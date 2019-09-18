@@ -1,2 +1,2 @@
 # userbot
-//ToDo: Not Implemented
+//To Do: Too lazy to create README now.
