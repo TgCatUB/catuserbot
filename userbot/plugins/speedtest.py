@@ -1,10 +1,11 @@
 from userbot import bot
 from telethon import events
+from userbot.utils import bot.command
 from datetime import datetime
 import io
 import speedtest
 
-@bot.on(events.NewMessage(pattern=r"\.speedtest ?(.*)"))
+@bot.command(pattern=r"\.speedtest ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
