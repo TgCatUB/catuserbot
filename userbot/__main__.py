@@ -19,7 +19,7 @@ for name in files:
             imported_module = importlib.import_module(f)
             print(f"Successfully imported {f}")
     except IOError as exc:
-        if exc.errno != errno.EISDIR
+        if exc.errno != errno.EISDIR:
             raise
 
 print("Yay your userbot is officially working.")
