@@ -17,7 +17,7 @@ else:
         sys.exit(1)
 
 try:
-    import userbot.__init__
+    import userbot
     import userbot.__main__
 except Exception as e:
     print(str(e))
