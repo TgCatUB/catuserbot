@@ -16,8 +16,6 @@ else:
         logging.info("Please run the command, again, after creating local_config.py similar to README.md")
         sys.exit(1)
 
-try:
-    import userbot.__init__
-    import userbot.__main__
-except Exception as e:
-    print(str(e))
+import userbot.__init__
+import userbot.__main__
+
