@@ -4,7 +4,7 @@ from datetime import datetime
 import io
 import speedtest
 
-@bot.on(events.NewMessage(pattern=r"^\.speedtest ?(.*)"))
+@bot.on(events.NewMessage(pattern=r"\.speedtest ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
