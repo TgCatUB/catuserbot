@@ -2,7 +2,7 @@ from userbot import bot
 from telethon import events
 
 def command(**args):
-    pattern = args.get["pattern"]
+    pattern = args.get("pattern", None)
     allow_edited_updates = args.get('allow_edited_updates', False)
 
     if pattern is not None and not pattern.startswith('(?i)'):
