@@ -1,4 +1,4 @@
-from startup import bot
+from userbot import bot
 from telethon import events
 from datetime import datetime
 import io
