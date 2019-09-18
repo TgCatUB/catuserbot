@@ -1,7 +1,6 @@
 import logging
 import os
 import sys
-from heroku_config.Var import STRING_SESSION, APP_ID, API_HASH
 from pathlib import Path
 from telethon.sessions import StringSession
 from telethon import TelegramClient
@@ -20,9 +19,9 @@ else:
 if STRING_SESSION is not None:
     session_name = str(STRING_SESSION)
     bot = TelegramClient(
-        StringSession(session_name),
-        APP_ID,
-        API_HASH
+        Var.StringSession(session_name),
+        Var.APP_ID,
+        Var.API_HASH
     )
     import userbot.__main__.py
 elif len(sys.argv) == 1:
