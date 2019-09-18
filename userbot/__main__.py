@@ -10,17 +10,12 @@ except PhoneNumberInvalidError:
     exit(1)
 
 import glob
-import errno
 path = 'userbot/plugins/*.py'
 files = glob.glob(path)
 for name in files:
-    try:
-        with open(name) as f:
+    with open(name) as f:
             imported_module = importlib.import_module(f.name.replace("/", ".").replace(".py", ""))
             print("Successfully imported {}".format(f.name.replace("userbot/plugins/", "")))
-    except IOError as exc:
-        if exc.errno != errno.EISDIR:
-            raise
 
 print("Yay your userbot is officially working.")
 
