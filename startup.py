@@ -19,7 +19,7 @@ else:
 if Var.STRING_SESSION is not None:
     session_name = str(Var.STRING_SESSION)
     bot = TelegramClient(
-        Var.StringSession(session_name),
+        StringSession(session_name),
         Var.APP_ID,
         Var.API_HASH
     )
