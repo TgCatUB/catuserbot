@@ -10,8 +10,18 @@ except PhoneNumberInvalidError:
     print("Phone Number you added was incorrect. Make sure to use your country code with your code")
     exit(1)
 
-for module_name in ALL_MODULES:
-    imported_module = importlib.import_module("userbot.plugins." + module_name)
+import glob
+import errno
+path = 'userbot/modules/*.py'
+files = glob.glob(path)
+for name in files:
+    try:
+        with open(name) as f:
+            imported_module = importlib.import_module(f)
+            print(f"Successfully imported {f}")
+    except IOError as exc:
+        if exc.errno != errno.EISDIR
+            raise
 
 print("Yay your userbot is officially working.")
 
