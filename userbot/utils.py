@@ -1,7 +1,7 @@
 from userbot import bot
 from telethon import events
 
-def bot.command(**args):
+def command(**args):
     pattern = args.get["pattern"]
     allow_edited_updates = args.get('allow_edited_updates', False)
 
