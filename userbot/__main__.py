@@ -16,7 +16,7 @@ files = glob.glob(path)
 for name in files:
     try:
         with open(name) as f:
-            print("hehe " + f)
+            print("hehe " + str(f))
             print(f"Successfully imported {f}")
     except IOError as exc:
         if exc.errno != errno.EISDIR:
