@@ -12,7 +12,7 @@ def command(**args):
         del args['allow_edited_updates']
 
     def decorator(func):
-        if not disable_edited:
+        if not allow_edited_updates:
             bot.add_event_handler(func, events.MessageEdited(**args))
         bot.add_event_handler(func, events.NewMessage(**args))
 
