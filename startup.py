@@ -16,24 +16,8 @@ else:
         logging.info("Please run the command, again, after creating local_config.py similar to README.md")
         sys.exit(1)
 
-if Var.STRING_SESSION is not None:
-    session_name = str(Var.STRING_SESSION)
-    bot = TelegramClient(
-        StringSession(session_name),
-        Var.APP_ID,
-        Var.API_HASH
-    )
-    import userbot.__main__.py
-elif len(sys.argv) == 1:
-    session_name = "startup"
-    bot = TelegramClient(
-        session_name,
-        Var.APP_ID,
-        Var.API_HASH
-    )
-    import userbot.__main__.py
-else:
-    logging.error("USAGE EXAMPLE:\n"
-                  "python3 -m startup"
-                  "\n 👆👆 Please follow the above format to run your userbot."
-                  "\n Bot quitting.")
+try:
+    import userbot.__init__
+    import userbot.__main__
+except Exception as e:
+    print(str(e))
