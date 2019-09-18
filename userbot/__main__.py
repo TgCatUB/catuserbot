@@ -1,4 +1,4 @@
-from userbot import bot
+from startup import bot
 from sys import argv
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 
