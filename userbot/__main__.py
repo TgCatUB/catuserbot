@@ -1,5 +1,6 @@
 from startup import bot
 from sys import argv
+import importlib
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 
 try:
@@ -8,7 +9,8 @@ except PhoneNumberInvalidError:
     print("Phone Number you added was incorrect. Make sure to use your country code with your code")
     exit(1)
 
-from userbot.plugins import *
+for module_name in ALL_MODULES:
+    imported_module = importlib.import_module("userbot.plugins." + module_name)
 
 print("Yay your userbot is officially working.")
 
