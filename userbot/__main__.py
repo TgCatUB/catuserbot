@@ -16,8 +16,8 @@ files = glob.glob(path)
 for name in files:
     try:
         with open(name) as f:
-            print("hehe " + str(f.name))
-            print(f"Successfully imported {f}")
+            imported_module = importlib.import_module(f.name.replace("/", "."))
+            print("Successfully imported {}".format(f.name.replace("userbot/plugins/", "")))
     except IOError as exc:
         if exc.errno != errno.EISDIR:
             raise
