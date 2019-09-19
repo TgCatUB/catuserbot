@@ -16,6 +16,7 @@ for name in files:
     with open(name) as f:
         imported_module = importlib.import_module(f.name.replace("/", ".").replace(".py", ""))
         print("Successfully imported {}".format(f.name.replace("userbot/plugins/", "")))
+import userbot._core
 
 print("Yay your userbot is officially working.")
 
