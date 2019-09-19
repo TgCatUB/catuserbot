@@ -11,7 +11,7 @@ def command(**args):
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
     
-    reg = re.compile('(?:.)(.*)')
+    reg = re.compile('(?:.)(.*)(?:\$)')
     cmd = re.match(reg, pattern)
 
     CMD_LIST.update({f"{cmd.group(1)}": f"{cmd.group(1)}"})
