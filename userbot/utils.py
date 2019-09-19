@@ -1,5 +1,6 @@
 from userbot import bot
 from telethon import events
+from userbot import CMD_LIST
 
 def command(**args):
     pattern = args.get("pattern", None)
@@ -7,6 +8,13 @@ def command(**args):
 
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
+    
+    if '\.' in pattern:
+        cmd = pattern.replace("\.", ".")
+    else:
+        cmd = pattern
+
+    CMD_LIST.update({f"{cmd}"})
 
     if "allow_edited_updates" in args:
         del args['allow_edited_updates']
