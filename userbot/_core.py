@@ -32,36 +32,6 @@ async def install(event):
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
 
-@command(pattern="^.load (?P<shortname>\w+)$", outgoing=True)
-async def load_reload(event):
-    await event.delete()
-    shortname = event.pattern_match["shortname"]
-    try:
-        imported_module = import_module("userbot.plugins." + shortname)
-        msg = await event.respond(f"Successfully (re)loaded plugin {shortname}")
-        await asyncio.sleep(DELETE_TIMEOUT)
-        await msg.delete()
-    except Exception as e:  # pylint:disable=C0103,W0703
-        trace_back = traceback.format_exc()
-        # pylint:disable=E0602
-        logger.warn(f"Failed to (re)load plugin {shortname}: {trace_back}")
-        await event.respond(f"Failed to (re)load plugin {shortname}: {e}")
-
-@command(pattern="^.unload (?P<shortname>\w+)$", outgoing=True)
-async def unload(event):
-    await event.delete()
-    shortname = event.pattern_match["shortname"]
-    try:
-        os.system(f"pkill -f userbot/plugin/{shortname}.py")
-        msg = await event.respond(f"Successfully unloaded plugin {shortname}")
-        await asyncio.sleep(DELETE_TIMEOUT)
-        await msg.delete()
-    except Exception as e:  # pylint:disable=C0103,W0703
-        trace_back = traceback.format_exc()
-        # pylint:disable=E0602
-        logger.warn(f"Failed to unload plugin {shortname}: {trace_back}")
-        await event.respond(f"Failed to unload plugin {shortname}: {e}")
-
 @command(pattern="^.send (?P<shortname>\w+)$", outgoing=True)
 async def send(event):
     if event.fwd_from:
