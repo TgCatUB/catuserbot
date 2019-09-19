@@ -10,12 +10,9 @@ def command(**args):
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
     
-    if '\.' in pattern:
-        cmd = pattern.replace("\.", ".")
-    else:
-        cmd = pattern
+     cmd = re.compile(pattern)
 
-    CMD_LIST.update({f"{pattern}": f"{cmd}"})
+    CMD_LIST.update({f"{cmd}": f"{cmd}"})
 
     if "allow_edited_updates" in args:
         del args['allow_edited_updates']
