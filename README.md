@@ -13,11 +13,11 @@ cd X-tra-Telegram
 virtualenv -p /usr/bin/python3 venv
 . ./venv/bin/activate
 pip install -r requirements.txt
-# <Create config.py with variables as given below>
+# <Create local_config.py with variables as given below>
 python3 -m startup
 ```
 
-An example `config.py` file could be:
+An example `local_config.py` file could be:
 
 **Not All of the variables are mandatory**
 
