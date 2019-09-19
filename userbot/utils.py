@@ -1,6 +1,7 @@
 from userbot import bot
 from telethon import events
 from userbot import CMD_LIST
+import re
 
 def command(**args):
     pattern = args.get("pattern", None)
