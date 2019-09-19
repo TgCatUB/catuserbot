@@ -1,0 +1,42 @@
+{
+  "name": "X-tra Telegram",
+  "description": "Userbot created by a Total Noob",
+  "logo": "https://telegra.ph/file/b20d706c006372a09e5ff.png",
+  "keywords": [
+    "telegram",
+    "userbot",
+    "plugin",
+    "modular",
+    "productivity"
+  ],
+  "repository": "https://github.com/Total-Noob-69/X-tra-Telegram",
+  "website": "#TODO",
+  "success_url": "#TODO",
+  "env": {
+    "ENV": {
+      "description": "Setting this to ANYTHING will enable heroku.",
+      "value": "ANYTHING"
+    },
+    "APP_ID": {
+      "description": "Get this value from my.telegram.org! Please do not steal",
+      "value": ""
+    },
+    "API_HASH": {
+      "description": "Get this value from my.telegram.org! Please do not steal",
+      "value": ""
+    },
+    "STRING_SESSION": {
+      "description": "Get this value by running python3 telesession.py locally",
+      "value": ""
+    }
+  },
+  "addons": [{
+    "plan": "heroku-postgresql",
+    "options": {
+      "version": "9.5"
+    }
+  }],
+  "buildpacks": [{
+    "url": "heroku/python"
+  }]
+}
