@@ -1,7 +1,7 @@
 from userbot import bot
 from telethon import events
 from userbot.utils import command
-from importlib import reload, import_module
+from importlib import import_module
 import sys
 import asyncio
 import traceback
@@ -37,7 +37,7 @@ async def load_reload(event):
     await event.delete()
     shortname = event.pattern_match["shortname"]
     try:
-        reload("userbot.plugins." + shortname)
+        imported_module = import_module("userbot.plugins." + shortname)
         msg = await event.respond(f"Successfully (re)loaded plugin {shortname}")
         await asyncio.sleep(DELETE_TIMEOUT)
         await msg.delete()
@@ -52,7 +52,9 @@ async def unload(event):
     await event.delete()
     shortname = event.pattern_match["shortname"]
     try:
-        del sys.modules[f"userbot.plugins.{shortname}"]
+        sys.path.append('userbot/plugins/')
+        if shortname in sys.modules:  
+            del sys.modules[shortname]
         msg = await event.respond(f"Successfully unloaded plugin {shortname}")
         await asyncio.sleep(DELETE_TIMEOUT)
         await msg.delete()
