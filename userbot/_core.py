@@ -52,12 +52,10 @@ async def unload(event):
     await event.delete()
     shortname = event.pattern_match["shortname"]
     try:
-        sys.path.append('userbot/plugins/')
-        if shortname in sys.modules:  
-            os.system(f"pkill -f userbot/plugin/{shortname}")
-            msg = await event.respond(f"Successfully unloaded plugin {shortname}")
-            await asyncio.sleep(DELETE_TIMEOUT)
-            await msg.delete()
+        os.system(f"pkill -f userbot/plugin/{shortname}.py")
+        msg = await event.respond(f"Successfully unloaded plugin {shortname}")
+        await asyncio.sleep(DELETE_TIMEOUT)
+        await msg.delete()
     except Exception as e:  # pylint:disable=C0103,W0703
         trace_back = traceback.format_exc()
         # pylint:disable=E0602
