@@ -11,9 +11,10 @@ def command(**args):
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
     
-    cmd = str(r"{}".format(pattern))
+    reg = re.compile('(?:.)(.*)')
+    cmd = re.match(reg, pattern)
 
-    CMD_LIST.update({f"{cmd}": f"{cmd}"})
+    CMD_LIST.update({f"{cmd.group(1)}": f"{cmd.group(1)}"})
 
     if "allow_edited_updates" in args:
         del args['allow_edited_updates']
