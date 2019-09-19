@@ -54,7 +54,7 @@ async def unload(event):
     try:
         sys.path.append('userbot/plugins/')
         if shortname in sys.modules:  
-            del sys.modules[shortname]
+            os.system(f"pkill -f userbot/plugin/{shortname}")
             msg = await event.respond(f"Successfully unloaded plugin {shortname}")
             await asyncio.sleep(DELETE_TIMEOUT)
             await msg.delete()
