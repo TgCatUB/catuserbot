@@ -5,6 +5,8 @@ from userbot import CMD_LIST
 def command(**args):
     pattern = args.get("pattern", None)
     allow_edited_updates = args.get('allow_edited_updates', False)
+    if args['outgoing]:
+        args['outgoing'] = True
 
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
