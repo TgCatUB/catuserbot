@@ -12,7 +12,7 @@ def command(**args):
         args['pattern'] = '(?i)' + pattern
     
     reg = re.compile('(?:.)(.*)(?:\$)')
-    cmd = re.match(reg, pattern)
+    cmd = re.search(reg, pattern)
 
     CMD_LIST.update({f"{cmd.group(1)}": f"{cmd.group(1)}"})
 
