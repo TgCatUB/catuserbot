@@ -15,7 +15,7 @@ def command(**args):
     else:
         cmd = pattern
 
-    CMD_LIST.update({f"{cmd}: for CMD_LIST"})
+    CMD_LIST.update({f"{pattern}": f"{cmd}"})
 
     if "allow_edited_updates" in args:
         del args['allow_edited_updates']
