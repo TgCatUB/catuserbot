@@ -1,6 +1,6 @@
 from userbot import bot
 from telethon import events
-from userbot.util import command
+from userbot.utils import command
 from importlib import reload, import_module
 import sys
 import asyncio
