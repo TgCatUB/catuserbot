@@ -55,9 +55,9 @@ async def unload(event):
         sys.path.append('userbot/plugins/')
         if shortname in sys.modules:  
             del sys.modules[shortname]
-        msg = await event.respond(f"Successfully unloaded plugin {shortname}")
-        await asyncio.sleep(DELETE_TIMEOUT)
-        await msg.delete()
+            msg = await event.respond(f"Successfully unloaded plugin {shortname}")
+            await asyncio.sleep(DELETE_TIMEOUT)
+            await msg.delete()
     except Exception as e:  # pylint:disable=C0103,W0703
         trace_back = traceback.format_exc()
         # pylint:disable=E0602
