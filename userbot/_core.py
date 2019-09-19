@@ -12,7 +12,7 @@ DELETE_TIMEOUT = 5
 
 @command(pattern="^.install", outgoing=True)
 async def install(event):
-  if event.fwd_from:
+    if event.fwd_from:
         return
     if event.reply_to_msg_id:
         try:
