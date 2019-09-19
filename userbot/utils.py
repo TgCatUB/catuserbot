@@ -10,7 +10,7 @@ def command(**args):
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
     
-     cmd = re.compile(pattern)
+    cmd = re.compile(pattern)
 
     CMD_LIST.update({f"{cmd}": f"{cmd}"})
 
