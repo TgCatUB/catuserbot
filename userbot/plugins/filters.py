@@ -125,7 +125,7 @@ async def on_snip_delete(event):
     await event.edit(f"filter {name} deleted successfully")
 
 
-@command(pattern="^.clearallfilters$"))
+@command(pattern="^.clearallfilters$")
 async def on_all_snip_delete(event):
     remove_all_filters(event.chat_id)
     await event.edit(f"filters **in current chat** deleted successfully")
