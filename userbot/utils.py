@@ -26,6 +26,10 @@ def command(**args):
 
     if "allow_edited_updates" in args:
         del args['allow_edited_updates']
+    try:
+        del args['allow_sudo'] # for now
+    except:
+        pass
 
     def decorator(func):
         if not allow_edited_updates:
