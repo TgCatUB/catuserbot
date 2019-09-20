@@ -3,6 +3,7 @@ from sys import argv
 import importlib
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 import os
+from config import Config
 
 try:
     bot.start()
