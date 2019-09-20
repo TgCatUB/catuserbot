@@ -28,8 +28,7 @@ async def _(event):
             c_time = time.time()
             downloaded_file_name = await event.client.download_media(
                 reply_message,
-                Config.TEMP_DOWNLOAD_DIRECTORY,
-                progress_callback="Downloading"
+                Config.TEMP_DOWNLOAD_DIRECTORY
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await mone.edit(str(e))
