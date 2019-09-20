@@ -3,3 +3,4 @@ pySmartDL
 hachoir
 sqlalchemy>=1.2
 psycopg2
+regex
