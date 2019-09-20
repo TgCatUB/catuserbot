@@ -5,6 +5,7 @@ from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 import os
 from config import Config
 from userbot.utils import command
+from pathlib import Path
 
 try:
     bot.start()
