@@ -26,6 +26,7 @@ for name in files:
         mod.bot = bot
         mod.command = command
         spec.loader.exec_module(mod)
+        print(str(mod))
         __import__(str(mod))
         print("Successfully imported {}".format(f.name.replace("userbot/plugins/", "")))
 import userbot._core
