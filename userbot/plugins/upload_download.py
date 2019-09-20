@@ -21,7 +21,7 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
 
-from config.Config import TEMP_DOWNLOAD_DIRECTORY
+from config import Config
 from userbot.utils import command
 
 
@@ -93,8 +93,8 @@ async def download(target_file):
             return
         await target_file.edit("Processing ...")
         input_str = target_file.pattern_match.group(1)
-        if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
-            os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
+        if not os.path.isdir(Config.TEMP_DOWNLOAD_DIRECTORY):
+            os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
         if "|" in input_str:
             url, file_name = input_str.split("|")
             url = url.strip()
@@ -103,10 +103,10 @@ async def download(target_file):
             head, tail = os.path.split(file_name)
             if head:
                 if not os.path.isdir(
-                        os.path.join(TEMP_DOWNLOAD_DIRECTORY, head)):
-                    os.makedirs(os.path.join(TEMP_DOWNLOAD_DIRECTORY, head))
+                        os.path.join(Config.TEMP_DOWNLOAD_DIRECTORY, head)):
+                    os.makedirs(os.path.join(Config.TEMP_DOWNLOAD_DIRECTORY, head))
                     file_name = os.path.join(head, tail)
-            downloaded_file_name = TEMP_DOWNLOAD_DIRECTORY + "" + file_name
+            downloaded_file_name = Config.TEMP_DOWNLOAD_DIRECTORY + "" + file_name
             downloader = SmartDL(url, downloaded_file_name, progress_bar=False)
             downloader.start(blocking=False)
             c_time = time.time()
@@ -151,7 +151,7 @@ async def download(target_file):
                 c_time = time.time()
                 downloaded_file_name = await target_file.client.download_media(
                     await target_file.get_reply_message(),
-                    TEMP_DOWNLOAD_DIRECTORY,
+                    Config.TEMP_DOWNLOAD_DIRECTORY,
                     progress_callback=lambda d, t: asyncio.get_event_loop(
                     ).create_task(
                         progress(d, t, target_file, c_time, "Downloading...")))
