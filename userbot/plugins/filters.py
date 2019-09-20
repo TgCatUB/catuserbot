@@ -93,7 +93,7 @@ async def on_snip_save(event):
         await event.edit("Reply to a message with `savefilter keyword` to save the filter")
 
 
-@command(pattern="^.listfilters$"))
+@command(pattern="^.listfilters$")
 async def on_snip_list(event):
     all_snips = get_all_filters(event.chat_id)
     OUT_STR = "Available Filters in the Current Chat:\n"
@@ -118,7 +118,7 @@ async def on_snip_list(event):
         await event.edit(OUT_STR)
 
 
-@command("^.clearfilter (.*)")
+@command(pattern="^.clearfilter (.*)")
 async def on_snip_delete(event):
     name = event.pattern_match.group(1)
     remove_filter(event.chat_id, name)
