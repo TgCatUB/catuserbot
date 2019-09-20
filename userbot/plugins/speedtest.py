@@ -1,6 +1,4 @@
-from userbot import bot
 from telethon import events
-from userbot.utils import command
 from datetime import datetime
 import io
 import speedtest
