@@ -27,7 +27,7 @@ for name in files:
         mod.command = command
         spec.loader.exec_module(mod)
         print(str(mod))
-        __import__(str(mod))
+        import mod
         print("Successfully imported {}".format(f.name.replace("userbot/plugins/", "")))
 import userbot._core
 os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
