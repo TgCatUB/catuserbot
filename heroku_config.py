@@ -8,6 +8,7 @@ class Var(object):
     DB_URI = os.environ.get("DATABASE_URL", None)
     TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", None)
     LOGGER = True
+    SUDO_USERS = os.environ.get("SUDO_USERS", None)
     # Here for later purposes
 
 class Development(Var):
