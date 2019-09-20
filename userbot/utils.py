@@ -12,6 +12,8 @@ def command(**args):
     try:
         if pattern is not None and not pattern.startswith('(?i)'):
             args['pattern'] = '(?i)' + pattern
+    except:
+        pass
     
     reg = re.compile('(?:.)(.*)')
     if not pattern == None:
