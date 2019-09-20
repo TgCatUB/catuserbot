@@ -21,9 +21,6 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
 
-from config import Config
-from userbot.utils import command
-
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
     """Generic progress_callback for both
