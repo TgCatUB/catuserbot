@@ -17,6 +17,11 @@
       "description": "Setting this to ANYTHING will enable heroku.",
       "value": "ANYTHING"
     },
+    "TEMP_DOWNLOAD_DIRECTORY": {
+      "description": "Where downloaded files will go.",
+      "value": "./DOWNLOADS/",
+      "required": false
+    },
     "APP_ID": {
       "description": "Get this value from my.telegram.org! Please do not steal",
       "value": ""
@@ -26,7 +31,7 @@
       "value": ""
     },
     "STRING_SESSION": {
-      "description": "Get this value by running python3 telesession.py locally",
+      "description": "Get this value by running python3 telesetup.py locally",
       "value": ""
     }
   },
