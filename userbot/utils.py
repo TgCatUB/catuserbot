@@ -13,13 +13,14 @@ def command(**args):
         args['pattern'] = '(?i)' + pattern
     
     reg = re.compile('(?:.)(.*)')
-    cmd = re.search(reg, pattern)
-    try:
-        cmd = cmd.group(1).replace("$", "")
-    except:
-        pass
+    if not pattern == None:
+        cmd = re.search(reg, pattern)
+        try:
+            cmd = cmd.group(1).replace("$", "")
+        except:
+            pass
 
-    CMD_LIST.update({f"{cmd}": f"{cmd}"})
+        CMD_LIST.update({f"{cmd}": f"{cmd}"})
 
     if "allow_edited_updates" in args:
         del args['allow_edited_updates']
