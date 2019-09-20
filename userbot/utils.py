@@ -23,9 +23,10 @@ def command(**args):
                 cmd = cmd.group(1).replace("$", "")
             except:
                 pass
-        except:pass
 
-        CMD_LIST.update({f"{cmd}": f"{cmd}"})
+            CMD_LIST.update({f"{cmd}": f"{cmd}"})
+        except:
+            pass
 
     if "allow_edited_updates" in args:
         del args['allow_edited_updates']
