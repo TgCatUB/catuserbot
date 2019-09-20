@@ -1,6 +1,5 @@
 from telethon import events
 from datetime import datetime
-from userbot.utils import command
 
 
 @command(pattern="^.ping")
