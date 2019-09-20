@@ -79,7 +79,7 @@ async def group_has_sedbot(group):
 async def on_message(event):
     last_msgs[event.chat_id].appendleft(event.message)
 
-@command(allow_edited_update=False)
+@command(allow_edited_updates=False)
 async def on_edit(event):
     for m in last_msgs[event.chat_id]:
         if m.id == event.id:
