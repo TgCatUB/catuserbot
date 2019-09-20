@@ -10,7 +10,7 @@ import asyncio
 import re
 from telethon import events, utils
 from telethon.tl import types
-from userbot.plugins.filter_sql import get_filter, add_filter, remove_filter, get_all_filters, remove_all_filters
+from userbot.plugins.sql_helper.filter_sql import get_filter, add_filter, remove_filter, get_all_filters, remove_all_filters
 from uniborg.util import admin_cmd
 from userbot import bot
 
@@ -25,7 +25,7 @@ global last_triggered_filters
 last_triggered_filters = {}  # pylint:disable=E0602
 
 
-@command(incoming=True))
+@command(incoming=True)
 async def on_snip(event):
     global last_triggered_filters
     name = event.raw_text
