@@ -24,6 +24,7 @@ for name in files:
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
         mod.bot = bot
+        mod.Config = Config
         mod.command = command
         spec.loader.exec_module(mod)
         print("Successfully imported {}".format(f.name.replace("userbot/plugins/", "")))
