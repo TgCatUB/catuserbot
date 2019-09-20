@@ -11,7 +11,6 @@ from datetime import datetime
 from telethon import events
 from telethon.tl.types import DocumentAttributeVideo
 from userbot.utils import command, humanbytes, progress, time_formatter
-from userbot import bot
 
 
 @command(pattern="^.download ?(.*)", allow_sudo=True)
@@ -27,7 +26,7 @@ async def _(event):
         reply_message = await event.get_reply_message()
         try:
             c_time = time.time()
-            downloaded_file_name = await bot.download_media(
+            downloaded_file_name = await event.client.download_media(
                 reply_message,
                 Config.TEMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
