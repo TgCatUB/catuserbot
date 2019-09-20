@@ -20,8 +20,8 @@ async def _(event):
         return
     mone = await event.reply("Processing ...")
     input_str = event.pattern_match.group(1)
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if not os.path.isdir(Config.TEMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         start = datetime.now()
         reply_message = await event.get_reply_message()
