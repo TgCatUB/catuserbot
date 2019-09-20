@@ -8,6 +8,7 @@ import time
 
 def command(**args):
     pattern = args.get("pattern", None)
+    allow_sudo = args.get("allow_sudo", None)
     allow_edited_updates = args.get('allow_edited_updates', False)
     args['outgoing'] = args.get('outgoing', True)
 
