@@ -1,5 +1,3 @@
-from userbot.utils import command
-from userbot import bot
 from userbot import CMD_LIST
 
 @command(pattern="^.get_cmd")
