@@ -1,1 +1,2 @@
 speedtest-cli
+aiohttp
