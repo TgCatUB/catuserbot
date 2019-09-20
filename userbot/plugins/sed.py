@@ -75,7 +75,7 @@ async def group_has_sedbot(group):
     return any(KNOWN_RE_BOTS.match(x.username or '') for x in full.users)
 
 
-@command
+@command()
 async def on_message(event):
     last_msgs[event.chat_id].appendleft(event.message)
 
