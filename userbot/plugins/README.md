@@ -2,7 +2,7 @@
 ```python3
 None
 ```
-This is needed to perform a task using the bot.
+There is None Mandatory Imports.
 
 ## Explanation
 The Mandatory Import are now automatically imported.
