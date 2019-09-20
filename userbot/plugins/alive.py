@@ -2,4 +2,4 @@
 async def hello_world(event):
     if event.fwd_from:
         return
-    await event.edit("**HELLO WORLD**\n\nThe following is controlled by me too!\n" + Config.SUDO_USERS)
+    await event.edit("**HELLO WORLD**\n\nThe following is controlling me too!\n" + Config.SUDO_USERS)
