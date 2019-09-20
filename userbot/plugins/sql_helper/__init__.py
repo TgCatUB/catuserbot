@@ -1,9 +1,11 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-from config import Config
 
-BASE = declarative_base()
+
+# the secret configuration specific things
+from config import Config
 
 
 def start() -> scoped_session:
@@ -13,4 +15,10 @@ def start() -> scoped_session:
     return scoped_session(sessionmaker(bind=engine, autoflush=False))
 
 
-SESSION = start()
+try:
+    BASE = declarative_base()
+    SESSION = start()
+except AttributeError as e:
+    # this is a dirty way for the work-around required for #23
+    print("DB_URI is not configured. Features depending on the database might have issues.")
+    print(str(e))
