@@ -30,12 +30,11 @@ async def _(event):
                 reply_message,
                 Config.TEMP_DOWNLOAD_DIRECTORY
             )
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await mone.edit(str(e))
-        else:
             end = datetime.now()
             ms = (end - start).seconds
             await mone.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
+        except Exception as e:  # pylint:disable=C0103,W0703
+            await mone.edit(str(e))
     elif input_str:
         start = datetime.now()
         url = input_str
