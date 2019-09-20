@@ -32,17 +32,18 @@ def command(**args):
         except:
             pass
 
-    if "allow_edited_updates" in args:
-        del args['allow_edited_updates']
     args['allow_sudo'] = allow_sudo
     if allow_sudo:
         args["from_users"] = list(Config.SUDO_USERS)
         # Mutually exclusive with outgoing (can only set one of either).
         args["incoming"] = True
-        del args["allow_sudo"]
+    del args["allow_sudo"]
+
+    if "allow_edited_updates" in args:
+        del args['allow_edited_updates']
 
     def decorator(func):
-        if not allow_edited_updates:
+        if allow_edited_updates:
             bot.add_event_handler(func, events.MessageEdited(**args))
         bot.add_event_handler(func, events.NewMessage(**args))
 
