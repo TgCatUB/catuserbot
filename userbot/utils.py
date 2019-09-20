@@ -9,8 +9,9 @@ def command(**args):
     allow_edited_updates = args.get('allow_edited_updates', False)
     args['outgoing'] = args.get('outgoing', True)
 
-    if pattern is not None and not pattern.startswith('(?i)'):
-        args['pattern'] = '(?i)' + pattern
+    try:
+        if pattern is not None and not pattern.startswith('(?i)'):
+            args['pattern'] = '(?i)' + pattern
     
     reg = re.compile('(?:.)(.*)')
     if not pattern == None:
