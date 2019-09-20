@@ -18,7 +18,6 @@ path = 'userbot/plugins/*.py'
 files = glob.glob(path)
 for name in files:
     with open(name) as f:
-        imported_module = importlib.import_module(f.name.replace("/", ".").replace(".py", ""))
         path = Path(f.name)
         shortname = path.stem
         name = "userbot.plugins.{}".format(shortname.replace(".py", ""))
@@ -27,6 +26,7 @@ for name in files:
         mod.bot = bot
         mod.command = command
         spec.loader.exec_module(mod)
+        imported_module = importlib.import_module(mod)
         print("Successfully imported {}".format(f.name.replace("userbot/plugins/", "")))
 import userbot._core
 os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
