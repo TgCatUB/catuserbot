@@ -16,7 +16,7 @@ TYPE_PHOTO = 1
 TYPE_DOCUMENT = 2
 
 
-@command(incoming=True, disable_edited=True)
+@command(incoming=True, allow_edited_updates=False)
 async def filter_incoming_handler(handler):
     """ Checks if the incoming message contains handler of a filter """
     try:
