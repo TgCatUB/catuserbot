@@ -1,5 +1,6 @@
 from userbot import bot
 from telethon import events
+from config import Config
 from userbot import CMD_LIST
 import re
 
@@ -7,7 +8,10 @@ def command(**args):
     pattern = args.get("pattern", None)
     allow_sudo = args.get("allow_sudo", None)
     allow_edited_updates = args.get('allow_edited_updates', False)
-    args['outgoing'] = args.get('outgoing', True)
+    args["incoming"] = args.get("incoming", False)
+    args["outgoing"] = True
+    if bool(args["incoming"]):
+        args["outgoing"] = False
 
     try:
         if pattern is not None and not pattern.startswith('(?i)'):
@@ -30,10 +34,12 @@ def command(**args):
 
     if "allow_edited_updates" in args:
         del args['allow_edited_updates']
-    try:
-        del args['allow_sudo'] # for now
-    except:
-        pass
+    args['allow_sudo'] = allow_sudo
+    if allow_sudo:
+        args["from_users"] = list(Config.SUDO_USERS)
+        # Mutually exclusive with outgoing (can only set one of either).
+        args["incoming"] = True
+        del args["allow_sudo"]
 
     def decorator(func):
         if not allow_edited_updates:
