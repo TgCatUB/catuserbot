@@ -17,11 +17,13 @@ def command(**args):
     
     reg = re.compile('(?:.)(.*)')
     if not pattern == None:
-        cmd = re.search(reg, pattern)
         try:
-            cmd = cmd.group(1).replace("$", "")
-        except:
-            pass
+            cmd = re.search(reg, pattern)
+            try:
+                cmd = cmd.group(1).replace("$", "")
+            except:
+                pass
+        except:pass
 
         CMD_LIST.update({f"{cmd}": f"{cmd}"})
 
