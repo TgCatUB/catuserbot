@@ -4,8 +4,6 @@ import re
 import regex
 from telethon import events, utils
 from telethon.tl import types, functions
-from userbot.utils import command
-from userbot import bot
 
 HEADER = "「sed」\n"
 KNOWN_RE_BOTS = re.compile(
@@ -79,7 +77,7 @@ async def group_has_sedbot(group):
 async def on_message(event):
     last_msgs[event.chat_id].appendleft(event.message)
 
-@command(allow_edited_updates=False)
+@command(allow_edited_updates=True)
 async def on_edit(event):
     for m in last_msgs[event.chat_id]:
         if m.id == event.id:
