@@ -9,7 +9,7 @@ from asyncio import sleep
 from re import fullmatch, IGNORECASE, escape
 from telethon.tl import types
 from telethon import utils
-from userbot.util import command
+from userbot.utils import command
 
 TYPE_TEXT = 0
 TYPE_PHOTO = 1
