@@ -166,8 +166,7 @@ async def download(target_file):
                 "Reply to a message to download to my local server.")
 
 
-@register(pattern=r".uploadir (.*)", outgoing=True)
-@errors_handler
+@command(pattern="^.uploadir (.*)", outgoing=True)
 async def uploadir(udir_event):
     """ For .uploadir command, allows you to upload everything from a folder in the server"""
     if not udir_event.text[0].isalpha() and udir_event.text[0] not in (
