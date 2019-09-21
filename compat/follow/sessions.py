@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from userbot import bot
-import . config
+import compat.follow.config
 logging.basicConfig(
 format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
 level=logging.INFO)
@@ -18,7 +18,7 @@ async def main():
 		await bot.start()
 		fwlrs.append(bot)
 	await asyncio.wait([
-		.disconnect()
+		bot.disconnect()
 		for client in fwlrs
 	])
 
