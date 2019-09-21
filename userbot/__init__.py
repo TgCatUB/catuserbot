@@ -18,5 +18,6 @@ else:
 CMD_LIST = {}
 # for later purposes
 CMD_HELP = {}
+BAN_PLUG = None
 BOTLOG = os.environ.get("BOTLOG", False)
 BOTLOG_CHATID = os.environ.get("BOTLOG_CHATID", None)
