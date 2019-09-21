@@ -11,8 +11,7 @@ def command(**args):
     previous_stack_frame = stack[1]
     test = previous_stack_frame.filename.replace("userbot/plugins/", "")
     if test in BAN_PLUG:
-        print('banned')
-        return print(**args)
+        return print("this plugin is banned from usinb this weapper")
     else:
         pattern = args.get("pattern", None)
         allow_sudo = args.get("allow_sudo", None)
