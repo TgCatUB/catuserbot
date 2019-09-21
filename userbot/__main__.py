@@ -1,10 +1,12 @@
 from userbot import bot
 from sys import argv
+import sys
 import importlib
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 import os
 from config import Config
 from userbot.utils import command
+import userbot.utils
 from pathlib import Path
 
 try:
@@ -27,7 +29,10 @@ for name in files:
         mod.Config = Config
         mod.command = command
         # support for uniborg
+        sys.modules["uniborg.util"] = userbot.utils
         mod.borg = bot
+        # support for paperplaneextended
+        sys.modules["userbot.events"] = userbot.utils
         spec.loader.exec_module(mod)
         print("Successfully imported {}".format(f.name.replace("userbot/plugins/", "")))
 import userbot._core
