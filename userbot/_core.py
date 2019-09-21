@@ -1,11 +1,13 @@
 from userbot import bot
 from telethon import events
 from userbot.utils import command
+from config import Config
 from importlib import import_module
 import sys
 import asyncio
 import traceback
 import os
+import userbot.utils
 from datetime import datetime
 
 DELETE_TIMEOUT = 5
@@ -21,7 +23,20 @@ async def install(event):
                 "userbot/plugins/"  # pylint:disable=E0602
             )
             if "(" not in downloaded_file_name:
-                imported_module = import_module(downloaded_file_name.replace("/", ".").replace(".py", ""))  # pylint:disable=E0602
+                path = Path(downloaded_file_name)
+                shortname = path.stem
+                name = "userbot.plugins.{}".format(shortname.replace(".py", ""))
+                spec = importlib.util.spec_from_file_location(name, path)
+                mod = importlib.util.module_from_spec(spec)
+                mod.bot = bot
+                mod.Config = Config
+                mod.command = command
+                # support for uniborg
+                sys.modules["uniborg.util"] = userbot.utils
+                mod.borg = bot
+                # support for paperplaneextended
+                sys.modules["userbot.events"] = userbot.utils
+                spec.loader.exec_module(mod)  # pylint:disable=E0602
                 await event.edit("Installed Plugin `{}`".format(os.path.basename(downloaded_file_name)))
             else:
                 os.remove(downloaded_file_name)
