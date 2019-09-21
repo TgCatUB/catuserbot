@@ -23,9 +23,9 @@ try:
 	aiocron_enabled = True
 except ImportError:
 	aiocron_enabled = False
-import .strings
-import .config
-import .classes
+import . strings
+import . config
+import . classes
 logging.basicConfig(
 format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
 level=logging.INFO)
