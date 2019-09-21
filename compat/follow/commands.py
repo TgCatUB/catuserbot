@@ -10,7 +10,7 @@ try:
 	speedtest_enabled = True
 except ImportError:
 	speedtest_enabled = False
-import config
+import .config
 import .helper
 import .strings
 from .classes import flags
