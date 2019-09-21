@@ -40,8 +40,9 @@ for name in files:
         path = Path(f.name)
         shortname = path.stem
         load_module(shortname.replace(".py", ""))
-        import userbot._core
         print("Successfully (re)imported {}".format(f.name.replace("userbot/plugins/", "")))
+
+impprt userbot._core
 
 os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
 
