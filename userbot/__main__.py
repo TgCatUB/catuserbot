@@ -25,7 +25,7 @@ for name in files:
     with open(name) as f:
         path = Path(f.name)
         shortname = path.stem
-        if not shortname in BAN_PLUG
+        if not shortname in BAN_PLUG:
             name = "userbot.plugins.{}".format(shortname.replace(".py", ""))
             spec = importlib.util.spec_from_file_location(name, path)
             mod = importlib.util.module_from_spec(spec)
