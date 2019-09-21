@@ -1,11 +1,10 @@
 from userbot import bot
 from telethon import events
-from userbot.utils import command
+from userbot.utils import command, load_module
 from config import Config
 import importlib
 from pathlib import Path
 from userbot import BAN_PLUG
-from userbot.__main__ import load_module
 import sys
 import asyncio
 import traceback
