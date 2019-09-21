@@ -9,8 +9,7 @@ def command(**args):
     import inspect
     stack = inspect.stack()
     previous_stack_frame = stack[1]
-    print(previous_stack_frame.filename.replace("/app/userbot/", ""))
-    test = previous_stack_frame.filename.replace("/app/userbot/", "")
+    test = previous_stack_frame.filename.replace("userbot/plugins/", "")
     if not test in BAN_PLUG:
         pattern = args.get("pattern", None)
         allow_sudo = args.get("allow_sudo", None)
