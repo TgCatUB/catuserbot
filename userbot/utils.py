@@ -6,9 +6,10 @@ from userbot import CMD_LIST
 import re
 
 def command(**args):
-    from os.path import basename
-    print(basename)
-    if not basename in BAN_PLUG:
+    from os.path import realpath
+    print(realpath(__file__).replace("userbot/plugins/", ""))
+    test = realpath(__file__).replace("userbot/plugins/", "")
+    if not test in BAN_PLUG:
         pattern = args.get("pattern", None)
         allow_sudo = args.get("allow_sudo", None)
         allow_edited_updates = args.get('allow_edited_updates', False)
