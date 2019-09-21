@@ -62,6 +62,7 @@ def command(**args):
 
 
 def load_module(shortname):
+    import userbot.utils
     import sys
     import importlib
     from pathlib import Path
