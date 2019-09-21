@@ -6,6 +6,7 @@ import os
 from config import Config
 from userbot.utils import command, load_module
 from userbot import BAN_PLUG
+from pathlib import Path
 import userbot.utils
 import logging
 logging.basicConfig(level=logging.WARNING)
@@ -21,7 +22,8 @@ path = 'userbot/plugins/*.py'
 files = glob.glob(path)
 for name in files:
     with open(name) as f:
-        shortname = path.stem
+        path1 = Path(f.name)
+        shortname = path1.stem
         load_module(shortname.replace(".py", ""))
         print("Successfully (re)imported {}".format(f.name.replace("userbot/plugins/", "")))
 
