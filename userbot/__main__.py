@@ -9,6 +9,7 @@ from userbot.utils import command
 import userbot.utils
 from pathlib import Path
 import logging
+logging.basicConfig(level=logging.WARNING)
 
 try:
     bot.start()
@@ -29,7 +30,6 @@ for name in files:
         mod.bot = bot
         mod.Config = Config
         mod.command = command
-        mod.log = logging.basicConfig(level=logging.WARNING)
         # support for uniborg
         sys.modules["uniborg.util"] = userbot.utils
         mod.borg = bot
