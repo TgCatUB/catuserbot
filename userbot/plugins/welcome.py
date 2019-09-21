@@ -73,7 +73,7 @@ async def _(event):
         "The previous welcome message was `{}`.".format(cws.custom_welcome_message)
     )
 
-@command(pattern="listwelcome"))  # pylint:disable=E0602
+@command(pattern="listwelcome")  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
