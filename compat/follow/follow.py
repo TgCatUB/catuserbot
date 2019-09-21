@@ -3,12 +3,12 @@ import logging
 import sys
 import os
 import importlib
-import . commands
+import compat.follow.commands
 from userbot import bot
-import . strings
-import . helper
-import . config
-import . classes
+import compat.follow.strings
+import compat.follow.helper
+import compat.follow.config
+import compat.follow.classes
 logging.basicConfig(
 format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
 level=logging.INFO)
