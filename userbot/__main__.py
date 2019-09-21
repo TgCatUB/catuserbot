@@ -28,7 +28,7 @@ for name in files:
         load_module(shortname.replace(".py", ""))
         print("Successfully (re)imported {}".format(f.name.replace("userbot/plugins/", "")))
 
-impprt userbot._core
+import userbot._core
 
 os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
 
