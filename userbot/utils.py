@@ -6,7 +6,7 @@ from userbot import CMD_LIST
 import re
 
 def command(**args):
-    from os import basename
+    from os.path import basename
     if not basename in BAN_PLUG:
         pattern = args.get("pattern", None)
         allow_sudo = args.get("allow_sudo", None)
