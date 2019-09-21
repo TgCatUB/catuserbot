@@ -4,16 +4,16 @@ import random
 from io import BytesIO
 from traceback import format_exc
 from telethon import utils, events, functions, types, errors
-import .follow
+import compat.follow.follow
 try:
 	from speedtest import Speedtest
 	speedtest_enabled = True
 except ImportError:
 	speedtest_enabled = False
-import . config
-import . helper
-import . strings
-from . classes import flags
+import compat.follow.config
+import compat.follow.helper
+import compat.follow.strings
+from compat.follow.classes import flags
 
 @helper.register(strings.cmd_help_text)
 async def help_text(e):
