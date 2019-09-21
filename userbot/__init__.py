@@ -16,3 +16,5 @@ else:
 
 
 CMD_LIST = {}
+# for later purposes
+CMD_HELP = {}
