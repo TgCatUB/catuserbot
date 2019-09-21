@@ -5,6 +5,7 @@ from config import Config
 import importlib
 from pathlib import Path
 from userbot import BAN_PLUG
+import subprocess
 import sys
 import asyncio
 import traceback
@@ -78,7 +79,9 @@ async def unload(event):
     shortname = event.pattern_match["shortname"]
     try:
         BAN_PLUG.append(shortname)
-        os.system(f"pkill -9 -f userbot/plugins/{shortname}.py")
+        process = await asyncio.create_subprocess_shell(
+            f"pkill -9 -f userbot/plugins/{shortname}.py", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+        )
         await event.edit("Unloaded {} successfully.".format(shortname))
     except Exception as e:
         await event.edit("Unable to unload {} due to the following error:\n{}".format(shortname, str(e)))
