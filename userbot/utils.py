@@ -8,7 +8,7 @@ import re
 def command(**args):
     from os import basename
     if not basename in BAN_PLUG:
-       pattern = args.get("pattern", None)
+        pattern = args.get("pattern", None)
         allow_sudo = args.get("allow_sudo", None)
         allow_edited_updates = args.get('allow_edited_updates', False)
         args["incoming"] = args.get("incoming", False)
