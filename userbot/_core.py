@@ -78,10 +78,7 @@ async def unload(event):
     await event.edit("Unloading...")
     shortname = event.pattern_match["shortname"]
     try:
-        BAN_PLUG.append(shortname)
-        process = await asyncio.create_subprocess_shell(
-            f"pkill -9 -f userbot/plugins/{shortname}.py", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-        )
+        BAN_PLUG.append(shortname + ".py")
         await event.edit("Unloaded {} successfully.".format(shortname))
     except Exception as e:
         await event.edit("Unable to unload {} due to the following error:\n{}".format(shortname, str(e)))
