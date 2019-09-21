@@ -12,7 +12,7 @@ def command(**args):
     test = previous_stack_frame.filename.replace("userbot/plugins/", "")
     if test in BAN_PLUG:
         print('banned')
-        return print(str(**args))
+        return print(**args)
     else:
         pattern = args.get("pattern", None)
         allow_sudo = args.get("allow_sudo", None)
