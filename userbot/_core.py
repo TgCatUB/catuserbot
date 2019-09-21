@@ -5,7 +5,7 @@ from config import Config
 import importlib
 from pathlib import Path
 from userbot import BAN_PLUG
-import subprocess
+from userbot.__main__ import load_module
 import sys
 import asyncio
 import traceback
@@ -79,6 +79,7 @@ async def unload(event):
     shortname = event.pattern_match["shortname"]
     try:
         BAN_PLUG.append(shortname + ".py")
+        load_module(shortname)
         await event.edit("Unloaded {} successfully.".format(shortname))
     except Exception as e:
         await event.edit("Unable to unload {} due to the following error:\n{}".format(shortname, str(e)))
