@@ -3,6 +3,7 @@ from telethon import events
 from userbot.utils import command
 from config import Config
 from importlib import import_module
+from pathlib import Path
 import sys
 import asyncio
 import traceback
