@@ -8,6 +8,7 @@ from config import Config
 from userbot.utils import command
 import userbot.utils
 from pathlib import Path
+import compat.follow.follow
 
 try:
     bot.start()
