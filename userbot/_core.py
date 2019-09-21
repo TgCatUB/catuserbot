@@ -4,6 +4,7 @@ from userbot.utils import command
 from config import Config
 import importlib
 from pathlib import Path
+from userbot import BAN_PLUG
 import sys
 import asyncio
 import traceback
@@ -76,6 +77,7 @@ async def unload(event):
     await event.edit("Unloading...")
     shortname = event.pattern_match["shortname"]
     try:
+        BAN_PLUG.append(shortname)
         os.system(f"pkill -9 -f userbot/plugins/{shortname}.py")
         await event.edit("Unloaded {} successfully.".format(shortname))
     except Exception as e:
