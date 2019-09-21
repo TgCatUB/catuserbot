@@ -3,12 +3,12 @@ import logging
 import sys
 import os
 import importlib
-import .commands
+import . commands
 from userbot import bot
-import .strings
-import .helper
-import .config
-import .classes
+import . strings
+import . helper
+import . config
+import . classes
 logging.basicConfig(
 format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
 level=logging.INFO)
