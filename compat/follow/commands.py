@@ -10,10 +10,10 @@ try:
 	speedtest_enabled = True
 except ImportError:
 	speedtest_enabled = False
-import .config
-import .helper
-import .strings
-from .classes import flags
+import . config
+import . helper
+import . strings
+from . classes import flags
 
 @helper.register(strings.cmd_help_text)
 async def help_text(e):
