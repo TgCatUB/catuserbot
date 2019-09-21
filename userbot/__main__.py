@@ -5,7 +5,7 @@ import importlib
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 import os
 from config import Config
-from userbot.utils import command
+from userbot.utils import command, load_module
 from userbot import BAN_PLUG
 import userbot.utils
 from pathlib import Path
@@ -17,20 +17,6 @@ try:
 except PhoneNumberInvalidError:
     print("Phone Number you added was incorrect. Make sure to use your country code with your code")
     exit(1)
-
-def load_module(shortname):
-    name = "userbot.plugins.{}".format(shortname)
-    spec = importlib.util.spec_from_file_location(name, path)
-    mod = importlib.util.module_from_spec(spec)
-    mod.bot = bot
-    mod.Config = Config
-    mod.command = command
-    # support for uniborg
-    sys.modules["uniborg.util"] = userbot.utils
-    mod.borg = bot
-    # support for paperplaneextended
-    sys.modules["userbot.events"] = userbot.utils
-    spec.loader.exec_module(mod)
 
 import glob
 path = 'userbot/plugins/*.py'
