@@ -1,1 +1,1 @@
-userbot: python -m startup
+userbot: python -m userbot
