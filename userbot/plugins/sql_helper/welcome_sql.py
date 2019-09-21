@@ -1,5 +1,5 @@
 from sqlalchemy import BigInteger, Boolean, Column, String, UnicodeText
-from sql_helpers import SESSION, BASE
+from userbot.plugins.sql_helper import SESSION, BASE
 
 
 class Welcome(BASE):
