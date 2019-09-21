@@ -19,3 +19,4 @@ CMD_LIST = {}
 # for later purposes
 CMD_HELP = {}
 BOTLOG = os.environ.get("BOTLOG", False)
+BOTLOG_CHATID = os.environ.get("BOTLOG_CHATID", None)
