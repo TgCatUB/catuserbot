@@ -58,7 +58,7 @@ async def _(event):
         await event.edit("Welcome note saved. ")
     else:
         input_str = event.pattern_match.group(1)
-        add_welcome_setting(event.chat_id, input_str, True, 0)
+        add_welcome_setting(event.chat_id, input_str, True, 0, None)
         await event.edit("Welcome note saved. ")
 
 
