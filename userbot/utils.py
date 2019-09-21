@@ -61,6 +61,23 @@ def command(**args):
         return decorator
 
 
+def load_module(shortname):
+    name = "userbot.plugins.{}".format(shortname)
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    mod.bot = bot
+    mod.Config = Config
+    mod.command = command
+    # support for uniborg
+    sys.modules["uniborg.util"] = userbot.utils
+    mod.borg = bot
+    # support for paperplaneextended
+    sys.modules["userbot.events"] = userbot.utils
+    spec.loader.exec_module(mod)
+
+
+
+
 def admin_cmd(pattern=None, **args):
     allow_sudo = args.get("allow_sudo", False)
 
