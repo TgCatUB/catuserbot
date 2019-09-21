@@ -1,4 +1,4 @@
-from config import default_flags
+from .config import default_flags
 
 class flags:
 	def __init__(self, disable_defaults=False, *, noall=None, crawler=None,
