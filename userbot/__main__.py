@@ -26,6 +26,8 @@ for name in files:
         mod.bot = bot
         mod.Config = Config
         mod.command = command
+        # support for uniborg
+        mod.borg = bot
         spec.loader.exec_module(mod)
         print("Successfully imported {}".format(f.name.replace("userbot/plugins/", "")))
 import userbot._core
