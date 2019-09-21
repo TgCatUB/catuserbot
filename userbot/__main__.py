@@ -33,6 +33,7 @@ def load_module(shortname):
     spec.loader.exec_module(mod)
 
 import glob
+import userbot._core
 path = 'userbot/plugins/*.py'
 files = glob.glob(path)
 for name in files:
@@ -42,7 +43,6 @@ for name in files:
         load_module(shortname.replace(".py", ""))
         print("Successfully (re)imported {}".format(f.name.replace("userbot/plugins/", "")))
 
-import userbot._core
 os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
 
 print("Yay your userbot is officially working.")
