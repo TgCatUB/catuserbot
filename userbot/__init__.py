@@ -18,3 +18,4 @@ else:
 CMD_LIST = {}
 # for later purposes
 CMD_HELP = {}
+BOTLOG = os.environ.get("BOTLOG", False)
