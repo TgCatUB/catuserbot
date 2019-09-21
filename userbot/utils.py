@@ -1,55 +1,58 @@
 from userbot import bot
 from telethon import events
 from config import Config
+from userbot import BAN_PLUG
 from userbot import CMD_LIST
 import re
 
 def command(**args):
-    pattern = args.get("pattern", None)
-    allow_sudo = args.get("allow_sudo", None)
-    allow_edited_updates = args.get('allow_edited_updates', False)
-    args["incoming"] = args.get("incoming", False)
-    args["outgoing"] = True
-    if bool(args["incoming"]):
-        args["outgoing"] = False
+    from os import basename
+    if not basename in BAN_PLUG:
+       pattern = args.get("pattern", None)
+        allow_sudo = args.get("allow_sudo", None)
+        allow_edited_updates = args.get('allow_edited_updates', False)
+        args["incoming"] = args.get("incoming", False)
+        args["outgoing"] = True
+        if bool(args["incoming"]):
+            args["outgoing"] = False
 
-    try:
-        if pattern is not None and not pattern.startswith('(?i)'):
-            args['pattern'] = '(?i)' + pattern
-    except:
-        pass
-    
-    reg = re.compile('(?:.)(.*)')
-    if not pattern == None:
         try:
-            cmd = re.search(reg, pattern)
+            if pattern is not None and not pattern.startswith('(?i)'):
+                args['pattern'] = '(?i)' + pattern
+        except:
+            pass
+    
+        reg = re.compile('(?:.)(.*)')
+        if not pattern == None:
             try:
-                cmd = cmd.group(1).replace("$", "")
+                cmd = re.search(reg, pattern)
+                try:
+                    cmd = cmd.group(1).replace("$", "")
+                except:
+                    pass
+
+                CMD_LIST.update({f"{cmd}": f"{cmd}"})
             except:
                 pass
 
-            CMD_LIST.update({f"{cmd}": f"{cmd}"})
-        except:
-            pass
+        args['allow_sudo'] = allow_sudo
+        if allow_sudo:
+            args["from_users"] = list(Config.SUDO_USERS)
+            # Mutually exclusive with outgoing (can only set one of either).
+            args["incoming"] = True
+        del args["allow_sudo"]
 
-    args['allow_sudo'] = allow_sudo
-    if allow_sudo:
-        args["from_users"] = list(Config.SUDO_USERS)
-        # Mutually exclusive with outgoing (can only set one of either).
-        args["incoming"] = True
-    del args["allow_sudo"]
+        if "allow_edited_updates" in args:
+            del args['allow_edited_updates']
 
-    if "allow_edited_updates" in args:
-        del args['allow_edited_updates']
+        def decorator(func):
+            if allow_edited_updates:
+                bot.add_event_handler(func, events.MessageEdited(**args))
+            bot.add_event_handler(func, events.NewMessage(**args))
 
-    def decorator(func):
-        if allow_edited_updates:
-            bot.add_event_handler(func, events.MessageEdited(**args))
-        bot.add_event_handler(func, events.NewMessage(**args))
+            return func
 
-        return func
-
-    return decorator
+        return decorator
 
 
 def admin_cmd(pattern=None, **args):
