@@ -48,17 +48,18 @@ async def _(event):
             update_previous_welcome(event.chat_id, current_message.id)
 
 
-@command(pattern="^.savewelcome (.*)")  # pylint:disable=E0602
+@command(pattern="^.savewelcome ")  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
     msg = await event.get_reply_message()
     if msg and msg.media:
-        add_welcome_setting(event.chat_id, msg.message, True, 0, msg.media)
+        bot_api_file_id = pack_bot_file_id(msg.media)
+        add_welcome_setting(event.chat_id, msg.message, True, 0, bot_api_file_id)
         await event.edit("Welcome note saved. ")
     else:
-        input_str = event.pattern_match.group(1)
-        add_welcome_setting(event.chat_id, input_str, True, 0, None)
+        input_str = event.text.split(None, 1)
+        add_welcome_setting(event.chat_id, input_str[1], True, 0)
         await event.edit("Welcome note saved. ")
 
 
