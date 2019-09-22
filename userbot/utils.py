@@ -4,6 +4,7 @@ from config import Config
 from userbot import LOAD_PLUG
 from userbot import CMD_LIST
 import re
+import logging
 
 def command(**args):
     import inspect
@@ -71,6 +72,7 @@ def load_module(shortname):
     mod.bot = bot
     mod.Config = Config
     mod.command = command
+    mod.log = logging.basicConfig(level=logging.DEBUG)
     # support for uniborg
     sys.modules["uniborg.util"] = userbot.utils
     mod.borg = bot
