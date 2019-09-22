@@ -76,8 +76,7 @@ async def unload(event):
         return
     shortname = event.pattern_match["shortname"]
     try:
-        print(LOAD_PLUG[shortname])
-        bot.remove_event_handler(LOAD_PLUG[shortname])
+        remove_plugin(shortname)
         await event.edit(f"Unloaded {shortname} successfully")
     except Exception as e:
         await event.edit("Could not unload {} due to the following error.\n{}".format(shortname, str(e)))
