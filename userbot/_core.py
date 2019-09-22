@@ -94,7 +94,7 @@ async def unload(event):
         import importlib
         import inspect
         sys.meta_path = [ImportBlocker(f'userbot.plugins.{shortname}')]
-        my_module = importlib.import_module("userbot.plugins." + shortname) # load the module
+        my_module = __import__("userbot.plugins." + shortname) # load the module
         for _, obj in inspect.getmembers(my_module): # iterate through members
           if isinstance(obj, type): # check if members is a class
             print(obj)
