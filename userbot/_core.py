@@ -4,7 +4,7 @@ from userbot.utils import command, load_module
 from config import Config
 import importlib
 from pathlib import Path
-from userbot import BAN_PLUG
+from userbot import LOAD_PLUG
 import sys
 import asyncio
 import traceback
