@@ -8,8 +8,6 @@ from userbot.utils import command, load_module
 from userbot import LOAD_PLUG
 from pathlib import Path
 import userbot.utils
-import logging
-logging.basicConfig(level=logging.WARNING)
 
 try:
     bot.start()
