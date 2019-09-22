@@ -72,7 +72,7 @@ def load_module(shortname):
     mod.bot = bot
     mod.Config = Config
     mod.command = command
-    mod.log = logging.basicConfig(level=logging.DEBUG)
+    mod.log = logging.basicConfig(level=logging.WARNING)
     # support for uniborg
     sys.modules["uniborg.util"] = userbot.utils
     mod.borg = bot
