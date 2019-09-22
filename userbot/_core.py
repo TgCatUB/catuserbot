@@ -1,6 +1,6 @@
 from userbot import bot
 from telethon import events
-from userbot.utils import command, load_module
+from userbot.utils import command, remove_plugin
 from config import Config
 import importlib
 from pathlib import Path
@@ -69,3 +69,14 @@ async def send(event):
     await event.edit("Uploaded {} in {} seconds".format(input_str, time_taken_in_ms))
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
+
+@command(pattern="^.unload (?P<shortname>\w+)$", outgoing=True)
+async def unload(event):
+    if event.fwd_from:
+        return
+    shortname = event.pattern_match["shortname"]
+    try:
+        remove_plugin(shortname)
+        await event.edit(f"Unloaded {shortname} successfully")
+    except Exception as e:
+        await event.edit("Could not unload {} due to the following error.\n{}".format(shortname, str(e)))
