@@ -76,11 +76,15 @@ async def unload(event):
         return
     shortname = event.pattern_match["shortname"]
     try:
+        import os
+        import os.path as path
+        import importlib
         import inspect
-        print(dir(sys.modules[f"userbot.plugins.{shortname}"]))
-        mod = dir(sys.modules[f"userbot.plugins.{shortname}"])
-        for i in mod:
-            remove_plugin(i)
+        my_module = importlib.import_module("userbot.plugins." + shortname) # load the module
+        for _, obj in inspect.getmembers(my_module): # iterate through members
+          if isinstance(obj, type): # check if members is a class
+            print(obj)
+            remove_plugin(obj)
         await event.edit(f"Unloaded {shortname} successfully")
     except Exception as e:
         await event.edit("Could not unload {} due to the following error.\n{}".format(shortname, str(e)))
