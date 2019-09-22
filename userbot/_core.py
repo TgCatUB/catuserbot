@@ -23,7 +23,7 @@ class ImportBlocker(object):
             return self
         return None
 
-    def exec_module(self, mdl):
+    def load_module(self, mdl):
         # return an empty namespace
         return {}
 
