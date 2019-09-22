@@ -28,9 +28,10 @@ def command(**args):
             pass
 
         if test in BAN_PLUG:
-            args["pattern"] = None
-            args["incoming"] = None
-            args["outgoing"] = None
+            print('test')
+            del args["pattern"]
+            del args["incoming"]
+            del args["outgoing"]
     
         reg = re.compile('(?:.)(.*)')
         if not pattern == None:
@@ -45,7 +46,6 @@ def command(**args):
             except:
                 pass
 
-        args['allow_sudo'] = allow_sudo
         if allow_sudo:
             args["from_users"] = list(Config.SUDO_USERS)
             # Mutually exclusive with outgoing (can only set one of either).
