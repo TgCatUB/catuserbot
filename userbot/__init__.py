@@ -19,6 +19,6 @@ CMD_LIST = {}
 # for later purposes
 CMD_HELP = {}
 INT_PLUG = ""
-LOAD_PLUG = []
+LOAD_PLUG = {}
 BOTLOG = os.environ.get("BOTLOG", False)
 BOTLOG_CHATID = os.environ.get("BOTLOG_CHATID", None)
