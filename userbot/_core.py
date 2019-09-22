@@ -77,7 +77,6 @@ async def unload(event):
     shortname = event.pattern_match["shortname"]
     try:
         import inspect
-        __import__("userbot.plugins." + shortname)
         print(inspect.getmembers("userbot.plugins." + shortname, inspect.isfunction))
         mod = all_functions = inspect.getmembers("userbot.plugins." + shortname, inspect.isfunction)
         for i in mod:
