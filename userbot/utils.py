@@ -54,7 +54,7 @@ def command(**args):
             if allow_edited_updates:
                 bot.add_event_handler(func, events.MessageEdited(**args))
             bot.add_event_handler(func, events.NewMessage(**args))
-            print(func)
+            print(func + " " + type(func))
             return func
 
         return decorator
