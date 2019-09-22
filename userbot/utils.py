@@ -10,7 +10,7 @@ def command(**args):
     import inspect
     stack = inspect.stack()
     previous_stack_frame = stack[1]
-    test = previous_stack_frame.filename.replace("userbot/plugins/", "")
+    func = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
     if 1 == 0:
         return print("stupidity at its best")
     else:
