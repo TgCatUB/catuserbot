@@ -81,7 +81,7 @@ def load_module(shortname):
     spec.loader.exec_module(mod)
 
 def remove_plugin(shortname):
-    bot.remove_event_handler(shortname)
+    bot.remove_event_handler(LOAD_PLUG[shortname])
 
 def admin_cmd(pattern=None, **args):
     allow_sudo = args.get("allow_sudo", False)
@@ -114,8 +114,11 @@ def admin_cmd(pattern=None, **args):
 
     # check if the plugin should listen for outgoing 'messages'
     is_message_enabled = True
+    def decorator(func):
+        LOAD_PLUG.update({file_test: func})
+        return events.NewMessage(**args)
 
-    return events.NewMessage(**args)
+    return decorator
 
 """ Userbot module for managing events.
  One of the main components of the userbot. """
@@ -134,6 +137,10 @@ import datetime
 
 def register(**args):
     """ Register a new event. """
+    import inspect
+    stack = inspect.stack()
+    previous_stack_frame = stack[1]
+    file_test = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
     pattern = args.get('pattern', None)
     disable_edited = args.get('disable_edited', False)
 
@@ -147,6 +154,7 @@ def register(**args):
         if not disable_edited:
             bot.add_event_handler(func, events.MessageEdited(**args))
         bot.add_event_handler(func, events.NewMessage(**args))
+        LOAD_PLUG.update({file_test: func})
 
         return func
 
