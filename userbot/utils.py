@@ -50,12 +50,9 @@ def command(**args):
         if "allow_edited_updates" in args:
             del args['allow_edited_updates']
 
-        def decorator(func):
-            if allow_edited_updates:
-                return @bot.on(events.MessageEdited(**args))
-            return @bot.on(events.NewMessage(**args))
-
-        return decorator
+        if allow_edited_updates == True:
+            @bot.on(events.MessageEdited(**args))
+        @bot.on(events.NewMessage(**args))
 
 
 def load_module(shortname):
