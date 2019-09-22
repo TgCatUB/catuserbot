@@ -59,7 +59,7 @@ async def _(event):
         await event.edit("Welcome note saved. ")
     else:
         input_str = event.text.split(None, 1)
-        add_welcome_setting(event.chat_id, input_str[1], True, 0)
+        add_welcome_setting(event.chat_id, input_str[1], True, 0, None)
         await event.edit("Welcome note saved. ")
 
 
