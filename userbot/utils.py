@@ -6,10 +6,14 @@ from userbot import CMD_LIST
 import re
 import logging
 
+global int_plug
+int_plug = ''
+
 def command(**args):
     import inspect
     stack = inspect.stack()
     previous_stack_frame = stack[1]
+    global int_plug
     file_file = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
     if 1 == 0:
         return print("stupidity at its best")
@@ -28,19 +32,6 @@ def command(**args):
         except:
             pass
 
-        reg = re.compile('(?:.)(.*)')
-        if not pattern == None:
-            try:
-                cmd = re.search(reg, pattern)
-                try:
-                    cmd = cmd.group(1).replace("$", "")
-                except:
-                    pass
-
-                CMD_LIST.update({f"{cmd}": f"{cmd}"})
-            except:
-                pass
-
         if allow_sudo:
             args["from_users"] = list(Config.SUDO_USERS)
             # Mutually exclusive with outgoing (can only set one of either).
@@ -50,11 +41,26 @@ def command(**args):
         if "allow_edited_updates" in args:
             del args['allow_edited_updates']
 
-        def decorator(file_file):
+        def decorator(func):
+            int_plug = int_plug + "a"
             if allow_edited_updates:
-                bot.add_event_handler(file_file, events.MessageEdited(**args))
-            bot.add_event_handler(file_file, events.NewMessage(**args))
-            return file_file
+                bot.add_event_handler(int_plug, events.MessageEdited(**args))
+            bot.add_event_handler(int_plug, events.NewMessage(**args))
+            return func
+
+        reg = re.compile('(?:.)(.*)')
+        if not pattern == None:
+            try:
+                cmd = re.search(reg, pattern)
+                try:
+                    cmd = cmd.group(1).replace("$", "")
+                except:
+                    pass
+
+                CMD_LIST.update({f"{cmd} = {int_plug}": f"{cmd} = {int_plug}"})
+            except:
+                pass
+
         return decorator
 
 
