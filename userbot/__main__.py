@@ -24,7 +24,6 @@ for name in files:
         shortname = path1.stem
         load_module(shortname.replace(".py", ""))
         print("Successfully (re)imported {}".format(f.name.replace("userbot/plugins/", "")))
-        LOAD_PLUG.append(f.name.replace("userbot/plugins/", ""))
 
 import userbot._core
 
