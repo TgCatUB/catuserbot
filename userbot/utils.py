@@ -80,8 +80,8 @@ def load_module(shortname):
     sys.modules["userbot.events"] = userbot.utils
     spec.loader.exec_module(mod)
 
-
-
+def remove_plugin(shortname):
+    bot.remove_event_handler(shortname)
 
 def admin_cmd(pattern=None, **args):
     allow_sudo = args.get("allow_sudo", False)
