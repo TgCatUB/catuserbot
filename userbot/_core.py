@@ -78,9 +78,10 @@ async def unload(event):
     try:
         import inspect
         __import__("userbot.plugins" + shortname)
-        print(inspect.getmembers("userbot.plugins" + shortname, inspect.isfunction))
-        mod = all_functions = inspect.getmembers("userbot.plugins" + shortname, inspect.isfunction)
-        remove_plugin(shortname)
+        print(inspect.getmembers("userbot.plugins." + shortname, inspect.isfunction))
+        mod = all_functions = inspect.getmembers("userbot.plugins." + shortname, inspect.isfunction)
+        for i in mod:
+            remove_plugin(i)
         await event.edit(f"Unloaded {shortname} successfully")
     except Exception as e:
         await event.edit("Could not unload {} due to the following error.\n{}".format(shortname, str(e)))
