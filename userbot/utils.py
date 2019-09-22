@@ -51,10 +51,8 @@ def command(**args):
             del args['allow_edited_updates']
 
         if allow_edited_updates:
-            hand_ler =bot.add_event_handler(file_file, events.MessageEdited(**args))
-        hand_ler = bot.add_event_handler(file_file, events.NewMessage(**args))
-
-        return hand_ler
+            return bot.add_event_handler(file_file, events.MessageEdited(**args))
+        return bot.add_event_handler(file_file, events.NewMessage(**args))
 
 
 def load_module(shortname):
