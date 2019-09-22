@@ -2,9 +2,12 @@ from userbot import bot
 from telethon import events
 from config import Config
 from userbot import LOAD_PLUG
-from userbot import CMD_LIST, INT_PLUG
+from userbot import CMD_LIST
 import re
 import logging
+
+global INT_PLUG
+INT_PLUG = ""
 
 def command(**args):
     import inspect
@@ -38,6 +41,7 @@ def command(**args):
             del args['allow_edited_updates']
 
         def decorator(func):
+            global INT_PLUG
             INT_PLUG = INT_PLUG + "a"
             if allow_edited_updates:
                 bot.add_event_handler(int_plug, events.MessageEdited(**args))
