@@ -50,9 +50,12 @@ def command(**args):
         if "allow_edited_updates" in args:
             del args['allow_edited_updates']
 
-        if allow_edited_updates:
-            return bot.add_event_handler(file_file, events.MessageEdited(**args))
-        return bot.add_event_handler(file_file, events.NewMessage(**args))
+        def decorator(file_file):
+            if allow_edited_updates:
+                bot.add_event_handler(file_file, events.MessageEdited(**args))
+            bot.add_event_handler(file_file, events.NewMessage(**args))
+            return file_file
+        return decorator
 
 
 def load_module(shortname):
