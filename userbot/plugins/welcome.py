@@ -24,7 +24,7 @@ async def _(event):
                     logger.warn(str(e))  # pylint:disable=E0602
             a_user = await event.get_user()
             chat = await event.get_chat()
-            me = await self.get_me()
+            me = await event.get_me()
 
             title = chat.title if chat.title else "this chat"
             participants = await event.client.get_participants(chat)
