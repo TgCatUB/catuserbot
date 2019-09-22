@@ -116,7 +116,8 @@ def admin_cmd(pattern=None, **args):
     is_message_enabled = True
     def decorator(func):
         LOAD_PLUG.update({file_test: func})
-        return events.NewMessage(**args)
+        events.NewMessage(**args)
+        return func
 
     return decorator
 
