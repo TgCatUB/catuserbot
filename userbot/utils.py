@@ -2,7 +2,7 @@ from userbot import bot
 from telethon import events
 from config import Config
 from userbot import LOAD_PLUG
-from userbot import CMD_LIST, int_plug
+from userbot import CMD_LIST, INT_PLUG
 import re
 import logging
 
@@ -38,7 +38,7 @@ def command(**args):
             del args['allow_edited_updates']
 
         def decorator(func):
-            int_plug = int_plug + "a"
+            INT_PLUG = INT_PLUG + "a"
             if allow_edited_updates:
                 bot.add_event_handler(int_plug, events.MessageEdited(**args))
             bot.add_event_handler(int_plug, events.NewMessage(**args))
@@ -53,7 +53,7 @@ def command(**args):
                 except:
                     pass
 
-                CMD_LIST.update({f"{cmd} = {int_plug}": f"{cmd} = {int_plug}"})
+                CMD_LIST.update({f"{cmd} = {INT_PLUG}": f"{cmd} = {INT_PLUG}"})
             except:
                 pass
 
