@@ -69,16 +69,3 @@ async def send(event):
     await event.edit("Uploaded {} in {} seconds".format(input_str, time_taken_in_ms))
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
-
-@command(pattern="^.unload (?P<shortname>\w+)$", outgoing=True)
-async def unload(event):
-    if event.fwd_from:
-        return
-    await event.edit("Unloading...")
-    shortname = event.pattern_match["shortname"]
-    try:
-        BAN_PLUG.append(shortname + ".py")
-        load_module(shortname)
-        await event.edit("Unloaded {} successfully.".format(shortname))
-    except Exception as e:
-        await event.edit("Unable to unload {} due to the following error:\n{}".format(shortname, str(e)))
