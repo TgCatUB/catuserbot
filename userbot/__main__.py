@@ -5,7 +5,7 @@ from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 import os
 from config import Config
 from userbot.utils import command, load_module
-from userbot import BAN_PLUG
+from userbot import LOAD_PLUG
 from pathlib import Path
 import userbot.utils
 import logging
@@ -26,6 +26,7 @@ for name in files:
         shortname = path1.stem
         load_module(shortname.replace(".py", ""))
         print("Successfully (re)imported {}".format(f.name.replace("userbot/plugins/", "")))
+        LOAD_PLUG.append(f.name.replace("userbot/plugins/", ""))
 
 import userbot._core
 
