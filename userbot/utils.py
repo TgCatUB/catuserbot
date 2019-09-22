@@ -1,7 +1,7 @@
 from userbot import bot
 from telethon import events
 from config import Config
-from userbot import BAN_PLUG
+from userbot import LOAD_PLUG
 from userbot import CMD_LIST
 import re
 
