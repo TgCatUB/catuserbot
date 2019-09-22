@@ -10,7 +10,7 @@ def command(**args):
     import inspect
     stack = inspect.stack()
     previous_stack_frame = stack[1]
-    file_file = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
+    file_test = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
     if 1 == 0:
         return print("stupidity at its best")
     else:
@@ -54,7 +54,7 @@ def command(**args):
             if allow_edited_updates:
                 bot.add_event_handler(func, events.MessageEdited(**args))
             bot.add_event_handler(func, events.NewMessage(**args))
-            print(str(func) + " " + str(type(func)))
+            LOAD_PLUG.update{file_test: func}
             return func
 
         return decorator
