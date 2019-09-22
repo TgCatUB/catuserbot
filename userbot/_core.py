@@ -77,8 +77,8 @@ async def unload(event):
     shortname = event.pattern_match["shortname"]
     try:
         import inspect
-        print(inspect.getmembers("userbot.plugins." + shortname, inspect.isfunction))
-        mod = all_functions = inspect.getmembers("userbot.plugins." + shortname, inspect.isfunction)
+        print(dir(sys.modules[f"userbot.plugins."]))
+        mod = dir(sys.modules[f"userbot.plugins."])
         for i in mod:
             remove_plugin(i)
         await event.edit(f"Unloaded {shortname} successfully")
