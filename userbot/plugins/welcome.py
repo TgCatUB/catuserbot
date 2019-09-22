@@ -73,7 +73,7 @@ async def _(event):
         "The previous welcome message was `{}`.".format(cws.custom_welcome_message)
     )
 
-@command(pattern="listwelcome")  # pylint:disable=E0602
+@command(pattern="^.listwelcome")  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
@@ -81,7 +81,7 @@ async def _(event):
     if hasattr(cws, 'custom_welcome_message'):
         await event.edit(
             "Welcome note found. " + \
-        "Your welcome message is {}.".format(cws.custom_welcome_message)
+        "Your welcome message is\n\n`{}`.".format(cws.custom_welcome_message)
     )
     else:
         await event.edit(
