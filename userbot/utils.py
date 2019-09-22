@@ -2,18 +2,14 @@ from userbot import bot
 from telethon import events
 from config import Config
 from userbot import LOAD_PLUG
-from userbot import CMD_LIST
+from userbot import CMD_LIST, int_plug
 import re
 import logging
-
-global int_plug
-int_plug = ''
 
 def command(**args):
     import inspect
     stack = inspect.stack()
     previous_stack_frame = stack[1]
-    global int_plug
     file_file = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
     if 1 == 0:
         return print("stupidity at its best")
