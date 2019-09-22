@@ -44,8 +44,8 @@ def command(**args):
             global INT_PLUG
             INT_PLUG = INT_PLUG + "a"
             if allow_edited_updates:
-                bot.add_event_handler(int_plug, events.MessageEdited(**args))
-            bot.add_event_handler(int_plug, events.NewMessage(**args))
+                bot.add_event_handler(INT_PLUG, events.MessageEdited(**args))
+            bot.add_event_handler(INT_PLUG, events.NewMessage(**args))
             return func
 
         reg = re.compile('(?:.)(.*)')
@@ -57,6 +57,7 @@ def command(**args):
                 except:
                     pass
 
+                global INT_PLUG
                 CMD_LIST.update({f"{cmd} = {INT_PLUG}": f"{cmd} = {INT_PLUG}"})
             except:
                 pass
