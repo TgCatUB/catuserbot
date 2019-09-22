@@ -6,9 +6,6 @@ from userbot import CMD_LIST
 import re
 import logging
 
-global INT_PLUG
-INT_PLUG = ""
-
 def command(**args):
     import inspect
     stack = inspect.stack()
@@ -31,6 +28,19 @@ def command(**args):
         except:
             pass
 
+        reg = re.compile('(?:.)(.*)')
+        if not pattern == None:
+            try:
+                cmd = re.search(reg, pattern)
+                try:
+                    cmd = cmd.group(1).replace("$", "")
+                except:
+                    pass
+
+                CMD_LIST.update({f"{cmd}": f"{cmd}"})
+            except:
+                pass
+
         if allow_sudo:
             args["from_users"] = list(Config.SUDO_USERS)
             # Mutually exclusive with outgoing (can only set one of either).
@@ -41,26 +51,11 @@ def command(**args):
             del args['allow_edited_updates']
 
         def decorator(func):
-            global INT_PLUG
-            INT_PLUG = INT_PLUG + "a"
             if allow_edited_updates:
-                bot.add_event_handler(INT_PLUG, events.MessageEdited(**args))
-            bot.add_event_handler(INT_PLUG, events.NewMessage(**args))
+                bot.add_event_handler(func, events.MessageEdited(**args))
+            bot.add_event_handler(func, events.NewMessage(**args))
+            print(func)
             return func
-
-        reg = re.compile('(?:.)(.*)')
-        if not pattern == None:
-            try:
-                cmd = re.search(reg, pattern)
-                try:
-                    cmd = cmd.group(1).replace("$", "")
-                except:
-                    pass
-
-                global INT_PLUG
-                CMD_LIST.update({f"{cmd} = {INT_PLUG}": f"{cmd} = {INT_PLUG}"})
-            except:
-                pass
 
         return decorator
 
