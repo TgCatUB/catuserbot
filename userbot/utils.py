@@ -27,11 +27,6 @@ def command(**args):
         except:
             pass
 
-        if test in BAN_PLUG:
-            import random
-            s = '^.ianciwhzlsicb'
-            args["pattern"] = s
-    
         reg = re.compile('(?:.)(.*)')
         if not pattern == None:
             try:
