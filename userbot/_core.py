@@ -14,6 +14,19 @@ from datetime import datetime
 
 DELETE_TIMEOUT = 5
 
+class ImportBlocker(object):
+    def __init__(self, *args):
+        self.module_names = args
+
+    def find_module(self, fullname, path=None):
+        if fullname in self.module_names:
+            return self
+        return None
+
+    def exec_module(self, mdl):
+        # return an empty namespace
+        return {}
+
 @command(pattern="^.install", outgoing=True)
 async def install(event):
     if event.fwd_from:
@@ -80,6 +93,7 @@ async def unload(event):
         import os.path as path
         import importlib
         import inspect
+        sys.meta_path = [ImportBlocker(f'userbot.plugins.{shortname}')]
         my_module = importlib.import_module("userbot.plugins." + shortname) # load the module
         for _, obj in inspect.getmembers(my_module): # iterate through members
           if isinstance(obj, type): # check if members is a class
