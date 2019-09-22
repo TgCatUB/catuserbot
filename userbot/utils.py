@@ -13,7 +13,6 @@ def command(**args):
     if 1 == 0:
         return print("stupidity at its best")
     else:
-        print(BAN_PLUG)
         pattern = args.get("pattern", None)
         allow_sudo = args.get("allow_sudo", None)
         allow_edited_updates = args.get('allow_edited_updates', False)
