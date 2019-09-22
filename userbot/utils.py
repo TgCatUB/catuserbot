@@ -114,12 +114,11 @@ def admin_cmd(pattern=None, **args):
 
     # check if the plugin should listen for outgoing 'messages'
     is_message_enabled = True
-    def decorator(func):
-        LOAD_PLUG.update({file_test: func})
-        events.NewMessage(**args)
-        return func
-
-    return decorator
+    try:
+        print(func)
+    except:
+        pass
+    return events.NewMessage(**args)
 
 """ Userbot module for managing events.
  One of the main components of the userbot. """
