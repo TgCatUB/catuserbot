@@ -205,17 +205,3 @@ def errors_handler(func):
             ftext += result
 
     return wrapper
-
-
-def remove_plugin(shortname):
-    name = f"userbot/plugins/{shortname}.py"
-
-    for i in reversed(range(len(bot._event_builders))):
-        ev, cb = bot._event_builders[i]
-        if cb.__module__ == name:
-            del bot._event_builders[i]
-
-    print(f"Removed plugin {shortname}")
-
-
-
