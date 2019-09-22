@@ -10,8 +10,8 @@ def command(**args):
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     test = previous_stack_frame.filename.replace("userbot/plugins/", "")
-    if test in BAN_PLUG:
-        return print("this plugin is banned from usinb this weapper")
+    if 1 == 0:
+        return print("stupidity at its best")
     else:
         pattern = args.get("pattern", None)
         allow_sudo = args.get("allow_sudo", None)
@@ -26,6 +26,11 @@ def command(**args):
                 args['pattern'] = '(?i)' + pattern
         except:
             pass
+
+        if test in BAN_PLUG:
+            args["pattern"] = None
+            args["incoming"] = None
+            args["outgoing"] = None
     
         reg = re.compile('(?:.)(.*)')
         if not pattern == None:
