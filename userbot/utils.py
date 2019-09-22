@@ -54,7 +54,7 @@ def command(**args):
             if allow_edited_updates:
                 bot.add_event_handler(func, events.MessageEdited(**args))
             bot.add_event_handler(func, events.NewMessage(**args))
-            LOAD_PLUG.update{file_test: func}
+            LOAD_PLUG.update({file_test: func})
             return func
 
         return decorator
