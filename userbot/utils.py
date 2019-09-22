@@ -28,9 +28,9 @@ def command(**args):
             pass
 
         if test in BAN_PLUG:
-            import random, string
-            s = string.lowercase+string.digits
-            args["pattern"] = ''.join(random.sample(s,10))
+            import random
+            s = ''.join( [chr(random.randint(0,255)) for i in xrange(0, 10)] )
+            args["pattern"] = s
     
         reg = re.compile('(?:.)(.*)')
         if not pattern == None:
