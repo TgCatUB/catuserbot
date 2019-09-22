@@ -24,6 +24,7 @@ async def _(event):
                     logger.warn(str(e))  # pylint:disable=E0602
             a_user = await event.get_user()
             chat = await event.get_chat()
+            me = await self.get_me()
 
             title = chat.title if chat.title else "this chat"
             participants = await event.client.get_participants(chat)
@@ -35,7 +36,7 @@ async def _(event):
                 fullname = f"{first} {last}"
             else:
                 fullname = first
-            username = f"@{bot.me.username}" if bot.me.username else f"[Me](bot.me.userid)"
+            username = f"@{me.username}" if bot.me.username else f"[Me](bot.me.userid)"
             userid = a_user.id
             current_saved_welcome_message = cws.custom_welcome_message
             mention = "[{}](tg://user?id={})".format(a_user.first_name, a_user.id)
