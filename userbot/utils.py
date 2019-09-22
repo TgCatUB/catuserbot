@@ -10,7 +10,7 @@ def command(**args):
     import inspect
     stack = inspect.stack()
     previous_stack_frame = stack[1]
-    file = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
+    file_file = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
     if 1 == 0:
         return print("stupidity at its best")
     else:
@@ -51,8 +51,8 @@ def command(**args):
             del args['allow_edited_updates']
 
         if allow_edited_updates:
-            hand_ler =bot.add_event_handler(func, events.MessageEdited(**args))
-        hand_ler = bot.add_event_handler(func, events.NewMessage(**args))
+            hand_ler =bot.add_event_handler(file_file, events.MessageEdited(**args))
+        hand_ler = bot.add_event_handler(file_file, events.NewMessage(**args))
 
         return hand_ler
 
