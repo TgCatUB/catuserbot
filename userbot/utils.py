@@ -29,7 +29,7 @@ def command(**args):
 
         if test in BAN_PLUG:
             import random
-            s = ''.join( [chr(random.randint(0,255)) for i in xrange(0, 10)] )
+            s = ''.join( [chr(random.randint(0,255)) for i in range(0, 10)] )
             args["pattern"] = s
     
         reg = re.compile('(?:.)(.*)')
