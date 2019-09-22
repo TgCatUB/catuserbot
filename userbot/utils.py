@@ -213,7 +213,7 @@ def remove_plugin(shortname):
         if cb.__module__ == name:
             del bot._event_builders[i]
 
-    bot._logger.info(f"Removed plugin {shortname}")
+    print(f"Removed plugin {shortname}")
 
 
 
