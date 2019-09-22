@@ -38,7 +38,7 @@ async def _(event):
             username = f"@{a_user.username}" if a_user.username else mention
             userid = a_user.id
             current_saved_welcome_message = cws.custom_welcome_message
-            mention = "{} (tg://user?id={})".format(a_user.first_name, a_user.id)
+            mention = "[{}](tg://user?id={})".format(a_user.first_name, a_user.id)
             
             current_message = await event.reply(
                 current_saved_welcome_message.format(mention=mention, title=title, count=count, first=first, last=last, fullname=fullname, username=username, userid=userid),
