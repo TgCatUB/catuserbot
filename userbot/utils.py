@@ -89,6 +89,7 @@ def remove_plugin(shortname):
         bot.remove_event_handler(i)
 
 def admin_cmd(pattern=None, **args):
+    import inspect
     stack = inspect.stack()
     the_class = stack[1][0].f_locals["self"].__class__
     the_method = stack[1][0].f_code.co_name
