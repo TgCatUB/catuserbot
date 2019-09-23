@@ -48,7 +48,7 @@ ISP Rating: {}""".format(ms, convert_from_bytes(download_speed), convert_from_by
             await bot.send_file(
                 event.chat_id,
                 speedtest_image,
-                caption="**SpeedTest** completed in {} seconds".format(ms),
+                caption="**SpeedTest** completed in {} ms".format(ms),
                 force_document=as_document,
                 reply_to=reply_msg_id,
                 allow_cache=False
