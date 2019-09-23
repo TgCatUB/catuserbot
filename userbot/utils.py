@@ -58,7 +58,8 @@ def command(**args):
                 LOAD_PLUG[file_test].append(func)
             except Exception as e:
                 print(str(e))
-                LOAD_PLUG.update({file_test: list(func)})
+                LOAD_PLUG.update({file_test: []})
+                LOAD_PLUG[file_test].append(func)
             return func
 
         return decorator
@@ -87,7 +88,7 @@ def load_module(shortname):
 def remove_plugin(shortname):
     for key, value in LOAD_PLUG.items():
         if key == shortname:
-            for i in list(value):
+            for i in value:
                 print(list(value))
                 bot.remove_event_handler(i)
 
