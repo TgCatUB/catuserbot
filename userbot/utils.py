@@ -87,7 +87,7 @@ def load_module(shortname):
 
 def remove_plugin(shortname):
     for i in LOAD_PLUG[shortname]:
-        print(i)
+        bot.remove_event_handler(i)
 
 def admin_cmd(pattern=None, **args):
     allow_sudo = args.get("allow_sudo", False)
