@@ -86,10 +86,8 @@ def load_module(shortname):
     spec.loader.exec_module(mod)
 
 def remove_plugin(shortname):
-    for key, value in LOAD_PLUG.items():
-        if key == shortname:
-            print(list(value))
-            bot.remove_event_handler(value)
+    for i in LOAD_PLUG[shortname]:
+        print(i)
 
 def admin_cmd(pattern=None, **args):
     allow_sudo = args.get("allow_sudo", False)
