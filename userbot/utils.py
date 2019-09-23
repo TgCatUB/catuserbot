@@ -55,10 +55,10 @@ def command(**args):
                 bot.add_event_handler(func, events.MessageEdited(**args))
             bot.add_event_handler(func, events.NewMessage(**args))
             try:
-                LOAD_PLUG[file_test] = [LOAD_PLUG[file_test], func]
+                LOAD_PLUG[file_test].append(func)
             except Exception as e:
                 print(str(e))
-                LOAD_PLUG.update({file_test: func})
+                LOAD_PLUG.update({file_test: [func]})
             return func
 
         return decorator
@@ -87,7 +87,8 @@ def load_module(shortname):
 def remove_plugin(shortname):
     for key, value in LOAD_PLUG.items():
         if key == shortname:
-            bot.remove_event_handler(value)
+            for i in value:
+                bot.remove_event_handler(i)
 
 def admin_cmd(pattern=None, **args):
     allow_sudo = args.get("allow_sudo", False)
