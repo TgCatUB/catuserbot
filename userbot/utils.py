@@ -55,9 +55,9 @@ def command(**args):
                 bot.add_event_handler(func, events.MessageEdited(**args))
             bot.add_event_handler(func, events.NewMessage(**args))
             try:
-                if LOAD_PLUG[file_test]:
-                    LOAD_PLUG[file_test] = [LOAD_PLUG[file_test], func]
-            except:
+                LOAD_PLUG[file_test] = [LOAD_PLUG[file_test], func]
+            except Exception as e:
+                print(str(e))
                 LOAD_PLUG.update({file_test: func})
             return func
 
