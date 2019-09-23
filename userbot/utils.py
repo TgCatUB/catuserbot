@@ -87,7 +87,7 @@ def load_module(shortname):
 def remove_plugin(shortname):
     for key, value in LOAD_PLUG.items():
         if key == shortname:
-            for i in value:
+            for i in list(value):
                 bot.remove_event_handler(i)
 
 def admin_cmd(pattern=None, **args):
