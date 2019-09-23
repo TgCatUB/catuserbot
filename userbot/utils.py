@@ -160,7 +160,12 @@ def register(**args):
         if not disable_edited:
             bot.add_event_handler(func, events.MessageEdited(**args))
         bot.add_event_handler(func, events.NewMessage(**args))
-        LOAD_PLUG.update({file_test: func})
+        try:
+            LOAD_PLUG[file_test].append(func)
+        except Exception as e:
+            print(str(e))
+            LOAD_PLUG.update({file_test: []})
+            LOAD_PLUG[file_test].append(func)
 
         return func
 
