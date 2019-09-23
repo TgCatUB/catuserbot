@@ -89,6 +89,10 @@ def remove_plugin(shortname):
         bot.remove_event_handler(i)
 
 def admin_cmd(pattern=None, **args):
+    stack = inspect.stack()
+    the_class = stack[1][0].f_locals["self"].__class__
+    the_method = stack[1][0].f_code.co_name
+    print("I was called by {}.{}()".format(str(the_class), the_method))
     allow_sudo = args.get("allow_sudo", False)
 
     # get the pattern from the decorator
@@ -119,10 +123,7 @@ def admin_cmd(pattern=None, **args):
 
     # check if the plugin should listen for outgoing 'messages'
     is_message_enabled = True
-    try:
-        print(func)
-    except:
-        pass
+
     return events.NewMessage(**args)
 
 """ Userbot module for managing events.
