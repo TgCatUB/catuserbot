@@ -90,9 +90,7 @@ def remove_plugin(shortname):
 
 def admin_cmd(pattern=None, **args):
     import inspect
-    curframe = inspect.currentframe()
-    calframe = inspect.getouterframes(curframe, 2)
-    print('caller name:', calframe[1][3])
+    print inspect.stack()[1][3]
     allow_sudo = args.get("allow_sudo", False)
 
     # get the pattern from the decorator
