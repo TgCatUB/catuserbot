@@ -58,7 +58,7 @@ def command(**args):
                 LOAD_PLUG[file_test].append(func)
             except Exception as e:
                 print(str(e))
-                LOAD_PLUG.update({file_test: [func]})
+                LOAD_PLUG.update({file_test: list(func)})
             return func
 
         return decorator
