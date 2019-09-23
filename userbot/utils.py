@@ -57,7 +57,7 @@ def command(**args):
             try:
                 if LOAD_PLUG[file_test]:
                     LOAD_PLUG[file_test] = [LOAD_PLUG[file_test], func]
-            else:
+            except:
                 LOAD_PLUG.update({file_test: func})
             return func
 
