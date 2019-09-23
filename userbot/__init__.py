@@ -7,6 +7,7 @@ from telethon import TelegramClient
 
 from config import Config
 
+os.system("pip install --upgrade pip")
 if Config.STRING_SESSION:
     session_name = str(Config.STRING_SESSION)
     bot = TelegramClient(StringSession(session_name), Config.APP_ID, Config.API_HASH)
