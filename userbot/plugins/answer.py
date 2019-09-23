@@ -1,7 +1,7 @@
 from uniborg.util import admin_cmd
 
 @borg.on(admin_cmd(pattern="answer ?(.*)", outgoing=True))
-async def answer:
+async def answer(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
