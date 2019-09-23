@@ -1,6 +1,6 @@
 from userbot import bot
 from telethon import events
-from userbot.utils import command, remove_plugin
+from userbot.utils import command, remove_plugin, load_module
 from config import Config
 import importlib
 from pathlib import Path
@@ -25,20 +25,9 @@ async def install(event):
                 "userbot/plugins/"  # pylint:disable=E0602
             )
             if "(" not in downloaded_file_name:
-                path = Path(downloaded_file_name)
+                path1 = Path(downloaded_file_name)
                 shortname = path.stem
-                name = "userbot.plugins.{}".format(shortname.replace(".py", ""))
-                spec = importlib.util.spec_from_file_location(name, path)
-                mod = importlib.util.module_from_spec(spec)
-                mod.bot = bot
-                mod.Config = Config
-                mod.command = command
-                # support for uniborg
-                sys.modules["uniborg.util"] = userbot.utils
-                mod.borg = bot
-                # support for paperplaneextended
-                sys.modules["userbot.events"] = userbot.utils
-                spec.loader.exec_module(mod)  # pylint:disable=E0602
+                load_module(shortname.replace(".py", ""))
                 await event.edit("Installed Plugin `{}`".format(os.path.basename(downloaded_file_name)))
             else:
                 os.remove(downloaded_file_name)
@@ -80,3 +69,18 @@ async def unload(event):
         await event.edit(f"Unloaded {shortname} successfully")
     except Exception as e:
         await event.edit("Could not unload {} due to the following error.\n{}".format(shortname, str(e)))
+
+@command(pattern="^.load (?P<shortname>\w+)$", outgoing=True)
+async def load(event):
+    if event.fwd_from:
+        return
+    shortname = event.pattern_match["shortname"]
+    try:
+        try:
+            remove_plugin(shortname)
+        except:
+            pass
+        load_module(shortname)
+        await event.edit(f"Successfully loaded {shortname}"
+     except Exception as e:
+        await event.edit(f"Could not load {shortname} because of the following error.\n{str(e)}")
