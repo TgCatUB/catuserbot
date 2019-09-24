@@ -21,7 +21,7 @@ An example `local_config.py` file could be:
 
 **Not All of the variables are mandatory**
 
-__The UniBorg should work by setting only the first two variables__
+__The Userbot should work by setting only the first two variables__
 
 ```python3
 from sample_config import Config
