@@ -1,6 +1,6 @@
 from userbot import bot
 from telethon import events
-from config import Config
+from config import Var
 from userbot import LOAD_PLUG
 from userbot import CMD_LIST
 import re
@@ -74,11 +74,12 @@ def load_module(shortname):
     spec = importlib.util.spec_from_file_location(name, path)
     mod = importlib.util.module_from_spec(spec)
     mod.bot = bot
-    mod.Config = Config
+    mod.Var = Var
     mod.command = command
     mod.log = logging.basicConfig(level=logging.WARNING)
     # support for uniborg
     sys.modules["uniborg.util"] = userbot.utils
+    mod.Config = Config
     mod.borg = bot
     # support for paperplaneextended
     sys.modules["userbot.events"] = userbot.utils
