@@ -100,7 +100,7 @@ async def on_snip_list(event):
             OUT_STR += f"👉 {a_snip.keyword} \n"
     else:
         OUT_STR = "No Filters. Start Saving using `.savefilter`"
-    if len(OUT_STR) > Config.MAX_MESSAGE_SIZE_LIMIT:
+    if len(OUT_STR) > 4096:
         with io.BytesIO(str.encode(OUT_STR)) as out_file:
             out_file.name = "filters.text"
             await bot.send_file(
