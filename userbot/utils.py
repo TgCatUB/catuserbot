@@ -89,8 +89,6 @@ def remove_plugin(shortname):
         bot.remove_event_handler(i)
 
 def admin_cmd(pattern=None, **args):
-    import inspect
-    print(inspect.stack()[1][3])
     allow_sudo = args.get("allow_sudo", False)
 
     # get the pattern from the decorator
