@@ -95,13 +95,12 @@ def remove_plugin(shortname):
         del LOAD_PLUG[shortname]
 
     except:
-        name = f"userbot/plugins/{shortname}.py"
+        name = f"userbot.plugins.{shortname}"
 
         for i in reversed(range(len(bot._event_builders))):
             ev, cb = bot._event_builders[i]
             if cb.__module__ == name:
                 del bot._event_builders[i]
-            print(cb.__module__)
     else:
         raise ValueError
 
