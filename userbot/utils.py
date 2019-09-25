@@ -99,7 +99,7 @@ def remove_plugin(shortname):
             ev, cb = bot._event_builders[i]
             if cb.__module__ == name:
                 del bot._event_builders[i]
-     except:
+    except:
         raise ValueError
 
 def admin_cmd(pattern=None, **args):
