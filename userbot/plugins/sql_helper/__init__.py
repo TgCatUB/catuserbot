@@ -5,11 +5,11 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 # the secret configuration specific things
-from config import Config
+from var import Var
 
 
 def start() -> scoped_session:
-    engine = create_engine(Config.DB_URI)
+    engine = create_engine(Var.DB_URI)
     BASE.metadata.bind = engine
     BASE.metadata.create_all(engine)
     return scoped_session(sessionmaker(bind=engine, autoflush=False))
