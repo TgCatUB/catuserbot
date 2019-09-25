@@ -57,7 +57,6 @@ async def on_snip(event):
                 await bot.send_message(
                     event.chat_id,
                     snip.reply,
-                    reply_to=message_id,
                     file=media
                 )
                 if event.chat_id not in last_triggered_filters:
