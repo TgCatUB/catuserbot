@@ -89,23 +89,19 @@ def load_module(shortname):
     spec.loader.exec_module(mod)
 
 def remove_plugin(shortname):
-    for i in LOAD_PLUG[shortname]:
-        bot.remove_event_handler(i)
+    try:
+        for i in LOAD_PLUG[shortname]:
+            bot.remove_event_handler(i)
+        del LOAD_PLUG[shortname]
+    except:
+        name = f"userbot/plugins/{shortname}.py"
+
+        for i in reversed(range(len(self._event_builders))):
+            ev, cb = self._event_builders[i]
+            if cb.__module__ == name:
+                del self._event_builders[i]
 
 def admin_cmd(pattern=None, **args):
-    import inspect
-    stack = inspect.stack()
-    previous_stack_frame = stack[1]
-    file_test = Path(previous_stack_frame.filename)
-    file_test = file_test.stem.replace(".py", "")
-    handlers = bot.list_event_handlers()
-    items = handlers[-1]
-    func = items[0]
-    try:
-        LOAD_PLUG[file_test].append(func)
-    except Exception as e:
-        LOAD_PLUG.update({file_test: []})
-        LOAD_PLUG[file_test].append(func)
     allow_sudo = args.get("allow_sudo", False)
 
     # get the pattern from the decorator
