@@ -96,10 +96,10 @@ def remove_plugin(shortname):
     except:
         name = f"userbot/plugins/{shortname}.py"
 
-        for i in reversed(range(len(self._event_builders))):
-            ev, cb = self._event_builders[i]
+        for i in reversed(range(len(bot._event_builders))):
+            ev, cb = bot._event_builders[i]
             if cb.__module__ == name:
-                del self._event_builders[i]
+                del bot._event_builders[i]
 
 def admin_cmd(pattern=None, **args):
     allow_sudo = args.get("allow_sudo", False)
