@@ -59,7 +59,7 @@ def command(**args):
             bot.add_event_handler(func, events.NewMessage(**args))
             try:
                 LOAD_PLUG[file_test].append(func)
-            except Exception as e:
+            except:
                 LOAD_PLUG.update({file_test: []})
                 LOAD_PLUG[file_test].append(func)
             return func
@@ -93,6 +93,19 @@ def remove_plugin(shortname):
         bot.remove_event_handler(i)
 
 def admin_cmd(pattern=None, **args):
+    import inspect
+    stack = inspect.stack()
+    previous_stack_frame = stack[1]
+    file_test = Path(previous_stack_frame.filename)
+    file_test = file_test.stem.replace(".py", "")
+    handlers = bot.list_event_handlers()
+    items = handlers[-1]
+    func = items[0]
+    try:
+        LOAD_PLUG[file_test].append(func)
+    except Exception as e:
+        LOAD_PLUG.update({file_test: []})
+        LOAD_PLUG[file_test].append(func)
     allow_sudo = args.get("allow_sudo", False)
 
     # get the pattern from the decorator
@@ -146,7 +159,8 @@ def register(**args):
     import inspect
     stack = inspect.stack()
     previous_stack_frame = stack[1]
-    file_test = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
+    file_test = Path(previous_stack_frame.filename)
+    file_test = file_test.stem.replace(".py", "")
     pattern = args.get('pattern', None)
     disable_edited = args.get('disable_edited', False)
 
