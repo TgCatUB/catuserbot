@@ -1,6 +1,7 @@
 from userbot import bot
 from telethon import events
 from var import Var
+from pathlib import Path
 from userbot.uniborgConfig import Config
 from userbot import LOAD_PLUG
 from userbot import CMD_LIST
@@ -11,7 +12,8 @@ def command(**args):
     import inspect
     stack = inspect.stack()
     previous_stack_frame = stack[1]
-    file_test = previous_stack_frame.filename.replace("userbot/plugins/", "").replace(".py", "")
+    file_test = Path(previous_stack_frame.filename)
+    file_test = file_test.stem.replace(".py", "")
     if 1 == 0:
         return print("stupidity at its best")
     else:
