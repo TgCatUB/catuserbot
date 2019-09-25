@@ -5,11 +5,11 @@ from pathlib import Path
 from telethon.sessions import StringSession
 from telethon import TelegramClient
 
-from config import Config
+from config import Var
 
 os.system("pip install --upgrade pip")
-if Config.STRING_SESSION:
-    session_name = str(Config.STRING_SESSION)
+if Var.STRING_SESSION:
+    session_name = str(Var.STRING_SESSION)
     bot = TelegramClient(StringSession(session_name), Config.APP_ID, Config.API_HASH)
 else:
     session_name = "startup"
