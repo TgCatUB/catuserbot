@@ -3,7 +3,7 @@ from sys import argv
 import sys
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 import os
-from config import Config
+from var import Var
 from userbot.utils import command, load_module
 from userbot import LOAD_PLUG
 from pathlib import Path
@@ -27,7 +27,7 @@ for name in files:
 
 import userbot._core
 
-os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
+os.makedirs(Var.TEMP_DOWNLOAD_DIRECTORY)
 
 print("Yay your userbot is officially working.")
 
