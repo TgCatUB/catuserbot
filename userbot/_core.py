@@ -1,7 +1,7 @@
 from userbot import bot
 from telethon import events
 from userbot.utils import command, remove_plugin, load_module
-from config import Config
+from var import Var
 import importlib
 from pathlib import Path
 from userbot import LOAD_PLUG
