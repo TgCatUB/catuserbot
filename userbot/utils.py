@@ -101,7 +101,7 @@ def remove_plugin(shortname):
             ev, cb = bot._event_builders[i]
             if cb.__module__ == name:
                 del bot._event_builders[i]
-                print(cb.__module__)
+            print(cb.__module__)
     else:
         raise ValueError
 
