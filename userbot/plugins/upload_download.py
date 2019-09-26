@@ -81,7 +81,7 @@ def time_formatter(milliseconds: int) -> str:
     return tmp[:-2]
 
 
-@command(pattern="^.download (.*)", outgoing=True)
+@command(pattern="^.download(?: |)(.*)", outgoing=True)
 async def download(target_file):
     """ For .download command, download files to the userbot's server. """
     if not target_file.text[0].isalpha() and target_file.text[0] not in (
@@ -92,7 +92,7 @@ async def download(target_file):
         input_str = target_file.pattern_match.group(1)
         if not os.path.isdir(Var.TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(Var.TEMP_DOWNLOAD_DIRECTORY)
-        if input_str:
+        if not input_str == None :
             if "|" in input_str:
                 url, file_name = input_str.split("|")
             else:
