@@ -41,10 +41,8 @@ requests>=2.18.4
 search-engine-parser>=0.4.2
 selenium
 speedtest-cli>=2.0.2
-sqlalchemy
 sqlalchemy>=1.2
 telegraph
-urbandict
 urbandict>=0.5
 wikipedia>=1.4.0
 youtube-dl
