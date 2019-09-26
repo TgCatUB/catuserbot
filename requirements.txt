@@ -1,4 +1,2 @@
 telethon>=1.10.3
 -r requirements-startup.txt
--r requirements-uniborg.txt
--r requirements-ppe.txt
