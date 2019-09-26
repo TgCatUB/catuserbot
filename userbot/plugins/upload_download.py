@@ -92,8 +92,12 @@ async def download(target_file):
         input_str = target_file.pattern_match.group(1)
         if not os.path.isdir(Var.TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(Var.TEMP_DOWNLOAD_DIRECTORY)
-        if "|" in input_str:
-            url, file_name = input_str.split("|")
+        if input_str:
+            if "|" in input_str:
+                url, file_name = input_str.split("|")
+            else:
+                url = input_str
+                file_name = os.path.basename(url)
             url = url.strip()
             # https://stackoverflow.com/a/761825/4723940
             file_name = file_name.strip()
