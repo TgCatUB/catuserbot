@@ -10,7 +10,7 @@ async def cf(event):
         api_client = coffeehouse.API(api_key)
         cf_session = api_client.create_session()
         reply = event.get_reply_message()
-        text_rep = session.think_thought(session.id, reply.text)
+        text_rep = cf_session.think_thought(cf_session.id, reply.text)
         await event.edit("**Lydia says**: {0}".format(text_rep))
     except Exception as e:
         await event.edit(str(e))
