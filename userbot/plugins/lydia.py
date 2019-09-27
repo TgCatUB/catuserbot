@@ -9,7 +9,7 @@ async def cf(event):
         api_key = Var.LYDIA_API_KEY
         api_client = coffeehouse.API(api_key)
         cf_session = api_client.create_session()
-        reply = event.get_reply_message()
+        reply = await event.get_reply_message()
         text_rep = cf_session.think_thought(cf_session.id, reply.text)
         await event.edit("**Lydia says**: {0}".format(text_rep))
     except Exception as e:
