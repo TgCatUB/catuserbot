@@ -4,6 +4,7 @@ import coffeehouse
 async def cf(event):
     if event.fwd_from:
         return
+    await event.edit("Proccessing...")
     try:
         api_key = Var.LYDIA_API_KEY
         api_client = coffeehouse.API(api_key)
@@ -11,5 +12,5 @@ async def cf(event):
         reply = event.get_reply_message()
         text_rep = session.think_thought(session.id, reply.text)
         await event.edit("**Lydia says**: {0}".format(text_rep))
-    except:
-        return
+    except Exception as e:
+        await event.edit(str(e))
