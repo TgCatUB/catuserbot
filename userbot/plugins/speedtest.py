@@ -61,3 +61,18 @@ Upload: {}
 Ping: {}
 __With the Following ERRORs__
 {}""".format(ms, convert_from_bytes(download_speed), convert_from_bytes(upload_speed), ping_time, str(exc)))
+
+def convert_from_bytes(size):
+    power = 2**10
+    n = 0
+    units = {
+        0: "",
+        1: "kilobytes",
+        2: "megabytes",
+        3: "gigabytes",
+        4: "terabytes"
+    }
+    while size > power:
+        size /= power
+        n += 1
+    return f"{round(size, 2)} {units[n]}"
