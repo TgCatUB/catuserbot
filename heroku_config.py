@@ -8,8 +8,9 @@ class Var(object):
     DB_URI = os.environ.get("DATABASE_URL", None)
     TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", None)
     LOGGER = True
-    SUDO_USERS = os.environ.get("SUDO_USERS", "719877937")
     # Here for later purposes
+    SUDO_USERS = os.environ.get("SUDO_USERS", "719877937")
+    LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
 
 class Development(Var):
     LOGGER = True
