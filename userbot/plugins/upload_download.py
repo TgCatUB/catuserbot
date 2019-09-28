@@ -92,7 +92,7 @@ async def download(target_file):
         input_str = target_file.pattern_match.group(1)
         if not os.path.isdir(Var.TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(Var.TEMP_DOWNLOAD_DIRECTORY)
-        if not input_str == None :
+        if input_str.startswith("http"):
             if "|" in input_str:
                 url, file_name = input_str.split("|")
             else:
