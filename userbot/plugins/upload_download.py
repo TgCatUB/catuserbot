@@ -150,18 +150,18 @@ async def download(target_file):
         elif target_file.reply_to_msg_id:
             try:
                 c_time = time.time()
+                file_media = await target_file.get_reply_message()
                 downloaded_file_name = await target_file.client.download_media(
-                    await target_file.get_reply_message(),
+                    file_media.media,
                     Var.TEMP_DOWNLOAD_DIRECTORY,
                     progress_callback=lambda d, t: asyncio.get_event_loop(
                     ).create_task(
                         progress(d, t, target_file, c_time, "Downloading...")))
-            except Exception as e:  # pylint:disable=C0103,W0703
-                await target_file.edit(str(e))
-            else:
                 await target_file.edit(
                     "Downloaded to `{}` successfully !!".format(
                         downloaded_file_name))
+            except Exception as e:  # pylint:disable=C0103,W0703
+                await target_file.edit(str(e))
         else:
             await target_file.edit(
                 "Reply to a message to download to my local server.")
