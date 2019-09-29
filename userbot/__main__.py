@@ -10,6 +10,9 @@ from userbot import LOAD_PLUG
 from pathlib import Path
 import userbot.utils
 
+async def add_bot(bot_token):
+    await bot.start(bot_token)
+
 try:
     bot.start()
 except PhoneNumberInvalidError:
@@ -43,7 +46,6 @@ else:
             api_id=Var.APP_ID,
             api_hash=Var.API_HASH
         ).start(bot_token=Var.TG_BOT_TOKEN_BF_HER)
-    bot.run_until_disconnected(_async_bot(bot_token))
+    bot.run_until_disconnected(add_bot(bot_token))
 
-async def _async_bot(bot_token):
-    await bot.start(bot_token)
+
