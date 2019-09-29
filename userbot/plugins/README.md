@@ -2,7 +2,7 @@
 ```python3
 None
 ```
-There is None Mandatory Imports. Because Config, bot, command are already automatically imported.
+There is None Mandatory Imports. Because Var, bot and command are already automatically imported.
 
 ## Explanation
 The Mandatory Import are now automatically imported.
