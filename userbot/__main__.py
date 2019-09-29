@@ -19,6 +19,19 @@ except PhoneNumberInvalidError:
     print("Phone Number you added was incorrect. Make sure to use your country code with your code")
     exit(1)
 
+if len(argv) not in (1, 3, 4):
+    bot.disconnect()
+else:
+    bot.tgbot = None
+    if Var.TG_BOT_USER_NAME_BF_HER is not None:
+        # ForTheGreatrerGood of beautification
+        bot.tgbot = TelegramClient(
+            "TG_BOT_TOKEN",
+            api_id=Var.APP_ID,
+            api_hash=Var.API_HASH
+        ).start(bot_token=Var.TG_BOT_TOKEN_BF_HER)
+    bot.loop.run_until_complete(add_bot(Var.TG_BOT_USER_NAME_BF_HER))
+
 import glob
 path = 'userbot/plugins/*.py'
 files = glob.glob(path)
@@ -35,17 +48,6 @@ os.makedirs(Var.TEMP_DOWNLOAD_DIRECTORY)
 
 print("Yay your userbot is officially working.")
 
-if len(argv) not in (1, 3, 4):
-    bot.disconnect()
-else:
-    bot.tgbot = None
-    if Var.TG_BOT_USER_NAME_BF_HER is not None:
-        # ForTheGreatrerGood of beautification
-        bot.tgbot = TelegramClient(
-            "TG_BOT_TOKEN",
-            api_id=Var.APP_ID,
-            api_hash=Var.API_HASH
-        ).start(bot_token=Var.TG_BOT_TOKEN_BF_HER)
-    bot.loop.run_until_complete(add_bot(Var.TG_BOT_USER_NAME_BF_HER))
+
 
 
