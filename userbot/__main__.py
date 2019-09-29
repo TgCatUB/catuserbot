@@ -48,6 +48,9 @@ os.makedirs(Var.TEMP_DOWNLOAD_DIRECTORY)
 
 print("Yay your userbot is officially working.")
 
-
+if len(argv) not in (1, 3, 4):
+    bot.disconnect()
+else:
+    bot.run_until_disconnected()
 
 
