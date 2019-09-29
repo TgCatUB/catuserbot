@@ -22,7 +22,7 @@ NEW_UP_DATE_FOUND = (
     "new update found for {branch_name}\n"
     "updating ..."
 )
-REPO_REMOTE_NAME = "tmp_upstream_remote"
+REPO_REMOTE_NAME = "temp_upstream_remote"
 IFFUCI_ACTIVE_BRANCH_NAME = "master"
 DIFF_MARKER = "HEAD..{remote_name}/{branch_name}"
 NO_HEROKU_APP_CFGD = "no heroku application found, but a key given? 😕 "
@@ -57,8 +57,8 @@ async def updater(message):
         print(e)
         pass
 
-    tmp_upstream_remote = repo.remote(REPO_REMOTE_NAME)
-    tmp_upstream_remote.fetch(active_branch_name)
+    temp_upstream_remote = repo.remote(REPO_REMOTE_NAME)
+    temp_upstream_remote.fetch(active_branch_name)
 
     changelog = generate_change_log(
         repo,
@@ -80,10 +80,10 @@ async def updater(message):
         branch_name=active_branch_name
     )
 
-    if len(message_one) > MAX_MESSAGE_LENGTH:
+    if len(message_one) > 4095:
         with open("change.log", "w+", encoding="utf8") as out_file:
             out_file.write(str(message_one))
-        await client.send_message(
+        await bot.send_message(
             message.chat_id,
             document="change.log",
             caption=message_two
@@ -97,7 +97,7 @@ async def updater(message):
 
     if Var.HEROKU_API_KEY is not None:
         import heroku3
-        heroku = heroku3.from_key(HEROKU_API_KEY)
+        heroku = heroku3.from_key(Var.HEROKU_API_KEY)
         heroku_applications = heroku.apps()
         if len(heroku_applications) >= 1:
             # assuming there will be only one heroku application
@@ -106,7 +106,7 @@ async def updater(message):
             heroku_app = heroku_applications[0]
             heroku_git_url = heroku_app.git_url.replace(
                 "https://",
-                "https://api:" + HEROKU_API_KEY + "@"
+                "https://api:" + Var.HEROKU_API_KEY + "@"
             )
             if "heroku" in repo.remotes:
                 remote = repo.remote("heroku")
