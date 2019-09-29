@@ -2,6 +2,7 @@
 Syntax: .update"""
 
 import git
+from contextlib import suppress
 import os
 
 # -- Constants -- #
@@ -37,18 +38,13 @@ async def updater(message):
         repo = git.Repo()
     except git.exc.InvalidGitRepositoryError as e:
         repo = git.Repo.init()
-        try:
+        with suppress(Exception):
             origin = repo.create_remote(REPO_REMOTE_NAME, OFFICIAL_UPSTREAM_REPO)
             origin.fetch()
-        except:
-            origin = repo.create_remote(REPO_REMOTE_NAME, OFFICIAL_UPSTREAM_REPO)
-            origin.fetch()
-            pass
         repo.create_head(IFFUCI_ACTIVE_BRANCH_NAME, origin.refs.master)
         repo.heads.master.checkout(True)
 
     active_branch_name = repo.active_branch.name
-    print(active_branch_name)
     if active_branch_name != IFFUCI_ACTIVE_BRANCH_NAME:
         await message.edit(IS_SELECTED_DIFFERENT_BRANCH.format(
             branch_name=active_branch_name
