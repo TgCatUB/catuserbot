@@ -38,8 +38,12 @@ async def updater(message):
     except git.exc.InvalidGitRepositoryError as e:
         print(e)
         repo = git.Repo.init()
-        origin = repo.create_remote(REPO_REMOTE_NAME, OFFICIAL_UPSTREAM_REPO)
-        origin.fetch()
+        try:
+            origin = repo.create_remote(REPO_REMOTE_NAME, OFFICIAL_UPSTREAM_REPO)
+            origin.fetch()
+        except:
+            origin = repo.create_remote(REPO_REMOTE_NAME, OFFICIAL_UPSTREAM_REPO)
+            origin.fetch()
         repo.create_head(IFFUCI_ACTIVE_BRANCH_NAME, origin.refs.master)
         repo.heads.master.checkout(True)
 
