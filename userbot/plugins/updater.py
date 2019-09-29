@@ -107,20 +107,28 @@ async def updater(message):
             # assuming there will be only one heroku application
             # created per account 🙃
             # possibly, ignore premium Heroku users
-            heroku_app = heroku_applications[0]
-            print(heroku_app)
-            heroku_git_url = heroku_app.git_url.replace(
-                "https://",
-                "https://api:" + Var.HEROKU_API_KEY + "@"
-            )
-            if "heroku" in repo.remotes:
-                remote = repo.remote("heroku")
-                remote.set_url(heroku_git_url)
+            if Var.HEROKU_APP_NAME is not None:
+                heroku_app = None
+                for i in heroku_applications:
+                    if i.name == Var.HEROKU_APP_NAME:
+                        heroku_app = i
+                if heroku_app is None:
+                    await event.edit("Invalid APP Name. Please set the name of your bot in heroku in the var HEROKU_APP_NAME.")
+                    return
+                heroku_git_url = heroku_app.git_url.replace(
+                    "https://",
+                    "https://api:" + Var.HEROKU_API_KEY + "@"
+                )
+                if "heroku" in repo.remotes:
+                    remote = repo.remote("heroku")
+                    remote.set_url(heroku_git_url)
+                else:
+                    remote = repo.create_remote("heroku", heroku_git_url)
+                remote.push(refspec=HEROKU_GIT_REF_SPEC)
             else:
-                remote = repo.create_remote("heroku", heroku_git_url)
-            remote.push(refspec=HEROKU_GIT_REF_SPEC)
+                await event.edit("Please create the var HEROKU_APP_NAME as the key and the name of your bot in heroku as your value.")
         else:
-            await message.reply(NO_HEROKU_APP_CFGD)
+            await message.edit(NO_HEROKU_APP_CFGD)
 
     await message.edit(RESTARTING_APP)
     await client.restart()
