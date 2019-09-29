@@ -92,7 +92,7 @@ async def updater(message):
     else:
         await message.reply(message_one)
 
-    tmp_upstream_remote.fetch(active_branch_name)
+    temp_upstream_remote.fetch(active_branch_name)
     repo.git.reset("--hard", "FETCH_HEAD")
 
     if Var.HEROKU_API_KEY is not None:
