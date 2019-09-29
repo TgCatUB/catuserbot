@@ -46,6 +46,6 @@ else:
             api_id=Var.APP_ID,
             api_hash=Var.API_HASH
         ).start(bot_token=Var.TG_BOT_TOKEN_BF_HER)
-    bot.run_until_disconnected(add_bot(TG_BOT_USER_NAME_BF_HER))
+    bot.run_until_disconnected(add_bot(Var.TG_BOT_USER_NAME_BF_HER))
 
 
