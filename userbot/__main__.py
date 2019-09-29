@@ -43,4 +43,7 @@ else:
             api_id=Var.APP_ID,
             api_hash=Var.API_HASH
         ).start(bot_token=Var.TG_BOT_TOKEN_BF_HER)
-    bot.run_until_disconnected(await bot.start(bot_token))
+    bot.run_until_disconnected(_async_bot(bot_token))
+
+async def _async_bot(bot_token):
+    await bot.start(bot_token)
