@@ -11,6 +11,7 @@ class Var(object):
     # Here for later purposes
     SUDO_USERS = os.environ.get("SUDO_USERS", "719877937")
     LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
+    HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
 
 class Development(Var):
     LOGGER = True
