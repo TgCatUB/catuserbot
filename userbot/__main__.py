@@ -34,4 +34,12 @@ print("Yay your userbot is officially working.")
 if len(argv) not in (1, 3, 4):
     bot.disconnect()
 else:
-    bot.run_until_disconnected()
+    self.tgbot = None
+    if Var.TG_BOT_USER_NAME_BF_HER is not None:
+        # ForTheGreatrerGood of beautification
+        bot.tgbot = TelegramClient(
+            "TG_BOT_TOKEN",
+            api_id=api_config.APP_ID,
+            api_hash=api_config.API_HASH
+        ).start(bot_token=Var.TG_BOT_TOKEN_BF_HER)
+    bot.run_until_disconnected(await self.start(bot_token))
