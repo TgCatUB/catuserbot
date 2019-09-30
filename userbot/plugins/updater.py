@@ -4,6 +4,7 @@ Syntax: .update"""
 import git
 from contextlib import suppress
 import os
+import asyncio
 
 # -- Constants -- #
 IS_SELECTED_DIFFERENT_BRANCH = (
@@ -70,6 +71,7 @@ async def updater(message):
 
     if not changelog:
         await message.edit(BOT_IS_UP_TO_DATE + "\n\nBut lets still update")
+        await asyncio.sleep(8)
  
     message_one = NEW_BOT_UP_DATE_FOUND.format(
         branch_name=active_branch_name,
@@ -117,13 +119,13 @@ async def updater(message):
                 else:
                     remote = repo.create_remote("heroku", heroku_git_url)
                 remote.push(refspec=HEROKU_GIT_REF_SPEC)
+                await message.edit(RESTARTING_APP)
             else:
                 await message.edit("Please create the var HEROKU_APP_NAME as the key and the name of your bot in heroku as your value.")
                 return
         else:
             await message.edit(NO_HEROKU_APP_CFGD)
 
-    await message.edit(RESTARTING_APP)
     asyncio.get_event_loop().create_task(restart(client, message))
 
 def generate_change_log(git_repo, diff_marker):
