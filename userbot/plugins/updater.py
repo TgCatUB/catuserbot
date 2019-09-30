@@ -125,8 +125,7 @@ async def updater(message):
             await message.edit(NO_HEROKU_APP_CFGD)
 
     await message.edit(RESTARTING_APP)
-    await client.restart()
-
+    asyncio.get_event_loop().create_task(restart(client, message))
 
 def generate_change_log(git_repo, diff_marker):
     out_put_str = ""
@@ -134,3 +133,7 @@ def generate_change_log(git_repo, diff_marker):
     for repo_change in git_repo.iter_commits(diff_marker):
         out_put_str += f"•[{repo_change.committed_datetime.strftime(d_form)}]: {repo_change.summary} <{repo_change.author}>\n"
     return out_put_str
+
+async def restart(client, message):
+    await client.restart()
+    await message.edit("restarted! do `.alive` to check if I am online?") 
