@@ -69,9 +69,8 @@ async def updater(message):
     )
 
     if not changelog:
-        await message.edit(BOT_IS_UP_TO_DATE)
-        return False
-
+        await message.edit(BOT_IS_UP_TO_DATE + "\n\nBut lets still update")
+ 
     message_one = NEW_BOT_UP_DATE_FOUND.format(
         branch_name=active_branch_name,
         changelog=changelog
