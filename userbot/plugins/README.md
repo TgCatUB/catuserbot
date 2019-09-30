@@ -5,7 +5,7 @@ None
 There is None Mandatory Imports. Because Var, bot and command are already automatically imported.
 
 ## Explanation
-The Mandatory Import are now automatically imported.
+The Mandatory Imports are now automatically imported.
 
 ### Formation
 Now I will show a short script to show the formation of the desired script.
