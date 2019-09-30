@@ -118,15 +118,14 @@ async def updater(message):
                     remote.set_url(heroku_git_url)
                 else:
                     remote = repo.create_remote("heroku", heroku_git_url)
-                remote.push(refspec=HEROKU_GIT_REF_SPEC)
+                asyncio.get_event_loop().create_task(remote.push(refspec=HEROKU_GIT_REF_SPEC))
                 await message.edit(RESTARTING_APP)
+                asyncio.get_event_loop().create_task(restart(bot, message))
             else:
                 await message.edit("Please create the var HEROKU_APP_NAME as the key and the name of your bot in heroku as your value.")
                 return
         else:
             await message.edit(NO_HEROKU_APP_CFGD)
-
-    asyncio.get_event_loop().create_task(restart(bot, message))
 
 def generate_change_log(git_repo, diff_marker):
     out_put_str = ""
