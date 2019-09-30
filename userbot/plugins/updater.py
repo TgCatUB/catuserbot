@@ -126,7 +126,7 @@ async def updater(message):
         else:
             await message.edit(NO_HEROKU_APP_CFGD)
 
-    asyncio.get_event_loop().create_task(restart(client, message))
+    asyncio.get_event_loop().create_task(restart(bot, message))
 
 def generate_change_log(git_repo, diff_marker):
     out_put_str = ""
