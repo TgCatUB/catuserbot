@@ -60,9 +60,10 @@ async def remcf(event):
 async def user(event):
     user_peep = str(event.chat_id) + str(event.from_id)
     user_text = event.text
-    if user_peep in ACC_LYDIA and user_peep in SESSION_ID:
-        session = ACC_LYDIA[user_peep]
-        session_id = SESSION_ID[user_peep]
-        text_rep = session.think_thought((session_id, user_text))
-        await event.edit(text_rep)
+    for i in ACC_LYDIA:
+        if user_peep == i:
+           session = ACC_LYDIA[user_peep]
+            session_id = SESSION_ID[user_peep]
+            text_rep = session.think_thought((session_id, user_text))
+            await event.edit(text_rep)
 
