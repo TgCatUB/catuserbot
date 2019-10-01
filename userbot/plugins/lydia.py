@@ -59,11 +59,10 @@ async def remcf(event):
 
 @bot.on(events.NewMessage(incoming=True))
 async def user(event):
-    user_chat = str(event.chat_id) + " " + str(event.from_id)
     user_text = event.text
     try:
-        session = ACC_LYDIA[user_chat]
-        session_id = SESSION_ID[user_chat]
+        session = ACC_LYDIA[str(event.chat_id) + " " + str(event.from_id)]
+        session_id = SESSION_ID[str(event.chat_id) + " " + str(event.from_id)]
         msg = event.text
         text_rep = session.think_thought((session_id, msg))
         await event.edit(text_rep)
