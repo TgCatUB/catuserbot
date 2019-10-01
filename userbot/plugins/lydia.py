@@ -35,8 +35,8 @@ async def addcf(event):
     if reply_msg:
         session = api_client.create_session()
         session_id = session.id
-        ACC_LYDIA.update(str(event.chat_id) + str(reply_msg.from_id): session)
-        SESSION_ID.update(str(event.chat_id) + str(reply_msg.from_id): session_id)
+        ACC_LYDIA.update({str(event.chat_id) + str(reply_msg.from_id): session})
+        SESSION_ID.update({str(event.chat_id) + str(reply_msg.from_id): session_id})
         await event.edit("Lydia successfully enabled for user: {} in chat: {}".format(str(event.chat_id), str(reply_msg.from_id)))
     else:
         await event.edit("Reply to a user to activate Lydia AI on them")
