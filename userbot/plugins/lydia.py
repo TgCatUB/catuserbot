@@ -64,7 +64,9 @@ async def user(event):
         session = ACC_LYDIA[str(event.chat_id) + " " + str(event.from_id)]
         session_id = SESSION_ID[str(event.chat_id) + " " + str(event.from_id)]
         msg = event.text
-        text_rep = session.think_thought((session_id, msg))
-        await event.reply(text_rep)
+        async with event.client.action(event.chat_id, "typing"):
+            await asyncio.sleep(1)
+            text_rep = session.think_thought((session_id, msg))
+            await event.reply(text_rep)
     except KeyError:
-        print("oh poop")
+        return
