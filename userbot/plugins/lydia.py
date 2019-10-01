@@ -65,6 +65,6 @@ async def user(event):
         session_id = SESSION_ID[str(event.chat_id) + " " + str(event.from_id)]
         msg = event.text
         text_rep = session.think_thought((session_id, msg))
-        await event.edit(text_rep)
+        await event.reply(text_rep)
     except KeyError:
         print("oh poop")
