@@ -62,7 +62,7 @@ async def user(event):
     user_text = event.text
     for i in ACC_LYDIA:
         if user_peep == i:
-           session = ACC_LYDIA[user_peep]
+            session = ACC_LYDIA[user_peep]
             session_id = SESSION_ID[user_peep]
             text_rep = session.think_thought((session_id, user_text))
             await event.edit(text_rep)
