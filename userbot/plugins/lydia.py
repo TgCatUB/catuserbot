@@ -59,15 +59,13 @@ async def remcf(event):
 
 @bot.on(events.NewMessage(incoming=True))
 async def user(event):
-    user_chat = str(event.chat_id)
-    user_id = str(event.from_id)
+    user_chat = str(event.chat_id) + " " + str(event.from_id)
     user_text = event.text
-    for i in ACC_LYDIA:
-        data = i.split(" ")
-        if user_chat == data[0]:
-            if user_id == data[1]:
-                session = ACC_LYDIA[i]
-                session_id = SESSION_ID[i]
-                text_rep = session.think_thought((session_id, user_text))
-                await event.edit(text_rep)
-
+    try:
+        session = ACC_LYDIA[user_chat]
+        session_id = SESSION_ID[user_chat]
+        msg = event.text
+        text_rep = session.think_thought((session_id, msg))
+        await event.edit(text_rep)
+    except KeyError:
+        return
