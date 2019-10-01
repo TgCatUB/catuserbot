@@ -68,4 +68,4 @@ async def user(event):
         text_rep = session.think_thought((session_id, msg))
         await event.edit(text_rep)
     except KeyError:
-        return
+        print("oh poop")
