@@ -64,8 +64,8 @@ async def user(event):
     user_text = event.text
     for i in ACC_LYDIA:
         data = i.split(" ")
-        if user_chat in data:
-            if user_id in data:
+        if user_chat == data[0]:
+            if user_id == data[1]:
                 session = ACC_LYDIA[i]
                 session_id = SESSION_ID[i]
                 text_rep = session.think_thought((session_id, user_text))
