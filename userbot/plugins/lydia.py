@@ -1,5 +1,6 @@
 import coffeehouse
 import asyncio
+from telethon import events
 
 # Non-SQL Mode
 ACC_LYDIA = {}
@@ -56,7 +57,7 @@ async def remcf(event):
     except KeyError:
         await event.edit("This person does not have Lydia activated on him/her.")
 
-@command(incoming=True)
+@bot.on(events.NewMessage(incoming=True))
 async def user(event):
     user_peep = str(event.chat_id) + str(event.from_id)
     user_text = event.text
