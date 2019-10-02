@@ -8,7 +8,7 @@ Available Commands:
 .rmblacklist"""
 import asyncio
 import re
-import userbot/plugins/sql_helper.blacklist_sql as sql
+import userbot.plugins.sql_helper.blacklist_sql as sql
 from telethon import events, utils
 from telethon.tl import types, functions
 from uniborg.util import admin_cmd
