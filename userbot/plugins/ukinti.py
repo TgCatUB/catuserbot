@@ -9,7 +9,7 @@ from telethon.tl.types import UserStatusEmpty, UserStatusLastMonth, UserStatusLa
 from telethon.tl import functions, types
 from time import sleep
 import asyncio
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd("unbanall ?(.*)"))
