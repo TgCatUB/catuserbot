@@ -5,7 +5,7 @@
 Syntax: .ud Query"""
 from telethon import events
 import urbandict
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd("ud (.*)"))
