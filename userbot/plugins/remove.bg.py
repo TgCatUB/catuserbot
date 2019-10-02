@@ -21,7 +21,7 @@ import io
 import os
 import requests
 from telethon import events
-from uniborg.util import progress, admin_cmd
+from userbot.utils import progress, admin_cmd
 
 
 @borg.on(admin_cmd("remove\.bg ?(.*)"))
