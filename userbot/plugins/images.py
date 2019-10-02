@@ -6,7 +6,7 @@ from google_images_download import google_images_download
 import os
 import shutil
 from re import findall
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd("img ?(.*)"))
