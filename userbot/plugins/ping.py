@@ -1,6 +1,6 @@
 from telethon import events
 from datetime import datetime
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd(pattern="ping ?(.*)", allow_sudo=True))
