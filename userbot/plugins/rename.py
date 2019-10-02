@@ -17,7 +17,7 @@ from telethon import events
 from telethon.tl.types import DocumentAttributeVideo
 from telethon.errors import MessageNotModifiedError
 import time
-from uniborg.util import progress, humanbytes, time_formatter, admin_cmd
+from userbot.utils import progress, humanbytes, time_formatter, admin_cmd
 
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
