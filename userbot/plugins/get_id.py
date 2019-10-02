@@ -2,7 +2,7 @@
 Syntax: .get_id"""
 from telethon import events
 from telethon.utils import pack_bot_file_id
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd("get_id"))
