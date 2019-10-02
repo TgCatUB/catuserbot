@@ -5,7 +5,7 @@ DB Options: bots, commands, email, forward, url"""
 
 from telethon import events, functions, types
 from userbot.plugins.sql_helper.locks_sql import update_lock, is_locked, get_locks
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd("lock( (?P<target>\S+)|$)"))
