@@ -11,7 +11,7 @@ By:- JaskaranSM ( @Zero_cool7870 )
 from telethon import events
 import logging
 import asyncio
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 logging.basicConfig(level=logging.INFO)
 MONGO_URI = Config.MONGO_URI
 try:	
