@@ -5,7 +5,7 @@ import asyncio
 from datetime import datetime
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChatBannedRights
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 unbanned_rights = ChatBannedRights(
