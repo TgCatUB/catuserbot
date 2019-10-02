@@ -2,7 +2,7 @@
 Syntax: .json"""
 from telethon import events
 import io
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd("json"))
