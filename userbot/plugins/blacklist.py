@@ -11,7 +11,7 @@ import re
 import userbot.plugins.sql_helper.blacklist_sql as sql
 from telethon import events, utils
 from telethon.tl import types, functions
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 @borg.on(events.NewMessage(incoming=True))
