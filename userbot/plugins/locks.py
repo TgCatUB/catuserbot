@@ -4,7 +4,7 @@ API Options: msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, cha
 DB Options: bots, commands, email, forward, url"""
 
 from telethon import events, functions, types
-from sql_helpers.locks_sql import update_lock, is_locked, get_locks
+from userbot.plugins.sql_helper.locks_sql import update_lock, is_locked, get_locks
 from uniborg.util import admin_cmd
 
 
