@@ -2,7 +2,7 @@ import threading
 
 from sqlalchemy import func, distinct, Column, String, UnicodeText
 
-from sql_helpers import SESSION, BASE
+from userbot.plugins.sql_helper import SESSION, BASE
 
 
 class BlackListFilters(BASE):
