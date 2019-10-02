@@ -12,10 +12,9 @@ async def _(event):
         s_help_string = borg._plugins[splugin_name].__doc__
     else:
         s_help_string = ""
-    help_string = """@UniBorg ( **Custom Built By** @A_Dark_Princ3 ) \n**Verified Account**: ✅
+    help_string = """@UniBorg ( **Custom Built By** @A_Dark_Princ3 ) \n\n**Verified Account**: ✅
 Python {}
 Telethon {}
-
 UserBot Forked from https://github.com/Dark-Princ3/X-tra-Telegram""".format(
         sys.version,
         __version__
