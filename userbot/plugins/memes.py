@@ -853,7 +853,13 @@ async def vapor(vpr):
 
         await vpr.edit("".join(reply_text))
 
-
+			  
+@register(outgoing=True, pattern="^.repo$")
+async def source(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        await e.edit("https://github.com/Dark-Princ3/X-tra-Telegram")
+			  
+			  
 @register(outgoing=True, pattern="^.str(?: |$)(.*)")
 async def stretch(stret):
     """ Stretch it."""
