@@ -1185,9 +1185,8 @@ def youtube_search(
         token=None,
         location=None,
         location_radius=None
-    ):
-
-			  
+    )
+	  
 @register(outgoing=True, pattern="^.bt$")
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
