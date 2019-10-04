@@ -1,3 +1,4 @@
+#WELCOME TO THE CULT
 # Installing
 
 ### The Easy Way
