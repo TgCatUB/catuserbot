@@ -1151,42 +1151,7 @@ async def claptext(memereview):
         reply_text += " 👏"
         await memereview.edit(reply_text)
 
-			  
-@register(outgoing=True, pattern="^.yt (.*)")
-async def yt_search(video_q):
-    """ For .yt command, do a YouTube search from Telegram. """
-    if not video_q.text[0].isalpha() and video_q.text[0] not in ("/", "#", "@", "!"):
-        query = video_q.pattern_match.group(1)
-        result = ''
 
-        if not YOUTUBE_API_KEY:
-            await video_q.edit("`Error: YouTube API key missing! Add it to environment vars or config.env.`")
-            return
-
-        await video_q.edit("```Processing...```")
-
-        full_response = youtube_search(query)
-        videos_json = full_response[1]
-
-
-        for video in videos_json:
-            title = f"{unescape(video['snippet']['title'])}"
-            link = f"https://youtu.be/{video['id']['videoId']}"
-            result += f"{title}\n{link}\n\n"
-
-        reply_text = f"**Search Query:**\n`{query}`\n\n**Results:**\n\n{result}"
-
-        await video_q.edit(reply_text)
-
-
-def youtube_search(
-        query,
-        order="relevance",
-        token=None,
-        location=None,
-        location_radius=None
-    )
-	  
 @register(outgoing=True, pattern="^.bt$")
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
