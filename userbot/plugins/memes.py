@@ -1187,35 +1187,6 @@ def youtube_search(
         location_radius=None
     ):
 
-    """ Do a YouTube search. """
-    youtube = build('youtube', 'v3',
-                    developerKey=YOUTUBE_API_KEY, cache_discovery=False)
-    search_response = youtube.search().list(
-        q=query,
-        type="video",
-        pageToken=token,
-        order=order,
-        part="id,snippet",
-        maxResults=10,
-        location=location,
-        locationRadius=location_radius
-    ).execute()
-
-    videos = []
-
-    for search_result in search_response.get("items", []):
-        if search_result["id"]["kind"] == "youtube#video":
-            videos.append(search_result)
-    try:
-        nexttok = search_response["nextPageToken"]
-        return(nexttok, videos)
-    except HttpError:
-        nexttok = "last_page"
-        return(nexttok, videos)
-    except KeyError:
-        nexttok = "KeyError, try again."
-        return(nexttok, videos)
-			  
 			  
 @register(outgoing=True, pattern="^.bt$")
 async def bluetext(bt_e):
