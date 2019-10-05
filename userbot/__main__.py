@@ -32,7 +32,7 @@ else:
         ).start(bot_token=Var.TG_BOT_TOKEN_BF_HER)
         print("Initialisation finished with no errors")
         print("Starting Userbot")
-        bot.loop.run_until_complete(add_bot(Var.TG_BOT_USER_NAME_BF_HER))
+        bot.loop.run_until_complete(add_bot(Var.TG_BOT_USER_NAME_BF_HER)https://telegra.ph/UniBorg-Environment-Variables-09-12)
         print("Startup Completed")
     else:
         bot.start()
