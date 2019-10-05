@@ -1,6 +1,6 @@
 {
   "name": "X-tra Telegram",
-  "description": "Userbot created by a SNAPDRAGON",
+  "description": "Userbot created by a SNAPDRAGON and custom fork by ANUBIS",
   "logo": "https://telegra.ph/file/1be6c59f53fef57b5745b.jpg",
   "keywords": [
     "telegram",
@@ -9,7 +9,7 @@
     "modular",
     "productivity"
   ],
-  "repository": "https://github.com/Total-Noob-69/X-tra-Telegram",
+  "repository": "https://github.com/Dark-Princ3/X-tra-Telegram",
   "website": "#TODO",
   "success_url": "#TODO",
   "env": {
