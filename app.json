@@ -1,0 +1,57 @@
+{
+  "name": "X-tra Telegram",
+  "description": "Userbot created by a SNAPDRAGON",
+  "logo": "https://telegra.ph/file/1be6c59f53fef57b5745b.jpg",
+  "keywords": [
+    "telegram",
+    "userbot",
+    "plugin",
+    "modular",
+    "productivity"
+  ],
+  "repository": "https://github.com/Total-Noob-69/X-tra-Telegram",
+  "website": "#TODO",
+  "success_url": "#TODO",
+  "env": {
+    "ENV": {
+      "description": "Setting this to ANYTHING will enable heroku.",
+      "value": "ANYTHING"
+    },
+    "TEMP_DOWNLOAD_DIRECTORY": {
+      "description": "Where downloaded files will go.",
+      "value": "./userbot/DOWNLOADS/",
+      "required": false
+    },
+    "APP_ID": {
+      "description": "Get this value from my.telegram.org! Please do not steal",
+      "value": ""
+    },
+    "API_HASH": {
+      "description": "Get this value from my.telegram.org! Please do not steal",
+      "value": ""
+    },
+    "STRING_SESSION": {
+      "description": "Get this value by running python3 telesetup.py locally",
+      "value": ""
+    }
+  },
+  "addons": [{
+    "plan": "heroku-postgresql",
+    "options": {
+      "version": "9.5"
+    }
+  }],
+  "buildpacks": [{
+    "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+  },{
+    "url":"https://github.com/amivin/aria2-heroku.git"
+  },{
+    "url":"https://github.com/heroku/heroku-buildpack-google-chrome"
+  },{
+    "url":"https://github.com/heroku/heroku-buildpack-chromedriver"
+  },{
+    "url": "https://github.com/opendoor-labs/heroku-buildpack-p7zip"
+  },{
+    "url": "heroku/python"
+  }]
+}
