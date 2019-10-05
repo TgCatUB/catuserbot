@@ -9,7 +9,7 @@
 
 Simply clone the repository and run the main file:
 ```sh
-git clone https://github.com/Total-Noob-69/X-tra-Telegram
+git clone https://github.com/Dark-Princ3/X-tra-Telegram
 cd X-tra-Telegram
 virtualenv -p /usr/bin/python3 venv
 . ./venv/bin/activate
