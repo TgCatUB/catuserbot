@@ -27,6 +27,15 @@ async def cmd_list(event):
                     await event.delete()
             else:
                 await event.edit(string)
+        elif input_str:
+            if input_str in CMD_LIST:
+                string = "Commands found in {}:".format(input_str)
+                for i in CMD_LIST[input_str]:
+                    string += "    " + i
+                    string += "\n"
+                await event.edit(string)
+            else:
+                await event.edit(input_str + " is not a valid plugin!")
         else:
             help_string = """Userbot Helper
 `Userbot Helper to reveal all the commands`"""
