@@ -239,11 +239,4 @@ async def carbon_api(e):
    # Removing carbon.png after uploading
 
    await e.delete() # Deleting msg
-
-CMD_HELP.update({
-
-    'carbon': '.carbon <text> [or reply]\
-
-        \nUsage: Beautify your code using carbon.now.sh\nUse .crblang <text> to set language for your code.'
-
-})
+   
