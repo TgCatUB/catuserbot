@@ -6,6 +6,7 @@ aria2p
 async_generator
 beautifulsoup4
 bs4
+bwb==3.0.0
 cfscrape
 coffeehouse
 cowpy
