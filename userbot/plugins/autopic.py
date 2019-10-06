@@ -8,8 +8,9 @@ import shutil
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
-@command(pattern="^.autopic", outgoing=True)
+@command(pattern="^.autopic ?(tilt)", outgoing=True)
 async def autopic(event):
+    input_str = event.pattern_match.group(1)
     downloaded_file_name = "userbot/original_pic.png"
     downloader = SmartDL(Var.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=False)
     downloader.start(blocking=False)
@@ -20,6 +21,7 @@ async def autopic(event):
     while True:
         shutil.copy(downloaded_file_name, photo)
         im = Image.open(photo)
+        if input_str == "tilt":
         file_test = im.rotate(counter, expand=False).save(photo, "PNG")
         current_time = datetime.now().strftime("⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡ \n ⚡I IZ VIDHAYAK⚡ \n  Time: %H:%M:%S \n  Date: %d.%m.%y \n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡")
         img = Image.open(photo)
