@@ -1,14 +1,4 @@
-"""Emoji
-
-Available Commands:
-
-.emoji shrug
-
-.emoji apple
-
-.emoji :/
-
-.emoji -_-"""
+"""COMMAND : .kill"""
 
 from telethon import events
 
