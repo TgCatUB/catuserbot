@@ -64,7 +64,7 @@ CARBONLANG = "auto"
 
 LANG = "en"
 
-@register(outgoing=True, pattern="^.carb")
+@register(outgoing=True, pattern="^.carbon")
 
 async def carbon_api(e):
 
