@@ -46,11 +46,10 @@ for name in files:
         path1 = Path(f.name)
         shortname = path1.stem
         load_module(shortname.replace(".py", ""))
-        print("Successfully (re)imported {}".format(f.name.replace("userbot/plugins/", "")))
 
 import userbot._core
 
-print("Yay your userbot is officially working.Ja ab gaand mara")
+print("Yay your userbot is officially working. Ja gaand mara")
 
 if len(argv) not in (1, 3, 4):
     bot.disconnect()
