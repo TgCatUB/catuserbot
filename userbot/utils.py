@@ -74,41 +74,59 @@ def command(**args):
 
 
 def load_module(shortname):
-    import userbot.utils
-    import sys
-    import importlib
-    from pathlib import Path
-    path = Path(f"userbot/plugins/{shortname}.py")
-    name = "userbot.plugins.{}".format(shortname)
-    spec = importlib.util.spec_from_file_location(name, path)
-    mod = importlib.util.module_from_spec(spec)
-    mod.bot = bot
-    mod.tgbot = bot.tgbot
-    mod.Var = Var
-    mod.command = command
-    mod.logger = logging.getLogger(shortname)
-    # support for uniborg
-    sys.modules["uniborg.util"] = userbot.utils
-    mod.Config = Config
-    mod.borg = bot
-    # support for paperplaneextended
-    sys.modules["userbot.events"] = userbot.utils
-    spec.loader.exec_module(mod)
+    if shortname.startswith("__"):
+        pass
+    elif shortname.endswith("_"):
+        import userbot.utils
+        import sys
+        import importlib
+        from pathlib import Path
+        path = Path(f"userbot/plugins/{shortname}.py")
+        name = "userbot.plugins.{}".format(shortname)
+        spec = importlib.util.spec_from_file_location(name, path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        print("Successfully (re)imported "+shortname)
+    else:
+        import userbot.utils
+        import sys
+        import importlib
+        from pathlib import Path
+        path = Path(f"userbot/plugins/{shortname}.py")
+        name = "userbot.plugins.{}".format(shortname)
+        spec = importlib.util.spec_from_file_location(name, path)
+        mod = importlib.util.module_from_spec(spec)
+        mod.bot = bot
+        mod.tgbot = bot.tgbot
+        mod.Var = Var
+        mod.command = command
+        mod.logger = logging.getLogger(shortname)
+        # support for uniborg
+        sys.modules["uniborg.util"] = userbot.utils
+        mod.Config = Config
+        mod.borg = bot
+        # support for paperplaneextended
+        sys.modules["userbot.events"] = userbot.utils
+        spec.loader.exec_module(mod)
+        # for imports
+        sys.modules["userbot.plugins."+shortname] = mod
+        print("Successfully (re)imported "+shortname)
 
 def remove_plugin(shortname):
     try:
-        for i in LOAD_PLUG[shortname]:
-            bot.remove_event_handler(i)
-        del LOAD_PLUG[shortname]
+        try:
+            for i in LOAD_PLUG[shortname]:
+                bot.remove_event_handler(i)
+            del LOAD_PLUG[shortname]
 
+        except:
+            name = f"userbot.plugins.{shortname}"
+
+            for i in reversed(range(len(bot._event_builders))):
+                ev, cb = bot._event_builders[i]
+                if cb.__module__ == name:
+                    del bot._event_builders[i]
     except:
-        name = f"userbot.plugins.{shortname}"
-
-        for i in reversed(range(len(bot._event_builders))):
-            ev, cb = bot._event_builders[i]
-            if cb.__module__ == name:
-                del bot._event_builders[i]
-    else:
         raise ValueError
 
 def admin_cmd(pattern=None, **args):
@@ -324,3 +342,9 @@ def time_formatter(milliseconds: int) -> str:
         ((str(seconds) + " second(s), ") if seconds else "") + \
         ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
     return tmp[:-2]
+
+class Loader():
+    def __init__(self, func=None, **args):
+        self.Var = Var
+        bot.add_event_handler(func, events.NewMessage(**args))
+
