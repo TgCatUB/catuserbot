@@ -14,8 +14,8 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from xtrabot import loader, utils
-from xtrabot.xtrautil import Module
+from userbot import loader, utils
+from userbot.utils import Module
 
 class LogMod(loader.Module):
     def __init__(self):
