@@ -25,15 +25,21 @@ from userbot import CMD_HELP,YOUTUBE_API_KEY
 from userbot.utils import register
 
 # ================= CONSTANT =================
-METOOSTR = [
-    "`Me too thanks`",
-    "`Haha yes, me too`",
-    "`Same lol`",
-    "`Me irl`",
-    "`HA me bhi bhai bsdk!`",
-    "`Same here`",
-    "`Haha yes`",
-    "`Same pinch bsdk`",
+RENDISTR = [
+    "`I Know Uh ez Rendi Bhay Dont show Your Randi Pesa Here`",
+    "`Jag Suna suna laage Sab #maderchod bhay`",
+    "`you talking behind meh wew uh iz my fan now bhay`",
+    "`Wanna pass in Life Goto BRAZZER.CAM BHAY`",
+    "`Uh iz Pro i iz noob your boob is landi uh are Randi`",
+    "`Sellers Nasa calling Uh bhay😆`",
+    "`Badwoo ki yojna behan bna ke ch*da uh iz badwa its your yozja?`",
+    "`CHAND PE CHADA HAI CHANDYAAN KA GHODA TERA NAAM HAI MANSUR TU HAI BEHAN KA LOD*😂`",
+    "`Jab se dil lga baithe tanhai me maa chu*da baithe wo kho gyi kisi aur ke pyar hum apne hi jaato me aag lga baithe`",
+    "`Chadii ke ander se lal pani kha se ata hai ky teri masuka ka bhosda bhi paan khata hai😂`",
+    "`Sun bhosdi ke By anonyCrew MOHABBAT KE SIWA AUR BHI GAM HAI JAMANE ME BSDK GAND PAHAT JATI HAI PAISA KAMANE ME`",
+    "`Thaan liya tha Sayri nhi krege Unka pichwada dekha Alfaaz nikal gye`",
+    "`Ravivaar ko dekha Chand Ka Tukra Itna Baar Dekha par Jaath na Ukra`",
+    "`Katal kro Tir se Talwar me Ky Rkkha hai Maal Chodo Sari Me Salwar me Ky Rkkha hai`",
 ]
 NOOBSTR = [
     "`YOU PRO NIMBA DONT MESS WIDH MEH`",
@@ -417,19 +423,14 @@ RAPE_STRINGS = [
      "`Lodu Andha hai kya Yaha tera rape ho raha hai aur tu abhi tak yahi gaand mara raha hai lulz`",
 ] 
 ABUSE_STRINGS = [
-       "`Madharchod`",
-	   "`Gaandu`",
 	   "`Chutiya he rah jaye ga`",
 	   "`Ja be Gaandu`",
-	   "`Ma ka Bharosa madharchod`",
-	   "`mml`",
-	   "`You MotherFeker`",
-	   "`Muh Me Lega Bhosdike ?`"
+	   "`Muh Me Lega Bhosdike ?`",
 	   "`Kro Gandu giri kam nhi toh Gand Maar lenge tumhari hum😂`",
-           "`Suno Lodu Jyda muh na chalo be muh me lawda pel Diyaa jayega`",
-           "`Sharam aagyi toh aakhe juka lijia land me dam nhi hai apke toh Shilajit kha lijia`",
-           "`Kahe Rahiman Kaviraaj C**t Ki Mahima Aisi,L**d Murjha Jaaye Par Ch**t Waisi Ki Waisi`",
-           "`Chudakkad Raand Ki Ch**T Mein Pele L*Nd Kabeer, Par Aisa Bhi Kya Choda Ki Ban Gaye Fakeer`",
+       "`Suno Lodu Jyda muh na chalo be muh me lawda pel Diyaa jayega`",
+       "`Sharam aagyi toh aakhe juka lijia land me dam nhi hai apke toh Shilajit kha lijia`",
+       "`Kahe Rahiman Kaviraaj C**t Ki Mahima Aisi,L**d Murjha Jaaye Par Ch**t Waisi Ki Waisi`",
+       "`Chudakkad Raand Ki Ch**T Mein Pele L*Nd Kabeer, Par Aisa Bhi Kya Choda Ki Ban Gaye Fakeer`",
 ]
 GEY_STRINGS = [
      "`you gey bsdk`",
@@ -445,9 +446,6 @@ PRO_STRINGS = [
      "`Proness Lebel: 6969696969`",
      "`Itna pro banda dekhlia bc, ab to marna hoga.`",
      "`U iz pro but i iz ur DAD, KeK`",
-     "`Aye pro,ek baat yaad rakhna, Agar Bharosa khud par ho to ksi ki chut tumhari kamzori nahi bnskti.`",
-     "`YOU PRO NIMBA DONT MESS WIDH MEH`",
-     "`Haha yes`",
      "`NOOB NIMBA TRYING TO BE FAMOUS KEK`",
      "`Sometimes one middle finger isnâ€™t enough to let someone know how you feel. Thatâ€™s why you have two hands`",
      "`Some Nimbas need to open their small minds instead of their big mouths`",
@@ -1109,11 +1107,11 @@ async def metoo(hahayes):
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
         await hahayes.edit(random.choice(NOOBSTR))
 			  
-@register(outgoing=True, pattern="^.metoo$")
+@register(outgoing=True, pattern="^.rendi$")
 async def metoo(hahayes):
     """ Haha yes """
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
-        await hahayes.edit(random.choice(METOOSTR))
+        await hahayes.edit(random.choice(RENDISTR))
 			 			  
 @register(outgoing=True, pattern="^.oof$")
 async def Oof(e):
