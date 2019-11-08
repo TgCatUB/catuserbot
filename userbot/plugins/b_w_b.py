@@ -11,7 +11,7 @@ wrap_users = {
     'o': 358491576,  # Jonas
     'm': 964048273,  # Mini Eule
     'g': 234480941,  # Twit
-    'v': 181585055,  # Viktor
+    'v': 967883138,  # Viktor
 }
 
 
