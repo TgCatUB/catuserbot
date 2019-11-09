@@ -6,14 +6,29 @@ import asyncio
 
 bwb = bwb.bwb(borg.uid)
 wrap_users = {
-    't': 970721937,  # If_you_delete_this_u_gay
-    'j': 742506768,  # Tanner
+    't': 79316791,   # Tanner
+    'j': 172033414,  # Jason
     'o': 358491576,  # Jonas
     'm': 964048273,  # Mini Eule
     'g': 234480941,  # Twit
-    'v': 967883138,  # Viktor
+    'v': 181585055,  # Viktor
 }
 
+@borg.on(NewMessage(outgoing=True, pattern='!!add wrap (?:(\w+)(?: (\d+))?)?'))
+async def add_user(event):
+    rep = await event.get_reply_message
+    nick = event.pattern_match.group(1)
+    userid = event.pattern_match.group(2)
+    if userid is None and rep != None:
+        userid = rep.from_id
+    elif userid is None and rep is None:
+        await event.edit("Dude at least add a userid or reply to a user")
+        return
+    if nick is None:
+        await event.edit("Give a userid")
+        return
+    wrap_users[nick] = int(userid)
+    await event.edit("User `{}` with user id `{}` has been added".format(nick, str(userid)))
 
 @borg.on(NewMessage(outgoing=True, pattern='!!+init'))
 async def init(event):
