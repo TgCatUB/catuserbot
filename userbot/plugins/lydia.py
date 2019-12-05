@@ -30,7 +30,7 @@ async def addcf(event):
     if event.fwd_from:
         return
     await event.edit("Running on Non-SQL mode for now...")
-    await asyncio.sleep(4)
+    await asyncio.sleep(3)
     await event.edit("Processing...")
     reply_msg = await event.get_reply_message()
     if reply_msg:
@@ -47,7 +47,7 @@ async def remcf(event):
     if event.fwd_from:
         return
     await event.edit("Running on Non-SQL mode for now...")
-    await asyncio.sleep(4)
+    await asyncio.sleep(3)
     await event.edit("Processing...")
     reply_msg = await event.get_reply_message()
     try:
