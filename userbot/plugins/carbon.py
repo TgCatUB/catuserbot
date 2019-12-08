@@ -152,7 +152,7 @@ async def carbon_api(e):
 
          file,
 
-         caption="<<Le bsdk tera gandu carbon xD>>",
+         caption="<< Here's your carbon, gey boi! \n Carbonised by @A_Dark_Princ3 >> ",
 
          force_document=True,
 
@@ -160,7 +160,7 @@ async def carbon_api(e):
 
          )
 
-   os.remove('./carbon.png')
+   os.remove('./Anubis.png')
 
    driver.quit()
 
