@@ -19,13 +19,12 @@ class Mute(BASE):
 Mute.__table__.create(checkfirst=True)
 
 
-def is_muted():
-    try:
-        return SESSION.query(Mute).all()
-    except:
-        return None
-    finally:
-        SESSION.close()
+def is_muted(sender, chat_id):
+    user = SESSION.query(Mute).get((str(sender), str(chat_id)))
+    if user:
+        return True
+    else:
+        return False
 
 
 def mute(sender, chat_id):
