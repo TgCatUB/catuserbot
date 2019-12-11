@@ -2,7 +2,7 @@ from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
 import asyncio
 
 @command(outgoing=True, pattern=r"^.mute ?(\d+)?")
-async def mute(event):
+async def startmute(event):
     private = False
     if event.fwd_from:
         return
