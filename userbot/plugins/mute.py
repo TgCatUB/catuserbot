@@ -11,7 +11,7 @@ async def startmute(event):
         await asyncio.sleep(3)
         private = True
     reply = await event.get_reply_message()
-    if event.pattern_match.group(1) != "":
+    if event.pattern_match.group(1) is not None:
         userid = event.pattern_match.group(1)
     elif reply is not None:
         userid = reply.sender_id
@@ -40,7 +40,7 @@ async def startmute(event):
         await event.edit("Successfully muted that person")
 
 @command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
-async def unmute(event):
+async def endmute(event):
     private = False
     if event.fwd_from:
         return
@@ -49,7 +49,7 @@ async def unmute(event):
         await asyncio.sleep(3)
         private = True
     reply = await event.get_reply_message()
-    if event.pattern_match.group(1) != "":
+    if event.pattern_match.group(1) is not None:
         userid = event.pattern_match.group(1)
     elif reply is not None:
         userid = reply.sender_id
