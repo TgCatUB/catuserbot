@@ -26,7 +26,7 @@ async def mute(event):
             pass
         else:
             return await event.edit("You can't mute a person if you dont have delete messages permission")
-    elif private = True:
+    elif private == True:
         pass
     else:
         return await event.edit("You can't mute a person without admin rights")
