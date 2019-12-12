@@ -21,11 +21,13 @@ async def startmute(event):
         return await event.edit("Please reply to a user or add their into the command to mute them.")
     chat_id = event.chat_id
     chat = await event.get_chat()
-    if "admin_rights" or "creator" in vars(chat):
+    if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None: 
         if chat.admin_rights.delete_messages is True:
             pass
         else:
             return await event.edit("You can't mute a person if you dont have delete messages permission")
+    elif "creator" in vars(chat):
+        pass
     elif private == True:
         pass
     else:
