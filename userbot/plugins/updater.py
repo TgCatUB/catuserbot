@@ -1,4 +1,4 @@
-"""Update UserBot code (for UniBorg)
+"""Update UserBot code (for Xtra-Telegram)
 Syntax: .update
 \nAll Credits goes to © @Three_Cube_TeKnoways
 \nFor this awasome plugin.\nPorted from PpaperPlane Extended"""
@@ -168,7 +168,7 @@ def generate_change_log(git_repo, diff_marker):
 
 async def deploy_start(tgbot, message, refspec, remote):
     await message.edit(RESTARTING_APP)
-    await message.edit("Restarted! do `.alive or .info or .helpme` to check if I am Working or not?")
+    await message.edit("Restarted! do `.alive or .help` to check if I am Working or not?")
     await remote.push(refspec=refspec)
     await tgbot.disconnect()
     os.execl(sys.executable, sys.executable, *sys.argv)
