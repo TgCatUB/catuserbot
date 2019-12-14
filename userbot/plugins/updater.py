@@ -29,7 +29,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon import events
 
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
 from contextlib import suppress
