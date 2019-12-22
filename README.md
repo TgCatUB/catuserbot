@@ -1,5 +1,4 @@
-# WELCOME TO THE CULT
-# Telegram channel- @XtraTgBot
+# Telegram channel- t.me/XtraTgBot asap to get updates and tuts!
 # FORK AT YOUR OWN RISK
 # Installing
 
