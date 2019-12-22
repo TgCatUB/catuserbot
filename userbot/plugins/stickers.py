@@ -70,7 +70,7 @@ async def _(event):
             sticker.seek(0)
             uploaded_sticker = await borg.upload_file(sticker, file_name=file_ext_ns_ion)
 
-    await event.edit("Look dat way,it's a gurl!Meanwhile lemme kang this stcker over hehe 0.0")
+    await event.edit("`Look dat way,it's a gurl!Meanwhile lemme kang this stcker over hehe 0.0`")
 
     async with borg.conversation("@Stickers") as bot_conv:
         now = datetime.datetime.now()
@@ -122,7 +122,7 @@ async def _(event):
             await silently_send_message(bot_conv, sticker_emoji)
             await silently_send_message(bot_conv, "/done")
 
-    await event.edit(f"BOOM BOI!\nSticker added! This sticker has been stolen to [this place](t.me/addstickers/{packshortname})"
+    await event.edit(f"**BOOM BOI!**\n`Sticker added! This sticker has been stolen to` [this place](t.me/addstickers/{packshortname} )"
                      f"by {DEFAULTUSER}")
 
 
