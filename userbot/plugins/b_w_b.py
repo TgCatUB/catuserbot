@@ -84,4 +84,4 @@ async def hs(event):
             await event.reply('Pong!')
         elif command == 'echo':
             sender = await event.get_sender()
-            await event.reply(f"[{sender.first_name}](tg://user?id={sender.id}): `{data}`")
+            await event.reply(f"{data}")
