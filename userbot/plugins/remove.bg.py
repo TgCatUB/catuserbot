@@ -39,7 +39,7 @@ async def _(event):
         message_id = event.reply_to_msg_id
         reply_message = await event.get_reply_message()
         # check if media message
-        await event.edit("Downloading this media ...")
+        await event.edit("Ooh Analysing dis pic...")
         try:
             downloaded_file_name = await borg.download_media(
                 reply_message,
@@ -72,7 +72,7 @@ async def _(event):
             )
         end = datetime.now()
         ms = (end - start).seconds
-        await event.edit("Background Removed in {} seconds using ReMove.BG API, powered by @UniBorg".format(ms))
+        await event.edit("Removed dat annoying Backgroup in {} seconds, powered by @XtraTgBot".format(ms))
     else:
         await event.edit("ReMove.BG API returned Errors. Please report to @UniBorg\n`{}".format(output_file_name.content.decode("UTF-8")))
 
