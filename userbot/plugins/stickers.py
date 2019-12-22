@@ -27,7 +27,9 @@ from telethon.tl.types import (
     MessageMediaPhoto
 )
 from userbot.utils import admin_cmd
+from userbot import ALIVE_NAME
 
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "No name set yet nibba, check @XtraTgBot"
 
 @borg.on(admin_cmd(pattern="kang ?(.*)"))
 async def _(event):
@@ -120,7 +122,7 @@ async def _(event):
             await silently_send_message(bot_conv, sticker_emoji)
             await silently_send_message(bot_conv, "/done")
 
-    await event.edit(f"BOOM BOI!\nSticker added! This sticker has been stolen to [this place](t.me/addstickers/{packshortname})")
+    await event.edit(f"BOOM BOI!\nSticker added! This sticker has been stolen to [this place](t.me/addstickers/{packshortname}) by f"{DEFAULTUSER"")
 
 
 @borg.on(admin_cmd(pattern="packinfo"))
