@@ -122,7 +122,7 @@ async def _(event):
             await silently_send_message(bot_conv, sticker_emoji)
             await silently_send_message(bot_conv, "/done")
 
-    await event.edit(f"**BOOM BOI!**\n`Sticker added! This sticker has been stolen to` [this place](t.me/addstickers/{packshortname}))"
+    await event.edit(f"**BOOM BOI!**\n`Sticker added! This sticker has been stolen to` [this place](t.me/addstickers/{packshortname})"
                      f" by {DEFAULTUSER}")
 
 
