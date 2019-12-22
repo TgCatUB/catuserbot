@@ -2,6 +2,7 @@
 import asyncio
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
+from platform import uname
 from userbot import ALIVE_NAME
 from userbot.utils import admin_cmd
 
