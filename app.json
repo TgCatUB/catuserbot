@@ -84,6 +84,11 @@
       "value": "",
       "required": false
     },
+    "ALIVE_NAME": {
+      "description": "Your username. Put including @",
+      "value": "",
+      "required": false
+    },
     "TZ": {
       "description": "Required for Correct Time on autopic",
       "value": "",
