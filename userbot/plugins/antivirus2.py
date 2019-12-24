@@ -2,7 +2,7 @@ import datetime
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
-from userbot.utils import admin_cmd
+from userbot.utils import admin_cmd,register
 
 @borg.on(admin_cmd("scan2 ?(.*)"))
 async def _(event):
@@ -32,4 +32,4 @@ async def _(event):
           if response.text.startswith("Forward"):
              await event.edit("```can you kindly disable your forward privacy settings for good?```")
           else: 
-             await event.edit(f"{response.message.message}")
+             await event.edit(f"**Antivirus scan was completed.** {response.message.message}")
