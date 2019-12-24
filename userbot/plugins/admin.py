@@ -248,9 +248,9 @@ async def ban(bon):
     # is done gracefully
     # Shout out the ID, so that fedadmins can fban later
     if reason:
-        await bon.edit(f"`{str(user.id)}` was banned !!\nReason: {reason}")
+        await bon.edit(f"Loser `{str(user.id)}` was banned !!\nReason: {reason}")
     else:
-        await bon.edit(f"`{str(user.id)}` was banned !!")
+        await bon.edit(f"Bitch `{str(user.id)}` was banned !!")
     # Announce to the logging group if we have banned the person
     # successfully!
     if BOTLOG:
@@ -287,7 +287,7 @@ async def nothanos(unbon):
     try:
         await unbon.client(
             EditBannedRequest(unbon.chat_id, user.id, UNBAN_RIGHTS))
-        await unbon.edit("```Unbanned Successfully```")
+        await unbon.edit("```Unbanned Successfully. Granting another chance.```")
 
         if BOTLOG:
             await unbon.client.send_message(
