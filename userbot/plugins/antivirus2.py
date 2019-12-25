@@ -4,7 +4,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot.utils import admin_cmd,register
 
-@borg.on(admin_cmd("scan2 ?(.*)"))
+@borg.on(admin_cmd("scan ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
