@@ -13,14 +13,14 @@ async def _(event):
        return
     reply_message = await event.get_reply_message() 
     if not reply_message.media:
-       await event.edit("```reply to text message```")
+       await event.edit("```reply to a media message```")
        return
     chat = "@DrWebBot"
     sender = reply_message.sender
     if reply_message.sender.bot:
        await event.edit("```Reply to actual users message.```")
        return
-    await event.edit("```Processing```")
+    await event.edit(" `Sliding my tip, of fingers over it`")
     async with borg.conversation(chat) as conv:
           try:     
               response = conv.wait_event(events.NewMessage(incoming=True,from_users=161163358))
@@ -35,4 +35,4 @@ async def _(event):
           	if response.text.startswith("Select"):
           		await event.edit("`Please go to` @DrWebBot `and select your language.`") 
           	else: 
-          			await event.edit(f"**Antivirus scan was completed.** {response.message.message}")
+          			await event.edit(f"**Antivirus scan was completed. I got dem final results.**\n {response.message.message}")
