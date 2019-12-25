@@ -31,5 +31,8 @@ async def _(event):
               return
           if response.text.startswith("Forward"):
              await event.edit("```can you kindly disable your forward privacy settings for good?```")
-          else: 
-             await event.edit(f"**Antivirus scan was completed.** {response.message.message}")
+          else:
+          	if response.text.startswith("Select"):
+          		await event.edit("`Please go to` @DrWebBot `and select your language.`") 
+          	else: 
+          			await event.edit(f"**Antivirus scan was completed.** {response.message.message}")
