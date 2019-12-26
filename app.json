@@ -85,7 +85,7 @@
       "required": false
     },
     "ALIVE_NAME": {
-      "description": "Your username. Put including @",
+      "description": "Your Telegram Username. ",
       "value": "",
       "required": false
     },
