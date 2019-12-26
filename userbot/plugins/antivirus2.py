@@ -1,3 +1,4 @@
+# Lots of lub to @r4v4n4 for gibing the base <3
 import datetime
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
