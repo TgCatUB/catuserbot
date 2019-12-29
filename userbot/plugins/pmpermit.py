@@ -101,9 +101,6 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
 
         sender = await bot.get_entity(chat_id)
-        chat = event.chat_id
-        conv = borg.conversation(chat)
-        response = conv.wait_event(events.NewMessage(incoming=True,from_users=chat))
         if chat_id == bot.uid:
             # don't log Saved Messages
             return
@@ -113,13 +110,6 @@ if Var.PRIVATE_GROUP_ID is not None:
         if sender.verified:
             # don't log verified accounts
             return
-        if response.textstartswith("/start"):
-            await borg.send_message(chat_id, "Do you choose death?{Y/N}")
-            return
-            if response.textstartwith("Y"):
-                await event.client(functions.contacts.BlockRequest(chat_id))
-            else:
-                await borg.send_message(chat_id, "oh, ok")
 
         if not pmpermit_sql.is_approved(chat_id):
             # pm permit
