@@ -113,7 +113,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         if response.textstartswith("/start"):
             await borg.send_message(chat_id, "Do you choose death?{Y/N}")
             if response.textstartwith("Y"):
-            await event.client(functions.contacts.BlockRequest(chat_id))
+                await event.client(functions.contacts.BlockRequest(chat_id))
             else:
                 await borg.send_message(chat_id, "oh, ok")
 
