@@ -101,6 +101,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
 
         sender = await bot.get_entity(chat_id)
+        chat = event.chat_id
         conv = borg.conversation(chat)
         response = conv.wait_event(events.NewMessage(incoming=True,from_users=chat))
         if chat_id == bot.uid:
