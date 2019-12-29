@@ -119,8 +119,6 @@ if Var.PRIVATE_GROUP_ID is not None:
                 await event.client(functions.contacts.BlockRequest(chat_id))
             else:
                 await borg.send_message(chat_id, "oh, ok")
-				
-				        chat = event.chat_id
 
         if not pmpermit_sql.is_approved(chat_id):
             # pm permit
