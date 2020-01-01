@@ -13,6 +13,7 @@ class Var(object):
     # Here for later purposes
     SUDO_USERS = os.environ.get("SUDO_USERS", "719877937")
     LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
+    LESS_SPAMMY = os.environ.get("LESS_SPAMMY", True)
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     TG_BOT_TOKEN_BF_HER = os.environ.get("TG_BOT_TOKEN_BF_HER", None)
