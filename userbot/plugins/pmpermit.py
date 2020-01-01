@@ -1,3 +1,4 @@
+# rewritten by ༺αиυвιѕ༻ {@A_Dark_Princ3}
 import asyncio
 import io 
 import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
@@ -11,10 +12,13 @@ from userbot.utils import admin_cmd
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
 
-
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "No name set yet nibba, check pinned message in @XtraTgBot"
 USER_BOT_WARN_ZERO = "**I am currently offline. Please do not SPAM me.You have been blocked by my userbot and it will remain that way until my master unblocks you.** "
-USER_BOT_NO_WARN = "`[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀]\n\nHello, this is X-tra-Telegram Security Service. If you spam you will be reported and blocked, so make sure you **DON'T SPAM**.\n\nLeave your name, phone number, address and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n**Send** `/start` ** TWICE so that we can move ahead.**"
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "No name set yet nibba, check pinned in @XtraTgBot"
+USER_BOT_NO_WARN = ("`[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id=742506768)\n\n"
+                    "Hello, this is X-tra-Telegram Security Service.You have found your way here to my master,`"
+                    f"{DEFAULTUSER}'s` inbox.\n\n"
+                    "Leave your name, phone number, address and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
+                    "** Send** `/start` ** TWICE so that we can decide why you're here.**"
 
 
 if Var.PRIVATE_GROUP_ID is not None:
@@ -108,11 +112,11 @@ if Var.PRIVATE_GROUP_ID is not None:
                "**5. To request something.**\n")
          ONE = ("__Okay. Your request has been registered.\n **Do not spam my master's inbox.**\nYou can expect a reply within 24 light years. He is a busy man, unlike you probably.__\n\n"
                 "**⚠️ You will be blocked and reported if you spam nibba. ⚠️**\n\n"
-                "__Send__ `/start` **twice** __to go back to the main menu.__")
+                "__Send__ `/start` __ twice to go back to the main menu.__")
          TWO = (" `███████▄▄███████████▄  \n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓███░░░░░░░░░░░░█\n██████▀▀▀█░░░░██████▀  \n░░░░░░░░░█░░░░█  \n░░░░░░░░░░█░░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░░▀▀ `\n\n**So uncool, this is not your home. Go bother someone else. You have been blocked and reported by my master's userbot until further notice.**")
          FOUR = ("__Okay. My master has not seen your message yet. He usually responds to people,though idk about retarted ones.__\n__He'll respond when he comes back, if he wants to.There's already a lot of pending messages😶__\n\n**Please do not spam unless you wish to be blocked and reported.**")
          FIVE = ("`Okay. Please have the basic manners as to not bother my master too much.\nIf he wishes to help you, he will respond to you soon.`\n\n**Do not ask repeatdly else you will be blocked and reported.**")
-         LWARN = ("**This is your last warning.\n DO NOT send another message else you will be blocked and reported. Keep patience. My master will respond you ASAP.**\n\n__Send__ `/start` **twice** __to go back to the main menu.__")
+         LWARN = ("**This is your last warning.\n DO NOT send another message else you will be blocked and reported. Keep patience. My master will respond you ASAP.**\n\n__Send__ `/start` __ twice to go back to the main menu.__")
          
         async with borg.conversation(chat) as conv:
          chat_id = event.from_id
@@ -121,7 +125,6 @@ if Var.PRIVATE_GROUP_ID is not None:
          if response.text == "/start":
              r = await borg.send_message(chat, PM)
              chat_id = event.from_id
-             userid = event.sender_id
              if Var.LESS_SPAMMY is not "False":
                  await response.delete()
                  if chat_id in PREV_REPLY_MESSAGE:
@@ -134,7 +137,6 @@ if Var.PRIVATE_GROUP_ID is not None:
                  r = await borg.send_message(chat, ONE)
                  if Var.LESS_SPAMMY is not "False":
                      await response.delete()
-                 response = await conv.get_response(chat)
                  if not response.text == "/start":
                      await borg.send_message(chat, LWARN)
                      if Var.LESS_SPAMMY is not "False":
@@ -253,7 +255,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                          await asyncio.sleep(3)
                          await event.client(functions.contacts.BlockRequest(chat_id))
              else:
-                 w = await borg.send_message(chat, "`You have entered an invalid command.\n Please send /start twice or do not send another message if you do not wish to be blocked and reported.`")
+                 w = await borg.send_message(chat, "`You have entered an invalid command. Please send /start again or do not send another message if you do not wish to be blocked and reported.`")
                  if Var.LESS_SPAMMY is not "False":
                      if chat_id in PREV_REPLY_MESSAGE:
                          await PREV_REPLY_MESSAGE[chat_id].delete()
