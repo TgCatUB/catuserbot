@@ -2,15 +2,23 @@
 # created by: @A_Dark_Princ3
 # if you change these, you gay
 # some things from kang.py from Spechide's fork of Uniborg
-import datetime
-from telethon import events
+
+"""Reply to an image/sticker with .mmf` 'text on top' ; 'text on bottom
+"""
+
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot.utils import admin_cmd
 from telethon import events
 from io import BytesIO
 from PIL import Image
 import asyncio
+import time
+from datetime import datetime
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
+from pySmartDL import SmartDL
+from telethon.tl.types import DocumentAttributeVideo
+from uniborg.util import progress, humanbytes, time_formatter, admin_cmd
 import datetime
 from collections import defaultdict
 import math
@@ -22,31 +30,35 @@ from telethon.errors import MessageNotModifiedError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.types import (
-    DocumentAttributeFilename,
-    DocumentAttributeSticker,
-    InputMediaUploadedDocument,
-    InputPeerNotifySettings,
-    InputStickerSetID,
-    InputStickerSetShortName,
-    MessageMediaPhoto
+DocumentAttributeFilename,
+DocumentAttributeSticker,
+InputMediaUploadedDocument,
+InputPeerNotifySettings,
+InputStickerSetID,
+InputStickerSetShortName,
+MessageMediaPhoto
 )
+
+
+thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+
 
 @borg.on(admin_cmd("mmf ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
     if not event.reply_to_msg_id:
-       await event.edit("`Syntax: reply to an image with .mmf` 'text on top' ; 'text on bottom' ")
+       await event.edit("`Syntax: reply to an image with .mms` 'text on top' ; 'text on bottom' ")
        return
     reply_message = await event.get_reply_message() 
     if not reply_message.media:
-       await event.edit("```reply to a media```")
+       await event.edit("```reply to a image/sticker/gif```")
        return
     chat = "@MemeAutobot"
     sender = reply_message.sender
     file_ext_ns_ion = "@memetime.png"
     file = await borg.download_file(reply_message.media)
-    uploaded_sticker = None
+    uploaded_gif = None
     if reply_message.sender.bot:
        await event.edit("```Reply to actual users message.```")
        return
@@ -67,25 +79,43 @@ async def _(event):
           if response.text.startswith("Forward"):
               await event.edit("```can you kindly disable your forward privacy settings for good nibba?```")
           if "Okay..." in response.text:
-            await event.edit("```NANI?! This is a sticker! This will take sum tym owo```")
-            with BytesIO(file) as mem_file, BytesIO() as sticker:
-                resize_image(mem_file, sticker)
-                sticker.seek(0)
-                uploaded_sticker = await borg.upload_file(sticker, file_name=file_ext_ns_ion)
-            await bot_conv.send_file(
-                file=uploaded_sticker,
-                allow_cache=False,
-                force_document=False
-            )
+            await event.edit("```NANI?! This is not an image! This will take sum tym to convert to image owo```")
+            thumb = None
+            if os.path.exists(thumb_image_path):
+                thumb = thumb_image_path
+            input_str = event.pattern_match.group(1)
+            if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+                os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+            if event.reply_to_msg_id:
+                file_name = "meme.png"
+                reply_message = await event.get_reply_message()
+                to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
+                downloaded_file_name = os.path.join(to_download_directory, file_name)
+                downloaded_file_name = await borg.download_media(
+                    reply_message,
+                    downloaded_file_name,
+                    )
+                if os.path.exists(downloaded_file_name):
+                    await borg.send_file(
+                        chat,
+                        downloaded_file_name,
+                        force_document=False,
+                        supports_streaming=False,
+                        allow_cache=False,
+                        thumb=thumb,
+                        )
+                    os.remove(downloaded_file_name)
+                else:
+                    await event.edit("File Not Found {}".format(input_str))
             response = await bot_conv.get_response()
             await borg.send_file(event.chat_id, response.media)
-            await borg.send_message(event.chat_id, "` 10 points to Griffindor! `")
+            await event.delete()
+            await borg.send_message(event.chat_id, "`10 Points to Griffindor!`")
           elif not is_message_image(reply_message):
-            await event.edit("Invalid message type.")
+            await event.edit("Invalid message type. Plz choose right message type u NIBBA.")
             return
           else: 
                await borg.send_file(event.chat_id, response.media)
-               await borg.send_message(event.chat_id, "` 10 points to Griffindor! `")
 
 def is_message_image(message):
     if message.media:
