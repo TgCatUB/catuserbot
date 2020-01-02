@@ -1,13 +1,10 @@
-# base by: @r4v4n4
-# created by: @A_Dark_Princ3
-# if you change these, you gay
-# some things from kang.py from Spechide's fork of Uniborg
-
 """Reply to an image/sticker with .mmf` 'text on top' ; 'text on bottom
+base by: @r4v4n4
+created by: @A_Dark_Princ3
+if you change these, you gay.
 """
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from userbot.utils import admin_cmd
 from telethon import events
 from io import BytesIO
 from PIL import Image
@@ -79,7 +76,7 @@ async def _(event):
           if response.text.startswith("Forward"):
               await event.edit("```can you kindly disable your forward privacy settings for good nibba?```")
           if "Okay..." in response.text:
-            await event.edit("```NANI?! This is not an image! This will take sum tym to convert to image owo```")
+            await event.edit("```🤨 NANI?! This is not an image! This will take sum tym to convert to image owo 🧐```")
             thumb = None
             if os.path.exists(thumb_image_path):
                 thumb = thumb_image_path
@@ -108,9 +105,23 @@ async def _(event):
                 else:
                     await event.edit("File Not Found {}".format(input_str))
             response = await bot_conv.get_response()
-            await borg.send_file(event.chat_id, response.media)
+            the_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
+            files_name = "memes.webp"
+            download_file_name = os.path.join(the_download_directory, files_name)
+            await borg.download_media(
+                response.media,
+                download_file_name,
+                )
+            requires_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "memes.webp"
+            await borg.send_file(  # pylint:disable=E0602
+                event.chat_id,
+                requires_file_name,
+                supports_streaming=False,
+                caption="Userbot: Powered by @x-tra-telegram",
+                # Courtesy: @A_Dark_Princ3
+            )
             await event.delete()
-            await borg.send_message(event.chat_id, "`10 Points to Griffindor!`")
+            await borg.send_message(event.chat_id, "`☠️☠️10 Points to Griffindor!🔥🔥`")
           elif not is_message_image(reply_message):
             await event.edit("Invalid message type. Plz choose right message type u NIBBA.")
             return
@@ -133,27 +144,3 @@ async def silently_send_message(conv, text):
     await conv.mark_read(message=response)
     return response
     
-def resize_image(image, save_locaton):
-    """ Copyright Rhyse Simpson:
-        https://github.com/skittles9823/SkittBot/blob/master/tg_bot/modules/stickers.py
-    """
-    im = Image.open(image)
-    maxsize = (512, 512)
-    if (im.width and im.height) < 512:
-        size1 = im.width
-        size2 = im.height
-        if im.width > im.height:
-            scale = 512 / size1
-            size1new = 512
-            size2new = size2 * scale
-        else:
-            scale = 512 / size2
-            size1new = size1 * scale
-            size2new = 512
-        size1new = math.floor(size1new)
-        size2new = math.floor(size2new)
-        sizenew = (size1new, size2new)
-        im = im.resize(sizenew)
-    else:
-        im.thumbnail(maxsize)
-    im.save(save_locaton, "PNG")
