@@ -28,7 +28,7 @@ async def on_new_private_message(event):
         await menu(chat_id, event)
 
 @command(pattern=r"\/start", incoming=True)
-async def menu(event):
+async def menu(chat_id, event):
     chat = await event.get_chat()
     if event.fwd_from:
         return
@@ -206,4 +206,3 @@ async def menu(event):
                  await borg.send_message(chat, TWO)
                  await asyncio.sleep(3)
                  await event.client(functions.contacts.BlockRequest(chat_id))
-
