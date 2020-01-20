@@ -55,15 +55,15 @@ async def menu(event):
      LWARN = ("**This is your last warning. DO NOT send another message else you will be blocked and reported. Keep patience. My master will respond you ASAP.**\n__Use__ `/start` __to go back to the main menu.__")
      
     async with borg.conversation(chat) as conv:
-         r = await borg.send_message(chat, PM)
-         chat_id = event.from_id
-         if Var.LESS_SPAMMY is not False:
-             await response.delete()
-             if chat_id in PREV_REPLY_MESSAGE:
-                 await PREV_REPLY_MESSAGE[chat_id].delete()
-                 await PREV_REPLY_MESSAGE[userid].delete()
-             PREV_REPLY_MESSAGE[chat_id] = r
-         response = await conv.get_response(chat)
+     r = await borg.send_message(chat, PM)
+     chat_id = event.from_id
+     if Var.LESS_SPAMMY is not False:
+         await response.delete()
+         if chat_id in PREV_REPLY_MESSAGE:
+             await PREV_REPLY_MESSAGE[chat_id].delete()
+             await PREV_REPLY_MESSAGE[userid].delete()
+         PREV_REPLY_MESSAGE[chat_id] = r
+     response = await conv.get_response(chat)
      chat_id = event.from_id
      response = await conv.get_response(chat)
      y = response.text
