@@ -48,5 +48,6 @@ speedtest-cli>=2.0.2
 sqlalchemy>=1.2
 telegraph
 asyncurban
+urbandict
 wikipedia>=1.4.0
 youtube-dl
