@@ -4,7 +4,7 @@
 """Urban Dictionary
 Syntax: .ud Query"""
 from telethon import events
-import urbandict
+import asyncurban
 from userbot.utils import admin_cmd
 
 
@@ -13,21 +13,10 @@ async def _(event):
     if event.fwd_from:
         return
     await event.edit("processing...")
-    str = event.pattern_match.group(1)
+    word = event.pattern_match.group(1)
+    urban = asyncurban.UrbanDictionary()
     try:
-        mean = urbandict.define(str)
-        if len(mean) > 0:
-            await event.edit(
-                'Text: **' +
-                str +
-                '**\n\nMeaning: **' +
-                mean[0]['def'] +
-                '**\n\n' +
-                'Example: \n__' +
-                mean[0]['example'] +
-                '__'
-            )
-        else:
-            await event.edit("No result found for **" + str + "**")
-    except:
-        await event.edit("No result found for **" + str + "**")
+        mean = urban.get_word(word)
+        await event.edit("Text: **{}**\n\nMeaning: **{}**\n\nExample: __{}__".format(mean.word, mean.definition, mean.example))
+    except asyncurban.WordNotFoundError:
+        await event.edit("No result found for **" + word + "**")
