@@ -16,7 +16,7 @@ async def _(event):
     word = event.pattern_match.group(1)
     urban = asyncurban.UrbanDictionary()
     try:
-        mean = urban.get_word(word)
+        mean = await urban.get_word(word)
         await event.edit("Text: **{}**\n\nMeaning: **{}**\n\nExample: __{}__".format(mean.word, mean.definition, mean.example))
     except asyncurban.WordNotFoundError:
         await event.edit("No result found for **" + word + "**")
