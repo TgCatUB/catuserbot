@@ -31,7 +31,7 @@ async def set_not_afk(event):
                 event.chat_id,
                 "Please set `PRIVATE_GROUP_BOT_API_ID` " + \
                 "for the proper functioning of afk functionality " + \
-                "in @UniBorg\n\n `{}`".format(str(e)),
+                "in @xtratgbot\nCheck pinned message for more info.\n\n `{}`".format(str(e)),
                 reply_to=event.message.id,
                 silent=True
             )
