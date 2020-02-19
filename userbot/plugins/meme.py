@@ -15,7 +15,7 @@ async def meme(event):
     if event.fwd_from:
         return   
     memeVar = event.text
-    sleepValue = 3
+    sleepValue = 5
     memeVar = memeVar[6:] 
            
     await event.edit("-------------"+memeVar)
@@ -87,7 +87,7 @@ async def meme(event):
     if event.fwd_from:
         return   
     flower =" 🌹"
-    sleepValue = 5
+    sleepValue = 10
            
     await event.edit(flower+"        ")
     await event.edit(flower+flower+"       ")
