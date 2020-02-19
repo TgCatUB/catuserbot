@@ -24,7 +24,7 @@ from telethon.tl.functions.photos import (DeletePhotosRequest,
 from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
 
 from userbot import bot, CMD_HELP
-from userbot.plugins import register
+from userbot.utils import register
 
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
