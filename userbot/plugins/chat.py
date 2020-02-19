@@ -7,8 +7,11 @@
 from asyncio import sleep
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, bot
 from userbot.utils import register
-from userbot.plugins.admin import get_user_from_event
-
+from telethon.tl.functions.photos import GetUserPhotosRequest
+from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.types import MessageEntityMentionName
+from telethon.utils import get_input_location
+from userbot.utils import admin_cmd
 
 @register(outgoing=True, pattern="^.userid$")
 async def useridgetter(target):
