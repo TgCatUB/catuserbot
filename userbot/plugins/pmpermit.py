@@ -13,9 +13,9 @@ PREV_REPLY_MESSAGE = {}
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "**No name set yet nibba, check pinned message in** @XtraTgBot"
 USER_BOT_WARN_ZERO = "`You were spamming my peru master's inbox, henceforth your retarded lame ass has been blocked by my master's userbot.` **Now GTFO, i'm playing minecraft** "
 USER_BOT_NO_WARN = ("[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id=916234223)\n\n"
-                    "`Hello, this is X-tra-Telegram Security Service.You have found your way here to my master,`"
-                    "`నేను ఆన్‌లైన్‌లో లేను. నన్ను స్పామ్ చేయవద్దు.నేను మీకు తరువాత ప్రత్యుత్తరం ఇస్తాను,`"
-                    
+                    "`Hello, this is X-tra-Telegram Security Service.You have found your way here to my master\n,`"
+                    "`నేను ఆన్‌లైన్‌లో లేను. నన్ను స్పామ్ చేయవద్దు.నేను మీకు తరువాత ప్రత్యుత్తరం ఇస్తాను,`\n"
+                    "'nenu online lo lenu present online loki vachaka message chastha.'\n"
                     f"{DEFAULTUSER}'s` inbox.\n\n"
                     "Leave your name, phone number, address and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
                     "** Send** `/start` ** so that we can decide why you're here.**")
