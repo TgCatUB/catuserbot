@@ -115,7 +115,7 @@ async def mute_chat(mute_e):
             str(mute_e.chat_id) + " was silenced.")
 
 
-@register(incoming=True, disable_errors=True)
+@register(incoming=True )
 async def keep_read(message):
     """ The mute logic. """
     try:
