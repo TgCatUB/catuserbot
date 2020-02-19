@@ -30,7 +30,7 @@ async def _(event):
 
     input_str = event.pattern_match.group(1)
 
-    if input_str == "fuk":
+    if input_str == "fuck":
 
         await event.edit(input_str)
 
@@ -67,7 +67,7 @@ async def _(event):
 
     input_str = event.pattern_match.group(1)
 
-    if input_str == "sux":
+    if input_str == "sex":
 
         await event.edit(input_str)
 
