@@ -86,7 +86,7 @@ async def kickme(leave):
 async def unmute_chat(unm_e):
     """ For .unmutechat command, unmute a muted chat. """
     try:
-        from userbot.modules.sql_helper.keep_read_sql import unkread
+        from userbot.plugins.sql_helper.keep_read_sql import unkread
     except AttributeError:
         await unm_e.edit('`Running on Non-SQL Mode!`')
         return
@@ -100,7 +100,7 @@ async def unmute_chat(unm_e):
 async def mute_chat(mute_e):
     """ For .mutechat command, mute any chat. """
     try:
-        from userbot.modules.sql_helper.keep_read_sql import kread
+        from userbot.plugins.sql_helper.keep_read_sql import kread
     except AttributeError:
         await mute_e.edit("`Running on Non-SQL mode!`")
         return
@@ -119,7 +119,7 @@ async def mute_chat(mute_e):
 async def keep_read(message):
     """ The mute logic. """
     try:
-        from userbot.modules.sql_helper.keep_read_sql import is_kread
+        from userbot.plugins.sql_helper.keep_read_sql import is_kread
     except AttributeError:
         return
     kread = is_kread()
