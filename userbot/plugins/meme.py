@@ -54,11 +54,11 @@ Bonus : Flower Boquee Generater
 usage:- .flower
 
 """
-@borg.on(events.NewMessage(pattern=r"\.lollipop", outgoing=True))
+@borg.on(events.NewMessage(pattern=r"\.lp", outgoing=True))
 async def meme(event):
     if event.fwd_from:
         return   
-    lollipop =" 🍭"
+    lp =" 🍭"
     sleepValue = 5
            
     await event.edit(lollipop+"        ")
