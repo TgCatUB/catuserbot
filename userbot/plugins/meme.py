@@ -54,6 +54,34 @@ Bonus : Flower Boquee Generater
 usage:- .flower
 
 """
+@borg.on(events.NewMessage(pattern=r"\.lollipop", outgoing=True))
+async def meme(event):
+    if event.fwd_from:
+        return   
+    lollipop =" 🍭"
+    sleepValue = 5
+           
+    await event.edit(lollipop+"        ")
+    await event.edit(lollipop+lollipop+"       ")
+    await event.edit(lollipop+lollipop+lollipop+"      ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+"     ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+"    ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+"   ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+"  ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+" ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop)
+    await event.edit(lollipop+"        ")
+    await event.edit(lollipop+lollipop+"       ")
+    await event.edit(lollipop+lollipop+lollipop+"      ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+"     ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+"    ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+"   ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+"  ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+" ")
+    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop)
+    await asyncio.sleep(sleepValue)
+    
+    
 @borg.on(events.NewMessage(pattern=r"\.flower", outgoing=True))
 async def meme(event):
     if event.fwd_from:
@@ -79,6 +107,5 @@ async def meme(event):
     await event.edit(flower+flower+flower+flower+flower+flower+flower+flower+"  ")
     await event.edit(flower+flower+flower+flower+flower+flower+flower+flower+flower+" ")
     await event.edit(flower+flower+flower+flower+flower+flower+flower+flower+flower+flower)
-    await asyncio.sleep(sleepValue)
-        
+    await asyncio.sleep(sleepValue)        
     
