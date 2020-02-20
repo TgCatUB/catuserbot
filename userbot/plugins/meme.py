@@ -59,26 +59,26 @@ async def meme(event):
     if event.fwd_from:
         return   
     lp =" 🍭"
-    sleepValue = 5
+    sleepValue = 10
            
-    await event.edit(lollipop+"        ")
-    await event.edit(lollipop+lollipop+"       ")
-    await event.edit(lollipop+lollipop+lollipop+"      ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+"     ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+"    ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+"   ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+"  ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+" ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop)
-    await event.edit(lollipop+"        ")
-    await event.edit(lollipop+lollipop+"       ")
-    await event.edit(lollipop+lollipop+lollipop+"      ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+"     ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+"    ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+"   ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+"  ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+" ")
-    await event.edit(lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop+lollipop)
+    await event.edit(lp+"        ")
+    await event.edit(lp+lp+"       ")
+    await event.edit(lp+lp+lp+"      ")
+    await event.edit(lp+lp+lp+lp+"     ")
+    await event.edit(lp+lp+lp+lp+lp+"    ")
+    await event.edit(lp+lp+lp+lp+lp+lp+"   ")
+    await event.edit(lp+lp+lp+lp+lp+lp+lp+"  ")
+    await event.edit(lp+lp+lp+lp+lp+lp+lp+lp+" ")
+    await event.edit(lp+lp+lp+lp+lp+lp+lp+lp+lp)
+    await event.edit(lp+"        ")
+    await event.edit(lp+lp+"       ")
+    await event.edit(lp+lp+lp+"      ")
+    await event.edit(lp+lp+lp+lp+"     ")
+    await event.edit(lp+lp+lp+lp+lp+"    ")
+    await event.edit(lp+lp+lp+lp+lp+lp+"   ")
+    await event.edit(lp+lp+lp+lp+lp+lp+lp+"  ")
+    await event.edit(lp+lp+lp+lp+lp+lp+lp+lp+" ")
+    await event.edit(lp+lp+lp+lp+lp+lp+lp+lp+lp)
     await asyncio.sleep(sleepValue)
     
     
