@@ -21,7 +21,7 @@ from userbot.utils import admin_cmd
 import os
 
 from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
-from userbot.events import register
+from userbot.utils import register
 
 
 @register(pattern=".whois(?: |$)(.*)", outgoing=True)
