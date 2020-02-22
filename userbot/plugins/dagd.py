@@ -51,10 +51,4 @@ async def _(event):
         await event.edit("Input URL {} returned status_code {}".format(input_str, r.status_code))
 
         
-CMD_HELP.update({
- " Available Commands
-\n.isup URL\
-\n.dns google.com\
-\n.url <long url>\
-\n.unshort <short url>\"
-})
+
