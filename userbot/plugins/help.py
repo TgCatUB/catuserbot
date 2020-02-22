@@ -9,7 +9,7 @@ from userbot import CMD_HELP
 from userbot.utils import register
 
 
-@register(outgoing=True, pattern="^.helper(?: |$)(.*)")
+@register(outgoing=True, pattern="^.about(?: |$)(.*)")
 async def help(event):
     """ For .help command,"""
     args = event.pattern_match.group(1).lower()
