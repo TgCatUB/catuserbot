@@ -3,7 +3,7 @@ from telethon import events
 import asyncio
 import os
 import sys
-
+from userbot import CMD_HELP 
 
 @borg.on(events.NewMessage(pattern=r"\.plane", outgoing=True))
 async def _(event):
