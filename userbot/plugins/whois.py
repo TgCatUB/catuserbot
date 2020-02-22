@@ -156,34 +156,10 @@ async def who(event):
 
     replied_user = await get_user(event)
 
-    try:
-        photo, caption = await fetch_info(replied_user, event)
-    except AttributeError:
-        event.edit("`Could not fetch info of that user.`")
-        return
-
     message_id_to_reply = event.message.reply_to_msg_id
 
     if not message_id_to_reply:
         message_id_to_reply = None
-
-    try:
-        await event.client.send_file(event.chat_id,
-                                     photo,
-                                     caption=caption,
-                                     link_preview=False,
-                                     force_document=False,
-                                     reply_to=message_id_to_reply,
-                                     parse_mode="html")
-
-        if not photo.startswith("http"):
-            os.remove(photo)
-        await event.delete()
-
-    except TypeError:
-        await event.edit(caption, parse_mode="html")
-
-
 async def get_user(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id and not event.pattern_match.group(1):
@@ -192,9 +168,6 @@ async def get_user(event):
             GetFullUserRequest(previous_message.from_id))
     else:
         user = event.pattern_match.group(1)
-
-        if user.isnumeric():
-            user = int(user)
 
         if not user:
             self_user = await event.client.get_me()
