@@ -14,6 +14,28 @@ from telethon.utils import get_input_location
 from userbot.utils import admin_cmd
 from userbot.plugins.admin import get_user_from_event
 
+from os import remove
+from telethon import events
+import asyncio
+from datetime import datetime
+from telethon.tl.functions.channels import EditBannedRequest
+from telethon.tl.types import ChatBannedRights
+
+from telethon.errors import (BadRequestError, ChatAdminRequiredError,
+                             ImageProcessFailedError, PhotoCropSizeSmallError,
+                             UserAdminInvalidError)
+from telethon.errors.rpcerrorlist import (UserIdInvalidError,
+                                          MessageTooLongError)
+from telethon.tl.functions.channels import (EditAdminRequest,
+                                            EditBannedRequest,
+                                            EditPhotoRequest)
+from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
+                               ChatBannedRights, MessageEntityMentionName,
+                               MessageMediaPhoto)
+
+from userbot.utils import register, errors_handler, admin_cmd
+
 @register(outgoing=True, pattern="^.userid$")
 async def useridgetter(target):
     """ For .userid command, returns the ID of the target user. """
