@@ -28,19 +28,7 @@ async def _(event):
     # https://stackoverflow.com/a/5072031/4723940
     # some Deleted Accounts do not have first_name
     # inspired by https://telegram.dog/afsaI181
-    
-        location = str(e)
-    caption = """Extracted Userdata From Anubis' DATABASE
-ID: <code>{}</code>
-Rendi's Name: <a href='tg://user?id={}'>{}</a>
-Bio: {}
-DC ID: {}
-Number of PPs: {}
-Restricted? : {}
-Verified gey: {}
-Bot(nub): {}
-Groups in Common with this gey: {}
-""".format(
+.format(
         user_id,
         user_id
     )
