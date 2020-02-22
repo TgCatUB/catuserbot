@@ -17,6 +17,3 @@ async def _(event):
 		await event.edit("".join(deq))
 		deq.rotate(1)
     
-CMD_HELP.update({
-    ".earth"
-})
