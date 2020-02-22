@@ -12,8 +12,6 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 from userbot.utils import admin_cmd
-from userbot.plugins.admin import get_user_from_event
-
 from os import remove
 from telethon import events
 import asyncio
