@@ -5,6 +5,7 @@ from pySmartDL import SmartDL
 from telethon.tl import functions
 import asyncio
 import shutil
+from userbot import CMD_HELP
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
@@ -37,3 +38,6 @@ async def autopic(event):
             await asyncio.sleep(60)
         except:
             return
+CMD_HELP.update({
+    " .autopic"
+})
