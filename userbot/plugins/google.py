@@ -130,3 +130,10 @@ async def _(event):
 
 More Info: Open this <a href="{the_location}">Link</a> in {ms} seconds""".format(**locals())
     await event.edit(OUTPUT_STR, parse_mode="HTML", link_preview=False)
+    
+CMD_HELP.update({
+    "Available Commands:
+.google <query>
+.google image <query>
+.google reverse search""" "
+})
