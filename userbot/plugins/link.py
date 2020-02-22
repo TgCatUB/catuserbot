@@ -28,10 +28,6 @@ async def _(event):
     # https://stackoverflow.com/a/5072031/4723940
     # some Deleted Accounts do not have first_name
     # inspired by https://telegram.dog/afsaI181
-.format(
-        user_id,
-        user_id
-    )
     message_id_to_reply = event.message.reply_to_msg_id
     if not message_id_to_reply:
         message_id_to_reply = event.message.id
