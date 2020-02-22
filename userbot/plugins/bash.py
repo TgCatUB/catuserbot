@@ -4,7 +4,7 @@ from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotMo
 import io
 import asyncio
 import time
-
+from userbot import CMD_HELP
 
 @command(pattern="^.bash ?(.*)")
 async def _(event):
