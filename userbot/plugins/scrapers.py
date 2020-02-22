@@ -40,13 +40,13 @@ from asyncio import sleep
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CHROME_DRIVER, GOOGLE_CHROME_BIN
 from userbot.events import register
 from telethon.tl.types import DocumentAttributeAudio
-from userbot.modules.upload_download import progress, humanbytes, time_formatter
+from userbot.plugins.upload_download import progress, humanbytes, time_formatter
 
 CARBONLANG = "auto"
 TTS_LANG = "en"
 TRT_LANG = "en"
 
-
+"""
 @register(outgoing=True, pattern="^.crblang (.*)")
 async def setlang(prog):
     global CARBONLANG
@@ -150,7 +150,7 @@ async def img_sampler(event):
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await event.delete()
 
-
+"""
 @register(outgoing=True, pattern="^.currency (.*)")
 async def moni(event):
     input_str = event.pattern_match.group(1)
@@ -244,7 +244,7 @@ async def wiki(wiki_q):
         await wiki_q.client.send_message(
             BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully")
 
-
+"""
 @register(outgoing=True, pattern="^.ud (.*)")
 async def urban_dict(ud_e):
     """ For .ud command, fetch content from Urban Dictionary. """
@@ -329,7 +329,7 @@ async def text_to_speech(query):
                 BOTLOG_CHATID, "Text to Speech executed successfully !")
         await query.delete()
 
-
+"""
 # kanged from Blank-x ;---;
 @register(outgoing=True, pattern="^.imdb (.*)")
 async def imdb(e):
