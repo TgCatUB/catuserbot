@@ -38,3 +38,6 @@ async def _(event):
           		await event.edit("`Please go to` @DrWebBot `and select your language.`") 
           	else: 
           			await event.edit(f"**Antivirus scan was completed. I got dem final results.**\n {response.message.message}")
+CMD_HELP.update({
+    " .scan"
+})
