@@ -135,5 +135,5 @@ async def on_afk(event):
   
 
 CMD_HELP.update({
-    ".afk"
+    "afk   reason"
 })
