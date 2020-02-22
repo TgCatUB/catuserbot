@@ -31,7 +31,7 @@ from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
-
+from userbot.plugins.admin import get_user_from_event
 from userbot.utils import register, errors_handler, admin_cmd
 
 @register(outgoing=True, pattern="^.userid$")
@@ -83,7 +83,19 @@ async def log(log_text):
     await sleep(2)
     await log_text.delete()
 
-
+@register(outgoing=True, pattern="^.link(?: |$)(.*)")
+async def permalink(mention):
+    """ For .link command, generates a link to the user's PM with a custom text. """
+    user, custom = await get_user_from_event(mention)
+    if not user:
+        return
+    if custom:
+        await mention.edit(f"[{custom}](tg://user?id={user.id})")
+    else:
+        tag = user.first_name.replace("\u2060",
+                                      "") if user.first_name else user.username
+        await mention.edit(f"[{tag}](tg://user?id={user.id})")
+    
 @register(outgoing=True, pattern="^.kickme$")
 async def kickme(leave):
     """ Basically it's .kickme command """
