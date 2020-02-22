@@ -7,6 +7,7 @@ Available Commands:
 
 from telethon import events
 import asyncio
+from userbot import CMD_HELP 
 @borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
 async def _(event):
     if event.fwd_from:
