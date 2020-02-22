@@ -148,56 +148,5 @@ async def fetch_info(replied_user, event):
 
     return photo, caption
    
-@register(outgoing=True, pattern="^.link(?: |$)(.*)")
-async def who(event):
-
-    if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
-
-    replied_user = await get_user(event)
-
-    message_id_to_reply = event.message.reply_to_msg_id
-
-    if not message_id_to_reply:
-        message_id_to_reply = None
-async def get_user(event):
-    """ Get the user from argument or replied message. """
-    if event.reply_to_msg_id and not event.pattern_match.group(1):
-        previous_message = await event.get_reply_message()
-        replied_user = await event.client(
-            GetFullUserRequest(previous_message.from_id))
-    else:
-        user = event.pattern_match.group(1)
-
-        if not user:
-            self_user = await event.client.get_me()
-            user = self_user.id
-
-        if event.message.entities is not None:
-            probable_user_mention_entity = event.message.entities[0]
-
-            if isinstance(probable_user_mention_entity,
-                          MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user
-        try:
-            user_object = await event.client.get_entity(user)
-            replied_user = await event.client(
-                GetFullUserRequest(user_object.id))
-        except (TypeError, ValueError) as err:
-            await event.edit(str(err))
-            return None
-
-    return replied_user
-   
-    if not user:
-        return
-    if custom:
-        await mention.edit(f"[{custom}](tg://user?id={user.id})")
-    else:
-        tag = user.first_name.replace("\u2060",
-                                      "") if user.first_name else user.username
-        await mention.edit(f"<a href=\"tg://user?id={user_id}\">{first_name}</a>")
 
 
