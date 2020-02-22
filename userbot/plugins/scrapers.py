@@ -56,7 +56,7 @@ async def setlang(prog):
 
 @register(outgoing=True, pattern="^.carbon")
 async def carbon_api(e):
-    """ A Wrapper for carbon.now.sh """
+    
     await e.edit("`Processing..`")
     CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
     global CARBONLANG
@@ -122,7 +122,6 @@ async def carbon_api(e):
 
 @register(outgoing=True, pattern="^.img (.*)")
 async def img_sampler(event):
-    """ For .img command, search and return images matching the query. """
     await event.edit("Processing...")
     query = event.pattern_match.group(1)
     lim = findall(r"lim=\d+", query)
@@ -287,7 +286,7 @@ async def urban_dict(ud_e):
 
 @register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
 async def text_to_speech(query):
-    """ For .tts command, a wrapper for Google Text-to-Speech. """
+
     textx = await query.get_reply_message()
     message = query.pattern_match.group(1)
     if message:
