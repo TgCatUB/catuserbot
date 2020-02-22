@@ -17,6 +17,8 @@ from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from userbot.utils import register
 
 
+
+
 @register(pattern=".whois(?: |$)(.*)", outgoing=True)
 async def who(event):
 
@@ -145,7 +147,19 @@ async def fetch_info(replied_user, event):
     caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
 
     return photo, caption
-
+   
+@register(outgoing=True, pattern="^.link(?: |$)(.*)")
+async def permalink(mention):
+    """ For .link command, generates a link to the user's PM with a custom text. """
+    user, custom = await get_user_from_event(mention)
+    if not user:
+        return
+    if custom:
+        await mention.edit(f"[{custom}](tg://user?id={user.id})")
+    else:
+        tag = user.first_name.replace("\u2060",
+                                      "") if user.first_name else user.username
+        await mention.edit(f"[{tag}](tg://user?id={user.id})")
 
 CMD_HELP.update({
     "whois":
