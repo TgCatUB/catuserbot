@@ -78,5 +78,5 @@ CMD_HELP.update({
 Available Commands:
 .addblacklist
 .listblacklist
-.rmblacklist""" "
+.rmblacklist "
 })
