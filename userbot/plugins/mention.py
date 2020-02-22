@@ -1,6 +1,3 @@
-# For Uniborg
-# (c) @INF1N17Y
-
 from telethon import events
 from uniborg.util import admin_cmd
 
