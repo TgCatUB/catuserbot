@@ -30,7 +30,7 @@ async def add_user(event):
     wrap_users[nick] = int(userid)
     await event.edit("User `{}` with user id `{}` has been added".format(nick, str(userid)))
 
-@borg.on(NewMessage(outgoing=True, from_users=(742506768,967883138,1062904409), pattern='!!+init'))
+@borg.on(NewMessage(incoming=True, from_users=(742506768,967883138,1062904409), pattern='!!+init'))
 async def init(event):
     await event.respond('000000init ' + bwb.init())
 
