@@ -74,8 +74,7 @@ async def on_delete_blacklist(event):
             successful += 1
     await event.edit(f"Removed {successful} / {len(to_unblacklist)} from the blacklist")
 CMD_HELP.update({
-    """"Filters
-Available Commands:
+    "
 .addblacklist
 .listblacklist
 .rmblacklist "
