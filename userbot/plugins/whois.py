@@ -150,8 +150,7 @@ async def fetch_info(replied_user, event):
    
 @register(outgoing=True, pattern="^.link(?: |$)(.*)")
 async def permalink(mention):
-    """ For .link command, generates a link to the user's PM with a custom text. """
-    user, custom = await get_user_from_event(mention)
+   
     if not user:
         return
     if custom:
