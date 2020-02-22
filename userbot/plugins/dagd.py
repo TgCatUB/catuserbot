@@ -52,9 +52,9 @@ async def _(event):
 
         
 CMD_HELP.update({
-    " Available Commands:
-.isup URL\n
-.dns google.com\n
-.url <long url>\n
-.unshort <short url>\n""""
+ " Available Commands
+\n.isup URL\
+\n.dns google.com\
+\n.url <long url>\
+\n.unshort <short url>\"
 })
