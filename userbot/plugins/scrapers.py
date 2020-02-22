@@ -246,7 +246,7 @@ async def wiki(wiki_q):
 """
 @register(outgoing=True, pattern="^.ud (.*)")
 async def urban_dict(ud_e):
-    """ For .ud command, fetch content from Urban Dictionary. """
+
     await ud_e.edit("Processing...")
     query = ud_e.pattern_match.group(1)
     try:
