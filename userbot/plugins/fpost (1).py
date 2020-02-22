@@ -28,3 +28,8 @@ async def _(event):
                     msg_cache[c] = msg
                     break
         await borg.forward_messages(destination, msg_cache[c])
+        
+        
+CMD_HELP.update({
+    "Command: .fpost word`"
+})
