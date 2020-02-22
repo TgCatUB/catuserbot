@@ -271,18 +271,6 @@ async def _(event):
         else:
             await event.edit("**PURGE** Failed!")
             
-@register(outgoing=True, pattern="^.link(?: |$)(.*)")
-async def permalink(mention):
-    """ For .link command, generates a link to the user's PM with a custom text. """
-    user, custom = await get_user_from_event(mention)
-    if not user:
-        return
-    if custom:
-        await mention.edit(f"[{custom}](tg://user?id={user.id})")
-    else:
-        tag = user.first_name.replace("\u2060",
-                                      "") if user.first_name else user.username
-        await mention.edit(f"[{tag}](tg://user?id={user.id})")
 
 @borg.on(admin_cmd(pattern="(ban|unban) ?(.*)"))
 async def _(event):
