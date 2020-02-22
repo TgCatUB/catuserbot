@@ -73,9 +73,4 @@ async def on_delete_blacklist(event):
         if sql.rm_from_blacklist(event.chat_id, trigger.lower()):
             successful += 1
     await event.edit(f"Removed {successful} / {len(to_unblacklist)} from the blacklist")
-CMD_HELP.update({
-    "
-\n.addblacklist\
-\n.listblacklist\
-\n.rmblacklist \"
-})
+
