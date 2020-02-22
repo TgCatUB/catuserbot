@@ -29,7 +29,7 @@ async def notes_active(svd):
 async def remove_notes(clr):
     """ For .clear command, clear note with the given name."""
     try:
-        from userbot.modules.sql_helper.notes_sql import rm_note
+        from userbot.plugins.sql_helper.notes_sql import rm_note
     except AttributeError:
         await clr.edit("`Running on Non-SQL mode!`")
         return
