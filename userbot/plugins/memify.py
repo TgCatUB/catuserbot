@@ -1,7 +1,4 @@
 """Reply to an image/sticker with .mmf` 'text on top' ; 'text on bottom
-base by: @r4v4n4
-created by: @A_Dark_Princ3
-if you change these, you gay.
 """
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
