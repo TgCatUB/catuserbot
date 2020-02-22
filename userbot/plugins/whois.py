@@ -149,7 +149,7 @@ async def fetch_info(replied_user, event):
     return photo, caption
    
 @register(outgoing=True, pattern="^.link(?: |$)(.*)")
-sync def who(event):
+async def who(event):
 
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
@@ -227,8 +227,4 @@ async def get_user(event):
                                       "") if user.first_name else user.username
         await mention.edit(f"<a href=\"tg://user?id={user_id}\">{first_name}</a>")
 
-CMD_HELP.update({
-    "whois":
-    ".whois <username> or reply to someones text with .whois\
-    \nUsage: Gets info of an user."
-})
+
