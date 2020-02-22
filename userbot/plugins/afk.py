@@ -5,7 +5,7 @@ import datetime
 from telethon import events
 from telethon.tl import functions, types
 
-
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 global USER_AFK  # pylint:disable=E0602
 global afk_time  # pylint:disable=E0602
 global last_afk_message  # pylint:disable=E0602
@@ -26,6 +26,8 @@ async def set_not_afk(event):
                 Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
                 "Set AFK mode to False"
             )
+            
+  
         except Exception as e:  # pylint:disable=C0103,W0703
             await borg.send_message(  # pylint:disable=E0602
                 event.chat_id,
@@ -130,3 +132,8 @@ async def on_afk(event):
         if event.chat_id in last_afk_message:  # pylint:disable=E0602
             await last_afk_message[event.chat_id].delete()  # pylint:disable=E0602
         last_afk_message[event.chat_id] = msg  # pylint:disable=E0602
+  
+
+CMD_HELP.update({
+    ".afk"
+})
