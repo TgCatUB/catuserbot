@@ -10,7 +10,7 @@ from asyncio import sleep
 async def notes_active(svd):
     """ For .notes command, list all of the notes saved in a chat. """
     try:
-        from userbot.modules.sql_helper.notes_sql import get_notes
+        from userbot.plugins.sql_helper.notes_sql import get_notes
     except AttributeError:
         await svd.edit("`Running on Non-SQL mode!`")
         return
@@ -45,7 +45,7 @@ async def remove_notes(clr):
 async def add_note(fltr):
     """ For .save command, saves notes in a chat. """
     try:
-        from userbot.modules.sql_helper.notes_sql import add_note
+        from userbot.plugins.sql_helper.notes_sql import add_note
     except AttributeError:
         await fltr.edit("`Running on Non-SQL mode!`")
         return
@@ -88,7 +88,7 @@ async def incom_note(getnt):
     try:
         if not (await getnt.get_sender()).bot:
             try:
-                from userbot.modules.sql_helper.notes_sql import get_note
+                from userbot.plugins.sql_helper.notes_sql import get_note
             except AttributeError:
                 return
             notename = getnt.text[1:]
