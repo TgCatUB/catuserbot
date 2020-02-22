@@ -134,6 +134,3 @@ async def on_afk(event):
         last_afk_message[event.chat_id] = msg  # pylint:disable=E0602
   
 
-CMD_HELP.update({
-    "afk   reason"
-})
