@@ -149,7 +149,8 @@ async def fetch_info(replied_user, event):
     return photo, caption
    
 @register(outgoing=True, pattern="^.link(?: |$)(.*)")
-async def permalink(mention):
+sync def who(event):
+
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
 
