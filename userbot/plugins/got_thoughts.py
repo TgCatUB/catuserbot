@@ -7,7 +7,7 @@ command .gott
 """
 
 from telethon import events
-from userbot import CMD_HELP , admin_cmd
+from userbot import CMD_HELP 
 import asyncio
 
 import os
