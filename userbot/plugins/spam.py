@@ -4,8 +4,6 @@
 # you may not use this file except in compliance with the License.
 
 import asyncio
-import time
-from asyncio import wait
 from asyncio import wait, sleep
 from userbot.utils import admin_cmd
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
@@ -77,14 +75,7 @@ async def spammer(e):
         await e.client.send_message(
             BOTLOG_CHATID, "#DelaySPAM\n"
             "DelaySpam was executed successfully")
-   
-@borg.on(admin_cmd("tspam"))
-async def tmeme(e):
-     tspam = str(e.text[7:])
-     message = tspam.replace(" ", "")
-     for letter in message:
-         await e.respond(letter)
-     await e.delete()
+
 
 
 CMD_HELP.update({
