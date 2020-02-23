@@ -175,30 +175,6 @@ if Var.PRIVATE_GROUP_ID is not None:
         PREV_REPLY_MESSAGE[chat_id] = r
  
 
-    @command(pattern="^.notifoff")
-    async def notifoff(noff_event):
-    #""" For .notifoff command, stop getting notifications from unapproved PMs. """
-    try:
-        from userbot.plugins.sql_helper.globals import addgvar
-    except AttributeError:
-        await noff_event.edit("`Running on Non-SQL mode!`")
-        return
-    addgvar("NOTIF_OFF", True)
-    await noff_event.edit("`Notifications from unapproved PM's are silenced!`")
-
-
-    @command(pattern="^.notifon")
-    async def notifon(non_event):
-    #""" For .notifoff command, get notifications from unapproved PMs. """
-    try:
-        from userbot.plugins.sql_helper.globals import delgvar
-    except AttributeError:
-        await non_event.edit("`Running on Non-SQL mode!`")
-        return
-    delgvar("NOTIF_OFF")
-    await non_event.edit("`Notifications from unapproved PM's unmuted!`")
-
-
     @command(pattern="^.disapprove")
     async def disapprovepm(disapprvpm):
     try:
