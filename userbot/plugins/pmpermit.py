@@ -173,8 +173,9 @@ if Var.PRIVATE_GROUP_ID is not None:
         if chat_id in PREV_REPLY_MESSAGE:
             await PREV_REPLY_MESSAGE[chat_id].delete()
         PREV_REPLY_MESSAGE[chat_id] = r
+ 
 
- @register(outgoing=True, pattern="^.notifoff")
+    @command(pattern="^.notifoff")
 async def notifoff(noff_event):
     """ For .notifoff command, stop getting notifications from unapproved PMs. """
     try:
@@ -186,7 +187,7 @@ async def notifoff(noff_event):
     await noff_event.edit("`Notifications from unapproved PM's are silenced!`")
 
 
-@register(outgoing=True, pattern="^.notifon")
+    @command(pattern="^.notifon")
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     try:
@@ -198,8 +199,8 @@ async def notifon(non_event):
     await non_event.edit("`Notifications from unapproved PM's unmuted!`")
 
 
-@register(outgoing=True, pattern="^.disapprove")
-async def disapprovepm(disapprvpm):
+    @command(pattern="^.disapprove")
+    async def disapprovepm(disapprvpm):
     try:
         from userbot.plugins.sql_helper.pm_permit_sql import dissprove
     except BaseException:
@@ -227,7 +228,7 @@ async def disapprovepm(disapprvpm):
             " was disapproved to PM you.",
         )
 
-@register(outgoing=True, pattern="^.unblock")
+    @command(pattern="^.unblock")
 async def unblockpm(unblock):
     """ For .unblock command, let people PMing you again! """
     if unblock.reply_to_msg_id:
