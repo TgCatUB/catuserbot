@@ -178,11 +178,8 @@ if Var.PRIVATE_GROUP_ID is not None:
     @command(pattern="^.disapprove")
     async def disapprovepm(disapprvpm):
         from userbot.plugins.sql_helper.pm_permit_sql import dissprove
-    except BaseException:
-        await disapprvpm.edit("`Running on Non-SQL mode!`")
-        return
-
-    if disapprvpm.reply_to_msg_id:
+                
+        if disapprvpm.reply_to_msg_id:
         reply = await disapprvpm.get_reply_message()
         replied_user = await disapprvpm.client.get_entity(reply.from_id)
         aname = replied_user.id
