@@ -55,6 +55,7 @@ async def mention_afk(mention):
     global COUNT_MSG
     global USERS
     global ISAFK
+    global ISAFK_SQL
     global AFFKREASON
     if afk_db:
         ISAFK_SQL = gvarstatus("AFK_STATUS")
