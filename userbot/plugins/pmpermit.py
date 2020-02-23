@@ -175,48 +175,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         PREV_REPLY_MESSAGE[chat_id] = r
  
 
-    @command(pattern="^.disapprove")
-    async def disapprovepm(disapprvpm):
-        from userbot.plugins.sql_helper.pm_permit_sql import dissprove
-                
-        if disapprvpm.reply_to_msg_id:
-        reply = await disapprvpm.get_reply_message()
-        replied_user = await disapprvpm.client.get_entity(reply.from_id)
-        aname = replied_user.id
-        name0 = str(replied_user.first_name)
-        dissprove(replied_user.id)
-    else:
-        dissprove(disapprvpm.chat_id)
-        aname = await disapprvpm.client.get_entity(disapprvpm.chat_id)
-        name0 = str(aname.first_name)
-
-    await disapprvpm.edit(
-        f"[{name0}](tg://user?id={disapprvpm.chat_id}) `Disaproved to PM!`")
-
-    if BOTLOG:
-        await disapprvpm.client.send_message(
-            BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={disapprvpm.chat_id})"
-            " was disapproved to PM you.",
-        )
-
-    @command(pattern="^.unblock")
-async def unblockpm(unblock):
-    #""" For .unblock command, let people PMing you again! """
-    if unblock.reply_to_msg_id:
-        reply = await unblock.get_reply_message()
-        replied_user = await unblock.client.get_entity(reply.from_id)
-        name0 = str(replied_user.first_name)
-        await unblock.client(UnblockRequest(replied_user.id))
-        await unblock.edit("`You have been unblocked.`")
-
-    if BOTLOG:
-        await unblock.client.send_message(
-            BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={replied_user.id})"
-            " was unblocc'd!.",
-        )
-
+    
 
 CMD_HELP.update({
     "pmpermit":
