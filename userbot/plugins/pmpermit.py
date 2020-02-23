@@ -176,7 +176,7 @@ if Var.PRIVATE_GROUP_ID is not None:
  
 
     @command(pattern="^.notifoff")
-async def notifoff(noff_event):
+    async def notifoff(noff_event):
     """ For .notifoff command, stop getting notifications from unapproved PMs. """
     try:
         from userbot.plugins.sql_helper.globals import addgvar
@@ -188,7 +188,7 @@ async def notifoff(noff_event):
 
 
     @command(pattern="^.notifon")
-async def notifon(non_event):
+    async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     try:
         from userbot.plugins.sql_helper.globals import delgvar
