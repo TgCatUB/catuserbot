@@ -177,7 +177,7 @@ if Var.PRIVATE_GROUP_ID is not None:
 
     @command(pattern="^.notifoff")
     async def notifoff(noff_event):
-    """ For .notifoff command, stop getting notifications from unapproved PMs. """
+    #""" For .notifoff command, stop getting notifications from unapproved PMs. """
     try:
         from userbot.plugins.sql_helper.globals import addgvar
     except AttributeError:
@@ -189,7 +189,7 @@ if Var.PRIVATE_GROUP_ID is not None:
 
     @command(pattern="^.notifon")
     async def notifon(non_event):
-    """ For .notifoff command, get notifications from unapproved PMs. """
+    #""" For .notifoff command, get notifications from unapproved PMs. """
     try:
         from userbot.plugins.sql_helper.globals import delgvar
     except AttributeError:
@@ -230,7 +230,7 @@ if Var.PRIVATE_GROUP_ID is not None:
 
     @command(pattern="^.unblock")
 async def unblockpm(unblock):
-    """ For .unblock command, let people PMing you again! """
+    #""" For .unblock command, let people PMing you again! """
     if unblock.reply_to_msg_id:
         reply = await unblock.get_reply_message()
         replied_user = await unblock.client.get_entity(reply.from_id)
