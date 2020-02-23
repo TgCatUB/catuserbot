@@ -177,7 +177,6 @@ if Var.PRIVATE_GROUP_ID is not None:
 
     @command(pattern="^.disapprove")
     async def disapprovepm(disapprvpm):
-    try:
         from userbot.plugins.sql_helper.pm_permit_sql import dissprove
     except BaseException:
         await disapprvpm.edit("`Running on Non-SQL mode!`")
