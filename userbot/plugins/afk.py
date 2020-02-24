@@ -164,6 +164,7 @@ async def type_afk_is_not_true(notafk):
         global ISAFK
         global AFFKREASON
     if afk_db:
+        global ISAFK_SQL
         ISAFK_SQL = gvarstatus("AFK_STATUS")
         AFKREASON_SQL = gvarstatus("AFK_REASON")
     if ISAFK or ISAFK_SQL:
