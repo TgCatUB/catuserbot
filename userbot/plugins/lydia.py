@@ -1,4 +1,5 @@
-import coffeehouse
+from coffeehouse.lydia import LydiaAI
+from coffeehouse.api import API
 import asyncio
 from telethon import events
 
@@ -7,8 +8,8 @@ ACC_LYDIA = {}
 
 if Var.LYDIA_API_KEY:
     api_key = Var.LYDIA_API_KEY
-    api_client = coffeehouse.api.API(api_key)
-    lydia = coffeehouse.lydia.LydiaAI(api_client)
+    api_client = API(api_key)
+    lydia = LydiaAI(api_client)
 
 @command(pattern="^.repcf", outgoing=True)
 async def repcf(event):
