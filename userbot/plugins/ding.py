@@ -10,8 +10,8 @@ from userbot.utils import admin_cmd
 
 
 
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
-
+#@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern="ding ?(.*)"))
 async def _(event):
 
     if event.fwd_from:
