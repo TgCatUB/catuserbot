@@ -20,7 +20,7 @@ USER_BOT_NO_WARN = ("[──▄█▀█▄─────────██ \n�
                     "`Hello, this is sandeep-Telegram Security Service.You have found your way here to my master\n,`"
                     f"{DEFAULTUSER}'s` inbox.\n\n"
                     "Leave your name, phone number, address and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
-                    "** Send** `/start` ** so that we can decide why you're here.**"
+                    "** Send** `/start` ** so that we can decide why you're here.**\n"
                     "`నేను ఆన్‌లైన్‌లో లేను. నన్ను స్పామ్ చేయవద్దు.నేను మీకు తరువాత ప్రత్యుత్తరం ఇస్తాను,`\n"
                     "'nenu online lo lenu present online loki vachaka message chastha.'\n"
                     )
