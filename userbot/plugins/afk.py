@@ -13,8 +13,6 @@ USER_AFK = {}
 afk_time = None
 last_afk_message = {}
 
-
-# ========================= CONSTANTS ============================
 AFKSTR = [
     "I'm busy right now. Please talk in a bag and when I come back you can just give me the bag!",
     "I'm away right now. If you need anything, leave a message after the beep:\n`beeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep`!",
@@ -40,7 +38,6 @@ AFKSTR = [
     "Life is so short, there are so many things to do...\nI'm away doing one of them..",
     "I am not here right now...\nbut if I was...\n\nwouldn't that be awesome?",
 ]
-# =================================================================
 
 @borg.on(events.NewMessage(outgoing=True))  # pylint:disable=E0602
 async def set_not_afk(event):
@@ -152,7 +149,7 @@ async def on_afk(event):
         message_to_reply = f"My Master Has Been Gone For {afk_since}\nWhere He Is: ONLY GOD KNOWS " + \
             f"\n\n__I promise I'll back in a few hours__\n**REASON**: {reason}" \
             if reason \
-            else await mention.reply(str(choice(AFKSTR)))
+            else (str(choice(AFKSTR)))
         msg = await event.reply(message_to_reply)
         await asyncio.sleep(5)
         if event.chat_id in last_afk_message:  # pylint:disable=E0602
