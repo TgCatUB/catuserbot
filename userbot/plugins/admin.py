@@ -270,7 +270,7 @@ async def _(event):
             await event.delete()
         else:
             await event.edit("**PURGE** Failed!")
-            
+
 
 @borg.on(admin_cmd(pattern="(ban|unban) ?(.*)"))
 async def _(event):
