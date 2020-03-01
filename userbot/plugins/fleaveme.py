@@ -37,9 +37,9 @@ async def _(event):
 
         return
 
-
-     await event.edit("fleaveme....")
-     await asyncio.sleep(2)
+    await event.edit("fleaveme....")
+    
+    await asyncio.sleep(2)
     
      for i in animation_ttl:
 
