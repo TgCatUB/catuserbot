@@ -13,7 +13,7 @@ import sys
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import CMD_HELP, bot, HEROKU_APP_NAME,HEROKU_API_KEY
+from userbot import CMD_HELP, bot
 from userbot.utils import register
 
 
