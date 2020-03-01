@@ -37,6 +37,8 @@ async def addcf(event):
     if reply_msg:
         session = lydia.create_session()
         session_id = session.id
+        if reply_msg.from_id is None:
+            return await event.edit("Invalid user type.")
         ACC_LYDIA.update({(event.chat_id & reply_msg.from_id): session})
         await event.edit("Lydia successfully (re)enabled for user: {} in chat: {}".format(str(reply_msg.from_id), str(event.chat_id)))
     else:
@@ -53,8 +55,9 @@ async def remcf(event):
     try:
         del ACC_LYDIA[event.chat_id & reply_msg.from_id]
         await event.edit("Lydia successfully disabled for user: {} in chat: {}".format(str(reply_msg.from_id), str(event.chat_id)))
-    except KeyError:
+    except Exception:
         await event.edit("This person does not have Lydia activated on him/her.")
+
 
 @bot.on(events.NewMessage(incoming=True))
 async def user(event):
@@ -69,5 +72,5 @@ async def user(event):
                 wait_time = wait_time + 0.1
             await asyncio.sleep(wait_time)
             await event.reply(text_rep)
-    except KeyError:
+    except (KeyError, TypeError):
         return
