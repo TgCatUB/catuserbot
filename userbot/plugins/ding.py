@@ -13,20 +13,20 @@ from userbot.utils import admin_cmd
 #@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
 @borg.on(admin_cmd(pattern="ding ?(.*)"))
 async def _(event):
-
-    if event.fwd_from:
-
-        return
-
     animation_interval = 0.3
 
     animation_ttl = range(0, 30)
+    
+    if event.fwd_from:
+
+        return
 
    #input_str = event.pattern_match.group(1)
 
     # if input_str == "ding":
 
       await event.edit("ding dong ding dong ...")
+        
       await asyncio.sleep(4)
     
         animation_chars = [
