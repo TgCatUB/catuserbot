@@ -10,7 +10,7 @@ from telethon import events
 import asyncio
 from userbot import CMD_HELP 
 
-
+from userbot.utils import admin_cmd
 
 
 @borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
