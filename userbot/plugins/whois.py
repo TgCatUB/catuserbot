@@ -23,7 +23,7 @@ import html
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd("who1 ?(.*)"))
+@borg.on(admin_cmd("info ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
