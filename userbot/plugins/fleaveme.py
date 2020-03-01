@@ -11,6 +11,7 @@ import asyncio
 
 from userbot import CMD_HELP 
 
+from userbot.utils import admin_cmd
 
 
 @borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
@@ -27,7 +28,7 @@ async def _(event):
 
     input_str = event.pattern_match.group(1)
 
-    if input_str == "fleave":
+    if input_str == "fleaveme":
 
         await event.edit(input_str)
 
@@ -42,13 +43,7 @@ async def _(event):
             "⬛⬆️↗️\n⬛🔄➡️\n⬛⬇️↘️",
             "⬛⬆️↗️\n⬛🔄➡️\n↙️⬇️↘️",
             "⬛⬆️↗️\n⬅️🔄➡️\n↙️⬇️↘️",
-            "↖️⬆️↗️\n⬅️🔄➡️\n↙️⬇️↘️",
-            "**Chat Message Exported To** `./Inpu/`",
-            "**Chat Message Exported To** `./Inpu/homework/`",
-            "**Chat Message Exported To** `./Inpu/homework/groupchat.txt`",
-            "__Legend is leaving this chat.....! Gaand Marao Bc..__",
-            "__Legend is leaving this chat.....! Gaand Marao Bc..__"
-
+            "↖️⬆️↗️\n⬅️🔄➡️\n↙️⬇️↘️"
  ]
 
         for i in animation_ttl:
