@@ -7,7 +7,8 @@ Available Commands:
 from telethon import events
 
 import asyncio
-
+from userbot import CMD_HELP
+from userbot.utils import admin_cmd
 
 
 
