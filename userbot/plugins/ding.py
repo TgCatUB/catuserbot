@@ -26,7 +26,7 @@ async def _(event):
 
     #if input_str == "ding":
 
-     #   await event.edit(input_str)
+      await event.edit(ding)
 
         animation_chars = [
         
