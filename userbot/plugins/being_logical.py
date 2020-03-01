@@ -18,8 +18,8 @@ import random
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 
-@borg.on(events.NewMessage(pattern=r"\.belo", outgoing=True))
-
+@borg.on(events.NewMessage(pattern="belo ?(.*)", outgoing=True))
+#@borg.on(admin_cmd(pattern="dump ?(.*)"))
 async def _(event):
 
     if event.fwd_from:
