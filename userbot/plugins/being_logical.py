@@ -16,7 +16,7 @@ import sys
 
 import random
 from userbot import CMD_HELP
-
+from userbot.utils import admin_cmd
 
 @borg.on(events.NewMessage(pattern=r"\.belo", outgoing=True))
 
