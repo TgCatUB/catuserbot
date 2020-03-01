@@ -4,7 +4,7 @@ Syntax: .belo
     by @Deonnn
 Quotes credits: Being logical Channel
 """
-from userbot import CMD_HELP
+
 
 from telethon import events
 
@@ -15,7 +15,7 @@ import os
 import sys
 
 import random
-
+from userbot import CMD_HELP
 
 
 @borg.on(events.NewMessage(pattern=r"\.belo", outgoing=True))
