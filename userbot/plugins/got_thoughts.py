@@ -16,7 +16,8 @@ import sys
 
 import random
 
-
+from userbot.utils import CMD_HELP
+from userbot.utils import admin_cmd
 
 @borg.on(events.NewMessage(pattern=r"\.gott", outgoing=True))
 
