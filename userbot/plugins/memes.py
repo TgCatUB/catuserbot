@@ -884,6 +884,11 @@ async def source(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Click [here](https://github.com/sandy1709/X-tra-Telegram) to open this lit af repo.")
 			  
+
+@register(outgoing=True, pattern="^.myrepo$")
+async def source(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        await e.edit("Click [here](https://github.com/sandy1709/userbot1709) to open this lit af repo.")
 			  
 @register(outgoing=True, pattern="^.str(?: |$)(.*)")
 async def stretch(stret):
