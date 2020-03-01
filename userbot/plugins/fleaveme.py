@@ -38,7 +38,7 @@ async def _(event):
     
     await asyncio.sleep(2)
     
-     for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
