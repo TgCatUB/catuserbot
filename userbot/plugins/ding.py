@@ -16,16 +16,8 @@ async def _(event):
     animation_interval = 0.3
 
     animation_ttl = range(0, 30)
-
-    if event.fwd_from:
-
-        return
-
-    await event.edit("ding..dong..ding..dong ...")
-
-    await asyncio.sleep(4)
     
-        animation_chars = [
+    animation_chars = [
         
             "🔴⬛⬛⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
             "⬜⬜⬛⬜⬜\n⬜⬛⬜⬜⬜\n🔴⬜⬜⬜⬜",
@@ -38,6 +30,16 @@ async def _(event):
             "🔴⬛⬛⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
             
  ]
+    
+    if event.fwd_from:
+
+        return
+
+    await event.edit("ding..dong..ding..dong ...")
+
+    await asyncio.sleep(4)
+    
+        
 
         for i in animation_ttl:
 
