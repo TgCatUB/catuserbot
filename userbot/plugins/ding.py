@@ -22,11 +22,11 @@ async def _(event):
 
     animation_ttl = range(0, 30)
 
-    input_str = event.pattern_match.group(1)
+   #  input_str = event.pattern_match.group(1)
 
-    if input_str == "ding":
+    #if input_str == "ding":
 
-        await event.edit(input_str)
+     #   await event.edit(input_str)
 
         animation_chars = [
         
