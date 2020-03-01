@@ -7,7 +7,7 @@ import sys
 from telethon import events, functions
 from userbot.utils import admin_cmd
 import random
-
+from userbot import CMD_HELP
 
 @borg.on(events.NewMessage(pattern=r"\.shout", outgoing=True))
 async def shout(args):
