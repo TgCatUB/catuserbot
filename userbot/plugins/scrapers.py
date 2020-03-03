@@ -244,7 +244,7 @@ async def wiki(wiki_q):
             BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully")
 
 
-@register(outgoing=True, pattern="^.ox (.*)")
+@register(outgoing=True, pattern="^.oxford (.*)")
 async def urban_dict(ud_e):
 
     await ud_e.edit("Processing...")
@@ -284,7 +284,7 @@ async def urban_dict(ud_e):
         await ud_e.edit("No result found for **" + query + "**")
 
 
-@register(outgoing=True, pattern=r"^.sp(?: |$)([\s\S]*)")
+@register(outgoing=True, pattern=r"^.tts (?: |$)([\s\S]*)")
 async def text_to_speech(query):
 
     textx = await query.get_reply_message()
