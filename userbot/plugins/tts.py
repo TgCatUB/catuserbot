@@ -11,7 +11,7 @@ from gtts import gTTS
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd("tts (.*)"))
+@borg.on(admin_cmd("speech (.*)"))
 async def _(event):
     if event.fwd_from:
         return
