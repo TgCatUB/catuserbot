@@ -243,8 +243,8 @@ async def wiki(wiki_q):
         await wiki_q.client.send_message(
             BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully")
 
-"""
-@register(outgoing=True, pattern="^.ud (.*)")
+
+@register(outgoing=True, pattern="^.ox (.*)")
 async def urban_dict(ud_e):
 
     await ud_e.edit("Processing...")
@@ -284,7 +284,7 @@ async def urban_dict(ud_e):
         await ud_e.edit("No result found for **" + query + "**")
 
 
-@register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
+@register(outgoing=True, pattern=r"^.sp(?: |$)([\s\S]*)")
 async def text_to_speech(query):
 
     textx = await query.get_reply_message()
@@ -328,7 +328,6 @@ async def text_to_speech(query):
                 BOTLOG_CHATID, "Text to Speech executed successfully !")
         await query.delete()
 
-"""
 # kanged from Blank-x ;---;
 @register(outgoing=True, pattern="^.imdb (.*)")
 async def imdb(e):
