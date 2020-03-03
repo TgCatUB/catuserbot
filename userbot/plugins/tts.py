@@ -9,48 +9,66 @@ import subprocess
 from datetime import datetime
 from gtts import gTTS
 from userbot.utils import admin_cmd
-from userbot.utils import register
 
-@register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
-async def text_to_speech(query):
-    """ For .tts command, a wrapper for Google Text-to-Speech. """
-    textx = await query.get_reply_message()
-    message = query.pattern_match.group(1)
-    if message:
-        pass
-    elif textx:
-        message = textx.text
+
+@borg.on(admin_cmd("tts (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    start = datetime.now()
+    if event.reply_to_msg_id:
+        previous_message = await event.get_reply_message()
+        text = previous_message.message
+        lan = input_str
+    elif "|" in input_str:
+        lan, text = input_str.split("|")
     else:
-        await query.edit(
-            "`Give a text or reply to a message for Text-to-Speech!`")
+        await event.edit("Invalid Syntax. Module stopping.")
         return
-
+    text = text.strip()
+    lan = lan.strip()
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "voice.ogg"
     try:
-        gTTS(message, TTS_LANG)
-    except AssertionError:
-        await query.edit(
-            'The text is empty.\n'
-            'Nothing left to speak after pre-precessing, tokenizing and cleaning.'
+        tts = gTTS(text, lan)
+        tts.save(required_file_name)
+        command_to_execute = [
+            "ffmpeg",
+            "-i",
+             required_file_name,
+             "-map",
+             "0:a",
+             "-codec:a",
+             "libopus",
+             "-b:a",
+             "100k",
+             "-vbr",
+             "on",
+             required_file_name + ".opus"
+        ]
+        try:
+            t_response = subprocess.check_output(command_to_execute, stderr=subprocess.STDOUT)
+        except (subprocess.CalledProcessError, NameError, FileNotFoundError) as exc:
+            await event.edit(str(exc))
+            # continue sending required_file_name
+        else:
+            os.remove(required_file_name)
+            required_file_name = required_file_name + ".opus"
+        end = datetime.now()
+        ms = (end - start).seconds
+        await borg.send_file(
+            event.chat_id,
+            required_file_name,
+            # caption="Processed {} ({}) in {} seconds!".format(text[0:97], lan, ms),
+            reply_to=event.message.reply_to_msg_id,
+            allow_cache=False,
+            voice_note=True
         )
-        return
-    except ValueError:
-        await query.edit('Language is not supported.')
-        return
-    except RuntimeError:
-        await query.edit('Error loading the languages dictionary.')
-        return
-    tts = gTTS(message, TTS_LANG)
-    tts.save("k.mp3")
-    with open("k.mp3", "rb") as audio:
-        linelist = list(audio)
-        linecount = len(linelist)
-    if linecount == 1:
-        tts = gTTS(message, TTS_LANG)
-        tts.save("k.mp3")
-    with open("k.mp3", "r"):
-        await query.client.send_file(query.chat_id, "k.mp3", voice_note=True)
-        os.remove("k.mp3")
-        if BOTLOG:
-            await query.client.send_message(
-                BOTLOG_CHATID, "Text to Speech executed successfully !")
-        await query.delete()
+        os.remove(required_file_name)
+        await event.edit("Processed {} ({}) in {} seconds!".format(text[0:97], lan, ms))
+        await asyncio.sleep(5)
+        await event.delete()
+    except Exception as e:
+        await event.edit(str(e))
