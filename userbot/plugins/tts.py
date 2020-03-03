@@ -9,7 +9,7 @@ import subprocess
 from datetime import datetime
 from gtts import gTTS
 from userbot.utils import admin_cmd
-
+from userbot.utils import register
 
 @register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
 async def text_to_speech(query):
