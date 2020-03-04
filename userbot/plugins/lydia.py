@@ -31,7 +31,7 @@ async def addcf(event):
     if event.fwd_from:
         return
     await event.edit("Running on Non-SQL mode for now...")
-    await asyncio.sleep(3)
+    await asyncio.sleep(1)
     await event.edit("Processing...")
     reply_msg = await event.get_reply_message()
     if reply_msg:
@@ -39,6 +39,7 @@ async def addcf(event):
         session_id = session.id
         ACC_LYDIA.update({(event.chat_id & reply_msg.from_id): session})
         await event.edit("Lydia successfully (re)enabled for user: {} in chat: {}".format(str(reply_msg.from_id), str(event.chat_id)))
+        await asyncio.sleep(1)
     else:
         await event.edit("Reply to a user to activate Lydia AI on them")
 
@@ -53,6 +54,7 @@ async def remcf(event):
     try:
         del ACC_LYDIA[event.chat_id & reply_msg.from_id]
         await event.edit("Lydia successfully disabled for user: {} in chat: {}".format(str(reply_msg.from_id), str(event.chat_id)))
+        await asyncio.sleep(1)
     except KeyError:
         await event.edit("This person does not have Lydia activated on him/her.")
 
