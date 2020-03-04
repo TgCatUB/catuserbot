@@ -24,7 +24,7 @@ from telethon import events
 from userbot.utils import progress, admin_cmd
 
 
-@borg.on(admin_cmd("remove\.bg ?(.*)"))
+@borg.on(admin_cmd("rmbg ?(.*)"))
 async def _(event):
     HELP_STR = "`.remove.bg` as reply to a media, or give a link as an argument to this command"
     if event.fwd_from:
@@ -61,7 +61,7 @@ async def _(event):
     contentType = output_file_name.headers.get("content-type")
     if "image" in contentType:
         with io.BytesIO(output_file_name.content) as remove_bg_image:
-            remove_bg_image.name = "@UniBorg_ReMove.png"
+            remove_bg_image.name = "BG_less.png"
             await borg.send_file(
                 event.chat_id,
                 remove_bg_image,
@@ -72,9 +72,9 @@ async def _(event):
             )
         end = datetime.now()
         ms = (end - start).seconds
-        await event.edit("Removed dat annoying Backgroup in {} seconds, powered by @XtraTgBot".format(ms))
+        await event.edit("Removed dat annoying Backgroup in {} seconds, powered by @mrconfused".format(ms))
     else:
-        await event.edit("ReMove.BG API returned Errors. Please report to @UniBorg\n`{}".format(output_file_name.content.decode("UTF-8")))
+        await event.edit("ReMove.BG API returned Errors.\n`{}".format(output_file_name.content.decode("UTF-8")))
 
 
 # this method will call the API, and return in the appropriate format
