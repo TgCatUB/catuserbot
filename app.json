@@ -40,7 +40,7 @@
       "required": false
     },
     "OCR_SPACE_API_KEY": {
-      "description": "Required for OCR functionality. Get from [OCR Space Website](https://ocr.space/ocrapi)",
+      "description": "Required for OCR functionality. Get from https://ocr.space/ocrapi",
       "value": "",
       "required": false
     },
@@ -55,7 +55,7 @@
       "required": false
     },
     "REM_BG_API_KEY": {
-      "description": "Required for Removing image background functionality. Get from [Remove BG}(https://www.remove.bg/)",
+      "description": "Required for Removing image background functionality. Get from https://www.remove.bg/",
       "value": "",
       "required": false
     },
@@ -90,7 +90,7 @@
       "required": false
     },
     "TG_BOT_TOKEN_BF_HER": {
-      "description": "Needed for inline buttons maker. Make a bot at [BotFather](http://telegram.dog/BotFather) and get the token of your bot.Worth it. Get it.",
+      "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the token of your bot.Worth it. Get it.",
       "value": "",
       "required": false
     },
@@ -105,7 +105,7 @@
       "required": false
     },
     "TG_BOT_USER_NAME_BF_HER": {
-      "description": "Needed for inline buttons maker. Make a bot at [BotFather](http://telegram.dog/BotFather) and get the username of your bot",
+      "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the username of your bot",
       "value": "",
       "required": false
     },
