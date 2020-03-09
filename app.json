@@ -34,6 +34,31 @@
       "description": "Get this value by running python3 telesetup.py locally",
       "value": ""
     },
+    "MAX_FLOOD_IN_P_M_s": {
+      "description": "Maximum number of messages a person can send in pm before getting blocked. Value must be an integer. 3 by default.",
+      "value": "",
+      "required": false
+    },
+    "OCR_SPACE_API_KEY": {
+      "description": "Required for OCR functionality. Get from [OCR Space Website](https://ocr.space/ocrapi)",
+      "value": "",
+      "required": false
+    },
+    "PRIVATE_GROUP_BOT_API_ID": {
+      "description": "Send .get_id in any group to fill this value. Required for afk.",
+      "value": "",
+      "required": false
+    },
+    "PRIVATE_GROUP_ID": {
+      "description": "Send .get_id in any group to fill this value. Required for pmpermit",
+      "value": "",
+      "required": false
+    },
+    "REM_BG_API_KEY": {
+      "description": "Required for Removing image background functionality. Get from [Remove BG}(https://www.remove.bg/)",
+      "value": "",
+      "required": false
+    },
     "GITHUB_ACCESS_TOKEN": {
       "description": "Your Github Access Token for gitcommit plugin.Google 'Github access token' to find.",
       "value": "",
