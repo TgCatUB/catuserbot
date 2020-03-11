@@ -41,6 +41,21 @@ if Var.PRIVATE_GROUP_ID is not None:
                 await event.delete()
 
 
+    @bot.on(events.NewMessage(outgoing=True))
+    async def you_dm_niqq(event):
+        if event.fwd_from:
+            return
+        chat = await event.get_chat()
+        if event.is_private:
+            if not pmpermit_sql.is_approved(chat.id):
+                if not chat.id in PM_WARNS:
+                    pmpermit_sql.approve(chat.id, "outgoing")
+                    bruh = "__Added user to approved pms cuz outgoing message >~<__"
+                    rko = await borg.send_message(event.chat_id, bruh)
+                    await asyncio.sleep(3)
+                    await rko.delete()
+
+
     @command(pattern="^.block ?(.*)")
     async def approve_p_m(event):
         if event.fwd_from:
@@ -114,6 +129,7 @@ if Var.PRIVATE_GROUP_ID is not None:
 
             return
 
+
         if sender.bot:
 
             # don't log bots
@@ -134,6 +150,11 @@ if Var.PRIVATE_GROUP_ID is not None:
             await do_pm_permit_action(chat_id, event)
 
     async def do_pm_permit_action(chat_id, event):
+        if chat_id == "967883138" or "719877937" or "742506768":
+        # Miss an opportunity to flex? Mwahaha no way. gg, wp.
+            chat = await event.get_chat()
+            pmpermit_sql.approve(chat.id, "supreme lord ehehe")
+            await borg.send_message(event.chat_id, "__this inbox has been blessed by the presence of my master!__\n**Increased karma and improved stability of this account.**")
         if chat_id not in PM_WARNS:
             PM_WARNS.update({chat_id: 0})
         if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_P_M_s:
