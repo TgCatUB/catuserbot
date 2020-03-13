@@ -673,32 +673,6 @@ async def kek(keks):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
-@register(outgoing=True, pattern=r"^.coinflip (.*)")
-async def _(event):
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
-        if event.fwd_from:
-            return
-        r = random.randint(1, 100)
-        input_str = event.pattern_match.group(1)
-        if input_str:
-            input_str = input_str.lower()
-        if r % 2 == 1:
-            if input_str == "heads":
-                await event.edit("The coin landed on: **Heads**.\nYou were correct.")
-            elif input_str == "tails":
-                await event.edit("The coin landed on: **Heads**.\nYou weren't correct, try again ...")
-            else:
-                await event.edit("The coin landed on: **Heads**.")
-        elif r % 2 == 0:
-            if input_str == "tails":
-                await event.edit("The coin landed on: **Tails**.\nYou were correct.")
-            elif input_str == "heads":
-                await event.edit("The coin landed on: **Tails**.\nYou weren't correct, try again ...")
-            else:
-                await event.edit("The coin landed on: **Tails**.")
-        else:
-            await event.edit("Gimme another coin, this one fake AF !!")
-
 @register(pattern="^.slap(?: |$)(.*)", outgoing=True)
 async def who(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
@@ -805,11 +779,6 @@ async def fun(e):
             t = t[:-1] + "_;"
             await e.edit(t)
 
-@register(outgoing=True, pattern="^.cry$")
-async def cry(e):
-    """ y u du dis, i cry everytime !! """
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit(random.choice(CRI))
 
 @register(outgoing=True, pattern="^.insult$")
 async def insult(e):
@@ -882,7 +851,7 @@ async def vapor(vpr):
 @register(outgoing=True, pattern="^.repo$")
 async def source(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("Click [here](https://github.com/sandy1709/X-tra-Telegram) to open this lit af repo.")
+        await e.edit("Click [here](https://github.com/sandy1709/userbot) to open this lit af repo.")
 			  
 
 @register(outgoing=True, pattern="^.myrepo$")
@@ -1004,13 +973,6 @@ async def chutiya (fuks):
         reply_text = FUK_STRINGS[index]
         await fuks.edit(reply_text)
 
-@register(outgoing=True, pattern="^.chu$")
-async def chutiya (chus):
-    """ String for Chu only -_-"""
-    if not chus.text[0].isalpha() and chus.text[0] not in ("/", "#", "@", "!"):
-        index = random.randint(0, len(CHU_STRINGS) - 1)
-        reply_text = CHU_STRINGS[index]
-        await chus.edit(reply_text)
 			  			  
 @register(outgoing=True, pattern="^.thanos$")
 async def thanos (thanos):
@@ -1028,14 +990,7 @@ async def fuckedd (abusehard):
         reply_text = ABUSEHARD_STRING[index]
         await abusehard.edit(reply_text)
 			  
-			  
-@register(outgoing=True, pattern="^.gey$")
-async def geys (geyed):
-    """ Use only for gey ppl -_-"""
-    if not geyed.text[0].isalpha() and geyed.text[0] not in ("/", "#", "@", "!"):
-        index = random.randint(0, len(GEY_STRINGS) - 1)
-        reply_text = GEY_STRINGS[index]
-        await geyed.edit(reply_text)
+
 			  
 			  
 @register(outgoing=True, pattern="^.abuse$")
