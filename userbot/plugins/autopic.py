@@ -6,6 +6,8 @@ from telethon.tl import functions
 import asyncio
 import shutil
 from userbot import CMD_HELP
+from userbot.utils import admin_cmd
+
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
