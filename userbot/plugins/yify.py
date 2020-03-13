@@ -7,7 +7,7 @@ from telethon import events
 import asyncio
 from bs4 import BeautifulSoup
 import requests
-from userbot.utils import 
+from userbot.utils import admin_cmd
 
 @borg.on(events.NewMessage(pattern=r"\.yify recents", outgoing=True))
 async def _(event):
