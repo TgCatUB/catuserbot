@@ -36,7 +36,7 @@
     },
     "MAX_FLOOD_IN_P_M_s": {
       "description": "Maximum number of messages a person can send in pm before getting blocked. Value must be an integer. 3 by default.",
-      "value": "",
+      "value": "3",
       "required": false
     },
     "OCR_SPACE_API_KEY": {
