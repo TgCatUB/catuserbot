@@ -6,7 +6,7 @@ from userbot import utils
 from userbot.utils import admin_cmd
 
 
-@borg.on(util.admin_cmd("create (b|g|c) (.*)"))  # pylint:disable=E0602
+@borg.on(utils.admin_cmd("create (b|g|c) (.*)"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
