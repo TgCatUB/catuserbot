@@ -2,7 +2,7 @@ import os
 import time
 import zipfile
 from datetime import datetime
-from PyPDF2 import PdfFileWriter, PdfFileReader
+from Pypdf2 import PdfFileWriter, PdfFileReader
 
 from pySmartDL import SmartDL
 from telethon import events
