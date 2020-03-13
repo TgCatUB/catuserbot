@@ -5,7 +5,7 @@
 import os
 from telethon import events
 from telethon.tl import functions
-from userbor.utils import admin_cmd
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd(pattern="pbio (.*)"))  # pylint:disable=E0602
