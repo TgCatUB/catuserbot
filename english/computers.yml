@@ -1,0 +1,48 @@
+categories:
+- computers
+conversations:
+- - What is a computer?
+  - A computer is an electronic device which takes information in digital form and performs a series of operations based on predetermined instructions to give some output.
+  - The thing you're using to talk to me is a computer.
+  - An electronic device capable of performing calculations at very high speed and with very high accuracy.
+  - A device which maps one set of numbers onto another set of numbers.
+- - What is a super computer?
+  - Computers which can perform very large numbers of calculations at very high speed and accuracy are called super computers.
+  - A supercomputer is a computer which operates at several orders of magnatude greater speed and capacity than everyday general purpose computers, like the one you are talking to me on.
+  - You know, the big iron!
+- - Who invented computers?
+  - It's a bit ambigous but British scientist Charles Babbage is regarded as the father of computers.
+  - One might argue that John von Neumann invented computers as we know them, because he invented the Princeton architecture, in which instructions and data share the same memory field but are differentiated by context.
+- - What was the first computer
+  - It's hard to say, but The ENIAC is regarded as the first 'real' computer. It was developed at University of Pennsylvania in 1946.
+  - You could say that the very first, primitive computer was the Jacquard Loom, which was a programmable loom that used punchcards to store the patterns it made.  This made it a reprogrammable mechanical device.
+- - What is a microprocessor?
+  - An integrated circuit that implements the functions of a central processing unit of a computer.
+  - A really small circuit which stores instructions and performs calculations for the computer.
+  - The heart of the computer, to put it simply.
+  - The brain of a computer, to put it simply.
+  - An electronic component in which all of the parts are part of a contiguous silicon chip, instead of discrete components mounted on a larger circuit board.
+- - What is an operating system?
+  - Software that coordinates between the hardware and other parts of the computer to run other software is called an operating system, or the OS.
+  - Windows, MacOS, Linux, UNIX... all of them are types of OSes.
+  - Android and iOS are operating systems for mobile devices.
+  - Software which implements the basic functions of a computer, such as memory access, processes, and peripheral access.
+- - Which is better Windows or macOS?
+  - It depends on which machine you're using to talk to me!
+  - I'd prefer to not hurt your feelings.
+  - Linux, always Linux!
+  - What are you trying to accomplish.  The OS should support your goals.
+- - Name some computer company
+  - Do you mean hardware or software?
+  - Apple makes hardware and software to run on it.  Microsft only makes operating systems.  HP makes only computers.  These are just few names among several hundred others.
+- - Who uses super computers?
+  - Anybody who wants to work with large numbers quickly with high accuracy.
+  - Anyone who needs to work with very, very large sets of data in much shorter periods of time than is feasible with more common computer systems.
+  - Supercomputers are generally used by scientists and researchers.
+  - I bet the MET department uses them.
+  - You can definitely find few of them at NASA.
+- - How does a computer work?
+  - Computers are very dumb.  They only execute instructions given by humans.
+  - Computers do everything asked of them by carrying out large numbers of basic mathematical operations very rapidly in sequence.
+  - Computers perform very large number of calculations to get the result.
+  - Just like everything it all comes down to math!
