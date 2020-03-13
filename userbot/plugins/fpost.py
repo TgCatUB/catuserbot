@@ -9,12 +9,12 @@ import string
 
 from telethon import events
 from telethon.tl import types
-
 from userbot.utils import admin_cmd
+
 msg_cache = {}
 
 
-@borg.on(events.NewMessage(pattern=r"\.fpost\s+(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=r"fpost\s+(.*)"))
 async def _(event):
     await event.delete()
     text = event.pattern_match.group(1)
@@ -29,5 +29,3 @@ async def _(event):
                     msg_cache[c] = msg
                     break
         await borg.forward_messages(destination, msg_cache[c])
-        
-
