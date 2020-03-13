@@ -3,122 +3,62 @@ import asyncio
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 from userbot.utils import admin_cmd
+import html
+from telethon.tl.functions.channels import EditBannedRequest
+import userbot.plugins.sql_helper.warns_sql as sql
 
 
-@borg.on(admin_cmd("warn1"))
+
+@borg.on(admin_cmd(pattern="warn (.*)"))
 async def _(event):
     if event.fwd_from:
         return
-    mentions = "`You Have  1/3  warnings...\nWatch out!....\n'"
-    chat = await event.get_input_chat()
-    async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
-        mentions += f""
-    reply_message = None
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        await reply_message.reply(mentions)
+    warn_reason = event.pattern_match.group(1)
+    reply_message = await event.get_reply_message()
+    limit, soft_warn = sql.get_warn_setting(event.chat_id)
+    num_warns, reasons = sql.warn_user(reply_message.from_id, event.chat_id, warn_reason)
+    if num_warns >= limit:
+        sql.reset_warns(reply_message.from_id, event.chat_id)
+        if soft_warn:
+            logger.info("TODO: kick user")
+            reply = "{} warnings, <u><a href='tg://user?id={}'>user</a></u> has been kicked!".format(limit, reply_message.from_id)
+        else:
+            logger.info("TODO: ban user")
+            reply = "{} warnings, <u><a href='tg://user?id={}'>user</a></u> has been banned!".format(limit, reply_message.from_id)
     else:
-        await event.reply(mentions)
-    await event.delete()
-
-""".admin Plugin for @UniBorg"""
-import asyncio
-from telethon import events
-from telethon.tl.types import ChannelParticipantsAdmins
-from uniborg.util import admin_cmd
+        reply = "<u><a href='tg://user?id={}'>user</a></u> has {}/{} warnings... watch out!".format(reply_message.from_id, num_warns, limit)
+        if warn_reason:
+            reply += "\nReason for last warn:\n{}".format(html.escape(warn_reason))
+    #
+    await event.edit(reply, parse_mode="html")
 
 
-@borg.on(admin_cmd("warn2"))
+@borg.on(admin_cmd(pattern="get_warns"))
 async def _(event):
     if event.fwd_from:
         return
-    mentions = "`You Have  2/3  warnings...\nWatch out!....\n`"
-    chat = await event.get_input_chat()
-    async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
-        mentions += f""
-    reply_message = None
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        await reply_message.reply(mentions)
+    reply_message = await event.get_reply_message()
+    result = sql.get_warns(reply_message.from_id, event.chat_id)
+    if result and result[0] != 0:
+        num_warns, reasons = result
+        limit, soft_warn = sql.get_warn_setting(event.chat_id)
+        if reasons:
+            text = "This user has {}/{} warnings, for the following reasons:".format(num_warns, limit)
+            text += "\r\n"
+            text += reasons
+            await event.edit(text)
+        else:
+            await event.edit("this user has {} / {} warning, but no reasons for any of them.".format(num_warns, limit))
     else:
-        await event.reply(mentions)
-    await event.delete()
-
-""".admin Plugin for @UniBorg"""
-import asyncio
-from telethon import events
-from telethon.tl.types import ChannelParticipantsAdmins
-from uniborg.util import admin_cmd
+        await event.edit("this user hasn't got any warnings!")
 
 
-@borg.on(admin_cmd("warn3"))
+@borg.on(admin_cmd(pattern="reset_warns"))
 async def _(event):
     if event.fwd_from:
         return
-    mentions = "`You Have  3/3  warnings...\nBanned!!!....\n`"
-    chat = await event.get_input_chat()
-    async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
-        mentions += f""
-    reply_message = None
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        await reply_message.reply(mentions)
-    else:
-        await event.reply(mentions)
-    await event.delete()
-
-""".admin Plugin for @UniBorg"""
-import asyncio
-from telethon import events
-from telethon.tl.types import ChannelParticipantsAdmins
-from uniborg.util import admin_cmd
+    reply_message = await event.get_reply_message()
+    sql.reset_warns(reply_message.from_id, event.chat_id)
+    await event.edit("Warnings have been reset!")
 
 
-@borg.on(admin_cmd("warn0"))
-async def _(event):
-    if event.fwd_from:
-        return
-    mentions = "`Warning Resetted By Admin...\nYou Have  0/3  warnings`"
-    chat = await event.get_input_chat()
-    async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
-        mentions += f""
-    reply_message = None
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        await reply_message.reply(mentions)
-    else:
-        await event.reply(mentions)
-    await event.delete()
-
-
-@borg.on(admin_cmd("ocb"))
-async def _(event):
-    if event.fwd_from:
-        return
-    mentions = "**Warning..\n\nBattery Below 10%, Please Charge Your Phone**"
-    chat = await event.get_input_chat()
-    async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
-        mentions += f""
-    reply_message = None
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        await reply_message.reply(mentions)
-    else:
-        await event.reply(mentions)
-    await event.delete()
-
-@borg.on(admin_cmd("fw"))
-async def _(event):
-    if event.fwd_from:
-        return
-    mentions = "`U Got A FloodWait:\nReason:telethon.errors.rpcerrorlist.FloodWaitError: A wait of 546578265716823 seconds is required (caused by EditMessageRequest)`"
-    chat = await event.get_input_chat()
-    async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
-        mentions += f""
-    reply_message = None
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        await reply_message.reply(mentions)
-    else:
-        await event.reply(mentions)
-    await event.delete()
