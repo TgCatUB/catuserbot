@@ -19,7 +19,7 @@ from userbot.utils import admin_cmd
 
 from userbot.plugins.sql_helper.gmute_sql import is_gmuted, gmute, ungmute
 from userbot.plugins.sql_helper.mute_sql import is_muted, mute ,unmute
-from userbot.plugins.sql_helper.fban_sql_helper import s_fban,get_fban,add_chat_fban,remove_chat_fban
+from userbot.plugins.sql_helper.fban_sql_helper import is_fban,get_fban,add_chat_fban,remove_chat_fban
 from userbot.plugins.sql_helper.gban_sql_helper import is_gban,get_gban,add_chat_gban,remove_chat_gban
 from userbot.plugins.sql_helper.spam_mute_sql import is_muted,mute,unmute
 
