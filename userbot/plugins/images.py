@@ -21,6 +21,7 @@ async def img_sampler(event):
     except IndexError:
         lim = 3
     response = google_images_download.googleimagesdownload()
+
     # creating list of arguments
     arguments = {
         "keywords": query,
@@ -28,10 +29,10 @@ async def img_sampler(event):
         "format": "jpg",
         "no_directory": "no_directory"
     }
+
     # passing the arguments to the function
     paths = response.download(arguments)
     lst = paths[0][query]
-    await event.client.send_file(
-        await event.client.get_input_entity(event.chat_id), lst)
+    await borg.send_file(await borg.get_input_entity(event.chat_id), lst)
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await event.delete()
