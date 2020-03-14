@@ -5,7 +5,7 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 import asyncio
 from telethon import events
 from uniborg.util import admin_cmd, humanbytes, progress
-from sample_config import Config
+from userbot.uniborgConfig import Config
 import shutil
 
 @borg.on(admin_cmd(pattern="watermark"))
