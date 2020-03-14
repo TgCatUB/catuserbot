@@ -51,7 +51,7 @@ LOGGING_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 ENABLE_LOG = True
-LOGGING_CHATID = Config.PRIVATE_CHANNEL_BOT_API_ID
+LOGGING_CHANNELID = Config.PRIVATE_CHANNEL_BOT_API_ID
 BANNED_RIGHTS = ChatBannedRights(
     until_date=None,
     view_messages=True,
@@ -484,7 +484,7 @@ async def gmute(eventGmute):
 
             if ENABLE_LOG:
                 await eventGmute.client.send_message(
-                    LOGGING_CHATID,
+                    LOGGING_CHANNELID,
                     "#GMUTE\n"
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                     f"CHAT: {eventGmute.chat.title}(`{eventGmute.chat_id}`)"
@@ -520,7 +520,7 @@ async def ungmute_(eventUnGmute):
 
             if ENABLE_LOG:
                 await eventUnGmute.client.send_message(
-                    LOGGING_CHATID,
+                    LOGGING_CHANNELID,
                     "#UNGMUTE\n"
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                     f"CHAT: {eventUnGmute.chat.title}(`{eventUnGmute.chat_id}`)"
