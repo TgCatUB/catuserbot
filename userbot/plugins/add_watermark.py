@@ -1,8 +1,8 @@
 import os
 import time
 import zipfile
+import PyPDF2
 from datetime import datetime
-from PyPDF2 import PdfFileWriter, PdfFileReader
 
 from pySmartDL import SmartDL
 from telethon import events
@@ -12,7 +12,7 @@ from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-from sample_config import Config
+from userbot.uniborgConfig import Config
 
 
 @borg.on(admin_cmd(pattern="watermark"))
@@ -22,8 +22,8 @@ async def _(event):
     mone = await event.edit("Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if not os.path.isdir("./ravana/watermark/"):
-        os.makedirs("./ravana/watermark/")
+    if not os.path.isdir("./sandeep/watermark/"):
+        os.makedirs("./sandeep/watermark/")
     if event.reply_to_msg_id:
         start = datetime.now()
         reply_message = await event.get_reply_message()
@@ -44,7 +44,7 @@ async def _(event):
             await mone.edit("Stored the pdf to `{}` in {} seconds.".format(downloaded_file_name, ms))
             watermark(
                 inputpdf=downloaded_file_name,
-                outputpdf='./ravana/watermark/' + reply_message.file.name,
+                outputpdf='./sandeep/watermark/' + reply_message.file.name,
                 watermarkpdf='./bin/watermark.pdf'
             )
         # filename = sorted(get_lst_of_files('./ravana/watermark/' + reply_message.file.name, []))
