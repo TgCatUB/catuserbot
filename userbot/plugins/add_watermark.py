@@ -1,19 +1,12 @@
 import os
 import time
-import zipfile
-import PyPDF2
 from datetime import datetime
-
-from pySmartDL import SmartDL
+from PyPDF2 import PdfFileWriter, PdfFileReader
+import asyncio
 from telethon import events
-from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
-from telethon.tl.types import DocumentAttributeFilename
-from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
-
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
-from userbot.uniborgConfig import Config
-
+from uniborg.util import admin_cmd, humanbytes, progress
+from sample_config import Config
+import shutil
 
 @borg.on(admin_cmd(pattern="watermark"))
 async def _(event):
@@ -22,8 +15,9 @@ async def _(event):
     mone = await event.edit("Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if not os.path.isdir("./sandeep/watermark/"):
-        os.makedirs("./sandeep/watermark/")
+    watermark_path = "./DOWNLOADS/watermark/"
+    if not os.path.isdir(watermark_path):
+        os.makedirs(watermark_path)
     if event.reply_to_msg_id:
         start = datetime.now()
         reply_message = await event.get_reply_message()
@@ -42,77 +36,34 @@ async def _(event):
             end = datetime.now()
             ms = (end - start).seconds
             await mone.edit("Stored the pdf to `{}` in {} seconds.".format(downloaded_file_name, ms))
+            await mone.edit("`Watermarking processing now, please wait for a while..`")
             watermark(
-                inputpdf=downloaded_file_name,
-                outputpdf='./sandeep/watermark/' + reply_message.file.name,
+                inputpdf=Config.TMP_DOWNLOAD_DIRECTORY + reply_message.file.name,
+                outputpdf=watermark_path + reply_message.file.name,
                 watermarkpdf='./bin/watermark.pdf'
             )
-        # filename = sorted(get_lst_of_files('./ravana/watermark/' + reply_message.file.name, []))
+        # filename = sorted(get_lst_of_files(watermark_path + reply_message.file.name, []))
         #filename = filename + "/"
         await event.edit("Uploading now")
         caption_rts = os.path.basename(watermark_path + reply_message.file.name)
         await borg.send_file(
             event.chat_id,
             watermark_path + reply_message.file.name,
+            force_document=True,
+            supports_streaming=False,
+            allow_cache=False,
+            caption=f'`{caption_rts}`',
             reply_to=event.message.id,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                progress(d, t, event, c_time, "trying to upload")
+                progress(d, t, mone, c_time, "trying to upload")
             )
         )
-        # r=root, d=directories, f = files
-        # for single_file in filename:
-        #     if os.path.exists(single_file):
-        #         # https://stackoverflow.com/a/678242/4723940
-        #         caption_rts = os.path.basename(single_file)
-        #         force_document = False
-        #         supports_streaming = True
-        #         document_attributes = []
-        #         if single_file.endswith((".mp4", ".mp3", ".flac", ".webm")):
-        #             metadata = extractMetadata(createParser(single_file))
-        #             duration = 0
-        #             width = 0
-        #             height = 0
-        #             if metadata.has("duration"):
-        #                 duration = metadata.get('duration').seconds
-        #             if os.path.exists(thumb_image_path):
-        #                 metadata = extractMetadata(createParser(thumb_image_path))
-        #                 if metadata.has("width"):
-        #                     width = metadata.get("width")
-        #                 if metadata.has("height"):
-        #                     height = metadata.get("height")
-        #             document_attributes = [
-        #                 DocumentAttributeVideo(
-        #                     duration=duration,
-        #                     w=width,
-        #                     h=height,
-        #                     round_message=False,
-        #                     supports_streaming=True
-        #                 )
-        #             ]
-        #         try:
-        #             await borg.send_file(
-        #                 event.chat_id,
-        #                 single_file,
-        #                 caption=f"`{caption_rts}`",
-        #                 force_document=force_document,
-        #                 supports_streaming=supports_streaming,
-        #                 allow_cache=False,
-        #                 reply_to=event.message.id,
-        #                 attributes=document_attributes,
-        #                 # progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-        #                 #     progress(d, t, event, c_time, "trying to upload")
-        #                 # )
-        #             )
-        #         except Exception as e:
-        #             await borg.send_message(
-        #                 event.chat_id,
-        #                 "{} caused `{}`".format(caption_rts, str(e)),
-        #                 reply_to=event.message.id
-        #             )
-        #             # some media were having some issues
-        #             continue
-        #         os.remove(single_file)
-        # os.remove(downloaded_file_name)
+        await asyncio.sleep(5)
+        await event.delete()
+        await asyncio.sleep(5)
+        shutil.rmtree(watermark_path)
+        await asyncio.sleep(5)
+        os.remove(Config.TMP_DOWNLOAD_DIRECTORY + reply_message.file.name)
 
 def watermark(inputpdf, outputpdf, watermarkpdf):
     watermark = PdfFileReader(watermarkpdf)
