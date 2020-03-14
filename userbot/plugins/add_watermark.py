@@ -8,11 +8,11 @@ from pySmartDL import SmartDL
 from telethon import events
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from telethon.tl.types import DocumentAttributeFilename
-from uniborg.util import admin_cmd, humanbytes, progress, time_formatter
+from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-from sample_config import Config
+from userbot.uniborgConfig import Config
 
 
 @borg.on(admin_cmd(pattern="watermark"))
