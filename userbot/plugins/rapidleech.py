@@ -21,7 +21,7 @@ from telethon.utils import get_inner_text
 
 from userbot.utils import admin_cmd
 
-from userbot.uniborg.Config import Config
+from userbot.uniborgConfig import Config
 
 logger.info(Config.OPEN_LOAD_LOGIN)
 # https://t.me/RoseSupport/33801
