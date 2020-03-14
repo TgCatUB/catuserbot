@@ -17,11 +17,11 @@ from userbot.uniborgConfig import Config
 from userbot.utils import admin_cmd
 
 
-from userbot.plugins.sql_helper.gmute_sql import (is_gmuted, gmute, ungmute)
-from userbot.plugins.sql_helper.mute_sql import (is_muted, mute ,unmute)
-from userbot.plugins.sql_helper.fban_sql_helper import (is_fban,get_fban,add_chat_fban,remove_chat_fban)
-from userbot.plugins.sql_helper.gban_sql_helper import (is_gban,get_gban,add_chat_gban,remove_chat_gban)
-from userbot.plugins.sql_helper.spam_mute_sql import (is_muted,mute,unmute)
+from userbot.plugins.sql_helper.gmute_sql import is_gmuted, gmute, ungmute
+from userbot.plugins.sql_helper.mute_sql import is_muted, mute ,unmute
+from userbot.plugins.sql_helper.fban_sql_helper import s_fban,get_fban,add_chat_fban,remove_chat_fban
+from userbot.plugins.sql_helper.gban_sql_helper import is_gban,get_gban,add_chat_gban,remove_chat_gban
+from userbot.plugins.sql_helper.spam_mute_sql import is_muted,mute,unmute
 
 
 # MONGOCLIENT = Config.MONGOCLIENT
@@ -70,7 +70,7 @@ async def gban_all(msg):
     count = 0
     banlist = []
     for i in x:
-        banlist.append(i["chatid"])
+        banlist.append(i["chat_id"])
     for banbot in banlist:
         async with bot.conversation(banbot) as conv:
             if textx:
@@ -129,7 +129,7 @@ async def fedban_all(msg):
     fbanlist = []
     x = get_fban()
     for i in x:
-        fbanlist.append(i["chatid"])
+        fbanlist.append(i["chat_id"])
     for bangroup in fbanlist:
 
         # Send to proof to Spamwatch in case it was spam
