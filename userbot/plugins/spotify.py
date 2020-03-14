@@ -11,7 +11,7 @@ from requests import get
 from telethon import events
 from telethon.tl import functions, types
 from telethon.tl.functions.account import UpdateProfileRequest
-
+from userbot.utils import admin_cmd
 
 import spotify_token as st
 from userbot.uniborgConfig import Config
