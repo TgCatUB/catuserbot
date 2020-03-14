@@ -25,7 +25,7 @@ from os import remove, execl
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import CMD_HELP, HEROKU_MEMEZ, HEROKU_APIKEY, HEROKU_APPNAME
+from userbot import CMD_HELP,HEROKU_APIKEY, HEROKU_APPNAME
 from userbot.utils import register
 
 
