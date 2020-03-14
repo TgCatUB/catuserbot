@@ -10,10 +10,11 @@ from asyncio import sleep
 
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, CMD_HELP, ISAFK, BOTLOG,
-                     BOTLOG_CHATID, USERS, PM_AUTO_BAN)
+from userbot import AFKREASON, COUNT_MSG, CMD_HELP, ISAFK, BOTLOG,BOTLOG_CHATID, USERS, PM_AUTO_BAN
+                  
 from userbot.utils import register
 
+from userbot.utils import admin_cmd
 
 global USER_AFK  # pylint:disable=E0602
 global afk_time  # pylint:disable=E0602
