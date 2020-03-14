@@ -149,7 +149,7 @@ async def img_sampler(event):
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await event.delete()
 
-"""
+
 @register(outgoing=True, pattern="^.currency (.*)")
 async def moni(event):
     input_str = event.pattern_match.group(1)
@@ -176,7 +176,7 @@ async def moni(event):
     else:
         await event.edit("`Invalid syntax.`")
         return
-
+"""
 
 @register(outgoing=True, pattern=r"^.google (.*)")
 async def gsearch(q_event):
@@ -283,7 +283,7 @@ async def urban_dict(ud_e):
     else:
         await ud_e.edit("No result found for **" + query + "**")
 
-
+"""
 @register(outgoing=True, pattern=r"^.tts (?: |$)([\s\S]*)")
 async def text_to_speech(query):
 
@@ -327,7 +327,7 @@ async def text_to_speech(query):
             await query.client.send_message(
                 BOTLOG_CHATID, "Text to Speech executed successfully !")
         await query.delete()
-
+"""
 # kanged from Blank-x ;---;
 @register(outgoing=True, pattern="^.imdb (.*)")
 async def imdb(e):
