@@ -5,7 +5,6 @@ aiohttp
 aria2p
 async_generator
 beautifulsoup4
-unicode_tr
 nltk
 times
 bs4
@@ -85,3 +84,4 @@ psutil
 pydownload
 PyDrive
 setuptools==39.1.0
+urbandict
