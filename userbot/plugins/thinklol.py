@@ -4,8 +4,9 @@ from telethon import events
 import asyncio
 from collections import deque
 
+from userbot.utils import admin_cmd
 
-@borg.on(events.NewMessage(pattern=r"\.lol", outgoing=True))
+@borg.on(admin_cmd(pattern=r"\.lol", outgoing=True))
 async def _(event):
 	if event.fwd_from:
 		return
