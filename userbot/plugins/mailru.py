@@ -7,7 +7,7 @@ import shutil
 import subprocess
 import time
 from pySmartDL import SmartDL
-from userbot.uniborg.Config import Config
+from userbot.uniborgConfig import Config
 from telethon import events
 from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 import subprocess
