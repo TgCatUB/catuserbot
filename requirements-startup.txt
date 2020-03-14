@@ -7,7 +7,7 @@ async_generator
 beautifulsoup4
 unicode_tr
 nltk
-time
+times
 bs4
 bwb==3.0.0
 cfscrape
