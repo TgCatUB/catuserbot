@@ -10,7 +10,7 @@ from telethon.tl.types import ChatAdminRights
 from userbot.utils import admin_cmd
 
 
-
+"""
 @borg.on(admin_cmd(pattern="promote ?(.*)"))
 async def _(event):
     if event.fwd_from:
@@ -40,7 +40,7 @@ async def _(event):
         await event.edit(str(exc))
     else:
         await event.edit("Successfully Promoted")
-
+"""
 
 @borg.on(admin_cmd(pattern="prankpromote ?(.*)"))
 async def _(event):
