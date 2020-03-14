@@ -72,7 +72,7 @@ async def update_spotify_info():
             if song != oldsong and artist != oldartist:
                 oldartist = artist
                 environ["oldsong"] = song
-                spobio = " 🎧: " +" - " + artist +  song
+                spobio = " 🎧:-" + song + " - " + artist
                 await borg(UpdateProfileRequest(first_name=spobio))
                 environ["errorcheck"] = "0"
         except KeyError:
