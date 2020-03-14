@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import requests
 from userbot.utils import admin_cmd
 
-@borg.on(events.NewMessage(pattern=r"\.yify recents", outgoing=True))
+@borg.on(admin_cmd(pattern=r"\.yify recents", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
