@@ -332,7 +332,7 @@ async def unban(eventUnban):
 async def mute(eventMute):
     if not eventMute.text[0].isalpha() and eventMute.text[0] not in ("/", "#", "@", "!"):
         try:
-            from sql_helpers.spam_mute_sql import mute
+            from userbot.plugins.sql_helper.spam_mute_sql import mute
         except AttributeError:
             await eventMute.edit("`Running on Non-SQL mode!`")
             return
@@ -370,7 +370,7 @@ async def mute(eventMute):
                         LOGGING_CHATID,
                         "#MUTE\n"
                         f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                        f"CHAT: {eventMute.chat.title}(`{eventMute.chat_id}`)"
+                       f"CHAT: {eventMute.chat.title}(`{eventMute.chat_id}`)"
                     )
             except UserIdInvalidError:
                 return await eventMute.edit("`Uh oh my mute logic broke!`")
@@ -387,7 +387,7 @@ async def unmute(eventUnMute):
             await eventUnMute.edit("`I am not an admin!`")
             return
         try:
-            from sql_helpers.spam_mute_sql import unmute
+            from userbot.plugins.sql_helper.spam_mute_sql import unmute
         except AttributeError:
             await eventUnMute.edit("`Running on Non-SQL mode!`")
             return
@@ -426,8 +426,8 @@ async def unmute(eventUnMute):
 @borg.on(events.NewMessage(incoming=True))
 async def muter(mutedMessage):
     try:
-        from sql_helpers.spam_mute_sql import is_muted
-        from sql_helpers.gmute_sql import is_gmuted
+        from userbot.plugins.sql_helper.spam_mute_sql import is_muted
+        from userbot.plugins.sql_helper.gmute_sql import is_gmuted
     except AttributeError:
         return
     muted = is_muted(mutedMessage.chat_id)
@@ -466,7 +466,7 @@ async def gmute(eventGmute):
             await eventGmute.edit("`I am not an admin!`")
             return
         try:
-            from sql_helpers.gmute_sql import gmute
+            from userbot.plugins.sql_helper.gmute_sql import gmute
         except AttributeError:
             await eventGmute.edit("`Running on Non-SQL mode!`")
             return
@@ -502,7 +502,7 @@ async def ungmute_(eventUnGmute):
             await eventUnGmute.edit("`I am not an admin!`")
             return
         try:
-            from sql_helpers.gmute_sql import ungmute
+            from userbot.plugins.sql_helper.gmute_sql import ungmute
         except AttributeError:
             await eventUnGmute.edit("`Running on Non-SQL mode!`")
             return
