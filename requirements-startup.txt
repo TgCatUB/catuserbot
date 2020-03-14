@@ -27,6 +27,8 @@ httplib2
 humanize
 lxml
 oauth2client
+patool
+PyPDF2
 psycopg2
 psycopg2-binary
 pySmartDL
