@@ -11,7 +11,7 @@ from json import loads
 from json.decoder import JSONDecodeError
 from os import environ
 from sys import setrecursionlimit
-
+from userbot.utils import admin_cmd
 from requests import get
 from telethon import events
 from telethon.tl import functions, types
