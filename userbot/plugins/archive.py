@@ -19,7 +19,7 @@ from userbot.uniborgConfig import Config
 from telethon import events
 from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 import subprocess
-import patool
+import patoolib
 
 
 extracted = Config.TMP_DOWNLOAD_DIRECTORY + "extracted/"
