@@ -45,7 +45,7 @@ async def okgoogle(img):
         try:
             image = Image.open(photo)
         except OSError:
-            await img.edit('`Unsupported sexuality, most likely.`')
+            await img.edit('`Unsupported , most likely.`')
             return
         name = "okgoogle.png"
         image.save(name, "PNG")
@@ -135,7 +135,7 @@ async def scam(results, lim):
     oboi = re.findall(pattern, decoded, re.I | re.M)
 
     for imglink in oboi:
-        counter += 1
+        counter += 2
         if not counter >= int(lim):
             imglinks.append(imglink)
         else:
