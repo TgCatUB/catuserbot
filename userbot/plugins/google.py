@@ -61,7 +61,7 @@ async def _(event):
         "output_directory": Config.TMP_DOWNLOAD_DIRECTORY
     }
     paths = response.download(arguments)
-    lst = paths[input_str]
+    lst = paths[1][input_str]
     await borg.send_file(
         event.chat_id,
         lst,
@@ -130,4 +130,3 @@ async def _(event):
 
 More Info: Open this <a href="{the_location}">Link</a> in {ms} seconds""".format(**locals())
     await event.edit(OUTPUT_STR, parse_mode="HTML", link_preview=False)
-
