@@ -40,7 +40,7 @@ async def monito_p_m_s(event):
                 print(e) 
 
 
-@borg.on(events.NewMessage(pattern="nolog ?(.*)"))
+@borg.on(admin_cmd(pattern="nolog ?(.*)"))
 async def approve_p_m(event):
     if event.fwd_from:
         return
