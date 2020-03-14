@@ -6,9 +6,11 @@ import time
 from telethon.tl import functions
 from telethon.errors import FloodWaitError
 from userbot.utils import admin_cmd
+from userbot import AUTONAME
 
 
-DEL_TIME_OUT = 70
+DEL_TIME_OUT = 60
+DEFAULTUSER = str(AUTONAME) if AUTONAME else "mrconfusedbot"
 
 
 @borg.on(admin_cmd(pattern="autoname"))  # pylint:disable=E0602
@@ -18,7 +20,7 @@ async def _(event):
     while True:
         DM = time.strftime("%d-%m-%y")
         HM = time.strftime("%H:%M")
-        name = f"{HM} Jayu {DM}"
+        name = f"{HM} {DEFAULTUSER} {DM}"
         logger.info(name)
         try:
             await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
@@ -36,4 +38,3 @@ async def _(event):
             # )
         await asyncio.sleep(DEL_TIME_OUT)
     await event.edit(f"Auto Name has been started Master") 
-  
