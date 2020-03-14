@@ -5,37 +5,126 @@ Syntax: .update
 
 from os import remove
 from os import execl
-import sys
-
-# from git import Repo
-# from git.exc import GitCommandError
-# from git.exc import InvalidGitRepositoryError
-# from git.exc import NoSuchPathError
-
-# from .. import bot
-# from userbot.utils import register
-
 import git
 import asyncio
 import random
 import re
 import time
-
 from collections import deque
-
 import requests
-
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon import events
-
 from userbot.utils import admin_cmd
-
-
 from contextlib import suppress
 import os
 import sys
-import asyncio
+from os import remove, execl
+
+
+from git import Repo
+from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+
+from userbot import CMD_HELP, bot, HEROKU_MEMEZ, HEROKU_APIKEY, HEROKU_APPNAME
+from userbot.utils import register
+
+
+async def gen_chlog(repo, diff):
+    ch_log = ''
+    d_form = "%d/%m/%y"
+    for c in repo.iter_commits(diff):
+        ch_log += f'•[{c.committed_datetime.strftime(d_form)}]: {c.summary} <{c.author}>\n'
+    return ch_log
+
+
+async def is_off_br(br):
+    off_br = ['sql-extended', 'sql-dirty']
+    for k in off_br:
+        if k == br:
+            return 1
+    return
+
+
+@register(outgoing=True, pattern="^.update2(?: |$)(.*)")
+async def upstream(ups):
+    "For .update command, check if the bot is up to date, update if specified"
+    await ups.edit("`Checking for updates, please wait....`")
+    conf = ups.pattern_match.group(1).lower()
+    off_repo = 'https://github.com/sandy1709/userbot.git'
+
+    try:
+        txt = "`Oops.. Updater cannot continue due to some problems occured`\n\n**LOGTRACE:**\n"
+        repo = Repo()
+    except NoSuchPathError as error:
+        await ups.edit(f'{txt}\n`directory {error} is not found`')
+        return
+    except GitCommandError as error:
+        await ups.edit(f'{txt}\n`Early failure! {error}`')
+        return
+    except InvalidGitRepositoryError:
+        repo = Repo.init()
+        await ups.edit(
+            "`Warning: Force-Syncing to the latest stable code from repo.`\
+            \nI may lose my downloaded files during this update."
+        )
+        origin = repo.create_remote('upstream', off_repo)
+        origin.fetch()
+        repo.create_head('sql-extended', origin.refs.master)
+        repo.heads.master.checkout(True)
+
+    ac_br = repo.active_branch.name
+    if not await is_off_br(ac_br):
+        await ups.edit(
+            f'**[UPDATER]:**` Looks like you are using your own custom branch ({ac_br}). \
+            in that case, Updater is unable to identify which branch is to be merged. \
+            please checkout to any official branch`')
+        return
+
+    try:
+        repo.create_remote('upstream', off_repo)
+    except BaseException:
+        pass
+
+    ups_rem = repo.remote('upstream')
+    ups_rem.fetch(ac_br)
+    changelog = await gen_chlog(repo, f'HEAD..upstream/{ac_br}')
+
+    if not changelog:
+        await ups.edit(f'\n`Your BOT is` **up-to-date** `with` **{ac_br}**\n')
+        return
+
+    if conf != "now":
+        changelog_str = f'**New UPDATE available for [{ac_br}]:\n\nCHANGELOG:**\n`{changelog}`'
+        if len(changelog_str) > 4096:
+            await ups.edit("`Changelog is too big, sending it as a file.`")
+            file = open("output.txt", "w+")
+            file.write(changelog_str)
+            file.close()
+            await ups.client.send_file(
+                ups.chat_id,
+                "output.txt",
+                reply_to=ups.id,
+            )
+            remove("output.txt")
+        else:
+            await ups.edit(changelog_str)
+        await ups.respond(
+            "`do \".update now\" to update\nDon't if using Heroku`")
+        return
+
+    await ups.edit('`New update found, updating...`')
+    ups_rem.fetch(ac_br)
+    await ups.edit('`Successfully Updated!\n'
+                   'Bot is restarting... Wait for a second!`')
+    await install_requirements()
+    await bot.disconnect()
+    # Spin a new instance of bot
+    execl(sys.executable, sys.executable, *sys.argv)
+    # Shut the existing one down
+    exit()
+
+
+
 
 # -- Constants -- #
 IS_SELECTED_DIFFERENT_BRANCH = (
@@ -169,120 +258,10 @@ def generate_change_log(git_repo, diff_marker):
 async def deploy_start(tgbot, message, refspec, remote):
     await message.edit(RESTARTING_APP)
     await message.edit("Updating and Deploying New Branch. Please wait for 5 minutes then use `.alive` to check if i'm working or not.")
-    #await remote.push(refspec=refspec)
-    await tgbot.disconnect()
-    os.execl(sys.executable, sys.executable, *sys.argv)
-
-    
-    
-@borg.on(admin_cmd("update2 ?(.*)", outgoing=True))
-async def updater(message):
-    try:
-        repo = git.Repo()
-    except git.exc.InvalidGitRepositoryError as e:
-        repo = git.Repo.init()
-        origin = repo.create_remote(REPO_REMOTE_NAME, OFFICIAL_UPSTREAM_REPO)
-        origin.fetch()
-        repo.create_head(IFFUCI_ACTIVE_BRANCH_NAME, origin.refs.master)
-        repo.heads.master.checkout(True)
-
-    active_branch_name = repo.active_branch.name
-    if active_branch_name != IFFUCI_ACTIVE_BRANCH_NAME:
-        await message.edit(IS_SELECTED_DIFFERENT_BRANCH.format(
-            branch_name=active_branch_name
-        ))
-        return False
-
-    try:
-        repo.create_remote(REPO_REMOTE_NAME, OFFICIAL_UPSTREAM_REPO)
-    except Exception as e:
-        print(e)
-        pass
-
-    temp_upstream_remote = repo.remote(REPO_REMOTE_NAME)
-    temp_upstream_remote.fetch(active_branch_name)
-
-    changelog = generate_change_log(
-        repo,
-        DIFF_MARKER.format(
-            remote_name=REPO_REMOTE_NAME,
-            branch_name=active_branch_name
-        )
-    )
-
-    if not changelog:
-        await message.edit("`Updating...`")
-        await asyncio.sleep(8)
- 
-    message_one = NEW_BOT_UP_DATE_FOUND.format(
-        branch_name=active_branch_name,
-        changelog=changelog
-    )
-    message_two = NEW_UP_DATE_FOUND.format(
-        branch_name=active_branch_name
-    )
-
-    if len(message_one) > 4095:
-        with open("change.log", "w+", encoding="utf8") as out_file:
-            out_file.write(str(message_one))
-        await tgbot.send_message(
-            message.chat_id,
-            document="change.log",
-            caption=message_two
-        )
-        os.remove("change.log")
-    else:
-        await message.edit(message_one)
-
-    temp_upstream_remote.fetch(active_branch_name)
-    repo.git.reset("--hard", "FETCH_HEAD")
-
-    if Var.HEROKU_API_KEY is not None:
-        import heroku3
-        heroku = heroku3.from_key(Var.HEROKU_API_KEY)
-        heroku_applications = heroku.apps()
-        if len(heroku_applications) >= 1:
-            if Var.HEROKU_APP_NAME is not None:
-                heroku_app = None
-                for i in heroku_applications:
-                    if i.name == Var.HEROKU_APP_NAME:
-                        heroku_app = i
-                if heroku_app is None:
-                    await message.edit("Invalid APP Name. Please set the name of your bot in heroku in the var `HEROKU_APP_NAME.`")
-                    return
-                heroku_git_url = heroku_app.git_url.replace(
-                    "https://",
-                    "https://api:" + Var.HEROKU_API_KEY + "@"
-                )
-                if "heroku" in repo.remotes:
-                    remote = repo.remote("heroku")
-                    remote.set_url(heroku_git_url)
-                else:
-                    remote = repo.create_remote("heroku", heroku_git_url)
-                asyncio.get_event_loop().create_task(deploy_start(tgbot, message, HEROKU_GIT_REF_SPEC, remote))
-
-            else:
-                await message.edit("Please create the var `HEROKU_APP_NAME` as the key and the name of your bot in heroku as your value.")
-                return
-        else:
-            await message.edit(NO_HEROKU_APP_CFGD)
-    else:
-        await message.edit("No heroku api key found in `HEROKU_API_KEY` var")
-        
-
-def generate_change_log(git_repo, diff_marker):
-    out_put_str = ""
-    d_form = "%d/%m/%y"
-    for repo_change in git_repo.iter_commits(diff_marker):
-        out_put_str += f"•[{repo_change.committed_datetime.strftime(d_form)}]: {repo_change.summary} <{repo_change.author}>\n"
-    return out_put_str
-
-async def deploy_start(tgbot, message, refspec, remote):
-    await message.edit(RESTARTING_APP)
-    await message.edit("Updating and Deploying New Branch. Please wait for 5 minutes then use `.alive` to check if i'm working or not.")
     await remote.push(refspec=refspec)
     await tgbot.disconnect()
     os.execl(sys.executable, sys.executable, *sys.argv)
 
     
-
+    
+    
