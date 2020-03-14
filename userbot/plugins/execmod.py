@@ -36,7 +36,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) CPU Model:**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) CPU Model:**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -75,7 +75,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) CPU UPTIME:**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) CPU UPTIME:**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:	
@@ -115,7 +115,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) SUICIDE BOMB:**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) SUICIDE BOMB:**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:	
@@ -155,7 +155,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) STDPLUGINS:**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) STDPLUGINS:**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:	
@@ -195,7 +195,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) PIP UPGRADE:**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) PIP UPGRADE:**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:	
@@ -234,7 +234,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) Date & Time Of India:**\n\n\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) Date & Time Of India:**\n\n\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:	
@@ -273,7 +273,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:	
@@ -313,7 +313,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) Neofetch Installed, Use `.sysd` :**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) Neofetch Installed, Use `.sysd` :**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -353,7 +353,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) Telethon Updated**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) Telethon Updated**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -393,7 +393,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , Server Speed Calculated:**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , Server Speed Calculated:**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -433,7 +433,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , Coffeehouse Updated:**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , Coffeehouse Updated:**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -473,7 +473,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , Sex Installed To Pornhub**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , Sex Installed To Pornhub**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -513,7 +513,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , Telegram Installed To Pornhub**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , Telegram Installed To Pornhub**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -552,7 +552,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , PIP Installed To Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , PIP Installed To Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -591,7 +591,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , PIP Installed To Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , PIP Installed To Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -623,14 +623,14 @@ async def _(event):
     cmd = "names"
 #    if dirname == tempdir:
 	
-    eply_to_id = event.message.id
+    reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
     start_time = time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , Name generator for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , Name generator for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -670,7 +670,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , fast.com for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , fast.com for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -709,7 +709,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , password generator for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , password generator for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -748,7 +748,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , fortune teller for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , fortune teller for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -788,7 +788,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , dad jokes for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , dad jokes for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -828,7 +828,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , quotes for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , quotes for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -867,7 +867,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , fake id generator for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , fake id generator for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -906,7 +906,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , kwot for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , kwot for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -946,7 +946,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , programming quotes for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , programming quotes for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
@@ -986,7 +986,7 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Ravana's](tg://need_update_for_some_feature/) , Simple Password Generator for Your Pornhub...**\n"
+    OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) , Simple Password Generator for Your Pornhub...**\n"
     stdout, stderr = await process.communicate()
     if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:
