@@ -9,7 +9,7 @@ from re import findall
 from userbot.utils import admin_cmd
 
 
-@register(outgoing=True, pattern="^.img (.*)")
+@borg.on(admin_cmd("img ?(.*)"))
 async def img_sampler(event):
     await event.edit("Processing...")
     query = event.pattern_match.group(1)
