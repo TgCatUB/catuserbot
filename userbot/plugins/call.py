@@ -29,6 +29,11 @@ async def _(event):
     
     await event.edit("calling......... tring ...tring")
     await asyncio.sleep(2)
+    for i in animation_ttl:
+
+            await asyncio.sleep(animation_interval)
+
+            await event.edit(animation_chars[i % 18])
 
     animation_interval = 3
 
@@ -62,8 +67,4 @@ async def _(event):
             "`Private Call Disconnected.`"
         ]
 
-        for i in animation_ttl:
-
-            await asyncio.sleep(animation_interval)
-
-            await event.edit(animation_chars[i % 18])
+        
