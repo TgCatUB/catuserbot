@@ -702,25 +702,23 @@ async def list_users(eventListUsers):
                 reply_to=eventListUsers.id,
             )
             remove("userslist.txt")
-
-@borg.on(admin_cmd(pattern="undlt ?(.*)"))
-async def _(event):
-    if event.fwd_from:
+            
+            
+@register(outgoing=True, pattern="^.link(?: |$)(.*)")
+async def permalink(event):
+    """ For .link command, generates a link to the user's PM with a custom text. """
+    user, custom = await get_user_from_event(event)
+    if not user:
         return
-    c = await event.get_chat()
-    if c.admin_rights or c.creator:
-        a = await borg.get_admin_log(event.chat_id,limit=5, edit=False, delete=True)
-        # print(a[0].old.message)
-        deleted_msg = "Deleted message in this group:"
-        for i in a:
-            deleted_msg += "\n👉`{}`".format(i.old.message)
-        await event.edit(deleted_msg)
+    if custom:
+        await mention.edit(f"[{custom}](tg://user?id={user.id})")
     else:
-        await event.edit("`You need administrative permissions in order to do this command`")
-        await asyncio.sleep(3)
-        await event.delete()
-
-
+        tag = user.first_name.replace("\u2060",
+                                      "") if user.first_name else user.username
+        await mention.edit(f"[{tag}](tg://user?id={user.id})")
+        
+        
+        
 async def get_user_from_event(event):
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
