@@ -607,7 +607,6 @@ async def rm_deletedacc(eventDeletedAccs):
 @borg.on(events.NewMessage(outgoing=True, pattern="^.link(?: |$)(.*)"))
 async def permalink(mention):
   user, custom = await get_user_from_event(mention)
-    """ For .link command, generates a link to the user's PM with a custom text. """
     if not user:
         return
     if custom:
