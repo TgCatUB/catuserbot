@@ -11,7 +11,7 @@ import telethon
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd(pattern="app (.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="appd (.*)", allow_sudo=True))
 async def apk(e):
     try:
         app_name = e.pattern_match.group(1)
@@ -39,7 +39,7 @@ async def apk(e):
     except Exception as err:
         await e.edit("Exception Occured:- "+str(err))
 
-@borg.on(admin_cmd(pattern="appr (.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="appdl (.*)", allow_sudo=True))
 async def apkr(e):
     try:
         app_name = e.pattern_match.group(1)
