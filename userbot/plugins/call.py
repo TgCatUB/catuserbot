@@ -14,36 +14,27 @@ from telethon import events
 
 import asyncio
 
-from userbot.utils import admin_cmd
-from userbot import CMD_HELP
 
 
 
-@borg.on(admin_cmd(pattern=r"call(.*)"))
-#@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+
+@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+
 async def _(event):
 
     if event.fwd_from:
 
         return
-    
-    await event.edit("calling......... tring ...tring")
-    await asyncio.sleep(2)
-    for i in animation_ttl:
-
-            await asyncio.sleep(animation_interval)
-
-            await event.edit(animation_chars[i % 18])
 
     animation_interval = 3
 
     animation_ttl = range(0, 18)
 
-    
+    input_str = event.pattern_match.group(1)
 
-  
+    if input_str == "call":
 
-        
+        await event.edit(input_str)
 
         animation_chars = [
         
@@ -67,4 +58,8 @@ async def _(event):
             "`Private Call Disconnected.`"
         ]
 
-        
+        for i in animation_ttl:
+
+            await asyncio.sleep(animation_interval)
+
+            await event.edit(animation_chars[i % 18])
