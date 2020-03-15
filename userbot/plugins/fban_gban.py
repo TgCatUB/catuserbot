@@ -21,13 +21,7 @@ from userbot.plugins.sql_helper.fban_sql_helper import is_fban,get_fban,add_chat
 from userbot.plugins.sql_helper.spam_mute_sql import is_muted,mute,unmute
 
 
-# MONGOCLIENT = Config.MONGOCLIENT
 
-@"""Globally Ban users from all the
-Group Administrations bots where you are SUDO
-Available Commands:
-.gban REASON
-.ungban REASON"""
 
 import asyncio
 
