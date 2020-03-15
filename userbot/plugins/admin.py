@@ -223,6 +223,48 @@ async def demote(eventDemote):
             )
 
 
+@borg.on(events.NewMessage(outgoing=True, pattern="^.ban(?: |$)(.*)"))
+async def ban(eventBan):
+    if not eventBan.text[0].isalpha() and eventBan.text[0] not in ("/", "#", "@", "!"):
+        chat = await eventBan.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            await eventBan.edit("`I am not an admin!`")
+            return
+        user = await get_user_from_event(eventBan)
+        if user:
+            pass
+        else:
+            return
+        await eventBan.edit("`Banlanacak kişiyi arıyorum...`")
+        try:
+            await eventBan.client(
+                EditBannedRequest(
+                    eventBan.chat_id,
+                    user.id,
+                    BANNED_RIGHTS
+                )
+            )
+        except BadRequestError:
+            await eventBan.edit("`I don't have sufficient permissions!`")
+            return
+        try:
+            reply = await eventBan.get_reply_message()
+            if reply:
+                await reply.delete()
+        except BadRequestError:
+            await eventBan.edit("`I dont have message nuking rights! But still he was banned!`")
+            return
+        await eventBan.edit(f"[{user.first_name}](tg://user?id={user.id}) banlandı!")
+        if ENABLE_LOG:
+            await eventBan.client.send_message(
+                LOGGING_CHATID,
+                "#BAN\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {eventBan.chat.title}(`{eventBan.chat_id}`)"
+            )
+
 
 @borg.on(events.NewMessage(outgoing=True, pattern="^.bots$"))
 async def listbots(eventListBots):
@@ -301,7 +343,7 @@ async def unban(eventUnban):
 async def mute(eventMute):
     if not eventMute.text[0].isalpha() and eventMute.text[0] not in ("/", "#", "@", "!"):
         try:
-          from userbot.plugins.sql_helper.spam_mute_sql import mute
+            from userbot.plugins.sql_helper.spam_mute_sql import mute
         except AttributeError:
             await eventMute.edit("`Running on Non-SQL mode!`")
             return
@@ -356,7 +398,7 @@ async def unmute(eventUnMute):
             await eventUnMute.edit("`I am not an admin!`")
             return
         try:
-          from userbot.plugins.sql_helper.spam_mute_sql import unmute
+            from userbot.plugins.sql_helper.spam_mute_sql import unmute
         except AttributeError:
             await eventUnMute.edit("`Running on Non-SQL mode!`")
             return
@@ -453,7 +495,7 @@ async def gmute(eventGmute):
 
             if ENABLE_LOG:
                 await eventGmute.client.send_message(
-                     LOGGING_CHANNELID,
+                    LOGGING_CHANNELID,
                     "#GMUTE\n"
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                     f"CHAT: {eventGmute.chat.title}(`{eventGmute.chat_id}`)"
@@ -561,7 +603,21 @@ async def rm_deletedacc(eventDeletedAccs):
             \n**{del_a}** deleted admin accounts are not removed."
         await eventDeletedAccs.edit(del_status)
 
+#@register(outgoing=True, pattern="^.link(?: |$)(.*)")
+@borg.on(events.NewMessage(outgoing=True, pattern="^.link(?: |$)(.*)"))
+async def permalink(mention):
+  user, custom = await get_user_from_event(mention)
+    """ For .link command, generates a link to the user's PM with a custom text. """
+    if not user:
+        return
+    if custom:
+        await mention.edit(f"[{custom}](tg://user?id={user.id})")
+    else:
+        tag = user.first_name.replace("\u2060",
+                                      "") if user.first_name else user.username
+        await mention.edit(f"[{tag}](tg://user?id={user.id})")
 
+        
 @borg.on(events.NewMessage(outgoing=True, pattern="^.adminlist$"))
 async def listadmins(eventListAdmins):
     if not eventListAdmins.text[0].isalpha() and eventListAdmins.text[0] not in ("/", "#", "@", "!"):
@@ -702,23 +758,25 @@ async def list_users(eventListUsers):
                 reply_to=eventListUsers.id,
             )
             remove("userslist.txt")
-            
-            
-@register(outgoing=True, pattern="^.link(?: |$)(.*)")
-async def permalink(event):
-    """ For .link command, generates a link to the user's PM with a custom text. """
-    user, custom = await get_user_from_event(event)
-    if not user:
+
+@borg.on(admin_cmd(pattern="undlt ?(.*)"))
+async def _(event):
+    if event.fwd_from:
         return
-    if custom:
-        await mention.edit(f"[{custom}](tg://user?id={user.id})")
+    c = await event.get_chat()
+    if c.admin_rights or c.creator:
+        a = await borg.get_admin_log(event.chat_id,limit=5, edit=False, delete=True)
+        # print(a[0].old.message)
+        deleted_msg = "Deleted message in this group:"
+        for i in a:
+            deleted_msg += "\n👉`{}`".format(i.old.message)
+        await event.edit(deleted_msg)
     else:
-        tag = user.first_name.replace("\u2060",
-                                      "") if user.first_name else user.username
-        await mention.edit(f"[{tag}](tg://user?id={user.id})")
-        
-        
-        
+        await event.edit("`You need administrative permissions in order to do this command`")
+        await asyncio.sleep(3)
+        await event.delete()
+
+
 async def get_user_from_event(event):
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
