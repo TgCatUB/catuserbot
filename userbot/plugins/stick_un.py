@@ -26,7 +26,7 @@ from userbot.utils import admin_cmd
 
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
 
-@borg.on(admin_cmd(pattern="un ?(?:(.*?) \| )?(.*)"))
+@borg.on(admin_cmd(pattern="stcr ?(?:(.*?) \| )?(.*)"))
 
 async def sticklet(event):
 
