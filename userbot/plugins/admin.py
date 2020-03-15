@@ -224,7 +224,7 @@ async def demote(eventDemote):
 
 
 
-            @borg.on(events.NewMessage(outgoing=True, pattern="^.bots$"))
+@borg.on(events.NewMessage(outgoing=True, pattern="^.bots$"))
 async def listbots(eventListBots):
     info = await eventListBots.client.get_entity(eventListBots.chat_id)
     title = info.title if info.title else "this chat"
