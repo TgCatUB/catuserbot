@@ -84,5 +84,4 @@ psutil
 pydownload
 PyDrive
 setuptools==39.1.0
-textwrap3
-pil
+
