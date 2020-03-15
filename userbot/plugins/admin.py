@@ -603,18 +603,6 @@ async def rm_deletedacc(eventDeletedAccs):
             \n**{del_a}** deleted admin accounts are not removed."
         await eventDeletedAccs.edit(del_status)
 
-#@register(outgoing=True, pattern="^.link(?: |$)(.*)")
-@borg.on(events.NewMessage(outgoing=True, pattern="^.link(?: |$)(.*)"))
-async def permalink(mention):
-  user, custom = await get_user_from_event(mention)
-    if not user:
-        return
-    if custom:
-        await mention.edit(f"[{custom}](tg://user?id={user.id})")
-    else:
-        tag = user.first_name.replace("\u2060",
-                                      "") if user.first_name else user.username
-        await mention.edit(f"[{tag}](tg://user?id={user.id})")
 
         
 @borg.on(events.NewMessage(outgoing=True, pattern="^.adminlist$"))
