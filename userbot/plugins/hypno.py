@@ -7,12 +7,12 @@ Available Commands:
 from telethon import events
 
 import asyncio
+from userbot.utils import admin_cmd
 
 
 
 
-
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=r"hypno(.*)", outgoing=True))
 
 async def _(event):
 
