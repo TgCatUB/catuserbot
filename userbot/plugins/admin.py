@@ -132,110 +132,99 @@ async def setgrouppic(eventPic):
             await eventPic.edit("`Reply .setgrouppic to an Image to set it as group's icon.`")
 
 
-@register(outgoing=True, pattern="^.promote(?: |$)(.*)")
-@errors_handler
-async def promote(promt):
-    """ For .promote command, promotes the replied/tagged person """
-    # Get targeted chat
-    chat = await promt.get_chat()
-    # Grab admin status or creator in a chat
-    admin = chat.admin_rights
-    creator = chat.creator
-
-    # If not admin and not creator, also return
-    if not admin and not creator:
-        await promt.edit(NO_ADMIN)
-        return
-
-    new_rights = ChatAdminRights(add_admins=False,
-                                 invite_users=True,
-                                 change_info=False,
-                                 ban_users=True,
-                                 delete_messages=True,
-                                 pin_messages=True)
-
-    await promt.edit("`Promoting...`")
-    user, rank = await get_user_from_event(promt)
-    if not rank:
-        rank = "admeme"  # Just in case.
-    if user:
-        pass
-    else:
-        return
-
-    # Try to promote if current user is admin or creator
-    try:
-        await promt.client(
-            EditAdminRequest(promt.chat_id, user.id, new_rights, rank))
-        await promt.edit("`Promoted Successfully! Now gib Party`")
-
-    # If Telethon spit BadRequestError, assume
-    # we don't have Promote permission
-    except BadRequestError:
-        await promt.edit(NO_PERM)
-        return
-
-    # Announce to the logging group if we have promoted successfully
-    if BOTLOG:
-        await promt.client.send_message(
-            BOTLOG_CHATID, "#PROMOTE\n"
-            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
+@borg.on(events.NewMessage(outgoing=True, pattern="^.promote(?: |$)(.*)"))
+async def promote(eventPromote):
+    if not eventPromote.text[0].isalpha() \
+            and eventPromote.text[0] not in ("/", "#", "@", "!"):
+        chat = await eventPromote.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            await eventPromote.edit("`I am not an admin!`")
+            return
+        newAdminRights = ChatAdminRights(
+            add_admins=False,
+            invite_users=True,
+            change_info=False,
+            ban_users=True,
+            delete_messages=True,
+            pin_messages=True
+        )
+        await eventPromote.edit("`` I empower this person ... ''")
+        user = await get_user_from_event(eventPromote)
+        if user:
+            pass
+        else:
+            return
+        try:
+            await eventPromote.client(
+                EditAdminRequest(
+                    eventPromote.chat_id,
+                    user.id,
+                    newAdminRights,
+                    rank = ""
+                )
+            )
+            await eventPromote.edit("`Successfully authorized!`")
+        except BadRequestError:
+            await eventPromote.edit("`I don't have enough powers! '")
+            return
+        if ENABLE_LOG:
+            await eventPromote.client.send_message(
+                LOGGING_CHATID,
+                "#PROMOTE\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {eventPromote.chat.title}(`{eventPromote.chat_id}`)"
+            )
 
 
-@register(outgoing=True, pattern="^.demote(?: |$)(.*)")
-@errors_handler
-async def demote(dmod):
-    """ For .demote command, demotes the replied/tagged person """
-    # Admin right check
-    chat = await dmod.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
+@borg.on(events.NewMessage(outgoing=True, pattern="^.demote(?: |$)(.*)"))
+async def demote(eventDemote):
+    if not eventDemote.text[0].isalpha() and eventDemote.text[0] not in ("/", "#", "@", "!"):
+        chat = await eventDemote.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            await eventDemote.edit("`I am not an admin!`")
+            return
+        await eventDemote.edit("`Demoting...`")
+        user = await get_user_from_event(eventDemote)
+        if user:
+            pass
+        else:
+            return
+        newAdminRights = ChatAdminRights(
+            add_admins=None,
+            invite_users=None,
+            change_info=None,
+            ban_users=None,
+            delete_messages=None,
+            pin_messages=None
+        )
+        try:
+            await eventDemote.client(
+                EditAdminRequest(
+                    eventDemote.chat_id,
+                    user.id,
+                    newAdminRights,
+                    rank = ""
+                )
+            )
+        except BadRequestError:
+            await eventDemote.edit("`I don't have sufficient permissions!`")
+            return
+        await eventDemote.edit("`Powers successfully removed!`")
+        if ENABLE_LOG:
+            await eventDemote.client.send_message(
+                LOGGING_CHATID,
+                "#DEMOTE\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {eventDemote.chat.title}(`{eventDemote.chat_id}`)"
+            )
 
-    if not admin and not creator:
-        await dmod.edit(NO_ADMIN)
-        return
 
-    # If passing, declare that we're going to demote
-    await dmod.edit("`Demoting...`")
-    rank = "admeme"  # dummy rank, lol.
-    user = await get_user_from_event(dmod)
-    user = user[0]
-    if user:
-        pass
-    else:
-        return
 
-    # New rights after demotion
-    newrights = ChatAdminRights(add_admins=None,
-                                invite_users=None,
-                                change_info=None,
-                                ban_users=None,
-                                delete_messages=None,
-                                pin_messages=None)
-    # Edit Admin Permission
-    try:
-        await dmod.client(
-            EditAdminRequest(dmod.chat_id, user.id, newrights, rank))
-
-    # If we catch BadRequestError from Telethon
-    # Assume we don't have permission to demote
-    except BadRequestError:
-        await dmod.edit(NO_PERM)
-        return
-    await dmod.edit("`Demoted this retard Successfully!`")
-
-    # Announce to the logging group if we have demoted successfully
-    if BOTLOG:
-        await dmod.client.send_message(
-            BOTLOG_CHATID, "#DEMOTE\n"
-            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
-        
-  
-  
-        
-@borg.on(events.NewMessage(outgoing=True, pattern="^.bots$"))
+            @borg.on(events.NewMessage(outgoing=True, pattern="^.bots$"))
 async def listbots(eventListBots):
     info = await eventListBots.client.get_entity(eventListBots.chat_id)
     title = info.title if info.title else "this chat"
