@@ -10,7 +10,7 @@ import os
 import sys
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=r"\.meme", outgoing=True))
+@borg.on(events.NewMessage(pattern=r"\.meme", outgoing=True))
 async def meme(event):
     if event.fwd_from:
         return   
