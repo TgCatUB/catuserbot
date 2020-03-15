@@ -19,23 +19,26 @@ from userbot import CMD_HELP
 
 
 
-@borg.on(admin_cmd(pattern=r"call(.*)", outgoing=True))
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=r"call(.*)"))
+#@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
 async def _(event):
 
     if event.fwd_from:
 
         return
+    
+    await event.edit("calling......... tring ...tring")
+    await asyncio.sleep(2)
 
     animation_interval = 3
 
     animation_ttl = range(0, 18)
 
-    input_str = event.pattern_match.group(1)
+    
 
-    if input_str == "call":
+  
 
-        await event.edit(input_str)
+        
 
         animation_chars = [
         
