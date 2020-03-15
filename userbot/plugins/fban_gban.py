@@ -16,75 +16,54 @@ from telethon import events
 from userbot.uniborgConfig import Config
 from userbot.utils import admin_cmd
 
-
-from userbot.plugins.sql_helper.gmute_sql import is_gmuted, gmute, ungmute
 from userbot.plugins.sql_helper.mute_sql import is_muted, mute ,unmute
 from userbot.plugins.sql_helper.fban_sql_helper import is_fban,get_fban,add_chat_fban,remove_chat_fban
-from userbot.plugins.sql_helper.gban_sql_helper import is_gban,get_gban,add_chat_gban,remove_chat_gban
 from userbot.plugins.sql_helper.spam_mute_sql import is_muted,mute,unmute
 
 
 # MONGOCLIENT = Config.MONGOCLIENT
 
-@borg.on(admin_cmd(pattern=("gban ?(.*)")))
-async def gban_all(msg):
-    # if not is_mongo_alive():
-    #     await msg.edit("`Database connections failing!`")
-    #     return
-    textx = await msg.get_reply_message()
-    if textx:
-        try:
-            banreason = "[userbot] "
-            banreason += banreason.join(msg.text.split(" ")[1:])
-            if banreason == "[userbot]":
-                raise TypeError
-        except TypeError:
-            banreason = "[userbot] gban"
-    else:
-        banid = msg.text.split(" ")[1]
-        if banid.isnumeric():
-            # if its a user id
-            banid = int(banid)
+@"""Globally Ban users from all the
+Group Administrations bots where you are SUDO
+Available Commands:
+.gban REASON
+.ungban REASON"""
+
+import asyncio
+
+
+
+@borg.on(admin_cmd("gban ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    reason = event.pattern_match.group(1)
+    if event.reply_to_msg_id:
+        r = await event.get_reply_message()
+        if r.forward:
+            r_from_id = r.forward.from_id or r.from_id
         else:
-            # deal wid the usernames
-            if msg.message.entities is not None:
-                probable_user_mention_entity = msg.message.entities[0]
-
-            if isinstance(probable_user_mention_entity,
-                          MessageEntityMentionName):
-                banid = probable_user_mention_entity.user_id
-        try:
-            banreason = "[userbot] "
-            banreason += banreason.join(msg.text.split(" ")[2:])
-            if banreason == "[userbot]":
-                raise TypeError
-        except TypeError:
-            banreason = "[userbot] fban"
-    if not textx:
-        await msg.edit(
-            "Reply Message missing! Might fail on many bots! Still attempting Gban!"
+            r_from_id = r.from_id
+        await borg.send_message(
+            Config.G_BAN_LOGGER_GROUP,
+            "!gban [user](tg://user?id={}) {}".format(r_from_id, reason)
         )
-        # Ensure User Read the warning
-        await sleep(1)
-    x = get_gban()
-    count = 0
-    banlist = []
-    for i in x:
-        banlist.append(i["chat_id"])
-    for banbot in banlist:
-        async with bot.conversation(banbot) as conv:
-            if textx:
-                c = await msg.forward_to(banbot)
-                await c.reply("/id")
-            await conv.send_message(f"/gban {banid} {banreason}")
-            await conv.get_response()
-            await bot.send_read_acknowledge(conv.chat_id)
-            count += 1
-            # We cant see if he actually Gbanned. Let this stay for now
-            await msg.edit("`Gbanned on " + str(count) + " bots!`")
-            await sleep(0.2)
+    await event.delete()
 
 
+@borg.on(admin_cmd("ungban ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    reason = event.pattern_match.group(1)
+    if event.reply_to_msg_id:
+        r = await event.get_reply_message()
+        r_from_id = r.from_id
+        await borg.send_message(
+            Config.G_BAN_LOGGER_GROUP,
+            "!ungban [user](tg://user?id={}) {}".format(r_from_id, reason)
+        )
+    await event.delete()
 
 @borg.on(admin_cmd(pattern=("fban ?(.*)")))
 async def fedban_all(msg):
@@ -179,14 +158,6 @@ async def add_to_fban(chat):
 
 
 
-@borg.on(admin_cmd(pattern=("addgban ?(.*)")))
-async def add_to_gban(chat):
-    # if not is_mongo_alive():
-    #     await chat.edit("`Database connections failing!`")
-    #     return
-    add_chat_gban(chat.chat_id)
-    print(chat.chat_id)
-    await chat.edit("`Added this bot under the Gbanlist!`")
 
 
 
@@ -200,11 +171,5 @@ async def remove_from_fban(chat):
 
 
 
-@borg.on(admin_cmd(pattern=("removegban ?(.*)")))
-async def remove_from_gban(chat):
-    # if not is_mongo_alive():
-    #     await chat.edit("`Database connections failing!`")
-    #     return
-    remove_chat_gban(chat.chat_id)
-    await chat.edit("`Removed this bot from the Gbanlist!`")
+
 
