@@ -178,7 +178,7 @@ async def moni(event):
         return
 """
 
-@register(outgoing=True, pattern=r"^.google (.*)")
+@register(outgoing=True, pattern=r"^.googles (.*)")
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
     match = q_event.pattern_match.group(1)
@@ -479,7 +479,7 @@ async def lang(value):
             f"`Language for {scraper} changed to {LANG.title()}.`")
 
 
-@register(outgoing=True, pattern="^.yt (.*)")
+@register(outgoing=True, pattern="^.yts (.*)")
 async def yt_search(video_q):
     """ For .yt command, do a YouTube search from Telegram. """
     query = video_q.pattern_match.group(1)
