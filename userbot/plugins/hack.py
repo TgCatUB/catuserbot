@@ -14,7 +14,7 @@ from userbot.utils import admin_cmd
 
 
 
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=r"call(.*)", outgoing=True))
 
 async def _(event):
 
