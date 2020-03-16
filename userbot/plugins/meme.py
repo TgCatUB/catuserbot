@@ -54,7 +54,7 @@ Bonus : Flower Boquee Generater
 usage:- .flower
 
 """
-@borg.on(admin_cmd(pattern=r"\.lp", outgoing=True))
+@borg.on(events.NewMessage(pattern=r"\.lp", outgoing=True))
 async def meme(event):
     if event.fwd_from:
         return   
@@ -82,7 +82,7 @@ async def meme(event):
     await asyncio.sleep(sleepValue)
     
     
-@borg.on(admin_cmd(pattern=r"\.flower", outgoing=True))
+@borg.on(events.NewMessage(pattern=r"\.flower", outgoing=True))
 async def meme(event):
     if event.fwd_from:
         return   
