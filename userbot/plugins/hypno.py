@@ -12,7 +12,7 @@ from userbot import CMD_HELP
 
 
 
-@borg.on(events.NewMessage(pattern=r"hypno(.*)", outgoing=True))
+@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
 
 async def _(event):
 
