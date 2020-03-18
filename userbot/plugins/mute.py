@@ -85,41 +85,41 @@ async def startmute(event):
         await asyncio.sleep(2)
     else:
         if event.fwd_from:
-        return
+            return
         elif event.is_private:
-        await event.edit("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
-        private = True
-        reply = await event.get_reply_message()
-        if event.pattern_match.group(1) is not None:
-        userid = event.pattern_match.group(1)
-        elif reply is not None:
-        userid = reply.sender_id
-        elif private is True:
-        userid = event.chat_id
-        else:
-        return await event.edit("Please reply to a user or add their userid into the command to mute them.")
-        chat_id = event.chat_id
-        chat = await event.get_chat()
-        if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None: 
-        if chat.admin_rights.delete_messages is True:
+            await event.edit("Unexpected issues or ugly errors may occur!")
+            await asyncio.sleep(3)
+            private = True
+            reply = await event.get_reply_message()
+            if event.pattern_match.group(1) is not None:
+            userid = event.pattern_match.group(1)
+            elif reply is not None:
+            userid = reply.sender_id
+            elif private is True:
+            userid = event.chat_id
+            else:
+            return await event.edit("Please reply to a user or add their userid into the command to mute them.")
+            chat_id = event.chat_id
+            chat = await event.get_chat()
+            if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None: 
+            if chat.admin_rights.delete_messages is True:
+                pass
+            else:
+                return await event.edit("`You can't mute a person if you dont have delete messages permission. ಥ﹏ಥ`")
+            elif "creator" in vars(chat):
             pass
-        else:
-            return await event.edit("`You can't mute a person if you dont have delete messages permission. ಥ﹏ಥ`")
-        elif "creator" in vars(chat):
-        pass
-        elif private == True:
-        pass
-        else:
-        return await event.edit("`You can't mute a person without admin rights niqq.` ಥ﹏ಥ  ")
-        if is_muted(userid, chat_id):
-        return await event.edit("This user is already muted in this chat ~~lmfao sed rip~~")
-        try:
-        mute(userid, chat_id)
-        except Exception as e:
-        await event.edit("Error occured!\nError is " + str(e))
-        else:
-        await event.edit("Successfully muted that person \n｀-´)⊃━☆ﾟ.*･｡ﾟ ")
+            elif private == True:
+            pass
+            else:
+            return await event.edit("`You can't mute a person without admin rights niqq.` ಥ﹏ಥ  ")
+            if is_muted(userid, chat_id):
+            return await event.edit("This user is already muted in this chat ~~lmfao sed rip~~")
+            try:
+            mute(userid, chat_id)
+            except Exception as e:
+            await event.edit("Error occured!\nError is " + str(e))
+            else:
+            await event.edit("Successfully muted that person \n｀-´)⊃━☆ﾟ.*･｡ﾟ ")
         
 @command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
 async def endmute(event):
