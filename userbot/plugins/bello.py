@@ -5,7 +5,6 @@ Syntax: .belo
 Quotes credits: Being logical Channel
 """
 
-
 from telethon import events
 
 import asyncio
@@ -15,11 +14,13 @@ import os
 import sys
 
 import random
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
 
-#@borg.on(events.NewMessage(pattern="^.belo ?(.*)", outgoing=True))
-@borg.on(admin_cmd(pattern="belo ?(.*)"))
+from uniborg.util import admin_cmd
+
+
+
+@borg.on(admin_cmd(pattern=r"belo"))
+
 async def _(event):
 
     if event.fwd_from:
@@ -420,4 +421,5 @@ async def _(event):
 
         await event.edit("`\"If we put solar panels above parking lots, then our cars wouldn't get hot and we would have a lot of clean energy.\"`")
 
- 
+    
+
