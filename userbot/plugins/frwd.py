@@ -5,7 +5,7 @@ from telethon import events
 from telethon import sync
 from telethon.tl import types, functions
 from userbot.utils import admin_cmd
-
+from userbot.uniborgConfig import Config
 
 @borg.on(admin_cmd(pattern="frwd"))
 async def _(event):
