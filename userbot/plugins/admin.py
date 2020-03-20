@@ -499,7 +499,7 @@ async def rm_deletedacc(show):
             \nCHAT: {show.chat.title}(`{show.chat_id}`)")
 
 
-@register(outgoing=True, pattern="^.admins$")
+@register(outgoing=True, pattern="^.adminslist$")
 @errors_handler
 async def get_admin(show):
     """ For .admins command, list all of the admins of the chat. """
@@ -609,7 +609,7 @@ async def kick(usr):
             f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
 
 
-@register(outgoing=True, pattern="^.users ?(.*)")
+@register(outgoing=True, pattern="^.userslist ?(.*)")
 @errors_handler
 async def get_users(show):
     """ For .users command, list all of the users in a chat. """
