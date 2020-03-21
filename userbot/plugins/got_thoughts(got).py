@@ -191,3 +191,24 @@ async def _(event):
     if x==40:
 
         await event.edit("`\"I wish I was the monster you think I am!\"`")
+    if x==41:
+        await event.edit("Never forget what you are. The rest of the world will not.Wear it like armor,\n and it can never be used to hurt you.")
+    if x==42:
+        await event.edit("There is only one thing we say to death: **Not today.**")
+    if x==43:
+        await event.edit("If you think this has a happy ending, you haven’t been **paying attention**.")
+    if x==44:
+        await event.edit("Chaos isn’t a pit. Chaos is a ladder.")
+    if x==45:
+        await event.edit("You know nothing, **Jon Snow**")
+    if x==46:
+        await event.edit("**Winter** is coming.")
+    if x==47:
+        await event.edit("When you play the **game of thrones**, you win or you die.")    
+    if x==48:
+        await event.edit("I'm not going to **stop** the wheel, I'm going to **break** the wheel.")
+    if x==49:
+        await event.edit("When people ask you what happened here, tell them the **North remembers**. Tell them winter came for **House Frey**.")
+    if x==50:
+        await event.edit("When the snows fall and the white winds blow,\n the lone wolf dies, but the pack **survives**.")
+    
