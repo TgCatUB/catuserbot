@@ -1,26 +1,38 @@
-"""Download & Upload Images on Telegram
-Syntax: .img <Name>"""
+# Adapted from OpenUserBot for Uniborg
 
+"""Download & Upload Images on Telegram\n
+Syntax: `.img <Name>` or `.img (replied message)`
+\n Upgraded and Google Image Error Fixed by @NeoMatrix90 aka @kirito6969
+"""
 
-from google_images_download import google_images_download
+from userbot.utils.google_images_download import googleimagesdownload
 import os
 import shutil
 from re import findall
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd("img ?(.*)"))
+@borg.on(admin_cmd(pattern="img ?(.*)"))
 async def img_sampler(event):
-    await event.edit("Processing...")
-    query = event.pattern_match.group(1)
+    await event.edit("`Processing Bsdk..`")
+    reply = await event.get_reply_message()
+    if event.pattern_match.group(1):
+        query = event.pattern_match.group(1)
+    elif reply:
+        query = reply.message
+    else:
+    	await event.edit("`What I am Supposed to Search `")
+    	return
+        
     lim = findall(r"lim=\d+", query)
+    # lim = event.pattern_match.group(1)
     try:
         lim = lim[0]
         lim = lim.replace("lim=", "")
         query = query.replace("lim=" + lim[0], "")
     except IndexError:
-        lim = 3
-    response = google_images_download.googleimagesdownload()
+        lim = 5
+    response = googleimagesdownload()
 
     # creating list of arguments
     arguments = {
@@ -33,6 +45,6 @@ async def img_sampler(event):
     # passing the arguments to the function
     paths = response.download(arguments)
     lst = paths[0][query]
-    await borg.send_file(await borg.get_input_entity(event.chat_id), lst)
+    await event.client.send_file(await event.client.get_input_entity(event.chat_id), lst)
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await event.delete()
