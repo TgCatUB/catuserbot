@@ -9,6 +9,8 @@ import re
 import logging
 import inspect
 
+from typing import List
+
 def command(**args):
     stack = inspect.stack()
     previous_stack_frame = stack[1]
