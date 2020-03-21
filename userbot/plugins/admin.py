@@ -29,6 +29,8 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot 
 from userbot.utils import register, errors_handler, admin_cmd
+from userbot.uniborgConfig import Config
+BOTLOG_CHATID= Config.PRIVATE_CHANNEL_BOT_API_ID
 
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
