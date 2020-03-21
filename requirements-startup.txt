@@ -19,6 +19,7 @@ cfscrape
 coffeehouse
 convertdate
 coronavirus
+covind
 cowpy
 cryptg
 csvfaker
