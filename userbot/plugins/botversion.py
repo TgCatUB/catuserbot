@@ -18,7 +18,7 @@ import distutils
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd(pattern="bver(.*)"))
+@borg.on(admin_cmd(pattern="ver(.*)"))
 async def bot_ver(event):
     """ For .ver command, get the bot version. """
     if which("git") is not None:
