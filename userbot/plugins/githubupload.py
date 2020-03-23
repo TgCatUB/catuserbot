@@ -15,7 +15,7 @@ from telethon.tl.types import DocumentAttributeVideo
 from uniborg.util import admin_cmd, humanbytes, progress, time_formatter
 
 GIT_TEMP_DIR = "./temp/"
-@borg.on(admin_cmd(pattern="commit ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="commit1 ?(.*)", allow_sudo=True))
 async def download(event):
 	if event.fwd_from:
 		return	
