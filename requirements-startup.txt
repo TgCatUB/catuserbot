@@ -21,6 +21,7 @@ convertdate
 coronavirus
 covid
 cowpy
+cowsay
 cryptg
 csvfaker
 dadjokes-cli
