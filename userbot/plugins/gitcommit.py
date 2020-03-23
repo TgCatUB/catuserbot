@@ -16,7 +16,7 @@ from telethon.tl.types import DocumentAttributeVideo
 
 
 GIT_TEMP_DIR = "./userbot/temp/"
-@command(pattern="^.commit", outgoing=True)
+@command(pattern="^.commit2", outgoing=True)
 async def download(event):
     if event.fwd_from:
         return	
