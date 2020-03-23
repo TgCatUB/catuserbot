@@ -5,13 +5,11 @@
 import requests
 import bs4 
 import re
-
-import telethon 
-
 from userbot.utils import admin_cmd
+from telethon import *
+from userbot import *
 
-
-@borg.on(admin_cmd(pattern="appd (.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="app (.*)", allow_sudo=True))
 async def apk(e):
     try:
         app_name = e.pattern_match.group(1)
@@ -32,14 +30,14 @@ async def apk(e):
         app_details += "\n\n<code>Developer :</code> <a href='"+app_dev_link+"'>"+app_dev+"</a>"
         app_details += "\n<code>Rating :</code> "+app_rating.replace("Rated ", "⭐ ").replace(" out of ", "/").replace(" stars", "", 1).replace(" stars", "⭐ ").replace("five", "5")
         app_details += "\n<code>Features :</code> <a href='"+app_link+"'>View in Play Store</a>"
-        app_details += "\n\n===> @R4V4N4 <==="
+        app_details += "\n\n===> @mrconfused <==="
         await e.edit(app_details, link_preview = True, parse_mode = 'HTML')
     except IndexError:
         await e.edit("No result found in search. Please enter **Valid app name**")
     except Exception as err:
         await e.edit("Exception Occured:- "+str(err))
 
-@borg.on(admin_cmd(pattern="appdl (.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="appr (.*)", allow_sudo=True))
 async def apkr(e):
     try:
         app_name = e.pattern_match.group(1)
@@ -60,8 +58,8 @@ async def apkr(e):
         app_details += "\n\n<code>Developer :</code> <a href='"+app_dev_link+"'>"+app_dev+"</a>"
         app_details += "\n<code>Rating :</code> "+app_rating.replace("Rated ", "⭐ ").replace(" out of ", "/").replace(" stars", "", 1).replace(" stars", "⭐ ").replace("five", "5")
         app_details += "\n<code>Features :</code> <a href='"+app_link+"'>View in Play Store</a>"
-        app_details += "\n\n<b>Download : </b> <a href='https://t.me/joinchat/JCu-H1NikiYDgNjpjPYd4A'>Request_Here</a>"
-        app_details += "\n\n===> @Xpl0iter <==="
+        app_details += "\n\n<b>Download : </b> <a href='@indiansongs143'>Request_Here</a>"
+        app_details += "\n\n===> @mrconfused <==="
         await e.edit(app_details, link_preview = True, parse_mode = 'HTML')
     except IndexError:
         await e.edit("No result found in search. Please enter **Valid app name**")
