@@ -16,6 +16,9 @@ import random
 
 
 
+from userbot.utils import admin_cmd
+
+@borg.on(admin_cmd(pattern=f"gotm", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.gotm", outgoing=True))
 
 async def _(event):
