@@ -2,6 +2,7 @@
 from telethon import events
 
 import asyncio
+from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(pattern=f"bombs", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.bombs", outgoing=True))
