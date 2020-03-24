@@ -10,8 +10,6 @@ from telethon import events
 
 from datetime import datetime
 
-from userbot.utils import admin_cmd
-
 import importlib.util
 
 import asyncio
@@ -23,6 +21,9 @@ import importlib.util
 
 
 
+from userbot.utils import admin_cmd
+
+@borg.on(admin_cmd(pattern=f"(q?w)char", allow_sudo=True))
 @borg.on(events.NewMessage(outgoing=True, pattern='^\.(q?w)char'))
 
 async def timer_blankx(e):
