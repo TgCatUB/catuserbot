@@ -3,7 +3,7 @@ from telethon import events
 
 import asyncio
 
-
+@borg.on(admin_cmd(pattern=f"bombs", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.bombs", outgoing=True))
 async def _(event):
     if event.fwd_from:
@@ -28,6 +28,6 @@ async def _(event):
     await asyncio.sleep(0.5)
     await event.edit("▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n😵😵😵😵 \n")
     await asyncio.sleep(0.5)
-    await event.edit("`RIP PLOXXX...Gand Marao...`")
+    await event.edit("`RIP PLOXXX......`")
     await asyncio.sleep(2)
     await event.delete()
