@@ -9,6 +9,9 @@ import asyncio
 from collections import deque
 
 
+from userbot.utils import admin_cmd
+
+@borg.on(admin_cmd(pattern=f"sysd", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.sysd", outgoing=True))
 async def sysdetails(sysd):
     """ a. """
