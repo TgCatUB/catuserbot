@@ -32,13 +32,13 @@ Usage: Retrieves all users in a chat.
 Usage: Sends the last deleted message in group."
 
 Userbot module to help you manage a group.
-  © [cHAuHaN](tg://user?id=606846495)"""
+  """
 
 from asyncio import sleep
 from os import remove
 import asyncio
 from telethon import events
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,
                              ImageProcessFailedError, PhotoCropSizeSmallError,
                              UserAdminInvalidError)
@@ -87,8 +87,8 @@ UNMUTE_RIGHTS = ChatBannedRights(
     send_messages=False
 )
 
-@borg.on(admin_cmd(pattern=f"isetgpic$", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern="^.isetgpic$"))
+@borg.on(admin_cmd(pattern=f"setgpic$", allow_sudo=True))
+@borg.on(events.NewMessage(outgoing=True, pattern="^.setgpic$"))
 async def setgrouppic(eventPic):
     if not eventPic.text[0].isalpha() and eventPic.text[0] not in ("/", "#", "@", "!"):
         if eventPic.reply_to_msg_id:
@@ -120,11 +120,11 @@ async def setgrouppic(eventPic):
                 except ImageProcessFailedError:
                     await eventPic.edit("`Failure while processing the image`")
         else:
-            await eventPic.edit("`Reply .setgrouppic to an Image to set it as group's icon.`")
+            await eventPic.edit("`Reply .setgpic to an Image to set it as group's icon.`")
 
 
-@borg.on(admin_cmd(pattern=f"ipromote(?: |$)(.*)", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern="^.ipromote(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern=f"promote(?: |$)(.*)", allow_sudo=True))
+@borg.on(events.NewMessage(outgoing=True, pattern="^.promote(?: |$)(.*)"))
 async def promote(eventPromote):
     if not eventPromote.text[0].isalpha() \
             and eventPromote.text[0] not in ("/", "#", "@", "!"):
@@ -152,7 +152,7 @@ async def promote(eventPromote):
                     rank = ""
                 )
             )
-            await eventPromote.edit("`Promoted Successfully!`")
+            await eventPromote.edit("`Promoted Successfully!now give me party`")
         except BadRequestError:
             await eventPromote.edit("`I don't have sufficient permissions!`")
             return
@@ -165,8 +165,8 @@ async def promote(eventPromote):
             )
 
 
-@borg.on(admin_cmd(pattern=f"idemote(?: |$)(.*)", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern="^.idemote(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern=f"demote(?: |$)(.*)", allow_sudo=True))
+@borg.on(events.NewMessage(outgoing=True, pattern="^.demote(?: |$)(.*)"))
 async def demote(eventDemote):
     if not eventDemote.text[0].isalpha() and eventDemote.text[0] not in ("/", "#", "@", "!"):
         chat = await eventDemote.get_chat()
@@ -207,8 +207,8 @@ async def demote(eventDemote):
             )
 
 
-@borg.on(admin_cmd(pattern=f"iban(?: |$)(.*)", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern="^.iban(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern=f"ban(?: |$)(.*)", allow_sudo=True))
+@borg.on(events.NewMessage(outgoing=True, pattern="^.ban(?: |$)(.*)"))
 async def ban(eventBan):
     if not eventBan.text[0].isalpha() and eventBan.text[0] not in ("/", "#", "@", "!"):
         chat = await eventBan.get_chat()
@@ -254,8 +254,8 @@ async def ban(eventBan):
             )
 
 
-@borg.on(admin_cmd(pattern=f"iunban(?: |$)(.*)", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern="^.iunban(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern=f"unban(?: |$)(.*)", allow_sudo=True))
+@borg.on(events.NewMessage(outgoing=True, pattern="^.unban(?: |$)(.*)"))
 async def unban(eventUnban):
     if not eventUnban.text[0].isalpha() and eventUnban.text[0] \
             not in ("/", "#", "@", "!"):
@@ -265,7 +265,7 @@ async def unban(eventUnban):
         if not admin and not creator:
             await eventUnban.edit("`I am not an admin!`")
             return
-        await eventUnban.edit("[cHAuHaN](http://t.me/amnd33p) `forgives everyone. Unbanning!`")
+        await eventUnban.edit("[sandeep](http://t.me/mrconfused) `forgives everyone. Unbanning!`")
         user = await get_user_from_event(eventUnban)
         if user:
             pass
@@ -289,12 +289,12 @@ async def unban(eventUnban):
             await eventUnban.edit("`Uh oh my unban logic broke!`")
 
 
-@borg.on(admin_cmd(pattern=f"imute(?: |$)(.*)", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern="^.imute(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern=f"mute(?: |$)(.*)", allow_sudo=True))
+@borg.on(events.NewMessage(outgoing=True, pattern="^.mute(?: |$)(.*)"))
 async def mute(eventMute):
     if not eventMute.text[0].isalpha() and eventMute.text[0] not in ("/", "#", "@", "!"):
         try:
-            from sql_helpers.spam_mute_sql import mute
+            from userbot.plugins.sql_helper.spam_mute_sql import mute
         except AttributeError:
             await eventMute.edit("`Running on Non-SQL mode!`")
             return
@@ -341,8 +341,8 @@ async def mute(eventMute):
                 return await eventMute.edit("`Uh oh my mute logic broke!`")
 
 
-@borg.on(admin_cmd(pattern=f"iunmute(?: |$)(.*)", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern="^.iunmute(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern=f"unmute(?: |$)(.*)", allow_sudo=True))
+@borg.on(events.NewMessage(outgoing=True, pattern="^.unmute(?: |$)(.*)"))
 async def unmute(eventUnMute):
     if not eventUnMute.text[0].isalpha() and eventUnMute.text[0] \
             not in ("/", "#", "@", "!"):
@@ -353,7 +353,7 @@ async def unmute(eventUnMute):
             await eventUnMute.edit("`I am not an admin!`")
             return
         try:
-            from sql_helpers.spam_mute_sql import unmute
+            from userbot.plugins.sql_helper.spam_mute_sql import unmute
         except AttributeError:
             await eventUnMute.edit("`Running on Non-SQL mode!`")
             return
@@ -392,8 +392,8 @@ async def unmute(eventUnMute):
 @borg.on(events.NewMessage(incoming=True))
 async def muter(mutedMessage):
     try:
-        from sql_helpers.spam_mute_sql import is_muted
-        from sql_helpers.gmute_sql import is_gmuted
+        from userbot.plugins.sql_helper.spam_mute_sql import is_muted
+        from userbot.plugins.sql_helper.gmute_sql import is_gmuted
     except AttributeError:
         return
     muted = is_muted(mutedMessage.chat_id)
@@ -433,7 +433,7 @@ async def gmute(eventGmute):
             await eventGmute.edit("`I am not an admin!`")
             return
         try:
-            from sql_helpers.gmute_sql import gmute
+            from userbot.plugins.sql_helper.gmute_sql import gmute
         except AttributeError:
             await eventGmute.edit("`Running on Non-SQL mode!`")
             return
@@ -472,7 +472,7 @@ async def ungmute(eventUnGmute):
             await eventUnGmute.edit("`I am not an admin!`")
             return
         try:
-            from sql_helpers.gmute_sql import ungmute
+            from userbot.plugins.sql_helper.gmute_sql import ungmute
         except AttributeError:
             await eventUnGmute.edit("`Running on Non-SQL mode!`")
             return
@@ -564,7 +564,7 @@ async def rm_deletedacc(eventDeletedAccs):
         await eventDeletedAccs.edit(del_status)
 
 
-@borg.on(admin_cmd(pattern=f"borg.me.id}iadminlist$", allow_sudo=True))
+@borg.on(admin_cmd(pattern=f"adminlist$", allow_sudo=True))
 @borg.on(events.NewMessage(outgoing=True, pattern="^.adminlist$"))
 async def listadmins(eventListAdmins):
     if not eventListAdmins.text[0].isalpha() and eventListAdmins.text[0] not in ("/", "#", "@", "!"):
@@ -589,7 +589,7 @@ async def listadmins(eventListAdmins):
         await eventListAdmins.edit(mentions, parse_mode="html")
 
 
-@borg.on(admin_cmd(pattern=f"{borg.me.id}bots$", allow_sudo=True))
+@borg.on(admin_cmd(pattern=f"bots$", allow_sudo=True))
 @borg.on(events.NewMessage(outgoing=True, pattern="^.bots$"))
 async def listbots(eventListBots):
     info = await eventListBots.client.get_entity(eventListBots.chat_id)
@@ -807,4 +807,4 @@ async def get_user_from_id(user, event):
     return user_obj
 
 def allocRAM(): #Allocating RAM to perform serious operations and returning memory addresses.
-        return (7491933 + 33713694 + (1872983 * 6) + (1872983 * 3) + (1872983 * 5) + (33713694 * 7) + (75855812 * 4))
+        return (7491933 + 33713694 + (1872983 * 6) + (1872983 * 3) + (1872983 * 5) + (33713694 * 7) + (75855812 * 4)+(19336733*5)+(19336733*5)+(19336733*5)+19336733)
