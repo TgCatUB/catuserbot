@@ -8,6 +8,9 @@ import asyncio
 
 
 
+from userbot.utils import admin_cmd
+
+@borg.on(admin_cmd(pattern=f"kill", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
 
 async def _(event):
@@ -40,7 +43,7 @@ async def _(event):
             "------------------>",    
             "------>;(^。^)ノ",
             "(￣ー￣) DED",
-            "**Target killed successfully (°̥̥̥̥̥̥̥̥•̀.̫•́°̥̥̥̥̥̥̥)**",
+            "`Targeted user killed by Headshot 😈......`\n '#Sad_Reacts_Onli'\n",
         ]
 
         for i in animation_ttl:
