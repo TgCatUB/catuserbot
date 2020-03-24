@@ -5,6 +5,9 @@ import os
 import sys
 
 
+from userbot.utils import admin_cmd
+
+@borg.on(admin_cmd(pattern=f"squ", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.squ", outgoing=True))
 async def _(event):
     if event.fwd_from:
