@@ -12,6 +12,9 @@ import asyncio
 
 
 
+from userbot.utils import admin_cmd
+
+@borg.on(admin_cmd(pattern=f"virus", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
 
 async def _(event):
