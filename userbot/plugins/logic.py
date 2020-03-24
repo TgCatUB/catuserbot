@@ -6,11 +6,14 @@ from telethon import events
 import asyncio
 import random
 
+from userbot.utils import admin_cmd
+
+@borg.on(admin_cmd(pattern=f"logic", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.logic", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
-    await event.edit("`Ruk Ek Kamal Ki Fact Soch ta Hoon...`")
+    await event.edit("`processing man wait 2sec can't you wait......`")
     await asyncio.sleep(2)
     x=(random.randrange(1,7))
     if x==1:
