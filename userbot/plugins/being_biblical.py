@@ -13,8 +13,8 @@ import sys
 import random
 from userbot.utils import admin_cmd
 
-
-@borg.on(events.NewMessage(pattern=r"\.BBL", outgoing=True))
+@borg.on(admin_cmd(pattern=f"bbl$", allow_sudo=True))
+@borg.on(events.NewMessage(pattern=r"\.bbl", outgoing=True))
 
 async def _(event):
 
@@ -26,7 +26,7 @@ async def _(event):
 
     await asyncio.sleep(2)
 
-    x=(random.randrange(98,101))
+    x=(random.randrange(1,101))
 
     if x==1:
 
