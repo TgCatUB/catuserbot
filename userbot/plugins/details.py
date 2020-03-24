@@ -10,6 +10,8 @@ from telethon.tl.types import MessageEntityPre
 from telethon.tl.tlobject import TLObject
 import datetime
 
+from userbot.utils import admin_cmd
+
 PRINTABLE_SET = set(bytes(string.printable, 'ascii'))
 STR_LEN_MAX = 256
 BYTE_LEN_MAX = 64
@@ -85,8 +87,8 @@ def yaml_format(obj, indent=0):
 
     return ''.join(result)
 
-
-@borg.on(events.NewMessage(pattern=r"\.new", outgoing=True))
+@borg.on(admin_cmd(pattern=f"details", allow_sudo=True))
+@borg.on(events.NewMessage(pattern=r"\.details", outgoing=True))
 async def _(event):
     if not event.message.is_reply:
         return
