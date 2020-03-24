@@ -374,9 +374,6 @@ RUNSREACTS = [
     "\"Oh, look at me! I'm so cool, I can run from a bot!\" - this person",
     "Yeah yeah, just tap /kickme already.",
     "Here, take this ring and head to Mordor while you're at it.",
-    "Here, take this ring and head to Mordor while you're at it.",
-    "Here, take this ring and head to Mordor while you're at it.",
-    "Here, take this ring and head to Mordor while you're at it.",
     "Legend has it, they're still running...",
     "Unlike Harry Potter, your parents can't protect you from me.",
     "Fear leads to anger. Anger leads to hate. Hate leads to suffering. If you keep running in fear, you might "
@@ -923,21 +920,13 @@ async def zal(zgfy):
         await zgfy.edit("".join(reply_text))
 
 
-@register(outgoing=True, pattern="^.HI$")
+@register(outgoing=True, pattern="^.hey$")
 async def hoi(hello):
     """ Greet everyone! """
     if not hello.text[0].isalpha() and hello.text[0] not in ("/", "#", "@", "!"):
         await hello.edit(random.choice(HELLOSTR))
 			  
-@register(outgoing=True, pattern="^.kill$")
-async def killing (killed):
-    """ Dont Kill Too much -_-"""
-    if not killed.text[0].isalpha() and killed.text[0] not in ("/", "#", "@", "!"):
-        if await killed.get_reply_message():
-            await killed.edit(
-                "`Targeted user killed by Headshot 😈......`\n"
-		"#Sad_Reacts_Onli\n"
-            )
+
 			  
 @register(outgoing=True, pattern="^.bt$")
 async def bluetext(bte):
