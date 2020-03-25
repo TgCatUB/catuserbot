@@ -73,7 +73,7 @@ async def set_not_afk(event):
         USER_AFK = {}  # pylint:disable=E0602
         afk_time = None  # pylint:disable=E0602
 
-
+@borg.on(admin_cmd(pattern=f"afk$", allow_sudo=True)
 @borg.on(events.NewMessage(pattern=r"\.afk ?(.*)", outgoing=True))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
