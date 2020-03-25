@@ -90,12 +90,12 @@ async def meme(event):
 
 @borg.on(admin_cmd(pattern=f"give", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.give", outgoing=True))
-async def meme(event):
+async def give(event):
     if event.fwd_from:
         return   
-    memeVar = event.text
+    giveVar = event.text
     sleepValue = 5
-    memeVar = memeVar[6:]
+    giveVar = giveVar[6:]
            
     await event.edit(give+"        ")
     await event.edit(give+give+"       ")
