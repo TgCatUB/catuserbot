@@ -19,7 +19,7 @@ cfscrape
 coffeehouse
 convertdate
 coronavirus
-covid
+covid==1.4.4
 cowpy
 cowsay
 cryptg
