@@ -20,7 +20,10 @@ from telethon.tl import functions
 from userbot.utils import admin_cmd
 import shutil
 from PIL import Image, ImageDraw, ImageFont
+from userbot.utils import admin_cmd
 
+
+@borg.on(admin_cmd(pattern=f"karpp", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.karpp", outgoing=True))
 async def carbon_api(e):
  while True:
