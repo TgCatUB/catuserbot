@@ -24,7 +24,7 @@ def progress(current, total):
 
 @borg.on(admin_cmd("go (.*)"))
 async def _(event):
-    await event.edit("`UniBorg is Getting Information From Google Please Wait... ✍️🙇`")
+    await event.edit("`cat is Getting Information From Google Please Wait Man... ✍️🙇`")
     match_ = event.pattern_match.group(1)
     match = quote_plus(match_)
     if not match:
@@ -78,7 +78,7 @@ async def _(event):
     await event.delete()
 
 
-@borg.on(admin_cmd("google reverse search"))
+@borg.on(admin_cmd("grs"))
 async def _(event):
     if event.fwd_from:
         return
