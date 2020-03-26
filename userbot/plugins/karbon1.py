@@ -12,7 +12,7 @@ from urllib.error import HTTPError
 from time import sleep
 import asyncio
 import os
-from userbot.utils import registe
+from userbot.utils import register
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CHROME_DRIVER, GOOGLE_CHROME_BIN
 
