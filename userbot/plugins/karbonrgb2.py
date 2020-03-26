@@ -14,7 +14,10 @@ import asyncio
 import os
 import random
 
+from userbot.utils import admin_cmd
 
+
+@borg.on(admin_cmd(pattern=f"rgbk2", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.rgbk2", outgoing=True))
 async def carbon_api(e):
  RED = random.randint(0,256)
