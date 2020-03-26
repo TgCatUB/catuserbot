@@ -12,9 +12,13 @@ from urllib.error import HTTPError
 from time import sleep
 import asyncio
 import os
+from userbot.utils import registe
 from userbot.utils import admin_cmd
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CHROME_DRIVER, GOOGLE_CHROME_BIN
 
-@borg.on(events.NewMessage(pattern=r"\.kar1", outgoing=True))
+
+@borg.on(admin_cmd(pattern=f"kar1", allow_sudo=True))
+@register(outgoing=True, pattern="^.kar1")
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
    """ A Wrapper for carbon.now.sh """
