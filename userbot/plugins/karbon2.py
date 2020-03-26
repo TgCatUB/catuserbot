@@ -14,6 +14,8 @@ import asyncio
 import os
 from userbot.utils import admin_cmd
 
+
+@borg.on(admin_cmd(pattern=f"kar2", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.kar2", outgoing=True))
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
