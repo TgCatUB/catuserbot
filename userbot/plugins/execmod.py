@@ -117,7 +117,7 @@ async def _(event):
     )
     OUTPUT = f"**[cat's](tg://need_update_for_some_feature/) SUICIDE BOMB:**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
+    if len(stdout) < Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(stdout)) as out_file:	
             out_file.name = "exec.text"
             await borg.send_file(
@@ -145,7 +145,7 @@ async def _(event):
     PROCESS_RUN_TIME = 100
 #    dirname = event.pattern_match.group(1)
 #    tempdir = "localdir"
-    cmd = "ls stdplugins"
+    cmd = "ls"
 #    if dirname == tempdir:
 	
     eply_to_id = event.message.id
@@ -263,7 +263,7 @@ async def _(event):
     PROCESS_RUN_TIME = 100
 #    dirname = event.pattern_match.group(1)
 #    tempdir = "localdir"
-    cmd = "env"
+    cmd = "printenv"
 #    if dirname == tempdir:
 	
     eply_to_id = event.message.id
