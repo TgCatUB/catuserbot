@@ -18,7 +18,7 @@ from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CHROME_DRI
 
 
 @borg.on(admin_cmd(pattern=f"kar1", allow_sudo=True))
-@register(outgoing=True, pattern="^.kar1")
+@borg.on(events.NewMessage(pattern=r"\.kar1", outgoing=True))
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
    """ A Wrapper for carbon.now.sh """
