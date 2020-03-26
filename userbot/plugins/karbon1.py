@@ -12,9 +12,7 @@ from urllib.error import HTTPError
 from time import sleep
 import asyncio
 import os
-from userbot.utils import register
 from userbot.utils import admin_cmd
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CHROME_DRIVER, GOOGLE_CHROME_BIN
 
 
 @borg.on(admin_cmd(pattern=f"kar1", allow_sudo=True))
@@ -65,7 +63,6 @@ async def carbon_api(e):
    await e.client.send_file(
          e.chat_id,
          file,
-         caption="Karbon1 by @mrconfused",
          force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
