@@ -1,5 +1,2 @@
 telethon>=1.10.8
-hastebin.py
-zalgo_text
-pyfiglet 
 -r requirements-startup.txt
