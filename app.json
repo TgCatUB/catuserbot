@@ -43,7 +43,6 @@
     },
     "PRIVATE_GROUP_BOT_API_ID": {
       "description": "Send .g_id in any group to fill this value.",
-      "value": "-100",
       "required": false
     },
     "PRIVATE_CHANNEL_BOT_API_ID": {
@@ -117,7 +116,7 @@
       "required": false
     },
     "PM_LOGGR_BOT_API_ID": {
-      "description": "send .g_id in any channel to forward all your NEW PMs to this group",
+      "description": "send .get_id in any channel to forward all your NEW PMs to this group",
       "required": false
     },
     "NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD": {
