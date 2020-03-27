@@ -12,7 +12,7 @@ from telethon import events
 from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 import subprocess
 import patoolib
-from bin.cmrudl import *
+from bin import cmrudl
 from datetime import datetime
 import io
 
