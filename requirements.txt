@@ -1,8 +1,5 @@
 telethon>=1.10.8
-pip>=19.2.3
 hastebin.py
 zalgo_text
 pyfiglet 
-chatterbot
-chatterbot_corpus
 -r requirements-startup.txt
