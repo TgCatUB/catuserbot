@@ -20,8 +20,8 @@ async def _(event):
     if event.fwd_from:
         return
     mone = await event.edit("Processing ...")
-    if not os.path.isdir(Config.TEMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if not os.path.isdir("./cat/watermark/"):
         os.makedirs("./cat/watermark/")
     if event.reply_to_msg_id:
@@ -31,7 +31,7 @@ async def _(event):
             c_time = time.time()
             downloaded_file_name = await borg.download_media(
                 reply_message,
-                Config.TEMP_DOWNLOAD_DIRECTORY,
+                Config.TMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, mone, c_time, "trying to download")
                 )
