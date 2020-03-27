@@ -98,3 +98,6 @@ urllib3
 wget
 wikipedia
 youtube-dl
+hastebin.py
+zalgo_text
+pyfiglet 
