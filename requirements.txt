@@ -1,2 +1,13 @@
-telethon>=1.10.3
+telethon>=1.10.8
+pip>=19.2.3
+hastebin.py
+async_generator
+pybase64
+zalgo_text
+pyfiglet
+lxml
+selenium
+aria2p 
+chatterbot
+chatterbot_corpus
 -r requirements-startup.txt
