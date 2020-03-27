@@ -29,6 +29,10 @@
       "description": "Get this value by running python3 telesetup.py locally",
       "value": ""
     },
+    "ALIVE_NAME": {
+      "description": "Give your name",
+      "value": ""
+    },
     "OPEN_WEATHER_MAP_APPID": {
       "description": "Get your own APPID from https://api.openweathermap.org/data/2.5/weather",
       "required": false
