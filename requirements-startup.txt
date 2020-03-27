@@ -67,6 +67,7 @@ pyfiglet
 pylast
 pymongo
 pysocks
+pytest-shutil
 python-barcode
 python-dotenv
 python-magic
