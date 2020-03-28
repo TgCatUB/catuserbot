@@ -12,9 +12,11 @@ PREV_REPLY_MESSAGE = {}
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "**@mrconfused** "
 USER_BOT_WARN_ZERO = "`You were spamming my peru master's inbox, henceforth you  has been blocked by my master's userbot.` **Now GTFO, i'm playing minecraft** "
-USER_BOT_NO_WARN = ("`Hello, this is sandeep's Security Service.You have found your way here to my master,I am offline right now`"
+USER_BOT_NO_WARN = ("[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id=916234223)\n\n"
+                    "`Hello, this is sandeep's Security Service.You have found your way here to my master,  `"
                     f"{DEFAULTUSER}'s` inbox.\n\n"
-                    "Leave your name, problem, and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n")
+                    "Leave your name, problem, and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
+                    "** Send** `/start` ** so that we can decide why you're here.**")
 
 
 if Var.PRIVATE_GROUP_ID is not None:
