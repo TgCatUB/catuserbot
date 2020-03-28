@@ -13,8 +13,8 @@
 # GNU General Public License for more details.
 #
 """Remove.BG Plugin for @UniBorg
-Syntax: .remove.bg https://link.to/image.extension
-Syntax: .remove.bg as reply to a media"""
+Syntax: .rmbg https://link.to/image.extension
+Syntax: .rmbg as reply to a media"""
 import asyncio
 from datetime import datetime
 import io
@@ -26,7 +26,7 @@ from userbot.utils import progress, admin_cmd
 
 @borg.on(admin_cmd("rmbg ?(.*)"))
 async def _(event):
-    HELP_STR = "`.remove.bg` as reply to a media, or give a link as an argument to this command"
+    HELP_STR = "`.rmbg` as reply to a media, or give a link as an argument to this command"
     if event.fwd_from:
         return
     if Config.REM_BG_API_KEY is None:
