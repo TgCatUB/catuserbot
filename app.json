@@ -22,6 +22,10 @@
       "value": "./userbot/DOWNLOADS/",
       "required": false
     },
+    "ALIVE_NAME": {
+      "description": "give your name",
+      "required": false
+    },
     "APP_ID": {
       "description": "Get this value from my.telegram.org! Please do not steal",
       "value": ""
