@@ -35,7 +35,7 @@ async def _(event):
         try:
             r = await borg(functions.channels.CreateChannelRequest(  # pylint:disable=E0602
                 title=group_name,
-                about="This is a Test from @UniBorg",
+                about="This is a Test from @mrconfused",
                 megagroup=False if type_of_group == "c" else True
             ))
             created_chat_id = r.chats[0].id
@@ -46,4 +46,4 @@ async def _(event):
         except Exception as e:  # pylint:disable=C0103,W0703
             await event.edit(str(e))
     else:
-        await event.edit("Read .helpme to know how to use me")
+        await event.edit("Read .help to know how to use me")
