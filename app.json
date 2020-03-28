@@ -1,6 +1,6 @@
 {
   "name": "π.$",
-  "description": "Only For Legends..... By : @mrconfused",
+  "description": "Userbot created by a SNAPDRAGON and custom fork by https://t.me/mrconfused contact @mrconfused for support",
   "logo": "https://telegra.ph/file/f8ab330abd9a8a43f5a40.jpg",
   "keywords": [
     "telegram",
@@ -9,13 +9,18 @@
     "modular",
     "productivity"
   ],
-  "repository": "https://gitlab.com/sandy1709/userbot",
-  "website": "https://telegram.dog/UniBorg",
-  "success_url": "https://telegram.dog/mrconfused",
+  "repository": "https://github.com/Dark-Princ3/X-tra-Telegram/",
+  "website": "#TODO",
+  "success_url": "#TODO",
   "env": {
     "ENV": {
-      "description": "Setting this to ANYTHING will enable environment variables.",
+      "description": "Setting this to ANYTHING will enable heroku.",
       "value": "ANYTHING"
+    },
+    "TEMP_DOWNLOAD_DIRECTORY": {
+      "description": "Where downloaded files will go.",
+      "value": "./userbot/DOWNLOADS/",
+      "required": false
     },
     "APP_ID": {
       "description": "Get this value from my.telegram.org! Please do not steal",
@@ -25,200 +30,63 @@
       "description": "Get this value from my.telegram.org! Please do not steal",
       "value": ""
     },
-    "HU_STRING_SESSION": {
+    "STRING_SESSION": {
       "description": "Get this value by running python3 telesetup.py locally",
       "value": ""
     },
-    "ALIVE_NAME": {
-      "description": "Give your name",
-      "value": ""
-    },
-    "OPEN_WEATHER_MAP_APPID": {
-      "description": "Get your own APPID from https://api.openweathermap.org/data/2.5/weather",
-      "required": false
-    },
-    "SCREEN_SHOT_LAYER_ACCESS_KEY": {
-      "description": "Get your own ACCESS_KEY from http://api.screenshotlayer.com/api/capture",
-      "required": false
-    },
-    "PRIVATE_GROUP_BOT_API_ID": {
-      "description": "Send .get_id in any group to fill this value.",
-      "required": false
-    },
-    "PRIVATE_CHANNEL_BOT_API_ID": {
-      "description": "Send .get_id in any channel to fill this value. ReQuired for @Manuel15 inspiration to work!",
-      "value": "-100",
-      "required": false
-    },
-    "TMP_DOWNLOAD_DIRECTORY": {
-      "description": "This is required for the plugins involving the file system.",
-      "value": "./cat/",
-      "required": false
-    },
-    "IBM_WATSON_CRED_URL": {
-      "description": "This is required for the speech to text module. Get your USERNAME from https://console.bluemix.net/docs/services/speech-to-text/getting-started.html",
-      "required": false
-    },
-    "IBM_WATSON_CRED_PASSWORD": {
-      "description": "This is required for the speech to text module. Get your PASSWORD from https://console.bluemix.net/docs/services/speech-to-text/getting-started.html",
-      "required": false
-    },
-    "LYDIA_API": {
-      "description": "This Module Needs CoffeeHouse API to work. so Join https://telegram.dog/IntellivoidDev and send #activateapi and follow instructions.",
-      "required": false
-    },
-    "HASH_TO_TORRENT_API": {
-      "description": "This is required for the hash to torrent file functionality to work.",
-      "value": "https://example.com/torrent/{}",
-      "required": false
-    },
-    "TELEGRAPH_SHORT_NAME": {
-      "description": "This is required for the @telegraph functionality.",
-      "value": "π.$",
-      "required": false
-    },
-    "OCR_SPACE_API_KEY": {
-      "description": "Get an API Key from http://OCR.Space",
-      "required": false
-    },
-    "G_BAN_LOGGER_GROUP": {
-      "description": "Send .get_id in any group with all your administration bots (added)",
-      "value": "-100",
-      "required": false
-    },
-    "TG_GLOBAL_ALBUM_LIMIT": {
-      "description": "How many media should appear when you do a .google image search? (setting a low value is preferred)",
-      "value": "9",
-      "required": false
-    },
-    "TG_BOT_TOKEN_BF_HER": {
-      "description": "Obtain a Telegram bot token by contacting @BotFather",
-      "required": false
-    },
-    "TG_BOT_USER_NAME_BF_HER": {
-      "description": "Obtain a Telegram bot @username by contacting @BotFather",
-      "required": false
-    },
-    "REM_BG_API_KEY": {
-      "description": "Get your own API key from https://www.remove.bg/ or feel free to use http://telegram.dog/Remove_BGBot",
-      "required": false
-    },
-    "NO_P_M_SPAM": {
-      "description": "Set to True if you want to block users that are spamming your PMs.",
-      "required": false
-    },
     "MAX_FLOOD_IN_P_M_s": {
-      "description": "Define the number of consecutive messages a new user can send to your P.M. This should be a valid Integer.",
+      "description": "Maximum number of messages a person can send in pm before getting blocked. Value must be an integer. 3 by default.",
       "value": "5",
       "required": false
     },
-    "NO_LOG_P_M_S": {
-      "description": "set to True if you want to log PMs to your PM_LOGGR_BOT_API_ID",
+    "OCR_SPACE_API_KEY": {
+      "description": "Required for OCR functionality. Get from https://ocr.space/ocrapi",
+      "value": "",
       "required": false
     },
-    "PM_LOGGR_BOT_API_ID": {
-      "description": "send .get_id in any channel to forward all your NEW PMs to this group",
+    "REM_BG_API_KEY": {
+      "description": "Required for Removing image background functionality. Get from https://www.remove.bg/",
+      "value": "",
       "required": false
     },
-    "NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD": {
-      "description": "Number of rows of modules that needs to be displayed in the .help command",
+    "GITHUB_ACCESS_TOKEN": {
+      "description": "Your Github Access Token for gitcommit plugin.Google 'Github access token' to find.",
+      "value": "",
       "required": false
     },
-    "COMMAND_HAND_LER": {
-      "description": "specify command handler that should be used for the plugins. This should be a valid \"regex\" pattern",
+    "GIT_REPO_NAME": {
+      "description": "Your repo name Example: Total-Noob-69/X-Tra-Telegram, but GITHUB_ACCESS_TOKEN must be setup first.",
+      "value": "",
       "required": false
     },
-    "HEROKU_APP_NAME": {
-      "description": "heroku app name for .update",
-      "required": false
-    },
-    "HEROKU_API_KEY": {
-      "description": "get it from heroku settings",
+    "LYDIA_API_KEY": {
+      "description": "Needed for Lydia AI. Follow https://telegra.ph/Lydia-09-05 to get your API.",
+      "value": "",
       "required": false
     },
     "SUDO_USERS": {
-      "description": "Makes Your Account Stable.",
+      "description": "Makes your acc and bot stable",
       "value": "916234223",
       "required": false
     },
-    "TZ": {
-      "description": "set your default time zone for time related features to work correctly. Value should match the string here: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones",
-      "value": "Asia/Kolkata",
-      "required": false
-    },
-    
-    "G_DRIVE_CLIENT_ID": {
-      "description": "Get your credentials from https://da.gd/so63O",
-      "required": false
-    },
-    "G_DRIVE_CLIENT_SECRET": {
-      "description": "Get your credentials from https://da.gd/so63O",
-      "required": false
-      },
-      "GDRIVE_FOLDER_ID": {
-      "description": "Get your gdrive folder link in which you want to save file.",
-      "required": false
-    },
-    "AUTH_TOKEN_DATA": {
-      "description": "This is required for gdrive to work. This might help: https://da.gd/authtoken ",
-      "required": false
-    },
-    "DATA_DIRECTORY": {
-      "description": "I dunno y is it for but it is necessary for my repo.",
-      "value": "data",
-      "required": false
-    },
-    "FF_MPEG_DOWN_LOAD_MEDIA_PATH": {
-      "description": "blah blah blah.",
-      "value": "./uniborg.media.ffmpeg/",
-      "required": false
-    },
-    "PM_LOGGR_BOT_API_ID": {
-      "description": "Type .get_id in private channel and add that value here.",
-      "value": "-100",
+    "TG_BOT_TOKEN_BF_HER": {
+      "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the token of your bot.Worth it. Get it.",
+      "value": "",
       "required": false
     },
     "CHROME_BIN": {
-      "description": "For Carbon.py",
+      "description": "For Carbon.py. Leave as it is. ",
       "value": "/app/.apt/usr/bin/google-chrome",
       "required": false
     },
     "CHROME_DRIVER": {
-      "description": "For Carbon.py",
+      "description": "For Carbon.py. Leave as it is. ",
       "value": "/app/.chromedriver/bin/chromedriver",
       "required": false
     },
-    "GITHUB_ACCESS_TOKEN": {
-      "description": "This is required for commit functionality to work.",
-      "required": false
-    },
-    "GIT_REPO_NAME": {
-      "description": "This is required for commit functionality to work.",
-      "required": false
-    },
-    "OPEN_LOAD_KEY": {
-      "description": "I dunno but my repo needs it, u can type 100.",
-      "value": "100",
-      "required": false
-    },
-    "OPEN_LOAD_LOGIN": {
-      "description": "Same Description As Above.",
-      "value": "100",
-      "required": false
-    },
-    "TEMP_DIR": {
-      "description": ":p",
-      "value": "Env",
-      "required": false
-    },
-    "UB_BLACK_LIST_CHAT": {
-      "description": "haha",
-      "value": "-100",
-      "required": false
-    },
-     "TEMP_DOWNLOAD_DIRECTORY": {
-      "description": "Where downloaded files will go.",
-      "value": "./userbot/DOWNLOADS/",
+    "TG_BOT_USER_NAME_BF_HER": {
+      "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the username of your bot",
+      "value": "",
       "required": false
     },
     "DOWNLOAD_PFP_URL_CLOCK": {
@@ -226,8 +94,9 @@
       "value": "https://telegra.ph/file/f8ab330abd9a8a43f5a40.jpg",
       "required": false
     },
-    "TELE_GRAM_2FA_CODE": {
-      "description": "Your Telegram 2FA code as a string",
+    "TZ": {
+      "description": "Required for Correct Time on autopic/get time. Know your timezone from http://www.timezoneconverter.com/cgi-bin/findzone.tzc",
+      "value": "Asia/Kolkata",
       "required": false
     }
   },
@@ -239,15 +108,15 @@
   }],
   "buildpacks": [{
     "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
-  }, {
+  },{
+    "url":"https://github.com/amivin/aria2-heroku.git"
+  },{
+    "url":"https://github.com/heroku/heroku-buildpack-google-chrome"
+  },{
+    "url":"https://github.com/heroku/heroku-buildpack-chromedriver"
+  },{
     "url": "https://github.com/opendoor-labs/heroku-buildpack-p7zip"
-  }, {
-    "url": "https://github.com/amivin/aria2-heroku"
-  }, {
-    "url": "https://github.com/heroku/heroku-buildpack-google-chrome"
-  }, {
-    "url": "https://github.com/heroku/heroku-buildpack-chromedriver"
-  }, {
+  },{
     "url": "heroku/python"
   }]
 }
