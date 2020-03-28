@@ -42,11 +42,11 @@
       "required": false
     },
     "PRIVATE_GROUP_BOT_API_ID": {
-      "description": "Send .g_id in any group to fill this value.",
+      "description": "Send .get_id in any group to fill this value.",
       "required": false
     },
     "PRIVATE_CHANNEL_BOT_API_ID": {
-      "description": "Send .g_id in any channel to fill this value. ReQuired for @Manuel15 inspiration to work!",
+      "description": "Send .get_id in any channel to fill this value. ReQuired for @Manuel15 inspiration to work!",
       "value": "-100",
       "required": false
     },
