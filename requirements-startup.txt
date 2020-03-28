@@ -29,7 +29,7 @@ dnspython
 emoji
 fast.com
 feedparser
-gTTS
+gtts
 gTTS-token
 git+https://github.com/LonamiWebs/Telethon
 git+https://github.com/ahupp/python-magic
