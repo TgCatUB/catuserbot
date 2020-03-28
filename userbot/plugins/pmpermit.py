@@ -15,7 +15,7 @@ USER_BOT_WARN_ZERO = "`You were spamming my peru master's inbox, henceforth you 
 USER_BOT_NO_WARN = ("[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀]\n\n"
                     "`Hello, this is sandeep's Security Service.You have found your way here to my master,`"
                     f"{DEFAULTUSER}'s` inbox.\n\n"
-                    "Leave your name, phone number, address and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
+                    "Leave your name, problem, and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
                     "** Send** `/start` ** so that we can decide why you're here.**")
 
 
