@@ -109,6 +109,7 @@
     },
     "MAX_FLOOD_IN_P_M_s": {
       "description": "Define the number of consecutive messages a new user can send to your P.M. This should be a valid Integer.",
+      "value": "5",
       "required": false
     },
     "NO_LOG_P_M_S": {
