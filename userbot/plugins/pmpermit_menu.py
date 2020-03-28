@@ -75,7 +75,6 @@ async def _(event):
                  await borg.send_message(chat, TWO)
                  await asyncio.sleep(3)
                  await event.client(functions.contacts.BlockRequest(chat_id))
-                     await event.client(functions.contacts.BlockRequest(chat_id))
          elif y == "4":
              await borg.send_message(chat, FOUR)
              response = await conv.get_response(chat)
