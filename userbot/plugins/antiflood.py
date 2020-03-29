@@ -4,23 +4,23 @@ from telethon.tl.functions.channels import EditBannedRequest
 from userbot.utils import admin_cmd
 
 
-borg.storage.CHAT_FLOOD = {}  # pylint:disable=E0602
+userbot.storage.CHAT_FLOOD = {}  # pylint:disable=E0602
 
 
 @borg.on(events.NewMessage(chats=Config.CHATS_TO_MONITOR_FOR_ANTI_FLOOD))  # pylint:disable=E0602
 async def _(event):
-    if not event.chat_id in borg.storage.CHAT_FLOOD:  # pylint:disable=E0602
+    if not event.chat_id in userbot.storage.CHAT_FLOOD:  # pylint:disable=E0602
         borg.storage.CHAT_FLOOD[event.chat_id] = {}  # pylint:disable=E0602
-    if event.chat_id in borg.storage.CHAT_FLOOD:  # pylint:disable=E0602
+    if event.chat_id in userbot.storage.CHAT_FLOOD:  # pylint:disable=E0602
         try:
             # pylint:disable=E0602
-            max_count = int(borg.storage.CHAT_FLOOD[event.chat_id][2]) or \
+            max_count = int(userbot.storage.CHAT_FLOOD[event.chat_id][2]) or \
             Config.MAX_ANTI_FLOOD_MESSAGES  # pylint:disable=E0602
         except KeyError:
             max_count = Config.MAX_ANTI_FLOOD_MESSAGES  # pylint:disable=E0602
         # pylint:disable=E0602
-        if event.message.from_id in borg.storage.CHAT_FLOOD[event.chat_id]:
-            current_count = int(borg.storage.CHAT_FLOOD[event.chat_id][1])
+        if event.message.from_id in userbot.storage.CHAT_FLOOD[event.chat_id]:
+            current_count = int(userbot.storage.CHAT_FLOOD[event.chat_id][1])
             current_count += 1
             if current_count > max_count:
                 try:
@@ -51,19 +51,19 @@ async def _(event):
 because he reached the defined flood limit.""".format(event.message.from_id),
                         reply_to=event.message.id
                     )
-                borg.storage.CHAT_FLOOD[event.chat_id] = (
+                userbot.storage.CHAT_FLOOD[event.chat_id] = (
                     event.message.from_id,
                     0,
                     max_count
                 )
             else:
-                borg.storage.CHAT_FLOOD[event.chat_id] = (
+                userbot.storage.CHAT_FLOOD[event.chat_id] = (
                     event.message.from_id,
                     current_count,
                     max_count
                 )
         else:
-            borg.storage.CHAT_FLOOD[event.chat_id] = (
+            userbot.storage.CHAT_FLOOD[event.chat_id] = (
                 event.message.from_id,
                 1,
                 max_count
@@ -79,7 +79,7 @@ async def _(event):
         Config.CHATS_TO_MONITOR_FOR_ANTI_FLOOD.append(event.chat_id)  # pylint:disable=E0602
     input_str = event.pattern_match.group(1)
     try:
-        borg.storage.CHAT_FLOOD[event.chat_id] = (None, 1, int(input_str))
+        userbot.storage.CHAT_FLOOD[event.chat_id] = (None, 1, int(input_str))
         await event.edit("Antiflood updated to {} in the current chat".format(input_str))
     except Exception as e:  # pylint:disable=C0103,W0703
         await event.edit(str(e))
