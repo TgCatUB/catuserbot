@@ -12,7 +12,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@mrconfused"
 async def amireallyalive(alive):
     """ For .alive command, check if the bot is running.  """
     await alive.edit("**MY BOT IS RUNNING SUCCESFULLY**\n\n"
-                     "`Telethon version: 6.9.0\nPython: 3.7.3\nfork by:` @mrconfused\n"
+                     "`Telethon version: 6.9.0\nPython: 3.7.3\n"
                      "`Bot created by:` [Sandeep](tg://user?id=916234223)\n"
                      "`Database Status: Databases functioning normally!\n\nAlways with you, my master!\n`"
                      f"`My peru owner`: {DEFAULTUSER}\n"
