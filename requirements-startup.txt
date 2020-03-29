@@ -25,6 +25,7 @@ cowsay
 cryptg
 csvfaker
 dadjokes-cli
+DateTime
 dnspython
 emoji
 fast.com
