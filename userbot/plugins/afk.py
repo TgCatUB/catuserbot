@@ -67,7 +67,7 @@ async def _(event):
             )
         )
         if isinstance(last_seen_status.rules, types.PrivacyValueAllowAll):
-            afk_time = datetime.now()  # pylint:disable=E0602
+            afk_time = datetime.datetime.now()  # pylint:disable=E0602
         USER_AFK = f"yes: {reason}"  # pylint:disable=E0602
         if reason:
             await borg.send_message(event.chat_id, f"**I shall be Going afk!** __because ~ {reason}__")
@@ -91,7 +91,7 @@ async def set_not_afk(event):
     global last_afk_message  # pylint:disable=E0602
     global afk_start
     global afk_end
-    back_alive = datetime.now()
+    back_alive = datetime.datetime.now()
     afk_end = back_alive.replace(microsecond=0)
     total_afk_time = str((afk_end - afk_start))
     current_message = event.message.message
@@ -129,7 +129,7 @@ async def on_afk(event):
     global last_afk_message  # pylint:disable=E0602
     global afk_start
     global afk_end
-    back_alivee = datetime.now()
+    back_alivee = datetime.datetime.now()
     afk_end = back_alivee.replace(microsecond=0)
     total_afk_time = str((afk_end - afk_start))
     afk_since = "**a while ago**"
@@ -140,7 +140,7 @@ async def on_afk(event):
         return False
     if USER_AFK and not (await event.get_sender()).bot:  # pylint:disable=E0602
         if afk_time:  # pylint:disable=E0602
-            now = datetime.now()
+            now = datetime.datetime.now()
             datime_since_afk = now - afk_time  # pylint:disable=E0602
             time = float(datime_since_afk.seconds)
             days = time // (24 * 3600)
