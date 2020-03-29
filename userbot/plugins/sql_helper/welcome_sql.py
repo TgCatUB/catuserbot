@@ -1,25 +1,28 @@
-from sqlalchemy import BigInteger, Boolean, Column, LargeBinary, Numeric, String, UnicodeText
+from sqlalchemy import BigInteger, Boolean, Column, String, UnicodeText
 from userbot.plugins.sql_helper import SESSION, BASE
 
 
 class Welcome(BASE):
     __tablename__ = "welcome"
-    chat_id = Column(Numeric, primary_key=True)
+    chat_id = Column(String(14), primary_key=True)
+    custom_welcome_message = Column(UnicodeText)
+    media_file_id = Column(UnicodeText)
     should_clean_welcome = Column(Boolean, default=False)
     previous_welcome = Column(BigInteger)
-    f_mesg_id = Column(Numeric)
 
     def __init__(
         self,
         chat_id,
+        custom_welcome_message,
         should_clean_welcome,
         previous_welcome,
-        f_mesg_id
+        media_file_id=None,
     ):
         self.chat_id = chat_id
+        self.custom_welcome_message = custom_welcome_message
+        self.media_file_id = media_file_id
         self.should_clean_welcome = should_clean_welcome
         self.previous_welcome = previous_welcome
-        self.f_mesg_id = f_mesg_id
 
 
 Welcome.__table__.create(checkfirst=True)
@@ -27,7 +30,7 @@ Welcome.__table__.create(checkfirst=True)
 
 def get_current_welcome_settings(chat_id):
     try:
-        return SESSION.query(Welcome).filter(Welcome.chat_id == chat_id).one()
+        return SESSION.query(Welcome).filter(Welcome.chat_id == str(chat_id)).one()
     except:
         return None
     finally:
@@ -36,28 +39,25 @@ def get_current_welcome_settings(chat_id):
 
 def add_welcome_setting(
     chat_id,
+    custom_welcome_message,
     should_clean_welcome,
     previous_welcome,
-    f_mesg_id
+    media_file_id
 ):
-    adder = SESSION.query(Welcome).get(chat_id)
-    if adder:
-        adder.should_clean_welcome = should_clean_welcome
-        adder.previous_welcome = previous_welcome
-        adder.f_mesg_id = f_mesg_id
-    else:
-        adder = Welcome(
-            chat_id,
-            should_clean_welcome,
-            previous_welcome,
-            f_mesg_id
-        )
+    # adder = SESSION.query(Welcome).get(chat_id)
+    adder = Welcome(
+        chat_id,
+        custom_welcome_message,
+        should_clean_welcome,
+        previous_welcome,
+        media_file_id
+    )
     SESSION.add(adder)
     SESSION.commit()
 
 
 def rm_welcome_setting(chat_id):
-    rem = SESSION.query(Welcome).get(chat_id)
+    rem = SESSION.query(Welcome).get(str(chat_id))
     if rem:
         SESSION.delete(rem)
         SESSION.commit()
