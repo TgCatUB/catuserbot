@@ -54,6 +54,15 @@ class Config(object):
     LOAD = []
     # foloowing plugins won't work on Heroku,
     # because of their ephemeral file system
+    MAX_ANTI_FLOOD_MESSAGES = 10
+    # warn mode for anti flood
+    ANTI_FLOOD_WARN_MODE = ChatBannedRights(
+        until_date=None,
+        view_messages=None,
+        send_messages=True
+    )
+    CHATS_TO_MONITOR_FOR_ANTI_FLOOD = []
+    # specify LOAD and NO_LOAD
     NO_LOAD = [
         "notification_mtab_manager",
         "dbhelper",
