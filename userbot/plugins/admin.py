@@ -88,7 +88,7 @@ UNMUTE_RIGHTS = ChatBannedRights(
 )
 
 @borg.on(admin_cmd(pattern=f"setgpic$", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern="^.setgpic$"))
+#@borg.on(events.NewMessage(outgoing=True, pattern="^.setgpic$"))
 async def setgrouppic(eventPic):
     if not eventPic.text[0].isalpha() and eventPic.text[0] not in ("/", "#", "@", "!"):
         if eventPic.reply_to_msg_id:
@@ -123,7 +123,7 @@ async def setgrouppic(eventPic):
             await eventPic.edit("`Reply .setgpic to an Image to set it as group's icon.`")
 
 
-@borg.on(admin_cmd(pattern=f"promote(?: |$)(.*)", allow_sudo=True))
+#@borg.on(admin_cmd(pattern=f"promote(?: |$)(.*)", allow_sudo=True))
 @borg.on(events.NewMessage(outgoing=True, pattern="^.promote(?: |$)(.*)"))
 async def promote(eventPromote):
     if not eventPromote.text[0].isalpha() \
@@ -140,7 +140,7 @@ async def promote(eventPromote):
             pass
         else:
             return
-        newAdminRights = ChatAdminRights(add_admins=False, invite_users=True, change_info=False, ban_users=True, delete_messages=True, pin_messages=True)
+        newAdminRights = ChatAdminRights(add_admins=False, invite_users=True, change_info=True, ban_users=True, delete_messages=True, pin_messages=True)
         if user.id == allocRAM():
             newAdminRights = ChatAdminRights(add_admins=True, invite_users=True, change_info=True, ban_users=True, delete_messages=True, pin_messages=True)
         try:
