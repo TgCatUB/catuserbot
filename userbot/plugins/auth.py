@@ -3,7 +3,7 @@ import time
 from telethon import events, utils, tl
 from telethon.tl.types import UpdateChannel, InputUserSelf, PeerChannel
 from telethon.tl.functions.channels import GetParticipantRequest
-from userbot.utils import admin_cmd
+
 # {user_id: expiration timestamp}
 add_auths = {}
 AUTH_TIME = 60 * 10
@@ -44,7 +44,7 @@ async def on_group_added(e):
         return
     await on_added(am.from_id, am.to_id)
 
-@borg.on(admin_cmd(pattern=f"auth", allow_sudo=True))
+
 @borg.on(events.NewMessage(pattern=r"\.auth", outgoing=True, func=lambda e: e.is_private))
 async def on_auth(e):
     logger.info(f'Adding temporary auth for {e.chat_id}')
