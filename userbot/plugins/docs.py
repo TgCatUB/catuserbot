@@ -7,7 +7,7 @@ from userbot.utils import parse_arguments, admin_cmd
 It will search in the docs for for You.
 """
 
-@borg.on(admin_cmd(pattern="docs\s+(.*)"))
+@borg.on(admin_cmd(pattern="docs (.*)"))
 async def doc_search(e):
     params = e.pattern_match.group(1)
     args, lib = parse_arguments(params, ['version'])
