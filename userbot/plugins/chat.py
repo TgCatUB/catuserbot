@@ -32,36 +32,12 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
 
+from telethon.tl.functions.channels import LeaveChannelRequest
+import time
 from userbot.utils import register, errors_handler, admin_cmd
 
-
-@register(outgoing=True, pattern="^.userid$")
-async def useridgetter(target):
-    """ For .userid command, returns the ID of the target user. """
-    message = await target.get_reply_message()
-    if message:
-        if not message.forward:
-            user_id = message.sender.id
-            if message.sender.username:
-                name = "@" + message.sender.username
-            else:
-                name = "**" + message.sender.first_name + "**"
-        else:
-            user_id = message.forward.sender.id
-            if message.forward.sender.username:
-                name = "@" + message.forward.sender.username
-            else:
-                name = "*" + message.forward.sender.first_name + "*"
-        await target.edit("**Name:** {} \n**User ID:** `{}`".format(
-            name, user_id))
-
-
-
-
-@register(outgoing=True, pattern="^.chatid$")
-async def chatidgetter(chat):
-    """ For .chatid, returns the ID of the chat you are in at that moment. """
-    await chat.edit("Chat ID: `" + str(chat.chat_id) + "`")
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_CHANNEL_BOT_API_ID
 
 
 @register(outgoing=True, pattern=r"^.log(?: |$)([\s\S]*)")
@@ -93,37 +69,6 @@ async def kickme(leave):
     await leave.client.kick_participant(leave.chat_id, 'me')
 
 
-@register(outgoing=True, pattern="^.unmutechat$")
-async def unmute_chat(unm_e):
-    """ For .unmutechat command, unmute a muted chat. """
-    try:
-        from userbot.plugins.sql_helper.keep_read_sql import unkread
-    except AttributeError:
-        await unm_e.edit('`Running on Non-SQL Mode!`')
-        return
-    unkread(str(unm_e.chat_id))
-    await unm_e.edit("```Unmuted this chat Successfully```")
-    await sleep(2)
-    await unm_e.delete()
-
-
-@register(outgoing=True, pattern="^.mutechat$")
-async def mute_chat(mute_e):
-    """ For .mutechat command, mute any chat. """
-    try:
-        from userbot.plugins.sql_helper.keep_read_sql import kread
-    except AttributeError:
-        await mute_e.edit("`Running on Non-SQL mode!`")
-        return
-    await mute_e.edit(str(mute_e.chat_id))
-    kread(str(mute_e.chat_id))
-    await mute_e.edit("`Shush! This chat will be silenced!`")
-    await sleep(2)
-    await mute_e.delete()
-    if BOTLOG:
-        await mute_e.client.send_message(
-            BOTLOG_CHATID,
-            str(mute_e.chat_id) + " was silenced.")
 
 
 @register(incoming=True )
