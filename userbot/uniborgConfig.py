@@ -101,11 +101,11 @@ class Config(object):
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
-    AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
-    os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
-    t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
-    t_file.write(AUTH_TOKEN_DATA)
-    t_file.close()
+  #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
+   # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
+   # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
+
+
     #
     TELE_GRAM_2FA_CODE = os.environ.get("TELE_GRAM_2FA_CODE", None)
     #
