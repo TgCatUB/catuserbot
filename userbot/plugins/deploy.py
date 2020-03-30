@@ -11,7 +11,7 @@ from userbot.utils import admin_cmd
 from userbot import AUTONAME
 
 
-DEFAULTUSER = str(AUTONAME) if AUTONAME else "mrconfusedbot"
+DEFAULTUSER = str(AUTONAME) if AUTONAME else "@mrconfused"
 
 @borg.on(admin_cmd(pattern=r"deploy"))
 
@@ -33,17 +33,17 @@ async def _(event):
 
     animation_chars = [
         
-            "**Heroku Connecting To Latest Github Build (mrconfusedBot)**",
-            "**Build started by user** **{DEFAULTUSER}**",
-            "**Deploy** `535a74f0` **by user** **{DEFAULTUSER}**",
+            "**Heroku Connecting To Latest Github Build (@mrconfusedBot)**",
+            "**Build started by user** ** {DEFAULTUSER} **",
+            "**Deploy** `535a74f0` **by user** ** {DEFAULTUSER} **",
             "**Restarting Heroku Server...**",
             "**State changed from up to starting**",    
             "**Stopping all processes with SIGTERM**",
             "**Process exited with** `status 143`",
             "**Starting process with command** `python3 -m stdborg`",
             "**State changed from starting to up**",
-            "__INFO:UniBorg:Logged in as 557667062__",
-            "__INFO:UniBorg:Successfully loaded all plugins__",
+            "__INFO:Userbot:Logged in as 557667062__",
+            "__INFO:Userbot:Successfully loaded all plugins__",
             "**Build Succeeded**"
 
  ]
