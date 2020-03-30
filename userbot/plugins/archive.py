@@ -56,7 +56,7 @@ async def _(event):
             await borg.send_file(
                 event.chat_id,
                 directory_name + ".rar",
-                caption="rarred By @By_Azade",
+                caption="rarred By cat",
                 force_document=True,
                 allow_cache=False,
                 reply_to=event.message.id,
@@ -106,7 +106,7 @@ async def _(event):
             await borg.send_file(
                 event.chat_id,
                 directory_name + ".7z",
-                caption="7z archived By @By_Azade",
+                caption="7z archived By cat",
                 force_document=True,
                 allow_cache=False,
                 reply_to=event.message.id,
@@ -157,7 +157,7 @@ async def _(event):
             await borg.send_file(
                 event.chat_id,
                 directory_name + ".zip",
-                caption="Zipped By @By_Azade",
+                caption="Zipped By cat",
                 force_document=True,
                 allow_cache=False,
                 reply_to=event.message.id,
