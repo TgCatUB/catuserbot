@@ -1,2 +1,3 @@
-telethon>=1.10.8
+git+https://github.com/LonamiWebs/Telethon
+pip
 -r requirements-startup.txt
