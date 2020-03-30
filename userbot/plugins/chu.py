@@ -10,7 +10,7 @@ from userbot.utils import admin_cmd
 
 
 
-@borg.on(admin_cmd(pattern="hu"))
+@borg.on(admin_cmd(pattern="chu"))
 
 async def _(event):
 
