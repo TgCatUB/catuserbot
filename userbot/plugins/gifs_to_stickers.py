@@ -1,6 +1,6 @@
 from io import BytesIO
 
-from userbot import utils
+from userbot import utils, storage
 from PIL import Image
 from telethon import types, utils, events
 from telethon.tl.functions.messages import SaveGifRequest, UploadMediaRequest
