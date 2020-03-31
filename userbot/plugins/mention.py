@@ -6,7 +6,7 @@ from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd("mention (.*)"))
-async def _(event):
+async def (event):
 	if event.fwd_from:
 		return	
 	input_str = event.pattern_match.group(1)
