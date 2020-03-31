@@ -41,11 +41,11 @@ from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CHROME_DRI
 from userbot.events import register
 from telethon.tl.types import DocumentAttributeAudio
 from userbot.plugins.upload_download import progress, humanbytes, time_formatter
-
+from userbot.uniborgConfig import Config
 CARBONLANG = "auto"
 TTS_LANG = "en"
 TRT_LANG = "en"
-BOTLOG_CHATID = PRIVATE_GROUP_ID
+BOTLOG_CHATID = PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
 @register(outgoing=True, pattern="^.crblang (.*)")
@@ -212,7 +212,7 @@ async def gsearch(q_event):
             "Google Search query `" + match + "` was executed successfully",
         )
 
-"""
+
 @register(outgoing=True, pattern=r"^.wiki (.*)")
 async def wiki(wiki_q):
     match = wiki_q.pattern_match.group(1)
@@ -242,7 +242,7 @@ async def wiki(wiki_q):
     if BOTLOG:
         await wiki_q.client.send_message(
             BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully")
-"""
+
 
 @register(outgoing=True, pattern="^.oxford (.*)")
 async def urban_dict(ud_e):
