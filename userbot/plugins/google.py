@@ -42,7 +42,7 @@ async def _(event):
         link_preview = False)
 
 
-@borg.on(admin_cmd("google image (.*)"))
+@borg.on(admin_cmd("gis (.*)"))
 async def _(event):
     if event.fwd_from:
         return
