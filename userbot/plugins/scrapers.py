@@ -45,8 +45,9 @@ from userbot.plugins.upload_download import progress, humanbytes, time_formatter
 CARBONLANG = "auto"
 TTS_LANG = "en"
 TRT_LANG = "en"
+BOTLOG_CHATID = PRIVATE_GROUP_ID
+BOTLOG = True
 
-"""
 @register(outgoing=True, pattern="^.crblang (.*)")
 async def setlang(prog):
     global CARBONLANG
@@ -54,7 +55,7 @@ async def setlang(prog):
     await prog.edit(f"Language for carbon.now.sh set to {CARBONLANG}")
 
 
-@register(outgoing=True, pattern="^.carbon")
+@register(outgoing=True, pattern="^.krb")
 async def carbon_api(e):
     
     await e.edit("`Processing..`")
@@ -119,7 +120,7 @@ async def carbon_api(e):
     # Removing carbon.png after uploading
     await e.delete()  # Deleting msg
 
-
+"""
 @register(outgoing=True, pattern="^.img (.*)")
 async def img_sampler(event):
     await event.edit("Processing...")
@@ -178,7 +179,7 @@ async def moni(event):
         return
 """
 
-@register(outgoing=True, pattern=r"^.googles (.*)")
+@register(outgoing=True, pattern=r"^.gs $")
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
     match = q_event.pattern_match.group(1)
