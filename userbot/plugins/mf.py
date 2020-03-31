@@ -4,7 +4,7 @@ from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd(pattern="mf ?(.*)", allow_sudo=True))  # pylint:disable=E0602
-async def (event):
+async def _(event):
     if event.fwd_from:
         return
     splugin_name = event.pattern_match.group(1)
@@ -60,7 +60,7 @@ async def (event):
 
 
 @borg.on(admin_cmd(pattern="dc"))  # pylint:disable=E0602
-async def (event):
+async def _(event):
     if event.fwd_from:
         return
     result = await borg(functions.help.GetNearestDcRequest())  # pylint:disable=E0602
@@ -68,7 +68,7 @@ async def (event):
 
 
 @borg.on(admin_cmd(pattern="config"))  # pylint:disable=E0602
-async def (event):
+async def _(event):
     if event.fwd_from:
         return
     result = await borg(functions.help.GetConfigRequest())  # pylint:disable=E0602
