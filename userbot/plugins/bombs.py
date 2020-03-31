@@ -31,4 +31,4 @@ async def _(event):
     await asyncio.sleep(0.5)
     await event.edit("`RIP PLOXXX......`")
     await asyncio.sleep(2)
-    await event.delete()
+    
