@@ -111,20 +111,7 @@ async def editer(edit):
                                        "Edit query was executed successfully")
 
 
-@register(outgoing=True, pattern="^.sd")
-@errors_handler
-async def selfdestruct(destroy):
-    """ For .sd command, make seflf-destructable messages. """
-    message = destroy.text
-    counter = int(message[4:6])
-    text = str(destroy.text[6:])
-    await destroy.delete()
-    smsg = await destroy.client.send_message(destroy.chat_id, text)
-    await sleep(counter)
-    await smsg.delete()
-    if BOTLOG:
-        await destroy.client.send_message(BOTLOG_CHATID,
-                                          "sd query done successfully")
+
 
 
 CMD_HELP.update({
@@ -148,9 +135,3 @@ CMD_HELP.update({
 \nUsage: Replace your last message with <newmessage>."
 })
 
-CMD_HELP.update({
-    'sd':
-    '.sd <x> <message>\
-\nUsage: Creates a message that selfdestructs in x seconds.\
-\nKeep the seconds under 100 since it puts your bot to sleep.'
-})
