@@ -1,6 +1,11 @@
 """Carbon Scraper Plugin for Userbot. //text in creative way.
 usage: .kar1 //as a reply to any text message
-
+usage: .kar2 //as a reply to any text message
+usage: .kar3 //as a reply to any text message
+usage: .kar4 //as a reply to any text message
+usage: .rgbk2//as a reply to any text message
+usage: .kargb //as a reply to any text message
+usage: .karpp //your profile pic will be setted
 Thanks to @r4v4n4 for vars"""
 
 from selenium.webdriver.support.ui import Select
@@ -18,7 +23,9 @@ from telethon.tl import functions
 from userbot.utils import admin_cmd
 import shutil
 from PIL import Image, ImageDraw, ImageFont
+from userbot import ALIVE_NAME
 
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 @borg.on(admin_cmd(pattern=f"kar1", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.kar1", outgoing=True))
@@ -457,7 +464,7 @@ async def carbon_api(e):
    #await e.edit("⬜⬜⬜⬜⬜")
      CARBON = 'https://carbon.now.sh/?bg=rgba({R}%2C{G}%2C{B}%2C1)&t={T}&wt=none&l=auto&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Fira%20Code&fs=14px&lh=152%25&si=false&es=2x&wm=false&code={code}'
      CARBONLANG = "en"
-     textx = datetime.now().strftime(" \n  ⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n      Time: %H¦%M¦%S \n      Date: %d/%m/%y")
+     textx = datetime.now().strftime(" {DEFAULTUSER} \n  ⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n      Time: %H¦%M¦%S \n      Date: %d/%m/%y")
      pcode = e.text
      if pcode[8:]:
            pcode = str(pcode[8:])
