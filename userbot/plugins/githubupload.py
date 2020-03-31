@@ -12,10 +12,10 @@ import time
 from datetime import datetime
 from telethon import events
 from telethon.tl.types import DocumentAttributeVideo
-from uniborg.util import admin_cmd, humanbytes, progress, time_formatter
+from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 
 GIT_TEMP_DIR = "./temp/"
-@borg.on(admin_cmd(pattern="commit1 ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="commit ?(.*)", allow_sudo=True))
 async def download(event):
 	if event.fwd_from:
 		return	
@@ -75,7 +75,7 @@ async def git_commit(file_name,mone):
 		try:
 			repo.create_file(file_name, "Uploaded New Plugin", commit_data, branch="master")
 			print("Committed File")
-			await mone.edit("`Committed on Your Github Repo.`\n\n░░░░░░░░░░░█▀▀░░█░░░░░░\n░░░░░░▄▀▀▀▀░░░░░█▄▄░░░░\n░░░░░░█░█░░░░░░░░░░▐░░░ \n░░░░░░▐▐░░░░░░░░░▄░▐░░░\n░░░░░░█░░░░░░░░▄▀▀░▐░░░ \n░░░░▄▀░░░░░░░░▐░▄▄▀░░░░ \n░░▄▀░░░▐░░░░░█▄▀░▐░░░░░ \n░░█░░░▐░░░░░░░░▄░█░░░░░ \n░░░█▄░░▀▄░░░░▄▀▐░█░░░░░ \n░░░█▐▀▀▀░▀▀▀▀░░▐░█░░░░░ \n░░▐█▐▄░░▀░░░░░░▐░█▄▄░░░ \n░░░▀▀░▄[Stdplugins](https://github.com/sandy1709/userbot/blob/master/stdplugins)░▐▄▄▄▀░░░\n░░░░░░░░░░░░░░░░░░░░░░░ ")
+			await mone.edit("`Committed on Your Github Repo.`\n\n░░░░░░░░░░░█▀▀░░█░░░░░░\n░░░░░░▄▀▀▀▀░░░░░█▄▄░░░░\n░░░░░░█░█░░░░░░░░░░▐░░░ \n░░░░░░▐▐░░░░░░░░░▄░▐░░░\n░░░░░░█░░░░░░░░▄▀▀░▐░░░ \n░░░░▄▀░░░░░░░░▐░▄▄▀░░░░ \n░░▄▀░░░▐░░░░░█▄▀░▐░░░░░ \n░░█░░░▐░░░░░░░░▄░█░░░░░ \n░░░█▄░░▀▄░░░░▄▀▐░█░░░░░ \n░░░█▐▀▀▀░▀▀▀▀░░▐░█░░░░░ \n░░▐█▐▄░░▀░░░░░░▐░█▄▄░░░ \n░░░▀▀░▄[Stdplugins](https://github.com/sandy1709/catuserbot/blob/master/stdplugins)░▐▄▄▄▀░░░\n░░░░░░░░░░░░░░░░░░░░░░░ ")
 		except:
 			print("Cannot Create Plugin")
 			await mone.edit("Cannot Upload Plugin")
