@@ -15,7 +15,6 @@ import importlib.util
 
 
 @borg.on(admin_cmd(pattern=f"fexit", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern='^\.(f?f)exit'))
 async def timer_blankx(e):
  txt=e.text[7:] + '\n\n`Processing....` '
  j=1
