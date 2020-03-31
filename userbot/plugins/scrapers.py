@@ -212,10 +212,9 @@ async def gsearch(q_event):
             "Google Search query `" + match + "` was executed successfully",
         )
 
-
+"""
 @register(outgoing=True, pattern=r"^.wiki (.*)")
 async def wiki(wiki_q):
-    """ For .wiki command, fetch content from Wikipedia. """
     match = wiki_q.pattern_match.group(1)
     try:
         summary(match)
@@ -243,7 +242,7 @@ async def wiki(wiki_q):
     if BOTLOG:
         await wiki_q.client.send_message(
             BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully")
-
+"""
 
 @register(outgoing=True, pattern="^.oxford (.*)")
 async def urban_dict(ud_e):
