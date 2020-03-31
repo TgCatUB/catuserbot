@@ -49,11 +49,13 @@ async def parseqr(qr_e):
     soup = BeautifulSoup(t_response, "html.parser")
     qr_contents = soup.find_all("pre")[0].text
     await qr_e.edit(qr_contents)
-
+"""
 
 @register(pattern=r".barcode(?: |$)([\s\S]*)")
 async def barcode(event):
-    """ For .barcode command, genrate a barcode containing the given content. """
+    """
+#For .barcode command, genrate a barcode containing the given content.
+"""
     await event.edit("`Processing..`")
     input_str = event.pattern_match.group(1)
     message = "SYNTAX: `.barcode <long text to include>`"
@@ -94,7 +96,7 @@ async def barcode(event):
         return
     await event.delete()
 
-
+"""
 @register(pattern=r".makeqr(?: |$)([\s\S]*)")
 async def make_qr(makeqr):
     """ For .makeqr command, make a QR Code containing the given content. """
