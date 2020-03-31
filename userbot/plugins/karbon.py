@@ -415,7 +415,7 @@ async def carbon_api(e):
    await e.delete() # Deleting msg   
    
 
-
+"""
 @borg.on(admin_cmd(pattern=f"karpp", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.karpp", outgoing=True))
 async def carbon_api(e):
@@ -460,7 +460,7 @@ async def carbon_api(e):
 
 
    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-   #""" A Wrapper for carbon.now.sh """
+ 
    #await e.edit("⬜⬜⬜⬜⬜")
      CARBON = 'https://carbon.now.sh/?bg=rgba({R}%2C{G}%2C{B}%2C1)&t={T}&wt=none&l=auto&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Fira%20Code&fs=14px&lh=152%25&si=false&es=2x&wm=false&code={code}'
      CARBONLANG = "en"
@@ -507,3 +507,4 @@ async def carbon_api(e):
      os.remove(kpp)
      os.remove(file)
      await asyncio.sleep(45)
+"""
