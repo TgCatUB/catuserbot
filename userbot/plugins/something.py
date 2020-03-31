@@ -4,7 +4,7 @@ from telethon import events
 import asyncio
 import os
 import sys
-from userbot.utils import admin_cmd
+from uniborg.util import admin_cmd
 
 @borg.on(admin_cmd(pattern=r"lmoon"))
 async def test(event):
@@ -21,9 +21,9 @@ async def test(event):
 
 🏬🏨🏫🏢🏤🏥🏦🏪🏫
               🌲/     l🚍\🌳👭
-           🌳/  🚘 l  🏃 \🌴 👬                       👬  🌴/            l  🚔    \🌲
-      🌲/   🚖     l               \
-   🌳/🚶           |   🚍         \ 🌴🚴🚴
+           🌳/  🚘 l  🏃 \🌴 👬                        👬     🌴/            l  🚔    \🌲
+      🌲/   🚖     l        \        
+          🌳/🚶           |   🚍         \ 🌴🚴🚴
 🌴/                    |                     \🌲""")
 
 # @PhycoNinja13b 's Part begin from here
