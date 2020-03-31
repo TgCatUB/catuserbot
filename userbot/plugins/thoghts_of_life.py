@@ -20,28 +20,16 @@ import random
 from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(pattern=f"tip", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.tip", outgoing=True))
-
 async def _(event):
-
     if event.fwd_from:
-
         return
-
     await event.edit("Well, let me give you a life-pro tip... 😉")
-
     await asyncio.sleep(2)
-
     x=(random.randrange(1,87))
-
     if x==1:
-
         await event.edit("`\"Before telling your landlord you're moving, ask them to fix anything broken that you're worried you might get charged for. They often will, and then when you move out they won't be able to take it out of your security deposit.\"`")
-
     if x==2:
-
         await event.edit("`\"Walking before solving a problem improves your creativity by an average of 60%.\"`")
-
     if x==3:
 
         await event.edit("`\"Wake up a little earlier than your alarm? Don’t go back to bed and wait for your alarm. Waking up naturally instead of to some sort of stimuli will help you get off to a better and healthier start to your day.\"`")
@@ -371,17 +359,10 @@ async def _(event):
         await event.edit("`\"Never make fun of someone if they mispronounce a word. It means they learned it by reading.\"`")
     
     if x==84:
-
         await event.edit("`\"If a service dog without a person approaches you, it means that the person is in need of help.\"`")
-    
     if x==85:
-
         await event.edit("`\"When taking a taxi ALWAYS get a receipt even if you don't need one. That way if you happen to accidentally leave a personal belonging behind you will have the company name and taxi number.\"`")
-    
     if x==86:
-
         await event.edit("`\"If you're buying a home printer for occasional use, get a laser printer; they're more expensive up front but way more economical in the long run.\"`")
-    
     if x==87:
-
         await event.edit("`\"Go for that run, no one is looking at you, don't overthink it, do it!\"`")
