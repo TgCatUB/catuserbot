@@ -6,8 +6,8 @@ async def figlet(event):
         return
     CMD_FIG = {"slant": "slant", "3D": "3-d", "5line": "5lineoblique", "alpha": "alphabet", "banner": "banner3-D", "doh": "doh", "iso": "isometric1", "letter": "letters", "allig": "alligator", "dotm": "dotmatrix", "bubble": "bubble", "bulb": "bulbhead", "digi": "digital"}
     input_str = event.pattern_match.group(1)
-    if "|" in input_str:
-        text, cmd = input_str.split("|", maxsplit=1)
+    if ":" in input_str:
+        text, cmd = input_str.split(":", maxsplit=1)
     elif input_str is not None:
         cmd = None
         text = input_str
