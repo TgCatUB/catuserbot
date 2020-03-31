@@ -68,14 +68,14 @@ async def git_commit(file_name,mone):
 		if i == 'ContentFile(path="'+file_name+'")':
 			return await mone.edit("`File Already Exists`")
 			create_file = False
-	file_name = "stdplugins/"+file_name		
+	file_name = "userbot/plugins/"+file_name		
 	if create_file == True:
 		file_name = file_name.replace("./temp/","")
 		print(file_name)
 		try:
 			repo.create_file(file_name, "Uploaded New Plugin", commit_data, branch="master")
 			print("Committed File")
-			await mone.edit("`Committed on Your Github Repo.`\n\n░░░░░░░░░░░█▀▀░░█░░░░░░\n░░░░░░▄▀▀▀▀░░░░░█▄▄░░░░\n░░░░░░█░█░░░░░░░░░░▐░░░ \n░░░░░░▐▐░░░░░░░░░▄░▐░░░\n░░░░░░█░░░░░░░░▄▀▀░▐░░░ \n░░░░▄▀░░░░░░░░▐░▄▄▀░░░░ \n░░▄▀░░░▐░░░░░█▄▀░▐░░░░░ \n░░█░░░▐░░░░░░░░▄░█░░░░░ \n░░░█▄░░▀▄░░░░▄▀▐░█░░░░░ \n░░░█▐▀▀▀░▀▀▀▀░░▐░█░░░░░ \n░░▐█▐▄░░▀░░░░░░▐░█▄▄░░░ \n░░░▀▀░▄[Stdplugins](https://github.com/sandy1709/catuserbot/blob/master/stdplugins)░▐▄▄▄▀░░░\n░░░░░░░░░░░░░░░░░░░░░░░ ")
+			await mone.edit("`Committed on Your Github Repo.`\n\n░░░░░░░░░░░█▀▀░░█░░░░░░\n░░░░░░▄▀▀▀▀░░░░░█▄▄░░░░\n░░░░░░█░█░░░░░░░░░░▐░░░ \n░░░░░░▐▐░░░░░░░░░▄░▐░░░\n░░░░░░█░░░░░░░░▄▀▀░▐░░░ \n░░░░▄▀░░░░░░░░▐░▄▄▀░░░░ \n░░▄▀░░░▐░░░░░█▄▀░▐░░░░░ \n░░█░░░▐░░░░░░░░▄░█░░░░░ \n░░░█▄░░▀▄░░░░▄▀▐░█░░░░░ \n░░░█▐▀▀▀░▀▀▀▀░░▐░█░░░░░ \n░░▐█▐▄░░▀░░░░░░▐░█▄▄░░░ \n░░░▀▀░▄[plugins](https://github.com/sandy1709/catuserbot/tree/master/userbot/plugins)░▐▄▄▄▀░░░\n░░░░░░░░░░░░░░░░░░░░░░░ ")
 		except:
 			print("Cannot Create Plugin")
 			await mone.edit("Cannot Upload Plugin")
