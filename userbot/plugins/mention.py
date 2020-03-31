@@ -10,6 +10,7 @@ from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 
 from userbot import bot
+from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(pattern=r"mention"))
 @bot.on(events.MessageEdited(pattern="^.mention ?(.*)", outgoing=True))
