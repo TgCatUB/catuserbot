@@ -45,7 +45,8 @@ from userbot.uniborgConfig import Config
 CARBONLANG = "auto"
 TTS_LANG = "en"
 TRT_LANG = "en"
-BOTLOG_CHATID = PRIVATE_GROUP_BOT_API_ID
+
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
 @register(outgoing=True, pattern="^.crblang (.*)")
