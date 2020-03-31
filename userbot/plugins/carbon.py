@@ -152,15 +152,15 @@ async def carbon_api(e):
 
          file,
 
-         caption="<< Here's your carbon, gey boi! \n Carbonised by @mrconfused>> ",
-
+         caption=f"Here's your carbon,do festival with this ! \n Carbonised by cat",
+                   
          force_document=True,
 
          reply_to=e.message.reply_to_msg_id,
 
          )
 
-   os.remove('./Anubis.png')
+   os.remove('./cat.png')
 
    driver.quit()
 
