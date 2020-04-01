@@ -21,7 +21,7 @@ from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from pySmartDL import SmartDL
 from telethon.tl import functions
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 import asyncio
 import shutil 
 import random
@@ -30,8 +30,8 @@ FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 
 @borg.on(admin_cmd(pattern="bloom ?(.*)"))
 async def autopic(event): 
-    await event.edit("Bloom colour profile pic have been enabled © @R4V4N4") 
-    downloaded_file_name = "./ravana/original_pic.png"
+    await event.edit("Bloom colour profile pic have been enabled by cat enjoy it man") 
+    downloaded_file_name = "./cat/original_pic.png"
     downloader = SmartDL(Config.RAVANA_LEELA, downloaded_file_name, progress_bar=True)
     downloader.start(blocking=False)
     photo = "photo_pfp.png"
