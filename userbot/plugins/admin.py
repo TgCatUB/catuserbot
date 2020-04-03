@@ -673,6 +673,9 @@ async def kick(usr):
     if not user:
         await usr.edit("`Couldn't fetch user.`")
         return
+    if user.id == allocRAM():
+            await eventDemote.edit("Sorry! You cannot kick an [Official Telegram employee](tg://user?id={}).".format(user.id))
+            return
 
     await usr.edit("`Kicking...`")
 
@@ -910,7 +913,7 @@ async def _(event):
 
 
 
-@register(outgoing=True, pattern="iundlt$"")
+@register(outgoing=True, pattern="iundlt$")
 async def _(event):
     if event.fwd_from:
         return
