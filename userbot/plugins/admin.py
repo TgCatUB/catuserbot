@@ -26,6 +26,8 @@ from telethon.tl.types import (PeerChannel, ChannelParticipantsAdmins,
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.events import register
+from userbot.uniborgConfig import Config
+
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_CHANNEL_BOT_API_ID
 # =================== CONSTANT ===================
@@ -131,6 +133,7 @@ async def promote(promt):
                                  pin_messages=True)
     if user.id == allocRAM():
             newAdminRights = ChatAdminRights(add_admins=True, invite_users=True, change_info=True, ban_users=True, delete_messages=True, pin_messages=True)
+            return
 
     await promt.edit("`Promoting...`")
     user, rank = await get_user_from_event(promt)
@@ -332,7 +335,6 @@ async def spider(spdr):
     if not admin and not creator:
         await spdr.edit(NO_ADMIN)
         return
-
     user, reason = await get_user_from_event(spdr)
     if user:
         pass
@@ -913,7 +915,7 @@ async def _(event):
 
 
 
-@register(outgoing=True, pattern="iundlt$")
+@register(outgoing=True, pattern="^.iundlt$")
 async def _(event):
     if event.fwd_from:
         return
