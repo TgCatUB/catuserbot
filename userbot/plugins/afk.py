@@ -68,7 +68,8 @@ async def set_not_afk(event):
     global afk_end
     back_alive = datetime.now()
     afk_end = back_alive.replace(microsecond=0)
-    total_afk_time = str((afk_end - afk_start))
+    if afk_start != {}:
+        total_afk_time = str((afk_end - afk_start))
     current_message = event.message.message
     if ".afk" not in current_message and "yes" in USER_AFK:  # pylint:disable=E0602
         shite = await borg.send_message(event.chat_id, "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`")
@@ -106,7 +107,8 @@ async def on_afk(event):
     global afk_end
     back_alivee = datetime.now()
     afk_end = back_alivee.replace(microsecond=0)
-    total_afk_time = str((afk_end - afk_start))
+    if afk_start != {}:
+        total_afk_time = str((afk_end - afk_start))
     afk_since = "**a while ago**"
     current_message_text = event.message.message.lower()
     if "afk" in current_message_text:
