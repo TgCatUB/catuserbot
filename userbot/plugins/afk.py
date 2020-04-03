@@ -18,32 +18,6 @@ last_afk_message = {}
 afk_start = {}
 
 
-AFKSTR = [
-    "I'm busy right now. Please talk in a bag and when I come back you can just give me the bag!",
-    "I'm away right now. If you need anything, leave a message after the beep:\n`beeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep`!",
-    "You missed me, next time aim better.",
-    "I'll be back in a few minutes and if I'm not...,\nwait longer.",
-    "I'm not here right now, so I'm probably somewhere else.",
-    "Roses are red,\nViolets are blue,\nLeave me a message,\nAnd I'll get back to you.",
-    "Sometimes the best things in life are worth waiting for…\nI'll be right back.",
-    "I'll be right back,\nbut if I'm not right back,\nI'll be back later.",
-    "If you haven't figured it out already,\nI'm not here.",
-    "Hello, welcome to my away message, how may I ignore you today?",
-    "I'm away over 7 seas and 7 countries,\n7 waters and 7 continents,\n7 mountains and 7 hills,\n7 plains and 7 mounds,\n7 pools and 7 lakes,\n7 springs and 7 meadows,\n7 cities and 7 neighborhoods,\n7 blocks and 7 houses...\n\nWhere not even your messages can reach me!",
-    "I'm away from the keyboard at the moment, but if you'll scream loud enough at your screen, I might just hear you.",
-    "I went that way\n---->",
-    "I went this way\n<----",
-    "Please leave a message and make me feel even more important than I already am.",
-    "I am not here so stop writing to me,\nor else you will find yourself with a screen full of your own messages.",
-    "If I were here,\nI'd tell you where I am.\n\nBut I'm not,\nso ask me when I return...",
-    "I am away!\nI don't know when I'll be back!\nHopefully a few minutes from now!",
-    "I'm not available right now so please leave your name, number, and address and I will stalk you later.",
-    "Sorry, I'm not here right now.\nFeel free to talk to my userbot as long as you like.\nI'll get back to you later.",
-    "I bet you were expecting an away message!",
-    "Life is so short, there are so many things to do...\nI'm away doing one of them..",
-    "I am not here right now...\nbut if I was...\n\nwouldn't that be awesome?",
-]
-
 @borg.on(events.NewMessage(pattern=r"\.afk ?(.*)", outgoing=True))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
@@ -94,7 +68,8 @@ async def set_not_afk(event):
     global afk_end
     back_alive = datetime.now()
     afk_end = back_alive.replace(microsecond=0)
-    total_afk_time = str((afk_end - afk_start))
+    if afk_start != {}:
+        total_afk_time = str((afk_end - afk_start))
     current_message = event.message.message
     if ".afk" not in current_message and "yes" in USER_AFK:  # pylint:disable=E0602
         shite = await borg.send_message(event.chat_id, "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`")
@@ -108,7 +83,7 @@ async def set_not_afk(event):
                 event.chat_id,
                 "Please set `PRIVATE_GROUP_BOT_API_ID` " + \
                 "for the proper functioning of afk functionality " + \
-                "contact @mrconfused.\n\n `{}`".format(str(e)),
+                "contact @sandy1709.\n\n `{}`".format(str(e)),
                 reply_to=event.message.id,
                 silent=True
             )
@@ -132,7 +107,8 @@ async def on_afk(event):
     global afk_end
     back_alivee = datetime.now()
     afk_end = back_alivee.replace(microsecond=0)
-    total_afk_time = str((afk_end - afk_start))
+    if afk_start != {}:
+        total_afk_time = str((afk_end - afk_start))
     afk_since = "**a while ago**"
     current_message_text = event.message.message.lower()
     if "afk" in current_message_text:
@@ -172,7 +148,7 @@ async def on_afk(event):
         message_to_reply = f"__My Master Has Been Gone For__ `{total_afk_time}`\nWhere He Is: ONLY GOD KNOWS " + \
             f"\n\n__I promise I'll back in a few light years__\n**REASON**: {reason}" \
             if reason \
-            else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? Soon  __Whenever I feel like it__**( ಠ ʖ̯ ಠ)**  "
+            else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? Soon __Whenever I feel like it__**( ಠ ʖ̯ ಠ)**  "
         msg = await event.reply(message_to_reply)
         await asyncio.sleep(5)
         if event.chat_id in last_afk_message:  # pylint:disable=E0602
