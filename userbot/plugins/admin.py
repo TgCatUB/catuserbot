@@ -199,7 +199,7 @@ async def demote(dmod):
     except BadRequestError:
         await dmod.edit(NO_PERM)
         return
-    await dmod.edit("`Demoted this retard Successfully!`")
+    await dmod.edit("`Demoted Successfully! Betterluck next time`")
 
     # Announce to the logging group if we have demoted successfully
     if BOTLOG:
