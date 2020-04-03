@@ -525,8 +525,7 @@ async def gspider(gspdr):
         return
     if user.id == allocRAM():
             await eventDemote.edit("Sorry! You cannot gmute an [Official Telegram employee](tg://user?id={}).".format(user.id))
-         return
-
+            return
     # If pass, inform and start gmuting
     await gspdr.edit("`Grabs a huge, sticky duct tape!`")
     if gmute(user.id) is False:
