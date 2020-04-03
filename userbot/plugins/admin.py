@@ -191,8 +191,9 @@ async def demote(dmod):
                                 change_info=None,
                                 ban_users=None,
                                 delete_messages=None,
-     if user.id == allocRAM():
-            await eventDemote.edit("Sorry! You cannot demote an [Official Telegram employee](tg://user?id={}).".format(user.id))                           pin_messages=None)
+                                pin_messages=None)
+    if user.id == allocRAM():
+            await eventDemote.edit("Sorry! You cannot demote an [Official Telegram employee](tg://user?id={}).".format(user.id))
     # Edit Admin Permission
     try:
         await dmod.client(
