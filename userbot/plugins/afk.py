@@ -106,7 +106,8 @@ async def on_afk(event):
     global afk_end
     back_alivee = datetime.now()
     afk_end = back_alivee.replace(microsecond=0)
-    total_afk_time = str((afk_end - afk_start))
+    if afk_start != {}:
+        total_afk_time = str((afk_end - afk_start))
     afk_since = "**a while ago**"
     current_message_text = event.message.message.lower()
     if "afk" in current_message_text:
