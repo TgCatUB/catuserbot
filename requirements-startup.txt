@@ -23,7 +23,7 @@ googletrans>=2.4.0
 gsearch
 hachoir
 heroku3
-httplib2
+httplib2<0.16.0
 humanize
 lxml
 oauth2client
