@@ -17,7 +17,7 @@ BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 async def notes_active(svd):
     """ For .notes command, list all of the notes saved in a chat. """
     try:
-        from userbot.modules.sql_helper.notes_sql import get_notes
+        from userbot.plugins.sql_helper.notes_sql import get_notes
     except AttributeError:
         await svd.edit("`Running on Non-SQL mode!`")
         return
