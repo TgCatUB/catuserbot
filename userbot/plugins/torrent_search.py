@@ -25,7 +25,7 @@ def dogbin(magnets):
 		counter = counter + 1
 	return urls	
 	
-@borg.on(admin_cmd(pattern="search ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="tsearch ?(.*)", allow_sudo=True))
 async def tor_search(event):
 	if event.fwd_from:
 		return 
