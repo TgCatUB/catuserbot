@@ -89,7 +89,7 @@ async def magnet_download(event):
 		new_gid = await check_metadata(gid)
 		await progress_status(gid=new_gid,event=event,previous=None)
 
-@borg.on(admin_cmd(pattern=r"ariaRM"))
+@borg.on(admin_cmd(pattern=r"ariarm"))
 async def remove_all(event):
 	if event.fwd_from:
 		return
