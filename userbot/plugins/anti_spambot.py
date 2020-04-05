@@ -12,7 +12,10 @@ from telethon.events import ChatAction
 from telethon.tl.types import ChannelParticipantsAdmins, Message
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, ANTI_SPAMBOT, ANTI_SPAMBOT_SHOUT, bot
+from userbot.uniborgConfig import Config
 
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_CHANNEL_BOT_API_ID
 
 @bot.on(ChatAction)
 async def ANTI_SPAMBOT(welcm):
