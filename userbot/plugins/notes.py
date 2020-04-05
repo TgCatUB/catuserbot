@@ -1,16 +1,23 @@
-
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# you may not use this file except in compliance with the License.
+#
 """ Userbot module containing commands for keeping notes. """
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.utils import register
 from asyncio import sleep
+from userbot.uniborgConfig import Config
 
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @register(outgoing=True, pattern="^.notes$")
 async def notes_active(svd):
     """ For .notes command, list all of the notes saved in a chat. """
     try:
-        from userbot.plugins.sql_helper.notes_sql import get_notes
+        from userbot.modules.sql_helper.notes_sql import get_notes
     except AttributeError:
         await svd.edit("`Running on Non-SQL mode!`")
         return
@@ -54,7 +61,7 @@ async def add_note(fltr):
     msg = await fltr.get_reply_message()
     msg_id = None
     if msg and msg.media and not string:
-        if BOTLOG_CHATID:
+        if BOTLOG:
             await fltr.client.send_message(
                 BOTLOG_CHATID, f"#NOTE\
             \nCHAT ID: {fltr.chat_id}\
@@ -81,14 +88,16 @@ async def add_note(fltr):
         return await fltr.edit(success.format('added', keyword))
 
 
-@register(pattern=r"#\w*"
-          )
+@register(pattern=r"#\w*",
+          disable_edited=True,
+          disable_errors=True,
+          ignore_unsafe=True)
 async def incom_note(getnt):
     """ Notes logic. """
     try:
         if not (await getnt.get_sender()).bot:
             try:
-                from userbot.plugins.sql_helper.notes_sql import get_note
+                from userbot.modules.sql_helper.notes_sql import get_note
             except AttributeError:
                 return
             notename = getnt.text[1:]
