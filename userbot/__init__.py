@@ -64,14 +64,18 @@ if bool(ENV):
         pass
 
     # Userbot logging feature switch.
-    BOTLOG = sb(os.environ.get("BOTLOG", "False"))
+    BOTLOG = sb(os.environ.get("BOTLOG", "True"))
 
     # Bleep Blop, this is a bot ;)
     PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
     # Console verbose logging
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
-
+    
+    # Genius lyrics get this value from https://genius.com/developers both has same values
+    GENIUS_API_TOKEN = os.environ.get("GENIUS", None)
+    # Genius lyrics get this value from https://genius.com/developers both has same values
+    GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
     # SQL Database URI
     DB_URI = os.environ.get("DATABASE_URL", None)
 
