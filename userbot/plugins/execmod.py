@@ -177,7 +177,7 @@ async def _(event):
 #        await event.edit("Unknown Command")
 
 
-@borg.on(admin_cmd(pattern="pip"))
+@borg.on(admin_cmd(pattern="pip$"))
 async def _(event):
     if event.fwd_from:
         return
