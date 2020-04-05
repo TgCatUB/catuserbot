@@ -50,6 +50,7 @@ jotquote
 kwot
 langdetect
 lxml
+lyricsgenius
 mtranslate
 names
 nltk
