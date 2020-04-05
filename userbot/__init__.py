@@ -68,7 +68,10 @@ if bool(ENV):
 
     # Bleep Blop, this is a bot ;)
     PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
-
+    # Heroku Credentials for updater.
+    HEROKU_MEMEZ = sb(os.environ.get("HEROKU_MEMEZ", "False"))
+    HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
+    HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     # Console verbose logging
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     
