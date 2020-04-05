@@ -33,25 +33,27 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
 # ============================================
 
 
-@register(outgoing=True, pattern="^.sysd$")
+@borg.on(admin_cmd(pattern=f"sysd", allow_sudo=True))
+@borg.on(events.NewMessage(pattern=r"\.sysd", outgoing=True))
 async def sysdetails(sysd):
-    """ For .sysd command, get system info using neofetch. """
-    try:
-        neo = "neofetch --stdout"
-        fetch = await asyncrunapp(
-            neo,
-            stdout=asyncPIPE,
-            stderr=asyncPIPE,
-        )
+    """ a. """
+    if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
+        try:
+            neo = "neofetch/neofetch --off --color_blocks off --bold off --cpu_temp C \
+                    --cpu_speed on --cpu_cores physical --kernel_shorthand off --stdout"
+            fetch = await asyncrunapp(
+                neo,
+                stdout=asyncPIPE,
+                stderr=asyncPIPE,
+            )
 
-        stdout, stderr = await fetch.communicate()
-        result = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
+            stdout, stderr = await fetch.communicate()
+            result = str(stdout.decode().strip()) \
+                + str(stderr.decode().strip())
 
-        await sysd.edit("`" + result + "`")
-    except FileNotFoundError:
-        await sysd.edit("`Install neofetch first !!`")
-
+            await sysd.edit("Neofetch Result: `" + result + "`")
+        except FileNotFoundError:
+            await sysd.edit("`Hello, on catuserbot  install .neofetch first kthx`")
 
 @register(outgoing=True, pattern="^.botver$")
 async def bot_ver(event):
@@ -135,25 +137,7 @@ async def pipcheck(pip):
 
 
 
-@register(outgoing=True, pattern="^.aliveu")
-async def amireallyaliveuser(username):
-    """ For .aliveu command, change the username in the .alive command. """
-    message = username.text
-    output = '.aliveu [new user without brackets] nor can it be empty'
-    if not (message == '.aliveu' or message[7:8] != ' '):
-        newuser = message[8:]
-        global DEFAULTUSER
-        DEFAULTUSER = newuser
-        output = 'Successfully changed user to ' + newuser + '!'
-    await username.edit("`" f"{output}" "`")
 
-
-@register(outgoing=True, pattern="^.resetalive$")
-async def amireallyalivereset(ureset):
-    """ For .resetalive command, reset the username in the .alive command. """
-    global DEFAULTUSER
-    DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
-    await ureset.edit("`" "Successfully reset user for alive!" "`")
 
 
 CMD_HELP.update(
