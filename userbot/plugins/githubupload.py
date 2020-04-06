@@ -32,7 +32,7 @@ async def download(event):
 	start = datetime.now()
 	reply_message = await event.get_reply_message()
 	try:
-		c_time = time.time()
+		#c_time = time.time()
 		downloaded_file_name = await borg.download_media(
 			reply_message,
 			GIT_TEMP_DIR,
