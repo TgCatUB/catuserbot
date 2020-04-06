@@ -101,3 +101,4 @@ urllib3
 wget
 wikipedia
 youtube-dl
+covid-cli
