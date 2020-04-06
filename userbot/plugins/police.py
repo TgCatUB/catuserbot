@@ -4,7 +4,11 @@ from telethon import events
 import asyncio
 
 from userbot.utils import admin_cmd
+from platform import uname
+from userbot import ALIVE_NAME
+from userbot.utils import admin_cmd
 
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
 @borg.on(admin_cmd(pattern=r"police"))
@@ -34,7 +38,7 @@ async def _(event):
             "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
             "🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴",
             "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
-            "@mrconfused **Police iz Here**"
+            "{DEFAULTUSER} **Police iz Here**"
 
  ]
 
