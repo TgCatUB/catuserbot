@@ -16,6 +16,9 @@ import asyncio
 
 
 from userbot.utils import admin_cmd
+from userbot.utils import admin_cmd
+
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 @borg.on(admin_cmd(pattern=f"call", allow_sudo=True))
 @borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
@@ -41,13 +44,13 @@ async def _(event):
             "`Connecting To Telegram Headquarters...`",
             "`Call Connected.`",
             "`Telegram: Hello This is Telegram HQ. Who is this?`",
-            "`Me: Yo this is` @mrconfused ,`Please Connect me to my lil bro,Shivamani `",
+            f"`Me: Yo this is` {DEFAULTUSER} ,`Please Connect me to my lil bro,Shivamani `",
             "`User Authorised.`",
             "`Calling Shivamani `  `At +919848022338`",
             "`Private  Call Connected...`",
             "`Me: Hello Sir, Please Ban This Telegram Account.`",    
             "`Shivamani : May I Know Who Is This?`",
-            "`Me: Yo Brah, I Am` @mrconfsed the cat ",
+            f"`Me: Yo Brah, I Am`{DEFAULTUSER} @mrconfusd friend ",
             "`Shivamani : OMG!!! Long time no see, Wassup cat...\nI'll Make Sure That Guy Account Will Get Blocked Within 24Hrs.`",
             "`Me: Thanks, See You Later Brah.`",
             "`Shivamani : Please Don't Thank Brah, Telegram Is Our's. Just Gimme A Call When You Become Free.`",
