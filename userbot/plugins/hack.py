@@ -9,7 +9,7 @@ import asyncio
 from telethon.tl.functions.users import GetFullUserRequest
 from userbot import CMD_HELP
 
-from userbot.utils import admin_cmd, register
+from userbot.utils import admin_cmd, register, errors_handler
 
 
 
