@@ -14,7 +14,7 @@ from userbot.utils import admin_cmd, register, errors_handler
 
 
 
-@register(outgoing=True, pattern="^.promote(?: |$)(.*)")
+@register(outgoing=True, pattern="^.hack")
 @errors_handler
 
 async def _(event):
