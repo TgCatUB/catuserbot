@@ -1,21 +1,15 @@
-"""thanks to @gujjubot and @r4v4n4 plugin was based on there repos 
-syntax: .hack """
+"""command: .hack"""
 
 from telethon import events
 
 import asyncio
 
 
-from telethon.tl.functions.users import GetFullUserRequest
-from userbot import CMD_HELP
-
-from userbot.utils import admin_cmd, register, errors_handler
 
 
+@borg.on(admin_cmd(pattern=f"hack", allow_sudo=True))
 
-
-@register(outgoing=True, pattern="^.hack")
-@errors_handler
+@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
 
 async def _(event):
 
