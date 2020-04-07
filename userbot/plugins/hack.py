@@ -21,7 +21,7 @@ async def _(event):
     animation_interval = 3
 
     animation_ttl = range(0, 11)
-        
+     """   
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
         replied_user = await event.client(GetFullUserRequest(reply_message.from_id))
@@ -30,7 +30,7 @@ async def _(event):
         idd = reply_message.from_id
         if idd==916234223:
             await event.edit("This is My Master\nI can't hack my master's Account")
-        else:
+        else:"""
             await event.edit("Hacking..")
             
             animation_chars = [
