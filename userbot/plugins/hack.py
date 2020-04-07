@@ -9,13 +9,13 @@ import asyncio
 from telethon.tl.functions.users import GetFullUserRequest
 from userbot import CMD_HELP
 
-from userbot.utils import admin_cmd
+from userbot.utils import admin_cmd, register
 
 
 
 
-
-@borg.on(admin_cmd(pattern=f"hack", allow_sudo=True))
+@register(outgoing=True, pattern="^.promote(?: |$)(.*)")
+@errors_handler
 
 async def _(event):
 
