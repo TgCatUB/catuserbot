@@ -56,7 +56,8 @@ async def carbon_api(e):
                pcode = pcodee
                skeme = None
    elif textx:
-         pcode = str(textx.message) # Importing message to module
+         pcode = str(textx.message)
+         skeme = None # Importing message to module
    code = quote_plus(pcode) # Converting to urlencoded
    await e.edit("`Meking Carbon...\n25%`")
    url = CARBON.format(code=code, lang=CARBONLANG)
