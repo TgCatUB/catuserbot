@@ -99,7 +99,7 @@ async def carbon_api(e):
    await e.client.send_file(
          e.chat_id,
          file,
-         caption="<< `Here's your carbon!` \n **Carbonised by** @anubisxx.>>\n__The colour scheme or this carbon style is__ `{}`".format(color_name),
+         caption="<< `Here's your carbon!` \n **Carbonised by** @anubisxx.>>\n**Colour Scheme: **`{}`".format(color_name),
          force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
