@@ -37,7 +37,7 @@ async def _(event):
     if event.fwd_from:
         return
     if not event.is_reply:
-        await event.edit("Reply to a photo to add to my personal sticker pack.**( ఠ ͟ʖ ఠ)")
+        await event.edit("Reply to a photo to add to my personal sticker pack.**( ఠ ͟ʖ ఠ)**")
         return
     reply_message = await event.get_reply_message()
     sticker_emoji = "🔥"
@@ -52,7 +52,7 @@ async def _(event):
     userid = event.from_id
     packname = f"{user.first_name}'s @XtraTgBot Vol.{pack}"
     packshortname = f"vol_{pack}_with_{userid}"
-    await event.edit("`Look dat way,it's a gurl!\nMeanwhile, lemme kang this stcker over hehe ヽ༼ ಠ益ಠ ༽ﾉ`")
+    await event.edit("`Look dat way,it's a gurl!`**（　ﾟДﾟ）**\n`Meanwhile, lemme kang this stcker over hehe`**ヽ༼ ಠ益ಠ ༽ﾉ**")
 
     is_a_s = is_it_animated_sticker(reply_message)
     file_ext_ns_ion = "Anubis69_roxx.png"
