@@ -34,10 +34,6 @@ async def _(event):
         await event.edit("` I need a link to download something pro.`**(._.)**")
     else:
         await event.edit("**💦Preparing to upload Video💦 **\n**Title**:  `{}`\n**Total Views**: `{}`".format(title, views))
-    downloaded_file_name = "userbot/original_pic.jpg"
-    downloader = SmartDL(thumb_image_link, downloaded_file_name, progress_bar=False)
-    downloader.start(blocking=False)
-    photo_thumb = "userbot/original_pic.jpg"
     await asyncio.sleep(2)
     
 
@@ -60,7 +56,7 @@ async def _(event):
               response = await conv.get_response()
               if "Downloading" in response.text:
                   video_hehe = await conv.get_response()
-                  await borg.send_file(event.chat_id, video_hehe, caption="`🤤 Video Uploaded by` [@anubisxx](https://github.com/Dark-Princ3/X-tra-Telegram)!🤤\n**Title:** `{}`".format(title), thumb=photo_thumb)
+                  await borg.send_file(event.chat_id, video_hehe, caption="`🤤 Video Uploaded by` [@anubisxx](https://github.com/Dark-Princ3/X-tra-Telegram)!🤤\n**Title:** `{}`".format(title))
               elif "Unfortunately" in response.text:
                   await event.edit("`Woops, Incorrect link!`\n**Please check and try again.**")
               elif "correct" in response.text:
