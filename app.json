@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
   "name": "π.$",
   "description": "Userbot created by a SNAPDRAGON and custom fork by https://t.me/mrconfused contact @mrconfused for support",
   "logo": "https://telegra.ph/file/f8ab330abd9a8a43f5a40.jpg",
+=======
+  "name": "X-tra Telegram",
+  "description": "Userbot created by a SNAPDRAGON and custom fork by ANUBIS\n\n join https://t.me/XtraTgChat for any problems or support",
+  "logo": "https://telegra.ph/file/1be6c59f53fef57b5745b.jpg",
+>>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
   "keywords": [
     "telegram",
     "userbot",
@@ -38,6 +44,7 @@
       "description": "Get this value by running python3 telesetup.py locally",
       "value": ""
     },
+<<<<<<< HEAD
     "TG_BOT_USER_NAME_BF_HER": {
       "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the username of your bot",
       "value": ""
@@ -49,6 +56,11 @@
     "MAX_FLOOD_IN_P_M_s": {
       "description": "Maximum number of messages a person can send in pm before getting blocked. Value must be an integer. 3 by default.",
       "value": "5",
+=======
+    "MAX_FLOOD_IN_P_M_s": {
+      "description": "Maximum number of messages a person can send in pm before getting blocked. Value must be an integer. 3 by default.",
+      "value": "3",
+>>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
       "required": false
     },
     "OCR_SPACE_API_KEY": {
@@ -78,7 +90,16 @@
     },
     "SUDO_USERS": {
       "description": "Makes your acc and bot stable",
+<<<<<<< HEAD
       "value": "916234223",
+=======
+      "value": "742506768",
+      "required": false
+    },
+    "TG_BOT_TOKEN_BF_HER": {
+      "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the token of your bot.Worth it. Get it.",
+      "value": "",
+>>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
       "required": false
     },
     "CHROME_BIN": {
@@ -91,9 +112,20 @@
       "value": "/app/.chromedriver/bin/chromedriver",
       "required": false
     },
+<<<<<<< HEAD
     "DOWNLOAD_PFP_URL_CLOCK": {
       "description": "Needed for autopic module. A url that is a preview link of your Profile Pic",
       "value": "https://telegra.ph/file/f8ab330abd9a8a43f5a40.jpg",
+=======
+    "TG_BOT_USER_NAME_BF_HER": {
+      "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the username of your bot",
+      "value": "",
+      "required": false
+    },
+    "DOWNLOAD_PFP_URL_CLOCK": {
+      "description": "Needed for autopic module. A url that is a preview link of your Profile Pic",
+      "value": "",
+>>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
       "required": false
     },
     "TZ": {

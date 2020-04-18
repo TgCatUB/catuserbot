@@ -1,21 +1,9 @@
-"""Emoji
-
-Available Commands:
-
-.emoji shrug
-
-.emoji apple
-
-.emoji :/
-
-.emoji -_-"""
-
 from telethon import events
-
 import asyncio
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 
+<<<<<<< HEAD:userbot/plugins/funny.py
 @borg.on(admin_cmd(pattern=r"sqh(.*)", outgoing=True))
 
 async def _(event):
@@ -24,16 +12,17 @@ async def _(event):
 
         return
 
+=======
+@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+async def _(event):
+    if event.fwd_from:
+        return
+>>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941:userbot/plugins/chod.py
     animation_interval = 0.1
-
     animation_ttl = range(0, 11)
-
     input_str = event.pattern_match.group(1)
-
     if input_str == "sqh":
-
         await event.edit(input_str)
-
         animation_chars = [
         
             "`Downloading File..`",

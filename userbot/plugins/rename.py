@@ -77,7 +77,11 @@ async def _(event):
     thumb = None
     if os.path.exists(thumb_image_path):
         thumb = thumb_image_path
+<<<<<<< HEAD
     await event.edit("Rename & Upload in process 🙄🙇‍♂️🙇‍♂️🙇‍♀️ It might take some time if file size is big")
+=======
+    await event.edit("⚡️`Rename and upload in progress, please wait!`⚡️")
+>>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
     input_str = event.pattern_match.group(1)
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -114,6 +118,7 @@ async def _(event):
     else:
         await event.edit("Syntax // .rnupload file.name as reply to a Telegram media")
 
+<<<<<<< HEAD
 
 @borg.on(admin_cmd("rnstreamupload (.*)"))
 async def _(event):
@@ -192,3 +197,5 @@ async def _(event):
             await event.edit("File Not Found {}".format(input_str))
     else:
         await event.edit("Syntax // .rnstreamupload file.name as reply to a Telegram media")
+=======
+>>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941

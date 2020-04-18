@@ -83,7 +83,11 @@ async def set_not_afk(event):
                 event.chat_id,
                 "Please set `PRIVATE_GROUP_BOT_API_ID` " + \
                 "for the proper functioning of afk functionality " + \
+<<<<<<< HEAD
                 "check pinned message in @xtragbot.\n\n `{}`".format(str(e)),
+=======
+                "in @xtratgbot\nCheck pinned message for more info.\n\n `{}`".format(str(e)),
+>>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
                 reply_to=event.message.id,
                 silent=True
             )
@@ -145,10 +149,17 @@ async def on_afk(event):
             else:
                 afk_since = f"`{int(seconds)}s` **ago**"
         msg = None
+<<<<<<< HEAD
         message_to_reply = f"__My Master Has Been Gone For__ `{total_afk_time}`\nWhere He Is: ONLY GOD KNOWS " + \
             f"\n\n__I promise I'll back in a few light years__\n**REASON**: {reason}" \
             if reason \
             else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? Soon __Whenever I feel like it__**( ಠ ʖ̯ ಠ)**  "
+=======
+        message_to_reply = f"__My Master Has Been Gone For__ `{total_afk_time}`\nWhere He Is: ~~ONLY GOD KNOWS~~ " + \
+            f"\n\n__I promise I'll back in a few light years__\n**REASON**: {reason}" \
+            if reason \
+            else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? ~~Soon~~ __Whenever I feel like it__**( ಠ ʖ̯ ಠ)**  "
+>>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
         msg = await event.reply(message_to_reply)
         await asyncio.sleep(5)
         if event.chat_id in last_afk_message:  # pylint:disable=E0602
