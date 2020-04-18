@@ -18,6 +18,6 @@ async def amireallyalive(alive):
                    #  "`fork by :` Sandeep\n"
                      "`☞Database Status: Databases functioning normally!\n\n`"
                      "`☞Always with you, my master!\n`"
-                     f"`☞My peru owner`: {DEFAULTUSER}\n"
+                     f"`☞My peru owner`: [{DEFAULTUSER}](https://github.com/sandy1709/catuserbot)\n"
                      #"[Deploy this userbot Now](https://github.com/sandy1709/catuserbot)"
                     )
