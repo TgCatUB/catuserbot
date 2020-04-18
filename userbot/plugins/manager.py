@@ -14,17 +14,17 @@ PREV_REPLY_MESSAGE = {}
 
 
 BAALAJI_TG_USER_BOT = "My Master hasn't approved you to PM."
-TG_COMPANION_USER_BOT = "Please wait for his response and don't spam his PM.Until then timepass here @indiansongs143"
-UNIBORG_USER_BOT_WARN_ZERO = "I am currently offline. Please do not SPAM me.Until then timepass here @indiansongs143"
-UNIBORG_USER_BOT_NO_WARN = "Hi! I will answer to your message soon. Please wait for my response and don't spam my PM.Until then timepass here @indiansongs143. Thanks"
+TG_COMPANION_USER_BOT = "Please wait for his response and don't spam his PM."
+UNIBORG_USER_BOT_WARN_ZERO = "I am currently offline. Please do not SPAM me."
+UNIBORG_USER_BOT_NO_WARN = "Hi! I will answer to your message soon. Please wait for my response and don't spam my PM. Thanks"
 
 
 @borg.on(admin_cmd(pattern="nccreatedch"))
 async def create_dump_channel(event):
     if Config.PM_LOGGR_BOT_API_ID is None:
         result = await event.client(functions.channels.CreateChannelRequest(  # pylint:disable=E0602
-            title=f"UniBorg-{borg.uid}-PM_LOGGR_BOT_API_ID-data",
-            about="@UniBorg PM_LOGGR_BOT_API_ID // Do Not Touch",
+            title=f"Userbot-{borg.uid}-PM_LOGGR_BOT_API_ID-data",
+            about="userbot PM_LOGGR_BOT_API_ID // Do Not Touch",
             megagroup=False
         ))
         logger.info(result)
@@ -97,7 +97,7 @@ async def approve_p_m(event):
                 await event.delete()
 
 
-@borg.on(admin_cmd(pattern="blockpm(.*)"))
+@borg.on(admin_cmd(pattern="blockpm ?(.*)"))
 async def approve_p_m(event):
     if event.fwd_from:
         return

@@ -10,7 +10,10 @@ import asyncio
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 
+from userbot import ALIVE_NAME
+from userbot.utils import admin_cmd
 
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
 @borg.on(admin_cmd(pattern=f"padmin", allow_sudo=True))
@@ -53,7 +56,7 @@ async def _(event):
             "**(8) Change Chat Info: ☑️**",
             "**(8) Change Chat Info: ✅**",
             "**Permission Granted Successfully**",
-            "**pRoMooTeD SuCcEsSfUlLy bY: @mrconfused**"
+            f"**pRoMooTeD SuCcEsSfUlLy bY: {DEFAULTUSER}**"
 
  ]
 

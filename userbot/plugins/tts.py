@@ -32,10 +32,6 @@ async def _(event):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "voice.ogg"
     try:
-<<<<<<< HEAD
-=======
-        #https://github.com/SpEcHiDe/UniBorg/commit/17f8682d5d2df7f3921f50271b5b6722c80f4106
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
         tts = gTTS(text, lang=lan)
         tts.save(required_file_name)
         command_to_execute = [

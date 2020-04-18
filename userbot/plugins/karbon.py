@@ -11,6 +11,7 @@ Thanks to @r4v4n4 for vars"""
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from telethon import events
 from urllib.parse import quote_plus
 from urllib.error import HTTPError
@@ -62,12 +63,12 @@ async def carbon_api(e):
    command_result = driver.execute("send_command", params)
 
    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-   sleep(5) # this might take a bit.
-   driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   sleep(5)
-   await e.edit("🔳🔳🔳🔲🔲")
-   driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-   sleep(5) #Waiting for downloading
+   sleep(3) # this might take a bit.
+  # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+  # sleep(5)
+  # await e.edit("🔳🔳🔳🔲🔲")
+ #  driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+   sleep(3) #Waiting for downloading
 
    await e.edit("🔳🔳🔳🔳🔳")
    file = './carbon.png'
@@ -121,10 +122,10 @@ async def carbon_api(e):
 
    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
    sleep(5) # this might take a bit.
-   driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   sleep(5)
+  # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+   #sleep(5)
    await e.edit("🔘🔘🔘📛📛")
-   driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+   #driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
    sleep(5) #Waiting for downloading
 
    await e.edit("🔘🔘🔘🔘🔘")
@@ -178,10 +179,10 @@ async def carbon_api(e):
 
    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
    sleep(5) # this might take a bit.
-   driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   sleep(5)
+  # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+   #sleep(5)
    await e.edit("🔵🔵🔵🎛🎛")
-   driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+  # driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
    sleep(5) #Waiting for downloading
 
    await e.edit("🔵🔵🔵🔵🔵")
@@ -237,10 +238,10 @@ async def carbon_api(e):
    
    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
    sleep(5) # this might take a bit.
-   driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   sleep(5)
+   #driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+  # sleep(5)
    await e.edit("🌝🌝🌝🌚🌚")
-   driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+   #driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
    sleep(5) #Waiting for downloading
 
    await e.edit("🌝🌝🌝🌝🌝")
@@ -298,10 +299,10 @@ async def carbon_api(e):
 
    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
    sleep(5) # this might take a bit.
-   driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   sleep(5)
+  # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+   #sleep(5)
    await e.edit("⬛⬛⬛⬜⬜")
-   driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+   #driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
    sleep(5) #Waiting for downloading
 
    await e.edit("⬛⬛⬛⬛⬛")
@@ -393,10 +394,10 @@ async def carbon_api(e):
 
    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
    sleep(5) # this might take a bit.
-   driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   sleep(5)
+ #  driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+  # sleep(5)
    await e.edit("⬛⬛⬛⬜⬜")
-   driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+   #driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
    sleep(5) #Waiting for downloading
 
    await e.edit("⬛⬛⬛⬛⬛")

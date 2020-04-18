@@ -1,25 +1,16 @@
-<<<<<<< HEAD
 import coffeehouse
 from coffeehouse.lydia import LydiaAI
-=======
-from coffeehouse.lydia import LydiaAI
-from coffeehouse.api import API
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
 import asyncio
 from telethon import events
 
 # Non-SQL Mode
 ACC_LYDIA = {}
+SESSION_ID = {}
 
 if Var.LYDIA_API_KEY:
     api_key = Var.LYDIA_API_KEY
-<<<<<<< HEAD
     api_client = coffeehouse.API(api_key)
     Lydia = LydiaAI(api_client)
-=======
-    api_client = API(api_key)
-    lydia = LydiaAI(api_client)
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
 
 @command(pattern="^.repcf", outgoing=True)
 async def repcf(event):
@@ -27,21 +18,12 @@ async def repcf(event):
         return
     await event.edit("Processing...")
     try:
-<<<<<<< HEAD
         session = Lydia.create_session()
         session_id = session.id
         reply = await event.get_reply_message()
         msg = reply.text
         text_rep = session.think_thought((session_id, msg))
         await event.edit(" {0}".format(text_rep))
-=======
-        session = lydia.create_session()
-        session_id = session.id
-        reply = await event.get_reply_message()
-        msg = reply.text
-        text_rep = session.think_thought(msg)
-        await event.edit("**sun bsdk**: {0}".format(text_rep))
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
     except Exception as e:
         await event.edit(str(e))
 
@@ -54,16 +36,11 @@ async def addcf(event):
     await event.edit("Processing...")
     reply_msg = await event.get_reply_message()
     if reply_msg:
-<<<<<<< HEAD
         session = Lydia.create_session()
-=======
-        session = lydia.create_session()
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
         session_id = session.id
-        if reply_msg.from_id is None:
-            return await event.edit("Invalid user type.")
-        ACC_LYDIA.update({(event.chat_id & reply_msg.from_id): session})
-        await event.edit("Lydia successfully (re)enabled for user: {} in chat: {}".format(str(reply_msg.from_id), str(event.chat_id)))
+        ACC_LYDIA.update({str(event.chat_id) + " " + str(reply_msg.from_id): session})
+        SESSION_ID.update({str(event.chat_id) + " " + str(reply_msg.from_id): session_id})
+        await event.edit("Lydia successfully enabled for user: {} in chat: {}".format(str(reply_msg.from_id), str(event.chat_id)))
     else:
         await event.edit("Reply to a user to activate Lydia AI on them")
 
@@ -76,24 +53,25 @@ async def remcf(event):
     await event.edit("Processing...")
     reply_msg = await event.get_reply_message()
     try:
-        del ACC_LYDIA[event.chat_id & reply_msg.from_id]
+        del ACC_LYDIA[str(event.chat_id) + " " + str(reply_msg.from_id)]
+        del SESSION_ID[str(event.chat_id) + " " + str(reply_msg.from_id)]
         await event.edit("Lydia successfully disabled for user: {} in chat: {}".format(str(reply_msg.from_id), str(event.chat_id)))
-    except Exception:
+    except KeyError:
         await event.edit("This person does not have Lydia activated on him/her.")
-
 
 @bot.on(events.NewMessage(incoming=True))
 async def user(event):
     user_text = event.text
     try:
-        session = ACC_LYDIA[event.chat_id & event.from_id]
+        session = ACC_LYDIA[str(event.chat_id) + " " + str(event.from_id)]
+        session_id = SESSION_ID[str(event.chat_id) + " " + str(event.from_id)]
         msg = event.text
         async with event.client.action(event.chat_id, "typing"):
-            text_rep = session.think_thought(msg)
+            text_rep = session.think_thought((session_id, msg))
             wait_time = 0
             for i in range(len(text_rep)):
                 wait_time = wait_time + 0.1
             await asyncio.sleep(wait_time)
             await event.reply(text_rep)
-    except (KeyError, TypeError):
+    except KeyError:
         return

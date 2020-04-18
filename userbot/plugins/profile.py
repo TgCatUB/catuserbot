@@ -4,7 +4,14 @@
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module for changing your Telegram profile details. """
-
+"""Profile Updation Commands
+.pbio <Bio>
+.pname <Name>
+.ppic"""
+import os
+from telethon import events
+from telethon.tl import functions
+from userbot.utils import admin_cmd
 import os
 
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
@@ -50,22 +57,72 @@ async def mine(event):
     await event.edit(output_str)
 
 
-@register(outgoing=True, pattern="^.name")
-async def update_name(name):
-    """ For .name command, change your name in Telegram. """
-    newname = name.text[6:]
-    if " " not in newname:
-        firstname = newname
-        lastname = ""
+
+@borg.on(admin_cmd(pattern="pbio (.*)"))  # pylint:disable=E0602
+async def _(event):
+    if event.fwd_from:
+        return
+    bio = event.pattern_match.group(1)
+    try:
+        await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
+            about=bio
+        ))
+        await event.edit("Succesfully changed my profile bio")
+    except Exception as e:  # pylint:disable=C0103,W0703
+        await event.edit(str(e))
+
+
+@borg.on(admin_cmd(pattern="pname ((.|\n)*)"))  # pylint:disable=E0602,W0703
+async def _(event):
+    if event.fwd_from:
+        return
+    names = event.pattern_match.group(1)
+    first_name = names
+    last_name = ""
+    if  "\\n" in names:
+        first_name, last_name = names.split("\\n", 1)
+    try:
+        await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
+            first_name=first_name,
+            last_name=last_name
+        ))
+        await event.edit("My name was changed successfully")
+    except Exception as e:  # pylint:disable=C0103,W0703
+        await event.edit(str(e))
+
+
+@borg.on(admin_cmd(pattern="ppic"))  # pylint:disable=E0602
+async def _(event):
+    if event.fwd_from:
+        return
+    reply_message = await event.get_reply_message()
+    await event.edit("Downloading Profile Picture to my local ...")
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):  # pylint:disable=E0602
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)  # pylint:disable=E0602
+    photo = None
+    try:
+        photo = await borg.download_media(  # pylint:disable=E0602
+            reply_message,
+            Config.TMP_DOWNLOAD_DIRECTORY  # pylint:disable=E0602
+        )
+    except Exception as e:  # pylint:disable=C0103,W0703
+        await event.edit(str(e))
     else:
-        namesplit = newname.split(" ", 1)
-        firstname = namesplit[0]
-        lastname = namesplit[1]
-
-    await name.client(
-        UpdateProfileRequest(first_name=firstname, last_name=lastname))
-    await name.edit(NAME_OK)
-
+        if photo:
+            await event.edit("now, Uploading to @Telegram ...")
+            file = await borg.upload_file(photo)  # pylint:disable=E0602
+            try:
+                await borg(functions.photos.UploadProfilePhotoRequest(  # pylint:disable=E0602
+                    file
+                ))
+            except Exception as e:  # pylint:disable=C0103,W0703
+                await event.edit(str(e))
+            else:
+                await event.edit("My profile picture was succesfully changed")
+    try:
+        os.remove(photo)
+    except Exception as e:  # pylint:disable=C0103,W0703
+        logger.warn(str(e))  # pylint:disable=E0602
 
 @register(outgoing=True, pattern="^.setpfp$")
 async def set_profilepic(propic):
@@ -95,12 +152,7 @@ async def set_profilepic(propic):
             await propic.edit(INVALID_MEDIA)
 
 
-@register(outgoing=True, pattern="^.setbio (.*)")
-async def set_biograph(setbio):
-    """ For .setbio command, set a new bio for your profile in Telegram. """
-    newbio = setbio.pattern_match.group(1)
-    await setbio.client(UpdateProfileRequest(about=newbio))
-    await setbio.edit(BIO_SUCCESS)
+
 
 
 @register(outgoing=True, pattern="^.username (.*)")

@@ -19,10 +19,10 @@ async def _(event):
 
         return
 
-    animation_interval = 30
+    animation_interval = 2
     
 
-    animation_ttl = range(0, 103)
+    animation_ttl = range(0, 12)
 
     input_str = event.pattern_match.group(1)
 
@@ -43,10 +43,11 @@ async def _(event):
             "------------------>",    
             "------>;(^。^)ノ",
             "(￣ー￣) DED",
-            "`Targeted user killed by Headshot 😈......`\n '#Sad_Reacts_Onli'\n",
+            "`Targeted user killed by Headshot 😈.😈.😈.😈.😈.😈.😈......`\n '#Sad_Reacts_Onli'\n",
         ]
 
         for i in animation_ttl:
 
+            await asyncio.sleep(animation_interval)
 
-            await event.edit(animation_chars[i % 103])
+            await event.edit(animation_chars[i % 12])

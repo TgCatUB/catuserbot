@@ -16,8 +16,7 @@ from userbot.utils import admin_cmd
 
 
 
-@borg.on(admin_cmd("unnoob"))
-@borg.on(admin_cmd("(.*)"))
+@borg.on(admin_cmd("unoob"))
 
 async def _(event):
 
@@ -25,7 +24,7 @@ async def _(event):
 
         return
 
-    animation_interval = 0.5
+    animation_interval = 1
     
 
     animation_ttl = range(0, 9)
@@ -56,7 +55,6 @@ async def _(event):
 
             
 @borg.on(admin_cmd("menoob"))           
-@borg.on(admin_cmd("(.*)"))
 
 async def _(event):
 
@@ -64,7 +62,7 @@ async def _(event):
 
         return
 
-    animation_interval = 0.5
+    animation_interval = 1
     
 
     animation_ttl = range(0, 9)
@@ -96,7 +94,6 @@ async def _(event):
             
             
 @borg.on(admin_cmd("upro"))            
-@borg.on(admin_cmd("(.*)"))
 
 async def _(event):
 
@@ -104,7 +101,7 @@ async def _(event):
 
         return
 
-    animation_interval = 0.5
+    animation_interval = 1
     
 
     animation_ttl = range(0, 8)
@@ -134,7 +131,6 @@ async def _(event):
             
             
 @borg.on(admin_cmd("mepro"))            
-@borg.on(admin_cmd("(.*)"))
 
 async def _(event):
 
@@ -142,7 +138,7 @@ async def _(event):
 
         return
 
-    animation_interval = 0.5
+    animation_interval = 1
     
 
     animation_ttl = range(0, 8)

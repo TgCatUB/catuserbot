@@ -1,18 +1,19 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
+
 #
+
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
+
 # you may not use this file except in compliance with the License.
+
 #
-# Fixed and made better by @anubisxx
+
 """ Userbot module containing various scrapers. """
+
 import os
 import shutil
 from bs4 import BeautifulSoup
 import re
-<<<<<<< HEAD
-=======
-import random
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
 from time import sleep
 from html import unescape
 from re import findall
@@ -20,12 +21,9 @@ from datetime import datetime
 from selenium import webdriver
 from urllib.parse import quote_plus
 from urllib.error import HTTPError
-<<<<<<< HEAD
-=======
-from selenium.webdriver.common.keys import Keys
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 from urbandict import define
@@ -38,25 +36,12 @@ from gtts import gTTS
 from emoji import get_emoji_regexp
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CHROME_DRIVER, GOOGLE_CHROME_BIN
 from userbot.utils import register
-<<<<<<< HEAD
 CARBONLANG = "auto"
 LANG = "en"
-
-@register(outgoing=True, pattern="^.carbon$")
-async def carbon_api(e):
- if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-=======
-
-
-CARBONLANG = "auto"
-LANG = "en"
-
 
 @register(outgoing=True, pattern="^.carbon")
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
- 
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
    """ A Wrapper for carbon.now.sh """
    await e.edit("`Processing..`")
    CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
@@ -64,21 +49,9 @@ async def carbon_api(e):
    textx = await e.get_reply_message()
    pcode = e.text
    if pcode[8:]:
-<<<<<<< HEAD
          pcode = str(pcode[8:])
    elif textx:
          pcode = str(textx.message) # Importing message to module
-=======
-         pcodee = str(pcode[8:])
-         if "|" in pcodee:
-               pcode, skeme = pcodee.split("|")
-         else:
-               pcode = pcodee
-               skeme = None
-   elif textx:
-         pcode = str(textx.message)
-         skeme = None # Importing message to module
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
    code = quote_plus(pcode) # Converting to urlencoded
    await e.edit("`Meking Carbon...\n25%`")
    url = CARBON.format(code=code, lang=CARBONLANG)
@@ -98,49 +71,23 @@ async def carbon_api(e):
    driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
    params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_path}}
    command_result = driver.execute("send_command", params)
-<<<<<<< HEAD
    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-=======
-   driver.find_element_by_xpath('//*[@id="__next"]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]').click()
-   if skeme != None:
-         k_skeme = driver.find_element_by_xpath('/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input')
-         k_skeme.send_keys(skeme)
-         k_skeme.send_keys(Keys.DOWN)
-         k_skeme.send_keys(Keys.ENTER)
-   else:
-       color_scheme = str(random.randint(1,29))
-       driver.find_element_by_id(("downshift-0-item-" + color_scheme)).click()
-   driver.find_element_by_id("export-menu").click()
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
-   driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+  # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+  # driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
    await e.edit("`Processing..\n75%`")
    # Waiting for downloading
    sleep(2.5)
-<<<<<<< HEAD
-=======
-   color_name = driver.find_element_by_xpath('/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input').get_attribute('value')
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
    await e.edit("`Done Dana Done...\n100%`")
    file = './carbon.png'
    await e.edit("`Uploading..`")
    await e.client.send_file(
          e.chat_id,
          file,
-<<<<<<< HEAD
-         caption=f"Here's your carbon,do festival with this ! \n Carbonised by cat",
+         caption="Here's your carbon, \n Carbonised by cat",
          force_document=True,
-         reply_to=e.message.reply_to_msg_id,
+         reply_to=e.message.reply_to_msg_id
          )
-   os.remove('./cat.png')
-=======
-         caption="<< `Here's your carbon!` \n **Carbonised by** [@anubisxx.](https://github.com/Dark-Princ3/X-tra-Telegram)>>\n**Colour Scheme: **`{}`".format(color_name),
-         force_document=True,
-         reply_to=e.message.reply_to_msg_id,
-         )
-   os.remove('./Anubis.png')
->>>>>>> e5ef0b3993bbed07fa8182df63a2a5da234c5941
+   os.remove('./carbon.png')
    driver.quit()
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg
-   

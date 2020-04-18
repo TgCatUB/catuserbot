@@ -1,7 +1,5 @@
 """Emoji
-
 Available Commands:
-
 .wtf"""
 
 from telethon import events
@@ -10,7 +8,7 @@ import asyncio
 
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd("wtf"))
+@borg.on(admin_cmd("wtf (.*)"))
 async def _(event):
     if event.fwd_from:
         return

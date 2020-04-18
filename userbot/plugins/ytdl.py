@@ -8,16 +8,19 @@ Audio and video downloader using Youtube-dl
 
 import os
 import time
+from html import unescape
 import math
 import asyncio
 from youtube_dl import YoutubeDL
+from googleapiclient.discovery import build
 from youtube_dl.utils import (DownloadError, ContentTooShortError,
                               ExtractorError, GeoRestrictedError,
                               MaxDownloadsReached, PostProcessingError,
                               UnavailableVideoError, XAttrMetadataError)
 from asyncio import sleep
 from telethon.tl.types import DocumentAttributeAudio
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
+from userbot.uniborgConfig import Config
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
     """Generic progress_callback for uploads and downloads."""
@@ -212,3 +215,68 @@ async def download_video(v_url):
         os.remove(f"{ytdl_data['id']}.mp4")
         await v_url.delete()
         
+                  
+
+#@register(outgoing=True, pattern="^.yts (.*)")
+@borg.on(admin_cmd(pattern="yts (.*)"))
+async def yt_search(video_q):
+    """ For .yts command, do a YouTube search from Telegram. """
+    query = video_q.pattern_match.group(1)
+    result = ''
+
+    if not Config.YOUTUBE_API_KEY:
+        await video_q.edit(
+            "`Error: YouTube API key missing! Add it to reveal config vars in heroku or userbot/uniborgConfig.py in github fork.`"
+        )
+        return
+
+    await video_q.edit("```Processing...```")
+
+    full_response = await youtube_search(query)
+    videos_json = full_response[1]
+
+    for video in videos_json:
+        title = f"{unescape(video['snippet']['title'])}"
+        link = f"https://youtu.be/{video['id']['videoId']}"
+        result += f"{title}\n{link}\n\n"
+
+    reply_text = f"**Search Query:**\n`{query}`\n\n**Results:**\n\n{result}"
+
+    await video_q.edit(reply_text)
+
+
+async def youtube_search(query,
+                         order="relevance",
+                         token=None,
+                         location=None,
+                         location_radius=None):
+    """ Do a YouTube search. """
+    youtube = build('youtube',
+                    'v3',
+                    developerKey=Config.YOUTUBE_API_KEY,
+                    cache_discovery=False)
+    search_response = youtube.search().list(
+        q=query,
+        type="video",
+        pageToken=token,
+        order=order,
+        part="id,snippet",
+        maxResults=10,
+        location=location,
+        locationRadius=location_radius).execute()
+
+    videos = []
+
+    for search_result in search_response.get("items", []):
+        if search_result["id"]["kind"] == "youtube#video":
+            videos.append(search_result)
+    try:
+        nexttok = search_response["nextPageToken"]
+        return (nexttok, videos)
+    except HttpError:
+        nexttok = "last_page"
+        return (nexttok, videos)
+    except KeyError:
+        nexttok = "KeyError, try again."
+        return (nexttok, videos)
+                  

@@ -49,7 +49,7 @@ class Config(object):
     TG_BOT_TOKEN_BF_HER = os.environ.get("TG_BOT_TOKEN_BF_HER", None)
     TG_BOT_USER_NAME_BF_HER = os.environ.get("TG_BOT_USER_NAME_BF_HER", None)
     #
-    NO_LOG_P_M_S = bool(os.environ.get("NO_LOG_P_M_S", False))
+    NO_LOG_P_M_S = bool(os.environ.get("NO_LOG_P_M_S", True))
     #
     # DO NOT EDIT BELOW THIS LINE IF YOU DO NOT KNOW WHAT YOU ARE DOING
     # TG API limit. A message can have maximum 4096 characters!
@@ -111,7 +111,10 @@ class Config(object):
    # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
    # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
 
-
+    
+    HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
+    #
+    HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     #
     TELE_GRAM_2FA_CODE = os.environ.get("TELE_GRAM_2FA_CODE", None)
     #
@@ -123,7 +126,7 @@ class Config(object):
     OPEN_LOAD_KEY = os.environ.get("OPEN_LOAD_KEY", "0")
     # Google Chrome Selenium Stuff
     # taken from https://github.com/jaskaranSM/UniBorg/blob/9072e3580cc6c98d46f30e41edbe73ffc9d850d3/sample_config.py#L104-L106
-    TEMP_DIR = os.environ.get("TEMP_DIR", None)
+    TEMP_DIR = os.environ.get("TEMP_DIR", "./DOWNLOADS")
     # spotify stuff
     DEFAULT_BIO = os.environ.get("DEFAULT_BIO",None)
     SPOTIFY_BIO_PREFIX = os.environ.get("SPOTIFY_BIO_PREFIX",None)
@@ -153,8 +156,6 @@ class Config(object):
     # MONGOCLIENT = pymongo.MongoClient(MONGO_DB_URI)
     # MONGO = MONGOCLIENT.userbot
     KUTT_IT_API_KEY = os.environ.get("KUTT_IT_API_KEY", None)
-    #lyrics plugin
-    GENIUS = os.environ.get("GENIUS_API_TOKEN", 'None')
     watermark_path = os.environ.get("watermark_path", None)
     # RSS_POST_MSG_GROUP_ID = map(int, os.environ.get("RSS_POST_MSG_GROUP_ID", None).split())
     RSS_POST_MSG_GROUP_ID = os.environ.get("RSS_POST_MSG_GROUP_ID", None)

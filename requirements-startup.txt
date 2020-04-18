@@ -1,6 +1,7 @@
 Pillow>=5.3.0
 PyDrive
 PyGithub
+PyLyrics
 PyPDF2
 SQLAlchemy
 aiofiles
@@ -12,7 +13,7 @@ aria2p
 async_generator
 asyncio
 asyncurban
-beautifulsoup4==4.6.0
+beautifulsoup4==4.8.1
 bs4
 bwb==3.0.0
 cfscrape
@@ -50,7 +51,6 @@ jotquote
 kwot
 langdetect
 lxml
-lyricsgenius
 mtranslate
 names
 nltk
@@ -87,6 +87,7 @@ search-engine-parser
 selenium
 setuptools>=40.3.0
 spamwatch
+spcli
 speedtest-cli
 spotify_token
 sqlalchemy

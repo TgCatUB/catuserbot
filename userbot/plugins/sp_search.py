@@ -12,7 +12,7 @@ from userbot.utils import admin_cmd
 
 
 
-@borg.on(admin_cmd(pattern="sch ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="spsearch ?(.*)", outgoing=True))
 async def sp_search(event):
 	search_str = event.pattern_match.group(1)
 

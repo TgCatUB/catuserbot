@@ -5,16 +5,16 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern="res ?(.*)"))
+@borg.on(admin_cmd(pattern="cres ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
     if not event.reply_to_msg_id:
-       await event.edit("```Reply to a Link.```")
+       await event.edit("```Reply to a username or username link.```")
        return
     reply_message = await event.get_reply_message() 
     if not reply_message.text:
-       await event.edit("```Reply to a Link```")
+       await event.edit("```Reply to a username or username link```")
        return
     chat = "@CheckRestrictionsBot"
     sender = reply_message.sender

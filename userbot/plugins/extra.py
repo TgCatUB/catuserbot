@@ -50,8 +50,8 @@ async def _(event):
 		
 
 
-@borg.on(admin_cmd("myusernames$"))
-@register(outgoing=True, pattern="^.myusernames$")
+@borg.on(admin_cmd("myusernames"))
+#@register(outgoing=True, pattern="^.myusernames$")
 async def _(event):
     if event.fwd_from:
         return

@@ -23,8 +23,7 @@ import importlib.util
 
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=f"(q?w)char", allow_sudo=True))
-@borg.on(events.NewMessage(outgoing=True, pattern='^\.(q?w)char'))
+@borg.on(admin_cmd(pattern=f"wchar", allow_sudo=True))
 
 async def timer_blankx(e):
 
