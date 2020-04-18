@@ -15,6 +15,7 @@ async def amireallyalive(alive):
                      "`☞Telethon version: 1.11.3\n`"
                      "`☞Python: 3.8.2\n`"
                      "`☞Bot was modified by:` sandeep\n"
+                     "`☞and created by :` snapdragon\n"
                    #  "`fork by :` Sandeep\n"
                      "`☞Database Status: Databases functioning normally!\n\n`"
                      "`☞Always with you, my master!\n`"
