@@ -170,6 +170,6 @@ def generate_change_log(git_repo, diff_marker):
 async def deploy_start(tgbot, message, refspec, remote):
     await message.edit(RESTARTING_APP)
     await message.edit("Restarted! do `.alive or .ping` to check if I am Working or not?")
-    await remote.push(refspec=refspec)
+   # await remote.push(refspec=refspec)
     await tgbot.disconnect()
     os.execl(sys.executable, sys.executable, *sys.argv)
