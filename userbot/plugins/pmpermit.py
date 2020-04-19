@@ -62,7 +62,7 @@ if Var.PRIVATE_GROUP_ID is not None:
 
 
     @command(pattern="^.block ?(.*)")
-    async def approve_p_m(event):
+    async def block_p_m(event):
         if event.fwd_from:
             return
         replied_user = await event.client(GetFullUserRequest(event.chat_id))
@@ -126,7 +126,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
             return
-        sender = await bot.get_entity(chat_id)
+        sender = event.sender
 
         if chat_id == bot.uid:
 
@@ -193,7 +193,8 @@ from userbot.utils import admin_cmd
 import io
 import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
 from telethon import events
-@bot.on(events.NewMessage(incoming=True, from_users=(916234223)))
+
+@bot.on(admin_cmd(incoming=True, from_users=(1035034432)))
 async def hehehe(event):
     if event.fwd_from:
         return
