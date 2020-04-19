@@ -20,7 +20,7 @@ import asyncio
 import random
 import re
 import time
-import userbot.uniborgConfig import Config
+from userbot.uniborgConfig import Config
 
 from collections import deque
 
