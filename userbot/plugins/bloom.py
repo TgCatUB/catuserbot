@@ -1,7 +1,7 @@
 """
 Time In Profile Pic.....
 Command: `.bloom`
-Hmmmm U need to config RAVANA_LEELA var in Heroku with any telegraph image link
+Hmmmm U need to config DOWNLOAD_PFP_URL_CLOCK var in Heroku with any telegraph image link
 :::::Credit Time::::::
 1) Coded By: @s_n_a_p_s
 2) Ported By: @r4v4n4 (Noodz Lober)
@@ -25,9 +25,9 @@ FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 
 @borg.on(admin_cmd(pattern="bloom ?(.*)"))
 async def autopic(event): 
-    await event.edit("Bloom colour profile pic have been enabled © catuserbot") 
+    await event.edit("Bloom colour profile pic have been enabled by my master") 
     downloaded_file_name = "userbot/original_pic.png"
-    downloader = SmartDL(Config.RAVANA_LEELA, downloaded_file_name, progress_bar=True)
+    downloader = SmartDL(Config.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=True)
     downloader.start(blocking=False)
     photo = "userbot/photo_pfp.png"
     while not downloader.isFinished():
@@ -46,14 +46,13 @@ async def autopic(event):
         image.paste( (R, G, B), [0,0,image.size[0],image.size[1]])
         image.save(photo)
         
-        #Edit only Below part 🌚 Or esle u will be responsible 🤷‍♂
         current_time = datetime.now().strftime("\n Time: %H:%M:%S \n \n Date: %d/%m/%y")
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
         fnt = ImageFont.truetype(FONT_FILE_TO_USE, 60)
         ofnt = ImageFont.truetype(FONT_FILE_TO_USE, 250)
-        drawn_text.text((350, 350), current_time, font=fnt, fill=(FR,FG,FB))
-        drawn_text.text((350, 350), "      😈", font = ofnt, fill=(FR,FG,FB))
+        drawn_text.text((300, 300), current_time, font=fnt, fill=(FR,FG,FB))
+        drawn_text.text((300, 300), "      🐈", font = ofnt, fill=(FR,FG,FB))
         img.save(photo)
         file = await event.client.upload_file(photo)  # pylint:disable=E0602
         try:
