@@ -1,12 +1,41 @@
-"""Update UserBot code
-Syntax: .update"""
+"""Update UserBot code (for catuserbot)
+Syntax: .update
+\nAll Credits goes to © @Three_Cube_TeKnoways
+\nFor this awasome plugin.\nPorted from PpaperPlane Extended"""
+
+from os import remove
+from os import execl
+import sys
+
+# from git import Repo
+# from git.exc import GitCommandError
+# from git.exc import InvalidGitRepositoryError
+# from git.exc import NoSuchPathError
+
+# from .. import bot
+# from userbot.utils import register
 
 import git
+import asyncio
+import random
+import re
+import time
+
+from collections import deque
+
+import requests
+
+from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.types import MessageEntityMentionName
+from telethon import events
+
+from userbot.utils import admin_cmd
+
+
 from contextlib import suppress
 import os
 import sys
 import asyncio
-from userbot.utils import admin_cmd
 
 # -- Constants -- #
 IS_SELECTED_DIFFERENT_BRANCH = (
@@ -16,15 +45,15 @@ IS_SELECTED_DIFFERENT_BRANCH = (
     "please check out to an official branch, and re-start the updater."
 )
 OFFICIAL_UPSTREAM_REPO = "https://github.com/sandy1709/catuserbot/"
-BOT_IS_UP_TO_DATE = "the userbot is up-to-date."
+BOT_IS_UP_TO_DATE = "`The userbot is up-to-date.\nThank you for Using this Service.`"
 NEW_BOT_UP_DATE_FOUND = (
     "new update found for {branch_name}\n"
     "changelog: \n\n{changelog}\n"
     "updating ..."
 )
 NEW_UP_DATE_FOUND = (
-    "new update found for {branch_name}\n"
-    "updating ..."
+    "New update found for {branch_name}\n"
+    "`updating ...`"
 )
 REPO_REMOTE_NAME = "temponame"
 IFFUCI_ACTIVE_BRANCH_NAME = "master"
@@ -71,7 +100,7 @@ async def updater(message):
     )
 
     if not changelog:
-        await message.edit("Updating...")
+        await message.edit("`Updating...`")
         await asyncio.sleep(8)
  
     message_one = NEW_BOT_UP_DATE_FOUND.format(
@@ -85,7 +114,7 @@ async def updater(message):
     if len(message_one) > 4095:
         with open("change.log", "w+", encoding="utf8") as out_file:
             out_file.write(str(message_one))
-        await bot.send_message(
+        await tgbot.send_message(
             message.chat_id,
             document="change.log",
             caption=message_two
@@ -108,7 +137,7 @@ async def updater(message):
                     if i.name == Var.HEROKU_APP_NAME:
                         heroku_app = i
                 if heroku_app is None:
-                    await message.edit("Invalid APP Name. Please set the name of your bot in heroku in the var HEROKU_APP_NAME.")
+                    await message.edit("Invalid APP Name. Please set the name of your bot in heroku in the var `HEROKU_APP_NAME.`")
                     return
                 heroku_git_url = heroku_app.git_url.replace(
                     "https://",
@@ -119,15 +148,15 @@ async def updater(message):
                     remote.set_url(heroku_git_url)
                 else:
                     remote = repo.create_remote("heroku", heroku_git_url)
-                asyncio.get_event_loop().create_task(deploy_start(bot, message, HEROKU_GIT_REF_SPEC, remote))
+                asyncio.get_event_loop().create_task(deploy_start(tgbot, message, HEROKU_GIT_REF_SPEC, remote))
 
             else:
-                await message.edit("Please create the var HEROKU_APP_NAME as the key and the name of your bot in heroku as your value.")
+                await message.edit("Please create the var `HEROKU_APP_NAME` as the key and the name of your bot in heroku as your value.")
                 return
         else:
             await message.edit(NO_HEROKU_APP_CFGD)
     else:
-        await message.edit("No heroku api key found in HEROKU_API_KEY var")
+        await message.edit("No heroku api key found in `HEROKU_API_KEY` var")
         
 
 def generate_change_log(git_repo, diff_marker):
@@ -137,12 +166,9 @@ def generate_change_log(git_repo, diff_marker):
         out_put_str += f"•[{repo_change.committed_datetime.strftime(d_form)}]: {repo_change.summary} <{repo_change.author}>\n"
     return out_put_str
 
-async def deploy_start(bot, message, refspec, remote):
+async def deploy_start(tgbot, message, refspec, remote):
     await message.edit(RESTARTING_APP)
-    await message.edit("restarted! do `.alive` to check if I am online?\n It will takes approximately 5 mins to update your userbot")
+    await message.edit("Updating and Deploying New Branch. Please wait for 5 minutes then use `.alive` to check if i'm working or not.")
     await remote.push(refspec=refspec)
-    await bot.disconnect()
+    await tgbot.disconnect()
     os.execl(sys.executable, sys.executable, *sys.argv)
-
-    
-
