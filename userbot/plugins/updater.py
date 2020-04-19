@@ -15,15 +15,13 @@ from userbot.uniborgConfig import Config
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import CMD_HELP, bot,  UPSTREAM_REPO_URL
+from userbot import CMD_HELP, bot,  UPSTREAM_REPO_URL, HEROKU_APP_NAME, HEROKU_API_KEY
 from userbot.events import register
 
 requirements_path = path.join(
     path.dirname(path.dirname(path.dirname(__file__))), 'requirements.txt')
 
 
-HEROKU_APIKEY = Config.HEROKU_API_KEY
- HEROKU_APPNAME = Config.HEROKU_APP_NAME
 async def gen_chlog(repo, diff):
     ch_log = ''
     d_form = "%d/%m/%y"
@@ -130,19 +128,19 @@ async def upstream(ups):
     else:
         await ups.edit('`Updating userbot, please wait....`')
     # We're in a Heroku Dyno, handle it's memez.
-    if HEROKU_APIKEY is not None:
+    if HEROKU_API_KEY is not None:
         import heroku3
-        heroku = heroku3.from_key(HEROKU_APIKEY)
+        heroku = heroku3.from_key(HEROKU_API_KEY)
         heroku_app = None
         heroku_applications = heroku.apps()
-        if not HEROKU_APPNAME:
+        if not HEROKU_APP_NAME:
             await ups.edit(
                 '`[HEROKU MEMEZ] Please set up the HEROKU_APPNAME variable to be able to update userbot.`'
             )
             repo.__del__()
             return
         for app in heroku_applications:
-            if app.name == HEROKU_APPNAME:
+            if app.name == HEROKU_APP_NAME:
                 heroku_app = app
                 break
         if heroku_app is None:
@@ -157,7 +155,7 @@ async def upstream(ups):
         ups_rem.fetch(ac_br)
         repo.git.reset("--hard", "FETCH_HEAD")
         heroku_git_url = heroku_app.git_url.replace(
-            "https://", "https://api:" + HEROKU_APIKEY + "@")
+            "https://", "https://api:" + HEROKU_API_KEY + "@")
         if "heroku" in repo.remotes:
             remote = repo.remote("heroku")
             remote.set_url(heroku_git_url)
