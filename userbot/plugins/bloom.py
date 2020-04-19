@@ -27,7 +27,7 @@ FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 async def autopic(event): 
     await event.edit("Bloom colour profile pic have been enabled by my master") 
     downloaded_file_name = "userbot/original_pic.png"
-    downloader = SmartDL(Config.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=True)
+    downloader = SmartDL(Var.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=True)
     downloader.start(blocking=False)
     photo = "userbot/photo_pfp.png"
     while not downloader.isFinished():
@@ -51,7 +51,7 @@ async def autopic(event):
         drawn_text = ImageDraw.Draw(img)
         fnt = ImageFont.truetype(FONT_FILE_TO_USE, 60)
         ofnt = ImageFont.truetype(FONT_FILE_TO_USE, 250)
-        drawn_text.text((300, 300), current_time, font=fnt, fill=(FR,FG,FB))
+        drawn_text.text((200, 400), current_time, font=fnt, fill=(FR,FG,FB))
         drawn_text.text((300, 300), "      🐈", font = ofnt, fill=(FR,FG,FB))
         img.save(photo)
         file = await event.client.upload_file(photo)  # pylint:disable=E0602
