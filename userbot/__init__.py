@@ -104,6 +104,10 @@ if bool(ENV):
     AUTONAME = os.environ.get("AUTONAME", None)
     LESS_SPAMMY = os.environ.get("LESS_SPAMMY", True)
     
+    UPSTREAM_REPO_URL = os.environ.get(
+    "UPSTREAM_REPO_URL",
+    "https://github.com/sandy1709/catuserbot.git")
+    
     # Time & Date - Country and Time Zone
     COUNTRY = str(os.environ.get("COUNTRY", ""))
 
