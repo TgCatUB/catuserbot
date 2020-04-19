@@ -28,7 +28,7 @@ async def autopic(event):
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
         fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
-        drawn_text.text((350, 350), current_time, font=fnt, fill=(255, 255, 255))
+        drawn_text.text((300, 300), current_time, font=fnt, fill=(255, 255, 0))
         img.save(photo)
         file = await bot.upload_file(photo)  # pylint:disable=E0602
         try:
@@ -37,7 +37,7 @@ async def autopic(event):
             ))
             os.remove(photo)
             counter -= 30
-            await asyncio.sleep(60)
+            await asyncio.sleep(30)
         except:
             return
 
