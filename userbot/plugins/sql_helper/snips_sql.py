@@ -5,15 +5,23 @@ from userbot.plugins.sql_helper import SESSION, BASE
 class Snips(BASE):
     __tablename__ = "snips"
     snip = Column(UnicodeText, primary_key=True)
-    f_mesg_id = Column(Numeric)
+    reply = Column(UnicodeText)
+    snip_type = Column(Numeric)
+    media_id = Column(UnicodeText)
+    media_access_hash = Column(UnicodeText)
+    media_file_reference = Column(LargeBinary)
 
     def __init__(
         self,
-        snip,
-        f_mesg_id
+        snip, reply, snip_type,
+        media_id=None, media_access_hash=None, media_file_reference=None
     ):
         self.snip = snip
-        self.f_mesg_id = f_mesg_id
+        self.reply = reply
+        self.snip_type = snip_type
+        self.media_id = media_id
+        self.media_access_hash = media_access_hash
+        self.media_file_reference = media_file_reference
 
 
 Snips.__table__.create(checkfirst=True)
@@ -37,12 +45,17 @@ def get_all_snips():
         SESSION.close()
 
 
-def add_snip(keyword, f_mesg_id):
+def add_snip(keyword, reply, snip_type, media_id, media_access_hash, media_file_reference):
     adder = SESSION.query(Snips).get(keyword)
     if adder:
-        adder.f_mesg_id = f_mesg_id
+        adder.reply = reply
+        adder.snip_type = snip_type
+        adder.media_id = media_id
+        adder.media_access_hash = media_access_hash
+        adder.media_file_reference = media_file_reference
     else:
-        adder = Snips(keyword, f_mesg_id)
+        adder = Snips(keyword, reply, snip_type, media_id,
+                      media_access_hash, media_file_reference)
     SESSION.add(adder)
     SESSION.commit()
 
