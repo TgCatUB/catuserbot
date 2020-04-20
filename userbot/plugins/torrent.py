@@ -69,7 +69,7 @@ async def torrent_download(event):
 	gid = download.gid
 	await progress_status(gid=gid,event=event,previous=None)
 
-@borg.on(admin_cmd(pattern=r"url"))
+@borg.on(admin_cmd(pattern=r"fromurl"))
 async def magnet_download(event):
 	if event.fwd_from:
 		return
@@ -102,6 +102,22 @@ async def remove_all(event):
 		os.system("aria2p remove-all")
 	await event.edit("`Removed All Downloads.`")  
 
+
+@borg.on(admin_cmd(pattern="ariap"))
+async def pause_all(event):
+    if event.fwd_from:
+        return
+    # Pause ALL Currently Running Downloads.
+    paused = aria2.pause_all(force=True)
+    await event.edit("Output: " + str(paused))
+	
+@borg.on(admin_cmd(pattern="ariaresume"))
+async def resume_all(event):
+    if event.fwd_from:
+        return
+    resumed = aria2.resume_all()
+    await event.edit("Output: " + str(resumed))	
+	
 @borg.on(admin_cmd(pattern=r"show"))
 async def show_all(event):
 	if event.fwd_from:
