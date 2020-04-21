@@ -12,19 +12,20 @@ from userbot.utils import admin_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@borg.on(admin_cmd(pattern=f"call", outgoing=True))
+@borg.on(admin_cmd(pattern="call")
 async def _(event):
-        animation_interval = 3
+    if event.fwd_from:
+
+         return
+ 
+    animation_interval = 3
 
     animation_ttl = range(0, 18)
 
-    input_str = event.pattern_match.group(1)
+    #input_str = event.pattern_match.group(1)
 
-
-    if event.fwd_from:
-        return
-    if input_str == "call":
-
+    #if input_str == "call":
+        
         await event.edit(input_str)
 
         animation_chars = [
