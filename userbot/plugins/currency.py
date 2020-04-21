@@ -1,5 +1,6 @@
 """Currency Converter Plugin for @UniBorg
-Syntax: .currency number from to"""
+Syntax: .currency number from to
+example: .currency 5 usd inr"""
 from telethon import events
 import asyncio
 from datetime import datetime
