@@ -18,7 +18,7 @@ async def _(event):
     animation_ttl = range(0, 5)
     #input_str = event.pattern_match.group(1)
     #if input_str == "wtf":
-    await event.edit(input_str)
+    await event.edit("wtf")
     animation_chars = [
             "What",
             "What The",
