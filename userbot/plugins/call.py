@@ -12,23 +12,23 @@ from userbot.utils import admin_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@borg.on(admin_cmd(pattern="call"))
-         
+@borg.on(admin_cmd(pattern=r"call"))
+
 async def _(event):
-         
+
     if event.fwd_from:
 
-         return
- 
+        return
+
     animation_interval = 3
 
     animation_ttl = range(0, 18)
 
-    #input_str = event.pattern_match.group(1)
+   # input_str = event.pattern_match.group(1)
 
-    #if input_str == "call":
-        
-    await event.edit(input_str)
+   # if input_str == "call":
+
+    await event.edit("Calling")
     animation_chars = [
         
             "`Connecting To Telegram Headquarters...`",
