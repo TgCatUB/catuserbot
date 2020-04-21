@@ -11,6 +11,7 @@ from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(pattern="wtf"))
 async def _(event):
+    
     if event.fwd_from:
         return
     animation_interval = 0.3
