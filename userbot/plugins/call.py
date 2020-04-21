@@ -13,20 +13,16 @@ from userbot.utils import admin_cmd
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 @borg.on(admin_cmd(pattern=f"call", outgoing=True))
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
-
 async def _(event):
-
-    if event.fwd_from:
-
-        return
-
-    animation_interval = 3
+        animation_interval = 3
 
     animation_ttl = range(0, 18)
 
     input_str = event.pattern_match.group(1)
 
+
+    if event.fwd_from:
+        return
     if input_str == "call":
 
         await event.edit(input_str)
@@ -42,7 +38,7 @@ async def _(event):
             "`Private  Call Connected...`",
             "`Me: Hello Sir, Please Ban This Telegram Account.`",    
             "`Shivamani : May I Know Who Is This?`",
-            f"`Me: Yo Brah, I Am` {DEFAULTUSER} friend of @mrconfused ",
+            f"`Me: Yo Brah, I Am` {DEFAULTUSER} ",
             "`Shivamani : OMG!!! Long time no see, Wassup cat...\nI'll Make Sure That Guy Account Will Get Blocked Within 24Hrs.`",
             "`Me: Thanks, See You Later Brah.`",
             "`Shivamani : Please Don't Thank Brah, Telegram Is Our's. Just Gimme A Call When You Become Free.`",
