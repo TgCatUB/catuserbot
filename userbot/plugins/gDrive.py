@@ -11,7 +11,7 @@ from datetime import datetime
 from telethon import events
 from uniborg.util import admin_cmd, progress
 #
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 from apiclient.http import MediaFileUpload
 from apiclient.errors import ResumableUploadError
 from oauth2client.client import OAuth2WebServerFlow
