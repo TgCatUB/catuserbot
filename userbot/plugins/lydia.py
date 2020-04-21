@@ -29,11 +29,6 @@ async def repcf(event):
 
 @command(pattern="^.addcf", outgoing=True)
 async def addcf(event):
- reply_message = await event.get_reply_message()
- idd = reply_message.from_id
- if idd == 1035034432:
-  await reply_message.reply("he is my master so i can't ")
-else:
     if event.fwd_from:
         return
     await event.edit("Running on Non-SQL mode for now...")
