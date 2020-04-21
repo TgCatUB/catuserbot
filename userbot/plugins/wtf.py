@@ -9,9 +9,7 @@ import asyncio
 from userbot.utils import admin_cmd
 
 
-
-
-@borg.on(admin_cmd(pattern=f"wtf", outgoing=True))
+@borg.on(admin_cmd(pattern="chu"))
 async def _(event):
     if event.fwd_from:
         return
