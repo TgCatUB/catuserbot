@@ -14,6 +14,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 @borg.on(admin_cmd(pattern="call")
 async def _(event):
+         
     if event.fwd_from:
 
          return
