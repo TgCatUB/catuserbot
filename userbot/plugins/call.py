@@ -26,9 +26,8 @@ async def _(event):
 
     #if input_str == "call":
         
-        await event.edit(input_str)
-
-        animation_chars = [
+    await event.edit(input_str)
+    animation_chars = [
         
             "`Connecting To Telegram Headquarters...`",
             "`Call Connected.`",
@@ -49,8 +48,7 @@ async def _(event):
             "`Shivamani : Sure Sur \nTC Bye Bye :)`",
             "`Private Call Disconnected.`"
         ]
-
-        for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
