@@ -11,6 +11,13 @@ from userbot.utils import admin_cmd
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
+CACHE = {}
+
+BAALAJI_TG_USER_BOT = "My Master hasn't approved you to PM."
+TG_COMPANION_USER_BOT = "Please wait for his response and don't spam his PM."
+UNIBORG_USER_BOT_WARN_ZERO = "I am currently offline. Please do not SPAM me."
+UNIBORG_USER_BOT_NO_WARN = "Hi! I will answer to your message soon. Please wait for my response and don't spam my PM. Thanks"
+
 
 
 
@@ -97,7 +104,12 @@ async def on_new_private_message(event):
         # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
         return
 
-    sender = await bot.get_entity(chat_id)
+        if event.from_id in CACHE:
+            sender = CACHE[event.from_id]
+        else:
+            sender = await bot.get_entity(event.from_id)
+            CACHE[event.from_id] = sender
+            
     if chat_id == borg.uid:
         # don't log Saved Messages
         return
@@ -108,9 +120,6 @@ async def on_new_private_message(event):
         # don't log verified accounts
         return
 
-    """if not pmpermit_sql.is_approved(chat_id):
-        # pm permit
-        await do_pm_permit_action(chat_id, event)"""
 
     if not no_log_pms_sql.is_approved(chat_id):
         # log pms
@@ -176,21 +185,7 @@ async def on_new_channel_message(event):
         )
 
 
-"""@borg.on(events.Raw())
-async def _(event):
-    if Config.PM_LOGGR_BOT_API_ID is None:
-        return
-    if tgbot is None:
-        return
-    logger.info(event.stringify())"""
 
-
-"""if tgbot is not None:
-    @tgbot.on(events.Raw())
-    async def _(event):
-        if Config.PM_LOGGR_BOT_API_ID is None:
-            return
-        logger.info(event.stringify())"""
 
 
 async def do_pm_permit_action(chat_id, event):
