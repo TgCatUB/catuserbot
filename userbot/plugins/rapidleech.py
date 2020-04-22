@@ -8,20 +8,15 @@
 #
 
 """RapidLeech plugin: Inspired by @SjProjects"""
-import logging
-logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-                    level=logging.WARNING)
+
+import aiohttp
 import asyncio
 import json
 import re
-
-import aiohttp
 from bs4 import BeautifulSoup
 from telethon.utils import get_inner_text
-
 from userbot.utils import admin_cmd
 
-from userbot.uniborgConfig import Config
 
 logger.info(Config.OPEN_LOAD_LOGIN)
 # https://t.me/RoseSupport/33801
@@ -41,7 +36,7 @@ async def _(event):
             reply_message.message, reply_message.entities)
     converted_links = ""
     if len(list_of_urls) > 0:
-        converted_links += "Trying to generate IP specific link\n \n"
+        converted_links += "Trying to generate IP specific link\n"
         for a_url in list_of_urls:
             converted_link_infos = await get_direct_ip_specific_link(a_url)
             if "url" in converted_link_infos:
