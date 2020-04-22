@@ -8,6 +8,7 @@ from userbot.utils import admin_cmd
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
+CACHE = {}
 
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "**No name set yet nibba, check pinned message in** @XtraTgBot"
@@ -121,7 +122,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
             return
-        sender = event.sender
+        sender = (await bot.get_entity(event.from_id)) if not event.from_id in CACHE else CACHE[event.from_ir]
 
         if chat_id == bot.uid:
 
