@@ -126,7 +126,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
             return
-        sender = event.sender
+        sender = await bot.get_entity(chat_id)
 
         if chat_id == bot.uid:
 
@@ -147,7 +147,7 @@ if Var.PRIVATE_GROUP_ID is not None:
 
             return
           
-        if any([x in event.raw_text for x in ("/start", "1", "2", "3", "4", "5")]):
+        if any([x in event.raw_text for x in ("/start", "1", "2", "4", "5")]):
             return
 
         if not pmpermit_sql.is_approved(chat_id):
