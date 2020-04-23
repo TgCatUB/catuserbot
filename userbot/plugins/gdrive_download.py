@@ -91,3 +91,8 @@ async def g_download(event):
     file_name = await download_file_from_google_drive(file_id)
     await event.edit("File Downloaded.\nName: `"+str(file_name)+"`")
             
+CMD_HELP.update({
+    "gdrive_download":
+    ".gdl <gdrive File-Link>\
+    \nUsage:G-Drive File Downloader Plugin For Userbot."
+})
