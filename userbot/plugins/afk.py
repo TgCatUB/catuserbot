@@ -161,6 +161,6 @@ CMD_HELP.update({
     ".afk [Optional Reason]\
 \nUsage: Sets you as afk.\nReplies to anyone who tags/PM's \
 you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
-\n afk full form away from keyboard.\
+\n afk full form away from keyboard/keypad.\
 "
 })        
