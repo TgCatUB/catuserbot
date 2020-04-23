@@ -230,3 +230,15 @@ async def _(event):
                 ban_reason_msg = await event.reply(
                     "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(users_added_by)
                 )
+                    
+CMD_HELP.update({
+    "locks":
+    ".lock <all (or) type(s)> or .unlock <all (or) type(s)>\
+\nUsage: Allows you to lock/unlock some common message types in the chat.\
+[NOTE: Requires proper admin rights in the chat !!]\
+\n\nAvailable message types to lock/unlock are: \
+\nAPI Options: msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, changeinfo\
+\nDB Options: bots, commands, email, forward, url\
+\n\n.curenabledlocks\
+\nUsage: to see the active locks"
+})
