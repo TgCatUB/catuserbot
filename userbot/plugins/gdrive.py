@@ -41,7 +41,7 @@ G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
-@register(pattern=r"^\.gdrive(?: |$)(.*)", outgoing=True)
+@register(pattern=r"^\.ugdrive(?: |$)(.*)", outgoing=True)
 async def gdrive_upload_function(dryb):
     """ For .gdrive command, upload files to google drive. """
     await dryb.edit("Processing ...")
