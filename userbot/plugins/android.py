@@ -1,45 +1,38 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module containing commands related to android"""
 
 import re
-from requests import get
+
 from bs4 import BeautifulSoup
+from requests import get
 
 from userbot import CMD_HELP
-from userbot.utils import register
+from userbot.events import register
 
 GITHUB = 'https://github.com'
 DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
                'certified-android-devices/master/devices.json'
 
 
-@register(outgoing=True, pattern="^\.magisk$")
+@register(outgoing=True, pattern="^.magisk$")
 async def magisk(request):
     """ magisk latest releases """
-    magisk_dict = {
-        "Stable":
-        "https://raw.githubusercontent.com/topjohnwu/magisk_files/master/stable.json",
-        "Beta":
-        "https://raw.githubusercontent.com/topjohnwu/magisk_files/master/beta.json",
-        "Canary (Release)":
-        "https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/release.json",
-        "Canary (Debug)":
-        "https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/debug.json"
-    }
+    url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/master/'
     releases = 'Latest Magisk Releases:\n'
-    for name, release_url in magisk_dict.items():
-        data = get(release_url).json()
+    for variant in ['stable', 'beta', 'canary_builds/canary']:
+        data = get(url + variant + '.json').json()
+        name = variant.split('_')[0].capitalize()
         releases += f'{name}: [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | ' \
                     f'[APK v{data["app"]["version"]}]({data["app"]["link"]}) | ' \
                     f'[Uninstaller]({data["uninstaller"]["link"]})\n'
     await request.edit(releases)
 
 
-@register(outgoing=True, pattern=r"^\.device(?: |$)(\S*)")
+@register(outgoing=True, pattern=r"^.device(?: |$)(\S*)")
 async def device_info(request):
     """ get android device basic info from its codename """
     textx = await request.get_reply_message()
@@ -56,7 +49,7 @@ async def device_info(request):
         if i["device"] == device or i["model"] == device
     ]
     if found:
-        reply = f'Search results for {device}:\n\n'
+        reply = f'Search results for {device}:\n'
         for item in found:
             brand = item['brand']
             name = item['name']
@@ -70,7 +63,7 @@ async def device_info(request):
     await request.edit(reply)
 
 
-@register(outgoing=True, pattern=r"^\.codename(?: |)([\S]*)(?: |)([\s\S]*)")
+@register(outgoing=True, pattern=r"^.codename(?: |)([\S]*)(?: |)([\s\S]*)")
 async def codename_info(request):
     """ search for android codename """
     textx = await request.get_reply_message()
@@ -91,7 +84,7 @@ async def codename_info(request):
     if len(found) > 8:
         found = found[:8]
     if found:
-        reply = f'Search results for {brand.capitalize()} {device.capitalize()}:\n\n'
+        reply = f'Search results for {brand.capitalize()} {device.capitalize()}:\n'
         for item in found:
             brand = item['brand']
             name = item['name']
@@ -105,7 +98,7 @@ async def codename_info(request):
     await request.edit(reply)
 
 
-@register(outgoing=True, pattern=r"^\.specs(?: |)([\S]*)(?: |)([\s\S]*)")
+@register(outgoing=True, pattern=r"^.specs(?: |)([\S]*)(?: |)([\s\S]*)")
 async def devices_specifications(request):
     """ Mobile devices specifications """
     textx = await request.get_reply_message()
@@ -147,7 +140,7 @@ async def devices_specifications(request):
     reply = ''
     for url in device_page_url:
         info = BeautifulSoup(get(url).content, 'lxml')
-        reply = '\n**' + info.title.text.split('-')[0].strip() + '**\n\n'
+        reply = '\n' + info.title.text.split('-')[0].strip() + '\n'
         info = info.find('div', {'id': 'model-brief-specifications'})
         specifications = re.findall(r'<b>.*?<br/>', str(info))
         for item in specifications:
@@ -158,7 +151,7 @@ async def devices_specifications(request):
     await request.edit(reply)
 
 
-@register(outgoing=True, pattern=r"^\.twrp(?: |$)(\S*)")
+@register(outgoing=True, pattern=r"^.twrp(?: |$)(\S*)")
 async def twrp(request):
     """ get android device twrp """
     textx = await request.get_reply_message()
@@ -188,15 +181,10 @@ async def twrp(request):
 
 
 CMD_HELP.update({
-    "android":
-    ".magisk\
-\nGet latest Magisk releases\
-\n\n.device <codename>\
-\nUsage: Get info about android device codename or model.\
-\n\n.codename <brand> <device>\
-\nUsage: Search for android device codename.\
-\n\n.specs <brand> <device>\
-\nUsage: Get device specifications info.\
-\n\n.twrp <codename>\
-\nUsage: Get latest twrp download for android device."
+  "android":
+  ".magisk\nUsage: Get latest Magisk releases\
+  \n\n.device <codename>\nUsage: Get info about android device codename or model.\
+  \n\n.codename <brand> <device>\nUsage: Search for android device codename.\
+  \n\n.specs <brand> <device>\nUsage: Get device specifications info.\
+  \n\n.twrp <codename>\nUsage: Get latest twrp download for android device."
 })
