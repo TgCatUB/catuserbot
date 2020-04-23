@@ -198,3 +198,16 @@ async def hehehe(event):
         if not pmpermit_sql.is_approved(chat.id):
             pmpermit_sql.approve(chat.id, "My master🙈🙈")
             await borg.send_message(chat, "My master is come....Thank you master")        
+
+            
+CMD_HELP.update({
+    "pmpermit":
+    "\
+.approve\
+\nUsage: Approves the mentioned/replied person to PM.\
+\n\n.block\
+\nUsage: Blocks the person.\
+\n\n.listapproved\
+\nUsage: To list the all approved users.\
+"
+})            
