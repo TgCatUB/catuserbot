@@ -11,7 +11,7 @@ import re
 from telethon import events, utils
 from telethon.tl import types
 from userbot.plugins.sql_helper.filter_sql import get_filter, add_filter, remove_filter, get_all_filters, remove_all_filters
-
+from userbot import CMD_HELP
 
 DELETE_TIMEOUT = 0
 TYPE_TEXT = 0
@@ -125,3 +125,19 @@ async def on_snip_delete(event):
 async def on_all_snip_delete(event):
     remove_all_filters(event.chat_id)
     await event.edit(f"filters **in current chat** deleted successfully")
+
+    
+
+CMD_HELP.update({
+    "filters":
+    ".listfilters\
+    \nUsage: Lists all active (of your userbot) filters in a chat.\
+    \n\n.savefilter  reply to a message with .savefilter <keyword>\
+    \nUsage: Saves the replied message as a reply to the 'keyword'.\
+    \nThe bot will reply to the message whenever 'keyword' is mentioned.\
+    \nWorks with everything from files to stickers.\
+    \n\n.clearfilter <keyword>\
+    \nUsage: Stops the specified keyword.\
+    \n\n.clearallfilters \
+    \nUsage: Removes all filters of your userbot in the chat."
+})    
