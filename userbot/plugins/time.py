@@ -237,3 +237,16 @@ async def _(event):
         return
     input_str = event.pattern_match.group(1)
     logger.info(input_str)  # pylint:disable=E0602
+
+    
+CMD_HELP.update({
+    "time":
+    ".ctime <country name/code> <timezone number>"
+    "\nUsage: Get the time of a country. If a country has "
+    "multiple timezones, it will list all of them "
+    "and let you select one."
+    ".cdate <country name/code> <timezone number>"
+    "\nUsage: Get the date of a country. If a country has "
+    "multiple timezones, it will list all of them "
+    "and let you select one."
+})    
