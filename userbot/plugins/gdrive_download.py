@@ -10,6 +10,7 @@ import asyncio
 import os
 import sys
 from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
 async def download_file_from_google_drive(id):
     URL = "https://docs.google.com/uc?export=download"
