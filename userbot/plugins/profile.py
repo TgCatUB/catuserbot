@@ -72,15 +72,15 @@ async def _(event):
         await event.edit(str(e))
 
 
-@borg.on(admin_cmd(pattern="pname ((.|\n)*)"))  # pylint:disable=E0602,W0703
+@borg.on(admin_cmd(pattern="pname"))  # pylint:disable=E0602,W0703
 async def _(event):
     if event.fwd_from:
         return
     names = event.pattern_match.group(1)
     first_name = names
     last_name = ""
-    if  "\\n" in names:
-        first_name, last_name = names.split("\\n", 1)
+    if  " " in names:
+        first_name, last_name = names.split(" ", 1)
     try:
         await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
             first_name=first_name,
@@ -234,11 +234,11 @@ CMD_HELP.update({
     "profile":
     ".username <new_username>\
 \nUsage: Changes your Telegram username.\
-\n\n.name <firstname> or .name <firstname> <lastname>\
+\n\n.pname <firstname> or .pname <firstname> <lastname>\
 \nUsage: Changes your Telegram name.(First and last name will get split by the first space)\
-\n\n.setpfp\
-\nUsage: Reply with .setpfp to an image to change your Telegram profie picture.\
-\n\n.setbio <new_bio>\
+\n\n.setpfp or .ppic\
+\nUsage: Reply with .setpfp or .ppic to an image to change your Telegram profie picture.\
+\n\n.pbio <new_bio>\
 \nUsage: Changes your Telegram bio.\
 \n\n.delpfp or .delpfp <number>/<all>\
 \nUsage: Deletes your Telegram profile picture(s).\
