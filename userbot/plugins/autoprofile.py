@@ -1,5 +1,9 @@
 """Auto Profile Updation Commands
-.autoname"""
+.autoname for time along name 
+.autopic tilted image along with time
+.autobio  for time along with your bio
+.monkeybio set of funny bio's
+"""
 from telethon import events
 import asyncio
 import time
