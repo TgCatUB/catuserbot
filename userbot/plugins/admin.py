@@ -714,7 +714,7 @@ async def kick(usr):
             f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
 
 
-@register(outgoing=True, pattern="^.users ?(.*)")
+@register(outgoing=True, pattern="^.users$")
 @errors_handler
 async def get_users(show):
     """ For .users command, list all of the users in a chat. """
@@ -823,7 +823,9 @@ async def get_user_from_id(user, event):
 
 CMD_HELP.update({
     "admin":
-    ".promote <username/reply> <custom rank (optional)>\
+    ".setgpic <reply to image>\
+\nUsage: Changes the group's display picture\
+\n\n.promote <username/reply> <custom rank (optional)>\
 \nUsage: Provides admin rights to the person in the chat.\
 \n\n.demote <username/reply>\
 \nUsage: Revokes the person's admin permissions in the chat.\
@@ -841,10 +843,14 @@ CMD_HELP.update({
 \nUsage: Reply someone's message with .ungmute to remove them from the gmuted list.\
 \n\n.delusers\
 \nUsage: Searches for deleted accounts in a group. Use .delusers clean to remove deleted accounts from the group.\
-\n\n.admins\
+\n\n.adminlist\
 \nUsage: Retrieves a list of admins in the chat.\
+\n\n.pin <reply>\
+\nUsage: Pins the replied message in Group\
+\n\n.kick <username/reply> \
+\nUsage: kick the person off your chat.\
 \n\n.users or .users <name of member>\
 \nUsage: Retrieves all (or queried) users in the chat.\
-\n\n.setgppic <reply to image>\
-\nUsage: Changes the group's display picture."
+\n\n.iundlt\
+\nUsage: display last 5 deleted messages in group."
 })
