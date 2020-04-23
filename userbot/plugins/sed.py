@@ -1,6 +1,6 @@
 from collections import defaultdict, deque
 import re
-
+from userbot import CMD_HELP
 import regex
 from telethon import events, utils
 from telethon.tl import types, functions
@@ -108,3 +108,11 @@ async def on_regex(event):
         await event.edit(s)
 
     raise events.StopPropagation
+
+    
+CMD_HELP.update({
+    "sed":
+    ".s<delimiter><old word(s)><delimiter><new word(s)>\
+    \nUsage: Replaces a word or words using sed.\
+    \nDelimiters: `/, :, |, _`"
+})    
