@@ -15,8 +15,8 @@ DEFAULTUSER = str(AUTONAME)
 
 @borg.on(admin_cmd(pattern="autoname"))  # pylint:disable=E0602
 async def _(event):
-    if event.fwd_from:
-        return
+    await event.edit(f"Auto Name has been started by my Master") 
+
     while True:
         DM = time.strftime("%d-%m-%y")
         HM = time.strftime("%H:%M")
@@ -37,4 +37,4 @@ async def _(event):
             #     "Successfully Changed Profile Name"
             # )
         await asyncio.sleep(DEL_TIME_OUT)
-    await event.edit(f"Auto Name has been started Master") 
+    
