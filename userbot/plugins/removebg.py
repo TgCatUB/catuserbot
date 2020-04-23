@@ -22,7 +22,7 @@ import os
 import requests
 from telethon import events
 from userbot.utils import progress, admin_cmd
-
+from userbot import CMD_HELP
 
 @borg.on(admin_cmd("rmbg ?(.*)"))
 async def _(event):
@@ -111,3 +111,10 @@ def ReTrieveURL(input_url):
         stream=True
     )
     return r
+
+
+CMD_HELP.update({
+    "removebg":
+    ".rmbg <Link to Image> or reply to any image (Warning: does not work on stickers.)\
+\nUsage: Removes the background of images, using remove.bg API"
+})
