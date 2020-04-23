@@ -9,7 +9,7 @@ from userbot import CMD_HELP
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="info(?: |$)(.*)")
+@register(outgoing=True, pattern="^.info(?: |$)(.*)")
 async def info(event):
     """ For .info command,"""
     args = event.pattern_match.group(1).lower()
