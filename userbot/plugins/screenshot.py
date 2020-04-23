@@ -8,9 +8,9 @@ from datetime import datetime
 from selenium import webdriver
 from telethon import events
 from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
-
-@borg.on(admin_cmd("siteshot (.*)"))
+@borg.on(admin_cmd("ss (.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -62,3 +62,11 @@ async def _(event):
         await event.edit(f"Completed screencapture Process in {ms} seconds")
     except Exception:
         await event.edit(traceback.format_exc())
+
+        
+CMD_HELP.update({
+    "ss":
+    ".ss <url>\
+    \nUsage: Takes a screenshot of a website and sends the screenshot.\
+    \nExample of a valid URL : `https://www.google.com`"
+})        
