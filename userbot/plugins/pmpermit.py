@@ -5,6 +5,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
 from userbot import ALIVE_NAME, LESS_SPAMMY
 from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
