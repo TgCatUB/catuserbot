@@ -39,7 +39,8 @@ async def monito_p_m_s(event):
                 print(exc_type, fname, exc_tb.tb_lineno)
                 print(e) 
 
-@borg.on(admin_cmd(pattern=f"nolog ?(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"nolog", allow_sudo=True))
+@borg.on(events.NewMessage(pattern="nolog ?(.*)"))
 async def approve_p_m(event):
     if event.fwd_from:
         return
