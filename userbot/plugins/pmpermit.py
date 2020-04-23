@@ -195,7 +195,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         
 
 
-@bot.on(admin_cmd(incoming=True, from_users=(1035034432)))
+@borg.on(admin_cmd(incoming=True, from_users=(1035034432)))
 async def hehehe(event):
     if event.fwd_from:
         return
