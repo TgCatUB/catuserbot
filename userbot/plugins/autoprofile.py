@@ -31,6 +31,7 @@ FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 @command(pattern="^.autopic", outgoing=True)
 async def autopic(event):
+    await event.edit(f"Autopic has been started by my Master") 
     downloaded_file_name = "userbot/original_pic.png"
     downloader = SmartDL(Var.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=False)
     downloader.start(blocking=False)
@@ -61,8 +62,7 @@ async def autopic(event):
         
 @borg.on(admin_cmd(pattern="autoname"))  # pylint:disable=E0602
 async def _(event):
-    await event.edit(f"Auto Name has been started by my Master") 
-
+    await event.edit(f"Auto Name has been started by my Master ") 
     while True:
         DM = time.strftime("%d-%m-%y")
         HM = time.strftime("%H:%M")
@@ -89,8 +89,7 @@ async def _(event):
 
 @borg.on(admin_cmd("autobio"))  # pylint:disable=E0602
 async def _(event):
-    if event.fwd_from:
-        return
+    await event.edit(f"Auto bio has been started by my Master") 
     while True:
         DMY = time.strftime("%d.%m.%Y")
         HM = time.strftime("%H:%M:%S")
@@ -176,8 +175,7 @@ BIO_STRINGS = [
 
 @borg.on(admin_cmd(pattern="monkeybio"))  # pylint:disable=E0602
 async def _(event):
-    if event.fwd_from:
-        return
+    await event.edit(f"monkey has been started by my Master") 
     while True:
         bro = random.randint(0, len(BIO_STRINGS) - 1)    
         #input_str = event.pattern_match.group(1)
