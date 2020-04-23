@@ -10,7 +10,7 @@ from telethon import events, utils
 from telethon.tl import types
 from userbot.plugins.sql_helper.snips_sql import get_snips, add_snip, remove_snip, get_all_snips
 from userbot.utils import admin_cmd
-
+from userbot import CMD_HELP
 
 TYPE_TEXT = 0
 TYPE_PHOTO = 1
@@ -102,3 +102,18 @@ async def on_snip_delete(event):
     name = event.pattern_match.group(1)
     remove_snip(name)
     await event.edit("snip #{} deleted successfully".format(name))
+
+    
+CMD_HELP.update({
+    "snip":
+    "\
+#<snipname>\
+\nUsage: Gets the specified note.\
+\n\n.snips: reply to a message with .snips <notename>\
+\nUsage: Saves the replied message as a note with the notename. (Works with pics, docs, and stickers too!)\
+\n\n.snipl\
+\nUsage: Gets all saved notes in a chat.\
+\n\n.snipd <notename>\
+\nUsage: Deletes the specified note.\
+"
+})    
