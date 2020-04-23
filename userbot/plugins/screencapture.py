@@ -5,7 +5,7 @@ import io
 import requests
 from telethon import events
 from userbot.utils import admin_cmd
-
+from userbot import CMD_HELP
 
 @borg.on(admin_cmd("screencapture (.*)"))
 async def _(event):
