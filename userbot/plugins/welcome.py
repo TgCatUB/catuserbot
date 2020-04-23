@@ -88,3 +88,17 @@ async def _(event):
         await event.edit(
             "No Welcome Message found"
         )
+        
+CMD_HELP.update({
+    "welcome":
+    "\
+.savewelcome <welcome message> or reply to a message with .setwelcome\
+\nUsage: Saves the message as a welcome note in the chat.\
+\n\nAvailable variables for formatting welcome messages :\
+\n`{mention}, {title}, {count}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
+\n\n.listwelcome\
+\nUsage: Check whether you have a welcome note in the chat.\
+\n\n.clearwelcome\
+\nUsage: Deletes the welcome note for the current chat.\
+"
+})
