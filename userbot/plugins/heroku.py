@@ -16,10 +16,14 @@ HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 @borg.on(admin_cmd(pattern=r"(set|get|del) var ?(.*)", outgoing=True))
 async def variable(var):
+    """
+        Manage most of ConfigVars setting, set new var, get current var,
+        or delete var...
+    """
     if HEROKU_APP_NAME is not None:
         app = Heroku.app(HEROKU_APP_NAME)
     else:
-        return await var.reply("`[HEROKU]:"
+        return await var.edit("`[HEROKU]:"
                               "\nPlease setup your` **HEROKU_APP_NAME**")
     exe = var.pattern_match.group(1)
     heroku_var = app.config()
@@ -27,13 +31,13 @@ async def variable(var):
         await var.edit("`Getting information...`")
         await asyncio.sleep(1.5)
         try:
-            variable = var.pattern_match.group(2).split()[0]
-            if variable in heroku_var:
-                return await var.reply("**ConfigVars**:"
-                                      f"\n\n**{variable}** = `{heroku_var[variable]}`\n")
+            val = var.pattern_match.group(2).split()[0]
+            if val in heroku_var:
+                return await var.edit("**Config vars**:"
+                                      f"\n\n`{val} = {heroku_var[val]}`\n")
             else:
-                return await var.reply("**ConfigVars**:"
-                                      f"\n\n`Error:\n-> {variable} don't exists`")
+                return await var.edit("**Config vars**:"
+                                      f"\n\n`Error -> {val} not exists`")
         except IndexError:
             configs = prettyjson(heroku_var.to_dict(), indent=2)
             with open("configs.json", "w") as fp:
@@ -48,7 +52,7 @@ async def variable(var):
                         caption="`Output too large, sending it as a file`",
                     )
                 else:
-                    await var.edit("`[HEROKU]` ConfigVars:\n\n"
+                    await var.edit("`[HEROKU]` variables:\n\n"
                                    "================================"
                                    f"\n```{result}```\n"
                                    "================================"
@@ -61,27 +65,25 @@ async def variable(var):
         try:
             val[1]
         except IndexError:
-            return await var.reply("`.set var <config name> <value>`")
+            return await var.edit("`!set var <config name> <value>`")
         await asyncio.sleep(1.5)
         if val[0] in heroku_var:
-            await var.reply(f"**{val[0]}**  `successfully changed to`  **{val[1]}**")
+            await var.edit(f"**{val[0]}**  `successfully changed to`  **{val[1]}**\n Restarting.....")
         else:
-            await var.reply(f"**{val[0]}**  `successfully added with value: **{val[1]}**")
+            await var.edit(f"**{val[0]}**  `successfully added with value:` **{val[1]}**\n Restarting.......")
         heroku_var[val[0]] = val[1]
     elif exe == "del":
-        await var.edit("`Getting information to deleting variable...`")
+        await var.edit("`Getting information to deleting vars...`")
         try:
-            variable = var.pattern_match.group(2).split()[0]
+            val = var.pattern_match.group(2).split()[0]
         except IndexError:
-            return await var.reply("`Please specify ConfigVars you want to delete`")
+            return await var.edit("`Please specify config vars you want to delete`")
         await asyncio.sleep(1.5)
-        if variable in heroku_var:
-            await var.reply(f"**{variable}**  `successfully deleted`")
-            del heroku_var[variable]
+        if val in heroku_var:
+            await var.edit(f"**{val}**  `successfully deleted`\n Restarting......")
+            del heroku_var[val]
         else:
-            return await var.reply(f"**{variable}**  `is not exists`")
-
-
+            return await var.edit(f"**{val}**  `is not exists`")
 @borg.on(admin_cmd(pattern="usage ?(.*)", outgoing=True))
 async def _(event):
     await event.edit("`Processing...`")
