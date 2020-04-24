@@ -114,5 +114,7 @@ CMD_HELP.update({
     "sed":
     ".s<delimiter><old word(s)><delimiter><new word(s)>\
     \nUsage: Replaces a word or words using sed.\
-    \nDelimiters: `/, :, |, _`"
+    \nDelimiters: `/, :, |, _`\
+    example: tag any sentence and type s/a/b. where is required word to replace and b is correct word."
+    
 })    
