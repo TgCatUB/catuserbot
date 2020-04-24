@@ -9,13 +9,7 @@ from userbot.utils import admin_cmd,register
 
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-#
-""" Userbot module for getting the date
-    and time of any country or the userbot server.  """
+
 
 from datetime import datetime as dt
 
