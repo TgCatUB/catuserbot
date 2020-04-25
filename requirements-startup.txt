@@ -102,4 +102,4 @@ urllib3
 wget
 wikipedia
 youtube-dl
-covid-cli
+covidcli==0.1.7
