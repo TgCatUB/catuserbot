@@ -61,7 +61,7 @@ async def _(event):
             reply_message,
             downloaded_file_name,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                 progress(d, t, mone, c_time, "trying to download")
+                 progress(d, t, event, c_time, "trying to download")
             )
         )
         end = datetime.now()
@@ -95,7 +95,7 @@ async def _(event):
             reply_message,
             downloaded_file_name,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                  progress(d, t, mone, c_time, "trying to download")
+                  progress(d, t, event, c_time, "trying to download")
             )
          
         )
@@ -145,7 +145,7 @@ async def _(event):
             reply_message,
             downloaded_file_name,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                  progress(d, t, mone, c_time, "trying to download")
+                  progress(d, t, event, c_time, "trying to download")
             )
         )
         end_one = datetime.now()
@@ -281,4 +281,4 @@ async def _(event):
         else:
             await event.edit("File Not Found {}".format(input_str))
     else:
-        await mone.edit("Incorrect URL\n {}".format(input_str))        
+        await event.edit("Incorrect URL\n {}".format(input_str))        
