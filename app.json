@@ -64,11 +64,6 @@
       "value": "",
       "required": false
     },
-    "SUDO_USERS": {
-      "description": "Makes your acc and bot stable",
-      "value": "742506768",
-      "required": false
-    },
     "TG_BOT_TOKEN_BF_HER": {
       "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the token of your bot.Worth it. Get it.",
       "value": "",
