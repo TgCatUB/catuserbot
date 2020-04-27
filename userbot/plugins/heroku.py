@@ -5,7 +5,7 @@ import asyncio
 import os
 import requests
 import math
-
+from userbot import CMD_HELP
 from userbot.utils import admin_cmd, prettyjson
 from userbot.uniborgConfig import Config
 # ================= 
@@ -135,3 +135,7 @@ async def _(event):
                            f"     •  `{hours}`**h**  `{minutes}`**m**  "
                            f"**|**  [`{percentage}`**%**]"
                            )
+CMD_HELP.update({
+  "heroku":
+  "Info for Module to Manage Heroku:**\n\n`.usage`\nUsage:__Check your heroku dyno hours status.__\n\n`.set var <NEW VAR> <VALUE>`\nUsage: __add new variable or update existing value variable__\n**!!! WARNING !!!, after setting a variable the bot will restart.**\n\n`.get var or .get var <VAR>`\nUsage: __get your existing varibles, use it only on your private group!__\n**This returns all of your private information, please be cautious...**\n\n`.del var <VAR>`\nUsage: __delete existing variable__\n**!!! WARNING !!!, after deleting variable the bot will restarted** "
+})    
