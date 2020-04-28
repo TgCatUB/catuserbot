@@ -29,11 +29,11 @@ async def _(event):
 
     animation_ttl = range(0, 9)
 
-    input_str = event.pattern_match.group(1)
+    #input_str = event.pattern_match.group(1)
 
-    if input_str == "unoob":
+  #  if input_str == "unoob":
 
-        await event.edit(input_str)
+        await event.edit("unnoob")
 
         animation_chars = [
             "EvErYbOdY",
@@ -67,11 +67,11 @@ async def _(event):
 
     animation_ttl = range(0, 9)
 
-    input_str = event.pattern_match.group(1)
+   # input_str = event.pattern_match.group(1)
 
-    if input_str == "menoob":
+    #if input_str == "menoob":
 
-        await event.edit(input_str)
+        await event.edit("menoob")
 
         animation_chars = [
             "EvErYbOdY",
@@ -106,11 +106,11 @@ async def _(event):
 
     animation_ttl = range(0, 8)
 
-    input_str = event.pattern_match.group(1)
+   # input_str = event.pattern_match.group(1)
 
-    if input_str == "upro":
+    #if input_str == "upro":
 
-        await event.edit(input_str)
+        await event.edit("upro")
 
         animation_chars = [
             "EvErYbOdY",
@@ -143,11 +143,11 @@ async def _(event):
 
     animation_ttl = range(0, 8)
 
-    input_str = event.pattern_match.group(1)
+  #  input_str = event.pattern_match.group(1)
 
-    if input_str == "mepro":
+   # if input_str == "mepro":
 
-        await event.edit(input_str)
+        await event.edit("mepro")
 
         animation_chars = [
             "EvErYbOdY",
