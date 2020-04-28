@@ -28,14 +28,10 @@ async def _(event):
     
 
     animation_ttl = range(0, 9)
-
     #input_str = event.pattern_match.group(1)
-
   #  if input_str == "unoob":
-
-        await event.edit("unnoob")
-
-        animation_chars = [
+    await event.edit("unnoob")
+    animation_chars = [
             "EvErYbOdY",
             "iZ",
             "BiGGeSt",
@@ -46,8 +42,7 @@ async def _(event):
             "😈",
             "EvErYbOdY iZ BiGGeSt NoOoB uNtiL YoU aRriVe 😈"
         ]
-
-        for i in animation_ttl:
+    for i in animation_ttl:
 
 
             await event.edit(animation_chars[i % 9])
@@ -71,9 +66,9 @@ async def _(event):
 
     #if input_str == "menoob":
 
-        await event.edit("menoob")
+    await event.edit("menoob")
 
-        animation_chars = [
+    animation_chars = [
             "EvErYbOdY",
             "iZ",
             "BiGGeSt",
@@ -85,7 +80,7 @@ async def _(event):
             "EvErYbOdY iZ BiGGeSt NoOoB uNtiL i aRriVe 😈"
         ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
 
             await event.edit(animation_chars[i % 9])
@@ -110,9 +105,9 @@ async def _(event):
 
     #if input_str == "upro":
 
-        await event.edit("upro")
+    await event.edit("upro")
 
-        animation_chars = [
+    animation_chars = [
             "EvErYbOdY",
             "iZ",
             "PeRu" ,
@@ -123,7 +118,7 @@ async def _(event):
             "EvErYbOdY iZ PeRu uNtiL YoU aRriVe 😈"
         ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
 
             await event.edit(animation_chars[i % 8])
@@ -147,9 +142,9 @@ async def _(event):
 
    # if input_str == "mepro":
 
-        await event.edit("mepro")
+    await event.edit("mepro")
 
-        animation_chars = [
+    animation_chars = [
             "EvErYbOdY",
             "iZ",
             "PeRu" ,
@@ -160,7 +155,7 @@ async def _(event):
             "EvErYbOdY iZ PeRu uNtiL i aRriVe 😈"
         ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
 
             await event.edit(animation_chars[i % 8])
