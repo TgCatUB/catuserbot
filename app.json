@@ -76,9 +76,9 @@
       "value": "",
       "required": false
     },
-    "SUDO_USERS": {
-      "description": "Makes your acc and bot stable",
-      "value": "916234223",
+     "UB_BLACK_LIST_CHAT ": {
+      "description": ".....",
+      "value": "1051754159",
       "required": false
     },
     "CHROME_BIN": {
