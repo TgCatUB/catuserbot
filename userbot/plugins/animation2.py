@@ -507,7 +507,7 @@ async def _(event):
 
     #if input_str == "virus":
 
-    await event.edit("virus)
+    await event.edit("virus..")
 
     animation_chars = [
 
