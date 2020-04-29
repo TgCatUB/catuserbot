@@ -63,7 +63,7 @@ async def _(event):
 
     #if input_str == "tmoon":
 
-    await event.edit(input_str)
+    await event.edit("tmoon")
 
     animation_chars = [
 
