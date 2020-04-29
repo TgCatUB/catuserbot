@@ -17,6 +17,8 @@ from telethon.tl.functions.messages import GetPeerDialogsRequest
 from typing import List
 
 def command(**args):
+    args["func"] = lambda e: e.via_bot_id is None
+
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
@@ -137,6 +139,7 @@ def remove_plugin(shortname):
         raise ValueError
 
 def admin_cmd(pattern=None, **args):
+    args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
@@ -195,6 +198,7 @@ import datetime
 
 
 def register(**args):
+    args["func"] = lambda e: e.via_bot_id is None
     """ Register a new event. """
     stack = inspect.stack()
     previous_stack_frame = stack[1]
