@@ -29,63 +29,47 @@ DOGBIN_URL = "https://del.dog/"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
-@register(outgoing=True, pattern=r"^\.paste(?: |$)([\s\S]*)")
-async def paste(pstl):
-    """ For .paste command, pastes the text directly to dogbin. """
-    dogbin_final_url = ""
-    match = pstl.pattern_match.group(1).strip()
-    reply_id = pstl.reply_to_msg_id
-
-    if not match and not reply_id:
-        await pstl.edit("`Elon Musk said I cannot paste void.`")
+@borg.on(admin_cmd(pattern="paste ?(.*)"))
+async def _(event):
+    if event.fwd_from:
         return
-
-    if match:
-        message = match
-    elif reply_id:
-        message = (await pstl.get_reply_message())
-        if message.media:
-            downloaded_file_name = await pstl.client.download_media(
-                message,
-                TEMP_DOWNLOAD_DIRECTORY,
+    start = datetime.now()
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    input_str = event.pattern_match.group(1)
+    message = "SYNTAX: `.paste <long text to include>`"
+    if input_str:
+        message = input_str
+    elif event.reply_to_msg_id:
+        previous_message = await event.get_reply_message()
+        if previous_message.media:
+            downloaded_file_name = await borg.download_media(
+                previous_message,
+                Config.TMP_DOWNLOAD_DIRECTORY,
+                progress_callback=progress
             )
             m_list = None
             with open(downloaded_file_name, "rb") as fd:
                 m_list = fd.readlines()
             message = ""
             for m in m_list:
-                message += m.decode("UTF-8") + "\r"
+                message += m.decode("UTF-8") + "\r\n"
             os.remove(downloaded_file_name)
         else:
-            message = message.message
-
-    # Dogbin
-    await pstl.edit("`Pasting text . . .`")
-    resp = post(DOGBIN_URL + "documents", data=message.encode('utf-8'))
-
-    if resp.status_code == 200:
-        response = resp.json()
-        key = response['key']
-        dogbin_final_url = DOGBIN_URL + key
-
-        if response['isUrl']:
-            reply_text = ("`Pasted successfully!`\n\n"
-                          f"`Shortened URL:` {dogbin_final_url}\n\n"
-                          "`Original(non-shortened) URLs`\n"
-                          f"`Dogbin URL`: {DOGBIN_URL}v/{key}\n")
-        else:
-            reply_text = ("`Pasted successfully!`\n\n"
-                          f"`Dogbin URL`: {dogbin_final_url}")
+            message = previous_message.message
     else:
-        reply_text = ("`Failed to reach Dogbin`")
-
-    await pstl.edit(reply_text)
-    if BOTLOG:
-        await pstl.client.send_message(
-            BOTLOG_CHATID,
-            f"Paste query was executed successfully",
-        )
-
+        message = "SYNTAX: `.paste <long text to include>`"
+    url = "https://del.dog/documents"
+    r = requests.post(url, data=message.encode("UTF-8")).json()
+    url = f"https://del.dog/{r['key']}"
+    end = datetime.now()
+    ms = (end - start).seconds
+    if r["isUrl"]:
+        nurl = f"https://del.dog/v/{r['key']}"
+        await event.edit("Dogged to {} in {} seconds. GoTo Original URL: {}".format(url, ms, nurl))
+    else:
+        await event.edit("Dogged to {} in {} seconds".format(url, ms))
+        
 
 @register(outgoing=True, pattern="^\.getpaste(?: |$)(.*)")
 async def get_dogbin_content(dog_url):
