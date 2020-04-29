@@ -78,8 +78,7 @@
     },
      "UB_BLACK_LIST_CHAT ": {
       "description": ".....",
-      "value": "1051754159",
-      "required": false
+      "value": "1051754159"
     },
     "CHROME_BIN": {
       "description": "For Carbon.py. Leave as it is. ",
