@@ -10,6 +10,8 @@ import logging
 import inspect
 
 def command(**args):
+    args["func"] = lambda e: e.via_bot_id is None
+
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
@@ -130,6 +132,8 @@ def remove_plugin(shortname):
         raise ValueError
 
 def admin_cmd(pattern=None, **args):
+    args["func"] = lambda e: e.via_bot_id is None
+
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
@@ -189,6 +193,8 @@ import datetime
 
 def register(**args):
     """ Register a new event. """
+    args["func"] = lambda e: e.via_bot_id is None
+
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
