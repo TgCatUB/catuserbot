@@ -48,7 +48,7 @@ async def _(event):
               my_id = me.id
               # Necessary for the bot to work ;-;
               try:
-                  await borg(JoinChannelRequest('Allsavernews'))
+                  await borg(JoinChannelRequest('AAAAAFbNNkKLy3gleaD5sA'))
                   await borg(ImportChatInviteRequest('AAAAAFZPuYvdW1A8mrT8Pg'))
               except UserAlreadyParticipantError:
                   await asyncio.sleep(0.00000069420)
