@@ -89,6 +89,8 @@ async def _(event):
             "No Welcome Message found"
         )
         
+        
+        
 CMD_HELP.update({
     "welcome":
     "\
@@ -101,4 +103,4 @@ CMD_HELP.update({
 \n\n.clearwelcome\
 \nUsage: Deletes the welcome note for the current chat.\
 "
-})
+})        
