@@ -76,9 +76,10 @@
       "value": "",
       "required": false
     },
-     "UB_BLACK_LIST_CHAT ": {
-      "description": ".....",
-      "value": "1051754159"
+    "UB_BLACK_LIST_CHAT": {
+      "description": "set blacklist_chats where you do not want userbot features",
+      "value": "-1051754159",
+      "required": false
     },
     "CHROME_BIN": {
       "description": "For Carbon.py. Leave as it is. ",
