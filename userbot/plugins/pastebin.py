@@ -16,7 +16,7 @@ from telethon import events
 from userbot.utils import admin_cmd
 from userbot.uniborgConfig import Config  
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-
+from requests import exceptions, get, post
 
 def progress(current, total):
     logger.info("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
