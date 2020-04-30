@@ -33,8 +33,6 @@ fast.com
 feedparser
 gTTS-token>=1.1.3
 gTTS>=2.0.1
-git+https://github.com/LonamiWebs/Telethon
-git+https://github.com/ahupp/python-magic
 gitpython
 google-api-python-client==1.8.0
 google-auth-oauthlib
@@ -51,9 +49,6 @@ jotquote
 kwot
 langdetect
 lxml
-mtranslate
-names
-nltk
 oauth2client
 passwordgenerator
 pathlib
@@ -74,7 +69,6 @@ python-barcode
 python-dotenv
 python-magic
 pytube
-pytube3
 pytuneteller
 pytz
 qrcode
@@ -95,7 +89,6 @@ telegraph
 textblob
 tgcrypto
 times
-typing
 unicode_tr
 urbandict
 urllib3
