@@ -16,7 +16,7 @@ async def _(event):
         animation_chars = [
         
             "`Randi Founded`",
-            "`Your Mom Is Going To Get Fucked By\n`",
+            "`Your Mom Is Going To Get Fucked \n`",
             "`Fucking Your Mom\n\n\nYour Mom's Pussy Get Red\n Spanking Your Mom's Ass\nCumming On Pussy\n\nAlmost Done... 0%\n▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ `",
             "` Fucking Your Mom\n\n\nYour Mom's Pussy Get Red\n Spanking Your Mom's Ass\nCumming On Pussy\n\nAlmost Done... \n\nFucked Percentage... 4%\n█▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ `",
             "` Fucking Your Mom\n\n\nYour Mom's Pussy Get Red\n Spanking Your Mom's Ass\nCumming On Pussy\n\nAlmost Done... \n\nFucked Percentage... 8%\n██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ `",    
