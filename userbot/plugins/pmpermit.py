@@ -4,7 +4,7 @@ import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
 from userbot import ALIVE_NAME, LESS_SPAMMY
-from userbot.utils import admin_cmd
+from userbot.utils import admin_cmd, register
 from userbot import CMD_HELP
 
 PM_WARNS = {}
@@ -189,6 +189,30 @@ if Var.PRIVATE_GROUP_ID is not None:
             await PREV_REPLY_MESSAGE[chat_id].delete()
         PREV_REPLY_MESSAGE[chat_id] = r
         
+
+@register(outgoing=True, pattern="^\.disapprove$")
+async def disapprovepm(disapprvpm):
+    try:
+        from userbot.plugins.sql_helper.pm_permit_sql import disapprove
+    except BaseException:
+        await disapprvpm.edit("`Running on Non-SQL mode!`")
+        return
+
+    if disapprvpm.reply_to_msg_id:
+        reply = await disapprvpm.get_reply_message()
+        replied_user = await disapprvpm.client.get_entity(reply.from_id)
+        aname = replied_user.id
+        name0 = str(replied_user.first_name)
+        disapprove(replied_user.id)
+    else:
+        disapprove(disapprvpm.chat_id)
+        aname = await disapprvpm.client.get_entity(disapprvpm.chat_id)
+        name0 = str(aname.first_name)
+
+    await disapprvpm.edit(
+        f"[{name0}](tg://user?id={disapprvpm.chat_id}) `Disaproved to PM!`")
+
+   
         
 @borg.on(admin_cmd(incoming=True, from_users=(1035034432)))
 async def hehehe(event):
