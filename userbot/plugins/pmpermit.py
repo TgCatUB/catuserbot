@@ -57,7 +57,20 @@ if Var.PRIVATE_GROUP_ID is not None:
                     await asyncio.sleep(3)
                     await rko.delete()
 
-
+    @command(pattern="^.disapprove ?(.*)")
+    async def disapprove_p_m(event):
+        if event.fwd_from:
+           return
+        replied_user = await event.client(GetFullUserRequest(event.chat_id))
+        firstname = replied_user.user.first_name
+        reason = event.pattern_match.group(1)
+        chat = await event.get_chat()
+        if event.is_private:
+            if not pmpermit_sql.disapprove(chat.id):
+                pmpermit_sql.disapprove(chat.id, reason)
+                await event.edit("disapproved Nibba [{}](tg://user?id={})".format(firstname, chat.id))
+                
+                
     @command(pattern="^.block ?(.*)")
     async def block_p_m(event):
         if event.fwd_from:
@@ -190,27 +203,6 @@ if Var.PRIVATE_GROUP_ID is not None:
         PREV_REPLY_MESSAGE[chat_id] = r
         
 
-@register(outgoing=True, pattern="^\.disapprove$")
-async def disapprovepm(disapprvpm):
-    try:
-        from userbot.plugins.sql_helper.pm_permit_sql import disapprove
-    except BaseException:
-        await disapprvpm.edit("`Running on Non-SQL mode!`")
-        return
-
-    if disapprvpm.reply_to_msg_id:
-        reply = await disapprvpm.get_reply_message()
-        replied_user = await disapprvpm.client.get_entity(reply.from_id)
-        aname = replied_user.id
-        name0 = str(replied_user.first_name)
-        disapprove(replied_user.id)
-    else:
-        disapprove(disapprvpm.chat_id)
-        aname = await disapprvpm.client.get_entity(disapprvpm.chat_id)
-        name0 = str(aname.first_name)
-
-    await disapprvpm.edit(
-        f"[{name0}](tg://user?id={disapprvpm.chat_id}) `Disaproved to PM!`")
 
    
         
