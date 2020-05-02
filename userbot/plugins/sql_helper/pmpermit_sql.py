@@ -40,21 +40,18 @@ def disapprove(chat_id):
 def get_all_approved():
     rem = SESSION.query(PMPermit).all()
     SESSION.close()
-    return rem
-
-try:
-    from userbot.modules.sql_helper import SESSION, BASE
-except ImportError:
-    raise AttributeError
-from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
+    return remfrom sqlalchemy import Column, String
+from userbot.plugins.sql_helper import SESSION, BASE
 
 
 class PMPermit(BASE):
     __tablename__ = "pmpermit"
     chat_id = Column(String(14), primary_key=True)
+    reason = Column(String(127))
 
-    def __init__(self, chat_id):
-        self.chat_id = str(chat_id)  # ensure string
+    def __init__(self, chat_id, reason=""):
+        self.chat_id = chat_id
+        self.reason = reason
 
 
 PMPermit.__table__.create(checkfirst=True)
@@ -62,21 +59,24 @@ PMPermit.__table__.create(checkfirst=True)
 
 def is_approved(chat_id):
     try:
-        return SESSION.query(PMPermit).filter(
-            PMPermit.chat_id == str(chat_id)).one()
-    except BaseException:
+        return SESSION.query(PMPermit).filter(PMPermit.chat_id == str(chat_id)).one()
+    except:
         return None
     finally:
         SESSION.close()
 
 
-def approve(chat_id):
-    adder = PMPermit(str(chat_id))
+def approve(chat_id, reason):
+    adder = PMPermit(str(chat_id), str(reason))
     SESSION.add(adder)
     SESSION.commit()
 
+def get_all_approved():
+    rem = SESSION.query(PMPermit).all()
+    SESSION.close()
+    return rem
 
-def dissprove(chat_id):
+def disapprove(chat_id):
     rem = SESSION.query(PMPermit).get(str(chat_id))
     if rem:
         SESSION.delete(rem)
