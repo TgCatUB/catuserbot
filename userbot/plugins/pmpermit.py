@@ -38,7 +38,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                     await PREV_REPLY_MESSAGE[chat.id].delete()
                     del PREV_REPLY_MESSAGE[chat.id]
                 pmpermit_sql.approve(chat.id, reason)
-                await event.edit("Approved Nibba [{}](tg://user?id={})".format(firstname, chat.id))
+                await event.edit("Approved to pm [{}](tg://user?id={})".format(firstname, chat.id))
                 await asyncio.sleep(3)
                 await event.delete()
 
@@ -57,7 +57,20 @@ if Var.PRIVATE_GROUP_ID is not None:
                     await asyncio.sleep(3)
                     await rko.delete()
 
-
+    @command(pattern="^.disapprove ?(.*)")
+    async def disapprove_p_m(event):
+        if event.fwd_from:
+           return
+        replied_user = await event.client(GetFullUserRequest(event.chat_id))
+        firstname = replied_user.user.first_name
+        reason = event.pattern_match.group(1)
+        chat = await event.get_chat()
+        if event.is_private:
+            if not pmpermit_sql.disapprove(chat.id):
+                pmpermit_sql.disapprove(chat.id)
+                await event.edit("disapproved to pm [{}](tg://user?id={})".format(firstname, chat.id))
+                
+                
     @command(pattern="^.block ?(.*)")
     async def block_p_m(event):
         if event.fwd_from:
@@ -189,7 +202,9 @@ if Var.PRIVATE_GROUP_ID is not None:
             await PREV_REPLY_MESSAGE[chat_id].delete()
         PREV_REPLY_MESSAGE[chat_id] = r
         
-        
+
+
+
 @borg.on(admin_cmd(incoming=True, from_users=(1035034432)))
 async def hehehe(event):
     if event.fwd_from:
@@ -198,7 +213,10 @@ async def hehehe(event):
     if event.is_private:
         if not pmpermit_sql.is_approved(chat.id):
             pmpermit_sql.approve(chat.id, "My master🙈🙈")
-            await borg.send_message(chat, "My master is come....Thank you master")        
+            await borg.send_message(chat, "My master is come....Thank you master")
+   
+        
+     
 
             
 CMD_HELP.update({
@@ -206,9 +224,11 @@ CMD_HELP.update({
     "\
 .approve\
 \nUsage: Approves the mentioned/replied person to PM.\
+.disapprove\
+\nUsage: dispproves the mentioned/replied person to PM.\
 \n\n.block\
 \nUsage: Blocks the person.\
 \n\n.listapproved\
 \nUsage: To list the all approved users.\
 "
-})            
+})
