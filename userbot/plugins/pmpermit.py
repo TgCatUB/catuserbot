@@ -4,6 +4,7 @@ import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
 from userbot import ALIVE_NAME, LESS_SPAMMY
+from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 
 PM_WARNS = {}
@@ -59,16 +60,15 @@ if Var.PRIVATE_GROUP_ID is not None:
     @command(pattern="^.disapprove ?(.*)")
     async def disapprove_p_m(event):
         if event.fwd_from:
-           return
+            return
         replied_user = await event.client(GetFullUserRequest(event.chat_id))
         firstname = replied_user.user.first_name
         reason = event.pattern_match.group(1)
         chat = await event.get_chat()
         if event.is_private:
-            if not pmpermit_sql.disapprove(chat.id):
+            if pmpermit_sql.is_approved(chat.id):
                 pmpermit_sql.disapprove(chat.id)
-                await event.edit("disapproved to pm [{}](tg://user?id={})".format(firstname, chat.id))
-                
+                await event.edit("disapproved to pm [{}](tg://user?id={})".format(firstname, chat.id))           
                 
     @command(pattern="^.block ?(.*)")
     async def block_p_m(event):
