@@ -13,7 +13,7 @@ from math import sqrt
 from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
 from telethon.utils import get_input_location
 
-@borg.on(admin_cmd(pattern="chatinfo(?: |$)(.*))", outgoing=True))
+@borg.on(admin_cmd(pattern="chatinfo(?: |$)(.*)", outgoing=True))
 async def info(event):
     await event.edit("`Analysing the chat...`")
     chat = await get_chatinfo(event)
