@@ -3,11 +3,7 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-""" Userbot module for changing your Telegram profile details. """
-"""Profile Updation Commands
-.pbio <Bio>
-.pname <Name>
-.ppic"""
+
 import os
 from telethon import events
 from telethon.tl import functions
@@ -72,15 +68,15 @@ async def _(event):
         await event.edit(str(e))
 
 
-@borg.on(admin_cmd(pattern="pname"))  # pylint:disable=E0602,W0703
+@borg.on(admin_cmd("pname ((.|\n)*)"))  # pylint:disable=E0602,W0703
 async def _(event):
     if event.fwd_from:
         return
     names = event.pattern_match.group(1)
     first_name = names
     last_name = ""
-    if  " " in names:
-        first_name, last_name = names.split(" ", 1)
+    if  "|" in names:
+        first_name, last_name = names.split("|", 1)
     try:
         await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
             first_name=first_name,
