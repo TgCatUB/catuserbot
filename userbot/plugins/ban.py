@@ -12,14 +12,12 @@ from telethon import events
 import asyncio
 
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,
-                             ImageProcessFailedError, PhotoCropSizeSmallError,
                              UserAdminInvalidError)
 from telethon.errors.rpcerrorlist import (UserIdInvalidError,
                                           MessageTooLongError)
 from telethon.tl.functions.channels import (EditAdminRequest,
-                                            EditBannedRequest,
-                                            EditPhotoRequest)
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+                                            EditBannedRequest)
+
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
