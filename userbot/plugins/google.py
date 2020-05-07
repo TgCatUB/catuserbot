@@ -23,8 +23,13 @@ from search_engine_parser import GoogleSearch
 from asyncio import sleep
 from userbot.utils import register
 from telethon.tl.types import DocumentAttributeAudio
+from userbot.uniborgConfig import Config
+
 def progress(current, total):
     logger.info("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
+    
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+BOTLOG = True
 
 @register(outgoing=True, pattern=r"^\.gs (.*)")
 async def gsearch(q_event):
@@ -52,6 +57,11 @@ async def gsearch(q_event):
     await q_event.edit("**Search Query:**\n`" + match + "`\n\n**Results:**\n" +
                        msg,
                        link_preview=False)
+    if BOTLOG:
+        await q_event.client.send_message(
+            BOTLOG_CHATID,
+            "Google Search query `" + match + "` was executed successfully",
+        )
     
 @borg.on(admin_cmd("grs"))
 async def _(event):
@@ -104,3 +114,4 @@ async def _(event):
 **Possible Related Search**: <a href="{prs_url}">{prs_text}</a>
 More Info: Open this <a href="{the_location}">Link</a> in {ms} seconds""".format(**locals())
     await event.edit(OUTPUT_STR, parse_mode="HTML", link_preview=False)
+    
