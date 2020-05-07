@@ -45,112 +45,79 @@ TRT_LANG = "en"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
-@register(outgoing=True, pattern="^\.crblang (.*)")
-async def setlang(prog):
-    global CARBONLANG
-    CARBONLANG = prog.pattern_match.group(1)
-    await prog.edit(f"Language for carbon.now.sh set to {CARBONLANG}")
+LANG = "en"
 
 
-@register(outgoing=True, pattern="^\.krb")
+@register(outgoing=True, pattern="^.carbon")
 async def carbon_api(e):
-    """ A Wrapper for carbon.now.sh """
-    await e.edit("`Processing..`")
-    CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
-    global CARBONLANG
-    textx = await e.get_reply_message()
-    pcode = e.text
-    if pcode[8:]:
-        pcode = str(pcode[8:])
-    elif textx:
-        pcode = str(textx.message)  # Importing message to module
-    code = quote_plus(pcode)  # Converting to urlencoded
-    await e.edit("`Processing..\n25%`")
-    if os.path.isfile("./carbon.png"):
-        os.remove("./carbon.png")
-    url = CARBON.format(code=code, lang=CARBONLANG)
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.binary_location = GOOGLE_CHROME_BIN
-    chrome_options.add_argument("--window-size=1920x1080")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-gpu")
-    prefs = {'download.default_directory': './'}
-    chrome_options.add_experimental_option('prefs', prefs)
-    driver = webdriver.Chrome(executable_path=CHROME_DRIVER,
-                              options=chrome_options)
-    driver.get(url)
-    await e.edit("`Processing..\n50%`")
-    download_path = './'
-    driver.command_executor._commands["send_command"] = (
-        "POST", '/session/$sessionId/chromium/send_command')
-    params = {
-        'cmd': 'Page.setDownloadBehavior',
-        'params': {
-            'behavior': 'allow',
-            'downloadPath': download_path
-        }
-    }
-    command_result = driver.execute("send_command", params)
-    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    #driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-    #driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-    await e.edit("`Processing..\n75%`")
-    # Waiting for downloading
-    while not os.path.isfile("./carbon.png"):
-        await sleep(0.5)
-    await e.edit("`Processing..\n100%`")
-    file = './carbon.png'
-    await e.edit("`Uploading..`")
-    await e.client.send_file(
-        e.chat_id,
-        file,
-        caption="Made using [Carbon](https://carbon.now.sh/about/),\
-        \na project by [Dawn Labs](https://dawnlabs.io/)",
-        force_document=True,
-        reply_to=e.message.reply_to_msg_id,
-    )
-
-    os.remove('./carbon.png')
-    driver.quit()
-    # Removing carbon.png after uploading
-    await e.delete()  # Deleting msg
-
-
-
-@register(outgoing=True, pattern=r"^\.gsearch (.*)")
-async def gsearch(q_event):
-    """ For .google command, do a Google search. """
-    match = q_event.pattern_match.group(1)
-    page = findall(r"page=\d+", match)
-    try:
-        page = page[0]
-        page = page.replace("page=", "")
-        match = match.replace("page=" + page[0], "")
-    except IndexError:
-        page = 1
-    search_args = (str(match), int(page))
-    gsearch = GoogleSearch()
-    gresults = await gsearch.async_search(*search_args)
-    msg = ""
-    for i in range(len(gresults["links"])):
-        try:
-            title = gresults["titles"][i]
-            link = gresults["links"][i]
-            desc = gresults["descriptions"][i]
-            msg += f"[{title}]({link})\n`{desc}`\n\n"
-        except IndexError:
-            break
-    await q_event.edit("**Search Query:**\n`" + match + "`\n\n**Results:**\n" +
-                       msg,
-                       link_preview=False)
-
-    if BOTLOG:
-        await q_event.client.send_message(
-            BOTLOG_CHATID,
-            "Google Search query `" + match + "` was executed successfully",
-        )
+ if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+ 
+   """ A Wrapper for carbon.now.sh """
+   await e.edit("`Processing..`")
+   CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
+   global CARBONLANG
+   textx = await e.get_reply_message()
+   pcode = e.text
+   if pcode[8:]:
+         pcodee = str(pcode[8:])
+         if "|" in pcodee:
+               pcode, skeme = pcodee.split("|")
+         else:
+               pcode = pcodee
+               skeme = None
+   elif textx:
+         pcode = str(textx.message)
+         skeme = None # Importing message to module
+   code = quote_plus(pcode) # Converting to urlencoded
+   await e.edit("`Meking Carbon...\n25%`")
+   url = CARBON.format(code=code, lang=CARBONLANG)
+   chrome_options = Options()
+   chrome_options.add_argument("--headless")
+   chrome_options.binary_location = GOOGLE_CHROME_BIN
+   chrome_options.add_argument("--window-size=1920x1080")
+   chrome_options.add_argument("--disable-dev-shm-usage")
+   chrome_options.add_argument("--no-sandbox")
+   chrome_options.add_argument("--disable-gpu")
+   prefs = {'download.default_directory' : './'}
+   chrome_options.add_experimental_option('prefs', prefs)
+   driver = webdriver.Chrome(executable_path=CHROME_DRIVER, options=chrome_options)
+   driver.get(url)
+   await e.edit("`Be Patient...\n50%`")
+   download_path = './'
+   driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+   params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_path}}
+   command_result = driver.execute("send_command", params)
+   driver.find_element_by_xpath('/html/body/div[1]/main/div[2]/div[2]/div[1]/div[1]/div/span[2]').click()
+   if skeme != None:
+         k_skeme = driver.find_element_by_xpath('/html/body/div[1]/main/div[2]/div[2]/div[1]/div[1]/div/span[2]/input')
+         k_skeme.send_keys(skeme)
+         k_skeme.send_keys(Keys.DOWN)
+         k_skeme.send_keys(Keys.ENTER)
+   else:
+       color_scheme = str(random.randint(1,29))
+       driver.find_element_by_id(("downshift-0-item-" + color_scheme)).click()
+   driver.find_element_by_id("export-menu").click()
+   driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+   driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+   await e.edit("`Processing..\n75%`")
+   # Waiting for downloading
+   sleep(2.5)
+   color_name = driver.find_element_by_xpath('/html/body/div[1]/main/div[2]/div[2]/div[1]/div[1]/div/span[2]/input').get_attribute('value')
+   await e.edit("`Done Dana Done...\n100%`")
+   file = './carbon.png'
+   await e.edit("`Uploading..`")
+   await e.client.send_file(
+         e.chat_id,
+         file,
+         caption="`Here's your carbon!` \n**Colour Scheme: **`{}`".format(color_name),
+         force_document=True,
+         reply_to=e.message.reply_to_msg_id,
+         )
+   os.remove('./carbon.png')
+   driver.quit()
+   # Removing carbon.png after uploading
+   await e.delete() # Deleting msg
+    
 
 
 @register(outgoing=True, pattern=r"^\.wiki (.*)")
@@ -184,47 +151,6 @@ async def wiki(wiki_q):
         await wiki_q.client.send_message(
             BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully")
 
-
-
-@register(outgoing=True, pattern="^.oxford (.*)")
-async def urban_dict(ud_e):
-
-
-    await ud_e.edit("Processing...")
-    query = ud_e.pattern_match.group(1)
-    try:
-        define(query)
-    except HTTPError:
-        await ud_e.edit(f"Sorry, couldn't find any results for: {query}")
-        return
-    mean = define(query)
-    deflen = sum(len(i) for i in mean[0]["def"])
-    exalen = sum(len(i) for i in mean[0]["example"])
-    meanlen = deflen + exalen
-    if int(meanlen) >= 0:
-        if int(meanlen) >= 4096:
-            await ud_e.edit("`Output too large, sending as file.`")
-            file = open("output.txt", "w+")
-            file.write("Text: " + query + "\n\nMeaning: " + mean[0]["def"] +
-                       "\n\n" + "Example: \n" + mean[0]["example"])
-            file.close()
-            await ud_e.client.send_file(
-                ud_e.chat_id,
-                "output.txt",
-                caption="`Output was too large, sent it as a file.`")
-            if os.path.exists("output.txt"):
-                os.remove("output.txt")
-            await ud_e.delete()
-            return
-        await ud_e.edit("Text: **" + query + "**\n\nMeaning: **" +
-                        mean[0]["def"] + "**\n\n" + "Example: \n__" +
-                        mean[0]["example"] + "__")
-        if BOTLOG:
-            await ud_e.client.send_message(
-                BOTLOG_CHATID,
-                "ud query `" + query + "` executed successfully.")
-    else:
-        await ud_e.edit("No result found for **" + query + "**")
 
 
 @register(outgoing=True, pattern=r"^\.trt(?: |$)([\s\S]*)")
