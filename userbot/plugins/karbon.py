@@ -403,7 +403,7 @@ async def carbon_api(e):
          force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
-     os.remove('./carbon.png')
+   os.remove('./carbon.png')
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg   
    
