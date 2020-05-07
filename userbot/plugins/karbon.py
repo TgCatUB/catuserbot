@@ -28,8 +28,7 @@ from userbot import ALIVE_NAME
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@borg.on(admin_cmd(pattern=f"kar1", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.kar1", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kar1", outgoing=True))
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
    """ A Wrapper for carbon.now.sh """
@@ -76,7 +75,7 @@ async def carbon_api(e):
    await e.client.send_file(
          e.chat_id,
          file,
-         caption=f"Here's your Karbon1 ,do festival with this ! \nCarbonised by cat",
+         caption=f"Here's your Karbon1 ",
          force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
@@ -86,8 +85,7 @@ async def carbon_api(e):
    await e.delete() # Deleting msg
 
    
-@borg.on(admin_cmd(pattern=f"kar2", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.kar2", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kar2", outgoing=True))
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
    """ A Wrapper for carbon.now.sh """
@@ -134,7 +132,7 @@ async def carbon_api(e):
    await e.client.send_file(
          e.chat_id,
          file,
-         caption=f"Here's your Karbon2,do festival with this ! \nCarbonised by cat",
+         caption=f"Here's your Karbon2",
          force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
@@ -143,8 +141,7 @@ async def carbon_api(e):
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg
 
-@borg.on(admin_cmd(pattern=f"kar3", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.kar3", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kar3", outgoing=True))
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
    """ A Wrapper for carbon.now.sh """
@@ -191,7 +188,7 @@ async def carbon_api(e):
    await e.client.send_file(
          e.chat_id,
          file,
-         caption=f"Here's your Karbon3,do festival with this ! \nCarbonised by cat",
+         caption=f"Here's your Karbon3",
          force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
@@ -202,8 +199,7 @@ async def carbon_api(e):
 
    
    
-@borg.on(admin_cmd(pattern=f"kar4", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.kar4", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kar4", outgoing=True))
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
    """ A Wrapper for carbon.now.sh """
@@ -250,7 +246,7 @@ async def carbon_api(e):
    await e.client.send_file(
          e.chat_id,
          file,
-         caption=f"Here's your Karbon4 ,do festival with this ! \nCarbonised by cat",
+         caption=f"Here's your Karbon4 ",
          force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
@@ -259,8 +255,7 @@ async def carbon_api(e):
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg
 
-@borg.on(admin_cmd(pattern=f"rgbk2", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.rgbk2", outgoing=True))
+@borg.on(admin_cmd(pattern=f"rgbk2", outgoing=True))
 async def carbon_api(e):
  RED = random.randint(0,256)
  GREEN = random.randint(0,256)
@@ -311,17 +306,15 @@ async def carbon_api(e):
    await e.client.send_file(
          e.chat_id,
          file,
-         caption=f"Here's your karbonrgb ,do festival with this ! \n Carbonised by cat",
-         force_document=False,
+         caption=f"Here's your karbonrgb",
+         force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
-
    os.remove('./carbon.png')
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg
    
-@borg.on(admin_cmd(pattern=f"kargb", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.kargb", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kargb", outgoing=True))
 async def carbon_api(e):
  RED = random.randint(0,256)
  GREEN = random.randint(0,256)
@@ -406,12 +399,11 @@ async def carbon_api(e):
    await e.client.send_file(
          e.chat_id,
          file,
-         caption=f"Here's your karbonrgb ,do festival with this ! \n Carbonised by cat",
+         caption=f"Here's your karbonrgb",
          force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
-
-   os.remove('./carbon.png')
+     os.remove('./carbon.png')
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg   
    
