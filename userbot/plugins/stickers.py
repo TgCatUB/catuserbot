@@ -94,9 +94,8 @@ async def kang(args):
                 # User sent just custom emote, wants to push to default
                 # pack
                 emoji = splat[1]
-
-        packname = f"{user.username}_{pack}"
-        packnick = f"@{user.username}'s_{pack}"
+        packname = f"sanjana_{pack}"
+        packnick = f"@quinn_h's_{pack}"
         cmd = '/newpack'
         file = io.BytesIO()
 
