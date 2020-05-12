@@ -21,7 +21,7 @@ from telethon.tl.types import MessageEntityMentionName
 
 from cowpy import cow
 
-from userbot import CMD_HELP,YOUTUBE_API_KEY
+from userbot import CMD_HELP
 from userbot.utils import register
 
 # ================= CONSTANT =================
