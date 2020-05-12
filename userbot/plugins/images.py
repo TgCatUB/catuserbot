@@ -14,7 +14,7 @@ from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(pattern="img ?(.*)"))
 async def img_sampler(event):
-    await event.edit("`Processing man wait..`")
+    await event.edit("`Processing dude wait..`")
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
