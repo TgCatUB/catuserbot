@@ -290,8 +290,6 @@ async def anime_download(event):
 			urls.pop(counter)	
 		counter = counter + 1 
 	await event.edit("Downloading Episodes...")
-	else:
-    	        await event.edit("`What I am Supposed to download get the link from Animefrenzy.net and try .danime pagelink`")
 	
 	for i in urls:
 		filename = await get_file_name(i)
