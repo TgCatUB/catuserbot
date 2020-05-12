@@ -10,7 +10,11 @@ import os
 import sys
 import random
 from userbot.utils import admin_cmd
+from userbot import CMD_HELP
+from bs4 import BeautifulSoup as bs 
+import requests
 
+chunk_size =  3242880
 
 action_list = ['6 Angels ', '12 Beast ', 'Accel World ', 'Accel World: Infinite Burst ', 'Adventures of Kotetsu ', 'Afro Samurai ', 'Agent Aika ', 'Aika R-16: Virgin Mission ', 'Air Gear ', 'Air Master ', 'Akakichi no Eleven ', 'Akashic Records of Bastard Magic Instructor ', 'Akumetsu ', 'Alive: The Final Evolution ', 'All Purpose Cultural Cat-Girl Nuku Nuku DASH! ', 'Amakusa 1637 ', 'Amefurashi ', 'Angel/Dust ', 'Angel Links ', "Angel's Feather ", 'Anne Freaks ', 'Apocalypse Zero ', 'Aquarion Evol ', 'Aquarion Logos ', 'Arc the Lad ', 'Aria the Scarlet Ammo ', "Armed Girl's Machiavellism ", 'Armitage III ', 'Armored Trooper Votoms ', 'Armored Trooper Votoms: Pailsen Files ', 'Arpeggio of Blue Steel ', 'Ashizuri Suizokukan ', 'The Asterisk War ', 'Aventura (manga) ', 'B.B. (manga) ', 'Bakumatsu Gijinden Roman ', 'Bambi and Her Pink Gun ', 'Baoh ', 'Basquash! ', 'Bastard!! ', 'Bat-Manga!: The Secret History of Batman in Japan ', 'Battle Rabbits ', 'Beelzebub (manga) ', 'Ben-To ', 'Berserk (2016 TV series) ', 'Birdy the Mighty ', 'Birth (anime) ', 'Black Bullet ', 'Black God (manga) ', 'Blame! ', 'Blame! (film) ', 'Blassreiter ', 'Blood-C: The Last Dark ', 'Blood: The Last Vampire ', 'Blue Blink ', 'Blue Seed ', 'Blue Sheep Reverie ', 'Bogle (manga) ', 'Boruto: Naruto the Movie ', 'Brave 10 ', 'Broken Blade ', 'Brotherhood: Final Fantasy XV ', 'Btooom! ', 'Bubblegum Crisis ', 'Bungo Stray Dogs ', 'Burn Up! ', 'Burn-Up Excess ', 'Burn-Up Scramble ', 'Burn-Up W ', 'Butlers: Chitose Momotose Monogatari ', 'C (TV series) ', 'C3 (novel series) ', 'Campus Special Investigator Hikaruon ', 'Caravan Kidd ', 'The Castle of Cagliostro ', 'Cat Paradise ', 'A Certain Magical Index ', 'Chivalry of a Failed Knight ', 'Chōsoku Henkei Gyrozetter ', 'Chronos Ruler ', 'City Hunter ', 'Clockwork Planet ', 'Cluster Edge ', 'Comedy (2002 film) ', 'Coppelion ', 'Cowboy Bebop ', 'Cowboy Bebop: The Movie ', 'Crimson Spell ', 'Crown (manga) ', 'Crusher Joe ', 'D4 Princess ', 'The Dagger of Kamui ', 'Daigunder ', 'Dance in the Vampire Bund ', 'Daphne in the Brilliant Blue ', 'Darkside Blues ', 'Debutante Detective Corps ', 'Demon City Shinjuku ', 'Demonizer Zilch ', 'Dennō Bōkenki Webdiver ', 'Desert Punk ', 'The Devil of the Earth ', 'Devilman ', 'Dimension W ', 'DJ (2013 anime) ', 'Dog Days (Japanese TV series) ', 'Dragon Ball Z: Bardock – The Father of Goku ', 'Dragon Ball Z: The History of Trunks ', 'Dragon Crisis! ', 'Dream Eater Merry ', 'Durarara!! ', 'Dynamic Heroes ', "E's ", "Eden: It's an Endless World! ", "Eden's Bowy ", 'Ehrgeiz (TV series) ', 'Elementalors ', "The Enemy's the Pirates! ", 'Fairy Gone ', 'Final Fantasy: Unlimited ', 'Flag (TV series) ', 'FLCL ', 'Freesia (manga) ', 'Freezing (manga) ', 'Full Metal Panic! ', "Full-Blast Science Adventure – So That's How It Is ", 'Futakoi Alternative ', 'G-On Riders ', 'Ga-Rei ', 'Gaist Crusher ', 'The Galaxy Railways ', 'Gantz ', 'Gantz: O ', 'Genesis of Aquarion ', 'Ghost in the Shell: Stand Alone Complex ', 'Giant Gorg ', 'Girls und Panzer ', 'Glass Maiden ', 'Gokudo the Adventurer ', 'Grenadier (manga) ', 'Grey (manga) ', 'Gulliver Boy ', 'Gunslinger Stratos: The Animation ', 'Guyver: The Bioboosted Armor ', 'Hajime no Ippo ', 'Hanako and the Terror of Allegory ', 'Hand Shakers ', 'Happy World! ', 'Hayate × Blade ', 'Hero Heel ', 'Hero Mask ', 'Hidamari no Ki ', 'Highlander: The Search for Vengeance ', 'Holy Talker ', 'Hyakka Ryōran ', 'Immortal Grand Prix ', 'Iron Virgin Jun ', 'The Irregular at Magic High School The Movie: The Girl Who Calls the Stars ', 'The Irregular at Magic High School ', 'Sword Oratoria ', 'Isuca ', 'Izetta: The Last Witch ', 'Japan (1992 manga) ', 'Jibaku-kun ', 'Jungle Book Shōnen Mowgli ', 'Jungle King Tar-chan ', 'Junk Force (manga) ', 'Junk: Record of the Last Hero ', 'Jushin Liger (TV series) ', 'The Kabocha Wine ', 'Kacchū no Senshi Gamu ', 'Kaiji (manga) ', 'Kamikaze (manga) ', 'Kamiyadori ', 'Kämpfer ', 'Kamui (manga series) ', 'Karakuri Circus ', 'Katanagatari ', 'Kaze ga Gotoku ', 'Kaze no Stigma ', 'Kemurikusa ', 'Kengan Ashura ', 'Kenka Shōbai ', 'Kick-Heart ', 'Kill la Kill ', 'The King Kong Show ', 'The King of Braves GaoGaiGar Final ', 'Kinnikuman ', 'Kishin Corps ', 'Kite (1998 film) ', 'Kite Liberator ', 'Kiznaiver ', 'Knights of Ramune ', 'Koihime Musō ', 'Kon Kon Kokon ', 'Kongō Banchō ', 'Kōtetsu Sangokushi ', 'Kōya no Shōnen Isamu ']
 adventure_list = ['3×3 Eyes ', '12 Beast ', '801 T.T.S. Airbats ', '3000 Leagues in Search of Mother ', 'Acrobunch ', 'The Adventure of Rock ', 'The Adventures of Hutch the Honeybee ', 'The Adventures of Pepero ', 'The Adventures of Peter Pan ', 'The Adventures of Lolo the Penguin ', 'Adventures of the Little Koala ', 'The Adventures of the Little Prince (TV series) ', 'Aesop World ', 'Age of Adventure ', 'Agent Aika ', 'Ai Tenchi Muyo! ', 'Aika R-16: Virgin Mission ', 'Akame ga Kill! ', 'Aladdin and the Wonderful Lamp (1982 film) ', 'Alakazam the Great ', 'Alice SOS ', 'Alive: The Final Evolution ', 'All You Need Is Kill ', 'Allison (novel series) ', 'Allison & Lillia ', 'Amon Saga ', 'Angel Links ', 'Angelic Layer ', 'Anime Ganbare Goemon ', 'Aqua Knight ', 'Arata: The Legend ', 'Arcadia of My Youth ', 'Arcadia of My Youth: Endless Orbit SSX ', 'Argento Soma ', 'Armitage III ', 'Astro Boy ', 'Attack on Titan ', 'Attack on Titan: No Regrets ', 'Aura Battler Dunbine ', "B't X ", 'Baby Birth ', 'Baccano! ', 'BakéGyamon ', 'Bakugan Battle Brawlers ', 'Barrage (manga) ', 'Basilisk (manga) ', 'Bat-Manga!: The Secret History of Batman in Japan ', 'Battle B-Daman ', 'Battle Tendency ', 'Bayonetta: Bloody Fate ', "Beast Wars II: Lio Convoy's Close Call! ", 'Beet the Vandel Buster ', 'Berserk (1997 TV series) ', 'Berserk (manga) ', 'Berserk: The Golden Age Arc ', 'The Betrayal Knows My Name ', 'Betterman (TV series) ', 'Beyond the Beyond (manga) ', 'Big Wars ', 'Birth (anime) ', 'Black Cat (manga) ', 'Black Clover ', 'Black Lagoon ', 'Blade of the Phantom Master ', 'Blank Slate (manga) ', 'Bleach (manga) ', 'Bleach (TV series) ', 'Blood Blockade Battlefront ', 'Blood Lad ', 'Blood-C ', 'Blue Dragon (TV series) ', 'Blue Exorcist ', 'Blue Inferior ', 'Blue Sonnet ', 'Bobobo-bo Bo-bobo ', 'Bomberman Jetters ', 'Boruto: Naruto Next Generations ', 'Boruto: Naruto the Movie ', 'Bosco Adventure ', 'Brave Story ', 'Bumpety Boo ', 'Burst Angel ', 'Buso Renkin ', 'Campus Special Investigator Hikaruon ', 'Capricorn (manga) ', 'Captain Harlock: Dimensional Voyage ', 'Caravan Kidd ', 'Castle in the Sky ', 'The Castle of Cagliostro ', 'The Cat Returns ', 'Cat Soup ', "Cat's Eye (manga) ", 'A Certain Scientific Railgun ', 'Chrono Crusade ', 'Cinnamoroll ', 'Classical Medley ', 'Claymore (manga) ', 'Cleopatra DC ', 'Cobra (manga) ', 'Code Geass ', 'Cosmo Warrior Zero ', 'The Cosmopolitan Prayers ', 'Cowa! ', 'Coyote Ragtime Show ', 'Crimson Spell ', 'Croket! ', 'Cross Manage ', 'Crusher Joe ', 'Cutie Honey Universe ', 'D.Gray-man ', 'The Dagger of Kamui ', 'Dai-Guard ', 'Dangaioh ', 'Dead Leaves ', 'Deadman Wonderland ', 'Dear (manga) ', 'Demon Slayer: Kimetsu no Yaiba ', 'Detonator Orgun ', 'Devil May Cry: The Animated Series ', 'The Devil of the Earth ', 'Devils and Realist ', 'Diamond Is Unbreakable ', 'Digimon Adventure ', 'Digimon Adventure 02 ', 'Digimon Adventure tri. ', 'Digimon Data Squad ', 'Digimon Frontier ', 'Digimon Fusion ', 'Digimon Tamers ', 'Dinozaurs ', 'Divergence Eve ', 'Dōbutsu no Mori (film) ', 'Dog Days (Japanese TV series) ', 'Dogs (manga) ', 'Doraemon: Nobita and the Birth of Japan 2016 ', 'Dorohedoro ', 'Double Decker! Doug & Kirill ', 'Dr. Stone ', 'Dragon Ball (manga) ', 'Dragon Ball (TV series) ', 'Dragon Ball GT ', 'Dragon Ball Super ', 'Dragon Ball Super: Broly ', 'Dragon Ball Z ', 'Dragon Drive ', 'Dragon Eye (manga) ', 'Dragon Half ', 'Dragon Knights ', 'Dragon Quest: The Adventure of Dai ', 'Drifters (manga) ', 'DT Eightron ', 'Eagle Riders ', 'Eat-Man ', "Eden's Bowy ", 'El Cazador de la Bruja ', 'ĒlDLIVE ', 'Elementalors ', 'Ellcia ', "Elmer's Adventure: My Father's Dragon ", 'Engage Planet Kiss Dum ', 'Eureka Seven ', 'Fairy Tail ', 'Famous Dog Lassie ', 'Fate/Zero ', 'Fighting Foodons ', 'Fire Force ', 'Firestorm (TV series) ', 'The First King Adventure ', 'Flame of Recca ', 'Flint the Time Detective ', 'Flower in a Storm ', 'Food Wars!: Shokugeki no Soma ', 'The Fossil Island ', "Full-Blast Science Adventure – So That's How It Is ", 'Fullmetal Alchemist ', 'Fullmetal Alchemist (TV series) ', 'Fullmetal Alchemist: Brotherhood ', 'Future Boy Conan ', 'Future War 198X ', 'Gaba Kawa ', 'Gad Guard ', 'Galactic Gale Baxingar ', 'Galactic Whirlwind Sasuraiger ', 'Galaxy Cyclone Braiger ', 'Gall Force ', 'Gamba no Bōken ', 'Gangsta (manga) ', 'Gatchaman (OVA) ', 'Gatchaman Fighter ', 'Gatchaman II ', 'Gate Keepers ', 'Generator Gawl ', 'Geneshaft ', 'Genesis Climber MOSPEADA ', 'Gestalt (manga) ', 'GetBackers ', 'Gin Tama ', 'God Mazinger ', 'Golden Kamuy ']
@@ -42,7 +46,7 @@ async def _(event):
     msg_str = msg_str.replace(",","")
     msg_str = msg_str.replace("']","")
     msg_str = msg_str.replace("' '","")
-    msg_str_front = "Here's Top "+str(number_of_times)+" Action Anime List For you !\n"
+    msg_str_front = "Here's  "+str(number_of_times)+" Action Anime List For you !\n"
     msg_str = msg_str_front+ msg_str
     msg_str = msg_str.replace("\\n","\n")
     msg_str = msg_str.replace("'","")
@@ -71,7 +75,7 @@ async def action(event):
     msg_str = msg_str.replace(",","")
     msg_str = msg_str.replace("']","")
     msg_str = msg_str.replace("' '","")
-    msg_str_front = "Here's Top "+str(number_of_times)+" Harem Anime List For you !\n"
+    msg_str_front = "Here's  "+str(number_of_times)+" Harem Anime List For you !\n"
     msg_str = msg_str_front+ msg_str
     msg_str = msg_str.replace("\\n","\n")
     msg_str = msg_str.replace("'","")
@@ -100,7 +104,7 @@ async def action(event):
     msg_str = msg_str.replace(",","")
     msg_str = msg_str.replace("']","")
     msg_str = msg_str.replace("' '","")
-    msg_str_front = "Here's Top "+str(number_of_times)+" Mecha Anime List For you !\n"
+    msg_str_front = "Here's "+str(number_of_times)+" Mecha Anime List For you !\n"
     msg_str = msg_str_front+ msg_str
     msg_str = msg_str.replace("\\n","\n")
     msg_str = msg_str.replace("'","")
@@ -129,7 +133,7 @@ async def action(event):
     msg_str = msg_str.replace(",","")
     msg_str = msg_str.replace("']","")
     msg_str = msg_str.replace("' '","")
-    msg_str_front = "Here's Top "+str(number_of_times)+" Romance Anime List For you !\n"
+    msg_str_front = "Here's  "+str(number_of_times)+" Romance Anime List For you !\n"
     msg_str = msg_str_front+ msg_str
     msg_str = msg_str.replace("\\n","\n")
     msg_str = msg_str.replace("'","")
@@ -158,7 +162,7 @@ async def action(event):
     msg_str = msg_str.replace(",","")
     msg_str = msg_str.replace("']","")
     msg_str = msg_str.replace("' '","")
-    msg_str_front = "Here's Top "+str(number_of_times)+" Isekai Anime List For you !\n"
+    msg_str_front = "Here's  "+str(number_of_times)+" Isekai Anime List For you !\n"
     msg_str = msg_str_front+ msg_str
     msg_str = msg_str.replace("\\n","\n")
     msg_str = msg_str.replace("'","")
@@ -187,7 +191,7 @@ async def action(event):
     msg_str = msg_str.replace(",","")
     msg_str = msg_str.replace("']","")
     msg_str = msg_str.replace("' '","")
-    msg_str_front = "Here's Top "+str(number_of_times)+" Adventure Anime List For you !\n"
+    msg_str_front = "Here's  "+str(number_of_times)+" Adventure Anime List For you !\n"
     msg_str = msg_str_front+ msg_str
     msg_str = msg_str.replace("\\n","\n")
     msg_str = msg_str.replace("'","")
@@ -223,3 +227,96 @@ async def action(event):
     msg_str = msg_str.replace('"',"")
     await event.edit("**"+msg_str+"**")                   
     
+
+async def get_file_name(link):
+	new_link = link[26:]
+	l = ""
+	for c in new_link:
+		if c =='?':
+			break
+		l = l + c	
+	l = l.replace("/","_")
+	return l
+
+async def download_file(url,filename):
+	response = requests.get(url, stream=True)
+	handle = open(filename, "wb")
+	for chunk in response.iter_content(chunk_size=chunk_size):
+		if chunk:  # filter out keep-alive new chunks
+			handle.write(chunk)
+	handle.close()   
+
+@borg.on(admin_cmd(pattern=r"danime"))
+async def anime_download(event):
+	urls = []
+	url_links = []
+	if event.fwd_from:
+		return   
+	if Config.TMP_DOWNLOAD_DIRECTORY is None:
+		await event.edit("Please Set TMP_DOWNLOAD_DIRECTORY ENV Variable First.")
+		return
+	download_dir=Config.TMP_DOWNLOAD_DIRECTORY	
+	try:
+		os.makedirs(download_dir)
+	except:
+		pass	
+	
+	var = event.text
+	var = var[6:]
+	res = requests.get(var)
+	source = bs(res.text,'lxml')
+
+	for a in source.find_all('a',{'class':'infovan'}):
+		url_links.append(a['href'])
+
+	for i in url_links:
+		res = requests.get(i)
+		source = bs(res.text,'lxml')
+
+		for a in source.find_all('a',{'class':'an'}):
+			urls.append(a['href'])
+		print("Getting Link...")	
+			
+	
+	counter = 0
+	for url in urls:
+		if "download.php?" in url:
+			urls.pop(counter)	
+		counter = counter + 1 
+
+	counter = 0	
+	for url in urls:
+		if "#" in url:
+			urls.pop(counter)	
+		counter = counter + 1 
+	await event.edit("Downloading Episodes...")
+	else:
+    	        await event.edit("`What I am Supposed to download get the link from Animefrenzy.net and try .danime pagelink`")
+	
+	for i in urls:
+		filename = await get_file_name(i)
+		print(filename)
+		filename = download_dir+"/"+filename
+		await download_file(i,filename)
+	await event.edit("All Episodes Downloaded.")		
+
+    
+CMD_HELP.update({
+    "anime": ".anime number example: `.anime 5`\
+    \nUSEAGE: gives a random names list of animes\
+    \n\n.harem number example: `.harem 5`\
+    \nUSEAGE: gives a random names list of harem genre\
+    \n\n.mecha number example: `.mecha 5`\
+    \nUSEAGE: gives a random names list of mecha genre\
+    \n\n.romance number example: `.romance 5`\
+    \nUSEAGE: gives a random names list of romance genre\
+    \n\n.isekai number example: `.isekai 5`\
+    \nUSEAGE: gives a random names list of isekai genre\
+    \n\n.adventure number example: `.adventure 5`\
+    \nUSEAGE: gives a random names list of adventure genre\
+    \n\n.slice number example: `.slice 5`\
+    \nUSEAGE: gives a random names list of slice genre\
+    \n\n.anime page_link\
+    \nusage:- get a link of Animefrenzy.net Anime page and use in cmd.\
+"
+})
