@@ -262,7 +262,7 @@ async def anime_download(event):
 		pass	
 	
 	var = event.text
-	var = var[6:]
+	var = var[8:]
 	res = requests.get(var)
 	source = bs(res.text,'lxml')
 
