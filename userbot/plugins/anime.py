@@ -314,7 +314,7 @@ CMD_HELP.update({
     \nUSEAGE: gives a random names list of adventure genre\
     \n\n.slice number example: `.slice 5`\
     \nUSEAGE: gives a random names list of slice genre\
-    \n\n.anime page_link\
+    \n\n.danime page_link\
     \nusage:- get a link of Animefrenzy.net Anime page and use in cmd.\
 "
 })
