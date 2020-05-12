@@ -33,9 +33,9 @@ async def _(event):
         
 CMD_HELP.update({
     "dice_dart":
-    ".🎲 \
-    \n shows a random number in between 1 to 6\
-    .🎯 \
-    \n animated dart \
+    "SYNTAX: .🎲 \
+    \nUSEAGE: shows a random number in between 1 to 6\
+    \nSYNTAX:.🎯 \
+    \nUSEAGE: animated dart \
     "
 })         
