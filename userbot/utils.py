@@ -148,7 +148,9 @@ def remove_plugin(shortname):
                 if cb.__module__ == name:
                     del bot._event_builders[i]
     except:
-        raise ValueErrordef admin_cmd(**args):
+        raise ValueError
+        
+def admin_cmd(**args):
     pattern = args.get("pattern", None)
     allow_sudo = args.get("allow_sudo", False)
 
