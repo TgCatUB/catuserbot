@@ -39,3 +39,9 @@ async def _(event):
           	else: 
           			await event.edit(f"**Antivirus scan was completed. I got dem final results.**\n {response.message.message}")
 
+CMD_HELP.update({
+    "antivirus":
+    ".scan reply to media or file\
+    \n USEAGE: it scans the media or file and checks either any virus is in the file or media\
+"
+})      
