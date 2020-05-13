@@ -1,16 +1,61 @@
 
 import re
 import time
-
-
 import requests
-
-
 from telethon import events
 from userbot import CMD_HELP
 from userbot.utils import register
 import asyncio
 import random
+
+
+EMOJIS = [
+    "😂",
+    "😂",
+    "👌",
+    "💞",
+    "👍",
+    "👌",
+    "💯",
+    "🎶",
+    "👀",
+    "😂",
+    "👓",
+    "👏",
+    "👐",
+    "🍕",
+    "💥",
+    "😩",
+    "😏",
+    "😞",
+    "👀",
+    "👅",
+    "😩",
+    "🤒",
+    "😳",
+    "🤯",
+    "😵",
+    "🥵",
+    "🤒",
+    "😠",
+    "😪",
+    "😴",
+    "🤤",
+    "👿",
+    "👽",
+    "😏",
+    "😒",
+    "😣",
+    "🤔",
+    "🤨",
+    "🧐",
+    "😝",
+    "🤪",
+    "🤩",
+    "☺️",
+    "😭",
+    "🥺",
+]
 
 @register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
 async def vapor(vpr):
@@ -163,7 +208,7 @@ async def spongemocktext(mock):
 
 CMD_HELP.update({
     "fontstyles": ".cp (text) or .cp reply to message \
-\nUsage: Copypasta the famous meme\
+\nUsage: inserts some emojis in between the texts\
 \n\n.vapor (text) or .vapor reply to message \
 \nUsage: Vaporize the given text. \
 \n\n.str (text) or .str reply to message \
