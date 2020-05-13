@@ -25,6 +25,7 @@ from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 import subprocess
 import patoolib
 import tarfile
+from userbot import CMD_HELP
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 extracted = Config.TMP_DOWNLOAD_DIRECTORY + "extracted/"
@@ -66,7 +67,7 @@ async def _(event):
         reply_to=event.message.id,
     )
     await event.edit("DONE!!!")
-    await asyncio.sleep(7)
+    await asyncio.sleep(5)
     await event.delete()
 
 
@@ -340,6 +341,9 @@ async def _(event):
                              progress(d, t, event, c_time, "trying to upload")
                          )
                     )
+                    await event.edit("DONE!!!")
+                    await asyncio.sleep(5)
+                    await event.delete()
                 except Exception as e:
                     await borg.send_message(
                         event.chat_id,
@@ -427,6 +431,9 @@ async def _(event):
                              progress(d, t, event, c_time, "trying to upload")
                          )
                     )
+                    await event.edit("DONE!!!")
+                    await asyncio.sleep(5)
+                    await event.delete()
                 except Exception as e:
                     await borg.send_message(
                         event.chat_id,
@@ -512,7 +519,7 @@ async def _(event):
                     await borg.send_file(
                         event.chat_id,
                         single_file,
-                        caption=f"UnZipped `{caption_rts}`",
+                        caption=f"Untared `{caption_rts}`",
                         force_document=force_document,
                         supports_streaming=supports_streaming,
                         allow_cache=False,
@@ -522,6 +529,9 @@ async def _(event):
                             progress(d, t, event, c_time, "trying to upload")
                         )
                     )
+                    await event.edit("DONE!!!")
+                    await asyncio.sleep(5)
+                    await event.delete()
                 except Exception as e:
                     await borg.send_message(
                         event.chat_id,
@@ -549,3 +559,21 @@ def get_lst_of_files(input_directory, output_lst):
 
 
 
+CMD_HELP.update({
+    "archive":
+    ".zip reply to a file/media\
+    \nUSEAGE: it will zip that file/media\
+    \n\n.rar reply to a file/media\
+    \nUSEAGE: it will rar that file/media\
+    z\n\n. reply to a file/media\
+    \nUSEAGE: it will make into .7z that hat file/media\
+    \n\n.tar reply to a file/media\
+    \nUSEAGE: it will tar that file/media\
+    \n\n.unzip reply to a .zip file\
+    \nUSEAGE: it will unzip that .zip file\
+    \n\n.unrar reply to a .rar file\
+    \nUSEAGE: it will unrar that .rar file\
+    \n\n.untar reply to a .tar\
+    \nUSEAGE: it will untar that .tar file\
+"
+}) 
