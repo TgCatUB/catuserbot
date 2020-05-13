@@ -9,8 +9,8 @@ import os
 import time
 from barcode.writer import ImageWriter
 from datetime import datetime
-from uniborg.util import admin_cmd
-
+from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
 @borg.on(admin_cmd(pattern="barcode ?(.*)"))
 async def _(event):
@@ -61,3 +61,11 @@ async def _(event):
     await event.edit("Created BarCode in {} seconds".format(ms))
     await asyncio.sleep(5)
     await event.delete()
+
+    
+CMD_HELP.update({
+    "barcode":
+    ".barcode <long text to include>\
+    \n creates a barcode of the given text.\
+"
+})        
