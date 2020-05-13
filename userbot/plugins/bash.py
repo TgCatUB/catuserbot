@@ -9,12 +9,12 @@ from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotMo
 import io
 import asyncio
 import time
-from uniborg.util import admin_cmd
-
+from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
 @borg.on(admin_cmd("bash ?(.*)"))
 async def _(event):
-    if event.fwd_from:
+    if event.fwd_from or event.via_bot_id:
         return
     DELAY_BETWEEN_EDITS = 0.3
     PROCESS_RUN_TIME = 100
@@ -36,8 +36,16 @@ async def _(event):
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                caption=OUTPUT,
+                caption=cmd,
                 reply_to=reply_to_id
             )
             await event.delete()
     await event.edit(OUTPUT)
+
+    
+CMD_HELP.update({
+    "bash":
+    ".bash code\
+    \n execute the give bash command in userbot server..\
+"
+})        
