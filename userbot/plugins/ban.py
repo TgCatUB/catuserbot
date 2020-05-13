@@ -202,3 +202,14 @@ async def get_user_from_id(user, event):
         return None
 
     return user_obj
+  
+  
+  
+CMD_HELP.update({
+    "ban":
+    ".ban reply to the user/.ban username/.ban userid\
+    \nbans the user in the group\
+    \n\n.unban reply to the user/.unban username/.unban userid\
+    \nunbans the user in the group\
+"
+})   
