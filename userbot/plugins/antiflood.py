@@ -6,7 +6,7 @@ from userbot.utils import admin_cmd
 import userbot.plugins.sql_helper.antiflood_sql as sql
 import userbot.utils
 from userbot.utils import humanbytes, progress, time_formatter
-
+from userbot import CMD_HELP
 
 CHAT_FLOOD = sql.__load_flood_settings()
 # warn mode for anti flood
@@ -69,3 +69,11 @@ async def _(event):
         await event.edit("Antiflood updated to {} in the current chat".format(input_str))
     except Exception as e:  # pylint:disable=C0103,W0703
         await event.edit(str(e))
+
+        
+CMD_HELP.update({
+    "antiflood":
+    ".setflood [number]\
+\nUsage: warns the user if he spams the chat  if you are admin mutes him in that group .\
+"
+})              
