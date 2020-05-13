@@ -5,6 +5,7 @@ from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 from userbot.utils import register
 import asyncio
+import random
 
 @register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
 async def vapor(vpr):
