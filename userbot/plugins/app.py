@@ -12,6 +12,7 @@ from telethon import events
 from bs4 import BeautifulSoup
 from platform import uname
 from userbot import ALIVE_NAME
+from userbot import CMD_HELP
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 @borg.on(admin_cmd(pattern="app (.*)"))
@@ -70,3 +71,13 @@ async def apkr(event):
         await event.edit("No result found in search. Please enter **Valid app name**")
     except Exception as err:
         await event.edit("Exception Occured:- "+str(err))
+
+        
+CMD_HELP.update({
+    "app":
+    ".app [app name]\
+\nUsage: searches the app in the playstore and provides the link to the app in playstore and fetchs app details \
+\n\n.appr [app name]\
+\nUsage: searches the app in the playstore and provides the link to the app in playstore and fetchs app details with Xpl0iter request link. \
+"
+})              
