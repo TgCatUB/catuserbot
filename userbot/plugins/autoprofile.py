@@ -198,3 +198,19 @@ async def _(event):
             #     "Successfully Changed Profile Bio"
             # )
         await asyncio.sleep(DEL_TIME_OUT)
+        
+        
+        
+CMD_HELP.update({
+    "autoprofile":
+    ".autoname\
+    \n usage:for time along name to work this you must set AUTONAME in the heroku vars first \
+\n\n.autopic\
+\n useage:tilted image along with time to work this you must set DOWNLOAD_PFP_URL_CLOCK in the heroku vars first by telegraph link of that image \
+\n\n.autobio\
+\nuseage:for time along with your bio to work this you must set DEFAULT_BIO in the heroku vars first \
+\n\n.monkeybio\
+\nuseage:set of funny monkey bio's\
+\n\n for stoping these type .restart and change them manually\
+"
+})         
