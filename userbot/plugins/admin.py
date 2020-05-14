@@ -25,6 +25,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot 
 from userbot.utils import register, errors_handler
 from userbot.uniborgConfig import Config
+from telethon import events, errors, functions, types
 
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_CHANNEL_BOT_API_ID
