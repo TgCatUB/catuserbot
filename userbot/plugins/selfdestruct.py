@@ -15,17 +15,10 @@ import importlib.util
 
 @borg.on(admin_cmd(pattern="sdm", outgoing=True  ))
 async def selfdestruct(destroy):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    """ For .sdm command, make seflf-destructable messages. """
-    if "|" in input_str:
-        counter, text = input_str.split("|")
-    else:
-        await event.edit("Invalid Syntax. Module stopping.SYNTAX:`.sdm number | text`")
-        return
-    text = text.strip()
-    counter = counter.strip()
+    if not destroy.text[0].isalpha() and destroy.text[0] not in ("/", "#", "@", "!"):
+        message = destroy.text
+        counter = int(message[5:7])
+        text = str(destroy.text[7:])
     text = (
             text
        )
@@ -37,14 +30,10 @@ async def selfdestruct(destroy):
         
 @borg.on(admin_cmd(pattern"selfd", outgoing=True  ))
 async def selfdestruct(destroy):
-    """ For .selfd command, make seflf-destructable messages. """
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    if "|" in input_str:
-        counter, text = input_str.split("|")
-    else:
-        await event.edit("Invalid Syntax. Module stopping.SYNTAX:`.selfd number | text`")
+    if not destroy.text[0].isalpha() and destroy.text[0] not in ("/", "#", "@", "!"):
+        message = destroy.text
+        counter = int(message[7:9])
+        text = str(destroy.text[9:])
         text = (
             text
             + "\n\n`This message shall be self-destructed in "
