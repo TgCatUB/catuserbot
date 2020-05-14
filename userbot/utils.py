@@ -164,7 +164,12 @@ def admin_cmd(**args):
             args["pattern"] = re.compile(pattern)
         else:
             args["pattern"] = re.compile(Config.COMMAND_HAND_LER + pattern)
-
+            cmd = Config.COMMAND_HAND_LER + pattern
+            try:
+                CMD_LIST[file_test].append(cmd)
+            except:
+                CMD_LIST.update({file_test: [cmd]})
+                
     args["outgoing"] = True
     # should this command be available for other users?
     if allow_sudo:
