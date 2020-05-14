@@ -17,10 +17,11 @@ from barcode.writer import ImageWriter
 from bs4 import BeautifulSoup
 
 from userbot import CMD_HELP
-from userbot.utils import register
+from userbot.utils import admin_cmd
 
 
-@register(pattern=r"^.decode$")
+
+@borg.on(admin_cmd(pattern="decode"))
 async def parseqr(qr_e):
     """ For .decode command, get QR Code/BarCode content from the replied photo. """
     downloaded_file_name = await qr_e.client.download_media(
@@ -49,55 +50,11 @@ async def parseqr(qr_e):
     soup = BeautifulSoup(t_response, "html.parser")
     qr_contents = soup.find_all("pre")[0].text
     await qr_e.edit(qr_contents)
-"""
 
-@register(pattern=r".barcode(?: |$)([\s\S]*)")
-async def barcode(event):
-    """
-#For .barcode command, genrate a barcode containing the given content.
-"""
-    await event.edit("`Processing..`")
-    input_str = event.pattern_match.group(1)
-    message = "SYNTAX: `.barcode <long text to include>`"
-    reply_msg_id = event.message.id
-    if input_str:
-        message = input_str
-    elif event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        reply_msg_id = previous_message.id
-        if previous_message.media:
-            downloaded_file_name = await event.client.download_media(
-                previous_message)
-            m_list = None
-            with open(downloaded_file_name, "rb") as fd:
-                m_list = fd.readlines()
-            message = ""
-            for m in m_list:
-                message += m.decode("UTF-8") + "\r\n"
-            os.remove(downloaded_file_name)
-        else:
-            message = previous_message.message
-    else:
-        event.edit("SYNTAX: `.barcode <long text to include>`")
-        return
-
-    bar_code_type = "code128"
-    try:
-        bar_code_mode_f = barcode.get(bar_code_type,
-                                      message,
-                                      writer=ImageWriter())
-        filename = bar_code_mode_f.save(bar_code_type)
-        await event.client.send_file(event.chat_id,
-                                     filename,
-                                     reply_to=reply_msg_id)
-        os.remove(filename)
-    except Exception as e:
-        await event.edit(str(e))
-        return
-    await event.delete()
-
-"""
-@register(pattern=r".makeqr(?: |$)([\s\S]*)")
+    
+    
+  
+@borg.on(admin_cmd(pattern="makeqr(?: |$)([\s\S]*)"))
 async def make_qr(makeqr):
     """ For .makeqr command, make a QR Code containing the given content. """
     input_str = makeqr.pattern_match.group(1)
