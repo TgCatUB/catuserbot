@@ -16,7 +16,7 @@ BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
-@register(outgoing=True, pattern=r"^.log(?: |$)([\s\S]*)")
+@borg.on(admin_cmd(pattern="log (.*)"))
 async def log(log_text):
     """ For .log command, forwards a message or the command argument to the bot logs group """
     if BOTLOG:
@@ -38,7 +38,7 @@ async def log(log_text):
 
 
     
-@register(outgoing=True, pattern="^.kickme$")
+@borg.on(admin_cmd(pattern="kickme (.*)"))
 async def kickme(leave):
     """ Basically it's .kickme command """
     await leave.edit("Nope, no, no, I go away")
