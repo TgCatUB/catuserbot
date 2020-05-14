@@ -8,7 +8,7 @@ from userbot.plugins.sql_helper.locks_sql import update_lock, is_locked, get_loc
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 
-@borg.on(admin_cmd("lock( (?P<target>\S+)|$)"))
+@borg.on(admin_cmd(pattern="lock( (?P<target>\S+)|$)"))
 async def _(event):
      # Space weirdness in regex required because argument is optional and other
      # commands start with ".lock"
@@ -82,7 +82,7 @@ async def _(event):
             )
 
 
-@borg.on(admin_cmd("unlock ?(.*)"))
+@borg.on(admin_cmd(pattern="unlock ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -99,7 +99,7 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd("curenabledlocks"))
+@borg.on(admin_cmd(pattern="curenabledlocks"))
 async def _(event):
     if event.fwd_from:
         return
