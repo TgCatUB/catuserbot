@@ -22,7 +22,7 @@ import shutil
 DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
 
 DEL_TIME_OUT = 30
-DEFAULTUSER = str(AUTONAME) if AUTONAME else "|『 𝘽𝙃𝘼𝙂𝘼𝙑𝘼𝙉 』|" 
+DEFAULTUSER = str(AUTONAME) if AUTONAME else "|『 𝙏𝙀𝙍𝙀𝙉𝘾𝙀 𝙃𝙄𝙇𝙇 』|" 
 
 
 
