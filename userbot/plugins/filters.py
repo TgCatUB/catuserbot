@@ -12,6 +12,7 @@ from telethon import events, utils
 from telethon.tl import types
 from userbot.plugins.sql_helper.filter_sql import get_filter, add_filter, remove_filter, get_all_filters, remove_all_filters
 from userbot import CMD_HELP
+from userbot.utils import admin_cmd
 
 DELETE_TIMEOUT = 0
 TYPE_TEXT = 0
