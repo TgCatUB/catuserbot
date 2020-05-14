@@ -4,11 +4,10 @@ from userbot import CMD_HELP
 import regex
 from telethon import events, utils
 from telethon.tl import types, functions
-from userbot.events import command
 
 HEADER = "「sed」\n"
 KNOWN_RE_BOTS = re.compile(
-    r"(regex|moku|BananaButler_|rgx|l4mR)bot",
+    Config.GROUP_REG_SED_EX_BOT_S,
     flags=re.IGNORECASE
 )
 
@@ -65,28 +64,28 @@ def doit(chat_id, match, original):
 
 async def group_has_sedbot(group):
     if isinstance(group, types.InputPeerChannel):
-        full = await bot(functions.channels.GetFullChannelRequest(group))
+        full = await borg(functions.channels.GetFullChannelRequest(group))
     elif isinstance(group, types.InputPeerChat):
-        full = await bot(functions.messages.GetFullChatRequest(group.chat_id))
+        full = await borg(functions.messages.GetFullChatRequest(group.chat_id))
     else:
         return False
 
     return any(KNOWN_RE_BOTS.match(x.username or '') for x in full.users)
 
 
-@command()
+@borg.on(events.NewMessage)
 async def on_message(event):
     last_msgs[event.chat_id].appendleft(event.message)
 
-@command(allow_edited_updates=True)
+@borg.on(events.MessageEdited)
 async def on_edit(event):
     for m in last_msgs[event.chat_id]:
         if m.id == event.id:
             m.raw_text = event.raw_text
             break
 
-@command(
-    pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True)
+@borg.on(events.NewMessage(
+    pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True))
 async def on_regex(event):
     if event.fwd_from:
         return
@@ -101,7 +100,7 @@ async def on_regex(event):
 
     if m is not None:
         s = f"{HEADER}{s}"
-        out = await bot.send_message(
+        out = await borg.send_message(
             await event.get_input_chat(), s, reply_to=m.id
         )
         last_msgs[chat_id].appendleft(out)
@@ -109,7 +108,8 @@ async def on_regex(event):
         await event.edit(s)
 
     raise events.StopPropagation
-
+    
+    
     
 CMD_HELP.update({
     "sed":
