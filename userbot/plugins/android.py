@@ -18,7 +18,7 @@ DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
                'certified-android-devices/master/devices.json'
 
 
-@register(outgoing=True, pattern="^.magisk$")
+@borg.on(admin_cmd(pattern="magisk (.*)"))
 async def magisk(request):
     """ magisk latest releases """
     url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/master/'
@@ -32,7 +32,7 @@ async def magisk(request):
     await request.edit(releases)
 
 
-@register(outgoing=True, pattern=r"^.device(?: |$)(\S*)")
+@borg.on(admin_cmd(pattern="device (.*)"))
 async def device_info(request):
     """ get android device basic info from its codename """
     textx = await request.get_reply_message()
@@ -62,8 +62,7 @@ async def device_info(request):
         reply = f"`Couldn't find info about {device}!`\n"
     await request.edit(reply)
 
-
-@register(outgoing=True, pattern=r"^.codename(?: |)([\S]*)(?: |)([\s\S]*)")
+@borg.on(admin_cmd(pattern="codename (.*)"))
 async def codename_info(request):
     """ search for android codename """
     textx = await request.get_reply_message()
@@ -97,8 +96,7 @@ async def codename_info(request):
         reply = f"`Couldn't find {device} codename!`\n"
     await request.edit(reply)
 
-
-@register(outgoing=True, pattern=r"^.specs(?: |)([\S]*)(?: |)([\s\S]*)")
+@borg.on(admin_cmd(pattern="specs (.*)"))
 async def devices_specifications(request):
     """ Mobile devices specifications """
     textx = await request.get_reply_message()
@@ -151,7 +149,7 @@ async def devices_specifications(request):
     await request.edit(reply)
 
 
-@register(outgoing=True, pattern=r"^.twrp(?: |$)(\S*)")
+@borg.on(admin_cmd(pattern="twrp (.*)"))
 async def twrp(request):
     """ get android device twrp """
     textx = await request.get_reply_message()
