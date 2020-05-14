@@ -6,7 +6,7 @@ from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot.utils import admin_cmd,register
 from userbot import CMD_HELP
 
-@borg.on(admin_cmd("scan ?(.*)"))
+@borg.on(admin_cmd(pattern="scan ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
