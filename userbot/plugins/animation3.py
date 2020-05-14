@@ -7,7 +7,7 @@ import random, re
 from collections import deque
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@borg.on(admin_cmd("gangasta ?(.*)"))
+@borg.on(admin_cmd(pattern="gangasta ?(.*)"))
 async def _(event):
      if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         await event.edit("EVERyBOdy")
