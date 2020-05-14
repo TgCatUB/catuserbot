@@ -13,7 +13,7 @@ import re
 import time
 
 from collections import deque
-
+from telethon import events, errors, functions, types
 import requests
 
 from telethon.tl.functions.users import GetFullUserRequest
