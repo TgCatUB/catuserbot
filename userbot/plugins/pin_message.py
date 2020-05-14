@@ -5,7 +5,7 @@ from telethon.tl import functions, types
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd("cpin ?(.*)"))
+@borg.on(admin_cmd(pattern="cpin ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
