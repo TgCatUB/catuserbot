@@ -8,7 +8,7 @@ from userbot.utils import admin_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@command(outgoing=True, pattern="^.alive$")
+@borg.on(admin_cmd(pattern="alive (.*)"))
 async def amireallyalive(alive):
     """ For .alive command, check if the bot is running.  """
     await alive.edit("**MY BOT IS RUNNING SUCCESFULLY**\n\n"
