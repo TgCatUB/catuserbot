@@ -11,25 +11,14 @@ from collections import deque
 
 from userbot.utils import admin_cmd
 
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-#
-""" Userbot module for getting information about the server. """
 
-from asyncio import create_subprocess_shell as asyncrunapp
-from asyncio.subprocess import PIPE as asyncPIPE
-from platform import python_version, uname
-from shutil import which
 from os import remove
 from telethon import version
 
 from userbot import CMD_HELP, ALIVE_NAME
-from userbot.events import register
 
 # ================= CONSTANT =================
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 # ============================================
 
 
@@ -55,7 +44,8 @@ async def sysdetails(sysd):
         except FileNotFoundError:
             await sysd.edit("`Hello, on catuserbot  install .neofetch first kthx`")
 
-@register(outgoing=True, pattern="^.botver$")
+
+@borg.on(admin_cmd(pattern="botver"))
 async def bot_ver(event):
     """ For .botver command, get the bot version. """
     if which("git") is not None:
@@ -91,7 +81,7 @@ async def bot_ver(event):
         )
 
 
-@register(outgoing=True, pattern="^.pips(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="pips(?: |$)(.*)"))
 async def pipcheck(pip):
     """ For .pip command, do a pip search. """
     pipmodule = pip.pattern_match.group(1)
@@ -141,19 +131,10 @@ async def pipcheck(pip):
 
 
 CMD_HELP.update(
-    {"sysd": ".sysd\
-    \nUsage: Shows system information using neofetch."})
-CMD_HELP.update({"botver": ".botver\
-    \nUsage: Shows the userbot version."})
-CMD_HELP.update(
-    {"pip": ".pip <module(s)>\
+    {"system": ".sysd\
+    \nUsage: Shows system information using neofetch do .neofetch and do this.\
+    \n\n.botver\
+    \nUsage: Shows the userbot version.\
+    \n\n.pips <module(s)>\
     \nUsage: Does a search of pip modules(s)."})
-CMD_HELP.update({
-    "alive":
-    ".alive\
-    \nUsage: Type .alive to see wether your bot is working or not.\
-    \n\n.aliveu <text>\
-    \nUsage: Changes the 'user' in alive to the text you want.\
-    \n\n.resetalive\
-    \nUsage: Resets the user to default."
-})
+
