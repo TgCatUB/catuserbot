@@ -43,7 +43,8 @@ USERNAME_TAKEN = "```This username is already taken.```"
 # ===============================================================
 
 
-@register(outgoing=True, pattern="^.reserved$")
+
+@borg.on(admin_cmd(pattern="reserved (.*)"))
 async def mine(event):
     """ For .reserved command, get a list of your reserved usernames. """
     result = await bot(GetAdminedPublicChannelsRequest())
@@ -120,7 +121,7 @@ async def _(event):
     except Exception as e:  # pylint:disable=C0103,W0703
         logger.warn(str(e))  # pylint:disable=E0602
 
-@register(outgoing=True, pattern="^.setpfp$")
+@borg.on(admin_cmd(pattern="setpfp (.*)"))
 async def set_profilepic(propic):
     """ For .profilepic command, change your profile picture in Telegram. """
     replymsg = await propic.get_reply_message()
@@ -151,7 +152,7 @@ async def set_profilepic(propic):
 
 
 
-@register(outgoing=True, pattern="^.username (.*)")
+@borg.on(admin_cmd(pattern="username (.*)"))
 async def update_username(username):
     """ For .username command, set a new username in Telegram. """
     newusername = username.pattern_match.group(1)
@@ -162,7 +163,7 @@ async def update_username(username):
         await username.edit(USERNAME_TAKEN)
 
 
-@register(outgoing=True, pattern="^.count$")
+@borg.on(admin_cmd(pattern="count (.*)"))
 async def count(event):
     """ For .count command, get profile stats. """
     u = 0
@@ -199,7 +200,7 @@ async def count(event):
     await event.edit(result)
 
 
-@register(outgoing=True, pattern=r"^.delpfp")
+@borg.on(admin_cmd(pattern="delpfp (.*)"))
 async def remove_profilepic(delpfp):
     """ For .delpfp command, delete your current profile picture in Telegram. """
     group = delpfp.text[8:]
