@@ -63,7 +63,7 @@ async def gsearch(q_event):
             "Google Search query `" + match + "` was executed successfully",
         )
     
-@borg.on(admin_cmd("grs"))
+@borg.on(admin_cmd(pattern="grs"))
 async def _(event):
     if event.fwd_from:
         return

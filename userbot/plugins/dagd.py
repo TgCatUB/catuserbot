@@ -11,7 +11,7 @@ import json
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 
-@borg.on(admin_cmd("dns (.*)"))
+@borg.on(admin_cmd(pattern="dns (.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -24,7 +24,7 @@ async def _(event):
         await event.edit("i can't seem to find {} on the internet".format(input_str))
 
 
-@borg.on(admin_cmd("url (.*)"))
+@borg.on(admin_cmd(pattern="url (.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -37,7 +37,7 @@ async def _(event):
         await event.edit("something is wrong. please try again later.")
 
 
-@borg.on(admin_cmd("unshort (.*)"))
+@borg.on(admin_cmd(pattern="unshort (.*)"))
 async def _(event):
     if event.fwd_from:
         return

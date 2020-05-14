@@ -14,9 +14,9 @@ async def cmd_list(event):
         input_str = event.pattern_match.group(1)
         if tgbotusername is None or input_str == "text":
             string = ""
-            for i in borg._plugins:
+            for i in CMD_LIST:
                 string += "👉 " + i + "\n"
-                for iter_list in borg._plugins[i]:
+                for iter_list in CMD_LIST[i]:
                     string += "    `" + str(iter_list) + "`"
                     string += "\n"
                 string += "\n"
@@ -26,9 +26,9 @@ async def cmd_list(event):
             else:
                 await event.edit(string)
         elif input_str:
-            if input_str in borg._plugins:
+            if input_str in CMD_LIST:
                 string = "Commands found in {}:\n".format(input_str)
-                for i in borg._plugins[input_str]:
+                for i in bCMD_LIST[input_str]:
                     string += "    " + i
                     string += "\n"
                 await event.edit(string)
@@ -49,9 +49,6 @@ async def cmd_list(event):
             await event.delete()
 
             
-            
-
-
 
 @borg.on(admin_cmd(pattern="dc"))  # pylint:disable=E0602
 async def _(event):
@@ -76,13 +73,17 @@ async def _(event):
     if event.fwd_from:
         return
     plugin_name = event.pattern_match.group(1)
-    if plugin_name in borg._plugins:
-        help_string = borg._plugins[plugin_name].__doc__
-        unload_string = f"Use `.unload {plugin_name}` to remove this plugin.\n ©userbot"
+
+    if plugin_name in CMD_LIST:
+        help_string = CMD_LIST[plugin_name].__doc__
+        unload_string = f"Use `.unload {plugin_name}` to remove this plugin.\n           ©catuserbot"
+        
         if help_string:
             plugin_syntax = f"Syntax for plugin **{plugin_name}**:\n\n{help_string}\n{unload_string}"
         else:
             plugin_syntax = f"No DOCSTRING has been setup for {plugin_name} plugin."
     else:
-        plugin_syntax = "Enter valid **Plugin** name.\nDo `.exec ls userbot/plugins` or `.help` to get list of valid plugin names."
+
+        plugin_syntax = "Enter valid **Plugin** name.\nDo `.info` or `.help` to get list of valid plugin names."
+
     await event.edit(plugin_syntax)            

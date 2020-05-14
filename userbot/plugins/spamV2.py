@@ -23,7 +23,7 @@ async def spammer(e):
             await asyncio.sleep(sleep2)
                
                
-@borg.on(admin_cmd("tspam"))
+@borg.on(admin_cmd(pattern="tspam"))
 async def tmeme(e):
      tspam = str(e.text[7:])
      message = tspam.replace(" ", "")

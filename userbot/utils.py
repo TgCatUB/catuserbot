@@ -3,19 +3,31 @@ from telethon import events
 from var import Var
 from pathlib import Path
 from userbot.uniborgConfig import Config
-from userbot import LOAD_PLUG
-from userbot import CMD_LIST
+from userbot import LOAD_PLUG, CMD_LIST
 import re
 import logging
 import inspect
 import math
 import os
 import time
-
+import asyncio
+from traceback import format_exc
+from time import gmtime, strftime
+import subprocess
+import sys
+import traceback
+import datetime
 from telethon.tl.functions.messages import GetPeerDialogsRequest
-
 from typing import List
 
+# the secret configuration specific things
+ENV = bool(os.environ.get("ENV", False))
+if ENV:
+    from userbot.uniborgConfig import Config
+else:
+    if os.path.exists("config.py"):
+        from config import Development as Config
+        
 def command(**args):
     args["func"] = lambda e: e.via_bot_id is None
 
@@ -137,13 +149,15 @@ def remove_plugin(shortname):
                     del bot._event_builders[i]
     except:
         raise ValueError
+        
 
-def admin_cmd(pattern=None, **args):
+def admin_cmd(**args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
+    pattern = args.get("pattern", None)
     allow_sudo = args.get("allow_sudo", False)
 
     # get the pattern from the decorator
@@ -152,13 +166,13 @@ def admin_cmd(pattern=None, **args):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
-            args["pattern"] = re.compile("\." + pattern)
-            cmd = "." + pattern
+            args["pattern"] = re.compile(Config.COMMAND_HAND_LER + pattern)
+            cmd = Config.COMMAND_HAND_LER + pattern
             try:
                 CMD_LIST[file_test].append(cmd)
             except:
                 CMD_LIST.update({file_test: [cmd]})
-
+                
     args["outgoing"] = True
     # should this command be available for other users?
     if allow_sudo:
@@ -172,6 +186,12 @@ def admin_cmd(pattern=None, **args):
         args["outgoing"] = True
 
     # add blacklist chats, UB should not respond in these chats
+    args["blacklist_chats"] = True
+    black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
+    if len(black_list_chats) > 0:
+        args["chats"] = black_list_chats
+
+    # check if the plugin should allow edited updates
     allow_edited_updates = False
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         allow_edited_updates = args["allow_edited_updates"]
@@ -182,19 +202,26 @@ def admin_cmd(pattern=None, **args):
 
     return events.NewMessage(**args)
 
-""" Userbot module for managing events.
- One of the main components of the userbot. """
 
-from telethon import events
-import asyncio
-from userbot import bot
-from traceback import format_exc
-from time import gmtime, strftime
-import math
-import subprocess
-import sys
-import traceback
-import datetime
+async def is_read(borg, entity, message, is_out=None):
+    """
+    Returns True if the given message (or id) has been read
+    if a id is given, is_out needs to be a bool
+    """
+    is_out = getattr(message, "out", is_out)
+    if not isinstance(is_out, bool):
+        raise ValueError(
+            "Message was id but is_out not provided or not a bool")
+    message_id = getattr(message, "id", message)
+    if not isinstance(message_id, int):
+        raise ValueError("Failed to extract id from message")
+
+    dialog = (await borg(GetPeerDialogsRequest([entity]))).dialogs[0]
+    max_id = dialog.read_outbox_max_id if is_out else dialog.read_inbox_max_id
+    return message_id <= max_id
+
+
+
 
 
 def register(**args):
@@ -296,8 +323,10 @@ def errors_handler(func):
 
     return wrapper
 
-async def progress(current, total, event, start, type_of_ps, file_name=None):
-    """Generic progress_callback for uploads and downloads."""
+
+async def progress(current, total, event, start, type_of_ps):
+    """Generic progress_callback for both
+    upload.py and download.py"""
     now = time.time()
     diff = now - start
     if round(diff % 10.00) == 0 or current == total:
@@ -306,9 +335,9 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
         elapsed_time = round(diff) * 1000
         time_to_completion = round((total - current) / speed) * 1000
         estimated_total_time = elapsed_time + time_to_completion
-        progress_str = "[{0}{1}] {2}%\n".format(
-            ''.join(["▰" for i in range(math.floor(percentage / 10))]),
-            ''.join(["▱" for i in range(10 - math.floor(percentage / 10))]),
+        progress_str = "[{0}{1}]\nPercent: {2}%\n".format(
+            ''.join(["█" for i in range(math.floor(percentage / 5))]),
+            ''.join(["░" for i in range(20 - math.floor(percentage / 5))]),
             round(percentage, 2))
         tmp = progress_str + \
             "{0} of {1}\nETA: {2}".format(
@@ -316,11 +345,10 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
                 humanbytes(total),
                 time_formatter(estimated_total_time)
             )
-        if file_name:
-            await event.edit("{}\nFile Name: `{}`\n{}".format(
-                type_of_ps, file_name, tmp))
-        else:
-            await event.edit("{}\n{}".format(type_of_ps, tmp))
+        await event.edit("{}\n {}".format(
+            type_of_ps,
+            tmp
+        ))
 
 
 def humanbytes(size):
@@ -330,9 +358,15 @@ def humanbytes(size):
     if not size:
         return ""
     # 2 ** 10 = 1024
-    power = 2**10
+    power = 2 ** 10
     raised_to_pow = 0
-    dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
+    dict_power_n = {
+        0: "",
+        1: "Ki",
+        2: "Mi",
+        3: "Gi",
+        4: "Ti"
+    }
     while size > power:
         size /= power
         raised_to_pow += 1
@@ -346,12 +380,13 @@ def time_formatter(milliseconds: int) -> str:
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
-    tmp = ((str(days) + " day(s), ") if days else "") + \
-        ((str(hours) + " hour(s), ") if hours else "") + \
-        ((str(minutes) + " minute(s), ") if minutes else "") + \
-        ((str(seconds) + " second(s), ") if seconds else "") + \
-        ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
+    tmp = ((str(days) + "d, ") if days else "") + \
+        ((str(hours) + "h, ") if hours else "") + \
+        ((str(minutes) + "m, ") if minutes else "") + \
+        ((str(seconds) + "s, ") if seconds else "") + \
+        ((str(milliseconds) + "ms, ") if milliseconds else "")
     return tmp[:-2]
+
 
 class Loader():
     def __init__(self, func=None, **args):

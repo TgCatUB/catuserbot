@@ -6,7 +6,7 @@ from telethon import events, utils
 from telethon.tl import types
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd("resend"))
+@borg.on(admin_cmd(pattern="resend"))
 async def _(event):
     await event.delete()
     m = await event.get_reply_message()

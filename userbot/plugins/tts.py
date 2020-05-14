@@ -2,7 +2,7 @@
 Available Commands:
 .tts LanguageCode as reply to a message
 .tts LangaugeCode | text to speak"""
-
+from userbot import CMD_HELP
 import asyncio
 import os
 import subprocess
@@ -11,7 +11,7 @@ from gtts import gTTS
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd("tts (.*)"))
+@borg.on(admin_cmd(pattern="tts (.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -73,3 +73,13 @@ async def _(event):
         await event.delete()
     except Exception as e:
         await event.edit(str(e))
+
+        
+CMD_HELP.update({
+    "tts":
+    " Google Text to Speech\
+\nAvailable Commands:\
+\n.tts LanguageCode as reply to a message\
+\n\n.tts LangaugeCode | text to speak\
+"
+}) 

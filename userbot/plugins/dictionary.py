@@ -3,16 +3,16 @@ Syntax: .meaning <word>"""
 
 import requests
 from telethon import events
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd("meaning (.*)"))
+@borg.on(admin_cmd(pattern="meaning (.*)"))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
     input_url = "https://bots.shrimadhavuk.me/dictionary/?s={}".format(input_str)
-    headers = {"USER-AGENT": "UniBorg"}
+    headers = {"USER-AGENT": "catty"}
     caption_str = f"Meaning of __{input_str}__\n"
     try:
         response = requests.get(input_url, headers=headers).json()

@@ -18,7 +18,7 @@ from uniborg.util import admin_cmd
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
  
-@borg.on(admin_cmd("scha ?(.*)"))
+@borg.on(admin_cmd(pattern="scha ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return

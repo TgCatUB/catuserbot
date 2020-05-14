@@ -12,7 +12,7 @@ import time
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 
-@borg.on(admin_cmd("bash ?(.*)"))
+@borg.on(admin_cmd(pattern="bash ?(.*)"))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
