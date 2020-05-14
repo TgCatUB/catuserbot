@@ -503,7 +503,7 @@ HIT = [
 # ===========================================
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"^.(\w+)say (.*)")
+@borg.on(admin_cmd(outgoing=True, pattern=r"(\w+)say (.*)"))
 async def univsaye(cowmsg):
     """ For .cowsay module, userbot wrapper for cow which says things. """
     if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in ("/", "#", "@", "!"):
@@ -520,7 +520,7 @@ async def univsaye(cowmsg):
         await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="^:/$")
+@borg.on(admin_cmd(outgoing=True, pattern=":/"))
 async def kek(keks):
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
         """ Check yourself ;)"""
@@ -529,7 +529,7 @@ async def kek(keks):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
-@borg.on(admin_cmd(pattern="^.slap(?: |$)(.*)", outgoing=True)
+@borg.on(admin_cmd(pattern="^.slap(?: |$)(.*)", outgoing=True))
 async def who(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         """ slaps a user, or get slapped if not a reply. """
@@ -601,7 +601,7 @@ async def slap(replied_user, event):
 
     return caption
 
-@borg.on(admin_cmd(outgoing=True, pattern="^-_-$")
+@borg.on(admin_cmd(outgoing=True, pattern="-_-"))
 async def lol(lel):
     if not lel.text[0].isalpha() and lel.text[0] not in ("/", "#", "@", "!"):
         """ Ok... """
@@ -610,7 +610,7 @@ async def lol(lel):
             okay = okay[:-1] + "_-"
             await lel.edit(okay)
 
-@borg.on(admin_cmd(outgoing=True, pattern="^.decide$")
+@borg.on(admin_cmd(outgoing=True, pattern="decide"))
 async def _(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         if event.fwd_from:
@@ -627,7 +627,7 @@ async def _(event):
         )
         await event.delete()
 
-@borg.on(admin_cmd(outgoing=True, pattern="^;_;$")
+@borg.on(admin_cmd(outgoing=True, pattern=";_;"))
 async def fun(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         t = ";__;"
@@ -636,7 +636,7 @@ async def fun(e):
             await e.edit(t)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="^.insult$")
+@borg.on(admin_cmd(outgoing=True, pattern="insult"))
 async def insult(e):
     """ I make you cry !! """
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -644,7 +644,7 @@ async def insult(e):
 
 
 			  
-@borg.on(admin_cmd(outgoing=True, pattern="^.repo$")
+@borg.on(admin_cmd(outgoing=True, pattern="repo"))
 async def source(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Click [here](https://github.com/sandy1709/catuserbot) to open this lit af repo.")
