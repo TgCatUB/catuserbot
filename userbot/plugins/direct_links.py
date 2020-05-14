@@ -15,10 +15,9 @@ from bs4 import BeautifulSoup
 from humanize import naturalsize
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.utils import admin_cmd
 
-
-@register(outgoing=True, pattern=r"^\.direct(?: |$)([\s\S]*)")
+@borg.on(admin_cmd(pattern="direct(?: |$)([\s\S]*)"))
 async def direct_link_generator(request):
     """ direct links generator """
     await request.edit("`Processing...`")
