@@ -207,7 +207,7 @@ async def gdrive_search_list(event):
 @borg.on(events.NewMessage(
     pattern=
     r"^\.gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})",
-    outgoing=True)
+    outgoing=True))
 async def download(set):
     """For .gsetf command, allows you to set path"""
     await set.edit("Processing ...")
@@ -221,7 +221,7 @@ async def download(set):
     else:
         await set.edit(
             "Use `.gdrivesp <link to GDrive Folder>` to set the folder to upload new files to."
-        ))
+        )
 
 
 @borg.on(admin_cmd(pattern="getclear"))
