@@ -1,6 +1,6 @@
 from userbot import bot
 from telethon import events
-from userbot.events import command, remove_plugin, load_module
+from userbot.utils import command, remove_plugin, load_module
 from var import Var
 import importlib
 from pathlib import Path
