@@ -169,7 +169,7 @@ ZALG_LIST = [["̖",
               ]]
 
 
-@borg.on(admin_cmd(pattern="vapor (.*)")))
+@borg.on(admin_cmd(pattern="vapor (.*)"))
 async def vapor(vpr):
     """ Vaporize everything! """
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
