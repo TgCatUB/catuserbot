@@ -3,13 +3,14 @@ Syntax: .get_admin"""
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantAdmin, ChannelParticipantCreator
 from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
 
-@borg.on(admin_cmd("get_ad?(m)in ?(.*)"))
+@borg.on(admin_cmd(pattern="get_ad?(m)in ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
-    mentions = "**Admins in this group**: \n"
+    mentions = "**Admins in this Group**: \n"
     should_mention_admins = False
     reply_message = None
     pattern_match_str = event.pattern_match.group(1)
@@ -23,7 +24,7 @@ async def _(event):
     if not input_str:
         chat = to_write_chat
     else:
-        mentions_heading = "Admins in {} channel: \n".format(input_str)
+        mentions_heading = "Admins in {} Group: \n".format(input_str)
         mentions = mentions_heading
         try:
             chat = await borg.get_entity(input_str)
@@ -52,3 +53,11 @@ async def _(event):
         await event.delete()
     else:
         await event.edit(mentions)
+        
+        
+CMD_HELP.update({
+    "get_admin":
+    ".get_admin or .get_admin group username\
+    \n shows the list of admins in the group where you executed the command.\
+"
+})         
