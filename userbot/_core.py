@@ -9,8 +9,9 @@ import sys
 import asyncio
 import traceback
 import os
-import userbot.utils
+import userbot import utils
 from datetime import datetime
+
 
 DELETE_TIMEOUT = 5
 
