@@ -1,5 +1,6 @@
-
+from userbot import bot
 from telethon import events
+from userbot.events import command, remove_plugin, load_module
 from var import Var
 import importlib
 from pathlib import Path
@@ -8,14 +9,12 @@ import sys
 import asyncio
 import traceback
 import os
-from userbot import utils
+import userbot.utils
 from datetime import datetime
-
 
 DELETE_TIMEOUT = 5
 
-
-@borg.on(utils.admin_cmd(pattern="install"))
+@command(pattern="^.install", outgoing=True)
 async def install(event):
     if event.fwd_from:
         return
@@ -39,8 +38,7 @@ async def install(event):
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
 
-
-@borg.on(utils.admin_cmd(pattern="send (?P<shortname>\w+)$"))
+@command(pattern="^.send (?P<shortname>\w+)$", outgoing=True)
 async def send(event):
     if event.fwd_from:
         return
@@ -61,8 +59,7 @@ async def send(event):
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
 
-
-@borg.on(utils.admin_cmd(pattern="unload (?P<shortname>\w+)$"))
+@command(pattern="^.unload (?P<shortname>\w+)$", outgoing=True)
 async def unload(event):
     if event.fwd_from:
         return
@@ -73,8 +70,7 @@ async def unload(event):
     except Exception as e:
         await event.edit("Successfully unload {shortname}\n{}".format(shortname, str(e)))
 
-
-@borg.on(utils.admin_cmd(pattern="load (?P<shortname>\w+)$"))
+@command(pattern="^.load (?P<shortname>\w+)$", outgoing=True)
 async def load(event):
     if event.fwd_from:
         return
