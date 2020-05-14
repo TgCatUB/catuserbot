@@ -31,7 +31,7 @@ def progress(current, total):
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
-@register(outgoing=True, pattern=r"^\.gs (.*)")
+@borg.on(admin_cmd(pattern="gs (.*)"))
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
     match = q_event.pattern_match.group(1)
