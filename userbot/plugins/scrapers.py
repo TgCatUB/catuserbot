@@ -33,7 +33,7 @@ from gtts.lang import tts_langs
 from emoji import get_emoji_regexp
 from asyncio import sleep
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, CHROME_DRIVER, GOOGLE_CHROME_BIN
-from userbot.events import register
+from userbot.utils import admin_cmd
 from telethon.tl.types import DocumentAttributeAudio
 from userbot.utils import progress, humanbytes, time_formatter
 from userbot.uniborgConfig import Config
@@ -48,7 +48,8 @@ BOTLOG = True
 LANG = "en"
 
 
-@register(outgoing=True, pattern="^.carbon")
+
+@borg.on(admin_cmd(pattern="carbon (.*)"))
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
  
@@ -120,7 +121,7 @@ async def carbon_api(e):
     
 
 
-@register(outgoing=True, pattern=r"^\.wiki (.*)")
+@borg.on(admin_cmd(pattern="wiki (.*)"))
 async def wiki(wiki_q):
     """ For .wiki command, fetch content from Wikipedia. """
     match = wiki_q.pattern_match.group(1)
@@ -153,7 +154,8 @@ async def wiki(wiki_q):
 
 
 
-@register(outgoing=True, pattern=r"^\.trt(?: |$)([\s\S]*)")
+
+@borg.on(admin_cmd(pattern="trt(?: |$)([\s\S]*)"))
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     translator = Translator()
@@ -185,7 +187,7 @@ async def translateme(trans):
         )
 
 
-@register(pattern="^\.lang (trt|tts) (.*)", outgoing=True)
+@borg.on(admin_cmd(pattern="lang (trt|tts) (.*)", outgoing=True))
 async def lang(value):
     """ For .lang command, change the default langauge of userbot scrapers. """
     util = value.pattern_match.group(1).lower()
