@@ -6,7 +6,9 @@ import time
 import json
 import sys
 
-@command(pattern="^.labstack ?(.*)")
+from userbot.utils import admin_cmd
+
+@borg.on(admin_cmd(pattern="labstack (.*)"))
 async def labstack(event):
     if event.fwd_from:
         return
