@@ -11,7 +11,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from userbot.events import register
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd("leave$"))
+@borg.on(admin_cmd(pattern="leave"))
 async def leave(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`I iz Leaving dis Kensur Group kek!`")
@@ -22,13 +22,13 @@ async def leave(e):
             await e.edit('`Sar This is Not A Chat`')
 
 
-@borg.on(admin_cmd("ccry$"))
+@borg.on(admin_cmd(pattern="ccry"))
 #@register(outgoing=True, pattern="^.cry$")
 async def cry(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("(;´༎ຶД༎ຶ)")
 
-@borg.on(admin_cmd("fp$"))
+@borg.on(admin_cmd(pattern="fp"))
 #@register(outgoing=True, pattern="^.fp$")
 async def facepalm(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -37,7 +37,7 @@ async def facepalm(e):
 		
 
 
-@borg.on(admin_cmd("heart$"))		
+@borg.on(admin_cmd(pattern="heart"))		
 #@register(outgoing=True, pattern="^.heart$")
 async def _(event):
 	if event.fwd_from:
@@ -50,7 +50,7 @@ async def _(event):
 		
 
 
-@borg.on(admin_cmd("myusernames"))
+@borg.on(admin_cmd(pattern="myusernames"))
 #@register(outgoing=True, pattern="^.myusernames$")
 async def _(event):
     if event.fwd_from:
