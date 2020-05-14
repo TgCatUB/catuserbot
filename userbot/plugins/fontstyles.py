@@ -4,7 +4,7 @@ import time
 import requests
 from telethon import events
 from userbot import CMD_HELP
-from userbot.utils import register
+from userbot.utils import admin_cmd
 import asyncio
 import random
 
@@ -169,7 +169,7 @@ ZALG_LIST = [["̖",
               ]]
 
 
-@register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="vapor (.*)")))
 async def vapor(vpr):
     """ Vaporize everything! """
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
@@ -193,8 +193,8 @@ async def vapor(vpr):
                 reply_text.append(charac)
 
         await vpr.edit("".join(reply_text))
-
-@register(outgoing=True, pattern="^.str(?: |$)(.*)")
+        
+@borg.on(admin_cmd(pattern="str (.*)"))
 async def stretch(stret):
     """ Stretch it."""
     if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@", "!"):
@@ -218,7 +218,7 @@ async def stretch(stret):
         await stret.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.zal(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="zal (.*)"))
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
     if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
@@ -258,7 +258,7 @@ async def zal(zgfy):
         await zgfy.edit("".join(reply_text))
 
     
-@register(outgoing=True, pattern="^.cp(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="cp (.*)"))
 async def copypasta(cp_e):
     """ Copypasta the famous meme """
     if not cp_e.text[0].isalpha() and cp_e.text[0] not in ("/", "#", "@", "!"):
@@ -294,7 +294,7 @@ async def copypasta(cp_e):
         await cp_e.edit(reply_text)
 
         
-@register(outgoing=True, pattern="^.mock(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="mock (.*)"))
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
     if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
