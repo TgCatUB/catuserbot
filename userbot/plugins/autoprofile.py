@@ -22,7 +22,7 @@ import shutil
 DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
 
 DEL_TIME_OUT = 30
-DEFAULTUSER = str(AUTONAME) if AUTONAME else "|『 𝙍𝘼𝘽𝘽𝙄𝙏 』|" 
+DEFAULTUSER = str(AUTONAME) if AUTONAME else "/『 𝙍𝘼𝘽𝘽𝙄𝙏 』/" 
 
 
 
