@@ -4,7 +4,7 @@ import json
 import random
 import re
 from telethon import events, errors, custom
-from userbot.uniborgConfig import Config
+from userbot import CMD_LIST
 import io
 
 if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
@@ -15,11 +15,11 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         query = event.text
         if event.query.user_id == bot.uid and query.startswith("Userbot"):
             rev_text = query[::-1]
-            buttons = paginate_help(0, borg._plugins, "helpme")
+            buttons = paginate_help(0, CMD_LIST, "helpme")
             result = builder.article(
                 "© Userbot Help",
                 text="{}\nCurrently Loaded Plugins: {}".format(
-                    query, len(borg._plugins)),
+                    query, len(CMD_LIST)),
                 buttons=buttons,
                 link_preview=False
             )
@@ -32,7 +32,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             current_page_number = int(
                 event.data_match.group(1).decode("UTF-8"))
             buttons = paginate_help(
-                current_page_number + 1, borg._plugins, "helpme")
+                current_page_number + 1, CMD_LIST, "helpme")
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
@@ -49,7 +49,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 event.data_match.group(1).decode("UTF-8"))
             buttons = paginate_help(
                 current_page_number - 1,
-                borg._plugins,  # pylint:disable=E0602
+                CMD_LIST,  # pylint:disable=E0602
                 "helpme"
             )
             # https://t.me/TelethonChat/115200
@@ -64,7 +64,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         plugin_name = event.data_match.group(1).decode("UTF-8")
         help_string = ""
         try:
-            for i in borg._plugins[plugin_name]:
+            for i in CMD_LIST[plugin_name]:
                 help_string += i
                 help_string += "\n"
         except:
