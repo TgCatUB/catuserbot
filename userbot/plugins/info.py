@@ -6,10 +6,10 @@
 """ Userbot help command """
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.utils import admin_cmd
 
 
-@register(outgoing=True, pattern="^.info(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="info(?: |$)(.*)"))
 async def info(event):
     """ For .info command,"""
     args = event.pattern_match.group(1).lower()
