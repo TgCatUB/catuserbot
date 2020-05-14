@@ -13,8 +13,7 @@ import sys
 import random
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=f"bbl$", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.bbl", outgoing=True))
+@borg.on(admin_cmd(pattern="bbl", allow_sudo=True,outgoing=true))
 
 async def _(event):
 
