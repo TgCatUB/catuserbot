@@ -4,9 +4,8 @@ from asyncio import wait
 from userbot.utils import admin_cmd
 from telethon import events, utils
 
-from userbot.events import register
 
-@register(outgoing=True, pattern="^.sspam")
+@borg.on(admin_cmd(pattern="sspam"))
 async def spammer(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
