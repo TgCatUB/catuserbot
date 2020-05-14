@@ -4,6 +4,7 @@ from userbot import CMD_HELP
 import regex
 from telethon import events, utils
 from telethon.tl import types, functions
+from userbot.events import command
 
 HEADER = "「sed」\n"
 KNOWN_RE_BOTS = re.compile(
