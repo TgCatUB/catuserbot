@@ -157,7 +157,7 @@ async def get_full_user(event):
             except Exception as e:
                 return None, e
 
-@register(pattern=".whois(?: |$)(.*)", outgoing=True)
+@borg.on(admin_cmd(pattern="whois (.*)"))
 async def who(event):
 
     await event.edit(
