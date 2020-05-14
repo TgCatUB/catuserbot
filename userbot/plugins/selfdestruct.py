@@ -26,12 +26,12 @@ async def selfdestruct(destroy):
         return
     text = text.strip()
     counter = counter.strip()
-        text = (
+    text = (
             text
-        )
-        await destroy.delete()
-        smsg = await destroy.client.send_message(destroy.chat_id, text)
-        time.sleep(counter)
+       )
+    await destroy.delete()
+    smsg = await destroy.client.send_message(destroy.chat_id, text)
+    time.sleep(counter)
         await smsg.delete()
 
         
