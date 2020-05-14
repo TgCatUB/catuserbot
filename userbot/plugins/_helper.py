@@ -2,6 +2,8 @@ from userbot import CMD_LIST
 from userbot import ALIVE_NAME
 from userbot.utils import admin_cmd
 from platform import uname
+import sys
+from telethon import events, functions, __version__
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@mrconfused"
 
@@ -12,9 +14,9 @@ async def cmd_list(event):
         input_str = event.pattern_match.group(1)
         if tgbotusername is None or input_str == "text":
             string = ""
-            for i in CMD_LIST:
+            for i in borg._plugins:
                 string += "👉 " + i + "\n"
-                for iter_list in CMD_LIST[i]:
+                for iter_list in borg._plugins[i]:
                     string += "    `" + str(iter_list) + "`"
                     string += "\n"
                 string += "\n"
@@ -24,9 +26,9 @@ async def cmd_list(event):
             else:
                 await event.edit(string)
         elif input_str:
-            if input_str in CMD_LIST:
+            if input_str in borg._plugins:
                 string = "Commands found in {}:\n".format(input_str)
-                for i in CMD_LIST[input_str]:
+                for i in borg._plugins[input_str]:
                     string += "    " + i
                     string += "\n"
                 await event.edit(string)
@@ -45,3 +47,42 @@ async def cmd_list(event):
                 hide_via=True
             )
             await event.delete()
+
+            
+            
+
+
+
+@borg.on(admin_cmd(pattern="dc"))  # pylint:disable=E0602
+async def _(event):
+    if event.fwd_from:
+        return
+    result = await borg(functions.help.GetNearestDcRequest())  # pylint:disable=E0602
+    await event.edit(result.stringify())
+
+
+@borg.on(admin_cmd(pattern="config"))  # pylint:disable=E0602
+async def _(event):
+    if event.fwd_from:
+        return
+    result = await borg(functions.help.GetConfigRequest())  # pylint:disable=E0602
+    result = result.stringify()
+    logger.info(result)  # pylint:disable=E0602
+    await event.edit("""Telethon UserBot powered by catuserbot""")
+
+
+@borg.on(admin_cmd(pattern="syntax (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    plugin_name = event.pattern_match.group(1)
+    if plugin_name in borg._plugins:
+        help_string = borg._plugins[plugin_name].__doc__
+        unload_string = f"Use `.unload {plugin_name}` to remove this plugin.\n ©userbot"
+        if help_string:
+            plugin_syntax = f"Syntax for plugin **{plugin_name}**:\n\n{help_string}\n{unload_string}"
+        else:
+            plugin_syntax = f"No DOCSTRING has been setup for {plugin_name} plugin."
+    else:
+        plugin_syntax = "Enter valid **Plugin** name.\nDo `.exec ls userbot/plugins` or `.help` to get list of valid plugin names."
+    await event.edit(plugin_syntax)            
