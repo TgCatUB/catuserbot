@@ -19,11 +19,8 @@ async def selfdestruct(destroy):
         message = destroy.text
         counter = int(message[5:7])
         text = str(destroy.text[7:])
-    text = (
+        text = (
             text
-            + "\n\n`This message shall be self-destructed in "
-            + str(counter)
-            + " seconds`"
         )
         await destroy.delete()
         smsg = await destroy.client.send_message(destroy.chat_id, text)
