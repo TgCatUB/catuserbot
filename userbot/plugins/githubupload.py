@@ -12,6 +12,7 @@ import os
 import time
 from datetime import datetime
 from telethon import events
+from userbot.utils import admin_cmd
 from telethon.tl.types import DocumentAttributeVideo
 
 
