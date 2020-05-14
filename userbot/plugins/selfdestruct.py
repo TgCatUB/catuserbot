@@ -21,11 +21,14 @@ async def selfdestruct(destroy):
         text = str(destroy.text[7:])
     text = (
             text
-       )
-    await destroy.delete()
-    smsg = await destroy.client.send_message(destroy.chat_id, text)
-    time.sleep(counter)
-        await smsg.delete()
+            + "\n\n`This message shall be self-destructed in "
+            + str(counter)
+            + " seconds`"
+        )
+        await destroy.delete()
+        smsg = await destroy.client.send_message(destroy.chat_id, text)
+        time.sleep(counter)
+        await smsg.delete()  
 
         
 @borg.on(admin_cmd(pattern"selfd", outgoing=True  ))
