@@ -10,7 +10,7 @@ from telethon import events
 import asyncio
 from datetime import datetime
 import time
-from userbot.utils import register, errors_handler, admin_cmd
+from userbot.utils import admin_cmd
 
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
