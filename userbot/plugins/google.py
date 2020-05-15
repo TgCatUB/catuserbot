@@ -21,7 +21,6 @@ import re
 from re import findall
 from search_engine_parser import GoogleSearch
 from asyncio import sleep
-from userbot.utils import register
 from telethon.tl.types import DocumentAttributeAudio
 from userbot.uniborgConfig import Config
 
