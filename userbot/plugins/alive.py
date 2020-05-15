@@ -8,7 +8,7 @@ from userbot.utils import admin_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@borg.on(admin_cmd(pattern="alive (.*)"))
+@borg.on(admin_cmd(pattern="alive (.*)", outgoing=True))
 async def amireallyalive(alive):
     if event.fwd_from:
 	return
