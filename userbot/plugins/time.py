@@ -5,7 +5,7 @@ import asyncio
 import os
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
-from userbot.utils import admin_cmd,register
+from userbot.utils import admin_cmd
 
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
