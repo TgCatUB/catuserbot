@@ -238,6 +238,7 @@ def register(**args):
     file_test = file_test.stem.replace(".py", "")
     pattern = args.get('pattern', None)
     disable_edited = args.get('disable_edited', False)
+    allow_sudo = args.get("allow_sudo", False)
 
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
