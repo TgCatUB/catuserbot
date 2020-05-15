@@ -321,3 +321,17 @@ def prettyjson(obj, indent=2, maxlinelength=80):
 
     items, _ = getsubitems(obj, itemkey="", islast=True, maxlinelength=maxlinelength - indent, indent=indent)
     return indentitems(items, indent, level=0)        
+
+
+def parse_arguments(message: str, valid: List[str]) -> (dict, str):
+    options = {}
+
+    # Handle boolean values
+    for opt in findall(r'([.!]\S+)', message):
+        if opt[1:] in valid:
+            if opt[0] == '.':
+                options[opt[1:]] = True
+            elif opt[0] == '!':
+                options[opt[1:]] = False
+            message = message.replace(opt, '')
+
