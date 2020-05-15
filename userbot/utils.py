@@ -70,15 +70,14 @@ def command(**args):
 
         if allow_sudo:
             args["from_users"] = list(Config.SUDO_USERS)
-        # Mutually exclusive with outgoing (can only set one of either).
-        args["incoming"] = True
-        del args["allow_sudo"]
+            args["incoming"] = True
+            del args["allow_sudo"]
         
         # error handling condition check
         elif "incoming" in args and not args["incoming"]:
             args["outgoing"] = True
 
-    # add blacklist chats, UB should not respond in these chats
+        # add blacklist chats, UB should not respond in these chats
         args["blacklist_chats"] = True
         black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
         if len(black_list_chats) > 0:
@@ -172,8 +171,8 @@ def admin_cmd(**args):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
-            args["pattern"] = re.compile(Config.COMMAND_HAND_LER + pattern)
-            cmd = Config.COMMAND_HAND_LER + pattern
+            args["pattern"] = re.compile("\." + pattern)
+            cmd = "." + pattern
             try:
                 CMD_LIST[file_test].append(cmd)
             except:
