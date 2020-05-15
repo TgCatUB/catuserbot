@@ -11,7 +11,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 @borg.on(admin_cmd(pattern="alive (.*)"))
 async def amireallyalive(alive):
     if event.fwd_from:
-		return
+	return
     """ For .alive command, check if the bot is running.  """
     await alive.edit("**MY BOT IS RUNNING SUCCESFULLY**\n\n"
                      "`☞Telethon version: 1.11.3\n`"
