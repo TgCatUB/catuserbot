@@ -69,14 +69,20 @@ def command(**args):
                 pass
 
         if allow_sudo:
-            args["from_users"] = list(Var.SUDO_USERS)
-            # Mutually exclusive with outgoing (can only set one of either).
-            args["incoming"] = True
-        del allow_sudo
-        try:
-            del args["allow_sudo"]
-        except:
-            pass
+        args["from_users"] = list(Config.SUDO_USERS)
+        # Mutually exclusive with outgoing (can only set one of either).
+        args["incoming"] = True
+        del args["allow_sudo"]
+        
+        # error handling condition check
+        elif "incoming" in args and not args["incoming"]:
+            args["outgoing"] = True
+
+    # add blacklist chats, UB should not respond in these chats
+        args["blacklist_chats"] = True
+        black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
+        if len(black_list_chats) > 0:
+            args["chats"] = black_list_chats
 
         if "allow_edited_updates" in args:
             del args['allow_edited_updates']
@@ -255,6 +261,35 @@ def register(**args):
                 CMD_LIST.update({file_test: [cmd]})
         except:
             pass
+     
+    args["outgoing"] = True
+    # should this command be available for other users?
+    if allow_sudo:
+        args["from_users"] = list(Config.SUDO_USERS)
+        # Mutually exclusive with outgoing (can only set one of either).
+        args["incoming"] = True
+        del args["allow_sudo"]
+
+    # error handling condition check
+    elif "incoming" in args and not args["incoming"]:
+        args["outgoing"] = True
+
+    # add blacklist chats, UB should not respond in these chats
+    args["blacklist_chats"] = True
+    black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
+    if len(black_list_chats) > 0:
+        args["chats"] = black_list_chats
+
+    # check if the plugin should allow edited updates
+    allow_edited_updates = False
+    if "allow_edited_updates" in args and args["allow_edited_updates"]:
+        allow_edited_updates = args["allow_edited_updates"]
+        del args["allow_edited_updates"]
+
+    # check if the plugin should listen for outgoing 'messages'
+    is_message_enabled = True
+
+    return events.NewMessage(**args)
 
     def decorator(func):
         if not disable_edited:
