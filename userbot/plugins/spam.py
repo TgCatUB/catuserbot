@@ -7,7 +7,7 @@ import asyncio
 from asyncio import wait, sleep
 from userbot.utils import admin_cmd
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.utils import register
+
 
 @borg.on(admin_cmd(pattern="csspam (.*)"))
 async def tmeme(e):
