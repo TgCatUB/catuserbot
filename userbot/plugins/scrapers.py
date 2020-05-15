@@ -33,7 +33,7 @@ from gtts.lang import tts_langs
 from emoji import get_emoji_regexp
 from asyncio import sleep
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, CHROME_DRIVER, GOOGLE_CHROME_BIN
-from userbot.events import register
+from userbot.utils import register
 from telethon.tl.types import DocumentAttributeAudio
 from userbot.utils import progress, humanbytes, time_formatter
 from userbot.uniborgConfig import Config
