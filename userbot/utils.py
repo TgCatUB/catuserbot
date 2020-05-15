@@ -8,6 +8,7 @@ from userbot import CMD_LIST
 import re
 import logging
 import inspect
+from typing import List
 
 def command(**args):
     args["func"] = lambda e: e.via_bot_id is None
