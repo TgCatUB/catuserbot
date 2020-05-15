@@ -1,10 +1,8 @@
 
 from asyncio import sleep
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, bot
-from userbot.utils import register
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
-from userbot.utils import admin_cmd
 from os import remove
 from telethon import events
 import asyncio
