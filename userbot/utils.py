@@ -69,14 +69,19 @@ def command(**args):
                 pass
 
         if allow_sudo:
-            args["from_users"] = list(Var.SUDO_USERS)
-            # Mutually exclusive with outgoing (can only set one of either).
+            args["from_users"] = list(Config.SUDO_USERS)
             args["incoming"] = True
-        del allow_sudo
-        try:
             del args["allow_sudo"]
-        except:
-            pass
+        
+        # error handling condition check
+        elif "incoming" in args and not args["incoming"]:
+            args["outgoing"] = True
+
+        # add blacklist chats, UB should not respond in these chats
+        args["blacklist_chats"] = True
+        black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
+        if len(black_list_chats) > 0:
+            args["chats"] = black_list_chats
 
         if "allow_edited_updates" in args:
             del args['allow_edited_updates']
@@ -225,15 +230,17 @@ async def is_read(borg, entity, message, is_out=None):
 
 
 def register(**args):
-    args["func"] = lambda e: e.via_bot_id is None
     """ Register a new event. """
+    args["func"] = lambda e: e.via_bot_id is None
+
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     pattern = args.get('pattern', None)
     disable_edited = args.get('disable_edited', False)
-
+    allow_sudo = args.get("allow_sudo", False)
+    
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
 
@@ -255,6 +262,17 @@ def register(**args):
                 CMD_LIST.update({file_test: [cmd]})
         except:
             pass
+      
+    if allow_sudo:
+        args["from_users"] = list(Config.SUDO_USERS)
+        # Mutually exclusive with outgoing (can only set one of either).
+        args["incoming"] = True
+        del args["allow_sudo"]
+        
+    args["blacklist_chats"] = True
+    black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
+    if len(black_list_chats) > 0:
+        args["chats"] = black_list_chats   
 
     def decorator(func):
         if not disable_edited:
@@ -267,61 +285,17 @@ def register(**args):
 
         return func
 
-    return decorator   
+    return decorator
 
 
 def errors_handler(func):
-    async def wrapper(errors):
+    async def wrapper(event):
         try:
-            await func(errors)
-        except BaseException:
-
-            date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-            new = {
-                'error': str(sys.exc_info()[1]),
-                'date': datetime.datetime.now()
-            }
-
-            text = "**USERBOT CRASH REPORT**\n\n"
-
-            link = "[here](https://t.me/PaperplaneExtendedSupport)"
-            text += "If you wanna you can report it"
-            text += f"- just forward this message {link}.\n"
-            text += "Nothing is logged except the fact of error and date\n"
-
-            ftext = "\nDisclaimer:\nThis file uploaded ONLY here,"
-            ftext += "\nwe logged only fact of error and date,"
-            ftext += "\nwe respect your privacy,"
-            ftext += "\nyou may not report this error if you've"
-            ftext += "\nany confidential data here, no one will see your data\n\n"
-
-            ftext += "--------BEGIN USERBOT TRACEBACK LOG--------"
-            ftext += "\nDate: " + date
-            ftext += "\nGroup ID: " + str(errors.chat_id)
-            ftext += "\nSender ID: " + str(errors.sender_id)
-            ftext += "\n\nEvent Trigger:\n"
-            ftext += str(errors.text)
-            ftext += "\n\nTraceback info:\n"
-            ftext += str(traceback.format_exc())
-            ftext += "\n\nError text:\n"
-            ftext += str(sys.exc_info()[1])
-            ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
-
-            command = "git log --pretty=format:\"%an: %s\" -5"
-
-            ftext += "\n\n\nLast 5 commits:\n"
-
-            process = await asyncio.create_subprocess_shell(
-                command,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE)
-            stdout, stderr = await process.communicate()
-            result = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
-
-            ftext += result
-
+            return await func(event)
+        except Exception:
+            pass
     return wrapper
+
 
 
 async def progress(current, total, event, start, type_of_ps):
