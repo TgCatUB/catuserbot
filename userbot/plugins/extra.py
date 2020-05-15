@@ -8,7 +8,6 @@ from telethon.tl.functions.contacts import BlockRequest
 from telethon.tl.functions.channels import LeaveChannelRequest, CreateChannelRequest, DeleteMessagesRequest
 from collections import deque
 from telethon.tl.functions.users import GetFullUserRequest
-from userbot.events import register
 from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(pattern="leave"))
