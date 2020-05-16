@@ -44,7 +44,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption="`Uploaded by` :💻🎧 @Mr_Hops 💽🎚️🎛️🎚️💽 \n`Channel` : [TOXIC BEATS](t.me/toxicbeats) 💽🎹💻🎹💽",
+                caption="`Uploaded by` :💻🎧 @Mr_Hops 💽\n`Channel` : [TOXIC BEATS](t.me/toxicbeats) 💽💻💽",
                 reply_to=reply_to_id
             )
     await event.delete()
