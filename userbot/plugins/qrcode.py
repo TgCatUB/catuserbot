@@ -1,7 +1,3 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
 #
 # The entire source code is OSSRPL except 'makeqr and getqr' which is MPL
 # License: MPL and OSSRPL
@@ -17,10 +13,10 @@ from barcode.writer import ImageWriter
 from bs4 import BeautifulSoup
 
 from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from userbot.events import register
 
 
-@borg.on(admin_cmd(pattern="decode (.*)"))
+@register(pattern=r"^.decode$", outgoing=True)
 async def parseqr(qr_e):
     """ For .decode command, get QR Code/BarCode content from the replied photo. """
     downloaded_file_name = await qr_e.client.download_media(
@@ -50,9 +46,52 @@ async def parseqr(qr_e):
     qr_contents = soup.find_all("pre")[0].text
     await qr_e.edit(qr_contents)
 
-    
-   
-@borg.on(admin_cmd(pattern="makeqr (.*)"))
+
+@register(pattern=r".barcode(?: |$)([\s\S]*)", outgoing=True)
+async def barcode(event):
+    """ For .barcode command, genrate a barcode containing the given content. """
+    await event.edit("`Processing..`")
+    input_str = event.pattern_match.group(1)
+    message = "SYNTAX: `.barcode <long text to include>`"
+    reply_msg_id = event.message.id
+    if input_str:
+        message = input_str
+    elif event.reply_to_msg_id:
+        previous_message = await event.get_reply_message()
+        reply_msg_id = previous_message.id
+        if previous_message.media:
+            downloaded_file_name = await event.client.download_media(
+                previous_message)
+            m_list = None
+            with open(downloaded_file_name, "rb") as fd:
+                m_list = fd.readlines()
+            message = ""
+            for m in m_list:
+                message += m.decode("UTF-8") + "\r\n"
+            os.remove(downloaded_file_name)
+        else:
+            message = previous_message.message
+    else:
+        event.edit("SYNTAX: `.barcode <long text to include>`")
+        return
+
+    bar_code_type = "code128"
+    try:
+        bar_code_mode_f = barcode.get(bar_code_type,
+                                      message,
+                                      writer=ImageWriter())
+        filename = bar_code_mode_f.save(bar_code_type)
+        await event.client.send_file(event.chat_id,
+                                     filename,
+                                     reply_to=reply_msg_id)
+        os.remove(filename)
+    except Exception as e:
+        await event.edit(str(e))
+        return
+    await event.delete()
+
+
+@register(pattern=r".makeqr(?: |$)([\s\S]*)", outgoing=True)
 async def make_qr(makeqr):
     """ For .makeqr command, make a QR Code containing the given content. """
     input_str = makeqr.pattern_match.group(1)
@@ -94,13 +133,12 @@ async def make_qr(makeqr):
 
 
 CMD_HELP.update({
-    'qrcode':
+    'qr':
     ".makeqr <content>\
 \nUsage: Make a QR Code from the given content.\
-\nExample: .makeqr www.google.com\
-\nNote: use .decode <reply to barcode/qrcode> to get decoded content.\
-\n\n.barcode <content>\
+\nExample: .makeqr www.google.com\n\n"
+".barcode <content>\
 \nUsage: Make a BarCode from the given content.\
 \nExample: .barcode www.google.com\
-\nNote: use .decode <reply to barcode/qrcode> to get decoded content."
+\n\n**Note**: use .decode <reply to barcode/qrcode> to get decoded content."
 })
