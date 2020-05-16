@@ -140,7 +140,7 @@ async def make_qr(makeqr):
 
 
 CMD_HELP.update({
-    'qr':
+    'barqrcodes':
     ".makeqr <content>\
 \nUsage: Make a QR Code from the given content.\
 \nExample: .makeqr www.google.com\n\n"
