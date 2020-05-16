@@ -98,7 +98,9 @@ if bool(ENV):
 
     # Youtube API key
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
-
+    GENIUS_API_TOKEN = os.environ.get("GENIUS", None)
+    # Genius lyrics get this value from https://genius.com/developers both has same values
+    GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
     # Default .alive name
     ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
     AUTONAME = os.environ.get("AUTONAME", None)
