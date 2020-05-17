@@ -70,14 +70,14 @@ def command(**args):
 
         if allow_sudo:
             args["from_users"] = list(Config.SUDO_USERS)
+            # Mutually exclusive with outgoing (can only set one of either).
             args["incoming"] = True
+        del allow_sudo
+        try:
             del args["allow_sudo"]
+        except:
+            pass
         
-        # error handling condition check
-        elif "incoming" in args and not args["incoming"]:
-            args["outgoing"] = True
-
-        # add blacklist chats, UB should not respond in these chats
         args["blacklist_chats"] = True
         black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
         if len(black_list_chats) > 0:
