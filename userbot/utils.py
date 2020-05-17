@@ -202,27 +202,6 @@ def admin_cmd(**args):
     return events.NewMessage(**args)
 
 
-async def is_read(borg, entity, message, is_out=None):
-    """
-    Returns True if the given message (or id) has been read
-    if a id is given, is_out needs to be a bool
-    """
-    is_out = getattr(message, "out", is_out)
-    if not isinstance(is_out, bool):
-        raise ValueError(
-            "Message was id but is_out not provided or not a bool")
-    message_id = getattr(message, "id", message)
-    if not isinstance(message_id, int):
-        raise ValueError("Failed to extract id from message")
-
-    dialog = (await borg(GetPeerDialogsRequest([entity]))).dialogs[0]
-    max_id = dialog.read_outbox_max_id if is_out else dialog.read_inbox_max_id
-    return message_id <= max_id
-
-
-
-
-
 def register(**args):
     """ Register a new event. """
     args["func"] = lambda e: e.via_bot_id is None
