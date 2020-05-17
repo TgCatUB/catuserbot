@@ -80,6 +80,7 @@ if bool(ENV):
 
     # OCR API key
     OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
+    LOGSPAMMER = sb(os.environ.get("LOGSPAMMER", "False"))
 
     # remove.bg API key
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
