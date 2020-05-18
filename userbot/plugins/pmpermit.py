@@ -37,7 +37,7 @@ async def permitpm(event):
         if event.is_private and event.chat_id != 777000 and event.chat_id != self_user.id and not (
                 await event.get_sender()).bot:
             try:
-                from userbot.plugins.sql_helper.pm_permit_sql import is_approved
+                from userbot.plugins.sql_helper.pmpermit_sql import is_approved
                 from userbot.plugins.sql_helper.globals import gvarstatus
             except AttributeError:
                 return
@@ -112,8 +112,8 @@ async def auto_accept(event):
     if event.is_private and event.chat_id != 777000 and event.chat_id != self_user.id and not (
             await event.get_sender()).bot:
         try:
-            from userbot.plugins.sql_helper.pm_permit_sql import is_approved
-            from userbot.plugins.sql_helper.pm_permit_sql import approve
+            from userbot.plugins.sql_helper.pmpermit_sql import is_approved
+            from userbot.plugins.sql_helper.pmpermit_sql import approve
         except AttributeError:
             return
 
@@ -166,7 +166,7 @@ async def notifon(non_event):
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
     try:
-        from userbot.plugins.sql_helper.pm_permit_sql import approve
+        from userbot.plugins.sql_helper.pmpermit_sql import approve
     except AttributeError:
         await apprvpm.edit("`Running on Non-SQL mode!`")
         return
@@ -206,7 +206,7 @@ async def approvepm(apprvpm):
 @register(outgoing=True, pattern="^\.disapprove$")
 async def disapprovepm(disapprvpm):
     try:
-        from userbot.plugins.sql_helper.pm_permit_sql import dissprove
+        from userbot.plugins.sql_helper.pmpermit_sql import disapprove
     except BaseException:
         await disapprvpm.edit("`Running on Non-SQL mode!`")
         return
@@ -216,9 +216,9 @@ async def disapprovepm(disapprvpm):
         replied_user = await disapprvpm.client.get_entity(reply.from_id)
         aname = replied_user.id
         name0 = str(replied_user.first_name)
-        dissprove(replied_user.id)
+        disapprove(replied_user.id)
     else:
-        dissprove(disapprvpm.chat_id)
+        disapprove(disapprvpm.chat_id)
         aname = await disapprvpm.client.get_entity(disapprvpm.chat_id)
         name0 = str(aname.first_name)
 
@@ -252,8 +252,8 @@ async def blockpm(block):
         uid = block.chat_id
 
     try:
-        from userbot.plugins.sql_helper.pm_permit_sql import dissprove
-        dissprove(uid)
+        from userbot.plugins.sql_helper.pmpermit_sql import disapprove
+        disapprove(uid)
     except AttributeError:
         pass
 
