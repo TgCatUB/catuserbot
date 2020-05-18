@@ -13,7 +13,7 @@ from sqlalchemy.exc import IntegrityError
 from userbot import (COUNT_PM, CMD_HELP, PM_AUTO_BAN,
                      LASTMSG, LOGS)
 
-from userbot.utils import sandy
+from userbot.utils import register
 from userbot.uniborgConfig import Config
 
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
@@ -28,7 +28,7 @@ UNAPPROVED_MSG = (
 # =================================================================
 
 
-@sandy(incoming=True, disable_edited=True, disable_errors=True)
+@register(incoming=True, disable_edited=True, disable_errors=True)
 async def permitpm(event):
     """ Prohibits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
@@ -103,7 +103,7 @@ async def permitpm(event):
                         )
 
 
-@sandy(disable_edited=True, outgoing=True, disable_errors=True)
+@register(disable_edited=True, outgoing=True, disable_errors=True)
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if not PM_AUTO_BAN:
@@ -138,7 +138,7 @@ async def auto_accept(event):
                     )
 
 
-@sandy(outgoing=True, pattern="^\.notifoff$")
+@register(outgoing=True, pattern="^\.notifoff$")
 async def notifoff(noff_event):
     """ For .notifoff command, stop getting notifications from unapproved PMs. """
     try:
@@ -150,7 +150,7 @@ async def notifoff(noff_event):
     await noff_event.edit("`Notifications from unapproved PM's are silenced!`")
 
 
-@sandy(outgoing=True, pattern="^\.notifon$")
+@register(outgoing=True, pattern="^\.notifon$")
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     try:
@@ -162,7 +162,7 @@ async def notifon(non_event):
     await non_event.edit("`Notifications from unapproved PM's unmuted!`")
 
 
-@sandy(outgoing=True, pattern="^\.approve$")
+@register(outgoing=True, pattern="^\.approve$")
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
     try:
@@ -203,7 +203,7 @@ async def approvepm(apprvpm):
         )
 
 
-@sandy(outgoing=True, pattern="^\.disapprove$")
+@register(outgoing=True, pattern="^\.disapprove$")
 async def disapprovepm(disapprvpm):
     try:
         from userbot.plugins.sql_helper.pm_permit_sql import dissprove
@@ -233,7 +233,7 @@ async def disapprovepm(disapprvpm):
         )
 
 
-@sandy(outgoing=True, pattern="^\.block$")
+@register(outgoing=True, pattern="^\.block$")
 async def blockpm(block):
     """ For .block command, block people from PMing you! """
     if block.reply_to_msg_id:
@@ -264,7 +264,7 @@ async def blockpm(block):
         )
 
 
-@sandy(outgoing=True, pattern="^\.unblock$")
+@register(outgoing=True, pattern="^\.unblock$")
 async def unblockpm(unblock):
     """ For .unblock command, let people PMing you again! """
     if unblock.reply_to_msg_id:
