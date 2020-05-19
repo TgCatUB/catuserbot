@@ -69,20 +69,19 @@ def command(**args):
                 pass
 
         if allow_sudo:
-            args["from_users"] = list(Config.SUDO_USERS)
+            args["from_users"] = list(Var.SUDO_USERS)
+            # Mutually exclusive with outgoing (can only set one of either).
             args["incoming"] = True
+        del allow_sudo
+        try:
             del args["allow_sudo"]
-        
-        # error handling condition check
-        elif "incoming" in args and not args["incoming"]:
-            args["outgoing"] = True
+        except:
+            pass
 
-        # add blacklist chats, UB should not respond in these chats
         args["blacklist_chats"] = True
         black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
         if len(black_list_chats) > 0:
             args["chats"] = black_list_chats
-
         if "allow_edited_updates" in args:
             del args['allow_edited_updates']
 
@@ -97,8 +96,9 @@ def command(**args):
             return func
 
         return decorator
-
-
+    
+    
+    
 def load_module(shortname):
     if shortname.startswith("__"):
         pass
