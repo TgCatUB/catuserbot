@@ -19,7 +19,7 @@ from pySmartDL import SmartDL
 import shutil
 
 
-DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
+DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " @hangout02 "
 
 DEL_TIME_OUT = 30
 DEFAULTUSER = str(AUTONAME) if AUTONAME else "𝙍𝘼𝘽𝘽𝙄𝙏" 
