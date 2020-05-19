@@ -116,7 +116,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             await event.edit(APPROVED_PMs)
 
 
-    @bot.on(events.NewMessage(incoming=True))
+    @borg.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):
         if event.from_id == bot.uid:
             return
