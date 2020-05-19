@@ -22,7 +22,7 @@ import shutil
 DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
 
 DEL_TIME_OUT = 30
-DEFAULTUSER = str(AUTONAME) if AUTONAME else "/『 𝙍𝘼𝘽𝘽𝙄𝙏 』/" 
+DEFAULTUSER = str(AUTONAME) if AUTONAME else "𝙍𝘼𝘽𝘽𝙄𝙏" 
 
 
 
@@ -66,7 +66,7 @@ async def _(event):
     while True:
         DM = time.strftime("%d-%m-%y")
         HM = time.strftime("%H:%M")
-        name = f"</{HM}{DEFAULTUSER}{DM}/>"
+        name = f"⏥⏥ {HM} ▰ ▱{DEFAULTUSER}▱ ▰ ⏥⏥"
         logger.info(name)
         try:
             await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
