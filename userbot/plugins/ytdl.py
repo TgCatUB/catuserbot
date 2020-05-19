@@ -12,6 +12,7 @@ from html import unescape
 import math
 import asyncio
 from youtube_dl import YoutubeDL
+from telethon import events
 from googleapiclient.discovery import build
 from youtube_dl.utils import (DownloadError, ContentTooShortError,
                               ExtractorError, GeoRestrictedError,
@@ -286,8 +287,9 @@ async def download_video(v_url):
     """ For .ytdl command, download media from YouTube and many other sites. """
     url = v_url.pattern_match.group(2)
     type = v_url.pattern_match.group(1).lower()
-
-    await v_url.edit("`Preparing to download...`")
+                  
+    await v_url.delete()
+    await v_url.reply("`Preparing to download...`")
 
     if type == "a":
         opts = {
@@ -431,7 +433,8 @@ async def yt_search(video_q):
             "`Error: YouTube API key missing! Add it to reveal config vars in heroku or userbot/uniborgConfig.py in github fork.`"
         )
         return
-
+    
+    await video_q.delete()              
     await video_q.edit("```Processing...```")
 
     full_response = await youtube_search(query)
