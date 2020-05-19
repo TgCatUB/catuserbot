@@ -15,7 +15,7 @@ from userbot import ALIVE_NAME, LESS_SPAMMY
 from userbot.utils import admin_cmd
 
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@mrconfused"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 PREV_REPLY_MESSAGE = {}
 
 
