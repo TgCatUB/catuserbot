@@ -6,6 +6,7 @@ beautifulsoup4==4.8.1
 cfscrape
 coffeehouse
 covid
+cowpy
 cryptg
 DateTime
 emoji
@@ -16,6 +17,7 @@ googletrans
 gsearch
 gtts
 hachoir
+heroku3
 httplib2==0.15.0
 humanize
 lyricsgenius
@@ -24,6 +26,7 @@ patool
 Pillow
 psycopg2
 pybase64
+pyfiglet
 PyGithub
 pylast
 PyLyrics
@@ -33,6 +36,7 @@ python-magic
 qrcode
 regex
 requests
+search-engine-parser
 selenium
 speedtest-cli
 spotify_token
