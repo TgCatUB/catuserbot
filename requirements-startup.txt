@@ -18,6 +18,7 @@ lyricsgenius
 oauth2client
 Pillow
 psycopg2
+pylast
 PyLyrics
 pySmartDL
 python-barcode
