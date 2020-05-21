@@ -23,7 +23,6 @@ from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 import asyncurban
 from requests import get
-from search_engine_parser import GoogleSearch
 from google_images_download import google_images_download
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
