@@ -49,4 +49,5 @@ async def _(event):
                 reply_to=reply_to_id
             )
             await event.delete()
-    await event.edit(OUTPUT)
+    else:
+        await event.edit(OUTPUT)
