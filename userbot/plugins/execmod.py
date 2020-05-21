@@ -229,25 +229,27 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:	
+    o = stdout.decode()
+    if not o:
+        o = "**Tip**: \n`If you want to see the results of your code, I suggest printing them to stdout.`"
+    else:
+        _o = o.split("\n")
+        o = "`\n".join(_o)
+    OUTPUT =f"**[Cat's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "exec.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
+                caption=cmd,
                 reply_to=reply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
+    await event.edit(OUTPUT)
 
 
 @borg.on(admin_cmd(pattern="neofetch"))
