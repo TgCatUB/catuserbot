@@ -1,13 +1,16 @@
 # originally created by
 # https://github.com/Total-Noob-69/X-tra-Telegram/blob/master/userbot/plugins/webupload.py
 # modified by __me__ to suit **my** needs
+"""webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles"""
 
+from userbot.utils import admin_cmd
 import asyncio
 import json
 import os
-from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
-@borg.on(admin_cmd(pattern="webupload ?(.+?|) --(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles)"))
+
+@borg.on(admin_cmd(pattern="webupload ?(.+?|) --(mixdrop|fileinfo|fileio|oload|anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles)"))
 async def _(event):
 	await event.edit("processing ...")
 	PROCESS_RUN_TIME = 100
@@ -23,6 +26,11 @@ async def _(event):
 		)
 	# a dictionary containing the shell commands
 	CMD_WEB = {
+                "mixdrop": "curl -X POST -F 'email=1996ravana@gmail.com' -F 'key=W7iGTx6LONW58TqRAzd6' -F 'file=@{full_file_path}' https://ul.mixdrop.co/api",
+                "fileinfo": ".exec ffmpeg -i \"file=@{full_file_path}\"",
+                "fileio": "curl -F \"file=@{full_file_path}\" https://file.io",
+                "oloda": "curl -F \"file=@{full_file_path}\" https://api.openload.cc/upload?token=ac0c09b75f63054c",
+                "oload": "curl -F \"file=@{full_file_path}\" https://api.openload.cc/upload",
 		"anonfiles": "curl -F \"file=@{full_file_path}\" https://anonfiles.com/api/upload",
 		"transfer": "curl --upload-file \"{full_file_path}\" https://transfer.sh/{bare_local_name}",
 		"filebin": "curl -X POST --data-binary \"@{full_file_path}\" -H \"filename: {bare_local_name}\" \"https://filebin.net\"",
@@ -61,3 +69,12 @@ async def _(event):
 		# assuming, the return values won't be longer than
 		# 4096 characters
 		await event.edit(t_response)
+		
+		
+		
+CMD_HELP.update({
+    "webupload":
+    ".webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles\
+    \nexample: `.webupload --oload` tag this to a file\
+"
+})  		
