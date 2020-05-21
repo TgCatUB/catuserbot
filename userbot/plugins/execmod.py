@@ -54,6 +54,7 @@ async def _(event):
     else:
 	await event.edit(OUTPUT)
 	
+	
 @borg.on(admin_cmd(pattern="uptime"))
 async def _(event):
     if event.fwd_from:
@@ -89,6 +90,7 @@ async def _(event):
             await event.delete()
     else:
 	await event.edit(OUTPUT)
+	
 	
 @borg.on(admin_cmd(pattern="suicide"))
 async def _(event):
@@ -126,6 +128,7 @@ async def _(event):
     else:
 	await event.edit(OUTPUT)
 	
+	
 @borg.on(admin_cmd(pattern="plugins"))
 async def _(event):
     if event.fwd_from:
@@ -161,6 +164,7 @@ async def _(event):
             await event.delete()
     else:
 	await event.edit(OUTPUT)
+	
 
 @borg.on(admin_cmd(pattern="date"))
 async def _(event):
@@ -197,6 +201,7 @@ async def _(event):
             await event.delete()
     else:
 	await event.edit(OUTPUT)
+	
 
 @borg.on(admin_cmd(pattern="env"))
 async def _(event):
@@ -233,6 +238,7 @@ async def _(event):
             await event.delete()
     else:
 	await event.edit(OUTPUT)
+	
 
 
 @borg.on(admin_cmd(pattern="neofetch"))
@@ -270,6 +276,7 @@ async def _(event):
             await event.delete()
     else:
 	await event.edit(OUTPUT)
+	
 
 
 @borg.on(admin_cmd(pattern="fast"))
@@ -384,6 +391,7 @@ async def _(event):
     else:
 	await event.edit(OUTPUT)
 	
+	
 @borg.on(admin_cmd(pattern="fakeid"))
 async def _(event):
     if event.fwd_from:
@@ -419,6 +427,7 @@ async def _(event):
             await event.delete()
     else:
 	await event.edit(OUTPUT)
+	
 
 @borg.on(admin_cmd(pattern="kwot"))
 async def _(event):
