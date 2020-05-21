@@ -8,6 +8,7 @@ coffeehouse
 covid
 cowpy
 cryptg
+csvfaker
 DateTime
 emoji
 gitpython
@@ -20,10 +21,13 @@ hachoir
 heroku3
 httplib2==0.15.0
 humanize
+jotquote
+kwot
 lyricsgenius
 oauth2client
 patool
 Pillow
+programmingquotes
 psycopg2
 pybase64
 pyfiglet
@@ -33,6 +37,7 @@ PyLyrics
 pySmartDL
 python-barcode
 python-magic
+pytuneteller
 qrcode
 regex
 requests
