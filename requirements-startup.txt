@@ -19,7 +19,7 @@ gsearch
 gtts
 hachoir
 heroku3
-httplib2==0.15.0
+httplib2
 humanize
 jotquote
 kwot
