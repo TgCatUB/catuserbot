@@ -36,26 +36,24 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) CPU Model:**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) CPU Model:**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
+    else:
+	await event.edit(OUTPUT)
+	
 @borg.on(admin_cmd(pattern="uptime"))
 async def _(event):
     if event.fwd_from:
@@ -74,27 +72,24 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) CPU UPTIME:**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:	
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) CPU UPTIME:**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
-
+    else:
+	await event.edit(OUTPUT)
+	
 @borg.on(admin_cmd(pattern="suicide"))
 async def _(event):
     if event.fwd_from:
@@ -113,27 +108,24 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) SUICIDE BOMB:**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout.decode()) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout.decode())) as out_file:	
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) SUICIDE BOMB:**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
-
+    else:
+	await event.edit(OUTPUT)
+	
 @borg.on(admin_cmd(pattern="plugins"))
 async def _(event):
     if event.fwd_from:
@@ -152,26 +144,23 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) PLUGINS:**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:	
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) PLUGINS:**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
+                caption=cmd,
                 reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
+    else:
+	await event.edit(OUTPUT)
 
 @borg.on(admin_cmd(pattern="date"))
 async def _(event):
@@ -191,25 +180,23 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) Date & Time Of India:**\n\n\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:	
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) Date & Time Of India:**\n\n\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
+    else:
+	await event.edit(OUTPUT)
 
 @borg.on(admin_cmd(pattern="env"))
 async def _(event):
@@ -231,11 +218,6 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    if not o:
-        o = "**Tip**: \n`If you want to see the results of your code, I suggest printing them to stdout.`"
-    else:
-        _o = o.split("\n")
-        o = "`\n".join(_o)
     OUTPUT =f"**[Cat's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
@@ -249,7 +231,8 @@ async def _(event):
                 reply_to=eply_to_id
             )
             await event.delete()
-    await event.edit(OUTPUT)
+    else:
+	await event.edit(OUTPUT)
 
 
 @borg.on(admin_cmd(pattern="neofetch"))
@@ -270,26 +253,23 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) Neofetch Installed, Use `.sysd` :**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) Neofetch Installed, Use `.sysd` :**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=`cmd`,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
+    else:
+	await event.edit(OUTPUT)
 
 
 @borg.on(admin_cmd(pattern="fast"))
@@ -310,26 +290,23 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , Server Speed Calculated:**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , Server Speed Calculated:**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
+    else:
+	await event.edit(OUTPUT)
 
 
 
@@ -352,26 +329,23 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , fortune teller for Your catuserbot...**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , fortune teller for Your catuserbot...**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
+    else:
+	await event.edit(OUTPUT)
 
 
 @borg.on(admin_cmd(pattern="qquote"))
@@ -392,26 +366,24 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , quotes for Your catuserbot...**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , quotes for Your catuserbot...**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
+    else:
+	await event.edit(OUTPUT)
+	
 @borg.on(admin_cmd(pattern="fakeid"))
 async def _(event):
     if event.fwd_from:
@@ -430,25 +402,23 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , fake id generator for Your catuserbot...**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , fake id generator for Your catuserbot...**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
+    else:
+	await event.edit(OUTPUT)
 
 @borg.on(admin_cmd(pattern="kwot"))
 async def _(event):
@@ -468,26 +438,23 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , kwot for Your catuserbot...**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , kwot for Your catuserbot...**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
+    else:
+	await event.edit(OUTPUT)
 
 @borg.on(admin_cmd(pattern="qpro"))
 async def _(event):
@@ -507,25 +474,20 @@ async def _(event):
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , programming quotes for Your catuserbot...**\n"
     stdout, stderr = await process.communicate()
-    if len(stdout) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(stdout)) as out_file:
-            out_file.name = "exec.text"
+    o = stdout.decode()
+    OUTPUT =f"**[Cat's](tg://need_update_for_some_feature/) , programming quotes for Your catuserbot...**\n{o}"
+    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(OUTPUT)) as out_file:
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                caption=cmd,
+                reply_to=eply_to_id
             )
             await event.delete()
-    if stderr.decode():
-        await event.edit(f"**{stderr.decode()}**")
-        return
-    await event.edit(f"{OUTPUT}`{stdout.decode()}`")
-#    else:
-#        await event.edit("Unknown Command")
-
-
-
+    else:
+	await event.edit(OUTPUT)
