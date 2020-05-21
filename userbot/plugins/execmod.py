@@ -162,7 +162,7 @@ async def _(event):
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                reply_to=eply_to_id
             )
             await event.delete()
     if stderr.decode():
@@ -239,14 +239,14 @@ async def _(event):
     OUTPUT =f"**[Cat's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
-            out_file.name = "exec.text"
+            out_file.name = "env.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=reply_to_id
+                reply_to=eply_to_id
             )
             await event.delete()
     await event.edit(OUTPUT)
