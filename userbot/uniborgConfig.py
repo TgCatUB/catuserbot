@@ -119,6 +119,7 @@ class Config(object):
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     #
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
+    
     #
     TELE_GRAM_2FA_CODE = os.environ.get("TELE_GRAM_2FA_CODE", None)
     #
@@ -161,6 +162,9 @@ class Config(object):
     # MONGO = MONGOCLIENT.userbot
     KUTT_IT_API_KEY = os.environ.get("KUTT_IT_API_KEY", None)
     watermark_path = os.environ.get("watermark_path", None)
+    
+    TZ = os.environ.get("TZ", None)
+    
     # RSS_POST_MSG_GROUP_ID = map(int, os.environ.get("RSS_POST_MSG_GROUP_ID", None).split())
     RSS_POST_MSG_GROUP_ID = os.environ.get("RSS_POST_MSG_GROUP_ID", None)
     if RSS_POST_MSG_GROUP_ID:
