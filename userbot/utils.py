@@ -11,7 +11,6 @@ import inspect
 import math
 import os
 import time
-
 import asyncio
 from traceback import format_exc
 from time import gmtime, strftime
@@ -24,6 +23,13 @@ from telethon.tl.functions.messages import GetPeerDialogsRequest
 
 from typing import List
 
+ENV = bool(os.environ.get("ENV", False))
+if ENV:
+    from userbot.uniborgConfig import Config
+else:
+    if os.path.exists("config.py"):
+        from config import Development as Config
+
 def command(**args):
     args["func"] = lambda e: e.via_bot_id is None
 
@@ -31,7 +37,6 @@ def command(**args):
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
-    allow_sudo = args.get("allow_sudo", False)
     if 1 == 0:
         return print("stupidity at its best")
     else:
@@ -65,7 +70,7 @@ def command(**args):
             pass
         
     if allow_sudo:
-        args["from_users"] = list(Var.SUDO_USERS)
+        args["from_users"] = list(Config.SUDO_USERS)
         # Mutually exclusive with outgoing (can only set one of either).
         args["incoming"] = True
         del args["allow_sudo"]
@@ -76,7 +81,7 @@ def command(**args):
 
     # add blacklist chats, UB should not respond in these chats
     args["blacklist_chats"] = True
-    black_list_chats = list(Var.UB_BLACK_LIST_CHAT)
+    black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
     if len(black_list_chats) > 0:
         args["chats"] = black_list_chats
         
@@ -177,7 +182,7 @@ def admin_cmd(**args):
     args["outgoing"] = True
     # should this command be available for other users?
     if allow_sudo:
-        args["from_users"] = list(Var.SUDO_USERS)
+        args["from_users"] = list(Config.SUDO_USERS)
         # Mutually exclusive with outgoing (can only set one of either).
         args["incoming"] = True
         del args["allow_sudo"]
@@ -188,7 +193,7 @@ def admin_cmd(**args):
 
     # add blacklist chats, UB should not respond in these chats
     args["blacklist_chats"] = True
-    black_list_chats = list(Var.UB_BLACK_LIST_CHAT)
+    black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
     if len(black_list_chats) > 0:
         args["chats"] = black_list_chats
 
@@ -240,7 +245,7 @@ def register(**args):
             pass
         
     if allow_sudo:
-        args["from_users"] = list(Var.SUDO_USERS)
+        args["from_users"] = list(Config.SUDO_USERS)
         # Mutually exclusive with outgoing (can only set one of either).
         args["incoming"] = True
         del args["allow_sudo"]
@@ -251,7 +256,7 @@ def register(**args):
 
     # add blacklist chats, UB should not respond in these chats
     args["blacklist_chats"] = True
-    black_list_chats = list(Var.UB_BLACK_LIST_CHAT)
+    black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
     if len(black_list_chats) > 0:
         args["chats"] = black_list_chats    
         
