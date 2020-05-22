@@ -1,8 +1,6 @@
 from userbot import bot
 from telethon import events
-from var import Var
 from pathlib import Path
-from userbot.uniborgConfig import Config
 from userbot import LOAD_PLUG
 from userbot import CMD_LIST
 import re
@@ -69,25 +67,24 @@ def command(**args):
                     CMD_LIST.update({file_test: [cmd]})
             except:
                 pass
-        
-    if allow_sudo:
-        args["from_users"] = list(Config.SUDO_USERS)
-        # Mutually exclusive with outgoing (can only set one of either).
-        args["incoming"] = True
-        del args["allow_sudo"]
 
-    # error handling condition check
-    elif "incoming" in args and not args["incoming"]:
-        args["outgoing"] = True
-
-    # add blacklist chats, UB should not respond in these chats
-    args["blacklist_chats"] = True
-    black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
-    if len(black_list_chats) > 0:
-        args["chats"] = black_list_chats
+        if allow_sudo:
+            args["from_users"] = list(Config.SUDO_USERS)
+            # Mutually exclusive with outgoing (can only set one of either).
+            args["incoming"] = True
+        del allow_sudo
+        try:
+            del args["allow_sudo"]
+        except:
+            pass
         
-    if "allow_edited_updates" in args:
-        del args['allow_edited_updates']
+        args["blacklist_chats"] = True
+        black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
+        if len(black_list_chats) > 0:
+            args["chats"] = black_list_chats
+
+        if "allow_edited_updates" in args:
+            del args['allow_edited_updates']
 
         def decorator(func):
             if allow_edited_updates:
@@ -100,8 +97,8 @@ def command(**args):
             return func
 
         return decorator
-
-
+    
+    
 def load_module(shortname):
     if shortname.startswith("__"):
         pass
