@@ -45,29 +45,30 @@ def command(**args):
         allow_edited_updates = args.get('allow_edited_updates', False)
         args["incoming"] = args.get("incoming", False)
         args["outgoing"] = True
-        
+        if bool(args["incoming"]):
+            args["outgoing"] = False
 
-    if pattern is not None and not pattern.startswith('(?i)'):
-        args['pattern'] = '(?i)' + pattern
-
-    if "disable_edited" in args:
-        del args['disable_edited']
-    
-    reg = re.compile('(.*)')
-    if not pattern == None:
         try:
-            cmd = re.search(reg, pattern)
-            try:
-                cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
-            except:
-                pass
-
-            try:
-                CMD_LIST[file_test].append(cmd)
-            except:
-                CMD_LIST.update({file_test: [cmd]})
+            if pattern is not None and not pattern.startswith('(?i)'):
+                args['pattern'] = '(?i)' + pattern
         except:
             pass
+
+        reg = re.compile('(.*)')
+        if not pattern == None:
+            try:
+                cmd = re.search(reg, pattern)
+                try:
+                    cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
+                except:
+                    pass
+
+                try:
+                    CMD_LIST[file_test].append(cmd)
+                except:
+                    CMD_LIST.update({file_test: [cmd]})
+            except:
+                pass
         
     if allow_sudo:
         args["from_users"] = list(Config.SUDO_USERS)
