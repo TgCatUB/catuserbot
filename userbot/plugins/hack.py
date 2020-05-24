@@ -116,5 +116,6 @@ CMD_HELP.update({
     \n USAGE: shows aanimation of hacking replied person telegram account\
     \n\n .wahack reply to a person\
     \n USAGE: shows aanimation of hacking replied person whatsapp account\
-    \n\n\n don't use this animation commands in group i am not responsible for your ban.\"
+    \n\n\n **don't use this animation commands in group i am not responsible for your ban.** \
+    "
 }) 
