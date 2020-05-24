@@ -126,5 +126,7 @@ CMD_HELP.update(
     \n\n.botver\
     \nUsage: Shows the userbot version. \
     \n\n.pip <module(s)>\
-    \nUsage: Does a search of pip modules(s).\"})
+    \nUsage: Does a search of pip modules(s).\
+    "
+    })
 
