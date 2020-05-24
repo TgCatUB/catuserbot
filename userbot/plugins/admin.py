@@ -352,12 +352,11 @@ async def startmute(event):
             await event.edit("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")
         # Announce to logging group    
         if BOTLOG:
-                await spdr.client.send_message(
+          await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                    f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)")
-        except UserIdInvalidError:
-            return await spdr.edit("`Uh oh my mute logic broke!`")
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")
+    
     
 
 @command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
@@ -392,10 +391,10 @@ async def endmute(event):
             await event.edit("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
         # Announce to logging group    
         if BOTLOG:
-            await unmot.client.send_message(
+            await event.client.send_message(
                 BOTLOG_CHATID, "#UNMUTE\n"
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)")
+                f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 
 @register(incoming=True)
