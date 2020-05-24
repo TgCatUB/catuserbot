@@ -8,6 +8,8 @@ Userbot module to help you manage a group
 
 from asyncio import sleep
 from os import remove
+from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
+import asyncio
 
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,
                              ImageProcessFailedError, PhotoCropSizeSmallError,
@@ -23,7 +25,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                MessageMediaPhoto)
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot 
-from userbot.utils import register, errors_handler
+from userbot.utils import register, errors_handler, admin_cmd
 from userbot.uniborgConfig import Config
 from telethon import events, errors, functions, types
 
@@ -301,115 +303,98 @@ async def nothanos(unbon):
     except UserIdInvalidError:
         await unbon.edit("`Uh oh my unban logic broke!`")
 
+@command(incoming=True)
+async def watcher(event):
+    if is_muted(event.sender_id, event.chat_id):
+        await event.delete()
 
-@register(outgoing=True, pattern="^.mute(?: |$)(.*)")
-@errors_handler
-async def spider(spdr):
-    """
-    This function is basically muting peeps
-    """
-    # Check if the function running under SQL mode
-    try:
-        from userbot.plugins.sql_helper.spam_mute_sql import mute
-    except AttributeError:
-        await spdr.edit(NO_SQL)
+@command(outgoing=True, pattern=r"^.mute ?(\d+)?")
+async def startmute(event):
+    private = False
+    if event.fwd_from:
         return
-
-    # Admin or creator check
-    chat = await spdr.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
-
-    # If not admin and not creator, return
-    if not admin and not creator:
-        await spdr.edit(NO_ADMIN)
-        return
-
-    user, reason = await get_user_from_event(spdr)
-    if user:
-        pass
+    elif event.is_private:
+        await event.edit("Unexpected issues or ugly errors may occur!")
+        await asyncio.sleep(3)
+        private = True
+    if any([x in event.raw_text for x in ("/mute", "!mute")]):
+        await asyncio.sleep(0.5)
     else:
-        return
-
-    self_user = await spdr.client.get_me()
-
-    if user.id == self_user.id:
-        await spdr.edit(
-            "`Hands too short, can't duct tape myself...\n(ヘ･_･)ヘ┳━┳`")
-        return
-
-    # If everything goes well, do announcing and mute
-    await spdr.edit("`Gets a tape!`")
-    if mute(spdr.chat_id, user.id) is False:
-        return await spdr.edit('`Error! User probably already muted.`')
-    else:
-        try:
-            await spdr.client(
-                EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
-
-            # Announce that the function is done
-            if reason:
-                await spdr.edit(f"`Safely taped !!`\nReason: {reason}")
+        reply = await event.get_reply_message()
+        if event.pattern_match.group(1) is not None:
+            userid = event.pattern_match.group(1)
+        elif reply is not None:
+            userid = reply.sender_id
+        elif private is True:
+            userid = event.chat_id
+        else:
+            return await event.edit("Please reply to a user or add their userid into the command to mute them.")
+        chat_id = event.chat_id
+        chat = await event.get_chat()
+        if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None: 
+            if chat.admin_rights.delete_messages is True:
+                pass
             else:
-                await spdr.edit("`Safely taped !!`")
-
-            # Announce to logging group
-            if BOTLOG:
-                await spdr.client.send_message(
+                return await event.edit("`You can't mute a person if you dont have delete messages permission. ಥ﹏ಥ`")
+        elif "creator" in vars(chat):
+            pass
+        elif private == True:
+            pass
+        else:
+            return await event.edit("`You can't mute a person without admin rights niqq.` ಥ﹏ಥ  ")
+        if is_muted(userid, chat_id):
+            return await event.edit("This user is already muted in this chat ~~lmfao sed rip~~")
+        try:
+            mute(userid, chat_id)
+        except Exception as e:
+            await event.edit("Error occured!\nError is " + str(e))
+        else:
+            await event.edit("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")
+        # Announce to logging group    
+        if BOTLOG:
+          await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                    f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)")
-        except UserIdInvalidError:
-            return await spdr.edit("`Uh oh my mute logic broke!`")
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")
+    
+    
 
-
-@register(outgoing=True, pattern="^.unmute(?: |$)(.*)")
-@errors_handler
-async def unmoot(unmot):
-    """ For .unmute command, unmute the replied/tagged person """
-    # Admin or creator check
-    chat = await unmot.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
-
-    # If not admin and not creator, return
-    if not admin and not creator:
-        await unmot.edit(NO_ADMIN)
+@command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
+async def endmute(event):
+    private = False
+    if event.fwd_from:
         return
-
-    # Check if the function running under SQL mode
-    try:
-        from userbot.plugins.sql_helper.spam_mute_sql import unmute
-    except AttributeError:
-        await unmot.edit(NO_SQL)
-        return
-
-    # If admin or creator, inform the user and start unmuting
-    await unmot.edit('```Unmuting...```')
-    user = await get_user_from_event(unmot)
-    user = user[0]
-    if user:
-        pass
+    elif event.is_private:
+        await event.edit("Unexpected issues or ugly errors may occur!")
+        await asyncio.sleep(3)
+        private = True
+    if any([x in event.raw_text for x in ("/unmute", "!unmute")]):
+        await asyncio.sleep(0.5)
     else:
-        return
-
-    if unmute(unmot.chat_id, user.id) is False:
-        return await unmot.edit("`Error! User probably already unmuted.`")
-    else:
-
+        reply = await event.get_reply_message()
+        if event.pattern_match.group(1) is not None:
+            userid = event.pattern_match.group(1)
+        elif reply is not None:
+            userid = reply.sender_id
+        elif private is True:
+            userid = event.chat_id
+        else:
+            return await event.edit("Please reply to a user or add their userid into the command to unmute them.")
+        chat_id = event.chat_id
+        if not is_muted(userid, chat_id):
+            return await event.edit("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
         try:
-            await unmot.client(
-                EditBannedRequest(unmot.chat_id, user.id, UNBAN_RIGHTS))
-            await unmot.edit("```Unmuted Successfully```")
-        except UserIdInvalidError:
-            await unmot.edit("`Uh oh my unmute logic broke!`")
-            return
-
+            unmute(userid, chat_id)
+        except Exception as e:
+            await event.edit("Error occured!\nError is " + str(e))
+        else:
+            await event.edit("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
+        # Announce to logging group    
         if BOTLOG:
-            await unmot.client.send_message(
+            await event.client.send_message(
                 BOTLOG_CHATID, "#UNMUTE\n"
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)")
+                f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 
 @register(incoming=True)
@@ -417,7 +402,7 @@ async def unmoot(unmot):
 async def muter(moot):
     """ Used for deleting the messages of muted people """
     try:
-        from userbot.plugins.sql_helper.spam_mute_sql import is_muted
+        from userbot.plugins.sql_helper.mute_sql import is_muted
         from userbot.plugins.sql_helper.gmute_sql import is_gmuted
     except AttributeError:
         return
