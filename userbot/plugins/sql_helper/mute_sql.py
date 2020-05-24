@@ -38,3 +38,8 @@ def unmute(sender, chat_id):
     if rem:
         SESSION.delete(rem)
         SESSION.commit()
+
+def get_all_muted():
+    rem = SESSION.query(Mute).all()
+    SESSION.close()
+    return rem
