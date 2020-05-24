@@ -3,38 +3,21 @@ from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
 from platform import python_version, uname
 from shutil import which
-
 from telethon import events
 import asyncio
 from collections import deque
-
-
-from userbot.utils import admin_cmd
-
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-#
-""" Userbot module for getting information about the server. """
-
-from asyncio import create_subprocess_shell as asyncrunapp
-from asyncio.subprocess import PIPE as asyncPIPE
-from platform import python_version, uname
-from shutil import which
+from userbot.utils import admin_cmd, register
 from os import remove
 from telethon import version
-
 from userbot import CMD_HELP, ALIVE_NAME
-from userbot.events import register
+
 
 # ================= CONSTANT =================
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
 # ============================================
 
 
-@borg.on(admin_cmd(pattern=f"sysd", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.sysd", outgoing=True))
+@borg.on(admin_cmd(pattern=f"sysd", outgoing=True))
 async def sysdetails(sysd):
     """ a. """
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
@@ -131,29 +114,17 @@ async def pipcheck(pip):
                            f"{invokepip}"
                            "`\n**Result: **\n`No Result Returned/False`")
     else:
-        await pip.edit("`Use .help pip to see an example`")
-
-
-
-
+        await pip.edit("`Use .info pip to see an example`")
 
 
 
 
 CMD_HELP.update(
-    {"sysd": ".sysd\
-    \nUsage: Shows system information using neofetch."})
-CMD_HELP.update({"botver": ".botver\
-    \nUsage: Shows the userbot version."})
-CMD_HELP.update(
-    {"pip": ".pip <module(s)>\
-    \nUsage: Does a search of pip modules(s)."})
-CMD_HELP.update({
-    "alive":
-    ".alive\
-    \nUsage: Type .alive to see wether your bot is working or not.\
-    \n\n.aliveu <text>\
-    \nUsage: Changes the 'user' in alive to the text you want.\
-    \n\n.resetalive\
-    \nUsage: Resets the user to default."
-})
+    {"sysdetails": 
+     ".sysd\
+    \nUsage: Shows system information using neofetch.\
+    \n\n.botver\
+    \nUsage: Shows the userbot version. \
+    \n\n.pip <module(s)>\
+    \nUsage: Does a search of pip modules(s).\"})
+
