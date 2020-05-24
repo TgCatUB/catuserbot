@@ -26,5 +26,6 @@ async def amireallyalive(alive):
 CMD_HELP.update({
     "alive":
     ".alive\
-    \nUsage: Type .alive to see wether your bot is working or not.\"
+    \nUsage: Type .alive to see wether your bot is working or not.\
+    "
 })    
