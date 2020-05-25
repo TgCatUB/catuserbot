@@ -162,6 +162,8 @@ class Config(object):
     # MONGO = MONGOCLIENT.userbot
     KUTT_IT_API_KEY = os.environ.get("KUTT_IT_API_KEY", None)
     watermark_path = os.environ.get("watermark_path", None)
+    # JustWatch Country
+    WATCH_COUNTRY = os.environ.get("WATCH_COUNTRY","IN")
     
     TZ = os.environ.get("TZ", None)
     
