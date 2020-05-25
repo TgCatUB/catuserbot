@@ -60,7 +60,7 @@ async def _(event):
     await borg.send_file(
         event.chat_id,
         directory_name + ".zip",
-        caption="Zipped By cat",
+        caption="Zipped By @Mr_Hops",
         force_document=True,
         allow_cache=False,
         reply_to=event.message.id,
@@ -72,7 +72,7 @@ async def _(event):
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
-    for root, dirs, files in os.walk(path):
+    for root, dirs, files in :
         for file in files:
             ziph.write(os.path.join(root, file))
             os.remove(os.path.join(root, file))
@@ -104,7 +104,7 @@ async def _(event):
             await borg.send_file(
                 event.chat_id,
                 directory_name + ".rar",
-                caption="rarred By cat",
+                caption="rarred By @Mr_Hops",
                 force_document=True,
                 allow_cache=False,
                 reply_to=event.message.id,
@@ -154,7 +154,7 @@ async def _(event):
             await borg.send_file(
                 event.chat_id,
                 directory_name + ".7z",
-                caption="7z archived By cat",
+                caption="7z archived By @Mr_Hops",
                 force_document=True,
                 allow_cache=False,
                 reply_to=event.message.id,
@@ -208,7 +208,7 @@ async def _(event):
             await borg.send_file(
                 event.chat_id,
                 output,
-                caption="TAR By cat",
+                caption="TAR By @Mr_Hops",
                 force_document=True,
                 allow_cache=False,
                 reply_to=event.message.id,
