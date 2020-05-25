@@ -14,7 +14,7 @@ async def amireallyalive(alive):
     await alive.edit("**MY BOT IS RUNNING SUCCESFULLY**\n\n"
                      "`☞Telethon version: 1.11.3\n`"
                      "`☞Python: 3.8.2\n`"
-                     "`☞Bot was modified by:` sandeep\n"
+                     "`☞Bot was modified by:` Mr_Hops\n"
                      "`☞and created by :` snapdragon,anubis\n"
                      "`☞Database Status: Databases functioning normally!\n\n`"
                      "`☞Always with you, my master!\n`"
