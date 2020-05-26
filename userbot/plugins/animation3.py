@@ -318,15 +318,14 @@ async def _(event):
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i %5 ])
 		
-@borg.on(admin_cmd(pattern="dumpbrain"))
+@borg.on(admin_cmd(pattern="stupid"))
 async def _(event):
     
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(0, 14)
-    #input_str = event.pattern_match.group(1)
-    #if input_str == "wtf":
+    
     await event.edit("brain")
     animation_chars = [          
               "YOᑌᖇ ᗷᖇᗩIᑎ ➡️ 🧠\n\n🧠         <(^_^ <)🗑",
