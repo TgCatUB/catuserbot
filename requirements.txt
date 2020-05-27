@@ -1,2 +1,29 @@
+#### Bot lib ####
+git+https://gitlab.com/HarukaNetwork/OSS/PTB.git
 telethon
--r requirements-startup.txt
+#################
+aiohttp>=2.2.5
+bleach
+emoji
+feedparser
+future
+geopy
+googletrans
+hurry.filesize
+markdown2
+nltk
+Pillow>=4.2.0
+psycopg2-binary
+PyLyrics
+pynewtonmath
+pyowm
+python-rapidjson
+PyYAML
+requests>=2.20.0
+spamwatch
+spongemock
+sqlalchemy
+tldextract
+wikipedia
+zalgo-text
+covid

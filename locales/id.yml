@@ -1,0 +1,1135 @@
+---
+#Main
+send-help: |
+  Hai! Namaku adalah *{}*. Saya bot manajemen grup modular dengan beberapa fitur tambahan menyenangkan! Lihatlah berikut ini untuk mengetahui beberapa hal yang dapat saya bantu. \n
+  Perintah utama yang tersedia:
+  - /start: Perintah keren untuk memeriksa apakah bot masih hidup atau tidak
+  - /help: Mengirim pesan pribadi untuk Anda.
+  - /help <module name>: Mengirim pesan pribadi kepada Anda tentang info modul itu.
+  - /donate: informasi tentang cara menyumbang!
+  - /lang: Ganti bahasa bot
+  - /setting:
+  - dalam Pesan Pribadi: akan mengirimkan pengaturan Anda untuk semua modul yang didukung.
+  - dalam grup: akan mengarahkan Anda ke pesan pribadi, dengan semua pengaturan obrolan itu. {}
+cmd_multitrigger: \nSemua perintah dapat dimulai dengan `/` atau `!`.
+here_is_help: Berikut ini beberapa bantuan untuk modul *{}*:\n\n{}
+help_not_found: String bantuan untuk <code>{}</code> tidak ditemukan!
+help_pm_only: Hubungi saya di pesan pribadi untuk mendapatkan daftar perintah yang tersedia.
+btn_help: '❔ Bantuan'
+btn_go_back: '⬅️ Kembali'
+main_start_group: Hai yang disana! Saya masih hidup :3
+main_start_pm: |
+  Hai! Nama saya Haruka Aya - Saya di sini untuk membantu Anda mengelola grup Anda!
+  Klik tombol Bantuan untuk mencari tahu lebih lanjut tentang cara menggunakan saya dengan menggunakan potensi penuh saya.
+
+  Bergabunglah dengan [Haruka Aya Group](https://t.me/HarukaAyaGroup) (@HarukaAyaGroup) jika Anda memerlukan dukungan atau bantuan.
+
+  Ikuti [Haruka Aya](https://t.me/HarukaAya) (@HarukaAya) jika Anda ingin mengikuti berita, pembaruan, dan waktu bot berhenti!
+
+  Dibuat dengan cinta oleh @RealAkito\n\nIngin menambahkan saya ke grup Anda? [Klik di sini!](https://t.me/HarukaAyaBot?startgroup=true)
+main_start_btn_support: '📢 Grup Dukungan'
+main_start_btn_ctrlpnl: '🛠 Panel kontrol'
+main_start_btn_lang: '🇮🇩 Bahasa'
+#Common
+common_err_no_admin: Anda bukan admin!
+common_err_no_user: Anda sepertinya tidak merujuk ke pengguna.
+common_err_invalid_chatid: ID Obrolan tidak valid!
+common_yes: "Ya"
+common_no: "Tidak"
+common_cmd_group_only: Perintah ini hanya dapat digunakan dalam grup, bukan di pesan pribadi.
+common_cmd_pm_only: Perintah ini hanya dapat digunakan dalam pesan pribadi, bukan grup.
+common_group_creator_only: Hanya pembuat grup yang dapat menggunakan perintah ini!
+common_this_chat: Obrolan ini
+common_invalid_arg: Argumen yang tidak valid! Silakan ketik `on`/`yes` atau `off`/`no`!
+#Admins
+modname_admin: Admin
+admin_err_no_perm: Saya tidak dapat mempromosikan/menurunkan orang di sini! Pastikan saya seorang admin dan dapat menunjuk admin baru.
+admin_err_user_admin: Bagaimana saya bisa mempromosikan seseorang yang sudah menjadi admin?
+admin_err_self_promote: Saya tidak bisa mempromosikan diri saya sendiri! Suruh admin untuk melakukannya untuk saya.
+admin_promote_success: Admin {} berhasil mempromosikan {} di <b>{}</b>!
+admin_err_demote_creator: Orang ini adalah PEMBUAT grup ini, bagaimana saya akan menurunkannya?
+admin_err_demote_noadmin: Tidak dapat menurunkan orang yang tidak dipromosikan!
+admin_err_self_demote: Saya tidak bisa menurunkan pangkat saya sendiri!
+admin_demote_success: Admin {} berhasil menurunkan {} di <b>{}</b>!
+admin_err_cant_demote: Tidak dapat menurunkan pangkat. Saya mungkin bukan admin, atau status admin ditunjuk oleh pengguna lain, jadi saya tidak bisa melakukan apapun!
+admin_list: "Admin di *{}*:"
+admin_list_creator: (Pencipta)
+admin_err_no_perm_invitelink: Saya tidak memiliki akses ke tautan undangan, coba rubah izin saya!
+admin_err_chat_no_invitelink: Maaf, tapi saya hanya bisa memberikan tautan undangan untuk grup super dan saluran!
+admin_disable_reaction: Menonaktifkan respons terhadap perintah admin yang dipicu pengguna.
+admin_enable_reaction: Mengaktifkan respons terhadap perintah admin yang dipicu pengguna.
+admin_err_wrong_arg: Silakan masukkan True atau False!
+admin_reaction_status: Respons untuk perintah admin yang dipicu pengguna saat ini *{}*!
+admin_help: |
+  /adminlist | /admin: Daftar admin dalam obrolan\n
+  *Hanya admin:*
+  - /pin: Diam-diam memberi pin pesan dibalas. Tambahkan 'keras', 'beri tahu' atau 'kasar' untuk mengirim pemberitahuan kepada pengguna.
+  - /unpin: Menghapus pin pesan yang saat ini disematkan
+  - /invitelink: Mendapat tautan undangan grup
+  - /promote: Mempromosikan pengguna Membalas pengguna atau menggunakan nama pengguna mereka.
+  - /demote: Menurunkan pangkat seorang pengguna. Balas ke pengguna atau gunakan nama pengguna mereka.
+#AFK
+modname_afk: AFK
+user_now_afk: "{} sekarang AFK!"
+user_no_longer_afk: "{} tidak lagi AFK!"
+status_afk_noreason: "{} sedang AFK!"
+status_afk_reason: "{} AFK! Katanya lagi:\n{}"
+afk_help: |
+  - /afk <reason>: Tandai diri Anda sebagai AFK.
+  - brb <reason>: Sama seperti perintah afk, tetapi bukan perintah.\n
+  Ketika ditandai sebagai AFK, panggilan apa pun akan dijawab dengan pesan yang mengatakan bahwa Anda tidak tersedia!
+#Android
+modname_android: Android
+download: "*Unduh:* [{}]({})\n"
+build_size: "*Ukuran File:* `{}`\n"
+build_date: "*Tanggal Di bentuk:* `{}`\n"
+version: "*Versi:* `{}`\n"
+android_version: "*Versi Android:* `{}`\n"
+rom_type: "*Tipe ROM:* `{}`\n"
+maintainer: "*Pengelola:* {}\n"
+xda_thread: "*Utas XDA:* [Here]({})\n"
+changelog: "*Log perubahan pada perangkat:* `{}`\n"
+weekly: "*Mingguan*\n"
+miui_release: "* ROM Pemulihan *\n\n*Stabil*\n"
+cust_releases: "*{} rilis terbaru*\n"
+err_not_found: Tidak dapat menemukan hasil yang cocok dengan kueri Anda.
+err_api: Tidak dapat menjangkau API.
+err_example_device: Mengapa Anda mencoba mendapatkan contoh perangkat?
+err_json: 'Beri tahu pengelola rom untuk memperbaiki json OTA mereka. Saya yakin ini tidak akan bekerja dengan OTA dan tidak akan bekerja dengan bot ini juga: P'
+btn_dl: Klik di sini untuk Mengunduh
+cmd_example: Silakan ketik perangkat Anda **kode perangkat**!\nSebagai contoh, `/{} tissot`
+evox_gsi: Silakan periksa saluran Evolution X Updates (@EvolutionXUpdates) atau klik tombol di bawah untuk mengunduh GSI!
+aex_cust_str: Silakan ketik perangkat Anda **kode perangkat** dan **Versi Android**!\nSebagai contoh, `/aex tissot pie`
+android_help: |
+  *ROM Khusus untuk perangkat Tertentu*
+  - /havoc <device>: Dapatkan Havoc ROM terbaru untuk perangkat anda
+  - /posp <device>: Dapatkan ROM POSP terbaru untuk perangkat anda
+  - /evo <device>: Dapatkan Evolution X ROM terbaru untuk perangkat anda
+  - /aex <device> <android version>: Dapatkan ROM AEX terbaru untuk perangkat anda
+  - /los <device>: Dapatkan LineageOS ROM terbaru untuk perangkat anda
+  - /bootleggers <device>: Dapatkan ROM Bootleggers terbaru untuk perangkat anda
+
+  *GSI*
+  - / phh: Dapatkan Phh AOSP Oreo GSI terbaru!
+#Antiflood
+modname_antiflood: Anti Banjir
+flood_mute: Saya ingin membiarkan banjir dalam bencana alam. Tapi kamu, kamu hanya kekecewaan. *Diam*!
+flood_err_no_perm: Saya tidak bisa membisukan orang di sini, beri saya izin terlebih dahulu! Sampai saat itu, saya akan menonaktifkan antiflood.
+flood_logger_success: "<b>{}:</b>\n#MUTED\n<b>Pengguna:</b>{}\nBanjiri grup."
+flood_logger_fail: "<b>{}:</b>\n#INFO\nTidak ada izin membisukan! Antiflood dinonaktifkan"
+flood_logger_set_off: "<b>{}:</b>\n#SETFLOOD\n<b>Admin:</b> {}\nAntiflood dinonaktifkan."
+flood_logger_set_on: "<b>{}:</b>\n#SETFLOOD\n<b>Admin:</b> {}\nSet antiflood ke <code>{}</code>."
+flood_set: Antiflood telah diperbarui dan disetel ke {}
+flood_set_off: Antiflood telah dinonaktifkan.
+flood_status_off: Saya saat ini tidak bisa mengendalikan banjir!
+flood_status_on: Saat ini saya membisukan pengguna jika mereka mengirim lebih dari {} pesan berurutan.
+flood_err_num: Antiflood harus berupa 0 (dinonaktifkan), atau angka yang lebih besar dari 3 (diaktifkan)!
+flood_err_args: Argumen yang tidak dikenal - silakan gunakan angka, 'off', atau 'no'.
+antiflood_help: |
+  Anda tahu bagaimana kadang-kadang orang bergabung, mengirim 100 pesan, dan merusak obrolan Anda? Dengan antiflood, itu tidak terjadi lagi!\n
+  Antiflood memungkinkan Anda untuk mengambil tindakan pada pengguna yang mengirim lebih dari **x** pesan berturut-turut.\n
+  Perintah yang tersedia adalah:
+  - /flood: mendapatkan pengaturan antiflood saat ini.
+  - /setflood <number/off>: mengatur jumlah pesan untuk mengambil tindakan pada pengguna.
+#Antispam
+modname_antispam: Keamanan Antispam
+antispam_err_usr_sudo: Saya memata-matai dengan mata kecil saya... perang pengguna sudo! Kenapa kalian saling berpaling?
+antispam_err_usr_support: OOOH, seseorang sedang mencoba untuk mencekal pengguna pendukung! *meraih popcorn*
+antispam_err_usr_bot: '-_- Sangat lucu, biarkan aku mencekal diri sendiri, kenapa tidak? Usaha yang bagus.'
+antispam_err_not_usr: Itu bukan pengguna!
+antispam_err_usr_deleted: Itu akun yang dihapus! Kenapa repot-repot memanggil mereka?
+antispam_err_no_new_reason: Pengguna ini sudah dicekal; Saya akan mengubah alasannya, tetapi Anda belum memberi saya satu...
+antispam_logger_update_gban: |
+  <b>Alasan Baru Dicekal Secara Global</b>\n
+  <b>Admin Sudo:</b> {}\n
+  <b>Pengguna:</b> {}\n
+  <b>ID: </b> <code>{}</code>\n
+  <b>Alasan Sebelumnya:</b> {}\n
+  <b>Alasan Baru:</b> {}
+antispam_reason_updated: "Pengguna ini telah dicekal. Saya telah memperbarui alasannya.\nAlasan sebelumnya: <code>{}</code>\nAlasan baru: <code>{}</code>"
+antispam_new_gban: Cekal Global {} dengan id <code>{}</code>...
+antispam_logger_new_gban: "{} adalah pengguna yang mencekal secara global {} dengan id <code>{}</code> dengan alasan berikut: <code>{}</code>."
+antispam_no_reason: Tidak ada alasan yang diberikan
+antispam_user_not_gbanned: Pengguna ini tidak dicekal secara global!
+antispam_ungbanned: Saya akan memberi {} kesempatan kedua, secara global.
+antispam_logger_ungban: "{} memiliki pengguna yang tidak dibolehkan {}."
+antispam_err_ungban: "Tidak dapat memblokir karena: {}"
+antispam_ungban_success: Berhasil diblokir!
+antispam_checkban_user_removed: "*Pengguna ini diblokir secara global dan telah dihapus.*\nAlasan: `{}`"
+antispam_on: Saya telah mengaktifkan keamanan antispam di grup ini. Ini akan membantu melindungi Anda dari spammer, karakter tidak sopan, dan tipuan tidak lucu.
+antispam_off: Saya telah menonaktifkan keamanan antispam di grup ini. GBans tidak akan memengaruhi pengguna Anda lagi. Anda tidak akan terlalu terlindungi dari tipuan dan spammer!
+antispam_err_wrong_arg: "Berikan saya beberapa argumen untuk memilih pengaturan! on/off, yes/no!\n\nPengaturan Anda saat ini adalah: {}\nKetika True, semua gbans yang terjadi juga akan terjadi di grup Anda. Ketika False, spammer tidak akan memberi belas kasihan pada Anda."
+antispam_userinfo_gbanned: "Dilarang secara global: <b>{}</b>"
+antispam_userinfo_gban_reason: "\nAlasan: {}"
+antispam_chatsettings_gban: "Obrolan ini memberlakukan *gbans*: `{}`."
+anitspam_appeal: \n<b>Banding di:</b> @HarukaAyaGroup
+antispam_help: |
+  Antispam digunakan oleh pemilik bot untuk melarang spammer di semua grup. Ini membantu melindungi Anda dan grup Anda dengan menghapus pembanjir spam secepat mungkin. Ini diaktifkan secara default, tetapi Anda dapat mengubahnya dengan menggunakan perintah.\n
+  *Hanya admin:*
+  - /antispam <on/off/yes/no>: Ubah pengaturan keamanan antispam di grup, atau kembalikan pengaturan Anda saat ini (saat tidak ada argumen).
+#Bans
+modname_bans: Pencekalan
+bans_err_usr_not_found: Sepertinya saya tidak dapat menemukan pengguna ini.
+bans_err_usr_is_bot: Aku tidak akan MENCEKAL diri sendiri, apakah kamu gila?
+bans_err_usr_is_admin: Mengapa saya harus mencekal admin? Itu terdengar seperti ide yang sangat goblog.
+bans_logger: |
+  <b>{}:</b>
+  #BANNED
+  <b>Admin:</b> {}
+  <b>Pengguna:</b> {} (<code>{}</code>)
+bans_banned_success: Admin {} berhasil mencekal {} di <b>{}</b>!
+bans_logger_reason: \n<b>Alasan:</b> {}
+bans_err_unknown: "Kesalahan tidak dikenal: {} gagal."
+bans_err_tban_no_arg: Anda belum menentukan waktu untuk mencekal pengguna ini!
+bans_tban_logger: "<b>{}:</b>\n#TEMP_BANNED\n<b>Admin:</b> {}\n<b>Pengguna:</b> {} (<code>{}</code>)\n<b>Waktu:</b> {}"
+bans_tbanned_success: Admin {} berhasil mencekal {} di <b>{}</b> karena {}!
+bans_kick_is_bot: Saya tidak mengeluarkan diri sendiri!
+bans_kick_is_admin: Mengapa saya mengeluarkan seorang admin? Itu terdengar seperti ide yang sangat goblog.
+bans_kick_success: Admin {} berhasil mengeluarkan {} di <b>{}</b>!
+bans_kick_logger: "<b>{}:</b>\n#KICKED\n<b>Admin:</b> {}\n<b>Pengguna:</b> {} (<code>{}</code>)"
+bans_kickme_success: Tidak masalah.
+bans_kickme_failed:
+bans_unban_user_in_chat: Mengapa Anda mencoba membatalkan pencekalan seseorang yang sudah ada dalam obrolan?
+bans_unban_success: Yap, pengguna ini bisa bergabung!
+bans_unban_logger: "<b>{}:</b>\n#UNBANNED\n<b>Admin:</b> {}\n<b>Pengguna:</b> {} (<code>{}</code>)"
+bans_sban_logger: "<b>{}:</b>\n#UNBANNED\n<b>Admin:</b> {}\n<b>Pengguna:</b> {} (<code>{}</code>)"
+bans_help: |
+  Beberapa orang perlu dicekal di depan umum; spammer, gangguan, atau hanya tipuan.\n
+  Modul ini memungkinkan Anda melakukannya dengan mudah, dengan memaparkan beberapa tindakan umum, sehingga semua orang akan melihat!\n
+  Perintah yang tersedia adalah:
+  - /ban: Cekal pengguna dalam obrolan.
+  - /banme: Cekal diri sendiri.
+  - /tban: Mencekal sementara pengguna di obrolan, mengatur waktu menggunakan int <d/h/m> (hari, jam atau menit)
+  - /unban:: Membatalkan cekalan pengguna dalam obrolan.
+  - /sban: Secara diam-diam mencekal pengguna di obrolan.
+  - /mute: Bisukan pengguna dalam obrolan.
+  - /tmute: Membisukan pengguna untuk sementara waktu dalam obrolan. setel waktu menggunakan int <d/h/m> (hari, jam atau menit)
+  - /unmute: Membunyikan pengguna dalam obrolan.
+  - /kick: Menendang pengguna dari obrolan.
+  - /kickme: Tendang dirimu sendiri.\n
+  Semua perintah berfungsi melalui gagang atau balasan, kecuali banme dan kickme (yang tidak memerlukan argumen).\n
+  Contoh mematikan sementara seseorang:
+  /tmute @username 2h; ini membisukan pengguna selama 2 jam.
+#Blacklist
+modname_blacklist: Kata-kata yang dilarang
+blacklist_active_list: Filter daftar hitam aktif di {}:\n
+blacklist_no_list: Tidak ada filter daftar hitam di <b>{}</b>!
+blacklist_add: Menambahkan <code>{}</code> ke daftar hitam di <b>{}</b>!
+blacklist_del: Mengurangi <code>{}</code> dari daftar hitam di <b>{}</b>!
+blacklist_multi_del: Mengurangi pemicu <code>{}</code> dari daftar hitam di <b>{}</b>!
+blacklist_err_add_no_args: Katakan padaku kata-kata apa yang kamu ingin {} dalam daftar hitam.
+blacklist_err_del_no_args: Katakan kata-kata apa yang ingin Anda hapus dari daftar hitam.
+blacklist_err_not_trigger: Ini bukan pemicu daftar hitam!
+blacklist_err_multidel_no_trigger: Tidak ada pemicu yang ada, jadi tidak ada yang dihapus dari daftar hitam.
+blacklist_err_multidel_some_no_trigger: Menghapus pemicu <code>{}</code> dari daftar hitam di <b>{}</b>! {} tidak ada, jadi tidak dihapus.
+blacklist_chatsettings_word_count: Ada {} kata-kata di daftar hitam.
+blacklist_help: |
+  Anda dapat mengatur filter daftar hitam untuk mengambil tindakan otomatis pada orang-orang ketika mereka mengatakan hal-hal tertentu. Ini dilakukan dengan menggunakan:
+  - /addblacklist <blacklist trigger> <blacklist reason>: blacklist the trigger. Anda dapat mengatur kalimat dengan menaruh tanda kutip di sekitar alasannya.
+  - /unblacklist <blacklist trigger>: hentikan blacklist dari trigger blacklist tertentu.
+  - /rmblacklist <blacklist trigger>: sama dengan /unblacklist
+  - /blacklist: daftar semua filter daftar hitam aktif\n
+  /addblacklist "admin goblog" Hormati admin Anda!
+  Ini akan menghapus pesan apa pun yang berisi 'admin goblog'.\n
+  Kiat pro:
+  Daftar hitam memungkinkan Anda untuk menggunakan beberapa pengubah untuk mencocokkan karakter "tidak dikenal". Misalnya, Anda dapat menggunakan karakter ? untuk mencocokkan kejadian tunggal dari karakter non-spasi putih.
+  Anda juga dapat menggunakan pengubah *, yang cocok dengan sejumlah karakter apa pun. Jika Anda ingin memasukkan daftar hitam url, ini akan memungkinkan Anda untuk mencocokkan semuanya. Ini cocok dengan setiap karakter kecuali spasi. Ini keren jika Anda ingin berhenti, misalnya, penyingkat url.
+  Misalnya, berikut ini akan mencekal tautan bit.ly apa pun:
+  /addblacklist "bit.ly/*" Kami tidak suka penyingkat link!
+  Jika Anda hanya ingin mencocokkan bit.ly/ tautan diikuti oleh tiga karakter, Anda dapat menggunakan:
+  /addblacklist "bit.ly/???" Kami tidak suka shortener!
+  Ini akan cocok dengan bit.ly/abc, tetapi tidak bit.ly/abcd.
+#Connections
+modname_connection: Koneksi
+connection_enable: Koneksi diaktifkan ke obrolan ini untuk pengguna.
+connection_disable: Koneksi dinonaktifkan untuk obrolan ini untuk pengguna.
+connection_err_wrong_arg: Silakan masukkan on/yes/off/no sebagai argumen!
+connection_success: Berhasil terhubung ke *{}*
+connection_fail: Koneksi gagal!
+connection_err_not_allowed: Koneksi ke obrolan ini tidak diizinkan!
+connection_err_no_chatid: Masukkan ID obrolan untuk terhubung!
+connection_dis_success: Berhasil diputus dari obrolan!
+connection_dis_fail: Gagal memutuskan sambungan!
+connection_err_unknown: Grup telah mengubah hak koneksi atau Anda bukan admin lagi.\nSaya akan memutus koneksi Anda.
+connection_help: |
+  Terkadang, Anda hanya ingin menambahkan beberapa catatan dan filter ke obrolan grup, tetapi Anda tidak ingin semua orang melihatnya; Di sinilah koneksi masuk...
+  Ini memungkinkan Anda untuk terhubung ke basis data obrolan, dan menambahkan sesuatu ke dalamnya tanpa ada perintah yang muncul di obrolan! Untuk alasan yang jelas, Anda harus menjadi admin untuk menambahkan sesuatu; tetapi setiap anggota dalam grup dapat melihat data Anda.\n
+  Tindakan tersedia dengan grup yang terhubung:
+  • Lihat dan edit catatan
+  • Lihat dan edit filter
+  • Lihat dan edit daftar hitam
+  • Mempromosikan/menurunkan pengguna
+  • Lihat list admin, lihat link undangan
+  • Nonaktifkan/aktifkan perintah dalam obrolan
+  • Bisukan/suarakan pengguna dalam obrolan
+  • Batasi/bebaskan pengguna dalam obrolan
+  • Lebih banyak di masa depan!\n
+  - Ketik /connect atau /connection di grup yang ingin Anda hubungkan.
+  - /connect atau /connection <chatid>: Hubungkan ke obrolan jarak jauh
+  - /disconnect: Putuskan sambungan dari obrolan
+  - /allowconnect on/yes/off/no: Izinkan hubungkan pengguna ke grup\n
+  Anda dapat mengambil id obrolan dengan menggunakan perintah /id di obrolan Anda. Jangan kaget jika id negatif; semua grup super memiliki id negatif.
+#Filters
+modname_cust_filters: Filter
+cust_filters_list: "*Daftar dalam filter {}:*\n"
+cust_filters_local: filter lokal
+cust_filters_err_btn_only: Filter teks balasan tidak ada. Anda TIDAK HANYA memiliki tombol, Anda perlu pesan untuk pergi kesana!
+cust_filters_err_empty: Anda tidak spesifik dengan apa harus menjawab!
+cust_filters_add_success: Pemegang '{}' ditambahkan di *{}*!
+cust_filters_list_empty: Tidak ada filter aktif di {}!
+cust_filters_stop_success: Yap, saya akan berhenti membalas itu di *{}*.
+cust_filters_err_wrong_filter: Itu bukan filter aktif - jalankan /filters untuk mengetahui semua filter yang aktif.
+cust_filters_err_protocol: Anda tampaknya mencoba menggunakan protokol url yang tidak didukung. Telegram tidak mendukung tombol untuk beberapa protokol, seperti tg://. Silakan coba lagi atau minta bantuan di @HarukaAyaGroup.
+cust_filters_err_badformat: Filter ini tidak dapat dikirim, karena tidak memakai format dengan benar. Tanyakan di @HarukaAyaGroup jika Anda tidak tahu mengapa!
+cust_filters_chatsettings_stats: Ada `{}` filter khusus di sini.
+cust_filters_help: |
+  Jadikan obrolan Anda lebih hidup dengan filter; Bot akan membalas kata-kata tertentu!
+  Filter tidak peka huruf besar-kecil; setiap kali seseorang mengatakan kata-kata pemicu Anda, {} akan membalas sesuatu yang lain! dapat digunakan untuk membuat perintah Anda sendiri, jika diinginkan.
+  - /filters: daftarkan semua filter aktif dalam obrolan ini.
+  *Hanya admin:*
+  - /filter <keyword> <reply message>: Setiap kali seseorang mengatakan "suatu kata", bot akan membalas dengan "kalimat". Untuk beberapa filter kata, kutip kata pertama.
+  - /stop <filter keyword>: hentikan filter itu.\n
+  Contoh cara mengatur filter akan melalui:
+  `/filter halo Halo! Bagaimana kabarmu?
+  Filter multi kata dapat diatur melalui:
+  `/filter "halo teman" Halo kembali! Lama tidak bertemu! `
+  Jika Anda ingin menyimpan gambar, gif, atau stiker, atau data lain, lakukan hal berikut:
+  `/filter word`, sambil membalas stiker atau data apa pun yang Anda inginkan. Sekarang, setiap kali seseorang menyebut "kata", stiker itu akan dikirim sebagai balasan.
+  Sekarang, siapa pun yang mengatakan "halo" akan dijawab dengan "Halo, apa kabar?".
+#Disable
+modname_disable: Perintah Dinonaktifkan
+disable_success: Menonaktifkan penggunaan `{}`
+disable_err_undisableable: Perintah itu tidak dapat dinonaktifkan
+disable_err_no_cmd: Lewati perintah sebagai argumen.
+disable_enable_success: Mengaktifkan penggunaan `{}`
+disable_already_enabled: Perintah itu sudah diaktifkan.
+disable_able_commands: Perintah-perintah berikut dapat diubah:\n{}
+disable_able_commands_none: Tidak ada perintah yang dapat dinonaktifkan.
+disable_chatsettings_none_disabled: Tidak ada perintah yang dinonaktifkan!
+disable_chatsettings_list_disabled: Perintah berikut saat ini dinonaktifkan untuk pengguna non-admin:\n{}
+disable_help: |
+  Tidak semua orang menginginkan setiap fitur yang ditawarkan bot. Beberapa perintah paling baik jika dibiarkan tidak digunakan untuk menghindari spam dan penyalahgunaan.\n
+  Ini memungkinkan Anda untuk menonaktifkan beberapa perintah yang biasa digunakan, sehingga pengguna non-admin tidak dapat menggunakannya.
+  Ini juga akan memungkinkan Anda untuk membuat model ulang secara otomatis, menghentikan orang-orang dari mengetik teks biru.\n
+  - /cmds: periksa status saat ini dari perintah yang dinonaktifkan\n
+  *Hanya admin:*
+  - /enable <cmd name>: Mengaktifkan perintah
+  - /disable <cmd name>: Nonaktifkan perintah
+#Feds
+modname_feds: Federasi
+feds_create_fail: Pembuatan federasi gagal! Tanyakan pada @HarukaAyaGroup untuk bantuan.
+feds_create_success: "*Anda telah berhasil membuat federasi baru!*\nNama: `{}`\nID: `{}`\n\nJalankan perintah di bawah dalam grup untuk menambahkannya ke federasi:\n`/joinfed {}`"
+feds_create_success_logger: "Federasi <b>{}</b> telah dibuat dengan ID: <pre>{}</pre>"
+feds_err_no_args: Silakan tulis nama federasi.
+feds_delete_not_found: Federasi ini tidak ditemukan!
+feds_owner_only: Hanya pemilik federasi yang dapat melakukan ini!
+feds_fedadmin_only: Hanya admin federasi yang dapat melakukan ini!
+feds_delete_confirm: Apakah Anda yakin ingin menghapus federasi ini? Tindakan ini tidak dapat dibatalkan, Anda akan kehilangan seluruh daftar larangan, dan <code>{}</code> federasi akan hilang secara permanen!
+feds_group_not_in_fed: Grup ini tidak ada dalam federasi apa pun!
+feds_group_part_of_fed: "Obrolan ini adalah bagian dari federasi berikut:"
+feds_group_joined_fed: Eh, apakah Anda akan bergabung dengan dua federasi dalam satu obrolan?
+feds_fedid_invalid: Silakan masukkan ID Federasi yang valid.
+feds_join_unknown_err: Gagal bergabung ke federasi karena kesalahan yang tidak diketahui, minta bantuan di @HarukaAyaGroup.
+feds_join_success: Obrolan bergabung dengan federasi!
+feds_leave_success: "Obrolan ini telah meninggalkan federasi: {}!"
+feds_leave_not_joined: Bagaimana Anda bisa meninggalkan federasi yang tidak pernah Anda ikuti?!
+feds_promote_owner: Mengapa Anda mencoba mempromosikan pemilik federasi?
+feds_promote_bot: Saya sudah menjadi admin federasi di semua federasi!
+feds_promote_success: Berhasil dipromosikan!
+feds_promote_failed: Gagal dipromosikan!
+feds_demote_bot: Saya tidak dapat menurunkan diri dari federasi!
+feds_demote_target_not_admin: Saya tidak dapat menurunkan pangkat orang yang bukan admin dari federasi!
+feds_demote_success: Keluar dari sini!
+feds_demote_failed: Menurunkan pangkat gagal!
+feds_info: |
+  <b> ℹ️ Informasi Federasi:</b>
+  FedID: <code>{}</code>
+  Nama: {}
+  Pembuat: {}
+  Semua Admin: <code>{}</code>
+  Total pengguna yang dicekal: <code>{}</code>
+  Jumlah grup dalam federasi ini: <code>{}</code>
+feds_admins: |
+  <b>Admin di federasi '{}':<b>
+feds_help: |
+  Ah, manajemen grup. Semuanya menyenangkan, sampai spammer mulai memasuki grup Anda, dan Anda harus memblokirnya. Maka Anda harus mulai melarang lebih banyak, dan lebih banyak lagi, dan itu menyakitkan.
+  Tetapi kemudian Anda memiliki banyak grup, dan Anda tidak ingin spammer ini berada di salah satu grup Anda - bagaimana Anda bisa mengatasinya? Apakah Anda harus memblokirnya secara manual, di semua grup Anda?
+
+  Tidak lagi! Dengan Federasi, Anda dapat membuat larangan dalam satu obrolan tumpang tindih dengan semua obrolan lainnya.
+  Anda bahkan dapat menetapkan federasi admin, sehingga admin tepercaya Anda dapat mencekal semua obrolan yang ingin Anda lindungi.
+
+  Masih tahap percobaan, membuat Federasi hanya bisa dilakukan oleh pembuat saya
+
+  Perintah:
+  - /newfed <fedname>: buat Federasi baru dengan nama yang diberikan. Pengguna hanya diizinkan memiliki satu Federasi. Metode ini juga dapat digunakan untuk mengganti nama Federasi. (maks. 64 karakter)
+  - /delfed: hapus Federasi Anda, dan informasi apa pun yang terkait dengannya. Tidak akan membatalkan pengguna yang diblokir.
+  - /fedinfo <FedID>: informasi tentang Federasi yang ditentukan.
+  - /joinfed <FedID>: gabung dengan obrolan saat ini ke Federasi. Hanya pemilik obrolan yang dapat melakukan ini. Setiap obrolan hanya bisa dalam satu Federasi.
+  - /leavefed <FedID>: keluar dari Federasi yang diikuti. Hanya pemilik obrolan yang dapat melakukan ini.
+  - /fpromote <user>: promosikan Pengguna untuk memberi admin yang diumpankan. Pemilik Fed saja.
+  - /fdemote <user>: menjatuhkan Pengguna dari admin Federasi ke Pengguna normal. Pemilik Fed saja.
+  - /fban <user>: melarang pengguna dari semua federasi tempat obrolan ini berlangsung, dan pelaksana memiliki kendali atas.
+  - /unfban <user>: batalkan Pengguna dari semua federasi tempat obrolan ini berlangsung, dan bahwa pelaksana memiliki kendali atas.
+  - /setfrules: Mengatur aturan Federasi.
+  - /frules: Lihat peraturan Federasi.
+  - /chatfed: Lihat Federasi dalam obrolan saat ini.
+  - /fedadmin: Tampilkan admin Federasi.
+  - /fbanlist: Menampilkan semua pengguna yang menjadi korban di Federasi saat ini.
+  - /fedchats: Dapatkan semua obrolan yang terhubung di Federasi.
+  - /importfbans: Membalas file pesan cadangan Federasi untuk mengimpor daftar yang terlarang ke Federasi sekarang.
+#TODO: To be continued
+#Keyboard
+keyboard_disconnect: Putuskan sambungan dari obrolan
+keyboard_connect: Terhubung ke obrolan
+keyboard_updated: Keyboard Diperbarui
+keyboard_bothelp: Bantuan Bot
+keyboard_notes: Catatan
+#Language
+language_switch_success: Preferensi bahasa untuk {} telah diperbarui ke {}
+language_switch_success_pm: Preferensi bahasa Anda telah diperbarui ke {}
+language_not_supported: "{} belum didukung!"
+language_code_not_valid: Itu bukan kode bahasa yang valid. Gunakan kode ISO yang diterima secara internasional!
+language_current_locale: "Lokal saat ini untuk obrolan ini adalah: *{}*"
+language_select_language: "*Pilih bahasa*\n"
+language_user_language: "Bahasa pengguna: `{}`\n\nBantu kami membawa lebih banyak bahasa ke bot dengan berkontribusi pada proyek di [Crowdin](https://crowdin.com/project/haruka)!"
+language_chat_language: "\nBahasa obrolan yang terhubung: `{}`"
+language_sel_user_lang: "*\n\nPilih bahasa pengguna baru: *"
+#Locks
+modname_locks: Kunci
+locks_list_title: "Kunci: "
+locks_lock_success: Pesan-pesan `{}` Terkunci bagi semua yang non-admin!
+locks_unlock_success: Membuka pesan `{}` untuk semua orang!
+locks_type_invalid: Apa yang kamu coba kunci...? Coba /locktypes untuk daftar apa saja yang bisa dikunci.
+locks_bot_not_admin: Pastikan saya adalah administrator grup dan memiliki izin untuk menghapus pesan, lalu coba lagi.
+locks_lock_no_type: Anda belum menentukan tipe yang akan dikunci.
+lokcs_unlock_no_type: Anda belum menentukan tipe yang akan dibuka kuncinya.
+locks_lock_bots_no_admin: Saya melihat bot, dan saya diberitahu untuk menghentikan mereka untuk bergabung... tapi saya bukan admin!
+locks_lock_bots_kick: Hanya admin yang diizinkan menambahkan bot ke obrolan ini! Mengeluarkan!
+locks_list_empty: Tidak ada yang dikunci saat ini di *{}*.
+locks_list: |
+  Ini adalah yang dikunci di *{}*:
+    - stiker = `{}`
+    - audio = `{}`
+    - pesan suara = `{}`
+    - dokumen = `{}`
+    - video = `{}`
+    - pesan video = `{}`
+    - kontak = `{}`
+    - foto = `{}`
+    - gif = `{}`
+    - url = `{}`
+    - bot = `{}`
+    - meneruskan = `{}`
+    - permainan = `{}`
+    - lokasi = `{}`
+    - pesan = `{}`
+    - media = `{}`
+    - lainnya = `{}`
+    - tinjauan = `{}`
+    - semua = `{}`
+locks_help: |
+  Apakah stiker mengganggu Anda? atau ingin menghindari orang lain membagikan tautan? atau gambar? Anda berada di tempat yang tepat!\n
+  Modul kunci memungkinkan Anda untuk mengunci beberapa item umum di dunia telegram; bot akan secara otomatis menghapusnya!\n
+  Perintah yang tersedia adalah:
+  - /lock <item(s)>: kunci penggunaan "item". Sekarang, hanya admin yang dapat menggunakan jenis ini!
+  - /unlock <item(s)>: membuka "item". Semua orang bisa menggunakannya lagi.
+  - /lock: daftar status kunci dalam obrolan.
+  - /locktypes: mendapat daftar semua hal yang dapat dikunci. (lihat ini!)\n
+  contoh: kunci stiker dengan:
+  /lock sticker
+#Log channel
+modname_log_channel: Log Saluran
+log_channel_link: \n<b>Link:</b> <a href=\"http://telegram.me/{}/{}\">klik disini</a>
+log_channel_deleted: Log saluran ini telah dihapus - tidak disetel.
+log_channel_err_format: \n\nPenggunaan format telah dinonaktifkan karena kesalahan yang tidak terduga.
+log_channel_grp_curr_conf: "Grup ini mengirimkan semua log-nya ke: {} (`{}`)"
+log_channel_none: Tidak ada saluran log yang ditetapkan untuk grup ini!
+log_channel_fwd_cmd: Sekarang, teruskan perintah /setlog ke grup tempat Anda ingin menghubungkan saluran ini!
+log_channel_chn_curr_conf: Saluran ini telah ditetapkan sebagai saluran log untuk {}.
+log_channel_link_success: Pengaturan saluran log berhasil!
+log_channel_invalid_message: Ini bukan pesan yang diteruskan! Silakan baca bantuan (ketik /help dalam PM dengan bot) untuk informasi lebih lanjut tentang perintah ini.
+log_channel_unlink_success: Saluran telah diputuskan dari {}!
+log_channel_unlink_none: Belum ada log saluran yang ditetapkan!
+log_channel_help: |
+  *Hanya admin:*
+  - /logchannel: dapatkan info saluran log
+  - /setlog: atur saluran log.
+  - /unsetlog: hapus saluran log.\n
+  Pengaturan saluran log dilakukan dengan:
+  - menambahkan bot ke saluran yang diinginkan (sebagai admin!)
+  - mengirim /setlog di saluran
+  - meneruskan /setlog ke grup
+#Memes and etc.
+modname_memes: Meme dan lain-lain.
+memes_no_message: Saya perlu pesan untuk meme.
+memes_deepfry_nothing: Apa yang harus saya lakukan dengan ini?!
+memes_shout_notext: Di mana teksnya?
+memes_not_doing_that: Saya tidak melakukan itu!
+memes_runs_list:
+  - "Kamu pikir kemana kamu pergi?"
+  - "Hah? apa? apakah mereka lolos?"
+  - "ZZzzZZzz... Hah? apa? oh, hanya mereka lagi, lupakan."
+  - "Kembali kesini!"
+  - "Tidak semudah itu ferguso..."
+  - "Awas tembok!"
+  - "Jangan tinggalkan aku sendiri bersama mereka!!"
+  - "Kamu lari, kamu mati."
+  - "Kamu bercanda? Aku ada di mana-mana"
+  - "Kau akan menyesal..."
+  - "Kamu juga bisa mencoba /kickme, kudengar itu menyenangkan."
+  - "Pergi mengganggu orang lain sana, tidak ada yang peduli disini."
+  - "Kamu bisa lari, tetapi tidak bisa sembunyi."
+  - "Apakah hanya itu yang kamu miliki?"
+  - "Aku di belakangmu..."
+  - "Kamu mendapatkan teman!"
+  - "Kita bisa melakukan ini dengan cara yang mudah, atau dengan cara yang sulit."
+  - "Kamu hanya tidak mengerti, bukan?"
+  - "Ya, sebaiknya kau lari!"
+  - "Tolong, ingatkan aku betapa aku peduli?"
+  - "Aku akan berlari lebih cepat jika aku jadi kamu."
+  - "Itu pasti robot yang kita cari."
+  - "Mungkin berkat dari Tuhan untukmu adalah keanehan."
+  - "Kata-kata terakhir yang terkenal."
+  - "Dan mereka menghilang selamanya, tidak pernah terlihat lagi."
+  - "'Oh, lihat aku! Aku sangat keren, aku bisa lari dari bot! ' - orang ini"
+  - "Ya ya, cukup ketuk /kickme saja."
+  - "Ini, ambil cincin ini dan pergi ke Mordor saat Anda sedang di sana."
+  - "Legenda mengatakan, mereka masih berlari..."
+  - "Tidak seperti Harry Potter, orang tuamu tidak bisa melindungimu dariku."
+  - "Ketakutan menyebabkan kemarahan. Kemarahan menyebabkan kebencian. Benci menyebabkan penderitaan. Jika Anda terus berlari dalam ketakutan, Anda mungkin "
+  - "menjadi Vader selanjutnya."
+  - "Beberapa perhitungan kemudian, saya telah memutuskan minat saya pada shenanigans Anda tepat 0."
+  - "Legenda mengatakan, mereka masih berlari."
+  - "Tetap pertahankan, kami tidak yakin kami tetap menginginkan Anda di sini."
+  - "Anda seorang penyi- Oh. Tunggu. Anda bukan Harry, terus bergerak."
+  - "JANGAN BERLARI DI LORONG!"
+  - "Hasta la vista, baby."
+  - "Siapa yang membiarkan anjing keluar?"
+  - "Ini lucu, karena tidak ada yang peduli."
+  - "Ah, sayang sekali. Saya suka yang itu."
+  - "Terus terang, sayangku, aku tidak peduli."
+  - "Milkshake saya membawa semua anak laki-laki ke halaman... Jadi lari lebih cepat!"
+  - "Anda tidak bisa MENANGANI kebenaran!"
+  - "Dahulu kala, di galaksi yang sangat jauh... Seseorang pasti akan peduli tentang itu. Sekarang tidak lagi."
+  - "Hei, lihat mereka! Mereka lari dari palu larangan yang tak terhindarkan... Lucu."
+  - "Han menembak lebih dulu. Aku juga akan."
+  - "Apa yang Anda kejar, kelinci putih?"
+  - "Seperti yang dikatakan The Doctor... LARI!"
+memes_insults_list:
+  - "Owww ... Bodoh sekali."
+  - "Jangan minum dan mengetik."
+  - "Saya pikir Anda harus pulang ke rumah atau lebih baik rumah sakit jiwa."
+  - "Perintah tidak ditemukan. Sama seperti otakmu."
+  - "Apakah kamu sadar kamu membodohi diri sendiri? Sepertinya tidak."
+  - "Kau bisa mengetik lebih baik dari itu."
+  - "Peraturan bot 544 bagian 9 mencegah saya membalas kepada manusia bodoh sepertimu."
+  - "Maaf, kami tidak menjual otak."
+  - "Percayalah, Anda tidak normal."
+  - "Saya yakin otakmu terasa seperti baru, mengingat kamu tidak pernah menggunakannya."
+  - "Jika saya ingin bunuh diri saya akan memanjat egomu dan melompat ke IQmu."
+  - "Zombi memakan otak... kau aman."
+  - "Kamu tidak berevolusi dari kera, mereka berevolusi darimu."
+  - "Kembalilah dan bicaralah padaku ketika IQmu melebihi usiamu."
+  - "Saya tidak mengatakan kamu goblog, saya hanya mengatakan kamu mengalami nasib buruk ketika harus berpikir."
+  - "Kamu berbicara bahasa apa? Karena kedengarannya seperti omong kosong."
+  - "Kebodohan bukanlah kejahatan sehingga Anda bebas untuk pergi."
+  - "Anda adalah bukti bahwa evolusi BISA terbalik."
+  - "Saya akan menanyakan usia Anda, tetapi saya tahu Anda tidak bisa menghitung setinggi itu."
+  - "Sebagai orang luar, apa pendapatmu tentang ras manusia?"
+  - "Otak bukanlah segalanya. Dalam kasusmu mereka bukan apa-apa."
+  - "Biasanya orang hidup dan belajar. Kamu hidup saja."
+  - "Saya tidak tahu apa yang membuat kamu begitu bodoh, tetapi itu benar-benar berhasil."
+  - "Terus bicara, suatu hari nanti kamu akan mengatakan sesuatu yang cerdas! (Aku meragukannya tapi)"
+  - "Kejutkan saya, katakan sesuatu yang cerdas."
+  - "IQ Anda lebih rendah dari ukuran sepatumu."
+  - "Sayang! Neurotransmitermu tidak lagi berfungsi."
+  - "Apakah kamu gila, bodoh."
+  - "Setiap orang memiliki hak untuk menjadi bodoh tetapi kamu menyalahgunakan hak istimewa."
+  - "Maaf aku menyakiti perasaanmu ketika aku menyebutmu bodoh. Aku pikir kamu sudah tahu itu."
+  - "Kamu harus mencoba mencicipi sianida."
+  - "Enzimmu dimaksudkan untuk mencerna racun tikus."
+  - "Kamu harus mencoba tidur selamanya."
+  - "Ambil pistol dan tembak dirimu sendiri."
+  - "Kamu bisa membuat rekor dunia dengan melompat dari pesawat tanpa parasut."
+  - "Berhentilah berbicara omong kosong dan lompat di depan kereta cepat yang sedang berjalan."
+  - "Cobalah mandi dengan Asam Kuat daripada air."
+  - "Coba ini: jika kamu menahan napas selama satu jam, kamu bisa menahannya selamanya."
+  - "Peduli lingkungan! Berhenti menghirup Oksigen."
+  - "Tuhan sedang mencarimu. Kamu harus pergi untuk menemuinya."
+  - "berikan 100%. Sekarang, lakukan donor darah."
+  - "Cobalah melompat dari gedung bertingkat seratus tetapi kamu hanya bisa melakukannya sekali."
+  - "Kamu harus menyumbangkan otakmu melihat bahwa kamu tidak pernah menggunakannya."
+  - "Sukarelawan untuk target dalam lapangan tembak."
+  - "Tembakan di kepala itu menyenangkan. Dapatkan sendiri satu."
+  - "Kau harus mencoba berenang dengan hiu putih besar."
+  - "Anda harus mecat diri sendiri berwarna merah dan berlari maraton dengan banteng."
+  - "Kamu dapat tetap berada di bawah air selama sisa hidupmu tanpa kembali lagi."
+  - "Bagaimana kalau kamu berhenti bernapas selama 1 hari? Itu akan bagus."
+  - "Cobalah memprovokasi harimau saat kalian berada di satu kandang."
+  - "Sudahkah kamu mencoba menembak diri sendiri setinggi 100m menggunakan meriam."
+  - "Kamu harus mencoba menggigit TNT di mulutmu dan menyalakannya."
+  - "Coba mainkan lempar tankap dengan RDX, itu menyenangkan."
+  - "Saya mendengar phogine beracun tetapi kukira kamu tidak keberatan menghirupnya untuk bersenang-senang."
+  - "Luncurkan dirimu ke luar angkasa sambil melupakan oksigen di Bumi."
+  - "Kamu harus mencoba bermain ular dan tangga, dengan ular sungguhan dan tanpa tangga."
+  - "Menari telanjang di atas dua kawat HT."
+  - "Kawah gunung berapi adalah kolam renang terbaik untukmu."
+  - "Kamu harus mencoba mandi air panas di gunung berapi."
+  - "Cobalah menghabiskan satu hari di peti mati dan itu akan menjadi milikmu selamanya."
+  - "Tumbukkan Uranium dengan neutron bergerak lambat di hadapan Anda. Itu akan menjadi pengalaman yang berharga."
+  - "Anda bisa menjadi orang pertama yang menginjak matahari. Selamat mencoba."
+memes_slaps_templates_list:
+  - "{user1} {hits} {user2} dengan {item}."
+  - "{user1} {hits} {user2} dimukanya dengan {item}."
+  - "{user1} {hits} {user2} sedikit demi sedikit dengan {item}."
+  - "{user1} {throws} {item} ke {user2}."
+  - "{user1} mengambil {item} dan {throws} ke muka {user2}."
+  - "{user1} meluncurkan {item} langsung ke arah {user2}."
+  - "{user1} mulai memukul gemay {user2} dengan {item}."
+  - "{user1} menjatuhkan {user2} dan {hits} berulang-ulang dengan {item}."
+  - "{user1} mengambil {item} dan {hits} {user2}."
+  - "{user1} mengikat {user2} di kursi dan {throws} {item} kearahnya."
+  - "{user1} mendorong dengan perlahan {user2} untuk berenang di dalam lahar."
+memes_items_list:
+  - "wajan besi cor"
+  - "trout besar"
+  - "tongkat pemukul baseball"
+  - "tongkat pemukul kriket"
+  - "tongkat kayu"
+  - "kuku"
+  - "printer"
+  - "sekop"
+  - "Monitor Tabung"
+  - "buku paket fisika"
+  - "pemanggang roti"
+  - "potret Richard Stallman"
+  - "televisi"
+  - "truk lima ton"
+  - "gulungan lakban"
+  - "buku"
+  - "laptop"
+  - "televisi lama"
+  - "sekarung batu"
+  - "ikan forel pelangi"
+  - "ayam karet"
+  - "alat pemukul berduri"
+  - "pemadam Api"
+  - "batu yang berat"
+  - "potongan tanah"
+  - "sarang lebah"
+  - "sepotong daging busuk"
+  - "beruang"
+  - "banyak batu bata"
+memes_throw_list:
+  - "melempar"
+  - "mencampak"
+  - "membuang"
+  - "melempar"
+memes_hit_list:
+  - "memukul"
+  - "mendera"
+  - "menampar"
+  - "memukulkan"
+  - "tamparan keras"
+memes_help: |
+  Beberapa perintah meme, cari tahu sendiri!
+
+  - /owo: mengOWOkan teks
+  - /stretch: meLEBARkan teks
+  - /vapor: owo vapor dis
+  - /hitler: Kutip pesan dan ketikkan perintah ini untuk membuat judul hitler
+  - /mock: Melakukan hal yang sama dengan /hitler tetapi spongemock sebagai gantinya
+  - /kim: Melakukan hal yang sama dengan /hitler tetapi dengan Kim Jong Un sebagai gantinya (O no plox jangan bom rumah saya)
+  - /pidor: meme 4pda
+  - /shout: Tulis apa pun yang Anda inginkan
+  - /zalgofy: balas pesan untuk mengirimnya keluar!
+  - /runs: membalas string acak dari berbagai balasan.
+  - /insults: balas string acak dari berbagai balasan.
+  - /slap: menampar pengguna, atau ditampar jika bukan balasan.
+#Misc
+modname_misc: Lain-lain
+misc_get_id_1: Pengirim asli, {}, memiliki ID `{}`. \nYang Meneruskan, {}, memiliki ID `{}`.
+misc_get_id_2: "Id {} adalah `{}`."
+misc_id_1: Id Anda adalah `{}`.
+misc_id_2: Id grup ini adalah `{}`.
+misc_info_1: "<b>Info Pengguna</b>:"
+misc_info_id: "\nID: <code>{}</code>"
+misc_info_first: "\nNama depan: {}"
+misc_info_name: "\nNama belakang: {}"
+misc_info_username: "\nNama pengguna: @{}"
+misc_info_user_link: "\nTautan pengguna: {}\n"
+misc_info_is_owner: "\n\nOrang ini adalah pemilik saya, saya tidak bisa melakukan apa pun terhadapnya!"
+misc_info_is_original_owner: "\nOrang ini adalah pencipta asli saya, meskipun dia sudah meninggalkan adik perempuan saya Marie :("
+misc_info_is_sudo: "\nOrang ini adalah salah satu pengguna istimewa saya! Dia akan membantu Anda jika Anda membutuhkan dukungan tentang bot."
+misc_info_is_support: "\nOrang ini adalah salah satu pengguna dukungan saya! Dia bisa mencekal para spammer dan orang jahat itu."
+misc_info_is_whitelisted: "\nOrang ini adalah pengguna yang masuk daftar putih, seseorang jarang mendapatkan peran ini, Anda tidak dapat mencekal atau menendangnya."
+misc_gdpr: Menghapus data yang dapat diidentifikasi...
+misc_md_list: |
+  Markdown adalah alat pemformatan yang sangat kuat yang didukung oleh telegram. Haruka Aya memiliki beberapa peningkatan, untuk memastikan bahwa \
+  pesan yang disimpan diuraikan dengan benar, dan untuk memungkinkan Anda membuat tombol.
+  - <code>_miring_</code>: membungkus teks dengan '_' akan menghasilkan teks yang miring
+  - <code>*tebal*</code>: membungkus teks dengan '*' akan menghasilkan teks tebal
+  - <code>`kode`</code>: membungkus teks dengan '`' akan menghasilkan teks monospace, juga dikenal sebagai 'kode'
+  - <code>[sometext](someURL)</code>: ini akan membuat tautan - pesannya hanya akan menampilkan <code>somethingext</code>, \
+  dan mengetuknya akan membuka halaman di <code>someURL</code>.
+  EG: <code>[test](example.com)</code>
+  - <code>[buttontext](buttonurl://someURL)</code>: ini adalah peningkatan khusus untuk memungkinkan pengguna melakukan telegram \
+  tombol dalam penurunan harga mereka. <code>buttontext</code> akan menjadi apa yang ditampilkan pada tombol, dan <code>someurl</code> \
+  akan menjadi url yang dibuka.
+  EG: <code>[Ini adalah tombol](buttonurl://example.com)</code>
+  Jika Anda ingin beberapa tombol pada baris yang sama, gunakan: sama, seperti:
+  <code>[one](buttonurl://example.com)
+  [two](buttonurl://google.com:same)</code>
+  Ini akan membuat dua tombol pada satu baris, bukan satu tombol per baris.
+misc_md_try: Coba teruskan pesan berikut ini kepada saya, dan Anda akan melihatnya!
+misc_md_help: "/save test Ini adalah tes macam bentuk kata. _miring_, *tebal*, `kode`, [URL](example.com) [button](buttonurl://github.com) [button2](buttonurl://google.com:same)"
+misc_paste_invalid: Apa yang harus saya lakukan dengan ini?!
+misc_paste_404: Gagal mencapai dogbin
+misc_paste_success: "URL singkat: {}/{}\nAnda dapat melihat statistik, dll. [here]({}/v/{})"
+misc_get_pasted_invalid: Silakan berikan dogbin di url!
+misc_get_pasted_unknown: Terjadi kesalahan yang tidak dikenal
+misc_help: |
+  - /id: dapatkan id grup saat ini. Jika anda menggunakan saat membalas pesan, anda akan mendapatkan id pengguna itu.
+  - /info: dapatkan informasi tentang pengguna.
+  - /gdpr: menghapus informasi Anda dari basis data bot. Obrolan pribadi saja.
+  - /stickerid: balas stiker kepada saya untuk memberi tahu Anda ID file-nya.
+  - /getsticker: balas stiker ke saya untuk mengunggah file PNG mentahnya.
+  - /markdownhelp: ringkasan cepat tentang bagaimana markdown bekerja di telegram - hanya dapat dipanggil dalam obrolan pribadi.
+  - /git: Mengembalikan info tentang pengguna atau organisasi GitHub.
+  - /repo: Kembalikan daftar repositori pengguna atau organisasi GitHub (Terbatas pada 40)
+  - /lyrics: Temukan lirik lagu favorit Anda!
+  - /paste: Buat menempelkan atau url singkat menggunakan [dogbin](https://del.dog)
+  - /getpaste: Dapatkan konten tempel atau url singkat dari [dogbin](https://del.dog)
+  - /pastestats: Dapatkan statistik tempel atau url singkat dari [dogbin](https://del.dog)
+  - /ud: Ketikkan kata atau ungkapan yang ingin Anda cari. Misalnya /ud Gay
+  - /removeebotkeyboard: Keyboard bot jahat tersangkut di grup Anda?
+  - /exec <language><code>[/stdin <stdin>]: Jalankan kode dalam bahasa yang ditentukan. Kirim perintah kosong untuk mendapatkan bahasa yang didukung.
+  - /wiki <keywords>: Dapatkan artikel wikipedia hanya menggunakan bot ini!
+#Purge
+modname_msg_deleting: Pembersihan
+purge_msg_cant_del_too_old: Tidak dapat menghapus semua pesan. Pesan mungkin terlalu lama, saya mungkin tidak memiliki hak untuk menghapus, atau ini mungkin bukan grup super.
+purge_msg_success: Pembersihan selesai.
+purge_invalid: Balas pesan untuk memilih dari mana awal mulai pembersihan.
+purge_invalid2: Apa yang ingin Anda hapus?
+msg_deleting_help: |
+  Menghapus pesan yang dipermudah dengan perintah ini. Bot membersihkan pesan secara bersama-sama atau secara individu.
+
+  *Hanya admin:*
+   - /del: menghapus pesan yang Anda balas
+   - /purge: menghapus semua pesan antara ini dan pesan yang dibalas.
+   - /purge <integer X>: menghapus pesan yang dibalas, dan pesan X mengikutinya.
+#Muting
+mute_invalid: "Anda harus memberi saya nama pengguna untuk dibisukan, atau membalas seseorang yang ingin dibisukan."
+mute_not_myself: "Saya tidak membisukan diri sendiri!"
+mute_not_sudo: "Tidak! Saya tidak membisukan bot sudoers! Itu akan menjadi ide yang sangat bodoh."
+mute_not_m_admin: "Tidak! Saya tidak membisukan obrolan administrator! Itu akan menjadi ide yang sangat bodoh."
+mute_success: "{} dibisukan di {}!"
+mute_already_mute: "Pengguna ini sudah dibisukan di {}!"
+mute_not_in_chat: "Pengguna ini tidak ada dalam {}!"
+unmute_invalid: "Anda harus memberi saya nama pengguna untuk disuarakan, atau membalas seseorang yang ingin disuarakan."
+unmute_not_muted: "Pengguna ini sudah memiliki hak untuk berbicara di {}."
+unmute_success: "Yap, {} dapat mulai berbicara lagi di {}!"
+unmute_not_in_chat: "Pengguna ini bahkan tidak ada dalam obrolan, menyuarakan dia tidak akan membuat dia berbicara lebih dari yang sudah mereka lakukan."
+mute_not_refer: "Anda sepertinya tidak menunjuk pengguna."
+mute_not_existed: "Sepertinya saya tidak dapat menemukan pengguna ini"
+mute_is_admin: "Aku benar-benar berharap bisa membisukan admin..."
+mute_is_bot: "Saya tidak akan MEMBUNGKAM diri sendiri, apakah Anda gila?"
+tmute_no_time: "Anda belum menentukan batas waktu untuk membisukan pengguna ini!"
+tmute_success: "Dibisukan untuk {} di {}!"
+mute_cant_mute: "Ya ampun, saya tidak bisa membisukan pengguna itu."
+restrict_invalid: "Anda harus memberi saya nama pengguna untuk dibatasi, atau membalas seseorang yang ingin dibatasi."
+restrict_is_bot: "Saya tidak membatasi diri!"
+restrict_is_admin: "Saya takut saya tidak bisa membatasi admin!"
+restrict_success: "{} dilarang mengirim media di {}!"
+restrict_already_restricted: "Pengguna ini sudah dibatasi di {}!"
+unrestrict_invalid: "Anda harus memberi saya nama pengguna untuk melepas batasan, atau membalas seseorang untuk melepas batasan."
+unrestrict_not_restricted: "Pengguna ini sudah memiliki hak untuk mengirim apa pun di {}."
+unrestrict_success: "Yap, {} dapat mengirim media lagi di {}!"
+unrestrict_not_in_chat: "Pengguna ini bahkan tidak ada dalam obrolan, melepas batasan mereka tidak akan membuat mereka mengirim apa pun daripada yang sudah mereka lakukan!"
+nomedia_need_time: "Anda belum menentukan batas waktu untuk membatasi pengguna ini!"
+nomedia_success: "Membatasi mengirim media untuk {} di {}!"
+restrict_cant_restrict: "Saya tidak bisa membatasi pengguna itu."
+muteme_muted: "Tidak masalah, Bungkam!"
+#Notes
+modname_notes: Catatan
+note_not_existed: "Catatan ini tidak ada!"
+note_lost: "Pesan ini tampaknya telah hilang - Saya akan menghapusnya dari catatan Anda."
+note_msg_del: "Sepertinya pengirim asli catatan ini telah menghapus pesan mereka - maaf! Gunakan dump pesan untuk menghindari ini. Saya akan menghapus catatan ini dari catatan Anda."
+note_url_invalid: "URL tombol tidak valid! Harap perbarui catatan ini!"
+note_mention_invalid: "Sepertinya Anda mencoba menyebutkan seseorang yang belum pernah saya lihat. Teruskan salah satu pesan mereka kepada saya dan saya akan menandai mereka!"
+note_incorrect_import: "Catatan ini adalah file yang salah diimpor dari bot lain - Saya tidak bisa menggunakannya. Simpan secara manual jika perlu. Saya akan menghapusnya dari daftar catatan Anda."
+note_cannot_send: "Catatan ini tidak dapat dikirim, karena diformat secara salah, Silakan tanyakan di @HarukaAyaGroup jika Anda tidak tahu mengapa!"
+get_invalid: "Catat nama yang hilang! Tulis nama catatan yang ingin Anda dapatkan."
+note_is_local: "catatan lokal"
+save_invalid: "Tidak ada yang bisa disimpan!"
+save_success: "Oke, menambahkan catatan `{}` di *{}*.\nDapatkan dengan `/get {}`, atau `#{}`"
+save_updated: "Oke, Catatan `{}` di *{}* telah diperbarui!.\nDapatkan dengan `/get {}`, atau `#{}`"
+clear_success: "Catatan berhasil dihapus dari *{}*."
+note_in_chat: "*Catatan di {}:*\n"
+note_in_local: "*Catatan Lokal:*\n"
+note_none_in_chat: "Tidak ada catatan di *{}*!"
+note_get: "\nAnda dapat mengambil catatan ini dengan menggunakan `/get notename`, atau `#notename`.\n`#` dengan nama note di sana tidak termasuk dalam nama note itu sendiri, kami hanya menempatkan `#` di dalamnya untuk memudahkan salintempel."
+note_fail_to_import: "File/foto ini gagal diimpor karena berasal dari bot lain. Ini adalah pembatasan dari API telegram, dan tidak dapat dihindari. Maaf untuk ketidaknyamanannya!"
+notes_help: |
+  Simpan data untuk pengguna di masa depan dengan catatan!
+  Catatan bagus untuk menyimpan informasi acak; nomor telepon, gif yang bagus, gambar lucu - apa saja!
+
+  Perintah yang tersedia adalah:
+   - /save <name> <content>: Menyimpan konten ke catatan dengan nama "nama". Membalas pesan akan menyimpan pesan itu. Bahkan bekerja di media!
+   - /get <name>: Dapatkan catatan dengan nama "nama".
+   - #<name>: sama dengan `/get name`
+   - /clear <name>: hapus catatan yang disebut "nama"
+   - /notes: Daftar semua catatan dalam obrolan saat ini
+   - /saved: sama dengan /notes
+
+  Contoh cara menyimpan catatan adalah melalui:
+  /save data Ini beberapa data!
+  Sekarang, siapa pun yang menggunakan "/get data", atau "#data" akan dijawab dengan "Ini adalah beberapa data!".
+  Jika Anda ingin menyimpan gambar, gif, atau stiker, atau data lain, lakukan hal berikut:
+  /save menyimpan kata saat membalas stiker atau data apa pun yang Anda inginkan. Sekarang, catatan di "#word" berisi stiker yang akan dikirim sebagai balasan.
+
+  Kiat: untuk mengambil catatan tanpa memformat, gunakan /get <notename> noformat
+  Ini akan mengambil catatan dan mengirimkannya tanpa memformatnya; memberi Anda markdown mentah, memungkinkan Anda untuk mengedit dengan mudah
+
+  Catatan: Nama catatan tidak peka huruf besar-kecil, dan mereka secara otomatis dikonversi ke huruf kecil sebelum disimpan.
+#Reporting
+modname_reporting: Pelaporan
+reports_pm_on: "Mengaktifkan pelaporan! Anda akan diberitahu setiap kali ada yang melaporkan sesuatu."
+reports_pm_off: "Mematikan pelaporan! Anda tidak akan mendapat laporan."
+reports_chat_on: "Mengaktifkan pelaporan! Admin yang telah mengaktifkan laporan akan diberi tahu saat /report atau @admin dipanggil."
+reports_chat_off: "Matikan pelaporan! Admin tidak akan diberitahukan saat ada yang mengetik /report atau @admin."
+reports_pm_pref: "Preferensi laporan Anda saat ini adalah: `{}`"
+reports_chat_pref: "Pengaturan obrolan saat ini adalah: `{}`"
+reports_success: "{} melaporkan pesan ke admin."
+reports_pm_enable: "Mengaktifkan pelaporan di pesan pribadi Anda!"
+reports_pm_disable: "Menonaktifkan pelaporan di pesan pribadi Anda!"
+reports_help: |
+  "- /report <reason>: balas pesan untuk laporkan ke admin.
+    - @admin: balas pesan untuk melaporkannya ke admin.
+  CATATAN: tidak satu pun dari ini akan dipicu jika digunakan oleh admin
+
+  *Hanya admin:*
+    - /report <on/off>: mengubah pengaturan laporan, atau melihat status saat ini.
+      - Jika dilakukan pada pesan pribadi, merubah status Anda.
+      - Jika dalam obrolan, merubah status obrolan itu."
+#Rules
+modname_rules: Aturan
+rules_shortcut_not_setup_properly: "Pintasan aturan untuk obrolan ini belum diatur dengan benar! Minta admin untuk memperbaikinya."
+rules_display: "Aturan di *{}* adalah:\n\n{}"
+rules_not_found: "Admin grup belum menetapkan aturan apa pun untuk obrolan ini. Ini tidak berarti disini tidak ada hukum berlaku...!"
+rules_button_click: "Klik tombol di bawah untuk melihat aturan grup ini."
+rules: "Peraturan"
+rules_success: "Berhasil menetapkan aturan untuk grup ini."
+rules_help: |
+  - /rules: dapatkan aturan untuk obrolan ini.
+
+  *Hanya admin:*
+   - /clearrules: hapus aturan untuk obrolan ini.
+   - /setrules <your rules here>: tetapkan aturan untuk obrolan ini.
+#Translator
+modname_translator: Penerjemah
+translator_translated: |
+  Sumber (`{}`):\n{}
+  Tujuan (`{}`):\n{}
+translator_err: Terjadi kesalahan saat menerjemahkan:\n {}
+translator_help: "- /tr (kode bahasa): Dapatkan terjemahan dari pesan yang dibalas."
+translator_no_str: Balas pesan untuk diterjemahkan!
+translator_no_args: Tentukan bahasa yang Anda inginkan untuk menerjemahkan pesan balasan!
+translator_animal_translated: |
+  Berhasil menerjemahkan hewan {}!
+  Binatang Anda berkata:\n`{}`
+translator_animal_lang:
+  - Aku cinta kamu
+  - Hai!
+  - Bersulang!
+  - Jangan sentuh aku!
+  - Hei! Saya lapar!
+  - Zzz...
+  - Persegi panjang hitam apa ini?
+  - Aku ingin keluar!
+  - Guk guk! Tunggu... apakah Anda merekam saya?!
+  - Aku tidak akan bicara!
+  - Dimana temanku?
+  - Saya butuh ke kamar mandi.
+  - Tinggalkan aku sendiri!
+  - Di mana testis saya?
+  - Kakiku kesakitan!
+  - Keluar dariku, SEKARANG!
+  - Mengapa kamu melecehkan saya??!
+  - Pergi dari sini.
+  - Aku akan memakanmu!
+  - Panggil pak! Ada masalah potensial! Seseorang datang ke wilayah kita!
+  - Apakah ada orang di sana? Saya kesepian dan butuh teman.
+  - Hentikan itu!
+  - Halo yang disana!
+  - Apa ini?
+  - Hah?
+  - Aduh!
+  - Mari main!
+  - Ini menyenangkan!
+  - Aku benar-benar takut padamu.
+  - Saya akan kencing!
+  - kaMu BaU.
+#URL Blacklist
+modname_urlblacklist: Daftar Hitam Domain
+url_blacklist_success: "Menambahkan domain <code>{}</code> ke daftar hitam!"
+url_blacklist_invalid: "Anda mencoba membuat daftar hitam dari url yang tidak valid"
+url_blacklist_success_2: Menambahkan domain <code>{}</code> ke daftar hitam.
+url_blacklist_invalid_2: "Beri tahu saya domain mana yang ingin Anda tambah ke daftar hitam."
+url_blacklist_remove_success: "Menghapus <code>{}</code> dari daftar hitam!"
+url_blacklist_remove_success_2: "Menghapus domain <code>{}</code> dari daftar hitam."
+url_blacklist_remove_invalid: "Ini bukan domain yang ada di daftar hitam...!"
+url_blacklist_remove_invalid_2: "Tidak ada domain ini yang ada, jadi tidak dihapus."
+url_blacklist_remove_success_3: "Menghapus <code>{}</code> dari daftar hitam di {}! {} tidak ada, jadi tidak dihapus."
+url_blacklist_remove_invalid_3: "Beri tahu saya domain mana yang ingin Anda hapus dari daftar hitam."
+url_blacklist_current: "Domain <b>daftar hitam</b> saat ini:\n"
+url_blacklist_no_existed: "Tidak ada domain dalam daftar hitam di sini!"
+urlblacklist_help: |
+  Daftar hitam domain digunakan untuk menghentikan domain tertentu agar tidak disebutkan dalam grup, Setiap kali url pada domain itu disebutkan, /
+  pesan akan segera dihapus.
+
+  *CATATAN:* daftar hitam domain tidak memengaruhi admin grup.
+
+  - /geturl: Lihat url yang masuk daftar hitam saat ini
+
+  *Hanya admin:*
+
+  - /addurl <urls>: Tambahkan domain ke daftar hitam. Bot akan secara otomatis mengurai url.
+  - /delurl <urls>: Hapus url dari daftar hitam
+#Greetings
+modname_welcome: Salam
+welcome_added_to_grp: Terima kasih telah menambahkan saya ke grup Anda! Jangan lupa untuk melihat saluran berita kami!
+welcome_mute_btn_unmuted: Tidak dibisukan! Anda sekarang dapat mengetik!
+welcome_mute_btn_old_user: Anda bukan pengguna baru!
+welcome_bot_owner_left: Nah, Tuan saya telah pergi, pestanya sekarang berakhir!
+welcome_mute_bot_cant_mute: Saya tidak bisa membatasi orang di sini! Pastikan saya seorang admin sehingga saya dapat membisukan seseorang!
+welcome_mute_enabled: Welcomemute telah diaktifkan! Anggota baru akan dibisukan hingga mereka mengklik tombol!
+welcome_mute_disabled: Welcomemute telah dinonaktifkan! Anggota baru tidak akan dibisukan lagi!
+welcome_mute_curr_settings: "Pengaturan saat ini adalah:\n\nKeamanan Selamat datang: `{}`\nAnggota akan dibisukan untuk: `{}`\nTeks khusus untuk tombol bersuara: `{}`"
+welcome_mute_time_none: Setiap anggota baru akan dibisukan sampai mereka menekan tombol selamat datang!
+welcome_mute_time: Setiap anggota baru akan dibisukan untuk {} atau sampai mereka menekan tombol selamat datang!
+welcome_mute_time_settings_none: Sekarang setiap anggota baru akan dibisukan sampai mereka menekan tombol selamat datang.
+welcome_mute_time_settings: Sekarang setiap anggota baru akan dibisukan untuk {} atau sampai mereka menekan tombol selamat datang.
+welcome_mute_btn_text_changed: "Teks tombol keamanan telah diubah menjadi: `{}`"
+welcome_mute_btn_curr_text: "Teks tombol keamanan saat ini adalah: `{}`"
+welcome_mute_btn_default_text: Klik di sini untuk membuktikan bahwa Anda manusia!
+welcome_mute_btn_text_reset: "Teks tombol keamanan telah disetel ulang ke: `{}`"
+welcome_clean_service_off: Saya akan meninggalkan pesan layanan.
+welcome_clean_service_on: Saya akan membersihkan pesan layanan.
+welcome_mute_time_short_none: (Diam selamanya sampai pengguna mengklik tombol)
+welcome_mute_time_short: (Membisukan pengguna untuk {})
+welcome_greet_set_on: Sekarang, anggota baru akan disambut dengan pesan sambutan hangat!
+welcome_greet_set_off: Sekarang, anggota baru tidak akan disambut dengan pesan sambutan hangat!
+welcome_goodbye_set_on: Anggota yang keluar akan diberi pesan perpisahan!
+welcome_goodbye_set_off: Anggota yang keluar tidak lagi diberi pesan perpisahan!
+welcome_set_welcome_no_text: Anda harus memberikan pesan selamat datang! Ketikkan `/help greetings` di pesan pribadi saya untuk mendapatkan bantuan untuk modul Salam!
+welcome_set_welcome_no_datatype: Tidak dapat menemukan tipe data pesan selamat datang.
+welcome_set_welcome_success: Berhasil menyetel pesan penyambutan khusus!
+welcome_reset_welcome_success: Berhasil menyetel ulang pesan selamat datang ke bawaan!
+welcome_set_goodbye_success: Berhasil menyetel pesan selamat tinggal kustom!
+welcome_reset_goodbye_success: Berhasil menyetel ulang pesan selamat tinggal ke default!
+welcome_clean_curr_on: Saat ini saya menghapus pesan sambutan yang berumur 2 hari!
+welcome_clean_curr_off: Saat ini saya tidak menghapus pesan sambutan lama!
+welcome_clean_set_on: Saya akan menghapus pesan sambutan lama (hingga 2 hari) mulai sekarang!
+welcome_clean_set_off: Saya tidak akan menghapus pesan sambutan lama lagi!
+welcome_chat_settings_pref: |
+  Obrolan ini memiliki pengaturan sambutan yang disetel ke `{}`.
+  Pengaturan selamat tinggal diatur ke `{}`.
+welcome_goodbye_settings: |
+  Obrolan ini memiliki pengaturan selamat tinggal yang diatur ke: `{}`.
+  *Pesan perpisahan (tidak mengisi {{}}) adalah:*
+welcome_settings: |
+  Obrolan ini memiliki pengaturan sambutan yang disetel ke: `{}`
+  Menghapus pesan sambutan lama: `{}`
+  Menghapus pesan layanan: `{}`
+  Membisukan pengguna saat mereka bergabung: `{}`
+  Bungkam teks tombol: `{}`
+  \n*Pesan sambutan (tidak mengisi {{}}) adalah:*
+welcome_help: |
+  Beri anggota Anda sambutan hangat dengan modul salam! Atau selamat tinggal yang menyedihkan... Tergantung anda mengaturnya!
+
+  Perintah yang tersedia adalah:
+  - /welcome <on/off/yes/no>: mengaktifkan / menonaktifkan pesan sambutan. Jika tidak ada opsi yang diberikan, mengembalikan ke awal pesan selamat datang dan pengaturan.
+  - /goodbye <on/off/yes/no>: mengaktifkan / menonaktifkan pesan selamat tinggal. Jika tidak ada opsi yang diberikan, mengembalikan ke awal pesan selamat tinggal dan pengaturan saat ini.
+  - /setwelcome <message>: setel pesan sambutan baru Anda! Fitur khusus dan tombol didukung, serta isi.
+  - /resetwelcome: me-reset pesan selamat datang Anda ke default; menghapus semua perubahan yang telah Anda buat.
+  - /setgoodbye <message>: setel pesan selamat tinggal baru Anda! Fitur khusus dan tombol didukung, serta isi.
+  - /resetgoodbye: me-reset pesan selamat tinggal Anda ke default; menghapus semua perubahan yang telah Anda buat.
+  - /cleanservice <on/off/yes/no>: menghapus semua pesan layanan; "x bergabung dengan grup" yang Anda lihat ketika orang bergabung.
+  - /cleanwelcome <on/off/yes/no>: menghapus pesan sambutan lama; ketika orang baru bergabung, pesan lama dihapus.
+  - /welcomemute <on/off/yes/no>: semua pengguna yang bergabung, dibisukan; sebuah tombol ditambahkan ke pesan selamat datang bagi mereka untuk membisukan diri mereka sendiri. Ini membuktikan bahwa mereka bukan bot!
+  - /welcomemutetime <Xw/d/h/m>: jika pengguna belum menekan tombol "unmute" di pesan selamat datang setelah waktu tertentu, mereka akan dibunyikan secara otomatis setelah periode waktu ini.
+  Catatan: jika Anda tidak ingin waktu bisu (bisukan pengguna sampai mereka menekan tombol), gunakan /welcomemutetime 0m.
+  - /setmutetext <new text>: Sesuaikan tombol "klik di sini untuk membuktikan bahwa Anda manusia" yang diperoleh dari mengaktifkan welcomemutes.
+  - /resetmutetext: me-reset tombol mute ke teks default.
+
+  Baca /markdownhelp untuk mempelajari tentang memformat teks Anda dan menyebutkan pengguna baru saat bergabung!
+
+  Isi:
+  Seperti disebutkan, Anda dapat menggunakan tag tertentu untuk mengisi pesan selamat datang Anda dengan pengguna atau info obrolan; Ada:
+  {first}: Nama depan pengguna.
+  {last}: Nama belakang pengguna.
+  {fullname}: Nama lengkap pengguna.
+  {username}: Nama pengguna pengguna; jika tidak ada, sebutkan pengguna.
+  {mention}: Menyebutkan pengguna, menggunakan nama depan mereka.
+  {id}: Id pengguna.
+  {chatname}: Nama obrolan.
+
+  Contoh cara menggunakan tambalan adalah dengan mengatur sambutan Anda, melalui:
+  /setwelcome Halo {first}! Selamat datang di {chatname}.
+
+  Anda dapat mengaktifkan /menonaktifkan pesan sambutan seperti contoh:
+  /welcome off
+
+  Jika Anda ingin menyimpan gambar, gif, atau stiker, atau data lain, lakukan hal berikut:
+  /setwelcome saat membalas stiker atau data apa pun yang Anda inginkan. Data ini sekarang akan dikirim untuk menyambut pengguna baru.
+
+  Tip: gunakan /welcome noformat untuk mengambil pesan selamat datang yang belum diformat.
+  Ini akan mengambil pesan selamat datang dan mengirimkannya tanpa memformatnya; memberi Anda markdown mentah, memungkinkan Anda untuk mengedit dengan mudah.
+  Ini juga berfungsi dengan /goodbye.
+#Users
+users_seen: "Saya pernah melihatnya di obrolan sebanyak <code>{}</code> kali."
+users_seen_is_bot: "Aku pernah melihatnya di... Wow. Apakah mereka menguntit saya? Mereka ada di semua tempat yang sama denganku... oh. Ini karena aku."
+#Userinfo
+modname_userinfo: Bio dan Tentang
+userinfo_about_not_set_they: "{} belum menetapkan pesan info tentang diri sendiri!"
+userinfo_about_not_set_you: Anda belum menetapkan pesan info tentang diri Anda!
+userinfo_about_set_success: Perbarui info Anda!
+userinfo_about_too_long: Info Anda harus dibawah {} karakter! Kamu punya {}.
+userinfo_bio_none_they: "{} tidak memiliki set bio."
+userinfo_bio_none_you: Tidak ada yang menetapkan bio untuk Anda!
+userinfo_bio_you_cant_set: Ha, Anda tidak dapat mengatur bio Anda sendiri! Anda berada di belas kasihan orang lain di sini...
+userinfo_bio_bot_sudo_only: Erm... ya, saya hanya mempercayai pengguna sudo untuk mengatur bio saya.
+userinfo_bio_sudo_sudo_only: Erm... ya, saya hanya mempercayai pengguna sudo untuk mengatur bio pengguna sudo.
+userinfo_bio_owner_nobio: Anda tidak mengatur bio master saya!
+userinfo_bio_too_long: Sebuah bio harus dibawah {} karakter! Anda mencoba mengatur {}.
+userinfo_bio_set_no_reply: Membalas pesan seseorang untuk mengatur bio mereka!
+userinfo_message_about_bio: <b>Tentang pengguna:</b>\n{}\n<b>Apa yang orang lain katakan:</b>\n{}
+userinfo_message_bio: <b>Apa yang orang lain katakan:</b>\n{bio}\n
+userinfo_message_about: <b>Tentang pengguna:</b>\n{}
+userinfo_what_i_and_other_say: <b>Tentang pengguna:</b>\n{}\n<b>Apa yang orang lain katakan:</b>\n{}
+userinfo_what_other_say: <b>Apa yang orang lain katakan:</b>\n\n
+userinfo_what_i_say: <b>Tentang pengguna:</b>\n{}
+userinfo_help: |
+  - /setbio <text>: saat membalas, akan menghemat bio pengguna lain
+  - /bio: akan mendapatkan bio Anda atau pengguna lain. Ini tidak dapat diatur sendiri.
+  - /setme <text>: akan mengatur info Anda
+  - /me: akan mendapatkan info Anda atau pengguna lain
+#Stickers
+modname_stickers: Stiker
+stickers_stickerid: ID Stiker:\n```{}```
+stickers_stickerid_no_reply: Harap balas stiker untuk mendapatkan ID-nya.
+stickers_getsticker_no_reply: Harap balas stiker untuk saya unggah PNG-nya.
+stickers_kang_error: Ya, saya tidak bisa mengatasinya.
+stickers_kang_success: |
+  Stiker berhasil ditambahkan ke [pack](t.me/addstickers/ {}).
+  Emoji: {}
+stickers_kang_only_img: Saya hanya bisa menyalin gambar!
+stickers_kang_invalid_emoji: "Kesalahan: Emoji tidak valid."
+stickers_kang_too_much: "Kesalahan: Paket maksimum tercapai. Tekan F untuk mengirim respecc."
+stickers_kang_no_reply: Silakan balas stiker atau gambar untuk menyimpan!\nOh, omong-omong. ini paket Anda:\n
+stickers_pack_name_exists: Paket stiker Anda dapat ditemukan [here](t.me/addstickers/%s)
+stickers_pack_contact_pm: Hubungi saya di PM dulu.
+stickers_pack_create_error: Gagal membuat paket stiker. Mungkin karena mejik terlarang.
+stickers_help: |
+  - /stickerid: balas stiker kepada saya untuk memberi tahu Anda ID file-nya.
+  - /getsticker: balas stiker ke saya untuk mengunggah file PNGnya.
+  - /kang: balas stiker untuk menambahkannya ke paket Anda.
+#Warnings
+modname_warns: Peringatan
+warns_warn_admin_no_warn: Saya tidak akan memperingatkan admin!
+warns_warn_admin_autofilter: Filter peringatan otomatis
+warns_max_warn_kick: "{} peringatan, {} telah ditendang!"
+warns_max_warn_ban: "{} peringatan, {} telah dicekal!"
+warns_warn_ban_log_channel: |
+  <b>{}:</b>
+  #WARN_BAN
+  <b>Admin:</b> {}
+  <b>Pengguna:</b> {} (<code>{}</code>)
+  <b>Alasan:</b> {}
+  <b>Jumlah Pelanggaran:</b> <code>{}/{}</code>
+warns_warn_log_channel: |
+  <b>{}:</b>
+  #WARN
+  <b>Admin:</b> {}
+  <b>Pengguna:</b> {} (<code>{}</code>)
+  <b>Alasan:</b> {}
+  <b>Penghitung:</b> <code>{}/{}</code>
+warns_remove_log_channel: |
+  <b>{}:</b>
+  #UNWARN
+  <b>Admin:</b> {}
+  <b>Pengguna:</b> {} (<code>{}</code>)
+warns_reset_log_channel: |
+  <b>{}:</b>
+  #RESETWARNS
+  <b>Admin:</b> {}
+  <b>Pengguna:</b> {} (<code>{}</code>)
+warns_set_warn_limit_log_channel: |
+  <b>{}:</b>
+  #SET_WARN_LIMIT
+  <b>Admin:</b> {}
+  Set batas pelanggaran ke <code>{}</code>
+warns_strength_on_log_channel: |
+  <b>{}:</b>\n
+  <b>Admin:</b> {}\n
+  Telah mengaktifkan peringatan yang kuat. Pengguna akan diblokir.
+warns_strength_off_log_channel: |
+  <b>{}:</b>\n
+  <b>Admin:</b> {}\n
+  Telah menonaktifkan peringatan yang kuat. Pengguna hanya akan ditendang.
+warns_btn_remove_warn: Hapus peringatan
+warns_btn_rules: Peraturan
+warns_user_warned: "{} <b> telah diperingatkan!</b>\nAnda memiliki {}/{} peringatan."
+warns_latest_warn_reason: \nPeringatan terakhir adalah karena:\n<code>{}</code>
+warns_remove_admin_only: Anda tidak berwenang menghapus peringatan ini! Hanya administrator yang dapat menghapus peringatan.
+warns_remove_success: Peringatan dihapus oleh {}.
+warns_user_has_no_warns: Pengguna tidak memiliki peringatan apa pun!
+warns_latest_remove_success: Peringatan terbaru telah dihapus!
+warns_reset_success: Peringatan telah diatur ulang!
+warns_list_warns: "Pengguna ini memiliki {}/{} peringatan karena alasan berikut:"
+warns_list_warns_no_reason: Pengguna ini memiliki {}/{} peringatan tetapi tidak ada alasan untuk itu.
+warns_list_warns_none: Pengguna ini tidak punya peringatan untuk apa pun!
+warns_handler_add_success: Pawang peringatan ditambahkan untuk '{}'!
+warns_filters_list_empty: Tidak ada filter peringatan yang aktif di sini!
+warns_filters_remove_success: Yap, saya akan berhenti memperingatkan orang untuk itu.
+warns_filter_doesnt_exist: Itu bukan filter peringatan saat ini - jalankan /warnlist untuk semua filter peringatan aktif.
+warns_filters_list: <b>Filter peringatan saat ini dalam obrolan ini:</b>\n
+warns_warnlimit_min_1: Batas minimum peringatan adalah 1!
+warns_warnlimit_updated_success: Memperbarui batas peringatan ke {}.
+warns_warnlimit_invalid_arg: Argumen yang tidak sah! Argumen harus berupa angka, tidak kurang dari 1.
+warns_warnlimit_current: Batas peringatan saat ini adalah {}.
+warns_strength_on_success: Melebihi batas peringatan sekarang akan mencekal pengguna!
+warns_strength_off_success: Melebihi batas peringatan sekarang akan mengeluarkan pengguna! Pengguna dapat bergabung setelah dikeluarkan.
+warns_strength_invalid_arg: Argumen yang tidak sah! Hanya on/yes/no/off yang diterima!
+warns_strength_off: Peringatan saat ini diatur untuk *mengeluarkan* pengguna ketika mereka melebihi batas.
+warns_strength_on: Peringatan saat ini diatur untuk *mencekal* pengguna ketika mereka melebihi batas.
+warns_help: |
+  - /warns<userhandle>: periksa berapa banyak peringatan yang dimiliki pengguna (dan lihat alasannya jika ada).
+  - /warnlist: daftar semua filter peringatan saat ini
+
+  *Hanya admin:*
+  - /warn <userhandle>: memperingatkan pengguna. Setelah 3 peringatan, pengguna akan diblokir dari grup. Bisa juga digunakan dengan membalas pesan.
+  - /resetwarn <userhandle>: atur ulang peringatan untuk pengguna. Bisa juga digunakan dengan membalas pesan.
+  - /addwarn <keyword> <reply message>: atur filter peringatan pada kata kunci tertentu. Jika Anda ingin kata kunci Anda \
+  menjadi sebuah kalimat, sertakan dengan tanda kutip, seperti: `/addwarn "sangat marah" Ini adalah pengguna yang marah`.
+  - /nowarn <keyword>: hentikan filter peringatan
+  - /warnlimit <num>: atur batas peringatan
+  - /strongwarn <on/yes/off/no>: Jika diatur ke on, melebihi batas peringatan akan mengakibatkan pencekalan dari grup. Jika off hanya akan menendang dari grup.
+  - /rmwarn <userhandle>: menghapus peringatan terbaru untuk pengguna. Bisa juga digunakan dengan membalas pesan.
+  - /unwarn <userhandle>: sama dengan /rmwarn
+### Helper functions
+#chat_status
+helpers_bot_cant_delete: Saya tidak dapat menghapus pesan di sini! Pastikan saya admin dan dapat menghapus pesan pengguna lain.
+helpers_bot_cant_pin: Saya tidak dapat menpin pesan di sini! Pastikan saya admin dan dapat menpin pesan pengguna lain.
+helpers_bot_cant_pro_demote: Saya tidak dapat mempromosikan/menurunkan orang di sini! Pastikan saya seorang admin dan dapat menunjuk admin baru.
+helpers_bot_cant_restrict: Saya tidak dapat membatasi orang di sini! Pastikan saya seorang admin dan dapat menunjuk admin baru.
+helpers_bot_not_admin: Saya bukan admin!
+helpers_user_not_admin: Siapa yang non-admin ini yang memberi tahu saya apa yang harus saya lakukan?
+#extraction
+helpers_user_not_in_db: |
+  Saya tidak memiliki pengguna itu di basis data pengguna saya.
+  Anda dapat berinteraksi dengan mereka jika Anda membalas pesan orang itu, atau meneruskan salah satu pesan mereka (ini hanya akan berfungsi jika pengguna tidak menyembunyikan akun mereka).
+#string_handling
+helpers_string_handling_invalid_time_amount: Jumlah waktu yang ditentukan tidak valid.
+helpers_string_handling_invalid_time_type: "Jenis waktu yang ditentukan tidak valid. Diharapkan menggunakan m, j, h, dapatkan: {}."
