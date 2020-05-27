@@ -8,6 +8,8 @@ from asyncio import wait, sleep
 from userbot.utils import admin_cmd
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.utils import register
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+BOTLOG = True
 
 
 @register(outgoing=True, pattern="^.cspam (.*)")
