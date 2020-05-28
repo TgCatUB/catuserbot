@@ -1,6 +1,6 @@
 """Send Chat Actions
-Syntax: .scha <option>
-        scha options: Options for sca 
+Syntax: .fake <option>
+        fake options: Options for fake
 
 typing
 contact
