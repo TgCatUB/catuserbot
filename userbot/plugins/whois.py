@@ -8,19 +8,13 @@
 """ Userbot module for getiing info about any user on Telegram(including you!). """
 
 import os
-
+import html
 from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
-from userbot.utils import register
-
-"""Get Telegram Profile Picture and other information
-Syntax: .whois @username"""
-
-import html
-from userbot.utils import admin_cmd
+from userbot.utils import register, admin_cmd
 
 
 @borg.on(admin_cmd(pattern="userinfo ?(.*)"))
@@ -157,7 +151,7 @@ async def get_full_user(event):
             except Exception as e:
                 return None, e
 
-@register(pattern=".whois(?: |$)(.*)", outgoing=True)
+@register(pattern="^\.whois(?: |$)(.*)", outgoing=True)
 async def who(event):
 
     await event.edit(
@@ -290,5 +284,7 @@ async def fetch_info(replied_user, event):
 CMD_HELP.update({
     "whois":
     ".whois <username> or reply to someones text with .whois\
+    \nUsage: Gets info of an user.\
+    .userinfo <username> or reply to someones text with .userinfo\
     \nUsage: Gets info of an user."
 })
