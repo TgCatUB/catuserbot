@@ -1,14 +1,28 @@
 
+""" Weebify a text,
+Ported from Saitama Bot. 
+By :- @PhycoNinja13b
+Modified by :- @kirito6969
+.weeb <text> """
 import re
 import time
 import requests
 from telethon import events
 from userbot import CMD_HELP
-from userbot.utils import register
+from userbot.utils import register, admin_cmd
 import asyncio
 import random
 
 
+
+
+normiefont = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+              'v', 'w', 'x', 'y', 'z']
+weebyfont = ['卂', '乃', '匚', '刀', '乇', '下', '厶', '卄', '工', '丁', '长', '乚', '从', '𠘨', '口', '尸', '㔿', '尺', '丂', '丅', '凵',
+             'リ', '山', '乂', '丫', '乙']
+
+
+    
 EMOJIS = [
     "😂",
     "😂",
@@ -317,6 +331,25 @@ async def spongemocktext(mock):
                 reply_text.append(charac)
 
         await mock.edit("".join(reply_text))
+        
+        
+        
+@borg.on(admin_cmd(pattern="weeb ?(.*)"))
+async def weebify(event):
+
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text   
+    if not args:
+        await event.edit("`What I am Supposed to Weebify U Dumb`")
+        return
+    string = '  '.join(args).lower()
+    for normiecharacter in string:
+        if normiecharacter in normiefont:
+            weebycharacter = weebyfont[normiefont.index(normiecharacter)]
+            string = string.replace(normiecharacter, weebycharacter)
+    await event.edit(string)        
 
 CMD_HELP.update({
     "fontstyles": ".cp (text) or .cp reply to message \
@@ -329,6 +362,8 @@ CMD_HELP.update({
 \nUsage: Invoke the feeling of chaos.\
 \n\n.mock (text) or .mock reply to message \
 \nUsage: random capital and small letters in given text.\
+\n\n.weeb (text) or .weeb reply to message \
+\nUsage: a different style of alphabets .\
 "
 })
         
