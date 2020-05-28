@@ -1,5 +1,5 @@
 """Send Chat Actions
-Syntax: .scha <option> <time in sec>
+Syntax: .scha <option>
         scha options: Options for sca 
 
 typing
@@ -14,11 +14,11 @@ document
 cancel"""
 
 import asyncio
-from uniborg.util import admin_cmd
-from userbot import CMD_HELP
 from userbot.utils import admin_cmd
+from userbot import CMD_HELP
+
  
-@borg.on(admin_cmd(pattern="scha ?(.*)"))
+@borg.on(admin_cmd(pattern="fake ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -29,3 +29,12 @@ async def _(event):
         action = input_str
     async with borg.action(event.chat_id, action):
         await asyncio.sleep(86400)  # type for 10 seconds
+        
+        
+        
+CMD_HELP.update({
+    "fake":
+    ".fake (action name)\
+    \nUsage: Type .fake (action name) this shows the fake action in the group  the actions are typing contact ,game, location, voice, round, video,photo,document.\
+    "
+})            
