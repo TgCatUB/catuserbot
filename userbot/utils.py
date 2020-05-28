@@ -200,7 +200,7 @@ def register(**args):
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     pattern = args.get('pattern', None)
-    disable_edited = args.get('disable_edited', False)
+    disable_edited = args.get('disable_edited', True)
 
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
