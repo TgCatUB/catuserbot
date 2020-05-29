@@ -46,5 +46,6 @@ async def _(event):
                 caption=cmd,
                 reply_to=reply_to_id
             )
+    await event.delete()
     os.system("rm -rf *.mp3")
     subprocess.check_output("rm -rf *.mp3",shell=True)
