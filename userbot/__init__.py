@@ -152,7 +152,7 @@ else:
 if not os.path.exists('bin'):
     os.mkdir('bin')
     
-from userbot.helpers import *
+from userbot.helpers import fonts as fonts
 
 binaries = {
     "https://raw.githubusercontent.com/yshalsager/megadown/master/megadown":
