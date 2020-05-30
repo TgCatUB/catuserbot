@@ -4,7 +4,8 @@ import re
 import time
 import requests
 from telethon import events
-from userbot import CMD_HELP
+from userbot import CMD_HELP, subscriptfont, superscriptfont, smallcapsfont, normaltext
+from userbot import downsidefont, smothtextfont, bubblesblackfont, bubblesfont, upsidefont
 from userbot.utils import register, admin_cmd
 import asyncio
 import random
@@ -20,52 +21,8 @@ weebyfont = ['卂', '乃', '匚', '刀', '乇', '下', '厶', '卄', '工', '丁
 
     
 EMOJIS = [
-    "😂",
-    "😂",
-    "👌",
-    "💞",
-    "👍",
-    "👌",
-    "💯",
-    "🎶",
-    "👀",
-    "😂",
-    "👓",
-    "👏",
-    "👐",
-    "🍕",
-    "💥",
-    "😩",
-    "😏",
-    "😞",
-    "👀",
-    "👅",
-    "😩",
-    "🤒",
-    "😳",
-    "🤯",
-    "😵",
-    "🥵",
-    "🤒",
-    "😠",
-    "😪",
-    "😴",
-    "🤤",
-    "👿",
-    "👽",
-    "😏",
-    "😒",
-    "😣",
-    "🤔",
-    "🤨",
-    "🧐",
-    "😝",
-    "🤪",
-    "🤩",
-    "☺️",
-    "😭",
-    "🥺",
-]
+    "😂", "😂", "👌", "💞", "👍", "👌", "💯","🎶","👀", "😂", "👓", "👏", "👐", "🍕", "💥",    "😩", "😏", "😞", "👀",  "👅", "😩",  "🤒", "😳",  "🤯",  "😵", "🥵", "🤒", "😠", "😪", "😴",  "🤤",  "👿",  "👽",  "😏", "😒", "😣",  "🤔",  "🤨", "🧐", "😝", "🤪", "🤩", "☺️", "😭", "🥺",
+       ]
 
 ZALG_LIST = [["̖",
               " ̗",
@@ -337,7 +294,7 @@ async def weebify(event):
         get = await event.get_reply_message()
         args = get.text   
     if not args:
-        await event.edit("`What I am Supposed to Weebify U Dumb`")
+        await event.edit("`What I am Supposed to Weebify `")
         return
     string = '  '.join(args).lower()
     for normiecharacter in string:
@@ -346,14 +303,7 @@ async def weebify(event):
             string = string.replace(normiecharacter, weebycharacter)
     await event.edit(string)        
 
-    
-upsidefont = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u','v', 'w', 'x', 'y', 'z',
-              'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y','Z',
-              '0', '1', '2', '3', '4','5', '6', '7', '8', '9', '_', "'", ',', '\\', '/', '!', '?']
-
-downsidefont = ['ɐ', 'q', 'ɔ', 'p', 'ə', 'ɟ', 'ɓ', 'ɥ', 'ı', 'ɾ', 'ʞ', 'l', 'ɯ', 'u', 'o', 'p', 'q', 'ɹ', 's', 'ʇ', 'n', 'ʌ', 'ʍ', 'x', 'ʎ', 'z',
-                '∀', 'B', 'Ↄ','◖', 'Ǝ', 'Ⅎ', '⅁', 'H',  'I',  'ſ','K',  '⅂',  'W',  'ᴎ',  'O','Ԁ',  'Ό',  'ᴚ',  'S',  '⊥','∩',  'ᴧ',  'M',  'X',  '⅄','Z',
-                '0',  '1', 'ᄅ',  'Ɛ',  'ᔭ', '5',  '9',  'Ɫ',  '8',  '6','¯',  ',',  "'",  '/',  '\\','¡', '¿']
+   
 
 @borg.on(admin_cmd(pattern="downside ?(.*)"))
 async def stylish_generator(event):
@@ -362,7 +312,7 @@ async def stylish_generator(event):
         get = await event.get_reply_message()
         args = get.text 
     if not args:    
-        await event.edit("Usage: `stylish your text goes here`")
+        await event.edit("What I am Supposed to change give text")
         return
     string = '  '.join(args).lower()
     for upsidecharacter in string:
@@ -372,13 +322,6 @@ async def stylish_generator(event):
     await event.edit(string)   
     
     
-normaltext = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-smallcapsfont = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-superscriptfont = "ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᵠᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰᶦʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻ¹²³⁴⁵⁶⁷⁸⁹⁰\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-subscriptfont = "ₐBCDₑFGₕᵢⱼₖₗₘₙₒₚQᵣₛₜᵤᵥWₓYZₐᵦ𝒸𝒹ₑ𝒻𝓰ₕᵢⱼₖₗₘₙₒₚᵩᵣₛₜᵤᵥ𝓌ₓᵧ𝓏₁₂₃₄₅₆₇₈₉₀\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-bubblesfont = "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-bubblesblackfont = "🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-smothtextfont = "ᗩᗷᑕᗞᗴᖴᏀᕼᏆᒍᏦᏞᗰᑎᝪᑭᑫᖇᔑᎢᑌᐯᗯ᙭ᎩᏃᗩᗷᑕᗞᗴᖴᏀᕼᏆᒍᏦᏞᗰᑎᝪᑭᑫᖇᔑᎢᑌᐯᗯ᙭ᎩᏃ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"   
     
 @borg.on(admin_cmd(pattern="smothtext ?(.*)"))
 async def stylish_generator(event):
@@ -387,7 +330,7 @@ async def stylish_generator(event):
         get = await event.get_reply_message()
         args = get.text 
     if not args:    
-        await event.edit("Usage: `stylish your text goes here`")
+        await event.edit("What I am Supposed to change give text")
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
@@ -403,7 +346,7 @@ async def stylish_generator(event):
         get = await event.get_reply_message()
         args = get.text 
     if not args:    
-        await event.edit("Usage: `stylish your text goes here`")
+        await event.edit("What I am Supposed to change give text")
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
@@ -419,7 +362,7 @@ async def stylish_generator(event):
         get = await event.get_reply_message()
         args = get.text 
     if not args:    
-        await event.edit("Usage: `stylish your text goes here`")
+        await event.edit("What I am Supposed to change give text")
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
@@ -435,7 +378,7 @@ async def stylish_generator(event):
         get = await event.get_reply_message()
         args = get.text 
     if not args:    
-        await event.edit("Usage: `stylish your text goes here`")
+        await event.edit("What I am Supposed to change give text")
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
@@ -451,7 +394,7 @@ async def stylish_generator(event):
         get = await event.get_reply_message()
         args = get.text 
     if not args:    
-        await event.edit("Usage: `stylish your text goes here`")
+        await event.edit("What I am Supposed to change give text")
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
@@ -467,7 +410,7 @@ async def stylish_generator(event):
         get = await event.get_reply_message()
         args = get.text 
     if not args:    
-        await event.edit("Usage: `stylish your text goes here`")
+        await event.edit("What I am Supposed to change give text")
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
