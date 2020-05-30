@@ -1,0 +1,82 @@
+
+import re
+import time
+import requests
+from telethon import events
+from userbot import CMD_HELP
+from userbot.utils import admin_cmd
+import asyncio
+import random
+
+
+
+ancientfont = ['ꍏ', 'ꌃ', 'ꉓ', 'ꀸ', 'ꍟ', 'ꎇ', 'ꁅ', 'ꃅ', 'ꀤ', 'ꀭ', 'ꀘ', '꒒', 'ꎭ', 'ꈤ', 'ꂦ', 'ᖘ', 'ꆰ', 'ꋪ', 'ꌗ', '꓄', 'ꀎ','ᐯ', 'ꅏ', 'ꊼ', 'ꌩ', 'ꁴ',
+              'ꍏ', 'ꌃ', 'ꉓ', 'ꀸ', 'ꍟ', 'ꎇ', 'ꁅ', 'ꃅ', 'ꀤ', 'ꀭ', 'ꀘ', '꒒', 'ꎭ', 'ꈤ', 'ꂦ', 'ᖘ', 'ꆰ', 'ꋪ', 'ꌗ', '꓄', 'ꀎ', 'ᐯ', 'ꅏ', 'ꊼ', 'ꌩ','ꁴ',
+              '0', '1', '2', '3', '4','5', '6', '7', '8', '9', '_', "'", ',', '\\', '/', '!', '?']
+
+normalfont = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u','v', 'w', 'x', 'y', 'z',
+              'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y','Z',
+              '0', '1', '2', '3', '4','5', '6', '7', '8', '9', '_', "'", ',', '\\', '/', '!', '?']
+
+musicalfont = ['♬', 'ᖲ', '¢', 'ᖱ', '៩', '⨏', '❡', 'Ϧ', 'ɨ', 'ɉ', 'ƙ', 'ɭ', '៣', '⩎', '០', 'ᖰ', 'ᖳ', 'Ʀ', 'ន', 'Ƭ', '⩏','⩔', 'Ɯ', '✗', 'ƴ', 'Ȥ',
+              '♬', 'ᖲ', '¢', 'ᖱ', '៩', '⨏', '❡', 'Ϧ', 'ɨ', 'ɉ', 'ƙ', 'ɭ', '៣', '⩎', '០', 'ᖰ', 'ᖳ', 'Ʀ', 'ន', 'Ƭ', '⩏', '⩔', 'Ɯ', '✗', 'ƴ','Ȥ',
+              '0', '1', '2', '3', '4','5', '6', '7', '8', '9', '_', "'", ',', '\\', '/', '!', '?']
+
+underlinedfont = [͍'͍a͍'͍,͍ '͍b͍'͍,͍ '͍c͍'͍,͍ '͍d͍'͍,͍ '͍e͍'͍,͍ '͍f͍'͍,͍ '͍g͍'͍,͍ '͍h͍'͍,͍ '͍i͍'͍,͍ '͍j͍'͍,͍ '͍k͍'͍,͍ '͍l͍'͍,͍ '͍m͍'͍,͍ '͍n͍'͍,͍ '͍o͍'͍,͍ '͍p͍'͍,͍ '͍q͍'͍,͍ '͍r͍'͍,͍ '͍s͍'͍,͍ '͍t͍'͍,͍ '͍u͍'͍,͍'͍v͍'͍,͍ '͍w͍'͍,͍ '͍x͍'͍,͍ '͍y͍'͍,͍ '͍z͍'͍,͍
+                  '͍A͍'͍,͍ '͍B͍'͍,͍ '͍C͍'͍,͍ '͍D͍'͍,͍ '͍E͍'͍,͍ '͍F͍'͍,͍ '͍G͍'͍,͍ '͍H͍'͍,͍ '͍I͍'͍,͍ '͍J͍'͍,͍ '͍K͍'͍,͍ '͍L͍'͍,͍ '͍M͍'͍,͍ '͍N͍'͍,͍ '͍O͍'͍,͍ '͍P͍'͍,͍ '͍Q͍'͍,͍ '͍R͍'͍,͍ '͍S͍'͍,͍ '͍T͍'͍,͍ '͍U͍'͍,͍ '͍V͍'͍,͍ '͍W͍'͍,͍ '͍X͍'͍,͍ '͍Y͍'͍,͍'͍Z͍'͍,͍
+                  '͍0͍'͍,͍ '͍1͍'͍,͍ '͍2͍'͍,͍ '͍3͍'͍,͍ '͍4͍'͍,͍'͍5͍'͍,͍ '͍6͍'͍,͍ '͍7͍'͍,͍ '͍8͍'͍,͍ '͍9͍'͍,͍ '͍_͍'͍,͍ "͍'͍"͍,͍ '͍,͍'͍,͍ '͍\͍\͍'͍,͍ '͍/͍'͍,͍ '͍!͍'͍,͍ '͍?͍'͍]͍
+         
+         
+@borg.on(admin_cmd(pattern="underlined ?(.*)"))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text 
+    if not args:    
+        await event.edit("What I am Supposed to change give text")
+        return
+    string = '  '.join(args).lower()
+    for normalfontcharacter in string:
+        if normalfontcharacter in normalfont:
+            bubblescharacter = underlinedfont[normalfont.index(normalfontcharacter)]
+            string = string.replace(normalfontcharacter, bubblescharacter)
+    await event.edit(string)          
+         
+                  
+@borg.on(admin_cmd(pattern="musical ?(.*)"))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text 
+    if not args:    
+        await event.edit("What I am Supposed to change give text")
+        return
+    string = '  '.join(args).lower()
+    for normalfontcharacter in string:
+        if normalfontcharacter in normalfont:
+            bubblescharacter = musicalfont[normalfont.index(normalfontcharacter)]
+            string = string.replace(normalfontcharacter, bubblescharacter)
+    await event.edit(string)                   
+                  
+@borg.on(admin_cmd(pattern="ancient ?(.*)"))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text 
+    if not args:    
+        await event.edit("What I am Supposed to change give text")
+        return
+    string = '  '.join(args).lower()
+    for normalfontcharacter in string:
+        if normalfontcharacter in normalfont:
+            bubblescharacter = ancientfont[normalfont.index(normalfontcharacter)]
+            string = string.replace(normalfontcharacter, bubblescharacter)
+    await event.edit(string)               
+    
+    
+    
+    
+    
