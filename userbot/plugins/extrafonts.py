@@ -22,7 +22,7 @@ musicalfont = ['♬', 'ᖲ', '¢', 'ᖱ', '៩', '⨏', '❡', 'Ϧ', 'ɨ', 'ɉ',
               '♬', 'ᖲ', '¢', 'ᖱ', '៩', '⨏', '❡', 'Ϧ', 'ɨ', 'ɉ', 'ƙ', 'ɭ', '៣', '⩎', '០', 'ᖰ', 'ᖳ', 'Ʀ', 'ន', 'Ƭ', '⩏', '⩔', 'Ɯ', '✗', 'ƴ','Ȥ',
               '0', '1', '2', '3', '4','5', '6', '7', '8', '9', '_', "'", ',', '\\', '/', '!', '?']
 
-@borg.on(admin_cmd(pattern="musical ?(.*)"))
+@borg.on(admin_cmd(pattern="fmusical ?(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
