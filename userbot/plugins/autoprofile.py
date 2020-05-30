@@ -27,7 +27,7 @@ DEFAULTUSER = str(AUTONAME) if AUTONAME else "𝙍𝘼𝘽⃤𝘽⸙𝙏"
 
 
 
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+FONT_FILE_TO_USE = "/userbot/FrozenCrystal3D-VaL6.otf"
 
 @command(pattern="^.autopic", outgoing=True)
 async def autopic(event):
