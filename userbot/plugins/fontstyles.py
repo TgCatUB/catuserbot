@@ -1,9 +1,5 @@
-
-""" Weebify a text,
-Ported from Saitama Bot. 
-By :- @PhycoNinja13b
-Modified by :- @kirito6969
-.weeb <text> """
+""" .weeb a text By :- @PhycoNinja13b
+ .downside by @sn12384"""
 import re
 import time
 import requests
@@ -376,9 +372,30 @@ async def stylish_generator(event):
     await event.edit(string)   
     
     
-   
+normaltext = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+smallcapsfont = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+superscript = "ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᵠᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰᶦʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻ¹²³⁴⁵⁶⁷⁸⁹⁰\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+subscript = "ₐBCDₑFGₕᵢⱼₖₗₘₙₒₚQᵣₛₜᵤᵥWₓYZₐᵦ𝒸𝒹ₑ𝒻𝓰ₕᵢⱼₖₗₘₙₒₚᵩᵣₛₜᵤᵥ𝓌ₓᵧ𝓏₁₂₃₄₅₆₇₈₉₀\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+bubbles = "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+bubblesblack = "🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+smothtext = "ᗩᗷᑕᗞᗴᖴᏀᕼᏆᒍᏦᏞᗰᑎᝪᑭᑫᖇᔑᎢᑌᐯᗯ᙭ᎩᏃᗩᗷᑕᗞᗴᖴᏀᕼᏆᒍᏦᏞᗰᑎᝪᑭᑫᖇᔑᎢᑌᐯᗯ᙭ᎩᏃ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"   
     
-    
+@borg.on(admin_cmd(pattern="smallcaps ?(.*)"))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text 
+    if not args:    
+        await event.edit("Usage: `stylish your text goes here`")
+        return
+    string = '  '.join(args).lower()
+    for normaltextcharacter in string:
+        if normaltextcharacter in normaltext:
+            smallcapscharacter = smallcapsfont[normaltext.index(normaltextcharacter)]
+            string = string.replace(normaltextcharacter, smallcapscharacter)
+    await event.edit(string) 
+  
 CMD_HELP.update({
     "fontstyles": ".cp (text) or .cp reply to message \
 \nUsage: inserts some emojis in between the texts\
