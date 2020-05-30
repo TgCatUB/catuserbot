@@ -4,14 +4,12 @@ import time
 import requests
 from telethon import events
 from userbot import CMD_HELP, fonts
-from userbot.utils import register, admin_cmd
+from userbot.utils import admin_cmd
 import asyncio
 import random
 
 
-
-
-@register(outgoing=True, pattern="^.str(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="str ?(.*)"))
 async def stretch(stret):
     """ Stretch it."""
     if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@", "!"):
@@ -35,7 +33,8 @@ async def stretch(stret):
         await stret.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.zal(?: |$)(.*)")
+
+@borg.on(admin_cmd(pattern="zal ?(.*)"))
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
     if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
@@ -74,8 +73,7 @@ async def zal(zgfy):
 
         await zgfy.edit("".join(reply_text))
 
-    
-@register(outgoing=True, pattern="^.cp(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="cp ?(.*)"))
 async def copypasta(cp_e):
     """ Copypasta the famous meme """
     if not cp_e.text[0].isalpha() and cp_e.text[0] not in ("/", "#", "@", "!"):
