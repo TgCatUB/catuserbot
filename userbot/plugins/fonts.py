@@ -3,12 +3,12 @@ import time
 import requests
 from telethon import events
 from userbot import CMD_HELP, fonts
-from userbot.utils import register, admin_cmd
+from userbot.utils import admin_cmd
 import asyncio
 import random
 
 
-@register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="vapor ?(.*)"))
 async def vapor(vpr):
     """ Vaporize everything! """
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
