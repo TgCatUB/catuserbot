@@ -42,21 +42,6 @@ async def stylish_generator(event):
             string = string.replace(normaltextcharacter, egyptfontcharacter)
     await event.edit(string) 
 
-@borg.on(admin_cmd(pattern="ancienttext ?(.*)"))
-async def stylish_generator(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
-        args = get.text 
-    if not args:    
-        await event.edit("What I am Supposed to change give text")
-        return
-    string = '  '.join(args).lower()
-    for normaltextcharacter in string:
-        if normaltextcharacter in normaltext:
-            anicenttextcharacter = anicenttextfont[normaltext.index(normaltextcharacter)]
-            string = string.replace(normaltextcharacter, anicenttextcharacter)
-    await event.edit(string) 
 
 @borg.on(admin_cmd(pattern="hwsl ?(.*)"))
 async def stylish_generator(event):
@@ -155,21 +140,7 @@ async def stylish_generator(event):
             string = string.replace(normaltextcharacter, littleboxtextcharacter)
     await event.edit(string) 
 
-@borg.on(admin_cmd(pattern="boxtext ?(.*)"))
-async def stylish_generator(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
-        args = get.text 
-    if not args:    
-        await event.edit("What I am Supposed to change give text")
-        return
-    string = '  '.join(args).lower()
-    for normaltextcharacter in string:
-        if normaltextcharacter in normaltext:
-            boxtextcharacter = boxtextfont[normaltext.index(normaltextcharacter)]
-            string = string.replace(normaltextcharacter, boxtextcharacter)
-    await event.edit(string) 
+
 
 @borg.on(admin_cmd(pattern="doubletext ?(.*)"))
 async def stylish_generator(event):
