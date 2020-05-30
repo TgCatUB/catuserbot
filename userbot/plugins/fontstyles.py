@@ -339,7 +339,7 @@ async def stylish_generator(event):
             string = string.replace(normaltextcharacter, smothtextcharacter)
     await event.edit(string)  
  
-@borg.on(admin_cmd(pattern="bubblesblack ?(.*)"))
+@borg.on(admin_cmd(pattern="blackbubbles ?(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
