@@ -109,32 +109,6 @@ async def copypasta(cp_e):
                     reply_text += owo.lower()
         reply_text += random.choice(fonts.EMOJIS)
         await cp_e.edit(reply_text)
-
-        
-@register(outgoing=True, pattern="^.mock(?: |$)(.*)")
-async def spongemocktext(mock):
-    """ Do it and find the real fun. """
-    if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
-        reply_text = list()
-        textx = await mock.get_reply_message()
-        message = mock.pattern_match.group(1)
-        if message:
-            pass
-        elif textx:
-            message = textx.text
-        else:
-            await mock.edit("`gIvE sOMEtHInG tO MoCk!`")
-            return
-
-        for charac in message:
-            if charac.isalpha() and random.randint(0, 1):
-                to_app = charac.upper() if charac.islower() else charac.lower()
-                reply_text.append(to_app)
-            else:
-                reply_text.append(charac)
-
-        await mock.edit("".join(reply_text))
-        
         
         
 @borg.on(admin_cmd(pattern="weeb ?(.*)"))
@@ -171,40 +145,8 @@ async def stylish_generator(event):
             string = string.replace(upsidecharacter, downsidecharacter)
     await event.edit(string)   
     
-    
-    
-@borg.on(admin_cmd(pattern="smothtext ?(.*)"))
-async def stylish_generator(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
-        args = get.text 
-    if not args:    
-        await event.edit("What I am Supposed to change give text")
-        return
-    string = '  '.join(args).lower()
-    for normaltextcharacter in string:
-        if normaltextcharacter in fonts.normaltext:
-            smothtextcharacter = fonts.smothtextfont[fonts.normaltext.index(normaltextcharacter)]
-            string = string.replace(normaltextcharacter, smothtextcharacter)
-    await event.edit(string)  
  
-@borg.on(admin_cmd(pattern="handsf ?(.*)"))
-async def stylish_generator(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
-        args = get.text 
-    if not args:    
-        await event.edit("What I am Supposed to change give text")
-        return
-    string = '  '.join(args).lower()
-    for normaltextcharacter in string:
-        if normaltextcharacter in fonts.normaltext:
-            hwslcharacter = fonts.hwslfont[fonts.normaltext.index(normaltextcharacter)]
-            string = string.replace(normaltextcharacter, hwslcharacter)
-    await event.edit(string) 
-    
+
 @borg.on(admin_cmd(pattern="subscript ?(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
@@ -237,21 +179,11 @@ async def stylish_generator(event):
             string = string.replace(normaltextcharacter, superscriptcharacter)
     await event.edit(string) 
  
-@borg.on(admin_cmd(pattern="ghostf ?(.*)"))
-async def stylish_generator(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
-        args = get.text 
-    if not args:    
-        await event.edit("What I am Supposed to change give text")
-        return
-    string = '  '.join(args).lower()
-    for normaltextcharacter in string:
-        if normaltextcharacter in fonts.normaltext:
-            ghostfontcharacter = fonts.ghostfontfont[fonts.normaltext.index(normaltextcharacter)]
-            string = string.replace(normaltextcharacter, ghostfontcharacter)
-    await event.edit(string) 
+ 
+
+    
+ 
+
 
 CMD_HELP.update({
     "funnyfonts": ".cp (text) or .cp reply to message \
@@ -260,8 +192,6 @@ CMD_HELP.update({
 \nUsage: Stretchs the given message.\
 \n\n.zal (text) or .zal reply to message \
 \nUsage: Invoke the feeling of chaos.\
-\n\n.mock (text) or .mock reply to message \
-\nUsage: random capital and small letters in given text.\
 \n\n.weeb (text) or .weeb reply to message \
 \nUsage: a different style of alphabets .\
 "
