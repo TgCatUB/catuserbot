@@ -50,39 +50,6 @@ async def stylish_generator(event):
     await event.edit(string) 
           
 
-@borg.on(admin_cmd(pattern="egyptf ?(.*)"))
-async def stylish_generator(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
-        args = get.text 
-    if not args:    
-        await event.edit("What I am Supposed to change give text")
-        return
-    string = '  '.join(args).lower()
-    for normaltextcharacter in string:
-        if normaltextcharacter in fonts.normaltext:
-            egyptfontcharacter = fonts.egyptfontfont[fonts.normaltext.index(normaltextcharacter)]
-            string = string.replace(normaltextcharacter, egyptfontcharacter)
-    await event.edit(string) 
-
-
-
-@borg.on(admin_cmd(pattern="maref ?(.*)"))
-async def stylish_generator(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
-        args = get.text 
-    if not args:    
-        await event.edit("What I am Supposed to change give text")
-        return
-    string = '  '.join(args).lower()
-    for normaltextcharacter in string:
-        if normaltextcharacter in fonts.normaltext:
-            nightmarecharacter = fonts.nightmarefont[fonts.normaltext.index(normaltextcharacter)]
-            string = string.replace(normaltextcharacter, nightmarecharacter)
-    await event.edit(string) 
 
 @borg.on(admin_cmd(pattern="blackbf ?(.*)"))
 async def stylish_generator(event):
@@ -116,21 +83,6 @@ async def stylish_generator(event):
             string = string.replace(normaltextcharacter, bubblescharacter)
     await event.edit(string) 
 
-@borg.on(admin_cmd(pattern="handcf ?(.*)"))
-async def stylish_generator(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
-        args = get.text 
-    if not args:    
-        await event.edit("What I am Supposed to change give text")
-        return
-    string = '  '.join(args).lower()
-    for normaltextcharacter in string:
-        if normaltextcharacter in fonts.normaltext:
-            hwcapitalcharacter = fonts.hwcapitalfont[fonts.normaltext.index(normaltextcharacter)]
-            string = string.replace(normaltextcharacter, hwcapitalcharacter)
-    await event.edit(string) 
 
 @borg.on(admin_cmd(pattern="tanf ?(.*)"))
 async def stylish_generator(event):
@@ -165,8 +117,7 @@ async def stylish_generator(event):
     await event.edit(string) 
 
 
-
-@borg.on(admin_cmd(pattern="doublef ?(.*)"))
+@borg.on(admin_cmd(pattern="smothtext ?(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -178,10 +129,9 @@ async def stylish_generator(event):
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            doubletextcharacter = fonts.doubletextfont[fonts.normaltext.index(normaltextcharacter)]
-            string = string.replace(normaltextcharacter, doubletextcharacter)
-    await event.edit(string) 
-    
+            smothtextcharacter = fonts.smothtextfont[fonts.normaltext.index(normaltextcharacter)]
+            string = string.replace(normaltextcharacter, smothtextcharacter)
+    await event.edit(string)     
     
     
 CMD_HELP.update({
