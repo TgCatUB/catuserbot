@@ -2,8 +2,8 @@ import os
 import sys
 from telethon.sessions import StringSession
 from telethon import TelegramClient
-
 from var import Var
+
 
 os.system("pip install --upgrade pip")
 if Var.STRING_SESSION:
@@ -27,7 +27,7 @@ ENV = os.environ.get("ENV", False)
 from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
 import asyncio
-
+from userbot.helpers import memeshelper as memes
 import pylast
 from pySmartDL import SmartDL
 from requests import get
@@ -151,6 +151,8 @@ else:
 # and giving them correct perms to work properly.
 if not os.path.exists('bin'):
     os.mkdir('bin')
+    
+from userbot.helpers import fonts as fonts
 
 binaries = {
     "https://raw.githubusercontent.com/yshalsager/megadown/master/megadown":
@@ -173,4 +175,5 @@ CMD_HELP = {}
 ISAFK = False
 AFKREASON = None
 # End of PaperPlaneExtended Support Vars
+
 
