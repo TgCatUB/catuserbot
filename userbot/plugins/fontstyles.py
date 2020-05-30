@@ -1,5 +1,4 @@
-""" .weeb a text By :- @PhycoNinja13b
- .downside by @sn12384"""
+""" plugin is modified by @sn12384 """
 import re
 import time
 import requests
