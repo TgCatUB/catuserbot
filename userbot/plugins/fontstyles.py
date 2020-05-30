@@ -374,12 +374,92 @@ async def stylish_generator(event):
     
 normaltext = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
 smallcapsfont = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-superscript = "ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᵠᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰᶦʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻ¹²³⁴⁵⁶⁷⁸⁹⁰\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-subscript = "ₐBCDₑFGₕᵢⱼₖₗₘₙₒₚQᵣₛₜᵤᵥWₓYZₐᵦ𝒸𝒹ₑ𝒻𝓰ₕᵢⱼₖₗₘₙₒₚᵩᵣₛₜᵤᵥ𝓌ₓᵧ𝓏₁₂₃₄₅₆₇₈₉₀\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-bubbles = "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-bubblesblack = "🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
-smothtext = "ᗩᗷᑕᗞᗴᖴᏀᕼᏆᒍᏦᏞᗰᑎᝪᑭᑫᖇᔑᎢᑌᐯᗯ᙭ᎩᏃᗩᗷᑕᗞᗴᖴᏀᕼᏆᒍᏦᏞᗰᑎᝪᑭᑫᖇᔑᎢᑌᐯᗯ᙭ᎩᏃ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"   
+superscriptfont = "ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᵠᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰᶦʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻ¹²³⁴⁵⁶⁷⁸⁹⁰\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+subscriptfont = "ₐBCDₑFGₕᵢⱼₖₗₘₙₒₚQᵣₛₜᵤᵥWₓYZₐᵦ𝒸𝒹ₑ𝒻𝓰ₕᵢⱼₖₗₘₙₒₚᵩᵣₛₜᵤᵥ𝓌ₓᵧ𝓏₁₂₃₄₅₆₇₈₉₀\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+bubblesfont = "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+bubblesblackfont = "🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"
+smothtextfont = "ᗩᗷᑕᗞᗴᖴᏀᕼᏆᒍᏦᏞᗰᑎᝪᑭᑫᖇᔑᎢᑌᐯᗯ᙭ᎩᏃᗩᗷᑕᗞᗴᖴᏀᕼᏆᒍᏦᏞᗰᑎᝪᑭᑫᖇᔑᎢᑌᐯᗯ᙭ᎩᏃ1234567890\"'#$%&()*+,-./:;<=>?@[\\]^_`{|}~"   
     
+@borg.on(admin_cmd(pattern="smothtext ?(.*)"))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text 
+    if not args:    
+        await event.edit("Usage: `stylish your text goes here`")
+        return
+    string = '  '.join(args).lower()
+    for normaltextcharacter in string:
+        if normaltextcharacter in normaltext:
+            smothtextcharacter = smothtextfont[normaltext.index(normaltextcharacter)]
+            string = string.replace(normaltextcharacter, smothtextcharacter)
+    await event.edit(string)  
+ 
+@borg.on(admin_cmd(pattern="bubblesblack ?(.*)"))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text 
+    if not args:    
+        await event.edit("Usage: `stylish your text goes here`")
+        return
+    string = '  '.join(args).lower()
+    for normaltextcharacter in string:
+        if normaltextcharacter in normaltext:
+            bubblesblackcharacter = bubblesblackfont[normaltext.index(normaltextcharacter)]
+            string = string.replace(normaltextcharacter, bubblesblackcharacter)
+    await event.edit(string)  
+ 
+@borg.on(admin_cmd(pattern="bubbles ?(.*)"))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text 
+    if not args:    
+        await event.edit("Usage: `stylish your text goes here`")
+        return
+    string = '  '.join(args).lower()
+    for normaltextcharacter in string:
+        if normaltextcharacter in normaltext:
+            bubblescharacter = bubblesfont[normaltext.index(normaltextcharacter)]
+            string = string.replace(normaltextcharacter, bubblescharacter)
+    await event.edit(string) 
+ 
+@borg.on(admin_cmd(pattern="subscript ?(.*)"))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text 
+    if not args:    
+        await event.edit("Usage: `stylish your text goes here`")
+        return
+    string = '  '.join(args).lower()
+    for normaltextcharacter in string:
+        if normaltextcharacter in normaltext:
+            subscriptcharacter = subscriptfont[normaltext.index(normaltextcharacter)]
+            string = string.replace(normaltextcharacter, subscriptcharacter)
+    await event.edit(string)  
+ 
+@borg.on(admin_cmd(pattern="superscript ?(.*)"))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text 
+    if not args:    
+        await event.edit("Usage: `stylish your text goes here`")
+        return
+    string = '  '.join(args).lower()
+    for normaltextcharacter in string:
+        if normaltextcharacter in normaltext:
+            superscriptcharacter = superscriptfont[normaltext.index(normaltextcharacter)]
+            string = string.replace(normaltextcharacter, superscriptcharacter)
+    await event.edit(string) 
+ 
 @borg.on(admin_cmd(pattern="smallcaps ?(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
