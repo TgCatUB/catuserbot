@@ -4,7 +4,7 @@ import re
 import time
 import requests
 from telethon import events
-from userbot import CMD_HELP
+from userbot import CMD_HELP, fonts
 from userbot.helpers import fonts
 from userbot.utils import register, admin_cmd
 import asyncio
