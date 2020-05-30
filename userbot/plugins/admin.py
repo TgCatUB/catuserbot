@@ -700,7 +700,7 @@ async def kick(usr):
             f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
 
 
-@register(outgoing=True, pattern="^.users$")
+@register(outgoing=True, pattern="^.users ?(.*)")
 @errors_handler
 async def get_users(show):
     """ For .users command, list all of the users in a chat. """
@@ -739,7 +739,7 @@ async def get_users(show):
             reply_to=show.id,
         )
         remove("userslist.txt")
-
+        
 @register(outgoing=True, pattern="^.iundlt$")
 async def _(event):
     if event.fwd_from:
