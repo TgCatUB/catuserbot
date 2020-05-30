@@ -414,8 +414,8 @@ async def stylish_generator(event):
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
-        if normaltextcharacter in normaltext:
-            smallcapscharacter = smallcapsfont[normaltext.index(normaltextcharacter)]
+        if normaltextcharacter in fonts.normaltext:
+            smallcapscharacter = fonts.smallcapsfont[normaltext.index(normaltextcharacter)]
             string = string.replace(normaltextcharacter, smallcapscharacter)
     await event.edit(string) 
   
