@@ -122,7 +122,7 @@ async def copypasta(cp_e):
         for owo in message:
             if owo == " ":
                 reply_text += random.choice(fonts.EMOJIS)
-            elif owo in EMOJIS:
+            elif owo in fonts.EMOJIS:
                 reply_text += owo
                 reply_text += random.choice(fonts.EMOJIS)
             elif owo.lower() == b_char:
