@@ -3,7 +3,7 @@ import time
 import requests
 from telethon import events
 from userbot import CMD_HELP, fonts
-from userbot.utils import register, admin_cmd
+from userbot.utils import admin_cmd
 import asyncio
 import random
 
@@ -77,7 +77,8 @@ async def stylish_generator(event):
     await event.edit(string) 
     
     
-@register(outgoing=True, pattern="^.mock(?: |$)(.*)")
+
+@borg.on(admin_cmd(pattern="mock(?: |$)(.*)"))
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
     if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
