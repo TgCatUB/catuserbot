@@ -11,130 +11,6 @@ import random
 
 
 
-
-normiefont = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
-              'v', 'w', 'x', 'y', 'z']
-weebyfont = ['卂', '乃', '匚', '刀', '乇', '下', '厶', '卄', '工', '丁', '长', '乚', '从', '𠘨', '口', '尸', '㔿', '尺', '丂', '丅', '凵',
-             'リ', '山', '乂', '丫', '乙']
-
-
-    
-EMOJIS = [
-    "😂", "😂", "👌", "💞", "👍", "👌", "💯","🎶","👀", "😂", "👓", "👏", "👐", "🍕", "💥",    "😩", "😏", "😞", "👀",  "👅", "😩",  "🤒", "😳",  "🤯",  "😵", "🥵", "🤒", "😠", "😪", "😴",  "🤤",  "👿",  "👽",  "😏", "😒", "😣",  "🤔",  "🤨", "🧐", "😝", "🤪", "🤩", "☺️", "😭", "🥺",
-       ]
-
-ZALG_LIST = [["̖",
-              " ̗",
-              " ̘",
-              " ̙",
-              " ̜",
-              " ̝",
-              " ̞",
-              " ̟",
-              " ̠",
-              " ̤",
-              " ̥",
-              " ̦",
-              " ̩",
-              " ̪",
-              " ̫",
-              " ̬",
-              " ̭",
-              " ̮",
-              " ̯",
-              " ̰",
-              " ̱",
-              " ̲",
-              " ̳",
-              " ̹",
-              " ̺",
-              " ̻",
-              " ̼",
-              " ͅ",
-              " ͇",
-              " ͈",
-              " ͉",
-              " ͍",
-              " ͎",
-              " ͓",
-              " ͔",
-              " ͕",
-              " ͖",
-              " ͙",
-              " ͚",
-              " ",
-              ],
-             [" ̍",
-              " ̎",
-              " ̄",
-              " ̅",
-              " ̿",
-              " ̑",
-              " ̆",
-              " ̐",
-              " ͒",
-              " ͗",
-              " ͑",
-              " ̇",
-              " ̈",
-              " ̊",
-              " ͂",
-              " ̓",
-              " ̈́",
-              " ͊",
-              " ͋",
-              " ͌",
-              " ̃",
-              " ̂",
-              " ̌",
-              " ͐",
-              " ́",
-              " ̋",
-              " ̏",
-              " ̽",
-              " ̉",
-              " ͣ",
-              " ͤ",
-              " ͥ",
-              " ͦ",
-              " ͧ",
-              " ͨ",
-              " ͩ",
-              " ͪ",
-              " ͫ",
-              " ͬ",
-              " ͭ",
-              " ͮ",
-              " ͯ",
-              " ̾",
-              " ͛",
-              " ͆",
-              " ̚",
-              ],
-             [" ̕",
-              " ̛",
-              " ̀",
-              " ́",
-              " ͘",
-              " ̡",
-              " ̢",
-              " ̧",
-              " ̨",
-              " ̴",
-              " ̵",
-              " ̶",
-              " ͜",
-              " ͝",
-              " ͞",
-              " ͟",
-              " ͠",
-              " ͢",
-              " ̸",
-              " ̷",
-              " ͡",
-              ]]
-
-
 @register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
 async def vapor(vpr):
     """ Vaporize everything! """
@@ -211,13 +87,13 @@ async def zal(zgfy):
 
                 if randint == 0:
                     charac = charac.strip() + \
-                        random.choice(ZALG_LIST[0]).strip()
+                        random.choice(fonts.ZALG_LIST[0]).strip()
                 elif randint == 1:
                     charac = charac.strip() + \
-                        random.choice(ZALG_LIST[1]).strip()
+                        random.choice(fonts.ZALG_LIST[1]).strip()
                 else:
                     charac = charac.strip() + \
-                        random.choice(ZALG_LIST[2]).strip()
+                        random.choice(fonts.ZALG_LIST[2]).strip()
 
             reply_text.append(charac)
 
@@ -239,16 +115,16 @@ async def copypasta(cp_e):
             await cp_e.edit("`😂🅱️IvE👐sOME👅text👅for✌️Me👌tO👐MAkE👀iT💞funNy!💦`")
             return
 
-        reply_text = random.choice(EMOJIS)
+        reply_text = random.choice(fonts.EMOJIS)
         b_char = random.choice(
             message
         ).lower()  # choose a random character in the message to be substituted with 🅱️
         for owo in message:
             if owo == " ":
-                reply_text += random.choice(EMOJIS)
+                reply_text += random.choice(fonts.EMOJIS)
             elif owo in EMOJIS:
                 reply_text += owo
-                reply_text += random.choice(EMOJIS)
+                reply_text += random.choice(fonts.EMOJIS)
             elif owo.lower() == b_char:
                 reply_text += "🅱️"
             else:
@@ -256,7 +132,7 @@ async def copypasta(cp_e):
                     reply_text += owo.upper()
                 else:
                     reply_text += owo.lower()
-        reply_text += random.choice(EMOJIS)
+        reply_text += random.choice(fonts.EMOJIS)
         await cp_e.edit(reply_text)
 
         
@@ -297,8 +173,8 @@ async def weebify(event):
         return
     string = '  '.join(args).lower()
     for normiecharacter in string:
-        if normiecharacter in normiefont:
-            weebycharacter = weebyfont[normiefont.index(normiecharacter)]
+        if normiecharacter in fonts.normiefont:
+            weebycharacter = fonts.weebyfont[fonts.normiefont.index(normiecharacter)]
             string = string.replace(normiecharacter, weebycharacter)
     await event.edit(string)        
 
@@ -315,8 +191,8 @@ async def stylish_generator(event):
         return
     string = '  '.join(args).lower()
     for upsidecharacter in string:
-        if upsidecharacter in upsidefont:
-            downsidecharacter = downsidefont[upsidefont.index(upsidecharacter)]
+        if upsidecharacter in fonts.upsidefont:
+            downsidecharacter = fonts.downsidefont[fonts.upsidefont.index(upsidecharacter)]
             string = string.replace(upsidecharacter, downsidecharacter)
     await event.edit(string)   
     
@@ -333,8 +209,8 @@ async def stylish_generator(event):
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
-        if normaltextcharacter in normaltext:
-            smothtextcharacter = smothtextfont[normaltext.index(normaltextcharacter)]
+        if normaltextcharacter in fonts.normaltext:
+            smothtextcharacter = fonts.smothtextfont[fonts.normaltext.index(normaltextcharacter)]
             string = string.replace(normaltextcharacter, smothtextcharacter)
     await event.edit(string)  
  
@@ -349,8 +225,8 @@ async def stylish_generator(event):
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
-        if normaltextcharacter in normaltext:
-            bubblesblackcharacter = bubblesblackfont[normaltext.index(normaltextcharacter)]
+        if normaltextcharacter in fonts.normaltext:
+            bubblesblackcharacter = fonts.bubblesblackfont[fonts.normaltext.index(normaltextcharacter)]
             string = string.replace(normaltextcharacter, bubblesblackcharacter)
     await event.edit(string)  
  
@@ -365,8 +241,8 @@ async def stylish_generator(event):
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
-        if normaltextcharacter in normaltext:
-            bubblescharacter = bubblesfont[normaltext.index(normaltextcharacter)]
+        if normaltextcharacter in fonts.normaltext:
+            bubblescharacter = fonts.bubblesfont[fonts.normaltext.index(normaltextcharacter)]
             string = string.replace(normaltextcharacter, bubblescharacter)
     await event.edit(string) 
  
@@ -381,8 +257,8 @@ async def stylish_generator(event):
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
-        if normaltextcharacter in normaltext:
-            subscriptcharacter = subscriptfont[normaltext.index(normaltextcharacter)]
+        if normaltextcharacter in fonts.normaltext:
+            subscriptcharacter = fonts.subscriptfont[fonts.normaltext.index(normaltextcharacter)]
             string = string.replace(normaltextcharacter, subscriptcharacter)
     await event.edit(string)  
  
@@ -397,8 +273,8 @@ async def stylish_generator(event):
         return
     string = '  '.join(args).lower()
     for normaltextcharacter in string:
-        if normaltextcharacter in normaltext:
-            superscriptcharacter = superscriptfont[normaltext.index(normaltextcharacter)]
+        if normaltextcharacter in fonts.normaltext:
+            superscriptcharacter = fonts.superscriptfont[fonts.normaltext.index(normaltextcharacter)]
             string = string.replace(normaltextcharacter, superscriptcharacter)
     await event.edit(string) 
  
