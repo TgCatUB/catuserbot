@@ -3,7 +3,7 @@ import sys
 from telethon.sessions import StringSession
 from telethon import TelegramClient
 from var import Var
-
+from pylast import LastFMNetwork, md5
 
 os.system("pip install --upgrade pip")
 if Var.STRING_SESSION:
