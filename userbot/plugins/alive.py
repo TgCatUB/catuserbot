@@ -22,10 +22,7 @@ async def amireallyalive(alive):
                      #"[Deploy this userbot Now](https://github.com/sandy1709/catuserbot)"
                     )
 
-    
-CMD_HELP.update({
-    "alive":
-    ".alive\
-    \nUsage: Type .alive to see wether your bot is working or not.\
-    "
-})    
+       
+CMD_HELP.update({"alive": ['alive',
+    " - `.alive` : Type .alive to see wether your bot is working or not. "]
+}) 
