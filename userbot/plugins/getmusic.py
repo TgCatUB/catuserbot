@@ -58,5 +58,6 @@ async def _(event):
     
     
 CMD_HELP.update({"getmusic": ['getmusic',
-    " - `.song` query : finds the song you entered in query and sends it "]
+    " - `.song` query : finds the song you entered in query and sends it "
+    " - `.song <Name>` or `.song (replied message)`"]
 })    
