@@ -15,6 +15,9 @@ from userbot.utils import admin_cmd
 @borg.on(admin_cmd(pattern="img ?(.*)"))
 async def img_sampler(event):
     await event.edit("`Processing dude wait..`")
+    reply_to_id = event.message.id
+    if event.reply_to_msg_id:
+        reply_to_id = event.reply_to_msg_id
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
@@ -45,6 +48,6 @@ async def img_sampler(event):
     # passing the arguments to the function
     paths = response.download(arguments)
     lst = paths[0][query]
-    await event.client.send_file(await event.client.get_input_entity(event.chat_id), lst)
+    await event.client.send_file(await event.client.get_input_entity(event.chat_id), lst,reply_to=reply_to_id)
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await event.delete()
