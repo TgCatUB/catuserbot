@@ -1,6 +1,6 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 
@@ -45,7 +45,7 @@ LastLog = False
 # ================================================
 
 
-@register(outgoing=True, pattern="^\.lastfm$")
+@register(outgoing=True, pattern="^.lastfm$")
 async def last_fm(lastFM):
     """ For .lastfm command, fetch scrobble data from last.fm. """
     await lastFM.edit("Processing...")
@@ -60,8 +60,8 @@ async def last_fm(lastFM):
             image = None
             pass
         tags = await gettags(isNowPlaying=True, playing=playing)
-        rectrack = parse.quote_plus(f"{playing}")
-        rectrack = sub("^", "https://www.youtube.com/results?search_query=",
+        rectrack = parse.quote(f"{playing}")
+        rectrack = sub("^", "https://open.spotify.com/search/",
                        rectrack)
         if image:
             output = f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
@@ -76,9 +76,9 @@ async def last_fm(lastFM):
             print(i)
             printable = await artist_and_song(track)
             tags = await gettags(track)
-            rectrack = parse.quote_plus(str(printable))
+            rectrack = parse.quote(str(printable))
             rectrack = sub("^",
-                           "https://www.youtube.com/results?search_query=",
+                           "https://open.spotify.com/search/",
                            rectrack)
             output += f"• [{printable}]({rectrack})\n"
             if tags:
@@ -177,7 +177,7 @@ async def get_curr_track(lfmbio):
     RUNNING = False
 
 
-@register(outgoing=True, pattern=r"^\.lastbio (on|off)")
+@register(outgoing=True, pattern=r"^.lastbio (on|off)")
 async def lastbio(lfmbio):
     arg = lfmbio.pattern_match.group(1).lower()
     global LASTFMCHECK
@@ -201,7 +201,7 @@ async def lastbio(lfmbio):
         await lfmbio.edit(LFM_BIO_ERR)
 
 
-@register(outgoing=True, pattern=r"^\.lastlog (on|off)")
+@register(outgoing=True, pattern=r"^.lastlog (on|off)")
 async def lastlog(lstlog):
     arg = lstlog.pattern_match.group(1).lower()
     global LastLog
