@@ -10,6 +10,7 @@ cowpy
 cryptg
 csvfaker
 DateTime
+python-dotenv
 emoji
 gitpython
 google-api-python-client==1.7.11
