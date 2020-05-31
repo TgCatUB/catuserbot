@@ -21,7 +21,7 @@ async def img_sampler(event):
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
-    elif reply:
+    elif reply.text:
         query = reply.message
     else:
     	await event.edit("`What I am Supposed to Search `")
