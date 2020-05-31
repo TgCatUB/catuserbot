@@ -13,7 +13,7 @@ from PIL import Image
 import random
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 from userbot import bot, CMD_HELP
-from userbot.utils import admin_cmd
+from userbot.utils import register
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.types import InputStickerSetID
 from telethon.tl.types import DocumentAttributeSticker
@@ -32,7 +32,7 @@ KANGING_STR = [
 ]
 
 
-@borg.on(admin_cmd(pattern="kang (.*)"))
+@register(outgoing=True, pattern="^.kang")
 async def kang(args):
     """ For .kang command, kangs stickers or creates new ones. """
     user = await bot.get_me()
@@ -266,8 +266,7 @@ async def resize_photo(photo):
     return image
 
 
-
-@borg.on(admin_cmd(pattern="stkrinfo (.*)"))
+@register(outgoing=True, pattern="^.stkrinfo$")
 async def get_pack_info(event):
     if not event.is_reply:
         await event.edit("`I can't fetch info from nothing, can I ?!`")
