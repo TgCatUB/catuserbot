@@ -23,6 +23,6 @@ async def amireallyalive(alive):
                     )
 
        
-CMD_HELP.update({"alive": ['alive',
-    " - `.alive` : Type .alive to see wether your bot is working or not. "]
+CMD_HELP.update({"alive": "'alive',\
+    \n`.alive` : Type .alive to see wether your bot is working or not. "
 }) 
