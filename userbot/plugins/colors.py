@@ -3,8 +3,8 @@ Syntax: .color <color_code>"""
 from telethon import events
 import os
 from PIL import Image, ImageColor
-from uniborg.util import admin_cmd
-
+from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
 @borg.on(admin_cmd(pattern="color (.*)"))
 async def _(event):
@@ -34,4 +34,12 @@ async def _(event):
             os.remove("UniBorg.png")
             await event.delete()
     else:
-        await event.edit("Syntax: `.color <color_code>`")
+        await event.edit("Syntax: `.color <color_code>` example : `.color #ff0000`")
+        
+        
+        
+        
+         
+CMD_HELP.update({"colors": "`.color` <color_code>  :\
+      \nUSAGE: sends you a plain image of the color example :`.color #ff0000` . "
+}) 
