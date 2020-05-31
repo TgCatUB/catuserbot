@@ -54,7 +54,6 @@ async def img_sampler(event):
     await event.delete()
 
     
-CMD_HELP.update({"images": "'images',\
-    \n`.img` <query> : Do an Image Search on Google.\ 
-    \n`.img <Name>` or `.img (replied message)`" 
+CMD_HELP.update({"images": "`.img <Name>` or `.img (replied message)`\
+    \nUSAGE: do google image search and sends 5 images." 
 })    
