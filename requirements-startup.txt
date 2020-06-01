@@ -25,13 +25,16 @@ humanize
 jotquote
 justwatch
 kwot
+lxml
 lyricsgenius
 oauth2client
 patool
 Pillow
 programmingquotes
+psutil
 psycopg2
 pybase64
+pyDownload
 pyfiglet
 PyGithub
 pylast
@@ -39,7 +42,9 @@ PyLyrics
 pySmartDL
 python-barcode
 python-magic
+pytube>=9.5.1
 pytuneteller
+pytz
 qrcode
 regex
 requests
