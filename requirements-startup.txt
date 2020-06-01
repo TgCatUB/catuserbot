@@ -51,7 +51,7 @@ requests
 search-engine-parser
 selenium
 speedtest-cli
-spotify_token==0.1.2
+spotify_token
 sqlalchemy
 telegraph
 urbandict
