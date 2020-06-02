@@ -54,7 +54,7 @@ async def _(event):
         start = datetime.now()
         file_name = input_str
         reply_message = await event.get_reply_message()
-       # c_time = time.time()
+        c_time = time.time()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
         downloaded_file_name = await borg.download_media(
@@ -89,6 +89,7 @@ async def _(event):
         start = datetime.now()
         file_name = input_str
         reply_message = await event.get_reply_message()
+        c_time = time.time()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
         downloaded_file_name = await borg.download_media(
