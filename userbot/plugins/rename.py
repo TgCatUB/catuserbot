@@ -113,7 +113,7 @@ async def _(event):
                 reply_to=event.message.id,
                 thumb=thumb,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "trying to download")
+                    progress(d, t, event, c_time, "trying to upload")
                 )
                 
             )
