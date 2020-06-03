@@ -5,7 +5,7 @@ from platform import uname
 import sys
 from telethon import events, functions, __version__
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@mrconfused"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 @command(pattern="^.help ?(.*)")
 async def cmd_list(event):
@@ -36,7 +36,7 @@ async def cmd_list(event):
                 await event.edit(input_str + " is not a valid plugin!")
         else:
             help_string = f"""Userbot Helper.. Provided by {DEFAULTUSER} \n\n
-`Userbot Helper to reveal all the commands`\n__Do .help plugin_name for commands, in case popup doesn't appear.__"""
+`Userbot Helper to reveal all the commands`\n__Do .help plugin_name for commands, in case popup doesn't appear.__\n__Do .info plugin_name for usage"""
             results = await bot.inline_query(  # pylint:disable=E0602
                 tgbotusername,
                 help_string
@@ -58,32 +58,3 @@ async def _(event):
     await event.edit(result.stringify())
 
 
-@borg.on(admin_cmd(pattern="config"))  # pylint:disable=E0602
-async def _(event):
-    if event.fwd_from:
-        return
-    result = await borg(functions.help.GetConfigRequest())  # pylint:disable=E0602
-    result = result.stringify()
-    logger.info(result)  # pylint:disable=E0602
-    await event.edit("""Telethon UserBot powered by catuserbot""")
-
-
-@borg.on(admin_cmd(pattern="syntax (.*)"))
-async def _(event):
-    if event.fwd_from:
-        return
-    plugin_name = event.pattern_match.group(1)
-
-    if plugin_name in CMD_LIST:
-        help_string = CMD_LIST[plugin_name].__doc__
-        unload_string = f"Use `.unload {plugin_name}` to remove this plugin.\n           ©catuserbot"
-        
-        if help_string:
-            plugin_syntax = f"Syntax for plugin **{plugin_name}**:\n\n{help_string}\n{unload_string}"
-        else:
-            plugin_syntax = f"No DOCSTRING has been setup for {plugin_name} plugin."
-    else:
-
-        plugin_syntax = "Enter valid **Plugin** name.\nDo `.info` or `.help` to get list of valid plugin names."
-
-    await event.edit(plugin_syntax)            
