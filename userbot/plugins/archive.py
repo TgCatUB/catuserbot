@@ -32,7 +32,7 @@ extracted = Config.TMP_DOWNLOAD_DIRECTORY + "extracted/"
 if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
-@borg.on(admin_cmd(pattern="compress"))
+@borg.on(admin_cmd(pattern="zip"))
 async def _(event):
     if event.fwd_from:
         return
