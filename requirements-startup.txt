@@ -50,7 +50,6 @@ regex
 requests
 search-engine-parser
 selenium
-spcli
 speedtest-cli
 spotify_token
 sqlalchemy
