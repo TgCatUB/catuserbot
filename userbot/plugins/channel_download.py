@@ -22,9 +22,9 @@ async def get_media(event):
     	pass
     channel_username= event.text
     command = ['ls','temp','|','wc','-l' ]
-    limit = channel_username[6:9]
+    counter = int(channel_username.split(' ', 1)[0])
     print(limit)
-    channel_username = channel_username[11: ]
+    spam_message = str(channel_username.split(' ', 1)[1])
     print(channel_username)
     await event.edit("Downloading Media From this Channel.")
     msgs = await borg.get_messages(channel_username, limit=int(limit))
@@ -42,9 +42,7 @@ async def get_media(event):
     output = output.replace("\n'","")
     await event.edit("Downloaded "+output+" files.")
              
-             
-             
-             
+         
              
              
 @borg.on(admin_cmd(pattern=r"geta"))
