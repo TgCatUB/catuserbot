@@ -20,11 +20,11 @@ async def get_media(event):
         os.makedirs("./temp/")
     except:
     	pass
-    channel_username= event.text
+    
     command = ['ls','temp','|','wc','-l' ]
-    counter = int(channel_username.split(' ', 1)[0])
+    limit = int(event.pattern_match.group(1).split(' ', 1)[0])
     print(limit)
-    spam_message = str(channel_username.split(' ', 1)[1])
+    channel_username = str(event.pattern_match.group(1).split(' ', 1)[1])
     print(channel_username)
     await event.edit("Downloading Media From this Channel.")
     msgs = await borg.get_messages(channel_username, limit=int(limit))
