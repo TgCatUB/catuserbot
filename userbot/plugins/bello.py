@@ -14,7 +14,7 @@ from userbot.utils import admin_cmd
 
 
 
-@borg.on(admin_cmd(pattern=r"belo"))
+@borg.on(admin_cmd(pattern=r"bello"))
 async def _(event):
     if event.fwd_from:
         return
