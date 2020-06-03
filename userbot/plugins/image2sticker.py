@@ -1,4 +1,5 @@
-"""QuotLy: Avaible commands: .sbot
+"""
+QuotLy: Avaible commands: .sbot
 """
 import datetime
 from telethon import events
@@ -6,7 +7,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern="itos ?(.*)"))
+@borg.on(admin_cmd(pattern="imgtos ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
