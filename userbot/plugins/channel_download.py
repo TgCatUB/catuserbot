@@ -21,10 +21,11 @@ async def get_media(event):
     except:
     	pass
     
+    catty = event.text
     command = ['ls','temp','|','wc','-l' ]
-    limit = int(event.pattern_match.group(1).split(' ', 1)[0])
+    limit = int(catty.split(' ')[1])
     print(limit)
-    channel_username = str(event.pattern_match.group(1).split(' ', 1)[1])
+    channel_username = str(catty.split(' ')[2])
     print(channel_username)
     await event.edit("Downloading Media From this Channel.")
     msgs = await borg.get_messages(channel_username, limit=int(limit))
