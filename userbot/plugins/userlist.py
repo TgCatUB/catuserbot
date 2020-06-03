@@ -8,7 +8,7 @@ from telethon.errors.rpcerrorlist import (UserIdInvalidError,
                                           
 @borg.on(events.NewMessage(pattern=r"\.users ?(.*)", outgoing=True))
 async def get_users(show):
-    """ For .userslist command, list all of the users of the chat. """
+    """ For .users command, list all of the users of the chat. """
     if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
         if not show.is_group:
             await show.edit("Are you sure this is a group?")
