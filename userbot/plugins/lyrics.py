@@ -10,19 +10,19 @@ import os
 import lyricsgenius
 import random
 
-from userbot.events import register
+from userbot.utils import admin_cmd
 from userbot import CMD_HELP, LOGS
 
 GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
 
 
-@register(outgoing=True, pattern="^.lyrics(?: |$)(.*)")
+@borg.on(admin_cmd(outgoing=True, pattern="lyrics(?: |$)(.*)"))
 async def lyrics(lyric):
     if r"-" in lyric.text:
         pass
     else:
-        await lyric.edit("`Error: please use '-' as divider for <artist> and <song>`\n"
-                         "eg: `Nicki Minaj - Super Bass`")
+        await lyric.edit("Error: please use '-' as divider for <artist> and <song>\n"
+                         "eg: `.lyrics Nicki Minaj - Super Bass`")
         return
 
     if GENIUS is None:
