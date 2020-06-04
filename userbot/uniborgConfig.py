@@ -77,9 +77,7 @@ class Config(object):
         "notification_mtab_manager",
         "dbhelper",
         "fban_gban",
-        "gban",
         "unbanmute",
-        "antispam"
     ]
     # Get your own API key from https://www.remove.bg/ or
     # feel free to use http://telegram.dog/Remove_BGBot
@@ -111,9 +109,9 @@ class Config(object):
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
-  #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
-   # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
-   # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
+    #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
+    # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
+    # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
 
     
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
