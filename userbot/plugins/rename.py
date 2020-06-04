@@ -26,7 +26,7 @@ from pySmartDL import SmartDL
 
 
 
-thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 
 def get_video_thumb(file, output=None, width=90):
