@@ -30,6 +30,7 @@ lyricsgenius
 oauth2client
 patool
 Pillow
+platform
 programmingquotes
 psutil
 psycopg2
