@@ -156,11 +156,10 @@ def remove_plugin(shortname):
     except:
         raise ValueError
 
-def admin_cmd(**args):
+def admin_cmd(pattern=None, **args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
-    pattern = args.get("pattern", None)
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     allow_sudo = args.get("allow_sudo", False)
