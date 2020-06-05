@@ -28,7 +28,7 @@ BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
-@register(outgoing=True, pattern=r"^.log(?: |$)([\s\S]*)")
+@register(outgoing=True, pattern=r"^.save(?: |$)([\s\S]*)")
 async def log(log_text):
     """ For .log command, forwards a message or the command argument to the bot logs group """
     if BOTLOG:
@@ -76,7 +76,17 @@ async def monito_p_m_s(event):
                 print(exc_type, fname, exc_tb.tb_lineno)
                 print(e) 
 
-
+@borg.on(admin_cmd(pattern="log ?(.*)"))
+async def set_no_log_p_m(event):
+    if Config.PM_LOGGR_BOT_API_ID is not None:
+        reason = event.pattern_match.group(1)
+        chat = await event.get_chat()
+        if event.is_private:
+            if chat.id in NO_PM_LOG_USERS:
+                NO_PM_LOG_USERS.remove(chat.id)
+                await event.edit("Will Log Messages from this chat")
+                await asyncio.sleep(3)
+                await event.delete()
                 
                 
 @borg.on(admin_cmd(pattern="nolog ?(.*)"))
