@@ -8,6 +8,10 @@ from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
 from pySmartDL import SmartDL
 from dotenv import load_dotenv
+import asyncio
+from userbot.helpers import memeshelper as memes
+import pylast
+from pySmartDL import SmartDL
 from requests import get
 
 os.system("pip install --upgrade pip")
@@ -20,6 +24,7 @@ else:
 
 
 CMD_LIST = {}
+SUDO_LIST = {}
 # for later purposes
 CMD_HELP = {}
 INT_PLUG = ""
@@ -29,13 +34,7 @@ LOAD_PLUG = {}
 ENV = os.environ.get("ENV", False)
 """ PPE initialization. """
 
-from logging import basicConfig, getLogger, INFO, DEBUG
-from distutils.util import strtobool as sb
-import asyncio
-from userbot.helpers import memeshelper as memes
-import pylast
-from pySmartDL import SmartDL
-from requests import get
+
 # Bot Logs setup:
 if bool(ENV):
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
