@@ -39,7 +39,7 @@ async def _(event):
             await event.edit("Invited Successfully")
             
             
-@borg.on(sudo_cmd(pattern="invite ?(.*)"))
+@borg.on(sudo_cmd(pattern="invite ?(.*)",allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
