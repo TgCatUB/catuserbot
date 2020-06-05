@@ -49,6 +49,6 @@ async def approve_p_m(event):
         if event.is_private:
             if chat.id not in NO_PM_LOG_USERS:
                 NO_PM_LOG_USERS.append(chat.id)
-                await event.edit("Won't Log Messages from this chat")
+                await event.edit("Won't Log Messages from this chat 56545")
                 await asyncio.sleep(3)
                 await event.delete()
