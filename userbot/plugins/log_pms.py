@@ -1,23 +1,60 @@
 """Log PMs
 Check https://t.me/tgbeta/3505"""
+from asyncio import sleep
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, bot
+from telethon.tl.types import MessageEntityMentionName
+from telethon.utils import get_input_location
+from userbot.utils import admin_cmd
+from os import remove
+from telethon import events
+import asyncio
+from datetime import datetime
+import time
+from userbot.utils import register, errors_handler, admin_cmd
 import asyncio
 import logging
 import os
 import sys
-
-from telethon import events
 from telethon.tl import functions, types
 from telethon.tl.types import Channel, Chat, User
-
 from userbot.uniborgConfig import Config
-from userbot.utils import admin_cmd
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.WARN)
 
-global NO_PM_LOG_USERS
 NO_PM_LOG_USERS = []
 
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+
+
+@register(outgoing=True, pattern=r"^.save(?: |$)([\s\S]*)")
+async def log(log_text):
+    """ For .log command, forwards a message or the command argument to the bot logs group """
+    if BOTLOG:
+        if log_text.reply_to_msg_id:
+            reply_msg = await log_text.get_reply_message()
+            await reply_msg.forward_to(BOTLOG_CHATID)
+        elif log_text.pattern_match.group(1):
+            user = f"#LOG / Chat ID: {log_text.chat_id}\n\n"
+            textx = user + log_text.pattern_match.group(1)
+            await bot.send_message(BOTLOG_CHATID, textx)
+        else:
+            await log_text.edit("`What am I supposed to log?`")
+            return
+        await log_text.edit("`Logged Successfully`")
+    else:
+        await log_text.edit("`This feature requires Logging to be enabled!`")
+    await sleep(2)
+    await log_text.delete()
+
+
+    
+@register(outgoing=True, pattern="^.kickme$")
+async def kickme(leave):
+    """ Basically it's .kickme command """
+    await leave.edit("Nope, no, no, I go away")
+    await leave.client.kick_participant(leave.chat_id, 'me')
 
 @borg.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def monito_p_m_s(event):
@@ -39,16 +76,27 @@ async def monito_p_m_s(event):
                 print(exc_type, fname, exc_tb.tb_lineno)
                 print(e) 
 
-@borg.on(admin_cmd(pattern=f"nolog", outgoing=True))
-async def approve_p_m(event):
-    if event.fwd_from:
-        return
-    reason = event.pattern_match.group(1)
-    chat = await event.get_chat()
-    if Config.NO_LOG_P_M_S:
+@borg.on(admin_cmd(pattern="log ?(.*)"))
+async def set_no_log_p_m(event):
+    if Config.PM_LOGGR_BOT_API_ID is not None:
+        reason = event.pattern_match.group(1)
+        chat = await event.get_chat()
+        if event.is_private:
+            if chat.id in NO_PM_LOG_USERS:
+                NO_PM_LOG_USERS.remove(chat.id)
+                await event.edit("Will Log Messages from this chat")
+                await asyncio.sleep(3)
+                await event.delete()
+                
+                
+@borg.on(admin_cmd(pattern="nolog ?(.*)"))
+async def set_no_log_p_m(event):
+    if Config.PM_LOGGR_BOT_API_ID is not None:
+        reason = event.pattern_match.group(1)
+        chat = await event.get_chat()
         if event.is_private:
             if chat.id not in NO_PM_LOG_USERS:
                 NO_PM_LOG_USERS.append(chat.id)
                 await event.edit("Won't Log Messages from this chat")
                 await asyncio.sleep(3)
-                await event.delete()
+                await event.delete()                
