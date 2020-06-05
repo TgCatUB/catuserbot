@@ -15,8 +15,8 @@ from userbot.utils import admin_cmd
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.WARN)
 
-global NO_PM_LOG_USERS
-NO_PM_LOG_USERS = []
+
+NO_PM_LOG_USERS = {}
 
 
 @borg.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
@@ -39,16 +39,17 @@ async def monito_p_m_s(event):
                 print(exc_type, fname, exc_tb.tb_lineno)
                 print(e) 
 
-@borg.on(admin_cmd(pattern=f"nolog", outgoing=True))
-async def approve_p_m(event):
-    if event.fwd_from:
-        return
-    reason = event.pattern_match.group(1)
-    chat = await event.get_chat()
-    if Config.NO_LOG_P_M_S:
+
+                
+                
+@borg.on(admin_cmd(pattern="nolog ?(.*)"))
+async def set_no_log_p_m(event):
+    if Config.PM_LOGGR_BOT_API_ID is not None:
+        reason = event.pattern_match.group(1)
+        chat = await event.get_chat()
         if event.is_private:
             if chat.id not in NO_PM_LOG_USERS:
                 NO_PM_LOG_USERS.append(chat.id)
-                await event.edit("Won't Log Messages from this chat 56545")
+                await event.edit("Won't Log Messages from this chat")
                 await asyncio.sleep(3)
-                await event.delete()
+                await event.delete()                
