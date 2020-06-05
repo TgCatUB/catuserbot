@@ -50,7 +50,7 @@ async def _(event):
     if not reply_message.media:
        await event.edit("```Reply to sticker message```")
        return
-    chat = "@Stickerdownloadbot"
+    chat = "@StickerToPicbot"
     sender = reply_message.sender
     if reply_message.sender.bot:
        await event.edit("```Reply to actual users message.```")
@@ -58,11 +58,11 @@ async def _(event):
     await event.edit("```Making a image```")
     async with event.client.conversation(chat) as conv:
           try:     
-              response = conv.wait_event(events.NewMessage(incoming=True,from_users=220255550))
+              response = conv.wait_event(events.NewMessage(incoming=True,from_users=1020956520))
               await event.client.forward_messages(chat, reply_message)
               response = await response 
           except YouBlockedUserError: 
-              await event.reply("``` unblock me (@Stickerdownloadbot) to work```")
+              await event.reply("``` unblock me (@StickerToPicbot) to work```")
               return
           if response.text.startswith("Hi!"):
              await event.edit("```Can you kindly disable your forward privacy settings for good?```")
