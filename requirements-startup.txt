@@ -2,7 +2,7 @@ aiofiles
 aiohttp
 aria2p
 asyncurban
-beautifulsoup4==4.8.1
+beautifulsoup4
 cfscrape
 coffeehouse
 covid
