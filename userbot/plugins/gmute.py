@@ -4,6 +4,7 @@ from userbot.uniborgConfig import Config
 
 from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
 import asyncio
+from userbot.utils import sudo_cmd
 
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_CHANNEL_BOT_API_ID
