@@ -19,6 +19,7 @@ from telethon.errors.rpcerrorlist import (UserIdInvalidError,
 from telethon.tl.functions.channels import (EditAdminRequest,
                                             EditBannedRequest,
                                             EditPhotoRequest)
+from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
@@ -335,6 +336,7 @@ async def startmute(event):
         else:
             return await event.edit("Please reply to a user or add their userid into the command to mute them.")
         chat_id = event.chat_id
+        replied_user = await event.client(GetFullUserRequest(userid))
         chat = await event.get_chat()
         if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None: 
             if chat.admin_rights.delete_messages is True:
@@ -359,7 +361,7 @@ async def startmute(event):
     if BOTLOG:
       await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
-                    f"USER: [{reply.first_name}](tg://user?id={userid})\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
     
     
@@ -386,6 +388,7 @@ async def endmute(event):
         else:
             return await event.edit("Please reply to a user or add their userid into the command to unmute them.")
         chat_id = event.chat_id
+        replied_user = await event.client(GetFullUserRequest(userid))
         if not is_muted(userid, chat_id):
             return await event.edit("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
         try:
@@ -398,7 +401,7 @@ async def endmute(event):
     if BOTLOG:
       await event.client.send_message(
                 BOTLOG_CHATID, "#UNMUTE\n"
-                f"USER: [{reply.first_name}](tg://user?id={userid})\n"
+                f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 
