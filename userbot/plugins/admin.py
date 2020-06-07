@@ -322,6 +322,7 @@ async def startmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True
+    user = await get_user_from_event(event)    
     if any([x in event.raw_text for x in ("/mute", "!mute")]):
         await asyncio.sleep(0.5)
     else:
@@ -359,7 +360,7 @@ async def startmute(event):
     if BOTLOG:
       await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
-                    f"USER: [{user.first_name}](tg://user?id={userid})\n"
+                    f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
     
     
@@ -373,6 +374,7 @@ async def endmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True
+    user = await get_user_from_event(event)    
     if any([x in event.raw_text for x in ("/unmute", "!unmute")]):
         await asyncio.sleep(0.5)
     else:
@@ -398,7 +400,7 @@ async def endmute(event):
     if BOTLOG:
       await event.client.send_message(
                 BOTLOG_CHATID, "#UNMUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={userid})\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 
