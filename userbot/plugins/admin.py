@@ -109,7 +109,7 @@ async def set_group_photo(gpic):
             await gpic.edit(PP_TOO_SMOL)
         except ImageProcessFailedError:
             await gpic.edit(PP_ERROR)
-        if BOTLOG:
+    if BOTLOG:
         await promt.client.send_message(
             BOTLOG_CHATID, "#GROUPPIC\n"
             f"Group profile pic succesfully changed "
