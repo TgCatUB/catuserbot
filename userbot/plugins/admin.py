@@ -110,9 +110,9 @@ async def set_group_photo(gpic):
         except ImageProcessFailedError:
             await gpic.edit(PP_ERROR)
     if BOTLOG:
-        await promt.client.send_message(
+        await gpic.client.send_message(
             BOTLOG_CHATID, "#GROUPPIC\n"
-            f"Group profile pic succesfully changed "
+            f"Group profile pic changed "
             f"CHAT: {gpic.chat.title}(`{gpic.chat_id}`)")        
 
 
@@ -359,7 +359,7 @@ async def startmute(event):
     if BOTLOG:
       await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
-                    f"USER: [{userid.first_name}](tg://user?id={userid})\n"
+                    f"USER: [{reply.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
     
     
@@ -398,7 +398,7 @@ async def endmute(event):
     if BOTLOG:
       await event.client.send_message(
                 BOTLOG_CHATID, "#UNMUTE\n"
-                f"USER: [{userid.first_name}](tg://user?id={userid})\n"
+                f"USER: [{reply.first_name}](tg://user?id={userid})\n"
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 
