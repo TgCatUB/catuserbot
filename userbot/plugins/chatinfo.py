@@ -260,10 +260,10 @@ async def get_users(show):
 CMD_HELP.update({
     "chatinfo":
     ".chatinfo or .chatinfo <username of group>\
-\nUsage: Shows you the total information of the required chat\ 
-\n\n.adminlist\
-\nUsage: Retrieves a list of admins in the chat.\
-\n\n.users or .users <name of member>\
-\nUsage: Retrieves all (or queried) users in the chat."
-})
+     \nUsage: Shows you the total information of the required chat.\ 
+     \n\n.adminlist\
+     \nUsage: Retrieves a list of admins in the chat.\
+     \n\n.users or .users <name of member>\
+     \nUsage: Retrieves all (or queried) users in the chat."      
+     })
         
