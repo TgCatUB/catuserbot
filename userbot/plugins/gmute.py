@@ -18,6 +18,7 @@ async def startgmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True   
+    replied_user = await event.client(GetFullUserRequest(event.chat_id))
     reply = await event.get_reply_message()
     if event.pattern_match.group(1) is not None:
         userid = event.pattern_match.group(1)
@@ -40,7 +41,7 @@ async def startgmute(event):
     if BOTLOG:
       await event.client.send_message(
                     BOTLOG_CHATID, "#GMUTE\n"
-                    f"USER: [{reply.first_name}](tg://user?id={userid})\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")    
 
 @command(outgoing=True, pattern=r"^.ungmute ?(\d+)?")
@@ -53,6 +54,7 @@ async def endgmute(event):
         await asyncio.sleep(3)
         private = True  
     reply = await event.get_reply_message()
+    replied_user = await event.client(GetFullUserRequest(event.chat_id))
     if event.pattern_match.group(1) is not None:
         userid = event.pattern_match.group(1)
     elif reply is not None:
@@ -73,7 +75,7 @@ async def endgmute(event):
     if BOTLOG:
       await event.client.send_message(
                     BOTLOG_CHATID, "#UNGMUTE\n"
-                    f"USER: [{reply.first_name}](tg://user?id={userid})\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")         
 
 
