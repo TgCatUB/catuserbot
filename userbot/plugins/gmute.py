@@ -18,8 +18,7 @@ async def startgmute(event):
     elif event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
-        private = True
-    user, reason = await get_user_from_event(event)    
+        private = True   
     reply = await event.get_reply_message()
     if event.pattern_match.group(1) is not None:
         userid = event.pattern_match.group(1)
@@ -53,8 +52,7 @@ async def endgmute(event):
     elif event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
-        private = True
-    user, reason = await get_user_from_event(event)    
+        private = True  
     reply = await event.get_reply_message()
     if event.pattern_match.group(1) is not None:
         userid = event.pattern_match.group(1)
