@@ -141,7 +141,7 @@ async def promote(promt):
     await promt.edit("`Promoting...`")
     user, rank = await get_user_from_event(promt)
     if not rank:
-        rank = "Administrator"  # Just in case.
+        rank = "Admin"  # Just in case.
     if user:
         pass
     else:
@@ -359,7 +359,7 @@ async def startmute(event):
     if BOTLOG:
       await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
-                    f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                    f"USER: [{user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
     
     
@@ -398,7 +398,7 @@ async def endmute(event):
     if BOTLOG:
       await event.client.send_message(
                 BOTLOG_CHATID, "#UNMUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"USER: [{user.first_name}](tg://user?id={userid})\n"
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 
