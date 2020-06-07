@@ -359,7 +359,7 @@ async def startmute(event):
     if BOTLOG:
       await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
-                    f"USER: [{user.first_name}](tg://user?id={sender_id})\n"
+                    f"USER: [{userid.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
     
     
@@ -398,7 +398,7 @@ async def endmute(event):
     if BOTLOG:
       await event.client.send_message(
                 BOTLOG_CHATID, "#UNMUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={sender_id})\n"
+                f"USER: [{userid.first_name}](tg://user?id={userid})\n"
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 
