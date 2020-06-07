@@ -13,6 +13,12 @@ from math import sqrt
 from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
 from telethon.utils import get_input_location
 from userbot import CMD_HELP
+from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
+from telethon.errors.rpcerrorlist import (UserIdInvalidError,
+                                          MessageTooLongError)
+from telethon.errors import (BadRequestError, ChatAdminRequiredError,
+                             ImageProcessFailedError, PhotoCropSizeSmallError,
+                             UserAdminInvalidError)
 
 @borg.on(admin_cmd(pattern="chatinfo(?: |$)(.*)", outgoing=True))
 async def info(event):
