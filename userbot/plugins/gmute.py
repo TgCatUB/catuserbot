@@ -41,7 +41,7 @@ async def startgmute(event):
     if BOTLOG:
       await event.client.send_message(
                     BOTLOG_CHATID, "#GMUTE\n"
-                    f"USER: [{user.first_name}](tg://user?id={reply.sender_id})\n"
+                    f"USER: [{reply.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")    
 
 @command(outgoing=True, pattern=r"^.ungmute ?(\d+)?")
@@ -74,7 +74,7 @@ async def endgmute(event):
     if BOTLOG:
       await event.client.send_message(
                     BOTLOG_CHATID, "#UNGMUTE\n"
-                    f"USER: [{user.first_name}](tg://user?id={reply.sender_id})\n"
+                    f"USER: [{reply.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")         
 
 
