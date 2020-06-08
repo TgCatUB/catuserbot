@@ -11,11 +11,11 @@ import asyncio
 from time import sleep
 
 COLLECTION_STRING = [
-  "star-wars-wallpaper-1080p",
-  "4k-sci-fi-wallpaper",
-  "star-wars-iphone-6-wallpaper",
-  "kylo-ren-wallpaper",
-  "darth-vader-wallpaper"
+  "awesome-batman-wallpapers",
+  "batman-arkham-knight-4k-wallpaper",
+  "batman-hd-wallpapers-1080p",
+  "the-joker-hd-wallpaper",
+  "dark-knight-joker-wallpaper"
 ]
 
 async def animepp():
@@ -30,12 +30,12 @@ async def animepp():
     if not os.path.exists("f.ttf"):
         urllib.request.urlretrieve("https://github.com/rebel6969/mym/raw/master/Rebel-robot-Regular.ttf","f.ttf")
     urllib.request.urlretrieve(fy,"donottouch.jpg")
-@borg.on(admin_cmd(pattern="gamerpfp ?(.*)"))
+@borg.on(admin_cmd(pattern="batmanpfp ?(.*)"))
 async def main(event):
-    await event.edit("**Starting Gamer Profile Pic.\n\nModded by @ViperAdnan") #Owner @NihiNivi
+    await event.edit("**Starting batman Profile Pic.") #Owner @NihiNivi
     while True:
         await animepp()
         file = await event.client.upload_file("donottouch.jpg")  
         await event.client(functions.photos.UploadProfilePhotoRequest( file))
         os.system("rm -rf donottouch.jpg")
-        await asyncio.sleep(300) #Edit this to your required needs
+        await asyncio.sleep(3600) #Edit this to your required needs
