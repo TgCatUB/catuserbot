@@ -74,8 +74,8 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
 
 
-
-@borg.on(admin_cmd(pattern="setgpic", outgoing=True))
+@register(outgoing=True, pattern="^.setgpic$")
+@errors_handler
 async def set_group_photo(gpic):
     """ For .setgpic command, changes the picture of a group """
     if not gpic.is_group:
@@ -117,8 +117,8 @@ async def set_group_photo(gpic):
             f"CHAT: {gpic.chat.title}(`{gpic.chat_id}`)")        
 
 
-#@register(outgoing=True, pattern="^.promote(?: |$)(.*)")
-@borg.on(admin_cmd(pattern="promote", outgoing=True))
+@register(outgoing=True, pattern="^.promote(?: |$)(.*)")
+@errors_handler
 async def promote(promt):
     """ For .promote command, promotes the replied/tagged person """
     # Get targeted chat
@@ -168,8 +168,8 @@ async def promote(promt):
             f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
 
 
-#@register(outgoing=True, pattern="^.demote(?: |$)(.*)")
-@borg.on(admin_cmd(pattern="demote", outgoing=True))
+@register(outgoing=True, pattern="^.demote(?: |$)(.*)")
+@errors_handler
 async def demote(dmod):
     """ For .demote command, demotes the replied/tagged person """
     # Admin right check
@@ -218,8 +218,8 @@ async def demote(dmod):
             f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
 
 
-#@register(outgoing=True, pattern="^.ban(?: |$)(.*)")
-@borg.on(admin_cmd(pattern="ban", outgoing=True))
+@register(outgoing=True, pattern="^.ban(?: |$)(.*)")
+@errors_handler
 async def ban(bon):
     """ For .ban command, bans the replied/tagged person """
     # Here laying the sanity check
@@ -272,8 +272,8 @@ async def ban(bon):
             f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
 
 
-#@register(outgoing=True, pattern="^.unban(?: |$)(.*)")
-@borg.on(admin_cmd(pattern="unban", outgoing=True))
+@register(outgoing=True, pattern="^.unban(?: |$)(.*)")
+@errors_handler
 async def nothanos(unbon):
     """ For .unban command, unbans the replied/tagged person """
     # Here laying the sanity check
@@ -440,8 +440,8 @@ async def muter(moot):
 
 
 
-#@register(outgoing=True, pattern="^.pin(?: |$)(.*)")
-@borg.on(admin_cmd(pattern="pin", outgoing=True))
+@register(outgoing=True, pattern="^.pin(?: |$)(.*)")
+@errors_handler
 async def pin(msg):
     """ For .pin command, pins the replied/tagged message on the top the chat. """
     # Admin or creator check
@@ -486,8 +486,8 @@ async def pin(msg):
             f"LOUD: {not is_silent}")
 
 
-#@register(outgoing=True, pattern="^.kick(?: |$)(.*)")
-@borg.on(admin_cmd(pattern="kick", outgoing=True))
+@register(outgoing=True, pattern="^.kick(?: |$)(.*)")
+@errors_handler
 async def kick(usr):
     """ For .kick command, kicks the replied/tagged person from the group. """
     # Admin or creator check
@@ -530,8 +530,7 @@ async def kick(usr):
 
 
         
-#@register(outgoing=True, pattern="^.iundlt$")
-@borg.on(admin_cmd(pattern="iundlt", outgoing=True))
+@register(outgoing=True, pattern="^.iundlt$")
 async def _(event):
     if event.fwd_from:
         return
