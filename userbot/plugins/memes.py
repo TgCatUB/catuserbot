@@ -38,7 +38,7 @@ async def univsaye(cowmsg):
         await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
 
-@borg.on(admin_cmd(":/ ?(.*)"))			  
+@register(outgoing=True, pattern="^:/$")		  
 async def kek(keks):
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
         """ Check yourself ;)"""
@@ -117,7 +117,7 @@ async def slap(replied_user, event):
 
     return caption
 
-@borg.on(admin_cmd("-_-?(.*)"))			  
+@register(outgoing=True, pattern="^-_-$")			  
 async def lol(lel):
     if not lel.text[0].isalpha() and lel.text[0] not in ("/", "#", "@", "!"):
         """ Ok... """
@@ -143,7 +143,8 @@ async def _(event):
         )
         await event.delete()
 
-@borg.on(admin_cmd(";_;"))
+			  
+@register(outgoing=True, pattern="^;_;$")			  			  			  
 async def fun(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         t = ";__;"
@@ -230,7 +231,7 @@ async def abusing (abused):
         await abused.edit(reply_text)
 
 
-@borg.on(admin_cmd("owo"))
+@register(outgoing=True, pattern="^owo$")
 async def faces(owo):
     """ UwU """
     if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
