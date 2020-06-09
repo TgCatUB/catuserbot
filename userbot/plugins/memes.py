@@ -17,7 +17,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from cowpy import cow
 from userbot import CMD_HELP, memes
-from userbot.utils import admin_cmd
+from userbot.utils import admin_cmd, register
 
 
 
