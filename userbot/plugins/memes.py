@@ -143,7 +143,7 @@ async def _(event):
         )
         await event.delete()
 
-@borg.on(admin_cmd(";_;")))
+@borg.on(admin_cmd(";_;"))
 async def fun(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         t = ";__;"
