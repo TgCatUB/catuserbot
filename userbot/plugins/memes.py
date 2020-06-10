@@ -17,11 +17,10 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from cowpy import cow
 from userbot import CMD_HELP, memes
-from userbot.utils import admin_cmd, register
+from userbot.utils import register
 
 
-
-@borg.on(admin_cmd("(\w+)say ?(.*)"))
+@register(outgoing=True, pattern=r"^.(\w+)say (.*)")
 async def univsaye(cowmsg):
     """ For .cowsay module, userbot wrapper for cow which says things. """
     if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in ("/", "#", "@", "!"):
@@ -38,7 +37,7 @@ async def univsaye(cowmsg):
         await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
 
-@register(outgoing=True, pattern="^:/$")		  
+@register(outgoing=True, pattern="^:/$")
 async def kek(keks):
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
         """ Check yourself ;)"""
@@ -47,8 +46,7 @@ async def kek(keks):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
-
-@borg.on(admin_cmd("slap ?(.*)"))			  
+@register(pattern="^.slap(?: |$)(.*)", outgoing=True)
 async def who(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         """ slaps a user, or get slapped if not a reply. """
@@ -117,7 +115,7 @@ async def slap(replied_user, event):
 
     return caption
 
-@register(outgoing=True, pattern="^-_-$")			  
+@register(outgoing=True, pattern="^-_-$")
 async def lol(lel):
     if not lel.text[0].isalpha() and lel.text[0] not in ("/", "#", "@", "!"):
         """ Ok... """
@@ -126,7 +124,7 @@ async def lol(lel):
             okay = okay[:-1] + "_-"
             await lel.edit(okay)
 
-@borg.on(admin_cmd("decide ?(.*)"))
+@register(outgoing=True, pattern="^.decide$")
 async def _(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         if event.fwd_from:
@@ -143,8 +141,7 @@ async def _(event):
         )
         await event.delete()
 
-			  
-@register(outgoing=True, pattern="^;_;$")			  			  			  
+@register(outgoing=True, pattern="^;_;$")
 async def fun(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         t = ";__;"
@@ -153,7 +150,7 @@ async def fun(e):
             await e.edit(t)
 
 
-@borg.on(admin_cmd("insult"))
+@register(outgoing=True, pattern="^.insult$")
 async def insult(e):
     """ I make you cry !! """
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -161,7 +158,7 @@ async def insult(e):
 
 
 			  
-@borg.on(admin_cmd("repo"))
+@register(outgoing=True, pattern="^.repo$")
 async def source(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Click [here](https://github.com/sandy1709/catuserbot) to open this lit af repo.")
@@ -170,7 +167,7 @@ async def source(e):
 			  
 
 
-@borg.on(admin_cmd("hey"))
+@register(outgoing=True, pattern="^.hey$")
 async def hoi(hello):
     """ Greet everyone! """
     if not hello.text[0].isalpha() and hello.text[0] not in ("/", "#", "@", "!"):
@@ -178,7 +175,7 @@ async def hoi(hello):
 			  
 
 			  			  
-@borg.on(admin_cmd("rape"))
+@register(outgoing=True, pattern="^.rape$")
 async def raping (raped):
     """ Dont Rape Too much -_-"""
     if not raped.text[0].isalpha() and raped.text[0] not in ("/", "#", "@", "!"):
@@ -186,7 +183,7 @@ async def raping (raped):
         reply_text = memes.RAPE_STRINGS[index]
         await raped.edit(reply_text)
 			  
-@borg.on(admin_cmd("pro"))
+@register(outgoing=True, pattern="^.pro$")
 async def proo (pros):
     """ String for Pros only -_-"""
     if not pros.text[0].isalpha() and pros.text[0] not in ("/", "#", "@", "!"):
@@ -194,7 +191,7 @@ async def proo (pros):
         reply_text = memes.PRO_STRINGS[index]
         await pros.edit(reply_text)
 
-@borg.on(admin_cmd("fuk"))
+@register(outgoing=True, pattern="^.fuk$")
 async def chutiya (fuks):
     """ String for fhu only -_-"""
     if not fuks.text[0].isalpha() and fuks.text[0] not in ("/", "#", "@", "!"):
@@ -203,7 +200,7 @@ async def chutiya (fuks):
         await fuks.edit(reply_text)
 
 			  			  
-@borg.on(admin_cmd("thanos"))
+@register(outgoing=True, pattern="^.thanos$")
 async def thanos (thanos):
     """ String for thanos only -_-"""
     if not thanos.text[0].isalpha() and thanos.text[0] not in ("/", "#", "@", "!"):
@@ -211,7 +208,7 @@ async def thanos (thanos):
         reply_text = memes.THANOS_STRINGS[index]
         await thanos.edit(reply_text)	
 			  
-@borg.on(admin_cmd("abusehard"))
+@register(outgoing=True, pattern="^.abusehard$")
 async def fuckedd (abusehard):
     """ Dont Use this Too much bsdk -_-"""
     if not abusehard.text[0].isalpha() and abusehard.text[0] not in ("/", "#", "@", "!"):
@@ -222,7 +219,7 @@ async def fuckedd (abusehard):
 
 			  
 			  
-@borg.on(admin_cmd("abusehim"))
+@register(outgoing=True, pattern="^.abusehim$")
 async def abusing (abused):
     """ Dont Abuse Too much bsdk -_-"""
     if not abused.text[0].isalpha() and abused.text[0] not in ("/", "#", "@", "!"):
@@ -231,7 +228,7 @@ async def abusing (abused):
         await abused.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^owo$")
+@register(outgoing=True, pattern="^.owo(?: |$)(.*)")
 async def faces(owo):
     """ UwU """
     if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
@@ -255,39 +252,39 @@ async def faces(owo):
         await owo.edit(reply_text)
 
 
-@borg.on(admin_cmd("react"))
+@register(outgoing=True, pattern="^.react$")
 async def react_meme(react):
     """ Make your userbot react to everything. """
     if not react.text[0].isalpha() and react.text[0] not in ("/", "#", "@", "!"):
         await react.edit(random.choice(memes.FACEREACTS))
 
 
-@borg.on(admin_cmd("shg"))
+@register(outgoing=True, pattern="^.shg$")
 async def shrugger(shg):
     r""" ¯\_(ツ)_/¯ """
     if not shg.text[0].isalpha() and shg.text[0] not in ("/", "#", "@", "!"):
         await shg.edit(random.choice(memes.SHGS))
 
 
-@borg.on(admin_cmd("runs"))
+@register(outgoing=True, pattern="^.runs$")
 async def runner_lol(run):
     """ Run, run, RUNNN! """
     if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@", "!"):
         await run.edit(random.choice(memes.RUNSREACTS))
 
-@borg.on(admin_cmd("noob"))
+@register(outgoing=True, pattern="^.noob$")
 async def metoo(hahayes):
     """ Haha yes """
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
         await hahayes.edit(random.choice(memes.NOOBSTR))
 			  
-@borg.on(admin_cmd("rendi"))
+@register(outgoing=True, pattern="^.rendi$")
 async def metoo(hahayes):
     """ Haha yes """
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
         await hahayes.edit(random.choice(memes.RENDISTR))
 			 			  
-@borg.on(admin_cmd("oof"))
+@register(outgoing=True, pattern="^.oof$")
 async def Oof(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         t = "Oof"
@@ -295,12 +292,12 @@ async def Oof(e):
             t = t[:-1] + "of"
             await e.edit(t)
 
-@borg.on(admin_cmd("10iq"))
+@register(outgoing=True, pattern="^.10iq$")
 async def iqless(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("♿")
 
-@borg.on(admin_cmd("moon"))
+@register(outgoing=True, pattern="^.moon$")
 async def _(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
 	    if event.fwd_from:
@@ -311,7 +308,7 @@ async def _(event):
 		    await event.edit("".join(deq))
 		    deq.rotate(1)
 
-@borg.on(admin_cmd("clock"))
+@register(outgoing=True, pattern="^.clock$")
 async def _(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
 	    if event.fwd_from:
@@ -323,7 +320,7 @@ async def _(event):
 		    deq.rotate(1)
 
 
-@borg.on(admin_cmd("clap"))
+@register(outgoing=True, pattern="^.clap(?: |$)(.*)")
 async def claptext(memereview):
     """ Praise people! """
     if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
@@ -345,7 +342,7 @@ async def claptext(memereview):
 
 
 
-@borg.on(admin_cmd("smk ?(.*)"))
+@register(outgoing=True, pattern="^.smk (.*)")
 async def smrk(smk):
         if not smk.text[0].isalpha() and smk.text[0] not in ("/", "#", "@", "!"):
             textx = await smk.get_reply_message()
@@ -364,7 +361,7 @@ async def smrk(smk):
              await smk.edit(reply_text)
 
 
-@borg.on(admin_cmd("f ?(.*)"))
+@register(outgoing=True, pattern=r"\.f (.*)")
 async def payf(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         paytext = e.pattern_match.group(1)
@@ -372,7 +369,7 @@ async def payf(e):
         await e.edit(pay)
 
 
-@borg.on(admin_cmd("lfy ?(.*)"))
+@register(outgoing=True, pattern="^.lfy (.*)",)
 async def let_me_google_that_for_you(lmgtfy_q):
     if not lmgtfy_q.text[0].isalpha() and lmgtfy_q.text[0] not in ("/", "#", "@", "!"):
         textx = await lmgtfy_q.get_reply_message()
@@ -395,7 +392,7 @@ async def let_me_google_that_for_you(lmgtfy_q):
 
 
 			  
-@borg.on(admin_cmd("type(?: |$)(.*)"))
+@register(pattern='.type(?: |$)(.*)')
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """
     if not typew.text[0].isalpha() and typew.text[0] not in ("/", "#", "@", "!"):
