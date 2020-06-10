@@ -165,13 +165,13 @@ def admin_cmd(pattern=None, **args):
     allow_sudo = args.get("allow_sudo", False)
     reg = re.compile('(.*)')
     # get the pattern from the decorator
-    if pattern is not None:
+     if pattern is not None:
         if pattern.startswith("\#"):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
-            cmd = re.compile("\." + pattern)
-            cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
+            args["pattern"] = re.search(reg, pattern)
+            cmd = "." + pattern
             try:
                 CMD_LIST[file_test].append(cmd)
             except:
