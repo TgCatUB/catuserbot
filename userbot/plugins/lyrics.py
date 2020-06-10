@@ -16,7 +16,7 @@ from userbot import CMD_HELP, LOGS
 GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="lyrics(?: |$)(.*)"))
+@borg.on(admin_cmd(outgoing=True, pattern="lyrics (.*)"))
 async def lyrics(lyric):
     if r"-" in lyric.text:
         pass
