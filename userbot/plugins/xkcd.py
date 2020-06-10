@@ -8,7 +8,7 @@ from urllib.parse import quote
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd(pattern="xkcd ?(.*)"))
+@borg.on(admin_cmd(pattern="xkcd (.*)"))
 async def _(event):
     if event.fwd_from:
         return
