@@ -163,7 +163,7 @@ def admin_cmd(pattern=None, **args):
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     allow_sudo = args.get("allow_sudo", False)
-
+    reg = re.compile('(.*)')
     # get the pattern from the decorator
     if pattern is not None:
         if pattern.startswith("\#"):
@@ -171,11 +171,14 @@ def admin_cmd(pattern=None, **args):
             args["pattern"] = re.compile(pattern)
         else:
             args["pattern"] = re.compile("\." + pattern)
-            cmd = "." + pattern
+            cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
             except:
                 CMD_LIST.update({file_test: [cmd]})
+                
+                
+                    
 
     args["outgoing"] = True
     # should this command be available for other users?
