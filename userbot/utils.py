@@ -165,7 +165,7 @@ def admin_cmd(pattern=None, **args):
     allow_sudo = args.get("allow_sudo", False)
     reg = re.compile('(.*)')
     # get the pattern from the decorator
-     if pattern is not None:
+    if pattern is not None:
         if pattern.startswith("\#"):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
