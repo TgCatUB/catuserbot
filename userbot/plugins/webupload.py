@@ -46,7 +46,7 @@ async def _(event):
 		
 CMD_HELP.update({
     "webupload":
-    ".webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles\
-    \nexample: `.webupload --oload` tag this to a file\
+    ".webupload ?(.+?|) (?:--)(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles\
+    \nexample: `.webupload --anonfiles` tag this to a file\
 "
 })  		
