@@ -18,7 +18,7 @@ DEL_TIME_OUT = 60
 DEFAULTUSER = str(AUTONAME) if AUTONAME else "cat" 
 
 
-@borg.on(admin_cmd(pattern="autoname"))  # pylint:disable=E0602
+@borg.on(admin_cmd(pattern="autoname (.*)"))  # pylint:disable=E0602
 async def _(event):
     await event.edit(f"Auto Name has been started by my Master ") 
     while True:
