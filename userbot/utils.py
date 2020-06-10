@@ -170,7 +170,7 @@ def admin_cmd(pattern=None, **args):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
-            args["pattern"] = re.compile("\." + pattern)
+            cmd = re.compile("\." + pattern)
             cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
