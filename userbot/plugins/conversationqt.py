@@ -38,7 +38,7 @@ from userbot.utils import admin_cmd
 
 
 
-@borg.on(admin_cmd(pattern=r"qt"))
+@borg.on(admin_cmd(pattern=r"qt (.*)"))
 
 
 
