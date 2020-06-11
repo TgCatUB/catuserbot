@@ -218,7 +218,8 @@ def register(**args):
     file_test = file_test.stem.replace(".py", "")
     pattern = args.get('pattern', None)
     disable_edited = args.get('disable_edited', True)
-
+    unsafe_pattern = r'^[^/!#@\$A-Za-z]'
+    
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
 
@@ -226,7 +227,11 @@ def register(**args):
         del args['disable_edited']
     
     reg = re.compile('(.*)')
+    
+        
     if not pattern == None:
+        if not ignore_unsafe:
+            args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)
         try:
             cmd = re.search(reg, pattern)
             try:
