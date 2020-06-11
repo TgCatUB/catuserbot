@@ -233,16 +233,10 @@ def register(**args):
     reg = re.compile('(.*)')
     
         
-    if not pattern == None:
+    if pattern:
         if not ignore_unsafe:
             args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)
-        try:
-            cmd = re.search(reg, pattern)
-            try:
-                cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
-            except:
-                pass
-
+            cmd = "." + pattern
             try:
                 CMD_LIST[file_test].append(cmd)
             except:
