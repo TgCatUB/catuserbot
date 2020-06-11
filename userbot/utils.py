@@ -214,7 +214,7 @@ def register(**args):
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     pattern = args.get("pattern", None)
-    
+    disable_edited = args.get('disable_edited', False)
     file_test = file_test.stem.replace(".py", "")
     allow_sudo = args.get("allow_sudo", False)
 
