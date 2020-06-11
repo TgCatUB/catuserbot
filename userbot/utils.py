@@ -209,67 +209,54 @@ def admin_cmd(pattern=None, **args):
 
 
 def register(**args):
-    """ Register a new event. """
-    args["func"] = lambda e: e.via_bot_id is None
-
+   args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
-    pattern = args.get('pattern', None)
-    disable_edited = args.get('disable_edited', True)
-    unsafe_pattern = r'^[^/!#@\$A-Za-z]'
-    ignore_unsafe = args.get('ignore_unsafe', False)
-    group_only = args.get('group_only', False)
-    disable_errors = args.get('disable_errors', False)
-    insecure = args.get('insecure', False)
-    
-    if pattern is not None and not pattern.startswith('(?i)'):
-        args['pattern'] = '(?i)' + pattern
+    allow_sudo = args.get("allow_sudo", False)
 
-    if "disable_edited" in args:
-        del args['disable_edited']
-        
-    if "ignore_unsafe" in args:
-        del args['ignore_unsafe']
-        
-
-    if "group_only" in args:
-        del args['group_only']
-
-    if "disable_errors" in args:
-        del args['disable_errors']
-
-    if "insecure" in args:
-        del args['insecure']
-    
-        
-    if pattern:
-        if not ignore_unsafe:
-            args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)
+    # get the pattern from the decorator
+    if pattern is not None:
+        if pattern.startswith("\#"):
+            # special fix for snip.py
+            args["pattern"] = re.compile(pattern)
+        else:
+            args["pattern"] = re.compile("\." + pattern)
             cmd = "." + pattern
             try:
                 CMD_LIST[file_test].append(cmd)
             except:
                 CMD_LIST.update({file_test: [cmd]})
-        
+
+    args["outgoing"] = True
+    # should this command be available for other users?
+    if allow_sudo:
+        args["from_users"] = list(Config.SUDO_USERS)
+        # Mutually exclusive with outgoing (can only set one of either).
+        args["incoming"] = True
+        del args["allow_sudo"]
+
+    # error handling condition check
+    elif "incoming" in args and not args["incoming"]:
+        args["outgoing"] = True
+
+    # add blacklist chats, UB should not respond in these chats
     args["blacklist_chats"] = True
     black_list_chats = list(Config.UB_BLACK_LIST_CHAT)
     if len(black_list_chats) > 0:
-        args["chats"] = black_list_chats       
+        args["chats"] = black_list_chats
 
-    def decorator(func):
-        if not disable_edited:
-            bot.add_event_handler(func, events.MessageEdited(**args))
-        bot.add_event_handler(func, events.NewMessage(**args))
-        try:
-            LOAD_PLUG[file_test].append(func)
-        except Exception as e:
-            LOAD_PLUG.update({file_test: [func]})
+    # add blacklist chats, UB should not respond in these chats
+    allow_edited_updates = False
+    if "allow_edited_updates" in args and args["allow_edited_updates"]:
+        allow_edited_updates = args["allow_edited_updates"]
+        del args["allow_edited_updates"]
 
-        return func
+    # check if the plugin should listen for outgoing 'messages'
+    is_message_enabled = True
 
-    return decorator
+    return events.NewMessage(**args)
 
 
 def errors_handler(func):
