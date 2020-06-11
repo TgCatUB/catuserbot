@@ -258,7 +258,18 @@ def register(**args):
     # check if the plugin should listen for outgoing 'messages'
     is_message_enabled = True
 
-    return events.NewMessage(**args)
+    def decorator(func):
+        if not disable_edited:
+            bot.add_event_handler(func, events.MessageEdited(**args))
+        bot.add_event_handler(func, events.NewMessage(**args))
+        try:
+            LOAD_PLUG[file_test].append(func)
+        except Exception as e:
+            LOAD_PLUG.update({file_test: [func]})
+
+        return func
+
+    return decorator
 
 
 def errors_handler(func):
