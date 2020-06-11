@@ -220,6 +220,9 @@ def register(**args):
     disable_edited = args.get('disable_edited', True)
     unsafe_pattern = r'^[^/!#@\$A-Za-z]'
     ignore_unsafe = args.get('ignore_unsafe', False)
+    group_only = args.get('group_only', False)
+    disable_errors = args.get('disable_errors', False)
+    insecure = args.get('insecure', False)
     
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
@@ -230,7 +233,15 @@ def register(**args):
     if "ignore_unsafe" in args:
         del args['ignore_unsafe']
         
-    reg = re.compile('(.*)')
+
+    if "group_only" in args:
+        del args['group_only']
+
+    if "disable_errors" in args:
+        del args['disable_errors']
+
+    if "insecure" in args:
+        del args['insecure']
     
         
     if pattern:
