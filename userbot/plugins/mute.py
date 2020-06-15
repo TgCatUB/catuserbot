@@ -3,7 +3,8 @@ import asyncio
 
             
 
-@command(outgoing=True, pattern=r"^.mute ?(\d+)?", allow_sudo=True)
+
+@borg.on(sudo_cmd(pattern="mute ?(.*)",allow_sudo=True))
 async def startmute(event):
     private = False
     if event.fwd_from:
@@ -46,7 +47,8 @@ async def startmute(event):
         else:
             await event.reply("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")
 
-@command(outgoing=True, pattern=r"^.unmute ?(\d+)?", allow_sudo=True)
+
+@borg.on(sudo_cmd(pattern="unmute ?(.*)",allow_sudo=True))
 async def endmute(event):
     private = False
     if event.fwd_from:
