@@ -15,7 +15,7 @@ import asyncio
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-
+from userbot.uniborgConfig import Config
 
 @borg.on(admin_cmd(pattern="img ?(.*)"))
 async def _(event):
@@ -25,15 +25,15 @@ async def _(event):
     await event.edit("Processing ...")
     input_str = event.pattern_match.group(1)
     response = google_images_download.googleimagesdownload()
-    if not os.path.isdir(Var.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Var.TMP_DOWNLOAD_DIRECTORY)
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     arguments = {
         "keywords": input_str,
-        "limit": Var.TG_GLOBAL_ALBUM_LIMIT,
+        "limit": Config.TG_GLOBAL_ALBUM_LIMIT,
         "format": "jpg",
         "delay": 1,
         "safe_search": True,
-        "output_directory": Var.TMP_DOWNLOAD_DIRECTORY
+        "output_directory": Config.TMP_DOWNLOAD_DIRECTORY
     }
     paths = response.download(arguments)
     logger.info(paths)
