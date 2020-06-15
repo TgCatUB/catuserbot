@@ -127,7 +127,7 @@ async def rm_deletedacc(show):
 
     if con != "clean":
         await show.reply("`Searching for ghost/deleted/zombie accounts...`")
-        await asyncio.sleep(2)
+        await show.delete()
         async for user in show.client.iter_participants(show.chat_id):
 
             if user.deleted:
