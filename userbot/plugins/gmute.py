@@ -100,6 +100,7 @@ async def startgmute(event):
     else:
         return await event.reply("Please reply to a user or add their into the command to gmute them.")
     chat_id = event.chat_id
+    replied_user = await event.client(GetFullUserRequest(userid))
     chat = await event.get_chat()
     if is_muted(userid, "gmute"):
         return await event.reply("This user is already gmuted")
@@ -135,6 +136,7 @@ async def endgmute(event):
     else:
         return await event.reply("Please reply to a user or add their into the command to ungmute them.")
     chat_id = event.chat_id
+    replied_user = await event.client(GetFullUserRequest(userid))
     if not is_muted(userid, "gmute"):
         return await event.reply("This user is not gmuted")
     try:
