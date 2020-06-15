@@ -1,5 +1,4 @@
 from userbot import CMD_HELP 
-
 from userbot.uniborgConfig import Config
 from telethon.tl.functions.users import GetFullUserRequest
 from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
@@ -7,7 +6,7 @@ import asyncio
 from userbot.utils import sudo_cmd
 
 BOTLOG = True
-BOTLOG_CHATID = Config.PRIVATE_CHANNEL_BOT_API_ID
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @command(outgoing=True, pattern=r"^.gmute ?(\d+)?")
 async def startgmute(event):
@@ -88,7 +87,7 @@ async def startgmute(event):
     if event.fwd_from:
         return
     elif event.is_private:
-        await event.edit("Unexpected issues or ugly errors may occur!")
+        await event.reply("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True
     reply = await event.get_reply_message()
@@ -99,17 +98,23 @@ async def startgmute(event):
     elif private is True:
         userid = event.chat_id
     else:
-        return await event.edit("Please reply to a user or add their into the command to gmute them.")
+        return await event.reply("Please reply to a user or add their into the command to gmute them.")
     chat_id = event.chat_id
     chat = await event.get_chat()
     if is_muted(userid, "gmute"):
-        return await event.edit("This user is already gmuted")
+        return await event.reply("This user is already gmuted")
     try:
         mute(userid, "gmute")
     except Exception as e:
-        await event.edit("Error occured!\nError is " + str(e))
+        await event.reply("Error occured!\nError is " + str(e))
     else:
-        await event.edit("Successfully gmuted that person")
+        await event.reply("Successfully gmuted that person")
+    if BOTLOG:
+      await event.client.send_message(
+                    BOTLOG_CHATID, "#GMUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")    
+        
 
 @borg.on(sudo_cmd(pattern=r"ungmute ?(\d+)?", allow_sudo=True))
 async def endgmute(event):
@@ -117,7 +122,7 @@ async def endgmute(event):
     if event.fwd_from:
         return
     elif event.is_private:
-        await event.edit("Unexpected issues or ugly errors may occur!")
+        await event.reply("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True
     reply = await event.get_reply_message()
@@ -128,16 +133,21 @@ async def endgmute(event):
     elif private is True:
         userid = event.chat_id
     else:
-        return await event.edit("Please reply to a user or add their into the command to ungmute them.")
+        return await event.reply("Please reply to a user or add their into the command to ungmute them.")
     chat_id = event.chat_id
     if not is_muted(userid, "gmute"):
-        return await event.edit("This user is not gmuted")
+        return await event.reply("This user is not gmuted")
     try:
         unmute(userid, "gmute")
     except Exception as e:
-        await event.edit("Error occured!\nError is " + str(e))
+        await event.reply("Error occured!\nError is " + str(e))
     else:
-        await event.edit("Successfully ungmuted that person")
+        await event.reply("Successfully ungmuted that person")
+    if BOTLOG:
+      await event.client.send_message(
+                    BOTLOG_CHATID, "#UNGMUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")          
 
 @command(incoming=True)
 async def watcher(event):
