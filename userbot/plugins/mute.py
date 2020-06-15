@@ -26,6 +26,7 @@ async def startmute(event):
         else:
             return await event.reply("Please reply to a user or add their userid into the command to mute them.")
         chat_id = event.chat_id
+        replied_user = await event.client(GetFullUserRequest(userid))
         chat = await event.get_chat()
         if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None: 
             if chat.admin_rights.delete_messages is True:
@@ -46,7 +47,11 @@ async def startmute(event):
             await event.reply("Error occured!\nError is " + str(e))
         else:
             await event.reply("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")
-
+    if BOTLOG:
+      await event.client.send_message(
+                    BOTLOG_CHATID, "#MUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 @borg.on(sudo_cmd(pattern="unmute ?(.*)",allow_sudo=True))
 async def endmute(event):
@@ -70,6 +75,7 @@ async def endmute(event):
         else:
             return await event.reply("Please reply to a user or add their userid into the command to unmute them.")
         chat_id = event.chat_id
+        replied_user = await event.client(GetFullUserRequest(userid))    
         if not is_muted(userid, chat_id):
             return await event.reply("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
         try:
@@ -78,6 +84,11 @@ async def endmute(event):
             await event.reply("Error occured!\nError is " + str(e))
         else:
             await event.reply("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
+    if BOTLOG:
+      await event.client.send_message(
+                    BOTLOG_CHATID, "#UNMUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")            
 
 @command(incoming=True)
 async def watcher(event):
