@@ -118,7 +118,6 @@ async def rm_deletedacc(show):
     if show.fwd_from:
         return
     con = show.pattern_match.group(1)
-    
     """ For .zombies command, list all the ghost/deleted/zombie accounts in a chat. """
 
     del_u = 0
