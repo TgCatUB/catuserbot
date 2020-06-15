@@ -5,52 +5,56 @@ Syntax: `.img <Name>` or `.img (replied message)`
 \n Upgraded and Google Image Error Fixed by @NeoMatrix90 aka @kirito6969
 """
 
-from google_images_download import googleimagesdownload
+from google_images_download import google_images_download
 import os
 import shutil
 from re import findall
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
+import asyncio
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
 
 
 @borg.on(admin_cmd(pattern="img ?(.*)"))
-async def img_sampler(event):
-    await event.edit("`Processing....`")
-    reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
-    reply = await event.get_reply_message()
-    if event.pattern_match.group(1):
-        query = event.pattern_match.group(1)
-    elif reply.text:
-        query = reply.message
-    else:
-    	await event.edit("`What I am Supposed to Search `")
-    	return
-        
-    lim = findall(r"lim=\d+", query)
-    # lim = event.pattern_match.group(1)
-    try:
-        lim = lim[0]
-        lim = lim.replace("lim=", "")
-        query = query.replace("lim=" + lim[0], "")
-    except IndexError:
-        lim = 5
-    response = googleimagesdownload()
-
-    # creating list of arguments
+async def _(event):
+    if event.fwd_from:
+        return
+    start = datetime.now()
+    await event.edit("Processing ...")
+    input_str = event.pattern_match.group(1)
+    response = google_images_download.googleimagesdownload()
+    if not os.path.isdir(Var.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Var.TMP_DOWNLOAD_DIRECTORY)
     arguments = {
-        "keywords": query,
-        "limit": lim,
+        "keywords": input_str,
+        "limit": Var.TG_GLOBAL_ALBUM_LIMIT,
         "format": "jpg",
-        "no_directory": "no_directory"
+        "delay": 1,
+        "safe_search": True,
+        "output_directory": Var.TMP_DOWNLOAD_DIRECTORY
     }
-
-    # passing the arguments to the function
     paths = response.download(arguments)
-    lst = paths[0][query]
-    await event.client.send_file(await event.client.get_input_entity(event.chat_id), lst,reply_to=reply_to_id)
-    shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
+    logger.info(paths)
+    lst = paths[0].get(input_str)
+    if len(lst) == 0:
+        await event.delete()
+        return
+    await borg.send_file(
+        event.chat_id,
+        lst,
+        caption=input_str,
+        reply_to=event.message.id,
+        progress_callback=progress
+    )
+    logger.info(lst)
+    for each_file in lst:
+        os.remove(each_file)
+    end = datetime.now()
+    ms = (end - start).seconds
+    await event.edit("searched Google for {} in {} seconds.".format(input_str, ms), link_preview=False)
+    await asyncio.sleep(5)
     await event.delete()
 
     
