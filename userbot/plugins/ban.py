@@ -89,9 +89,9 @@ async def _(event):
     try:
         await borg(EditBannedRequest(event.chat_id, to_ban_id, rights))
     except (Exception) as exc:
-        await event.edit(str(exc))
+        await event.reply(str(exc))
     else:
-        await event.edit(f"{input_cmd}ned Successfully!")
+        await event.reply(f"{input_cmd}ned Successfully!")
 
 
 @borg.on(sudo_cmd(pattern="pgs ?(.*)", allow_sudo=True))
@@ -121,7 +121,7 @@ async def _(event):
             msgs = []
             await event.delete()
         else:
-            await event.edit("**PURGE** Failed!")
+            await event.reply("**PURGE** Failed!")
 
 
 @borg.on(admin_cmd(pattern="(ban|unban) ?(.*)"))
