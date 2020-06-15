@@ -113,7 +113,9 @@ async def rm_deletedacc(show):
             f"Cleaned **{del_u}** deleted account(s) !!\
             \nCHAT: {show.chat.title}(`{show.chat_id}`)")
 
-@borg.on(sudo_cmd(pattern=f"zombies", allow_sudo=True))  
+        
+               
+@borg.on(sudo_cmd(pattern="zombies ?(.*)", allow_sudo=True))  
 async def rm_deletedacc(show):
     if show.fwd_from:
         return
