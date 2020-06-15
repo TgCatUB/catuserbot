@@ -25,7 +25,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot 
 
 BOTLOG = True
-BOTLOG_CHATID = Config.PRIVATE_CHANNEL_BOT_API_ID
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 # =================== CONSTANT ===================
 
@@ -60,8 +60,8 @@ async def rm_deletedacc(show):
                 del_u += 1
                 await sleep(1)
         if del_u > 0:
-            del_status = f"`Found` **{del_u}** `ghost/deleted/zombie account(s) in this group,\
-            \nclean them by using .zombies clean`"
+            del_status = f"`Found` **{del_u}** ghost/deleted/zombie account(s) in this group,\
+            \nclean them by using `.zombies clean`"
         await show.edit(del_status)
         return
 
@@ -127,7 +127,6 @@ async def rm_deletedacc(show):
 
     if con != "clean":
         await show.reply("`Searching for ghost/deleted/zombie accounts...`")
-        await sleep(2)
         await show.delete()
         async for user in show.client.iter_participants(show.chat_id):
 
@@ -135,8 +134,8 @@ async def rm_deletedacc(show):
                 del_u += 1
                 await sleep(1)
         if del_u > 0:
-            del_status = f"`Found` **{del_u}** `ghost/deleted/zombie account(s) in this group,\
-            \nclean them by using .zombies clean`"
+            del_status = f"`Found` **{del_u}** ghost/deleted/zombie account(s) in this group,\
+            \nclean them by using `.zombies clean`"
         await show.reply(del_status)
         return
 
@@ -151,6 +150,7 @@ async def rm_deletedacc(show):
         return
 
     await show.reply("`Deleting deleted accounts...\nOh I can do that?!?!`")
+    await show.delete()
     del_u = 0
     del_a = 0
 
