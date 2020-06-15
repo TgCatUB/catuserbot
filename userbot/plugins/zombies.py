@@ -122,7 +122,9 @@ async def rm_deletedacc(show):
     del_status = "`No deleted accounts found, Group is clean`"
 
     if con != "clean":
-        await show.edit("`Searching for ghost/deleted/zombie accounts...`")
+        await show.reply("`Searching for ghost/deleted/zombie accounts...`")
+        await sleep(2)
+        await show.delete()
         async for user in show.client.iter_participants(show.chat_id):
 
             if user.deleted:
@@ -131,7 +133,7 @@ async def rm_deletedacc(show):
         if del_u > 0:
             del_status = f"`Found` **{del_u}** `ghost/deleted/zombie account(s) in this group,\
             \nclean them by using .zombies clean`"
-        await show.edit(del_status)
+        await show.reply(del_status)
         return
 
     # Here laying the sanity check
@@ -141,10 +143,10 @@ async def rm_deletedacc(show):
 
     # Well
     if not admin and not creator:
-        await show.edit("`I am not an admin here!`")
+        await show.reply("`I am not an admin here!`")
         return
 
-    await show.edit("`Deleting deleted accounts...\nOh I can do that?!?!`")
+    await show.reply("`Deleting deleted accounts...\nOh I can do that?!?!`")
     del_u = 0
     del_a = 0
 
@@ -154,7 +156,7 @@ async def rm_deletedacc(show):
                 await show.client(
                     EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
             except ChatAdminRequiredError:
-                await show.edit("`I don't have ban rights in this group`")
+                await show.reply("`I don't have ban rights in this group`")
                 return
             except UserAdminInvalidError:
                 del_u -= 1
@@ -172,7 +174,7 @@ async def rm_deletedacc(show):
         \n**{del_a}** deleted admin accounts are not removed"
 
 
-    await show.edit(del_status)
+    await show.reply(del_status)
     await sleep(2)
     await show.delete()
 
