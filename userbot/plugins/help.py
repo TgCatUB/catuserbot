@@ -79,9 +79,9 @@ async def info(event):
                 await event.reply(args + " is not a valid plugin!")
     else:
         await event.reply("Please specify which plugin do you want help for !!\
-            \nUsage: .info <plugin name>")
+            \nUsage: .help <plugin name>")
         string = ""
         for i in SUDO_LIST:
-            string += " " + str(i)
-            string += " \n"
+            string += "`" + str(i)
+            string += "`\n"
         await event.reply(string)
