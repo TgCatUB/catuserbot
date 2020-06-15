@@ -116,10 +116,11 @@ async def rm_deletedacc(show):
 @borg.on(sudo_cmd(pattern=f"zombies", allow_sudo=True))  
 async def rm_deletedacc(show):
     if show.fwd_from:
-      return
+        return
+    con = show.pattern_match.group(1)
+    
     """ For .zombies command, list all the ghost/deleted/zombie accounts in a chat. """
 
-    con = show.pattern_match.group(1).lower()
     del_u = 0
     del_status = "`No deleted accounts found, Group is clean`"
 
