@@ -7,11 +7,11 @@ Usage: Searches for deleted accounts in a groups and channels.
 Use .zombies clean to remove deleted accounts from the groups and channels.
 \nPorted by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)"""
 
-from telethon import events, functions
+from telethon import events
 from userbot.utils import admin_cmd,sudo_cmd
 from asyncio import sleep
 from os import remove
-
+import asyncio
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,
                              UserAdminInvalidError)
 from telethon.errors.rpcerrorlist import (UserIdInvalidError,
@@ -127,7 +127,7 @@ async def rm_deletedacc(show):
 
     if con != "clean":
         await show.reply("`Searching for ghost/deleted/zombie accounts...`")
-        await show.delete()
+        await asyncio.sleep(2)
         async for user in show.client.iter_participants(show.chat_id):
 
             if user.deleted:
@@ -150,7 +150,7 @@ async def rm_deletedacc(show):
         return
 
     await show.reply("`Deleting deleted accounts...\nOh I can do that?!?!`")
-    await show.delete()
+    await asyncio.sleep(2)
     del_u = 0
     del_a = 0
 
