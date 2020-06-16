@@ -84,7 +84,7 @@ async def spammer(e):
 
 
 
-@borg.on(sudo_cmd("spam?(.*)" allow_sudo="True"))
+@borg.on(sudo_cmd("spam?(.*)", allow_sudo="True"))
 async def spammer(e):
     counter = int(e.pattern_match.group(1).split(' ', 1)[0])
     spam_message = str(e.pattern_match.group(1).split(' ', 1)[1])
