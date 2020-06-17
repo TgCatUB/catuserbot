@@ -55,7 +55,7 @@ async def _(event):
     if reply_message.sender.bot:
        await event.reply("```Reply to actual users message.```")
        return
-    await event.reply("```Making a Quote```")
+    cat = await event.reply("```Making a Quote```")
     async with event.client.conversation(chat) as conv:
           try:     
               response = conv.wait_event(events.NewMessage(incoming=True,from_users=1031952739))
@@ -67,6 +67,6 @@ async def _(event):
           if response.text.startswith("Hi!"):
              await event.reply("```Can you kindly disable your forward privacy settings for good?```")
           else: 
-             await event.delete()
+             await cat.delete()
              await event.client.send_message(event.chat_id, response.message)
             
