@@ -29,7 +29,7 @@ async def spider(spdr):
     except AttributeError:
         await spdr.delete()
         return
-
+    
     # Admin or creator check
     chat = await spdr.get_chat()
     admin = chat.admin_rights
@@ -82,6 +82,12 @@ async def spider(spdr):
 @borg.on(sudo_cmd(pattern=r"unmute(?: |$)(.*)" ,allow_sudo = True))
 @errors_handler
 async def unmoot(unmot):
+    try:
+        from userbot.plugins.sql_helper.mute_sql import unmute
+    except AttributeError:
+        await unmot.delete()
+        return
+    
     """ For .unmute command, unmute the replied/tagged person """
     # Admin or creator check
     chat = await unmot.get_chat()
@@ -94,11 +100,7 @@ async def unmoot(unmot):
         return
 
     # Check if the function running under SQL mode
-    try:
-        from userbot.plugins.sql_helper.mute_sql import unmute
-    except AttributeError:
-        await unmot.delete()
-        return
+    
 
     # If admin or creator, inform the user and start unmuting
 
