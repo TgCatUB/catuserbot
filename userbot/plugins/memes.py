@@ -6,7 +6,6 @@
 #
 
 """ Userbot module for having some fun with people. """
-
 import asyncio
 import random
 import re
@@ -340,8 +339,8 @@ async def claptext(memereview):
         await memereview.edit(reply_text)
 
 
-@register(outgoing=True, pattern="smk (.*)")
-async def smrk(smk):		  
+@register(outgoing=True, pattern="^.smk (.*)")
+async def smrk(smk):
         if not smk.text[0].isalpha() and smk.text[0] not in ("/", "#", "@", "!"):
             textx = await smk.get_reply_message()
             message = smk.text
@@ -357,7 +356,6 @@ async def smrk(smk):
              smirk = " ツ"
              reply_text = message + smirk
              await smk.edit(reply_text)
-
 
 @borg.on(admin_cmd(pattern="ftext ?(.*)"))
 async def payf(event):
