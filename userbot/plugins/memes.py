@@ -20,7 +20,7 @@ from userbot import CMD_HELP, memes
 from userbot.utils import admin_cmd, register
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"^.(\w+)say (.*)"))
+@register(outgoing=True, pattern=r"^.(\w+)say (.*)")
 async def univsaye(cowmsg):
     """ For .cowsay module, userbot wrapper for cow which says things. """
     if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in ("/", "#", "@", "!"):
@@ -47,7 +47,7 @@ async def kek(keks):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
-@borg.on(admin_cmd(pattern="slap (.*)", outgoing=True))
+@register(pattern="slap (.*)", outgoing=True)
 async def who(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         """ slaps a user, or get slapped if not a reply. """
@@ -247,7 +247,7 @@ async def faces(owo):
         reply_text = re.sub(r"(R|L)", "W", reply_text)
         reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
         reply_text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
-        reply_text = re.sub(r"\!+", " " + random.choice(UWUS), reply_text)
+        reply_text = re.sub(r"\!+", " " + random.choice(memes.UWUS), reply_text)
         reply_text = reply_text.replace("ove", "uv")
         reply_text += " " + random.choice(memes.UWUS)
         await owo.edit(reply_text)
@@ -321,7 +321,7 @@ async def _(event):
 		    deq.rotate(1)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="clap (.*)"))
+@register(outgoing=True, pattern="clap (.*)")
 async def claptext(memereview):
     """ Praise people! """
     if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
@@ -345,6 +345,8 @@ async def claptext(memereview):
 
 @borg.on(admin_cmd(outgoing=True, pattern="smk (.*)"))
 async def smrk(smk):
+	if smk.fwd_from:
+            return		  
         if not smk.text[0].isalpha() and smk.text[0] not in ("/", "#", "@", "!"):
             textx = await smk.get_reply_message()
             message = smk.text
@@ -392,7 +394,7 @@ async def let_me_google_that_for_you(lmgtfy_q):
 
 
 			  
-@borg.on(admin_cmd(pattern='type (.*)'))
+@borg.on(admin_cmd(pattern="type (.*)"))
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """
     if not typew.text[0].isalpha() and typew.text[0] not in ("/", "#", "@", "!"):
