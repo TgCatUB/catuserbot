@@ -6,6 +6,11 @@ from datetime import datetime
 from telethon.errors.rpcerrorlist import UserIdInvalidError
 from userbot.utils import sudo_cmd
 from telethon.tl.functions.channels import EditBannedRequest
+from userbot.uniborgConfig import Config
+
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID 
+
 
 NO_ADMIN = "`I am not an admin nub nibba!`"
 NO_PERM = "`I don't have sufficient permissions! This is so sed. Alexa play despacito`"
