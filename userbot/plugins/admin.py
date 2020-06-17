@@ -385,8 +385,9 @@ async def endmute(event):
             userid = event.chat_id
         else:
             return await event.edit("Please reply to a user or add their userid into the command to unmute them.")
+        replied_user = await event.client(GetFullUserRequest(userid))  
         chat_id = event.chat_id
-        replied_user = await event.client(GetFullUserRequest(userid))
+        
         if not is_muted(userid, chat_id):
             return await event.edit("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
         try:
@@ -398,9 +399,9 @@ async def endmute(event):
         # Announce to logging group    
     if BOTLOG:
       await event.client.send_message(
-                BOTLOG_CHATID, "#UNMUTE\n"
-                f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-                f"CHAT: {event.chat.title}(`{event.chat_id}`)")
+                    BOTLOG_CHATID, "#UNMUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 
 @register(incoming=True)
