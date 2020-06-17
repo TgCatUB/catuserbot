@@ -7,7 +7,7 @@ from telethon.errors.rpcerrorlist import UserIdInvalidError
 from userbot.utils import sudo_cmd
 from telethon.tl.functions.channels import EditBannedRequest
 from userbot.uniborgConfig import Config
-
+from telethon.tl.types import ChatBannedRights
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID 
 
