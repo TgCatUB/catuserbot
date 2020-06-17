@@ -46,9 +46,9 @@ BANNED_RIGHTS = ChatBannedRights(
         
 @borg.on(admin_cmd(pattern=f"zombies", outgoing=True))
 async def rm_deletedacc(show):
-    """ For .zombies command, list all the ghost/deleted/zombie accounts in a chat. """
-
-    con = show.pattern_match.group(1).lower()
+    if show.fwd_from:
+        return
+    con = show.pattern_match.group(1)
     del_u = 0
     del_status = "`No deleted accounts found, Group is clean`"
 
@@ -128,7 +128,7 @@ async def rm_deletedacc(show):
     if con != "clean":
         cat = await show.reply("`Searching for ghost/deleted/zombie accounts...`")
         await asyncio.sleep(2)
-        await cat.delete(0.1)
+        await cat.delete()
         async for user in show.client.iter_participants(show.chat_id):
 
             if user.deleted:
