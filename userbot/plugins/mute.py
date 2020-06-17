@@ -24,9 +24,13 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 @borg.on(sudo_cmd(pattern=r"mute(?: |$)(.*)" ,allow_sudo = True))
 @errors_handler
 async def spider(spdr):
-    if event.fwd_from:
+    try:
+        from userbot.plugins.sql_helper.mute_sql import mute
+    except AttributeError:
+        await spdr.delete()
         return
-    
+
+    # Admin or creator check
     chat = await spdr.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
@@ -34,9 +38,6 @@ async def spider(spdr):
     # If not admin and not creator, return
     if not admin and not creator:
         await spdr.reply(NO_ADMIN)
-        return
-    try:
-        from userbot.plugins.sql_helper.mute_sql import mute
         return
 
     user, reason = await get_user_from_event(spdr)
@@ -48,21 +49,24 @@ async def spider(spdr):
     self_user = await spdr.client.get_me()
 
     if user.id == self_user.id:
-        await spdr.edit(
-            "`Hands too short, can't duct tape myself...\n(ヘ･_･)ヘ┳━┳`")
+        await spdr.reply(
+            f"Sorry, I can't mute my self")
         return
-
-
+    
     if mute(spdr.chat_id, user.id) is False:
-        return await spdr.reply('`Error! User probably already muted.`')
+        return await spdr.reply(f"Error! User probably already muted.")
     else:
         try:
             await spdr.client(
                 EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
+
+            # Announce that the function is done
             if reason:
-                await spdr.reply(f"`Safely taped !!`\nReason: {reason}")
+                await spdr.reply(f"{user.first_name} was muted in {spdr.chat.title}\n"
+                                               f"`Reason:`{reason}")
             else:
-                await spdr.reply("`Safely taped !!`")
+                await spdr.reply(f"{user.first_name} was muted in {spdr.chat.title}")
+
 
             # Announce to logging group
             if BOTLOG:
@@ -73,11 +77,13 @@ async def spider(spdr):
         except UserIdInvalidError:
             return await spdr.reply("`Uh oh my mute logic broke!`")
 
+
+
 @borg.on(sudo_cmd(pattern=r"unmute(?: |$)(.*)") ,allow_sudo = True))
 @errors_handler
 async def unmoot(unmot):
-    if event.fwd_from:
-        return
+    """ For .unmute command, unmute the replied/tagged person """
+    # Admin or creator check
     chat = await unmot.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
@@ -90,7 +96,12 @@ async def unmoot(unmot):
     # Check if the function running under SQL mode
     try:
         from userbot.plugins.sql_helper.mute_sql import unmute
+    except AttributeError:
+        await unmot.delete()
         return
+
+    # If admin or creator, inform the user and start unmuting
+
     user = await get_user_from_event(unmot)
     user = user[0]
     if user:
@@ -99,15 +110,15 @@ async def unmoot(unmot):
         return
 
     if unmute(unmot.chat_id, user.id) is False:
-        return await unmot.reply("`Error! User probably already unmuted.`")
+        return await unmot.reply(f"Error! User probably already unmuted.")
     else:
 
         try:
             await unmot.client(
                 EditBannedRequest(unmot.chat_id, user.id, UNBAN_RIGHTS))
-            await unmot.reply("```Unmuted Successfully```")
+            await unmot.reply(f"{user.first_name} was unmuted in {unmot.chat.title}")
         except UserIdInvalidError:
-            await unmot.reply("`Uh oh my unmute logic broke!`")
+            await unmot.reply("Uh oh my unmute logic broke!")
             return
 
         if BOTLOG:
