@@ -21,8 +21,6 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 async def spider(spdr):
     if event.fwd_from:
         return
-    try:
-        from userbot.modules.sql_helper.spam_mute_sql import mute
     
     chat = await spdr.get_chat()
     admin = chat.admin_rights
@@ -31,6 +29,9 @@ async def spider(spdr):
     # If not admin and not creator, return
     if not admin and not creator:
         await spdr.reply(NO_ADMIN)
+        return
+    try:
+        from userbot.plugins.sql_helper.mute_sql import mute
         return
 
     user, reason = await get_user_from_event(spdr)
@@ -83,7 +84,7 @@ async def unmoot(unmot):
 
     # Check if the function running under SQL mode
     try:
-        from userbot.modules.sql_helper.spam_mute_sql import unmute
+        from userbot.plugins.sql_helper.mute_sql import unmute
         return
     user = await get_user_from_event(unmot)
     user = user[0]
