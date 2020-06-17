@@ -39,7 +39,7 @@ async def _(event):
              await event.client.send_message(event.chat_id, response.message)
 
             
-@borg.on(sudo_cmd(pattern="qbot ?(.*)",outgoing=True))
+@borg.on(sudo_cmd(pattern="qbot ?(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return 
