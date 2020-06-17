@@ -52,23 +52,18 @@ def command(**args):
                 args['pattern'] = '(?i)' + pattern
         except:
             pass
-
-        reg = re.compile('(.*)')
-        if not pattern == None:
+    if pattern is not None:
+        if pattern.startswith("\#"):
+            # special fix for snip.py
+            args["pattern"] = re.compile(pattern)
+        else:
+            args["pattern"] = re.compile("\." + pattern)
+            cmd = "." + pattern
             try:
-                cmd = re.search(reg, pattern)
-                try:
-                    cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
-                except:
-                    pass
-
-                try:
-                    CMD_LIST[file_test].append(cmd)
-                except:
-                    CMD_LIST.update({file_test: [cmd]})
+                CMD_LIST[file_test].append(cmd)
             except:
-                pass
-
+                CMD_LIST.update({file_test: [cmd]})
+                
         if allow_sudo:
             args["from_users"] = list(Config.SUDO_USERS)
             # Mutually exclusive with outgoing (can only set one of either).
