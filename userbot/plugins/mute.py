@@ -79,7 +79,7 @@ async def spider(spdr):
 
 
 
-@borg.on(sudo_cmd(pattern=r"unmute(?: |$)(.*)") ,allow_sudo = True))
+@borg.on(sudo_cmd(pattern=r"unmute(?: |$)(.*)" ,allow_sudo = True))
 @errors_handler
 async def unmoot(unmot):
     """ For .unmute command, unmute the replied/tagged person """
