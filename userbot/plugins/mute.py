@@ -4,7 +4,7 @@ from telethon import events
 import asyncio
 from datetime import datetime
 from telethon.errors.rpcerrorlist import UserIdInvalidError
-from userbot.utils import sudo_cmd
+from userbot.utils import sudo_cmd, errors_handler
 from telethon.tl.functions.channels import EditBannedRequest
 from userbot.uniborgConfig import Config
 from telethon.tl.types import ChatBannedRights
