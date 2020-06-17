@@ -313,8 +313,8 @@ async def nothanos(unbon):
 async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
-
-@borg.on(admin_cmd("mute ?(.*)"))
+        
+@command(outgoing=True, pattern=r"^.mute ?(\d+)?")
 async def startmute(event):
     private = False
     if event.fwd_from:
@@ -323,7 +323,7 @@ async def startmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True 
-    if any([x in event.raw_text for x in ("/mute", "!mute")]):
+    if any([x in event.raw_text for x in ("/mute", "!mute", "amute", "bmute", "cmute", "dmute", "emute", "fmute", "gmute", "hmute", "imute", "jmute", "kmute", "lmute", "mmute", "nmute", "omute", "pmute", "qmute", "rmute", "smute", "tmute", "umute", "vmute", "wmute", "xmute", "ymute", "zmute" )]):
         await asyncio.sleep(0.5)
     else:
         reply = await event.get_reply_message()
@@ -364,9 +364,7 @@ async def startmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
     
-    
-
-@borg.on(admin_cmd("unmute ?(.*)"))
+@command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
 async def endmute(event):
     private = False
     if event.fwd_from:
@@ -375,7 +373,7 @@ async def endmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True   
-    if any([x in event.raw_text for x in ("/unmute", "!unmute")]):
+    if any([x in event.raw_text for x in ("/mute", "!mute", "amute", "bmute", "cmute", "dmute", "emute", "fmute", "gmute", "hmute", "imute", "jmute", "kmute", "lmute", "mmute", "nmute", "omute", "pmute", "qmute", "rmute", "smute", "tmute", "umute", "vmute", "wmute", "xmute", "ymute", "zmute" )]):
         await asyncio.sleep(0.5)
     else:
         reply = await event.get_reply_message()
