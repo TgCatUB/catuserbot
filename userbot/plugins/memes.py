@@ -340,13 +340,8 @@ async def claptext(memereview):
         await memereview.edit(reply_text)
 
 
-
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="smk (.*)"))
-async def smrk(smk):
-	if smk.fwd_from:
-            return		  
+@register(outgoing=True, pattern="smk (.*)")
+async def smrk(smk):		  
         if not smk.text[0].isalpha() and smk.text[0] not in ("/", "#", "@", "!"):
             textx = await smk.get_reply_message()
             message = smk.text
