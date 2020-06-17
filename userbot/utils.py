@@ -52,18 +52,23 @@ def command(**args):
                 args['pattern'] = '(?i)' + pattern
         except:
             pass
-    if pattern is not None:
-        if pattern.startswith("\#"):
-            # special fix for snip.py
-            args["pattern"] = re.compile(pattern)
-        else:
-            args["pattern"] = re.compile("\." + pattern)
-            cmd = "." + pattern
+
+        reg = re.compile('(.*)')
+        if not pattern == None:
             try:
-                CMD_LIST[file_test].append(cmd)
+                cmd = re.search(reg, pattern)
+                try:
+                    cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
+                except:
+                    pass
+
+                try:
+                    CMD_LIST[file_test].append(cmd)
+                except:
+                    CMD_LIST.update({file_test: [cmd]})
             except:
-                CMD_LIST.update({file_test: [cmd]})
-                
+                pass
+
         if allow_sudo:
             args["from_users"] = list(Config.SUDO_USERS)
             # Mutually exclusive with outgoing (can only set one of either).
@@ -429,14 +434,6 @@ def sudo_cmd(pattern=None, **args):
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         allow_edited_updates = args["allow_edited_updates"]
         del args["allow_edited_updates"]
-
     # check if the plugin should listen for outgoing 'messages'
     is_message_enabled = True
-
     return events.NewMessage(**args)
-
-
-
-
-
-
