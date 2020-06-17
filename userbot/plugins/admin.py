@@ -323,7 +323,7 @@ async def startmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True 
-    if any([x in event.raw_text for x in ("/mute", "!mute", "amute", "bmute", "cmute", "dmute", "emute", "fmute", "gmute", "hmute", "imute", "jmute", "kmute", "lmute", "mmute", "nmute", "omute", "pmute", "qmute", "rmute", "smute", "tmute", "umute", "vmute", "wmute", "xmute", "ymute", "zmute" )]):
+    if any([x in event.raw_text for x in ("/mute", "!mute", "amute", "bmute", "cmute", "dmute", "emute", "fmute", "gmute", "hmute", "imute", "jmute", "kmute", "lmute", "mmute", "nmute", "omute", "pmute", "qmute", "rmute", "smute", "tmute", "umute", "vmute", "wmute", "xmute", "ymute", "zmute" ,"1mute","2mute","3mute","4mute","5mute","6mute","7mute","8mute","9mute","0mute")]):
         await asyncio.sleep(0.5)
     else:
         reply = await event.get_reply_message()
@@ -362,7 +362,7 @@ async def startmute(event):
       await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")   
     
 @command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
 async def endmute(event):
@@ -373,7 +373,7 @@ async def endmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True   
-    if any([x in event.raw_text for x in ("/mute", "!mute", "amute", "bmute", "cmute", "dmute", "emute", "fmute", "gmute", "hmute", "imute", "jmute", "kmute", "lmute", "mmute", "nmute", "omute", "pmute", "qmute", "rmute", "smute", "tmute", "umute", "vmute", "wmute", "xmute", "ymute", "zmute" )]):
+    if any([x in event.raw_text for x in ("/unmute", "!unmute")]):
         await asyncio.sleep(0.5)
     else:
         reply = await event.get_reply_message()
