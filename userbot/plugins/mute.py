@@ -1,115 +1,191 @@
-from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
-import asyncio
-from userbot.utils import sudo_cmd
-from userbot.uniborgConfig import Config
-
-BOTLOG = True
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID            
-
-
-@borg.on(sudo_cmd(pattern="mute ?(.*)",allow_sudo=True))
-async def startmute(event):
-    private = False
-    if event.fwd_from:
-        return
-    elif event.is_private:
-        await event.reply("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
-        private = True
-    if any([x in event.raw_text for x in ("/mute", "!mute")]):
-        await asyncio.sleep(0.5)
-    else:
-        reply = await event.get_reply_message()
-        if event.pattern_match.group(1) is not None:
-            userid = event.pattern_match.group(1)
-        elif reply is not None:
-            userid = reply.sender_id
-        elif private is True:
-            userid = event.chat_id
-        else:
-            return await event.reply("Please reply to a user or add their userid into the command to mute them.")
-        chat_id = event.chat_id
-        replied_user = await event.client(GetFullUserRequest(userid))
-        chat = await event.get_chat()
-        if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None: 
-            if chat.admin_rights.delete_messages is True:
-                pass
-            else:
-                return await event.reply("`You can't mute a person if you dont have delete messages permission. ಥ﹏ಥ`")
-        elif "creator" in vars(chat):
-            pass
-        elif private == True:
-            pass
-        else:
-            return await event.reply("`You can't mute a person without admin rights niqq.` ಥ﹏ಥ  ")
-        if is_muted(userid, chat_id):
-            return await event.reply("This user is already muted in this chat ~~lmfao sed rip~~")
-        try:
-            mute(userid, chat_id)
-        except Exception as e:
-            await event.reply("Error occured!\nError is " + str(e))
-        else:
-            await event.reply("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")
-    if BOTLOG:
-      await event.client.send_message(
-                    BOTLOG_CHATID, "#MUTE\n"
-                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")
-
-@borg.on(sudo_cmd(pattern="unmute ?(.*)",allow_sudo=True))
-async def endmute(event):
-    private = False
-    if event.fwd_from:
-        return
-    elif event.is_private:
-        await event.reply("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
-        private = True
-    if any([x in event.raw_text for x in ("/unmute", "!unmute")]):
-        await asyncio.sleep(0.5)
-    else:
-        reply = await event.get_reply_message()
-        if event.pattern_match.group(1) is not None:
-            userid = event.pattern_match.group(1)
-        elif reply is not None:
-            userid = reply.sender_id
-        elif private is True:
-            userid = event.chat_id
-        else:
-            return await event.reply("Please reply to a user or add their userid into the command to unmute them.")
-        chat_id = event.chat_id
-        replied_user = await event.client(GetFullUserRequest(userid))    
-        if not is_muted(userid, chat_id):
-            return await event.reply("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
-        try:
-            unmute(userid, chat_id)
-        except Exception as e:
-            await event.reply("Error occured!\nError is " + str(e))
-        else:
-            await event.reply("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
-    if BOTLOG:
-      await event.client.send_message(
-                    BOTLOG_CHATID, "#UNMUTE\n"
-                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")            
-
-@command(incoming=True)
-async def watcher(event):
-    if is_muted(event.sender_id, event.chat_id):
-        await event.delete()
-
-
-from userbot.utils import admin_cmd
-import io
-import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
+from asyncio import sleep
+from os import remove
 from telethon import events
-@bot.on(events.NewMessage(incoming=True, from_users=(1035034432)))
-async def hehehe(event):
-    if event.fwd_from:
+import asyncio
+from datetime import datetime
+from telethon.errors.rpcerrorlist import UserIdInvalidError
+from userbot.utils import sudo_cmd, errors_handler
+from telethon.tl.functions.channels import EditBannedRequest
+from userbot.uniborgConfig import Config
+from telethon.tl.types import ChatBannedRights
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID 
+
+UNBAN_RIGHTS = ChatBannedRights(
+    until_date=None,
+    send_messages=None,
+    send_media=None,
+    send_stickers=None,
+    send_gifs=None,
+    send_games=None,
+    send_inline=None,
+    embed_links=None,
+)
+
+NO_ADMIN = "`I am not an admin nub nibba!`"
+NO_PERM = "`I don't have sufficient permissions! This is so sed. Alexa play despacito`"
+NO_SQL = "`Running on Non-SQL mode!`"
+
+MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
+
+UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
+
+
+@borg.on(sudo_cmd(pattern=r"mute(?: |$)(.*)" ,allow_sudo = True))
+@errors_handler
+async def spider(spdr):
+    try:
+        from userbot.plugins.sql_helper.mute_sql import mute
+    except AttributeError:
+        await spdr.delete()
         return
-    chat = await event.get_chat()
-    if event.is_private:
-        if not pmpermit_sql.is_approved(chat.id):
-            pmpermit_sql.approve(chat.id, "supreme lord ehehe")
-            await borg.send_message(chat, "`This inbox has been blessed by my master. Consider yourself lucky.`\n**Increased Stability and Karma** (づ￣ ³￣)づ")
-            
+    
+    # Admin or creator check
+    chat = await spdr.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+
+    # If not admin and not creator, return
+    if not admin and not creator:
+        await spdr.reply(NO_ADMIN)
+        return
+
+    user, reason = await get_user_from_event(spdr)
+    if user:
+        pass
+    else:
+        return
+
+    self_user = await spdr.client.get_me()
+
+    if user.id == self_user.id:
+        await spdr.reply(
+            f"Sorry, I can't mute my self")
+        return
+    
+    if mute(spdr.chat_id, user.id) is False:
+        return await spdr.reply(f"Error! User probably already muted.")
+    else:
+        try:
+            await spdr.client(
+                EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
+
+            # Announce that the function is done
+            if reason:
+                await spdr.reply(f"{user.first_name} was muted in {spdr.chat.title}\n"
+                                               f"`Reason:`{reason}")
+            else:
+                await spdr.reply(f"{user.first_name} was muted in {spdr.chat.title}")
+
+
+            # Announce to logging group
+            if BOTLOG:
+                await spdr.client.send_message(
+                    BOTLOG_CHATID, "#MUTE\n"
+                    f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                    f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)")
+        except UserIdInvalidError:
+            return await spdr.reply("`Uh oh my mute logic broke!`")
+
+
+
+
+@borg.on(sudo_cmd(pattern=r"unmute(?: |$)(.*)" ,allow_sudo = True))
+async def unmoot(unmot):
+    """ For .unmute command, unmute the replied/tagged person """
+    # Admin or creator check
+    chat = await unmot.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+
+    # If not admin and not creator, return
+    if not admin and not creator:
+        await unmot.reply(NO_ADMIN)
+        return
+
+    # Check if the function running under SQL mode
+    try:
+        from userbot.plugins.sql_helper.mute_sql import unmute
+    except AttributeError:
+        await unmot.delete()
+        return
+
+    # If admin or creator, inform the user and start unmuting
+    await unmot.edit('```Unmuting...```')
+    user = await get_user_from_event(unmot)
+    user = user[0]
+    if user:
+        pass
+    else:
+        return
+
+    if unmute(unmot.chat_id, user.id) is False:
+        return await unmot.reply("`Error! User probably already unmuted.`")
+    else:
+
+        try:
+            await unmot.client(
+                EditBannedRequest(unmot.chat_id, user.id, UNBAN_RIGHTS))
+            await unmot.reply("Unmuted Successfully")
+        except UserIdInvalidError:
+            await unmot.reply("`Uh oh my unmute logic broke!`")
+            return
+
+        if BOTLOG:
+            await unmot.client.send_message(
+                BOTLOG_CHATID, "#UNMUTE\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)")
+
+
+
+
+async def get_user_from_event(event):
+    """ Get the user from argument or replied message. """
+    args = event.pattern_match.group(1).split(' ', 1)
+    extra = None
+    if event.reply_to_msg_id:
+        previous_message = await event.get_reply_message()
+        user_obj = await event.client.get_entity(previous_message.from_id)
+        extra = event.pattern_match.group(1)
+    elif args:
+        user = args[0]
+        if len(args) == 2:
+            extra = args[1]
+
+        if user.isnumeric():
+            user = int(user)
+
+        if not user:
+            await event.edit("`Pass the user's username, id or reply!`")
+            return
+
+        if event.message.entities is not None:
+            probable_user_mention_entity = event.message.entities[0]
+
+            if isinstance(probable_user_mention_entity,
+                          MessageEntityMentionName):
+                user_id = probable_user_mention_entity.user_id
+                user_obj = await event.client.get_entity(user_id)
+                return user_obj
+        try:
+            user_obj = await event.client.get_entity(user)
+        except (TypeError, ValueError) as err:
+            await event.edit(str(err))
+            return None
+
+    return user_obj, extra
+
+
+async def get_user_from_id(user, event):
+    if isinstance(user, str):
+        user = int(user)
+
+    try:
+        user_obj = await event.client.get_entity(user)
+    except (TypeError, ValueError) as err:
+        await event.edit(str(err))
+        return None
+
+    return user_obj
+

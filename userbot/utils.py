@@ -434,14 +434,6 @@ def sudo_cmd(pattern=None, **args):
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         allow_edited_updates = args["allow_edited_updates"]
         del args["allow_edited_updates"]
-
     # check if the plugin should listen for outgoing 'messages'
     is_message_enabled = True
-
     return events.NewMessage(**args)
-
-
-
-
-
-

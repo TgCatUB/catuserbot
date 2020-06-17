@@ -313,8 +313,8 @@ async def nothanos(unbon):
 async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
-
-@borg.on(admin_cmd("mute ?(.*)"))
+        
+@command(outgoing=True, pattern=r"^.mute ?(\d+)?")
 async def startmute(event):
     private = False
     if event.fwd_from:
@@ -323,7 +323,7 @@ async def startmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True 
-    if any([x in event.raw_text for x in ("/mute", "!mute")]):
+    if any([x in event.raw_text for x in ("/mute", "!mute", "amute", "bmute", "cmute", "dmute", "emute", "fmute", "gmute", "hmute", "imute", "jmute", "kmute", "lmute", "mmute", "nmute", "omute", "pmute", "qmute", "rmute", "smute", "tmute", "umute", "vmute", "wmute", "xmute", "ymute", "zmute" ,"1mute","2mute","3mute","4mute","5mute","6mute","7mute","8mute","9mute","0mute")]):
         await asyncio.sleep(0.5)
     else:
         reply = await event.get_reply_message()
@@ -362,11 +362,9 @@ async def startmute(event):
       await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")   
     
-    
-
-@borg.on(admin_cmd("unmute ?(.*)"))
+@command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
 async def endmute(event):
     private = False
     if event.fwd_from:
@@ -375,7 +373,7 @@ async def endmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True   
-    if any([x in event.raw_text for x in ("/unmute", "!unmute")]):
+    if any([x in event.raw_text for x in ("/unmute", "!unmute", "aunmute", "bunmute", "cunmute", "dunmute", "eunmute", "funmute", "gunmute", "hunmute", "iunmute", "junmute", "kunmute", "lunmute", "munmute", "nunmute", "ounmute", "punmute", "qunmute", "runmute", "sunmute", "tunmute", "uunmute", "vunmute", "wunmute", "xunmute", "yunmute", "zunmute" ,"1unmute","2unmute","3unmute","4unmute","5unmute","6unmute","7unmute","8unmute","9unmute","0unmute")]):
         await asyncio.sleep(0.5)
     else:
         reply = await event.get_reply_message()
@@ -387,8 +385,9 @@ async def endmute(event):
             userid = event.chat_id
         else:
             return await event.edit("Please reply to a user or add their userid into the command to unmute them.")
+        replied_user = await event.client(GetFullUserRequest(userid))  
         chat_id = event.chat_id
-        replied_user = await event.client(GetFullUserRequest(userid))
+        
         if not is_muted(userid, chat_id):
             return await event.edit("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
         try:
@@ -400,9 +399,9 @@ async def endmute(event):
         # Announce to logging group    
     if BOTLOG:
       await event.client.send_message(
-                BOTLOG_CHATID, "#UNMUTE\n"
-                f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-                f"CHAT: {event.chat.title}(`{event.chat_id}`)")
+                    BOTLOG_CHATID, "#UNMUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 
 @register(incoming=True)

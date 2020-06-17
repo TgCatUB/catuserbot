@@ -6,7 +6,6 @@
 #
 
 """ Userbot module for having some fun with people. """
-
 import asyncio
 import random
 import re
@@ -17,8 +16,11 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from cowpy import cow
 from userbot import CMD_HELP, memes
-from userbot.utils import register
+from userbot.utils import admin_cmd, register
+from userbot.uniborgConfig import Config
 
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @register(outgoing=True, pattern=r"^.(\w+)say (.*)")
 async def univsaye(cowmsg):
@@ -37,7 +39,8 @@ async def univsaye(cowmsg):
         await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
 
-@register(outgoing=True, pattern="^:/$")
+
+@register(outgoing=True, pattern="^:/$")	 
 async def kek(keks):
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
         """ Check yourself ;)"""
@@ -46,7 +49,7 @@ async def kek(keks):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
-@register(pattern="^.slap(?: |$)(.*)", outgoing=True)
+@register(pattern="slap (.*)", outgoing=True)
 async def who(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         """ slaps a user, or get slapped if not a reply. """
@@ -124,24 +127,21 @@ async def lol(lel):
             okay = okay[:-1] + "_-"
             await lel.edit(okay)
 
-@register(outgoing=True, pattern="^.decide$")
-async def _(event):
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
-        if event.fwd_from:
-            return
-        message_id = event.message.id
-        if event.reply_to_msg_id:
-            message_id = event.reply_to_msg_id
-        r = requests.get("https://yesno.wtf/api").json()
-        await event.client.send_message(
-            event.chat_id,
-            str(r["answer"]).upper(),
-            reply_to=message_id,
-            file=r["image"]
-        )
-        await event.delete()
+@borg.on(admin_cmd(outgoing=True, pattern="(yes|no|maybe|decide)"))
+async def decide(event):
+    decision = event.pattern_match.group(1).lower()
+    message_id = event.reply_to_msg_id if event.reply_to_msg_id else None
+    if decision != "decide":
+        r = requests.get(f"https://yesno.wtf/api?force={decision}").json()
+    else:
+        r = requests.get(f"https://yesno.wtf/api").json()
+    await event.delete()
+    await event.client.send_message(event.chat_id,
+                                    str(r["answer"]).upper(),
+                                    reply_to=message_id,
+                                    file=r["image"])
 
-@register(outgoing=True, pattern="^;_;$")
+@register(outgoing=True, pattern="^;_;")
 async def fun(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         t = ";__;"
@@ -150,7 +150,7 @@ async def fun(e):
             await e.edit(t)
 
 
-@register(outgoing=True, pattern="^.insult$")
+@borg.on(admin_cmd(outgoing=True, pattern="insult"))
 async def insult(e):
     """ I make you cry !! """
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -158,7 +158,7 @@ async def insult(e):
 
 
 			  
-@register(outgoing=True, pattern="^.repo$")
+@borg.on(admin_cmd(outgoing=True, pattern="repo"))
 async def source(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Click [here](https://github.com/sandy1709/catuserbot) to open this lit af repo.")
@@ -167,7 +167,7 @@ async def source(e):
 			  
 
 
-@register(outgoing=True, pattern="^.hey$")
+@borg.on(admin_cmd(outgoing=True, pattern="hey"))
 async def hoi(hello):
     """ Greet everyone! """
     if not hello.text[0].isalpha() and hello.text[0] not in ("/", "#", "@", "!"):
@@ -175,7 +175,7 @@ async def hoi(hello):
 			  
 
 			  			  
-@register(outgoing=True, pattern="^.rape$")
+@borg.on(admin_cmd(outgoing=True, pattern="rape"))
 async def raping (raped):
     """ Dont Rape Too much -_-"""
     if not raped.text[0].isalpha() and raped.text[0] not in ("/", "#", "@", "!"):
@@ -183,7 +183,7 @@ async def raping (raped):
         reply_text = memes.RAPE_STRINGS[index]
         await raped.edit(reply_text)
 			  
-@register(outgoing=True, pattern="^.pro$")
+@borg.on(admin_cmd(outgoing=True, pattern="pro"))
 async def proo (pros):
     """ String for Pros only -_-"""
     if not pros.text[0].isalpha() and pros.text[0] not in ("/", "#", "@", "!"):
@@ -191,7 +191,7 @@ async def proo (pros):
         reply_text = memes.PRO_STRINGS[index]
         await pros.edit(reply_text)
 
-@register(outgoing=True, pattern="^.fuk$")
+@borg.on(admin_cmd(outgoing=True, pattern="fuck"))
 async def chutiya (fuks):
     """ String for fhu only -_-"""
     if not fuks.text[0].isalpha() and fuks.text[0] not in ("/", "#", "@", "!"):
@@ -200,7 +200,7 @@ async def chutiya (fuks):
         await fuks.edit(reply_text)
 
 			  			  
-@register(outgoing=True, pattern="^.thanos$")
+@borg.on(admin_cmd(outgoing=True, pattern="thanos"))
 async def thanos (thanos):
     """ String for thanos only -_-"""
     if not thanos.text[0].isalpha() and thanos.text[0] not in ("/", "#", "@", "!"):
@@ -208,7 +208,7 @@ async def thanos (thanos):
         reply_text = memes.THANOS_STRINGS[index]
         await thanos.edit(reply_text)	
 			  
-@register(outgoing=True, pattern="^.abusehard$")
+@borg.on(admin_cmd(outgoing=True, pattern="abusehard"))
 async def fuckedd (abusehard):
     """ Dont Use this Too much bsdk -_-"""
     if not abusehard.text[0].isalpha() and abusehard.text[0] not in ("/", "#", "@", "!"):
@@ -219,7 +219,7 @@ async def fuckedd (abusehard):
 
 			  
 			  
-@register(outgoing=True, pattern="^.abusehim$")
+@borg.on(admin_cmd(outgoing=True, pattern="abusehim"))
 async def abusing (abused):
     """ Dont Abuse Too much bsdk -_-"""
     if not abused.text[0].isalpha() and abused.text[0] not in ("/", "#", "@", "!"):
@@ -228,7 +228,7 @@ async def abusing (abused):
         await abused.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.owo(?: |$)(.*)")
+@borg.on(admin_cmd(outgoing=True, pattern="owo (.*)"))
 async def faces(owo):
     """ UwU """
     if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
@@ -246,45 +246,45 @@ async def faces(owo):
         reply_text = re.sub(r"(R|L)", "W", reply_text)
         reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
         reply_text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
-        reply_text = re.sub(r"\!+", " " + random.choice(UWUS), reply_text)
+        reply_text = re.sub(r"\!+", " " + random.choice(memes.UWUS), reply_text)
         reply_text = reply_text.replace("ove", "uv")
         reply_text += " " + random.choice(memes.UWUS)
         await owo.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.react$")
+@borg.on(admin_cmd(outgoing=True, pattern="react"))
 async def react_meme(react):
     """ Make your userbot react to everything. """
     if not react.text[0].isalpha() and react.text[0] not in ("/", "#", "@", "!"):
         await react.edit(random.choice(memes.FACEREACTS))
 
 
-@register(outgoing=True, pattern="^.shg$")
+@borg.on(admin_cmd(outgoing=True, pattern="shg"))
 async def shrugger(shg):
     r""" ¯\_(ツ)_/¯ """
     if not shg.text[0].isalpha() and shg.text[0] not in ("/", "#", "@", "!"):
         await shg.edit(random.choice(memes.SHGS))
 
 
-@register(outgoing=True, pattern="^.runs$")
+@borg.on(admin_cmd(outgoing=True, pattern="runs"))
 async def runner_lol(run):
     """ Run, run, RUNNN! """
     if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@", "!"):
         await run.edit(random.choice(memes.RUNSREACTS))
 
-@register(outgoing=True, pattern="^.noob$")
+@borg.on(admin_cmd(outgoing=True, pattern="noob"))
 async def metoo(hahayes):
     """ Haha yes """
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
         await hahayes.edit(random.choice(memes.NOOBSTR))
 			  
-@register(outgoing=True, pattern="^.rendi$")
+@borg.on(admin_cmd(outgoing=True, pattern="rendi"))
 async def metoo(hahayes):
     """ Haha yes """
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
         await hahayes.edit(random.choice(memes.RENDISTR))
 			 			  
-@register(outgoing=True, pattern="^.oof$")
+@borg.on(admin_cmd(outgoing=True, pattern="oof"))
 async def Oof(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         t = "Oof"
@@ -292,12 +292,12 @@ async def Oof(e):
             t = t[:-1] + "of"
             await e.edit(t)
 
-@register(outgoing=True, pattern="^.10iq$")
+@borg.on(admin_cmd(outgoing=True, pattern="10iq"))
 async def iqless(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("♿")
 
-@register(outgoing=True, pattern="^.moon$")
+@borg.on(admin_cmd(outgoing=True, pattern="moon"))
 async def _(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
 	    if event.fwd_from:
@@ -308,7 +308,7 @@ async def _(event):
 		    await event.edit("".join(deq))
 		    deq.rotate(1)
 
-@register(outgoing=True, pattern="^.clock$")
+@borg.on(admin_cmd(outgoing=True, pattern="clock"))
 async def _(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
 	    if event.fwd_from:
@@ -320,7 +320,7 @@ async def _(event):
 		    deq.rotate(1)
 
 
-@register(outgoing=True, pattern="^.clap(?: |$)(.*)")
+@register(outgoing=True, pattern="clap (.*)")
 async def claptext(memereview):
     """ Praise people! """
     if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
@@ -337,9 +337,6 @@ async def claptext(memereview):
         reply_text += message.replace(" ", " 👏 ")
         reply_text += " 👏"
         await memereview.edit(reply_text)
-
-
-
 
 
 @register(outgoing=True, pattern="^.smk (.*)")
@@ -360,16 +357,24 @@ async def smrk(smk):
              reply_text = message + smirk
              await smk.edit(reply_text)
 
+@borg.on(admin_cmd(pattern="ftext ?(.*)"))
+async def payf(event):
+    paytext = event.pattern_match.group(1)
+    pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
+        paytext * 8, paytext * 8, paytext * 2, paytext * 2, paytext * 2,
+        paytext * 6, paytext * 6, paytext * 2, paytext * 2, paytext * 2,
+        paytext * 2, paytext * 2)
+    await event.edit(pay)
+			  
+@borg.on(admin_cmd(outgoing=True, pattern="bt"))
+async def bluetext(bt_e):
+    """ Believe me, you will find this useful. """
+    if await bt_e.get_reply_message() and bt_e.is_group:
+        await bt_e.edit(
+            "/BLUETEXT /MUST /CLICK.\n"
+            "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?")
 
-@register(outgoing=True, pattern=r"\.f (.*)")
-async def payf(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        paytext = e.pattern_match.group(1)
-        pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}".format(paytext*5, paytext*1,paytext*1, paytext*4, paytext*1, paytext*1, paytext*1)
-        await e.edit(pay)
-
-
-@register(outgoing=True, pattern="^.lfy (.*)",)
+@borg.on(admin_cmd(outgoing=True, pattern="lfy (.*)",))
 async def let_me_google_that_for_you(lmgtfy_q):
     if not lmgtfy_q.text[0].isalpha() and lmgtfy_q.text[0] not in ("/", "#", "@", "!"):
         textx = await lmgtfy_q.get_reply_message()
@@ -392,7 +397,7 @@ async def let_me_google_that_for_you(lmgtfy_q):
 
 
 			  
-@register(pattern='.type(?: |$)(.*)')
+@borg.on(admin_cmd(pattern="type (.*)"))
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """
     if not typew.text[0].isalpha() and typew.text[0] not in ("/", "#", "@", "!"):
@@ -459,8 +464,10 @@ CMD_HELP.update({
 \nUsage: Haha yes\
 \n\n.clap\
 \nUsage: Praise people!\
-\n\n.f <emoji/character>\
+\n\n.ftext <emoji/character>\
 \nUsage: Pay Respects.\
+\n\n.bt\
+\nUsage: Believe me, you will find this useful.\
 \n\n.smk <text/reply>\
 \nUsage: A shit module for ツ , who cares.\
 \n\n.type\
