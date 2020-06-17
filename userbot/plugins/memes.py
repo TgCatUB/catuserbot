@@ -128,22 +128,19 @@ async def lol(lel):
             okay = okay[:-1] + "_-"
             await lel.edit(okay)
 
-@borg.on(admin_cmd(outgoing=True, pattern="decide"))
-async def _(event):
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
-        if event.fwd_from:
-            return
-        message_id = event.message.id
-        if event.reply_to_msg_id:
-            message_id = event.reply_to_msg_id
-        r = requests.get("https://yesno.wtf/api").json()
-        await event.client.send_message(
-            event.chat_id,
-            str(r["answer"]).upper(),
-            reply_to=message_id,
-            file=r["image"]
-        )
-        await event.delete()
+@borg.on(admin_cmd(outgoing=True, pattern="(yes|no|maybe|decide)"))
+async def decide(event):
+    decision = event.pattern_match.group(1).lower()
+    message_id = event.reply_to_msg_id if event.reply_to_msg_id else None
+    if decision != "decide":
+        r = requests.get(f"https://yesno.wtf/api?force={decision}").json()
+    else:
+        r = requests.get(f"https://yesno.wtf/api").json()
+    await event.delete()
+    await event.client.send_message(event.chat_id,
+                                    str(r["answer"]).upper(),
+                                    reply_to=message_id,
+                                    file=r["image"])
 
 @register(outgoing=True, pattern="^;_;")
 async def fun(e):
@@ -375,7 +372,14 @@ async def payf(event):
         paytext * 6, paytext * 6, paytext * 2, paytext * 2, paytext * 2,
         paytext * 2, paytext * 2)
     await event.edit(pay)
-
+			  
+@borg.on(admin_cmd(outgoing=True, pattern="bt"))
+async def bluetext(bt_e):
+    """ Believe me, you will find this useful. """
+    if await bt_e.get_reply_message() and bt_e.is_group:
+        await bt_e.edit(
+            "/BLUETEXT /MUST /CLICK.\n"
+            "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?")
 
 @borg.on(admin_cmd(outgoing=True, pattern="lfy (.*)",))
 async def let_me_google_that_for_you(lmgtfy_q):
@@ -467,8 +471,10 @@ CMD_HELP.update({
 \nUsage: Haha yes\
 \n\n.clap\
 \nUsage: Praise people!\
-\n\n.f <emoji/character>\
+\n\n.ftext <emoji/character>\
 \nUsage: Pay Respects.\
+\n\n.bt\
+\nUsage: Believe me, you will find this useful.\
 \n\n.smk <text/reply>\
 \nUsage: A shit module for ツ , who cares.\
 \n\n.type\
