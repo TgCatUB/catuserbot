@@ -18,7 +18,10 @@ from telethon.tl.types import MessageEntityMentionName
 from cowpy import cow
 from userbot import CMD_HELP, memes
 from userbot.utils import admin_cmd, register
+from userbot.uniborgConfig import Config
 
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @register(outgoing=True, pattern=r"^.(\w+)say (.*)")
 async def univsaye(cowmsg):
