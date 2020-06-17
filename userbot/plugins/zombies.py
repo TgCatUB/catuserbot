@@ -126,8 +126,9 @@ async def rm_deletedacc(show):
     del_status = "`No deleted accounts found, Group is clean`"
 
     if con != "clean":
-        await show.reply("`Searching for ghost/deleted/zombie accounts...`")
-        await show.delete()
+        cat = await show.reply("`Searching for ghost/deleted/zombie accounts...`")
+        await asyncio.sleep(2)
+        await cat.delete(0.1)
         async for user in show.client.iter_participants(show.chat_id):
 
             if user.deleted:
@@ -149,8 +150,9 @@ async def rm_deletedacc(show):
         await show.reply("`I am not an admin here!`")
         return
 
-    await show.reply("`Deleting deleted accounts...\nOh I can do that?!?!`")
+    cat2 = await show.reply("`Deleting deleted accounts...\nOh I can do that?!?!`")
     await asyncio.sleep(2)
+    await cat2.delete()
     del_u = 0
     del_a = 0
 
@@ -178,9 +180,9 @@ async def rm_deletedacc(show):
         \n**{del_a}** deleted admin accounts are not removed"
 
 
-    await show.reply(del_status)
+    cat3 = await show.reply(del_status)
     await sleep(2)
-    await show.delete()
+    await cat3.delete()
 
 CMD_HELP.update({
     "zombies":
