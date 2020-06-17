@@ -2,7 +2,7 @@ from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
 import asyncio
 from userbot.utils import sudo_cmd
 from userbot.uniborgConfig import Config
-
+from telethon.tl.functions.users import GetFullUserRequest
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID            
 
