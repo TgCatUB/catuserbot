@@ -79,15 +79,9 @@ async def spider(spdr):
 
 
 
+
 @borg.on(sudo_cmd(pattern=r"unmute(?: |$)(.*)" ,allow_sudo = True))
-@errors_handler
 async def unmoot(unmot):
-    try:
-        from userbot.plugins.sql_helper.mute_sql import unmute
-    except AttributeError:
-        await unmot.delete()
-        return
-    
     """ For .unmute command, unmute the replied/tagged person """
     # Admin or creator check
     chat = await unmot.get_chat()
@@ -100,10 +94,14 @@ async def unmoot(unmot):
         return
 
     # Check if the function running under SQL mode
-    
+    try:
+        from userbot.plugins.sql_helper.mute_sql import unmute
+    except AttributeError:
+        await unmot.delete()
+        return
 
     # If admin or creator, inform the user and start unmuting
-
+    await unmot.edit('```Unmuting...```')
     user = await get_user_from_event(unmot)
     user = user[0]
     if user:
@@ -112,15 +110,15 @@ async def unmoot(unmot):
         return
 
     if unmute(unmot.chat_id, user.id) is False:
-        return await unmot.reply(f"Error! User probably already unmuted.")
+        return await unmot.reply("`Error! User probably already unmuted.`")
     else:
 
         try:
             await unmot.client(
                 EditBannedRequest(unmot.chat_id, user.id, UNBAN_RIGHTS))
-            await unmot.reply(f"{user.first_name} was unmuted in {unmot.chat.title}")
+            await unmot.reply("Unmuted Successfully")
         except UserIdInvalidError:
-            await unmot.reply("Uh oh my unmute logic broke!")
+            await unmot.reply("`Uh oh my unmute logic broke!`")
             return
 
         if BOTLOG:
@@ -128,7 +126,6 @@ async def unmoot(unmot):
                 BOTLOG_CHATID, "#UNMUTE\n"
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)")
-
 
 
 
