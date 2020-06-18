@@ -5,27 +5,31 @@ import asyncio
 import os
 import time
 from datetime import datetime
+from telethon import events
 from userbot.utils import admin_cmd, progress
 from userbot import CMD_HELP
 
-
-@borg.on(admin_cmd(pattern="nfc (.*)"))  # pylint:disable=E0602
+@borg.on(admin_cmd(pattern="nfc ?(.*)"))
 async def _(event):
     if event.fwd_from:
-        return
+        return 
     if not event.reply_to_msg_id:
-       await event.edit("Reply to any required media file.")
+       await event.edit("```Reply to any media file.```")
        return
     reply_message = await event.get_reply_message() 
     if not reply_message.media:
        await event.edit("reply to media file")
        return
     input_str = event.pattern_match.group(1)
-    if  input_str != "mp3" or input_str !="voice":
-        await event.edit("only mp3 and voice supports ")
-        return
-   
-    await event.edit("trying to download media file, to my local")
+    if  input_str is None:
+        await event.edit("try `.nfc voice` or`.nfc mp3`")
+    elif input_str == "mp3":
+        await event.edit("converting...")
+    elif input_str == "voice":
+        await event.edit("converting...")
+    else:
+        await event.edit("try `.nfc voice` or`.nfc mp3`")
+        
     try:
         start = datetime.now()
         c_time = time.time()
