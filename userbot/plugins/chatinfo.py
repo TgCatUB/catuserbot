@@ -205,7 +205,7 @@ async def fetch_info(chat, event):
 @borg.on(admin_cmd(pattern="adminlist", outgoing=True))
 @errors_handler
 async def get_admin(show):
-    """ For .admins command, list all of the admins of the chat. """
+    """ For .adminlist command, list all of the admins of the chat. """
     info = await show.client.get_entity(show.chat_id)
     title = info.title if info.title else "this chat"
     mentions = f'<b>Admins in {title}:</b> \n'

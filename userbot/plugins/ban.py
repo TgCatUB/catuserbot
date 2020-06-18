@@ -23,8 +23,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                MessageMediaPhoto)
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot 
-from userbot.utils import  errors_handler, admin_cmd,sudo_cmd
-
+from userbot.utils import  errors_handler, admin_cmd
 
 # =================== CONSTANT ===================
 
@@ -62,39 +61,7 @@ MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
 
-
-@borg.on(sudo_cmd(pattern="(ban|unban) ?(.*)", allow_sudo=True))
-async def _(event):
-    # Space weirdness in regex required because argument is optional and other
-    # commands start with ".unban"
-    if event.fwd_from:
-        return
-    start = datetime.now()
-    to_ban_id = None
-    rights = None
-    input_cmd = event.pattern_match.group(1)
-    if input_cmd == "ban":
-        rights = BANNED_RIGHTS
-    elif input_cmd == "unban":
-        rights = UNBAN_RIGHTS
-    input_str = event.pattern_match.group(2)
-    reply_msg_id = event.reply_to_msg_id
-    if reply_msg_id:
-        r_mesg = await event.get_reply_message()
-        to_ban_id = r_mesg.from_id
-    elif input_str and "all" not in input_str:
-        to_ban_id = int(input_str)
-    else:
-        return False
-    try:
-        await borg(EditBannedRequest(event.chat_id, to_ban_id, rights))
-    except (Exception) as exc:
-        await event.reply(str(exc))
-    else:
-        await event.reply(f"{input_cmd}ned Successfully!")
-
-
-@borg.on(sudo_cmd(pattern="pgs ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="pgs ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -121,7 +88,7 @@ async def _(event):
             msgs = []
             await event.delete()
         else:
-            await event.reply("**PURGE** Failed!")
+            await event.edit("**PURGE** Failed!")
 
 
 @borg.on(admin_cmd(pattern="(ban|unban) ?(.*)"))

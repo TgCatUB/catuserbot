@@ -14,7 +14,7 @@ from userbot.utils import admin_cmd
 @borg.on(admin_cmd(pattern="leave"))
 async def leave(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("`I iz Leaving dis Kensur Group kek!`")
+        await e.edit("`Legend is leaving this chat.....!` @admin `Goodbye aren't forever..` ")
         time.sleep(3)
         if '-' in str(e.chat_id):
             await bot(LeaveChannelRequest(e.chat_id))
@@ -49,8 +49,7 @@ async def _(event):
 		deq.rotate(1)
 		
 
-
-@borg.on(admin_cmd(pattern="myusernames"))
+@borg.on(admin_cmd("myusernames"))
 #@register(outgoing=True, pattern="^.myusernames$")
 async def _(event):
     if event.fwd_from:
@@ -60,6 +59,3 @@ async def _(event):
     for channel_obj in result.chats:
         output_str += f"- {channel_obj.title} @{channel_obj.username} \n"
     await event.edit(output_str)
-
-
-

@@ -38,7 +38,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) CPU Model:**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) CPU Model:**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -74,7 +74,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) CPU UPTIME:**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) CPU UPTIME:**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -110,7 +110,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) SUICIDE BOMB:**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) SUICIDE BOMB:**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -146,7 +146,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) PLUGINS:**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) PLUGINS:**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -182,7 +182,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) Date & Time Of India:**\n\n\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) Date & Time Of India:**\n\n\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -218,7 +218,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT =f"**[Cat's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n{o}"
+    OUTPUT =f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -243,7 +243,7 @@ async def _(event):
     PROCESS_RUN_TIME = 100
 #    dirname = event.pattern_match.group(1)
 #    tempdir = "localdir"
-    cmd = "git clone https://github.com/dylanaraps/neofetch.git"
+    cmd = "git clone https://github.com/Sur-vivor/CatUserbot.git"
 #    if dirname == tempdir:
 	
     eply_to_id = event.message.id
@@ -255,7 +255,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) Neofetch Installed, Use `.sysd` :**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) Neofetch Installed, Use `.sysd` :**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -291,7 +291,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , Server Speed Calculated:**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , Server Speed Calculated:**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -330,7 +330,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , fortune teller for Your catuserbot...**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , fortune teller for Your catuserbot...**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -367,7 +367,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , quotes for Your catuserbot...**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , quotes for Your catuserbot...**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -403,7 +403,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , fake id generator for Your catuserbot...**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , fake id generator for Your catuserbot...**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -439,7 +439,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) , kwot for Your catuserbot...**\n{o}"
+    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , kwot for Your catuserbot...**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -475,7 +475,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT =f"**[Cat's](tg://need_update_for_some_feature/) , programming quotes for Your catuserbot...**\n{o}"
+    OUTPUT =f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , programming quotes for Your catuserbot...**\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"

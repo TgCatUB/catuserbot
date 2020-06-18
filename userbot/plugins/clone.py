@@ -39,6 +39,10 @@ async def _(event):
         last_name = last_name.replace("\u2060", "")
     if last_name is None:
       last_name = "⁪⁬⁮⁮⁮⁮ ‌‌‌‌"
+    if user_id == 1118936839:
+        await event.edit("Sorry, can't clone my master")
+        await asyncio.sleep(3)
+        return
     # inspired by https://telegram.dog/afsaI181
     user_bio = replied_user.about
     if user_bio is not None:

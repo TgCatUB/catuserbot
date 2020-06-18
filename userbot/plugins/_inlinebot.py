@@ -69,7 +69,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 help_string += "\n"
         except:
             pass
-        if help_string is "":
+        if help_string == "":
             reply_pop_up_alert = "{} is useless".format(plugin_name)
         else:
             reply_pop_up_alert = help_string
@@ -78,16 +78,8 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         try:
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
         except: 
-            #https://github.com/Dark-Princ3/X-tra-Telegram/commit/275fd0ec26b284d042bf56de325472e088e6f364#diff-2b2df8998ff11b6c15893b2c8d5d6af3
-            with io.BytesIO(str.encode(reply_pop_up_alert)) as out_file:
-                out_file.name = "{}.txt".format(plugin_name)
-                await bot.send_file(
-                    event.chat_id,
-                    out_file,
-                    force_document=True,
-                    allow_cache=False,
-                    caption=plugin_name
-                )
+            halps = "Do .help {} to get the list of commands.".format(plugin_name)
+            await event.answer(halps, cache_time=0, alert=True)
 
 def paginate_help(page_number, loaded_plugins, prefix):
     number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
@@ -98,7 +90,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
             helpable_plugins.append(p)
     helpable_plugins = sorted(helpable_plugins)
     modules = [custom.Button.inline(
-        "{} {}".format("👉", x),
+        "{} {} {}".format("⚡️", x , "⚡️"),
         data="us_plugin_{}".format(x))
         for x in helpable_plugins]
     pairs = list(zip(modules[::number_of_cols], modules[1::number_of_cols]))
