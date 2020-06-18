@@ -14,7 +14,7 @@ document
 cancel"""
 
 import asyncio
-from userbot.utils import admin_cm
+from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 
  
