@@ -17,7 +17,7 @@ from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from userbot.utils import register, admin_cmd
 
 
-@borg.on(admin_cmd(pattern="userinfo ?(.*)"))
+@borg.on(admin_cmd(pattern="info ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -64,7 +64,9 @@ async def _(event):
 🌐Verified: {}
 🤖Bot: {}
 👥Groups in Common: {}
+
 List Of Telegram Data Centres:
+
 DC1 : Miami FL, USA
 DC2 : Amsterdam, NL
 DC3 : Miami FL, USA
@@ -285,6 +287,6 @@ CMD_HELP.update({
     "whois":
     ".whois <username> or reply to someones text with .whois\
     \nUsage: Gets info of an user.\
-    .userinfo <username> or reply to someones text with .userinfo\
+    .info <username> or reply to someones text with .userinfo\
     \nUsage: Gets info of an user."
 })

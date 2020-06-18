@@ -1,7 +1,7 @@
 """ Google Translate
 Available Commands:
-.tr LanguageCode as reply to a message
-.tr LangaugeCode | text to translate"""
+.tl LanguageCode as reply to a message
+.tl LangaugeCode | text to translate"""
 
 import emoji
 from googletrans import Translator
@@ -23,7 +23,7 @@ async def _(event):
     elif "|" in input_str:
         lan, text = input_str.split("|")
     else:
-        await event.edit("`.tr LanguageCode` as reply to a message")
+        await event.edit("`.tl LanguageCode` as reply to a message")
         return
     text = emoji.demojize(text.strip())
     lan = lan.strip()

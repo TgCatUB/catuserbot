@@ -2,13 +2,13 @@
 #
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
-#
 
+from datetime import datetime
 import os
 from telethon import events
 from telethon.tl import functions
 from userbot.utils import admin_cmd
-import os
+from userbot import bot
 
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 
@@ -162,41 +162,45 @@ async def update_username(username):
         await username.edit(USERNAME_TAKEN)
 
 
-@register(outgoing=True, pattern="^.count$")
-async def count(event):
-    """ For .count command, get profile stats. """
+@bot.on(admin_cmd(pattern=r"count"))
+async def _(event):
+    if event.fwd_from:
+        return
+    start = datetime.now()
     u = 0
     g = 0
     c = 0
     bc = 0
     b = 0
-    result = ""
-    await event.edit("`Processing..`")
-    dialogs = await bot.get_dialogs(limit=None, ignore_migrated=True)
+    await event.edit("Retrieving Telegram Count(s)...")
+    dialogs = await bot.get_dialogs(
+        limit=None,
+        ignore_migrated=True
+    )
     for d in dialogs:
         currrent_entity = d.entity
-        if isinstance(currrent_entity, User):
+        if type(currrent_entity) is User:
             if currrent_entity.bot:
                 b += 1
             else:
                 u += 1
-        elif isinstance(currrent_entity, Chat):
+        elif type(currrent_entity) is Chat:
             g += 1
-        elif isinstance(currrent_entity, Channel):
+        elif type(currrent_entity) is Channel:
             if currrent_entity.broadcast:
                 bc += 1
             else:
                 c += 1
         else:
             print(d)
-
-    result += f"`Users:`\t**{u}**\n"
-    result += f"`Groups:`\t**{g}**\n"
-    result += f"`Super Groups:`\t**{c}**\n"
-    result += f"`Channels:`\t**{bc}**\n"
-    result += f"`Bots:`\t**{b}**"
-
-    await event.edit(result)
+    end = datetime.now()
+    ms = (end - start).seconds
+    await event.edit("""`Your Stats Obtained in {} seconds`
+`You have {} Private Messages`
+`You are in {} Groups`
+`You are in {} Super Groups`
+`You Are in {} Channels`
+`And finally Bots = {}`""".format(ms, u, g, c, bc, b))
 
 
 @register(outgoing=True, pattern=r"^.delpfp")

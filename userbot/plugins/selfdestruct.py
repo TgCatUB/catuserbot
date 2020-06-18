@@ -13,7 +13,7 @@ import importlib.util
 
 
 
-@borg.on(admin_cmd(pattern="sdm", outgoing=True  ))
+@borg.on(admin_cmd(pattern="sdm", outgoing=True))
 async def selfdestruct(destroy):
     if not destroy.text[0].isalpha() and destroy.text[0] not in ("/", "#", "@", "!"):
         message = destroy.text

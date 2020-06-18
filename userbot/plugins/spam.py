@@ -7,10 +7,9 @@ import asyncio
 from asyncio import wait, sleep
 from userbot.utils import admin_cmd
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.utils import admin_cmd,sudo_cmd
+from userbot.utils import admin_cmd
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
-
 
 
 @borg.on(admin_cmd("cspam ?(.*)"))
@@ -24,7 +23,22 @@ async def tmeme(e):
         await e.client.send_message(
             BOTLOG_CHATID, "#CSPAM\n"
             "TSpam was executed successfully")
-
+        
+@borg.on(admin_cmd("bigspam ?(.*)"))
+async def bigspam(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        message = e.text
+        counter = int(message[9:13])
+        spam_message = str(e.text[13:])
+        for i in range(1, counter):
+            await e.respond(spam_message)
+        await e.delete()
+        if BOTLOG:
+            await e.client.send_message(
+                BOTLOG_CHATID,
+                "#BIGSPAM \n\n"
+                "Bigspam was executed successfully"
+                )
 
 @borg.on(admin_cmd("wspam ?(.*)"))
 async def tmeme(e):
@@ -39,11 +53,8 @@ async def tmeme(e):
             "WSpam was executed successfully")
 
 
-
 @borg.on(admin_cmd("spam ?(.*)"))
 async def spammer(e):
-    if e.fwd_from:
-        return
     counter = int(e.pattern_match.group(1).split(' ', 1)[0])
     spam_message = str(e.pattern_match.group(1).split(' ', 1)[1])
     await e.delete()
@@ -51,7 +62,6 @@ async def spammer(e):
     if BOTLOG:
         await e.client.send_message(BOTLOG_CHATID, "#SPAM\n"
                                     "Spam was executed successfully")
-
 
 
 @borg.on(admin_cmd("picspam ?(.*)"))
@@ -69,11 +79,8 @@ async def tiny_pic_spam(e):
             "PicSpam was executed successfully")
 
 
-
 @borg.on(admin_cmd("delayspam ?(.*)"))
 async def spammer(e):
-    if e.fwd_from:
-        return    
     spamDelay = float(e.pattern_match.group(1).split(' ', 2)[0])
     counter = int(e.pattern_match.group(1).split(' ', 2)[1])
     spam_message = str(e.pattern_match.group(1).split(' ', 2)[2])
@@ -88,25 +95,13 @@ async def spammer(e):
 
 
 
-@borg.on(sudo_cmd("spam ?(.*)", allow_sudo="True"))
-async def spammer(e):
-    if e.fwd_from:
-        return
-    input_str = e.pattern_match.group(1)
-    counter = int(input_str.split(' ', 1)[0])
-    spam_message = str(input_str.split(' ', 1)[1])
-    await e.delete()
-    await asyncio.wait([e.respond(spam_message) for i in range(counter)])
-    if BOTLOG:
-        await e.client.send_message(BOTLOG_CHATID, "#SPAM\n"
-                                    "Spam was executed successfully")
-        
-        
 CMD_HELP.update({
     "spam":
     ".cspam <text>\
 \nUsage: Spam the text letter by letter.\
 \n\n.spam <count> <text>\
+\nUsage: Floods text in the chat !!\
+\n\n.bigspam <count> <text>\
 \nUsage: Floods text in the chat !!\
 \n\n.wspam <text>\
 \nUsage: Spam the text word by word.\
