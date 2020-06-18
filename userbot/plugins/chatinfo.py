@@ -222,6 +222,6 @@ CMD_HELP.update({
     ".chatinfo or .chatinfo <username of group>\
      \nUsage: Shows you the total information of the required chat.\
      \n\n.iundlt\
-     \nUsage: display last 5 deleted messages in group.\"
+     \nUsage: display last 5 deleted messages in group."
      })
         
