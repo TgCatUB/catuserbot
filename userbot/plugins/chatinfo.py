@@ -199,11 +199,30 @@ async def fetch_info(chat, event):
     if description:
         caption += f"Description: \n<code>{description}</code>\n"
     return caption 
-           
+
+@borg.on(admin_cmd("iundlt ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    c = await event.get_chat()
+    if c.admin_rights or c.creator:
+        a = await borg.get_admin_log(event.chat_id,limit=5, edit=False, delete=True)
+        # print(a[0].old.message)
+        deleted_msg = "Deleted message in this group:"
+        for i in a:
+            deleted_msg += "\n👉`{}`".format(i.old.message)
+        await event.edit(deleted_msg)
+    else:
+        await event.edit("`You need administrative permissions in order to do this command`")
+        await asyncio.sleep(3)
+        await event.delete()  
+  
 CMD_HELP.update({
     "chatinfo":
     ".chatinfo or .chatinfo <username of group>\
      \nUsage: Shows you the total information of the required chat.\
+     \n\n.iundlt\
+      \nUsage: display last 5 deleted messages in group.
      "      
      })
         
