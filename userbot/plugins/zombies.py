@@ -44,7 +44,7 @@ BANNED_RIGHTS = ChatBannedRights(
 
 
         
-@borg.on(admin_cmd(pattern=f"zombies"))
+@borg.on(admin_cmd(pattern=f"zombies ?(.*)"))
 async def rm_deletedacc(show):
     """ For .zombies command, list all the ghost/deleted/zombie accounts in a chat. """
 
