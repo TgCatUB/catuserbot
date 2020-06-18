@@ -6,7 +6,6 @@ import io
 import asyncio
 import time
 from userbot.utils import admin_cmd
-from userbot import CMD_HELP
 import glob
 import os
 try:
@@ -26,38 +25,26 @@ def bruh(name):
 
 @borg.on(admin_cmd(pattern="song ?(.*)"))
 async def _(event):
-    await event.edit("wi8..! I am finding your song....`")
+    if event.fwd_from:
+        return
+    DELAY_BETWEEN_EDITS = 0.3
+    PROCESS_RUN_TIME = 100
+    cmd = event.pattern_match.group(1)
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    reply = await event.get_reply_message()
-    if event.pattern_match.group(1):
-        query = event.pattern_match.group(1)
-    elif reply.text:
-        query = reply.message
-    else:
-    	await event.edit("`What I am Supposed to find `")
-    	return
-    
-    bruh(str(query))
+    await event.edit("╔═════════╗\n║▐▀▀▀▀▀▀▀▌║\n║▐░░░░▓░░▌║\n║▐░░▓░▓▓░▌║\n║▐▓░▓▓▓▓░▌║\n║▐▄▄▄▄▄▄▄▌║\n╟─────────╢\n║▒▒▒▒▒▒▒▒▒║\n║▒▒▄▒▒▒▄▀▒║\n║▒▀█▀▒▒▒▒▒║\n║▒▒▒▒▒▒║║║║\n╙═════════╜\n\n ok finding the song")    
+    bruh(str(cmd))
     l = glob.glob("*.mp3")
     loa = l[0]
-    await event.edit("yeah..! i found something wi8..🥰")
+    await event.edit("╔══╗ \n║██║ \n║(O)║♫ ♪ ♫ ♪\n╚══╝\n▄ █ ▄ █ ▄ ▄ █ ▄ █ ▄ █ \nMin- - - - - - - - - - - -●Max \n\n sending song")
     await borg.send_file(
                 event.chat_id,
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=query,
+                caption=cmd,
                 reply_to=reply_to_id
             )
-    await event.delete()
     os.system("rm -rf *.mp3")
     subprocess.check_output("rm -rf *.mp3",shell=True)
-    
-    
-    
-CMD_HELP.update({"getmusic": ['getmusic',
-    " - `.song` query : finds the song you entered in query and sends it "
-    " - `.song <Name>` or `.song (replied message)`"]
-})    

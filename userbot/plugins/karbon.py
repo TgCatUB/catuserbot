@@ -26,7 +26,7 @@ import shutil
 from PIL import Image, ImageDraw, ImageFont
 from userbot import ALIVE_NAME
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
 
 @borg.on(admin_cmd(pattern=f"kar1", outgoing=True))
 async def carbon_api(e):

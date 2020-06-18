@@ -9,7 +9,7 @@ from telethon.tl.functions.channels import EditBannedRequest
 from userbot.uniborgConfig import Config
 from telethon.tl.types import ChatBannedRights
 BOTLOG = True
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID 
+BOTLOG_CHATID = Config.PRIVATE_CHANNEL_BOT_API_ID 
 
 UNBAN_RIGHTS = ChatBannedRights(
     until_date=None,

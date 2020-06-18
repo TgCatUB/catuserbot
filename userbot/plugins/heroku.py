@@ -143,6 +143,26 @@ def prettyjson(obj, indent=2, maxlinelength=80):
     items, _ = getsubitems(obj, itemkey="", islast=True, maxlinelength=maxlinelength - indent, indent=indent)
     return indentitems(items, indent, level=0)
 
+@borg.on(admin_cmd(pattern="logs ?(.*)", outgoing=True))
+async def _(dyno):        
+        try:
+             Heroku = heroku3.from_key(HEROKU_API_KEY)                         
+             app = Heroku.app(HEROKU_APP_NAME)
+        except:
+  	       return await dyno.reply(" Please make sure your Heroku API Key, Your App name are configured correctly in the heroku Please Join @Sur_vivor For Any Issue")
+        await dyno.edit("Getting Logs....")
+        with open('logs.txt', 'w') as log:
+            log.write(app.get_log())
+        await dyno.client.send_file(
+            dyno.chat_id,
+            "logs.txt",
+            reply_to=dyno.id,
+            caption="logs of 100+ lines",
+        )
+        await dyno.edit("Sending in Progress.......")
+        await asyncio.sleep(5)
+        await dyno.delete()
+        return os.remove('logs.txt')
 CMD_HELP.update({
   "heroku":
   "Info for Module to Manage Heroku:**\n\n`.usage`\nUsage:__Check your heroku dyno hours status.__\n\n`.set var <NEW VAR> <VALUE>`\nUsage: __add new variable or update existing value variable__\n**!!! WARNING !!!, after setting a variable the bot will restart.**\n\n`.get var or .get var <VAR>`\nUsage: __get your existing varibles, use it only on your private group!__\n**This returns all of your private information, please be cautious...**\n\n`.del var <VAR>`\nUsage: __delete existing variable__\n**!!! WARNING !!!, after deleting variable the bot will restarted** "

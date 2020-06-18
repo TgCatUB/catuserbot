@@ -1,14 +1,11 @@
-from userbot import CMD_LIST, SUDO_LIST
+from userbot import CMD_LIST
 from userbot import ALIVE_NAME
-from userbot.utils import admin_cmd, sudo_cmd
+from userbot.utils import admin_cmd
 from platform import uname
 import sys
 from telethon import events, functions, __version__
 
-from userbot import SUDO_LIST
-from userbot.utils import sudo_cmd
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
 
 @command(pattern="^.help ?(.*)")
 async def cmd_list(event):
@@ -18,7 +15,7 @@ async def cmd_list(event):
         if tgbotusername is None or input_str == "text":
             string = ""
             for i in CMD_LIST:
-                string += "👉 " + i + "\n"
+                string += "🛡 " + i + "\n"
                 for iter_list in CMD_LIST[i]:
                     string += "    `" + str(iter_list) + "`"
                     string += "\n"
@@ -38,8 +35,8 @@ async def cmd_list(event):
             else:
                 await event.edit(input_str + " is not a valid plugin!")
         else:
-            help_string = f"""Userbot Helper.. Provided by {DEFAULTUSER} \n
-Userbot Helper to reveal all the commands\n__Do `.help` plugin_name for commands, in case popup doesn't appear.__\nDo `.info` plugin_name for usage"""
+            help_string = f"""Userbot Helper.. Provided by {DEFAULTUSER} \n\n
+`Userbot Helper to reveal all the commands`\n__Do .help plugin_name for commands, in case popup doesn't appear.__"""
             results = await bot.inline_query(  # pylint:disable=E0602
                 tgbotusername,
                 help_string
@@ -51,6 +48,8 @@ Userbot Helper to reveal all the commands\n__Do `.help` plugin_name for commands
             )
             await event.delete()
 
+            
+
 @borg.on(admin_cmd(pattern="dc"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
@@ -59,29 +58,32 @@ async def _(event):
     await event.edit(result.stringify())
 
 
-
-@borg.on(sudo_cmd(allow_sudo=True, pattern="help(?: |$)(.*)"))
-async def info(event):
+@borg.on(admin_cmd(pattern="config"))  # pylint:disable=E0602
+async def _(event):
     if event.fwd_from:
         return
-    """ For .info command,"""
-    args = event.pattern_match.group(1).lower()
-    input_str = event.pattern_match.group(1)
-    if args:
-        if args in SUDO_LIST:
-            if input_str in SUDO_LIST:
-                string = "Commands found in {}:\n".format(input_str)
-                for i in SUDO_LIST[input_str]:
-                    string += "    " + i
-                    string += "\n"
-                await event.reply(string)
+    result = await borg(functions.help.GetConfigRequest())  # pylint:disable=E0602
+    result = result.stringify()
+    logger.info(result)  # pylint:disable=E0602
+    await event.edit("""Telethon UserBot powered by catuserbot""")
+
+
+@borg.on(admin_cmd(pattern="syntax (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    plugin_name = event.pattern_match.group(1)
+
+    if plugin_name in CMD_LIST:
+        help_string = CMD_LIST[plugin_name].__doc__
+        unload_string = f"Use `.unload {plugin_name}` to remove this plugin.\n           ©catuserbot"
+        
+        if help_string:
+            plugin_syntax = f"Syntax for plugin **{plugin_name}**:\n\n{help_string}\n{unload_string}"
         else:
-                await event.reply(args + " is not a valid plugin!")
+            plugin_syntax = f"No DOCSTRING has been setup for {plugin_name} plugin."
     else:
-        await event.reply("Please specify which plugin do you want help for !!\
-            \nUsage: .help <plugin name>")
-        string = ""
-        for i in SUDO_LIST:
-            string += "`" + str(i)
-            string += "`\n"
-        await event.reply(string)
+
+        plugin_syntax = "Enter valid **Plugin** name.\nDo `.info` or `.help` to get list of valid plugin names."
+
+    await event.edit(plugin_syntax)            
