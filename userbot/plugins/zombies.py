@@ -42,6 +42,16 @@ BANNED_RIGHTS = ChatBannedRights(
 )
 
 
+UNBAN_RIGHTS = ChatBannedRights(
+    until_date=None,
+    send_messages=None,
+    send_media=None,
+    send_stickers=None,
+    send_gifs=None,
+    send_games=None,
+    send_inline=None,
+    embed_links=None,
+)
 
         
 @borg.on(admin_cmd(pattern=f"zombies ?(.*)"))
