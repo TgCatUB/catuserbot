@@ -9,12 +9,10 @@ Use .zombies clean to remove deleted accounts from the groups and channels.
 
 from telethon import events
 from userbot.utils import admin_cmd
-#
 from asyncio import sleep
 from os import remove
-
+import asyncio
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,
-                             ImageProcessFailedError, PhotoCropSizeSmallError,
                              UserAdminInvalidError)
 from telethon.errors.rpcerrorlist import (UserIdInvalidError,
                                           MessageTooLongError)
@@ -24,7 +22,10 @@ from telethon.tl.functions.channels import (EditAdminRequest,
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot 
 
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 # =================== CONSTANT ===================
 
@@ -40,26 +41,11 @@ BANNED_RIGHTS = ChatBannedRights(
     embed_links=True,
 )
 
-UNBAN_RIGHTS = ChatBannedRights(
-    until_date=None,
-    send_messages=None,
-    send_media=None,
-    send_stickers=None,
-    send_gifs=None,
-    send_games=None,
-    send_inline=None,
-    embed_links=None,
-)
-
-MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
-
-UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
 
 
 
-@borg.on(admin_cmd(pattern=f"zombies", allow_sudo=True))
-@borg.on(events.NewMessage(pattern="^.zombies(?: |$)(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"zombies ?(.*)"))
 async def rm_deletedacc(show):
     """ For .zombies command, list all the ghost/deleted/zombie accounts in a chat. """
 
@@ -75,8 +61,8 @@ async def rm_deletedacc(show):
                 del_u += 1
                 await sleep(1)
         if del_u > 0:
-            del_status = f"`Found` **{del_u}** `ghost/deleted/zombie account(s) in this group,\
-            \nclean them by using .zombies clean`"
+            del_status = f"`Found` **{del_u}** ghost/deleted/zombie account(s) in this group,\
+            \nclean them by using `.zombies clean`"
         await show.edit(del_status)
         return
 
@@ -121,11 +107,16 @@ async def rm_deletedacc(show):
     await show.edit(del_status)
     await sleep(2)
     await show.delete()
-
-
-    if Config.G_BAN_LOGGER_GROUP is not None:
+    
+    if BOTLOG:
         await show.client.send_message(
-            Config.G_BAN_LOGGER_GROUP, "#CLEANUP\n"
+            BOTLOG_CHATID, "#CLEANUP\n"
             f"Cleaned **{del_u}** deleted account(s) !!\
             \nCHAT: {show.chat.title}(`{show.chat_id}`)")
 
+CMD_HELP.update({
+    "zombies":
+    ".zombies\
+\nUsage: Searches for deleted accounts in a group. Use .delusers clean to remove deleted accounts from the group.\
+"
+})        
