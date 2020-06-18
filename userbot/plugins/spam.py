@@ -40,7 +40,7 @@ async def tmeme(e):
 
 
 
-@borg.on(admin_cmd("spam?(.*)"))
+@borg.on(admin_cmd("spam ?(.*)"))
 async def spammer(e):
     if e.fwd_from:
         return
