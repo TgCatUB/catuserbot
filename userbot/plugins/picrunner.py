@@ -33,7 +33,14 @@ if AUTOPFP_PACK is None:
    "roaring-lion-wallpaper",
    "wolves-screensavers-and-wallpaper",
    "cool-wallpaper-for-men",
-   "Epic-1080p-Wallpapers"
+   "Epic-1080p-Wallpapers",
+   "hacker-background",
+   "Vietnam-War-Wallpapers",
+   "War-of-the-Worlds-Wallpaper",
+   "War-Plane-Wallpaper",
+   "World-War-Ii-Wallpaper",
+   "Cool-War-Wallpapers",
+   "World-War-2-Wallpaper-HD"
   ]
 else:
   PACK = AUTOPFP_PACK
