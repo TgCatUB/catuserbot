@@ -42,6 +42,8 @@ async def tmeme(e):
 
 @borg.on(admin_cmd("spam?(.*)"))
 async def spammer(e):
+    if e.fwd_from:
+        return
     counter = int(e.pattern_match.group(1).split(' ', 1)[0])
     spam_message = str(e.pattern_match.group(1).split(' ', 1)[1])
     await e.delete()
@@ -70,6 +72,8 @@ async def tiny_pic_spam(e):
 
 @borg.on(admin_cmd("delayspam ?(.*)"))
 async def spammer(e):
+    if e.fwd_from:
+        return    
     spamDelay = float(e.pattern_match.group(1).split(' ', 2)[0])
     counter = int(e.pattern_match.group(1).split(' ', 2)[1])
     spam_message = str(e.pattern_match.group(1).split(' ', 2)[2])
