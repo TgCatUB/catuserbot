@@ -368,8 +368,8 @@ async def startmute(event):
         else:
             await event.edit("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")
         # Announce to logging group    
-    if BOTLOG:
-      await event.client.send_message(
+        if BOTLOG:
+          await event.client.send_message(
                     BOTLOG_CHATID, "#MUTE\n"
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")   
@@ -418,8 +418,8 @@ async def endmute(event):
         else:
             await event.edit("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
         # Announce to logging group    
-    if BOTLOG:
-      await event.client.send_message(
+        if BOTLOG:
+           await event.client.send_message(
                     BOTLOG_CHATID, "#UNMUTE\n"
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
