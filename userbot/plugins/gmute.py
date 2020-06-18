@@ -10,6 +10,18 @@ BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @command(outgoing=True, pattern=r"^.gmute ?(\d+)?")
 async def startgmute(event):
+    if any([x in event.raw_text for x in ("/gmute", "!gmute", "agmute", "bgmute", "cgmute", "dgmute", 
+                                          "egmute", "fgmute", "ggmute", "hgmute", "igmute", "jgmute",
+                                          "kgmute", "lgmute", "mgmute", "ngmute", "ogmute", "pgmute", 
+                                          "qgmute", "rgmute", "sgmute", "tgmute", "ugmute", "vgmute", 
+                                          "wgmute", "xgmute", "ygmute", "zgmute" , "1gmute", "2gmute", 
+                                          "3gmute", "4gmute", "5gmute", "6gmute", "7gmute", "8gmute", 
+                                          "9gmute", "0gmute", "Agmute", "Bgmute", "Cgmute", "Dgmute", 
+                                          "Egmute", "Fgmute", "Ggmute", "Hgmute", "Igmute", "Jgmute", 
+                                          "Kgmute", "Lgmute", "Mgmute", "Ngmute", "Ogmute", "Pgmute",
+                                          "Qgmute", "Rgmute", "Sgmute", "Tgmute", "Ugmute", "Vgmute", 
+                                          "Wgmute", "Xgmute", "Ygmute", "Zgmute",)]):
+        return
     private = False
     if event.fwd_from:
         return
@@ -47,6 +59,18 @@ async def startgmute(event):
 
 @command(outgoing=True, pattern=r"^.ungmute ?(\d+)?")
 async def endgmute(event):
+    if any([x in event.raw_text for x in ("/ungmute", "!ungmute", "aungmute", "bungmute", "cungmute", "dungmute", 
+                                          "eungmute", "fungmute", "gungmute", "hungmute", "iungmute", "jungmute",
+                                          "kungmute", "lungmute", "mungmute", "nungmute", "oungmute", "pungmute", 
+                                          "qungmute", "rungmute", "sungmute", "tungmute", "uungmute", "vungmute", 
+                                          "wungmute", "xungmute", "yungmute", "zungmute" , "1ungmute", "2ungmute", 
+                                          "3ungmute", "4ungmute", "5ungmute", "6ungmute", "7ungmute", "8ungmute", 
+                                          "9ungmute", "0ungmute", "Aungmute", "Bungmute", "Cungmute", "Dungmute", 
+                                          "Eungmute", "Fungmute", "Gungmute", "Hungmute", "Iungmute", "Jungmute", 
+                                          "Kungmute", "Lungmute", "Mungmute", "Nungmute", "Oungmute", "Pungmute",
+                                          "Qungmute", "Rungmute", "Sungmute", "Tungmute", "Uungmute", "Vungmute", 
+                                          "Wungmute", "Xungmute", "Yungmute", "Zungmute",)]):
+        return
     private = False
     if event.fwd_from:
         return
