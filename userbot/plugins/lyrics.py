@@ -62,7 +62,7 @@ async def lyrics(lyric):
         pass
     else:
         await lyric.edit("Error: please use '-' as divider for <artist> and <song>\n"
-                         "eg: `.lyrics Nicki Minaj - Super Bass`")
+                         "eg: `.glyrics Nicki Minaj - Super Bass`")
         return
 
     if GENIUS is None:
