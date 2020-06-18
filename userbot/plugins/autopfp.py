@@ -32,7 +32,7 @@ async def animepp():
     urllib.request.urlretrieve(fy,"donottouch.jpg")
 @borg.on(admin_cmd(pattern="batmanpfp ?(.*)"))
 async def main(event):
-    await event.edit("**Starting batman Profile Pic.") #Owner @NihiNivi
+    await event.edit("**Starting batman Profile Pic.**") #Owner @NihiNivi
     while True:
         await animepp()
         file = await event.client.upload_file("donottouch.jpg")  
