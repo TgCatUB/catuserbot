@@ -118,6 +118,7 @@ async def _(event):
             )
             ms_two = (end_two - end).seconds
             os.remove(new_required_file_name)
+            await event.delete()
 
             
 CMD_HELP.update({"filetomp3": "`.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\
