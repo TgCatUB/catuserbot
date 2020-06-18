@@ -58,7 +58,7 @@ async def user(event):
             for i in range(len(text_rep)):
                 wait_time = wait_time + 0.1
             await asyncio.sleep(wait_time)
-            await event.reply(text_rep)
+            await event.reply("💫" + text_rep)
     except (KeyError, TypeError):
         return
     
