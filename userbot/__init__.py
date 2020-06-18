@@ -9,9 +9,7 @@ from distutils.util import strtobool as sb
 from pySmartDL import SmartDL
 from dotenv import load_dotenv
 import asyncio
-from userbot.helpers import memeshelper as memes
 import pylast
-from pySmartDL import SmartDL
 from requests import get
 
 os.system("pip install --upgrade pip")
@@ -113,7 +111,7 @@ if bool(ENV):
     MAX_FLOOD_IN_P_M_s = int(os.environ.get("MAX_FLOOD_IN_P_M_s", 5))
     UPSTREAM_REPO_URL = os.environ.get(
     "UPSTREAM_REPO_URL",
-    "https://github.com/sandy1709/catuserbot.git")
+    "https://github.com/Sur-vivor/CatUserbot.git")
     
     # Time & Date - Country and Time Zone
     COUNTRY = str(os.environ.get("COUNTRY", ""))

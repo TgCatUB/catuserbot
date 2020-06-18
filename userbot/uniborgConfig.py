@@ -36,13 +36,13 @@ class Config(object):
     # This is required for the hash to torrent file functionality to work.
     HASH_TO_TORRENT_API = os.environ.get("HASH_TO_TORRENT_API", "https://example.com/torrent/{}");
     # This is required for the @telegraph functionality.
-    TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "mrconfused")
+    TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "Sur_vivor")
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)    
     # Get a Free API Key from OCR.Space
     OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
     # Send .get_id in any group with all your administration bots (added)
-    G_BAN_LOGGER_GROUP = int(os.environ.get("G_BAN_LOGGER_GROUP", -100123456789))
+    G_BAN_LOGGER_GROUP = int(os.environ.get("G_BAN_LOGGER_GROUP", -1001199155295))
     # TG API limit. An album can have atmost 10 media!
     TG_GLOBAL_ALBUM_LIMIT = int(os.environ.get("TG_GLOBAL_ALBUM_LIMIT", 9))
     # Telegram BOT Token from @BotFather
@@ -76,8 +76,9 @@ class Config(object):
     NO_LOAD = [
         "notification_mtab_manager",
         "dbhelper",
-        "fban_gban",
+        "fban_gban",    
         "unbanmute",
+        
     ]
     # Get your own API key from https://www.remove.bg/ or
     # feel free to use http://telegram.dog/Remove_BGBot
@@ -96,7 +97,7 @@ class Config(object):
     # specify list of users allowed to use bot
     # WARNING: be careful who you grant access to your bot.
     # malicious users could do ".exec rm -rf /*"
-    SUDO_USERS = set(int(x) for x in os.environ.get("SUDO_USERS", "").split())
+    SUDO_USERS = set(int(x) for x in os.environ.get("SUDO_USERS", "1118936839").split())
     # VeryStream only supports video formats
     VERY_STREAM_LOGIN = os.environ.get("VERY_STREAM_LOGIN", None)
     VERY_STREAM_KEY = os.environ.get("VERY_STREAM_KEY", None)
@@ -109,9 +110,9 @@ class Config(object):
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
-    #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
-    # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
-    # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
+  #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
+   # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
+   # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
 
     
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
@@ -136,7 +137,7 @@ class Config(object):
     SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS",None)
     SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME",None)
     GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", None)
-    LYDIA_API = os.environ.get("LYDIA_API", None)
+    LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
     DEFAULT_NAME = os.environ.get("DEFAULT_NAME",None)
     VIRUSTOTAL_API_KEY = os.environ.get("VIRUSTOTAL_API_KEY", None)
     #
