@@ -49,7 +49,7 @@ async def kek(keks):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 			  
 @borg.on(admin_cmd(pattern=r"slap(?: |$)(.*)", outgoing=True))
 async def who(event):
