@@ -6,17 +6,25 @@ import os
 import time
 from datetime import datetime
 from userbot.utils import admin_cmd, progress
+from userbot import CMD_HELP
 
 
 @borg.on(admin_cmd(pattern="nfc (.*)"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
+    if not event.reply_to_msg_id:
+       await event.edit("Reply to any required media file.")
+       return
+    reply_message = await event.get_reply_message() 
+    if not reply_message.media:
+       await event.edit("reply to media file")
+       return
     input_str = event.pattern_match.group(1)
-    reply_message = await event.get_reply_message()
-    if reply_message is None:
-        await event.edit("reply to a media to use the `nfc` operation.\nInspired by @FileConverterBot")
+    if  input_str != "mp3" or input_str !="voice":
+        await event.edit("only mp3 and voice supports ")
         return
+   
     await event.edit("trying to download media file, to my local")
     try:
         start = datetime.now()
@@ -106,3 +114,7 @@ async def _(event):
             ms_two = (end_two - end).seconds
             os.remove(new_required_file_name)
             await event.edit(f"converted in {ms_two} seconds")
+            
+CMD_HELP.update({"filetomp3": "`.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\
+      \nUSAGE:Converts the required media file to voice or mp3 file. "
+})             
