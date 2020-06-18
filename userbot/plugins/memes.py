@@ -15,7 +15,7 @@ import requests
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from cowpy import cow
-from userbot import CMD_HELP, memes
+from userbot import CMD_HELP, memes , ALIVE_NAME
 from userbot.utils import admin_cmd, register
 from userbot.uniborgConfig import Config
 
@@ -49,24 +49,23 @@ async def kek(keks):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
-@register(pattern="slap (.*)", outgoing=True)
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
+			  
+@borg.on(admin_cmd(pattern=r"slap(?: |$)(.*)", outgoing=True))
 async def who(event):
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
-        """ slaps a user, or get slapped if not a reply. """
-        if event.fwd_from:
-            return
+    if event.fwd_from:
+        return
+    replied_user = await get_user(event)
+    caption = await slap(replied_user, event)
+    message_id_to_reply = event.message.reply_to_msg_id
 
-        replied_user = await get_user(event)
-        caption = await slap(replied_user, event)
-        message_id_to_reply = event.message.reply_to_msg_id
-
-        if not message_id_to_reply:
-            message_id_to_reply = None
-        try:
-            await event.edit(caption)
-        except:
-            await event.edit("`Can't slap this person, need to fetch some sticks and stones !!`")
-
+    if not message_id_to_reply:
+        message_id_to_reply = None
+    try:
+        await event.edit(caption)
+    except:
+        await event.edit("`Can't slap this person, need to fetch some sticks and stones !!`")
+			  
 async def get_user(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id:
