@@ -30,12 +30,14 @@ async def animepp():
     if not os.path.exists("f.ttf"):
         urllib.request.urlretrieve("https://github.com/rebel6969/mym/raw/master/Rebel-robot-Regular.ttf","f.ttf")
     urllib.request.urlretrieve(fy,"donottouch.jpg")
+    
 @borg.on(admin_cmd(pattern="batmanpfp ?(.*)"))
 async def main(event):
     await event.edit("**Starting batman Profile Pic.") #Owner @NihiNivi
     while True:
         await animepp()
         file = await event.client.upload_file("donottouch.jpg")  
+        await event.client(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit=1)))
         await event.client(functions.photos.UploadProfilePhotoRequest( file))
         os.system("rm -rf donottouch.jpg")
-        await asyncio.sleep(3600) #Edit this to your required needs
+        await asyncio.sleep(120) #Edit this to your required needs
