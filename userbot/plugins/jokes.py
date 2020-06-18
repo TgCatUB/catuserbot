@@ -1,4 +1,5 @@
 """COMMAND : .join , .pay , .work , .push , .aag , .climb, .ohh, .suckit, .lovestory, .bf"""
+import random
 import asyncio
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
