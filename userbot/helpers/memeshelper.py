@@ -412,18 +412,38 @@ CRI = [
 ]
 
 SLAP_TEMPLATES = [
-    "{hits} {victim} with a {item}.",
-    "{hits} {victim} in the face with a {item}.",
-    "{hits} {victim} around a bit with a {item}.",
-    "{throws} a {item} at {victim}.",
-    "grabs a {item} and {throws} it at {victim}'s face.",
-    "launches a {item} in {victim}'s general direction.",
-    "starts slapping {victim} silly with a {item}.",
-    "pins {victim} down and repeatedly {hits} them with a {item}.",
-    "grabs up a {item} and {hits} {victim} with it.",
-    "ties {victim} to a chair and {throws} a {item} at them.",
-    "gave a friendly push to help {victim} learn to swim in lava."
+    "{user1} {hits} {victim} with a {item}.",
+    "{user1} {hits} {victim} in the face with a {item}.",
+    "{user1} {hits} {victim} around a bit with a {item}.",
+    "{user1} {throws} a {item} at {victim}.",
+    "{user1} grabs a {item} and {throws} it at {victim}'s face.",
+    "{user1} {hits} a {item} at {victim}.", "{throws} a few {item} at {victim}.",
+    "{user1} grabs a {item} and {throws} it in {victim}'s face.",
+    "{user1} launches a {item} in {victim}'s general direction.",
+    "{user1} sits on {victim}'s face while slamming a {item} {where}.",
+    "{user1} starts slapping {victim} silly with a {item}.",
+    "{user1} pins {victim} down and repeatedly {hits} them with a {item}.",
+    "{user1} grabs up a {item} and {hits} {victim} with it.",
+    "{user1} starts slapping {victim} silly with a {item}.",
+    "{user1} holds {victim} down and repeatedly {hits} them with a {item}.",
+    "{user1} prods {victim} with a {item}.",
+    "{user1} picks up a {item} and {hits} {victim} with it.",
+    "{user1} ties {victim} to a chair and {throws} a {item} at them.",
+    "{user1} {hits} {victim} {where} with a {item}.",
+    "{user1} ties {victim} to a pole and whips them {where} with a {item}."
+    "{user1} gave a friendly push to help {victim} learn to swim in lava.",
+    "{user1} sent {victim} to /dev/null.", "sent {victim} down the memory hole.",
+    "{user1} beheaded {victim}.", "threw {victim} off a building.",
+    "{user1} replaced all of {victim}'s music with Nickelback.",
+    "{user1} spammed {victim}'s email.", "made {victim} a knuckle sandwich.",
+    "{user1} slapped {victim} with pure nothing.",
+    "{user1} hit {victim} with a small, interstellar spaceship.",
+    "{user1} quickscoped {victim}.", "put {victim} in check-mate.",
+    "{user1} RSA-encrypted {victim} and deleted the private key.",
+    "{user1} put {victim} in the friendzone.",
+    "{user1} slaps {victim} with a DMCA takedown request!"
 ]
+
 
 ITEMS = [
     "cast iron skillet",
@@ -434,11 +454,15 @@ ITEMS = [
     "nail",
     "printer",
     "shovel",
+    "pair of trousers",
     "CRT monitor",
+    "diamond sword",
+    "baguette",
     "physics textbook",
     "toaster",
     "portrait of Richard Stallman",
     "television",
+    "mau5head",
     "five ton truck",
     "roll of duct tape",
     "book",
@@ -446,8 +470,11 @@ ITEMS = [
     "old television",
     "sack of rocks",
     "rainbow trout",
+    "cobblestone block",
+    "lava bucket",
     "rubber chicken",
     "spiked bat",
+    "gold block",
     "fire extinguisher",
     "heavy rock",
     "chunk of dirt",
@@ -472,3 +499,5 @@ HIT = [
     "smacks",
     "bashes",
 ]
+
+WHERE = ["in the chest", "on the head", "on the butt", "on the crotch"]
