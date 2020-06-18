@@ -3,6 +3,12 @@
 from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
 import asyncio
 from uniborg.util import admin_cmd
+from telethon.tl.functions.users import GetFullUserRequest
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
+from userbot.uniborgConfig import Config
+
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 #@command(outgoing=True, pattern=r"^.mute ?(\d+)?")
 @borg.on(admin_cmd(pattern="mute ?(\d+)?"))
@@ -27,6 +33,7 @@ async def startmute(event):
         else:
             return await event.edit("Please reply to a user or add their userid into the command to mute them.")
         chat_id = event.chat_id
+        replied_user = await event.client(GetFullUserRequest(userid))
         chat = await event.get_chat()
         if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None: 
             if chat.admin_rights.delete_messages is True:
@@ -47,6 +54,13 @@ async def startmute(event):
             await event.edit("Error occured!\nError is " + str(e))
         else:
             await event.edit("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")
+            
+        # Announce to logging group    
+        if BOTLOG:
+          await event.client.send_message(
+                    BOTLOG_CHATID, "#MUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")     
 
 #@command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
 @borg.on(admin_cmd(pattern="unmute ?(\d+)?"))
@@ -70,6 +84,7 @@ async def endmute(event):
             userid = event.chat_id
         else:
             return await event.edit("Please reply to a user or add their userid into the command to unmute them.")
+        replied_user = await event.client(GetFullUserRequest(userid))
         chat_id = event.chat_id
         if not is_muted(userid, chat_id):
             return await event.edit("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
@@ -79,7 +94,13 @@ async def endmute(event):
             await event.edit("Error occured!\nError is " + str(e))
         else:
             await event.edit("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
-            
+        
+        # Announce to logging group    
+        if BOTLOG:
+           await event.client.send_message(
+                    BOTLOG_CHATID, "#UNMUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
 @command(incoming=True)
 async def watcher(event):
