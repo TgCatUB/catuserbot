@@ -336,6 +336,7 @@ async def startmute(event):
         else:
             return await event.edit("Please reply to a user or add their userid into the command to mute them.")
         chat_id = event.chat_id
+        replied_user = await event.client(GetFullUserRequest(userid))
         chat = await event.get_chat()
         if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None: 
             if chat.admin_rights.delete_messages is True:
@@ -384,6 +385,7 @@ async def endmute(event):
             userid = event.chat_id
         else:
             return await event.edit("Please reply to a user or add their userid into the command to unmute them.")
+        replied_user = await event.client(GetFullUserRequest(userid))  
         chat_id = event.chat_id
         if not is_muted(userid, chat_id):
             return await event.edit("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
