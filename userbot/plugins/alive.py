@@ -18,7 +18,7 @@ async def amireallyalive(alive):
                      f"`🛡Python Version: {python_version()}\n\n`"
                      "`🛡Bot Was Modified by:`[✰Şสͥℝสͣ✞ͫђ™✰](http://t.me/Sur_vivor)\n\n"
                      "`🛡Created by :` Snapdragon,Anubis,Sandeep\n\n"
-                     "`🛡Database Status: Databases functioning normally!\n\n`"
+                     "`🛡Database Status: Databases Functioning Normally!\n\n`"
                      "`🛡Always With You, My Master!\n\n`"
                      f"`🛡Owner Name`: {DEFAULTUSER}\n\n\n"
                      "[⚜️DEPLOY THIS USERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)"
