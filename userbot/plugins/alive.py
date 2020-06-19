@@ -16,12 +16,12 @@ async def amireallyalive(alive):
     await alive.edit("**MY BOT IS RUNNING SUCCESFULLY**\n\n"
                      f"`🛡Telethon version: {version.__version__}\n`"
                      f"`🛡Python: {python_version()}\n`"
-                     "`🛡Bot was modified by:` @Sur_vivor\n"
+                     "`🛡Bot was modified by:`[✰Şสͥℝสͣ✞ͫђ™✰](http://t.me/Sur_vivor)\n"
                      "`🛡Created by :` snapdragon,anubis,sandeep\n"
                      "`🛡Database Status: Databases functioning normally!\n\n`"
                      "`🛡Always with you, my master!\n`"
                      f"`🛡Owner Name`: {DEFAULTUSER}\n\n\n"
-                     "[DEPLOY THIS USERBOT](https://github.com/Sur-vivor/CatUserbot)"
+                     "[⚜️DEPLOY THIS USERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)"
                     )
 
     
