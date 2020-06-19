@@ -182,5 +182,6 @@ CMD_HELP.update({"tiktok": "`.tti` <link> :\
       \n\n `.ttv `<link>\
       \nUSAGE: Sends you the tiktok video of the given link without watermark\
       \n\n `.wttv `<link>\
-      \n\nUSAGE: Sends you the tiktok video of the given link with watermark\"
+      \n\nUSAGE: Sends you the tiktok video of the given link with watermark\
+      "
 })             
