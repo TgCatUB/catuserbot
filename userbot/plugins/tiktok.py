@@ -1,4 +1,8 @@
-""" Spotify / Deezer downloader plugin by @anubisxx | Syntax: .sdd link"""
+""" tiktok downloaded plugin creted by @mrconfused and @sandy1709 
+
+idea by @IMperialxx 
+
+Dont edit credits """
 import datetime
 import asyncio
 from telethon import events
@@ -101,7 +105,7 @@ async def _(event):
         await event.reply("` I need a link to download something pro.`**(._.)**")
         return
     else:
-        await event.reply("doownloading your video")
+        sandy =await event.reply("doownloading your video")
     bot = "@HK_tiktok_BOT"
     
     async with borg.conversation("@HK_tiktok_BOT") as conv:
@@ -115,7 +119,7 @@ async def _(event):
                 cat2 = await conv.get_response()
                 cat3 = await conv.get_response()
                 await borg.send_file(event.chat_id, details, caption = details.text)
-                await event.delete()
+                await sandy.delete()
           except YouBlockedUserError:
             await event.edit("**Error:** `unblock` @HK_tiktok_BOT `and retry!`")
             
@@ -130,7 +134,7 @@ async def _(event):
         await event.reply("` I need a link to download something pro.`**(._.)**")
         return
     else:
-        await event.reply("doownloading your video")
+        sandy = await event.reply("doownloading your video")
     bot = "@HK_tiktok_BOT"
     
     async with borg.conversation("@HK_tiktok_BOT") as conv:
@@ -144,7 +148,7 @@ async def _(event):
                 cat2 = await conv.get_response()
                 cat3 = await conv.get_response()
                 await borg.send_file(event.chat_id, cat3)
-                await event.delete()
+                await sandy.delete()
           except YouBlockedUserError:
             await event.edit("**Error:** `unblock` @HK_tiktok_BOT `and retry!`")
             
@@ -159,7 +163,7 @@ async def _(event):
         await event.reply("` I need a link to download something pro.`**(._.)**")
         return
     else:
-        await event.reply("doownloading your video")
+        sandy = await event.reply("doownloading your video")
     bot = "@HK_tiktok_BOT"
     
     async with borg.conversation("@HK_tiktok_BOT") as conv:
@@ -173,7 +177,7 @@ async def _(event):
                 cat2 = await conv.get_response()
                 cat3 = await conv.get_response()
                 await borg.send_file(event.chat_id, cat2)
-                await event.delete()
+                await sandy.delete()
           except YouBlockedUserError:
             await event.edit("**Error:** `unblock` @HK_tiktok_BOT `and retry!`")   
             
