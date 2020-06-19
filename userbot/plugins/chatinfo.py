@@ -198,7 +198,69 @@ async def fetch_info(chat, event):
         caption += f"Verified by Telegram: {verified}\n\n"
     if description:
         caption += f"Description: \n<code>{description}</code>\n"
-    return caption 
+    return caption
+  
+@borg.on(admin_cmd(pattern="adminlist", outgoing=True))
+@errors_handler
+async def get_admin(show):
+    """ For .admins command, list all of the admins of the chat. """
+    info = await show.client.get_entity(show.chat_id)
+    title = info.title if info.title else "this chat"
+    mentions = f'<b>Admins in {title}:</b> \n'
+    try:
+        async for user in show.client.iter_participants(
+                show.chat_id, filter=ChannelParticipantsAdmins):
+            if not user.deleted:
+                link = f"<a href=\"tg://user?id={user.id}\">{user.first_name}</a>"
+                userid = f"<code>{user.id}</code>"
+                mentions += f"\n{link} {userid}"
+            else:
+                mentions += f"\nDeleted Account <code>{user.id}</code>"
+    except ChatAdminRequiredError as err:
+        mentions += " " + str(err) + "\n"
+    await show.edit(mentions, parse_mode="html")
+
+    
+@borg.on(admin_cmd(pattern=r"users ?(.*)", outgoing=True))
+async def get_users(show):
+    """ For .userslist command, list all of the users of the chat. """
+    if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
+        if not show.is_group:
+            await show.edit("Are you sure this is a group?")
+            return
+        info = await show.client.get_entity(show.chat_id)
+        title = info.title if info.title else "this chat"
+        mentions = 'Users in {}: \n'.format(title)
+        try:
+            if not show.pattern_match.group(1):
+                async for user in show.client.iter_participants(show.chat_id):
+                    if not user.deleted:
+                        mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
+                    else:
+                        mentions += f"\nDeleted Account `{user.id}`"
+            else:
+                searchq = show.pattern_match.group(1)
+                async for user in show.client.iter_participants(show.chat_id, search=f'{searchq}'):
+                    if not user.deleted:
+                        mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
+                    else:
+                        mentions += f"\nDeleted Account `{user.id}`"
+        except ChatAdminRequiredError as err:
+            mentions += " " + str(err) + "\n"
+        try:
+            await show.edit(mentions)
+        except MessageTooLongError:
+            await show.edit("Damn, this is a huge group. Uploading users lists as file.")
+            file = open("userslist.txt", "w+")
+            file.write(mentions)
+            file.close()
+            await show.client.send_file(
+                show.chat_id,
+                "userslist.txt",
+                caption='Users in {}'.format(title),
+                reply_to=show.id,
+            )
+            remove("userslist.txt")  
 
 @borg.on(admin_cmd("iundlt ?(.*)"))
 async def _(event):
@@ -221,6 +283,10 @@ CMD_HELP.update({
     "chatinfo":
     ".chatinfo or .chatinfo <username of group>\
      \nUsage: Shows you the total information of the required chat.\
+     \n\n.adminlist\
+     \nUsage: Retrieves a list of admins in the chat.\
+     \n\n.users or .users <name of member>\
+     \nUsage: Retrieves all (or queried) users in the chat.\
      \n\n.iundlt\
      \nUsage: display last 5 deleted messages in group."
      })
