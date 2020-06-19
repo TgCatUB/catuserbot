@@ -32,7 +32,7 @@ async def _(event):
                   "`1`. Female Homo-Sapien\n"
                   "`2`. Male Homo-Sapien\n"
                   "`3`. Other\n")
-         PM = ("`Hello. You are accessing the availabe menu of my peru master,`"
+         PM = ("`Hello. You are accessing the availabe menu of my sweet master,`"
                f"{DEFAULTUSER}.\n"
                "__Let's make this smooth and let me know why you are here.__\n"
                "**Choose one of the following reasons why you are here:**\n\n"
