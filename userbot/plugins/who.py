@@ -6,6 +6,9 @@ import html
 from telethon import events
 from telethon import utils
 from telethon.tl import types
+from telethon.errors import (BadRequestError, ChatAdminRequiredError,
+                             ImageProcessFailedError, PhotoCropSizeSmallError,
+                             UserAdminInvalidError)
 
 
 def get_who_string(who):
@@ -39,3 +42,19 @@ async def _(event):
     ]
 
     await event.edit("\n".join(members), parse_mode='html')
+    except ChatAdminRequiredError as err:
+            mentions += " " + str(err) + "\n"
+        try:
+            await show.edit(mentions)
+        except MessageTooLongError:
+            await show.edit("Damn, this is a huge group. Uploading users lists as file.")
+            file = open("userslist.txt", "w+")
+            file.write(mentions)
+            file.close()
+            await show.client.send_file(
+                show.chat_id,
+                "userslist.txt",
+                caption='Users in {}'.format(title),
+                reply_to=show.id,
+            )
+            remove("userslist.txt")
