@@ -524,7 +524,7 @@ CMD_HELP.update({
 \n\n.unban <username/reply>\
 \nUsage: Removes the ban from the person in the chat.\
 \n\n.pin <reply to msg>\
-\nUsage: Pin a message in the chat.\  
+\nUsage: Pin a message in the chat.\
 \n\n.delusers\
 \nUsage: Searches for deleted accounts in a group. Use .delusers clean to remove deleted accounts from the group.\
 \n\n.setgppic <reply to image>\
