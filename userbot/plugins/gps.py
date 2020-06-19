@@ -1,36 +1,33 @@
+#created by @Mr_Hops
+"""Gps: Avaible commands: .gps <location>
 """
-  Syntax : .gps <location name>
-  help from @sunda005 and @spechide
-  credits :@mrconfused
-  don't edit credits """
 
-from geopy.geocoders import Nominatim
-from uniborg.util import admin_cmd
+
+import datetime
 from telethon import events
-import asyncio
-from telethon.tl import types
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.account import UpdateNotifySettingsRequest
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd(pattern="gps ?(.*)"))
-async def gps(event):
+async def _(event):
     if event.fwd_from:
-        return
-    reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+        return 
     input_str = event.pattern_match.group(1)
- 
-    if not input_str:
-        return await event.edit("what should i find give me location.")
-    else:
-         await event.edit("finding")
-         
-    geolocator = Nominatim(user_agent="catuserbot")
-    geoloc = geolocator.geocode(input_str) 
-    if geoloc:
-        lon = geoloc.longitude
-        lat = geoloc.latitude
-        await borg.send_file(event.chat_id, file=types.InputMediaGeoPoint(types.InputGeoPoint(lat, lon)),reply_to=reply_to_id)
-        await event.delete()
-    else:
-        await event.edit("i coudn't fint it")
+    reply_message = await event.get_reply_message()
+    chat = "@Thepgirlbot"
+    await event.edit("```Checking...```")
+    async with event.client.conversation(chat) as conv:
+          try:     
+              response = conv.wait_event(events.NewMessage(incoming=True,from_users=1097028858))
+              await event.client.send_message(chat, "/gps {}".format(input_str))
+              response = await response 
+          except YouBlockedUserError: 
+              await event.reply("```Unblock @Thepgirlbot```")
+              return
+          if response.text.startswith("I can't find that"):
+             await event.edit("😐**Place Not Found**😐\n\n👇👇👇👇👇👇👇👇👇\n 👉👉Enter a valid place👈👈\n👆👆👆👆👆👆👆👆👆")
+          else: 
+             await event.delete()
+             await event.client.send_message(event.chat_id, response.message)
