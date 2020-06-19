@@ -84,7 +84,7 @@ async def set_not_afk(event):
                 event.chat_id,
                 "Please set `PRIVATE_GROUP_BOT_API_ID` " + \
                 "for the proper functioning of afk functionality " + \
-                "check pinned message in @xtratgbot.\n\n `{}`".format(str(e)),
+                "check pinned message in @ItsMeSurvivor.\n\n `{}`".format(str(e)),
                 reply_to=event.message.id,
                 silent=True
             )
@@ -146,10 +146,10 @@ async def on_afk(event):
             else:
                 afk_since = f"`{int(seconds)}s` **ago**"
         msg = None
-        message_to_reply = f"__My Master Has Been Gone For__ `{total_afk_time}`\nWhere He Is: ONLY GOD KNOWS " + \
+        message_to_reply = f"__My Master Has Been Gone For__ `{total_afk_time}`\nWhere He Is: **ONLY GOD KNOWS** " + \
             f"\n\n__I promise I'll back in a few light years__\n**REASON**: {reason}" \
             if reason \
-            else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? Soon __Whenever I feel like it__**( ಠ ʖ̯ ಠ)**  "
+            else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? Soon __Whenever I feel like it__**( ಠ ʖ̯ ಠ)**\n\n\n**Important Notice**\n\n[This User Is Ded Forever...](https://telegra.ph/file/a4821748db331a0c899a0.mp4)"
         msg = await event.reply(message_to_reply)
         await asyncio.sleep(5)
         if event.chat_id in last_afk_message:  # pylint:disable=E0602
