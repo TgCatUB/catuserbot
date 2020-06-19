@@ -1,4 +1,7 @@
+""" tiktok downloaded plugin creted by @mrconfused and @sandy1709 
 
+
+Dont edit credits """
 import datetime
 import asyncio
 from telethon import events
