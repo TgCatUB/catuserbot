@@ -1,5 +1,5 @@
 """
-QuotLy: Avaible commands: .sbot
+QuotLy: Avaible commands: .imgtos
 """
 import datetime
 from telethon import events
