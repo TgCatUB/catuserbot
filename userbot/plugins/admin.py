@@ -460,7 +460,7 @@ async def muter(moot):
 
 
 
-@borg.on(admin_cmd("pin ?(.*)"))
+@borg.on(admin_cmd("pin(?: |$)(.*)"))
 @errors_handler
 async def pin(msg):
     """ For .pin command, pins the replied/tagged message on the top the chat. """
