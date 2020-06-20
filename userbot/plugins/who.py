@@ -19,7 +19,7 @@ def get_who_string(who):
     return who_string
 
 
-@borg.on(events.NewMessage(pattern=r"\.who", outgoing=True))
+@borg.on(events.NewMessage(pattern=r"\.urid", outgoing=True))
 async def _(event):
     if not event.message.is_reply:
         who = await event.get_chat()
