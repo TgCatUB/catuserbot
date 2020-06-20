@@ -19,7 +19,7 @@ import random
 
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=f"gott", allow_sudo=True))
+@borg.on(admin_cmd(pattern=f"gott", outgoing=True))
 
 async def _(event):
 
