@@ -26,7 +26,7 @@ from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.utils import register, errors_handler
 from userbot.utils import admin_cmd
 from userbot.uniborgConfig import Config
-from telethon import events
+from telethon import events, errors, functions, types
 
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
