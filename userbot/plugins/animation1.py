@@ -7,7 +7,7 @@ from userbot import ALIVE_NAME
 import random, re
 from userbot import CMD_HELP
 from collections import deque
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Sur_vivor"
 
 
 @borg.on(admin_cmd(pattern=f"earth", outgoing=True))
