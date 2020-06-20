@@ -1,5 +1,5 @@
 """Syntax : .gps <location name>
-  help from @sunda005
+  help from @sunda005 and @SpEcHIDe
   credits :@mrconfused
   don't edit credits"""
 
