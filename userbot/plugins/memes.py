@@ -928,14 +928,12 @@ async def smrk(smk):
              await smk.edit(reply_text)
 
 
-@borg.on(admin_cmd(pattern="ftext ?(.*)"))
-async def payf(event):
-    paytext = event.pattern_match.group(1)
-    pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
-        paytext * 8, paytext * 8, paytext * 2, paytext * 2, paytext * 2,
-        paytext * 6, paytext * 6, paytext * 2, paytext * 2, paytext * 2,
-        paytext * 2, paytext * 2)
-    await event.edit(pay)
+@borg.on(admin_cmd(pattern="f (.*)"))
+async def payf(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        paytext = e.pattern_match.group(1)
+        pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}".format(paytext*5, paytext*1,paytext*1, paytext*4, paytext*1, paytext*1, paytext*1)
+        await e.edit(pay)
 
 @borg.on(admin_cmd(outgoing=True, pattern="bt"))
 async def bluetext(bt_e):
@@ -945,7 +943,7 @@ async def bluetext(bt_e):
             "/BLUETEXT /MUST /CLICK.\n"
             "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?")
 			  
-@borg.on(admin_cmd(outgoing=True, pattern="lfy (.*)",))
+@borg.on(admin_cmd(outgoing=True, pattern="lfy (.*)"))
 async def let_me_google_that_for_you(lmgtfy_q):
     if not lmgtfy_q.text[0].isalpha() and lmgtfy_q.text[0] not in ("/", "#", "@", "!"):
         textx = await lmgtfy_q.get_reply_message()
@@ -1035,7 +1033,7 @@ CMD_HELP.update({
 \nUsage: Haha yes\
 \n\n.clap\
 \nUsage: Praise people!\
-\n\n.ftext <emoji/character>\
+\n\n.f <emoji/character>\
 \nUsage: Pay Respects.\
 \n\n.smk <text/reply>\
 \nUsage: A shit module for ツ , who cares.\
