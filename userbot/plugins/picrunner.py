@@ -26,7 +26,7 @@ if AUTOPFP_PACK is None:
    "Epic-1080p-Wallpapers",
    "Japanese-Desktop-Wallpaper",
    "Cool-Gold-Cars-Wallpapers",
-   "Pretty-Wallpapers-for-iPhone-Quotes"
+   "Pretty-Wallpapers-for-iPhone-Quotes",
    "dark-abstract-wallpaper",
    "abstract-dark-wallpaper",
    "abstract-wallpapers-and-screensavers",
