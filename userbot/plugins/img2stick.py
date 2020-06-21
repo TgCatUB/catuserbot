@@ -1,6 +1,4 @@
-"""
-QuotLy: Avaible commands: .sbot
-"""
+
 import datetime
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -50,7 +48,7 @@ async def _(event):
     if not reply_message.media:
        await event.edit("```Reply to sticker message```")
        return
-    chat = "@StickerToPicbot"
+    chat = "@DownloadStickersBot"
     sender = reply_message.sender
     if reply_message.sender.bot:
        await event.edit("```Reply to actual users message.```")
@@ -58,15 +56,14 @@ async def _(event):
     await event.edit("```Making a image```")
     async with event.client.conversation(chat) as conv:
           try:     
-              response = conv.wait_event(events.NewMessage(incoming=True,from_users=1020956520))
+              response = conv.wait_event(events.NewMessage(incoming=True,from_users=658563529))
               await event.client.forward_messages(chat, reply_message)
               response = await response 
           except YouBlockedUserError: 
-              await event.reply("``` unblock me (@StickerToPicbot) to work```")
+              await event.reply("``` unblock me (@DownloadStickersBot) to work```")
               return
           if response.text.startswith("Hi!"):
              await event.edit("```Can you kindly disable your forward privacy settings for good?```")
           else: 
              await event.delete()
              await event.client.send_message(event.chat_id, response.message)
-            
