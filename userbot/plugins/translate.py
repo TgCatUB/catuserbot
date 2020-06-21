@@ -33,8 +33,9 @@ async def _(event):
         after_tr_text = translated.text
         # TODO: emojify the :
         # either here, or before translation
-        output_str = """**TRANSLATED** from {} to {}
-{}""".format(
+        output_str = """**TRANSLATED By CatUserbot**
+        From **( {} )** To **( {} )**
+        {}""".format(
             translated.src,
             lan,
             after_tr_text
