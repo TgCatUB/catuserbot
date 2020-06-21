@@ -10,6 +10,7 @@ import random
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from userbot import ALIVE_NAME
+from userbot import CMD_HELP
 
 SLAP_TEMPLATES = [
     "{user1} {hits} {victim} with a {item}.",
@@ -168,3 +169,11 @@ async def slap(replied_user, event):
     caption = temp.format(user1=DEFAULTUSER, victim=slapped, item=item, hits=hit, throws=throw, where=where)
 
     return caption
+
+
+
+CMD_HELP.update({
+    "slap":
+    ".slap reply to someones text with .slap\
+    \nUsage: reply to slap them with random objects !!"
+})
