@@ -31,4 +31,3 @@ CMD_HELP.update({
     \nUsage: Type .alive to see wether your bot is working or not.\
     "
 })    
-
