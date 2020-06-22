@@ -15,7 +15,7 @@ pm_caption += f"🛡`Telethon Version:` **{version.__version__}**\n\n"
 pm_caption += f"🛡`Python Version:` **{python_version()}**\n\n"
 pm_caption += "🛡**Bot Was Modified by**:[✰Şสͥℝสͣ✞ͫђ™✰](http://t.me/Sur_vivor)\n\n"
 pm_caption += "🛡**Created by**: Snapdragon,Anubis,Sandeep\n\n"
-pm_caption += "🛡**Database Status: Databases Functioning Normally!**\n\n"
+pm_caption += "🛡**Database Status**: Databases Functioning Normally!\n\n"
 pm_caption += "🛡**Always With You, My Master!**\n\n"
 pm_caption += f"🛡**Owner Name**: {DEFAULTUSER}\n\n\n"
 pm_caption += "**[⚜️DEPLOY THIS USERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
@@ -26,11 +26,9 @@ async def amireallyalive(alive):
     """ For .alive command, check if the bot is running.  """
     await alive.delete()
     await borg.send_file(await borg.send_file(alive.chat_id, PM_IMG, caption=pm_caption)
-
-    
+                         
 CMD_HELP.update({
-    "alive":
-    ".alive\
-    \nUsage: Type .alive to see wether your bot is working or not.\
-    "
+   "alive":
+   ".alive\
+  \nUsage: Type .alive to see wether your bot is working or not."
 })
