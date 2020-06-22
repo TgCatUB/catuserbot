@@ -25,6 +25,7 @@ TELEGRAPH_MEDIA_LINKS = ["https://telegra.ph/file/b2cea1712ebaca603e6f4.jpg",
 @borg.on(admin_cmd(pattern="alandp ?(.*)"))
 async def autopic(event):
     while True:
+        await event.edit("Starting digital Profile Pic see magic in 5 sec.")
         piclink = random.randint(0, len(TELEGRAPH_MEDIA_LINKS) - 1)
         AUTOPP = TELEGRAPH_MEDIA_LINKS[piclink]
         downloaded_file_name = "./userbot/original_pic.png"
@@ -40,8 +41,8 @@ async def autopic(event):
         current_time = datetime.now().strftime("@Sur_vivor \n \nTime: %H:%M:%S \nDate: %d/%m/%y")
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
-        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
-        drawn_text.text((10,50), current_time, font=fnt, fill=(255,0,0))
+        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 25)
+        drawn_text.text((10,40), current_time, font=fnt, fill=(255,0,0))
         img.save(photo)
         file = await event.client.upload_file(photo)  # pylint:disable=E0602
         try:
