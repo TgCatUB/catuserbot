@@ -41,10 +41,11 @@ async def autopic(event):
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
         fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
-        drawn_text.text((20, 450), current_time, font=fnt, fill=(0,0,0))
+        drawn_text.text((10,50), current_time, font=fnt, fill=(255,0,0))
         img.save(photo)
         file = await event.client.upload_file(photo)  # pylint:disable=E0602
         try:
+            await event.client(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit=1)))
             await event.client(functions.photos.UploadProfilePhotoRequest(  # pylint:disable=E0602
                 file
             ))
