@@ -62,13 +62,13 @@ async def _(event):
     tgbot_reply_message = None
     if reply_message.media is not None:
         message_id_in_channel = reply_message.id
-        tgbot_reply_message = await event.get_messages(
+        tgbot_reply_message = await event.client.get_messages(
             entity=Config.PRIVATE_CHANNEL_BOT_API_ID,
             ids=message_id_in_channel
         )
         tgbot_reply_message = tgbot_reply_message.media
 
-    await event.send_message(
+    await event.client.send_message(
         entity=Config.PRIVATE_CHANNEL_BOT_API_ID,
         message=message_text,
         parse_mode="html",
