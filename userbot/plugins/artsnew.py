@@ -77,6 +77,24 @@ E = ("▬▬▬.◙.▬▬▬ \n"
 "╬═╬/▌ \n"
 "╬═╬/ \\n")
 
+C = ("┳┻┳┻╭━━━━╮╱▔▔▔╲\n"
+"┻┳┻┳┃╯╯╭━┫▏╰╰╰▕\n"
+"┳┻┳┻┃╯╯┃▔╰┓▔▂▔▕╮\n"
+"┻┳┻┳╰╮╯┃┈╰┫╰━╯┏╯\n"
+"┳┻┳┻┏╯╯┃╭━╯┳━┳╯\n"
+"┻┳┻┳╰━┳╯▔╲╱▔╭╮▔╲\n"
+"┳┻┳┻┳┻┃┈╲┈╲╱╭╯╮▕\n"
+"┻┳┻┳┻┳┃┈▕╲▂╱┈╭╯╱\n"
+"┳┻┳┻┳┻┃'''┈┃┈┃┈'''╰╯\n"
+"┻┳┻┳┻┏╯▔'''╰┓┣━┳┫\n"
+"┳┻┳┻┳╰┳┳┳'''╯┃┈┃┃\n"
+"┻┳┻┳┻┳┃┃┃┈'''┃┈┃┃\n"
+"┳┻┳┻┳┻┃┃┃'''┊┃┈┃┃\n"
+"┻┳┻┳┻┳┃┃┃┈'''┃┈┃┃.\n"
+"┳┻┳┻┳┻┣╋┫'''┊┣━╋┫\n"
+"┻┳┻┳┻╭╯╰╰-╭╯━╯.''╰╮\n"
+"Love You Forever,,,,\n")
+
 
 @borg.on(admin_cmd(pattern=r"monster"))
 async def bluedevilmonster(monster):
@@ -99,3 +117,6 @@ async def bluedevilhello(hello):
 @borg.on(admin_cmd(pattern=r"hmf"))
 async def bluedevilhmf(hmf):
     await hmf.edit(E)
+@borg.on(admin_cmd(pattern=r"couple"))
+async def bluedevilcouple(couple):
+    await couple.edit(C)    
