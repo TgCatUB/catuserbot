@@ -14,14 +14,14 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 async def amireallyalive(alive):
     """ For .alive command, check if the bot is running.  """
     await alive.edit("**MY BOT IS RUNNING SUCCESFULLY**\n\n"
-                     f"`☞Telethon version: {version.__version__}\n`"
+                     f"`☞Telethon Version: {version.__version__}\n`"
                      f"`☞Python: {python_version()}\n`"
-                     "`☞Bot was modified by:` sandeep\n"
-                     "`☞and created by :` snapdragon,anubis\n"
-                     "`☞Database Status: Databases functioning normally!\n\n`"
-                     "`☞Always with you, my master!\n`"
-                     f"`☞My peru owner`: [{DEFAULTUSER}](https://github.com/sandy1709/catuserbot)\n"
-                     #"[Deploy this userbot Now](https://github.com/sandy1709/catuserbot)"
+                     "☞Bot was modified by: [π.$](https://t.me/catuserbot17)\n"
+                     "☞and created by : snapdragon,anubis\n"
+                     "☞Database Status: Databases functioning normally!\n\n"
+                     "☞Always with you, my Master! Try `.help` for more information!!\n"
+                     f"☞My peru owner: {DEFAULTUSER}\n"
+                      "[Deploy Catuserbot Now](https://github.com/sandy1709/catuserbot)"
                     )
     
     
