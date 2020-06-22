@@ -2,6 +2,7 @@
 # FORK AT YOUR OWN RISK
 # Installing
 ### The Easy Way
+### CLICK THE IMAGE FOR DEPLOY...
 [![Deploy To Heroku](https://telegra.ph/file/be15be483400f07f7e442.jpg)](https://heroku.com/deploy)
 
 ### The Normal Way
