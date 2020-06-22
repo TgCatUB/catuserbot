@@ -166,3 +166,21 @@ async def _(event):
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 35])
+
+@borg.on(admin_cmd(pattern="flower")))
+async def flower(event):
+    if event.fwd_from:
+        return   
+    flower =" 🌹"
+    sleepValue = 5
+           
+    await event.edit(flower+"        ")
+    await event.edit(flower+flower+"       ")
+    await event.edit(flower+flower+flower+"      ")
+    await event.edit(flower+flower+flower+flower+"     ")
+    await event.edit(flower+flower+flower+flower+flower+"    ")
+    await event.edit(flower+flower+flower+flower+flower+flower+flower+"   ")
+    await event.edit(flower+flower+flower+flower+flower+flower+flower+flower+"  ")
+    await event.edit(flower+flower+flower+flower+flower+flower+flower+flower+flower+" ")
+    await event.edit(flower+flower+flower+flower+flower+flower+flower+flower+flower+flower)
+    await asyncio.sleep(sleepValue)        
