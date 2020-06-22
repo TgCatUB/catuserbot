@@ -17,7 +17,7 @@ import shutil
 import random, re
 
 
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+FONT_FILE_TO_USE = "userbot/helpers/styles/digital.ttf"
 
 #Add telegraph media links of profile pics that are to be used
 TELEGRAPH_MEDIA_LINKS = ["https://telegra.ph/file/b2cea1712ebaca603e6f4.jpg",
@@ -40,7 +40,7 @@ async def autopic(event):
         current_time = datetime.now().strftime("@Sur_vivor \n \nTime: %H:%M:%S \nDate: %d/%m/%y")
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
-        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 23)
+        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
         drawn_text.text((20, 450), current_time, font=fnt, fill=(0,0,0))
         img.save(photo)
         file = await event.client.upload_file(photo)  # pylint:disable=E0602
