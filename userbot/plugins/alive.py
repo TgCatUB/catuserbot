@@ -25,4 +25,4 @@ cat_caption += "[⚜️**DEPLOY THIS USERBOT**⚜️](https://github.com/Sur-viv
 async def amireallyalive(alive):
     """ For .alive command, check if the bot is running.  """
     await alive.delete()
-    await borg.send_file(await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption))
+    await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption)
