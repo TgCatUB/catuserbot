@@ -1,5 +1,5 @@
 """
-QuotLy: Avaible commands: .imgtos
+QuotLy: Avaible commands: .itos
 """
 import datetime
 from telethon import events
@@ -7,7 +7,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern="imgtos ?(.*)"))
+@borg.on(admin_cmd(pattern="itos ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
