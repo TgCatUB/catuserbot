@@ -10,7 +10,7 @@ from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 from pySmartDL import SmartDL
 
-PMPERMIT_PIC = os.environ.get("PMPERMIT", None)
+PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
