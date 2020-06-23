@@ -37,7 +37,7 @@ async def _(event):
         await event.edit("Reply to a photo to add to my personal sticker pack.")
         return
     reply_message = await event.get_reply_message()
-    sticker_emoji = "😇"
+    sticker_emoji = "❤"
     input_str = event.pattern_match.group(1)
     if input_str:
         sticker_emoji = input_str
@@ -65,7 +65,7 @@ async def _(event):
             sticker.seek(0)
             uploaded_sticker = await borg.upload_file(sticker, file_name=file_ext_ns_ion)
 
-    await event.edit("⬛⬛⬛⬛⬛⬛⬛\n⬛⬛⏸️⬛⏸️⬛⬛\n⬛⬛⏸️⬛⏸️⬛⬛\n⬛⬛⏸️⬛⏸️⬛⬛\n⬛⬛⏸️⬛⏸️⬛⬛\n⬛⬛⏸️⬛⏸️⬛⬛\n⬛⬛⬛⬛⬛⬛⬛")
+    await event.edit("Please Wait Master, Let me Kang This Sticker")
 
     async with borg.conversation("@Stickers") as bot_conv:
         now = datetime.datetime.now()
@@ -117,7 +117,7 @@ async def _(event):
             await silently_send_message(bot_conv, sticker_emoji)
             await silently_send_message(bot_conv, "/done")
 
-    await event.edit(f"[⬛⬛⬛⬛⬛⬛⬛\n⬛⬛▶️⬛⬛⬛⬛\n⬛⬛▶️▶️⬛⬛⬛\n⬛⬛▶️▶️▶️⬛⬛\n⬛⬛▶️▶️⬛⬛⬛\n⬛⬛▶️⬛⬛⬛⬛\n⬛⬛⬛⬛⬛⬛⬛](t.me/addstickers/{packshortname})")
+    await event.edit(f"Sticker added! Your pack can be found [here](t.me/addstickers/{packshortname})\nSticker Emoji {sticker_emoji}")
 
 @borg.on(admin_cmd(outgoing=True, pattern="packinfo"))
 async def _(event):
