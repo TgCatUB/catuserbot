@@ -1,7 +1,7 @@
 """Make / Download Telegram Sticker Packs without installing Third Party applications
 Available Commands:
-.kangsticker [Optional Emoji]
-.packinfo
+.kang [Optional Emoji]
+.stkrinfo
 .getsticker"""
 from telethon import events
 from io import BytesIO
@@ -192,8 +192,8 @@ async def _(event):
                 await silently_send_message(bot_conv, "/done")
 
 
-    await event.edit(f"**Kanged!** `This sticker has been stolen to` [this place](t.me/addstickers/{packshortname}), pack{pack}"
-                     f" `by` {DEFAULTUSER}\n**ᕦ(ò_óˇ)ᕤ**")
+    await event.edit(f"**Kanged!** `This sticker has been stolen to` [this place🔥](t.me/addstickers/{packshortname}), pack{pack}"
+                     f" `by` {DEFAULTUSER}\nSticker Emoji {sticker_emoji}\n**ᕦ(ò_óˇ)ᕤ**")
 
 
 @borg.on(admin_cmd(pattern="stkrinfo"))
