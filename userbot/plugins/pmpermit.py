@@ -19,7 +19,7 @@ USER_BOT_NO_WARN = ("──▄█▀█▄─────────██ \n�
                     f"{DEFAULTUSER}'s `inbox.\n"
                     "Leave your Name,Reason and 10k$ and hopefully you'll get a reply within 2 light years.`⭕️\n\n"
                     "❤️ Register Your Request! ❤️\nSend /start To Register Your Request!! 🔥\n"
-                    "⭕️**Now You Are In Trouble So Send** 🔥 `/start` 🔥  **To Start A Valid Conversation!!**⭕️")
+                    "⭕️**Now You Are In Trouble So Send** 🔥 `/start` 🔥 **To Start A Valid Conversation!!**⭕️")
 
 
 if Var.PRIVATE_GROUP_ID is not None:
