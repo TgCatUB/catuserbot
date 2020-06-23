@@ -3,7 +3,7 @@
 # Installing
 ### The Easy Way
 ### CLICK THE IMAGE FOR DEPLOY...
-[![Deploy To Heroku](https://telegra.ph/file/be15be483400f07f7e442.jpg)](https://heroku.com/deploy)
+[![Deploy To Heroku]( https://telegra.ph/file/4117e39218991cdd7379f.jpg)](https://heroku.com/deploy)
 
 ### The Normal Way
 
