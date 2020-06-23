@@ -7,6 +7,7 @@ from telethon import events, errors, functions, types
 from userbot import ALIVE_NAME, PMPERMIT
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
+from pySmartDL import SmartDL
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
