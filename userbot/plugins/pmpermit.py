@@ -4,7 +4,7 @@ import io
 import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
-from userbot import ALIVE_NAME
+from userbot import ALIVE_NAME, PMPERMIT
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 
@@ -14,7 +14,7 @@ PREV_REPLY_MESSAGE = {}
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "**Set ALIVE_NAME in config vars in Heroku**"
 USER_BOT_WARN_ZERO = "`You were spamming my sweet master's inbox, henceforth your retarded lame ass has been blocked by my master's userbot⭕️.`\n**Now GTFO, i'm playing minecraft**"
-CAT_PIC = SmartDL(Var.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=False) if DOWNLOAD_PFP_URL_CLOCK else "https://telegra.ph/file/3f28053a6e44d18e0f60f.jpg" 
+CAT_PIC = SmartDL(Var.PMPERMIT, downloaded_file_name, progress_bar=False) if PMPERMIT else "https://telegra.ph/file/3f28053a6e44d18e0f60f.jpg" 
 USER_BOT_NO_WARN = ("`Hello, This is AntiSpam Security Service⚠️.You have found your way here to my master,`"
                     f"{DEFAULTUSER}'s `inbox.\n"
                     "Leave your Name,Reason and 10k$ and hopefully you'll get a reply within 2 light years.`⭕️\n\n"
