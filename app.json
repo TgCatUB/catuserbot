@@ -28,13 +28,11 @@
     },
     "ALIVE_PIC": {
       "description": "put here any telegraph links for alive pic.",
-      "value": "",
-      "required": false
+      "value": "https://telegra.ph/file/4117e39218991cdd7379f.jpg"
     },
     "PMPERMIT_PIC": {
       "description": "put here any telegraph links for pmpermit custom pic.",
-      "value": "",
-      "required": false
+      "value": "https://telegra.ph/file/46b489cdf0e7adbce0c64.mp4"
     },
     "APP_ID": {
       "description": "Get this value from my.telegram.org! Please do not steal",
