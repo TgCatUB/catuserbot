@@ -12,9 +12,9 @@ from userbot import CMD_HELP
 
 PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
 if PMPERMIT_PIC is None:
-  CAT_PIC = "https://telegra.ph/file/46b489cdf0e7adbce0c64.mp4"
+  WARN_PIC = "https://telegra.ph/file/46b489cdf0e7adbce0c64.mp4"
 else:
-  CAT_PIC = PMPERMIT_PIC  
+  WARN_PIC = PMPERMIT_PIC  
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
@@ -205,7 +205,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                 return
             except:
                 return
-        r = await event.client.send_file(event.chat_id, CAT_PIC, caption=USER_BOT_NO_WARN)
+        r = await event.client.send_file(event.chat_id, WARN_PIC, caption=USER_BOT_NO_WARN)
         PM_WARNS[chat_id] += 1
         if chat_id in PREV_REPLY_MESSAGE:
             await PREV_REPLY_MESSAGE[chat_id].delete()
