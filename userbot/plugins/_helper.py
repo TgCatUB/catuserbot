@@ -8,8 +8,9 @@ from telethon import events, functions, __version__
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
 
 @command(pattern="^.help ?(.*)")
+#@borg.on(admin_cmd(pattern=r"help ?(.*)"))
 async def cmd_list(event):
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
+    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!", "-", "_"):
         tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
         input_str = event.pattern_match.group(1)
         if tgbotusername is None or input_str == "text":
@@ -36,7 +37,7 @@ async def cmd_list(event):
                 await event.edit(string)
         elif input_str:
             if input_str in CMD_LIST:
-                string = "Commands found in {}:\n".format(input_str)
+                string = "Commands found in {}:".format(input_str)
                 for i in CMD_LIST[input_str]:
                     string += "    " + i
                     string += "\n"
@@ -56,9 +57,7 @@ async def cmd_list(event):
                 hide_via=True
             )
             await event.delete()
-
             
-
 @borg.on(admin_cmd(pattern="dc"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
