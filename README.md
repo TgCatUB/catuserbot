@@ -2,7 +2,7 @@
 # FORK AT YOUR OWN RISK
 # Installing
 ### The Easy Way
-### CLICK THE IMAGE FOR DEPLOY...
+### CLICK BELOW IMAGE TO DEPLOY CATUSERBOT...
 [![Deploy To Heroku](https://telegra.ph/file/4117e39218991cdd7379f.jpg)](https://heroku.com/deploy)
 
 ### The Normal Way
