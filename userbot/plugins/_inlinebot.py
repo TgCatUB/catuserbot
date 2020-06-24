@@ -81,7 +81,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             #https://github.com/Dark-Princ3/X-tra-Telegram/commit/275fd0ec26b284d042bf56de325472e088e6f364#diff-2b2df8998ff11b6c15893b2c8d5d6af3
             with io.BytesIO(str.encode(reply_pop_up_alert)) as out_file:
                 out_file.name = "{}.txt".format(plugin_name)
-                await bot.send_file(
+                await borg.send_file(
                     event.chat_id,
                     out_file,
                     force_document=True,
@@ -101,9 +101,16 @@ def paginate_help(page_number, loaded_plugins, prefix):
         "{} {} {}".format("⚚", x,"⚚"),
         data="us_plugin_{}".format(x))
         for x in helpable_plugins]
-    pairs = list(zip(modules[::number_of_cols], modules[1::number_of_cols], modules[2::number_of_cols]))
+    if number_of_cols == 1:
+        pairs = list(zip(modules[::number_of_cols]))
+    elseif number_of_cols == 2:
+        pairs = list(zip(modules[::number_of_cols], modules[1::number_of_cols]))
+    else:
+        pairs = list(zip(modules[::number_of_cols], modules[1::number_of_cols], modules[2::number_of_cols]))
     if len(modules) % number_of_cols == 1:
         pairs.append((modules[-1],))
+    elseif len(modules) % number_of_cols == 2:
+        pairs.append((modules[-1],modules[-1]))
     max_num_pages = ceil(len(pairs) / number_of_rows)
     modulo_page = page_number % max_num_pages
     if len(pairs) > number_of_rows:
