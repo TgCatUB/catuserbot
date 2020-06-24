@@ -94,4 +94,4 @@ async def _(event):
 
         plugin_syntax = "Enter valid **Plugin** name.\nDo `.plinfo` or `.help` to get list of valid plugin names."
 
-    await event.edit(plugin_syntax)            
+    await event.edit(plugin_syntax)
