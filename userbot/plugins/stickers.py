@@ -52,7 +52,7 @@ async def _(event):
     userid = event.from_id
     packname = f"{user.first_name}'s @Sur_vivor Vol.{pack}"
     packshortname = f"vol_{pack}_with_{userid}"
-    await event.edit("`Look dat way,it's a gurl!`**（　ﾟДﾟ）**\n`Meanwhile, lemme kang this stcker over hehe`**ヽ༼ ಠ益ಠ ༽ﾉ**")
+    await event.edit("`Look dat way,it's a gurl!\n`Meanwhile, lemme kang this stcker over hehe`**ヽ༼ ಠ益ಠ ༽ﾉ**")
 
     is_a_s = is_it_animated_sticker(reply_message)
     file_ext_ns_ion = "survivors.png"
@@ -192,8 +192,8 @@ async def _(event):
                 await silently_send_message(bot_conv, "/done")
 
 
-    await event.edit(f"**Kanged!** `This sticker has been stolen to` [this place🔥](t.me/addstickers/{packshortname}), pack{pack}"
-                     f" `by` {DEFAULTUSER}\nSticker Emoji {sticker_emoji}\n**ᕦ(ò_óˇ)ᕤ**")
+    await event.edit(f"**Kanged!** `This sticker has been stolen to` [⚡Here⚡](t.me/addstickers/{packshortname}), `pack` {pack}"
+                     f" `by` {DEFAULTUSER}\n`Sticker Emoji` {sticker_emoji}")
 
 
 @borg.on(admin_cmd(pattern="stkrinfo"))
