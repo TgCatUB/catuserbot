@@ -32,9 +32,9 @@ async def _(event):
              await event.edit("sorry i can't find it")
           else: 
              await event.delete()
-             await reply_to_id.reply(event.chat_id, response.message)
+             await borg.send_file(event.chat_id, response.message, reply_to=reply_to_id)
 
-@borg.on(sudo_cmd(pattern="mash ?(.*)"))
+@borg.on(sudo_cmd(pattern="mash ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return 
@@ -56,7 +56,7 @@ async def _(event):
              await event.reply("sorry i can't find it")
           else: 
              await event.delete()
-             await reply_to_id.reply(event.chat_id, response.message)
+             await borg.send_file(event.chat_id, response.message, reply_to=reply_to_id)
 
 CMD_HELP.update({"mashup": "`.mash` <text> :\
       \n**USAGE:** Send you the related video message of given text . "
