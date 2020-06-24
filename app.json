@@ -23,7 +23,15 @@
       "required": false
     },
     "ALIVE_NAME": {
-      "description": "give your name",
+      "description": "Fill your Full name or Username like @Sur_vivor.",
+      "value": ""
+    },
+    "ALIVE_PIC": {
+      "description": "put here any telegraph links for alive pic.",
+      "value": ""
+    },
+    "PMPERMIT_PIC": {
+      "description": "put here any telegraph links for pmpermit custom pic.",
       "value": ""
     },
     "APP_ID": {
