@@ -98,7 +98,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
             helpable_plugins.append(p)
     helpable_plugins = sorted(helpable_plugins)
     modules = [custom.Button.inline(
-        "{} {} {}".format("⚚", x,"⚚"),
+        "{} {} {}".format(Config.EMOJI_TO_DISPLAY_IN_HELP, x,Config.EMOJI_TO_DISPLAY_IN_HELP),
         data="us_plugin_{}".format(x))
         for x in helpable_plugins]
     if number_of_cols == 1:
