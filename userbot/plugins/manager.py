@@ -11,7 +11,7 @@ PREV_REPLY_MESSAGE = {}
 
 
 
-@borg.on(admin_cmd(pattern="nccreatedch"))
+@borg.on(admin_cmd(pattern="nccreatedch$"))
 async def create_dump_channel(event):
     if Config.PM_LOGGR_BOT_API_ID is None:
         result = await event.client(functions.channels.CreateChannelRequest(  # pylint:disable=E0602
@@ -43,7 +43,7 @@ async def create_dump_channel(event):
         await event.edit(f"**is configured**. [please do not touch](https://t.me/c/{Config.PM_LOGGR_BOT_API_ID}/2)")
 
 
-@borg.on(admin_cmd(pattern="nolog ?(.*)"))
+@borg.on(admin_cmd(pattern="nolog(?: |$)(.*)"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         reason = event.pattern_match.group(1)
@@ -56,7 +56,7 @@ async def set_no_log_p_m(event):
                 await event.delete()
 
 
-@borg.on(admin_cmd(pattern="log ?(.*)"))
+@borg.on(admin_cmd(pattern="log(?: |$)(.*)"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         reason = event.pattern_match.group(1)
