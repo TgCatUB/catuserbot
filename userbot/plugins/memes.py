@@ -673,7 +673,7 @@ async def faces(owo):
         await owo.edit(reply_text)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="react"))
+@borg.on(admin_cmd(outgoing=True, pattern="freact"))
 async def react_meme(react):
     """ Make your userbot react to everything. """
     if not react.text[0].isalpha() and react.text[0] not in ("/", "#", "@", "!"):
@@ -741,7 +741,7 @@ async def _(event):
 		    deq.rotate(1)
 
 
-@register(outgoing=True, pattern="^.clap$")
+@register(outgoing=True, pattern="^.clap (.*)")
 async def claptext(memereview):
     """ Praise people! """
     if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
