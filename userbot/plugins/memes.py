@@ -22,9 +22,12 @@ from telethon.tl.types import MessageEntityMentionName
 
 from cowpy import cow
 
-from userbot import CMD_HELP
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID 
 from userbot.utils import register, admin_cmd
 from userbot import ALIVE_NAME
+
+BOTLOG = True
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 # ================= CONSTANT =================
 
@@ -559,7 +562,7 @@ async def cry(e):
 async def insult(e):
     """ I make you cry !! """
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit(random.choice(memes.INSULT_STRINGS))
+        await e.edit(random.choice(INSULT_STRINGS))
 
 
 			  
@@ -573,7 +576,7 @@ async def source(e):
 async def hoi(hello):
     """ Greet everyone! """
     if not hello.text[0].isalpha() and hello.text[0] not in ("/", "#", "@", "!"):
-        await hello.edit(random.choice(memes.HELLOSTR))
+        await hello.edit(random.choice(HELLOSTR))
 			  
 
 			  			  
@@ -581,8 +584,8 @@ async def hoi(hello):
 async def raping (raped):
     """ Dont Rape Too much -_-"""
     if not raped.text[0].isalpha() and raped.text[0] not in ("/", "#", "@", "!"):
-        index = random.randint(0, len(memes.RAPE_STRINGS) - 1)
-        reply_text = memes.RAPE_STRINGS[index]
+        index = random.randint(0, len(RAPE_STRINGS) - 1)
+        reply_text = RAPE_STRINGS[index]
         await raped.edit(reply_text)
 			  
 @register(outgoing=True, pattern="^.pkill$")
@@ -607,8 +610,8 @@ async def proo (pros):
 async def chutiya (fuks):
     """ String for fhu only -_-"""
     if not fuks.text[0].isalpha() and fuks.text[0] not in ("/", "#", "@", "!"):
-        index = random.randint(0, len(memes.CHU_STRINGS) - 1)
-        reply_text = memes.FUK_STRINGS[index]
+        index = random.randint(0, len(CHU_STRINGS) - 1)
+        reply_text = FUK_STRINGS[index]
         await fuks.edit(reply_text)
 
 			  			  
@@ -616,16 +619,16 @@ async def chutiya (fuks):
 async def thanos (thanos):
     """ String for thanos only -_-"""
     if not thanos.text[0].isalpha() and thanos.text[0] not in ("/", "#", "@", "!"):
-        index = random.randint(0, len(memes.THANOS_STRINGS) - 1)
-        reply_text = memes.THANOS_STRINGS[index]
+        index = random.randint(0, len(THANOS_STRINGS) - 1)
+        reply_text = THANOS_STRINGS[index]
         await thanos.edit(reply_text)	
 			  
 @borg.on(admin_cmd(outgoing=True, pattern="abusehard"))
 async def fuckedd (abusehard):
     """ Dont Use this Too much bsdk -_-"""
     if not abusehard.text[0].isalpha() and abusehard.text[0] not in ("/", "#", "@", "!"):
-        index = random.randint(0, len(memes.ABUSEHARD_STRING) - 1)
-        reply_text = memes.ABUSEHARD_STRING[index]
+        index = random.randint(0, len(ABUSEHARD_STRING) - 1)
+        reply_text = ABUSEHARD_STRING[index]
         await abusehard.edit(reply_text)
 			  
 @register(outgoing=True, pattern="^.gey$")
@@ -641,8 +644,8 @@ async def geys (geyed):
 async def abusing (abused):
     """ Dont Abuse Too much bsdk -_-"""
     if not abused.text[0].isalpha() and abused.text[0] not in ("/", "#", "@", "!"):
-        index = random.randint(0, len(memes.ABUSE_STRINGS) - 1)
-        reply_text = memes.ABUSE_STRINGS[index]
+        index = random.randint(0, len(ABUSE_STRINGS) - 1)
+        reply_text = ABUSE_STRINGS[index]
         await abused.edit(reply_text)
 
 
@@ -664,9 +667,9 @@ async def faces(owo):
         reply_text = re.sub(r"(R|L)", "W", reply_text)
         reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
         reply_text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
-        reply_text = re.sub(r"\!+", " " + random.choice(memes.UWUS), reply_text)
+        reply_text = re.sub(r"\!+", " " + random.choice(UWUS), reply_text)
         reply_text = reply_text.replace("ove", "uv")
-        reply_text += " " + random.choice(memes.UWUS)
+        reply_text += " " + random.choice(UWUS)
         await owo.edit(reply_text)
 
 
@@ -674,33 +677,33 @@ async def faces(owo):
 async def react_meme(react):
     """ Make your userbot react to everything. """
     if not react.text[0].isalpha() and react.text[0] not in ("/", "#", "@", "!"):
-        await react.edit(random.choice(memes.FACEREACTS))
+        await react.edit(random.choice(FACEREACTS))
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="shg"))
 async def shrugger(shg):
     r""" ¯\_(ツ)_/¯ """
     if not shg.text[0].isalpha() and shg.text[0] not in ("/", "#", "@", "!"):
-        await shg.edit(random.choice(memes.SHGS))
+        await shg.edit(random.choice(SHGS))
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="runs"))
 async def runner_lol(run):
     """ Run, run, RUNNN! """
     if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@", "!"):
-        await run.edit(random.choice(memes.RUNSREACTS))
+        await run.edit(random.choice(RUNSREACTS))
 
 @borg.on(admin_cmd(outgoing=True, pattern="noob"))
 async def metoo(hahayes):
     """ Haha yes """
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
-        await hahayes.edit(random.choice(memes.NOOBSTR))
+        await hahayes.edit(random.choice(NOOBSTR))
 			  
 @borg.on(admin_cmd(outgoing=True, pattern="rendi"))
 async def metoo(hahayes):
     """ Haha yes """
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
-        await hahayes.edit(random.choice(memes.RENDISTR))
+        await hahayes.edit(random.choice(RENDISTR))
 			 			  
 @borg.on(admin_cmd(outgoing=True, pattern="oof"))
 async def Oof(e):
@@ -738,7 +741,7 @@ async def _(event):
 		    deq.rotate(1)
 
 
-@register(outgoing=True, pattern="clap (.*)")
+@register(outgoing=True, pattern="^.clap$")
 async def claptext(memereview):
     """ Praise people! """
     if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
