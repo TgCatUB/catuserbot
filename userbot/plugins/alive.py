@@ -26,7 +26,7 @@ cat_caption += f"🛡`Owner Name :` {DEFAULTUSER}\n\n"
 cat_caption += "🛡`Database Status :` Databases Functioning Normally!\n\n"
 cat_caption += "🛡`Modified by :` [✰Şสͥℝสͣ✞ͫђ™✰](http://t.me/Sur_vivor)\n\n"
 cat_caption += "🛡`Created by :` Sandeep \n\n"
-cat_caption += "**[⚜️DEPLOY THIS USERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
+cat_caption += "**[⚜️DEPLOY CATUSERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
 
 
 @borg.on(admin_cmd(pattern=r"alive"))
