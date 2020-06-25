@@ -18,7 +18,7 @@ async def _(event):
     await borg.send_message(
         chat, mentions, reply_to=event.message.reply_to_msg_id)
 
-@borg.on(admin_cmd(pattern=r"all", outgoing=True))
+@borg.on(admin_cmd(pattern=r"all (.*)", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
