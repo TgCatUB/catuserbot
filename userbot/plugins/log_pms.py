@@ -87,8 +87,7 @@ async def set_no_log_p_m(event):
                 await event.edit("Will Log Messages from this chat")
                 await asyncio.sleep(3)
                 
-                
-                
+
 @borg.on(admin_cmd(pattern="nolog(?: |$)(.*)"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
