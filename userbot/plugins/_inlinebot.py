@@ -15,7 +15,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         query = event.text
         if event.query.user_id == bot.uid and query.startswith("Userbot"):
             rev_text = query[::-1]
-            buttons = paginate_help(0, CMD_LIST, "help")
+            buttons = paginate_help(0, CMD_LIST, "helpme")
             result = builder.article(
                 "© CatUserbot Help",
                 text="{}\nCurrently Loaded Plugins: {}".format(
@@ -25,14 +25,14 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             )
         await event.answer([result] if result else None)
     @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
-        data=re.compile(b"help_next\((.+?)\)")
+        data=re.compile(b"helpme_next\((.+?)\)")
     ))
     async def on_plug_in_callback_query_handler(event):
         if event.query.user_id == bot.uid:  # pylint:disable=E0602
             current_page_number = int(
                 event.data_match.group(1).decode("UTF-8"))
             buttons = paginate_help(
-                current_page_number + 1, CMD_LIST, "help")
+                current_page_number + 1, CMD_LIST, "helpme")
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
@@ -50,7 +50,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             buttons = paginate_help(
                 current_page_number - 1,
                 CMD_LIST,  # pylint:disable=E0602
-                "help"
+                "helpme"
             )
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
@@ -98,7 +98,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
             helpable_plugins.append(p)
     helpable_plugins = sorted(helpable_plugins)
     modules = [custom.Button.inline(
-        "{} {} {}".format("⚡️", x ,"⚡️"),
+        "{} {} {}".format(Config.EMOJI_TO_DISPLAY_IN_HELP, x, Config.EMOJI_TO_DISPLAY_IN_HELP),
         data="us_plugin_{}".format(x))
         for x in helpable_plugins]
     if number_of_cols == 1:
