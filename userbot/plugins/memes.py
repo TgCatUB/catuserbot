@@ -322,7 +322,7 @@ async def _(event):
 		    deq.rotate(1)
 
 
-@register(outgoing=True, pattern="clap (.*)")
+@register(outgoing=True, pattern="^.clap (.*)")
 async def claptext(memereview):
     """ Praise people! """
     if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
