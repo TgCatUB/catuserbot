@@ -588,7 +588,7 @@ async def raping (raped):
         reply_text = RAPE_STRINGS[index]
         await raped.edit(reply_text)
 			  
-@register(outgoing=True, pattern="^.pkill$")
+@borg.on(admin_cmd(outgoing=True, pattern="pkill$"))
 async def killing (killed):
     """ Dont Kill Too much -_-"""
     if not killed.text[0].isalpha() and killed.text[0] not in ("/", "#", "@", "!"):
