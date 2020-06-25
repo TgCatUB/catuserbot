@@ -17,7 +17,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             rev_text = query[::-1]
             buttons = paginate_help(0, CMD_LIST, "helpme")
             result = builder.article(
-                "© CatUserbot Help",
+                "© Userbot Help",
                 text="{}\nCurrently Loaded Plugins: {}".format(
                     query, len(CMD_LIST)),
                 buttons=buttons,
@@ -74,13 +74,14 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         else:
             reply_pop_up_alert = help_string
         reply_pop_up_alert += "\n Use .unload {} to remove this plugin\n\
-            © CatUserbot".format(plugin_name)
+            © Userbot".format(plugin_name)
         try:
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-        except:
+        except: 
+            #https://github.com/Dark-Princ3/X-tra-Telegram/commit/275fd0ec26b284d042bf56de325472e088e6f364#diff-2b2df8998ff11b6c15893b2c8d5d6af3
             with io.BytesIO(str.encode(reply_pop_up_alert)) as out_file:
                 out_file.name = "{}.txt".format(plugin_name)
-                await bot.send_file(
+                await borg.send_file(
                     event.chat_id,
                     out_file,
                     force_document=True,
@@ -90,25 +91,32 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
 
 def paginate_help(page_number, loaded_plugins, prefix):
     number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
-    number_of_cols = 2
+    number_of_cols = Config.NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD
     helpable_plugins = []
     for p in loaded_plugins:
         if not p.startswith("_"):
             helpable_plugins.append(p)
     helpable_plugins = sorted(helpable_plugins)
     modules = [custom.Button.inline(
-        "{} {} {}".format("⚡", x , "⚡"),
+        "{} {} {}".format("⚡️", x ,"⚡️"),
         data="us_plugin_{}".format(x))
         for x in helpable_plugins]
-    pairs = list(zip(modules[::number_of_cols], modules[1::number_of_cols]))
+    if number_of_cols == 1:
+        pairs = list(zip(modules[::number_of_cols]))
+    elif number_of_cols == 2:
+        pairs = list(zip(modules[::number_of_cols], modules[1::number_of_cols]))
+    else:
+        pairs = list(zip(modules[::number_of_cols], modules[1::number_of_cols], modules[2::number_of_cols]))
     if len(modules) % number_of_cols == 1:
         pairs.append((modules[-1],))
+    elif len(modules) % number_of_cols == 2:
+        pairs.append((modules[-2],modules[-1]))
     max_num_pages = ceil(len(pairs) / number_of_rows)
     modulo_page = page_number % max_num_pages
     if len(pairs) > number_of_rows:
         pairs = pairs[modulo_page * number_of_rows:number_of_rows * (modulo_page + 1)] + \
             [
-            (custom.Button.inline("◀️", data="{}_prev({})".format(prefix, modulo_page)),
-             custom.Button.inline("▶️", data="{}_next({})".format(prefix, modulo_page)))
+            (custom.Button.inline("Previous<<<<", data="{}_prev({})".format(prefix, modulo_page)),
+             custom.Button.inline(">>>>>Next", data="{}_next({})".format(prefix, modulo_page)))
         ]
     return pairs
