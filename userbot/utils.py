@@ -53,7 +53,7 @@ def command(**args):
         except:
             pass
 
-        reg = re.compile('[.]')
+        reg = re.compile('(.*)')
         if not pattern == None:
             try:
                 cmd = re.search(reg, pattern)
@@ -172,7 +172,7 @@ def admin_cmd(pattern=None, **args):
         else:
             
             args["pattern"] = re.compile("\." + pattern)
-            cmd = "." + pattern
+            cmd = ("." + pattern).replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
             except:
@@ -227,7 +227,7 @@ def register(**args):
     if "disable_edited" in args:
         del args['disable_edited']
     
-    reg = re.compile('[\.]')
+    reg = re.compile('(.*)')
     if not pattern == None:
         try:
             cmd = re.search(reg, pattern)
