@@ -18,6 +18,21 @@ async def _(event):
     await event.reply(mentions)
     await event.delete()
     
+@borg.on(admin_cmd(pattern="tag"))
+async def _(event):
+    if event.fwd_from:
+        return
+    reply_to_id = event.message
+    if event.reply_to_msg_id:
+        reply_to_id = await event.get_reply_message()
+    mentions = "@all"
+    chat = await event.get_input_chat()
+    async for x in borg.iter_participants(chat, 100):
+        mentions += f"[\u2063](tg://user?id={x.id})"
+    await reply_to_id.reply(mentions)
+    await event.delete()    
+    
+    
 @borg.on(admin_cmd(pattern="all (.*)"))
 async def _(event):
     if event.fwd_from:
