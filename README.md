@@ -5,6 +5,9 @@
 ### CLICK BELOW IMAGE TO DEPLOY CATUSERBOT...
 [![Deploy To Heroku](https://telegra.ph/file/4117e39218991cdd7379f.jpg)](https://heroku.com/deploy)
 
+###Also you can deploy by clicking the button...
+[![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ### The Normal Way
 
 
