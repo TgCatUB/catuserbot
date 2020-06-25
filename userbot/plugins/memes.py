@@ -127,7 +127,9 @@ async def lol(lel):
             okay = okay[:-1] + "_-"
             await lel.edit(okay)
 
-@borg.on(admin_cmd(outgoing=True, pattern="(yes|no|maybe|decide)"))
+
+@borg.on(admin_cmd(outgoing=True, pattern="(yes|no|maybe|decide)$"))
+
 async def decide(event):
     decision = event.pattern_match.group(1).lower()
     message_id = event.reply_to_msg_id if event.reply_to_msg_id else None
@@ -183,7 +185,7 @@ async def raping (raped):
         reply_text = memes.RAPE_STRINGS[index]
         await raped.edit(reply_text)
 			  
-@borg.on(admin_cmd(outgoing=True, pattern="pro"))
+@borg.on(admin_cmd(outgoing=True, pattern="pro$"))
 async def proo (pros):
     """ String for Pros only -_-"""
     if not pros.text[0].isalpha() and pros.text[0] not in ("/", "#", "@", "!"):

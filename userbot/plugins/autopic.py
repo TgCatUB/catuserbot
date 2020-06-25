@@ -50,7 +50,7 @@ async def autopic(event):
 CMD_HELP.update({
     "autopic":
     ".autopic\
-\n useage:tilted auto image along with time to work this you must set `DOWNLOAD_PFP_URL_CLOCK`\
-in the heroku vars first by telegraph link of that image \
+\n **USAGE:** Rotating image along with the time on it .\
+\n for working this you must set `DOWNLOAD_PFP_URL_CLOCK` in the heroku vars first with telegraph link of required image\
 "
 })          
