@@ -50,7 +50,7 @@ async def _(event):
         THREE = ("__Okay. My master has not seen your message yet.He usually responds to people,though idk about retarted ones.__\n __He'll respond when he comes back, if he wants to.There's already a lot of pending messages😶__\n **Please do not spam unless you wish to be blocked and reported.**")
         FOUR = ("`Okay. please have the basic manners as to not bother my master too much. If he wishes to help you, he will respond to you soon.`\n**Do not ask repeatdly else you will be blocked and reported.**")
         FIVE = ("▬▬▬.◙.▬▬▬ \n"
-               "═▂▄▄▓▄▄▂ \n"
+               " ═▂▄▄▓▄▄▂ \n"
                "◢◤ █▀▀████▄▄▄▄◢◤ \n"
                "█▄ █ █▄ ███▀▀▀▀▀▀▀╬ \n"
                "◥█████◤ \n"
