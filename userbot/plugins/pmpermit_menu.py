@@ -49,12 +49,12 @@ async def _(event):
         TWO = (" `███████▄▄███████████▄  \n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓███░░░░░░░░░░░░█\n██████▀▀▀█░░░░██████▀  \n░░░░░░░░░█░░░░█  \n░░░░░░░░░░█░░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░░▀▀ `\n\n**So uncool, this is not your home. Go bother someone else. You have been blocked and reported until further notice.**")
         THREE = ("__Okay. My master has not seen your message yet.He usually responds to people,though idk about retarted ones.__\n __He'll respond when he comes back, if he wants to.There's already a lot of pending messages😶__\n **Please do not spam unless you wish to be blocked and reported.**")
         FOUR = ("`Okay. please have the basic manners as to not bother my master too much. If he wishes to help you, he will respond to you soon.`\n**Do not ask repeatdly else you will be blocked and reported.**")
-        FIVE = ("▬▬▬.◙.▬▬▬ \n"
-               " ═▂▄▄▓▄▄▂ \n"
-               "◢◤ █▀▀████▄▄▄▄◢◤ \n"
-               "█▄ █ █▄ ███▀▀▀▀▀▀▀╬ \n"
-               "◥█████◤ \n"
-               "══╩══╩══ \n"
+        FIVE = ("▬▬▬.◙.▬▬▬\n"
+               " ═▂▄▄▓▄▄▂\n"
+               "◢◤ █▀▀████▄▄▄▄◢◤\n"
+               "█▄ █ █▄ ███▀▀▀▀▀▀▀╬\n"
+               "◥█████◤\n"
+               "══╩══╩══\n"
                "HIYA BOSS! THANKS 😃\n LEAVE WHATEVER U WANT TO LEAVE HERE \n I AM GLAD FROM U BOI🔜\n. ◌⑅⃝●♡⋆♡LOVE♡⋆♡●⑅◌")
         LWARN = ("**This is your last warning. DO NOT send another message else you will be blocked and reported. Keep patience. My master will respond you ASAP.**\n__Use__ `/start` __to go back to the main menu.__")
      
