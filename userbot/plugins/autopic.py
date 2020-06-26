@@ -29,7 +29,7 @@ async def autopic(event):
         shutil.copy(downloaded_file_name, photo)
         im = Image.open(photo)
         file_test = im.rotate(counter, expand=False).save(photo, "PNG")
-        current_time = datetime.now().strftime("  %H:%M\n\n%d.%m.%y")
+        current_time = datetime.now().strftime("  %H:%M\n%d.%m.%y")
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
         fnt = ImageFont.truetype(FONT_FILE_TO_USE, 100)
