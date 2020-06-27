@@ -18,14 +18,13 @@ else:
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
 
 cat_caption = "**MY BOT IS RUNNING SUCCESFULLY**\n\n"
-cat_caption += "🛡**SYSTEM STATUS**\n\n"
-cat_caption += f"🛡`Telethon Version:` **{version.__version__}**\n\n"
-cat_caption += f"🛡`Python Version:` **{python_version()}**\n\n"
-cat_caption += "🛡**Always With You, My Master!**\n\n"
-cat_caption += f"🛡`Owner Name :` {DEFAULTUSER}\n\n"
-cat_caption += "🛡`Database Status :` Databases Functioning Normally!\n\n"
-cat_caption += "🛡`Modified by :` [✰Şสͥℝสͣ✞ͫђ™✰](http://t.me/Sur_vivor)\n\n"
-cat_caption += "🛡`Created by :` Sandeep \n\n"
+cat_caption += f"☞`Telethon Version:` **{version.__version__}**\n"
+cat_caption += f"☞`Python Version:` **{python_version()}**\n"
+cat_caption += "☞**Always With You, My Master!**\n"
+cat_caption += f"☞`Owner Name :` {DEFAULTUSER}\n"
+cat_caption += "☞`Database Status :` Databases Functioning Normally!\n"
+cat_caption += "☞`Modified by :` [✰Şสͥℝสͣ✞ͫђ™✰](http://t.me/Sur_vivor)\n"
+cat_caption += "☞`Created by :` snapdragon, anubis, sandeep\n\n"
 cat_caption += "**[⚜️DEPLOY CATUSERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
 
 
