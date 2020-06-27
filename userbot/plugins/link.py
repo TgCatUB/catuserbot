@@ -60,7 +60,7 @@ async def get_user_from_event(event):
             await event.edit("`Pass the user's username, id or reply!`")
             return
 
-        if not event.message.entities:
+        if event.message.entities is not None:
             probable_user_mention_entity = event.message.entities[0]
 
             if isinstance(probable_user_mention_entity,
