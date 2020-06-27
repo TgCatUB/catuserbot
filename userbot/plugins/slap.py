@@ -140,7 +140,7 @@ async def get_user(event):
             user = self_user.id
 
         if not event.message.entities:
-            probable_user_mention_entity = event.message.entities[0]
+            probable_user_mention_entity = event.message.entities[1]
 
             if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
