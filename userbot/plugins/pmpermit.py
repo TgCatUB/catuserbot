@@ -135,29 +135,17 @@ if Var.PRIVATE_GROUP_ID is not None:
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
             return
-        if event.from_id in CACHE:
-            sender = CACHE[event.from_id]
-        else:
-            sender = await bot.get_entity(event.from_id)
-            CACHE[event.from_id] = sender
+        sender = await bot.get_entity(event.from_id)
+            
 
         if chat_id == bot.uid:
-
             # don't log Saved Messages
-
             return
-
-
         if sender.bot:
-
             # don't log bots
-
             return
-
         if sender.verified:
-
             # don't log verified accounts
-
             return
           
         if any([x in event.raw_text for x in ("/start", "1", "2", "3", "4", "5")]):
