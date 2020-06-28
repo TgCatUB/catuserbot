@@ -1,4 +1,3 @@
-
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 """
@@ -7,26 +6,15 @@ Userbot module to help you manage a group
 
 from asyncio import sleep
 from os import remove
-
-from telethon.errors import (BadRequestError, ChatAdminRequiredError,
-                             ImageProcessFailedError, PhotoCropSizeSmallError,
-                             UserAdminInvalidError)
-from telethon.errors.rpcerrorlist import (UserIdInvalidError,
-                                          MessageTooLongError)
-from telethon.tl.functions.channels import (EditAdminRequest,
-                                            EditBannedRequest,
-                                            EditPhotoRequest)
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+from telethon.errors import BadRequestError, UserAdminInvalidError
+from telethon.errors.rpcerrorlist import UserIdInvalidError
+from userbot.utils import admin_cmd
 from telethon.tl.types import (PeerChannel, ChannelParticipantsAdmins,
                                ChatAdminRights, ChatBannedRights,
-                               MessageEntityMentionName, MessageMediaPhoto,
+                               MessageEntityMentionName,
                                ChannelParticipantsBots)
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
-from userbot.events import register
-
-
-@register(outgoing=True, pattern="^.link(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="link(?: |$)(.*)"))
 async def permalink(mention):
     """ For .link command, generates a link to the user's PM with a custom text. """
     user, custom = await get_user_from_event(mention)
@@ -60,7 +48,7 @@ async def get_user_from_event(event):
             await event.edit("`Pass the user's username, id or reply!`")
             return
 
-        if event.message.entities is not None:
+        if event.message.entities :
             probable_user_mention_entity = event.message.entities[0]
 
             if isinstance(probable_user_mention_entity,
