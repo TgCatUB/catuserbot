@@ -7,26 +7,12 @@ Userbot module to help you manage a group
 
 from asyncio import sleep
 from os import remove
-
-from telethon.errors import (BadRequestError, ChatAdminRequiredError,
-                             ImageProcessFailedError, PhotoCropSizeSmallError,
-                             UserAdminInvalidError)
-from telethon.errors.rpcerrorlist import (UserIdInvalidError,
-                                          MessageTooLongError)
-from telethon.tl.functions.channels import (EditAdminRequest,
-                                            EditBannedRequest,
-                                            EditPhotoRequest)
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
-from telethon.tl.types import (PeerChannel, ChannelParticipantsAdmins,
-                               ChatAdminRights, ChatBannedRights,
-                               MessageEntityMentionName, MessageMediaPhoto,
-                               ChannelParticipantsBots)
-
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
-from userbot.events import register
+from telethon.errors import BadRequestError, UserAdminInvalidError
+from telethon.errors.rpcerrorlist import UserIdInvalidError
+from userbot.utils import admin_cmd
 
 
-@register(outgoing=True, pattern="^.link(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="link(?: |$)(.*))
 async def permalink(mention):
     """ For .link command, generates a link to the user's PM with a custom text. """
     user, custom = await get_user_from_event(mention)
@@ -42,13 +28,13 @@ async def permalink(mention):
 
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
-    args = event.pattern_match.group(1).split(':', 1)
+    args = event.pattern_match.group(1).split(' ', 1)
     extra = None
-    if event.reply_to_msg_id and not len(args) == 2:
+    if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         user_obj = await event.client.get_entity(previous_message.from_id)
         extra = event.pattern_match.group(1)
-    elif len(args[0]) > 0:
+    elif args:
         user = args[0]
         if len(args) == 2:
             extra = args[1]
@@ -60,7 +46,7 @@ async def get_user_from_event(event):
             await event.edit("`Pass the user's username, id or reply!`")
             return
 
-        if not event.message.entities :
+        if not event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
 
             if isinstance(probable_user_mention_entity,
