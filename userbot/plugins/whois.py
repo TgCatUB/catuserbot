@@ -18,7 +18,7 @@ from userbot.utils import register, admin_cmd
 
 TMP_DOWNLOAD_DIRECTORY = "./"
 
-@borg.on(admin_cmd(pattern="whois(?: |$)(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern="whois(?: |$)(.*)"))
 async def who(event):
 
     await event.edit(
@@ -32,7 +32,7 @@ async def who(event):
     try:
         photo, caption = await fetch_info(replied_user, event)
     except AttributeError:
-        event.edit("`Could not fetch info of that user.`")
+        await event.edit("`Could not fetch info of that user.`")
         return
 
     message_id_to_reply = event.message.reply_to_msg_id
@@ -73,7 +73,7 @@ async def get_user(event):
             self_user = await event.client.get_me()
             user = self_user.id
 
-        if event.message.entities is not None:
+        if event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
 
             if isinstance(probable_user_mention_entity,
