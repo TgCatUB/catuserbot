@@ -10,6 +10,10 @@ from os import remove
 from telethon.errors import BadRequestError, UserAdminInvalidError
 from telethon.errors.rpcerrorlist import UserIdInvalidError
 from userbot.utils import admin_cmd
+from telethon.tl.types import (PeerChannel, ChannelParticipantsAdmins,
+                               ChatAdminRights, ChatBannedRights,
+                               MessageEntityMentionName,
+                               ChannelParticipantsBots)
 
 @borg.on(admin_cmd(pattern="link(?: |$)(.*)"))
 async def permalink(mention):
@@ -27,13 +31,13 @@ async def permalink(mention):
 
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
-    args = event.pattern_match.group(1).split(' ', 1)
+    args = event.pattern_match.group(1).split(':', 1)
     extra = None
-    if event.reply_to_msg_id:
+    if event.reply_to_msg_id and not len(args) == 2:
         previous_message = await event.get_reply_message()
         user_obj = await event.client.get_entity(previous_message.from_id)
         extra = event.pattern_match.group(1)
-    elif args:
+    elif len(args[0]) > 0:
         user = args[0]
         if len(args) == 2:
             extra = args[1]
@@ -45,7 +49,7 @@ async def get_user_from_event(event):
             await event.edit("`Pass the user's username, id or reply!`")
             return
 
-        if event.message.entities:
+        if event.message.entities :
             probable_user_mention_entity = event.message.entities[0]
 
             if isinstance(probable_user_mention_entity,
