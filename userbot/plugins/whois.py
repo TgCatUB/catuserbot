@@ -17,7 +17,7 @@ from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from userbot.utils import register, admin_cmd
 
 
-@borg.on(admin_cmd(pattern="userinfo ?(.*)"))
+@borg.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -151,7 +151,7 @@ async def get_full_user(event):
             except Exception as e:
                 return None, e
 
-@register(pattern="^\.whois(?: |$)(.*)", outgoing=True)
+@borg.on(admin_cmd(pattern="whois(?: |$)(.*)"))
 async def who(event):
 
     await event.edit(
@@ -165,7 +165,7 @@ async def who(event):
     try:
         photo, caption = await fetch_info(replied_user, event)
     except AttributeError:
-        event.edit("`Could not fetch info of that user.`")
+        await event.edit("`Could not fetch info of that user.`")
         return
 
     message_id_to_reply = event.message.reply_to_msg_id
