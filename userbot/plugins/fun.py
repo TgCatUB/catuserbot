@@ -38,7 +38,7 @@ GAMBAR_TITIT = """
 
 # ===========================================
 
-@borg.on(admin_cmd(pattern=r"fp$"))
+@borg.on(admin_cmd(pattern=r"hf$"))
 async def facepalm(e):
     """ Facepalm  🤦‍♂ """
     await e.edit("🤦‍♂")
