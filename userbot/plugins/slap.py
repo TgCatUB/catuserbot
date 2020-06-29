@@ -108,7 +108,7 @@ WHERE = ["in the chest", "on the head", "on the butt", "on the crotch"]
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
 
-@borg.on(admin_cmd(pattern="slap ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="slap ?(.*)"))
 async def who(event):
     if event.fwd_from:
         return
