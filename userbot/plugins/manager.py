@@ -84,7 +84,7 @@ async def on_new_private_message(event):
     message_to_id = event.message.to_id
     chat_id = event.chat_id
     # logger.info(chat_id)
-
+    
 
     sender = await event.client.get_entity(chat_id)
     if chat_id == borg.uid:
@@ -108,11 +108,12 @@ async def on_new_chat_action_message(event):
         return
     # logger.info(event.stringify())
     chat_id = event.chat_id
-    message_id = event.action_message.id
+    
 
     if event.created or event.user_added:
         added_by_users = event.action_message.action.users
         if borg.uid in added_by_users:
+            message_id = event.action_message.id
             added_by_user = event.action_message.from_id
             # someone added me to chat
             the_message = ""
