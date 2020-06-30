@@ -1,7 +1,7 @@
 """Log PMs
 Check https://t.me/tgbeta/3505"""
 from asyncio import sleep
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, bot
+from userbot import CMD_HELP
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 from userbot.utils import admin_cmd
@@ -64,7 +64,7 @@ async def monito_p_m_s(event):
         if chat.id not in NO_PM_LOG_USERS and chat.id != borg.uid:
             try:
                 if Config.PM_LOGGR_BOT_API_ID:
-                  if event.message.message:
+                  if event.message:
                     e = await borg.get_entity(int(Config.PM_LOGGR_BOT_API_ID))
                     fwd_message = await borg.forward_messages(
                                      e,
@@ -82,7 +82,7 @@ async def monito_p_m_s(event):
                 print(exc_type, fname, exc_tb.tb_lineno)
                 print(e) 
 
-@borg.on(admin_cmd(pattern="enlog(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern="log(?: |$)(.*)"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         reason = event.pattern_match.group(1)
@@ -104,3 +104,13 @@ async def set_no_log_p_m(event):
                 NO_PM_LOG_USERS.append(chat.id)
                 await event.edit("Won't Log Messages from this chat")
                 await asyncio.sleep(3)
+                
+CMD_HELP.update({"log_pms": "`.save` :\
+      \nUSAGE: saves taged message in private group .\
+      \n\n `.kickme`:\
+      \nUSAGE: kicks you from the chat where you used this\
+      \n\n`.log`:\
+      \nUSAGE:By default will log all private chat messages if you use .nolog and want to log again then you need to use this\
+      \n\n`.nolog`:\
+      \nUSAGE:to stops logging from a private chat "
+})
