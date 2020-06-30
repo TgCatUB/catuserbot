@@ -77,15 +77,14 @@ async def on_new_private_message(event):
 
     if not event.is_private:
         return
-
+    if event.from_id == bot.uid:
+        return
     message_text = event.message.message
     message_media = event.message.media
     message_id = event.message.id
     message_to_id = event.message.to_id
-    chat_id = event.chat_id
+    chat_id = event.from_id
     # logger.info(chat_id)
-    
-
     sender = await event.client.get_entity(chat_id)
     if chat_id == borg.uid:
         # don't log Saved Messages
@@ -109,7 +108,6 @@ async def on_new_chat_action_message(event):
     # logger.info(event.stringify())
     chat_id = event.chat_id
     
-
     if event.created or event.user_added:
         added_by_users = event.action_message.action.users
         if borg.uid in added_by_users:
@@ -170,7 +168,8 @@ async def do_log_pm_action(chat_id, event, message_text, message_media):
     the_message += f"[User](tg://user?id={chat_id}): {chat_id}\n"
     the_message += f"Message: {message_text}\n"
     #the_message += f"Media: {message_media}"
-    await event.client.send_message(
+    if event.message.message:
+        await event.client.send_message(
         entity=Config.PM_LOGGR_BOT_API_ID,
         message=the_message,
         # reply_to=,
@@ -178,4 +177,13 @@ async def do_log_pm_action(chat_id, event, message_text, message_media):
         link_preview=False,
         file=message_media,
         silent=True
-    )
+        )
+    else:
+        return
+
+CMD_HELP.update({"manager": "`.nccreatedch` :\
+      \n\n`.log`:\
+      \nUSAGE:logs the messages from the private chat by default it will log if you stop by .nolog and you want to log then use .log\
+      \n\n`.nolog`:\
+      \nUSAGE:to stop logging from a private chat "
+})     
