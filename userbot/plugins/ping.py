@@ -3,7 +3,7 @@ from datetime import datetime
 from telethon import events
 from datetime import datetime
 from userbot.utils import admin_cmd
-from userbot StartTime
+from userbot.__init__ import StartTime
 import time
 
 @borg.on(admin_cmd(pattern="pong ?(.*)", allow_sudo=True))
