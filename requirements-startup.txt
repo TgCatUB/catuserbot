@@ -54,7 +54,6 @@ selenium
 speedtest-cli
 spotify_token
 sqlalchemy
-subprocess
 telegraph
 tswift
 urbandict
