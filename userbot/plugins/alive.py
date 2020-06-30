@@ -23,7 +23,7 @@ cat_caption += f"☞`Python Version:` **{python_version()}**\n"
 cat_caption += "☞**Always With You, My Master!**\n"
 cat_caption += f"☞`Owner Name :` {DEFAULTUSER}\n"
 cat_caption += "☞`Database Status :` Databases Functioning Normally!\n"
-cat_caption += "☞`Modified by :` [✰Şสͥℝสͣ✞ͫђ™✰](http://t.me/Sur_vivor)\n"
+cat_caption += "☞`Modified by :` [✰Sᴀͥʀᴀͣᴛͫʜ™️✰](http://t.me/Sur_vivor)\n"
 cat_caption += "☞`Created by :` snapdragon, anubis, sandeep\n\n"
 cat_caption += "**[⚜️DEPLOY CATUSERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
 
