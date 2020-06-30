@@ -9,18 +9,9 @@ from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 import glob
 import os
-try:
- import instantmusic , subprocess
-except:
- os.system("pip install instantmusic")
- 
-
-
-os.system("rm -rf *.mp3")
-
+import instantmusic , subprocess
 
 def bruh(name):
-    
     os.system("instantmusic -q -s "+name)
     
 
