@@ -43,7 +43,7 @@ async def apk(event):
     except Exception as err:
         await event.edit("Exception Occured:- "+str(err))
         
-@borg.on(sudo_cmd(pattern="app (.*)"))
+@borg.on(sudo_cmd(pattern="app (.*)",allow_sudo=True))
 async def apk(event):
     try:
         app_name = event.pattern_match.group(1)
