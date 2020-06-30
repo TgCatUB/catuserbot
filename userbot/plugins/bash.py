@@ -43,7 +43,7 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
         
-@borg.on(sudo_cmd(pattern="bash ?(.*)"))
+@borg.on(sudo_cmd(pattern="bash ?(.*)" ,allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
