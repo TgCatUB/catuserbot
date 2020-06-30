@@ -9,20 +9,7 @@ from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 import glob
 import os
-try:
- import instantmusic , subprocess
-except:
- os.system("pip install instantmusic")
- 
-
-
-os.system("rm -rf *.mp3")
-
-
-def bruh(name):
-    
-    os.system("instantmusic -q -s "+name)
-    
+import instantmusic , subprocess    
 
 @borg.on(admin_cmd(pattern="song ?(.*)"))
 async def _(event):
@@ -38,8 +25,7 @@ async def _(event):
     else:
     	await event.edit("`What I am Supposed to find `")
     	return
-    
-    bruh(str(query))
+    os.system("instantmusic -q -s "+str(query))
     l = glob.glob("*.mp3")
     loa = l[0]
     await event.edit("yeah..! i found something wi8..🥰")
