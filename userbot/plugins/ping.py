@@ -6,7 +6,7 @@ from userbot.utils import admin_cmd
 from userbot.__init__ import StartTime
 import time
 
-@borg.on(admin_cmd(pattern="pong ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="pong ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -46,7 +46,8 @@ def get_readable_time(seconds: int) -> str:
     return ping_time
 
 
-@command(pattern="^.ping$")
+#@command(pattern="^.ping$")
+@borg.on(admin_cmd(pattern="ping$"))
 async def _(event):
     if event.fwd_from:
         return
