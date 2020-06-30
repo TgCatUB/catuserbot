@@ -56,7 +56,7 @@ async def set_no_log_p_m(event):
                 await event.delete()
 
 
-@borg.on(admin_cmd(pattern="log(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern="enlog(?: |$)(.*)"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         reason = event.pattern_match.group(1)
@@ -182,7 +182,7 @@ async def do_log_pm_action(chat_id, event, message_text, message_media):
         return
 
 CMD_HELP.update({"manager": "`.nccreatedch` :\
-      \n\n`.log`:\
+      \n\n`.enlog`:\
       \nUSAGE:logs the messages from the private chat by default it will log if you stop by .nolog and you want to log then use .log\
       \n\n`.nolog`:\
       \nUSAGE:to stop logging from a private chat "
