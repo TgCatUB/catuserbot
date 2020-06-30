@@ -136,14 +136,8 @@ async def _(event):
                            f"**|**  [`{percentage}`**%**]"
                            )
 
-def prettyjson(obj, indent=2, maxlinelength=80):
-    """Renders JSON content with indentation and line splits/concatenations to fit maxlinelength.
-    Only dicts, lists and basic types are supported"""
 
-    items, _ = getsubitems(obj, itemkey="", islast=True, maxlinelength=maxlinelength - indent, indent=indent)
-    return indentitems(items, indent, level=0)
-
-@borg.on(admin_cmd(pattern="logs ?(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern="herokulogs ?(.*)", outgoing=True))
 async def _(dyno):        
         try:
              Heroku = heroku3.from_key(HEROKU_API_KEY)                         
@@ -163,7 +157,15 @@ async def _(dyno):
         await asyncio.sleep(5)
         await dyno.delete()
         return os.remove('logs.txt')
+    
+def prettyjson(obj, indent=2, maxlinelength=80):
+    """Renders JSON content with indentation and line splits/concatenations to fit maxlinelength.
+    Only dicts, lists and basic types are supported"""
+
+    items, _ = getsubitems(obj, itemkey="", islast=True, maxlinelength=maxlinelength - indent, indent=indent)
+    return indentitems(items, indent, level=0)
+
 CMD_HELP.update({
   "heroku":
-  "Info for Module to Manage Heroku:**\n\n`.usage`\nUsage:__Check your heroku dyno hours status.__\n\n`.set var <NEW VAR> <VALUE>`\nUsage: __add new variable or update existing value variable__\n**!!! WARNING !!!, after setting a variable the bot will restart.**\n\n`.get var or .get var <VAR>`\nUsage: __get your existing varibles, use it only on your private group!__\n**This returns all of your private information, please be cautious...**\n\n`.del var <VAR>`\nUsage: __delete existing variable__\n**!!! WARNING !!!, after deleting variable the bot will restarted** "
+  "Info for Module to Manage Heroku:**\n\n`.usage`\nUsage:__Check your heroku dyno hours status.__\n\n`.set var <NEW VAR> <VALUE>`\nUsage: __add new variable or update existing value variable__\n**!!! WARNING !!!, after setting a variable the bot will restart.**\n\n`.get var or .get var <VAR>`\nUsage: __get your existing varibles, use it only on your private group!__\n**This returns all of your private information, please be cautious...**\n\n`.del var <VAR>`\nUsage: __delete existing variable__\n**!!! WARNING !!!, after deleting variable the bot will restarted**\n\n`.herokulogs`\nUsage:sends you recent 100 lines of logs in heroku"
 })    
