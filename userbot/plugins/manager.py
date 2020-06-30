@@ -4,7 +4,7 @@ import userbot.plugins.sql_helper.no_log_pms_sql as no_log_pms_sql
 import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
 from telethon import events, errors, functions, types
 from userbot.utils import admin_cmd
-
+from userbot import CMD_HELP
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
