@@ -12,6 +12,8 @@ import asyncio
 import pylast
 from requests import get
 
+StartTime = time.time()
+
 os.system("pip install --upgrade pip")
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
