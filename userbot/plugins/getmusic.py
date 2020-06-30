@@ -8,24 +8,11 @@ from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 import glob
 import os
-try:
- import instantmusic , subprocess
-except:
- os.system("pip install instantmusic")
- 
-
-
-os.system("rm -rf *.mp3")
-
-
-def bruh(name):
-    
-    os.system("instantmusic -q -s "+name)
-    
+import instantmusic , subprocess    
 
 @borg.on(admin_cmd(pattern="song ?(.*)"))
 async def _(event):
-    await event.edit("╔═════════╗\n║▐▀▀▀▀▀▀▀▌║\n║▐░░░░▓░░▌║\n║▐░░▓░▓▓░▌║\n║▐▓░▓▓▓▓░▌║\n║▐▄▄▄▄▄▄▄▌║\n╟─────────╢\n║▒▒▒▒▒▒▒▒▒║\n║▒▒▄▒▒▒▄▀▒║\n║▒▀█▀▒▒▒▒▒║\n║▒▒▒▒▒▒║║║║\n╙═════════╜\n\n`wi8..! I am finding your song....`")
+    await event.edit("╔══╗ \n║██║ \n║(O)║♫ ♪ ♫ ♪\n╚══╝\n▄ █ ▄ █ ▄ ▄ █ ▄ █ ▄ █ \nMin- - - - - - - - - - - -●Max\n`wi8..! I am finding your song....`")
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -37,11 +24,10 @@ async def _(event):
     else:
     	await event.edit("`What I am Supposed to find `")
     	return
-    
-    bruh(str(query))
+    os.system("instantmusic -q -s "+str(query))
     l = glob.glob("*.mp3")
     loa = l[0]
-    await event.edit("╔══╗ \n║██║ \n║(O)║♫ ♪ ♫ ♪\n╚══╝\n▄ █ ▄ █ ▄ ▄ █ ▄ █ ▄ █ \nMin- - - - - - - - - - - -●Max \n\ni found something wi8..🥰")
+    await event.edit("yeah..! i found something wi8..🥰")
     await borg.send_file(
                 event.chat_id,
                 loa,
