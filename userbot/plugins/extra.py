@@ -28,13 +28,6 @@ async def cry(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("(;´༎ຶД༎ຶ)")
 
-@borg.on(admin_cmd(pattern="fp"))
-#@register(outgoing=True, pattern="^.fp$")
-async def facepalm(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("🤦‍♂")
-
-		
 
 
 @borg.on(admin_cmd(pattern="heart"))		
