@@ -1,5 +1,5 @@
 
-# FORK AT YOUR OWN RISK
+# ⚠️FORK AT YOUR OWN RISK
 # Installing
 ### The Easy Way
 ### CLICK BELOW IMAGE TO DEPLOY CATUSERBOT...
@@ -8,8 +8,12 @@
 ### Also you can deploy by clicking the button...
 [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-### The Normal Way
 
+### CLICK BELOW IMAGE TO GENERATE STRING_SESSION
+[![ONLINE_TERMUX_STRING_SESSION](https://telegra.ph/file/012e02bec79baa81490ee.jpg)](https://generatestringsession.sarathsurvivor.repl.run)
+
+
+### The Normal Way
 
 An example `local_config.py` file could be:
 
