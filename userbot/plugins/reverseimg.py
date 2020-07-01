@@ -17,7 +17,7 @@ import re
 from telethon.tl.types import MessageMediaPhoto
 from PIL import Image
 
-from userbot import bot, CMD_HELP
+from userbot import bot, CMD_HELP, admin_cmd
 from userbot.utils import register, errors_handler
 
 opener = urllib.request.build_opener()
@@ -25,7 +25,7 @@ useragent = 'Mozilla/5.0 (Linux; Android 9; SM-G960F Build/PPR1.180610.011; wv) 
 opener.addheaders = [('User-agent', useragent)]
 
 
-@register(outgoing=True, pattern=r"^.reverse(?: |$)(\d*)")
+@borg.on(admin_cmd(outgoing=True, pattern=r"reverse(?: |$)(\d*)"))
 @errors_handler
 async def okgoogle(img):
     """ For .reverse command, Google search images and stickers. """
