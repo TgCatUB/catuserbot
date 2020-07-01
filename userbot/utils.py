@@ -171,8 +171,9 @@ def admin_cmd(pattern=None, **args):
             args["pattern"] = re.compile(pattern)
         else:
             
-            args["pattern"] = re.compile("\." + pattern)
-            cmd = ("." + pattern).replace("$", "").replace("\\", "").replace("^", "")
+            args["pattern"] = re.compile(Config.COMMAND_HAND_LER + pattern)
+            reg =Config.COMMAND_HAND_LER[1]
+            cmd = (reg +pattern).replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
             except:
