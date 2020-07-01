@@ -48,7 +48,7 @@ BOTLOG = True
 LANG = "en"
 
 
-@register(outgoing=True, pattern="^.krb")
+@borg.on(admin_cmd(outgoing=True, pattern="krb"))
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
  
@@ -120,7 +120,7 @@ async def carbon_api(e):
     
 
 
-@register(outgoing=True, pattern=r"^\.wiki (.*)")
+@borg.on(admin_cmd(outgoing=True, pattern=r"wiki (.*)"))
 async def wiki(wiki_q):
     """ For .wiki command, fetch content from Wikipedia. """
     match = wiki_q.pattern_match.group(1)
@@ -153,7 +153,7 @@ async def wiki(wiki_q):
 
 
 
-@register(outgoing=True, pattern=r"^\.trt(?: |$)([\s\S]*)")
+@borg.on(admin_cmd(outgoing=True, pattern=r"trt(?: |$)([\s\S]*)"))
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     translator = Translator()
@@ -185,7 +185,7 @@ async def translateme(trans):
         )
 
 
-@register(pattern="^\.lang (trt|tts) (.*)", outgoing=True)
+@borg.on(admin_cmd(pattern="lang (trt|tts) (.*)", outgoing=True))
 async def lang(value):
     """ For .lang command, change the default langauge of userbot scrapers. """
     util = value.pattern_match.group(1).lower()
