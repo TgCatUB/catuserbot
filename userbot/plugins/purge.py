@@ -10,7 +10,7 @@ from asyncio import sleep
 from telethon.errors import rpcbaseerrors
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.utils import register, errors_handler
+from userbot.utils import admin_cmd, errors_handler
 
 from userbot.uniborgConfig import Config
 
