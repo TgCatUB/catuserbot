@@ -1,21 +1,11 @@
-"""Emoji
-Available Commands:
-.emoji shrug
-.emoji apple
-.emoji :/
-.emoji -_-"""
-
 from telethon import events
-
 import asyncio
-
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 
 
 
-@borg.on(admin_cmd(pattern=f"quickheal", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"quickheal$", outgoing=True))
 
 async def _(event):
 
@@ -27,13 +17,9 @@ async def _(event):
 
     animation_ttl = range(0, 11)
 
-    input_str = event.pattern_match.group(1)
+    await event.edit("quickheal")
 
-    if input_str == "quickheal":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+    animation_chars = [
         
             "`Downloading File..`",
             "`File Downloaded....`",
@@ -48,14 +34,13 @@ async def _(event):
             "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nTask: 01 of 01 Files Scanned...\n\nReault: No Virus Found...`"
         ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
             await event.edit(animation_chars[i % 11])
 
-@borg.on(admin_cmd(pattern=f"sqh", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"sqh$", outgoing=True))
 
 async def _(event):
 
@@ -67,13 +52,9 @@ async def _(event):
 
     animation_ttl = range(0, 11)
 
-    input_str = event.pattern_match.group(1)
+    await event.edit("sqh")
 
-    if input_str == "sqh":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+    animation_chars = [
         
             "`Downloading File..`",
             "`File Downloaded....`",
@@ -88,15 +69,14 @@ async def _(event):
             "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nTask: 01 of 01 Files Scanned...\n\nReault: No Virus Found...`"
         ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
             await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=f"vquickheal", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"vquickheal$", outgoing=True))
 
 async def _(event):
 
@@ -108,13 +88,9 @@ async def _(event):
 
     animation_ttl = range(0, 11)
 
-    input_str = event.pattern_match.group(1)
+    await event.edit("vquickheal")
 
-    if input_str == "vquickheal":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+    animation_chars = [
         
             "`Downloading File..`",
             "`File Downloaded....`",
@@ -129,7 +105,7 @@ async def _(event):
             "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nTask: 01 of 01 Files Scanned...\n\nReault:⚠️Virus Found⚠️\nMore Info: Torzan, Spyware, Adware`"
         ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
