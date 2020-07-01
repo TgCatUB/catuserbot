@@ -5,7 +5,7 @@ import asyncio
 import os
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
-from userbot.utils import admin_cmd,register
+from userbot.utils import admin_cmd
 
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
@@ -46,7 +46,7 @@ async def get_tz(con):
         return
 
 
-@register(outgoing=True, pattern="^.ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
+@borg.on(admin_cmd(outgoing=True, pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
 async def time_func(tdata):
     """ For .time command, return the time of
         1. The country passed as an argument,
@@ -109,7 +109,7 @@ async def time_func(tdata):
         return
 
 
-@register(outgoing=True, pattern="^.cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
+@borg.on(admin_cmd(outgoing=True, pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
 async def date_func(dat):
     """ For .date command, return the date of
         1. The country passed as an argument,
