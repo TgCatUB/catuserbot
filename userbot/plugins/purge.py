@@ -19,7 +19,7 @@ BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
-@register(outgoing=True, pattern="^.purge$")
+@borg.on(admin_cmd(outgoing=True, pattern="purge$"))
 @errors_handler
 async def fastpurger(purg):
     """ For .purge command, purge all messages starting from the reply. """
@@ -55,7 +55,7 @@ async def fastpurger(purg):
     await done.delete()
 
 
-@register(outgoing=True, pattern="^.purgeme")
+@borg.on(admin_cmd(outgoing=True, pattern="purgeme"))
 @errors_handler
 async def purgeme(delme):
     """ For .purgeme, delete x count of your latest message."""
@@ -83,7 +83,7 @@ async def purgeme(delme):
     await smsg.delete()
 
 
-@register(outgoing=True, pattern="^.del$")
+@borg.on(admin_cmd(outgoing=True, pattern="del$"))
 @errors_handler
 async def delete_it(delme):
     """ For .del command, delete the replied message. """
@@ -101,7 +101,7 @@ async def delete_it(delme):
                     BOTLOG_CHATID, "Well, I can't delete a message")
 
 
-@register(outgoing=True, pattern="^.edit")
+@borg.on(admin_cmd(outgoing=True, pattern="edit"))
 @errors_handler
 async def editer(edit):
     """ For .editme command, edit your last message. """
@@ -121,9 +121,6 @@ async def editer(edit):
                                        "Edit query was executed successfully")
 
 
-
-
-
 CMD_HELP.update({
     'purge':
     ".purge\
@@ -135,4 +132,3 @@ CMD_HELP.update({
     \n\n.edit <newmessage>\
     \nUsage: Replace your last message with <newmessage>."
 })
-
