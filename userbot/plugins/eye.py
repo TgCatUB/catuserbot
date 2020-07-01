@@ -8,7 +8,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 3
-    animation_ttl = range(0, 103)
+    animation_ttl = range(0, 10)
     #input_str = event.pattern_match.group(1)
     #if input_str == "eye":
     await event.edit("👁👁")
@@ -28,3 +28,4 @@ async def _(event):
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 10])
+        await event.delete()
