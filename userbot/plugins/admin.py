@@ -316,9 +316,6 @@ async def watcher(event):
         
 @borg.on(admin_cmd("mute(?: |$)(.*)"))
 async def startmute(event):
-    if any([x in event.raw_text for x in ("aamute")]):
-        await asyncio.sleep(0.5)
-    else:
         private = False
         if event.fwd_from:
           return
@@ -366,9 +363,6 @@ async def startmute(event):
     
 @borg.on(admin_cmd("unmute(?: |$)(.*)"))
 async def endmute(event):   
-    if any([x in event.raw_text for x in ("aaunmute" )]):
-        await asyncio.sleep(0.5)
-    else: 
         private = False
         if event.fwd_from:
           return
