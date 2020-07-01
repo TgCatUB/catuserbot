@@ -54,7 +54,7 @@ async def _(event):
 
     await event.edit("windows")
 
-        animation_chars = [
+    animation_chars = [
         
             "`Connecting To Windows 10...`",
             "`Initiating Windows 10 Login.`",
