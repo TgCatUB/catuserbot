@@ -19,7 +19,7 @@ import random
 
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=f"tip", allow_sudo=True))
+@borg.on(admin_cmd(pattern=f"lifetip$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
