@@ -15,7 +15,7 @@ import shutil
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
-@command(pattern="^.autopic", outgoing=True)
+@borg.on(admin_cmd(pattern="autopic$"))
 async def autopic(event):
     await event.edit(f"Autopic has been started by my Master") 
     downloaded_file_name = "userbot/original_pic.png"
