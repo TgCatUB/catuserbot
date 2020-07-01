@@ -10,8 +10,7 @@ import requests
 
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=f"yify recents", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.yify recents", outgoing=True))
+@borg.on(admin_cmd(pattern=f"yify recents", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -37,4 +36,3 @@ async def _(event):
             )
             # return False
             await asyncio.sleep(120)
-
