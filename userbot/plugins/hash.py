@@ -45,7 +45,7 @@ async def gethash(hash_q):
         await hash_q.reply(ans)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="hbase (en|de) (.*)")
+@borg.on(admin_cmd(outgoing=True, pattern="hbase (en|de) (.*)"))
 @errors_handler
 async def endecrypt(query):
     """ For .base64 command, find the base64 encoding of the given string. """
