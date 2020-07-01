@@ -391,7 +391,6 @@ class Loader():
         bot.add_event_handler(func, events.NewMessage(**args))
 
         
-
 def sudo_cmd(pattern=None, **args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
@@ -406,8 +405,10 @@ def sudo_cmd(pattern=None, **args):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
-            args["pattern"] = re.compile("\." + pattern)
-            cmd = "." + pattern
+            
+            args["pattern"] = re.compile(Config.SUDO_COMMAND_HAND_LER + pattern)
+            reg =Config.SUDO_COMMAND_HAND_LER[1]
+            cmd = (reg +pattern).replace("$", "").replace("\\", "").replace("^", "")
             try:
                 SUDO_LIST[file_test].append(cmd)
             except:
@@ -436,6 +437,9 @@ def sudo_cmd(pattern=None, **args):
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         allow_edited_updates = args["allow_edited_updates"]
         del args["allow_edited_updates"]
+
     # check if the plugin should listen for outgoing 'messages'
     is_message_enabled = True
+
     return events.NewMessage(**args)
+
