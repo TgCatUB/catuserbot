@@ -204,7 +204,7 @@ async def gdrive_search_list(event):
     await event.edit(gsearch_results, link_preview=False)
 
 
-@borg.on(admin_cmd(pattern=r"^gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"))
+@borg.on(admin_cmd(pattern=r"gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"))
 async def download(set):
     """For .gsetf command, allows you to set path"""
     await set.edit("Processing ...")
