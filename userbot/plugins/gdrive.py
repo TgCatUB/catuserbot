@@ -18,7 +18,7 @@ from oauth2client import file, client, tools
 from userbot import (G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET,
                      G_DRIVE_AUTH_TOKEN_DATA, GDRIVE_FOLDER_ID, BOTLOG_CHATID,
                      TEMP_DOWNLOAD_DIRECTORY, CMD_HELP, LOGS)
-from userbot.events import register
+from userbot.utils import admin_cmd
 from mimetypes import guess_type
 import httplib2
 import subprocess
@@ -41,7 +41,7 @@ G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
-@register(pattern=r"^\.ugdrive(?: |$)(.*)", outgoing=True)
+@borg.on(admin_cmd(pattern=r"ugdrive(?: |$)(.*)")
 async def gdrive_upload_function(dryb):
     """ For .gdrive command, upload files to google drive. """
     await dryb.edit("Processing ...")
@@ -156,7 +156,7 @@ async def gdrive_upload_function(dryb):
                 f"Error while Uploading to Google Drive\nError Code:\n`{e}`")
 
 
-@register(pattern=r"^\.ggd(?: |$)(.*)", outgoing=True)
+@borg.on(admin_cmd(pattern=r"ggd(?: |$)(.*)"))
 async def upload_dir_to_gdrive(event):
     await event.edit("Processing ...")
     if CLIENT_ID is None or CLIENT_SECRET is None:
@@ -183,7 +183,7 @@ async def upload_dir_to_gdrive(event):
         await event.edit(f"Directory {input_str} does not seem to exist")
 
 
-@register(pattern=r"^\.list(?: |$)(.*)", outgoing=True)
+@borg.on(admin_cmd(pattern=r"list(?: |$)(.*)"))
 async def gdrive_search_list(event):
     await event.edit("Processing ...")
     if CLIENT_ID is None or CLIENT_SECRET is None:
@@ -204,10 +204,7 @@ async def gdrive_search_list(event):
     await event.edit(gsearch_results, link_preview=False)
 
 
-@register(
-    pattern=
-    r"^\.gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})",
-    outgoing=True)
+@borg.on(admin_cmd(pattern=r"^gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"))
 async def download(set):
     """For .gsetf command, allows you to set path"""
     await set.edit("Processing ...")
@@ -224,7 +221,7 @@ async def download(set):
         )
 
 
-@register(pattern="^\.gsetclear$", outgoing=True)
+@borg.on(admin_cmd(pattern="gsetclear$"))
 async def download(gclr):
     """For .gsetclear command, allows you clear ur curnt custom path"""
     await gclr.reply("Processing ...")
@@ -232,7 +229,7 @@ async def download(gclr):
     await gclr.edit("Custom Folder ID cleared successfully.")
 
 
-@register(pattern="^\.gfolder$", outgoing=True)
+@borg.on(admin_cmd(pattern="gfolder$"))
 async def show_current_gdrove_folder(event):
     if parent_id:
         folder_link = f"https://drive.google.com/drive/folders/" + parent_id
