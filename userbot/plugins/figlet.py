@@ -32,5 +32,6 @@ CMD_HELP.update({
     "figlet":
     ".figlet text or **.figlet text : type\
     \n USAGE:the types are slant, 3D , 5line , alpha , banner ,  doh ,  iso ,  letter , allig , dotm , bubble , bulb , digi\
-    \nEXAMPLE : `.figlet hello : digi`"
+    \n NOTE: Nospace must be given after : and type\
+    \nEXAMPLE : `.figlet hello :digi`"
 })    
