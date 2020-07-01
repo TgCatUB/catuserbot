@@ -309,7 +309,7 @@ async def smrk(smk):
     elif textx.message:
         message = textx.message
     else:
-	await smk.edit("ツ")
+        await smk.edit("ツ")
         return			  
     if message == 'dele':
         await smk.edit( message +'te the hell' + "ツ" )
