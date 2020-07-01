@@ -54,7 +54,7 @@ UNBAN_RIGHTS = ChatBannedRights(
 )
 
         
-@borg.on(admin_cmd(pattern=f"zombies ?(.*)"))
+@borg.on(admin_cmd(pattern=f"zombies$"))
 async def rm_deletedacc(show):
     """ For .zombies command, list all the ghost/deleted/zombie accounts in a chat. """
 
@@ -125,7 +125,7 @@ async def rm_deletedacc(show):
 
         
                
-@borg.on(sudo_cmd(pattern="zombies ?(.*)", allow_sudo=True))  
+@borg.on(sudo_cmd(pattern="zombies$", allow_sudo=True))  
 async def rm_deletedacc(show):
     if show.fwd_from:
         return
