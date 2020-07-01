@@ -23,7 +23,7 @@ import importlib.util
 
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=f"wchar", allow_sudo=True))
+@borg.on(admin_cmd(pattern=f"wchar"))
 
 async def timer_blankx(e):
 
