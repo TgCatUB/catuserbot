@@ -285,33 +285,32 @@ async def _(event):
 		    await event.edit("".join(deq))
 		    deq.rotate(1)
 
-
-@borg.on(admin_cmd(outgoing=True, pattern="clap (.*)"))
-async def claptext(memereview):
-        textx = await memereview.get_reply_message()
-        message = memereview.pattern_match.group(1)
-        if message:
-            pass
-        elif textx:
-            message = textx.text
-        else:
-            await memereview.edit("`Hah, I don't clap pointlessly!`")
-            return
-        reply_text = "👏 "
-        reply_text += message.replace(" ", " 👏 ")
-        reply_text += " 👏"
-        await memereview.edit(reply_text)
+@borg.on(admin_cmd(outgoing=True, pattern="clap(?: |$)(.*)"))
+async def claptext(event):
+    textx = await event.get_reply_message()
+    if event.pattern_match.group(1):
+        query = event.pattern_match.group(1)
+    elif textx.message:
+        query = textx.message
+    else:
+      await event.edit("Hah, I don't clap pointlessly!")
+      return  
+    reply_text = "👏 "
+    reply_text += query.replace(" ", " 👏 ")
+    reply_text += " 👏"
+    await event.edit(reply_text)   
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="smk (.*)"))
+@borg.on(admin_cmd(outgoing=True, pattern="smk(?: |$)(.*)"))
 async def smrk(smk):
         textx = await smk.get_reply_message()
-        message = smk.text
         if message[5:]:
             message = str(message[5:])
-        elif textx:
-            message = textx
-            message = str(message.message)
+        elif textx.message:
+            message = textx.message
+	else:
+	    await smk.edit("ツ")		  
+	    		  
         if message == 'dele':
             await smk.edit( message +'te the hell' + "ツ" )
             await smk.edit("ツ")
@@ -332,7 +331,7 @@ async def payf(event):
 @borg.on(admin_cmd(outgoing=True, pattern="bt$"))
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
-    if await bt_e.get_reply_message() and bt_e.is_group:
+    if bt_e.is_group:
         await bt_e.edit(
             "/BLUETEXT /MUST /CLICK.\n"
             "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?")
