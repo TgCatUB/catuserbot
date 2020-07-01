@@ -5,12 +5,9 @@ from platform import uname
 import sys
 from telethon import events, functions, __version__
 
-from userbot import SUDO_LIST
-from userbot.utils import sudo_cmd
-
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@command(pattern="^.help ?(.*)")
+@borg.on(admin_cmd(pattern="help ?(.*)"))
 async def cmd_list(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
