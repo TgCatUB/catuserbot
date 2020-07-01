@@ -86,7 +86,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                 await event.client(functions.contacts.BlockRequest(chat.id))
 
 
-    @borg.on(admin_cmd(pattern="listapproved$")
+    @borg.on(admin_cmd(pattern="listapproved$"))
     async def approve_p_m(event):
         if event.fwd_from:
             return
