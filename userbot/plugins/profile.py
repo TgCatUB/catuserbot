@@ -27,7 +27,6 @@ from telethon.tl.functions.photos import (DeletePhotosRequest,
 from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
 
 from userbot import bot, CMD_HELP
-from userbot.utils import register
 
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
@@ -43,14 +42,6 @@ USERNAME_TAKEN = "```This username is already taken.```"
 # ===============================================================
 
 
-@register(outgoing=True, pattern="^.reserved$")
-async def mine(event):
-    """ For .reserved command, get a list of your reserved usernames. """
-    result = await bot(GetAdminedPublicChannelsRequest())
-    output_str = ""
-    for channel_obj in result.chats:
-        output_str += f"{channel_obj.title}\n@{channel_obj.username}\n\n"
-    await event.edit(output_str)
 
 
 
@@ -120,38 +111,8 @@ async def _(event):
     except Exception as e:  # pylint:disable=C0103,W0703
         logger.warn(str(e))  # pylint:disable=E0602
 
-@register(outgoing=True, pattern="^.setpfp$")
-async def set_profilepic(propic):
-    """ For .profilepic command, change your profile picture in Telegram. """
-    replymsg = await propic.get_reply_message()
-    photo = None
-    if replymsg.media:
-        if isinstance(replymsg.media, MessageMediaPhoto):
-            photo = await propic.client.download_media(message=replymsg.photo)
-        elif "image" in replymsg.media.document.mime_type.split('/'):
-            photo = await propic.client.download_file(replymsg.media.document)
-        else:
-            await propic.edit(INVALID_MEDIA)
 
-    if photo:
-        try:
-            await propic.client(
-                UploadProfilePhotoRequest(await
-                                          propic.client.upload_file(photo)))
-            os.remove(photo)
-            await propic.edit(PP_CHANGED)
-        except PhotoCropSizeSmallError:
-            await propic.edit(PP_TOO_SMOL)
-        except ImageProcessFailedError:
-            await propic.edit(PP_ERROR)
-        except PhotoExtInvalidError:
-            await propic.edit(INVALID_MEDIA)
-
-
-
-
-
-@register(outgoing=True, pattern="^.username (.*)")
+@borg.on(admin_cmd(outgoing=True, pattern="username (.*)"))
 async def update_username(username):
     """ For .username command, set a new username in Telegram. """
     newusername = username.pattern_match.group(1)
@@ -162,7 +123,7 @@ async def update_username(username):
         await username.edit(USERNAME_TAKEN)
 
 
-@register(outgoing=True, pattern="^.count$")
+@borg.on(admin_cmd(outgoing=True, pattern="count$"))
 async def count(event):
     """ For .count command, get profile stats. """
     u = 0
@@ -199,7 +160,7 @@ async def count(event):
     await event.edit(result)
 
 
-@register(outgoing=True, pattern=r"^.delpfp")
+@borg.on(admin_cmd(outgoing=True, pattern=r"delpfp"))
 async def remove_profilepic(delpfp):
     """ For .delpfp command, delete your current profile picture in Telegram. """
     group = delpfp.text[8:]
