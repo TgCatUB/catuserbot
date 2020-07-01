@@ -18,7 +18,7 @@ from telethon.tl.types import User as Userbot
 from telethon.errors.rpcerrorlist import FloodWaitError
 
 from userbot import CMD_HELP, DEFAULT_BIO, BIO_PREFIX, lastfm, LASTFM_USERNAME, bot
-from userbot.events import register
+from userbot.utils import admin_cmd
 
 
 from userbot.uniborgConfig import Config
@@ -52,7 +52,7 @@ LastLog = False
 # ================================================
 
 
-@register(outgoing=True, pattern="^.lastfm$")
+@borg.on(admin_cmd(outgoing=True, pattern="lastfm$"))
 async def last_fm(lastFM):
     """ For .lastfm command, fetch scrobble data from last.fm. """
     await lastFM.edit("Processing...")
@@ -184,7 +184,7 @@ async def get_curr_track(lfmbio):
     RUNNING = False
 
 
-@register(outgoing=True, pattern=r"^.lastbio (on|off)")
+@borg.on(admin_cmd(outgoing=True, pattern=r"lastbio (on|off)"))
 async def lastbio(lfmbio):
     arg = lfmbio.pattern_match.group(1).lower()
     global LASTFMCHECK
@@ -208,7 +208,7 @@ async def lastbio(lfmbio):
         await lfmbio.edit(LFM_BIO_ERR)
 
 
-@register(outgoing=True, pattern=r"^.lastlog (on|off)")
+@borg.on(admin_cmd(outgoing=True, pattern=r"lastlog (on|off)"))
 async def lastlog(lstlog):
     arg = lstlog.pattern_match.group(1).lower()
     global LastLog
