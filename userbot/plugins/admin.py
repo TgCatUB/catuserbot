@@ -74,7 +74,7 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
 
 
-@borg.on(admin_cmd("setgpic ?(.*)"))
+@borg.on(admin_cmd("setgpic(?: |$)(.*)"))
 @errors_handler
 async def set_group_photo(gpic):
     """ For .setgpic command, changes the picture of a group """
@@ -168,7 +168,7 @@ async def promote(promt):
             f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
 
 
-@borg.on(admin_cmd("demote ?(.*)"))
+@borg.on(admin_cmd("demote(?: |$)(.*)"))
 @errors_handler
 async def demote(dmod):
     """ For .demote command, demotes the replied/tagged person """
@@ -218,7 +218,7 @@ async def demote(dmod):
             f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
 
 
-@borg.on(admin_cmd("ban ?(.*)"))
+@borg.on(admin_cmd("ban(?: |$)(.*)"))
 @errors_handler
 async def ban(bon):
     """ For .ban command, bans the replied/tagged person """
@@ -272,7 +272,7 @@ async def ban(bon):
             f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
 
 
-@borg.on(admin_cmd("unban ?(.*)"))
+@borg.on(admin_cmd("unban(?: |$)(.*)"))
 @errors_handler
 async def nothanos(unbon):
     """ For .unban command, unbans the replied/tagged person """
@@ -314,7 +314,7 @@ async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
         
-@command(outgoing=True, pattern=r"^.mute ?(\d+)?")
+@borg.on(admin_cmd("mute(?: |$)(.*)"))
 async def startmute(event):
     if any([x in event.raw_text for x in ("/mute", "!mute", "amute", "bmute", "cmute", "dmute", 
                                           "emute", "fmute", "gmute", "hmute", "imute", "jmute",
@@ -374,7 +374,7 @@ async def startmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")   
     
-@command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
+@borg.on(admin_cmd("unmute(?: |$)(.*)"))
 async def endmute(event):   
     if any([x in event.raw_text for x in ("/unmute", "!unmute", "aunmute", "bunmute", "cunmute", "dunmute",
                                           "eunmute", "funmute", "gunmute", "hunmute", "iunmute", "junmute", 
@@ -506,7 +506,7 @@ async def pin(msg):
             f"LOUD: {not is_silent}")
 
 
-@borg.on(admin_cmd("kick ?(.*)"))
+@borg.on(admin_cmd("kick(?: |$)(.*)"))
 @errors_handler
 async def kick(usr):
     """ For .kick command, kicks the replied/tagged person from the group. """
@@ -550,7 +550,7 @@ async def kick(usr):
 
 
         
-@borg.on(admin_cmd("iundlt ?(.*)"))
+@borg.on(admin_cmd("iundlt$"))
 async def _(event):
     if event.fwd_from:
         return
