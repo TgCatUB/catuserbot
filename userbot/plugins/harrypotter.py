@@ -11,8 +11,7 @@ import random
 
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=f"hps", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.hps", outgoing=True))
+@borg.on(admin_cmd(pattern=f"hps$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -97,8 +96,3 @@ async def _(event):
       await event.edit("**Tergeo**")
     if (x==39):
       await event.edit("**Wingardium Leviosa**")
-
-
-
-
-
