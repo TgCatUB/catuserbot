@@ -11,7 +11,7 @@ from requests import get
 from bs4 import BeautifulSoup
 import asyncio
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.utils import admin_cmd
 
 GITHUB = 'https://github.com'
 DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
