@@ -23,6 +23,7 @@ hachoir
 heroku3
 httplib2
 humanize
+instantmusic
 jotquote
 justwatch
 kwot
@@ -59,4 +60,3 @@ tswift
 urbandict
 wikipedia
 youtube-dl
-instantmusic
