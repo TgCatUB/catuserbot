@@ -11,17 +11,19 @@ import glob
 import os
 import instantmusic , subprocess    
 
-@borg.on(admin_cmd(pattern="song ?(.*)"))
+@borg.on(admin_cmd(pattern="song(?: |$)(.*)"))
 async def _(event):
-    await event.edit("wi8..! I am finding your song....`")
+    
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
-    elif reply.text:
+        await event.edit("wi8..! I am finding your song....`")
+    elif reply.message:
         query = reply.message
+        await event.edit("wi8..! I am finding your song....`")
     else:
     	await event.edit("`What I am Supposed to find `")
     	return
@@ -43,7 +45,7 @@ async def _(event):
     
     
     
-CMD_HELP.update({"getmusic": ['getmusic',
-    " - `.song` query : finds the song you entered in query and sends it "
-    " - `.song <Name>` or `.song (replied message)`"]
+CMD_HELP.update({"getmusic":
+    "`.song` query or `.song` reply to song name :\
+    \nUSAGE:finds the song you entered in query and sends it"
 })    
