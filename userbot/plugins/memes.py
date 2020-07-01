@@ -293,8 +293,8 @@ async def claptext(event):
     elif textx.message:
         query = textx.message
     else:
-      await event.edit("Hah, I don't clap pointlessly!")
-      return  
+        await event.edit("Hah, I don't clap pointlessly!")
+        return  
     reply_text = "👏 "
     reply_text += query.replace(" ", " 👏 ")
     reply_text += " 👏"
@@ -303,21 +303,21 @@ async def claptext(event):
 
 @borg.on(admin_cmd(outgoing=True, pattern="smk(?: |$)(.*)"))
 async def smrk(smk):
-        textx = await smk.get_reply_message()
-        if message[5:]:
-            message = str(message[5:])
-        elif textx.message:
-            message = textx.message
-	else:
-	    await smk.edit("ツ")		  
-	    		  
-        if message == 'dele':
-            await smk.edit( message +'te the hell' + "ツ" )
-            await smk.edit("ツ")
-        else:
-             smirk = " ツ"
-             reply_text = message + smirk
-             await smk.edit(reply_text)
+    textx = await smk.get_reply_message()
+    if message[5:]:
+        message = str(message[5:])
+    elif textx.message:
+        message = textx.message
+    else:
+	await smk.edit("ツ")
+        return			  
+    if message == 'dele':
+        await smk.edit( message +'te the hell' + "ツ" )
+        await smk.edit("ツ")
+    else:
+        smirk = " ツ"
+        reply_text = message + smirk
+        await smk.edit(reply_text)
 
 @borg.on(admin_cmd(pattern="ftext ?(.*)"))
 async def payf(event):
