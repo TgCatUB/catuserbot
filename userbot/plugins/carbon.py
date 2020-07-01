@@ -35,13 +35,13 @@ from googletrans import LANGUAGES, Translator
 from gtts import gTTS
 from emoji import get_emoji_regexp
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CHROME_DRIVER, GOOGLE_CHROME_BIN
-from userbot.utils import register
+from userbot.utils import admin_cmd
 CARBONLANG = "auto"
 LANG = "en"
 
-@register(outgoing=True, pattern="^.carbon")
+
+@borg.on(admin_cmd(outgoing=True, pattern="carbon(?: |$)(.*)"))
 async def carbon_api(e):
- if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
    """ A Wrapper for carbon.now.sh """
    await e.edit("`Processing..`")
    CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
