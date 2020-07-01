@@ -14,7 +14,7 @@ from coffeehouse.lydia import LydiaAI
 from coffeehouse.api import API
 import asyncio
 import io
-import userbot.plugins.sql_helper.lydia_ai_sql import get_s, get_all_s, add_s, remove_s
+from userbot.plugins.sql_helper.lydia_ai_sql import get_s, get_all_s, add_s, remove_s
 from time import time
 from userbot.utils import admin_cmd
 from userbot.uniborgConfig import Config
