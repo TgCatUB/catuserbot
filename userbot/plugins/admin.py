@@ -117,7 +117,7 @@ async def set_group_photo(gpic):
             f"CHAT: {gpic.chat.title}(`{gpic.chat_id}`)")        
 
 
-@borg.on(admin_cmd("promote (.*)"))
+@borg.on(admin_cmd("promote(?: |$)(.*)"))
 @errors_handler
 async def promote(promt):
     """ For .promote command, promotes the replied/tagged person """
@@ -168,7 +168,7 @@ async def promote(promt):
             f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
 
 
-@borg.on(admin_cmd("demote (.*)"))
+@borg.on(admin_cmd("demote(?: |$)(.*)"))
 @errors_handler
 async def demote(dmod):
     """ For .demote command, demotes the replied/tagged person """
@@ -314,7 +314,7 @@ async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
         
-@borg.on(admin_cmd("mute (.*)"))
+@borg.on(admin_cmd("mute ?(\d+)?"))
 async def startmute(event):
   
         private = False
@@ -362,7 +362,7 @@ async def startmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")   
     
-@borg.on(admin_cmd("unmute(?: |$)(.*)"))
+@borg.on(admin_cmd("unmute ?(\d+)?"))
 async def endmute(event):   
         private = False
         if event.fwd_from:
