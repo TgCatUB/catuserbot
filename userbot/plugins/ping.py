@@ -1,7 +1,7 @@
 from telethon import events
 from datetime import datetime
 from userbot.utils import admin_cmd,sudo_cmd
-
+from userbot import CMD_HELP
 
 @borg.on(admin_cmd(pattern="pong$"))
 async def _(event):
