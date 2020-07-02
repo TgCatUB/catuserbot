@@ -1,3 +1,2 @@
 telethon
---update pip
 -r requirements-startup.txt
