@@ -1,20 +1,17 @@
 """Emoji
-
 Available Commands:
-
 .repe
-
 build by legend @r4v4n4 , if u edit it then u r gay..."""
 
 from telethon import events
 
 import asyncio
 
+from userbot.utils import admin_cmd
 
 
 
-
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=r"repe$", outgoing=True))
 
 async def _(event):
 
@@ -26,13 +23,9 @@ async def _(event):
 
     animation_ttl = range(0, 30)
 
-    input_str = event.pattern_match.group(1)
+    await event.edit("repe")
 
-    if input_str == "repe":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+    animation_chars = [
         
             "**r**",
             "**ra**",
@@ -66,7 +59,7 @@ async def _(event):
             "**rApEd**"
  ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
