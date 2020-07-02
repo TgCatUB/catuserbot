@@ -30,7 +30,7 @@ USER_BOT_NO_WARN = ("`Hello, This is AntiSpam Security Service⚠️.You have fo
 
 
 if Var.PRIVATE_GROUP_ID is not None:
-    @command(pattern="^.approve ?(.*)")
+    @borg.on(admin_cmd(pattern="approve ?(.*)"))
     async def approve_p_m(event):
         if event.fwd_from:
            return
@@ -65,7 +65,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                     await asyncio.sleep(3)
                     await rko.delete()
 
-    @command(pattern="^.disapprove ?(.*)")
+    @borg.on(admin_cmd(pattern="disapprove ?(.*)"))
     async def approve_p_m(event):
         if event.fwd_from:
             return
@@ -81,7 +81,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                 pmpermit_sql.disapprove(chat.id)
                 await event.edit("Disapproved [{}](tg://user?id={})".format(firstname, chat.id))           
                 
-    @command(pattern="^.block ?(.*)")
+    @borg.on(admin_cmd(pattern="block ?(.*)"))
     async def approve_p_m(event):
         if event.fwd_from:
             return
@@ -101,7 +101,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                 await event.client(functions.contacts.BlockRequest(chat.id))
 
 
-    @command(pattern="^.listapproved")
+    @borg.on(admin_cmd(pattern="listapproved$"))
     async def approve_p_m(event):
         if event.fwd_from:
             return
@@ -150,24 +150,21 @@ if Var.PRIVATE_GROUP_ID is not None:
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
             return
-        sender = await bot.get_entity(chat_id)
+        if event.from_id in CACHE:
+
+            sender = CACHE[event.from_id]
+        else:
+            sender = await bot.get_entity(event.from_id)
+            CACHE[event.from_id] = sender
 
         if chat_id == bot.uid:
-
             # don't log Saved Messages
-
             return
-
         if sender.bot:
-
             # don't log bots
-
             return
-
         if sender.verified:
-
             # don't log verified accounts
-
             return
           
         if any([x in event.raw_text for x in ("/start", "1", "2", "3", "4", "5")]):
@@ -225,8 +222,7 @@ async def hehehe(event):
             pmpermit_sql.approve(chat.id, "**My Boss Is Best🔥**")
             await borg.send_message(chat, "**Boss Meet My Creator**")
              
-
-            
+              
 CMD_HELP.update({
     "pmpermit":
     "\
