@@ -21,7 +21,6 @@ import re
 from re import findall
 from search_engine_parser import GoogleSearch
 from asyncio import sleep
-from userbot.utils import register
 from telethon.tl.types import DocumentAttributeAudio
 from userbot.uniborgConfig import Config
 
@@ -31,7 +30,7 @@ def progress(current, total):
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
-@register(outgoing=True, pattern=r"^\.gs (.*)")
+@borg.on(admin_cmd(outgoing=True, pattern=r"gs (.*)"))
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
     match = q_event.pattern_match.group(1)
@@ -51,7 +50,7 @@ async def gsearch(q_event):
             title = gresults["titles"][i]
             link = gresults["links"][i]
             desc = gresults["descriptions"][i]
-            msg += f"[{title}]({link})\n`{desc}`\n\n"
+            msg += f"👉[{title}]({link})\n`{desc}`\n\n"
         except IndexError:
             break
     await q_event.edit("**Search Query:**\n`" + match + "`\n\n**Results:**\n" +
@@ -114,4 +113,3 @@ async def _(event):
 **Possible Related Search**: <a href="{prs_url}">{prs_text}</a>
 More Info: Open this <a href="{the_location}">Link</a> in {ms} seconds""".format(**locals())
     await event.edit(OUTPUT_STR, parse_mode="HTML", link_preview=False)
-    

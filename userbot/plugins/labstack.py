@@ -5,8 +5,9 @@ import subprocess
 import time
 import json
 import sys
+from userbot.utils import admin_cmd
 
-@command(pattern="^.labstack ?(.*)")
+@borg.on(admin_cmd(pattern="labstack ?(.*)"))
 async def labstack(event):
     if event.fwd_from:
         return
@@ -47,4 +48,3 @@ async def labstack(event):
         logger.info(t_response)
         t_response_arry = "https://up.labstack.com/api/v1/links/{}/receive".format(r2json['code'])
     await event.edit(t_response_arry + "\nMax Days:" + str(max_days), link_preview=False)
-    

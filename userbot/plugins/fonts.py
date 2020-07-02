@@ -8,7 +8,7 @@ import asyncio
 import random
 
 
-@borg.on(admin_cmd(pattern="vapor ?(.*)"))
+@borg.on(admin_cmd(pattern="vapor(?: |$)(.*)"))
 async def vapor(vpr):
     """ Vaporize everything! """
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
@@ -33,7 +33,7 @@ async def vapor(vpr):
 
         await vpr.edit("".join(reply_text))
 
-@borg.on(admin_cmd(pattern="smallcaps ?(.*)"))
+@borg.on(admin_cmd(pattern="smallcaps(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -51,7 +51,7 @@ async def stylish_generator(event):
           
 
 
-@borg.on(admin_cmd(pattern="blackbf ?(.*)"))
+@borg.on(admin_cmd(pattern="blackbf(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -67,7 +67,7 @@ async def stylish_generator(event):
             string = string.replace(normaltextcharacter, bubblesblackcharacter)
     await event.edit(string)  
  
-@borg.on(admin_cmd(pattern="bubbles ?(.*)"))
+@borg.on(admin_cmd(pattern="bubbles(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -84,7 +84,7 @@ async def stylish_generator(event):
     await event.edit(string) 
 
 
-@borg.on(admin_cmd(pattern="tanf ?(.*)"))
+@borg.on(admin_cmd(pattern="tanf(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -100,7 +100,7 @@ async def stylish_generator(event):
             string = string.replace(normaltextcharacter, tantextcharacter)
     await event.edit(string) 
 
-@borg.on(admin_cmd(pattern="boxf ?(.*)"))
+@borg.on(admin_cmd(pattern="boxf(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -117,7 +117,7 @@ async def stylish_generator(event):
     await event.edit(string) 
 
 
-@borg.on(admin_cmd(pattern="smothtext ?(.*)"))
+@borg.on(admin_cmd(pattern="smothtext(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:

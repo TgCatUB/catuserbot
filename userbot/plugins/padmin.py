@@ -16,8 +16,7 @@ from userbot.utils import admin_cmd
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
-@borg.on(admin_cmd(pattern=f"padmin", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"padmin", outgoing=True))
 
 async def _(event):
 
@@ -29,13 +28,9 @@ async def _(event):
 
     animation_ttl = range(0, 20)
 
-    input_str = event.pattern_match.group(1)
+    await event.edit("promoting.......")
 
-    if input_str == "padmin":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+    animation_chars = [
         
             "**Promoting User As Admin...**",
             "**Enabling All Permissions To User...**",
@@ -60,7 +55,7 @@ async def _(event):
 
  ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 

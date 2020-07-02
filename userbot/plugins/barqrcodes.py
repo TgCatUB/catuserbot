@@ -14,10 +14,10 @@ from barcode.writer import ImageWriter
 from bs4 import BeautifulSoup
 
 from userbot import CMD_HELP
-from userbot.utils import register, admin_cmd
+from userbot.utils import admin_cmd
 
 
-@register(pattern=r"^.decode$", outgoing=True)
+@borg.on(admin_cmd(pattern=r"decode$", outgoing=True))
 async def parseqr(qr_e):
     """ For .decode command, get QR Code/BarCode content from the replied photo. """
     downloaded_file_name = await qr_e.client.download_media(
@@ -98,7 +98,7 @@ async def _(event):
     await asyncio.sleep(5)
     await event.delete()
 
-@register(pattern=r".makeqr(?: |$)([\s\S]*)", outgoing=True)
+@borg.on(admin_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", outgoing=True))
 async def make_qr(makeqr):
     """ For .makeqr command, make a QR Code containing the given content. """
     input_str = makeqr.pattern_match.group(1)

@@ -1,6 +1,8 @@
 import pyfiglet
+from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
-@command(pattern="^.figlet ?(.*)", outgoing=True)
+@borg.on(admin_cmd(pattern="figlet ?(.*)", outgoing=True))
 async def figlet(event):
     if event.fwd_from:
         return
@@ -25,3 +27,11 @@ async def figlet(event):
         result = pyfiglet.figlet_format(text)
     await event.respond("‌‌‎`{}`".format(result))
     await event.delete()
+
+CMD_HELP.update({
+    "figlet":
+    ".figlet text or **.figlet text : type\
+    \n USAGE:the types are slant, 3D , 5line , alpha , banner ,  doh ,  iso ,  letter , allig , dotm , bubble , bulb , digi\
+    \n NOTE: Nospace must be given after : and type\
+    \nEXAMPLE : `.figlet hello :digi`"
+})    

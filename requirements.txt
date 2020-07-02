@@ -1,2 +1,3 @@
 telethon
+pip
 -r requirements-startup.txt

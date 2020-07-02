@@ -11,8 +11,7 @@ from userbot import CMD_HELP
 
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=f"shout", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.shout", outgoing=True))
+@borg.on(admin_cmd(pattern=f"shout", outgoing=True))
 async def shout(args):
     if args.fwd_from:
         return
@@ -30,6 +29,3 @@ async def shout(args):
         result = "".join(result)
         msg = "\n" + result
         await args.edit("`"+msg+"`")
-        
-    
-    

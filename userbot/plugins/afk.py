@@ -54,7 +54,7 @@ async def _(event):
         try:
             await borg.send_message(  # pylint:disable=E0602
                 Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-                f"#AFKTRUE \n Set AFK mode to True, and Reason is {reason}"
+                f"#AFKTRUE \nSet AFK mode to True, and Reason is {reason}"
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             logger.warn(str(e))  # pylint:disable=E0602
@@ -77,7 +77,7 @@ async def set_not_afk(event):
         try:
             await borg.send_message(  # pylint:disable=E0602
                 Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-                "#AFKFALSE \n Set AFK mode to False\n" + "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`"
+                "#AFKFALSE \nSet AFK mode to False\n" + "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`"
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await borg.send_message(  # pylint:disable=E0602
@@ -164,4 +164,4 @@ CMD_HELP.update({
 you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
 \n afk full form away from keyboard/keypad.\
 "
-})        
+})

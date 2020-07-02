@@ -9,7 +9,7 @@ import asyncio
 import random
 
 
-@borg.on(admin_cmd(pattern="str ?(.*)"))
+@borg.on(admin_cmd(pattern="str(?: |$)(.*)"))
 async def stretch(stret):
     """ Stretch it."""
     if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@", "!"):
@@ -34,7 +34,7 @@ async def stretch(stret):
 
 
 
-@borg.on(admin_cmd(pattern="zal ?(.*)"))
+@borg.on(admin_cmd(pattern="zal(?: |$)(.*)"))
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
     if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
@@ -73,7 +73,7 @@ async def zal(zgfy):
 
         await zgfy.edit("".join(reply_text))
 
-@borg.on(admin_cmd(pattern="cp ?(.*)"))
+@borg.on(admin_cmd(pattern="cp(?: |$)(.*)"))
 async def copypasta(cp_e):
     """ Copypasta the famous meme """
     if not cp_e.text[0].isalpha() and cp_e.text[0] not in ("/", "#", "@", "!"):
@@ -109,7 +109,7 @@ async def copypasta(cp_e):
         await cp_e.edit(reply_text)
         
         
-@borg.on(admin_cmd(pattern="weeb ?(.*)"))
+@borg.on(admin_cmd(pattern="weeb(?: |$)(.*)"))
 async def weebify(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -127,7 +127,7 @@ async def weebify(event):
 
    
 
-@borg.on(admin_cmd(pattern="downside ?(.*)"))
+@borg.on(admin_cmd(pattern="downside(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -145,7 +145,7 @@ async def stylish_generator(event):
     
  
 
-@borg.on(admin_cmd(pattern="subscript ?(.*)"))
+@borg.on(admin_cmd(pattern="subscript(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -161,7 +161,7 @@ async def stylish_generator(event):
             string = string.replace(normaltextcharacter, subscriptcharacter)
     await event.edit(string)  
  
-@borg.on(admin_cmd(pattern="superscript ?(.*)"))
+@borg.on(admin_cmd(pattern="superscript(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -177,10 +177,6 @@ async def stylish_generator(event):
             string = string.replace(normaltextcharacter, superscriptcharacter)
     await event.edit(string) 
  
- 
-
-    
- 
 
 
 CMD_HELP.update({
@@ -194,5 +190,3 @@ CMD_HELP.update({
 \nUsage: a different style of alphabets .\
 "
 })
-        
-    

@@ -10,7 +10,7 @@ from telethon.tl.functions.messages import SendMediaRequest
 
 
 
-@borg.on(utils.admin_cmd(pattern=r"ftoimg"))
+@borg.on(utils.admin_cmd(pattern=r"ftoi$"))
 async def on_file_to_photo(event):
     await event.edit("processing.....")
     await asyncio.sleep(2)
