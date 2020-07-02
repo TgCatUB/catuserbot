@@ -20,7 +20,7 @@ if Var.LYDIA_API_KEY:
 async def lydia_disable_enable(event):
     if event.fwd_from:
         return
-    if Var.LYDIA_API_KEYis None:
+    if Var.LYDIA_API_KEY is None:
         await event.edit("Please add required `LYDIA_API_KEY` env var")
         return
     if event.reply_to_msg_id is not None:
