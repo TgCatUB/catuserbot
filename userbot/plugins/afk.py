@@ -19,9 +19,7 @@ last_afk_message = {}
 afk_start = {}
 
 
-CAT = Config.COMMAND_HAND_LER
-
-@borg.on(events.NewMessage(pattern=f"{CAT}afk ?(.*)", outgoing=True))  # pylint:disable=E0602
+@borg.on(events.NewMessage(pattern=r"\.afk ?(.*)", outgoing=True))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
