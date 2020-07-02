@@ -16,7 +16,7 @@ import random
 
 
 
-@borg.on(events.NewMessage(pattern=r"\.gotm", outgoing=True))
+@borg.on(admin_cmd(pattern=f"gotm$", outgoing=True))
 
 async def _(event):
 
