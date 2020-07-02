@@ -2,7 +2,6 @@
 Memes Plugin for Userbot
 usage = .meme someCharacter //default delay will be 3
 By : - @Zero_cool7870
-
 """
 from telethon import events
 import asyncio
@@ -11,8 +10,7 @@ import sys
 
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern=f"meme", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.meme", outgoing=True))
+@borg.on(admin_cmd(pattern=f"meme", outgoing=True))
 async def meme(event):
     if event.fwd_from:
         return   
@@ -54,12 +52,10 @@ async def meme(event):
 """
 Bonus : Give Boquee Generater
 usage:- .give
-
 """
 
 
-@borg.on(admin_cmd(pattern=f"lp", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.lp", outgoing=True))
+@borg.on(admin_cmd(pattern=f"lp$", outgoing=True))
 async def meme(event):
     if event.fwd_from:
         return   
@@ -88,8 +84,7 @@ async def meme(event):
     
 
 
-@borg.on(admin_cmd(pattern=f"give", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.give", outgoing=True))
+@borg.on(admin_cmd(pattern=f"give", outgoing=True))
 async def give(event):
     if event.fwd_from:
         return   
@@ -117,12 +112,12 @@ async def give(event):
     await event.edit(giveVar+giveVar+giveVar+giveVar+giveVar+giveVar+giveVar+giveVar+giveVar+giveVar)
     await asyncio.sleep(sleepValue)        
     
-@borg.on(admin_cmd(pattern="lcry"))
+@borg.on(admin_cmd(pattern="lcry$"))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0, 103)
+    animation_ttl = range(0, 36)
     await event.edit("crying")
     animation_chars = [
 
@@ -165,7 +160,7 @@ async def _(event):
         ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
-        await event.edit(animation_chars[i % 35])
+        await event.edit(animation_chars[i % 36])
 
 @borg.on(admin_cmd(pattern="flower"))
 async def flower(event):
