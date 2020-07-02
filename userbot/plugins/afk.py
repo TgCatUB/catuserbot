@@ -19,7 +19,7 @@ last_afk_message = {}
 afk_start = {}
 
 
-@borg.on(admin_cmd(pattern=r"afk ?(.*)", outgoing=True))  # pylint:disable=E0602
+@borg.on(admin_cmd(pattern=r"afk ?(.*)"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
@@ -49,8 +49,6 @@ async def _(event):
             await borg.send_message(event.chat_id, f"**I shall be Going afk!** __because ~ {reason}__")
         else:
             await borg.send_message(event.chat_id, f"**I am Going afk!**")
-        await asyncio.sleep(5)
-        await event.delete()
         try:
             await borg.send_message(  # pylint:disable=E0602
                 Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
@@ -58,7 +56,8 @@ async def _(event):
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             logger.warn(str(e))  # pylint:disable=E0602
-
+        await asyncio.sleep(5)
+        await event.delete()
 
 @borg.on(events.NewMessage(outgoing=True))  # pylint:disable=E0602
 async def set_not_afk(event):
