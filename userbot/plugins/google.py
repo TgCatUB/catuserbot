@@ -21,7 +21,7 @@ import re
 from re import findall
 from search_engine_parser import GoogleSearch
 from asyncio import sleep
-from userbot.utils import register
+from userbot.utils import admin_cmd
 from telethon.tl.types import DocumentAttributeAudio
 from userbot.uniborgConfig import Config
 
@@ -31,7 +31,7 @@ def progress(current, total):
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
-@register(outgoing=True, pattern=r"^\.gs (.*)")
+@borg.on(admin_cmd(outgoing=True, pattern=r"gs (.*)"))
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
     match = q_event.pattern_match.group(1)
