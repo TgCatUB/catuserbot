@@ -91,7 +91,7 @@ async def time_func(tdata):
 
             return_str += "\n`Choose one by typing the number "
             return_str += "in the command.`\n"
-            return_str += f"`Example: .time {c_name} 2`"
+            return_str += f"`Example: .ctime {c_name} 2`"
 
             await tdata.edit(return_str)
             return
@@ -154,7 +154,7 @@ async def date_func(dat):
 
             return_str += "\n`Choose one by typing the number "
             return_str += "in the command.`\n"
-            return_str += f"Example: .date {c_name} 2"
+            return_str += f"Example: .cdate {c_name} 2"
 
             await dat.edit(return_str)
             return
