@@ -22,7 +22,6 @@ def progress(current, total):
     logger.info("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
     
 from userbot import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
-from userbot.events import register
 
 DOGBIN_URL = "https://del.dog/"
 
@@ -71,7 +70,7 @@ async def _(event):
         await event.edit("Dogged to {} in {} seconds".format(url, ms))
         
 
-@register(outgoing=True, pattern="^\.getpaste(?: |$)(.*)")
+@borg.on(admin_cmd(outgoing=True, pattern="getpaste(?: |$)(.*)"))
 async def get_dogbin_content(dog_url):
     """ For .getpaste command, fetches the content of a dogbin URL. """
     textx = await dog_url.get_reply_message()
@@ -282,4 +281,4 @@ CMD_HELP.update({
 \n\n.paster <text/reply>\
 \nUsage: Create a instant view or a paste it in telegraph file\
   "
-})  
+})
