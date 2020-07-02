@@ -8,8 +8,8 @@ from time import time
 from userbot.utils import admin_cmd
 from userbot.uniborgConfig import Config
 
-if Config.LYDIA_API_KEY is not None:
-    api_key = Config.LYDIA_API_KEY
+if Var.LYDIA_API_KEY:
+    api_key = Var.LYDIA_API_KEY
     # Create the coffeehouse API
     coffeehouse_api = API(api_key)
     # Create Lydia instance
