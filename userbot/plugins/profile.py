@@ -2,13 +2,13 @@
 #
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
+#
 
-from datetime import datetime
 import os
 from telethon import events
 from telethon.tl import functions
 from userbot.utils import admin_cmd
-from userbot import bot
+import os
 
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 
@@ -27,7 +27,6 @@ from telethon.tl.functions.photos import (DeletePhotosRequest,
 from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
 
 from userbot import bot, CMD_HELP
-from userbot.utils import register
 
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
@@ -43,14 +42,6 @@ USERNAME_TAKEN = "```This username is already taken.```"
 # ===============================================================
 
 
-@register(outgoing=True, pattern="^.reserved$")
-async def mine(event):
-    """ For .reserved command, get a list of your reserved usernames. """
-    result = await bot(GetAdminedPublicChannelsRequest())
-    output_str = ""
-    for channel_obj in result.chats:
-        output_str += f"{channel_obj.title}\n@{channel_obj.username}\n\n"
-    await event.edit(output_str)
 
 
 
@@ -120,38 +111,8 @@ async def _(event):
     except Exception as e:  # pylint:disable=C0103,W0703
         logger.warn(str(e))  # pylint:disable=E0602
 
-@register(outgoing=True, pattern="^.setpfp$")
-async def set_profilepic(propic):
-    """ For .profilepic command, change your profile picture in Telegram. """
-    replymsg = await propic.get_reply_message()
-    photo = None
-    if replymsg.media:
-        if isinstance(replymsg.media, MessageMediaPhoto):
-            photo = await propic.client.download_media(message=replymsg.photo)
-        elif "image" in replymsg.media.document.mime_type.split('/'):
-            photo = await propic.client.download_file(replymsg.media.document)
-        else:
-            await propic.edit(INVALID_MEDIA)
 
-    if photo:
-        try:
-            await propic.client(
-                UploadProfilePhotoRequest(await
-                                          propic.client.upload_file(photo)))
-            os.remove(photo)
-            await propic.edit(PP_CHANGED)
-        except PhotoCropSizeSmallError:
-            await propic.edit(PP_TOO_SMOL)
-        except ImageProcessFailedError:
-            await propic.edit(PP_ERROR)
-        except PhotoExtInvalidError:
-            await propic.edit(INVALID_MEDIA)
-
-
-
-
-
-@register(outgoing=True, pattern="^.username (.*)")
+@borg.on(admin_cmd(outgoing=True, pattern="username (.*)"))
 async def update_username(username):
     """ For .username command, set a new username in Telegram. """
     newusername = username.pattern_match.group(1)
@@ -162,48 +123,44 @@ async def update_username(username):
         await username.edit(USERNAME_TAKEN)
 
 
-@bot.on(admin_cmd(pattern=r"count"))
-async def _(event):
-    if event.fwd_from:
-        return
-    start = datetime.now()
+@borg.on(admin_cmd(outgoing=True, pattern="count$"))
+async def count(event):
+    """ For .count command, get profile stats. """
     u = 0
     g = 0
     c = 0
     bc = 0
     b = 0
-    await event.edit("Retrieving Telegram Count(s)...")
-    dialogs = await bot.get_dialogs(
-        limit=None,
-        ignore_migrated=True
-    )
+    result = ""
+    await event.edit("`Processing..`")
+    dialogs = await bot.get_dialogs(limit=None, ignore_migrated=True)
     for d in dialogs:
         currrent_entity = d.entity
-        if type(currrent_entity) is User:
+        if isinstance(currrent_entity, User):
             if currrent_entity.bot:
                 b += 1
             else:
                 u += 1
-        elif type(currrent_entity) is Chat:
+        elif isinstance(currrent_entity, Chat):
             g += 1
-        elif type(currrent_entity) is Channel:
+        elif isinstance(currrent_entity, Channel):
             if currrent_entity.broadcast:
                 bc += 1
             else:
                 c += 1
         else:
             print(d)
-    end = datetime.now()
-    ms = (end - start).seconds
-    await event.edit("""`Your Stats Obtained in {} seconds`
-`You have {} Private Messages`
-`You are in {} Groups`
-`You are in {} Super Groups`
-`You Are in {} Channels`
-`And finally Bots = {}`""".format(ms, u, g, c, bc, b))
+
+    result += f"`Users:`\t**{u}**\n"
+    result += f"`Groups:`\t**{g}**\n"
+    result += f"`Super Groups:`\t**{c}**\n"
+    result += f"`Channels:`\t**{bc}**\n"
+    result += f"`Bots:`\t**{b}**"
+
+    await event.edit(result)
 
 
-@register(outgoing=True, pattern=r"^.delpfp")
+@borg.on(admin_cmd(outgoing=True, pattern=r"delpfp"))
 async def remove_profilepic(delpfp):
     """ For .delpfp command, delete your current profile picture in Telegram. """
     group = delpfp.text[8:]
