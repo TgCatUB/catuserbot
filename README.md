@@ -1,6 +1,7 @@
 
 # ⚠️FORK AT YOUR OWN RISK
 # Installing
+# Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bugs
 ### The Easy Way
 ### CLICK BELOW IMAGE TO DEPLOY CATUSERBOT...
 [![Deploy To Heroku](https://telegra.ph/file/4117e39218991cdd7379f.jpg)](https://heroku.com/deploy)
