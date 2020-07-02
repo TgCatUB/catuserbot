@@ -6,7 +6,7 @@ import io
 from userbot.plugins.sql_helper.lydia_ai_sql import get_s, get_all_s, add_s, remove_s
 from time import time
 from userbot.utils import admin_cmd
-from userbot.uniborgConfig import Config
+from userbot  import CMD_HELP
 
 if Var.LYDIA_API_KEY:
     api_key = Var.LYDIA_API_KEY
