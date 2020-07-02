@@ -13,9 +13,9 @@ from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotMo
 import io
 import asyncio
 import time
+from userbot.utils import admin_cmd
 
-
-@command(pattern="^.webupload ?(.+?|) (?:--)(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles)")
+@borg.on(admin_cmd(pattern="webupload ?(.+?|) (?:--)(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -49,4 +49,4 @@ CMD_HELP.update({
     ".webupload ?(.+?|) (?:--)(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles\
     \nexample: `.webupload --anonfiles` tag this to a file\
 "
-})  		
+})
