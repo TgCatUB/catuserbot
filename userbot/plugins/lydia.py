@@ -20,7 +20,7 @@ if Var.LYDIA_API_KEY:
 async def lydia_disable_enable(event):
     if event.fwd_from:
         return
-    if Config.LYDIA_API_KEY is None:
+    if Var.LYDIA_API_KEYis None:
         await event.edit("Please add required `LYDIA_API_KEY` env var")
         return
     if event.reply_to_msg_id is not None:
@@ -71,9 +71,9 @@ async def lydia_disable_enable(event):
 
 @borg.on(admin_cmd(incoming=True))
 async def on_new_message(event):
-    if event.chat_id in Config.UB_BLACK_LIST_CHAT:
+    if event.chat_id in Var.UB_BLACK_LIST_CHAT:
         return
-    if Config.LYDIA_API_KEY is None:
+    if Var.LYDIA_API_KEY is None:
         return
     reply = await event.get_reply_message()
     if reply is None:
