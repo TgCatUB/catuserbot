@@ -71,7 +71,7 @@ async def lydia_disable_enable(event):
 
 @borg.on(admin_cmd(incoming=True))
 async def on_new_message(event):
-    if event.chat_id in Var.UB_BLACK_LIST_CHAT:
+    if event.chat_id in Config.UB_BLACK_LIST_CHAT:
         return
     if Var.LYDIA_API_KEY is None:
         return
