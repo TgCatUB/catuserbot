@@ -1,21 +1,11 @@
-"""Emoji
-Available Commands:
-.emoji shrug
-.emoji apple
-.emoji :/
-.emoji -_-"""
-
 from telethon import events
-
 import asyncio
-
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 
 
 
-@borg.on(admin_cmd(pattern=f"quickheal", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"quickheal$", outgoing=True)))
 
 async def _(event):
 
@@ -54,8 +44,7 @@ async def _(event):
 
             await event.edit(animation_chars[i % 11])
 
-@borg.on(admin_cmd(pattern=f"sqh", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"sqh$", outgoing=True))
 
 async def _(event):
 
@@ -95,8 +84,7 @@ async def _(event):
             await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=f"vquickheal", allow_sudo=True))
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"vquickheal$", outgoing=True))
 
 async def _(event):
 
