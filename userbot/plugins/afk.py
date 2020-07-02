@@ -6,7 +6,7 @@ from datetime import datetime
 from telethon import events
 from telethon.tl import functions, types
 from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+
 
 global USER_AFK  # pylint:disable=E0602
 global afk_time  # pylint:disable=E0602
@@ -19,7 +19,9 @@ last_afk_message = {}
 afk_start = {}
 
 
-@borg.on(admin_cmd(pattern=r"afk ?(.*)"))  # pylint:disable=E0602
+CAT = Config.COMMAND_HAND_LER
+
+@borg.on(events.NewMessage(pattern=f"{CAT}afk ?(.*)", outgoing=True))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
@@ -49,15 +51,16 @@ async def _(event):
             await borg.send_message(event.chat_id, f"**I shall be Going afk!** __because ~ {reason}__")
         else:
             await borg.send_message(event.chat_id, f"**I am Going afk!**")
+        await asyncio.sleep(5)
+        await event.delete()
         try:
             await borg.send_message(  # pylint:disable=E0602
                 Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-                f"Set AFK mode to True, and Reason is {reason}"
+                f"#AFKTRUE \nSet AFK mode to True, and Reason is {reason}"
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             logger.warn(str(e))  # pylint:disable=E0602
-        await asyncio.sleep(5)
-        await event.delete()
+
 
 @borg.on(events.NewMessage(outgoing=True))  # pylint:disable=E0602
 async def set_not_afk(event):
@@ -76,7 +79,7 @@ async def set_not_afk(event):
         try:
             await borg.send_message(  # pylint:disable=E0602
                 Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-                "#AFKFALSE\nSet AFK mode to False\n" + "__Back alive!__\n**No Longer afk.**\n`Was afk for:``" + total_afk_time + "`"
+                "#AFKFALSE \nSet AFK mode to False\n" + "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`"
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await borg.send_message(  # pylint:disable=E0602
