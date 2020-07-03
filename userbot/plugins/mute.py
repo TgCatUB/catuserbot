@@ -10,19 +10,15 @@ from userbot.uniborgConfig import Config
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
-#@command(outgoing=True, pattern=r"^.mute ?(\d+)?")
 @borg.on(admin_cmd(pattern="mute ?(\d+)?"))
 async def startmute(event):
     private = False
     if event.fwd_from:
         return
     elif event.is_private:
-        await event.edit("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
-        private = True
-    if any([x in event.raw_text for x in ("/mute", "!mute", "amute", "bmute", "cmute", "dmute", "emute", "fmute", "gmute", "hmute", "imute", "jmute", "kmute", "lmute", "mmute", "nmute", "omute", "pmute", "qmute", "rmute", "smute", "tmute", "umute", "vmute", "wmute", "xmute", "ymute", "zmute" )]):
-        await asyncio.sleep(0.5)
-    else:
+          await event.edit("Unexpected issues or ugly errors may occur!")
+          await asyncio.sleep(3)
+          private = True
         reply = await event.get_reply_message()
         if event.pattern_match.group(1) is not None:
             userid = event.pattern_match.group(1)
@@ -62,19 +58,15 @@ async def startmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")     
 
-#@command(outgoing=True, pattern=r"^.unmute ?(\d+)?")
 @borg.on(admin_cmd(pattern="unmute ?(\d+)?"))
 async def endmute(event):
     private = False
     if event.fwd_from:
         return
     elif event.is_private:
-        await event.edit("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
-        private = True
-    if any([x in event.raw_text for x in ("/unmute", "!unmute", "aunmute", "bunmute", "cunmute", "dunmute", "eunmute", "funmute", "gunmute", "hunmute", "iunmute", "junmute", "kunmute", "lunmute", "munmute", "nunmute", "ounmute", "punmute", "qunmute", "runmute", "sunmute", "tunmute", "uunmute", "vunmute", "wunmute", "xunmute", "yunmute", "zunmute" )]):
-        await asyncio.sleep(0.5)
-    else:
+          await event.edit("Unexpected issues or ugly errors may occur!")
+          await asyncio.sleep(3)
+          private = True
         reply = await event.get_reply_message()
         if event.pattern_match.group(1) is not None:
             userid = event.pattern_match.group(1)
