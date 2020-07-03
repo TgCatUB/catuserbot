@@ -55,14 +55,11 @@ async def _(event):
 		await event.edit("".join(deq))
 		deq.rotate(1)
 		
-@borg.on(admin_cmd(pattern="ccry"))
-#@register(outgoing=True, pattern="^.cry$")
+@borg.on(admin_cmd(pattern="ccry$"))
 async def cry(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("(;´༎ຶД༎ຶ)")
 
-@borg.on(admin_cmd(pattern="heart"))		
-#@register(outgoing=True, pattern="^.heart$")
+@borg.on(admin_cmd(pattern="heart$"))		
 async def _(event):
 	if event.fwd_from:
 		return
