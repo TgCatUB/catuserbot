@@ -223,8 +223,6 @@ async def get_admin(show):
     
 @borg.on(admin_cmd(pattern=r"users ?(.*)", outgoing=True))
 async def get_users(show):
-    """ For .users command, list all of the users of the chat. """
-    if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
         if not show.is_group:
             await show.edit("Are you sure this is a group?")
             return
