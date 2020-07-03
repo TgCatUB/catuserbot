@@ -13,6 +13,10 @@ from userbot.helpers import memeshelper as memes
 import pylast
 from pySmartDL import SmartDL
 from requests import get
+import time
+
+
+StartTime = time.time()
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
