@@ -5,13 +5,11 @@ by @KshitijGagan
 inspired from @xcruzhd2 """
 
 from telethon import events
-
 import asyncio
+from userbot.utils import admin_cmd
 
 
-
-
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"gf$", outgoing=True))
 
 async def _(event):
 
@@ -23,13 +21,8 @@ async def _(event):
 
     animation_ttl = range(0, 21)
 
-    input_str = event.pattern_match.group(1)
 
-    if input_str == "gf":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+    animation_chars = [
         
             "`Ruk jaa , Abhi teri GF ko Fuck karta hu `",
             "`Making your Gf warm 🔥`",
@@ -54,7 +47,7 @@ async def _(event):
             "`Fucking Your GF😈😈\n\n\nYour GF's ASS🍑 Get Red\nCummed On her Mouth👅👄\n\nYour GF got Pleasure\n\nResult: Now I Have 1 More SEX Partner 👍👍`"
         ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
