@@ -1,4 +1,3 @@
-
 import re
 import time
 import requests
@@ -11,7 +10,7 @@ from userbot import CMD_HELP, fonts
 
 
 
-@borg.on(admin_cmd(pattern="fmusical ?(.*)"))
+@borg.on(admin_cmd(pattern="fmusical(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -27,7 +26,7 @@ async def stylish_generator(event):
             string = string.replace(normalfontcharacter, musicalcharacter)
     await event.edit(string)                   
                   
-@borg.on(admin_cmd(pattern="ancient ?(.*)"))
+@borg.on(admin_cmd(pattern="ancient(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -41,9 +40,4 @@ async def stylish_generator(event):
         if normalfontcharacter in fonts.normalfont:
             ancientcharacter = fonts.ancientfont[fonts.normalfont.index(normalfontcharacter)]
             string = string.replace(normalfontcharacter, ancientcharacter)
-    await event.edit(string)               
-    
-    
-    
-    
-    
+    await event.edit(string)
