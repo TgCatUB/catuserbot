@@ -41,7 +41,7 @@ async def _(event):
             "You Are A Clown 🤡"
         ]
 
-     for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
