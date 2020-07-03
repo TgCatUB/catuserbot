@@ -12,13 +12,14 @@ BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @borg.on(admin_cmd(pattern="mute ?(\d+)?"))
 async def startmute(event):
-    private = False
-    if event.fwd_from:
-        return
-    elif event.is_private:
+        private = False
+        if event.fwd_from:
+          return
+        elif event.is_private:
           await event.edit("Unexpected issues or ugly errors may occur!")
           await asyncio.sleep(3)
           private = True
+            
         reply = await event.get_reply_message()
         if event.pattern_match.group(1) is not None:
             userid = event.pattern_match.group(1)
@@ -60,13 +61,14 @@ async def startmute(event):
 
 @borg.on(admin_cmd(pattern="unmute ?(\d+)?"))
 async def endmute(event):
-    private = False
-    if event.fwd_from:
-        return
-    elif event.is_private:
+        private = False
+        if event.fwd_from:
+          return
+        elif event.is_private:
           await event.edit("Unexpected issues or ugly errors may occur!")
           await asyncio.sleep(3)
           private = True
+            
         reply = await event.get_reply_message()
         if event.pattern_match.group(1) is not None:
             userid = event.pattern_match.group(1)
