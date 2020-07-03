@@ -13,39 +13,12 @@ from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(pattern="leave$"))
 async def leave(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`Legend is leaving this chat.....!` @admin `Goodbye aren't forever..` ")
         time.sleep(3)
         if '-' in str(e.chat_id):
             await bot(LeaveChannelRequest(e.chat_id))
         else:
             await e.edit('`Sar This is Not A Chat`')
-
-
-@borg.on(admin_cmd(pattern="ccry$"))
-#@register(outgoing=True, pattern="^.cry$")
-async def cry(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("(;´༎ຶД༎ຶ)")
-
-@borg.on(admin_cmd(pattern="hf$"))
-#@register(outgoing=True, pattern="^.fp$")
-async def facepalm(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("🤦‍♂")
-
-@borg.on(admin_cmd(pattern="heart$"))		
-#@register(outgoing=True, pattern="^.heart$")
-async def _(event):
-	if event.fwd_from:
-		return
-	deq = deque(list("❤️🧡💛💚💙💜🖤"))
-	for _ in range(32):
-		await asyncio.sleep(0.1)
-		await event.edit("".join(deq))
-		deq.rotate(1)
-		
-
 
 @borg.on(admin_cmd(pattern="myusernames$"))
 #@register(outgoing=True, pattern="^.myusernames$")
