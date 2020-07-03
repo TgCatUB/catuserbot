@@ -15,7 +15,7 @@ from telethon.tl.types import MessageEntityMentionName
 
 from userbot import ALIVE_NAME
 from userbot import CMD_HELP
-from userbot.utils import register, admin_cmd
+from userbot.utils import admin_cmd
 
 # ================= CONSTANT =================
 NOOBSTR = [
@@ -187,7 +187,6 @@ async def slap(replied_user, event):
 @borg.on(admin_cmd(outgoing=True, pattern="mrape"))
 async def raping (raped):
     """ Dont Rape Too much -_-"""
-    if not raped.text[0].isalpha() and raped.text[0] not in ("/", "#", "@", "!"):
         index = random.randint(0, len(RAPE_STRINGS) - 1)
         reply_text = RAPE_STRINGS[index]
         await raped.edit(reply_text)
@@ -195,7 +194,6 @@ async def raping (raped):
 @borg.on(admin_cmd(outgoing=True, pattern="mshe"))
 async def thanos (thanos):
     """ String for thanos only -_-"""
-    if not thanos.text[0].isalpha() and thanos.text[0] not in ("/", "#", "@", "!"):
         index = random.randint(0, len(THANOS_STRINGS) - 1)
         reply_text = THANOS_STRINGS[index]
         await thanos.edit(reply_text)
@@ -203,7 +201,6 @@ async def thanos (thanos):
 @borg.on(admin_cmd(outgoing=True, pattern="mabuse"))
 async def fuckedd (abusehard):
     """ Dont Use this Too much bsdk -_-"""
-    if not abusehard.text[0].isalpha() and abusehard.text[0] not in ("/", "#", "@", "!"):
         index = random.randint(0, len(ABUSEHARD_STRING) - 1)
         reply_text = ABUSEHARD_STRING[index]
         await abusehard.edit(reply_text)
@@ -211,13 +208,11 @@ async def fuckedd (abusehard):
 @borg.on(admin_cmd(outgoing=True, pattern="mruns"))
 async def metoo(hahayes):
     """ Haha yes """
-    if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
         await hahayes.edit(random.choice(NOOBSTR))
         
 @borg.on(admin_cmd(outgoing=True, pattern="minsult$"))
 async def proo (pros):
     """ String for Pros only -_-"""
-    if not pros.text[0].isalpha() and pros.text[0] not in ("/", "#", "@", "!"):
         index = random.randint(0, len(PRO_STRINGS) - 1)
         reply_text = PRO_STRINGS[index]
         await pros.edit(reply_text)        
