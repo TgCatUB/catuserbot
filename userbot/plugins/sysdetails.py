@@ -40,6 +40,7 @@ async def sysdetails(sysd):
         except FileNotFoundError:
             await sysd.edit("`Hello, on catuserbot  install .neofetch first kthx`")
 
+#uptime idea and credits was from @Sur_vivor
 @borg.on(admin_cmd(pattern="uptime$"))
 async def _(event):
     uptime = get_readable_time((time.time() - StartTime))
