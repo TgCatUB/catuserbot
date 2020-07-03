@@ -18,7 +18,7 @@ if not os.path.isdir("./SAVED"):
 if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
      os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
 
-@borg.on(admin_cmd(pattern="cpu"))
+@borg.on(admin_cmd(pattern="cpu$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -54,7 +54,7 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
 	
-@borg.on(admin_cmd(pattern="uptime"))
+@borg.on(admin_cmd(pattern="uptime$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -90,7 +90,7 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
 	
-@borg.on(admin_cmd(pattern="suicide"))
+@borg.on(admin_cmd(pattern="suicide$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -126,7 +126,7 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
 	
-@borg.on(admin_cmd(pattern="plugins"))
+@borg.on(admin_cmd(pattern="plugins$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -162,7 +162,7 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
 
-@borg.on(admin_cmd(pattern="date"))
+@borg.on(admin_cmd(pattern="date$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -182,7 +182,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) Date & Time Of India:**\n\n\n{o}"
+    OUTPUT = f"**Date & Time Of India:**\n\n\n{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -198,7 +198,7 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
 
-@borg.on(admin_cmd(pattern="env"))
+@borg.on(admin_cmd(pattern="env$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -235,7 +235,7 @@ async def _(event):
         await event.edit(OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="neofetch"))
+@borg.on(admin_cmd(pattern="neofetch$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -255,24 +255,25 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) Neofetch Installed, Use `.sysd` :**\n{o}"
+   OUTPUT = f"Neofetch Installed, Use `.sysd`"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
-            out_file.name = "env.text"
+            out_file.name = "neofetch.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=eply_to_id
+                reply_to=reply_to_id
             )
             await event.delete()
     else:
         await event.edit(OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="fast"))
+@borg.on(admin_cmd(pattern="fast$"))
 async def _(event):
+    await event.edit("calculating...")
     if event.fwd_from:
         return
     DELAY_BETWEEN_EDITS = 0.3
@@ -310,7 +311,7 @@ async def _(event):
 
 
 
-@borg.on(admin_cmd(pattern="fortune"))
+@borg.on(admin_cmd(pattern="fortune$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -330,7 +331,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , fortune teller for Your catuserbot...**\n{o}"
+    OUTPUT = f"{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -347,7 +348,7 @@ async def _(event):
         await event.edit(OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="qquote"))
+@borg.on(admin_cmd(pattern="qquote$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -367,7 +368,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , quotes for Your catuserbot...**\n{o}"
+    OUTPUT = f"{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -383,7 +384,7 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
 	
-@borg.on(admin_cmd(pattern="fakeid"))
+@borg.on(admin_cmd(pattern="fakeid$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -403,7 +404,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , fake id generator for Your catuserbot...**\n{o}"
+    OUTPUT = f"{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -419,7 +420,7 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
 
-@borg.on(admin_cmd(pattern="kwot"))
+@borg.on(admin_cmd(pattern="kwot$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -427,7 +428,7 @@ async def _(event):
     PROCESS_RUN_TIME = 100
 #    dirname = event.pattern_match.group(1)
 #    tempdir = "localdir"
-    cmd = "kwot 5"
+    cmd = "kwot"
 #    if dirname == tempdir:
 	
     eply_to_id = event.message.id
@@ -439,10 +440,10 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , kwot for Your catuserbot...**\n{o}"
+    OUTPUT = f"{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
-            out_file.name = "env.text"
+            out_file.name = "kwot.text"
             await borg.send_file(
                 event.chat_id,
                 out_file,
@@ -455,7 +456,7 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
 
-@borg.on(admin_cmd(pattern="qpro"))
+@borg.on(admin_cmd(pattern="qpro$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -475,7 +476,7 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT =f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) , programming quotes for Your catuserbot...**\n{o}"
+    OUTPUT =f"{o}"
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
