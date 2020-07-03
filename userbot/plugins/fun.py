@@ -13,7 +13,7 @@ from telethon.tl.types import MessageEntityMentionName
 
 
 from userbot import CMD_HELP
-from userbot.utils import register, admin_cmd
+from userbot.utils import admin_cmd
 
 
 # ================= CONSTANT =================
@@ -65,18 +65,16 @@ async def let_me_google_that_for_you(lmgtfy_q):
     \n[{query}]({r.json()['shorturl']})")
 
 
-@register(outgoing=True, pattern="^.fail$")
+@borg.on(admin_cmd(outgoing=True, pattern="fail$"))
 async def fail(e):
-   if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`\n▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄ `" 
                      "`\n████▌▄▌▄▐▐▌█████ `"    
                      "`\n████▌▄▌▄▐▐▌▀████ `"       
                      "`\n▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ `")    
 
 
-@register(outgoing=True, pattern="^.lol$")
+@borg.on(admin_cmd(outgoing=True, pattern="lol$"))
 async def lol(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`\n╱┏┓╱╱╱╭━━━╮┏┓╱╱╱╱ `" 
                      "`\n╱┃┃╱╱╱┃╭━╮┃┃┃╱╱╱╱ `"       
                      "`\n╱┃┗━━┓┃╰━╯┃┃┗━━┓╱ `" 
@@ -84,9 +82,8 @@ async def lol(e):
  
  
                                                                                    
-@register(outgoing=True, pattern="^.lool$")
+@borg.on(admin_cmd(outgoing=True, pattern="lool$"))
 async def lool(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`\n╭╭━━━╮╮┈┈┈┈┈┈┈┈┈┈\n┈┃╭━━╯┈┈┈┈▕╲▂▂╱▏┈\n┈┃┃╱▔▔▔▔▔▔▔▏╱▋▋╮┈`"
                      "`\n┈┃╰▏┃╱╭╮┃╱╱▏╱╱▆┃┈\n┈╰━▏┗━╰╯┗━╱╱╱╰┻┫┈\n┈┈┈▏┏┳━━━━▏┏┳━━╯┈`"
                      "`\n┈┈┈▏┃┃┈┈┈┈▏┃┃┈┈┈┈ `")
@@ -94,9 +91,8 @@ async def lool(e):
 
 
 
-@register(outgoing=True, pattern="^.nih$")
+@borg.on(admin_cmd(outgoing=True, pattern="nih$"))
 async def nih(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`\n(\_/)`"
                      "`\n(•_•)`"
                      "`\n >🌹 *`"
@@ -106,9 +102,8 @@ async def nih(e):
                      "`\n🌹<\ *`")
 
 
-@register(outgoing=True, pattern="^.hoi$")  
+@borg.on(admin_cmd(outgoing=True, pattern="hoi$"))  
 async def gtfo(e):
-   if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`\n█████████`" 
                      "`\n█▄█████▄█`"    
                      "`\n█▼▼▼▼▼`"       
@@ -118,10 +113,9 @@ async def gtfo(e):
                     "`\n ██   ██`")               
 
 
-@register(outgoing=True, pattern="^.ml(?: |$)(.*)")
+@borg.on(admin_cmd(outgoing=True, pattern="ml(?: |$)(.*)"))
 async def gtfo(e):
    message = e.pattern_match.group(1)
-   if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`\n█████████`" 
                      "`\n█▄█████▄█`"    
                      "`\n█▼▼▼▼▼`"       
@@ -131,53 +125,46 @@ async def gtfo(e):
                     "`\n ██   ██`")               
 
 
-@register(outgoing=True, pattern="^.taco$")  
+@borg.on(admin_cmd(outgoing=True, pattern="taco$")) 
 async def taco(e):
-   if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("\n{\__/}"
                      "\n(●_●)"
                      "\n( >🌮 Want a taco?")
 
 
-@register(outgoing=True, pattern="^.paw$")  
+@borg.on(admin_cmd(outgoing=True, pattern="paw$"))  
 async def paw(e):
-   if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`(=ↀωↀ=)")
 
 
-@register(outgoing=True, pattern="^.tf$")  
+@borg.on(admin_cmd(outgoing=True, pattern="tf$")) 
 async def tf(e):
-   if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("(̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄  ")  
       
 
-@register(outgoing=True, pattern="^.gay$")            
+@borg.on(admin_cmd(outgoing=True, pattern="gay$"))           
 async def gey(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`\n┈┈┈╭━━━━━╮┈┈┈┈┈\n┈┈┈┃┊┊┊┊┊┃┈┈┈┈┈`"
                      "`\n┈┈┈┃┊┊╭━╮┻╮┈┈┈┈\n┈┈┈╱╲┊┃▋┃▋┃┈┈┈┈\n┈┈╭┻┊┊╰━┻━╮┈┈┈┈`"
                      "`\n┈┈╰┳┊╭━━━┳╯┈┈┈┈\n┈┈┈┃┊┃╰━━┫┈U GAY`"
                     "\n┈┈┈┈┈┈┏━┓┈┈┈┈┈┈")    
 
 
-@register(outgoing=True, pattern="^.bot$")
+@borg.on(admin_cmd(outgoing=True, pattern="bot$"))
 async def bot(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("` \n   ╲╲╭━━━━╮ \n╭╮┃▆┈┈▆┃╭╮ \n┃╰┫▽▽▽┣╯┃ \n╰━┫△△△┣━╯`"
                      "`\n╲╲┃┈┈┈┈┃  \n╲╲┃┈┏┓┈┃ `")
 
 
-@register(outgoing=True, pattern="^.hai$")
+@borg.on(admin_cmd(outgoing=True, pattern="hai$"))
 async def hey(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("\n┈┈┈╱▔▔▔▔╲┈╭━━━━━\n┈┈▕▂▂▂▂▂▂▏┃HELLO!┊😀`"
                      "`\n┈┈▕▔▇▔▔┳▔▏╰┳╮HELLO!┊\n┈┈▕╭━╰╯━╮▏━╯╰━━━\n╱▔▔▏▅▅▅▅▕▔▔╲┈┈┈┈`"
                      "`\n▏┈┈╲▂▂▂▂╱┈┈┈▏┈┈┈`")
 
 
-@register(outgoing=True, pattern="^.nou$")
+@borg.on(admin_cmd(outgoing=True, pattern="nou$"))
 async def nou(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`\n┈╭╮╭╮\n┈┃┃┃┃\n╭┻┗┻┗╮`"
                      "`\n┃┈▋┈▋┃\n┃┈╭▋━╮━╮\n┃┈┈╭╰╯╰╯╮`"
                      "`\n┫┈┈  NoU\n┃┈╰╰━━━━╯`"
@@ -185,9 +172,8 @@ async def nou(e):
 
 
 
-@register(outgoing=True, pattern="^.mf$")  
+@borg.on(admin_cmd(outgoing=True, pattern="mf$"))
 async def gtfo(e):
-   if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit(
 "\n......................................../´¯/) "
 "\n......................................,/¯../ "
@@ -217,7 +203,7 @@ async def gtfo(e):
 
 
 
-@register(outgoing=True, pattern="^.sayhi$")
+@borg.on(admin_cmd(outgoing=True, pattern="sayhi$"))
 async def shalom(e):
     await e.edit(
         "\n💛💛💛💛💛💛💛💛💛"
@@ -234,7 +220,7 @@ async def shalom(e):
         "\n💛🔷💛💛💛💛️💛🔷💛"
         "\n💛💛💛💛💛💛💛💛💛")
 
-@register(outgoing=True, pattern=r"^\.(?:penis|dick)\s?(.)?")
+@borg.on(admin_cmd(outgoing=True, pattern=r"(?:penis|dick)\s?(.)?"))
 async def emoji_penis(e):
     emoji = e.pattern_match.group(1)
     titid = GAMBAR_TITIT
@@ -243,7 +229,7 @@ async def emoji_penis(e):
     await e.edit(titid)
 
 
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern=f"muth", outgoing=True))
 
 async def _(event):
 
@@ -254,14 +240,8 @@ async def _(event):
     animation_interval = 0.3
 
     animation_ttl = range(0, 100)
-
-    input_str = event.pattern_match.group(1)
-
-    if input_str == "muth":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+         
+    animation_chars = [
 
             "8✊️===D",
 
@@ -285,7 +265,7 @@ async def _(event):
 
         ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
         
             await asyncio.sleep(animation_interval)
         
