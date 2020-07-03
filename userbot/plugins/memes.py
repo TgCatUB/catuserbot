@@ -758,11 +758,9 @@ async def let_me_google_that_for_you(lmgtfy_q):
                 BOTLOG_CHATID,
                 "LMGTFY query `" + query + "` was executed successfully",
             )
-
 			  
 @borg.on(admin_cmd(pattern="type (.*)"))
 async def typewriter(typew):
-    """ Just a small command to make your keyboard become a typewriter! """
         textx = await typew.get_reply_message()
         message = typew.pattern_match.group(1)
         if message:
@@ -784,6 +782,7 @@ async def typewriter(typew):
             await asyncio.sleep(sleep_time)
             await typew.edit(old_text)
             await asyncio.sleep(sleep_time)
+			  
 
 CMD_HELP.update({
     "memes": ".cowsay\
