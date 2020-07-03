@@ -115,7 +115,7 @@ async def gtfo(e):
 
 @borg.on(admin_cmd(outgoing=True, pattern="ml(?: |$)(.*)"))
 async def gtfo(e):
-   message = e.pattern_match.group(1)
+        message = e.pattern_match.group(1)
         await e.edit("`\n█████████`" 
                      "`\n█▄█████▄█`"    
                      "`\n█▼▼▼▼▼`"       
