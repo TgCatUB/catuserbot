@@ -7,12 +7,12 @@ Available Commands:
 from telethon import events
 
 import asyncio
+from userbot.utils import admin_cmd
 
 
 
 
-
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern="pyavam$"))
 
 async def _(event):
 
@@ -24,13 +24,7 @@ async def _(event):
 
     animation_ttl = range(0, 20)
 
-    input_str = event.pattern_match.group(1)
-
-    if input_str == "pyavam":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+    animation_chars = [
         
             "**Finding User Info..**",
             "**Finding User Info....**",
@@ -53,9 +47,9 @@ async def _(event):
             "**ചുരുക്കി പറഞ്ഞ നിന്റെ 8 തന്തകളിൽ ഒരാൾ എന്റെ Master  ആണ്*",
             "**ശരിയായ തന്തയെ കണ്ടു പിടിച്ചതിൽ നീ സന്തോഷവാൻ ആണോ Options : YES & NO Otherwise നീ ഒരു തന്ത ഇല്ല കഴുവേറി ആണ്**"
 
- ]
+        ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
