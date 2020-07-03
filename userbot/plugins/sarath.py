@@ -8,11 +8,7 @@ from telethon import events
 
 import asyncio
 
-
-
-
-
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern="sarath$"))
 
 async def _(event):
 
@@ -24,13 +20,7 @@ async def _(event):
 
     animation_ttl = range(0, 30)
 
-    input_str = event.pattern_match.group(1)
-
-    if input_str == "sarath":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+    animation_chars = [
 
             "S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽\nS͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽\nS͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽\nS͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽\nS͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽S͓̽A͓̽R͓̽A͓̽T͓̽H͓̽",
             
@@ -93,7 +83,7 @@ async def _(event):
             "◼️"
         ]
 
-        for i in animation_ttl:
+    for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
 
