@@ -80,8 +80,6 @@ async def stylish_generator(event):
 
 @borg.on(admin_cmd(pattern="mock(?: |$)(.*)"))
 async def spongemocktext(mock):
-    """ Do it and find the real fun. """
-    if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
         reply_text = list()
         textx = await mock.get_reply_message()
         message = mock.pattern_match.group(1)
