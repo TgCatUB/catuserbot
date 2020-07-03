@@ -5,8 +5,8 @@ Available Commands:
 .sarath"""
 
 from telethon import events
-
 import asyncio
+from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(pattern="sarath$"))
 
