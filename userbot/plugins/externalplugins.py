@@ -11,9 +11,9 @@ import sys
 import asyncio
 import traceback
 import os
-import userbot.utils
+from userbot.utils import admin_cmd
 
-@command(pattern="^.extdl", outgoing=True)
+@borg.on(admin_cmd(pattern="extdl$", outgoing=True))
 async def install(event):
     if event.fwd_from:
         return
