@@ -1,37 +1,25 @@
-"""Emoji
-Available Commands:
-.emoji shrug
-.emoji apple
-.emoji :/
-.emoji -_-"""
-
 from telethon import events
 
 import asyncio
 from base64 import b64decode
 import io
+from userbot.utils import admin_cmd
 
 
 
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
-
+@borg.on(admin_cmd(pattern=f"fhack$", outgoing=True))
 async def _(event):
-
     if event.fwd_from:
-
+        
         return
-
+    
     animation_interval = 2
-
+    
     animation_ttl = range(0, 11)
-
-    input_str = event.pattern_match.group(1)
-
-    if input_str == "fhack":
-
-        await event.edit(input_str)
-
-        animation_chars = [
+    
+    await event.edit("Starting...")
+    
+    animation_chars = [
         
             "`Connecting To Hacked Private Server...`",
             "`Target Selected.`",
@@ -46,16 +34,13 @@ async def _(event):
             "`Targeted Account Hacked...`\n\n`_______________________`\n`result ... :)`\n\n`Chatlist : ✅`\n`Calls : ✅`\n`groups : ✅`\n `Contacts : ✅`\n`Channel : ✅`\n`Deleted Messages : ❌`\n`Edited Messages : ❌`\n`All API Tokens : ✅`\n\n`Pay 69$ To` @Sur_vivor `Or send your girlfriend number To Remove This Hack`"
            
         ]
-        await event.client.send_file(event.chat_id, SHUTDOWN,
-                                                     caption="`hacking inprogress...`", voice_note=True),
-        await event.client.send_file(event.chat_id, STARTUP,
-                                                     caption="`you will be hacked in a moment. thank you..`", voice_note=True),
+    await event.client.send_file(event.chat_id, SHUTDOWN, caption="`hacking inprogress...`", voice_note=True),
+    await event.client.send_file(event.chat_id, STARTUP, caption="`you will be hacked in a moment. thank you..`", voice_note=True),
 
-        for i in animation_ttl:
+    for i in animation_ttl:
+          await asyncio.sleep(animation_interval)
 
-            await asyncio.sleep(animation_interval)
-
-            await event.edit(animation_chars[i % 11])
+          await event.edit(animation_chars[i % 11])
     
             
             
