@@ -7,7 +7,7 @@ from userbot.utils import admin_cmd
 import asyncio
 import random
 
-@borg.on(admin_cmd(pattern="egyptf ?(.*)"))
+@borg.on(admin_cmd(pattern="egyptf(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -25,7 +25,7 @@ async def stylish_generator(event):
 
 
 
-@borg.on(admin_cmd(pattern="maref ?(.*)"))
+@borg.on(admin_cmd(pattern="maref(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -43,7 +43,7 @@ async def stylish_generator(event):
 
 
 
-@borg.on(admin_cmd(pattern="handcf ?(.*)"))
+@borg.on(admin_cmd(pattern="handcf(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -60,7 +60,7 @@ async def stylish_generator(event):
     await event.edit(string) 
 
 
-@borg.on(admin_cmd(pattern="doublef ?(.*)"))
+@borg.on(admin_cmd(pattern="doublef(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -102,7 +102,7 @@ async def spongemocktext(mock):
 
         await mock.edit("".join(reply_text))
         
-@borg.on(admin_cmd(pattern="ghostf ?(.*)"))
+@borg.on(admin_cmd(pattern="ghostf(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -120,7 +120,7 @@ async def stylish_generator(event):
     
     
     
-@borg.on(admin_cmd(pattern="handsf ?(.*)"))
+@borg.on(admin_cmd(pattern="handsf(?: |$)(.*)"))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -142,4 +142,4 @@ CMD_HELP.update({
     "funnyfonts": ".mock (text) or .mock reply to message \
 \nUsage: random capital and small letters in given text.\
 "
-})    
+})
