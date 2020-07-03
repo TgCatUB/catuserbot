@@ -11,8 +11,6 @@ import random
 
 @borg.on(admin_cmd(pattern="str(?: |$)(.*)"))
 async def stretch(stret):
-    """ Stretch it."""
-    if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@", "!"):
         textx = await stret.get_reply_message()
         message = stret.text
         message = stret.pattern_match.group(1)
@@ -36,8 +34,6 @@ async def stretch(stret):
 
 @borg.on(admin_cmd(pattern="zal(?: |$)(.*)"))
 async def zal(zgfy):
-    """ Invoke the feeling of chaos. """
-    if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
         reply_text = list()
         textx = await zgfy.get_reply_message()
         message = zgfy.pattern_match.group(1)
@@ -75,8 +71,6 @@ async def zal(zgfy):
 
 @borg.on(admin_cmd(pattern="cp(?: |$)(.*)"))
 async def copypasta(cp_e):
-    """ Copypasta the famous meme """
-    if not cp_e.text[0].isalpha() and cp_e.text[0] not in ("/", "#", "@", "!"):
         textx = await cp_e.get_reply_message()
         message = cp_e.pattern_match.group(1)
 
