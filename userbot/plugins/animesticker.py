@@ -19,7 +19,7 @@ import json
 from PIL import ImageEnhance, ImageOps
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.utils import admin_cmd
 
 
 EMOJI_PATTERN = re.compile(
@@ -42,7 +42,7 @@ def deEmojify(inputString: str) -> str:
     """Remove emojis and other non-safe characters from string"""
     return re.sub(EMOJI_PATTERN, '', inputString)
 
-@register(outgoing=True, pattern="^.waifu(?: |$)(.*)")
+@borg.on(admin_cmd(outgoing=True, pattern="waifu(?: |$)(.*)"))
 async def waifu(animu):
 #"""Creates random anime sticker!"""
 
