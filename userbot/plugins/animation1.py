@@ -5,6 +5,8 @@ from userbot import ALIVE_NAME
 import random, re
 from userbot import CMD_HELP
 from collections import deque
+import importlib.util
+import random
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 @borg.on(admin_cmd(pattern="stupid$"))
@@ -220,3 +222,15 @@ async def _(event):
         await event.edit("🔥🔥🔥")
         await asyncio.sleep(0.3)
         await event.edit("EVERyBOdy iZ GangSTur UNtIL I ArRivE 🔥🔥🔥")		
+
+@borg.on(admin_cmd(pattern=f"charging$"))
+async def timer_blankx(e):
+ txt=e.text[7:] + '\n\n`Tesla Wireless Charging (beta) Started...\nDevice Detected: Nokia 1100\nBattery Percentage:` '
+ j=10
+ k=j
+ for j in range(j):
+  await e.edit(txt + str(k))
+  k=k+10
+  await asyncio.sleep(1)
+ await asyncio.sleep(1) 
+ await e.edit("`Tesla Wireless Charging (beta) Completed...\nDevice Detected: Nokia 1100 (Space Grey Varient)\nBattery Percentage:` [100%](https://telegra.ph/file/a45aa7450c8eefed599d9.mp4) ", link_preview=True)
