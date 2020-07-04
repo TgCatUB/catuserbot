@@ -4,7 +4,27 @@ import random, re, asyncio
 from userbot import CMD_HELP
 from collections import deque
 
+@borg.on(admin_cmd(pattern=r"lmao$"))
+async def _(event):
+	if event.fwd_from:
+		return
+	deq = deque(list("😂🤣😂🤣😂🤣"))
+	for _ in range(999):
+		await asyncio.sleep(0.1)
+		await event.edit("".join(deq))
+		deq.rotate(1)
 
+    
+@borg.on(admin_cmd(pattern=r"nothappy$"))
+async def _(event):
+	if event.fwd_from:
+		return
+	deq = deque(list("😁☹️😁☹️😁☹️😁"))
+	for _ in range(999):
+		await asyncio.sleep(0.4)
+		await event.edit("".join(deq))
+		deq.rotate(1)
+		
 @borg.on(admin_cmd(outgoing=True, pattern="clock$"))
 async def _(event):
 	    if event.fwd_from:
@@ -15,15 +35,15 @@ async def _(event):
 		    await event.edit("".join(deq))
 		    deq.rotate(1)
         
-@borg.on(admin_cmd(pattern=r"star$", outgoing=True))
+@borg.on(admin_cmd(pattern=r"muah$"))
 async def _(event):
 	if event.fwd_from:
 		return
-	deq = deque(list("🦋✨🦋✨🦋✨🦋✨"))
+	deq = deque(list("😗😙😚😚😘"))
 	for _ in range(48):
 		await asyncio.sleep(0.1)
 		await event.edit("".join(deq))
-		deq.rotate(1)
+		deq.rotate(1)	
     
 @borg.on(admin_cmd(pattern="heart$"))		
 async def _(event):
@@ -35,15 +55,6 @@ async def _(event):
 		await event.edit("".join(deq))
 		deq.rotate(1)        
         
-@borg.on(admin_cmd(pattern=f"rain", outgoing=True))
-async def _(event):
-	if event.fwd_from:
-		return
-	deq = deque(list("🌬☁️🌩🌨🌧🌦🌥⛅🌤"))
-	for _ in range(48):
-		await asyncio.sleep(0.1)
-		await event.edit("".join(deq))
-		deq.rotate(1)
 		
 @borg.on(admin_cmd(pattern="gym$", outgoing=True))
 async def _(event):
@@ -142,4 +153,3 @@ async def _(event):
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 32])
-    
