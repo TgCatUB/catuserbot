@@ -275,6 +275,6 @@ CMD_HELP.update({
      \n\n.adminlist\
      \nUsage: Retrieves a list of admins in the chat.\
      \n\n.users or .users <name of member>\
-     \nUsage: Retrieves all (or queried) users in the chat.\"
+     \nUsage: Retrieves all (or queried) users in the chat."
      })
         
