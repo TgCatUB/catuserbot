@@ -17,7 +17,7 @@ async def _(event):
 		await event.edit("".join(deq))
 		deq.rotate(1)
 		
-@borg.on(admin_cmd(pattern=r"blocks$"))
+@borg.on(admin_cmd(pattern=r"boxs"))
 async def _(event):
 	if event.fwd_from:
 		return
