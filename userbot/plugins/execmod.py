@@ -18,7 +18,7 @@ if not os.path.isdir("./SAVED"):
 if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
      os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
 
-@borg.on(admin_cmd(outgoing=True, pattern="pips(?: |$)(.*)")
+@borg.on(admin_cmd(outgoing=True, pattern="pips(?: |$)(.*)"))
 async def pipcheck(pip):
     """ For .pip command, do a pip search. """
     pipmodule = pip.pattern_match.group(1)
