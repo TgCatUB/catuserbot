@@ -2,7 +2,7 @@ from telethon import events
 from datetime import datetime
 from userbot.utils import admin_cmd,sudo_cmd
 from userbot import CMD_HELP
-
+import asyncio
 
 @borg.on(admin_cmd(pattern=f"fping$", outgoing=True))
 async def _(event):
