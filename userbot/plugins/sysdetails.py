@@ -167,7 +167,6 @@ CMD_HELP.update(
     \nUsage:shows the uptime of your cpu\
     \n\n.botver\
     \nUsage: Shows the userbot version. \
-    
     "
     })
 
