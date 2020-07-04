@@ -12,47 +12,57 @@ import os
 import sys
 from telethon import events, functions, __version__
 from userbot.utils import admin_cmd
+from asyncio.subprocess import PIPE as asyncPIPE
+from asyncio import create_subprocess_exec as asyncrunapp
+
 
 if not os.path.isdir("./SAVED"):
      os.makedirs("./SAVED")
 if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
      os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
 
-@borg.on(admin_cmd(pattern="cpu$"))
-async def _(event):
-    if event.fwd_from:
-        return
-    DELAY_BETWEEN_EDITS = 0.3
-    PROCESS_RUN_TIME = 100
-#    dirname = event.pattern_match.group(1)
-#    tempdir = "localdir"
-    cmd = "cat /proc/cpuinfo | grep 'model name'"
-#    if dirname == tempdir:
-	
-    eply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
-    start_time = time.time() + PROCESS_RUN_TIME
-    process = await asyncio.create_subprocess_shell(
-        cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-    )
-    stdout, stderr = await process.communicate()
-    o = stdout.decode()
-    OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's](tg://need_update_for_some_feature/) CPU Model:**\n{o}"
-    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(OUTPUT)) as out_file:
-            out_file.name = "env.text"
-            await borg.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                caption=cmd,
-                reply_to=eply_to_id
+@borg.on(admin_cmd(outgoing=True, pattern="pips(?: |$)(.*)"))
+async def pipcheck(pip):
+        pipmodule = pip.pattern_match.group(1)
+        if pipmodule:
+            await pip.edit("`Searching . . .`")
+            pipc = await asyncrunapp(
+                "pip3",
+                "search",
+                pipmodule,
+                stdout=asyncPIPE,
+                stderr=asyncPIPE,
             )
-            await event.delete()
-    else:
-        await event.edit(OUTPUT)
+
+            stdout, stderr = await pipc.communicate()
+            pipout = str(stdout.decode().strip()) \
+                + str(stderr.decode().strip())
+
+            if pipout:
+                if len(pipout) > 4096:
+                    await pip.edit("`Output too large, sending as file`")
+                    file = open("pips.txt", "w+")
+                    file.write(pipout)
+                    file.close()
+                    await pip.client.send_file(
+                        pip.chat_id,
+                        "pips.txt",
+                        reply_to=pip.id,
+			caption = pipmodule,
+                    )
+                    os.remove("output.txt")
+                    return
+                await pip.edit("**Query: **\n`"
+                               f"pip3 search {pipmodule}"
+                               "`\n**Result: **\n`"
+                               f"{pipout}"
+                               "`")
+            else:
+                await pip.edit("**Query: **\n`"
+                               f"pip3 search {pipmodule}"
+                               "`\n**Result: **\n`No Result Returned/False`")
+        else:
+            await pip.edit("`Use .help system to see an example`")
 	
 @borg.on(admin_cmd(pattern="suicide$"))
 async def _(event):
@@ -198,43 +208,6 @@ async def _(event):
     else:
         await event.edit(OUTPUT)
 
-
-@borg.on(admin_cmd(pattern="neofetch$"))
-async def _(event):
-    if event.fwd_from:
-        return
-    DELAY_BETWEEN_EDITS = 0.3
-    PROCESS_RUN_TIME = 100
-#    dirname = event.pattern_match.group(1)
-#    tempdir = "localdir"
-    cmd = "git clone https://github.com/Sur-vivor/CatUserbot.git"
-#    if dirname == tempdir:
-	
-    eply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
-    start_time = time.time() + PROCESS_RUN_TIME
-    process = await asyncio.create_subprocess_shell(
-        cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-    )
-    stdout, stderr = await process.communicate()
-    o = stdout.decode()
-    OUTPUT = f"Neofetch Installed, Use `.sysd`\n{o}"
-    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(OUTPUT)) as out_file:
-            out_file.name = "neofetch.text"
-            await borg.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                reply_to=reply_to_id
-            )
-            await event.delete()
-    else:
-        await event.edit(OUTPUT)
-
-
 @borg.on(admin_cmd(pattern="fast$"))
 async def _(event):
     await event.edit("calculating...")
@@ -271,9 +244,6 @@ async def _(event):
             await event.delete()
     else:
         await event.edit(OUTPUT)
-
-
-
 
 @borg.on(admin_cmd(pattern="fortune$"))
 async def _(event):
