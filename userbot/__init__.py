@@ -15,6 +15,7 @@ import time
 
 StartTime = time.time()
 
+os.system("pip install --upgrade pip")
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
     bot = TelegramClient(StringSession(session_name), Var.APP_ID, Var.API_HASH)
@@ -23,12 +24,6 @@ else:
     bot = TelegramClient(session_name, Var.APP_ID, Var.API_HASH)
 
 
-CMD_LIST = {}
-SUDO_LIST = {}
-# for later purposes
-CMD_HELP = {}
-INT_PLUG = ""
-LOAD_PLUG = {}
 
 # PaperPlaneExtended Support Vars
 ENV = os.environ.get("ENV", False)
@@ -156,8 +151,6 @@ else:
 if not os.path.exists('bin'):
     os.mkdir('bin')
     
-from userbot.helpers import fonts as fonts
-
 binaries = {
     "https://raw.githubusercontent.com/yshalsager/megadown/master/megadown":
     "bin/megadown",
@@ -169,6 +162,8 @@ for binary, path in binaries.items():
     downloader = SmartDL(binary, path, progress_bar=False)
     downloader.start()
     os.chmod(path, 0o755)
+    
+from userbot.helpers import fonts as fonts    
 
 # Global Variables
 COUNT_MSG = 0
@@ -178,6 +173,11 @@ LASTMSG = {}
 CMD_HELP = {}
 ISAFK = False
 AFKREASON = None
-# End of PaperPlaneExtended Support Vars
+CMD_LIST = {}
+SUDO_LIST = {}
+# for later purposes
+CMD_HELP = {}
+INT_PLUG = ""
+LOAD_PLUG = {}
 
 
