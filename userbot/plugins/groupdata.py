@@ -4,21 +4,29 @@ from telethon import events
 import asyncio
 from telethon.errors import (ChannelInvalidError, ChannelPrivateError, ChannelPublicGroupNaError, InviteHashEmptyError, InviteHashExpiredError, InviteHashInvalidError)
 from emoji import emojize
-from telethon.tl.types import MessageActionChannelMigrateFrom, ChannelParticipantsAdmins
+from telethon.tl.types import MessageActionChannelMigrateFrom, ChannelParticipantsAdmins, ChannelParticipantCreator
 from telethon.tl.functions.messages import GetHistoryRequest, CheckChatInviteRequest, GetFullChatRequest
-from userbot.utils import  errors_handler, admin_cmd
 from telethon.events import ChatAction
 from datetime import datetime
 from math import sqrt
-from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
+from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest,LeaveChannelRequest
 from telethon.utils import get_input_location
-from userbot import CMD_HELP
-from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
 from telethon.errors.rpcerrorlist import (UserIdInvalidError,
                                           MessageTooLongError)
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,
                              ImageProcessFailedError, PhotoCropSizeSmallError,
                              UserAdminInvalidError)
+from userbot import CMD_HELP
+from userbot.utils import  errors_handler, admin_cmd
+
+@borg.on(admin_cmd(pattern="leave$"))
+async def leave(e):
+        await e.edit("`Legend is leaving this chat.....!` @admin `Goodbye aren't forever..` ")
+        time.sleep(3)
+        if '-' in str(e.chat_id):
+            await bot(LeaveChannelRequest(e.chat_id))
+        else:
+            await e.edit('`Sar This is Not A Chat`')
 
 @borg.on(admin_cmd(pattern="chatinfo(?: |$)(.*)", outgoing=True))
 async def info(event):
@@ -259,23 +267,6 @@ async def get_users(show):
                 reply_to=show.id,
             )
             remove("userslist.txt")  
-
-@borg.on(admin_cmd("iundlt$"))
-async def _(event):
-    if event.fwd_from:
-        return
-    c = await event.get_chat()
-    if c.admin_rights or c.creator:
-        a = await borg.get_admin_log(event.chat_id,limit=5, edit=False, delete=True)
-        # print(a[0].old.message)
-        deleted_msg = "Deleted message in this group:"
-        for i in a:
-            deleted_msg += "\n👉`{}`".format(i.old.message)
-        await event.edit(deleted_msg)
-    else:
-        await event.edit("`You need administrative permissions in order to do this command`")
-        await asyncio.sleep(3)
-        await event.delete()  
   
 CMD_HELP.update({
     "chatinfo":
@@ -284,8 +275,6 @@ CMD_HELP.update({
      \n\n.adminlist\
      \nUsage: Retrieves a list of admins in the chat.\
      \n\n.users or .users <name of member>\
-     \nUsage: Retrieves all (or queried) users in the chat.\
-     \n\n.iundlt\
-     \nUsage: display last 5 deleted messages in group."
+     \nUsage: Retrieves all (or queried) users in the chat.\"
      })
         
