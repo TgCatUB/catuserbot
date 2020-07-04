@@ -21,7 +21,7 @@ if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
 
 @borg.on(admin_cmd(outgoing=True, pattern="pips(?: |$)(.*)"))
 async def pipcheck(pip):
-    pipmodule = pip.pattern_match.group(1)
+        pipmodule = pip.pattern_match.group(1)
         if pipmodule:
             await pip.edit("`Searching . . .`")
             pipc = await asyncrunapp(
