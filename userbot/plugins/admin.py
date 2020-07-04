@@ -463,7 +463,23 @@ async def kick(usr):
             BOTLOG_CHATID, "#KICK\n"
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
-
+        
+@borg.on(admin_cmd("iundlt$"))
+async def _(event):
+    if event.fwd_from:
+        return
+    c = await event.get_chat()
+    if c.admin_rights or c.creator:
+        a = await borg.get_admin_log(event.chat_id,limit=5, edit=False, delete=True)
+        # print(a[0].old.message)
+        deleted_msg = "Deleted message in this group:"
+        for i in a:
+            deleted_msg += "\n👉`{}`".format(i.old.message)
+        await event.edit(deleted_msg)
+    else:
+        await event.edit("`You need administrative permissions in order to do this command`")
+        await asyncio.sleep(3)
+        await event.delete()
 
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
@@ -530,5 +546,7 @@ CMD_HELP.update({
 \n\n.delusers\
 \nUsage: Searches for deleted accounts in a group. Use .delusers clean to remove deleted accounts from the group.\
 \n\n.setgppic <reply to image>\
-\nUsage: Changes the group's display picture."
+\nUsage: Changes the group's display picture.\
+\n\n.iundlt\
+\nUsage: display last 5 deleted messages in group."
 })
