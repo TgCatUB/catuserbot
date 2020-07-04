@@ -225,7 +225,7 @@ async def _(event):
 
 @borg.on(admin_cmd(pattern=f"charging$"))
 async def timer_blankx(e):
- txt=e.text[7:] + '\n\n`Tesla Wireless Charging (beta) Started...\nDevice Detected: Nokia 1100\nBattery Percentage:` '
+ txt=e.text[10:] + '\n\n`Tesla Wireless Charging (beta) Started...\nDevice Detected: Nokia 1100\nBattery Percentage:` '
  j=10
  k=j
  for j in range(j):
