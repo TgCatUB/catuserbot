@@ -25,7 +25,7 @@ async def pipcheck(pip):
     if pipmodule:
         await pip.edit("`Searching . . .`")
         invokepip = f"pip3 search {pipmodule}"
-        pipc = await asyncrunapp(
+        pipc = await pip(
             invokepip,
             stdout=asyncPIPE,
             stderr=asyncPIPE,
