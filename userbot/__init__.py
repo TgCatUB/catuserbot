@@ -18,7 +18,7 @@ import time
 
 StartTime = time.time()
 
-
+os.system("git init")
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -163,6 +163,7 @@ for binary, path in binaries.items():
 
 from userbot.helpers import fonts as fonts
 from userbot.helpers import functions as def
+
 
 # Global Variables
 COUNT_MSG = 0
