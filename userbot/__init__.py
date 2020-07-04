@@ -18,6 +18,8 @@ import time
 
 StartTime = time.time()
 
+
+
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
     bot = TelegramClient(StringSession(session_name), Var.APP_ID, Var.API_HASH)
@@ -26,12 +28,7 @@ else:
     bot = TelegramClient(session_name, Var.APP_ID, Var.API_HASH)
 
 
-CMD_LIST = {}
-SUDO_LIST = {}
-# for later purposes
-CMD_HELP = {}
-INT_PLUG = ""
-LOAD_PLUG = {}
+
 
 # PaperPlaneExtended Support Vars
 ENV = os.environ.get("ENV", False)
@@ -73,8 +70,6 @@ if bool(ENV):
     # Userbot logging feature switch.
     BOTLOG = sb(os.environ.get("BOTLOG", "True"))
 
-    # Bleep Blop, this is a bot ;)
-    PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
     # Heroku Credentials for updater.
     HEROKU_MEMEZ = sb(os.environ.get("HEROKU_MEMEZ", "False"))
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
@@ -98,11 +93,6 @@ if bool(ENV):
 
     # OpenWeatherMap API Key
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
-
-    # Anti Spambot Config
-    ANTI_SPAMBOT = sb(os.environ.get("ANTI_SPAMBOT", "False"))
-
-    ANTI_SPAMBOT_SHOUT = sb(os.environ.get("ANTI_SPAMBOT_SHOUT", "False"))
 
     # Youtube API key
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
@@ -159,8 +149,6 @@ else:
 if not os.path.exists('bin'):
     os.mkdir('bin')
     
-from userbot.helpers import fonts as fonts
-
 binaries = {
     "https://raw.githubusercontent.com/yshalsager/megadown/master/megadown":
     "bin/megadown",
@@ -173,6 +161,9 @@ for binary, path in binaries.items():
     downloader.start()
     os.chmod(path, 0o755)
 
+from userbot.helpers import fonts as fonts
+from userbot.helpers import functions as def
+
 # Global Variables
 COUNT_MSG = 0
 USERS = {}
@@ -181,6 +172,8 @@ LASTMSG = {}
 CMD_HELP = {}
 ISAFK = False
 AFKREASON = None
-# End of PaperPlaneExtended Support Vars
-
-
+CMD_LIST = {}
+SUDO_LIST = {}
+# for later purposes
+INT_PLUG = ""
+LOAD_PLUG = {}
