@@ -1,42 +1,58 @@
-# For UniBorg
-# By Priyam Kalra
-# Syntax (.calc <term1><operator><term2>)
-# For eg .calc 02*02 or 99*99 (the zeros are important) (two terms and two digits max)
-from telethon import events
-from userbot.utils import admin_cmd
+#credits to @mrconfused 
+from telethon import events, errors, functions, types
+import inspect
+import traceback
 import asyncio
-from telethon.tl import functions, types
+import sys
+import io
+from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 
-#neccesary tg shit
-@borg.on(admin_cmd(pattern="calc ?(.*)"))
+@borg.on(admin_cmd(pattern="calc"))
 async def _(event):
-    if event.fwd_from:
+    if event.fwd_from or event.via_bot_id:
         return
-    input = event.pattern_match.group(1) #get input
-    exp = "Given expression is " + input #report back input
-    #lazy workaround to add support for two digits
-    final_input = tuple(input)
-    term1part1 = final_input[0]
-    term1part2 = final_input[1]
-    term1 = str(term1part1) + str(term1part2)
-    final_term1 = (int(term1))
-    operator = str(final_input[2])
-    term2part1 = final_input[3]
-    term2part2 = final_input[4]
-    term2 = str(term2part1) + str(term2part2)
-    final_term2 = (int(term2))
-    #actual calculations go here
-    if input == "help":
-        await event.edit("Syntax .calc <term1><operator><term2>\nFor eg .calc 02*02 or 99*99 (the zeros are important) (two terms and two digits max)")
-    elif operator == "*":
-        await event.edit("Solution -->\n" + exp + "\n" + str(final_term1 * final_term2))
-    elif operator == "-":
-        await event.edit("Solution -->\n" + exp + "\n" + str(final_term1 - final_term2))
-    elif operator == "+":
-        await event.edit("Solution -->\n" + exp + "\n" + str(final_term1 + final_term2))
-    elif operator == "/":
-        await event.edit("Solution -->\n" + exp + "\n" + str(final_term1 / final_term2))
-    elif operator == "%":
-        await event.edit("Solution -->\n" + exp + "\n" + str(final_term1 % final_term2))
+    await event.edit("Processing ...")
+    cmd = event.text.split(" ", maxsplit=1)[1]
+    reply_to_id = event.message.id
+    if event.reply_to_msg_id:
+        reply_to_id = event.reply_to_msg_id
+        
+    san = f"print({cmd})"
+    old_stderr = sys.stderr
+    old_stdout = sys.stdout
+    redirected_output = sys.stdout = io.StringIO()
+    redirected_error = sys.stderr = io.StringIO()
+    stdout, stderr, exc = None, None, None
+    try:
+        await aexec(san, event)
+    except Exception:
+        exc = traceback.format_exc()
+    stdout = redirected_output.getvalue()
+    stderr = redirected_error.getvalue()
+    sys.stdout = old_stdout
+    sys.stderr = old_stderr
+
+    evaluation = ""
+    if exc:
+        evaluation = exc
+    elif stderr:
+        evaluation = stderr
+    elif stdout:
+        evaluation = stdout
     else:
-        await event.edit("use .calc help")
+        evaluation = "Something went wrong"
+
+    final_output = "**EQUATION**: `{}` \n\n **SOLUTION**: \n`{}` \n".format(cmd, evaluation)
+    await event.edit(final_output)
+
+async def aexec(code, event):
+    exec(
+        f'async def __aexec(event): ' +
+        ''.join(f'\n {l}' for l in code.split('\n'))
+    )
+    return await locals()['__aexec'](event)
+
+CMD_HELP.update({"calc": "`.calc` your equation :\
+      \nUSAGE: solves the given maths equation. "
+}) 
