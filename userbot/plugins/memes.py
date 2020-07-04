@@ -265,25 +265,6 @@ async def Oof(e):
 async def iqless(e):
         await e.edit("♿")
 
-@borg.on(admin_cmd(outgoing=True, pattern="moon$"))
-async def _(event):
-	    if event.fwd_from:
-		    return
-	    deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
-	    for _ in range(32):
-		    await asyncio.sleep(0.1)
-		    await event.edit("".join(deq))
-		    deq.rotate(1)
-
-@borg.on(admin_cmd(outgoing=True, pattern="clock$"))
-async def _(event):
-	    if event.fwd_from:
-		    return
-	    deq = deque(list("🕙🕘🕗🕖🕕🕔🕓🕒🕑🕐🕛"))
-	    for _ in range(32):
-		    await asyncio.sleep(0.1)
-		    await event.edit("".join(deq))
-		    deq.rotate(1)
 
 @borg.on(admin_cmd(outgoing=True, pattern="clap(?: |$)(.*)"))
 async def claptext(event):
