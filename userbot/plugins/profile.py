@@ -8,24 +8,16 @@ import os
 from telethon import events
 from telethon.tl import functions
 from userbot.utils import admin_cmd
-import os
-
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-
 from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,
                                           UsernameOccupiedError)
-
 from telethon.tl.functions.account import (UpdateProfileRequest,
                                            UpdateUsernameRequest)
-
 from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
-
 from telethon.tl.functions.photos import (DeletePhotosRequest,
                                           GetUserPhotosRequest,
                                           UploadProfilePhotoRequest)
-
 from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
-
 from userbot import bot, CMD_HELP
 
 # ====================== CONSTANT ===============================
@@ -33,16 +25,11 @@ INVALID_MEDIA = "```The extension of the media entity is invalid.```"
 PP_CHANGED = "```Profile picture changed successfully.```"
 PP_TOO_SMOL = "```This image is too small, use a bigger image.```"
 PP_ERROR = "```Failure occured while processing image.```"
-
 BIO_SUCCESS = "```Successfully edited Bio.```"
-
 NAME_OK = "```Your name was succesfully changed.```"
 USERNAME_SUCCESS = "```Your username was succesfully changed.```"
 USERNAME_TAKEN = "```This username is already taken.```"
 # ===============================================================
-
-
-
 
 
 @borg.on(admin_cmd(pattern="pbio (.*)"))  # pylint:disable=E0602
@@ -190,7 +177,7 @@ async def remove_profilepic(delpfp):
 async def _(event):
     if event.fwd_from:
         return
-    result = await bot(functions.channels.GetAdminedPublicChannelsRequest())
+    result = await bot(GetAdminedPublicChannelsRequest())
     output_str = ""
     for channel_obj in result.chats:
         output_str += f"- {channel_obj.title} @{channel_obj.username} \n"
