@@ -7,9 +7,8 @@ import random, re
 from collections import deque
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@borg.on(admin_cmd(pattern="gangasta ?(.*)"))
+@borg.on(admin_cmd(pattern="gangasta$"))
 async def _(event):
-     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         await event.edit("EVERyBOdy")
         await asyncio.sleep(0.3)
         await event.edit("iZ")
@@ -28,7 +27,7 @@ async def _(event):
         
         
         
-@borg.on(admin_cmd(pattern="gym", outgoing=True))
+@borg.on(admin_cmd(pattern="gym$", outgoing=True))
 async def _(event):
 	if event.fwd_from:
 		return
@@ -40,7 +39,7 @@ async def _(event):
         
         
         
-@borg.on(admin_cmd(pattern=f"human", outgoing=True))
+@borg.on(admin_cmd(pattern=f"human$", outgoing=True))
 
 async def _(event):
 
@@ -86,7 +85,7 @@ async def _(event):
             
             
             
-@borg.on(admin_cmd(pattern=f"hypno", outgoing=True))
+@borg.on(admin_cmd(pattern=f"hypno$", outgoing=True))
 
 async def _(event):
 
@@ -130,7 +129,7 @@ async def _(event):
             await event.edit(animation_chars[i % 15])    
             
             
-@borg.on(admin_cmd(pattern=r"isro"))
+@borg.on(admin_cmd(pattern=r"isro$"))
 
 async def _(event):
 
@@ -185,7 +184,7 @@ async def _(event):
         
         
         
-@borg.on(admin_cmd(pattern=f"jio", outgoing=True))
+@borg.on(admin_cmd(pattern=f"jio$", outgoing=True))
 
 async def _(event):
 
@@ -237,7 +236,7 @@ async def _(event):
                     
             
             
-@borg.on(admin_cmd(pattern=f"mc", outgoing=True))
+@borg.on(admin_cmd(pattern=f"mc$", outgoing=True))
 
 async def _(event):
 
@@ -296,7 +295,7 @@ async def _(event):
 		
 
 
-@borg.on(admin_cmd(pattern="wtf"))
+@borg.on(admin_cmd(pattern="wtf$"))
 async def _(event):
     
     if event.fwd_from:
@@ -318,7 +317,7 @@ async def _(event):
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i %5 ])
 		
-@borg.on(admin_cmd(pattern="stupid"))
+@borg.on(admin_cmd(pattern="stupid$"))
 async def _(event):
     
     if event.fwd_from:
