@@ -162,7 +162,7 @@ for binary, path in binaries.items():
     os.chmod(path, 0o755)
 
 from userbot.helpers import fonts as fonts
-from userbot.helpers import functions as def
+from userbot.helpers import functions as catdef
 
 
 # Global Variables
