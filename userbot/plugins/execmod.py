@@ -18,42 +18,47 @@ if not os.path.isdir("./SAVED"):
 if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
      os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
 
-@borg.on(admin_cmd(pattern="cpu$"))
-async def _(event):
-    if event.fwd_from:
-        return
-    DELAY_BETWEEN_EDITS = 0.3
-    PROCESS_RUN_TIME = 100
-#    dirname = event.pattern_match.group(1)
-#    tempdir = "localdir"
-    cmd = "cat /proc/cpuinfo | grep 'model name'"
-#    if dirname == tempdir:
-	
-    eply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
-    start_time = time.time() + PROCESS_RUN_TIME
-    process = await asyncio.create_subprocess_shell(
-        cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-    )
-    stdout, stderr = await process.communicate()
-    o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) CPU Model:**\n{o}"
-    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(OUTPUT)) as out_file:
-            out_file.name = "env.text"
-            await borg.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                caption=cmd,
-                reply_to=eply_to_id
-            )
-            await event.delete()
+@borg.on(admin_cmd(outgoing=True, pattern="pips(?: |$)(.*)")
+async def pipcheck(pip):
+    """ For .pip command, do a pip search. """
+    pipmodule = pip.pattern_match.group(1)
+    if pipmodule:
+        await pip.edit("`Searching . . .`")
+        invokepip = f"pip3 search {pipmodule}"
+        pipc = await asyncrunapp(
+            invokepip,
+            stdout=asyncPIPE,
+            stderr=asyncPIPE,
+        )
+
+        stdout, stderr = await pipc.communicate()
+        pipout = str(stdout.decode().strip()) \
+            + str(stderr.decode().strip())
+
+        if pipout:
+            if len(pipout) > 4096:
+                await pip.edit("`Output too large, sending as file`")
+                file = open("output.txt", "w+")
+                file.write(pipout)
+                file.close()
+                await pip.client.send_file(
+                    pip.chat_id,
+                    "output.txt",
+                    reply_to=pip.id,
+                )
+                remove("output.txt")
+                return
+            await pip.edit("**Query: **\n`"
+                           f"{invokepip}"
+                           "`\n**Result: **\n`"
+                           f"{pipout}"
+                           "`")
+        else:
+            await pip.edit("**Query: **\n`"
+                           f"{invokepip}"
+                           "`\n**Result: **\n`No Result Returned/False`")
     else:
-        await event.edit(OUTPUT)
-	
+        await pip.edit("`Use .info pip to see an example`")	
 
 	
 @borg.on(admin_cmd(pattern="suicide$"))
@@ -201,41 +206,6 @@ async def _(event):
         await event.edit(OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="neofetch$"))
-async def _(event):
-    if event.fwd_from:
-        return
-    DELAY_BETWEEN_EDITS = 0.3
-    PROCESS_RUN_TIME = 100
-#    dirname = event.pattern_match.group(1)
-#    tempdir = "localdir"
-    cmd = "git clone https://github.com/dylanaraps/neofetch.git"
-#    if dirname == tempdir:
-	
-    eply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
-    start_time = time.time() + PROCESS_RUN_TIME
-    process = await asyncio.create_subprocess_shell(
-        cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-    )
-	
-    stdout, stderr = await process.communicate()
-    o = stdout.decode()
-    OUTPUT = f"Neofetch Installed, Use `.sysd`"
-    if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(OUTPUT)) as out_file:
-            out_file.name = "neofetch.text"
-            await borg.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                reply_to=reply_to_id
-            )
-            await event.delete()
-    else:
-        await event.edit(OUTPUT) 
 
 
 @borg.on(admin_cmd(pattern="fast$"))
