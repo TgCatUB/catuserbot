@@ -119,40 +119,6 @@ async def _(event):
     OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) CPU UPTIME:**\n{uptime}"
     await event.edit(OUTPUT)
 
-@borg.on(admin_cmd(outgoing=True, pattern="botver$"))
-async def bot_ver(event):
-    """ For .botver command, get the bot version. """
-    if which("git") is not None:
-        invokever = "git describe --all --long"
-        ver = await asyncrunapp(
-            invokever,
-            stdout=asyncPIPE,
-            stderr=asyncPIPE,
-        )
-        stdout, stderr = await ver.communicate()
-        verout = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
-
-        invokerev = "git rev-list --all --count"
-        rev = await asyncrunapp(
-            invokerev,
-            stdout=asyncPIPE,
-            stderr=asyncPIPE,
-        )
-        stdout, stderr = await rev.communicate()
-        revout = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
-
-        await event.edit("`Userbot Version: "
-                         f"{verout}"
-                         "` \n"
-                         "`Revision: "
-                         f"{revout}"
-                         "`")
-    else:
-        await event.edit(
-            "Shame that you don't have git, You're running 9.0 - 'Extended' anyway"
-        )
 
 
 
@@ -163,8 +129,6 @@ CMD_HELP.update(
     \nUsage: Shows system information using neofetch.\
     \n\n`.uptime`\
     \nUsage:shows the uptime of your cpu\
-    \n\n.botver\
-    \nUsage: Shows the userbot version. \
     "
     })
 
