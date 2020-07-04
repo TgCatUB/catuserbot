@@ -8,24 +8,16 @@ import os
 from telethon import events
 from telethon.tl import functions
 from userbot.utils import admin_cmd
-import os
-
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-
 from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,
                                           UsernameOccupiedError)
-
 from telethon.tl.functions.account import (UpdateProfileRequest,
                                            UpdateUsernameRequest)
-
 from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
-
 from telethon.tl.functions.photos import (DeletePhotosRequest,
                                           GetUserPhotosRequest,
                                           UploadProfilePhotoRequest)
-
 from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
-
 from userbot import bot, CMD_HELP
 
 # ====================== CONSTANT ===============================
@@ -33,16 +25,11 @@ INVALID_MEDIA = "```The extension of the media entity is invalid.```"
 PP_CHANGED = "```Profile picture changed successfully.```"
 PP_TOO_SMOL = "```This image is too small, use a bigger image.```"
 PP_ERROR = "```Failure occured while processing image.```"
-
 BIO_SUCCESS = "```Successfully edited Bio.```"
-
 NAME_OK = "```Your name was succesfully changed.```"
 USERNAME_SUCCESS = "```Your username was succesfully changed.```"
 USERNAME_TAKEN = "```This username is already taken.```"
 # ===============================================================
-
-
-
 
 
 @borg.on(admin_cmd(pattern="pbio (.*)"))  # pylint:disable=E0602
@@ -186,7 +173,16 @@ async def remove_profilepic(delpfp):
     await delpfp.edit(
         f"`Successfully deleted {len(input_photos)} profile picture(s).`")
 
-
+@borg.on(admin_cmd(pattern="myusernames$"))
+async def _(event):
+    if event.fwd_from:
+        return
+    result = await bot(GetAdminedPublicChannelsRequest())
+    output_str = ""
+    for channel_obj in result.chats:
+        output_str += f"- {channel_obj.title} @{channel_obj.username} \n"
+    await event.edit(output_str)
+    
 CMD_HELP.update({
     "profile":
     ".username <new_username>\
@@ -199,8 +195,8 @@ CMD_HELP.update({
 \nUsage: Changes your Telegram bio.\
 \n\n.delpfp or .delpfp <number>/<all>\
 \nUsage: Deletes your Telegram profile picture(s).\
-\n\n.reserved\
-\nUsage: Shows usernames reserved by you.\
+\n\n.myusernames\
+\nUsage: Shows usernames reserved by you.that is created by you channels or groups\
 \n\n.count\
 \nUsage: Counts your groups, chats, bots etc..."
 })
