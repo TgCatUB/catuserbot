@@ -239,7 +239,7 @@ async def _(event):
 
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
-            await event.edit(animation_chars[i % 117])
+            await event.edit(animation_chars[i % 100])
 
 @borg.on(admin_cmd(pattern=r"isro"))
 async def _(event):
