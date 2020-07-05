@@ -6,7 +6,7 @@ from datetime import datetime
 from telethon import events
 from telethon.tl import functions, types
 from userbot import CMD_HELP
-
+from userbot.utils import admin_cmd
 
 global USER_AFK  # pylint:disable=E0602
 global afk_time  # pylint:disable=E0602
@@ -19,7 +19,41 @@ last_afk_message = {}
 afk_start = {}
 
 
-@borg.on(events.NewMessage(pattern=r"\.afk ?(.*)", outgoing=True))  # pylint:disable=E0602
+@borg.on(events.NewMessage(outgoing=True))  # pylint:disable=E0602
+async def set_not_afk(event):
+    global USER_AFK  # pylint:disable=E0602
+    global afk_time  # pylint:disable=E0602
+    global last_afk_message  # pylint:disable=E0602
+    global afk_start
+    global afk_end
+    back_alive = datetime.now()
+    afk_end = back_alive.replace(microsecond=0)
+    if afk_start != {}:
+        total_afk_time = str((afk_end - afk_start))
+    current_message = event.message.message
+    if "afk" not in current_message and "yes" in USER_AFK:  # pylint:disable=E0602
+        shite = await borg.send_message(event.chat_id, "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`")
+        try:
+            await borg.send_message(  # pylint:disable=E0602
+                Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
+                "#AFKFALSE \n Set AFK mode to False\n" + "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`"
+            )
+        except Exception as e:  # pylint:disable=C0103,W0703
+            await borg.send_message(  # pylint:disable=E0602
+                event.chat_id,
+                "Please set `PRIVATE_GROUP_BOT_API_ID` " + \
+                "for the proper functioning of afk functionality " + \
+                "check pinned message in @catuserbot17.\n\n `{}`".format(str(e)),
+                reply_to=event.message.id,
+                silent=True
+            )
+        await asyncio.sleep(2)
+        await shite.delete()
+        USER_AFK = {}  # pylint:disable=E0602
+        afk_time = None  # pylint:disable=E0602
+        
+        
+@borg.on(admin_cmd(pattern=r"afk ?(.*)"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
@@ -49,7 +83,7 @@ async def _(event):
             await borg.send_message(event.chat_id, f"**I shall be Going AFK!** __because ~ {reason}__")
         else:
             await borg.send_message(event.chat_id, f"**I am Going AFK!**")
-        await asyncio.sleep(5)
+        await asyncio.sleep(2)
         await event.delete()
         try:
             await borg.send_message(  # pylint:disable=E0602
@@ -59,41 +93,7 @@ async def _(event):
         except Exception as e:  # pylint:disable=C0103,W0703
             logger.warn(str(e))  # pylint:disable=E0602
 
-
-@borg.on(events.NewMessage(outgoing=True))  # pylint:disable=E0602
-async def set_not_afk(event):
-    global USER_AFK  # pylint:disable=E0602
-    global afk_time  # pylint:disable=E0602
-    global last_afk_message  # pylint:disable=E0602
-    global afk_start
-    global afk_end
-    back_alive = datetime.now()
-    afk_end = back_alive.replace(microsecond=0)
-    if afk_start != {}:
-        total_afk_time = str((afk_end - afk_start))
-    current_message = event.message.message
-    if ".afk" not in current_message and "yes" in USER_AFK:  # pylint:disable=E0602
-        shite = await borg.send_message(event.chat_id, "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`")
-        try:
-            await borg.send_message(  # pylint:disable=E0602
-                Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-                "#AFKFALSE \n Set AFK mode to False\n" + "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`"
-            )
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await borg.send_message(  # pylint:disable=E0602
-                event.chat_id,
-                "Please set `PRIVATE_GROUP_BOT_API_ID` " + \
-                "for the proper functioning of afk functionality " + \
-                "check pinned message in @catuserbot17.\n\n `{}`".format(str(e)),
-                reply_to=event.message.id,
-                silent=True
-            )
-        await asyncio.sleep(5)
-        await shite.delete()
-        USER_AFK = {}  # pylint:disable=E0602
-        afk_time = None  # pylint:disable=E0602
-
-
+            
 @borg.on(events.NewMessage(  # pylint:disable=E0602
     incoming=True,
     func=lambda e: bool(e.mentioned or e.is_private)
