@@ -18,8 +18,7 @@ async def startmute(event):
         elif event.is_private:
           await event.edit("Unexpected issues or ugly errors may occur!")
           await asyncio.sleep(3)
-          private = True
-            
+          private = True           
         reply = await event.get_reply_message()
         if event.pattern_match.group(1) is not None:
             userid = event.pattern_match.group(1)
@@ -50,8 +49,7 @@ async def startmute(event):
         except Exception as e:
             await event.edit("Error occured!\nError is " + str(e))
         else:
-            await event.edit("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")
-            
+            await event.edit("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")           
         # Announce to logging group    
         if BOTLOG:
           await event.client.send_message(
@@ -67,8 +65,7 @@ async def endmute(event):
         elif event.is_private:
           await event.edit("Unexpected issues or ugly errors may occur!")
           await asyncio.sleep(3)
-          private = True
-            
+          private = True            
         reply = await event.get_reply_message()
         if event.pattern_match.group(1) is not None:
             userid = event.pattern_match.group(1)
@@ -87,8 +84,7 @@ async def endmute(event):
         except Exception as e:
             await event.edit("Error occured!\nError is " + str(e))
         else:
-            await event.edit("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
-        
+            await event.edit("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")        
         # Announce to logging group    
         if BOTLOG:
            await event.client.send_message(
