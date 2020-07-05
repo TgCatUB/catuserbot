@@ -31,5 +31,6 @@ cat_caption += "**[⚜️DEPLOY CATUSERBOT⚜️](https://github.com/Sur-vivor/C
 @borg.on(admin_cmd(outgoing=True, pattern="alive$"))
 async def amireallyalive(alive):
     """ For .alive command, check if the bot is running.  """
+    await asyncio.sleep(2)
     await alive.delete()
     await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption)
