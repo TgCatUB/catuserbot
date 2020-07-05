@@ -5,7 +5,7 @@ from userbot.utils import admin_cmd
 from userbot import ALIVE_NAME
 import random, re
 from collections import deque
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"     
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Cat"     
                 
         
 @borg.on(admin_cmd(pattern=f"snake$", outgoing=True))
