@@ -251,3 +251,40 @@ async def _(event):
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 11])		
+
+@borg.on(admin_cmd(pattern=f"squ",outgoing=True))
+async def _(event):
+    if event.fwd_from:
+        return
+
+
+    await event.edit("╔═══════════════════╗ \n  \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n \t░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ \t░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ \n╚═══════════════════╝") 
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1) 
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(1)
+    await event.edit("╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝")
+    await asyncio.sleep(6)		
