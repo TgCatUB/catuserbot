@@ -21,7 +21,7 @@ from userbot.utils import  errors_handler, admin_cmd
 
 @borg.on(admin_cmd(pattern="leave$"))
 async def leave(e):
-        await e.edit("`Legend is leaving this chat.....!` @admin `Goodbye aren't forever..` ")
+        await e.edit("`Legend is leaving this chat.....!Goodbye aren't forever..` ")
         time.sleep(3)
         if '-' in str(e.chat_id):
             await bot(LeaveChannelRequest(e.chat_id))
