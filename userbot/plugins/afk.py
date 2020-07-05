@@ -5,7 +5,6 @@ import datetime
 from datetime import datetime
 from telethon import events
 from telethon.tl import functions, types
-from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 
 
@@ -19,7 +18,8 @@ afk_time = None
 last_afk_message = {}
 afk_start = {}
 
-@borg.on(admin_cmd(pattern=r"afk ?(.*)"))  # pylint:disable=E0602
+
+@borg.on(events.NewMessage(pattern=r"\.afk ?(.*)", outgoing=True))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
@@ -58,7 +58,8 @@ async def _(event):
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             logger.warn(str(e))  # pylint:disable=E0602
-           
+
+
 @borg.on(events.NewMessage(outgoing=True))  # pylint:disable=E0602
 async def set_not_afk(event):
     global USER_AFK  # pylint:disable=E0602
@@ -91,7 +92,8 @@ async def set_not_afk(event):
         await shite.delete()
         USER_AFK = {}  # pylint:disable=E0602
         afk_time = None  # pylint:disable=E0602
-        
+
+
 @borg.on(events.NewMessage(  # pylint:disable=E0602
     incoming=True,
     func=lambda e: bool(e.mentioned or e.is_private)
@@ -147,7 +149,7 @@ async def on_afk(event):
         message_to_reply = f"__My Master Has Been In afk For__ `{total_afk_time}`\nWhere He Is: ONLY GOD KNOWS " + \
             f"\n\n__I promise He'll back in a few light years__\n**REASON**: {reason}" \
             if reason \
-            else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? Soon __Whenever I feel like it__**( ಠ ʖ̯ ಠ)**"
+            else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? Soon __Whenever I feel like it__\n\n`Important Notice`\n**THIS USER DEAD FOREVER...**"
         msg = await event.reply(message_to_reply)
         await asyncio.sleep(5)
         if event.chat_id in last_afk_message:  # pylint:disable=E0602
@@ -162,4 +164,4 @@ CMD_HELP.update({
 you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
 \n afk full form away from keyboard/keypad.\
 "
-})        
+})
