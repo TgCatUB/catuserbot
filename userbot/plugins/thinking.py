@@ -1,22 +1,17 @@
 """Emoji
-
 Available Commands:
-
 .think"""
-
 from telethon import events
-
 import asyncio
-
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern="think"))
+@borg.on(admin_cmd(pattern="thinking$"))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.01
     animation_ttl = range(0, 288)
-    await event.edit("think")
+    await event.edit("thinking..")
     animation_chars = [
             "THINKING",
             "THI&K#N₹",

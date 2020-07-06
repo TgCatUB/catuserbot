@@ -4,12 +4,22 @@ import random, re, asyncio
 from userbot import CMD_HELP
 from collections import deque
 
+@borg.on(admin_cmd(pattern="think$", outgoing=True))
+async def _(event):
+	if event.fwd_from:
+		return
+	deq = deque(list("🤔🧐🤔🧐🤔🧐"))
+	for _ in range(48):
+		await asyncio.sleep(0.1)
+		await event.edit("".join(deq))
+		deq.rotate(1)
+		
 @borg.on(admin_cmd(pattern=r"lmao$"))
 async def _(event):
 	if event.fwd_from:
 		return
 	deq = deque(list("😂🤣😂🤣😂🤣"))
-	for _ in range(999):
+	for _ in range(48):
 		await asyncio.sleep(0.1)
 		await event.edit("".join(deq))
 		deq.rotate(1)
@@ -20,7 +30,7 @@ async def _(event):
 	if event.fwd_from:
 		return
 	deq = deque(list("😁☹️😁☹️😁☹️😁"))
-	for _ in range(999):
+	for _ in range(48):
 		await asyncio.sleep(0.4)
 		await event.edit("".join(deq))
 		deq.rotate(1)
@@ -30,7 +40,7 @@ async def _(event):
 	    if event.fwd_from:
 		    return
 	    deq = deque(list("🕙🕘🕗🕖🕕🕔🕓🕒🕑🕐🕛"))
-	    for _ in range(32):
+	    for _ in range(48):
 		    await asyncio.sleep(0.1)
 		    await event.edit("".join(deq))
 		    deq.rotate(1)
@@ -50,7 +60,7 @@ async def _(event):
 	if event.fwd_from:
 		return
 	deq = deque(list("❤️🧡💛💚💙💜🖤"))
-	for _ in range(32):
+	for _ in range(48):
 		await asyncio.sleep(0.1)
 		await event.edit("".join(deq))
 		deq.rotate(1)        
@@ -81,7 +91,7 @@ async def _(event):
 	    if event.fwd_from:
 		    return
 	    deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
-	    for _ in range(32):
+	    for _ in range(48):
 		    await asyncio.sleep(0.1)
 		    await event.edit("".join(deq))
 		    deq.rotate(1)

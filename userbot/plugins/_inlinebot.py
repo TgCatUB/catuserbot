@@ -36,7 +36,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
-            reply_pop_up_alert = "Please get your own Userbot, and don't use mine!"
+            reply_pop_up_alert = "Please get your own catuserbot, and don't use mine! Join @catuserbot17 help"
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
 
@@ -55,39 +55,42 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
-            reply_pop_up_alert = "Please get your own Userbot, and don't use mine!"
+            reply_pop_up_alert = "Please get your own catuserbot, and don't use mine! Join @catuserbot17 help "
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
     @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"us_plugin_(.*)")
     ))
     async def on_plug_in_callback_query_handler(event):
-        plugin_name = event.data_match.group(1).decode("UTF-8")
-        help_string = ""
-        try:
-            for i in CMD_LIST[plugin_name]:
-                help_string += i
-                help_string += "\n"
-        except:
-            pass
-        if help_string == "":
-            reply_pop_up_alert = "{} is useless".format(plugin_name)
+        if event.query.user_id == bot.uid:
+            plugin_name = event.data_match.group(1).decode("UTF-8")
+            help_string = ""
+            try:
+                for i in CMD_LIST[plugin_name]:
+                    help_string += i
+                    help_string += "\n"
+            except:
+                pass
+            if help_string == "":
+                reply_pop_up_alert = "{} is useless".format(plugin_name)
+            else:
+                reply_pop_up_alert = help_string
+            reply_pop_up_alert += "\n Use .unload {} to remove this plugin\n\© catuserbot".format(plugin_name)
+            try:
+                await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+            except:
+                #https://github.com/Dark-Princ3/X-tra-Telegram/commit/275fd0ec26b284d042bf56de325472e088e6f364#diff-2b2df8998ff11b6c15893b2c8d5d6af3
+                with io.BytesIO(str.encode(reply_pop_up_alert)) as out_file:
+                    out_file.name = "{}.txt".format(plugin_name)
+                    await borg.send_file(
+                          event.chat_id,
+                          out_file,
+                          force_document=True,
+                          allow_cache=False,
+                          caption=plugin_name
+                          )
         else:
-            reply_pop_up_alert = help_string
-        reply_pop_up_alert += "\n Use .unload {} to remove this plugin\n\
-            © Userbot".format(plugin_name)
-        try:
-            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-        except: 
-            #https://github.com/Dark-Princ3/X-tra-Telegram/commit/275fd0ec26b284d042bf56de325472e088e6f364#diff-2b2df8998ff11b6c15893b2c8d5d6af3
-            with io.BytesIO(str.encode(reply_pop_up_alert)) as out_file:
-                out_file.name = "{}.txt".format(plugin_name)
-                await borg.send_file(
-                    event.chat_id,
-                    out_file,
-                    force_document=True,
-                    allow_cache=False,
-                    caption=plugin_name
-                )
+            reply_pop_up_alert = "Please get your own catuserbot, and don't use mine! Join @catuserbot17 help "
+            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)            
 
 def paginate_help(page_number, loaded_plugins, prefix):
     number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
