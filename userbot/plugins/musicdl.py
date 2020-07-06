@@ -1,5 +1,4 @@
 """ Spotify / Deezer downloader plugin by @anubisxx | Syntax: .sdd link"""
-""" Spotify / Deezer downloader plugin by @anubisxx | Syntax: .sdd link"""
 import datetime
 import asyncio
 from telethon import events
