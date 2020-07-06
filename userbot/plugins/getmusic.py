@@ -9,7 +9,17 @@ from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 import glob
 import os
-import instantmusic , subprocess    
+try:
+ import instantmusic , subprocess
+except:
+ os.system("pip install instantmusic")
+
+os.system("rm -rf *.mp3")
+
+
+def bruh(name):
+
+    os.system("instantmusic -q -s "+name)    
 
 @borg.on(admin_cmd(pattern="song(?: |$)(.*)"))
 async def _(event):
