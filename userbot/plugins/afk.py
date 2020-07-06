@@ -32,7 +32,7 @@ async def set_not_afk(event):
         total_afk_time = str((afk_end - afk_start))
     current_message = event.message.message
     if ".afk" not in current_message and "yes" in USER_AFK:  # pylint:disable=E0602
-        
+        shite = await borg.send_message(event.chat_id, "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`")
         try:
             await borg.send_message(  # pylint:disable=E0602
                 Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
@@ -46,8 +46,7 @@ async def set_not_afk(event):
                 "check pinned message in @catuserbot17.\n\n `{}`".format(str(e)),
                 reply_to=event.message.id,
                 silent=True
-            )
-        shite = await borg.send_message(event.chat_id, "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`")    
+            )          
         await asyncio.sleep(5)
         await shite.delete()
         USER_AFK = {}  # pylint:disable=E0602
