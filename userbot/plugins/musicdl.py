@@ -7,7 +7,7 @@ from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd("sdd ?(.*)"))
+@borg.on(admin_cmd(pattern="sdd ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
