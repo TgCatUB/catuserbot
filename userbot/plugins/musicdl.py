@@ -1,4 +1,5 @@
 """ Spotify / Deezer downloader plugin by @anubisxx | Syntax: .sdd link"""
+""" Spotify / Deezer downloader plugin by @anubisxx | Syntax: .sdd link"""
 import datetime
 import asyncio
 from telethon import events
@@ -7,7 +8,7 @@ from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern="sdd ?(.*)"))
+@borg.on(admin_cmd("sdd ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
