@@ -672,7 +672,7 @@ async def iqless(e):
 
 @borg.on(admin_cmd(pattern="ccry$"))
 async def cry(e):
-        await e.edit("(;´༎ຶД༎ຶ)")			  
+        await e.edit("(;´༎ຶД༎ຶ`)")			  
 
 @borg.on(admin_cmd(outgoing=True, pattern="clap(?: |$)(.*)"))
 async def claptext(event):
