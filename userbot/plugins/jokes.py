@@ -140,23 +140,12 @@ async def _(event):
     await event.delete()
     
 @borg.on(admin_cmd(pattern="lovestory"))
-
 async def _(event):
-
     if event.fwd_from:
-
         return
-
     animation_interval = 3
-
-    animation_ttl = range(0, 103)
-
-    #input_str = event.pattern_match.group(1)
-
-    #if input_str == "lovestory":
-
+    animation_ttl = range(0, 103)    
     await event.edit("Starting asf")
-
     animation_chars = [
 
             "1 ❤️ love story",
@@ -176,9 +165,7 @@ async def _(event):
         ]
 
     for i in animation_ttl:
-
         await asyncio.sleep(animation_interval)
-
         await event.edit(animation_chars[i % 103])
   
 @borg.on(admin_cmd(outgoing=True, pattern="bf"))
@@ -201,4 +188,11 @@ async def pressf(f):
         for line in F_LENGTHS:
             c = max(round(line / len(arg)), 1)
             out += (arg * c) + "\n"
-        await f.edit("`" + out + "`")  
+        await f.edit("`" + out + "`")
+        
+@borg.on(admin_cmd(pattern="session$"))
+async def _(event):
+    if event.fwd_from:
+        return
+    mentions = "**telethon.errors.rpcerrorlist.AuthKeyDuplicatedError: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetMessagesRequest)**"
+    await event.edit(mentions)        
