@@ -47,8 +47,3 @@ async def _(event):
             )
     os.system("rm -rf *.mp3")
     subprocess.check_output("rm -rf *.mp3",shell=True)
-            
-CMD_HELP.update({"getmusic":
-    "`.song` query or `.song` reply to song name :\
-    \nUSAGE:finds the song you entered in query and sends it"
-})
