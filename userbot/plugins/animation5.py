@@ -7,160 +7,121 @@ from userbot import CMD_HELP
 from collections import deque
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
-@borg.on(admin_cmd(pattern=f"load", outgoing=True))
+@borg.on(admin_cmd(pattern=f"loading$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.3
-    animation_ttl = range(0, 100)
-    input_str = event.pattern_match.group(1)
-    if input_str == "load":
-        await event.edit(input_str)
-        animation_chars = [
+    animation_ttl = range(0, 20)
+    animation_chars = [
             "▮",
             "▯",
             "▬",
-            "▭"
+            "▭",
             "‎"
         ]
-        for i in animation_ttl:
+    for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 4])
 
-
-from telethon import events
-import asyncio
-from userbot.utils import admin_cmd
-from userbot import ALIVE_NAME
-import random, re
-from userbot import CMD_HELP
-from collections import deque
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
-@borg.on(admin_cmd(pattern=f"square", outgoing=True))
+@borg.on(admin_cmd(pattern=f"square$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.3
-    animation_ttl = range(0, 100)
-    input_str = event.pattern_match.group(1)
-    if input_str == "square":
-        await event.edit(input_str)
-        animation_chars = [
+    animation_ttl = range(0, 20)
+    animation_chars = [
             "◧",
             "◨",
             "◧",
-            "◨"
+            "◨",
             "‎"
         ]
-        for i in animation_ttl:
+    for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 4])
 
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
-@borg.on(admin_cmd(pattern=f"up", outgoing=True))
+@borg.on(admin_cmd(pattern=f"up$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.3
-    animation_ttl = range(0, 100)
-    input_str = event.pattern_match.group(1)
-    if input_str == "up":
-        await event.edit(input_str)
-        animation_chars = [
+    animation_ttl = range(0, 20)
+    animation_chars = [
             "╹",
             "╻",
             "╹",
             "╻",
             "‎"
         ]
-        for i in animation_ttl:
+    for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 4])
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgong=True))
-@borg.on(admin_cmd(pattern=f"round", outgoing=True))
+            
+@borg.on(admin_cmd(pattern=f"round$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.3
-    animation_ttl = range(0, 100)
-    input_str = event.pattern_match.group(1)
-    if input_str == "round":
-        await event.edit(input_str)
-        animation_chars = [
+    animation_ttl = range(0, 20)
+    animation_chars = [
             "⚫",
             "⬤",
             "●",
-            "∘"
+            "∘",
             "‎"
         ]
-        for i in animation_ttl:
+    for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 4])
 
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgong=True))
-@borg.on(admin_cmd(pattern=f"haart", outgoing=True))
+@borg.on(admin_cmd(pattern=f"hart$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.5
-    animation_ttl = range(0, 100)
-    input_str = event.pattern_match.group(1)
-    if input_str == "haart":
-        await event.edit(input_str)
-        animation_chars = [
+    animation_ttl = range(0, 20)
+    animation_chars = [
             "🖤",
             "❤️",
             "🖤",
-            "❤️"
+            "❤️",
             "‎"
         ]
-        for i in animation_ttl:
+    for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 4])
 
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outging=True))
-@borg.on(admin_cmd(pattern=f"anim", outgoing=True))
+@borg.on(admin_cmd(pattern=f"anim$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(0, 11)
-    input_str = event.pattern_match.group(1)
-    if input_str == "anim":
-        await event.edit(input_str)
-        animation_chars = [
-            "😁",
-
-            "😧",
-
-            "😡",
-            "😢",
-            "‎**Repo of Jisan**",
+    animation_chars = [
             "😁",
             "😧",
             "😡",
             "😢",
-            "‎github.com/Jisan09/catuserbot",
+            "‎**Repo of catuserbot**",
+            "😁",
+            "😧",
+            "😡",
+            "😢",
+            "‎github.com/sandy1709/catuserbot",
             "__**Good to See you Guys....**__"
         ]
-        for i in animation_ttl:
+    for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 11])
             
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outoing=True))
-@borg.on(admin_cmd(pattern=f"fnl", outgoing=True))
+@borg.on(admin_cmd(pattern=f"fnl$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 2
     animation_ttl = range(0, 6)
-    input_str = event.pattern_match.group(1)
-    if input_str == "fnl":
-        await event.edit(input_str)
-        animation_chars = [
+    animation_chars = [
             "😁🏿",
             "😁🏾",
             "😁🏽",
@@ -168,20 +129,17 @@ async def _(event):
             "‎😁",
             "**Good to See you Guys....**"
         ]
-        for i in animation_ttl:
+    for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 6])
 
-@borg.on(admin_cmd(pattern=f"monkey", outgoing=True))
+@borg.on(admin_cmd(pattern=f"monkey$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 2
     animation_ttl = range(0, 6)
-    input_str = event.pattern_match.group(1)
-    if input_str == "monkey"
-        await event.edit(input_str)
-        animation_chars = [
+    animation_chars = [
             "🐵",
             "🙉",
             "🙈",
@@ -189,11 +147,11 @@ async def _(event):
             "🖕‎🐵🖕",
             "**Good to See you Guys....**"
         ]
-        for i in animation_ttl:
+    for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 6])
                      
-@borg.on(admin_cmd(pattern=f"herber", outgoing=True))
+@borg.on(admin_cmd(pattern=f"herber$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -211,7 +169,7 @@ async def _(event):
             "**===================**\n      **Server Details**  \n**===================**\n\n\n**=>>>   CPU   <<<=**\n\n    **🔹current_freq:** 2500.09MHz\n    **🔹total_usage:** 100%\n\n    ●●●●●●●●●●\n\n    **🔹cpu core**\n\n        **🔹core_usage:** 100.0%\n        **🔹current_freq:** 2500.09MHz\n        |██████████▉  |\n       \n**=>>>   RAM   <<<=**\n\n    **🔹free:** 5.25GB\n    **🔹used:** 31.14GB\n    **🔹total:** 60.0GB\n    \n    ●●●●●●●●●●\n\n\n**=>>>   DISK   <<<=**\n\n   **🔹free:** 224.12GB\n    **🔹used:** 131.84GB\n    **🔹total:** 375.02GB\n    **🔹usage:** 37.0%\n\n    |████▍        |\n\n\n**=>>>   NETWORK   <<<=**\n\n    **🔹sent:** 108.31GB\n    **🔹recv:** 167.17GB\n    **🔹sent_packets:** 84518799\n    **🔹recv_packets:** 124575356\n\n\n**===================**\n",
             "**===================**\n      **Server Details**  \n**===================**\n\n\n**=>>>   CPU   <<<=**\n\n    **🔹current_freq:** 2500.09MHz\n    **🔹total_usage:** 70%\n\n    ●●●●●●●○○○\n\n    **🔹cpu core**\n\n        **🔹core_usage:** 76.2%\n        **🔹current_freq:** 2500.09MHz\n        |██████████▉  |\n       \n**=>>>   RAM   <<<=**\n\n    **🔹free:** 8.01GB\n    **🔹used:** 33.27GB\n    **🔹total:** 60.0GB\n    \n    ●●●○○○○○○○\n\n\n**=>>>   DISK   <<<=**\n\n   **🔹free:** 224.12GB\n    **🔹used:** 131.84GB\n    **🔹total:** 375.02GB\n    **🔹usage:** 37.0%\n\n    |████▍        |\n\n\n**=>>>   NETWORK   <<<=**\n\n    **🔹sent:** 167.17GB\n    **🔹recv:** 158.98GB\n    **🔹sent_packets:** 36547698\n    **🔹recv_packets:** 165455856\n\n\n**===================**\n",
         ]
-        for i in animation_ttl:
+    for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 11])
 
