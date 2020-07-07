@@ -8,8 +8,7 @@ import asyncio
 from userbot.utils import admin_cmd , sudo_cmd
 import glob
 import os  
-from userbot import catdef
-
+from userbot import catdef, CMD_HELP
 @borg.on(admin_cmd(pattern="song(?: |$)(.*)"))
 async def _(event):
     
