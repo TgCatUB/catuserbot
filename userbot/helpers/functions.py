@@ -1,3 +1,6 @@
+import requests
+from bs4 import BeautifulSoup
+
 def get_readable_time(seconds: int) -> str:
     count = 0
     up_time = ""
