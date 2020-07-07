@@ -1,25 +1,42 @@
 """CC- @refundisillegal\nSyntax:-\n.get var NAME\n.del var NAME\n.set var NAME"""
 
+# Copyright (C) 2020 Adek Maulana.
+# All rights reserved.
+"""
+   Heroku manager for your userbot
+"""
+
 import heroku3
 import asyncio
 import os
 import requests
 import math
-from userbot import CMD_HELP
 from userbot.utils import admin_cmd
+from userbot import CMD_HELP
 from userbot.uniborgConfig import Config
+
 # ================= 
+
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
+Heroku = heroku3.from_key(Var.HEROKU_API_KEY)
 heroku_api = "https://api.heroku.com"
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME
 HEROKU_API_KEY = Config.HEROKU_API_KEY
 
-@borg.on(admin_cmd(pattern=r"(set|get|del) var ?(.*)", outgoing=True))
+Heroku = heroku3.from_key(Var.HEROKU_API_KEY)
+heroku_api = "https://api.heroku.com"
+
+
+@borg.on(admin_cmd(pattern="(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)", outgoing=True))
 async def variable(var):
-    if HEROKU_APP_NAME is not None:
-        app = Heroku.app(HEROKU_APP_NAME)
+    """
+        Manage most of ConfigVars setting, set new var, get current var,
+        or delete var...
+    """
+    if Var.HEROKU_APP_NAME is not None:
+        app = Heroku.app(Var.HEROKU_APP_NAME)
     else:
-        return await var.reply("`[HEROKU]:"
+        return await var.edit("`[HEROKU]:"
                               "\nPlease setup your` **HEROKU_APP_NAME**")
     exe = var.pattern_match.group(1)
     heroku_var = app.config()
@@ -29,10 +46,10 @@ async def variable(var):
         try:
             variable = var.pattern_match.group(2).split()[0]
             if variable in heroku_var:
-                return await var.reply("**ConfigVars**:"
-                                      f"\n\n**{variable}** = `{heroku_var[variable]}`\n")
+                return await var.edit("**ConfigVars**:"
+                                      f"\n\n`{variable} = {heroku_var[variable]}`\n")
             else:
-                return await var.reply("**ConfigVars**:"
+                return await var.edit("**ConfigVars**:"
                                       f"\n\n`Error:\n-> {variable} don't exists`")
         except IndexError:
             configs = prettyjson(heroku_var.to_dict(), indent=2)
@@ -57,48 +74,56 @@ async def variable(var):
             return
     elif exe == "set":
         await var.edit("`Setting information...`")
-        val = var.pattern_match.group(2).split()
-        try:
-            val[1]
-        except IndexError:
-            return await var.reply("`.set var <config name> <value>`")
+        variable = var.pattern_match.group(2)
+        if not variable:
+            return await var.edit(">`.set var <ConfigVars-name> <value>`")
+        value = var.pattern_match.group(3)
+        if not value:
+            variable = variable.split()[0]
+            try:
+                value = var.pattern_match.group(2).split()[1]
+            except IndexError:
+                return await var.edit(">`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1.5)
-        if val[0] in heroku_var:
-            await var.reply(f"**{val[0]}**  `successfully changed to`  **{val[1]}**")
+        if variable in heroku_var:
+            await var.edit(f"**{variable}**  `successfully changed to`  ->  **{value}**")
         else:
-            await var.reply(f"**{val[0]}**  `successfully added with value: **{val[1]}**")
-        heroku_var[val[0]] = val[1]
+            await var.edit(f"**{variable}**  `successfully added with value`  ->  **{value}**")
+        heroku_var[variable] = value
     elif exe == "del":
         await var.edit("`Getting information to deleting variable...`")
         try:
             variable = var.pattern_match.group(2).split()[0]
         except IndexError:
-            return await var.reply("`Please specify ConfigVars you want to delete`")
+            return await var.edit("`Please specify ConfigVars you want to delete`")
         await asyncio.sleep(1.5)
         if variable in heroku_var:
-            await var.reply(f"**{variable}**  `successfully deleted`")
+            await var.edit(f"**{variable}**  `successfully deleted`")
             del heroku_var[variable]
         else:
-            return await var.reply(f"**{variable}**  `is not exists`")
+            return await var.edit(f"**{variable}**  `is not exists`")
 
 
-@borg.on(admin_cmd(pattern="usage ?(.*)", outgoing=True))
-async def _(event):
-    await event.edit("`Processing...`")
+@borg.on(admin_cmd(pattern="usage(?: |$)", outgoing=True))
+async def dyno_usage(dyno):
+    """
+        Get your account Dyno Usage
+    """
+    await dyno.edit("`Processing...`")
     useragent = ('Mozilla/5.0 (Linux; Android 10; SM-G975F) '
                  'AppleWebKit/537.36 (KHTML, like Gecko) '
                  'Chrome/80.0.3987.149 Mobile Safari/537.36'
                  )
-    u_id = Heroku.account().id
+    user_id = Heroku.account().id
     headers = {
      'User-Agent': useragent,
-     'Authorization': f'Bearer {HEROKU_API_KEY}',
+     'Authorization': f'Bearer {Var.HEROKU_API_KEY}',
      'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
     }
-    path = "/accounts/" + u_id + "/actions/get-quota"
+    path = "/accounts/" + user_id + "/actions/get-quota"
     r = requests.get(heroku_api + path, headers=headers)
     if r.status_code != 200:
-        return await event.edit("`Error: something bad happened`\n\n"
+        return await dyno.edit("`Error: something bad happened`\n\n"
                                f">.`{r.reason}`\n")
     result = r.json()
     quota = result['account_quota']
@@ -126,11 +151,11 @@ async def _(event):
 
     await asyncio.sleep(1.5)
 
-    return await event.reply("**Dyno Usage**:\n\n"
-                           f" -> `Dyno usage for`  **{HEROKU_APP_NAME}**:\n"
+    return await dyno.edit("**Dyno Usage**:\n\n"
+                           f" -> `Dyno usage for`  **{Var.HEROKU_APP_NAME}**:\n"
                            f"     •  `{AppHours}`**h**  `{AppMinutes}`**m**  "
                            f"**|**  [`{AppPercentage}`**%**]"
-                           "\n"
+                           "\n\n"
                            " -> `Dyno hours quota remaining this month`:\n"
                            f"     •  `{hours}`**h**  `{minutes}`**m**  "
                            f"**|**  [`{percentage}`**%**]"
