@@ -241,7 +241,7 @@ async def _(event):
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 100])
 
-@borg.on(admin_cmd(pattern=r"isro"))
+@borg.on(admin_cmd(pattern=f"isro$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -324,7 +324,7 @@ async def _(event):
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 11])		
 
-@borg.on(admin_cmd(pattern=f"squ",outgoing=True))
+@borg.on(admin_cmd(pattern=f"squ$",outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
