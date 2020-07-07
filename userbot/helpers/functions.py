@@ -27,9 +27,8 @@ def get_readable_time(seconds: int) -> str:
 
 
 #for getmusic
-DEFAULT_AUDIO_QUALITY = '320K'
 
-def catmusic(cat):
+def catmusic(cat,DEFAULT_AUDIO_QUALITY):
   search = cat
 
   headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
@@ -42,6 +41,6 @@ def catmusic(cat):
         video_link = link.get('href') 
         break
      
-  cat =  'http://www.youtube.com/'+video_link
-  command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' +DEFAULT_AUDIO_QUALITY + ' ' +cat)	
+  video_link =  'http://www.youtube.com/'+video_link
+  command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' +DEFAULT_AUDIO_QUALITY + ' ' + video_link)	
   os.system(command)
