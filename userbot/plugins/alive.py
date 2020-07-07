@@ -20,20 +20,7 @@ async def amireallyalive(alive):
     if alive.reply_to_msg_id:
         reply_to_id = await alive.get_reply_message()
         
-    if PIC is none:
-        """ For .alive command, check if the bot is running.  """
-        await alive.edit("**MY BOT IS RUNNING SUCCESFULLY**\n\n"
-                         f"`☞Telethon version: {version.__version__}\n`"
-                         f"`☞Python: {python_version()}\n`"
-                         "`☞Bot was modified by:` sandeep\n"
-                         "`☞and created by :` snapdragon,anubis\n"
-                         "`☞Database Status: Databases functioning normally!\n\n`"
-                         "`☞Always with you, my master!\n`"
-                         f"`☞My peru owner`: [{DEFAULTUSER}](https://github.com/sandy1709/catuserbot)\n"
-                         "[Deploy Catuserbot Now](https://github.com/sandy1709/catuserbot)"
-                        )
-    
-    else:
+    if PIC:
          cat_caption  = "**MY BOT IS RUNNING SUCCESFULLY**\n\n"
          cat_caption += f"`☞Telethon version: {version.__version__}\n`"
          cat_caption += f"`☞Python: {python_version()}\n`"
@@ -45,6 +32,19 @@ async def amireallyalive(alive):
          cat_caption += "[Deploy Catuserbot Now](https://github.com/sandy1709/catuserbot)" 
          await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
          await alive.delete()
+    else:
+        """ For .alive command, check if the bot is running.  """
+        await alive.edit("**MY BOT IS RUNNING SUCCESFULLY**\n\n"
+                         f"`☞Telethon version: {version.__version__}\n`"
+                         f"`☞Python: {python_version()}\n`"
+                         "`☞Bot was modified by:` sandeep\n"
+                         "`☞and created by :` snapdragon,anubis\n"
+                         "`☞Database Status: Databases functioning normally!\n\n`"
+                         "`☞Always with you, my master!\n`"
+                         f"`☞My peru owner`: [{DEFAULTUSER}](https://github.com/sandy1709/catuserbot)\n"
+                         "[Deploy Catuserbot Now](https://github.com/sandy1709/catuserbot)"
+                        )
+         
 
 @borg.on(sudo_cmd(pattern="sudo", allow_sudo=True))
 async def _(event):
