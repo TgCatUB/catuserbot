@@ -34,7 +34,6 @@ async def amireallyalive(alive):
          await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption)
          await alive.delete()
     else:
-      """ For .alive command, check if the bot is running.  """
         await alive.edit("🚴‍♂️**MY BOT IS RUNNING SUCCESFULLY**\n\n"
                          f"⏳`Telethon Version:` **{version.__version__}**\n"
                          f"⏳`Python Version:` **{python_version()}**\n"
