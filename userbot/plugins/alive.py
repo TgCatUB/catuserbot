@@ -45,3 +45,7 @@ async def amireallyalive(alive):
                          f"⏳`Owner Name :` {DEFAULTUSER}\n\n"
                          "**[⚜️DEPLOY CATUSERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
                         )
+
+CMD_HELP.update({"alive": "`.alive` :\
+      \nUSAGE: Type .alive to see wether your bot is working or not. "
+})
