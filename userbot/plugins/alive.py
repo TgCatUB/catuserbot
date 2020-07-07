@@ -14,11 +14,11 @@ PIC = Config.ALIVE_PIC
 
 @borg.on(admin_cmd(outgoing=True, pattern="alive$"))
 async def amireallyalive(alive):
-    if event.fwd_from:
+    if alive.fwd_from:
         return
-    reply_to_id = event.message
+    reply_to_id = alive.message
     if event.reply_to_msg_id:
-        reply_to_id = await event.get_reply_message()
+        reply_to_id = await alive.get_reply_message()
         
     if PIC is none:
         """ For .alive command, check if the bot is running.  """
