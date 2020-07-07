@@ -164,6 +164,7 @@ for binary, path in binaries.items():
     os.chmod(path, 0o755)
     
 from userbot.helpers import fonts as fonts    
+from userbot.helpers import functions as catdef
 
 # Global Variables
 COUNT_MSG = 0
@@ -179,5 +180,3 @@ SUDO_LIST = {}
 CMD_HELP = {}
 INT_PLUG = ""
 LOAD_PLUG = {}
-
-
