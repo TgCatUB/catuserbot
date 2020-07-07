@@ -9,6 +9,8 @@ from userbot.utils import admin_cmd
 import glob
 import os  
 from userbot import catdef, CMD_HELP
+
+
 @borg.on(admin_cmd(pattern="song(?: |$)(.*)"))
 async def _(event):
     
@@ -41,3 +43,8 @@ async def _(event):
     await event.delete()
     os.system("rm -rf *.mp3")
     subprocess.check_output("rm -rf *.mp3",shell=True)
+
+CMD_HELP.update({"getmusic":
+    "`.song` query or `.song` reply to song name :\
+    \nUSAGE:finds the song you entered in query and sends it"
+})    
