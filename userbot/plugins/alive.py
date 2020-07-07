@@ -17,7 +17,7 @@ async def amireallyalive(alive):
     if alive.fwd_from:
         return
     reply_to_id = alive.message
-    if event.reply_to_msg_id:
+    if alive.reply_to_msg_id:
         reply_to_id = await alive.get_reply_message()
         
     if PIC is none:
