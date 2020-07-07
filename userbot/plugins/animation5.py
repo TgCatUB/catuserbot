@@ -110,8 +110,8 @@ async def _(event):
             "😧",
             "😡",
             "😢",
-            "‎github.com/sandy1709/catuserbot",
-            "__**Good to See you Guys....**__"
+            "[‎](github.com/sandy1709/catuserbot)",
+            "__**Good to See you guys....**__"
         ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
@@ -129,7 +129,7 @@ async def _(event):
             "😁🏽",
             "😁🏼",
             "‎😁",
-            "**Good to See you Guys....**"
+            "**Good to See you friend....**"
         ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
@@ -147,7 +147,7 @@ async def _(event):
             "🙈",
             "🙊",
             "🖕‎🐵🖕",
-            "**Good to See you Guys....**"
+            "**Good to See you friend....**"
         ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
