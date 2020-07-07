@@ -1,3 +1,5 @@
+#https://github.com/jisan009bot/catuserbot credits to @Jisan7509
+
 from telethon import events
 import asyncio
 from userbot.utils import admin_cmd
