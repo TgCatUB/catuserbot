@@ -28,7 +28,8 @@
     },
     "ALIVE_PIC": {
       "description": "put here any telegraph links for alive pic.",
-      "value": "https://telegra.ph/file/4117e39218991cdd7379f.jpg"
+      "value": "",
+      "required": false
     },
     "PMPERMIT_PIC": {
       "description": "put here any telegraph links for pmpermit custom pic.",
