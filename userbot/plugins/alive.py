@@ -42,8 +42,8 @@ async def amireallyalive(alive):
          cat_caption += "`☞Database Status: Databases functioning normally!\n\n`"
          cat_caption += "`☞Always with you, my master!\n`"
          cat_caption += f"`☞My peru owner`: [{DEFAULTUSER}](https://github.com/sandy1709/catuserbot)\n"
-         cat_caption += "[Deploy Catuserbot Now](https://github.com/sandy1709/catuserbot)"        
-         await reply_to_id.reply( cat_caption , file = CAT_IMG)
+         cat_caption += "[Deploy Catuserbot Now](https://github.com/sandy1709/catuserbot)" 
+         await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
          await alive.delete()
 
 @borg.on(sudo_cmd(pattern="sudo", allow_sudo=True))
