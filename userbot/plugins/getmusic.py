@@ -26,7 +26,7 @@ async def _(event):
     	await event.edit("`What I am Supposed to find `")
     	return
     
-    catdef.catmusic(str(query))
+    catdef.catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     loa = l[0]
     await event.edit("yeah..! i found something wi8..🥰")
@@ -58,7 +58,7 @@ async def _(event):
     	san = await event.reply("`What I am Supposed to find `")
     	return
     
-    catdef.catmusic(str(query))
+    catdef.catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     loa = l[0]
     await event.edit("yeah..! i found something wi8..🥰")
