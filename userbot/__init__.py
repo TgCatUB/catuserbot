@@ -26,7 +26,9 @@ else:
 """
 # PaperPlaneExtended Support Vars
 ENV = os.environ.get("ENV", False)
-""" PPE initialization. """
+"""
+#PPE initialization.
+"""
 
 # Bot Logs setup:
 if bool(ENV):
