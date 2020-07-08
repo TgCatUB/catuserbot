@@ -16,7 +16,7 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 from oauth2client import file, client, tools
 from userbot import (G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET,
-                     G_DRIVE_AUTH_TOKEN_DATA, GDRIVE_FOLDER_ID, BOTLOG_CHATID,
+                     G_DRIVE_AUTH_TOKEN_DATA, GDRIVE_FOLDER_ID,
                      TEMP_DOWNLOAD_DIRECTORY, CMD_HELP, LOGS)
 from userbot.utils import admin_cmd
 from mimetypes import guess_type
