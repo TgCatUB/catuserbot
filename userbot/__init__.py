@@ -8,15 +8,14 @@ from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
 from pySmartDL import SmartDL
 from dotenv import load_dotenv
-import asyncio
-from userbot.helpers import memeshelper as memes
-import pylast
-from pySmartDL import SmartDL
 from requests import get
 import time
-
+from userbot.helpers import fonts as fonts
+from userbot.helpers import functions as catdef
+from userbot.helpers import memeshelper as memes
 
 StartTime = time.time()
+catversion = 2.5.0
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -25,13 +24,9 @@ else:
     session_name = "startup"
     bot = TelegramClient(session_name, Var.APP_ID, Var.API_HASH)
 
-
-
-
 # PaperPlaneExtended Support Vars
 ENV = os.environ.get("ENV", False)
 """ PPE initialization. """
-
 
 # Bot Logs setup:
 if bool(ENV):
@@ -137,7 +132,7 @@ if bool(ENV):
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
     GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", None)
     TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY",
-                                         "./downloads")
+                                         "./DOWNLOADS/")
 else:
     # Put your ppe vars here if you are using local hosting
     PLACEHOLDER = None
@@ -158,9 +153,6 @@ for binary, path in binaries.items():
     downloader = SmartDL(binary, path, progress_bar=False)
     downloader.start()
     os.chmod(path, 0o755)
-
-from userbot.helpers import fonts as fonts
-from userbot.helpers import functions as catdef
 
 
 # Global Variables
