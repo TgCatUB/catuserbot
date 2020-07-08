@@ -1,9 +1,9 @@
 """Check if userbot alive or not . """
-import os
+import os, time
 import asyncio
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
-from userbot import ALIVE_NAME, CMD_HELP
+from userbot import ALIVE_NAME, CMD_HELP, catdef , catversion
 from userbot.utils import admin_cmd
 from telethon import version
 from platform import python_version, uname
@@ -25,8 +25,10 @@ async def amireallyalive(alive):
          cat_caption = "🚴‍♂️**MY BOT IS RUNNING SUCCESFULLY**\n\n"
          cat_caption += f"⏳`Telethon Version:` **{version.__version__}**\n"
          cat_caption += f"⏳`Python Version:` **{python_version()}**\n"
+         cat_caption += f"⏳`Catuserbot Version`: **{catversion}**\n"
+         cat_caption += f"⏳`Cat Uptime`: **{uptime}**\n"
          cat_caption += "⏳`Database Status :` Databases Functioning Normally!\n"
-         cat_caption += "💠**Always With You, My Masters!**\n"
+         cat_caption += "💠**Cat is Always With You, My Masters!**\n"
          cat_caption += "⏳`Modified by :` [✰Sᴀͥʀᴀͣᴛͫʜ™️✰](http://t.me/Sur_vivor)\n"
          cat_caption += "⏳`Created by :` Snapdragon, Anubis, Sandeep\n"
          cat_caption += f"⏳`Owner Name :` {DEFAULTUSER}\n\n"
@@ -37,8 +39,10 @@ async def amireallyalive(alive):
         await alive.edit("🚴‍♂️**MY BOT IS RUNNING SUCCESFULLY**\n\n"
                          f"⏳`Telethon Version:` **{version.__version__}**\n"
                          f"⏳`Python Version:` **{python_version()}**\n"
+                         f"⏳`Catuserbot Version`: **{catversion}**\n"
+                         f"⏳`Cat Uptime`: **{uptime}**\n"
                          "⏳`Database Status :` Databases Functioning Normally!\n"
-                         "💠**Always With You, My Masters!**\n"
+                         "💠**Cat is Always With You, My Masters!**\n"
                          "⏳`Modified by :` [✰Sᴀͥʀᴀͣᴛͫʜ™️✰](http://t.me/Sur_vivor)\n"
                          "⏳`Created by :` Snapdragon, Anubis, Sandeep\n"
                          f"⏳`Owner Name :` {DEFAULTUSER}\n\n"
