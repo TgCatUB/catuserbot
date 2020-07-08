@@ -22,7 +22,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot 
+from userbot import CMD_HELP, bot 
 from userbot.utils import  errors_handler, admin_cmd,sudo_cmd
 
 
