@@ -22,9 +22,8 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot 
-from userbot.utils import register, errors_handler
-from userbot.utils import admin_cmd
+from userbot import CMD_HELP, bot 
+from userbot.utils import register, errors_handler, admin_cmd
 from userbot.uniborgConfig import Config
 from telethon import events, errors, functions, types
 
