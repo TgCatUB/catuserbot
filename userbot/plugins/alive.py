@@ -2,7 +2,7 @@
 
 import asyncio
 from telethon import events
-from telethon.tl.types import ChannelParticipantsAdmins
+from userbot import StartTime , catdef
 from platform import uname
 from userbot import CMD_HELP, ALIVE_NAME 
 from userbot.utils import admin_cmd,sudo_cmd
@@ -23,26 +23,22 @@ async def amireallyalive(alive):
         
     if CAT_IMG:
          cat_caption  = "**MY BOT IS RUNNING SUCCESFULLY**\n\n"
-         cat_caption += f"`☞Telethon version: {version.__version__}\n`"
-         cat_caption += f"`☞Python: {python_version()}\n`"
-         cat_caption += "`☞Bot was modified by:` sandeep\n"
-         cat_caption += "`☞and created by :` snapdragon,anubis\n"
-         cat_caption += "`☞Database Status: Databases functioning normally!\n\n`"
-         cat_caption += "`☞Always with you, my master!\n`"
-         cat_caption += f"`☞My peru owner`: [{DEFAULTUSER}](https://github.com/sandy1709/catuserbot)\n"
+         cat_caption += "☞Database Status: Databases functioning normally!\n\n"   
+         cat_caption += f"**☞Telethon version:** `{version.__version__}\n`"
+         cat_caption += f"**☞Python Version:** `{python_version()}\n`"
+         cat_caption += "☞Always with you, my master!\n"
+         cat_caption += f"**☞My peru owner:** {DEFAULTUSER}\n"
          cat_caption += "[Deploy Catuserbot Now](https://github.com/sandy1709/catuserbot)" 
          await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
          await alive.delete()
     else:
         """ For .alive command, check if the bot is running.  """
         await alive.edit("**MY BOT IS RUNNING SUCCESFULLY**\n\n"
-                         f"`☞Telethon version: {version.__version__}\n`"
-                         f"`☞Python: {python_version()}\n`"
-                         "`☞Bot was modified by:` sandeep\n"
-                         "`☞and created by :` snapdragon,anubis\n"
-                         "`☞Database Status: Databases functioning normally!\n\n`"
-                         "`☞Always with you, my master!\n`"
-                         f"`☞My peru owner`: [{DEFAULTUSER}](https://github.com/sandy1709/catuserbot)\n"
+                         "☞Database Status: Databases functioning normally!\n\n" 
+                         f"**☞Telethon version:** `{version.__version__}\n`"
+                         f"**☞Python Version:** `{python_version()}\n`"
+                         "☞Always with you, my master!\n"
+                         f"**☞My peru owner:** {DEFAULTUSER}\n"
                          "[Deploy Catuserbot Now](https://github.com/sandy1709/catuserbot)"
                         )
          
@@ -51,7 +47,7 @@ async def amireallyalive(alive):
 async def _(event):
     if event.fwd_from:
         return
-    await event.reply("YOU ARE SUDO FOR THIS BOT \n\n"
+    await event.reply(" SUDO COMMANDS ARE WORKING PERFECTLY \n\n"
                      f"☞Telethon version: {version.__version__}\n"
                      f"☞Python: {python_version()}\n"
                      f"☞My peru owner: {DEFAULTUSER}\n"
