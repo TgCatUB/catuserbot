@@ -6,18 +6,13 @@ import os
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from userbot.utils import admin_cmd
-
-
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
-
-
 from datetime import datetime as dt
-
 from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
-
 from userbot import CMD_HELP, COUNTRY, TZ_NUMBER
+
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 LOCATION = Config.TZ
 
