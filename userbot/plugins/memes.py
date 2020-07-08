@@ -22,7 +22,7 @@ from telethon.tl.types import MessageEntityMentionName
 
 from cowpy import cow
 
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID 
+from userbot import CMD_HELP 
 from userbot.utils import register, admin_cmd
 from userbot import ALIVE_NAME
 
