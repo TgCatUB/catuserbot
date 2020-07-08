@@ -22,7 +22,7 @@ from telethon.tl.functions.channels import (EditAdminRequest,
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot 
+from userbot import CMD_HELP, bot 
 
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
