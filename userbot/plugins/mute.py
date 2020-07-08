@@ -4,7 +4,7 @@ from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
 import asyncio
 from uniborg.util import admin_cmd
 from telethon.tl.functions.users import GetFullUserRequest
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
+from userbot import CMD_HELP, bot
 from userbot.uniborgConfig import Config
 
 BOTLOG = True
