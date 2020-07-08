@@ -4,7 +4,6 @@ import time
 import asyncio
 from telethon import events
 from userbot import StartTime , catdef, catversion
-from telethon.tl.types import ChannelParticipantsAdmins
 from userbot import ALIVE_NAME, CMD_HELP
 from userbot.utils import admin_cmd
 from telethon import version
@@ -26,11 +25,11 @@ async def amireallyalive(alive):
 
     if CAT_IMG:
          cat_caption = "🚴‍♂️**MY BOT IS RUNNING SUCCESFULLY**\n\n"
+         cat_caption += "⏳`Database Status :` Databases Functioning Normally!\n"   
          cat_caption += f"⏳`Telethon Version:` **{version.__version__}**\n"
          cat_caption += f"⏳`Python Version:` **{python_version()}**\n"
-         cat_caption += f"⏳`Catuserbot Version`: **{catversion}**\n"
-         cat_caption += f"⏳`Cat Uptime`: **{uptime}**\n"
-         cat_caption += "⏳`Database Status :` Databases Functioning Normally!\n"
+         cat_caption += f"⏳`CatUserbot Version`: **{catversion}**\n"
+         cat_caption += f"⏳`Cat Uptime`: **{uptime}**\n"         
          cat_caption += "💠**Cat is Always With You, My Masters!**\n"
          cat_caption += "⏳`Modified by :` [✰Sᴀͥʀᴀͣᴛͫʜ™️✰](http://t.me/Sur_vivor)\n"
          cat_caption += "⏳`Created by :` Snapdragon, Anubis, Sandeep\n"
@@ -40,11 +39,11 @@ async def amireallyalive(alive):
          await alive.delete()
     else:
         await alive.edit("🚴‍♂️**MY BOT IS RUNNING SUCCESFULLY**\n\n"
+                         "⏳`Database Status :` Databases Functioning Normally!\n"
                          f"⏳`Telethon Version:` **{version.__version__}**\n"
                          f"⏳`Python Version:` **{python_version()}**\n"
                          f"⏳`Catuserbot Version`: **{catversion}**\n"
-                         f"⏳`Cat Uptime`: **{uptime}**\n"
-                         "⏳`Database Status :` Databases Functioning Normally!\n"
+                         f"⏳`Cat Uptime`: **{uptime}**\n"                        
                          "💠**Cat is Always With You, My Masters!**\n"
                          "⏳`Modified by :` [✰Sᴀͥʀᴀͣᴛͫʜ™️✰](http://t.me/Sur_vivor)\n"
                          "⏳`Created by :` Snapdragon, Anubis, Sandeep\n"
