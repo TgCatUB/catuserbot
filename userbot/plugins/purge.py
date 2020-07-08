@@ -6,14 +6,10 @@
 """ Userbot module for purging unneeded messages(usually spam or ot). """
 
 from asyncio import sleep
-
 from telethon.errors import rpcbaseerrors
-
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from userbot import CMD_HELP
 from userbot.utils import admin_cmd, errors_handler
-
 from userbot.uniborgConfig import Config
-
 
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
@@ -44,13 +40,13 @@ async def fastpurger(purg):
         await purg.client.delete_messages(chat, msgs)
     done = await purg.client.send_message(
         purg.chat_id,
-        "`Fast purge complete!\n`Purged " + str(count) + " messages.",
+        "Fast purge complete!\nPurged" + str(count) + " messages.",
     )
 
     if BOTLOG:
         await purg.client.send_message(
             BOTLOG_CHATID,
-            "Purge of " + str(count) + " messages done successfully.")
+            "#PURGE \nPurge of " + str(count) + " messages done successfully.")
     await sleep(2)
     await done.delete()
 
@@ -77,7 +73,7 @@ async def purgeme(delme):
     if BOTLOG:
         await delme.client.send_message(
             BOTLOG_CHATID,
-            "Purge of " + str(count) + " messages done successfully.")
+            "#PURGEME \nPurge of " + str(count) + " messages done successfully.")
     await sleep(2)
     i = 1
     await smsg.delete()
@@ -94,7 +90,7 @@ async def delete_it(delme):
             await delme.delete()
             if BOTLOG:
                 await delme.client.send_message(
-                    BOTLOG_CHATID, "Deletion of message was successful")
+                    BOTLOG_CHATID, "#DEL \nDeletion of message was successful")
         except rpcbaseerrors.BadRequestError:
             if BOTLOG:
                 await delme.client.send_message(
@@ -118,7 +114,7 @@ async def editer(edit):
         i = i + 1
     if BOTLOG:
         await edit.client.send_message(BOTLOG_CHATID,
-                                       "Edit query was executed successfully")
+                                       "#EDIT \nEdit query was executed successfully")
 
 
 CMD_HELP.update({
