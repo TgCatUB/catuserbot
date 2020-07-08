@@ -5,10 +5,8 @@ import io
 import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
-from userbot import ALIVE_NAME
+from userbot import ALIVE_NAME, CMD_HELP
 from userbot.utils import admin_cmd
-from userbot import CMD_HELP
-
 
 PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
 WARN_PIC = PMPERMIT_PIC  
