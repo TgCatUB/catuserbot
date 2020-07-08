@@ -14,6 +14,8 @@ from requests import get
 import time
 
 StartTime = time.time()
+catversion = "2.5.0"
+
 
 os.system("pip install --upgrade pip")
 if Var.STRING_SESSION:
