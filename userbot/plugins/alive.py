@@ -1,5 +1,6 @@
 """Check if userbot alive or not . """
 
+
 import asyncio , time
 from telethon import events
 from userbot import StartTime , catdef
@@ -37,13 +38,16 @@ async def amireallyalive(alive):
         await alive.edit(f"**MY BOT IS RUNNING SUCCESFULLY**\n\n"
                          "**Database Status: Databases functioning normally!\n**" 
                          f"☞Telethon version : `{version.__version__}\n`"
-						 f"☞Catuserbot Version : `{catversion}`\n"
+						             f"☞Catuserbot Version : `{catversion}`\n"
                          f"☞Python Version : `{python_version()}\n\n`"
                          "**cat🐱 is always with you, my master!\n**"
                          f"☞My peru Master: {DEFAULTUSER}\n"
                          f"☞uptime : `{uptime}\n`"
-                         f"**☞Click **[here](https://github.com/sandy1709/catuserbot) to deply catuserbot"
+                         f"☞**Click **[here](https://github.com/sandy1709/catuserbot) to deply catuserbot"
                         )         
+
+         
+
 
 @borg.on(sudo_cmd(pattern="sudo", allow_sudo=True))
 async def _(event):
