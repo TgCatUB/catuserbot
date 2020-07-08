@@ -37,11 +37,21 @@ async def _(event):
 		await event.edit("".join(deq))
 		deq.rotate(1)
 
-@borg.on(admin_cmd(pattern=r"clol"))
+@borg.on(admin_cmd(pattern=r"clol$"))
 async def _(event):
 	if event.fwd_from:
 		return
 	deq = deque(list("🤔🧐🤨🤔🧐🤨"))
+	for _ in range(48):
+		await asyncio.sleep(0.1)
+		await event.edit("".join(deq))
+		deq.rotate(1)		
+
+@borg.on(admin_cmd(pattern=r"odra$"))
+async def _(event):
+	if event.fwd_from:
+		return
+	deq = deque(list("🚶🏃🚶🏃🚶🏃🚶🏃"))
 	for _ in range(48):
 		await asyncio.sleep(0.1)
 		await event.edit("".join(deq))
