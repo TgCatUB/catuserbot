@@ -23,7 +23,7 @@ if Var.STRING_SESSION:
 else:
     session_name = "startup"
     bot = TelegramClient(session_name, Var.APP_ID, Var.API_HASH)
-
+"""
 # PaperPlaneExtended Support Vars
 ENV = os.environ.get("ENV", False)
 """ PPE initialization. """
@@ -135,7 +135,7 @@ if bool(ENV):
                                          "./DOWNLOADS/")
 else:
     # Put your ppe vars here if you are using local hosting
-    PLACEHOLDER = None
+    PLACEHOLDER = None """
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
 # and giving them correct perms to work properly.
