@@ -11,7 +11,7 @@ from os import remove
 from telethon import version
 from userbot import CMD_HELP, ALIVE_NAME
 from datetime import datetime
-from userbot import StartTime
+from userbot import StartTime, catdef
 import time
 from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import os
@@ -117,36 +117,10 @@ async def sysdetails(sysd):
 #uptime idea and credits was from @Sur_vivor
 @borg.on(admin_cmd(pattern="uptime$"))
 async def _(event):
-    uptime = get_readable_time((time.time() - StartTime))
+    uptime = catdef.get_readable_time((time.time() - StartTime))
     OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's Cat](tg://need_update_for_some_feature/) CPU UPTIME:**\n{uptime}"
     await event.edit(OUTPUT)            
 
-def get_readable_time(seconds: int) -> str:
-    count = 0
-    up_time = ""
-    time_list = []
-    time_suffix_list = ["s", "m", "h", "days"]
-
-    while count < 4:
-        count += 1
-        if count < 3:
-            remainder, result = divmod(seconds, 60)
-        else:
-            remainder, result = divmod(seconds, 24)
-        if seconds == 0 and remainder == 0:
-            break
-        time_list.append(int(result))
-        seconds = int(remainder)
-
-    for x in range(len(time_list)):
-        time_list[x] = str(time_list[x]) + time_suffix_list[x]
-    if len(time_list) == 4:
-        up_time += time_list.pop() + ", "
-
-    time_list.reverse()
-    up_time += ":".join(time_list)
-
-    return up_time
 
 CMD_HELP.update(
     {"sysdetails": 
