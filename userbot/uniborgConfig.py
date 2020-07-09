@@ -43,7 +43,7 @@ class Config(object):
     # Get a Free API Key from OCR.Space
     OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
     # Send .get_id in any group with all your administration bots (added)
-    G_BAN_LOGGER_GROUP = int(os.environ.get("G_BAN_LOGGER_GROUP", -100123456789))
+    G_BAN_LOGGER_GROUP = int(os.environ.get("G_BAN_LOGGER_GROUP", -100))
     # TG API limit. An album can have atmost 10 media!
     TG_GLOBAL_ALBUM_LIMIT = int(os.environ.get("TG_GLOBAL_ALBUM_LIMIT", 9))
     # Telegram BOT Token from @BotFather
@@ -121,10 +121,8 @@ class Config(object):
 
     
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
-    #
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
-    
-    #
+    # For transfer channel
     TELE_GRAM_2FA_CODE = os.environ.get("TELE_GRAM_2FA_CODE", None)
     #
     GROUP_REG_SED_EX_BOT_S = os.environ.get("GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot")
@@ -152,6 +150,9 @@ class Config(object):
     PM_LOGGR_BOT_API_ID = os.environ.get("PM_LOGGR_BOT_API_ID", None)
     if PM_LOGGR_BOT_API_ID:
         PM_LOGGR_BOT_API_ID = int(PM_LOGGR_BOT_API_ID)
+    #to work manager.py 
+    DUAL_LOG = os.environ.get("DUAL_LOG", False )
+
     # define the "types" that should be uplaoded as streamable
     TL_VID_STREAM_TYPES = ("MKV", "MP4", "WEBM")
     TL_MUS_STREAM_TYPES = ("MP3", "WAV", "FLAC")
@@ -186,7 +187,6 @@ class Production(Config):
 
 class Development(Config):
     LOGGER = True
-
 
 def is_mongo_alive():
     try:
