@@ -77,8 +77,7 @@ async def spammer(e):
             if e.is_private:
                 await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} messages of \n" +f"`{spam_message}`")
             else:
-                await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in {e.chat.title}(`{e.chat_id}`) chat  with {counter} messages of \n" +f"`{spam_message}`")
-					
+                await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in {e.chat.title}(`{e.chat_id}`) chat  with {counter} messages of \n" +f"`{spam_message}`")					
     else: 
         await e.edit("try again something went wrong or check `.info spam`")
 
@@ -91,10 +90,10 @@ async def tmeme(e):
     for letter in message:
         await e.respond(letter)
     if BOTLOG:
-        await e.client.send_message(
-            BOTLOG_CHATID, "#CSPAM\n"
-            "TSpam was executed successfully")
-
+            if e.is_private:
+                await e.client.send_message(BOTLOG_CHATID, "#CSPAM\n" +f"Letter Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with : `{message}`")
+            else:
+                await e.client.send_message(BOTLOG_CHATID, "#CSPAM\n" +f"Letter Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with : `{message}`")
 
 @borg.on(admin_cmd("wspam ?(.*)"))
 async def tmeme(e):
@@ -104,9 +103,11 @@ async def tmeme(e):
     for word in message:
         await e.respond(word)
     if BOTLOG:
-        await e.client.send_message(
-            BOTLOG_CHATID, "#WSPAM\n"
-            "WSpam was executed successfully")
+            if e.is_private:
+                await e.client.send_message(BOTLOG_CHATID, "#WSPAM\n" +f"Word Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with : `{message}`")
+            else:
+                await e.client.send_message(BOTLOG_CHATID, "#WSPAM\n" +f"Word Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with : `{message}`")
+
 
 @borg.on(admin_cmd("delayspam ?(.*)"))
 async def spammer(e):
@@ -120,24 +121,11 @@ async def spammer(e):
         await e.respond(spam_message)
         await sleep(spamDelay)
     if BOTLOG:
-        await e.client.send_message(
-            BOTLOG_CHATID, "#DelaySPAM\n"
-            "DelaySpam of was executed successfully")
+            if e.is_private:
+                await e.client.send_message(BOTLOG_CHATID, "#DELAYSPAM\n" +f"Delay Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {spamDelay}s Delay and {counter} times with : `{message}`")
+            else:
+                await e.client.send_message(BOTLOG_CHATID, "#DELAYCSPAM\n" +f"Delay Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {spamDelay}s Delay and {counter} times with: `{message}`")
 
-
-
-@borg.on(sudo_cmd("spam ?(.*)", allow_sudo="True"))
-async def spammer(e):
-    if e.fwd_from:
-        return
-    input_str = e.pattern_match.group(1)
-    counter = int(input_str.split(' ', 1)[0])
-    spam_message = str(input_str.split(' ', 1)[1])
-    await e.delete()
-    await asyncio.wait([e.respond(spam_message) for i in range(counter)])
-    if BOTLOG:
-        await e.client.send_message(BOTLOG_CHATID, "#SPAM\n"
-                                    f"Spam of  {counter}  was executed successfully")
         
         
 CMD_HELP.update({
