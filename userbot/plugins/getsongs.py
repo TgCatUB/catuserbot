@@ -80,7 +80,6 @@ async def _(event):
         width = metadata.get("width")
     if metadata.has("height"):
         height = metadata.get("height")
-    await event.edit("yeah..! i found something wi8..🥰")
     await borg.send_file(
                 event.chat_id,
                 loa,
