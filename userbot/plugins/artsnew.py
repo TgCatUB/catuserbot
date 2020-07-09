@@ -88,7 +88,7 @@ async def _(event):
         req_ascii = ascii[str(input_str)]
         await event.edit(req_ascii)
     except KeyError:
-        await event.edit("ASCII art not found!"    
+        await event.edit("ASCII art not found!")    
     
 @borg.on(admin_cmd(pattern=r"ded"))
 async def bluedevilded(ded):
