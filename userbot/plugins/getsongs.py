@@ -9,6 +9,9 @@ from userbot.utils import admin_cmd , sudo_cmd
 import glob
 import os  
 from userbot import catdef, CMD_HELP
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
+from telethon.tl.types import DocumentAttributeVideo
 
 @borg.on(admin_cmd(pattern="song(?: |$)(.*)"))
 async def _(event):
@@ -28,8 +31,11 @@ async def _(event):
     
     catdef.catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
-    loa = l[0]
-    await event.edit("yeah..! i found something wi8..🥰")
+    if l:
+        await event.edit("yeah..! i found something wi8..🥰")
+    else:
+        await event.edit(f"Sorry..! i can't find anything with `{query}`")
+    loa = l[0]    
     await borg.send_file(
                 event.chat_id,
                 loa,
@@ -55,12 +61,25 @@ async def _(event):
         query = reply.message
         await event.edit("wi8..! I am finding your videosong....")
     else:
-    	await event.edit("What I am Supposed to find")
-    	return
-    
-    catdef.catmusicvideo(str(query))
-    l = glob.glob("*.mkv")
-    loa = l[0]
+        await event.edit("What I am Supposed to find")
+        return
+    catdef.catmusicvideo(query)
+    l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
+    if l:
+        await event.edit("yeah..! i found something wi8..🥰")
+    else:
+        await event.edit(f"Sorry..! i can't find anything with `{query}`")
+    loa = l[0]  
+    metadata = extractMetadata(createParser(loa))
+    duration = 0
+    width = 0
+    height = 0
+    if metadata.has("duration"):
+        duration = metadata.get("duration").seconds
+    if metadata.has("width"):
+        width = metadata.get("width")
+    if metadata.has("height"):
+        height = metadata.get("height")
     await event.edit("yeah..! i found something wi8..🥰")
     await borg.send_file(
                 event.chat_id,
@@ -69,11 +88,19 @@ async def _(event):
                 allow_cache=False,
                 caption=query,
                 supports_streaming=True,
-                reply_to=reply_to_id
+                reply_to=reply_to_id,
+                attributes=[DocumentAttributeVideo(
+                                duration=duration,
+                                w=width,
+                                h=height,
+                                round_message=False,
+                                supports_streaming=True,
+                            )],
             )
     await event.delete()
     os.system("rm -rf *.mkv")
-    subprocess.check_output("rm -rf *.mkv",shell=True)
+    os.system("rm -rf *.mp4")
+    os.system("rm -rf *.webm")    
     
 @borg.on(sudo_cmd(pattern="song(?: |$)(.*)", allow_sudo = True))
 async def _(event):
@@ -92,8 +119,11 @@ async def _(event):
     	return
     catdef.catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
+    if l:
+        await event.edit("yeah..! i found something wi8..🥰")
+    else:
+        await event.edit(f"Sorry..! i can't find anything with `{query}`")
     loa = l[0]
-    await event.edit("yeah..! i found something wi8..🥰")
     await borg.send_file(
                 event.chat_id,
                 loa,
