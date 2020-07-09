@@ -81,6 +81,5 @@ CMD_HELP.update({
     "recognize":
     "`.recognize` reply this to any media file\
     \nUSAGE : Get information about an image using AWS Rekognition.\ 
-     Find out information including detected labels, faces. text and \
-     moderation tags." 
+    \nFind out information including detected labels, faces. text and moderation tags." 
 })
