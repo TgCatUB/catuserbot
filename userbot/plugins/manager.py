@@ -158,9 +158,6 @@ if Config.DUAL_LOG:
                 silent=True
             )
 
-
-
-
     async def do_log_pm_action(chat_id, event, message_text, message_media):
         the_message = ""
         the_message += "#LOG_PMs\n\n"
