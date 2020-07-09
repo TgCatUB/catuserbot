@@ -1,3 +1,4 @@
+#Pmpermit_pic by @Sur_vivor
 import os
 import time
 import asyncio
