@@ -23,7 +23,7 @@ async def _(event):
     if reply_message.sender.bot:
        await event.edit("Reply to actual users message.")
        return
-    cat = await event.edit("Processing this shit!")
+    cat = await event.edit("recognizeing this media")
     async with event.client.conversation(chat) as conv:
           try:     
               response = conv.wait_event(events.NewMessage(incoming=True,from_users=461083923))
@@ -36,11 +36,11 @@ async def _(event):
           if response.text.startswith("See next message."):
               response = conv.wait_event(events.NewMessage(incoming=True,from_users=461083923))
               response = await response
-              await event.client.send_message(event.chat_id, response.message, reply = event.reply_to_msg_id)
-              await cat.delete()
+              await event.edit(response.message)
+      
           else:
-              await event.client.send_message(event.chat_id, response.message, reply = event.reply_to_msg_id)
-              await cat.delete()
+              await event.edit(response.message)
+      
               
 @borg.on(sudo_cmd(pattern="recognize ?(.*)" ,allow_sudo = True ))
 async def _(event):
@@ -71,10 +71,10 @@ async def _(event):
           if response.text.startswith("See next message."):
               response = conv.wait_event(events.NewMessage(incoming=True,from_users=461083923))
               response = await response
-              await event.client.send_message(event.chat_id, response.message , reply = event.reply_to_msg_id)
+              await event.reply(response.message)
               await cat.delete()
           else:
-              await event.client.send_message(event.chat_id, response.message , reply = event.reply_to_msg_id) 
+              await event.reply(response.message) 
               await cat.delete()
 
 CMD_HELP.update({
