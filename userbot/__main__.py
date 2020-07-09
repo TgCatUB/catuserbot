@@ -10,11 +10,9 @@ from userbot import LOAD_PLUG, LOGS
 from pathlib import Path
 import asyncio
 import telethon.utils
-import heroku3
 
-
-async def add_bot():
-    ((await bot.start()) if os.environ.get("PHONE") is None else (await bot.start(phone=os.environ.get("PHONE"))))
+async def add_bot(bot_token):
+    await bot.start(bot_token)
     bot.me = await bot.get_me() 
     bot.uid = telethon.utils.get_peer_id(bot.me)
 
@@ -34,19 +32,10 @@ else:
         ).start(bot_token=Var.TG_BOT_TOKEN_BF_HER)
         print("Initialisation finished with no errors")
         print("Starting Userbot")
-        bot.loop.run_until_complete(add_bot())
-        if Var.HEROKU_APP_NAME and Var.HEROKU_API_KEY is not None:
-            Heroku = heroku3.from_key(Var.HEROKU_API_KEY)
-            app = Heroku.app(Var.HEROKU_APP_NAME)
-            heroku_var = app.config()
-            variable = "SUDO_USERS"
-            if variable in heroku_var:
-                del heroku_var[variable]
-            else:
-                print("All Good!")
+        bot.loop.run_until_complete(add_bot(Var.TG_BOT_USER_NAME_BF_HER))
         print("Startup Completed")
     else:
-        ((bot.start()) if os.environ.get("PHONE") is None else (bot.start(phone=os.environ.get("PHONE"))))
+        bot.start()
     
 
 import glob
