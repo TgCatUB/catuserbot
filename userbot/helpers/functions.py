@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from asyncio import sleep
 from random import choice
 from telethon import events
-from userbot import bot
+#from userbot import bot
 
 def get_readable_time(seconds: int) -> str:
     count = 0
