@@ -17,6 +17,8 @@ class Config(object):
     # some people upload their session files on GitHub or other third party hosting
     # websites, this might prevent the un-authorized use of the
     # confidential session files
+    ALIVE_PIC = os.environ.get("ALIVE_PIC", None)
+    PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
     HU_STRING_SESSION = os.environ.get("HU_STRING_SESSION", None)
     # Get your own APPID from https://api.openweathermap.org/data/2.5/weather
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
@@ -76,8 +78,8 @@ class Config(object):
     NO_LOAD = [
         "notification_mtab_manager",
         "dbhelper",
-        "fban_gban",    
-        "unbanmute",    
+        "fban_gban",
+        "unbanmute",
     ]
     # Get your own API key from https://www.remove.bg/ or
     # feel free to use http://telegram.dog/Remove_BGBot
@@ -90,10 +92,10 @@ class Config(object):
     DB_URI = os.environ.get("DATABASE_URL", None)
     # number of rows of buttons to be displayed in .help command
     NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD = int(os.environ.get("NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD", 7))
-    # number of rows of buttons to be displayed in .help command
+    # number of rows of buttons to be displayed in .helpme command
     NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD = int(os.environ.get("NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD", 3))
     #emoji to be displayed in .help
-    EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", "⚡️")
+    EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", "⚚")
     # specify command handler that should be used for the plugins
     # this should be a valid "regex" pattern
     COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", "\.")
@@ -114,16 +116,14 @@ class Config(object):
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
-  #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
-   # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
-   # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
+    #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
+    # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
+    # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
 
     
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
-    #
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
-    
-    #
+    # For transfer channel
     TELE_GRAM_2FA_CODE = os.environ.get("TELE_GRAM_2FA_CODE", None)
     #
     GROUP_REG_SED_EX_BOT_S = os.environ.get("GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot")
@@ -141,7 +141,7 @@ class Config(object):
     SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS",None)
     SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME",None)
     GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", None)
-    LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
+    LYDIA_API = os.environ.get("LYDIA_API", None)
     DEFAULT_NAME = os.environ.get("DEFAULT_NAME",None)
     VIRUSTOTAL_API_KEY = os.environ.get("VIRUSTOTAL_API_KEY", None)
     #
@@ -151,6 +151,9 @@ class Config(object):
     PM_LOGGR_BOT_API_ID = os.environ.get("PM_LOGGR_BOT_API_ID", None)
     if PM_LOGGR_BOT_API_ID:
         PM_LOGGR_BOT_API_ID = int(PM_LOGGR_BOT_API_ID)
+    #to work manager.py 
+    DUAL_LOG = os.environ.get("DUAL_LOG", False )
+
     # define the "types" that should be uplaoded as streamable
     TL_VID_STREAM_TYPES = ("MKV", "MP4", "WEBM")
     TL_MUS_STREAM_TYPES = ("MP3", "WAV", "FLAC")
@@ -185,7 +188,6 @@ class Production(Config):
 
 class Development(Config):
     LOGGER = True
-
 
 def is_mongo_alive():
     try:
