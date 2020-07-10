@@ -6,16 +6,14 @@ from shutil import which
 from telethon import events
 import asyncio
 from collections import deque
-from userbot.utils import admin_cmd, register
+from userbot.utils import admin_cmd
 from os import remove
 from telethon import version
-from userbot import CMD_HELP, ALIVE_NAME
-from datetime import datetime
-from userbot import StartTime, catdef
+from userbot import CMD_HELP, ALIVE_NAME, catdef, StartTime
+from datetime import datetime  
 import time
 from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import os
-
 
 # ================= CONSTANT =================
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
