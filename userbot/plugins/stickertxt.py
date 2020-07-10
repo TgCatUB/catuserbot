@@ -48,7 +48,7 @@ async def waifu(animu):
     except:
         pass   
     await animu.delete()
-    await waifutxt(text, animu.chat_id , reply_to_id)        
+    await catdef.waifutxt(text, animu.chat_id , reply_to_id)        
 # 12 21 28 30
 
 CMD_HELP.update({
