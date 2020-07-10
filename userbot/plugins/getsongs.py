@@ -21,10 +21,10 @@ async def _(event):
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
-        await event.edit("wi8..! I am finding your song....`")
+        await event.edit("wi8..! I am finding your song....")
     elif reply.message:
         query = reply.message
-        await event.edit("wi8..! I am finding your song....`")
+        await event.edit("wi8..! I am finding your song....")
     else:
     	await event.edit("`What I am Supposed to find `")
     	return
