@@ -8,7 +8,7 @@ import asyncio
 from userbot.utils import admin_cmd
 import glob
 import os  
-from userbot import CMD_HELP  , catdef
+from userbot import CMD_HELP, ALIVE_NAME, catdef
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
