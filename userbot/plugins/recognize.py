@@ -76,7 +76,7 @@ async def _(event):
               await event.reply(cat)
               await cat.delete()
           else:
-              await event.reply("sorry, I couldn't find it:) 
+              await event.reply("sorry, I couldn't find it") 
               await cat.delete()
 
 CMD_HELP.update({
