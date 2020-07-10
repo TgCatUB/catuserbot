@@ -59,16 +59,16 @@ async def _(event):
     if event.fwd_from:
         return
     start = datetime.now()
-    await event.edit("🏓Ping!")
+    await event.edit("🚀Ping!")
     end = datetime.now()
-    ms = (end - start).microseconds / 1000
+    ms = (end - start).microseconds / 100000
     uptime = catdef.get_readable_time((time.time() - StartTime))
-    await event.edit(f"🏓Pong!\nPing Speed: {ms}\nUserbot Uptime: {uptime}")
+    await event.edit(f"🚀Pong!\nPing Speed: {ms}\nUserbot Uptime: {uptime}")
         
 CMD_HELP.update({
     "ping":
     "`.fping`\
-    \nUSAGE:A kind ofping with extra animation\
+    \nUSAGE:A kind of ping with extra animation\
     \n\n`.ping`\
     \nUSAGE:Shows you the ping speed of server"
 })    
