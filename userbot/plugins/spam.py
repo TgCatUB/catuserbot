@@ -2,7 +2,7 @@ import time
 import asyncio
 from asyncio import wait, sleep
 from userbot import CMD_HELP
-from userbot.utils import admin_cmd,sudo_cmd
+from userbot.utils import admin_cmd
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest
 import os 
