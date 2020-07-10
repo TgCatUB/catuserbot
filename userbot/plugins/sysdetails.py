@@ -11,7 +11,7 @@ from os import remove
 from telethon import version
 from userbot import CMD_HELP, ALIVE_NAME
 from datetime import datetime
-from userbot import StartTime , catdef
+from userbot import StartTime 
 import time
 from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import os
