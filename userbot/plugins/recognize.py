@@ -36,10 +36,11 @@ async def _(event):
           if response.text.startswith("See next message."):
               response = conv.wait_event(events.NewMessage(incoming=True,from_users=461083923))
               response = await response
-              await event.edit(response.message)
+              cat = response.message.message
+              await event.edit(cat)
       
           else:
-              await event.edit(response.message)
+              await event.edit("sorry, I couldnt find it")
       
               
 @borg.on(sudo_cmd(pattern="recognize ?(.*)" ,allow_sudo = True ))
@@ -71,10 +72,11 @@ async def _(event):
           if response.text.startswith("See next message."):
               response = conv.wait_event(events.NewMessage(incoming=True,from_users=461083923))
               response = await response
-              await event.reply(response.message)
+              cat  = response.message.message
+              await event.reply(cat)
               await cat.delete()
           else:
-              await event.reply(response.message) 
+              await event.reply("sorry, I couldn't find it:) 
               await cat.delete()
 
 CMD_HELP.update({
