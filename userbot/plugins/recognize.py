@@ -36,13 +36,13 @@ async def _(event):
           if response.text.startswith("See next message."):
               response = conv.wait_event(events.NewMessage(incoming=True,from_users=461083923))
               response = await response
-              await event.edit(response.message)
+              cat = response.message.message
+              await event.edit(cat)
       
           else:
-              await event.edit(response.message)
+              await event.edit("sorry, I couldnt find it")
       
            
-
 CMD_HELP.update({
     "recognize":
     "`.recognize` reply this to any media file\
