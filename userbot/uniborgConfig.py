@@ -141,7 +141,7 @@ class Config(object):
     SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS",None)
     SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME",None)
     GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", None)
-    LYDIA_API = os.environ.get("LYDIA_API", None)
+    LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
     DEFAULT_NAME = os.environ.get("DEFAULT_NAME",None)
     VIRUSTOTAL_API_KEY = os.environ.get("VIRUSTOTAL_API_KEY", None)
     #
