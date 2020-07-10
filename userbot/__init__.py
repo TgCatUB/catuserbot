@@ -11,11 +11,11 @@ from dotenv import load_dotenv
 from requests import get
 import time
 from userbot.helpers import fonts as fonts
-from userbot.helpers import functions 
+from userbot.helpers import functions as catdef
 from userbot.helpers import memeshelper as memes
 
 StartTime = time.time()
-catversion = "2.5.0"
+catversion = "2.5.1"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
