@@ -28,7 +28,7 @@ async def waifu(animu):
     except:
         pass   
     await animu.delete()
-    await catdef.waifutxt(text, animu.chat_id , reply_to_id, bot)
+    await catdef.waifutxt(text, animu.chat_id , reply_to_id, bot, borg)
         
 @borg.on(sudo_cmd(allow_sudo = True, pattern="sttxt(?: |$)(.*)"))
 async def waifu(animu):
@@ -48,7 +48,7 @@ async def waifu(animu):
     except:
         pass   
     await animu.delete()
-    await catdef.waifutxt(text, animu.chat_id , reply_to_id, bot)        
+    await catdef.waifutxt(text, animu.chat_id , reply_to_id, bot, borg)        
 # 12 21 28 30
 
 CMD_HELP.update({
