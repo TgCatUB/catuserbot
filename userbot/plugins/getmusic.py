@@ -5,7 +5,7 @@ import subprocess
 from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import io
 import asyncio
-from userbot.utils import admin_cmd , sudo_cmd
+from userbot.utils import admin_cmd
 import glob
 import os  
 from userbot import CMD_HELP  , catdef
