@@ -1,15 +1,8 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
-
-#
-
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
-
 # you may not use this file except in compliance with the License.
 
-#
-
 """ Userbot module containing various scrapers. """
-
 import os
 import shutil
 from bs4 import BeautifulSoup
@@ -34,10 +27,11 @@ from googleapiclient.errors import HttpError
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS
 from emoji import get_emoji_regexp
-from userbot import CMD_HELP, CHROME_DRIVER, GOOGLE_CHROME_BIN
+from userbot import CMD_HELP, CHROME_DRIVER, GOOGLE_CHROME_BIN ,catdef
 from userbot.utils import admin_cmd
 CARBONLANG = "auto"
 LANG = "en"
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="carbon(?: |$)(.*)"))
 async def carbon_api(e):
@@ -51,6 +45,7 @@ async def carbon_api(e):
          pcode = str(pcode[8:])
    elif textx:
          pcode = str(textx.message) # Importing message to module
+   pcode = catdef.deEmojify(pcode)
    code = quote_plus(pcode) # Converting to urlencoded
    await e.edit("`Meking Carbon...\n25%`")
    url = CARBON.format(code=code, lang=CARBONLANG)
