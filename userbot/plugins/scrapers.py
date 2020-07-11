@@ -48,7 +48,7 @@ BOTLOG = True
 LANG = "en"
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="krb"))
+@borg.on(admin_cmd(outgoing=True, pattern="krb(?: |$)(.*)"))
 async def carbon_api(e):
    await e.edit("`Processing..`")
    CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
