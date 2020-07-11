@@ -52,8 +52,8 @@ async def carbon_api(e):
    global CARBONLANG
    textx = await e.get_reply_message()
    pcode = e.text
-   if pcode[8:]:
-         pcodee = str(pcode[8:])
+   if pcode[5:]:
+         pcodee = str(pcode[5:])
          if "|" in pcodee:
                pcode, skeme = pcodee.split("|")
          else:
