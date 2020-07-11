@@ -50,9 +50,6 @@ LANG = "en"
 
 @borg.on(admin_cmd(outgoing=True, pattern="krb"))
 async def carbon_api(e):
- if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
- 
-   """ A Wrapper for carbon.now.sh """
    await e.edit("`Processing..`")
    CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
    global CARBONLANG
@@ -68,6 +65,7 @@ async def carbon_api(e):
    elif textx:
          pcode = str(textx.message)
          skeme = None # Importing message to module
+   pcode = deEmojify(pcode)   
    code = quote_plus(pcode) # Converting to urlencoded
    await e.edit("`Meking Carbon...\n25%`")
    url = CARBON.format(code=code, lang=CARBONLANG)
@@ -87,9 +85,9 @@ async def carbon_api(e):
    driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
    params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_path}}
    command_result = driver.execute("send_command", params)
-   driver.find_element_by_xpath('/html/body/div[1]/main/div[2]/div[2]/div[1]/div[1]/div/span[2]').click()
+   driver.find_element_by_xpath('/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]').click()
    if skeme != None:
-         k_skeme = driver.find_element_by_xpath('/html/body/div[1]/main/div[2]/div[2]/div[1]/div[1]/div/span[2]/input')
+         k_skeme = driver.find_element_by_xpath('/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input')
          k_skeme.send_keys(skeme)
          k_skeme.send_keys(Keys.DOWN)
          k_skeme.send_keys(Keys.ENTER)
@@ -102,7 +100,7 @@ async def carbon_api(e):
    await e.edit("`Processing..\n75%`")
    # Waiting for downloading
    sleep(2.5)
-   color_name = driver.find_element_by_xpath('/html/body/div[1]/main/div[2]/div[2]/div[1]/div[1]/div/span[2]/input').get_attribute('value')
+   color_name = driver.find_element_by_xpath('/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input').get_attribute('value')
    await e.edit("`Done Dana Done...\n100%`")
    file = './carbon.png'
    await e.edit("`Uploading..`")
@@ -118,8 +116,6 @@ async def carbon_api(e):
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg
     
-
-
 @borg.on(admin_cmd(outgoing=True, pattern=r"wiki (.*)"))
 async def wiki(wiki_q):
     """ For .wiki command, fetch content from Wikipedia. """
