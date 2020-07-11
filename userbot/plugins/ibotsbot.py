@@ -134,7 +134,6 @@ async def _(event):
               if response.text.startswith("..."):
                   response = conv.wait_event(events.NewMessage(incoming=True,from_users=611085086))
                   response = await response
-                  await event.delete()
                   await reply_to_id.reply(response.message)
               else:
                   await event.reply("try again")
