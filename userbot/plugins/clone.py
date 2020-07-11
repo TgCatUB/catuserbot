@@ -81,9 +81,9 @@ async def _(event):
       reply_to=reply_message
       )
     if BOTLOG:
-        await event.client.send_message(BOTLOG_CHATID, f"#CLONED\nSuccesfulley cloned [{first_name}](tg://user?id={replied_user.id})")
+        await event.client.send_message(BOTLOG_CHATID, f"#CLONED\nSuccesfulley cloned [{first_name}](tg://user?id={user_id })")
     
-@borg.on(admin_cmd(pattern="revert ?(.*)"))
+@borg.on(admin_cmd(pattern="revert$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -93,6 +93,7 @@ async def _(event):
     await borg(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit= n)))    
     await borg(functions.account.UpdateProfileRequest(about=bio))
     await borg(functions.account.UpdateProfileRequest(first_name=name))
+    await event.edit("succesfully reverted to your account back")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, f"#REVERT\nSuccesfully reverted back to your profile")
     
