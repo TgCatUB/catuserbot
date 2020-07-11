@@ -89,7 +89,8 @@ async def _(event):
         return
     name = f"{DEFAULTUSER}"
     bio = f"{DEFAULTUSERBIO}"
-    await borg(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit="1")))    
+    n = 1
+    await borg(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit= n)))    
     await borg(functions.account.UpdateProfileRequest(about=bio))
     await borg(functions.account.UpdateProfileRequest(first_name=name))
     if BOTLOG:
