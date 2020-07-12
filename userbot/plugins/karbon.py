@@ -26,19 +26,18 @@ import shutil
 from PIL import Image, ImageDraw, ImageFont
 from userbot import ALIVE_NAME
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@borg.on(admin_cmd(pattern=f"kar1", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kar1(?: |$)(.*)", outgoing=True))
 async def carbon_api(e):
- if not e.text[0].isalpha() and e.text[0] not in ("/"):
    """ A Wrapper for carbon.now.sh """
    await e.edit("🔲🔲🔲🔲🔲")
    CARBON = 'https://carbon.now.sh/?bg=rgba(249%2C237%2C212%2C0)&t=synthwave-84&wt=none&l=application%2Fjson&ds=true&dsyoff=20px&dsblur=0px&wc=true&wa=true&pv=56px&ph=0px&ln=false&fl=1&fm=IBM%20Plex%20Mono&fs=14.5px&lh=153%25&si=false&es=4x&wm=false&code={code}'
    CARBONLANG = "en"
    textx = await e.get_reply_message()
    pcode = e.text
-   if pcode[8:]:
-         pcode = str(pcode[8:])
+   if pcode[6:]:
+         pcode = str(pcode[6:])
    elif textx:
          pcode = str(textx.message) # Importing message to module
    code = quote_plus(pcode) # Converting to urlencoded
@@ -85,17 +84,16 @@ async def carbon_api(e):
    await e.delete() # Deleting msg
 
    
-@borg.on(admin_cmd(pattern=f"kar2", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kar2(?: |$)(.*)", outgoing=True))
 async def carbon_api(e):
- if not e.text[0].isalpha() and e.text[0] not in ("/"):
    """ A Wrapper for carbon.now.sh """
    await e.edit("📛📛📛📛📛")
    CARBON = 'https://carbon.now.sh/?bg=rgba(239%2C40%2C44%2C1)&t=one-light&wt=none&l=application%2Ftypescript&ds=true&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Hack&fs=14px&lh=143%25&si=false&es=2x&wm=false&code={code}'
    CARBONLANG = "en"
    textx = await e.get_reply_message()
    pcode = e.text
-   if pcode[8:]:
-         pcode = str(pcode[8:])
+   if pcode[6:]:
+         pcode = str(pcode[6:])
    elif textx:
          pcode = str(textx.message) # Importing message to module
    code = quote_plus(pcode) # Converting to urlencoded
@@ -141,17 +139,16 @@ async def carbon_api(e):
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg
 
-@borg.on(admin_cmd(pattern=f"kar3", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kar3(?: |$)(.*)", outgoing=True))
 async def carbon_api(e):
- if not e.text[0].isalpha() and e.text[0] not in ("/"):
    """ A Wrapper for carbon.now.sh """
    await e.edit("🎛🎛🎛🎛🎛")
    CARBON = 'https://carbon.now.sh/?bg=rgba(74%2C144%2C226%2C1)&t=material&wt=none&l=auto&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Fira%20Code&fs=14px&lh=152%25&si=false&es=2x&wm=false&code={code}'
    CARBONLANG = "en"
    textx = await e.get_reply_message()
    pcode = e.text
-   if pcode[8:]:
-         pcode = str(pcode[8:])
+   if pcode[6:]:
+         pcode = str(pcode[6:])
    elif textx:
          pcode = str(textx.message) # Importing message to module
    code = quote_plus(pcode) # Converting to urlencoded
@@ -195,21 +192,18 @@ async def carbon_api(e):
 
    os.remove('./carbon.png')
    # Removing carbon.png after uploading
-   await e.delete() # Deleting msg
-
+   await e.delete() # Deleting msg 
    
-   
-@borg.on(admin_cmd(pattern=f"kar4", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kar4(?: |$)(.*)", outgoing=True))
 async def carbon_api(e):
- if not e.text[0].isalpha() and e.text[0] not in ("/"):
    """ A Wrapper for carbon.now.sh """
    await e.edit("🌚🌚🌚🌚🌚")
    CARBON = 'https://carbon.now.sh/?bg=rgba(29%2C40%2C104%2C1)&t=one-light&wt=none&l=application%2Ftypescript&ds=true&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Hack&fs=14px&lh=143%25&si=false&es=2x&wm=false&code={code}'
    CARBONLANG = "en"
    textx = await e.get_reply_message()
    pcode = e.text
-   if pcode[8:]:
-         pcode = str(pcode[8:])
+   if pcode[6:]:
+         pcode = str(pcode[6:])
    elif textx:
          pcode = str(textx.message) # Importing message to module
    code = quote_plus(pcode) # Converting to urlencoded
@@ -255,21 +249,20 @@ async def carbon_api(e):
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg
 
-@borg.on(admin_cmd(pattern=f"rgbk2", outgoing=True))
+@borg.on(admin_cmd(pattern=f"rgbk2(?: |$)(.*)", outgoing=True))
 async def carbon_api(e):
- RED = random.randint(0,256)
- GREEN = random.randint(0,256)
- BLUE = random.randint(0,256)
- OPC = random.random()
- if not e.text[0].isalpha() and e.text[0] not in ("/"):
+   RED = random.randint(0,256)
+   GREEN = random.randint(0,256)
+   BLUE = random.randint(0,256)
+   OPC = random.random()
    """ A Wrapper for carbon.now.sh """
    await e.edit("⬜⬜⬜⬜⬜")
    CARBON = 'https://carbon.now.sh/?bg=rgba({R}%2C{G}%2C{B}%2C{O})&t=material&wt=none&l=auto&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Fira%20Code&fs=14px&lh=152%25&si=false&es=2x&wm=false&code={code}'
    CARBONLANG = "en"
    textx = await e.get_reply_message()
    pcode = e.text
-   if pcode[8:]:
-         pcode = str(pcode[8:])
+   if pcode[7:]:
+         pcode = str(pcode[7:])
    elif textx:
          pcode = str(textx.message) # Importing message to module
    code = quote_plus(pcode) # Converting to urlencoded
@@ -314,12 +307,12 @@ async def carbon_api(e):
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg
    
-@borg.on(admin_cmd(pattern=f"kargb", outgoing=True))
+@borg.on(admin_cmd(pattern=f"kargb(?: |$)(.*)", outgoing=True))
 async def carbon_api(e):
- RED = random.randint(0,256)
- GREEN = random.randint(0,256)
- BLUE = random.randint(0,256)
- THEME= [         "3024-night",
+   RED = random.randint(0,256)
+   GREEN = random.randint(0,256)
+   BLUE = random.randint(0,256)
+   THEME= [         "3024-night",
                   "a11y-dark",
                   "blackboard",
                   "base16-dark",
@@ -348,21 +341,17 @@ async def carbon_api(e):
                   "vscode",
                   "yeti",
                   "zenburn",
-]
-
- CUNTHE = random.randint(0, len(THEME) - 1)
- The = THEME[CUNTHE]
-
-
- if not e.text[0].isalpha() and e.text[0] not in ("/"):
+   ]
+   CUNTHE = random.randint(0, len(THEME) - 1)
+   The = THEME[CUNTHE]
    """ A Wrapper for carbon.now.sh """
    await e.edit("⬜⬜⬜⬜⬜")
    CARBON = 'https://carbon.now.sh/?bg=rgba({R}%2C{G}%2C{B}%2C1)&t={T}&wt=none&l=auto&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Fira%20Code&fs=14px&lh=152%25&si=false&es=2x&wm=false&code={code}'
    CARBONLANG = "en"
    textx = await e.get_reply_message()
    pcode = e.text
-   if pcode[8:]:
-         pcode = str(pcode[8:])
+   if pcode[7:]:
+         pcode = str(pcode[7:])
    elif textx:
          pcode = str(textx.message) # Importing message to module
    code = quote_plus(pcode) # Converting to urlencoded
@@ -447,12 +436,9 @@ async def carbon_api(e):
                     "yeti",
                     "zenburn",
 ]
-
    CUNTHE = random.randint(0, len(THEME) - 1)
    The = THEME[CUNTHE]
-
-
-   if not e.text[0].isalpha() and e.text[0] not in ("/"):
+   if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
  
    #await e.edit("⬜⬜⬜⬜⬜")
      CARBON = 'https://carbon.now.sh/?bg=rgba({R}%2C{G}%2C{B}%2C1)&t={T}&wt=none&l=auto&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Fira%20Code&fs=14px&lh=152%25&si=false&es=2x&wm=false&code={code}'
@@ -474,21 +460,18 @@ async def carbon_api(e):
      chrome_options.add_argument('--disable-gpu')
      prefs = {'download.default_directory' : './'}
      chrome_options.add_experimental_option('prefs', prefs)
-
      driver = webdriver.Chrome(executable_path=Config.CHROME_DRIVER, options=chrome_options)
      driver.get(url)
      download_path = './'
      driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
      params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_path}}
      command_result = driver.execute("send_command", params)
-
      driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
      sleep(5) # this might take a bit.
      driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
      sleep(5)
      driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
      sleep(5) #Waiting for downloading
-
      file = './carbon.png'
      photo = Image.open(file)
      photo.save(kpp)
