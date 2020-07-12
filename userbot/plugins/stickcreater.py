@@ -9,7 +9,7 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import InputMessagesFilterDocument
 from userbot.utils import admin_cmd, sudo_cmd
-
+from userbot.plugins import deEmojify
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
 
 @borg.on(admin_cmd(pattern="stcr ?(?:(.*?) \| )?(.*)", outgoing=True))
@@ -35,6 +35,7 @@ async def sticklet(event):
     # delete the userbot command,
     # i don't know why this is required
     await event.delete()
+    sticktext = deEmojify(sticktext)
     # https://docs.python.org/3/library/textwrap.html#textwrap.wrap
     sticktext = textwrap.wrap(sticktext, width=10)
     # converts back the list to a string
