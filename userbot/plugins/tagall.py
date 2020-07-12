@@ -7,7 +7,7 @@ from telethon.tl.types import ChannelParticipantsAdmins
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd(pattern=r"tagall", outgoing=True))
+@borg.on(admin_cmd(pattern=r"tagall$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -18,7 +18,7 @@ async def _(event):
     await event.reply(mentions)
     await event.delete()
     
-@borg.on(admin_cmd(pattern="tag"))
+@borg.on(admin_cmd(pattern="tag$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -50,5 +50,4 @@ async def _(event):
     async for x in borg.iter_participants(chat, 100):
         mentions += f"[\u2063](tg://user?id={x.id})"
     await reply_to_id.reply(mentions)
-    await event.delete()    
-    
+    await event.delete()
