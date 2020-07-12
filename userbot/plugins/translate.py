@@ -25,7 +25,7 @@ async def _(event):
     else:
         await event.edit("`.tr LanguageCode` as reply to a message")
         return
-    text = emoji.demojize(text.strip())
+    text = deEmojify(text.strip())
     lan = lan.strip()
     translator = Translator()
     try:
