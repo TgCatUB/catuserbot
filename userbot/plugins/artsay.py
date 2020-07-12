@@ -109,7 +109,7 @@ D = ("⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n"
 
 
 @borg.on(admin_cmd(pattern="xthink (.*)"))
-async def kakashi(think):
+async def survivor(think):
     name = think.pattern_match.group(1)
     E = (f"**  ➥ {name} .\n\n**"
         "⠀⠀⠀⠀⢀⣀⣀⣀\n"
@@ -131,7 +131,7 @@ async def kakashi(think):
     
     
 @borg.on(admin_cmd(pattern="xdick (.*)"))
-async def kakashi(dicksay):
+async def survivor(dicksay):
     name = dicksay.pattern_match.group(1)
     F = (f"**  ➥ {name} .\n**"
         "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n"
@@ -155,7 +155,7 @@ async def kakashi(dicksay):
 
         
 @borg.on(admin_cmd(pattern="xfrog (.*)"))
-async def kakashi(frogsay):
+async def survivor(frogsay):
     name = frogsay.pattern_match.group(1)
     G = (f"**  ➥ {name} .\n\n**"
         "⠄⠄⠄⠄⠄⠄⣀⣀⣀⣤⣶⣿⣿⣶⣶⣶⣤⣄⣠⣴⣶⣿⣶⣦⣄⠄⠄\n"
@@ -177,7 +177,7 @@ async def kakashi(frogsay):
     
     
 @borg.on(admin_cmd(pattern="xputin (.*)"))
-async def kakashi(putinsay):
+async def survivor(putinsay):
     name = putinsay.pattern_match.group(1)
     H = (f"**𝑽𝒍𝒂𝒅𝒊𝒎𝒊𝒓 𝑷𝒖𝒕𝒊𝒏 ➥ {name} .\n\n**"
         "⣿⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n"
@@ -201,7 +201,7 @@ async def kakashi(putinsay):
 
 
 @borg.on(admin_cmd(pattern="xdead (.*)"))
-async def kakashi(deadfrog):
+async def survivor(deadfrog):
     name = deadfrog.pattern_match.group(1)
     I = (f"**𝑭𝒓𝒐𝒈𝒈𝒚 ➥ {name} .\n\n**"
         "⣿⣿⣿⡇⠄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n"
@@ -223,7 +223,7 @@ async def kakashi(deadfrog):
     
   
 @borg.on(admin_cmd(pattern="xtrump (.*)"))
-async def kakashi(trumpsay):
+async def survivor(trumpsay):
     name = trumpsay.pattern_match.group(1)
     J = (f"**𝑫𝒐𝒏𝒂𝒍𝒅 𝑻𝒓𝒖𝒎𝒑 ➥ {name} .\n\n**"
         "⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠋⠉⡉⣉⡛⣛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n"
@@ -245,7 +245,7 @@ async def kakashi(trumpsay):
 
 
 @borg.on(admin_cmd(pattern="xchina (.*)"))
-async def kakashi(ckmkb):
+async def survivor(ckmkb):
     name = ckmkb.pattern_match.group(1)
     K = (f"**🅲🅺🅼🅺🅱 ➥ {name} .\n\n**"
         "⣿⣿⣿⣿⣿⠟⠋⠄⠄⠄⠄⠄⠄⠄⢁⠈⢻⢿⣿⣿⣿⣿⣿⣿⣿\n"
@@ -268,17 +268,17 @@ async def kakashi(ckmkb):
  
  
 @borg.on(admin_cmd(pattern=r"xpika"))
-async def kakashi(pikachu):
+async def survivor(pikachu):
     await pikachu.edit(A)
     
 @borg.on(admin_cmd(pattern=r"xshit"))
-async def kakashi(shit):
+async def survivor(shit):
     await shit.edit(B)
     
 @borg.on(admin_cmd(pattern=r"xxx"))
-async def kakashi(saxy):
+async def survivor(saxy):
     await saxy.edit(C)
     
 @borg.on(admin_cmd(pattern=r"pornhub"))
-async def kakashi(pornhub):
+async def survivor(pornhub):
     await pornhub.edit(D)
