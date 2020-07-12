@@ -1,4 +1,4 @@
-
+#Added by @Sur_vivor
 import asyncio
 import random
 import re
@@ -270,3 +270,34 @@ async def _(event):
             await asyncio.sleep(animation_interval)
         
             await event.edit(animation_chars[i % 8])
+
+emojis = {
+    "yee": "ツ",
+    "happy": "(ʘ‿ʘ)",
+    "veryhappy": "=͟͟͞͞٩(๑☉ᴗ☉)੭ु⁾⁾",
+    "amazed": "ヾ(o✪‿✪o)ｼ",
+    "crying": "༎ຶ︵༎ຶ",
+    "dicc": "╰U╯☜(◉ɷ◉ )",
+    "fek": "╰U╯\n(‿ˠ‿)",
+    "ded": "✖‿✖",
+    "sad": "⊙︿⊙",
+    "lenny": "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)",
+    "idc": "¯\_(ツ)_/¯",
+    "f": "😂😂😂😂😂😂😂😂\n😂😂😂😂😂😂😂😂😂\n😂😂\n😂😂\n😂😂😂😂😂😂\n😂😂😂😂😂😂\n😂😂\n😂😂\n😂😂\n😂😂\n😂😂"
+}
+
+unpacked_emojis = ""
+
+for emoji in emojis:
+    unpacked_emojis += f"`{emoji}`\n"
+    
+@borg.on(admin_cmd(pattern="emoji ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    try:
+        req_emoji = emojis[str(input_str)]
+        await event.edit(req_emoji)
+    except KeyError:
+        await event.edit("Emoji not found!")    
