@@ -13,7 +13,6 @@ from telethon.utils import get_input_location
 from userbot.utils import admin_cmd
 from telethon.tl import functions
 from telethon import events
-from userbot.utils import admin_cmd
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,
                                           UsernameOccupiedError)
@@ -27,7 +26,7 @@ from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
 from userbot import bot, CMD_HELP , AUTONAME , DEFAULT_BIO , ALIVE_NAME
 
 DEFAULTUSER = str(AUTONAME) if AUTONAME else str(ALIVE_NAME)
-DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙ oıq ɹoɟ ɓuıʞuıɥʇ uɐɯ ʇıɐM"
+DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else "ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙ oıq ɹoɟ ɓuıʞuıɥʇ uɐɯ ʇıɐM"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
