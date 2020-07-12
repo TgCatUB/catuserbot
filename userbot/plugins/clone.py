@@ -1,7 +1,7 @@
 """Get Telegram Profile Picture and other information
 and set as own profile.
 Syntax: .clone @username"""
-#Copy That Plugin by @ViperAdnan
+#Copy That Plugin by @ViperAdnan and @mrconfused
 #Give credit if you are going to kang it.
 
 import html
@@ -12,7 +12,24 @@ from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 from userbot.utils import admin_cmd
 from telethon.tl import functions
+from telethon import events
+from userbot.utils import admin_cmd
+from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
+from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,
+                                          UsernameOccupiedError)
+from telethon.tl.functions.account import (UpdateProfileRequest,
+                                           UpdateUsernameRequest)
+from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
+from telethon.tl.functions.photos import (DeletePhotosRequest,
+                                          GetUserPhotosRequest,
+                                          UploadProfilePhotoRequest)
+from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
+from userbot import bot, CMD_HELP , AUTONAME , DEFAULT_BIO , ALIVE_NAME
 
+DEFAULTUSER = str(AUTONAME) if AUTONAME else ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤstr(ALIVENAME)
+DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙ oıq ɹoɟ ɓuıʞuıɥʇ uɐɯ ʇıɐM"
+BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+BOTLOG = True
 
 @borg.on(admin_cmd(pattern="clone ?(.*)"))
 async def _(event):
@@ -39,10 +56,6 @@ async def _(event):
         last_name = last_name.replace("\u2060", "")
     if last_name is None:
       last_name = "⁪⁬⁮⁮⁮⁮ ‌‌‌‌"
-    if user_id == 1118936839:
-        await event.edit("Sorry, can't clone my master")
-        await asyncio.sleep(3)
-        return
     # inspired by https://telegram.dog/afsaI181
     user_bio = replied_user.about
     if user_bio is not None:
@@ -61,21 +74,31 @@ async def _(event):
     await borg(functions.photos.UploadProfilePhotoRequest(  # pylint:disable=E0602
         pfile
     ))
-    #message_id_to_reply = event.message.reply_to_msg_id
-    #if not message_id_to_reply:
-    #    message_id_to_reply = event.message.id
-    #await borg.send_message(
-    #  event.chat_id,
-    #  "Hey ? Whats Up !",
-    #  reply_to=message_id_to_reply,
-    #  )
     await event.delete()
     await borg.send_message(
       event.chat_id,
       "**LET US BE AS ONE**",
       reply_to=reply_message
       )
-
+    if BOTLOG:
+        await event.client.send_message(BOTLOG_CHATID, f"#CLONED\nSuccesfulley cloned [{first_name}](tg://user?id={user_id })")
+    
+@borg.on(admin_cmd(pattern="revert$"))
+async def _(event):
+    if event.fwd_from:
+        return
+    name = f"{DEFAULTUSER}"
+    bio = f"{DEFAULTUSERBIO}"
+    n = 1
+    await borg(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit= n)))    
+    await borg(functions.account.UpdateProfileRequest(about=bio))
+    await borg(functions.account.UpdateProfileRequest(first_name=name))
+    await event.edit("succesfully reverted to your account back")
+    if BOTLOG:
+        await event.client.send_message(BOTLOG_CHATID, f"#REVERT\nSuccesfully reverted back to your profile")
+    
+    
+    
 async def get_full_user(event):
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
@@ -99,7 +122,7 @@ async def get_full_user(event):
             input_str = event.pattern_match.group(1)
         except IndexError as e:
             return None, e
-        if event.message.entities is not None:
+        if event.message.entities:
             mention_entity = event.message.entities
             probable_user_mention_entity = mention_entity[0]
             if isinstance(probable_user_mention_entity, MessageEntityMentionName):
