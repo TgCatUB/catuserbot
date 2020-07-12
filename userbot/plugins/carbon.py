@@ -27,7 +27,8 @@ from googleapiclient.errors import HttpError
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS
 from emoji import get_emoji_regexp
-from userbot import CMD_HELP, CHROME_DRIVER, GOOGLE_CHROME_BIN ,catdef
+from userbot import CMD_HELP, CHROME_DRIVER, GOOGLE_CHROME_BIN 
+from userbot.plugins import deEmojify
 from userbot.utils import admin_cmd
 CARBONLANG = "auto"
 LANG = "en"
@@ -45,7 +46,7 @@ async def carbon_api(e):
          pcode = str(pcode[8:])
    elif textx:
          pcode = str(textx.message) # Importing message to module
-   pcode = catdef.deEmojify(pcode)
+   pcode = deEmojify(pcode)
    code = quote_plus(pcode) # Converting to urlencoded
    await e.edit("`Meking Carbon...\n25%`")
    url = CARBON.format(code=code, lang=CARBONLANG)
