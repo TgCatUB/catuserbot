@@ -7,12 +7,8 @@ from random import choice, randint
 from collections import deque
 from telethon import events
 import requests
-
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
-
-
-from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 
 
@@ -300,4 +296,4 @@ async def _(event):
         req_emoji = emojis[str(input_str)]
         await event.edit(req_emoji)
     except KeyError:
-        await event.edit("Emoji not found!")    
+        await event.edit("Emoji not found!")
