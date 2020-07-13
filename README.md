@@ -9,7 +9,7 @@ Get APP ID and API HASH from [HERE](https://my.telegram.org) and also BOT TOKEN 
 
 [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-![catuserbot logo](https://telegra.ph/file/7e1e89621fabbf02596f8.jpg)
+[![catuserbot logo](https://telegra.ph/file/7e1e89621fabbf02596f8.jpg)](https://heroku.com/deploy)
 
 
 ### Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bugs
