@@ -21,7 +21,7 @@ gsearch
 gtts
 hachoir
 heroku3
-httplib2
+httplib2<0.16.0
 humanize
 jotquote
 justwatch
