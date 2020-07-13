@@ -28,7 +28,7 @@ async def waifu(animu):
         await event.client(cat)
     except:
         pass   
-    text = deEmojify.text
+    text = deEmojify(text)
     await animu.delete()
     await waifutxt(text, animu.chat_id , reply_to_id, bot, borg)
         
@@ -50,7 +50,7 @@ async def waifu(animu):
     except:
         pass   
     await animu.delete()
-    text = deEmojify.text
+    text = deEmojify(text)
     await waifutxt(text, animu.chat_id , reply_to_id, bot, borg)        
 # 12 21 28 30
 
