@@ -4,7 +4,7 @@
 # Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bugs
 ### The Easy Way
 ### CLICK BELOW IMAGE TO DEPLOY CATUSERBOT...
-[![Deploy To Heroku](https://telegra.ph/file/4117e39218991cdd7379f.jpg)](https://heroku.com/deploy)
+[![Deploy To Heroku](https://telegra.ph/file/7e1e89621fabbf02596f8.jpg)](https://heroku.com/deploy)
 
 ### Also you can deploy by clicking the button...
 [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
