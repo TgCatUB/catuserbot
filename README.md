@@ -3,7 +3,7 @@
 
 
 ### The Easy Way to deploy the bot
-Generate stringsession by running repl.run and then deploy in heroku
+Get APP ID and API HASH from [HERE](https://my.telegram.org) and also BOT TOKEN from [Bot Father](https://t.me/botfather) and then Generate stringsession by clicking on run.on.repl.it button below and then deploy in heroku 
 
 [![Get string session](https://repl.it/badge/github/sandy1709/sandeep1709)](https://generatestringsession.sandeep1709.repl.run/)
 
