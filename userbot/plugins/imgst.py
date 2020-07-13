@@ -1,6 +1,3 @@
-"""
-QuotLy: Avaible commands: .sbot
-"""
 import datetime
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -8,7 +5,7 @@ from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot.utils import admin_cmd , sudo_cmd
 from userbot import bot 
 
-@borg.on(admin_cmd(pattern="sbot ?(.*)"))
+@borg.on(admin_cmd(pattern="itos ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
@@ -36,7 +33,7 @@ async def _(event):
              await event.client.send_message(event.chat_id, response.message)
           await bot.send_read_acknowledge(conv.chat_id)
             
-@borg.on(admin_cmd(pattern="ibot ?(.*)"))
+@borg.on(admin_cmd(pattern="stoi ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
@@ -71,7 +68,7 @@ async def _(event):
                   await event.edit("try again")
           await bot.send_read_acknowledge(conv.chat_id)
         
-@borg.on(sudo_cmd(pattern="sbot ?(.*)" , allow_sudo = True))
+@borg.on(sudo_cmd(pattern="itos ?(.*)" , allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return 
@@ -100,7 +97,7 @@ async def _(event):
           await cat.delete()      
           await bot.send_read_acknowledge(conv.chat_id)
             
-@borg.on(sudo_cmd(pattern="ibot ?(.*)" , allow_sudo = True))
+@borg.on(sudo_cmd(pattern="stoi ?(.*)" , allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return  
