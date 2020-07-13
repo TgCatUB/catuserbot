@@ -19,7 +19,7 @@ async def amireallyalive(alive):
     if alive.fwd_from:
         return
     reply_to_id = alive.message
-    uptime = catdef.get_readable_time((time.time() - StartTime))
+    uptime = await catdef.get_readable_time((time.time() - StartTime))
     if alive.reply_to_msg_id:
         reply_to_id = await alive.get_reply_message()
     if CAT_IMG:
@@ -50,7 +50,7 @@ async def amireallyalive(alive):
 async def _(event):
     if event.fwd_from:
         return
-    uptime = catdef.get_readable_time((time.time() - StartTime))
+    uptime = await catdef.get_readable_time((time.time() - StartTime))
     await event.reply(" SUDO COMMANDS ARE WORKING PERFECTLY \n\n"
                      f"☞Telethon version: {version.__version__}\n"
                      f"☞Python: {python_version()}\n"
