@@ -10,7 +10,7 @@
 ![catuserbot logo](https://telegra.ph/file/7e1e89621fabbf02596f8.jpg)
 
 
-# Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bugs
+### Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bugs
 
 ### The Normal Way
 
