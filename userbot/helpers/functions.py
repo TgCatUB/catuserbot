@@ -5,6 +5,7 @@ from random import choice
 from telethon import events
 from emoji import get_emoji_regexp
 from PIL import Image
+from validators.url import url
 
 async def get_readable_time(seconds: int) -> str:
     count = 0
