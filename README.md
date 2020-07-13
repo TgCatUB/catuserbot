@@ -1,13 +1,16 @@
 
-# FORK AT YOUR OWN RISK
-# Installing
-# Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bugs
+# CAT USERBOT
+
+
 
 ### The Easy Way
 [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-### The Normal Way
 
+
+# Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bugs
+
+### The Normal Way
 
 An example `local_config.py` file could be:
 
