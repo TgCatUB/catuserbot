@@ -136,3 +136,16 @@ async def moditweet(text):
         img = Image.open("temp.png").convert("RGB")
         img.save("temp.jpg", "jpeg")    
         return "temp.jpg"     
+    
+async def tweets(text1,text2):
+        r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=tweet&text={text1}&username={text2}").json()
+        sandy = r.get("message")
+        caturl = url(sandy)
+        if not caturl:
+            return  "check syntax once more"
+        with open("temp.png", "wb") as f:
+            f.write(requests.get(sandy).content)
+        img = Image.open("temp.png").convert("RGB")
+        img.save("temp.jpg", "jpeg")    
+        return "temp.jpg"      
