@@ -57,5 +57,6 @@ sqlalchemy
 telegraph
 tswift
 urbandict
+validators
 wikipedia
 youtube-dl
