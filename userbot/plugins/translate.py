@@ -6,7 +6,7 @@ Available Commands:
 import emoji
 from googletrans import Translator
 from userbot.utils import admin_cmd
-
+from userbot.plugins import deEmojify
 
 @borg.on(admin_cmd(pattern="tl ?(.*)"))
 async def _(event):
@@ -25,7 +25,7 @@ async def _(event):
     else:
         await event.edit("`.tr LanguageCode` as reply to a message")
         return
-    text = emoji.demojize(text.strip())
+    text = deEmojify(text.strip())
     lan = lan.strip()
     translator = Translator()
     try:

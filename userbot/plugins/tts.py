@@ -9,7 +9,7 @@ import subprocess
 from datetime import datetime
 from gtts import gTTS
 from userbot.utils import admin_cmd
-
+from userbot.plugins import deEmojify
 
 @borg.on(admin_cmd(pattern="tts (.*)"))
 async def _(event):
@@ -26,7 +26,7 @@ async def _(event):
     else:
         await event.edit("Invalid Syntax. Module stopping.")
         return
-    text = text.strip()
+    text = deEmojify(text.strip())
     lan = lan.strip()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)

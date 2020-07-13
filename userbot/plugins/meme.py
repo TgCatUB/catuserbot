@@ -1,15 +1,24 @@
-"""
-Memes Plugin for Userbot
-usage = .meme someCharacter //default delay will be 3
-By : - @Zero_cool7870
-
-"""
-from telethon import events
 import asyncio
+from userbot.utils import admin_cmd
+from telethon import events
+from telethon.tl.types import ChannelParticipantsAdmins
 import os
 import sys
 
-from userbot.utils import admin_cmd
+@borg.on(admin_cmd(pattern="session$"))
+async def _(event):
+    if event.fwd_from:
+        return
+    mentions = "**telethon.errors.rpcerrorlist.AuthKeyDuplicatedError: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetMessagesRequest)**"
+    await event.edit(mentions)
+
+@borg.on(admin_cmd(pattern="ccry$"))
+async def cry(e):
+        await e.edit("(;´༎ຶД༎ຶ`)")
+
+@borg.on(admin_cmd(pattern="fp$"))
+async def facepalm(e):
+        await e.edit("🤦‍♂")
 
 @borg.on(admin_cmd(pattern=f"meme", outgoing=True))
 async def meme(event):
