@@ -1,5 +1,6 @@
 """
 By:- @Mrconfused & @sandy1709
+idea from userage
 """
 import asyncio , time 
 import os ,os.path
