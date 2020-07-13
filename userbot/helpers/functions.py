@@ -125,7 +125,7 @@ async def kannagen(text):
     
 async def moditweet(text):
         r = requests.get(
-            f"https://nekobot.xyz/api/imagegen?type=tweet&text={text1}&username=narendramodi").json()
+            f"https://nekobot.xyz/api/imagegen?type=tweet&text={text}&username=narendramodi").json()
         sandy = r.get("message")
         caturl = url(sandy)
         if not caturl:
