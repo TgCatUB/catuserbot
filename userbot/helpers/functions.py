@@ -4,8 +4,9 @@ from asyncio import sleep
 from random import choice
 from telethon import events
 from emoji import get_emoji_regexp
+from PIL import Image
 
-def get_readable_time(seconds: int) -> str:
+async def get_readable_time(seconds: int) -> str:
     count = 0
     up_time = ""
     time_list = []
@@ -35,7 +36,7 @@ def get_readable_time(seconds: int) -> str:
 
 #for getmusic
 
-def catmusic(cat,DEFAULT_AUDIO_QUALITY):
+async def catmusic(cat,DEFAULT_AUDIO_QUALITY):
   search = cat
   headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
   html = requests.get('https://www.youtube.com/results?search_query='+search, headers=headers).text
@@ -51,7 +52,7 @@ def catmusic(cat,DEFAULT_AUDIO_QUALITY):
 
 #for getmusicvideo
 
-def catmusicvideo(cat):
+async def catmusicvideo(cat):
     search = cat
     headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
     html = requests.get('https://www.youtube.com/results?search_query='+search, headers=headers).text
@@ -78,7 +79,59 @@ async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
         await borg.send_file(int(chat_id) , cat , reply_to = reply_to_id ) 
         await cat.delete()
 
-def deEmojify(inputString):
+async def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
     return get_emoji_regexp().sub(u'', inputString)
     
+# for nekobot
+async def trumptweet(text):
+        r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=trumptweet&text={text}").json()
+        sandy = r.get("message")
+        caturl = url(sandy)
+        if not caturl:
+            return  "check syntax once more"
+        with open("temp.png", "wb") as f:
+            f.write(requests.get(sandy).content)
+        img = Image.open("temp.png").convert("RGB")
+        img.save("temp.jpg", "jpeg")    
+        return "temp.jpg"
+
+async def changemymind(text):
+        r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=changemymind&text={text}").json()
+        sandy = r.get("message")
+        caturl = url(sandy)
+        if not caturl:
+            return  "check syntax once more"
+        with open("temp.png", "wb") as f:
+            f.write(requests.get(sandy).content)
+        img = Image.open("temp.png").convert("RGB")
+        img.save("temp.jpg", "jpeg")    
+        return "temp.jpg"
+    
+async def kannagen(text):
+        r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=kannagen&text={text}").json()
+        sandy = r.get("message")
+        caturl = url(sandy)
+        if not caturl:
+            return  "check syntax once more"
+        with open("temp.png", "wb") as f:
+            f.write(requests.get(sandy).content)
+        img = Image.open("temp.png").convert("RGB")
+        img.save("temp.jpg", "jpeg")    
+        return "temp.jpg"    
+    
+async def moditweet(text):
+        r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=tweet&text={text1}&username=narendramodi").json()
+        sandy = r.get("message")
+        caturl = url(sandy)
+        if not caturl:
+            return  "check syntax once more"
+        with open("temp.png", "wb") as f:
+            f.write(requests.get(sandy).content)
+        img = Image.open("temp.png").convert("RGB")
+        img.save("temp.jpg", "jpeg")    
+        return "temp.jpg"     
