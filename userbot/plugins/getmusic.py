@@ -8,7 +8,8 @@ import asyncio
 from userbot.utils import admin_cmd
 import glob
 import os  
-from userbot import CMD_HELP, ALIVE_NAME, catdef
+from userbot import CMD_HELP, ALIVE_NAME
+from userbot.plugins import catmusic , catmusicvideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
@@ -31,7 +32,7 @@ async def _(event):
     	await event.edit("`What I am Supposed to find `")
     	return
     
-    catdef.catmusic(str(query),"320k")
+    await catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
@@ -43,7 +44,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER},
                 reply_to=reply_to_id
             )
     await event.delete()
@@ -65,7 +66,7 @@ async def _(event):
     else:
         await event.edit("What I am Supposed to find")
         return
-    catdef.catmusicvideo(query)
+    await catmusicvideo(query)
     l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
@@ -87,7 +88,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER},
                 supports_streaming=True,
                 reply_to=reply_to_id,
                 attributes=[DocumentAttributeVideo(
@@ -101,7 +102,8 @@ async def _(event):
     await event.delete()
     os.system("rm -rf *.mkv")
     os.system("rm -rf *.mp4")
-    os.system("rm -rf *.webm")    
+    os.system("rm -rf *.webm")
+
 
 CMD_HELP.update({"getmusic":
     "`.song` query or `.song` reply to song name :\
