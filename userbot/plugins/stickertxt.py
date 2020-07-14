@@ -8,8 +8,9 @@ from random import choice
 import re
 from telethon import events
 from userbot import bot
-from userbot import CMD_HELP , catdef
-from userbot.utils import admin_cmd
+from userbot import CMD_HELP  
+from userbot.plugins import waifutxt , deEmojify
+from userbot.utils import admin_cmd , sudo_cmd
 import pybase64
 
 @borg.on(admin_cmd(outgoing=True, pattern="sttxt(?: |$)(.*)"))
@@ -29,8 +30,9 @@ async def waifu(animu):
         await event.client(cat)
     except:
         pass   
+    text = deEmojify(text)
     await animu.delete()
-    await catdef.waifutxt(text, animu.chat_id , reply_to_id, bot, borg)
+    await waifutxt(text, animu.chat_id , reply_to_id, bot, borg)
         
 CMD_HELP.update({
     'stickertxt':
