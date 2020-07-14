@@ -37,7 +37,7 @@ async def get_readable_time(seconds: int) -> str:
 
 #for getmusic
 
-async def catmusic(cat,DEFAULT_AUDIO_QUALITY):
+async def catmusic(cat , QUALITY):
   search = cat
   headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
   html = requests.get('https://www.youtube.com/results?search_query='+search, headers=headers).text
@@ -48,10 +48,9 @@ async def catmusic(cat,DEFAULT_AUDIO_QUALITY):
         video_link = link.get('href') 
         break
   video_link =  'http://www.youtube.com/'+video_link
-  command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' +DEFAULT_AUDIO_QUALITY + ' ' + video_link)	
+  command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)	
   os.system(command)
 
-#for getmusicvideo
 
 async def catmusicvideo(cat):
     search = cat
@@ -110,8 +109,8 @@ async def trumptweet(text):
         with open("temp.png", "wb") as f:
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
-        img.save("temp.jpg", "jpeg")    
-        return "temp.jpg"
+        img.save("temp.webp", "webp")    
+        return "temp.webp"
 
 async def changemymind(text):
         r = requests.get(
@@ -149,8 +148,8 @@ async def moditweet(text):
         with open("temp.png", "wb") as f:
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
-        img.save("temp.jpg", "jpeg")    
-        return "temp.jpg"     
+        img.save("temp.webp", "webp")    
+        return "temp.webp"     
     
 async def tweets(text1,text2):
         r = requests.get(
@@ -162,5 +161,5 @@ async def tweets(text1,text2):
         with open("temp.png", "wb") as f:
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
-        img.save("temp.jpg", "jpeg")    
-        return "temp.jpg"      
+        img.save("temp.webp", "webp")    
+        return "temp.webp"      
