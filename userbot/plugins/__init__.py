@@ -7,3 +7,5 @@ kannagen = catdef.kannagen
 moditweet = catdef.moditweet
 tweets = catdef.tweets
 waifutxt = catdef.waifutxt
+catmusic = catdef.catmusic 
+catmusicvideo = catdef.catmusicvideo
