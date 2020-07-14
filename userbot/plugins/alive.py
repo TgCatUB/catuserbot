@@ -32,7 +32,7 @@ async def amireallyalive(alive):
          cat_caption += f"⏳`Cat Uptime:` **{uptime}**\n\n"         
          cat_caption += f"**Cat is Always With You, My Masters!**\n"
          cat_caption += f"⏳`Owner Name:` {DEFAULTUSER}\n"   
-         cat_caption += f"⏳`Modified by:` **Sur_vivor**\n\n"         
+         cat_caption += f"⏳`Modified by:` [Sur_vivor](t.me/Sur_vivor)\n\n"         
          cat_caption += f"**[⚜️DEPLOY CATUSERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
          await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption)
          await alive.delete()
@@ -45,7 +45,7 @@ async def amireallyalive(alive):
                          f"⏳`Cat Uptime:` **{uptime}**\n\n"                        
                          "**Cat is Always With You, My Masters!**\n"                                                
                          f"⏳`Owner Name:` {DEFAULTUSER}\n"
-                         "⏳`Modified by:` **Sur_vivor**\n\n"
+                         "⏳`Modified by:` [Sur_vivor](t.me/Sur_vivor)\n\n"
                          f"**[⚜️DEPLOY CATUSERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
                         )
 
