@@ -115,7 +115,7 @@ async def sysdetails(sysd):
 #uptime idea and credits was from @Sur_vivor
 @borg.on(admin_cmd(pattern="uptime$"))
 async def _(event):
-    uptime = catdef.get_readable_time((time.time() - StartTime))
+    uptime = await catdef.get_readable_time((time.time() - StartTime))
     OUTPUT = f"**[Sᴜʀᴠɪᴠᴏʀ's Cat](tg://need_update_for_some_feature/) CPU UPTIME:**\n{uptime}"
     await event.edit(OUTPUT)            
 
