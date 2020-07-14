@@ -62,7 +62,7 @@ async def _(event):
     await event.edit("🚀Ping!")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
-    uptime = catdef.get_readable_time((time.time() - StartTime))
+    uptime = await catdef.get_readable_time((time.time() - StartTime))
     await event.edit(f"🚀Pong!\nPing Speed: {ms}\nUserbot Uptime: {uptime}")
         
 CMD_HELP.update({
