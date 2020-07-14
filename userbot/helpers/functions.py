@@ -110,8 +110,8 @@ async def trumptweet(text):
         with open("temp.png", "wb") as f:
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
-        img.save("temp.jpg", "jpeg")    
-        return "temp.jpg"
+        img.save("temp.webp", "webp")    
+        return "temp.webp"
 
 async def changemymind(text):
         r = requests.get(
@@ -149,8 +149,8 @@ async def moditweet(text):
         with open("temp.png", "wb") as f:
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
-        img.save("temp.jpg", "jpeg")    
-        return "temp.jpg"     
+        img.save("temp.webp", "webp")    
+        return "temp.webp"     
     
 async def tweets(text1,text2):
         r = requests.get(
@@ -162,5 +162,5 @@ async def tweets(text1,text2):
         with open("temp.png", "wb") as f:
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
-        img.save("temp.jpg", "jpeg")    
-        return "temp.jpg"      
+        img.save("temp.webp", "webp")    
+        return "temp.webp"      
