@@ -51,11 +51,11 @@ async def sticklet(event):
     width, height = draw.multiline_textsize(sticktext, font=font)
     draw.multiline_text(((512-width)/2,(512-height)/2), sticktext, font=font, fill=(R, G, B))
     image_stream = io.BytesIO()
-    image_stream.name = "@mrconfused.webp"
+    image_stream.name = "@Sur_vivor.webp"
     image.save(image_stream, "WebP")
     image_stream.seek(0)
     # finally, reply the sticker
-    await event.client.send_file(event.chat_id, image_stream, caption="cat's Sticklet", reply_to=event.message.reply_to_msg_id)
+    await event.client.send_file(event.chat_id, image_stream, caption="Cat's Sticklet", reply_to=event.message.reply_to_msg_id)
     # cleanup
     try:
         os.remove(FONT_FILE)
