@@ -19,7 +19,7 @@ async def amireallyalive(alive):
     if alive.fwd_from:
         return
     reply_to_id = alive.message
-    uptime = catdef.get_readable_time((time.time() - StartTime))
+    uptime = await catdef.get_readable_time((time.time() - StartTime))
     if alive.reply_to_msg_id:
         reply_to_id = await alive.get_reply_message()
 
