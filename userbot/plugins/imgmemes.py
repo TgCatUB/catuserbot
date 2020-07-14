@@ -7,6 +7,7 @@ from userbot.utils import admin_cmd
 @borg.on(admin_cmd(outgoing=True, pattern="trump(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
+    text =  re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -34,6 +35,7 @@ async def nekobot(cat):
 @borg.on(admin_cmd(outgoing=True, pattern="modi(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
+    text =  re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -61,6 +63,7 @@ async def nekobot(cat):
 @borg.on(admin_cmd(outgoing=True, pattern="cmm(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
+    text =  re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -88,6 +91,7 @@ async def nekobot(cat):
 @borg.on(admin_cmd(outgoing=True, pattern="kanna(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
+    text =  re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -115,6 +119,7 @@ async def nekobot(cat):
 @borg.on(admin_cmd(outgoing=True, pattern="tweet(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
+    text =  re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
