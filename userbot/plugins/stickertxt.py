@@ -10,7 +10,7 @@ from telethon import events
 from userbot import bot
 from userbot import CMD_HELP  
 from userbot.plugins import waifutxt , deEmojify
-from userbot.utils import admin_cmd , sudo_cmd
+from userbot.utils import admin_cmd
 import pybase64
 
 @borg.on(admin_cmd(outgoing=True, pattern="sttxt(?: |$)(.*)"))
