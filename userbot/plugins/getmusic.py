@@ -44,7 +44,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER},
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
                 reply_to=reply_to_id
             )
     await event.delete()
@@ -88,7 +88,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER},
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
                 supports_streaming=True,
                 reply_to=reply_to_id,
                 attributes=[DocumentAttributeVideo(
