@@ -8,7 +8,8 @@ import asyncio
 from userbot.utils import admin_cmd , sudo_cmd
 import glob
 import os  
-from userbot import CMD_HELP  , catdef
+from userbot import CMD_HELP
+from userbot.plugins import catmusic , catmusicvideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
@@ -29,7 +30,7 @@ async def _(event):
     	await event.edit("`What I am Supposed to find `")
     	return
     
-    catdef.catmusic(str(query),"320k")
+    await catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
@@ -63,7 +64,7 @@ async def _(event):
     else:
         await event.edit("What I am Supposed to find")
         return
-    catdef.catmusicvideo(query)
+    await catmusicvideo(query)
     l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
@@ -116,7 +117,7 @@ async def _(event):
     else:
     	san = await event.reply("`What I am Supposed to find `")
     	return
-    catdef.catmusic(str(query),"320k")
+    await catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
