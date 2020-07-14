@@ -13,7 +13,6 @@ from telethon.utils import get_input_location
 from userbot.utils import admin_cmd
 from telethon.tl import functions
 from telethon import events
-from userbot.utils import admin_cmd
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,
                                           UsernameOccupiedError)
@@ -122,7 +121,7 @@ async def get_full_user(event):
             input_str = event.pattern_match.group(1)
         except IndexError as e:
             return None, e
-        if event.message.entities is not None:
+        if event.message.entities:
             mention_entity = event.message.entities
             probable_user_mention_entity = mention_entity[0]
             if isinstance(probable_user_mention_entity, MessageEntityMentionName):
