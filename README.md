@@ -1,8 +1,12 @@
 
 # ⚠️FORK AT YOUR OWN RISK
-# Installing
-# Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bugs
-### The Easy Way
+# CAT USERBOT
+
+### The Easy Way to deploy the bot
+Get APP ID and API HASH from [HERE](https://my.telegram.org) and BOT TOKEN from [Bot Father](https://t.me/botfather) and then Generate stringsession by clicking on run.on.repl.it button below and then click on deploy to heroku
+
+### Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bug
+
 ### CLICK BELOW IMAGE TO DEPLOY CATUSERBOT...
 [![Deploy To Heroku](https://telegra.ph/file/7e1e89621fabbf02596f8.jpg)](https://heroku.com/deploy)
 
