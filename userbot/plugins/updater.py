@@ -19,6 +19,7 @@ from userbot.utils import admin_cmd
 from contextlib import suppress
 import os
 
+
 # -- Constants -- #
 IS_SELECTED_DIFFERENT_BRANCH = (
     f"looks like a custom branch {branch_name} "
@@ -47,7 +48,20 @@ HEROKU_GIT_REF_SPEC = "HEAD:refs/heads/master"
 RESTARTING_APP = "re-starting heroku application"
 # -- Constants End -- #
 
+async def generate_change_log(git_repo, diff_marker):
+    out_put_str = ""
+    d_form = "%d/%m/%y"
+    for repo_change in git_repo.iter_commits(diff_marker):
+        out_put_str += f"•[{repo_change.committed_datetime.strftime(d_form)}]: {repo_change.summary} <{repo_change.author}>\n"
+    return out_put_str
 
+async def deploy_start(tgbot, message, refspec, remote):
+    await message.edit(RESTARTING_APP)
+    await message.edit("Updating and Deploying New Branch. Please wait for 5 minutes then use `.alive` to check if i'm working or not.")
+    await  remote.push(refspec="HEAD:refs/heads/master", force=True)
+    await tgbot.disconnect()
+    os.execl(sys.executable, sys.executable, *sys.argv)
+    
 @borg.on(admin_cmd(pattern="update ?(.*)", outgoing=True))
 async def updater(message):
     try:
@@ -73,7 +87,7 @@ async def updater(message):
         pass
     temp_upstream_remote = repo.remote(REPO_REMOTE_NAME)
     temp_upstream_remote.fetch(active_branch_name)
-    changelog = generate_change_log(
+    changelog = await generate_change_log(
         repo,
         DIFF_MARKER.format(
             remote_name=REPO_REMOTE_NAME,
@@ -136,18 +150,3 @@ async def updater(message):
             await message.edit(NO_HEROKU_APP_CFGD)
     else:
         await message.edit("No heroku api key found in `HEROKU_API_KEY` var")
-        
-
-def generate_change_log(git_repo, diff_marker):
-    out_put_str = ""
-    d_form = "%d/%m/%y"
-    for repo_change in git_repo.iter_commits(diff_marker):
-        out_put_str += f"•[{repo_change.committed_datetime.strftime(d_form)}]: {repo_change.summary} <{repo_change.author}>\n"
-    return out_put_str
-
-async def deploy_start(tgbot, message, refspec, remote):
-    await message.edit(RESTARTING_APP)
-    await message.edit("Updating and Deploying New Branch. Please wait for 5 minutes then use `.alive` to check if i'm working or not.")
-    await  remote.push(refspec="HEAD:refs/heads/master", force=True)
-    await tgbot.disconnect()
-    os.execl(sys.executable, sys.executable, *sys.argv)
