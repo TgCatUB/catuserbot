@@ -104,15 +104,3 @@ async def _(event):
               return
           await event.delete()
           await borg.send_file(event.chat_id, response.message.media)
-
-@borg.on(admin_cmd(pattern="connecter ?(.*)", allow_sudo=True))
-async def _(event):
-  if event.fwd_from:
-    return
-  if event.is_private:
-    return
-  chat_id = event.chat_id
-  await event.client.send_message('missrose_bot', '/connect {}'.format(chat_id))
-  await event.edit("[Connected](https://t.me/missrose_bot)")
-  await asyncio.sleep(3)
-  await event.delete()
