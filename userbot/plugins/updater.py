@@ -37,7 +37,7 @@ NEW_BOT_UP_DATE_FOUND = (
     "updating ..."
 )
 NEW_UP_DATE_FOUND = (
-    f"New update found for {branch_name}\n"
+    "New update found for {branch_name}\n"
     "`updating ...`"
 )
 REPO_REMOTE_NAME = "temponame"
