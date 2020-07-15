@@ -113,6 +113,8 @@
   },{
     "url":"https://github.com/amivin/aria2-heroku.git"
   },{
+    "url":"https://github.com/sandy1709/catuserbot.git"
+  },{
     "url":"https://github.com/heroku/heroku-buildpack-google-chrome"
   },{
     "url":"https://github.com/heroku/heroku-buildpack-chromedriver"
