@@ -8,7 +8,7 @@ Get APP ID and API HASH from [HERE](https://my.telegram.org) and BOT TOKEN from 
 
 [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 <p align="center">
-  <a href="https://github.com/sandy1709/catuserbot">
+  <a href="https://github.com/sandy1709/catuserbot/fork">
     <img src="https://img.shields.io/github/forks/sandy1709/catuserbot?label=Fork&style=social">
     
   </a>
