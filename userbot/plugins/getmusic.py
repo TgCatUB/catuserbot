@@ -8,7 +8,7 @@ import asyncio
 from userbot.utils import admin_cmd
 import glob
 import os  
-from userbot import CMD_HELP
+from userbot import CMD_HELP, ALIVE_NAME
 from userbot.plugins import catmusic , catmusicvideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
