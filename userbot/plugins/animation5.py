@@ -256,7 +256,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    animation_interval = 0.3
+    animation_interval = 1
     animation_ttl = range(0, 54)
     animation_chars = [
         "🟪🟦🟦🟦🟦🟪\n
@@ -344,7 +344,7 @@ async def _(event):
          🟪██▌▐▀▀░▐██🟪\n
          🟪███▄▄▄▄███🟪\n
          🟪🟦🟦🟦🟦🟪"
-        ]
+      ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 18])
