@@ -1,3 +1,4 @@
+#imported from uniborg credit goes to spechide
 from telethon.tl.types import InputMediaDice
 from userbot.utils import admin_cmd
 
@@ -5,10 +6,11 @@ from userbot.utils import admin_cmd
 DART_E_MOJI = "🎯"
 DICE_E_MOJI = "🎲"
 BALL_E_MOJI = "🏀"
+FOOT_E_MOJI = "⚽️"
 # EMOJI CONSTANTS
 
 
-@borg.on(admin_cmd(pattern=f"({DART_E_MOJI}|{DICE_E_MOJI}|{BALL_E_MOJI}) ?(.*)"))
+@borg.on(admin_cmd(pattern=f"({DART_E_MOJI}|{DICE_E_MOJI}|{BALL_E_MOJI}|{FOOT_E_MOJI}) ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
