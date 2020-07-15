@@ -3,61 +3,45 @@ Syntax: .update
 \nAll Credits goes to © @Three_Cube_TeKnoways
 \nFor this awasome plugin.\nPorted from PpaperPlane Extended"""
 
-from os import remove
-from os import execl
+from os import remove,execl
 import sys
-
-# from git import Repo
-# from git.exc import GitCommandError
-# from git.exc import InvalidGitRepositoryError
-# from git.exc import NoSuchPathError
-
-# from .. import bot
-# from userbot.utils import register
-
 import git
 import asyncio
 import random
 import re
 import time
-
 from collections import deque
-
 import requests
-
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon import events
-
 from userbot.utils import admin_cmd
-
-
 from contextlib import suppress
 import os
-import sys
-import asyncio
 
 # -- Constants -- #
 IS_SELECTED_DIFFERENT_BRANCH = (
-    "looks like a custom branch {branch_name} "
+    f"looks like a custom branch {branch_name} "
     "is being used:\n"
     "in this case, Updater is unable to identify the branch to be updated."
     "please check out to an official branch, and re-start the updater."
 )
-OFFICIAL_UPSTREAM_REPO = "https://github.com/sandy1709/catuserbot"
+
+OFFICIAL_UPSTREAM_REPO = "https://github.com/sandy1709/catuserbot.git"
+
 BOT_IS_UP_TO_DATE = "`The userbot is up-to-date.\nThank you for Using this Service.`"
 NEW_BOT_UP_DATE_FOUND = (
-    "new update found for {branch_name}\n"
-    "changelog: \n\n{changelog}\n"
+    f"new update found for {branch_name}\n"
+    f"changelog: \n\n{changelog}\n"
     "updating ..."
 )
 NEW_UP_DATE_FOUND = (
-    "New update found for {branch_name}\n"
+    f"New update found for {branch_name}\n"
     "`updating ...`"
 )
 REPO_REMOTE_NAME = "temponame"
 IFFUCI_ACTIVE_BRANCH_NAME = "master"
-DIFF_MARKER = "HEAD..{remote_name}/{branch_name}"
+DIFF_MARKER = f"HEAD..{remote_name}/{branch_name}"
 NO_HEROKU_APP_CFGD = "no heroku application found, but a key given? 😕 "
 HEROKU_GIT_REF_SPEC = "HEAD:refs/heads/master"
 RESTARTING_APP = "re-starting heroku application"
@@ -81,16 +65,13 @@ async def updater(message):
             branch_name=active_branch_name
         ))
         return False
-
     try:
         repo.create_remote(REPO_REMOTE_NAME, OFFICIAL_UPSTREAM_REPO)
     except Exception as e:
         print(e)
         pass
-
     temp_upstream_remote = repo.remote(REPO_REMOTE_NAME)
     temp_upstream_remote.fetch(active_branch_name)
-
     changelog = generate_change_log(
         repo,
         DIFF_MARKER.format(
@@ -122,10 +103,8 @@ async def updater(message):
         os.remove("change.log")
     else:
         await message.edit(message_one)
-
     temp_upstream_remote.fetch(active_branch_name)
     repo.git.reset("--hard", "FETCH_HEAD")
-
     if Var.HEROKU_API_KEY is not None:
         import heroku3
         heroku = heroku3.from_key(Var.HEROKU_API_KEY)
@@ -149,7 +128,6 @@ async def updater(message):
                 else:
                     remote = repo.create_remote("heroku", heroku_git_url)
                 asyncio.get_event_loop().create_task(deploy_start(tgbot, message, HEROKU_GIT_REF_SPEC, remote))
-
             else:
                 await message.edit("Please create the var `HEROKU_APP_NAME` as the key and the name of your bot in heroku as your value.")
                 return
@@ -172,5 +150,3 @@ async def deploy_start(tgbot, message, refspec, remote):
     await  remote.push(refspec="HEAD:refs/heads/master", force=True)
     await tgbot.disconnect()
     os.execl(sys.executable, sys.executable, *sys.argv)
-
-    
