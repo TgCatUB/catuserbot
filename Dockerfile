@@ -61,15 +61,39 @@ RUN apt update && apt upgrade -y && \
     libopus0 \
     libopus-dev \
     && rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp
+    
+RUN python3 -m ensurepip \
+    && pip3 install --upgrade pip setuptools \
+    && rm -r /usr/lib/python*/ensurepip && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+    rm -r /root/.cache
 
-# Pypi package Repo upgrade
-RUN pip3 install --upgrade pip setuptools
-RUN pip3 install --upgrade pip install wheel 
-RUN rm -r /root/.cache
+#
+# Clone repo and prepare working directory
+#
+RUN git clone https://github.com/sandy1709/catuserbot /root/userbot
+RUN mkdir /root/userbot/bin/
+WORKDIR /root/userbot/
 
-RUN git clone https://github.com/sandy1709/catuserbot.git /root/cat
-WORKDIR /root/cat/
+#
+# Copies session and config (if it exists)
+#
+COPY ./sample_config.env ./userbot.session* ./config.env* /root/userbot/
 
+#
+# Install requirements
+#
 RUN pip3 install -r requirements.txt
 CMD ["python3","-m","userbot"]
+# Pypi package Repo upgrade
+
+
+
+
+
+
+
+
+
 
