@@ -77,7 +77,7 @@ async def _(event):
           await event.delete()
           await event.client.send_message(event.chat_id, response.message, reply_to=reply_message)
         
-@borg.on(admin_cmd(pattern="ad ?(.*)"))
+@borg.on(admin_cmd(pattern="audiodl ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
