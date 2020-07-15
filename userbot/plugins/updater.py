@@ -22,7 +22,7 @@ import os
 
 # -- Constants -- #
 IS_SELECTED_DIFFERENT_BRANCH = (
-    f"looks like a custom branch {branch_name} "
+    "looks like a custom branch {branch_name} "
     "is being used:\n"
     "in this case, Updater is unable to identify the branch to be updated."
     "please check out to an official branch, and re-start the updater."
@@ -32,8 +32,8 @@ OFFICIAL_UPSTREAM_REPO = "https://github.com/sandy1709/catuserbot.git"
 
 BOT_IS_UP_TO_DATE = "`The userbot is up-to-date.\nThank you for Using this Service.`"
 NEW_BOT_UP_DATE_FOUND = (
-    f"new update found for {branch_name}\n"
-    f"changelog: \n\n{changelog}\n"
+    "new update found for {branch_name}\n"
+    "changelog: \n\n{changelog}\n"
     "updating ..."
 )
 NEW_UP_DATE_FOUND = (
@@ -42,7 +42,7 @@ NEW_UP_DATE_FOUND = (
 )
 REPO_REMOTE_NAME = "temponame"
 IFFUCI_ACTIVE_BRANCH_NAME = "master"
-DIFF_MARKER = f"HEAD..{remote_name}/{branch_name}"
+DIFF_MARKER = "HEAD..{remote_name}/{branch_name}"
 NO_HEROKU_APP_CFGD = "no heroku application found, but a key given? 😕 "
 HEROKU_GIT_REF_SPEC = "HEAD:refs/heads/master"
 RESTARTING_APP = "re-starting heroku application"
