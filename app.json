@@ -76,6 +76,10 @@
       "value": "",
       "required": false
     },
+    "G_BAN_LOGGER_GROUP": {	
+      "description": "Gban log channel, include the hyphen too: ex: -123456",
+      "value": "-100"  
+    },
     "GIT_REPO_NAME": {
       "description": "Your repo name Example: Sur-vivor/CatUserbot, but GITHUB_ACCESS_TOKEN must be setup first.",
       "value": "",
