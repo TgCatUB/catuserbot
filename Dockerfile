@@ -1,4 +1,4 @@
- credits to @pokurt
+# credits to @pokurt
 FROM python:3.8.3-slim-buster
 
 ENV PIP_NO_CACHE_DIR 1
