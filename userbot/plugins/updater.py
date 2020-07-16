@@ -74,7 +74,6 @@ async def updater(message):
         repo.heads.master.checkout(True)
 
     active_branch_name = repo.active_branch.name
-    branch_name = active_branch_name
     if active_branch_name != IFFUCI_ACTIVE_BRANCH_NAME:
         await message.edit(IS_SELECTED_DIFFERENT_BRANCH.format(
             branch_name=active_branch_name
