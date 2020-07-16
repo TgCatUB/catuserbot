@@ -105,7 +105,7 @@ async def _(event):
           await event.delete()
           await borg.send_file(event.chat_id, response.message.media)
 
-@borg.on(admin_cmd(pattern="insta ?(.*)"))
+@borg.on(admin_cmd(pattern="instadl ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return 
@@ -125,4 +125,4 @@ async def _(event):
              await event.edit("😐")
           else: 
              await event.delete()
-             await event.client.send_file(event.chat_id, response.message)     
+             await event.client.send_file(event.chat_id, response.message)
