@@ -3,7 +3,7 @@
 # you may not use this file except in compliance with the License.
 #custom cmds by @heyworld to make it look more gayish
 #Thanks to @AbhinavShinde @jisan7509 for strings
-#Edited by @Jisan7509
+#Edited by @Sur_vivor
 """ Userbot module for having some fun with people. """
 
 import asyncio
@@ -12,8 +12,7 @@ from random import choice, getrandbits, randint
 from re import sub
 from random import randint
 from telethon import events, functions
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd , sudo_cmd
+from userbot.utils import admin_cmd
 
 
 # ================= CONSTANT =================
@@ -292,90 +291,41 @@ GDMORNING = [
 
 
 @borg.on(admin_cmd(pattern=f"love$", outgoing=True))
-async def suru(chutiyappa):
+async def love(chutiyappa):
     await chutiyappa.edit(choice(LOVESTR))
-    
-@borg.on(sudo_cmd(pattern=f"love$", allow_sudo = True))
-async def suru(chutiyappa):
-    await chutiyappa.reply(choice(LOVESTR))
-    
-    
+        
 @borg.on(admin_cmd(pattern=f"dhoka$", outgoing=True))
 async def katgya(chutiya):
     await chutiya.edit(choice(DHOKA))
-
-@borg.on(sudo_cmd(pattern=f"dhoka$", allow_sudo = True))
-async def katgya(chutiya):
-    await chutiya.reply(choice(DHOKA))
-    
 
 @borg.on(admin_cmd(pattern=f"metoo$", outgoing=True))
 async def metoo(hahayes):
     await hahayes.edit(choice(METOOSTR))
 
-@borg.on(sudo_cmd(pattern=f"metoo$", allow_sudo = True))
-async def metoo(hahayes):
-      await hahayes.reply(choice(METOOSTR))
-
-
-@borg.on(admin_cmd(pattern=f"gnoon$", outgoing=True))
+@borg.on(admin_cmd(pattern=f"gdnoon$", outgoing=True))
 async def noon(noon):
     await noon.edit(choice(GDNOON))    
-
-@borg.on(sudo_cmd(pattern=f"gnoon$", allow_sudo = True))
-async def noon(noon):
-    await noon.reply(choice(GDNOON))
-    
     
 @borg.on(admin_cmd(pattern=f"chase$", outgoing=True))
 async def police(chase):
     await chase.edit(choice(CHASE_STR))
-    
-@borg.on(sudo_cmd(pattern=f"chase$", allow_sudo = True))
-async def police(chase):
-    await chase.reply(choice(CHASE_STR))
- 
-    
+       
 @borg.on(admin_cmd(pattern=f"congo$", outgoing=True))
 async def Sahih(congrats):
     await congrats.edit(choice(CONGRATULATION))
-    
-@borg.on(sudo_cmd(pattern=f"congo$", allow_sudo = True))
-async def Sahih(congrats):
-    await congrats.reply(choice(CONGRATULATION))
-
-    
+        
 @borg.on(admin_cmd(pattern=f"qhi$", outgoing=True))
 async def hoi(hello):
     await hello.edit(choice(HELLOSTR))
     
-@borg.on(sudo_cmd(pattern=f"qhi$", allow_sudo = True))
-async def hoi(hello):
-    await hello.reply(choice(HELLOSTR))
-    
-    
-@borg.on(admin_cmd(pattern=f"qbye$", outgoing=True))
+@borg.on(admin_cmd(pattern=f"gdbye$", outgoing=True))
 async def bhago(bhagobc):
     await bhagobc.edit(choice(BYESTR))
     
-@borg.on(sudo_cmd(pattern=f"qbye$", allow_sudo = True))
-async def bhago(bhagobc):
-    await bhagobc.reply(choice(BYESTR))
-    
-    
-@borg.on(admin_cmd(pattern=f"gn$", outgoing=True))
+@borg.on(admin_cmd(pattern=f"gdnyt$", outgoing=True))
 async def night(night):
     await night.edit(choice(GDNIGHT))
     
-@borg.on(sudo_cmd(pattern=f"gn$", allow_sudo = True))
-async def night(night):
-    await night.reply(choice(GDNIGHT))
-    
-    
-@borg.on(admin_cmd(pattern=f"gm$", outgoing=True))
+@borg.on(admin_cmd(pattern=f"gdmng$", outgoing=True))
 async def morning(morning):
     await morning.edit(choice(GDMORNING))
-    
-@borg.on(sudo_cmd(pattern=f"gm$", allow_sudo = True))
-async def morning(morning):
-    await morning.reply(choice(GDMORNING))
