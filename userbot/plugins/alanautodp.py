@@ -17,7 +17,7 @@ import shutil
 import random, re
 
 
-FONT_FILE_TO_USE = "userbot/helpers/styles/digital.ttf"
+FONT_FILE_TO_USE = "userbot/helpers/styles/italic.ttf"
 
 #Add telegraph media links of profile pics that are to be used
 TELEGRAPH_MEDIA_LINKS = ["https://telegra.ph/file/b2cea1712ebaca603e6f4.jpg",
