@@ -24,8 +24,8 @@ TELEGRAPH_MEDIA_LINKS = ["https://telegra.ph/file/b2cea1712ebaca603e6f4.jpg",
                         ]
 @borg.on(admin_cmd(pattern="alandp ?(.*)"))
 async def autopic(event):
-        await event.edit("Autopic has been started by my Master")
     while True:
+        await event.edit("Autopic has been started by my Master")
         piclink = random.randint(0, len(TELEGRAPH_MEDIA_LINKS) - 1)
         AUTOPP = TELEGRAPH_MEDIA_LINKS[piclink]
         downloaded_file_name = "./userbot/original_pic.png"
