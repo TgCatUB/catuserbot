@@ -74,4 +74,4 @@ WORKDIR /root/cat
 RUN sudo pip3 install -U -r requirements.txt
 
 # Starting Worker
-CMD ["python3","-m","nana"]
+CMD ["python3","-m","userbot"]
