@@ -17,7 +17,7 @@ import shutil
 import random, re
 
 
-FONT_FILE_TO_USE = "userbot/helpers/styles/DIGIT.ttf"
+FONT_FILE_TO_USE = "userbot/helpers/styles/digital.ttf"
 
 #Add telegraph media links of profile pics that are to be used
 TELEGRAPH_MEDIA_LINKS = ["https://telegra.ph/file/b2cea1712ebaca603e6f4.jpg",
@@ -35,10 +35,10 @@ async def autopic(event):
             place_holder = None   
         shutil.copy(downloaded_file_name, photo)
         im = Image.open(photo)
-        current_time = datetime.now().strftime("@Sur_vivor \n\n %H:%M:%S \n %d/%m/%y")
+        current_time = datetime.now().strftime(" @Sur_vivor \n\n %H:%M:%S \n %d/%m/%y")
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
-        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 35)
+        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 40)
         drawn_text.text((10,40), current_time, font=fnt, fill=(255,0,0))
         img.save(photo)
         file = await event.client.upload_file(photo)  # pylint:disable=E0602
