@@ -6,8 +6,6 @@ Available Commands:
 from telethon import events
 import asyncio
 from userbot.utils import admin_cmd
-from userbot import G_BAN_LOGGER_GROUP
-
 
 @borg.on(admin_cmd(pattern="gban ?(.*)"))
 async def _(event):
