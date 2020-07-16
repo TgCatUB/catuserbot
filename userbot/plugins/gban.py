@@ -5,7 +5,8 @@ Available Commands:
 .ungban REASON"""
 from telethon import events
 import asyncio
-from uniborg.util import admin_cmd
+from userbot.utils import admin_cmd
+from userbot import G_BAN_LOGGER_GROUP
 
 
 @borg.on(admin_cmd(pattern="gban ?(.*)"))
@@ -23,7 +24,7 @@ async def _(event):
         else:
             r_from_id = r.from_id
         await borg.send_message(
-            Config.,
+            Config.G_BAN_LOGGER_GROUP,
             "/gban [user](tg://user?id={}) {}".format(r_from_id, reason)
         )
     await event.delete()
