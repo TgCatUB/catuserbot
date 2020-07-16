@@ -44,7 +44,7 @@ class Config(object):
     # Get a Free API Key from OCR.Space
     OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
     # Send .get_id in any group with all your administration bots (added)
-    G_BAN_LOGGER_GROUP = int(os.environ.get("G_BAN_LOGGER_GROUP", None))
+    G_BAN_LOGGER_GROUP = int(os.environ.get("G_BAN_LOGGER_GROUP", -100))
     # TG API limit. An album can have atmost 10 media!
     TG_GLOBAL_ALBUM_LIMIT = int(os.environ.get("TG_GLOBAL_ALBUM_LIMIT", 9))
     # Telegram BOT Token from @BotFather
