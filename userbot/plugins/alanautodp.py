@@ -17,7 +17,7 @@ import shutil
 import random, re
 
 
-FONT_FILE_TO_USE = "userbot/helpers/styles/italic.ttf"
+FONT_FILE_TO_USE = "userbot/helpers/styles/DIGIT.ttf"
 
 #Add telegraph media links of profile pics that are to be used
 TELEGRAPH_MEDIA_LINKS = ["https://telegra.ph/file/b2cea1712ebaca603e6f4.jpg",
@@ -25,7 +25,6 @@ TELEGRAPH_MEDIA_LINKS = ["https://telegra.ph/file/b2cea1712ebaca603e6f4.jpg",
 @borg.on(admin_cmd(pattern="alandp ?(.*)"))
 async def autopic(event):
     while True:
-        await event.edit("Autopic has been started by my Master")
         piclink = random.randint(0, len(TELEGRAPH_MEDIA_LINKS) - 1)
         AUTOPP = TELEGRAPH_MEDIA_LINKS[piclink]
         downloaded_file_name = "./userbot/original_pic.png"
@@ -36,7 +35,7 @@ async def autopic(event):
             place_holder = None   
         shutil.copy(downloaded_file_name, photo)
         im = Image.open(photo)
-        current_time = datetime.now().strftime("@Sur_vivor \n \n %H:%M:%S \n %d/%m/%y")
+        current_time = datetime.now().strftime("@Sur_vivor \n\n %H:%M:%S \n %d/%m/%y")
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
         fnt = ImageFont.truetype(FONT_FILE_TO_USE, 35)
