@@ -731,7 +731,7 @@ async def get_user_from_event(event):
         try:
             user_obj = await event.client.get_entity(user)
         except (TypeError, ValueError) as err:
-            await event.edit(str(err))
+            await event.edit("Could not fetch info of that user.")
             return None
     return user_obj, extra
 
