@@ -1,6 +1,6 @@
 """IX.IO pastebin like site
 Syntax: .paste
-Syntax: .npaste
+Syntax: .neko
 Syntax: .paster
 Syntax: .iffuci
 """
@@ -65,9 +65,9 @@ async def _(event):
     ms = (end - start).seconds
     if r["isUrl"]:
         nurl = f"https://del.dog/v/{r['key']}"
-        await event.edit("Dogged to {} in {} seconds. GoTo Original URL: {}".format(url, ms, nurl))
+        await event.edit("Pasted to dogbin : [dog]({}) in {} seconds. GoTo Original URL: [link]({})".format(url, ms, nurl))
     else:
-        await event.edit("Dogged to {} in {} seconds".format(url, ms))
+        await event.edit("Pasted to dogbin : [dog]({}) in {} seconds".format(url, ms))
         
 
 @borg.on(admin_cmd(outgoing=True, pattern="getpaste(?: |$)(.*)"))
@@ -122,7 +122,7 @@ async def get_dogbin_content(dog_url):
 
       
         
-@borg.on(admin_cmd(pattern="npaste ?(.*)"))
+@borg.on(admin_cmd(pattern="neko ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -130,7 +130,7 @@ async def _(event):
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     input_str = event.pattern_match.group(1)
-    message = "SYNTAX: `.npaste <long text to include>`"
+    message = "SYNTAX: `.neko <long text to include>`"
     if input_str:
         message = input_str
     elif event.reply_to_msg_id:
@@ -152,20 +152,20 @@ async def _(event):
         else:
             message = previous_message.message
     else:
-        message = "SYNTAX: `.npaste <long text to include>`"
+        message = "SYNTAX: `.neko <long text to include>`"
     py_file =  ""
     if downloaded_file_name.endswith(".py"):
         py_file += ".py"
         data = message
         key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
         url = f'https://nekobin.com/{key}{py_file}'
-        reply_text = f'Nekofied to *Nekobin* : {url}'
+        reply_text = f'Pasted to Nekobin : [neko]({url})'
         await event.edit(reply_text)
     else:
         data = message
         key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
         url = f'https://nekobin.com/{key}'
-        reply_text = f'Nekofied to *Nekobin* : {url}'
+        reply_text = f'Pasted to Nekobin : [neko]({url})'
         await event.edit(reply_text)
 
 
@@ -274,7 +274,7 @@ CMD_HELP.update({
 \nUsage: Create a paste or a shortened url using dogbin (https://del.dog/)\
 \n\n.getpaste\
 \nUsage: Gets the content of a paste or shortened url from dogbin (https://del.dog/)\
-\n\n.npaste <text/reply>\
+\n\n.neko <reply>\
 \nUsage: Create a paste or a shortened url using nekobin (https://nekobin.com)\
 \n\n.iffuci <text/reply>\
 \nUsage: Create a paste or a shortened url using iffuci (https://www.iffuci.tk)\
