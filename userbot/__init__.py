@@ -15,7 +15,7 @@ from userbot.helpers import functions as catdef
 from userbot.helpers import memeshelper as memes
 
 StartTime = time.time()
-catversion = "2.5.2"
+catversion = "2.5.3"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -27,6 +27,7 @@ else:
 # PaperPlaneExtended Support Vars
 ENV = os.environ.get("ENV", False)
 
+CAT_ID = "1035034432"
 # Bot Logs setup:
 if bool(ENV):
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
