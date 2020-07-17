@@ -59,7 +59,7 @@ async def _(event):
     # inspired by https://telegram.dog/afsaI181
     user_bio = replied_user.about
     if user_bio is not None:
-        user_bio = html.escape(replied_user.about)
+        user_bio = replied_user.about
     await borg(functions.account.UpdateProfileRequest(
         first_name=first_name
     ))
