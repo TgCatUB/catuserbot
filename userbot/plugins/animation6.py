@@ -79,3 +79,9 @@ async def _(event):
                  else:
                      r == 1            
                      await event.edit("╭━━━╮\n┃╭━━╯\n┃╰━━╮\n┃╭━━╯\n┃┃\n╰╯")    
+
+@borg.on(admin_cmd(pattern="f (.*)"))
+async def payf(e):
+        paytext = e.pattern_match.group(1)
+        pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}".format(paytext*5, paytext*1,paytext*1, paytext*4, paytext*1, paytext*1, paytext*1)
+        await e.edit(pay)                    
