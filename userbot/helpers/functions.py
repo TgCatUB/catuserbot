@@ -34,6 +34,16 @@ async def get_readable_time(seconds: int) -> str:
 
     return up_time
 
+#gban
+async def admin_groups(cat):
+    catgroups = []
+    async for dialog in cat.client.iter_dialogs():
+        entity = dialog.entity  
+        if isinstance(entity, Channel):
+            if entity.megagroup:
+                if entity.creator or entity.admin_rights:
+                   catgroups.append(entity.id)
+    return catgroups
 
 #for getmusic
 
