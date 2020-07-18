@@ -33,7 +33,7 @@ async def gbun(event):
             jnl=("`Warning!! `"
                   "[{}](tg://user?id={})"
                   "` 𝙂𝘽𝘼𝙉𝙉𝙀𝘿 By Admin...\n\n`"
-                  "**Rendi's Name: ** __{}__\n"
+                  "**user's Name: ** __{}__\n"
                   "**ID : ** `{}`\n"
                 ).format(firstname, idd, firstname, idd)
             if usname == None:
