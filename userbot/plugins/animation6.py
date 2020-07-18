@@ -1,6 +1,8 @@
 import os
 import sys
 import asyncio
+import random
+import logging
 from telethon import events
 from userbot.utils import admin_cmd
 
@@ -67,3 +69,13 @@ async def payf(event):
     paytext=event.pattern_match.group(1)
     pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(paytext*8, paytext*8, paytext*2, paytext*2, paytext*2, paytext*6, paytext*6, paytext*2, paytext*2, paytext*2, paytext*2, paytext*2)
     await event.edit(pay)      
+
+@borg.on(admin_cmd(outgoing=True, pattern="kf$(.*)"))
+async def _(event):                             
+                 r = random.randint(0, 3)
+                 logger.debug(r)
+                 if r == 0:
+                     await event.edit("┏━━━┓\n┃┏━━┛\n┃┗━━┓\n┃┏━━┛\n┃┃\n┗┛")
+                 else:
+                     r == 1            
+                     await event.edit("╭━━━╮\n┃╭━━╯\n┃╰━━╮\n┃╭━━╯\n┃┃\n╰╯")    
