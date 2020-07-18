@@ -22,6 +22,8 @@ from mimetypes import guess_type
 import httplib2
 import subprocess
 from userbot.utils import admin_cmd, progress, humanbytes, time_formatter
+from datetime import datetime
+from telethon import events
 
 # Path to token json file, it should be in same directory as script
 G_DRIVE_TOKEN_FILE = "./auth_token.txt"
@@ -33,7 +35,7 @@ OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 # Redirect URI for installed apps, can be left as is
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 # global variable to set Folder ID to upload to
-parent_id = GDRIVE_FOLDER_ID
+parent_id = None
 # global variable to indicate mimeType of directories in gDrive
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
@@ -210,7 +212,7 @@ async def download(set):
     if input_str:
         parent_id = input_str
         await set.edit(
-            "Custom Folder ID set successfully. The next uploads will upload to {parent_id} till `.gdriveclear`"
+            f"Custom Folder ID set successfully. The next uploads will upload to `{parent_id}` till `.gsetclear`"
         )
     else:
         await set.edit(
@@ -222,7 +224,7 @@ async def download(set):
 async def download(gclr):
     """For .gsetclear command, allows you clear ur curnt custom path"""
     await gclr.reply("Processing ...")
-    parent_id = GDRIVE_FOLDER_ID
+    parent_id = None
     await gclr.edit("Custom Folder ID cleared successfully.")
 
 
