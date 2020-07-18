@@ -2,11 +2,10 @@ from userbot import CMD_HELP
 from telethon.tl.functions.users import GetFullUserRequest
 from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
 import asyncio
-from userbot.utils import sudo_cmd,admin_cmd
+from userbot.utils import admin_cmd
 from telethon.tl.types import (Channel, ChatAdminRights,ChatBannedRights, MessageEntityMentionName)
 from telethon.errors import (BadRequestError, ChatAdminRequiredError, UserAdminInvalidError)
-from telethon.tl.functions.channels import EditBannedRequest 
-from userbot.plugins.admin import get_user_from_id, get_user_from_event
+from telethon.tl.functions.channels import EditBannedRequest
 from userbot import CAT_ID 
 from userbot.plugins import admin_groups
 from datetime import datetime
@@ -224,8 +223,48 @@ async def watcher(event):
     if is_muted(event.sender_id, "gmute"):
         await event.delete()
         
-   
-        
+async def get_user_from_event(event):
+    """ Get the user from argument or replied message. """
+    args = event.pattern_match.group(1).split(' ', 1)
+    extra = None
+    if event.reply_to_msg_id:
+        previous_message = await event.get_reply_message()
+        user_obj = await event.client.get_entity(previous_message.from_id)
+        extra = event.pattern_match.group(1)
+    elif args:
+        user = args[0]
+        if len(args) == 2:
+            extra = args[1]
+        if user.isnumeric():
+            user = int(user)
+        if not user:
+            await event.edit("`Pass the user's username, id or reply!`")
+            return
+        if event.message.entities:
+            probable_user_mention_entity = event.message.entities[0]
+
+            if isinstance(probable_user_mention_entity,
+                          MessageEntityMentionName):
+                user_id = probable_user_mention_entity.user_id
+                user_obj = await event.client.get_entity(user_id)
+                return user_obj
+        try:
+            user_obj = await event.client.get_entity(user)
+        except (TypeError, ValueError) as err:
+            await event.edit("Could not fetch info of that user.")
+            return None
+    return user_obj, extra
+  
+async def get_user_from_id(user, event):
+    if isinstance(user, str):
+        user = int(user)
+    try:
+        user_obj = await event.client.get_entity(user)
+    except (TypeError, ValueError) as err:
+        await event.edit(str(err))
+        return None
+    return user_obj
+  
 CMD_HELP.update({
     "gadmin":
     ".gban <username/reply/userid> <reason (optional)>\
