@@ -19,10 +19,10 @@ from userbot import (G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET,
                      G_DRIVE_AUTH_TOKEN_DATA, GDRIVE_FOLDER_ID,
                      TEMP_DOWNLOAD_DIRECTORY, CMD_HELP, LOGS)
 from mimetypes import guess_type
+import re
 import httplib2
 import subprocess
 from userbot.utils import admin_cmd, progress, humanbytes, time_formatter
-from telethon import events
 
 # Path to token json file, it should be in same directory as script
 G_DRIVE_TOKEN_FILE = "./auth_token.txt"
@@ -34,7 +34,7 @@ OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 # Redirect URI for installed apps, can be left as is
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 # global variable to set Folder ID to upload to
-parent_id = None
+parent_id = GDRIVE_FOLDER_ID
 # global variable to indicate mimeType of directories in gDrive
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
@@ -203,19 +203,20 @@ async def gdrive_search_list(event):
     await event.edit(gsearch_results, link_preview=False)
 
 
-@borg.on(admin_cmd(pattern=r"gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"))
-async def download(set):
+@borg.on(admin_cmd(pattern="gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"))
+async def download(cat):
     """For .gsetf command, allows you to set path"""
-    await set.edit("Processing ...")
-    input_str = set.pattern_match.group(1)
+    set = await cat.reply("Processing ...")
+    input_str = cat.pattern_match.group(1)
     if input_str:
         parent_id = input_str
         await set.edit(
             f"Custom Folder ID set successfully. The next uploads will upload to `{parent_id}` till `.gsetclear`"
         )
+        await cat.delete()
     else:
         await set.edit(
-            "Use `.gdrivesp <link to GDrive Folder>` to set the folder to upload new files to."
+            "Use `.gsetf <link to GDrive Folder>` to set the folder to upload new files to."
         )
 
 
@@ -223,7 +224,7 @@ async def download(set):
 async def download(gclr):
     """For .gsetclear command, allows you clear ur curnt custom path"""
     await gclr.reply("Processing ...")
-    parent_id = None
+    parent_id = GDRIVE_FOLDER_ID
     await gclr.edit("Custom Folder ID cleared successfully.")
 
 
