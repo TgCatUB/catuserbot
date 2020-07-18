@@ -212,7 +212,6 @@ async def download(set):
         await set.edit(
             "Custom Folder ID set successfully. The next uploads will upload to {parent_id} till `.gdriveclear`"
         )
-        await set.delete()
     else:
         await set.edit(
             "Use `.gdrivesp <link to GDrive Folder>` to set the folder to upload new files to."
