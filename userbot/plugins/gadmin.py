@@ -152,7 +152,7 @@ async def startgmute(event):
     private = False
     if event.fwd_from:
         return
-    elif event.is_private:
+    if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True   
@@ -189,7 +189,7 @@ async def endgmute(event):
     private = False
     if event.fwd_from:
         return
-    elif event.is_private:
+    if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True  
