@@ -255,16 +255,6 @@ async def get_user_from_event(event):
             return None
     return user_obj, extra
   
-async def get_user_from_id(user, event):
-    if isinstance(user, str):
-        user = int(user)
-    try:
-        user_obj = await event.client.get_entity(user)
-    except (TypeError, ValueError) as err:
-        await event.edit(str(err))
-        return None
-    return user_obj
-  
 CMD_HELP.update({
     "gadmin":
     ".gban <username/reply/userid> <reason (optional)>\
