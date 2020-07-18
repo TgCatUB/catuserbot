@@ -285,8 +285,8 @@ async def claptext(event):
 @borg.on(admin_cmd(outgoing=True, pattern="smk(?: |$)(.*)"))
 async def smrk(smk):
     textx = await smk.get_reply_message()
-    if message[5:]:
-        message = str(message[5:])
+    if event.pattern_match.group(1):
+        message = event.pattern_match.group(1)
     elif textx.message:
         message = textx.message
     else:
