@@ -305,7 +305,7 @@ CMD_HELP.update({
 \nUsage: Reply someone's message with .ungban to remove them from the gbanned list.\
 \n\n.listgban\
 \nUsage: Shows you the gbanned list and reason for their gban.\
-\n.gmute <username/reply> <reason (optional)>\
+\n\n.gmute <username/reply> <reason (optional)>\
 \nUsage: Mutes the person in all groups you have in common with them.\
 \n\n.ungmute <username/reply>\
 \nUsage: Reply someone's message with .ungmute to remove them from the gmuted list."
