@@ -709,12 +709,6 @@ async def smrk(smk):
         await smk.edit(reply_text)
 
 
-@borg.on(admin_cmd(pattern="f (.*)"))
-async def payf(e):
-        paytext = e.pattern_match.group(1)
-        pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}".format(paytext*5, paytext*1,paytext*1, paytext*4, paytext*1, paytext*1, paytext*1)
-        await e.edit(pay)
-
 @borg.on(admin_cmd(outgoing=True, pattern="bt$"))
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
@@ -807,8 +801,6 @@ CMD_HELP.update({
 \nUsage: Haha yes\
 \n\n.clap\
 \nUsage: Praise people!\
-\n\n.f <emoji/character>\
-\nUsage: Pay Respects.\
 \n\n.smk <text/reply>\
 \nUsage: A shit module for ツ , who cares.\
 \n\n.type\
