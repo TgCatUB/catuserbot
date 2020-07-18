@@ -22,7 +22,6 @@ from mimetypes import guess_type
 import httplib2
 import subprocess
 from userbot.utils import admin_cmd, progress, humanbytes, time_formatter
-from datetime import datetime
 from telethon import events
 
 # Path to token json file, it should be in same directory as script
