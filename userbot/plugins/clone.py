@@ -59,7 +59,7 @@ async def _(event):
     # inspired by https://telegram.dog/afsaI181
     user_bio = replied_user.about
     if user_bio is not None:
-        user_bio = html.escape(replied_user.about)
+        user_bio = replied_user.about
     await borg(functions.account.UpdateProfileRequest(
         first_name=first_name
     ))
@@ -91,8 +91,8 @@ async def _(event):
     bio = f"{DEFAULTUSERBIO}"
     n = 1
     await borg(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit= n)))    
-    await borg(functions.account.UpdateProfileRequest(about=bio))
-    await borg(functions.account.UpdateProfileRequest(first_name=name))
+    await borg(functions.account.UpdateProfileRequest(about=f"{bio}"))
+    await borg(functions.account.UpdateProfileRequest(first_name=f"{name}"))
     await event.edit("succesfully reverted to your account back")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, f"#REVERT\nSuccesfully reverted back to your profile")
