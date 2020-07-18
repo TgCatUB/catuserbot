@@ -37,10 +37,10 @@ async def catgban(cat):
     if user.id == (await cat.client.get_me()).id:
         await cat.edit("why would i ban myself")
         return 
-    elif user.id in CAT_ID:
+    if user.id in CAT_ID:
         await cat.edit("why would i ban my DEVELOPER")
         return
-    elif gban_sql.is_gbanned(user.id):
+    if gban_sql.is_gbanned(user.id):
         await cat.edit(f"the [user](tg://user?id={user.id}) is already in gbanned list any way checking again")
     else:
         gban_sql.catgban(user.id, reason)
@@ -225,7 +225,7 @@ async def startgmute(event):
     private = False
     if event.fwd_from:
         return
-    elif event.is_private:
+    if event.is_private:
         await event.reply("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True
@@ -261,7 +261,7 @@ async def endgmute(event):
     private = False
     if event.fwd_from:
         return
-    elif event.is_private:
+    if event.is_private:
         await event.reply("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True
