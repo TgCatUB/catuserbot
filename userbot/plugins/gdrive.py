@@ -41,10 +41,10 @@ if not get_parent_id():
 else:
   catparent_id = get_parent_id()
   if len(catparent_id)== 1:
-    parent_id = catparent_id
+    parent_id = catparent_id[0].cat
   elif len(catparent_id)>1 :
     for fid in catparent_id:
-      rmparent_id(fid)
+      rmparent_id(fid.cat)
     parent_id = None
 
 # global variable to indicate mimeType of directories in gDrive
