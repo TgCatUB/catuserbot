@@ -3,7 +3,7 @@ from userbot.plugins.sql_helper import SESSION, BASE
 
 class Gdrive(BASE):
     __tablename__ = "gdrive"
-    chat_id = Column(String(50), primary_key=True)
+    cat = Column(String(50), primary_key=True)
 
     def __init__(self, cat):
         self.cat = cat
