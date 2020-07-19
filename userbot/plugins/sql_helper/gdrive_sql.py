@@ -1,9 +1,12 @@
 from sqlalchemy import Column, String
-from userbot.plugins.sql_helper import SESSION, BASE
+try:
+    from userbot.plugins.sql_helper import SESSION, BASE
+except ImportError:
+    raise AttributeError
 
 class Gdrive(BASE):
     __tablename__ = "gdrive"
-    chat_id = Column(String, primary_key=True)
+    chat_id = Column(String)
 
     def __init__(self, chat_id):
         self.chat_id = str(chat_id)
@@ -12,7 +15,7 @@ Gdrive.__table__.create(checkfirst=True)
 
 def is_folder(chat_id):
     try:
-        return SESSION.query(Gdrive).filter(Gdrive.chat_id == str(chat_id)).one()
+        return SESSION.query(Gdrive).filter(Gdrive.chat_id == str(chat_id))
     except:
         return None
     finally:
