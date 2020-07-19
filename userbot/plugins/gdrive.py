@@ -205,6 +205,16 @@ async def upload_dir_to_gdrive(event):
 
 @borg.on(admin_cmd(pattern=r"list(?: |$)(.*)"))
 async def gdrive_search_list(event):
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None
     await event.edit("Processing ...")
     if CLIENT_ID is None or CLIENT_SECRET is None:
         return
