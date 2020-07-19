@@ -235,8 +235,6 @@ async def download(cat):
 
 @borg.on(admin_cmd(pattern="gsetclear$"))
 async def download(gclr):
-    """For .gsetclear command, allows you clear ur curnt custom path"""
-    await gclr.reply("Processing ...")
     if len(catparent_id)== 1: 
           if is_folder(parent_id):
             rmparent_id(parent_id)
