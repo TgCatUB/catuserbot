@@ -3,7 +3,7 @@ from userbot.plugins.sql_helper import SESSION, BASE
 
 
 class Gdrive(BASE):
-    __tablename__ = "gdrive"
+    __tablename__ = "gdrive_"
     snip = Column(UnicodeText, primary_key=True)
     reply = Column(UnicodeText)
 
