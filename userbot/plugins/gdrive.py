@@ -36,7 +36,9 @@ OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 # global variable to set Folder ID to upload to
 
-if get_parent_id():
+if not get_parent_id():
+  parent_id = None
+else:
   catparent_id = get_parent_id()
   if len(catparent_id)== 1:
     parent_id = catparent_id
@@ -45,9 +47,7 @@ if get_parent_id():
       rmparent_id(fid)
     parent_id = None
   else:
-   parent_id = None 
-else:
- parent_id = None
+   parent_id = None
 
 # global variable to indicate mimeType of directories in gDrive
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
