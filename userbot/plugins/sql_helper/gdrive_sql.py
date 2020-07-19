@@ -20,7 +20,7 @@ def is_folder(cat):
     finally:
         SESSION.close()
 
-def parent_id(cat):
+def gparent_id(cat):
     adder = Gdrive(str(cat))
     SESSION.add(adder)
     SESSION.commit()
