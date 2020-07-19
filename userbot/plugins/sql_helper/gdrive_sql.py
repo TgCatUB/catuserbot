@@ -36,7 +36,7 @@ def get_parent_id():
         SESSION.close()
 
 
-def gparent_id((keyword, reply):
+def gparent_id(keyword, reply):
     adder = SESSION.query(Gdrive).get(keyword)
     if adder:
         adder.reply = reply
