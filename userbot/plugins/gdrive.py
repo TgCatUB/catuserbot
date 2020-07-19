@@ -35,15 +35,20 @@ OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 # Redirect URI for installed apps, can be left as is
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 # global variable to set Folder ID to upload to
-catparent_id = get_parent_id()
-if len(catparent_id)== 1:
-  parent_id = catparent_id
-elif len(catparent_id)>1 :
-  for fid in catparent_id:
-    rmparent_id(fid)
-  parent_id = None
+
+if get_parent_id():
+  catparent_id = get_parent_id()
+  if len(catparent_id)== 1:
+    parent_id = catparent_id
+  elif len(catparent_id)>1 :
+    for fid in catparent_id:
+      rmparent_id(fid)
+    parent_id = None
+  else:
+   parent_id = None 
 else:
- parent_id = None 
+ parent_id = None
+
 # global variable to indicate mimeType of directories in gDrive
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
