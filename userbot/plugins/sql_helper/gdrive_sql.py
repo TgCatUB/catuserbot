@@ -6,28 +6,28 @@ except ImportError:
 
 class Gdrive(BASE):
     __tablename__ = "gdrive"
-    chat_id = Column(String)
+    folderid = Column(String , primary_key=True)
 
-    def __init__(self, chat_id):
-        self.chat_id = str(chat_id)
+    def __init__(self, folderid):
+        self.folderid = str(folderid)
 
 Gdrive.__table__.create(checkfirst=True)
 
-def is_folder(chat_id):
+def is_folder(folderid):
     try:
-        return SESSION.query(Gdrive).filter(Gdrive.chat_id == str(chat_id))
+        return SESSION.query(Gdrive).filter(Gdrive.folderid == str(folderid))
     except:
         return None
     finally:
         SESSION.close()
 
-def gparent_id(chat_id):
-    adder = Gdrive(str(chat_id))
+def gparent_id(folderid):
+    adder = Gdrive(str(folderid))
     SESSION.add(adder)
     SESSION.commit()
 
-def rmparent_id(chat_id):
-    rem = SESSION.query(Gdrive).get(str(chat_id))
+def rmparent_id(folderid):
+    rem = SESSION.query(Gdrive).get(str(folderid))
     if rem:
         SESSION.delete(rem)
         SESSION.commit()
