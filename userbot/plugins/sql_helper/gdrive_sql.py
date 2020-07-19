@@ -4,7 +4,7 @@ try:
 except ImportError:
     raise AttributeError
 
-class Gdrive(BASE):
+class GDrive(BASE):
     __tablename__ = "gdrive"
     folderid = Column(String(50) , primary_key=True)
     name = Column(String(127))
