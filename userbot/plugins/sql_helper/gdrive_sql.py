@@ -23,21 +23,22 @@ def is_folder(folder_id):
 
 
 def gparent_id(folder_id):
-    adder = Gdrive(str(folder_id))
+    adder = SESSION.query(Gdrive).get(folder_id)
+    if not adder:
+        adder = Gdrive(folder_id)
     SESSION.add(adder)
     SESSION.commit()
-    return True
+    
+def get_parent_id():
+    try:
+        return SESSION.query(Gdrive).all()
+    except:
+        return None
+    finally:
+        SESSION.close()
 
 def rmparent_id(folder_id):
-    rem = SESSION.query(Gdrive).get(str(folder_id))
-    if rem:
-        SESSION.delete(rem)
+    note = SESSION.query(Gdrive).filter(Gdrive.folder_id == folder_id)
+    if note:
+        note.delete()
         SESSION.commit()
-    return True
-
-def get_parent_id():
-    rem = SESSION.query(Gdrive)
-    if not rem:
-        rem = None
-    SESSION.close()
-    return rem
