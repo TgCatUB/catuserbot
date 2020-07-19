@@ -35,7 +35,15 @@ OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 # Redirect URI for installed apps, can be left as is
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 # global variable to set Folder ID to upload to
-parent_id = GDRIVE_FOLDER_ID
+catparent_id = get_parent_id()
+if len(catparent_id)== 1:
+  parent_id = catparent_id
+elif len(catparent_id)>1 :
+  for fid in catparent_id:
+    rmparent_id(fid)
+  parent_id = None
+else:
+ parent_id = None 
 # global variable to indicate mimeType of directories in gDrive
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
@@ -206,26 +214,28 @@ async def gdrive_search_list(event):
 
 @borg.on(admin_cmd(pattern="gsetf https://drive.google.com/drive/folders/([-\w]{25,})"))
 async def download(cat):
+    await cat.delete()
     """For .gsetf command, allows you to set path"""
     set = await cat.reply("Processing ...")
     input_str = cat.pattern_match.group(1)
     if input_str:
-        parent_id = input_str
-        await set.edit(
-            f"Custom Folder ID set successfully. The next uploads will upload to `{parent_id}` till `.gsetclear`"
-        )
-        await cat.delete()
+        id = input_str
+        if len(catparent_id)== 1: 
+          if is_folder(parent_id):
+            rmparent_id(parent_id)
+        gparent_id(id)
+        await set.edit(f"Custom Folder ID set successfully. The next uploads will upload to `{id}` till `.gsetclear`")
     else:
-        await set.edit(
-            "Use `.gsetf <link to GDrive Folder>` to set the folder to upload new files to."
-        )
+        await set.edit("Use `.gsetf <link to GDrive Folder>` to set the folder to upload new files to.")
 
 
 @borg.on(admin_cmd(pattern="gsetclear$"))
 async def download(gclr):
     """For .gsetclear command, allows you clear ur curnt custom path"""
     await gclr.reply("Processing ...")
-    parent_id = GDRIVE_FOLDER_ID
+    if len(catparent_id)== 1: 
+          if is_folder(parent_id):
+            rmparent_id(parent_id)
     await gclr.edit("Custom Folder ID cleared successfully.")
 
 
