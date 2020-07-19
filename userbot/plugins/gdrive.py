@@ -235,9 +235,9 @@ async def download(cat):
 
 @borg.on(admin_cmd(pattern="gsetclear$"))
 async def download(gclr):
-    if len(catparent_id)== 1: 
-          if is_folder(parent_id):
-            rmparent_id(parent_id)
+    if parent_id: 
+        if is_folder(parent_id):
+           rmparent_id(parent_id)
     await gclr.edit("Custom Folder ID cleared successfully.")
 
 
