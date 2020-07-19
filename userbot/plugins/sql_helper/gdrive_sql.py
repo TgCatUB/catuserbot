@@ -4,30 +4,28 @@ from userbot.plugins.sql_helper import SESSION, BASE
 
 class Gdrive(BASE):
     __tablename__ = "gdrive"
-    cat= Column(String(5), primary_key=True)
-    catid = Column(String(50))
+    cat= Column(String(50), primary_key=True)
 
-    def __init__(self,cat,catid):
+    def __init__(self,cat):
         self.cat = cat
-        self.catid = catid
 
 
 Gdrive.__table__.create(checkfirst=True)
 
 
-def is_folder(hmm):
+def is_folder(folder_id):
     try:
-        return SESSION.query(Gdrive).filter(Gdrive.cat == str(hmm)).one()
+        return SESSION.query(Gdrive).filter(Gdrive.cat == str(folder_id)).one()
     except:
         return None
     finally:
         SESSION.close()
 
 
-def gparent_id(hmm , folder_id):
-    adder = SESSION.query(Gdrive).get(hmm)
+def gparent_id(folder_id):
+    adder = SESSION.query(Gdrive).get(folder_id)
     if not adder:
-        adder = Gdrive(hmm , folder_id)
+        adder = Gdrive(folder_id)
     SESSION.add(adder)
     SESSION.commit()
     
@@ -39,8 +37,8 @@ def get_parent_id():
     finally:
         SESSION.close()
 
-def rmparent_id(hmm):
-    note = SESSION.query(Gdrive).filter(Gdrive.cat == hmm)
+def rmparent_id(folder_id):
+    note = SESSION.query(Gdrive).filter(Gdrive.cat == folder_id)
     if note:
         note.delete()
         SESSION.commit()
