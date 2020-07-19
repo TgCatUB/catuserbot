@@ -73,7 +73,7 @@ async def torrent_download(event):
 async def magnet_download(event):
 	if event.fwd_from:
 		return
-	var = event.text[5:]
+	var = event.text[8:]
 	print(var)	
 	uris = [var]
 	try: # Add URL Into Queue
