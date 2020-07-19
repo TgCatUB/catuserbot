@@ -4,12 +4,10 @@ from userbot.plugins.sql_helper import SESSION, BASE
 
 class GDrive(BASE):
     __tablename__ = "gdrive"
-    chat_id = Column(String(14))
     folderid = Column(String(40), primary_key=True)
 
-    def __init__(self, chat_id, folderid):
+    def __init__(self, folderid):
         self.folderid = folderid
-        self.chat_id = chat_id
 
 GDrive.__table__.create(checkfirst=True)
 
