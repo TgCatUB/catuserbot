@@ -3,12 +3,10 @@ from userbot.plugins.sql_helper import SESSION, BASE
 
 class Gdrive(BASE):
     __tablename__ = "gdrive"
-    chat_id = Column(String(14), primary_key=True)
-    reason = Column(String(127))
+    chat_id = Column(String(50), primary_key=True)
 
-    def __init__(self, chat_id, reason=""):
-        self.chat_id = chat_id
-        self.reason = reason
+    def __init__(self, cat):
+        self.cat = cat
 
 Gdrive.__table__.create(checkfirst=True)
 
