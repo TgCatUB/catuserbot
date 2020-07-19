@@ -30,7 +30,7 @@ def gparent_id (folder_id):
     SESSION.commit()
 
 
-def rmparent_id(folder_id)):
+def rmparent_id(folder_id):
     rem = SESSION.query(Gdrive).get(str(folder_id))
     if rem:
         SESSION.delete(rem)
