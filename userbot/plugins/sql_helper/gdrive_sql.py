@@ -13,7 +13,7 @@ class GDrive(BASE):
 GDrive.__table__.create(checkfirst=True)
 
 
-def is_GDrivened(folderid):
+def is_folder(folderid):
     try:
         return SESSION.query(GDrive).filter(GDrive.folderid == str(folderid)).one()
     except:
@@ -22,20 +22,20 @@ def is_GDrivened(folderid):
         SESSION.close()
 
 
-def catGDrive(folderid):
+def gparent_id(folderid):
     adder = GDrive(str(folderid))
     SESSION.add(adder)
     SESSION.commit()
 
 
-def catunGDrive(folderid):
+def rmparent_id(folderid):
     rem = SESSION.query(GDrive).get(str(folderid))
     if rem:
         SESSION.delete(rem)
         SESSION.commit()
 
 
-def get_all_GDrivened():
+def get_parent_id():
     rem = SESSION.query(GDrive).all()
     SESSION.close()
     return rem
