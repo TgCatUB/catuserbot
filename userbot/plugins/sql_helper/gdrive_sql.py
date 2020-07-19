@@ -1,34 +1,32 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, UnicodeText, LargeBinary, Numeric
 from userbot.plugins.sql_helper import SESSION, BASE
 
 
 class Gdrive(BASE):
     __tablename__ = "gdrive"
-    cat= Column(String(50), primary_key=True)
+    snip = Column(UnicodeText, primary_key=True)
+    reply = Column(UnicodeText)
 
-    def __init__(self,cat):
-        self.cat = cat
+    def __init__(
+        self,
+        snip, reply
+    ):
+        self.snip = snip
+        self.reply = reply
 
 
 Gdrive.__table__.create(checkfirst=True)
 
 
-def is_folder(folder_id):
+def is_folder(keyword):
     try:
-        return SESSION.query(Gdrive).filter(Gdrive.cat == str(folder_id)).one()
+        return SESSION.query(Gdrive).get(keyword)
     except:
         return None
     finally:
         SESSION.close()
 
 
-def gparent_id(folder_id):
-    adder = SESSION.query(Gdrive).all()
-    if not adder:
-        adder = Gdrive(folder_id)
-    SESSION.add(adder)
-    SESSION.commit()
-    
 def get_parent_id():
     try:
         return SESSION.query(Gdrive).all()
@@ -37,8 +35,19 @@ def get_parent_id():
     finally:
         SESSION.close()
 
-def rmparent_id(folder_id):
-    note = SESSION.query(Gdrive).filter(Gdrive.cat == folder_id)
+
+def gparent_id((keyword, reply):
+    adder = SESSION.query(Gdrive).get(keyword)
+    if adder:
+        adder.reply = reply
+    else:
+        adder = Gdrive(keyword, reply)
+    SESSION.add(adder)
+    SESSION.commit()
+
+
+def rmparent_id(keyword):
+    note = SESSION.query(Gdrive).filter(Gdrive.snip == keyword)
     if note:
         note.delete()
         SESSION.commit()
