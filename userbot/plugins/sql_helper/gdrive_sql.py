@@ -23,7 +23,7 @@ def is_folder(folder_id):
 
 
 def gparent_id(folder_id):
-    adder = SESSION.query(Gdrive).get(folder_id)
+    adder = SESSION.query(Gdrive).all()
     if not adder:
         adder = Gdrive(folder_id)
     SESSION.add(adder)
