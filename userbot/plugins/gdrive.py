@@ -23,6 +23,7 @@ import re
 import httplib2
 import subprocess
 from userbot.utils import admin_cmd, progress, humanbytes, time_formatter
+from userbot.plugins.sql_helper.gdrive_sql import is_folder , gparent_id , rmparent_id , get_parent_id
 
 # Path to token json file, it should be in same directory as script
 G_DRIVE_TOKEN_FILE = "./auth_token.txt"
