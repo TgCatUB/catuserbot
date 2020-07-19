@@ -6,7 +6,7 @@ class Gdrive(BASE):
     cat = Column(String(50), primary_key=True)
 
     def __init__(self, cat):
-        self.cat = cat
+        self.cat = str(cat)
 
 Gdrive.__table__.create(checkfirst=True)
 
