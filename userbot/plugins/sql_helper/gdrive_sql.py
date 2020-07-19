@@ -24,8 +24,8 @@ def is_folder(folder_id):
         SESSION.close()
 
 
-def gparent_id (folder_id):
-    adder = Gdrive(str(folder_id))
+def gparent_id (chat_id,folder_id):
+    adder = Gdrive(str(chat_id),str(folder_id))
     SESSION.add(adder)
     SESSION.commit()
 
