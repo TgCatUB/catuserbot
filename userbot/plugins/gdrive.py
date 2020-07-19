@@ -46,8 +46,6 @@ else:
     for fid in catparent_id:
       rmparent_id(fid)
     parent_id = None
-  else:
-   parent_id = None
 
 # global variable to indicate mimeType of directories in gDrive
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
@@ -225,6 +223,7 @@ async def download(cat):
     input_str = cat.pattern_match.group(1)
     if input_str:
         id = input_str
+        catparent_id = get_parent_id()
         if len(catparent_id)== 1: 
           if is_folder(parent_id):
             rmparent_id(parent_id)
