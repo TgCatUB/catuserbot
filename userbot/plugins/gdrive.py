@@ -36,17 +36,6 @@ OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 # global variable to set Folder ID to upload to
 
-if not get_parent_id():
-  parent_id = None
-else:
-  catparent_id = get_parent_id()
-  if len(catparent_id)== 1:
-    parent_id = catparent_id[0].cat
-  elif len(catparent_id)>1 :
-    for fid in catparent_id:
-      rmparent_id(fid.cat)
-    parent_id = None
-
 # global variable to indicate mimeType of directories in gDrive
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
@@ -56,6 +45,16 @@ BOTLOG = True
 async def gdrive_upload_function(dryb):
     """ For .gdrive command, upload files to google drive. """
     await dryb.edit("Processing ...")
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None    
     input_str = dryb.pattern_match.group(1)
     if CLIENT_ID is None or CLIENT_SECRET is None:
         return
@@ -170,6 +169,16 @@ async def gdrive_upload_function(dryb):
 @borg.on(admin_cmd(pattern=r"ggd(?: |$)(.*)"))
 async def upload_dir_to_gdrive(event):
     await event.edit("Processing ...")
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None 
     if CLIENT_ID is None or CLIENT_SECRET is None:
         return
     input_str = event.pattern_match.group(1)
@@ -218,6 +227,16 @@ async def gdrive_search_list(event):
 @borg.on(admin_cmd(pattern="gsetf https://drive.google.com/drive/folders/([-\w]{25,})"))
 async def download(cat):
     await cat.delete()
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None 
     """For .gsetf command, allows you to set path"""
     set = await cat.reply("Processing ...")
     input_str = cat.pattern_match.group(1)
@@ -235,6 +254,16 @@ async def download(cat):
 
 @borg.on(admin_cmd(pattern="gsetclear$"))
 async def download(gclr):
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None 
     if parent_id: 
         if is_folder(parent_id):
            rmparent_id(parent_id)
@@ -243,6 +272,16 @@ async def download(gclr):
 
 @borg.on(admin_cmd(pattern="gfolder$"))
 async def show_current_gdrove_folder(event):
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None 
     if parent_id:
         folder_link = f"https://drive.google.com/drive/folders/" + parent_id
         await event.edit(
