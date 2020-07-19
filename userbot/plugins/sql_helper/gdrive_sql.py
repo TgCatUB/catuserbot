@@ -7,7 +7,7 @@ class GDrive(BASE):
     chat_id = Column(String(14))
     folderid = Column(String(40), primary_key=True)
 
-    def __init__(self, chat_id),  folderid ):
+    def __init__(self, chat_id, folderid):
         self.folderid = folderid
         self.chat_id = chat_id
 
