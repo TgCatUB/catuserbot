@@ -1,41 +1,41 @@
 from sqlalchemy import Column, String
-try:
-    from userbot.plugins.sql_helper import SESSION, BASE
-except ImportError:
-    raise AttributeError
+from userbot.plugins.sql_helper import SESSION, BASE
+
 
 class GDrive(BASE):
     __tablename__ = "gdrive"
-    folderid = Column(String(50) , primary_key=True)
-    name = Column(String(127))
-    
-    def __init__(self, folderid, name = ""):
-        self.folderid = str(folderid)
-        self.name = name
-        
-        
-Gdrive.__table__.create(checkfirst=True)
+    folderid = Column(String(40), primary_key=True)
 
-def is_folder(folderid):
+    def __init__(self, folderid):
+        self.folderid = folderid
+
+
+GDrive.__table__.create(checkfirst=True)
+
+
+def is_GDrivened(folderid):
     try:
-        return SESSION.query(Gdrive).filter(Gdrive.folderid == str(folderid)).one()
+        return SESSION.query(GDrive).filter(GDrive.folderid == str(folderid)).one()
     except:
         return None
     finally:
         SESSION.close()
 
-def gparent_id(folderid , name):
-    adder = Gdrive(str(folderid), str(name))
+
+def catGDrive(folderid):
+    adder = GDrive(str(folderid))
     SESSION.add(adder)
     SESSION.commit()
 
-def rmparent_id(folderid):
-    rem = SESSION.query(Gdrive).get(str(folderid))
+
+def catunGDrive(folderid):
+    rem = SESSION.query(GDrive).get(str(folderid))
     if rem:
         SESSION.delete(rem)
         SESSION.commit()
 
-def get_parent_id():
-    rem = SESSION.query(Gdrive).all()
+
+def get_all_GDrivened():
+    rem = SESSION.query(GDrive).all()
     SESSION.close()
     return rem
