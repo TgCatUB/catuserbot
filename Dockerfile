@@ -1,90 +1,77 @@
 # credits to @pokurt
-FROM python:3.8.3-slim-buster
+FROM alpine:edge
 
-ENV PIP_NO_CACHE_DIR 1
+#
+# We have to uncomment Community repo for some packages
+#
+RUN sed -e 's;^#http\(.*\)/edge/community;http\1/edge/community;g' -i /etc/apk/repositories
 
-RUN sed -i.bak 's/us-west-2\.ec2\.//' /etc/apt/sources.list
-
-# Installing Required Packages
-RUN apt update && apt upgrade -y && \
-    apt install --no-install-recommends -y \
-    debian-keyring \
-    debian-archive-keyring \
+#
+# Installing Packages
+#
+RUN apk add --no-cache=true --update \
+    coreutils \
     bash \
-    bzip2 \
+    build-base \
+    bzip2-dev \
     curl \
     figlet \
+    gcc \
+    g++ \
     git \
+    aria2 \
     util-linux \
+    libevent \
+    jpeg-dev \
     libffi-dev \
-    libjpeg-dev \
-    libjpeg62-turbo-dev \
+    libpq \
     libwebp-dev \
-    linux-headers-amd64 \
-    musl-dev \
+    libxml2 \
+    libxml2-dev \
+    libxslt-dev \
+    linux-headers \
     musl \
     neofetch \
-    php-pgsql \
-    python3-lxml \
+    openssl-dev \
     postgresql \
     postgresql-client \
-    python3-psycopg2 \
-    libpq-dev \
-    libcurl4-openssl-dev \
-    libxml2-dev \
-    libxslt1-dev \
-    python3-pip \
-    python3-requests \
-    python3-sqlalchemy \
-    python3-tz \
-    python3-aiohttp \
+    postgresql-dev \
     openssl \
     pv \
     jq \
     wget \
     python3 \
     python3-dev \
-    libreadline-dev \
-    libyaml-dev \
-    gcc \
-    sqlite3 \
-    libsqlite3-dev \
-    sudo \
-    zlib1g \
+    readline-dev \
+    sqlite \
     ffmpeg \
-    libssl-dev \
-    libgconf-2-4 \
-    libxi6 \
-    xvfb \
-    unzip \
-    libopus0 \
-    libopus-dev \
-    && rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp
-
-RUN curl https://cli-assets.heroku.com/install.sh
+    sqlite-dev \
+    sudo \
+    chromium \
+    chromium-chromedriver \
+    zlib-dev \
+    jpeg \
+    zip \
+    freetype-dev
 
 RUN python3 -m ensurepip \
     && pip3 install --upgrade pip setuptools \
+    && pip3 install wheel \
     && rm -r /usr/lib/python*/ensurepip && \
     if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
     if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
     rm -r /root/.cache
 
-
-
-
 #
 # Clone repo and prepare working directory
 #
-
-RUN git clone https://github.com/sandy1709/catuserbot.git /root/userbot
-RUN mkdir /root/userbot/.bin
-WORKDIR /root/userbot/
-ENV PATH="/root/userbot/.bin:$PATH"
-WORKDIR /root/userbot/
+RUN git clone -b master https://github.com/sandy1709/catuserbot.git /home/catuserbot/
+RUN mkdir /home/catuserbot/bin/
+WORKDIR /home/catuserbot/
 
 #
 # Install requirements
 #
 RUN pip3 install -r requirements.txt
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 CMD ["python3","-m","userbot"]
