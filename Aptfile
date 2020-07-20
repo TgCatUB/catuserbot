@@ -1,3 +1,4 @@
-pv
-jq
-git + git clone -b master https://github.com/sandy1709/catuserbot.git
+pv \
+jq \
+git \
+git clone https://github.com/sandy1709/catuserbot.git /root/userbot
