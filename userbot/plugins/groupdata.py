@@ -28,26 +28,47 @@ async def leave(e):
         else:
             await e.edit('`Sar This is Not A Chat`')
    
-@borg.on(admin_cmd(pattern="adminlist", outgoing=True))
-@errors_handler
-async def get_admin(show):
-    """ For .admins command, list all of the admins of the chat. """
-    info = await show.client.get_entity(show.chat_id)
-    title = info.title if info.title else "this chat"
-    mentions = f'<b>Admins in {title}:</b> \n'
+@borg.on(admin_cmd(pattern="get_admins ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    mentions = "**Admins in this Group**: \n"
+    reply_message = None
+    pattern_match_str = event.pattern_match.group(1)
+    if event.reply_to_msg_id:
+         reply_message = await event.get_reply_message()
+    input_str = event.pattern_match.group(2)
+    to_write_chat = await event.get_input_chat()
+    chat = None
+    if not input_str:
+        chat = to_write_chat
+    else:
+        mentions_heading = "Admins in {} Group: \n".format(input_str)
+        mentions = mentions_heading
+        try:
+            chat = await borg.get_entity(input_str)
+        except Exception as e:
+            await event.edit(str(e))
+            return None
     try:
-        async for user in show.client.iter_participants(
-                show.chat_id, filter=ChannelParticipantsAdmins):
-            if not user.deleted:
-                link = f"<a href=\"tg://user?id={user.id}\">{user.first_name}</a>"
-                userid = f"<code>{user.id}</code>"
-                mentions += f"\n{link} {userid}"
+        async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
+            if not x.deleted:
+                if isinstance(x.participant, ChannelParticipantCreator):
+                    mentions += "\n 👑 [{}](tg://user?id={}) `{}`".format(x.first_name, x.id, x.id)
+        mentions += "\n"
+        async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
+            if not x.deleted:
+                if isinstance(x.participant, ChannelParticipantAdmin):
+                    mentions += "\n ⚜️ [{}](tg://user?id={}) `{}`".format(x.first_name, x.id, x.id)
             else:
-                mentions += f"\nDeleted Account <code>{user.id}</code>"
-    except ChatAdminRequiredError as err:
-        mentions += " " + str(err) + "\n"
-    await show.edit(mentions, parse_mode="html")
-
+                mentions += "\n `{}`".format(x.id)
+    except Exception as e:
+        mentions += " " + str(e) + "\n"
+    if reply_message:
+        await reply_message.reply(mentions)
+    else:
+        await event.reply(mentions)
+    await event.delete()
     
 @borg.on(admin_cmd(pattern=r"users ?(.*)", outgoing=True))
 async def get_users(show):
@@ -276,7 +297,7 @@ CMD_HELP.update({
     "groupdata":
     ".chatinfo or .chatinfo <username of group>\
      \nUsage: Shows you the total information of the required chat.\
-     \n\n.adminlist\
+     \n\n.get_admins or .get_admins <username of group >\
      \nUsage: Retrieves a list of admins in the chat.\
      \n\n.users or .users <name of member>\
      \nUsage: Retrieves all (or queried) users in the chat."      
