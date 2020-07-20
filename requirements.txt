@@ -52,7 +52,7 @@ regex
 requests
 search-engine-parser
 selenium
-setuptools
+setuptools>=40.3.0
 speedtest-cli
 spotify_token
 sqlalchemy
