@@ -2,11 +2,11 @@
 # thx to @r4v4n4
 from telethon import events
 import asyncio
+from base64 import b64decode	
+import io
 from userbot.utils import admin_cmd
 from platform import uname
-from userbot import ALIVE_NAME
-from userbot.utils import admin_cmd
-from userbot import CMD_HELP
+from userbot import ALIVE_NAME, CMD_HELP
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Sur_vivor"
 
