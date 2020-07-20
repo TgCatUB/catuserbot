@@ -1,7 +1,7 @@
 {
-  "name": "π.$",
-  "description": "Userbot created by a SNAPDRAGON and custom fork by https://t.me/mrconfused contact @mrconfused for support",
-  "logo": "https://telegra.ph/file/f8ab330abd9a8a43f5a40.jpg",
+  "name": "Catuserbot",
+  "description": "Userbot created by a SNAPDRAGON and custom fork by https://t.me/mrconfused contact @catuserbot_support for support",
+  "logo": "https://telegra.ph/file/3d60313110c58684b31ea.jpg",
   "keywords": [
     "telegram",
     "userbot",
@@ -112,6 +112,8 @@
     "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
   },{
     "url":"https://github.com/amivin/aria2-heroku.git"
+  },{
+     "url": "https://github.com/heroku/heroku-buildpack-apt.git"
   },{
     "url":"https://github.com/heroku/heroku-buildpack-google-chrome"
   },{
