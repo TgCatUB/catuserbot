@@ -1,4 +1,2 @@
-pv \
-jq \
-git \
-git clone https://github.com/sandy1709/catuserbot.git /root/userbot
+pv
+jq
