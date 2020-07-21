@@ -116,7 +116,7 @@ async def mega_downloader(megadl):
             ''.join(["▱" for i in range(
                     10 - math.floor(percentage / 10))]),
             round(percentage, 2))
-        diff = time.time() - start
+        diff = (time.time() - start)*1000
         try:
             current_message = (
                 f"`{file_name}`\n\n"
@@ -137,10 +137,10 @@ async def mega_downloader(megadl):
             pass
         finally:
             if status == "Combining":
-                wait = round(downloader.get_eta())
+                wait = round(downloader.get_eta())*1000
                 await asyncio.sleep(wait)
     if downloader.isSuccessful():
-        download_time = round(downloader.get_dl_time() + wait)
+        download_time = round(downloader.get_dl_time() + wait)*1000
         try:
             P = multiprocessing.Process(target=await decrypt_file(megadl,
                                                                   file_path, temp_file_path,
