@@ -1,4 +1,4 @@
 pv
 jq
+libcurl4-openssl-dev
 openssl
-openssl-dev
