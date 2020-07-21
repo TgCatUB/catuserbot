@@ -15,7 +15,7 @@ from userbot.helpers import functions as catdef
 from userbot.helpers import memeshelper as memes
 
 StartTime = time.time()
-catversion = "2.5.3"
+catversion = "2.5.4"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -106,22 +106,22 @@ else:
     PLACEHOLDER = None
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
-# and giving them correct perms to work properly.
 if not os.path.exists('bin'):
     os.mkdir('bin')
-    
+
 binaries = {
-    "https://raw.githubusercontent.com/yshalsager/megadown/master/megadown":
+    "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown":
     "bin/megadown",
     "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py":
-    "bin/cmrudl"
+    "bin/cmrudl",
+    "https://raw.githubusercontent.com/adekmaulana/python-scripts/master/shell/megadirect":
+    "bin/megadirect"
 }
 
 for binary, path in binaries.items():
     downloader = SmartDL(binary, path, progress_bar=False)
     downloader.start()
     os.chmod(path, 0o755)
-
 
 # Global Variables
 COUNT_MSG = 0
