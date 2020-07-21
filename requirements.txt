@@ -29,6 +29,7 @@ justwatch
 kwot
 lxml
 lyricsgenius
+nekos.py
 oauth2client
 patool
 Pillow
