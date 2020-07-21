@@ -1,2 +1,4 @@
 pv
 jq
+openssl
+openssl-dev
