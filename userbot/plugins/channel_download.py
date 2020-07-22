@@ -32,9 +32,8 @@ async def get_media(event):
         f.write(str(msgs))
     for msg in msgs:
        if msg.media is not None:
-            await borg.download_media(
-                msg,dir)
-        await time.sleep(2)
+            await borg.download_media(msg,dir)
+            await time.sleep(2)
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
@@ -60,9 +59,8 @@ async def get_media(event):
         f.write(str(msgs))
     for msg in msgs:
        if msg.media is not None:
-           await borg.download_media(
-                msg,dir)   
-        await time.sleep(2)
+           await borg.download_media(msg,dir)   
+           await time.sleep(2)
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
