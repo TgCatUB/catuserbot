@@ -30,10 +30,12 @@ async def get_media(event):
     msgs = await borg.get_messages(channel_username, limit=int(limit))
     with open('log.txt','w') as f:
         f.write(str(msgs))
+    i = 0           
     for msg in msgs:
        if msg.media is not None:
             await borg.download_media(msg,dir)
-            await time.sleep(2)
+            i +=1
+            await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED**`{i}`")
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
@@ -57,10 +59,12 @@ async def get_media(event):
     msgs = await borg.get_messages(channel_username,limit=3000)
     with open('log.txt','w') as f:
         f.write(str(msgs))
+    i = 0
     for msg in msgs:
        if msg.media is not None:
            await borg.download_media(msg,dir)   
-           await time.sleep(2)
+           i +=1
+           await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED**`{i}`")
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
