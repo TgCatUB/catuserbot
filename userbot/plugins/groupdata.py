@@ -4,7 +4,7 @@ from telethon import events
 import asyncio
 from telethon.errors import (ChannelInvalidError, ChannelPrivateError, ChannelPublicGroupNaError, InviteHashEmptyError, InviteHashExpiredError, InviteHashInvalidError)
 from emoji import emojize
-from telethon.tl.types import MessageActionChannelMigrateFrom, ChannelParticipantsAdmins, ChannelParticipantCreator
+from telethon.tl.types import MessageActionChannelMigrateFrom,  ChannelParticipantsAdmins, ChannelParticipantAdmin, ChannelParticipantCreator
 from telethon.tl.functions.messages import GetHistoryRequest, CheckChatInviteRequest, GetFullChatRequest
 from telethon.events import ChatAction
 from datetime import datetime
@@ -34,10 +34,9 @@ async def _(event):
         return
     mentions = "**Admins in this Group**: \n"
     reply_message = None
-    pattern_match_str = event.pattern_match.group(1)
     if event.reply_to_msg_id:
          reply_message = await event.get_reply_message()
-    input_str = event.pattern_match.group(2)
+    input_str = event.pattern_match.group(1)
     to_write_chat = await event.get_input_chat()
     chat = None
     if not input_str:
