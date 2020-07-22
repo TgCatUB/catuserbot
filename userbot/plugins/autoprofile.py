@@ -5,7 +5,8 @@ from telethon.tl import functions
 from telethon.errors import FloodWaitError
 from userbot.utils import admin_cmd
 from userbot import AUTONAME, CMD_HELP, DEFAULT_BIO
-import random, re
+import random
+import re
 import os
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
