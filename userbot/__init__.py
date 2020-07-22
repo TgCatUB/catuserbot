@@ -14,7 +14,7 @@ from userbot.helpers import fonts as fonts
 from userbot.helpers import functions as catdef
 
 StartTime = time.time()
-catversion = "2.5.3"
+catversion = "2.5.4"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -27,7 +27,6 @@ else:
 ENV = os.environ.get("ENV", False)
 
 CAT_ID = ["1035034432", "1118936839"]
-
 # Bot Logs setup:
 if bool(ENV):
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
@@ -106,15 +105,16 @@ else:
     PLACEHOLDER = None
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
-# and giving them correct perms to work properly.
 if not os.path.exists('bin'):
     os.mkdir('bin')
     
 binaries = {
-    "https://raw.githubusercontent.com/yshalsager/megadown/master/megadown":
+    "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown":
     "bin/megadown",
     "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py":
-    "bin/cmrudl"
+    "bin/cmrudl",
+    "https://raw.githubusercontent.com/adekmaulana/python-scripts/master/shell/megadirect":
+    "bin/megadirect"
 }
 
 for binary, path in binaries.items():
