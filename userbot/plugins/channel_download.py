@@ -21,7 +21,7 @@ async def get_media(event):
     try:
         os.makedirs("./temp/")
     except:
-    	pass
+        pass
     catty = event.pattern_match.group(1)
     command = ['ls','temp','|','wc','-l' ]
     limit = int(catty.split(' ')[0])
@@ -29,12 +29,12 @@ async def get_media(event):
     await event.edit("Downloading Media From this Channel.")
     msgs = await borg.get_messages(channel_username, limit=int(limit))
     with open('log.txt','w') as f:
-    	f.write(str(msgs))
+        f.write(str(msgs))
     for msg in msgs:
        if msg.media is not None:
-	        await borg.download_media(
+            await borg.download_media(
                 msg,dir)
-		await time.sleep(2)
+        await time.sleep(2)
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
@@ -51,18 +51,18 @@ async def get_media(event):
     try:
         os.makedirs("./temp/")
     except:
-    	pass
+        pass
     channel_username = event.pattern_match.group(1)
     command = ['ls','temp','|','wc','-l' ]
     await event.edit("Downloading All Media From this Channel.")
     msgs = await borg.get_messages(channel_username,limit=3000)
     with open('log.txt','w') as f:
-    	f.write(str(msgs))
+        f.write(str(msgs))
     for msg in msgs:
        if msg.media is not None:
-	        await borg.download_media(
+           await borg.download_media(
                 msg,dir)   
-		await time.sleep(2)
+        await time.sleep(2)
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
