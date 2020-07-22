@@ -33,6 +33,9 @@ from pySmartDL import SmartDL
 from userbot import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
 from userbot.utils import humanbytes, time_formatter, admin_cmd
 
+if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
+      os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
+        
 async def subprocess_run(megadl, cmd):
     subproc = await asyncSubprocess(cmd, stdout=asyncPIPE, stderr=asyncPIPE)
     stdout, stderr = await subproc.communicate()
@@ -49,8 +52,6 @@ async def subprocess_run(megadl, cmd):
 @borg.on(admin_cmd(outgoing=True, pattern=r"mega(?: |$)(.*)"))
 async def mega_downloader(megadl):
     await megadl.edit("`Collecting information...`")
-    if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     msg_link = await megadl.get_reply_message()
     link = megadl.pattern_match.group(1)
     if link:
@@ -61,7 +62,6 @@ async def mega_downloader(megadl):
         return await megadl.edit("Usage: `.mega` **<MEGA.nz link>**")
     try:
         link = re.findall(r'\bhttps?://.*mega.*\.nz\S+', link)[0]
-        """ - Mega changed their URL again - """
         if "file" in link:
             link = link.replace("#", "!").replace("file/", "#!")
         elif "folder" in link or "#F" in link or "#N" in link:
