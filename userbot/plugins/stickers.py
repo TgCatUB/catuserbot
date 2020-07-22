@@ -53,7 +53,7 @@ async def _(event):
     pack = 1
     userid = event.from_id
     packname = f"{user.first_name}'s @{user.username} Vol.{pack}"
-    packshortname = f"@{user.username}'s_{pack}"
+    packshortname = f"Vol._{pack}_with_{userid}"
     await event.edit("`Look dat way,it's a gurl!\n`Meanwhile, lemme kang this stcker over hehe`**ヽ༼ ಠ益ಠ ༽ﾉ**")
 
     is_a_s = is_it_animated_sticker(reply_message)
@@ -133,7 +133,7 @@ async def _(event):
                     pack += 1
                     prevv = int(pack) - 1
                     packname = f"{user.first_name}'s @{user.username} Vol.{pack}"
-                    packshortname = f"@{user.username}'s_{pack}"
+                    packshortname = f"Vol._{pack}_with_{userid}"
                     if not await stickerset_exists(bot_conv, packshortname):
                         await event.edit("**Pack No. **" + str(prevv) + "** full! Making a new Pack, Vol. **" + str(pack))
                         if is_a_s:
