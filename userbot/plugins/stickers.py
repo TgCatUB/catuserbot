@@ -29,7 +29,7 @@ from telethon.tl.types import (
 from userbot.utils import admin_cmd
 from userbot import ALIVE_NAME
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "No name set yet nibba, check pinned in @XtraTgBot"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Sur_vivor"
 FILLED_UP_DADDY = "Invalid pack selected."
 
 @borg.on(admin_cmd(pattern="kang ?(.*)"))
@@ -48,14 +48,16 @@ async def _(event):
     user = await bot.get_me()
     if not user.first_name:
         user.first_name = user.id
+    if not user.username:
+        user.username = user.id    
     pack = 1
     userid = event.from_id
-    packname = f"{user.first_name}'s @Sur_vivor Vol.{pack}"
-    packshortname = f"vol_{pack}_with_{userid}"
+    packname = f"{user.first_name}'s @{user.username} Vol.{pack}"
+    packshortname = f"@{user.username}'s_{pack}"
     await event.edit("`Look dat way,it's a gurl!\n`Meanwhile, lemme kang this stcker over hehe`**ヽ༼ ಠ益ಠ ༽ﾉ**")
 
     is_a_s = is_it_animated_sticker(reply_message)
-    file_ext_ns_ion = "survivors.png"
+    file_ext_ns_ion = "sticker.png"
     file = await borg.download_file(reply_message.media)
     uploaded_sticker = None
     if is_a_s:
@@ -92,7 +94,7 @@ async def _(event):
             response = await silently_send_message(bot_conv, packname)
             if not response.text.startswith("Alright!"):
                 if "unacceptable" in response.text:
-                    packname = f"{user.id}'s @Sur_vivor Vol.{pack}"
+                    packname = f"{user.id}'s @{user.username} Vol.{pack}"
                     response = await silently_send_message(bot_conv, packname)
                 else:
                     await event.edit(f"**FAILED**! @Stickers replied: {response.text}")
@@ -130,8 +132,8 @@ async def _(event):
                 while response.text == FILLED_UP_DADDY:
                     pack += 1
                     prevv = int(pack) - 1
-                    packname = f"{user.first_name}'s @Sur_vivor Vol.{pack}"
-                    packshortname = f"Vol._{pack}_with_{userid}"
+                    packname = f"{user.first_name}'s @{user.username} Vol.{pack}"
+                    packshortname = f"@{user.username}'s_{pack}"
                     if not await stickerset_exists(bot_conv, packshortname):
                         await event.edit("**Pack No. **" + str(prevv) + "** full! Making a new Pack, Vol. **" + str(pack))
                         if is_a_s:
@@ -144,7 +146,7 @@ async def _(event):
                         response = await silently_send_message(bot_conv, packname)
                         if not response.text.startswith("Alright!"):
                             if "unacceptable" in response.text:
-                                packname = f"{user.id}'s @Sur_vivor Vol.{pack}"
+                                packname = f"{user.id}'s @{user.username} Vol.{pack}"
                                 response = await silently_send_message(bot_conv, packname)
                             else:
                                 await event.edit(f"**FAILED**! @Stickers replied: {response.text}")
