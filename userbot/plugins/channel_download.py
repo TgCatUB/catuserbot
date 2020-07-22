@@ -35,7 +35,7 @@ async def get_media(event):
        if msg.media is not None:
             await borg.download_media(msg,dir)
             i +=1
-            await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED**`{i}`")
+            await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`")
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
@@ -64,7 +64,7 @@ async def get_media(event):
        if msg.media is not None:
            await borg.download_media(msg,dir)   
            i +=1
-           await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED**`{i}`")
+           await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`")
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
