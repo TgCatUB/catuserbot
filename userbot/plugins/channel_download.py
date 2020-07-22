@@ -10,8 +10,9 @@ import os
 import subprocess
 import sys
 from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
+from userbot import CMD_HELP
 
-@borg.on(admin_cmd(pattern=r"getc"))
+@borg.on(admin_cmd(pattern=r"getc(?: |$)(.*)"))
 async def get_media(event):
     if event.fwd_from:
         return
@@ -20,13 +21,10 @@ async def get_media(event):
         os.makedirs("./temp/")
     except:
     	pass
-    
-    catty = event.text
+    catty = event.pattern_match.group(1)
     command = ['ls','temp','|','wc','-l' ]
     limit = int(catty.split(' ')[1])
-    print(limit)
     channel_username = str(catty.split(' ')[2])
-    print(channel_username)
     await event.edit("Downloading Media From this Channel.")
     msgs = await borg.get_messages(channel_username, limit=int(limit))
     with open('log.txt','w') as f:
@@ -39,14 +37,11 @@ async def get_media(event):
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
     output = str(output)
-    output = output.replace("b'","")
-    output = output.replace("\n'","")
+    output = output.replace("b","")
+    output = output.replace("\n","")
     await event.edit("Downloaded "+output+" files.")
              
-         
-             
-             
-@borg.on(admin_cmd(pattern=r"geta"))
+@borg.on(admin_cmd(pattern=r"geta(?: |$)(.*)"))
 async def get_media(event):
     if event.fwd_from:
         return
@@ -55,12 +50,8 @@ async def get_media(event):
         os.makedirs("./temp/")
     except:
     	pass
-    channel_username= event.text
+    channel_username = event.pattern_match.group(1)
     command = ['ls','temp','|','wc','-l' ]
-    channel_username = channel_username[7:]
- 
-   
-    print(channel_username)
     await event.edit("Downloading All Media From this Channel.")
     msgs = await borg.get_messages(channel_username,limit=3000)
     with open('log.txt','w') as f:
@@ -76,6 +67,8 @@ async def get_media(event):
     output = output.replace("b'","")
     output = output.replace("\n'","")
     await event.edit("Downloaded "+output+" files.")
-             
-             
-             
+
+CMD_HELP.update({"channel_download": "Telegram Channel Media Downloader Plugin for userbot\.
+\n\n**usage :**\n .geta channel_username [will  get all media from channel, tho there is limit of 3000 there to prevent API limits.]\
+\n .getc number_of_messsages channel_username" 
+})  
