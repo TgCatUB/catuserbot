@@ -1,8 +1,6 @@
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 
-
-
 @borg.on(admin_cmd(outgoing=True, pattern="info(?: |$)(.*)"))
 async def info(event):
     """ For .info command,"""
