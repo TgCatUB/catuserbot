@@ -247,19 +247,18 @@ async def download(cat):
         for fid in catparent_id:
           rmparent_id(fid.cat)
         parent_id = None 
-    """For .gsetf command, allows you to set path"""
-    set = await cat.reply("Processing ...")
+    setf = await cat.reply("Processing ...")
     input_str = cat.pattern_match.group(1)
     if input_str:
-        id = input_str
+        gid = input_str
         catparent_id = get_parent_id()
         if len(catparent_id)== 1: 
           if is_folder(parent_id):
             rmparent_id(parent_id)
-        gparent_id(id)
-        await set.edit(f"Custom Folder ID set successfully. The next uploads will upload to `{id}` till `.gsetclear`")
+        gparent_id(gid)
+        await setf.edit(f"Custom Folder ID set successfully. The next uploads will upload to `{gid}` till `.gsetclear`")
     else:
-        await set.edit("Use `.gsetf <link to GDrive Folder>` to set the folder to upload new files to.")
+        await setf.edit("Use `.gsetf <link to GDrive Folder>` to set the folder to upload new files to.")
 
 
 @borg.on(admin_cmd(pattern="gsetclear$"))
