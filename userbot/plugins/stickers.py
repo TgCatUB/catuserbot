@@ -53,21 +53,24 @@ async def _(event):
     pack = 1
     userid = event.from_id
     packname = f"{user.first_name}'s @{user.username} Vol.{pack}"
-    packshortname = f"{user.username}_{pack}_{user.id}"
+    if userid == 1118936839:        
+        packshortname = f"Sarath_Survivor{userid}"
+    else:        
+        packshortname = f"{user.username}_{pack}_{user.id}"
     await event.edit("`Look dat way,it's a gurl!\n`Meanwhile, lemme kang this stcker over hehe`**ヽ༼ ಠ益ಠ ༽ﾉ**")
 
     is_a_s = is_it_animated_sticker(reply_message)
-    file_ext_ns_ion = "sticker.png"
+    file_ext_ns_ion = "Survivor_Sticker.png"
     file = await borg.download_file(reply_message.media)
     uploaded_sticker = None
     if is_a_s:
         file_ext_ns_ion = "AnimatedSticker.tgs"
         uploaded_sticker = await borg.upload_file(file, file_name=file_ext_ns_ion)
         packname = f"{user.first_name}'s Animated {pack}"
-        #if userid == 1118936839:
-        #    packshortname = "Sur_vivor_Animated"
-        #else:
-        packshortname = f"{user.username}_animated_{pack}_{user.id}" # format: Uni_Borg_userid
+        if userid == 1118936839:            
+            packshortname = f"Survivor_Animated"
+        else:
+            packshortname = f"{user.username}_animated_{pack}_{user.id}" # format: Uni_Borg_userid
     elif not is_message_image(reply_message):
         await event.edit("Invalid message type")
         return
