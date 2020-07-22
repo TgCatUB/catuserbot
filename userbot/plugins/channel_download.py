@@ -9,6 +9,7 @@ import asyncio
 import os
 import subprocess
 import sys
+import time 
 from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 from userbot import CMD_HELP
 
@@ -33,12 +34,13 @@ async def get_media(event):
        if msg.media is not None:
 	        await borg.download_media(
                 msg,dir)
+		await time.sleep(2)
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
     output = str(output)
-    output = output.replace("b","")
-    output = output.replace("\n","")
+    output = output.replace("b'"," ")
+    output = output.replace("\\n'"," ")
     await event.edit("Downloaded "+output+" files.")
              
 @borg.on(admin_cmd(pattern=r"geta(?: |$)(.*)"))
@@ -59,13 +61,14 @@ async def get_media(event):
     for msg in msgs:
        if msg.media is not None:
 	        await borg.download_media(
-                msg,dir)          
+                msg,dir)   
+		await time.sleep(2)
     ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
     output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
     ps.wait()
     output = str(output)
     output = output.replace("b'","")
-    output = output.replace("\n'","")
+    output = output.replace("\\n'","")
     await event.edit("Downloaded "+output+" files.")
 
 CMD_HELP.update({"channel_download": "Telegram Channel Media Downloader Plugin for userbot.\
