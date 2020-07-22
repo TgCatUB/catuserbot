@@ -68,7 +68,7 @@ async def get_media(event):
     output = output.replace("\n'","")
     await event.edit("Downloaded "+output+" files.")
 
-CMD_HELP.update({"channel_download": "Telegram Channel Media Downloader Plugin for userbot\.
+CMD_HELP.update({"channel_download": "Telegram Channel Media Downloader Plugin for userbot.\
 \n\n**usage :**\n .geta channel_username [will  get all media from channel, tho there is limit of 3000 there to prevent API limits.]\
 \n .getc number_of_messsages channel_username" 
 })  
