@@ -1,14 +1,5 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-#
-""" Userbot help command """
-
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
-
-
 
 @borg.on(admin_cmd(outgoing=True, pattern="info(?: |$)(.*)"))
 async def info(event):
@@ -20,9 +11,9 @@ async def info(event):
         else:
             await event.edit("Please specify a valid plugin name.")
     else:
-        string = "Please specify which plugin do you want help for !!\
-            \nUsage: `.info` <plugin name>\n"
-        for i in CMD_HELP:
-            string += " `" + str(i)
-            string += "` ➖"
+        string = "**Please specify which plugin do you want help for !!**\
+            \n**Usage:** `.info` <plugin name>\n\n"
+        for i in sorted(CMD_HELP):
+            string += "◆`" + str(i)
+            string += "`   "
         await event.edit(string)

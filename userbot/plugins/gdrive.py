@@ -19,9 +19,11 @@ from userbot import (G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET,
                      G_DRIVE_AUTH_TOKEN_DATA, GDRIVE_FOLDER_ID,
                      TEMP_DOWNLOAD_DIRECTORY, CMD_HELP, LOGS)
 from mimetypes import guess_type
+import re
 import httplib2
 import subprocess
 from userbot.utils import admin_cmd, progress, humanbytes, time_formatter
+from userbot.plugins.sql_helper.gdrive_sql import is_folder , gparent_id , rmparent_id , get_parent_id
 
 # Path to token json file, it should be in same directory as script
 G_DRIVE_TOKEN_FILE = "./auth_token.txt"
@@ -33,7 +35,7 @@ OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 # Redirect URI for installed apps, can be left as is
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 # global variable to set Folder ID to upload to
-parent_id = GDRIVE_FOLDER_ID
+
 # global variable to indicate mimeType of directories in gDrive
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
@@ -43,6 +45,16 @@ BOTLOG = True
 async def gdrive_upload_function(dryb):
     """ For .gdrive command, upload files to google drive. """
     await dryb.edit("Processing ...")
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None    
     input_str = dryb.pattern_match.group(1)
     if CLIENT_ID is None or CLIENT_SECRET is None:
         return
@@ -157,6 +169,16 @@ async def gdrive_upload_function(dryb):
 @borg.on(admin_cmd(pattern=r"ggd(?: |$)(.*)"))
 async def upload_dir_to_gdrive(event):
     await event.edit("Processing ...")
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None 
     if CLIENT_ID is None or CLIENT_SECRET is None:
         return
     input_str = event.pattern_match.group(1)
@@ -183,6 +205,16 @@ async def upload_dir_to_gdrive(event):
 
 @borg.on(admin_cmd(pattern=r"list(?: |$)(.*)"))
 async def gdrive_search_list(event):
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None
     await event.edit("Processing ...")
     if CLIENT_ID is None or CLIENT_SECRET is None:
         return
@@ -203,32 +235,62 @@ async def gdrive_search_list(event):
 
 
 @borg.on(admin_cmd(pattern=r"gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"))
-async def download(set):
-    """For .gsetf command, allows you to set path"""
-    await set.edit("Processing ...")
-    input_str = set.pattern_match.group(1)
-    if input_str:
-        parent_id = input_str
-        await set.edit(
-            "Custom Folder ID set successfully. The next uploads will upload to {parent_id} till `.gdriveclear`"
-        )
-        await set.delete()
+async def download(cat):
+    await cat.delete()
+    if not get_parent_id():
+      parent_id = None
     else:
-        await set.edit(
-            "Use `.gdrivesp <link to GDrive Folder>` to set the folder to upload new files to."
-        )
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None 
+    setf = await cat.reply("Processing ...")
+    input_str = cat.pattern_match.group(1)
+    if input_str:
+        gid = input_str
+        catparent_id = get_parent_id()
+        if len(catparent_id)== 1: 
+          if is_folder(parent_id):
+            rmparent_id(parent_id)
+        gparent_id(gid)
+        await setf.edit(f"Custom Folder ID set successfully. The next uploads will upload to `{gid}` till `.gsetclear`")
+    else:
+        await setf.edit("Use `.gsetf <link to GDrive Folder>` to set the folder to upload new files to.")
 
 
 @borg.on(admin_cmd(pattern="gsetclear$"))
 async def download(gclr):
-    """For .gsetclear command, allows you clear ur curnt custom path"""
-    await gclr.reply("Processing ...")
-    parent_id = GDRIVE_FOLDER_ID
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None 
+    if parent_id: 
+        if is_folder(parent_id):
+           rmparent_id(parent_id)
     await gclr.edit("Custom Folder ID cleared successfully.")
 
 
 @borg.on(admin_cmd(pattern="gfolder$"))
 async def show_current_gdrove_folder(event):
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None 
     if parent_id:
         folder_link = f"https://drive.google.com/drive/folders/" + parent_id
         await event.edit(
