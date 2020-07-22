@@ -32,9 +32,6 @@ from urllib.error import HTTPError
 from pySmartDL import SmartDL
 from userbot import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
 from userbot.utils import humanbytes, time_formatter, admin_cmd
-
-if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
-      os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
         
 async def subprocess_run(megadl, cmd):
     subproc = await asyncSubprocess(cmd, stdout=asyncPIPE, stderr=asyncPIPE)
@@ -70,6 +67,8 @@ async def mega_downloader(megadl):
     except IndexError:
         await megadl.edit("`MEGA.nz link not found...`")
         return None
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     cmd = f'bin/megadown -q -m {link}'
     result = await subprocess_run(megadl, cmd)
     try:
