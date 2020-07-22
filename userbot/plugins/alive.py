@@ -9,9 +9,13 @@ from userbot import CMD_HELP, ALIVE_NAME, catversion , catdef
 from userbot.utils import admin_cmd,sudo_cmd
 from telethon import version
 from platform import python_version, uname
+import requests
+import re
+from PIL import Image
+import os
+import nekos
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-
 CAT_IMG = Config.ALIVE_PIC
 
 @borg.on(admin_cmd(outgoing=True, pattern="alive$"))
@@ -58,7 +62,22 @@ async def _(event):
                      f"**uptime :** `{uptime}\n`"
                      #"Deploy this userbot Now"
                     )
-       
+
+@borg.on(admin_cmd(pattern="cat$"))
+async def _(event):
+    await event.delete() 
+    reply_to_id = event.message
+    if event.reply_to_msg_id:
+        reply_to_id = await event.get_reply_message()
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(nekos.cat()).content)
+    img = Image.open("temp.png")
+    img.save("temp.webp", "webp")
+    img.seek(0)
+    await bot.send_file(event.chat_id , open("temp.webp", "rb"),reply_to=reply_to_id) 
+	
 CMD_HELP.update({"alive": "`.alive` :\
-      \nUSAGE: Type .alive to see wether your bot is working or not. "
+      \n**USAGE:** Type .alive to see wether your bot is working or not.\
+      \n\n`.cat`\
+      \n**USAGE : **Random cat stickers"
 }) 
