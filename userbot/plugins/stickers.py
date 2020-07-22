@@ -116,7 +116,7 @@ async def _(event):
                 await event.edit(f"**FAILED**! @Stickers replied: {response.text}")
                 return
             elif response.text == "Sorry, this short name is unacceptable.":
-                packshortname = f"pack_{pack}_animated_{user.id}"
+                packshortname = f"pack_{pack}_sticker_{user.id}"
                 await silently_send_message(bot_conv, packshortname)
         else:
             await silently_send_message(bot_conv, "/cancel")
@@ -168,7 +168,7 @@ async def _(event):
                             await event.edit(f"**FAILED**! @Stickers replied: {response.text}")
                             return
                         elif response.text == "Sorry, this short name is unacceptable.":
-                            packshortname = f"pack_{pack}_animated_{user.id}"
+                            packshortname = f"pack_{pack}_sticker_{user.id}"
                             await silently_send_message(bot_conv, packshortname)
                     else:
                         await event.edit("Pack No. " + str(prevv) + " full! Switching to Vol. " + str(pack))
