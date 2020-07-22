@@ -57,7 +57,7 @@ async def _(event):
         packshortname = f"Sarath_Survivor{userid}"
     else:        
         packshortname = f"{user.username}_{pack}_{user.id}"
-    await event.edit("`Look dat way,it's a gurl!\n`Meanwhile, lemme kang this stcker over hehe`**ヽ༼ ಠ益ಠ ༽ﾉ**")
+    await event.edit("`Look dat way,it's a gurl!\n`Meanwhile, lemme kang this stcker over hehe`")
 
     is_a_s = is_it_animated_sticker(reply_message)
     file_ext_ns_ion = "Survivor_Sticker.png"
@@ -201,7 +201,7 @@ async def _(event):
                      f" `by` {DEFAULTUSER}\n`Sticker Emoji` {sticker_emoji}")
 
 
-@borg.on(admin_cmd(pattern="stkrinfo"))
+@borg.on(admin_cmd(pattern="packinfo"))
 async def _(event):
     if event.fwd_from:
         return
@@ -256,7 +256,7 @@ async def _(event):
             return
         is_a_s = is_it_animated_sticker(reply_message)
         file_ext_ns_ion = "webp"
-        file_caption = "https://t.me/RoseSupport/33801"
+        file_caption = "By CatUserbot"
         if is_a_s:
             file_ext_ns_ion = "tgs"
             file_caption = "Forward the ZIP file to @AnimatedStickersRoBot to get lottIE JSON containing the vector information."
