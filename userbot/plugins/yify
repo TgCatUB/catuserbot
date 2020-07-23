@@ -34,5 +34,4 @@ async def _(event):
                 uploadbot,
                 magnetic_link
             )
-            # return False
             await asyncio.sleep(120)
