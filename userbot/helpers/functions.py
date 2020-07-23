@@ -104,7 +104,7 @@ def deEmojify(inputString: str) -> str:
     return re.sub(EMOJI_PATTERN, '', inputString)
   
 def convert_toimage(image):
-    im = Image.open(image)
+    img = Image.open(image)
     img.save("temp.jpg", "jpeg")
     os.remove(image)
     return "temp.jpg"
