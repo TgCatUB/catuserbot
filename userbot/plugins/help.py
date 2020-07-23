@@ -28,7 +28,7 @@ async def cmd_list(event):
             if input_str in CMD_LIST:
                 string = "Commands found in {}:\n".format(input_str)
                 for i in CMD_LIST[input_str]:
-                    string += "    " + f"`{i}`"
+                    string += "    " + i
                     string += "\n"
                 await event.edit(string)
             else:
