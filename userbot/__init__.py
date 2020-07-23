@@ -14,7 +14,7 @@ from userbot.helpers import fonts as fonts
 from userbot.helpers import functions as catdef
 
 StartTime = time.time()
-catversion = "2.5.4"
+catversion = "2.5.5"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
