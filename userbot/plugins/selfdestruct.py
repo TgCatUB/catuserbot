@@ -48,9 +48,9 @@ async def selfdestruct(destroy):
         
 CMD_HELP.update({
     "selfdestruct":
-    ".sdm number | [text]\
+    ".sdm number [text]\
 \nUsage: self destruct this message in number seconds \
-\n\n.self number | [text]\
+\n\n.selfd number [text]\
 \nUsage:self destruct this message in number seconds with showing that it will destruct. \
 "
 })         
