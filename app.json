@@ -12,6 +12,7 @@
   "repository": "https://github.com/sandy1709/catuserbot/",
   "website": "#TODO",
   "success_url": "#TODO",
+  "stack": "container",
   "env": {
     "ENV": {
       "description": "Setting this to ANYTHING will enable heroku.",
