@@ -9,6 +9,7 @@ RUN apt update && apt upgrade -y && \
     apt install --no-install-recommends -y \
     debian-keyring \
     debian-archive-keyring \
+    aria2\
     bash \
     bzip2 \
     curl \
