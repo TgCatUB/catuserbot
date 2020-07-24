@@ -64,14 +64,14 @@ RUN apt update && apt upgrade -y && \
 RUN pip3 install --upgrade pip setuptools
 
 
-# Copy Python Requirements to /root/catuserbot
-RUN git clone -b test https://github.com/sandy1709/catuserbot.git /root/catuserbot
-WORKDIR /root/catuserbot
+# Copy Python Requirements to /root/userbot
+RUN git clone -b test https://github.com/sandy1709/catuserbot.git /root/userbot
+WORKDIR /root/userbot
 
-ENV PATH="/home/catuserbot/bin:$PATH"
+ENV PATH="/home/userbot/bin:$PATH"
 
 # Install requirements
 RUN pip3 install -U -r requirements.txt
 
 # Starting Worker
-CMD ["python3","-m","catuserbot"]
+CMD ["python3","-m","userbot"]
