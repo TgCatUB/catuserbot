@@ -22,6 +22,9 @@ RUN apt update && apt upgrade -y && \
     libffi-dev \
     libjpeg-dev \
     libjpeg62-turbo-dev \
+    libgbm1 \
+    libnspr4 \
+    libnss3 \
     libwebp-dev \
     linux-headers-amd64 \
     musl-dev \
@@ -63,6 +66,7 @@ RUN apt update && apt upgrade -y && \
     unzip \
     libopus0 \
     libopus-dev \
+    xdg-utils \
     && rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp
     
 # Pypi package Repo upgrade
