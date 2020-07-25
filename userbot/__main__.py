@@ -38,8 +38,15 @@ else:
     else:
         bot.start()
     
+path = 'userbot/plugins/*.py'
+files = glob.glob(path)
+for name in files:
+    with open(name) as f:
+        path1 = Path(f.name)
+        shortname = path1.stem
+        load_module(shortname.replace(".py", ""))
+        
 LOGS.info("Yay your userbot is officially working.!!!")
-
 LOGS.info("Congratulation, now type .alive to see message if bot is live\n"
           "If you need assistance, head to https://t.me/catuserbot_support")
 
