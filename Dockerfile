@@ -15,9 +15,11 @@ RUN apt update && apt upgrade -y && \
     chromium \
     curl \
     figlet \
+    fonts-liberation \
     git \
     gnupg \
     util-linux \
+    libappindicator3-1 \
     libffi-dev \
     libjpeg-dev \
     libjpeg62-turbo-dev \
