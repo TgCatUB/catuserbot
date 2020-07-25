@@ -82,14 +82,14 @@
       "value": "-1051754159",
       "required": false
     },
-    "CHROME_DRIVER": {
-      "description": "ChromeDriver location for selenium based modules.",
-      "value": "/usr/bin/chromedriver",
-      "required": false
-    },
     "CHROME_BIN": {
       "description": "Google Chrome (or) Chromium binary location for selenium based modules.",
-      "value": "/usr/bin/chromium-browser",
+      "value": "/usr/bin/google-chrome",
+      "required": false
+    },
+    "CHROME_DRIVER": {
+      "description": "ChromeDriver location for selenium based modules",
+      "value": "/usr/bin/chromedriver",
       "required": false
     },
     "DOWNLOAD_PFP_URL_CLOCK": {
@@ -108,12 +108,5 @@
     "options": {
       "version": "12"
     }
-  }],
-  "buildpacks": [{
-    "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
-  },{
-    "url":"https://github.com/heroku/heroku-buildpack-google-chrome"
-  },{
-    "url":"https://github.com/heroku/heroku-buildpack-chromedriver"
   }]
 }
