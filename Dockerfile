@@ -48,10 +48,8 @@ RUN apk add --no-cache --update \
     zlib-dev \
     python3-dev
     
-RUN python3 -m ensurepip \
-    && rm -r /usr/lib/python*/ensurepip && \
-    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
-    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python
+RUN pip3 install --upgrade pip setuptools
+
 # Clone repo and prepare working directory
 #
 RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
