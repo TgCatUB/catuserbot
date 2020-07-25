@@ -1,72 +1,75 @@
 FROM alpine:edge
 
-ENV PIP_NO_CACHE_DIR 1
-
-RUN sed -i.bak 's/us-west-2\.ec2\.//' /etc/apt/sources.list
+RUN sed -e 's;^#http\(.*\)/edge/community;http\1/edge/community;g' -i /etc/apk/repositories
 
 # Installing Required Packages
-RUN apt update && apt upgrade -y && \
-    apt install --no-install-recommends -y \
-    debian-keyring \
-    debian-archive-keyring \
-    aria2\
+RUN apk add --no-cache=true --update \
+    aria2 \
     bash \
-    bzip2 \
+    build-base \
+    bzip2-dev \
+    chromium \
+    chromium-chromedriver \
+    coreutils \
     curl \
+    docker \
+    ffmpeg \
     figlet \
+    freetype-dev \
+    g++ \
+    gcc \
     git \
-    util-linux \
+    jpeg \
+    jpeg-dev \
+    jq \
+    libevent \
     libffi-dev \
-    libjpeg-dev \
-    libjpeg62-turbo-dev \
+	libgconf-2-4 \	
+	libjpeg-dev \	
+	libjpeg62-turbo-dev \	
+    libopus-dev \	
+	libopus0 \	
+	libpq-dev \	
+	libreadline-dev \	
+	libsqlite3-dev \	
+	libssl-dev \    
+    libpq \
     libwebp-dev \
-    linux-headers-amd64 \
-    musl-dev \
+    libxml2 \
+    libxml2-dev \
+    libxslt-dev \
+    linux-headers \
     musl \
     neofetch \
-    php-pgsql \
-    python3-lxml \
+    nodejs \
+    openssl \
+    openssl-dev \
     postgresql \
     postgresql-client \
-    python3-psycopg2 \
-    libpq-dev \
-    libcurl4-openssl-dev \
-    libxml2-dev \
-    libxslt1-dev \
-    python3-pip \
-    python3-requests \
-    python3-sqlalchemy \
-    python3-tz \
-    python3-aiohttp \
-    openssl \
+    postgresql-dev \
     pv \
-    jq \
-    wget \
     python3 \
-    python3-dev \
-    libreadline-dev \
-    libyaml-dev \
-    gcc \
-    sqlite3 \
-    libsqlite3-dev \
+	python3-aiohttp \	
+	python3-dev \	
+	python3-lxml \	
+	python3-pip \	
+	python3-psycopg2 \	
+	python3-requests \	
+	python3-sqlalchemy \	
+	python3-tz \	
+	sqlite3 \
+    readline-dev \
     sudo \
-    zlib1g \
-    ffmpeg \
-    libssl-dev \
-    libgconf-2-4 \
-    libxi6 \
-    xvfb \
-    unzip \
-    libopus0 \
-    libopus-dev \
-    && rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp
-
+    util-linux \
+    wget \
+    zip \
+    zlib-dev
+    
 # Pypi package Repo upgrade
 RUN pip3 install --upgrade pip setuptools
 
-
 # Copy Python Requirements to /root/userbot
-RUN git clone -b test https://github.com/sandy1709/catuserbot.git /root/userbot
+RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
 WORKDIR /root/userbot
 
 ENV PATH="/home/userbot/bin:$PATH"
