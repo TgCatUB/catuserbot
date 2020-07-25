@@ -33,6 +33,8 @@ from telethon import events, errors, functions, types
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 if BOTLOG_CHATID:
   BOTLOG = True
+else:
+  BOTLOG = False
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing the image`"
