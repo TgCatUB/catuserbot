@@ -46,8 +46,7 @@ RUN apk add --no-cache --update \
     sqlite-dev \
     sudo \
     zlib-dev \
-    python3-dev\
-    pip3 install --upgrade pip setuptools
+    python3-dev
     
 RUN python3 -m ensurepip \
     && rm -r /usr/lib/python*/ensurepip && \
