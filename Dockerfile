@@ -69,7 +69,7 @@ RUN pip3 install --upgrade pip setuptools
 
 # install google chrome
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN apt install -y ./google-chrome-stable_current_amd64.deb
+RUN dpkg -i ./google-chrome-stable_current_amd64.deb
 
 # Copy Python Requirements to /root/nana
 RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
