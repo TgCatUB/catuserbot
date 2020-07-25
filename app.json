@@ -82,14 +82,14 @@
       "value": "-1051754159",
       "required": false
     },
-    "CHROME_BIN": {
-      "description": "For Carbon.py. Leave as it is. ",
-      "value": "/app/.apt/usr/bin/google-chrome",
+    "CHROME_DRIVER": {
+      "description": "ChromeDriver location for selenium based modules.",
+      "value": "/usr/bin/chromedriver",
       "required": false
     },
-    "CHROME_DRIVER": {
-      "description": "For Carbon.py. Leave as it is. ",
-      "value": "/app/.chromedriver/bin/chromedriver",
+    "CHROME_BIN": {
+      "description": "Google Chrome (or) Chromium binary location for selenium based modules.",
+      "value": "/usr/bin/chromium-browser",
       "required": false
     },
     "DOWNLOAD_PFP_URL_CLOCK": {
