@@ -12,7 +12,6 @@ RUN apt update && apt upgrade -y && \
     debian-archive-keyring \
     bash \
     bzip2 \
-    chromium \
     curl \
     figlet \
     fonts-liberation \
@@ -77,7 +76,7 @@ RUN wget http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.stora
 RUN unzip chromedriver_linux64.zip
 RUN rm chromedriver_linux64.zip
 
-# Copy Python Requirements to /root/nana
+# Copy Python Requirements to /root/userbot
 RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
 WORKDIR /root/userbot
 ENV PATH="/home/userbot/bin:$PATH"
