@@ -62,8 +62,6 @@ RUN apt update && apt upgrade -y && \
     libopus-dev \
     && rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp
     
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-
 # Pypi package Repo upgrade
 RUN pip3 install --upgrade pip setuptools
 
@@ -73,6 +71,9 @@ RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/use
 WORKDIR /root/userbot
 ENV PATH="/home/userbot/bin:$PATH"
 
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+RUN apt install -y ./google-chrome-stable_current_amd64.deb
 # Install requirements
 RUN pip3 install -U -r requirements.txt
 
