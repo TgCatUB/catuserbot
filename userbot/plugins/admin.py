@@ -29,8 +29,10 @@ from userbot.utils import register, errors_handler, admin_cmd,sudo_cmd
 from userbot.uniborgConfig import Config
 from telethon import events, errors, functions, types
 
-BOTLOG = True
+
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+if BOTLOG_CHATID:
+  BOTLOG = True
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing the image`"
