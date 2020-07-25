@@ -12,8 +12,6 @@ RUN apt update && apt upgrade -y && \
     debian-archive-keyring \
     bash \
     bzip2 \
-    chromium \
-    chromium-chromedriver \
     curl \
     figlet \
     git \
