@@ -61,9 +61,9 @@ RUN apt update && apt upgrade -y && \
     libopus0 \
     libopus-dev \
     && rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp
-
+    
+RUN cd /root/
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN cd /root/ 
 RUN apt install -y ./google-chrome-stable_current_amd64.deb
 
 # Pypi package Repo upgrade
