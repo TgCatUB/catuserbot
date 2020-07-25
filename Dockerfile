@@ -73,8 +73,9 @@ RUN pip3 install --upgrade pip setuptools
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN dpkg -i ./google-chrome-stable_current_amd64.deb
 
-RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
-RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+RUN wget http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
+RUN unzip chromedriver_linux64.zip
+RUN rm chromedriver_linux64.zip
 
 # Copy Python Requirements to /root/nana
 RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
