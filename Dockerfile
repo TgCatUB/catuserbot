@@ -34,9 +34,6 @@ RUN apt update && apt upgrade -y && \
     libcurl4-openssl-dev \
     libxml2-dev \
     libxslt1-dev \
-    install \
-    libgconf2-4 \
-    libnss3-1d \
     libxss1 \
     python3-pip \
     python3-requests \
