@@ -135,7 +135,7 @@ def load_module(shortname):
         spec.loader.exec_module(mod)
         # for imports
         sys.modules["userbot.plugins."+shortname] = mod
-        LOGS.info("Successfully (re)imported "+shortname)
+        LOGS.info("Successfully imported "+shortname)
 
 def remove_plugin(shortname):
     try:
@@ -205,9 +205,6 @@ def admin_cmd(pattern=None, **args):
     is_message_enabled = True
 
     return events.NewMessage(**args)
-
-
-
 
 def register(**args):
     args["func"] = lambda e: e.via_bot_id is None
