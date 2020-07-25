@@ -50,21 +50,16 @@ RUN apk add --no-cache=true --update \
     zip \
     zlib-dev
  
-RUN curl https://cli-assets.heroku.com/install.sh
+# Pypi package Repo upgrade
+RUN pip3 install --upgrade pip setuptools
 
-RUN python3 -m ensurepip \
-    && pip3 install --upgrade pip setuptools \
-    && rm -r /usr/lib/python*/ensurepip && \
-    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
-    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
-    rm -r /root/.cache
 
-# Copy Python Requirements to /root/userbot
-RUN git clone -b newupdate https://github.com/sandy1709/catuserbot /root/userbot
-RUN mkdir /root/userbot/.bin
+# Copy Python Requirements to /root/nana
+RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
 WORKDIR /root/userbot
-ENV PATH="/root/userbot/.bin:$PATH"
-WORKDIR /root/userbot
+
+
+ENV PATH="/home/userbot/bin:$PATH"
 
 # Install requirements
 RUN pip3 install -U -r requirements.txt
