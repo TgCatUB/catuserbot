@@ -71,9 +71,6 @@ RUN pip3 install --upgrade pip setuptools
 # Copy Python Requirements to /root/nana
 RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
 WORKDIR /root/userbot
-
-RUN apt install -y ./google-chrome-stable_current_amd64.deb
-
 ENV PATH="/home/userbot/bin:$PATH"
 
 # Install requirements
