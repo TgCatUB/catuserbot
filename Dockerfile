@@ -65,13 +65,14 @@ RUN apt update && apt upgrade -y && \
 # Pypi package Repo upgrade
 RUN pip3 install --upgrade pip setuptools
 
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
-
 # Copy Python Requirements to /root/nana
 RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
 WORKDIR /root/userbot
 ENV PATH="/home/userbot/bin:$PATH"
+
+# Install Chrome
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
 
 # Install requirements
 RUN pip3 install -U -r requirements.txt
