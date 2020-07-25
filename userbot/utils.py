@@ -2,7 +2,6 @@ from userbot import bot
 from telethon import events
 from pathlib import Path
 from var import Var
-from userbot import LOAD_PLUG
 from userbot import CMD_LIST, SUDO_LIST
 import re
 import logging
@@ -17,9 +16,8 @@ import subprocess
 import sys
 import traceback
 import datetime
-
+from userbot import LOAD_PLUG, LOGS
 from telethon.tl.functions.messages import GetPeerDialogsRequest
-
 from typing import List
 
 ENV = bool(os.environ.get("ENV", False))
