@@ -16,6 +16,7 @@ RUN apt update && apt upgrade -y && \
     curl \
     figlet \
     git \
+    gnupg \
     util-linux \
     libffi-dev \
     libjpeg-dev \
@@ -66,16 +67,17 @@ RUN apt update && apt upgrade -y && \
 # Pypi package Repo upgrade
 RUN pip3 install --upgrade pip setuptools
 
-# Copy Python Requirements to /root/nana
-RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
-WORKDIR /root/userbot
-ENV PATH="/home/userbot/bin:$PATH"
-
 # install google chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 RUN apt-get -y update
 RUN apt-get install -y google-chrome-stable
+
+# Copy Python Requirements to /root/nana
+RUN git clone -b newupdate https://github.com/sandy1709/catuserbot.git /root/userbot
+WORKDIR /root/userbot
+ENV PATH="/home/userbot/bin:$PATH"
+
 
 # Install requirements
 RUN pip3 install -U -r requirements.txt
