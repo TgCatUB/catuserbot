@@ -8,7 +8,10 @@ from telethon.tl.functions.messages import ImportChatInviteRequest
 import os 
 
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-BOTLOG = True
+if BOTLOG_CHATID:
+  BOTLOG = True
+else:
+  BOTLOG = False
 
 @borg.on(admin_cmd(pattern = "spam ?(.*)" ))
 async def spammer(e):
