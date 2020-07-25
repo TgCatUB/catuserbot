@@ -24,15 +24,6 @@ RUN apk add --no-cache=true --update \
     jq \
     libevent \
     libffi-dev \
-    libgconf-2-4 \
-    libjpeg-dev \
-    libjpeg62-turbo-dev \
-    libopus-dev \
-    libopus0 \
-    libpq-dev \
-    libreadline-dev \
-    libsqlite3-dev \
-    libssl-dev \
     libpq \
     libwebp-dev \
     libxml2 \
@@ -49,16 +40,10 @@ RUN apk add --no-cache=true --update \
     postgresql-dev \
     pv \
     python3 \
-    python3-aiohttp \
     python3-dev \
-    python3-lxml \
-    python3-pip \
-    python3-psycopg2 \
-    python3-requests \
-    python3-sqlalchemy \
-    python3-tz \
-    sqlite3 \
     readline-dev \
+    sqlite \
+    sqlite-dev \
     sudo \
     util-linux \
     wget \
