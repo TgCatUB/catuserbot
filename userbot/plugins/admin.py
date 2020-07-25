@@ -29,8 +29,10 @@ from userbot.utils import register, errors_handler, admin_cmd,sudo_cmd
 from userbot.uniborgConfig import Config
 from telethon import events, errors, functions, types
 
-BOTLOG = True
+
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+if BOTLOG_CHATID:
+  BOTLOG = True
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing the image`"
@@ -398,42 +400,6 @@ async def endmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
-
-@register(incoming=True)
-@errors_handler
-async def muter(moot):
-    """ Used for deleting the messages of muted people """
-    try:
-        from userbot.plugins.sql_helper.mute_sql import is_muted
-        from userbot.plugins.sql_helper.gmute_sql import is_gmuted
-    except AttributeError:
-        return
-    muted = is_muted(moot.chat_id)
-    gmuted = is_gmuted(moot.sender_id)
-    rights = ChatBannedRights(
-        until_date=None,
-        send_messages=True,
-        send_media=True,
-        send_stickers=True,
-        send_gifs=True,
-        send_games=True,
-        send_inline=True,
-        embed_links=True,
-    )
-    if muted:
-        for i in muted:
-            if str(i.sender) == str(moot.sender_id):
-                await moot.delete()
-                await moot.client(
-                    EditBannedRequest(moot.chat_id, moot.sender_id, rights))
-    for i in gmuted:
-        if i.sender == str(moot.sender_id):
-            await moot.delete()
-
-
-
-
-
 @borg.on(admin_cmd("pin(?: |$)(.*)"))
 @errors_handler
 async def pin(msg):
@@ -442,43 +408,32 @@ async def pin(msg):
     chat = await msg.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
-
     # If not admin and not creator, return
     if not admin and not creator:
         await msg.edit(NO_ADMIN)
         return
-
     to_pin = msg.reply_to_msg_id
-
     if not to_pin:
         await msg.edit("`Reply to a message to pin it.`")
         return
-
     options = msg.pattern_match.group(1)
-
     is_silent = True
-
     if options.lower() == "loud":
         is_silent = False
-
     try:
         await msg.client(
             UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
     except BadRequestError:
         await msg.edit(NO_PERM)
         return
-
     await msg.edit("`Pinned Successfully!`")
-
     user = await get_user_from_id(msg.from_id, msg)
-
     if BOTLOG:
         await msg.client.send_message(
             BOTLOG_CHATID, "#PIN\n"
             f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
             f"LOUD: {not is_silent}")
-
 
 @borg.on(admin_cmd("kick(?: |$)(.*)"))
 @errors_handler
@@ -488,26 +443,21 @@ async def kick(usr):
     chat = await usr.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
-
     # If not admin and not creator, return
     if not admin and not creator:
         await usr.edit(NO_ADMIN)
         return
-
     user, reason = await get_user_from_event(usr)
     if not user:
         await usr.edit("`Couldn't fetch user.`")
         return
-
     await usr.edit("`Kicking...`")
-
     try:
         await usr.client.kick_participant(usr.chat_id, user.id)
         await sleep(.5)
     except Exception as e:
         await usr.edit(NO_PERM + f"\n{str(e)}")
         return
-
     if reason:
         await usr.edit(
             f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`\nReason: {reason}"
@@ -515,15 +465,12 @@ async def kick(usr):
     else:
         await usr.edit(
             f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`")
-
     if BOTLOG:
         await usr.client.send_message(
             BOTLOG_CHATID, "#KICK\n"
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
 
-
-        
 @borg.on(admin_cmd("iundlt$"))
 async def _(event):
     if event.fwd_from:

@@ -11,13 +11,13 @@ from userbot import LOAD_PLUG, LOGS
 from pathlib import Path
 import asyncio
 import telethon.utils
+import userbot._core
+import glob
 
 async def add_bot(bot_token):
     await bot.start(bot_token)
     bot.me = await bot.get_me() 
     bot.uid = telethon.utils.get_peer_id(bot.me)
-
-
 
 if len(argv) not in (1, 3, 4):
     bot.disconnect()
@@ -38,8 +38,6 @@ else:
     else:
         bot.start()
     
-
-import glob
 path = 'userbot/plugins/*.py'
 files = glob.glob(path)
 for name in files:
@@ -47,10 +45,10 @@ for name in files:
         path1 = Path(f.name)
         shortname = path1.stem
         load_module(shortname.replace(".py", ""))
-
-import userbot._core
-
-print("Yay your userbot is officially working.")
+        
+LOGS.info("Yay your userbot is officially working.!!!")
+LOGS.info("Congratulation, now type .alive to see message if bot is live\n"
+          "If you need assistance, head to https://t.me/catuserbot_support")
 
 if len(argv) not in (1, 3, 4):
     bot.disconnect()
