@@ -293,7 +293,7 @@ async def _(event):
             zip_ref.extractall(extracted)
         filename = sorted(get_lst_of_files(extracted, []))
         #filename = filename + "/"
-        await event.edit("Unzipping now")
+        await event.edit("Unzipping now..")
         # r=root, d=directories, f = files
         for single_file in filename:
             if os.path.exists(single_file):
@@ -338,6 +338,9 @@ async def _(event):
                         #    progress(d, t, event, c_time, "trying to upload")
                         #)
                     )
+                    await event.edit("DONE!!!")
+                    await asyncio.sleep(2)
+                    await event.delete()
                 except Exception as e:
                     await borg.send_message(
                         event.chat_id,
