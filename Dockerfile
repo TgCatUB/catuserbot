@@ -1,4 +1,4 @@
-FROM python:3.8.4-slim-buster
+FROM alpine:edge
 
 ENV PIP_NO_CACHE_DIR 1
 
