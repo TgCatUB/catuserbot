@@ -338,9 +338,6 @@ async def _(event):
                         #    progress(d, t, event, c_time, "trying to upload")
                         #)
                     )
-                    await event.edit("DONE!!!")
-                    await asyncio.sleep(2)
-                    await event.delete()
                 except Exception as e:
                     await borg.send_message(
                         event.chat_id,
