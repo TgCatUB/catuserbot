@@ -64,7 +64,7 @@ RUN apt update && apt upgrade -y && \
 
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
-RUN sudo apt install -y ./google-chrome-stable_current_amd64.deb
+RUN apt install ./google-chrome-stable_current_amd64.deb
 
 # Pypi package Repo upgrade
 RUN pip3 install --upgrade pip setuptools
