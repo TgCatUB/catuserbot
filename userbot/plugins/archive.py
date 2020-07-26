@@ -25,7 +25,7 @@ import tarfile
 from userbot import CMD_HELP
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
-extracted = Config.TMP_DOWNLOAD_DIRECTORY + "extracted/"
+extracted = Config.TMP_DOWNLOAD_DIRECTORY
 if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
