@@ -39,11 +39,11 @@ UNBAN_RIGHTS = ChatBannedRights(until_date=None, send_messages=None, send_media=
                                 send_stickers=None, send_gifs=None, send_games=None,
                                 send_inline=None,  embed_links=None)
 
-if hasattr(Config, PRIVATE_GROUP_BOT_API_ID):
-  BOTLOG = True
-  BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
 else:
-  BOTLOG = False
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @borg.on(admin_cmd("gban(?: |$)(.*)"))
