@@ -1,7 +1,7 @@
 from telethon import events
 import asyncio
 from userbot.utils import admin_cmd
-
+import os
 
 @borg.on(admin_cmd(pattern="ttf ?(.*)"))
 async def get(event):
@@ -11,3 +11,4 @@ async def get(event):
         f.write(m.message)
     await event.delete()
     await borg.send_file(event.chat_id,name,force_document=True)
+    os.remove(name)
