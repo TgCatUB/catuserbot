@@ -5,7 +5,6 @@ import inspect
 import traceback
 import asyncio
 import sys
-from telethon import events
 import subprocess
 from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import io
@@ -139,10 +138,9 @@ async def _(event):
         await event.edit(final_output)
 
 async def aexec(code, event):
-    exec(
-        f'async def __aexec(event): ' +
+    exec(f'async def __aexec(event): ' +
         ''.join(f'\n {l}' for l in code.split('\n'))
-    )
+        )
     return await locals()['__aexec'](event)
 
 @borg.on(sudo_cmd(pattern="bash ?(.*)" ,allow_sudo=True))
