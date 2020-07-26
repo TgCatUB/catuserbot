@@ -283,7 +283,6 @@ async def _(event):
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, mone, c_time, "trying to download")
                 )
-                
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await mone.edit(str(e))
@@ -291,12 +290,11 @@ async def _(event):
             end = datetime.now()
             ms = (end - start).seconds
             await mone.edit("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))
-
         with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
             zip_ref.extractall(extracted)
         filename = sorted(get_lst_of_files(extracted, []))
         #filename = filename + "/"
-        await event.edit("Unzipping now")
+        await event.edit("Unzipping now..")
         # r=root, d=directories, f = files
         for single_file in filename:
             if os.path.exists(single_file):
@@ -341,9 +339,6 @@ async def _(event):
                              progress(d, t, event, c_time, "trying to upload")
                          )
                     )
-                    #await event.edit("DONE!!!")
-                    #await asyncio.sleep(5)
-                    #await event.delete()
                 except Exception as e:
                     await borg.send_message(
                         event.chat_id,
@@ -353,9 +348,10 @@ async def _(event):
                     # some media were having some issues
                     continue
                 os.remove(single_file)
+        await event.edit("DONE!!!")
+        await asyncio.sleep(5)
+        await event.delete()
         os.remove(downloaded_file_name)
-
-
 
 @borg.on(admin_cmd(pattern="unrar"))
 async def _(event):
