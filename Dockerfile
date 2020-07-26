@@ -5,8 +5,8 @@ ENV PIP_NO_CACHE_DIR 1
 RUN sed -i.bak 's/us-west-2\.ec2\.//' /etc/apt/sources.list
 
 # Installing Required Packages
-RUN apt update && apt upgrade -y && \
-    apt install --no-install-recommends -y \
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install --no-install-recommends -y \
     aria2\
     debian-keyring \
     debian-archive-keyring \
@@ -76,9 +76,9 @@ RUN pip3 install --upgrade pip setuptools
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN dpkg -i ./google-chrome-stable_current_amd64.deb
 
-RUN mkdir /tmp/
 #install chromedriver
-RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip 
+RUN mkdir /tmp/
+RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip 
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/bin/ 
 
 # Copy Python Requirements to /root/userbot
