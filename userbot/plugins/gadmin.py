@@ -39,9 +39,9 @@ UNBAN_RIGHTS = ChatBannedRights(until_date=None, send_messages=None, send_media=
                                 send_stickers=None, send_gifs=None, send_games=None,
                                 send_inline=None,  embed_links=None)
 
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-if BOTLOG_CHATID:
+if hasattr(Config, PRIVATE_GROUP_BOT_API_ID):
   BOTLOG = True
+  BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 else:
   BOTLOG = False
 
