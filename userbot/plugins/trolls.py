@@ -2,6 +2,7 @@ from telegraph import upload_file, exceptions
 from userbot.utils import admin_cmd
 import nekos
 from . import *
+import os 
 
 @borg.on(admin_cmd(pattern = "threats(?: |$)(.*)"))
 async def catbot(catmemes):
