@@ -285,7 +285,6 @@ async def _(event):
                     )
                     # some media were having some issues
                     continue
-                os.remove(single_file)
         await event.edit("DONE!!!")
         await asyncio.sleep(5)
         await event.delete()
