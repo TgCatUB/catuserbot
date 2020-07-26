@@ -723,16 +723,16 @@ class googleimagesdownload:
         version = (3, 0)
         cur_version = sys.version_info
         if cur_version >= version: #python3
-        try:
-            object_decode = bytes(object_raw, "utf-8").decode("unicode_escape")
-            final_object = json.loads(object_decode)
-        except:
-            final_object = ""
+            try:
+                object_decode = bytes(object_raw, "utf-8").decode("unicode_escape")
+                final_object = json.loads(object_decode)
+            except:
+                final_object = ""
         else:  #python2
-        try:
-            final_object = (json.loads(self.repair(object_raw)))
-        except:
-            final_object = ""
+            try:
+                final_object = (json.loads(self.repair(object_raw)))
+            except:
+                final_object = ""
         return final_object, end_object
 
 
