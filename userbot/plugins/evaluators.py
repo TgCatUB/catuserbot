@@ -8,7 +8,6 @@ import sys
 import subprocess
 from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import io
-import asyncio
 import time
 from userbot.utils import admin_cmd,sudo_cmd
 from userbot import CMD_HELP
