@@ -42,12 +42,12 @@ LANG = "en"
 CARBONLANG = "auto"
 TTS_LANG = "en"
 TRT_LANG = "en"
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-if BOTLOG_CHATID:
+if hasattr(Config, PRIVATE_GROUP_BOT_API_ID):
   BOTLOG = True
+  BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 else:
   BOTLOG = False
-
+  
 @borg.on(admin_cmd(outgoing=True, pattern="krb"))
 async def carbon_api(e):
    await e.edit("Processing..")
