@@ -7,6 +7,7 @@ from telethon.tl.functions.messages import ImportChatInviteRequest
 from userbot.utils import admin_cmd , sudo_cmd
 from userbot import CMD_HELP 
 from telegraph import upload_file, exceptions
+import os
 from . import *
 
 @borg.on(admin_cmd("mask ?(.*)"))
