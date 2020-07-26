@@ -436,3 +436,15 @@ def sudo_cmd(pattern=None, **args):
     # check if the plugin should listen for outgoing 'messages'
     is_message_enabled = True
     return events.NewMessage(**args)
+
+#https://t.me/c/1220993104/623253
+async def edit_or_reply(event, text):
+    if event.from_id in Config.SUDO_USERS:
+        await event.delete()
+        reply_to = await event.get_reply_message()
+        if reply_to:
+            return await reply_to.reply(text)
+        else:
+            return await event.reply(text)
+    else:
+        return await event.edit(text)
