@@ -30,12 +30,11 @@ from userbot.uniborgConfig import Config
 from telethon import events, errors, functions, types
 
 
-
-if hasattr(Config, PRIVATE_GROUP_BOT_API_ID):
-  BOTLOG = True
-  BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
 else:
-  BOTLOG = False
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing the image`"
