@@ -205,7 +205,6 @@ async def create_archive(input_directory):
 
 @borg.on(admin_cmd(pattern="unzip"))
 async def _(event):
-    async def _(event):
     if event.fwd_from:
         return
     mone = await event.edit("Processing ...")
