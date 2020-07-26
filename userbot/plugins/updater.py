@@ -3,11 +3,6 @@ Syntax: .update
 \nAll Credits goes to © @Three_Cube_TeKnoways
 \nFor this awasome plugin.\nPorted from PpaperPlane Extended"""
 
-"""Update UserBot code (for Xtra-Telegram)
-Syntax: .update
-\nAll Credits goes to © @Three_Cube_TeKnoways
-\nFor this awasome plugin.\nPorted from PpaperPlane Extended"""
-
 from os import remove, execle, path, makedirs, getenv, environ,execl
 from shutil import rmtree
 import asyncio
@@ -71,11 +66,11 @@ async def upstream(ups):
         origin = repo.create_remote('upstream', off_repo)
         origin.fetch()
         force_update = True
-        repo.create_head('newupdate', origin.refs.newupdate)
-        repo.heads.newupdate.set_tracking_branch(origin.refs.newupdate)
-        repo.heads.newupdate.checkout(True)
+        repo.create_head('master', origin.refs.master)
+        repo.heads.master.set_tracking_branch(origin.refs.master)
+        repo.heads.master.checkout(True)
     ac_br = repo.active_branch.name
-    if ac_br != 'newupdate':
+    if ac_br != 'master':
         await ups.edit(
             f'**[UPDATER]:**` Looks like you are using your own custom branch ({ac_br}). '
             'in that case, Updater is unable to identify '
@@ -166,4 +161,4 @@ CMD_HELP.update({
 \nUsage: Checks if the main userbot repository has any updates and shows a changelog if so.\
 \n\n.update now\
 \nUsage: Updates your userbot, if there are any updates in the main userbot repository."
-})  
+})
