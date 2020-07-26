@@ -12,9 +12,9 @@ from userbot.utils import admin_cmd, errors_handler
 from userbot.uniborgConfig import Config
 
 
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-if BOTLOG_CHATID:
+if hasattr(Config, PRIVATE_GROUP_BOT_API_ID):
   BOTLOG = True
+  BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 else:
   BOTLOG = False
 
