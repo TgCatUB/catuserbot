@@ -5,7 +5,7 @@ from platform import uname
 import sys
 from telethon import events, functions, __version__
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Sur_vivor"
 
 @borg.on(admin_cmd(pattern="help ?(.*)"))
 async def cmd_list(event):
@@ -20,22 +20,13 @@ async def cmd_list(event):
                     string += "\n"
                 string += "\n"
             if len(string) > 4095:
-                with io.BytesIO(str.encode(string)) as out_file:
-                    out_file.name = "cmd.txt"
-                    await bot.send_file(
-                        event.chat_id,
-                        out_file,
-                        force_document=True,
-                        allow_cache=False,
-                        caption="**COMMANDS**",
-                        reply_to=reply_to_id
-                    )
-                    await event.delete()
+                await borg.send_message(event.chat_id, "Do .help cmd")
+                await asyncio.sleep(5)
             else:
                 await event.edit(string)
         elif input_str:
             if input_str in CMD_LIST:
-                string = "Commands found in {}:".format(input_str)
+                string = "Commands found in {}:\n".format(input_str)
                 for i in CMD_LIST[input_str]:
                     string += "    " + i
                     string += "\n"
