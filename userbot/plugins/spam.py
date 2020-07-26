@@ -7,11 +7,11 @@ import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest
 import os 
 
-if hasattr(Config, PRIVATE_GROUP_BOT_API_ID):
-  BOTLOG = True
-  BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
 else:
-  BOTLOG = False
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @borg.on(admin_cmd(pattern = "spam ?(.*)" ))
 async def spammer(e):
