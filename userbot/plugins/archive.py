@@ -205,6 +205,7 @@ async def create_archive(input_directory):
 
 @borg.on(admin_cmd(pattern="unzip"))
 async def _(event):
+    async def _(event):
     if event.fwd_from:
         return
     mone = await event.edit("Processing ...")
@@ -228,66 +229,10 @@ async def _(event):
             end = datetime.now()
             ms = (end - start).seconds
             await mone.edit("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))
-        with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
-            zip_ref.extractall(extracted)
-        filename = sorted(get_lst_of_files(extracted, []))
-        #filename = filename + "/"
         await event.edit("Unzipping now")
-        # r=root, d=directories, f = files
-        for single_file in filename:
-            if os.path.exists(single_file):
-                # https://stackoverflow.com/a/678242/4723940
-                caption_rts = os.path.basename(single_file)
-                force_document = True
-                supports_streaming = False
-                document_attributes = []
-                if single_file.endswith((".mp4", ".mp3", ".flac", ".webm")):
-                    metadata = extractMetadata(createParser(single_file))
-                    duration = 0
-                    width = 0
-                    height = 0
-                    if metadata.has("duration"):
-                        duration = metadata.get('duration').seconds
-                    if os.path.exists(thumb_image_path):
-                        metadata = extractMetadata(createParser(thumb_image_path))
-                        if metadata.has("width"):
-                            width = metadata.get("width")
-                        if metadata.has("height"):
-                            height = metadata.get("height")
-                    document_attributes = [
-                        DocumentAttributeVideo(
-                            duration=duration,
-                            w=width,
-                            h=height,
-                            round_message=False,
-                            supports_streaming=True
-                        )
-                    ]
-                try:
-                    await borg.send_file(
-                        event.chat_id,
-                        single_file,
-                        caption=f"UnZipped `{caption_rts}`",
-                        force_document=force_document,
-                        supports_streaming=supports_streaming,
-                        allow_cache=False,
-                        reply_to=event.message.id,
-                        attributes=document_attributes,
-                        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                             progress(d, t, event, c_time, "trying to upload")
-                         )
-                    )
-                except Exception as e:
-                    await borg.send_message(
-                        event.chat_id,
-                        "{} caused `{}`".format(caption_rts, str(e)),
-                        reply_to=event.message.id
-                    )
-                    # some media were having some issues
-                    continue
-        await event.edit("DONE!!!")
-        await asyncio.sleep(5)
-        await event.delete()
+        with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
+            zip_ref.extractall()
+        await event.edit(f"unzipped and stored to `{downloaded_file_name[:-4]}`")
         os.remove(downloaded_file_name)
 
 @borg.on(admin_cmd(pattern="unrar"))
@@ -315,7 +260,6 @@ async def _(event):
             end = datetime.now()
             ms = (end - start).seconds
             await mone.edit("Stored the rar to `{}` in {} seconds.".format(downloaded_file_name, ms))
-
         patoolib.extract_archive(downloaded_file_name, outdir=extracted)
         filename = sorted(get_lst_of_files(extracted, []))
         #filename = filename + "/"
@@ -408,73 +352,9 @@ async def _(event):
             ms = (end - start).seconds
             await mone.edit("Stored the tar to `{}` in {} seconds.".format(downloaded_file_name, ms))
         with tarfile.TarFile.open(downloaded_file_name,'r') as tar_file:
-            tar_file.extractall(path=extracted)
-        # tf = tarfile.open(downloaded_file_name)
-        # tf.extractall(path=extracted)
-        # tf.close()
-
-        # with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
-        #     zip_ref.extractall(extracted)
-        filename = sorted(get_lst_of_files(extracted, []))
-        #filename = filename + "/"
-        await event.edit("Untarring now")
-        # r=root, d=directories, f = files
-        for single_file in filename:
-            if os.path.exists(single_file):
-                # https://stackoverflow.com/a/678242/4723940
-                caption_rts = os.path.basename(single_file)
-                force_document = False
-                supports_streaming = True
-                document_attributes = []
-                if single_file.endswith((".mp4", ".mp3", ".flac", ".webm")):
-                    metadata = extractMetadata(createParser(single_file))
-                    duration = 0
-                    width = 0
-                    height = 0
-                    if metadata.has("duration"):
-                        duration = metadata.get('duration').seconds
-                    if os.path.exists(thumb_image_path):
-                        metadata = extractMetadata(createParser(thumb_image_path))
-                        if metadata.has("width"):
-                            width = metadata.get("width")
-                        if metadata.has("height"):
-                            height = metadata.get("height")
-                    document_attributes = [
-                        DocumentAttributeVideo(
-                            duration=duration,
-                            w=width,
-                            h=height,
-                            round_message=False,
-                            supports_streaming=True
-                        )
-                    ]
-                try:
-                    await borg.send_file(
-                        event.chat_id,
-                        single_file,
-                        caption=f"Untared `{caption_rts}`",
-                        force_document=force_document,
-                        supports_streaming=supports_streaming,
-                        allow_cache=False,
-                        reply_to=event.message.id,
-                        attributes=document_attributes,
-                        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                            progress(d, t, event, c_time, "trying to upload")
-                        )
-                    )
-                except Exception as e:
-                    await borg.send_message(
-                        event.chat_id,
-                        "{} caused `{}`".format(caption_rts, str(e)),
-                        reply_to=event.message.id
-                    )
-                    # some media were having some issues
-                    continue
-                os.remove(single_file)
+            tar_file.extractall()
+        await event.edit(f"unzipped and stored to `{downloaded_file_name[:-4]}`")
         os.remove(downloaded_file_name)
-        await event.edit("DONE!!!")
-        await asyncio.sleep(5)
-        await event.delete()
 
 def get_lst_of_files(input_directory, output_lst):
     filesinfolder = os.listdir(input_directory)
