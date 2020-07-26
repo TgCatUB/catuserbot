@@ -5,7 +5,8 @@ ENV PIP_NO_CACHE_DIR 1
 RUN sed -i.bak 's/us-west-2\.ec2\.//' /etc/apt/sources.list
 
 # Installing Required Packages
-RUN apt-get update && apt-get upgrade -y && \
+RUN apt-get update \
+    apt-get upgrade -y  \
     apt-get install --no-install-recommends -y \
     aria2\
     debian-keyring \
