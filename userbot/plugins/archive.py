@@ -1,10 +1,7 @@
 """
 usage: reply with file : .rar , .7z  create archived file
-
 unzip usage: reply with zipped file .unzipper
-
 Coded by @furki
-
 """
 
 from datetime import datetime
@@ -70,7 +67,6 @@ async def _(event):
     await asyncio.sleep(5)
     await event.delete()
 
-
 def zipdir(path, ziph):
     # ziph is zipfile handle
     for root, dirs, files in os.walk(path):
@@ -122,61 +118,7 @@ async def _(event):
             await mone.edit(str(e))
     elif input_str:
         directory_name = input_str
-        
         await event.edit("Local file compressed to `{}`".format(directory_name + ".rar"))
-
-
-
-
-@borg.on(admin_cmd(pattern=("7z ?(.*)")))
-async def _(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    mone = await event.edit("Processing ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        try:
-            c_time = time.time()
-            downloaded_file_name = await borg.download_media(
-                reply_message,
-                Config.TMP_DOWNLOAD_DIRECTORY,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "trying to download")
-                )
-            )
-            directory_name = downloaded_file_name
-            await event.edit("creating 7z archive, please wait..")
-            # patoolib.create_archive(directory_name + '.7z',directory_name)
-            patoolib.create_archive(directory_name + ".7z",(directory_name,Config.TMP_DOWNLOAD_DIRECTORY))
-            # patoolib.create_archive("/content/21.yy Avrupa (1).pdf.zip",("/content/21.yy Avrupa (1).pdf","/content/"))
-            await borg.send_file(
-                event.chat_id,
-                directory_name + ".7z",
-                caption="7z archived By cat",
-                force_document=True,
-                allow_cache=False,
-                reply_to=event.message.id,
-            )
-            try:
-                os.remove(directory_name + ".7z")
-                os.remove(directory_name)
-            except:
-                    pass
-            await event.edit("Task Completed")
-            await asyncio.sleep(3)
-            await event.delete()
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await mone.edit(str(e))
-    elif input_str:
-        directory_name = input_str
-        
-        await event.edit("Local file compressed to `{}`".format(directory_name + ".7z"))
-
-
-
 
 @borg.on(admin_cmd(pattern=("tar ?(.*)")))
 async def _(event):
@@ -226,10 +168,7 @@ async def _(event):
             await mone.edit(str(e))
     elif input_str:
         directory_name = input_str
-        
         await event.edit("Local file compressed to `{}`".format(output))
-
-
 
 async def create_archive(input_directory):
     return_name = None
@@ -264,7 +203,6 @@ async def create_archive(input_directory):
             return_name = compressed_file_name
     return return_name
 
-
 @borg.on(admin_cmd(pattern="unzip"))
 async def _(event):
     if event.fwd_from:
@@ -283,7 +221,6 @@ async def _(event):
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, mone, c_time, "trying to download")
                 )
-                
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await mone.edit(str(e))
@@ -291,7 +228,6 @@ async def _(event):
             end = datetime.now()
             ms = (end - start).seconds
             await mone.edit("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))
-
         with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
             zip_ref.extractall(extracted)
         filename = sorted(get_lst_of_files(extracted, []))
@@ -341,9 +277,6 @@ async def _(event):
                              progress(d, t, event, c_time, "trying to upload")
                          )
                     )
-                    await event.edit("DONE!!!")
-                    await asyncio.sleep(5)
-                    await event.delete()
                 except Exception as e:
                     await borg.send_message(
                         event.chat_id,
@@ -353,9 +286,10 @@ async def _(event):
                     # some media were having some issues
                     continue
                 os.remove(single_file)
+        await event.edit("DONE!!!")
+        await asyncio.sleep(5)
+        await event.delete()
         os.remove(downloaded_file_name)
-
-
 
 @borg.on(admin_cmd(pattern="unrar"))
 async def _(event):
@@ -431,9 +365,6 @@ async def _(event):
                              progress(d, t, event, c_time, "trying to upload")
                          )
                     )
-                    await event.edit("DONE!!!")
-                    await asyncio.sleep(5)
-                    await event.delete()
                 except Exception as e:
                     await borg.send_message(
                         event.chat_id,
@@ -444,6 +375,9 @@ async def _(event):
                     continue
                 os.remove(single_file)
         os.remove(downloaded_file_name)
+        await event.edit("DONE!!!")
+        await asyncio.sleep(5)
+        await event.delete()
 
 @borg.on(admin_cmd(pattern="untar"))
 async def _(event):
@@ -529,9 +463,6 @@ async def _(event):
                             progress(d, t, event, c_time, "trying to upload")
                         )
                     )
-                    await event.edit("DONE!!!")
-                    await asyncio.sleep(5)
-                    await event.delete()
                 except Exception as e:
                     await borg.send_message(
                         event.chat_id,
@@ -542,11 +473,9 @@ async def _(event):
                     continue
                 os.remove(single_file)
         os.remove(downloaded_file_name)
-
-
-
-
-
+        await event.edit("DONE!!!")
+        await asyncio.sleep(5)
+        await event.delete()
 
 def get_lst_of_files(input_directory, output_lst):
     filesinfolder = os.listdir(input_directory)
@@ -557,16 +486,12 @@ def get_lst_of_files(input_directory, output_lst):
         output_lst.append(current_file_name)
     return output_lst
 
-
-
 CMD_HELP.update({
     "archive":
     ".zip reply to a file/media\
     \nUSEAGE: it will zip that file/media\
     \n\n.rar reply to a file/media\
     \nUSEAGE: it will rar that file/media\
-    z\n\n. reply to a file/media\
-    \nUSEAGE: it will make into .7z that hat file/media\
     \n\n.tar reply to a file/media\
     \nUSEAGE: it will tar that file/media\
     \n\n.unzip reply to a .zip file\
