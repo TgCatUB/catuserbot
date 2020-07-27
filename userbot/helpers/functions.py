@@ -210,7 +210,9 @@ async def threats(text):
         return  "check syntax once more"
     with open("temp.png", "wb") as f:
         f.write(requests.get(sandy).content)
-    img = Image.open("temp.png").convert("RGB")
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
     img.save("temp.jpg", "jpeg")    
     return "temp.jpg"     
 
@@ -223,7 +225,9 @@ async def lolice(text):
         return  "check syntax once more"
     with open("temp.png", "wb") as f:
         f.write(requests.get(sandy).content)
-    img = Image.open("temp.png").convert("RGB")
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
     img.save("temp.jpg", "jpeg")    
     return "temp.jpg"     
 
@@ -236,7 +240,9 @@ async def trash(text):
         return  "check syntax once more"
     with open("temp.png", "wb") as f:
         f.write(requests.get(sandy).content)
-    img = Image.open("temp.png").convert("RGB")
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
     img.save("temp.jpg", "jpeg")    
     return "temp.jpg"     
 
@@ -249,7 +255,9 @@ async def awooify(text):
         return  "check syntax once more"
     with open("temp.png", "wb") as f:
         f.write(requests.get(sandy).content)
-    img = Image.open("temp.png").convert("RGB")
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
     img.save("temp.jpg", "jpeg")    
     return "temp.jpg"     
 
@@ -262,7 +270,9 @@ async def trap(text1,text2,text3):
         return  "check syntax once more"
     with open("temp.png", "wb") as f:
         f.write(requests.get(sandy).content)
-    img = Image.open("temp.png").convert("RGB")
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
     img.save("temp.jpg", "jpeg")    
     return "temp.jpg"
 
@@ -276,5 +286,7 @@ async def phcomment(text1,text2,text3):
     with open("temp.png", "wb") as f:
         f.write(requests.get(sandy).content)
     img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
     img.save("temp.jpg", "jpeg")    
     return "temp.jpg"
