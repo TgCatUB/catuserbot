@@ -27,7 +27,7 @@ from userbot.plugins import catmusic , catmusicvideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
-from telethon.tl.functions.messages import ImportChatInviteRequest
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 @borg.on(admin_cmd(pattern="song(?: |$)(.*)"))
 async def _(event):
@@ -45,7 +45,8 @@ async def _(event):
     	await event.edit("`What I am Supposed to find `")
     	return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
         await event.client(cat)
     except:
         pass
@@ -84,7 +85,8 @@ async def _(event):
     	await event.edit("`What I am Supposed to find `")
     	return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
         await event.client(cat)
     except:
         pass
@@ -107,7 +109,7 @@ async def _(event):
     os.system("rm -rf *.mp3")
     subprocess.check_output("rm -rf *.mp3",shell=True)    
     
-@borg.on(admin_cmd(pattern="videosong(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
 async def _(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -124,7 +126,8 @@ async def _(event):
         return
     await catmusicvideo(query)
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
         await event.client(cat)
     except:
         pass
@@ -181,7 +184,8 @@ async def _(event):
     	san = await event.reply("`What I am Supposed to find `")
     	return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
         await event.client(cat)
     except:
         pass
