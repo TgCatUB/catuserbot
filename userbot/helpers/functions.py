@@ -13,7 +13,6 @@ async def get_readable_time(seconds: int) -> str:
     up_time = ""
     time_list = []
     time_suffix_list = ["s", "m", "h", "days"]
-
     while count < 4:
         count += 1
         if count < 3:
@@ -24,15 +23,12 @@ async def get_readable_time(seconds: int) -> str:
             break
         time_list.append(int(result))
         seconds = int(remainder)
-
     for x in range(len(time_list)):
         time_list[x] = str(time_list[x]) + time_suffix_list[x]
     if len(time_list) == 4:
         up_time += time_list.pop() + ", "
-
     time_list.reverse()
     up_time += ":".join(time_list)
-
     return up_time
 
 #gban
@@ -77,7 +73,6 @@ async def catmusicvideo(cat):
     os.system(command)
 
 # for stickertxt
-
 async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
     animus = [0, 1, 2, 3, 4, 9, 15, 20, 22, 27, 29, 32, 33, 34, 37, 38, 
               41, 42, 44, 45, 47, 48, 51, 52, 53, 55, 56, 57, 58, 61, 62, 63]
@@ -107,7 +102,15 @@ EMOJI_PATTERN = re.compile(
 def deEmojify(inputString: str) -> str:
     """Remove emojis and other non-safe characters from string"""
     return re.sub(EMOJI_PATTERN, '', inputString)
-    
+  
+def convert_toimage(image):
+    img = Image.open(image)
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img.save("temp.jpg", "jpeg")
+    os.remove(image)
+    return "temp.jpg"
+
 # for nekobot
 async def trumptweet(text):
         r = requests.get(
@@ -173,3 +176,119 @@ async def tweets(text1,text2):
         img = Image.open("temp.png").convert("RGB")
         img.save("temp.webp", "webp")    
         return "temp.webp"      
+
+async def iphonex(text):
+    r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=iphonex&url={text}").json()
+    sandy = r.get("message")
+    caturl = url(sandy)
+    if not caturl:
+        return  "check syntax once more"
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(sandy).content)
+    img = Image.open("temp.png").convert("RGB")
+    img.save("temp.jpg", "jpeg")    
+    return "temp.jpg"       
+
+async def baguette(text):
+    r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=baguette&url={text}").json()
+    sandy = r.get("message")
+    caturl = url(sandy)
+    if not caturl:
+        return  "check syntax once more"
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(sandy).content)
+    img = Image.open("temp.png").convert("RGB")
+    img.save("temp.jpg", "jpeg")    
+    return "temp.jpg"     
+
+async def threats(text):
+    r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=threats&url={text}").json()
+    sandy = r.get("message")
+    caturl = url(sandy)
+    if not caturl:
+        return  "check syntax once more"
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(sandy).content)
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img.save("temp.jpg", "jpeg")    
+    return "temp.jpg"     
+
+async def lolice(text):
+    r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=lolice&url={text}").json()
+    sandy = r.get("message")
+    caturl = url(sandy)
+    if not caturl:
+        return  "check syntax once more"
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(sandy).content)
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img.save("temp.jpg", "jpeg")    
+    return "temp.jpg"     
+
+async def trash(text):
+    r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=trash&url={text}").json()
+    sandy = r.get("message")
+    caturl = url(sandy)
+    if not caturl:
+        return  "check syntax once more"
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(sandy).content)
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img.save("temp.jpg", "jpeg")    
+    return "temp.jpg"     
+
+async def awooify(text):
+    r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=awooify&url={text}").json()
+    sandy = r.get("message")
+    caturl = url(sandy)
+    if not caturl:
+        return  "check syntax once more"
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(sandy).content)
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img.save("temp.jpg", "jpeg")    
+    return "temp.jpg"     
+
+async def trap(text1,text2,text3):
+    r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=trap&name={text1}&author={text2}&image={text3}").json()
+    sandy = r.get("message")
+    caturl = url(sandy)
+    if not caturl:
+        return  "check syntax once more"
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(sandy).content)
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img.save("temp.jpg", "jpeg")    
+    return "temp.jpg"
+
+async def phcomment(text1,text2,text3):
+    r = requests.get(
+            f"https://nekobot.xyz/api/imagegen?type=phcomment&image={text1}&text={text2}&username={text3}").json()
+    sandy = r.get("message")
+    caturl = url(sandy)
+    if not caturl:
+        return  "check syntax once more"
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(sandy).content)
+    img = Image.open("temp.png")
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img.save("temp.jpg", "jpeg")    
+    return "temp.jpg"

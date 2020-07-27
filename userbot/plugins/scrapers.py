@@ -42,9 +42,12 @@ LANG = "en"
 CARBONLANG = "auto"
 TTS_LANG = "en"
 TRT_LANG = "en"
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-BOTLOG = True
-
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
+else:
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+  
 @borg.on(admin_cmd(outgoing=True, pattern="krb"))
 async def carbon_api(e):
    await e.edit("Processing..")
@@ -96,7 +99,7 @@ async def carbon_api(e):
    driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
    await e.edit("Processing..\n75%")
    # Waiting for downloading
-   sleep(2.5)
+   await sleep(2.5)
    color_name = driver.find_element_by_xpath('/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input').get_attribute('value')
    await e.edit("Done Dana Done...\n100%")
    file = './carbon.png'

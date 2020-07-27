@@ -54,8 +54,6 @@ async def _(event):
     result = await borg(functions.help.GetNearestDcRequest())  # pylint:disable=E0602
     await event.edit(result.stringify())
 
-
-
 @borg.on(sudo_cmd(allow_sudo=True, pattern="help(?: |$)(.*)"))
 async def info(event):
     if event.fwd_from:
@@ -74,10 +72,9 @@ async def info(event):
         else:
                 await event.reply(args + " is not a valid plugin!")
     else:
-        await event.reply("Please specify which plugin do you want help for !!\
-            \nUsage: .help <plugin name>")
-        string = ""
-        for i in SUDO_LIST:
-            string += "`" + str(i)
-            string += "`\n"
+        string = "**Please specify which plugin do you want help for !!**\
+            \n**Usage:** `.info` <plugin name>\n\n"
+        for i in sorted(SUDO_LIST):
+            string += "◆`" + str(i)
+            string += "`   "
         await event.reply(string)

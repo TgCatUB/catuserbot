@@ -17,22 +17,23 @@ from userbot.uniborgConfig import Config
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 import io
 
+async def catlst_of_files(path):
+    files = []
+    for dirname, dirnames, filenames in os.walk(path):
+        # print path to all filenames.
+        for filename in filenames:
+            files.append(os.path.join(dirname, filename))
+    return files
 
 @borg.on(admin_cmd(pattern="uploadir (.*)", outgoing=True))
 async def uploadir(udir_event):
-    """ 
-#For .uploadir command, allows you to upload everything from a folder in the server
-"""
     input_str = udir_event.pattern_match.group(1)
+    input_str = Path(input_str)
+    await borg.send_message(udir_event.caht_id , input_str)
     if os.path.exists(input_str):
-        await udir_event.edit("Processing ...")
+        await udir_event.edit(f"Gathering file details in directory `{input_str}`")
         lst_of_files = []
-        for r, d, f in os.walk(input_str):
-            for file in f:
-                lst_of_files.append(os.path.join(r, file))
-            for file in d:
-                lst_of_files.append(os.path.join(r, file))
-        LOGS.info(lst_of_files)
+        lst_of_files = await catlst_of_files(input_str)
         uploaded = 0
         await udir_event.edit(
             "Found {} files. Uploading will start soon. Please wait!".format(
@@ -88,10 +89,8 @@ async def uploadir(udir_event):
                         ).create_task(
                             progress(d, t, udir_event, c_time, "Uploading...",
                                      single_file)))
-                os.remove(single_file)
                 uploaded = uploaded + 1
-        await udir_event.edit(
-            "Uploaded {} files successfully !!".format(uploaded))
+        await udir_event.edit("Uploaded {} files successfully !!".format(uploaded))
     else:
         await udir_event.edit("404: Directory Not Found")
 
@@ -120,7 +119,6 @@ async def _(event):
             )
         )
         end = datetime.now()
-        # os.remove(input_str)
         ms = (end - start).seconds
         await mone.edit("Uploaded in {} seconds.".format(ms))
     else:
@@ -276,4 +274,4 @@ CMD_HELP.update({
     "upload":
     ".upload <path in server>\
 \nUsage: Uploads a locally stored file to the chat."
-})        
+})

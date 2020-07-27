@@ -1,21 +1,52 @@
-#
-# The entire source code is OSSRPL except 'makeqr and getqr' which is MPL
-# License: MPL and OSSRPL
-""" Userbot module containing commands related to QR Codes. """
-
-import os
+from telethon import events
 import asyncio
+import json
+import requests
+from urllib.parse import quote
+from userbot.utils import admin_cmd
+import os
 import time
 from datetime import datetime
 import qrcode
 import barcode
 from barcode.writer import ImageWriter
-
 from bs4 import BeautifulSoup
-
 from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.account import UpdateNotifySettingsRequest
 
+@borg.on(admin_cmd(pattern="scan ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return 
+    if not event.reply_to_msg_id:
+        await event.edit("```Reply to any user message.```")
+        return
+    reply_message = await event.get_reply_message() 
+    if not reply_message.media:
+        await event.edit("```reply to a media message```")
+        return
+    chat = "@DrWebBot"
+    sender = reply_message.sender
+    if reply_message.sender.bot:
+        await event.edit("```Reply to actual users message.```")
+        return
+    await event.edit(" `Sliding my tip, of fingers over it`")
+    async with borg.conversation(chat) as conv:
+        try:
+            response = conv.wait_event(events.NewMessage(incoming=True,from_users=161163358))
+            await borg.forward_messages(chat, reply_message)
+            response = await response 
+        except YouBlockedUserError: 
+            await event.reply("```Please unblock @sangmatainfo_bot and try again```")
+            return
+        if response.text.startswith("Forward"):
+            await event.edit("```can you kindly disable your forward privacy settings for good?```")
+        else:
+            if response.text.startswith("Select"):
+                await event.edit("`Please go to` @DrWebBot `and select your language.`") 
+            else: 
+                await event.edit(f"**Antivirus scan was completed. I got dem final results.**\n {response.message.message}")
 
 @borg.on(admin_cmd(pattern=r"decode$", outgoing=True))
 async def parseqr(qr_e):
@@ -138,14 +169,63 @@ async def make_qr(makeqr):
     os.remove("img_file.webp")
     await makeqr.delete()
 
+@borg.on(admin_cmd(pattern="xkcd ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    xkcd_id = None
+    if input_str:
+        if input_str.isdigit():
+            xkcd_id = input_str
+        else:
+            xkcd_search_url = "https://relevantxkcd.appspot.com/process?"
+            queryresult = requests.get(
+                xkcd_search_url,
+                params={
+                    "action":"xkcd",
+                    "query":quote(input_str)
+                }
+            ).text
+            xkcd_id = queryresult.split(" ")[2].lstrip("\n")
+    if xkcd_id is None:
+        xkcd_url = "https://xkcd.com/info.0.json"
+    else:
+        xkcd_url = "https://xkcd.com/{}/info.0.json".format(xkcd_id)
+    r = requests.get(xkcd_url)
+    if r.ok:
+        data = r.json()
+        year = data.get("year")
+        month = data["month"].zfill(2)
+        day = data["day"].zfill(2)
+        xkcd_link = "https://xkcd.com/{}".format(data.get("num"))
+        safe_title = data.get("safe_title")
+        transcript = data.get("transcript")
+        alt = data.get("alt")
+        img = data.get("img")
+        title = data.get("title")
+        output_str = """[\u2060]({})**{}**
+[XKCD ]({})
+Title: {}
+Alt: {}
+Day: {}
+Month: {}
+Year: {}""".format(img, input_str, xkcd_link, safe_title, alt, day, month, year)
+        await event.edit(output_str, link_preview=True)
+    else:
+        await event.edit("xkcd n.{} not found!".format(xkcd_id))
 
 CMD_HELP.update({
-    'barqrcodes':
-    ".makeqr <content>\
-\nUsage: Make a QR Code from the given content.\
-\nExample: .makeqr www.google.com\n\n"
-".barcode <content>\
-\nUsage: Make a BarCode from the given content.\
+    'tools':
+    ".scan reply to media or file\
+\nUSEAGE: it scans the media or file and checks either any virus is in the file or media\
+\n\n.makeqr <content>\
+\nUSAGE: Make a QR Code from the given content.\
+\nExample: .makeqr www.google.com\
+\n\n.barcode <content>\
+\nUSAGE: Make a BarCode from the given content.\
 \nExample: .barcode www.google.com\
-\n\n**Note**: use .decode <reply to barcode/qrcode> to get decoded content."
+\n\n**Note**: use .decode <reply to barcode/qrcode> to get decoded content.\
+\n\n`.xkcd` <query>\
+\nUSAGE:Searches for the query for the relevant XKCD comic "
 })
