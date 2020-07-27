@@ -275,6 +275,6 @@ async def phcomment(text1,text2,text3):
         return  "check syntax once more"
     with open("temp.png", "wb") as f:
         f.write(requests.get(sandy).content)
-    img = Image.open("temp.png").convert("RGB")
+    img = Image.open("temp.png")
     img.save("temp.jpg", "jpeg")    
     return "temp.jpg"
