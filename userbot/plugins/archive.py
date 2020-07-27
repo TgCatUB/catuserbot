@@ -4,19 +4,22 @@ unzip usage: reply with zipped file .unzipper
 Coded by @furki
 """
 
+import logging
+logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
+                    level=logging.WARNING)
+logger = logging.getLogger(__name__)
+
 from datetime import datetime
 import zipfile
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-from zipfile import ZipFile
 import asyncio
 import os
 import shutil
 import subprocess
 import time
 from pySmartDL import SmartDL
-from userbot.uniborgConfig import Config
 from telethon import events
 from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 import subprocess
@@ -29,17 +32,15 @@ extracted = Config.TMP_DOWNLOAD_DIRECTORY
 if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
-@borg.on(admin_cmd(pattern="zip"))
+@borg.on(admin_cmd(pattern=("zip ?(.*)")))
 async def _(event):
     if event.fwd_from:
         return
-    if not event.is_reply:
-        await event.edit("Reply to a file to compress it.")
-        return
-    mone = await event.edit("Processing ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    input_str = event.pattern_match.group(1)
+    mone = await event.edit("Zipping in progress....")
     if event.reply_to_msg_id:
+        if not os.path.isdir(Config.TEMP_DOWNLOAD_DIRECTORY):
+            os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
         reply_message = await event.get_reply_message()
         try:
             c_time = time.time()
@@ -51,28 +52,32 @@ async def _(event):
                 )
             )
             directory_name = downloaded_file_name
-            await event.edit(downloaded_file_name)
+            await event.edit("Finish downloading to my local")
+            zipfile.ZipFile(directory_name + '.zip', 'w',
+                            zipfile.ZIP_DEFLATED).write(directory_name)
+            os.remove(directory_name)
+            cat = directory_name + ".zip"
+            await event.edit(f"compressed successfully into `{cat}`")
         except Exception as e:  # pylint:disable=C0103,W0703
-            await mone.edit(str(e))
-    zipfile.ZipFile(directory_name + '.zip', 'w', zipfile.ZIP_DEFLATED).write(directory_name)
-    await borg.send_file(
-        event.chat_id,
-        directory_name + ".zip",
-        caption="Zipped By cat",
-        force_document=True,
-        allow_cache=False,
-        reply_to=event.message.id,
-    )
-    await event.edit("DONE!!!")
-    await asyncio.sleep(5)
-    await event.delete()
+            await mone.edit(str(e))    
+    elif input_str:
+        if not os.path.exists(input_str):
+            await event.edit(f"There is no such directory or file with the name `{input_str}` check again")
+            return
+        filePaths = zipdir(input_str)    
+        zip_file = zipfile.ZipFile(input_str+'.zip', 'w')
+        with zip_file:
+            for file in filePaths:
+                zip_file.write(file)
+        await event.edit("Local file compressed to `{}`".format(input_str + ".zip"))      
 
-def zipdir(path, ziph):
-    # ziph is zipfile handle
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            ziph.write(os.path.join(root, file))
-            os.remove(os.path.join(root, file))
+def zipdir(dirName):
+  filePaths = []
+  for root, directories, files in os.walk(dirName):
+    for filename in files:
+        filePath = os.path.join(root, filename)
+        filePaths.append(filePath)
+  return filePaths        
     
 @borg.on(admin_cmd(pattern=("rar ?(.*)")))
 async def _(event):
@@ -230,7 +235,7 @@ async def _(event):
             await mone.edit("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))
         await event.edit("Unzipping now")
         with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
-            zip_ref.extractall()
+            zip_ref.extractall(Config.TMP_DOWNLOAD_DIRECTORY)
         await event.edit(f"unzipped and stored to `{downloaded_file_name[:-4]}`")
         os.remove(downloaded_file_name)
 
