@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup as bs
 import requests
 import asyncio
 import json
-from bs4 import BeautifulSoup 
 from telethon import events
 import cfscrape  # https://github.com/Anorov/cloudflare-scrape
 from datetime import datetime
@@ -155,7 +154,7 @@ def search_torrentz_eu(search_query):
     scraper = cfscrape.create_scraper()  # returns a CloudflareScraper instance
     raw_html = scraper.get(url).content
     # print(raw_html)
-    soup = BeautifulSoup(raw_html, "html.parser")
+    soup = bs(raw_html, "html.parser")
     results = soup.find_all("div", {"class": "results"})
     # print(results)
     if len(results) > 0:
