@@ -253,7 +253,7 @@ async def awooify(text):
     img.save("temp.jpg", "jpeg")    
     return "temp.jpg"     
 
-def trap(text1,text2,text3):
+async def trap(text1,text2,text3):
     r = requests.get(
             f"https://nekobot.xyz/api/imagegen?type=trap&name={text1}&author={text2}&image={text3}").json()
     sandy = r.get("message")
@@ -266,7 +266,7 @@ def trap(text1,text2,text3):
     img.save("temp.jpg", "jpeg")    
     return "temp.jpg"
 
-def phcomment(text1,text2,text3):
+async def phcomment(text1,text2,text3):
     r = requests.get(
             f"https://nekobot.xyz/api/imagegen?type=phcomment&image={text1}&text={text2}&username={text3}").json()
     sandy = r.get("message")
