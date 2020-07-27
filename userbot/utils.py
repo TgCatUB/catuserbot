@@ -442,7 +442,5 @@ async def edit_or_reply(event, text):
         reply_to = await event.get_reply_message()
         if reply_to:
             return await reply_to.reply(text)
-        else:
-            return await event.reply(text)
-    else:
-        return await event.edit(text)   
+        return await event.reply(text)
+    return await event.edit(text)
