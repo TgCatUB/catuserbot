@@ -24,10 +24,7 @@ import math
 import os
 from pySmartDL import SmartDL
 
-
-
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
-
 
 def get_video_thumb(file, output=None, width=90):
     metadata = extractMetadata(createParser(file))
@@ -73,7 +70,6 @@ async def _(event):
     else:
         await event.edit("Syntax // `.rename file.name` as reply to a Telegram media")
 
-
 @borg.on(admin_cmd(pattern="rnup (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -98,7 +94,6 @@ async def _(event):
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                   progress(d, t, event, c_time, "trying to download")
             )
-         
         )
         end = datetime.now()
         ms_one = (end - start).seconds
@@ -125,7 +120,6 @@ async def _(event):
             await event.edit("File Not Found {}".format(input_str))
     else:
         await event.edit("Syntax // .rnupload file.name as reply to a Telegram media")
-
 
 @borg.on(admin_cmd(pattern="rnstreamupload (.*)"))
 async def _(event):
