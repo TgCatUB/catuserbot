@@ -119,7 +119,6 @@ async def _(event):
             )
         )
         end = datetime.now()
-        # os.remove(input_str)
         ms = (end - start).seconds
         await mone.edit("Uploaded in {} seconds.".format(ms))
     else:
@@ -275,4 +274,4 @@ CMD_HELP.update({
     "upload":
     ".upload <path in server>\
 \nUsage: Uploads a locally stored file to the chat."
-})        
+})
