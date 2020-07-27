@@ -102,7 +102,7 @@ async def catbot(catmemes):
     else:
         text1 = input_str
         text2 = "cat"
-        await event.edit("**Syntax :** reply to image as `.trap (name of the person to trap)|(trapper name)`")
+        await catmemes.edit("**Syntax :** reply to image as `.trap (name of the person to trap)|(trapper name)`")
     replied = await catmemes.get_reply_message()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -154,7 +154,7 @@ async def catbot(catmemes):
     else:
         text1 = input_str
         text2 = "cat"
-        await event.edit("**Syntax :** reply to image as `.phub (username)|(text in comment)`")
+        await catmemes.edit("**Syntax :** reply to image as `.phub (username)|(text in comment)`")
     replied = await catmemes.get_reply_message()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
