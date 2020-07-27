@@ -17,3 +17,5 @@ lolice = catdef.lolice
 trash = catdef.trash
 awooify = catdef.awooify
 convert_toimage = catdef.convert_toimage
+trap = catdef.trap
+phcomment = catdef.phcomment
