@@ -130,8 +130,7 @@ def search_idop_se(search_query):
     raw_json = requests.get(url).json()
     results = raw_json["result"]["items"]
     for item in results:
-        """ The content scrapped on 24.09.2018 22:56:45
-        """
+        #The content scrapped on 24.09.2018 22:56:45
         title = item["name"]
         hash = item["info_hash"]
         age = item["create_time"]
@@ -161,8 +160,7 @@ def search_torrentz_eu(search_query):
         results = results[0]
         for item in results.find_all("dl"):
             # print(item)
-            """The content scrapped on 23.06.2018 15:40:35
-            """
+            #The content scrapped on 23.06.2018 15:40:35
             dt = item.find_all("dt")[0]
             dd = item.find_all("dd")[0]
             #
