@@ -2,6 +2,7 @@ from userbot import catdef
 from pySmartDL import SmartDL
 from PIL import Image, ImageDraw, ImageFont
 import shutil
+from userbot.uniborgConfig import Config
 
 #thumb image
 downloaded_file_name = "./DOWNLOADS/thumb_image.jpg"
