@@ -114,8 +114,6 @@ class Config(object):
     #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
     # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
     # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
-
-    
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     # For transfer channel
@@ -166,11 +164,8 @@ class Config(object):
     SPAM_WATCH_API = os.environ.get("SPAM_WATCH_API", None)
     
     
-
-
 class Production(Config):
     LOGGER = False
-
 
 class Development(Config):
     LOGGER = True
