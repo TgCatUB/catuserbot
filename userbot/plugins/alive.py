@@ -18,7 +18,7 @@ import nekos
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 CAT_IMG = Config.ALIVE_PIC
 
-@borg.on(admin_cmd(outgoing=True, pattern="alive$"))
+@borg.on(admin_cmd(outgoing=True, pattern="live$"))
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
