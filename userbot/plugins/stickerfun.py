@@ -21,7 +21,7 @@ from telethon.tl.functions.messages import ImportChatInviteRequest
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="sttxt(?: |$)(.*)"))
+@borg.on(admin_cmd(outgoing=True, pattern="st(?: |$)(.*)"))
 async def waifu(animu):
     text = animu.pattern_match.group(1)
     reply_to_id = animu.message
@@ -42,7 +42,7 @@ async def waifu(animu):
     await animu.delete()
     await waifutxt(text, animu.chat_id , reply_to_id, bot, borg)
         
-@borg.on(sudo_cmd(allow_sudo = True, pattern="sttxt(?: |$)(.*)"))
+@borg.on(sudo_cmd(allow_sudo = True, pattern="st(?: |$)(.*)"))
 async def waifu(animu):
     text = animu.pattern_match.group(1)
     reply_to_id = animu.message
@@ -182,7 +182,7 @@ async def get_font_file(client, channel_id, search_kw=""):
 
 CMD_HELP.update({
     'stickerfun':
-    "`.sttxt` <your txt>\nUSAGE : Anime that makes your writing fun.\
+    "`.st` <your txt>\nUSAGE : Anime that makes your writing fun.\
     \n\n`.stcr` <your txt>\nUSAGE :your text as sticker\
     "
 })
