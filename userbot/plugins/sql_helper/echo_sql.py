@@ -7,7 +7,7 @@ class ECHOSQL(BASE):
     user_id = Column(String(14), primary_key=True)
     chat_id = Column(String(14), primary_key=True)
 
-    def __init__()
+    def __init__(
         self,
         user_id,
         chat_id
