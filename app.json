@@ -12,6 +12,7 @@
   "repository": "https://github.com/Sur-vivor/CatUserbot/",
   "website": "#TODO",
   "success_url": "#TODO",
+  "stack": "container",
   "env": {
     "ENV": {
       "description": "Setting this to ANYTHING will enable heroku.",
@@ -96,12 +97,12 @@
       "required": false
     },
     "CHROME_BIN": {
-      "description": "For Carbon.py. Leave as it is. ",
+      "description": "Google Chrome (or) Chromium binary location for selenium based modules.",
       "value": "/app/.apt/usr/bin/google-chrome",
       "required": false
     },
     "CHROME_DRIVER": {
-      "description": "For Carbon.py. Leave as it is. ",
+      "description": "ChromeDriver location for selenium based modules",,
       "value": "/app/.chromedriver/bin/chromedriver",
       "required": false
     },
@@ -121,20 +122,5 @@
     "options": {
       "version": "12"
     }
-  }],
-  "buildpacks": [{
-    "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
-  },{
-    "url":"https://github.com/amivin/aria2-heroku.git"
-  },{
-     "url": "https://github.com/heroku/heroku-buildpack-apt.git"
-  },{
-    "url":"https://github.com/heroku/heroku-buildpack-google-chrome"
-  },{
-    "url":"https://github.com/heroku/heroku-buildpack-chromedriver"
-  },{
-    "url": "https://github.com/opendoor-labs/heroku-buildpack-p7zip"
-  },{
-    "url": "heroku/python"
   }]
 }
