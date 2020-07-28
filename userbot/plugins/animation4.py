@@ -2,6 +2,8 @@ from userbot import CMD_HELP
 from telethon import events
 import asyncio
 import os
+import logging
+import random
 import sys
 from userbot import utils
 from userbot.utils import admin_cmd
@@ -12,7 +14,6 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
 
-
 @borg.on(utils.admin_cmd(pattern="g1 ?(.*)"))
 async def payf(event):
     paytext=event.pattern_match.group(1)
@@ -20,18 +21,13 @@ async def payf(event):
     await event.edit(pay)
     
 
-@borg.on(admin_cmd(pattern="uff ?(.*)"))
+@borg.on(admin_cmd(pattern="uff ?(.*)"))      
 async def _(event):
     if event.fwd_from:
         return
-    animation_interval = 1
-    
-    animation_ttl = range(0, 103)
-    input_str = event.pattern_match.group(1)
-    if input_str == "uff":
-        await event.edit(input_str)
-        animation_chars = [
-
+    animation_interval = 1    
+    animation_ttl = range(0, 103)    
+    animation_chars = [
             "U",
             "Uf",    
             "Uff",
@@ -46,9 +42,9 @@ async def _(event):
             "Ufffffffffffff",
             "Uffffffffffffff"
         ]
-
-        for i in animation_ttl:
-            await event.edit(animation_chars[i % 103])	
+    for i in animation_ttl:          
+        await asyncio.sleep(animation_interval)
+        await event.edit(animation_chars[i % 103])
 	
 	
 @borg.on(admin_cmd(pattern=f"snake$", outgoing=True))
