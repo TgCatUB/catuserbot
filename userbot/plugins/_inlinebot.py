@@ -36,7 +36,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
-            reply_pop_up_alert = "Please get your own catuserbot, and don't use mine! Join @catuserbot17 help"
+            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana!"
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
 
@@ -55,7 +55,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
-            reply_pop_up_alert = "Please get your own catuserbot, and don't use mine! Join @catuserbot17 help "
+            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana! "
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
     @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"us_plugin_(.*)")
@@ -89,7 +89,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                           caption=plugin_name
                           )
         else:
-            reply_pop_up_alert = "Please get your own catuserbot, and don't use mine! Join @catuserbot17 help "
+            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana!"
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)            
 
 def paginate_help(page_number, loaded_plugins, prefix):
@@ -119,7 +119,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
     if len(pairs) > number_of_rows:
         pairs = pairs[modulo_page * number_of_rows:number_of_rows * (modulo_page + 1)] + \
             [
-            (custom.Button.inline("Previous<<<<", data="{}_prev({})".format(prefix, modulo_page)),
-             custom.Button.inline(">>>>>Next", data="{}_next({})".format(prefix, modulo_page)))
+            (custom.Button.inline("⌫", data="{}_prev({})".format(prefix, modulo_page)),
+             custom.Button.inline("⌦", data="{}_next({})".format(prefix, modulo_page)))
         ]
     return pairs
