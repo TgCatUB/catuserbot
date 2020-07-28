@@ -60,5 +60,5 @@ async def echo(cat):
 async def samereply(cat):
     if cat.chat_id in Config.UB_BLACK_LIST_CHAT:
         return
-    if is_echo(cat.sender_id, catt.chat_id):
+    if is_echo(cat.sender_id, cat.chat_id):
         await cat.reply(cat.message)
