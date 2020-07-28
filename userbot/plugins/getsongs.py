@@ -22,12 +22,15 @@ import asyncio
 from userbot.utils import admin_cmd , sudo_cmd
 import glob
 import os  
-from userbot import CMD_HELP
+from userbot import CMD_HELP, ALIVE_NAME
 from userbot.plugins import catmusic , catmusicvideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
 @borg.on(admin_cmd(pattern="song(?: |$)(.*)"))
 async def _(event):
@@ -62,7 +65,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=query,
+                caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 reply_to=reply_to_id
             )
     await event.delete()
@@ -102,7 +105,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=query,
+                caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 reply_to=reply_to_id
             )
     await event.delete()
@@ -152,7 +155,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=query,
+                caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 supports_streaming=True,
                 reply_to=reply_to_id,
                 attributes=[DocumentAttributeVideo(
@@ -201,7 +204,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=query,
+                caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 reply_to=reply_to_id
             )
     await san.delete()
@@ -252,7 +255,7 @@ async def _(event):
                 loa,
                 force_document=True,
                 allow_cache=False,
-                caption=query,
+                caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 supports_streaming=True,
                 reply_to=reply_to_id,
                 attributes=[DocumentAttributeVideo(
