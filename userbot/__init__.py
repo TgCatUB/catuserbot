@@ -9,12 +9,12 @@ from distutils.util import strtobool as sb
 from dotenv import load_dotenv
 from requests import get
 import time
-from userbot.helpers import fonts as fonts
-from userbot.helpers import functions as catdef
+from userbot.helpers import fonts as fonts ,functions as catdef
 from userbot.helpers import memeshelper as memes
 from pySmartDL import SmartDL
 from PIL import Image, ImageDraw, ImageFont
 import shutil
+from userbot.uniborgConfig import Config
 
 StartTime = time.time()
 catversion = "2.6.1"
