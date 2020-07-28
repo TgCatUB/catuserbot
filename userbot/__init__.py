@@ -5,10 +5,7 @@ from telethon import TelegramClient
 from var import Var
 from pylast import LastFMNetwork, md5
 from logging import basicConfig, getLogger, INFO, DEBUG
-from distutils.util import strtobool as sb
-from pySmartDL import SmartDL
-from PIL import Image, ImageDraw, ImageFont
-import shutil
+from distutils.util import strtobool as sb  
 from dotenv import load_dotenv
 from requests import get
 import time
@@ -123,9 +120,7 @@ for binary, path in binaries.items():
     downloader = SmartDL(binary, path, progress_bar=False)
     downloader.start()
     os.chmod(path, 0o755)
-
-downloaded_file_name = "./DOWNLOADS/thumb_image.jpg""
-downloader = SmartDL(Config.THUMB_IMAGE, downloaded_file_name, progress_bar=False)    
+ 
 # Global Variables
 COUNT_MSG = 0
 USERS = {}
