@@ -3,18 +3,16 @@ Available Commands:
 .savethumbnail
 .clearthumbnail
 .getthumbnail"""
-
 import os
+import asyncio
 import subprocess
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
 from telethon import events
-from userbot.utils import admin_cmd
-
+from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
-
 
 def get_video_thumb(file, output=None, width=320):
     output = file + ".jpg"
@@ -30,7 +28,6 @@ def get_video_thumb(file, output=None, width=320):
     if not p.returncode and os.path.lexists(file):
         os.remove(file)
         return output
-
 
 @borg.on(admin_cmd(pattern="savethumbnail"))
 async def _(event):
