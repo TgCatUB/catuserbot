@@ -11,10 +11,6 @@ from requests import get
 import time
 from userbot.helpers import fonts as fonts ,functions as catdef
 from userbot.helpers import memeshelper as memes
-from pySmartDL import SmartDL
-from PIL import Image, ImageDraw, ImageFont
-import shutil
-from userbot.uniborgConfig import Config
 
 StartTime = time.time()
 catversion = "2.6.1"
@@ -31,9 +27,6 @@ ENV = os.environ.get("ENV", False)
 
 CAT_ID = ["1035034432", "551290198"]
 
-#thumb image
-downloaded_file_name = "./DOWNLOADS/thumb_image.jpg"
-downloader = SmartDL(Config.THUMB_IMAGE, downloaded_file_name, progress_bar=False)
 # Bot Logs setup:
 if bool(ENV):
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
