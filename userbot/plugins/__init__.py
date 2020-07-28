@@ -1,4 +1,10 @@
 from userbot import catdef
+from PIL import Image, ImageDraw, ImageFont
+from pySmartDL import SmartDL
+import shutil
+
+downloaded_file_name = "./DOWNLOADS/thumb_image.jpg""
+downloader = SmartDL(Config.THUMB_IMAGE, downloaded_file_name, progress_bar=False)
 
 deEmojify = catdef.deEmojify
 trumptweet = catdef.trumptweet 
