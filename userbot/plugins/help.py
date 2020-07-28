@@ -6,7 +6,6 @@ import sys
 from telethon import events, functions, __version__
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
 @borg.on(admin_cmd(pattern="help ?(.*)"))
 async def cmd_list(event):
@@ -35,8 +34,8 @@ async def cmd_list(event):
             else:
                 await event.edit(input_str + " is not a valid plugin!")
         else:
-            help_string = f"""__**Helper:↬ Provided by**__ **[{DEFAULTUSER}]({USERNAME})** \n
-__**Cat Helper To reveal all the commands:↬**__\n__Type` .help` plugin_name for commands, in case popup doesn't appear.__\n __Type `.info` plugin_name for usage__"""
+            help_string = f"""Userbot Helper.. Provided by {DEFAULTUSER} \n
+Userbot Helper to reveal all the commands\n__Do `.help` plugin_name for commands, in case popup doesn't appear.__\nDo `.info` plugin_name for usage"""
             results = await bot.inline_query(  # pylint:disable=E0602
                 tgbotusername,
                 help_string
