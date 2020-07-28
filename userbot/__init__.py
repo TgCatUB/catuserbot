@@ -14,7 +14,7 @@ from userbot.helpers import fonts as fonts
 from userbot.helpers import functions as catdef
 
 StartTime = time.time()
-catversion = "2.5.5"
+catversion = "2.6.0"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -107,7 +107,7 @@ else:
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
 if not os.path.exists('bin'):
     os.mkdir('bin')
-    
+
 binaries = {
     "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown":
     "bin/megadown",
@@ -121,7 +121,6 @@ for binary, path in binaries.items():
     downloader = SmartDL(binary, path, progress_bar=False)
     downloader.start()
     os.chmod(path, 0o755)
-
 
 # Global Variables
 COUNT_MSG = 0
