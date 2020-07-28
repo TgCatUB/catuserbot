@@ -171,7 +171,7 @@ async def _(dyno):
     key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
     url = f'https://nekobin.com/{key}'
     reply_text = f'The last 100 lines of heroku logrs are : [neko]({url})'
-    await event.edit(reply_text)
+    await dyno.edit(reply_text)
     
 def prettyjson(obj, indent=2, maxlinelength=80):
     """Renders JSON content with indentation and line splits/concatenations to fit maxlinelength.
