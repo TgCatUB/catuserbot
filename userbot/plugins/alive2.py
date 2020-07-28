@@ -14,7 +14,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 CAT_IMG = Config.ALIVE_PIC
 
-@borg.on(admin_cmd(outgoing=True, pattern="live$"))
+@borg.on(admin_cmd(outgoing=True, pattern="alive$"))
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
