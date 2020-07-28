@@ -1,13 +1,13 @@
-from sqlalchemy import Column, UnicodeText, LargeBinary, Numeric
+from sqlalchemy import Column, UnicodeText, LargeBinary,String
 from userbot.plugins.sql_helper import SESSION, BASE
 
 
 class ECHOSQL(BASE):
     __tablename__ = "echo_sql"
-    user_id = Column(Numeric, primary_key=True)
-    chat_id = Column(Numeric, primary_key=True)
+    user_id = Column(String(14), primary_key=True)
+    chat_id = Column(String(14), primary_key=True)
 
-    def __init__(
+    def __init__()
         self,
         user_id,
         chat_id
@@ -46,7 +46,7 @@ def remove_echo(
     user_id,
     chat_id
 ):
-    note = SESSION.query(ECHOSQL).get((user_id, chat_id))
+    note = SESSION.query(ECHOSQL).get((str(user_id), str(chat_id)))
     if note:
         SESSION.delete(note)
         SESSION.commit()
