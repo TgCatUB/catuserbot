@@ -19,8 +19,7 @@ async def add_bot(bot_token):
 if len(argv) not in (1, 3, 4):
     bot.disconnect()
 else:
-    bot.tgbot = None
-    bot.run_until_disconnected()  
+    bot.tgbot = None 
     if Var.TG_BOT_USER_NAME_BF_HER is not None:
         LOGS.info("Initiating Inline Bot")
         # ForTheGreatrerGood of beautification
@@ -47,3 +46,9 @@ for name in files:
 LOGS.info("Yay your userbot is officially working.!!!")
 LOGS.info("Congratulation, now type .alive to see message if bot is live\n"
           "If you need assistance, head to https://t.me/catuserbot_support")
+
+if len(argv) not in (1, 3, 4):
+    bot.disconnect()
+else:
+    bot.tgbot = None
+    bot.run_until_disconnected()  
