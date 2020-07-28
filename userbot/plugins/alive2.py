@@ -14,7 +14,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 CAT_IMG = Config.ALIVE_PIC
 
-@borg.on(admin_cmd(outgoing=True, pattern="live$"))
+@borg.on(admin_cmd(outgoing=True, pattern="de$"))
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
@@ -23,29 +23,29 @@ async def amireallyalive(alive):
     if alive.reply_to_msg_id:
         reply_to_id = await alive.get_reply_message()
     if CAT_IMG:
-         cat_caption  = f"**MY BOT IS RUNNING SUCCESFULLY**\n\n"
-         cat_caption += f"**Database Status: Databases functioning normally!\n**"   
-         cat_caption += f"☞Telethon version : `{version.__version__}\n`"
-         cat_caption += f"☞Catuserbot Version : `{catversion}`\n"
-         cat_caption += f"☞Python Version : `{python_version()}\n\n`"
-         cat_caption += f"**cat🐱 is always with you, my master!\n**"
-         cat_caption += f"☞My peru Master: [{DEFAULTUSER}](@Jisan7509)\n"
-         cat_caption += f"☞uptime : `{uptime}\n`"
-         cat_caption += f"☞Contact **[Hatake Kakashi]**(@kakashi09bot) For notes & get help\n"
-         cat_caption +=	f"☞**Click **[here](https://github.com/Jisan09/catuserbot) to deply catuserbot"
+         cat_caption  = f"__**༄ MY BOT IS RUNNING SUCCESFULLY ༄**__\n\n"
+         cat_caption += f"**✧✧ Database :** `Functioning normally!`\n"   
+         cat_caption += f"**✧✧ Telethon version :** `{version.__version__}\n`"
+         cat_caption += f"**✧✧ Catuserbot Version :** `{catversion}`\n"
+         cat_caption += f"**✧✧ Python Version :** `{python_version()}\n\n`"
+         cat_caption += f"**ღ** __**Cat**__🐱 __**is always with you, my master ღ\n\n**__"
+         cat_caption += f"**✧✧ My peru Master:** [{DEFAULTUSER}](@Jisan7509)\n"
+         cat_caption += f"**✧✧ Uptime :** `{uptime}\n`"
+         cat_caption += f"**✧✧ Contact [Hatake Kakashi](@kakashi09bot) For notes**\n\n"
+         cat_caption +=	f"           **ღ** __**[DEPLOY MY REPO]**__(https://github.com/Jisan09/catuserbot) **ღ**"
          await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
          await alive.delete()
     else:
-        await alive.edit(f"**MY BOT IS RUNNING SUCCESFULLY**\n\n"
-                         "**Database Status: Databases functioning normally!\n**" 
-                         f"☞Telethon version : `{version.__version__}\n`"
-			 f"☞Catuserbot Version : `{catversion}`\n"
-                         f"☞Python Version : `{python_version()}\n\n`"
-                         "**cat🐱 is always with you, my master!\n**"
-                         f"☞My peru Master: [{DEFAULTUSER}](@Jisan7509)\n"
-                         f"☞uptime : `{uptime}\n`"
-                         f"☞Contact **[Hatake Kakashi]**(@kakashi09bot) For notes & get help\n"
-                         f"☞**Click **[here](https://github.com/Jisan09/catuserbot) to deply catuserbot"
+        await alive.edit(f"__**༄ MY BOT IS RUNNING SUCCESFULLY ༄**__\n\n"
+                         "**✧✧ Database :** `Functioning normally!`\n"   
+                         f"**✧✧ Telethon version :** `{version.__version__}\n`"
+                         f"**✧✧ Catuserbot Version :** `{catversion}`\n"
+                         f"**✧✧ Python Version :** `{python_version()}\n\n`"
+                         "**ღ** __**Cat**__🐱 __**is always with you, my master ღ\n\n**__"
+                         f"**✧✧ My peru Master:** [{DEFAULTUSER}](@Jisan7509)\n"
+                         f"**✧✧ Uptime :** `{uptime}\n`"
+                         f"**✧✧ Contact [Hatake Kakashi](@kakashi09bot) For notes**\n\n"
+                         f"           **ღ** __**[DEPLOY MY REPO]**__(https://github.com/Jisan09/catuserbot) **ღ**"
                         )         
 
 
