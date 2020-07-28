@@ -98,12 +98,12 @@
     },
     "CHROME_BIN": {
       "description": "Google Chrome (or) Chromium binary location for selenium based modules.",
-      "value": "/app/.apt/usr/bin/google-chrome",
+      "value": "/usr/bin/google-chrome",
       "required": false
     },
     "CHROME_DRIVER": {
       "description": "ChromeDriver location for selenium based modules",,
-      "value": "/app/.chromedriver/bin/chromedriver",
+      "value": "/usr/bin/chromedriver",
       "required": false
     },
     "DOWNLOAD_PFP_URL_CLOCK": {
