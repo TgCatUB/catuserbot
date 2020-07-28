@@ -178,7 +178,8 @@ class Config(object):
         RSS_POST_MSG_GROUP_ID = int(RSS_POST_MSG_GROUP_ID)
     SPAM_WATCH_API = os.environ.get("SPAM_WATCH_API", None)
     
-    
+    #username to be displayed in .live
+    EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("LIVE_USERNAME", None)    
 
 
 class Production(Config):
