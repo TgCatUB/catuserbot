@@ -179,7 +179,7 @@ class Config(object):
     SPAM_WATCH_API = os.environ.get("SPAM_WATCH_API", None)
     
     #username to be displayed in .live
-    EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("LIVE_USERNAME", None)    
+    LIVE_USERNAME = os.environ.get("LIVE_USERNAME", None)    
 
 
 class Production(Config):
