@@ -17,7 +17,7 @@ from pySmartDL import SmartDL
 from PIL import Image, ImageDraw, ImageFont
 import shutil
 
-downloaded_file_name = "./DOWNLOADS/thumb_image.jpg""
+downloaded_file_name = "./DOWNLOADS/thumb_image.jpg"
 downloader = SmartDL(Config.THUMB_IMAGE, downloaded_file_name, progress_bar=False)
 
 async def add_bot(bot_token):
