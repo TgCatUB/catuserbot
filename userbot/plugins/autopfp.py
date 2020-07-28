@@ -27,7 +27,7 @@ COLLECTION_STRING2 = [
 async def animeppbat():
     os.system("rm -rf donot.jpg")
     rnd = random.randint(0, len(COLLECTION_STRING1) - 1)
-    pack = COLLECTION_STRING[rnd]
+    pack = COLLECTION_STRING1[rnd]
     pc = requests.get("http://getwallpapers.com/collection/" + pack).text
     f = re.compile('/\w+/full.+.jpg')
     f = f.findall(pc)
@@ -40,7 +40,7 @@ async def animeppbat():
 async def animeppthor():
     os.system("rm -rf donot.jpg")
     rnd = random.randint(0, len(COLLECTION_STRING2) - 1)
-    pack = COLLECTION_STRING[rnd]
+    pack = COLLECTION_STRING2[rnd]
     pc = requests.get("http://getwallpapers.com/collection/" + pack).text
     f = re.compile('/\w+/full.+.jpg')
     f = f.findall(pc)
