@@ -11,7 +11,7 @@ from telethon import version
 from platform import python_version, uname
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USERNAME = str(LIVE_USERNAME) if LIVE_USERNAME
+USERNAME = Config.LIVE_USERNAME
 CAT_IMG = Config.ALIVE_PIC
 
 @borg.on(admin_cmd(outgoing=True, pattern="de$"))
