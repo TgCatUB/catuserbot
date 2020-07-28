@@ -1,6 +1,7 @@
 from userbot import catdef
 import requests
 import os
+from userbot.uniborgConfig import Config
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 #thumb image
