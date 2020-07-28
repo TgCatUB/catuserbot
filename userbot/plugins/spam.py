@@ -4,7 +4,7 @@ from asyncio import wait, sleep
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 import pybase64
-from telethon.tl.functions.messages import ImportChatInviteRequest
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 import os 
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
