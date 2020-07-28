@@ -1,4 +1,6 @@
 import random
+import os
+import sys
 import asyncio
 import random
 import logging
@@ -9,17 +11,15 @@ from userbot import CMD_HELP, LOGS
 
 
 
-@borg.on(events.NewMessage(pattern=r"\.(.*)", outgoing=True))
-async def _(event):
-           input_str = event.pattern_match.group(1)
-           if input_str == "kk":                              
+@borg.on(admin_cmd(outgoing=True, pattern="kf$(.*)"))
+async def _(event):                             
                  r = random.randint(0, 3)
                  logger.debug(r)
                  if r == 0:
                      await event.edit("┏━━━┓\n┃┏━━┛\n┃┗━━┓\n┃┏━━┛\n┃┃\n┗┛")
                  else:
                      r == 1            
-                     await event.edit("╭━━━╮\n┃╭━━╯\n┃╰━━╮\n┃╭━━╯\n┃┃\n╰╯")
+                     await event.edit("╭━━━╮\n┃╭━━╯\n┃╰━━╮\n┃╭━━╯\n┃┃\n╰╯")   
                     
 @borg.on(admin_cmd(pattern="join"))
 async def _(event):
@@ -205,60 +205,38 @@ async def pressf(f):
         await f.edit("`" + out + "`")
         
         
-        
-@borg.on(admin_cmd(pattern=r"ooof"))
-async def bigf_func(message):
+@borg.on(admin_cmd("bigoof"))
+async def _(event):
+    if event.fwd_from:
+        return
+    animation_interval = 0.2
+    animation_ttl = range(0, 7)
+    await event.edit("┏━━━┓╋╋╋╋┏━━━┓ \n┃┏━┓┃╋╋╋╋┃┏━┓┃ \n┃┃╋┃┣┓┏┓┏┫┃╋┃┃ \n┃┃╋┃┃┗┛┗┛┃┃╋┃┃ \n┃┗━┛┣┓┏┓┏┫┗━┛┃ \n┗━━━┛┗┛┗┛┗━━━┛")
+    animation_chars = [
+            "╭━━━╮╱╱╱╭━╮ \n┃╭━╮┃╱╱╱┃╭╯ \n┃┃╱┃┣━━┳╯╰╮ \n┃┃╱┃┃╭╮┣╮╭╯ \n┃╰━╯┃╰╯┃┃┃ \n╰━━━┻━━╯╰╯ ",
+            "╭━━━╮╱╱╱╱╱╱╭━╮ \n┃╭━╮┃╱╱╱╱╱╱┃╭╯ \n┃┃╱┃┣━━┳━━┳╯╰╮ \n┃┃╱┃┃╭╮┃╭╮┣╮╭╯ \n┃╰━╯┃╰╯┃╰╯┃┃┃ \n ╰━━━┻━━┻━━╯╰╯",
+            "╭━━━╮╱╱╱╱╱╱╱╱╱╭━╮ \n┃╭━╮┃╱╱╱╱╱╱╱╱╱┃╭╯ \n┃┃╱┃┣━━┳━━┳━━┳╯╰╮ \n┃┃╱┃┃╭╮┃╭╮┃╭╮┣╮╭╯ \n┃╰━╯┃╰╯┃╰╯┃╰╯┃┃┃ \n╰━━━┻━━┻━━┻━━╯╰╯",
+            "╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╭━╮ \n┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱┃╭╯ \n┃┃╱┃┣━━┳━━┳━━┳━━┳╯╰╮ \n┃┃╱┃┃╭╮┃╭╮┃╭╮┃╭╮┣╮╭╯ \n┃╰━╯┃╰╯┃╰╯┃╰╯┃╰╯┃┃┃ \n╰━━━┻━━┻━━┻━━┻━━╯╰╯",
+            "╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭━╮ \n┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃╭╯ \n┃┃╱┃┣━━┳━━┳━━┳━━┳━━┳╯╰╮ \n┃┃╱┃┃╭╮┃╭╮┃╭╮┃╭╮┃╭╮┣╮╭╯ \n┃╰━╯┃╰╯┃╰╯┃╰╯┃╰╯┃╰╯┃┃┃ \n╰━━━┻━━┻━━┻━━┻━━┻━━╯╰╯",
+            "╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╭━╮ \n┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱┃╭╯ \n┃┃╱┃┣━━┳━━┳━━┳━━┳╯╰╮ \n┃┃╱┃┃╭╮┃╭╮┃╭╮┃╭╮┣╮╭╯ \n┃╰━╯┃╰╯┃╰╯┃╰╯┃╰╯┃┃┃ \n╰━━━┻━━┻━━┻━━┻━━╯╰╯",
+            "╭━━━╮╱╱╱╱╱╱╱╱╱╭━╮ \n┃╭━╮┃╱╱╱╱╱╱╱╱╱┃╭╯ \n┃┃╱┃┣━━┳━━┳━━┳╯╰╮ \n┃┃╱┃┃╭╮┃╭╮┃╭╮┣╮╭╯ \n┃╰━╯┃╰╯┃╰╯┃╰╯┃┃┃ \n╰━━━┻━━┻━━┻━━╯╰╯"
+         ]
+          
+    for i in animation_ttl:        	
+        await asyncio.sleep(animation_interval)
+        await event.edit(animation_chars[i % 7])
+           
+           
+@borg.on(admin_cmd(pattern="ctext ?(.*)"))
+async def payf(event):
+    paytext=event.pattern_match.group(1)
+    pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(paytext*8, paytext*8, paytext*2, paytext*2, paytext*2, paytext*2, paytext*2, paytext*2, paytext*2, paytext*2, paytext*8, paytext*8)
+    await event.edit(pay)
 
-    a = """
-    ┏━━━┓╋╋╋╋┏━━━┓
-    ┃┏━┓┃╋╋╋╋┃┏━┓┃
-    ┃┏━┓┃╋╋╋╋┃┏━┓┃
-    ┃┃╋┃┣┓┏┓┏┫┃╋┃┃
-    ┃┃╋┃┃┗┛┗┛┃┃╋┃┃
-    ┃┃╋┃┃┗┛┗┛┃┃╋┃┃
-    ┃┗━┛┣┓┏┓┏┫┗━┛┃
-    ┗━━━┛┗┛┗┛┗━━━┛
-    """
-    b = """
-    ╭━━━╮╱╱╱╭━╮ 
-    ┃╭━╮┃╱╱╱┃╭╯ 
-    ┃┃╱┃┣━━┳╯╰╮
-    ┃┃╱┃┃╭╮┣╮╭╯ 
-    ┃╰━╯┃╰╯┃┃┃ 
-    ╰━━━┻━━╯╰╯
-    """
-    c = """
-    ╭━━━╮╱╱╱╱╱╱╭━╮ 
-    ┃╭━╮┃╱╱╱╱╱╱┃╭╯ 
-    ┃┃╱┃┣━━┳━━┳╯╰╮ 
-    ┃┃╱┃┃╭╮┃╭╮┣╮╭╯ 
-    ┃╰━╯┃╰╯┃╰╯┃┃┃
-    ╰━━━┻━━┻━━╯╰╯
-    """
-    d = """
-    ╭━━━╮╱╱╱╱╱╱╱╱╱╭━╮ ┃╭━╮┃╱╱╱╱╱╱╱╱╱┃╭╯ ┃┃╱┃┣━━┳━━┳━━┳╯╰╮ ┃┃╱┃┃╭╮┃╭╮┃╭╮┣╮╭╯ ┃╰━╯┃╰╯┃╰╯┃╰╯┃┃┃ ╰━━━┻━━┻━━┻━━╯╰╯
-    """
-    e = """
-    ╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╭━╮ ┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱┃╭╯ ┃┃╱┃┣━━┳━━┳━━┳━━┳╯╰╮ ┃┃╱┃┃╭╮┃╭╮┃╭╮┃╭╮┣╮╭╯ ┃╰━╯┃╰╯┃╰╯┃╰╯┃╰╯┃┃┃ ╰━━━┻━━┻━━┻━━┻━━╯╰╯
-    """
-    f = """
-    ╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭━╮ ┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃╭╯ ┃┃╱┃┣━━┳━━┳━━┳━━┳━━┳╯╰╮ ┃┃╱┃┃╭╮┃╭╮┃╭╮┃╭╮┃╭╮┣╮╭╯ ┃╰━╯┃╰╯┃╰╯┃╰╯┃╰╯┃╰╯┃┃┃ ╰━━━┻━━┻━━┻━━┻━━┻━━╯╰╯
-    """
-    g = """
-    ╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╭━╮ ┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱┃╭╯ ┃┃╱┃┣━━┳━━┳━━┳━━┳╯╰╮ ┃┃╱┃┃╭╮┃╭╮┃╭╮┃╭╮┣╮╭╯ ┃╰━╯┃╰╯┃╰╯┃╰╯┃╰╯┃┃┃ ╰━━━┻━━┻━━┻━━┻━━╯╰╯
-    """
-    h = """
-    ╭━━━╮╱╱╱╱╱╱╱╱╱╭━╮ ┃╭━╮┃╱╱╱╱╱╱╱╱╱┃╭╯ ┃┃╱┃┣━━┳━━┳━━┳╯╰╮ ┃┃╱┃┃╭╮┃╭╮┃╭╮┣╮╭╯ ┃╰━╯┃╰╯┃╰╯┃╰╯┃┃┃ ╰━━━┻━━┻━━┻━━╯╰╯
-    """
-    k = """
-    ╭━━━╮╱╱╱╱╱╱╭━╮ 
-    ┃╭━╮┃╱╱╱╱╱╱┃╭╯ 
-    ┃┃╱┃┣━━┳━━┳╯╰╮ 
-    ┃┃╱┃┃╭╮┃╭╮┣╮╭╯ 
-    ┃╰━╯┃╰╯┃╰╯┃┃┃
-    ╰━━━┻━━┻━━╯╰╯
-    """
-    animation_chars = [ a, b, c, d, e, f, g, h, k]
-    for i in range(27):
-        await asyncio.sleep(0.1)
-        await message.edit(animation_chars[i % 9])
+
+@borg.on(admin_cmd(pattern="ctext ?(.*)"))
+async def payf(event):
+    paytext=event.pattern_match.group(1)
+    pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(paytext*8, paytext*8, paytext*2, paytext*2, paytext*2, paytext*2, paytext*2, paytext*2, paytext*2, paytext*2, paytext*8, paytext*8)
+    await event.edit(pay)
+
