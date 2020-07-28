@@ -1,4 +1,5 @@
 from userbot import bot
+from sys import argv
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 from telethon import TelegramClient
 from var import Var
