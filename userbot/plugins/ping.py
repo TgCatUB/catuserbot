@@ -1,8 +1,12 @@
 from telethon import events
 from datetime import datetime
 from userbot.utils import admin_cmd,sudo_cmd
-from userbot import CMD_HELP
+from userbot import CMD_HELP, ALIVE_NAME
 import asyncio
+from platform import uname
+
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
 @borg.on(admin_cmd(pattern=f"fping$", outgoing=True))
 async def _(event):
@@ -53,10 +57,10 @@ async def _(event):
     if event.fwd_from:
         return
     start = datetime.now()
-    await event.edit("Pong!")
+    await event.edit("__**☞ Pong!__**")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
-    await event.edit("Pong!\n{}".format(ms))
+    await event.edit(f"__**☞ Pong!__**\n➥ {ms}\n➥ __**Bot**__ __**of**__ [{DEFAULTUSER}]({USERNAME})")
     
 
 @borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
@@ -65,10 +69,10 @@ async def _(event):
         return
     await event.delete()
     start = datetime.now()
-    mone = await event.reply("Pong!")
+    await event.edit("__**☞ Pong!__**")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
-    await mone.edit("Pong!\n{}".format(ms))
+    await event.edit(f"__**☞ Pong!__**\n➥ {ms}\n➥ __**Bot**__ __**of**__ [{DEFAULTUSER}]({USERNAME})")
 
     
 CMD_HELP.update({
