@@ -1,5 +1,5 @@
 {
-  "name": "Sur_vivor-CatUserbot",
+  "name": "Catuserbot",
   "description": "Userbot created by a SNAPDRAGON and custom fork by https://t.me/Sur_vivor contact @catuserbot_support for support",
   "logo": "https://telegra.ph/file/3d60313110c58684b31ea.jpg",
   "keywords": [
@@ -24,7 +24,7 @@
       "required": false
     },
     "ALIVE_NAME": {
-      "description": "Fill your Full name or Username like @Sur_vivor.",
+      "description": "give your name",
       "value": ""
     },
     "ALIVE_PIC": {
@@ -35,7 +35,7 @@
     "PMPERMIT_PIC": {
       "description": "put here any telegraph links for pmpermit custom pic.",
       "value": "https://telegra.ph/file/4117e39218991cdd7379f.jpg",
-      "required": false
+      "required": false  
     },
     "APP_ID": {
       "description": "Get this value from my.telegram.org! Please do not steal",
@@ -77,14 +77,14 @@
       "value": "",
       "required": false
     },
+    "GIT_REPO_NAME": {
+      "description": "Your repo name Example: sandy1709/catuserbot, but GITHUB_ACCESS_TOKEN must be setup first.",
+      "value": "",
+      "required": false
+    },
     "G_BAN_LOGGER_GROUP": {	
       "description": "Gban log channel, include the hyphen too: ex: -123456",
       "value": "-100"  
-    },
-    "GIT_REPO_NAME": {
-      "description": "Your repo name Example: Sur-vivor/CatUserbot, but GITHUB_ACCESS_TOKEN must be setup first.",
-      "value": "",
-      "required": false
     },
     "LYDIA_API_KEY": {
       "description": "Needed for Lydia AI. Follow https://telegra.ph/Lydia-09-05 to get your API.",
@@ -93,7 +93,7 @@
     },
     "UB_BLACK_LIST_CHAT": {
       "description": "set blacklist_chats where you do not want userbot features",
-      "value": "",
+      "value": "-1051754159",
       "required": false
     },
     "CHROME_BIN": {
@@ -102,7 +102,7 @@
       "required": false
     },
     "CHROME_DRIVER": {
-      "description": "ChromeDriver location for selenium based modules",,
+      "description": "ChromeDriver location for selenium based modules",
       "value": "/usr/bin/chromedriver",
       "required": false
     },
