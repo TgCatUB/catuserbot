@@ -1,24 +1,13 @@
 from userbot import bot
-from sys import argv
-import sys
-from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
-import os
 from telethon import TelegramClient
 from var import Var
 from userbot.utils import load_module
 from userbot import LOAD_PLUG, LOGS
 from pathlib import Path
-import asyncio
 import telethon.utils
 import userbot._core
 import glob
-from pySmartDL import SmartDL
-from PIL import Image, ImageDraw, ImageFont
-import shutil
-
-downloaded_file_name = "./DOWNLOADS/thumb_image.jpg"
-downloader = SmartDL(Config.THUMB_IMAGE, downloaded_file_name, progress_bar=False)
 
 async def add_bot(bot_token):
     await bot.start(bot_token)
