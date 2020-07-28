@@ -1,5 +1,6 @@
 from userbot import catdef
 import requests
+import os
 
 #thumb image
 with open("./DOWNLOADS/thumb_image.jpg", "wb") as f:
