@@ -15,7 +15,7 @@ async def startmute(event):
         private = False
         if event.fwd_from:
           return
-        elif event.is_private:
+        if event.is_private:
           await event.edit("Unexpected issues or ugly errors may occur!")
           await asyncio.sleep(3)
           private = True           
@@ -38,7 +38,7 @@ async def startmute(event):
                 return await event.edit("`You can't mute a person if you dont have delete messages permission. ಥ﹏ಥ`")
         elif "creator" in vars(chat):
             pass
-        elif private == True:
+        elif private:
             pass
         else:
             return await event.edit("`You can't mute a person without admin rights niqq.` ಥ﹏ಥ  ")
@@ -62,7 +62,7 @@ async def endmute(event):
         private = False
         if event.fwd_from:
           return
-        elif event.is_private:
+        if event.is_private:
           await event.edit("Unexpected issues or ugly errors may occur!")
           await asyncio.sleep(3)
           private = True            
