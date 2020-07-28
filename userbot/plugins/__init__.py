@@ -1,12 +1,10 @@
 from userbot import catdef
-from pySmartDL import SmartDL
-from PIL import Image, ImageDraw, ImageFont
-import shutil
-from userbot.uniborgConfig import Config
+import requests
 
 #thumb image
-downloaded_file_name = "./DOWNLOADS/thumb_image.jpg"
-downloader = SmartDL(Config.THUMB_IMAGE, downloaded_file_name, progress_bar=False)
+with open("./DOWNLOADS/thumb_image.jpg", "wb") as f:
+    f.write(requests.get(Config.THUMB_IMAGE).content)
+    
 deEmojify = catdef.deEmojify
 trumptweet = catdef.trumptweet 
 changemymind = catdef.changemymind
