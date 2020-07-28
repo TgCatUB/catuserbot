@@ -11,7 +11,7 @@ from telethon import version
 from platform import python_version, uname
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-
+USERNAME = str(LIVE_USERNAME) if LIVE_USERNAME
 CAT_IMG = Config.ALIVE_PIC
 
 @borg.on(admin_cmd(outgoing=True, pattern="de$"))
@@ -29,7 +29,7 @@ async def amireallyalive(alive):
          cat_caption += f"**✧✧ Catuserbot Version :** `{catversion}`\n"
          cat_caption += f"**✧✧ Python Version :** `{python_version()}\n\n`"
          cat_caption += f"**ღ** __**Cat**__🐱 __**is always with you, my master ღ\n\n**__"
-         cat_caption += f"**✧✧ My peru Master:** [{DEFAULTUSER}](@Jisan7509)\n"
+         cat_caption += f"**✧✧ My peru Master:** [{DEFAULTUSER}]({USERNAME})\n"
          cat_caption += f"**✧✧ Uptime :** `{uptime}\n`"
          cat_caption += f"**✧✧ Contact [Hatake Kakashi](@kakashi09bot) For notes**\n\n"
          cat_caption +=	f"           **ღ** __**[DEPLOY MY REPO]**__(https://github.com/Jisan09/catuserbot) **ღ**"
@@ -42,7 +42,7 @@ async def amireallyalive(alive):
                          f"**✧✧ Catuserbot Version :** `{catversion}`\n"
                          f"**✧✧ Python Version :** `{python_version()}\n\n`"
                          "**ღ** __**Cat**__🐱 __**is always with you, my master ღ\n\n**__"
-                         f"**✧✧ My peru Master:** [{DEFAULTUSER}](@Jisan7509)\n"
+                         f"**✧✧ My peru Master:** [{DEFAULTUSER}]({USERNAME})\n"
                          f"**✧✧ Uptime :** `{uptime}\n`"
                          f"**✧✧ Contact [Hatake Kakashi](@kakashi09bot) For notes**\n\n"
                          f"           **ღ** __**[DEPLOY MY REPO]**__(https://github.com/Jisan09/catuserbot) **ღ**"
