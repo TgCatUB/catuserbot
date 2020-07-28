@@ -217,9 +217,10 @@ async def catbot(catmemes):
     await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
     
 CMD_HELP.update({"trolls": 
-       "**Syntax :**`.threats` reply to image or sticker :\
+       "**TROLLS**\
+      \n\n**Syntax :**`.threats` reply to image or sticker \
       \n**USAGE:**Changes the given pic to another pic which shows that pic content is threat to society as that of nuclear bomb .\
-      \n\n**Syntax :**`.trash`reply to image or sticker\
+      \n\n**Syntax :**`.trash` reply to image or sticker\
       \n**USAGE : **Changes the given pic to another pic which shows that pic content is as equal as to trash(waste)\
       \n\n**Syntax :** reply to image or sticker with `.trap (name of the person to trap)|(trapper name)`\
       \n**USAGE :**Changes the given pic to another pic which shows that pic content is trapped in trap card\
