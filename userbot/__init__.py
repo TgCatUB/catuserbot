@@ -64,7 +64,7 @@ if bool(ENV):
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
     
     #username to be displayed in .live
-    EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("LIVE_USERNAME", None)    
+    LIVE_USERNAME = os.environ.get("LIVE_USERNAME", None)    
 
     # Youtube API key
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
