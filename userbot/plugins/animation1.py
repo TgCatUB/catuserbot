@@ -7,7 +7,9 @@ from userbot import CMD_HELP
 from collections import deque
 import importlib.util
 import random
+
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
 @borg.on(admin_cmd(pattern="stupid$"))
 async def _(event):
@@ -115,7 +117,7 @@ async def _(event):
             "------------------>",    
             "------>;(^。^)ノ",
             "(￣ー￣) DEAD",
-            "`Targeted user killed by Headshot 😈.😈.😈.😈.😈.😈.😈......`\n '#Sad_Reacts_Online'\n",
+            f"[{DEFAULTUSER}]({USERNAME})` Killed targeted user by Headshot 😈.😈.😈.😈.😈.😈.😈......`\n '#Sad_Reacts_Online'\n",
         ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
@@ -142,7 +144,7 @@ async def _(event):
             "------------------>",    
             "------>;(^。^)ノ",
             "(￣ー￣) DED",
-            "**Target killed successfully (°̥̥̥̥̥̥̥̥•̀.̫•́°̥̥̥̥̥̥̥)**",
+            f"[{DEFAULTUSER}]({USERNAME})** killed target successfully (°̥̥̥̥̥̥̥̥•̀.̫•́°̥̥̥̥̥̥̥)**",
         ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
