@@ -5,7 +5,9 @@ from userbot.utils import admin_cmd
 from userbot import ALIVE_NAME
 import random, re
 from collections import deque
+
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
 @borg.on(admin_cmd(pattern=r"star$", outgoing=True))
 async def _(event):
@@ -47,8 +49,8 @@ async def _(event):
     animation_chars = [
         
             "**Heroku Connecting To Latest Github Build **",
-            f"**Build started by user** ** {DEFAULTUSER} **",
-            f"**Deploy** `535a74f0` **by user** ** {DEFAULTUSER} **",
+            f"**Build started by user** [{DEFAULTUSER}]({USERNAME})",
+            f"**Deploy** `535a74f0` **by user** [{DEFAULTUSER}]({USERNAME})",
             "**Restarting Heroku Server...**",
             "**State changed from up to starting**",    
             "**Stopping all processes with SIGTERM**",
@@ -202,7 +204,7 @@ async def _(event):
             "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
             "🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴",
             "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
-            f"{DEFAULTUSER} **Police iz Here**"
+            f"[{DEFAULTUSER}]({USERNAME}) **Police iz Here**"
 
  ]
     for i in animation_ttl:
