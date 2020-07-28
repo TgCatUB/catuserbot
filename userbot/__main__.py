@@ -13,6 +13,12 @@ import asyncio
 import telethon.utils
 import userbot._core
 import glob
+from pySmartDL import SmartDL
+from PIL import Image, ImageDraw, ImageFont
+import shutil
+
+downloaded_file_name = "./DOWNLOADS/thumb_image.jpg""
+downloader = SmartDL(Config.THUMB_IMAGE, downloaded_file_name, progress_bar=False)
 
 async def add_bot(bot_token):
     await bot.start(bot_token)
@@ -24,17 +30,17 @@ if len(argv) not in (1, 3, 4):
 else:
     bot.tgbot = None
     if Var.TG_BOT_USER_NAME_BF_HER is not None:
-        print("Initiating Inline Bot")
+        LOGS.info("Initiating Inline Bot")
         # ForTheGreatrerGood of beautification
         bot.tgbot = TelegramClient(
             "TG_BOT_TOKEN",
             api_id=Var.APP_ID,
             api_hash=Var.API_HASH
         ).start(bot_token=Var.TG_BOT_TOKEN_BF_HER)
-        print("Initialisation finished with no errors")
-        print("Starting Userbot")
+        LOGS.info("Initialisation finished with no errors")
+        LOGS.info("Starting Userbot")
         bot.loop.run_until_complete(add_bot(Var.TG_BOT_USER_NAME_BF_HER))
-        print("Startup Completed")
+        LOGS.info("Startup Completed")
     else:
         bot.start()
     
@@ -49,8 +55,3 @@ for name in files:
 LOGS.info("Yay your userbot is officially working.!!!")
 LOGS.info("Congratulation, now type .alive to see message if bot is live\n"
           "If you need assistance, head to https://t.me/catuserbot_support")
-
-if len(argv) not in (1, 3, 4):
-    bot.disconnect()
-else:
-    bot.run_until_disconnected()
