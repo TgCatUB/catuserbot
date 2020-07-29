@@ -167,6 +167,7 @@ async def nekobot(cat):
         username , text = text.split("|")
     else:
        await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text`") 
+       return
     await cat.edit(f"Requesting {username} to tweet...")    
     text = deEmojify(text)
     catfile = await tweets(text,username)
