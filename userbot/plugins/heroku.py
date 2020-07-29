@@ -170,7 +170,7 @@ async def _(dyno):
     data = app.get_log()
     key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
     url = f'https://nekobin.com/{key}'
-    reply_text = f'The last 100 lines of heroku logrs are : [neko]({url})'
+    reply_text = f'Recent 100 lines of heroku logs: [here]({url})'
     await dyno.edit(reply_text)
     
 def prettyjson(obj, indent=2, maxlinelength=80):
