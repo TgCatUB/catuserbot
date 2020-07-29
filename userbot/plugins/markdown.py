@@ -141,7 +141,7 @@ async def reparse(event):
         peer=await event.get_input_chat(),
         id=event.message.id,
         message=message,
-        link_preview=False,
+        web_preview=False,
         entities=msg_entities
     ))
     raise events.StopPropagation
