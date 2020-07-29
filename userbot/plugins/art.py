@@ -3,16 +3,17 @@ import asyncio
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 from platform import uname
-from userbot import ALIVE_NAME
+from userbot import CMD_HELP, ALIVE_NAME
 from userbot.utils import admin_cmd
 
 
-n = str(ALIVE_NAME) if ALIVE_NAME else "Set ALIVE_NAME in config vars in Heroku"
+D = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+U = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
-#@command(outgoing=True, pattern="^.ded$")
-@borg.on(admin_cmd(pattern=r"ded"))
-async def bluedevilded(ded):
-    await ded.edit(n + " ==             |\n　　　　　|" "\n　　　　　| \n"
+@borg.on(admin_cmd(pattern="ded (.*)"))
+async def kakashi(ded):
+    name = ded.pattern_match.group(1)
+    await ded.edit(f"[{D}]({U}) --- {name}          \n　　　　　|" "\n　　　　　| \n"
 "　　　　　| \n"
 "　　　　　| \n"
 "　　　　　| \n"
@@ -25,6 +26,15 @@ async def bluedevilded(ded):
 "＜ 、･　　|　　＼ \n"
 "　＼＿＿／∪ _ ∪) \n"
 "　　　　　 Ｕ Ｕ\n")
+    
+@borg.on(admin_cmd(pattern="killer (.*)"))
+async def kakashi(killer):
+    name = killer.pattern_match.group(1)
+    await killer.edit(f"__**Commando **__[{D}]({U})          \n\n"
+"_/﹋\_\n"
+"(҂`_´)\n"
+f"<,︻╦╤─ ҉ - - - {name}\n"
+"_/﹋\_\n")
 
 A = ("▄███████▄\n"
 "█▄█████▄█\n"
@@ -42,11 +52,6 @@ B = ("┈┈┏━╮╭━┓┈╭━━━━╮\n"
 "┈╰━┳┻▅╯╲╲╲╲┃┈┈┈\n"
 "┈┈┈╰━┳┓┏┳┓┏╯┈┈┈\n"
 "┈┈┈┈┈┗┻┛┗┻┛┈┈┈┈\n")
-
-C = ("_/﹋\_\n"
-"(҂`_´)\n"
-"<,︻╦╤─ ҉ - -\n"
-"_/﹋\_\n")
 
 D = ("░▐█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█▄\n"
 "░███████████████████████ \n"
@@ -290,9 +295,6 @@ async def bluedevilmonster(monster):
 @borg.on(admin_cmd(pattern=r"pig"))
 async def bluedevilpig(pig):
     await pig.edit(B)
-@borg.on(admin_cmd(pattern=r"kiler"))
-async def bluedevilkiller(kiler):
-    await kiler.edit(C)
 @borg.on(admin_cmd(pattern=r"gun"))
 async def bluedevilgun(gun):
     await gun.edit(D)
