@@ -14,6 +14,9 @@ async def echo(cat):
         reply_msg = await cat.get_reply_message()
         user_id = reply_msg.from_id
         chat_id = cat.chat_id
+        if is_echo(user_id, chat_id):
+            await cat.edit("The user is already enabled with echo ")
+            return
         addecho(user_id , chat_id)
         await cat.edit("Hi")
     else:
@@ -54,7 +57,7 @@ async def echo(cat):
                     caption="Echo enabled users",
                     )
         else:
-            await event.edit(output_str)  
+            await cat.edit(output_str)  
       
 @borg.on(events.NewMessage(incoming=True))
 async def samereply(cat):
