@@ -22,6 +22,7 @@ from userbot.utils import admin_cmd
 @borg.on(admin_cmd(outgoing=True, pattern="trump(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
+    
     text =  re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
@@ -137,7 +138,11 @@ async def nekobot(cat):
     
 @borg.on(admin_cmd(outgoing=True, pattern="tweet(?: |$)(.*)"))
 async def nekobot(cat):
-    text = cat.pattern_match.group(1)
+    if  cat.pattern_match.group(1):
+        text = cat.pattern_match.group(1)
+    else:
+        reply_to_id = await cat.get_reply_message()
+        text = reply_to_id.text
     text =  re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
