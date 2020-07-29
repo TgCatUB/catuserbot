@@ -7,13 +7,13 @@ from userbot import CMD_HELP, ALIVE_NAME
 from userbot.utils import admin_cmd
 
 
-D = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-U = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+DEF = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+USR = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
 @borg.on(admin_cmd(pattern="ded (.*)"))
 async def kakashi(ded):
     name = ded.pattern_match.group(1)
-    await ded.edit(f"[{D}]({U}) --- {name}          \n　　　　　|" "\n　　　　　| \n"
+    await ded.edit(f"[{DEF}]({USR}) --- {name}          \n　　　　　|" "\n　　　　　| \n"
 "　　　　　| \n"
 "　　　　　| \n"
 "　　　　　| \n"
@@ -30,7 +30,7 @@ async def kakashi(ded):
 @borg.on(admin_cmd(pattern="killer (.*)"))
 async def kakashi(killer):
     name = killer.pattern_match.group(1)
-    await killer.edit(f"__**Commando **__[{D}]({U})          \n\n"
+    await killer.edit(f"__**Commando **__[{DEF}]({USR})          \n\n"
 "_/﹋\_\n"
 "(҂`_´)\n"
 f"<,︻╦╤─ ҉ - - - {name}\n"
