@@ -9,12 +9,13 @@ from selenium import webdriver
 from telethon import events
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
-
+import requests
+       
 @borg.on(admin_cmd(pattern="ss (.*)"))
 async def _(event):
     if event.fwd_from:
         return
-    if Config.GOOGLE_CHROME_BIN is None:
+    if Config.CHROME_BIN is None:
         await event.edit("Need to install Google Chrome. Module Stopping.")
         return
     await event.edit("Processing ...")
@@ -27,7 +28,7 @@ async def _(event):
         # https://stackoverflow.com/a/53073789/4723940
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
-        chrome_options.binary_location = Config.GOOGLE_CHROME_BIN
+        chrome_options.binary_location = Config.CHROME_BIN
         await event.edit("Starting Google Chrome BIN")
         driver = webdriver.Chrome(chrome_options=chrome_options)
         input_str = event.pattern_match.group(1)
@@ -62,11 +63,50 @@ async def _(event):
         await event.edit(f"Completed screencapture Process in {ms} seconds")
     except Exception:
         await event.edit(traceback.format_exc())
-
         
+@borg.on(admin_cmd(pattern="scapture (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    if Config.SCREEN_SHOT_LAYER_ACCESS_KEY is None:
+        await event.edit("Need to get an API key from https://screenshotlayer.com/product \nModule stopping!")
+        return
+    await event.edit("Processing ...")
+    sample_url = "https://api.screenshotlayer.com/api/capture?access_key={}&url={}&fullpage={}&viewport={}&format={}&force={}"
+    input_str = event.pattern_match.group(1)
+    response_api = requests.get(sample_url.format(
+        Config.SCREEN_SHOT_LAYER_ACCESS_KEY,
+        input_str,
+        "1",
+        "2560x1440",
+        "PNG",
+        "1"
+    ))
+    # https://stackoverflow.com/a/23718458/4723940
+    contentType = response_api.headers['content-type']
+    if "image" in contentType:
+        with io.BytesIO(response_api.content) as screenshot_image:
+            screenshot_image.name = "screencapture.png"
+            try:
+                await borg.send_file(
+                    event.chat_id,
+                    screenshot_image,
+                    caption=input_str,
+                    force_document=True,
+                    reply_to=event.message.reply_to_msg_id
+                )
+                await event.delete()
+            except Exception as e:
+                await event.edit(str(e))
+    else:
+        await event.edit(response_api.text)        
+
 CMD_HELP.update({
-    "ss":
+    "screenshot":
     ".ss <url>\
     \nUsage: Takes a screenshot of a website and sends the screenshot.\
+    \nExample of a valid URL : `https://www.google.com`\
+    \n\n.scapture <url>\
+    \nUsage: Takes a screenshot of a website and sends the screenshot need to set config var for this.\
     \nExample of a valid URL : `https://www.google.com`"
 })        
