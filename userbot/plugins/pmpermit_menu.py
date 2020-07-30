@@ -33,10 +33,10 @@ async def _(event):
                f"{DEFAULTUSER}.\n"
                "__Let's make this smooth and let me know why you are here.__\n"
                "**Choose one of the following reasons why you are here:**\n\n"
-               "`1`. To chat with my master\n"
-               "`2`. To spam my master's inbox.\n"
-               "`4`. To enquire something\n"
-               "`5`. To request something\n")
+               "`a`. To chat with my master\n"
+               "`b`. To spam my master's inbox.\n"
+               "`c`. To enquire something\n"
+               "`d`. To request something\n")
         ONE = ("__Okay. Your request has been registered. Do not spam my master's inbox.You can expect a reply within 24 light years. He is a busy man, unlike you probably.__\n\n"
                 "**⚠️ You will be blocked and reported if you spam nibba. ⚠️**\n\n"
                 "__Use__ `/start` __to go back to the main menu.__")
@@ -52,7 +52,7 @@ async def _(event):
          chat_id = event.from_id
          response = await conv.get_response(chat)
          y = response.text
-         if y == "1":
+         if y == "a":
              if pmpermit_sql.is_approved(chat_id):
                 return
              await borg.send_message(chat, ONE)
@@ -73,7 +73,7 @@ async def _(event):
                      await borg.send_message(chat, TWO)
                      await asyncio.sleep(3)
                      await event.client(functions.contacts.BlockRequest(chat_id))
-         elif y == "2":
+         elif y == "b":
              if pmpermit_sql.is_approved(chat_id):
                     return
              await borg.send_message(chat, LWARN)
@@ -84,7 +84,7 @@ async def _(event):
                  await borg.send_message(chat, TWO)
                  await asyncio.sleep(3)
                  await event.client(functions.contacts.BlockRequest(chat_id))
-         elif y == "4":
+         elif y == "c":
              if pmpermit_sql.is_approved(chat_id):
                     return
              await borg.send_message(chat, FOUR)
@@ -103,7 +103,7 @@ async def _(event):
                      await borg.send_message(chat, TWO)
                      await asyncio.sleep(3)
                      await event.client(functions.contacts.BlockRequest(chat_id))
-         elif y == "5":
+         elif y == "d":
              if pmpermit_sql.is_approved(chat_id):
                     return
              await borg.send_message(chat,FIVE)
