@@ -39,10 +39,7 @@ async def _(event):
     if event.reply_to_msg_id:
         downloaded_file_name = await borg.download_media(
             await event.get_reply_message(),
-            Config.TMP_DOWNLOAD_DIRECTORY,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                 progress(d, t, mone, c_time, "trying to download")
-            )
+            Config.TMP_DOWNLOAD_DIRECTORY
         )
         if downloaded_file_name.endswith(".mp4"):
             downloaded_file_name = get_video_thumb(
