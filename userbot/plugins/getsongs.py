@@ -56,7 +56,7 @@ async def _(event):
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
-    thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+    thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
     if os.path.exists(thumb_image_path):
         thumb = thumb_image_path
     loa = l[0]    
