@@ -18,6 +18,7 @@ from userbot import CMD_HELP
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from userbot.plugins import trumptweet , moditweet, tweets, deEmojify,changemymind, kannagen
 from userbot.utils import admin_cmd 
+import pybase64
 
 @borg.on(admin_cmd(outgoing=True, pattern="trump(?: |$)(.*)"))
 async def nekobot(cat):
