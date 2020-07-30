@@ -1,4 +1,3 @@
-# if you change credits, you get anal cancer and get murdered by russians in 3 days.
 """
 Support chatbox for pmpermit.
 Used by incoming messages with trigger as /start
@@ -14,10 +13,8 @@ from telethon import events, errors, functions, types
 from userbot import ALIVE_NAME
 from userbot.utils import admin_cmd
 
-
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 PREV_REPLY_MESSAGE = {}
-
 
 @command(pattern=r"\/start", incoming=True)
 async def _(event):
