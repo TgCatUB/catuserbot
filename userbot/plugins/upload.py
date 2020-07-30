@@ -250,7 +250,10 @@ async def uploadas(uas_event):
             elif spam_big_messages:
                 await uas_event.edit("TBD: Not (yet) Implemented")
                 return
-            os.remove(thumb)
+            try:
+                os.remove(thumb)
+            except:
+                pass
             await uas_event.edit("Uploaded successfully !!")
         except FileNotFoundError as err:
             await uas_event.edit(str(err))
