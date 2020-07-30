@@ -81,7 +81,7 @@ async def _(event):
         downloaded_file_name = input_str
         start = datetime.now()
         with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
-              zip_ref.extractall(Config.TMP_DOWNLOAD_DIRECTORY)
+              zip_ref.extractall()
         end = datetime.now()
         ms = (end - start).seconds
         await event.edit(f"unzipped and stored to `{downloaded_file_name[:-4]}` \n**Time Taken :** `{ms} seconds`")
