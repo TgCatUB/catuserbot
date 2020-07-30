@@ -110,7 +110,7 @@ async def _(event):
             event.chat_id,
             input_str,
             force_document=True,
-            supports_streaming=False,
+            supports_streaming=True,
             allow_cache=False,
             reply_to=event.message.id,
             thumb=thumb,
