@@ -5,17 +5,16 @@ from telethon import TelegramClient
 from var import Var
 from pylast import LastFMNetwork, md5
 from logging import basicConfig, getLogger, INFO, DEBUG
-from distutils.util import strtobool as sb
-from pySmartDL import SmartDL
+from distutils.util import strtobool as sb  
 from dotenv import load_dotenv
 from requests import get
 import time
-from userbot.helpers import fonts as fonts
-from userbot.helpers import functions as catdef
+from pySmartDL import SmartDL
+from userbot.helpers import fonts as fonts ,functions as catdef
 from userbot.helpers import memeshelper as memes
 
 StartTime = time.time()
-catversion = "2.6.0"
+catversion = "2.6.1"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -28,6 +27,7 @@ else:
 ENV = os.environ.get("ENV", False)
 
 CAT_ID = ["1035034432", "551290198"]
+
 # Bot Logs setup:
 if bool(ENV):
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
@@ -108,7 +108,6 @@ else:
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
 if not os.path.exists('bin'):
     os.mkdir('bin')
-
 binaries = {
     "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown":
     "bin/megadown",
@@ -122,7 +121,7 @@ for binary, path in binaries.items():
     downloader = SmartDL(binary, path, progress_bar=False)
     downloader.start()
     os.chmod(path, 0o755)
-
+ 
 # Global Variables
 COUNT_MSG = 0
 USERS = {}

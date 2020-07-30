@@ -42,8 +42,6 @@ class Config(object):
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)    
     # Get a Free API Key from OCR.Space
     OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
-    # Send .get_id in any group with all your administration bots (added)
-    G_BAN_LOGGER_GROUP = int(os.environ.get("G_BAN_LOGGER_GROUP", -100))
     # TG API limit. An album can have atmost 10 media!
     TG_GLOBAL_ALBUM_LIMIT = int(os.environ.get("TG_GLOBAL_ALBUM_LIMIT", 9))
     # Telegram BOT Token from @BotFather
@@ -51,7 +49,7 @@ class Config(object):
     TG_BOT_USER_NAME_BF_HER = os.environ.get("TG_BOT_USER_NAME_BF_HER", None)
     #
     NO_LOG_P_M_S = bool(os.environ.get("NO_LOG_P_M_S", True))
-    
+    THUMB_IMAGE = os.environ.get("THUMB_IMAGE" ,"https://telegra.ph/file/3d60313110c58684b31ea.jpg")
     GENIUS_API_TOKEN = os.environ.get("GENIUS", None)
     # Genius lyrics get this value from https://genius.com/developers both has same values
     GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
@@ -108,18 +106,14 @@ class Config(object):
     VERY_STREAM_KEY = os.environ.get("VERY_STREAM_KEY", None)
     # Google Drive ()
     #
-    GOOGLE_CHROME_DRIVER = os.environ.get("GOOGLE_CHROME_DRIVER", None)
-    CHROME_BIN = os.environ.get("CHROME_BIN", None)
-    CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/app/.chromedriver/bin/chromedriver")
-    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", "/app/.apt/usr/bin/google-chrome")
+    CHROME_BIN = os.environ.get("CHROME_BIN", "/usr/bin/google-chrome")
+    CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
     #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
     # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
     # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
-
-    
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     # For transfer channel
@@ -128,9 +122,6 @@ class Config(object):
     GROUP_REG_SED_EX_BOT_S = os.environ.get("GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot")
     # rapidleech plugins	
     DOWNLOAD_PFP_URL_CLOCK = os.environ.get("DOWNLOAD_PFP_URL_CLOCK", None)
-    
-    OPEN_LOAD_LOGIN = os.environ.get("OPEN_LOAD_LOGIN", "0")
-    OPEN_LOAD_KEY = os.environ.get("OPEN_LOAD_KEY", "0")
     # Google Chrome Selenium Stuff
     # taken from https://github.com/jaskaranSM/UniBorg/blob/9072e3580cc6c98d46f30e41edbe73ffc9d850d3/sample_config.py#L104-L106
     TEMP_DIR = os.environ.get("TEMP_DIR", "./DOWNLOADS")
@@ -157,21 +148,15 @@ class Config(object):
     TL_VID_STREAM_TYPES = ("MKV", "MP4", "WEBM")
     TL_MUS_STREAM_TYPES = ("MP3", "WAV", "FLAC")
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
-    ANTI_SPAMBOT = os.environ.get("ANTI_SPAMBOT", None)
-    ANTI_SPAMBOT_SHOUT = os.environ.get("ANTI_SPAMBOT_SHOUT", None)
     #API_TOKEN for quote plugin
     API_TOKEN = os.environ.get("API_TOKEN",None)
     # MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
     BOTLOG = os.environ.get("BOTLOG", None)
     # MONGOCLIENT = pymongo.MongoClient(MONGO_DB_URI)
     # MONGO = MONGOCLIENT.userbot
-    KUTT_IT_API_KEY = os.environ.get("KUTT_IT_API_KEY", None)
-    watermark_path = os.environ.get("watermark_path", None)
     # JustWatch Country
     WATCH_COUNTRY = os.environ.get("WATCH_COUNTRY","IN")
-    
     TZ = os.environ.get("TZ", None)
-    
     # RSS_POST_MSG_GROUP_ID = map(int, os.environ.get("RSS_POST_MSG_GROUP_ID", None).split())
     RSS_POST_MSG_GROUP_ID = os.environ.get("RSS_POST_MSG_GROUP_ID", None)
     if RSS_POST_MSG_GROUP_ID:
@@ -179,11 +164,8 @@ class Config(object):
     SPAM_WATCH_API = os.environ.get("SPAM_WATCH_API", None)
     
     
-
-
 class Production(Config):
     LOGGER = False
-
 
 class Development(Config):
     LOGGER = True

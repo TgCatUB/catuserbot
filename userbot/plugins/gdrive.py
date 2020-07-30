@@ -467,6 +467,16 @@ async def gdrive_list_file_md(service, file_id):
 
 
 async def gdrive_search(http, search_query):
+    if not get_parent_id():
+      parent_id = None
+    else:
+      catparent_id = get_parent_id()
+      if len(catparent_id)== 1:
+        parent_id = catparent_id[0].cat
+      elif len(catparent_id)>1 :
+        for fid in catparent_id:
+          rmparent_id(fid.cat)
+        parent_id = None 
     if parent_id:
         query = "'{}' in parents and (title contains '{}')".format(
             parent_id, search_query)
