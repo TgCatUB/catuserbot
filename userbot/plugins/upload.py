@@ -137,7 +137,6 @@ def get_video_thumb(file, output=None, width=320):
     ], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     p.communicate()
     if not p.returncode and os.path.lexists(file):
-        os.remove(file)
         return output
 
 def extract_w_h(file):
