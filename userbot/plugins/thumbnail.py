@@ -92,7 +92,6 @@ async def _(event):
                 r.media.document.thumbs[0],
                 Config.TMP_DOWNLOAD_DIRECTORY
                 )
-            )
         except Exception as e:
             await event.edit(str(e))
         try:
