@@ -68,9 +68,8 @@ async def echo(cat):
         except:
             pass
         if is_echo(user_id, chat_id):
-            await cat.edit("The user is already enabled with echo ")
             remove_echo(user_id , chat_id)
-            await cat.edit("No nearby Mountains to echo")
+            await cat.edit("No nearby Mountains to echo his messages")
         else:
             await cat.edit("The user is not activated with echo")   
     else:
