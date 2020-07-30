@@ -3,7 +3,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import re
 from functools import partial
-
 from telethon import events
 from telethon.tl.functions.messages import EditMessageRequest
 from telethon.extensions.markdown import DEFAULT_URL_RE
@@ -21,7 +20,6 @@ def parse_url_match(m):
         url=del_surrogate(m.group(2))
     )
     return m.group(1), entity
-
 
 def get_tag_parser(tag, entity):
     # TODO unescape escaped tags?
@@ -102,29 +100,23 @@ def parse(message, old_entities=None):
         else:
             i += 1
             continue
-
         text, entity = parser(match)
-
         # Shift old entities after our current position (so they stay in place)
         shift = len(text) - len(match[0])
         if shift:
             for e in old_entities[after:]:
                 e.offset += shift
-
         # Replace whole match with text from parser
         message = ''.join((
             message[:match.start()],
             text,
             message[match.end():]
         ))
-
         # Append entity if we got one
         if entity:
             entities.append(entity)
-
         # Skip past the match
         i += len(text)
-
     return del_surrogate(message), entities + old_entities
 
 
@@ -136,12 +128,11 @@ async def reparse(event):
     message, msg_entities = await borg._parse_message_text(event.raw_text, parser)
     if len(old_entities) >= len(msg_entities) and event.raw_text == message:
         return
-
     await borg(EditMessageRequest(
         peer=await event.get_input_chat(),
         id=event.message.id,
-        message=message,
-        web_preview=False,
-        entities=msg_entities
+        message = message,
+        web_preview = False,
+        entities = msg_entities
     ))
     raise events.StopPropagation
