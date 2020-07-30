@@ -29,10 +29,6 @@ async def _(event):
             return
         if not event.is_private:
             return
-        Nudas = ("__Please state your gender.__\n"
-                  "`1`. Female Homo-Sapien\n"
-                  "`2`. Male Homo-Sapien\n"
-                  "`3`. Other\n")
         PM = ("`Hello. You are accessing the availabe menu of my peru master,`"
                f"{DEFAULTUSER}.\n"
                "__Let's make this smooth and let me know why you are here.__\n"
@@ -50,63 +46,93 @@ async def _(event):
         LWARN = ("**This is your last warning. DO NOT send another message else you will be blocked and reported. Keep patience. My master will respond you ASAP.**\n__Use__ `/start` __to go back to the main menu.__")
      
         async with borg.conversation(chat) as conv:
+         if pmpermit_sql.is_approved(chat_id):
+            return
          await borg.send_message(chat, PM)
          chat_id = event.from_id
          response = await conv.get_response(chat)
          y = response.text
          if y == "1":
+             if pmpermit_sql.is_approved(chat_id):
+                return
              await borg.send_message(chat, ONE)
              response = await conv.get_response(chat)
              await event.delete()
              if not response.text == "/start":
                  await response.delete()
+                 if pmpermit_sql.is_approved(chat_id):
+                    return
                  await borg.send_message(chat, LWARN)
                  response = await conv.get_response(chat)
                  await event.delete()
                  await response.delete()
                  response = await conv.get_response(chat)
                  if not response.text == "/start":
+                     if pmpermit_sql.is_approved(chat_id):
+                            return
                      await borg.send_message(chat, TWO)
                      await asyncio.sleep(3)
                      await event.client(functions.contacts.BlockRequest(chat_id))
          elif y == "2":
+             if pmpermit_sql.is_approved(chat_id):
+                    return
              await borg.send_message(chat, LWARN)
              response = await conv.get_response(chat)
              if not response.text == "/start":
+                 if pmpermit_sql.is_approved(chat_id):
+                        return
                  await borg.send_message(chat, TWO)
                  await asyncio.sleep(3)
                  await event.client(functions.contacts.BlockRequest(chat_id))
          elif y == "4":
+             if pmpermit_sql.is_approved(chat_id):
+                    return
              await borg.send_message(chat, FOUR)
              response = await conv.get_response(chat)
              await event.delete()
              await response.delete()
              if not response.text == "/start":
+                if pmpermit_sql.is_approved(chat_id):
+                    return
                  await borg.send_message(chat, LWARN)
                  await event.delete()
                  response = await conv.get_response(chat)
                  if not response.text == "/start":
+                     if pmpermit_sql.is_approved(chat_id):
+                            return
                      await borg.send_message(chat, TWO)
                      await asyncio.sleep(3)
                      await event.client(functions.contacts.BlockRequest(chat_id))
          elif y == "5":
+             if pmpermit_sql.is_approved(chat_id):
+                    return
              await borg.send_message(chat,FIVE)
              response = await conv.get_response(chat)
              if not response.text == "/start":
+                 if pmpermit_sql.is_approved(chat_id):
+                        return
                  await borg.send_message(chat, LWARN)
                  response = await conv.get_response(chat)
                  if not response.text == "/start":
+                     if pmpermit_sql.is_approved(chat_id):
+                            return
                      await borg.send_message(chat, TWO)
                      await asyncio.sleep(3)
                      await event.client(functions.contacts.BlockRequest(chat_id))
          else:
+             if pmpermit_sql.is_approved(chat_id):
+                    return
              await borg.send_message(chat, "`You have entered an invalid command. Please send /start again or do not send another message if you do not wish to be blocked and reported.`")
              response = await conv.get_response(chat)
              z = response.text
              if not z == "/start":
+                 if pmpermit_sql.is_approved(chat_id):
+                    return
                  await borg.send_message(chat, LWARN)
                  await conv.get_response(chat)
                  if not response.text == "/start":
+                     if pmpermit_sql.is_approved(chat_id):
+                        return
                      await borg.send_message(chat, TWO)
                      await asyncio.sleep(3)
                      await event.client(functions.contacts.BlockRequest(chat_id))
