@@ -3,6 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import re
 from functools import partial
+
 from telethon import events
 from telethon.tl.functions.messages import EditMessageRequest
 from telethon.extensions.markdown import DEFAULT_URL_RE
@@ -11,7 +12,6 @@ from telethon.tl.types import (
     MessageEntityBold, MessageEntityItalic, MessageEntityCode,
     MessageEntityPre, MessageEntityTextUrl
 )
-
 
 def parse_url_match(m):
     entity = MessageEntityTextUrl(
@@ -28,7 +28,6 @@ def get_tag_parser(tag, entity):
     tag = re.escape(tag)
     return re.compile(tag + r'(.+?)' + tag, re.DOTALL), tag_parser
 
-
 PRINTABLE_ASCII = range(0x21, 0x7f)
 def parse_aesthetics(m):
     def aesthetify(string):
@@ -41,7 +40,6 @@ def parse_aesthetics(m):
             yield chr(c)
     return "".join(aesthetify(m[1])), None
 
-
 def parse_subreddit(m):
     text = '/' + m.group(3)
     entity = MessageEntityTextUrl(
@@ -51,12 +49,10 @@ def parse_subreddit(m):
     )
     return m.group(1) + text, entity
 
-
 def parse_strikethrough(m):
     text = m.group(2)
     text =  "\u0336".join(text) + "\u0336 "
     return text, None
-
 
 PARSED_ENTITIES = (
     MessageEntityBold, MessageEntityItalic, MessageEntityCode,
@@ -79,7 +75,6 @@ MATCHERS = [
 def parse(message, old_entities=None):
     entities = []
     old_entities = sorted(old_entities or [], key=lambda e: e.offset)
-
     i = 0
     after = 0
     message = add_surrogate(message)
@@ -91,7 +86,6 @@ def parse(message, old_entities=None):
             # Skip already existing entities if we're at one
             if i == e.offset:
                 i += e.length
-
         # Find the first pattern that matches
         for pattern, parser in MATCHERS:
             match = pattern.match(message, pos=i)
@@ -119,7 +113,6 @@ def parse(message, old_entities=None):
         i += len(text)
     return del_surrogate(message), entities + old_entities
 
-
 @borg.on(events.MessageEdited(outgoing=True))
 @borg.on(events.NewMessage(outgoing=True))
 async def reparse(event):
@@ -128,11 +121,12 @@ async def reparse(event):
     message, msg_entities = await borg._parse_message_text(event.raw_text, parser)
     if len(old_entities) >= len(msg_entities) and event.raw_text == message:
         return
+
     await borg(EditMessageRequest(
         peer=await event.get_input_chat(),
         id=event.message.id,
         message = message,
-        web_preview = False,
+        no_webpage = not bool(event.message.media),
         entities = msg_entities
     ))
     raise events.StopPropagation
