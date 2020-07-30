@@ -57,13 +57,31 @@ async def _(event):
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
     loa = l[0]    
+    metadata = extractMetadata(createParser(loa))
+    duration = 0
+    width = 0
+    height = 0
+    if metadata.has("duration"):
+        duration = metadata.get("duration").seconds
+    if metadata.has("width"):
+        width = metadata.get("width")
+    if metadata.has("height"):
+        height = metadata.get("height")
     await borg.send_file(
                 event.chat_id,
                 loa,
                 force_document=True,
                 allow_cache=False,
                 caption=query,
-                reply_to=reply_to_id
+                supports_streaming=True,
+                reply_to=reply_to_id,
+                attributes=[DocumentAttributeVideo(
+                                duration=duration,
+                                w=width,
+                                h=height,
+                                round_message=False,
+                                supports_streaming=True,
+                            )],
             )
     await event.delete()
     os.system("rm -rf *.mp3")
