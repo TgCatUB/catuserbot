@@ -92,7 +92,7 @@ async def _(event):
              await event.delete()
              await response.delete()
              if not response.text == "/start":
-                if pmpermit_sql.is_approved(chat_id):
+                 if pmpermit_sql.is_approved(chat_id):
                     return
                  await borg.send_message(chat, LWARN)
                  await event.delete()
