@@ -73,7 +73,7 @@ async def _(event):
 @borg.on(admin_cmd(pattern="unzip"))
 async def _(event):
     if event.fwd_from:
-        return
+      return
     mone = await event.edit("Processing ...")
     input_str = event.pattern_match.group(1)
     if input_str:
@@ -85,8 +85,8 @@ async def _(event):
         end = datetime.now()
         ms = (end - start).seconds
         await event.edit(f"unzipped and stored to `{downloaded_file_name[:-4]}` \n**Time Taken :** `{ms} seconds`")
-     else:
-      await event.edit(f"I can't find that path `{input_str}`")
+      else:
+        await event.edit(f"I can't find that path `{input_str}`")
     else:
       if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
           os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
