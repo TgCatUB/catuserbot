@@ -27,6 +27,7 @@ from userbot.plugins import catmusic , catmusicvideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
+import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 @borg.on(admin_cmd(pattern="song(?: |$)(.*)"))
