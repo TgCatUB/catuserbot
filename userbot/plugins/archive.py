@@ -38,8 +38,8 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     mone = await event.edit("Zipping in progress....")
     if event.reply_to_msg_id:
-        if not os.path.isdir(Config.TEMP_DOWNLOAD_DIRECTORY):
-            os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
+        if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+            os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
         reply_message = await event.get_reply_message()
         try:
             c_time = time.time()
@@ -70,7 +70,7 @@ async def _(event):
                 zip_file.write(file)
         await event.edit("Local file compressed to `{}`".format(input_str + ".zip"))      
 
-@borg.on(admin_cmd(pattern="unzip"))
+@borg.on(admin_cmd(pattern="unzip ?(.*)"))
 async def _(event):
     if event.fwd_from:
       return
