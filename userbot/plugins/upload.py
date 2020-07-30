@@ -146,7 +146,7 @@ def get_video_thumb(file, output=None, width=90):
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
     )
-    if not popen.returncode and os.path.lexists(file):
+    if not popen.returncode and os.path.exists(file):
         return output
     return None
 
@@ -201,7 +201,7 @@ async def uploadas(uas_event):
         thumb = thumb.strip()
     else:
         file_name = input_str
-        cat_thumb_path = Config.TMP_DOWNLOAD_DIRECTORY + "/cat_image.jpg"
+        cat_thumb_path = Config.TMP_DOWNLOAD_DIRECTORY + "cat_image.jpg"
         thumb = get_video_thumb(file_name, output=cat_thumb_path)
     if os.path.exists(file_name):
         metadata = extractMetadata(createParser(file_name))
