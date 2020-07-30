@@ -9,10 +9,9 @@ from userbot.utils import admin_cmd
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
 CACHE = {}
-
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "**No name set yet nibba, check pinned message in** @XtraTgBot"
-USER_BOT_WARN_ZERO = "`You were spamming my peru master's inbox, henceforth your retarded lame ass has been blocked by my master's userbot.` **Now GTFO, i'm playing minecraft** "
-USER_BOT_NO_WARN = ("[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id=1035034432)\n\n"
+USER_BOT_WARN_ZERO = "`You were spamming my peru master's inbox, henceforth you are blocked by my master's userbot.` **Now GTFO, i'm playing minecraft** "
+USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
                     "`Hello, this is cat Security Service.You have found your way here to my master,`"
                     f"{DEFAULTUSER}'s` inbox.\n\n"
                     "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
@@ -139,7 +138,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         if sender.verified:
             # don't log verified accounts
             return
-        if any([x in event.raw_text for x in ("/start", "1", "2", "3", "4", "5")]):
+        if any([x in event.raw_text for x in ("/start", "a", "b","c", "d")]):
             return
         if not pmpermit_sql.is_approved(chat_id):
             # pm permit
@@ -149,6 +148,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         if chat_id not in PM_WARNS:
             PM_WARNS.update({chat_id: 0})
         if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_P_M_s:
+            catid = chat_id
             r = await event.reply(USER_BOT_WARN_ZERO)
             await asyncio.sleep(3)
             await event.client(functions.contacts.BlockRequest(chat_id))
