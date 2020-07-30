@@ -125,31 +125,20 @@ async def _(event):
         await mone.edit("404: File Not Found")
 
                 
-def get_video_thumb(file, output=None, width=90):
-    """ Get video thumbnail """
+def get_video_thumb(file, output=None, width=320):
+    output = file + ".jpg"
     metadata = extractMetadata(createParser(file))
-    popen = subprocess.Popen(
-        [
-            "ffmpeg",
-            "-i",
-            file,
-            "-ss",
-            str(
-                int((0, metadata.get("duration").seconds
-                     )[metadata.has("duration")] / 2)),
-            "-filter:v",
-            "scale={}:-1".format(width),
-            "-vframes",
-            "1",
-            output,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-    )
-    if not popen.returncode and os.path.exists(file):
+    p = subprocess.Popen([
+        'ffmpeg', '-i', file,
+        '-ss', str(int((0, metadata.get('duration').seconds)[metadata.has('duration')] / 2)),
+        # '-filter:v', 'scale={}:-1'.format(width),
+        '-vframes', '1',
+        output,
+    ], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    p.communicate()
+    if not p.returncode and os.path.lexists(file):
+        os.remove(file)
         return output
-    return None
-
 
 def extract_w_h(file):
     """ Get width and height of media """
@@ -201,8 +190,7 @@ async def uploadas(uas_event):
         thumb = thumb.strip()
     else:
         file_name = input_str
-        cat_thumb_path = Config.TMP_DOWNLOAD_DIRECTORY + "cat_image.jpg"
-        thumb = get_video_thumb(file_name, output=cat_thumb_path)
+        thumb = get_video_thumb(file_name)
     if os.path.exists(file_name):
         metadata = extractMetadata(createParser(file_name))
         duration = 0
