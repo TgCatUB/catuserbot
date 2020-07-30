@@ -201,8 +201,8 @@ async def uploadas(uas_event):
         thumb = thumb.strip()
     else:
         file_name = input_str
-        thumb_path = "a_random_f_file_name" + ".jpg"
-        thumb = get_video_thumb(file_name, output=thumb_path)
+        cat_thumb_path = Config.TMP_DOWNLOAD_DIRECTORY + "/cat_image.jpg"
+        thumb = get_video_thumb(file_name, output=cat_thumb_path)
     if os.path.exists(file_name):
         metadata = extractMetadata(createParser(file_name))
         duration = 0
