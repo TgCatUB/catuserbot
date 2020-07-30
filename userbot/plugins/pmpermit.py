@@ -149,12 +149,6 @@ if Var.PRIVATE_GROUP_ID is not None:
         if chat_id not in PM_WARNS:
             PM_WARNS.update({chat_id: 0})
         if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_P_M_s:
-            catid = chat_id
-            USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
-                    "`Hello, this is cat Security Service.You have found your way here to my master,`"
-                    f"{DEFAULTUSER}'s` inbox.\n\n"
-                    "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
-                    "** Send** `/start` ** so that we can decide why you're here.**")
             r = await event.reply(USER_BOT_WARN_ZERO)
             await asyncio.sleep(3)
             await event.client(functions.contacts.BlockRequest(chat_id))
@@ -179,6 +173,12 @@ if Var.PRIVATE_GROUP_ID is not None:
                 return
             except:
                 return
+        catid = chat_id
+        USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
+                    "`Hello, this is cat Security Service.You have found your way here to my master,`"
+                    f"{DEFAULTUSER}'s` inbox.\n\n"
+                    "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
+                    "** Send** `/start` ** so that we can decide why you're here.**")
         r = await event.reply(USER_BOT_NO_WARN)
         PM_WARNS[chat_id] += 1
         if chat_id in PREV_REPLY_MESSAGE:
