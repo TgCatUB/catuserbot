@@ -216,9 +216,9 @@ async def _(event):
     await catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     if l:
-        await event.reply("yeah..! i found something wi8..🥰")
+        await event.edit("yeah..! i found something wi8..🥰")
     else:
-        await event.reply(f"Sorry..! i can't find anything with `{query}`")
+        await event.edit(f"Sorry..! i can't find anything with `{query}`")
     loa = l[0]
     await borg.send_file(
                 event.chat_id,
@@ -241,7 +241,7 @@ async def _(event):
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
-        await event.edit("wi8..! I am finding your videosong....")
+        await event.reply("wi8..! I am finding your videosong....")
     elif reply.message:
         query = reply.message
         await event.reply("wi8..! I am finding your videosong....")
@@ -257,9 +257,9 @@ async def _(event):
         pass
     l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
     if l:
-        await event.reply("yeah..! i found something wi8..🥰")
+        await event.edit("yeah..! i found something wi8..🥰")
     else:
-        await event.reply(f"Sorry..! i can't find anything with `{query}`")
+        await event.edit(f"Sorry..! i can't find anything with `{query}`")
     loa = l[0]  
     metadata = extractMetadata(createParser(loa))
     duration = 0
