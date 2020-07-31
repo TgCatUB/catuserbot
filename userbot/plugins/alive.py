@@ -5,7 +5,7 @@ import asyncio
 from telethon import events
 from userbot import StartTime
 from userbot import ALIVE_NAME, CMD_HELP, catdef, catversion
-from userbot.utils import admin_cmd
+from userbot.utils import admin_cmd, sudo_cmd
 from telethon import version
 from platform import python_version, uname
 import requests
@@ -16,8 +16,7 @@ import nekos
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Sur_vivor"
 
-ALIVE_PIC = os.environ.get("ALIVE_PIC", None)
-CAT_IMG = ALIVE_PIC
+CAT_IMG = Config.ALIVE_PIC
 
 @borg.on(admin_cmd(outgoing=True, pattern="alive$"))
 async def amireallyalive(alive):
@@ -53,6 +52,19 @@ async def amireallyalive(alive):
                          "⏳`Modified by:` [✰Sᴀͥʀᴀͣᴛͫʜ™️✰](t.me/Sur_vivor)\n\n"
                          f"**[⚜️DEPLOY CATUSERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
                         )
+
+@borg.on(sudo_cmd(pattern="sudo", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    uptime = await catdef.get_readable_time((time.time() - StartTime))
+    await event.reply(" SUDO COMMANDS ARE WORKING PERFECTLY \n\n"
+                     f"☞Telethon version: {version.__version__}\n"
+                     f"☞Python: {python_version()}\n"
+                     f"☞My Owner: {DEFAULTUSER}\n"
+                     f"**uptime :** `{uptime}\n`"
+                     #"Deploy this userbot Now"
+		     )
 
 @borg.on(admin_cmd(pattern="cat$"))
 async def _(event):
