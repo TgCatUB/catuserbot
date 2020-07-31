@@ -5,16 +5,15 @@ from telethon import TelegramClient
 from var import Var
 from pylast import LastFMNetwork, md5
 from logging import basicConfig, getLogger, INFO, DEBUG
-from distutils.util import strtobool as sb
-from pySmartDL import SmartDL
+from distutils.util import strtobool as sb  
 from dotenv import load_dotenv
 from requests import get
 import time
-from userbot.helpers import fonts as fonts
-from userbot.helpers import functions as catdef
+from pySmartDL import SmartDL
+from userbot.helpers import fonts as fonts ,functions as catdef
 
 StartTime = time.time()
-catversion = "2.6.0"
+catversion = "2.6.1"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
