@@ -1,7 +1,9 @@
-#https://github.com/jisan009bot/catuserbot credits to @Jisan7509
+#https://github.com/Jisan009/catuserbot credits to @Jisan7509
 
 from telethon import events
 import asyncio
+import os
+import sys
 from userbot.utils import admin_cmd
 from userbot import ALIVE_NAME
 import random, re
@@ -43,6 +45,15 @@ async def _(event):
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 4])
 
+            
+@borg.on(admin_cmd(pattern="hi (.*)"))
+async def hi(texthi):
+    A = texthi.pattern_match.group(1)
+    if texthi.fwd_from:
+        return
+    await texthi.edit(f"{A}✨✨{A}✨{A}{A}{A}\n{A}✨✨{A}✨✨{A}✨\n{A}{A}{A}{A}✨✨{A}✨\n{A}✨✨{A}✨✨{A}✨\n{A}✨✨{A}✨{A}{A}{A}\n☁☁☁☁☁☁☁☁")
+
+            
 @borg.on(admin_cmd(pattern=f"up$", outgoing=True))
 async def _(event):
     if event.fwd_from:
