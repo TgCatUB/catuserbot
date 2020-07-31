@@ -174,8 +174,8 @@ async def tweets(text1,text2):
         with open("temp.png", "wb") as f:
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
-        img.save("temp.webp", "webp")    
-        return "temp.webp"      
+        img.save("temp.jpg", "jpeg")    
+        return "temp.jpg"
 
 async def iphonex(text):
     r = requests.get(
