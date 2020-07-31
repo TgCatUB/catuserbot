@@ -38,7 +38,7 @@ async def update_requirements():
     except Exception as e:
         return repr(e)
 
-@borg.on(admin_cmd(pattern="update ?(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern="official ?(.*)", outgoing=True))
 async def upstream(ups):
     "For .update command, check if the bot is up to date, update if specified"
     conf = ups.pattern_match.group(1)
@@ -60,7 +60,7 @@ async def upstream(ups):
     except InvalidGitRepositoryError as error:
         if conf != "now":
             await ups.edit(f"Unfortunately, the directory {error} does not seem to be a git repository.\
-            \nBut we can fix that by force updating the userbot using `.update now`.")
+            \nBut we can fix that by force updating the userbot using `.official now`.")
             return
         repo = Repo.init()
         origin = repo.create_remote('upstream', off_repo)
