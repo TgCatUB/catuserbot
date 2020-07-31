@@ -46,7 +46,7 @@ async def _(event):
             await event.edit(animation_chars[i % 4])
 
             
-@borg.on(admin_cmd(pattern="hi (.*)"))
+@borg.on(admin_cmd(pattern="hhi (.*)"))
 async def hi(texthi):
     A = texthi.pattern_match.group(1)
     if texthi.fwd_from:
