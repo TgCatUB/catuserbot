@@ -25,7 +25,7 @@ COLLECTION_STRING2 = [
 ]
 
 async def animeppbat():
-    os.system("rm -rf donot.jpg")
+    os.remove("donot.jpg")
     rnd = random.randint(0, len(COLLECTION_STRING1) - 1)
     pack = COLLECTION_STRING1[rnd]
     pc = requests.get("http://getwallpapers.com/collection/" + pack).text
@@ -38,7 +38,7 @@ async def animeppbat():
     urllib.request.urlretrieve(fy,"donottouch.jpg")
     
 async def animeppthor():
-    os.system("rm -rf donot.jpg")
+    os.remove("donot.jpg")
     rnd = random.randint(0, len(COLLECTION_STRING2) - 1)
     pack = COLLECTION_STRING2[rnd]
     pc = requests.get("http://getwallpapers.com/collection/" + pack).text
@@ -70,4 +70,4 @@ async def main(event):
         await event.client(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit=1)))
         await event.client(functions.photos.UploadProfilePhotoRequest( file))
         os.system("rm -rf donottouch.jpg")
-        await asyncio.sleep(120) #Edit this to your required needs        
+        await asyncio.sleep(120) #Edit this to your required needs
