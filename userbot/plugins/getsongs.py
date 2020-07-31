@@ -241,12 +241,12 @@ async def _(event):
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
-        await event.reply("wi8..! I am finding your videosong....")
+        san = await event.reply("wi8..! I am finding your videosong....`")
     elif reply.message:
         query = reply.message
-        await event.reply("wi8..! I am finding your videosong....")
+        san = await event.reply("wi8..! I am finding your videosong....`")
     else:
-        await event.reply("What I am Supposed to find")
+    	san = await event.reply("`What I am Supposed to find `")
         return
     await catmusicvideo(query)
     try:
@@ -287,7 +287,7 @@ async def _(event):
                                 supports_streaming=True,
                             )],
             )
-    await event.delete()
+    await san.delete()
     os.system("rm -rf *.mkv")
     os.system("rm -rf *.mp4")
     os.system("rm -rf *.webm")    
