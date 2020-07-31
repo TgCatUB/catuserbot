@@ -11,17 +11,18 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 @borg.on(admin_cmd(pattern="help ?(.*)"))
 async def cmd_list(event):
     input_str = event.pattern_match.group(1)
-    if Config.HELP_INLINETYPE:
+    if Config.HELP_INLINETYPE is None:
         tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
         if tgbotusername is None or input_str == "text":
             string = ""
             for i in CMD_LIST:
                 string += "⚚" + i + "\n"
                 for iter_list in CMD_LIST[i]:
-                    string += "    `" + str(iter_list) + "`"
+                    string += "    " + str(iter_list)
                     string += "\n"
                 string += "\n"
             if len(string) > 4095:
+                data = string
                 key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
                 url = f'https://nekobin.com/{key}'
                 reply_text = f'All commands of the catuserbot are [here]({url})'
