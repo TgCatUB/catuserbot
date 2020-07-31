@@ -6,11 +6,8 @@ import io
 import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
-from userbot import ALIVE_NAME, CMD_HELP
+from userbot import ALIVE_NAME, CMD_HELP, PMPERMIT_PIC
 from userbot.utils import admin_cmd
-
-PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
-WARN_PIC = PMPERMIT_PIC  
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
@@ -19,12 +16,6 @@ CACHE = {}
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "**Set ALIVE_NAME in config vars in Heroku**"
 USER_BOT_WARN_ZERO = "`You were spamming my sweet master's inbox, henceforth your retarded lame ass has been blocked by my master's userbot.`\n**Now GTFO, i'm playing minecraft**"
-ASCII = ("──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀\n\n")
-USER_BOT_NO_WARN = ("`Hello, This is AntiSpam Security Service⚠️.You have found your way here to my master,`"
-                    f"{DEFAULTUSER}'s `inbox.\n\n"
-                    "Leave your Name,Reason and 10k$ and hopefully you'll get a reply within 2 light years.`⭕️\n\n"
-                    "❤️Register Your Request!❤️\nSend /start To Register Your Request!!🔥\n"
-                    "⭕️**Now You Are In Trouble So Send** 🔥 `/start` 🔥 **To Start A Valid Conversation!!**⭕️")
 
 
 if Var.PRIVATE_GROUP_ID is not None:
@@ -133,17 +124,21 @@ if Var.PRIVATE_GROUP_ID is not None:
     async def on_new_private_message(event):
         if event.from_id == bot.uid:
             return
-
         if Var.PRIVATE_GROUP_ID is None:
             return
-
         if not event.is_private:
             return
-
         message_text = event.message.message
         chat_id = event.from_id
-
+        catid = chat_id
         current_message_text = message_text.lower()
+        WARN_PIC = PMPERMIT_PIC
+        ASCII = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n")
+        USER_BOT_NO_WARN = ("`Hello, This is AntiSpam Security Service⚠️.You have found your way here to my master,`"
+                    f"{DEFAULTUSER}'s `inbox.\n\n"
+                    "Leave your Name,Reason and 10k$ and hopefully you'll get a reply within 2 light years.`⭕️\n\n"
+                    "❤️Register Your Request!❤️\nSend /start To Register Your Request!!🔥\n"
+                    "⭕️**Now You Are In Trouble So Send** 🔥 `/start` 🔥 **To Start A Valid Conversation!!**⭕️")
         if USER_BOT_NO_WARN == message_text:
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
@@ -163,11 +158,9 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if sender.verified:
             # don't log verified accounts
-            return
-          
+            return          
         if any([x in event.raw_text for x in ("/start", "1", "2", "3", "4", "5")]):
             return
-
         if not pmpermit_sql.is_approved(chat_id):
             # pm permit
             await do_pm_permit_action(chat_id, event)
@@ -200,6 +193,14 @@ if Var.PRIVATE_GROUP_ID is not None:
                 return
             except:
                 return
+        catid = chat_id
+        WARN_PIC = PMPERMIT_PIC
+        ASCII = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n")
+        USER_BOT_NO_WARN = ("`Hello, This is AntiSpam Security Service⚠️.You have found your way here to my master,`"
+                    f"{DEFAULTUSER}'s `inbox.\n\n"
+                    "Leave your Name,Reason and 10k$ and hopefully you'll get a reply within 2 light years.`⭕️\n\n"
+                    "❤️Register Your Request!❤️\nSend /start To Register Your Request!!🔥\n"
+                    "⭕️**Now You Are In Trouble So Send** 🔥 `/start` 🔥 **To Start A Valid Conversation!!**⭕️")
         if WARN_PIC:      
               r = await event.client.send_file(event.chat_id, WARN_PIC, caption=USER_BOT_NO_WARN)
         else:    
@@ -226,8 +227,7 @@ async def hehehe(event):
               
 CMD_HELP.update({
     "pmpermit":
-    "\
-.approve\
+    ".approve\
 \nUsage: Approves the mentioned/replied person to PM.\
 .disapprove\
 \nUsage: dispproves the mentioned/replied person to PM.\
