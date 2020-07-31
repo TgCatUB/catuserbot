@@ -13,7 +13,6 @@ from telethon.tl.types import (
     MessageEntityPre, MessageEntityTextUrl
 )
 
-
 def parse_url_match(m):
     entity = MessageEntityTextUrl(
         offset=m.start(),
@@ -22,14 +21,12 @@ def parse_url_match(m):
     )
     return m.group(1), entity
 
-
 def get_tag_parser(tag, entity):
     # TODO unescape escaped tags?
     def tag_parser(m):
         return m.group(1), entity(offset=m.start(), length=len(m.group(1)))
     tag = re.escape(tag)
     return re.compile(tag + r'(.+?)' + tag, re.DOTALL), tag_parser
-
 
 PRINTABLE_ASCII = range(0x21, 0x7f)
 def parse_aesthetics(m):
@@ -43,7 +40,6 @@ def parse_aesthetics(m):
             yield chr(c)
     return "".join(aesthetify(m[1])), None
 
-
 def parse_subreddit(m):
     text = '/' + m.group(3)
     entity = MessageEntityTextUrl(
@@ -53,12 +49,10 @@ def parse_subreddit(m):
     )
     return m.group(1) + text, entity
 
-
 def parse_strikethrough(m):
     text = m.group(2)
     text =  "\u0336".join(text) + "\u0336 "
     return text, None
-
 
 PARSED_ENTITIES = (
     MessageEntityBold, MessageEntityItalic, MessageEntityCode,
@@ -81,7 +75,6 @@ MATCHERS = [
 def parse(message, old_entities=None):
     entities = []
     old_entities = sorted(old_entities or [], key=lambda e: e.offset)
-
     i = 0
     after = 0
     message = add_surrogate(message)
@@ -93,7 +86,6 @@ def parse(message, old_entities=None):
             # Skip already existing entities if we're at one
             if i == e.offset:
                 i += e.length
-
         # Find the first pattern that matches
         for pattern, parser in MATCHERS:
             match = pattern.match(message, pos=i)
@@ -102,31 +94,24 @@ def parse(message, old_entities=None):
         else:
             i += 1
             continue
-
         text, entity = parser(match)
-
         # Shift old entities after our current position (so they stay in place)
         shift = len(text) - len(match[0])
         if shift:
             for e in old_entities[after:]:
                 e.offset += shift
-
         # Replace whole match with text from parser
         message = ''.join((
             message[:match.start()],
             text,
             message[match.end():]
         ))
-
         # Append entity if we got one
         if entity:
             entities.append(entity)
-
         # Skip past the match
         i += len(text)
-
     return del_surrogate(message), entities + old_entities
-
 
 @borg.on(events.MessageEdited(outgoing=True))
 @borg.on(events.NewMessage(outgoing=True))
@@ -140,8 +125,8 @@ async def reparse(event):
     await borg(EditMessageRequest(
         peer=await event.get_input_chat(),
         id=event.message.id,
-        message=message,
-        no_webpage=not bool(event.message.media),
-        entities=msg_entities
+        message = message,
+        no_webpage = not bool(event.message.media),
+        entities = msg_entities
     ))
     raise events.StopPropagation
