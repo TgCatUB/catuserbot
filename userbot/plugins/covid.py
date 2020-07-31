@@ -11,7 +11,7 @@ from userbot.utils import admin_cmd , sudo_cmd
 from userbot.events import register
 
 
-@borg.on(admin_cmd(pattern="covid (.*)"))
+@borg.on(admin_cmd(pattern="cor (.*)"))
 async def corona(event):
     await event.edit("`Wait Processing...🥺😭`")
     country = event.pattern_match.group(1)
@@ -34,7 +34,7 @@ async def corona(event):
             f"__**💤 No information found for: {country}!**__\n__**Check your spelling and try again.**__"
         )
 
-@borg.on(sudo_cmd(pattern="covid (.*)", allow_sudo = True))
+@borg.on(sudo_cmd(pattern="cor (.*)", allow_sudo = True))
 async def corona(event):
     country = event.pattern_match.group(1)
     covid = Covid(source="worldometers")
@@ -58,6 +58,6 @@ async def corona(event):
     
 CMD_HELP.update({
     "covid":
-        "`.covid` <country>"
+        "`.cor` <country>"
         "\nUsage: Get an information about data covid-19 in your country.\n"
 })
