@@ -31,7 +31,7 @@ from datetime import datetime
 import userbot.plugins.sql_helper.gban_sql_helper as gban_sql
 from telethon import events, errors, functions, types
 import pybase64
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+from telethon.tl.functions.messages import ImportChatInviteRequest
 
 BANNED_RIGHTS = ChatBannedRights(until_date=None, view_messages=True,send_messages=True,
                                  send_media=True, send_stickers=True, send_gifs=True,
@@ -65,7 +65,7 @@ async def catgban(cat):
         return
     try:
         cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-        cat = Get(cat)
+        cat = ImportChatInviteRequest(cat)
         await catmemes.client(cat)
     except:
         pass
