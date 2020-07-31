@@ -192,6 +192,7 @@ async def _(event):
     os.system("rm -rf *.mp4")
     os.system("rm -rf *.webm")    
     
+
 @borg.on(sudo_cmd(pattern="song(?: |$)(.*)", allow_sudo = True))
 async def _(event):
     reply_to_id = event.message.id
@@ -216,9 +217,9 @@ async def _(event):
     await catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     if l:
-        await event.edit("yeah..! i found something wi8..🥰")
+        san = await event.edit("yeah..! i found something wi8..🥰")
     else:
-        await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        san = await event.edit(f"Sorry..! i can't find anything with `{query}`")
     loa = l[0]
     await borg.send_file(
                 event.chat_id,
@@ -247,7 +248,7 @@ async def _(event):
         san = await event.reply("wi8..! I am finding your videosong....`")
     else:
     	san = await event.reply("`What I am Supposed to find `")
-        return
+    	return
     await catmusicvideo(query)
     try:
         cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
