@@ -14,7 +14,9 @@ import math
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 from userbot.uniborgConfig import Config
+import urllib3
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # ================= 
 
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
@@ -135,7 +137,6 @@ async def dyno_usage(dyno):
     minutes_remaining = remaining_quota / 60
     hours = math.floor(minutes_remaining / 60)
     minutes = math.floor(minutes_remaining % 60)
-
     """ - Current - """
     App = result['apps']
     try:
@@ -148,9 +149,7 @@ async def dyno_usage(dyno):
         AppPercentage = math.floor(App[0]['quota_used'] * 100 / quota)
     AppHours = math.floor(AppQuotaUsed / 60)
     AppMinutes = math.floor(AppQuotaUsed % 60)
-
     await asyncio.sleep(1.5)
-
     return await dyno.edit("**Dyno Usage**:\n\n"
                            f" -> `Dyno usage for`  **{Var.HEROKU_APP_NAME}**:\n"
                            f"     •  `{AppHours}`**h**  `{AppMinutes}`**m**  "
@@ -163,30 +162,20 @@ async def dyno_usage(dyno):
 
 @borg.on(admin_cmd(pattern="herokulogs$", outgoing=True))
 async def _(dyno):        
-        try:
-             Heroku = heroku3.from_key(HEROKU_API_KEY)                         
-             app = Heroku.app(HEROKU_APP_NAME)
-        except:
-  	       return await dyno.reply(" Please make sure your Heroku API Key, Your App name are configured correctly in the heroku")
-        await dyno.edit("Getting Logs....")
-        with open('logs.txt', 'w') as log:
-            log.write(app.get_log())
-        await dyno.edit("Got the logs wait a sec")    
-        await dyno.client.send_file(
-            dyno.chat_id,
-            "logs.txt",
-            reply_to=dyno.id,
-            caption="logs of 100+ lines",
-        )
-        
-        await asyncio.sleep(5)
-        await dyno.delete()
-        return os.remove('logs.txt')
+    try:
+        Heroku = heroku3.from_key(HEROKU_API_KEY)                         
+        app = Heroku.app(HEROKU_APP_NAME)
+    except:
+  	     return await dyno.reply(" Please make sure your Heroku API Key, Your App name are configured correctly in the heroku") 
+    data = app.get_log()
+    key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
+    url = f'https://nekobin.com/{key}'
+    reply_text = f'Recent 100 lines of heroku logs: [here]({url})'
+    await dyno.edit(reply_text)
     
 def prettyjson(obj, indent=2, maxlinelength=80):
     """Renders JSON content with indentation and line splits/concatenations to fit maxlinelength.
     Only dicts, lists and basic types are supported"""
-
     items, _ = getsubitems(obj, itemkey="", islast=True, maxlinelength=maxlinelength - indent, indent=indent)
     return indentitems(items, indent, level=0)
 
