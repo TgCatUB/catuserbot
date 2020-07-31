@@ -17,6 +17,7 @@ from telegraph import upload_file, exceptions
 from userbot.utils import admin_cmd
 import nekos
 from . import *
+from userbot import CMD_HELP
 import os 
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
@@ -118,7 +119,7 @@ async def catbot(catmemes):
     if "|" in input_str:
         text1, text2 = input_str.split("|")
     else:
-        await catmemes.edit("**Syntax :** reply to image as `.trap (name of the person to trap)|(trapper name)`")
+        await catmemes.edit("**Syntax :** reply to image or sticker with `.trap (name of the person to trap)|(trapper name)`")
         return
     replied = await catmemes.get_reply_message()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
@@ -170,7 +171,7 @@ async def catbot(catmemes):
     if "|" in input_str:
         username, text = input_str.split("|")
     else:
-        await catmemes.edit("**Syntax :** reply to image as `.phub (username)|(text in comment)`")
+        await catmemes.edit("**Syntax :** reply to image or sticker with `.phub (username)|(text in comment)`")
         return
     replied = await catmemes.get_reply_message()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
@@ -214,3 +215,16 @@ async def catbot(catmemes):
     cat = await phcomment(cat,text,username)
     await catmemes.delete()
     await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
+    
+CMD_HELP.update({"trolls": 
+       "**TROLLS**\
+      \n\n**Syntax :**`.threats` reply to image or sticker \
+      \n**USAGE:**Changes the given pic to another pic which shows that pic content is threat to society as that of nuclear bomb .\
+      \n\n**Syntax :**`.trash` reply to image or sticker\
+      \n**USAGE : **Changes the given pic to another pic which shows that pic content is as equal as to trash(waste)\
+      \n\n**Syntax :** reply to image or sticker with `.trap (name of the person to trap)|(trapper name)`\
+      \n**USAGE :**Changes the given pic to another pic which shows that pic content is trapped in trap card\
+      \n\n**Syntax :** reply to image or sticker with `.phub (username)|(text in comment)`\
+      \n**USAGE :**Changes the given pic to another pic which shows that pic content as dp and shows a comment in phub with the given username\
+      "
+})
