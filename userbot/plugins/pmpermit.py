@@ -6,7 +6,7 @@ import io
 import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
-from userbot import ALIVE_NAME, CMD_HELP, PMPERMIT_PIC
+from userbot import ALIVE_NAME, CMD_HELP
 from userbot.utils import admin_cmd
 
 PM_WARNS = {}
@@ -132,7 +132,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         chat_id = event.from_id
         catid = chat_id
         current_message_text = message_text.lower()
-        WARN_PIC = PMPERMIT_PIC
+        WARN_PIC = Config.PMPERMIT_PIC
         ASCII = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n")
         USER_BOT_NO_WARN = ("`Hello, This is AntiSpam Security Service⚠️.You have found your way here to my master,`"
                     f"{DEFAULTUSER}'s `inbox.\n\n"
@@ -194,7 +194,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             except:
                 return
         catid = chat_id
-        WARN_PIC = PMPERMIT_PIC
+        WARN_PIC = Config.PMPERMIT_PIC
         ASCII = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n")
         USER_BOT_NO_WARN = ("`Hello, This is AntiSpam Security Service⚠️.You have found your way here to my master,`"
                     f"{DEFAULTUSER}'s `inbox.\n\n"
