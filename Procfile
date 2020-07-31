@@ -1,1 +1,0 @@
-userbot: python -m userbot
