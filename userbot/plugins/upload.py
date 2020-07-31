@@ -110,7 +110,7 @@ async def _(event):
             event.chat_id,
             input_str,
             force_document=True,
-            supports_streaming=False,
+            supports_streaming=True,
             allow_cache=False,
             reply_to=event.message.id,
             thumb=thumb,
@@ -125,31 +125,19 @@ async def _(event):
         await mone.edit("404: File Not Found")
 
                 
-def get_video_thumb(file, output=None, width=90):
-    """ Get video thumbnail """
+def get_video_thumb(file, output=None, width=320):
+    output = file + ".jpg"
     metadata = extractMetadata(createParser(file))
-    popen = subprocess.Popen(
-        [
-            "ffmpeg",
-            "-i",
-            file,
-            "-ss",
-            str(
-                int((0, metadata.get("duration").seconds
-                     )[metadata.has("duration")] / 2)),
-            "-filter:v",
-            "scale={}:-1".format(width),
-            "-vframes",
-            "1",
-            output,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-    )
-    if not popen.returncode and os.path.lexists(file):
+    p = subprocess.Popen([
+        'ffmpeg', '-i', file,
+        '-ss', str(int((0, metadata.get('duration').seconds)[metadata.has('duration')] / 2)),
+        # '-filter:v', 'scale={}:-1'.format(width),
+        '-vframes', '1',
+        output,
+    ], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    p.communicate()
+    if not p.returncode and os.path.lexists(file):
         return output
-    return None
-
 
 def extract_w_h(file):
     """ Get width and height of media """
@@ -201,8 +189,7 @@ async def uploadas(uas_event):
         thumb = thumb.strip()
     else:
         file_name = input_str
-        thumb_path = "a_random_f_file_name" + ".jpg"
-        thumb = get_video_thumb(file_name, output=thumb_path)
+        thumb = get_video_thumb(file_name)
     if os.path.exists(file_name):
         metadata = extractMetadata(createParser(file_name))
         duration = 0
@@ -263,7 +250,10 @@ async def uploadas(uas_event):
             elif spam_big_messages:
                 await uas_event.edit("TBD: Not (yet) Implemented")
                 return
-            os.remove(thumb)
+            try:
+                os.remove(thumb)
+            except:
+                pass
             await uas_event.edit("Uploaded successfully !!")
         except FileNotFoundError as err:
             await uas_event.edit(str(err))
