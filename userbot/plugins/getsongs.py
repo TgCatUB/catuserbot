@@ -124,7 +124,7 @@ async def _(event):
     await borg.send_file(
                 event.chat_id,
                 loa,
-                force_document=True,
+                force_document=False,
                 allow_cache=False,
                 caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 reply_to=reply_to_id
@@ -216,14 +216,14 @@ async def _(event):
     await catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     if l:
-        await event.edit("yeah..! i found something wi8..🥰")
+        await event.reply("yeah..! i found something wi8..🥰")
     else:
-        await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        await event.reply(f"Sorry..! i can't find anything with `{query}`")
     loa = l[0]
     await borg.send_file(
                 event.chat_id,
                 loa,
-                force_document=True,
+                force_document=False,
                 allow_cache=False,
                 caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 reply_to=reply_to_id
@@ -244,9 +244,9 @@ async def _(event):
         await event.edit("wi8..! I am finding your videosong....")
     elif reply.message:
         query = reply.message
-        await event.edit("wi8..! I am finding your videosong....")
+        await event.reply("wi8..! I am finding your videosong....")
     else:
-        await event.edit("What I am Supposed to find")
+        await event.reply("What I am Supposed to find")
         return
     await catmusicvideo(query)
     try:
@@ -257,9 +257,9 @@ async def _(event):
         pass
     l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
     if l:
-        await event.edit("yeah..! i found something wi8..🥰")
+        await event.reply("yeah..! i found something wi8..🥰")
     else:
-        await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        await event.reply(f"Sorry..! i can't find anything with `{query}`")
     loa = l[0]  
     metadata = extractMetadata(createParser(loa))
     duration = 0
@@ -274,7 +274,7 @@ async def _(event):
     await borg.send_file(
                 event.chat_id,
                 loa,
-                force_document=True,
+                force_document=False,
                 allow_cache=False,
                 caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 supports_streaming=True,
