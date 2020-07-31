@@ -33,16 +33,13 @@ def get_video_thumb(file, output=None, width=320):
 async def _(event):
     if event.fwd_from:
         return
-    await event.edit("Processing ...")
+    mone = await event.edit("Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         downloaded_file_name = await borg.download_media(
             await event.get_reply_message(),
-            Config.TMP_DOWNLOAD_DIRECTORY,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                 progress(d, t, mone, c_time, "trying to download")
-            )
+            Config.TMP_DOWNLOAD_DIRECTORY
         )
         if downloaded_file_name.endswith(".mp4"):
             downloaded_file_name = get_video_thumb(
@@ -84,16 +81,14 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
+    mone = await event.edit("processing..........")
     if event.reply_to_msg_id:
         r = await event.get_reply_message()
         try:
             a = await borg.download_media(
                 r.media.document.thumbs[0],
-                Config.TMP_DOWNLOAD_DIRECTORY,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "trying to download")
+                Config.TMP_DOWNLOAD_DIRECTORY
                 )
-            )
         except Exception as e:
             await event.edit(str(e))
         try:
