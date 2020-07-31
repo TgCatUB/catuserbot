@@ -192,7 +192,6 @@ async def _(event):
     os.system("rm -rf *.mp4")
     os.system("rm -rf *.webm")    
     
-
 @borg.on(sudo_cmd(pattern="song(?: |$)(.*)", allow_sudo = True))
 async def _(event):
     reply_to_id = event.message.id
@@ -217,9 +216,9 @@ async def _(event):
     await catmusic(str(query),"320k")
     l = glob.glob("*.mp3")
     if l:
-        san = await event.edit("yeah..! i found something wi8..🥰")
+        await event.edit("yeah..! i found something wi8..🥰")
     else:
-        san = await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        await event.edit(f"Sorry..! i can't find anything with `{query}`")
     loa = l[0]
     await borg.send_file(
                 event.chat_id,
@@ -232,7 +231,7 @@ async def _(event):
     await san.delete()
     os.system("rm -rf *.mp3")
     subprocess.check_output("rm -rf *.mp3",shell=True)
-
+    
     
 @borg.on(sudo_cmd(pattern="vsong(?: |$)(.*)", allow_sudo = True))
 async def _(event):
