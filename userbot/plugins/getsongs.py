@@ -72,7 +72,7 @@ async def _(event):
                 reply_to=reply_to_id
             )
     await event.delete()
-    os.system("/bin/rm -rf *.mp3")
+    subprocess.call("/bin/rm -rf *.mp3", shell=False)
     
 @borg.on(admin_cmd(pattern="song320(?: |$)(.*)"))
 async def _(event):
@@ -112,7 +112,7 @@ async def _(event):
                 reply_to=reply_to_id
             )
     await event.delete()
-    os.system("/bin/rm -rf *.mp3")   
+    subprocess.call("/bin/rm -rf *.mp3", shell=False)   
     
 @borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
 async def _(event):
@@ -170,9 +170,9 @@ async def _(event):
                             )],
             )
     await event.delete()
-    os.system("/bin/rm -rf *.mkv")
-    os.system("/bin/rm -rf *.mp4")
-    os.system("/bin/rm -rf *.webm")    
+    subprocess.call("/bin/rm -rf *.mkv", shell=False)
+    subprocess.call("/bin/rm -rf *.mp4", shell=False)
+    subprocess.call("/bin/rm -rf *.webm", shell=False)    
     
 @borg.on(sudo_cmd(pattern="song(?: |$)(.*)", allow_sudo = True))
 async def _(event):
@@ -212,7 +212,7 @@ async def _(event):
                 reply_to=reply_to_id
             )
     await san.delete()
-    os.system("/bin/rm -rf *.mp3")
+    subprocess.call("/bin/rm -rf *.mp3", shell=False)
     
 CMD_HELP.update({"getmusic":
     "`.song` query or `.song` reply to song name :\
