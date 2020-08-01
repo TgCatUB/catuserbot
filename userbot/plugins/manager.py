@@ -41,7 +41,6 @@ if Config.DUAL_LOG:
         else:
             await event.edit(f"**is configured**. [please do not touch](https://t.me/c/{Config.PM_LOGGR_BOT_API_ID}/2)")
 
-
     @borg.on(admin_cmd(pattern="nolog(?: |$)(.*)"))
     async def set_no_log_p_m(event):
         if Config.PM_LOGGR_BOT_API_ID is not None:
@@ -53,7 +52,6 @@ if Config.DUAL_LOG:
                     await event.edit("Won't Log Messages from this chat")
                     await asyncio.sleep(3)
                     await event.delete()
-
 
     @borg.on(admin_cmd(pattern="log(?: |$)(.*)"))
     async def set_no_log_p_m(event):
@@ -67,13 +65,10 @@ if Config.DUAL_LOG:
                     await asyncio.sleep(3)
                     await event.delete()
 
-
-
     @borg.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):
         if Config.PM_LOGGR_BOT_API_ID is None:
             return
-
         if not event.is_private:
             return
         if event.from_id == bot.uid:
@@ -94,11 +89,9 @@ if Config.DUAL_LOG:
         if sender.verified:
             # don't log verified accounts
             return
-
         if not no_log_pms_sql.is_approved(chat_id):
             # log pms
             await do_log_pm_action(chat_id, event, message_text, message_media)
-
 
     @borg.on(events.ChatAction(blacklist_chats=Config.UB_BLACK_LIST_CHAT))
     async def on_new_chat_action_message(event):
@@ -106,7 +99,6 @@ if Config.DUAL_LOG:
             return
         # logger.info(event.stringify())
         chat_id = event.chat_id
-
         if event.created or event.user_added:
             added_by_users = event.action_message.action.users
             if borg.uid in added_by_users:
@@ -126,7 +118,6 @@ if Config.DUAL_LOG:
                     # file=message_media,
                     silent=True
                 )
-
 
     @borg.on(events.Raw())
     async def on_new_channel_message(event):
@@ -175,11 +166,4 @@ if Config.DUAL_LOG:
             silent=True
             )
         else:
-            return
-
-    CMD_HELP.update({"manager": "`.nccreatedch` :\
-          \n\n`.log`:\
-          \nUSAGE:logs the messages from the private chat by default it will log if you stop by .nolog and you want to log then use .log\
-          \n\n`.nolog`:\
-          \nUSAGE:to stop logging from a private chat "
-    })     
+            return    
