@@ -11,6 +11,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 @borg.on(admin_cmd(pattern="help ?(.*)"))
 async def cmd_list(event):
     input_str = event.pattern_match.group(1)
+    tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
     if input_str == "text":
         string = ""
         for i in sorted(CMD_LIST):
