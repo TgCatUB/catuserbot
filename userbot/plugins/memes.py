@@ -19,6 +19,7 @@ from userbot import CMD_HELP, memes , ALIVE_NAME
 from userbot.utils import admin_cmd, register
 from userbot.uniborgConfig import Config
 
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
@@ -26,28 +27,22 @@ BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 async def univsaye(cowmsg):
         arg = cowmsg.pattern_match.group(1).lower()
         text = cowmsg.pattern_match.group(2)
-
         if arg == "cow":
             arg = "default"
         if arg not in cow.COWACTERS:
             return
         cheese = cow.get_cow(arg)
         cheese = cheese()
-
         await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
-
-
 
 @register(outgoing=True, pattern="^:/$")	 
 async def kek(keks):
+    """ Check yourself ;)"""
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
-        """ Check yourself ;)"""
         uio = ["/", "\\"]
         for i in range(1, 15):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 			  
 @borg.on(admin_cmd(pattern=r"slap(?: |$)(.*)", outgoing=True))
 async def who(event):
@@ -56,7 +51,6 @@ async def who(event):
     replied_user = await get_user(event)
     caption = await slap(replied_user, event)
     message_id_to_reply = event.message.reply_to_msg_id
-
     if not message_id_to_reply:
         message_id_to_reply = None
     try:
@@ -100,26 +94,22 @@ async def slap(replied_user, event):
     user_id = replied_user.user.id
     first_name = replied_user.user.first_name
     username = replied_user.user.username
-
     if username:
         slapped = "@{}".format(username)
     else:
         slapped = f"[{first_name}](tg://user?id={user_id})"
-
     temp = random.choice(memes.SLAP_TEMPLATES)
     item = random.choice(memes.ITEMS)
     hit = random.choice(memes.HIT)
     throw = random.choice(memes.THROW)
     where = random.choice(memes.WHERE)				  
-
     caption = "..." + temp.format(user1=DEFAULTUSER, victim=slapped, item=item, hits=hit, throws=throw, where=where)			  
-
     return caption
 
 @register(outgoing=True, pattern="^-_-$")
 async def lol(lel):
+    """ Ok... """
     if not lel.text[0].isalpha() and lel.text[0] not in ("/", "#", "@", "!"):
-        """ Ok... """
         okay = "-_-"
         for _ in range(10):
             okay = okay[:-1] + "_-"
