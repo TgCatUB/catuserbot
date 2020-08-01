@@ -57,6 +57,7 @@ async def _(event):
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        return
     thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
     if os.path.exists(thumb_image_path):
         thumb = thumb_image_path
@@ -71,8 +72,7 @@ async def _(event):
                 reply_to=reply_to_id
             )
     await event.delete()
-    os.system("rm -rf *.mp3")
-    subprocess.check_output("rm -rf *.mp3",shell=True)
+    os.system("/bin/rm -rf *.mp3")
     
 @borg.on(admin_cmd(pattern="song320(?: |$)(.*)"))
 async def _(event):
@@ -101,6 +101,7 @@ async def _(event):
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        return
     loa = l[0]    
     await borg.send_file(
                 event.chat_id,
@@ -111,8 +112,7 @@ async def _(event):
                 reply_to=reply_to_id
             )
     await event.delete()
-    os.system("rm -rf *.mp3")
-    subprocess.check_output("rm -rf *.mp3",shell=True)    
+    os.system("/bin/rm -rf *.mp3")   
     
 @borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
 async def _(event):
@@ -141,6 +141,7 @@ async def _(event):
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        return
     loa = l[0]  
     metadata = extractMetadata(createParser(loa))
     duration = 0
@@ -169,9 +170,9 @@ async def _(event):
                             )],
             )
     await event.delete()
-    os.system("rm -rf *.mkv")
-    os.system("rm -rf *.mp4")
-    os.system("rm -rf *.webm")    
+    os.system("/bin/rm -rf *.mkv")
+    os.system("/bin/rm -rf *.mp4")
+    os.system("/bin/rm -rf *.webm")    
     
 @borg.on(sudo_cmd(pattern="song(?: |$)(.*)", allow_sudo = True))
 async def _(event):
@@ -200,6 +201,7 @@ async def _(event):
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        return
     loa = l[0]
     await borg.send_file(
                 event.chat_id,
@@ -210,8 +212,7 @@ async def _(event):
                 reply_to=reply_to_id
             )
     await san.delete()
-    os.system("rm -rf *.mp3")
-    subprocess.check_output("rm -rf *.mp3",shell=True)
+    os.system("/bin/rm -rf *.mp3")
     
 CMD_HELP.update({"getmusic":
     "`.song` query or `.song` reply to song name :\
