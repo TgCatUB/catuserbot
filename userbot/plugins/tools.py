@@ -207,7 +207,7 @@ async def list(ups):
     hmm =""
     for key, value in dil_wale_puch_de_na_chaaa.items():
         hmm += f"`{key}`" +"\t\t\t"
-    await ups.edit("**List of some currencies:**\n{}\n".format(key))   
+    await ups.edit(f"**List of some currencies:**\n{key}\n")   
         
 @borg.on(admin_cmd(pattern="ifsc (.*)"))
 async def _(event):
