@@ -31,7 +31,7 @@ DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ �
 DEL_TIME_OUT = 60
 DEFAULTUSER = str(AUTONAME) if AUTONAME else "cat" 
 
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf"
 
 @borg.on(admin_cmd(pattern="autopic$"))
 async def autopic(event):
@@ -98,7 +98,6 @@ async def autopic(event):
     photo = "userbot/photo_pfp.png"
     while not downloader.isFinished():
         place_holder = None
-
     while True:
         #RIP Danger zone Here no editing here plox
         R = random.randint(0,256)
@@ -111,7 +110,6 @@ async def autopic(event):
         image = Image.open(photo)
         image.paste( (R, G, B), [0,0,image.size[0],image.size[1]])
         image.save(photo)
-        
         current_time = datetime.now().strftime("\n Time: %H:%M:%S \n \n Date: %d/%m/%y")
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
@@ -234,9 +232,7 @@ BIO_STRINGS = [
      "🙉",
      "🙊",
      "🐵",
-
 ]
-
 
 @borg.on(admin_cmd(pattern="monkeybio"))  # pylint:disable=E0602
 async def _(event):
