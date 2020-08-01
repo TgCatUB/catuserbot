@@ -318,8 +318,8 @@ CMD_HELP.update({
 \n**USAGE : **Shows you the some list of currencies\
 \n\n`.ifsc` <IFSC code>\
 \n**USAGE : ** to get details of the relevant bank or branch **Example :** `.ifsc SBIN0016086`\
-\n\n`.color` <color_code>  :\
-\n**USEAGE : **sends you a plain image of the color example :`.color #ff0000`\ 
+\n\n`.color` <color_code> \
+\n**USEAGE : **sends you a plain image of the color example :`.color #ff0000`\
 \n\n`.xkcd` <query>\
 \n**USEAGE : **Searches for the query for the relevant XKCD comic "
 })
