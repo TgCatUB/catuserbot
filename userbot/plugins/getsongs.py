@@ -60,17 +60,7 @@ async def _(event):
     thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
     if os.path.exists(thumb_image_path):
         thumb = thumb_image_path
-    loa = l[0]    
-    metadata = extractMetadata(createParser(loa))
-    duration = 0
-    width = 0
-    height = 0
-    if metadata.has("duration"):
-        duration = metadata.get("duration").seconds
-    if metadata.has("width"):
-        width = metadata.get("width")
-    if metadata.has("height"):
-        height = metadata.get("height")
+    loa = l[0]
     await borg.send_file(
                 event.chat_id,
                 loa,
@@ -78,14 +68,7 @@ async def _(event):
                 allow_cache=False,
                 caption=query,
                 supports_streaming=True,
-                reply_to=reply_to_id,
-                attributes=[DocumentAttributeVideo(
-                                duration=duration,
-                                w=width,
-                                h=height,
-                                round_message=False,
-                                supports_streaming=True,
-                            )],
+                reply_to=reply_to_id
             )
     await event.delete()
     os.system("rm -rf *.mp3")
@@ -122,7 +105,7 @@ async def _(event):
     await borg.send_file(
                 event.chat_id,
                 loa,
-                force_document=True,
+                force_document=False,
                 allow_cache=False,
                 caption=query,
                 reply_to=reply_to_id
