@@ -15,6 +15,7 @@ from bs4 import BeautifulSoup
 from userbot import CMD_HELP
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
+
 @borg.on(admin_cmd(pattern="scan ?(.*)"))
 async def _(event):
     if event.fwd_from:
@@ -208,6 +209,21 @@ async def list(ups):
         hmm += f"`{key}`" +"\t\t\t"
     await ups.edit("**List of some currencies:**\n{}\n".format(key))   
         
+@borg.on(admin_cmd(pattern="ifsc (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    url = "https://ifsc.razorpay.com/{}".format(input_str)
+    r = requests.get(url)
+    if r.status_code == 200:
+        b = r.json()
+        a = json.dumps(b, sort_keys=True, indent=4)
+        # https://stackoverflow.com/a/9105132/4723940
+        await event.edit(str(a))
+    else:
+        await event.edit("`{}`: {}".format(input_str, r.text))
+        
 @borg.on(admin_cmd(pattern="color (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -296,10 +312,12 @@ CMD_HELP.update({
 \nExample: `.barcode` www.google.com\
 \n\n`.decode` <reply to barcode/qrcode> \
 \n**USAGE : **to get decoded content of those codes.\
-\n\n`.currency amount (from currency) (to currency)\
-\n**USAGE : **Currency converter for userbot Example : `.currency 10 usd inr`\
+\n\n`.currency` amount (from currency) (to currency)\
+\n**USAGE : **Currency converter for userbot **Example :** `.currency 10 usd inr`\
 \n\n`.currencies`\
 \n**USAGE : **Shows you the some list of currencies\
+\n\n`.ifsc` <IFSC code>\
+\n**USAGE : ** to get details of the relevant bank or branch **Example :** `.ifsc SBIN0016086`\
 \n\n`.color` <color_code>  :\
 \n**USEAGE : **sends you a plain image of the color example :`.color #ff0000`\ 
 \n\n`.xkcd` <query>\
