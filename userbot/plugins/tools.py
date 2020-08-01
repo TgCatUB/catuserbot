@@ -198,7 +198,7 @@ async def _(event):
     ms = (end - start).seconds
     
 @borg.on(admin_cmd(pattern="currencies$"))
-async def list(ups):
+async def currencylist(ups):
     if ups.fwd_from:
         return
     request_url = "https://api.exchangeratesapi.io/latest?base=USD"
