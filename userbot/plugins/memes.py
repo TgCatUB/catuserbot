@@ -317,22 +317,19 @@ async def bluetext(bt_e):
             "/BLUETEXT /MUST /CLICK.\n"
             "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?")
 
-@borg.on(admin_cmd(outgoing=True, pattern="lfy (.*)",))
-async def let_me_google_that_for_you(lmgtfy_q):
-        textx = await lmgtfy_q.get_reply_message()
-        query = lmgtfy_q.text
-        if query[5:]:
-            query = str(query[5:])
-        elif textx:
-            query = textx
-            query = query.message
-        query_encoded = query.replace(" ", "+")
-        lfy_url = f"http://lmgtfy.com/?s=g&iie=1&q={query_encoded}"
-        payload = {'format': 'json', 'url': lfy_url}
-        r = requests.get('http://is.gd/create.php', params=payload)
-        await lmgtfy_q.edit(f"[{query}]({r.json()['shorturl']})")
-        if BOTLOG:
-            await bot.send_message(
+@borg.on(admin_cmd(pattern="lfy (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    sample_url = "https://da.gd/s?url=https://lmgtfy.com/?q={}%26iie=1".format(input_str.replace(" ","+"))
+    response_api = requests.get(sample_url).text
+    if response_api:
+        await event.edit("[{}]({})\n`Thank me Later 🙃` ".format(input_str,response_api.rstrip()))
+    else:
+        await event.edit("something is wrong. please try again later.")
+    if BOTLOG:
+        await bot.send_message(
                 BOTLOG_CHATID,
                 "LMGTFY query `" + query + "` was executed successfully",
             )
