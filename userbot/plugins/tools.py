@@ -4,6 +4,7 @@ import json
 import requests
 from urllib.parse import quote
 from userbot.utils import admin_cmd
+from PIL import Image, ImageColor
 import os
 import time
 from datetime import datetime
@@ -14,7 +15,6 @@ from bs4 import BeautifulSoup
 from userbot import CMD_HELP
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
-
 @borg.on(admin_cmd(pattern="scan ?(.*)"))
 async def _(event):
     if event.fwd_from:
@@ -169,12 +169,45 @@ async def make_qr(makeqr):
     os.remove("img_file.webp")
     await makeqr.delete()
 
-from telethon import events
-import os
-from PIL import Image, ImageColor
-from userbot.utils import admin_cmd
-from userbot import CMD_HELP
-
+@borg.on(admin_cmd(pattern="currency (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    start = datetime.now()
+    input_str = event.pattern_match.group(1)
+    input_sgra = input_str.split(" ")
+    if len(input_sgra) == 3:
+        try:
+            number = float(input_sgra[0])
+            currency_from = input_sgra[1].upper()
+            currency_to = input_sgra[2].upper()
+            request_url = "https://api.exchangeratesapi.io/latest?base={}".format(currency_from)
+            current_response = requests.get(request_url).json()
+            if currency_to in current_response["rates"]:
+                current_rate = float(current_response["rates"][currency_to])
+                rebmun = round(number * current_rate, 2)
+                await event.edit("{} {} = {} {}".format(number, currency_from, rebmun, currency_to))
+            else:
+                await event.edit("Welp, Hate to tell yout this but this Currency isn't supported **yet**.\n__Try__ `.currencies` __for a list of supported currencies.__")
+        except e:
+            await event.edit(str(e))
+    else:
+        await event.edit("**Syntax:**\n.currency amount from to\n**Example:**\n`.currency 10 usd inr`")
+    end = datetime.now()
+    ms = (end - start).seconds
+    
+@borg.on(admin_cmd(pattern="currencies$"))
+async def list(ups):
+    if ups.fwd_from:
+        return
+    request_url = "https://api.exchangeratesapi.io/latest?base=USD"
+    current_response = requests.get(request_url).json()
+    dil_wale_puch_de_na_chaaa = current_response["rates"]
+    hmm =""
+    for key, value in dil_wale_puch_de_na_chaaa.items():
+        hmm += f"`{key}`" +"\t\t\t"
+    await ups.edit("**List of some currencies:**\n{}\n".format(key))   
+        
 @borg.on(admin_cmd(pattern="color (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -191,7 +224,7 @@ async def _(event):
             return False
         else:
             im = Image.new(mode="RGB", size=(1280, 720), color=usercolor)
-            im.save("UniBorg.png", "PNG")
+            im.save("cat.png", "PNG")
             input_str = input_str.replace("#", "#COLOR_")
             await borg.send_file(
                 event.chat_id,
@@ -200,7 +233,7 @@ async def _(event):
                 caption=input_str,
                 reply_to=message_id
             )
-            os.remove("UniBorg.png")
+            os.remove("cat.png")
             await event.delete()
     else:
         await event.edit("Syntax: `.color <color_code>` example : `.color #ff0000`")
@@ -263,6 +296,10 @@ CMD_HELP.update({
 \nExample: `.barcode` www.google.com\
 \n\n`.decode` <reply to barcode/qrcode> \
 \n**USAGE : **to get decoded content of those codes.\
+\n\n`.currency amount (from currency) (to currency)\
+\n**USAGE : **Currency converter for userbot Example : `.currency 10 usd inr`\
+\n\n`.currencies`\
+\n**USAGE : **Shows you the some list of currencies\
 \n\n`.color` <color_code>  :\
 \n**USEAGE : **sends you a plain image of the color example :`.color #ff0000`\ 
 \n\n`.xkcd` <query>\
