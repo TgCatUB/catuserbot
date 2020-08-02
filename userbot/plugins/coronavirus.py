@@ -26,7 +26,7 @@ async def corona(event):
         data +=  f"\n😟New Deaths  : `{country_data['new_deaths']}`"
     else:
         data += "\nNo information yet about this country!"
-    await event.edit(f"**Corona Virus Info in {}:**\n{}".format(country.capitalize(), data))
+    await event.edit("**Corona Virus Info in {}:**\n{}".format(country.capitalize(), data))
 
 CMD_HELP.update({"coronavirus":
    "`.covid ` <country name>\
