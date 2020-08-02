@@ -25,10 +25,10 @@ async def magnet_download(event):
 	if event.fwd_from:
 		return
 	var = event.pattern_match.group(1)
-	print(var)	
+	print(var)
 	uris = [var]
 	#Add URL Into Queue 
-	try:	
+	try:
 		download = aria2.add_uris(uris, options=None, position=None)
 	except Exception as e:
 		await event.edit("`Error:\n`"+str(e))
@@ -49,7 +49,7 @@ async def magnet_download(event):
 			await asyncio.sleep(10)
 		except Exception as e:
 			# print(str(e))
-			pass	
+			pass
 	await event.edit("**File Downloaded Successfully:** `{}`".format(file.name))
 
 
@@ -64,9 +64,9 @@ async def progress_status(gid,event,previous):
 				previous = msg
 			else:
 				logger.info(str(file.error_message))
-				await event.edit("Error : `{}`".format(str(file.error_message)))		
+				await event.edit("Error : `{}`".format(str(file.error_message)))
 				return
-			await asyncio.sleep(EDIT_SLEEP_TIME_OUT)	
+			await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
 			await progress_status(gid,event,previous)
 		else:
 			await event.edit("File Downloaded Successfully: `{}`".format(file.name))
@@ -81,7 +81,7 @@ async def progress_status(gid,event,previous):
 		else:
 			logger.info(str(e))
 			await event.edit("Error :\n`{}`".format(str(e)))
-			return		
+			return
 
 async def check_metadata(gid):
 	file = aria2.get_download(gid)
