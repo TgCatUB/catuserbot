@@ -29,10 +29,10 @@ async def magnet_download(event):
 	uris = [var]
 	#Add URL Into Queue 
 	try:	
-	    download = aria2.add_uris(uris, options=None, position=None)
+		download = aria2.add_uris(uris, options=None, position=None)
 	except Exception as e:
-	    await event.edit("`Error:\n`"+str(e))
-	    return
+		await event.edit("`Error:\n`"+str(e))
+		return
 	gid = download.gid
 	complete = None
 	await progress_status(gid=gid,event=event,previous=None)
@@ -57,31 +57,31 @@ async def progress_status(gid,event,previous):
 	try:
 		file = aria2.get_download(gid)
 		if not file.is_complete:
-		    if not file.error_message:
+			if not file.error_message:
 			msg = "Downloading File: `"+str(file.name) +"`\nSpeed: "+ str(file.download_speed_string())+"\nProgress: "+str(file.progress_string())+"\nTotal Size: "+str(file.total_length_string())+"\nStatus: "+str(file.status)+"\nETA:  "+str(file.eta_string())+"\n\n"
 			if previous != msg:
-		            await event.edit(msg)
-			    previous = msg
+					await event.edit(msg)
+				previous = msg
 			else:
-			    logger.info(str(file.error_message))
-			    await event.edit("Error : `{}`".format(str(file.error_message)))		
-			    return
-		    await asyncio.sleep(EDIT_SLEEP_TIME_OUT)	
-		    await progress_status(gid,event,previous)
+				logger.info(str(file.error_message))
+				await event.edit("Error : `{}`".format(str(file.error_message)))		
+				return
+			await asyncio.sleep(EDIT_SLEEP_TIME_OUT)	
+			await progress_status(gid,event,previous)
 		else:
-		    await event.edit("File Downloaded Successfully: `{}`".format(file.name))
-		    return
+			await event.edit("File Downloaded Successfully: `{}`".format(file.name))
+			return
 	except Exception as e:
 		if " not found" in str(e) or "'file'" in str(e):
 			await event.edit("Download Canceled :\n`{}`".format(file.name))
 			return
 		if " depth exceeded" in str(e):
-		    file.remove(force=True)
-		    await event.edit("Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(file.name))
+			file.remove(force=True)
+			await event.edit("Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(file.name))
 		else:
-		    logger.info(str(e))
-		    await event.edit("Error :\n`{}`".format(str(e)))
-		    return		
+			logger.info(str(e))
+			await event.edit("Error :\n`{}`".format(str(e)))
+			return		
 
 async def check_metadata(gid):
 	file = aria2.get_download(gid)
