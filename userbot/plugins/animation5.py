@@ -4,7 +4,8 @@ from telethon import events
 import asyncio
 from userbot.utils import admin_cmd
 from userbot import ALIVE_NAME
-import random, re
+import random
+import re
 from userbot import CMD_HELP
 from collections import deque
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
