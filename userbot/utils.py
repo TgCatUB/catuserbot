@@ -1,6 +1,7 @@
 from userbot import bot
 from telethon import events
 from pathlib import Path
+import importlib
 from var import Var
 from userbot import CMD_LIST, SUDO_LIST
 import re
@@ -59,14 +60,12 @@ def command(**args):
                     cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
                 except:
                     pass
-
                 try:
                     CMD_LIST[file_test].append(cmd)
                 except:
                     CMD_LIST.update({file_test: [cmd]})
             except:
                 pass
-
         if allow_sudo:
             args["from_users"] = list(Config.SUDO_USERS)
             # Mutually exclusive with outgoing (can only set one of either).
@@ -103,9 +102,6 @@ def load_module(shortname):
         pass
     elif shortname.endswith("_"):
         import userbot.utils
-        import sys
-        import importlib
-        from pathlib import Path
         path = Path(f"userbot/plugins/{shortname}.py")
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
@@ -114,9 +110,6 @@ def load_module(shortname):
         LOGS.info("Successfully imported "+shortname)
     else:
         import userbot.utils
-        import sys
-        import importlib
-        from pathlib import Path
         path = Path(f"userbot/plugins/{shortname}.py")
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
