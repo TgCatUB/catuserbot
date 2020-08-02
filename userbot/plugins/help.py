@@ -27,9 +27,8 @@ async def cmd_list(event):
             reply_text = f'All commands of the catuserbot are [here]({url})'
             await event.edit(reply_text)
             return
-        else:
-            await event.edit(string)
-            return
+        await event.edit(string)
+        return
     if Config.HELP_INLINETYPE is None:
         if input_str:
             if input_str in CMD_LIST:
