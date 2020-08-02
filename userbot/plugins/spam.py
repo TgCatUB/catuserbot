@@ -6,6 +6,7 @@ from userbot.utils import admin_cmd,sudo_cmd
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 import os 
+import subprocess
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
@@ -62,11 +63,11 @@ async def spammer(e):
                 if e.is_private:
                     await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} times with below message")
                     await borg.send_file(BOTLOG_CHATID, downloaded_file_name)
-                    os.system(f"rm -rf {downloaded_file_name}")
+                    subprocess.call(f'/bin/rm -rf {downloaded_file_name}', shell=False)
                 else:
                     await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in {e.chat.title}(`{e.chat_id}`) with {counter} times with below message") 
                     await borg.send_file(BOTLOG_CHATID, downloaded_file_name)
-                    os.system(f"rm -rf {downloaded_file_name}")	
+                    subprocess.call(f'/bin/rm -rf {downloaded_file_name}', shell=False)
     elif reply_to_id.text and e.reply_to_msg_id:
         spam_message = 	reply_to_id.text
         await e.delete()
@@ -179,11 +180,11 @@ async def spammer(e):
                 if e.is_private:
                     await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} times with below message")
                     await borg.send_file(BOTLOG_CHATID, downloaded_file_name)
-                    os.system(f"rm -rf {downloaded_file_name}")
+                    subprocess.call(f'/bin/rm -rf {downloaded_file_name}', shell=False)
                 else:
                     await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in {e.chat.title}(`{e.chat_id}`) with {counter} times with below message") 
                     await borg.send_file(BOTLOG_CHATID, downloaded_file_name)
-                    os.system(f"rm -rf {downloaded_file_name}")	
+                    subprocess.call(f'/bin/rm -rf {downloaded_file_name}', shell=False)
     elif reply_to_id.text and e.reply_to_msg_id:
         spam_message = 	reply_to_id.text
         await e.delete()
