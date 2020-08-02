@@ -24,7 +24,7 @@ async def _(event):
     if  input_str is None:
         await event.edit("try `.nfc voice` or`.nfc mp3`")
         return
-    elif input_str == "mp3":
+    if input_str == "mp3":
         await event.edit("converting...")
     elif input_str == "voice":
         await event.edit("converting...")
