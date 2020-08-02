@@ -161,10 +161,10 @@ async def _(event):
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 35])
             
-@borg.on(admin_cmd(pattern=f"plane", outgoing=True))
+@borg.on(admin_cmd(pattern="plane$", outgoing=True))
 async def _(event):
     if event.fwd_from:
-        retun
+        return
     await event.edit("✈-------------")
     await event.edit("-✈------------")
     await event.edit("--✈-----------")
@@ -182,8 +182,7 @@ async def _(event):
     await asyncio.sleep(3)
     await event.delete()           
     
-    
-@borg.on(admin_cmd(pattern=r"police"))
+@borg.on(admin_cmd(pattern=r"police$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -191,7 +190,6 @@ async def _(event):
     animation_ttl = range(0, 12)
     await event.edit("Police")
     animation_chars = [
-        
             "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
             "🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴",
             "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
@@ -204,8 +202,7 @@ async def _(event):
             "🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴",
             "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
             f"{DEFAULTUSER} **Police iz Here**"
-
- ]
+            ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 12])    
@@ -238,13 +235,12 @@ async def _(event):
             "`▁ ▂ ▄ ▅ ▆ ▇ ▒`",
             "`▁ ▂ ▄ ▅ ▆ ▇ █`",
             "**JIO NETWORK Boosted....**"
- ]
+	    ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 19])                
-                    
-            
-@borg.on(admin_cmd(pattern=f"solarsystem", outgoing=True))
+                     
+@borg.on(admin_cmd(pattern=f"solarsystem$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -263,4 +259,4 @@ async def _(event):
             ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
-            await event.edit(animation_chars[i % 8])      
+            await event.edit(animation_chars[i % 8])
