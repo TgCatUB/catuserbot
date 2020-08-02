@@ -128,11 +128,11 @@ async def get_full_user(event):
                 return replied_user, None
             try:
                 user_object = await event.client.get_entity(input_str)
-                 user_id = user_object.id
-                 replied_user = await event.client(GetFullUserRequest(user_id))
-                 return replied_user, None
+                user_id = user_object.id
+                replied_user = await event.client(GetFullUserRequest(user_id))
+                return replied_user, None
             except Exception as e:
-                 return None, e
+                return None, e
         if event.is_private:
             try:
                 user_id = event.chat_id
