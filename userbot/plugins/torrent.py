@@ -123,7 +123,7 @@ async def remove_all(event):
         aria2.purge_all()
     except:
         pass
-    if removed == False:  #If API returns False Try to Remove Through System Call.
+    if removed is False:  #If API returns False Try to Remove Through System Call.
         os.system("aria2p remove-all")
     await event.edit("`Removed All Downloads.`")  
 
