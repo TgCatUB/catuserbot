@@ -10,7 +10,6 @@ from datetime import datetime
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 import json
-import os
 import requests
 import subprocess
 from telethon import events
