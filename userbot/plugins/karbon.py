@@ -251,7 +251,6 @@ async def carbon_api(e):
    GREEN = random.randint(0,256)
    BLUE = random.randint(0,256)
    OPC = random.random()
-   """ A Wrapper for carbon.now.sh """
    await e.edit("⬜⬜⬜⬜⬜")
    CARBON = 'https://carbon.now.sh/?bg=rgba({R}%2C{G}%2C{B}%2C{O})&t=material&wt=none&l=auto&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Fira%20Code&fs=14px&lh=152%25&si=false&es=2x&wm=false&code={code}'
    CARBONLANG = "en"
@@ -340,7 +339,6 @@ async def carbon_api(e):
    ]
    CUNTHE = random.randint(0, len(THEME) - 1)
    The = THEME[CUNTHE]
-   """ A Wrapper for carbon.now.sh """
    await e.edit("⬜⬜⬜⬜⬜")
    CARBON = 'https://carbon.now.sh/?bg=rgba({R}%2C{G}%2C{B}%2C1)&t={T}&wt=none&l=auto&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Fira%20Code&fs=14px&lh=152%25&si=false&es=2x&wm=false&code={code}'
    CARBONLANG = "en"
