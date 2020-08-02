@@ -95,11 +95,11 @@ async def kang(args):
         packname = f"{user.username}_{pack}"
         packnick = f"@{user.username}'s_{pack}"
         cmd = '/newpack'
-        file = io.BytesIO()
         if not is_anim:
-            file = "sticker.png"
-            resize_photo(photo , file)
-            file.seek(0)
+            with BytesIO(file) as mem_file, BytesIO() as sticker:
+                resize_photo(mem_file, sticker)
+                sticker.seek(0)
+            file = await borg.upload_file(sticker, file_name="sticker.png")
         else:
             packname += "_anim"
             packnick += " (Animated)"
@@ -233,7 +233,7 @@ async def kang(args):
             \nPack can be found [here](t.me/addstickers/{packname})",
                         parse_mode='md')
 
-async def resize_image(image, save_locaton):
+def resize_photo(image, save_locaton):
     image = Image.open(image)
     maxsize = (512, 512)
     if (image.width and image.height) < 512:
