@@ -1,4 +1,7 @@
-import requests , os, re
+import requests 
+import os
+import re
+import subprocess
 from bs4 import BeautifulSoup
 from asyncio import sleep
 from random import choice
@@ -54,8 +57,8 @@ async def catmusic(cat , QUALITY):
         video_link = link.get('href') 
         break
   video_link =  'http://www.youtube.com/'+video_link
-  command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)	
-  os.system(command)
+  command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)
+  subprocess.call(f'/bin/{command}', shell=False)
 
 
 async def catmusicvideo(cat):
@@ -70,7 +73,7 @@ async def catmusicvideo(cat):
             break    
     video_link =  'http://www.youtube.com/'+video_link
     command = ('youtube-dl -f "[filesize<20M]" ' +video_link)  
-    os.system(command)
+    subprocess.call(f'/bin/{command}', shell=False)
 
 # for stickertxt
 async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
