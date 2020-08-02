@@ -5,7 +5,6 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 from userbot.utils import admin_cmd
 
-
 @borg.on(admin_cmd(pattern="gbun"))
 async def gbun(event):
     if event.fwd_from:
@@ -36,9 +35,9 @@ async def gbun(event):
                   "**user's Name: ** __{}__\n"
                   "**ID : ** `{}`\n"
                 ).format(firstname, idd, firstname, idd)
-            if usname == None:
+            if usname is None:
                 jnl += "**Victim Nigga's username: ** `Doesn't own a username!`\n"
-            elif usname != "None":
+            else:
                 jnl += "**Victim Nigga's username** : @{}\n".format(usname)
             if len(gbunVar) > 0:
                 gbunm = "`{}`".format(gbunVar)
