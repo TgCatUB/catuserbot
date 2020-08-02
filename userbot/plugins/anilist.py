@@ -77,7 +77,7 @@ async def formatJSON(outData):
 @borg.on(admin_cmd(pattern="anilist ?(.*)"))
 async def anilist(event):
     if event.fwd_from:
-	return
+        return
     input_str = event.pattern_match.group(1)
     result = await callAPI(input_str)
     msg = await formatJSON(result)
