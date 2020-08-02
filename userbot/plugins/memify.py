@@ -46,10 +46,9 @@ async def _(event):
     file_ext_ns_ion = "@memetime.png"
     uploaded_gif = None
     if reply_message.sender.bot:
-       await event.edit("```Reply to actual users message.```")
+       await event.edit("Reply to actual users message.")
        return
-    else:
-       await event.edit("Transfiguration Time! Mwahaha memifying this image! (」ﾟﾛﾟ)｣")
+    await event.edit("Transfiguration Time! Mwahaha memifying this image! (」ﾟﾛﾟ)｣")
     file = await borg.download_file(reply_message.media)
     async with borg.conversation("@MemeAutobot") as bot_conv:
           try:
@@ -109,12 +108,10 @@ async def _(event):
                 caption="bot",
             )
             await event.delete()
-            
           elif not is_message_image(reply_message):
             await event.edit("Invalid message type. Plz choose right message type u NIBBA.")
             return
-          else: 
-               await borg.send_file(event.chat_id, response.media)
+          await borg.send_file(event.chat_id, response.media)
 
 def is_message_image(message):
     if message.media:
