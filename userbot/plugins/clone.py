@@ -90,7 +90,7 @@ async def _(event):
     name = f"{DEFAULTUSER}"
     bio = f"{DEFAULTUSERBIO}"
     n = 1
-    await borg(functions.past.literal_eval(hotos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit= n)))    
+    await borg(functions.past.literal_eval(hotos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit= n)))) 
     await borg(functions.account.UpdateProfileRequest(about=bio))
     await borg(functions.account.UpdateProfileRequest(first_name=name))
     await event.edit("succesfully reverted to your account back")
