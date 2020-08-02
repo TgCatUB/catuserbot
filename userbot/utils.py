@@ -161,7 +161,6 @@ def admin_cmd(pattern=None, **args):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
-            
             args["pattern"] = re.compile(Config.COMMAND_HAND_LER + pattern)
             reg =Config.COMMAND_HAND_LER[1]
             cmd = (reg +pattern).replace("$", "").replace("\\", "").replace("^", "")
@@ -200,8 +199,8 @@ def admin_cmd(pattern=None, **args):
     return events.NewMessage(**args)
 
 def register(**args):
-    args["func"] = lambda e: e.via_bot_id is None
     """ Register a new event. """
+    args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
