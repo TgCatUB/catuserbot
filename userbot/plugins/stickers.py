@@ -36,8 +36,8 @@ KANGING_STR = [
 
 @register(outgoing=True, pattern="^.kang")
 async def kang(args):
-    """ For .kang command, kangs stickers or creates new ones. """
     user = await bot.get_me()
+    userid = borg.uid
     if not user.username:
         user.username = user.first_name
     message = await args.get_reply_message()
