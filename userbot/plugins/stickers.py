@@ -92,15 +92,14 @@ async def kang(args):
                 # User sent just custom emote, wants to push to default
                 # pack
                 emoji = splat[1]
-
         packname = f"{user.username}_{pack}"
         packnick = f"@{user.username}'s_{pack}"
         cmd = '/newpack'
         file = io.BytesIO()
         if not is_anim:
-            image = await resize_photo(photo)
-            file.name = "sticker.png"
-            image.save(file, "PNG")
+            file = "sticker.png"
+            resize_photo(photo , file)
+            file.seek(0)
         else:
             packname += "_anim"
             packnick += " (Animated)"
@@ -234,9 +233,8 @@ async def kang(args):
             \nPack can be found [here](t.me/addstickers/{packname})",
                         parse_mode='md')
 
-async def resize_photo(photo):
-    """ Resize the given photo to 512x512 """
-    image = Image.open(photo)
+async def resize_image(image, save_locaton):
+    image = Image.open(image)
     maxsize = (512, 512)
     if (image.width and image.height) < 512:
         size1 = image.width
@@ -255,7 +253,8 @@ async def resize_photo(photo):
         image = image.resize(sizenew)
     else:
         image.thumbnail(maxsize)
-    return image
+    image.save(save_locaton, "PNG")
+
 
 @borg.on(admin_cmd(pattern="stkrinfo$"))
 async def get_pack_info(event):
