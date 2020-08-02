@@ -96,10 +96,6 @@ async def check_media(reply_message):
             data = reply_message.media.document
         else:
             return False
-    else:
-        return False
-
     if not data or data is None:
         return False
-    else:
-        return data
+    return data
