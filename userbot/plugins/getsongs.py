@@ -67,7 +67,7 @@ async def _(event):
                 force_document=False,
                 allow_cache=False,
                 caption=query,
-                thumb = catthumb
+                thumb = catthumb,
                 supports_streaming=True,
                 reply_to=reply_to_id
             )
@@ -112,7 +112,7 @@ async def _(event):
                 force_document=False,
                 allow_cache=False,
                 caption=query,
-                thumb = catthumb
+                thumb = catthumb,
                 supports_streaming=True,
                 reply_to=reply_to_id
             )
@@ -166,7 +166,7 @@ async def _(event):
                 loa,
                 force_document=False,
                 allow_cache=False,
-                thumb = catthumb
+                thumb = catthumb,
                 caption=query,
                 supports_streaming=True,
                 reply_to=reply_to_id
@@ -212,7 +212,7 @@ async def _(event):
                 force_document=False,
                 allow_cache=False,
                 caption=query,
-                thumb = catthumb
+                thumb = catthumb,
                 supports_streaming=True,
                 reply_to=reply_to_id
             )
