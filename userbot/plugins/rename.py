@@ -17,7 +17,8 @@ from telethon import events
 from telethon.tl.types import DocumentAttributeVideo
 from telethon.errors import MessageNotModifiedError
 import time
-from userbot.utils import admin_cmd
+from userbot import CMD_HELP, ALIVE_NAME
+from userbot.utils import admin_cmd, sudo_cmd
 from userbot.utils import progress, humanbytes, time_formatter
 import io
 import math
@@ -38,6 +39,8 @@ def get_video_thumb(file, output=None, width=90):
     if not p.returncode and os.path.lexists(file):
         return output
 
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
 @borg.on(admin_cmd(pattern="rename (.*)"))
 async def _(event):
@@ -115,12 +118,65 @@ async def _(event):
             end_two = datetime.now()
             os.remove(downloaded_file_name)
             ms_two = (end_two - end).seconds
-            await event.edit("Downloaded in {} seconds. Uploaded in {} seconds.".format(ms_one, ms_two))
+            await event.edit(f"**➥ Downloaded in {ms_one} seconds.**\n**➥ Uploaded in {ms_two} seconds.**\n**➥ Uploaded by :-** [{DEFAULTUSER}]({USERNAME})")
         else:
             await event.edit("File Not Found {}".format(input_str))
     else:
         await event.edit("Syntax // .rnupload file.name as reply to a Telegram media")
 
+
+@borg.on(sudo_cmd(pattern="rnup (.*)",allow_sudo = True))
+async def _(event):
+    if event.fwd_from:
+        return
+    thumb = None
+    if os.path.exists(thumb_image_path):
+        thumb = thumb_image_path
+    await event.edit("Rename & Upload in process 🙄🙇‍♂️🙇‍♂️🙇‍♀️ It might take some time if file size is big")
+    input_str = event.pattern_match.group(1)
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if event.reply_to_msg_id:
+        start = datetime.now()
+        file_name = input_str
+        reply_message = await event.get_reply_message()
+        c_time = time.time()
+        to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
+        downloaded_file_name = os.path.join(to_download_directory, file_name)
+        downloaded_file_name = await borg.download_media(
+            reply_message,
+            downloaded_file_name,
+            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                  progress(d, t, event, c_time, "trying to download")
+            )
+        )
+        end = datetime.now()
+        ms_one = (end - start).seconds
+        if os.path.exists(downloaded_file_name):
+            c_time = time.time()
+            await borg.send_file(
+                event.chat_id,
+                downloaded_file_name,
+                force_document=False,
+                supports_streaming=False,
+                allow_cache=False,
+                reply_to=event.message.id,
+                thumb=thumb,
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, event, c_time, "trying to upload")
+                )
+                
+            )
+            end_two = datetime.now()
+            os.remove(downloaded_file_name)
+            ms_two = (end_two - end).seconds
+            await event.reply(f"**➥ Downloaded in {ms_one} seconds.**\n**➥ Uploaded in {ms_two} seconds.**\n**➥ Uploaded by :-** [{DEFAULTUSER}]({USERNAME})")
+        else:
+            await event.reply("File Not Found {}".format(input_str))
+    else:
+        await event.reply("Syntax // .rnupload file.name as reply to a Telegram media")
+     
+        
 @borg.on(admin_cmd(pattern="rnstreamupload (.*)"))
 async def _(event):
     if event.fwd_from:

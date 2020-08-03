@@ -65,15 +65,12 @@ async def _(event):
 
 @borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
 async def _(event):
-    if event.fwd_from:
-        return
-    await event.delete()
     start = datetime.now()
-    await event.edit("__**☞ Pong!__**")
+    kakashi = await event.reply("__**☞ Pong!__**")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
-    await event.edit(f"__**☞ Pong!__**\n➥ {ms}\n➥ __**Bot**__ __**of**__ [{DEFAULTUSER}]({USERNAME})")
-
+    await event.reply(f"__**☞ Pong!__**\n➥ {ms}\n➥ __**Bot**__ __**of**__ [{DEFAULTUSER}]({USERNAME})")
+    await kakashi.delete()
     
 CMD_HELP.update({
     "ping":
