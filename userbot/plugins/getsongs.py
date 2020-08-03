@@ -73,7 +73,7 @@ async def _(event):
             )
     await event.delete()
     os.system("rm -rf ./temp/*.mp3") 
-    os.system("rm-rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.jpg")
     
 @borg.on(admin_cmd(pattern="song320(?: |$)(.*)"))
 async def _(event):
@@ -121,7 +121,7 @@ async def _(event):
             )
     await event.delete()
     os.system("rm -rf ./temp/*.mp3") 
-    os.system("rm-rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.jpg")
     
 @borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
 async def _(event):
@@ -179,7 +179,7 @@ async def _(event):
             )
     await event.delete()
     os.system("rm -rf ./temp/*.mp4") 
-    os.system("rm-rf ./temp/*.jpg")  
+    os.system("rm -rf ./temp/*.jpg")  
     
 @borg.on(sudo_cmd(pattern="song(?: |$)(.*)", allow_sudo = True))
 async def _(event):
@@ -227,7 +227,7 @@ async def _(event):
             )
     await event.delete()
     os.system("rm -rf ./temp/*.mp3") 
-    os.system("rm-rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.jpg")
     
 CMD_HELP.update({"getmusic":
     "`.song` query or `.song` reply to song name :\
