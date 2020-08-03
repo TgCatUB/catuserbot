@@ -77,7 +77,7 @@ class Config(object):
     # in alive message pic 
     ALIVE_PIC = os.environ.get("ALIVE_PIC", None)
     # in pm permit pic 
-    PMPERMIT_PIC = os.environ.get("PMPERMIT", None)
+    PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
     # Get your own API key from https://www.remove.bg/ or
     # feel free to use http://telegram.dog/Remove_BGBot
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
