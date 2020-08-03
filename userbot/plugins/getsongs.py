@@ -148,7 +148,7 @@ async def _(event):
         await event.client(cat)
     except:
         pass
-    l = glob.glob(("/temp/*.mp4")) 
+    l = glob.glob(("./temp/*.mp4")) 
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
