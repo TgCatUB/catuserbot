@@ -62,7 +62,7 @@ async def catmusic(cat , QUALITY):
         os.makedirs("./temp/")
   command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)
   os.system(command)
-  thumb = ("youtube-dl --write-thumbnail --skip-download" + video_link)
+  thumb = ("youtube-dl --write-thumbnail --skip-download " + video_link)
   os .system(thumb)
 
 
@@ -81,7 +81,7 @@ async def catmusicvideo(cat):
         os.makedirs("./temp/")
     command = ('youtube-dl -f "[filesize<20M]" ' +video_link)  
     os.system(command)
-    thumb = ("youtube-dl --write-thumbnail --skip-download" + video_link)
+    thumb = ("youtube-dl --write-thumbnail --skip-download " + video_link)
     os .system(thumb)
 
 # for stickertxt
