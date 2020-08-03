@@ -58,8 +58,12 @@ async def catmusic(cat , QUALITY):
         video_link = link.get('href') 
         break
   video_link =  'http://www.youtube.com/'+video_link
+  if not os.path.isdir("./temp/"):
+        os.makedirs("./temp/")
   command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)
-  subprocess.call(f'/bin/{command}', shell=False)
+  os.system(command)
+  thumb = ("youtube-dl --write-thumbnail --skip-download" + video_link)
+  os .system(thumb)
 
 
 async def catmusicvideo(cat):
@@ -73,8 +77,12 @@ async def catmusicvideo(cat):
             video_link = link.get('href') 
             break    
     video_link =  'http://www.youtube.com/'+video_link
+    if not os.path.isdir("./temp/"):
+        os.makedirs("./temp/")
     command = ('youtube-dl -f "[filesize<20M]" ' +video_link)  
-    subprocess.call(f'/bin/{command}', shell=False)
+    os.system(command)
+    thumb = ("youtube-dl --write-thumbnail --skip-download" + video_link)
+    os .system(thumb)
 
 # for stickertxt
 async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
