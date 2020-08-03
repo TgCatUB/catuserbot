@@ -52,15 +52,14 @@ async def _(event):
     except:
         pass
     await catmusic(str(query),"128k")
-    l = glob.glob("*.mp3")
+    l = glob.glob("./temp/*.mp3")
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
         return
-    thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
-    if os.path.exists(thumb_image_path):
-        thumb = thumb_image_path
+    thumbcat = glob.glob("./temp/*.webp")
+    catthumb = thumbcat[0]
     loa = l[0]
     await borg.send_file(
                 event.chat_id,
@@ -68,11 +67,13 @@ async def _(event):
                 force_document=False,
                 allow_cache=False,
                 caption=query,
+                thumb = catthumb
                 supports_streaming=True,
                 reply_to=reply_to_id
             )
     await event.delete()
-    subprocess.call("/bin/rm -rf *.mp3", shell=False)
+    os.system("rm -rf ./temp/*.mp3") 
+    os.system("rm-rf ./temp/*.webp")
     
 @borg.on(admin_cmd(pattern="song320(?: |$)(.*)"))
 async def _(event):
@@ -96,23 +97,28 @@ async def _(event):
     except:
         pass
     await catmusic(str(query),"320k")
-    l = glob.glob("*.mp3")
+    l = glob.glob("./temp/*.mp3")
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
         return
-    loa = l[0]    
+    thumbcat = glob.glob("./temp/*.webp")
+    catthumb = thumbcat[0]
+    loa = l[0]
     await borg.send_file(
                 event.chat_id,
                 loa,
                 force_document=False,
                 allow_cache=False,
                 caption=query,
+                thumb = catthumb
+                supports_streaming=True,
                 reply_to=reply_to_id
             )
     await event.delete()
-    subprocess.call("/bin/rm -rf *.mp3", shell=False)   
+    os.system("rm -rf ./temp/*.mp3") 
+    os.system("rm-rf ./temp/*.webp")
     
 @borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
 async def _(event):
@@ -136,12 +142,14 @@ async def _(event):
         await event.client(cat)
     except:
         pass
-    l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
+    l = glob.glob(("/temp/*.mp4")) 
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
         return
+    thumbcat = glob.glob("./temp/*.webp")
+    catthumb = thumbcat[0]
     loa = l[0]  
     metadata = extractMetadata(createParser(loa))
     duration = 0
@@ -158,21 +166,14 @@ async def _(event):
                 loa,
                 force_document=False,
                 allow_cache=False,
+                thumb = catthumb
                 caption=query,
                 supports_streaming=True,
-                reply_to=reply_to_id,
-                attributes=[DocumentAttributeVideo(
-                                duration=duration,
-                                w=width,
-                                h=height,
-                                round_message=False,
-                                supports_streaming=True,
-                            )],
+                reply_to=reply_to_id
             )
     await event.delete()
-    subprocess.call("/bin/rm -rf *.mkv", shell=False)
-    subprocess.call("/bin/rm -rf *.mp4", shell=False)
-    subprocess.call("/bin/rm -rf *.webm", shell=False)    
+    os.system("rm -rf ./temp/*.mp4") 
+    os.system("rm-rf ./temp/*.webp")  
     
 @borg.on(sudo_cmd(pattern="song(?: |$)(.*)", allow_sudo = True))
 async def _(event):
@@ -196,12 +197,14 @@ async def _(event):
     except:
         pass
     await catmusic(str(query),"320k")
-    l = glob.glob("*.mp3")
+    l = glob.glob("./temp/*.mp3")
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
         return
+    thumbcat = glob.glob("./temp/*.webp")
+    catthumb = thumbcat[0]
     loa = l[0]
     await borg.send_file(
                 event.chat_id,
@@ -209,10 +212,13 @@ async def _(event):
                 force_document=False,
                 allow_cache=False,
                 caption=query,
+                thumb = catthumb
+                supports_streaming=True,
                 reply_to=reply_to_id
             )
-    await san.delete()
-    subprocess.call("/bin/rm -rf *.mp3", shell=False)
+    await event.delete()
+    os.system("rm -rf ./temp/*.mp3") 
+    os.system("rm-rf ./temp/*.webp")
     
 CMD_HELP.update({"getmusic":
     "`.song` query or `.song` reply to song name :\
