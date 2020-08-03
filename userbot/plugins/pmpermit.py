@@ -9,6 +9,7 @@ from userbot.utils import admin_cmd
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
 CACHE = {}
+PMPERMIT_PIC = Config.PMPERMIT_PIC
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "**No name set yet nibba, check pinned message in** @XtraTgBot"
 USER_BOT_WARN_ZERO = "`You were spamming my peru master's inbox, henceforth you are blocked by my master's userbot.` **Now GTFO, i'm playing minecraft** "
 
@@ -117,10 +118,10 @@ if Var.PRIVATE_GROUP_ID is not None:
         catid = chat_id
         current_message_text = message_text.lower()
         USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
-                    "`Hello, this is cat Security Service.You have found your way here to my master,`"
-                    f"{DEFAULTUSER}'s` inbox.\n\n"
-                    "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
-                    "** Send** `/start` ** so that we can decide why you're here.**")
+                      "This is auto generated message from cat security service\n\n"
+                     f"Hi buddy my master {DEFAULTUSER} haven't approved you yet , so.\n"
+                      "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
+                      "** Send** `/start` ** so that my master can decide why you're here.**")
         if USER_BOT_NO_WARN == message_text:
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
@@ -174,12 +175,19 @@ if Var.PRIVATE_GROUP_ID is not None:
             except:
                 return
         catid = chat_id
-        USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
-                    "`Hello, this is cat Security Service.You have found your way here to my master,`"
-                    f"{DEFAULTUSER}'s` inbox.\n\n"
-                    "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.`\n\n"
-                    "** Send** `/start` ** so that we can decide why you're here.**")
-        r = await event.reply(USER_BOT_NO_WARN)
+        if PMPERMIT_PIC:
+            USER_BOT_NO_WARN = ("This is auto generated message from cat security service\n\n"
+                     f"Hi buddy my master {DEFAULTUSER} haven't approved you yet , so.\n"
+                      "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
+                      "** Send** `/start` ** so that my master can decide why you're here.**")
+            r = await event.reply( USER_BOT_NO_WARN , file = PMPERMIT_PIC)
+        else:
+            USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
+                      "This is auto generated message from cat security service\n\n"
+                     f"Hi buddy my master {DEFAULTUSER} haven't approved you yet , so.\n"
+                      "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
+                      "** Send** `/start` ** so that my master can decide why you're here.**")
+            r = await event.reply(USER_BOT_NO_WARN)
         PM_WARNS[chat_id] += 1
         if chat_id in PREV_REPLY_MESSAGE:
             await PREV_REPLY_MESSAGE[chat_id].delete()
