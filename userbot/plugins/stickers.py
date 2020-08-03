@@ -116,7 +116,7 @@ async def kang(args):
         response = urllib.request.urlopen(
             urllib.request.Request(f'http://t.me/addstickers/{packname}'))
         htmlstr = response.read().decode("utf8").split('\n')
-        if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
+        if "A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
             async with bot.conversation('Stickers') as conv:
                 await conv.send_message('/addsticker')
                 await conv.get_response()
@@ -152,7 +152,7 @@ async def kang(args):
                             await conv.send_file(file, force_document=True)
                         rsp = await conv.get_response()
                         if "You can list several emoji in one message, but I recommend using no more than two per sticker" not in rsp.text:
-                            await args.edit("Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.txt}")
+                            await args.edit(f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.txt}")
                             return
                         await conv.send_message(emoji)
                         # Ensure user doesn't get spamming notifications
@@ -188,7 +188,7 @@ async def kang(args):
                     await conv.send_file(file, force_document=True)
                 rsp = await conv.get_response()
                 if "You can list several emoji in one message, but I recommend using no more than two per sticker" not in rsp.text:
-                    await args.edit("Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.txt}")
+                    await args.edit(f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.txt}")
                     return
                 await conv.send_message(emoji)
                 # Ensure user doesn't get spamming notifications
@@ -217,7 +217,7 @@ async def kang(args):
                     await conv.send_file(file, force_document=True)
                 rsp = await conv.get_response()
                 if "You can list several emoji in one message, but I recommend using no more than two per sticker" not in rsp.text:
-                    await args.edit("Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.txt}")
+                    await args.edit(f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.txt}")
                     return
                 await conv.send_message(emoji)
                 # Ensure user doesn't get spamming notifications
