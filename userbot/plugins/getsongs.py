@@ -12,6 +12,7 @@ credits to @mrconfused and @sandy1709
 #    GNU Affero General Public License for more details.
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from telethon import events
 from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import io
@@ -50,13 +51,13 @@ async def _(event):
         pass
     await catmusic(str(query),"128k")
     l = glob.glob("./temp/*.mp3")
-    if l is not None:
+    if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
         return
-    thumbcat = glob.glob("./temp/*.jpg")
-    if thumbcat is not None:
+    thumbcat = glob.glob("./temp/*.jpg") + glob.glob("./temp/*.webp") 
+    if thumbcat:
         catthumb = thumbcat[0]
     else:
         catthumb = None
@@ -74,6 +75,7 @@ async def _(event):
     await event.delete()
     os.system("rm -rf ./temp/*.mp3") 
     os.system("rm -rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.webp")
     
 @borg.on(admin_cmd(pattern="song320(?: |$)(.*)"))
 async def _(event):
@@ -98,13 +100,13 @@ async def _(event):
         pass
     await catmusic(str(query),"320k")
     l = glob.glob("./temp/*.mp3")
-    if l is not None:
+    if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
         return
-    thumbcat = glob.glob("./temp/*.jpg")
-    if thumbcat is not None:
+    thumbcat = glob.glob("./temp/*.jpg") + glob.glob("./temp/*.webp")
+    if thumbcat:
         catthumb = thumbcat[0]
     else:
         catthumb = None
@@ -122,6 +124,7 @@ async def _(event):
     await event.delete()
     os.system("rm -rf ./temp/*.mp3") 
     os.system("rm -rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.webp")
     
 @borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
 async def _(event):
@@ -146,13 +149,13 @@ async def _(event):
     except:
         pass
     l = glob.glob(("/temp/*.mp4")) 
-    if l is not None:
+    if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
         return
-    thumbcat = glob.glob("./temp/*.jpg")
-    if thumbcat is not None:
+    thumbcat = glob.glob("./temp/*.jpg") + glob.glob("./temp/*.webp")
+    if thumbcat:
         catthumb = thumbcat[0]
     else:
         catthumb = None
@@ -179,7 +182,8 @@ async def _(event):
             )
     await event.delete()
     os.system("rm -rf ./temp/*.mp4") 
-    os.system("rm -rf ./temp/*.jpg")  
+    os.system("rm -rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.webp")
     
 @borg.on(sudo_cmd(pattern="song(?: |$)(.*)", allow_sudo = True))
 async def _(event):
@@ -204,13 +208,13 @@ async def _(event):
         pass
     await catmusic(str(query),"320k")
     l = glob.glob("./temp/*.mp3")
-    if l is not None:
+    if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
         return
-    thumbcat = glob.glob("./temp/*.jpg")
-    if thumbcat is not None:
+    thumbcat = glob.glob("./temp/*.jpg") +  glob.glob("./temp/*.webp")
+    if thumbcat:
         catthumb = thumbcat[0]
     else:
         catthumb = None
@@ -228,6 +232,7 @@ async def _(event):
     await event.delete()
     os.system("rm -rf ./temp/*.mp3") 
     os.system("rm -rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.webp")
     
 CMD_HELP.update({"getmusic":
     "`.song` query or `.song` reply to song name :\
