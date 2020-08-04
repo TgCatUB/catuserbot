@@ -1,9 +1,6 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
-#
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
-#
-#
 
 """ Userbot module for having some fun with people. """
 import asyncio
@@ -20,8 +17,11 @@ from userbot.utils import admin_cmd, register
 from userbot.uniborgConfig import Config
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-BOTLOG = True
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
+else:
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"(\w+)say (.*)"))
 async def univsaye(cowmsg):
@@ -321,7 +321,7 @@ async def _(event):
     if BOTLOG:
         await bot.send_message(
                 BOTLOG_CHATID,
-                "LMGTFY query `" + query + "` was executed successfully",
+                "LMGTFY query `" + input_str + "` was executed successfully",
             )
 
 
