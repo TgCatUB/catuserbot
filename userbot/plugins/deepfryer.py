@@ -26,7 +26,8 @@ import io
 from random import randint, uniform
 from PIL import Image, ImageEnhance, ImageOps
 from telethon.tl.types import DocumentAttributeFilename
-from userbot.utils import admin_cmd
+from userbot import CMD_HELP
+from userbot.utils import admin_cmd, sudo_cmd
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
