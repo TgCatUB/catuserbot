@@ -26,17 +26,13 @@ Type `.poto` for get **All profile pics of that User**
 """
 
 import logging
-
-from uniborg.util import admin_cmd
-
+from userbot.utils import admin_cmd
 from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 import asyncio
 logger = logging.getLogger(__name__)
-
-
 
 if 1 == 1:
     name = "Profile Photos"
@@ -55,6 +51,15 @@ if 1 == 1:
             photos = await event.client.get_profile_photos(chat)
             u = False
         if id.strip() == "":
+            id = 1
+            if int(id) <= (len(photos)):
+                send_photos = await event.client.download_media(photos[id - 1])
+                await event.client.send_file(event.chat_id, send_photos)
+            else:
+                await event.edit("No photo found of this NIBBA / NIBBI. Now u Die!")
+                await asyncio.sleep(2)
+                return
+        elif id.strip() == "all":
             if len(photos) > 0:
                 await event.client.send_file(event.chat_id, photos)
             else:
@@ -65,21 +70,21 @@ if 1 == 1:
                         photo = await event.client.download_profile_photo(event.input_chat)
                     await event.client.send_file(event.chat_id, photo)
                 except a:
-                    await event.edit("**This user has no photos.\nGEYYYY!**")
+                    await event.edit("**This user has no photos!**")
                     return
         else:
             try:
                 id = int(id)
                 if id <= 0:
-                    await event.edit("```ID number Invalid!``` **Are you Comedy Me ?**")
+                    await event.edit("```number Invalid!``` **Are you Comedy Me ?**")
                     return
             except:
-                 await event.edit("`Are you comedy me ?`")
+                 await event.edit("Are you comedy me ?")
                  return
             if int(id) <= (len(photos)):
                 send_photos = await event.client.download_media(photos[id - 1])
                 await event.client.send_file(event.chat_id, send_photos)
             else:
-                await event.edit("```No photo found of this NIBBA / NIBBI. Now u Die!```")
-                await asyncio.sleep(8)
+                await event.edit("No photo found of this NIBBA / NIBBI. Now u Die!")
+                await asyncio.sleep(2)
                 return
