@@ -72,7 +72,7 @@ if bool(ENV):
     AUTONAME = os.environ.get("AUTONAME", None)
     UPSTREAM_REPO_URL = os.environ.get(
     "UPSTREAM_REPO_URL",
-    "https://github.com/sandy1709/catuserbot.git")
+    "https://github.com/Jisan09/catuserbot.git")
    
 
     # Last.fm Module
