@@ -154,12 +154,11 @@ async def _(event):
         except Exception as e:  # pylint:disable=C0103,W0703
             logger.warn(str(e))  # pylint:disable=E0602
 
-        
 CMD_HELP.update({
     "afk":
     ".afk [Optional Reason]\
-\nUsage: Sets you as afk.\nReplies to anyone who tags/PM's \
+\n**Usage : **Sets you as afk.\nReplies to anyone who tags/PM's \
 you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
-\n afk full form away from keyboard/keypad.\
+\nafk means away from keyboard/keypad.\
 "
 })

@@ -28,8 +28,7 @@ async def catlst_of_files(path):
 @borg.on(admin_cmd(pattern="uploadir (.*)", outgoing=True))
 async def uploadir(udir_event):
     input_str = udir_event.pattern_match.group(1)
-    input_str = Path(input_str)
-    await borg.send_message(udir_event.caht_id , input_str)
+    await borg.send_message(udir_event.chat_id , input_str)
     if os.path.exists(input_str):
         await udir_event.edit(f"Gathering file details in directory `{input_str}`")
         lst_of_files = []

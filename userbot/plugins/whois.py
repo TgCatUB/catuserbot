@@ -14,8 +14,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
-from userbot.utils import register, admin_cmd
-
+from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
 async def _(event):
@@ -107,72 +106,61 @@ async def get_full_user(event):
                 )
             )
             return replied_user, None
-        else:
-            replied_user = await event.client(
+        replied_user = await event.client(
                 GetFullUserRequest(
                     previous_message.from_id
                 )
             )
+        return replied_user, None
+    input_str = None
+    try:
+        input_str = event.pattern_match.group(1)
+    except IndexError as e:
+        return None, e
+    if event.message.entities :
+        mention_entity = event.message.entities
+        probable_user_mention_entity = mention_entity[0]
+        if isinstance(probable_user_mention_entity, MessageEntityMentionName):
+            user_id = probable_user_mention_entity.user_id
+            replied_user = await event.client(GetFullUserRequest(user_id))
             return replied_user, None
-    else:
-        input_str = None
         try:
-            input_str = event.pattern_match.group(1)
-        except IndexError as e:
+            user_object = await event.client.get_entity(input_str)
+            user_id = user_object.id
+            replied_user = await event.client(GetFullUserRequest(user_id))
+            return replied_user, None
+        except Exception as e:
             return None, e
-        if event.message.entities :
-            mention_entity = event.message.entities
-            probable_user_mention_entity = mention_entity[0]
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user, None
-            else:
-                try:
-                    user_object = await event.client.get_entity(input_str)
-                    user_id = user_object.id
-                    replied_user = await event.client(GetFullUserRequest(user_id))
-                    return replied_user, None
-                except Exception as e:
-                    return None, e
-        elif event.is_private:
-            try:
-                user_id = event.chat_id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user, None
-            except Exception as e:
-                return None, e
-        else:
-            try:
-                user_object = await event.client.get_entity(int(input_str))
-                user_id = user_object.id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user, None
-            except Exception as e:
-                return None, e
+    if event.is_private:
+        try:
+            user_id = event.chat_id
+            replied_user = await event.client(GetFullUserRequest(user_id))
+            return replied_user, None
+        except Exception as e:
+            return None, e
+    try:
+        user_object = await event.client.get_entity(int(input_str))
+        user_id = user_object.id
+        replied_user = await event.client(GetFullUserRequest(user_id))
+        return replied_user, None
+    except Exception as e:
+        return None, e
 
 @borg.on(admin_cmd(pattern="whois(?: |$)(.*)"))
 async def who(event):
-
     await event.edit(
         "`Sit tight while I steal some data from Mark Zuckerburg...`")
-
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
-
     replied_user = await get_user(event)
-
     try:
         photo, caption = await fetch_info(replied_user, event)
     except AttributeError:
         await event.edit("`Could not fetch info of that user.`")
         return
-
     message_id_to_reply = event.message.reply_to_msg_id
-
     if not message_id_to_reply:
         message_id_to_reply = None
-
     try:
         await event.client.send_file(event.chat_id,
                                      photo,
@@ -181,14 +169,11 @@ async def who(event):
                                      force_document=False,
                                      reply_to=message_id_to_reply,
                                      parse_mode="html")
-
         if not photo.startswith("http"):
             os.remove(photo)
         await event.delete()
-
     except TypeError:
         await event.edit(caption, parse_mode="html")
-
 
 async def get_user(event):
     """ Get the user from argument or replied message. """
@@ -198,17 +183,13 @@ async def get_user(event):
             GetFullUserRequest(previous_message.from_id))
     else:
         user = event.pattern_match.group(1)
-
         if user.isnumeric():
             user = int(user)
-
         if not user:
             self_user = await event.client.get_me()
             user = self_user.id
-
         if event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
-
             if isinstance(probable_user_mention_entity,
                           MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
@@ -221,7 +202,6 @@ async def get_user(event):
         except (TypeError, ValueError) as err:
             await event.edit(str(err))
             return None
-
     return replied_user
 
 
@@ -262,7 +242,6 @@ async def fetch_info(replied_user, event):
     username = "@{}".format(username) if username else (
         "This User has no Username")
     user_bio = "This User has no About" if not user_bio else user_bio
-
     caption = "<b>USER INFO from cat's database :</b>\n\n"
     caption += f"First Name: {first_name}\n"
     caption += f"Last Name: {last_name}\n"
@@ -277,7 +256,6 @@ async def fetch_info(replied_user, event):
     caption += f"Common Chats with this user: {common_chat}\n"
     caption += f"Permanent Link To Profile: "
     caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
-
     return photo, caption
 
 

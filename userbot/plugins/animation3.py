@@ -3,7 +3,8 @@ from telethon import events
 import asyncio
 from userbot.utils import admin_cmd
 from userbot import ALIVE_NAME
-import random, re
+import random
+import re
 from collections import deque
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
@@ -162,10 +163,10 @@ async def _(event):
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 35])
             
-@borg.on(admin_cmd(pattern=f"plane", outgoing=True))
+@borg.on(admin_cmd(pattern="plane$", outgoing=True))
 async def _(event):
     if event.fwd_from:
-        retun
+        return
     await event.edit("✈-------------")
     await event.edit("-✈------------")
     await event.edit("--✈-----------")
@@ -184,7 +185,7 @@ async def _(event):
     await event.delete()           
     
     
-@borg.on(admin_cmd(pattern=r"police"))
+@borg.on(admin_cmd(pattern=r"police$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -239,13 +240,13 @@ async def _(event):
             "`▁ ▂ ▄ ▅ ▆ ▇ ▒`",
             "`▁ ▂ ▄ ▅ ▆ ▇ █`",
             "**JIO NETWORK Boosted....**"
- ]
+	    ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
             await event.edit(animation_chars[i % 19])                
                     
             
-@borg.on(admin_cmd(pattern=f"solarsystem", outgoing=True))
+@borg.on(admin_cmd(pattern=f"solarsystem$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -264,4 +265,4 @@ async def _(event):
             ]
     for i in animation_ttl:
             await asyncio.sleep(animation_interval)
-            await event.edit(animation_chars[i % 8])      
+            await event.edit(animation_chars[i % 8])

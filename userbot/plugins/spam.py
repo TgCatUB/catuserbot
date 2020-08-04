@@ -6,6 +6,7 @@ from userbot.utils import admin_cmd,sudo_cmd
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 import os 
+import subprocess
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
@@ -37,10 +38,10 @@ async def spammer(e):
         for i in range(counter):
             if e.reply_to_msg_id:
                 await reply_to_id.reply(spam_message)
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.5)
             else:
                await borg.send_message(e.chat_id , spam_message)
-               await asyncio.sleep(0.1)
+               await asyncio.sleep(0.5)
         if BOTLOG:
             if e.is_private:
                 await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} messages of \n" +f"`{spam_message}`")
@@ -57,7 +58,7 @@ async def spammer(e):
                     e.chat_id,
                     downloaded_file_name
                     ) 
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(1)
             if BOTLOG:
                 if e.is_private:
                     await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} times with below message")
@@ -66,17 +67,17 @@ async def spammer(e):
                 else:
                     await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in {e.chat.title}(`{e.chat_id}`) with {counter} times with below message") 
                     await borg.send_file(BOTLOG_CHATID, downloaded_file_name)
-                    os.system(f"rm -rf {downloaded_file_name}")	
+                    os.system(f"rm -rf {downloaded_file_name}")
     elif reply_to_id.text and e.reply_to_msg_id:
         spam_message = 	reply_to_id.text
         await e.delete()
         for i in range(counter):
             if e.reply_to_msg_id:
                 await reply_to_id.reply(spam_message)
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.5)
             else:
                await borg.send_message(e.chat_id , spam_message)
-               await asyncio.sleep(0.1)
+               await asyncio.sleep(0.5)
         if BOTLOG:
             if e.is_private:
                 await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} messages of \n" +f"`{spam_message}`")
@@ -154,10 +155,10 @@ async def spammer(e):
         for i in range(counter):
             if e.reply_to_msg_id:
                 await reply_to_id.reply(spam_message)
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.5)
             else:
                await borg.send_message(e.chat_id , spam_message)
-               await asyncio.sleep(0.1)
+               await asyncio.sleep(0.5)
         if BOTLOG:
             if e.is_private:
                 await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} messages of \n" +f"`{spam_message}`")
@@ -174,7 +175,7 @@ async def spammer(e):
                     e.chat_id,
                     downloaded_file_name
                     ) 
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(1)
             if BOTLOG:
                 if e.is_private:
                     await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} times with below message")
@@ -183,17 +184,17 @@ async def spammer(e):
                 else:
                     await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in {e.chat.title}(`{e.chat_id}`) with {counter} times with below message") 
                     await borg.send_file(BOTLOG_CHATID, downloaded_file_name)
-                    os.system(f"rm -rf {downloaded_file_name}")	
+                    os.system(f"rm -rf {downloaded_file_name}")
     elif reply_to_id.text and e.reply_to_msg_id:
         spam_message = 	reply_to_id.text
         await e.delete()
         for i in range(counter):
             if e.reply_to_msg_id:
                 await reply_to_id.reply(spam_message)
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.5)
             else:
                await borg.send_message(e.chat_id , spam_message)
-               await asyncio.sleep(0.1)
+               await asyncio.sleep(0.5)
         if BOTLOG:
             if e.is_private:
                 await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" +f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} messages of \n" +f"`{spam_message}`")

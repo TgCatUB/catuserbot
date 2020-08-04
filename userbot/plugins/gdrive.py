@@ -105,7 +105,6 @@ async def gdrive_upload_function(dryb):
                     display_message = current_message
             except Exception as e:
                 LOGS.info(str(e))
-                pass
         if downloader.isSuccessful():
             await dryb.edit(
                 "Downloaded to `{}` successfully !!\nInitiating Upload to Google Drive.."
@@ -301,14 +300,12 @@ async def show_current_gdrove_folder(event):
             \nFind uploaded files [here](https://drive.google.com/drive/my-drive)"
         )
 
-
 # Get mime type and name of given file
 def file_ops(file_path):
     mime_type = guess_type(file_path)[0]
     mime_type = mime_type if mime_type else "text/plain"
     file_name = file_path.split("/")[-1]
     return file_name, mime_type
-
 
 async def create_token_file(token_file, event):
     # Run through the OAuth flow and retrieve credentials
@@ -330,7 +327,6 @@ async def create_token_file(token_file, event):
         storage.put(credentials)
         return storage
 
-
 def authorize(token_file, storage):
     # Get credentials
     if storage is None:
@@ -341,7 +337,6 @@ def authorize(token_file, storage):
     credentials.refresh(http)
     http = credentials.authorize(http)
     return http
-
 
 async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
     # Create Google Drive service instance
@@ -384,7 +379,6 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
                     display_message = current_message
                 except Exception as e:
                     LOGS.info(str(e))
-                    pass
     file_id = response.get("id")
     # Insert new permissions
     drive_service.permissions().insert(fileId=file_id,
@@ -393,7 +387,6 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
     file = drive_service.files().get(fileId=file_id).execute()
     download_url = file.get("webContentLink")
     return download_url
-
 
 async def create_directory(http, directory_name, parent_id):
     drive_service = build("drive", "v2", http=http, cache_discovery=False)
@@ -437,9 +430,7 @@ async def DoTeskWithDir(http, input_directory, event, parent_id):
                                              file_name, mime_type, event,
                                              parent_id)
             r_p_id = parent_id
-    # TODO: there is a #bug here :(
     return r_p_id
-
 
 async def gdrive_list_file_md(service, file_id):
     try:
@@ -464,7 +455,6 @@ async def gdrive_list_file_md(service, file_id):
         return json.dumps(file_meta_data, sort_keys=True, indent=4)
     except Exception as e:
         return str(e)
-
 
 async def gdrive_search(http, search_query):
     if not get_parent_id():
@@ -507,7 +497,6 @@ async def gdrive_search(http, search_query):
             break
     msg = f"**Google Drive Query**:\n`{search_query}`\n\n**Results**\n\n{res}"
     return msg
-
 
 CMD_HELP.update({
     "gdrive":

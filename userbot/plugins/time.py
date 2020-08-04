@@ -12,7 +12,7 @@ from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 from userbot import CMD_HELP, COUNTRY, TZ_NUMBER
 
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf"
 
 LOCATION = Config.TZ
 
@@ -30,7 +30,6 @@ async def get_tz(con):
         con = con.replace("Minor Outlying Islands", "minor outlying islands")
     if "Nl" in con:
         con = con.replace("Nl", "NL")
-
     for c_code in c_n:
         if con == c_n[c_code]:
             return c_tz[c_code]
@@ -39,7 +38,6 @@ async def get_tz(con):
             return c_tz[con]
     except KeyError:
         return
-
 
 @borg.on(admin_cmd(outgoing=True, pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
 async def time_func(tdata):
@@ -50,10 +48,8 @@ async def time_func(tdata):
     """
     con = tdata.pattern_match.group(1).title()
     tz_num = tdata.pattern_match.group(2)
-
     t_form = "%H:%M"
     c_name = None
-
     if len(con) > 4:
         try:
             c_name = c_n[con]
@@ -67,11 +63,9 @@ async def time_func(tdata):
     else:
         await tdata.edit(f"`It's`  **{dt.now().strftime(t_form)}**  `here.`")
         return
-
     if not timezones:
         await tdata.edit("`Invaild country.`")
         return
-
     if len(timezones) == 1:
         time_zone = timezones[0]
     elif len(timezones) > 1:
@@ -92,13 +86,11 @@ async def time_func(tdata):
             return
 
     dtnow = dt.now(tz(time_zone)).strftime(t_form)
-
     if c_name != COUNTRY:
         await tdata.edit(
             f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
         return
-
-    elif COUNTRY:
+    if COUNTRY:
         await tdata.edit(f"`It's`  **{dtnow}**  `here, in {COUNTRY}"
                          f"({time_zone} timezone).`")
         return
@@ -150,31 +142,23 @@ async def date_func(dat):
             return_str += "\n`Choose one by typing the number "
             return_str += "in the command.`\n"
             return_str += f"Example: .cdate {c_name} 2"
-
             await dat.edit(return_str)
             return
-
     dtnow = dt.now(tz(time_zone)).strftime(d_form)
-
     if c_name != COUNTRY:
         await dat.edit(
             f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
         return
-
-    elif COUNTRY:
+    if COUNTRY:
         await dat.edit(f"`It's`  **{dtnow}**  `here, in {COUNTRY}"
                        f"({time_zone} timezone).`")
         return
-
-
-
-
 
 @borg.on(admin_cmd(pattern="time ?(.*)"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
-    current_time = datetime.now().strftime(f"⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡ \n ⚡USERBOT TIMEZONE⚡ \nLOCATION:{LOCATION}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡")
+    current_time = datetime.now().strftime(f"\n  USERBOT TIMEZONE  \nLOCATION:{LOCATION}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n")
     start = datetime.now()
     input_str = event.pattern_match.group(1)
     reply_msg_id = event.message.id
@@ -205,15 +189,6 @@ async def _(event):
     await event.edit("Created sticker in {} seconds".format(time_taken_ms))
     await asyncio.sleep(5)
     await event.delete()
-
-
-@borg.on(admin_cmd(pattern="gtime (.*)"))  # pylint:disable=E0602
-async def _(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    logger.info(input_str)  # pylint:disable=E0602
-
     
 CMD_HELP.update({
     "time":

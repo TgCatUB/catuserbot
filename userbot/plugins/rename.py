@@ -22,7 +22,6 @@ from userbot.utils import admin_cmd, sudo_cmd
 from userbot.utils import progress, humanbytes, time_formatter
 import io
 import math
-import os
 from pySmartDL import SmartDL
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"

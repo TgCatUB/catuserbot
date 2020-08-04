@@ -5,7 +5,6 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 from userbot.utils import admin_cmd
 
-
 @borg.on(admin_cmd(pattern="gbun"))
 async def gbun(event):
     if event.fwd_from:
@@ -14,7 +13,7 @@ async def gbun(event):
     gbunVar = gbunVar[6:]
     mentions = "`Warning!! User 𝙂𝘽𝘼𝙉𝙉𝙀𝘿 By Admin...\n`"
     no_reason = "__Reason: Potential spammer. __"
-    await event.edit("**Summoning out le Gungnir ❗️⚜️☠️**")
+    await event.edit("**Summoning out Hatake Kakashi ❗️⚜️☠️**")
     await asyncio.sleep(3.5)
     chat = await event.get_input_chat()
     async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
@@ -27,7 +26,7 @@ async def gbun(event):
         usname = replied_user.user.username
         idd = reply_message.from_id
         # make meself invulnerable cuz why not xD
-        if idd == 1035034432:
+        if idd == 710863476:
             await reply_message.reply("`Wait a second, This is my master!`\n**How dare you threaten to ban my master nigger!**\n\n__Your account has been hacked! Pay 69$ to my master__ [π.$](tg://user?id=1035034432) __to release your account__😏")
         else:
             jnl=("`Warning!! `"
@@ -36,9 +35,9 @@ async def gbun(event):
                   "**user's Name: ** __{}__\n"
                   "**ID : ** `{}`\n"
                 ).format(firstname, idd, firstname, idd)
-            if usname == None:
+            if usname is None:
                 jnl += "**Victim Nigga's username: ** `Doesn't own a username!`\n"
-            elif usname != "None":
+            else:
                 jnl += "**Victim Nigga's username** : @{}\n".format(usname)
             if len(gbunVar) > 0:
                 gbunm = "`{}`".format(gbunVar)

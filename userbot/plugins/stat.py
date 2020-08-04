@@ -5,14 +5,9 @@ import asyncio
 from datetime import datetime
 from telethon.tl.types import User, Chat, Channel
 from userbot.utils import admin_cmd
-
 import time
 from telethon.events import NewMessage
 from telethon.tl.custom import Dialog
-
-
-
-"""Type `.count` and see Magic."""
 
 @borg.on(admin_cmd(pattern='stat'))
 async def stats(event: NewMessage.Event) -> None:  # pylint: disable = R0912, R0914, R0915
@@ -34,7 +29,6 @@ async def stats(event: NewMessage.Event) -> None:  # pylint: disable = R0912, R0
     dialog: Dialog
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
-
         if isinstance(entity, Channel):
             # participants_count = (await event.get_participants(dialog, limit=0)).total
             if entity.broadcast:
@@ -43,7 +37,6 @@ async def stats(event: NewMessage.Event) -> None:  # pylint: disable = R0912, R0
                     admin_in_broadcast_channels += 1
                 if entity.creator:
                     creator_in_channels += 1
-
             elif entity.megagroup:
                 groups += 1
                 # if participants_count > largest_group_member_count:
@@ -54,23 +47,19 @@ async def stats(event: NewMessage.Event) -> None:  # pylint: disable = R0912, R0
                     admin_in_groups += 1
                 if entity.creator:
                     creator_in_groups += 1
-
         elif isinstance(entity, User):
             private_chats += 1
             if entity.bot:
                 bots += 1
-
         elif isinstance(entity, Chat):
             groups += 1
             if entity.creator or entity.admin_rights:
                 admin_in_groups += 1
             if entity.creator:
                 creator_in_groups += 1
-
         unread_mentions += dialog.unread_mentions_count
         unread += dialog.unread_count
     stop_time = time.time() - start_time
-
     full_name = inline_mention(await event.client.get_me())
     response = f'📌 **Stats for {full_name}** \n\n'
     response += f'**Private Chats:** {private_chats} \n'
@@ -87,21 +76,16 @@ async def stats(event: NewMessage.Event) -> None:  # pylint: disable = R0912, R0
     response += f'**Unread:** {unread} \n'
     response += f'**Unread Mentions:** {unread_mentions} \n\n'
     response += f'📌 __It Took:__ {stop_time:.02f}s \n'
-
     await event.edit(response)
-
 
 def make_mention(user):
     if user.username:
         return f"@{user.username}"
-    else:
-        return inline_mention(user)
-
+    return inline_mention(user)
 
 def inline_mention(user):
     full_name = user_full_name(user) or "No Name"
     return f"[{full_name}](tg://user?id={user.id})"
-
 
 def user_full_name(user):
     names = [user.first_name, user.last_name]

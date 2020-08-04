@@ -14,10 +14,8 @@ ANTI_FLOOD_WARN_MODE = ChatBannedRights(
     send_messages=True
 )
 
-
 @borg.on(admin_cmd(incoming=True))
 async def _(event):
-    # logger.info(CHAT_FLOOD)
     if not CHAT_FLOOD:
         return
     if not (str(event.chat_id) in CHAT_FLOOD):
@@ -53,7 +51,6 @@ because he reached the defined flood limit.""".format(event.message.from_id),
             reply_to=event.message.id
         )
 
-
 @borg.on(admin_cmd(pattern="setflood (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -66,10 +63,9 @@ async def _(event):
     except Exception as e:  # pylint:disable=C0103,W0703
         await event.edit(str(e))
         
-        
 CMD_HELP.update({
     "antiflood":
     ".setflood [number]\
 \nUsage: warns the user if he spams the chat  if you are admin mutes him in that group .\
 "
-})        
+})

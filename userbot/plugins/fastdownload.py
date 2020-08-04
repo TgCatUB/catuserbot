@@ -1,6 +1,5 @@
 """
 command: .url 
-
 """
 import aria2p
 from telethon import events
@@ -26,16 +25,14 @@ async def magnet_download(event):
 	if event.fwd_from:
 		return
 	var = event.pattern_match.group(1)
-	print(var)	
+	print(var)
 	uris = [var]
-
 	#Add URL Into Queue 
-	try:	
+	try:
 		download = aria2.add_uris(uris, options=None, position=None)
 	except Exception as e:
 		await event.edit("`Error:\n`"+str(e))
 		return
-
 	gid = download.gid
 	complete = None
 	await progress_status(gid=gid,event=event,previous=None)
@@ -52,8 +49,7 @@ async def magnet_download(event):
 			await asyncio.sleep(10)
 		except Exception as e:
 			# print(str(e))
-			pass	
-			
+			pass
 	await event.edit("**File Downloaded Successfully:** `{}`".format(file.name))
 
 
@@ -62,15 +58,15 @@ async def progress_status(gid,event,previous):
 		file = aria2.get_download(gid)
 		if not file.is_complete:
 			if not file.error_message:
-				msg = "Downloading File: `"+str(file.name) +"`\nSpeed: "+ str(file.download_speed_string())+"\nProgress: "+str(file.progress_string())+"\nTotal Size: "+str(file.total_length_string())+"\nStatus: "+str(file.status)+"\nETA:  "+str(file.eta_string())+"\n\n"
-				if previous != msg:
-					await event.edit(msg)
-					previous = msg
+			    msg = "Downloading File: `"+str(file.name) +"`\nSpeed: "+ str(file.download_speed_string())+"\nProgress: "+str(file.progress_string())+"\nTotal Size: "+str(file.total_length_string())+"\nStatus: "+str(file.status)+"\nETA:  "+str(file.eta_string())+"\n\n"
+			if previous != msg:
+				await event.edit(msg)
+				previous = msg
 			else:
 				logger.info(str(file.error_message))
-				await event.edit("Error : `{}`".format(str(file.error_message)))		
+				await event.edit("Error : `{}`".format(str(file.error_message)))
 				return
-			await asyncio.sleep(EDIT_SLEEP_TIME_OUT)	
+			await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
 			await progress_status(gid,event,previous)
 		else:
 			await event.edit("File Downloaded Successfully: `{}`".format(file.name))
@@ -79,17 +75,16 @@ async def progress_status(gid,event,previous):
 		if " not found" in str(e) or "'file'" in str(e):
 			await event.edit("Download Canceled :\n`{}`".format(file.name))
 			return
-		elif " depth exceeded" in str(e):
+		if " depth exceeded" in str(e):
 			file.remove(force=True)
 			await event.edit("Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(file.name))
 		else:
 			logger.info(str(e))
 			await event.edit("Error :\n`{}`".format(str(e)))
-			return			
-
+			return
 
 async def check_metadata(gid):
 	file = aria2.get_download(gid)
 	new_gid = file.followed_by_ids[0]
 	logger.info("Changing GID "+gid+" to "+new_gid)
-	return new_gid	
+	return new_gid

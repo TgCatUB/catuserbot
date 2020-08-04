@@ -12,10 +12,8 @@ credits to @mrconfused and @sandy1709
 #    GNU Affero General Public License for more details.
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import requests
-from bs4 import BeautifulSoup
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from telethon import events
-import subprocess
 from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import io
 import asyncio
@@ -27,6 +25,7 @@ from userbot.plugins import catmusic , catmusicvideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
+import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
@@ -54,44 +53,32 @@ async def _(event):
     except:
         pass
     await catmusic(str(query),"128k")
-    l = glob.glob("*.mp3")
+    l = glob.glob("./temp/*.mp3")
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
-    thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
-    if os.path.exists(thumb_image_path):
-        thumb = thumb_image_path
-    loa = l[0]    
-    metadata = extractMetadata(createParser(loa))
-    duration = 0
-    width = 0
-    height = 0
-    if metadata.has("duration"):
-        duration = metadata.get("duration").seconds
-    if metadata.has("width"):
-        width = metadata.get("width")
-    if metadata.has("height"):
-        height = metadata.get("height")
+        return
+    thumbcat = glob.glob("./temp/*.jpg") + glob.glob("./temp/*.webp") 
+    if thumbcat:
+        catthumb = thumbcat[0]
+    else:
+        catthumb = None
+    loa = l[0]
     await borg.send_file(
                 event.chat_id,
                 loa,
                 force_document=False,
                 allow_cache=False,
                 caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
+                thumb = catthumb,
                 supports_streaming=True,
-                reply_to=reply_to_id,
-                attributes=[DocumentAttributeVideo(
-                                duration=duration,
-                                w=width,
-                                h=height,
-                                round_message=False,
-                                supports_streaming=True,
-                            )],
+                reply_to=reply_to_id
             )
     await event.delete()
-    os.system("rm -rf *.mp3")
-    subprocess.check_output("rm -rf *.mp3",shell=True)
+    os.system("rm -rf ./temp/*.mp3") 
+    os.system("rm -rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.webp")
     
 @borg.on(admin_cmd(pattern="song320(?: |$)(.*)"))
 async def _(event):
@@ -115,23 +102,32 @@ async def _(event):
     except:
         pass
     await catmusic(str(query),"320k")
-    l = glob.glob("*.mp3")
+    l = glob.glob("./temp/*.mp3")
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
-    loa = l[0]    
+        return
+    thumbcat = glob.glob("./temp/*.jpg") + glob.glob("./temp/*.webp")
+    if thumbcat:
+        catthumb = thumbcat[0]
+    else:
+        catthumb = None
+    loa = l[0]
     await borg.send_file(
                 event.chat_id,
                 loa,
                 force_document=False,
                 allow_cache=False,
                 caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
+                thumb = catthumb,
+                supports_streaming=True,
                 reply_to=reply_to_id
             )
     await event.delete()
-    os.system("rm -rf *.mp3")
-    subprocess.check_output("rm -rf *.mp3",shell=True)    
+    os.system("rm -rf ./temp/*.mp3") 
+    os.system("rm -rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.webp")
     
 @borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
 async def _(event):
@@ -155,11 +151,17 @@ async def _(event):
         await event.client(cat)
     except:
         pass
-    l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
+    l = glob.glob(("./temp/*.mp4")) 
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        return
+    thumbcat = glob.glob("./temp/*.jpg") + glob.glob("./temp/*.webp")
+    if thumbcat:
+        catthumb = thumbcat[0]
+    else:
+        catthumb = None
     loa = l[0]  
     metadata = extractMetadata(createParser(loa))
     duration = 0
@@ -176,21 +178,15 @@ async def _(event):
                 loa,
                 force_document=False,
                 allow_cache=False,
+                thumb = catthumb,
                 caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 supports_streaming=True,
-                reply_to=reply_to_id,
-                attributes=[DocumentAttributeVideo(
-                                duration=duration,
-                                w=width,
-                                h=height,
-                                round_message=False,
-                                supports_streaming=True,
-                            )],
+                reply_to=reply_to_id
             )
     await event.delete()
-    os.system("rm -rf *.mkv")
-    os.system("rm -rf *.mp4")
-    os.system("rm -rf *.webm")    
+    os.system("rm -rf ./temp/*.mp4") 
+    os.system("rm -rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.webp")
     
 @borg.on(sudo_cmd(pattern="song(?: |$)(.*)", allow_sudo = True))
 async def _(event):
@@ -214,11 +210,17 @@ async def _(event):
     except:
         pass
     await catmusic(str(query),"320k")
-    l = glob.glob("*.mp3")
+    l = glob.glob("./temp/*.mp3")
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        return
+    thumbcat = glob.glob("./temp/*.jpg") +  glob.glob("./temp/*.webp")
+    if thumbcat:
+        catthumb = thumbcat[0]
+    else:
+        catthumb = None
     loa = l[0]
     await borg.send_file(
                 event.chat_id,
@@ -226,14 +228,17 @@ async def _(event):
                 force_document=False,
                 allow_cache=False,
                 caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
+                thumb = catthumb,
+                supports_streaming=True,
                 reply_to=reply_to_id
             )
     await san.delete()
-    os.system("rm -rf *.mp3")
-    subprocess.check_output("rm -rf *.mp3",shell=True)
-    
-    
-@borg.on(sudo_cmd(pattern="vsong(?: |$)(.*)", allow_sudo = True))
+    os.system("rm -rf ./temp/*.mp3") 
+    os.system("rm -rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.webp")
+  
+
+@borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
 async def _(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -255,11 +260,17 @@ async def _(event):
         await event.client(cat)
     except:
         pass
-    l = glob.glob(("*.mp4")) + glob.glob(("*.mkv")) + glob.glob(("*.webm")) 
+    l = glob.glob(("./temp/*.mp4")) 
     if l:
         await event.edit("yeah..! i found something wi8..🥰")
     else:
         await event.edit(f"Sorry..! i can't find anything with `{query}`")
+        return
+    thumbcat = glob.glob("./temp/*.jpg") + glob.glob("./temp/*.webp")
+    if thumbcat:
+        catthumb = thumbcat[0]
+    else:
+        catthumb = None
     loa = l[0]  
     metadata = extractMetadata(createParser(loa))
     duration = 0
@@ -276,22 +287,16 @@ async def _(event):
                 loa,
                 force_document=False,
                 allow_cache=False,
+                thumb = catthumb,
                 caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
                 supports_streaming=True,
-                reply_to=reply_to_id,
-                attributes=[DocumentAttributeVideo(
-                                duration=duration,
-                                w=width,
-                                h=height,
-                                round_message=False,
-                                supports_streaming=True,
-                            )],
+                reply_to=reply_to_id
             )
     await san.delete()
-    os.system("rm -rf *.mkv")
-    os.system("rm -rf *.mp4")
-    os.system("rm -rf *.webm")    
-    
+    os.system("rm -rf ./temp/*.mp4") 
+    os.system("rm -rf ./temp/*.jpg")
+    os.system("rm -rf ./temp/*.webp")
+
 CMD_HELP.update({"getmusic":
     "`.song` query or `.song` reply to song name :\
     \nUSAGE:finds the song you entered in query and sends it"
