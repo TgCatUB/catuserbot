@@ -82,7 +82,7 @@ RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$(c
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/bin/ 
 
 # Copy Python Requirements to /root/userbot
-RUN git clone -b test https://github.com/sandy1709/catuserbot.git /root/userbot
+RUN git clone https://github.com/sandy1709/catuserbot.git /root/userbot
 WORKDIR /root/userbot
 ENV PATH="/home/userbot/bin:$PATH"
 
