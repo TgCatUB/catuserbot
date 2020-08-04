@@ -27,14 +27,14 @@ class Var(object):
     GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", "root")
     AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
     MAX_FLOOD_IN_P_M_s = int(os.environ.get("MAX_FLOOD_IN_P_M_s", 5))
-    if AUTH_TOKEN_DATA != None:
+    if AUTH_TOKEN_DATA is not None:
         if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
         t_file = open(TEMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
         t_file.write(AUTH_TOKEN_DATA)
         t_file.close()
     PRIVATE_GROUP_ID = os.environ.get("PRIVATE_GROUP_ID", None)
-    if PRIVATE_GROUP_ID != None:
+    if PRIVATE_GROUP_ID is not None:
         try:
             PRIVATE_GROUP_ID = int(PRIVATE_GROUP_ID)
         except ValueError:
@@ -42,4 +42,3 @@ class Var(object):
 
 class Development(Var):
     LOGGER = True
-    # Here for later purposes
