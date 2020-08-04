@@ -1,6 +1,5 @@
 """Check if userbot alive or not . """
 
-
 import asyncio , time
 from telethon import events
 from userbot import StartTime
