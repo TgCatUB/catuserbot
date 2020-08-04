@@ -32,6 +32,7 @@ async def _(event):
           except YouBlockedUserError: 
               await event.reply("```Please unblock me (@QuotLyBot) u Nigga```")
               return
+          await borg.send_read_acknowledge(conv.chat_id)
           if response.text.startswith("Hi!"):
              await event.edit("```Can you kindly disable your forward privacy settings for good?```")
           else: 
@@ -56,6 +57,7 @@ async def _(event):
        await event.reply("```Reply to actual users message.```")
        return
     cat = await event.reply("```Making a Quote```")
+    await borg.send_read_acknowledge(conv.chat_id)
     async with event.client.conversation(chat) as conv:
           try:     
               response = conv.wait_event(events.NewMessage(incoming=True,from_users=1031952739))
