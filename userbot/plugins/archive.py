@@ -16,7 +16,6 @@ from hachoir.parser import createParser
 import asyncio
 import os
 import shutil
-import subprocess
 import time
 from pySmartDL import SmartDL
 from telethon import events

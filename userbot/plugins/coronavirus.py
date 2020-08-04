@@ -1,28 +1,37 @@
 """CoronaVirus LookUp
-Syntax: .coronavirus <country>"""
+Syntax: .corona <country>"""
 from covid import Covid
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 
-@borg.on(admin_cmd(pattern="coronavirus (.*)"))
-async def _(event):
-    covid = Covid()
-    data = covid.get_data()
-    country = event.pattern_match.group(1)
-    country_data = get_country_data(country, data)
-    output_text = "" 
-    for name, value in country_data.items():
-        output_text += "`{}`: `{}`\n".format(str(name), str(value))
-    await event.edit("**CoronaVirus Info in {}**:\n\n{}".format(country.capitalize(), output_text))
+@borg.on(admin_cmd(pattern="corona(?: |$)(.*)"))
+async def corona(event):
+    if event.pattern_match.group(1):
+        country = event.pattern_match.group(1)
+    else:
+        country = "World"
+    covid = Covid(source="worldometers")
+    data = ""
+    try:
+        country_data = covid.get_status_by_country_name(country)
+    except ValueError:
+        country_data = ""
+    if country_data:
+        hmm1 = country_data['confirmed']+country_data['new_cases']
+        hmm2 = country_data['deaths']+country_data['new_deaths']
+        data +=  f"\n⚠️Confirmed   : `{hmm1}`"
+        data +=  f"\n😔Active           : `{country_data['active']}`"
+        data +=  f"\n⚰️Deaths         : `{hmm2}`"
+        data +=  f"\n🤕Critical          : `{country_data['critical']}`"
+        data +=  f"\n😊Recovered   : `{country_data['recovered']}`"
+        data +=  f"\n💉Total tests    : `{country_data['total_tests']}`"
+        data +=  f"\n🥺New Cases   : `{country_data['new_cases']}`"
+        data +=  f"\n😟New Deaths : `{country_data['new_deaths']}`"
+    else:
+        data += "\nNo information yet about this country!"
+    await event.edit("**Corona Virus Info in {}:**\n{}".format(country.capitalize(), data))
 
-def get_country_data(country, world):
-    for country_data in world:
-        if country_data["country"] == country:
-            return country_data
-    return {"Status": "No information yet about this country!"}
-
-
-CMD_HELP.update({"coronavirus": "`.coronavirus` <country name> :\
-      \n USAGE:finds the covid data of the given country remember country name first letter must be capital. "
-}) 
-
+CMD_HELP.update({"coronavirus":
+   "`.covid ` <country name>\
+   \n**USAGE :** Get an information about covid-19 data in the given country."
+})

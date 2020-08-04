@@ -1,9 +1,6 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
-#
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
-#
-#
 
 """ Userbot module for having some fun with people. """
 import asyncio
@@ -19,35 +16,33 @@ from userbot import CMD_HELP, memes , ALIVE_NAME
 from userbot.utils import admin_cmd, register
 from userbot.uniborgConfig import Config
 
-BOTLOG = True
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
+else:
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"(\w+)say (.*)"))
 async def univsaye(cowmsg):
         arg = cowmsg.pattern_match.group(1).lower()
         text = cowmsg.pattern_match.group(2)
-
         if arg == "cow":
             arg = "default"
         if arg not in cow.COWACTERS:
             return
         cheese = cow.get_cow(arg)
         cheese = cheese()
-
         await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
-
-
 
 @register(outgoing=True, pattern="^:/$")	 
 async def kek(keks):
+    """ Check yourself ;)"""
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
-        """ Check yourself ;)"""
         uio = ["/", "\\"]
         for i in range(1, 15):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 			  
 @borg.on(admin_cmd(pattern=r"slap(?: |$)(.*)", outgoing=True))
 async def who(event):
@@ -56,7 +51,6 @@ async def who(event):
     replied_user = await get_user(event)
     caption = await slap(replied_user, event)
     message_id_to_reply = event.message.reply_to_msg_id
-
     if not message_id_to_reply:
         message_id_to_reply = None
     try:
@@ -100,26 +94,22 @@ async def slap(replied_user, event):
     user_id = replied_user.user.id
     first_name = replied_user.user.first_name
     username = replied_user.user.username
-
     if username:
         slapped = "@{}".format(username)
     else:
         slapped = f"[{first_name}](tg://user?id={user_id})"
-
     temp = random.choice(memes.SLAP_TEMPLATES)
     item = random.choice(memes.ITEMS)
     hit = random.choice(memes.HIT)
     throw = random.choice(memes.THROW)
     where = random.choice(memes.WHERE)				  
-
     caption = "..." + temp.format(user1=DEFAULTUSER, victim=slapped, item=item, hits=hit, throws=throw, where=where)			  
-
     return caption
 
 @register(outgoing=True, pattern="^-_-$")
 async def lol(lel):
+    """ Ok... """
     if not lel.text[0].isalpha() and lel.text[0] not in ("/", "#", "@", "!"):
-        """ Ok... """
         okay = "-_-"
         for _ in range(10):
             okay = okay[:-1] + "_-"
@@ -317,24 +307,21 @@ async def bluetext(bt_e):
             "/BLUETEXT /MUST /CLICK.\n"
             "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?")
 
-@borg.on(admin_cmd(outgoing=True, pattern="lfy (.*)",))
-async def let_me_google_that_for_you(lmgtfy_q):
-        textx = await lmgtfy_q.get_reply_message()
-        query = lmgtfy_q.text
-        if query[5:]:
-            query = str(query[5:])
-        elif textx:
-            query = textx
-            query = query.message
-        query_encoded = query.replace(" ", "+")
-        lfy_url = f"http://lmgtfy.com/?s=g&iie=1&q={query_encoded}"
-        payload = {'format': 'json', 'url': lfy_url}
-        r = requests.get('http://is.gd/create.php', params=payload)
-        await lmgtfy_q.edit(f"[{query}]({r.json()['shorturl']})")
-        if BOTLOG:
-            await bot.send_message(
+@borg.on(admin_cmd(pattern="lfy (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    sample_url = "https://da.gd/s?url=https://lmgtfy.com/?q={}%26iie=1".format(input_str.replace(" ","+"))
+    response_api = requests.get(sample_url).text
+    if response_api:
+        await event.edit("[{}]({})\n`Thank me Later 🙃` ".format(input_str,response_api.rstrip()))
+    else:
+        await event.edit("something is wrong. please try again later.")
+    if BOTLOG:
+        await bot.send_message(
                 BOTLOG_CHATID,
-                "LMGTFY query `" + query + "` was executed successfully",
+                "LMGTFY query `" + input_str + "` was executed successfully",
             )
 
 

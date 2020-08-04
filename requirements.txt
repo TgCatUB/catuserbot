@@ -1,4 +1,4 @@
-telethon
+telethon==1.15.0
 aiofiles
 aiohttp
 aria2p

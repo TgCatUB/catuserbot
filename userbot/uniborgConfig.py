@@ -6,7 +6,6 @@ from telethon.tl.types import ChatBannedRights
 # from pymongo import MongoClient
 # import pymongo
 
-
 class Config(object):
     LOGGER = True
     # Get this value from my.telegram.org! Please do not steal
@@ -17,7 +16,6 @@ class Config(object):
     # some people upload their session files on GitHub or other third party hosting
     # websites, this might prevent the un-authorized use of the
     # confidential session files
-    ALIVE_PIC = os.environ.get("ALIVE_PIC", None)
     HU_STRING_SESSION = os.environ.get("HU_STRING_SESSION", None)
     # Get your own APPID from https://api.openweathermap.org/data/2.5/weather
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
@@ -47,13 +45,11 @@ class Config(object):
     # Telegram BOT Token from @BotFather
     TG_BOT_TOKEN_BF_HER = os.environ.get("TG_BOT_TOKEN_BF_HER", None)
     TG_BOT_USER_NAME_BF_HER = os.environ.get("TG_BOT_USER_NAME_BF_HER", None)
-    #
     NO_LOG_P_M_S = bool(os.environ.get("NO_LOG_P_M_S", True))
     THUMB_IMAGE = os.environ.get("THUMB_IMAGE" ,"https://telegra.ph/file/3d60313110c58684b31ea.jpg")
     GENIUS_API_TOKEN = os.environ.get("GENIUS", None)
     # Genius lyrics get this value from https://genius.com/developers both has same values
     GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
-    #
     # DO NOT EDIT BELOW THIS LINE IF YOU DO NOT KNOW WHAT YOU ARE DOING
     # TG API limit. A message can have maximum 4096 characters!
     MAX_MESSAGE_SIZE_LIMIT = 4095
@@ -78,6 +74,10 @@ class Config(object):
         "fban_gban",
         "unbanmute",
     ]
+    # in alive message pic 
+    ALIVE_PIC = os.environ.get("ALIVE_PIC", None)
+    # in pm permit pic 
+    PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
     # Get your own API key from https://www.remove.bg/ or
     # feel free to use http://telegram.dog/Remove_BGBot
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
@@ -97,6 +97,7 @@ class Config(object):
     # this should be a valid "regex" pattern
     COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", "\.")
     SUDO_COMMAND_HAND_LER = os.environ.get("SUDO_COMMAND_HAND_LER", "\.")
+    HELP_INLINETYPE = os.environ.get("HELP_INLINETYPE", None)
     # specify list of users allowed to use bot
     # WARNING: be careful who you grant access to your bot.
     # malicious users could do ".exec rm -rf /*"
@@ -105,7 +106,6 @@ class Config(object):
     VERY_STREAM_LOGIN = os.environ.get("VERY_STREAM_LOGIN", None)
     VERY_STREAM_KEY = os.environ.get("VERY_STREAM_KEY", None)
     # Google Drive ()
-    #
     CHROME_BIN = os.environ.get("CHROME_BIN", "/usr/bin/google-chrome")
     CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
@@ -118,7 +118,6 @@ class Config(object):
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     # For transfer channel
     TELE_GRAM_2FA_CODE = os.environ.get("TELE_GRAM_2FA_CODE", None)
-    #
     GROUP_REG_SED_EX_BOT_S = os.environ.get("GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot")
     # rapidleech plugins	
     DOWNLOAD_PFP_URL_CLOCK = os.environ.get("DOWNLOAD_PFP_URL_CLOCK", None)
@@ -134,7 +133,6 @@ class Config(object):
     LYDIA_API = os.environ.get("LYDIA_API", None)
     DEFAULT_NAME = os.environ.get("DEFAULT_NAME",None)
     VIRUSTOTAL_API_KEY = os.environ.get("VIRUSTOTAL_API_KEY", None)
-    #
     # define "spam" in PMs
     MAX_FLOOD_IN_P_M_s = int(os.environ.get("MAX_FLOOD_IN_P_M_s", 5))
     # leave this blank, should be automatically filled for Heroku.com users
@@ -143,7 +141,6 @@ class Config(object):
         PM_LOGGR_BOT_API_ID = int(PM_LOGGR_BOT_API_ID)
     #to work manager.py 
     DUAL_LOG = os.environ.get("DUAL_LOG", False )
-
     # define the "types" that should be uplaoded as streamable
     TL_VID_STREAM_TYPES = ("MKV", "MP4", "WEBM")
     TL_MUS_STREAM_TYPES = ("MP3", "WAV", "FLAC")
@@ -162,7 +159,6 @@ class Config(object):
     if RSS_POST_MSG_GROUP_ID:
         RSS_POST_MSG_GROUP_ID = int(RSS_POST_MSG_GROUP_ID)
     SPAM_WATCH_API = os.environ.get("SPAM_WATCH_API", None)
-    
     
 class Production(Config):
     LOGGER = False

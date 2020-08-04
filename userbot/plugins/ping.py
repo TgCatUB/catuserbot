@@ -13,7 +13,6 @@ async def _(event):
     animation_ttl = range(0, 26)
     await event.edit("ping....")
     animation_chars = [
-        
             "⬛⬛⬛⬛⬛⬛⬛⬛⬛",
             "⬛⬛⬛⬛⬛⬛⬛⬛⬛ \n⬛‎📶‎📶‎📶‎📶‎📶‎📶‎📶⬛",
             "⬛⬛⬛⬛⬛⬛⬛⬛⬛ \n⬛‎📶‎📶‎📶‎📶‎📶‎📶‎📶⬛ \n⬛⬛⬛⬛‎📶⬛⬛‎📶⬛",
@@ -56,9 +55,8 @@ async def _(event):
     await event.edit("Pong!")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
-    await event.edit("Pong!\n{}".format(ms))
+    await event.edit("Pong!\n`{}`".format(ms))
     
-
 @borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
@@ -68,9 +66,8 @@ async def _(event):
     mone = await event.reply("Pong!")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
-    await mone.edit("Pong!\n{}".format(ms))
-
-    
+    await mone.edit("Pong!\n`{}`".format(ms))
+ 
 CMD_HELP.update({
     "ping":
     "`.fping`\
@@ -78,4 +75,3 @@ CMD_HELP.update({
     \n\n`.ping`\
     \nUSAGE:Shows you the ping speed of server"
 })
-    

@@ -1,3 +1,16 @@
+"""
+Time In Profile Pic.....
+Command: `.bloom`
+Hmmmm U need to config DOWNLOAD_PFP_URL_CLOCK var in Heroku with any telegraph image link
+:::::Credit Time::::::
+1) Coded By: @s_n_a_p_s
+2) Ported By: @r4v4n4 (Noodz Lober)
+3) End Game Help By: @spechide
+4) Better Colour Profile Pic By @PhycoNinja13b
+#curse: who ever edits this credit section will goto hell
+⚠️DISCLAIMER⚠️
+USING THIS PLUGIN CAN RESULT IN ACCOUNT BAN. WE DONT CARE ABOUT BAN, SO WE ARR USING THIS.
+"""
 from telethon import events
 import asyncio
 import time
@@ -7,6 +20,7 @@ from userbot.utils import admin_cmd
 from userbot import AUTONAME, CMD_HELP, DEFAULT_BIO
 import random
 import re
+import pybase64
 import os
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
@@ -33,11 +47,11 @@ async def autopic(event):
         shutil.copy(downloaded_file_name, photo)
         im = Image.open(photo)
         file_test = im.rotate(counter, expand=False).save(photo, "PNG")
-        current_time = datetime.now().strftime("⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡ \n  Time: %H:%M \n  Date: %d.%m.%y \n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡")
+        current_time = datetime.now().strftime("  Time: %H:%M \n  Date: %d.%m.%y ")
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
         fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
-        drawn_text.text((95, 250), current_time, font=fnt, fill=(124, 252, 0))
+        drawn_text.text((150,250), current_time, font=fnt, fill=(124, 252, 0))
         img.save(photo)
         file = await bot.upload_file(photo)  # pylint:disable=E0602
         try:
@@ -50,6 +64,70 @@ async def autopic(event):
         except:
             return         
 
+@borg.on(admin_cmd(pattern="digitalpfp"))
+async def main(event):
+    await event.edit("Starting digital Profile Pic see magic in 5 sec.") 
+    poto = "userbot/poto_pfp.png"
+    cat = str( pybase64.b64decode("aHR0cHM6Ly90ZWxlZ3JhLnBoL2ZpbGUvYWVhZWJlMzNiMWYzOTg4YTBiNjkwLmpwZw==") )[2:51]
+    downloaded_file_name = "userbot/digital_pic.png"
+    downloader = SmartDL(cat, downloaded_file_name, progress_bar=True)
+    downloader.start(blocking=False)
+    await asyncio.sleep(5)
+    while True:
+        shutil.copy(downloaded_file_name, poto)
+        im = Image.open(poto)
+        current_time = datetime.now().strftime("%H:%M")
+        img = Image.open(poto)
+        drawn_text = ImageDraw.Draw(img)
+        cat = str( pybase64.b64decode("dXNlcmJvdC9oZWxwZXJzL3N0eWxlcy9kaWdpdGFsLnR0Zg==") )[2:36]
+        fnt = ImageFont.truetype(cat, 200)
+        drawn_text.text((350, 100), current_time, font=fnt, fill=(124, 252, 0))
+        img.save(poto)
+        file = await event.client.upload_file(poto)
+        await event.client(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit=1)))
+        await event.client(functions.photos.UploadProfilePhotoRequest( file))
+        os.remove(poto)
+        await asyncio.sleep(60)
+        
+@borg.on(admin_cmd(pattern="bloom ?(.*)"))
+async def autopic(event): 
+    await event.edit("Bloom colour profile pic have been enabled by my master") 
+    downloaded_file_name = "userbot/original_pic.png"
+    downloader = SmartDL(Var.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=True)
+    downloader.start(blocking=False)
+    photo = "userbot/photo_pfp.png"
+    while not downloader.isFinished():
+        place_holder = None
+    while True:
+        #RIP Danger zone Here no editing here plox
+        R = random.randint(0,256)
+        B = random.randint(0,256)
+        G = random.randint(0,256)
+        FR = (256 - R) 
+        FB = (256 - B) 
+        FG = (256 - G) 
+        shutil.copy(downloaded_file_name, photo)
+        image = Image.open(photo)
+        image.paste( (R, G, B), [0,0,image.size[0],image.size[1]])
+        image.save(photo)
+        current_time = datetime.now().strftime("\n Time: %H:%M:%S \n \n Date: %d/%m/%y")
+        img = Image.open(photo)
+        drawn_text = ImageDraw.Draw(img)
+        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 60)
+        ofnt = ImageFont.truetype(FONT_FILE_TO_USE, 250)
+        drawn_text.text((95, 250), current_time, font=fnt, fill=(FR,FG,FB))
+        drawn_text.text((95, 250), "      😈", font = ofnt, fill=(FR,FG,FB))
+        img.save(photo)
+        file = await event.client.upload_file(photo)  # pylint:disable=E0602
+        try:
+            await event.client(functions.photos.UploadProfilePhotoRequest(  # pylint:disable=E0602
+                file
+            ))
+            os.remove(photo)
+            await asyncio.sleep(30)
+        except:
+            return
+        
 @borg.on(admin_cmd(pattern="autoname"))  # pylint:disable=E0602
 async def _(event):
     await event.edit(f"Auto Name has been started by my Master ") 
@@ -96,7 +174,6 @@ async def _(event):
             #     "Changed Profile Picture"
             # )
         await asyncio.sleep(DEL_TIME_OUT)
-     
      
 BIO_STRINGS = [
      "👉⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️🔲",
@@ -155,10 +232,7 @@ BIO_STRINGS = [
      "🙉",
      "🙊",
      "🐵",
-
 ]
-
-
 
 @borg.on(admin_cmd(pattern="monkeybio"))  # pylint:disable=E0602
 async def _(event):
@@ -191,12 +265,17 @@ CMD_HELP.update({
     "`.autopic`\
 \n**USAGE:** Rotating image along with the time on it .\
 \nfor working this you must set `DOWNLOAD_PFP_URL_CLOCK` in the heroku vars first with telegraph link of required image\
+\n\n`.digitalpfp`\
+\n**USAGE:**Your profile pic changes to digitaltime profile picutre \
+\n\n`.bloom`\
+\n**USAGE:**Random colour profile pics will be setted along with time on it.\
+\nfor working this you must set `DOWNLOAD_PFP_URL_CLOCK` in the heroku vars first with telegraph link of required image\
 \n\n`.autoname`\
-\n usage:for time along name to work this you must set `AUTONAME`in the heroku vars first \
+\n**USAGE:**for time along name to work this you must set `AUTONAME`in the heroku vars first \
 \n\n`.autobio`\
-\nuseage:for time along with your bio to work this you must set `DEFAULT_BIO` in the heroku vars first \
+\n**USAGE:**for time along with your bio to work this you must set `DEFAULT_BIO` in the heroku vars first \
 \n\n`.monkeybio`\
-\nuseage:set of funny monkey bio's\
-\n\n for stoping these type .restart and change them manually\
+\n**USAGE:**set of funny monkey bio's\
+\n\n for stoping these aby command you need to do `.restart` and change them manually\
 "
 })
