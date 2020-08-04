@@ -99,7 +99,7 @@ async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
 
 #https://github.com/pokurt/LyndaRobot/blob/7556ca0efafd357008131fa88401a8bb8057006f/lynda/modules/helper_funcs/string_handling.py#L238
 
-def extract_time(cat , time_val):
+async def extract_time(cat , time_val):
     if any(time_val.endswith(unit) for unit in ('m', 'h', 'd' , 'w')):
         unit = time_val[-1]
         time_num = time_val[:-1]  # type: str
