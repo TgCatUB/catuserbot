@@ -28,6 +28,8 @@ from PIL import Image, ImageEnhance, ImageOps
 from telethon.tl.types import DocumentAttributeFilename
 from userbot.utils import admin_cmd
 from telethon import events
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.account import UpdateNotifySettingsRequest
 
 @borg.on(admin_cmd(pattern="deepfry(?: |$)(.*)", outgoing=True)) 
 async def deepfryer(event):
@@ -44,7 +46,8 @@ async def deepfryer(event):
             await event.edit("`I can't deep fry that!`")
             return
     if not event.is_reply:
-        await event.edit("`Reply to an image or sticker to deep fry it!`")
+        await event.edit("Reply to an image or sticker to deep fry it!")
+        return
     # download last photo (highres) as byte array
     await event.edit("`Downloading media…`")
     image = io.BytesIO()
@@ -84,6 +87,37 @@ async def deepfry(img: Image) -> Image:
     img = ImageEnhance.Sharpness(img).enhance(randint(5, 300))
     return img
 
+@borg.on(admin_cmd(pattern="frybot ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return 
+    if not event.reply_to_msg_id:
+       await event.edit("Reply to any user message.")
+       return
+    reply_message = await event.get_reply_message() 
+    if not reply_message.media:
+       await event.edit("reply to media file")
+       return
+    chat = "@image_deepfrybot"
+    sender = reply_message.sender
+    if reply_message.sender.bot:
+       await event.edit("Reply to actual users message.")
+       return
+    await event.edit("```Processing```")
+    async with borg.conversation(chat) as conv:
+          try:     
+              response = conv.wait_event(events.NewMessage(incoming=True,from_users=432858024))
+              await borg.forward_messages(chat, reply_message)
+              response = await response 
+          except YouBlockedUserError: 
+              await event.reply("unblock @image_deepfrybot and try again")
+              return
+          await bot.send_read_acknowledge(conv.chat_id)
+          if response.text.startswith("Forward"):
+              await event.edit("```can you kindly disable your forward privacy settings for good?```")
+          else: 
+              await borg.send_file(event.chat_id, response.message.media)
+                
 async def check_media(reply_message):
     if reply_message and reply_message.media:
         if reply_message.photo:
