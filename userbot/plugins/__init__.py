@@ -29,3 +29,4 @@ awooify = catdef.awooify
 convert_toimage = catdef.convert_toimage
 trap = catdef.trap
 phcomment = catdef.phcomment
+extract_time = catdef.extract_time
