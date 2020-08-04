@@ -150,6 +150,7 @@ async def kang(args):
                             await conv.send_file(file, force_document=True)
                         rsp = await conv.get_response()
                         if "You can list several emoji in one message, but I recommend using no more than two per sticker" not in rsp.text:
+                            await bot.send_read_acknowledge(conv.chat_id)
                             await args.edit(f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.txt}")
                             return
                         await conv.send_message(emoji)
@@ -186,6 +187,7 @@ async def kang(args):
                     await conv.send_file(file, force_document=True)
                 rsp = await conv.get_response()
                 if "You can list several emoji in one message, but I recommend using no more than two per sticker" not in rsp.text:
+                    await bot.send_read_acknowledge(conv.chat_id)
                     await args.edit(f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.text}")
                     return
                 await conv.send_message(emoji)
