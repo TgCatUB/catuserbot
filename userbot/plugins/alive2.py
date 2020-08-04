@@ -31,7 +31,7 @@ async def amireallyalive(alive):
          cat_caption += f"**ღ** __**Cat**__🐱 __**is always with you, my master ღ\n\n**__"
          cat_caption += f"**✧✧ My peru Master:** [{DEFAULTUSER}]({USERNAME})\n"
          cat_caption += f"**✧✧ Uptime :** `{uptime}\n`"
-         cat_caption += f"**✧✧ Contact [Hatake Kakashi](@kakashi09bot) For notes**\n\n"
+         cat_caption += f"**✧✧ Contact [Hatake Kakashi](@kakashi_robot) For notes**\n\n"
          cat_caption +=	f"           **ღ** __**[DEPLOY MY REPO]**__(https://github.com/Jisan09/catuserbot) **ღ**"
          await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
          await alive.delete()
@@ -44,11 +44,11 @@ async def amireallyalive(alive):
                          "**ღ** __**Cat**__🐱 __**is always with you, my master ღ\n\n**__"
                          f"**✧✧ My peru Master:** [{DEFAULTUSER}]({USERNAME})\n"
                          f"**✧✧ Uptime :** `{uptime}\n`"
-                         f"**✧✧ Contact [Hatake Kakashi](@kakashi09bot) For notes**\n\n"
+                         f"**✧✧ Contact [Hatake Kakashi](@kakashi_robot) For notes**\n\n"
                          f"           **ღ** __**[DEPLOY MY REPO]**__(https://github.com/Jisan09/catuserbot) **ღ**"
                         )         
 
 
-CMD_HELP.update({"live": "`.live` :\
+CMD_HELP.update({"alive": "`.alive` :\
       \nUSAGE: Type .live to see wether your bot is working or not. "
 }) 
