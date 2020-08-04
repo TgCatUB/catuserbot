@@ -59,7 +59,7 @@ async def _(event):
             await borg.send_file(chat, reply_message.media)
             response = await bot_conv.get_response()
           except YouBlockedUserError: 
-              await event.reply("```Please unblock @MemeAutobot and try again```")
+              await event.reply("Please unblock @MemeAutobot and try again")
               return
           if response.text.startswith("Forward"):
               await event.edit("```can you kindly disable your forward privacy settings for good nibba?```")
@@ -109,8 +109,10 @@ async def _(event):
             )
             await event.delete()
           elif not is_message_image(reply_message):
+            await bot.send_read_acknowledge(bot_conv.chat_id)
             await event.edit("Invalid message type. Plz choose right message type u NIBBA.")
             return
+          await bot.send_read_acknowledge(bot_conv.chat_id)
           await borg.send_file(event.chat_id, response.media)
 
 def is_message_image(message):
