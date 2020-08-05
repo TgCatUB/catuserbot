@@ -39,7 +39,7 @@ async def kang(args):
             user.first_name.encode('utf-8').decode('ascii')
             user.username = user.first_name
         except UnicodeDecodeError:
-            user.username = user.id
+            user.username = f"cat_{user.id}"
     message = await args.get_reply_message()
     photo = None
     emojibypass = False
