@@ -16,25 +16,6 @@ COLORS = [
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
-async def process(msg, user, client, reply, replied=None):
-    if not os.path.isdir("./tmp"):
-        os.mkdir("./tmp", 0o755)
-        urllib.request.urlretrieve(
-           'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf',
-           './tmp/Roboto-Regular.ttf')
-        urllib.request.urlretrieve(
-           'https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf',
-           './tmp/Quivira.otf')
-        urllib.request.urlretrieve(
-           'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
-           './tmp/Roboto-Medium.ttf')
-        urllib.request.urlretrieve(
-           'https://github.com/erenmetesar/modules-repo/raw/master/DroidSansMono.ttf',
-           './tmp/DroidSansMono.ttf')
-        urllib.request.urlretrieve(
-           'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf',
-           './tmp/Roboto-Italic.ttf')
         
 async def drawer(width, height):
     # Top part
@@ -55,27 +36,7 @@ async def fontTest(letter):
         if ord(letter) in table.cmap.keys():
             return True
           
-async def get_entity(msg):
-    bold = {0: 0}
-    italic = {0: 0}
-    mono = {0: 0}
-    link = {0: 0}
-    if not msg.entities:
-        return bold, mono, italic, link
-    for entity in msg.entities:
-        if isinstance(entity, types.MessageEntityBold):
-            bold[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityItalic):
-            italic[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityCode):
-            mono[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityUrl):
-            link[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityTextUrl):
-            link[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityMention):
-            link[entity.offset] = entity.offset + entity.length
-    return bold, mono, italic, link
+
 
 async def doctype(name, size, type, canvas):
     font = ImageFont.truetype("./tmp/Roboto-Medium.ttf", 38)
@@ -146,19 +107,3 @@ async def replied_user(draw, tot, text, maxlength, title):
         else:
             draw.text((180 + space, 132), letter, font=textfont, fill="white")
             space += textfont.getsize(letter)[0]
-
-async def quotexxx(message):
-    """Converts the replied message into an independent sticker"""
-    await message.delete()
-    reply = await message.get_reply_message()
-    msg = reply.message
-    repliedreply = await reply.get_reply_message()
-    user = (
-        await message.client.get_entity(reply.forward.sender) if reply.fwd_from
-        else reply.sender)
-    res, canvas = await Quote.process(msg, user, message.client, reply, repliedreply)
-    if not res:
-        return
-    canvas.save('./tmp/sticker.webp')
-    await message.respond(file="./tmp/sticker.webp")
-    os.remove('./tmp/sticker.webp')
