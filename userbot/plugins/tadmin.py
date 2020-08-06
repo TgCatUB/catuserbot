@@ -146,10 +146,9 @@ async def ban(catty):
         return
     await catty.edit("`Whacking the pest!`")
     try:
-        await catty.client(EditBannedRequest(catty.chat_id, user.id,
-                                            ChatBannedRights(until_date=ctime,
-                                                            view_messages=True,
-                                                            send_messages=True,
+        await catty.client(EditBannedRequest(catty.chat_id, user.id,ChatBannedRights(until_date=ctime,
+                                                            view_messages=None,
+                                                            send_messages=None,
                                                             send_media=True,
                                                             send_stickers=True,
                                                             send_gifs=True,
