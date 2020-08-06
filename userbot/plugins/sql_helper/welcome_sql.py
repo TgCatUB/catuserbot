@@ -67,4 +67,5 @@ def update_previous_welcome(chat_id, previous_welcome):
     row = SESSION.query(Welcome).get(chat_id)
     row.previous_welcome = previous_welcome
     # commit the changes to the DB
+    SESSION.add(row)
     SESSION.commit()
