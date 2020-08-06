@@ -109,6 +109,53 @@ async def unmoot(catty):
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {catty.chat.title}(`{catty.chat_id}`)")
 
+@borg.on(admin_cmd("tban(?: |$)(.*)"))
+@errors_handler
+async def ban(bon):
+    chat = await bon.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+    # Well
+    if not admin and not creator:
+        await bon.edit(NO_ADMIN)
+        return
+    user, reason = await get_user_from_event(bon)
+    if user:
+        pass
+    else:
+        return
+    # Announce that we're going to whack the pest
+    await bon.edit("`Whacking the pest!`")
+    try:
+        await bon.client(EditBannedRequest(bon.chat_id, user.id,
+                                            BANNED_RIGHTS))
+    except BadRequestError:
+        await bon.edit(NO_PERM)
+        return
+    # Helps ban group join spammers more easily
+    try:
+        reply = await bon.get_reply_message()
+        if reply:
+            await reply.delete()
+    except BadRequestError:
+        await bon.edit(
+            "`I dont have message nuking rights! But still he was banned!`")
+        return
+    # Delete message and then tell that the command
+    # is done gracefully
+    # Shout out the ID, so that fedadmins can fban later
+    if reason:
+        await bon.edit(f"`{str(user.id)}` was banned !!\nReason: {reason}")
+    else:
+        await bon.edit(f"`{str(user.id)}` was banned !!")
+    # Announce to the logging group if we have banned the person
+    # successfully!
+    if BOTLOG:
+        await bon.client.send_message(
+            BOTLOG_CHATID, "#BAN\n"
+            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+            f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
+        
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
     args = event.pattern_match.group(1).split(' ', 1)
