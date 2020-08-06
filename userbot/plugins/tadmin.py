@@ -28,7 +28,7 @@ async def tmuter(catty):
     creator = chat.creator
     # If not admin and not creator, return
     if not admin and not creator:
-        await catty.reply(NO_ADMIN)
+        await catty.edit(NO_ADMIN)
         return
     user, reason = await get_user_from_event(catty)
     if user:
@@ -64,8 +64,8 @@ async def tmuter(catty):
                 await catty.client.send_message(
                     BOTLOG_CHATID, "#TMUTE\n"
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                    f"CHAT: {catty.chat.title}(`{catty.chat_id}`)"
-                    f"MUTTED_UNTILL : `{cattime}`"
+                    f"CHAT: {catty.chat.title}(`{catty.chat_id}`)\n"
+                    f"MUTTED_UNTILL : `{cattime}`\n"
                     f"REASON : {reason}")
         else:
             await catty.edit(f"{user.first_name} was muted in {catty.chat.title}\n"f"Mutted until {cattime}\n")
@@ -73,7 +73,7 @@ async def tmuter(catty):
                 await catty.client.send_message(
                     BOTLOG_CHATID, "#TMUTE\n"
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                    f"CHAT: {catty.chat.title}(`{catty.chat_id}`)"
+                    f"CHAT: {catty.chat.title}(`{catty.chat_id}`)\n"
                     f"MUTTED_UNTILL : `{cattime}`")
         # Announce to logging group
     except UserIdInvalidError:
@@ -87,7 +87,7 @@ async def unmoot(catty):
     creator = chat.creator
     # If not admin and not creator, return
     if not admin and not creator:
-        await catty.reply(NO_ADMIN)
+        await catty.edit(NO_ADMIN)
         return
     # If admin or creator, inform the user and start unmuting
     await catty.edit('```Unmuting...```')
@@ -111,50 +111,85 @@ async def unmoot(catty):
 
 @borg.on(admin_cmd("tban(?: |$)(.*)"))
 @errors_handler
-async def ban(bon):
-    chat = await bon.get_chat()
+async def ban(catty):
+    chat = await catty.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
-    # Well
+    # If not admin and not creator, return
     if not admin and not creator:
-        await bon.edit(NO_ADMIN)
+        await catty.edit(NO_ADMIN)
         return
-    user, reason = await get_user_from_event(bon)
+    user, reason = await get_user_from_event(catty)
     if user:
         pass
     else:
         return
-    # Announce that we're going to whack the pest
-    await bon.edit("`Whacking the pest!`")
+    if reason:
+        reason = reason.split(' ', 1)
+        hmm = len(reason)
+        if hmm ==2:
+            cattime = reason[0]
+            reason = reason[1]
+        else:
+            cattime = reason[0]
+            reason = None
+    else:
+        await catty.edit("you havent mentioned time check `.info tadmin`")
+        return
+    self_user = await catty.client.get_me()
+    ctime = await extract_time(catty , cattime)
+    if not ctime:
+        await catty.edit(f"Invalid time type specified. Expected m , h , d or w not as {cattime}")
+        return
+    if user.id == self_user.id:
+        await catty.edit(f"Sorry, I can't ban my self")
+        return
+    await catty.edit("`Whacking the pest!`")
     try:
-        await bon.client(EditBannedRequest(bon.chat_id, user.id,
-                                            BANNED_RIGHTS))
+        await catty.client(EditBannedRequest(catty.chat_id, user.id,
+                                            ChatBannedRights(until_date=ctime,
+                                                            view_messages=True,
+                                                            send_messages=True,
+                                                            send_media=True,
+                                                            send_stickers=True,
+                                                            send_gifs=True,
+                                                            send_games=True,
+                                                            send_inline=True,
+                                                            embed_links=True,
+                                                        )
+                                                        ))
     except BadRequestError:
-        await bon.edit(NO_PERM)
+        await catty.edit(NO_PERM)
         return
     # Helps ban group join spammers more easily
     try:
-        reply = await bon.get_reply_message()
+        reply = await catty.get_reply_message()
         if reply:
             await reply.delete()
     except BadRequestError:
-        await bon.edit(
+        await catty.edit(
             "`I dont have message nuking rights! But still he was banned!`")
         return
     # Delete message and then tell that the command
     # is done gracefully
     # Shout out the ID, so that fedadmins can fban later
     if reason:
-        await bon.edit(f"`{str(user.id)}` was banned !!\nReason: {reason}")
+        await catty.edit(f"{user.first_name} was banned in {catty.chat.title}\n"f"banned until {cattime}\n"f"`Reason:`{reason}")
+        if BOTLOG:
+            await catty.client.send_message(
+                BOTLOG_CHATID, "#TBAN\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {catty.chat.title}(`{catty.chat_id}`)\n"
+               f"BANNED_UNTILL : `{cattime}`\n"
+                f"REASON : {reason}")
     else:
-        await bon.edit(f"`{str(user.id)}` was banned !!")
-    # Announce to the logging group if we have banned the person
-    # successfully!
-    if BOTLOG:
-        await bon.client.send_message(
-            BOTLOG_CHATID, "#BAN\n"
-            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
+        await catty.edit(f"{user.first_name} was banned in {catty.chat.title}\n"f"banned until {cattime}\n")
+        if BOTLOG:
+            await catty.client.send_message(
+                BOTLOG_CHATID, "#TBAN\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {catty.chat.title}(`{catty.chat_id}`)\n"
+                f"BANNED_UNTILL : `{cattime}`")
         
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
