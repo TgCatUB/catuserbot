@@ -59,7 +59,7 @@ async def tmuter(catty):
         await catty.client(EditBannedRequest(catty.chat_id, user.id, ChatBannedRights(until_date=ctime, send_messages=True)))
         # Announce that the function is done
         if reason:
-            await catty.edit(f"{user.first_name} was muted in {catty.chat.title}\n"f"Mutted until {cattime}\n"f"`Reason:`{reason}")
+            await catty.edit(f"{user.first_name} was muted in {catty.chat.title}\n"f"Mutted until {cattime}\n"f"Reason:`{reason}`")
             if BOTLOG:
                 await catty.client.send_message(
                     BOTLOG_CHATID, "#TMUTE\n"
@@ -164,7 +164,7 @@ async def ban(catty):
     # is done gracefully
     # Shout out the ID, so that fedadmins can fban later
     if reason:
-        await catty.edit(f"{user.first_name} was banned in {catty.chat.title}\n"f"banned until {cattime}\n"f"`Reason:`{reason}")
+        await catty.edit(f"{user.first_name} was banned in {catty.chat.title}\n"f"banned until {cattime}\n"f"Reason:`{reason}`")
         if BOTLOG:
             await catty.client.send_message(
                 BOTLOG_CHATID, "#TBAN\n"
