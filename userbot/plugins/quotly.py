@@ -6,7 +6,32 @@ from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot.utils import admin_cmd, sudo_cmd
+import logging
+import os
+from ..utils import admin_cmd
+from .. import process
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+
+@borg.on(admin_cmd(pattern="schat ?(.*)"))
+async def stickerchat(catquotes):
+    if catquotes.fwd_from:
+        return
+    await catquotes.delete()
+    reply = await catquotes.get_reply_message()
+    fetchmsg = reply.message
+    repliedreply = await reply.get_reply_message()
+    user = (await borg.get_entity(reply.forward.sender) if reply.fwd_from
+            else reply.sender)
+    res, catmsg = await process(fetchmsg, user, borg , reply, repliedreply)
+    if not res:
+        return
+    catmsg.save('.tmp/sticker.webp')
+    await borg.send_file(catquotes.chat_id, ".tmp/sticker.webp")
+    os.remove('.tmp/sticker.webp')
+    
 @borg.on(admin_cmd(pattern="qbot ?(.*)",outgoing=True))
 async def _(event):
     if event.fwd_from:
@@ -38,8 +63,7 @@ async def _(event):
           else: 
              await event.delete()
              await event.client.send_message(event.chat_id, response.message)
-
-            
+  
 @borg.on(sudo_cmd(pattern="qbot ?(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
@@ -71,4 +95,3 @@ async def _(event):
           else: 
              await cat.delete()
              await event.client.send_message(event.chat_id, response.message)
-            
