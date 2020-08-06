@@ -1,1 +1,1 @@
-from quoteshelper import process
+from .quoteshelper import process
