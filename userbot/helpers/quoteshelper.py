@@ -179,7 +179,7 @@ async def process(msg, user, client, catquotes , reply, replied=None):
             canvas.paste(stimg, (pfpbg.width + 10, 10))
             os.remove(sticker)
             return True, canvas
-        elif reply.document  not reply.audio:
+        elif reply.document and not reply.audio:
             docname = ".".join(reply.document.attributes[-1].file_name.split(".")[:-1])
             doctype = reply.document.attributes[-1].file_name.split(".")[-1].upper()
             if reply.document.size < 1024:
