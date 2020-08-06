@@ -25,7 +25,7 @@ async def stickerchat(catquotes):
     repliedreply = await reply.get_reply_message()
     user = (await borg.get_entity(reply.forward.sender) if reply.fwd_from
             else reply.sender)
-    res, catmsg = await process(fetchmsg, user, borg , reply, repliedreply)
+    res, catmsg = await process(fetchmsg, user, catquotes, borg , reply, repliedreply)
     if not res:
         return
     catmsg.save('.tmp/sticker.webp')
