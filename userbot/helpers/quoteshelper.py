@@ -1,15 +1,12 @@
 #    This file is part of NiceGrill.
-
 #    NiceGrill is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
-
 #    NiceGrill is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
-
 #    You should have received a copy of the GNU General Public License
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -32,7 +29,10 @@ COLORS = [
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-async def process(msg, user, client, reply, replied=None):
+async def process(msg, user, client, catquotes , reply, replied=None):
+        if "tgsticker" in msg.media.document.mime_type:
+            await catquotes.edit("animated stickers are not supported")
+            return
         if not os.path.isdir(".tmp"):
             os.mkdir(".tmp", 0o755)
             urllib.request.urlretrieve(
@@ -147,14 +147,9 @@ async def process(msg, user, client, reply, replied=None):
             if reply.sticker:
                 sticker = await reply.download_media()
                 stimg = Image.open(sticker)
-                canvas = canvas.resize((stimg.width + pfpbg.width, stimg.height + 160))
-                top = Image.new("RGBA", (200 + stimg.width, 300), (29, 29, 29, 255))
-                draw = ImageDraw.Draw(top)
-                await replied_user(draw, reptot, replied.message.replace("\n", " "), 20)
-                top = top.crop((135, 70, top.width, 300))
+                canvas = canvas.resize((stimg.width + pfpbg.width + 30, stimg.height + 10))
                 canvas.paste(pfpbg, (0,0))
-                canvas.paste(top, (pfpbg.width + 10, 0))
-                canvas.paste(stimg, (pfpbg.width + 10, 140))
+                canvas.paste(stimg, (pfpbg.width + 10, 10))
                 os.remove(sticker)
                 return True, canvas
             canvas = canvas.resize((canvas.width + 60, canvas.height + 120))
@@ -184,7 +179,7 @@ async def process(msg, user, client, reply, replied=None):
             canvas.paste(stimg, (pfpbg.width + 10, 10))
             os.remove(sticker)
             return True, canvas
-        elif reply.document and not reply.audio and not reply.audio:
+        elif reply.document  not reply.audio:
             docname = ".".join(reply.document.attributes[-1].file_name.split(".")[:-1])
             doctype = reply.document.attributes[-1].file_name.split(".")[-1].upper()
             if reply.document.size < 1024:
@@ -202,7 +197,7 @@ async def process(msg, user, client, reply, replied=None):
             canvas.paste(top, (pfpbg.width, 0))
             canvas.paste(middle, (pfpbg.width, top.height))
             canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
-            canvas = await doctype(docname, docsize, doctype, canvas)
+            canvas = await catdoctype(docname, docsize, doctype, canvas)
             y = 80 if text else 0
         else:
             canvas.paste(pfpbg, (0, 0))
@@ -318,7 +313,7 @@ async def get_entity(msg):
                 link[entity.offset] = entity.offset + entity.length
         return bold, mono, italic, link
 
-async def doctype(name, size, type, canvas):
+async def catdoctype(name, size, type, canvas):
         font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
         doc = Image.new("RGBA", (130, 130), (29, 29, 29, 255))
         draw = ImageDraw.Draw(doc)
