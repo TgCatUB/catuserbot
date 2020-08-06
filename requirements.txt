@@ -13,6 +13,7 @@ csvfaker
 DateTime
 python-dotenv
 emoji
+fonttools
 geopy
 gitpython
 google-api-python-client==1.7.11
