@@ -29,10 +29,7 @@ COLORS = [
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-async def process(msg, user, client, catquotes , reply, replied=None):
-        if "tgsticker" in msg.media.document.mime_type:
-            await catquotes.edit("animated stickers are not supported")
-            return
+async def process(msg, user, client, reply, replied=None):
         if not os.path.isdir(".tmp"):
             os.mkdir(".tmp", 0o755)
             urllib.request.urlretrieve(
