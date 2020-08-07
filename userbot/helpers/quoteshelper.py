@@ -177,8 +177,8 @@ async def process(msg, user, client, reply, replied=None):
             os.remove(sticker)
             return True, canvas
         elif reply.document and not reply.audio:
-            docname = ".".join(reply.document.DocumentAttributeFilename.file_name.split(".")[:-1])
-            doctype = reply.document.DocumentAttributeFilename.file_name.split(".")[-1].upper()
+            docname = ".".join(reply.document.attributes.DocumentAttributeFilename.file_name.split(".")[:-1])
+            doctype = reply.document.attributes.DocumentAttributeFilename.file_name.split(".")[-1].upper()
             if reply.document.size < 1024:
                 docsize = str(reply.document.size) + " Bytes"
             elif reply.document.size < 1048576:
