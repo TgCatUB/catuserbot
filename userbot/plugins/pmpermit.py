@@ -176,13 +176,19 @@ if Var.PRIVATE_GROUP_ID is not None:
                 return
         catid = chat_id
         if PMPERMIT_PIC:
-            USER_BOT_NO_WARN = ("This is auto generated message from cat security service\n\n"
+            if Config.CUSTOM_PMPERMIT_TEXT:
+                USER_BOT_NO_WARN = (Config.CUSTOM_PMPERMIT_TEXT + '\n\n' + "**Send** `/start` ** so that my master can decide why you're here.**")
+            else:
+                USER_BOT_NO_WARN = ("This is auto generated message from cat security service\n\n"
                      f"Hi buddy my master {DEFAULTUSER} haven't approved you yet. so ,"
                       "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
                       "**Send** `/start` ** so that my master can decide why you're here.**")
             r = await event.reply( USER_BOT_NO_WARN , file = PMPERMIT_PIC)
         else:
-            USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
+            if Config.CUSTOM_PMPERMIT_TEXT:
+                USER_BOT_NO_WARN = (Config.CUSTOM_PMPERMIT_TEXT + '\n\n' + "**Send** `/start` ** so that my master can decide why you're here.**")
+            else:
+                USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
                       "This is auto generated message from cat security service\n\n"
                      f"Hi buddy my master {DEFAULTUSER} haven't approved you yet. so ,"
                       "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
