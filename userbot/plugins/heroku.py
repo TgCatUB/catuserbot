@@ -82,7 +82,7 @@ async def variable(var):
         if not value:
             variable = variable.split()[0]
             try:
-                value = var.pattern_match.group(2).split()[1]
+                value = var.pattern_match.group(2).split(' ', 1)[1]
             except IndexError:
                 return await var.edit(">`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1.5)
