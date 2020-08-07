@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-@borg.on(admin_cmd(pattern="schat ?(.*)"))
+@borg.on(admin_cmd(pattern="q(?: |$)(.*)"))
 async def stickerchat(catquotes):
     if catquotes.fwd_from:
         return
@@ -23,7 +23,7 @@ async def stickerchat(catquotes):
     reply = await catquotes.get_reply_message()
     fetchmsg = reply.message
     repliedreply = await reply.get_reply_message()
-    if "tgsticker" in fetchmsg.media.document.mime_type:
+    if "tgsticker" in reply.media.document.mime_type:
         await catquotes.edit("animated stickers are not supported")
         return
     user = (await borg.get_entity(reply.forward.sender) if reply.fwd_from
@@ -32,10 +32,10 @@ async def stickerchat(catquotes):
     if not res:
         return
     catmsg.save('.tmp/sticker.webp')
-    await borg.send_file(catquotes.chat_id, ".tmp/sticker.webp")
+    await borg.send_file(catquotes.chat_id, ".tmp/sticker.webp" , reply_to = reply)
     os.remove('.tmp/sticker.webp')
     
-@borg.on(admin_cmd(pattern="qbot ?(.*)",outgoing=True))
+@borg.on(admin_cmd(pattern="qbot(?: |$)(.*)",outgoing=True))
 async def _(event):
     if event.fwd_from:
         return 
@@ -67,7 +67,7 @@ async def _(event):
              await event.delete()
              await event.client.send_message(event.chat_id, response.message)
   
-@borg.on(sudo_cmd(pattern="qbot ?(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="qbot(?: |$)(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return 
