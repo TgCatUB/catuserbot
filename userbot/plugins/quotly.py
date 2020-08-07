@@ -15,6 +15,9 @@ async def stickerchat(catquotes):
     if catquotes.fwd_from:
         return
     reply = await catquotes.get_reply_message()
+    if not reply:
+        await catquotes.edit("I cant quote the message . reply to a message")
+        return
     fetchmsg = reply.message
     repliedreply = await reply.get_reply_message()
     if reply.media:
