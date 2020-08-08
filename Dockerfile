@@ -1,7 +1,6 @@
 FROM sandy1709/catuserbot:slim-buster
 
-RUN mkdir /root/userbot/bin/
-RUN chmod 777 /root/userbot
-WORKDIR /root/userbot/
+RUN rm -rf /root/userbot/userbot/
+RUN git clone -b test https://github.com/sandy1709/catuserbot.git /root/userbot
 
 CMD ["python3","-m","userbot"]
