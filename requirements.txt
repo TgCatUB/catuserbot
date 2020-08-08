@@ -11,6 +11,7 @@ cowpy
 cryptg
 csvfaker
 DateTime
+fontTools
 python-dotenv
 emoji
 geopy
