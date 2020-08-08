@@ -9,10 +9,34 @@ from userbot import utils
 from userbot.utils import admin_cmd
 from userbot import ALIVE_NAME
 import random, re
+import importlib.util
 from collections import deque
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"     
 
+DEF = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+USR = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
+@borg.on(admin_cmd(pattern="kilr (.*)"))
+async def _(event):
+    name = event.pattern_match.group(1)
+    if event.fwd_from:
+        return
+    animation_interval = 0.7
+    animation_ttl = range(0, 12)
+    await event.edit(f"**Ready Commando **__[{DEF}]({USR})....")
+    animation_chars = [
+
+            "Ｆｉｉｉｉｉｒｅ",
+            f"__**Commando **__[{DEF}]({USR})          \n\n_/﹋\_\n (҂`_´)\n <,︻╦╤─ ҉ - \n _/﹋\_\n",    
+            f"__**Commando **__[{DEF}]({USR})          \n\n_/﹋\_\n (҂`_´)\n  <,︻╦╤─ ҉ - -\n _/﹋\_\n",
+            f"__**Commando **__[{DEF}]({USR})          \n\n_/﹋\_\n (҂`_´)\n <,︻╦╤─ ҉ - - -\n _/﹋\_\n",
+            f"__**Commando **__[{DEF}]({USR})          \n\n_/﹋\_\n (҂`_´)\n<,︻╦╤─ ҉ - -\n _/﹋\_\n",
+            f"__**Commando **__[{DEF}]({USR})          \n\n_/﹋\_\n (҂`_´)\n <,︻╦╤─ ҉ - \n _/﹋\_\n",
+            f"__**Commando **__[{DEF}]({USR})          \n\n_/﹋\_\n (҂`_´)\n  <,︻╦╤─ ҉ - -\n _/﹋\_\n",
+            f"__**Commando **__[{DEF}]({USR})          \n\n_/﹋\_\n (҂`_´)\n <,︻╦╤─ ҉ - - - {name}\n _/﹋\_\n",
+        ]
+    for i in animation_ttl:
+            await asyncio.sleep(animation_interval)
+            await event.edit(animation_chars[i % 12])
 
 @borg.on(utils.admin_cmd(pattern="g1 ?(.*)"))
 async def payf(event):
