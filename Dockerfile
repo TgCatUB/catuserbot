@@ -1,4 +1,4 @@
-FROM sandy1709/catuserbot:python
+FROM sandy1709/catuserbot
 
 RUN rm -rf /root/userbot/userbot/
 RUN git clone -b test https://github.com/sandy1709/catuserbot.git /root/userbot
