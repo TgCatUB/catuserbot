@@ -238,7 +238,7 @@ async def _(event):
     os.system("rm -rf ./temp/*.webp")
   
 
-@borg.on(admin_cmd(pattern="vsong(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="vsong(?: |$)(.*)", allow_sudo = True))
 async def _(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
