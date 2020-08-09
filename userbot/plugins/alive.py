@@ -3,12 +3,18 @@
 
 import asyncio , time
 from telethon import events
-from userbot import StartTime , catdef
+from userbot import StartTime 
 from platform import uname
 from userbot import CMD_HELP, ALIVE_NAME, catdef , catversion
 from userbot.utils import admin_cmd,sudo_cmd
 from telethon import version
 from platform import python_version, uname
+import requests
+import re
+from PIL import Image
+import os
+import nekos
+
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
@@ -38,11 +44,11 @@ async def amireallyalive(alive):
     else:
         await alive.edit(f"__**༄ MY BOT IS RUNNING SUCCESFULLY ༄**__\n\n"
                          "**✧✧ Database :** `Functioning normally!`\n"   
-                         f"**✧✧ Telethon version :** `{version.__version__}\n`"
+                         f"**✧✧ Telethon Version :** `{version.__version__}\n`"
                          f"**✧✧ Catuserbot Version :** `{catversion}`\n"
                          f"**✧✧ Python Version :** `{python_version()}\n\n`"
                          "**ღ** __**Cat**__🐱 __**is always with you, my master ღ\n\n**__"
-                         f"**✧✧ My peru Master:** [{DEFAULTUSER}]({USERNAME})\n"
+                         f"**✧✧ My Peru Master:** [{DEFAULTUSER}]({USERNAME})\n"
                          f"**✧✧ Uptime :** `{uptime}\n`"
                          f"**✧✧ Contact [Hatake Kakashi](@kakashi_robot) For notes**\n\n"
                          f"           **ღ** __**[DEPLOY MY REPO]**__(https://github.com/Jisan09/catuserbot) **ღ**"
@@ -52,3 +58,34 @@ async def amireallyalive(alive):
 CMD_HELP.update({"alive": "`.alive` :\
       \nUSAGE: Type .live to see wether your bot is working or not. "
 }) 
+
+@borg.on(sudo_cmd(pattern="sudo", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    uptime = await catdef.get_readable_time((time.time() - StartTime))
+    await event.reply("__**༄ SUDO COMMANDS ARE WORKING PERFECTLY ༄**__\n\n"
+                     f"**✧✧ Telethon Version :** `{version.__version__}\n`"
+                     f"**✧✧ Python Version :** `{python_version()}\n\n`"
+                     f"**✧✧ My Peru Owner:** [{DEFAULTUSER}]({USERNAME})\n"
+                     f"**✧✧ Uptime :** `{uptime}\n`"
+                    )   
+    
+@borg.on(admin_cmd(pattern="cat$"))
+async def _(event):
+    await event.delete() 
+    reply_to_id = event.message
+    if event.reply_to_msg_id:
+        reply_to_id = await event.get_reply_message()
+    with open("temp.png", "wb") as f:
+        f.write(requests.get(nekos.cat()).content)
+    img = Image.open("temp.png")
+    img.save("temp.webp", "webp")
+    img.seek(0)
+    await bot.send_file(event.chat_id , open("temp.webp", "rb"),reply_to=reply_to_id) 
+	
+CMD_HELP.update({"alive": "`.live` :\
+      \n**USAGE:** Type .live to see wether your bot is working or not.\
+      \n\n`.cat`\
+      \n**USAGE : **Random cat stickers"
+})
