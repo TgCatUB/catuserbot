@@ -1,4 +1,7 @@
-"""QuotLy: Avaible commands: .qbot
+"""
+imported from nicegrill
+modified by @mrconfused
+QuotLy: Avaible commands: .qbot
 """
 import datetime
 import asyncio
