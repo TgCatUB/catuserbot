@@ -118,9 +118,8 @@ async def extract_time(cat , time_val):
             # how even...?
             return ""
         return bantime
-    else:
-        cat.edit("Invalid time type specified. Expected m , h , d or w but got: {}".format(time_val[-1]))
-        return ""
+    cat.edit("Invalid time type specified. Expected m , h , d or w but got: {}".format(time_val[-1]))
+    return ""
         
 EMOJI_PATTERN = re.compile(
     "["
