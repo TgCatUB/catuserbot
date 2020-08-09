@@ -310,7 +310,7 @@ async def get_entity(msg):
                 link[entity.offset] = entity.offset + entity.length
         return bold, mono, italic, link
 
-async def catdoctype(name, size, type, canvas):
+async def catdoctype(name, size, htype, canvas):
         font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
         doc = Image.new("RGBA", (130, 130), (29, 29, 29, 255))
         draw = ImageDraw.Draw(doc)
@@ -323,7 +323,7 @@ async def catdoctype(name, size, type, canvas):
         draw2.text((320, 40), name, font=font, fill="white")
         draw2.text(
             (320, 97), size
-            + type , font=font, fill="#AAAAAA")
+            + htype , font=font, fill="#AAAAAA")
         return canvas
 
 async def no_photo(reply, tot):
