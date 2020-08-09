@@ -69,7 +69,6 @@ async def process(msg, user, client, reply, replied=None):
                         width = mono.getsize(line[:43])[0] + 30
                     else:
                         width = fallback.getsize(line[:43])[0]
-                next
             else:
                 text.append(line + "\n")
                 if width < fallback.getsize(line)[0]:
