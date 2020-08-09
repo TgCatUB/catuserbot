@@ -36,8 +36,6 @@ async def univsaye(cowmsg):
 
         await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
-
-
 @register(outgoing=True, pattern="^:/$")	 
 async def kek(keks):
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
@@ -46,6 +44,31 @@ async def kek(keks):
         for i in range(1, 15):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
+
+@borg.on(admin_cmd(pattern="coin ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    r = random.randint(1, 100)
+    input_str = event.pattern_match.group(1)
+    if input_str:
+        input_str = input_str.lower()
+    if r % 2 == 1:
+        if input_str == "heads":
+            await event.edit("The coin landed on: **Heads**. \n You were correct.")
+        elif input_str == "tails":
+            await event.edit("The coin landed on: **Heads**. \n You weren't correct, try again ...")
+        else:
+            await event.edit("The coin landed on: **Heads**.")
+    elif r % 2 == 0:
+        if input_str == "tails":
+            await event.edit("The coin landed on: **Tails**. \n You were correct.")
+        elif input_str == "heads":
+            await event.edit("The coin landed on: **Tails**. \n You weren't correct, try again ...")
+        else:
+            await event.edit("The coin landed on: **Tails**.")
+    else:
+        await event.edit("¯\_(ツ)_/¯")
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 			  
@@ -430,5 +453,7 @@ CMD_HELP.update({
 \nUsage: If you think you're pro, try this.\
 \n\n.abuse\
 \nUsage: Protects you from unwanted peeps.\
+\n\n.coin\
+\nUsage: Flip a coin.\
 "
 })

@@ -11,8 +11,10 @@ cowpy
 cryptg
 csvfaker
 DateTime
+fontTools
 python-dotenv
 emoji
+fonttools
 geopy
 gitpython
 google-api-python-client==1.7.11

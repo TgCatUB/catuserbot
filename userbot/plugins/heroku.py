@@ -82,14 +82,14 @@ async def variable(var):
         if not value:
             variable = variable.split()[0]
             try:
-                value = var.pattern_match.group(2).split()[1]
+                value = var.pattern_match.group(2).split(' ', 1)[1]
             except IndexError:
                 return await var.edit(">`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1.5)
         if variable in heroku_var:
-            await var.edit(f"**{variable}**  `successfully changed to`  ->  **{value}**")
+            await var.edit(f"`{variable}` **successfully changed to  ->  **`{value}`")
         else:
-            await var.edit(f"**{variable}**  `successfully added with value`  ->  **{value}**")
+            await var.edit(f"`{variable}`**  successfully added with value`  ->  **{value}`")
         heroku_var[variable] = value
     elif exe == "del":
         await var.edit("`Getting information to deleting variable...`")
@@ -99,10 +99,10 @@ async def variable(var):
             return await var.edit("`Please specify ConfigVars you want to delete`")
         await asyncio.sleep(1.5)
         if variable in heroku_var:
-            await var.edit(f"**{variable}**  `successfully deleted`")
+            await var.edit(f"`{variable}`  **successfully deleted**")
             del heroku_var[variable]
         else:
-            return await var.edit(f"**{variable}**  `is not exists`")
+            return await var.edit(f"`{variable}`**  is not exists**")
 
 
 @borg.on(admin_cmd(pattern="usage(?: |$)", outgoing=True))

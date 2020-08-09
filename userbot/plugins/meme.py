@@ -59,12 +59,6 @@ async def meme(event):
     await event.edit(memeVar)
     await asyncio.sleep(sleepValue)
 
-"""
-Bonus : Give Boquee Generater
-usage:- .give
-"""
-
-
 @borg.on(admin_cmd(pattern=f"lp$", outgoing=True))
 async def meme(event):
     if event.fwd_from:

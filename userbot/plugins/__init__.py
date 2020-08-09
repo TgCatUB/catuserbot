@@ -2,6 +2,7 @@ from userbot import catdef
 import requests
 import os
 from userbot.uniborgConfig import Config
+import re 
 
 if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
      os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -29,3 +30,12 @@ awooify = catdef.awooify
 convert_toimage = catdef.convert_toimage
 trap = catdef.trap
 phcomment = catdef.phcomment
+extract_time = catdef.extract_time
+
+def check(cat):
+    if "/start" in cat:
+        return True 
+    hi = re.search(f"\\b{cat}\\b" ,"a|b|c|d")
+    if hi:
+        return True
+    return False

@@ -1,6 +1,7 @@
 import requests 
 import os
 import re
+import time
 import subprocess
 from bs4 import BeautifulSoup
 from asyncio import sleep
@@ -95,6 +96,30 @@ async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
     if cat:
         await borg.send_file(int(chat_id) , cat , reply_to = reply_to_id ) 
         await cat.delete()
+
+#https://github.com/pokurt/LyndaRobot/blob/7556ca0efafd357008131fa88401a8bb8057006f/lynda/modules/helper_funcs/string_handling.py#L238
+
+async def extract_time(cat , time_val):
+    if any(time_val.endswith(unit) for unit in ('m', 'h', 'd' , 'w')):
+        unit = time_val[-1]
+        time_num = time_val[:-1]  # type: str
+        if not time_num.isdigit():
+            cat.edit("Invalid time amount specified.")
+            return ""
+        if unit == 'm':
+            bantime = int(time.time() + int(time_num) * 60)
+        elif unit == 'h':
+            bantime = int(time.time() + int(time_num) * 60 * 60)
+        elif unit == 'd':
+            bantime = int(time.time() + int(time_num) * 24 * 60 * 60)
+        elif unit == 'w':
+            bantime = int(time.time() + int(time_num) * 7 * 24 * 60 * 60) 
+        else:
+            # how even...?
+            return ""
+        return bantime
+    cat.edit("Invalid time type specified. Expected m , h , d or w but got: {}".format(time_val[-1]))
+    return ""
 
 EMOJI_PATTERN = re.compile(
     "["

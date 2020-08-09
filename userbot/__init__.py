@@ -10,11 +10,12 @@ from dotenv import load_dotenv
 from requests import get
 import time
 from pySmartDL import SmartDL
-from userbot.helpers import fonts as fonts ,functions as catdef
-from userbot.helpers import memeshelper as memes
+from .helpers import fonts as fonts ,functions as catdef
+from .helpers import memeshelper as memes
+from .helpers import process as process
 
 StartTime = time.time()
-catversion = "2.6.2"
+catversion = "2.6.3"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
