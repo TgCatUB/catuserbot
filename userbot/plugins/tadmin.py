@@ -1,3 +1,7 @@
+"""
+idea from lynda and rose bot 
+made by @mrconfused
+"""
 from telethon.errors import (BadRequestError, ChatAdminRequiredError, UserAdminInvalidError)
 from telethon.errors.rpcerrorlist import (UserIdInvalidError, MessageTooLongError)
 from telethon.tl.functions.channels import (EditAdminRequest, EditBannedRequest, EditPhotoRequest)
