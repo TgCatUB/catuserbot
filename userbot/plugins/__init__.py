@@ -38,5 +38,4 @@ def check(cat):
     hi = re.search(f"\\b{cat}\\b" ,"a|b|c|d")
     if hi:
         return True
-    else:
-        return False
+    return False
