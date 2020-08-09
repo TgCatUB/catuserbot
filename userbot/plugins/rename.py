@@ -66,7 +66,7 @@ async def _(event):
         end = datetime.now()
         ms = (end - start).seconds
         if os.path.exists(downloaded_file_name):
-            await event.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
+            await event.edit(f"__**➥ Downloaded in {ms} seconds.**__\n__**➥ Downloaded to :- **__ `{downloaded_file_name}`\n__**➥ Downloaded by :-**__ [{DEFAULTUSER}]({USERNAME})")
         else:
             await event.edit("Error Occurred\n {}".format(input_str))
     else:
@@ -101,7 +101,7 @@ async def _(event):
         ms_one = (end - start).seconds
         if os.path.exists(downloaded_file_name):
             c_time = time.time()
-            await borg.send_file(
+            caat = await borg.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
@@ -117,7 +117,8 @@ async def _(event):
             end_two = datetime.now()
             os.remove(downloaded_file_name)
             ms_two = (end_two - end).seconds
-            await event.edit(f"**➥ Downloaded in {ms_one} seconds.**\n**➥ Uploaded in {ms_two} seconds.**\n**➥ Uploaded by :-** [{DEFAULTUSER}]({USERNAME})")
+            await event.delete()
+            await caat.edit(f"__**➥ Downloaded in {ms_one} seconds.**__\n__**➥ Uploaded in {ms_two} seconds.**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})")
         else:
             await event.edit("File Not Found {}".format(input_str))
     else:
@@ -153,7 +154,7 @@ async def _(event):
         ms_one = (end - start).seconds
         if os.path.exists(downloaded_file_name):
             c_time = time.time()
-            await borg.send_file(
+            caat = await borg.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
@@ -169,14 +170,15 @@ async def _(event):
             end_two = datetime.now()
             os.remove(downloaded_file_name)
             ms_two = (end_two - end).seconds
-            await event.reply(f"**➥ Downloaded in {ms_one} seconds.**\n**➥ Uploaded in {ms_two} seconds.**\n**➥ Uploaded by :-** [{DEFAULTUSER}]({USERNAME})")
+            await event.delete()
+            await caat.reply(f"__**➥ Downloaded in {ms_one} seconds.**__\n__**➥ Uploaded in {ms_two} seconds.**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})")
         else:
             await event.reply("File Not Found {}".format(input_str))
     else:
         await event.reply("Syntax // .rnupload file.name as reply to a Telegram media")
      
         
-@borg.on(admin_cmd(pattern="rnstreamupload (.*)"))
+@borg.on(admin_cmd(pattern="rnstreamup (.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -227,7 +229,7 @@ async def _(event):
             # Bad Request: VIDEO_CONTENT_TYPE_INVALID
            # c_time = time.time()
             try:
-                await borg.send_file(
+                caat = await borg.send_file(
                     event.chat_id,
                     downloaded_file_name,
                     thumb=thumb,
@@ -251,7 +253,8 @@ async def _(event):
                 end = datetime.now()
                 os.remove(downloaded_file_name)
                 ms_two = (end - end_one).seconds
-                await event.edit("Downloaded in {} seconds. Uploaded in {} seconds.".format(ms_one, ms_two))
+                await event.delete()
+                await caat.edit(f"__**➥ Downloaded in {ms_one} seconds.**__\n__**➥ Uploaded in {ms_two} seconds.**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})")
         else:
             await event.edit("File Not Found {}".format(input_str))
     else:
@@ -312,7 +315,7 @@ async def _(event):
         await event.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms_dl))
         if os.path.exists(downloaded_file_name):
             c_time = time.time()
-            await borg.send_file(
+            caat = await borg.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=True,
@@ -327,7 +330,8 @@ async def _(event):
             end_two = datetime.now()
             os.remove(downloaded_file_name)
             ms_two = (end_two - end).seconds
-            await event.edit("Downloaded in {} seconds. Uploaded in {} seconds.".format(ms_dl, ms_two))
+            await event.delete()
+            await caat.edit(f"__**➥ Downloaded in {ms_dl} seconds.**__\n__**➥ Uploaded in {ms_two} seconds.**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})")
         else:
             await event.edit("File Not Found {}".format(input_str))
     else:

@@ -11,7 +11,7 @@ import math
 from pySmartDL import SmartDL
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-from userbot import LOGS, CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
+from userbot import LOGS, CMD_HELP, ALIVE_NAME , TEMP_DOWNLOAD_DIRECTORY
 from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
 from userbot.uniborgConfig import Config
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
@@ -24,6 +24,9 @@ async def catlst_of_files(path):
         for filename in filenames:
             files.append(os.path.join(dirname, filename))
     return files
+
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
 @borg.on(admin_cmd(pattern="uploadir (.*)", outgoing=True))
 async def uploadir(udir_event):
@@ -105,7 +108,7 @@ async def _(event):
     if os.path.exists(input_str):
         start = datetime.now()
         c_time = time.time()
-        await bot.send_file(
+        caat = await bot.send_file(
             event.chat_id,
             input_str,
             force_document=True,
@@ -119,7 +122,8 @@ async def _(event):
         )
         end = datetime.now()
         ms = (end - start).seconds
-        await mone.edit("Uploaded in {} seconds.".format(ms))
+        await mone.delete()
+        await caat.edit(f"__**➥ Uploaded in {ms} seconds.**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})")
     else:
         await mone.edit("404: File Not Found")
 
