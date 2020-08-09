@@ -341,9 +341,8 @@ async def emoji_fetch(emoji):
         if emoji in emojis:
             img = emojis[emoji]
             return await transparent(urllib.request.urlretrieve(img, ".tmp/emoji.png")[0])
-        else:
-            img = emojis["⛔"]
-            return await transparent(urllib.request.urlretrieve(img, ".tmp/emoji.png")[0])
+        img = emojis["⛔"]
+        return await transparent(urllib.request.urlretrieve(img, ".tmp/emoji.png")[0])
         
 async def transparent(emoji):
         emoji = Image.open(emoji).convert("RGBA")
