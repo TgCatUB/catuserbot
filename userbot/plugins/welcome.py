@@ -48,7 +48,6 @@ async def _(event):
             )
             update_previous_welcome(event.chat_id, current_message.id)
 
-
 @borg.on(admin_cmd(pattern="savewelcome"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
@@ -62,7 +61,6 @@ async def _(event):
         input_str = event.text.split(None, 1)
         add_welcome_setting(event.chat_id, input_str[1], True, 0, None)
         await event.edit("Welcome note saved. ")
-
 
 @borg.on(admin_cmd(pattern="clearwelcome"))  # pylint:disable=E0602
 async def _(event):
@@ -89,19 +87,17 @@ async def _(event):
         await event.edit(
             "No Welcome Message found"
         )
-        
-        
-        
+            
 CMD_HELP.update({
     "welcome":
     "\
-.savewelcome <welcome message> or reply to a message with .setwelcome\
+`.savewelcome` <welcome message> or reply to a message with .setwelcome\
 \nUsage: Saves the message as a welcome note in the chat.\
 \n\nAvailable variables for formatting welcome messages :\
 \n`{mention}, {title}, {count}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
-\n\n.listwelcome\
+\n\n`.listwelcome`\
 \nUsage: Check whether you have a welcome note in the chat.\
-\n\n.clearwelcome\
+\n\n`.clearwelcome`\
 \nUsage: Deletes the welcome note for the current chat.\
 "
-})        
+})

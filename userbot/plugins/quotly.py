@@ -1,13 +1,43 @@
-"""QuotLy: Avaible commands: .qbot
+"""
+imported from nicegrill
+modified by @mrconfused
+QuotLy: Avaible commands: .qbot
 """
 import datetime
 import asyncio
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
-from userbot.utils import admin_cmd, sudo_cmd
+from ..utils import admin_cmd, sudo_cmd
+import logging
+import os
+from .. import process
 
-@borg.on(admin_cmd(pattern="qbot ?(.*)",outgoing=True))
+@borg.on(admin_cmd(pattern="q(?: |$)(.*)"))
+async def stickerchat(catquotes):
+    if catquotes.fwd_from:
+        return
+    reply = await catquotes.get_reply_message()
+    if not reply:
+        await catquotes.edit("I cant quote the message . reply to a message")
+        return
+    fetchmsg = reply.message
+    repliedreply = await reply.get_reply_message()
+    if reply.media:
+        if reply.media.document.mime_type in ('tgsticker', 'mp4'):
+            await catquotes.edit("animated stickers and mp4 formats are not supported")
+            return
+    await catquotes.delete()
+    user = (await borg.get_entity(reply.forward.sender) if reply.fwd_from
+            else reply.sender)
+    res, catmsg = await process(fetchmsg, user, borg , reply, repliedreply)
+    if not res:
+        return
+    catmsg.save('.tmp/sticker.webp')
+    await borg.send_file(catquotes.chat_id, ".tmp/sticker.webp" , reply_to = reply)
+    os.remove('.tmp/sticker.webp')
+    
+@borg.on(admin_cmd(pattern="qbot(?: |$)(.*)",outgoing=True))
 async def _(event):
     if event.fwd_from:
         return 
@@ -38,9 +68,8 @@ async def _(event):
           else: 
              await event.delete()
              await event.client.send_message(event.chat_id, response.message)
-
-            
-@borg.on(sudo_cmd(pattern="qbot ?(.*)",allow_sudo = True))
+  
+@borg.on(sudo_cmd(pattern="qbot(?: |$)(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return 
@@ -71,4 +100,3 @@ async def _(event):
           else: 
              await cat.delete()
              await event.client.send_message(event.chat_id, response.message)
-            

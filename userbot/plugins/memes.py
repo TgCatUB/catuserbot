@@ -43,6 +43,32 @@ async def kek(keks):
         for i in range(1, 15):
             time.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
+		
+
+@borg.on(admin_cmd(pattern="coin ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    r = random.randint(1, 100)
+    input_str = event.pattern_match.group(1)
+    if input_str:
+        input_str = input_str.lower()
+    if r % 2 == 1:
+        if input_str == "heads":
+            await event.edit("The coin landed on: **Heads**. \n You were correct.")
+        elif input_str == "tails":
+            await event.edit("The coin landed on: **Heads**. \n You weren't correct, try again ...")
+        else:
+            await event.edit("The coin landed on: **Heads**.")
+    elif r % 2 == 0:
+        if input_str == "tails":
+            await event.edit("The coin landed on: **Tails**. \n You were correct.")
+        elif input_str == "heads":
+            await event.edit("The coin landed on: **Tails**. \n You weren't correct, try again ...")
+        else:
+            await event.edit("The coin landed on: **Tails**.")
+    else:
+        await event.edit("¯\_(ツ)_/¯")
 			  
 @borg.on(admin_cmd(pattern=r"slap(?: |$)(.*)", outgoing=True))
 async def who(event):
@@ -190,8 +216,26 @@ async def fuckedd (abusehard):
         reply_text = memes.ABUSEHARD_STRING[index]
         await abusehard.edit(reply_text)
 			  
+RUNSREACTS = [
+    "`Congratulations and BRAVO!`",
+    "`You did it! So proud of you!`",
+    "`This calls for celebrating! Congratulations!`",
+    "`I knew it was only a matter of time. Well done!`",
+    "`Congratulations on your well-deserved success.`",
+    "`Heartfelt congratulations to you.`",
+    "`Warmest congratulations on your achievement.`",
+    "`Congratulations and best wishes for your next adventure!”`",
+    "`So pleased to see you accomplishing great things.`",
+    "`Feeling so much joy for you today. What an impressive achievement!`",
+]
 
-			  
+@borg.on(admin_cmd(pattern="congo"))
+async def _(event):
+    if event.fwd_from:
+         return
+    bro = random.randint(0, len(RUNSREACTS) - 1)    
+    reply_text = RUNSREACTS[bro]
+    await event.edit(reply_text)			  
 			  
 @borg.on(admin_cmd(outgoing=True, pattern="abusehim$"))
 async def abusing (abused):

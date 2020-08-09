@@ -26,8 +26,7 @@ async def meme(event):
         return   
     memeVar = event.text
     sleepValue = 5
-    memeVar = memeVar[6:] 
-           
+    memeVar = memeVar[6:]
     await event.edit("-------------"+memeVar)
     await event.edit("------------"+memeVar+"-")
     await event.edit("-----------"+memeVar+"--")
@@ -59,13 +58,6 @@ async def meme(event):
     await event.edit(memeVar)
     await asyncio.sleep(sleepValue)
 
-"""
-Bonus : Give Boquee Generater
-usage:- .give
-
-"""
-
-
 @borg.on(admin_cmd(pattern=f"lp$", outgoing=True))
 async def meme(event):
     if event.fwd_from:
@@ -93,8 +85,6 @@ async def meme(event):
     await event.edit(lp+lp+lp+lp+lp+lp+lp+lp+lp)
     await asyncio.sleep(sleepValue)
     
-
-
 @borg.on(admin_cmd(pattern=f"give", outgoing=True))
 async def give(event):
     if event.fwd_from:
@@ -131,7 +121,6 @@ async def _(event):
     animation_ttl = range(0, 36)
     await event.edit("crying")
     animation_chars = [
-
             ";__",
             ";___",
             ";____",

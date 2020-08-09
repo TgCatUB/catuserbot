@@ -5,6 +5,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
 from userbot import ALIVE_NAME, CMD_HELP
 from userbot.utils import admin_cmd
+from . import check 
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
@@ -107,14 +108,14 @@ if Var.PRIVATE_GROUP_ID is not None:
 
     @bot.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):
-        if event.sender_id == bot.uid:
+        if event.from_id == bot.uid:
             return
         if Var.PRIVATE_GROUP_ID is None:
             return
         if not event.is_private:
             return
         message_text = event.message.message
-        chat_id = event.sender_id
+        chat_id = event.from_id
         catid = chat_id
         current_message_text = message_text.lower()
         USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
@@ -126,11 +127,11 @@ if Var.PRIVATE_GROUP_ID is not None:
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
             return
-        if event.sender_id in CACHE:
-            sender = CACHE[event.sender_id]
+        if event.from_id in CACHE:
+            sender = CACHE[event.from_id]
         else:
-            sender = await bot.get_entity(event.sender_id)
-            CACHE[event.sender_id] = sender
+            sender = await bot.get_entity(event.from_id)
+            CACHE[event.from_id] = sender
         if chat_id == bot.uid:
             # don't log Saved Messages
             return
@@ -140,7 +141,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         if sender.verified:
             # don't log verified accounts
             return
-        if any([x in event.raw_text for x in ("/start", "a", "b","c", "d")]):
+        if check(event.raw_text):
             return
         if not pmpermit_sql.is_approved(chat_id):
             # pm permit
@@ -176,13 +177,19 @@ if Var.PRIVATE_GROUP_ID is not None:
                 return
         catid = chat_id
         if PMPERMIT_PIC:
-            USER_BOT_NO_WARN = ("This is auto generated message from cat security service\n\n"
+            if Config.CUSTOM_PMPERMIT_TEXT:
+                USER_BOT_NO_WARN = (Config.CUSTOM_PMPERMIT_TEXT + '\n\n' + "**Send** `/start` ** so that my master can decide why you're here.**")
+            else:
+                USER_BOT_NO_WARN = ("This is auto generated message from cat security service\n\n"
                      f"Hi buddy my master {DEFAULTUSER} haven't approved you yet. so ,"
                       "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
                       "**Send** `/start` ** so that my master can decide why you're here.**")
             r = await event.reply( USER_BOT_NO_WARN , file = PMPERMIT_PIC)
         else:
-            USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
+            if Config.CUSTOM_PMPERMIT_TEXT:
+                USER_BOT_NO_WARN = (Config.CUSTOM_PMPERMIT_TEXT + '\n\n' + "**Send** `/start` ** so that my master can decide why you're here.**")
+            else:
+                USER_BOT_NO_WARN = (f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
                       "This is auto generated message from cat security service\n\n"
                      f"Hi buddy my master {DEFAULTUSER} haven't approved you yet. so ,"
                       "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"

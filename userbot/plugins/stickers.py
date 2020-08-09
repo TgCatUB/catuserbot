@@ -81,6 +81,7 @@ async def kang(args):
         splat = args.text.split()
         if not emojibypass:
             emoji = "😂"
+        pack = 1
         if len(splat) == 3:
             if char_is_emoji(splat[1]):
                 pack = splat[2]  # User sent both
@@ -93,12 +94,10 @@ async def kang(args):
                 return
         elif len(splat) == 2:
             if char_is_emoji(splat[1]):
-                pack = 1
                 emoji = splat[1]
             else:
                 pack = splat[1]
-        else:
-            pack = 1
+                
         packname = f"{user.username}_{pack}"
         packnick = f"@{user.username}'s_{pack}"
         cmd = '/newpack'
