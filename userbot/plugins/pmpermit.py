@@ -5,6 +5,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
 from userbot import ALIVE_NAME, CMD_HELP
 from userbot.utils import admin_cmd
+from . import check 
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
@@ -140,7 +141,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         if sender.verified:
             # don't log verified accounts
             return
-        if any([x in event.raw_text for x in ("/start", "a", "b","c", "d")]):
+        if check(event.raw_text):
             return
         if not pmpermit_sql.is_approved(chat_id):
             # pm permit
