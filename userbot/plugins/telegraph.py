@@ -7,13 +7,16 @@ import os
 from PIL import Image
 from datetime import datetime
 from telegraph import Telegraph, upload_file, exceptions
-from userbot import CMD_HELP
+from userbot import CMD_HELP , ALIVE_NAME 
 from userbot.utils import admin_cmd, sudo_cmd
 
 telegraph = Telegraph()
 r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
 auth_url = r["auth_url"]
 
+
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
 @borg.on(admin_cmd(pattern="telegraph (media|text) ?(.*)"))
 async def _(event):
@@ -46,6 +49,7 @@ async def _(event):
             try:
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
+                jisan = "https://telegra.ph{}".format(media_urls[0])
             except exceptions.TelegraphException as exc:
                 await event.edit("ERROR: " + str(exc))
                 os.remove(downloaded_file_name)
@@ -53,7 +57,7 @@ async def _(event):
                 end = datetime.now()
                 ms_two = (end - start).seconds
                 os.remove(downloaded_file_name)
-                await event.edit("Uploaded to https://telegra.ph{} in {} seconds.".format(media_urls[0], (ms + ms_two)), link_preview=True)
+                await event.edit(f"__**➥ Uploaded to :-**__ **[Telegraph]**({jisan})\n__**➥ Uploaded in {ms + ms_two} seconds .**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})", link_preview=True)
         elif input_str == "text":
             user_object = await borg.get_entity(r_message.from_id)
             title_of_page = user_object.first_name # + " " + user_object.last_name
@@ -79,9 +83,10 @@ async def _(event):
                 title_of_page,
                 html_content=page_content
             )
+            kakashi = "https://telegra.ph/{}".format(response["path"])
             end = datetime.now()
             ms = (end - start).seconds
-            await event.edit("Pasted to https://telegra.ph/{} in {} seconds.".format(response["path"], ms), link_preview=True)
+            await event.edit(f"__**➥ Pasted to :-**__ **[Telegraph]**({kakashi})\n__**➥ Pasted in {ms} seconds .**__", link_preview=True)
     else:
         await event.edit("Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)")
 
@@ -117,6 +122,7 @@ async def _(event):
             try:
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
+                jisan = "https://telegra.ph{}".format(media_urls[0])
             except exceptions.TelegraphException as exc:
                 await event.edit("ERROR: " + str(exc))
                 os.remove(downloaded_file_name)
@@ -124,7 +130,7 @@ async def _(event):
                 end = datetime.now()
                 ms_two = (end - start).seconds
                 os.remove(downloaded_file_name)
-                await event.reply("Uploaded to https://telegra.ph{} in {} seconds.".format(media_urls[0], (ms + ms_two)), link_preview=True)
+                await event.reply(f"__**➥ Uploaded to :-**__ **[Telegraph]**({jisan})\n__**➥ Uploaded in {ms + ms_two} seconds .**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})", link_preview=True)
         elif input_str == "text":
             user_object = await borg.get_entity(r_message.from_id)
             title_of_page = user_object.first_name # + " " + user_object.last_name
@@ -150,11 +156,12 @@ async def _(event):
                 title_of_page,
                 html_content=page_content
             )
+            kakashi = "https://telegra.ph/{}".format(response["path"])
             end = datetime.now()
             ms = (end - start).seconds
-            await event.edit("Pasted to https://telegra.ph/{} in {} seconds.".format(response["path"], ms), link_preview=True)
+            await event.reply(f"__**➥ Pasted to :-**__ **[Telegraph]**({kakashi})\n__**➥ Pasted in {ms} seconds .**__", link_preview=True)
     else:
-        await event.edit("Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)")
+        await event.reply("Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)")
 
 def resize_image(image):
     im = Image.open(image)
