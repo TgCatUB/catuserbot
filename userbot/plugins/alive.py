@@ -55,10 +55,6 @@ async def amireallyalive(alive):
                         )         
 
 
-CMD_HELP.update({"alive": "`.alive` :\
-      \nUSAGE: Type .live to see wether your bot is working or not. "
-}) 
-
 @borg.on(sudo_cmd(pattern="sudo", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
@@ -70,7 +66,34 @@ async def _(event):
                      f"**✧✧ My Peru Owner:** [{DEFAULTUSER}]({USERNAME})\n"
                      f"**✧✧ Uptime :** `{uptime}\n`"
                     )   
-    
+@borg.on(admin_cmd(outgoing=True, pattern="live$"))
+async def amireallyalive(alive):
+    if alive.fwd_from:
+        return
+    reply_to_id = alive.message
+    uptime = await catdef.get_readable_time((time.time() - StartTime))
+    if alive.reply_to_msg_id:
+        reply_to_id = await alive.get_reply_message()
+    if CAT_IMG:
+         cat_caption  = f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
+         cat_caption += f"**✧ Database :** `Functioning normally!`\n"   
+         cat_caption += f"**✧ Telethon version :** `{version.__version__}\n`"
+         cat_caption += f"**✧ Catuserbot Version :** `{catversion}`\n"
+         cat_caption += f"**✧ Python Version :** `{python_version()}\n`"
+         cat_caption += f"**✧ My peru Master:** [{DEFAULTUSER}]({USERNAME})\n"
+         cat_caption += f"**✧ Uptime :** `{uptime}\n`"
+         await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
+         await alive.delete()
+    else:
+        await alive.edit(f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
+                         "**✧ Database :** `Functioning normally!`\n"   
+                         f"**✧ Telethon Version :** `{version.__version__}\n`"
+                         f"**✧ Catuserbot Version :** `{catversion}`\n"
+                         f"**✧ Python Version :** `{python_version()}\n`"
+                         f"**✧ My Peru Master:** [{DEFAULTUSER}]({USERNAME})\n"
+                         f"**✧ Uptime :** `{uptime}\n`"
+                        )         
+
 @borg.on(admin_cmd(pattern="cat$"))
 async def _(event):
     await event.delete() 
@@ -84,8 +107,10 @@ async def _(event):
     img.seek(0)
     await bot.send_file(event.chat_id , open("temp.webp", "rb"),reply_to=reply_to_id) 
 	
-CMD_HELP.update({"alive": "`.live` :\
-      \n**USAGE:** Type .live to see wether your bot is working or not.\
+CMD_HELP.update({"alive": "`.alive` :\
+      \n**USAGE:** Type .alive to see wether your bot is working or not.\
+      \n\n`.live`\
+      \n**USAGE : **status of bot.\
       \n\n`.cat`\
       \n**USAGE : **Random cat stickers"
 })
