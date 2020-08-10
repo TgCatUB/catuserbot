@@ -91,7 +91,7 @@ async def _(event):
         await event.edit("Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)")
 
 
-@borg.on(sudo_cmd(pattern="telegraph (media) ?(.*)", allow_sudo = True))
+@borg.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)", allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
