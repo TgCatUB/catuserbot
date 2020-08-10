@@ -10,17 +10,18 @@ from datetime import datetime
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 import json
+import os
 import requests
 import subprocess
 from telethon import events
 from telethon.tl.types import DocumentAttributeVideo
 from telethon.errors import MessageNotModifiedError
 import time
-from userbot.utils import admin_cmd
+from userbot import CMD_HELP, ALIVE_NAME
+from userbot.utils import admin_cmd, sudo_cmd
 from userbot.utils import progress, humanbytes, time_formatter
 import io
 import math
-import os
 from pySmartDL import SmartDL
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
@@ -37,6 +38,7 @@ def get_video_thumb(file, output=None, width=90):
     if not p.returncode and os.path.lexists(file):
         return output
 
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 @borg.on(admin_cmd(pattern="rename (.*)"))
 async def _(event):
@@ -63,7 +65,7 @@ async def _(event):
         end = datetime.now()
         ms = (end - start).seconds
         if os.path.exists(downloaded_file_name):
-            await event.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
+            await event.edit(f"__**➥ Downloaded in {ms} seconds.**__\n__**➥ Downloaded to :- **__ `{downloaded_file_name}`\n__**➥ Downloaded by :-**__ {DEFAULTUSER}")
         else:
             await event.edit("Error Occurred\n {}".format(input_str))
     else:
@@ -98,7 +100,7 @@ async def _(event):
         ms_one = (end - start).seconds
         if os.path.exists(downloaded_file_name):
             c_time = time.time()
-            await borg.send_file(
+            caat = await borg.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
@@ -114,13 +116,68 @@ async def _(event):
             end_two = datetime.now()
             os.remove(downloaded_file_name)
             ms_two = (end_two - end).seconds
-            await event.edit("Downloaded in {} seconds. Uploaded in {} seconds.".format(ms_one, ms_two))
+            await event.delete()
+            await caat.edit(f"__**➥ Downloaded in {ms_one} seconds.**__\n__**➥ Uploaded in {ms_two} seconds.**__\n__**➥ Uploaded by :-**__ {DEFAULTUSER}")
         else:
             await event.edit("File Not Found {}".format(input_str))
     else:
         await event.edit("Syntax // .rnupload file.name as reply to a Telegram media")
 
-@borg.on(admin_cmd(pattern="rnstreamupload (.*)"))
+
+@borg.on(sudo_cmd(pattern="rnup (.*)",allow_sudo = True))
+async def _(event):
+    if event.fwd_from:
+        return
+    thumb = None
+    if os.path.exists(thumb_image_path):
+        thumb = thumb_image_path
+    await event.edit("Rename & Upload in process 🙄🙇‍♂️🙇‍♂️🙇‍♀️ It might take some time if file size is big")
+    input_str = event.pattern_match.group(1)
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if event.reply_to_msg_id:
+        start = datetime.now()
+        file_name = input_str
+        reply_message = await event.get_reply_message()
+        c_time = time.time()
+        to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
+        downloaded_file_name = os.path.join(to_download_directory, file_name)
+        downloaded_file_name = await borg.download_media(
+            reply_message,
+            downloaded_file_name,
+            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                  progress(d, t, event, c_time, "trying to download")
+            )
+        )
+        end = datetime.now()
+        ms_one = (end - start).seconds
+        if os.path.exists(downloaded_file_name):
+            c_time = time.time()
+            caat = await borg.send_file(
+                event.chat_id,
+                downloaded_file_name,
+                force_document=False,
+                supports_streaming=False,
+                allow_cache=False,
+                reply_to=event.message.id,
+                thumb=thumb,
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, event, c_time, "trying to upload")
+                )
+                
+            )
+            end_two = datetime.now()
+            os.remove(downloaded_file_name)
+            ms_two = (end_two - end).seconds
+            await event.delete()
+            await caat.reply(f"__**➥ Downloaded in {ms_one} seconds.**__\n__**➥ Uploaded in {ms_two} seconds.**__\n__**➥ Uploaded by :-**__ {DEFAULTUSER}")
+        else:
+            await event.reply("File Not Found {}".format(input_str))
+    else:
+        await event.reply("Syntax // .rnupload file.name as reply to a Telegram media")
+     
+        
+@borg.on(admin_cmd(pattern="rnstreamup (.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -171,7 +228,7 @@ async def _(event):
             # Bad Request: VIDEO_CONTENT_TYPE_INVALID
            # c_time = time.time()
             try:
-                await borg.send_file(
+                caat = await borg.send_file(
                     event.chat_id,
                     downloaded_file_name,
                     thumb=thumb,
@@ -195,7 +252,8 @@ async def _(event):
                 end = datetime.now()
                 os.remove(downloaded_file_name)
                 ms_two = (end - end_one).seconds
-                await event.edit("Downloaded in {} seconds. Uploaded in {} seconds.".format(ms_one, ms_two))
+                await event.delete()
+                await caat.edit(f"__**➥ Downloaded in {ms_one} seconds.**__\n__**➥ Uploaded in {ms_two} seconds.**__\n__**➥ Uploaded by :-**__ {DEFAULTUSER}")
         else:
             await event.edit("File Not Found {}".format(input_str))
     else:
@@ -256,7 +314,7 @@ async def _(event):
         await event.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms_dl))
         if os.path.exists(downloaded_file_name):
             c_time = time.time()
-            await borg.send_file(
+            caat = await borg.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=True,
@@ -271,7 +329,8 @@ async def _(event):
             end_two = datetime.now()
             os.remove(downloaded_file_name)
             ms_two = (end_two - end).seconds
-            await event.edit("Downloaded in {} seconds. Uploaded in {} seconds.".format(ms_dl, ms_two))
+            await event.delete()
+            await caat.edit(f"__**➥ Downloaded in {ms_dl} seconds.**__\n__**➥ Uploaded in {ms_two} seconds.**__\n__**➥ Uploaded by :-**__ {DEFAULTUSER}")
         else:
             await event.edit("File Not Found {}".format(input_str))
     else:
