@@ -31,6 +31,7 @@ convert_toimage = catdef.convert_toimage
 trap = catdef.trap
 phcomment = catdef.phcomment
 extract_time = catdef.extract_time
+take_screen_shot = catdef.take_screen_shot
 
 def check(cat):
     if "/start" in cat:
