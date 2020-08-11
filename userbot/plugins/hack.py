@@ -40,7 +40,7 @@ async def _(event):
             "`Hacking... 52%\n█████████████▒▒▒▒▒▒▒▒▒▒▒▒ `",
             "`Hacking... 84%\n█████████████████████▒▒▒▒ `",
             "`Hacking... 100%\n█████████HACKED███████████ `",
-            f"`Targeted Account Hacked...\n\nPay 69$ To` {DEFAULTUSER} . `To Remove this hack..`"
+            f"`Targeted Account Hacked...\n\nPay 100$ To` {DEFAULTUSER} . `To Remove this hack..`"
             ]
             for i in animation_ttl:
                 await asyncio.sleep(animation_interval)
