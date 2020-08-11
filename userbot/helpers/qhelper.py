@@ -30,30 +30,30 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 async def process(msg, user, client, reply, replied=None):
-        if not os.path.isdir(".tmp"):
-            os.mkdir(".tmp", 0o755)
+        if not os.path.isdir("./temp"):
+            os.mkdir("./temp", 0o755)
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf',
-                '.tmp/Roboto-Regular.ttf')
+                './temp/Roboto-Regular.ttf')
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf',
-                '.tmp/Quivira.otf')
+                './temp/Quivira.otf')
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
-                '.tmp/Roboto-Medium.ttf')
+                './temp/Roboto-Medium.ttf')
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/DroidSansMono.ttf',
-                '.tmp/DroidSansMono.ttf')
+                './temp/DroidSansMono.ttf')
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf',
-                '.tmp/Roboto-Italic.ttf')
+                './temp/Roboto-Italic.ttf')
 
         # Importıng fonts and gettings the size of text
-        font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 43, encoding="utf-16")
-        font2 = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 33, encoding="utf-16")
-        mono = ImageFont.truetype(".tmp/DroidSansMono.ttf", 30, encoding="utf-16")
-        italic = ImageFont.truetype(".tmp/Roboto-Italic.ttf", 33, encoding="utf-16")
-        fallback = ImageFont.truetype(".tmp/Quivira.otf", 43, encoding="utf-16")
+        font = ImageFont.truetype("./temp/Roboto-Medium.ttf", 43, encoding="utf-16")
+        font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 33, encoding="utf-16")
+        mono = ImageFont.truetype("./temp/DroidSansMono.ttf", 30, encoding="utf-16")
+        italic = ImageFont.truetype("./temp/Roboto-Italic.ttf", 33, encoding="utf-16")
+        fallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
 
         # Splitting text
         maxlength = 0
@@ -204,7 +204,7 @@ async def process(msg, user, client, reply, replied=None):
 
         # Writing User's Name
         space = pfpbg.width + 30
-        namefallback = ImageFont.truetype(".tmp/Quivira.otf", 43, encoding="utf-16")
+        namefallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
         for letter in tot:
             if letter in emoji.UNICODE_EMOJI:
                 newemoji, mask = await emoji_fetch(letter)
@@ -227,26 +227,26 @@ async def process(msg, user, client, reply, replied=None):
         mdlength = 0
         index = 0
         emojicount = 0
-        textfallback = ImageFont.truetype(".tmp/Quivira.otf", 33, encoding="utf-16")
+        textfallback = ImageFont.truetype("./temp/Quivira.otf", 33, encoding="utf-16")
         textcolor = "white"
         for line in text:
             for letter in line:
                 index = msg.find(letter) if emojicount == 0 else msg.find(letter) + emojicount
                 for offset, length in bold.items():
                     if index in range(offset, length):
-                        font2 = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 33, encoding="utf-16")
+                        font2 = ImageFont.truetype("./temp/Roboto-Medium.ttf", 33, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in italic.items():
                     if index in range(offset, length):
-                        font2 = ImageFont.truetype(".tmp/Roboto-Italic.ttf", 33, encoding="utf-16")
+                        font2 = ImageFont.truetype("./temp/Roboto-Italic.ttf", 33, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in mono.items():
                     if index in range(offset, length):
-                        font2 = ImageFont.truetype(".tmp/DroidSansMono.ttf", 30, encoding="utf-16")
+                        font2 = ImageFont.truetype("./temp/DroidSansMono.ttf", 30, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in link.items():
                     if index in range(offset, length):
-                        font2 = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 30, encoding="utf-16")
+                        font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 30, encoding="utf-16")
                         textcolor = "#898989"
                 if letter in emoji.UNICODE_EMOJI:
                     newemoji, mask = await emoji_fetch(letter)
@@ -282,7 +282,7 @@ async def drawer(width, height):
         return top, middle, bottom
 
 async def fontTest(letter):
-        test = TTFont(".tmp/Roboto-Medium.ttf")
+        test = TTFont("./temp/Roboto-Medium.ttf")
         for table in test['cmap'].tables:
             if ord(letter) in table.cmap.keys():
                 return True
@@ -310,7 +310,7 @@ async def get_entity(msg):
         return bold, mono, italic, link
 
 async def catdoctype(name, size, htype, canvas):
-        font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
+        font = ImageFont.truetype("./temp/Roboto-Medium.ttf", 38)
         doc = Image.new("RGBA", (130, 130), (29, 29, 29, 255))
         draw = ImageDraw.Draw(doc)
         draw.ellipse((0, 0, 130, 130), fill="#434343")
@@ -331,7 +331,7 @@ async def no_photo(reply, tot):
         color = random.choice(COLORS)
         pen.ellipse((0, 0, 105, 105), fill=color)
         letter = "" if not tot else tot[0]
-        font = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 60)
+        font = ImageFont.truetype("./temp/Roboto-Regular.ttf", 60)
         pen.text((32, 17), letter, font=font, fill="white")
         return pfp, color
 
@@ -340,9 +340,9 @@ async def emoji_fetch(emoji):
             urllib.request.urlopen("https://github.com/erenmetesar/modules-repo/raw/master/emojis.txt").read().decode())
         if emoji in emojis:
             img = emojis[emoji]
-            return await transparent(urllib.request.urlretrieve(img, ".tmp/emoji.png")[0])
+            return await transparent(urllib.request.urlretrieve(img, "./temp/emoji.png")[0])
         img = emojis["⛔"]
-        return await transparent(urllib.request.urlretrieve(img, ".tmp/emoji.png")[0])
+        return await transparent(urllib.request.urlretrieve(img, "./temp/emoji.png")[0])
         
 async def transparent(emoji):
         emoji = Image.open(emoji).convert("RGBA")
@@ -355,10 +355,10 @@ async def transparent(emoji):
         return emoji, mask
 
 async def replied_user(draw, tot, text, maxlength, title):
-        namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
-        namefallback= ImageFont.truetype(".tmp/Quivira.otf", 38)
-        textfont = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 32)
-        textfallback = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
+        namefont = ImageFont.truetype("./temp/Roboto-Medium.ttf", 38)
+        namefallback= ImageFont.truetype("./temp/Quivira.otf", 38)
+        textfont = ImageFont.truetype("./temp/Roboto-Regular.ttf", 32)
+        textfallback = ImageFont.truetype("./temp/Roboto-Medium.ttf", 38)
         maxlength = maxlength + 7 if maxlength < 10 else maxlength
         text = text[:maxlength - 2] + ".." if len(text) > maxlength else text
         draw.line((165, 90, 165, 170), width=5, fill="white")
