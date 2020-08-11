@@ -4,6 +4,7 @@ aiohttp
 aria2p
 asyncurban
 beautifulsoup4
+cairosvg
 cfscrape
 coffeehouse
 covid
