@@ -30,6 +30,7 @@ humanize
 jotquote
 justwatch
 kwot
+lottie
 lxml
 lyricsgenius
 nekos.py
