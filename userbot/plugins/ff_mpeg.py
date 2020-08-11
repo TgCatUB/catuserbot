@@ -9,9 +9,7 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from userbot.utils import admin_cmd, progress
 
-
 FF_MPEG_DOWN_LOAD_MEDIA_PATH = "uniborg.media.ffmpeg"
-
 
 @borg.on(admin_cmd(pattern="ffmpegsave"))
 async def ff_mpeg_trim_cmd(event):
@@ -115,7 +113,6 @@ async def ff_mpeg_trim_cmd(event):
     ms = (end - start).seconds
     await event.edit(f"Completed Process in {ms} seconds")
 
-
 async def take_screen_shot(video_file, output_directory, ttl):
     # https://stackoverflow.com/a/13891070/4723940
     out_put_file_name = output_directory + \
@@ -143,10 +140,9 @@ async def take_screen_shot(video_file, output_directory, ttl):
     t_response = stdout.decode().strip()
     if os.path.lexists(out_put_file_name):
         return out_put_file_name
-    else:
-        logger.info(e_response)
-        logger.info(t_response)
-        return None
+    logger.info(e_response)
+    logger.info(t_response)
+    return None
 
 # https://github.com/Nekmo/telegram-upload/blob/master/telegram_upload/video.py#L26
 
@@ -180,7 +176,6 @@ async def cult_small_video(video_file, output_directory, start_time, end_time):
     t_response = stdout.decode().strip()
     if os.path.lexists(out_put_file_name):
         return out_put_file_name
-    else:
-        logger.info(e_response)
-        logger.info(t_response)
-        return None
+    logger.info(e_response)
+    logger.info(t_response)
+    return None

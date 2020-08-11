@@ -50,8 +50,7 @@ async def variable(var):
             if variable in heroku_var:
                 return await var.edit("**ConfigVars**:"
                                       f"\n\n`{variable} = {heroku_var[variable]}`\n")
-            else:
-                return await var.edit("**ConfigVars**:"
+            return await var.edit("**ConfigVars**:"
                                       f"\n\n`Error:\n-> {variable} don't exists`")
         except IndexError:
             configs = prettyjson(heroku_var.to_dict(), indent=2)
@@ -83,14 +82,14 @@ async def variable(var):
         if not value:
             variable = variable.split()[0]
             try:
-                value = var.pattern_match.group(2).split()[1]
+                value = var.pattern_match.group(2).split(' ', 1)[1]
             except IndexError:
                 return await var.edit(">`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1.5)
         if variable in heroku_var:
-            await var.edit(f"**{variable}**  `successfully changed to`  ->  **{value}**")
+            await var.edit(f"`{variable}` **successfully changed to  ->  **`{value}`")
         else:
-            await var.edit(f"**{variable}**  `successfully added with value`  ->  **{value}**")
+            await var.edit(f"`{variable}`**  successfully added with value`  ->  **{value}`")
         heroku_var[variable] = value
     elif exe == "del":
         await var.edit("`Getting information to deleting variable...`")
@@ -100,10 +99,10 @@ async def variable(var):
             return await var.edit("`Please specify ConfigVars you want to delete`")
         await asyncio.sleep(1.5)
         if variable in heroku_var:
-            await var.edit(f"**{variable}**  `successfully deleted`")
+            await var.edit(f"`{variable}`  **successfully deleted**")
             del heroku_var[variable]
         else:
-            return await var.edit(f"**{variable}**  `is not exists`")
+            return await var.edit(f"`{variable}`**  is not exists**")
 
 
 @borg.on(admin_cmd(pattern="usage(?: |$)", outgoing=True))
@@ -182,4 +181,4 @@ def prettyjson(obj, indent=2, maxlinelength=80):
 CMD_HELP.update({
   "heroku":
   "Info for Module to Manage Heroku:**\n\n`.usage`\nUsage:__Check your heroku dyno hours status.__\n\n`.set var <NEW VAR> <VALUE>`\nUsage: __add new variable or update existing value variable__\n**!!! WARNING !!!, after setting a variable the bot will restart.**\n\n`.get var or .get var <VAR>`\nUsage: __get your existing varibles, use it only on your private group!__\n**This returns all of your private information, please be cautious...**\n\n`.del var <VAR>`\nUsage: __delete existing variable__\n**!!! WARNING !!!, after deleting variable the bot will restarted**\n\n`.herokulogs`\nUsage:sends you recent 100 lines of logs in heroku"
-})
+})    

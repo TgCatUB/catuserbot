@@ -1,8 +1,6 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
-#
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
-#
 """ Userbot module containing various scrapers. """
 
 import os
@@ -42,13 +40,12 @@ LANG = "en"
 CARBONLANG = "auto"
 TTS_LANG = "en"
 TRT_LANG = "en"
-
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
 else:
     BOTLOG = True
     BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-
+  
 @borg.on(admin_cmd(outgoing=True, pattern="krb"))
 async def carbon_api(e):
    await e.edit("Processing..")
@@ -87,7 +84,7 @@ async def carbon_api(e):
    params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_path}}
    command_result = driver.execute("send_command", params)
    driver.find_element_by_xpath('/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]').click()
-   if skeme != None:
+   if skeme is not None:
          k_skeme = driver.find_element_by_xpath('/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input')
          k_skeme.send_keys(skeme)
          k_skeme.send_keys(Keys.DOWN)

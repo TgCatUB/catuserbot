@@ -16,7 +16,6 @@ from hachoir.parser import createParser
 import asyncio
 import os
 import shutil
-import subprocess
 import time
 from pySmartDL import SmartDL
 from telethon import events
@@ -394,4 +393,4 @@ CMD_HELP.update({
     \n\n.untar reply to a .tar\
     \nUSEAGE: it will untar that .tar file\
 "
-})
+}) 

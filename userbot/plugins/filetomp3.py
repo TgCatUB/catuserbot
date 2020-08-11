@@ -24,7 +24,7 @@ async def _(event):
     if  input_str is None:
         await event.edit("try `.nfc voice` or`.nfc mp3`")
         return
-    elif input_str == "mp3":
+    if input_str == "mp3":
         await event.edit("converting...")
     elif input_str == "voice":
         await event.edit("converting...")
@@ -55,7 +55,7 @@ async def _(event):
         voice_note = False
         supports_streaming = False
         if input_str == "voice":
-            new_required_file_caption = "AUDIO_" + str(round(time.time())) + ".opus"
+            new_required_file_caption = "NLFC_" + str(round(time.time())) + ".opus"
             new_required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "/" + new_required_file_caption
             command_to_run = [
                 "ffmpeg",
@@ -74,7 +74,7 @@ async def _(event):
             voice_note = True
             supports_streaming = True
         elif input_str == "mp3":
-            new_required_file_caption = "MP3_" + str(round(time.time())) + ".mp3"
+            new_required_file_caption = "mp3_" + str(round(time.time())) + ".mp3"
             new_required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "/" + new_required_file_caption
             command_to_run = [
                 "ffmpeg",
@@ -123,4 +123,4 @@ async def _(event):
             
 CMD_HELP.update({"filetomp3": "`.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\
       \n**USAGE:**Converts the required media file to voice or mp3 file. "
-})
+})             
