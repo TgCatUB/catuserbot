@@ -12,7 +12,7 @@ from . import take_screen_shot ,runcmd
 
 @borg.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
 async def glitch(cat):
-    await cat.edit("```Processing... ```")
+    await cat.edit("```Glitching... 😁```")
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
     reply = await cat.get_reply_message()
@@ -23,9 +23,7 @@ async def glitch(cat):
         os.mkdir("./temp/")
     catid = cat.reply_to_msg_id
     catsticker = await reply.download_media(file = "./temp/")
-    if catsticker.endswith(('.mp4','.webp','.tgs','.png','.jpg')):
-        await cat.edit("```Glitching... 😁```")
-    else:
+    if not catsticker.endswith(('.mp4','.webp','.tgs','.png','.jpg')):
         os.remove(catsticker)
         await cat.edit("`Media not found...`")
         return
