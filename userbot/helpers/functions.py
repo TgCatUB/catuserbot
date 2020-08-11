@@ -6,7 +6,7 @@ import asyncio
 import requests 
 import subprocess
 from PIL import Image
-from userbot import LOGS
+from userbot import *
 from asyncio import sleep
 from random import choice
 from telethon import events
@@ -54,13 +54,13 @@ async def admin_groups(cat):
 
 #For using gif , animated stickers and videos in some parts , this function takes  take a screenshot and stores ported from userge
 async def take_screen_shot(video_file: str, duration: int, path: str = '') -> Optional[str]:
-    LOGS.info('[[[Extracting a frame from %s ||| Video duration => %s]]]', video_file, duration)
+    userbot.LOGS.info('[[[Extracting a frame from %s ||| Video duration => %s]]]', video_file, duration)
     ttl = duration // 2
     thumb_image_path = path or os.path.join("./temp/", f"{basename(video_file)}.jpg")
     command = f"ffmpeg -ss {ttl} -i '{video_file}' -vframes 1 '{thumb_image_path}'"
     err = (await runcmd(command))[1]
     if err:
-        LOGS.info(err)
+        userbot.LOGS.info(err)
     return thumb_image_path if os.path.exists(thumb_image_path) else None
 
 # executing of terminal commands 
