@@ -143,7 +143,7 @@ async def process(msg, user, client, reply, replied=None):
             replywidth = font2.getsize(reptot)[0]
             if reply.sticker:
                 sticker = await reply.download_media()
-                if reply.media.document.mime_type in ('tgsticker', 'mp4'):
+                if sticker.endswith(('tgs')):
                     await take_screen_shot(sticker, 0, "./temp/q.png")
                     stimg = Image.open("./temp/q.png")
                 else:
@@ -176,7 +176,7 @@ async def process(msg, user, client, reply, replied=None):
             y = 200
         elif reply.sticker:
             sticker = await reply.download_media()
-            if reply.media.document.mime_type in ('tgsticker', 'mp4'):
+            if sticker.endswith(('tgs')):
                 await take_screen_shot(sticker, 0, "./temp/q.png")
                 stimg = Image.open("./temp/q.png")
             else:
