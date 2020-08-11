@@ -1,7 +1,6 @@
 from sqlalchemy import Boolean, Column, String
 from userbot.plugins.sql_helper import SESSION, BASE
 
-
 class Locks(BASE):
     __tablename__ = "locks"
     chat_id = Column(String(14), primary_key=True)
@@ -11,8 +10,6 @@ class Locks(BASE):
     email = Column(Boolean, default=False)
     forward = Column(Boolean, default=False)
     url = Column(Boolean, default=False)
-
-
     def __init__(self, chat_id):
         self.chat_id = str(chat_id)  # ensure string
         self.bots = False
@@ -21,9 +18,7 @@ class Locks(BASE):
         self.forward = False
         self.url = False
 
-
 Locks.__table__.create(checkfirst=True)
-
 
 def init_locks(chat_id, reset=False):
     curr_restr = SESSION.query(Locks).get(str(chat_id))
@@ -34,7 +29,6 @@ def init_locks(chat_id, reset=False):
     SESSION.add(restr)
     SESSION.commit()
     return restr
-
 
 def update_lock(chat_id, lock_type, locked):
     curr_perm = SESSION.query(Locks).get(str(chat_id))
@@ -53,23 +47,21 @@ def update_lock(chat_id, lock_type, locked):
     SESSION.add(curr_perm)
     SESSION.commit()
 
-
 def is_locked(chat_id, lock_type):
     curr_perm = SESSION.query(Locks).get(str(chat_id))
     SESSION.close()
     if not curr_perm:
         return False
-    elif lock_type == "bots":
+    if lock_type == "bots":
         return curr_perm.bots
-    elif lock_type == "commands":
+    if lock_type == "commands":
         return curr_perm.commands
-    elif lock_type == "email":
+    if lock_type == "email":
         return curr_perm.email
-    elif lock_type == "forward":
+    if lock_type == "forward":
         return curr_perm.forward
-    elif lock_type == "url":
+    if lock_type == "url":
         return curr_perm.url
-
 
 def get_locks(chat_id):
     try:
