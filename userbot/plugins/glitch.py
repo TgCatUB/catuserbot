@@ -4,12 +4,11 @@ ported to telethon by @mrconfused and @sandy1709
 """
 
 import os
-from .. import LOGS , CMD_HELP
 from PIL import Image
-from glitch_this import ImageGlitcher
 from ..utils import admin_cmd 
+from .. import LOGS , CMD_HELP
+from glitch_this import ImageGlitcher
 from . import take_screen_shot ,runcmd
-Glitched = "./temp/" + "glitch.gif"
 
 @borg.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
 async def glitch(cat):
@@ -77,6 +76,7 @@ async def glitch(cat):
         os.remove(glitched)
         await cat.delete()
     elif cmd == "glitch":
+        Glitched = "./temp/" + "glitch.gif"
         glitch_img = glitcher.glitch_image(img, catinput, color_offset=True, gif=True)
         DURATION = 200
         LOOP = 0
@@ -96,7 +96,7 @@ async def glitch(cat):
     for files in (catsticker, glitch_file):
         if files and os.path.exists(files):
             os.remove(files)
-            
+
 CMD_HELP.update({
     "glitch":
     "**SYNTAX : **`.glitch` reply to media file\
@@ -106,4 +106,4 @@ CMD_HELP.update({
     \n**USAGE :** glitches the given mediafile(gif , stickers , image, videos) to a sticker and glitch range is from 1 to 8.\
     If nothing is mentioned then by default it is 2\
     "
-})            
+})
