@@ -1,4 +1,8 @@
-import requests , os, re
+import requests 
+import os
+import re
+import time
+import subprocess
 from bs4 import BeautifulSoup
 from asyncio import sleep
 from random import choice
@@ -13,7 +17,6 @@ async def get_readable_time(seconds: int) -> str:
     up_time = ""
     time_list = []
     time_suffix_list = ["s", "m", "h", "days"]
-
     while count < 4:
         count += 1
         if count < 3:
@@ -24,15 +27,13 @@ async def get_readable_time(seconds: int) -> str:
             break
         time_list.append(int(result))
         seconds = int(remainder)
-
-    for x in range(len(time_list)):
+    hmm = len(time_list)
+    for x in range(hmm):
         time_list[x] = str(time_list[x]) + time_suffix_list[x]
     if len(time_list) == 4:
         up_time += time_list.pop() + ", "
-
     time_list.reverse()
     up_time += ":".join(time_list)
-
     return up_time
 
 #gban
@@ -58,8 +59,12 @@ async def catmusic(cat , QUALITY):
         video_link = link.get('href') 
         break
   video_link =  'http://www.youtube.com/'+video_link
-  command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)	
+  if not os.path.isdir("./temp/"):
+        os.makedirs("./temp/")
+  command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)
   os.system(command)
+  thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
+  os .system(thumb)
 
 
 async def catmusicvideo(cat):
@@ -73,11 +78,14 @@ async def catmusicvideo(cat):
             video_link = link.get('href') 
             break    
     video_link =  'http://www.youtube.com/'+video_link
-    command = ('youtube-dl -f "[filesize<20M]" ' +video_link)  
+    if not os.path.isdir("./temp/"):
+        os.makedirs("./temp/")
+    command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" -f "[filesize<20M]" ' +video_link)  
     os.system(command)
+    thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
+    os .system(thumb)
 
 # for stickertxt
-
 async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
     animus = [0, 1, 2, 3, 4, 7, 9, 10, 11, 15, 20, 22, 27, 29, 31, 32, 33, 34, 36, 37, 38, 
               40, 41, 42, 43, 44, 45, 47, 48, 51, 52, 53, 54, 55, 56, 57, 58, 60, 61, 62, 63]
@@ -89,6 +97,30 @@ async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
         await borg.send_file(int(chat_id) , cat , reply_to = reply_to_id ) 
         await cat.delete()
 
+#https://github.com/pokurt/LyndaRobot/blob/7556ca0efafd357008131fa88401a8bb8057006f/lynda/modules/helper_funcs/string_handling.py#L238
+
+async def extract_time(cat , time_val):
+    if any(time_val.endswith(unit) for unit in ('m', 'h', 'd' , 'w')):
+        unit = time_val[-1]
+        time_num = time_val[:-1]  # type: str
+        if not time_num.isdigit():
+            cat.edit("Invalid time amount specified.")
+            return ""
+        if unit == 'm':
+            bantime = int(time.time() + int(time_num) * 60)
+        elif unit == 'h':
+            bantime = int(time.time() + int(time_num) * 60 * 60)
+        elif unit == 'd':
+            bantime = int(time.time() + int(time_num) * 24 * 60 * 60)
+        elif unit == 'w':
+            bantime = int(time.time() + int(time_num) * 7 * 24 * 60 * 60) 
+        else:
+            # how even...?
+            return ""
+        return bantime
+    cat.edit("Invalid time type specified. Expected m , h , d or w but got: {}".format(time_val[-1]))
+    return ""
+        
 EMOJI_PATTERN = re.compile(
     "["
     "\U0001F1E0-\U0001F1FF"  # flags (iOS)
@@ -107,7 +139,7 @@ EMOJI_PATTERN = re.compile(
 def deEmojify(inputString: str) -> str:
     """Remove emojis and other non-safe characters from string"""
     return re.sub(EMOJI_PATTERN, '', inputString)
-
+  
 def convert_toimage(image):
     img = Image.open(image)
     if img.mode != 'RGB':
@@ -115,7 +147,7 @@ def convert_toimage(image):
     img.save("temp.jpg", "jpeg")
     os.remove(image)
     return "temp.jpg"
-    
+
 # for nekobot
 async def trumptweet(text):
         r = requests.get(
@@ -180,7 +212,7 @@ async def tweets(text1,text2):
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
         img.save("temp.webp", "webp")    
-        return "temp.webp"
+        return "temp.webp"      
 
 async def iphonex(text):
     r = requests.get(
@@ -296,4 +328,4 @@ async def phcomment(text1,text2,text3):
     if img.mode != 'RGB':
         img = img.convert('RGB')
     img.save("temp.jpg", "jpeg")    
-    return "temp.jpg"    
+    return "temp.jpg"
