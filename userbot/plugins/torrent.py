@@ -20,7 +20,7 @@ EDIT_SLEEP_TIME_OUT = 5
 aria2_is_running = os.system(cmd)
 
 aria2 = aria2p.API(aria2p.Client(host="http://localhost", 
-				 port=8210,
+				 port=6800,
                                  secret=""))
 
 @borg.on(admin_cmd(pattern=r"fromurl(?: |$)(.*)"))
