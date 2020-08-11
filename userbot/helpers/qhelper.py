@@ -33,19 +33,19 @@ logger.setLevel(logging.DEBUG)
 async def process(msg, user, client, reply, replied=None):
         if not os.path.isdir("./temp/"):
             os.mkdir("./temp/", 0o755)
-            urllib.request.urlretrieve(
+        urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf',
                 './temp/Roboto-Regular.ttf')
-            urllib.request.urlretrieve(
+        urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf',
                 './temp/Quivira.otf')
-            urllib.request.urlretrieve(
+        urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
                 './temp/Roboto-Medium.ttf')
-            urllib.request.urlretrieve(
+        urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/DroidSansMono.ttf',
                 './temp/DroidSansMono.ttf')
-            urllib.request.urlretrieve(
+        urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf',
                 './temp/Roboto-Italic.ttf')
 
