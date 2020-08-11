@@ -22,6 +22,7 @@ import random
 import json
 import os
 import re
+from .functions import take_screen_shot
 
 COLORS = [
     "#F07975", "#F49F69", "#F9C84A", "#8CC56E", "#6CC7DC", "#80C1FA", "#BCB3F9", "#E181AC"]
@@ -142,11 +143,17 @@ async def process(msg, user, client, reply, replied=None):
             replywidth = font2.getsize(reptot)[0]
             if reply.sticker:
                 sticker = await reply.download_media()
-                stimg = Image.open(sticker)
+                if reply.media.document.mime_type in ('tgsticker', 'mp4'):
+                    await take_screen_shot(sticker, 0, "./temp/q.png")
+                    stimg = Image.open("./temp/q.png")
+                else:
+                    stimg = Image.open(sticker)
                 canvas = canvas.resize((stimg.width + pfpbg.width + 30, stimg.height + 10))
                 canvas.paste(pfpbg, (0,0))
                 canvas.paste(stimg, (pfpbg.width + 10, 10))
                 os.remove(sticker)
+                if os.path.lexists("./temp/q.png"):
+                    os.remove("./temp/q.png")
                 return True, canvas
             canvas = canvas.resize((canvas.width + 60, canvas.height + 120))
             top, middle, bottom = await drawer(middle.width + 60, height + 105)
@@ -169,11 +176,17 @@ async def process(msg, user, client, reply, replied=None):
             y = 200
         elif reply.sticker:
             sticker = await reply.download_media()
-            stimg = Image.open(sticker)
+            if reply.media.document.mime_type in ('tgsticker', 'mp4'):
+                await take_screen_shot(sticker, 0, "./temp/q.png")
+                stimg = Image.open("./temp/q.png")
+            else:
+                stimg = Image.open(sticker)
             canvas = canvas.resize((stimg.width + pfpbg.width + 30, stimg.height + 10))
             canvas.paste(pfpbg, (0,0))
             canvas.paste(stimg, (pfpbg.width + 10, 10))
             os.remove(sticker)
+            if os.path.lexists("./temp/q.png"):
+                os.remove("./temp/q.png")
             return True, canvas
         elif reply.document and not reply.audio:
             docname = ".".join(reply.document.attributes[-1].file_name.split(".")[:-1])
