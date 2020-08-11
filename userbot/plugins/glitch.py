@@ -20,7 +20,7 @@ async def glitch(cat):
         return
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
-    catid = await cat.reply_to_msg_id
+    catid = cat.reply_to_msg_id
     catsticker = await reply.download_media(file = "./temp/")
     if catsticker.endswith(('.mp4','.webp','.tgs','.png','.jpg')):
         await cat.edit("```Glitching... 😁```")
