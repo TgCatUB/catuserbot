@@ -11,6 +11,7 @@
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
+from .functions import take_screen_shot , runcmd
 from telethon.tl import types, functions
 from fontTools.ttLib import TTFont 
 from fontTools.unicode import Unicode 
@@ -22,7 +23,6 @@ import random
 import json
 import os
 import re
-from .functions import take_screen_shot
 
 COLORS = [
     "#F07975", "#F49F69", "#F9C84A", "#8CC56E", "#6CC7DC", "#80C1FA", "#BCB3F9", "#E181AC"]
@@ -31,8 +31,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 async def process(msg, user, client, reply, replied=None):
-        if not os.path.isdir("./temp"):
-            os.mkdir("./temp", 0o755)
+        if not os.path.isdir("./temp/"):
+            os.mkdir("./temp/", 0o755)
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf',
                 './temp/Roboto-Regular.ttf')
@@ -143,8 +143,10 @@ async def process(msg, user, client, reply, replied=None):
             replywidth = font2.getsize(reptot)[0]
             if reply.sticker:
                 sticker = await reply.download_media()
+                file_1 = os.path.join("./temp/", "q.png")
                 if sticker.endswith(('tgs')):
-                    await take_screen_shot(sticker, 0, "./temp/q.png")
+                    cmd = f"lottie_convert.py --frame 0 -if lottie -of png {sticker} {file_1}"
+                    stdout, stderr = (await runcmd(cmd))[:2]
                     stimg = Image.open("./temp/q.png")
                 else:
                     stimg = Image.open(sticker)
@@ -152,8 +154,8 @@ async def process(msg, user, client, reply, replied=None):
                 canvas.paste(pfpbg, (0,0))
                 canvas.paste(stimg, (pfpbg.width + 10, 10))
                 os.remove(sticker)
-                if os.path.lexists("./temp/q.png"):
-                    os.remove("./temp/q.png")
+                if os.path.lexists(file_1):
+                    os.remove(file_1)
                 return True, canvas
             canvas = canvas.resize((canvas.width + 60, canvas.height + 120))
             top, middle, bottom = await drawer(middle.width + 60, height + 105)
@@ -176,8 +178,10 @@ async def process(msg, user, client, reply, replied=None):
             y = 200
         elif reply.sticker:
             sticker = await reply.download_media()
+            file_1 = os.path.join("./temp/", "q.png")
             if sticker.endswith(('tgs')):
-                await take_screen_shot(sticker, 0, "./temp/q.png")
+                cmd = f"lottie_convert.py --frame 0 -if lottie -of png {sticker} {file_1}"
+                stdout, stderr = (await runcmd(cmd))[:2]
                 stimg = Image.open("./temp/q.png")
             else:
                 stimg = Image.open(sticker)
@@ -185,8 +189,8 @@ async def process(msg, user, client, reply, replied=None):
             canvas.paste(pfpbg, (0,0))
             canvas.paste(stimg, (pfpbg.width + 10, 10))
             os.remove(sticker)
-            if os.path.lexists("./temp/q.png"):
-                os.remove("./temp/q.png")
+            if os.path.lexists(file_1):
+                os.remove(file_1)
             return True, canvas
         elif reply.document and not reply.audio:
             docname = ".".join(reply.document.attributes[-1].file_name.split(".")[:-1])
