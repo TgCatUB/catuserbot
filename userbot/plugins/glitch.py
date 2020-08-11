@@ -12,6 +12,7 @@ from . import take_screen_shot ,runcmd
 
 @borg.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
 async def glitch(cat):
+    await cat.edit("```Processing... ```")
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
     reply = await cat.get_reply_message()
@@ -61,7 +62,7 @@ async def glitch(cat):
             await cat.edit("```catsticker not found...```")
             return
         glitch_file = catfile
-    if glitch_file is None:
+    else:
         glitch_file = catsticker
     glitcher = ImageGlitcher()
     img = Image.open(glitch_file)
