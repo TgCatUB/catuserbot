@@ -11,6 +11,7 @@ from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from ..utils import admin_cmd, sudo_cmd
 import logging
 import os
+from . import take_screen_shot
 from .. import process
 
 @borg.on(admin_cmd(pattern="q(?: |$)(.*)"))
@@ -24,7 +25,7 @@ async def stickerchat(catquotes):
     fetchmsg = reply.message
     repliedreply = await reply.get_reply_message()
     if reply.media:
-        if reply.media.document.mime_type in ('tgsticker', 'mp4'):
+        if reply.media.document.mime_type in ('mp4'):
             await catquotes.edit("animated stickers and mp4 formats are not supported")
             return
     await catquotes.delete()
@@ -33,9 +34,9 @@ async def stickerchat(catquotes):
     res, catmsg = await process(fetchmsg, user, borg , reply, repliedreply)
     if not res:
         return
-    catmsg.save('.tmp/sticker.webp')
-    await borg.send_file(catquotes.chat_id, ".tmp/sticker.webp" , reply_to = reply)
-    os.remove('.tmp/sticker.webp')
+    catmsg.save('./temp/sticker.webp')
+    await borg.send_file(catquotes.chat_id, "./temp/sticker.webp" , reply_to = reply)
+    os.remove('./temp/sticker.webp')
     
 @borg.on(admin_cmd(pattern="qbot(?: |$)(.*)",outgoing=True))
 async def _(event):
