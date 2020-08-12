@@ -76,8 +76,7 @@ async def _(event):
                  logger.debug(r)
                  if r == 0:
                      await event.edit("┏━━━┓\n┃┏━━┛\n┃┗━━┓\n┃┏━━┛\n┃┃\n┗┛")
-                 else:
-                     r == 1            
+                 else:                                
                      await event.edit("╭━━━╮\n┃╭━━╯\n┃╰━━╮\n┃╭━━╯\n┃┃\n╰╯")    
 
 @borg.on(admin_cmd(pattern="f (.*)"))
