@@ -26,8 +26,7 @@ import multiprocessing
 import os
 import re
 import time
-from asyncio import create_subprocess_shell as asyncSubprocess
-from asyncio.subprocess import PIPE as asyncPIPE
+from subprocess import PIPE, Popen
 from urllib.error import HTTPError
 from pySmartDL import SmartDL
 from userbot import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
@@ -167,7 +166,7 @@ async def decrypt_file(megadl, file_path, temp_file_path,
                        hex_key, hex_raw_key):
     cmd = ("cat '{}' | openssl enc -d -aes-128-ctr -K {} -iv {} > '{}'"
            .format(temp_file_path, hex_key, hex_raw_key, file_path))
-    await subprocess_run(megadl, cmd):
+    await subprocess_run(megadl, cmd)
     os.remove(temp_file_path)
 
 CMD_HELP.update({
