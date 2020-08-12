@@ -20,13 +20,15 @@ import asyncio
 from userbot.utils import admin_cmd , sudo_cmd
 import glob
 import os  
-from userbot import CMD_HELP
+from userbot import CMD_HELP, ALIVE_NAME
 from userbot.plugins import catmusic , catmusicvideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Cat"
 
 @borg.on(admin_cmd(pattern="song(?: |$)(.*)"))
 async def _(event):
@@ -67,7 +69,7 @@ async def _(event):
                 loa,
                 force_document=False,
                 allow_cache=False,
-                caption=query,
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
                 thumb = catthumb,
                 supports_streaming=True,
                 reply_to=reply_to_id
@@ -116,7 +118,7 @@ async def _(event):
                 loa,
                 force_document=False,
                 allow_cache=False,
-                caption=query,
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
                 thumb = catthumb,
                 supports_streaming=True,
                 reply_to=reply_to_id
@@ -176,7 +178,7 @@ async def _(event):
                 force_document=False,
                 allow_cache=False,
                 thumb = catthumb,
-                caption=query,
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
                 supports_streaming=True,
                 reply_to=reply_to_id
             )
@@ -224,7 +226,7 @@ async def _(event):
                 loa,
                 force_document=False,
                 allow_cache=False,
-                caption=query,
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
                 thumb = catthumb,
                 supports_streaming=True,
                 reply_to=reply_to_id
