@@ -23,7 +23,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                MessageMediaPhoto)
 
 from userbot import CMD_HELP, bot 
-from userbot.utils import register, errors_handler, admin_cmd
+from userbot.utils import register, errors_handler, admin_cmd, sudo_cmd
 from userbot.uniborgConfig import Config
 from telethon import events, errors, functions, types
 
