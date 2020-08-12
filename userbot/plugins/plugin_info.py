@@ -12,7 +12,7 @@ async def info(event):
             await event.edit("Please specify a valid plugin name.")
     else:
         string = "**Please specify which plugin do you want help for !!**\
-            \n**Usage:** `.info` <plugin name>\n\n"
+            \n**Usage:** `.plinfo` <plugin name>\n\n"
         for i in sorted(CMD_HELP):
             string += "◆`" + str(i)
             string += "`   "
