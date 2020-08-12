@@ -118,11 +118,11 @@ async def mega_downloader(megadl):
         diff = time.time() - start
         try:
             current_message = (
-                f"{file_name}\n\n"
+                f"**{file_name}**\n\n"
                 "Status\n"
                 f"`{progress_str}`\n"
                 f"`{humanbytes(downloaded)}` of `{humanbytes(total_length)}`"
-                f" @ {speed}\n"
+                f" @ `{speed}`\n"
                 f"**ETA -> **`{time_formatter(estimated_total_time)}`\n"
                 f"**Duration -> **`{time_formatter(round(diff))}`")
             if round(diff % 15.00) == 0 and (display_message != current_message
