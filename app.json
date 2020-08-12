@@ -9,7 +9,7 @@
     "modular",
     "productivity"
   ],
-  "repository": "https://github.com/sandy1709/catuserbot/",
+  "repository": "https://github.com/Jisan09/catuserbot/",
   "website": "#TODO",
   "success_url": "#TODO",
   "stack": "container",
@@ -24,7 +24,7 @@
       "required": false
     },
     "ALIVE_NAME": {
-      "description": "give your name",
+      "description": "give your name, like Jisan",
       "value": ""
     },
     "APP_ID": {
@@ -33,6 +33,10 @@
     },
     "API_HASH": {
       "description": "Get this value from my.telegram.org! Please do not steal",
+      "value": ""
+    },
+    "LIVE_USERNAME": {
+      "description": "give your tg username, like @Jisan7509",
       "value": ""
     },
     "STRING_SESSION": {
