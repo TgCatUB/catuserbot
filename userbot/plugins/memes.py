@@ -26,12 +26,14 @@ from userbot import CMD_HELP
 from userbot.utils import register, admin_cmd
 from userbot import ALIVE_NAME
 
-BOTLOG = True
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
+else:
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 # ================= CONSTANT =================
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "@Sur_vivor"
 
 RENDISTR = [
     "`I Know Uh ez Rendi Bhay Dont show Your Randi Pesa Here`",
