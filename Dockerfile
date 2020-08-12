@@ -1,4 +1,4 @@
-FROM sur-vivor/catuserbot:latest
+FROM sandy1709/catuserbot:latest
 
 #clonning repo 
 RUN git clone https://github.com/Sur-vivor/CatUserbot.git /root/userbot
