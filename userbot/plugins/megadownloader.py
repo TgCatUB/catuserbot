@@ -33,18 +33,19 @@ from pySmartDL import SmartDL
 from userbot import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
 from userbot.utils import humanbytes, time_formatter, admin_cmd
         
-async def subprocess_run(megadl, cmd):
-    subproc = await asyncSubprocess(cmd, stdout=asyncPIPE, stderr=asyncPIPE)
-    stdout, stderr = await subproc.communicate()
-    exitCode = subproc.returncode
-    if exitCode != 0:
-        await megadl.edit(
-            '**An error was detected while running subprocess.**\n'
-            f'exitCode : `{exitCode}`\n'
-            f'stdout : `{stdout.decode().strip()}`\n'
-            f'stderr : `{stderr.decode().strip()}`')
-        return exitCode
-    return stdout.decode().strip(), stderr.decode().strip(), exitCode
+async def subprocess_run(message , cmd):
+    subproc = Popen(cmd, stdout=PIPE, stderr=PIPE,
+                    shell=True, universal_newlines=True,
+                    executable="bash")
+    talk = subproc.communicate()
+    exit_code = subproc.returncode
+    if exit_code != 0:
+        await message.edit('```An error was detected while running the subprocess:\n'
+            f'exit code: {exit_code}\n'
+            f'stdout: {talk[0]}\n'
+            f'stderr: {talk[1]}```')
+        return exit_code
+    return talk
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"mega(?: |$)(.*)"))
 async def mega_downloader(megadl):
@@ -166,12 +167,8 @@ async def decrypt_file(megadl, file_path, temp_file_path,
                        hex_key, hex_raw_key):
     cmd = ("cat '{}' | openssl enc -d -aes-128-ctr -K {} -iv {} > '{}'"
            .format(temp_file_path, hex_key, hex_raw_key, file_path))
-    if await subprocess_run(megadl, cmd):
-        os.remove(temp_file_path)
-    else:
-        raise FileNotFoundError(
-            errno.ENOENT, os.strerror(errno.ENOENT), file_path)
-    return
+    await subprocess_run(megadl, cmd):
+    os.remove(temp_file_path)
 
 CMD_HELP.update({
     "mega":
