@@ -118,13 +118,13 @@ async def mega_downloader(megadl):
         diff = time.time() - start
         try:
             current_message = (
-                f"**{file_name}**\n\n"
-                "Status\n"
+                f"**➥file name : **`{file_name}`\n\n"
+                "**➥Status**\n"
                 f"{progress_str}\n"
                 f"`{humanbytes(downloaded)}` of `{humanbytes(total_length)}`"
                 f" @ `{speed}`\n"
-                f"**ETA -> **`{time_formatter(estimated_total_time)}`\n"
-                f"**Duration -> **`{time_formatter(round(diff))}`")
+                f"**➥ETA -> **`{time_formatter(estimated_total_time)}`\n"
+                f"**➥ Duration -> **`{time_formatter(round(diff))}`")
             if round(diff % 15.00) == 0 and (display_message != current_message
                                              or total_length == downloaded):
                 await megadl.edit(current_message)
@@ -151,9 +151,9 @@ async def mega_downloader(megadl):
             return None
         else:
             await megadl.edit(
-                f"`{file_name}`\n\n"
-                f"Successfully downloaded in: '`{file_path}`'.\n"
-                f"Download took: {time_formatter(download_time)}.")
+                f"**➥ file name : **`{file_name}`\n\n"
+                f"**➥ Successfully downloaded in : ** `{file_path}`.\n"
+                f"**➥ Download took :** {time_formatter(download_time)}.")
             return None
     else:
         await megadl.edit("`Failed to download, "
