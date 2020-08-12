@@ -63,7 +63,18 @@ async def _(event):
     end = datetime.now()
     ms = (end - start).microseconds / 1000
     uptime = await catdef.get_readable_time((time.time() - StartTime))
-    await event.edit(f"🚀Pong!\nPing Speed: {ms}\nUserbot Uptime: {uptime}")
+    await event.edit(f"🚀Pong!\nPing Speed: `{ms}`\nUserbot Uptime: `{uptime}`")
+    
+@borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
+async def _(event):
+    if event.fwd_from:
+        return
+    await event.delete()
+    start = datetime.now()
+    mone = await event.reply("Pong!")
+    end = datetime.now()
+    ms = (end - start).microseconds / 1000
+    await mone.edit("Pong!\n`{}`".format(ms))
         
 CMD_HELP.update({
     "ping":
@@ -71,4 +82,4 @@ CMD_HELP.update({
     \nUSAGE:A kind of ping with extra animation\
     \n\n`.ping`\
     \nUSAGE:Shows you the ping speed of server"
-})    
+})
