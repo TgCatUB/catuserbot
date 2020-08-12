@@ -120,7 +120,7 @@ async def mega_downloader(megadl):
             current_message = (
                 f"**{file_name}**\n\n"
                 "Status\n"
-                f"`{progress_str}`\n"
+                f"{progress_str}\n"
                 f"`{humanbytes(downloaded)}` of `{humanbytes(total_length)}`"
                 f" @ `{speed}`\n"
                 f"**ETA -> **`{time_formatter(estimated_total_time)}`\n"
