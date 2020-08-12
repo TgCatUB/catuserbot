@@ -6,7 +6,7 @@ import sys
 import requests
 from telethon import events, functions, __version__
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Cat"
 
 @borg.on(admin_cmd(pattern="help ?(.*)"))
 async def cmd_list(event):
@@ -15,7 +15,7 @@ async def cmd_list(event):
     if input_str == "text":
         string = ""
         for i in sorted(CMD_LIST):
-            string += "⚚" + i + "\n"
+            string += "⚡️" + i + "\n"
             for iter_list in CMD_LIST[i]:
                 string += "    " + str(iter_list)
                 string += "\n"
@@ -24,7 +24,7 @@ async def cmd_list(event):
             data = string
             key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
             url = f'https://nekobin.com/{key}'
-            reply_text = f'All commands of the catuserbot are [here]({url})'
+            reply_text = f'All commands of the CatUserbot are [here]({url})'
             await event.edit(reply_text)
             return
         await event.edit(string)
@@ -40,10 +40,10 @@ async def cmd_list(event):
             else:
                 await event.edit(input_str + " is not a valid plugin!")
         else:
-            help_string = f"Userbot Helper.. Provided by {DEFAULTUSER}\
+            help_string = f"Userbot Helper.. Provided by ✨{DEFAULTUSER}✨\
                           \nUserbot Helper to reveal all the plugin names\
                           \n__Do__ `.help` __plugin_name for commands, in case popup doesn't appear.__\
-                          \nDo `.info` plugin_name for usage"
+                          \nDo `.plinfo` plugin_name for usage"
             results = await bot.inline_query(  # pylint:disable=E0602
                 tgbotusername,
                 help_string
@@ -65,7 +65,7 @@ async def cmd_list(event):
             else:
                 await event.edit(input_str + " is not a valid plugin!")
         else:
-            string = f"**Userbot Helper.. Provided by {DEFAULTUSER}\nUserbot Helper to reveal all the plugin names\n\n**Do `.help` plugin_name for commands\nDo `.info` plugin_name for usage\n\n"
+            string = f"**Userbot Helper.. Provided by ✨{DEFAULTUSER}✨\nUserbot Helper to reveal all the plugin names\n\n**Do `.help` plugin_name for commands\nDo `.plinfo` plugin_name for usage\n\n"
             for i in sorted(CMD_LIST):
                 string += "◆`" + str(i)
                 string += "`   "
@@ -97,7 +97,7 @@ async def info(event):
                 await event.reply(args + " is not a valid plugin!")
     else:
         string = "**Please specify which plugin do you want help for !!**\
-            \n**Usage:** `.info` <plugin name>\n\n"
+            \n**Usage:** `.plinfo` <plugin name>\n\n"
         for i in sorted(SUDO_LIST):
             string += "◆`" + str(i)
             string += "`   "
