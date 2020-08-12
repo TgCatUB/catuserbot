@@ -1,3 +1,5 @@
+from userbot import bot
+from telethon import events
 from pathlib import Path
 import importlib
 from var import Var
