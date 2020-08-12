@@ -263,6 +263,6 @@ CMD_HELP.update({
     "whois":
     ".whois <username> or reply to someones text with .whois\
     \nUsage: Gets info of an user.\
-    .info <username> or reply to someones text with .userinfo\
+    .info <username> or reply to someones text with .info\
     \nUsage: Gets info of an user."
 })
