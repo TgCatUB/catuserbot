@@ -10,7 +10,9 @@ class Var(object):
     LOGGER = True
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
-    # Here for later purposes
+    #username to be displayed in .live 
+    LIVE_USERNAME = os.environ.get("LIVE_USERNAME", None)
+    # Here for later purpose
     SUDO_USERS = set(int(x) for x in os.environ.get("SUDO_USERS", "1005520858").split())
     LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
     LESS_SPAMMY = os.environ.get("LESS_SPAMMY", None)
