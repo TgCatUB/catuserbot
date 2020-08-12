@@ -304,7 +304,64 @@ async def nothanos(unbon):
     except UserIdInvalidError:
         await unbon.edit("`Uh oh my unban logic broke!`")
 
+@borg.on(sudo_cmd(pattern="(ban|unban) ?(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    start = datetime.now()
+    to_ban_id = None
+    rights = None
+    input_cmd = event.pattern_match.group(1)
+    if input_cmd == "ban":
+        rights = BANNED_RIGHTS
+    elif input_cmd == "unban":
+        rights = UNBAN_RIGHTS
+    input_str = event.pattern_match.group(2)
+    reply_msg_id = event.reply_to_msg_id
+    if reply_msg_id:
+        r_mesg = await event.get_reply_message()
+        to_ban_id = r_mesg.from_id
+    elif input_str and "all" not in input_str:
+        to_ban_id = int(input_str)
+    else:
+        return False
+    try:
+        await borg(EditBannedRequest(event.chat_id, to_ban_id, rights))
+    except (Exception) as exc:
+        await event.reply(str(exc))
+    else:
+        await event.reply(f"{input_cmd}ned Successfully!")
 
+@borg.on(sudo_cmd(pattern="pgs ?(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    if event.reply_to_msg_id:
+        i = 1
+        msgs = []
+        from_user = None
+        input_str = event.pattern_match.group(1)
+        if input_str:
+            from_user = await borg.get_entity(input_str)
+            logger.info(from_user)
+        async for message in borg.iter_messages(
+            event.chat_id,
+            min_id=event.reply_to_msg_id,
+            from_user=from_user
+        ):
+            i = i + 1
+            msgs.append(message)
+            if len(msgs) == 100:
+                await borg.delete_messages(event.chat_id, msgs, revoke=True)
+                msgs = []
+        if len(msgs) <= 100:
+            await borg.delete_messages(event.chat_id, msgs, revoke=True)
+            msgs = []
+            await event.delete()
+        else:
+            await event.reply("**PURGE** Failed!")
+ 
+        
 @borg.on(admin_cmd(pattern=r"delusers(?: |$)(.*)"))
 @errors_handler
 async def rm_deletedacc(show):
