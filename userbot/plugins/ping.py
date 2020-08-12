@@ -3,7 +3,7 @@ from telethon import events
 from datetime import datetime
 from telethon import events
 from datetime import datetime
-from userbot.utils import admin_cmd
+from userbot.utils import admin_cmd, sudo_cmd
 from userbot import CMD_HELP
 from userbot import StartTime, catdef
 import time
