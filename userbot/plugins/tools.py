@@ -4,6 +4,7 @@ import json
 import requests
 from urllib.parse import quote
 from userbot.utils import admin_cmd
+from PIL import Image, ImageColor
 import os
 import time
 from datetime import datetime
@@ -169,6 +170,90 @@ async def make_qr(makeqr):
     os.remove("img_file.webp")
     await makeqr.delete()
 
+@borg.on(admin_cmd(pattern="currency (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    start = datetime.now()
+    input_str = event.pattern_match.group(1)
+    input_sgra = input_str.split(" ")
+    if len(input_sgra) == 3:
+        try:
+            number = float(input_sgra[0])
+            currency_from = input_sgra[1].upper()
+            currency_to = input_sgra[2].upper()
+            request_url = "https://api.exchangeratesapi.io/latest?base={}".format(currency_from)
+            current_response = requests.get(request_url).json()
+            if currency_to in current_response["rates"]:
+                current_rate = float(current_response["rates"][currency_to])
+                rebmun = round(number * current_rate, 2)
+                await event.edit("{} {} = {} {}".format(number, currency_from, rebmun, currency_to))
+            else:
+                await event.edit("Welp, Hate to tell yout this but this Currency isn't supported **yet**.\n__Try__ `.currencies` __for a list of supported currencies.__")
+        except e:
+            await event.edit(str(e))
+    else:
+        await event.edit("**Syntax:**\n.currency amount from to\n**Example:**\n`.currency 10 usd inr`")
+    end = datetime.now()
+    ms = (end - start).seconds
+    
+@borg.on(admin_cmd(pattern="currencies$"))
+async def currencylist(ups):
+    if ups.fwd_from:
+        return
+    request_url = "https://api.exchangeratesapi.io/latest?base=USD"
+    current_response = requests.get(request_url).json()
+    dil_wale_puch_de_na_chaaa = current_response["rates"]
+    hmm =""
+    for key, value in dil_wale_puch_de_na_chaaa.items():
+        hmm += f"`{key}`" +"\t\t\t"
+    await ups.edit(f"**List of some currencies:**\n{hmm}\n")   
+        
+@borg.on(admin_cmd(pattern="ifsc (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    url = "https://ifsc.razorpay.com/{}".format(input_str)
+    r = requests.get(url)
+    if r.status_code == 200:
+        b = r.json()
+        a = json.dumps(b, sort_keys=True, indent=4)
+        # https://stackoverflow.com/a/9105132/4723940
+        await event.edit(str(a))
+    else:
+        await event.edit("`{}`: {}".format(input_str, r.text))
+        
+@borg.on(admin_cmd(pattern="color (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    message_id = event.message.id
+    if event.reply_to_msg_id:
+        message_id = event.reply_to_msg_id
+    if input_str.startswith("#"):
+        try:
+            usercolor = ImageColor.getrgb(input_str)
+        except Exception as e:
+            await event.edit(str(e))
+            return False
+        else:
+            im = Image.new(mode="RGB", size=(1280, 720), color=usercolor)
+            im.save("cat.png", "PNG")
+            input_str = input_str.replace("#", "#COLOR_")
+            await borg.send_file(
+                event.chat_id,
+                "UniBorg.png",
+                force_document=False,
+                caption=input_str,
+                reply_to=message_id
+            )
+            os.remove("cat.png")
+            await event.delete()
+    else:
+        await event.edit("Syntax: `.color <color_code>` example : `.color #ff0000`")
+   
 @borg.on(admin_cmd(pattern="xkcd ?(.*)"))
 async def _(event):
     if event.fwd_from:
@@ -214,18 +299,27 @@ Year: {}""".format(img, input_str, xkcd_link, safe_title, alt, day, month, year)
         await event.edit(output_str, link_preview=True)
     else:
         await event.edit("xkcd n.{} not found!".format(xkcd_id))
-
+        
 CMD_HELP.update({
     'tools':
-    ".scan reply to media or file\
-\nUSEAGE: it scans the media or file and checks either any virus is in the file or media\
-\n\n.makeqr <content>\
-\nUSAGE: Make a QR Code from the given content.\
+    "`.scan` reply to media or file\
+\n**USEAGE : **it scans the media or file and checks either any virus is in the file or media\
+\n\n`.makeqr` <content>\
+\n**USEAGE : **Make a QR Code from the given content.\
 \nExample: .makeqr www.google.com\
-\n\n.barcode <content>\
-\nUSAGE: Make a BarCode from the given content.\
-\nExample: .barcode www.google.com\
-\n\n**Note**: use .decode <reply to barcode/qrcode> to get decoded content.\
+\n\n`.barcode `<content>\
+\n**USEAGE : **Make a BarCode from the given content.\
+\nExample: `.barcode` www.google.com\
+\n\n`.decode` <reply to barcode/qrcode> \
+\n**USAGE : **to get decoded content of those codes.\
+\n\n`.currency` amount (from currency) (to currency)\
+\n**USAGE : **Currency converter for userbot **Example :** `.currency 10 usd inr`\
+\n\n`.currencies`\
+\n**USAGE : **Shows you the some list of currencies\
+\n\n`.ifsc` <IFSC code>\
+\n**USAGE : ** to get details of the relevant bank or branch **Example :** `.ifsc SBIN0016086`\
+\n\n`.color` <color_code> \
+\n**USEAGE : **sends you a plain image of the color example :`.color #ff0000`\
 \n\n`.xkcd` <query>\
-\nUSAGE:Searches for the query for the relevant XKCD comic "
+\n**USEAGE : **Searches for the query for the relevant XKCD comic "
 })
