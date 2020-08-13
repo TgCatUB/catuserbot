@@ -11,7 +11,7 @@ from telethon import events
 from telethon import version
 from userbot import StartTime
 from platform import python_version, uname
-from userbot.utils import admin_cmd,sudo_cmd
+from userbot.utils import admin_cmd
 from userbot import CMD_HELP, ALIVE_NAME, catdef , catversion
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Cat"
