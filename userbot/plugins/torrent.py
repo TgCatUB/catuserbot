@@ -19,13 +19,9 @@ cmd = "aria2c --enable-rpc --rpc-listen-all=false --rpc-listen-port 6800  --max-
 EDIT_SLEEP_TIME_OUT = 5
 aria2_is_running = os.system(cmd)
 
-aria2 = aria2p.API(
-	aria2p.Client(
-	host="http://localhost",
-            port=6800,
-            secret=""
-           )
-        )
+aria2 = aria2p.API(aria2p.Client(host="http://localhost", 
+				 port=6800,
+                                 secret=""))
 
 @borg.on(admin_cmd(pattern=r"fromurl(?: |$)(.*)"))
 async def magnet_download(event):
