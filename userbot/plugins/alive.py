@@ -29,18 +29,18 @@ async def amireallyalive(alive):
         reply_to_id = await alive.get_reply_message()
     if CAT_IMG:
         cat_caption  = f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
-        cat_caption += f"**✧ Database :** `{check_sgnirts}`\n"   
+        cat_caption += f"**✧ Database :** `{check_sgnirts}`\n"
         cat_caption += f"**✧ Telethon version :** `{version.__version__}\n`"
         cat_caption += f"**✧ Catuserbot Version :** `{catversion}`\n"
         cat_caption += f"**✧ Python Version :** `{python_version()}\n`"
-        cat_caption += f"**✧ Uptime :** `{uptime}\n`"  
-        cat_caption += f"**✧ My Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n\n"
+	cat_caption += f"**✧ Uptime :** `{uptime}\n`"
+	cat_caption += f"**✧ My Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n\n"
 	cat_caption += f"**[⚜️DEPLOY CATUSERBOT⚜️](https://github.com/Sur-vivor/CatUserbot)**"
-        await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
-        await alive.delete()
+	await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
+	await alive.delete()
     else:
         await alive.edit(f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
-                         f"**✧ Database :** `{check_sgnirts}`\n"   
+                         f"**✧ Database :** `{check_sgnirts}`\n"
                          f"**✧ Telethon Version :** `{version.__version__}\n`"
                          f"**✧ Catuserbot Version :** `{catversion}`\n"
                          f"**✧ Python Version :** `{python_version()}\n`"
