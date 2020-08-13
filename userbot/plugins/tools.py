@@ -244,7 +244,7 @@ async def _(event):
             input_str = input_str.replace("#", "#COLOR_")
             await borg.send_file(
                 event.chat_id,
-                "UniBorg.png",
+                "cat.png",
                 force_document=False,
                 caption=input_str,
                 reply_to=message_id
