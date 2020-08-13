@@ -164,14 +164,14 @@ async def slap(replied_user, event):
         slapped = "@{}".format(username)
     else:
         slapped = f"[{first_name}](tg://user?id={user_id})"
-    slap = bot.uid
+    
     temp = random.choice(SLAP_TEMPLATES)
     item = random.choice(ITEMS)
     hit = random.choice(HIT)
     throw = random.choice(THROW)
     where = random.choice(WHERE)		  
 
-    caption = temp.format(user1=[DEFAULTUSER](tg://user?id={slap}), victim=slapped, item=item, hits=hit, throws=throw, where=where)
+    caption = temp.format(user1=DEFAULTUSER, victim=slapped, item=item, hits=hit, throws=throw, where=where)
 
     return caption
 
