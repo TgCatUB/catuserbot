@@ -6,19 +6,16 @@
 
 import os
 from telethon import events
+from userbot import CMD_HELP
 from telethon.tl import functions
 from userbot.utils import admin_cmd
-from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,
-                                          UsernameOccupiedError)
-from telethon.tl.functions.account import (UpdateProfileRequest,
-                                           UpdateUsernameRequest)
+from telethon.tl.functions.account import UpdateUsernameRequest
 from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
-from telethon.tl.functions.photos import (DeletePhotosRequest,
-                                          GetUserPhotosRequest,
-                                          UploadProfilePhotoRequest)
+from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
-from userbot import bot, CMD_HELP
+from telethon.tl.functions.photos import DeletePhotosRequest,GetUserPhotosRequest
+from telethon.errors.rpcerrorlist import PhotoExtInvalidError, UsernameOccupiedError
+
 
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
@@ -64,7 +61,6 @@ async def _(event):
     except Exception as e:  # pylint:disable=C0103,W0703
         await event.edit(str(e))
 
-
 @borg.on(admin_cmd(pattern="ppic"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
@@ -83,12 +79,24 @@ async def _(event):
         await event.edit(str(e))
     else:
         if photo:
-            await event.edit("now, Uploading to @Telegram ...")
-            file = await borg.upload_file(photo)  # pylint:disable=E0602
+            await event.edit("now, Uploading to Telegram ...")
+            if photo.endswith((".mp4" ,".MP4")):
+                #https://t.me/tgbetachat/324694
+                size = os.stat(photo).st_size
+                if size > 2097152:
+                    await event.edit("size must be less than 2 mb")
+                    os.remove(photo)
+                    return
+                catpic = None
+                catvideo = await borg.upload_file(photo)
+            else:
+                catpic = await borg.upload_file(photo)  # pylint:disable=E0602
+                catvideo = None
             try:
-                await borg(functions.photos.UploadProfilePhotoRequest(  # pylint:disable=E0602
-                    file
-                ))
+                await borg(functions.photos.UploadProfilePhotoRequest(
+                    file = catpic,
+                    video = catvideo,
+                    video_start_ts =  0.01               ))
             except Exception as e:  # pylint:disable=C0103,W0703
                 await event.edit(str(e))
             else:
@@ -96,8 +104,7 @@ async def _(event):
     try:
         os.remove(photo)
     except Exception as e:  # pylint:disable=C0103,W0703
-        logger.warn(str(e))  # pylint:disable=E0602
-
+        logger.warn(str(e))  # pylint:
 
 @borg.on(admin_cmd(outgoing=True, pattern="username (.*)"))
 async def update_username(username):
@@ -157,7 +164,6 @@ async def remove_profilepic(delpfp):
         lim = int(group)
     else:
         lim = 1
-
     pfplist = await delpfp.client(
         GetUserPhotosRequest(user_id=delpfp.from_id,
                              offset=0,

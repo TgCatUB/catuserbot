@@ -1,15 +1,15 @@
 """ It does not do to dwell on dreams and forget to live
 Syntax: .getime"""
 
-import asyncio
 import os
+import asyncio
 from datetime import datetime
-from PIL import Image, ImageDraw, ImageFont
+from pytz import timezone as tz
 from userbot.utils import admin_cmd
 from datetime import datetime as dt
 from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
-from pytz import timezone as tz
+from PIL import Image, ImageDraw, ImageFont
 from userbot import CMD_HELP, COUNTRY, TZ_NUMBER
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf"
@@ -192,14 +192,10 @@ async def _(event):
     
 CMD_HELP.update({
     "time":
-    ".ctime <country name/code> <timezone number>"
-    "\nUsage: Get the time of a country. If a country has "
-    "multiple timezones, it will list all of them "
-    "and let you select one."
-    ".cdate <country name/code> <timezone number>"
-    "\nUsage: Get the date of a country. If a country has "
-    "multiple timezones, it will list all of them "
-    "and let you select one."
-    ".time \
-    \n USAGE : shows current default time you can change by changing TZ in heroku vars"
+    "**SYNTAX : **.ctime <country name/code> <timezone number> \
+    \n**USAGE : ** Get the time of a country. If a country has multiple timezones, it will list all of them and let you select one.\
+    \n\n**SYNTAX : **.cdate <country name/code> <timezone number> \
+    \n**USAGE : ** Get the date of a country. If a country has multiple timezones, it will list all of them \and let you select one.\
+    \n\n**SYNTAX : **.time \
+    \n**USAGE : ** shows current default time you can change by changing TZ in heroku vars"
 })    

@@ -96,7 +96,7 @@ async def uploadir(udir_event):
     else:
         await udir_event.edit("404: Directory Not Found")
 
-@borg.on(admin_cmd(pattern="get (.*)", outgoing=True))                
+@borg.on(admin_cmd(pattern="send (.*)", outgoing=True))                
 async def _(event):
     if event.fwd_from:
         return

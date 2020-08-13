@@ -2,18 +2,16 @@
 By:- @Mrconfused & @sandy1709
 idea from userage
 """
-import asyncio , time 
+import io
 import os ,os.path
-from os.path import join, splitext, basename, dirname, relpath, exists, isdir, isfile
-from userbot.utils import admin_cmd, humanbytes ,sudo_cmd
+import asyncio , time
 from userbot import CMD_HELP 
 from telethon.errors import MessageTooLongError
-import io 
+from userbot.utils import admin_cmd, humanbytes ,sudo_cmd
+from os.path import join, splitext, basename, dirname, relpath, exists, isdir, isfile
 
 @borg.on(admin_cmd(pattern="ls ?(.*)"))
 async def lst(event):
-    if event.fwd_from:
-        return
     cat = event.pattern_match.group(1)
     if cat: 
         path = cat
@@ -160,7 +158,6 @@ async def lst(event):
         msg += f"**Size :** `{humanbytes(size)}`\n" 
         msg += f"**Last Modified Time:** `{time2}`\n"
         msg += f"**Last Accessed Time:** `{time3}`"
-
     if len(msg) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(msg)) as out_file:
             out_file.name = "ls.txt"
@@ -176,14 +173,35 @@ async def lst(event):
     else:
         await event.reply(msg)                   
  
+@borg.on(admin_cmd(pattern="rem ?(.*)"))
+async def lst(event):
+    cat = event.pattern_match.group(1)
+    if cat: 
+        path = cat
+    else:
+        await event.edit("what should i delete")
+        return
+    if not exists(path):
+        await event.edit(f"there is no such directory or file with the name `{cat}` check again")
+        return
+    catcmd = f"rm -rf {path}"
+    if isdir(path):
+        catanswer = await runcmd(catcmd)
+        await event.edit(f"Succesfully removed `{path}` directory")
+    else:
+        catanswer = await runcmd(catcmd)
+        await event.edit(f"Succesfully removed `{path}` file")
+        
 CMD_HELP.update({
     "filemanager": "List Files plugin for userbot \
-     \ncmd: `.ls`\
-     \nUSAGE : will return files from current working directory\
-     \n\t.ls path\
-     \nUSAGE : will return output according to path  \
-     \n\n .ls file path\
-     \nUSAGE : will return file details\
+     \n**SYNTAX :** `.ls`\
+     \n**USAGE :** will return files from current working directory\
+     \n\n**SYNTAX :** .ls path\
+     \n**USAGE :** will return output according to path  \
+     \n\n**SYNTAX :** .ls file path\
+     \n**USAGE :** will return file details\
      \n\nSimple Module for people who dont wanna use shell executor for listing files.\
+     \n\n**SYNTAX :** `.rem path`\
+     \n**USAGE :** To delete the required item from the bot server\
 "
 }) 

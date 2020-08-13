@@ -3,18 +3,18 @@ Syntax: .update
 \nAll Credits goes to © @Three_Cube_TeKnoways
 \nFor this awasome plugin.\nPorted from PpaperPlane Extended"""
 
-from os import remove, execle, path, makedirs, getenv, environ,execl
-from shutil import rmtree
-import asyncio
 import sys
+import asyncio
 from git import Repo
-from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+from shutil import rmtree
 from userbot import CMD_HELP, bot
 from userbot.utils import admin_cmd
+from os import remove, execle, path, makedirs, getenv, environ,execl
+from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot.git"
 HEROKU_API_KEY = Var.HEROKU_API_KEY
 HEROKU_APP_NAME = Var.HEROKU_APP_NAME
+UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot.git"
 
 requirements_path = path.join(
     path.dirname(path.dirname(path.dirname(__file__))), 'requirements.txt')
@@ -105,7 +105,7 @@ async def upstream(ups):
             remove("output.txt")
         else:
             await ups.edit(changelog_str)
-        await ups.respond("do `.update now` to update")
+        await ups.respond('Type  [`.update now`] to update')
         return
     if force_update:
         await ups.edit('Force-Syncing to latest stable userbot code, please wait...')
@@ -157,8 +157,8 @@ async def upstream(ups):
 
 CMD_HELP.update({
     'update':
-    ".update\
-\nUsage: Checks if the main userbot repository has any updates and shows a changelog if so.\
-\n\n.update now\
-\nUsage: Updates your userbot, if there are any updates in the main userbot repository."
+    "**SYNTAX :** .update\
+\n**USAGE :** Checks if the main userbot repository has any updates and shows a changelog if so.\
+\n\n**SYNTAX : **.update now\
+\n**USAGE :** Updates your userbot, if there are any updates in the main userbot repository."
 })
