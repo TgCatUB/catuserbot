@@ -9,12 +9,12 @@
 
 import os
 import html
-from telethon.tl.functions.photos import GetUserPhotosRequest
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import MessageEntityMentionName
+from userbot.utils import admin_cmd
 from telethon.utils import get_input_location
 from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
-from userbot.utils import admin_cmd
+from telethon.tl.types import MessageEntityMentionName
+from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.functions.photos import GetUserPhotosRequest
 
 @borg.on(admin_cmd(pattern="info(?: |$)(.*)"))
 async def _(event):
@@ -258,11 +258,10 @@ async def fetch_info(replied_user, event):
     caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
     return photo, caption
 
-
 CMD_HELP.update({
     "whois":
-    ".whois <username> or reply to someones text with .whois\
-    \nUsage: Gets info of an user.\
-    .info <username> or reply to someones text with .info\
-    \nUsage: Gets info of an user."
+    "**SYNTAX : **.whois <username> or reply to someones text with .whois\
+    \n**USAGE :** Gets info of an user.\
+    \n\n**SYNTAX : **.info <username> or reply to someones text with .info\
+    \n**USAGE :** Gets info of an user."
 })
