@@ -1,16 +1,20 @@
-import requests 
 import os
 import re
 import time
+import shlex
+import asyncio
+import requests 
 import subprocess
-from bs4 import BeautifulSoup
+from PIL import Image
 from asyncio import sleep
 from random import choice
 from telethon import events
-from emoji import get_emoji_regexp
-from PIL import Image
+from os.path import basename
+from bs4 import BeautifulSoup
 from validators.url import url
+from emoji import get_emoji_regexp
 from telethon.tl.types import Channel
+from typing import Tuple, List, Optional
 
 async def get_readable_time(seconds: int) -> str:
     count = 0
@@ -46,6 +50,29 @@ async def admin_groups(cat):
                 if entity.creator or entity.admin_rights:
                    catgroups.append(entity.id)
     return catgroups
+
+#For using gif , animated stickers and videos in some parts , this function takes  take a screenshot and stores ported from userge
+async def take_screen_shot(video_file: str, duration: int, path: str = '') -> Optional[str]:
+    print('[[[Extracting a frame from %s ||| Video duration => %s]]]', video_file, duration)
+    ttl = duration // 2
+    thumb_image_path = path or os.path.join("./temp/", f"{basename(video_file)}.jpg")
+    command = f"ffmpeg -ss {ttl} -i '{video_file}' -vframes 1 '{thumb_image_path}'"
+    err = (await runcmd(command))[1]
+    if err:
+        print(err)
+    return thumb_image_path if os.path.exists(thumb_image_path) else None
+
+# executing of terminal commands 
+async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
+    args = shlex.split(cmd)
+    process = await asyncio.create_subprocess_exec(*args,
+                                                   stdout=asyncio.subprocess.PIPE,
+                                                   stderr=asyncio.subprocess.PIPE)
+    stdout, stderr = await process.communicate()
+    return (stdout.decode('utf-8', 'replace').strip(),
+            stderr.decode('utf-8', 'replace').strip(),
+            process.returncode,
+            process.pid)
 
 #for getmusic
 async def catmusic(cat , QUALITY):
@@ -173,7 +200,7 @@ async def changemymind(text):
             f.write(requests.get(sandy).content)
         img = Image.open("temp.png").convert("RGB")
         img.save("temp.webp", "webp")    
-        return "temp.webp" 
+        return "temp.webp"
     
 async def kannagen(text):
         r = requests.get(
