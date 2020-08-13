@@ -1,16 +1,16 @@
 """Execute GNU/Linux commands inside Telegram
 Syntax: .exec Code"""
-from telethon import events, errors, functions, types
-import inspect
-import traceback
-import asyncio
-import sys
-import subprocess
-from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import io
+import sys
 import time
-from userbot.utils import admin_cmd,sudo_cmd
+import inspect
+import asyncio
+import traceback
+import subprocess
 from userbot import CMD_HELP
+from userbot.utils import admin_cmd,sudo_cmd
+from telethon import events, errors, functions, types
+from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 
 @borg.on(admin_cmd(pattern="bash ?(.*)"))
 async def _(event):
