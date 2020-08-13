@@ -18,22 +18,22 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import asyncio
-import errno
-import json
-import math
-import multiprocessing
 import os
 import re
 import time
-from asyncio import create_subprocess_shell as asyncSubprocess
-from asyncio.subprocess import PIPE as asyncPIPE
-from urllib.error import HTTPError
+import json
+import math
+import errno
+import asyncio
+import multiprocessing
 from pySmartDL import SmartDL
-from userbot import CMD_HELP, LOGS 
-TEMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
+from urllib.error import HTTPError
+from userbot import CMD_HELP, LOGS
+from asyncio.subprocess import PIPE as asyncPIPE
+from asyncio import create_subprocess_shell as asyncSubprocess
 from userbot.utils import humanbytes, time_formatter, admin_cmd
 
+TEMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
 async def subprocess_run(megadl, cmd):
     subproc = await asyncSubprocess(cmd, stdout=asyncPIPE, stderr=asyncPIPE)
@@ -47,7 +47,6 @@ async def subprocess_run(megadl, cmd):
             f'stderr : `{stderr.decode().strip()}`')
         return exitCode
     return stdout.decode().strip(), stderr.decode().strip(), exitCode
-
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"mega(?: |$)(.*)"))
 async def mega_downloader(megadl):
@@ -64,7 +63,7 @@ async def mega_downloader(megadl):
         return await megadl.edit("Usage: `.mega` **<MEGA.nz link>**")
     try:
         link = re.findall(r'\bhttps?://.*mega.*\.nz\S+', link)[0]
-        """ - Mega changed their URL again - """
+        # - Mega changed their URL again - 
         if "file" in link:
             link = link.replace("#", "!").replace("file/", "#!")
         elif "folder" in link or "#F" in link or "#N" in link:
@@ -162,7 +161,6 @@ async def mega_downloader(megadl):
             LOGS.info(str(e))
     return
 
-
 async def decrypt_file(megadl, file_path, temp_file_path, hex_key,
                        hex_raw_key):
     cmd = ("cat '{}' | openssl enc -d -aes-128-ctr -K {} -iv {} > '{}'".format(
@@ -173,7 +171,6 @@ async def decrypt_file(megadl, file_path, temp_file_path, hex_key,
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT),
                                 file_path)
     return
-
 
 CMD_HELP.update({
     "mega":
