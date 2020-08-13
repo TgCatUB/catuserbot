@@ -97,8 +97,7 @@ CMD_HELP.update({
 \n`{mention}, {title}, {count}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
 \n\n**SYNTAX :** `.listwelcome`\
 \n**USAGE :** Check whether you have a welcome note in the chat.\
-\n\n
-**SYNTAX :** `.clearwelcome`\
+\n\n**SYNTAX :** `.clearwelcome`\
 \n**USAGE :** Deletes the welcome note for the current chat.\
 "
 })
