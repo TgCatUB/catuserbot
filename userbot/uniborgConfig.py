@@ -3,8 +3,8 @@
 # Create a new config.py file in same dir and import, then extend this class.
 import os
 from telethon.tl.types import ChatBannedRights
-# from pymongo import MongoClient
-# import pymongo
+from pymongo import MongoClient
+import pymongo
 
 class Config(object):
     LOGGER = True
@@ -160,9 +160,14 @@ class Production(Config):
 class Development(Config):
     LOGGER = True
 
+# Init Mongo
+MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
+MONGO = MONGOCLIENT.userbot
+
+
 def is_mongo_alive():
     try:
-        Config.MONGOCLIENT.server_info()
-    except BaseException:
-        return False
-    return True
+        MONGOCLIENT.server_info()
+    except BaseException as e:
+        print(e)
+        return Fa
