@@ -1,10 +1,10 @@
 import re
-from telethon import custom
+from telethon import types
 from userbot.utils import admin_cmd
 from telethon import events
 
 # regex obtained from: https://github.com/PaulSonOfLars/tgbot/blob/master/tg_bot/modules/helper_funcs/string_handling.py#L23
-BTN_URL_REGEX = re.compile(r"(\{([^\[]+?)\}\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
+BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\(buttonurl:(?:/{0,2})(.+?)(:same)?\))")
 
 @borg.on(events.NewMessage(pattern=r"\.6(.*)", outgoing=True))
 async def _(event):
@@ -69,12 +69,11 @@ async def _(event):
         silent=True
     )
 
-# Helpers
 def build_keyboard(buttons):
     keyb = []
     for btn in buttons:
         if btn[2] and keyb:
-            keyb[-1].append(custom.button.Button.url(btn[0], btn[1]))
+            keyb[-1].append(types.InlineKeyboardButton(btn[0], btn[1]))
         else:
-            keyb.append([custom.button.Button.url(btn[0], btn[1])])
+            keyb.append([types.InlineKeyboardButton(btn[0], btn[1])])
     return keyb
