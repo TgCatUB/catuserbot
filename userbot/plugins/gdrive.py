@@ -500,16 +500,16 @@ async def gdrive_search(http, search_query):
 
 CMD_HELP.update({
     "gdrive":
-    ".ugdrive <file_path / reply / URL|file_name>\
+    "`.ugdrive` <file_path / reply / URL|file_name>\
     \nUsage: Uploads the file in reply , URL or file path in server to your Google Drive.\
-    \n\n.gsetf <GDrive Folder URL>\
+    \n\n`.gsetf https://drive.google.com/drive/u/0/folders/ `<GDrive Folder Id>\
     \nUsage: Sets the folder to upload new files to.\
-    \n\n.gsetclear\
+    \n\n`.gsetclear`\
     \nUsage: Reverts to default upload destination.\
-    \n\n.gfolder\
+    \n\n`.gfolder`\
     \nUsage: Shows your current upload destination/folder.\
-    \n\n.list <query>\
+    \n\n`.list` <query>\
     \nUsage: Looks for files and folders in your Google Drive.\
-    \n\n.ggd <path_to_folder_in_server>\
+    \n\n`.ggd` <path_to_folder_in_server>\
     \nUsage: Uploads all the files in the directory to a folder in Google Drive."
 })
