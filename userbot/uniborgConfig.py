@@ -142,7 +142,6 @@ class Config(object):
     TL_VID_STREAM_TYPES = ("MKV", "MP4", "WEBM")
     TL_MUS_STREAM_TYPES = ("MP3", "WAV", "FLAC")
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
-    MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
     # MONGOCLIENT = pymongo.MongoClient(MONGO_DB_URI)
     # MONGO = MONGOCLIENT.userbot
     # JustWatch Country
@@ -161,6 +160,7 @@ class Development(Config):
     LOGGER = True
 
 # Init Mongo
+MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
 MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
 MONGO = MONGOCLIENT.userbot
 
