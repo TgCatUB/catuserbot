@@ -1,32 +1,23 @@
-"""Create Button Posts
-"""
-
 import re
 from telethon import custom
 from userbot.utils import admin_cmd
-
 from telethon import events
-from userbot.uniborgConfig import Config
 
 # regex obtained from: https://github.com/PaulSonOfLars/tgbot/blob/master/tg_bot/modules/helper_funcs/string_handling.py#L23
 BTN_URL_REGEX = re.compile(r"(\{([^\[]+?)\}\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 
-
-@borg.on(events.NewMessage(pattern=r"\.cbutton(.*)", outgoing=True))
+@borg.on(events.NewMessage(pattern=r"\.6(.*)", outgoing=True))
 async def _(event):
     if Config.TG_BOT_USER_NAME_BF_HER is None or tgbot is None:
         await event.edit("need to set up a @BotFather bot for this module to work")
         return
-
     if Config.PRIVATE_CHANNEL_BOT_API_ID is None:
-        await event.edit("need to have a `PRIVATE_CHANNEL_BOT_API_ID` for this module to work")
+        await event.edit("need to have a PRIVATE_CHANNEL_BOT_API_ID for this module to work")
         return
-
     reply_message = await event.get_reply_message()
     if reply_message is None:
         await event.edit("reply to a message that I need to parse the magic on")
         return
-
     markdown_note = reply_message.text
     prev = 0
     note_data = ""
@@ -78,14 +69,12 @@ async def _(event):
         silent=True
     )
 
-
 # Helpers
-
 def build_keyboard(buttons):
     keyb = []
     for btn in buttons:
         if btn[2] and keyb:
-            keyb[-1].append(custom.Button.url(btn[0], btn[1]))
+            keyb[-1].append(custom.button.Button.url(btn[0], btn[1]))
         else:
-            keyb.append([custom.Button.url(btn[0], btn[1])])
+            keyb.append([custom.button.Button.url(btn[0], btn[1])])
     return keyb
