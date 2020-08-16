@@ -74,8 +74,8 @@ async def formatJSON(outData):
     msg += " __" + re.sub("<br>", '\n', cat) +"__"
     return msg
 
-@borg.on(admin_cmd(pattern="anilist ?(.*)"))
-@borg.on(sudo_cmd(pattern="anilist ?(.*)",allow_sudo = True))
+@borg.on(admin_cmd(pattern="anilist(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="anilist(?: |$)(.*)",allow_sudo = True))
 async def anilist(event):
     input_str = event.pattern_match.group(1)
     event = await edit_or_reply(event , "Searching...")
