@@ -1,9 +1,20 @@
+import asyncio
+from .. import CMD_HELP
 from telethon import events
 from datetime import datetime
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from userbot import CMD_HELP
-import asyncio
 
+@borg.on(admin_cmd(pattern="ping$"))
+@borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
+async def _(event):
+    if event.fwd_from:
+        return
+    start = datetime.now()
+    event = await edit_or_reply(event ,"Pong!")
+    end = datetime.now()
+    ms = (end - start).microseconds / 1000
+    await event.edit("Pong!\n`{}`".format(ms))
+    
 @borg.on(admin_cmd(pattern=f"fping$", outgoing=True))
 async def _(event):
     if event.fwd_from:
@@ -46,17 +57,6 @@ async def _(event):
     end = datetime.now()
     ms = (end - start).microseconds /1000
     await event.edit("‎‎‎‎‎‎‎‎‎⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛⬛📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛📶⬛⬛⬛\n⬛⬛⬛⬛📶⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛📶⬛⬛⬛📶⬛\n⬛⬛📶📶⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶⬛📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛ \n‎‎‎‎‎‎‎‎‎ \n \n My 🇵 🇮 🇳 🇬  Is : {} ms".format(ms))
- 
-@borg.on(admin_cmd(pattern="ping$"))
-@borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
-async def _(event):
-    if event.fwd_from:
-        return
-    start = datetime.now()
-    event = await edit_or_reply(event ,"Pong!")
-    end = datetime.now()
-    ms = (end - start).microseconds / 1000
-    await event.edit("Pong!\n`{}`".format(ms))
  
 CMD_HELP.update({
     "ping":
