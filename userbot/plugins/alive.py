@@ -36,10 +36,10 @@ async def amireallyalive(alive):
         cat_caption += f"**✧ Uptime :** `{uptime}\n`"  
         cat_caption += f"**✧ My peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
         await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
-    try:
-        await alive.delete()
-    except:
-        pass
+        try:
+            await alive.delete()
+        except:
+            pass
     else:
         await edit_or_reply(alive ,f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
                          f"**✧ Database :** `{check_sgnirts}`\n"   
