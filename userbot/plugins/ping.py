@@ -1,6 +1,6 @@
 from telethon import events
 from datetime import datetime
-from userbot.utils import admin_cmd,sudo_cmd
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from userbot import CMD_HELP
 import asyncio
 
@@ -48,25 +48,15 @@ async def _(event):
     await event.edit("‎‎‎‎‎‎‎‎‎⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛⬛📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛📶⬛⬛⬛\n⬛⬛⬛⬛📶⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛📶⬛⬛⬛📶⬛\n⬛⬛📶📶⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶⬛📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛ \n‎‎‎‎‎‎‎‎‎ \n \n My 🇵 🇮 🇳 🇬  Is : {} ms".format(ms))
  
 @borg.on(admin_cmd(pattern="ping$"))
-async def _(event):
-    if event.fwd_from:
-        return
-    start = datetime.now()
-    await event.edit("Pong!")
-    end = datetime.now()
-    ms = (end - start).microseconds / 1000
-    await event.edit("Pong!\n`{}`".format(ms))
-    
 @borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
-    await event.delete()
     start = datetime.now()
-    mone = await event.reply("Pong!")
+    event = await edit_or_reply(event ,"Pong!")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
-    await mone.edit("Pong!\n`{}`".format(ms))
+    await event.edit("Pong!\n`{}`".format(ms))
  
 CMD_HELP.update({
     "ping":
