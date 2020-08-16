@@ -36,10 +36,12 @@ async def amireallyalive(alive):
         cat_caption += f"**✧ Uptime :** `{uptime}\n`"  
         cat_caption += f"**✧ My peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
         await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
-	try:
-	    await alive.delete()
+    try:
+        await alive.delete()
+    except:
+        pass
     else:
-	await edit_or_reply(alive ,f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
+        await edit_or_reply(alive ,f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
                          f"**✧ Database :** `{check_sgnirts}`\n"   
                          f"**✧ Telethon Version :** `{version.__version__}\n`"
                          f"**✧ Catuserbot Version :** `{catversion}`\n"
@@ -52,7 +54,9 @@ async def amireallyalive(alive):
 @borg.on(sudo_cmd(pattern="cat$",allow_sudo = True))
 async def _(event):
     try:
-	await event.delete() 
+        await event.delete() 
+    except:
+        pass
     reply_to_id = event.message
     if event.reply_to_msg_id:
         reply_to_id = await event.get_reply_message()
@@ -62,7 +66,7 @@ async def _(event):
     img.save("temp.webp", "webp")
     img.seek(0)
     await bot.send_file(event.chat_id , open("temp.webp", "rb"),reply_to=reply_to_id) 
-	
+
 #UniBorg Telegram UseRBot 
 #Copyright (C) 2020 @UniBorg
 #This code is licensed under
