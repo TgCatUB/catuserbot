@@ -50,12 +50,7 @@ async def _(event):
 
     tgbot_reply_message = None
     if reply_message.media is not None:
-        message_id_in_channel = reply_message.id
-        tgbot_reply_message = await tgbot.get_messages(
-            entity=chat,
-            ids=message_id_in_channel
-        )
-        tgbot_reply_message = tgbot_reply_message.media
+        tgbot_reply_message = reply_message.media
 
     await tgbot.send_message(
         entity=chat,
