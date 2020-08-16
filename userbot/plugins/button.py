@@ -1,6 +1,6 @@
 """Create Button Posts
 """
-
+import os
 import re 
 from telethon import events, Button
 from userbot.utils import admin_cmd
@@ -50,8 +50,7 @@ async def _(event):
 
     tgbot_reply_message = None
     if reply_message.media is not None:
-        tgbot_reply_message = reply_message.media
-
+        tgbot_reply_message = await borg.download_media(reply_message.media)
     await tgbot.send_message(
         entity=chat,
         message=message_text,
@@ -61,7 +60,9 @@ async def _(event):
         buttons=tl_ib_buttons,
         silent=True
     )
-
+    if tgbot_reply_message:
+        os.remove(tgbot_reply_message)
+        
 # Helpers
 def build_keyboard(buttons):
     keyb = []
