@@ -168,7 +168,6 @@ def admin_cmd(pattern=None, **args):
                 CMD_LIST[file_test].append(cmd)
             except:
                 CMD_LIST.update({file_test: [cmd]})
-
     args["outgoing"] = True
     # should this command be available for other users?
     if allow_sudo:
@@ -176,7 +175,6 @@ def admin_cmd(pattern=None, **args):
         # Mutually exclusive with outgoing (can only set one of either).
         args["incoming"] = True
         del args["allow_sudo"]
-
     # error handling condition check
     elif "incoming" in args and not args["incoming"]:
         args["outgoing"] = True
@@ -377,15 +375,14 @@ class Loader():
     def __init__(self, func=None, **args):
         self.Var = Var
         bot.add_event_handler(func, events.NewMessage(**args))
-
-        
-def sudo_cmd(pattern=None, **args):
+       
+def sudo_cmd(pattern=None, allow_sudo = True , **args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
-    allow_sudo = args.get("allow_sudo", True)
+    allow_sudo = args.get("allow_sudo", False)
     # get the pattern from the decorator
     if pattern is not None:
         if pattern.startswith("\#"):
