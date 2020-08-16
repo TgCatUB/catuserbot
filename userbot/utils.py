@@ -1,25 +1,23 @@
-from userbot import bot
-from telethon import events
-from pathlib import Path
-import importlib
-from var import Var
-from userbot import CMD_LIST, SUDO_LIST
 import re
+import os
+import sys
+import math
+import time
 import logging
 import inspect
-import math
-import os
-import time
 import asyncio
+import datetime
+import traceback
+import importlib
+import subprocess
+from var import Var
+from typing import List
+from pathlib import Path
+from telethon import events
 from traceback import format_exc
 from time import gmtime, strftime
-import subprocess
-import sys
-import traceback
-import datetime
-from userbot import LOAD_PLUG, LOGS
+from . import LOAD_PLUG, LOGS, CMD_LIST, SUDO_LIST, bot
 from telethon.tl.functions.messages import GetPeerDialogsRequest
-from typing import List
 
 ENV = bool(os.environ.get("ENV", False))
 if ENV:
@@ -168,6 +166,7 @@ def admin_cmd(pattern=None, **args):
                 CMD_LIST[file_test].append(cmd)
             except:
                 CMD_LIST.update({file_test: [cmd]})
+
     args["outgoing"] = True
     # should this command be available for other users?
     if allow_sudo:
@@ -175,6 +174,7 @@ def admin_cmd(pattern=None, **args):
         # Mutually exclusive with outgoing (can only set one of either).
         args["incoming"] = True
         del args["allow_sudo"]
+
     # error handling condition check
     elif "incoming" in args and not args["incoming"]:
         args["outgoing"] = True
@@ -375,8 +375,9 @@ class Loader():
     def __init__(self, func=None, **args):
         self.Var = Var
         bot.add_event_handler(func, events.NewMessage(**args))
-       
-def sudo_cmd(pattern=None, allow_sudo = True , **args):
+
+        
+def sudo_cmd(pattern=None, **args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
