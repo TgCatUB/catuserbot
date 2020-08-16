@@ -1,17 +1,16 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
-#
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
-#
+
 """ Userbot module containing commands related to android"""
 
 import re
 import json
+import asyncio
+from .. import CMD_HELP
 from requests import get
 from bs4 import BeautifulSoup
-import asyncio
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 GITHUB = 'https://github.com'
 DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
@@ -19,6 +18,7 @@ DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="magisk$"))
+@borg.on(sudo_cmd(pattern="magisk$",allow_sudo = True))
 async def magisk(request):
     """ magisk latest releases """
     magisk_dict = {
@@ -37,9 +37,10 @@ async def magisk(request):
         releases += f'{name}: [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | ' \
                     f'[APK v{data["app"]["version"]}]({data["app"]["link"]}) | ' \
                     f'[Uninstaller]({data["uninstaller"]["link"]})\n'
-    await request.edit(releases)
+    await edit_or_reply(request , releases)
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"device(?: |$)(\S*)"))
+@borg.on(sudo_cmd(pattern="device(?: |$)(\S*)",allow_sudo = True))
 async def device_info(request):
     """ get android device basic info from its codename """
     textx = await request.get_reply_message()
@@ -49,7 +50,7 @@ async def device_info(request):
     elif textx:
         codename = textx.text
     else:
-        await request.edit("`Usage: .device <codename> / <model>`")
+        await edit_or_reply(request , "`Usage: .device <codename> / <model>`")
         return
     data = json.loads(
         get("https://raw.githubusercontent.com/androidtrackers/"
@@ -63,10 +64,11 @@ async def device_info(request):
                      f"**Model**: {item['model']}\n\n"
     else:
         reply = f"`Couldn't find info about {codename}!`\n"
-    await request.edit(reply)
+    await edit_or_reply(request , reply)
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"codename(?: |)([\S]*)(?: |)([\s\S]*)"))
+@borg.on(sudo_cmd(pattern="codename(?: |)([\S]*)(?: |)([\s\S]*)",allow_sudo = True))
 async def codename_info(request):
     """ search for android codename """
     textx = await request.get_reply_message()
@@ -79,7 +81,7 @@ async def codename_info(request):
         brand = textx.text.split(' ')[0]
         device = ' '.join(textx.text.split(' ')[1:])
     else:
-        await request.edit("`Usage: .codename <brand> <device>`")
+        await edit_or_reply(request , "`Usage: .codename <brand> <device>`")
         return
 
     data = json.loads(
@@ -102,10 +104,11 @@ async def codename_info(request):
                      f"**Model**: {item['model']}\n\n"
     else:
         reply = f"`Couldn't find {device} codename!`\n"
-    await request.edit(reply)
+    await edit_or_reply(request , reply)
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"specs(?: |)([\S]*)(?: |)([\s\S]*)"))
+@borg.on(sudo_cmd(pattern="specs(?: |)([\S]*)(?: |)([\s\S]*)",allow_sudo = True))
 async def devices_specifications(request):
     """ Mobile devices specifications """
     textx = await request.get_reply_message()
@@ -117,7 +120,7 @@ async def devices_specifications(request):
         brand = textx.text.split(' ')[0]
         device = ' '.join(textx.text.split(' ')[1:])
     else:
-        await request.edit("`Usage: .specs <brand> <device>`")
+        await edit_or_reply(request ,"`Usage: .specs <brand> <device>`")
         return
     all_brands = BeautifulSoup(
         get('https://www.devicespecifications.com/en/brand-more').content,
@@ -130,7 +133,8 @@ async def devices_specifications(request):
             i['href'] for i in all_brands if brand == i.text.strip().lower()
         ][0]
     except IndexError:
-        await request.edit(f'`{brand} is unknown brand!`')
+        await edit_or_reply(request ,f'`{brand} is unknown brand!`')
+        return
     devices = BeautifulSoup(get(brand_page_url).content, 'lxml') \
         .findAll('div', {'class': 'model-listing-container-80'})
     device_page_url = None
@@ -141,7 +145,8 @@ async def devices_specifications(request):
             if device in i.text.strip().lower()
         ]
     except IndexError:
-        await request.edit(f"`can't find {device}!`")
+        await edit_or_reply(request ,f"`can't find {device}!`")
+        return
     if len(device_page_url) > 2:
         device_page_url = device_page_url[:2]
     reply = ''
@@ -155,10 +160,11 @@ async def devices_specifications(request):
             data = re.findall(r'</b>: (.*?)<br/>', item)[0] \
                 .replace('<b>', '').replace('</b>', '').strip()
             reply += f'**{title}**: {data}\n'
-    await request.edit(reply)
+    await edit_or_reply(request ,reply)
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"twrp(?: |$)(\S*)"))
+@borg.on(sudo_cmd(pattern="twrp(?: |$)(\S*)",allow_sudo = True))
 async def twrp(request):
     """ get android device twrp """
     textx = await request.get_reply_message()
@@ -168,12 +174,12 @@ async def twrp(request):
     elif textx:
         device = textx.text.split(' ')[0]
     else:
-        await request.edit("`Usage: .twrp <codename>`")
+        await edit_or_reply(request ,"`Usage: .twrp <codename>`")
         return
     url = get(f'https://dl.twrp.me/{device}/')
     if url.status_code == 404:
         reply = f"`Couldn't find twrp downloads for {device}!`\n"
-        await request.edit(reply)
+        await edit_or_reply(request , reply)
         return
     page = BeautifulSoup(url.content, 'lxml')
     download = page.find('table').find('tr').find('a')
@@ -184,8 +190,7 @@ async def twrp(request):
     reply = f'**Latest TWRP for {device}:**\n' \
         f'[{dl_file}]({dl_link}) - __{size}__\n' \
         f'**Updated:** __{date}__\n'
-    await request.edit(reply)
-
+    await edit_or_reply(request , reply)
 
 CMD_HELP.update({
     "android":
