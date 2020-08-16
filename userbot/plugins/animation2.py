@@ -99,7 +99,7 @@ async def _(event):
 		    deq.rotate(1)
         
 @borg.on(admin_cmd(pattern=f"smoon$", outgoing=True))
-=@borg.on(sudo_cmd(pattern="smoon$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="smoon$",allow_sudo = True))
 async def _(event):
     event = await edit_or_reply(event ,"smoon")
     animation_interval = 0.1
