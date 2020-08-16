@@ -1,19 +1,17 @@
-import re
-from telethon import types
+"""Create Button Posts
+"""
+
+import re 
+from telethon import events, Button
 from userbot.utils import admin_cmd
-from telethon import events
 
 # regex obtained from: https://github.com/PaulSonOfLars/tgbot/blob/master/tg_bot/modules/helper_funcs/string_handling.py#L23
-BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\(buttonurl:(?:/{0,2})(.+?)(:same)?\))")
+BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 
-@borg.on(events.NewMessage(pattern=r"\.6(.*)", outgoing=True))
+
+@borg.on(events.NewMessage(pattern=r"\.cbutton(.*)", outgoing=True))
 async def _(event):
-    if Config.TG_BOT_USER_NAME_BF_HER is None or tgbot is None:
-        await event.edit("need to set up a @BotFather bot for this module to work")
-        return
-    if Config.PRIVATE_CHANNEL_BOT_API_ID is None:
-        await event.edit("need to have a PRIVATE_CHANNEL_BOT_API_ID for this module to work")
-        return
+    chat = event.chat_id
     reply_message = await event.get_reply_message()
     if reply_message is None:
         await event.edit("reply to a message that I need to parse the magic on")
@@ -54,13 +52,13 @@ async def _(event):
     if reply_message.media is not None:
         message_id_in_channel = reply_message.id
         tgbot_reply_message = await tgbot.get_messages(
-            entity=Config.PRIVATE_CHANNEL_BOT_API_ID,
+            entity=chat
             ids=message_id_in_channel
         )
         tgbot_reply_message = tgbot_reply_message.media
 
     await tgbot.send_message(
-        entity=Config.PRIVATE_CHANNEL_BOT_API_ID,
+        entity=chat,
         message=message_text,
         parse_mode="html",
         file=tgbot_reply_message,
@@ -69,11 +67,12 @@ async def _(event):
         silent=True
     )
 
+# Helpers
 def build_keyboard(buttons):
     keyb = []
     for btn in buttons:
         if btn[2] and keyb:
-            keyb[-1].append(types.InlineKeyboardButton(btn[0], btn[1]))
+            keyb[-1].append(Button.url(btn[0], btn[1]))
         else:
-            keyb.append([types.InlineKeyboardButton(btn[0], btn[1])])
+            keyb.append([Button.url(btn[0], btn[1])])
     return keyb
