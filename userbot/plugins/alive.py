@@ -1,5 +1,4 @@
 """Check if userbot alive or not . """
-
 import os
 import re
 import nekos
@@ -11,13 +10,14 @@ from telethon import events
 from telethon import version
 from userbot import StartTime
 from platform import python_version, uname
-from userbot.utils import admin_cmd,sudo_cmd
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from userbot import CMD_HELP, ALIVE_NAME, catdef , catversion
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 CAT_IMG = Config.ALIVE_PIC
 
 @borg.on(admin_cmd(outgoing=True, pattern="alive$"))
+@borg.on(sudo_cmd(pattern="alive$",allow_sudo = True))
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
@@ -36,20 +36,23 @@ async def amireallyalive(alive):
         cat_caption += f"**✧ Uptime :** `{uptime}\n`"  
         cat_caption += f"**✧ My peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
         await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
-        await alive.delete()
+	try:
+	    await alive.delete()
     else:
-        await alive.edit(f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
+	await edit_or_reply(alive ,f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
                          f"**✧ Database :** `{check_sgnirts}`\n"   
                          f"**✧ Telethon Version :** `{version.__version__}\n`"
                          f"**✧ Catuserbot Version :** `{catversion}`\n"
                          f"**✧ Python Version :** `{python_version()}\n`"
                          f"**✧ Uptime :** `{uptime}\n`"
                          f"**✧ My Peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
-                        )         
+                        )        
 
 @borg.on(admin_cmd(pattern="cat$"))
+@borg.on(sudo_cmd(pattern="cat$",allow_sudo = True))
 async def _(event):
-    await event.delete() 
+    try:
+	await event.delete() 
     reply_to_id = event.message
     if event.reply_to_msg_id:
         reply_to_id = await event.get_reply_message()
