@@ -91,7 +91,7 @@ async def _(event):
 @borg.on(admin_cmd(outgoing=True, pattern="moon$"))
 @borg.on(sudo_cmd(pattern="moon$",allow_sudo = True))
 async def _(event):
-	    event = await edit_or_reply(event ,"moon)
+	    event = await edit_or_reply(event ,"moon")
 	    deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
 	    for _ in range(48):
 		    await asyncio.sleep(0.1)
