@@ -13,8 +13,8 @@ from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-@borg.on(admin_cmd(pattern="app (.*)"))
-@borg.on(sudo_cmd(pattern="app (.*)",allow_sudo=True))
+@borg.on(admin_cmd(pattern="app ?(.*)"))
+@borg.on(sudo_cmd(pattern="app ?(.*)",allow_sudo=True))
 async def apk(event):
     event = await edit_or_reply(event ,"Searching!")
     try:
