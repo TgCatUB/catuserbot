@@ -52,8 +52,7 @@ async def uploadir(udir_event):
                         force_document=False,
                         allow_cache=False,
                         reply_to=udir_event.message.id,
-                        progress_callback=lambda d, t: asyncio.get_event_loop(
-                        ).create_task(
+                        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                             progress(d, t, udir_event, c_time, "Uploading...",
                                      single_file)))
                 else:
@@ -86,8 +85,7 @@ async def uploadir(udir_event):
                                 supports_streaming=True,
                             )
                         ],
-                        progress_callback=lambda d, t: asyncio.get_event_loop(
-                        ).create_task(
+                        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                             progress(d, t, udir_event, c_time, "Uploading...",
                                      single_file)))
                 uploaded = uploaded + 1
@@ -200,10 +198,8 @@ def extract_w_h(file):
 
 @borg.on(admin_cmd(pattern="uploadas(stream|vn|all) (.*)", outgoing=True))
 async def uploadas(uas_event):
-    """
 #For .uploadas command, allows you to specify some arguments for upload.
-"""
-    await uas_event.edit("Processing ...")
+    await uas_event.edit("uploading.....")
     type_of_upload = uas_event.pattern_match.group(1)
     supports_streaming = False
     round_message = False
@@ -223,7 +219,10 @@ async def uploadas(uas_event):
         thumb = thumb.strip()
     else:
         file_name = input_str
-        thumb = get_video_thumb(file_name)
+        thumb = vthumb = get_video_thumb(file_name)
+    if not thumb:
+        if os.path.exists(thumb_image_path):
+            thumb = thumb_image_path
     if os.path.exists(file_name):
         metadata = extractMetadata(createParser(file_name))
         duration = 0
@@ -255,8 +254,7 @@ async def uploadas(uas_event):
                             supports_streaming=True,
                         )
                     ],
-                    progress_callback=lambda d, t: asyncio.get_event_loop(
-                    ).create_task(
+                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                         progress(d, t, uas_event, c_time, "Uploading...",
                                  file_name)))
             elif round_message:
@@ -277,15 +275,14 @@ async def uploadas(uas_event):
                             supports_streaming=True,
                         )
                     ],
-                    progress_callback=lambda d, t: asyncio.get_event_loop(
-                    ).create_task(
+                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                         progress(d, t, uas_event, c_time, "Uploading...",
                                  file_name)))
             elif spam_big_messages:
                 await uas_event.edit("TBD: Not (yet) Implemented")
                 return
             try:
-                os.remove(thumb)
+                os.remove(vthumb)
             except:
                 pass
             await uas_event.edit("Uploaded successfully !!")
