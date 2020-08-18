@@ -25,7 +25,10 @@ COLLECTION_STRING2 = [
 ]
 
 async def animeppbat():
-    os.remove("donot.jpg")
+    try:
+      os.remove("donottouch.jpg")
+    execpt:
+      pass
     rnd = random.randint(0, len(COLLECTION_STRING1) - 1)
     pack = COLLECTION_STRING1[rnd]
     pc = requests.get("http://getwallpapers.com/collection/" + pack).text
@@ -38,7 +41,10 @@ async def animeppbat():
     urllib.request.urlretrieve(fy,"donottouch.jpg")
     
 async def animeppthor():
-    os.remove("donot.jpg")
+    try:
+      os.remove("donottouch.jpg")
+    execpt:
+      pass
     rnd = random.randint(0, len(COLLECTION_STRING2) - 1)
     pack = COLLECTION_STRING2[rnd]
     pc = requests.get("http://getwallpapers.com/collection/" + pack).text
@@ -50,7 +56,7 @@ async def animeppthor():
         urllib.request.urlretrieve("https://github.com/rebel6969/mym/raw/master/Rebel-robot-Regular.ttf","f.ttf")
     urllib.request.urlretrieve(fy,"donottouch.jpg")    
     
-@borg.on(admin_cmd(pattern="batmanpfp ?(.*)"))
+@borg.on(admin_cmd(pattern="batmanpfp$"))
 async def main(event):
     await event.edit("Starting batman Profile Pic.") #Owner @NihiNivi
     while True:
@@ -61,7 +67,7 @@ async def main(event):
         os.system("rm -rf donottouch.jpg")
         await asyncio.sleep(120) #Edit this to your required needs
 
-@borg.on(admin_cmd(pattern="thorpfp ?(.*)"))
+@borg.on(admin_cmd(pattern="thorpfp$"))
 async def main(event):
     await event.edit("Starting thor Profile Pic.") #Owner @NihiNivi
     while True:
