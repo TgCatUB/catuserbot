@@ -5,6 +5,7 @@
 
 import re
 import bs4
+import requests
 from platform import uname
 from telethon import events
 from bs4 import BeautifulSoup
