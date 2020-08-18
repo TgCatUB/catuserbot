@@ -16,9 +16,9 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 @borg.on(admin_cmd(pattern="app ?(.*)"))
 @borg.on(sudo_cmd(pattern="app ?(.*)",allow_sudo=True))
 async def apk(event):
+    app_name = event.pattern_match.group(1)
     event = await edit_or_reply(event ,"Searching!")
     try:
-        app_name = event.pattern_match.group(1)
         remove_space = app_name.split(' ')
         final_name = '+'.join(remove_space)
         page = requests.get("https://play.google.com/store/search?q="+final_name+"&c=apps")
@@ -46,9 +46,9 @@ async def apk(event):
 @borg.on(admin_cmd(pattern="appr (.*)"))
 @borg.on(sudo_cmd(pattern="appr (.*)",allow_sudo=True))
 async def apkr(event):
+    app_name = event.pattern_match.group(1)
     event = await edit_or_reply(event ,"searching!")
     try:
-        app_name = event.pattern_match.group(1)
         remove_space = app_name.split(' ')
         final_name = '+'.join(remove_space)
         page = requests.get("https://play.google.com/store/search?q="+final_name+"&c=apps")
