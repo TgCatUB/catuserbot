@@ -12,7 +12,7 @@ import asyncio
 from .. import CMD_HELP
 from telethon import events, utils
 from telethon.tl import types, functions
-import .sql_helper.blacklist_sql as sql
+import userbot.plugins.sql_helper.blacklist_sql as sql
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 @borg.on(events.NewMessage(incoming=True))
@@ -85,4 +85,4 @@ CMD_HELP.update({
     \n**USAGE : **Shows you the list of blacklist words in that specific chat\
     \n\n**NOTE : 8**f you are adding more than one word at time via this then remember that new word must be given in new line that is not [hi hello] . it must be as\
     [hi \n hello]"
-})    
+})
