@@ -16,10 +16,10 @@ BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>
 async def _(event):
     chat = event.chat_id
     reply_message = await event.get_reply_message()
-    if reply_message is None:
-        markdown_note = event.pattern_match.group(1)
-    else:
+    if reply_message:
         markdown_note = reply_message.text
+    else:
+        markdown_note = event.pattern_match.group(1)
     prev = 0
     note_data = ""
     buttons = []
