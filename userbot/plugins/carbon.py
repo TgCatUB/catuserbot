@@ -37,7 +37,7 @@ async def carbon_api(e):
          pcode = str(textx.message) # Importing message to module
    pcode = deEmojify(pcode)
    code = quote_plus(pcode) # Converting to urlencoded
-   e = await edit_or_reply(e ,"`Meking Carbon...\n25%`")
+   cat = await edit_or_reply(e ,"`Meking Carbon...\n25%`")
    url = CARBON.format(code=code, lang=CARBONLANG)
    chrome_options = Options()
    chrome_options.add_argument("--headless")
@@ -50,7 +50,7 @@ async def carbon_api(e):
    chrome_options.add_experimental_option('prefs', prefs)
    driver = webdriver.Chrome(executable_path=CHROME_DRIVER, options=chrome_options)
    driver.get(url)
-   await e.edit("`Be Patient...\n50%`")
+   await cat.edit("`Be Patient...\n50%`")
    download_path = './'
    driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
    params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_path}}
@@ -58,12 +58,12 @@ async def carbon_api(e):
    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
   # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
   # driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-   await e.edit("`Processing..\n75%`")
+   await cat.edit("`Processing..\n75%`")
    # Waiting for downloading
    sleep(2.5)
-   await e.edit("`Done Dana Done...\n100%`")
+   await cat.edit("`Done Dana Done...\n100%`")
    file = './carbon.png'
-   await e.edit("`Uploading..`")
+   await cat.edit("`Uploading..`")
    await e.client.send_file(
          e.chat_id,
          file,
@@ -74,7 +74,7 @@ async def carbon_api(e):
    os.remove('./carbon.png')
    driver.quit()
    # Removing carbon.png after uploading
-   await e.delete() # Deleting msg
+   await cat.delete() # Deleting msg
    
 CMD_HELP.update({
     "carbon":
