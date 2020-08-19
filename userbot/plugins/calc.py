@@ -20,6 +20,7 @@ async def _(car):
     redirected_output = sys.stdout = io.StringIO()
     redirected_error = sys.stderr = io.StringIO()
     stdout, stderr, exc = None, None, None
+    san = f"print({cmd})"
     try:
         await aexec(san, event)
     except Exception:
