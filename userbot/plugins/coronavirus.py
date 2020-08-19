@@ -1,10 +1,11 @@
 """CoronaVirus LookUp
 Syntax: .corona <country>"""
+from .. import CMD_HELP
 from covid import Covid
-from userbot.utils import admin_cmd
-from userbot import CMD_HELP
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 @borg.on(admin_cmd(pattern="corona(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="corona(?: |$)(.*)",allow_sudo = True))
 async def corona(event):
     if event.pattern_match.group(1):
         country = event.pattern_match.group(1)
@@ -29,7 +30,7 @@ async def corona(event):
         data +=  f"\n😟New Deaths : `{country_data['new_deaths']}`"
     else:
         data += "\nNo information yet about this country!"
-    await event.edit("**Corona Virus Info in {}:**\n{}".format(country.capitalize(), data))
+    await edit_or_reply(event ,"**Corona Virus Info in {}:**\n{}".format(country.capitalize(), data))
 
 CMD_HELP.update({"coronavirus":
    "`.covid ` <country name>\
