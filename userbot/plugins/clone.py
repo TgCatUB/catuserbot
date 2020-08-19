@@ -1,8 +1,7 @@
 """Get Telegram Profile Picture and other information
 and set as own profile.
 Syntax: .clone @username"""
-#Copy That Plugin by @ViperAdnan and @mrconfused
-#Give credit if you are going to kang it.
+#Credits of Plugin @ViperAdnan and @mrconfused(revert)[will add sql soon]
 
 import html
 import os
