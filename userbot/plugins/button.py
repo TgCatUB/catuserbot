@@ -15,7 +15,6 @@ BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>
 @borg.on(sudo_cmd(pattern="cbutton(?: |$)(.*)",allow_sudo = True))
 async def _(event):
     chat = event.chat_id
-    await event.delete()
     reply_message = await event.get_reply_message()
     if reply_message:
         markdown_note = reply_message.text
@@ -58,6 +57,7 @@ async def _(event):
         buttons=tl_ib_buttons,
         silent=True
     )
+    await event.delete()
     if tgbot_reply_message:
         os.remove(tgbot_reply_message)
         
