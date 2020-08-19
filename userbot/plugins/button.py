@@ -45,8 +45,9 @@ async def _(event):
     message_text = note_data.strip()
     tl_ib_buttons = build_keyboard(buttons)
     tgbot_reply_message = None
-    if reply_message.media:
-        tgbot_reply_message = await borg.download_media(reply_message.media)
+    if reply_message:
+        if reply_message.media:
+            tgbot_reply_message = await borg.download_media(reply_message.media)
     await tgbot.send_message(
         entity=chat,
         message=message_text,
@@ -70,7 +71,7 @@ def build_keyboard(buttons):
     return keyb
 
 CMD_HELP.update({
-    "ping":
+    "button":
     "**SYNTAX : **`.cbutton`\
     \n**USAGE :** Buttons must be in th format as [name on button]<buttonurl:link you want to open>\
     \n**EXAMPLE :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
