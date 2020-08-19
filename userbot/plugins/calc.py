@@ -9,12 +9,12 @@ from telethon import events, errors, functions, types
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 @borg.on(admin_cmd(pattern="calc (.*)"))
-async def _(event):
-    cmd = event.text.split(" ", maxsplit=1)[1]
-    event = await edit_or_reply(event ,"Calculating ...")
-    reply_to_id = event.message.id
+async def _(car):
+    cmd = car.text.split(" ", maxsplit=1)[1]
+    event = await edit_or_reply(car ,"Calculating ...")
+    reply_to_id = car.message.id
     if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+        reply_to_id = car.reply_to_msg_id
     old_stderr = sys.stderr
     old_stdout = sys.stdout
     redirected_output = sys.stdout = io.StringIO()
