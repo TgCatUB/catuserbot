@@ -1,13 +1,15 @@
-"""Create Button Posts
+"""
+Create Button Posts imported from uniborg
+modified for catuserbot by @sandy1709
 """
 import os
 import re 
+from .. import CMD_HELP
 from telethon import events, Button
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 # regex obtained from: https://github.com/PaulSonOfLars/tgbot/blob/master/tg_bot/modules/helper_funcs/string_handling.py#L23
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
-
 
 @borg.on(admin_cmd(pattern=r"cbutton(?: |$)(.*)", outgoing=True))
 @borg.on(sudo_cmd(pattern="cbutton(?: |$)(.*)",allow_sudo = True))
@@ -43,7 +45,7 @@ async def _(event):
     message_text = note_data.strip()
     tl_ib_buttons = build_keyboard(buttons)
     tgbot_reply_message = None
-    if reply_message.media is not None:
+    if reply_message.media:
         tgbot_reply_message = await borg.download_media(reply_message.media)
     await tgbot.send_message(
         entity=chat,
@@ -66,3 +68,11 @@ def build_keyboard(buttons):
         else:
             keyb.append([Button.url(btn[0], btn[1])])
     return keyb
+
+CMD_HELP.update({
+    "ping":
+    "**SYNTAX : **`.cbutton`\
+    \n**USAGE :** Buttons must be in th format as [name on button]<buttonurl:link you want to open>\
+    \n**EXAMPLE :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
+    "
+})
