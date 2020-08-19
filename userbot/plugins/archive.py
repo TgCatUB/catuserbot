@@ -76,8 +76,8 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
       return
-    event = mone = await edit_or_reply(event ,"Processing ...")
     input_str = event.pattern_match.group(1)
+    event = mone = await edit_or_reply(event ,"Processing ...")
     if input_str:
       if os.path.exists(input_str):
         downloaded_file_name = input_str
