@@ -75,8 +75,8 @@ async def _(event):
     else:
         event = await edit_or_reply(event ,response_api["message"])
         
-@borg.on(admin_cmd(outgoing=True, pattern="climate (.*)"))
-@borg.on(sudo_cmd(pattern="climate (.*)",allow_sudo = True))
+@borg.on(admin_cmd(outgoing=True, pattern="climate(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="climate(?: |$)(.*)",allow_sudo = True))
 @errors_handler
 async def get_weather(weather):
     """ For .weather command, gets the current weather of a city. """
