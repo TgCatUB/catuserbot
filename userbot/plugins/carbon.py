@@ -5,36 +5,25 @@
 """ Userbot module containing various scrapers. """
 import os
 import shutil
-from bs4 import BeautifulSoup
-import re
 from time import sleep
+from . import deEmojify
+from requests import get
 from html import unescape
-from re import findall
-from datetime import datetime
+from bs4 import BeautifulSoup
 from selenium import webdriver
-from urllib.parse import quote_plus
 from urllib.error import HTTPError
+from urllib.parse import quote_plus
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from wikipedia import summary
-from wikipedia.exceptions import DisambiguationError, PageError
-from urbandict import define
-from requests import get
-from google_images_download import google_images_download
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from googletrans import LANGUAGES, Translator
-from gtts import gTTS
-from emoji import get_emoji_regexp
-from userbot import CMD_HELP, CHROME_DRIVER, GOOGLE_CHROME_BIN 
-from userbot.plugins import deEmojify
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from .. import CMD_HELP, CHROME_DRIVER, GOOGLE_CHROME_BIN 
+
 CARBONLANG = "auto"
 LANG = "en"
 
-
 @borg.on(admin_cmd(outgoing=True, pattern="carbon(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="carbon(?: |$)(.*)",allow_sudo = True))
 async def carbon_api(e):
    """ A Wrapper for carbon.now.sh """
    await e.edit("`Processing..`")
@@ -48,7 +37,7 @@ async def carbon_api(e):
          pcode = str(textx.message) # Importing message to module
    pcode = deEmojify(pcode)
    code = quote_plus(pcode) # Converting to urlencoded
-   await e.edit("`Meking Carbon...\n25%`")
+   e = await edit_or_reply(e ,"`Meking Carbon...\n25%`")
    url = CARBON.format(code=code, lang=CARBONLANG)
    chrome_options = Options()
    chrome_options.add_argument("--headless")
@@ -86,3 +75,10 @@ async def carbon_api(e):
    driver.quit()
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg
+   
+CMD_HELP.update({
+    "ping":
+    "**SYNTAX :** `.carbon` <reply to code>\
+    \n**USAGE : **Shows your code in different style\
+    "
+})   
