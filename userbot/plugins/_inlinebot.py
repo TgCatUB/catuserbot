@@ -98,7 +98,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         if event.query.user_id == bot.uid:
             await event.edit("menu closed")
             await asyncio.sleep(2)
-            await event.delete()
+            await borg.send_message('me',event.id)
         else:
             reply_pop_up_alert = "Please get your own catuserbot, and don't use mine! Join @catuserbot17 help "
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True) 
