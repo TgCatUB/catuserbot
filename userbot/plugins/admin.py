@@ -115,7 +115,7 @@ async def set_group_photo(gpic):
             f"CHAT: {gpic.chat.title}(`{gpic.chat_id}`)")        
 
 
-@borg.on(admin_cmd("promote(?: |$)(.*)"))
+@borg.on(admin_cmd("promote(?: |$)"))
 @errors_handler
 async def promote(promt):
     """ For .promote command, promotes the replied/tagged person """
