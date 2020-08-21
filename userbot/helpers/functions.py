@@ -15,6 +15,7 @@ from validators.url import url
 from selenium import webdriver
 from emoji import get_emoji_regexp
 from telethon.tl.types import Channel
+from userbot.uniborgConfig import Config
 from typing import Tuple, List, Optional
 
 async def get_readable_time(seconds: int) -> str:
@@ -86,7 +87,6 @@ async def catmusic(cat , QUALITY):
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.binary_location = Config.CHROME_BIN
     driver = webdriver.Chrome(chrome_options=chrome_options)
-    search = "prema venala"
     driver.get('https://www.youtube.com/results?search_query='+search)
     user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
     for i in user_data:
@@ -109,7 +109,6 @@ async def catmusicvideo(cat):
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.binary_location = Config.CHROME_BIN
     driver = webdriver.Chrome(chrome_options=chrome_options)
-    search = "prema venala"
     driver.get('https://www.youtube.com/results?search_query='+search)
     user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
     for i in user_data:
