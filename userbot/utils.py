@@ -196,7 +196,7 @@ def admin_cmd(pattern=None, **args):
     return events.NewMessage(**args)
 
 # from paperplaneextended
-on = borg.on
+on = bot.on
 def on(**args):
     def decorator(func):
         async def wrapper(event):
