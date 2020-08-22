@@ -203,7 +203,7 @@ def on(**args):
         async def wrapper(event):
             # do things like check if sudo
             await func(event)
-        client.add_event_handler(wrapper, events.NewMessage(**args)
+        client.add_event_handler(wrapper, events.NewMessage(**args))
         return wrapper
     return decorater
                                  
