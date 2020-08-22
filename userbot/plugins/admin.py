@@ -29,7 +29,6 @@ from userbot.utils import register, errors_handler, admin_cmd,sudo_cmd
 from userbot.uniborgConfig import Config
 from telethon import events, errors, functions, types
 
-
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
 else:
@@ -494,7 +493,6 @@ async def _(event):
         input_str = event.pattern_match.group(1)
         if input_str:
             from_user = await borg.get_entity(input_str)
-            logger.info(from_user)
         async for message in borg.iter_messages(
             event.chat_id,
             min_id=event.reply_to_msg_id,
