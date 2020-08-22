@@ -197,6 +197,7 @@ def admin_cmd(pattern=None, **args):
 
 # from paperplaneextended
 
+borg.on = on
 def on(**args):
     def decorator(func):
         async def wrapper(event):
