@@ -1,3 +1,4 @@
+import io
 import re
 import json
 import random
@@ -21,7 +22,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             result = builder.article(
                 "Alive cat",
                 text=query,
-                thumb = CAT_IMG,
+                content = CAT_IMG,
                 buttons=buttons
                 )
             await event.answer([result] if result else None)
