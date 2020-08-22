@@ -1,13 +1,15 @@
 #created by @eve_enryu
+#edited & fix by @Jisan7509
+
 
 import datetime
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot import bot, CMD_HELP
-from userbot.events import register
+from userbot.events import admin_cmd
 
-@register(outgoing=True, pattern="^.firmware(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="firmware(?: |$)(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -26,9 +28,9 @@ async def _(event):
           else:
              await event.delete()
              await bot.forward_messages(event.chat_id, response.message)
-
+          await bot.send_read_acknowledge(conv.chat_id)
   
-@register(outgoing=True, pattern="^.specs(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="specs(?: |$)(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -47,10 +49,10 @@ async def _(event):
           else:
              await event.delete()
              await bot.forward_messages(event.chat_id, response.message)
-   
+          await bot.send_read_acknowledge(conv.chat_id)
  
  
-@register(outgoing=True, pattern="^.fastboot(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="fastboot(?: |$)(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -69,9 +71,9 @@ async def _(event):
           else:
              await event.delete()
              await bot.forward_messages(event.chat_id, response.message)
-
+          await bot.send_read_acknowledge(conv.chat_id)
  
-@register(outgoing=True, pattern="^.recovery(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="recovery(?: |$)(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -90,9 +92,9 @@ async def _(event):
           else:
              await event.delete()
              await bot.forward_messages(event.chat_id, response.message)
+          await bot.send_read_acknowledge(conv.chat_id)
 
-
-@register(outgoing=True, pattern="^.pb(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="pb(?: |$)(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -111,9 +113,9 @@ async def _(event):
           else:
              await event.delete()
              await bot.forward_messages(event.chat_id, response.message)
+          await bot.send_read_acknowledge(conv.chat_id)
 
-
-@register(outgoing=True, pattern="^.of(?: |$)(.*)")
+@borg.on(admin_cmd(pattern="of(?: |$)(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -132,7 +134,8 @@ async def _(event):
           else:
              await event.delete()
              await bot.forward_messages(event.chat_id, response.message)
-
+          await bot.send_read_acknowledge(conv.chat_id)
+        
 CMD_HELP.update({
 "xiaomi":
 "For Xiaomeme devices only!\
@@ -148,3 +151,4 @@ CMD_HELP.update({
      \nUsage : Get latest recovery MIUI\
 \n\n`.of` (codename)\
      \nUsage : Get latest ORangeFox Recovery"})
+
