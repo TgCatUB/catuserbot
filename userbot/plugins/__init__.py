@@ -41,3 +41,5 @@ def check(cat):
     if hi:
         return True
     return False
+
+statstext = "yet to write"
