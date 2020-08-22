@@ -3,11 +3,23 @@ import asyncio
 import json
 import random
 import re
-from telethon import events, errors, custom
+from telethon import events, errors, custom, Button
 from userbot import CMD_LIST , LOGS
 import io
 
 if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
+    @tgbot.on(events.InlineQuery)  # pylint:disable=E0602
+    async def inline_handler(event):
+        builder = event.builder
+        query = event.text
+        if event.query.user_id == bot.uid and query.startswith("Alive"):
+            buttons = Button.url("jisan" , "www.google.com")
+            result = builder.article(
+                "Alive cat",
+                text="My bot is succesfully running",
+                buttons=buttons
+                )
+        await event.answer([result] if result else None)
     @tgbot.on(events.InlineQuery)  # pylint:disable=E0602
     async def inline_handler(event):
         builder = event.builder
