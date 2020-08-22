@@ -7,13 +7,14 @@ from telethon import events, errors, custom, Button
 from userbot import CMD_LIST , LOGS
 import io
 
+CAT_IMG = Config.ALIVE_PIC if Config ALIVE_PIC else None
 if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
     @tgbot.on(events.InlineQuery)  # pylint:disable=E0602
     async def inline_handler(event):
         builder = event.builder
         result = None
         query = event.text
-        if event.query.user_id == bot.uid and query.startswith("__**✮ MY BOT"):
+        if event.query.user_id == bot.uid and query.startswith("__**✮ CATUSERBOT"):
             buttons = [(custom.Button.inline("Stats", data="stats"),
                         Button.url("Repo" , "https://github.com/sandy1709/catuserbot"))]
             result = builder.article(
@@ -21,7 +22,10 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 text=query,
                 buttons=buttons
                 )
-            await event.answer([result] if result else None)
+            if CAT_IMG:
+                await event.answer([result,builder.photo(CAT_IMG)] if result else None)
+            else:
+                await event.answer([result] if result else None)
         elif event.query.user_id == bot.uid and query.startswith("Userbot"):
             rev_text = query[::-1]
             buttons = paginate_help(0, CMD_LIST, "helpme")
