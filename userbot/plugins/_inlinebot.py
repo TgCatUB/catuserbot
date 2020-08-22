@@ -20,10 +20,10 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             buttons = [(custom.Button.inline("Stats", data="stats"),
                         Button.url("Repo" , "https://github.com/sandy1709/catuserbot"))]
             catpic = CAT_IMG
-            result = builder.document(
-                         catpic,
+            result = builder.article(
+                        # catpic,
                          title = "Alive cat",
-                         force_document = False,
+                         #force_document = False,
                          text = query,
                          buttons = buttons
                          )
