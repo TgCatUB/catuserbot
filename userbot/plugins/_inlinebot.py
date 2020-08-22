@@ -13,11 +13,12 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         builder = event.builder
         result = None
         query = event.text
-        if event.query.user_id == bot.uid and query.startswith("Alive"):
-            buttons = Button.url("jisan" , "www.google.com")
+        if event.query.user_id == bot.uid and query.startswith("__**✮ MY BOT"):
+            buttons = [(custom.Button.inline("Stats", data="stats"),
+                        Button.url("Repo" , "https://github.com/sandy1709/catuserbot"))]
             result = builder.article(
                 "Alive cat",
-                text="My bot is succesfully running",
+                text=query,
                 buttons=buttons
                 )
             await event.answer([result] if result else None)
