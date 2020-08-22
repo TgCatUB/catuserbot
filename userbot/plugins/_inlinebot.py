@@ -21,12 +21,10 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             result = builder.article(
                 "Alive cat",
                 text=query,
+                media = CAT_IMG,
                 buttons=buttons
                 )
-            if CAT_IMG:
-                await event.answer([result,builder.photo(CAT_IMG)] if result else None)
-            else:
-                await event.answer([result] if result else None)
+            await event.answer([result] if result else None)
         elif event.query.user_id == bot.uid and query.startswith("Userbot"):
             rev_text = query[::-1]
             buttons = paginate_help(0, CMD_LIST, "helpme")
