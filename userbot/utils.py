@@ -144,7 +144,7 @@ def remove_plugin(shortname):
                     del bot._event_builders[i]
     except:
         raise ValueError
-
+                                 
 def admin_cmd(pattern=None, **args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
@@ -152,7 +152,6 @@ def admin_cmd(pattern=None, **args):
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     allow_sudo = args.get("allow_sudo", False)
-
     # get the pattern from the decorator
     if pattern is not None:
         if pattern.startswith("\#"):
@@ -196,6 +195,17 @@ def admin_cmd(pattern=None, **args):
 
     return events.NewMessage(**args)
 
+# from paperplaneextended
+
+def on(**args):
+    def decorator(func):
+        async def wrapper(event):
+            # do things like check if sudo
+            await func(event)
+        client.add_event_handler(wrapper, events.NewMessage(**args)
+        return wrapper
+    return decorater
+                                 
 def register(**args):
     """ Register a new event. """
     args["func"] = lambda e: e.via_bot_id is None
@@ -256,8 +266,7 @@ def register(**args):
             LOAD_PLUG.update({file_test: [func]})
         return func
     return decorator
-
-
+                                 
 def errors_handler(func):
     async def wrapper(errors):
         try:
