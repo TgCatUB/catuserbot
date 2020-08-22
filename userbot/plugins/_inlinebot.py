@@ -7,7 +7,7 @@ from . import statstext
 from .. import CMD_LIST , LOGS
 from telethon import events, errors, custom, Button
 
-CAT_IMG = Config.ALIVE_PIC if Config ALIVE_PIC else None
+CAT_IMG = Config.ALIVE_PIC if Config.ALIVE_PIC else None
 
 if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
     @tgbot.on(events.InlineQuery)  # pylint:disable=E0602
