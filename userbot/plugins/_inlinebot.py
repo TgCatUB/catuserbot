@@ -19,11 +19,10 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         if event.query.user_id == bot.uid and query.startswith("__**✮ CATUSERBOT"):
             buttons = [(custom.Button.inline("Stats", data="stats"),
                         Button.url("Repo" , "https://github.com/sandy1709/catuserbot"))]
-            result = builder.document(
-                         file = CAT_IMG,
+            result = builder.article(
+                         content = CAT_IMG,
                          title = "Alive cat",
                          text = query,
-                         force_document = False,
                          buttons = buttons
                          )
             await event.answer([result] if result else None)
