@@ -196,15 +196,15 @@ def admin_cmd(pattern=None, **args):
     return events.NewMessage(**args)
 
 # from paperplaneextended
-on = bot.on
-def on(**args):
-    def decorator(func):
-        async def wrapper(event):
+#on = bot.on
+#def on(**args):
+#    def decorator(func):
+#        async def wrapper(event):
             # do things like check if sudo
-            await func(event)
-        client.add_event_handler(wrapper, events.NewMessage(**args))
-        return wrapper
-    return decorater
+#            await func(event)
+#        client.add_event_handler(wrapper, events.NewMessage(**args))
+#        return wrapper
+#    return decorater
                                  
 def register(**args):
     """ Register a new event. """
