@@ -372,7 +372,7 @@ async def endmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
-@borg.on(admin_cmd("pin ?(.*)"))
+@borg.on(admin_cmd("pin (.*)"))
 @errors_handler
 async def pin(msg):
     """ For .pin command, pins the replied/tagged message on the top the chat. """
