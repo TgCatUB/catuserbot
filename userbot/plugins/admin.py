@@ -290,7 +290,7 @@ async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
         
-@borg.on(admin_cmd("mute (\d+)?"))
+@borg.on(admin_cmd("mute($|  (\d+))"))
 async def startmute(event):
         private = False
         if event.fwd_from:
@@ -337,7 +337,7 @@ async def startmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")   
     
-@borg.on(admin_cmd("unmute (\d+)?"))
+@borg.on(admin_cmd("unmute($|  (\d+))"))
 async def endmute(event):   
         private = False
         if event.fwd_from:
@@ -372,7 +372,7 @@ async def endmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
-@borg.on(admin_cmd("pin (.*)"))
+@borg.on(admin_cmd("pin($| (.*))"))
 @errors_handler
 async def pin(msg):
     """ For .pin command, pins the replied/tagged message on the top the chat. """
@@ -457,7 +457,7 @@ async def _(event):
         await asyncio.sleep(3)
         await event.delete()
 
-@borg.on(sudo_cmd(pattern="(ban|unban) (.*)", allow_sudo=True))
+@borg.on(sudo_cmd(pattern="(ban|unban)($| (.*))", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -485,7 +485,7 @@ async def _(event):
     else:
         await event.reply(f"{input_cmd}ned Successfully!")
 
-@borg.on(sudo_cmd(pattern="pgs (.*)", allow_sudo=True))
+@borg.on(sudo_cmd(pattern="pgs($| (.*))", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
