@@ -5,6 +5,7 @@ idea from userage
 import io
 import os ,os.path
 import asyncio , time
+from . import runcmd
 from userbot import CMD_HELP 
 from telethon.errors import MessageTooLongError
 from userbot.utils import admin_cmd, humanbytes ,sudo_cmd
