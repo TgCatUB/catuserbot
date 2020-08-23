@@ -36,6 +36,7 @@ import codecs
 import socket
 import requests
 import urllib3
+from . import LOGS
 
 args_list = ["keywords", "keywords_from_file", "prefix_keywords", "suffix_keywords",
              "limit", "format", "color", "color_type", "usage_rights", "size",
