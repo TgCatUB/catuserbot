@@ -36,7 +36,7 @@ async def amireallyalive(alive):
             )
     await results[0].click(
                 alive.chat_id,
-                reply_to=a.reply_to_id,
+                reply_to=reply_to_id,
                 hide_via=True
             )
     await alive.delete()
