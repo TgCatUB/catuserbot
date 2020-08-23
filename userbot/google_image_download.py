@@ -734,30 +734,54 @@ class googleimagesdownload:
         return final_object, end_object
 
 
-    # Getting all links with the help of '_images_get_next_image'
-    def _get_image_objects(self,s):
-        start_line = s.find("AF_initDataCallback({key: \\'ds:1\\'") - 10
-        start_object = s.find('[', start_line + 1)
-        end_object = s.find('</script>', start_object + 1) - 4
-        object_raw = str(s[start_object:end_object])
-        object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
-        image_objects = json.loads(json.dumps(object_decode))[31][0][12][2]
-        return image_objects
+    # Finding 'Next Image' from the given raw page
+    def _get_next_item(self,s):
+        start_line = s.find('rg_meta notranslate')
+        if start_line == -1:  # If no links are found then give an error!
+            end_quote = 0
+            link = "no_links"
+            return link, end_quote
+        else:
+            start_line = s.find('class="rg_meta notranslate">')
+            start_object = s.find('{', start_line + 1)
+            end_object = s.find('</div>', start_object + 1)
+            object_raw = str(s[start_object:end_object])
+            #remove escape characters based on python version
+            version = (3, 0)
+            cur_version = sys.version_info
+            if cur_version >= version: #python3
+                try:
+                    object_decode = bytes(object_raw, "utf-8").decode("unicode_escape")
+                    final_object = json.loads(object_decode)
+                except:
+                    final_object = ""
+            else:  #python2
+                try:
+                    final_object = (json.loads(self.repair(object_raw)))
+                except:
+                    final_object = ""
+            return final_object, end_object
 
+
+    # Getting all links with the help of '_images_get_next_image'
     def _get_all_items(self,page,main_directory,dir_name,limit,arguments):
         items = []
         abs_path = []
         errorCount = 0
         i = 0
         count = 1
-        image_objects = self._get_image_objects(page)
         while count < limit+1:
-            if len(image_objects) == 0:
-                print("no_links")
+            object, end_content = self._get_next_item(page)
+            if object == "no_links":
                 break
+            elif object == "":
+                page = page[end_content:]
+            elif arguments['offset'] and count < int(arguments['offset']):
+                    count += 1
+                    page = page[end_content:]
             else:
                 #format the item for readability
-                object = self.format_object(image_objects[i])
+                object = self.format_object(object)
                 if arguments['metadata']:
                     if not arguments["silent_mode"]:
                         print("\nImage Metadata: " + str(object))
@@ -784,13 +808,14 @@ class googleimagesdownload:
                 #delay param
                 if arguments['delay']:
                     time.sleep(int(arguments['delay']))
+
+                page = page[end_content:]
             i += 1
         if count < limit:
             print("\n\nUnfortunately all " + str(
                 limit) + " could not be downloaded because some images were not downloadable. " + str(
                 count-1) + " is all we got for this search filter!")
         return items,errorCount,abs_path
-
 
     # Bulk Download
     def download(self,arguments):
