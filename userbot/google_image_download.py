@@ -742,7 +742,7 @@ class googleimagesdownload:
         object_raw = str(s[start_object:end_object])
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
         file = open("error.log", "w+")
-        file.write(ftext)
+        file.write(object_decode)
         file.close()
         await borg.send_file(
                             Config.PRIVATE_GROUP_BOT_API_ID,
