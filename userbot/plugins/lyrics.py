@@ -1,4 +1,4 @@
-"made br @mrconfused and @sandy1709 dont edit credits"
+"made by @mrconfused and @sandy1709"
 import os
 import lyricsgenius
 import random
@@ -12,9 +12,6 @@ import io
 import asyncio
 import time
 GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
-
-
-
 
 @borg.on(admin_cmd(outgoing=True, pattern="lyrics (.*)"))
 async def _(event):
@@ -30,7 +27,7 @@ async def _(event):
     else:
     	await event.edit("`What I am Supposed to find `")
     	return
-    
+   
     song = ""
     song = Song.find_song(query)
     if song:
@@ -62,22 +59,20 @@ async def lyrics(lyric):
         pass
     else:
         await lyric.edit("Error: please use '-' as divider for <artist> and <song>\n"
-                         "eg: `.lyrics Nicki Minaj - Super Bass`")
+                         "eg: `.glyrics Nicki Minaj - Super Bass`")
         return
 
     if GENIUS is None:
-        await lyric.edit(
-            "`Provide genius access token to config.py or Heroku Var first kthxbye!`")
+        await lyric.edit("`Provide genius access token to config.py or Heroku Var first kthxbye!`")
     else:
         genius = lyricsgenius.Genius(GENIUS)
         try:
             args = lyric.text.split('.lyrics')[1].split('-')
             artist = args[0].strip(' ')
             song = args[1].strip(' ')
-        except Exception:
-            await lyric.edit("`LMAO please provide artist and song names`")
+        except Exception as e:
+            await lyric.edit(f"Error:\n`{e}`")
             return
-
     if len(args) < 1:
         await lyric.edit("`Please provide artist and song names`")
         return
