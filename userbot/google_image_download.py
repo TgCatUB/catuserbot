@@ -744,8 +744,7 @@ class googleimagesdownload:
         file = open("error.log", "w+")
         file.write(object_decode)
         file.close()
-        await borg.send_file(
-                            Config.PRIVATE_GROUP_BOT_API_ID,
+        borg.send_file(Config.PRIVATE_GROUP_BOT_API_ID,
                             "error.log"
                         )
         image_objects = json.loads(object_decode)[31][0][12][2]
