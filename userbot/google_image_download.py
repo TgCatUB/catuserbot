@@ -743,7 +743,7 @@ class googleimagesdownload:
         start_object = s.find('[', start_line + 1)
         end_object = s.find('</script>', start_object + 1) - 4
         object_raw = str(s[start_object:end_object])
-        object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
+        object_decode = bytes(object_raw[:-3], "utf-8").decode("unicode_escape")
         key = requests.post('https://nekobin.com/api/documents', json={"content": object_decode}).json().get('result').get('key')
         url = f'https://nekobin.com/{key}'
         LOGS.info(url)
