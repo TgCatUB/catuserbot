@@ -34,6 +34,7 @@ import json
 import re
 import codecs
 import socket
+from . import bot 
 
 args_list = ["keywords", "keywords_from_file", "prefix_keywords", "suffix_keywords",
              "limit", "format", "color", "color_type", "usage_rights", "size",
