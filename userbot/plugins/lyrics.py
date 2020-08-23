@@ -1,4 +1,4 @@
-"made br @mrconfused and @sandy1709 dont edit credits"
+"made by @mrconfused and @sandy1709"
 import os
 import lyricsgenius
 import random
@@ -13,10 +13,7 @@ import asyncio
 import time
 GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
 
-
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="lyrics (.*)"))
+@borg.on(admin_cmd(outgoing=True, pattern="lyrics ?(.*)"))
 async def _(event):
     await event.edit("wi8..! I am searching your lyrics....`")
     reply_to_id = event.message.id
@@ -30,7 +27,6 @@ async def _(event):
     else:
     	await event.edit("`What I am Supposed to find `")
     	return
-    
     song = ""
     song = Song.find_song(query)
     if song:
@@ -39,8 +35,7 @@ async def _(event):
         else:
             reply = "Couldn't find any lyrics for that song! try with artist name along with song if still doesnt work try `.glyrics`"
     else:
-        reply = "lyrics not found! try with artist name along with song if still doesnt work try `.glyrics`"
-        
+        reply = "lyrics not found! try with artist name along with song if still doesnt work try `.glyrics`"  
     if len(reply) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(reply)) as out_file:
             out_file.name = "lyrics.text"
@@ -56,39 +51,37 @@ async def _(event):
     else:
         await event.edit(reply)       
 
-@borg.on(admin_cmd(outgoing=True, pattern="glyrics(?: |$)(.*)"))
+@borg.on(admin_cmd(outgoing=True, pattern="glyrics ?(.*)"))
 async def lyrics(lyric):
-    if r"-" in lyric.text:
+    if lyric.pattern_match.group(1):
+        query = lyric.pattern_match.group(1)
+    else:
+        await lyric.edit("Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`")
+        return
+    if r"-" in query:
         pass
     else:
-        await lyric.edit("Error: please use '-' as divider for <artist> and <song>\n"
-                         "eg: `.lyrics Nicki Minaj - Super Bass`")
+        await lyric.edit("Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`")
         return
-
     if GENIUS is None:
-        await lyric.edit(
-            "`Provide genius access token to config.py or Heroku Var first kthxbye!`")
+        await lyric.edit("`Provide genius access token to config.py or Heroku Var first kthxbye!`")
     else:
         genius = lyricsgenius.Genius(GENIUS)
         try:
-            args = lyric.text.split('.lyrics')[1].split('-')
+            args = query.split('-', 1)
             artist = args[0].strip(' ')
             song = args[1].strip(' ')
-        except Exception:
-            await lyric.edit("`LMAO please provide artist and song names`")
+        except Exception as e:
+            await lyric.edit(f"Error:\n`{e}`")
             return
-
     if len(args) < 1:
         await lyric.edit("`Please provide artist and song names`")
         return
-
     await lyric.edit(f"`Searching lyrics for {artist} - {song}...`")
-
     try:
         songs = genius.search_song(song, artist)
     except TypeError:
         songs = None
-
     if songs is None:
         await lyric.edit(f"Song **{artist} - {song}** not found!")
         return
@@ -105,11 +98,6 @@ async def lyrics(lyric):
     else:
         await lyric.edit(f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```")
     return
-
-
-
-
-
 
 CMD_HELP.update({
     "lyrics":
