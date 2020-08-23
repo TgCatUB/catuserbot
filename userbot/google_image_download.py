@@ -34,7 +34,6 @@ import json
 import re
 import codecs
 import socket
-from . import LOGS
 
 args_list = ["keywords", "keywords_from_file", "prefix_keywords", "suffix_keywords",
              "limit", "format", "color", "color_type", "usage_rights", "size",
@@ -742,7 +741,13 @@ class googleimagesdownload:
         end_object = s.find('</script>', start_object + 1) - 4
         object_raw = str(s[start_object:end_object])
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
-        LOGS.info(object_decode)
+        file = open("error.log", "w+")
+        file.write(ftext)
+        file.close()
+        await borg.send_file(
+                            Config.PRIVATE_GROUP_BOT_API_ID,
+                            "error.log"
+                        )
         image_objects = json.loads(object_decode)[31][0][12][2]
         return image_objects
 
