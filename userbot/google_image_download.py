@@ -34,9 +34,6 @@ import json
 import re
 import codecs
 import socket
-import requests
-import urllib3
-from . import LOGS
 
 args_list = ["keywords", "keywords_from_file", "prefix_keywords", "suffix_keywords",
              "limit", "format", "color", "color_type", "usage_rights", "size",
@@ -233,23 +230,27 @@ class googleimagesdownload:
             end_quote = 0
             link = "no_tabs"
             return link,'',end_quote
-        start_line = s.find('class="dtviD"')
-        start_content = s.find('href="', start_line + 1)
-        end_content = s.find('">', start_content + 1)
-        url_item = "https://www.google.com" + str(s[start_content + 6:end_content])
-        url_item = url_item.replace('&amp;', '&')
-        start_line_2 = s.find('class="dtviD"')
-        s = s.replace('&amp;', '&')
-        start_content_2 = s.find(':', start_line_2 + 1)
-        end_content_2 = s.find('&usg=', start_content_2 + 1)
-        url_item_name = str(s[start_content_2 + 1:end_content_2])
-        chars = url_item_name.find(',g_1:')
-        chars_end = url_item_name.find(":", chars + 6)
-        if chars_end == -1:
-            updated_item_name = (url_item_name[chars + 5:]).replace("+", " ")
         else:
-            updated_item_name = (url_item_name[chars+5:chars_end]).replace("+", " ")
-        return url_item, updated_item_name, end_content
+            start_line = s.find('class="dtviD"')
+            start_content = s.find('href="', start_line + 1)
+            end_content = s.find('">', start_content + 1)
+            url_item = "https://www.google.com" + str(s[start_content + 6:end_content])
+            url_item = url_item.replace('&amp;', '&')
+
+            start_line_2 = s.find('class="dtviD"')
+            s = s.replace('&amp;', '&')
+            start_content_2 = s.find(':', start_line_2 + 1)
+            end_content_2 = s.find('&usg=', start_content_2 + 1)
+            url_item_name = str(s[start_content_2 + 1:end_content_2])
+
+            chars = url_item_name.find(',g_1:')
+            chars_end = url_item_name.find(":", chars + 6)
+            if chars_end == -1:
+                updated_item_name = (url_item_name[chars + 5:]).replace("+", " ")
+            else:
+                updated_item_name = (url_item_name[chars+5:chars_end]).replace("+", " ")
+
+            return url_item, updated_item_name, end_content
 
 
     # Getting all links with the help of '_images_get_next_image'
@@ -323,6 +324,7 @@ class googleimagesdownload:
         except OSError as e:
             raise e
         print("completed ====> " + image_name.encode('raw_unicode_escape').decode('utf-8'))
+        return
 
     def similar_images(self,similar_images):
         version = (3, 0)
@@ -506,6 +508,7 @@ class googleimagesdownload:
             if e.errno != 17:
                 raise
             pass
+        return
 
 
     # Download Image thumbnails
@@ -618,7 +621,7 @@ class googleimagesdownload:
                     return_image_name = ''
                     absolute_path = ''
                     return download_status, download_message, return_image_name, absolute_path
-                if image_name.lower().find("." + image_format) < 0:
+                elif image_name.lower().find("." + image_format) < 0:
                     image_name = image_name + "." + image_format
                 else:
                     image_name = image_name[:image_name.lower().find("." + image_format) + (len(image_format) + 1)]
@@ -628,10 +631,12 @@ class googleimagesdownload:
                     prefix = prefix + " "
                 else:
                     prefix = ''
+
                 if no_numbering:
                     path = main_directory + "/" + dir_name + "/" + prefix + image_name
                 else:
                     path = main_directory + "/" + dir_name + "/" + prefix + str(count) + "." + image_name
+
                 try:
                     output_file = open(path, 'wb')
                     output_file.write(data)
@@ -716,25 +721,26 @@ class googleimagesdownload:
             end_quote = 0
             link = "no_links"
             return link, end_quote
-        start_line = s.find('class="rg_meta notranslate">')
-        start_object = s.find('{', start_line + 1)
-        end_object = s.find('</div>', start_object + 1)
-        object_raw = str(s[start_object:end_object])
-        #remove escape characters based on python version
-        version = (3, 0)
-        cur_version = sys.version_info
-        if cur_version >= version: #python3
-            try:
-                object_decode = bytes(object_raw, "utf-8").decode("unicode_escape")
-                final_object = json.loads(object_decode)
-            except:
-                final_object = ""
-        else:  #python2
-            try:
-                final_object = (json.loads(self.repair(object_raw)))
-            except:
-                final_object = ""
-        return final_object, end_object
+        else:
+            start_line = s.find('class="rg_meta notranslate">')
+            start_object = s.find('{', start_line + 1)
+            end_object = s.find('</div>', start_object + 1)
+            object_raw = str(s[start_object:end_object])
+            #remove escape characters based on python version
+            version = (3, 0)
+            cur_version = sys.version_info
+            if cur_version >= version: #python3
+                try:
+                    object_decode = bytes(object_raw, "utf-8").decode("unicode_escape")
+                    final_object = json.loads(object_decode)
+                except:
+                    final_object = ""
+            else:  #python2
+                try:
+                    final_object = (json.loads(self.repair(object_raw)))
+                except:
+                    final_object = ""
+            return final_object, end_object
 
 
     # Getting all links with the help of '_images_get_next_image'
@@ -744,10 +750,7 @@ class googleimagesdownload:
         end_object = s.find('</script>', start_object + 1) - 4
         object_raw = str(s[start_object:end_object])
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
-        key = requests.post('https://nekobin.com/api/documents', json={"content": object_decode}).json().get('result').get('key')
-        url = f'https://nekobin.com/{key}'
-        LOGS.info(url)
-        image_objects = json.loads(self.repair(object_raw))[31][0][12][2]
+        image_objects = json.loads(object_decode)[31][0][12][2]
         return image_objects
 
     def _get_all_items(self,page,main_directory,dir_name,limit,arguments):
@@ -825,20 +828,22 @@ class googleimagesdownload:
                     total_errors = total_errors + errors
                 return paths_agg,total_errors
             # if the calling file contains params directly
+            else:
+                paths, errors = self.download_executor(arguments)
+                for i in paths:
+                    paths_agg[i] = paths[i]
+                if not arguments["silent_mode"]:
+                    if arguments['print_paths']:
+                        print(paths.encode('raw_unicode_escape').decode('utf-8'))
+                return paths_agg, errors
+        # for input coming from CLI
+        else:
             paths, errors = self.download_executor(arguments)
             for i in paths:
                 paths_agg[i] = paths[i]
             if not arguments["silent_mode"]:
                 if arguments['print_paths']:
                     print(paths.encode('raw_unicode_escape').decode('utf-8'))
-            return paths_agg, errors
-        # for input coming from CLI
-        paths, errors = self.download_executor(arguments)
-        for i in paths:
-            paths_agg[i] = paths[i]
-        if not arguments["silent_mode"]:
-            if arguments['print_paths']:
-                print(paths.encode('raw_unicode_escape').decode('utf-8'))
         return paths_agg, errors
 
     def download_executor(self,arguments):
@@ -1009,3 +1014,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# In[ ]:
