@@ -27,7 +27,6 @@ async def _(event):
     else:
     	await event.edit("`What I am Supposed to find `")
     	return
-   
     song = ""
     song = Song.find_song(query)
     if song:
@@ -36,8 +35,7 @@ async def _(event):
         else:
             reply = "Couldn't find any lyrics for that song! try with artist name along with song if still doesnt work try `.glyrics`"
     else:
-        reply = "lyrics not found! try with artist name along with song if still doesnt work try `.glyrics`"
-        
+        reply = "lyrics not found! try with artist name along with song if still doesnt work try `.glyrics`"  
     if len(reply) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(reply)) as out_file:
             out_file.name = "lyrics.text"
@@ -58,7 +56,7 @@ async def lyrics(lyric):
     if lyric.pattern_match.group(1):
         query = lyric.pattern_match.group(1)
     else:
-    	await lyric.edit("Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`")
+        await lyric.edit("Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`")
         return
     if r"-" in query:
         pass
