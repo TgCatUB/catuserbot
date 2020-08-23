@@ -1,5 +1,3 @@
-"""Check if userbot alive or not . """
-"""Check if userbot alive or not . """
 import os
 import re
 import nekos
