@@ -743,7 +743,7 @@ class googleimagesdownload:
         object_raw = str(s[start_object:end_object])
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
         LOGS.info(object_decode)
-        image_objects = [json.loads(line)[31][0][12][2] for line in open('object_decode', 'r')]
+        image_objects = json.loads(object_decode)[31][0][12][2]
         return image_objects
 
     def _get_all_items(self,page,main_directory,dir_name,limit,arguments):
@@ -1005,5 +1005,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# In[ ]:
