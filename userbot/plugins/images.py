@@ -5,7 +5,7 @@ Syntax: `.img <Name>` or `.img (replied message)`
 \n Upgraded and Google Image Error Fixed by @NeoMatrix90 aka @kirito6969
 """
 
-from google_images_download import google_images_download
+from userbot.google_image_download import googleimagesdownload
 import os
 import shutil
 from re import findall
@@ -37,17 +37,16 @@ async def img_sampler(event):
         query = query.replace("lim=" + lim[0], "")
     except IndexError:
         lim = 5
-    response = google_images_download.googleimagesdownload()
+    response = googleimagesdownload()
 
     # creating list of arguments
     arguments = {
         "keywords": query,
         "limit": lim,
         "format": "jpg",
-        "delay": 1,
-        "safe_search": True,
-        "output_directory": Config.TMP_DOWNLOAD_DIRECTORY
+        "no_directory": "no_directory"
     }
+
     # passing the arguments to the function
     paths = response.download(arguments)
     lst = paths[0][query]
