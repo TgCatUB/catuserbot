@@ -34,6 +34,7 @@ import json
 import re
 import codecs
 import socket
+from . import LOGS
 
 args_list = ["keywords", "keywords_from_file", "prefix_keywords", "suffix_keywords",
              "limit", "format", "color", "color_type", "usage_rights", "size",
@@ -741,7 +742,8 @@ class googleimagesdownload:
         end_object = s.find('</script>', start_object + 1) - 4
         object_raw = str(s[start_object:end_object])
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
-        image_objects = json.loads(object_decode)[31][0][12][2]
+        LOGS.info(object_decode)
+        image_objects = [json.loads(line)[31][0][12][2] for line in open('object_decode', 'r')]
         return image_objects
 
     def _get_all_items(self,page,main_directory,dir_name,limit,arguments):
