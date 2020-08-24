@@ -1,4 +1,4 @@
-#Created by  Md Jisan.  tg @jisan7509
+#Created by  Md Jisan.  tg @Jisan7509
 
 import asyncio
 from telethon import events
