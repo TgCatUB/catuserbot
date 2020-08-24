@@ -23,6 +23,7 @@ from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 @borg.on(admin_cmd(pattern="song( (.*)|$)"))
+@borg.on(sudo_cmd(pattern="song( (.*)|$)",allow_sudo = True))
 async def _(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -71,6 +72,7 @@ async def _(event):
     os.system("rm -rf ./temp/*.webp")
     
 @borg.on(admin_cmd(pattern="song320( (.*)|$)"))
+@borg.on(sudo_cmd(pattern="song320( (.*)|$)",allow_sudo = True))
 async def _(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -119,6 +121,7 @@ async def _(event):
     os.system("rm -rf ./temp/*.webp")
     
 @borg.on(admin_cmd(pattern="vsong( (.*)|$)"))
+@borg.on(sudo_cmd(pattern="vsong( (.*)|$)",allow_sudo = True))
 async def _(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
