@@ -1,25 +1,23 @@
-from userbot import bot
-from telethon import events
-from pathlib import Path
-import importlib
-from var import Var
-from userbot import CMD_LIST, SUDO_LIST
 import re
+import os
+import sys
+import math
+import time
 import logging
 import inspect
-import math
-import os
-import time
 import asyncio
+import datetime
+import traceback
+import importlib
+import subprocess
+from var import Var
+from typing import List
+from pathlib import Path
+from telethon import events
 from traceback import format_exc
 from time import gmtime, strftime
-import subprocess
-import sys
-import traceback
-import datetime
-from userbot import LOAD_PLUG, LOGS
+from . import LOAD_PLUG, LOGS, CMD_LIST, SUDO_LIST, bot
 from telethon.tl.functions.messages import GetPeerDialogsRequest
-from typing import List
 
 ENV = bool(os.environ.get("ENV", False))
 if ENV:
@@ -146,7 +144,7 @@ def remove_plugin(shortname):
                     del bot._event_builders[i]
     except:
         raise ValueError
-
+                                 
 def admin_cmd(pattern=None, **args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
@@ -154,7 +152,6 @@ def admin_cmd(pattern=None, **args):
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     allow_sudo = args.get("allow_sudo", False)
-
     # get the pattern from the decorator
     if pattern is not None:
         if pattern.startswith("\#"):
@@ -198,6 +195,17 @@ def admin_cmd(pattern=None, **args):
 
     return events.NewMessage(**args)
 
+# from paperplaneextended
+on = bot.on
+def on(**args):
+    def decorator(func):
+        async def wrapper(event):
+            # do things like check if sudo
+            await func(event)
+        client.add_event_handler(wrapper, events.NewMessage(**args))
+        return wrapper
+    return decorater
+                                 
 def register(**args):
     """ Register a new event. """
     args["func"] = lambda e: e.via_bot_id is None
@@ -258,8 +266,7 @@ def register(**args):
             LOAD_PLUG.update({file_test: [func]})
         return func
     return decorator
-
-
+                                 
 def errors_handler(func):
     async def wrapper(errors):
         try:
