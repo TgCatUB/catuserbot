@@ -31,8 +31,9 @@ async def _(event):
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
-    elif reply.message:
-        query = reply.message
+    elif reply:
+        if reply.message:
+            query = reply.messag
     else:
     	event = await edit_or_reply(event ,"`What I am Supposed to find `")
     	return
@@ -80,8 +81,9 @@ async def _(event):
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
-    elif reply.message:
-        query = reply.message
+    elif reply:
+        if reply.message:
+            query = reply.message
     else:
     	event = await edit_or_reply(event ,"`What I am Supposed to find `")
     	return
@@ -129,8 +131,9 @@ async def _(event):
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
-    elif reply.message:
-        query = reply.message
+    elif reply:
+        if reply.message:
+            query = reply.messag
     else:
         event = await edit_or_reply(event ,"What I am Supposed to find")
         return
