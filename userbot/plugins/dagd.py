@@ -13,6 +13,7 @@ from userbot import CMD_HELP
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 @borg.on(admin_cmd(pattern="dns (.*)"))
+@borg.on(sudo_cmd(pattern="dns (.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
@@ -25,6 +26,7 @@ async def _(event):
         await edit_or_reply(event ,"i can't seem to find {} on the internet".format(input_str))
 
 @borg.on(admin_cmd(pattern="url (.*)"))
+@borg.on(sudo_cmd(pattern="url (.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
@@ -37,6 +39,7 @@ async def _(event):
         await edit_or_reply(event ,"something is wrong. please try again later.")
 
 @borg.on(admin_cmd(pattern="unshort (.*)"))
+@borg.on(sudo_cmd(pattern="unshort (.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
@@ -51,11 +54,11 @@ async def _(event):
         
 CMD_HELP.update({
     "ping":
-    "**SYNTAX :** `.dns link`\
-    \n**USAGE : **Shows you Domain Name System(dns) of the given link . example `.dns google.com` or `.dns github.cm`\
-    \n\n**SYNTAX : **`.url link`\
-    \n**USAGE : **shortens the given link\
-    \n\n**SYNTAX : **`.unshort link`\
-    \n**USAGE : **unshortens the given short link\
+    "**Syntax :** `.dns link`\
+    \n**Usage : **Shows you Domain Name System(dns) of the given link . example `.dns google.com` or `.dns github.cm`\
+    \n\n**Syntax : **`.url link`\
+    \n**Usage : **shortens the given link\
+    \n\n**Syntax : **`.unshort link`\
+    \n**Usage : **unshortens the given short link\
     "
 })               
