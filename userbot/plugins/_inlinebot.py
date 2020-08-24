@@ -1,11 +1,14 @@
-from math import ceil
-import asyncio
+import io
+import re
 import json
 import random
-import re
-from telethon import events, errors, custom
-from userbot import CMD_LIST
-import io
+import asyncio
+from math import ceil
+from . import statstext
+from .. import CMD_LIST , LOGS
+from telethon import events, errors, custom, Button
+
+CAT_IMG = Config.ALIVE_PIC if Config.ALIVE_PIC else None
 
 if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
     @tgbot.on(events.InlineQuery)  # pylint:disable=E0602
@@ -13,17 +16,28 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         builder = event.builder
         result = None
         query = event.text
-        if event.query.user_id == bot.uid and query.startswith("Userbot"):
+        if event.query.user_id == bot.uid and query.startswith("__**✮ CATUSERBOT"):
+            buttons = [(custom.Button.inline("Stats", data="stats"),
+                        Button.url("Repo" , "https://github.com/Jisan09/catuserbot"))]
+            result = builder.article(
+                        # catpic,
+                         title = "Alive cat",
+                         #force_document = False,
+                         text = query,
+                         buttons = buttons
+                         )
+            await event.answer([result] if result else None)
+        elif event.query.user_id == bot.uid and query.startswith("Userbot"):
             rev_text = query[::-1]
             buttons = paginate_help(0, CMD_LIST, "helpme")
             result = builder.article(
                 "© Userbot Help",
-                text="{}\n**Currently Loaded Plugins:** {}".format(
+                text="{}\nCurrently Loaded Plugins: {}".format(
                     query, len(CMD_LIST)),
                 buttons=buttons,
                 link_preview=False
             )
-        await event.answer([result] if result else None)
+            await event.answer([result] if result else None) 
     @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"helpme_next\((.+?)\)")
     ))
@@ -55,8 +69,9 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
-            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana! "
+            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana!"
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+            
     @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"us_plugin_(.*)")
     ))
@@ -90,8 +105,25 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                           )
         else:
             reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana!"
-            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)            
-
+            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)  
+            
+    @tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"close")))
+    async def on_plug_in_callback_query_handler(event):
+        if event.query.user_id == bot.uid:
+            await event.edit("menu closed")
+        else:
+            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana!"
+            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+       
+    @tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"stats")))
+    async def on_plug_in_callback_query_handler(event):
+        if event.query.user_id == bot.uid:
+            reply_pop_up_alert = statstext
+            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+        else:
+            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana!"
+            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+                
 def paginate_help(page_number, loaded_plugins, prefix):
     number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
     number_of_cols = Config.NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD
@@ -120,6 +152,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
         pairs = pairs[modulo_page * number_of_rows:number_of_rows * (modulo_page + 1)] + \
             [
             (custom.Button.inline("⌫", data="{}_prev({})".format(prefix, modulo_page)),
+             custom.Button.inline("Close", data="close"),
              custom.Button.inline("⌦", data="{}_next({})".format(prefix, modulo_page)))
         ]
     return pairs

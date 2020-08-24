@@ -224,7 +224,10 @@ async def uploadas(uas_event):
         thumb = thumb.strip()
     else:
         file_name = input_str
-        thumb = get_video_thumb(file_name)
+        thumb = vthumb = get_video_thumb(file_name)
+    if not thumb:
+        if os.path.exists(thumb_image_path):
+            thumb = thumb_image_path
     if os.path.exists(file_name):
         metadata = extractMetadata(createParser(file_name))
         duration = 0
@@ -286,7 +289,7 @@ async def uploadas(uas_event):
                 await uas_event.edit("TBD: Not (yet) Implemented")
                 return
             try:
-                os.remove(thumb)
+                os.remove(vthumb)
             except:
                 pass
             await uas_event.edit("Uploaded successfully !!")

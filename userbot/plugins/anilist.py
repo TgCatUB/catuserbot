@@ -3,13 +3,13 @@ Anilist Search Plugin for Userbot
 Usage : .anilist animeName	
 By :- @Zero_cool7870	
 """
-
-import requests 
+ 
 import re
 import json
 import asyncio
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+import requests
+from .. import CMD_HELP
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 async def callAPI(search_str):
     query = '''
@@ -74,18 +74,17 @@ async def formatJSON(outData):
     msg += " __" + re.sub("<br>", '\n', cat) +"__"
     return msg
 
-@borg.on(admin_cmd(pattern="anilist ?(.*)"))
+@borg.on(admin_cmd(pattern="anilist (.*)"))
+@borg.on(sudo_cmd(pattern="anilist (.*)",allow_sudo = True))
 async def anilist(event):
-    if event.fwd_from:
-        return
     input_str = event.pattern_match.group(1)
+    event = await edit_or_reply(event , "Searching...")
     result = await callAPI(input_str)
     msg = await formatJSON(result)
     await event.edit(msg,link_preview=True)
 
-	
 CMD_HELP.update({
     "anilist":
     ".anilist <anime name >\
-     \nUSAGE: Shows you the details of the Anime."
+     \nUSAGE: Shows you the details of the anime."
 })

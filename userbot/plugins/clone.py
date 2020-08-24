@@ -1,34 +1,27 @@
 """Get Telegram Profile Picture and other information
 and set as own profile.
 Syntax: .clone @username"""
-#Copy That Plugin by @ViperAdnan and @mrconfused
-#Give credit if you are going to kang it.
+#Credits of Plugin @ViperAdnan and @mrconfused(revert)[will add sql soon]
 
-import html
 import os
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import MessageEntityMentionName
-from telethon.utils import get_input_location
-from userbot.utils import admin_cmd
-from telethon.tl import functions
+import html
 from telethon import events
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd
+from telethon.tl import functions
+from telethon.tl.types import MessageEntityMentionName
+from telethon.tl.functions.users import GetFullUserRequest
+from .. import CMD_HELP , AUTONAME , DEFAULT_BIO , ALIVE_NAME
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,
-                                          UsernameOccupiedError)
-from telethon.tl.functions.account import (UpdateProfileRequest,
-                                           UpdateUsernameRequest)
-from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
-from telethon.tl.functions.photos import (DeletePhotosRequest,
-                                          GetUserPhotosRequest,
-                                          UploadProfilePhotoRequest)
 from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
-from userbot import bot, CMD_HELP , AUTONAME , DEFAULT_BIO , ALIVE_NAME
+from telethon.errors.rpcerrorlist import PhotoExtInvalidError, UsernameOccupiedError
 
 DEFAULTUSER = str(AUTONAME) if AUTONAME else str(ALIVE_NAME)
 DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙"
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-BOTLOG = True
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
+else:
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 @borg.on(admin_cmd(pattern="clone ?(.*)"))
 async def _(event):
@@ -145,3 +138,12 @@ async def get_full_user(event):
         return replied_user, None
     except Exception as e:
         return None, e
+
+CMD_HELP.update({
+    "clone":
+    "**SYNTAX :** `.clone`<reply to user who you want to clone\
+    \n**USAGE : **clone the replied user account\
+    \n\n**SYNTAX : **`.revert`\
+    \n**USAGE : **Reverts back to your profile which you have set in heroku for  AUTONAME,DEFAULT_BIO\
+    "
+})      

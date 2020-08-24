@@ -6,9 +6,7 @@ import nekos
 import requests
 import asyncio , time
 from PIL import Image
-from platform import uname
-from telethon import events
-from telethon import version
+from telethon import events,version
 from userbot import StartTime
 from platform import python_version, uname
 from userbot.utils import admin_cmd,sudo_cmd
