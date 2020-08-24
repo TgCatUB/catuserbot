@@ -69,7 +69,7 @@ async def _(event):
               await event.edit("```can you kindly disable your forward privacy settings for good?```")
           else: 
               await borg.send_file(event.chat_id, response.message.media)
-         await event.delete()
+          await event.delete()
  
 @borg.on(admin_cmd(pattern="deepfry(?: |$)(.*)", outgoing=True))
 @borg.on(sudo_cmd(pattern="deepfry(?: |$)(.*)",allow_sudo = True))
