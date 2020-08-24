@@ -77,7 +77,7 @@ async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
             process.pid)
 
 #for getmusic
-async def catmusic(cat , QUALITY):
+async def catmusic(cat , QUALITY,hello):
     search = cat
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--ignore-certificate-errors')
@@ -94,12 +94,21 @@ async def catmusic(cat , QUALITY):
         break
     if not os.path.isdir("./temp/"):
         os.makedirs("./temp/")
-    command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)
-    os.system(command)
-    thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
-    os.system(thumb)
+    if not video_link:
+        await hello.edit(f"Sorry. I can't find that song `{search}`")
+        return
+    try:
+        command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)
+        os.system(command)
+    except Exception as e:
+        return await hello.edit(f"`Error:\n {e}`") 
+    try:
+        thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
+        os.system(thumb)
+    except Exception as e:
+        return await hello.edit(f"`Error:\n {e}`")
 
-async def catmusicvideo(cat):
+async def catmusicvideo(cat,hello):
     search = cat
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--ignore-certificate-errors')
@@ -116,10 +125,19 @@ async def catmusicvideo(cat):
         break
     if not os.path.isdir("./temp/"):
         os.makedirs("./temp/")
-    command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" -f "[filesize<20M]" ' +video_link)  
-    os.system(command)
-    thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
-    os.system(thumb)
+    if not video_link:
+        await hello.edit(f"Sorry. I can't find that song `{search}`")
+        return  
+    try:
+        command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" -f "[filesize<20M]" ' +video_link)  
+        os.system(command)
+    except Exception as e:
+        return await hello.edit(f"`Error:\n {e}`")     
+    try:
+        thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
+        os.system(thumb)
+    except Exception as e:
+        return await hello.edit(f"`Error:\n {e}`")     
 
 # for stickertxt
 async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
