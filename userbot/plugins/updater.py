@@ -1,10 +1,8 @@
 
 # Copyright (C) 2019 The Raphielscape Company LLC.
-#
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 # credits to @AvinashReddy3108
-#
 """
 This module updates the userbot based on upstream revision
 Ported from Kensurbot
@@ -201,7 +199,7 @@ async def upstream(event):
     if conf == "" and force_update is False:
         await print_changelogs(event, ac_br, changelog)
         await event.delete()
-        return await event.respond('`do ".update now or .update deploy" to update.`')
+        return await event.respond('do "[.update now] or [.update deploy]" to update.Check `.info updater` for details')
 
     if force_update:
         await event.edit(
@@ -213,13 +211,13 @@ async def upstream(event):
     return
 
 CMD_HELP.update({
-        "update": "**Syntax : **`.update`"
+        "updater": "**Syntax : **`.update`"
         "\n**Usage :** Checks if the main userbot repository has any updates "
         "and shows a changelog if so."
         "\n\n**Syntax : **`.update now`"
         "\n**Usage :** Update your userbot, "
-        "if there are any updates in your userbot repository."
+        "if there are any updates in your userbot repository.if you restart these goes back to last time when you deployed"
         "\n\n**Syntax : **`.update deploy`"
-        "\n**Usage :** Deploy your userbot"
+        "\n**Usage :** Deploy your userbot.So even you restart it doesnt go back to previous version"
         "\nThis will triggered deploy always, even no updates."
     })
