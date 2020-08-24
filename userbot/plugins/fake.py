@@ -89,4 +89,4 @@ CMD_HELP.update({
     \n\n`.padmin`\
     \n**USAGE : ** An animation that shows enableing all permissions to him that he is admin(fake promotion)\
     "
-})            
+})
