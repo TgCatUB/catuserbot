@@ -58,8 +58,8 @@ if bool(ENV):
 
 
     # Chrome Driver and Headless Google Chrome Binaries
-    CHROME_DRIVER = os.environ.get("CHROME_DRIVER", None)
-    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", None)
+    CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
+    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", "/usr/bin/google-chrome")
 
     # OpenWeatherMap API Key
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
