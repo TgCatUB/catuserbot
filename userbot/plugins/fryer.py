@@ -23,7 +23,7 @@
 """ Userbot module for frying stuff. ported by @NeoMatrix90 """
 
 import io
-from . import CMD_HELP
+from .. import CMD_HELP
 from telethon import events
 from random import randint, uniform
 from PIL import Image, ImageEnhance, ImageOps
