@@ -1,9 +1,20 @@
+import asyncio
+from .. import CMD_HELP
 from telethon import events
 from datetime import datetime
-from userbot.utils import admin_cmd,sudo_cmd
-from userbot import CMD_HELP
-import asyncio
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
+@borg.on(admin_cmd(pattern="ping$"))
+@borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
+async def _(event):
+    if event.fwd_from:
+        return
+    start = datetime.now()
+    event = await edit_or_reply(event ,"Pong!")
+    end = datetime.now()
+    ms = (end - start).microseconds / 1000
+    await event.edit("Pong!\n`{}`".format(ms))
+    
 @borg.on(admin_cmd(pattern=f"fping$", outgoing=True))
 async def _(event):
     if event.fwd_from:
@@ -47,31 +58,11 @@ async def _(event):
     ms = (end - start).microseconds /1000
     await event.edit("‎‎‎‎‎‎‎‎‎⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛⬛📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛📶⬛⬛⬛\n⬛⬛⬛⬛📶⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛📶⬛⬛⬛📶⬛\n⬛⬛📶📶⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶⬛📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛ \n‎‎‎‎‎‎‎‎‎ \n \n My 🇵 🇮 🇳 🇬  Is : {} ms".format(ms))
  
-@borg.on(admin_cmd(pattern="ping$"))
-async def _(event):
-    if event.fwd_from:
-        return
-    start = datetime.now()
-    await event.edit("Pong!")
-    end = datetime.now()
-    ms = (end - start).microseconds / 1000
-    await event.edit("Pong!\n`{}`".format(ms))
-    
-@borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
-async def _(event):
-    if event.fwd_from:
-        return
-    await event.delete()
-    start = datetime.now()
-    mone = await event.reply("Pong!")
-    end = datetime.now()
-    ms = (end - start).microseconds / 1000
-    await mone.edit("Pong!\n`{}`".format(ms))
- 
 CMD_HELP.update({
     "ping":
-    "`.fping`\
-    \nUSAGE:A kind ofping with extra animation\
-    \n\n`.ping`\
-    \nUSAGE:Shows you the ping speed of server"
+    "**SYNTAX :** `.ping`\
+    \n**USAGE : **Shows you the ping speed of server\
+    \n\n**SYNTAX : **`.fping`\
+    \n**USAGE : **A kind ofping with extra animation\
+    "
 })

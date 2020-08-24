@@ -137,8 +137,9 @@ if Var.PRIVATE_GROUP_ID is not None:
         if sender.verified:
             # don't log verified accounts
             return
-        if check(event.raw_text):
-            return
+        if (len(event.raw_text)==1):
+            if check(event.raw_text):
+                return
         if not pmpermit_sql.is_approved(chat_id):
             # pm permit
             await do_pm_permit_action(chat_id, event)

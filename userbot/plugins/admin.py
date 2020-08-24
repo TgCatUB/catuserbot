@@ -29,7 +29,6 @@ from userbot.utils import register, errors_handler, admin_cmd,sudo_cmd
 from userbot.uniborgConfig import Config
 from telethon import events, errors, functions, types
 
-
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
 else:
@@ -76,7 +75,7 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
 
 
-@borg.on(admin_cmd("setgpic(?: |$)(.*)"))
+@borg.on(admin_cmd("setgpic$"))
 @errors_handler
 async def set_group_photo(gpic):
     """ For .setgpic command, changes the picture of a group """
@@ -158,7 +157,6 @@ async def promote(promt):
             BOTLOG_CHATID, "#PROMOTE\n"
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
-
 
 @borg.on(admin_cmd("demote(?: |$)(.*)"))
 @errors_handler
@@ -253,7 +251,6 @@ async def ban(bon):
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
 
-
 @borg.on(admin_cmd("unban(?: |$)(.*)"))
 @errors_handler
 async def nothanos(unbon):
@@ -290,7 +287,7 @@ async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
         
-@borg.on(admin_cmd("mute ?(\d+)?"))
+@borg.on(admin_cmd("mute ?(\d+)"))
 async def startmute(event):
         private = False
         if event.fwd_from:
@@ -337,7 +334,7 @@ async def startmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")   
     
-@borg.on(admin_cmd("unmute ?(\d+)?"))
+@borg.on(admin_cmd("unmute ?(\d+)"))
 async def endmute(event):   
         private = False
         if event.fwd_from:
@@ -372,7 +369,7 @@ async def endmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
-@borg.on(admin_cmd("pin(?: |$)(.*)"))
+@borg.on(admin_cmd("pin($| (.*))"))
 @errors_handler
 async def pin(msg):
     """ For .pin command, pins the replied/tagged message on the top the chat. """
@@ -457,7 +454,7 @@ async def _(event):
         await asyncio.sleep(3)
         await event.delete()
 
-@borg.on(sudo_cmd(pattern="(ban|unban) ?(.*)", allow_sudo=True))
+@borg.on(sudo_cmd(pattern="(ban|unban)($| (.*))", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -485,7 +482,7 @@ async def _(event):
     else:
         await event.reply(f"{input_cmd}ned Successfully!")
 
-@borg.on(sudo_cmd(pattern="pgs ?(.*)", allow_sudo=True))
+@borg.on(sudo_cmd(pattern="pgs($| (.*))", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -496,7 +493,6 @@ async def _(event):
         input_str = event.pattern_match.group(1)
         if input_str:
             from_user = await borg.get_entity(input_str)
-            logger.info(from_user)
         async for message in borg.iter_messages(
             event.chat_id,
             min_id=event.reply_to_msg_id,

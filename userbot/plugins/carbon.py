@@ -78,7 +78,7 @@ async def carbon_api(e):
    
 CMD_HELP.update({
     "carbon":
-    "**SYNTAX :** `.carbon` <reply to code>\
-    \n**USAGE : **Shows your code in different style\
+    "**Syntax :** `.carbon` <reply to code>\
+    \n**Usage : **Shows your code in different style\
     "
-})
+})   

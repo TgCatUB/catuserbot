@@ -1,12 +1,13 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
+from .. import CMD_HELP
 from telethon import events
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from telethon.tl.functions.messages import SaveDraftRequest
-from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern="chain"))
+@borg.on(admin_cmd(pattern="chain$"))
+@borg.on(sudo_cmd(pattern="chain$",allow_sudo = True))
 async def _(event):
     await event.edit("Counting...")
     count = -1
@@ -22,3 +23,10 @@ async def _(event):
         message = reply
         count += 1
     await event.edit(f"Chain length: {count}")
+    
+CMD_HELP.update({
+    "chain":
+    "**SYNTAX :** `.chain`\
+    \n**USAGE : **Reply this command to any converstion where you want to find length of converstion(Only tagged chain will count ) \
+    "
+})

@@ -8,22 +8,23 @@ import logging
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
                     level=logging.WARNING)
 logger = logging.getLogger(__name__)
-from datetime import datetime
-import zipfile
-from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
-import asyncio
+
 import os
-import shutil
 import time
-from pySmartDL import SmartDL
-from telethon import events
-from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
-import subprocess
-import patoolib
+import shutil
 import tarfile
-from userbot import CMD_HELP
+import zipfile
+import asyncio
+import patoolib
+import subprocess
+from .. import CMD_HELP
+from telethon import events
+from datetime import datetime
+from pySmartDL import SmartDL
+from hachoir.parser import createParser
+from hachoir.metadata import extractMetadata
+from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply, humanbytes, progress, time_formatter
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 extracted = Config.TMP_DOWNLOAD_DIRECTORY
@@ -31,11 +32,12 @@ if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
 @borg.on(admin_cmd(pattern=("zip ?(.*)")))
+@borg.on(sudo_cmd(pattern="zip ?(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    mone = await event.edit("Zipping in progress....")
+    event = mone = await edit_or_reply(event ,"Zipping in progress....")
     if event.reply_to_msg_id:
         if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
             os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -70,11 +72,12 @@ async def _(event):
         await event.edit("Local file compressed to `{}`".format(input_str + ".zip"))      
 
 @borg.on(admin_cmd(pattern="unzip ?(.*)"))
+@borg.on(sudo_cmd(pattern="unzip ?(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
       return
-    mone = await event.edit("Processing ...")
     input_str = event.pattern_match.group(1)
+    event = mone = await edit_or_reply(event ,"Processing ...")
     if input_str:
       if os.path.exists(input_str):
         downloaded_file_name = input_str
@@ -120,11 +123,12 @@ def zipdir(dirName):
   return filePaths        
     
 @borg.on(admin_cmd(pattern=("rar ?(.*)")))
+@borg.on(sudo_cmd(pattern="rar ?(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    mone = await event.edit("Processing ...")
+    event = mone = await edit_or_reply(event ,"Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -166,11 +170,12 @@ async def _(event):
         await event.edit("Local file compressed to `{}`".format(directory_name + ".rar"))
 
 @borg.on(admin_cmd(pattern=("tar ?(.*)")))
+@borg.on(sudo_cmd(pattern="tar ?(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    mone = await event.edit("Processing ...")
+    event = mone = await edit_or_reply(event ,"Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -249,10 +254,11 @@ async def create_archive(input_directory):
     return return_name      
 
 @borg.on(admin_cmd(pattern="unrar"))
+@borg.on(sudo_cmd(pattern="unrar",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
-    mone = await event.edit("Processing ...")
+    event = mone = await edit_or_reply(event ,"Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -336,10 +342,11 @@ async def _(event):
         await event.delete()
 
 @borg.on(admin_cmd(pattern="untar"))
+@borg.on(sudo_cmd(pattern="untar",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
-    mone = await event.edit("Processing ...")
+    event = mone = await edit_or_reply(event ,"Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     extracted = Config.TMP_DOWNLOAD_DIRECTORY + "extracted/"

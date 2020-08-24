@@ -1,18 +1,16 @@
 """Say something from the Holy Bible... Syntax: .BBL by @Mayur_Karaniya
-|
 Quotes credits: Being Biblical Channel : @BeingBiblical"""
-from telethon import events
-import asyncio
-import os
-import sys
-import random
-from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern="bbl", outgoing=True))
+import asyncio
+import random
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+
+@borg.on(admin_cmd(pattern="bbl$", outgoing=True))
+@borg.on(sudo_cmd(pattern="bbl$",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
-    await event.edit("LAKHU CHU 1 MINUTE !...")
+    event = await edit_or_reply(event ,"LAKHU CHU 1 MINUTE !...")
     await asyncio.sleep(2)
     x=(random.randrange(1,101))
     if x==1:
