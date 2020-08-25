@@ -34,6 +34,9 @@ import json
 import re
 import codecs
 import socket
+import requests
+import urllib3
+from . import LOGS
 
 args_list = ["keywords", "keywords_from_file", "prefix_keywords", "suffix_keywords",
              "limit", "format", "color", "color_type", "usage_rights", "size",
@@ -741,7 +744,10 @@ class googleimagesdownload:
         end_object = s.find('</script>', start_object + 1) - 4
         object_raw = str(s[start_object:end_object])
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
-        image_objects = json.loads(object_decode)[31][0][12][2]
+       # key = requests.post('https://nekobin.com/api/documents', json={"content": object_decode[:-15]}).json().get('result').get('key')
+       # url = f'https://nekobin.com/{key}'
+       # LOGS.info(url)
+        image_objects = json.loads(object_decode[:-15])[31][0][12][2]
         return image_objects
 
     def _get_all_items(self,page,main_directory,dir_name,limit,arguments):
@@ -1003,5 +1009,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# In[ ]:

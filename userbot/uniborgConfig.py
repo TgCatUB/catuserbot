@@ -3,8 +3,8 @@
 # Create a new config.py file in same dir and import, then extend this class.
 import os
 from telethon.tl.types import ChatBannedRights
-# from pymongo import MongoClient
-# import pymongo
+from pymongo import MongoClient
+import pymongo
 
 class Config(object):
     LOGGER = True
@@ -32,7 +32,7 @@ class Config(object):
     IBM_WATSON_CRED_URL = os.environ.get("IBM_WATSON_CRED_URL", None)
     IBM_WATSON_CRED_PASSWORD = os.environ.get("IBM_WATSON_CRED_PASSWORD", None)
     # This is required for the @telegraph functionality.
-    TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "Survivor")
+    TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "mrconfused")
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)    
     # Get a Free API Key from OCR.Space
@@ -89,7 +89,7 @@ class Config(object):
     # number of rows of buttons to be displayed in .helpme command
     NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD = int(os.environ.get("NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD", 3))
     #emoji to be displayed in .help
-    EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", "⚡️")
+    EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", " ")
     # specify command handler that should be used for the plugins
     # this should be a valid "regex" pattern
     COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", "\.")
@@ -142,7 +142,6 @@ class Config(object):
     TL_VID_STREAM_TYPES = ("MKV", "MP4", "WEBM")
     TL_MUS_STREAM_TYPES = ("MP3", "WAV", "FLAC")
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
-    # MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
     # MONGOCLIENT = pymongo.MongoClient(MONGO_DB_URI)
     # MONGO = MONGOCLIENT.userbot
     # JustWatch Country
@@ -160,9 +159,14 @@ class Production(Config):
 class Development(Config):
     LOGGER = True
 
+# Init Mongo
+MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
+MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
+MONGO = MONGOCLIENT.userbot
+
 def is_mongo_alive():
     try:
-        Config.MONGOCLIENT.server_info()
-    except BaseException:
-        return False
-    return True
+        MONGOCLIENT.server_info()
+    except BaseException as e:
+        print(e)
+        return Fa
