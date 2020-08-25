@@ -102,6 +102,7 @@ async def deepfryer(event):
     image.save(fried_io, "JPEG")
     fried_io.seek(0)
     await event.reply(file=fried_io)
+    await event.delete()
 
 async def deepfry(img: Image) -> Image:
     colours = (
