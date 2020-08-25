@@ -23,6 +23,16 @@
       "value": "./DOWNLOADS/",
       "required": false
     },
+    "DEFAULT_BIO": {
+      "description": "Your bio here note bio must have only 70characters or less.",
+      "value": "",
+      "required": false
+    },
+    "AUTONAME": {
+      "description": "for .autoname command",
+      "value": "",
+      "required": false
+    },
     "ALIVE_NAME": {
       "description": "give your name",
       "value": ""
