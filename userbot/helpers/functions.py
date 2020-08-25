@@ -141,8 +141,8 @@ async def catmusicvideo(cat,hello):
 
 # for stickertxt
 async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
-    animus = [0, 1, 2, 3, 4, 9, 15, 20, 22, 27, 29, 32, 33, 34, 37, 38, 
-              41, 42, 44, 45, 47, 48, 51, 52, 53, 55, 56, 57, 58, 61, 62, 63]
+    animus = [0, 1, 2, 3, 4, 7, 9, 10, 11, 15, 20, 22, 27, 29, 31, 32, 33, 34, 36, 37, 38, 
+              40, 41, 42, 43, 44, 45, 47, 48, 51, 52, 53, 54, 55, 56, 57, 58, 60, 61, 62, 63]
     sticcers = await bot.inline_query(
         "stickerizerbot", f"#{choice(animus)}{text}")
     cat = await sticcers[0].click( "me" ,
