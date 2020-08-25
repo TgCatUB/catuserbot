@@ -8,13 +8,14 @@ This module updates the userbot based on upstream revision
 Ported from Kensurbot
 """
 
-import asyncio
+
 import sys
-from os import environ, execle, path, remove
+import asyncio
 from git import Repo
+from .. import CMD_HELP
+from os import environ, execle, path, remove
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
 
 HEROKU_APP_NAME = Var.HEROKU_APP_NAME
 HEROKU_API_KEY = Var.HEROKU_API_KEY
@@ -137,10 +138,11 @@ async def update(event, repo, ups_rem, ac_br):
     return
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"update($| (now|deploy))"))
+@borg.on(sudo_cmd(pattern="update($| (now|deploy))",allow_sudo = True))
 async def upstream(event):
     "For .update command, check if the bot is up to date, update if specified"
-    await event.edit("`Checking for updates, please wait....`")
     conf = event.pattern_match.group(1).strip()
+    event = await edit_or_reply(event ,"`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
     try:
