@@ -17,10 +17,13 @@ import io
 import glob
 import asyncio
 import pybase64
-from .. import CMD_HELP
+from .. import CMD_HELP, ALIVE_NAME
 from . import catmusic , catmusicvideo
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Cat"
+
 
 @borg.on(admin_cmd(pattern="song( (.*)|$)"))
 @borg.on(sudo_cmd(pattern="song( (.*)|$)",allow_sudo = True))
@@ -62,7 +65,7 @@ async def _(event):
                 loa,
                 force_document=False,
                 allow_cache=False,
-                caption=query,
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
                 thumb = catthumb,
                 supports_streaming=True,
                 reply_to=reply_to_id
@@ -112,7 +115,7 @@ async def _(event):
                 loa,
                 force_document=False,
                 allow_cache=False,
-                caption=query,
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
                 thumb = catthumb,
                 supports_streaming=True,
                 reply_to=reply_to_id
@@ -161,7 +164,7 @@ async def _(event):
                 event.chat_id,
                 loa,
                 thumb = catthumb,
-                caption=query,
+                caption=f"`Song`: {query}\n`Uploaded by`: {DEFAULTUSER}",
                 supports_streaming=True,
                 reply_to=reply_to_id
             )
