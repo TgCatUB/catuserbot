@@ -12,8 +12,10 @@ from telethon import events
 from os.path import basename
 from bs4 import BeautifulSoup
 from validators.url import url
+from selenium import webdriver
 from emoji import get_emoji_regexp
 from telethon.tl.types import Channel
+from userbot.uniborgConfig import Config
 from typing import Tuple, List, Optional
 
 async def get_readable_time(seconds: int) -> str:
@@ -75,47 +77,72 @@ async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
             process.pid)
 
 #for getmusic
-async def catmusic(cat , QUALITY):
-  search = cat
-  headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
-  html = requests.get('https://www.youtube.com/results?search_query='+search, headers=headers).text
-  soup = BeautifulSoup(html, 'html.parser')
-  for link in soup.find_all('a'):
-    if '/watch?v=' in link.get('href'):
-        # May change when Youtube Website may get updated in the future.
-        video_link = link.get('href') 
-        break
-  video_link =  'http://www.youtube.com/'+video_link
-  if not os.path.isdir("./temp/"):
-        os.makedirs("./temp/")
-  command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)
-  os.system(command)
-  thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
-  os .system(thumb)
-
-
-async def catmusicvideo(cat):
+async def catmusic(cat , QUALITY,hello):
     search = cat
-    headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
-    html = requests.get('https://www.youtube.com/results?search_query='+search, headers=headers).text
-    soup = BeautifulSoup(html, 'html.parser')
-    for link in soup.find_all('a'):
-        if '/watch?v=' in link.get('href'):
-            # May change when Youtube Website may get updated in the future.
-            video_link = link.get('href') 
-            break    
-    video_link =  'http://www.youtube.com/'+video_link
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--ignore-certificate-errors')
+    chrome_options.add_argument("--test-type")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.binary_location = Config.CHROME_BIN
+    driver = webdriver.Chrome(chrome_options=chrome_options)
+    driver.get('https://www.youtube.com/results?search_query='+search)
+    user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
+    for i in user_data:
+        video_link = i.get_attribute('href')
+        break
     if not os.path.isdir("./temp/"):
         os.makedirs("./temp/")
-    command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" -f "[filesize<20M]" ' +video_link)  
-    os.system(command)
-    thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
-    os .system(thumb)
+    if not video_link:
+        await hello.edit(f"Sorry. I can't find that song `{search}`")
+        return
+    try:
+        command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality ' + QUALITY + ' ' + video_link)
+        os.system(command)
+    except Exception as e:
+        return await hello.edit(f"`Error:\n {e}`") 
+    try:
+        thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
+        os.system(thumb)
+    except Exception as e:
+        return await hello.edit(f"`Error:\n {e}`")
+
+async def catmusicvideo(cat,hello):
+    search = cat
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--ignore-certificate-errors')
+    chrome_options.add_argument("--test-type")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.binary_location = Config.CHROME_BIN
+    driver = webdriver.Chrome(chrome_options=chrome_options)
+    driver.get('https://www.youtube.com/results?search_query='+search)
+    user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
+    for i in user_data:
+        video_link = i.get_attribute('href')
+        break
+    if not os.path.isdir("./temp/"):
+        os.makedirs("./temp/")
+    if not video_link:
+        await hello.edit(f"Sorry. I can't find that song `{search}`")
+        return  
+    try:
+        command = ('youtube-dl -o "./temp/%(title)s.%(ext)s" -f "[filesize<20M]" ' +video_link)  
+        os.system(command)
+    except Exception as e:
+        return await hello.edit(f"`Error:\n {e}`")     
+    try:
+        thumb = ('youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download ' + video_link)
+        os.system(thumb)
+    except Exception as e:
+        return await hello.edit(f"`Error:\n {e}`")     
 
 # for stickertxt
 async def waifutxt(text, chat_id ,reply_to_id , bot, borg):
-    animus = [0, 1, 2, 3, 4, 7, 9, 10, 11, 15, 20, 22, 27, 29, 31, 32, 33, 34, 36, 37, 38, 
-              40, 41, 42, 43, 44, 45, 47, 48, 51, 52, 53, 54, 55, 56, 57, 58, 60, 61, 62, 63]
+    animus = [0, 1, 2, 3, 4, 9, 15, 20, 22, 27, 29, 32, 33, 34, 37, 38, 
+              41, 42, 44, 45, 47, 48, 51, 52, 53, 55, 56, 57, 58, 61, 62, 63]
     sticcers = await bot.inline_query(
         "stickerizerbot", f"#{choice(animus)}{text}")
     cat = await sticcers[0].click( "me" ,
