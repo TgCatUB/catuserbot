@@ -13,6 +13,7 @@ cryptg
 csvfaker
 DateTime
 fontTools
+pymongo
 python-dotenv
 emoji
 fonttools
@@ -20,7 +21,7 @@ geopy
 gitpython
 glitch_this
 google-api-python-client==1.7.11
-google_images_download==2.8.0
+google_images_download
 googletrans
 gsearch
 gtts
