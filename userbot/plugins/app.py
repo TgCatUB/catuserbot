@@ -2,23 +2,24 @@
 .app <app_name> to fetch app details.
 .appr <app_name>  to fetch app details with Xpl0iter request link.
   © [cHAuHaN](http://t.me/amnd33p)"""
-import requests
-import bs4 
+
 import re
-from userbot.utils import admin_cmd
-from telethon import *
-from userbot import *
+import bs4
+import requests
+from platform import uname
 from telethon import events
 from bs4 import BeautifulSoup
-from platform import uname
-from userbot import ALIVE_NAME
-from userbot import CMD_HELP
+from .. import CMD_HELP ,ALIVE_NAME
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+
 @borg.on(admin_cmd(pattern="app (.*)"))
+@borg.on(sudo_cmd(pattern="app (.*)",allow_sudo=True))
 async def apk(event):
+    app_name = event.pattern_match.group(1)
+    event = await edit_or_reply(event ,"Searching!")
     try:
-        app_name = event.pattern_match.group(1)
         remove_space = app_name.split(' ')
         final_name = '+'.join(remove_space)
         page = requests.get("https://play.google.com/store/search?q="+final_name+"&c=apps")
@@ -42,11 +43,13 @@ async def apk(event):
         await event.edit("No result found in search. Please enter **Valid app name**")
     except Exception as err:
         await event.edit("Exception Occured:- "+str(err))
-
+        
 @borg.on(admin_cmd(pattern="appr (.*)"))
+@borg.on(sudo_cmd(pattern="appr (.*)",allow_sudo=True))
 async def apkr(event):
+    app_name = event.pattern_match.group(1)
+    event = await edit_or_reply(event ,"searching!")
     try:
-        app_name = event.pattern_match.group(1)
         remove_space = app_name.split(' ')
         final_name = '+'.join(remove_space)
         page = requests.get("https://play.google.com/store/search?q="+final_name+"&c=apps")
@@ -65,19 +68,18 @@ async def apkr(event):
         app_details += "\n<code>Rating :</code> "+app_rating.replace("Rated ", "⭐ ").replace(" out of ", "/").replace(" stars", "", 1).replace(" stars", "⭐ ").replace("five", "5")
         app_details += "\n<code>Features :</code> <a href='"+app_link+"'>View in Play Store</a>"
         app_details += "\n\n<b>Download : </b> <a href='https://t.me/joinchat/JCu-H1NikiYDgNjpjPYd4A'>Request_Here</a>"
-        app_details += f"\n\n===> {DEFAULTUSER} <==="
+        app_details += "\n\n===> @Xpl0iter <==="
         await event.edit(app_details, link_preview = True, parse_mode = 'HTML')
     except IndexError:
         await event.edit("No result found in search. Please enter **Valid app name**")
     except Exception as err:
         await event.edit("Exception Occured:- "+str(err))
-
         
 CMD_HELP.update({
     "app":
     ".app [app name]\
 \nUsage: searches the app in the playstore and provides the link to the app in playstore and fetchs app details \
 \n\n.appr [app name]\
-\nUsage: searches the app in the playstore and provides the link to the app in playstore and fetchs app details with Sur_vivor request link. \
+\nUsage: searches the app in the playstore and provides the link to the app in playstore and fetchs app details with Xpl0iter request link. \
 "
-})              
+})

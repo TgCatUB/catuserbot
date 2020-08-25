@@ -29,7 +29,6 @@ from userbot.utils import register, errors_handler, admin_cmd,sudo_cmd
 from userbot.uniborgConfig import Config
 from telethon import events, errors, functions, types
 
-
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
 else:
@@ -76,7 +75,7 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
 
 
-@borg.on(admin_cmd("setgpic(?: |$)(.*)"))
+@borg.on(admin_cmd("setgpic$"))
 @errors_handler
 async def set_group_photo(gpic):
     """ For .setgpic command, changes the picture of a group """
@@ -159,7 +158,6 @@ async def promote(promt):
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
 
-
 @borg.on(admin_cmd("demote(?: |$)(.*)"))
 @errors_handler
 async def demote(dmod):
@@ -173,7 +171,7 @@ async def demote(dmod):
         return
     # If passing, declare that we're going to demote
     await dmod.edit("`Demoting...`")
-    rank = "Admin"  # dummy rank, lol.
+    rank = "admeme"  # dummy rank, lol.
     user = await get_user_from_event(dmod)
     user = user[0]
     if user:
@@ -203,7 +201,6 @@ async def demote(dmod):
             BOTLOG_CHATID, "#DEMOTE\n"
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
-
 
 @borg.on(admin_cmd("ban(?: |$)(.*)"))
 @errors_handler
@@ -254,7 +251,6 @@ async def ban(bon):
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
 
-
 @borg.on(admin_cmd("unban(?: |$)(.*)"))
 @errors_handler
 async def nothanos(unbon):
@@ -290,81 +286,8 @@ async def nothanos(unbon):
 async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
-       
-      
-@borg.on(admin_cmd(pattern=r"delusers(?: |$)(.*)"))
-@errors_handler
-async def rm_deletedacc(show):
-    """ For .delusers command, list all the ghost/deleted accounts in a chat. """
-    if not show.is_group:
-        await show.edit("`I don't think this is a group.`")
-        return
-    con = show.pattern_match.group(1)
-    del_u = 0
-    del_status = "`No deleted accounts found, Group is cleaned as Hell`"
-
-    if con != "clean":
-        await show.edit("`Searching for zombie accounts...`")
-        async for user in show.client.iter_participants(show.chat_id,
-                                                        aggressive=True):
-            if user.deleted:
-                del_u += 1
-                await sleep(1)
-        if del_u > 0:
-            del_status = f"Found **{del_u}** deleted account(s) in this group,\
-            \nclean them by using .delusers clean"
-
-        await show.edit(del_status)
-        return
-
-    # Here laying the sanity check
-    chat = await show.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
-
-    # Well
-    if not admin and not creator:
-        await show.edit("`I am not an admin here!`")
-        return
-
-    await show.edit("`Deleting deleted accounts...\nOh I can do that?!?!`")
-    del_u = 0
-    del_a = 0
-
-    async for user in show.client.iter_participants(show.chat_id):
-        if user.deleted:
-            try:
-                await show.client(
-                    EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
-            except ChatAdminRequiredError:
-                await show.edit("`I don't have ban rights in this group`")
-                return
-            except UserAdminInvalidError:
-                del_u -= 1
-                del_a += 1
-            await show.client(
-                EditBannedRequest(show.chat_id, user.id, UNBAN_RIGHTS))
-            del_u += 1
-
-    if del_u > 0:
-        del_status = f"Cleaned **{del_u}** deleted account(s)"
-
-    if del_a > 0:
-        del_status = f"Cleaned **{del_u}** deleted account(s) \
-        \n**{del_a}** deleted admin accounts are not removed"
-
-    await show.edit(del_status)
-    await sleep(2)
-    await show.delete()
-
-    if BOTLOG:
-        await show.client.send_message(
-            BOTLOG_CHATID, "#CLEANUP\n"
-            f"Cleaned **{del_u}** deleted account(s) !!\
-            \nCHAT: {show.chat.title}(`{show.chat_id}`)")
-
-
-@borg.on(admin_cmd("mute ?(\d+)?"))
+        
+@borg.on(admin_cmd("mute ?(\d+)"))
 async def startmute(event):
         private = False
         if event.fwd_from:
@@ -411,7 +334,7 @@ async def startmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")   
     
-@borg.on(admin_cmd("unmute ?(\d+)?"))
+@borg.on(admin_cmd("unmute ?(\d+)"))
 async def endmute(event):   
         private = False
         if event.fwd_from:
@@ -446,7 +369,7 @@ async def endmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")
 
-@borg.on(admin_cmd("pin(?: |$)(.*)"))
+@borg.on(admin_cmd("pin($| (.*))"))
 @errors_handler
 async def pin(msg):
     """ For .pin command, pins the replied/tagged message on the top the chat. """
@@ -531,7 +454,7 @@ async def _(event):
         await asyncio.sleep(3)
         await event.delete()
 
-@borg.on(sudo_cmd(pattern="(ban|unban) ?(.*)", allow_sudo=True))
+@borg.on(sudo_cmd(pattern="(ban|unban)($| (.*))", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -559,7 +482,7 @@ async def _(event):
     else:
         await event.reply(f"{input_cmd}ned Successfully!")
 
-@borg.on(sudo_cmd(pattern="pgs ?(.*)", allow_sudo=True))
+@borg.on(sudo_cmd(pattern="pgs($| (.*))", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -570,7 +493,6 @@ async def _(event):
         input_str = event.pattern_match.group(1)
         if input_str:
             from_user = await borg.get_entity(input_str)
-            logger.info(from_user)
         async for message in borg.iter_messages(
             event.chat_id,
             min_id=event.reply_to_msg_id,
