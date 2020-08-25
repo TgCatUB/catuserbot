@@ -14,7 +14,7 @@ from .helpers import fonts as fonts ,functions as catdef
 from .helpers import process as process
 
 StartTime = time.time()
-catversion = "2.6.4"
+catversion = "2.6.6"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
