@@ -94,7 +94,7 @@ async def deepfryer(event):
     await event.client.download_media(data, image)
     image = Image.open(image)
     # fry the image
-    await edit_or_reply(event ,"`Deep frying media…`")
+    hmm = await edit_or_reply(event ,"`Deep frying media…`")
     for _ in range(frycount):
         image = await deepfry(image)
     fried_io = io.BytesIO()
@@ -102,7 +102,7 @@ async def deepfryer(event):
     image.save(fried_io, "JPEG")
     fried_io.seek(0)
     await event.reply(file=fried_io)
-    await event.delete()
+    await hmm.delete()
 
 async def deepfry(img: Image) -> Image:
     colours = (
