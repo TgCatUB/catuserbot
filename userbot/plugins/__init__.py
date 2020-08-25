@@ -37,7 +37,7 @@ runcmd = catdef.runcmd
 def check(cat):
     if "/start" in cat:
         return True 
-    hi = re.search(re.escape(f"\\b{cat}\\b") ,"a|b|c|d")
+    hi = re.search(re.escape(f"\\b{cat}\\b") ,"1|2|3|4|5")
     if hi:
         return True
     return False
