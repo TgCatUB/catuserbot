@@ -287,7 +287,7 @@ async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
         
-@borg.on(admin_cmd("mute ?(\d+)"))
+@borg.on(admin_cmd("mute ?(\d+)?"))
 async def startmute(event):
         private = False
         if event.fwd_from:
@@ -334,7 +334,7 @@ async def startmute(event):
                     f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)")   
     
-@borg.on(admin_cmd("unmute ?(\d+)"))
+@borg.on(admin_cmd("unmute ?(\d+)?"))
 async def endmute(event):   
         private = False
         if event.fwd_from:
