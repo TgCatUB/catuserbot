@@ -16,17 +16,7 @@ async def _(event):
 		await asyncio.sleep(0.1)
 		await event.edit("".join(deq))
 		deq.rotate(1)
-			
-@borg.on(admin_cmd(pattern=f"candy$", outgoing=True))
-@borg.on(sudo_cmd(pattern="candy$",allow_sudo = True))
-async def _(event):
-	event = await edit_or_reply(event ,"candy")
-	deq = deque(list("🍦🍧🍩🍪🎂🍰🧁🍫🍬🍭"))
-	for _ in range(48):
-		await asyncio.sleep(0.1)
-		await event.edit("".join(deq))
-		deq.rotate(1)			
-        
+		
 @borg.on(admin_cmd(pattern=r"nothappy$"))
 @borg.on(sudo_cmd(pattern="noathappy$",allow_sudo = True))
 async def _(event):
