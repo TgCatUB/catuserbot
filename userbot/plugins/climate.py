@@ -18,7 +18,7 @@ from ..utils import admin_cmd, sudo_cmd, edit_or_reply, errors_handler
 from pytz import country_timezones as c_tz, timezone as tz, country_names as c_n
 
 # ===== CONSTANT =====
-DEFCITY = 'Delhi'
+DEFCITY = 'Calicut'
 # ====================
 
 async def get_tz(con):
