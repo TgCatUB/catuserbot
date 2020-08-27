@@ -9,6 +9,7 @@ import sys
 import time
 import asyncio
 import subprocess
+from .. import CMD_HELP
 from asyncio.subprocess import PIPE as asyncPIPE
 from telethon import events, functions, __version__
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
