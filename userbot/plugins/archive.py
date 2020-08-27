@@ -387,17 +387,17 @@ def get_lst_of_files(input_directory, output_lst):
 
 CMD_HELP.update({
     "archive":
-    ".zip reply to a file/media\
-    \nUSEAGE: it will zip that file/media\
-    \n\n.rar reply to a file/media\
-    \nUSEAGE: it will rar that file/media\
-    \n\n.tar reply to a file/media\
-    \nUSEAGE: it will tar that file/media\
-    \n\n.unzip reply to a .zip file\
-    \nUSEAGE: it will unzip that .zip file\
-    \n\n.unrar reply to a .rar file\
-    \nUSEAGE: it will unrar that .rar file\
-    \n\n.untar reply to a .tar\
-    \nUSEAGE: it will untar that .tar file\
+    "**Syntax : **`.zip reply to a file/media`\
+    \n**Usage : **it will zip that file/media\
+    \n\n**Syntax : **`.rar reply to a file/media`\
+    \n**Usage : **it will rar that file/media\
+    \n\n**Syntax : **`.tar reply to a file/media`\
+    \n**Usage : **it will tar that file/media\
+    \n\n**Syntax : **`.unzip reply to a .zip file`\
+    \n**Usage : **it will unzip that .zip file\
+    \n\n**Syntax : **`.unrar reply to a .rar file`\
+    \n**Usage : **it will unrar that .rar file\
+    \n\n**Syntax : **`.untar reply to a .tar`\
+    \n**Usage : **it will untar that .tar file\
 "
 }) 
