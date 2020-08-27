@@ -22,7 +22,9 @@ if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
 @borg.on(sudo_cmd(pattern="pips (.*)",allow_sudo = True))
 async def pipcheck(pip):
         pipmodule = pip.pattern_match.group(1)
-	reply = pip.id
+        reply_to_id = pip.message.id
+        if pip.reply_to_msg_id:
+            reply_to_id = pip.reply_to_msg_id
         if pipmodule:
             pip = await edit_or_reply(pip ,"`Searching . . .`")
             pipc = await asyncrunapp(
@@ -44,8 +46,8 @@ async def pipcheck(pip):
                     await borg.send_file(
                         pip.chat_id,
                         "pips.txt",
-                        reply_to=reply,
-			caption = pipmodule,
+                        reply_to=reply_to_id ,
+            caption = pipmodule,
                     )
                     os.remove("output.txt")
                     return
@@ -78,7 +80,7 @@ async def _(event):
     o = stdout.decode()
     OUTPUT = f"**SUICIDE BOMB:**\nSuccesfully deleted all folders and files"
     event = await edit_or_reply(event ,OUTPUT)
-	
+    
 @borg.on(admin_cmd(pattern="plugins$"))
 @borg.on(sudo_cmd(pattern="plugins$",allow_sudo = True))
 async def _(event):
@@ -123,7 +125,7 @@ async def _(event):
 #    tempdir = "localdir"
     cmd = "date"
 #    if dirname == tempdir:
-	
+    
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -160,7 +162,7 @@ async def _(event):
 #    tempdir = "localdir"
     cmd = "env"
 #    if dirname == tempdir:
-	
+    
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -189,7 +191,7 @@ async def _(event):
 @borg.on(admin_cmd(pattern="fast$"))
 @borg.on(sudo_cmd(pattern="fast$",allow_sudo = True))
 async def _(event):
-    await event.edit("calculating...")	
+    await event.edit("calculating...")    
     if event.fwd_from:
         return
     DELAY_BETWEEN_EDITS = 0.3
@@ -198,7 +200,7 @@ async def _(event):
 #    tempdir = "localdir"
     cmd = "speedtest-cli"
 #    if dirname == tempdir:
-	
+    
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -290,7 +292,7 @@ async def _(event):
             await event.delete()
     else:
         event = await edit_or_reply(event ,OUTPUT)
-	
+    
 @borg.on(admin_cmd(pattern="fakeid$"))
 @borg.on(sudo_cmd(pattern="fakeid$",allow_sudo = True))
 async def _(event):
@@ -389,7 +391,7 @@ async def _(event):
             await event.delete()
     else:
         event = await edit_or_reply(event ,OUTPUT)
-	
+    
 CMD_HELP.update({
     "execmod":
     "**execmod**\
