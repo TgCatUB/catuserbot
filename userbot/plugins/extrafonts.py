@@ -44,8 +44,9 @@ async def stylish_generator(event):
   
 CMD_HELP.update({
     "extrafonts":
-    "**Syntax :** `.fmusical`\
-    \n\n         `.ancient`\
+    "**extrafonts**\
+    \n**Syntax :** `.fmusical`\
+    \n        `.ancient`\
     \n**Usage : **Some differnt font styles\
     "
 })
