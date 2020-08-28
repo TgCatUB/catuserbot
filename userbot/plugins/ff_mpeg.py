@@ -9,7 +9,7 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply, progress
 
-FF_MPEG_DOWN_LOAD_MEDIA_PATH = "DOWNLOADS/ffmpeg"
+FF_MPEG_DOWN_LOAD_MEDIA_PATH = "uniborg.media.ffmpeg"
 
 @borg.on(admin_cmd(pattern="ffmpegsave$"))
 @borg.on(sudo_cmd(pattern="ffmpegsave$",allow_sudo = True))
