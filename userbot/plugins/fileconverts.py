@@ -16,7 +16,7 @@ async def _(cat):
     if cat.fwd_from:
         return
     reply_to_id = cat.message.id
-    if event.reply_to_msg_id:
+    if cat.reply_to_msg_id:
         reply_to_id = cat.reply_to_msg_id    
     filename = "hi.jpg"
     event = await edit_or_reply(cat ,"Converting.....")
@@ -48,7 +48,7 @@ async def _(cat):
     if cat.fwd_from:
         return
     reply_to_id = cat.message.id
-    if event.reply_to_msg_id:
+    if cat.reply_to_msg_id:
         reply_to_id = cat.reply_to_msg_id 
     filename = "hi.webp"
     event = await edit_or_reply(cat ,"Converting.....")
