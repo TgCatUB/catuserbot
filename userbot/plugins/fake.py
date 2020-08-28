@@ -62,7 +62,7 @@ async def _(event):
     animation_ttl = range(0, 20)
     event = await edit_or_reply(event ,"promoting.......")
     animation_chars = [
-            "**Promoting User As@borg.on(sudo_cmd(pattern="ping$",allow_sudo = True)) Admin...**",
+            "**Promoting User As Admin...**",
             "**Enabling All Permissions To User...**",
             "**(1) Send Messages: ☑️**",
             "**(1) Send Messages: ✅**",
