@@ -91,6 +91,37 @@ async def get(event):
     else:
         await edit_or_reply(event ,"reply to text message as `.ttf <file name>`")
         
+@borg.on(admin_cmd(pattern="ftoi$"))
+@borg.on(sudo_cmd(pattern="ftoi$",allow_sudo = True))
+async def on_file_to_photo(event):
+    target = await event.get_reply_message()
+    catt = await edit_or_reply(event ,"Converting.....")
+    try:
+        image = target.media.document
+    except AttributeError:
+        return
+    if not image.mime_type.startswith('image/'):
+        return  # This isn't an image
+    if image.mime_type == 'image/webp':
+        return  # Telegram doesn't let you directly send stickers as photos
+    if image.size > 10 * 1024 * 1024:
+        return  # We'd get PhotoSaveFileInvalidError otherwise
+    file = await borg.download_media(target, file=BytesIO())
+    file.seek(0)
+    img = await borg.upload_file(file)
+    img.name = 'image.png'
+    try:
+        await borg(SendMediaRequest(
+            peer=await event.get_input_chat(),
+            media=types.InputMediaUploadedPhoto(img),
+            message=target.message,
+            entities=target.entities,
+            reply_to_msg_id=target.id
+        ))
+    except PhotoInvalidDimensionsError:
+        return
+    await catt.delete() 
+    
 @borg.on(admin_cmd(pattern="nfc ?(.*)"))
 @borg.on(sudo_cmd(pattern="nfc ?(.*)",allow_sudo = True))
 async def _(event):
@@ -202,38 +233,17 @@ async def _(event):
             os.remove(new_required_file_name)
             await event.delete()
 
-@borg.on(admin_cmd(pattern="ftoi$"))
-@borg.on(sudo_cmd(pattern="ftoi$",allow_sudo = True))
-async def on_file_to_photo(event):
-    target = await event.get_reply_message()
-    try:
-        image = target.media.document
-    except AttributeError:
-        return
-    if not image.mime_type.startswith('image/'):
-        return  # This isn't an image
-    if image.mime_type == 'image/webp':
-        return  # Telegram doesn't let you directly send stickers as photos
-    if image.size > 10 * 1024 * 1024:
-        return  # We'd get PhotoSaveFileInvalidError otherwise
-    file = await borg.download_media(target, file=BytesIO())
-    file.seek(0)
-    img = await borg.upload_file(file)
-    img.name = 'image.png'
-    try:
-        await borg(SendMediaRequest(
-            peer=await event.get_input_chat(),
-            media=types.InputMediaUploadedPhoto(img),
-            message=target.message,
-            entities=target.entities,
-            reply_to_msg_id=target.id
-        ))
-    except PhotoInvalidDimensionsError:
-        return
-
 CMD_HELP.update({
     "fileconverts": 
-    "**Plugin :**`fileconverts`\
+    "**Plugin : **`fileconverts`\
+    \n\n**Syntax : **`.stoi` reply to sticker\
+    \n**Usage :**Converts sticker to image\
+    \n\n**Syntax : **`.itos` reply to image\
+    \n**Usage :**Converts image to sticker\
+    \n\n**Syntax :** `.ftoi` reply to image file\
+    \n**Usage :** Converts Given image file to straemable form\
+    \n\n**Syntax :** `.ttf file name` reply to text message\
+    \n**Usage :** Converts Given text message to required file(given file name)\
     \n\n**Syntax :**`.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\
-    \n**Usage :**Converts the required media file to voice or mp3 file. "
+    \n**Usage :**Converts the required media file to voice or mp3 file. \"
 })    
