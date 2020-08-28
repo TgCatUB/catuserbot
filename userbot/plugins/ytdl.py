@@ -19,8 +19,7 @@ from youtube_dl.utils import (DownloadError, ContentTooShortError,
                               UnavailableVideoError, XAttrMetadataError)
 from asyncio import sleep
 from telethon.tl.types import DocumentAttributeAudio
-from userbot.utils import admin_cmd
-from userbot.uniborgConfig import Config
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
     """Generic progress_callback for uploads and downloads."""
@@ -80,13 +79,12 @@ def time_formatter(milliseconds: int) -> str:
     return tmp[:-2]
 
 @borg.on(admin_cmd(pattern="yt(a|v) (.*)"))
+@borg.on(sudo_cmd(pattern="yt(a|v) (.*)",allow_sudo = True))
 async def download_video(v_url):
     """ For .ytdl command, download media from YouTube and many other sites. """
     url = v_url.pattern_match.group(2)
     type = v_url.pattern_match.group(1).lower()
-
-    await v_url.edit("`Preparing to download...`")
-
+    v_url = await edit_or_reply(v_url ,"`Preparing to download...`")
     if type == "a":
         opts = {
             'format':
@@ -117,7 +115,6 @@ async def download_video(v_url):
         }
         video = False
         song = True
-
     elif type == "v":
         opts = {
             'format':
@@ -145,7 +142,6 @@ async def download_video(v_url):
         }
         song = False
         video = True
-
     try:
         await v_url.edit("`Fetching data, please wait..`")
         with YoutubeDL(opts) as ytdl:
@@ -184,7 +180,7 @@ async def download_video(v_url):
         await v_url.edit(f"`Preparing to upload song:`\
         \n**{ytdl_data['title']}**\
         \nby *{ytdl_data['uploader']}*")
-        await v_url.client.send_file(
+        await borg.send_file(
             v_url.chat_id,
             f"{ytdl_data['id']}.mp3",
             supports_streaming=True,
@@ -203,7 +199,7 @@ async def download_video(v_url):
         await v_url.edit(f"`Preparing to upload video:`\
         \n**{ytdl_data['title']}**\
         \nby *{ytdl_data['uploader']}*")
-        await v_url.client.send_file(
+        await borg.send_file(
             v_url.chat_id,
             f"{ytdl_data['id']}.mp4",
             supports_streaming=True,
@@ -215,35 +211,24 @@ async def download_video(v_url):
         os.remove(f"{ytdl_data['id']}.mp4")
         await v_url.delete()
         
-                  
-
-#@register(outgoing=True, pattern="^.yts (.*)")
 @borg.on(admin_cmd(pattern="yts (.*)"))
+@borg.on(sudo_cmd(pattern="yts (.*)",allow_sudo = True))
 async def yt_search(video_q):
     """ For .yts command, do a YouTube search from Telegram. """
     query = video_q.pattern_match.group(1)
     result = ''
-
     if not Config.YOUTUBE_API_KEY:
-        await video_q.edit(
-            "`Error: YouTube API key missing! Add it to reveal config vars in heroku or userbot/uniborgConfig.py in github fork.`"
-        )
+        await edit_or_reply( video_q ,"`Error: YouTube API key missing! Add it to reveal config vars in heroku or userbot/uniborgConfig.py in github fork.`")
         return
-
-    await video_q.edit("```Processing...```")
-
+    video_q = await edit_or_reply( video_q ,"```Processing...```")
     full_response = await youtube_search(query)
     videos_json = full_response[1]
-
     for video in videos_json:
         title = f"{unescape(video['snippet']['title'])}"
         link = f"https://youtu.be/{video['id']['videoId']}"
         result += f"{title}\n{link}\n\n"
-
     reply_text = f"**Search Query:**\n`{query}`\n\n**Results:**\n\n{result}"
-
     await video_q.edit(reply_text)
-
 
 async def youtube_search(query,
                          order="relevance",
@@ -264,9 +249,7 @@ async def youtube_search(query,
         maxResults=10,
         location=location,
         locationRadius=location_radius).execute()
-
     videos = []
-
     for search_result in search_response.get("items", []):
         if search_result["id"]["kind"] == "youtube#video":
             videos.append(search_result)
@@ -279,4 +262,3 @@ async def youtube_search(query,
     except KeyError:
         nexttok = "KeyError, try again."
         return (nexttok, videos)
-                  
