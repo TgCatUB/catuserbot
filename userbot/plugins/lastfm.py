@@ -17,13 +17,20 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User as Userbot
 from telethon.errors.rpcerrorlist import FloodWaitError
 
-from userbot import CMD_HELP, DEFAULT_BIO, BIO_PREFIX, lastfm, LASTFM_USERNAME, bot
+from userbot import CMD_HELP, DEFAULT_BIO, BIO_PREFIX, LASTFM_USERNAME, bot,LASTFM_API, LASTFM_SECRET, LASTFM_PASSWORD_PLAIN
 from userbot.utils import admin_cmd
+from pylast import LastFMNetwork, md5
 
 
-from userbot.uniborgConfig import Config
-
-
+LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN)
+if LASTFM_API and LASTFM_SECRET and LASTFM_USERNAME and LASTFM_PASS:
+        lastfm = LastFMNetwork(api_key=LASTFM_API,
+                               api_secret=LASTFM_SECRET,
+                               username=LASTFM_USERNAME,
+                               password_hash=LASTFM_PASS)
+else:
+        lastfm = None
+        
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
