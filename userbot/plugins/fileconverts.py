@@ -245,5 +245,6 @@ CMD_HELP.update({
     \n\n**Syntax :** `.ttf file name` reply to text message\
     \n**Usage :** Converts Given text message to required file(given file name)\
     \n\n**Syntax :**`.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\
-    \n**Usage :**Converts the required media file to voice or mp3 file. \"
+    \n**Usage :**Converts the required media file to voice or mp3 file.\
+    "
 })    
