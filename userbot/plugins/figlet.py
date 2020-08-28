@@ -1,8 +1,9 @@
 import pyfiglet
-from userbot.utils import admin_cmd
-from userbot import CMD_HELP
+from .. import CMD_HELP
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 @borg.on(admin_cmd(pattern="figlet ?(.*)", outgoing=True))
+@borg.on(sudo_cmd(pattern="figlet ?(.*)",allow_sudo = True))
 async def figlet(event):
     if event.fwd_from:
         return
@@ -14,19 +15,18 @@ async def figlet(event):
         cmd = None
         text = input_str
     else:
-        await event.edit("Please add some text to figlet")
+        await edit_or_reply(event ,"Please add some text to figlet")
         return
     if cmd is not None:
         try:
             font = CMD_FIG[cmd]
         except KeyError:
-            await event.edit("Invalid selected font.")
+            await edit_or_reply(event ,"Invalid selected font.")
             return
         result = pyfiglet.figlet_format(text, font=font)
     else:
         result = pyfiglet.figlet_format(text)
-    await event.respond("‌‌‎`{}`".format(result))
-    await event.delete()
+    await edit_or_reply(event ,"‌‌‎`{}`".format(result))
 
 CMD_HELP.update({
     "figlet":
