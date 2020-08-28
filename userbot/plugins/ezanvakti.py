@@ -4,13 +4,13 @@ import datetime
 import json
 import logging
 import requests
+from .. import CMD_HELP, LOGS
 from telethon import events
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
                     level=logging.WARNING)
 TEMPAT = ''
-
 
 @borg.on(admin_cmd(pattern=("ezanvakti ?(.*)")))
 @borg.on(sudo_cmd(pattern="ezanvakti ?(.*)",allow_sudo = True))
@@ -24,7 +24,8 @@ async def get_adzan(adzan):
         LOKASI = adzan.pattern_match.group(1)
     url = f'http://muslimsalat.com/{LOKASI}.json?key=bd099c5825cbedb9aa934e255a81a5fc'
     request = requests.get(url)
-    result = json.loads(request.text)
+    LOGS.info(request.text)
+    result = json.loads((request.text))
     if request.status_code != 200:
         await edit_or_reply(adzan ,f"{result['status_description']}")
         return
