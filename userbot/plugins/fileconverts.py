@@ -10,6 +10,70 @@ from telethon.errors import PhotoInvalidDimensionsError
 from telethon.tl.functions.messages import SendMediaRequest
 from ..utils import admin_cmd, sudo_cmd, progress, edit_or_reply
 
+@borg.on(admin_cmd(pattern="stoi$"))
+@borg.on(sudo_cmd(pattern="stoi$",allow_sudo = True))
+async def _(cat):
+    if cat.fwd_from:
+        return
+    reply_to_id = cat.message.id
+    if event.reply_to_msg_id:
+        reply_to_id = cat.reply_to_msg_id    
+    filename = "hi.jpg"
+    event = await edit_or_reply(cat ,"Converting.....")
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if event.reply_to_msg_id:
+        file_name = filename
+        reply_message = await event.get_reply_message()
+        to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
+        downloaded_file_name = os.path.join(to_download_directory, file_name)
+        downloaded_file_name = await borg.download_media( reply_message , downloaded_file_name )
+        if os.path.exists(downloaded_file_name):
+            caat = await borg.send_file(
+                event.chat_id,
+                downloaded_file_name,
+                force_document=False,
+                reply_to = reply_to_id
+            )
+            os.remove(downloaded_file_name)
+            await event.delete()
+        else:
+            await event.edit("Can't Convert")
+    else:
+        await event.edit("Syntax : `.stoi` reply to a Telegram normal sticker")
+
+@borg.on(admin_cmd(pattern="itos$"))
+@borg.on(sudo_cmd(pattern="itos$",allow_sudo = True))
+async def _(cat):
+    if cat.fwd_from:
+        return
+    reply_to_id = cat.message.id
+    if event.reply_to_msg_id:
+        reply_to_id = cat.reply_to_msg_id 
+    filename = "hi.webp"
+    event = await edit_or_reply(cat ,"Converting.....")
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if event.reply_to_msg_id:
+        file_name = filename
+        reply_message = await event.get_reply_message()
+        to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
+        downloaded_file_name = os.path.join(to_download_directory, file_name)
+        downloaded_file_name = await borg.download_media( reply_message , downloaded_file_name )
+        if os.path.exists(downloaded_file_name):
+            caat = await borg.send_file(
+                event.chat_id,
+                downloaded_file_name,
+                force_document=False,
+                reply_to=reply_to_id
+            )   
+            os.remove(downloaded_file_name)
+            await event.delete()
+        else:
+            await event.edit("Can't Convert")
+    else:
+        await event.edit("Syntax : `.itos` reply to a Telegram normal sticker")        
+
 @borg.on(admin_cmd(pattern="ttf ?(.*)"))
 @borg.on(sudo_cmd(pattern="ttf ?(.*)",allow_sudo = True))
 async def get(event):
