@@ -1,30 +1,36 @@
-import asyncio
+from telethon.tl.functions.channels import EditAdminRequest
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from telethon.tl.types import ChatAdminRights
+from .. import CMD_HELP, ALIVE_NAME
+from datetime import datetime
 from telethon import events
 import logging
+import asyncio
+
+
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
                     level=logging.WARNING)
-from telethon.tl.functions.channels import EditAdminRequest
-from telethon.tl.types import ChatAdminRights
-from userbot import ALIVE_NAME
-from userbot.utils import admin_cmd
-from userbot import CMD_HELP
-from datetime import datetime
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 @borg.on(admin_cmd(pattern="scam ?(.*)"))
+@borg.on(sudo_cmd(pattern="scam ?(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
-    await event.delete()
     input_str = event.pattern_match.group(1)
     action = "typing"
     if input_str:
         action = input_str
+    try:
+      await event.delete()
+    except:
+      pass
     async with borg.action(event.chat_id, action):
         await asyncio.sleep(86400)  # type for 10 seconds        
      
 @borg.on(admin_cmd(pattern="prankpromote ?(.*)"))
+@borg.on(sudo_cmd(pattern="prankpromote ?(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
@@ -43,19 +49,20 @@ async def _(event):
     try:
         await borg(EditAdminRequest(event.chat_id, to_promote_id, rights, ""))
     except (Exception) as exc:
-        await event.edit(str(exc))
+        await edit_or_reply(event ,str(exc))
     else:
-        await event.edit("Successfully Promoted")
+        await edit_or_reply(event ,"Successfully Promoted")
         
 @borg.on(admin_cmd(pattern=f"padmin$", outgoing=True))
+@borg.on(sudo_cmd(pattern="padmin$",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(0, 20)
-    await event.edit("promoting.......")
+    event = await edit_or_reply(event ,"promoting.......")
     animation_chars = [
-            "**Promoting User As Admin...**",
+            "**Promoting User As@borg.on(sudo_cmd(pattern="ping$",allow_sudo = True)) Admin...**",
             "**Enabling All Permissions To User...**",
             "**(1) Send Messages: ☑️**",
             "**(1) Send Messages: ✅**",
@@ -82,11 +89,12 @@ async def _(event):
                 
 CMD_HELP.update({
     "fake":
-    ".scam <action> \
-    \n**USAGE : **Type .scam (action name) this shows the fake action in the group  the actions are typing ,contact ,game, location, voice, round, video,photo,document, cancel.\
-    \n\n`.prankpromote` reply to user to who you want to prank promote\
-    \n**USAGE : **it promotes him to admin but he will not have any permission to take action that is he can see rection actions but cant take any admin action\
-    \n\n`.padmin`\
-    \n**USAGE : ** An animation that shows enableing all permissions to him that he is admin(fake promotion)\
+    "**fake**\
+    \n\n**Syntax :** `.scam <action>` \
+    \n**Usage : **Type .scam (action name) this shows the fake action in the group  the actions are typing ,contact ,game, location, voice, round, video,photo,document, cancel.\
+    \n\n**Syntax :** `.prankpromote` reply to user to who you want to prank promote\
+    \n**Usage : **it promotes him to admin but he will not have any permission to take action that is he can see rection actions but cant take any admin action\
+    \n\n**Syntax :** `.padmin`\
+    \n**Usage : ** An animation that shows enableing all permissions to him that he is admin(fake promotion)\
     "
 })
