@@ -1,19 +1,15 @@
 """COMMAND : .ftoimg 
 here file must be in image file """
-from io import BytesIO
-from userbot import utils
 import asyncio
+from io import BytesIO
 from telethon import types
+from ..utils import admin_cmd, sudo_cmd
 from telethon.errors import PhotoInvalidDimensionsError
 from telethon.tl.functions.messages import SendMediaRequest
 
-
-
-
-@borg.on(utils.admin_cmd(pattern=r"ftoi$"))
+@borg.on(admin_cmd(pattern="ftoi$"))
+@borg.on(sudo_cmd(pattern="ftoi$",allow_sudo = True))
 async def on_file_to_photo(event):
-    await event.edit("processing.....")
-    await asyncio.sleep(2)
     target = await event.get_reply_message()
     try:
         image = target.media.document
@@ -25,12 +21,10 @@ async def on_file_to_photo(event):
         return  # Telegram doesn't let you directly send stickers as photos
     if image.size > 10 * 1024 * 1024:
         return  # We'd get PhotoSaveFileInvalidError otherwise
-
     file = await borg.download_media(target, file=BytesIO())
     file.seek(0)
     img = await borg.upload_file(file)
     img.name = 'image.png'
-
     try:
         await borg(SendMediaRequest(
             peer=await event.get_input_chat(),
