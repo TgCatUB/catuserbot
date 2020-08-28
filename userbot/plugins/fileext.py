@@ -12,7 +12,6 @@ from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 async def _(event):
     if event.fwd_from:
         return
-    await edit_or_reply(event ,"Processing ...")
     sample_url = "https://www.fileext.com/file-extension/{}.html"
     input_str = event.pattern_match.group(1).lower()
     response_api = requests.get(sample_url.format(input_str))
