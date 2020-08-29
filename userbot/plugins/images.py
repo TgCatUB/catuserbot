@@ -1,8 +1,8 @@
-# Adapted from OpenUserBot for Uniborg
-
-"""Download & Upload Images on Telegram\n
+"""
+Download & Upload Images on Telegram\n
 Syntax: `.img <Name>` or `.img (replied message)`
 \n Upgraded and Google Image Error Fixed by @NeoMatrix90 aka @kirito6969
+from oub
 """
 import os
 import shutil
@@ -40,7 +40,6 @@ async def img_sampler(event):
         "format": "jpg",
         "no_directory": "no_directory"
     }
-
     # passing the arguments to the function
     try:
         paths = response.download(arguments)
