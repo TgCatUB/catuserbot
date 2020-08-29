@@ -7,8 +7,6 @@
 This module updates the userbot based on upstream revision
 Ported from Kensurbot
 """
-
-
 import sys
 import asyncio
 from git import Repo
@@ -19,7 +17,7 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 HEROKU_APP_NAME = Var.HEROKU_APP_NAME
 HEROKU_API_KEY = Var.HEROKU_API_KEY
-UPSTREAM_REPO_BRANCH = "test"
+UPSTREAM_REPO_BRANCH = "master"
 UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
 
 requirements_path = path.join(
