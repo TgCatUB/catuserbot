@@ -7,6 +7,7 @@
 
 from os import popen
 import re
+from re import findall
 import urllib.parse
 import json
 from random import choice
