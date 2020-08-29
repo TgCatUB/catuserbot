@@ -51,6 +51,6 @@ async def img_sampler(event):
     await cat.delete()
 
 CMD_HELP.update({"images": "**Plugin :**`images`\
-\n\n**Syntax :** `.img <Name>` or `.img (replied message)`\
-    \n**Usage : **do google image search and sends 5 images." 
+\n\n**Syntax :** `.img <limit> <Name>` or `.img <limit> (replied message)`\
+    \n**Usage : **do google image search and sends 3 images. default if you havent mentioned limit" 
 })    
