@@ -1,6 +1,7 @@
 #imported from uniborg credit goes to spechide
+from .. import CMD_HELP
+from ..utils import admin_cmd ,sudo_cmd
 from telethon.tl.types import InputMediaDice
-from userbot.utils import admin_cmd
 
 # EMOJI CONSTANTS
 DART_E_MOJI = "🎯"
@@ -9,8 +10,8 @@ BALL_E_MOJI = "🏀"
 FOOT_E_MOJI = "⚽️"
 # EMOJI CONSTANTS
 
-
 @borg.on(admin_cmd(pattern=f"({DART_E_MOJI}|{DICE_E_MOJI}|{BALL_E_MOJI}|{FOOT_E_MOJI}) ?(.*)"))
+@bot.on(sudo_cmd(pattern=f"({DART_E_MOJI}|{DICE_E_MOJI}|{BALL_E_MOJI}|{FOOT_E_MOJI}) ?(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
@@ -29,3 +30,16 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except:
             pass
+        
+CMD_HELP.update({
+    "dice_dart_ball":"__**PLUGIN NAME :** dice_dart_ball__\
+    \n\n📌** CMD ➥** `.🎯` [1-6]\
+    \n**USAGE   ➥  **Each number shows different animation\
+    \n\n📌** CMD ➥** `.🎲` [1-6]\
+    \n**USAGE   ➥  **Each number shows different animation\
+    \n\n📌** CMD ➥** `.🏀` [1-5]\
+    \n**USAGE   ➥  **Each number shows different animation\
+    \n\n📌** CMD ➥** `.⚽️` [1-5]\
+    \n**USAGE   ➥  **Each number shows different animation\
+    "
+})        

@@ -92,7 +92,7 @@ async def g_download(event):
     await event.edit("File Downloaded.\nName: `"+str(file_name)+"`")
             
 CMD_HELP.update({
-    "gdrive_download":
-    ".gdl <gdrive File-Link>\
-    \nUsage:G-Drive File Downloader Plugin For Userbot."
+    "gdrive_download":"__**PLUGIN NAME :** Gdrive Download__\
+    \n\n📌** CMD ➥** `.gdl` <gdrive File-Link>\
+    \n**USAGE   ➥  **G-Drive File Downloader Plugin For Userbot."
 })

@@ -50,13 +50,13 @@ async def _(event):
         await event.edit("Read `.info create` to know how to use me")
 
 CMD_HELP.update({
-    "create":
-    "**SYNTAX :** `.create b`\
-    \n**USAGE : **Creates a super group and send you link\
-    \n\n**SYNTAX : **`.create g`\
-    \n**USAGE : **Creates a private group and sends you link\
-    \n\n**SYNTAX : **`.create c`\
-    \n**USAGE : **Creates a Channel and sends you link\
-    \n\nhere the bot accout is owner\
+    "create":"__**PLUGIN NAME :** Create__\
+    \n\n📌** CMD ➥** `.create b`\
+    \n**USAGE   ➥  **Creates a super group and send you link\
+    \n\n📌** CMD ➥** `.create g`\
+    \n**USAGE   ➥  **Creates a private group and sends you link\
+    \n\n📌** CMD ➥** `.create c`\
+    \n**USAGE   ➥  **Creates a Channel and sends you link\
+    \n\n**Here the bot accout is owner**\
     "
 })        

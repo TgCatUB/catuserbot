@@ -155,10 +155,9 @@ async def _(event):
             logger.warn(str(e))  # pylint:disable=E0602
 
 CMD_HELP.update({
-    "afk":
-    ".afk [Optional Reason]\
-\n**Usage : **Sets you as afk.\nReplies to anyone who tags/PM's \
-you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
-\nafk means away from keyboard/keypad.\
+    "afk":"__**PLUGIN NAME :** Afk__\
+\n\n📌** CMD ➥** `.afk` [Optional Reason]\
+\n**USAGE   ➥  **Sets you as afk.\nReplies to anyone who tags/PM's \
+you telling them that you are AFK(reason)\n\n__Switches off AFK when you type back anything, anywhere.__\
 "
 })

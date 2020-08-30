@@ -84,7 +84,7 @@ async def anilist(event):
     await event.edit(msg,link_preview=True)
 
 CMD_HELP.update({
-    "anilist":
-    ".anilist <anime name >\
-     \nUSAGE: Shows you the details of the anime."
+    "anilist":"__**PLUGIN NAME :** Anilist__\
+    \n\n📌** CMD ➥** `.anilist` <anime name >\
+    \n**USAGE   ➥  **Shows you the details of the anime."
 })

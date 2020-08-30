@@ -48,7 +48,7 @@ async def aexec(code, event):
     )
     return await locals()['__aexec'](event)
 
-CMD_HELP.update({"calc": 
-      "**SYNTAX : **`.calc` your equation :\
-      \n**USAGE : **solves the given maths equation by bodmass rule. "
+CMD_HELP.update({"calc": "__**PLUGIN NAME :** Calc__\
+      \n\n📌** CMD ➥** `.calc` your equation :\
+      \n**USAGE   ➥  **Solves the given maths equation by bodmass rule. "
 }) 

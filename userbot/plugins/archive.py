@@ -386,18 +386,18 @@ def get_lst_of_files(input_directory, output_lst):
     return output_lst
 
 CMD_HELP.update({
-    "archive":
-    ".zip reply to a file/media\
-    \nUSEAGE: it will zip that file/media\
-    \n\n.rar reply to a file/media\
-    \nUSEAGE: it will rar that file/media\
-    \n\n.tar reply to a file/media\
-    \nUSEAGE: it will tar that file/media\
-    \n\n.unzip reply to a .zip file\
-    \nUSEAGE: it will unzip that .zip file\
-    \n\n.unrar reply to a .rar file\
-    \nUSEAGE: it will unrar that .rar file\
-    \n\n.untar reply to a .tar\
-    \nUSEAGE: it will untar that .tar file\
+    "archive":"__**PLUGIN NAME :** Archive__\
+    \n\n📌** CMD ➥** `.zip` reply to a file/media\
+    \n**USAGE   ➥  **It will zip that file/media\
+    \n\n📌** CMD ➥** `.rar` reply to a file/media\
+    \n**USAGE   ➥  **It will rar that file/media\
+    \n\n📌** CMD ➥** `.tar` reply to a file/media\
+    \n**USAGE   ➥  **It will tar that file/media\
+    \n\n📌** CMD ➥** `.unzip` reply to a .zip file\
+    \n**USAGE   ➥  **It will unzip that .zip file\
+    \n\n📌** CMD ➥** `.unrar` reply to a .rar file\
+    \n**USAGE   ➥  **It will unrar that .rar file\
+    \n\n📌** CMD ➥** `.untar` reply to a .tar\
+    \n**USAGE   ➥  **It will untar that .tar file\
 "
 }) 

@@ -293,12 +293,12 @@ async def fetch_info(chat, event):
 
 
 CMD_HELP.update({
-    "groupdata":
-    ".chatinfo or .chatinfo <username of group>\
-     \nUsage: Shows you the total information of the required chat.\
-     \n\n.get_admins or .get_admins <username of group >\
-     \nUsage: Retrieves a list of admins in the chat.\
-     \n\n.users or .users <name of member>\
-     \nUsage: Retrieves all (or queried) users in the chat."      
+    "groupdata":"__**PLUGIN NAME :** Group Data__\
+     \n\n📌** CMD ➥** `.chatinfo` or .chatinfo <username of group>\
+     \n**USAGE   ➥  **Shows you the total information of the required chat.\
+     \n\n📌** CMD ➥** `.get_admins` or .get_admins <username of group >\
+     \n**USAGE   ➥  **Retrieves a list of admins in the chat.\
+     \n\n📌** CMD ➥** `.users` or .users <name of member>\
+     \n**USAGE   ➥  **Retrieves all (or queried) users in the chat."      
      })
         

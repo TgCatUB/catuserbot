@@ -53,12 +53,12 @@ async def _(event):
         await edit_or_reply(event ,"Input URL {} returned status_code {}".format(input_str, r.status_code))
         
 CMD_HELP.update({
-    "ping":
-    "**Syntax :** `.dns link`\
-    \n**Usage : **Shows you Domain Name System(dns) of the given link . example `.dns google.com` or `.dns github.cm`\
-    \n\n**Syntax : **`.url link`\
-    \n**Usage : **shortens the given link\
-    \n\n**Syntax : **`.unshort link`\
-    \n**Usage : **unshortens the given short link\
+    "dagd":"__**PLUGIN NAME :** Dagd__\
+    \n\n📌** CMD ➥** `.dns` <link>\
+    \n**USAGE   ➥  **Shows you Domain Name System(dns) of the given link . example `.dns google.com` or `.dns github.cm`\
+    \n\n📌** CMD ➥** `.url` <link>\
+    \n**USAGE   ➥  **shortens the given link\
+    \n\n📌** CMD ➥** `.unshort` <link>\
+    \n**USAGE   ➥  **unshortens the given short link\
     "
-})               
+})      

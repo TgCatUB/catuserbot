@@ -7,11 +7,12 @@ import time
 from datetime import datetime
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-from userbot.utils import admin_cmd, progress
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply, progress
 
 FF_MPEG_DOWN_LOAD_MEDIA_PATH = "uniborg.media.ffmpeg"
 
-@borg.on(admin_cmd(pattern="ffmpegsave"))
+@borg.on(admin_cmd(pattern="ffmpegsave$"))
+@borg.on(sudo_cmd(pattern="ffmpegsave$",allow_sudo = True))
 async def ff_mpeg_trim_cmd(event):
     if event.fwd_from:
         return
@@ -35,19 +36,20 @@ async def ff_mpeg_trim_cmd(event):
             else:
                 end = datetime.now()
                 ms = (end - start).seconds
-                await event.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
+                await edit_or_reply(event ,"Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
         else:
-            await event.edit("Reply to a Telegram media file")
+            await edit_or_reply(event ,"Reply to a Telegram media file")
     else:
-        await event.edit(f"a media file already exists in path. Please remove the media and try again!\n`.exec rm {FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
+        await edit_or_reply(event ,f"a media file already exists in path. Please remove the media and try again!\n`.exec rm {FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
 
 
 @borg.on(admin_cmd(pattern="ffmpegtrim"))
+@borg.on(sudo_cmd(pattern="ffmpegtrim",allow_sudo = True))
 async def ff_mpeg_trim_cmd(event):
     if event.fwd_from:
         return
     if not os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
-        await event.edit(f"a media file needs to be downloaded, and saved to the following path: `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
+        await edit_or_reply(event ,f"a media file needs to be downloaded, and saved to the following path: `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
         return
     current_message_text = event.raw_text
     cmt = current_message_text.split(" ")

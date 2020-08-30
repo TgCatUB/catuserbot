@@ -135,7 +135,7 @@ async def stylish_generator(event):
     
     
 CMD_HELP.update({
-    "fonts": ".vapor (text) or .vapor reply to message \
-\nUsage: Vaporize the given text. \
-"
+    "fonts":"__**PLUGIN NAME :** Fonts__\
+\n\n📌** CMD ➥** `.vapor` (text) or .vapor reply to message \
+\n**USAGE   ➥  **Vaporize the given text."
 })    

@@ -229,9 +229,11 @@ async def _(event):
     await event.edit(input_str)
     
 CMD_HELP.update({
-    "climate":
-    ".climate <city> or .weather <city>, <country name/code>\
-    \nUsage: Gets the weather of a city.\n\
-    \n.setcity <city> or .setcity <city>, <country name/code>\
-    \nUsage: Sets your default city so you can just use .weather."
+    "climate":"__**PLUGIN NAME :** Climate__\
+    \n\n📌** CMD ➥** `.climate` <city> or `.weather` <city>, <country name/code>\
+    \n**USAGE   ➥  **Gets the weather of a city.\
+    \n\n📌** CMD ➥** `.wttr` <city>\
+    \n**USAGE   ➥  **Gets 3days of weather report of a city.\
+    \n\n📌** CMD ➥** `.setcity` <city> or `.setcity` <city>, <country name/code>\
+    \n**USAGE   ➥  **Sets your default city so you can just use .weather."
 })

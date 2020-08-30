@@ -4,24 +4,25 @@ ported to telethon by @mrconfused and @sandy1709
 """
 
 import os
-from PIL import Image
-from ..utils import admin_cmd 
+from PIL import Image 
 from .. import LOGS , CMD_HELP
 from glitch_this import ImageGlitcher
 from . import take_screen_shot ,runcmd
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 @borg.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="(glitch|glitchs)(?: |$)(.*)",allow_sudo = True))
 async def glitch(cat):
-    await cat.edit("```Glitching... 😁```")
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
     reply = await cat.get_reply_message()
+    catid = cat.reply_to_msg_id
+    cat = await edit_or_reply(cat ,"```Glitching... 😁```")
     if not (reply and (reply.media)):
         await cat.edit("`Media not found...`")
         return
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
-    catid = cat.reply_to_msg_id
     catsticker = await reply.download_media(file = "./temp/")
     if not catsticker.endswith(('.mp4','.webp','.tgs','.png','.jpg')):
         os.remove(catsticker)
@@ -97,12 +98,12 @@ async def glitch(cat):
             os.remove(files)
 
 CMD_HELP.update({
-    "glitch":
-    "**SYNTAX : **`.glitch` reply to media file\
-    \n**USAGE :** glitches the given mediafile(gif , stickers , image, videos) to a gif and glitch range is from 1 to 8.\
+    "glitch":"__**PLUGIN NAME :** Glitch__\
+    \n\n📌** CMD ➥** `.glitch` reply to media file\
+    \n**USAGE   ➥  **Glitches the given mediafile(gif , stickers , image, videos) to a gif and glitch range is from 1 to 8.\
     If nothing is mentioned then by default it is 2\
-    \n\n**SYNTAX : **`.glitchs` reply to media file\
-    \n**USAGE :** glitches the given mediafile(gif , stickers , image, videos) to a sticker and glitch range is from 1 to 8.\
+    \n\n📌** CMD ➥** `.glitchs` reply to media file\
+    \n**USAGE   ➥  **Glitches the given mediafile(gif , stickers , image, videos) to a sticker and glitch range is from 1 to 8.\
     If nothing is mentioned then by default it is 2\
     "
 })

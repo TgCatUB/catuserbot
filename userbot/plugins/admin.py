@@ -628,25 +628,25 @@ async def get_user_from_id(user, event):
 
 
 CMD_HELP.update({
-    "admin":
-    ".setgpic <reply to image>\
-\nUsage: Changes the group's display picture\
-\n\n.promote <username/reply> <custom rank (optional)>\
-\nUsage: Provides admin rights to the person in the chat.\
-\n\n.demote <username/reply>\
-\nUsage: Revokes the person's admin permissions in the chat.\
-\n\n.ban <username/reply> <reason (optional)>\
-\nUsage: Bans the person off your chat.\
-\n\n.unban <username/reply>\
-\nUsage: Removes the ban from the person in the chat.\
-\n\n.mute <username/reply> <reason (optional)>\
-\nUsage: Mutes the person in the chat, works on admins too.\
-\n\n.unmute <username/reply>\
-\nUsage: Removes the person from the muted list.\
-\n\n.pin <reply>\
-\nUsage: Pins the replied message in Group\
-\n\n.kick <username/reply> \
-\nUsage: kick the person off your chat.\
-\n\n.iundlt\
-\nUsage: display last 5 deleted messages in group."
+    "admin":"__**PLUGIN NAME :** Admin__\
+\n\n📌** CMD ➥** `.setgpic` <reply to image>\
+\n**USAGE   ➥  **Changes the group's display picture\
+\n\n📌** CMD ➥** `.promote` <username/reply> <custom rank (optional)>\
+\n**USAGE   ➥  **Provides admin rights to the person in the chat.\
+\n\n📌** CMD ➥** `.demote` <username/reply>\
+\n**USAGE   ➥  **Revokes the person's admin permissions in the chat.\
+\n\n📌** CMD ➥** `.ban` <username/reply> <reason (optional)>\
+\n**USAGE   ➥  **Bans the person off your chat.\
+\n\n📌** CMD ➥** `.unban` <username/reply>\
+\n**USAGE   ➥  **Removes the ban from the person in the chat.\
+\n\n📌** CMD ➥** `.mute` <username/reply> <reason (optional)>\
+\n**USAGE   ➥  **Mutes the person in the chat, works on admins too.\
+\n\n📌** CMD ➥** `.unmute` <username/reply>\
+\n**USAGE   ➥  **Removes the person from the muted list.\
+\n\n📌** CMD ➥** `.pin` <reply>\
+\n**USAGE   ➥  **Pins the replied message in Group\
+\n\n📌** CMD ➥** `.kick` <username/reply> \
+\n**USAGE   ➥  **kick the person off your chat.\
+\n\n📌** CMD ➥** `.iundlt`\
+\n**USAGE   ➥  **display last 5 deleted messages in group."
 })

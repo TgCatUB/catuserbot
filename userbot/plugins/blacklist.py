@@ -76,13 +76,13 @@ async def on_view_blacklist(event):
         await edit_or_reply(event , OUT_STR)
     
 CMD_HELP.update({
-    "blacklist":
-    "**SYNTAX : **`.addblacklist` <word/words>\
-    \n**USAGE : **The given word or words will be added to blacklist in that specific chat if any user sends then the message deletes.\
-    \n\n**SYNTAX : **`.rmblacklist` <word/words>\
-    \n**USAGE : **The given word or words will be removed from blacklist in that specific chat\
-    \n\n**SYNTAX : **`.listblacklist`\
-    \n**USAGE : **Shows you the list of blacklist words in that specific chat\
-    \n\n**NOTE : 8**f you are adding more than one word at time via this then remember that new word must be given in new line that is not [hi hello] . it must be as\
+    "blacklist":"__**PLUGIN NAME :** Blacklist__\
+    \n\n📌** CMD ➥** `.addblacklist` <word/words>\
+    \n**USAGE   ➥  **The given word or words will be added to blacklist in that specific chat if any user sends then the message deletes.\
+    \n\n📌** CMD ➥** `.rmblacklist` <word/words>\
+    \n**USAGE   ➥  **The given word or words will be removed from blacklist in that specific chat\
+    \n\n📌** CMD ➥** `.listblacklist`\
+    \n**USAGE   ➥  **Shows you the list of blacklist words in that specific chat\
+    \n\n**NOTE : **If you are adding more than one word at time via this then remember that new word must be given in new line that is not [hi hello] . it must be as\
     [hi \n hello]"
 })

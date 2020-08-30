@@ -2,14 +2,13 @@
 import asyncio
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
-from userbot.utils import admin_cmd
 import html
 from telethon.tl.functions.channels import EditBannedRequest
 import userbot.plugins.sql_helper.warns_sql as sql
-
-
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 @borg.on(admin_cmd(pattern="warn (.*)"))
+@borg.on(sudo_cmd(pattern="warn (.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
@@ -29,11 +28,10 @@ async def _(event):
         reply = "<u><a href='tg://user?id={}'>user</a></u> has {}/{} warnings... watch out!".format(reply_message.from_id, num_warns, limit)
         if warn_reason:
             reply += "\nReason for last warn:\n{}".format(html.escape(warn_reason))
-    #
-    await event.edit(reply, parse_mode="html")
+    await edit_or_reply(event ,reply, parse_mode="html")
 
-
-@borg.on(admin_cmd(pattern="get_warns"))
+@borg.on(admin_cmd(pattern="get_warns$"))
+@borg.on(sudo_cmd(pattern="get_warns$",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
@@ -48,17 +46,15 @@ async def _(event):
             text += reasons
             await event.edit(text)
         else:
-            await event.edit("this user has {} / {} warning, but no reasons for any of them.".format(num_warns, limit))
+            await edit_or_reply(event ,"this user has {} / {} warning, but no reasons for any of them.".format(num_warns, limit))
     else:
-        await event.edit("this user hasn't got any warnings!")
+        await edit_or_reply(event ,"this user hasn't got any warnings!")
 
-
-@borg.on(admin_cmd(pattern="reset_warns"))
+@borg.on(admin_cmd(pattern="reset_warns$"))
+@borg.on(sudo_cmd(pattern="reset_warns$",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
     reply_message = await event.get_reply_message()
     sql.reset_warns(reply_message.from_id, event.chat_id)
-    await event.edit("Warnings have been reset!")
-
-
+    await edit_or_reply(event ,"Warnings have been reset!")

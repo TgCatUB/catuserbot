@@ -1,4 +1,3 @@
-
 """
 created by @mrconfused and @sandy1709
 Idea by @BlazingRobonix
@@ -19,18 +18,19 @@ Idea by @BlazingRobonix
  #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .sql_helper.echo_sql import is_echo , get_all_echos , addecho , remove_echo
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+import io
 import asyncio
 import pybase64
-import io
-from time import time
-from userbot.utils import admin_cmd
-from userbot  import CMD_HELP
 import requests
+from time import time
+from .. import CMD_HELP
 from telethon import events, errors
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+from .sql_helper.echo_sql import is_echo , get_all_echos , addecho , remove_echo
 
-@borg.on(admin_cmd(pattern="addecho"))
+@borg.on(admin_cmd(pattern="addecho$"))
+@borg.on(sudo_cmd(pattern="addecho$",allow_sudo = True))
 async def echo(cat):
     if cat.fwd_from:
         return
@@ -45,14 +45,15 @@ async def echo(cat):
         except:
             pass
         if is_echo(user_id, chat_id):
-            await cat.edit("The user is already enabled with echo ")
+            await edit_or_reply(cat ,"The user is already enabled with echo ")
             return
         addecho(user_id , chat_id)
-        await cat.edit("Hi")
+        await edit_or_reply(cat ,"Hi")
     else:
-        await cat.edit("Reply To A User's Message to echo his messages")
+        await edit_or_reply(cat ,"Reply To A User's Message to echo his messages")
         
-@borg.on(admin_cmd(pattern="rmecho"))
+@borg.on(admin_cmd(pattern="rmecho$"))
+@borg.on(sudo_cmd(pattern="rmecho$",allow_sudo = True))
 async def echo(cat):
     if cat.fwd_from:
         return
@@ -68,13 +69,14 @@ async def echo(cat):
             pass
         if is_echo(user_id, chat_id):
             remove_echo(user_id , chat_id)
-            await cat.edit("No nearby Mountains to echo his messages")
+            await edit_or_reply(cat ,"Echo has been stopped for the user")
         else:
-            await cat.edit("The user is not activated with echo")   
+            await edit_or_reply(cat ,"The user is not activated with echo")   
     else:
-        await cat.edit("Reply To A User's Message to echo his messages")
+        await edit_or_reply(cat ,"Reply To A User's Message to echo his messages")
         
-@borg.on(admin_cmd(pattern="listecho"))
+@borg.on(admin_cmd(pattern="listecho$"))
+@borg.on(sudo_cmd(pattern="listecho$",allow_sudo = True))
 async def echo(cat):
     if cat.fwd_from:
         return
@@ -89,9 +91,9 @@ async def echo(cat):
         key = requests.post('https://nekobin.com/api/documents', json={"content": output_str}).json().get('result').get('key')
         url = f'https://nekobin.com/{key}'
         reply_text = f'echo enabled users: [here]({url})'
-        await cat.edit(reply_text)
+        await edit_or_reply(cat ,reply_text)
     else:
-        await cat.edit(output_str)
+        await edit_or_reply(cat ,output_str)
       
 @borg.on(events.NewMessage(incoming=True))
 async def samereply(cat):
@@ -107,3 +109,14 @@ async def samereply(cat):
             pass
         if cat.message.text or cat.message.sticker:
             await cat.reply(cat.message)
+    
+CMD_HELP.update({
+    "echo":"__**PLUGIN NAME :** Echo__\
+    \n\n📌** CMD ➥** `.addecho` reply to user to who you want to enable\
+    \n**USAGE   ➥  **replay's his every message for whom you enabled echo\
+    \n\n📌** CMD ➥** `.rmecho` reply to user to who you want to stop\
+    \n**USAGE   ➥  **Stops replaying his messages\
+    \n\n📌** CMD ➥** `.listecho`\
+    \n**USAGE   ➥  **shows the list of users for who you enabled echo\
+    "
+})

@@ -9,20 +9,21 @@
 
 import os
 import html
-from userbot.utils import admin_cmd
 from telethon.utils import get_input_location
 from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from telethon.tl.types import MessageEntityMentionName
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.functions.photos import GetUserPhotosRequest
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 @borg.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="userinfo(?: |$)(.*)",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
     replied_user, error_i_a = await get_full_user(event)
     if replied_user is None:
-        await event.edit(str(error_i_a))
+        await edit_or_reply(event ,str(error_i_a))
         return False
     replied_user_profile_photos = await borg(GetUserPhotosRequest(
         user_id=replied_user.user.id,
@@ -95,7 +96,6 @@ DC5 : Singapore, SG
     )
     await event.delete()
 
-
 async def get_full_user(event):
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
@@ -147,8 +147,9 @@ async def get_full_user(event):
         return None, e
 
 @borg.on(admin_cmd(pattern="whois(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="whois(?: |$)(.*)",allow_sudo = True))
 async def who(event):
-    await event.edit(
+    cat = await edit_or_reply(event ,
         "`Sit tight while I steal some data from Mark Zuckerburg...`")
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
@@ -156,13 +157,13 @@ async def who(event):
     try:
         photo, caption = await fetch_info(replied_user, event)
     except AttributeError:
-        await event.edit("`Could not fetch info of that user.`")
+        await edit_or_reply(event ,"`Could not fetch info of that user.`")
         return
     message_id_to_reply = event.message.reply_to_msg_id
     if not message_id_to_reply:
         message_id_to_reply = None
     try:
-        await event.client.send_file(event.chat_id,
+        await borg.send_file(event.chat_id,
                                      photo,
                                      caption=caption,
                                      link_preview=False,
@@ -171,9 +172,9 @@ async def who(event):
                                      parse_mode="html")
         if not photo.startswith("http"):
             os.remove(photo)
-        await event.delete()
+        await cat.delete()
     except TypeError:
-        await event.edit(caption, parse_mode="html")
+        await edit_or_reply(event ,caption, parse_mode="html")
 
 async def get_user(event):
     """ Get the user from argument or replied message. """
@@ -242,26 +243,27 @@ async def fetch_info(replied_user, event):
     username = "@{}".format(username) if username else (
         "This User has no Username")
     user_bio = "This User has no About" if not user_bio else user_bio
-    caption = "<b>USER INFO from cat's database :</b>\n\n"
-    caption += f"First Name: {first_name}\n"
-    caption += f"Last Name: {last_name}\n"
-    caption += f"Username: {username}\n"
-    caption += f"Data Centre ID: {dc_id}\n"
-    caption += f"Number of Profile Pics: {replied_user_profile_photos_count}\n"
-    caption += f"Is Bot: {is_bot}\n"
-    caption += f"Is Restricted: {restricted}\n"
-    caption += f"Is Verified by Telegram: {verified}\n"
-    caption += f"ID: <code>{user_id}</code>\n\n"
-    caption += f"Bio: \n<code>{user_bio}</code>\n\n"
-    caption += f"Common Chats with this user: {common_chat}\n"
-    caption += f"Permanent Link To Profile: "
+    caption = "<b>USER INFO from druv's database :</b>\n\n"
+    caption += f"🤵First Name: {first_name}\n"
+    caption += f"🤵Last Name: {last_name}\n"
+    caption += f"🤵Username: {username}\n"
+    caption += f"🌏Data Centre ID: {dc_id}\n"
+    caption += f"🖼Number of Profile Pics: {replied_user_profile_photos_count}\n"
+    caption += f"🤖Is Bot: {is_bot}\n"
+    caption += f"🔏Is Restricted: {restricted}\n"
+    caption += f"🌐Is Verified by Telegram: {verified}\n"
+    caption += f"🔖ID: <code>{user_id}</code>\n\n"
+    caption += f"✍️Bio: \n<code>{user_bio}</code>\n\n"
+    caption += f"👥Common Chats with this user: {common_chat}\n"
+    caption += f"🔗Permanent Link To Profile: "
     caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
     return photo, caption
 
+
 CMD_HELP.update({
-    "whois":
-    "**SYNTAX : **.whois <username> or reply to someones text with .whois\
-    \n**USAGE :** Gets info of an user.\
-    \n\n**SYNTAX : **.userinfo <username> or reply to someones text with .userinfo\
-    \n**USAGE :** Gets info of an user."
+    "whois":"__**PLUGIN NAME :** Whois__\
+    \n\n📌** CMD ➥** `.whois <username>` or reply to someones text with `.whois`\
+    \n**USAGE   ➥  **Gets info of an user.\
+    \n\n📌** CMD ➥** `.userinfo <username>` or reply to someones text with `.userinfo`\
+    \n**USAGE   ➥  **Gets info of an user."
 })

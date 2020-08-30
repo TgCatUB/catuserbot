@@ -39,7 +39,8 @@ async def _(event):
              await borg.send_file(event.chat_id, response.message.media)  
                 
 
-CMD_HELP.update({"ascii": "`.ascii` reply to any image file:\
-      \nUSAGE:makes an image ascii style, try out your own.\
+CMD_HELP.update({"ascii":"__**PLUGIN NAME :** Ascii__\
+      \n\n📌** CMD ➥** `.ascii` reply to any image file:\
+      \n**USAGE   ➥  **Makes an image ascii style, try out your own.\
       "
 })          

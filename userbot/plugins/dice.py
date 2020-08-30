@@ -139,32 +139,3 @@ async def _(event):
                 r = await event.reply(file=InputMediaDice('⚽️'))
         except:
             pass
-        
-        
-CMD_HELP.update({
-    "dice":
-    ".dice or .dice 1 to 6 any value\
-\nUsage: hahaha just a magic.\
-\nwarning: `you would be in trouble if you input any other value than mentioned.`"
-})    
-
-CMD_HELP.update({
-    "basketball":
-    ".basketball or .basketball 1 to 5 any value\
-\nUsage: hahaha just a magic.\
-\nwarning: `you would be in trouble if you input any other value than mentioned.`"
-})    
-
-CMD_HELP.update({
-    "dart":
-    ".dart or .dart 1 to 6 any value\
-\nUsage: hahaha just a magic.\
-\nwarning: `you would be in trouble if you input any other value than mentioned.`"
-})    
-
-CMD_HELP.update({
-    "football":
-    ".football or .football 1 to 6 any value\
-\nUsage: hahaha just a magic.\
-\nwarning: `you would be in trouble if you input any other value than mentioned.`"
-})    

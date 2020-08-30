@@ -85,7 +85,7 @@ async def gps(event):
         await cat.edit("i coudn't find it")
 
         
-CMD_HELP.update({"gps": "`.gps` <location name> :\
-      \nUSAGE: sends you the given location name\
-      "
+CMD_HELP.update({"gps":"__**PLUGIN NAME :** GPS__\
+      \n\n📌** CMD ➥** `.gps` <location name> :\
+      \n**USAGE   ➥  **Sends you the given location name."
 })           

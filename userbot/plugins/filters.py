@@ -1,27 +1,22 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-"""Filters
-Available Commands:
-.savefilter
-.listfilters
-.clearfilter"""
-import asyncio
+
 import re
-from telethon import events, utils
+import asyncio
+from .. import CMD_HELP
 from telethon.tl import types
+from telethon import events, utils
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from userbot.plugins.sql_helper.filter_sql import get_filter, add_filter, remove_filter, get_all_filters, remove_all_filters
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+
 DELETE_TIMEOUT = 0
 TYPE_TEXT = 0
 TYPE_PHOTO = 1
 TYPE_DOCUMENT = 2
 
-
 global last_triggered_filters
 last_triggered_filters = {}  # pylint:disable=E0602
-
 
 @command(incoming=True)
 async def on_snip(event):
@@ -64,8 +59,8 @@ async def on_snip(event):
                 await asyncio.sleep(DELETE_TIMEOUT)
                 last_triggered_filters[event.chat_id].remove(name)
 
-
-@borg.on(admin_cmd(pattern="savefilter (.*)"))
+@borg.on(admin_cmd(pattern="filter (.*)"))
+@borg.on(sudo_cmd(pattern="filter (.*)",allow_sudo = True))
 async def on_snip_save(event):
     name = event.pattern_match.group(1)
     msg = await event.get_reply_message()
@@ -84,12 +79,13 @@ async def on_snip_save(event):
                 snip['hash'] = media.access_hash
                 snip['fr'] = media.file_reference
         add_filter(event.chat_id, name, snip['text'], snip['type'], snip.get('id'), snip.get('hash'), snip.get('fr'))
-        await event.edit(f"filter {name} saved successfully. Get it with {name}")
+        await edit_or_reply(event ,f"filter {name} saved successfully. Get it with {name}")
     else:
-        await event.edit("Reply to a message with `savefilter keyword` to save the filter")
+        await edit_or_reply(event ,"Reply to a message with `savefilter keyword` to save the filter")
 
 
-@borg.on(admin_cmd(pattern="listfilters$"))
+@borg.on(admin_cmd(pattern="filters$"))
+@borg.on(sudo_cmd(pattern="filters$",allow_sudo = True))
 async def on_snip_list(event):
     all_snips = get_all_filters(event.chat_id)
     OUT_STR = "Available Filters in the Current Chat:\n"
@@ -111,33 +107,32 @@ async def on_snip_list(event):
             )
             await event.delete()
     else:
-        await event.edit(OUT_STR)
+        await edit_or_reply(event ,OUT_STR)
 
-
-@borg.on(admin_cmd(pattern="clearfilter (.*)"))
+@borg.on(admin_cmd(pattern="stop (.*)"))
+@borg.on(sudo_cmd(pattern="stop (.*)",allow_sudo = True))
 async def on_snip_delete(event):
     name = event.pattern_match.group(1)
     remove_filter(event.chat_id, name)
-    await event.edit(f"filter {name} deleted successfully")
+    await edit_or_reply(event ,f"filter {name} deleted successfully")
 
 
-@borg.on(admin_cmd(pattern="clearallfilters$"))
+@borg.on(admin_cmd(pattern="rmfilters$"))
+@borg.on(sudo_cmd(pattern="rmfilters$",allow_sudo = True))
 async def on_all_snip_delete(event):
     remove_all_filters(event.chat_id)
-    await event.edit(f"filters **in current chat** deleted successfully")
-
-    
+    await edit_or_reply(event ,f"filters **in current chat** deleted successfully")
 
 CMD_HELP.update({
-    "filters":
-    ".listfilters\
-    \nUsage: Lists all active (of your userbot) filters in a chat.\
-    \n\n.savefilter  reply to a message with .savefilter <keyword>\
-    \nUsage: Saves the replied message as a reply to the 'keyword'.\
+    "filters":"__**PLUGIN NAME :** Filters__\
+    \n\n📌** CMD ➥** `.filters`\
+    \n**USAGE   ➥  **Lists all active (of your userbot) filters in a chat.\
+    \n\n📌** CMD ➥** `.filter`  reply to a message with .filter <keyword>\
+    \n**USAGE   ➥  **Saves the replied message as a reply to the 'keyword'.\
     \nThe bot will reply to the message whenever 'keyword' is mentioned.\
     \nWorks with everything from files to stickers.\
-    \n\n.clearfilter <keyword>\
-    \nUsage: Stops the specified keyword.\
-    \n\n.clearallfilters \
-    \nUsage: Removes all filters of your userbot in the chat."
-})    
+    \n\n📌** CMD ➥** `.stop <keyword>`\
+    \n**USAGE   ➥  **Stops the specified keyword.\
+    \n\n📌** CMD ➥** `.rmfilters` \
+    \n**USAGE   ➥  **Removes all filters of your userbot in the chat."
+})

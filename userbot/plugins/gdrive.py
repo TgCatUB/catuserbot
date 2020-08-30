@@ -499,17 +499,17 @@ async def gdrive_search(http, search_query):
     return msg
 
 CMD_HELP.update({
-    "gdrive":
-    "`.ugdrive` <file_path / reply / URL|file_name>\
-    \nUsage: Uploads the file in reply , URL or file path in server to your Google Drive.\
-    \n\n`.gsetf https://drive.google.com/drive/u/0/folders/ `<GDrive Folder Id>\
-    \nUsage: Sets the folder to upload new files to.\
-    \n\n`.gsetclear`\
-    \nUsage: Reverts to default upload destination.\
-    \n\n`.gfolder`\
-    \nUsage: Shows your current upload destination/folder.\
-    \n\n`.list` <query>\
-    \nUsage: Looks for files and folders in your Google Drive.\
-    \n\n`.ggd` <path_to_folder_in_server>\
-    \nUsage: Uploads all the files in the directory to a folder in Google Drive."
+    "gdrive":"__**PLUGIN NAME :** Gdrive__\
+    \n\n📌** CMD ➥** `.ugdrive` <file_path / reply / URL|file_name>\
+    \n**USAGE   ➥  **Uploads the file in reply , URL or file path in server to your Google Drive.\
+    \n\n📌** CMD ➥** `.gsetf https://drive.google.com/drive/u/0/folders/ `<Gdrive Folder Id>\
+    \n**USAGE   ➥  **Sets the folder to upload new files to.\
+    \n\n📌** CMD ➥** `.gsetclear`\
+    \n**USAGE   ➥  **Reverts to default upload destination.\
+    \n\n📌** CMD ➥** `.gfolder`\
+    \n**USAGE   ➥  **Shows your current upload destination/folder.\
+    \n\n📌** CMD ➥** `.list` <query>\
+    \n**USAGE   ➥  **Looks for files and folders in your Google Drive.\
+    \n\n📌** CMD ➥** `.ggd` <path_to_folder_in_server>\
+    \n**USAGE   ➥  **Uploads all the files in the directory to a folder in Google Drive."
 })

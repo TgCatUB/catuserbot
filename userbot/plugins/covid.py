@@ -32,7 +32,7 @@ async def corona(event):
         data += "\nNo information yet about this country!"
     await edit_or_reply(event ,"**Corona Virus Info in {}:**\n{}".format(country.capitalize(), data))
 
-CMD_HELP.update({"coronavirus":
-   "`.covid ` <country name>\
-   \n**USAGE :** Get an information about covid-19 data in the given country."
+CMD_HELP.update({"covid":"__**PLUGIN NAME :** Covid__\
+   \n\n📌** CMD ➥** `.cor ` <country name>\
+   \n**USAGE   ➥  **Get an information about covid-19 data in the given country."
 })

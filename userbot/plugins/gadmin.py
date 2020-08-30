@@ -357,15 +357,15 @@ async def get_user_from_event(event):
    
         
 CMD_HELP.update({
-    "gadmin":
-    ".gban <username/reply/userid> <reason (optional)>\
-\n**Usage : **Bans the person in all groups where you are admin .\
-\n\n.ungban <username/reply/userid>\
-\n**Usage : **Reply someone's message with .ungban to remove them from the gbanned list.\
-\n\n.listgban\
-\n**Usage : **Shows you the gbanned list and reason for their gban.\
-\n\n.gmute <username/reply> <reason (optional)>\
-\n**Usage : **Mutes the person in all groups you have in common with them.\
-\n\n.ungmute <username/reply>\
-\n**Usage : **Reply someone's message with .ungmute to remove them from the gmuted list."
+    "gadmin":"__**PLUGIN NAME :** Gadmin__\
+\n\n📌** CMD ➥** `.gban` <username/reply/userid> <reason (optional)>\
+\n**USAGE   ➥  **Bans the person in all groups where you are admin .\
+\n\n📌** CMD ➥** `.ungban` <username/reply/userid>\
+\n**USAGE   ➥  **Reply someone's message with .ungban to remove them from the gbanned list.\
+\n\n📌** CMD ➥** `.listgban`\
+\n**USAGE   ➥  **Shows you the gbanned list and reason for their gban.\
+\n\n📌** CMD ➥** `.gmute` <username/reply> <reason (optional)>\
+\n**USAGE   ➥  **Mutes the person in all groups you have in common with them.\
+\n\n📌** CMD ➥** `.ungmute` <username/reply>\
+\n**USAGE   ➥  **Reply someone's message with .ungmute to remove them from the gmuted list."
 })

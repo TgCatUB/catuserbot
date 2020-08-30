@@ -77,8 +77,8 @@ async def carbon_api(e):
    await cat.delete() # Deleting msg
    
 CMD_HELP.update({
-    "carbon":
-    "**Syntax :** `.carbon` <reply to code>\
-    \n**Usage : **Shows your code in different style\
+    "carbon":"__**PLUGIN NAME :** Carbon__\
+    \n\n📌** CMD ➥** `.carbon` <reply to code>\
+    \n**USAGE   ➥  **Shows your code in different style\
     "
 })   

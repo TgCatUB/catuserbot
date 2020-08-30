@@ -7,14 +7,13 @@
 This module updates the userbot based on upstream revision
 Ported from Kensurbot
 """
-
-import asyncio
 import sys
-from os import environ, execle, path, remove
+import asyncio
 from git import Repo
+from .. import CMD_HELP
+from os import environ, execle, path, remove
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
 
 HEROKU_APP_NAME = Var.HEROKU_APP_NAME
 HEROKU_API_KEY = Var.HEROKU_API_KEY
@@ -137,10 +136,11 @@ async def update(event, repo, ups_rem, ac_br):
     return
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"update($| (now|deploy))"))
+@borg.on(sudo_cmd(pattern="update($| (now|deploy))",allow_sudo = True))
 async def upstream(event):
     "For .update command, check if the bot is up to date, update if specified"
-    await event.edit("`Checking for updates, please wait....`")
     conf = event.pattern_match.group(1).strip()
+    event = await edit_or_reply(event ,"`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
     try:
@@ -192,14 +192,14 @@ async def upstream(event):
         return
     if changelog == "" and not force_update:
         await event.edit(
-            "\n`Your USERBOT is`  **up-to-date**  `with`  "
+            "\n`CATUSERBOT is`  **up-to-date**  `with`  "
             f"**{UPSTREAM_REPO_BRANCH}**\n"
         )
         return repo.__del__()
     if conf == "" and force_update is False:
         await print_changelogs(event, ac_br, changelog)
         await event.delete()
-        return await event.respond('do "[.update now] or [.update deploy]" to update.Check `.info updater` for details')
+        return await event.respond('do "[`.update now`] or [`.update deploy`]" to update.Check `.info updater` for details')
 
     if force_update:
         await event.edit(
@@ -211,13 +211,14 @@ async def upstream(event):
     return
 
 CMD_HELP.update({
-        "updater": "**Syntax : **`.update`"
-        "\n**Usage :** Checks if the main userbot repository has any updates "
-        "and shows a changelog if so."
-        "\n\n**Syntax : **`.update now`"
-        "\n**Usage :** Update your userbot, "
-        "if there are any updates in your userbot repository.if you restart these goes back to last time when you deployed"
-        "\n\n**Syntax : **`.update deploy`"
-        "\n**Usage :** Deploy your userbot.So even you restart it doesnt go back to previous version"
-        "\nThis will triggered deploy always, even no updates."
+        "updater":"__**PLUGIN NAME :** Updater__\
+        \n\n📌** CMD ➥** `.update`\
+        \n**Usage :** Checks if the main userbot repository has any updates\
+        \nand shows a changelog if so.\
+        \n\n📌** CMD ➥** `.update now`\
+        \n**USAGE   ➥  **Update your userbot,\
+        \nif there are any updates in your userbot repository.if you restart these goes back to last time when you deployed\
+        \n\n📌** CMD ➥** `.update deploy`\
+        \n**USAGE   ➥  **Deploy your userbot.So even you restart it doesnt go back to previous version\
+        \nThis will triggered deploy always, even no updates."
     })

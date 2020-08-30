@@ -72,9 +72,9 @@ def build_keyboard(buttons):
     return keyb
 
 CMD_HELP.update({
-    "button":
-    "**SYNTAX : **`.cbutton`\
-    \n**USAGE :** Buttons must be in th format as [name on button]<buttonurl:link you want to open> and narddown is Default to html\
-    \n**EXAMPLE :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
+    "button":"__**PLUGIN NAME :** Button__\
+    \n\n📌** CMD ➥** `.cbutton`\
+    \n**USAGE   ➥  **Buttons must be in th format as [name on button]<buttonurl:link you want to open> and narddown is Default to html\
+    \n\n**EXAMPLE :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
     "
 })

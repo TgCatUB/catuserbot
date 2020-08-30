@@ -174,13 +174,14 @@ async def stylish_generator(event):
 
 
 CMD_HELP.update({
-    "funnyfonts": ".cp (text) or .cp reply to message \
-\nUsage: inserts some emojis in between the texts\
-\n\n.str (text) or .str reply to message \
-\nUsage: Stretchs the given message.\
-\n\n.zal (text) or .zal reply to message \
-\nUsage: Invoke the feeling of chaos.\
-\n\n.weeb (text) or .weeb reply to message \
-\nUsage: a different style of alphabets .\
+    "funnyfonts":"__**PLUGIN NAME :** Funnyfonts__\
+\n\n📌** CMD ➥** `.cp` (text) or .cp reply to message \
+\n**USAGE   ➥  **Inserts some emojis in between the texts\
+\n\n📌** CMD ➥** `.str` (text) or .str reply to message \
+\n**USAGE   ➥  **Stretchs the given message.\
+\n\n📌** CMD ➥** `.zal` (text) or .zal reply to message \
+\n**USAGE   ➥  **Invoke the feeling of chaos.\
+\n\n📌** CMD ➥** `.weeb` (text) or .weeb reply to message \
+\n**USAGE   ➥  **A different style of alphabets .\
 "
 })

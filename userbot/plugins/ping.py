@@ -1,9 +1,8 @@
+import asyncio
+from .. import CMD_HELP , ALIVE_NAME
 from telethon import events
 from datetime import datetime
-from userbot.utils import admin_cmd,sudo_cmd
-from userbot import CMD_HELP, ALIVE_NAME
-import asyncio
-from platform import uname
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
@@ -53,30 +52,22 @@ async def _(event):
     await event.edit("‎‎‎‎‎‎‎‎‎⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛⬛📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛📶⬛⬛⬛\n⬛⬛⬛⬛📶⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛📶⬛⬛⬛📶⬛\n⬛⬛📶📶⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶⬛📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛ \n‎‎‎‎‎‎‎‎‎ \n \n My 🇵 🇮 🇳 🇬  Is : {} ms".format(ms))
  
 @borg.on(admin_cmd(pattern="ping$"))
+@borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
     start = datetime.now()
-    await event.edit("__**☞ Pong!__**")
+    event = await edit_or_reply(event ,"__**☞ Pong!__**")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
     await event.edit(f"__**☞ Pong!__**\n➥ {ms}\n➥ __**Bot**__ __**of**__ [{DEFAULTUSER}]({USERNAME})")
     
-
-@borg.on(sudo_cmd(pattern="ping$",allow_sudo = True))
-async def _(event):
-    start = datetime.now()
-    kakashi = await event.reply("__**☞ Pong!__**")
-    end = datetime.now()
-    ms = (end - start).microseconds / 1000
-    await event.reply(f"__**☞ Pong!__**\n➥ {ms}\n➥ __**Bot**__ __**of**__ [{DEFAULTUSER}]({USERNAME})")
-    await kakashi.delete()
     
 CMD_HELP.update({
-    "ping":
-    "`.fping`\
-    \nUSAGE:A kind ofping with extra animation\
-    \n\n`.ping`\
-    \nUSAGE:Shows you the ping speed of server"
+    "ping":"__**PLUGIN NAME :** Ping__\
+    \n\n📌** CMD ➥** `.fping`\
+    \n**USAGE   ➥  **A kind ofping with extra animation\
+    \n\n📌** CMD ➥** `.ping`\
+    \n**USAGE   ➥  **Shows you the ping speed of server"
 })
     

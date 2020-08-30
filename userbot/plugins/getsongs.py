@@ -173,9 +173,9 @@ async def _(event):
     os.system("rm -rf ./temp/*.jpg")
     os.system("rm -rf ./temp/*.webp")
     
-CMD_HELP.update({"getmusic":
-    "`.song` query or `.song` reply to song name :\
-    \nUSAGE:finds the song you entered in query and sends it"
-    "`.vsong` query or `.vsong` reply to song name :\
-    \nUSAGE:finds the video song you entered in query and sends it"
+CMD_HELP.update({"getsongs":"__**PLUGIN NAME :** Get Songs__\
+    \n\n📌** CMD ➥** `.song` query or `.song` reply to song name :\
+    \n**USAGE   ➥  **Finds the song you entered in query and sends it\
+    \n\n📌** CMD ➥** `.vsong` query or `.vsong` reply to song name :\
+    \n**USAGE   ➥  **Finds the video song you entered in query and sends it"
 })
