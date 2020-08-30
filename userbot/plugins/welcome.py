@@ -41,8 +41,8 @@ async def _(event):
             )
             update_previous_welcome(event.chat_id, current_message.id)
 
-@borg.on(admin_cmd(pattern="savewelcome$"))
-@borg.on(sudo_cmd(pattern="savewelcome$",allow_sudo = True))
+@borg.on(admin_cmd(pattern="savewelcome"))
+@borg.on(sudo_cmd(pattern="savewelcome",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
         return
@@ -81,7 +81,7 @@ async def _(event):
             
 CMD_HELP.update({
     "welcome":
-    "**Plugin :** `welcome\
+    "**Plugin :** `welcome`\
 \n\n**Syntax :** `.savewelcome` <welcome message> or reply to a message with .setwelcome\
 \n**Usage :** Saves the message as a welcome note in the chat.\
 \n\nAvailable variables for formatting welcome messages :\
