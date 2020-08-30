@@ -1,4 +1,4 @@
-from .. import CMD_LIST, SUDO_LIST
+from .. import CMD_LIST, SUDO_LIST, CMD_HELP
 from userbot import ALIVE_NAME
 from platform import uname
 import sys
