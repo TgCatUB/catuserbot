@@ -131,8 +131,8 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    mone = event = await edit_or_reply(event ,"Processing ...")
     input_str = event.pattern_match.group(1)
+    mone = await edit_or_reply(event ,"Processing ...")
     thumb = None
     if os.path.exists(thumb_image_path):
         thumb = thumb_image_path
