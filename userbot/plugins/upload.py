@@ -99,7 +99,7 @@ async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    mone = event = await edit_or_reply(event ,"Processing ...")
+    mone = await edit_or_reply(event ,"Processing ...")
     jisan = "./userbot/plugins/{}.py".format(input_str)
     thumb = None
     if os.path.exists(thumb_image_path):
