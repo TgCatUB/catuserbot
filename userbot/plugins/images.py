@@ -12,6 +12,7 @@ from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from userbot.google_image_download import googleimagesdownload
 
 @borg.on(admin_cmd(pattern="img(?: |$)(\d*)? ?(.*)"))
+@borg.on(sudo_cmd(pattern="img(?: |$)(\d*)? ?(.*)",allow_sudo = True))
 async def img_sampler(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
