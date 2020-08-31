@@ -79,24 +79,27 @@ async def kang(args):
         return
     if photo:
         splat = args.text.split()
-        emoji = "😂"
+        if emojibypass:
+            emoji = emoji
+        else:
+            emoji = "😂"
         pack = 1
         if len(splat) == 3:
             if char_is_emoji(splat[1]):
+                if char_is_emoji(splat[2]):
+                    return await args.edit("check `.info stickers`")
                 pack = splat[2]  # User sent both
                 emoji = splat[1]
             elif char_is_emoji(splat[2]):
                 pack = splat[1]  # User sent both
                 emoji = splat[2]
             else:
-                await args.edit("check `.info stickers`")
-                return
+                return await args.edit("check `.info stickers`")
         elif len(splat) == 2:
             if char_is_emoji(splat[1]):
                 emoji = splat[1]
             else:
-                pack = splat[1]
-                
+                pack = splat[1]     
         packname = f"{user.username}_{pack}"
         packnick = f"@{user.username}'s_{pack}"
         cmd = '/newpack'
@@ -121,9 +124,10 @@ async def kang(args):
                 await conv.send_message(packname)
                 x = await conv.get_response()
                 while "Whoa! That's probably enough stickers for one pack, give it a break" in x.text:
-                    if pack.isnumeric():
+                    try:
+                        val = int(pack)
                         pack += 1
-                    else:
+                    except ValueError:
                         pack = 1
                     packname = f"{user.username}_{pack}"
                     packnick = f"@{user.username}'s_{pack}"
