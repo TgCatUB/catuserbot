@@ -79,24 +79,27 @@ async def kang(args):
         return
     if photo:
         splat = args.text.split()
-        emoji = "😂"
+        if emojibypass:
+            emoji = emoji
+        else:
+            emoji = "😂"
         pack = 1
         if len(splat) == 3:
             if char_is_emoji(splat[1]):
+                if char_is_emoji(splat[2]):
+                    return await args.edit("check `.info stickers`")
                 pack = splat[2]  # User sent both
                 emoji = splat[1]
             elif char_is_emoji(splat[2]):
                 pack = splat[1]  # User sent both
                 emoji = splat[2]
             else:
-                await args.edit("check `.info stickers`")
-                return
+                return await args.edit("check `.info stickers`")
         elif len(splat) == 2:
             if char_is_emoji(splat[1]):
                 emoji = splat[1]
             else:
-                pack = splat[1]
-                
+                pack = splat[1]     
         packname = f"{user.username}_{pack}"
         packnick = f"@{user.username}'s_{pack}"
         cmd = '/newpack'
@@ -121,12 +124,17 @@ async def kang(args):
                 await conv.send_message(packname)
                 x = await conv.get_response()
                 while "Whoa! That's probably enough stickers for one pack, give it a break" in x.text:
-                    if pack.isnumeric():
-                        pack += 1
-                    else:
+                    try:
+                        val = int(pack)
+                        pack = val + 1
+                    except ValueError:
                         pack = 1
-                    packname = f"{user.username}_{pack}"
-                    packnick = f"@{user.username}'s_{pack}"
+                    if not is_anim:
+                        packname = f"{user.username}_{pack}"
+                        packnick = f"@{user.username}'s_{pack}"
+                    else:
+                        packname = f"{user.username}_{pack}_anim"
+                        packnick = f"@{user.username}'s_{pack} (Animated)"
                     await args.edit("`Switching to Pack " + str(pack) +
                                     " due to insufficient space`")
                     await conv.send_message(packname)
@@ -305,15 +313,15 @@ async def get_pack_info(event):
     await event.edit(OUTPUT)
 
 CMD_HELP.update({
-    "stickers":
-    ".kang\
-\nUsage: Reply .kang to a sticker or an image to kang it to your userbot pack.\
-\n\n.kang [emoji('s)]\
-\nUsage: Works just like .kang but uses the emoji('s) you picked.\
-\n\n.kang [number]\
-\nUsage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\
-\n\n.kang [emoji('s)] [number]\
-\nUsage: Kang's the sticker/image to the specified pack and uses the emoji('s) you picked.\
-\n\n.stkrinfo\
-\nUsage: Gets info about the sticker pack."
+    "stickers":"__**PLUGIN NAME :** Stickers__\
+\n\n📌** CMD ➥** `.kang`\
+\n**USAGE   ➥  **Reply .kang to a sticker or an image to kang it to your userbot pack.\
+\n\n📌** CMD ➥** `.kang [emoji('s)]`\
+\n**USAGE   ➥  **Works just like .kang but uses the emoji('s) you picked.\
+\n\n📌** CMD ➥** `.kang [number]`\
+\n**USAGE   ➥  **Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\
+\n\n📌** CMD ➥** `.kang [emoji('s)] [number]`\
+\n**USAGE   ➥  **Kang's the sticker/image to the specified pack and uses the emoji('s) you picked.\
+\n\n📌** CMD ➥** `.stkrinfo`\
+\n**USAGE   ➥  **Gets info about the sticker pack."
 })

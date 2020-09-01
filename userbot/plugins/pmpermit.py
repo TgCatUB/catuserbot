@@ -1,11 +1,11 @@
-import asyncio
 import io
-import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
+import asyncio
+from .sql_helper import pmpermit_sql as pmpermit_sql
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
-from userbot import ALIVE_NAME, CMD_HELP
-from userbot.utils import admin_cmd
-from . import check 
+from .. import ALIVE_NAME, CMD_HELP
+from ..utils import admin_cmd
+from . import check, extract_time
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
@@ -34,7 +34,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                 await event.edit("Approved to pm [{}](tg://user?id={})".format(firstname, chat.id))
                 await asyncio.sleep(3)
                 await event.delete()
-
+                
     @bot.on(events.NewMessage(outgoing=True))
     async def you_dm_niqq(event):
         if event.fwd_from:
@@ -149,7 +149,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             PM_WARNS.update({chat_id: 0})
         if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_P_M_s:
             r = await event.reply(USER_BOT_WARN_ZERO)
-            await asyncio.sleep(3)
+            await asyncio.sleep(1)
             await event.client(functions.contacts.BlockRequest(chat_id))
             if chat_id in PREV_REPLY_MESSAGE:
                 await PREV_REPLY_MESSAGE[chat_id].delete()
@@ -198,14 +198,13 @@ if Var.PRIVATE_GROUP_ID is not None:
         PREV_REPLY_MESSAGE[chat_id] = r
                    
 CMD_HELP.update({
-    "pmpermit":
-    ".approve\
-\nUsage: Approves the mentioned/replied person to PM.\
-.disapprove\
-\nUsage: dispproves the mentioned/replied person to PM.\
-\n\n.block\
-\nUsage: Blocks the person.\
-\n\n.listapproved\
-\nUsage: To list the all approved users.\
-"
+    "pmpermit":"__**PLUGIN NAME :** Pm Permit__\
+\n\n📌** CMD ➥** `.approve`\
+\n**USAGE   ➥  **Approves the mentioned/replied person to PM.\
+\n\n📌** CMD ➥** `.disapprove`\
+\n**USAGE   ➥  **Dispproves the mentioned/replied person to PM.\
+\n\n📌** CMD ➥** `block`\
+\n**USAGE   ➥  **Blocks the person.\
+\n\n📌** CMD ➥** `listapproved`\
+\n**USAGE   ➥  **To list the all approved users."
 })

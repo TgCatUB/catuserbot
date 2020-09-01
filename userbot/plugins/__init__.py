@@ -4,6 +4,7 @@ import os
 from userbot.uniborgConfig import Config
 import re 
 
+
 if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
      os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
@@ -42,4 +43,4 @@ def check(cat):
         return True
     return False
 
-statstext = "yet to write"
+statstext = " Nothing Now"
