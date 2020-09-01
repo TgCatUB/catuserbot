@@ -1,11 +1,12 @@
-import asyncio
 import io
-import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
+import time
+import asyncio
+import .sql_helper.pmpermit_sql as pmpermit_sql
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
-from userbot import ALIVE_NAME, CMD_HELP
-from userbot.utils import admin_cmd
-from . import check 
+from .. import ALIVE_NAME, CMD_HELP
+from ..utils import admin_cmd
+from . import check, extract_time
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
@@ -34,7 +35,48 @@ if Var.PRIVATE_GROUP_ID is not None:
                 await event.edit("Approved to pm [{}](tg://user?id={})".format(firstname, chat.id))
                 await asyncio.sleep(3)
                 await event.delete()
-
+                
+    @borg.on(admin_cmd(pattern="approve ?(.*)"))
+    async def approve_p_m(event):
+        if event.fwd_from:
+           return
+        reason = event.pattern_match.group(1)
+        if reason:
+            reason = reason.split(' ', 1)
+            hmm = len(reason)
+            if hmm ==2:
+                cattime = reason[0]
+                reason = reason[1]
+            else:
+                cattime = reason[0]
+                reason = None
+        else:
+            await catty.edit("you havent mentioned time check `.info pmpermit`")
+            return
+        ctime = await extract_time(event , cattime)
+        if not ctime:
+            await event.edit(f"Invalid time type specified. Expected m , h , d or w not as {cattime}")
+            return
+        replied_user = await event.client(GetFullUserRequest(event.chat_id))
+        firstname = replied_user.user.first_name
+        chat = await event.get_chat()
+        if event.is_private:
+            if not pmpermit_sql.is_approved(chat.id):
+                if chat.id in PM_WARNS:
+                    del PM_WARNS[chat.id]
+                if chat.id in PREV_REPLY_MESSAGE:
+                    await PREV_REPLY_MESSAGE[chat.id].delete()
+                    del PREV_REPLY_MESSAGE[chat.id]
+                pmpermit_sql.approve(chat.id, reason)
+                await event.edit("Approved to pm [{}](tg://user?id={})".format(firstname, chat.id))
+                await asyncio.sleep(3)
+                await event.delete()
+        start = time.time()
+        ttl = int(ctime) - int(start)
+        await asyncio.sleep(int(ttl))
+        if pmpermit_sql.is_approved(chat.id):
+                pmpermit_sql.disapprove(chat.id)
+                
     @bot.on(events.NewMessage(outgoing=True))
     async def you_dm_niqq(event):
         if event.fwd_from:
@@ -149,7 +191,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             PM_WARNS.update({chat_id: 0})
         if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_P_M_s:
             r = await event.reply(USER_BOT_WARN_ZERO)
-            await asyncio.sleep(3)
+            await asyncio.sleep(1)
             await event.client(functions.contacts.BlockRequest(chat_id))
             if chat_id in PREV_REPLY_MESSAGE:
                 await PREV_REPLY_MESSAGE[chat_id].delete()
