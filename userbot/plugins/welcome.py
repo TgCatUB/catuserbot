@@ -41,7 +41,7 @@ async def _(event):
             )
             update_previous_welcome(event.chat_id, current_message.id)
 
-@borg.on(admin_cmd(pattern="savewelcome"))
+@borg.on(admin_cmd(pattern="savewelcome ?(.*)"))
 @borg.on(sudo_cmd(pattern="savewelcome",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
@@ -52,8 +52,11 @@ async def _(event):
         add_welcome_setting(event.chat_id, msg.message, True, 0, bot_api_file_id)
         await edit_or_reply(event ,"Welcome note saved. ")
     else:
-        input_str = event.text.split(None, 1)
-        add_welcome_setting(event.chat_id, input_str[1], True, 0, None)
+        if event.pattern_match.group(1):
+            input_str = event.pattern_match.group(1)
+        else:
+            await edit_or_reply(event ,"what should i set for welcome")
+        add_welcome_setting(event.chat_id, input_str, True, 0, None)
         await edit_or_reply(event ,"Welcome note saved. ")
 
 @borg.on(admin_cmd(pattern="clearwelcome$")) 
