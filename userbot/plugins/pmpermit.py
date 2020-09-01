@@ -35,48 +35,6 @@ if Var.PRIVATE_GROUP_ID is not None:
                 await asyncio.sleep(3)
                 await event.delete()
                 
-    @borg.on(admin_cmd(pattern="tapprove ?(.*)"))
-    async def approve_p_m(event):
-        if event.fwd_from:
-           return
-        reason = event.pattern_match.group(1)
-        if reason:
-            reason = reason.split(' ', 1)
-            hmm = len(reason)
-            if hmm ==2:
-                cattime = reason[0]
-                reason = reason[1]
-            else:
-                cattime = reason[0]
-                reason = None
-        else:
-            await catty.edit("you havent mentioned time check `.info pmpermit`")
-            return
-        ctime = await extract_time(event , cattime)
-        if not ctime:
-            await event.edit(f"Invalid time type specified. Expected m , h , d or w not as {cattime}")
-            return
-        replied_user = await event.client(GetFullUserRequest(event.chat_id))
-        firstname = replied_user.user.first_name
-        chat = await event.get_chat()
-        if event.is_private:
-            if not pmpermit_sql.is_approved(chat.id):
-                if chat.id in PM_WARNS:
-                    del PM_WARNS[chat.id]
-                if chat.id in PREV_REPLY_MESSAGE:
-                    await PREV_REPLY_MESSAGE[chat.id].delete()
-                    del PREV_REPLY_MESSAGE[chat.id]
-                pmpermit_sql.approve(chat.id, reason)
-                await event.edit("Approved to pm [{}](tg://user?id={}) for {}".format(firstname, chat.id,cattime))
-                start = time.time()
-                ttl = int(ctime) - int(start)
-                await asyncio.sleep(ttl)
-                cat = await borg.send_message(chat.id,"disapproved")
-                if pmpermit_sql.is_approved(chat.id):
-                        pmpermit_sql.disapprove(chat.id)
-                await asyncio.sleep(3)
-                await cat.delete()
-                
     @bot.on(events.NewMessage(outgoing=True))
     async def you_dm_niqq(event):
         if event.fwd_from:
