@@ -18,7 +18,7 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 HEROKU_APP_NAME = Var.HEROKU_APP_NAME
 HEROKU_API_KEY = Var.HEROKU_API_KEY
 UPSTREAM_REPO_BRANCH = "master"
-UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
+UPSTREAM_REPO_URL = "https://github.com/xmtscf/catuserbot"
 
 requirements_path = path.join(
     path.dirname(path.dirname(path.dirname(__file__))), "requirements.txt"
