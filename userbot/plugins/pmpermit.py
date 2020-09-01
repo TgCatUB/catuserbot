@@ -1,5 +1,4 @@
 import io
-import time
 import asyncio
 from .sql_helper import pmpermit_sql as pmpermit_sql
 from telethon.tl.functions.users import GetFullUserRequest
@@ -68,14 +67,17 @@ if Var.PRIVATE_GROUP_ID is not None:
                     await PREV_REPLY_MESSAGE[chat.id].delete()
                     del PREV_REPLY_MESSAGE[chat.id]
                 pmpermit_sql.approve(chat.id, reason)
-                await event.edit("Approved to pm [{}](tg://user?id={})".format(firstname, chat.id))
+                await event.edit("Approved to pm [{}](tg://user?id={}) for {}".format(firstname, chat.id,cattime))
                 await asyncio.sleep(3)
                 await event.delete()
         start = time.time()
         ttl = int(ctime) - int(start)
-        await asyncio.sleep(int(ttl))
+        await asyncio.sleep(ttl)
+        cat = await borg.send_message(chat.id,"disapproved")
         if pmpermit_sql.is_approved(chat.id):
                 pmpermit_sql.disapprove(chat.id)
+        await asyncio.sleep(3)
+        await cat.delete()
                 
     @bot.on(events.NewMessage(outgoing=True))
     async def you_dm_niqq(event):
