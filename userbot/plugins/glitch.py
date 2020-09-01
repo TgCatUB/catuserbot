@@ -6,6 +6,7 @@ ported to telethon by @mrconfused and @sandy1709
 import os
 from PIL import Image 
 from .. import LOGS , CMD_HELP
+from telethon import functions, types
 from glitch_this import ImageGlitcher
 from . import take_screen_shot ,runcmd
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
@@ -87,10 +88,18 @@ async def glitch(cat):
             save_all=True,
             duration=DURATION,
             loop=LOOP)
-        await borg.send_file(
+        sandy = await borg.send_file(
             cat.chat_id,
             Glitched,
             reply_to=catid)
+        await borg(functions.messages.SaveGifRequest(
+        id=types.InputDocument(
+            id=sandy.media.document.id,
+            access_hash=sandy.media.document.access_hash,
+            file_reference=sandy.media.document.file_reference
+        ),
+        unsave=True
+    )) 
         os.remove(Glitched)
         await cat.delete()
     for files in (catsticker, glitch_file):
