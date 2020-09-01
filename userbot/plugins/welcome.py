@@ -18,6 +18,13 @@ async def _(event):
                     )
                 except Exception as e:  # pylint:disable=C0103,W0703
                     logger.warn(str(e))  # pylint:disable=E0602
+                    
+            cat = await bot.get_me()
+            my_first = cat.first_name
+            my_last = cat.last_name
+            my_fullname = f"{my_first} {my_last}"
+            my_mention = "[{}](tg://user?id={})".format(my_first, cat.id)
+            my_username= f"@{cat.username}"
             a_user = await event.get_user()
             chat = await event.get_chat()
             me = await bot.get_me()
@@ -36,12 +43,13 @@ async def _(event):
             current_saved_welcome_message = cws.custom_welcome_message
             mention = "[{}](tg://user?id={})".format(a_user.first_name, a_user.id)
             current_message = await event.reply(
-                current_saved_welcome_message.format(mention=mention, title=title, count=count, first=first, last=last, fullname=fullname, username=username, userid=userid),
+                current_saved_welcome_message.format(mention=mention, title=title, count=count, first=first, last=last, fullname=fullname, username=username, userid=userid,
+                                                    my_first=my_first ,my_fullname=my_fullname, my_last=my_last, my_mention=my_mention, my_username=my_username),
                 file=cws.media_file_id
             )
             update_previous_welcome(event.chat_id, current_message.id)
 
-@borg.on(admin_cmd(pattern="savewelcome"))
+@borg.on(admin_cmd(pattern="savewelcome ?(.*)"))
 @borg.on(sudo_cmd(pattern="savewelcome",allow_sudo = True))
 async def _(event):
     if event.fwd_from:
@@ -52,8 +60,11 @@ async def _(event):
         add_welcome_setting(event.chat_id, msg.message, True, 0, bot_api_file_id)
         await edit_or_reply(event ,"Welcome note saved. ")
     else:
-        input_str = event.text.split(None, 1)
-        add_welcome_setting(event.chat_id, input_str[1], True, 0, None)
+        if event.pattern_match.group(1):
+            input_str = event.pattern_match.group(1)
+        else:
+            await edit_or_reply(event ,"what should i set for welcome")
+        add_welcome_setting(event.chat_id, input_str, True, 0, None)
         await edit_or_reply(event ,"Welcome note saved. ")
 
 @borg.on(admin_cmd(pattern="clearwelcome$")) 

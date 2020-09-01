@@ -126,11 +126,15 @@ async def kang(args):
                 while "Whoa! That's probably enough stickers for one pack, give it a break" in x.text:
                     try:
                         val = int(pack)
-                        pack += 1
+                        pack = val + 1
                     except ValueError:
                         pack = 1
-                    packname = f"{user.username}_{pack}"
-                    packnick = f"@{user.username}'s_{pack}"
+                    if not is_anim:
+                        packname = f"{user.username}_{pack}"
+                        packnick = f"@{user.username}'s_{pack}"
+                    else:
+                        packname = f"{user.username}_{pack}_anim"
+                        packnick = f"@{user.username}'s_{pack} (Animated)"
                     await args.edit("`Switching to Pack " + str(pack) +
                                     " due to insufficient space`")
                     await conv.send_message(packname)
@@ -310,14 +314,15 @@ async def get_pack_info(event):
 
 CMD_HELP.update({
     "stickers":
-    ".kang\
-\nUsage: Reply .kang to a sticker or an image to kang it to your userbot pack.\
-\n\n.kang [emoji('s)]\
-\nUsage: Works just like .kang but uses the emoji('s) you picked.\
-\n\n.kang [number]\
-\nUsage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\
-\n\n.kang [emoji('s)] [number]\
-\nUsage: Kang's the sticker/image to the specified pack and uses the emoji('s) you picked.\
-\n\n.stkrinfo\
-\nUsage: Gets info about the sticker pack."
+    "**Plugins : **`stickers`\
+    \n\n**Syntax : **`.kang`\
+\n**Usage : **Reply .kang to a sticker or an image to kang it to your userbot pack.\
+\n\n**Syntax : **`.kang [emoji('s)]`\
+\n**Usage : **Works just like .kang but uses the emoji('s) you picked.\
+\n\n**Syntax : **`.kang [number]`\
+\n**Usage : **Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\
+\n\n**Syntax : **`.kang [emoji('s)] [number]`\
+\n**Usage : **Kang's the sticker/image to the specified pack and uses the emoji('s) you picked.\
+\n\n**Syntax : **`.stkrinfo`\
+\n**Usage : **Gets info about the sticker pack."
 })

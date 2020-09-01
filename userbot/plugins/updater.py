@@ -1,4 +1,3 @@
-
 # Copyright (C) 2019 The Raphielscape Company LLC.
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
@@ -211,7 +210,8 @@ async def upstream(event):
     return
 
 CMD_HELP.update({
-        "updater": "**Syntax : **`.update`"
+        "updater": "**Plugin : **`updater`"
+        "\n\n**Syntax : **`.update`"
         "\n**Usage :** Checks if the main userbot repository has any updates "
         "and shows a changelog if so."
         "\n\n**Syntax : **`.update now`"

@@ -395,8 +395,8 @@ async def _(event):
     
 CMD_HELP.update({
     "execmod":
-    "**execmod**\
-    \n**Syntax :** `.pips query`\
+    "**Plugin : **`execmod`\
+    \n\n**Syntax :** `.pips query`\
     \n**Usage : **Searches your pip modules\
     \n\n**Syntax : **`.sucide`\
     \n**Usage : **Deletes all your folders and files in the bot\
