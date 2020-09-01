@@ -66,5 +66,6 @@ telegraph
 tswift
 urbandict
 validators
+wand
 wikipedia
 youtube-dl
