@@ -43,7 +43,7 @@ async def _(event):
             current_saved_welcome_message = cws.custom_welcome_message
             mention = "[{}](tg://user?id={})".format(a_user.first_name, a_user.id)
             current_message = await event.reply(
-                current_saved_welcome_message.format(mention=mention, title=title, count=count, first=first, last=last, fullname=fullname, username=username, userid=userid
+                current_saved_welcome_message.format(mention=mention, title=title, count=count, first=first, last=last, fullname=fullname, username=username, userid=userid,
                                                     my_first=my_first ,my_fullname=my_fullname, my_last=my_last, my_mention=my_mention, my_username=my_username),
                 file=cws.media_file_id
             )
