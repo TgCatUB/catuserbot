@@ -12,7 +12,7 @@ import time
 from pySmartDL import SmartDL
 from .helpers import fonts as fonts ,functions as catdef
 from .helpers import memeshelper as memes
-from .helpers import process as process
+from .helpers import tempmemes , process as process
 
 StartTime = time.time()
 catversion = "2.7.0"
