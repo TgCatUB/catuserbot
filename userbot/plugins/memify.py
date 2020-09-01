@@ -101,3 +101,13 @@ async def memes(cat):
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
             os.remove(files)
+            
+CMD_HELP.update({
+    "memify":
+    "**Plugin : **`memify`\
+    \n\n**Syntax :** `.mmf toptext ; bottomtext`\
+    \n**Usage : **Creates a image meme with give text at specific locations and sends\
+    \n\n**Syntax : **`.mms toptext ; bottomtext`\
+    \n**Usage : **Creates a sticker meme with give text at specific locations and sends\
+    "
+})
