@@ -72,7 +72,7 @@ async def glitch(cat):
         await borg.send_file(
             cat.chat_id,
             glitched,
-            reply_to_message_id= catid)
+            reply_to= catid)
         os.remove(glitched)
         await cat.delete()
     elif cmd == "glitch":
@@ -90,7 +90,7 @@ async def glitch(cat):
         await borg.send_file(
             cat.chat_id,
             Glitched,
-            reply_to_message_id=catid)
+            reply_to=catid)
         os.remove(Glitched)
         await cat.delete()
     for files in (catsticker, glitch_file):
