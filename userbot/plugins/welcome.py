@@ -18,6 +18,13 @@ async def _(event):
                     )
                 except Exception as e:  # pylint:disable=C0103,W0703
                     logger.warn(str(e))  # pylint:disable=E0602
+                    
+            cat = await bot.get_me()
+            my_first = cat.first_name
+            my_last = cat.last_name
+            my_fullname = f"{my_first} {my_last}"
+            my_mention = "[{}](tg://user?id={})".format(my_first, cat.id)
+            my_username= f"@{cat.username}"
             a_user = await event.get_user()
             chat = await event.get_chat()
             me = await bot.get_me()
@@ -36,7 +43,8 @@ async def _(event):
             current_saved_welcome_message = cws.custom_welcome_message
             mention = "[{}](tg://user?id={})".format(a_user.first_name, a_user.id)
             current_message = await event.reply(
-                current_saved_welcome_message.format(mention=mention, title=title, count=count, first=first, last=last, fullname=fullname, username=username, userid=userid),
+                current_saved_welcome_message.format(mention=mention, title=title, count=count, first=first, last=last, fullname=fullname, username=username, userid=userid
+                                                    my_first=my_first ,my_fullname=my_fullname, my_last=my_last, my_mention=my_mention, my_username=my_username),
                 file=cws.media_file_id
             )
             update_previous_welcome(event.chat_id, current_message.id)
