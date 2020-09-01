@@ -3,7 +3,7 @@ Created by @mrconfused and @sandy1709
 memify plugin
 """
 import os
-import time
+import asyncio
 from .. import tempmemes
 from .. import LOGS , CMD_HELP
 from . import take_screen_shot ,runcmd, convert_toimage
@@ -32,7 +32,7 @@ async def memes(cat):
         os.mkdir("./temp/")
     cat = await edit_or_reply(cat ,"`Downloading media......`")
     from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-    time.sleep(2.0)  
+    await asyncio.sleep(2)  
     catsticker = await reply.download_media(file = "./temp/")
     if not catsticker.endswith(('.mp4','.webp','.tgs','.png','.jpg','.mov')):
         os.remove(catsticker)
