@@ -31,7 +31,7 @@ async def install(event):
     await event.delete()
 
 
-@borg.on(admin_cmd(pattern="unload (?P<shortname>\w+)$", outgoing=True)
+@borg.on(admin_cmd(pattern="unload (?P<shortname>\w+)$", outgoing=True))
 async def unload(event):
     if event.fwd_from:
         return
@@ -43,7 +43,7 @@ async def unload(event):
         await event.edit("Successfully unload {shortname}\n{}".format(shortname, str(e)))
 
 
-@ borg.on(admin_cmd(pattern="load (?P<shortname>\w+)$", outgoing=True)
+@borg.on(admin_cmd(pattern="load (?P<shortname>\w+)$", outgoing=True))
 async def load(event):
     if event.fwd_from:
         return
