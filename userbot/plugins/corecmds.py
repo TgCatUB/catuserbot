@@ -41,10 +41,12 @@ async def install(event):
 async def send(event):
     if event.fwd_from:
         return
+    reply_to_id = event.message.id
+    if event.reply_to_msg_id:
+        reply_to_id = event.reply_to_msg_id
     thumb = None
     if os.path.exists(thumb_image_path):
         thumb = thumb_image_path
-    message_id = event.message.id
     input_str = event.pattern_match["shortname"]
     the_plugin_file = "./userbot/plugins/{}.py".format(input_str)
     if os.path.exists(the_plugin_file):
@@ -54,7 +56,7 @@ async def send(event):
             the_plugin_file,
             force_document=True,
             allow_cache=False,
-            reply_to=message_id,
+            reply_to=reply_to_id,
             thumb=thumb
         )
         end = datetime.now()
