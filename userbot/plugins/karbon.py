@@ -59,7 +59,7 @@ async def carbon_api(e):
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
     await asyncio.sleep(2)
     await e.edit("🔳🔳🔳🔲🔲")
-    await asyncio.sleep(2) 
+    await asyncio.sleep(2)
     await e.edit("🔳🔳🔳🔳🔳")
     file = './carbon.png'
     await e.edit("☣️Karbon1 Completed, Uploading Karbon☣️")
