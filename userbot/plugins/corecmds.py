@@ -49,7 +49,6 @@ async def send(event):
     the_plugin_file = "./userbot/plugins/{}.py".format(input_str)
     if os.path.exists(the_plugin_file):
         start = datetime.now()
-        time.time()
         caat = await event.client.send_file(  # pylint:disable=E0602
             event.chat_id,
             the_plugin_file,
