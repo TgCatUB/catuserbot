@@ -11,7 +11,7 @@ Thanks to @r4v4n4 for vars"""
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from urllib.parse import quote_plus
-from time import sleep
+import asyncio
 import os
 import random
 from userbot.utils import admin_cmd
@@ -57,13 +57,9 @@ async def carbon_api(e):
     driver.execute("send_command", params)
 
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    sleep(3)  # this might take a bit.
-   # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   # sleep(5)
-   # await e.edit("🔳🔳🔳🔲🔲")
-  #  driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-    sleep(3)  # Waiting for downloading
-
+    await asyncio.sleep(2)
+    await e.edit("🔳🔳🔳🔲🔲")
+    await asyncio.sleep(2) 
     await e.edit("🔳🔳🔳🔳🔳")
     file = './carbon.png'
     await e.edit("☣️Karbon1 Completed, Uploading Karbon☣️")
@@ -114,13 +110,9 @@ async def carbon_api(e):
         'behavior': 'allow', 'downloadPath': download_path}}
     driver.execute("send_command", params)
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    sleep(5)  # this might take a bit.
-   # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-    # sleep(5)
+    await asyncio.sleep(2)
     await e.edit("🔘🔘🔘📛📛")
-    # driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-    sleep(5)  # Waiting for downloading
-
+    await asyncio.sleep(2)  # Waiting for downloading
     await e.edit("🔘🔘🔘🔘🔘")
     file = './carbon.png'
     await e.edit("☣️Karbon2 Completed, Uploading Karbon☣️")
@@ -174,12 +166,10 @@ async def carbon_api(e):
     driver.execute("send_command", params)
 
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    sleep(5)  # this might take a bit.
-   # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-    # sleep(5)
+    await asyncio.sleep(2)
     await e.edit("🔵🔵🔵🎛🎛")
    # driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-    sleep(5)  # Waiting for downloading
+    await asyncio.sleep(2)  # Waiting for downloading
 
     await e.edit("🔵🔵🔵🔵🔵")
     file = './carbon.png'
@@ -234,12 +224,10 @@ async def carbon_api(e):
     driver.execute("send_command", params)
 
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    sleep(5)  # this might take a bit.
-    # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   # sleep(5)
+    await asyncio.sleep(2)
     await e.edit("🌝🌝🌝🌚🌚")
     # driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-    sleep(5)  # Waiting for downloading
+    await asyncio.sleep(2)  # Waiting for downloading
 
     await e.edit("🌝🌝🌝🌝🌝")
     file = './carbon.png'
@@ -303,12 +291,12 @@ async def carbon_api(e):
     driver.execute("send_command", params)
 
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    sleep(5)  # this might take a bit.
+    await asyncio.sleep(2)  # this might take a bit.
    # driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-    # sleep(5)
+    # await asyncio.sleep(5)
     await e.edit("⬛⬛⬛⬜⬜")
     # driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-    sleep(5)  # Waiting for downloading
+    await asyncio.sleep(2)  # Waiting for downloading
 
     await e.edit("⬛⬛⬛⬛⬛")
     file = './carbon.png'
@@ -401,12 +389,12 @@ async def carbon_api(e):
         'behavior': 'allow', 'downloadPath': download_path}}
     driver.execute("send_command", params)
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    sleep(5)  # this might take a bit.
+    await asyncio.sleep(2)  # this might take a bit.
   #  driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   # sleep(5)
+   # await asyncio.sleep(5)
     await e.edit("⬛⬛⬛⬜⬜")
     # driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-    sleep(5)  # Waiting for downloading
+    await asyncio.sleep(2)  # Waiting for downloading
     await e.edit("⬛⬛⬛⬛⬛")
     file = './carbon.png'
     await e.edit("✅RGB Karbon Completed, Uploading Karbon✅")
