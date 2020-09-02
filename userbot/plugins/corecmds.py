@@ -1,5 +1,5 @@
 from .utils import admin_cmd, remove_plugin, load_module, sudo_cmd, edit_or_reply
-from .. import ALIVE_NAME, CMD_HELP
+from .. import ALIVE_NAME
 from pathlib import Path
 import asyncio
 import os
@@ -7,6 +7,7 @@ import os
 DELETE_TIMEOUT = 5
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+
 
 @borg.on(admin_cmd(pattern="install$"))
 @borg.on(sudo_cmd(pattern="install$", allow_sudo=True))
@@ -32,10 +33,10 @@ async def install(event):
             os.remove(downloaded_file_name)
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
-    
-    
-@borg.on(admin_cmd(pattern="^.send (?P<shortname>\w+)$", outgoing=True))
-@borg.on(sudo_cmd(pattern="^.send (?P<shortname>\w+)$", allow_sudo=True))
+
+
+@borg.on(admin_cmd(pattern=r"^.send (?P<shortname>\w+)$", outgoing=True))
+@borg.on(sudo_cmd(pattern=r"^.send (?P<shortname>\w+)$", allow_sudo=True))
 async def send(event):
     if event.fwd_from:
         return
@@ -47,14 +48,14 @@ async def send(event):
     the_plugin_file = "./userbot/plugins/{}.py".format(input_str)
     if os.path.exists(jisan):
         start = datetime.now()
-        c_time = time.time()
+        time.time()
         caat = await event.client.send_file(  # pylint:disable=E0602
-        event.chat_id,
-        the_plugin_file,
-        force_document=True,
-        allow_cache=False,
-        reply_to=message_id,
-        thumb=thumb
+            event.chat_id,
+            the_plugin_file,
+            force_document=True,
+            allow_cache=False,
+            reply_to=message_id,
+            thumb=thumb
         )
         end = datetime.now()
         ms = (end - start).seconds
@@ -62,7 +63,8 @@ async def send(event):
         await caat.edit(f"__**➥ Plugin Name:- {input_str} .**__\n__**➥ Uploaded in {ms} seconds.**__\n__**➥ Uploaded by :-**__ {DEFAULTUSER}")
     else:
         await edit_or_reply(event, "404: File Not Found")
-    
+
+
 @borg.on(admin_cmd(pattern=r"unload (?P<shortname>\w+)$", outgoing=True))
 @borg.on(sudo_cmd(pattern=r"unload (?P<shortname>\w+)$", allow_sudo=True))
 async def unload(event):
