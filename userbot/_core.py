@@ -5,6 +5,7 @@ import os
 
 DELETE_TIMEOUT = 5
 
+
 @borg.on(admin_cmd(pattern="install$"))
 async def install(event):
     if event.fwd_from:
@@ -34,7 +35,7 @@ async def install(event):
 async def unload(event):
     if event.fwd_from:
         return
-    shortname = event.pattern_match["shortname"]
+    shortname=event.pattern_match["shortname"]
     try:
         remove_plugin(shortname)
         await event.edit(f"Unloaded {shortname} successfully")
@@ -42,11 +43,11 @@ async def unload(event):
         await event.edit("Successfully unload {shortname}\n{}".format(shortname, str(e)))
 
 
-@borg.on(admin_cmd(pattern="load (?P<shortname>\w+)$", outgoing=True)
+@ borg.on(admin_cmd(pattern="load (?P<shortname>\w+)$", outgoing=True)
 async def load(event):
     if event.fwd_from:
         return
-    shortname = event.pattern_match["shortname"]
+    shortname=event.pattern_match["shortname"]
     try:
         try:
             remove_plugin(shortname)
