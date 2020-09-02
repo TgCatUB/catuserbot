@@ -46,7 +46,7 @@ async def send(event):
     message_id = event.message.id
     input_str = event.pattern_match["shortname"]
     the_plugin_file = "./userbot/plugins/{}.py".format(input_str)
-    if os.path.exists(jisan):
+    if os.path.exists(the_plugin_file):
         start = datetime.now()
         time.time()
         caat = await event.client.send_file(  # pylint:disable=E0602
