@@ -8,7 +8,7 @@ import os
 import shutil
 from .. import CMD_HELP
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from userbot.google_image_download import googleimagesdownload
+from ..helpers.google_image_download import googleimagesdownload
 
 
 @borg.on(admin_cmd(pattern=r"img(?: |$)(\d*)? ?(.*)"))
