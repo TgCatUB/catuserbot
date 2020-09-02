@@ -1,5 +1,5 @@
 """	
-Anilist Search Plugin for Userbot	
+Anilist Search Plugin for Userbot
 Usage : .anilist animeName	
 By :- @Zero_cool7870
 ported char, airing and manga by @sandy1709 and @mrconfused
@@ -223,9 +223,6 @@ async def anilist(event):
 @borg.on(sudo_cmd(pattern="airing (.*)",allow_sudo = True))
 async def anilist(event):
     search = event.pattern_match.group(1)
-    reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
     variables = {'search': search}
     response = requests.post(
         url, json={'query': airing_query, 'variables': variables}).json()['data']['Media']
