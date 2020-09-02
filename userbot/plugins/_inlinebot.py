@@ -66,11 +66,10 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             message_text = note_data.strip()
             tl_ib_buttons = ibuild_keyboard(buttons)
             result = builder.article(
-                "Inline creater",
-                text=message_text,
-                buttons=buttons,
-                link_preview=False
-            )
+                         title = "Inline creator",
+                         text = message_text,
+                         buttons = tl_ib_buttons
+                         )
             await event.answer([result] if result else None)
     @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"helpme_next\((.+?)\)")
