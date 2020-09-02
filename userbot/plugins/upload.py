@@ -91,40 +91,6 @@ async def uploadir(event):
         await udir_event.edit("404: Directory Not Found")
 
 
-@borg.on(admin_cmd(pattern="send (.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="send (.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    mone = await edit_or_reply(event, "Processing ...")
-    jisan = "./userbot/plugins/{}.py".format(input_str)
-    thumb = None
-    if os.path.exists(thumb_image_path):
-        thumb = thumb_image_path
-    if os.path.exists(jisan):
-        start = datetime.now()
-        c_time = time.time()
-        caat = await bot.send_file(
-            event.chat_id,
-            jisan,
-            force_document=True,
-            supports_streaming=True,
-            allow_cache=False,
-            reply_to=event.message.id,
-            thumb=thumb,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                progress(d, t, mone, c_time, "trying to upload")
-            )
-        )
-        end = datetime.now()
-        ms = (end - start).seconds
-        await mone.delete()
-        await caat.edit(f"__**➥ Plugin Name:- {input_str} .**__\n__**➥ Uploaded in {ms} seconds.**__\n__**➥ Uploaded by :-**__ {DEFAULTUSER}")
-    else:
-        await mone.edit("404: File Not Found")
-
-
 @borg.on(admin_cmd(pattern="upload (.*)", outgoing=True))
 @borg.on(sudo_cmd(pattern="upload (.*)", allow_sudo=True))
 async def _(event):
