@@ -1,12 +1,11 @@
-from userbot.utils import command, remove_plugin, load_module
+from .utils import admin_cmd, remove_plugin, load_module
 from pathlib import Path
 import asyncio
 import os
 
 DELETE_TIMEOUT = 5
 
-
-@command(pattern="^.install", outgoing=True)
+@borg.on(admin_cmd(pattern="install$"))
 async def install(event):
     if event.fwd_from:
         return
@@ -31,7 +30,7 @@ async def install(event):
     await event.delete()
 
 
-@command(pattern=r"^.unload (?P<shortname>\w+)$", outgoing=True)
+@borg.on(admin_cmd(pattern="unload (?P<shortname>\w+)$", outgoing=True)
 async def unload(event):
     if event.fwd_from:
         return
@@ -43,7 +42,7 @@ async def unload(event):
         await event.edit("Successfully unload {shortname}\n{}".format(shortname, str(e)))
 
 
-@command(pattern=r"^.load (?P<shortname>\w+)$", outgoing=True)
+@borg.on(admin_cmd(pattern="load (?P<shortname>\w+)$", outgoing=True)
 async def load(event):
     if event.fwd_from:
         return
