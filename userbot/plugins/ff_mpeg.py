@@ -1,18 +1,16 @@
 """FFMpeg for @UniBorg
 """
 import asyncio
-import io
 import os
 import time
 from datetime import datetime
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply, progress
 
 FF_MPEG_DOWN_LOAD_MEDIA_PATH = "uniborg.media.ffmpeg"
 
+
 @borg.on(admin_cmd(pattern="ffmpegsave$"))
-@borg.on(sudo_cmd(pattern="ffmpegsave$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="ffmpegsave$", allow_sudo=True))
 async def ff_mpeg_trim_cmd(event):
     if event.fwd_from:
         return
@@ -28,7 +26,7 @@ async def ff_mpeg_trim_cmd(event):
                     reply_message,
                     FF_MPEG_DOWN_LOAD_MEDIA_PATH,
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                      progress(d, t, event, c_time, "trying to download")
+                        progress(d, t, event, c_time, "trying to download")
                     )
                 )
             except Exception as e:  # pylint:disable=C0103,W0703
@@ -36,20 +34,20 @@ async def ff_mpeg_trim_cmd(event):
             else:
                 end = datetime.now()
                 ms = (end - start).seconds
-                await edit_or_reply(event ,"Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
+                await edit_or_reply(event, "Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
         else:
-            await edit_or_reply(event ,"Reply to a Telegram media file")
+            await edit_or_reply(event, "Reply to a Telegram media file")
     else:
-        await edit_or_reply(event ,f"a media file already exists in path. Please remove the media and try again!\n`.exec rm {FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
+        await edit_or_reply(event, f"a media file already exists in path. Please remove the media and try again!\n`.exec rm {FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
 
 
 @borg.on(admin_cmd(pattern="ffmpegtrim"))
-@borg.on(sudo_cmd(pattern="ffmpegtrim",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="ffmpegtrim", allow_sudo=True))
 async def ff_mpeg_trim_cmd(event):
     if event.fwd_from:
         return
     if not os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
-        await edit_or_reply(event ,f"a media file needs to be downloaded, and saved to the following path: `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
+        await edit_or_reply(event, f"a media file needs to be downloaded, and saved to the following path: `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
         return
     current_message_text = event.raw_text
     cmt = current_message_text.split(" ")
@@ -76,7 +74,7 @@ async def ff_mpeg_trim_cmd(event):
                 allow_cache=False,
                 reply_to=event.message.id,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                   progress(d, t, event, c_time, "trying to upload")
+                    progress(d, t, event, c_time, "trying to upload")
                 )
             )
             os.remove(o)
@@ -102,7 +100,7 @@ async def ff_mpeg_trim_cmd(event):
                 allow_cache=False,
                 reply_to=event.message.id,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                   progress(d, t, event, c_time, "trying to upload")
+                    progress(d, t, event, c_time, "trying to upload")
                 )
             )
             os.remove(o)
@@ -114,6 +112,7 @@ async def ff_mpeg_trim_cmd(event):
     end = datetime.now()
     ms = (end - start).seconds
     await event.edit(f"Completed Process in {ms} seconds")
+
 
 async def take_screen_shot(video_file, output_directory, ttl):
     # https://stackoverflow.com/a/13891070/4723940
@@ -147,6 +146,7 @@ async def take_screen_shot(video_file, output_directory, ttl):
     return None
 
 # https://github.com/Nekmo/telegram-upload/blob/master/telegram_upload/video.py#L26
+
 
 async def cult_small_video(video_file, output_directory, start_time, end_time):
     # https://stackoverflow.com/a/13891070/4723940

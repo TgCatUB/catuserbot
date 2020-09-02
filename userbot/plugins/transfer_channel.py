@@ -4,7 +4,7 @@ Available Commands:
 
 import telethon.password as pwd_mod
 # https://t.me/TelethonChat/140200
-from telethon.tl import functions, types
+from telethon.tl import functions
 from userbot import utils
 
 
@@ -24,4 +24,3 @@ async def _(event):
         await event.edit(str(e))
     else:
         await event.edit("Transferred 🌚")
-

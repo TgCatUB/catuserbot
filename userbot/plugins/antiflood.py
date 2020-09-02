@@ -1,6 +1,5 @@
 import asyncio
 from .. import CMD_HELP
-from telethon import events
 from telethon.tl.types import ChatBannedRights
 import userbot.plugins.sql_helper.antiflood_sql as sql
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
@@ -13,6 +12,7 @@ ANTI_FLOOD_WARN_MODE = ChatBannedRights(
     view_messages=None,
     send_messages=True
 )
+
 
 @borg.on(admin_cmd(incoming=True))
 async def _(event):
@@ -51,18 +51,19 @@ because he reached the defined flood limit.""".format(event.message.from_id),
             reply_to=event.message.id
         )
 
+
 @borg.on(admin_cmd(pattern="setflood(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="setflood(?: |$)(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="setflood(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     input_str = event.pattern_match.group(1)
-    event = await edit_or_reply(event ,"updating flood settings!")
+    event = await edit_or_reply(event, "updating flood settings!")
     try:
         sql.set_flood(event.chat_id, input_str)
-        CHAT_FLOOD = sql.__load_flood_settings()
+        sql.__load_flood_settings()
         await event.edit("Antiflood updated to {} in the current chat".format(input_str))
     except Exception as e:  # pylint:disable=C0103,W0703
         await event.edit(str(e))
-        
+
 CMD_HELP.update({
     "antiflood":
     ".setflood [number]\

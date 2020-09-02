@@ -1,16 +1,17 @@
 """
-idea from lynda and rose bot 
+idea from lynda and rose bot
 made by @mrconfused
 """
-from telethon.errors import (BadRequestError, ChatAdminRequiredError, UserAdminInvalidError)
-from telethon.errors.rpcerrorlist import (UserIdInvalidError, MessageTooLongError)
-from telethon.tl.functions.channels import (EditAdminRequest, EditBannedRequest, EditPhotoRequest)
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest, GetDialogsRequest
-from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,   ChatBannedRights, MessageEntityMentionName )
-from userbot import CMD_HELP, bot 
+from telethon.errors import (
+    BadRequestError)
+from telethon.errors.rpcerrorlist import (
+    UserIdInvalidError)
+from telethon.tl.functions.channels import (
+    EditBannedRequest)
+from telethon.tl.types import (
+    ChatBannedRights,
+    MessageEntityMentionName)
 from userbot.utils import errors_handler, admin_cmd
-from telethon import events, errors, functions, types
 from userbot.plugins import extract_time
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
@@ -23,6 +24,7 @@ else:
 NO_ADMIN = "`I am not an admin nub nibba!`"
 NO_PERM = "`I don't have sufficient permissions! This is so sed. Alexa play despacito`"
 NO_SQL = "`Running on Non-SQL mode!`"
+
 
 @borg.on(admin_cmd(pattern=r"tmute(?: |$)(.*)"))
 @errors_handler
@@ -42,7 +44,7 @@ async def tmuter(catty):
     if reason:
         reason = reason.split(' ', 1)
         hmm = len(reason)
-        if hmm ==2:
+        if hmm == 2:
             cattime = reason[0]
             reason = reason[1]
         else:
@@ -52,7 +54,7 @@ async def tmuter(catty):
         await catty.edit("you havent mentioned time check `.info tadmin`")
         return
     self_user = await catty.client.get_me()
-    ctime = await extract_time(catty , cattime)
+    ctime = await extract_time(catty, cattime)
     if not ctime:
         await catty.edit(f"Invalid time type specified. Expected m , h , d or w not as {cattime}")
         return
@@ -81,7 +83,8 @@ async def tmuter(catty):
                     f"MUTTED_UNTILL : `{cattime}`")
         # Announce to logging group
     except UserIdInvalidError:
-            return await catty.edit("`Uh oh my mute logic broke!`")
+        return await catty.edit("`Uh oh my mute logic broke!`")
+
 
 @borg.on(admin_cmd(pattern=r"untmute(?: |$)(.*)"))
 async def unmoot(catty):
@@ -102,16 +105,17 @@ async def unmoot(catty):
     else:
         return
     try:
-       await catty.client(EditBannedRequest(catty.chat_id, user.id, ChatBannedRights(until_date = None , send_messages = None)))
-       await catty.edit("Unmuted Successfully")
+        await catty.client(EditBannedRequest(catty.chat_id, user.id, ChatBannedRights(until_date=None, send_messages=None)))
+        await catty.edit("Unmuted Successfully")
     except UserIdInvalidError:
-       await catty.edit("`Uh oh my unmute logic broke!`")
-       return
+        await catty.edit("`Uh oh my unmute logic broke!`")
+        return
     if BOTLOG:
-       await catty.client.send_message(
-                BOTLOG_CHATID, "#UNTMUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {catty.chat.title}(`{catty.chat_id}`)")
+        await catty.client.send_message(
+            BOTLOG_CHATID, "#UNTMUTE\n"
+            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+            f"CHAT: {catty.chat.title}(`{catty.chat_id}`)")
+
 
 @borg.on(admin_cmd("tban(?: |$)(.*)"))
 @errors_handler
@@ -131,7 +135,7 @@ async def ban(catty):
     if reason:
         reason = reason.split(' ', 1)
         hmm = len(reason)
-        if hmm ==2:
+        if hmm == 2:
             cattime = reason[0]
             reason = reason[1]
         else:
@@ -141,7 +145,7 @@ async def ban(catty):
         await catty.edit("you havent mentioned time check `.info tadmin`")
         return
     self_user = await catty.client.get_me()
-    ctime = await extract_time(catty , cattime)
+    ctime = await extract_time(catty, cattime)
     if not ctime:
         await catty.edit(f"Invalid time type specified. Expected m , h , d or w not as {cattime}")
         return
@@ -150,8 +154,8 @@ async def ban(catty):
         return
     await catty.edit("`Whacking the pest!`")
     try:
-        await catty.client(EditBannedRequest(catty.chat_id, user.id ,
-                                             ChatBannedRights(until_date=ctime,view_messages=True)))
+        await catty.client(EditBannedRequest(catty.chat_id, user.id,
+                                             ChatBannedRights(until_date=ctime, view_messages=True)))
     except BadRequestError:
         await catty.edit(NO_PERM)
         return
@@ -174,7 +178,7 @@ async def ban(catty):
                 BOTLOG_CHATID, "#TBAN\n"
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {catty.chat.title}(`{catty.chat_id}`)\n"
-               f"BANNED_UNTILL : `{cattime}`\n"
+                f"BANNED_UNTILL : `{cattime}`\n"
                 f"REASON : {reason}")
     else:
         await catty.edit(f"{user.first_name} was banned in {catty.chat.title}\n"f"banned until {cattime}\n")
@@ -184,7 +188,8 @@ async def ban(catty):
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {catty.chat.title}(`{catty.chat_id}`)\n"
                 f"BANNED_UNTILL : `{cattime}`")
-        
+
+
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
     args = event.pattern_match.group(1).split(' ', 1)
@@ -211,10 +216,11 @@ async def get_user_from_event(event):
                 return user_obj
         try:
             user_obj = await event.client.get_entity(user)
-        except (TypeError, ValueError) as err:
+        except (TypeError, ValueError):
             await event.edit("Could not fetch info of that user.")
             return None
     return user_obj, extra
+
 
 async def get_user_from_id(user, event):
     if isinstance(user, str):

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, UnicodeText, LargeBinary,String
+from sqlalchemy import Column, String
 from userbot.plugins.sql_helper import SESSION, BASE
 
 
@@ -22,7 +22,7 @@ ECHOSQL.__table__.create(checkfirst=True)
 def is_echo(user_id, chat_id):
     try:
         return SESSION.query(ECHOSQL).get((str(user_id), str(chat_id)))
-    except:
+    except BaseException:
         return None
     finally:
         SESSION.close()
@@ -31,7 +31,7 @@ def is_echo(user_id, chat_id):
 def get_all_echos():
     try:
         return SESSION.query(ECHOSQL).all()
-    except:
+    except BaseException:
         return None
     finally:
         SESSION.close()
@@ -41,6 +41,7 @@ def addecho(user_id, chat_id):
     adder = ECHOSQL(str(user_id), str(chat_id))
     SESSION.add(adder)
     SESSION.commit()
+
 
 def remove_echo(
     user_id,

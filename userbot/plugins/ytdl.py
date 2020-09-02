@@ -17,9 +17,9 @@ from youtube_dl.utils import (DownloadError, ContentTooShortError,
                               ExtractorError, GeoRestrictedError,
                               MaxDownloadsReached, PostProcessingError,
                               UnavailableVideoError, XAttrMetadataError)
-from asyncio import sleep
 from telethon.tl.types import DocumentAttributeAudio
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
     """Generic progress_callback for uploads and downloads."""
@@ -78,13 +78,14 @@ def time_formatter(milliseconds: int) -> str:
         ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
     return tmp[:-2]
 
+
 @borg.on(admin_cmd(pattern="yt(a|v) (.*)"))
-@borg.on(sudo_cmd(pattern="yt(a|v) (.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="yt(a|v) (.*)", allow_sudo=True))
 async def download_video(v_url):
     """ For .ytdl command, download media from YouTube and many other sites. """
     url = v_url.pattern_match.group(2)
     type = v_url.pattern_match.group(1).lower()
-    v_url = await edit_or_reply(v_url ,"`Preparing to download...`")
+    v_url = await edit_or_reply(v_url, "`Preparing to download...`")
     if type == "a":
         opts = {
             'format':
@@ -210,17 +211,18 @@ async def download_video(v_url):
                          f"{ytdl_data['title']}.mp4")))
         os.remove(f"{ytdl_data['id']}.mp4")
         await v_url.delete()
-        
+
+
 @borg.on(admin_cmd(pattern="yts (.*)"))
-@borg.on(sudo_cmd(pattern="yts (.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="yts (.*)", allow_sudo=True))
 async def yt_search(video_q):
     """ For .yts command, do a YouTube search from Telegram. """
     query = video_q.pattern_match.group(1)
     result = ''
     if not Config.YOUTUBE_API_KEY:
-        await edit_or_reply( video_q ,"`Error: YouTube API key missing! Add it to reveal config vars in heroku or userbot/uniborgConfig.py in github fork.`")
+        await edit_or_reply(video_q, "`Error: YouTube API key missing! Add it to reveal config vars in heroku or userbot/uniborgConfig.py in github fork.`")
         return
-    video_q = await edit_or_reply( video_q ,"```Processing...```")
+    video_q = await edit_or_reply(video_q, "```Processing...```")
     full_response = await youtube_search(query)
     videos_json = full_response[1]
     for video in videos_json:
@@ -229,6 +231,7 @@ async def yt_search(video_q):
         result += f"{title}\n{link}\n\n"
     reply_text = f"**Search Query:**\n`{query}`\n\n**Results:**\n\n{result}"
     await video_q.edit(reply_text)
+
 
 async def youtube_search(query,
                          order="relevance",

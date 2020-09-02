@@ -32,7 +32,7 @@ GBan.__table__.create(checkfirst=True)
 def is_gbanned(chat_id):
     try:
         return SESSION.query(GBan).filter(GBan.chat_id == str(chat_id)).one()
-    except:
+    except BaseException:
         return None
     finally:
         SESSION.close()

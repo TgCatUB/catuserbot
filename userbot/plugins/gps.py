@@ -16,7 +16,7 @@
 from geopy.geocoders import Nominatim
 from userbot.utils import admin_cmd, sudo_cmd
 from telethon.tl import types
-from userbot import CMD_HELP 
+from userbot import CMD_HELP
 
 
 @borg.on(admin_cmd(pattern="gps ?(.*)"))
@@ -50,9 +50,9 @@ async def gps(event):
         await event.delete()
     else:
         await event.edit("i coudn't find it")
-        
-        
-@borg.on(sudo_cmd(pattern="gps ?(.*)", allow_sudo = True))
+
+
+@borg.on(sudo_cmd(pattern="gps ?(.*)", allow_sudo=True))
 async def gps(event):
     if event.fwd_from:
         return
@@ -84,8 +84,8 @@ async def gps(event):
     else:
         await cat.edit("i coudn't find it")
 
-        
+
 CMD_HELP.update({"gps": "`.gps` <location name> :\
       \nUSAGE: sends you the given location name\
       "
-})           
+                 })

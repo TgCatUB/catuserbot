@@ -13,6 +13,7 @@ from telethon.tl.types import (
     MessageEntityPre, MessageEntityTextUrl
 )
 
+
 def parse_url_match(m):
     entity = MessageEntityTextUrl(
         offset=m.start(),
@@ -21,6 +22,7 @@ def parse_url_match(m):
     )
     return m.group(1), entity
 
+
 def get_tag_parser(tag, entity):
     # TODO unescape escaped tags?
     def tag_parser(m):
@@ -28,7 +30,10 @@ def get_tag_parser(tag, entity):
     tag = re.escape(tag)
     return re.compile(tag + r'(.+?)' + tag, re.DOTALL), tag_parser
 
+
 PRINTABLE_ASCII = range(0x21, 0x7f)
+
+
 def parse_aesthetics(m):
     def aesthetify(string):
         for c in string:
@@ -40,6 +45,7 @@ def parse_aesthetics(m):
             yield chr(c)
     return "".join(aesthetify(m[1])), None
 
+
 def parse_subreddit(m):
     text = '/' + m.group(3)
     entity = MessageEntityTextUrl(
@@ -49,10 +55,12 @@ def parse_subreddit(m):
     )
     return m.group(1) + text, entity
 
+
 def parse_strikethrough(m):
     text = m.group(2)
-    text =  "\u0336".join(text) + "\u0336 "
+    text = "\u0336".join(text) + "\u0336 "
     return text, None
+
 
 PARSED_ENTITIES = (
     MessageEntityBold, MessageEntityItalic, MessageEntityCode,
@@ -113,6 +121,7 @@ def parse(message, old_entities=None):
         i += len(text)
     return del_surrogate(message), entities + old_entities
 
+
 @borg.on(events.MessageEdited(outgoing=True))
 @borg.on(events.NewMessage(outgoing=True))
 async def reparse(event):
@@ -125,8 +134,8 @@ async def reparse(event):
     await borg(EditMessageRequest(
         peer=await event.get_input_chat(),
         id=event.message.id,
-        message = message,
-        no_webpage = not bool(event.message.media),
-        entities = msg_entities
+        message=message,
+        no_webpage=not bool(event.message.media),
+        entities=msg_entities
     ))
     raise events.StopPropagation

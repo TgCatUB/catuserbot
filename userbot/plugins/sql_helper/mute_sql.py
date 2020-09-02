@@ -2,7 +2,8 @@ try:
     from userbot.plugins.sql_helper import SESSION, BASE
 except ImportError:
     raise Exception("Hello!")
-from sqlalchemy import Column, String, UnicodeText
+from sqlalchemy import Column, String
+
 
 class Mute(BASE):
     __tablename__ = "mute"
@@ -13,7 +14,9 @@ class Mute(BASE):
         self.sender = str(sender)
         self.chat_id = str(chat_id)
 
+
 Mute.__table__.create(checkfirst=True)
+
 
 def is_muted(sender, chat_id):
     user = SESSION.query(Mute).get((str(sender), str(chat_id)))
@@ -21,10 +24,12 @@ def is_muted(sender, chat_id):
         return True
     return False
 
+
 def mute(sender, chat_id):
     adder = Mute(str(sender), str(chat_id))
     SESSION.add(adder)
     SESSION.commit()
+
 
 def unmute(sender, chat_id):
     rem = SESSION.query(Mute).get((str(sender), str(chat_id)))

@@ -3,10 +3,8 @@ Available Commands:
 .unbanall
 .kick option
 Available Options: d, y, m, w, o, q, r """
-from telethon import events
-from datetime import datetime, timedelta
 from telethon.tl.types import UserStatusEmpty, UserStatusLastMonth, UserStatusLastWeek, UserStatusOffline, UserStatusOnline, UserStatusRecently, ChannelParticipantsKicked, ChatBannedRights
-from telethon.tl import functions, types
+from telethon.tl import functions
 from time import sleep
 import asyncio
 from userbot.utils import admin_cmd

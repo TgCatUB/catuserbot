@@ -15,14 +15,13 @@
 """Remove.BG Plugin for @UniBorg
 Syntax: .rmbg https://link.to/image.extension
 Syntax: .rmbg as reply to a media"""
-import asyncio
 from datetime import datetime
 import io
 import os
 import requests
-from telethon import events
-from userbot.utils import progress, admin_cmd
+from userbot.utils import admin_cmd
 from userbot import CMD_HELP
+
 
 @borg.on(admin_cmd(pattern="rmbg ?(.*)"))
 async def _(event):
@@ -101,7 +100,7 @@ def ReTrieveURL(input_url):
         "X-API-Key": Config.REM_BG_API_KEY,
     }
     data = {
-      "image_url": input_url
+        "image_url": input_url
     }
     r = requests.post(
         "https://api.remove.bg/v1.0/removebg",

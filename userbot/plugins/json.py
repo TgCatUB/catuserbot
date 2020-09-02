@@ -1,6 +1,5 @@
 """Get Detailed info about any message
 Syntax: .json"""
-from telethon import events
 import io
 from userbot.utils import admin_cmd
 

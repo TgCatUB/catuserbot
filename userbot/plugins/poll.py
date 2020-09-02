@@ -1,7 +1,5 @@
 """Get Poll Info on non supported clients
 Syntax: .get_poll"""
-from telethon import events
-import asyncio
 from userbot.utils import admin_cmd
 
 
@@ -25,7 +23,8 @@ Answers: \n""".format(closed_status, question)
             results = media.results
             i = 0
             for result in results.results:
-                edit_caption += "{}> {}    {}\n".format(result.option, answers[i].text, result.voters)
+                edit_caption += "{}> {}    {}\n".format(
+                    result.option, answers[i].text, result.voters)
                 i += 1
             edit_caption += "Total Voters: {}".format(results.total_voters)
         else:

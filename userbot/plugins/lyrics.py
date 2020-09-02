@@ -1,17 +1,12 @@
 "made by @mrconfused and @sandy1709"
 import os
 import lyricsgenius
-import random
 from userbot.utils import admin_cmd
-from userbot import CMD_HELP, LOGS
+from userbot import CMD_HELP
 from tswift import Song
-from telethon import events
-import subprocess
-from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import io
-import asyncio
-import time
 GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="lyrics ?(.*)"))
 async def _(event):
@@ -25,8 +20,8 @@ async def _(event):
     elif reply.text:
         query = reply.message
     else:
-    	await event.edit("`What I am Supposed to find `")
-    	return
+        await event.edit("`What I am Supposed to find `")
+        return
     song = ""
     song = Song.find_song(query)
     if song:
@@ -35,7 +30,7 @@ async def _(event):
         else:
             reply = "Couldn't find any lyrics for that song! try with artist name along with song if still doesnt work try `.glyrics`"
     else:
-        reply = "lyrics not found! try with artist name along with song if still doesnt work try `.glyrics`"  
+        reply = "lyrics not found! try with artist name along with song if still doesnt work try `.glyrics`"
     if len(reply) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(reply)) as out_file:
             out_file.name = "lyrics.text"
@@ -49,7 +44,8 @@ async def _(event):
             )
             await event.delete()
     else:
-        await event.edit(reply)       
+        await event.edit(reply)
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="glyrics ?(.*)"))
 async def lyrics(lyric):
@@ -93,20 +89,18 @@ async def lyrics(lyric):
             lyric.chat_id,
             "lyrics.txt",
             reply_to=lyric.id,
-            )
+        )
         os.remove("lyrics.txt")
     else:
         await lyric.edit(f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```")
     return
 
-CMD_HELP.update({
-    "lyrics":
-    "Lyrics Plugin Syntax: `.lyrics` <aritst name - song nane> or `.lyrics` <song_name>\
+CMD_HELP.update(
+    {"lyrics": "Lyrics Plugin Syntax: `.lyrics` <aritst name - song nane> or `.lyrics` <song_name>\
     \n**USAGE:** searches a song lyrics and sends you if song name doesnt work try along with artisyt name\
     \n\n**Usage:** .`glyrics <artist name> - <song name>`\
     \n__note__: **-** is neccessary when searching the lyrics to divided artist and song\
     \n\n**Genius lyrics plugin**\
     \nget this value from `https://genius.com/developers` \
     \nAdd:-  `GENIUS_API_TOKEN` and token value in heroku app settings \
-    "
-})
+    "})

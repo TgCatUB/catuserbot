@@ -1,22 +1,18 @@
-import io
 import os
 import time
 import json
-import math
-import aiohttp
 import asyncio
 import subprocess
-from pySmartDL import SmartDL
 from datetime import datetime
-from telethon import events
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
-from .. import LOGS, CMD_HELP, ALIVE_NAME , TEMP_DOWNLOAD_DIRECTORY
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply, humanbytes, progress, time_formatter
+from .. import ALIVE_NAME, CMD_HELP, LOGS
+from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+
 
 async def catlst_of_files(path):
     files = []
@@ -26,11 +22,12 @@ async def catlst_of_files(path):
             files.append(os.path.join(dirname, filename))
     return files
 
+
 @borg.on(admin_cmd(pattern="uploadir (.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="uploadir (.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="uploadir (.*)", allow_sudo=True))
 async def uploadir(event):
     input_str = event.pattern_match.group(1)
-    udir_event = await edit_or_reply(event ,"Uploading....")
+    udir_event = await edit_or_reply(event, "Uploading....")
     if os.path.exists(input_str):
         await udir_event.edit(f"Gathering file details in directory `{input_str}`")
         lst_of_files = []
@@ -93,13 +90,14 @@ async def uploadir(event):
     else:
         await udir_event.edit("404: Directory Not Found")
 
-@borg.on(admin_cmd(pattern="send (.*)", outgoing=True)) 
-@borg.on(sudo_cmd(pattern="send (.*)",allow_sudo = True))
+
+@borg.on(admin_cmd(pattern="send (.*)", outgoing=True))
+@borg.on(sudo_cmd(pattern="send (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    mone = await edit_or_reply(event ,"Processing ...")
+    mone = await edit_or_reply(event, "Processing ...")
     jisan = "./userbot/plugins/{}.py".format(input_str)
     thumb = None
     if os.path.exists(thumb_image_path):
@@ -126,13 +124,14 @@ async def _(event):
     else:
         await mone.edit("404: File Not Found")
 
-@borg.on(admin_cmd(pattern="upload (.*)", outgoing=True)) 
-@borg.on(sudo_cmd(pattern="upload (.*)",allow_sudo = True))
+
+@borg.on(admin_cmd(pattern="upload (.*)", outgoing=True))
+@borg.on(sudo_cmd(pattern="upload (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    mone = await edit_or_reply(event ,"Processing ...")
+    mone = await edit_or_reply(event, "Processing ...")
     thumb = None
     if os.path.exists(thumb_image_path):
         thumb = thumb_image_path
@@ -158,12 +157,14 @@ async def _(event):
     else:
         await mone.edit("404: File Not Found")
 
+
 def get_video_thumb(file, output=None, width=320):
     output = file + ".jpg"
     metadata = extractMetadata(createParser(file))
     p = subprocess.Popen([
         'ffmpeg', '-i', file,
-        '-ss', str(int((0, metadata.get('duration').seconds)[metadata.has('duration')] / 2)),
+        '-ss', str(int((0, metadata.get('duration').seconds)
+                       [metadata.has('duration')] / 2)),
         # '-filter:v', 'scale={}:-1'.format(width),
         '-vframes', '1',
         output,
@@ -171,6 +172,7 @@ def get_video_thumb(file, output=None, width=320):
     p.communicate()
     if not p.returncode and os.path.lexists(file):
         return output
+
 
 def extract_w_h(file):
     """ Get width and height of media """
@@ -197,10 +199,11 @@ def extract_w_h(file):
         height = int(response_json["streams"][0]["height"])
         return width, height
 
+
 @borg.on(admin_cmd(pattern="uploadas(stream|vn|all) (.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="uploadas(stream|vn|all) (.*) ",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="uploadas(stream|vn|all) (.*) ", allow_sudo=True))
 async def uploadas(event):
-#For .uploadas command, allows you to specify some arguments for upload.
+    # For .uploadas command, allows you to specify some arguments for upload.
     type_of_upload = event.pattern_match.group(1)
     input_str = event.pattern_match.group(2)
     uas_event = await edit_or_reply(event, "uploading.....")
@@ -285,7 +288,7 @@ async def uploadas(event):
                 return
             try:
                 os.remove(vthumb)
-            except:
+            except BaseException:
                 pass
             await uas_event.edit("Uploaded successfully !!")
         except FileNotFoundError as err:

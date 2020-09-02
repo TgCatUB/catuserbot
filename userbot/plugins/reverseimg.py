@@ -7,11 +7,9 @@
 import io
 import os
 import urllib
-from urllib.request import urlopen
 import requests
 from bs4 import BeautifulSoup
 import re
-from telethon.tl.types import MessageMediaPhoto
 from PIL import Image
 from userbot import bot, CMD_HELP
 from userbot.utils import admin_cmd, errors_handler
@@ -19,6 +17,7 @@ from userbot.utils import admin_cmd, errors_handler
 opener = urllib.request.build_opener()
 useragent = 'Mozilla/5.0 (Linux; Android 9; SM-G960F Build/PPR1.180610.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.157 Mobile Safari/537.36'
 opener.addheaders = [('User-agent', useragent)]
+
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"reverse(?: |$)(\d*)"))
 @errors_handler
@@ -90,6 +89,7 @@ async def okgoogle(img):
         await img.edit(
             f"[{guess}]({fetchUrl})\n\n[Visually similar images]({imgspage})")
 
+
 async def ParseSauce(googleurl):
     """Parse/Scrape the HTML code for the info we want."""
     source = opener.open(googleurl).read()
@@ -105,6 +105,7 @@ async def ParseSauce(googleurl):
     for best_guess in soup.findAll('div', attrs={'class': 'r5a77d'}):
         results['best_guess'] = best_guess.get_text()
     return results
+
 
 async def scam(results, lim):
     single = opener.open(results['similar_images']).read()

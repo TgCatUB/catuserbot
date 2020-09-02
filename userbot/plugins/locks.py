@@ -8,10 +8,11 @@ from userbot.plugins.sql_helper.locks_sql import update_lock, is_locked, get_loc
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 
-@borg.on(admin_cmd(pattern="lock( (?P<target>\S+)|$)"))
+
+@borg.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
 async def _(event):
-     # Space weirdness in regex required because argument is optional and other
-     # commands start with ".lock"
+    # Space weirdness in regex required because argument is optional and other
+    # commands start with ".lock"
     if event.fwd_from:
         return
     input_str = event.pattern_match.group("target")
@@ -183,7 +184,10 @@ async def check_incoming_messages(event):
         is_url = False
         if entities:
             for entity in entities:
-                if isinstance(entity, (types.MessageEntityTextUrl, types.MessageEntityUrl)):
+                if isinstance(
+                    entity,
+                    (types.MessageEntityTextUrl,
+                     types.MessageEntityUrl)):
                     is_url = True
         if is_url:
             try:
@@ -230,7 +234,7 @@ async def _(event):
                 ban_reason_msg = await event.reply(
                     "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(users_added_by)
                 )
-                    
+
 CMD_HELP.update({
     "locks":
     ".lock <all (or) type(s)> or .unlock <all (or) type(s)>\

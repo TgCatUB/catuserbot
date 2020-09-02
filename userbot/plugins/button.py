@@ -3,16 +3,19 @@ Create Button Posts imported from uniborg
 modified for catuserbot by @sandy1709
 """
 import os
-import re 
+import re
 from .. import CMD_HELP
-from telethon import events, Button
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from telethon import Button
+from ..utils import admin_cmd, sudo_cmd
 
-# regex obtained from: https://github.com/PaulSonOfLars/tgbot/blob/master/tg_bot/modules/helper_funcs/string_handling.py#L23
-BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
+# regex obtained from:
+# https://github.com/PaulSonOfLars/tgbot/blob/master/tg_bot/modules/helper_funcs/string_handling.py#L23
+BTN_URL_REGEX = re.compile(
+    r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
+
 
 @borg.on(admin_cmd(pattern=r"cbutton(?: |$)(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="cbutton(?: |$)(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="cbutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     chat = event.chat_id
     reply_message = await event.get_reply_message()
@@ -33,7 +36,11 @@ async def _(event):
         # if even, not escaped -> create button
         if n_escapes % 2 == 0:
             # create a thruple with button label, url, and newline status
-            buttons.append((match.group(2), match.group(3), bool(match.group(4))))
+            buttons.append(
+                (match.group(2),
+                 match.group(3),
+                 bool(
+                    match.group(4))))
             note_data += markdown_note[prev:match.start(1)]
             prev = match.end(1)
         # if odd, escaped -> move along
@@ -60,8 +67,10 @@ async def _(event):
     await event.delete()
     if tgbot_reply_message:
         os.remove(tgbot_reply_message)
-        
+
 # Helpers
+
+
 def build_keyboard(buttons):
     keyb = []
     for btn in buttons:
@@ -70,6 +79,7 @@ def build_keyboard(buttons):
         else:
             keyb.append([Button.url(btn[0], btn[1])])
     return keyb
+
 
 CMD_HELP.update({
     "button":

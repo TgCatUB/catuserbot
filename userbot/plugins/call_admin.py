@@ -1,6 +1,4 @@
 """.admin Plugin for @UniBorg"""
-import asyncio
-from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 from userbot.utils import admin_cmd
 
