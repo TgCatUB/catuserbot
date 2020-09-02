@@ -1,10 +1,13 @@
+from userbot import bot
+from telethon import events
 from userbot.utils import command, remove_plugin, load_module
 from pathlib import Path
+from userbot import LOAD_PLUG
 import asyncio
 import os
+import userbot.utils
 
 DELETE_TIMEOUT = 5
-
 
 @command(pattern="^.install", outgoing=True)
 async def install(event):
@@ -29,7 +32,6 @@ async def install(event):
             os.remove(downloaded_file_name)
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
-
 
 @command(pattern=r"^.unload (?P<shortname>\w+)$", outgoing=True)
 async def unload(event):
