@@ -1,12 +1,15 @@
-from .utils import admin_cmd, remove_plugin, load_module
+from .utils import admin_cmd, remove_plugin, load_module, sudo_cmd, edit_or_reply
+from .. import ALIVE_NAME, CMD_HELP
 from pathlib import Path
 import asyncio
 import os
 
 DELETE_TIMEOUT = 5
-
+thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 @borg.on(admin_cmd(pattern="install$"))
+@borg.on(sudo_cmd(pattern="install$"))
 async def install(event):
     if event.fwd_from:
         return
@@ -20,30 +23,61 @@ async def install(event):
                 path1 = Path(downloaded_file_name)
                 shortname = path1.stem
                 load_module(shortname.replace(".py", ""))
-                await event.edit("Installed Plugin `{}`".format(os.path.basename(downloaded_file_name)))
+                await edit_or_reply(event, "Installed Plugin `{}`".format(os.path.basename(downloaded_file_name)))
             else:
                 os.remove(downloaded_file_name)
-                await event.edit("Errors! This plugin is already installed/pre-installed.")
+                await edit_or_reply(event, "Errors! This plugin is already installed/pre-installed.")
         except Exception as e:  # pylint:disable=C0103,W0703
-            await event.edit(str(e))
+            await edit_or_reply(event, str(e))
             os.remove(downloaded_file_name)
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
-
-
+    
+    
+@borg.on(admin_cmd(pattern="^.send (?P<shortname>\w+)$", outgoing=True))
+@borg.on(sudo_cmd(pattern="^.send (?P<shortname>\w+)$", outgoing=True))
+async def send(event):
+    if event.fwd_from:
+        return
+    thumb = None
+    if os.path.exists(thumb_image_path):
+        thumb = thumb_image_path
+    message_id = event.message.id
+    input_str = event.pattern_match["shortname"]
+    the_plugin_file = "./userbot/plugins/{}.py".format(input_str)
+    if os.path.exists(jisan):
+        start = datetime.now()
+        c_time = time.time()
+        caat = await event.client.send_file(  # pylint:disable=E0602
+        event.chat_id,
+        the_plugin_file,
+        force_document=True,
+        allow_cache=False,
+        reply_to=message_id,
+        thumb=thumb
+        )
+        end = datetime.now()
+        ms = (end - start).seconds
+        await mone.delete()
+        await caat.edit(f"__**➥ Plugin Name:- {input_str} .**__\n__**➥ Uploaded in {ms} seconds.**__\n__**➥ Uploaded by :-**__ {DEFAULTUSER}")
+    else:
+        await edit_or_reply(event, "404: File Not Found")
+    
 @borg.on(admin_cmd(pattern=r"unload (?P<shortname>\w+)$", outgoing=True))
+@borg.on(sudo_cmd(pattern=r"unload (?P<shortname>\w+)$", outgoing=True))
 async def unload(event):
     if event.fwd_from:
         return
     shortname = event.pattern_match["shortname"]
     try:
         remove_plugin(shortname)
-        await event.edit(f"Unloaded {shortname} successfully")
+        await edit_or_reply(event, f"Unloaded {shortname} successfully")
     except Exception as e:
-        await event.edit("Successfully unload {shortname}\n{}".format(shortname, str(e)))
+        await edit_or_reply(event, "Successfully unload {shortname}\n{}".format(shortname, str(e)))
 
 
 @borg.on(admin_cmd(pattern=r"load (?P<shortname>\w+)$", outgoing=True))
+@borg.on(sudo_cmd(pattern=r"load (?P<shortname>\w+)$", outgoing=True))
 async def load(event):
     if event.fwd_from:
         return
@@ -54,6 +88,6 @@ async def load(event):
         except BaseException:
             pass
         load_module(shortname)
-        await event.edit(f"Successfully loaded {shortname}")
+        await edit_or_reply(event, f"Successfully loaded {shortname}")
     except Exception as e:
-        await event.edit(f"Could not load {shortname} because of the following error.\n{str(e)}")
+        await edit_or_reply(event, f"Could not load {shortname} because of the following error.\n{str(e)}")
