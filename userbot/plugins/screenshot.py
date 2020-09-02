@@ -11,7 +11,6 @@ from userbot import CMD_HELP
 import requests
 from validators.url import url
 
-
 @borg.on(admin_cmd(pattern="ss (.*)"))
 async def _(event):
     if event.fwd_from:
