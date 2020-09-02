@@ -41,7 +41,7 @@ async def install(event):
 async def send(event):
     if event.fwd_from:
         return
-    reply_to_id = event.message.id
+    reply_to_id = None
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
     thumb = None
