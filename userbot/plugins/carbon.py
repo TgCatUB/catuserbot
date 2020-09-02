@@ -4,7 +4,7 @@
 
 """ Userbot module containing various scrapers. """
 import os
-from time import sleep
+import asyncio
 from . import deEmojify
 from selenium import webdriver
 from urllib.parse import quote_plus
@@ -58,7 +58,7 @@ async def carbon_api(e):
    # driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
     await cat.edit("`Processing..\n75%`")
     # Waiting for downloading
-    sleep(2.5)
+    await asyncio.sleep(2)
     await cat.edit("`Done Dana Done...\n100%`")
     file = './carbon.png'
     await cat.edit("`Uploading..`")
