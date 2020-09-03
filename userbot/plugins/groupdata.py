@@ -13,7 +13,7 @@ from telethon.errors import ChatAdminRequiredError
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 import io
-
+import os 
 
 @borg.on(admin_cmd(pattern="leave$"))
 async def leave(e):
@@ -122,8 +122,9 @@ async def get_users(show):
                 reply_to=reply_to_id
             )
             await show.delete()
+        os.remove("users.text")
     else:
-        await show.edit(reply)
+        await show.edit(mentions)
 
 
 @borg.on(admin_cmd(pattern="chatinfo(?: |$)(.*)", outgoing=True))
