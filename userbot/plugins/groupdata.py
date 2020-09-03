@@ -13,7 +13,6 @@ from telethon.errors import ChatAdminRequiredError
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 import io
-import os
 
 
 @borg.on(admin_cmd(pattern="leave$"))
