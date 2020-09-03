@@ -78,8 +78,9 @@ async def get_users(show):
     if event.fwd_from:
         return
     mentions = "**Users in this Group**: \n"
+    reply_to_id = None
     if event.reply_to_msg_id:
-        await event.get_reply_message()
+        reply_to_id = event.reply_to_msg_id
     input_str = event.pattern_match.group(1)
     await event.get_input_chat()
     if not input_str:
@@ -121,7 +122,7 @@ async def get_users(show):
             show.chat_id,
             "userslist.txt",
             caption='Users in {}'.format(title),
-            reply_to=show.id,
+            reply_to=reply_to_id
         )
         remove("userslist.txt")
 
