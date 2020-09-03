@@ -457,3 +457,13 @@ async def solarize(imagefile, endname):
     image = Image.open(imagefile)
     inverted_image = PIL.ImageOps.solarize(image, threshold=128)
     inverted_image.save(endname)
+
+async def add_frame(imagefile, endname,x,color):
+    image = Image.open(imagefile)
+    inverted_image = PIL.ImageOps.expand(image, border=x, fill=color)
+    inverted_image.save(endname)   
+    
+async def crop(imagefile, endname,x):
+    image = Image.open(imagefile)
+    inverted_image = PIL.ImageOps.crop(image, border=x)
+    inverted_image.save(endname)      
