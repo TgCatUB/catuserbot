@@ -123,7 +123,6 @@ async def get_users(show):
                 reply_to=reply_to_id
             )
             await show.delete()
-        os.remove("users.text")
     else:
         await show.edit(mentions)
 
