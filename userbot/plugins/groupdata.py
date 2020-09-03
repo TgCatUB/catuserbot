@@ -69,7 +69,7 @@ async def _(event):
     if reply_message:
         await reply_message.reply(mentions)
     else:
-        await borg.send_message(event.chat_id , mentions)
+        await borg.send_message(event.chat_id, mentions)
     await event.delete()
 
 
