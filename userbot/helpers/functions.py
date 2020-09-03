@@ -425,30 +425,35 @@ async def phcomment(text1, text2, text3):
     img.save("temp.jpg", "jpeg")
     return "temp.jpg"
 
-#http://effbot.org/imagingbook/imageops.html  
-#https://stackoverflow.com/questions/2498875/how-to-invert-colors-of-image-with-pil-python-imaging/38378828
+# http://effbot.org/imagingbook/imageops.html
+# https://stackoverflow.com/questions/2498875/how-to-invert-colors-of-image-with-pil-python-imaging/38378828
+
 
 async def invert_colors(imagefile, endname):
     image = Image.open(imagefile)
     inverted_image = PIL.ImageOps.invert(image)
     inverted_image.save(endname)
-    
+
+
 async def flip_image(imagefile, endname):
     image = Image.open(imagefile)
     inverted_image = PIL.ImageOps.flip(image)
     inverted_image.save(endname)
-    
+
+
 async def grayscale(imagefile, endname):
     image = Image.open(imagefile)
     inverted_image = PIL.ImageOps.grayscale(image)
     inverted_image.save(endname)
-    
+
+
 async def mirror_file(imagefile, endname):
     image = Image.open(imagefile)
     inverted_image = PIL.ImageOps.mirror(image)
-    inverted_image.save(endname)    
-    
+    inverted_image.save(endname)
+
+
 async def solarize(imagefile, endname):
     image = Image.open(imagefile)
     inverted_image = PIL.ImageOps.solarize(image, threshold=128)
-    inverted_image.save(endname)    
+    inverted_image.save(endname)
