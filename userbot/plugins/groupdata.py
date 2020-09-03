@@ -103,13 +103,13 @@ async def get_users(show):
                 else:
                     mentions += f"\nDeleted Account `{user.id}`"
         else:
-            async for user in show.client.iter_participants(chat):
+            async for user in show.client.iter_participants(chat.id):
                 if not user.deleted:
                     mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
                 else:
                     mentions += f"\nDeleted Account `{user.id}`"
-    except ChatAdminRequiredError as err:
-        mentions += " " + str(err) + "\n"
+    except Exception as e:
+        mentions += " " + str(e) + "\n"
     if len(mentions) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(mentions)) as out_file:
             out_file.name = "users.text"
