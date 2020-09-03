@@ -91,7 +91,7 @@ async def get_users(show):
         mentions_heading = "Users in {} Group: \n".format(input_str)
         mentions = mentions_heading
         try:
-            await borg.get_entity(input_str)
+            chat = await borg.get_entity(input_str)
         except Exception as e:
             await event.show(str(e))
             return None
@@ -103,8 +103,7 @@ async def get_users(show):
                 else:
                     mentions += f"\nDeleted Account `{user.id}`"
         else:
-            searchq = show.pattern_match.group(1)
-            async for user in show.client.iter_participants(show.chat_id, search=f'{searchq}'):
+            async for user in show.client.iter_participants(chat):
                 if not user.deleted:
                     mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
                 else:
