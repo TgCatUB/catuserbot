@@ -162,6 +162,7 @@ async def memes(cat):
         await cat.client(san)
     except BaseException:
         pass
+    meme_file = convert_toimage(meme_file)
     if jisanidea:
         outputfile = "invert.webp"
         await invert_colors(meme_file, outputfile)
