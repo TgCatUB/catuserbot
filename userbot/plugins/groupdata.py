@@ -78,14 +78,11 @@ async def get_users(show):
     if event.fwd_from:
         return
     mentions = "**Users in this Group**: \n"
-    reply_message = None
     if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
+        await event.get_reply_message()
     input_str = event.pattern_match.group(1)
-    to_write_chat = await event.get_input_chat()
-    chat = None
+    await event.get_input_chat()
     if not input_str:
-        chat = to_write_chat
         if not event.is_group:
             await event.edit("Are you sure this is a group?")
             return
@@ -93,7 +90,7 @@ async def get_users(show):
         mentions_heading = "Users in {} Group: \n".format(input_str)
         mentions = mentions_heading
         try:
-            chat = await borg.get_entity(input_str)
+            await borg.get_entity(input_str)
         except Exception as e:
             await event.edit(str(e))
             return None
