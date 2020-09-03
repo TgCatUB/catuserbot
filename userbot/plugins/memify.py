@@ -577,12 +577,18 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     if jisanidea:
         outputfile = "grayscale.webp"
-        await grayscale(meme_file, outputfile, catinput)
-        await borg.send_file(
-            cat.chat_id,
-            outputfile,
-            force_document=False,
-            reply_to=catid)
+        try:
+            await crop(meme_file, outputfile, catinput)
+        except Exception as e:
+            return await cat.edit(f"`{e}`")
+        try:
+            await borg.send_file(
+                cat.chat_id,
+                outputfile,
+                force_document=False,
+                reply_to=catid)
+        except Exception as e:
+            return await cat.edit(f"`{e}`")
     else:
         outputfile = "grayscale.jpg"
         try:
@@ -672,12 +678,18 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     if jisanidea:
         outputfile = "framed.webp"
-        await add_frame(meme_file, outputfile, catinput, colr)
-        await borg.send_file(
-            cat.chat_id,
-            outputfile,
-            force_document=False,
-            reply_to=catid)
+        try:
+            await add_frame(meme_file, outputfile, catinput, colr)
+        except Exception as e:
+            return await cat.edit(f"`{e}`")
+        try:
+            await borg.send_file(
+                cat.chat_id,
+                outputfile,
+                force_document=False,
+                reply_to=catid)
+        except Exception as e:
+            return await cat.edit(f"`{e}`")
     else:
         outputfile = "framed.jpg"
         try:
