@@ -523,7 +523,7 @@ async def memes(cat):
         return
     catinput = cat.pattern_match.group(1)
     if not catinput:
-        catinput = 50 
+        catinput = 50
     catid = cat.reply_to_msg_id
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
@@ -577,7 +577,7 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     if jisanidea:
         outputfile = "grayscale.webp"
-        await grayscale(meme_file, outputfile,catinput)
+        await grayscale(meme_file, outputfile, catinput)
         await borg.send_file(
             cat.chat_id,
             outputfile,
@@ -586,7 +586,7 @@ async def memes(cat):
     else:
         outputfile = "grayscale.jpg"
         try:
-            await crop(meme_file, outputfile,catinput)
+            await crop(meme_file, outputfile, catinput)
         except Exception as e:
             return await cat.edit(f"`{e}`")
         try:
@@ -602,7 +602,7 @@ async def memes(cat):
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
             os.remove(files)
-            
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="frame ?(.*)"))
 @borg.on(sudo_cmd(pattern="frame ?(.*)", allow_sudo=True))
@@ -613,7 +613,8 @@ async def memes(cat):
         return
     catinput = cat.pattern_match.group(1)
     if not catinput:
-        catinput = 50;0
+        catinput = 50
+        0
     if ";" in catinput:
         catinput, colr = catinput.split(';', 1)
     else:
@@ -671,7 +672,7 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     if jisanidea:
         outputfile = "framed.webp"
-        await add_frame(meme_file, outputfile,catinput,colr)
+        await add_frame(meme_file, outputfile, catinput, colr)
         await borg.send_file(
             cat.chat_id,
             outputfile,
@@ -680,7 +681,7 @@ async def memes(cat):
     else:
         outputfile = "framed.jpg"
         try:
-            await add_frame(meme_file, outputfile,catinput,colr)
+            await add_frame(meme_file, outputfile, catinput, colr)
         except Exception as e:
             return await cat.edit(f"`{e}`")
         try:
@@ -695,8 +696,8 @@ async def memes(cat):
     os.remove(outputfile)
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
-            os.remove(files)            
-            
+            os.remove(files)
+
 CMD_HELP.update({
     "memify":
     "**Plugin : **`memify`\
