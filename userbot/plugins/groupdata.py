@@ -75,12 +75,28 @@ async def _(event):
 
 @borg.on(admin_cmd(pattern=r"users ?(.*)", outgoing=True))
 async def get_users(show):
-    if not show.is_group:
-        await show.edit("Are you sure this is a group?")
+    if event.fwd_from:
         return
-    info = await show.client.get_entity(show.chat_id)
-    title = info.title if info.title else "this chat"
-    mentions = 'Users in {}: \n'.format(title)
+    mentions = "**Users in this Group**: \n"
+    reply_message = None
+    if event.reply_to_msg_id:
+        reply_message = await event.get_reply_message()
+    input_str = event.pattern_match.group(1)
+    to_write_chat = await event.get_input_chat()
+    chat = None
+    if not input_str:
+        chat = to_write_chat
+        if not event.is_group:
+            await event.edit("Are you sure this is a group?")
+            return
+    else:
+        mentions_heading = "Users in {} Group: \n".format(input_str)
+        mentions = mentions_heading
+        try:
+            chat = await borg.get_entity(input_str)
+        except Exception as e:
+            await event.edit(str(e))
+            return None
     try:
         if not show.pattern_match.group(1):
             async for user in show.client.iter_participants(show.chat_id):
