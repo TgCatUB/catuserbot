@@ -14,10 +14,10 @@ from . import convert_toimage, invert_colors, runcmd, take_screen_shot
 async def memes(cat):
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
+    reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
         return
-    reply = await cat.get_reply_message()
     catid = cat.reply_to_msg_id
     if catinput:
         if ";" in catinput:
@@ -107,10 +107,10 @@ async def memes(cat):
 @borg.on(admin_cmd(outgoing=True, pattern="invert$"))
 @borg.on(sudo_cmd(pattern="invert$", allow_sudo=True))
 async def memes(cat):
+    reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
         return
-    reply = await cat.get_reply_message()
     catid = cat.reply_to_msg_id
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
