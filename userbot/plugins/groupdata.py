@@ -1,4 +1,3 @@
-from os import remove
 from telethon.errors import (
     ChannelInvalidError,
     ChannelPrivateError,
@@ -10,11 +9,11 @@ from datetime import datetime
 from math import sqrt
 from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest, LeaveChannelRequest
 from telethon.utils import get_input_location
-from telethon.errors.rpcerrorlist import MessageTooLongError
 from telethon.errors import ChatAdminRequiredError
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 import io
+
 
 @borg.on(admin_cmd(pattern="leave$"))
 async def leave(e):
