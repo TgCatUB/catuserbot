@@ -80,11 +80,19 @@ async def spammer(e):
                         ),
                         unsave=True
                     ))
-                    os.system(f"rm -rf {downloaded_file_name}")
+                    os.remove(downloaded_file_name)
                 else:
                     await e.client.send_message(BOTLOG_CHATID, "#SPAM\n" + f"Spam was executed successfully in {e.chat.title}(`{e.chat_id}`) with {counter} times with below message")
-                    await borg.send_file(BOTLOG_CHATID, downloaded_file_name)
-                    os.system(f"rm -rf {downloaded_file_name}")
+                    sandy = await borg.send_file(BOTLOG_CHATID, downloaded_file_name)
+                    await borg(functions.messages.SaveGifRequest(
+                        id=types.InputDocument(
+                            id=sandy.media.document.id,
+                            access_hash=sandy.media.document.access_hash,
+                            file_reference=sandy.media.document.file_reference
+                        ),
+                        unsave=True
+                    ))
+                    os.remove(downloaded_file_nam)
     elif reply_to_id.text and e.reply_to_msg_id:
         spam_message = reply_to_id.text
         await e.delete()
