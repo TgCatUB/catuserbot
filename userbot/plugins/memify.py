@@ -6,7 +6,7 @@ import os
 import asyncio
 from .. import LOGS, CMD_HELP, tempmemes
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from . import take_screen_shot, runcmd, convert_toimage, solarize, mirror_file, flip_image, invert_colors, grayscale 
+from . import take_screen_shot, runcmd, convert_toimage, solarize, mirror_file, flip_image, invert_colors, grayscale
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
@@ -184,7 +184,7 @@ async def memes(cat):
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
             os.remove(files)
-            
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="solarize$"))
 @borg.on(sudo_cmd(pattern="solarize$", allow_sudo=True))
@@ -266,7 +266,7 @@ async def memes(cat):
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
             os.remove(files)
-            
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="mirror$"))
 @borg.on(sudo_cmd(pattern="mirror$", allow_sudo=True))
@@ -348,7 +348,7 @@ async def memes(cat):
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
             os.remove(files)
-            
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="flip$"))
 @borg.on(sudo_cmd(pattern="flip$", allow_sudo=True))
@@ -430,7 +430,7 @@ async def memes(cat):
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
             os.remove(files)
-            
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="gray$"))
 @borg.on(sudo_cmd(pattern="gray$", allow_sudo=True))
@@ -511,7 +511,7 @@ async def memes(cat):
     os.remove(outputfile)
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
-            os.remove(files)            
+            os.remove(files)
 
 CMD_HELP.update({
     "memify":
