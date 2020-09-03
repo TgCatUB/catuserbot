@@ -39,6 +39,9 @@ async def _(event):
     chat = None
     if not input_str:
         chat = to_write_chat
+        if not event.is_group:
+            await event.edit("Are you sure this is a group?")
+            return
     else:
         mentions_heading = "Admins in {} Group: \n".format(input_str)
         mentions = mentions_heading
