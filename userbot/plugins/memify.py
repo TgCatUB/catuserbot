@@ -6,7 +6,8 @@ import os
 import asyncio
 from .. import LOGS, CMD_HELP, tempmemes
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from . import take_screen_shot, runcmd, convert_toimage, solarize, mirror_file, flip_image, invert_colors, grayscale 
+from . import convert_toimage, invert_colors, runcmd, take_screen_shot
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
 @borg.on(sudo_cmd(pattern="(mmf|mms) ?(.*)", allow_sudo=True))
@@ -101,7 +102,8 @@ async def memes(cat):
     for files in (catsticker, meme_file):
         if files and os.path.exists(files):
             os.remove(files)
-            
+
+
 @borg.on(admin_cmd(outgoing=True, pattern="invert$"))
 @borg.on(sudo_cmd(pattern="invert$", allow_sudo=True))
 async def memes(cat):
@@ -166,16 +168,16 @@ async def memes(cat):
         await borg.send_file(
             cat.chat_id,
             outputfile,
-            force_document = False,
-            reply_to = catid )
+            force_document=False,
+            reply_to=catid)
     else:
         outputfile = "invert.jpg"
         await invert_colors(meme_file, outputfile)
         await borg.send_file(
             cat.chat_id,
             outputfile,
-            force_document = False,
-            reply_to = catid )
+            force_document=False,
+            reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
