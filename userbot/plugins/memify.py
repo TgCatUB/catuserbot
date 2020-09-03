@@ -524,6 +524,8 @@ async def memes(cat):
     catinput = cat.pattern_match.group(1)
     if not catinput:
         catinput = 50
+    else:
+        catinput = int(catinput)
     catid = cat.reply_to_msg_id
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
@@ -625,6 +627,8 @@ async def memes(cat):
         catinput, colr = catinput.split(';', 1)
     else:
         colr = 0
+    catinput = int(catinput)
+    colr = int(colr)
     catid = cat.reply_to_msg_id
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
