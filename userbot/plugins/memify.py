@@ -619,11 +619,10 @@ async def memes(cat):
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
         return
-    catinput = str(cat.pattern_match.group(1))
+    catinput = cat.pattern_match.group(1)
     if not catinput:
         catinput = 50
-        0
-    if ";" in catinput:
+    if ";" in str(catinput):
         catinput, colr = catinput.split(';', 1)
     else:
         colr = 0
