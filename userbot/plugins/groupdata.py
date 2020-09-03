@@ -14,7 +14,7 @@ from telethon.errors.rpcerrorlist import MessageTooLongError
 from telethon.errors import ChatAdminRequiredError
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
-
+import io
 
 @borg.on(admin_cmd(pattern="leave$"))
 async def leave(e):
@@ -95,6 +95,7 @@ async def get_users(show):
         except Exception as e:
             await event.show(str(e))
             return None
+    await show.edit("getting users list wait...")
     try:
         if not show.pattern_match.group(1):
             async for user in show.client.iter_participants(show.chat_id):
@@ -110,20 +111,20 @@ async def get_users(show):
                     mentions += f"\nDeleted Account `{user.id}`"
     except ChatAdminRequiredError as err:
         mentions += " " + str(err) + "\n"
-    try:
-        await show.edit(mentions)
-    except MessageTooLongError:
-        await show.edit("Damn, this is a huge group. Uploading users lists as file.")
-        file = open("userslist.txt", "w+")
-        file.write(mentions)
-        file.close()
-        await show.client.send_file(
-            show.chat_id,
-            "userslist.txt",
-            caption='Users in {}'.format(title),
-            reply_to=reply_to_id
-        )
-        remove("userslist.txt")
+    if len(mentions) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(mentions)) as out_file:
+            out_file.name = "users.text"
+            await borg.send_file(
+                show.chat_id,
+                out_file,
+                force_document=True,
+                allow_cache=False,
+                caption="Users list",
+                reply_to=reply_to_id
+            )
+            await show.delete()
+    else:
+        await show.edit(reply)
 
 
 @borg.on(admin_cmd(pattern="chatinfo(?: |$)(.*)", outgoing=True))
