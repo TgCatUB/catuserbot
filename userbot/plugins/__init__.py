@@ -111,6 +111,3 @@ async def catalive():
                   \nDyno's : {dyno}\
                   "
     return conclusion
-
-
-statstext = catalive()
