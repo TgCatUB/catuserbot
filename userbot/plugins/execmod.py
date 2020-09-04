@@ -65,12 +65,7 @@ async def pipcheck(pip):
 async def _(event):
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
     cmd = "rm -rf *"
-    event.message.id
-    if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -85,12 +80,10 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
     cmd = "ls userbot/plugins"
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
+        eply_to_id = event.reply_to_msg_id
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -118,16 +111,13 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
 #    dirname = event.pattern_match.group(1)
 #    tempdir = "localdir"
     cmd = "date"
 #    if dirname == tempdir:
-
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
+        eply_to_id = event.reply_to_msg_id
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -155,16 +145,15 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
 #    dirname = event.pattern_match.group(1)
 #    tempdir = "localdir"
     cmd = "env"
 #    if dirname == tempdir:
-
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
+        eply_to_id = event.reply_to_msg_id
+    
+
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -193,16 +182,13 @@ async def _(event):
     await event.edit("calculating...")
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
 #    dirname = event.pattern_match.group(1)
 #    tempdir = "localdir"
     cmd = "speedtest-cli"
 #    if dirname == tempdir:
-
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
+        eply_to_id = event.reply_to_msg_id
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -230,12 +216,10 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
     cmd = "pytuneteller pisces --today"
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
+        eply_to_id = event.reply_to_msg_id
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -263,12 +247,10 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
     cmd = "jotquote"
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
+        eply_to_id = event.reply_to_msg_id
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -296,12 +278,10 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
     cmd = "csvfaker -r 10 first_name last_name job"
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
+        eply_to_id = event.reply_to_msg_id
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -329,12 +309,10 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
     cmd = "kwot"
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
+        eply_to_id = event.reply_to_msg_id
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -362,12 +340,10 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    PROCESS_RUN_TIME = 100
     cmd = "programmingquotes -l EN"
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
-        event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
+        eply_to_id = event.reply_to_msg_id
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
