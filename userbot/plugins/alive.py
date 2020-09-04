@@ -11,10 +11,6 @@ from userbot import CMD_HELP, ALIVE_NAME, catdef, catversion
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 CAT_IMG = Config.ALIVE_PIC
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-CAT_IMG = Config.ALIVE_PIC
-
-
 @borg.on(admin_cmd(outgoing=True, pattern="alive$"))
 async def amireallyalive(alive):
     if alive.fwd_from:
