@@ -221,7 +221,6 @@ async def upstream(event):
 async def upstream(event):
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = "https://github.com/Jisan09/catuserbot"
-    force_update = False
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
@@ -243,13 +242,12 @@ async def upstream(event):
         repo = Repo.init()
         origin = repo.create_remote("upstream", off_repo)
         origin.fetch()
-        force_update = True
         repo.create_head("master", origin.refs.master)
         repo.heads.master.set_tracking_branch(origin.refs.master)
         repo.heads.master.checkout(True)
     await event.edit("`Deploying userbot, please wait....`")
     await deploy(event, repo, ups_rem, ac_br, txt)
-    
+
 CMD_HELP.update({
     "updater": "**Plugin : **`updater`"
     "\n\n**Syntax : **`.update`"
