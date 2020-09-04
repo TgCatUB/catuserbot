@@ -292,11 +292,12 @@ async def anilist(event):
         ms_g = ms_g[:-2]
         image = json.get("bannerImage", False)
         ms_g += f"_{json.get('description', None)}_"
+        ms_g =  ms_g.replace("<br>", "").replace("</br>", "").replace("<i>", "").replace("</i>", "")
         if image:
             try:
                 await borg.send_file(event.chat_id,
                                      image,
-                                     caption=msg,
+                                     caption=ms_ms_g,
                                      parse_mode="md",
                                      reply_to=reply_to_id)
                 await event.delete()
