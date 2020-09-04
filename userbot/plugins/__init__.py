@@ -107,8 +107,7 @@ async def catalive():
     except Exception as e:
         dyno = e
     conclusion = f"Catuserbot Stats\
-                 \n----------------\
-                  \nDatabase : {check_sgnirts}\
+                 \n\nDatabase : {check_sgnirts}\
                   \nSudo : {sudo}\
                   \nUptime : {uptime}\
                   \nDyno : {dyno}\
