@@ -327,5 +327,5 @@ CMD_HELP.update({
     \n**Usage : **Shows you the details of the manga.\
     \n**Syntax : **`.airing <anime name >`\
     \n**Usage : **Shows you the time for that current running anime show.\
-    
+    "
 })
