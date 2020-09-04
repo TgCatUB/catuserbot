@@ -6,7 +6,7 @@ import os
 import re
 from .. import CMD_HELP
 from telethon import Button
-from ..utils import admin_cmd, sudo_cmd
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 # regex obtained from:
 # https://github.com/PaulSonOfLars/tgbot/blob/master/tg_bot/modules/helper_funcs/string_handling.py#L23
@@ -75,14 +75,15 @@ async def _(event):
 @borg.on(sudo_cmd(pattern="ibutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     reply_to_id = None
+    catinput = event.pattern_match.group(1)
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
     reply = await event.get_reply_message()
     if (reply and (reply.media)):
         # soon will try to add media support
-        await edit_or_reply(event, "`Sorry media is not suupported for this plugin`")
-        return
-    catinput = event.pattern_match.group(1)
+        if not catinput:
+            await edit_or_reply(event, "`Sorry media is not suupported for this plugin`")
+            return
     if not catinput:
         catinput = await event.get_reply_message()
     catinput = "Inline buttons " + catinput
