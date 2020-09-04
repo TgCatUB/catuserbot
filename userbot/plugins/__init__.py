@@ -113,4 +113,4 @@ async def catalive():
     return conclusion
 
 
-statstext = await catalive()
+statstext = catalive()
