@@ -9,6 +9,7 @@ Ported from Kensurbot
 import sys
 import asyncio
 from git import Repo
+from . import runcmd
 from .. import CMD_HELP
 from os import environ, execle, path, remove
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
@@ -221,6 +222,11 @@ async def upstream(event):
 async def upstream(event):
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = "https://github.com/Jisan09/catuserbot"
+    catcmd = f"rm -rf .git"
+    try:
+        await runcmd(catcmd)
+    except:
+        pass
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
