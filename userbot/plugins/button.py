@@ -70,6 +70,7 @@ async def _(event):
 
 # Helpers
 
+
 @borg.on(admin_cmd(pattern=r"ibutton(?: |$)(.*)", outgoing=True))
 @borg.on(sudo_cmd(pattern="ibutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
@@ -78,7 +79,7 @@ async def _(event):
         reply_to_id = event.reply_to_msg_id
     reply = await cat.get_reply_message()
     if (reply and (reply.media)):
-        #soon will try to add media support
+        # soon will try to add media support
         await edit_or_reply(cat, "`Sorry media is not suupported for this plugin`")
         return
     catinput = cat.pattern_match.group(1)
@@ -87,16 +88,15 @@ async def _(event):
     catinput = "Inline buttons " + catinput
     tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
     results = await bot.inline_query(
-                tgbotusername,
-                catinput
-            )
+        tgbotusername,
+        catinput
+    )
     await results[0].click(
-                event.chat_id,
-                reply_to=reply_to_id,
-                hide_via=True
-            )
+        event.chat_id,
+        reply_to=reply_to_id,
+        hide_via=True
+    )
     await event.delete()
-    
 
 
 def build_keyboard(buttons):
