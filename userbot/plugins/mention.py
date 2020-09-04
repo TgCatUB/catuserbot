@@ -2,7 +2,7 @@
 `.men` <text>
 """
 # By: @INF1N17Y
-# plugin from uniborg 
+# plugin from uniborg
 
 from userbot.utils import admin_cmd
 from telethon.tl.types import ChannelParticipantsAdmins
@@ -58,6 +58,7 @@ async def _(event):
     else:
         await event.reply(mentions)
     await event.delete()
+
 
 @borg.on(admin_cmd(pattern="men (.*)"))
 async def _(event):
