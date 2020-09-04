@@ -36,13 +36,13 @@ async def amireallyalive(alive):
         await alive.delete()
     else:
         await edit_or_reply(event, f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
-                         f"**✧ Database :** `{check_sgnirts}`\n"
-                         f"**✧ Telethon Version :** `{version.__version__}\n`"
-                         f"**✧ Catuserbot Version :** `{catversion}`\n"
-                         f"**✧ Python Version :** `{python_version()}\n`"
-                         f"**✧ Uptime :** `{uptime}\n`"
-                         f"**✧ My Peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
-                         )
+                            f"**✧ Database :** `{check_sgnirts}`\n"
+                            f"**✧ Telethon Version :** `{version.__version__}\n`"
+                            f"**✧ Catuserbot Version :** `{catversion}`\n"
+                            f"**✧ Python Version :** `{python_version()}\n`"
+                            f"**✧ Uptime :** `{uptime}\n`"
+                            f"**✧ My Peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
+                            )
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="ialive$"))
