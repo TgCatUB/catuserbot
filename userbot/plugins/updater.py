@@ -215,6 +215,41 @@ async def upstream(event):
         await update(event, repo, ups_rem, ac_br)
     return
 
+
+@bot.on(admin_cmd(outgoing=True, pattern=r"galicmds$"))
+@borg.on(sudo_cmd(pattern="galicmds$", allow_sudo=True))
+async def upstream(event):
+    event = await edit_or_reply(event, "`Checking for updates, please wait....`")
+    off_repo = "https://github.com/Jisan09/catuserbot"
+    force_update = False
+    try:
+        txt = "`Oops.. Updater cannot continue due to "
+        txt += "some problems occured`\n\n**LOGTRACE:**\n"
+        repo = Repo()
+    except NoSuchPathError as error:
+        await event.edit(f"{txt}\n`directory {error} is not found`")
+        return repo.__del__()
+    except GitCommandError as error:
+        await event.edit(f"{txt}\n`Early failure! {error}`")
+        return repo.__del__()
+    except InvalidGitRepositoryError as error:
+        if conf is None:
+            return await event.edit(
+                f"`Unfortunately, the directory {error} "
+                "does not seem to be a git repository.\n"
+                "But we can fix that by force updating the userbot using "
+                ".update now.`"
+            )
+        repo = Repo.init()
+        origin = repo.create_remote("upstream", off_repo)
+        origin.fetch()
+        force_update = True
+        repo.create_head("master", origin.refs.master)
+        repo.heads.master.set_tracking_branch(origin.refs.master)
+        repo.heads.master.checkout(True)
+    await event.edit("`Deploying userbot, please wait....`")
+    await deploy(event, repo, ups_rem, ac_br, txt)
+    
 CMD_HELP.update({
     "updater": "**Plugin : **`updater`"
     "\n\n**Syntax : **`.update`"
