@@ -4,9 +4,9 @@
 import re
 from random import choice
 from functools import partial
-
 from telethon import events
 from telethon.tl.functions.messages import EditMessageRequest
+from telethon.extensions.markdown import DEFAULT_URL_RE
 from telethon.utils import add_surrogate, del_surrogate
 from telethon.tl.types import (
     MessageEntityBold, MessageEntityItalic, MessageEntityCode,
