@@ -1,14 +1,18 @@
 from .. import CMD_LIST, SUDO_LIST, CMD_HELP
 from userbot import ALIVE_NAME
+from platform import uname
+import sys
 import requests
-from telethon import functions
+from telethon import events, functions, __version__
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-
 @borg.on(admin_cmd(pattern="help ?(.*)"))
 async def cmd_list(event):
+    reply_to_id = None
+    if event.reply_to_msg_id:
+        reply_to_id = event.reply_to_msg_id
     input_str = event.pattern_match.group(1)
     tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
     if input_str == "text":
@@ -21,10 +25,7 @@ async def cmd_list(event):
             string += "\n"
         if len(string) > 4095:
             data = string
-            key = requests.post(
-                'https://nekobin.com/api/documents',
-                json={
-                    "content": data}).json().get('result').get('key')
+            key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
             url = f'https://nekobin.com/{key}'
             reply_text = f'All commands of the catuserbot are [here]({url})'
             await event.edit(reply_text)
@@ -52,7 +53,7 @@ async def cmd_list(event):
             )
             await results[0].click(
                 event.chat_id,
-                reply_to=event.reply_to_msg_id,
+                reply_to=reply_to_id,
                 hide_via=True
             )
             await event.delete()
@@ -71,27 +72,25 @@ async def cmd_list(event):
             for i in sorted(CMD_LIST):
                 string += "◆`" + str(i)
                 string += "`   "
-            await event.edit(string)
-
+            await event.edit(string)            
 
 @borg.on(admin_cmd(outgoing=True, pattern="info ?(.*)"))
-@borg.on(sudo_cmd(pattern="info ?(.*)", allow_sudo=True))
+@borg.on(sudo_cmd(pattern="info ?(.*)",allow_sudo = True))
 async def info(event):
     """ For .info command,"""
     args = event.pattern_match.group(1).lower()
     if args:
         if args in CMD_HELP:
-            await edit_or_reply(event, str(CMD_HELP[args]))
+            await edit_or_reply(event ,str(CMD_HELP[args]))
         else:
-            await edit_or_reply(event, "Please specify a valid plugin name.")
+            await edit_or_reply(event ,"Please specify a valid plugin name.")
     else:
         string = "**Please specify which plugin do you want help for !!**\
             \n**Usage:** `.info` <plugin name>\n\n"
         for i in sorted(CMD_HELP):
             string += "◆`" + str(i)
             string += "`   "
-        await edit_or_reply(event, string)
-
+        await edit_or_reply(event ,string)        
 
 @borg.on(admin_cmd(pattern="dc"))  # pylint:disable=E0602
 async def _(event):
@@ -99,7 +98,6 @@ async def _(event):
         return
     result = await borg(functions.help.GetNearestDcRequest())  # pylint:disable=E0602
     await event.edit(result.stringify())
-
 
 @borg.on(sudo_cmd(allow_sudo=True, pattern="help(?: |$)(.*)"))
 async def info(event):
@@ -116,7 +114,7 @@ async def info(event):
                     string += "\n"
                 await event.reply(string)
         else:
-            await event.reply(args + " is not a valid plugin!")
+                await event.reply(args + " is not a valid plugin!")
     else:
         string = "**Please specify which plugin do you want help for !!**\
             \n**Usage:** `.help` <plugin name>\n\n"
