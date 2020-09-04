@@ -7,7 +7,6 @@ from functools import partial
 
 from telethon import events
 from telethon.tl.functions.messages import EditMessageRequest
-from telethon.extensions.markdown import DEFAULT_URL_RE
 from telethon.utils import add_surrogate, del_surrogate
 from telethon.tl.types import (
     MessageEntityBold, MessageEntityItalic, MessageEntityCode,
@@ -34,6 +33,7 @@ def get_tag_parser(tag, entity):
 
 PRINTABLE_ASCII = range(0x21, 0x7f)
 
+
 def parse_aesthetics(m):
     def aesthetify(string):
         for c in string:
@@ -49,8 +49,10 @@ def parse_aesthetics(m):
 def parse_randcase(m):
     return ''.join(choice([str.upper, str.lower])(c) for c in m[1]), None
 
+
 def parse_b_meme(m):
     return re.sub(r'(\s|^)\S(\S)', r'\1🅱️\2', m[1]), None
+
 
 def parse_subreddit(m):
     text = '/' + m.group(3)
@@ -60,6 +62,7 @@ def parse_subreddit(m):
         url=f'https://reddit.com{text}'
     )
     return m.group(1) + text, entity
+
 
 def parse_strikethrough(m):
     text = m.group(2)
