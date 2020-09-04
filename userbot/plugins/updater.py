@@ -231,7 +231,7 @@ async def upstream(event):
     except GitCommandError as error:
         await event.edit(f"{txt}\n`Early failure! {error}`")
         return repo.__del__()
-    except InvalidGitRepositoryError as error:
+    except InvalidGitRepositoryError:
         repo = Repo.init()
         origin = repo.create_remote("upstream", off_repo)
         origin.fetch()
