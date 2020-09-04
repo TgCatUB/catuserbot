@@ -637,6 +637,7 @@ async def memes(cat):
     else:
         colr = 0
     catinput = int(catinput)
+    colr = int(colr)
     catid = cat.reply_to_msg_id
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
