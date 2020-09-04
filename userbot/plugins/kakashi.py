@@ -1,67 +1,68 @@
-#created by @Jisan7509
+# created by @Jisan7509
 
-import datetime
-import asyncio
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.account import UpdateNotifySettingsRequest
-from userbot import bot, CMD_HELP
+from userbot import bot
 from userbot.events import register
 from userbot.utils import admin_cmd
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="note_help$"))
 async def kakashi(jisan):
     await jisan.edit("All commands for note is [HERE](https://nekobin.com/qetutujaqo) ")
+
 
 @register(outgoing=True, pattern="^.note(?: |$)(.*)")
 async def kakashi(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
-    if (link in ("alivepic" , "ap")):
+    if (link in ("alivepic", "ap")):
         link = "Alive Picture"
-    elif (link in ("autoname" , "an")):
+    elif (link in ("autoname", "an")):
         link = "Auto Name"
-    elif link == "bloom": 
+    elif link == "bloom":
         link = "Bloom / Colour DP"
-    elif (link in ("customrowcolumn" , "crc")):
+    elif (link in ("customrowcolumn", "crc")):
         link = "Custom Row & Coloum"
-    elif (link in ("helpemoji" , "he")):
+    elif (link in ("helpemoji", "he")):
         link = "Help Menu Emoji"
-    elif (link in ("gdrive" , "gd")):
+    elif (link in ("gdrive", "gd")):
         link = "G-Drive Setup"
-    elif (link in ("github" , "gh")):
+    elif (link in ("github", "gh")):
         link = "Github Commit"
     elif link == "lydia":
         link = "Lydia Setup"
-    elif (link in ("handler" , "ch")):
+    elif (link in ("handler", "ch")):
         link = "Custom Handler"
-    elif link == "ocr": 
+    elif link == "ocr":
         link = "OCR Setup"
-    elif (link in ("pmlogger" , "pl")):
+    elif (link in ("pmlogger", "pl")):
         link = "PM Logger"
-    elif (link in ("pmpermit" , "pp")):
+    elif (link in ("pmpermit", "pp")):
         link = "PM Permit"
-    elif (link in ("pmpermitpic" , "ppp")):
+    elif (link in ("pmpermitpic", "ppp")):
         link = "Pm Permit Pic"
-    elif (link in ("speechtotext" , "stt")):
+    elif (link in ("speechtotext", "stt")):
         link = "Speech To Text"
-    elif link == "sudo": 
+    elif link == "sudo":
         link = "Add Sudo"
-    elif (link in ("youtube" , "yts")):
+    elif (link in ("youtube", "yts")):
         link = "Youtube Search"
-    elif (link in ("updater" , "ud")):
+    elif (link in ("updater", "ud")):
         link = "Setup Updater"
     await event.edit("```Sending your note....```")
     async with bot.conversation("@kakashi_robot") as conv:
-          try:
-              response = conv.wait_event(events.NewMessage(incoming=True,from_users=1117359246))
-              await conv.send_message(f'{link}')
-              response = await response
-          except YouBlockedUserError:
-              await event.reply("```Unblock @kakashi_robot plox```")
-              return
-          else:
-             await event.delete()
-             await bot.forward_messages(event.chat_id, response.message)
-
+        try:
+            response = conv.wait_event(
+                events.NewMessage(
+                    incoming=True,
+                    from_users=1117359246))
+            await conv.send_message(f'{link}')
+            response = await response
+        except YouBlockedUserError:
+            await event.reply("```Unblock @kakashi_robot plox```")
+            return
+        else:
+            await event.delete()
+            await bot.forward_messages(event.chat_id, response.message)

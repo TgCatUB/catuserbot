@@ -17,10 +17,10 @@ from youtube_dl.utils import (DownloadError, ContentTooShortError,
                               ExtractorError, GeoRestrictedError,
                               MaxDownloadsReached, PostProcessingError,
                               UnavailableVideoError, XAttrMetadataError)
-from asyncio import sleep
 from telethon.tl.types import DocumentAttributeAudio
 from userbot.utils import admin_cmd
 from userbot.uniborgConfig import Config
+
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
     """Generic progress_callback for uploads and downloads."""
@@ -78,6 +78,7 @@ def time_formatter(milliseconds: int) -> str:
         ((str(seconds) + " second(s), ") if seconds else "") + \
         ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
     return tmp[:-2]
+
 
 @borg.on(admin_cmd(pattern="yt(a|v) (.*)"))
 async def download_video(v_url):
@@ -214,10 +215,9 @@ async def download_video(v_url):
                          f"{ytdl_data['title']}.mp4")))
         os.remove(f"{ytdl_data['id']}.mp4")
         await v_url.delete()
-        
-                  
 
-#@register(outgoing=True, pattern="^.yts (.*)")
+
+# @register(outgoing=True, pattern="^.yts (.*)")
 @borg.on(admin_cmd(pattern="yts (.*)"))
 async def yt_search(video_q):
     """ For .yts command, do a YouTube search from Telegram. """
@@ -279,4 +279,3 @@ async def youtube_search(query,
     except KeyError:
         nexttok = "KeyError, try again."
         return (nexttok, videos)
- 

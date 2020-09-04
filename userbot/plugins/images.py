@@ -6,13 +6,13 @@ from oub
 """
 import os
 import shutil
-from re import findall
 from .. import CMD_HELP
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from userbot.google_image_download import googleimagesdownload
+from ..helpers.google_image_download import googleimagesdownload
 
-@borg.on(admin_cmd(pattern="img(?: |$)(\d*)? ?(.*)"))
-@borg.on(sudo_cmd(pattern="img(?: |$)(\d*)? ?(.*)",allow_sudo = True))
+
+@borg.on(admin_cmd(pattern=r"img(?: |$)(\d*)? ?(.*)"))
+@borg.on(sudo_cmd(pattern=r"img(?: |$)(\d*)? ?(.*)", allow_sudo=True))
 async def img_sampler(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -23,8 +23,8 @@ async def img_sampler(event):
     else:
         query = str(event.pattern_match.group(2))
     if not query:
-        return await edit_or_reply(event ,"Reply to a message or pass a query to search!")
-    cat = await edit_or_reply(event ,"`Processing...`")
+        return await edit_or_reply(event, "Reply to a message or pass a query to search!")
+    cat = await edit_or_reply(event, "`Processing...`")
     if event.pattern_match.group(1) != "":
         lim = int(event.pattern_match.group(1))
         if lim > 10:
@@ -47,12 +47,12 @@ async def img_sampler(event):
     except Exception as e:
         return await cat.edit(f"Error: \n`{e}`")
     lst = paths[0][query]
-    await bot.send_file(await bot.get_input_entity(event.chat_id), lst,reply_to=reply_to_id)
+    await bot.send_file(await bot.get_input_entity(event.chat_id), lst, reply_to=reply_to_id)
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await cat.delete()
 
 
-CMD_HELP.update({"images":"__**PLUGIN NAME :** Images__\
+CMD_HELP.update({"images": "__**PLUGIN NAME :** Images__\
 \n\n📌** CMD ➥** `.img` <count 1-10><Name> or `.img (replied message)`\
-\n**USAGE   ➥  **Search in google and sends your desire number of images\n Default number is 3 images." 
-})    
+\n**USAGE   ➥  **Search in google and sends your desire number of images\n Default number is 3 images."
+                 })

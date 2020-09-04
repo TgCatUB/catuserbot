@@ -63,11 +63,11 @@ async def endecrypt(query):
 
 CMD_HELP.update({"hash": ".hbase en or .hbase de \nUsage: Find the base64 encoding of the given string\
     \n\n.hash\nUsage: Find the md5, sha1, sha256, sha512 of the string when written into a txt file."
-})
+                 })
 
-CMD_HELP.update({"hash":"__**PLUGIN NAME :** Hash__\
+CMD_HELP.update({"hash": "__**PLUGIN NAME :** Hash__\
 \n\n📌** CMD ➥** `.hbase en` or `.hbase de`\
 \n**USAGE   ➥  **Find the base64 encoding of the given string\
 \n\n📌** CMD ➥** `.hash`\
 \n**USAGE   ➥  **Find the md5, sha1, sha256, sha512 of the string when written into a txt file."
-})
+                 })

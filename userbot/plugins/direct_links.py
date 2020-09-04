@@ -7,7 +7,6 @@
 
 from os import popen
 import re
-from re import findall
 import urllib.parse
 import json
 from random import choice
@@ -348,7 +347,7 @@ def useragent():
 
 
 CMD_HELP.update({
-    "direct":"__**PLUGIN NAME :** Direct links__\
+    "direct": "__**PLUGIN NAME :** Direct links__\
     \n\n📌** CMD ➥** `.direct` <url>\
     \n**USAGE   ➥  **Reply to a link or paste a URL to generate a direct download link\
     \n\n**List of supported URLs:**\

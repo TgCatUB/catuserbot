@@ -6,9 +6,9 @@ import re
 import asyncio
 from .. import CMD_HELP
 from telethon.tl import types
-from telethon import events, utils
+from telethon import utils
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from userbot.plugins.sql_helper.filter_sql import get_filter, add_filter, remove_filter, get_all_filters, remove_all_filters
+from userbot.plugins.sql_helper.filter_sql import add_filter, get_all_filters, remove_all_filters, remove_filter
 
 DELETE_TIMEOUT = 0
 TYPE_TEXT = 0
@@ -17,6 +17,7 @@ TYPE_DOCUMENT = 2
 
 global last_triggered_filters
 last_triggered_filters = {}  # pylint:disable=E0602
+
 
 @command(incoming=True)
 async def on_snip(event):
@@ -46,9 +47,9 @@ async def on_snip(event):
                     )
                 else:
                     media = None
-                message_id = event.message.id
+                event.message.id
                 if event.reply_to_msg_id:
-                    message_id = event.reply_to_msg_id
+                    event.reply_to_msg_id
                 await event.reply(
                     snip.reply,
                     file=media
@@ -59,8 +60,9 @@ async def on_snip(event):
                 await asyncio.sleep(DELETE_TIMEOUT)
                 last_triggered_filters[event.chat_id].remove(name)
 
+
 @borg.on(admin_cmd(pattern="filter (.*)"))
-@borg.on(sudo_cmd(pattern="filter (.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="filter (.*)", allow_sudo=True))
 async def on_snip_save(event):
     name = event.pattern_match.group(1)
     msg = await event.get_reply_message()
@@ -78,14 +80,21 @@ async def on_snip_save(event):
                 snip['id'] = media.id
                 snip['hash'] = media.access_hash
                 snip['fr'] = media.file_reference
-        add_filter(event.chat_id, name, snip['text'], snip['type'], snip.get('id'), snip.get('hash'), snip.get('fr'))
-        await edit_or_reply(event ,f"filter {name} saved successfully. Get it with {name}")
+        add_filter(
+            event.chat_id,
+            name,
+            snip['text'],
+            snip['type'],
+            snip.get('id'),
+            snip.get('hash'),
+            snip.get('fr'))
+        await edit_or_reply(event, f"filter {name} saved successfully. Get it with {name}")
     else:
-        await edit_or_reply(event ,"Reply to a message with `savefilter keyword` to save the filter")
+        await edit_or_reply(event, "Reply to a message with `savefilter keyword` to save the filter")
 
 
 @borg.on(admin_cmd(pattern="filters$"))
-@borg.on(sudo_cmd(pattern="filters$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="filters$", allow_sudo=True))
 async def on_snip_list(event):
     all_snips = get_all_filters(event.chat_id)
     OUT_STR = "Available Filters in the Current Chat:\n"
@@ -107,24 +116,25 @@ async def on_snip_list(event):
             )
             await event.delete()
     else:
-        await edit_or_reply(event ,OUT_STR)
+        await edit_or_reply(event, OUT_STR)
+
 
 @borg.on(admin_cmd(pattern="stop (.*)"))
-@borg.on(sudo_cmd(pattern="stop (.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="stop (.*)", allow_sudo=True))
 async def on_snip_delete(event):
     name = event.pattern_match.group(1)
     remove_filter(event.chat_id, name)
-    await edit_or_reply(event ,f"filter {name} deleted successfully")
+    await edit_or_reply(event, f"filter {name} deleted successfully")
 
 
 @borg.on(admin_cmd(pattern="rmfilters$"))
-@borg.on(sudo_cmd(pattern="rmfilters$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="rmfilters$", allow_sudo=True))
 async def on_all_snip_delete(event):
     remove_all_filters(event.chat_id)
-    await edit_or_reply(event ,f"filters **in current chat** deleted successfully")
+    await edit_or_reply(event, f"filters **in current chat** deleted successfully")
 
 CMD_HELP.update({
-    "filters":"__**PLUGIN NAME :** Filters__\
+    "filters": "__**PLUGIN NAME :** Filters__\
     \n\n📌** CMD ➥** `.filters`\
     \n**USAGE   ➥  **Lists all active (of your userbot) filters in a chat.\
     \n\n📌** CMD ➥** `.filter`  reply to a message with .filter <keyword>\

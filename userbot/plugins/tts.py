@@ -11,6 +11,7 @@ from gtts import gTTS
 from userbot.utils import admin_cmd
 from userbot.plugins import deEmojify
 
+
 @borg.on(admin_cmd(pattern="tts (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -32,25 +33,26 @@ async def _(event):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "voice.ogg"
     try:
-        #https://github.com/SpEcHiDe/UniBorg/commit/17f8682d5d2df7f3921f50271b5b6722c80f4106
+        # https://github.com/SpEcHiDe/UniBorg/commit/17f8682d5d2df7f3921f50271b5b6722c80f4106
         tts = gTTS(text, lang=lan)
         tts.save(required_file_name)
         command_to_execute = [
             "ffmpeg",
             "-i",
-             required_file_name,
-             "-map",
-             "0:a",
-             "-codec:a",
-             "libopus",
-             "-b:a",
-             "100k",
-             "-vbr",
-             "on",
-             required_file_name + ".opus"
+            required_file_name,
+            "-map",
+            "0:a",
+            "-codec:a",
+            "libopus",
+            "-b:a",
+            "100k",
+            "-vbr",
+            "on",
+            required_file_name + ".opus"
         ]
         try:
-            t_response = subprocess.check_output(command_to_execute, stderr=subprocess.STDOUT)
+            t_response = subprocess.check_output(
+                command_to_execute, stderr=subprocess.STDOUT)
         except (subprocess.CalledProcessError, NameError, FileNotFoundError) as exc:
             await event.edit(str(exc))
             # continue sending required_file_name
@@ -74,7 +76,7 @@ async def _(event):
     except Exception as e:
         await event.edit(str(e))
 
-        
+
 CMD_HELP.update({
     "tts":
     " Google Text to Speech\
@@ -82,4 +84,4 @@ CMD_HELP.update({
 \n.tts LanguageCode as reply to a message\
 \n\n.tts LangaugeCode | text to speak\
 "
-}) 
+})

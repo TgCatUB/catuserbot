@@ -2,12 +2,26 @@ import pyfiglet
 from .. import CMD_HELP
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
+
 @borg.on(admin_cmd(pattern="figlet ?(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="figlet ?(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="figlet ?(.*)", allow_sudo=True))
 async def figlet(event):
     if event.fwd_from:
         return
-    CMD_FIG = {"slant": "slant", "3D": "3-d", "5line": "5lineoblique", "alpha": "alphabet", "banner": "banner3-D", "doh": "doh", "iso": "isometric1", "letter": "letters", "allig": "alligator", "dotm": "dotmatrix", "bubble": "bubble", "bulb": "bulbhead", "digi": "digital"}
+    CMD_FIG = {
+        "slant": "slant",
+        "3D": "3-d",
+        "5line": "5lineoblique",
+        "alpha": "alphabet",
+        "banner": "banner3-D",
+        "doh": "doh",
+        "iso": "isometric1",
+        "letter": "letters",
+        "allig": "alligator",
+        "dotm": "dotmatrix",
+        "bubble": "bubble",
+        "bulb": "bulbhead",
+        "digi": "digital"}
     input_str = event.pattern_match.group(1)
     if ":" in input_str:
         text, cmd = input_str.split(":", maxsplit=1)
@@ -15,23 +29,23 @@ async def figlet(event):
         cmd = None
         text = input_str
     else:
-        await edit_or_reply(event ,"Please add some text to figlet")
+        await edit_or_reply(event, "Please add some text to figlet")
         return
     if cmd is not None:
         try:
             font = CMD_FIG[cmd]
         except KeyError:
-            await edit_or_reply(event ,"Invalid selected font.")
+            await edit_or_reply(event, "Invalid selected font.")
             return
         result = pyfiglet.figlet_format(text, font=font)
     else:
         result = pyfiglet.figlet_format(text)
-    await edit_or_reply(event ,"‌‌‎`{}`".format(result))
+    await edit_or_reply(event, "‌‌‎`{}`".format(result))
 
 CMD_HELP.update({
-    "figlet":"__**PLUGIN NAME :** Figlet__\
+    "figlet": "__**PLUGIN NAME :** Figlet__\
     \n\n📌** CMD ➥** `.figlet` text ** or **`.figlet text :type`\
     \n**USAGE   ➥  **the types are slant, 3D , 5line , alpha , banner ,  doh ,  iso ,  letter , allig , dotm , bubble , bulb , digi\
     \n\n***NOTE: **Nospace must be given after : and type\
     \n**EXAMPLE :** `.figlet hello :digi`"
-})    
+})

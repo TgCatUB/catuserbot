@@ -1,4 +1,4 @@
-#imported from pornhub credits to pornhub
+# imported from pornhub credits to pornhub
 from coffeehouse.lydia import LydiaAI
 from coffeehouse.api import API
 import asyncio
@@ -6,7 +6,7 @@ import io
 from userbot.plugins.sql_helper.lydia_ai_sql import get_s, get_all_s, add_s, remove_s
 from time import time
 from userbot.utils import admin_cmd
-from userbot  import CMD_HELP
+from userbot import CMD_HELP
 
 if Var.LYDIA_API_KEY:
     api_key = Var.LYDIA_API_KEY
@@ -99,25 +99,30 @@ async def on_new_message(event):
                 logger.info(session)
                 session_id = session.id
                 session_expires = session.expires
-                logger.info(add_s(user_id, chat_id, session_id, session_expires))
+                logger.info(
+                    add_s(
+                        user_id,
+                        chat_id,
+                        session_id,
+                        session_expires))
             # Try to think a thought.
             try:
                 async with event.client.action(event.chat_id, "location"):
                     await asyncio.sleep(5)
                     output = lydia.think_thought(session_id, query)
-                    await event.reply("💫"+output)
+                    await event.reply("💫" + output)
             except cf.exception.CoffeeHouseError as e:
-                logger.info(str(e))    
-    
-    
+                logger.info(str(e))
+
+
 CMD_HELP.update({
-    "lydia":
-    "`.enai` reply to a user\
-    \nUSAGE: your bot will auto reply to the tagged user until you stops it by `.remcf`\
-    \n\n`.reai` reply to the user to who you want to disable the lydia\
-    \n\n`.liai` to list the users to whom you enabled ai(lydia)\
-    \n\n for functioning this plugin you need to set the heroku var\
-    \n the key is `LYDIA_API_KEY` and get var from `https://coffeehouse.intellivoid.net/`\
-"
-})    
-    
+    "lydia": "__**PLUGIN NAME :** Lydia__\
+    \n\n📌** CMD ➥** `.enai` <reply to user>\
+    \n**USAGE   ➥  **your bot will auto reply to the tagged user until you stops it by `.remcf`\
+    \n\n📌** CMD ➥** `.reai`<replay to user > \
+    \n**USAGE   ➥  **reply to the user to who you want to disable the lydia\
+    \n\n📌** CMD ➥** `.liai` \
+    \n**USAGE   ➥  **to list the users to whom you enabled ai(lydia)\
+    \n\n For functioning this plugin you need to set the heroku var\
+    \n The key is `LYDIA_API_KEY` and get var from [Here](https://coffeehouse.intellivoid.net)"
+})

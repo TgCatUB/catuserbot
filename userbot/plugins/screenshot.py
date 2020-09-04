@@ -6,11 +6,11 @@ import io
 import traceback
 from datetime import datetime
 from selenium import webdriver
-from telethon import events
 from userbot.utils import admin_cmd
 from userbot import CMD_HELP
 import requests
 from validators.url import url
+
 
 @borg.on(admin_cmd(pattern="ss (.*)"))
 async def _(event):
@@ -39,14 +39,16 @@ async def _(event):
             return
         driver.get(input_str)
         await event.edit("Calculating Page Dimensions")
-        height = driver.execute_script("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);")
-        width = driver.execute_script("return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);")
+        height = driver.execute_script(
+            "return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);")
+        width = driver.execute_script(
+            "return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);")
         driver.set_window_size(width + 100, height + 100)
-        # Add some pixels on top of the calculated dimensions 
+        # Add some pixels on top of the calculated dimensions
         # for good measure to make the scroll bars disappear
         im_png = driver.get_screenshot_as_png()
         # saves screenshot of entire page
-        await event.edit("Stoppping Chrome Bin")    
+        await event.edit("Stoppping Chrome Bin")
         driver.close()
         message_id = event.message.id
         if event.reply_to_msg_id:
@@ -68,7 +70,8 @@ async def _(event):
             )
     except Exception:
         await event.edit(traceback.format_exc())
-        
+
+
 @borg.on(admin_cmd(pattern="scapture (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -96,7 +99,7 @@ async def _(event):
     contentType = response_api.headers['content-type']
     end = datetime.now()
     ms = (end - start).seconds
-    hmm = f"**url : **{input_str} \n**Time :** `{ms} seconds`"       
+    hmm = f"**url : **{input_str} \n**Time :** `{ms} seconds`"
     if "image" in contentType:
         with io.BytesIO(response_api.content) as screenshot_image:
             screenshot_image.name = "screencapture.png"
@@ -112,14 +115,13 @@ async def _(event):
             except Exception as e:
                 await event.edit(str(e))
     else:
-        await event.edit(response_api.text)        
+        await event.edit(response_api.text)
 
 CMD_HELP.update({
-    "screenshot":
-    ".ss <url>\
-    \nUsage: Takes a screenshot of a website and sends the screenshot.\
-    \nExample of a valid URL : `https://www.google.com`\
-    \n\n.scapture <url>\
-    \nUsage: Takes a screenshot of a website and sends the screenshot need to set config var for this.\
-    \nExample of a valid URL : `https://www.google.com`"
+    "screenshot": "__**PLUGIN NAME :** Screenshot__\
+    \n\n📌** CMD ➥** `.ss` <url>\
+    \n**USAGE   ➥  **Takes a screenshot of a website and sends the screenshot.\
+    \n\n📌** CMD ➥** `.scapture` <url>\
+    \n**USAGE   ➥  **Takes a screenshot of a website and sends the screenshot need to set config var for this.\
+    \n\n**Example of a valid URL :** `https://www.google.com`"
 })

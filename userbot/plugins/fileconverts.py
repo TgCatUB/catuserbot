@@ -4,22 +4,22 @@ import asyncio
 from io import BytesIO
 from .. import CMD_HELP
 from telethon import types
-from telethon import events
 from datetime import datetime
 from telethon.errors import PhotoInvalidDimensionsError
 from telethon.tl.functions.messages import SendMediaRequest
 from ..utils import admin_cmd, sudo_cmd, progress, edit_or_reply
 
+
 @borg.on(admin_cmd(pattern="stoi$"))
-@borg.on(sudo_cmd(pattern="stoi$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="stoi$", allow_sudo=True))
 async def _(cat):
     if cat.fwd_from:
         return
     reply_to_id = cat.message.id
     if cat.reply_to_msg_id:
-        reply_to_id = cat.reply_to_msg_id    
+        reply_to_id = cat.reply_to_msg_id
     filename = "hi.jpg"
-    event = await edit_or_reply(cat ,"Converting.....")
+    event = await edit_or_reply(cat, "Converting.....")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -27,13 +27,13 @@ async def _(cat):
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await borg.download_media( reply_message , downloaded_file_name )
+        downloaded_file_name = await borg.download_media(reply_message, downloaded_file_name)
         if os.path.exists(downloaded_file_name):
             caat = await borg.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
-                reply_to = reply_to_id
+                reply_to=reply_to_id
             )
             os.remove(downloaded_file_name)
             await event.delete()
@@ -42,16 +42,17 @@ async def _(cat):
     else:
         await event.edit("Syntax : `.stoi` reply to a Telegram normal sticker")
 
+
 @borg.on(admin_cmd(pattern="itos$"))
-@borg.on(sudo_cmd(pattern="itos$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="itos$", allow_sudo=True))
 async def _(cat):
     if cat.fwd_from:
         return
     reply_to_id = cat.message.id
     if cat.reply_to_msg_id:
-        reply_to_id = cat.reply_to_msg_id 
+        reply_to_id = cat.reply_to_msg_id
     filename = "hi.webp"
-    event = await edit_or_reply(cat ,"Converting.....")
+    event = await edit_or_reply(cat, "Converting.....")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -59,43 +60,45 @@ async def _(cat):
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await borg.download_media( reply_message , downloaded_file_name )
+        downloaded_file_name = await borg.download_media(reply_message, downloaded_file_name)
         if os.path.exists(downloaded_file_name):
             caat = await borg.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
                 reply_to=reply_to_id
-            )   
+            )
             os.remove(downloaded_file_name)
             await event.delete()
         else:
             await event.edit("Can't Convert")
     else:
-        await event.edit("Syntax : `.itos` reply to a Telegram normal sticker")        
+        await event.edit("Syntax : `.itos` reply to a Telegram normal sticker")
+
 
 @borg.on(admin_cmd(pattern="ttf ?(.*)"))
-@borg.on(sudo_cmd(pattern="ttf ?(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="ttf ?(.*)", allow_sudo=True))
 async def get(event):
     name = event.text[5:]
     if name is None:
-        await edit_or_reply(event ,"reply to text message as `.ttf <file name>`")
+        await edit_or_reply(event, "reply to text message as `.ttf <file name>`")
         return
     m = await event.get_reply_message()
     if m.text:
         with open(name, "w") as f:
             f.write(m.message)
         await event.delete()
-        await borg.send_file(event.chat_id,name,force_document=True)
+        await borg.send_file(event.chat_id, name, force_document=True)
         os.remove(name)
     else:
-        await edit_or_reply(event ,"reply to text message as `.ttf <file name>`")
-        
+        await edit_or_reply(event, "reply to text message as `.ttf <file name>`")
+
+
 @borg.on(admin_cmd(pattern="ftoi$"))
-@borg.on(sudo_cmd(pattern="ftoi$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="ftoi$", allow_sudo=True))
 async def on_file_to_photo(event):
     target = await event.get_reply_message()
-    catt = await edit_or_reply(event ,"Converting.....")
+    catt = await edit_or_reply(event, "Converting.....")
     try:
         image = target.media.document
     except AttributeError:
@@ -120,31 +123,32 @@ async def on_file_to_photo(event):
         ))
     except PhotoInvalidDimensionsError:
         return
-    await catt.delete() 
-    
+    await catt.delete()
+
+
 @borg.on(admin_cmd(pattern="nfc ?(.*)"))
-@borg.on(sudo_cmd(pattern="nfc ?(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="nfc ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
-        return 
+        return
     if not event.reply_to_msg_id:
-       await edit_or_reply(event ,"```Reply to any media file.```")
-       return
-    reply_message = await event.get_reply_message() 
+        await edit_or_reply(event, "```Reply to any media file.```")
+        return
+    reply_message = await event.get_reply_message()
     if not reply_message.media:
-       await edit_or_reply(event ,"reply to media file")
-       return
+        await edit_or_reply(event, "reply to media file")
+        return
     input_str = event.pattern_match.group(1)
-    if  input_str is None:
-        await edit_or_reply(event ,"try `.nfc voice` or`.nfc mp3`")
+    if input_str is None:
+        await edit_or_reply(event, "try `.nfc voice` or`.nfc mp3`")
         return
     if input_str == "mp3":
-        event = await edit_or_reply(event ,"converting...")
+        event = await edit_or_reply(event, "converting...")
     elif input_str == "voice":
-        event = await edit_or_reply(event ,"converting...")
+        event = await edit_or_reply(event, "converting...")
     else:
-        await edit_or_reply(event ,"try `.nfc voice` or`.nfc mp3`")
-        return  
+        await edit_or_reply(event, "try `.nfc voice` or`.nfc mp3`")
+        return
     try:
         start = datetime.now()
         c_time = time.time()
@@ -168,8 +172,10 @@ async def _(event):
         voice_note = False
         supports_streaming = False
         if input_str == "voice":
-            new_required_file_caption = "voice_" + str(round(time.time())) + ".opus"
-            new_required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "/" + new_required_file_caption
+            new_required_file_caption = "voice_" + \
+                str(round(time.time())) + ".opus"
+            new_required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + \
+                "/" + new_required_file_caption
             command_to_run = [
                 "ffmpeg",
                 "-i",
@@ -187,8 +193,10 @@ async def _(event):
             voice_note = True
             supports_streaming = True
         elif input_str == "mp3":
-            new_required_file_caption = "mp3_" + str(round(time.time())) + ".mp3"
-            new_required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "/" + new_required_file_caption
+            new_required_file_caption = "mp3_" + \
+                str(round(time.time())) + ".mp3"
+            new_required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + \
+                "/" + new_required_file_caption
             command_to_run = [
                 "ffmpeg",
                 "-i",
@@ -212,8 +220,8 @@ async def _(event):
         )
         # Wait for the subprocess to finish
         stdout, stderr = await process.communicate()
-        e_response = stderr.decode().strip()
-        t_response = stdout.decode().strip()
+        stderr.decode().strip()
+        stdout.decode().strip()
         os.remove(downloaded_file_name)
         if os.path.exists(new_required_file_name):
             end_two = datetime.now()
@@ -229,12 +237,12 @@ async def _(event):
                     progress(d, t, event, c_time, "trying to upload")
                 )
             )
-            ms_two = (end_two - end).seconds
+            (end_two - end).seconds
             os.remove(new_required_file_name)
             await event.delete()
 
 CMD_HELP.update({
-    "fileconverts":"__**PLUGIN NAME :** File Converts__\
+    "fileconverts": "__**PLUGIN NAME :** File Converts__\
     \n\n📌** CMD ➥** `.stoi` reply to sticker\
     \n**USAGE   ➥  **Converts sticker to image\
     \n\n📌** CMD ➥** `.itos` reply to image\
@@ -246,4 +254,4 @@ CMD_HELP.update({
     \n\n📌** CMD ➥** `.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\
     \n**USAGE   ➥  **Converts the required media file to voice or mp3 file.\
     "
-})    
+})

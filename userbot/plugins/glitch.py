@@ -4,38 +4,39 @@ ported to telethon by @mrconfused and @sandy1709
 """
 
 import os
-from PIL import Image 
-from .. import LOGS , CMD_HELP
+from PIL import Image
+from .. import LOGS, CMD_HELP
 from telethon import functions, types
 from glitch_this import ImageGlitcher
-from . import take_screen_shot ,runcmd
+from . import take_screen_shot, runcmd
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
+
 @borg.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="(glitch|glitchs)(?: |$)(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="(glitch|glitchs)(?: |$)(.*)", allow_sudo=True))
 async def glitch(cat):
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
     reply = await cat.get_reply_message()
     catid = cat.reply_to_msg_id
-    cat = await edit_or_reply(cat ,"```Glitching... 😁```")
+    cat = await edit_or_reply(cat, "```Glitching... 😁```")
     if not (reply and (reply.media)):
         await cat.edit("`Media not found...`")
         return
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
-    catsticker = await reply.download_media(file = "./temp/")
-    if not catsticker.endswith(('.mp4','.webp','.tgs','.png','.jpg')):
+    catsticker = await reply.download_media(file="./temp/")
+    if not catsticker.endswith(('.mp4', '.webp', '.tgs', '.png', '.jpg')):
         os.remove(catsticker)
         await cat.edit("`Media not found...`")
         return
-    file = os.path.join("./temp/", "glitch.png")
+    os.path.join("./temp/", "glitch.png")
     if catinput:
         if not catinput.isdigit():
             await cat.edit("`You input is invalid, check help`")
             return
         catinput = int(catinput)
-        if not 0 < catinput< 9:
+        if not 0 < catinput < 9:
             await cat.edit("`Invalid Range...`")
             return
     else:
@@ -50,14 +51,14 @@ async def glitch(cat):
         glitch_file = catfile
     elif catsticker.endswith(".webp"):
         catfile = os.path.join("./temp/", "glitch.png")
-        os.rename(catsticker , catfile)
+        os.rename(catsticker, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("`catsticker not found... `")
             return
         glitch_file = catfile
     elif catsticker.endswith(".mp4"):
         catfile = os.path.join("./temp/", "glitch.png")
-        await take_screen_shot(catsticker , 0, catfile)
+        await take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```catsticker not found...```")
             return
@@ -73,12 +74,13 @@ async def glitch(cat):
         await borg.send_file(
             cat.chat_id,
             glitched,
-            reply_to= catid)
+            reply_to=catid)
         os.remove(glitched)
         await cat.delete()
     elif cmd == "glitch":
         Glitched = "./temp/" + "glitch.gif"
-        glitch_img = glitcher.glitch_image(img, catinput, color_offset=True, gif=True)
+        glitch_img = glitcher.glitch_image(
+            img, catinput, color_offset=True, gif=True)
         DURATION = 200
         LOOP = 0
         glitch_img[0].save(
@@ -93,13 +95,13 @@ async def glitch(cat):
             Glitched,
             reply_to=catid)
         await borg(functions.messages.SaveGifRequest(
-        id=types.InputDocument(
-            id=sandy.media.document.id,
-            access_hash=sandy.media.document.access_hash,
-            file_reference=sandy.media.document.file_reference
-        ),
-        unsave=True
-    )) 
+            id=types.InputDocument(
+                id=sandy.media.document.id,
+                access_hash=sandy.media.document.access_hash,
+                file_reference=sandy.media.document.file_reference
+            ),
+            unsave=True
+        ))
         os.remove(Glitched)
         await cat.delete()
     for files in (catsticker, glitch_file):
@@ -107,7 +109,7 @@ async def glitch(cat):
             os.remove(files)
 
 CMD_HELP.update({
-    "glitch":"__**PLUGIN NAME :** Glitch__\
+    "glitch": "__**PLUGIN NAME :** Glitch__\
     \n\n📌** CMD ➥** `.glitch` reply to media file\
     \n**USAGE   ➥  **Glitches the given mediafile(gif , stickers , image, videos) to a gif and glitch range is from 1 to 8.\
     If nothing is mentioned then by default it is 2\

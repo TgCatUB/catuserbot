@@ -1,7 +1,6 @@
 """Pins the replied message
 Syntax: .cpin [LOUD]"""
-from telethon import events
-from telethon.tl import functions, types
+from telethon.tl import functions
 from userbot.utils import admin_cmd
 
 

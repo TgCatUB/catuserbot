@@ -18,6 +18,7 @@ afk_time = None
 last_afk_message = {}
 afk_start = {}
 
+
 @borg.on(events.NewMessage(outgoing=True))  # pylint:disable=E0602
 async def set_not_afk(event):
     global USER_AFK  # pylint:disable=E0602
@@ -35,14 +36,16 @@ async def set_not_afk(event):
         try:
             await borg.send_message(  # pylint:disable=E0602
                 Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-                "#AFKFALSE \nSet AFK mode to False\n" + "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`"
+                "#AFKFALSE \nSet AFK mode to False\n" + \
+                "__Back alive!__\n**No Longer afk.**\n `Was afk for:``" + total_afk_time + "`"
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await borg.send_message(  # pylint:disable=E0602
                 event.chat_id,
                 "Please set `PRIVATE_GROUP_BOT_API_ID` " + \
                 "for the proper functioning of afk functionality " + \
-                "check pinned message in @catuserbot17.\n\n `{}`".format(str(e)),
+                "check pinned message in @catuserbot17.\n\n `{}`".format(
+                    str(e)),
                 reply_to=event.message.id,
                 silent=True
             )
@@ -96,13 +99,13 @@ async def on_afk(event):
                     afk_since = date.strftime("%A, %Y %B %m, %H:%I")
                 else:
                     wday = now + datetime.timedelta(days=-days)
-                    afk_since = wday.strftime('%A')
+                    wday.strftime('%A')
             elif hours > 1:
-                afk_since = f"`{int(hours)}h{int(minutes)}m` **ago**"
+                f"`{int(hours)}h{int(minutes)}m` **ago**"
             elif minutes > 0:
-                afk_since = f"`{int(minutes)}m{int(seconds)}s` **ago**"
+                f"`{int(minutes)}m{int(seconds)}s` **ago**"
             else:
-                afk_since = f"`{int(seconds)}s` **ago**"
+                f"`{int(seconds)}s` **ago**"
         msg = None
         message_to_reply = f"__My Master Has Been In afk For__ `{total_afk_time}`\nWhere He Is: ONLY GOD KNOWS " + \
             f"\n\n__I promise He'll back in a few light years__\n**REASON**: {reason}" \
@@ -113,6 +116,7 @@ async def on_afk(event):
         if event.chat_id in last_afk_message:  # pylint:disable=E0602
             await last_afk_message[event.chat_id].delete()  # pylint:disable=E0602
         last_afk_message[event.chat_id] = msg  # pylint:disable=E0602
+
 
 @borg.on(admin_cmd(pattern=r"afk ?(.*)", outgoing=True))  # pylint:disable=E0602
 async def _(event):
@@ -155,7 +159,7 @@ async def _(event):
             logger.warn(str(e))  # pylint:disable=E0602
 
 CMD_HELP.update({
-    "afk":"__**PLUGIN NAME :** Afk__\
+    "afk": "__**PLUGIN NAME :** Afk__\
 \n\n📌** CMD ➥** `.afk` [Optional Reason]\
 \n**USAGE   ➥  **Sets you as afk.\nReplies to anyone who tags/PM's \
 you telling them that you are AFK(reason)\n\n__Switches off AFK when you type back anything, anywhere.__\

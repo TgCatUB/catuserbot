@@ -3,27 +3,23 @@ Syntax: .exec Code"""
 import io
 import sys
 import time
-import inspect
 import asyncio
 import traceback
-import subprocess
 from .. import CMD_HELP
-from telethon import events, errors, functions, types
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
+
 
 @borg.on(admin_cmd(pattern="bash ?(.*)"))
-@borg.on(sudo_cmd(pattern="bash ?(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="bash ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
-    DELAY_BETWEEN_EDITS = 0.3
     PROCESS_RUN_TIME = 100
     cmd = event.pattern_match.group(1)
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    start_time = time.time() + PROCESS_RUN_TIME
+    time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -42,20 +38,20 @@ async def _(event):
             )
             await event.delete()
     else:
-        await edit_or_reply(event ,OUTPUT)
-        
+        await edit_or_reply(event, OUTPUT)
+
+
 @borg.on(admin_cmd(pattern="exec ?(.*)"))
-@borg.on(sudo_cmd(pattern="exec ?(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="exec ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
-    DELAY_BETWEEN_EDITS = 0.3
     PROCESS_RUN_TIME = 100
     cmd = event.pattern_match.group(1)
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    start_time = time.time() + PROCESS_RUN_TIME
+    time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -83,10 +79,11 @@ async def _(event):
             )
             await event.delete()
     else:
-        await edit_or_reply(event ,OUTPUT)
+        await edit_or_reply(event, OUTPUT)
+
 
 @borg.on(admin_cmd(pattern="eval"))
-@borg.on(sudo_cmd(pattern="eval",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="eval", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
@@ -94,7 +91,7 @@ async def _(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    event = await edit_or_reply(event ,"Processing ...")
+    event = await edit_or_reply(event, "Processing ...")
     old_stderr = sys.stderr
     old_stdout = sys.stdout
     redirected_output = sys.stdout = io.StringIO()
@@ -117,7 +114,8 @@ async def _(event):
         evaluation = stdout
     else:
         evaluation = "Success"
-    final_output = "**EVAL**: `{}` \n\n **OUTPUT**: \n`{}` \n".format(cmd, evaluation)
+    final_output = "**EVAL**: `{}` \n\n **OUTPUT**: \n`{}` \n".format(
+        cmd, evaluation)
     if len(final_output) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(final_output)) as out_file:
             out_file.name = "eval.text"
@@ -133,15 +131,15 @@ async def _(event):
     else:
         await event.edit(final_output)
 
-        
+
 async def aexec(code, event):
     exec(f'async def __aexec(event): ' +
-        ''.join(f'\n {l}' for l in code.split('\n'))
-        )
+         ''.join(f'\n {l}' for l in code.split('\n'))
+         )
     return await locals()['__aexec'](event)
-        
+
 CMD_HELP.update({
-    "evaluators":"__**PLUGIN NAME :** Evaluators__\
+    "evaluators": "__**PLUGIN NAME :** Evaluators__\
      \n\n📌** CMD ➥** `.eval` <expr>\
      \n**USAGE   ➥  **Execute Python script.\
      \n\n📌** CMD ➥** `.exec` <command>\

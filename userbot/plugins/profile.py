@@ -5,16 +5,14 @@
 #
 
 import os
-from telethon import events
 from userbot import CMD_HELP
 from telethon.tl import functions
 from userbot.utils import admin_cmd
 from telethon.tl.functions.account import UpdateUsernameRequest
 from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
-from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
-from telethon.tl.functions.photos import DeletePhotosRequest,GetUserPhotosRequest
-from telethon.errors.rpcerrorlist import PhotoExtInvalidError, UsernameOccupiedError
+from telethon.tl.types import Channel, Chat, InputPhoto, User
+from telethon.tl.functions.photos import DeletePhotosRequest, GetUserPhotosRequest
+from telethon.errors.rpcerrorlist import UsernameOccupiedError
 
 
 # ====================== CONSTANT ===============================
@@ -50,7 +48,7 @@ async def _(event):
     names = event.pattern_match.group(1)
     first_name = names
     last_name = ""
-    if  "|" in names:
+    if "|" in names:
         first_name, last_name = names.split("|", 1)
     try:
         await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
@@ -61,13 +59,15 @@ async def _(event):
     except Exception as e:  # pylint:disable=C0103,W0703
         await event.edit(str(e))
 
+
 @borg.on(admin_cmd(pattern="ppic"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
     reply_message = await event.get_reply_message()
     await event.edit("Downloading Profile Picture to my local ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):  # pylint:disable=E0602
+    if not os.path.isdir(
+            Config.TMP_DOWNLOAD_DIRECTORY):  # pylint:disable=E0602
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)  # pylint:disable=E0602
     photo = None
     try:
@@ -80,8 +80,8 @@ async def _(event):
     else:
         if photo:
             await event.edit("now, Uploading to Telegram ...")
-            if photo.endswith((".mp4" ,".MP4")):
-                #https://t.me/tgbetachat/324694
+            if photo.endswith((".mp4", ".MP4")):
+                # https://t.me/tgbetachat/324694
                 size = os.stat(photo).st_size
                 if size > 2097152:
                     await event.edit("size must be less than 2 mb")
@@ -94,9 +94,9 @@ async def _(event):
                 catvideo = None
             try:
                 await borg(functions.photos.UploadProfilePhotoRequest(
-                    file = catpic,
-                    video = catvideo,
-                    video_start_ts =  0.01               ))
+                    file=catpic,
+                    video=catvideo,
+                    video_start_ts=0.01))
             except Exception as e:  # pylint:disable=C0103,W0703
                 await event.edit(str(e))
             else:
@@ -105,6 +105,7 @@ async def _(event):
         os.remove(photo)
     except Exception as e:  # pylint:disable=C0103,W0703
         logger.warn(str(e))  # pylint:
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="username (.*)"))
 async def update_username(username):
@@ -179,6 +180,7 @@ async def remove_profilepic(delpfp):
     await delpfp.edit(
         f"`Successfully deleted {len(input_photos)} profile picture(s).`")
 
+
 @borg.on(admin_cmd(pattern="myusernames$"))
 async def _(event):
     if event.fwd_from:
@@ -188,7 +190,7 @@ async def _(event):
     for channel_obj in result.chats:
         output_str += f"- {channel_obj.title} @{channel_obj.username} \n"
     await event.edit(output_str)
-    
+
 CMD_HELP.update({
     "profile":
     ".username <new_username>\

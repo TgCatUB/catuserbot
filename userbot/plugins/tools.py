@@ -6,7 +6,6 @@ from urllib.parse import quote
 from userbot.utils import admin_cmd
 from PIL import Image, ImageColor
 import os
-import time
 from datetime import datetime
 import qrcode
 import barcode
@@ -14,43 +13,48 @@ from barcode.writer import ImageWriter
 from bs4 import BeautifulSoup
 from userbot import CMD_HELP
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.account import UpdateNotifySettingsRequest
 import logging
-logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-                    level=logging.WARNING)
+logging.basicConfig(
+    format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
+    level=logging.WARNING)
+
 
 @borg.on(admin_cmd(pattern="scan ?(.*)"))
 async def _(event):
     if event.fwd_from:
-        return 
+        return
     if not event.reply_to_msg_id:
         await event.edit("```Reply to any user message.```")
         return
-    reply_message = await event.get_reply_message() 
+    reply_message = await event.get_reply_message()
     if not reply_message.media:
         await event.edit("```reply to a media message```")
         return
     chat = "@DrWebBot"
-    sender = reply_message.sender
+    reply_message.sender
     if reply_message.sender.bot:
         await event.edit("```Reply to actual users message.```")
         return
     await event.edit(" `Sliding my tip, of fingers over it`")
     async with borg.conversation(chat) as conv:
         try:
-            response = conv.wait_event(events.NewMessage(incoming=True,from_users=161163358))
+            response = conv.wait_event(
+                events.NewMessage(
+                    incoming=True,
+                    from_users=161163358))
             await borg.forward_messages(chat, reply_message)
-            response = await response 
-        except YouBlockedUserError: 
+            response = await response
+        except YouBlockedUserError:
             await event.reply("```Please unblock @sangmatainfo_bot and try again```")
             return
         if response.text.startswith("Forward"):
             await event.edit("```can you kindly disable your forward privacy settings for good?```")
         else:
             if response.text.startswith("Select"):
-                await event.edit("`Please go to` @DrWebBot `and select your language.`") 
-            else: 
+                await event.edit("`Please go to` @DrWebBot `and select your language.`")
+            else:
                 await event.edit(f"**Antivirus scan was completed. I got dem final results.**\n {response.message.message}")
+
 
 @borg.on(admin_cmd(pattern=r"decode$", outgoing=True))
 async def parseqr(qr_e):
@@ -115,7 +119,8 @@ async def _(event):
         message = "SYNTAX: `.barcode <long text to include>`"
     bar_code_type = "code128"
     try:
-        bar_code_mode_f = barcode.get(bar_code_type, message, writer=ImageWriter())
+        bar_code_mode_f = barcode.get(
+            bar_code_type, message, writer=ImageWriter())
         filename = bar_code_mode_f.save(bar_code_type)
         await borg.send_file(
             event.chat_id,
@@ -132,6 +137,7 @@ async def _(event):
     await event.edit("Created BarCode in {} seconds".format(ms))
     await asyncio.sleep(5)
     await event.delete()
+
 
 @borg.on(admin_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", outgoing=True))
 async def make_qr(makeqr):
@@ -172,6 +178,7 @@ async def make_qr(makeqr):
     os.remove("img_file.webp")
     await makeqr.delete()
 
+
 @borg.on(admin_cmd(pattern="calendar (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -183,21 +190,26 @@ async def _(event):
         yyyy = input_sgra[0]
         mm = input_sgra[1]
         dd = input_sgra[2]
-        required_url = "https://calendar.kollavarsham.org/api/years/{}/months/{}/days/{}?lang={}".format(yyyy, mm, dd, "en")
+        required_url = "https://calendar.kollavarsham.org/api/years/{}/months/{}/days/{}?lang={}".format(
+            yyyy, mm, dd, "en")
         headers = {"Accept": "application/json"}
         response_content = requests.get(required_url, headers=headers).json()
         a = ""
         if "error" not in response_content:
             current_date_detail_arraays = response_content["months"][0]["days"][0]
-            a = json.dumps(current_date_detail_arraays, sort_keys=True, indent=4)
+            a = json.dumps(
+                current_date_detail_arraays,
+                sort_keys=True,
+                indent=4)
         else:
             a = response_content["error"]
         await event.edit(str(a))
     else:
         await event.edit("SYNTAX: .calendar YYYY-MM-DD")
     end = datetime.now()
-    ms = (end - start).seconds
-    
+    (end - start).seconds
+
+
 @borg.on(admin_cmd(pattern="currency (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -210,7 +222,8 @@ async def _(event):
             number = float(input_sgra[0])
             currency_from = input_sgra[1].upper()
             currency_to = input_sgra[2].upper()
-            request_url = "https://api.exchangeratesapi.io/latest?base={}".format(currency_from)
+            request_url = "https://api.exchangeratesapi.io/latest?base={}".format(
+                currency_from)
             current_response = requests.get(request_url).json()
             if currency_to in current_response["rates"]:
                 current_rate = float(current_response["rates"][currency_to])
@@ -223,8 +236,9 @@ async def _(event):
     else:
         await event.edit("**Syntax:**\n.currency amount from to\n**Example:**\n`.currency 10 usd inr`")
     end = datetime.now()
-    ms = (end - start).seconds
-    
+    (end - start).seconds
+
+
 @borg.on(admin_cmd(pattern="currencies$"))
 async def currencylist(ups):
     if ups.fwd_from:
@@ -232,11 +246,12 @@ async def currencylist(ups):
     request_url = "https://api.exchangeratesapi.io/latest?base=USD"
     current_response = requests.get(request_url).json()
     dil_wale_puch_de_na_chaaa = current_response["rates"]
-    hmm =""
+    hmm = ""
     for key, value in dil_wale_puch_de_na_chaaa.items():
-        hmm += f"`{key}`" +"\t\t\t"
-    await ups.edit(f"**List of some currencies:**\n{hmm}\n")   
-        
+        hmm += f"`{key}`" + "\t\t\t"
+    await ups.edit(f"**List of some currencies:**\n{hmm}\n")
+
+
 @borg.on(admin_cmd(pattern="ifsc (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -251,7 +266,8 @@ async def _(event):
         await event.edit(str(a))
     else:
         await event.edit("`{}`: {}".format(input_str, r.text))
-        
+
+
 @borg.on(admin_cmd(pattern="color (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -281,7 +297,8 @@ async def _(event):
             await event.delete()
     else:
         await event.edit("Syntax: `.color <color_code>` example : `.color #ff0000`")
-   
+
+
 @borg.on(admin_cmd(pattern="xkcd ?(.*)"))
 async def _(event):
     if event.fwd_from:
@@ -296,8 +313,8 @@ async def _(event):
             queryresult = requests.get(
                 xkcd_search_url,
                 params={
-                    "action":"xkcd",
-                    "query":quote(input_str)
+                    "action": "xkcd",
+                    "query": quote(input_str)
                 }
             ).text
             xkcd_id = queryresult.split(" ")[2].lstrip("\n")
@@ -313,10 +330,10 @@ async def _(event):
         day = data["day"].zfill(2)
         xkcd_link = "https://xkcd.com/{}".format(data.get("num"))
         safe_title = data.get("safe_title")
-        transcript = data.get("transcript")
+        data.get("transcript")
         alt = data.get("alt")
         img = data.get("img")
-        title = data.get("title")
+        data.get("title")
         output_str = """[\u2060]({})**{}**
 [XKCD ]({})
 Title: {}
@@ -327,7 +344,7 @@ Year: {}""".format(img, input_str, xkcd_link, safe_title, alt, day, month, year)
         await event.edit(output_str, link_preview=True)
     else:
         await event.edit("xkcd n.{} not found!".format(xkcd_id))
-        
+
 CMD_HELP.update({
     'tools':
     "`.scan` reply to media or file\

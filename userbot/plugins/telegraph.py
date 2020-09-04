@@ -2,12 +2,11 @@
 Available Commands:
 .telegraph media as reply to a media
 .telegraph text as reply to a large text"""
-from telethon import events
 import os
 from PIL import Image
 from datetime import datetime
 from telegraph import Telegraph, upload_file, exceptions
-from userbot import CMD_HELP , ALIVE_NAME 
+from userbot import ALIVE_NAME
 from userbot.utils import admin_cmd, sudo_cmd
 
 telegraph = Telegraph()
@@ -17,6 +16,7 @@ auth_url = r["auth_url"]
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+
 
 @borg.on(admin_cmd(pattern="telegraph (media|text) ?(.*)"))
 async def _(event):
@@ -60,7 +60,7 @@ async def _(event):
                 await event.edit(f"__**➥ Uploaded to :-**__ **[Telegraph]**({jisan})\n__**➥ Uploaded in {ms + ms_two} seconds .**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})", link_preview=True)
         elif input_str == "text":
             user_object = await borg.get_entity(r_message.from_id)
-            title_of_page = user_object.first_name # + " " + user_object.last_name
+            title_of_page = user_object.first_name  # + " " + user_object.last_name
             # apparently, all Users do not have last_name field
             if optional_title:
                 title_of_page = optional_title
@@ -91,7 +91,7 @@ async def _(event):
         await event.edit("Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)")
 
 
-@borg.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)", allow_sudo = True))
+@borg.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -133,7 +133,7 @@ async def _(event):
                 await event.reply(f"__**➥ Uploaded to :-**__ **[Telegraph]**({jisan})\n__**➥ Uploaded in {ms + ms_two} seconds .**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})", link_preview=True)
         elif input_str == "text":
             user_object = await borg.get_entity(r_message.from_id)
-            title_of_page = user_object.first_name # + " " + user_object.last_name
+            title_of_page = user_object.first_name  # + " " + user_object.last_name
             # apparently, all Users do not have last_name field
             if optional_title:
                 title_of_page = optional_title
@@ -162,6 +162,7 @@ async def _(event):
             await event.reply(f"__**➥ Pasted to :-**__ **[Telegraph]**({kakashi})\n__**➥ Pasted in {ms} seconds .**__", link_preview=True)
     else:
         await event.reply("Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)")
+
 
 def resize_image(image):
     im = Image.open(image)

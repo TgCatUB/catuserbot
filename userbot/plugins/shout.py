@@ -3,13 +3,10 @@ usage: .shout message
 originaly from : @corsicanu_bot
 """
 
-import sys
-from telethon import events, functions
 from userbot.utils import admin_cmd
-import random
-from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 import asyncio
+
 
 @borg.on(admin_cmd(pattern=f"shout", outgoing=True))
 async def shout(args):
@@ -27,30 +24,30 @@ async def shout(args):
     result[0] = text[0]
     result = "".join(result)
     msg = "\n" + result
-    await args.edit("`"+msg+"`")
-        
+    await args.edit("`" + msg + "`")
+
+
 @borg.on(admin_cmd(pattern=f"sadmin", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
-    animation_interval = 1
     animation_ttl = range(0, 13)
     await event.edit("sadmin")
     animation_chars = [
-            "@aaaaaaaaaaaaadddddddddddddmmmmmmmmmmmmmiiiiiiiiiiiiinnnnnnnnnnnnn",
-            "@aaaaaaaaaaaaddddddddddddmmmmmmmmmmmmiiiiiiiiiiiinnnnnnnnnnnn",    
-            "@aaaaaaaaaaadddddddddddmmmmmmmmmmmiiiiiiiiiiinnnnnnnnnnn",
-            "@aaaaaaaaaaddddddddddmmmmmmmmmmiiiiiiiiiinnnnnnnnnn",
-            "@aaaaaaaaadddddddddmmmmmmmmmiiiiiiiiinnnnnnnnn",
-            "@aaaaaaaaddddddddmmmmmmmmiiiiiiiinnnnnnnn",
-            "@aaaaaaadddddddmmmmmmmiiiiiiinnnnnnn",
-            "@aaaaaaddddddmmmmmmiiiiiinnnnnn",
-            "@aaaaadddddmmmmmiiiiinnnnn",    
-            "@aaaaddddmmmmiiiinnnn",
-            "@aaadddmmmiiinnn",
-            "@aaddmmiinn",
-            "@admin"
-        ]
+        "@aaaaaaaaaaaaadddddddddddddmmmmmmmmmmmmmiiiiiiiiiiiiinnnnnnnnnnnnn",
+        "@aaaaaaaaaaaaddddddddddddmmmmmmmmmmmmiiiiiiiiiiiinnnnnnnnnnnn",
+        "@aaaaaaaaaaadddddddddddmmmmmmmmmmmiiiiiiiiiiinnnnnnnnnnn",
+        "@aaaaaaaaaaddddddddddmmmmmmmmmmiiiiiiiiiinnnnnnnnnn",
+        "@aaaaaaaaadddddddddmmmmmmmmmiiiiiiiiinnnnnnnnn",
+        "@aaaaaaaaddddddddmmmmmmmmiiiiiiiinnnnnnnn",
+        "@aaaaaaadddddddmmmmmmmiiiiiiinnnnnnn",
+        "@aaaaaaddddddmmmmmmiiiiiinnnnnn",
+        "@aaaaadddddmmmmmiiiiinnnnn",
+        "@aaaaddddmmmmiiiinnnn",
+        "@aaadddmmmiiinnn",
+        "@aaddmmiinn",
+        "@admin"
+    ]
     for i in animation_ttl:
-            await asyncio.sleep(1)
-            await event.edit(animation_chars[i % 13])
+        await asyncio.sleep(1)
+        await event.edit(animation_chars[i % 13])

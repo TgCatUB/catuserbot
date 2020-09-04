@@ -1,7 +1,7 @@
 import io
 import re
-from math import ceil
-from . import statstext
+import math
+from . import catalive
 from .. import CMD_LIST
 from telethon import Button, custom, events
 
@@ -15,8 +15,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         builder = event.builder
         result = None
         query = event.text
-        if event.query.user_id == bot.uid and query.startswith(
-                "__**Catuserbot"):
+        if query.startswith("__**Catuserbot"):
             buttons = [
                 (custom.Button.inline(
                     "Stats", data="stats"), Button.url(
@@ -107,7 +106,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
-            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana! "
+            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana!"
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
     @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
@@ -127,7 +126,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 reply_pop_up_alert = "{} is useless".format(plugin_name)
             else:
                 reply_pop_up_alert = help_string
-            reply_pop_up_alert += r"\n Use .unload {} to remove this plugin\n\© catuserbot".format(
+            reply_pop_up_alert += "Use .unload {} to remove this plugin ©catuserbot".format(
                 plugin_name)
             try:
                 await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
@@ -143,7 +142,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                         caption=plugin_name
                     )
         else:
-            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana! "
+            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana!"
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
     @tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"close")))
@@ -151,17 +150,14 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         if event.query.user_id == bot.uid:
             await event.edit("menu closed")
         else:
-            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana! "
+            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana!"
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
     @tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"stats")))
     async def on_plug_in_callback_query_handler(event):
-        if event.query.user_id == bot.uid:
-            reply_pop_up_alert = statstext
-            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-        else:
-            reply_pop_up_alert = "Aary bas kar Bhai !! Tab se dabate jaa rha h, Khudka bot bana! "
-            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+        statstext = await catalive()
+        reply_pop_up_alert = statstext
+        await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
 
 def paginate_help(page_number, loaded_plugins, prefix):
@@ -192,7 +188,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
         pairs.append((modules[-1],))
     elif len(modules) % number_of_cols == 2:
         pairs.append((modules[-2], modules[-1]))
-    max_num_pages = ceil(len(pairs) / number_of_rows)
+    max_num_pages = math.ceil(len(pairs) / number_of_rows)
     modulo_page = page_number % max_num_pages
     if len(pairs) > number_of_rows:
         pairs = pairs[modulo_page * number_of_rows:number_of_rows * (modulo_page + 1)] + \

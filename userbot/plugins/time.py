@@ -16,6 +16,7 @@ FONT_FILE_TO_USE = "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.
 
 LOCATION = Config.TZ
 
+
 async def get_tz(con):
     """ Get time zone of the given country. """
     if "(Uk)" in con:
@@ -39,7 +40,9 @@ async def get_tz(con):
     except KeyError:
         return
 
-@borg.on(admin_cmd(outgoing=True, pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
+
+@borg.on(admin_cmd(outgoing=True,
+                   pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
 async def time_func(tdata):
     """ For .time command, return the time of
         1. The country passed as an argument,
@@ -96,7 +99,8 @@ async def time_func(tdata):
         return
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
+@borg.on(admin_cmd(outgoing=True,
+                   pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
 async def date_func(dat):
     """ For .date command, return the date of
         1. The country passed as an argument,
@@ -154,11 +158,13 @@ async def date_func(dat):
                        f"({time_zone} timezone).`")
         return
 
+
 @borg.on(admin_cmd(pattern="time ?(.*)"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
-    current_time = datetime.now().strftime(f"\n  USERBOT TIMEZONE  \nLOCATION:{LOCATION}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n")
+    current_time = datetime.now().strftime(
+        f"\n  USERBOT TIMEZONE  \nLOCATION:{LOCATION}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n")
     start = datetime.now()
     input_str = event.pattern_match.group(1)
     reply_msg_id = event.message.id
@@ -167,10 +173,12 @@ async def _(event):
     elif event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         reply_msg_id = previous_message.id
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):  # pylint:disable=E0602
+    if not os.path.isdir(
+            Config.TMP_DOWNLOAD_DIRECTORY):  # pylint:disable=E0602
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)  # pylint:disable=E0602
     # pylint:disable=E0602
-    required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + " " + str(datetime.now()) + ".webp"
+    required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + \
+        " " + str(datetime.now()) + ".webp"
     img = Image.new("RGBA", (350, 220), color=(0, 0, 0, 115))
     fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
     drawn_text = ImageDraw.Draw(img)
@@ -189,7 +197,7 @@ async def _(event):
     await event.edit("Created sticker in {} seconds".format(time_taken_ms))
     await asyncio.sleep(5)
     await event.delete()
-    
+
 CMD_HELP.update({
     "time":
     "**SYNTAX : **.ctime <country name/code> <timezone number> \
@@ -198,4 +206,4 @@ CMD_HELP.update({
     \n**USAGE : ** Get the date of a country. If a country has multiple timezones, it will list all of them \and let you select one.\
     \n\n**SYNTAX : **.time \
     \n**USAGE : ** shows current default time you can change by changing TZ in heroku vars"
-})    
+})

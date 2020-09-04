@@ -6,26 +6,25 @@
 # License: MPL and OSSRPL
 """ Userbot module which contains everything related to \
     downloading/uploading from/to the server. """
-import io
 import os
 import time
 import math
-import aiohttp
 import asyncio
 from datetime import datetime
 from pySmartDL import SmartDL
-from .. import LOGS, CMD_HELP, ALIVE_NAME , TEMP_DOWNLOAD_DIRECTORY
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply, humanbytes, progress, time_formatter
+from .. import ALIVE_NAME, CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, humanbytes, progress, sudo_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
+
 @borg.on(admin_cmd(pattern="download(?: |$)(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="download(?: |$)(.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="download(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    mone = await edit_or_reply(event ,"`Processing ...`")
+    mone = await edit_or_reply(event, "`Processing ...`")
     input_str = event.pattern_match.group(1)
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -67,8 +66,8 @@ async def _(event):
             now = time.time()
             diff = now - c_time
             percentage = downloader.get_progress() * 100
-            speed = downloader.get_speed()
-            elapsed_time = round(diff) * 1000
+            downloader.get_speed()
+            round(diff) * 1000
             progress_str = "{0}{1}\nProgress: {2}%".format(
                 ''.join(["█" for i in range(math.floor(percentage / 5))]),
                 ''.join(["░" for i in range(20 - math.floor(percentage / 5))]),
@@ -76,7 +75,9 @@ async def _(event):
             estimated_total_time = downloader.get_eta(human=True)
             try:
                 current_message = f"trying to download\nURL: {url}\nFile Name: {file_name}\n{progress_str}\n{humanbytes(downloaded)} of {humanbytes(total_length)}\nETA: {estimated_total_time}"
-                if round(diff % 10.00) == 0 and current_message != display_message:
+                if round(
+                        diff %
+                        10.00) == 0 and current_message != display_message:
                     await mone.edit(current_message)
                     display_message = current_message
             except Exception as e:
@@ -88,10 +89,10 @@ async def _(event):
         else:
             await mone.edit("Incorrect URL\n {}".format(input_str))
     else:
-        await mone.edit("Reply to a message to download to my local server.")        
-        
+        await mone.edit("Reply to a message to download to my local server.")
+
 CMD_HELP.update({
-    "download":"__**PLUGIN NAME :** Download__\
+    "download": "__**PLUGIN NAME :** Download__\
 \n\n📌** CMD ➥** `.download` <link|filename> or reply to media\
 \n**USAGE   ➥  **Downloads file to the server."
-})        
+})

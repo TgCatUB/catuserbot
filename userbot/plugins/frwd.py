@@ -1,11 +1,9 @@
 """Enable Seen Counter in any message,
 to know how many users have seen your message
 Syntax: .frwd as reply to any message"""
-from telethon import events
-from telethon import sync
-from telethon.tl import types, functions
 from userbot.utils import admin_cmd
 from userbot.uniborgConfig import Config
+
 
 @borg.on(admin_cmd(pattern="frwd"))
 async def _(event):

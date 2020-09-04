@@ -8,12 +8,11 @@ Available Commands:
 .rmblacklist"""
 
 import re
-import asyncio
 from .. import CMD_HELP
-from telethon import events, utils
-from telethon.tl import types, functions
+from telethon import events
 import userbot.plugins.sql_helper.blacklist_sql as sql
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+
 
 @borg.on(events.NewMessage(incoming=True))
 async def on_new_message(event):
@@ -25,33 +24,38 @@ async def on_new_message(event):
         if re.search(pattern, name, flags=re.IGNORECASE):
             try:
                 await event.delete()
-            except Exception as e:
+            except Exception:
                 await event.reply("I do not have DELETE permission in this chat")
                 sql.rm_from_blacklist(event.chat_id, snip.lower())
             break
 
+
 @borg.on(admin_cmd(pattern="addblacklist ((.|\n)*)"))
-@borg.on(sudo_cmd(pattern="addblacklist ((.|\n)*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="addblacklist ((.|\n)*)", allow_sudo=True))
 async def on_add_black_list(event):
     text = event.pattern_match.group(1)
-    to_blacklist = list(set(trigger.strip() for trigger in text.split("\n") if trigger.strip()))
+    to_blacklist = list(set(trigger.strip()
+                            for trigger in text.split("\n") if trigger.strip()))
     for trigger in to_blacklist:
         sql.add_to_blacklist(event.chat_id, trigger.lower())
-    await edit_or_reply(event ,"Added {} triggers to the blacklist in the current chat".format(len(to_blacklist)))
+    await edit_or_reply(event, "Added {} triggers to the blacklist in the current chat".format(len(to_blacklist)))
+
 
 @borg.on(admin_cmd(pattern="rmblacklist ((.|\n)*)"))
-@borg.on(sudo_cmd(pattern="rmblacklist ((.|\n)*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="rmblacklist ((.|\n)*)", allow_sudo=True))
 async def on_delete_blacklist(event):
     text = event.pattern_match.group(1)
-    to_unblacklist = list(set(trigger.strip() for trigger in text.split("\n") if trigger.strip()))
+    to_unblacklist = list(set(trigger.strip()
+                              for trigger in text.split("\n") if trigger.strip()))
     successful = 0
     for trigger in to_unblacklist:
         if sql.rm_from_blacklist(event.chat_id, trigger.lower()):
             successful += 1
-    await edit_or_reply(event ,f"Removed {successful} / {len(to_unblacklist)} from the blacklist")
-    
+    await edit_or_reply(event, f"Removed {successful} / {len(to_unblacklist)} from the blacklist")
+
+
 @borg.on(admin_cmd(pattern="listblacklist$"))
-@borg.on(sudo_cmd(pattern="listblacklist$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="listblacklist$", allow_sudo=True))
 async def on_view_blacklist(event):
     all_blacklisted = sql.get_chat_blacklist(event.chat_id)
     OUT_STR = "Blacklists in the Current Chat:\n"
@@ -73,10 +77,10 @@ async def on_view_blacklist(event):
             )
             await event.delete()
     else:
-        await edit_or_reply(event , OUT_STR)
-    
+        await edit_or_reply(event, OUT_STR)
+
 CMD_HELP.update({
-    "blacklist":"__**PLUGIN NAME :** Blacklist__\
+    "blacklist": "__**PLUGIN NAME :** Blacklist__\
     \n\n📌** CMD ➥** `.addblacklist` <word/words>\
     \n**USAGE   ➥  **The given word or words will be added to blacklist in that specific chat if any user sends then the message deletes.\
     \n\n📌** CMD ➥** `.rmblacklist` <word/words>\

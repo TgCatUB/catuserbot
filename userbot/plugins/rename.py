@@ -4,27 +4,22 @@ Syntax:
 .rnupload file.name
 .rnstreamupload file.name
 By @Ck_ATR"""
-import aiohttp
 import asyncio
 from datetime import datetime
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-import json
 import os
-import requests
 import subprocess
-from telethon import events
 from telethon.tl.types import DocumentAttributeVideo
-from telethon.errors import MessageNotModifiedError
 import time
-from userbot import CMD_HELP, ALIVE_NAME
+from userbot import ALIVE_NAME
 from userbot.utils import admin_cmd, sudo_cmd
-from userbot.utils import progress, humanbytes, time_formatter
-import io
+from userbot.utils import humanbytes, progress
 import math
 from pySmartDL import SmartDL
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
+
 
 def get_video_thumb(file, output=None, width=90):
     metadata = extractMetadata(createParser(file))
@@ -38,8 +33,10 @@ def get_video_thumb(file, output=None, width=90):
     if not p.returncode and os.path.lexists(file):
         return output
 
+
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+
 
 @borg.on(admin_cmd(pattern="rename (.*)"))
 async def _(event):
@@ -60,7 +57,7 @@ async def _(event):
             reply_message,
             downloaded_file_name,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                 progress(d, t, event, c_time, "trying to download")
+                progress(d, t, event, c_time, "trying to download")
             )
         )
         end = datetime.now()
@@ -71,6 +68,7 @@ async def _(event):
             await event.edit("Error Occurred\n {}".format(input_str))
     else:
         await event.edit("Syntax // `.rename file.name` as reply to a Telegram media")
+
 
 @borg.on(admin_cmd(pattern="rnup (.*)"))
 async def _(event):
@@ -94,7 +92,7 @@ async def _(event):
             reply_message,
             downloaded_file_name,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                  progress(d, t, event, c_time, "trying to download")
+                progress(d, t, event, c_time, "trying to download")
             )
         )
         end = datetime.now()
@@ -112,7 +110,7 @@ async def _(event):
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, event, c_time, "trying to upload")
                 )
-                
+
             )
             end_two = datetime.now()
             os.remove(downloaded_file_name)
@@ -125,7 +123,7 @@ async def _(event):
         await event.edit("Syntax // .rnupload file.name as reply to a Telegram media")
 
 
-@borg.on(sudo_cmd(pattern="rnup (.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="rnup (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -147,7 +145,7 @@ async def _(event):
             reply_message,
             downloaded_file_name,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                  progress(d, t, event, c_time, "trying to download")
+                progress(d, t, event, c_time, "trying to download")
             )
         )
         end = datetime.now()
@@ -165,7 +163,7 @@ async def _(event):
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, event, c_time, "trying to upload")
                 )
-                
+
             )
             end_two = datetime.now()
             os.remove(downloaded_file_name)
@@ -176,8 +174,8 @@ async def _(event):
             await event.reply("File Not Found {}".format(input_str))
     else:
         await event.reply("Syntax // .rnupload file.name as reply to a Telegram media")
-     
-        
+
+
 @borg.on(admin_cmd(pattern="rnstreamup (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -197,14 +195,15 @@ async def _(event):
             reply_message,
             downloaded_file_name,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                  progress(d, t, event, c_time, "trying to download")
+                progress(d, t, event, c_time, "trying to download")
             )
         )
         end_one = datetime.now()
         ms_one = (end_one - start).seconds
         if os.path.exists(downloaded_file_name):
             thumb = None
-            if not downloaded_file_name.endswith((".mkv", ".mp4", ".mp3", ".flac")):
+            if not downloaded_file_name.endswith(
+                    (".mkv", ".mp4", ".mp3", ".flac")):
                 await event.edit("Sorry. But I don't think {} is a streamable file. Please try again.\n**Supported Formats**: MKV, MP4, MP3, FLAC".format(downloaded_file_name))
                 return False
             if os.path.exists(thumb_image_path):
@@ -246,7 +245,7 @@ async def _(event):
                             supports_streaming=True
                         )
                     ]
-                    )
+                )
             except Exception as e:
                 await event.edit(str(e))
             else:
@@ -260,7 +259,7 @@ async def _(event):
     else:
         await event.edit("Syntax // .rnstreamupload file.name as reply to a Telegram media")
 
-        
+
 @borg.on(admin_cmd(pattern="rndlup (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -290,8 +289,8 @@ async def _(event):
         now = time.time()
         diff = now - c_time
         percentage = downloader.get_progress() * 100
-        speed = downloader.get_speed()
-        elapsed_time = round(diff) * 1000
+        downloader.get_speed()
+        round(diff) * 1000
         progress_str = "[{0}{1}]\nProgress: {2}%".format(
             ''.join(["█" for i in range(math.floor(percentage / 5))]),
             ''.join(["░" for i in range(20 - math.floor(percentage / 5))]),
@@ -335,4 +334,4 @@ async def _(event):
         else:
             await event.edit("File Not Found {}".format(input_str))
     else:
-        await event.edit("Incorrect URL\n {}".format(input_str))        
+        await event.edit("Incorrect URL\n {}".format(input_str))

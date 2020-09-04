@@ -30,6 +30,7 @@ KANGING_STR = [
     "Mr.Steal Your Sticker is stealing this sticker... ",
 ]
 
+
 @borg.on(admin_cmd(pattern="kang ?(.*)"))
 async def kang(args):
     """ For .kang command, kangs stickers or creates new ones. """
@@ -99,7 +100,7 @@ async def kang(args):
             if char_is_emoji(splat[1]):
                 emoji = splat[1]
             else:
-                pack = splat[1]     
+                pack = splat[1]
         packname = f"{user.username}_{pack}"
         packnick = f"@{user.username}'s_{pack}"
         cmd = '/newpack'
@@ -250,6 +251,7 @@ async def kang(args):
             \nPack can be found [here](t.me/addstickers/{packname}) and emoji of the sticker is {emoji}",
                         parse_mode='md')
 
+
 async def resize_photo(photo):
     """ Resize the given photo to 512x512 """
     image = Image.open(photo)
@@ -273,8 +275,10 @@ async def resize_photo(photo):
         image.thumbnail(maxsize)
     return image
 
+
 def char_is_emoji(character):
     return character in emoji.UNICODE_EMOJI
+
 
 @borg.on(admin_cmd(pattern="stkrinfo$"))
 async def get_pack_info(event):
@@ -313,7 +317,7 @@ async def get_pack_info(event):
     await event.edit(OUTPUT)
 
 CMD_HELP.update({
-    "stickers":"__**PLUGIN NAME :** Stickers__\
+    "stickers": "__**PLUGIN NAME :** Stickers__\
 \n\n📌** CMD ➥** `.kang`\
 \n**USAGE   ➥  **Reply .kang to a sticker or an image to kang it to your userbot pack.\
 \n\n📌** CMD ➥** `.kang [emoji('s)]`\
