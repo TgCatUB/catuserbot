@@ -61,13 +61,13 @@ def check_data_base_heal_th():
     return is_database_working, output
 
 
-def catalive():
+async def catalive():
     _, check_sgnirts = check_data_base_heal_th()
     if Config.SUDO_USERS:
         sudo = "Enabled"
     else:
         sudo = "Disabled"
-    uptime = get_readable_time((time.time() - StartTime))
+    uptime = await get_readable_time((time.time() - StartTime))
     try:
         useragent = ('Mozilla/5.0 (Linux; Android 10; SM-G975F) '
                      'AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -113,4 +113,4 @@ def catalive():
     return conclusion
 
 
-statstext = catalive()
+statstext = await catalive()
