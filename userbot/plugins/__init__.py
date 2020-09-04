@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import math
 import heroku3
 import requests
 from ..helpers import *
@@ -105,8 +106,8 @@ async def catalive():
         dyno = f"{AppHours}h {AppMinutes}m/{hours}h {minutes}"
     except Exception as e:
         dyno = e
-    conclusion = f"**Catuserbot stats**\
-                  \n-----------------------------\
+    conclusion = f"Catuserbot stats\
+                 \n----------------\
                   \nDatabase : {check_sgnirts}\
                   \nSudo function : {sudo}\
                   \nUptime : {uptime}\
