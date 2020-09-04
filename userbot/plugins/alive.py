@@ -35,7 +35,7 @@ async def amireallyalive(alive):
         await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
         await alive.delete()
     else:
-        await edit_or_reply(event, f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
+        await edit_or_reply(alive, f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
                             f"**✧ Database :** `{check_sgnirts}`\n"
                             f"**✧ Telethon Version :** `{version.__version__}\n`"
                             f"**✧ Catuserbot Version :** `{catversion}`\n"
