@@ -30,8 +30,9 @@ Welcome.__table__.create(checkfirst=True)
 
 def get_current_welcome_settings(chat_id):
     try:
-        return SESSION.query(Welcome).filter(Welcome.chat_id == str(chat_id)).one()
-    except:
+        return SESSION.query(Welcome).filter(
+            Welcome.chat_id == str(chat_id)).one()
+    except BaseException:
         return None
     finally:
         SESSION.close()

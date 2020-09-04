@@ -11,19 +11,15 @@ from pySmartDL import SmartDL
 from telethon import events
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-from googleapiclient.errors import ResumableUploadError
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from oauth2client import file, client, tools
 from userbot import (G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET,
-                     G_DRIVE_AUTH_TOKEN_DATA, GDRIVE_FOLDER_ID,
-                     TEMP_DOWNLOAD_DIRECTORY, CMD_HELP, LOGS)
+                     G_DRIVE_AUTH_TOKEN_DATA, TEMP_DOWNLOAD_DIRECTORY,
+                     CMD_HELP, LOGS)
 from mimetypes import guess_type
-import re
 import httplib2
-import subprocess
-from userbot.utils import admin_cmd, progress, humanbytes, time_formatter
-from userbot.plugins.sql_helper.gdrive_sql import is_folder , gparent_id , rmparent_id , get_parent_id
+from userbot.utils import admin_cmd, humanbytes, progress
+from userbot.plugins.sql_helper.gdrive_sql import is_folder, gparent_id, rmparent_id, get_parent_id
 
 # Path to token json file, it should be in same directory as script
 G_DRIVE_TOKEN_FILE = "./auth_token.txt"
@@ -41,20 +37,21 @@ G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
 
+
 @borg.on(admin_cmd(pattern=r"ugdrive(?: |$)(.*)"))
 async def gdrive_upload_function(dryb):
     """ For .gdrive command, upload files to google drive. """
     await dryb.edit("Processing ...")
     if not get_parent_id():
-      parent_id = None
+        parent_id = None
     else:
-      catparent_id = get_parent_id()
-      if len(catparent_id)== 1:
-        parent_id = catparent_id[0].cat
-      elif len(catparent_id)>1 :
-        for fid in catparent_id:
-          rmparent_id(fid.cat)
-        parent_id = None    
+        catparent_id = get_parent_id()
+        if len(catparent_id) == 1:
+            parent_id = catparent_id[0].cat
+        elif len(catparent_id) > 1:
+            for fid in catparent_id:
+                rmparent_id(fid.cat)
+            parent_id = None
     input_str = dryb.pattern_match.group(1)
     if CLIENT_ID is None or CLIENT_SECRET is None:
         return
@@ -83,8 +80,8 @@ async def gdrive_upload_function(dryb):
             now = time.time()
             diff = now - c_time
             percentage = downloader.get_progress() * 100
-            speed = downloader.get_speed()
-            elapsed_time = round(diff) * 1000
+            downloader.get_speed()
+            round(diff) * 1000
             progress_str = "[{0}{1}] {2}%".format(
                 ''.join(["█" for i in range(math.floor(percentage / 10))]),
                 ''.join(["░"
@@ -169,15 +166,15 @@ async def gdrive_upload_function(dryb):
 async def upload_dir_to_gdrive(event):
     await event.edit("Processing ...")
     if not get_parent_id():
-      parent_id = None
+        parent_id = None
     else:
-      catparent_id = get_parent_id()
-      if len(catparent_id)== 1:
-        parent_id = catparent_id[0].cat
-      elif len(catparent_id)>1 :
-        for fid in catparent_id:
-          rmparent_id(fid.cat)
-        parent_id = None 
+        catparent_id = get_parent_id()
+        if len(catparent_id) == 1:
+            parent_id = catparent_id[0].cat
+        elif len(catparent_id) > 1:
+            for fid in catparent_id:
+                rmparent_id(fid.cat)
+            parent_id = None
     if CLIENT_ID is None or CLIENT_SECRET is None:
         return
     input_str = event.pattern_match.group(1)
@@ -186,7 +183,8 @@ async def upload_dir_to_gdrive(event):
         if G_DRIVE_AUTH_TOKEN_DATA is not None:
             with open(G_DRIVE_TOKEN_FILE, "w") as t_file:
                 t_file.write(G_DRIVE_AUTH_TOKEN_DATA)
-        # Check if token file exists, if not create it by requesting authorization code
+        # Check if token file exists, if not create it by requesting
+        # authorization code
         storage = None
         if not os.path.isfile(G_DRIVE_TOKEN_FILE):
             storage = await create_token_file(G_DRIVE_TOKEN_FILE, event)
@@ -205,15 +203,14 @@ async def upload_dir_to_gdrive(event):
 @borg.on(admin_cmd(pattern=r"list(?: |$)(.*)"))
 async def gdrive_search_list(event):
     if not get_parent_id():
-      parent_id = None
+        pass
     else:
-      catparent_id = get_parent_id()
-      if len(catparent_id)== 1:
-        parent_id = catparent_id[0].cat
-      elif len(catparent_id)>1 :
-        for fid in catparent_id:
-          rmparent_id(fid.cat)
-        parent_id = None
+        catparent_id = get_parent_id()
+        if len(catparent_id) == 1:
+            catparent_id[0].cat
+        elif len(catparent_id) > 1:
+            for fid in catparent_id:
+                rmparent_id(fid.cat)
     await event.edit("Processing ...")
     if CLIENT_ID is None or CLIENT_SECRET is None:
         return
@@ -222,38 +219,42 @@ async def gdrive_search_list(event):
     if G_DRIVE_AUTH_TOKEN_DATA is not None:
         with open(G_DRIVE_TOKEN_FILE, "w") as t_file:
             t_file.write(G_DRIVE_AUTH_TOKEN_DATA)
-    # Check if token file exists, if not create it by requesting authorization code
+    # Check if token file exists, if not create it by requesting authorization
+    # code
     storage = None
     if not os.path.isfile(G_DRIVE_TOKEN_FILE):
         storage = await create_token_file(G_DRIVE_TOKEN_FILE, event)
     http = authorize(G_DRIVE_TOKEN_FILE, storage)
-    # Authorize, get file parameters, upload file and print out result URL for download
+    # Authorize, get file parameters, upload file and print out result URL for
+    # download
     await event.edit(f"Searching for {input_str} in your Google Drive ...")
     gsearch_results = await gdrive_search(http, input_str)
     await event.edit(gsearch_results, link_preview=False)
 
 
-@borg.on(admin_cmd(pattern=r"gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"))
+@borg.on(
+    admin_cmd(
+        pattern=r"gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"))
 async def download(cat):
     await cat.delete()
     if not get_parent_id():
-      parent_id = None
+        parent_id = None
     else:
-      catparent_id = get_parent_id()
-      if len(catparent_id)== 1:
-        parent_id = catparent_id[0].cat
-      elif len(catparent_id)>1 :
-        for fid in catparent_id:
-          rmparent_id(fid.cat)
-        parent_id = None 
+        catparent_id = get_parent_id()
+        if len(catparent_id) == 1:
+            parent_id = catparent_id[0].cat
+        elif len(catparent_id) > 1:
+            for fid in catparent_id:
+                rmparent_id(fid.cat)
+            parent_id = None
     setf = await cat.reply("Processing ...")
     input_str = cat.pattern_match.group(1)
     if input_str:
         gid = input_str
         catparent_id = get_parent_id()
-        if len(catparent_id)== 1: 
-          if is_folder(parent_id):
-            rmparent_id(parent_id)
+        if len(catparent_id) == 1:
+            if is_folder(parent_id):
+                rmparent_id(parent_id)
         gparent_id(gid)
         await setf.edit(f"Custom Folder ID set successfully. The next uploads will upload to `{gid}` till `.gsetclear`")
     else:
@@ -263,33 +264,33 @@ async def download(cat):
 @borg.on(admin_cmd(pattern="gsetclear$"))
 async def download(gclr):
     if not get_parent_id():
-      parent_id = None
+        parent_id = None
     else:
-      catparent_id = get_parent_id()
-      if len(catparent_id)== 1:
-        parent_id = catparent_id[0].cat
-      elif len(catparent_id)>1 :
-        for fid in catparent_id:
-          rmparent_id(fid.cat)
-        parent_id = None 
-    if parent_id: 
+        catparent_id = get_parent_id()
+        if len(catparent_id) == 1:
+            parent_id = catparent_id[0].cat
+        elif len(catparent_id) > 1:
+            for fid in catparent_id:
+                rmparent_id(fid.cat)
+            parent_id = None
+    if parent_id:
         if is_folder(parent_id):
-           rmparent_id(parent_id)
+            rmparent_id(parent_id)
     await gclr.edit("Custom Folder ID cleared successfully.")
 
 
 @borg.on(admin_cmd(pattern="gfolder$"))
 async def show_current_gdrove_folder(event):
     if not get_parent_id():
-      parent_id = None
+        parent_id = None
     else:
-      catparent_id = get_parent_id()
-      if len(catparent_id)== 1:
-        parent_id = catparent_id[0].cat
-      elif len(catparent_id)>1 :
-        for fid in catparent_id:
-          rmparent_id(fid.cat)
-        parent_id = None 
+        catparent_id = get_parent_id()
+        if len(catparent_id) == 1:
+            parent_id = catparent_id[0].cat
+        elif len(catparent_id) > 1:
+            for fid in catparent_id:
+                rmparent_id(fid.cat)
+            parent_id = None
     if parent_id:
         folder_link = f"https://drive.google.com/drive/folders/" + parent_id
         await event.edit(
@@ -301,11 +302,14 @@ async def show_current_gdrove_folder(event):
         )
 
 # Get mime type and name of given file
+
+
 def file_ops(file_path):
     mime_type = guess_type(file_path)[0]
     mime_type = mime_type if mime_type else "text/plain"
     file_name = file_path.split("/")[-1]
     return file_name, mime_type
+
 
 async def create_token_file(token_file, event):
     # Run through the OAuth flow and retrieve credentials
@@ -327,6 +331,7 @@ async def create_token_file(token_file, event):
         storage.put(credentials)
         return storage
 
+
 def authorize(token_file, storage):
     # Get credentials
     if storage is None:
@@ -337,6 +342,7 @@ def authorize(token_file, storage):
     credentials.refresh(http)
     http = credentials.authorize(http)
     return http
+
 
 async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
     # Create Google Drive service instance
@@ -351,7 +357,8 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
     if parent_id:
         body["parents"] = [{"id": parent_id}]
     # Permissions body description: anyone who has link can upload
-    # Other permissions can be found at https://developers.google.com/drive/v2/reference/permissions
+    # Other permissions can be found at
+    # https://developers.google.com/drive/v2/reference/permissions
     permissions = {
         "role": "reader",
         "type": "anyone",
@@ -387,6 +394,7 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
     file = drive_service.files().get(fileId=file_id).execute()
     download_url = file.get("webContentLink")
     return download_url
+
 
 async def create_directory(http, directory_name, parent_id):
     drive_service = build("drive", "v2", http=http, cache_discovery=False)
@@ -432,6 +440,7 @@ async def DoTeskWithDir(http, input_directory, event, parent_id):
             r_p_id = parent_id
     return r_p_id
 
+
 async def gdrive_list_file_md(service, file_id):
     try:
         file = service.files().get(fileId=file_id).execute()
@@ -456,17 +465,18 @@ async def gdrive_list_file_md(service, file_id):
     except Exception as e:
         return str(e)
 
+
 async def gdrive_search(http, search_query):
     if not get_parent_id():
-      parent_id = None
+        parent_id = None
     else:
-      catparent_id = get_parent_id()
-      if len(catparent_id)== 1:
-        parent_id = catparent_id[0].cat
-      elif len(catparent_id)>1 :
-        for fid in catparent_id:
-          rmparent_id(fid.cat)
-        parent_id = None 
+        catparent_id = get_parent_id()
+        if len(catparent_id) == 1:
+            parent_id = catparent_id[0].cat
+        elif len(catparent_id) > 1:
+            for fid in catparent_id:
+                rmparent_id(fid.cat)
+            parent_id = None
     if parent_id:
         query = "'{}' in parents and (title contains '{}')".format(
             parent_id, search_query)

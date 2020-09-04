@@ -4,22 +4,22 @@ Available Commands:
 .clearthumbnail
 .getthumbnail"""
 import os
-import asyncio
 import subprocess
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
-from telethon import events
-from userbot.utils import admin_cmd, humanbytes, progress, time_formatter
+from userbot.utils import admin_cmd
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+
 
 def get_video_thumb(file, output=None, width=320):
     output = file + ".jpg"
     metadata = extractMetadata(createParser(file))
     p = subprocess.Popen([
         'ffmpeg', '-i', file,
-        '-ss', str(int((0, metadata.get('duration').seconds)[metadata.has('duration')] / 2)),
+        '-ss', str(int((0, metadata.get('duration').seconds)
+                       [metadata.has('duration')] / 2)),
         # '-filter:v', 'scale={}:-1'.format(width),
         '-vframes', '1',
         output,
@@ -29,11 +29,12 @@ def get_video_thumb(file, output=None, width=320):
         os.remove(file)
         return output
 
+
 @borg.on(admin_cmd(pattern="savethumbnail"))
 async def _(event):
     if event.fwd_from:
         return
-    mone = await event.edit("Processing ...")
+    await event.edit("Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -52,7 +53,8 @@ async def _(event):
         # resize image
         # ref: https://t.me/PyrogramChat/44663
         # https://stackoverflow.com/a/21669827/4723940
-        Image.open(downloaded_file_name).convert("RGB").save(downloaded_file_name)
+        Image.open(downloaded_file_name).convert(
+            "RGB").save(downloaded_file_name)
         img = Image.open(downloaded_file_name)
         # https://stackoverflow.com/a/37631799/4723940
         # img.thumbnail((320, 320))
@@ -61,7 +63,7 @@ async def _(event):
         # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails
         os.remove(downloaded_file_name)
         await event.edit(
-            "Custom video / file thumbnail saved. " + \
+            "Custom video / file thumbnail saved. " +
             "This image will be used in the upload, till `.clearthumbnail`."
         )
     else:
@@ -81,14 +83,14 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    mone = await event.edit("processing..........")
+    await event.edit("processing..........")
     if event.reply_to_msg_id:
         r = await event.get_reply_message()
         try:
             a = await borg.download_media(
                 r.media.document.thumbs[0],
                 Config.TMP_DOWNLOAD_DIRECTORY
-                )
+            )
         except Exception as e:
             await event.edit(str(e))
         try:

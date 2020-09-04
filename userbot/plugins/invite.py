@@ -37,9 +37,9 @@ async def _(event):
                 except Exception as e:
                     await event.reply(str(e))
             await event.edit("Invited Successfully")
-            
-            
-@borg.on(sudo_cmd(pattern="invite ?(.*)",allow_sudo=True))
+
+
+@borg.on(sudo_cmd(pattern="invite ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -71,4 +71,3 @@ async def _(event):
                 except Exception as e:
                     await event.reply(str(e))
             await event.reply("Invited Successfully")
-            

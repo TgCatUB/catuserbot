@@ -66,7 +66,13 @@ async def on_snip_save(event):
                 snip['id'] = media.id
                 snip['hash'] = media.access_hash
                 snip['fr'] = media.file_reference
-        add_snip(name, snip['text'], snip['type'], snip.get('id'), snip.get('hash'), snip.get('fr'))
+        add_snip(
+            name,
+            snip['text'],
+            snip['type'],
+            snip.get('id'),
+            snip.get('hash'),
+            snip.get('fr'))
         await event.edit("snip {name} saved successfully. Get it with #{name}".format(name=name))
     else:
         await event.edit("Reply to a message with `snips keyword` to save the snip")
@@ -97,13 +103,13 @@ async def on_snip_list(event):
         await event.edit(OUT_STR)
 
 
-@borg.on(admin_cmd(pattern="snipd (\S+)"))
+@borg.on(admin_cmd(pattern=r"snipd (\S+)"))
 async def on_snip_delete(event):
     name = event.pattern_match.group(1)
     remove_snip(name)
     await event.edit("snip #{} deleted successfully".format(name))
 
-    
+
 CMD_HELP.update({
     "snip":
     "\
@@ -116,4 +122,4 @@ CMD_HELP.update({
 \n\n.snipd <notename>\
 \nUsage: Deletes the specified note.\
 "
-})    
+})

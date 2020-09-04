@@ -5,6 +5,7 @@
 """
    Heroku manager for your userbot
 """
+
 import os
 import math
 import heroku3
@@ -13,22 +14,23 @@ import urllib3
 import requests
 from .. import CMD_HELP
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-# ================= 
+# =================
 
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
-Heroku = heroku3.from_key(Var.HEROKU_API_KEY)
 heroku_api = "https://api.heroku.com"
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME
 HEROKU_API_KEY = Config.HEROKU_API_KEY
 
-Heroku = heroku3.from_key(Var.HEROKU_API_KEY)
-heroku_api = "https://api.heroku.com"
 
-
-@borg.on(admin_cmd(pattern="(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)",allow_sudo = True))
+@borg.on(
+    admin_cmd(
+        pattern=r"(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)",
+        outgoing=True))
+@borg.on(
+    sudo_cmd(
+        pattern=r"(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)",
+        allow_sudo=True))
 async def variable(var):
     """
         Manage most of ConfigVars setting, set new var, get current var,
@@ -37,12 +39,12 @@ async def variable(var):
     if Var.HEROKU_APP_NAME is not None:
         app = Heroku.app(Var.HEROKU_APP_NAME)
     else:
-        return await edit_or_reply(var ,"`[HEROKU]:"
-                              "\nPlease setup your` **HEROKU_APP_NAME**")
+        return await edit_or_reply(var, "`[HEROKU]:"
+                                   "\nPlease setup your` **HEROKU_APP_NAME**")
     exe = var.pattern_match.group(1)
     heroku_var = app.config()
     if exe == "get":
-        cat = await edit_or_reply(var ,"`Getting information...`")
+        cat = await edit_or_reply(var, "`Getting information...`")
         await asyncio.sleep(1.0)
         try:
             variable = var.pattern_match.group(2).split()[0]
@@ -50,7 +52,7 @@ async def variable(var):
                 return await cat.edit("**ConfigVars**:"
                                       f"\n\n`{variable} = {heroku_var[variable]}`\n")
             return await cat.edit("**ConfigVars**:"
-                                      f"\n\n`Error:\n-> {variable} don't exists`")
+                                  f"\n\n`Error:\n-> {variable} don't exists`")
         except IndexError:
             configs = prettyjson(heroku_var.to_dict(), indent=2)
             with open("configs.json", "w") as fp:
@@ -73,7 +75,7 @@ async def variable(var):
             os.remove("configs.json")
             return
     elif exe == "set":
-        cat = await edit_or_reply(var ,"`Setting information...`")
+        cat = await edit_or_reply(var, "`Setting information...`")
         variable = var.pattern_match.group(2)
         if not variable:
             return await cat.edit(">`.set var <ConfigVars-name> <value>`")
@@ -91,7 +93,7 @@ async def variable(var):
             await cat.edit(f"`{variable}`**  successfully added with value`  ->  **{value}`")
         heroku_var[variable] = value
     elif exe == "del":
-        cat = await edit_or_reply(var ,"`Getting information to deleting variable...`")
+        cat = await edit_or_reply(var, "`Getting information to deleting variable...`")
         try:
             variable = var.pattern_match.group(2).split()[0]
         except IndexError:
@@ -103,22 +105,23 @@ async def variable(var):
         else:
             return await cat.edit(f"`{variable}`**  is not exists**")
 
+
 @borg.on(admin_cmd(pattern="usage$", outgoing=True))
-@borg.on(sudo_cmd(pattern="usage$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="usage$", allow_sudo=True))
 async def dyno_usage(dyno):
     """
         Get your account Dyno Usage
     """
-    dyno = await edit_or_reply(dyno ,"`Processing...`")
+    dyno = await edit_or_reply(dyno, "`Processing...`")
     useragent = ('Mozilla/5.0 (Linux; Android 10; SM-G975F) '
                  'AppleWebKit/537.36 (KHTML, like Gecko) '
                  'Chrome/80.0.3987.149 Mobile Safari/537.36'
                  )
     user_id = Heroku.account().id
     headers = {
-     'User-Agent': useragent,
-     'Authorization': f'Bearer {Var.HEROKU_API_KEY}',
-     'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
+        'User-Agent': useragent,
+        'Authorization': f'Bearer {Var.HEROKU_API_KEY}',
+        'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
     }
     path = "/accounts/" + user_id + "/actions/get-quota"
     r = requests.get(heroku_api + path, headers=headers)
@@ -158,27 +161,32 @@ async def dyno_usage(dyno):
                            f"**|**  [`{percentage}`**%**]"
                            )
 
+
 @borg.on(admin_cmd(pattern="herokulogs$", outgoing=True))
-@borg.on(sudo_cmd(pattern="herokulogs$",allow_sudo = True))
-async def _(dyno):        
+@borg.on(sudo_cmd(pattern="herokulogs$", allow_sudo=True))
+async def _(dyno):
     try:
-        Heroku = heroku3.from_key(HEROKU_API_KEY)                         
+        Heroku = heroku3.from_key(HEROKU_API_KEY)
         app = Heroku.app(HEROKU_APP_NAME)
-    except:
-  	     return await dyno.reply(" Please make sure your Heroku API Key, Your App name are configured correctly in the heroku") 
+    except BaseException:
+        return await dyno.reply(" Please make sure your Heroku API Key, Your App name are configured correctly in the heroku")
     data = app.get_log()
-    key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
+    key = requests.post('https://nekobin.com/api/documents',
+                        json={"content": data}).json().get('result').get('key')
     url = f'https://nekobin.com/{key}'
     reply_text = f'Recent 100 lines of heroku logs: [here]({url})'
-    cat = await edit_or_reply(dyno ,reply_text)
-    
+    await edit_or_reply(dyno, reply_text)
+
+
 def prettyjson(obj, indent=2, maxlinelength=80):
     """Renders JSON content with indentation and line splits/concatenations to fit maxlinelength.
     Only dicts, lists and basic types are supported"""
-    items, _ = getsubitems(obj, itemkey="", islast=True, maxlinelength=maxlinelength - indent, indent=indent)
+    items, _ = getsubitems(obj, itemkey="", islast=True,
+                           maxlinelength=maxlinelength - indent, indent=indent)
     return indentitems(items, indent, level=0)
 
+
 CMD_HELP.update({
-  "heroku":
-  "Info for Module to Manage Heroku:**\n\n`.usage`\nUsage:__Check your heroku dyno hours status.__\n\n`.set var <NEW VAR> <VALUE>`\nUsage: __add new variable or update existing value variable__\n**!!! WARNING !!!, after setting a variable the bot will restart.**\n\n`.get var or .get var <VAR>`\nUsage: __get your existing varibles, use it only on your private group!__\n**This returns all of your private information, please be cautious...**\n\n`.del var <VAR>`\nUsage: __delete existing variable__\n**!!! WARNING !!!, after deleting variable the bot will restarted**\n\n`.herokulogs`\nUsage:sends you recent 100 lines of logs in heroku"
-})    
+    "heroku":
+    "Info for Module to Manage Heroku:**\n\n`.usage`\nUsage:__Check your heroku dyno hours status.__\n\n`.set var <NEW VAR> <VALUE>`\nUsage: __add new variable or update existing value variable__\n**!!! WARNING !!!, after setting a variable the bot will restart.**\n\n`.get var or .get var <VAR>`\nUsage: __get your existing varibles, use it only on your private group!__\n**This returns all of your private information, please be cautious...**\n\n`.del var <VAR>`\nUsage: __delete existing variable__\n**!!! WARNING !!!, after deleting variable the bot will restarted**\n\n`.herokulogs`\nUsage:sends you recent 100 lines of logs in heroku"
+})

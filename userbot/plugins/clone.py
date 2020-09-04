@@ -1,27 +1,24 @@
 """Get Telegram Profile Picture and other information
 and set as own profile.
 Syntax: .clone @username"""
-#Credits of Plugin @ViperAdnan and @mrconfused(revert)[will add sql soon]
+# Credits of Plugin @ViperAdnan and @mrconfused(revert)[will add sql soon]
 
-import os
 import html
-from telethon import events
 from ..utils import admin_cmd
 from telethon.tl import functions
 from telethon.tl.types import MessageEntityMentionName
 from telethon.tl.functions.users import GetFullUserRequest
-from .. import CMD_HELP , AUTONAME , DEFAULT_BIO , ALIVE_NAME
-from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
-from telethon.errors.rpcerrorlist import PhotoExtInvalidError, UsernameOccupiedError
+from .. import CMD_HELP, AUTONAME, DEFAULT_BIO, ALIVE_NAME
 
 DEFAULTUSER = str(AUTONAME) if AUTONAME else str(ALIVE_NAME)
-DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙"
+DEFAULTUSERBIO = str(
+    DEFAULT_BIO) if DEFAULT_BIO else "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙"
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
 else:
     BOTLOG = True
     BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+
 
 @borg.on(admin_cmd(pattern="clone ?(.*)"))
 async def _(event):
@@ -39,7 +36,8 @@ async def _(event):
     # https://stackoverflow.com/a/5072031/4723940
     # some Deleted Accounts do not have first_name
     if first_name is not None:
-        # some weird people (like me) have more than 4096 characters in their names
+        # some weird people (like me) have more than 4096 characters in their
+        # names
         first_name = first_name.replace("\u2060", "")
     last_name = replied_user.user.last_name
     # last_name is not Manadatory in @Telegram
@@ -47,7 +45,7 @@ async def _(event):
         last_name = html.escape(last_name)
         last_name = last_name.replace("\u2060", "")
     if last_name is None:
-      last_name = "⁪⁬⁮⁮⁮⁮ ‌‌‌‌"
+        last_name = "⁪⁬⁮⁮⁮⁮ ‌‌‌‌"
     # inspired by https://telegram.dog/afsaI181
     user_bio = replied_user.about
     if user_bio is not None:
@@ -61,20 +59,20 @@ async def _(event):
     await borg(functions.account.UpdateProfileRequest(
         about=user_bio
     ))
-    n = 1
-    pfile = await borg.upload_file(profile_pic)  # pylint:disable=E060      
+    pfile = await borg.upload_file(profile_pic)  # pylint:disable=E060
     await borg(functions.photos.UploadProfilePhotoRequest(  # pylint:disable=E0602
         pfile
     ))
     await event.delete()
     await borg.send_message(
-      event.chat_id,
-      "**LET US BE AS ONE**",
-      reply_to=reply_message
-      )
+        event.chat_id,
+        "**LET US BE AS ONE**",
+        reply_to=reply_message
+    )
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, f"#CLONED\nSuccesfulley cloned [{first_name}](tg://user?id={user_id })")
-    
+
+
 @borg.on(admin_cmd(pattern="revert$"))
 async def _(event):
     if event.fwd_from:
@@ -82,13 +80,14 @@ async def _(event):
     name = f"{DEFAULTUSER}"
     bio = f"{DEFAULTUSERBIO}"
     n = 1
-    await borg(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit= n)))
+    await borg(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit=n)))
     await borg(functions.account.UpdateProfileRequest(about=bio))
     await borg(functions.account.UpdateProfileRequest(first_name=name))
     await event.edit("succesfully reverted to your account back")
     if BOTLOG:
-        await event.client.send_message(BOTLOG_CHATID, f"#REVERT\nSuccesfully reverted back to your profile")    
-    
+        await event.client.send_message(BOTLOG_CHATID, f"#REVERT\nSuccesfully reverted back to your profile")
+
+
 async def get_full_user(event):
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
@@ -100,10 +99,10 @@ async def get_full_user(event):
             )
             return replied_user, None
         replied_user = await event.client(
-                GetFullUserRequest(
-                    previous_message.from_id
-                )
+            GetFullUserRequest(
+                previous_message.from_id
             )
+        )
         return replied_user, None
     input_str = None
     try:
@@ -146,4 +145,4 @@ CMD_HELP.update({
     \n\n**SYNTAX : **`.revert`\
     \n**USAGE : **Reverts back to your profile which you have set in heroku for  AUTONAME,DEFAULT_BIO\
     "
-})      
+})

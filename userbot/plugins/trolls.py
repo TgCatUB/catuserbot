@@ -15,14 +15,14 @@ credits to @mrconfused and @sandy1709
 
 from telegraph import upload_file, exceptions
 from userbot.utils import admin_cmd
-import nekos
 from . import *
 from userbot import CMD_HELP
-import os 
+import os
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-@borg.on(admin_cmd(pattern = "threats(?: |$)(.*)"))
+
+@borg.on(admin_cmd(pattern="threats(?: |$)(.*)"))
 async def catbot(catmemes):
     replied = await catmemes.get_reply_message()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
@@ -39,22 +39,22 @@ async def catbot(catmemes):
         cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         cat = Get(cat)
         await catmemes.client(cat)
-    except:
+    except BaseException:
         pass
-    download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
+    download_location = await borg.download_media(replied, Config.TMP_DOWNLOAD_DIRECTORY)
     if download_location.endswith((".webp")):
-        download_location = convert_toimage(download_location)  
-    size = os.stat(download_location).st_size    
+        download_location = convert_toimage(download_location)
+    size = os.stat(download_location).st_size
     if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
         if size > 5242880:
             await catmemes.edit("the replied file size is not supported it must me below 5 mb")
             os.remove(download_location)
-            return 
+            return
         await catmemes.edit("generating image..")
     else:
-        await catmemes.edit("the replied file is not supported") 
-        os.remove(download_location)  
-        return    
+        await catmemes.edit("the replied file is not supported")
+        os.remove(download_location)
+        return
     try:
         response = upload_file(download_location)
         os.remove(download_location)
@@ -65,9 +65,10 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await threats(cat)
     await catmemes.delete()
-    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
+    await borg.send_file(catmemes.chat_id, cat, reply_to=replied)
 
-@borg.on(admin_cmd(pattern = "trash(?: |$)(.*)"))
+
+@borg.on(admin_cmd(pattern="trash(?: |$)(.*)"))
 async def catbot(catmemes):
     replied = await catmemes.get_reply_message()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
@@ -84,22 +85,22 @@ async def catbot(catmemes):
         cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         cat = Get(cat)
         await catmemes.client(cat)
-    except:
-        pass 
-    download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
+    except BaseException:
+        pass
+    download_location = await borg.download_media(replied, Config.TMP_DOWNLOAD_DIRECTORY)
     if download_location.endswith((".webp")):
-        download_location = convert_toimage(download_location)  
-    size = os.stat(download_location).st_size    
+        download_location = convert_toimage(download_location)
+    size = os.stat(download_location).st_size
     if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
         if size > 5242880:
             await catmemes.edit("the replied file size is not supported it must me below 5 mb")
             os.remove(download_location)
-            return 
+            return
         await catmemes.edit("generating image..")
     else:
-        await catmemes.edit("the replied file is not supported") 
-        os.remove(download_location)  
-        return    
+        await catmemes.edit("the replied file is not supported")
+        os.remove(download_location)
+        return
     try:
         response = upload_file(download_location)
         os.remove(download_location)
@@ -110,9 +111,10 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await trash(cat)
     await catmemes.delete()
-    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
+    await borg.send_file(catmemes.chat_id, cat, reply_to=replied)
 
-@borg.on(admin_cmd(pattern = "trap(?: |$)(.*)"))
+
+@borg.on(admin_cmd(pattern="trap(?: |$)(.*)"))
 async def catbot(catmemes):
     input_str = catmemes.pattern_match.group(1)
     input_str = deEmojify(input_str)
@@ -136,22 +138,22 @@ async def catbot(catmemes):
         cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         cat = Get(cat)
         await catmemes.client(cat)
-    except:
-        pass 
-    download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
+    except BaseException:
+        pass
+    download_location = await borg.download_media(replied, Config.TMP_DOWNLOAD_DIRECTORY)
     if download_location.endswith((".webp")):
-        download_location = convert_toimage(download_location)  
-    size = os.stat(download_location).st_size    
+        download_location = convert_toimage(download_location)
+    size = os.stat(download_location).st_size
     if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
         if size > 5242880:
             await catmemes.edit("the replied file size is not supported it must me below 5 mb")
             os.remove(download_location)
-            return 
+            return
         await catmemes.edit("generating image..")
     else:
-        await catmemes.edit("the replied file is not supported") 
-        os.remove(download_location)  
-        return    
+        await catmemes.edit("the replied file is not supported")
+        os.remove(download_location)
+        return
     try:
         response = upload_file(download_location)
         os.remove(download_location)
@@ -160,11 +162,12 @@ async def catbot(catmemes):
         os.remove(download_location)
         return
     cat = f"https://telegra.ph{response[0]}"
-    cat = await trap(text1,text2,cat)
+    cat = await trap(text1, text2, cat)
     await catmemes.delete()
-    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
-    
-@borg.on(admin_cmd(pattern = "phub(?: |$)(.*)"))
+    await borg.send_file(catmemes.chat_id, cat, reply_to=replied)
+
+
+@borg.on(admin_cmd(pattern="phub(?: |$)(.*)"))
 async def catbot(catmemes):
     input_str = catmemes.pattern_match.group(1)
     input_str = deEmojify(input_str)
@@ -188,22 +191,22 @@ async def catbot(catmemes):
         cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         cat = Get(cat)
         await catmemes.client(cat)
-    except:
+    except BaseException:
         pass
-    download_location = await borg.download_media(replied , Config.TMP_DOWNLOAD_DIRECTORY)
+    download_location = await borg.download_media(replied, Config.TMP_DOWNLOAD_DIRECTORY)
     if download_location.endswith((".webp")):
-        download_location = convert_toimage(download_location)  
-    size = os.stat(download_location).st_size    
+        download_location = convert_toimage(download_location)
+    size = os.stat(download_location).st_size
     if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
         if size > 5242880:
             await catmemes.edit("the replied file size is not supported it must me below 5 mb")
             os.remove(download_location)
-            return 
+            return
         await catmemes.edit("generating image..")
     else:
-        await catmemes.edit("the replied file is not supported") 
-        os.remove(download_location)  
-        return    
+        await catmemes.edit("the replied file is not supported")
+        os.remove(download_location)
+        return
     try:
         response = upload_file(download_location)
         os.remove(download_location)
@@ -212,12 +215,12 @@ async def catbot(catmemes):
         os.remove(download_location)
         return
     cat = f"https://telegra.ph{response[0]}"
-    cat = await phcomment(cat,text,username)
+    cat = await phcomment(cat, text, username)
     await catmemes.delete()
-    await borg.send_file(catmemes.chat_id , cat,reply_to=replied)
-    
-CMD_HELP.update({"trolls": 
-       "**TROLLS**\
+    await borg.send_file(catmemes.chat_id, cat, reply_to=replied)
+
+CMD_HELP.update({"trolls":
+                 "**TROLLS**\
       \n\n**Syntax :**`.threats` reply to image or sticker \
       \n**USAGE:**Changes the given pic to another pic which shows that pic content is threat to society as that of nuclear bomb .\
       \n\n**Syntax :**`.trash` reply to image or sticker\
@@ -227,4 +230,4 @@ CMD_HELP.update({"trolls":
       \n\n**Syntax :** reply to image or sticker with `.phub (username)|(text in comment)`\
       \n**USAGE :**Changes the given pic to another pic which shows that pic content as dp and shows a comment in phub with the given username\
       "
-})
+                 })

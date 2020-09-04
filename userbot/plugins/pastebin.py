@@ -5,28 +5,34 @@ Syntax: .paster
 Syntax: .iffuci
 """
 
-import logging
-logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-                    level=logging.WARNING)
-import asyncio
-import os
-from datetime import datetime
-import requests
-from telethon import events
-from userbot.utils import admin_cmd
-from userbot.uniborgConfig import Config  
+from userbot import CMD_HELP
+from userbot.uniborgConfig import Config
+from requests import exceptions, get
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from requests import exceptions, get, post
+from userbot.utils import admin_cmd
+from telethon import events
+import requests
+from datetime import datetime
+import os
+import logging
+logging.basicConfig(
+    format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
+    level=logging.WARNING)
+
 
 def progress(current, total):
-    logger.info("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
-    
-from userbot import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
+    logger.info(
+        "Downloaded {} of {}\nCompleted {}".format(
+            current,
+            total,
+            (current / total) * 100))
+
 
 DOGBIN_URL = "https://del.dog/"
 
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 BOTLOG = True
+
 
 @borg.on(admin_cmd(pattern="paste ?(.*)"))
 async def _(event):
@@ -68,7 +74,7 @@ async def _(event):
         await event.edit("Pasted to dogbin : [dog]({}) in {} seconds. GoTo Original URL: [link]({})".format(url, ms, nurl))
     else:
         await event.edit("Pasted to dogbin : [dog]({}) in {} seconds".format(url, ms))
-        
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="getpaste(?: |$)(.*)"))
 async def get_dogbin_content(dog_url):
@@ -120,13 +126,11 @@ async def get_dogbin_content(dog_url):
         )
 
 
-      
-        
 @borg.on(admin_cmd(pattern="neko ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
-    start = datetime.now()
+    datetime.now()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     input_str = event.pattern_match.group(1)
@@ -153,26 +157,28 @@ async def _(event):
             message = previous_message.message
     else:
         message = "SYNTAX: `.neko <long text to include>`"
-    py_file =  ""
+    py_file = ""
     if downloaded_file_name.endswith(".py"):
         py_file += ".py"
         data = message
-        key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
+        key = requests.post(
+            'https://nekobin.com/api/documents',
+            json={
+                "content": data}).json().get('result').get('key')
         url = f'https://nekobin.com/{key}{py_file}'
         reply_text = f'Pasted to Nekobin : [neko]({url})'
         await event.edit(reply_text)
     else:
         data = message
-        key = requests.post('https://nekobin.com/api/documents', json={"content": data}).json().get('result').get('key')
+        key = requests.post(
+            'https://nekobin.com/api/documents',
+            json={
+                "content": data}).json().get('result').get('key')
         url = f'https://nekobin.com/{key}'
         reply_text = f'Pasted to Nekobin : [neko]({url})'
         await event.edit(reply_text)
 
 
- 
-    
-    
-    
 @borg.on(admin_cmd(pattern="iffuci ?(.*)"))
 async def _(event):
     if event.fwd_from:
@@ -215,12 +221,11 @@ async def _(event):
         await event.edit("code is pasted to {} in {} seconds".format(url, ms))
 
 
-
 @borg.on(admin_cmd(pattern="paster ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
-    start = datetime.now()
+    datetime.now()
     reply_message = await event.get_reply_message()
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -254,15 +259,18 @@ async def _(event):
     if r["isUrl"]:
         nurl = f"https://del.dog/v/{r['key']}"
         await event.edit("Dogged to {} in {} seconds. GoTo Original URL: {}".format(url, ms, nurl))
-    #This module is modded by @ViperAdnan #KeepCredit
+    # This module is modded by @ViperAdnan #KeepCredit
     else:
-      await event.edit("**Making instant view...**")
-      async with event.client.conversation(chat) as conv:
-            try:     
-                response = conv.wait_event(events.NewMessage(incoming=True,from_users=272572121))
+        await event.edit("**Making instant view...**")
+        async with event.client.conversation(chat) as conv:
+            try:
+                response = conv.wait_event(
+                    events.NewMessage(
+                        incoming=True,
+                        from_users=272572121))
                 await event.client.send_message(chat, url)
-                response = await response 
-            except YouBlockedUserError: 
+                response = await response
+            except YouBlockedUserError:
                 await event.reply("```Please unblock me (@chotamreaderbot) u Nigga```")
                 return
             await event.delete()
@@ -281,4 +289,4 @@ CMD_HELP.update({
 \n\n.paster <text/reply>\
 \nUsage: Create a instant view or a paste it in telegraph file\
   "
-})  
+})

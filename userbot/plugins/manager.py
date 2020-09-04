@@ -1,10 +1,8 @@
 import asyncio
 import io
 import userbot.plugins.sql_helper.no_log_pms_sql as no_log_pms_sql
-import userbot.plugins.sql_helper.pmpermit_sql as pmpermit_sql
-from telethon import events, errors, functions, types
+from telethon import events, functions, types
 from userbot.utils import admin_cmd
-from userbot import CMD_HELP
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
@@ -44,7 +42,7 @@ if Config.DUAL_LOG:
     @borg.on(admin_cmd(pattern="nolog(?: |$)(.*)"))
     async def set_no_log_p_m(event):
         if Config.PM_LOGGR_BOT_API_ID is not None:
-            reason = event.pattern_match.group(1)
+            event.pattern_match.group(1)
             chat = await event.get_chat()
             if event.is_private:
                 if not no_log_pms_sql.is_approved(chat.id):
@@ -56,7 +54,7 @@ if Config.DUAL_LOG:
     @borg.on(admin_cmd(pattern="log(?: |$)(.*)"))
     async def set_no_log_p_m(event):
         if Config.PM_LOGGR_BOT_API_ID is not None:
-            reason = event.pattern_match.group(1)
+            event.pattern_match.group(1)
             chat = await event.get_chat()
             if event.is_private:
                 if no_log_pms_sql.is_approved(chat.id):
@@ -75,8 +73,8 @@ if Config.DUAL_LOG:
             return
         message_text = event.message.message
         message_media = event.message.media
-        message_id = event.message.id
-        message_to_id = event.message.to_id
+        event.message.id
+        event.message.to_id
         chat_id = event.from_id
         # logger.info(chat_id)
         sender = await event.client.get_entity(chat_id)
@@ -157,13 +155,13 @@ if Config.DUAL_LOG:
         #the_message += f"Media: {message_media}"
         if event.message.message:
             await event.client.send_message(
-            entity=Config.PM_LOGGR_BOT_API_ID,
-            message=the_message,
-            # reply_to=,
-            # parse_mode="html",
-            link_preview=False,
-            file=message_media,
-            silent=True
+                entity=Config.PM_LOGGR_BOT_API_ID,
+                message=the_message,
+                # reply_to=,
+                # parse_mode="html",
+                link_preview=False,
+                file=message_media,
+                silent=True
             )
         else:
-            return    
+            return

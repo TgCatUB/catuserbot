@@ -30,7 +30,7 @@ Snips.__table__.create(checkfirst=True)
 def get_snips(keyword):
     try:
         return SESSION.query(Snips).get(keyword)
-    except:
+    except BaseException:
         return None
     finally:
         SESSION.close()
@@ -39,13 +39,19 @@ def get_snips(keyword):
 def get_all_snips():
     try:
         return SESSION.query(Snips).all()
-    except:
+    except BaseException:
         return None
     finally:
         SESSION.close()
 
 
-def add_snip(keyword, reply, snip_type, media_id, media_access_hash, media_file_reference):
+def add_snip(
+        keyword,
+        reply,
+        snip_type,
+        media_id,
+        media_access_hash,
+        media_file_reference):
     adder = SESSION.query(Snips).get(keyword)
     if adder:
         adder.reply = reply

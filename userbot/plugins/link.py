@@ -5,15 +5,9 @@
 Userbot module to help you manage a group
 """
 
-from asyncio import sleep
-from os import remove
-from telethon.errors import BadRequestError, UserAdminInvalidError
-from telethon.errors.rpcerrorlist import UserIdInvalidError
 from userbot.utils import admin_cmd
-from telethon.tl.types import (PeerChannel, ChannelParticipantsAdmins,
-                               ChatAdminRights, ChatBannedRights,
-                               MessageEntityMentionName,
-                               ChannelParticipantsBots)
+from telethon.tl.types import MessageEntityMentionName
+
 
 @borg.on(admin_cmd(pattern="link(?: |$)(.*)"))
 async def permalink(mention):
@@ -49,7 +43,7 @@ async def get_user_from_event(event):
             await event.edit("`Pass the user's username, id or reply!`")
             return
 
-        if event.message.entities :
+        if event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
 
             if isinstance(probable_user_mention_entity,

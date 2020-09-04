@@ -13,18 +13,17 @@ credits to @mrconfused and @sandy1709
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-from telethon import events
-from userbot import CMD_HELP
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-from userbot.plugins import trumptweet , moditweet, tweets, deEmojify,changemymind, kannagen
-from userbot.utils import admin_cmd 
+from userbot.plugins import trumptweet, moditweet, tweets, deEmojify, changemymind, kannagen
+from userbot.utils import admin_cmd
 import pybase64
+
 
 @borg.on(admin_cmd(outgoing=True, pattern="trump(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    
-    text =  re.sub("&", '', text)
+
+    text = re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -43,17 +42,18 @@ async def nekobot(cat):
         hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         hmm = Get(hmm)
         await e.client(hmm)
-    except:
-        pass   
+    except BaseException:
+        pass
     text = deEmojify(text)
     catfile = await trumptweet(text)
-    await borg.send_file(cat.chat_id , catfile , reply_to = reply_to_id ) 
+    await borg.send_file(cat.chat_id, catfile, reply_to=reply_to_id)
     await cat.delete()
-    
+
+
 @borg.on(admin_cmd(outgoing=True, pattern="modi(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    text =  re.sub("&", '', text)
+    text = re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -72,17 +72,18 @@ async def nekobot(cat):
         hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         hmm = Get(hmm)
         await e.client(hmm)
-    except:
-        pass  
+    except BaseException:
+        pass
     text = deEmojify(text)
     catfile = await moditweet(text)
-    await borg.send_file(cat.chat_id , catfile , reply_to = reply_to_id ) 
-    await cat.delete() 
-    
+    await borg.send_file(cat.chat_id, catfile, reply_to=reply_to_id)
+    await cat.delete()
+
+
 @borg.on(admin_cmd(outgoing=True, pattern="cmm(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    text =  re.sub("&", '', text)
+    text = re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -96,22 +97,23 @@ async def nekobot(cat):
         else:
             await cat.edit("Give text for to write on banner, man")
             return
-    await cat.edit("Your banner is under creation wait a sec...")    
+    await cat.edit("Your banner is under creation wait a sec...")
     try:
         hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         hmm = Get(hmm)
         await e.client(hmm)
-    except:
-        pass   
+    except BaseException:
+        pass
     text = deEmojify(text)
     catfile = await changemymind(text)
-    await borg.send_file(cat.chat_id , catfile , reply_to = reply_to_id ) 
+    await borg.send_file(cat.chat_id, catfile, reply_to=reply_to_id)
     await cat.delete()
-    
+
+
 @borg.on(admin_cmd(outgoing=True, pattern="kanna(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    text =  re.sub("&", '', text)
+    text = re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -125,26 +127,27 @@ async def nekobot(cat):
         else:
             await cat.edit("what should kanna write give text")
             return
-    await cat.edit("Kanna is writing your text...")        
+    await cat.edit("Kanna is writing your text...")
     try:
         hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         hmm = Get(hmm)
         await e.client(hmm)
-    except:
+    except BaseException:
         pass
     text = deEmojify(text)
     catfile = await kannagen(text)
-    await borg.send_file(cat.chat_id , catfile , reply_to = reply_to_id ) 
+    await borg.send_file(cat.chat_id, catfile, reply_to=reply_to_id)
     await cat.delete()
-    
+
+
 @borg.on(admin_cmd(outgoing=True, pattern="tweet(?: |$)(.*)"))
 async def nekobot(cat):
-    if  cat.pattern_match.group(1):
+    if cat.pattern_match.group(1):
         text = cat.pattern_match.group(1)
     else:
         reply_to_id = await cat.get_reply_message()
         text = reply_to_id.text
-    text =  re.sub("&", '', text)
+    text = re.sub("&", '', text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -157,20 +160,20 @@ async def nekobot(cat):
                 return
         else:
             await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text` ")
-            return        
+            return
     try:
         hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         hmm = Get(hmm)
         await e.client(hmm)
-    except:
+    except BaseException:
         pass
     if "|" in text:
-        username , text = text.split("|")
+        username, text = text.split("|")
     else:
-       await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text`") 
-       return
-    await cat.edit(f"Requesting {username} to tweet...")    
+        await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text`")
+        return
+    await cat.edit(f"Requesting {username} to tweet...")
     text = deEmojify(text)
-    catfile = await tweets(text,username)
-    await borg.send_file(cat.chat_id , catfile , reply_to = reply_to_id ) 
+    catfile = await tweets(text, username)
+    await borg.send_file(cat.chat_id, catfile, reply_to=reply_to_id)
     await cat.delete()

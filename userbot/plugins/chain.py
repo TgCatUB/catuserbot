@@ -2,12 +2,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from .. import CMD_HELP
-from telethon import events
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from ..utils import admin_cmd, sudo_cmd
 from telethon.tl.functions.messages import SaveDraftRequest
 
+
 @borg.on(admin_cmd(pattern="chain$"))
-@borg.on(sudo_cmd(pattern="chain$",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="chain$", allow_sudo=True))
 async def _(event):
     await event.edit("Counting...")
     count = -1
@@ -23,7 +23,7 @@ async def _(event):
         message = reply
         count += 1
     await event.edit(f"Chain length: {count}")
-    
+
 CMD_HELP.update({
     "chain":
     "**SYNTAX :** `.chain`\

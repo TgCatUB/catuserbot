@@ -2,13 +2,12 @@
 Syntax: .filext EXTENSION"""
 
 import requests
-from telethon import events
 from bs4 import BeautifulSoup
-from .. import CMD_HELP, LOGS
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
+
 @borg.on(admin_cmd(pattern="filext (.*)"))
-@borg.on(sudo_cmd(pattern="filext (.*)",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="filext (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -20,6 +19,6 @@ async def _(event):
         raw_html = response_api.content
         soup = BeautifulSoup(raw_html, "html.parser")
         ext_details = soup.find_all("td", {"colspan": "3"})[-1].text
-        await edit_or_reply(event ,"**File Extension**: `{}`\n**Description**: `{}`".format(input_str, ext_details))
+        await edit_or_reply(event, "**File Extension**: `{}`\n**Description**: `{}`".format(input_str, ext_details))
     else:
-        await edit_or_reply(event ,"https://www.fileext.com/ responded with {} for query: {}".format(status_code, input_str))
+        await edit_or_reply(event, "https://www.fileext.com/ responded with {} for query: {}".format(status_code, input_str))

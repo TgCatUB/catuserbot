@@ -7,22 +7,13 @@ Usage: Searches for deleted accounts in a groups and channels.
 Use .zombies clean to remove deleted accounts from the groups and channels.
 \nPorted by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)"""
 
-from telethon import events
-from userbot.utils import admin_cmd,sudo_cmd
+from userbot.utils import admin_cmd, sudo_cmd
 from asyncio import sleep
-from os import remove
 import asyncio
-from telethon.errors import (BadRequestError, ChatAdminRequiredError,
-                             UserAdminInvalidError)
-from telethon.errors.rpcerrorlist import (UserIdInvalidError,
-                                          MessageTooLongError)
-from telethon.tl.functions.channels import (EditAdminRequest,
-                                            EditBannedRequest,
-                                            EditPhotoRequest)
-from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
-                               ChatBannedRights, MessageEntityMentionName,
-                               MessageMediaPhoto)
-from userbot import CMD_HELP, bot 
+from telethon.errors import (ChatAdminRequiredError, UserAdminInvalidError)
+from telethon.tl.functions.channels import EditBannedRequest
+from telethon.tl.types import ChatBannedRights
+from userbot import CMD_HELP
 
 BOTLOG = True
 BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
@@ -53,7 +44,7 @@ UNBAN_RIGHTS = ChatBannedRights(
     embed_links=None,
 )
 
-        
+
 @borg.on(admin_cmd(pattern=f"zombies ?(.*)"))
 async def rm_deletedacc(show):
     """ For .zombies command, list all the ghost/deleted/zombie accounts in a chat. """
@@ -104,7 +95,6 @@ async def rm_deletedacc(show):
                 EditBannedRequest(show.chat_id, user.id, UNBAN_RIGHTS))
             del_u += 1
 
-
     if del_u > 0:
         del_status = f"Cleaned **{del_u}** deleted account(s)"
 
@@ -112,20 +102,18 @@ async def rm_deletedacc(show):
         del_status = f"Cleaned **{del_u}** deleted account(s) \
         \n**{del_a}** deleted admin accounts are not removed"
 
-
     await show.edit(del_status)
     await sleep(2)
     await show.delete()
-    
+
     if BOTLOG:
         await show.client.send_message(
             BOTLOG_CHATID, "#CLEANUP\n"
             f"Cleaned **{del_u}** deleted account(s) !!\
             \nCHAT: {show.chat.title}(`{show.chat_id}`)")
 
-        
-               
-@borg.on(sudo_cmd(pattern="zombies ?(.*)", allow_sudo=True))  
+
+@borg.on(sudo_cmd(pattern="zombies ?(.*)", allow_sudo=True))
 async def rm_deletedacc(show):
     if show.fwd_from:
         return
@@ -181,14 +169,12 @@ async def rm_deletedacc(show):
                 EditBannedRequest(show.chat_id, user.id, UNBAN_RIGHTS))
             del_u += 1
 
-
     if del_u > 0:
         del_status = f"Cleaned **{del_u}** deleted account(s)"
 
     if del_a > 0:
         del_status = f"Cleaned **{del_u}** deleted account(s) \
         \n**{del_a}** deleted admin accounts are not removed"
-
 
     cat3 = await show.reply(del_status)
     await sleep(2)
@@ -200,4 +186,3 @@ CMD_HELP.update({
 \nUsage: Searches for deleted accounts in a group. Use .delusers clean to remove deleted accounts from the group.\
 "
 })
-

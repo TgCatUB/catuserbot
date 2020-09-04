@@ -9,6 +9,7 @@ Ported from Kensurbot
 import sys
 import asyncio
 from git import Repo
+from . import runcmd
 from .. import CMD_HELP
 from os import environ, execle, path, remove
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
@@ -23,6 +24,7 @@ requirements_path = path.join(
     path.dirname(path.dirname(path.dirname(__file__))), "requirements.txt"
 )
 
+
 async def gen_chlog(repo, diff):
     ch_log = ""
     d_form = "%d/%m/%y"
@@ -32,6 +34,7 @@ async def gen_chlog(repo, diff):
             f"{c.summary} <{c.author}>\n"
         )
     return ch_log
+
 
 async def print_changelogs(event, ac_br, changelog):
     changelog_str = (
@@ -52,6 +55,7 @@ async def print_changelogs(event, ac_br, changelog):
         )
     return True
 
+
 async def update_requirements():
     reqs = str(requirements_path)
     try:
@@ -64,6 +68,7 @@ async def update_requirements():
         return process.returncode
     except Exception as e:
         return repr(e)
+
 
 async def deploy(event, repo, ups_rem, ac_br, txt):
     if HEROKU_API_KEY is not None:
@@ -112,13 +117,13 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             )
             await asyncio.sleep(5)
             return await event.delete()
-        else:
-            await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
+        await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
     else:
         await event.edit(
             "`[HEROKU]`\n" "`Please set up`  **HEROKU_API_KEY**  `variable...`"
         )
     return
+
 
 async def update(event, repo, ups_rem, ac_br):
     try:
@@ -134,12 +139,13 @@ async def update(event, repo, ups_rem, ac_br):
     execle(sys.executable, *args, environ)
     return
 
+
 @bot.on(admin_cmd(outgoing=True, pattern=r"update($| (now|deploy))"))
-@borg.on(sudo_cmd(pattern="update($| (now|deploy))",allow_sudo = True))
+@borg.on(sudo_cmd(pattern="update($| (now|deploy))", allow_sudo=True))
 async def upstream(event):
     "For .update command, check if the bot is up to date, update if specified"
     conf = event.pattern_match.group(1).strip()
-    event = await edit_or_reply(event ,"`Checking for updates, please wait....`")
+    event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
     try:
@@ -184,7 +190,7 @@ async def upstream(event):
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
     changelog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
-    """ - Special case for deploy - """
+    # Special case for deploy
     if conf == "deploy":
         await event.edit("`Deploying userbot, please wait....`")
         await deploy(event, repo, ups_rem, ac_br, txt)
@@ -209,15 +215,55 @@ async def upstream(event):
         await update(event, repo, ups_rem, ac_br)
     return
 
+
+@bot.on(admin_cmd(outgoing=True, pattern=r"badcat$"))
+@borg.on(sudo_cmd(pattern="badcat$", allow_sudo=True))
+async def upstream(event):
+    event = await edit_or_reply(event, "`Checking for updates, please wait....`")
+    off_repo = "https://github.com/Jisan09/catuserbot"
+    catcmd = f"rm -rf .git"
+    try:
+        await runcmd(catcmd)
+    except BaseException:
+        pass
+    try:
+        txt = "`Oops.. Updater cannot continue due to "
+        txt += "some problems occured`\n\n**LOGTRACE:**\n"
+        repo = Repo()
+    except NoSuchPathError as error:
+        await event.edit(f"{txt}\n`directory {error} is not found`")
+        return repo.__del__()
+    except GitCommandError as error:
+        await event.edit(f"{txt}\n`Early failure! {error}`")
+        return repo.__del__()
+    except InvalidGitRepositoryError:
+        repo = Repo.init()
+        origin = repo.create_remote("upstream", off_repo)
+        origin.fetch()
+        repo.create_head("master", origin.refs.master)
+        repo.heads.master.set_tracking_branch(origin.refs.master)
+        repo.heads.master.checkout(True)
+    try:
+        repo.create_remote("upstream", off_repo)
+    except BaseException:
+        pass
+    ac_br = repo.active_branch.name
+    ups_rem = repo.remote("upstream")
+    ups_rem.fetch(ac_br)
+    await event.edit("`Deploying userbot, please wait....`")
+    await deploy(event, repo, ups_rem, ac_br, txt)
+
 CMD_HELP.update({
-        "updater": "**Plugin : **`updater`"
-        "\n\n**Syntax : **`.update`"
-        "\n**Usage :** Checks if the main userbot repository has any updates "
-        "and shows a changelog if so."
-        "\n\n**Syntax : **`.update now`"
-        "\n**Usage :** Update your userbot, "
-        "if there are any updates in your userbot repository.if you restart these goes back to last time when you deployed"
-        "\n\n**Syntax : **`.update deploy`"
-        "\n**Usage :** Deploy your userbot.So even you restart it doesnt go back to previous version"
-        "\nThis will triggered deploy always, even no updates."
-    })
+    "updater": "**Plugin : **`updater`"
+    "\n\n**Syntax : **`.update`"
+    "\n**Usage :** Checks if the main userbot repository has any updates "
+    "and shows a changelog if so."
+    "\n\n**Syntax : **`.update now`"
+    "\n**Usage :** Update your userbot, "
+    "if there are any updates in your userbot repository.if you restart these goes back to last time when you deployed"
+    "\n\n**Syntax : **`.update deploy`"
+    "\n**Usage :** Deploy your userbot.So even you restart it doesnt go back to previous version"
+    "\nThis will triggered deploy always, even no updates."
+    "\n\n**Syntax : **`.badcat`"
+    "\n**Usage :** Shifts from official cat repo to jisan's repo(for gali commands)"
+})

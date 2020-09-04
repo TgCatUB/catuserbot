@@ -3,10 +3,10 @@ Available Commands:
 .tr LanguageCode as reply to a message
 .tr LangaugeCode | text to translate"""
 
-import emoji
 from googletrans import Translator
 from userbot.utils import admin_cmd
 from userbot.plugins import deEmojify
+
 
 @borg.on(admin_cmd(pattern="tl ?(.*)"))
 async def _(event):

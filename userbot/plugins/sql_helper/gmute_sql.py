@@ -4,7 +4,7 @@ try:
 except ImportError:
     raise Exception("Hello!")
 
-from sqlalchemy import Column, String, UnicodeText
+from sqlalchemy import Column, String
 
 
 class GMute(BASE):
@@ -21,7 +21,7 @@ GMute.__table__.create(checkfirst=True)
 def is_gmuted(sender_id):
     try:
         return SESSION.query(GMute).all()
-    except:
+    except BaseException:
         return None
     finally:
         SESSION.close()

@@ -35,6 +35,7 @@ from userbot.utils import humanbytes, time_formatter, admin_cmd
 
 TEMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
+
 async def subprocess_run(megadl, cmd):
     subproc = await asyncSubprocess(cmd, stdout=asyncPIPE, stderr=asyncPIPE)
     stdout, stderr = await subproc.communicate()
@@ -47,6 +48,7 @@ async def subprocess_run(megadl, cmd):
             f'stderr : `{stderr.decode().strip()}`')
         return exitCode
     return stdout.decode().strip(), stderr.decode().strip(), exitCode
+
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"mega(?: |$)(.*)"))
 async def mega_downloader(megadl):
@@ -63,7 +65,7 @@ async def mega_downloader(megadl):
         return await megadl.edit("Usage: `.mega` **<MEGA.nz link>**")
     try:
         link = re.findall(r'\bhttps?://.*mega.*\.nz\S+', link)[0]
-        # - Mega changed their URL again - 
+        # - Mega changed their URL again -
         if "file" in link:
             link = link.replace("#", "!").replace("file/", "#!")
         elif "folder" in link or "#F" in link or "#N" in link:
@@ -160,6 +162,7 @@ async def mega_downloader(megadl):
         for e in downloader.get_errors():
             LOGS.info(str(e))
     return
+
 
 async def decrypt_file(megadl, file_path, temp_file_path, hex_key,
                        hex_raw_key):
