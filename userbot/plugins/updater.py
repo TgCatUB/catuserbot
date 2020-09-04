@@ -217,8 +217,8 @@ async def upstream(event):
     return
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"galicmds$"))
-@borg.on(sudo_cmd(pattern="galicmds$", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern=r"badcat$"))
+@borg.on(sudo_cmd(pattern="badcat$", allow_sudo=True))
 async def upstream(event):
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = "https://github.com/Jisan09/catuserbot"
@@ -265,4 +265,6 @@ CMD_HELP.update({
     "\n\n**Syntax : **`.update deploy`"
     "\n**Usage :** Deploy your userbot.So even you restart it doesnt go back to previous version"
     "\nThis will triggered deploy always, even no updates."
+    "\n\n**Syntax : **`.badcat`"
+    "\n**Usage :** Shifts from official cat repo to jisan's repo(for gali commands)"
 })
