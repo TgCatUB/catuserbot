@@ -1,7 +1,6 @@
 import io
 import re
 import math
-from math import ceil
 from . import catalive
 from .. import CMD_LIST
 from telethon import Button, custom, events
