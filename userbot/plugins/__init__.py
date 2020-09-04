@@ -57,7 +57,7 @@ def check_data_base_heal_th():
         output = f"❌ {str(e)}"
         is_database_working = False
     else:
-        output = "Functioning Normally"
+        output = "Functioning"
         is_database_working = True
     return is_database_working, output
 
@@ -103,14 +103,14 @@ async def catalive():
             math.floor(App[0]['quota_used'] * 100 / quota)
         AppHours = math.floor(AppQuotaUsed / 60)
         AppMinutes = math.floor(AppQuotaUsed % 60)
-        dyno = f"{AppHours}h {AppMinutes}m/{hours}h {minutes}"
+        dyno = f"{AppHours}h {AppMinutes}m/{hours}h {minutes}m"
     except Exception as e:
         dyno = e
-    conclusion = f"Catuserbot stats\
+    conclusion = f"Catuserbot Stats\
                  \n----------------\
                   \nDatabase : {check_sgnirts}\
-                  \nSudo function : {sudo}\
+                  \nSudo : {sudo}\
                   \nUptime : {uptime}\
-                  \nDyno's : {dyno}\
+                  \nDyno : {dyno}\
                   "
     return conclusion
