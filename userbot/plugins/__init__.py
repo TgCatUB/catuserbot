@@ -60,6 +60,7 @@ def check_data_base_heal_th():
         is_database_working = True
     return is_database_working, output
 
+
 def catalive():
     _, check_sgnirts = check_data_base_heal_th()
     if Config.SUDO_USERS:
@@ -110,5 +111,6 @@ def catalive():
                   \nDyno's : {dyno}\
                   "
     return conclusion
+
 
 statstext = catalive()
