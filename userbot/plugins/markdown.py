@@ -2,6 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import re
+from random import choice
 from functools import partial
 
 from telethon import events
@@ -33,28 +34,32 @@ def get_tag_parser(tag, entity):
 
 PRINTABLE_ASCII = range(0x21, 0x7f)
 
-
 def parse_aesthetics(m):
     def aesthetify(string):
         for c in string:
-            c = ord(c)
-            if c in PRINTABLE_ASCII:
-                c += 0xFF00 - 0x20
-            elif c == ord(" "):
-                c = 0x3000
-            yield chr(c)
+            if " " < c <= "~":
+                yield chr(ord(c) + 0xFF00 - 0x20)
+            elif c == " ":
+                yield "\u3000"
+            else:
+                yield c
     return "".join(aesthetify(m[1])), None
 
+
+def parse_randcase(m):
+    return ''.join(choice([str.upper, str.lower])(c) for c in m[1]), None
+
+def parse_b_meme(m):
+    return re.sub(r'(\s|^)\S(\S)', r'\1🅱️\2', m[1]), None
 
 def parse_subreddit(m):
     text = '/' + m.group(3)
     entity = MessageEntityTextUrl(
         offset=m.start(2),
         length=len(text),
-        url=f'reddit.com{text}'
+        url=f'https://reddit.com{text}'
     )
     return m.group(1) + text, entity
-
 
 def parse_strikethrough(m):
     text = m.group(2)
@@ -69,20 +74,17 @@ PARSED_ENTITIES = (
 # A matcher is a tuple of (regex pattern, parse function)
 # where the parse function takes the match and returns (text, entity)
 MATCHERS = [
-    (DEFAULT_URL_RE, parse_url_match),
-    (get_tag_parser('**', MessageEntityBold)),
-    (get_tag_parser('__', MessageEntityItalic)),
-    (get_tag_parser('```', partial(MessageEntityPre, language=''))),
-    (get_tag_parser('`', MessageEntityCode)),
-    (re.compile(r'\+\+(.+?)\+\+'), parse_aesthetics),
-    (re.compile(r'([^/\w]|^)(/?(r/\w+))'), parse_subreddit),
-    (re.compile(r"(?<!\w)(~{2})(?!~~)(.+?)(?<!~)\1(?!\w)"), parse_strikethrough)
+    (re.compile(r'a\.\.\s?(.+?)\.\.'), parse_aesthetics),
+    (re.compile(r'b\.\.\s?(.+?)\.\.'), parse_b_meme),
+    (re.compile(r'c\.\.\s?(.+?)\.\.'), parse_randcase),
+    (re.compile(r'([^/\w]|^)(/?([ru]/\w+))'), parse_subreddit),
 ]
 
 
 def parse(message, old_entities=None):
     entities = []
     old_entities = sorted(old_entities or [], key=lambda e: e.offset)
+
     i = 0
     after = 0
     message = add_surrogate(message)
@@ -94,6 +96,9 @@ def parse(message, old_entities=None):
             # Skip already existing entities if we're at one
             if i == e.offset:
                 i += e.length
+        else:
+            after += 1
+
         # Find the first pattern that matches
         for pattern, parser in MATCHERS:
             match = pattern.match(message, pos=i)
@@ -102,23 +107,29 @@ def parse(message, old_entities=None):
         else:
             i += 1
             continue
+
         text, entity = parser(match)
+
         # Shift old entities after our current position (so they stay in place)
         shift = len(text) - len(match[0])
         if shift:
             for e in old_entities[after:]:
                 e.offset += shift
+
         # Replace whole match with text from parser
         message = ''.join((
             message[:match.start()],
             text,
             message[match.end():]
         ))
+
         # Append entity if we got one
         if entity:
             entities.append(entity)
+
         # Skip past the match
         i += len(text)
+
     return del_surrogate(message), entities + old_entities
 
 
