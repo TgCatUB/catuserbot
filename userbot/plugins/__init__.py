@@ -33,7 +33,7 @@ def check(cat):
     return False
 
 
-statstext = await catalive()
+statstext = catalive()
 
 
 async def catalive():
