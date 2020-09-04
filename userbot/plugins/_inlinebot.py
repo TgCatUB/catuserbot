@@ -1,5 +1,6 @@
 import io
 import re
+import math
 from math import ceil
 from . import catalive
 from .. import CMD_LIST
@@ -192,7 +193,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
         pairs.append((modules[-1],))
     elif len(modules) % number_of_cols == 2:
         pairs.append((modules[-2], modules[-1]))
-    max_num_pages = ceil(len(pairs) / number_of_rows)
+    max_num_pages = math.ceil(len(pairs) / number_of_rows)
     modulo_page = page_number % max_num_pages
     if len(pairs) > number_of_rows:
         pairs = pairs[modulo_page * number_of_rows:number_of_rows * (modulo_page + 1)] + \
