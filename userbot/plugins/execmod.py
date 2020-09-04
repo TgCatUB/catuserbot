@@ -5,7 +5,6 @@
 
 import io
 import os
-import time
 import asyncio
 from .. import CMD_HELP
 from asyncio.subprocess import PIPE as asyncPIPE
@@ -152,7 +151,6 @@ async def _(event):
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
         eply_to_id = event.reply_to_msg_id
-    
 
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
