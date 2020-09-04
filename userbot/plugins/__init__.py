@@ -33,15 +33,13 @@ def check(cat):
 
 statstext = catalive()
 
-
-async def catalive():
+def catalive():
     _, check_sgnirts = check_data_base_heal_th()
     if Config.SUDO_USERS:
         sudo = "Enabled"
     else:
         sudo = "Disabled"
-    uptime = await get_readable_time((time.time() - StartTime))
-    dyno = await edit_or_reply(dyno, "`Processing...`")
+    uptime = get_readable_time((time.time() - StartTime))
     useragent = ('Mozilla/5.0 (Linux; Android 10; SM-G975F) '
                  'AppleWebKit/537.36 (KHTML, like Gecko) '
                  'Chrome/80.0.3987.149 Mobile Safari/537.36'
