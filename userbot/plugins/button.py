@@ -85,7 +85,7 @@ async def _(event):
             await edit_or_reply(event, "`Sorry media is not suupported for this plugin`")
             return
     if not catinput:
-        catinput = await event.get_reply_message()
+        catinput = (await event.get_reply_message()).text
     catinput = "Inline buttons " + catinput
     tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
     results = await bot.inline_query(
