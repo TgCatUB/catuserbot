@@ -76,7 +76,7 @@ async def catalive():
         user_id = Heroku.account().id
         headers = {
             'User-Agent': useragent,
-            'Authorization': f'Bearer {Var.HEROKU_API_KEY}',
+            'Authorization': f'Bearer {config.HEROKU_API_KEY}',
             'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
         }
         path = "/accounts/" + user_id + "/actions/get-quota"
@@ -105,7 +105,7 @@ async def catalive():
         dyno = f"{AppHours}h {AppMinutes}m/{hours}h {minutes}"
     except Exception as e:
         dyno = e
-    conclusion = f"Database : {_}\
+    conclusion = f"Database : {check_sgnirts}\
                   \nSudo function : {sudo}\
                   \nUptime : {uptime}\
                   \nDyno's : {dyno}\
