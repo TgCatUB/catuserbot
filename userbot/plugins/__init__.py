@@ -86,13 +86,13 @@ async def catalive():
         quota = result['account_quota']
         quota_used = result['quota_used']
 
-        # Used 
+        # Used
         remaining_quota = quota - quota_used
         math.floor(remaining_quota / quota * 100)
         minutes_remaining = remaining_quota / 60
         hours = math.floor(minutes_remaining / 60)
         minutes = math.floor(minutes_remaining % 60)
-        # Current 
+        # Current
         App = result['apps']
         try:
             App[0]['quota_used']
