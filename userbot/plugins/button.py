@@ -78,8 +78,8 @@ async def _(event):
     catinput = event.pattern_match.group(1)
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    reply = await event.get_reply_message()
-    # soon will try to add media support  
+    await event.get_reply_message()
+    # soon will try to add media support
     if not catinput:
         catinput = (await event.get_reply_message()).text
     if not catinput:
