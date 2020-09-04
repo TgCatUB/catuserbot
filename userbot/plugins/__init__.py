@@ -76,7 +76,7 @@ async def catalive():
         user_id = Heroku.account().id
         headers = {
             'User-Agent': useragent,
-            'Authorization': f'Bearer {config.HEROKU_API_KEY}',
+            'Authorization': f'Bearer {Config.HEROKU_API_KEY}',
             'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
         }
         path = "/accounts/" + user_id + "/actions/get-quota"
