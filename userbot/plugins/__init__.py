@@ -33,10 +33,10 @@ def check(cat):
     return False
 
 
-statstext = catalive
+statstext = await catalive()
 
 
-def catalive():
+async def catalive():
     _, check_sgnirts = check_data_base_heal_th()
     if Config.SUDO_USERS:
         sudo = "Enabled"
