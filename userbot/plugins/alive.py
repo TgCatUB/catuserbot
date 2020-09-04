@@ -5,7 +5,7 @@ from PIL import Image
 from telethon import version
 from userbot import StartTime
 from platform import python_version
-from ..utils import admin_cmd, sudo_cmd
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from userbot import CMD_HELP, ALIVE_NAME, catdef, catversion
 from ..uniborgConfig import Config
 
@@ -14,6 +14,7 @@ CAT_IMG = Config.ALIVE_PIC
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="alive$"))
+@borg.on(sudo_cmd(pattern="alive$", allow_sudo=True))
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
@@ -34,7 +35,7 @@ async def amireallyalive(alive):
         await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
         await alive.delete()
     else:
-        await alive.edit(f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
+        await edit_or_reply(event, f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
                          f"**✧ Database :** `{check_sgnirts}`\n"
                          f"**✧ Telethon Version :** `{version.__version__}\n`"
                          f"**✧ Catuserbot Version :** `{catversion}`\n"
