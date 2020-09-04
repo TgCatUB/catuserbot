@@ -86,6 +86,7 @@ async def carbon_api(e):
     # Removing carbon.png after uploading
     await cat.delete()  # Deleting msg
 
+
 @borg.on(admin_cmd(pattern=f"kar1(?: |$)(.*)", outgoing=True))
 async def carbon_api(e):
     """ A Wrapper for carbon.now.sh """
@@ -473,8 +474,8 @@ async def carbon_api(e):
     )
     os.remove('./carbon.png')
     await e.delete()  # Deleting msg
-    
-    
+
+
 CMD_HELP.update({
     "carbon":
     "**Plugin : **`carbon`\
