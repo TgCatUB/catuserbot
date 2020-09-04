@@ -225,7 +225,7 @@ async def upstream(event):
     catcmd = f"rm -rf .git"
     try:
         await runcmd(catcmd)
-    except:
+    except BaseException:
         pass
     try:
         txt = "`Oops.. Updater cannot continue due to "
