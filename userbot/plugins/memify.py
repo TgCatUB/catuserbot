@@ -6,7 +6,7 @@ import os
 import asyncio
 from .. import LOGS, CMD_HELP, tempmemes
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from . import take_screen_shot, runcmd, convert_toimage, solarize, mirror_file, flip_image, invert_colors, grayscale, crop, add_frame
+from . import (take_screen_shot, runcmd, convert_toimage, solarize, mirror_file, flip_image, invert_colors, grayscale, crop, add_frame)
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
@@ -627,7 +627,6 @@ async def memes(cat):
     else:
         colr = 0
     catinput = int(catinput)
-    colr = int(colr)
     catid = cat.reply_to_msg_id
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
@@ -720,5 +719,20 @@ CMD_HELP.update({
     \n**Usage : **Creates a image meme with give text at specific locations and sends\
     \n\n**Syntax : **`.mms toptext ; bottomtext`\
     \n**Usage : **Creates a sticker meme with give text at specific locations and sends\
+    \n\n**Syntax : **`.invert`\
+    \n**Usage : **Inverts the colors in media file\
+    \n\n**Syntax : **`.solarize`\
+    \n**Usage : **Watch sun buring ur media file\
+    \n\n**Syntax : **`.mirror`\
+    \n**Usage : **shows you the reflection of the media file\
+    \n\n**Syntax : **`.flip`\
+    \n**Usage : **shows you the upside down image of the given media file\
+    \n\n**Syntax : **`.gray`\
+    \n**Usage : **makes your media file to black and white\
+    \n\n**Syntax : **`.zoom` or `.zoom range`\
+    \n**Usage : **zooms your media file\
+    \n\n**Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
+    \n**Usage : **make a frame for your media file\
+    \n**fill:** This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.\
     "
 })
