@@ -8,6 +8,7 @@ import asyncio
 import random
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 
+
 @borg.on(admin_cmd(pattern=f"hps$", outgoing=True))
 async def _(event):
     if event.fwd_from:
@@ -93,7 +94,8 @@ async def _(event):
         await event.edit("**Tergeo**")
     if (x == 39):
         await event.edit("**Wingardium Leviosa**")
-        
+
+
 @borg.on(admin_cmd(pattern=f"gott$", outgoing=True))
 async def _(event):
     if event.fwd_from:
@@ -270,6 +272,7 @@ async def _(event):
         await event.edit("[When your friends cancel on the plan you made at the last minute...](https://telegra.ph/file/960b58c8f625b17613307.jpg)", link_preview=True)
     if x == 30:
         await event.edit("[For that friend of yours who does not like loud music and head banging...](https://telegra.ph/file/acbce070d3c52b921b2bd.jpg)", link_preview=True)
+
 
 @borg.on(admin_cmd(pattern="bbl$", outgoing=True))
 @borg.on(sudo_cmd(pattern="bbl$", allow_sudo=True))
@@ -481,6 +484,7 @@ async def _(event):
         await event.edit("`\"These words spake Jesus, and lifted up his eyes to heaven, and said, Father, the hour is come; glorify thy Son, that thy Son also may glorify thee:  <John 17:1>.\"`")
     if x == 101:
         await event.edit("`\"As thou hast given him power over all flesh, that he should give eternal life to as many as thou hast given him.  <John 17:2>.\"`")
+
 
 @borg.on(admin_cmd(pattern=r"tip$", outgoing=True))
 async def _(event):
