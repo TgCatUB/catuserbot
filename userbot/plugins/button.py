@@ -79,13 +79,12 @@ async def _(event):
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
     reply = await event.get_reply_message()
-    if (reply and (reply.media)):
-        # soon will try to add media support
-        if not catinput:
-            await edit_or_reply(event, "`Sorry media is not suupported for this plugin`")
-            return
+    # soon will try to add media support  
     if not catinput:
         catinput = (await event.get_reply_message()).text
+    if not catinput:
+        await edit_or_reply(event, "`Give me some thing`")
+        return
     catinput = "Inline buttons " + catinput
     tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
     results = await bot.inline_query(
