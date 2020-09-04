@@ -5,7 +5,7 @@ import heroku3
 import requests
 from ..helpers import *
 from .. import StartTime
-from ..uniborgConfig import Config
+from userbot.uniborgConfig import Config
 from .alive import check_data_base_heal_th
 
 
