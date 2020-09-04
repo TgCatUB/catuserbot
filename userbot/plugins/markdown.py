@@ -77,10 +77,14 @@ PARSED_ENTITIES = (
 # A matcher is a tuple of (regex pattern, parse function)
 # where the parse function takes the match and returns (text, entity)
 MATCHERS = [
-    (re.compile(r'a\.\.\s?(.+?)\.\.'), parse_aesthetics),
-    (re.compile(r'b\.\.\s?(.+?)\.\.'), parse_b_meme),
-    (re.compile(r'c\.\.\s?(.+?)\.\.'), parse_randcase),
-    (re.compile(r'([^/\w]|^)(/?([ru]/\w+))'), parse_subreddit),
+    (DEFAULT_URL_RE, parse_url_match),
+    (get_tag_parser('**', MessageEntityBold)),
+    (get_tag_parser('__', MessageEntityItalic)),
+    (get_tag_parser('```', partial(MessageEntityPre, language=''))),
+    (get_tag_parser('`', MessageEntityCode)),
+    (re.compile(r'\+\+(.+?)\+\+'), parse_aesthetics),
+    (re.compile(r'([^/\w]|^)(/?(r/\w+))'), parse_subreddit),
+    (re.compile(r"(?<!\w)(~{2})(?!~~)(.+?)(?<!~)\1(?!\w)"), parse_strikethrough)
 ]
 
 
