@@ -15,7 +15,7 @@ from .helpers import memeshelper as memes
 from .helpers import tempmemes, process as process
 
 StartTime = time.time()
-catversion = "2.7.1"
+catversion = "2.7.2"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
