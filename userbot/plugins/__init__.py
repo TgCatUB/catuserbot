@@ -16,7 +16,7 @@ HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
     os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    
+
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 # thumb image
@@ -33,8 +33,8 @@ def check(cat):
     return False
 
 
-
 statstext = catalive
+
 
 def catalive():
     _, check_sgnirts = check_data_base_heal_th()
@@ -65,7 +65,7 @@ def catalive():
 
     """ - Used - """
     remaining_quota = quota - quota_used
-    percentage = math.floor(remaining_quota / quota * 100)
+    math.floor(remaining_quota / quota * 100)
     minutes_remaining = remaining_quota / 60
     hours = math.floor(minutes_remaining / 60)
     minutes = math.floor(minutes_remaining % 60)
@@ -75,10 +75,9 @@ def catalive():
         App[0]['quota_used']
     except IndexError:
         AppQuotaUsed = 0
-        AppPercentage = 0
     else:
         AppQuotaUsed = App[0]['quota_used'] / 60
-        AppPercentage = math.floor(App[0]['quota_used'] * 100 / quota)
+        math.floor(App[0]['quota_used'] * 100 / quota)
     AppHours = math.floor(AppQuotaUsed / 60)
     AppMinutes = math.floor(AppQuotaUsed % 60)
     dyno = f"{AppHours}h {AppMinutes}m/{hours}h {minutes}"
@@ -88,4 +87,3 @@ def catalive():
                   \nDyno's : {dyno}\
                   "
     return conclusion
-    
