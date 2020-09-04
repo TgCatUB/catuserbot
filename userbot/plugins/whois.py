@@ -178,7 +178,7 @@ async def who(event):
             os.remove(photo)
         await cat.delete()
     except TypeError:
-        await cat.edit(caption,parse_mode = "html")
+        await cat.edit(caption, parse_mode="html")
 
 
 async def get_user(event):
