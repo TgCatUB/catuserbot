@@ -40,6 +40,7 @@ async def _(event):
     await reply_to_id.reply(mentions)
     await event.delete()
 
+
 @borg.on(admin_cmd(pattern="admins$"))
 async def _(event):
     if event.fwd_from:
@@ -54,4 +55,4 @@ async def _(event):
         await reply_message.reply(mentions)
     else:
         await event.reply(mentions)
-    await event.delete()    
+    await event.delete()
