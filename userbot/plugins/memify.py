@@ -6,7 +6,17 @@ import os
 import asyncio
 from .. import LOGS, CMD_HELP, tempmemes
 from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from . import (take_screen_shot, runcmd, convert_toimage, solarize, mirror_file, flip_image, invert_colors, grayscale, crop, add_frame)
+from . import (
+    take_screen_shot,
+    runcmd,
+    convert_toimage,
+    solarize,
+    mirror_file,
+    flip_image,
+    invert_colors,
+    grayscale,
+    crop,
+    add_frame)
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
