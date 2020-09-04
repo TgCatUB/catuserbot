@@ -328,13 +328,13 @@ async def anilist(event):
 CMD_HELP.update({
     "anilist":
     "**Plugin : **`anilist`\
-    \n**Syntax : **`.anilist <anime name >`\
+    \n\n**Syntax : **`.anilist <anime name >`\
     \n**Usage : **Shows you the details of the anime.\
-    \n**Syntax : **`.char <character name >`\
+    \n\n**Syntax : **`.char <character name >`\
     \n**Usage : **Shows you the details of that character in anime with pic.\
-    \n**Syntax : **`.manga <anime name >`\
+    \n\n**Syntax : **`.manga <anime name >`\
     \n**Usage : **Shows you the details of the manga.\
-    \n**Syntax : **`.airing <anime name >`\
+    \n\n**Syntax : **`.airing <anime name >`\
     \n**Usage : **Shows you the time for that current running anime show.\
     "
 })
