@@ -232,19 +232,16 @@ async def upstream(event):
         await event.edit(f"{txt}\n`Early failure! {error}`")
         return repo.__del__()
     except InvalidGitRepositoryError as error:
-        if conf is None:
-            return await event.edit(
-                f"`Unfortunately, the directory {error} "
-                "does not seem to be a git repository.\n"
-                "But we can fix that by force updating the userbot using "
-                ".update now.`"
-            )
         repo = Repo.init()
         origin = repo.create_remote("upstream", off_repo)
         origin.fetch()
         repo.create_head("master", origin.refs.master)
         repo.heads.master.set_tracking_branch(origin.refs.master)
         repo.heads.master.checkout(True)
+    try:
+        repo.create_remote("upstream", off_repo)
+    except BaseException:
+        pass
     ac_br = repo.active_branch.name
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
