@@ -77,12 +77,12 @@ async def _(event):
     reply_to_id = None
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    reply = await cat.get_reply_message()
+    reply = await event.get_reply_message()
     if (reply and (reply.media)):
         # soon will try to add media support
-        await edit_or_reply(cat, "`Sorry media is not suupported for this plugin`")
+        await edit_or_reply(event, "`Sorry media is not suupported for this plugin`")
         return
-    catinput = cat.pattern_match.group(1)
+    catinput = event.pattern_match.group(1)
     if not catinput:
         catinput = await event.get_reply_message()
     catinput = "Inline buttons " + catinput
