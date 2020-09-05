@@ -98,7 +98,25 @@ async def _(event):
     )
     await event.delete()
 
-
+@bot.on(admin_cmd(pattern=r"secret ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="secret ?(.*)", allow_sudo=True))
+async def _(event):
+    reply_to_id = None
+    if event.reply_to_msg_id:
+        reply_to_id = event.reply_to_msg_id
+    catinput = event.pattern_match.group(1)
+    if catinput:
+        user , text = catinput(" " , 1)
+    else:
+       await event.edit("invalid syntax check help")
+    u = await event.client.get_entity(user)
+    tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
+    help_string = f"secret {u.id} {text}"
+    results = await bot.inline_query(tgbotusername,help_string )
+    await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+    await event.delete()
+    
+    
 def build_keyboard(buttons):
     keyb = []
     for btn in buttons:
