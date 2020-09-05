@@ -15,7 +15,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             try:
                 u = await event.client.get_entity(user)
             except ValueError:
-                u = await event.client.get_entity(user)
+                u = await event.client.get_entity(int(user))
             buttons = [custom.Button.inline(
                 "show message 🔐",
                 data=f"secret_{u.id}_ {txct}")]
