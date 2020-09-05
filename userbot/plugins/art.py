@@ -29,7 +29,7 @@ async def kakashi(ded):
 async def kakashi(killer):
     name = killer.pattern_match.group(1)
     await killer.edit(f"__**Commando **__[{DEF}]({USR})          \n\n"
-                      r"_/﹋\_\n"
+                      "_/﹋\_\n"
                       "(҂`_´)\n"
                       f"<,︻╦╤─ ҉ - - - {name}\n"
                       "_/﹋\_\n")

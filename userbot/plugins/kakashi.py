@@ -9,7 +9,7 @@ from userbot.utils import admin_cmd
 
 @borg.on(admin_cmd(outgoing=True, pattern="note_help$"))
 async def kakashi(jisan):
-    await jisan.edit("All commands for note is [HERE](https://nekobin.com/qetutujaqo) ")
+    await jisan.edit("All commands for note is [HERE](https://nekobin.com/duyupeneje) ")
 
 
 @register(outgoing=True, pattern="^.note(?: |$)(.*)")
@@ -51,6 +51,16 @@ async def kakashi(event):
         link = "Youtube Search"
     elif (link in ("updater", "ud")):
         link = "Setup Updater"
+    elif (link in ("weather", "ws")):
+        link = "Weather Setup"
+    elif (link in ("forward", "frwd")):
+        link = "Forward"
+    elif (link in ("customtext", "cppt")):
+        link = "Custom PM Permit Text"
+    elif link == "cat":
+        link = "🐱 Cat UserBot 🐱"
+    elif link == "my":
+        link = "😎 My Fork 😎"
     await event.edit("```Sending your note....```")
     async with bot.conversation("@kakashi_robot") as conv:
         try:
