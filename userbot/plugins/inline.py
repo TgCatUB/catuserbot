@@ -1,4 +1,4 @@
-##thanks to @null7410  for callbackquery code 
+# thanks to @null7410  for callbackquery code
 
 import re
 from telethon import custom, events
