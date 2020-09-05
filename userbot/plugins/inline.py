@@ -1,6 +1,5 @@
 # thanks to @null7410  for callbackquery code
 # created by @sandy1709 and @mrconfused
-import re
 from telethon import custom, events
 
 if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
