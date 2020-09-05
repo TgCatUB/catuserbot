@@ -34,7 +34,6 @@ async def carbon_api(e):
     """ A Wrapper for carbon.now.sh """
     await e.edit("`Processing..`")
     CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
-    global CARBONLANG
     textx = await e.get_reply_message()
     pcode = e.text
     if pcode[8:]:
@@ -474,7 +473,6 @@ async def carbon_api(e):
     )
     os.remove('./carbon.png')
     await e.delete()  # Deleting msg
-
 
 CMD_HELP.update({
     "carbon": "__**PLUGIN NAME :** Carbon__\
