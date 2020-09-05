@@ -113,7 +113,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
     @tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"secret_(.+?)_(.+)")))
     async def on_plug_in_callback_query_handler(event):
         userid = event.pattern_match.group(1)
-        ids = Config.SUDO_USERS
+        ids = []
         ids.append(int(userid))
         ids.append(bot.uid)
         if event.query.user_id in ids:
