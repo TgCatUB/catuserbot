@@ -12,7 +12,10 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         if event.query.user_id == bot.uid and query.startswith("secret"):
             query = query[7:]
             user, txct = query.split(" ", 1)
-            u = await event.client.get_entity(user)
+            try:
+                u = await event.client.get_entity(user)
+            except ValueError:
+                u = await event.client.get_entity(user)
             buttons = [custom.Button.inline(
                 "show message 🔐",
                 data=f"secret_{u.id}_ {txct}")]
