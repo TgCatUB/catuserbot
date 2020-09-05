@@ -1,5 +1,5 @@
 # thanks to @null7410  for callbackquery code
-
+# created by @sandy1709 and @mrconfused
 import re
 from telethon import custom, events
 
@@ -9,16 +9,20 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         builder = event.builder
         result = None
         query = event.text
-        if event.query.user_id == bot.uid and query.startswith("Secret"):
+        if event.query.user_id == bot.uid and query.startswith("secret"):
             query = query[10:]
-            txt = re.findall(r'(\d+) ?(.*)', query)
-            buttons = [
-                custom.Button.inline(
+            user, txct = query.split(" " ,1)
+            u = await event.client.get_entity(user)
+            buttons = [ custom.Button.inline(
                     "show message 🔐",
-                    data=f"secret_{txt[0][0]}_ {txt[0][1]}")]
+                    data=f"secret_{u.id}_ {txct}")]
+            if u.username:
+                sandy = f"@{u.username}"
+            else:
+                sandy = f"[{u.first_name}](tg://user?id={u.id})"
             result = builder.article(
                 title="secret message",
-                text=f"🔒 A whisper message to [user](tg://user?id={txt[0][0]}), Only he / she can open it.",
+                text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
                 buttons=buttons)
             await event.answer([result] if result else None)
 
