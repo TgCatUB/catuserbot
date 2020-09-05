@@ -17,7 +17,7 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 HEROKU_APP_NAME = Var.HEROKU_APP_NAME
 HEROKU_API_KEY = Var.HEROKU_API_KEY
-UPSTREAM_REPO_BRANCH = "master"
+UPSTREAM_REPO_BRANCH = "beta"
 UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
 
 requirements_path = path.join(
@@ -219,7 +219,7 @@ async def upstream(event):
 @bot.on(admin_cmd(outgoing=True, pattern=r"badcat$"))
 @borg.on(sudo_cmd(pattern="badcat$", allow_sudo=True))
 async def upstream(event):
-    event = await edit_or_reply(event, "`Checking for updates, please wait....`")
+    event = await edit_or_reply(event, "`Pulling the bad cat repo wait a sec ....`")
     off_repo = "https://github.com/Jisan09/catuserbot"
     catcmd = f"rm -rf .git"
     try:
