@@ -98,6 +98,7 @@ async def _(event):
     )
     await event.delete()
 
+
 def build_keyboard(buttons):
     keyb = []
     for btn in buttons:
