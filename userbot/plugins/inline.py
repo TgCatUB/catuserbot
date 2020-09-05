@@ -1,7 +1,7 @@
 # thanks to @null7410  for callbackquery code
 # created by @sandy1709 and @mrconfused
 from telethon import custom, events
-import re 
+import re
 
 if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
     @tgbot.on(events.InlineQuery)
