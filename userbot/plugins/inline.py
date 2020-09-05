@@ -1,3 +1,4 @@
+import re
 from telethon import custom, events
 
 if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
@@ -8,6 +9,8 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         query = event.text
         if event.query.user_id == bot.uid and query.startswith("Secret bot"):
             buttons = [custom.Button.inline("show message 🔐", data="secert")]
+            query = query[10:]
+            txt = re.findall(r'(\d+) ?(.*)', query)
             result = builder.article(
                 title="secret message",
                 text=f"🔒 A whisper message to [user](tg://user?id={txt[0][0]}), Only he / she can open it.",
