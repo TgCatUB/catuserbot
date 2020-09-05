@@ -1,6 +1,7 @@
 from telethon import Button, custom, events
 import re
 
+
 @tgbot.on(events.InlineQuery)  # pylint:disable=E0602
 async def inline_handler(event):
     builder = event.builder
@@ -15,11 +16,12 @@ async def inline_handler(event):
     if event.query.user_id == bot.uid and query.startswith("Secret bot"):
         buttons = [custom.Button.inline("show message 🔐", data="secert")]
         result = builder.article(
-                title="secret message",
-                text=f"🔒 A whisper message to [user](tg://user?id={txt[0][0]}), Only he/she can open it.,
-                buttons=buttons
-            )
+            title="secret message",
+            text=f"🔒 A whisper message to[user](tg: // user?id={txt[0][0]}), Only he / she can open it.,
+            buttons=buttons
+        )
         await event.answer([result] if result else None)
+
     @tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"secret")))
     async def on_plug_in_callback_query_handler(event):
         tcxt = text[10:]
