@@ -5,7 +5,7 @@ from PIL import Image
 from telethon import version
 from userbot import StartTime
 from platform import python_version
-from ..utils import admin_cmd, sudo_cmd
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from userbot import CMD_HELP, ALIVE_NAME, catdef, catversion
 from ..uniborgConfig import Config
 
@@ -14,6 +14,7 @@ CAT_IMG = Config.ALIVE_PIC
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="alive$"))
+@borg.on(sudo_cmd(pattern="alive$", allow_sudo=True))
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
@@ -34,18 +35,18 @@ async def amireallyalive(alive):
         await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
         await alive.delete()
     else:
-        await alive.edit(f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
-                         f"**✧ Database :** `{check_sgnirts}`\n"
-                         f"**✧ Telethon Version :** `{version.__version__}\n`"
-                         f"**✧ Catuserbot Version :** `{catversion}`\n"
-                         f"**✧ Python Version :** `{python_version()}\n`"
-                         f"**✧ Uptime :** `{uptime}\n`"
-                         f"**✧ My Peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
-                         )
+        await edit_or_reply(alive, f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
+                            f"**✧ Database :** `{check_sgnirts}`\n"
+                            f"**✧ Telethon Version :** `{version.__version__}\n`"
+                            f"**✧ Catuserbot Version :** `{catversion}`\n"
+                            f"**✧ Python Version :** `{python_version()}\n`"
+                            f"**✧ Uptime :** `{uptime}\n`"
+                            f"**✧ My Peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
+                            )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="live$"))
-@borg.on(sudo_cmd(pattern="live$", allow_sudo=True))
+@borg.on(admin_cmd(outgoing=True, pattern="ialive$"))
+@borg.on(sudo_cmd(pattern="ialive$", allow_sudo=True))
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
@@ -87,6 +88,7 @@ async def _(event):
     img.save("temp.webp", "webp")
     img.seek(0)
     await bot.send_file(event.chat_id, open("temp.webp", "rb"), reply_to=reply_to_id)
+
 
 # UniBorg Telegram UseRBot
 # Copyright (C) 2020 @UniBorg
