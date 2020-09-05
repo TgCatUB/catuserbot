@@ -13,7 +13,6 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             id = []
             id.append(txt[0][0])
             id.append(bot.uid)
-            (await bot.get_me()).id
             buttons = [custom.Button.inline("show message 🔐", data="secert")]
             result = builder.article(
                 title="secret message",
