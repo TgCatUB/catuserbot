@@ -31,7 +31,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                     else:
                         sandy = f"[{u.first_name}](tg://user?id={u.id})"
                 except ValueError:
-                    sandy = f"[{user}](tg://user?id={u})"
+                    sandy = f"[user](tg://user?id={u})"
                 result = builder.article(
                     title="secret message",
                     text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
