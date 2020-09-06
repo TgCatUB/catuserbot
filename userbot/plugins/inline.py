@@ -15,7 +15,11 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             query = query[7:]
             user, txct = query.split(" ", 1)
             try:
-                #ValueError: Could not find the input entity for <telethon.tl.types.PeerUser object at 0x7f96e090dac0>. Please read https://docs.telethon.dev/en/latest/concepts/entities.html to find out more detail
+                # ValueError: Could not find the input entity for
+                # <telethon.tl.types.PeerUser object at 0x7f96e090dac0>. Please
+                # read
+                # https://docs.telethon.dev/en/latest/concepts/entities.html to
+                # find out more detail
                 u = int(user)
                 buttons = [custom.Button.inline(
                     "show message 🔐",
