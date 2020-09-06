@@ -26,7 +26,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                     data=f"secret_{u}_ {txct}")]
                 try:
                     u = await event.client.get_entity(user)
-                    if:
+                    if u.username:
                         sandy = f"@{u.username}"
                     else:
                         sandy = f"[{u.first_name}](tg://user?id={u.id})"
