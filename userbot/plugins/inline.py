@@ -15,11 +15,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             query = query[7:]
             user, txct = query.split(" ", 1)
             try:
-                # ValueError: Could not find the input entity for
-                # <telethon.tl.types.PeerUser object at 0x7f96e090dac0>. Please
-                # read
-                # https://docs.telethon.dev/en/latest/concepts/entities.html to
-                # find out more detail
+                # if u is user id
                 u = int(user)
                 buttons = [custom.Button.inline(
                     "show message 🔐",
@@ -31,6 +27,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                     else:
                         sandy = f"[{u.first_name}](tg://user?id={u.id})"
                 except ValueError:
+                    # ValueError: Could not find the input entity
                     sandy = f"[user](tg://user?id={u})"
                 result = builder.article(
                     title="secret message",
@@ -38,6 +35,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                     buttons=buttons)
                 await event.answer([result] if result else None)
             except ValueError:
+                # if u is username
                 u = await event.client.get_entity(user)
                 buttons = [custom.Button.inline(
                     "show message 🔐",
