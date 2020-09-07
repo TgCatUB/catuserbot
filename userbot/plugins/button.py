@@ -71,7 +71,7 @@ async def _(event):
 # Helpers
 
 
-@borg.on(admin_cmd(pattern=r"ibutton(?: |$)(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern="ibutton(?: |$)(.*)", outgoing=True))
 @borg.on(sudo_cmd(pattern="ibutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     reply_to_id = None
