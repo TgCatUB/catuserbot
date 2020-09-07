@@ -71,7 +71,7 @@ async def _(event):
 # Helpers
 
 
-@borg.on(admin_cmd(pattern=r"ibutton(?: |$)(.*)", outgoing=True))
+@borg.on(admin_cmd(pattern="ibutton(?: |$)(.*)", outgoing=True))
 @borg.on(sudo_cmd(pattern="ibutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     reply_to_id = None
@@ -109,17 +109,6 @@ def build_keyboard(buttons):
     return keyb
 
 
-CMD_HELP.update({
-    "button":
-    "**Plugin : **`button`\
-    \n\n**SYNTAX : **`.cbutton`\
-    \n**USAGE :** Buttons must be in th format as [name on button]<buttonurl:link you want to open> and markdown is Default to html\
-    \n**EXAMPLE :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
-    \n\n**SYNTAX : **`.ibutton`\
-    \n**USAGE :** Buttons must be in th format as [name on button]<buttonurl:link you want to open>\
-    \n**EXAMPLE :** `.ibutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
-    "
-})
 CMD_HELP.update({
     "button": "__**PLUGIN NAME :** Button__\
     \n\n📌** CMD ➥** `.cbutton`\
