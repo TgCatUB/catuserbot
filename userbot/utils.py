@@ -1,19 +1,22 @@
-import re
-import os
-import sys
-import math
-import time
-import logging
-import inspect
 import asyncio
 import datetime
-import traceback
 import importlib
-from var import Var
+import inspect
+import logging
+import math
+import os
+import re
+import sys
+import time
+import traceback
 from pathlib import Path
-from telethon import events
 from time import gmtime, strftime
-from . import LOAD_PLUG, LOGS, CMD_LIST, SUDO_LIST, bot
+
+from telethon import events
+
+from var import Var
+
+from . import CMD_LIST, LOAD_PLUG, LOGS, SUDO_LIST, bot
 
 ENV = bool(os.environ.get("ENV", False))
 if ENV:
@@ -35,30 +38,26 @@ def command(**args):
     else:
         pattern = args.get("pattern", None)
         allow_sudo = args.get("allow_sudo", None)
-        allow_edited_updates = args.get('allow_edited_updates', False)
+        allow_edited_updates = args.get("allow_edited_updates", False)
         args["incoming"] = args.get("incoming", False)
         args["outgoing"] = True
         if bool(args["incoming"]):
             args["outgoing"] = False
 
         try:
-            if pattern is not None and not pattern.startswith('(?i)'):
-                args['pattern'] = '(?i)' + pattern
+            if pattern is not None and not pattern.startswith("(?i)"):
+                args["pattern"] = "(?i)" + pattern
         except BaseException:
             pass
 
-        reg = re.compile('(.*)')
+        reg = re.compile("(.*)")
         if pattern is not None:
             try:
                 cmd = re.search(reg, pattern)
                 try:
-                    cmd = cmd.group(1).replace(
-                        "$",
-                        "").replace(
-                        "\\",
-                        "").replace(
-                        "^",
-                        "")
+                    cmd = (
+                        cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
+                    )
                 except BaseException:
                     pass
                 try:
@@ -83,7 +82,7 @@ def command(**args):
             args["chats"] = black_list_chats
 
         if "allow_edited_updates" in args:
-            del args['allow_edited_updates']
+            del args["allow_edited_updates"]
 
         def decorator(func):
             if allow_edited_updates:
@@ -103,6 +102,7 @@ def load_module(shortname):
         pass
     elif shortname.endswith("_"):
         import userbot.utils
+
         path = Path(f"userbot/plugins/{shortname}.py")
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
@@ -111,6 +111,7 @@ def load_module(shortname):
         LOGS.info("Successfully imported " + shortname)
     else:
         import userbot.utils
+
         path = Path(f"userbot/plugins/{shortname}.py")
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
@@ -165,15 +166,7 @@ def admin_cmd(pattern=None, **args):
         else:
             args["pattern"] = re.compile(Config.COMMAND_HAND_LER + pattern)
             reg = Config.COMMAND_HAND_LER[1]
-            cmd = (
-                reg +
-                pattern).replace(
-                "$",
-                "").replace(
-                "\\",
-                "").replace(
-                "^",
-                "")
+            cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
             except BaseException:
@@ -216,8 +209,10 @@ def on(**args):
         async def wrapper(event):
             # do things like check if sudo
             await func(event)
+
         client.add_event_handler(wrapper, events.NewMessage(**args))
         return wrapper
+
     return decorater
 
 
@@ -228,28 +223,22 @@ def register(**args):
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
-    pattern = args.get('pattern', None)
-    disable_edited = args.get('disable_edited', True)
+    pattern = args.get("pattern", None)
+    disable_edited = args.get("disable_edited", True)
     allow_sudo = args.get("allow_sudo", False)
 
-    if pattern is not None and not pattern.startswith('(?i)'):
-        args['pattern'] = '(?i)' + pattern
+    if pattern is not None and not pattern.startswith("(?i)"):
+        args["pattern"] = "(?i)" + pattern
 
     if "disable_edited" in args:
-        del args['disable_edited']
+        del args["disable_edited"]
 
-    reg = re.compile('(.*)')
+    reg = re.compile("(.*)")
     if pattern is not None:
         try:
             cmd = re.search(reg, pattern)
             try:
-                cmd = cmd.group(1).replace(
-                    "$",
-                    "").replace(
-                    "\\",
-                    "").replace(
-                    "^",
-                    "")
+                cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
             except BaseException:
                 pass
 
@@ -285,6 +274,7 @@ def register(**args):
         except Exception:
             LOAD_PLUG.update({file_test: [func]})
         return func
+
     return decorator
 
 
@@ -295,10 +285,7 @@ def errors_handler(func):
         except BaseException:
 
             date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-            new = {
-                'error': str(sys.exc_info()[1]),
-                'date': datetime.datetime.now()
-            }
+            new = {"error": str(sys.exc_info()[1]), "date": datetime.datetime.now()}
 
             text = "**USERBOT CRASH REPORT**\n\n"
             link = "[here](https://t.me/catuserbot_support)"
@@ -322,17 +309,15 @@ def errors_handler(func):
             ftext += str(sys.exc_info()[1])
             ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
 
-            command = "git log --pretty=format:\"%an: %s\" -5"
+            command = 'git log --pretty=format:"%an: %s" -5'
 
             ftext += "\n\n\nLast 5 commits:\n"
 
             process = await asyncio.create_subprocess_shell(
-                command,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE)
+                command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+            )
             stdout, stderr = await process.communicate()
-            result = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+            result = str(stdout.decode().strip()) + str(stderr.decode().strip())
             ftext += result
             file = open("error.log", "w+")
             file.write(ftext)
@@ -342,6 +327,7 @@ def errors_handler(func):
                 "error.log",
                 caption=text,
             )
+
     return wrapper
 
 
@@ -356,18 +342,17 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
         time_to_completion = round((total - current) / speed) * 1000
         estimated_total_time = elapsed_time + time_to_completion
         progress_str = "[{0}{1}] {2}%\n".format(
-            ''.join(["▰" for i in range(math.floor(percentage / 10))]),
-            ''.join(["▱" for i in range(10 - math.floor(percentage / 10))]),
-            round(percentage, 2))
-        tmp = progress_str + \
-            "{0} of {1}\nETA: {2}".format(
-                humanbytes(current),
-                humanbytes(total),
-                time_formatter(estimated_total_time)
-            )
+            "".join(["▰" for i in range(math.floor(percentage / 10))]),
+            "".join(["▱" for i in range(10 - math.floor(percentage / 10))]),
+            round(percentage, 2),
+        )
+        tmp = progress_str + "{0} of {1}\nETA: {2}".format(
+            humanbytes(current), humanbytes(total), time_formatter(estimated_total_time)
+        )
         if file_name:
-            await event.edit("{}\nFile Name: `{}`\n{}".format(
-                type_of_ps, file_name, tmp))
+            await event.edit(
+                "{}\nFile Name: `{}`\n{}".format(type_of_ps, file_name, tmp)
+            )
         else:
             await event.edit("{}\n{}".format(type_of_ps, tmp))
 
@@ -379,7 +364,7 @@ def humanbytes(size):
     if not size:
         return ""
     # 2 ** 10 = 1024
-    power = 2**10
+    power = 2 ** 10
     raised_to_pow = 0
     dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
     while size > power:
@@ -395,15 +380,17 @@ def time_formatter(milliseconds: int) -> str:
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
-    tmp = ((str(days) + " day(s), ") if days else "") + \
-        ((str(hours) + " hour(s), ") if hours else "") + \
-        ((str(minutes) + " minute(s), ") if minutes else "") + \
-        ((str(seconds) + " second(s), ") if seconds else "") + \
-        ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
+    tmp = (
+        ((str(days) + " day(s), ") if days else "")
+        + ((str(hours) + " hour(s), ") if hours else "")
+        + ((str(minutes) + " minute(s), ") if minutes else "")
+        + ((str(seconds) + " second(s), ") if seconds else "")
+        + ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
+    )
     return tmp[:-2]
 
 
-class Loader():
+class Loader:
     def __init__(self, func=None, **args):
         self.Var = Var
         bot.add_event_handler(func, events.NewMessage(**args))
@@ -422,18 +409,9 @@ def sudo_cmd(pattern=None, **args):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
-            args["pattern"] = re.compile(
-                Config.SUDO_COMMAND_HAND_LER + pattern)
+            args["pattern"] = re.compile(Config.SUDO_COMMAND_HAND_LER + pattern)
             reg = Config.SUDO_COMMAND_HAND_LER[1]
-            cmd = (
-                reg +
-                pattern).replace(
-                "$",
-                "").replace(
-                "\\",
-                "").replace(
-                "^",
-                "")
+            cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
             try:
                 SUDO_LIST[file_test].append(cmd)
             except BaseException:
@@ -459,6 +437,7 @@ def sudo_cmd(pattern=None, **args):
         del args["allow_edited_updates"]
     # check if the plugin should listen for outgoing 'messages'
     return events.NewMessage(**args)
+
 
 # https://t.me/c/1220993104/623253
 
