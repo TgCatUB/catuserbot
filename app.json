@@ -9,7 +9,7 @@
     "modular",
     "productivity"
   ],
-  "repository": "https://github.com/tesbot07/catuserbot/",
+  "repository": "https://github.com/tesbot07/userbot/",
   "website": "#TODO",
   "success_url": "#TODO",
   "stack": "container",
@@ -25,37 +25,57 @@
     },
     "ALIVE_NAME": {
       "description": "give your name",
-      "value": ""
+      "value": "@watefuk"
     },
     "APP_ID": {
       "description": "Get this value from my.telegram.org! Please do not steal",
-      "value": ""
+      "value": "",
+      "required": true
     },
     "API_HASH": {
       "description": "Get this value from my.telegram.org! Please do not steal",
-      "value": ""
+      "value": "",
+      "required": true
     },
     "STRING_SESSION": {
-      "description": "Get this value by running python3 telesetup.py locally",
-      "value": ""
+      "description": "Get this value by running python3 telesetup.py locally or https://generatestringsession.sandeep1709.repl.run/",
+      "value": "",
+      "required": true
+    },
+"OPEN_WEATHER_MAP_APPID": {
+      "description": "Get this value API key on openweather.org",
+      "value": "",
+      "required": false
     },
     "TG_BOT_USER_NAME_BF_HER": {
       "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the username of your bot",
-      "value": ""
+      "value": "",
+      "required": true
     },
     "TG_BOT_TOKEN_BF_HER": {
       "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the token of your bot.Worth it. Get it.",
-      "value": ""
+      "value": "",
+      "required": true
     },
     "HEROKU_API_KEY": {
       "description": "Required for updating the bot and other stuff get it from https://dashboard.heroku.com/account",
       "value": "",
-      "required": false
+      "required": true
     },
     "HEROKU_APP_NAME": {
       "description": "YOUR app name ",
       "value": "",
-      "required": false
+      "required": true
+    },
+"PRIVATE_GROUP_ID": {
+      "description": "",
+      "value": "",
+      "required": true
+    },
+"PRIVATE_GROUP_BOT_API_ID": {
+      "description": "",
+      "value": "",
+      "required": true
     },
     "DEFAULT_BIO": {
       "description": "Your bio here note bio must have only 70characters or less.",
@@ -104,7 +124,7 @@
     },
     "TZ": {
       "description": "Required for Correct Time on autopic/get time. Know your timezone from http://www.timezoneconverter.com/cgi-bin/findzone.tzc",
-      "value": "Asia/Kolkata",
+      "value": "Asia/Jakarta",
       "required": false
     }
   },
