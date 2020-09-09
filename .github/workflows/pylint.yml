@@ -18,7 +18,7 @@ jobs:
           pip install autopep8 autoflake
       - name: Check for showstoppers
         run: |
-          autopep8 --verbose --in-place --recursive --aggressive --aggressive . *.py
+          autopep8 --verbose --in-place --recursive --aggressive --aggressive --ignore=W605. *.py
       - name: Remove unused imports and variables
         run: |
           autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables --ignore-init-module-imports .
