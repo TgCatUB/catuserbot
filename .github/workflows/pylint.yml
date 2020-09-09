@@ -24,8 +24,8 @@ jobs:
           autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables --ignore-init-module-imports .
       - name: lint with isort and black
         run: |
-          isort userbot/*.py
-          black userbot/*.py
+          isort *.py
+          black *.py
           
       # commit changes
       - uses: stefanzweifel/git-auto-commit-action@v4
