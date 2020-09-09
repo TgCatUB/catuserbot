@@ -34,7 +34,7 @@ async def kakashi(killer):
         r"_/﹋\_\n"
         "(҂`_´)\n"
         f"<,︻╦╤─ ҉ - - - {name}\n"
-        "_/﹋\_\n"
+        r"_/﹋\_\n"
     )
 
 
