@@ -18,10 +18,10 @@ jobs:
           pip install autopep8 autoflake isort black
       - name: Check for showstoppers
         run: |
-          autopep8 --verbose --in-place --recursive --aggressive --aggressive --ignore-docstrings=yes . *.py
+          autopep8 --verbose --in-place --recursive --aggressive --aggressive . *.py
       - name: Remove unused imports and variables
         run: |
-          autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables --ignore-init-module-imports .
+          autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables --ignore-init-module-imports --ignore-docstrings=yes .
       - name: lint with isort and black
         run: |
           isort userbot/*.py
