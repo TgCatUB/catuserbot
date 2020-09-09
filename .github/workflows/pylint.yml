@@ -15,13 +15,26 @@ jobs:
 
       - name: Install Python lint libraries
         run: |
-          pip install autopep8 autoflake
+          pip install autopep8 autoflake isort black
       - name: Check for showstoppers
         run: |
-          autopep8 --verbose --in-place --recursive --aggressive --aggressive . *.py
+          autopep8 --verbose --in-place --recursive --aggressive --aggressive --ignore-docstrings=yes . *.py
       - name: Remove unused imports and variables
         run: |
           autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables --ignore-init-module-imports .
+      - name: lint with isort and black
+        run: |
+          isort userbot/*.py
+          black userbot/*.py
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v2
+        with:
+            git_user_signingkey: true
+            git_commit_gpgsign: true
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          PASSPHRASE: ${{ secrets.PASSPHRASE }}
       # commit changes
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
