@@ -7,7 +7,7 @@ import re
 
 from telethon import Button
 
-from .. import CMD_HELP, LOGS
+from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 # regex obtained from:
@@ -16,7 +16,7 @@ BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>
 
 
 @borg.on(admin_cmd(pattern=r"cbutton(?: |$)(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="cbutton(?: |$)(.*)", allow_sudo=True))
+@borg.on(sudo_cmd(pattern=r"cbutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     chat = event.chat_id
     reply_message = await event.get_reply_message()
@@ -69,12 +69,11 @@ async def _(event):
 # Helpers
 
 
-@borg.on(admin_cmd(pattern="ibutton($| (.+))", outgoing=True))
-@borg.on(sudo_cmd(pattern="ibutton($| (.+))", allow_sudo=True))
+@borg.on(admin_cmd(pattern=r"ibutton(?: |$)(.*)", outgoing=True))
+@borg.on(sudo_cmd(pattern=r"ibutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     reply_to_id = None
     catinput = event.pattern_match.group(1)
-    LOGS.info(catinput)
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
     await event.get_reply_message()
