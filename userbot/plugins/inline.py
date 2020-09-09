@@ -1,9 +1,11 @@
 # thanks to @null7410  for callbackquery code
 # created by @sandy1709 and @mrconfused
-from telethon import custom, events
 import re
 
+from telethon import custom, events
+
 if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
+
     @tgbot.on(events.InlineQuery)
     async def inline_handler(event):
         builder = event.builder
@@ -17,9 +19,9 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             try:
                 # if u is user id
                 u = int(user)
-                buttons = [custom.Button.inline(
-                    "show message 🔐",
-                    data=f"secret_{u}_ {txct}")]
+                buttons = [
+                    custom.Button.inline("show message 🔐", data=f"secret_{u}_ {txct}")
+                ]
                 try:
                     u = await event.client.get_entity(u)
                     if u.username:
@@ -32,14 +34,17 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 result = builder.article(
                     title="secret message",
                     text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
-                    buttons=buttons)
+                    buttons=buttons,
+                )
                 await event.answer([result] if result else None)
             except ValueError:
                 # if u is username
                 u = await event.client.get_entity(user)
-                buttons = [custom.Button.inline(
-                    "show message 🔐",
-                    data=f"secret_{u.id}_ {txct}")]
+                buttons = [
+                    custom.Button.inline(
+                        "show message 🔐", data=f"secret_{u.id}_ {txct}"
+                    )
+                ]
                 if u.username:
                     sandy = f"@{u.username}"
                 else:
@@ -47,5 +52,6 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 result = builder.article(
                     title="secret message",
                     text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
-                    buttons=buttons)
+                    buttons=buttons,
+                )
                 await event.answer([result] if result else None)

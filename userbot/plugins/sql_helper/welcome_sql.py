@@ -1,5 +1,6 @@
 from sqlalchemy import BigInteger, Boolean, Column, String, UnicodeText
-from userbot.plugins.sql_helper import SESSION, BASE
+
+from userbot.plugins.sql_helper import BASE, SESSION
 
 
 class Welcome(BASE):
@@ -30,8 +31,7 @@ Welcome.__table__.create(checkfirst=True)
 
 def get_current_welcome_settings(chat_id):
     try:
-        return SESSION.query(Welcome).filter(
-            Welcome.chat_id == str(chat_id)).one()
+        return SESSION.query(Welcome).filter(Welcome.chat_id == str(chat_id)).one()
     except BaseException:
         return None
     finally:
@@ -43,7 +43,7 @@ def add_welcome_setting(
     custom_welcome_message,
     should_clean_welcome,
     previous_welcome,
-    media_file_id
+    media_file_id,
 ):
     # adder = SESSION.query(Welcome).get(chat_id)
     adder = Welcome(
@@ -51,7 +51,7 @@ def add_welcome_setting(
         custom_welcome_message,
         should_clean_welcome,
         previous_welcome,
-        media_file_id
+        media_file_id,
     )
     SESSION.add(adder)
     SESSION.commit()

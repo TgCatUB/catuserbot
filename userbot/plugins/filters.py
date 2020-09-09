@@ -2,13 +2,21 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-import re
 import asyncio
-from .. import CMD_HELP
-from telethon.tl import types
+import re
+
 from telethon import utils
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from userbot.plugins.sql_helper.filter_sql import add_filter, get_all_filters, remove_all_filters, remove_filter
+from telethon.tl import types
+
+from userbot.plugins.sql_helper.filter_sql import (
+    add_filter,
+    get_all_filters,
+    remove_all_filters,
+    remove_filter,
+)
+
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 DELETE_TIMEOUT = 0
 TYPE_TEXT = 0
@@ -37,23 +45,20 @@ async def on_snip(event):
                     media = types.InputPhoto(
                         int(snip.media_id),
                         int(snip.media_access_hash),
-                        snip.media_file_reference
+                        snip.media_file_reference,
                     )
                 elif snip.snip_type == TYPE_DOCUMENT:
                     media = types.InputDocument(
                         int(snip.media_id),
                         int(snip.media_access_hash),
-                        snip.media_file_reference
+                        snip.media_file_reference,
                     )
                 else:
                     media = None
                 event.message.id
                 if event.reply_to_msg_id:
                     event.reply_to_msg_id
-                await event.reply(
-                    snip.reply,
-                    file=media
-                )
+                await event.reply(snip.reply, file=media)
                 if event.chat_id not in last_triggered_filters:
                     last_triggered_filters[event.chat_id] = []
                 last_triggered_filters[event.chat_id].append(name)
@@ -67,30 +72,35 @@ async def on_snip_save(event):
     name = event.pattern_match.group(1)
     msg = await event.get_reply_message()
     if msg:
-        snip = {'type': TYPE_TEXT, 'text': msg.message or ''}
+        snip = {"type": TYPE_TEXT, "text": msg.message or ""}
         if msg.media:
             media = None
             if isinstance(msg.media, types.MessageMediaPhoto):
                 media = utils.get_input_photo(msg.media.photo)
-                snip['type'] = TYPE_PHOTO
+                snip["type"] = TYPE_PHOTO
             elif isinstance(msg.media, types.MessageMediaDocument):
                 media = utils.get_input_document(msg.media.document)
-                snip['type'] = TYPE_DOCUMENT
+                snip["type"] = TYPE_DOCUMENT
             if media:
-                snip['id'] = media.id
-                snip['hash'] = media.access_hash
-                snip['fr'] = media.file_reference
+                snip["id"] = media.id
+                snip["hash"] = media.access_hash
+                snip["fr"] = media.file_reference
         add_filter(
             event.chat_id,
             name,
-            snip['text'],
-            snip['type'],
-            snip.get('id'),
-            snip.get('hash'),
-            snip.get('fr'))
-        await edit_or_reply(event, f"filter {name} saved successfully. Get it with {name}")
+            snip["text"],
+            snip["type"],
+            snip.get("id"),
+            snip.get("hash"),
+            snip.get("fr"),
+        )
+        await edit_or_reply(
+            event, f"filter {name} saved successfully. Get it with {name}"
+        )
     else:
-        await edit_or_reply(event, "Reply to a message with `savefilter keyword` to save the filter")
+        await edit_or_reply(
+            event, "Reply to a message with `savefilter keyword` to save the filter"
+        )
 
 
 @borg.on(admin_cmd(pattern="filters$"))
@@ -112,7 +122,7 @@ async def on_snip_list(event):
                 force_document=True,
                 allow_cache=False,
                 caption="Available Filters in the Current Chat",
-                reply_to=event
+                reply_to=event,
             )
             await event.delete()
     else:
@@ -133,9 +143,10 @@ async def on_all_snip_delete(event):
     remove_all_filters(event.chat_id)
     await edit_or_reply(event, f"filters **in current chat** deleted successfully")
 
-CMD_HELP.update({
-    "filters":
-    "**Plugin :**`filters\
+
+CMD_HELP.update(
+    {
+        "filters": "**Plugin :**`filters\
     \n\n**Synatx :** `.filters`\
     \n**Usage: **Lists all active (of your userbot) filters in a chat.\
     \n\n*Synatx :** `.filter`  reply to a message with .filter <keyword>\
@@ -146,4 +157,5 @@ CMD_HELP.update({
     \n**Usage: **Stops the specified keyword.\
     \n\n*Synatx :** `.rmfilters` \
     \n**Usage: **Removes all filters of your userbot in the chat."
-})
+    }
+)

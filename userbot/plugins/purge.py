@@ -6,11 +6,12 @@
 """ Userbot module for purging unneeded messages(usually spam or ot). """
 
 from asyncio import sleep
-from telethon.errors import rpcbaseerrors
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd, errors_handler
-from userbot.uniborgConfig import Config
 
+from telethon.errors import rpcbaseerrors
+
+from userbot import CMD_HELP
+from userbot.uniborgConfig import Config
+from userbot.utils import admin_cmd, errors_handler
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
@@ -37,7 +38,9 @@ async def fastpurger(purg):
                 await purg.client.delete_messages(chat, msgs)
                 msgs = []
     else:
-        await purg.edit("`No message specified.`", )
+        await purg.edit(
+            "`No message specified.`",
+        )
         return
 
     if msgs:
@@ -50,7 +53,8 @@ async def fastpurger(purg):
     if BOTLOG:
         await purg.client.send_message(
             BOTLOG_CHATID,
-            "#PURGE \nPurge of " + str(count) + " messages done successfully.")
+            "#PURGE \nPurge of " + str(count) + " messages done successfully.",
+        )
     await sleep(2)
     await done.delete()
 
@@ -63,8 +67,7 @@ async def purgeme(delme):
     count = int(message[9:])
     i = 1
 
-    async for message in delme.client.iter_messages(delme.chat_id,
-                                                    from_user='me'):
+    async for message in delme.client.iter_messages(delme.chat_id, from_user="me"):
         if i > count + 1:
             break
         i = i + 1
@@ -77,7 +80,8 @@ async def purgeme(delme):
     if BOTLOG:
         await delme.client.send_message(
             BOTLOG_CHATID,
-            "#PURGEME \nPurge of " + str(count) + " messages done successfully.")
+            "#PURGEME \nPurge of " + str(count) + " messages done successfully.",
+        )
     await sleep(2)
     i = 1
     await smsg.delete()
@@ -94,11 +98,13 @@ async def delete_it(delme):
             await delme.delete()
             if BOTLOG:
                 await delme.client.send_message(
-                    BOTLOG_CHATID, "#DEL \nDeletion of message was successful")
+                    BOTLOG_CHATID, "#DEL \nDeletion of message was successful"
+                )
         except rpcbaseerrors.BadRequestError:
             if BOTLOG:
                 await delme.client.send_message(
-                    BOTLOG_CHATID, "Well, I can't delete a message")
+                    BOTLOG_CHATID, "Well, I can't delete a message"
+                )
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="edit"))
@@ -107,7 +113,7 @@ async def editer(edit):
     """ For .editme command, edit your last message. """
     message = edit.text
     chat = await edit.get_input_chat()
-    self_id = await edit.client.get_peer_id('me')
+    self_id = await edit.client.get_peer_id("me")
     string = str(message[6:])
     i = 1
     async for message in edit.client.iter_messages(chat, self_id):
@@ -117,13 +123,14 @@ async def editer(edit):
             break
         i = i + 1
     if BOTLOG:
-        await edit.client.send_message(BOTLOG_CHATID,
-                                       "#EDIT \nEdit query was executed successfully")
+        await edit.client.send_message(
+            BOTLOG_CHATID, "#EDIT \nEdit query was executed successfully"
+        )
 
 
-CMD_HELP.update({
-    'purge':
-    ".purge\
+CMD_HELP.update(
+    {
+        "purge": ".purge\
     \nUsage: Purges all messages starting from the reply.\
     \n\n.purgeme <x>\
     \nUsage: Deletes x amount of your latest messages.\
@@ -131,4 +138,5 @@ CMD_HELP.update({
     \nUsage: Deletes the message you replied to.\
     \n\n.edit <newmessage>\
     \nUsage: Replace your last message with <newmessage>."
-})
+    }
+)

@@ -13,15 +13,18 @@ credits to @mrconfused and @sandy1709
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
+import pybase64
+from telegraph import exceptions, upload_file
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-from userbot.utils import admin_cmd, sudo_cmd
+
 from userbot import CMD_HELP
-from telegraph import upload_file, exceptions
-import os
+from userbot.utils import admin_cmd, sudo_cmd
+
 from . import *
-import pybase64
 
 
 @borg.on(admin_cmd("mask ?(.*)"))
@@ -44,16 +47,17 @@ async def _(event):
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=905164246))
+                events.NewMessage(incoming=True, from_users=905164246)
+            )
             await borg.send_message(chat, reply_message)
             response = await response
         except YouBlockedUserError:
             await event.reply("```Please unblock @hazmat_suit_bot and try again```")
             return
         if response.text.startswith("Forward"):
-            await event.edit("```can you kindly disable your forward privacy settings for good?```")
+            await event.edit(
+                "```can you kindly disable your forward privacy settings for good?```"
+            )
         else:
             await borg.send_file(event.chat_id, response.message.media)
 
@@ -77,13 +81,17 @@ async def catbot(catmemes):
         await catmemes.client(cat)
     except BaseException:
         pass
-    download_location = await borg.download_media(replied, Config.TMP_DOWNLOAD_DIRECTORY)
+    download_location = await borg.download_media(
+        replied, Config.TMP_DOWNLOAD_DIRECTORY
+    )
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)
     size = os.stat(download_location).st_size
     if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
         if size > 5242880:
-            await catmemes.edit("the replied file size is not supported it must me below 5 mb")
+            await catmemes.edit(
+                "the replied file size is not supported it must me below 5 mb"
+            )
             os.remove(download_location)
             return
         await catmemes.edit("generating image..")
@@ -123,13 +131,17 @@ async def catbot(catmemes):
         await catmemes.client(cat)
     except BaseException:
         pass
-    download_location = await borg.download_media(replied, Config.TMP_DOWNLOAD_DIRECTORY)
+    download_location = await borg.download_media(
+        replied, Config.TMP_DOWNLOAD_DIRECTORY
+    )
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)
     size = os.stat(download_location).st_size
     if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
         if size > 5242880:
-            await catmemes.edit("the replied file size is not supported it must me below 5 mb")
+            await catmemes.edit(
+                "the replied file size is not supported it must me below 5 mb"
+            )
             os.remove(download_location)
             return
         await catmemes.edit("generating image..")
@@ -169,13 +181,17 @@ async def catbot(catmemes):
         await catmemes.client(cat)
     except BaseException:
         pass
-    download_location = await borg.download_media(replied, Config.TMP_DOWNLOAD_DIRECTORY)
+    download_location = await borg.download_media(
+        replied, Config.TMP_DOWNLOAD_DIRECTORY
+    )
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)
     size = os.stat(download_location).st_size
     if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
         if size > 5242880:
-            await catmemes.edit("the replied file size is not supported it must me below 5 mb")
+            await catmemes.edit(
+                "the replied file size is not supported it must me below 5 mb"
+            )
             os.remove(download_location)
             return
         await catmemes.edit("generating image..")
@@ -215,13 +231,17 @@ async def catbot(catmemes):
         await catmemes.client(cat)
     except BaseException:
         pass
-    download_location = await borg.download_media(replied, Config.TMP_DOWNLOAD_DIRECTORY)
+    download_location = await borg.download_media(
+        replied, Config.TMP_DOWNLOAD_DIRECTORY
+    )
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)
     size = os.stat(download_location).st_size
     if download_location.endswith((".jpg", ".jpeg", ".png", ".bmp", ".ico")):
         if size > 5242880:
-            await catmemes.edit("the replied file size is not supported it must me below 5 mb")
+            await catmemes.edit(
+                "the replied file size is not supported it must me below 5 mb"
+            )
             os.remove(download_location)
             return
         await catmemes.edit("generating image..")
@@ -261,21 +281,25 @@ async def _(event):
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=905164246))
+                events.NewMessage(incoming=True, from_users=905164246)
+            )
             await borg.send_message(chat, reply_message)
             response = await response
         except YouBlockedUserError:
             await event.reply("```Please unblock @hazmat_suit_bot and try again```")
             return
         if response.text.startswith("Forward"):
-            await event.edit("```can you kindly disable your forward privacy settings for good?```")
+            await event.edit(
+                "```can you kindly disable your forward privacy settings for good?```"
+            )
         else:
             await borg.send_file(event.chat_id, response.message.media)
 
 
-CMD_HELP.update({"mask": "`.mask` reply to any image file:\
+CMD_HELP.update(
+    {
+        "mask": "`.mask` reply to any image file:\
       \nUSAGE:makes an image a different style try out your own.\
       "
-                 })
+    }
+)

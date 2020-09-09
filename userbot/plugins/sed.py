@@ -1,14 +1,15 @@
-from collections import defaultdict, deque
 import re
-from userbot import CMD_HELP
+from collections import defaultdict, deque
+
 import regex
 from telethon import events, utils
-from telethon.tl import types, functions
+from telethon.tl import functions, types
+
+from userbot import CMD_HELP
 
 HEADER = "「sed」\n"
 KNOWN_RE_BOTS = re.compile(
-    r"(regex|moku|BananaButler_|rgx|l4mR)bot",
-    flags=re.IGNORECASE
+    r"(regex|moku|BananaButler_|rgx|l4mR)bot", flags=re.IGNORECASE
 )
 
 # Heavily based on
@@ -20,22 +21,22 @@ last_msgs = defaultdict(lambda: deque(maxlen=10))
 def doit(chat_id, match, original):
     fr = match.group(1)
     to = match.group(2)
-    to = to.replace('\\/', '/')
+    to = to.replace("\\/", "/")
     try:
         fl = match.group(3)
         if fl is None:
-            fl = ''
+            fl = ""
         fl = fl[1:]
     except IndexError:
-        fl = ''
+        fl = ""
 
     # Build Python regex flags
     count = 1
     flags = 0
     for f in fl:
-        if f == 'i':
+        if f == "i":
             flags |= regex.IGNORECASE
-        elif f == 'g':
+        elif f == "g":
             count = 0
         else:
             return None, f"Unknown flag: {f}"
@@ -44,7 +45,7 @@ def doit(chat_id, match, original):
         try:
             s = original.message
             if s.startswith(HEADER):
-                s = s[len(HEADER):]
+                s = s[len(HEADER) :]
             s, i = regex.subn(fr, to, s, count=count, flags=flags)
             if i > 0:
                 return original, s
@@ -70,7 +71,7 @@ async def group_has_sedbot(group):
     else:
         return False
 
-    return any(KNOWN_RE_BOTS.match(x.username or '') for x in full.users)
+    return any(KNOWN_RE_BOTS.match(x.username or "") for x in full.users)
 
 
 @command()
@@ -86,14 +87,11 @@ async def on_edit(event):
             break
 
 
-@command(
-    pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"),
-    outgoing=True)
+@command(pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True)
 async def on_regex(event):
     if event.fwd_from:
         return
-    if not event.is_private and\
-            await group_has_sedbot(await event.get_input_chat()):
+    if not event.is_private and await group_has_sedbot(await event.get_input_chat()):
         # await event.edit("This group has a sed bot. Ignoring this message!")
         return
 
@@ -103,9 +101,7 @@ async def on_regex(event):
 
     if m is not None:
         s = f"{HEADER}{s}"
-        out = await bot.send_message(
-            await event.get_input_chat(), s, reply_to=m.id
-        )
+        out = await bot.send_message(await event.get_input_chat(), s, reply_to=m.id)
         last_msgs[chat_id].appendleft(out)
     elif s is not None:
         await event.edit(s)
@@ -113,11 +109,11 @@ async def on_regex(event):
     raise events.StopPropagation
 
 
-CMD_HELP.update({
-    "sed":
-    ".s<delimiter><old word(s)><delimiter><new word(s)>\
+CMD_HELP.update(
+    {
+        "sed": ".s<delimiter><old word(s)><delimiter><new word(s)>\
     \nUsage: Replaces a word or words using sed.\
     \nDelimiters: `/, :, |, _`\
     example: tag any sentence and type s/a/b. where is required word to replace and b is correct word."
-
-})
+    }
+)

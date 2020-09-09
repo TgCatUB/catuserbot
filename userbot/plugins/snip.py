@@ -8,16 +8,22 @@ Available Commands:
 .snipd"""
 from telethon import events, utils
 from telethon.tl import types
-from userbot.plugins.sql_helper.snips_sql import get_snips, add_snip, remove_snip, get_all_snips
-from userbot.utils import admin_cmd
+
 from userbot import CMD_HELP
+from userbot.plugins.sql_helper.snips_sql import (
+    add_snip,
+    get_all_snips,
+    get_snips,
+    remove_snip,
+)
+from userbot.utils import admin_cmd
 
 TYPE_TEXT = 0
 TYPE_PHOTO = 1
 TYPE_DOCUMENT = 2
 
 
-@borg.on(events.NewMessage(pattern=r'\#(\S+)', outgoing=True))
+@borg.on(events.NewMessage(pattern=r"\#(\S+)", outgoing=True))
 async def on_snip(event):
     name = event.pattern_match.group(1)
     snip = get_snips(name)
@@ -26,13 +32,13 @@ async def on_snip(event):
             media = types.InputPhoto(
                 int(snip.media_id),
                 int(snip.media_access_hash),
-                snip.media_file_reference
+                snip.media_file_reference,
             )
         elif snip.snip_type == TYPE_DOCUMENT:
             media = types.InputDocument(
                 int(snip.media_id),
                 int(snip.media_access_hash),
-                snip.media_file_reference
+                snip.media_file_reference,
             )
         else:
             media = None
@@ -40,10 +46,7 @@ async def on_snip(event):
         if event.reply_to_msg_id:
             message_id = event.reply_to_msg_id
         await borg.send_message(
-            event.chat_id,
-            snip.reply,
-            reply_to=message_id,
-            file=media
+            event.chat_id, snip.reply, reply_to=message_id, file=media
         )
         await event.delete()
 
@@ -53,27 +56,30 @@ async def on_snip_save(event):
     name = event.pattern_match.group(1)
     msg = await event.get_reply_message()
     if msg:
-        snip = {'type': TYPE_TEXT, 'text': msg.message or ''}
+        snip = {"type": TYPE_TEXT, "text": msg.message or ""}
         if msg.media:
             media = None
             if isinstance(msg.media, types.MessageMediaPhoto):
                 media = utils.get_input_photo(msg.media.photo)
-                snip['type'] = TYPE_PHOTO
+                snip["type"] = TYPE_PHOTO
             elif isinstance(msg.media, types.MessageMediaDocument):
                 media = utils.get_input_document(msg.media.document)
-                snip['type'] = TYPE_DOCUMENT
+                snip["type"] = TYPE_DOCUMENT
             if media:
-                snip['id'] = media.id
-                snip['hash'] = media.access_hash
-                snip['fr'] = media.file_reference
+                snip["id"] = media.id
+                snip["hash"] = media.access_hash
+                snip["fr"] = media.file_reference
         add_snip(
             name,
-            snip['text'],
-            snip['type'],
-            snip.get('id'),
-            snip.get('hash'),
-            snip.get('fr'))
-        await event.edit("snip {name} saved successfully. Get it with #{name}".format(name=name))
+            snip["text"],
+            snip["type"],
+            snip.get("id"),
+            snip.get("hash"),
+            snip.get("fr"),
+        )
+        await event.edit(
+            "snip {name} saved successfully. Get it with #{name}".format(name=name)
+        )
     else:
         await event.edit("Reply to a message with `snips keyword` to save the snip")
 
@@ -96,7 +102,7 @@ async def on_snip_list(event):
                 force_document=True,
                 allow_cache=False,
                 caption="Available Snips",
-                reply_to=event
+                reply_to=event,
             )
             await event.delete()
     else:
@@ -110,9 +116,9 @@ async def on_snip_delete(event):
     await event.edit("snip #{} deleted successfully".format(name))
 
 
-CMD_HELP.update({
-    "snip":
-    "\
+CMD_HELP.update(
+    {
+        "snip": "\
 #<snipname>\
 \nUsage: Gets the specified note.\
 \n\n.snips: reply to a message with .snips <notename>\
@@ -122,4 +128,5 @@ CMD_HELP.update({
 \n\n.snipd <notename>\
 \nUsage: Deletes the specified note.\
 "
-})
+    }
+)

@@ -1,6 +1,7 @@
 import pyfiglet
+
 from .. import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="figlet ?(.*)", outgoing=True))
@@ -21,7 +22,8 @@ async def figlet(event):
         "dotm": "dotmatrix",
         "bubble": "bubble",
         "bulb": "bulbhead",
-        "digi": "digital"}
+        "digi": "digital",
+    }
     input_str = event.pattern_match.group(1)
     if ":" in input_str:
         text, cmd = input_str.split(":", maxsplit=1)
@@ -42,10 +44,12 @@ async def figlet(event):
         result = pyfiglet.figlet_format(text)
     await edit_or_reply(event, "‌‌‎`{}`".format(result))
 
-CMD_HELP.update({
-    "figlet":
-    ".figlet text or **.figlet text : type\
+
+CMD_HELP.update(
+    {
+        "figlet": ".figlet text or **.figlet text : type\
     \n USAGE:the types are slant, 3D , 5line , alpha , banner ,  doh ,  iso ,  letter , allig , dotm , bubble , bulb , digi\
     \n NOTE: Nospace must be given after : and type\
     \nEXAMPLE : `.figlet hello :digi`"
-})
+    }
+)

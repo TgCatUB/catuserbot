@@ -1,8 +1,10 @@
-from .. import CMD_LIST, SUDO_LIST, CMD_HELP
-from userbot import ALIVE_NAME
 import requests
 from telethon import functions
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+
+from userbot import ALIVE_NAME
+
+from .. import CMD_HELP, CMD_LIST, SUDO_LIST
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -24,12 +26,16 @@ async def cmd_list(event):
             string += "\n"
         if len(string) > 4095:
             data = string
-            key = requests.post(
-                'https://nekobin.com/api/documents',
-                json={
-                    "content": data}).json().get('result').get('key')
-            url = f'https://nekobin.com/{key}'
-            reply_text = f'All commands of the catuserbot are [here]({url})'
+            key = (
+                requests.post(
+                    "https://nekobin.com/api/documents", json={"content": data}
+                )
+                .json()
+                .get("result")
+                .get("key")
+            )
+            url = f"https://nekobin.com/{key}"
+            reply_text = f"All commands of the catuserbot are [here]({url})"
             await event.edit(reply_text)
             return
         await event.edit(string)
@@ -50,14 +56,9 @@ async def cmd_list(event):
                           \n__Do__ `.help` __plugin_name for commands, in case popup doesn't appear.__\
                           \nDo `.info` plugin_name for usage"
             results = await bot.inline_query(  # pylint:disable=E0602
-                tgbotusername,
-                help_string
+                tgbotusername, help_string
             )
-            await results[0].click(
-                event.chat_id,
-                reply_to=reply_to_id,
-                hide_via=True
-            )
+            await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
             await event.delete()
     else:
         if input_str:

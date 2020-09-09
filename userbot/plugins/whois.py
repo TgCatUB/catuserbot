@@ -7,14 +7,17 @@
 # License: MPL and OSSRPL
 """ Userbot module for getiing info about any user on Telegram(including you!). """
 
-import os
 import html
-from telethon.utils import get_input_location
-from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
-from telethon.tl.types import MessageEntityMentionName
-from telethon.tl.functions.users import GetFullUserRequest
+import os
+
 from telethon.tl.functions.photos import GetUserPhotosRequest
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.types import MessageEntityMentionName
+from telethon.utils import get_input_location
+
+from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
+
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
@@ -26,12 +29,11 @@ async def _(event):
     if replied_user is None:
         await edit_or_reply(event, str(error_i_a))
         return False
-    replied_user_profile_photos = await borg(GetUserPhotosRequest(
-        user_id=replied_user.user.id,
-        offset=42,
-        max_id=0,
-        limit=80
-    ))
+    replied_user_profile_photos = await borg(
+        GetUserPhotosRequest(
+            user_id=replied_user.user.id, offset=42, max_id=0, limit=80
+        )
+    )
     replied_user_profile_photos_count = "NaN"
     try:
         replied_user_profile_photos_count = replied_user_profile_photos.count
@@ -82,7 +84,7 @@ DC5 : Singapore, SG
         replied_user.user.restricted,
         replied_user.user.verified,
         replied_user.user.bot,
-        common_chats
+        common_chats,
     )
     message_id_to_reply = event.message.reply_to_msg_id
     if not message_id_to_reply:
@@ -94,7 +96,7 @@ DC5 : Singapore, SG
         parse_mode="HTML",
         file=replied_user.profile_photo,
         force_document=False,
-        silent=True
+        silent=True,
     )
     await event.delete()
 
@@ -105,15 +107,12 @@ async def get_full_user(event):
         if previous_message.forward:
             replied_user = await event.client(
                 GetFullUserRequest(
-                    previous_message.forward.from_id or previous_message.forward.channel_id
+                    previous_message.forward.from_id
+                    or previous_message.forward.channel_id
                 )
             )
             return replied_user, None
-        replied_user = await event.client(
-            GetFullUserRequest(
-                previous_message.from_id
-            )
-        )
+        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
         return replied_user, None
     input_str = None
     try:
@@ -153,8 +152,9 @@ async def get_full_user(event):
 @borg.on(admin_cmd(pattern="whois(?: |$)(.*)"))
 @borg.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
 async def who(event):
-    cat = await edit_or_reply(event,
-                              "`Sit tight while I steal some data from Mark Zuckerburg...`")
+    cat = await edit_or_reply(
+        event, "`Sit tight while I steal some data from Mark Zuckerburg...`"
+    )
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     replied_user = await get_user(event)
@@ -167,13 +167,15 @@ async def who(event):
     if not message_id_to_reply:
         message_id_to_reply = None
     try:
-        await borg.send_file(event.chat_id,
-                             photo,
-                             caption=caption,
-                             link_preview=False,
-                             force_document=False,
-                             reply_to=message_id_to_reply,
-                             parse_mode="html")
+        await borg.send_file(
+            event.chat_id,
+            photo,
+            caption=caption,
+            link_preview=False,
+            force_document=False,
+            reply_to=message_id_to_reply,
+            parse_mode="html",
+        )
         if not photo.startswith("http"):
             os.remove(photo)
         await cat.delete()
@@ -185,8 +187,7 @@ async def get_user(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id and not event.pattern_match.group(1):
         previous_message = await event.get_reply_message()
-        replied_user = await event.client(
-            GetFullUserRequest(previous_message.from_id))
+        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
     else:
         user = event.pattern_match.group(1)
         if user.isnumeric():
@@ -196,15 +197,13 @@ async def get_user(event):
             user = self_user.id
         if event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
-            if isinstance(probable_user_mention_entity,
-                          MessageEntityMentionName):
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 replied_user = await event.client(GetFullUserRequest(user_id))
                 return replied_user
         try:
             user_object = await event.client.get_entity(user)
-            replied_user = await event.client(
-                GetFullUserRequest(user_object.id))
+            replied_user = await event.client(GetFullUserRequest(user_object.id))
         except (TypeError, ValueError) as err:
             await event.edit(str(err))
             return None
@@ -214,11 +213,13 @@ async def get_user(event):
 async def fetch_info(replied_user, event):
     """ Get details from the User object. """
     replied_user_profile_photos = await event.client(
-        GetUserPhotosRequest(user_id=replied_user.user.id,
-                             offset=42,
-                             max_id=0,
-                             limit=80))
-    replied_user_profile_photos_count = "Person needs help with uploading profile picture."
+        GetUserPhotosRequest(
+            user_id=replied_user.user.id, offset=42, max_id=0, limit=80
+        )
+    )
+    replied_user_profile_photos_count = (
+        "Person needs help with uploading profile picture."
+    )
     try:
         replied_user_profile_photos_count = replied_user_profile_photos.count
     except AttributeError:
@@ -237,16 +238,18 @@ async def fetch_info(replied_user, event):
     is_bot = replied_user.user.bot
     restricted = replied_user.user.restricted
     verified = replied_user.user.verified
-    photo = await event.client.download_profile_photo(user_id,
-                                                      TEMP_DOWNLOAD_DIRECTORY +
-                                                      str(user_id) + ".jpg",
-                                                      download_big=True)
-    first_name = first_name.replace(
-        "\u2060", "") if first_name else ("This User has no First Name")
-    last_name = last_name.replace(
-        "\u2060", "") if last_name else ("This User has no Last Name")
-    username = "@{}".format(username) if username else (
-        "This User has no Username")
+    photo = await event.client.download_profile_photo(
+        user_id, TEMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg", download_big=True
+    )
+    first_name = (
+        first_name.replace("\u2060", "")
+        if first_name
+        else ("This User has no First Name")
+    )
+    last_name = (
+        last_name.replace("\u2060", "") if last_name else ("This User has no Last Name")
+    )
+    username = "@{}".format(username) if username else ("This User has no Username")
     user_bio = "This User has no About" if not user_bio else user_bio
     caption = "<b>USER INFO from druv's database :</b>\n\n"
     caption += f"🤵First Name: {first_name}\n"
@@ -261,15 +264,16 @@ async def fetch_info(replied_user, event):
     caption += f"✍️Bio: \n<code>{user_bio}</code>\n\n"
     caption += f"👥Common Chats with this user: {common_chat}\n"
     caption += f"🔗Permanent Link To Profile: "
-    caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
+    caption += f'<a href="tg://user?id={user_id}">{first_name}</a>'
     return photo, caption
 
 
-CMD_HELP.update({
-    "whois":
-    "**Plugin : **`whois`\
+CMD_HELP.update(
+    {
+        "whois": "**Plugin : **`whois`\
     \n\n**Syntax : **`.whois <username>` or reply to someones text with .whois\
     \n**Usage :** Gets info of an user.\
     \n\n**Syntax : **`.userinfo <username>` or reply to someones text with .userinfo\
     \n**Usage :** Gets info of an user."
-})
+    }
+)

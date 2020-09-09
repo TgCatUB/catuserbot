@@ -3,7 +3,8 @@ Syntax: .filext EXTENSION"""
 
 import requests
 from bs4 import BeautifulSoup
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="filext (.*)"))
@@ -19,6 +20,16 @@ async def _(event):
         raw_html = response_api.content
         soup = BeautifulSoup(raw_html, "html.parser")
         ext_details = soup.find_all("td", {"colspan": "3"})[-1].text
-        await edit_or_reply(event, "**File Extension**: `{}`\n**Description**: `{}`".format(input_str, ext_details))
+        await edit_or_reply(
+            event,
+            "**File Extension**: `{}`\n**Description**: `{}`".format(
+                input_str, ext_details
+            ),
+        )
     else:
-        await edit_or_reply(event, "https://www.fileext.com/ responded with {} for query: {}".format(status_code, input_str))
+        await edit_or_reply(
+            event,
+            "https://www.fileext.com/ responded with {} for query: {}".format(
+                status_code, input_str
+            ),
+        )

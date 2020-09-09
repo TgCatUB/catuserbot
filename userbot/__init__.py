@@ -25,10 +25,7 @@ catversion = "2.7.2"
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
     if session_name.endswith("="):
-        bot = TelegramClient(
-            StringSession(session_name),
-            Var.APP_ID,
-            Var.API_HASH)
+        bot = TelegramClient(StringSession(session_name), Var.APP_ID, Var.API_HASH)
     else:
         bot = TelegramClient(
             "TG_BOT_TOKEN", api_id=Var.APP_ID, api_hash=Var.API_HASH
@@ -44,10 +41,7 @@ CAT_ID = ["1035034432", "551290198"]
 
 # Bot Logs setup:
 if bool(ENV):
-    CONSOLE_LOGGER_VERBOSE = sb(
-        os.environ.get(
-            "CONSOLE_LOGGER_VERBOSE",
-            "False"))
+    CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     if CONSOLE_LOGGER_VERBOSE:
         basicConfig(
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -55,8 +49,8 @@ if bool(ENV):
         )
     else:
         basicConfig(
-            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-            level=INFO)
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=INFO
+        )
     LOGS = getLogger(__name__)
 
     # Check if the config was edited by using the already used variable.
@@ -71,14 +65,10 @@ if bool(ENV):
         quit(1)
     BOTLOG_CHATID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID", "-100"))
     BOTLOG = sb(os.environ.get("BOTLOG", "True"))
-    CONSOLE_LOGGER_VERBOSE = sb(
-        os.environ.get(
-            "CONSOLE_LOGGER_VERBOSE",
-            "False"))
+    CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     # Chrome Driver and Headless Google Chrome Binaries
     CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
-    GOOGLE_CHROME_BIN = os.environ.get(
-        "GOOGLE_CHROME_BIN", "/usr/bin/google-chrome")
+    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", "/usr/bin/google-chrome")
     # OpenWeatherMap API Key
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
     # Youtube API key
@@ -101,8 +91,7 @@ if bool(ENV):
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
     GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", None)
-    TEMP_DOWNLOAD_DIRECTORY = os.environ.get(
-        "TEMP_DOWNLOAD_DIRECTORY", "./downloads")
+    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./downloads")
     # time.py
     COUNTRY = str(os.environ.get("COUNTRY", ""))
     TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))

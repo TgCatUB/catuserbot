@@ -1,10 +1,12 @@
 """Get the info your system. Using .neofetch then .sysd"""
+import asyncio
+import time
 from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
-import asyncio
+
+from userbot import ALIVE_NAME, CMD_HELP, StartTime, catdef
 from userbot.utils import admin_cmd
-from userbot import CMD_HELP, ALIVE_NAME, catdef, StartTime
-import time
+
 # ================= CONSTANT =================
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 # ============================================
@@ -15,10 +17,10 @@ async def _(event):
     if event.fwd_from:
         return
     PROCESS_RUN_TIME = 100
-#    dirname = event.pattern_match.group(1)
-#    tempdir = "localdir"
+    #    dirname = event.pattern_match.group(1)
+    #    tempdir = "localdir"
     cmd = "cat /proc/cpuinfo | grep 'model name'"
-#    if dirname == tempdir:
+    #    if dirname == tempdir:
 
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -39,7 +41,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
@@ -51,10 +53,10 @@ async def _(event):
     if event.fwd_from:
         return
     PROCESS_RUN_TIME = 100
-#    dirname = event.pattern_match.group(1)
-#    tempdir = "localdir"
+    #    dirname = event.pattern_match.group(1)
+    #    tempdir = "localdir"
     cmd = "git clone https://github.com/dylanaraps/neofetch.git"
-#    if dirname == tempdir:
+    #    if dirname == tempdir:
 
     event.message.id
     if event.reply_to_msg_id:
@@ -75,7 +77,7 @@ async def _(event):
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                reply_to=reply_to_id
+                reply_to=reply_to_id,
             )
             await event.delete()
     else:
@@ -94,12 +96,12 @@ async def sysdetails(sysd):
         )
 
         stdout, stderr = await fetch.communicate()
-        result = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
+        result = str(stdout.decode().strip()) + str(stderr.decode().strip())
 
         await sysd.edit("Neofetch Result: `" + result + "`")
     except FileNotFoundError:
         await sysd.edit("`Hello, on catuserbot  install .neofetch first kthx`")
+
 
 # uptime idea and credits was from @Sur_vivor
 
@@ -112,10 +114,11 @@ async def _(event):
 
 
 CMD_HELP.update(
-    {"sysdetails":
-     ".sysd\
+    {
+        "sysdetails": ".sysd\
     \nUsage: Shows system information using neofetch.\
     \n\n`.uptime`\
     \nUsage:shows the uptime of your cpu\
     "
-     })
+    }
+)

@@ -1,15 +1,16 @@
-from telethon.tl.functions.channels import EditAdminRequest
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from telethon.tl.types import ChatAdminRights
-from .. import CMD_HELP, ALIVE_NAME
-from datetime import datetime
-import logging
 import asyncio
+import logging
+from datetime import datetime
 
+from telethon.tl.functions.channels import EditAdminRequest
+from telethon.tl.types import ChatAdminRights
+
+from .. import ALIVE_NAME, CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 logging.basicConfig(
-    format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-    level=logging.WARNING)
+    format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
+)
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -38,9 +39,7 @@ async def _(event):
         return
     datetime.now()
     to_promote_id = None
-    rights = ChatAdminRights(
-        post_messages=True
-    )
+    rights = ChatAdminRights(post_messages=True)
     input_str = event.pattern_match.group(1)
     reply_msg_id = event.message.id
     if reply_msg_id:
@@ -84,15 +83,16 @@ async def _(event):
         "**(8) Change Chat Info: ☑️**",
         "**(8) Change Chat Info: ✅**",
         "**Permission Granted Successfully**",
-        f"**pRoMooTeD SuCcEsSfUlLy bY: {DEFAULTUSER}**"
+        f"**pRoMooTeD SuCcEsSfUlLy bY: {DEFAULTUSER}**",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 20])
 
-CMD_HELP.update({
-    "fake":
-    "**fake**\
+
+CMD_HELP.update(
+    {
+        "fake": "**fake**\
     \n\n**Syntax :** `.scam <action>` \
     \n**Usage : **Type .scam (action name) this shows the fake action in the group  the actions are typing ,contact ,game, location, voice, round, video,photo,document, cancel.\
     \n\n**Syntax :** `.prankpromote` reply to user to who you want to prank promote\
@@ -100,4 +100,5 @@ CMD_HELP.update({
     \n\n**Syntax :** `.padmin`\
     \n**Usage : ** An animation that shows enableing all permissions to him that he is admin(fake promotion)\
     "
-})
+    }
+)

@@ -4,8 +4,9 @@
 # By: @INF1N17Y
 # plugin from uniborg
 
-from userbot.utils import admin_cmd
 from telethon.tl.types import ChannelParticipantsAdmins
+
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd(pattern="tagall$"))
@@ -68,7 +69,8 @@ async def _(event):
         input_str = event.pattern_match.group(1)
         reply_msg = await event.get_reply_message()
         caption = """<a href='tg://user?id={}'>{}</a>""".format(
-            reply_msg.from_id, input_str)
+            reply_msg.from_id, input_str
+        )
         await event.delete()
         await borg.send_message(event.chat_id, caption, parse_mode="HTML")
     else:

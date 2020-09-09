@@ -6,6 +6,7 @@
 @arnab431"""
 
 import asyncio
+
 from userbot.utils import admin_cmd
 
 
@@ -25,7 +26,7 @@ async def _(event):
         "YoU",
         "aRriVe",
         "😈",
-        "EvErYbOdY iZ BiGGeSt NoOoB uNtiL YoU aRriVe 😈"
+        "EvErYbOdY iZ BiGGeSt NoOoB uNtiL YoU aRriVe 😈",
     ]
     for i in animation_ttl:
         await event.edit(animation_chars[i % 9])
@@ -48,7 +49,7 @@ async def _(event):
         "i",
         "aRriVe",
         "😈",
-        "EvErYbOdY iZ BiGGeSt NoOoB uNtiL i aRriVe 😈"
+        "EvErYbOdY iZ BiGGeSt NoOoB uNtiL i aRriVe 😈",
     ]
     for i in animation_ttl:
         await event.edit(animation_chars[i % 9])
@@ -70,7 +71,7 @@ async def _(event):
         "YoU",
         "aRriVe",
         "😈",
-        "EvErYbOdY iZ PeRu uNtiL YoU aRriVe 😈"
+        "EvErYbOdY iZ PeRu uNtiL YoU aRriVe 😈",
     ]
     for i in animation_ttl:
         await event.edit(animation_chars[i % 8])
@@ -92,7 +93,7 @@ async def _(event):
         "i",
         "aRriVe",
         "😈",
-        "EvErYbOdY iZ PeRu uNtiL i aRriVe 😈"
+        "EvErYbOdY iZ PeRu uNtiL i aRriVe 😈",
     ]
     for i in animation_ttl:
         await event.edit(animation_chars[i % 8])

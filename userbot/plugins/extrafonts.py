@@ -1,6 +1,5 @@
-
 from .. import CMD_HELP, fonts
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="fmusical(?: |$)(.*)"))
@@ -13,11 +12,12 @@ async def stylish_generator(event):
     if not args:
         await edit_or_reply(event, "What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normalfontcharacter in string:
         if normalfontcharacter in fonts.normalfont:
-            musicalcharacter = fonts.musicalfont[fonts.normalfont.index(
-                normalfontcharacter)]
+            musicalcharacter = fonts.musicalfont[
+                fonts.normalfont.index(normalfontcharacter)
+            ]
             string = string.replace(normalfontcharacter, musicalcharacter)
     await edit_or_reply(event, string)
 
@@ -32,19 +32,22 @@ async def stylish_generator(event):
     if not args:
         await edit_or_reply(event, "What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normalfontcharacter in string:
         if normalfontcharacter in fonts.normalfont:
-            ancientcharacter = fonts.ancientfont[fonts.normalfont.index(
-                normalfontcharacter)]
+            ancientcharacter = fonts.ancientfont[
+                fonts.normalfont.index(normalfontcharacter)
+            ]
             string = string.replace(normalfontcharacter, ancientcharacter)
     await edit_or_reply(event, string)
 
-CMD_HELP.update({
-    "extrafonts":
-    "**extrafonts**\
+
+CMD_HELP.update(
+    {
+        "extrafonts": "**extrafonts**\
     \n**Syntax :** `.fmusical`\
     \n        `.ancient`\
     \n**Usage : **Some differnt font styles\
     "
-})
+    }
+)

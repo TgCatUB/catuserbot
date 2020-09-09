@@ -37,11 +37,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            smallcapscharacter = fonts.smallcapsfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            smallcapscharacter = fonts.smallcapsfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, smallcapscharacter)
     await event.edit(string)
 
@@ -55,11 +56,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            bubblesblackcharacter = fonts.bubblesblackfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            bubblesblackcharacter = fonts.bubblesblackfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, bubblesblackcharacter)
     await event.edit(string)
 
@@ -73,11 +75,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            bubblescharacter = fonts.bubblesfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            bubblescharacter = fonts.bubblesfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, bubblescharacter)
     await event.edit(string)
 
@@ -91,11 +94,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            tantextcharacter = fonts.tantextfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            tantextcharacter = fonts.tantextfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, tantextcharacter)
     await event.edit(string)
 
@@ -109,14 +113,13 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            littleboxtextcharacter = fonts.littleboxtextfont[fonts.normaltext.index(
-                normaltextcharacter)]
-            string = string.replace(
-                normaltextcharacter,
-                littleboxtextcharacter)
+            littleboxtextcharacter = fonts.littleboxtextfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
+            string = string.replace(normaltextcharacter, littleboxtextcharacter)
     await event.edit(string)
 
 
@@ -129,17 +132,20 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            smothtextcharacter = fonts.smothtextfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            smothtextcharacter = fonts.smothtextfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, smothtextcharacter)
     await event.edit(string)
 
 
-CMD_HELP.update({
-    "fonts": ".vapor (text) or .vapor reply to message \
+CMD_HELP.update(
+    {
+        "fonts": ".vapor (text) or .vapor reply to message \
 \nUsage: Vaporize the given text. \
 "
-})
+    }
+)

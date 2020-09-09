@@ -1,13 +1,15 @@
+import time
+from platform import python_version
+
 import nekos
 import requests
-import time
 from PIL import Image
 from telethon import version
-from userbot import StartTime
-from platform import python_version
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from userbot import CMD_HELP, ALIVE_NAME, catdef, catversion
+
+from userbot import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion
+
 from ..uniborgConfig import Config
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 CAT_IMG = Config.ALIVE_PIC
@@ -32,17 +34,21 @@ async def amireallyalive(alive):
         cat_caption += f"**✧ Python Version :** `{python_version()}\n`"
         cat_caption += f"**✧ Uptime :** `{uptime}\n`"
         cat_caption += f"**✧ My peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
-        await borg.send_file(alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id)
+        await borg.send_file(
+            alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id
+        )
         await alive.delete()
     else:
-        await edit_or_reply(alive, f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
-                            f"**✧ Database :** `{check_sgnirts}`\n"
-                            f"**✧ Telethon Version :** `{version.__version__}\n`"
-                            f"**✧ Catuserbot Version :** `{catversion}`\n"
-                            f"**✧ Python Version :** `{python_version()}\n`"
-                            f"**✧ Uptime :** `{uptime}\n`"
-                            f"**✧ My Peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
-                            )
+        await edit_or_reply(
+            alive,
+            f"__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
+            f"**✧ Database :** `{check_sgnirts}`\n"
+            f"**✧ Telethon Version :** `{version.__version__}\n`"
+            f"**✧ Catuserbot Version :** `{catversion}`\n"
+            f"**✧ Python Version :** `{python_version()}\n`"
+            f"**✧ Uptime :** `{uptime}\n`"
+            f"**✧ My Peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n",
+        )
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="ialive$"))
@@ -60,15 +66,8 @@ async def amireallyalive(alive):
     cat_caption += f"**  -Catuserbot Version :** `{catversion}`\n"
     cat_caption += f"**  -Python Version :** `{python_version()}\n`"
     cat_caption += f"**  -My peru Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
-    results = await bot.inline_query(  # pylint:disable=E0602
-        tgbotusername,
-        cat_caption
-    )
-    await results[0].click(
-        alive.chat_id,
-        reply_to=reply_to_id,
-        hide_via=True
-    )
+    results = await bot.inline_query(tgbotusername, cat_caption)  # pylint:disable=E0602
+    await results[0].click(alive.chat_id, reply_to=reply_to_id, hide_via=True)
     await alive.delete()
 
 
@@ -89,6 +88,7 @@ async def _(event):
     img.seek(0)
     await bot.send_file(event.chat_id, open("temp.webp", "rb"), reply_to=reply_to_id)
 
+
 # UniBorg Telegram UseRBot
 # Copyright (C) 2020 @UniBorg
 # This code is licensed under
@@ -107,6 +107,7 @@ def check_data_base_heal_th():
     if not Var.DB_URI:
         return is_database_working, output
     from userbot.plugins.sql_helper import SESSION
+
     try:
         # to check database we will execute raw query
         SESSION.execute("SELECT 1")
@@ -119,11 +120,14 @@ def check_data_base_heal_th():
     return is_database_working, output
 
 
-CMD_HELP.update({"alive": "**Plugin :** `alive`\
+CMD_HELP.update(
+    {
+        "alive": "**Plugin :** `alive`\
       \n\n**Syntax : **`.alive` :\
       \n**Usage : ** status of bot.\
       \n\n**Syntax : **`.ialive` :\
       \n**Usage : ** inline alive.\
       \n\n**Synatx :** `.cat`\
       \n**Usage : **Random cat stickers"
-                 })
+    }
+)

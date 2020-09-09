@@ -2,8 +2,9 @@
 
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from userbot.utils import admin_cmd, sudo_cmd
+
 from userbot import CMD_HELP
+from userbot.utils import admin_cmd, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="recognize ?(.*)"))
@@ -26,9 +27,8 @@ async def _(event):
     async with event.client.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=461083923))
+                events.NewMessage(incoming=True, from_users=461083923)
+            )
             await event.client.forward_messages(chat, reply_message)
             response = await response
         except YouBlockedUserError:
@@ -37,9 +37,8 @@ async def _(event):
             return
         if response.text.startswith("See next message."):
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=461083923))
+                events.NewMessage(incoming=True, from_users=461083923)
+            )
             response = await response
             cat = response.message.message
             await event.edit(cat)
@@ -68,9 +67,8 @@ async def _(event):
     async with event.client.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=461083923))
+                events.NewMessage(incoming=True, from_users=461083923)
+            )
             await event.client.forward_messages(chat, reply_message)
             response = await response
         except YouBlockedUserError:
@@ -79,9 +77,8 @@ async def _(event):
             return
         if response.text.startswith("See next message."):
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=461083923))
+                events.NewMessage(incoming=True, from_users=461083923)
+            )
             response = await response
             cat = response.message.message
             await event.reply(cat)
@@ -90,9 +87,11 @@ async def _(event):
             await event.reply("sorry, I couldn't find it")
             await cat.delete()
 
-CMD_HELP.update({
-    "recognize":
-    "`.recognize` reply this to any media file\
+
+CMD_HELP.update(
+    {
+        "recognize": "`.recognize` reply this to any media file\
     \nUSAGE : Get information about an image using AWS Rekognition.\
     \nFind out information including detected labels, faces. text and moderation tags."
-})
+    }
+)

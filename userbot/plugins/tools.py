@@ -1,22 +1,25 @@
-from telethon import events
 import asyncio
 import json
-import requests
-from urllib.parse import quote
-from userbot.utils import admin_cmd
-from PIL import Image, ImageColor
+import logging
 import os
 from datetime import datetime
-import qrcode
+from urllib.parse import quote
+
 import barcode
+import qrcode
+import requests
 from barcode.writer import ImageWriter
 from bs4 import BeautifulSoup
-from userbot import CMD_HELP
+from PIL import Image, ImageColor
+from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-import logging
+
+from userbot import CMD_HELP
+from userbot.utils import admin_cmd
+
 logging.basicConfig(
-    format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-    level=logging.WARNING)
+    format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
+)
 
 
 @borg.on(admin_cmd(pattern="scan ?(.*)"))
@@ -39,32 +42,40 @@ async def _(event):
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=161163358))
+                events.NewMessage(incoming=True, from_users=161163358)
+            )
             await borg.forward_messages(chat, reply_message)
             response = await response
         except YouBlockedUserError:
             await event.reply("```Please unblock @sangmatainfo_bot and try again```")
             return
         if response.text.startswith("Forward"):
-            await event.edit("```can you kindly disable your forward privacy settings for good?```")
+            await event.edit(
+                "```can you kindly disable your forward privacy settings for good?```"
+            )
         else:
             if response.text.startswith("Select"):
                 await event.edit("`Please go to` @DrWebBot `and select your language.`")
             else:
-                await event.edit(f"**Antivirus scan was completed. I got dem final results.**\n {response.message.message}")
+                await event.edit(
+                    f"**Antivirus scan was completed. I got dem final results.**\n {response.message.message}"
+                )
 
 
 @borg.on(admin_cmd(pattern=r"decode$", outgoing=True))
 async def parseqr(qr_e):
     """ For .decode command, get QR Code/BarCode content from the replied photo. """
     downloaded_file_name = await qr_e.client.download_media(
-        await qr_e.get_reply_message())
+        await qr_e.get_reply_message()
+    )
     # parse the Official ZXing webpage to decode the QRCode
     command_to_exec = [
-        "curl", "-X", "POST", "-F", "f=@" + downloaded_file_name + "",
-        "https://zxing.org/w/decode"
+        "curl",
+        "-X",
+        "POST",
+        "-F",
+        "f=@" + downloaded_file_name + "",
+        "https://zxing.org/w/decode",
     ]
     process = await asyncio.create_subprocess_exec(
         *command_to_exec,
@@ -119,8 +130,7 @@ async def _(event):
         message = "SYNTAX: `.barcode <long text to include>`"
     bar_code_type = "code128"
     try:
-        bar_code_mode_f = barcode.get(
-            bar_code_type, message, writer=ImageWriter())
+        bar_code_mode_f = barcode.get(bar_code_type, message, writer=ImageWriter())
         filename = bar_code_mode_f.save(bar_code_type)
         await borg.send_file(
             event.chat_id,
@@ -151,8 +161,7 @@ async def make_qr(makeqr):
         previous_message = await makeqr.get_reply_message()
         reply_msg_id = previous_message.id
         if previous_message.media:
-            downloaded_file_name = await makeqr.client.download_media(
-                previous_message)
+            downloaded_file_name = await makeqr.client.download_media(previous_message)
             m_list = None
             with open(downloaded_file_name, "rb") as file:
                 m_list = file.readlines()
@@ -172,9 +181,9 @@ async def make_qr(makeqr):
     qr.make(fit=True)
     img = qr.make_image(fill_color="black", back_color="white")
     img.save("img_file.webp", "PNG")
-    await makeqr.client.send_file(makeqr.chat_id,
-                                  "img_file.webp",
-                                  reply_to=reply_msg_id)
+    await makeqr.client.send_file(
+        makeqr.chat_id, "img_file.webp", reply_to=reply_msg_id
+    )
     os.remove("img_file.webp")
     await makeqr.delete()
 
@@ -191,16 +200,14 @@ async def _(event):
         mm = input_sgra[1]
         dd = input_sgra[2]
         required_url = "https://calendar.kollavarsham.org/api/years/{}/months/{}/days/{}?lang={}".format(
-            yyyy, mm, dd, "en")
+            yyyy, mm, dd, "en"
+        )
         headers = {"Accept": "application/json"}
         response_content = requests.get(required_url, headers=headers).json()
         a = ""
         if "error" not in response_content:
             current_date_detail_arraays = response_content["months"][0]["days"][0]
-            a = json.dumps(
-                current_date_detail_arraays,
-                sort_keys=True,
-                indent=4)
+            a = json.dumps(current_date_detail_arraays, sort_keys=True, indent=4)
         else:
             a = response_content["error"]
         await event.edit(str(a))
@@ -223,18 +230,25 @@ async def _(event):
             currency_from = input_sgra[1].upper()
             currency_to = input_sgra[2].upper()
             request_url = "https://api.exchangeratesapi.io/latest?base={}".format(
-                currency_from)
+                currency_from
+            )
             current_response = requests.get(request_url).json()
             if currency_to in current_response["rates"]:
                 current_rate = float(current_response["rates"][currency_to])
                 rebmun = round(number * current_rate, 2)
-                await event.edit("{} {} = {} {}".format(number, currency_from, rebmun, currency_to))
+                await event.edit(
+                    "{} {} = {} {}".format(number, currency_from, rebmun, currency_to)
+                )
             else:
-                await event.edit("Welp, Hate to tell yout this but this Currency isn't supported **yet**.\n__Try__ `.currencies` __for a list of supported currencies.__")
+                await event.edit(
+                    "Welp, Hate to tell yout this but this Currency isn't supported **yet**.\n__Try__ `.currencies` __for a list of supported currencies.__"
+                )
         except e:
             await event.edit(str(e))
     else:
-        await event.edit("**Syntax:**\n.currency amount from to\n**Example:**\n`.currency 10 usd inr`")
+        await event.edit(
+            "**Syntax:**\n.currency amount from to\n**Example:**\n`.currency 10 usd inr`"
+        )
     end = datetime.now()
     (end - start).seconds
 
@@ -291,7 +305,7 @@ async def _(event):
                 "cat.png",
                 force_document=False,
                 caption=input_str,
-                reply_to=message_id
+                reply_to=message_id,
             )
             os.remove("cat.png")
             await event.delete()
@@ -311,11 +325,7 @@ async def _(event):
         else:
             xkcd_search_url = "https://relevantxkcd.appspot.com/process?"
             queryresult = requests.get(
-                xkcd_search_url,
-                params={
-                    "action": "xkcd",
-                    "query": quote(input_str)
-                }
+                xkcd_search_url, params={"action": "xkcd", "query": quote(input_str)}
             ).text
             xkcd_id = queryresult.split(" ")[2].lstrip("\n")
     if xkcd_id is None:
@@ -340,14 +350,17 @@ Title: {}
 Alt: {}
 Day: {}
 Month: {}
-Year: {}""".format(img, input_str, xkcd_link, safe_title, alt, day, month, year)
+Year: {}""".format(
+            img, input_str, xkcd_link, safe_title, alt, day, month, year
+        )
         await event.edit(output_str, link_preview=True)
     else:
         await event.edit("xkcd n.{} not found!".format(xkcd_id))
 
-CMD_HELP.update({
-    'tools':
-    "`.scan` reply to media or file\
+
+CMD_HELP.update(
+    {
+        "tools": "`.scan` reply to media or file\
 \n**USEAGE : **it scans the media or file and checks either any virus is in the file or media\
 \n\n`.makeqr` <content>\
 \n**USEAGE : **Make a QR Code from the given content.\
@@ -367,4 +380,5 @@ CMD_HELP.update({
 \n**USEAGE : **sends you a plain image of the color example :`.color #ff0000`\
 \n\n`.xkcd` <query>\
 \n**USEAGE : **Searches for the query for the relevant XKCD comic "
-})
+    }
+)
