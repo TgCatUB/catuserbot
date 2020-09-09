@@ -164,7 +164,8 @@ def admin_cmd(pattern=None, **args):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
-            args["pattern"] = re.compile(Config.COMMAND_HAND_LER + pattern)
+            catreg = "^" + Config.COMMAND_HAND_LER
+            args["pattern"] = re.compile(catreg + pattern)
             reg = Config.COMMAND_HAND_LER[1]
             cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
             try:
@@ -409,7 +410,8 @@ def sudo_cmd(pattern=None, **args):
             # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
-            args["pattern"] = re.compile(Config.SUDO_COMMAND_HAND_LER + pattern)
+            catreg = "^" + Config.SUDO_COMMAND_HAND_LER
+            args["pattern"] = re.compile(catreg + pattern)
             reg = Config.SUDO_COMMAND_HAND_LER[1]
             cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
             try:
