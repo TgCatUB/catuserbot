@@ -69,8 +69,8 @@ async def _(event):
 # Helpers
 
 
-@borg.on(admin_cmd(pattern="ibutton(?: |$)(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="ibutton(?: |$)(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="ibutton($| (.*))", outgoing=True))
+@borg.on(sudo_cmd(pattern="ibutton($| (.*))", allow_sudo=True))
 async def _(event):
     reply_to_id = None
     catinput = event.pattern_match.group(1)
