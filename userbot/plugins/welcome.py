@@ -71,8 +71,8 @@ async def _(event):
             update_previous_welcome(event.chat_id, current_message.id)
 
 
-@borg.on(admin_cmd(pattern="savewelcome ?(.*)"))
-@borg.on(sudo_cmd(pattern="savewelcome", allow_sudo=True))
+@borg.on(admin_cmd(pattern=r"savewelcome ?(.*)"))
+@borg.on(sudo_cmd(pattern=r"savewelcome", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
