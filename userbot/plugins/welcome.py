@@ -111,7 +111,7 @@ async def save_welcome(event):
         rep_msg = await event.get_reply_message()
         string = rep_msg.text
     success = "`Welcome note {} for this chat.`"
-    if add_welcome_setting(event.chat_id, 0, string, msg_id, None) is True:
+    if add_welcome_setting(event.chat_id, 0, string, msg_id) is True:
         await edit_or_reply(event, success.format("saved"))
     else:
         await edit_or_reply(event, success.format("updated"))
