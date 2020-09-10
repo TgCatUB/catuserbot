@@ -1,3 +1,5 @@
+#ported from paperplaneExtended by avinashreddy3108 for media support
+
 from telethon import events
 from telethon.utils import pack_bot_file_id
 
@@ -8,24 +10,25 @@ from userbot.plugins.sql_helper.welcome_sql import (
     update_previous_welcome,
 )
 
-from .. import CLEAN_WELCOME, CMD_HELP, LOGS, bot
+from .. import CMD_HELP, bot, LOGS, CLEAN_WELCOME
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
 else:
     BOTLOG = True
     BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-
-
+    
 @bot.on(events.ChatAction)
 async def _(event):
     cws = get_current_welcome_settings(event.chat_id)
     if cws:
-        if (event.user_joined or event.user_added) and not (await event.get_user()).bot:
+        if (event.user_joined
+                or event.user_added) and not (await event.get_user()).bot:
             if CLEAN_WELCOME:
                 try:
-                    await bot.delete_messages(event.chat_id, cws.previous_welcome)
+                    await bot.delete_messages(event.chat_id,cws.previous_welcome)
                 except Exception as e:
                     LOGS.warn(str(e))
             a_user = await event.get_user()
@@ -54,31 +57,26 @@ async def _(event):
             file_media = None
             current_saved_welcome_message = None
             if cws and cws.f_mesg_id:
-                msg_o = await event.client.get_messages(
-                    entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id)
-                )
+                msg_o = await event.client.get_messages(entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id))
                 file_media = msg_o.media
                 current_saved_welcome_message = msg_o.message
             elif cws and cws.reply:
                 current_saved_welcome_message = cws.reply
             current_message = await event.reply(
-                current_saved_welcome_message.format(
-                    mention=mention,
-                    title=title,
-                    count=count,
-                    first=first,
-                    last=last,
-                    fullname=fullname,
-                    username=username,
-                    userid=userid,
-                    my_first=my_first,
-                    my_last=my_last,
-                    my_fullname=my_fullname,
-                    my_username=my_username,
-                    my_mention=my_mention,
-                ),
-                file=file_media,
-            )
+                current_saved_welcome_message.format(mention=mention,
+                                                     title=title,
+                                                     count=count,
+                                                     first=first,
+                                                     last=last,
+                                                     fullname=fullname,
+                                                     username=username,
+                                                     userid=userid,
+                                                     my_first=my_first,
+                                                     my_last=my_last,
+                                                     my_fullname=my_fullname,
+                                                     my_username=my_username,
+                                                     my_mention=my_mention),
+                file=file_media,)
             update_previous_welcome(event.chat_id, current_message.id)
 
 
@@ -91,14 +89,15 @@ async def save_welcome(event):
     if msg and msg.media and not string:
         if BOTLOG_CHATID:
             await bot.send_message(
-                BOTLOG_CHATID,
-                f"#WELCOME_NOTE\
+                BOTLOG_CHATID, f"#WELCOME_NOTE\
                 \nCHAT ID: {event.chat_id}\
-                \nThe following message is saved as the welcome note for the {event.chat.title}, Dont delete this message !!",
-            )
+                \nThe following message is saved as the welcome note for the {event.chat.title}, Dont delete this message !!"
+                )
             msg_o = await event.client.forward_messages(
-                entity=BOTLOG_CHATID, messages=msg, from_peer=event.chat_id, silent=True
-            )
+                entity=BOTLOG_CHATID,
+                messages=msg,
+                from_peer=event.chat_id,
+                silent=True)
             msg_id = msg_o.id
         else:
             msg_id = pack_bot_file_id(msg.media)
@@ -107,9 +106,9 @@ async def save_welcome(event):
         string = rep_msg.text
     success = "`Welcome note {} for this chat.`"
     if add_welcome_setting(event.chat_id, 0, string, msg_id) is True:
-        await edit_or_reply(event, success.format("saved"))
+        await edit_or_reply(event, success.format('saved'))
     else:
-        await edit_or_reply(event, success.format("updated"))
+        await edit_or_reply(event, success.format('updated'))
 
 
 @borg.on(admin_cmd(pattern="clearwelcome$"))
@@ -119,8 +118,7 @@ async def del_welcome(event):
         await edit_or_reply(event, "`Welcome note deleted for this chat.`")
     else:
         await edit_or_reply(event, "`Do I have a welcome note here ?`")
-
-
+        
 @borg.on(admin_cmd(pattern="listwelcome$"))
 @borg.on(sudo_cmd(pattern="listwelcome$", allow_sudo=True))
 async def show_welcome(event):
@@ -129,21 +127,19 @@ async def show_welcome(event):
         await edit_or_reply(event, "`No welcome message saved here.`")
         return
     elif cws and cws.f_mesg_id:
-        msg_o = await bot.get_messages(entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id))
-        await edit_or_reply(
-            event, "`I am currently welcoming new users with this welcome note.`"
-        )
+        msg_o = await bot.get_messages(entity=BOTLOG_CHATID,
+                                                ids=int(cws.f_mesg_id))
+        await edit_or_reply(event, 
+            "`I am currently welcoming new users with this welcome note.`")
         await event.reply(msg_o.message, file=msg_o.media)
     elif cws and cws.reply:
-        await edit_or_reply(
-            event, "`I am currently welcoming new users with this welcome note.`"
-        )
-        await event.reply(cws.reply)
+        await edit_or_reply(event, 
+            "`I am currently welcoming new users with this welcome note.`")
+        await event.reply(cws.reply)        
 
 
 CMD_HELP.update(
-    {
-        "welcome": "**Plugin :** `welcome`\
+    {"welcome": "**Plugin :** `welcome`\
 \n\n**Syntax :** `.savewelcome` <welcome message> or reply to a message with .setwelcome\
 \n**Usage :** Saves the message as a welcome note in the chat.\
 \n\nAvailable variables for formatting welcome messages :\
@@ -153,5 +149,4 @@ CMD_HELP.update(
 \n\n**Syntax :** `.clearwelcome`\
 \n**Usage :** Deletes the welcome note for the current chat.\
 "
-    }
-)
+ })
