@@ -73,7 +73,7 @@ async def _(event):
 @borg.on(sudo_cmd(pattern=r"ibutton( (.*)|$)", allow_sudo=True))
 async def _(event):
     reply_to_id = None
-    catinput = event.pattern_match.group(1)
+    catinput = "".join(event.text.split(maxsplit=1)[1:])
     LOGS.info(catinput)
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
