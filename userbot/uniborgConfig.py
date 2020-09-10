@@ -37,7 +37,8 @@ class Config(object):
     # This is required for the @telegraph functionality.
     TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "mrconfused")
     # Set False to stop deleting old welcome messages
-    CLEAN_WELCOME = os.environ.get("IBM_WATSON_CRED_PASSWORD", False)
+    CLEAN_WELCOME = os.environ.get("CLEAN_WELCOME", False)
+    #github vars
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
     # Get a Free API Key from OCR.Space
