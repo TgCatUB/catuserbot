@@ -69,8 +69,7 @@ async def incom_note(getnt):
                 await bot.send_message(
                     getnt.chat_id,
                     note.reply,
-                    reply_to=message_id_to_reply,
-                    parse_mode="html",
+                    reply_to=message_id_to_reply
                 )
     except AttributeError:
         pass
