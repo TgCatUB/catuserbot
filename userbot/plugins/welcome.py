@@ -79,7 +79,7 @@ async def _(event):
                     my_mention=my_mention,
                 ),
                 file=file_media,
-                parse_mode = "html"
+                parse_mode="html",
             )
             update_previous_welcome(event.chat_id, current_message.id)
 
