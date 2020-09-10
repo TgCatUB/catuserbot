@@ -52,7 +52,7 @@ async def incom_note(getnt):
     try:
         if not (await getnt.get_sender()).bot:
             notename = getnt.text[1:]
-            note = get_note(getnt.chat_id, notename)
+            note = get_note(notename)
             message_id_to_reply = getnt.message.reply_to_msg_id
             if not message_id_to_reply:
                 message_id_to_reply = None
