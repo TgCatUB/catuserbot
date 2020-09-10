@@ -47,9 +47,9 @@ async def test(event):
 @borg.on(admin_cmd(pattern=r"hi (.*)"))
 async def hi(event):
     giveVar = event.text
-    lp = giveVar[4:5]
-    if not lp:
-        lp = "🌺"
+    cat = giveVar[4:5]
+    if not cat:
+        cat = "🌺"
     await event.edit(
         f"{cat}✨✨{cat}✨{cat}{cat}{cat}\n{cat}✨✨{cat}✨✨{cat}✨\n{cat}{cat}{cat}{cat}✨✨{cat}✨\n{cat}✨✨{cat}✨✨{cat}✨\n{cat}✨✨{cat}✨{cat}{cat}{cat}\n☁☁☁☁☁☁☁☁"
     )
