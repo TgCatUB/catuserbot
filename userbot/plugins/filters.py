@@ -118,7 +118,9 @@ async def remove_a_filter(r_handler):
 @borg.on(admin_cmd(pattern="rmfilters$"))
 @borg.on(sudo_cmd(pattern="rmfilters$", allow_sudo=True))
 async def on_all_snip_delete(event):
-    if remove_all_filters(event.chat_id):
+    filters = get_filters(event.chat_id)
+    if filters:
+        remove_all_filters(event.chat_id)
         await edit_or_reply(event, f"filters in current chat deleted successfully")
     else:
         await edit_or_reply(event, f"There are no filters in this group")
