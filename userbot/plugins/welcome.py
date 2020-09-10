@@ -35,8 +35,8 @@ async def _(event):
             title = chat.title if chat.title else "this chat"
             participants = await bot.get_participants(chat)
             count = len(participants)
-            mention = "[{}](tg://user?id={})".format(a_user.first_name, a_user.id)
-            my_mention = "[{}](tg://user?id={})".format(me.first_name, me.id)
+            mention = "<a href='tg://user?id={}'>{}</a>".format(a_user.id,a_user.first_name)
+            my_mention = "<a href='tg://user?id={}'>{}</a>".format(me.id,me.first_name)
             first = a_user.first_name
             last = a_user.last_name
             if last:
