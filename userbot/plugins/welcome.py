@@ -103,12 +103,14 @@ async def save_welcome(event):
             )
             msg_id = msg_o.id
         else:
-            msg_id = pack_bot_file_id(msg.media)
+            await edit_or_reply(event, 
+                "`Saving media as part of the welcome note requires the BOTLOG_CHATID to be set.`")
+            return
     elif event.reply_to_msg_id and not string:
         rep_msg = await event.get_reply_message()
         string = rep_msg.text
     success = "`Welcome note {} for this chat.`"
-    if add_welcome_setting(event.chat_id, 0, string, msg_id) is True:
+    if add_welcome_setting(event.chat_id, 0, string, msg_id,None) is True:
         await edit_or_reply(event, success.format("saved"))
     else:
         await edit_or_reply(event, success.format("updated"))
