@@ -83,7 +83,7 @@ async def incom_note(getnt):
 @borg.on(admin_cmd(pattern=r"snips ?(.*)"))
 @borg.on(sudo_cmd(pattern=r"snips ?(.*)", allow_sudo=True))
 async def add_note(fltr):
-    keyword = "".join(fltr.text.split(maxsplit=1)[1:])
+    keyword = fltr.pattern_match.group(1)
     string = fltr.text.partition(keyword)[2]
     msg = await fltr.get_reply_message()
     msg_id = None
