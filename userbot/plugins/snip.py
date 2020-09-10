@@ -67,9 +67,7 @@ async def incom_note(getnt):
             elif note and note.reply:
                 await getnt.delete()
                 await bot.send_message(
-                    getnt.chat_id,
-                    note.reply,
-                    reply_to=message_id_to_reply
+                    getnt.chat_id, note.reply, reply_to=message_id_to_reply
                 )
     except AttributeError:
         pass
