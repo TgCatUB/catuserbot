@@ -7,7 +7,7 @@ import re
 
 from telethon import Button
 
-from .. import CMD_HELP, LOGS
+from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 # regex obtained from:
@@ -74,7 +74,6 @@ async def _(event):
 async def _(event):
     reply_to_id = None
     catinput = "".join(event.text.split(maxsplit=1)[1:])
-    LOGS.info(catinput)
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
     await event.get_reply_message()
