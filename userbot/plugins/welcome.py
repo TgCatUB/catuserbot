@@ -83,7 +83,7 @@ async def _(event):
         await edit_or_reply(event, "Welcome note saved. ")
     else:
         if event.pattern_match.group(1):
-            input_str = event.pattern_match.group(1)
+            input_str = "".join(event.text.split(maxsplit=1)[1:])
         else:
             await edit_or_reply(event, "what should i set for welcome")
         add_welcome_setting(event.chat_id, input_str, True, 0, None)
