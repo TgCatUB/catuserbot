@@ -63,9 +63,8 @@ async def incom_note(getnt):
                 await getnt.delete()
                 await bot.send_message(
                     getnt.chat_id,
-                    msg_o.mesage,
+                    msg_o,
                     reply_to=message_id_to_reply,
-                    file=msg_o.media,
                     parse_mode="html",
                 )
             elif note and note.reply:
