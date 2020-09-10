@@ -1,5 +1,5 @@
 try:
-    from userbot.modules.sql_helper import SESSION, BASE
+    from .sql_helper import SESSION, BASE
 except ImportError:
     raise AttributeError
 
