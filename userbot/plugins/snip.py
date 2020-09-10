@@ -80,8 +80,8 @@ async def incom_note(getnt):
         pass
 
 
-@borg.on(admin_cmd(pattern=r"snips ?(.*)"))
-@borg.on(sudo_cmd(pattern=r"snips ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern=r"snips (\w*)"))
+@borg.on(sudo_cmd(pattern=r"snips (\w*)", allow_sudo=True))
 async def add_snip(fltr):
     keyword = fltr.pattern_match.group(1)
     string = fltr.text.partition(keyword)[2]
@@ -108,6 +108,8 @@ async def add_snip(fltr):
     elif fltr.reply_to_msg_id and not string:
         rep_msg = await fltr.get_reply_message()
         string = rep_msg.text
+    if not (string and msg_id):
+        return await edit_or_reply("What should i set for the Given note")
     success = "Note {}  is successfully saved. Use` #{} `to get it"
     if add_note(keyword, string, msg_id) is False:
         rm_note(keyword)
