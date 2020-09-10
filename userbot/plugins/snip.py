@@ -5,9 +5,8 @@ from telethon.tl import types
 
 from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from .sql_helper.snips_sql import get_all_snips, get_snips, remove_snip
 from .sql_helper.snip_sql import add_note, get_note, get_notes, rm_note
-
+from .sql_helper.snips_sql import get_all_snips, get_snips, remove_snip
 
 TYPE_TEXT = 0
 TYPE_PHOTO = 1
