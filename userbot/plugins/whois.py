@@ -9,14 +9,11 @@
 
 import html
 import os
-
 from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
-
 from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
-
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
@@ -267,6 +264,61 @@ async def fetch_info(replied_user, event):
     caption += f'<a href="tg://user?id={user_id}">{first_name}</a>'
     return photo, caption
 
+@borg.on(admin_cmd(pattern="link(?: |$)(.*)"))
+async def permalink(mention):
+    """ For .link command, generates a link to the user's PM with a custom text. """
+    user, custom = await get_user_from_event(mention)
+    if not user:
+        return
+    if custom:
+        await mention.edit(f"[{custom}](tg://user?id={user.id})")
+    else:
+        tag = (
+            user.first_name.replace("\u2060", "") if user.first_name else user.username
+        )
+        await mention.edit(f"[{tag}](tg://user?id={user.id})")
+
+
+async def get_user_from_event(event):
+    """ Get the user from argument or replied message. """
+    args = event.pattern_match.group(1).split(":", 1)
+    extra = None
+    if event.reply_to_msg_id and not len(args) == 2:
+        previous_message = await event.get_reply_message()
+        user_obj = await event.client.get_entity(previous_message.from_id)
+        extra = event.pattern_match.group(1)
+    elif len(args[0]) > 0:
+        user = args[0]
+        if len(args) == 2:
+            extra = args[1]
+        if user.isnumeric():
+            user = int(user)
+        if not user:
+            await event.edit("`Pass the user's username, id or reply!`")
+            return
+        if event.message.entities:
+            probable_user_mention_entity = event.message.entities[0]
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
+                user_id = probable_user_mention_entity.user_id
+                user_obj = await event.client.get_entity(user_id)
+                return user_obj
+        try:
+            user_obj = await event.client.get_entity(user)
+        except (TypeError, ValueError) as err:
+            await event.edit(str(err))
+            return None
+    return user_obj, extra
+
+
+async def ge (user, event):
+    if isinstance(user, str):
+        user = int(user)
+    try:
+        user_obj = await event.client.get_entity(user)
+    except (TypeError, ValueError) as err:
+        await event.edit(str(err))
+        return None
+    return user_obj
 
 CMD_HELP.update(
     {
