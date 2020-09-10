@@ -52,7 +52,7 @@ def rm_note(keyword):
     if not to_check:
         return False
     else:
-        rem = SESSION.query(Snips).get(keyword))
+        rem = SESSION.query(Snips).get(keyword)
         SESSION.delete(rem)
         SESSION.commit()
         return True
