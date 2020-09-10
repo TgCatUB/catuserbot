@@ -115,9 +115,11 @@ async def save_welcome(event):
         string = rep_msg.text
     success = "`Welcome note {} for this chat.`"
     if add_welcome_setting(event.chat_id, 0, string, msg_id) is True:
-        await edit_or_reply(event, success.format("saved"))
-    else:
-        await edit_or_reply(event, success.format("updated"))
+        return await edit_or_reply(event, success.format("saved"))
+    rm_welcome_setting(event.chat_id)
+    if add_welcome_setting(event.chat_id, 0, string, msg_id) is True:
+        return await edit_or_reply(event, success.format("updated"))
+    await edit_or_reply("Error while setting welcome in this group")
 
 
 @borg.on(admin_cmd(pattern="clearwelcome$"))
