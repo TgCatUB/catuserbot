@@ -1,5 +1,6 @@
 from userbot.utils import admin_cmd
 
+
 @borg.on(admin_cmd(pattern="gnt$"))
 async def gn(event):
     await event.edit(
@@ -12,6 +13,7 @@ async def gm(event):
     await event.edit(
         "｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･｡♥｡･ﾟ♡ﾟ･\n╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╱╱╭╮\n╭━┳━┳━┳╯┃╭━━┳━┳┳┳━┳╋╋━┳┳━╮\n┃╋┃╋┃╋┃╋┃┃┃┃┃╋┃╭┫┃┃┃┃┃┃┃╋┃\n┣╮┣━┻━┻━╯╰┻┻┻━┻╯╰┻━┻┻┻━╋╮┃\n╰━╯╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰━╯\n｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･｡♥｡･ﾟ♡ﾟ･"
     )
+
 
 # by  @Halto_Tha
 @borg.on(admin_cmd(pattern=r"lmoon$"))
@@ -47,8 +49,10 @@ async def hi(event):
     giveVar = event.text
     lp = giveVar[4:5]
     if not lp:
-        lp="🌺"
-    await event.edit(f"{cat}✨✨{cat}✨{cat}{cat}{cat}\n{cat}✨✨{cat}✨✨{cat}✨\n{cat}{cat}{cat}{cat}✨✨{cat}✨\n{cat}✨✨{cat}✨✨{cat}✨\n{cat}✨✨{cat}✨{cat}{cat}{cat}\n☁☁☁☁☁☁☁☁")
+        lp = "🌺"
+    await event.edit(
+        f"{cat}✨✨{cat}✨{cat}{cat}{cat}\n{cat}✨✨{cat}✨✨{cat}✨\n{cat}{cat}{cat}{cat}✨✨{cat}✨\n{cat}✨✨{cat}✨✨{cat}✨\n{cat}✨✨{cat}✨{cat}{cat}{cat}\n☁☁☁☁☁☁☁☁"
+    )
 
 
 @borg.on(admin_cmd(pattern=r"cheer$"))
