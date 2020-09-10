@@ -37,7 +37,7 @@ class Config(object):
     # This is required for the @telegraph functionality.
     TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "mrconfused")
     # Set False to stop deleting old welcome messages
-    CLEAN_WELCOME = os.environ.get("CLEAN_WELCOME", False)
+    CLEAN_WELCOME = os.environ.get("CLEAN_WELCOME", True)
     # github vars
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
@@ -136,7 +136,7 @@ class Config(object):
     # Google Chrome Selenium Stuff
     # taken from
     # https://github.com/jaskaranSM/UniBorg/blob/9072e3580cc6c98d46f30e41edbe73ffc9d850d3/sample_config.py#L104-L106
-    TEMP_DIR = os.environ.get("TEMP_DIR", "./DOWNLOADS")
+    TEMP_DIR = os.environ.get("TEMP_DIR", "./temp")
     # spotify stuff
     DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
     SPOTIFY_BIO_PREFIX = os.environ.get("SPOTIFY_BIO_PREFIX", None)
