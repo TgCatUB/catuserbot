@@ -102,6 +102,16 @@
       "value": "",
       "required": false
     },
+    "PRIVATE_GROUP_ID": {
+      "description": "  ",
+      "required": false
+    },
+    "PRIVATE_GROUP_BOT_API_ID": {
+      "description": "Enter Valid Id. Required For Pm Logger Plugin Ignore If You Want [Useful If You Want To Log Your Messages]",
+      "required": false
+
+
+    },
     "TZ": {
       "description": "Required for Correct Time on autopic/get time. Know your timezone from http://www.timezoneconverter.com/cgi-bin/findzone.tzc",
       "value": "Asia/Kolkata",
