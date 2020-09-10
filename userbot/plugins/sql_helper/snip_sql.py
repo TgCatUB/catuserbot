@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Numeric, String, UnicodeText
+from sqlalchemy import Column, Numeric, UnicodeText
+
 from . import BASE, SESSION
+
 
 class Snips(BASE):
     __tablename__ = "snip"
