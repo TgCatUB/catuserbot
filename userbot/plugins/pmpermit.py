@@ -117,11 +117,15 @@ if Var.PRIVATE_GROUP_ID is not None:
         message_text.lower()
         USER_BOT_NO_WARN = (
             f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
-            "This is auto generated message from cat security service\n\n"
-            f"Hi buddy my master {DEFAULTUSER} haven't approved you yet. so ,"
-            "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
-            "**Send** `/start` ** so that my master can decide why you're here.**")
-        if USER_BOT_NO_WARN == message_text:
+            "**Hey There!**\n\n"
+            f"Currently My Boss👑\n"
+            "                          👑@imDivu is Busy !\n"
+            "So Better Don't Spam His Inbox !⚠️\n\n"
+            "YOU HAVE TRESPASSED TO MY BOSS INBOX \nTHIS IS ILLEGAL AND REGARDED AS A CRIME\n"
+            "‼️                        🔞☢☢📵                       ‼️\n"
+            "Now You Are In Trouble So Please Wait Until \nMy Boss Arrives And Reply To You.\n"
+            "       🚫Otherwise You Will Be Blocked🚫\n\n"
+            "- If You Have Any Important Thing To Ask Msg \n  Me Here : @imXiaoTong"
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
             return
