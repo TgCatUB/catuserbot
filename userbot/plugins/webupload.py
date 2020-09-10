@@ -1,7 +1,5 @@
 # originally created by
 # https://github.com/Total-Noob-69/X-tra-Telegram/blob/master/userbot/plugins/webupload.py
-# modified by __me__ to suit **my** needs
-"""webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles"""
 
 import asyncio
 import time
@@ -70,11 +68,7 @@ async def labstack(event):
         t_response_arry + "\nMax Days:" + str(max_days), link_preview=False
     )
     
-@borg.on(
-    admin_cmd(
-        pattern="webupload ?(.+?|) (?:--)(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles)"
-    )
-)
+@borg.on(admin_cmd(pattern="webupload ?(.+?|) (?:--)(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles)"))
 async def _(event):
     if event.fwd_from:
         return
