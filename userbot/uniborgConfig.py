@@ -36,7 +36,7 @@ class Config(object):
     IBM_WATSON_CRED_PASSWORD = os.environ.get("IBM_WATSON_CRED_PASSWORD", None)
     # This is required for the @telegraph functionality.
     TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "mrconfused")
-    #Set False to stop deleting old welcome messages
+    # Set False to stop deleting old welcome messages
     CLEAN_WELCOME = os.environ.get("IBM_WATSON_CRED_PASSWORD", False)
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
