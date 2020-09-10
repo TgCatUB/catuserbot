@@ -10,7 +10,7 @@ from userbot.plugins.sql_helper.welcome_sql import (
     update_previous_welcome,
 )
 
-from .. import CLEAN_WELCOME, CMD_HELP, LOGS, bot
+from .. import CMD_HELP, LOGS, bot
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
@@ -25,7 +25,7 @@ async def _(event):
     cws = get_current_welcome_settings(event.chat_id)
     if cws:
         if (event.user_joined or event.user_added) and not (await event.get_user()).bot:
-            if CLEAN_WELCOME:
+            if Config.CLEAN_WELCOME:
                 try:
                     await bot.delete_messages(event.chat_id, cws.previous_welcome)
                 except Exception as e:
