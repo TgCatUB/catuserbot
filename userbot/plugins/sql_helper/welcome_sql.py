@@ -1,5 +1,5 @@
 try:
-    from .sql_helper import BASE, SESSION
+    from . import BASE, SESSION
 except ImportError:
     raise AttributeError
 
