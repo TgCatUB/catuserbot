@@ -1,4 +1,4 @@
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd
 
 
 @borg.on(admin_cmd(pattern="gnt$"))
@@ -44,7 +44,7 @@ async def test(event):
 # @PhycoNinja13b 's Part begin from here
 
 
-@borg.on(admin_cmd(pattern=r"hi (.*)"))
+@borg.on(admin_cmd(pattern=r"hi ?(.*)"))
 async def hi(event):
     giveVar = event.text
     cat = giveVar[4:5]
