@@ -41,6 +41,7 @@ async def stylish_generator(event):
             string = string.replace(normalfontcharacter, ancientcharacter)
     await edit_or_reply(event, string)
 
+
 @borg.on(admin_cmd(pattern="vapor(?: |$)(.*)"))
 async def vapor(vpr):
     """ Vaporize everything! """
@@ -179,6 +180,7 @@ async def stylish_generator(event):
             ]
             string = string.replace(normaltextcharacter, smothtextcharacter)
     await event.edit(string)
+
 
 CMD_HELP.update(
     {

@@ -1,5 +1,7 @@
-from . import SESSION, BASE
-from sqlalchemy import Column, UnicodeText, Numeric, String
+from sqlalchemy import Column, Numeric, String, UnicodeText
+
+from . import BASE, SESSION
+
 
 class Filter(BASE):
     __tablename__ = "catfilters"
@@ -16,8 +18,10 @@ class Filter(BASE):
 
     def __eq__(self, other):
         return bool(
-            isinstance(other, Filter) and self.chat_id == other.chat_id
-            and self.keyword == other.keyword)
+            isinstance(other, Filter)
+            and self.chat_id == other.chat_id
+            and self.keyword == other.keyword
+        )
 
 
 Filter.__table__.create(checkfirst=True)
@@ -32,8 +36,7 @@ def get_filter(chat_id, keyword):
 
 def get_filters(chat_id):
     try:
-        return SESSION.query(Filter).filter(
-            Filter.chat_id == str(chat_id)).all()
+        return SESSION.query(Filter).filter(Filter.chat_id == str(chat_id)).all()
     finally:
         SESSION.close()
 
@@ -64,10 +67,10 @@ def remove_filter(chat_id, keyword):
         SESSION.delete(rem)
         SESSION.commit()
         return True
-    
+
 
 def remove_all_filters(chat_id):
     saved_filter = SESSION.query(Filter).filter(Filter.chat_id == str(chat_id))
     if saved_filter:
         saved_filter.delete()
-        SESSION.commit()    
+        SESSION.commit()

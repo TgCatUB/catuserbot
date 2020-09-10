@@ -1,16 +1,23 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
-from asyncio import sleep
+from re import IGNORECASE, fullmatch
+
 from telethon import events
-from .. import CMD_HELP, LOGS, bot
-from re import fullmatch, IGNORECASE, escape
+
+from .. import CMD_HELP, bot
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from .sql_helper.filter_sql import get_filters,get_filter,add_filter,remove_filter,remove_all_filters
+from .sql_helper.filter_sql import (
+    add_filter,
+    get_filters,
+    remove_all_filters,
+    remove_filter,
+)
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
 else:
     BOTLOG = True
     BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+
 
 @borg.on(events.NewMessage(incoming=True))
 async def filter_incoming_handler(handler):
@@ -24,16 +31,18 @@ async def filter_incoming_handler(handler):
                 pro = fullmatch(trigger.keyword, name, flags=IGNORECASE)
                 if pro and trigger.f_mesg_id:
                     msg_o = await handler.client.get_messages(
-                        entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id))
+                        entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
+                    )
                     await handler.reply(msg_o.message, file=msg_o.media)
                 elif pro and trigger.reply:
                     await handler.reply(trigger.reply)
     except AttributeError:
         pass
 
+
 @borg.on(admin_cmd(pattern="filter (\w*)"))
 @borg.on(sudo_cmd(pattern="filter (\w*)", allow_sudo=True))
-async def add_new_filter(new_handler):  
+async def add_new_filter(new_handler):
     keyword = new_handler.pattern_match.group(1)
     string = new_handler.text.partition(keyword)[2]
     msg = await new_handler.get_reply_message()
@@ -41,16 +50,18 @@ async def add_new_filter(new_handler):
     if msg and msg.media and not string:
         if BOTLOG_CHATID:
             await new_handler.client.send_message(
-                BOTLOG_CHATID, f"#FILTER\
+                BOTLOG_CHATID,
+                f"#FILTER\
             \nCHAT ID: {new_handler.chat_id}\
             \nTRIGGER: {keyword}\
-            \n\nThe following message is saved as the filter's reply data for the chat, please do NOT delete it !!"
+            \n\nThe following message is saved as the filter's reply data for the chat, please do NOT delete it !!",
             )
             msg_o = await new_handler.client.forward_messages(
                 entity=BOTLOG_CHATID,
                 messages=msg,
                 from_peer=new_handler.chat_id,
-                silent=True)
+                silent=True,
+            )
             msg_id = msg_o.id
         else:
             await new_handler.edit(
@@ -62,9 +73,10 @@ async def add_new_filter(new_handler):
         string = rep_msg.text
     success = "`Filter` **{}** `{} successfully`"
     if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
-        await new_handler.edit(success.format(keyword, 'added'))
+        await new_handler.edit(success.format(keyword, "added"))
     else:
-        await new_handler.edit(success.format(keyword, 'updated'))
+        await new_handler.edit(success.format(keyword, "updated"))
+
 
 @borg.on(admin_cmd(pattern="filters$"))
 @borg.on(sudo_cmd(pattern="filters$", allow_sudo=True))

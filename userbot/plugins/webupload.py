@@ -2,13 +2,16 @@
 # https://github.com/Total-Noob-69/X-tra-Telegram/blob/master/userbot/plugins/webupload.py
 
 import asyncio
-import time
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
 import json
 import os
 import subprocess
+import time
+
 import requests
+
+from userbot import CMD_HELP
+from userbot.utils import admin_cmd
+
 
 @borg.on(admin_cmd(pattern="labstack ?(.*)"))
 async def labstack(event):
@@ -67,8 +70,13 @@ async def labstack(event):
     await event.edit(
         t_response_arry + "\nMax Days:" + str(max_days), link_preview=False
     )
-    
-@borg.on(admin_cmd(pattern="webupload ?(.+?|) (?:--)(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles)"))
+
+
+@borg.on(
+    admin_cmd(
+        pattern="webupload ?(.+?|) (?:--)(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles)"
+    )
+)
 async def _(event):
     if event.fwd_from:
         return
