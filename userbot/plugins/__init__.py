@@ -2,7 +2,7 @@ import math
 import os
 import re
 import time
-
+import spamwatch as spam_watch
 import heroku3
 import requests
 
@@ -35,6 +35,7 @@ def check(cat):
     return False
 
 
+
 # UniBorg Telegram UseRBot
 # Copyright (C) 2020 @UniBorg
 # This code is licensed under
@@ -65,6 +66,10 @@ def check_data_base_heal_th():
         is_database_working = True
     return is_database_working, output
 
+
+#spamwatch support 
+token = Config.SPAMWATCH_API
+spamwatch = spam_watch.Client(token)
 
 async def catalive():
     _, check_sgnirts = check_data_base_heal_th()
