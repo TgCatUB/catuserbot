@@ -101,8 +101,15 @@ async def info(event):
 async def _(event):
     if event.fwd_from:
         return
-    result = await borg(functions.help.GetNearestDcRequest())  # pylint:disable=E0602
-    await event.edit(result.stringify())
+    result = await borg(functions.help.GetNearestDcRequest())
+    result = result.stringify() + "\n\nList Of Telegram Data Centres:\
+                                    \nDC1 : Miami FL, USA\
+                                    \nDC2 : Amsterdam, NL\
+                                    \nDC3 : Miami FL, USA\
+                                    \nDC4 : Amsterdam, NL\
+                                    \nDC5 : Singapore, SG\
+                                    "
+    await event.edit(result)
 
 
 @borg.on(sudo_cmd(allow_sudo=True, pattern="help(?: |$)(.*)"))
