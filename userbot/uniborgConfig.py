@@ -167,9 +167,9 @@ class Config(object):
     RSS_POST_MSG_GROUP_ID = os.environ.get("RSS_POST_MSG_GROUP_ID", None)
     if RSS_POST_MSG_GROUP_ID:
         RSS_POST_MSG_GROUP_ID = int(RSS_POST_MSG_GROUP_ID)
-    #SpamWatch API you can get it from get api from http://t.me/SpamWatchBot?start=token
+    # SpamWatch API you can get it from get api from http://t.me/SpamWatchBot?start=token
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
-    #SpamWatch ban Needed
+    # SpamWatch ban Needed
     SPAMWATCH_BAN = os.environ.get("SPAMWATCH_BAN", False)
 
 
