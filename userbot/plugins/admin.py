@@ -249,15 +249,15 @@ async def ban(bon):
         if reply:
             await reply.delete()
     except BadRequestError:
-        await bon.edit("`I dont have message nuking rights! But still he was banned!`")
+        await bon.edit("`I dont have message nuking rights! But still he is banned!`")
         return
     # Delete message and then tell that the command
     # is done gracefully
     # Shout out the ID, so that fedadmins can fban later
     if reason:
-        await bon.edit(f"`{str(user.id)}` was banned !!\nReason: {reason}")
+        await bon.edit(f"`{str(user.id)}` is banned !!\nReason: {reason}")
     else:
-        await bon.edit(f"`{str(user.id)}` was banned !!")
+        await bon.edit(f"`{str(user.id)}` is banned !!")
     # Announce to the logging group if we have banned the person
     # successfully!
     if BOTLOG:
@@ -587,11 +587,11 @@ async def spider(spdr):
         # Announce that the function is done
         if reason:
             await spdr.reply(
-                f"{user.first_name} was muted in {spdr.chat.title}\n"
+                f"{user.first_name} is muted in {spdr.chat.title}\n"
                 f"`Reason:`{reason}"
             )
         else:
-            await spdr.reply(f"{user.first_name} was muted in {spdr.chat.title}")
+            await spdr.reply(f"{user.first_name} is muted in {spdr.chat.title}")
         # Announce to logging group
         if BOTLOG:
             await spdr.client.send_message(
