@@ -54,10 +54,10 @@ async def _(event):
         sw = "**Spamwatch Banned :**`Not Connected`"
     caption = """**Info of [{}](tg://user?id={}):
    -🔖ID : **`{}`
-   **-**👥**Groups in Common : **{}
-   **-**🌏**Data Centre Number : **{}
-   **-**🔏**Restricted by telegram : **{}
-   **-**{}
+   **-**👥**Groups in Common : **`{}`
+   **-**🌏**Data Centre Number : **`{}`
+   **-**🔏**Restricted by telegram : **`{}`
+   **-**🦅{}
 """.format(
         first_name,
         user_id,
