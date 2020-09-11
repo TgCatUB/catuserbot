@@ -1,17 +1,18 @@
+from requests import get
 from telethon import events
+
 from .. import LOGS
 from ..utils import is_admin
 from . import spamwatch
-from asyncio import sleep
-from requests import get
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
 else:
     BOTLOG = True
     BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-    
+
 if Config.ANTISPAMBOT_BAN:
+
     @bot.on(events.ChatAction())
     async def _(event):
         chat = event.chat_id
@@ -39,14 +40,15 @@ if Config.ANTISPAMBOT_BAN:
                     except Exception as e:
                         LOGS.info(e)
                         data = None
-                        pass
-                    if data and data['ok']:
+                    if data and data["ok"]:
                         reason = f"[Banned by Combot Anti Spam](https://cas.chat/query?u={user.id})"
                         hmm = await event.reply(
                             f"This [{user.first_name}](tg://user?id={user.id}) was banned by Combat anti-spam service(CAS) For the reason check {reason}"
                         )
                         try:
-                            await bot.edit_permissions(chat, user.id, view_messages=False)
+                            await bot.edit_permissions(
+                                chat, user.id, view_messages=False
+                            )
                             catbanned = true
                         except Exception as e:
-                            LOGS.info(e)             
+                            LOGS.info(e)
