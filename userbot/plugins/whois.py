@@ -14,7 +14,7 @@ from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
-
+from requests import get
 from .. import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import spamwatch
@@ -47,17 +47,31 @@ async def _(event):
     if spamwatch:
         ban = spamwatch.get_ban(user_id)
         if ban:
-            sw = f"**Spamwatch Banned :**`True` \n       **-**🤷‍♂️**Reason : **`{ban.reason}`"
+            sw = f"**Spamwatch Banned :** `True` \n       **-**🤷‍♂️**Reason : **`{ban.reason}`"
         else:
-            sw = f"**Spamwatch Banned :**`False`"
+            sw = f"**Spamwatch Banned :** `False`"
     else:
         sw = "**Spamwatch Banned :**`Not Connected`"
+    try:
+        casurl = "https://api.cas.chat/check?user_id={}".format(user.id)
+        data = get(casurl).json()
+    except Exception as e:
+        LOGS.info(e)
+        data = None
+    if data:
+        if data["ok"]:
+            cas = "**Antispam(CAS) Banned :** `True`"
+        else:
+            cas = "**Antispam(CAS) Banned :** `False`"
+    else:
+        cas = "**Antispam(CAS) Banned :** `Couldn't Fetch`"
     caption = """**Info of [{}](tg://user?id={}):
    -🔖ID : **`{}`
    **-**👥**Groups in Common : **`{}`
    **-**🌏**Data Centre Number : **`{}`
    **-**🔏**Restricted by telegram : **`{}`
    **-**🦅{}
+   **-**👮‍♂️{}
 """.format(
         first_name,
         user_id,
@@ -66,6 +80,7 @@ async def _(event):
         dc_id,
         replied_user.user.restricted,
         sw,
+        cas,
     )
     await event.edit(caption)
 
