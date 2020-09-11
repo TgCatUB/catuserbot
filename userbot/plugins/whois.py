@@ -57,14 +57,14 @@ async def _(event):
    **-**👥**Groups in Common : **{}
    **-**🌏**Data Centre Number : **{}
    **-**🔏**Restricted by telegram : **{}
-{}
+   **-**{}
 """.format(
         first_name,
         user_id,
         user_id,
-        replied_user.user.restricted,
         common_chats,
         dc_id,
+        replied_user.user.restricted,
         sw,
     )
     await event.edit(caption)
