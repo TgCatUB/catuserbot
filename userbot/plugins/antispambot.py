@@ -1,6 +1,7 @@
 from requests import get
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
+
 from .. import LOGS
 from ..utils import is_admin
 from . import spamwatch
@@ -29,12 +30,14 @@ if Config.ANTISPAMBOT_BAN:
                     adder = event.action_message.from_id
                 except AttributeError:
                     return
-            async for admin in bot.iter_participants(event.chat_id, filter=ChannelParticipantsAdmins):
+            async for admin in bot.iter_participants(
+                event.chat_id, filter=ChannelParticipantsAdmins
+            ):
                 if admin.id == adder:
                     ignore = True
                     break
             if ignore:
-                return  
+                return
             if spamwatch:
                 ban = spamwatch.get_ban(user.id)
                 if ban:
