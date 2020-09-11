@@ -14,7 +14,8 @@ if Config.SPAMWATCH_BAN and spamwatch:
         chat = event.chat_id
         if event.user_joined:
             user = await event.get_user()
-            if not is_admin(bot, chat, user.id):
+            catadmin = is_admin(bot, chat, user.id)
+            if not catadmin:
                 return
             ban = spamwatch.get_ban(user.id)
             if ban:
