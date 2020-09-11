@@ -54,7 +54,7 @@ async def _(event):
     else:
         sw = "**Spamwatch Banned :**`Not Connected`"
     try:
-        casurl = "https://api.cas.chat/check?user_id={}".format(user.id)
+        casurl = "https://api.cas.chat/check?user_id={}".format(user_id)
         data = get(casurl).json()
     except Exception as e:
         LOGS.info(e)
