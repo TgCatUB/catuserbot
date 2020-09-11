@@ -68,8 +68,11 @@ def check_data_base_heal_th():
 
 
 # spamwatch support
-token = Config.SPAMWATCH_API
-spamwatch = spam_watch.Client(token)
+if Config.SPAMWATCH_API:
+    token = Config.SPAMWATCH_API
+    spamwatch = spam_watch.Client(token)
+else:
+    spamwatch = None
 
 
 async def catalive():
