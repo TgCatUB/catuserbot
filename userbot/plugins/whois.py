@@ -9,13 +9,15 @@
 
 import html
 import os
-from . import spamwatch
+
 from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
+
 from .. import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import spamwatch
 
 
 @borg.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
@@ -56,7 +58,15 @@ async def _(event):
    **-**🌏**Data Centre Number : **{}
    **-**🔏**Restricted by telegram : **{}
 {}
-""".format(first_name,user_id,user_id,replied_user.user.restricted,common_chats,dc_id,sw)
+""".format(
+        first_name,
+        user_id,
+        user_id,
+        replied_user.user.restricted,
+        common_chats,
+        dc_id,
+        sw,
+    )
     await event.edit(caption)
 
 
