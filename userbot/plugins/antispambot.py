@@ -30,7 +30,7 @@ if Config.ANTISPAMBOT_BAN:
                     )
                     try:
                         await bot.edit_permissions(chat, user.id, view_messages=False)
-                        catbanned = true
+                        catbanned = True
                     except Exception as e:
                         LOGS.info(e)
                 if not catbanned:
@@ -49,7 +49,7 @@ if Config.ANTISPAMBOT_BAN:
                             await bot.edit_permissions(
                                 chat, user.id, view_messages=False
                             )
-                            catbanned = true
+                            catbanned = True
                         except Exception as e:
                             LOGS.info(e)
                 if BOTLOG and catbanned:
