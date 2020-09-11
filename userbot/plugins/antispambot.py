@@ -5,8 +5,7 @@ from ..utils import is_admin
 from . import spamwatch
 from .gadmin import BANNED_RIGHTS
 
-if Config.SPAMWATCH_BAN:
-
+if Config.SPAMWATCH_BAN and spamwatch:
     @bot.on(events.ChatAction)
     async def _(event):
         chat = event.chat_id
