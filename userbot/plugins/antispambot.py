@@ -1,15 +1,9 @@
 from telethon import events
-from telethon.tl.functions.channels import EditBannedRequest
-
-from userbot.uniborgConfig import Config
-
 from .. import LOGS
 from ..utils import is_admin
 from . import spamwatch
-from .gadmin import BANNED_RIGHTS
 
 if Config.SPAMWATCH_BAN and spamwatch:
-
     @bot.on(events.ChatAction())
     async def _(event):
         chat = event.chat_id
@@ -24,6 +18,6 @@ if Config.SPAMWATCH_BAN and spamwatch:
                     f"This [{user.first_name}](tg://user?id={user.id}) was banned by spamwatch For the reason `{ban.reason}`"
                 )
                 try:
-                    await bot(EditBannedRequest(chat, user.id, BANNED_RIGHTS))
+                    await bot.edit_permissions(chat, user.id, view_messages=False)
                 except Exception as e:
                     return LOGS.info(e)
