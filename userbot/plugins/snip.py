@@ -127,15 +127,15 @@ async def on_snip_list(event):
     for note in notes:
         if message == "There are no saved notes in this chat":
             message = "Notes saved in this chat:\n"
-            message += "`#{}`\n".format(note.keyword)
+            message += "👉 `#{}`\n".format(note.keyword)
         else:
-            message += "`#{}`\n".format(note.keyword)
+            message += "👉 `#{}`\n".format(note.keyword)
     for a_snip in all_snips:
         if message == "There are no saved notes in this chat":
             message = "Notes saved in this chat:\n"
-            message += "`#{}`\n".format(a_snip.snip)
+            message += "👉 `#{}`\n".format(a_snip.snip)
         else:
-            message += "`#{}`\n".format(a_snip.snip)
+            message += "👉 `#{}`\n".format(a_snip.snip)
     if len(message) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(message)) as out_file:
             out_file.name = "snips.text"
