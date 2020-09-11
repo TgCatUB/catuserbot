@@ -9,12 +9,11 @@
 
 import html
 import os
-
+from . import spamwatch
 from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
-
 from .. import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
@@ -28,16 +27,6 @@ async def _(event):
     if replied_user is None:
         await edit_or_reply(event, str(error_i_a))
         return False
-    replied_user_profile_photos = await borg(
-        GetUserPhotosRequest(
-            user_id=replied_user.user.id, offset=42, max_id=0, limit=80
-        )
-    )
-    replied_user_profile_photos_count = "NaN"
-    try:
-        replied_user_profile_photos_count = replied_user_profile_photos.count
-    except AttributeError:
-        pass
     user_id = replied_user.user.id
     # some people have weird HTML in their names
     first_name = html.escape(replied_user.user.first_name)
@@ -48,56 +37,27 @@ async def _(event):
         # names
         first_name = first_name.replace("\u2060", "")
     # inspired by https://telegram.dog/afsaI181
-    user_bio = replied_user.about
-    if user_bio is not None:
-        user_bio = html.escape(replied_user.about)
     common_chats = replied_user.common_chats_count
     try:
         dc_id, location = get_input_location(replied_user.profile_photo)
-    except Exception as e:
-        dc_id = "Need a Profile Picture to check **this**"
-        str(e)
-    caption = """Detailed Whois:
-🔖ID: <code>{}</code>
-🤵Name: <a href='tg://user?id={}'>{}</a>
-✍️Bio: {}
-🌏Data Centre Number: {}
-🖼Number of Profile Pics: {}
-🔏Restricted: {}
-🌐Verified: {}
-🤖Bot: {}
-👥Groups in Common: {}
-List Of Telegram Data Centres:
-DC1 : Miami FL, USA
-DC2 : Amsterdam, NL
-DC3 : Miami FL, USA
-DC4 : Amsterdam, NL
-DC5 : Singapore, SG
-""".format(
-        user_id,
-        user_id,
-        first_name,
-        user_bio,
-        dc_id,
-        replied_user_profile_photos_count,
-        replied_user.user.restricted,
-        replied_user.user.verified,
-        replied_user.user.bot,
-        common_chats,
-    )
-    message_id_to_reply = event.message.reply_to_msg_id
-    if not message_id_to_reply:
-        message_id_to_reply = event.message.id
-    await borg.send_message(
-        event.chat_id,
-        caption,
-        reply_to=message_id_to_reply,
-        parse_mode="HTML",
-        file=replied_user.profile_photo,
-        force_document=False,
-        silent=True,
-    )
-    await event.delete()
+    except:
+        dc_id = "Couldn't fetch DC ID!"
+    if spamwatch:
+        ban = spamwatch.get_ban(user_id)
+        if ban:
+            sw = f"**Spamwatch Banned :**`True` \n **-Reason : **{ban.reason}"
+        else:
+            sw = f"**Spamwatch Banned :**`False`"
+    else:
+        sw = "**Spamwatch Banned :**`Not Connected`"
+    caption = """**Info of [{}](tg://user?id={}):
+   -🔖ID : **`{}`
+   **-**👥**Groups in Common : **{}
+   **-**🌏**Data Centre Number : **{}
+   **-**🔏**Restricted by telegram : **{}
+{}
+""".format(first_name,user_id,user_id,replied_user.user.restricted,common_chats,dc_id,sw)
+    await event.edit(caption)
 
 
 async def get_full_user(event):
@@ -226,9 +186,8 @@ async def fetch_info(replied_user, event):
     last_name = replied_user.user.last_name
     try:
         dc_id, location = get_input_location(replied_user.profile_photo)
-    except Exception as e:
+    except:
         dc_id = "Couldn't fetch DC ID!"
-        str(e)
     common_chat = replied_user.common_chats_count
     username = replied_user.user.username
     user_bio = replied_user.about
