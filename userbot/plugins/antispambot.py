@@ -16,12 +16,25 @@ if Config.ANTISPAMBOT_BAN:
     @bot.on(events.ChatAction())
     async def _(event):
         chat = event.chat_id
-        if event.user_joined:
+        if event.user_joined or event.user_added:
             user = await event.get_user()
             catadmin = await is_admin(bot, chat, bot.uid)
             if not catadmin:
                 return
             catbanned = None
+            adder = None
+            ignore = False
+            if event.user_added:
+                try:
+                    adder = event.action_message.from_id
+                except AttributeError:
+                    return
+            async for admin in bot.iter_participants(event.chat_id, filter=ChannelParticipantsAdmins):
+                if admin.id == adder:
+                    ignore = True
+                    break
+            if ignore:
+                return  
             if spamwatch:
                 ban = spamwatch.get_ban(user.id)
                 if ban:
