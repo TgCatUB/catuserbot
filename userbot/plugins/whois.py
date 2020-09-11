@@ -9,14 +9,13 @@
 
 import html
 import os
-from . import spamwatch
+
 from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 
 from .. import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
-
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
@@ -217,9 +216,7 @@ async def fetch_info(replied_user, event):
             user_id=replied_user.user.id, offset=42, max_id=0, limit=80
         )
     )
-    replied_user_profile_photos_count = (
-        "User haven't set profile pic"
-    )
+    replied_user_profile_photos_count = "User haven't set profile pic"
     try:
         replied_user_profile_photos_count = replied_user_profile_photos.count
     except AttributeError:
