@@ -5,6 +5,7 @@ from ..utils import is_admin
 from . import spamwatch
 
 if Config.ANTISPAMBOT_BAN:
+
     @bot.on(events.ChatAction())
     async def _(event):
         chat = event.chat_id
