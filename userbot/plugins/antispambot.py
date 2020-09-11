@@ -6,6 +6,7 @@ from .. import LOGS
 from ..utils import is_admin
 from . import spamwatch
 from .gadmin import BANNED_RIGHTS
+from telethon.tl.functions.channels import EditBannedRequest
 
 if Config.SPAMWATCH_BAN and spamwatch:
 
