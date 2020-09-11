@@ -64,7 +64,7 @@ async def add_new_filter(new_handler):
             )
             msg_id = msg_o.id
         else:
-            await new_handler.edit(
+            await edit_or_reply(new_handler,
                 "`Saving media as reply to the filter requires the BOTLOG_CHATID to be set.`"
             )
             return
@@ -73,18 +73,20 @@ async def add_new_filter(new_handler):
         string = rep_msg.text
     success = "`Filter` **{}** `{} successfully`"
     if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
-        await new_handler.edit(success.format(keyword, "added"))
-    else:
-        await new_handler.edit(success.format(keyword, "updated"))
+        return await edit_or_reply(new_handler,success.format(keyword, "added"))
+    remove_filter(str(new_handler.chat_id), keyword)
+    if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
+        return await edit_or_reply(new_handler,success.format(keyword, "Updated"))
+    await edit_or_reply(new_handler,f"Error while setting filter for {keyword}")
 
 
 @borg.on(admin_cmd(pattern="filters$"))
 @borg.on(sudo_cmd(pattern="filters$", allow_sudo=True))
 async def on_snip_list(event):
-    OUT_STR = "`There are no filters in this chat.`"
+    OUT_STR = "There are no filters in this chat."
     filters = get_filters(event.chat_id)
     for filt in filters:
-        if OUT_STR == "`There are no filters in this chat.`":
+        if OUT_STR == "There are no filters in this chat.":
             OUT_STR = "Active filters in this chat:\n"
             OUT_STR += "👉 `{}`\n".format(filt.keyword)
         else:
@@ -110,9 +112,9 @@ async def on_snip_list(event):
 async def remove_a_filter(r_handler):
     filt = r_handler.pattern_match.group(1)
     if not remove_filter(r_handler.chat_id, filt):
-        await r_handler.edit("`Filter` **{}** `doesn't exist.`".format(filt))
+        await r_handler.edit("Filter` {} `doesn't exist.".format(filt))
     else:
-        await r_handler.edit("`Filter` **{}** `was deleted successfully`".format(filt))
+        await r_handler.edit("Filter `{} `was deleted successfully".format(filt))
 
 
 @borg.on(admin_cmd(pattern="rmfilters$"))
