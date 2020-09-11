@@ -64,8 +64,9 @@ async def add_new_filter(new_handler):
             )
             msg_id = msg_o.id
         else:
-            await edit_or_reply(new_handler,
-                "`Saving media as reply to the filter requires the BOTLOG_CHATID to be set.`"
+            await edit_or_reply(
+                new_handler,
+                "`Saving media as reply to the filter requires the BOTLOG_CHATID to be set.`",
             )
             return
     elif new_handler.reply_to_msg_id and not string:
@@ -73,11 +74,11 @@ async def add_new_filter(new_handler):
         string = rep_msg.text
     success = "`Filter` **{}** `{} successfully`"
     if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
-        return await edit_or_reply(new_handler,success.format(keyword, "added"))
+        return await edit_or_reply(new_handler, success.format(keyword, "added"))
     remove_filter(str(new_handler.chat_id), keyword)
     if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
-        return await edit_or_reply(new_handler,success.format(keyword, "Updated"))
-    await edit_or_reply(new_handler,f"Error while setting filter for {keyword}")
+        return await edit_or_reply(new_handler, success.format(keyword, "Updated"))
+    await edit_or_reply(new_handler, f"Error while setting filter for {keyword}")
 
 
 @borg.on(admin_cmd(pattern="filters$"))
