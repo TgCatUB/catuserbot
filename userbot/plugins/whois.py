@@ -118,7 +118,8 @@ async def get_full_user(event):
             return replied_user, None
         except Exception as e:
             return None, e
-    return None , "No input is found"         
+    return None, "No input is found"
+
 
 @borg.on(admin_cmd(pattern="whois(?: |$)(.*)"))
 @borg.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
