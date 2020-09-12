@@ -99,7 +99,7 @@ async def _(event):
         + os.path.basename(file_name),
         "filebin": 'curl -X POST --data-binary "@{full_file_path}" -H "filename: {bare_local_name}" "https://filebin.net"',
         "anonymousfiles": 'curl -F file="@{full_file_path}" https://api.anonymousfiles.io/',
-        "vshare": 'curl -F "file=@{}" https://api.vshare.is/upload',
+        "vshare": 'curl -F "file=@{full_file_path}" https://api.vshare.is/upload',
         "bayfiles": 'curl -F "file=@{full_file_path}" https://bayfiles.com/api/upload',
     }
     filename = os.path.basename(file_name)
@@ -119,6 +119,11 @@ async def _(event):
     error = stderr.decode().strip()
     t_response = stdout.decode().strip()
     if t_response:
+        try:
+			t_response = json.dumps(json.loads(t_response), sort_keys=True, indent=4)
+		except Exception as e:
+			# some sites don't return valid JSONs
+			pass
         urls = re.findall("(?P<url>https?://[^\s]+)", t_response)
         result = ""
         for i in urls:
