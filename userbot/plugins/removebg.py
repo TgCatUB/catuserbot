@@ -18,15 +18,12 @@ Syntax: .rmbg as reply to a media"""
 import io
 import os
 from datetime import datetime
-
 import requests
-
 from .. import CMD_HELP
 from ..utils import admin_cmd
 from . import convert_toimage
 
 HELP_STR = "`.rmbg` as reply to a media, or give a link as an argument to this command"
-
 
 @borg.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
 async def _(event):
@@ -44,6 +41,7 @@ async def _(event):
         reply_message = await event.get_reply_message()
         # check if media message
         await event.edit("Ooh Analysing dis pic...")
+        file_name = "rmbg.png"
         if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
             os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
@@ -57,7 +55,7 @@ async def _(event):
             return
         else:
             await event.edit("sending to ReMove.BG")
-            downloaded_file_name = convert_toimage(downloaded_file_name)
+            downloaded_file_name = convert_toimage(downloaded_file_name) 
             output_file_name = ReTrieveFile(downloaded_file_name)
             os.remove(downloaded_file_name)
     elif input_str:
