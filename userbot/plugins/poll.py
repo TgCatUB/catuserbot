@@ -1,7 +1,6 @@
 import random
-
 from telethon.tl.types import InputMediaPoll, Poll
-
+from . import Build_Poll
 from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
@@ -24,4 +23,5 @@ async def pollcreator(catpoll):
                     answers=options,
                 )
             ),
+            reply_to = reply_to_id
         )
