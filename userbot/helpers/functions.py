@@ -6,12 +6,14 @@ import time
 from os.path import basename
 from random import choice
 from typing import Optional, Tuple
+
 import PIL.ImageOps
 import requests
 from PIL import Image
 from selenium import webdriver
-from telethon.tl.types import PollAnswer , Channel
+from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
+
 from userbot.uniborgConfig import Config
 
 
@@ -269,8 +271,8 @@ def deEmojify(inputString: str) -> str:
     return re.sub(EMOJI_PATTERN, "", inputString)
 
 
+# For polls
 
-#For polls
 
 def Build_Poll(options):
     i = 0
