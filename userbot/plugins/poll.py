@@ -1,7 +1,7 @@
 import random
 
 from telethon.tl.types import InputMediaPoll, Poll
-
+from telethon.errors.rpcbaseerrors import ForbiddenError
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import Build_Poll
 
@@ -28,8 +28,10 @@ async def pollcreator(catpoll):
                 reply_to=reply_to_id,
             )
             await catpoll.delete()
-        except Exception as e:
-            await edit_or_reply(catpoll, e)
+        except PollOptionInvalidError :
+            await edit_or_reply(catpoll, "`A poll option used invalid data (the data may be too long).`")
+        except ForbiddenError:
+            await edit_or_reply(catpoll, "`This chat has forbidden the polls`")
     else:
         catinput = string.split(";")
         if len(catinput) > 2 and len(catinput) < 12:
@@ -47,10 +49,13 @@ async def pollcreator(catpoll):
                     reply_to=reply_to_id,
                 )
                 await catpoll.delete()
-            except Exception as e:
-                await edit_or_reply(catpoll, e)
+            except PollOptionInvalidError :
+                await edit_or_reply(catpoll, "`A poll option used invalid data (the data may be too long).`")
+            except ForbiddenError:
+                await edit_or_reply(catpoll, "`This chat has forbidden the polls`")
         else:
             await edit_or_reply(
                 catpoll,
                 "Make sure that you used Correct syntax `.poll question ; option1 ; option2`",
             )
+            
