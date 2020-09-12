@@ -121,7 +121,7 @@ async def _(event):
     if t_response:
         try:
             t_response = json.dumps(json.loads(t_response), sort_keys=True, indent=4)
-        except Exception as e:
+        except Exception:
             # some sites don't return valid JSONs
             pass
         urls = re.findall("(?P<url>https?://[^\s]+)", t_response)
