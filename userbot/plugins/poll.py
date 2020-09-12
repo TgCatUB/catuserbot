@@ -1,8 +1,9 @@
 import random
+
 from telethon.tl.types import InputMediaPoll, Poll
+
+from ..utils import admin_cmd, sudo_cmd
 from . import Build_Poll
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="poll( (.*)|$)"))
@@ -23,5 +24,5 @@ async def pollcreator(catpoll):
                     answers=options,
                 )
             ),
-            reply_to = reply_to_id
+            reply_to=reply_to_id,
         )
