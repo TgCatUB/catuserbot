@@ -11,61 +11,52 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
-"""Remove.BG Plugin for @UniBorg
-Syntax: .rmbg https://link.to/image.extension
-Syntax: .rmbg as reply to a media"""
+
 import io
 import os
 from datetime import datetime
-
 import requests
-
 from .. import CMD_HELP
 from ..utils import admin_cmd
 from . import convert_toimage
 
-HELP_STR = "`.rmbg` as reply to a media, or give a link as an argument to this command"
-
-
 @borg.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
-async def _(event):
+@borg.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
+async def remove_background(event):
     if event.fwd_from:
         return
     if Config.REM_BG_API_KEY is None:
-        await event.edit("`You need API token from remove.bg to use this plugin.`")
-        return False
+        return await edit_or_reply( event , "`You need API token from remove.bg to use this plugin.`")
     cmd = event.pattern_match.group(1)
     input_str = event.pattern_match.group(2)
-    start = datetime.now()
-    message_id = event.message.id
+    message_id = None
     if event.reply_to_msg_id:
         message_id = event.reply_to_msg_id
         reply_message = await event.get_reply_message()
         # check if media message
-        await event.edit("Ooh Analysing dis pic...")
+        event = await edit_or_reply( event ,"Ooh Analysing dis pic...")
         file_name = "rmbg.png"
         if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
             os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
         try:
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await bot.download_media(
                 reply_message, downloaded_file_name
             )
         except Exception as e:
             await event.edit(str(e))
             return
         else:
-            await event.edit("sending to ReMove.BG")
+            await event.edit("`Removing Back ground od this media`")
             downloaded_file_name = convert_toimage(downloaded_file_name)
             output_file_name = ReTrieveFile(downloaded_file_name)
             os.remove(downloaded_file_name)
     elif input_str:
-        await event.edit("sending to ReMove.BG")
+        await event.edit("`Removing Back ground of this media`")
         output_file_name = ReTrieveURL(input_str)
     else:
-        await event.edit(HELP_STR)
+        await event.edit("`.rmbg`/`.srmbg` as reply to a media, or give a link as an argument to this command")
         return
     contentType = output_file_name.headers.get("content-type")
     if "image" in contentType:
@@ -76,34 +67,21 @@ async def _(event):
                     event.chat_id,
                     remove_bg_image,
                     force_document=True,
-                    supports_streaming=False,
-                    allow_cache=False,
                     reply_to=message_id,
                 )
-            end = datetime.now()
-            ms = (end - start).seconds
-            await event.edit("Removed dat annoying Backgroup in {} seconds".format(ms))
+            await event.delete()
         elif cmd == "srmbg":
             with io.BytesIO(output_file_name.content) as remove_bg_image:
                 remove_bg_image.name = "CATBG_less.webp"
                 await borg.send_file(
                     event.chat_id,
                     remove_bg_image,
-                    force_document=True,
-                    supports_streaming=False,
-                    allow_cache=False,
+                    force_document=False,
                     reply_to=message_id,
                 )
-            end = datetime.now()
-            ms = (end - start).seconds
-            await event.edit("Removed dat annoying Backgroup in {} seconds".format(ms))
+            await event.delete()
     else:
-        await event.edit(
-            "ReMove.BG API returned Errors. Please report to @catuserbot_support\n`{}".format(
-                output_file_name.content.decode("UTF-8")
-            )
-        )
-
+        await edit_or_reply( event , "`{}`".format(output_file_name.content.decode("UTF-8")))
 
 # this method will call the API, and return in the appropriate format
 # with the name provided.
@@ -141,7 +119,11 @@ def ReTrieveURL(input_url):
 
 CMD_HELP.update(
     {
-        "removebg": ".rmbg <Link to Image> or reply to any image (Warning: does not work on stickers.)\
-\nUsage: Removes the background of images, using remove.bg API"
+        "removebg": "**__Plugin : __**`removebg`\
+        \n\n**__Syntax : __**`.rmbg` <Link to Image> or reply to any image\
+        \n**__Usage : __**Removes the background of images and send as png format\
+        \n\n**__Syntax : __**`.srmbg` <Link to Image> or reply to any image\
+        \n**__Usage : __**Removes the background of images and send as sticker format\
+        "
     }
 )
