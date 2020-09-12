@@ -277,7 +277,7 @@ def Build_Poll(options):
     poll = []
     for option in options:
         i = i + 1
-        poll.append(PollAnswer(option, b"{}".format(i))
+        poll.append(PollAnswer(option, b"{}".format(i)))
     return poll
 
 
