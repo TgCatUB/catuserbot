@@ -1,5 +1,6 @@
 import random
-from .. import CMD_HELP , Build_Poll
+from . Build_Poll
+from .. import CMD_HELP 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from telethon.tl.types import InputMediaPoll, Poll
 
