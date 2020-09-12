@@ -131,7 +131,7 @@ async def _(event):
                 result += "\n" + i
             else:
                 result = f"the uploaded links of {selected_transfer} are :"
-                result = "\n" + i
+                result += "\n" + i
         await event.edit(result)
     else:
         await event.edit(error)
