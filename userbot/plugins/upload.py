@@ -43,7 +43,7 @@ async def uploadir(event):
         )
         for single_file in lst_of_files:
             if os.path.exists(single_file):
-                #https://stackoverflow.com/a/678242/4723940
+                # https://stackoverflow.com/a/678242/4723940
                 caption_rts = os.path.basename(single_file)
                 c_time = time.time()
                 if not caption_rts.lower().endswith(".mp4"):

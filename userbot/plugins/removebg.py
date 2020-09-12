@@ -18,7 +18,7 @@ import os
 import requests
 
 from .. import CMD_HELP
-from ..utils import admin_cmd,sudo_cmd,edit_or_reply
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import convert_toimage
 
 
