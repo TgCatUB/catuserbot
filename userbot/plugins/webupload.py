@@ -12,8 +12,11 @@ import requests
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 
-link_regex = re.compile("((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)" , re.DOTALL)
-                                                   
+link_regex = re.compile(
+    "((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)", re.DOTALL
+)
+
+
 @borg.on(admin_cmd(pattern="labstack ?(.*)"))
 async def labstack(event):
     if event.fwd_from:
