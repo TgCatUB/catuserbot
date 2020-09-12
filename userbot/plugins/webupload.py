@@ -89,10 +89,9 @@ async def _(event):
     else:
         reply = await event.get_reply_message()
         file_name = await bot.download_media(reply.media, Var.TEMP_DOWNLOAD_DIRECTORY)
-    event.message.id
     CMD_WEB = {
         "anonfiles": 'curl -F "file=@{}" https://anonfiles.com/api/upload',
-        "transfer": 'curl --upload-file "{}" https://transfer.sh/{os.path.basename(file_name)}',
+        "transfer": f'curl --upload-file "{}" https://transfer.sh/{os.path.basename(file_name)}',
         "filebin": 'curl -X POST --data-binary "@test.png" -H "filename: {}" "https://filebin.net"',
         "anonymousfiles": 'curl -F file="@{}" https://api.anonymousfiles.io/',
         "megaupload": 'curl -F "file=@{}" https://megaupload.is/api/upload',
@@ -103,7 +102,6 @@ async def _(event):
     except KeyError:
         await event.edit("Invalid selected Transfer")
     cmd = selected_one
-    time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
