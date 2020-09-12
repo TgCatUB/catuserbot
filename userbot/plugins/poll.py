@@ -16,7 +16,6 @@ async def pollcreator(catpoll):
     if not string:
         options = Build_Poll(["Yah sure 😊✌️", "Nah 😏😕", "Whatever die sur 🥱🙄"])
         try:
-            await catpoll.delete()
             await bot.send_message(
                 catpoll.chat_id,
                 file=InputMediaPoll(
@@ -28,6 +27,7 @@ async def pollcreator(catpoll):
                 ),
                 reply_to=reply_to_id,
             )
+            await catpoll.delete()
         except Exception as e:
             await edit_or_reply(catpoll, e)
     else:
@@ -35,7 +35,6 @@ async def pollcreator(catpoll):
         if len(catinput) > 2 and len(catinput) < 12:
             options = Build_Poll(catinput[1:])
             try:
-                await catpoll.delete()
                 await bot.send_message(
                     catpoll.chat_id,
                     file=InputMediaPoll(
@@ -47,6 +46,7 @@ async def pollcreator(catpoll):
                     ),
                     reply_to=reply_to_id,
                 )
+                await catpoll.delete()
             except Exception as e:
                 await edit_or_reply(catpoll, e)
         else:
