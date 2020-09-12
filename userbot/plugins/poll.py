@@ -45,7 +45,7 @@ async def pollcreator(catpoll):
                     reply_to=reply_to_id,
                 )
             except Exception as e:
-                await edit_or_reply( catpoll, e)
+                await edit_or_reply(catpoll, e)
         else:
             await edit_or_reply(
                 catpoll,
