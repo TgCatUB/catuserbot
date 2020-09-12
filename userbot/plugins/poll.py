@@ -1,6 +1,6 @@
 import random
 
-from telethon.errors.rpcbaseerrors import ForbiddenError
+from telethon.errors.rpcbaseerrors import ForbiddenError, PollOptionInvalidError
 from telethon.tl.types import InputMediaPoll, Poll
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
