@@ -68,7 +68,7 @@ async def remove_background(event):
     if "image" in contentType:
         if cmd == "rmbg":
             with io.BytesIO(output_file_name.content) as remove_bg_image:
-                remove_bg_image.name = "CATBG_less.png"
+                remove_bg_image.name = "BG_less.png"
                 await borg.send_file(
                     event.chat_id,
                     remove_bg_image,
@@ -82,7 +82,7 @@ async def remove_background(event):
                 await borg.send_file(
                     event.chat_id,
                     remove_bg_image,
-                    force_document=False,
+                    force_document=True,
                     reply_to=message_id,
                 )
             await event.delete()
