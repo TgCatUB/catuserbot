@@ -14,16 +14,34 @@ async def pollcreator(catpoll):
         reply_to_id = catpoll.reply_to_msg_id
     string = "".join(catpoll.text.split(maxsplit=1)[1:])
     if not string:
-        options = Build_Poll(["Yah sure😊✌️", "Nah😏😕", "Whatever die sur🥱🙄"])
+        options = Build_Poll(["Yah sure 😊✌️", "Nah 😏😕", "Whatever die sur 🥱🙄"])
+        await catpoll.delete()
         await bot.send_message(
             catpoll.chat_id,
             file=InputMediaPoll(
                 poll=Poll(
                     id=random.getrandbits(32),
-                    question="👆👆So do you guys agree to this?",
+                    question="👆👆So do you guys agree with this?",
                     answers=options,
                 )
             ),
             reply_to=reply_to_id,
         )
-        await catpoll.delete()
+    else:
+        catinput = string.split(";")
+        if len(catinput)>2 and len(catinput)<12:
+            options = Build_Poll(catinput[1:])
+            await catpoll.delete()
+            await bot.send_message(
+                catpoll.chat_id,
+                file=InputMediaPoll(
+                    poll=Poll(
+                        id=random.getrandbits(32),
+                        question=catinput[0],
+                        answers=options,
+                    )
+                ),
+                reply_to=reply_to_id,
+            )
+        else:
+            await edit_or_reply( catpoll , "Make sure that you used Correct syntax `.poll question ; option1 ; option2`")
