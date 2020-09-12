@@ -10,10 +10,10 @@ async def _(event):
     if event.fwd_from:
         return
     start = datetime.now()
-    event = await edit_or_reply(event, "Pong!")
+    event = await edit_or_reply(event, "__**💥 𝖕  𝖔  𝖓  𝖌 ! 💥💘**__")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
-    await event.edit("Pong!\n`{}`".format(ms))
+    await event.edit(f"__**💥 𝖕  𝖔  𝖓  𝖌 ! 💥💘**__\n`💥{ms}💥💘\n`__**💥𝖇𝖔𝖙**__ __**𝖒𝖆𝖘𝖙𝖊𝖗💥💘**__ [{DEFAULTUSER}]({USERNAME})".format(ms))
 
 
 @borg.on(admin_cmd(pattern=f"fping$", outgoing=True))
