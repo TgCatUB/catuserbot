@@ -9,7 +9,7 @@ from . import Build_Poll
 @borg.on(admin_cmd(pattern="poll( (.*)|$)"))
 @borg.on(sudo_cmd(pattern="poll( (.*)|$)", allow_sudo=True))
 async def pollcreator(catpoll):
-    reply_to_id = catpoll.message.id
+    reply_to_id = None
     if catpoll.reply_to_msg_id:
         reply_to_id = catpoll.reply_to_msg_id
     string = "".join(catpoll.text.split(maxsplit=1)[1:])
@@ -31,18 +31,21 @@ async def pollcreator(catpoll):
         catinput = string.split(";")
         if len(catinput) > 2 and len(catinput) < 12:
             options = Build_Poll(catinput[1:])
-            await catpoll.delete()
-            await bot.send_message(
-                catpoll.chat_id,
-                file=InputMediaPoll(
-                    poll=Poll(
-                        id=random.getrandbits(32),
-                        question=catinput[0],
-                        answers=options,
-                    )
-                ),
-                reply_to=reply_to_id,
-            )
+            try:
+                await catpoll.delete()
+                await bot.send_message(
+                    catpoll.chat_id,
+                    file=InputMediaPoll(
+                        poll=Poll(
+                            id=random.getrandbits(32),
+                            question=catinput[0],
+                            answers=options,
+                        )
+                    ),
+                    reply_to=reply_to_id,
+                )
+            except Exception as e:
+                await edit_or_reply( catpoll, e)
         else:
             await edit_or_reply(
                 catpoll,
