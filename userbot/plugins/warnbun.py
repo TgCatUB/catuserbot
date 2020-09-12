@@ -21,21 +21,21 @@ async def _(event):
         sql.reset_warns(reply_message.from_id, event.chat_id)
         if soft_warn:
             logger.info("TODO: kick user")
-            reply = "{} warnings, <u><a href='tg://user?id={}'>user</a></u> has been kicked!".format(
+            reply = "{} warnings, [user](tg://user?id={}) has to bee kicked!".format(
                 limit, reply_message.from_id
             )
         else:
             logger.info("TODO: ban user")
-            reply = "{} warnings, <u><a href='tg://user?id={}'>user</a></u> has been banned!".format(
+            reply = "{} warnings, [user](tg://user?id={}) has to bee banned!".format(
                 limit, reply_message.from_id
             )
     else:
-        reply = "<u><a href='tg://user?id={}'>user</a></u> has {}/{} warnings... watch out!".format(
+        reply = "[user](tg://user?id={}) has {}/{} warnings... watch out!".format(
             reply_message.from_id, num_warns, limit
         )
         if warn_reason:
             reply += "\nReason for last warn:\n{}".format(html.escape(warn_reason))
-    await edit_or_reply(event, reply, parse_mode="html")
+    await edit_or_reply(event, reply)
 
 
 @borg.on(admin_cmd(pattern="get_warns$"))
