@@ -15,18 +15,21 @@ async def pollcreator(catpoll):
     string = "".join(catpoll.text.split(maxsplit=1)[1:])
     if not string:
         options = Build_Poll(["Yah sure 😊✌️", "Nah 😏😕", "Whatever die sur 🥱🙄"])
-        await catpoll.delete()
-        await bot.send_message(
-            catpoll.chat_id,
-            file=InputMediaPoll(
-                poll=Poll(
-                    id=random.getrandbits(32),
-                    question="👆👆So do you guys agree with this?",
-                    answers=options,
-                )
-            ),
-            reply_to=reply_to_id,
-        )
+        try:
+            await catpoll.delete()
+            await bot.send_message(
+                catpoll.chat_id,
+                file=InputMediaPoll(
+                    poll=Poll(
+                        id=random.getrandbits(32),
+                        question="👆👆So do you guys agree with this?",
+                        answers=options,
+                    )
+                ),
+                reply_to=reply_to_id,
+            )
+        except Exception as e:
+            await edit_or_reply(catpoll, e)    
     else:
         catinput = string.split(";")
         if len(catinput) > 2 and len(catinput) < 12:
