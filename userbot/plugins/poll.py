@@ -12,7 +12,7 @@ async def pollcreator(catpoll):
     reply_to_id = catpoll.message.id
     if catpoll.reply_to_msg_id:
         reply_to_id = catpoll.reply_to_msg_id
-    string = "".join(event.text.split(maxsplit=1)[1:])
+    string = "".join(catpoll.text.split(maxsplit=1)[1:])
     if not string:
         options = Build_Poll(["Yah sure😊✌️", "Nah😏😕", "Whatever die sur🥱🙄"])
         await bot.send_message(
@@ -26,3 +26,4 @@ async def pollcreator(catpoll):
             ),
             reply_to=reply_to_id,
         )
+        await catpoll.delete()
