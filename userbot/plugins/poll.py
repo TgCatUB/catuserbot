@@ -29,7 +29,7 @@ async def pollcreator(catpoll):
                 reply_to=reply_to_id,
             )
         except Exception as e:
-            await edit_or_reply(catpoll, e)    
+            await edit_or_reply(catpoll, e)
     else:
         catinput = string.split(";")
         if len(catinput) > 2 and len(catinput) < 12:
