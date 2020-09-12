@@ -132,10 +132,10 @@ async def _(event):
         result = ""
         for i in urls:
             if result:
-                result += "\n" + i
+                result += f"\n{i}"
             else:
                 result = f"**Uploaded File link/links :**"
-                result += "\n" + i
+                result += f"\n{i}"
         await event.edit(result)
     else:
         await event.edit(error)
