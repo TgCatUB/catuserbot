@@ -12,7 +12,8 @@ import requests
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd
 
-
+link_regex = re.compile("((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)" , re.DOTALL)
+                                                   
 @borg.on(admin_cmd(pattern="labstack ?(.*)"))
 async def labstack(event):
     if event.fwd_from:
@@ -124,13 +125,13 @@ async def _(event):
         except Exception:
             # some sites don't return valid JSONs
             pass
-        urls = re.findall("(?P<url>https?://[^\s]+)", t_response)
+        urls = links = re.findall(link_regex, t_response)
         result = ""
         for i in urls:
             if result:
                 result += "\n" + i
             else:
-                result = f"the uploaded links of {selected_transfer} are :"
+                result = f"**Uploaded File link/links :**"
                 result += "\n" + i
         await event.edit(result)
     else:
