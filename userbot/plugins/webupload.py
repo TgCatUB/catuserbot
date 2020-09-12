@@ -5,7 +5,7 @@ import asyncio
 import json
 import os
 import subprocess
-
+import re
 import requests
 
 from userbot import CMD_HELP
@@ -73,7 +73,7 @@ async def labstack(event):
 
 @borg.on(
     admin_cmd(
-        pattern="webupload ?(.+?|) --(fileinfo|fileio|oload|anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles)"
+        pattern="webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|vshare|bayfiles)"
     )
 )
 async def _(event):
@@ -89,15 +89,14 @@ async def _(event):
         )
     # a dictionary containing the shell commands
     CMD_WEB = {
-        "fileinfo": '.exec ffmpeg -i "file=@{full_file_path}"',
         "fileio": 'curl -F "file=@{full_file_path}" https://file.io',
         "oload": 'curl -F "file=@{full_file_path}" https://api.openload.cc/upload',
         "anonfiles": 'curl -F "file=@{full_file_path}" https://anonfiles.com/api/upload',
-        "transfer": 'curl --upload-file "{full_file_path}" https://transfer.sh/{bare_local_name}',
+        "transfer": "curl --upload-file \"{full_file_path}\" https://transfer.sh/" + os.path.basename(file_name),
         "filebin": 'curl -X POST --data-binary "@{full_file_path}" -H "filename: {bare_local_name}" "https://filebin.net"',
         "anonymousfiles": 'curl -F file="@{full_file_path}" https://api.anonymousfiles.io/',
-        "megaupload": 'curl -F "file=@{full_file_path}" https://megaupload.is/api/upload',
-        "bayfiles": '.exec curl -F "file=@{full_file_path}" https://bayfiles.com/api/upload',
+        "vshare": "curl -F \"file=@{}\" https://api.vshare.is/upload"
+        "bayfiles": 'curl -F "file=@{full_file_path}" https://bayfiles.com/api/upload',
     }
     filename = os.path.basename(file_name)
     try:
@@ -113,22 +112,20 @@ async def _(event):
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
     stdout, stderr = await process.communicate()
-    stderr.decode().strip()
-    # logger.info(e_response)
+    error = stderr.decode().strip()
     t_response = stdout.decode().strip()
-    # logger.info(t_response)
-    """if e_response:
-		await event.edit(f"**FAILED** to __transload__: `{e_response}`")
-		return"""
     if t_response:
-        try:
-            t_response = json.dumps(json.loads(t_response), sort_keys=True, indent=4)
-        except Exception:
-            # some sites don't return valid JSONs
-            pass
-        # assuming, the return values won't be longer than
-        # 4096 characters
-        await event.edit(t_response)
+        urls = re.findall("(?P<url>https?://[^\s]+)", t_response)
+        result = ""
+        for i in urls:
+            if result:
+                result += "\n" + i
+            else:
+                result = f"the uploaded links of {selected_transfer} are :"
+                result = "\n" + i
+        await event.edit(result)
+    else:
+        await event.edit(error)
 
 
 CMD_HELP.update(
