@@ -113,8 +113,11 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "webupload": ".webupload ?(.+?|) (?:--)(anonfiles|transfer|filebin|anonymousfiles|megaupload|bayfiles\
-    \nexample: `.webupload --anonfiles` tag this to a file\
-"
+        "webupload": "__**PLUGIN NAME :** __ `webupload`\
+    \n\n**Syntax : ** `.webupload` ?(.+?|) (?:--)(`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`megaupload`|`bayfiles`\
+    \n**Usage : **Upload the file to web according to your choice\
+    \n**Example : **`.webupload --anonfiles` tag this to a file\
+    \n\n**Syntax :** `.labstack` Reply to a media file or provide a directory\
+    \n**Usage : **Upload the file to labstack for 7 days."
     }
 )
