@@ -2,7 +2,7 @@ import random
 
 from telethon.tl.types import InputMediaPoll, Poll
 
-from ..utils import admin_cmd, sudo_cmd
+from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from . import Build_Poll
 
 
