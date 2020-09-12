@@ -273,11 +273,11 @@ def deEmojify(inputString: str) -> str:
 #For polls
 
 def Build_Poll(options):
-    i = 1
+    i = 0
     poll = []
     for option in options:
+        i = i + 1
         poll.append(PollAnswer(option, b"{}".format(i))
-        i += 1
     return poll
 
 
