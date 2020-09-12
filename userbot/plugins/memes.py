@@ -260,7 +260,7 @@ async def _(event):
     await event.edit(reply_text)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="abusehim$"))
+@borg.on(admin_cmd(outgoing=True, pattern="abuse$"))
 async def abusing(abused):
     index = random.randint(0, len(memes.ABUSE_STRINGS) - 1)
     reply_text = memes.ABUSE_STRINGS[index]
