@@ -90,7 +90,7 @@ async def get_full_user(event):
     input_str = event.pattern_match.group(1)
     if input_str:
         try:
-            user_object = await event.client.get_entity(int(input_str))
+            user_object = await event.client.get_entity(input_str)
             user_id = user_object.id
             replied_user = await event.client(GetFullUserRequest(user_id))
             return replied_user, None
