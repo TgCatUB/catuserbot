@@ -14,11 +14,13 @@
 
 import io
 import os
-from datetime import datetime
+
 import requests
+
 from .. import CMD_HELP
 from ..utils import admin_cmd
 from . import convert_toimage
+
 
 @borg.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
 @borg.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
@@ -26,7 +28,9 @@ async def remove_background(event):
     if event.fwd_from:
         return
     if Config.REM_BG_API_KEY is None:
-        return await edit_or_reply( event , "`You need API token from remove.bg to use this plugin.`")
+        return await edit_or_reply(
+            event, "`You need API token from remove.bg to use this plugin.`"
+        )
     cmd = event.pattern_match.group(1)
     input_str = event.pattern_match.group(2)
     message_id = None
@@ -34,7 +38,7 @@ async def remove_background(event):
         message_id = event.reply_to_msg_id
         reply_message = await event.get_reply_message()
         # check if media message
-        event = await edit_or_reply( event ,"Ooh Analysing dis pic...")
+        event = await edit_or_reply(event, "Ooh Analysing dis pic...")
         file_name = "rmbg.png"
         if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
             os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -56,7 +60,9 @@ async def remove_background(event):
         await event.edit("`Removing Back ground of this media`")
         output_file_name = ReTrieveURL(input_str)
     else:
-        await event.edit("`.rmbg`/`.srmbg` as reply to a media, or give a link as an argument to this command")
+        await event.edit(
+            "`.rmbg`/`.srmbg` as reply to a media, or give a link as an argument to this command"
+        )
         return
     contentType = output_file_name.headers.get("content-type")
     if "image" in contentType:
@@ -81,7 +87,10 @@ async def remove_background(event):
                 )
             await event.delete()
     else:
-        await edit_or_reply( event , "`{}`".format(output_file_name.content.decode("UTF-8")))
+        await edit_or_reply(
+            event, "`{}`".format(output_file_name.content.decode("UTF-8"))
+        )
+
 
 # this method will call the API, and return in the appropriate format
 # with the name provided.
