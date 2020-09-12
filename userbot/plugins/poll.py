@@ -1,40 +1,20 @@
-"""Get Poll Info on non supported clients
-Syntax: .get_poll"""
-from userbot.utils import admin_cmd
+import random
+from .. import CMD_HELP , Build_Poll
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from telethon.tl.types import InputMediaPoll, Poll
 
-
-@borg.on(admin_cmd(pattern="get_poll"))
-async def _(event):
-    reply_message = await event.get_reply_message()
-    if reply_message.media is None:
-        await event.edit(
-            "Please reply to a media_type == @gPoll to view the questions and answers"
-        )
-    elif reply_message.media.poll is None:
-        await event.edit(
-            "Please reply to a media_type == @gPoll to view the questions and answers"
-        )
-    else:
-        media = reply_message.media
-        poll = media.poll
-        closed_status = poll.closed
-        answers = poll.answers
-        question = poll.question
-        edit_caption = """Poll is Closed: {}
-Question: {}
-Answers: \n""".format(
-            closed_status, question
-        )
-        if closed_status:
-            results = media.results
-            i = 0
-            for result in results.results:
-                edit_caption += "{}> {}    {}\n".format(
-                    result.option, answers[i].text, result.voters
-                )
-                i += 1
-            edit_caption += "Total Voters: {}".format(results.total_voters)
-        else:
-            for answer in answers:
-                edit_caption += "{}> {}\n".format(answer.option, answer.text)
-        await event.edit(edit_caption)
+@borg.on(admin_cmd(pattern="poll( (.*)|$)"))
+@borg.on(sudo_cmd(pattern="poll( (.*)|$)", allow_sudo=True))
+async def pollcreator(catpoll):
+    reply_to_id = catpoll.message.id
+    if catpoll.reply_to_msg_id:
+        reply_to_id = catpoll.reply_to_msg_id
+    string = "".join(event.text.split(maxsplit=1)[1:])
+    if not string:
+        options = Build_Poll(['Yah sure😊✌️', 'Nah😏😕', 'Whatever die sur🥱🙄'])
+        await bot.send_message(catpoll.chat_id ,file=InputMediaPoll(poll=Poll(
+                                    id=random.getrandbits(32),
+                                    question="👆👆So do you guys agree to this?",
+                                    answers= options
+                                )
+                            )) 
