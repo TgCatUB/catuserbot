@@ -28,8 +28,7 @@ async def _(event):
         return
     replied_user, error_i_a = await get_full_user(event)
     if replied_user is None:
-        await edit_or_reply(event, str(error_i_a))
-        return False
+        return await edit_or_reply(event, f"`{str(error_i_a)}`")
     user_id = replied_user.user.id
     # some people have weird HTML in their names
     first_name = html.escape(replied_user.user.first_name)
@@ -90,6 +89,10 @@ async def get_full_user(event):
     input_str = event.pattern_match.group(1)
     if input_str:
         try:
+            try:
+                input_str = int(input_str)
+            except:
+                pass
             user_object = await event.client.get_entity(input_str)
             user_id = user_object.id
             replied_user = await event.client(GetFullUserRequest(user_id))
@@ -115,7 +118,7 @@ async def get_full_user(event):
             return replied_user, None
         except Exception as e:
             return None, e
-
+    return None , "No input is found"         
 
 @borg.on(admin_cmd(pattern="whois(?: |$)(.*)"))
 @borg.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
