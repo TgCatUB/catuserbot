@@ -18,24 +18,22 @@ Syntax: .rmbg as reply to a media"""
 import io
 import os
 from datetime import datetime
-
 import requests
+from .. import CMD_HELP
+from ..utils import admin_cmd
+from . import convert_toimage
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+HELP_STR = "`.rmbg` as reply to a media, or give a link as an argument to this command"
 
-
-@borg.on(admin_cmd(pattern="rmbg ?(.*)"))
+@borg.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
 async def _(event):
-    HELP_STR = (
-        "`.rmbg` as reply to a media, or give a link as an argument to this command"
-    )
     if event.fwd_from:
         return
     if Config.REM_BG_API_KEY is None:
-        await event.edit("You need API token from remove.bg to use this plugin.")
+        await event.edit("`You need API token from remove.bg to use this plugin.`")
         return False
-    input_str = event.pattern_match.group(1)
+    cmd = event.pattern_match.group(1)
+    input_str = event.pattern_match.group(2)
     start = datetime.now()
     message_id = event.message.id
     if event.reply_to_msg_id:
@@ -43,15 +41,21 @@ async def _(event):
         reply_message = await event.get_reply_message()
         # check if media message
         await event.edit("Ooh Analysing dis pic...")
+        filename = "rmbg.png"
+        if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+            os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+        to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
+        downloaded_file_name = os.path.join(to_download_directory, file_name)
         try:
             downloaded_file_name = await borg.download_media(
-                reply_message, Config.TMP_DOWNLOAD_DIRECTORY
+                reply_message, downloaded_file_name
             )
         except Exception as e:
             await event.edit(str(e))
             return
         else:
             await event.edit("sending to ReMove.BG")
+            downloaded_file_name = convert_toimage(downloaded_file_name) 
             output_file_name = ReTrieveFile(downloaded_file_name)
             os.remove(downloaded_file_name)
     elif input_str:
@@ -62,19 +66,34 @@ async def _(event):
         return
     contentType = output_file_name.headers.get("content-type")
     if "image" in contentType:
-        with io.BytesIO(output_file_name.content) as remove_bg_image:
-            remove_bg_image.name = "BG_less.png"
-            await borg.send_file(
-                event.chat_id,
-                remove_bg_image,
-                force_document=True,
-                supports_streaming=False,
-                allow_cache=False,
-                reply_to=message_id,
-            )
-        end = datetime.now()
-        ms = (end - start).seconds
-        await event.edit("Removed dat annoying Backgroup in {} seconds".format(ms))
+        if cmd == "rmbg":
+            with io.BytesIO(output_file_name.content) as remove_bg_image:
+                remove_bg_image.name = "CATBG_less.png"
+                await borg.send_file(
+                    event.chat_id,
+                    remove_bg_image,
+                    force_document=True,
+                    supports_streaming=False,
+                    allow_cache=False,
+                    reply_to=message_id,
+                )
+            end = datetime.now()
+            ms = (end - start).seconds
+            await event.edit("Removed dat annoying Backgroup in {} seconds".format(ms))
+        elif cmd == "srmbg":
+            with io.BytesIO(output_file_name.content) as remove_bg_image:
+                remove_bg_image.name = "CATBG_less.webp"
+                await borg.send_file(
+                    event.chat_id,
+                    remove_bg_image,
+                    force_document=True,
+                    supports_streaming=False,
+                    allow_cache=False,
+                    reply_to=message_id,
+                )
+            end = datetime.now()
+            ms = (end - start).seconds
+            await event.edit("Removed dat annoying Backgroup in {} seconds".format(ms))
     else:
         await event.edit(
             "ReMove.BG API returned Errors. Please report to @catuserbot_support\n`{}".format(
