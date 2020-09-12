@@ -14,7 +14,7 @@ from pytz import timezone as tz
 from userbot import CMD_HELP, COUNTRY, TZ_NUMBER
 from userbot.utils import admin_cmd
 
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf"
+FONT_FILE_TO_USE = "userbot/helpers/styles/digital.ttf"
 
 LOCATION = Config.TZ
 
