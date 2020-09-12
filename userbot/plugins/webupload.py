@@ -1,11 +1,12 @@
- # originally created by
+# originally created by
 # https://github.com/Total-Noob-69/X-tra-Telegram/blob/master/userbot/plugins/webupload.py
 
 import asyncio
 import json
 import os
-import subprocess
 import re
+import subprocess
+
 import requests
 
 from userbot import CMD_HELP
@@ -92,10 +93,11 @@ async def _(event):
         "fileio": 'curl -F "file=@{full_file_path}" https://file.io',
         "oload": 'curl -F "file=@{full_file_path}" https://api.openload.cc/upload',
         "anonfiles": 'curl -F "file=@{full_file_path}" https://anonfiles.com/api/upload',
-        "transfer": "curl --upload-file \"{full_file_path}\" https://transfer.sh/" + os.path.basename(file_name),
+        "transfer": 'curl --upload-file "{full_file_path}" https://transfer.sh/'
+        + os.path.basename(file_name),
         "filebin": 'curl -X POST --data-binary "@{full_file_path}" -H "filename: {bare_local_name}" "https://filebin.net"',
         "anonymousfiles": 'curl -F file="@{full_file_path}" https://api.anonymousfiles.io/',
-        "vshare": "curl -F \"file=@{}\" https://api.vshare.is/upload",
+        "vshare": 'curl -F "file=@{}" https://api.vshare.is/upload',
         "bayfiles": 'curl -F "file=@{full_file_path}" https://bayfiles.com/api/upload',
     }
     filename = os.path.basename(file_name)
