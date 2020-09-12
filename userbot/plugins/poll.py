@@ -29,7 +29,7 @@ async def pollcreator(catpoll):
         )
     else:
         catinput = string.split(";")
-        if len(catinput)>2 and len(catinput)<12:
+        if len(catinput) > 2 and len(catinput) < 12:
             options = Build_Poll(catinput[1:])
             await catpoll.delete()
             await bot.send_message(
@@ -44,4 +44,7 @@ async def pollcreator(catpoll):
                 reply_to=reply_to_id,
             )
         else:
-            await edit_or_reply( catpoll , "Make sure that you used Correct syntax `.poll question ; option1 ; option2`")
+            await edit_or_reply(
+                catpoll,
+                "Make sure that you used Correct syntax `.poll question ; option1 ; option2`",
+            )
