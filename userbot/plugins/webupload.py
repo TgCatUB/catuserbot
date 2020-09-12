@@ -120,10 +120,10 @@ async def _(event):
     t_response = stdout.decode().strip()
     if t_response:
         try:
-			t_response = json.dumps(json.loads(t_response), sort_keys=True, indent=4)
-		except Exception as e:
-			# some sites don't return valid JSONs
-			pass
+            t_response = json.dumps(json.loads(t_response), sort_keys=True, indent=4)
+        except Exception as e:
+            # some sites don't return valid JSONs
+            pass
         urls = re.findall("(?P<url>https?://[^\s]+)", t_response)
         result = ""
         for i in urls:
@@ -142,7 +142,8 @@ async def _(event):
 CMD_HELP.update(
     {
         "webupload": "__**PLUGIN NAME :** __ `webupload`\
-    \n\n**Syntax : ** `.webupload` ?(.+?|) (?:--)(`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`megaupload`|`bayfiles`\
+    \n\n**Syntax : **`.webupload` --(`fileio`|`oload`|`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`vshare`|`bayfiles`) or \
+    \n         `.webuplod` (path of file) --(`fileio`|`oload`|`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`vshare`|`bayfiles`)\
     \n**Usage : **Upload the file to web according to your choice\
     \n**Example : **`.webupload --anonfiles` tag this to a file\
     \n\n**Syntax :** `.labstack` Reply to a media file or provide a directory\
