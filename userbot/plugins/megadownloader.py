@@ -139,10 +139,11 @@ async def mega_downloader(megadl):
                 display_message = current_message
         except Exception:
             pass
-        finally:
-            if status == "Combining":
-                wait = round(downloader.get_eta())
-                await asyncio.sleep(wait)
+        if status == "Combining":
+            wait = round(downloader.get_eta())
+            await asyncio.sleep(wait)
+        else:
+            wait = 0
     if downloader.isSuccessful():
         download_time = round(downloader.get_dl_time() + wait)
         try:
