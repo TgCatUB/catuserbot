@@ -32,7 +32,7 @@ async def spammer(e):
         await e.client(hmm)
     except BaseException:
         pass
-    cat = e.pattern_match.group(1).split(" ", 1)
+    cat = ("".join(e.text.split(maxsplit=1)[1:])).split(" ", 1)
     counter = int(cat[0])
     if len(cat) == 2:
         spam_message = str(e.pattern_match.group(1).split(" ", 1)[1])
@@ -148,7 +148,7 @@ async def spammer(e):
 
 @borg.on(admin_cmd("cspam ?(.*)"))
 async def tmeme(e):
-    cspam = str(e.pattern_match.group(1))
+    cspam = str("".join(e.text.split(maxsplit=1)[1:]))
     message = cspam.replace(" ", "")
     await e.delete()
     for letter in message:
@@ -168,9 +168,9 @@ async def tmeme(e):
             )
 
 
-@borg.on(admin_cmd("wspam ?(.*)"))
+@borg.on(admin_cmd("wspam (.*)"))
 async def tmeme(e):
-    wspam = str(e.pattern_match.group(1))
+    wspam = str("".join(e.text.split(maxsplit=1)[1:]))
     message = wspam.split()
     await e.delete()
     for word in message:
@@ -190,13 +190,14 @@ async def tmeme(e):
             )
 
 
-@borg.on(admin_cmd("delayspam ?(.*)"))
+@borg.on(admin_cmd("delayspam (.*)"))
 async def spammer(e):
     if e.fwd_from:
         return
-    spamDelay = float(e.pattern_match.group(1).split(" ", 2)[0])
-    counter = int(e.pattern_match.group(1).split(" ", 2)[1])
-    spam_message = str(e.pattern_match.group(1).split(" ", 2)[2])
+    input_str = "".join(e.text.split(maxsplit=1)[1:])
+    spamDelay = float(input_str.split(" ", 2)[0])
+    counter = int(input_str.split(" ", 2)[1])
+    spam_message = str(input_str.split(" ", 2)[2])
     await e.delete()
     for i in range(1, counter):
         await e.respond(spam_message)
