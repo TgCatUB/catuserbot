@@ -6,6 +6,7 @@ from telethon.tl.types import InputMediaPoll, Poll
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import Build_Poll
+from .. import CMD_HELP
 
 
 @borg.on(admin_cmd(pattern="poll( (.*)|$)"))
@@ -36,6 +37,8 @@ async def pollcreator(catpoll):
             )
         except ForbiddenError:
             await edit_or_reply(catpoll, "`This chat has forbidden the polls`")
+        except exception as e:
+            await edit_or_reply(catpoll, str(e))
     else:
         catinput = string.split(";")
         if len(catinput) > 2 and len(catinput) < 12:
@@ -60,8 +63,22 @@ async def pollcreator(catpoll):
                 )
             except ForbiddenError:
                 await edit_or_reply(catpoll, "`This chat has forbidden the polls`")
+            except exception as e:
+                await edit_or_reply(catpoll, str(e))
         else:
             await edit_or_reply(
                 catpoll,
                 "Make sure that you used Correct syntax `.poll question ; option1 ; option2`",
             )
+
+
+CMD_HELP.update(
+    {
+        "poll": "**Plugin :**`poll`\
+        \n\n**Syntax :** `.poll`\
+        \n**Usage : **If you doesnt give any input it sends a default poll. if you like customize it then use this syntax :\
+        \n `.poll question ; option 1; option2 ;`\
+        \n ';' this seperates the each option and question \
+        "
+    }
+)            
