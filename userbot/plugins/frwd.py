@@ -23,5 +23,4 @@ async def _(event):
         # https://t.me/telethonofftopic/78166
         fwd_message = await borg.forward_messages(e, re_message, silent=True)
         await borg.forward_messages(event.chat_id, fwd_message)
-        await fwd_message.delete()
         await event.delete()
