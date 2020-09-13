@@ -1,5 +1,5 @@
 #    Copyright (C) 2020  sandeep.n(π.$)
-#button post makker for catuserbot thanks to uniborg for the base 
+# button post makker for catuserbot thanks to uniborg for the base
 # by @sandy1709 (@mrconfused)
 import os
 import re
