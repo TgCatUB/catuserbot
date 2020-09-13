@@ -1,7 +1,6 @@
 """ It does not do to dwell on dreams and forget to live
 Syntax: .getime"""
 
-import asyncio
 import os
 from datetime import datetime
 from datetime import datetime as dt
@@ -173,8 +172,8 @@ async def _(event):
     elif event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         reply_msg_id = previous_message.id
-    if not os.path.isdir("./temp/"): 
-        os.makedirs("./temp/")  
+    if not os.path.isdir("./temp/"):
+        os.makedirs("./temp/")
     required_file_name = (
         Config.TMP_DOWNLOAD_DIRECTORY + " " + str(datetime.now()) + ".webp"
     )
@@ -183,7 +182,7 @@ async def _(event):
     drawn_text = ImageDraw.Draw(img)
     drawn_text.text((10, 10), current_time, font=fnt, fill=(255, 255, 255))
     img.save(required_file_name)
-    await borg.send_file( 
+    await borg.send_file(
         event.chat_id,
         required_file_name,
         # Courtesy: @ManueI15
