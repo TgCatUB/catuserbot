@@ -148,7 +148,8 @@ async def _(event):
         )
     if x == 33:
         await event.edit("Not in a mood to sing. Sorry!")
-        
+
+
 @borg.on(admin_cmd(pattern=f"hps$", outgoing=True))
 async def _(event):
     if event.fwd_from:
