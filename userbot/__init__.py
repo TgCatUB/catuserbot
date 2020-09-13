@@ -100,15 +100,15 @@ else:
     PLACEHOLDER = None
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
-#if not os.path.exists("bin"):
+# if not os.path.exists("bin"):
 #    os.mkdir("bin")
-#binaries = {
+# binaries = {
 #    "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown": "bin/megadown",
 #    "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py": "bin/cmrudl",
 #    "https://raw.githubusercontent.com/adekmaulana/python-scripts/master/shell/megadirect": "bin/megadirect",
-#}
+# }
 
-#for binary, path in binaries.items():
+# for binary, path in binaries.items():
 #    downloader = SmartDL(binary, path, progress_bar=False)
 #    downloader.start()
 #    os.chmod(path, 0o755)
