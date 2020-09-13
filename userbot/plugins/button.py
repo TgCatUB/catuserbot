@@ -1,7 +1,6 @@
-"""
-Create Button Posts imported from uniborg
-modified for catuserbot by @sandy1709
-"""
+#    Copyright (C) 2020  sandeep.n(π.$)
+#button post makker for catuserbot thanks to uniborg for the base 
+# by @sandy1709 (@mrconfused)
 import os
 import re
 
