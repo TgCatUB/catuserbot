@@ -4,13 +4,15 @@ GITHUB File Uploader Plugin for userbot. Heroku Automation should be Enabled. El
 Instructions:- Set GITHUB_ACCESS_TOKEN and GIT_REPO_NAME Variables in Heroku vars First
 usage:- .commit reply_to_any_plugin //can be any type of file too. but for plugin must be in .py
 """
-import requests
-from userbot.utils import admin_cmd
-from github import Github
 import os
 import time
 from datetime import datetime
+
+import requests
+from github import Github
+
 from userbot import CMD_HELP
+from userbot.utils import admin_cmd
 
 GIT_TEMP_DIR = "./userbot/temp/"
 
@@ -41,11 +43,13 @@ Company: {}
 Blog: {}
 Location: {}
 Bio: {}
-Profile Created: {}""".format(name, html_url, gh_type, company, blog, location, bio, created_at),
+Profile Created: {}""".format(
+                name, html_url, gh_type, company, blog, location, bio, created_at
+            ),
             file=avatar_url,
             force_document=False,
             allow_cache=False,
-            reply_to=event
+            reply_to=event,
         )
         await event.delete()
     else:
@@ -71,8 +75,7 @@ async def download(event):
         time.time()
         print("Downloading to TEMP directory")
         downloaded_file_name = await bot.download_media(
-            reply_message.media,
-            GIT_TEMP_DIR
+            reply_message.media, GIT_TEMP_DIR
         )
     except Exception as e:
         await mone.edit(str(e))
@@ -80,7 +83,9 @@ async def download(event):
         end = datetime.now()
         ms = (end - start).seconds
         await event.delete()
-        await mone.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
+        await mone.edit(
+            "Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms)
+        )
         await mone.edit("Committing to Github....")
         await git_commit(downloaded_file_name, mone)
 
@@ -89,7 +94,7 @@ async def git_commit(file_name, mone):
     content_list = []
     access_token = Var.GITHUB_ACCESS_TOKEN
     g = Github(access_token)
-    file = open(file_name, "r", encoding='utf-8')
+    file = open(file_name, "r", encoding="utf-8")
     commit_data = file.read()
     repo = g.get_repo(Var.GIT_REPO_NAME)
     print(repo.name)
@@ -109,25 +114,28 @@ async def git_commit(file_name, mone):
         print(file_name)
         try:
             repo.create_file(
-                file_name,
-                "Uploaded New Plugin",
-                commit_data,
-                branch="master")
+                file_name, "Uploaded New Plugin", commit_data, branch="master"
+            )
             print("Committed File")
             ccess = Var.GIT_REPO_NAME
             ccess = ccess.strip()
-            await mone.edit(f"`Commited On Your Github Repo`\n\n[Your PLUGINS](https://github.com/{ccess}/tree/master/userbot/plugins/)")
+            await mone.edit(
+                f"`Commited On Your Github Repo`\n\n[Your PLUGINS](https://github.com/{ccess}/tree/master/userbot/plugins/)"
+            )
         except BaseException:
             print("Cannot Create Plugin")
             await mone.edit("Cannot Upload Plugin")
     else:
         return await mone.edit("`Committed Suicide`")
 
-CMD_HELP.update({
-    'github': "__**PLUGIN NAME :** Github__\
+
+CMD_HELP.update(
+    {
+        "github": "__**PLUGIN NAME :** Github__\
     \n\n📌** CMD ➥** `.github` USERNAME\
     \n**USAGE   ➥  **Shows you the github information about the username you given\
     \n\n📌** CMD ➥** `.commit` reply to python file to upload to github\
     \n**USAGE   ➥  **It uploads the given file to your github repo(to userbot/plugins folder)\
     \n\nTo work commit plugin set `GITHUB_ACCESS_TOKEN` and `GIT_REPO_NAME` Variables in Heroku vars First"
-})
+    }
+)

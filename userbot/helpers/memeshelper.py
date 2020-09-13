@@ -203,7 +203,7 @@ RUNSREACTS = [
     "May the odds be ever in your favour.",
     "Famous last words.",
     "And they disappeared forever, never to be seen again.",
-    "\"Oh, look at me! I'm so cool, I can run from a bot!\" - this person",
+    '"Oh, look at me! I\'m so cool, I can run from a bot!" - this person',
     "Yeah yeah, just tap /kickme already.",
     "Here, take this ring and head to Mordor while you're at it.",
     "Legend has it, they're still running...",
@@ -266,7 +266,6 @@ PRO_STRINGS = [
     "`UH DONT KNOW MEH SO STAY AWAY LAWDE`",
     "`Kysa kysaaaa haaan? Phir MAAR nhi Khayega tu?`",
     "`Zikr Jinka hota hai galiyo meh woh bhosdika ajj paya gya naliyo me`",
-
 ]
 CHU_STRINGS = [
     "`Taare hai Asmaan me very very bright jaat na jla bskd dekh le apni hight.`",
@@ -446,7 +445,8 @@ SLAP_TEMPLATES = [
     "put {victim} in check-mate.",
     "{user1} RSA-encrypted {victim} and deleted the private key.",
     "{user1} put {victim} in the friendzone.",
-    "{user1} slaps {victim} with a DMCA takedown request!"]
+    "{user1} slaps {victim} with a DMCA takedown request!",
+]
 
 
 ITEMS = [

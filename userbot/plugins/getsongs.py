@@ -1,6 +1,8 @@
 """
 credits to @mrconfused and @sandy1709
 """
+import glob
+
 #    Copyright (C) 2020  sandeep.n(π.$)
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -13,12 +15,13 @@ credits to @mrconfused and @sandy1709
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os
-import glob
+
 import pybase64
-from .. import CMD_HELP, ALIVE_NAME
-from . import catmusic, catmusicvideo
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+
+from .. import ALIVE_NAME, CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import catmusic, catmusicvideo
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
@@ -67,7 +70,7 @@ async def _(event):
         caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
         thumb=catthumb,
         supports_streaming=True,
-        reply_to=reply_to_id
+        reply_to=reply_to_id,
     )
     await event.delete()
     os.system("rm -rf ./temp/*.mp3")
@@ -118,7 +121,7 @@ async def _(event):
         caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
         thumb=catthumb,
         supports_streaming=True,
-        reply_to=reply_to_id
+        reply_to=reply_to_id,
     )
     await event.delete()
     os.system("rm -rf ./temp/*.mp3")
@@ -167,16 +170,20 @@ async def _(event):
         thumb=catthumb,
         caption=f"➥ __**Song :- {query}**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})",
         supports_streaming=True,
-        reply_to=reply_to_id
+        reply_to=reply_to_id,
     )
     await event.delete()
     os.system("rm -rf ./temp/*.mp4")
     os.system("rm -rf ./temp/*.jpg")
     os.system("rm -rf ./temp/*.webp")
 
-CMD_HELP.update({"getsongs": "__**PLUGIN NAME :** Get Songs__\
+
+CMD_HELP.update(
+    {
+        "getsongs": "__**PLUGIN NAME :** Get Songs__\
     \n\n📌** CMD ➥** `.song` query or `.song` reply to song name :\
     \n**USAGE   ➥  **Finds the song you entered in query and sends it\
     \n\n📌** CMD ➥** `.vsong` query or `.vsong` reply to song name :\
     \n**USAGE   ➥  **Finds the video song you entered in query and sends it"
-                 })
+    }
+)

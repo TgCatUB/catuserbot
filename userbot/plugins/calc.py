@@ -2,6 +2,7 @@
 import io
 import sys
 import traceback
+
 from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply
 
@@ -37,18 +38,20 @@ async def _(car):
     else:
         evaluation = "Sorry I cant find result for the given equation"
     final_output = "**EQUATION**: `{}` \n\n **SOLUTION**: \n`{}` \n".format(
-        cmd, evaluation)
+        cmd, evaluation
+    )
     await event.edit(final_output)
 
 
 async def aexec(code, event):
-    exec(
-        f'async def __aexec(event): ' +
-        ''.join(f'\n {l}' for l in code.split('\n'))
-    )
-    return await locals()['__aexec'](event)
+    exec(f"async def __aexec(event): " + "".join(f"\n {l}" for l in code.split("\n")))
+    return await locals()["__aexec"](event)
 
-CMD_HELP.update({"calc": "__**PLUGIN NAME :** Calc__\
+
+CMD_HELP.update(
+    {
+        "calc": "__**PLUGIN NAME :** Calc__\
       \n\n📌** CMD ➥** `.calc` your equation :\
       \n**USAGE   ➥  **Solves the given maths equation by bodmass rule. "
-                 })
+    }
+)

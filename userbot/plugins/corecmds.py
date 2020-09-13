@@ -1,9 +1,10 @@
-from ..utils import admin_cmd, remove_plugin, load_module, sudo_cmd, edit_or_reply
-from datetime import datetime
-from .. import ALIVE_NAME
-from pathlib import Path
 import asyncio
 import os
+from datetime import datetime
+from pathlib import Path
+
+from .. import ALIVE_NAME
+from ..utils import admin_cmd, edit_or_reply, load_module, remove_plugin, sudo_cmd
 
 DELETE_TIMEOUT = 5
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
@@ -18,18 +19,27 @@ async def install(event):
         return
     if event.reply_to_msg_id:
         try:
-            downloaded_file_name = await event.client.download_media(  # pylint:disable=E0602
-                await event.get_reply_message(),
-                "userbot/plugins/"  # pylint:disable=E0602
+            downloaded_file_name = (
+                await event.client.download_media(  # pylint:disable=E0602
+                    await event.get_reply_message(),
+                    "userbot/plugins/",  # pylint:disable=E0602
+                )
             )
             if "(" not in downloaded_file_name:
                 path1 = Path(downloaded_file_name)
                 shortname = path1.stem
                 load_module(shortname.replace(".py", ""))
-                await edit_or_reply(event, "Installed Plugin `{}`".format(os.path.basename(downloaded_file_name)))
+                await edit_or_reply(
+                    event,
+                    "Installed Plugin `{}`".format(
+                        os.path.basename(downloaded_file_name)
+                    ),
+                )
             else:
                 os.remove(downloaded_file_name)
-                await edit_or_reply(event, "Errors! This plugin is already installed/pre-installed.")
+                await edit_or_reply(
+                    event, "Errors! This plugin is already installed/pre-installed."
+                )
         except Exception as e:  # pylint:disable=C0103,W0703
             await edit_or_reply(event, str(e))
             os.remove(downloaded_file_name)
@@ -58,12 +68,14 @@ async def send(event):
             force_document=True,
             allow_cache=False,
             reply_to=reply_to_id,
-            thumb=thumb
+            thumb=thumb,
         )
         end = datetime.now()
         ms = (end - start).seconds
         await event.delete()
-        await caat.edit(f"__**➥ Plugin Name:- {input_str} .**__\n__**➥ Uploaded in {ms} seconds.**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})")
+        await caat.edit(
+            f"__**➥ Plugin Name:- {input_str} .**__\n__**➥ Uploaded in {ms} seconds.**__\n__**➥ Uploaded by :-**__ [{DEFAULTUSER}]({USERNAME})"
+        )
     else:
         await edit_or_reply(event, "404: File Not Found")
 
@@ -78,7 +90,9 @@ async def unload(event):
         remove_plugin(shortname)
         await edit_or_reply(event, f"Unloaded {shortname} successfully")
     except Exception as e:
-        await edit_or_reply(event, "Successfully unload {shortname}\n{}".format(shortname, str(e)))
+        await edit_or_reply(
+            event, "Successfully unload {shortname}\n{}".format(shortname, str(e))
+        )
 
 
 @borg.on(admin_cmd(pattern=r"load (?P<shortname>\w+)$", outgoing=True))
@@ -95,4 +109,7 @@ async def load(event):
         load_module(shortname)
         await edit_or_reply(event, f"Successfully loaded {shortname}")
     except Exception as e:
-        await edit_or_reply(event, f"Could not load {shortname} because of the following error.\n{str(e)}")
+        await edit_or_reply(
+            event,
+            f"Could not load {shortname} because of the following error.\n{str(e)}",
+        )

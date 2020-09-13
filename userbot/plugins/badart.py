@@ -1,8 +1,10 @@
 ##Created by @Jisan7509
-#credit @GulfysHalfyyyy
+# credit @GulfysHalfyyyy
 
 import asyncio
+
 from userbot.utils import admin_cmd
+
 
 @borg.on(admin_cmd(pattern=r"ohnoo"))
 async def kakashi(bsdk):
@@ -28,23 +30,25 @@ async def kakashi(bsdk):
         await asyncio.sleep(animation_interval)
         await bsdk.edit(animation_chars[i % 11])
 
+
 @borg.on(admin_cmd(pattern=r"ohyaah"))
 async def kakashi(baby):
-    await baby.edit("**💪💪Ohhh Yeeah Baby**...\n\n"
-         "／ イ  ..........(((ヽ   \n"
-         "(  ﾉ       ￣—--＼    \n"
-         "| (＼  (\🎩/)   ｜    )  \n"
-         "ヽ ヽ` ( ͡° ͜ʖ ͡°) _ノ    /  \n"
-         " ＼ | ⌒Ｙ⌒ /  /  \n"
-         "   ｜ヽ  ｜  ﾉ ／  \n"
-         "     ＼トー仝ーイ \n"
-         "        ｜ ミ土彡/ \n"
-         "         ) \      °   /  \n"
-         "        (     \🌿 /  \n"
-         "         /       /ѼΞΞΞΞΞΞΞD💨💦\n"
-         "      /  /     /      \ \   \  \n"
-         "      ( (    ).           ) ).  ) \n"
-         "     (      ).            ( |    | \n"
-         "      |    /                \    |\n"
-         "      👞.                  👞")
-                      
+    await baby.edit(
+        "**💪💪Ohhh Yeeah Baby**...\n\n"
+        "／ イ  ..........(((ヽ   \n"
+        "(  ﾉ       ￣—--＼    \n"
+        "| (＼  (\🎩/)   ｜    )  \n"
+        "ヽ ヽ` ( ͡° ͜ʖ ͡°) _ノ    /  \n"
+        " ＼ | ⌒Ｙ⌒ /  /  \n"
+        "   ｜ヽ  ｜  ﾉ ／  \n"
+        "     ＼トー仝ーイ \n"
+        "        ｜ ミ土彡/ \n"
+        "         ) \      °   /  \n"
+        "        (     \🌿 /  \n"
+        "         /       /ѼΞΞΞΞΞΞΞD💨💦\n"
+        "      /  /     /      \ \   \  \n"
+        "      ( (    ).           ) ).  ) \n"
+        "     (      ).            ( |    | \n"
+        "      |    /                \    |\n"
+        "      👞.                  👞"
+    )

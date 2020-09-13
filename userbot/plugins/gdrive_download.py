@@ -5,8 +5,9 @@ By: @Zero_cool7870
 
 """
 import requests
-from userbot.utils import admin_cmd
+
 from userbot import CMD_HELP
+from userbot.utils import admin_cmd
 
 
 async def download_file_from_google_drive(id):
@@ -14,14 +15,14 @@ async def download_file_from_google_drive(id):
 
     session = requests.Session()
 
-    response = session.get(URL, params={'id': id}, stream=True)
+    response = session.get(URL, params={"id": id}, stream=True)
     token = await get_confirm_token(response)
     if token:
-        params = {'id': id, 'confirm': token}
+        params = {"id": id, "confirm": token}
         response = session.get(URL, params=params, stream=True)
 
     headers = response.headers
-    content = headers['Content-Disposition']
+    content = headers["Content-Disposition"]
     destination = await get_file_name(content)
 
     file_name = await save_response_content(response, destination)
@@ -30,7 +31,7 @@ async def download_file_from_google_drive(id):
 
 async def get_confirm_token(response):
     for key, value in response.cookies.items():
-        if key.startswith('download_warning'):
+        if key.startswith("download_warning"):
             return value
 
     return None
@@ -93,8 +94,11 @@ async def g_download(event):
     file_name = await download_file_from_google_drive(file_id)
     await event.edit("File Downloaded.\nName: `" + str(file_name) + "`")
 
-CMD_HELP.update({
-    "gdrive_download": "__**PLUGIN NAME :** Gdrive Download__\
+
+CMD_HELP.update(
+    {
+        "gdrive_download": "__**PLUGIN NAME :** Gdrive Download__\
     \n\n📌** CMD ➥** `.gdl` <gdrive File-Link>\
     \n**USAGE   ➥  **G-Drive File Downloader Plugin For Userbot."
-})
+    }
+)

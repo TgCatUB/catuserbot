@@ -13,17 +13,26 @@ credits to @mrconfused and @sandy1709
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-from userbot.plugins import trumptweet, moditweet, tweets, deEmojify, changemymind, kannagen
-from userbot.utils import admin_cmd, sudo_cmd
+
 import pybase64
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+
+from userbot.plugins import (
+    changemymind,
+    deEmojify,
+    kannagen,
+    moditweet,
+    trumptweet,
+    tweets,
+)
+from userbot.utils import admin_cmd, sudo_cmd
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="trump(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
 
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -53,7 +62,7 @@ async def nekobot(cat):
 @borg.on(admin_cmd(outgoing=True, pattern="modi(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -83,7 +92,7 @@ async def nekobot(cat):
 @borg.on(admin_cmd(outgoing=True, pattern="cmm(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -113,7 +122,7 @@ async def nekobot(cat):
 @borg.on(admin_cmd(outgoing=True, pattern="kanna(?: |$)(.*)"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -147,7 +156,7 @@ async def nekobot(cat):
     else:
         reply_to_id = await cat.get_reply_message()
         text = reply_to_id.text
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -156,10 +165,14 @@ async def nekobot(cat):
             if not reply_to_id.media:
                 text = reply_to_id.message
             else:
-                await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text` ")
+                await cat.edit(
+                    "what should i tweet? Give some text and format must be like `.tweet username | your text` "
+                )
                 return
         else:
-            await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text` ")
+            await cat.edit(
+                "what should i tweet? Give some text and format must be like `.tweet username | your text` "
+            )
             return
     try:
         hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
@@ -170,7 +183,9 @@ async def nekobot(cat):
     if "|" in text:
         username, text = text.split("|")
     else:
-        await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text`")
+        await cat.edit(
+            "what should i tweet? Give some text and format must be like `.tweet username | your text`"
+        )
         return
     await cat.edit(f"Requesting {username} to tweet...")
     text = deEmojify(text)
@@ -183,7 +198,7 @@ async def nekobot(cat):
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
 
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -213,7 +228,7 @@ async def nekobot(cat):
 @borg.on(sudo_cmd(outgoing=True, pattern="modi(?: |$)(.*)", allow_sudo=True))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -243,7 +258,7 @@ async def nekobot(cat):
 @borg.on(sudo_cmd(outgoing=True, pattern="cmm(?: |$)(.*)", allow_sudo=True))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -273,7 +288,7 @@ async def nekobot(cat):
 @borg.on(sudo_cmd(outgoing=True, pattern="kanna(?: |$)(.*)", allow_sudo=True))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -307,7 +322,7 @@ async def nekobot(cat):
     else:
         reply_to_id = await cat.get_reply_message()
         text = reply_to_id.text
-    text = re.sub("&", '', text)
+    text = re.sub("&", "", text)
     reply_to_id = cat.message
     if cat.reply_to_msg_id:
         reply_to_id = await cat.get_reply_message()
@@ -316,10 +331,14 @@ async def nekobot(cat):
             if not reply_to_id.media:
                 text = reply_to_id.message
             else:
-                await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text` ")
+                await cat.edit(
+                    "what should i tweet? Give some text and format must be like `.tweet username | your text` "
+                )
                 return
         else:
-            await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text` ")
+            await cat.edit(
+                "what should i tweet? Give some text and format must be like `.tweet username | your text` "
+            )
             return
     try:
         hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
@@ -330,7 +349,9 @@ async def nekobot(cat):
     if "|" in text:
         username, text = text.split("|")
     else:
-        await cat.edit("what should i tweet? Give some text and format must be like `.tweet username | your text`")
+        await cat.edit(
+            "what should i tweet? Give some text and format must be like `.tweet username | your text`"
+        )
         return
     kakashi = await cat.reply(f"Requesting {username} to tweet...")
     text = deEmojify(text)

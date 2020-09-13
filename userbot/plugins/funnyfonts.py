@@ -1,8 +1,9 @@
 """ plugin is modified by @sn12384 """
+import random
 import re
+
 from userbot import CMD_HELP, fonts
 from userbot.utils import admin_cmd
-import random
 
 
 @borg.on(admin_cmd(pattern="str(?: |$)(.*)"))
@@ -19,11 +20,7 @@ async def stretch(stret):
         return
 
     count = random.randint(3, 10)
-    reply_text = re.sub(
-        r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])",
-        (r"\1" * count),
-        message
-    )
+    reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count), message)
     await stret.edit(reply_text)
 
 
@@ -51,14 +48,11 @@ async def zal(zgfy):
             randint = random.randint(0, 2)
 
             if randint == 0:
-                charac = charac.strip() + \
-                    random.choice(fonts.ZALG_LIST[0]).strip()
+                charac = charac.strip() + random.choice(fonts.ZALG_LIST[0]).strip()
             elif randint == 1:
-                charac = charac.strip() + \
-                    random.choice(fonts.ZALG_LIST[1]).strip()
+                charac = charac.strip() + random.choice(fonts.ZALG_LIST[1]).strip()
             else:
-                charac = charac.strip() + \
-                    random.choice(fonts.ZALG_LIST[2]).strip()
+                charac = charac.strip() + random.choice(fonts.ZALG_LIST[2]).strip()
 
         reply_text.append(charac)
 
@@ -107,11 +101,10 @@ async def weebify(event):
     if not args:
         await event.edit("`What I am Supposed to Weebify `")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normiecharacter in string:
         if normiecharacter in fonts.normiefont:
-            weebycharacter = fonts.weebyfont[fonts.normiefont.index(
-                normiecharacter)]
+            weebycharacter = fonts.weebyfont[fonts.normiefont.index(normiecharacter)]
             string = string.replace(normiecharacter, weebycharacter)
     await event.edit(string)
 
@@ -125,11 +118,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for upsidecharacter in string:
         if upsidecharacter in fonts.upsidefont:
-            downsidecharacter = fonts.downsidefont[fonts.upsidefont.index(
-                upsidecharacter)]
+            downsidecharacter = fonts.downsidefont[
+                fonts.upsidefont.index(upsidecharacter)
+            ]
             string = string.replace(upsidecharacter, downsidecharacter)
     await event.edit(string)
 
@@ -143,11 +137,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            subscriptcharacter = fonts.subscriptfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            subscriptcharacter = fonts.subscriptfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, subscriptcharacter)
     await event.edit(string)
 
@@ -161,17 +156,19 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            superscriptcharacter = fonts.superscriptfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            superscriptcharacter = fonts.superscriptfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, superscriptcharacter)
     await event.edit(string)
 
 
-CMD_HELP.update({
-    "funnyfonts": "__**PLUGIN NAME :** Funnyfonts__\
+CMD_HELP.update(
+    {
+        "funnyfonts": "__**PLUGIN NAME :** Funnyfonts__\
 \n\n📌** CMD ➥** `.cp` (text) or .cp reply to message \
 \n**USAGE   ➥  **Inserts some emojis in between the texts\
 \n\n📌** CMD ➥** `.str` (text) or .str reply to message \
@@ -181,4 +178,5 @@ CMD_HELP.update({
 \n\n📌** CMD ➥** `.weeb` (text) or .weeb reply to message \
 \n**USAGE   ➥  **A different style of alphabets .\
 "
-})
+    }
+)

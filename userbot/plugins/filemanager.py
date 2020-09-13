@@ -6,10 +6,12 @@ import io
 import os
 import os.path
 import time
-from . import runcmd
-from userbot import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply, humanbytes
 from os.path import exists, isdir
+
+from userbot import CMD_HELP
+
+from ..utils import admin_cmd, edit_or_reply, humanbytes, sudo_cmd
+from . import runcmd
 
 
 @borg.on(admin_cmd(pattern="ls ?(.*)"))
@@ -21,7 +23,10 @@ async def lst(event):
     else:
         path = os.getcwd()
     if not exists(path):
-        await edit_or_reply(event, f"there is no such directory or file with the name `{cat}` check again")
+        await edit_or_reply(
+            event,
+            f"there is no such directory or file with the name `{cat}` check again",
+        )
         return
     if isdir(path):
         if cat:
@@ -40,11 +45,15 @@ async def lst(event):
                     files += "🎵" + f"`{contents}`\n"
                 if contents.endswith((".opus")):
                     files += "🎙" + f"`{contents}`\n"
-                elif contents.endswith((".mkv", ".mp4", ".webm", ".avi", ".mov", ".flv")):
+                elif contents.endswith(
+                    (".mkv", ".mp4", ".webm", ".avi", ".mov", ".flv")
+                ):
                     files += "🎞" + f"`{contents}`\n"
                 elif contents.endswith((".zip", ".tar", ".tar.gz", ".rar")):
                     files += "🗜" + f"`{contents}`\n"
-                elif contents.endswith((".jpg", ".jpeg", ".png", ".gif", ".bmp", ".ico")):
+                elif contents.endswith(
+                    (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".ico")
+                ):
                     files += "🖼" + f"`{contents}`\n"
                 else:
                     files += "📄" + f"`{contents}`\n"
@@ -85,15 +94,15 @@ async def lst(event):
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                caption=path
+                caption=path,
             )
             await event.delete()
     else:
         await edit_or_reply(event, msg)
 
 
-@borg.on(admin_cmd(pattern="rem ?(.*)"))
-@borg.on(sudo_cmd(pattern="rem ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="rem (.*)"))
+@borg.on(sudo_cmd(pattern="rem (.*)", allow_sudo=True))
 async def lst(event):
     cat = event.pattern_match.group(1)
     if cat:
@@ -102,7 +111,10 @@ async def lst(event):
         await edit_or_reply(event, "what should i delete")
         return
     if not exists(path):
-        await edit_or_reply(event, f"there is no such directory or file with the name `{cat}` check again")
+        await edit_or_reply(
+            event,
+            f"there is no such directory or file with the name `{cat}` check again",
+        )
         return
     catcmd = f"rm -rf {path}"
     if isdir(path):
@@ -112,8 +124,10 @@ async def lst(event):
         await runcmd(catcmd)
         await edit_or_reply(event, f"Succesfully removed `{path}` file")
 
-CMD_HELP.update({
-    "filemanager": "__**PLUGIN NAME :** File Manager__\
+
+CMD_HELP.update(
+    {
+        "filemanager": "__**PLUGIN NAME :** File Manager__\
      \n\n📌** CMD ➥** `.ls`\
      \n**USAGE   ➥  **Will return files from current working directory\
      \n\n📌** CMD ➥** `.ls` path\
@@ -123,4 +137,5 @@ CMD_HELP.update({
      \n\n📌** CMD ➥** `.rem` path\
      \n**USAGE   ➥  **To delete the required item from the bot server\
      \n\nSimple Module for people who dont wanna use shell executor for listing files."
-})
+    }
+)

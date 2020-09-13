@@ -1,10 +1,13 @@
 "made by @mrconfused and @sandy1709"
-import os
-import lyricsgenius
-from userbot.utils import admin_cmd
-from userbot import CMD_HELP
-from tswift import Song
 import io
+import os
+
+import lyricsgenius
+from tswift import Song
+
+from userbot import CMD_HELP
+from userbot.utils import admin_cmd
+
 GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
 
 
@@ -40,7 +43,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=query,
-                reply_to=reply_to_id
+                reply_to=reply_to_id,
             )
             await event.delete()
     else:
@@ -52,21 +55,27 @@ async def lyrics(lyric):
     if lyric.pattern_match.group(1):
         query = lyric.pattern_match.group(1)
     else:
-        await lyric.edit("Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`")
+        await lyric.edit(
+            "Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`"
+        )
         return
     if r"-" in query:
         pass
     else:
-        await lyric.edit("Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`")
+        await lyric.edit(
+            "Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`"
+        )
         return
     if GENIUS is None:
-        await lyric.edit("`Provide genius access token to config.py or Heroku Var first kthxbye!`")
+        await lyric.edit(
+            "`Provide genius access token to config.py or Heroku Var first kthxbye!`"
+        )
     else:
         genius = lyricsgenius.Genius(GENIUS)
         try:
-            args = query.split('-', 1)
-            artist = args[0].strip(' ')
-            song = args[1].strip(' ')
+            args = query.split("-", 1)
+            artist = args[0].strip(" ")
+            song = args[1].strip(" ")
         except Exception as e:
             await lyric.edit(f"Error:\n`{e}`")
             return
@@ -92,11 +101,15 @@ async def lyrics(lyric):
         )
         os.remove("lyrics.txt")
     else:
-        await lyric.edit(f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```")
+        await lyric.edit(
+            f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```"
+        )
     return
 
-CMD_HELP.update({
-    "lyrics": "__**PLUGIN NAME :** Lyrics__\
+
+CMD_HELP.update(
+    {
+        "lyrics": "__**PLUGIN NAME :** Lyrics__\
     \n\n📌** CMD ➥** `.lyrics` <aritst name - song nane> or `.lyrics` <song_name>\
     \n**USAGE   ➥  **Searches a song lyrics and sends you if song name doesnt work try along with artisyt name\
     \n\n📌** CMD ➥** `.glyrics <artist name> - <song name>`\
@@ -105,4 +118,5 @@ CMD_HELP.update({
     \n\n**Genius lyrics plugin**\
     \nget this value from [Here](https://genius.com/developers)\
     \nAdd var `GENIUS_API_TOKEN` and token value in heroku app settings."
-})
+    }
+)

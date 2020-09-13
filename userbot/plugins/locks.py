@@ -4,9 +4,10 @@ API Options: msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, cha
 DB Options: bots, commands, email, forward, url"""
 
 from telethon import events, functions, types
-from userbot.plugins.sql_helper.locks_sql import update_lock, is_locked, get_locks
-from userbot.utils import admin_cmd
+
 from userbot import CMD_HELP
+from userbot.plugins.sql_helper.locks_sql import get_locks, is_locked, update_lock
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
@@ -19,9 +20,7 @@ async def _(event):
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, True)
-        await event.edit(
-            "Locked {}".format(input_str)
-        )
+        await event.edit("Locked {}".format(input_str))
     else:
         msg = None
         media = None
@@ -71,8 +70,7 @@ async def _(event):
         try:
             result = await borg(  # pylint:disable=E0602
                 functions.messages.EditChatDefaultBannedRightsRequest(
-                    peer=peer_id,
-                    banned_rights=banned_rights
+                    peer=peer_id, banned_rights=banned_rights
                 )
             )
         except Exception as e:  # pylint:disable=C0103,W0703
@@ -91,13 +89,9 @@ async def _(event):
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, False)
-        await event.edit(
-            "UnLocked {}".format(input_str)
-        )
+        await event.edit("UnLocked {}".format(input_str))
     else:
-        await event.edit(
-            "Use `.lock` without any parameters to unlock API locks"
-        )
+        await event.edit("Use `.lock` without any parameters to unlock API locks")
 
 
 @borg.on(admin_cmd(pattern="curenabledlocks"))
@@ -185,9 +179,8 @@ async def check_incoming_messages(event):
         if entities:
             for entity in entities:
                 if isinstance(
-                    entity,
-                    (types.MessageEntityTextUrl,
-                     types.MessageEntityUrl)):
+                    entity, (types.MessageEntityTextUrl, types.MessageEntityUrl)
+                ):
                     is_url = True
         if is_url:
             try:
@@ -209,34 +202,37 @@ async def _(event):
         if event.user_added:
             users_added_by = event.action_message.from_id
             is_ban_able = False
-            rights = types.ChatBannedRights(
-                until_date=None,
-                view_messages=True
-            )
+            rights = types.ChatBannedRights(until_date=None, view_messages=True)
             added_users = event.action_message.action.users
             for user_id in added_users:
                 user_obj = await borg.get_entity(user_id)
                 if user_obj.bot:
                     is_ban_able = True
                     try:
-                        await borg(functions.channels.EditBannedRequest(
-                            event.chat_id,
-                            user_obj,
-                            rights
-                        ))
+                        await borg(
+                            functions.channels.EditBannedRequest(
+                                event.chat_id, user_obj, rights
+                            )
+                        )
                     except Exception as e:
                         await event.reply(
-                            "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+                            "I don't seem to have ADMIN permission here. \n`{}`".format(
+                                str(e)
+                            )
                         )
                         update_lock(event.chat_id, "bots", False)
                         break
             if Config.G_BAN_LOGGER_GROUP is not None and is_ban_able:
                 ban_reason_msg = await event.reply(
-                    "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(users_added_by)
+                    "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(
+                        users_added_by
+                    )
                 )
 
-CMD_HELP.update({
-    "locks": "__**PLUGIN NAME :** Locks__\
+
+CMD_HELP.update(
+    {
+        "locks": "__**PLUGIN NAME :** Locks__\
 \n\n📌** CMD ➥** `lock` <all (or) type(s)> or `.unlock` <all (or) type(s)>\
 \n**USAGE   ➥  **Allows you to lock/unlock some common message types in the chat.\
 \n***NOTE:** Requires proper admin rights in the chat !!]\
@@ -245,4 +241,5 @@ CMD_HELP.update({
 \n**DB Options:** bots, commands, email, forward, url\
 \n\n📌** CMD ➥** `.curenabledlocks`\
 \n**USAGE   ➥  **To see the active locks"
-})
+    }
+)

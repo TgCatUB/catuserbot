@@ -5,17 +5,22 @@
 
 import io
 import math
+import random
 import urllib.request
 from os import remove
-from PIL import Image
-import random
-from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
-from userbot import bot, CMD_HELP
-from userbot.utils import admin_cmd
+
 import emoji
+from PIL import Image
 from telethon.tl.functions.messages import GetStickerSetRequest
-from telethon.tl.types import InputStickerSetID
-from telethon.tl.types import DocumentAttributeSticker
+from telethon.tl.types import (
+    DocumentAttributeFilename,
+    DocumentAttributeSticker,
+    InputStickerSetID,
+    MessageMediaPhoto,
+)
+
+from userbot import CMD_HELP, bot
+from userbot.utils import admin_cmd
 
 KANGING_STR = [
     "Using Witchery to kang this sticker...",
@@ -37,7 +42,7 @@ async def kang(args):
     user = await bot.get_me()
     if not user.username:
         try:
-            user.first_name.encode('utf-8').decode('ascii')
+            user.first_name.encode("utf-8").decode("ascii")
             user.username = user.first_name
         except UnicodeDecodeError:
             user.username = f"cat_{user.id}"
@@ -51,18 +56,19 @@ async def kang(args):
             await args.edit(f"`{random.choice(KANGING_STR)}`")
             photo = io.BytesIO()
             photo = await bot.download_media(message.photo, photo)
-        elif "image" in message.media.document.mime_type.split('/'):
+        elif "image" in message.media.document.mime_type.split("/"):
             await args.edit(f"`{random.choice(KANGING_STR)}`")
             photo = io.BytesIO()
             await bot.download_file(message.media.document, photo)
-            if (DocumentAttributeFilename(file_name='sticker.webp') in
-                    message.media.document.attributes):
+            if (
+                DocumentAttributeFilename(file_name="sticker.webp")
+                in message.media.document.attributes
+            ):
                 emoji = message.media.document.attributes[1].alt
                 emojibypass = True
         elif "tgsticker" in message.media.document.mime_type:
             await args.edit(f"`{random.choice(KANGING_STR)}`")
-            await bot.download_file(message.media.document,
-                                    'AnimatedSticker.tgs')
+            await bot.download_file(message.media.document, "AnimatedSticker.tgs")
 
             attributes = message.media.document.attributes
             for attribute in attributes:
@@ -103,7 +109,7 @@ async def kang(args):
                 pack = splat[1]
         packname = f"{user.username}_{pack}"
         packnick = f"@{user.username}'s_{pack}"
-        cmd = '/newpack'
+        cmd = "/newpack"
         file = io.BytesIO()
         if not is_anim:
             image = await resize_photo(photo)
@@ -112,19 +118,26 @@ async def kang(args):
         else:
             packname += "_anim"
             packnick += " (Animated)"
-            cmd = '/newanimated'
+            cmd = "/newanimated"
         response = urllib.request.urlopen(
-            urllib.request.Request(f'http://t.me/addstickers/{packname}'))
-        htmlstr = response.read().decode("utf8").split('\n')
-        if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
-            async with bot.conversation('Stickers') as conv:
-                await conv.send_message('/addsticker')
+            urllib.request.Request(f"http://t.me/addstickers/{packname}")
+        )
+        htmlstr = response.read().decode("utf8").split("\n")
+        if (
+            "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
+            not in htmlstr
+        ):
+            async with bot.conversation("Stickers") as conv:
+                await conv.send_message("/addsticker")
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 await conv.send_message(packname)
                 x = await conv.get_response()
-                while "Whoa! That's probably enough stickers for one pack, give it a break" in x.text:
+                while (
+                    "Whoa! That's probably enough stickers for one pack, give it a break"
+                    in x.text
+                ):
                     try:
                         val = int(pack)
                         pack = val + 1
@@ -136,8 +149,11 @@ async def kang(args):
                     else:
                         packname = f"{user.username}_{pack}_anim"
                         packnick = f"@{user.username}'s_{pack} (Animated)"
-                    await args.edit("`Switching to Pack " + str(pack) +
-                                    " due to insufficient space`")
+                    await args.edit(
+                        "`Switching to Pack "
+                        + str(pack)
+                        + " due to insufficient space`"
+                    )
                     await conv.send_message(packname)
                     x = await conv.get_response()
                     if x.text == "Invalid pack selected.":
@@ -150,15 +166,20 @@ async def kang(args):
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
                         if is_anim:
-                            await conv.send_file('AnimatedSticker.tgs')
-                            remove('AnimatedSticker.tgs')
+                            await conv.send_file("AnimatedSticker.tgs")
+                            remove("AnimatedSticker.tgs")
                         else:
                             file.seek(0)
                             await conv.send_file(file, force_document=True)
                         rsp = await conv.get_response()
-                        if "You can list several emoji in one message, but I recommend using no more than two per sticker" not in rsp.text:
+                        if (
+                            "You can list several emoji in one message, but I recommend using no more than two per sticker"
+                            not in rsp.text
+                        ):
                             await bot.send_read_acknowledge(conv.chat_id)
-                            await args.edit(f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.txt}")
+                            await args.edit(
+                                f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.txt}"
+                            )
                             return
                         await conv.send_message(emoji)
                         # Ensure user doesn't get spamming notifications
@@ -181,33 +202,40 @@ async def kang(args):
                         await conv.get_response()
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
-                        await args.edit(f"Sticker added in a Different Pack !\
+                        await args.edit(
+                            f"Sticker added in a Different Pack !\
                             \nThis Pack is Newly created!\
                             \nYour pack can be found [here](t.me/addstickers/{packname}) and emoji of the sticker added is {emoji}",
-                                        parse_mode='md')
+                            parse_mode="md",
+                        )
                         return
                 if is_anim:
-                    await conv.send_file('AnimatedSticker.tgs')
-                    remove('AnimatedSticker.tgs')
+                    await conv.send_file("AnimatedSticker.tgs")
+                    remove("AnimatedSticker.tgs")
                 else:
                     file.seek(0)
                     await conv.send_file(file, force_document=True)
                 rsp = await conv.get_response()
-                if "You can list several emoji in one message, but I recommend using no more than two per sticker" not in rsp.text:
+                if (
+                    "You can list several emoji in one message, but I recommend using no more than two per sticker"
+                    not in rsp.text
+                ):
                     await bot.send_read_acknowledge(conv.chat_id)
-                    await args.edit(f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.text}")
+                    await args.edit(
+                        f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.text}"
+                    )
                     return
                 await conv.send_message(emoji)
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 await conv.get_response()
-                await conv.send_message('/done')
+                await conv.send_message("/done")
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
         else:
             await args.edit("`Brewing a new Pack...`")
-            async with bot.conversation('Stickers') as conv:
+            async with bot.conversation("Stickers") as conv:
                 await conv.send_message(cmd)
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
@@ -217,14 +245,19 @@ async def kang(args):
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 if is_anim:
-                    await conv.send_file('AnimatedSticker.tgs')
-                    remove('AnimatedSticker.tgs')
+                    await conv.send_file("AnimatedSticker.tgs")
+                    remove("AnimatedSticker.tgs")
                 else:
                     file.seek(0)
                     await conv.send_file(file, force_document=True)
                 rsp = await conv.get_response()
-                if "You can list several emoji in one message, but I recommend using no more than two per sticker" not in rsp.text:
-                    await args.edit(f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}")
+                if (
+                    "You can list several emoji in one message, but I recommend using no more than two per sticker"
+                    not in rsp.text
+                ):
+                    await args.edit(
+                        f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
+                    )
                     return
                 await conv.send_message(emoji)
                 # Ensure user doesn't get spamming notifications
@@ -247,9 +280,11 @@ async def kang(args):
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
-        await args.edit(f"Sticker kanged successfully!\
+        await args.edit(
+            f"Sticker kanged successfully!\
             \nPack can be found [here](t.me/addstickers/{packname}) and emoji of the sticker is {emoji}",
-                        parse_mode='md')
+            parse_mode="md",
+        )
 
 
 async def resize_photo(photo):
@@ -291,8 +326,7 @@ async def get_pack_info(event):
         return
     try:
         stickerset_attr = rep_msg.document.attributes[1]
-        await event.edit(
-            "`Fetching details of the sticker pack, please wait..`")
+        await event.edit("`Fetching details of the sticker pack, please wait..`")
     except BaseException:
         await event.edit("`This is not a sticker. Reply to a sticker.`")
         return
@@ -303,21 +337,28 @@ async def get_pack_info(event):
         GetStickerSetRequest(
             InputStickerSetID(
                 id=stickerset_attr.stickerset.id,
-                access_hash=stickerset_attr.stickerset.access_hash)))
+                access_hash=stickerset_attr.stickerset.access_hash,
+            )
+        )
+    )
     pack_emojis = []
     for document_sticker in get_stickerset.packs:
         if document_sticker.emoticon not in pack_emojis:
             pack_emojis.append(document_sticker.emoticon)
-    OUTPUT = f"**Sticker Title:** `{get_stickerset.set.title}\n`" \
-        f"**Sticker Short Name:** `{get_stickerset.set.short_name}`\n" \
-        f"**Official:** `{get_stickerset.set.official}`\n" \
-        f"**Archived:** `{get_stickerset.set.archived}`\n" \
-        f"**Stickers In Pack:** `{len(get_stickerset.packs)}`\n" \
+    OUTPUT = (
+        f"**Sticker Title:** `{get_stickerset.set.title}\n`"
+        f"**Sticker Short Name:** `{get_stickerset.set.short_name}`\n"
+        f"**Official:** `{get_stickerset.set.official}`\n"
+        f"**Archived:** `{get_stickerset.set.archived}`\n"
+        f"**Stickers In Pack:** `{len(get_stickerset.packs)}`\n"
         f"**Emojis In Pack:**\n{' '.join(pack_emojis)}"
+    )
     await event.edit(OUTPUT)
 
-CMD_HELP.update({
-    "stickers": "__**PLUGIN NAME :** Stickers__\
+
+CMD_HELP.update(
+    {
+        "stickers": "__**PLUGIN NAME :** Stickers__\
 \n\n📌** CMD ➥** `.kang`\
 \n**USAGE   ➥  **Reply .kang to a sticker or an image to kang it to your userbot pack.\
 \n\n📌** CMD ➥** `.kang [emoji('s)]`\
@@ -328,4 +369,5 @@ CMD_HELP.update({
 \n**USAGE   ➥  **Kang's the sticker/image to the specified pack and uses the emoji('s) you picked.\
 \n\n📌** CMD ➥** `.stkrinfo`\
 \n**USAGE   ➥  **Gets info about the sticker pack."
-})
+    }
+)

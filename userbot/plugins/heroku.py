@@ -6,14 +6,17 @@
    Heroku manager for your userbot
 """
 
-import os
-import math
-import heroku3
 import asyncio
-import urllib3
+import math
+import os
+
+import heroku3
 import requests
+import urllib3
+
 from .. import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # =================
 
@@ -24,23 +27,22 @@ HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 
 @borg.on(
-    admin_cmd(
-        pattern=r"(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)",
-        outgoing=True))
+    admin_cmd(pattern=r"(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)", outgoing=True)
+)
 @borg.on(
-    sudo_cmd(
-        pattern=r"(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)",
-        allow_sudo=True))
+    sudo_cmd(pattern=r"(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)", allow_sudo=True)
+)
 async def variable(var):
     """
-        Manage most of ConfigVars setting, set new var, get current var,
-        or delete var...
+    Manage most of ConfigVars setting, set new var, get current var,
+    or delete var...
     """
     if Var.HEROKU_APP_NAME is not None:
         app = Heroku.app(Var.HEROKU_APP_NAME)
     else:
-        return await edit_or_reply(var, "`[HEROKU]:"
-                                   "\nPlease setup your` **HEROKU_APP_NAME**")
+        return await edit_or_reply(
+            var, "`[HEROKU]:" "\nPlease setup your` **HEROKU_APP_NAME**"
+        )
     exe = var.pattern_match.group(1)
     heroku_var = app.config()
     if exe == "get":
@@ -49,10 +51,12 @@ async def variable(var):
         try:
             variable = var.pattern_match.group(2).split()[0]
             if variable in heroku_var:
-                return await cat.edit("**ConfigVars**:"
-                                      f"\n\n`{variable} = {heroku_var[variable]}`\n")
-            return await cat.edit("**ConfigVars**:"
-                                  f"\n\n`Error:\n-> {variable} don't exists`")
+                return await cat.edit(
+                    "**ConfigVars**:" f"\n\n`{variable} = {heroku_var[variable]}`\n"
+                )
+            return await cat.edit(
+                "**ConfigVars**:" f"\n\n`Error:\n-> {variable} don't exists`"
+            )
         except IndexError:
             configs = prettyjson(heroku_var.to_dict(), indent=2)
             with open("configs.json", "w") as fp:
@@ -67,11 +71,12 @@ async def variable(var):
                         caption="`Output too large, sending it as a file`",
                     )
                 else:
-                    await cat.edit("`[HEROKU]` ConfigVars:\n\n"
-                                   "================================"
-                                   f"\n```{result}```\n"
-                                   "================================"
-                                   )
+                    await cat.edit(
+                        "`[HEROKU]` ConfigVars:\n\n"
+                        "================================"
+                        f"\n```{result}```\n"
+                        "================================"
+                    )
             os.remove("configs.json")
             return
     elif exe == "set":
@@ -83,14 +88,16 @@ async def variable(var):
         if not value:
             variable = variable.split()[0]
             try:
-                value = var.pattern_match.group(2).split(' ', 1)[1]
+                value = var.pattern_match.group(2).split(" ", 1)[1]
             except IndexError:
                 return await cat.edit(">`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1.5)
         if variable in heroku_var:
             await cat.edit(f"`{variable}` **successfully changed to  ->  **`{value}`")
         else:
-            await cat.edit(f"`{variable}`**  successfully added with value`  ->  **{value}`")
+            await cat.edit(
+                f"`{variable}`**  successfully added with value`  ->  **{value}`"
+            )
         heroku_var[variable] = value
     elif exe == "del":
         cat = await edit_or_reply(var, "`Getting information to deleting variable...`")
@@ -110,27 +117,29 @@ async def variable(var):
 @borg.on(sudo_cmd(pattern="usage$", allow_sudo=True))
 async def dyno_usage(dyno):
     """
-        Get your account Dyno Usage
+    Get your account Dyno Usage
     """
     dyno = await edit_or_reply(dyno, "`Processing...`")
-    useragent = ('Mozilla/5.0 (Linux; Android 10; SM-G975F) '
-                 'AppleWebKit/537.36 (KHTML, like Gecko) '
-                 'Chrome/80.0.3987.149 Mobile Safari/537.36'
-                 )
+    useragent = (
+        "Mozilla/5.0 (Linux; Android 10; SM-G975F) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/80.0.3987.149 Mobile Safari/537.36"
+    )
     user_id = Heroku.account().id
     headers = {
-        'User-Agent': useragent,
-        'Authorization': f'Bearer {Var.HEROKU_API_KEY}',
-        'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
+        "User-Agent": useragent,
+        "Authorization": f"Bearer {Var.HEROKU_API_KEY}",
+        "Accept": "application/vnd.heroku+json; version=3.account-quotas",
     }
     path = "/accounts/" + user_id + "/actions/get-quota"
     r = requests.get(heroku_api + path, headers=headers)
     if r.status_code != 200:
-        return await dyno.edit("`Error: something bad happened`\n\n"
-                               f">.`{r.reason}`\n")
+        return await dyno.edit(
+            "`Error: something bad happened`\n\n" f">.`{r.reason}`\n"
+        )
     result = r.json()
-    quota = result['account_quota']
-    quota_used = result['quota_used']
+    quota = result["account_quota"]
+    quota_used = result["quota_used"]
 
     """ - Used - """
     remaining_quota = quota - quota_used
@@ -139,27 +148,28 @@ async def dyno_usage(dyno):
     hours = math.floor(minutes_remaining / 60)
     minutes = math.floor(minutes_remaining % 60)
     """ - Current - """
-    App = result['apps']
+    App = result["apps"]
     try:
-        App[0]['quota_used']
+        App[0]["quota_used"]
     except IndexError:
         AppQuotaUsed = 0
         AppPercentage = 0
     else:
-        AppQuotaUsed = App[0]['quota_used'] / 60
-        AppPercentage = math.floor(App[0]['quota_used'] * 100 / quota)
+        AppQuotaUsed = App[0]["quota_used"] / 60
+        AppPercentage = math.floor(App[0]["quota_used"] * 100 / quota)
     AppHours = math.floor(AppQuotaUsed / 60)
     AppMinutes = math.floor(AppQuotaUsed % 60)
     await asyncio.sleep(1.5)
-    return await dyno.edit("**Dyno Usage**:\n\n"
-                           f" -> `Dyno usage for`  **{Var.HEROKU_APP_NAME}**:\n"
-                           f"     •  `{AppHours}`**h**  `{AppMinutes}`**m**  "
-                           f"**|**  [`{AppPercentage}`**%**]"
-                           "\n\n"
-                           " -> `Dyno hours quota remaining this month`:\n"
-                           f"     •  `{hours}`**h**  `{minutes}`**m**  "
-                           f"**|**  [`{percentage}`**%**]"
-                           )
+    return await dyno.edit(
+        "**Dyno Usage**:\n\n"
+        f" -> `Dyno usage for`  **{Var.HEROKU_APP_NAME}**:\n"
+        f"     •  `{AppHours}`**h**  `{AppMinutes}`**m**  "
+        f"**|**  [`{AppPercentage}`**%**]"
+        "\n\n"
+        " -> `Dyno hours quota remaining this month`:\n"
+        f"     •  `{hours}`**h**  `{minutes}`**m**  "
+        f"**|**  [`{percentage}`**%**]"
+    )
 
 
 @borg.on(admin_cmd(pattern="herokulogs$", outgoing=True))
@@ -169,25 +179,37 @@ async def _(dyno):
         Heroku = heroku3.from_key(HEROKU_API_KEY)
         app = Heroku.app(HEROKU_APP_NAME)
     except BaseException:
-        return await dyno.reply(" Please make sure your Heroku API Key, Your App name are configured correctly in the heroku")
+        return await dyno.reply(
+            " Please make sure your Heroku API Key, Your App name are configured correctly in the heroku"
+        )
     data = app.get_log()
-    key = requests.post('https://nekobin.com/api/documents',
-                        json={"content": data}).json().get('result').get('key')
-    url = f'https://nekobin.com/{key}'
-    reply_text = f'Recent 100 lines of heroku logs: [here]({url})'
+    key = (
+        requests.post("https://nekobin.com/api/documents", json={"content": data})
+        .json()
+        .get("result")
+        .get("key")
+    )
+    url = f"https://nekobin.com/{key}"
+    reply_text = f"Recent 100 lines of heroku logs: [here]({url})"
     await edit_or_reply(dyno, reply_text)
 
 
 def prettyjson(obj, indent=2, maxlinelength=80):
     """Renders JSON content with indentation and line splits/concatenations to fit maxlinelength.
     Only dicts, lists and basic types are supported"""
-    items, _ = getsubitems(obj, itemkey="", islast=True,
-                           maxlinelength=maxlinelength - indent, indent=indent)
+    items, _ = getsubitems(
+        obj,
+        itemkey="",
+        islast=True,
+        maxlinelength=maxlinelength - indent,
+        indent=indent,
+    )
     return indentitems(items, indent, level=0)
 
 
-CMD_HELP.update({
-    "heroku": "__**PLUGIN NAME :** Heroku__\
+CMD_HELP.update(
+    {
+        "heroku": "__**PLUGIN NAME :** Heroku__\
   \n\n📌** CMD ➥** `.usage`\
   \n**USAGE   ➥  **Check your heroku dyno hours status.\
   \n\n📌** CMD ➥** `.set var` <NEW VAR> <VALUE>\
@@ -200,4 +222,5 @@ CMD_HELP.update({
   \n**USAGE   ➥  **Sends you recent 100 lines of logs in heroku\
   \n\n\n**!!! WARNING !!!, After adding or deleting variable the bot will restarted**\
   \n**Don't use .get var in public groups.This returns all of your private information, please be cautious...**"
-})
+    }
+)

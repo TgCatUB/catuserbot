@@ -1,6 +1,7 @@
+import random
+
 from userbot import CMD_HELP, fonts
 from userbot.utils import admin_cmd
-import random
 
 
 @borg.on(admin_cmd(pattern="egyptf(?: |$)(.*)"))
@@ -12,11 +13,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            egyptfontcharacter = fonts.egyptfontfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            egyptfontcharacter = fonts.egyptfontfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, egyptfontcharacter)
     await event.edit(string)
 
@@ -30,11 +32,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            nightmarecharacter = fonts.nightmarefont[fonts.normaltext.index(
-                normaltextcharacter)]
+            nightmarecharacter = fonts.nightmarefont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, nightmarecharacter)
     await event.edit(string)
 
@@ -48,11 +51,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            hwcapitalcharacter = fonts.hwcapitalfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            hwcapitalcharacter = fonts.hwcapitalfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, hwcapitalcharacter)
     await event.edit(string)
 
@@ -66,11 +70,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            doubletextcharacter = fonts.doubletextfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            doubletextcharacter = fonts.doubletextfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, doubletextcharacter)
     await event.edit(string)
 
@@ -109,11 +114,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            ghostfontcharacter = fonts.ghostfontfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            ghostfontcharacter = fonts.ghostfontfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, ghostfontcharacter)
     await event.edit(string)
 
@@ -127,17 +133,18 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            hwslcharacter = fonts.hwslfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            hwslcharacter = fonts.hwslfont[fonts.normaltext.index(normaltextcharacter)]
             string = string.replace(normaltextcharacter, hwslcharacter)
     await event.edit(string)
 
 
-CMD_HELP.update({
-    "fonts2": "__**PLUGIN NAME :** Fonts2__\
+CMD_HELP.update(
+    {
+        "fonts2": "__**PLUGIN NAME :** Fonts2__\
 \n\n📌** CMD ➥** `.mock` (text) or .mock reply to message \
 \n**USAGE   ➥  **Random capital and small letters in given text."
-})
+    }
+)

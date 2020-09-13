@@ -1,28 +1,33 @@
 import asyncio
 import io
-import userbot.plugins.sql_helper.no_log_pms_sql as no_log_pms_sql
+
 from telethon import events, functions, types
+
+import userbot.plugins.sql_helper.no_log_pms_sql as no_log_pms_sql
 from userbot.utils import admin_cmd
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
 
 if Config.DUAL_LOG:
+
     @borg.on(admin_cmd(pattern="nccreatedch$"))
     async def create_dump_channel(event):
         if Config.PM_LOGGR_BOT_API_ID is None:
-            result = await event.client(functions.channels.CreateChannelRequest(  # pylint:disable=E0602
-                title=f"catuserbot-{borg.uid}-PM_LOGGR_BOT_API_ID-data",
-                about=" PM_LOGGR_BOT_API_ID // Do Not Touch",
-                megagroup=False
-            ))
+            result = await event.client(
+                functions.channels.CreateChannelRequest(  # pylint:disable=E0602
+                    title=f"catuserbot-{borg.uid}-PM_LOGGR_BOT_API_ID-data",
+                    about=" PM_LOGGR_BOT_API_ID // Do Not Touch",
+                    megagroup=False,
+                )
+            )
             logger.info(result)
             created_chat_id = result.chats[0].id
             result = await event.client.edit_admin(  # pylint:disable=E0602
                 entity=created_chat_id,
                 user=Config.TG_BOT_USER_NAME_BF_HER,
                 is_admin=True,
-                title="Editor"
+                title="Editor",
             )
             logger.info(result)
             with io.BytesIO(str.encode(str(created_chat_id))) as out_file:
@@ -33,11 +38,13 @@ if Config.DUAL_LOG:
                     force_document=True,
                     allow_cache=False,
                     caption=f"Please set `PM_LOGGR_BOT_API_ID` to `{created_chat_id}`",
-                    reply_to=1
+                    reply_to=1,
                 )
             await event.delete()
         else:
-            await event.edit(f"**is configured**. [please do not touch](https://t.me/c/{Config.PM_LOGGR_BOT_API_ID}/2)")
+            await event.edit(
+                f"**is configured**. [please do not touch](https://t.me/c/{Config.PM_LOGGR_BOT_API_ID}/2)"
+            )
 
     @borg.on(admin_cmd(pattern="nolog(?: |$)(.*)"))
     async def set_no_log_p_m(event):
@@ -105,8 +112,12 @@ if Config.DUAL_LOG:
                 # someone added me to chat
                 the_message = ""
                 the_message += "#MessageActionChatAddUser\n\n"
-                the_message += f"[User](tg://user?id={added_by_user}): `{added_by_user}`\n"
-                the_message += f"[Private Link](https://t.me/c/{chat_id}/{message_id})\n"
+                the_message += (
+                    f"[User](tg://user?id={added_by_user}): `{added_by_user}`\n"
+                )
+                the_message += (
+                    f"[Private Link](https://t.me/c/{chat_id}/{message_id})\n"
+                )
                 await event.client.send_message(
                     entity=Config.PM_LOGGR_BOT_API_ID,
                     message=the_message,
@@ -114,7 +125,7 @@ if Config.DUAL_LOG:
                     # parse_mode="html",
                     link_preview=False,
                     # file=message_media,
-                    silent=True
+                    silent=True,
                 )
 
     @borg.on(events.Raw())
@@ -144,7 +155,7 @@ if Config.DUAL_LOG:
                 # parse_mode="html",
                 link_preview=False,
                 # file=message_media,
-                silent=True
+                silent=True,
             )
 
     async def do_log_pm_action(chat_id, event, message_text, message_media):
@@ -152,7 +163,7 @@ if Config.DUAL_LOG:
         the_message += "#LOG_PMs\n\n"
         the_message += f"[User](tg://user?id={chat_id}): {chat_id}\n"
         the_message += f"Message: {message_text}\n"
-        #the_message += f"Media: {message_media}"
+        # the_message += f"Media: {message_media}"
         if event.message.message:
             await event.client.send_message(
                 entity=Config.PM_LOGGR_BOT_API_ID,
@@ -161,7 +172,7 @@ if Config.DUAL_LOG:
                 # parse_mode="html",
                 link_preview=False,
                 file=message_media,
-                silent=True
+                silent=True,
             )
         else:
             return

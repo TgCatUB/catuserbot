@@ -1,46 +1,47 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
-#
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
-#
-#
 
 """ Userbot module for having some fun with people. """
 import asyncio
 import random
 import re
 import time
+
 import requests
+from cowpy import cow
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
-from cowpy import cow
-from userbot import CMD_HELP, memes, ALIVE_NAME
-from userbot.utils import admin_cmd, register
-from userbot.uniborgConfig import Config
 
-BOTLOG = True
-BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+from userbot import ALIVE_NAME, CMD_HELP, memes
+from userbot.uniborgConfig import Config
+from userbot.utils import admin_cmd, register
+
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
+else:
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"(\w+)say (.*)"))
 async def univsaye(cowmsg):
     arg = cowmsg.pattern_match.group(1).lower()
     text = cowmsg.pattern_match.group(2)
-
     if arg == "cow":
         arg = "default"
     if arg not in cow.COWACTERS:
         return
     cheese = cow.get_cow(arg)
     cheese = cheese()
-
     await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
 
 @register(outgoing=True, pattern="^:/$")
 async def kek(keks):
+    """ Check yourself ;)"""
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
-        """ Check yourself ;)"""
         uio = ["/", "\\"]
         for i in range(1, 15):
             time.sleep(0.3)
@@ -59,20 +60,22 @@ async def _(event):
         if input_str == "heads":
             await event.edit("The coin landed on: **Heads**. \n You were correct.")
         elif input_str == "tails":
-            await event.edit("The coin landed on: **Heads**. \n You weren't correct, try again ...")
+            await event.edit(
+                "The coin landed on: **Heads**. \n You weren't correct, try again ..."
+            )
         else:
             await event.edit("The coin landed on: **Heads**.")
     elif r % 2 == 0:
         if input_str == "tails":
             await event.edit("The coin landed on: **Tails**. \n You were correct.")
         elif input_str == "heads":
-            await event.edit("The coin landed on: **Tails**. \n You weren't correct, try again ...")
+            await event.edit(
+                "The coin landed on: **Tails**. \n You weren't correct, try again ..."
+            )
         else:
             await event.edit("The coin landed on: **Tails**.")
     else:
         await event.edit(r"¯\_(ツ)_/¯")
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
 @borg.on(admin_cmd(pattern=r"slap(?: |$)(.*)", outgoing=True))
@@ -82,13 +85,14 @@ async def who(event):
     replied_user = await get_user(event)
     caption = await slap(replied_user, event)
     message_id_to_reply = event.message.reply_to_msg_id
-
     if not message_id_to_reply:
         message_id_to_reply = None
     try:
         await event.edit(caption)
     except BaseException:
-        await event.edit("`Can't slap this person, need to fetch some sticks and stones !!`")
+        await event.edit(
+            "`Can't slap this person, need to fetch some sticks and stones !!`"
+        )
 
 
 async def get_user(event):
@@ -108,9 +112,7 @@ async def get_user(event):
         if event.message.entities is not None:
             probable_user_mention_entity = event.message.entities[0]
 
-            if isinstance(
-                    probable_user_mention_entity,
-                    MessageEntityMentionName):
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 replied_user = await event.client(GetFullUserRequest(user_id))
                 return replied_user
@@ -130,32 +132,30 @@ async def slap(replied_user, event):
     user_id = replied_user.user.id
     first_name = replied_user.user.first_name
     username = replied_user.user.username
-
     if username:
         slapped = "@{}".format(username)
     else:
         slapped = f"[{first_name}](tg://user?id={user_id})"
-
     temp = random.choice(memes.SLAP_TEMPLATES)
     item = random.choice(memes.ITEMS)
     hit = random.choice(memes.HIT)
     throw = random.choice(memes.THROW)
     where = random.choice(memes.WHERE)
-
-    caption = "..." + temp.format(user1=DEFAULTUSER,
-                                  victim=slapped,
-                                  item=item,
-                                  hits=hit,
-                                  throws=throw,
-                                  where=where)
-
+    caption = "..." + temp.format(
+        user1=DEFAULTUSER,
+        victim=slapped,
+        item=item,
+        hits=hit,
+        throws=throw,
+        where=where,
+    )
     return caption
 
 
 @register(outgoing=True, pattern="^-_-$")
 async def lol(lel):
+    """ Ok... """
     if not lel.text[0].isalpha() and lel.text[0] not in ("/", "#", "@", "!"):
-        """ Ok... """
         okay = "-_-"
         for _ in range(10):
             okay = okay[:-1] + "_-"
@@ -171,10 +171,9 @@ async def decide(event):
     else:
         r = requests.get(f"https://yesno.wtf/api").json()
     await event.delete()
-    await event.client.send_message(event.chat_id,
-                                    str(r["answer"]).upper(),
-                                    reply_to=message_id,
-                                    file=r["image"])
+    await event.client.send_message(
+        event.chat_id, str(r["answer"]).upper(), reply_to=message_id, file=r["image"]
+    )
 
 
 @register(outgoing=True, pattern="^;_;")
@@ -193,7 +192,9 @@ async def insult(e):
 
 @borg.on(admin_cmd(outgoing=True, pattern="repo$"))
 async def source(e):
-    await e.edit("Click [here](https://github.com/Jisan09/catuserbot) to open this lit af repo.")
+    await e.edit(
+        "Click [here](https://github.com/Jisan09/catuserbot) to open this lit af repo."
+    )
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="hey$"))
@@ -236,7 +237,30 @@ async def fuckedd(abusehard):
     await abusehard.edit(reply_text)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="abusehim$"))
+RUNSREACTS = [
+    "`Congratulations and BRAVO!`",
+    "`You did it! So proud of you!`",
+    "`This calls for celebrating! Congratulations!`",
+    "`I knew it was only a matter of time. Well done!`",
+    "`Congratulations on your well-deserved success.`",
+    "`Heartfelt congratulations to you.`",
+    "`Warmest congratulations on your achievement.`",
+    "`Congratulations and best wishes for your next adventure!”`",
+    "`So pleased to see you accomplishing great things.`",
+    "`Feeling so much joy for you today. What an impressive achievement!`",
+]
+
+
+@borg.on(admin_cmd(pattern="congo"))
+async def _(event):
+    if event.fwd_from:
+        return
+    bro = random.randint(0, len(RUNSREACTS) - 1)
+    reply_text = RUNSREACTS[bro]
+    await event.edit(reply_text)
+
+
+@borg.on(admin_cmd(outgoing=True, pattern="abuse$"))
 async def abusing(abused):
     index = random.randint(0, len(memes.ABUSE_STRINGS) - 1)
     reply_text = memes.ABUSE_STRINGS[index]
@@ -265,14 +289,112 @@ async def faces(owo):
     await owo.edit(reply_text)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="react$"))
-async def react_meme(react):
-    await react.edit(random.choice(memes.FACEREACTS))
-
-
 @borg.on(admin_cmd(outgoing=True, pattern="shg$"))
 async def shrugger(shg):
     await shg.edit(random.choice(memes.SHGS))
+
+
+@borg.on(admin_cmd(pattern=f"react ?(.*)", outgoing=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    if input_str in "happy":
+        emoticons = [
+            "( ͡° ͜ʖ ͡°)",
+            "(ʘ‿ʘ)",
+            "(✿´‿`)",
+            "=͟͟͞͞٩(๑☉ᴗ☉)੭ु⁾⁾",
+            "(*⌒▽⌒*)θ～♪",
+            "°˖✧◝(⁰▿⁰)◜✧˖°",
+            "✌(-‿-)✌",
+            "⌒°(❛ᴗ❛)°⌒",
+            "(ﾟ<|＼(･ω･)／|>ﾟ)",
+            "ヾ(o✪‿✪o)ｼ",
+        ]
+    elif input_str in "think":
+        emoticons = [
+            "(҂⌣̀_⌣́)",
+            "（；¬＿¬)",
+            "(-｡-;",
+            "┌[ O ʖ̯ O ]┐",
+            "〳 ͡° Ĺ̯ ͡° 〵",
+        ]
+    elif input_str in "wave":
+        emoticons = [
+            "(ノ^∇^)",
+            "(;-_-)/",
+            "@(o・ェ・)@ノ",
+            "ヾ(＾-＾)ノ",
+            "ヾ(◍’౪`◍)ﾉﾞ♡",
+            "(ό‿ὸ)ﾉ",
+            "(ヾ(´・ω・｀)",
+        ]
+    elif input_str in "wtf":
+        emoticons = [
+            "༎ຶ‿༎ຶ",
+            "(‿ˠ‿)",
+            "╰U╯☜(◉ɷ◉ )",
+            "(;´༎ຶ益༎ຶ`)♡",
+            "╭∩╮(︶ε︶*)chu",
+            "( ＾◡＾)っ (‿|‿)",
+        ]
+    elif input_str in "love":
+        emoticons = [
+            "乂❤‿❤乂",
+            "(｡♥‿♥｡)",
+            "( ͡~ ͜ʖ ͡°)",
+            "໒( ♥ ◡ ♥ )७",
+            "༼♥ل͜♥༽",
+        ]
+    elif input_str in "confused":
+        emoticons = [
+            "(・_・ヾ",
+            "｢(ﾟﾍﾟ)",
+            "﴾͡๏̯͡๏﴿",
+            "(￣■￣;)!?",
+            "▐ ˵ ͠° (oo) °͠ ˵ ▐",
+            "(-_-)ゞ゛",
+        ]
+    elif input_str in "dead":
+        emoticons = [
+            "(✖╭╮✖)",
+            "✖‿✖",
+            "(+_+)",
+            "(✖﹏✖)",
+            "∑(✘Д✘๑)",
+        ]
+    elif input_str in "sad":
+        emoticons = [
+            "(＠´＿｀＠)",
+            "⊙︿⊙",
+            "(▰˘︹˘▰)",
+            "●︿●",
+            "(　´_ﾉ` )",
+            "彡(-_-;)彡",
+        ]
+    elif input_str in "dog":
+        emoticons = [
+            "-ᄒᴥᄒ-",
+            "◖⚆ᴥ⚆◗",
+        ]
+    else:
+        emoticons = [
+            "( ͡° ͜ʖ ͡°)",
+            r"¯\_(ツ)_/¯",
+            "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)",
+            "ʕ•ᴥ•ʔ",
+            "(▀̿Ĺ̯▀̿ ̿)",
+            "(ง ͠° ͟ل͜ ͡°)ง",
+            "༼ つ ◕_◕ ༽つ",
+            "ಠ_ಠ",
+            "(☞ ͡° ͜ʖ ͡°)☞",
+            r"¯\_༼ ି ~ ି ༽_/¯",
+            "c༼ ͡° ͜ʖ ͡° ༽⊃",
+        ]
+    index = random.randint(0, len(emoticons))
+    output_str = emoticons[index]
+    await event.edit(output_str)
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="runs$"))
@@ -329,8 +451,8 @@ async def smrk(smk):
     else:
         await smk.edit("ツ")
         return
-    if message == 'dele':
-        await smk.edit(message + 'te the hell' + "ツ")
+    if message == "dele":
+        await smk.edit(message + "te the hell" + "ツ")
         await smk.edit("ツ")
     else:
         smirk = " ツ"
@@ -342,9 +464,19 @@ async def smrk(smk):
 async def payf(event):
     paytext = event.pattern_match.group(1)
     pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
-        paytext * 8, paytext * 8, paytext * 2, paytext * 2, paytext * 2,
-        paytext * 6, paytext * 6, paytext * 2, paytext * 2, paytext * 2,
-        paytext * 2, paytext * 2)
+        paytext * 8,
+        paytext * 8,
+        paytext * 2,
+        paytext * 2,
+        paytext * 2,
+        paytext * 6,
+        paytext * 6,
+        paytext * 2,
+        paytext * 2,
+        paytext * 2,
+        paytext * 2,
+        paytext * 2,
+    )
     await event.edit(pay)
 
 
@@ -354,27 +486,29 @@ async def bluetext(bt_e):
     if bt_e.is_group:
         await bt_e.edit(
             "/BLUETEXT /MUST /CLICK.\n"
-            "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?")
+            "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?"
+        )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="lfy (.*)",))
-async def let_me_google_that_for_you(lmgtfy_q):
-    textx = await lmgtfy_q.get_reply_message()
-    query = lmgtfy_q.text
-    if query[5:]:
-        query = str(query[5:])
-    elif textx:
-        query = textx
-        query = query.message
-    query_encoded = query.replace(" ", "+")
-    lfy_url = f"http://lmgtfy.com/?s=g&iie=1&q={query_encoded}"
-    payload = {'format': 'json', 'url': lfy_url}
-    r = requests.get('http://is.gd/create.php', params=payload)
-    await lmgtfy_q.edit(f"[{query}]({r.json()['shorturl']})")
+@borg.on(admin_cmd(pattern="ggl (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    sample_url = "https://da.gd/s?url=https://lmgtfy.com/?q={}%26iie=1".format(
+        input_str.replace(" ", "+")
+    )
+    response_api = requests.get(sample_url).text
+    if response_api:
+        await event.edit(
+            "[{}]({})\n`Thank me Later 🙃` ".format(input_str, response_api.rstrip())
+        )
+    else:
+        await event.edit("something is wrong. please try again later.")
     if BOTLOG:
         await bot.send_message(
             BOTLOG_CHATID,
-            "LMGTFY query `" + query + "` was executed successfully",
+            "LMGTFY query `" + input_str + "` was executed successfully",
         )
 
 
@@ -391,7 +525,7 @@ async def typewriter(typew):
         return
     sleep_time = 0.03
     typing_symbol = "|"
-    old_text = ''
+    old_text = ""
     await typew.edit(typing_symbol)
     await asyncio.sleep(sleep_time)
     for character in message:
@@ -402,74 +536,58 @@ async def typewriter(typew):
         await typew.edit(old_text)
         await asyncio.sleep(sleep_time)
 
-CMD_HELP.update({
-    "memes": ".cowsay\
-\nUsage: cow which says things.\
-\n\n.milksay\
-\nUsage: Weird Milk that can speak\
-\n\n:/\
-\nUsage: Check yourself ;)\
-\n\n-_-\
-\nUsage: Ok...\
-\n\n;_;\
-\nUsage: Like `-_-` but crying.\
-\n\n.10iq\
+
+CMD_HELP.update(
+    {
+        "memes": "__**PLUGIN NAME :** Memes__\
+\n\n📌** CMD ➥** `.cowsay`\
+\n**USAGE   ➥  **cow which says things.\
+\n\n📌** CMD ➥** `.milksay`\
+\n**USAGE   ➥  **Weird Milk that can speak\
+\n\n📌** CMD ➥** `:/` or `-_-` or `;_;` \
+\n**USAGE   ➥  **Check yourself ;)\
+\n\n📌** CMD ➥** `.10iq`\
 \nUsage: You retard !!\
-\n\n.oof\
-\nUsage: Ooooof\
-\n\n.moon\
-\nUsage: kensar moon animation.\
-\n\n.clock\
-\nUsage: kensar clock animation.\
-\n\n.earth\
-\nUsage: kensar earth animation.\
-\n\n.hi\
-\nUsage: Greet everyone!\
-\n\n.coinflip <heads/tails>\
-\nUsage: Flip a coin !!\
-\n\n.owo\
-\nUsage: UwU\
-\n\n.react\
-\nUsage: Make your userbot react to everything.\
-\n\n.slap\
-\nUsage: reply to slap them with random objects !!\
-\n\n.cry\
-\nUsage: y u du dis, i cri.\
-\n\n.shg\
-\nUsage: Shrug at it !!\
-\n\n.runs\
-\nUsage: Run, run, RUNNN! [`.disable runs`: disable | `.enable runs`: enable]\
-\n\n.metoo\
-\nUsage: Haha yes\
-\n\n.clap\
-\nUsage: Praise people!\
-\n\n.ftext <emoji/character>\
-\nUsage: Pay Respects.\
-\n\n.bt\
-\nUsage: Believe me, you will find this useful.\
-\n\n.smk <text/reply>\
-\nUsage: A shit module for ツ , who cares.\
-\n\n.type\
-\nUsage: Just a small command to make your keyboard become a typewriter!\
-\n\n.lfy <query>\
-\nUsage: Let me Google that for you real quick !!\
-\n\n.decide\
-\nUsage: Make a quick decision.\
-\n\n.abusehard\
-\nUsage: You already got that! Ain't?.\
-\n\n.chu\
-\nUsage: Incase, the person infront of you is....\
-\n\n.fuk\
-\nUsage: The only word that can be used fucking everywhere.\
-\n\n.thanos\
-\nUsage: Try and then Snap.\
-\n\n.noob\
-\nUsage: Whadya want to know? Are you a NOOB?\
-\n\n.pro\
-\nUsage: If you think you're pro, try this.\
-\n\n.abuse\
-\nUsage: Protects you from unwanted peeps.\
-\n\n.coin\
-\nUsage: Flip a coin.\
+\n\n📌** CMD ➥** `.oof`\
+\n**USAGE   ➥  **Ooooof\
+\n\n📌** CMD ➥** `.hey`\
+\n**USAGE   ➥  **Greet everyone!\
+\n\n📌** CMD ➥** `.coinflip` <heads/tails>\
+\n**USAGE   ➥  **Flip a coin !!\
+\n\n📌** CMD ➥** `.owo` <text> \
+\n**USAGE   ➥  **UwU\
+\n\n📌** CMD ➥** `.react` <type>\
+\n**USAGE   ➥  **Make your userbot react. types are <happy ,think ,wave ,wtf ,love ,confused,dead, sad,dog>\
+\n\n📌** CMD ➥** `.slap`\
+\n**USAGE   ➥  **reply to slap them with random objects !!\
+\n\n📌** CMD ➥** `.shg`\
+\n**USAGE   ➥  **Shrug at it !!\
+\n\n📌** CMD ➥** `.runs`\
+\n**USAGE   ➥  **Run, run, RUNNN! [`.disable runs`: disable | `.enable runs`: enable]\
+\n\n📌** CMD ➥** `.clap`\
+\n**USAGE   ➥  **Praise people!\
+\n\n📌** CMD ➥** `.ftext` <emoji/character>\
+\n**USAGE   ➥  **Pay Respects.\
+\n\n📌** CMD ➥** `.bt`\
+\n**USAGE   ➥  **Believe me, you will find this useful.\
+\n\n📌** CMD ➥** `.smk` <text/reply>\
+\n**USAGE   ➥  **A shit module for ツ , who cares.\
+\n\n📌** CMD ➥** `.type`\
+\n**USAGE   ➥  **Just a small command to make your keyboard become a typewriter!\
+\n\n📌** CMD ➥** `.ggl` <query>\
+\n**USAGE   ➥  **Let me Google that for you real quick !!\
+\n\n📌** CMD ➥** `.decide`\
+\n**USAGE   ➥  **Make a quick decision.\
+\n\n📌** CMD ➥** `.abusehard`\
+\n**USAGE   ➥  **You already got that! Ain't?.\
+\n\n📌** CMD ➥** `.thanos`\
+\n**USAGE   ➥  **Try and then Snap.\
+\n\n📌** CMD ➥** `.noob`\
+\n**USAGE   ➥  **Whadya want to know? Are you a NOOB?\
+\n\n📌** CMD ➥** `.pro`\
+\n**USAGE   ➥  **If you think you're pro, try this.\
+\n\n📌** CMD ➥** `.abuse`\
+\n**USAGE   ➥  **Protects you from unwanted peeps.\
 "
-})
+    }
+)

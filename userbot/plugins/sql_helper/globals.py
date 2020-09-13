@@ -1,5 +1,5 @@
 try:
-    from userbot.plugins.sql_helper import SESSION, BASE
+    from userbot.plugins.sql_helper import BASE, SESSION
 except ImportError:
     raise AttributeError
 from sqlalchemy import Column, String, UnicodeText
@@ -20,8 +20,12 @@ Globals.__table__.create(checkfirst=True)
 
 def gvarstatus(variable):
     try:
-        return SESSION.query(Globals).filter(
-            Globals.variable == str(variable)).first().value
+        return (
+            SESSION.query(Globals)
+            .filter(Globals.variable == str(variable))
+            .first()
+            .value
+        )
     except BaseException:
         return None
     finally:
@@ -29,8 +33,7 @@ def gvarstatus(variable):
 
 
 def addgvar(variable, value):
-    if SESSION.query(Globals).filter(
-            Globals.variable == str(variable)).one_or_none():
+    if SESSION.query(Globals).filter(Globals.variable == str(variable)).one_or_none():
         delgvar(variable)
     adder = Globals(str(variable), value)
     SESSION.add(adder)
@@ -38,7 +41,10 @@ def addgvar(variable, value):
 
 
 def delgvar(variable):
-    rem = SESSION.query(Globals).filter(Globals.variable == str(variable))\
+    rem = (
+        SESSION.query(Globals)
+        .filter(Globals.variable == str(variable))
         .delete(synchronize_session="fetch")
+    )
     if rem:
         SESSION.commit()

@@ -1,7 +1,8 @@
 import asyncio
-from userbot.utils import admin_cmd
-from userbot import ALIVE_NAME
 from collections import deque
+
+from userbot import ALIVE_NAME
+from userbot.utils import admin_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
@@ -48,7 +49,6 @@ async def _(event):
     animation_ttl = range(0, 12)
     await event.edit("Deploying...")
     animation_chars = [
-
         "**Heroku Connecting To Latest Github Build **",
         f"**Build started by user** [{DEFAULTUSER}]({USERNAME})",
         f"**Deploy** `535a74f0` **by user** [{DEFAULTUSER}]({USERNAME})",
@@ -60,7 +60,7 @@ async def _(event):
         "**State changed from starting to up**",
         "__INFO:Userbot:Logged in as 557667062__",
         "__INFO:Userbot:Successfully loaded all plugins__",
-        "**Build Succeeded**"
+        "**Build Succeeded**",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -73,16 +73,31 @@ async def _(message):
         obj = message.pattern_match.group(1)
         if len(obj) != 3:
             raise IndexError
-        inp = ' '.join(obj)
+        inp = " ".join(obj)
     except IndexError:
         inp = "🥞 🎂 🍫"
-    u, t, g, o, s, n = inp.split(), '🗑', '<(^_^ <)', '(> ^_^)>', '⠀ ', '\n'
-    h = [(u[0], u[1], u[2]), (u[0], u[1], ''), (u[0], '', '')]
-    for something in reversed([y for y in ([''.join(x) for x in (
-            f + (s, g, s + s * f.count(''), t), f + (g, s * 2 + s * f.count(''), t),
-            f[:i] + (o, f[i], s * 2 + s * f.count(''), t), f[:i] + (s + s * f.count(''), o, f[i], s, t),
-            f[:i] + (s * 2 + s * f.count(''), o, f[i], t), f[:i] + (s * 3 + s * f.count(''), o, t),
-            f[:i] + (s * 3 + s * f.count(''), g, t))] for i, f in enumerate(reversed(h)))]):
+    u, t, g, o, s, n = inp.split(), "🗑", "<(^_^ <)", "(> ^_^)>", "⠀ ", "\n"
+    h = [(u[0], u[1], u[2]), (u[0], u[1], ""), (u[0], "", "")]
+    for something in reversed(
+        [
+            y
+            for y in (
+                [
+                    "".join(x)
+                    for x in (
+                        f + (s, g, s + s * f.count(""), t),
+                        f + (g, s * 2 + s * f.count(""), t),
+                        f[:i] + (o, f[i], s * 2 + s * f.count(""), t),
+                        f[:i] + (s + s * f.count(""), o, f[i], s, t),
+                        f[:i] + (s * 2 + s * f.count(""), o, f[i], t),
+                        f[:i] + (s * 3 + s * f.count(""), o, t),
+                        f[:i] + (s * 3 + s * f.count(""), g, t),
+                    )
+                ]
+                for i, f in enumerate(reversed(h))
+            )
+        ]
+    ):
         for something_else in something:
             await asyncio.sleep(0.3)
             try:
@@ -96,7 +111,6 @@ async def _(event):
     animation_interval = 1
     animation_ttl = range(0, 10)
     animation_chars = [
-
         "⬛⬛⬛\n⬛⬛⬛\n⬛⬛⬛",
         "⬛⬛⬛\n⬛🔄⬛\n⬛⬛⬛",
         "⬛⬆️⬛\n⬛🔄⬛\n⬛⬛⬛",
@@ -106,7 +120,7 @@ async def _(event):
         "⬛⬆️↗️\n⬛🔄➡️\n⬛⬇️↘️",
         "⬛⬆️↗️\n⬛🔄➡️\n↙️⬇️↘️",
         "⬛⬆️↗️\n⬅️🔄➡️\n↙️⬇️↘️",
-        "↖️⬆️↗️\n⬅️🔄➡️\n↙️⬇️↘️"
+        "↖️⬆️↗️\n⬅️🔄➡️\n↙️⬇️↘️",
     ]
     if event.fwd_from:
         return
@@ -196,7 +210,6 @@ async def _(event):
     animation_ttl = range(0, 12)
     await event.edit("Police")
     animation_chars = [
-
         "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
         "🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴",
         "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
@@ -208,8 +221,7 @@ async def _(event):
         "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
         "🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴\n🔵🔵🔵⬜⬜⬜🔴🔴🔴",
         "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
-        f"[{DEFAULTUSER}]({USERNAME}) **Police iz Here**"
-
+        f"[{DEFAULTUSER}]({USERNAME}) **Police iz Here**",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -242,7 +254,7 @@ async def _(event):
         "`▁ ▂ ▄ ▅ ▆ ▒ ▒`",
         "`▁ ▂ ▄ ▅ ▆ ▇ ▒`",
         "`▁ ▂ ▄ ▅ ▆ ▇ █`",
-        "**JIO NETWORK Boosted....**"
+        "**JIO NETWORK Boosted....**",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)

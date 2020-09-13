@@ -1,6 +1,7 @@
 """Pins the replied message
 Syntax: .cpin [LOUD]"""
 from telethon.tl import functions
+
 from userbot.utils import admin_cmd
 
 
@@ -15,11 +16,11 @@ async def _(event):
     if event.message.reply_to_msg_id is not None:
         message_id = event.message.reply_to_msg_id
         try:
-            await borg(functions.messages.UpdatePinnedMessageRequest(
-                event.chat_id,
-                message_id,
-                silent
-            ))
+            await borg(
+                functions.messages.UpdatePinnedMessageRequest(
+                    event.chat_id, message_id, silent
+                )
+            )
         except Exception as e:
             await event.edit(str(e))
         else:

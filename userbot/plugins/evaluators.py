@@ -1,12 +1,13 @@
 """Execute GNU/Linux commands inside Telegram
 Syntax: .exec Code"""
+import asyncio
 import io
 import sys
 import time
-import asyncio
 import traceback
+
 from .. import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="bash ?(.*)"))
@@ -34,7 +35,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=reply_to_id
+                reply_to=reply_to_id,
             )
             await event.delete()
     else:
@@ -75,7 +76,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=reply_to_id
+                reply_to=reply_to_id,
             )
             await event.delete()
     else:
@@ -114,8 +115,7 @@ async def _(event):
         evaluation = stdout
     else:
         evaluation = "Success"
-    final_output = "**EVAL**: `{}` \n\n **OUTPUT**: \n`{}` \n".format(
-        cmd, evaluation)
+    final_output = "**EVAL**: `{}` \n\n **OUTPUT**: \n`{}` \n".format(cmd, evaluation)
     if len(final_output) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(final_output)) as out_file:
             out_file.name = "eval.text"
@@ -125,7 +125,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=reply_to_id
+                reply_to=reply_to_id,
             )
             await event.delete()
     else:
@@ -133,13 +133,13 @@ async def _(event):
 
 
 async def aexec(code, event):
-    exec(f'async def __aexec(event): ' +
-         ''.join(f'\n {l}' for l in code.split('\n'))
-         )
-    return await locals()['__aexec'](event)
+    exec(f"async def __aexec(event): " + "".join(f"\n {l}" for l in code.split("\n")))
+    return await locals()["__aexec"](event)
 
-CMD_HELP.update({
-    "evaluators": "__**PLUGIN NAME :** Evaluators__\
+
+CMD_HELP.update(
+    {
+        "evaluators": "__**PLUGIN NAME :** Evaluators__\
      \n\n📌** CMD ➥** `.eval` <expr>\
      \n**USAGE   ➥  **Execute Python script.\
      \n\n📌** CMD ➥** `.exec` <command>\
@@ -147,4 +147,5 @@ CMD_HELP.update({
      \n\n📌** CMD ➥** `.bash` <command>\
      \n**USAGE   ➥  **Execute a bash command on catuserbot server and  easy to copy output\
      "
-})
+    }
+)

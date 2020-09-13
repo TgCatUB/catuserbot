@@ -7,19 +7,31 @@ import asyncio
 import math
 import os
 import time
-from pySmartDL import SmartDL
-from telethon import events
+from mimetypes import guess_type
+
+import httplib2
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from userbot import (G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET,
-                     G_DRIVE_AUTH_TOKEN_DATA, TEMP_DOWNLOAD_DIRECTORY,
-                     CMD_HELP, LOGS)
-from mimetypes import guess_type
-import httplib2
+from pySmartDL import SmartDL
+from telethon import events
+
+from userbot import (
+    CMD_HELP,
+    G_DRIVE_AUTH_TOKEN_DATA,
+    G_DRIVE_CLIENT_ID,
+    G_DRIVE_CLIENT_SECRET,
+    LOGS,
+    TEMP_DOWNLOAD_DIRECTORY,
+)
+from userbot.plugins.sql_helper.gdrive_sql import (
+    get_parent_id,
+    gparent_id,
+    is_folder,
+    rmparent_id,
+)
 from userbot.utils import admin_cmd, humanbytes, progress
-from userbot.plugins.sql_helper.gdrive_sql import is_folder, gparent_id, rmparent_id, get_parent_id
 
 # Path to token json file, it should be in same directory as script
 G_DRIVE_TOKEN_FILE = "./auth_token.txt"
@@ -83,10 +95,10 @@ async def gdrive_upload_function(dryb):
             downloader.get_speed()
             round(diff) * 1000
             progress_str = "[{0}{1}] {2}%".format(
-                ''.join(["█" for i in range(math.floor(percentage / 10))]),
-                ''.join(["░"
-                         for i in range(10 - math.floor(percentage / 10))]),
-                round(percentage, 2))
+                "".join(["█" for i in range(math.floor(percentage / 10))]),
+                "".join(["░" for i in range(10 - math.floor(percentage / 10))]),
+                round(percentage, 2),
+            )
             estimated_total_time = downloader.get_eta(human=True)
             try:
                 current_message = f"{status}...\
@@ -96,16 +108,17 @@ async def gdrive_upload_function(dryb):
                 \n{humanbytes(downloaded)} of {humanbytes(total_length)}\
                 \nETA: {estimated_total_time}"
 
-                if round(diff %
-                         10.00) == 0 and current_message != display_message:
+                if round(diff % 10.00) == 0 and current_message != display_message:
                     await dryb.edit(current_message)
                     display_message = current_message
             except Exception as e:
                 LOGS.info(str(e))
         if downloader.isSuccessful():
             await dryb.edit(
-                "Downloaded to `{}` successfully !!\nInitiating Upload to Google Drive.."
-                .format(downloaded_file_name))
+                "Downloaded to `{}` successfully !!\nInitiating Upload to Google Drive..".format(
+                    downloaded_file_name
+                )
+            )
             required_file_name = downloaded_file_name
         else:
             await dryb.edit("Incorrect URL\n{}".format(url))
@@ -114,11 +127,14 @@ async def gdrive_upload_function(dryb):
         if os.path.exists(input_str):
             required_file_name = input_str
             await dryb.edit(
-                "Found `{}` in local server, Initiating Upload to Google Drive.."
-                .format(input_str))
+                "Found `{}` in local server, Initiating Upload to Google Drive..".format(
+                    input_str
+                )
+            )
         else:
             await dryb.edit(
-                "File not found in local server. Give me a valid file path !")
+                "File not found in local server. Give me a valid file path !"
+            )
             return False
     elif dryb.reply_to_msg_id:
         try:
@@ -126,15 +142,19 @@ async def gdrive_upload_function(dryb):
             downloaded_file_name = await dryb.client.download_media(
                 await dryb.get_reply_message(),
                 TEMP_DOWNLOAD_DIRECTORY,
-                progress_callback=lambda d, t: asyncio.get_event_loop(
-                ).create_task(progress(d, t, dryb, c_time, "Downloading...")))
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, dryb, c_time, "Downloading...")
+                ),
+            )
         except Exception as e:
             await dryb.edit(str(e))
         else:
             required_file_name = downloaded_file_name
             await dryb.edit(
-                "Downloaded to `{}` Successfully !!\nInitiating Upload to Google Drive.."
-                .format(downloaded_file_name))
+                "Downloaded to `{}` Successfully !!\nInitiating Upload to Google Drive..".format(
+                    downloaded_file_name
+                )
+            )
     if required_file_name:
         if G_DRIVE_AUTH_TOKEN_DATA is not None:
             with open(G_DRIVE_TOKEN_FILE, "w") as t_file:
@@ -151,15 +171,16 @@ async def gdrive_upload_function(dryb):
         # required_file_name will have the full path
         # Sometimes API fails to retrieve starting URI, we wrap it.
         try:
-            g_drive_link = await upload_file(http, required_file_name,
-                                             file_name, mime_type, dryb,
-                                             parent_id)
+            g_drive_link = await upload_file(
+                http, required_file_name, file_name, mime_type, dryb, parent_id
+            )
             await dryb.edit(
                 f"File:`{required_file_name}`\nwas Successfully Uploaded to [Google Drive]({g_drive_link})!"
             )
         except Exception as e:
             await dryb.edit(
-                f"Error while Uploading to Google Drive\nError Code:\n`{e}`")
+                f"Error while Uploading to Google Drive\nError Code:\n`{e}`"
+            )
 
 
 @borg.on(admin_cmd(pattern=r"ggd(?: |$)(.*)"))
@@ -192,7 +213,8 @@ async def upload_dir_to_gdrive(event):
         # Authorize, get file parameters, upload file and print out result URL for download
         # first, create a sub-directory
         dir_id = await create_directory(
-            http, os.path.basename(os.path.abspath(input_str)), parent_id)
+            http, os.path.basename(os.path.abspath(input_str)), parent_id
+        )
         await DoTeskWithDir(http, input_str, event, dir_id)
         dir_link = "https://drive.google.com/folderview?id={}".format(dir_id)
         await event.edit(f"Here is your Google Drive [link]({dir_link})")
@@ -234,7 +256,9 @@ async def gdrive_search_list(event):
 
 @borg.on(
     admin_cmd(
-        pattern=r"gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"))
+        pattern=r"gsetf https?://drive\.google\.com/drive/u/\d/folders/([-\w]{25,})"
+    )
+)
 async def download(cat):
     await cat.delete()
     if not get_parent_id():
@@ -256,9 +280,13 @@ async def download(cat):
             if is_folder(parent_id):
                 rmparent_id(parent_id)
         gparent_id(gid)
-        await setf.edit(f"Custom Folder ID set successfully. The next uploads will upload to `{gid}` till `.gsetclear`")
+        await setf.edit(
+            f"Custom Folder ID set successfully. The next uploads will upload to `{gid}` till `.gsetclear`"
+        )
     else:
-        await setf.edit("Use `.gsetf <link to GDrive Folder>` to set the folder to upload new files to.")
+        await setf.edit(
+            "Use `.gsetf <link to GDrive Folder>` to set the folder to upload new files to."
+        )
 
 
 @borg.on(admin_cmd(pattern="gsetclear$"))
@@ -294,12 +322,14 @@ async def show_current_gdrove_folder(event):
     if parent_id:
         folder_link = f"https://drive.google.com/drive/folders/" + parent_id
         await event.edit(
-            f"My userbot is currently uploading files [here]({folder_link})")
+            f"My userbot is currently uploading files [here]({folder_link})"
+        )
     else:
         await event.edit(
             f"My userbot is currently uploading files to the root of my Google Drive storage.\
             \nFind uploaded files [here](https://drive.google.com/drive/my-drive)"
         )
+
 
 # Get mime type and name of given file
 
@@ -313,17 +343,17 @@ def file_ops(file_path):
 
 async def create_token_file(token_file, event):
     # Run through the OAuth flow and retrieve credentials
-    flow = OAuth2WebServerFlow(CLIENT_ID,
-                               CLIENT_SECRET,
-                               OAUTH_SCOPE,
-                               redirect_uri=REDIRECT_URI)
+    flow = OAuth2WebServerFlow(
+        CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, redirect_uri=REDIRECT_URI
+    )
     authorize_url = flow.step1_get_authorize_url()
     async with event.client.conversation(BOTLOG_CHATID) as conv:
         await conv.send_message(
             f"Go to the following link in your browser: {authorize_url} and reply the code"
         )
         response = conv.wait_event(
-            events.NewMessage(outgoing=True, chats=BOTLOG_CHATID))
+            events.NewMessage(outgoing=True, chats=BOTLOG_CHATID)
+        )
         response = await response
         code = response.message.message.strip()
         credentials = flow.step2_exchange(code)
@@ -359,12 +389,7 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
     # Permissions body description: anyone who has link can upload
     # Other permissions can be found at
     # https://developers.google.com/drive/v2/reference/permissions
-    permissions = {
-        "role": "reader",
-        "type": "anyone",
-        "value": None,
-        "withLink": True
-    }
+    permissions = {"role": "reader", "type": "anyone", "value": None, "withLink": True}
     # Insert a file
     file = drive_service.files().insert(body=body, media_body=media_body)
     response = None
@@ -376,10 +401,12 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
             percentage = int(status.progress() * 100)
             progress_str = "[{0}{1}] {2}%".format(
                 "".join(["█" for i in range(math.floor(percentage / 10))]),
-                "".join(["░"
-                         for i in range(10 - math.floor(percentage / 10))]),
-                round(percentage, 2))
-            current_message = f"Uploading to Google Drive\nFile Name: {file_name}\n{progress_str}"
+                "".join(["░" for i in range(10 - math.floor(percentage / 10))]),
+                round(percentage, 2),
+            )
+            current_message = (
+                f"Uploading to Google Drive\nFile Name: {file_name}\n{progress_str}"
+            )
             if display_message != current_message:
                 try:
                     await event.edit(current_message)
@@ -388,8 +415,7 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
                     LOGS.info(str(e))
     file_id = response.get("id")
     # Insert new permissions
-    drive_service.permissions().insert(fileId=file_id,
-                                       body=permissions).execute()
+    drive_service.permissions().insert(fileId=file_id, body=permissions).execute()
     # Define file instance and get url for download
     file = drive_service.files().get(fileId=file_id).execute()
     download_url = file.get("webContentLink")
@@ -398,24 +424,16 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
 
 async def create_directory(http, directory_name, parent_id):
     drive_service = build("drive", "v2", http=http, cache_discovery=False)
-    permissions = {
-        "role": "reader",
-        "type": "anyone",
-        "value": None,
-        "withLink": True
-    }
-    file_metadata = {
-        "title": directory_name,
-        "mimeType": G_DRIVE_DIR_MIME_TYPE
-    }
+    permissions = {"role": "reader", "type": "anyone", "value": None, "withLink": True}
+    file_metadata = {"title": directory_name, "mimeType": G_DRIVE_DIR_MIME_TYPE}
     if parent_id:
         file_metadata["parents"] = [{"id": parent_id}]
     file = drive_service.files().insert(body=file_metadata).execute()
     file_id = file.get("id")
-    drive_service.permissions().insert(fileId=file_id,
-                                       body=permissions).execute()
-    LOGS.info("Created Gdrive Folder:\nName: {}\nID: {} ".format(
-        file.get("title"), file_id))
+    drive_service.permissions().insert(fileId=file_id, body=permissions).execute()
+    LOGS.info(
+        "Created Gdrive Folder:\nName: {}\nID: {} ".format(file.get("title"), file_id)
+    )
     return file_id
 
 
@@ -427,16 +445,14 @@ async def DoTeskWithDir(http, input_directory, event, parent_id):
     for a_c_f_name in list_dirs:
         current_file_name = os.path.join(input_directory, a_c_f_name)
         if os.path.isdir(current_file_name):
-            current_dir_id = await create_directory(http, a_c_f_name,
-                                                    parent_id)
-            r_p_id = await DoTeskWithDir(http, current_file_name, event,
-                                         current_dir_id)
+            current_dir_id = await create_directory(http, a_c_f_name, parent_id)
+            r_p_id = await DoTeskWithDir(http, current_file_name, event, current_dir_id)
         else:
             file_name, mime_type = file_ops(current_file_name)
             # current_file_name will have the full path
-            g_drive_link = await upload_file(http, current_file_name,
-                                             file_name, mime_type, event,
-                                             parent_id)
+            g_drive_link = await upload_file(
+                http, current_file_name, file_name, mime_type, event, parent_id
+            )
             r_p_id = parent_id
     return r_p_id
 
@@ -459,7 +475,8 @@ async def gdrive_list_file_md(service, file_id):
             file_meta_data["md5Checksum"] = file["md5Checksum"]
             file_meta_data["fileSize"] = str(humanbytes(int(file["fileSize"])))
             file_meta_data["quotaBytesUsed"] = str(
-                humanbytes(int(file["quotaBytesUsed"])))
+                humanbytes(int(file["quotaBytesUsed"]))
+            )
             file_meta_data["previewURL"] = file["downloadUrl"]
         return json.dumps(file_meta_data, sort_keys=True, indent=4)
     except Exception as e:
@@ -479,7 +496,8 @@ async def gdrive_search(http, search_query):
             parent_id = None
     if parent_id:
         query = "'{}' in parents and (title contains '{}')".format(
-            parent_id, search_query)
+            parent_id, search_query
+        )
     else:
         query = "title contains '{}'".format(search_query)
     drive_service = build("drive", "v2", http=http, cache_discovery=False)
@@ -487,11 +505,16 @@ async def gdrive_search(http, search_query):
     res = ""
     while True:
         try:
-            response = drive_service.files().list(
-                q=query,
-                spaces="drive",
-                fields="nextPageToken, items(id, title, mimeType)",
-                pageToken=page_token).execute()
+            response = (
+                drive_service.files()
+                .list(
+                    q=query,
+                    spaces="drive",
+                    fields="nextPageToken, items(id, title, mimeType)",
+                    pageToken=page_token,
+                )
+                .execute()
+            )
             for file in response.get("items", []):
                 file_title = file.get("title")
                 file_id = file.get("id")
@@ -508,8 +531,10 @@ async def gdrive_search(http, search_query):
     msg = f"**Google Drive Query**:\n`{search_query}`\n\n**Results**\n\n{res}"
     return msg
 
-CMD_HELP.update({
-    "gdrive": "__**PLUGIN NAME :** Gdrive__\
+
+CMD_HELP.update(
+    {
+        "gdrive": "__**PLUGIN NAME :** Gdrive__\
     \n\n📌** CMD ➥** `.ugdrive` <file_path / reply / URL|file_name>\
     \n**USAGE   ➥  **Uploads the file in reply , URL or file path in server to your Google Drive.\
     \n\n📌** CMD ➥** `.gsetf https://drive.google.com/drive/u/0/folders/ `<Gdrive Folder Id>\
@@ -522,4 +547,5 @@ CMD_HELP.update({
     \n**USAGE   ➥  **Looks for files and folders in your Google Drive.\
     \n\n📌** CMD ➥** `.ggd` <path_to_folder_in_server>\
     \n**USAGE   ➥  **Uploads all the files in the directory to a folder in Google Drive."
-})
+    }
+)

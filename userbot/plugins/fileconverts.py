@@ -1,13 +1,15 @@
+import asyncio
 import os
 import time
-import asyncio
-from io import BytesIO
-from .. import CMD_HELP
-from telethon import types
 from datetime import datetime
+from io import BytesIO
+
+from telethon import types
 from telethon.errors import PhotoInvalidDimensionsError
 from telethon.tl.functions.messages import SendMediaRequest
-from ..utils import admin_cmd, sudo_cmd, progress, edit_or_reply
+
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="stoi$"))
@@ -27,13 +29,15 @@ async def _(cat):
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await borg.download_media(reply_message, downloaded_file_name)
+        downloaded_file_name = await borg.download_media(
+            reply_message, downloaded_file_name
+        )
         if os.path.exists(downloaded_file_name):
             caat = await borg.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
-                reply_to=reply_to_id
+                reply_to=reply_to_id,
             )
             os.remove(downloaded_file_name)
             await event.delete()
@@ -60,13 +64,15 @@ async def _(cat):
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await borg.download_media(reply_message, downloaded_file_name)
+        downloaded_file_name = await borg.download_media(
+            reply_message, downloaded_file_name
+        )
         if os.path.exists(downloaded_file_name):
             caat = await borg.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
-                reply_to=reply_to_id
+                reply_to=reply_to_id,
             )
             os.remove(downloaded_file_name)
             await event.delete()
@@ -103,24 +109,26 @@ async def on_file_to_photo(event):
         image = target.media.document
     except AttributeError:
         return
-    if not image.mime_type.startswith('image/'):
+    if not image.mime_type.startswith("image/"):
         return  # This isn't an image
-    if image.mime_type == 'image/webp':
+    if image.mime_type == "image/webp":
         return  # Telegram doesn't let you directly send stickers as photos
     if image.size > 10 * 1024 * 1024:
         return  # We'd get PhotoSaveFileInvalidError otherwise
     file = await borg.download_media(target, file=BytesIO())
     file.seek(0)
     img = await borg.upload_file(file)
-    img.name = 'image.png'
+    img.name = "image.png"
     try:
-        await borg(SendMediaRequest(
-            peer=await event.get_input_chat(),
-            media=types.InputMediaUploadedPhoto(img),
-            message=target.message,
-            entities=target.entities,
-            reply_to_msg_id=target.id
-        ))
+        await borg(
+            SendMediaRequest(
+                peer=await event.get_input_chat(),
+                media=types.InputMediaUploadedPhoto(img),
+                message=target.message,
+                entities=target.entities,
+                reply_to_msg_id=target.id,
+            )
+        )
     except PhotoInvalidDimensionsError:
         return
     await catt.delete()
@@ -157,14 +165,16 @@ async def _(event):
             Config.TMP_DOWNLOAD_DIRECTORY,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                 progress(d, t, event, c_time, "trying to download")
-            )
+            ),
         )
     except Exception as e:  # pylint:disable=C0103,W0703
         await event.edit(str(e))
     else:
         end = datetime.now()
         ms = (end - start).seconds
-        await event.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
+        await event.edit(
+            "Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms)
+        )
         new_required_file_name = ""
         new_required_file_caption = ""
         command_to_run = []
@@ -172,10 +182,10 @@ async def _(event):
         voice_note = False
         supports_streaming = False
         if input_str == "voice":
-            new_required_file_caption = "voice_" + \
-                str(round(time.time())) + ".opus"
-            new_required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + \
-                "/" + new_required_file_caption
+            new_required_file_caption = "voice_" + str(round(time.time())) + ".opus"
+            new_required_file_name = (
+                Config.TMP_DOWNLOAD_DIRECTORY + "/" + new_required_file_caption
+            )
             command_to_run = [
                 "ffmpeg",
                 "-i",
@@ -188,21 +198,21 @@ async def _(event):
                 "100k",
                 "-vbr",
                 "on",
-                new_required_file_name
+                new_required_file_name,
             ]
             voice_note = True
             supports_streaming = True
         elif input_str == "mp3":
-            new_required_file_caption = "mp3_" + \
-                str(round(time.time())) + ".mp3"
-            new_required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + \
-                "/" + new_required_file_caption
+            new_required_file_caption = "mp3_" + str(round(time.time())) + ".mp3"
+            new_required_file_name = (
+                Config.TMP_DOWNLOAD_DIRECTORY + "/" + new_required_file_caption
+            )
             command_to_run = [
                 "ffmpeg",
                 "-i",
                 downloaded_file_name,
                 "-vn",
-                new_required_file_name
+                new_required_file_name,
             ]
             voice_note = False
             supports_streaming = True
@@ -235,14 +245,16 @@ async def _(event):
                 supports_streaming=supports_streaming,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, event, c_time, "trying to upload")
-                )
+                ),
             )
             (end_two - end).seconds
             os.remove(new_required_file_name)
             await event.delete()
 
-CMD_HELP.update({
-    "fileconverts": "__**PLUGIN NAME :** File Converts__\
+
+CMD_HELP.update(
+    {
+        "fileconverts": "__**PLUGIN NAME :** File Converts__\
     \n\n📌** CMD ➥** `.stoi` reply to sticker\
     \n**USAGE   ➥  **Converts sticker to image\
     \n\n📌** CMD ➥** `.itos` reply to image\
@@ -254,4 +266,5 @@ CMD_HELP.update({
     \n\n📌** CMD ➥** `.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\
     \n**USAGE   ➥  **Converts the required media file to voice or mp3 file.\
     "
-})
+    }
+)

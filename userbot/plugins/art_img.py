@@ -3,8 +3,9 @@
 
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from userbot.utils import admin_cmd
+
 from userbot import CMD_HELP
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd("ascii ?(.*)"))
@@ -27,16 +28,17 @@ async def _(event):
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=164766745))
+                events.NewMessage(incoming=True, from_users=164766745)
+            )
             await borg.send_message(chat, reply_message)
             response = await response
         except YouBlockedUserError:
             await event.reply("```Please unblock @asciiart_bot and try again```")
             return
         if response.text.startswith("Forward"):
-            await event.edit("```can you kindly disable your forward privacy settings for good?```")
+            await event.edit(
+                "```can you kindly disable your forward privacy settings for good?```"
+            )
         else:
             await borg.send_file(event.chat_id, response.message.media)
 
@@ -61,22 +63,27 @@ async def _(event):
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=1120861844))
+                events.NewMessage(incoming=True, from_users=1120861844)
+            )
             await borg.forward_messages(chat, reply_message)
             response = await response
         except YouBlockedUserError:
             await event.reply("```Please unblock @sangmatainfo_bot and try again```")
             return
         if response.text.startswith("Forward"):
-            await event.edit("```can you kindly disable your forward privacy settings for good?```")
+            await event.edit(
+                "```can you kindly disable your forward privacy settings for good?```"
+            )
         else:
             await borg.send_file(event.chat_id, response.message.media)
 
-CMD_HELP.update({"ascii": "__**PLUGIN NAME :** Ascii__\
+
+CMD_HELP.update(
+    {
+        "ascii": "__**PLUGIN NAME :** Ascii__\
       \n\n📌** CMD ➥** `.ascii` reply to any image file:\
       \n**USAGE   ➥  **Makes an image ascii style, try out your own.\
       \n\n📌** CMD ➥** `.line` reply to any image file:\
  \n**USAGE   ➥  **Makes an image line style.\ "
-                 })
+    }
+)

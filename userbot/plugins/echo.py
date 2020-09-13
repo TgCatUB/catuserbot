@@ -19,13 +19,15 @@ Idea by @BlazingRobonix
 
 
 import asyncio
+
 import pybase64
 import requests
-from .. import CMD_HELP
 from telethon import events
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-from .sql_helper.echo_sql import is_echo, get_all_echos, addecho, remove_echo
+
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from .sql_helper.echo_sql import addecho, get_all_echos, is_echo, remove_echo
 
 
 @borg.on(admin_cmd(pattern="addecho$"))
@@ -85,16 +87,22 @@ async def echo(cat):
     if len(lsts) > 0:
         output_str = "echo enabled users:\n\n"
         for echos in lsts:
-            output_str += f"[User](tg://user?id={echos.user_id}) in chat `{echos.chat_id}`\n"
+            output_str += (
+                f"[User](tg://user?id={echos.user_id}) in chat `{echos.chat_id}`\n"
+            )
     else:
         output_str = "No echo enabled users "
     if len(output_str) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        key = requests.post(
-            'https://nekobin.com/api/documents',
-            json={
-                "content": output_str}).json().get('result').get('key')
-        url = f'https://nekobin.com/{key}'
-        reply_text = f'echo enabled users: [here]({url})'
+        key = (
+            requests.post(
+                "https://nekobin.com/api/documents", json={"content": output_str}
+            )
+            .json()
+            .get("result")
+            .get("key")
+        )
+        url = f"https://nekobin.com/{key}"
+        reply_text = f"echo enabled users: [here]({url})"
         await edit_or_reply(cat, reply_text)
     else:
         await edit_or_reply(cat, output_str)
@@ -115,8 +123,10 @@ async def samereply(cat):
         if cat.message.text or cat.message.sticker:
             await cat.reply(cat.message)
 
-CMD_HELP.update({
-    "echo": "__**PLUGIN NAME :** Echo__\
+
+CMD_HELP.update(
+    {
+        "echo": "__**PLUGIN NAME :** Echo__\
     \n\n📌** CMD ➥** `.addecho` reply to user to who you want to enable\
     \n**USAGE   ➥  **replay's his every message for whom you enabled echo\
     \n\n📌** CMD ➥** `.rmecho` reply to user to who you want to stop\
@@ -124,4 +134,5 @@ CMD_HELP.update({
     \n\n📌** CMD ➥** `.listecho`\
     \n**USAGE   ➥  **shows the list of users for who you enabled echo\
     "
-})
+    }
+)

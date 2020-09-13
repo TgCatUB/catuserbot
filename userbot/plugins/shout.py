@@ -3,9 +3,9 @@ usage: .shout message
 originaly from : @corsicanu_bot
 """
 
-from userbot.utils import admin_cmd
-from userbot.utils import admin_cmd
 import asyncio
+
+from userbot.utils import admin_cmd
 
 
 @borg.on(admin_cmd(pattern=f"shout", outgoing=True))
@@ -17,9 +17,9 @@ async def shout(args):
     messagestr = messagestr[7:]
     text = " ".join(messagestr)
     result = []
-    result.append(' '.join([s for s in text]))
+    result.append(" ".join([s for s in text]))
     for pos, symbol in enumerate(text[1:]):
-        result.append(symbol + ' ' + '  ' * pos + symbol)
+        result.append(symbol + " " + "  " * pos + symbol)
     result = list("\n".join(result))
     result[0] = text[0]
     result = "".join(result)
@@ -46,7 +46,7 @@ async def _(event):
         "@aaaaddddmmmmiiiinnnn",
         "@aaadddmmmiiinnn",
         "@aaddmmiinn",
-        "@admin"
+        "@admin",
     ]
     for i in animation_ttl:
         await asyncio.sleep(1)

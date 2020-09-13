@@ -7,7 +7,8 @@ You remove this, you gay.
 """
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from userbot import bot, CMD_HELP
+
+from userbot import CMD_HELP, bot
 from userbot.utils import admin_cmd
 
 
@@ -21,10 +22,9 @@ async def _(event):
     async with bot.conversation("@themememakerbot") as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=740813545))
-            await conv.send_message(f'/{sf} {jisan}')
+                events.NewMessage(incoming=True, from_users=740813545)
+            )
+            await conv.send_message(f"/{sf} {jisan}")
             response = await response
         except YouBlockedUserError:
             await event.reply("```Unblock @themememakerbot plox```")
@@ -45,10 +45,9 @@ async def _(event):
     async with bot.conversation("@themememakerbot") as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=740813545))
-            await conv.send_message(f'/{ttm} {jisan}')
+                events.NewMessage(incoming=True, from_users=740813545)
+            )
+            await conv.send_message(f"/{ttm} {jisan}")
             response = await response
         except YouBlockedUserError:
             await event.reply("```Unblock @themememakerbot plox```")
@@ -69,10 +68,9 @@ async def _(event):
     async with bot.conversation("@themememakerbot") as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=740813545))
-            await conv.send_message(f'/{bbs} {jisan}')
+                events.NewMessage(incoming=True, from_users=740813545)
+            )
+            await conv.send_message(f"/{bbs} {jisan}")
             response = await response
         except YouBlockedUserError:
             await event.reply("```Unblock @themememakerbot plox```")
@@ -93,10 +91,9 @@ async def _(event):
     async with bot.conversation("@themememakerbot") as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=740813545))
-            await conv.send_message(f'/{sp} {jisan}')
+                events.NewMessage(incoming=True, from_users=740813545)
+            )
+            await conv.send_message(f"/{sp} {jisan}")
             response = await response
         except YouBlockedUserError:
             await event.reply("```Unblock @themememakerbot plox```")
@@ -117,10 +114,9 @@ async def _(event):
     async with bot.conversation("@themememakerbot") as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=740813545))
-            await conv.send_message(f'/{love} {jisan}')
+                events.NewMessage(incoming=True, from_users=740813545)
+            )
+            await conv.send_message(f"/{love} {jisan}")
             response = await response
         except YouBlockedUserError:
             await event.reply("```Unblock @themememakerbot plox```")
@@ -131,16 +127,18 @@ async def _(event):
         await bot.send_read_acknowledge(conv.chat_id)
 
 
-CMD_HELP.update({
-    "troll":
-    "`.fox` <your text>\
-\n**Usage:** Send sneeky fox troll \
-\n\n`.talkme` <your text>\
-\n**Usage:** Send you a hardcore meme.\
-\n\n`.brnsay` <your text>\
-\n**Usage:** Send you a sleeping brain meme.\
-\n\n`.sbob` <your text>\
-\n**Usage:** Send you spongebob meme.\
-\n\n`.child` <your text>\
-\n**Usage:** Send you child in trash meme."
-})
+CMD_HELP.update(
+    {
+        "troll": "__**PLUGIN NAME :** Troll__\
+\n\n📌** CMD ➥** `.fox` <your text>\
+\n**USAGE   ➥  **Send sneeky fox troll \
+\n\n📌** CMD ➥** `.talkme` <your text>\
+\n**USAGE   ➥  **Send you a hardcore meme.\
+\n\n📌** CMD ➥** `.brnsay` <your text>\
+\n**USAGE   ➥  **Send you a sleeping brain meme.\
+\n\n📌** CMD ➥** `.sbob` <your text>\
+\n**USAGE   ➥  **Send you spongebob meme.\
+\n\n📌** CMD ➥** `.child` <your text>\
+\n**USAGE   ➥  **Send you child in trash meme."
+    }
+)

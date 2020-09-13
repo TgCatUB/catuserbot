@@ -9,12 +9,13 @@ By:- git: jaskaranSM tg: @Zero_cool7870
 """
 
 
-from userbot.utils import admin_cmd
+from os import remove
 from random import choice
 from urllib import parse
-from os import remove
+
 import requests
 
+from userbot.utils import admin_cmd
 
 BASE_URL = "https://headp.at/pats/{}"
 PAT_IMAGE = "pat.jpg"
@@ -33,7 +34,7 @@ async def lastfm(event):
     pats = resp.json()
     pat = BASE_URL.format(parse.quote(choice(pats)))
     await event.delete()
-    with open(PAT_IMAGE, 'wb') as f:
+    with open(PAT_IMAGE, "wb") as f:
         f.write(requests.get(pat).content)
     if username:
         await borg.send_file(event.chat_id, PAT_IMAGE, caption=username)

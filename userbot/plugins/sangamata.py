@@ -1,11 +1,14 @@
 import asyncio
-from userbot.utils import admin_cmd
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon import events
 import logging
+
+from telethon import events
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+
+from userbot.utils import admin_cmd
+
 logging.basicConfig(
-    format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-    level=logging.WARNING)
+    format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
+)
 
 
 @borg.on(admin_cmd(pattern=("sg ?(.*)")))
@@ -28,16 +31,17 @@ async def _(event):
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=461843263))
+                events.NewMessage(incoming=True, from_users=461843263)
+            )
             await borg.forward_messages(chat, reply_message)
             response = await response
         except YouBlockedUserError:
             await event.reply("```Please unblock @sangmatainfo_bot and try again```")
             return
         if response.text.startswith("Forward"):
-            await event.edit("The user have enabled privacy settings you cant get name history")
+            await event.edit(
+                "The user have enabled privacy settings you cant get name history"
+            )
         else:
             await event.edit(f"{response.message.message}")
 
@@ -52,7 +56,9 @@ async def _(event):
         try:
             await event.client.send_message("@fakemailbot", "/generate")
             await asyncio.sleep(5)
-            k = await event.client.get_messages(entity="@fakemailbot", limit=1, reverse=False)
+            k = await event.client.get_messages(
+                entity="@fakemailbot", limit=1, reverse=False
+            )
             mail = k[0].text
             # print(k[0].text)
         except YouBlockedUserError:
@@ -71,7 +77,9 @@ async def _(event):
         try:
             await event.client.send_message("@fakemailbot", "/id")
             await asyncio.sleep(5)
-            k = await event.client.get_messages(entity="@fakemailbot", limit=1, reverse=False)
+            k = await event.client.get_messages(
+                entity="@fakemailbot", limit=1, reverse=False
+            )
             mail = k[0].text
             # print(k[0].text)
         except YouBlockedUserError:
@@ -100,16 +108,17 @@ async def _(event):
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=97342984))
+                events.NewMessage(incoming=True, from_users=97342984)
+            )
             await borg.forward_messages(chat, reply_message)
             response = await response
         except YouBlockedUserError:
             await event.reply("```Please unblock @uploadbot and try again```")
             return
         if response.text.startswith("Hi!,"):
-            await event.edit("```can you kindly disable your forward privacy settings for good?```")
+            await event.edit(
+                "```can you kindly disable your forward privacy settings for good?```"
+            )
         else:
             await event.edit(f"{response.message.message}")
 
@@ -134,15 +143,16 @@ async def _(event):
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=186675376))
+                events.NewMessage(incoming=True, from_users=186675376)
+            )
             await borg.forward_messages(chat, reply_message)
             response = await response
         except YouBlockedUserError:
             await event.reply("```you blocked bot```")
             return
         if response.text.startswith("Hello,"):
-            await event.edit("```can you kindly disable your forward privacy settings for good?```")
+            await event.edit(
+                "```can you kindly disable your forward privacy settings for good?```"
+            )
         else:
             await event.edit(f"{response.message.message}")

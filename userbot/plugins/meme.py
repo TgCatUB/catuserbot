@@ -1,4 +1,5 @@
 import asyncio
+
 from userbot.utils import admin_cmd
 
 
@@ -12,7 +13,7 @@ async def _(event):
 
 @borg.on(admin_cmd(pattern="ccry$"))
 async def cry(e):
-    await e.edit("(;´༎ຶД༎ຶ`)")
+    await e.edit("`(;༎ຶД༎ຶ`)`")
 
 
 @borg.on(admin_cmd(pattern="fp$"))
@@ -25,39 +26,65 @@ async def meme(event):
     if event.fwd_from:
         return
     memeVar = event.text
-    sleepValue = 5
+    sleepValue = 1
     memeVar = memeVar[6:]
-
     await event.edit("-------------" + memeVar)
-    await event.edit("------------" + memeVar + "-")
-    await event.edit("-----------" + memeVar + "--")
-    await event.edit("----------" + memeVar + "---")
-    await event.edit("---------" + memeVar + "----")
-    await event.edit("--------" + memeVar + "-----")
-    await event.edit("-------" + memeVar + "------")
-    await event.edit("------" + memeVar + "-------")
-    await event.edit("-----" + memeVar + "--------")
-    await event.edit("----" + memeVar + "---------")
-    await event.edit("---" + memeVar + "----------")
-    await event.edit("--" + memeVar + "-----------")
-    await event.edit("-" + memeVar + "------------")
-    await event.edit(memeVar + "-------------")
-    await event.edit("-------------" + memeVar)
-    await event.edit("------------" + memeVar + "-")
-    await event.edit("-----------" + memeVar + "--")
-    await event.edit("----------" + memeVar + "---")
-    await event.edit("---------" + memeVar + "----")
-    await event.edit("--------" + memeVar + "-----")
-    await event.edit("-------" + memeVar + "------")
-    await event.edit("------" + memeVar + "-------")
-    await event.edit("-----" + memeVar + "--------")
-    await event.edit("----" + memeVar + "---------")
-    await event.edit("---" + memeVar + "----------")
-    await event.edit("--" + memeVar + "-----------")
-    await event.edit("-" + memeVar + "------------")
-    await event.edit(memeVar + "-------------")
-    await event.edit(memeVar)
     await asyncio.sleep(sleepValue)
+    await event.edit("------------" + memeVar + "-")
+    await asyncio.sleep(sleepValue)
+    await event.edit("-----------" + memeVar + "--")
+    await asyncio.sleep(sleepValue)
+    await event.edit("----------" + memeVar + "---")
+    await asyncio.sleep(sleepValue)
+    await event.edit("---------" + memeVar + "----")
+    await asyncio.sleep(sleepValue)
+    await event.edit("--------" + memeVar + "-----")
+    await asyncio.sleep(sleepValue)
+    await event.edit("-------" + memeVar + "------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("------" + memeVar + "-------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("-----" + memeVar + "--------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("----" + memeVar + "---------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("---" + memeVar + "----------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("--" + memeVar + "-----------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("-" + memeVar + "------------")
+    await asyncio.sleep(sleepValue)
+    await event.edit(memeVar + "-------------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("-------------" + memeVar)
+    await asyncio.sleep(sleepValue)
+    await event.edit("------------" + memeVar + "-")
+    await asyncio.sleep(sleepValue)
+    await event.edit("-----------" + memeVar + "--")
+    await asyncio.sleep(sleepValue)
+    await event.edit("----------" + memeVar + "---")
+    await asyncio.sleep(sleepValue)
+    await event.edit("---------" + memeVar + "----")
+    await asyncio.sleep(sleepValue)
+    await event.edit("--------" + memeVar + "-----")
+    await asyncio.sleep(sleepValue)
+    await event.edit("-------" + memeVar + "------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("------" + memeVar + "-------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("-----" + memeVar + "--------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("----" + memeVar + "---------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("---" + memeVar + "----------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("--" + memeVar + "-----------")
+    await asyncio.sleep(sleepValue)
+    await event.edit("-" + memeVar + "------------")
+    await asyncio.sleep(sleepValue)
+    await event.edit(memeVar + "-------------")
+    await asyncio.sleep(sleepValue)
+    await event.edit(memeVar)
 
 
 @borg.on(admin_cmd(pattern=f"lp$", outgoing=True))
@@ -65,27 +92,42 @@ async def meme(event):
     if event.fwd_from:
         return
     lp = " 🍭"
-    sleepValue = 10
-
+    sleepValue = 1
     await event.edit(lp + "        ")
+    await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + "       ")
+    await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + lp + "      ")
+    await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + lp + lp + "     ")
+    await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + lp + lp + lp + "    ")
+    await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + lp + lp + lp + lp + "   ")
+    await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + lp + lp + lp + lp + lp + "  ")
+    await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + " ")
-    await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + lp)
-    await event.edit(lp + "        ")
-    await event.edit(lp + lp + "       ")
-    await event.edit(lp + lp + lp + "      ")
-    await event.edit(lp + lp + lp + lp + "     ")
-    await event.edit(lp + lp + lp + lp + lp + "    ")
-    await event.edit(lp + lp + lp + lp + lp + lp + "   ")
-    await event.edit(lp + lp + lp + lp + lp + lp + lp + "  ")
-    await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + " ")
+    await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + lp)
     await asyncio.sleep(sleepValue)
+    await event.edit(lp + "        ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + "       ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + "      ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + "     ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + "    ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + "   ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + lp + "  ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + " ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + lp)
 
 
 @borg.on(admin_cmd(pattern=f"give", outgoing=True))
@@ -93,28 +135,43 @@ async def give(event):
     if event.fwd_from:
         return
     giveVar = event.text
-    sleepValue = 5
-    giveVar = giveVar[6:]
-
-    await event.edit(giveVar + "        ")
-    await event.edit(giveVar + giveVar + "       ")
-    await event.edit(giveVar + giveVar + giveVar + "      ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + "     ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + "    ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + "   ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + "  ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + " ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar)
-    await event.edit(giveVar + "        ")
-    await event.edit(giveVar + giveVar + "       ")
-    await event.edit(giveVar + giveVar + giveVar + "      ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + "     ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + "    ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + "   ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + "  ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + " ")
-    await event.edit(giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar + giveVar)
+    sleepValue = 1
+    lp = giveVar[6:]
+    await event.edit(lp + "        ")
     await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + "       ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + "      ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + "     ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + "    ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + "   ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + lp + "  ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + " ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + lp)
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + "        ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + "       ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + "      ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + "     ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + "    ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + "   ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + lp + "  ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + " ")
+    await asyncio.sleep(sleepValue)
+    await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + lp)
 
 
 @borg.on(admin_cmd(pattern="lcry$"))
@@ -125,7 +182,6 @@ async def _(event):
     animation_ttl = range(0, 36)
     await event.edit("crying")
     animation_chars = [
-
         ";__",
         ";___",
         ";____",
@@ -161,7 +217,7 @@ async def _(event):
         ";____",
         ";___",
         ";__",
-        ";You made me `CRY`"
+        ";You made me `CRY`",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)

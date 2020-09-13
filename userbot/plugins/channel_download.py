@@ -6,6 +6,7 @@ By: @Zero_cool7870
 """
 import os
 import subprocess
+
 from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
@@ -21,20 +22,22 @@ async def get_media(event):
     except BaseException:
         pass
     catty = event.pattern_match.group(1)
-    limit = int(catty.split(' ')[0])
-    channel_username = str(catty.split(' ')[1])
+    limit = int(catty.split(" ")[0])
+    channel_username = str(catty.split(" ")[1])
     event = await edit_or_reply(event, "Downloading Media From this Channel.")
     msgs = await borg.get_messages(channel_username, limit=int(limit))
-    with open('log.txt', 'w') as f:
+    with open("log.txt", "w") as f:
         f.write(str(msgs))
     i = 0
     for msg in msgs:
         if msg.media is not None:
             await borg.download_media(msg, dir)
             i += 1
-            await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`")
-    ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
-    output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
+            await event.edit(
+                f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"
+            )
+    ps = subprocess.Popen(("ls", "temp"), stdout=subprocess.PIPE)
+    output = subprocess.check_output(("wc", "-l"), stdin=ps.stdout)
     ps.wait()
     output = str(output)
     output = output.replace("b'", " ")
@@ -55,25 +58,31 @@ async def get_media(event):
     channel_username = event.pattern_match.group(1)
     event = await edit_or_reply(event, "Downloading All Media From this Channel.")
     msgs = await borg.get_messages(channel_username, limit=3000)
-    with open('log.txt', 'w') as f:
+    with open("log.txt", "w") as f:
         f.write(str(msgs))
     i = 0
     for msg in msgs:
         if msg.media is not None:
             await borg.download_media(msg, dir)
             i += 1
-            await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`")
-    ps = subprocess.Popen(('ls', 'temp'), stdout=subprocess.PIPE)
-    output = subprocess.check_output(('wc', '-l'), stdin=ps.stdout)
+            await event.edit(
+                f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"
+            )
+    ps = subprocess.Popen(("ls", "temp"), stdout=subprocess.PIPE)
+    output = subprocess.check_output(("wc", "-l"), stdin=ps.stdout)
     ps.wait()
     output = str(output)
     output = output.replace("b'", "")
     output = output.replace("\\n'", "")
     await event.edit("Downloaded " + output + " files.")
 
-CMD_HELP.update({"channel_download": "__**PLUGIN NAME :** Channel Download__\
+
+CMD_HELP.update(
+    {
+        "channel_download": "__**PLUGIN NAME :** Channel Download__\
 \n\n📌** CMD ➥** `.geta` <channel_username>\
 \n**USAGE   ➥  **Will  get all media from channel, though there is limit of 3000 there to prevent API limits.\
 \n\n📌** CMD ➥** `.getc` <number_of_messsages channel_username>\
 \n**USAGE   ➥  **Will  get that number of media from channel"
-                 })
+    }
+)

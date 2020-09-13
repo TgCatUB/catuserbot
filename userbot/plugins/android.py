@@ -3,16 +3,20 @@
 # you may not use this file except in compliance with the License.
 # J
 """ Userbot module containing commands related to android"""
-import re
 import json
-from .. import CMD_HELP
-from requests import get
-from bs4 import BeautifulSoup
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+import re
 
-GITHUB = 'https://github.com'
-DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
-               'certified-android-devices/master/devices.json'
+from bs4 import BeautifulSoup
+from requests import get
+
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+
+GITHUB = "https://github.com"
+DEVICES_DATA = (
+    "https://raw.githubusercontent.com/androidtrackers/"
+    "certified-android-devices/master/devices.json"
+)
 
 
 @borg.on(admin_cmd(pattern=r"magisk"))
@@ -24,7 +28,8 @@ async def kakashi(magisk):
         f"**Stable : **[ZIP v20.4](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-v20.4.zip) | [ZIP v20.3](https://bit.ly/3hXLF3L) | [Uninstaller](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-uninstaller-20200323.zip)\n"
         f"**Magisk Manager : **[APK v7.5.0](https://bit.ly/31U1C5F)\n"
         f"**Canary : **[ZIP vcd6eca1d](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/magisk-release.zip) | [Uninstaller](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/magisk-uninstaller.zip)\n"
-        f"**Canary Build : **[APK v87de0e7a](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/app-release.apk)")
+        f"**Canary Build : **[APK v87de0e7a](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/app-release.apk)"
+    )
     await edit_or_reply(magisk, releases)
 
 
@@ -42,26 +47,27 @@ async def device_info(request):
         await edit_or_reply(request, "`Usage: .device <codename> / <model>`")
         return
     data = json.loads(
-        get("https://raw.githubusercontent.com/androidtrackers/"
-            "certified-android-devices/master/by_device.json").text)
+        get(
+            "https://raw.githubusercontent.com/androidtrackers/"
+            "certified-android-devices/master/by_device.json"
+        ).text
+    )
     results = data.get(codename)
     if results:
         reply = f"**Search results for {codename}**:\n\n"
         for item in results:
-            reply += f"**Brand**: {item['brand']}\n" \
-                     f"**Name**: {item['name']}\n" \
-                     f"**Model**: {item['model']}\n\n"
+            reply += (
+                f"**Brand**: {item['brand']}\n"
+                f"**Name**: {item['name']}\n"
+                f"**Model**: {item['model']}\n\n"
+            )
     else:
         reply = f"`Couldn't find info about {codename}!`\n"
     await edit_or_reply(request, reply)
 
 
-@borg.on(admin_cmd(outgoing=True,
-                   pattern=r"codename(?: |)([\S]*)(?: |)([\s\S]*)"))
-@borg.on(
-    sudo_cmd(
-        pattern=r"codename(?: |)([\S]*)(?: |)([\s\S]*)",
-        allow_sudo=True))
+@borg.on(admin_cmd(outgoing=True, pattern=r"codename(?: |)([\S]*)(?: |)([\s\S]*)"))
+@borg.on(sudo_cmd(pattern=r"codename(?: |)([\S]*)(?: |)([\s\S]*)", allow_sudo=True))
 async def codename_info(request):
     """ search for android codename """
     textx = await request.get_reply_message()
@@ -71,41 +77,42 @@ async def codename_info(request):
     if brand and device:
         pass
     elif textx:
-        brand = textx.text.split(' ')[0]
-        device = ' '.join(textx.text.split(' ')[1:])
+        brand = textx.text.split(" ")[0]
+        device = " ".join(textx.text.split(" ")[1:])
     else:
         await edit_or_reply(request, "`Usage: .codename <brand> <device>`")
         return
 
     data = json.loads(
-        get("https://raw.githubusercontent.com/androidtrackers/"
-            "certified-android-devices/master/by_brand.json").text)
-    devices_lower = {k.lower(): v
-                     for k, v in data.items()}  # Lower brand names in JSON
+        get(
+            "https://raw.githubusercontent.com/androidtrackers/"
+            "certified-android-devices/master/by_brand.json"
+        ).text
+    )
+    devices_lower = {k.lower(): v for k, v in data.items()}  # Lower brand names in JSON
     devices = devices_lower.get(brand)
     results = [
-        i for i in devices if i["name"].lower() == device.lower()
-        or i["model"].lower() == device.lower()
+        i
+        for i in devices
+        if i["name"].lower() == device.lower() or i["model"].lower() == device.lower()
     ]
     if results:
         reply = f"**Search results for {brand} {device}**:\n\n"
         if len(results) > 8:
             results = results[:8]
         for item in results:
-            reply += f"**Device**: {item['device']}\n" \
-                     f"**Name**: {item['name']}\n" \
-                     f"**Model**: {item['model']}\n\n"
+            reply += (
+                f"**Device**: {item['device']}\n"
+                f"**Name**: {item['name']}\n"
+                f"**Model**: {item['model']}\n\n"
+            )
     else:
         reply = f"`Couldn't find {device} codename!`\n"
     await edit_or_reply(request, reply)
 
 
-@borg.on(admin_cmd(outgoing=True,
-                   pattern=r"aspecs(?: |)([\S]*)(?: |)([\s\S]*)"))
-@borg.on(
-    sudo_cmd(
-        pattern=r"aspecs(?: |)([\S]*)(?: |)([\s\S]*)",
-        allow_sudo=True))
+@borg.on(admin_cmd(outgoing=True, pattern=r"aspecs(?: |)([\S]*)(?: |)([\s\S]*)"))
+@borg.on(sudo_cmd(pattern=r"aspecs(?: |)([\S]*)(?: |)([\s\S]*)", allow_sudo=True))
 async def devices_specifications(request):
     """ Mobile devices specifications """
     textx = await request.get_reply_message()
@@ -114,31 +121,34 @@ async def devices_specifications(request):
     if brand and device:
         pass
     elif textx:
-        brand = textx.text.split(' ')[0]
-        device = ' '.join(textx.text.split(' ')[1:])
+        brand = textx.text.split(" ")[0]
+        device = " ".join(textx.text.split(" ")[1:])
     else:
         await edit_or_reply(request, "`Usage: .aspecs <brand> <device>`")
         return
-    all_brands = BeautifulSoup(
-        get('https://www.devicespecifications.com/en/brand-more').content,
-        'lxml').find('div', {
-            'class': 'brand-listing-container-news'
-        }).findAll('a')
+    all_brands = (
+        BeautifulSoup(
+            get("https://www.devicespecifications.com/en/brand-more").content, "lxml"
+        )
+        .find("div", {"class": "brand-listing-container-news"})
+        .findAll("a")
+    )
     brand_page_url = None
     try:
         brand_page_url = [
-            i['href'] for i in all_brands if brand == i.text.strip().lower()
+            i["href"] for i in all_brands if brand == i.text.strip().lower()
         ][0]
     except IndexError:
-        await edit_or_reply(request, f'`{brand} is unknown brand!`')
+        await edit_or_reply(request, f"`{brand} is unknown brand!`")
         return
-    devices = BeautifulSoup(get(brand_page_url).content, 'lxml') \
-        .findAll('div', {'class': 'model-listing-container-80'})
+    devices = BeautifulSoup(get(brand_page_url).content, "lxml").findAll(
+        "div", {"class": "model-listing-container-80"}
+    )
     device_page_url = None
     try:
         device_page_url = [
-            i.a['href']
-            for i in BeautifulSoup(str(devices), 'lxml').findAll('h3')
+            i.a["href"]
+            for i in BeautifulSoup(str(devices), "lxml").findAll("h3")
             if device in i.text.strip().lower()
         ]
     except IndexError:
@@ -146,17 +156,21 @@ async def devices_specifications(request):
         return
     if len(device_page_url) > 2:
         device_page_url = device_page_url[:2]
-    reply = ''
+    reply = ""
     for url in device_page_url:
-        info = BeautifulSoup(get(url).content, 'lxml')
-        reply = '\n' + info.title.text.split('-')[0].strip() + '\n'
-        info = info.find('div', {'id': 'model-brief-specifications'})
-        specifications = re.findall(r'<b>.*?<br/>', str(info))
+        info = BeautifulSoup(get(url).content, "lxml")
+        reply = "\n" + info.title.text.split("-")[0].strip() + "\n"
+        info = info.find("div", {"id": "model-brief-specifications"})
+        specifications = re.findall(r"<b>.*?<br/>", str(info))
         for item in specifications:
-            title = re.findall(r'<b>(.*?)</b>', item)[0].strip()
-            data = re.findall(r'</b>: (.*?)<br/>', item)[0] \
-                .replace('<b>', '').replace('</b>', '').strip()
-            reply += f'**{title}**: {data}\n'
+            title = re.findall(r"<b>(.*?)</b>", item)[0].strip()
+            data = (
+                re.findall(r"</b>: (.*?)<br/>", item)[0]
+                .replace("<b>", "")
+                .replace("</b>", "")
+                .strip()
+            )
+            reply += f"**{title}**: {data}\n"
     await edit_or_reply(request, reply)
 
 
@@ -169,28 +183,32 @@ async def twrp(request):
     if device:
         pass
     elif textx:
-        device = textx.text.split(' ')[0]
+        device = textx.text.split(" ")[0]
     else:
         await edit_or_reply(request, "`Usage: .twrp <codename>`")
         return
-    url = get(f'https://dl.twrp.me/{device}/')
+    url = get(f"https://dl.twrp.me/{device}/")
     if url.status_code == 404:
         reply = f"`Couldn't find twrp downloads for {device}!`\n"
         await edit_or_reply(request, reply)
         return
-    page = BeautifulSoup(url.content, 'lxml')
-    download = page.find('table').find('tr').find('a')
+    page = BeautifulSoup(url.content, "lxml")
+    download = page.find("table").find("tr").find("a")
     dl_link = f"https://dl.twrp.me{download['href']}"
     dl_file = download.text
     size = page.find("span", {"class": "filesize"}).text
     date = page.find("em").text.strip()
-    reply = f'**Latest TWRP for {device}:**\n' \
-        f'[{dl_file}]({dl_link}) - __{size}__\n' \
-        f'**Updated:** __{date}__\n'
+    reply = (
+        f"**Latest TWRP for {device}:**\n"
+        f"[{dl_file}]({dl_link}) - __{size}__\n"
+        f"**Updated:** __{date}__\n"
+    )
     await edit_or_reply(request, reply)
 
-CMD_HELP.update({
-    "android": "__**PLUGIN NAME :** Android__\
+
+CMD_HELP.update(
+    {
+        "android": "__**PLUGIN NAME :** Android__\
 \n\n📌** CMD ➥** `.magisk`\
 \n**USAGE   ➥  **Get latest Magisk releases\
 \n\n📌** CMD ➥** `.device` <codename>\
@@ -201,4 +219,5 @@ CMD_HELP.update({
 \n**USAGE   ➥  **Get device specifications info.\
 \n\n📌** CMD ➥** `.twrp` <codename>\
 \n**USAGE   ➥  **Get latest twrp download for android device."
-})
+    }
+)

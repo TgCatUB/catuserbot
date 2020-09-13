@@ -6,12 +6,14 @@
 # License: MPL and OSSRPL
 """ Userbot module which contains everything related to \
     downloading/uploading from/to the server. """
+import asyncio
+import math
 import os
 import time
-import math
-import asyncio
 from datetime import datetime
+
 from pySmartDL import SmartDL
+
 from .. import ALIVE_NAME, CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, humanbytes, progress, sudo_cmd
 
@@ -38,14 +40,16 @@ async def _(event):
                 Config.TMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, mone, c_time, "trying to download")
-                )
+                ),
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await mone.edit(str(e))
         else:
             end = datetime.now()
             ms = (end - start).seconds
-            await mone.edit(f"__**➥ Downloaded in {ms} seconds.**__\n__**➥ Downloaded to :- **__ `{downloaded_file_name}`\n__**➥ Downloaded by :-**__ [{DEFAULTUSER}]({USERNAME})")
+            await mone.edit(
+                f"__**➥ Downloaded in {ms} seconds.**__\n__**➥ Downloaded to :- **__ `{downloaded_file_name}`\n__**➥ Downloaded by :-**__ [{DEFAULTUSER}]({USERNAME})"
+            )
     elif input_str:
         start = datetime.now()
         url = input_str
@@ -69,15 +73,14 @@ async def _(event):
             downloader.get_speed()
             round(diff) * 1000
             progress_str = "{0}{1}\nProgress: {2}%".format(
-                ''.join(["█" for i in range(math.floor(percentage / 5))]),
-                ''.join(["░" for i in range(20 - math.floor(percentage / 5))]),
-                round(percentage, 2))
+                "".join(["█" for i in range(math.floor(percentage / 5))]),
+                "".join(["░" for i in range(20 - math.floor(percentage / 5))]),
+                round(percentage, 2),
+            )
             estimated_total_time = downloader.get_eta(human=True)
             try:
                 current_message = f"trying to download\nURL: {url}\nFile Name: {file_name}\n{progress_str}\n{humanbytes(downloaded)} of {humanbytes(total_length)}\nETA: {estimated_total_time}"
-                if round(
-                        diff %
-                        10.00) == 0 and current_message != display_message:
+                if round(diff % 10.00) == 0 and current_message != display_message:
                     await mone.edit(current_message)
                     display_message = current_message
             except Exception as e:
@@ -85,14 +88,19 @@ async def _(event):
         end = datetime.now()
         ms = (end - start).seconds
         if downloader.isSuccessful():
-            await mone.edit(f"__**➥ Downloaded in {ms} seconds.**__\n__**➥ Downloaded to :- **__ `{downloaded_file_name}`\n__**➥ Downloaded by :-**__ [{DEFAULTUSER}]({USERNAME})")
+            await mone.edit(
+                f"__**➥ Downloaded in {ms} seconds.**__\n__**➥ Downloaded to :- **__ `{downloaded_file_name}`\n__**➥ Downloaded by :-**__ [{DEFAULTUSER}]({USERNAME})"
+            )
         else:
             await mone.edit("Incorrect URL\n {}".format(input_str))
     else:
         await mone.edit("Reply to a message to download to my local server.")
 
-CMD_HELP.update({
-    "download": "__**PLUGIN NAME :** Download__\
+
+CMD_HELP.update(
+    {
+        "download": "__**PLUGIN NAME :** Download__\
 \n\n📌** CMD ➥** `.download` <link|filename> or reply to media\
 \n**USAGE   ➥  **Downloads file to the server."
-})
+    }
+)

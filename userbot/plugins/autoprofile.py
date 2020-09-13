@@ -12,18 +12,20 @@ Hmmmm U need to config DOWNLOAD_PFP_URL_CLOCK var in Heroku with any telegraph i
 USING THIS PLUGIN CAN RESULT IN ACCOUNT BAN. WE DONT CARE ABOUT BAN, SO WE ARR USING THIS.
 """
 import asyncio
-import time
-from telethon.tl import functions
-from telethon.errors import FloodWaitError
-from userbot.utils import admin_cmd
-from userbot import AUTONAME, CMD_HELP, DEFAULT_BIO
-import random
-import pybase64
 import os
+import random
+import shutil
+import time
 from datetime import datetime
+
+import pybase64
 from PIL import Image, ImageDraw, ImageFont
 from pySmartDL import SmartDL
-import shutil
+from telethon.errors import FloodWaitError
+from telethon.tl import functions
+
+from userbot import AUTONAME, CMD_HELP, DEFAULT_BIO
+from userbot.utils import admin_cmd
 
 DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
 DEL_TIME_OUT = 60
@@ -37,9 +39,8 @@ async def autopic(event):
     await event.edit(f"Autopic has been started by my Master")
     downloaded_file_name = "userbot/original_pic.png"
     downloader = SmartDL(
-        Var.DOWNLOAD_PFP_URL_CLOCK,
-        downloaded_file_name,
-        progress_bar=False)
+        Var.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=False
+    )
     downloader.start(blocking=False)
     photo = "userbot/photo_pfp.png"
     while not downloader.isFinished():
@@ -57,9 +58,9 @@ async def autopic(event):
         img.save(photo)
         file = await bot.upload_file(photo)  # pylint:disable=E0602
         try:
-            await bot(functions.photos.UploadProfilePhotoRequest(  # pylint:disable=E0602
-                file
-            ))
+            await bot(
+                functions.photos.UploadProfilePhotoRequest(file)  # pylint:disable=E0602
+            )
             os.remove(photo)
             counter -= 60
             await asyncio.sleep(60)
@@ -71,8 +72,11 @@ async def autopic(event):
 async def main(event):
     await event.edit("Starting digital Profile Pic see magic in 5 sec.")
     poto = "userbot/poto_pfp.png"
-    cat = str(pybase64.b64decode(
-        "aHR0cHM6Ly90ZWxlZ3JhLnBoL2ZpbGUvYWVhZWJlMzNiMWYzOTg4YTBiNjkwLmpwZw=="))[2:51]
+    cat = str(
+        pybase64.b64decode(
+            "aHR0cHM6Ly90ZWxlZ3JhLnBoL2ZpbGUvYWVhZWJlMzNiMWYzOTg4YTBiNjkwLmpwZw=="
+        )
+    )[2:51]
     downloaded_file_name = "userbot/digital_pic.png"
     downloader = SmartDL(cat, downloaded_file_name, progress_bar=True)
     downloader.start(blocking=False)
@@ -83,13 +87,18 @@ async def main(event):
         current_time = datetime.now().strftime("%H:%M")
         img = Image.open(poto)
         drawn_text = ImageDraw.Draw(img)
-        cat = str(pybase64.b64decode(
-            "dXNlcmJvdC9oZWxwZXJzL3N0eWxlcy9kaWdpdGFsLnR0Zg=="))[2:36]
+        cat = str(
+            pybase64.b64decode("dXNlcmJvdC9oZWxwZXJzL3N0eWxlcy9kaWdpdGFsLnR0Zg==")
+        )[2:36]
         fnt = ImageFont.truetype(cat, 200)
         drawn_text.text((350, 100), current_time, font=fnt, fill=(124, 252, 0))
         img.save(poto)
         file = await event.client.upload_file(poto)
-        await event.client(functions.photos.DeletePhotosRequest(await event.client.get_profile_photos("me", limit=1)))
+        await event.client(
+            functions.photos.DeletePhotosRequest(
+                await event.client.get_profile_photos("me", limit=1)
+            )
+        )
         await event.client(functions.photos.UploadProfilePhotoRequest(file))
         os.remove(poto)
         await asyncio.sleep(60)
@@ -100,9 +109,8 @@ async def autopic(event):
     await event.edit("Bloom colour profile pic have been enabled by my master")
     downloaded_file_name = "userbot/original_pic.png"
     downloader = SmartDL(
-        Var.DOWNLOAD_PFP_URL_CLOCK,
-        downloaded_file_name,
-        progress_bar=True)
+        Var.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=True
+    )
     downloader.start(blocking=False)
     photo = "userbot/photo_pfp.png"
     while not downloader.isFinished():
@@ -112,9 +120,9 @@ async def autopic(event):
         R = random.randint(0, 256)
         B = random.randint(0, 256)
         G = random.randint(0, 256)
-        FR = (256 - R)
-        FB = (256 - B)
-        FG = (256 - G)
+        FR = 256 - R
+        FB = 256 - B
+        FG = 256 - G
         shutil.copy(downloaded_file_name, photo)
         image = Image.open(photo)
         image.paste((R, G, B), [0, 0, image.size[0], image.size[1]])
@@ -129,9 +137,9 @@ async def autopic(event):
         img.save(photo)
         file = await event.client.upload_file(photo)  # pylint:disable=E0602
         try:
-            await event.client(functions.photos.UploadProfilePhotoRequest(  # pylint:disable=E0602
-                file
-            ))
+            await event.client(
+                functions.photos.UploadProfilePhotoRequest(file)  # pylint:disable=E0602
+            )
             os.remove(photo)
             await asyncio.sleep(30)
         except BaseException:
@@ -147,19 +155,21 @@ async def _(event):
         name = f"⌚️ {HM}||›  {DEFAULTUSER} ‹||📅 {DM}"
         logger.info(name)
         try:
-            await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
-                first_name=name
-            ))
+            await borg(
+                functions.account.UpdateProfileRequest(  # pylint:disable=E0602
+                    first_name=name
+                )
+            )
         except FloodWaitError as ex:
             logger.warning(str(e))
             await asyncio.sleep(ex.seconds)
 
         # else:
-            # logger.info(r.stringify())
-            # await borg.send_message(  # pylint:disable=E0602
-            #     Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-            #     "Successfully Changed Profile Name"
-            # )
+        # logger.info(r.stringify())
+        # await borg.send_message(  # pylint:disable=E0602
+        #     Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
+        #     "Successfully Changed Profile Name"
+        # )
         await asyncio.sleep(DEL_TIME_OUT)
 
 
@@ -172,19 +182,22 @@ async def _(event):
         bio = f"📅 {DMY} | {DEFAULTUSERBIO} | ⌚️ {HM}"
         logger.info(bio)
         try:
-            await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
-                about=bio
-            ))
+            await borg(
+                functions.account.UpdateProfileRequest(  # pylint:disable=E0602
+                    about=bio
+                )
+            )
         except FloodWaitError as ex:
             logger.warning(str(e))
             await asyncio.sleep(ex.seconds)
         # else:
-            # logger.info(r.stringify())
-            # await borg.send_message(  # pylint:disable=E0602
-            #     Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-            #     "Changed Profile Picture"
-            # )
+        # logger.info(r.stringify())
+        # await borg.send_message(  # pylint:disable=E0602
+        #     Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
+        #     "Changed Profile Picture"
+        # )
         await asyncio.sleep(DEL_TIME_OUT)
+
 
 BIO_STRINGS = [
     "👉⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️🔲",
@@ -251,29 +264,33 @@ async def _(event):
     await event.edit(f"monkey has been started by my Master")
     while True:
         bro = random.randint(0, len(BIO_STRINGS) - 1)
-        #input_str = event.pattern_match.group(1)
+        # input_str = event.pattern_match.group(1)
         Bio = BIO_STRINGS[bro]
         time.strftime("%d.%m.%Y")
         HM = time.strftime("%H:%M:%S")
-        #bio = f"📅 {DMY} | ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ | ⌚️ {HM}"
+        # bio = f"📅 {DMY} | ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ | ⌚️ {HM}"
         logger.info(Bio)
         try:
-            await borg(functions.account.UpdateProfileRequest(  # pylint:disable=E0602
-                about=Bio
-            ))
+            await borg(
+                functions.account.UpdateProfileRequest(  # pylint:disable=E0602
+                    about=Bio
+                )
+            )
         except FloodWaitError as ex:
             logger.warning(str(e))
             await asyncio.sleep(ex.seconds)
         # else:
-            # logger.info(r.stringify())
-            # await borg.send_message(  # pylint:disable=E0602
-            #     Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-            #     "Successfully Changed Profile Bio"
-            # )
+        # logger.info(r.stringify())
+        # await borg.send_message(  # pylint:disable=E0602
+        #     Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
+        #     "Successfully Changed Profile Bio"
+        # )
         await asyncio.sleep(DEL_TIME_OUT)
 
-CMD_HELP.update({
-    "autoprofile": "__**PLUGIN NAME :** Autoprofile__\
+
+CMD_HELP.update(
+    {
+        "autoprofile": "__**PLUGIN NAME :** Autoprofile__\
 \n\n📌** CMD ➥** `.autopic`\
 \n**USAGE   ➥  **Rotating image along with the time on it .\
 \nfor working this you must set `DOWNLOAD_PFP_URL_CLOCK` in the heroku vars first with telegraph link of required image\
@@ -290,4 +307,5 @@ CMD_HELP.update({
 \n**USAGE   ➥  **Set of funny monkey bio's\
 \n\n for stoping these aby command you need to do `.restart` and change them manually\
 "
-})
+    }
+)

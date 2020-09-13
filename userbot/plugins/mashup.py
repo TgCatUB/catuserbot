@@ -5,8 +5,9 @@ Syntax: .mash <text>
 """
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from userbot.utils import admin_cmd, sudo_cmd
+
 from userbot import CMD_HELP
+from userbot.utils import admin_cmd, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="mash ?(.*)"))
@@ -22,9 +23,8 @@ async def _(event):
     async with event.client.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=285336877))
+                events.NewMessage(incoming=True, from_users=285336877)
+            )
             await event.client.send_message(chat, "{}".format(input_str))
             response = await response
         except YouBlockedUserError:
@@ -50,9 +50,8 @@ async def _(event):
     async with event.client.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=285336877))
+                events.NewMessage(incoming=True, from_users=285336877)
+            )
             await event.client.send_message(chat, "{}".format(input_str))
             response = await response
         except YouBlockedUserError:
@@ -64,7 +63,11 @@ async def _(event):
             await event.delete()
             await borg.send_file(event.chat_id, response.message, reply_to=reply_to_id)
 
-CMD_HELP.update({"mashup": "__**PLUGIN NAME :** Mashup__\
+
+CMD_HELP.update(
+    {
+        "mashup": "__**PLUGIN NAME :** Mashup__\
       \n\n📌** CMD ➥** `.mash` <text> :\
       \n**USAGE   ➥  **Send you the related video message of given text . "
-                 })
+    }
+)

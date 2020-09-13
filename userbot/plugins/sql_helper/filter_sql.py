@@ -1,86 +1,76 @@
-from sqlalchemy import Column, UnicodeText, LargeBinary, Numeric, String
-from userbot.plugins.sql_helper import SESSION, BASE
+from sqlalchemy import Column, Numeric, String, UnicodeText
+
+from . import BASE, SESSION
 
 
-class Filters(BASE):
-    __tablename__ = "filters"
+class Filter(BASE):
+    __tablename__ = "catfilters"
     chat_id = Column(String(14), primary_key=True)
-    keyword = Column(UnicodeText, primary_key=True)
+    keyword = Column(UnicodeText, primary_key=True, nullable=False)
     reply = Column(UnicodeText)
-    snip_type = Column(Numeric)
-    media_id = Column(UnicodeText)
-    media_access_hash = Column(UnicodeText)
-    media_file_reference = Column(LargeBinary)
+    f_mesg_id = Column(Numeric)
 
-    def __init__(
-        self,
-        chat_id,
-        keyword, reply, snip_type,
-        media_id=None, media_access_hash=None, media_file_reference=None
-    ):
-        self.chat_id = chat_id
+    def __init__(self, chat_id, keyword, reply, f_mesg_id):
+        self.chat_id = str(chat_id)
         self.keyword = keyword
         self.reply = reply
-        self.snip_type = snip_type
-        self.media_id = media_id
-        self.media_access_hash = media_access_hash
-        self.media_file_reference = media_file_reference
+        self.f_mesg_id = f_mesg_id
+
+    def __eq__(self, other):
+        return bool(
+            isinstance(other, Filter)
+            and self.chat_id == other.chat_id
+            and self.keyword == other.keyword
+        )
 
 
-Filters.__table__.create(checkfirst=True)
+Filter.__table__.create(checkfirst=True)
 
 
 def get_filter(chat_id, keyword):
     try:
-        return SESSION.query(Filters).get((str(chat_id), keyword))
-    except BaseException:
-        return None
+        return SESSION.query(Filter).get((str(chat_id), keyword))
     finally:
         SESSION.close()
 
 
-def get_all_filters(chat_id):
+def get_filters(chat_id):
     try:
-        return SESSION.query(Filters).filter(
-            Filters.chat_id == str(chat_id)).all()
-    except BaseException:
-        return None
+        return SESSION.query(Filter).filter(Filter.chat_id == str(chat_id)).all()
     finally:
         SESSION.close()
 
 
-def add_filter(
-        chat_id,
-        keyword,
-        reply,
-        snip_type,
-        media_id,
-        media_access_hash,
-        media_file_reference):
-    adder = SESSION.query(Filters).get((str(chat_id), keyword))
-    if adder:
-        adder.reply = reply
-        adder.snip_type = snip_type
-        adder.media_id = media_id
-        adder.media_access_hash = media_access_hash
-        adder.media_file_reference = media_file_reference
+def add_filter(chat_id, keyword, reply, f_mesg_id):
+    to_check = get_filter(chat_id, keyword)
+    if not to_check:
+        adder = Filter(str(chat_id), keyword, reply, f_mesg_id)
+        SESSION.add(adder)
+        SESSION.commit()
+        return True
     else:
-        adder = Filters(chat_id, keyword, reply, snip_type, media_id,
-                        media_access_hash, media_file_reference)
-    SESSION.add(adder)
-    SESSION.commit()
+        rem = SESSION.query(Filter).get((str(chat_id), keyword))
+        SESSION.delete(rem)
+        SESSION.commit()
+        adder = Filter(str(chat_id), keyword, reply, f_mesg_id)
+        SESSION.add(adder)
+        SESSION.commit()
+        return False
 
 
 def remove_filter(chat_id, keyword):
-    saved_filter = SESSION.query(Filters).get((str(chat_id), keyword))
-    if saved_filter:
-        SESSION.delete(saved_filter)
+    to_check = get_filter(chat_id, keyword)
+    if not to_check:
+        return False
+    else:
+        rem = SESSION.query(Filter).get((str(chat_id), keyword))
+        SESSION.delete(rem)
         SESSION.commit()
+        return True
 
 
 def remove_all_filters(chat_id):
-    saved_filter = SESSION.query(Filters).filter(
-        Filters.chat_id == str(chat_id))
+    saved_filter = SESSION.query(Filter).filter(Filter.chat_id == str(chat_id))
     if saved_filter:
         saved_filter.delete()
         SESSION.commit()

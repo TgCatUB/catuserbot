@@ -5,17 +5,20 @@ By :- @Zero_cool7870
 ported char, airing and manga by @sandy1709 and @mrconfused
 """
 
-import re
 import json
+import re
+
 import requests
+
 from .. import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply, time_formatter as t
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from ..utils import time_formatter as t
 
 
-def shorten(description, info='anilist.co'):
+def shorten(description, info="anilist.co"):
     msg = ""
     if len(description) > 700:
-        description = description[0:200] + '.....'
+        description = description[0:200] + "....."
         msg += f"\n**Description**:\n{description} [Read More]({info})"
     else:
         msg += f"\n**Description**: \n   {description}"
@@ -46,7 +49,7 @@ character_query = """
     }
 """
 
-airing_query = '''
+airing_query = """
     query ($id: Int,$search: String) {
       Media (id: $id, type: ANIME,search: $search) {
         id
@@ -63,9 +66,9 @@ airing_query = '''
         }
       }
     }
-    '''
+    """
 
-anime_query = '''
+anime_query = """
    query ($id: Int,$search: String) {
       Media (id: $id, type: ANIME,search: $search) {
         id
@@ -100,7 +103,7 @@ anime_query = '''
           bannerImage
       }
     }
-'''
+"""
 
 manga_query = """
 query ($id: Int,$search: String) {
@@ -128,7 +131,7 @@ query ($id: Int,$search: String) {
 
 
 async def callAPI(search_str):
-    query = '''
+    query = """
     query ($id: Int,$search: String) {
       Media (id: $id, type: ANIME,search: $search) {
         id
@@ -153,16 +156,10 @@ async def callAPI(search_str):
           bannerImage
       }
     }
-    '''
-    variables = {
-        'search': search_str
-    }
-    url = 'https://graphql.anilist.co'
-    response = requests.post(
-        url,
-        json={
-            'query': query,
-            'variables': variables})
+    """
+    variables = {"search": search_str}
+    url = "https://graphql.anilist.co"
+    response = requests.post(url, json={"query": query, "variables": variables})
     return response.text
 
 
@@ -173,17 +170,17 @@ async def formatJSON(outData):
     if "errors" in res:
         msg += f"**Error** : `{jsonData['errors'][0]['message']}`"
         return msg
-    jsonData = jsonData['data']['Media']
+    jsonData = jsonData["data"]["Media"]
     if "bannerImage" in jsonData.keys():
         msg += f"[〽️]({jsonData['bannerImage']})"
     else:
         msg += "〽️"
-    title = jsonData['title']['romaji']
+    title = jsonData["title"]["romaji"]
     link = f"https://anilist.co/anime/{jsonData['id']}"
     msg += f"[{title}]({link})"
     msg += f"\n\n**Type** : {jsonData['format']}"
     msg += f"\n**Genres** : "
-    for g in jsonData['genres']:
+    for g in jsonData["genres"]:
         msg += g + " "
     msg += f"\n**Status** : {jsonData['status']}"
     msg += f"\n**Episode** : {jsonData['episodes']}"
@@ -192,10 +189,11 @@ async def formatJSON(outData):
     msg += f"\n**Duration** : {jsonData['duration']} min\n\n"
     # https://t.me/catuserbot_support/19496
     cat = f"{jsonData['description']}"
-    msg += " __" + re.sub("<br>", '\n', cat) + "__"
+    msg += " __" + re.sub("<br>", "\n", cat) + "__"
     return msg
 
-url = 'https://graphql.anilist.co'
+
+url = "https://graphql.anilist.co"
 
 
 @borg.on(admin_cmd(pattern="char (.*)"))
@@ -205,28 +203,24 @@ async def anilist(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    variables = {'query': search}
-    json = requests.post(
-        url,
-        json={
-            'query': character_query,
-            'variables': variables}).json()['data'].get(
-        'Character',
-        None)
+    variables = {"query": search}
+    json = (
+        requests.post(url, json={"query": character_query, "variables": variables})
+        .json()["data"]
+        .get("Character", None)
+    )
     if json:
         msg = f"**{json.get('name').get('full')}**\n"
         description = f"{json['description']}"
-        site_url = json.get('siteUrl')
+        site_url = json.get("siteUrl")
         msg += shorten(description, site_url)
-        image = json.get('image', None)
+        image = json.get("image", None)
         if image:
-            image = image.get('large')
+            image = image.get("large")
             await event.delete()
-            await borg.send_file(event.chat_id,
-                                 image,
-                                 caption=msg,
-                                 parse_mode="md",
-                                 reply_to=reply_to_id)
+            await borg.send_file(
+                event.chat_id, image, caption=msg, parse_mode="md", reply_to=reply_to_id
+            )
         else:
             await edit_or_reply(event, msg)
     else:
@@ -237,15 +231,13 @@ async def anilist(event):
 @borg.on(sudo_cmd(pattern="airing (.*)", allow_sudo=True))
 async def anilist(event):
     search = event.pattern_match.group(1)
-    variables = {'search': search}
+    variables = {"search": search}
     response = requests.post(
-        url,
-        json={
-            'query': airing_query,
-            'variables': variables}).json()['data']['Media']
+        url, json={"query": airing_query, "variables": variables}
+    ).json()["data"]["Media"]
     ms_g = f"**Name**: **{response['title']['romaji']}**(`{response['title']['native']}`)\n**ID**: `{response['id']}`"
-    if response['nextAiringEpisode']:
-        airing_time = response['nextAiringEpisode']['timeUntilAiring'] * 1000
+    if response["nextAiringEpisode"]:
+        airing_time = response["nextAiringEpisode"]["timeUntilAiring"] * 1000
         airing_time_final = t(airing_time)
         ms_g += f"\n**Episode**: `{response['nextAiringEpisode']['episode']}`\n**Airing In**: `{airing_time_final}`"
     else:
@@ -260,22 +252,22 @@ async def anilist(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    variables = {'search': search}
-    json = requests.post(
-        url,
-        json={
-            'query': manga_query,
-            'variables': variables}).json()['data'].get(
-        'Media',
-        None)
-    ms_g = ''
+    variables = {"search": search}
+    json = (
+        requests.post(url, json={"query": manga_query, "variables": variables})
+        .json()["data"]
+        .get("Media", None)
+    )
+    ms_g = ""
     if json:
-        title, title_native = json['title'].get(
-            'romaji', False), json['title'].get('native', False)
-        start_date, status, score = json['startDate'].get(
-            'year', False), json.get(
-            'status', False), json.get(
-            'averageScore', False)
+        title, title_native = json["title"].get("romaji", False), json["title"].get(
+            "native", False
+        )
+        start_date, status, score = (
+            json["startDate"].get("year", False),
+            json.get("status", False),
+            json.get("averageScore", False),
+        )
         if title:
             ms_g += f"**{title}**"
             if title_native:
@@ -286,28 +278,27 @@ async def anilist(event):
             ms_g += f"\n**Status** - `{status}`"
         if score:
             ms_g += f"\n**Score** - `{score}`"
-        ms_g += '\n**Genres** - '
-        for x in json.get('genres', []):
+        ms_g += "\n**Genres** - "
+        for x in json.get("genres", []):
             ms_g += f"{x}, "
         ms_g = ms_g[:-2]
         image = json.get("bannerImage", False)
         ms_g += f"_{json.get('description', None)}_"
-        ms_g = ms_g.replace(
-            "<br>",
-            "").replace(
-            "</br>",
-            "").replace(
-            "<i>",
-            "").replace(
-                "</i>",
-            "")
+        ms_g = (
+            ms_g.replace("<br>", "")
+            .replace("</br>", "")
+            .replace("<i>", "")
+            .replace("</i>", "")
+        )
         if image:
             try:
-                await borg.send_file(event.chat_id,
-                                     image,
-                                     caption=ms_ms_g,
-                                     parse_mode="md",
-                                     reply_to=reply_to_id)
+                await borg.send_file(
+                    event.chat_id,
+                    image,
+                    caption=ms_ms_g,
+                    parse_mode="md",
+                    reply_to=reply_to_id,
+                )
                 await event.delete()
             except BaseException:
                 ms_g += f" [〽️]({image})"
@@ -325,8 +316,10 @@ async def anilist(event):
     msg = await formatJSON(result)
     await event.edit(msg, link_preview=True)
 
-CMD_HELP.update({
-    "anilist": "__**PLUGIN NAME :** Anilist__\
+
+CMD_HELP.update(
+    {
+        "anilist": "__**PLUGIN NAME :** Anilist__\
     \n\n📌** CMD ➥** `.anilist` <anime name >\
     \n**USAGE   ➥  **Shows you the details of the anime.\
     \n\n📌** CMD ➥** `.char` <character name >\
@@ -336,4 +329,5 @@ CMD_HELP.update({
     \n\n📌** CMD ➥** `.airing` <anime name >\
     \n**USAGE   ➥  **Shows you the time for that current running anime show.\
     "
-})
+    }
+)

@@ -14,7 +14,7 @@ async def scramble_message(e):
     text = e.pattern_match.group(1) or reply_message.text
     words = re.split(r"\s", text)
     scrambled = map(scramble_word, words)
-    text = ' '.join(scrambled)
+    text = " ".join(scrambled)
     await e.edit(text)
 
 
@@ -27,4 +27,4 @@ def scramble_word(word):
     middle_letters = list(word[1:-1])
     random.shuffle(middle_letters)
 
-    return first_letter + ''.join(middle_letters) + last_letter
+    return first_letter + "".join(middle_letters) + last_letter

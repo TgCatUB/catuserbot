@@ -1,8 +1,10 @@
 # https://github.com/Jisan09/catuserbot credits to @Jisan7509
 
 import asyncio
-from userbot.utils import admin_cmd
+
 from userbot import ALIVE_NAME
+from userbot.utils import admin_cmd
+
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
@@ -49,7 +51,7 @@ async def _(event):
         "¶H×NK&N*",
         "NGITHKIN",
         "T+I#K@₹G",
-        "THINKING... 🤔"
+        "THINKING... 🤔",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -62,13 +64,7 @@ async def _(event):
         return
     animation_interval = 0.3
     animation_ttl = range(0, 20)
-    animation_chars = [
-        "▮",
-        "▯",
-        "▬",
-        "▭",
-        "‎"
-    ]
+    animation_chars = ["▮", "▯", "▬", "▭", "‎"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 4])
@@ -80,24 +76,10 @@ async def _(event):
         return
     animation_interval = 0.3
     animation_ttl = range(0, 20)
-    animation_chars = [
-        "◧",
-        "◨",
-        "◧",
-        "◨",
-        "‎"
-    ]
+    animation_chars = ["◧", "◨", "◧", "◨", "‎"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 4])
-
-
-@borg.on(admin_cmd(pattern="hhi (.*)"))
-async def hi(texthi):
-    A = texthi.pattern_match.group(1)
-    if texthi.fwd_from:
-        return
-    await texthi.edit(f"{A}✨✨{A}✨{A}{A}{A}\n{A}✨✨{A}✨✨{A}✨\n{A}{A}{A}{A}✨✨{A}✨\n{A}✨✨{A}✨✨{A}✨\n{A}✨✨{A}✨{A}{A}{A}\n☁☁☁☁☁☁☁☁")
 
 
 @borg.on(admin_cmd(pattern=f"up$", outgoing=True))
@@ -106,13 +88,7 @@ async def _(event):
         return
     animation_interval = 0.3
     animation_ttl = range(0, 20)
-    animation_chars = [
-        "╹",
-        "╻",
-        "╹",
-        "╻",
-        "‎"
-    ]
+    animation_chars = ["╹", "╻", "╹", "╻", "‎"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 4])
@@ -124,13 +100,7 @@ async def _(event):
         return
     animation_interval = 0.3
     animation_ttl = range(0, 20)
-    animation_chars = [
-        "⚫",
-        "⬤",
-        "●",
-        "∘",
-        "‎"
-    ]
+    animation_chars = ["⚫", "⬤", "●", "∘", "‎"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 4])
@@ -142,13 +112,7 @@ async def _(event):
         return
     animation_interval = 0.5
     animation_ttl = range(0, 20)
-    animation_chars = [
-        "🖤",
-        "❤️",
-        "🖤",
-        "❤️",
-        "‎"
-    ]
+    animation_chars = ["🖤", "❤️", "🖤", "❤️", "‎"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 4])
@@ -171,7 +135,7 @@ async def _(event):
         "😡",
         "😢",
         "[‎](github.com/sandy1709/catuserbot)",
-        "__**Good to See you guys....**__"
+        "__**Good to See you guys....**__",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -184,14 +148,7 @@ async def _(event):
         return
     animation_interval = 2
     animation_ttl = range(0, 6)
-    animation_chars = [
-        "😁🏿",
-        "😁🏾",
-        "😁🏽",
-        "😁🏼",
-        "‎😁",
-        "**Good to See you friend....**"
-    ]
+    animation_chars = ["😁🏿", "😁🏾", "😁🏽", "😁🏼", "‎😁", "**Good to See you friend....**"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 6])
@@ -203,14 +160,7 @@ async def _(event):
         return
     animation_interval = 2
     animation_ttl = range(0, 6)
-    animation_chars = [
-        "🐵",
-        "🙉",
-        "🙈",
-        "🙊",
-        "🖕‎🐵🖕",
-        "**Good to See you friend....**"
-    ]
+    animation_chars = ["🐵", "🙉", "🙈", "🙊", "🖕‎🐵🖕", "**Good to See you friend....**"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 6])
@@ -258,7 +208,7 @@ async def _(event):
         "🤘",
         "🤙",
         "🖐️",
-        "👌"
+        "👌",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -283,7 +233,7 @@ async def _(event):
         "2️⃣",
         "1️⃣",
         "0️⃣",
-        "🆘"
+        "🆘",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -314,7 +264,7 @@ async def _(event):
         "💜",
         "🖤",
         "💘",
-        "💝"
+        "💝",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)

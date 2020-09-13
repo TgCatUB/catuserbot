@@ -2,6 +2,7 @@
 
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
+
 from userbot import bot
 from userbot.events import register
 from userbot.utils import admin_cmd
@@ -17,45 +18,45 @@ async def kakashi(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
-    if (link in ("alivepic", "ap")):
+    if link in ("alivepic", "ap"):
         link = "Alive Picture"
-    elif (link in ("autoname", "an")):
+    elif link in ("autoname", "an"):
         link = "Auto Name"
     elif link == "bloom":
         link = "Bloom / Colour DP"
-    elif (link in ("customrowcolumn", "crc")):
+    elif link in ("customrowcolumn", "crc"):
         link = "Custom Row & Coloum"
-    elif (link in ("helpemoji", "he")):
+    elif link in ("helpemoji", "he"):
         link = "Help Menu Emoji"
-    elif (link in ("gdrive", "gd")):
+    elif link in ("gdrive", "gd"):
         link = "G-Drive Setup"
-    elif (link in ("github", "gh")):
+    elif link in ("github", "gh"):
         link = "Github Commit"
     elif link == "lydia":
         link = "Lydia Setup"
-    elif (link in ("handler", "ch")):
+    elif link in ("handler", "ch"):
         link = "Custom Handler"
     elif link == "ocr":
         link = "OCR Setup"
-    elif (link in ("pmlogger", "pl")):
+    elif link in ("pmlogger", "pl"):
         link = "PM Logger"
-    elif (link in ("pmpermit", "pp")):
+    elif link in ("pmpermit", "pp"):
         link = "PM Permit"
-    elif (link in ("pmpermitpic", "ppp")):
+    elif link in ("pmpermitpic", "ppp"):
         link = "Pm Permit Pic"
-    elif (link in ("speechtotext", "stt")):
+    elif link in ("speechtotext", "stt"):
         link = "Speech To Text"
     elif link == "sudo":
         link = "Add Sudo"
-    elif (link in ("youtube", "yts")):
+    elif link in ("youtube", "yts"):
         link = "Youtube Search"
-    elif (link in ("updater", "ud")):
+    elif link in ("updater", "ud"):
         link = "Setup Updater"
-    elif (link in ("weather", "ws")):
+    elif link in ("weather", "ws"):
         link = "Weather Setup"
-    elif (link in ("forward", "frwd")):
+    elif link in ("forward", "frwd"):
         link = "Forward"
-    elif (link in ("customtext", "cppt")):
+    elif link in ("customtext", "cppt"):
         link = "Custom PM Permit Text"
     elif link == "cat":
         link = "🐱 Cat UserBot 🐱"
@@ -65,10 +66,9 @@ async def kakashi(event):
     async with bot.conversation("@kakashi_robot") as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(
-                    incoming=True,
-                    from_users=1117359246))
-            await conv.send_message(f'{link}')
+                events.NewMessage(incoming=True, from_users=1117359246)
+            )
+            await conv.send_message(f"{link}")
             response = await response
         except YouBlockedUserError:
             await event.reply("```Unblock @kakashi_robot plox```")

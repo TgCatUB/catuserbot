@@ -1,20 +1,20 @@
 """Log PMs
 Check https://t.me/tgbeta/3505"""
-from asyncio import sleep
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
-from telethon import events
-import asyncio
-from userbot.utils import admin_cmd
 import asyncio
 import logging
 import os
 import sys
+from asyncio import sleep
+
+from telethon import events
+
+from userbot import CMD_HELP
 from userbot.uniborgConfig import Config
+from userbot.utils import admin_cmd
 
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.WARN)
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.WARN
+)
 
 NO_PM_LOG_USERS = []
 
@@ -47,7 +47,7 @@ async def log(log_text):
 async def kickme(leave):
     """ Basically it's .kickme command """
     await leave.edit("Nope, no, no, I go away")
-    await leave.client.kick_participant(leave.chat_id, 'me')
+    await leave.client.kick_participant(leave.chat_id, "me")
 
 
 @borg.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
@@ -61,9 +61,7 @@ async def monito_p_m_s(event):
                     if event.message:
                         e = await borg.get_entity(int(Config.PM_LOGGR_BOT_API_ID))
                         fwd_message = await borg.forward_messages(
-                            e,
-                            event.message,
-                            silent=True
+                            e, event.message, silent=True
                         )
                     else:
                         return
@@ -100,7 +98,10 @@ async def set_no_log_p_m(event):
                 await event.edit("Won't Log Messages from this chat")
                 await asyncio.sleep(3)
 
-CMD_HELP.update({"log_pms": "__**PLUGIN NAME :** Log Pms__\
+
+CMD_HELP.update(
+    {
+        "log_pms": "__**PLUGIN NAME :** Log Pms__\
       \n\n📌** CMD ➥** `.save` :\
       \n**USAGE   ➥  **Saves taged message in private group .\
       \n\n📌** CMD ➥** `.kickme`:\
@@ -109,4 +110,5 @@ CMD_HELP.update({"log_pms": "__**PLUGIN NAME :** Log Pms__\
       \n**USAGE   ➥  **By default will log all private chat messages if you use .nolog and want to log again then you need to use this\
       \n\n📌** CMD ➥** `.nolog`:\
       \n**USAGE   ➥  **To stops logging from a private chat "
-                 })
+    }
+)

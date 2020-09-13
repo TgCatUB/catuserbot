@@ -59,6 +59,7 @@ regex
 requests
 search-engine-parser
 selenium
+spamwatch
 speedtest-cli
 spotify_token
 sqlalchemy

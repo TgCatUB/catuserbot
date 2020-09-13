@@ -3,14 +3,15 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import asyncio
 import io
 import os
 import time
-import asyncio
-from .. import CMD_HELP
-from asyncio.subprocess import PIPE as asyncPIPE
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
 from asyncio import create_subprocess_exec as asyncrunapp
+from asyncio.subprocess import PIPE as asyncPIPE
+
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
     os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -33,8 +34,7 @@ async def pipcheck(pip):
             stderr=asyncPIPE,
         )
         stdout, stderr = await pipc.communicate()
-        pipout = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
+        pipout = str(stdout.decode().strip()) + str(stderr.decode().strip())
         if pipout:
             if len(pipout) > 4096:
                 await pip.edit("`Output too large, sending as file`")
@@ -49,15 +49,19 @@ async def pipcheck(pip):
                 )
                 os.remove("output.txt")
                 return
-            await pip.edit("**Query: **\n`"
-                           f"pip3 search {pipmodule}"
-                           "`\n**Result: **\n`"
-                           f"{pipout}"
-                           "`")
+            await pip.edit(
+                "**Query: **\n`"
+                f"pip3 search {pipmodule}"
+                "`\n**Result: **\n`"
+                f"{pipout}"
+                "`"
+            )
         else:
-            await pip.edit("**Query: **\n`"
-                           f"pip3 search {pipmodule}"
-                           "`\n**Result: **\n`No Result Returned/False`")
+            await pip.edit(
+                "**Query: **\n`"
+                f"pip3 search {pipmodule}"
+                "`\n**Result: **\n`No Result Returned/False`"
+            )
 
 
 @borg.on(admin_cmd(pattern="suicide$"))
@@ -106,7 +110,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
@@ -119,10 +123,10 @@ async def _(event):
     if event.fwd_from:
         return
     PROCESS_RUN_TIME = 100
-#    dirname = event.pattern_match.group(1)
-#    tempdir = "localdir"
+    #    dirname = event.pattern_match.group(1)
+    #    tempdir = "localdir"
     cmd = "date"
-#    if dirname == tempdir:
+    #    if dirname == tempdir:
 
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -143,7 +147,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
@@ -156,10 +160,10 @@ async def _(event):
     if event.fwd_from:
         return
     PROCESS_RUN_TIME = 100
-#    dirname = event.pattern_match.group(1)
-#    tempdir = "localdir"
+    #    dirname = event.pattern_match.group(1)
+    #    tempdir = "localdir"
     cmd = "env"
-#    if dirname == tempdir:
+    #    if dirname == tempdir:
 
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -170,7 +174,9 @@ async def _(event):
     )
     stdout, stderr = await process.communicate()
     o = stdout.decode()
-    OUTPUT = f"**[Cat's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n{o}"
+    OUTPUT = (
+        f"**[Cat's](tg://need_update_for_some_feature/) Environment Module:**\n\n\n{o}"
+    )
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
@@ -180,7 +186,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
@@ -194,10 +200,10 @@ async def _(event):
     if event.fwd_from:
         return
     PROCESS_RUN_TIME = 100
-#    dirname = event.pattern_match.group(1)
-#    tempdir = "localdir"
+    #    dirname = event.pattern_match.group(1)
+    #    tempdir = "localdir"
     cmd = "speedtest-cli"
-#    if dirname == tempdir:
+    #    if dirname == tempdir:
 
     eply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -218,7 +224,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
@@ -251,7 +257,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
@@ -284,7 +290,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
@@ -317,7 +323,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
@@ -350,7 +356,7 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
@@ -383,14 +389,16 @@ async def _(event):
                 force_document=True,
                 allow_cache=False,
                 caption=cmd,
-                reply_to=eply_to_id
+                reply_to=eply_to_id,
             )
             await event.delete()
     else:
         event = await edit_or_reply(event, OUTPUT)
 
-CMD_HELP.update({
-    "execmod": "__**PLUGIN NAME :** Execmod__\
+
+CMD_HELP.update(
+    {
+        "execmod": "__**PLUGIN NAME :** Execmod__\
     \n\n📌** CMD ➥** `.pips` <query>\
     \n**USAGE   ➥  **Searches your pip modules\
     \n\n📌** CMD ➥** `.sucide`\
@@ -414,4 +422,5 @@ CMD_HELP.update({
     \n\n📌** CMD ➥** `.qpro`\
     \n**USAGE   ➥  **Programming Quotes\
     "
-})
+    }
+)
