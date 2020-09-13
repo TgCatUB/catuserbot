@@ -288,6 +288,7 @@ async def faces(owo):
     reply_text += " " + random.choice(memes.UWUS)
     await owo.edit(reply_text)
 
+
 @borg.on(admin_cmd(outgoing=True, pattern="shg$"))
 async def shrugger(shg):
     await shg.edit(random.choice(memes.SHGS))
@@ -374,6 +375,7 @@ async def payf(event):
         paytext * 2,
     )
     await event.edit(pay)
+
 
 @borg.on(admin_cmd(pattern=f"react ?(.*)", outgoing=True))
 async def _(event):
@@ -476,7 +478,8 @@ async def _(event):
     index = random.randint(0, len(emoticons))
     output_str = emoticons[index]
     await event.edit(output_str)
-                      
+
+
 @borg.on(admin_cmd(outgoing=True, pattern="bt$"))
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
