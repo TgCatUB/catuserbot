@@ -20,7 +20,7 @@ from .helpers import process as process
 from .helpers import tempmemes
 
 StartTime = time.time()
-catversion = "2.7.2"
+catversion = "2.7.3"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -100,18 +100,18 @@ else:
     PLACEHOLDER = None
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
-# if not os.path.exists("bin"):
-#    os.mkdir("bin")
-# binaries = {
-#    "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown": "bin/megadown",
-#    "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py": "bin/cmrudl",
-#    "https://raw.githubusercontent.com/adekmaulana/python-scripts/master/shell/megadirect": "bin/megadirect",
-# }
+if not os.path.exists("bin"):
+    os.mkdir("bin")
+binaries = {
+    "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown": "bin/megadown",
+    "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py": "bin/cmrudl",
+    "https://raw.githubusercontent.com/adekmaulana/python-scripts/master/shell/megadirect": "bin/megadirect",
+}
 
-# for binary, path in binaries.items():
-#    downloader = SmartDL(binary, path, progress_bar=False)
-#    downloader.start()
-#    os.chmod(path, 0o755)
+for binary, path in binaries.items():
+    downloader = SmartDL(binary, path, progress_bar=False)
+    downloader.start()
+    os.chmod(path, 0o755)
 
 # Global Variables
 COUNT_MSG = 0
