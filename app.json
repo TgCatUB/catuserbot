@@ -1,7 +1,7 @@
 {
-  "name": "Catuserbot",
-  "description": "Userbot created by a SNAPDRAGON and custom fork by https://t.me/mrconfused contact @catuserbot_support for support",
-  "logo": "https://telegra.ph/file/3d60313110c58684b31ea.jpg",
+  "name": "SonicCatuserbot",
+  "description": "Userbot created by a SNAPDRAGON and custom fork by https://t.me/HyperPhoenix contact @catuserbot_support for support",
+  "logo": "https://telegra.ph/file/8712da037bd4332b131b2.jpg",
   "keywords": [
     "telegram",
     "userbot",
@@ -9,7 +9,7 @@
     "modular",
     "productivity"
   ],
-  "repository": "https://github.com/sandy1709/catuserbot/",
+  "repository": "https://github.com/santo-surviver/catuserbot/",
   "website": "#TODO",
   "success_url": "#TODO",
   "stack": "container",
