@@ -40,8 +40,8 @@ async def filter_incoming_handler(handler):
         pass
 
 
-@borg.on(admin_cmd(pattern="filter (\w*)"))
-@borg.on(sudo_cmd(pattern="filter (\w*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="filter (.*)"))
+@borg.on(sudo_cmd(pattern="filter (.*)", allow_sudo=True))
 async def add_new_filter(new_handler):
     keyword = new_handler.pattern_match.group(1)
     string = new_handler.text.partition(keyword)[2]
@@ -108,8 +108,8 @@ async def on_snip_list(event):
         await edit_or_reply(event, OUT_STR)
 
 
-@borg.on(admin_cmd(pattern="stop (\w*)"))
-@borg.on(sudo_cmd(pattern="stop (\w*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="stop (.*)"))
+@borg.on(sudo_cmd(pattern="stop (.*)", allow_sudo=True))
 async def remove_a_filter(r_handler):
     filt = r_handler.pattern_match.group(1)
     if not remove_filter(r_handler.chat_id, filt):
