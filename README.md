@@ -3,7 +3,8 @@
 
 ### The Easy Way to deploy the bot
 1. Get APP ID and API HASH from [HERE](https://my.telegram.org) and BOT TOKEN from [Bot Father](https://t.me/botfather)
-2. Generate stringsession by clicking on run.on.repl.it button below and then click on deploy to heroku . 
+2. Generate stringsession by clicking on run.on.repl.it button below and then click on deploy to heroku
+
 Note : Before clicking on deploy to heroku just click on fork and star just below
 
 [![Get string session](https://repl.it/badge/github/sandy1709/sandeep1709)](https://generatestringsession.sandeep1709.repl.run/)
@@ -20,7 +21,7 @@ Note : Before clicking on deploy to heroku just click on fork and star just belo
 </p>
 
 
-[![catuserbot logo](https://telegra.ph/file/7e1e89621fabbf02596f8.jpg)](https://heroku.com/deploy)
+[![Sonic Cat logo](https://telegra.ph/file/8712da037bd4332b131b2.jpg)](https://heroku.com/deploy)
 
 [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
