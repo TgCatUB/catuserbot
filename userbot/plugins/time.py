@@ -162,9 +162,7 @@ async def date_func(dat):
 async def _(event):
     if event.fwd_from:
         return
-    current_time = datetime.now().strftime(
-        f"\nUSERBOT TIMEZONE\n {LOCATION}\n Time: %H:%M:%S \n Date: %d.%m.%y \n"
-    )
+    current_time = datetime.now().strftime(f"\nUSERBOT TIMEZONE\n  {LOCATION}\n Time: %H:%M:%S \n Date: %d.%m.%y \n")
     input_str = event.pattern_match.group(1)
     reply_msg_id = event.message.id
     if input_str:
@@ -174,9 +172,7 @@ async def _(event):
         reply_msg_id = previous_message.id
     if not os.path.isdir("./temp/"):
         os.makedirs("./temp/")
-    required_file_name = (
-        Config.TMP_DOWNLOAD_DIRECTORY + " " + str(datetime.now()) + ".webp"
-    )
+    required_file_name = ("./temp" + " " + str(datetime.now()) + ".webp")
     img = Image.new("RGBA", (350, 220), color=(0, 0, 0, 115))
     fnt = ImageFont.truetype(FONT_FILE_TO_USE, 35)
     drawn_text = ImageDraw.Draw(img)
@@ -194,11 +190,12 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "time": "**SYNTAX : **.ctime <country name/code> <timezone number> \
-    \n**USAGE : ** Get the time of a country. If a country has multiple timezones, it will list all of them and let you select one.\
-    \n\n**SYNTAX : **.cdate <country name/code> <timezone number> \
-    \n**USAGE : ** Get the date of a country. If a country has multiple timezones, it will list all of them \and let you select one.\
-    \n\n**SYNTAX : **.time \
-    \n**USAGE : ** shows current default time you can change by changing TZ in heroku vars"
+        "time": "**Plugin : **`time`\
+        \n\n**Syntax : **.ctime <country name/code> <timezone number> \
+    \n**Usage : ** Get the time of a country. If a country has multiple timezones, it will list all of them and let you select one.\
+    \n\n**Syntax : **.cdate <country name/code> <timezone number> \
+    \n**Usage : ** Get the date of a country. If a country has multiple timezones, it will list all of them \and let you select one.\
+    \n\n**Syntax : **`.time` \
+    \n**Usage : ** shows current default time you can change by changing TZ in heroku vars"
     }
 )
