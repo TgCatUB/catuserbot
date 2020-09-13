@@ -598,7 +598,7 @@ CMD_HELP.update(
 \nUsage: The onlu word that can be used fucking everywhere.\
 \n\n**Syntax :** `.thanos`\
 \nUsage: Try and then Snap.\
-\n\n**Syntax :** `.noob\
+\n\n**Syntax :** `.noob`\
 \nUsage: Whadya want to know? Are you a NOOB?\
 \n\n**Syntax :** `.pro`\
 \nUsage: If you think you're pro, try this.\
