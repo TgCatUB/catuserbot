@@ -4,9 +4,9 @@ from telethon.errors.rpcbaseerrors import ForbiddenError
 from telethon.errors.rpcerrorlist import PollOptionInvalidError
 from telethon.tl.types import InputMediaPoll, Poll
 
+from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import Build_Poll
-from .. import CMD_HELP
 
 
 @borg.on(admin_cmd(pattern="poll( (.*)|$)"))
@@ -81,4 +81,4 @@ CMD_HELP.update(
         \n ';' this seperates the each option and question \
         "
     }
-)            
+)
