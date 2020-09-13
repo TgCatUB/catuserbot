@@ -1,7 +1,8 @@
 import asyncio
 from collections import deque
+
 from .. import ALIVE_NAME
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -87,7 +88,8 @@ async def _(event):
         "`Pavel Durov : Yes Sur, There Is A Bug In Telegram v69.6.9.\nI Am Not Able To Fix It. If Possible, Please Help Fix The Bug.`",
         "`Me: Send Me The App On My Telegram Account, I Will Fix The Bug & Send You.`",
         "`Pavel Durov : Sure Sur \nTC Bye Bye :)`",
-        "`Private Call Disconnected.`"]
+        "`Private Call Disconnected.`",
+    ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 18])
@@ -133,7 +135,7 @@ async def _(event):
         "What The",
         "What The F",
         "What The F Brah",
-        "What The F Brah\nhttps://telegra.ph//file/f3b760e4a99340d331f9b.jpg"
+        "What The F Brah\nhttps://telegra.ph//file/f3b760e4a99340d331f9b.jpg",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -146,7 +148,6 @@ async def _(event):
     animation_interval = 0.3
     animation_ttl = range(0, 30)
     animation_chars = [
-
         "🔴⬛⬛⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
         "⬜⬜⬛⬜⬜\n⬜⬛⬜⬜⬜\n🔴⬜⬜⬜⬜",
         "⬜⬜⬛⬜⬜\n⬜⬜⬛⬜⬜\n⬜⬜🔴⬜⬜",
@@ -156,7 +157,6 @@ async def _(event):
         "⬜⬜⬛⬜⬜\n⬜⬜⬛⬜⬜\n⬜⬜🔴⬜⬜",
         "⬜⬜⬛⬜⬜\n⬜⬛⬜⬜⬜\n🔴⬜⬜⬜⬜",
         "🔴⬛⬛⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
-
     ]
     event = await edit_or_reply(event, "ding..dong..ding..dong ...")
     await asyncio.sleep(4)
@@ -188,7 +188,8 @@ async def _(event):
         "⬜⬜⬜⬜⬜⬜⬜\n⬜⬛⬛⬛⬛⬛⬜\n⬜⬛⬜⬜⬜⬛⬜\n⬜⬛⬜⬛⬜⬛⬜\n⬜⬛⬜⬜⬜⬛⬜\n⬜⬛⬛⬛⬛⬛⬜\n⬜⬜⬜⬜⬜⬜⬜",
         "⬛⬛⬛⬛⬛\n⬛⬜⬜⬜⬛\n⬛⬜⬛⬜⬛\n⬛⬜⬜⬜⬛\n⬛⬛⬛⬛⬛",
         "⬜⬜⬜\n⬜⬛⬜\n⬜⬜⬜",
-        "[👉🔴👈])"]
+        "[👉🔴👈])",
+    ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 15])
@@ -230,8 +231,10 @@ async def _(event):
 @borg.on(sudo_cmd(pattern=f"charging$", allow_sudo=True))
 async def timer_blankx(e):
     e = await edit_or_reply(e, "charging")
-    txt = e.text[10:] + \
-        '\n\n`Tesla Wireless Charging (beta) Started...\nDevice Detected: Nokia 1100\nBattery Percentage:` '
+    txt = (
+        e.text[10:]
+        + "\n\n`Tesla Wireless Charging (beta) Started...\nDevice Detected: Nokia 1100\nBattery Percentage:` "
+    )
     j = 10
     k = j
     for j in range(j):
@@ -239,4 +242,7 @@ async def timer_blankx(e):
         k = k + 10
         await asyncio.sleep(1)
     await asyncio.sleep(1)
-    await e.edit("`Tesla Wireless Charging (beta) Completed...\nDevice Detected: Nokia 1100 (Space Grey Varient)\nBattery Percentage:` [100%](https://telegra.ph/file/a45aa7450c8eefed599d9.mp4) ", link_preview=True)
+    await e.edit(
+        "`Tesla Wireless Charging (beta) Completed...\nDevice Detected: Nokia 1100 (Space Grey Varient)\nBattery Percentage:` [100%](https://telegra.ph/file/a45aa7450c8eefed599d9.mp4) ",
+        link_preview=True,
+    )

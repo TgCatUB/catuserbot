@@ -1,23 +1,25 @@
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
-"""Snips
-Available Commands:
-.snips
-.snipl
-.snipd"""
-from telethon import events, utils
+# ported from paperplaneExtended by avinashreddy3108 for media support
+
+from telethon import events
 from telethon.tl import types
-from userbot.plugins.sql_helper.snips_sql import get_snips, add_snip, remove_snip, get_all_snips
-from userbot.utils import admin_cmd
-from userbot import CMD_HELP
+
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from .sql_helper.snip_sql import add_note, get_note, get_notes, rm_note
+from .sql_helper.snips_sql import get_all_snips, get_snips, remove_snip
 
 TYPE_TEXT = 0
 TYPE_PHOTO = 1
 TYPE_DOCUMENT = 2
 
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
+else:
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
-@borg.on(events.NewMessage(pattern=r'\#(\S+)', outgoing=True))
+
+@borg.on(events.NewMessage(pattern=r"\#(\S+)", outgoing=True))
 async def on_snip(event):
     name = event.pattern_match.group(1)
     snip = get_snips(name)
@@ -26,13 +28,13 @@ async def on_snip(event):
             media = types.InputPhoto(
                 int(snip.media_id),
                 int(snip.media_access_hash),
-                snip.media_file_reference
+                snip.media_file_reference,
             )
         elif snip.snip_type == TYPE_DOCUMENT:
             media = types.InputDocument(
                 int(snip.media_id),
                 int(snip.media_access_hash),
-                snip.media_file_reference
+                snip.media_file_reference,
             )
         else:
             media = None
@@ -40,86 +42,144 @@ async def on_snip(event):
         if event.reply_to_msg_id:
             message_id = event.reply_to_msg_id
         await borg.send_message(
-            event.chat_id,
-            snip.reply,
-            reply_to=message_id,
-            file=media
+            event.chat_id, snip.reply, reply_to=message_id, file=media
         )
         await event.delete()
 
 
-@borg.on(admin_cmd(pattern="snips (.*)"))
-async def on_snip_save(event):
-    name = event.pattern_match.group(1)
-    msg = await event.get_reply_message()
-    if msg:
-        snip = {'type': TYPE_TEXT, 'text': msg.message or ''}
-        if msg.media:
-            media = None
-            if isinstance(msg.media, types.MessageMediaPhoto):
-                media = utils.get_input_photo(msg.media.photo)
-                snip['type'] = TYPE_PHOTO
-            elif isinstance(msg.media, types.MessageMediaDocument):
-                media = utils.get_input_document(msg.media.document)
-                snip['type'] = TYPE_DOCUMENT
-            if media:
-                snip['id'] = media.id
-                snip['hash'] = media.access_hash
-                snip['fr'] = media.file_reference
-        add_snip(
-            name,
-            snip['text'],
-            snip['type'],
-            snip.get('id'),
-            snip.get('hash'),
-            snip.get('fr'))
-        await event.edit("snip {name} saved successfully. Get it with #{name}".format(name=name))
-    else:
-        await event.edit("Reply to a message with `snips keyword` to save the snip")
+@borg.on(events.NewMessage(pattern=r"\#(\S+)", outgoing=True))
+async def incom_note(getnt):
+    try:
+        if not (await getnt.get_sender()).bot:
+            notename = getnt.text[1:]
+            note = get_note(notename)
+            message_id_to_reply = getnt.message.reply_to_msg_id
+            if not message_id_to_reply:
+                message_id_to_reply = None
+            if note and note.f_mesg_id:
+                msg_o = await bot.get_messages(
+                    entity=BOTLOG_CHATID, ids=int(note.f_mesg_id)
+                )
+                await getnt.delete()
+                await bot.send_message(
+                    getnt.chat_id,
+                    msg_o,
+                    reply_to=message_id_to_reply,
+                    link_preview=False,
+                )
+            elif note and note.reply:
+                await getnt.delete()
+                await bot.send_message(
+                    getnt.chat_id,
+                    note.reply,
+                    reply_to=message_id_to_reply,
+                    link_preview=False,
+                )
+    except AttributeError:
+        pass
 
 
-@borg.on(admin_cmd(pattern="snipl"))
+@borg.on(admin_cmd(pattern=r"snips (\w*)"))
+@borg.on(sudo_cmd(pattern=r"snips (\w*)", allow_sudo=True))
+async def add_snip(fltr):
+    keyword = fltr.pattern_match.group(1)
+    string = fltr.text.partition(keyword)[2]
+    msg = await fltr.get_reply_message()
+    msg_id = None
+    if msg and msg.media and not string:
+        if BOTLOG_CHATID:
+            await bot.send_message(
+                BOTLOG_CHATID,
+                f"#NOTE\
+                  \nKEYWORD: `#{keyword}`\
+                  \n\nThe following message is saved as the snip in your bot , do NOT delete it !!",
+            )
+            msg_o = await bot.forward_messages(
+                entity=BOTLOG_CHATID, messages=msg, from_peer=fltr.chat_id, silent=True
+            )
+            msg_id = msg_o.id
+        else:
+            await edit_or_reply(
+                fltr,
+                "Saving media as data for the note requires the `PRIVATE_GROUP_BOT_API_ID` to be set.",
+            )
+            return
+    elif fltr.reply_to_msg_id and not string:
+        rep_msg = await fltr.get_reply_message()
+        string = rep_msg.text
+    success = "Note {}  is successfully saved. Use` #{} `to get it"
+    if add_note(keyword, string, msg_id) is False:
+        rm_note(keyword)
+        if add_note(keyword, string, msg_id) is False:
+            return await edit_or_reply(
+                fltr, f"Error in saving the given snip {keyword}"
+            )
+        return await edit_or_reply(fltr, success.format("updated", keyword))
+    return await edit_or_reply(fltr, success.format("added", keyword))
+
+
+@borg.on(admin_cmd(pattern="snipl$"))
+@borg.on(sudo_cmd(pattern=r"snipl$", allow_sudo=True))
 async def on_snip_list(event):
+    message = "There are no saved notes in this chat"
+    notes = get_notes()
     all_snips = get_all_snips()
-    OUT_STR = "Available Snips:\n"
-    if len(all_snips) > 0:
-        for a_snip in all_snips:
-            OUT_STR += f"👉 #{a_snip.snip} \n"
-    else:
-        OUT_STR = "No Snips. Start Saving using `.snips`"
-    if len(OUT_STR) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(OUT_STR)) as out_file:
+    for note in notes:
+        if message == "There are no saved notes in this chat":
+            message = "Notes saved in this chat:\n"
+            message += "👉 `#{}`\n".format(note.keyword)
+        else:
+            message += "👉 `#{}`\n".format(note.keyword)
+    for a_snip in all_snips:
+        if message == "There are no saved notes in this chat":
+            message = "Notes saved in this chat:\n"
+            message += "👉 `#{}`\n".format(a_snip.snip)
+        else:
+            message += "👉 `#{}`\n".format(a_snip.snip)
+    if len(message) > Config.MAX_MESSAGE_SIZE_LIMIT:
+        with io.BytesIO(str.encode(message)) as out_file:
             out_file.name = "snips.text"
-            await borg.send_file(
+            await bot.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
                 allow_cache=False,
                 caption="Available Snips",
-                reply_to=event
+                reply_to=event,
             )
             await event.delete()
     else:
-        await event.edit(OUT_STR)
+        await edit_or_reply(event, message)
 
 
 @borg.on(admin_cmd(pattern=r"snipd (\S+)"))
+@borg.on(sudo_cmd(pattern=r"snipd (\S+)", allow_sudo=True))
 async def on_snip_delete(event):
     name = event.pattern_match.group(1)
-    remove_snip(name)
-    await event.edit("snip #{} deleted successfully".format(name))
+    snip = get_snips(name)
+    catsnip = get_note(name)
+    if snip:
+        remove_snip(name)
+    elif catsnip:
+        rm_note(name)
+    else:
+        return await edit_or_reply(
+            event, f"Are you sure that #{name} is saved as snip?"
+        )
+    await edit_or_reply(event, "snip #{} deleted successfully".format(name))
 
 
-CMD_HELP.update({
-    "snip":
-    "\
-#<snipname>\
-\nUsage: Gets the specified note.\
-\n\n.snips: reply to a message with .snips <notename>\
-\nUsage: Saves the replied message as a note with the notename. (Works with pics, docs, and stickers too!)\
-\n\n.snipl\
-\nUsage: Gets all saved notes in a chat.\
-\n\n.snipd <notename>\
-\nUsage: Deletes the specified note.\
+CMD_HELP.update(
+    {
+        "snip": "**Plugin :** `snip`\
+\n\n**Syntax :** #<snipname>\
+\n**Usage :** Gets the specified note.\
+\n\n**Syntax :** `.snips: reply to a message with .snips <notename>`\
+\n**Usage :** Saves the replied message as a note with the notename. (Works with pics, docs, and stickers too!)\
+\n\n**Syntax :** `.snipl`\
+\n**Usage :** Gets all saved notes in a chat.\
+\n\n**Syntax :** `.snipd <notename>`\
+\n**Usage :** Deletes the specified note.\
 "
-})
+    }
+)

@@ -1,35 +1,35 @@
 import os
 import sys
-from telethon.sessions import StringSession
-from telethon import TelegramClient
-from var import Var
-from pylast import LastFMNetwork, md5
-from logging import basicConfig, getLogger, INFO, DEBUG
-from distutils.util import strtobool as sb
-from dotenv import load_dotenv
-from requests import get
 import time
+from distutils.util import strtobool as sb
+from logging import DEBUG, INFO, basicConfig, getLogger
+
+from dotenv import load_dotenv
+from pylast import LastFMNetwork, md5
 from pySmartDL import SmartDL
-from .helpers import fonts as fonts, functions as catdef
+from requests import get
+from telethon import TelegramClient
+from telethon.sessions import StringSession
+
+from var import Var
+
+from .helpers import fonts as fonts
+from .helpers import functions as catdef
 from .helpers import memeshelper as memes
-from .helpers import tempmemes, process as process
+from .helpers import process as process
+from .helpers import tempmemes
 
 StartTime = time.time()
-catversion = "2.7.2"
+catversion = "2.7.3"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
     if session_name.endswith("="):
-        bot = TelegramClient(
-            StringSession(session_name),
-            Var.APP_ID,
-            Var.API_HASH)
+        bot = TelegramClient(StringSession(session_name), Var.APP_ID, Var.API_HASH)
     else:
         bot = TelegramClient(
-            "TG_BOT_TOKEN",
-            api_id=Var.APP_ID,
-            api_hash=Var.API_HASH).start(
-            bot_token=Var.STRING_SESSION)
+            "TG_BOT_TOKEN", api_id=Var.APP_ID, api_hash=Var.API_HASH
+        ).start(bot_token=Var.STRING_SESSION)
 else:
     session_name = "startup"
     bot = TelegramClient(session_name, Var.APP_ID, Var.API_HASH)
@@ -41,10 +41,7 @@ CAT_ID = ["1035034432", "551290198"]
 
 # Bot Logs setup:
 if bool(ENV):
-    CONSOLE_LOGGER_VERBOSE = sb(
-        os.environ.get(
-            "CONSOLE_LOGGER_VERBOSE",
-            "False"))
+    CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     if CONSOLE_LOGGER_VERBOSE:
         basicConfig(
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -52,14 +49,15 @@ if bool(ENV):
         )
     else:
         basicConfig(
-            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-            level=INFO)
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=INFO
+        )
     LOGS = getLogger(__name__)
 
     # Check if the config was edited by using the already used variable.
     # Basically, its the 'virginity check' for the config file ;)
     CONFIG_CHECK = os.environ.get(
-        "___________PLOX_______REMOVE_____THIS_____LINE__________", None)
+        "___________PLOX_______REMOVE_____THIS_____LINE__________", None
+    )
     if CONFIG_CHECK:
         LOGS.info(
             "Please remove the line mentioned in the first hashtag from the config.env file"
@@ -67,14 +65,10 @@ if bool(ENV):
         quit(1)
     BOTLOG_CHATID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID", "-100"))
     BOTLOG = sb(os.environ.get("BOTLOG", "True"))
-    CONSOLE_LOGGER_VERBOSE = sb(
-        os.environ.get(
-            "CONSOLE_LOGGER_VERBOSE",
-            "False"))
+    CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     # Chrome Driver and Headless Google Chrome Binaries
     CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
-    GOOGLE_CHROME_BIN = os.environ.get(
-        "GOOGLE_CHROME_BIN", "/usr/bin/google-chrome")
+    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", "/usr/bin/google-chrome")
     # OpenWeatherMap API Key
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
     # Youtube API key
@@ -83,8 +77,8 @@ if bool(ENV):
     ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
     AUTONAME = os.environ.get("AUTONAME", None)
     UPSTREAM_REPO_URL = os.environ.get(
-        "UPSTREAM_REPO_URL",
-        "https://github.com/sandy1709/catuserbot.git")
+        "UPSTREAM_REPO_URL", "https://github.com/sandy1709/catuserbot.git"
+    )
     # Last.fm Module
     BIO_PREFIX = os.environ.get("BIO_PREFIX", None)
     DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
@@ -97,8 +91,7 @@ if bool(ENV):
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
     GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", None)
-    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY",
-                                             "./downloads")
+    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./downloads")
     # time.py
     COUNTRY = str(os.environ.get("COUNTRY", ""))
     TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
@@ -107,15 +100,12 @@ else:
     PLACEHOLDER = None
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
-if not os.path.exists('bin'):
-    os.mkdir('bin')
+if not os.path.exists("bin"):
+    os.mkdir("bin")
 binaries = {
-    "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown":
-    "bin/megadown",
-    "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py":
-    "bin/cmrudl",
-    "https://raw.githubusercontent.com/adekmaulana/python-scripts/master/shell/megadirect":
-    "bin/megadirect"
+    "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown": "bin/megadown",
+    "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py": "bin/cmrudl",
+    "https://raw.githubusercontent.com/adekmaulana/python-scripts/master/shell/megadirect": "bin/megadirect",
 }
 
 for binary, path in binaries.items():

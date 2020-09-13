@@ -1,12 +1,14 @@
 # imported from pornhub credits to pornhub
-from coffeehouse.lydia import LydiaAI
-from coffeehouse.api import API
 import asyncio
 import io
-from userbot.plugins.sql_helper.lydia_ai_sql import get_s, get_all_s, add_s, remove_s
 from time import time
-from userbot.utils import admin_cmd
+
+from coffeehouse.api import API
+from coffeehouse.lydia import LydiaAI
+
 from userbot import CMD_HELP
+from userbot.plugins.sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
+from userbot.utils import admin_cmd
 
 if Var.LYDIA_API_KEY:
     api_key = Var.LYDIA_API_KEY
@@ -59,14 +61,18 @@ async def lydia_disable_enable(event):
                         force_document=True,
                         allow_cache=False,
                         caption="Lydia AI enabled users",
-                        reply_to=event
+                        reply_to=event,
                     )
             else:
                 await event.edit(output_str)
         else:
-            await event.edit("Reply To User Message to Add / Delete them from Lydia Auto-Chat.")
+            await event.edit(
+                "Reply To User Message to Add / Delete them from Lydia Auto-Chat."
+            )
     else:
-        await event.edit("Reply To A User's Message to Add / Delete them from Lydia Auto-Chat.")
+        await event.edit(
+            "Reply To A User's Message to Add / Delete them from Lydia Auto-Chat."
+        )
 
 
 @borg.on(admin_cmd(incoming=True))
@@ -99,12 +105,7 @@ async def on_new_message(event):
                 logger.info(session)
                 session_id = session.id
                 session_expires = session.expires
-                logger.info(
-                    add_s(
-                        user_id,
-                        chat_id,
-                        session_id,
-                        session_expires))
+                logger.info(add_s(user_id, chat_id, session_id, session_expires))
             # Try to think a thought.
             try:
                 async with event.client.action(event.chat_id, "location"):
@@ -115,13 +116,14 @@ async def on_new_message(event):
                 logger.info(str(e))
 
 
-CMD_HELP.update({
-    "lydia":
-    "`.enai` reply to a user\
+CMD_HELP.update(
+    {
+        "lydia": "`.enai` reply to a user\
     \nUSAGE: your bot will auto reply to the tagged user until you stops it by `.remcf`\
     \n\n`.reai` reply to the user to who you want to disable the lydia\
     \n\n`.liai` to list the users to whom you enabled ai(lydia)\
     \n\n for functioning this plugin you need to set the heroku var\
     \n the key is `LYDIA_API_KEY` and get var from `https://coffeehouse.intellivoid.net/`\
 "
-})
+    }
+)

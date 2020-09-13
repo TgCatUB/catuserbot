@@ -6,18 +6,20 @@
 This module updates the userbot based on upstream revision
 Ported from Kensurbot
 """
-import sys
 import asyncio
-from git import Repo
-from . import runcmd
-from .. import CMD_HELP
+import sys
 from os import environ, execle, path, remove
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+
+from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import runcmd
 
 HEROKU_APP_NAME = Var.HEROKU_APP_NAME
 HEROKU_API_KEY = Var.HEROKU_API_KEY
-UPSTREAM_REPO_BRANCH = "master"
+UPSTREAM_REPO_BRANCH = "test"
 UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
 
 requirements_path = path.join(
@@ -46,12 +48,16 @@ async def print_changelogs(event, ac_br, changelog):
         file.write(changelog_str)
         file.close()
         await event.client.send_file(
-            event.chat_id, "output.txt", reply_to=event.id,
+            event.chat_id,
+            "output.txt",
+            reply_to=event.id,
         )
         remove("output.txt")
     else:
         await event.client.send_message(
-            event.chat_id, changelog_str, reply_to=event.id,
+            event.chat_id,
+            changelog_str,
+            reply_to=event.id,
         )
     return True
 
@@ -73,6 +79,7 @@ async def update_requirements():
 async def deploy(event, repo, ups_rem, ac_br, txt):
     if HEROKU_API_KEY is not None:
         import heroku3
+
         heroku = heroku3.from_key(HEROKU_API_KEY)
         heroku_app = None
         heroku_applications = heroku.apps()
@@ -204,7 +211,9 @@ async def upstream(event):
     if conf == "" and force_update is False:
         await print_changelogs(event, ac_br, changelog)
         await event.delete()
-        return await event.respond('do "[`.update now`] or [`.update deploy`]" to update.Check `.info updater` for details')
+        return await event.respond(
+            'do "[`.update now`] or [`.update deploy`]" to update.Check `.info updater` for details'
+        )
 
     if force_update:
         await event.edit(
@@ -219,7 +228,7 @@ async def upstream(event):
 @bot.on(admin_cmd(outgoing=True, pattern=r"badcat$"))
 @borg.on(sudo_cmd(pattern="badcat$", allow_sudo=True))
 async def upstream(event):
-    event = await edit_or_reply(event, "`Checking for updates, please wait....`")
+    event = await edit_or_reply(event, "`Pulling the bad cat repo wait a sec ....`")
     off_repo = "https://github.com/Jisan09/catuserbot"
     catcmd = f"rm -rf .git"
     try:
@@ -253,17 +262,20 @@ async def upstream(event):
     await event.edit("`Deploying userbot, please wait....`")
     await deploy(event, repo, ups_rem, ac_br, txt)
 
-CMD_HELP.update({
-    "updater": "**Plugin : **`updater`"
-    "\n\n**Syntax : **`.update`"
-    "\n**Usage :** Checks if the main userbot repository has any updates "
-    "and shows a changelog if so."
-    "\n\n**Syntax : **`.update now`"
-    "\n**Usage :** Update your userbot, "
-    "if there are any updates in your userbot repository.if you restart these goes back to last time when you deployed"
-    "\n\n**Syntax : **`.update deploy`"
-    "\n**Usage :** Deploy your userbot.So even you restart it doesnt go back to previous version"
-    "\nThis will triggered deploy always, even no updates."
-    "\n\n**Syntax : **`.badcat`"
-    "\n**Usage :** Shifts from official cat repo to jisan's repo(for gali commands)"
-})
+
+CMD_HELP.update(
+    {
+        "updater": "**Plugin : **`updater`"
+        "\n\n**Syntax : **`.update`"
+        "\n**Usage :** Checks if the main userbot repository has any updates "
+        "and shows a changelog if so."
+        "\n\n**Syntax : **`.update now`"
+        "\n**Usage :** Update your userbot, "
+        "if there are any updates in your userbot repository.if you restart these goes back to last time when you deployed"
+        "\n\n**Syntax : **`.update deploy`"
+        "\n**Usage :** Deploy your userbot.So even you restart it doesnt go back to previous version"
+        "\nThis will triggered deploy always, even no updates."
+        "\n\n**Syntax : **`.badcat`"
+        "\n**Usage :** Shifts from official cat repo to jisan's repo(for gali commands)"
+    }
+)

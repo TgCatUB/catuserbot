@@ -1,5 +1,7 @@
 import random
+
 import requests
+
 from userbot.utils import admin_cmd
 
 
@@ -10,15 +12,17 @@ async def quote_search(event):
     await event.edit("Processing...")
     search_string = event.pattern_match.group(1)
     input_url = "https://bots.shrimadhavuk.me/Telegram/GoodReadsQuotesBot/?q={}".format(
-        search_string)
+        search_string
+    )
     headers = {"USER-AGENT": "UniBorg"}
     try:
         response = requests.get(input_url, headers=headers).json()
     except BaseException:
         response = None
     if response is not None:
-        result = random.choice(response).get(
-            "input_message_content").get("message_text")
+        result = (
+            random.choice(response).get("input_message_content").get("message_text")
+        )
     else:
         result = None
     if result:

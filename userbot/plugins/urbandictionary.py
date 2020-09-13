@@ -4,6 +4,7 @@
 """Urban Dictionary
 Syntax: .ud Query"""
 import asyncurban
+
 from userbot.utils import admin_cmd
 
 
@@ -16,6 +17,10 @@ async def _(event):
     urban = asyncurban.UrbanDictionary()
     try:
         mean = await urban.get_word(word)
-        await event.edit("Text: **{}**\n\nMeaning: **{}**\n\nExample: __{}__".format(mean.word, mean.definition, mean.example))
+        await event.edit(
+            "Text: **{}**\n\nMeaning: **{}**\n\nExample: __{}__".format(
+                mean.word, mean.definition, mean.example
+            )
+        )
     except asyncurban.WordNotFoundError:
         await event.edit("No result found for **" + word + "**")

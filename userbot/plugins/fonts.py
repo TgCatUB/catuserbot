@@ -1,5 +1,45 @@
-from userbot import CMD_HELP, fonts
-from userbot.utils import admin_cmd
+from .. import CMD_HELP, fonts
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+
+
+@borg.on(admin_cmd(pattern="fmusical(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="fmusical(?: |$)(.*)", allow_sudo=True))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text
+    if not args:
+        await edit_or_reply(event, "What I am Supposed to change give text")
+        return
+    string = "  ".join(args).lower()
+    for normalfontcharacter in string:
+        if normalfontcharacter in fonts.normalfont:
+            musicalcharacter = fonts.musicalfont[
+                fonts.normalfont.index(normalfontcharacter)
+            ]
+            string = string.replace(normalfontcharacter, musicalcharacter)
+    await edit_or_reply(event, string)
+
+
+@borg.on(admin_cmd(pattern="ancient(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="ancient(?: |$)(.*)", allow_sudo=True))
+async def stylish_generator(event):
+    args = event.pattern_match.group(1)
+    if not args:
+        get = await event.get_reply_message()
+        args = get.text
+    if not args:
+        await edit_or_reply(event, "What I am Supposed to change give text")
+        return
+    string = "  ".join(args).lower()
+    for normalfontcharacter in string:
+        if normalfontcharacter in fonts.normalfont:
+            ancientcharacter = fonts.ancientfont[
+                fonts.normalfont.index(normalfontcharacter)
+            ]
+            string = string.replace(normalfontcharacter, ancientcharacter)
+    await edit_or_reply(event, string)
 
 
 @borg.on(admin_cmd(pattern="vapor(?: |$)(.*)"))
@@ -37,11 +77,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            smallcapscharacter = fonts.smallcapsfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            smallcapscharacter = fonts.smallcapsfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, smallcapscharacter)
     await event.edit(string)
 
@@ -55,11 +96,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            bubblesblackcharacter = fonts.bubblesblackfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            bubblesblackcharacter = fonts.bubblesblackfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, bubblesblackcharacter)
     await event.edit(string)
 
@@ -73,11 +115,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            bubblescharacter = fonts.bubblesfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            bubblescharacter = fonts.bubblesfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, bubblescharacter)
     await event.edit(string)
 
@@ -91,11 +134,12 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            tantextcharacter = fonts.tantextfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            tantextcharacter = fonts.tantextfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, tantextcharacter)
     await event.edit(string)
 
@@ -109,14 +153,13 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            littleboxtextcharacter = fonts.littleboxtextfont[fonts.normaltext.index(
-                normaltextcharacter)]
-            string = string.replace(
-                normaltextcharacter,
-                littleboxtextcharacter)
+            littleboxtextcharacter = fonts.littleboxtextfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
+            string = string.replace(normaltextcharacter, littleboxtextcharacter)
     await event.edit(string)
 
 
@@ -129,17 +172,23 @@ async def stylish_generator(event):
     if not args:
         await event.edit("What I am Supposed to change give text")
         return
-    string = '  '.join(args).lower()
+    string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
-            smothtextcharacter = fonts.smothtextfont[fonts.normaltext.index(
-                normaltextcharacter)]
+            smothtextcharacter = fonts.smothtextfont[
+                fonts.normaltext.index(normaltextcharacter)
+            ]
             string = string.replace(normaltextcharacter, smothtextcharacter)
     await event.edit(string)
 
 
-CMD_HELP.update({
-    "fonts": ".vapor (text) or .vapor reply to message \
-\nUsage: Vaporize the given text. \
+CMD_HELP.update(
+    {
+        "extrafonts": "**extrafonts**\
+    \n**Syntax :** `.fmusical`\
+    \n        `.ancient`\
+    \n        `.vapor`\
+    \n**Usage : **differnt font styles\
 "
-})
+    }
+)

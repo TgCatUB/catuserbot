@@ -6,8 +6,10 @@ Available Commands:
 .unshort <short url>"""
 
 import requests
+
 from userbot import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="dns (.*)"))
@@ -19,9 +21,13 @@ async def _(event):
     sample_url = "https://da.gd/dns/{}".format(input_str)
     response_api = requests.get(sample_url).text
     if response_api:
-        await edit_or_reply(event, "DNS records of {} are \n{}".format(input_str, response_api))
+        await edit_or_reply(
+            event, "DNS records of {} are \n{}".format(input_str, response_api)
+        )
     else:
-        await edit_or_reply(event, "i can't seem to find {} on the internet".format(input_str))
+        await edit_or_reply(
+            event, "i can't seem to find {} on the internet".format(input_str)
+        )
 
 
 @borg.on(admin_cmd(pattern="url (.*)"))
@@ -33,7 +39,9 @@ async def _(event):
     sample_url = "https://da.gd/s?url={}".format(input_str)
     response_api = requests.get(sample_url).text
     if response_api:
-        await edit_or_reply(event, "Generated {} for {}.".format(response_api, input_str))
+        await edit_or_reply(
+            event, "Generated {} for {}.".format(response_api, input_str)
+        )
     else:
         await edit_or_reply(event, "something is wrong. please try again later.")
 
@@ -47,18 +55,28 @@ async def _(event):
     if not input_str.startswith("http"):
         input_str = "http://" + input_str
     r = requests.get(input_str, allow_redirects=False)
-    if str(r.status_code).startswith('3'):
-        await edit_or_reply(event, "Input URL: {}\nReDirected URL: {}".format(input_str, r.headers["Location"]))
+    if str(r.status_code).startswith("3"):
+        await edit_or_reply(
+            event,
+            "Input URL: {}\nReDirected URL: {}".format(
+                input_str, r.headers["Location"]
+            ),
+        )
     else:
-        await edit_or_reply(event, "Input URL {} returned status_code {}".format(input_str, r.status_code))
+        await edit_or_reply(
+            event,
+            "Input URL {} returned status_code {}".format(input_str, r.status_code),
+        )
 
-CMD_HELP.update({
-    "ping":
-    "**Syntax :** `.dns link`\
+
+CMD_HELP.update(
+    {
+        "ping": "**Syntax :** `.dns link`\
     \n**Usage : **Shows you Domain Name System(dns) of the given link . example `.dns google.com` or `.dns github.cm`\
     \n\n**Syntax : **`.url link`\
     \n**Usage : **shortens the given link\
     \n\n**Syntax : **`.unshort link`\
     \n**Usage : **unshortens the given short link\
     "
-})
+    }
+)

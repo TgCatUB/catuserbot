@@ -7,14 +7,18 @@
 # License: MPL and OSSRPL
 """ Userbot module for getiing info about any user on Telegram(including you!). """
 
-import os
 import html
-from telethon.utils import get_input_location
-from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
-from telethon.tl.types import MessageEntityMentionName
-from telethon.tl.functions.users import GetFullUserRequest
+import os
+
+from requests import get
 from telethon.tl.functions.photos import GetUserPhotosRequest
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
+from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.types import MessageEntityMentionName
+from telethon.utils import get_input_location
+
+from .. import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import spamwatch
 
 
 @borg.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
@@ -24,19 +28,7 @@ async def _(event):
         return
     replied_user, error_i_a = await get_full_user(event)
     if replied_user is None:
-        await edit_or_reply(event, str(error_i_a))
-        return False
-    replied_user_profile_photos = await borg(GetUserPhotosRequest(
-        user_id=replied_user.user.id,
-        offset=42,
-        max_id=0,
-        limit=80
-    ))
-    replied_user_profile_photos_count = "NaN"
-    try:
-        replied_user_profile_photos_count = replied_user_profile_photos.count
-    except AttributeError:
-        pass
+        return await edit_or_reply(event, f"`{str(error_i_a)}`")
     user_id = replied_user.user.id
     # some people have weird HTML in their names
     first_name = html.escape(replied_user.user.first_name)
@@ -47,93 +39,78 @@ async def _(event):
         # names
         first_name = first_name.replace("\u2060", "")
     # inspired by https://telegram.dog/afsaI181
-    user_bio = replied_user.about
-    if user_bio is not None:
-        user_bio = html.escape(replied_user.about)
     common_chats = replied_user.common_chats_count
     try:
         dc_id, location = get_input_location(replied_user.profile_photo)
+    except:
+        dc_id = "Couldn't fetch DC ID!"
+    if spamwatch:
+        ban = spamwatch.get_ban(user_id)
+        if ban:
+            sw = f"**Spamwatch Banned :** `True` \n       **-**🤷‍♂️**Reason : **`{ban.reason}`"
+        else:
+            sw = f"**Spamwatch Banned :** `False`"
+    else:
+        sw = "**Spamwatch Banned :**`Not Connected`"
+    try:
+        casurl = "https://api.cas.chat/check?user_id={}".format(user_id)
+        data = get(casurl).json()
     except Exception as e:
-        dc_id = "Need a Profile Picture to check **this**"
-        str(e)
-    caption = """Detailed Whois:
-🔖ID: <code>{}</code>
-🤵Name: <a href='tg://user?id={}'>{}</a>
-✍️Bio: {}
-🌏Data Centre Number: {}
-🖼Number of Profile Pics: {}
-🔏Restricted: {}
-🌐Verified: {}
-🤖Bot: {}
-👥Groups in Common: {}
-List Of Telegram Data Centres:
-DC1 : Miami FL, USA
-DC2 : Amsterdam, NL
-DC3 : Miami FL, USA
-DC4 : Amsterdam, NL
-DC5 : Singapore, SG
+        LOGS.info(e)
+        data = None
+    if data:
+        if data["ok"]:
+            cas = "**Antispam(CAS) Banned :** `True`"
+        else:
+            cas = "**Antispam(CAS) Banned :** `False`"
+    else:
+        cas = "**Antispam(CAS) Banned :** `Couldn't Fetch`"
+    caption = """**Info of [{}](tg://user?id={}):
+   -🔖ID : **`{}`
+   **-**👥**Groups in Common : **`{}`
+   **-**🌏**Data Centre Number : **`{}`
+   **-**🔏**Restricted by telegram : **`{}`
+   **-**🦅{}
+   **-**👮‍♂️{}
 """.format(
-        user_id,
-        user_id,
         first_name,
-        user_bio,
+        user_id,
+        user_id,
+        common_chats,
         dc_id,
-        replied_user_profile_photos_count,
         replied_user.user.restricted,
-        replied_user.user.verified,
-        replied_user.user.bot,
-        common_chats
+        sw,
+        cas,
     )
-    message_id_to_reply = event.message.reply_to_msg_id
-    if not message_id_to_reply:
-        message_id_to_reply = event.message.id
-    await borg.send_message(
-        event.chat_id,
-        caption,
-        reply_to=message_id_to_reply,
-        parse_mode="HTML",
-        file=replied_user.profile_photo,
-        force_document=False,
-        silent=True
-    )
-    await event.delete()
+    await event.edit(caption)
 
 
 async def get_full_user(event):
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        if previous_message.forward:
-            replied_user = await event.client(
-                GetFullUserRequest(
-                    previous_message.forward.from_id or previous_message.forward.channel_id
-                )
-            )
-            return replied_user, None
-        replied_user = await event.client(
-            GetFullUserRequest(
-                previous_message.from_id
-            )
-        )
-        return replied_user, None
-    input_str = None
-    try:
-        input_str = event.pattern_match.group(1)
-    except IndexError as e:
-        return None, e
-    if event.message.entities:
-        mention_entity = event.message.entities
-        probable_user_mention_entity = mention_entity[0]
-        if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-            user_id = probable_user_mention_entity.user_id
-            replied_user = await event.client(GetFullUserRequest(user_id))
-            return replied_user, None
+    input_str = event.pattern_match.group(1)
+    if input_str:
         try:
+            try:
+                input_str = int(input_str)
+            except:
+                pass
             user_object = await event.client.get_entity(input_str)
             user_id = user_object.id
             replied_user = await event.client(GetFullUserRequest(user_id))
             return replied_user, None
         except Exception as e:
             return None, e
+    if event.reply_to_msg_id:
+        previous_message = await event.get_reply_message()
+        if previous_message.forward:
+            replied_user = await event.client(
+                GetFullUserRequest(
+                    previous_message.forward.from_id
+                    or previous_message.forward.channel_id
+                )
+            )
+            return replied_user, None
+        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
+        return replied_user, None
     if event.is_private:
         try:
             user_id = event.chat_id
@@ -141,20 +118,15 @@ async def get_full_user(event):
             return replied_user, None
         except Exception as e:
             return None, e
-    try:
-        user_object = await event.client.get_entity(int(input_str))
-        user_id = user_object.id
-        replied_user = await event.client(GetFullUserRequest(user_id))
-        return replied_user, None
-    except Exception as e:
-        return None, e
+    return None, "No input is found"
 
 
 @borg.on(admin_cmd(pattern="whois(?: |$)(.*)"))
 @borg.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
 async def who(event):
-    cat = await edit_or_reply(event,
-                              "`Sit tight while I steal some data from Mark Zuckerburg...`")
+    cat = await edit_or_reply(
+        event, "`Sit tight while I steal some data from Mark Zuckerburg...`"
+    )
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     replied_user = await get_user(event)
@@ -167,13 +139,15 @@ async def who(event):
     if not message_id_to_reply:
         message_id_to_reply = None
     try:
-        await borg.send_file(event.chat_id,
-                             photo,
-                             caption=caption,
-                             link_preview=False,
-                             force_document=False,
-                             reply_to=message_id_to_reply,
-                             parse_mode="html")
+        await borg.send_file(
+            event.chat_id,
+            photo,
+            caption=caption,
+            link_preview=False,
+            force_document=False,
+            reply_to=message_id_to_reply,
+            parse_mode="html",
+        )
         if not photo.startswith("http"):
             os.remove(photo)
         await cat.delete()
@@ -185,8 +159,7 @@ async def get_user(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id and not event.pattern_match.group(1):
         previous_message = await event.get_reply_message()
-        replied_user = await event.client(
-            GetFullUserRequest(previous_message.from_id))
+        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
     else:
         user = event.pattern_match.group(1)
         if user.isnumeric():
@@ -196,15 +169,13 @@ async def get_user(event):
             user = self_user.id
         if event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
-            if isinstance(probable_user_mention_entity,
-                          MessageEntityMentionName):
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 replied_user = await event.client(GetFullUserRequest(user_id))
                 return replied_user
         try:
             user_object = await event.client.get_entity(user)
-            replied_user = await event.client(
-                GetFullUserRequest(user_object.id))
+            replied_user = await event.client(GetFullUserRequest(user_object.id))
         except (TypeError, ValueError) as err:
             await event.edit(str(err))
             return None
@@ -214,11 +185,11 @@ async def get_user(event):
 async def fetch_info(replied_user, event):
     """ Get details from the User object. """
     replied_user_profile_photos = await event.client(
-        GetUserPhotosRequest(user_id=replied_user.user.id,
-                             offset=42,
-                             max_id=0,
-                             limit=80))
-    replied_user_profile_photos_count = "Person needs help with uploading profile picture."
+        GetUserPhotosRequest(
+            user_id=replied_user.user.id, offset=42, max_id=0, limit=80
+        )
+    )
+    replied_user_profile_photos_count = "User haven't set profile pic"
     try:
         replied_user_profile_photos_count = replied_user_profile_photos.count
     except AttributeError:
@@ -228,48 +199,106 @@ async def fetch_info(replied_user, event):
     last_name = replied_user.user.last_name
     try:
         dc_id, location = get_input_location(replied_user.profile_photo)
-    except Exception as e:
+    except:
         dc_id = "Couldn't fetch DC ID!"
-        str(e)
     common_chat = replied_user.common_chats_count
     username = replied_user.user.username
     user_bio = replied_user.about
     is_bot = replied_user.user.bot
     restricted = replied_user.user.restricted
     verified = replied_user.user.verified
-    photo = await event.client.download_profile_photo(user_id,
-                                                      TEMP_DOWNLOAD_DIRECTORY +
-                                                      str(user_id) + ".jpg",
-                                                      download_big=True)
-    first_name = first_name.replace(
-        "\u2060", "") if first_name else ("This User has no First Name")
-    last_name = last_name.replace(
-        "\u2060", "") if last_name else ("This User has no Last Name")
-    username = "@{}".format(username) if username else (
-        "This User has no Username")
+    photo = await event.client.download_profile_photo(
+        user_id, TEMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg", download_big=True
+    )
+    first_name = (
+        first_name.replace("\u2060", "")
+        if first_name
+        else ("This User has no First Name")
+    )
+    last_name = (
+        last_name.replace("\u2060", "") if last_name else ("This User has no Last Name")
+    )
+    username = "@{}".format(username) if username else ("This User has no Username")
     user_bio = "This User has no About" if not user_bio else user_bio
     caption = "<b>USER INFO from druv's database :</b>\n\n"
-    caption += f"🤵First Name: {first_name}\n"
-    caption += f"🤵Last Name: {last_name}\n"
+    caption += f"👤First Name: {first_name} {last_name}\n"
     caption += f"🤵Username: {username}\n"
+    caption += f"🔖ID: <code>{user_id}</code>\n"
     caption += f"🌏Data Centre ID: {dc_id}\n"
     caption += f"🖼Number of Profile Pics: {replied_user_profile_photos_count}\n"
     caption += f"🤖Is Bot: {is_bot}\n"
     caption += f"🔏Is Restricted: {restricted}\n"
-    caption += f"🌐Is Verified by Telegram: {verified}\n"
-    caption += f"🔖ID: <code>{user_id}</code>\n\n"
+    caption += f"🌐Is Verified by Telegram: {verified}\n\n"
     caption += f"✍️Bio: \n<code>{user_bio}</code>\n\n"
     caption += f"👥Common Chats with this user: {common_chat}\n"
     caption += f"🔗Permanent Link To Profile: "
-    caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
+    caption += f'<a href="tg://user?id={user_id}">{first_name}</a>'
     return photo, caption
 
 
-CMD_HELP.update({
-    "whois":
-    "**Plugin : **`whois`\
+@borg.on(admin_cmd(pattern="link(?: |$)(.*)"))
+async def permalink(mention):
+    """ For .link command, generates a link to the user's PM with a custom text. """
+    user, custom = await get_user_from_event(mention)
+    if not user:
+        return
+    if custom:
+        await mention.edit(f"[{custom}](tg://user?id={user.id})")
+    else:
+        tag = (
+            user.first_name.replace("\u2060", "") if user.first_name else user.username
+        )
+        await mention.edit(f"[{tag}](tg://user?id={user.id})")
+
+
+async def get_user_from_event(event):
+    """ Get the user from argument or replied message. """
+    args = event.pattern_match.group(1).split(":", 1)
+    extra = None
+    if event.reply_to_msg_id and not len(args) == 2:
+        previous_message = await event.get_reply_message()
+        user_obj = await event.client.get_entity(previous_message.from_id)
+        extra = event.pattern_match.group(1)
+    elif len(args[0]) > 0:
+        user = args[0]
+        if len(args) == 2:
+            extra = args[1]
+        if user.isnumeric():
+            user = int(user)
+        if not user:
+            await event.edit("`Pass the user's username, id or reply!`")
+            return
+        if event.message.entities:
+            probable_user_mention_entity = event.message.entities[0]
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
+                user_id = probable_user_mention_entity.user_id
+                user_obj = await event.client.get_entity(user_id)
+                return user_obj
+        try:
+            user_obj = await event.client.get_entity(user)
+        except (TypeError, ValueError) as err:
+            await event.edit(str(err))
+            return None
+    return user_obj, extra
+
+
+async def ge(user, event):
+    if isinstance(user, str):
+        user = int(user)
+    try:
+        user_obj = await event.client.get_entity(user)
+    except (TypeError, ValueError) as err:
+        await event.edit(str(err))
+        return None
+    return user_obj
+
+
+CMD_HELP.update(
+    {
+        "whois": "**Plugin : **`whois`\
     \n\n**Syntax : **`.whois <username>` or reply to someones text with .whois\
     \n**Usage :** Gets info of an user.\
     \n\n**Syntax : **`.userinfo <username>` or reply to someones text with .userinfo\
     \n**Usage :** Gets info of an user."
-})
+    }
+)

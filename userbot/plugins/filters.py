@@ -1,108 +1,97 @@
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# ported from paperplaneExtended by avinashreddy3108 for media support
+from re import IGNORECASE, fullmatch
 
-import re
-import asyncio
-from .. import CMD_HELP
-from telethon.tl import types
-from telethon import utils
-from ..utils import admin_cmd, sudo_cmd, edit_or_reply
-from userbot.plugins.sql_helper.filter_sql import add_filter, get_all_filters, remove_all_filters, remove_filter
+from telethon import events
 
-DELETE_TIMEOUT = 0
-TYPE_TEXT = 0
-TYPE_PHOTO = 1
-TYPE_DOCUMENT = 2
+from .. import CMD_HELP, bot
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from .sql_helper.filter_sql import (
+    add_filter,
+    get_filters,
+    remove_all_filters,
+    remove_filter,
+)
 
-global last_triggered_filters
-last_triggered_filters = {}  # pylint:disable=E0602
+if Config.PRIVATE_GROUP_BOT_API_ID is None:
+    BOTLOG = False
+else:
+    BOTLOG = True
+    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
-@command(incoming=True)
-async def on_snip(event):
-    global last_triggered_filters
-    name = event.raw_text
-    if event.chat_id in last_triggered_filters:
-        if name in last_triggered_filters[event.chat_id]:
-            # avoid userbot spam
-            # "I demand rights for us bots, we are equal to you humans." -Henri Koivuneva (t.me/UserbotTesting/2698)
-            return False
-    snips = get_all_filters(event.chat_id)
-    if snips:
-        for snip in snips:
-            pattern = r"( |^|[^\w])" + re.escape(snip.keyword) + r"( |$|[^\w])"
-            if re.search(pattern, name, flags=re.IGNORECASE):
-                if snip.snip_type == TYPE_PHOTO:
-                    media = types.InputPhoto(
-                        int(snip.media_id),
-                        int(snip.media_access_hash),
-                        snip.media_file_reference
+@borg.on(events.NewMessage(incoming=True))
+async def filter_incoming_handler(handler):
+    try:
+        if not (await handler.get_sender()).bot:
+            name = handler.raw_text
+            filters = get_filters(handler.chat_id)
+            if not filters:
+                return
+            for trigger in filters:
+                pro = fullmatch(trigger.keyword, name, flags=IGNORECASE)
+                if pro and trigger.f_mesg_id:
+                    msg_o = await handler.client.get_messages(
+                        entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
                     )
-                elif snip.snip_type == TYPE_DOCUMENT:
-                    media = types.InputDocument(
-                        int(snip.media_id),
-                        int(snip.media_access_hash),
-                        snip.media_file_reference
-                    )
-                else:
-                    media = None
-                event.message.id
-                if event.reply_to_msg_id:
-                    event.reply_to_msg_id
-                await event.reply(
-                    snip.reply,
-                    file=media
-                )
-                if event.chat_id not in last_triggered_filters:
-                    last_triggered_filters[event.chat_id] = []
-                last_triggered_filters[event.chat_id].append(name)
-                await asyncio.sleep(DELETE_TIMEOUT)
-                last_triggered_filters[event.chat_id].remove(name)
+                    await handler.reply(msg_o.message, file=msg_o.media)
+                elif pro and trigger.reply:
+                    await handler.reply(trigger.reply)
+    except AttributeError:
+        pass
 
 
-@borg.on(admin_cmd(pattern="filter (.*)"))
-@borg.on(sudo_cmd(pattern="filter (.*)", allow_sudo=True))
-async def on_snip_save(event):
-    name = event.pattern_match.group(1)
-    msg = await event.get_reply_message()
-    if msg:
-        snip = {'type': TYPE_TEXT, 'text': msg.message or ''}
-        if msg.media:
-            media = None
-            if isinstance(msg.media, types.MessageMediaPhoto):
-                media = utils.get_input_photo(msg.media.photo)
-                snip['type'] = TYPE_PHOTO
-            elif isinstance(msg.media, types.MessageMediaDocument):
-                media = utils.get_input_document(msg.media.document)
-                snip['type'] = TYPE_DOCUMENT
-            if media:
-                snip['id'] = media.id
-                snip['hash'] = media.access_hash
-                snip['fr'] = media.file_reference
-        add_filter(
-            event.chat_id,
-            name,
-            snip['text'],
-            snip['type'],
-            snip.get('id'),
-            snip.get('hash'),
-            snip.get('fr'))
-        await edit_or_reply(event, f"filter {name} saved successfully. Get it with {name}")
-    else:
-        await edit_or_reply(event, "Reply to a message with `savefilter keyword` to save the filter")
+@borg.on(admin_cmd(pattern="filter (\w*)"))
+@borg.on(sudo_cmd(pattern="filter (\w*)", allow_sudo=True))
+async def add_new_filter(new_handler):
+    keyword = new_handler.pattern_match.group(1)
+    string = new_handler.text.partition(keyword)[2]
+    msg = await new_handler.get_reply_message()
+    msg_id = None
+    if msg and msg.media and not string:
+        if BOTLOG_CHATID:
+            await new_handler.client.send_message(
+                BOTLOG_CHATID,
+                f"#FILTER\
+            \nCHAT ID: {new_handler.chat_id}\
+            \nTRIGGER: {keyword}\
+            \n\nThe following message is saved as the filter's reply data for the chat, please do NOT delete it !!",
+            )
+            msg_o = await new_handler.client.forward_messages(
+                entity=BOTLOG_CHATID,
+                messages=msg,
+                from_peer=new_handler.chat_id,
+                silent=True,
+            )
+            msg_id = msg_o.id
+        else:
+            await edit_or_reply(
+                new_handler,
+                "`Saving media as reply to the filter requires the BOTLOG_CHATID to be set.`",
+            )
+            return
+    elif new_handler.reply_to_msg_id and not string:
+        rep_msg = await new_handler.get_reply_message()
+        string = rep_msg.text
+    success = "`Filter` **{}** `{} successfully`"
+    if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
+        return await edit_or_reply(new_handler, success.format(keyword, "added"))
+    remove_filter(str(new_handler.chat_id), keyword)
+    if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
+        return await edit_or_reply(new_handler, success.format(keyword, "Updated"))
+    await edit_or_reply(new_handler, f"Error while setting filter for {keyword}")
 
 
 @borg.on(admin_cmd(pattern="filters$"))
 @borg.on(sudo_cmd(pattern="filters$", allow_sudo=True))
 async def on_snip_list(event):
-    all_snips = get_all_filters(event.chat_id)
-    OUT_STR = "Available Filters in the Current Chat:\n"
-    if len(all_snips) > 0:
-        for a_snip in all_snips:
-            OUT_STR += f"👉 {a_snip.keyword} \n"
-    else:
-        OUT_STR = "No Filters. Start Saving using `.savefilter`"
+    OUT_STR = "There are no filters in this chat."
+    filters = get_filters(event.chat_id)
+    for filt in filters:
+        if OUT_STR == "There are no filters in this chat.":
+            OUT_STR = "Active filters in this chat:\n"
+            OUT_STR += "👉 `{}`\n".format(filt.keyword)
+        else:
+            OUT_STR += "👉 `{}`\n".format(filt.keyword)
     if len(OUT_STR) > 4096:
         with io.BytesIO(str.encode(OUT_STR)) as out_file:
             out_file.name = "filters.text"
@@ -112,30 +101,37 @@ async def on_snip_list(event):
                 force_document=True,
                 allow_cache=False,
                 caption="Available Filters in the Current Chat",
-                reply_to=event
+                reply_to=event,
             )
             await event.delete()
     else:
         await edit_or_reply(event, OUT_STR)
 
 
-@borg.on(admin_cmd(pattern="stop (.*)"))
-@borg.on(sudo_cmd(pattern="stop (.*)", allow_sudo=True))
-async def on_snip_delete(event):
-    name = event.pattern_match.group(1)
-    remove_filter(event.chat_id, name)
-    await edit_or_reply(event, f"filter {name} deleted successfully")
+@borg.on(admin_cmd(pattern="stop (\w*)"))
+@borg.on(sudo_cmd(pattern="stop (\w*)", allow_sudo=True))
+async def remove_a_filter(r_handler):
+    filt = r_handler.pattern_match.group(1)
+    if not remove_filter(r_handler.chat_id, filt):
+        await r_handler.edit("Filter` {} `doesn't exist.".format(filt))
+    else:
+        await r_handler.edit("Filter `{} `was deleted successfully".format(filt))
 
 
 @borg.on(admin_cmd(pattern="rmfilters$"))
 @borg.on(sudo_cmd(pattern="rmfilters$", allow_sudo=True))
 async def on_all_snip_delete(event):
-    remove_all_filters(event.chat_id)
-    await edit_or_reply(event, f"filters **in current chat** deleted successfully")
+    filters = get_filters(event.chat_id)
+    if filters:
+        remove_all_filters(event.chat_id)
+        await edit_or_reply(event, f"filters in current chat deleted successfully")
+    else:
+        await edit_or_reply(event, f"There are no filters in this group")
 
-CMD_HELP.update({
-    "filters":
-    "**Plugin :**`filters\
+
+CMD_HELP.update(
+    {
+        "filters": "**Plugin :**`filters\
     \n\n**Synatx :** `.filters`\
     \n**Usage: **Lists all active (of your userbot) filters in a chat.\
     \n\n*Synatx :** `.filter`  reply to a message with .filter <keyword>\
@@ -146,4 +142,5 @@ CMD_HELP.update({
     \n**Usage: **Stops the specified keyword.\
     \n\n*Synatx :** `.rmfilters` \
     \n**Usage: **Removes all filters of your userbot in the chat."
-})
+    }
+)

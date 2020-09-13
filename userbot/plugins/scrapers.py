@@ -5,19 +5,21 @@
 
 import os
 import random
+from asyncio import sleep
 from time import sleep
-from selenium import webdriver
 from urllib.parse import quote_plus
+
+from emoji import get_emoji_regexp
+from googletrans import LANGUAGES, Translator
+from gtts.lang import tts_langs
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
-from googletrans import LANGUAGES, Translator
-from gtts.lang import tts_langs
-from emoji import get_emoji_regexp
-from asyncio import sleep
+
 from userbot import CHROME_DRIVER, GOOGLE_CHROME_BIN
-from userbot.utils import admin_cmd
 from userbot.uniborgConfig import Config
+from userbot.utils import admin_cmd
 
 LANG = "en"
 CARBONLANG = "auto"
@@ -33,7 +35,7 @@ else:
 @borg.on(admin_cmd(outgoing=True, pattern="krb"))
 async def carbon_api(e):
     await e.edit("Processing..")
-    CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
+    CARBON = "https://carbon.now.sh/?l={lang}&code={code}"
     global CARBONLANG
     textx = await e.get_reply_message()
     pcode = e.text
@@ -58,24 +60,28 @@ async def carbon_api(e):
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-gpu")
-    prefs = {'download.default_directory': './'}
-    chrome_options.add_experimental_option('prefs', prefs)
-    driver = webdriver.Chrome(
-        executable_path=CHROME_DRIVER,
-        options=chrome_options)
+    prefs = {"download.default_directory": "./"}
+    chrome_options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(executable_path=CHROME_DRIVER, options=chrome_options)
     driver.get(url)
     await e.edit("Be Patient...\n50%")
-    download_path = './'
+    download_path = "./"
     driver.command_executor._commands["send_command"] = (
-        "POST", '/session/$sessionId/chromium/send_command')
-    params = {'cmd': 'Page.setDownloadBehavior', 'params': {
-        'behavior': 'allow', 'downloadPath': download_path}}
+        "POST",
+        "/session/$sessionId/chromium/send_command",
+    )
+    params = {
+        "cmd": "Page.setDownloadBehavior",
+        "params": {"behavior": "allow", "downloadPath": download_path},
+    }
     driver.execute("send_command", params)
     driver.find_element_by_xpath(
-        '/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]').click()
+        "/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]"
+    ).click()
     if skeme is not None:
         k_skeme = driver.find_element_by_xpath(
-            '/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input')
+            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input"
+        )
         k_skeme.send_keys(skeme)
         k_skeme.send_keys(Keys.DOWN)
         k_skeme.send_keys(Keys.ENTER)
@@ -89,9 +95,10 @@ async def carbon_api(e):
     # Waiting for downloading
     await sleep(2.5)
     color_name = driver.find_element_by_xpath(
-        '/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input').get_attribute('value')
+        "/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input"
+    ).get_attribute("value")
     await e.edit("Done Dana Done...\n100%")
-    file = './carbon.png'
+    file = "./carbon.png"
     await e.edit("Uploading..")
     await e.client.send_file(
         e.chat_id,
@@ -100,7 +107,7 @@ async def carbon_api(e):
         force_document=True,
         reply_to=e.message.reply_to_msg_id,
     )
-    os.remove('./carbon.png')
+    os.remove("./carbon.png")
     driver.quit()
     # Removing carbon.png after uploading
     await e.delete()  # Deleting msg
@@ -135,7 +142,8 @@ async def wiki(wiki_q):
     await wiki_q.edit("**Search:**\n`" + match + "`\n\n**Result:**\n" + result)
     if BOTLOG:
         await wiki_q.client.send_message(
-            BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully")
+            BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully"
+        )
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"trt(?: |$)([\s\S]*)"))
@@ -158,8 +166,8 @@ async def translateme(trans):
         await trans.edit("Invalid destination language.")
         return
 
-    source_lan = LANGUAGES[f'{reply_text.src.lower()}']
-    transl_lan = LANGUAGES[f'{reply_text.dest.lower()}']
+    source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
+    transl_lan = LANGUAGES[f"{reply_text.dest.lower()}"]
     reply_text = f"From **{source_lan.title()}**\nTo **{transl_lan.title()}:**\n\n{reply_text.text}"
 
     await trans.edit(reply_text)
@@ -201,10 +209,10 @@ async def lang(value):
     await value.edit(f"`Language for {scraper} changed to {LANG.title()}.`")
     if BOTLOG:
         await value.client.send_message(
-            BOTLOG_CHATID,
-            f"`Language for {scraper} changed to {LANG.title()}.`")
+            BOTLOG_CHATID, f"`Language for {scraper} changed to {LANG.title()}.`"
+        )
 
 
 def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
-    return get_emoji_regexp().sub(u'', inputString)
+    return get_emoji_regexp().sub("", inputString)
