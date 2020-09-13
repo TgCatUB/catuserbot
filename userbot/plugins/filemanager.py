@@ -101,8 +101,8 @@ async def lst(event):
         await edit_or_reply(event, msg)
 
 
-@borg.on(admin_cmd(pattern="rem ?(.*)"))
-@borg.on(sudo_cmd(pattern="rem ?(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="rem (.*)"))
+@borg.on(sudo_cmd(pattern="rem (.*)", allow_sudo=True))
 async def lst(event):
     cat = event.pattern_match.group(1)
     if cat:
