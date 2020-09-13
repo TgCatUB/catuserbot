@@ -288,12 +288,6 @@ async def faces(owo):
     reply_text += " " + random.choice(memes.UWUS)
     await owo.edit(reply_text)
 
-
-@borg.on(admin_cmd(outgoing=True, pattern="react$"))
-async def react_meme(react):
-    await react.edit(random.choice(memes.FACEREACTS))
-
-
 @borg.on(admin_cmd(outgoing=True, pattern="shg$"))
 async def shrugger(shg):
     await shg.edit(random.choice(memes.SHGS))
@@ -381,7 +375,108 @@ async def payf(event):
     )
     await event.edit(pay)
 
-
+@borg.on(admin_cmd(pattern=f"react ?(.*)", outgoing=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    if input_str in "happy":
+        emoticons = [
+            "( ͡° ͜ʖ ͡°)",
+            "(ʘ‿ʘ)",
+            "(✿´‿`)",
+            "=͟͟͞͞٩(๑☉ᴗ☉)੭ु⁾⁾",
+            "(*⌒▽⌒*)θ～♪",
+            "°˖✧◝(⁰▿⁰)◜✧˖°",
+            "✌(-‿-)✌",
+            "⌒°(❛ᴗ❛)°⌒",
+            "(ﾟ<|＼(･ω･)／|>ﾟ)",
+            "ヾ(o✪‿✪o)ｼ",
+        ]
+    elif input_str in "think":
+        emoticons = [
+            "(҂⌣̀_⌣́)",
+            "（；¬＿¬)",
+            "(-｡-;",
+            "┌[ O ʖ̯ O ]┐",
+            "〳 ͡° Ĺ̯ ͡° 〵",
+        ]
+    elif input_str in "wave":
+        emoticons = [
+            "(ノ^∇^)",
+            "(;-_-)/",
+            "@(o・ェ・)@ノ",
+            "ヾ(＾-＾)ノ",
+            "ヾ(◍’౪`◍)ﾉﾞ♡",
+            "(ό‿ὸ)ﾉ",
+            "(ヾ(´・ω・｀)",
+        ]
+    elif input_str in "wtf":
+        emoticons = [
+            "༎ຶ‿༎ຶ",
+            "(‿ˠ‿)",
+            "╰U╯☜(◉ɷ◉ )",
+            "(;´༎ຶ益༎ຶ`)♡",
+            "╭∩╮(︶ε︶*)chu",
+            "( ＾◡＾)っ (‿|‿)",
+        ]
+    elif input_str in "love":
+        emoticons = [
+            "乂❤‿❤乂",
+            "(｡♥‿♥｡)",
+            "( ͡~ ͜ʖ ͡°)",
+            "໒( ♥ ◡ ♥ )७",
+            "༼♥ل͜♥༽",
+        ]
+    elif input_str in "confused":
+        emoticons = [
+            "(・_・ヾ",
+            "｢(ﾟﾍﾟ)",
+            "﴾͡๏̯͡๏﴿",
+            "(￣■￣;)!?",
+            "▐ ˵ ͠° (oo) °͠ ˵ ▐",
+            "(-_-)ゞ゛",
+        ]
+    elif input_str in "dead":
+        emoticons = [
+            "(✖╭╮✖)",
+            "✖‿✖",
+            "(+_+)",
+            "(✖﹏✖)",
+            "∑(✘Д✘๑)",
+        ]
+    elif input_str in "sad":
+        emoticons = [
+            "(＠´＿｀＠)",
+            "⊙︿⊙",
+            "(▰˘︹˘▰)",
+            "●︿●",
+            "(　´_ﾉ` )",
+            "彡(-_-;)彡",
+        ]
+    elif input_str in "dog":
+        emoticons = [
+            "-ᄒᴥᄒ-",
+            "◖⚆ᴥ⚆◗",
+        ]
+    else:
+        emoticons = [
+            "( ͡° ͜ʖ ͡°)",
+            r"¯\_(ツ)_/¯",
+            "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)",
+            "ʕ•ᴥ•ʔ",
+            "(▀̿Ĺ̯▀̿ ̿)",
+            "(ง ͠° ͟ل͜ ͡°)ง",
+            "༼ つ ◕_◕ ༽つ",
+            "ಠ_ಠ",
+            "(☞ ͡° ͜ʖ ͡°)☞",
+            r"¯\_༼ ି ~ ି ༽_/¯",
+            "c༼ ͡° ͜ʖ ͡° ༽⊃",
+        ]
+    index = random.randint(0, len(emoticons))
+    output_str = emoticons[index]
+    await event.edit(output_str)
+                      
 @borg.on(admin_cmd(outgoing=True, pattern="bt$"))
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
@@ -441,71 +536,70 @@ async def typewriter(typew):
 
 CMD_HELP.update(
     {
-        "memes": ".cowsay\
+        "memes": "**Plugin : **`memes`\
+        \n\n**Syntax :** `.cowsay`\
 \nUsage: cow which says things.\
-\n\n.milksay\
+\n\n**Syntax :** `.milksay`\
 \nUsage: Weird Milk that can speak\
-\n\n:/\
+\n\n**Syntax :** `:/`\
 \nUsage: Check yourself ;)\
-\n\n-_-\
+\n\n**Syntax :** `-_-`\
 \nUsage: Ok...\
-\n\n;_;\
+\n\n**Syntax :** `;_;`\
 \nUsage: Like `-_-` but crying.\
-\n\n.10iq\
+\n\n**Syntax :** `.10iq`\
 \nUsage: You retard !!\
-\n\n.oof\
+\n\n**Syntax :** `.oof`\
 \nUsage: Ooooof\
-\n\n.moon\
+\n\n**Syntax :** `.moon`\
 \nUsage: kensar moon animation.\
-\n\n.clock\
+\n\n**Syntax :** `.clock`\
 \nUsage: kensar clock animation.\
-\n\n.earth\
+\n\n**Syntax :** `.earth`\
 \nUsage: kensar earth animation.\
-\n\n.hi\
-\nUsage: Greet everyone!\
-\n\n.coinflip <heads/tails>\
+\n\n**Syntax :** `.coinflip <heads/tails>`\
 \nUsage: Flip a coin !!\
-\n\n.owo\
+\n\n**Syntax :** `.owo`\
 \nUsage: UwU\
-\n\n.react\
-\nUsage: Make your userbot react to everything.\
-\n\n.slap\
+\n\n**Syntax :** `.react` <type>\
+\nUsage: Make your userbot react. types are <happy ,think ,wave ,wtf ,love ,confused,dead, sad,dog>\
+\n\n**Syntax :** `.slap`\
 \nUsage: reply to slap them with random objects !!\
-\n\n.cry\
+\n\n**Syntax :** `.cry`\
 \nUsage: y u du dis, i cri.\
-\n\n.shg\
+\n\n**Syntax :** `.shg`\
 \nUsage: Shrug at it !!\
-\n\n.runs\
+\n\n**Syntax :** `.runs`\
 \nUsage: Run, run, RUNNN! [`.disable runs`: disable | `.enable runs`: enable]\
-\n\n.metoo\
+\n\n**Syntax :** `.metoo`\
 \nUsage: Haha yes\
-\n\n.clap\
+\n\n**Syntax :** `.clap`\
 \nUsage: Praise people!\
-\n\n.ftext <emoji/character>\
+\n\n**Syntax :** `.ftext <emoji/character>`\
 \nUsage: Pay Respects.\
-\n\n.bt\
+\n\n**Syntax :** `.bt`\
 \nUsage: Believe me, you will find this useful.\
-\n\n.smk <text/reply>\
+\n\n**Syntax :** `.smk <text/reply>`\
 \nUsage: A shit module for ツ , who cares.\
-\n\n.type\
+\n\n**Syntax :** `.type`\
 \nUsage: Just a small command to make your keyboard become a typewriter!\
-\n\n.lfy <query>\
+\n\n**Syntax :** `.lfy <query>`\
 \nUsage: Let me Google that for you real quick !!\
-\n\n.decide\
+\n\n**Syntax :** `.decide`\
 \nUsage: Make a quick decision.\
-\n\n.abusehard\
+\n\n**Syntax :** `.abusehard`\
 \nUsage: You already got that! Ain't?.\
-\n\n.chu\
+\n\n**Syntax :** `.chu`\
 \nUsage: Incase, the person infront of you is....\
-\n\n.fuk\
+\n\n**Syntax :** `.fuk`\
 \nUsage: The onlu word that can be used fucking everywhere.\
-\n\n.thanos\
+\n\n**Syntax :** `.thanos`\
 \nUsage: Try and then Snap.\
-\n\n.noob\
+\n\n**Syntax :** `.noob\
 \nUsage: Whadya want to know? Are you a NOOB?\
-\n\n.pro\
+\n\n**Syntax :** `.pro`\
 \nUsage: If you think you're pro, try this.\
-\n\n.abuse\
+\n\n**Syntax :** `.abuse`\
 \nUsage: Protects you from unwanted peeps.\
 "
     }
