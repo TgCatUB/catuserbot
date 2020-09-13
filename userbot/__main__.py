@@ -41,7 +41,7 @@ for name in files:
         shortname = path1.stem
         load_module(shortname.replace(".py", ""))
 
-LOGS.info("Yay your userbot is officially working.!!!")
+LOGS.info("Sonic Cat is started to running ")
 LOGS.info(
     "Congratulation, now type .alive to see message if bot is live\n"
     "If you need assistance, head to https://t.me/catuserbot_support"
