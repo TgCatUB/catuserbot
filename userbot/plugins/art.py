@@ -320,31 +320,6 @@ R = (
     "░░░░░░░░░░░░▀▀\n"
 )
 
-s = ("░░▄███▄███▄\n"
-     "░░█████████\n"
-     "░░▒▀█████▀░\n"
-     "░░▒░░▀█▀\n"
-     "░░▒░░█░\n"
-     "░░▒░█\n"
-     "░░░█\n"
-     "░░█░░░░███████\n"
-     "░██░░░██▓▓███▓██▒\n"
-     "██░░░█▓▓▓▓▓▓▓█▓████\n"
-     "██░░██▓▓▓(◐)▓█▓█▓█\n"
-     "███▓▓▓█▓▓▓▓▓█▓█▓▓▓▓█\n"
-     "▀██▓▓█░██▓▓▓▓██▓▓▓▓▓█\n"
-     "░▀██▀░░█▓▓▓▓▓▓▓▓▓▓▓▓▓█\n"
-     "░░░░▒░░░█▓▓▓▓▓█▓▓▓▓▓▓█\n"
-     "░░░░▒░░░█▓▓▓▓█▓█▓▓▓▓▓█\n"
-     "░▒░░▒░░░█▓▓▓█▓▓▓█▓▓▓▓█\n"
-     "░▒░░▒░░░█▓▓▓█░░░█▓▓▓█\n"
-     "░▒░░▒░░██▓██░░░██▓▓██\n"           
-     "██████████████████████\n"
-     "█─████─▄▄─██─█─██─▄▄─█\n"
-     "█─██▀█─██─██─█─██─▄█▀█\n"
-     "█▄▄▄▄▀▄▄▄▄▀▀▄▄▄▀▀▄▄▄▄▀
-
-
 @borg.on(admin_cmd(pattern=r"monster"))
 async def bluedevilmonster(monster):
     await monster.edit(A)
@@ -413,7 +388,3 @@ async def bluedevilshitos(shitos):
 @borg.on(admin_cmd(pattern=r"dislike"))
 async def bluedevildislike(dislike):
     await dislike.edit(R)
-
-@borg.on(admin_cmd(pattern=r"elove"))
-async def bluedevilelove(elove):
-    await elove.edit(s)
