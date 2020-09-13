@@ -13,7 +13,7 @@ from pytz import timezone as tz
 from userbot import CMD_HELP, COUNTRY, TZ_NUMBER
 from userbot.utils import admin_cmd
 
-FONT_FILE_TO_USE = "userbot/helpers/styles/digital.ttf"
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf"
 
 LOCATION = Config.TZ
 
@@ -163,7 +163,7 @@ async def _(event):
     if event.fwd_from:
         return
     current_time = datetime.now().strftime(
-        f"\n  USERBOT TIMEZONE  \nLOCATION:{LOCATION}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n"
+        f"\nUSERBOT TIMEZONE\n{LOCATION}\nTime : %H:%M:%S \nDate: %d.%m.%y \n"
     )
     input_str = event.pattern_match.group(1)
     reply_msg_id = event.message.id
@@ -178,7 +178,7 @@ async def _(event):
         Config.TMP_DOWNLOAD_DIRECTORY + " " + str(datetime.now()) + ".webp"
     )
     img = Image.new("RGBA", (350, 220), color=(0, 0, 0, 115))
-    fnt = ImageFont.truetype(FONT_FILE_TO_USE, 50)
+    fnt = ImageFont.truetype(FONT_FILE_TO_USE, 40)
     drawn_text = ImageDraw.Draw(img)
     drawn_text.text((10, 10), current_time, font=fnt, fill=(255, 255, 255))
     img.save(required_file_name)
