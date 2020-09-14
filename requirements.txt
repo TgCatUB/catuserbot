@@ -43,6 +43,7 @@ programmingquotes
 psutil
 psycopg2
 pybase64
+PyDictionary
 pyDownload
 pyfiglet
 PyGithub
@@ -61,7 +62,6 @@ search-engine-parser
 selenium
 spamwatch
 speedtest-cli
-spotify_token
 sqlalchemy
 telegraph
 tswift
