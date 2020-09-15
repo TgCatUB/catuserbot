@@ -16,7 +16,6 @@ thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
-
 async def catlst_of_files(path):
     files = []
     for dirname, dirnames, filenames in os.walk(path):
@@ -260,7 +259,7 @@ async def uploadas(event):
                     video_note=True,
                     attributes=[
                         DocumentAttributeVideo(
-                            duration=0,
+                            duration=60,
                             w=1,
                             h=1,
                             round_message=True,
@@ -288,7 +287,10 @@ async def uploadas(event):
 CMD_HELP.update(
     {
         "upload": "__**PLUGIN NAME :** Upload__\
-\n\n📌** CMD ➥** `.upload` <path in server>\
-\n**USAGE   ➥  **Uploads a locally stored file to the chat."
+    \n\n📌** CMD ➥** `.upload` path of file\
+    \n**USAGE   ➥  **Uploads the file from the server\
+    \n\n📌** CMD ➥** `.uploadasstream` path of video/audio\
+    \n**USAGE   ➥  **Uploads video/audio as streamable from the server\
+    "
     }
 )
