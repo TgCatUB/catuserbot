@@ -16,6 +16,7 @@ thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
 
+
 async def catlst_of_files(path):
     files = []
     for dirname, dirnames, filenames in os.walk(path):
