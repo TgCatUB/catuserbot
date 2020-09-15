@@ -5,10 +5,12 @@ memify plugin
 import asyncio
 import os
 
-from .. import CMD_HELP, LOGS, tempmemes
+from .. import CMD_HELP, LOGS
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import (
     add_frame,
+    cat_meeme,
+    cat_meme,
     convert_toimage,
     crop,
     flip_image,
@@ -103,16 +105,16 @@ async def memes(cat):
     if cmd == "mmf":
         meme = "catmeme.jpg"
         if max(len(top), len(bottom)) < 21:
-            await tempmemes.cat_meme(top, bottom, meme_file, meme)
+            await cat_meme(top, bottom, meme_file, meme)
         else:
-            await tempmemes.cat_meeme(top, bottom, meme_file, meme)
+            await cat_meeme(top, bottom, meme_file, meme)
         await borg.send_file(cat.chat_id, meme, reply_to=catid)
     elif cmd == "mms":
         meme = "catmeme.webp"
         if max(len(top), len(bottom)) < 21:
-            await tempmemes.cat_meme(top, bottom, meme_file, meme)
+            await cat_meme(top, bottom, meme_file, meme)
         else:
-            await tempmemes.cat_meeme(top, bottom, meme_file, meme)
+            await cat_meeme(top, bottom, meme_file, meme)
         await borg.send_file(cat.chat_id, meme, reply_to=catid)
     await cat.delete()
     os.remove(meme)

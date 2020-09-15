@@ -1,5 +1,6 @@
-from .. import CMD_HELP, fonts
+from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import fonts
 
 
 @borg.on(admin_cmd(pattern="fmusical(?: |$)(.*)"))

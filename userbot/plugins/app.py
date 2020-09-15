@@ -155,11 +155,11 @@ async def apkr(event):
 
 CMD_HELP.update(
     {
-        "app": "**app**\
-    \n**Syntax : **`.app [app name]`\
-\n**Usage: **searches the app in the playstore and provides the link to the app in playstore and fetchs app details \
-\n\n**Syntax : **`.appr [app name]`\
-\n**Usage: **searches the app in the playstore and provides the link to the app in playstore and fetchs app details with Xpl0iter request link. \
-"
+        "app": "**Plugin :** `app`\
+        \n**Syntax : **`.app [app name]`\
+        \n**Usage: **searches the app in the playstore and provides the link to the app in playstore and fetchs app details \
+        \n\n**Syntax : **`.appr [app name]`\
+        \n**Usage: **searches the app in the playstore and provides the link to the app in playstore and fetchs app details with Xpl0iter request link. \
+        "
     }
 )

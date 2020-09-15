@@ -7,18 +7,17 @@
 
 from justwatch import JustWatch
 
-from userbot.utils import admin_cmd
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 def get_stream_data(query):
     stream_data = {}
-
     # Compatibility for Current Userge Users
     try:
         country = Config.WATCH_COUNTRY
     except Exception:
         country = "IN"
-
     # Cooking Data
     just_watch = JustWatch(country=country)
     results = just_watch.search_for_item(query=query)
@@ -60,8 +59,6 @@ def get_stream_data(query):
 
 
 # Helper Functions
-
-
 def pretty(name):
     if name == "play":
         name = "Google Play Movies"
@@ -78,11 +75,12 @@ def get_provider(url):
 
 
 @borg.on(admin_cmd(pattern="watch (.*)"))
+@borg.on(sudo_cmd(pattern="watch (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     query = event.pattern_match.group(1)
-    await event.edit("Finding Sites...")
+    et = await edit_or_reply(event, "Finding Sites...")
     streams = get_stream_data(query)
     title = streams["title"]
     thumb_link = streams["movie_thumb"]
@@ -93,7 +91,6 @@ async def _(event):
         imdb_score = scores["imdb"]
     except KeyError:
         imdb_score = None
-
     try:
         tmdb_score = scores["tmdb"]
     except KeyError:
@@ -123,4 +120,14 @@ async def _(event):
         allow_cache=False,
         silent=True,
     )
-    await event.delete()
+    await et.delete()
+
+
+CMD_HELP.update(
+    {
+        "watch": "**Plugin :** `watch`\
+    \n\n**Syntax :** `.watch query`\
+    \n**Usage : **Fetches the list of sites(standard) where you can watch that movie\
+    "
+    }
+)

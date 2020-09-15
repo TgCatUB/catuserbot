@@ -237,18 +237,19 @@ async def fetch_info(replied_user, event):
 
 
 @borg.on(admin_cmd(pattern="link(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="link(?: |$)(.*)", allow_sudo=True))
 async def permalink(mention):
     """ For .link command, generates a link to the user's PM with a custom text. """
     user, custom = await get_user_from_event(mention)
     if not user:
         return
     if custom:
-        await mention.edit(f"[{custom}](tg://user?id={user.id})")
+        await edit_or_reply(mention, f"[{custom}](tg://user?id={user.id})")
     else:
         tag = (
             user.first_name.replace("\u2060", "") if user.first_name else user.username
         )
-        await mention.edit(f"[{tag}](tg://user?id={user.id})")
+        await edit_or_reply(mention, f"[{tag}](tg://user?id={user.id})")
 
 
 async def get_user_from_event(event):
@@ -299,6 +300,8 @@ CMD_HELP.update(
     \n\n**Syntax : **`.whois <username>` or reply to someones text with .whois\
     \n**Usage :** Gets info of an user.\
     \n\n**Syntax : **`.userinfo <username>` or reply to someones text with .userinfo\
-    \n**Usage :** Gets info of an user."
+    \n**Usage :** Gets info of an user.\
+    \n\n**Syntax : **`.link` <text>\
+    \n**Usage :** Generates a link to the user's PM with a custom text."
     }
 )

@@ -9,12 +9,13 @@ from datetime import datetime
 
 from gtts import gTTS
 
-from userbot import CMD_HELP
-from userbot.plugins import deEmojify
-from userbot.utils import admin_cmd
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import deEmojify
 
 
 @borg.on(admin_cmd(pattern="tts (.*)"))
+@borg.on(sudo_cmd(pattern="tts (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -27,13 +28,13 @@ async def _(event):
     elif "|" in input_str:
         lan, text = input_str.split("|")
     else:
-        await event.edit("Invalid Syntax. Module stopping.")
+        await edit_or_reply(event, "Invalid Syntax. Module stopping.")
         return
     text = deEmojify(text.strip())
     lan = lan.strip()
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "voice.ogg"
+    if not os.path.isdir("./temp/"):
+        os.makedirs("./temp/")
+    required_file_name = "./temp/" + "voice.ogg"
     try:
         # https://github.com/SpEcHiDe/UniBorg/commit/17f8682d5d2df7f3921f50271b5b6722c80f4106
         tts = gTTS(text, lang=lan)
@@ -73,19 +74,21 @@ async def _(event):
             voice_note=True,
         )
         os.remove(required_file_name)
-        await event.edit("Processed {} ({}) in {} seconds!".format(text[0:97], lan, ms))
+        event = await edit_or_reply(
+            event, "Processed {} ({}) in {} seconds!".format(text[0:97], lan, ms)
+        )
         await asyncio.sleep(5)
         await event.delete()
     except Exception as e:
-        await event.edit(str(e))
+        await edit_or_reply(event, str(e))
 
 
 CMD_HELP.update(
     {
-        "tts": " Google Text to Speech\
-\nAvailable Commands:\
-\n.tts LanguageCode as reply to a message\
-\n\n.tts LangaugeCode | text to speak\
-"
+        "tts": "**Plugin :** `tts`\
+        \n\nAvailable Commands:\
+        \n.tts LanguageCode as reply to a message\
+        \n.tts LangaugeCode | text to speak\
+         "
     }
 )

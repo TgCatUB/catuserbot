@@ -5,11 +5,13 @@ Available Commands:
 
 from googletrans import Translator
 
-from userbot.plugins import deEmojify
-from userbot.utils import admin_cmd
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import deEmojify
 
 
 @borg.on(admin_cmd(pattern="tl ?(.*)"))
+@borg.on(sudo_cmd(pattern="tl ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -24,7 +26,7 @@ async def _(event):
     elif "|" in input_str:
         lan, text = input_str.split("|")
     else:
-        await event.edit("`.tr LanguageCode` as reply to a message")
+        await edit_or_reply(event, "`.tl LanguageCode` as reply to a message")
         return
     text = deEmojify(text.strip())
     lan = lan.strip()
@@ -38,6 +40,17 @@ async def _(event):
 {}""".format(
             translated.src, lan, after_tr_text
         )
-        await event.edit(output_str)
+        await edit_or_reply(event, output_str)
     except Exception as exc:
-        await event.edit(str(exc))
+        await edit_or_reply(event, str(exc))
+
+
+CMD_HELP.update(
+    {
+        "translate": "**Plugin :** `translate`\
+         \n\nAvailable Commands:\
+         \n.tl LanguageCode as reply to a message\
+         \n.tl LangaugeCode | text to translate\
+        "
+    }
+)
