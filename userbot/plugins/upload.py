@@ -284,7 +284,6 @@ async def uploadas(event):
     else:
         await uas_event.edit("404: File Not Found")
 
-
 CMD_HELP.update(
     {
         "upload": "__**PLUGIN NAME :** Upload__\
