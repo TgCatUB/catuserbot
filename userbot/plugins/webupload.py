@@ -9,19 +9,20 @@ import subprocess
 
 import requests
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 link_regex = re.compile(
     "((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)", re.DOTALL
 )
 
 
-@borg.on(admin_cmd(pattern="labstack ?(.*)"))
+@borg.on(admin_cmd(pattern="labstack( (.*)|$)"))
+@borg.on(sudo_cmd(pattern="labstack( (.*)|$)", allow_sudo=True))
 async def labstack(event):
     if event.fwd_from:
         return
-    await event.edit("Processing...")
+    editor = await edit_or_reply(event, "Processing...")
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     if input_str:
@@ -31,7 +32,7 @@ async def labstack(event):
             reply.media, Var.TEMP_DOWNLOAD_DIRECTORY
         )
     else:
-        await event.edit(
+        await editor.edit(
             "Reply to a media file or provide a directory to upload the file to labstack"
         )
         return
@@ -64,14 +65,14 @@ async def labstack(event):
         t_response = subprocess.check_output(command_to_exec, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as exc:
         logger.info("Status : FAIL", exc.returncode, exc.output)
-        await event.edit(exc.output.decode("UTF-8"))
+        await editor.edit(exc.output.decode("UTF-8"))
         return
     else:
         logger.info(t_response)
         t_response_arry = "https://up.labstack.com/api/v1/links/{}/receive".format(
             r2json["code"]
         )
-    await event.edit(
+    await editor.edit(
         t_response_arry + "\nMax Days:" + str(max_days), link_preview=False
     )
 
@@ -81,8 +82,14 @@ async def labstack(event):
         pattern="webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|vshare|bayfiles)"
     )
 )
+@borg.on(
+    sudo_cmd(
+        pattern="webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|vshare|bayfiles)",
+        allow_sudo=True,
+    )
+)
 async def _(event):
-    await event.edit("processing ...")
+    editor = await edit_or_reply(event, "processing ...")
     input_str = event.pattern_match.group(1)
     selected_transfer = event.pattern_match.group(2)
     catcheck = None
@@ -112,7 +119,7 @@ async def _(event):
             full_file_path=file_name, bare_local_name=filename
         )
     except KeyError:
-        await event.edit("Invalid selected Transfer")
+        await editor.edit("Invalid selected Transfer")
         return
     cmd = selected_one
     # start the subprocess $SHELL
@@ -136,9 +143,9 @@ async def _(event):
             else:
                 result = f"**Uploaded File link/links :**"
                 result += f"\n{i[0]}"
-        await event.edit(result)
+        await editor.edit(result)
     else:
-        await event.edit(error)
+        await editor.edit(error)
     if catcheck:
         os.remove(file_name)
 
