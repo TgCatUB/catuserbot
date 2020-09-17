@@ -2,7 +2,7 @@
 from telethon.tl.types import InputMediaDice
 
 from .. import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd
+from ..utils import admin_cmd
 
 # EMOJI CONSTANTS
 DART_E_MOJI = "🎯"
@@ -11,8 +11,14 @@ BALL_E_MOJI = "🏀"
 FOOT_E_MOJI = "⚽️"
 # EMOJI CONSTANTS
 
-@borg.on(admin_cmd(pattern = f"({DART_E_MOJI}|dart) [1-6]"))
-@borg.on(admin_cmd(pattern = f"({DART_E_MOJI}|dart) [1-6]", allow_sudo=True,))
+
+@borg.on(admin_cmd(pattern=f"({DART_E_MOJI}|dart) [1-6]"))
+@borg.on(
+    admin_cmd(
+        pattern=f"({DART_E_MOJI}|dart) [1-6]",
+        allow_sudo=True,
+    )
+)
 async def _(event):
     if event.fwd_from:
         return
@@ -23,7 +29,7 @@ async def _(event):
     input_str = event.pattern_match.group(2)
     await event.delete()
     if emoticon == "dart":
-        emoticon =  "🎯"
+        emoticon = "🎯"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
         try:
@@ -33,9 +39,15 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
-        
-@borg.on(admin_cmd(pattern = f"({DICE_E_MOJI}|dice) [1-6]"))
-@borg.on(admin_cmd(pattern = f"({DICE_E_MOJI}|dice) [1-6]", allow_sudo=True,))
+
+
+@borg.on(admin_cmd(pattern=f"({DICE_E_MOJI}|dice) [1-6]"))
+@borg.on(
+    admin_cmd(
+        pattern=f"({DICE_E_MOJI}|dice) [1-6]",
+        allow_sudo=True,
+    )
+)
 async def _(event):
     if event.fwd_from:
         return
@@ -46,7 +58,7 @@ async def _(event):
     input_str = event.pattern_match.group(2)
     await event.delete()
     if emoticon == "dice":
-        emoticon =  "🎲"
+        emoticon = "🎲"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
         try:
@@ -56,9 +68,15 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
-        
-@borg.on(admin_cmd(pattern = f"({BALL_E_MOJI}|bb) [1-5]"))
-@borg.on(admin_cmd(pattern = f"({BALL_E_MOJI}|bb) [1-5]", allow_sudo=True,))
+
+
+@borg.on(admin_cmd(pattern=f"({BALL_E_MOJI}|bb) [1-5]"))
+@borg.on(
+    admin_cmd(
+        pattern=f"({BALL_E_MOJI}|bb) [1-5]",
+        allow_sudo=True,
+    )
+)
 async def _(event):
     if event.fwd_from:
         return
@@ -69,7 +87,7 @@ async def _(event):
     input_str = event.pattern_match.group(2)
     await event.delete()
     if emoticon == "bb":
-        emoticon =  "🏀"
+        emoticon = "🏀"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
         try:
@@ -79,9 +97,15 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
-        
-@borg.on(admin_cmd(pattern = f"({FOOT_E_MOJI}|fb) [1-5]"))
-@borg.on(admin_cmd(pattern = f"({FOOT_E_MOJI}|fb) [1-5]", allow_sudo=True,))
+
+
+@borg.on(admin_cmd(pattern=f"({FOOT_E_MOJI}|fb) [1-5]"))
+@borg.on(
+    admin_cmd(
+        pattern=f"({FOOT_E_MOJI}|fb) [1-5]",
+        allow_sudo=True,
+    )
+)
 async def _(event):
     if event.fwd_from:
         return
@@ -92,7 +116,7 @@ async def _(event):
     input_str = event.pattern_match.group(2)
     await event.delete()
     if emoticon == "fb":
-        emoticon =  "⚽️"
+        emoticon = "⚽️"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
         try:
@@ -102,6 +126,7 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+
 
 CMD_HELP.update(
     {
