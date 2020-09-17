@@ -12,7 +12,7 @@ FOOT_E_MOJI = "⚽️"
 # EMOJI CONSTANTS
 
 
-@borg.on(admin_cmd(pattern=f"({DART_E_MOJI}|dart) [1-6]"))
+@borg.on(admin_cmd(pattern=f"({DART_E_MOJI}|dart) ([1-6])"))
 @borg.on(
     sudo_cmd(
         pattern=f"({DART_E_MOJI}|dart) [1-6]",
@@ -41,7 +41,7 @@ async def _(event):
             pass
 
 
-@borg.on(admin_cmd(pattern=f"({DICE_E_MOJI}|dice) [1-6]"))
+@borg.on(admin_cmd(pattern=f"({DICE_E_MOJI}|dice) ([1-6])"))
 @borg.on(
     sudo_cmd(
         pattern=f"({DICE_E_MOJI}|dice) [1-6]",
@@ -70,7 +70,7 @@ async def _(event):
             pass
 
 
-@borg.on(admin_cmd(pattern=f"({BALL_E_MOJI}|bb) [1-5]"))
+@borg.on(admin_cmd(pattern=f"({BALL_E_MOJI}|bb) ([1-5])"))
 @borg.on(
     sudo_cmd(
         pattern=f"({BALL_E_MOJI}|bb) [1-5]",
@@ -99,7 +99,7 @@ async def _(event):
             pass
 
 
-@borg.on(admin_cmd(pattern=f"({FOOT_E_MOJI}|fb) [1-5]"))
+@borg.on(admin_cmd(pattern=f"({FOOT_E_MOJI}|fb) ([1-5])"))
 @borg.on(
     sudo_cmd(
         pattern=f"({FOOT_E_MOJI}|fb) [1-5]",
