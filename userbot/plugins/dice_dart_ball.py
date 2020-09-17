@@ -130,13 +130,13 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "dice_dart_ball": "**Syntax :** `.🎯` `[1-6]` or `.dart [1-6]`\
+        "dice_dart_ball": "**Syntax :** `.🎯 [1-6]` or `.dart [1-6]`\
     \n**Usage : **each number shows different animation for dart\
-    \n\n**Syntax : **`.🎲` `[1-6] or `.dice [1-6]`\
+    \n\n**Syntax : **`.🎲 [1-6]` or `.dice [1-6]`\
     \n**Usage : **each number shows different animation for dice\
-    \n\n**Syntax : **`.🏀` `[1-5] or `.bb [1-5]`\
+    \n\n**Syntax : **`.🏀 [1-5]` or `.bb [1-5]`\
     \n**Usage : **each number shows different animation for basket ball\
-    \n\n**Syntax : **`.⚽️` `[1-5] or `.fb [1-5]`\
+    \n\n**Syntax : **`.⚽️ [1-5] `or `.fb [1-5]`\
     \n**Usage : **each number shows different animation for football\
     "
     }
