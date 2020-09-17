@@ -12,14 +12,10 @@ FOOT_E_MOJI = "⚽️"
 # EMOJI CONSTANTS
 
 
+@borg.on(admin_cmd(pattern=f"({DART_E_MOJI}|dart) [1-6]"))
 @borg.on(
-    admin_cmd(
-        pattern=f"({DART_E_MOJI}|{DICE_E_MOJI}|{BALL_E_MOJI}|{FOOT_E_MOJI}) ?(.*)"
-    )
-)
-@bot.on(
     sudo_cmd(
-        pattern=f"({DART_E_MOJI}|{DICE_E_MOJI}|{BALL_E_MOJI}|{FOOT_E_MOJI}) ?(.*)",
+        pattern=f"({DART_E_MOJI}|dart) [1-6]",
         allow_sudo=True,
     )
 )
@@ -32,6 +28,95 @@ async def _(event):
     emoticon = event.pattern_match.group(1)
     input_str = event.pattern_match.group(2)
     await event.delete()
+    if emoticon == "dart":
+        emoticon = "🎯"
+    r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
+    if input_str:
+        try:
+            required_number = int(input_str)
+            while not r.media.value == required_number:
+                await r.delete()
+                r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
+        except BaseException:
+            pass
+
+
+@borg.on(admin_cmd(pattern=f"({DICE_E_MOJI}|dice) [1-6]"))
+@borg.on(
+    sudo_cmd(
+        pattern=f"({DICE_E_MOJI}|dice) [1-6]",
+        allow_sudo=True,
+    )
+)
+async def _(event):
+    if event.fwd_from:
+        return
+    reply_message = event
+    if event.reply_to_msg_id:
+        reply_message = await event.get_reply_message()
+    emoticon = event.pattern_match.group(1)
+    input_str = event.pattern_match.group(2)
+    await event.delete()
+    if emoticon == "dice":
+        emoticon = "🎲"
+    r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
+    if input_str:
+        try:
+            required_number = int(input_str)
+            while not r.media.value == required_number:
+                await r.delete()
+                r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
+        except BaseException:
+            pass
+
+
+@borg.on(admin_cmd(pattern=f"({BALL_E_MOJI}|bb) [1-5]"))
+@borg.on(
+    sudo_cmd(
+        pattern=f"({BALL_E_MOJI}|bb) [1-5]",
+        allow_sudo=True,
+    )
+)
+async def _(event):
+    if event.fwd_from:
+        return
+    reply_message = event
+    if event.reply_to_msg_id:
+        reply_message = await event.get_reply_message()
+    emoticon = event.pattern_match.group(1)
+    input_str = event.pattern_match.group(2)
+    await event.delete()
+    if emoticon == "bb":
+        emoticon = "🏀"
+    r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
+    if input_str:
+        try:
+            required_number = int(input_str)
+            while not r.media.value == required_number:
+                await r.delete()
+                r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
+        except BaseException:
+            pass
+
+
+@borg.on(admin_cmd(pattern=f"({FOOT_E_MOJI}|fb) [1-5]"))
+@borg.on(
+    sudo_cmd(
+        pattern=f"({FOOT_E_MOJI}|fb) [1-5]",
+        allow_sudo=True,
+    )
+)
+async def _(event):
+    if event.fwd_from:
+        return
+    reply_message = event
+    if event.reply_to_msg_id:
+        reply_message = await event.get_reply_message()
+    emoticon = event.pattern_match.group(1)
+    input_str = event.pattern_match.group(2)
+    await event.delete()
+    if emoticon == "fb":
+        emoticon = "⚽️"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
         try:
@@ -46,13 +131,13 @@ async def _(event):
 CMD_HELP.update(
     {
         "dice_dart_ball": "__**PLUGIN NAME :** dice_dart_ball__\
-    \n\n📌** CMD ➥** `.🎯` [1-6]\
+    \n\n📌** CMD ➥** `.🎯` or `.dart` [1-6]\
     \n**USAGE   ➥  **Each number shows different animation\
-    \n\n📌** CMD ➥** `.🎲` [1-6]\
+    \n\n📌** CMD ➥** `.🎲` or `.dice` [1-6]\
     \n**USAGE   ➥  **Each number shows different animation\
-    \n\n📌** CMD ➥** `.🏀` [1-5]\
+    \n\n📌** CMD ➥** `.🏀` or `.bb` [1-5]\
     \n**USAGE   ➥  **Each number shows different animation\
-    \n\n📌** CMD ➥** `.⚽️` [1-5]\
+    \n\n📌** CMD ➥** `.⚽️` or `.fb` [1-5]\
     \n**USAGE   ➥  **Each number shows different animation\
     "
     }
