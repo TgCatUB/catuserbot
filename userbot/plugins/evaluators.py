@@ -119,15 +119,25 @@ async def _(event):
     if len(final_output) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(final_output)) as out_file:
             out_file.name = "eval.text"
-            await borg.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                caption=cmd,
-                reply_to=reply_to_id,
-            )
-            await event.delete()
+            try:
+                await borg.send_file(
+                    event.chat_id,
+                    out_file,
+                    force_document=True,
+                    allow_cache=False,
+                    caption=cmd,
+                    reply_to=reply_to_id,
+                )
+                await event.delete()
+            except:
+                await borg.send_file(
+                    event.chat_id,
+                    out_file,
+                    force_document=True,
+                    allow_cache=False,
+                    reply_to=reply_to_id,
+                )
+                await event.delete()
     else:
         await event.edit(final_output)
 

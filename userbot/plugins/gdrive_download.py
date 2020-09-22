@@ -83,12 +83,11 @@ async def get_file_name(content):
     return file_name
 
 
-@borg.on(admin_cmd(pattern=f"gdl", outgoing=True))
+@borg.on(admin_cmd(pattern=f"gdl (.*)", outgoing=True))
 async def g_download(event):
     if event.fwd_from:
         return
     drive_link = event.text[4:]
-    print("Drive Link: " + drive_link)
     file_id = await get_id(drive_link)
     await event.edit("Downloading Requested File from G-Drive...")
     file_name = await download_file_from_google_drive(file_id)

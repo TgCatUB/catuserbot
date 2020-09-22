@@ -90,7 +90,6 @@ async def set_no_log_p_m(event):
                 await asyncio.sleep(3)
 
 
-# TODO : Need to improve
 @borg.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
 async def log_tagged_messages(event):
     from .afk import USERAFK_ON
