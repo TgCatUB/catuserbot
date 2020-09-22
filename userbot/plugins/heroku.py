@@ -85,7 +85,7 @@ async def variable(var):
         variable = var.pattern_match.group(2)
         if not variable:
             return await cat.edit(">`.set var <ConfigVars-name> <value>`")
-        value = var.pattern_match.group(3)
+        value = "".join(var.text.split(maxsplit=3)[3:])
         if not value:
             variable = variable.split()[0]
             try:
