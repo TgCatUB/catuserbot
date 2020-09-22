@@ -131,7 +131,7 @@ async def on_all_snip_delete(event):
 
 CMD_HELP.update(
     {
-        "filters": "**Plugin :**`filters\
+        "filters": "**Plugin :**`filters`\
     \n\n**Synatx :** `.filters`\
     \n**Usage: **Lists all active (of your userbot) filters in a chat.\
     \n\n*Synatx :** `.filter`  reply to a message with .filter <keyword>\
