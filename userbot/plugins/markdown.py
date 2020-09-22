@@ -143,6 +143,7 @@ def parse(message, old_entities=None):
     except:
         pass
 
+
 @borg.on(events.MessageEdited(outgoing=True))
 @borg.on(events.NewMessage(outgoing=True))
 async def reparse(event):
