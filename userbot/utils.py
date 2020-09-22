@@ -19,6 +19,7 @@ from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
 from var import Var
 
 from . import CMD_LIST, LOAD_PLUG, LOGS, SUDO_LIST, bot
+from .helpers.exceptions import CancelProcess
 
 ENV = bool(os.environ.get("ENV", False))
 if ENV:
@@ -334,10 +335,14 @@ def errors_handler(func):
     return wrapper
 
 
-async def progress(current, total, event, start, type_of_ps, file_name=None):
+async def progress(
+    current, total, event, start, type_of_ps, file_name=None, is_cancelled=None
+):
     """Generic progress_callback for uploads and downloads."""
     now = time.time()
     diff = now - start
+    if is_cancelled is True:
+        raise CancelProcess
     if round(diff % 10.00) == 0 or current == total:
         percentage = current * 100 / total
         speed = current / diff
@@ -374,6 +379,23 @@ def humanbytes(size):
         size /= power
         raised_to_pow += 1
     return str(round(size, 2)) + " " + dict_power_n[raised_to_pow] + "B"
+
+
+def human_to_bytes(size: str) -> int:
+    units = {
+        "M": 2 ** 20,
+        "MB": 2 ** 20,
+        "G": 2 ** 30,
+        "GB": 2 ** 30,
+        "T": 2 ** 40,
+        "TB": 2 ** 40,
+    }
+
+    size = size.upper()
+    if not re.match(r" ", size):
+        size = re.sub(r"([KMGT])", r" \1", size)
+    number, unit = [string.strip() for string in size.split()]
+    return int(float(number) * units[unit])
 
 
 def time_formatter(milliseconds: int) -> str:

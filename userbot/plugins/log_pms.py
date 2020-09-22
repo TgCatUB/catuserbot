@@ -2,15 +2,11 @@
 Check https://t.me/tgbeta/3505"""
 import asyncio
 import logging
-import os
-import sys
-from asyncio import sleep
 
 from telethon import events
 
-from userbot import CMD_HELP
-from userbot.uniborgConfig import Config
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd
+from . import CMD_HELP, LOGS
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.WARN
@@ -39,13 +35,12 @@ async def log(log_text):
         await log_text.edit("`Logged Successfully`")
     else:
         await log_text.edit("`This feature requires Logging to be enabled!`")
-    await sleep(2)
+    await asyncio.sleep(2)
     await log_text.delete()
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="kickme$"))
 async def kickme(leave):
-    """ Basically it's .kickme command """
     await leave.edit("Nope, no, no, I go away")
     await leave.client.kick_participant(leave.chat_id, "me")
 
@@ -68,14 +63,10 @@ async def monito_p_m_s(event):
                 else:
                     return
             except Exception as e:
-                # logger.warn(str(e))
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print(exc_type, fname, exc_tb.tb_lineno)
-                print(e)
+                LOGS.warn(str(e))
 
 
-@borg.on(admin_cmd(pattern="log(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern="log$"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         event.pattern_match.group(1)
@@ -87,7 +78,7 @@ async def set_no_log_p_m(event):
                 await asyncio.sleep(3)
 
 
-@borg.on(admin_cmd(pattern="nolog(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern="nolog$"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         event.pattern_match.group(1)
@@ -97,6 +88,23 @@ async def set_no_log_p_m(event):
                 NO_PM_LOG_USERS.append(chat.id)
                 await event.edit("Won't Log Messages from this chat")
                 await asyncio.sleep(3)
+
+
+@borg.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
+async def log_tagged_messages(event):
+    from .afk import USERAFK_ON
+
+    if "on" in USERAFK_ON:
+        return
+    if not (await event.get_sender()).bot:
+        hmm = await event.get_chat()
+        if Config.PM_LOGGR_BOT_API_ID:
+            await asyncio.sleep(5)
+            if not event.is_private:
+                await bot.send_message(
+                    Config.PM_LOGGR_BOT_API_ID,
+                    f"#TAGS \nhttps://t.me/c/{hmm.id}/{event.message.id}",
+                )
 
 
 CMD_HELP.update(

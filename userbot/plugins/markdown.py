@@ -94,51 +94,54 @@ MATCHERS = [
 
 
 def parse(message, old_entities=None):
-    entities = []
-    old_entities = sorted(old_entities or [], key=lambda e: e.offset)
+    try:
+        entities = []
+        old_entities = sorted(old_entities or [], key=lambda e: e.offset)
 
-    i = 0
-    after = 0
-    message = add_surrogate(message)
-    while i < len(message):
-        for after, e in enumerate(old_entities[after:], start=after):
-            # If the next entity is strictly to our right, we're done here
-            if i < e.offset:
-                break
-            # Skip already existing entities if we're at one
-            if i == e.offset:
-                i += e.length
-        else:
-            after += 1
+        i = 0
+        after = 0
+        message = add_surrogate(message)
+        while i < len(message):
+            for after, e in enumerate(old_entities[after:], start=after):
+                # If the next entity is strictly to our right, we're done here
+                if i < e.offset:
+                    break
+                # Skip already existing entities if we're at one
+                if i == e.offset:
+                    i += e.length
+            else:
+                after += 1
 
-        # Find the first pattern that matches
-        for pattern, parser in MATCHERS:
-            match = pattern.match(message, pos=i)
-            if match:
-                break
-        else:
-            i += 1
-            continue
+            # Find the first pattern that matches
+            for pattern, parser in MATCHERS:
+                match = pattern.match(message, pos=i)
+                if match:
+                    break
+            else:
+                i += 1
+                continue
 
-        text, entity = parser(match)
+            text, entity = parser(match)
 
-        # Shift old entities after our current position (so they stay in place)
-        shift = len(text) - len(match[0])
-        if shift:
-            for e in old_entities[after:]:
-                e.offset += shift
+            # Shift old entities after our current position (so they stay in place)
+            shift = len(text) - len(match[0])
+            if shift:
+                for e in old_entities[after:]:
+                    e.offset += shift
 
-        # Replace whole match with text from parser
-        message = "".join((message[: match.start()], text, message[match.end() :]))
+            # Replace whole match with text from parser
+            message = "".join((message[: match.start()], text, message[match.end() :]))
 
-        # Append entity if we got one
-        if entity:
-            entities.append(entity)
+            # Append entity if we got one
+            if entity:
+                entities.append(entity)
 
-        # Skip past the match
-        i += len(text)
+            # Skip past the match
+            i += len(text)
 
-    return del_surrogate(message), entities + old_entities
+        return del_surrogate(message), entities + old_entities
+    except:
+        pass
 
 
 @borg.on(events.MessageEdited(outgoing=True))
@@ -149,7 +152,6 @@ async def reparse(event):
     message, msg_entities = await borg._parse_message_text(event.raw_text, parser)
     if len(old_entities) >= len(msg_entities) and event.raw_text == message:
         return
-
     await borg(
         EditMessageRequest(
             peer=await event.get_input_chat(),

@@ -35,9 +35,9 @@ class Config(object):
     IBM_WATSON_CRED_URL = os.environ.get("IBM_WATSON_CRED_URL", None)
     IBM_WATSON_CRED_PASSWORD = os.environ.get("IBM_WATSON_CRED_PASSWORD", None)
     # This is required for the @telegraph functionality.
-    TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "jisan")
+    TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "mrconfused")
     # Set False to stop deleting old welcome messages
-    CLEAN_WELCOME = os.environ.get("CLEAN_WELCOME", False)
+    CLEAN_WELCOME = os.environ.get("CLEAN_WELCOME", True)
     # github vars
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
@@ -89,8 +89,6 @@ class Config(object):
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
     # For Databases
     # can be None in which case plugins requiring
-    # Set to True if you want to block users that are spamming your PMs.
-    SLAP_USERNAME = os.environ.get("SLAP_USERNAME", None)
     # DataBase would not work
     DB_URI = os.environ.get("DATABASE_URL", None)
     # number of rows of buttons to be displayed in .help command
@@ -112,15 +110,14 @@ class Config(object):
     # WARNING: be careful who you grant access to your bot.
     # malicious users could do ".exec rm -rf /*"
     SUDO_USERS = set(int(x) for x in os.environ.get("SUDO_USERS", "").split())
-    # VeryStream only supports video formats
-    VERY_STREAM_LOGIN = os.environ.get("VERY_STREAM_LOGIN", None)
-    VERY_STREAM_KEY = os.environ.get("VERY_STREAM_KEY", None)
     # Google Drive ()
     CHROME_BIN = os.environ.get("CHROME_BIN", "/usr/bin/google-chrome")
     CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
+    G_DRIVE_FOLDER_ID = os.environ.get("G_DRIVE_FOLDER_ID", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
+    G_DRIVE_DATA = os.environ.get("G_DRIVE_DATA", None)
     #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
     # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
     # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
@@ -136,16 +133,14 @@ class Config(object):
     # Google Chrome Selenium Stuff
     # taken from
     # https://github.com/jaskaranSM/UniBorg/blob/9072e3580cc6c98d46f30e41edbe73ffc9d850d3/sample_config.py#L104-L106
-    TEMP_DIR = os.environ.get("TEMP_DIR", "./DOWNLOADS")
+    TEMP_DIR = os.environ.get("TEMP_DIR", "./temp/")
     # spotify stuff
     DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
     SPOTIFY_BIO_PREFIX = os.environ.get("SPOTIFY_BIO_PREFIX", None)
     SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
     SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
-    GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", None)
     LYDIA_API = os.environ.get("LYDIA_API", None)
     DEFAULT_NAME = os.environ.get("DEFAULT_NAME", None)
-    VIRUSTOTAL_API_KEY = os.environ.get("VIRUSTOTAL_API_KEY", None)
     # define "spam" in PMs
     MAX_FLOOD_IN_P_M_s = int(os.environ.get("MAX_FLOOD_IN_P_M_s", 5))
     # leave this blank, should be automatically filled for Heroku.com users
@@ -154,9 +149,6 @@ class Config(object):
         PM_LOGGR_BOT_API_ID = int(PM_LOGGR_BOT_API_ID)
     # to work manager.py
     DUAL_LOG = os.environ.get("DUAL_LOG", False)
-    # define the "types" that should be uplaoded as streamable
-    TL_VID_STREAM_TYPES = ("MKV", "MP4", "WEBM")
-    TL_MUS_STREAM_TYPES = ("MP3", "WAV", "FLAC")
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
     # MONGOCLIENT = pymongo.MongoClient(MONGO_DB_URI)
     # MONGO = MONGOCLIENT.userbot

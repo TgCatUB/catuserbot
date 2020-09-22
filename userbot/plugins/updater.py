@@ -229,7 +229,7 @@ async def upstream(event):
 @bot.on(admin_cmd(outgoing=True, pattern=r"goodcat$"))
 @borg.on(sudo_cmd(pattern="goodcat$", allow_sudo=True))
 async def upstream(event):
-    event = await edit_or_reply(event, "`Checking for updates, please wait....`")
+    event = await edit_or_reply(event, "`Pulling the good cat repo wait a sec ....`")
     off_repo = "https://github.com/sandy1709/catuserbot"
     catcmd = f"rm -rf .git"
     try:

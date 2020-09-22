@@ -4,11 +4,14 @@
 
 # imported from uniborg
 
-
-from justwatch import JustWatch
+from justwatch import JustWatch, justwatchapi
 
 from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+
+justwatchapi.__dict__["HEADER"] = {
+    "User-Agent": "JustWatch client (github.com/dawoudt/JustWatchAPI)"
+}
 
 
 def get_stream_data(query):
@@ -81,7 +84,10 @@ async def _(event):
         return
     query = event.pattern_match.group(1)
     et = await edit_or_reply(event, "Finding Sites...")
-    streams = get_stream_data(query)
+    try:
+        streams = get_stream_data(query)
+    except Exception as e:
+        return await et.edit(f"**Error :** `{str(e)}`")
     title = streams["title"]
     thumb_link = streams["movie_thumb"]
     release_year = streams["release_year"]
