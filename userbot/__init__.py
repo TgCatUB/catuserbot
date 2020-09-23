@@ -13,12 +13,8 @@ from telethon.sessions import StringSession
 
 from var import Var
 
-from .helpers import *
-from .helpers import functions as catdef
-from .helpers import memeshelper as memes
-
 StartTime = time.time()
-catversion = "2.7.5"
+catversion = "2.7.4"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -124,3 +120,9 @@ SUDO_LIST = {}
 # for later purposes
 INT_PLUG = ""
 LOAD_PLUG = {}
+
+# showing imports error
+
+from .helpers import *
+from .helpers import functions as catdef
+from .helpers import memeshelper as memes
