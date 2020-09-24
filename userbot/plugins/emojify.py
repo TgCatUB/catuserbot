@@ -3,6 +3,8 @@ Created by @Jisan7509
 Peru helper @mrconfused
 Userbot plugin for CatUserbot
 """
+import emoji
+
 from userbot import CMD_HELP
 from userbot.utils import admin_cmd, edit_or_reply, sudo_cmd
 
@@ -41,15 +43,27 @@ async def itachi(event):
             event, "`What am I Supposed to do with this nibba/nibbi, Give me a text. `"
         )
         return
-    emoji, args = args.split(" ", 1)
-    string = "  ".join(args).lower()
-    for chutiya in string:
-        if chutiya in emojify.itachitext:
-            bsdk = emojify.itachiemoji[emojify.itachitext.index(chutiya)].format(
-                cj=emoji
-            )
-            string = string.replace(chutiya, bsdk)
-    await edit_or_reply(event, string)
+    try:
+        emoji, arg = args.split(" ", 1)
+    except:
+        arg = args
+        emoji = "😺"
+    if not char_is_emoji(emoji):
+        arg = args
+        emoji = "😺"
+    result = ""
+    for a in arg:
+        a = a.lower()
+        if a in emojify.kakashitext:
+            char = emojify.itachiemoji[emojify.kakashitext.index(a)].format(cj=emoji)
+            result += char
+        else:
+            result += a
+    await edit_or_reply(event, result)
+
+
+def char_is_emoji(character):
+    return character in emoji.UNICODE_EMOJI
 
 
 CMD_HELP.update(

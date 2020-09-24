@@ -14,7 +14,6 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
 from userbot import ALIVE_NAME, CMD_HELP, memes
-from userbot.uniborgConfig import Config
 from userbot.utils import admin_cmd, register
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"

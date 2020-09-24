@@ -31,7 +31,6 @@ from telethon.tl.types import (
 
 from userbot import CMD_HELP
 from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
-from userbot.uniborgConfig import Config
 from userbot.utils import admin_cmd, errors_handler, sudo_cmd
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:

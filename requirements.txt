@@ -1,7 +1,6 @@
 telethon >= 1.16.1
 aiofiles
 aiohttp
-aria2p
 asyncurban
 beautifulsoup4
 cairosvg
@@ -13,7 +12,6 @@ cryptg
 csvfaker
 DateTime
 fontTools
-pymongo
 python-dotenv
 emoji
 fonttools

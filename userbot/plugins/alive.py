@@ -8,7 +8,6 @@ from telethon import version
 
 from userbot import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion
 
-from ..uniborgConfig import Config
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"

@@ -10,7 +10,7 @@ from selenium import webdriver
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
 
-from userbot.uniborgConfig import Config
+from ..Config import Config
 
 
 async def get_readable_time(seconds: int) -> str:
