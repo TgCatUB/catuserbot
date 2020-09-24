@@ -10,7 +10,6 @@ from asyncio import sleep
 from telethon.errors import rpcbaseerrors
 
 from userbot import CMD_HELP
-from userbot.uniborgConfig import Config
 from userbot.utils import admin_cmd, errors_handler
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:

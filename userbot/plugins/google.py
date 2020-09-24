@@ -11,7 +11,6 @@ import requests
 from bs4 import BeautifulSoup
 from search_engine_parser import GoogleSearch
 
-from userbot.uniborgConfig import Config
 from userbot.utils import admin_cmd
 
 
