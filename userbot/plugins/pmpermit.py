@@ -79,7 +79,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         if event.fwd_from:
             return
         chat = await event.get_chat()
-        if event.text.startswith((".bloack", ".disapprove")):
+        if event.text.startswith((".block", ".disapprove")):
             return
         if event.is_private:
             if not pmpermit_sql.is_approved(chat.id):
