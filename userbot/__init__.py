@@ -13,10 +13,6 @@ from telethon.sessions import StringSession
 
 from var import Var
 
-from .helpers import *
-from .helpers import functions as catdef
-from .helpers import memeshelper as memes
-
 StartTime = time.time()
 catversion = "2.7.5"
 
@@ -65,8 +61,12 @@ if bool(ENV):
     BOTLOG = sb(os.environ.get("BOTLOG", "True"))
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     # Chrome Driver and Headless Google Chrome Binaries
-    CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
-    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", "/usr/bin/google-chrome")
+    CHROME_DRIVER = os.environ.get(
+        "CHROME_DRIVER", "/app/.chromedriver/bin/chromedriver"
+    )
+    GOOGLE_CHROME_BIN = os.environ.get(
+        "GOOGLE_CHROME_BIN", "/app/.apt/usr/bin/google-chrome"
+    )
     # OpenWeatherMap API Key
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
     # Youtube API key
@@ -126,3 +126,9 @@ SUDO_LIST = {}
 # for later purposes
 INT_PLUG = ""
 LOAD_PLUG = {}
+
+# showing imports error
+
+from .helpers import *
+from .helpers import functions as catdef
+from .helpers import memeshelper as memes

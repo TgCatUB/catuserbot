@@ -245,7 +245,7 @@ async def download(event, gdrive, service, uri=None):
     """ - Download files to local then upload - """
     if not isdir(TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TMP_DOWNLOAD_DIRECTORY)
-        required_file_name = None
+        required_file_name = ""
     if uri:
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
         if isfile(uri) and uri.endswith(".torrent"):
@@ -259,13 +259,18 @@ async def download(event, gdrive, service, uri=None):
         await check_progress_for_dl(gdrive, gid, previous=None)
         file = aria2.get_download(gid)
         filename = file.name
+        LOGS.info(f"1. {filename}")
         if file.followed_by_ids:
             new_gid = await check_metadata(gid)
             await check_progress_for_dl(gdrive, new_gid, previous=None)
         try:
+            LOGS.info(f"4. {filenames}")
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filenames
+            LOGS.info(f"2. {required_file_name}")
         except Exception:
+            LOGS.info(f"5. {filename}")
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filename
+            LOGS.info(f"3. {required_file_name}")
     else:
         try:
             current_time = time.time()
@@ -1038,7 +1043,9 @@ async def google_drive(gdrive):
                 return None
         elif re.findall(r"\bhttps?://.*\.\S+", value) or "magnet:?" in value:
             uri = value.split()
+            return await gdrive.edit("i will add these later")
         else:
+            return await gdrive.edit("i will add these later")
             for fileId in value.split():
                 if any(map(str.isdigit, fileId)):
                     one = True
