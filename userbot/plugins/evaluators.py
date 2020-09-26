@@ -16,7 +16,7 @@ async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
     PROCESS_RUN_TIME = 100
-    cmd = event.pattern_match.group(1)
+    cmd = "".join(event.text.split(maxsplit=1)[1:])
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -48,7 +48,7 @@ async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
     PROCESS_RUN_TIME = 100
-    cmd = event.pattern_match.group(1)
+    cmd = "".join(event.text.split(maxsplit=1)[1:])
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
