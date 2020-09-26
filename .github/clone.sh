@@ -33,6 +33,7 @@ else
     rm -rf userbot
     mv cat_ub/.git .
     mv cat_ub/userbot .
+    mv cat_ub/requirements.txt .
     rm -rf cat_ub
     python ./.github/update.py
 fi
