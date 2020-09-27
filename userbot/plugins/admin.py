@@ -539,25 +539,26 @@ async def get_user_from_id(user, event):
 
 CMD_HELP.update(
     {
-        "admin": ".setgpic <reply to image>\
-\nUsage: Changes the group's display picture\
-\n\n.promote <username/reply> <custom rank (optional)>\
-\nUsage: Provides admin rights to the person in the chat.\
-\n\n.demote <username/reply>\
-\nUsage: Revokes the person's admin permissions in the chat.\
-\n\n.ban <username/reply> <reason (optional)>\
-\nUsage: Bans the person off your chat.\
-\n\n.unban <username/reply>\
-\nUsage: Removes the ban from the person in the chat.\
-\n\n.mute <username/reply> <reason (optional)>\
-\nUsage: Mutes the person in the chat, works on admins too.\
-\n\n.unmute <username/reply>\
-\nUsage: Removes the person from the muted list.\
-\n\n.pin <reply>\
-\nUsage: Pins the replied message in Group\
-\n\n.kick <username/reply> \
-\nUsage: kick the person off your chat.\
-\n\n.iundlt\
-\nUsage: display last 5 deleted messages in group."
+        "admin": "**Plugin : **`admin`\
+        \n\n**Syntax : **`.setgpic` <reply to image>\
+        \n**Usage : **Changes the group's display picture\
+        \n\n**Syntax : **`.promote` <username/reply> <custom rank (optional)>\
+        \n**Usage : **Provides admin rights to the person in the chat.\
+        \n\n**Syntax : **`.demote `<username/reply>\
+        \n**Usage : **Revokes the person's admin permissions in the chat.\
+        \n\n**Syntax : **`.ban` <username/reply> <reason (optional)>\
+        \n**Usage : **Bans the person off your chat.\
+        \n\n**Syntax : **`.unban` <username/reply>\
+        \n**Usage : **Removes the ban from the person in the chat.\
+        \n\n**Syntax : **`.mute` <username/reply> <reason (optional)>\
+        \n**Usage : **Mutes the person in the chat, works on admins too.\
+        \n\n**Syntax : **`.unmute` <username/reply>\
+        \n**Usage : **Removes the person from the muted list.\
+        \n\n**Syntax : **`.pin `<reply> or `.pin loud`\
+        \n**Usage : **Pins the replied message in Group\
+        \n\n**Syntax : **`.kick `<username/reply> \
+        \n**Usage : **kick the person off your chat.\
+        \n\n**Syntax : **`.iundlt`\
+        \n**Usage : **display last 5 deleted messages in group."
     }
 )
