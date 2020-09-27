@@ -310,11 +310,9 @@ async def watcher(event):
 
 @borg.on(admin_cmd(r"mute(?: |$)(.*)"))
 async def startmute(event):
-    private = False
     if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
-        private = True
         await event.get_reply_message()
         userid = event.chat_id
         replied_user = await event.client(GetFullUserRequest(userid))
@@ -441,6 +439,7 @@ async def endmute(event):
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)",
             )
     else:
+        chat = await event.get_chat()
         admin = chat.admin_rights
         creator = chat.creator
         # If not admin and not creator, return
