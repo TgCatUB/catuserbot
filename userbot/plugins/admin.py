@@ -14,7 +14,7 @@ from telethon.errors import (
     ImageProcessFailedError,
     PhotoCropSizeSmallError,
 )
-from telethon.errors.rpcerrorlist import UserIdInvalidError, UserAdminInvalidError
+from telethon.errors.rpcerrorlist import UserAdminInvalidError, UserIdInvalidError
 from telethon.tl.functions.channels import (
     EditAdminRequest,
     EditBannedRequest,
@@ -307,6 +307,7 @@ async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
 
+
 @borg.on(admin_cmd(r"mute(?: |$)(.*)"))
 async def startmute(event):
     private = False
@@ -314,7 +315,7 @@ async def startmute(event):
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
         private = True
-        reply = await event.get_reply_message()
+        await event.get_reply_message()
         userid = event.chat_id
         replied_user = await event.client(GetFullUserRequest(userid))
         chat_id = event.chat_id
@@ -408,17 +409,16 @@ async def startmute(event):
                     f"CHAT: {event.chat.title}(`{event.chat_id}`)",
                 )
         except Exception as e:
-             await event.edit("Error occured!\nError is " + str(e))
-           
+            await event.edit("Error occured!\nError is " + str(e))
+
+
 @borg.on(admin_cmd(r"unmute(?: |$)(.*)"))
 async def endmute(event):
-    private = False 
     if event.fwd_from:
         return
     if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
         await asyncio.sleep(3)
-        private = True
         userid = event.chat_id
         replied_user = await event.client(GetFullUserRequest(userid))
         chat_id = event.chat_id
@@ -472,6 +472,7 @@ async def endmute(event):
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)",
             )
+
 
 @borg.on(admin_cmd("pin($| (.*))"))
 @errors_handler
@@ -622,8 +623,6 @@ async def _(event):
             await event.delete()
         else:
             await event.reply("**PURGE** Failed!")
-
-
 
 
 async def get_user_from_event(event):
