@@ -13,13 +13,13 @@ from telethon.errors import (
     ImageProcessFailedError,
     PhotoCropSizeSmallError,
 )
-
+from telethon.errors.rpcerrorlist import UserAdminInvalidError, UserIdInvalidError
 from telethon.tl.functions.channels import (
     EditAdminRequest,
     EditBannedRequest,
     EditPhotoRequest,
 )
-
+from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import (
     ChatAdminRights,
@@ -28,12 +28,10 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
-from telethon.errors.rpcerrorlist import UserAdminInvalidError, UserIdInvalidError
-from . import CMD_HELP ,BOTLOG, BOTLOG_CHATID
-from .sql_helper.mute_sql import is_muted, mute, unmute
 from ..utils import admin_cmd, errors_handler, sudo_cmd
-    
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from .sql_helper.mute_sql import is_muted, mute, unmute
+
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing the image`"
@@ -75,6 +73,7 @@ UNBAN_RIGHTS = ChatBannedRights(
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
+
 
 @borg.on(admin_cmd("setgpic$"))
 @errors_handler
