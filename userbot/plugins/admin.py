@@ -1,10 +1,9 @@
+# Userbot module to help you manage a group
 # Copyright (C) 2019 The Raphielscape Company LLC.
-#
+
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
-"""
-Userbot module to help you manage a group
-"""
+
 import asyncio
 from asyncio import sleep
 from datetime import datetime
@@ -14,13 +13,13 @@ from telethon.errors import (
     ImageProcessFailedError,
     PhotoCropSizeSmallError,
 )
-from telethon.errors.rpcerrorlist import UserAdminInvalidError, UserIdInvalidError
+
 from telethon.tl.functions.channels import (
     EditAdminRequest,
     EditBannedRequest,
     EditPhotoRequest,
 )
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import (
     ChatAdminRights,
@@ -29,15 +28,12 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 
-from userbot import CMD_HELP
-from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
-from userbot.utils import admin_cmd, errors_handler, sudo_cmd
-
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+from telethon.errors.rpcerrorlist import UserAdminInvalidError, UserIdInvalidError
+from . import CMD_HELP ,BOTLOG, BOTLOG_CHATID
+from .sql_helper.mute_sql import is_muted, mute, unmute
+from ..utils import admin_cmd, errors_handler, sudo_cmd
+    
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing the image`"
@@ -79,7 +75,6 @@ UNBAN_RIGHTS = ChatBannedRights(
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
-
 
 @borg.on(admin_cmd("setgpic$"))
 @errors_handler
@@ -368,7 +363,6 @@ async def endmute(event):
             await event.edit("Error occured!\nError is " + str(e))
         else:
             await event.edit("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
-        # Announce to logging group
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -377,20 +371,15 @@ async def endmute(event):
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)",
             )
     else:
-        await event.get_chat()
         await event.edit("```Unmuting...```")
         user = await get_user_from_event(event)
         user = user[0]
         if not user:
             return
-        if not is_muted(user.id, event.chat_id):
-            return await event.edit(
-                "__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）"
-            )
         try:
             await event.client(EditBannedRequest(event.chat_id, user.id, UNBAN_RIGHTS))
-        except UserAdminInvalidError:
-            unmute(user.id, event.chat_id)
+            if is_muted(user.id, event.chat_id):
+                unmute(user.id, event.chat_id)
         except Exception as e:
             return await event.edit(f"**Error : **`{str(e)}`")
         else:
