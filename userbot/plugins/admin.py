@@ -1,12 +1,10 @@
-# Userbot module to help you manage a group
-# Copyright (C) 2019 The Raphielscape Company LLC.
+ # Userbot module to help you manage a group
 
+# Copyright (C) 2019 The Raphielscape Company LLC.
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 
-import asyncio
 from asyncio import sleep
-from datetime import datetime
 
 from telethon.errors import (
     BadRequestError,
@@ -28,58 +26,54 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 
-from ..utils import admin_cmd, errors_handler, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from ..utils import admin_cmd, errors_handler, sudo_cmd , edit_or_reply
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, LOGS
 from .sql_helper.mute_sql import is_muted, mute, unmute
 
 # =================== CONSTANT ===================
+
 PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing the image`"
 NO_ADMIN = "`I am not an admin nub nibba!`"
 NO_PERM = "`I don't have sufficient permissions! This is so sed. Alexa play despacito`"
-NO_SQL = "`Running on Non-SQL mode!`"
-
 CHAT_PP_CHANGED = "`Chat Picture Changed`"
-CHAT_PP_ERROR = (
-    "`Some issue with updating the pic,`"
-    "`maybe coz I'm not an admin,`"
-    "`or don't have enough rights.`"
-)
 INVALID_MEDIA = "`Invalid Extension`"
 
 BANNED_RIGHTS = ChatBannedRights(
-    until_date=None,
-    view_messages=True,
-    send_messages=True,
-    send_media=True,
-    send_stickers=True,
-    send_gifs=True,
-    send_games=True,
-    send_inline=True,
-    embed_links=True,
-)
+                    until_date=None,
+                    view_messages=True,
+                    send_messages=True,
+                    send_media=True,
+                    send_stickers=True,
+                    send_gifs=True,
+                    send_games=True,
+                    send_inline=True,
+                    embed_links=True,
+                )
 
 UNBAN_RIGHTS = ChatBannedRights(
-    until_date=None,
-    send_messages=None,
-    send_media=None,
-    send_stickers=None,
-    send_gifs=None,
-    send_games=None,
-    send_inline=None,
-    embed_links=None,
-)
+                    until_date=None,
+                    send_messages=None,
+                    send_media=None,
+                    send_stickers=None,
+                    send_gifs=None,
+                    send_games=None,
+                    send_inline=None,
+                    embed_links=None,
+                )
 
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
+
 # ================================================
 
 
 @borg.on(admin_cmd("setgpic$"))
+@borg.on(sudo_cmd(pattern="setgpic$", allow_sudo=True))
 @errors_handler
 async def set_group_photo(gpic):
     if not gpic.is_group:
-        await gpic.edit("`I don't think this is a group.`")
+        await edit_or_reply(gpic ,"`I don't think this is a group.`")
         return
     replymsg = await gpic.get_reply_message()
     chat = await gpic.get_chat()
@@ -87,7 +81,7 @@ async def set_group_photo(gpic):
     creator = chat.creator
     photo = None
     if not admin and not creator:
-        await gpic.edit(NO_ADMIN)
+        await edit_or_reply(gpic ,NO_ADMIN)
         return
     if replymsg and replymsg.media:
         if isinstance(replymsg.media, MessageMediaPhoto):
@@ -95,34 +89,39 @@ async def set_group_photo(gpic):
         elif "image" in replymsg.media.document.mime_type.split("/"):
             photo = await gpic.client.download_file(replymsg.media.document)
         else:
-            await gpic.edit(INVALID_MEDIA)
+            await edit_or_reply(gpic ,INVALID_MEDIA)
+    sandy = None
     if photo:
         try:
             await gpic.client(
                 EditPhotoRequest(gpic.chat_id, await gpic.client.upload_file(photo))
             )
-            await gpic.edit(CHAT_PP_CHANGED)
+            await edit_or_reply(gpic ,CHAT_PP_CHANGED)
+            sandy = True
         except PhotoCropSizeSmallError:
-            await gpic.edit(PP_TOO_SMOL)
+            await edit_or_reply(gpic ,PP_TOO_SMOL)
         except ImageProcessFailedError:
-            await gpic.edit(PP_ERROR)
-    if BOTLOG:
-        await gpic.client.send_message(
-            BOTLOG_CHATID,
-            "#GROUPPIC\n"
-            f"Group profile pic changed "
-            f"CHAT: {gpic.chat.title}(`{gpic.chat_id}`)",
-        )
+            await edit_or_reply(gpic ,PP_ERROR)
+        except Exception as e:
+            await edit_or_reply(gpic , f"**Error : **`{str(e)}`")
+        if BOTLOG and sandy:
+            await gpic.client.send_message(
+                BOTLOG_CHATID,
+                "#GROUPPIC\n"
+                f"Group profile pic changed "
+                f"CHAT: {gpic.chat.title}(`{gpic.chat_id}`)",
+            )
 
 
 @borg.on(admin_cmd("promote(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="promote(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def promote(promt):
     chat = await promt.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
     if not admin and not creator:
-        await promt.edit(NO_ADMIN)
+        await edit_or_reply(promt , NO_ADMIN)
         return
     new_rights = ChatAdminRights(
         add_admins=False,
@@ -132,19 +131,17 @@ async def promote(promt):
         delete_messages=True,
         pin_messages=True,
     )
-    await promt.edit("`Promoting...`")
+    catevent = await edit_or_reply(promt ,"`Promoting...`")
     user, rank = await get_user_from_event(promt)
     if not rank:
         rank = "Admin"
-    if user:
-        pass
-    else:
+    if not user:
         return
     try:
         await promt.client(EditAdminRequest(promt.chat_id, user.id, new_rights, rank))
-        await promt.edit("`Promoted Successfully! Now gib Party`")
+        await catevent.edit("`Promoted Successfully! Now gib Party`")
     except BadRequestError:
-        await promt.edit(NO_PERM)
+        await catevent.edit(NO_PERM)
         return
     if BOTLOG:
         await promt.client.send_message(
@@ -156,21 +153,20 @@ async def promote(promt):
 
 
 @borg.on(admin_cmd("demote(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="demote(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def demote(dmod):
     chat = await dmod.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
     if not admin and not creator:
-        await dmod.edit(NO_ADMIN)
+        await edit_or_reply(dmod ,NO_ADMIN)
         return
-    await dmod.edit("`Demoting...`")
+    catevent = await edit_or_reply(dmod ,"`Demoting...`")
     rank = "admeme"
     user = await get_user_from_event(dmod)
     user = user[0]
-    if user:
-        pass
-    else:
+    if not user:
         return
     newrights = ChatAdminRights(
         add_admins=None,
@@ -183,9 +179,9 @@ async def demote(dmod):
     try:
         await dmod.client(EditAdminRequest(dmod.chat_id, user.id, newrights, rank))
     except BadRequestError:
-        await dmod.edit(NO_PERM)
+        await catevent.edit(NO_PERM)
         return
-    await dmod.edit("`Demoted Successfully! Betterluck next time`")
+    await catevent.edit("`Demoted Successfully! Betterluck next time`")
     if BOTLOG:
         await dmod.client.send_message(
             BOTLOG_CHATID,
@@ -196,36 +192,35 @@ async def demote(dmod):
 
 
 @borg.on(admin_cmd("ban(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="ban(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def ban(bon):
     chat = await bon.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
     if not admin and not creator:
-        await bon.edit(NO_ADMIN)
+        await edit_or_reply(bon ,NO_ADMIN)
         return
     user, reason = await get_user_from_event(bon)
-    if user:
-        pass
-    else:
+    if not user:
         return
-    await bon.edit("`Whacking the pest!`")
+    catevent = await edit_or_reply(bon ,"`Whacking the pest!`")
     try:
         await bon.client(EditBannedRequest(bon.chat_id, user.id, BANNED_RIGHTS))
     except BadRequestError:
-        await bon.edit(NO_PERM)
+        await catevent.edit(NO_PERM)
         return
     try:
         reply = await bon.get_reply_message()
         if reply:
             await reply.delete()
     except BadRequestError:
-        await bon.edit("`I dont have message nuking rights! But still he is banned!`")
+        await catevent.edit("`I dont have message nuking rights! But still he is banned!`")
         return
     if reason:
-        await bon.edit(f"`{str(user.id)}` is banned !!\nReason: {reason}")
+        await catevent.edit(f"`{str(user.id)}` is banned !!\nReason: {reason}")
     else:
-        await bon.edit(f"`{str(user.id)}` is banned !!")
+        await catevent.edit(f"`{str(user.id)}` is banned !!")
     if BOTLOG:
         await bon.client.send_message(
             BOTLOG_CHATID,
@@ -236,24 +231,23 @@ async def ban(bon):
 
 
 @borg.on(admin_cmd("unban(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="unban(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def nothanos(unbon):
     chat = await unbon.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
     if not admin and not creator:
-        await unbon.edit(NO_ADMIN)
+        await edit_or_reply(unbon ,NO_ADMIN)
         return
-    await unbon.edit("`Unbanning...`")
+    catevent = await edit_or_reply(unbon ,"`Unbanning...`")
     user = await get_user_from_event(unbon)
     user = user[0]
-    if user:
-        pass
-    else:
+    if not user:
         return
     try:
         await unbon.client(EditBannedRequest(unbon.chat_id, user.id, UNBAN_RIGHTS))
-        await unbon.edit("```Unbanned Successfully. Granting another chance.```")
+        await catevent.edit("```Unbanned Successfully. Granting another chance.```")
         if BOTLOG:
             await unbon.client.send_message(
                 BOTLOG_CHATID,
@@ -262,20 +256,24 @@ async def nothanos(unbon):
                 f"CHAT: {unbon.chat.title}(`{unbon.chat_id}`)",
             )
     except UserIdInvalidError:
-        await unbon.edit("`Uh oh my unban logic broke!`")
+        await catevent.edit("`Uh oh my unban logic broke!`")
 
 
 @command(incoming=True)
 async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
-        await event.delete()
+        try:
+            await event.delete()
+        except Exception as e:
+            LOGS.info(str(e))
 
 
-@borg.on(admin_cmd(r"mute(?: |$)(.*)"))
+@borg.on(admin_cmd("mute(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="mute(?: |$)(.*)", allow_sudo=True))
 async def startmute(event):
     if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
+        await sleep(3)
         await event.get_reply_message()
         userid = event.chat_id
         replied_user = await event.client(GetFullUserRequest(userid))
@@ -303,9 +301,9 @@ async def startmute(event):
         if not user:
             return
         if user.id == bot.uid:
-            return await event.edit("Sorry, I can't mute my self")
+            return await edit_or_reply(event ,"Sorry, I can't mute my self")
         if is_muted(user.id, event.chat_id):
-            return await event.edit(
+            return await edit_or_reply(event ,
                 "This user is already muted in this chat ~~lmfao sed rip~~"
             )
         try:
@@ -313,26 +311,26 @@ async def startmute(event):
         except UserAdminInvalidError:
             if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None:
                 if chat.admin_rights.delete_messages is not True:
-                    return await event.edit(
+                    return await edit_or_reply(event ,
                         "`You can't mute a person if you dont have delete messages permission. ಥ﹏ಥ`"
                     )
             elif "creator" not in vars(chat):
-                return await event.edit(
+                return await edit_or_reply(event ,
                     "`You can't mute a person without admin rights niqq.` ಥ﹏ಥ  "
                 )
             try:
                 mute(user.id, event.chat_id)
             except Exception as e:
-                return await event.edit("Error occured!\nError is " + str(e))
+                return await edit_or_reply(event ,"Error occured!\nError is " + str(e))
         except Exception as e:
-            return await event.edit(f"**Error : **`{str(e)}`")
+            return await edit_or_reply(event ,f"**Error : **`{str(e)}`")
         if reason:
-            await event.edit(
+            await edit_or_reply(event ,
                 f"{user.first_name} is muted in {event.chat.title}\n"
                 f"`Reason:`{reason}"
             )
         else:
-            await event.edit(f"{user.first_name} is muted in {event.chat.title}")
+            await edit_or_reply(event ,f"{user.first_name} is muted in {event.chat.title}")
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -342,13 +340,12 @@ async def startmute(event):
             )
 
 
-@borg.on(admin_cmd(r"unmute(?: |$)(.*)"))
+@borg.on(admin_cmd("unmute(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="unmute(?: |$)(.*)", allow_sudo=True))
 async def endmute(event):
-    if event.fwd_from:
-        return
     if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
+        await sleep(3)
         userid = event.chat_id
         replied_user = await event.client(GetFullUserRequest(userid))
         chat_id = event.chat_id
@@ -370,7 +367,6 @@ async def endmute(event):
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)",
             )
     else:
-        await event.edit("```Unmuting...```")
         user = await get_user_from_event(event)
         user = user[0]
         if not user:
@@ -380,9 +376,9 @@ async def endmute(event):
             if is_muted(user.id, event.chat_id):
                 unmute(user.id, event.chat_id)
         except Exception as e:
-            return await event.edit(f"**Error : **`{str(e)}`")
+            return await edit_or_reply(event ,f"**Error : **`{str(e)}`")
         else:
-            await event.edit("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
+            await edit_or_reply(event ,"Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -393,17 +389,18 @@ async def endmute(event):
 
 
 @borg.on(admin_cmd("pin($| (.*))"))
+@borg.on(sudo_cmd(pattern="pin($| (.*))", allow_sudo=True))
 @errors_handler
 async def pin(msg):
     chat = await msg.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
     if not admin and not creator:
-        await msg.edit(NO_ADMIN)
+        await edit_or_reply(msg ,NO_ADMIN)
         return
     to_pin = msg.reply_to_msg_id
     if not to_pin:
-        await msg.edit("`Reply to a message to pin it.`")
+        await edit_or_reply(msg ,"`Reply to a message to pin it.`")
         return
     options = msg.pattern_match.group(1)
     is_silent = True
@@ -412,9 +409,9 @@ async def pin(msg):
     try:
         await msg.client(UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
     except BadRequestError:
-        await msg.edit(NO_PERM)
+        await edit_or_reply(msg ,NO_PERM)
         return
-    await msg.edit("`Pinned Successfully!`")
+    hmm = await edit_or_reply(msg ,"`Pinned Successfully!`")
     user = await get_user_from_id(msg.from_id, msg)
     if BOTLOG:
         await msg.client.send_message(
@@ -424,34 +421,40 @@ async def pin(msg):
             f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
             f"LOUD: {not is_silent}",
         )
+    await sleep(3)
+    try:
+        await hmm.delete()
+    except:
+        pass
 
 
 @borg.on(admin_cmd("kick(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="kick(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def kick(usr):
     chat = await usr.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
     if not admin and not creator:
-        await usr.edit(NO_ADMIN)
+        await edit_or_reply(usr , NO_ADMIN)
         return
     user, reason = await get_user_from_event(usr)
     if not user:
-        await usr.edit("`Couldn't fetch user.`")
+        await edit_or_reply(usr , "`Couldn't fetch user.`")
         return
-    await usr.edit("`Kicking...`")
+    catevent = await edit_or_reply(usr , "`Kicking...`")
     try:
         await usr.client.kick_participant(usr.chat_id, user.id)
         await sleep(0.5)
     except Exception as e:
-        await usr.edit(NO_PERM + f"\n{str(e)}")
+        await catevent.edit(NO_PERM + f"\n{str(e)}")
         return
     if reason:
-        await usr.edit(
+        await catevent.edit(
             f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`\nReason: {reason}"
         )
     else:
-        await usr.edit(f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`")
+        await catevent.edit(f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`")
     if BOTLOG:
         await usr.client.send_message(
             BOTLOG_CHATID,
@@ -462,6 +465,7 @@ async def kick(usr):
 
 
 @borg.on(admin_cmd("iundlt$"))
+@borg.on(sudo_cmd(pattern="iundlt$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -471,70 +475,16 @@ async def _(event):
         deleted_msg = "Deleted message in this group:"
         for i in a:
             deleted_msg += "\n👉`{}`".format(i.old.message)
-        await event.edit(deleted_msg)
+        await edit_or_reply(event , deleted_msg)
     else:
-        await event.edit(
+        await edit_or_reply(event ,
             "`You need administrative permissions in order to do this command`"
         )
-        await asyncio.sleep(3)
-        await event.delete()
-
-
-@borg.on(sudo_cmd(pattern="(ban|unban)($| (.*))", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    datetime.now()
-    to_ban_id = None
-    rights = None
-    input_cmd = event.pattern_match.group(1)
-    if input_cmd == "ban":
-        rights = BANNED_RIGHTS
-    elif input_cmd == "unban":
-        rights = UNBAN_RIGHTS
-    input_str = event.pattern_match.group(2)
-    reply_msg_id = event.reply_to_msg_id
-    if reply_msg_id:
-        r_mesg = await event.get_reply_message()
-        to_ban_id = r_mesg.from_id
-    elif input_str and "all" not in input_str:
-        to_ban_id = int(input_str)
-    else:
-        return False
-    try:
-        await borg(EditBannedRequest(event.chat_id, to_ban_id, rights))
-    except (Exception) as exc:
-        await event.reply(str(exc))
-    else:
-        await event.reply(f"{input_cmd}ned Successfully!")
-
-
-@borg.on(sudo_cmd(pattern="pgs($| (.*))", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    if event.reply_to_msg_id:
-        i = 1
-        msgs = []
-        from_user = None
-        input_str = event.pattern_match.group(1)
-        if input_str:
-            from_user = await borg.get_entity(input_str)
-        async for message in borg.iter_messages(
-            event.chat_id, min_id=event.reply_to_msg_id, from_user=from_user
-        ):
-            i = i + 1
-            msgs.append(message)
-            if len(msgs) == 100:
-                await borg.delete_messages(event.chat_id, msgs, revoke=True)
-                msgs = []
-        if len(msgs) <= 100:
-            await borg.delete_messages(event.chat_id, msgs, revoke=True)
-            msgs = []
+        await sleep(3)
+        try:
             await event.delete()
-        else:
-            await event.reply("**PURGE** Failed!")
-
+        except:
+            pass
 
 async def get_user_from_event(event):
     args = event.pattern_match.group(1).split(" ", 1)
