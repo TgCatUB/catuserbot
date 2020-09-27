@@ -318,7 +318,9 @@ async def startmute(event):
         replied_user = await event.client(GetFullUserRequest(userid))
         chat_id = event.chat_id
         if is_muted(userid, chat_id):
-            return await event.edit("This user is already muted in this chat ~~lmfao sed rip~~")
+            return await event.edit(
+                "This user is already muted in this chat ~~lmfao sed rip~~"
+            )
         try:
             mute(userid, chat_id)
         except Exception as e:
@@ -345,25 +347,31 @@ async def startmute(event):
         if user.id == bot.uid:
             return await event.edit("Sorry, I can't mute my self")
         if is_muted(event.chat_id, user.id):
-            return await event.edit("This user is already muted in this chat ~~lmfao sed rip~~")
+            return await event.edit(
+                "This user is already muted in this chat ~~lmfao sed rip~~"
+            )
         try:
             await event.client(EditBannedRequest(event.chat_id, user.id, MUTE_RIGHTS))
         except UserAdminInvalidError:
             if "admin_rights" in vars(chat) and vars(chat)["admin_rights"] is not None:
                 if chat.admin_rights.delete_messages is not True:
-                    return await event.edit("`You can't mute a person if you dont have delete messages permission. ಥ﹏ಥ`")
+                    return await event.edit(
+                        "`You can't mute a person if you dont have delete messages permission. ಥ﹏ಥ`"
+                    )
             elif "creator" not in vars(chat):
-                return await event.edit("`You can't mute a person without admin rights niqq.` ಥ﹏ಥ  ")
+                return await event.edit(
+                    "`You can't mute a person without admin rights niqq.` ಥ﹏ಥ  "
+                )
             try:
                 mute(user.id, event.chat_id)
             except Exception as e:
                 return await event.edit("Error occured!\nError is " + str(e))
         except Exception as e:
-            return await event.edit('Error occured!\nError is ' + str(e))
+            return await event.edit("Error occured!\nError is " + str(e))
         if reason:
             await event.edit(
-            f"{user.first_name} is muted in {event.chat.title}\n"
-            f"`Reason:`{reason}"
+                f"{user.first_name} is muted in {event.chat.title}\n"
+                f"`Reason:`{reason}"
             )
         else:
             await event.edit(f"{user.first_name} is muted in {event.chat.title}")
@@ -374,6 +382,7 @@ async def startmute(event):
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)",
             )
+
 
 @borg.on(admin_cmd(r"unmute(?: |$)(.*)"))
 async def endmute(event):
@@ -386,7 +395,9 @@ async def endmute(event):
         replied_user = await event.client(GetFullUserRequest(userid))
         chat_id = event.chat_id
         if not is_muted(userid, chat_id):
-            return await event.edit("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
+            return await event.edit(
+                "__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）"
+            )
         try:
             unmute(userid, chat_id)
         except Exception as e:
@@ -414,7 +425,9 @@ async def endmute(event):
         if not user:
             return
         if not is_muted(user.id, event.chat_id):
-            return await event.edit("__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）")
+            return await event.edit(
+                "__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）"
+            )
         try:
             await event.client(EditBannedRequest(event.chat_id, user.id, UNBAN_RIGHTS))
         except UserAdminInvalidError:
@@ -430,6 +443,7 @@ async def endmute(event):
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)",
             )
+
 
 @borg.on(admin_cmd("pin($| (.*))"))
 @errors_handler
