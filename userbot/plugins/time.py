@@ -163,7 +163,7 @@ async def _(event):
     if event.fwd_from:
         return
     current_time = datetime.now().strftime(
-        f"USERBOT TIMEZONE\n✨✨✨✨✨✨✨✨✨✨✨✨\n  {LOCATION}\n Time: %H:%M:%S \n Date: %d.%m.%y \n"
+        f"⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n⚡USERBOT TIMEZONE⚡\n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n   {LOCATION}\n Time: %H:%M:%S \n Date: %d.%m.%y \n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡"
     )
     input_str = event.pattern_match.group(1)
     reply_msg_id = event.message.id
@@ -176,7 +176,7 @@ async def _(event):
         os.makedirs("./temp/")
     required_file_name = "./temp" + " " + str(datetime.now()) + ".webp"
     img = Image.new("RGBA", (350, 220), color=(0, 0, 0, 115))
-    fnt = ImageFont.truetype(FONT_FILE_TO_USE, 35)
+    fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
     drawn_text = ImageDraw.Draw(img)
     drawn_text.text((10, 10), current_time, font=fnt, fill=(255, 255, 255))
     img.save(required_file_name)
