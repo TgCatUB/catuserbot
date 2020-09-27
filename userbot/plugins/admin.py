@@ -171,7 +171,7 @@ async def demote(dmod):
         await dmod.edit(NO_ADMIN)
         return
     await dmod.edit("`Demoting...`")
-    rank = "admeme" 
+    rank = "admeme"
     user = await get_user_from_event(dmod)
     user = user[0]
     if user:
@@ -276,6 +276,7 @@ async def watcher(event):
     if is_muted(event.sender_id, event.chat_id):
         await event.delete()
 
+
 @borg.on(admin_cmd(r"mute(?: |$)(.*)"))
 async def startmute(event):
     if event.is_private:
@@ -309,7 +310,7 @@ async def startmute(event):
             return
         if user.id == bot.uid:
             return await event.edit("Sorry, I can't mute my self")
-        if is_muted(user.id , event.chat_id):
+        if is_muted(user.id, event.chat_id):
             return await event.edit(
                 "This user is already muted in this chat ~~lmfao sed rip~~"
             )
@@ -376,7 +377,7 @@ async def endmute(event):
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)",
             )
     else:
-        chat = await event.get_chat()
+        await event.get_chat()
         await event.edit("```Unmuting...```")
         user = await get_user_from_event(event)
         user = user[0]
@@ -401,7 +402,7 @@ async def endmute(event):
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {event.chat.title}(`{event.chat_id}`)",
             )
-        
+
 
 @borg.on(admin_cmd("pin($| (.*))"))
 @errors_handler
