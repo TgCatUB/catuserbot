@@ -46,7 +46,7 @@ async def log_tagged_messages(event):
                 if hmm.username:
                     await event.client.send_message(
                         Config.PM_LOGGR_BOT_API_ID,
-                        f"#TAGS \n<b>Group name : </b><code>{hmm.title}</code> \n<b>Link : </b>@{hmm.username}\
+                        f"#TAGS \n\n<b>Group name : </b><code>{hmm.title}</code> \n\
                         \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
                         parse_mode="html",
                         link_preview=False,
@@ -54,7 +54,7 @@ async def log_tagged_messages(event):
                 else:
                     await event.client.send_message(
                         Config.PM_LOGGR_BOT_API_ID,
-                        f"#TAGS \n<b>Group name : </b><code>{hmm.title}</code> \n<b>Link : </b><code>Private group</code> \
+                        f"#TAGS \n\n<b>Group name : </b><code>{hmm.title}</code> \n\
                         \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
                         parse_mode="html",
                         link_preview=False,
