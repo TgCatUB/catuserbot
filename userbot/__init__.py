@@ -98,6 +98,7 @@ else:
     PLACEHOLDER = None
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
+"""
 if not os.path.exists("bin"):
     os.mkdir("bin")
 binaries = {
@@ -110,7 +111,7 @@ for binary, path in binaries.items():
     downloader = SmartDL(binary, path, progress_bar=False)
     downloader.start()
     os.chmod(path, 0o755)
-
+"""
 # Global Variables
 COUNT_MSG = 0
 USERS = {}
