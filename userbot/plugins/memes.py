@@ -13,8 +13,8 @@ from cowpy import cow
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
-from . import ALIVE_NAME, CMD_HELP, memes, BOTLOG, BOTLOG_CHATID
 from ..utils import admin_cmd, register
+from . import ALIVE_NAME, BOTLOG, BOTLOG_CHATID, CMD_HELP, memes
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
