@@ -5,13 +5,14 @@ import logging
 from telethon import events
 
 from ..utils import admin_cmd
-from . import CMD_HELP, LOGS,BOTLOG,BOTLOG_CHATID
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, LOGS
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.WARN
 )
 
 NO_PM_LOG_USERS = []
+
 
 @borg.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def monito_p_m_s(event):
@@ -28,11 +29,13 @@ async def monito_p_m_s(event):
             except Exception as e:
                 LOGS.warn(str(e))
 
+
 @borg.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
 async def log_tagged_messages(event):
     if event.chat_id in NO_PM_LOG_USERS:
         return
     from .afk import USERAFK_ON
+
     if "on" in USERAFK_ON:
         return
     if not (await event.get_sender()).bot:
@@ -45,13 +48,18 @@ async def log_tagged_messages(event):
                         Config.PM_LOGGR_BOT_API_ID,
                         f"#TAGS \n<b>Group name : </b><code>{hmm.title}</code> \n<b>Link : </b>@{hmm.username}\
                         \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
-                        parse_mode = "html" , link_preview=False)
+                        parse_mode="html",
+                        link_preview=False,
+                    )
                 else:
                     await event.client.send_message(
                         Config.PM_LOGGR_BOT_API_ID,
                         f"#TAGS \n<b>Group name : </b><code>{hmm.title}</code> \n<b>Link : </b><code>Private group</code> \
                         \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
-                        parse_mode = "html" , link_preview=False)
+                        parse_mode="html",
+                        link_preview=False,
+                    )
+
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"save(?: |$)([\s\S]*)"))
 async def log(log_text):
@@ -78,6 +86,7 @@ async def kickme(leave):
     await leave.edit("Nope, no, no, I go away")
     await leave.client.kick_participant(leave.chat_id, "me")
 
+
 @borg.on(admin_cmd(pattern="log$"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
@@ -94,6 +103,7 @@ async def set_no_log_p_m(event):
         if chat.id not in NO_PM_LOG_USERS:
             NO_PM_LOG_USERS.append(chat.id)
             await event.edit("Won't Log Messages from this chat")
+
 
 CMD_HELP.update(
     {
