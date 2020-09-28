@@ -1,3 +1,2 @@
-pv 
-jq 
-libgconf2-dev
+jq
+pv
