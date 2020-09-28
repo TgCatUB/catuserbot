@@ -43,7 +43,7 @@ async def kek(keks):
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
         uio = ["/", "\\"]
         for i in range(1, 15):
-            time.sleep(0.3)
+            await asyncio.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
 
