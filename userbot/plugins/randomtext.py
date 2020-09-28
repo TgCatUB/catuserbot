@@ -1292,8 +1292,6 @@ async def _(event):
         )
 
 
-
-
 @borg.on(admin_cmd(pattern=r"qt$"))
 async def _(event):
     if event.fwd_from:
