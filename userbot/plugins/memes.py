@@ -6,7 +6,6 @@
 import asyncio
 import random
 import re
-import time
 
 import requests
 from cowpy import cow
