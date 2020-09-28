@@ -36,6 +36,7 @@ async def log_tagged_messages(event):
     if hmm.id in NO_PM_LOG_USERS:
         return
     from .afk import USERAFK_ON
+
     if "on" in USERAFK_ON:
         return
     if not (await event.get_sender()).bot:
