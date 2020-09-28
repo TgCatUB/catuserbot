@@ -411,7 +411,6 @@ def time_formatter(seconds: int) -> str:
     return tmp[:-2]
 
 
-
 class Loader:
     def __init__(self, func=None, **args):
         self.Var = Var
