@@ -32,14 +32,13 @@ async def monito_p_m_s(event):
 
 @borg.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
 async def log_tagged_messages(event):
-    if event.chat_id in NO_PM_LOG_USERS:
+    hmm = await event.get_chat()
+    if hmm.id in NO_PM_LOG_USERS:
         return
     from .afk import USERAFK_ON
-
     if "on" in USERAFK_ON:
         return
     if not (await event.get_sender()).bot:
-        hmm = await event.get_chat()
         if Config.PM_LOGGR_BOT_API_ID:
             await asyncio.sleep(5)
             if not event.is_private:
