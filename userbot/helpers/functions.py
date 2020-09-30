@@ -20,10 +20,7 @@ async def get_readable_time(seconds: int) -> str:
     time_suffix_list = ["s", "m", "h", "days"]
     while count < 4:
         count += 1
-        if count < 3:
-            remainder, result = divmod(seconds, 60)
-        else:
-            remainder, result = divmod(seconds, 24)
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
         if seconds == 0 and remainder == 0:
             break
         time_list.append(int(result))
@@ -45,10 +42,12 @@ async def admin_groups(cat):
     catgroups = []
     async for dialog in cat.client.iter_dialogs():
         entity = dialog.entity
-        if isinstance(entity, Channel):
-            if entity.megagroup:
-                if entity.creator or entity.admin_rights:
-                    catgroups.append(entity.id)
+        if (
+            isinstance(entity, Channel)
+            and entity.megagroup
+            and (entity.creator or entity.admin_rights)
+        ):
+            catgroups.append(entity.id)
     return catgroups
 
 
@@ -178,7 +177,7 @@ async def waifutxt(text, chat_id, reply_to_id, bot, borg):
 
 
 #unziping file
-async unzip(downloaded_file_name):
+async def unzip(downloaded_file_name):
     with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
         zip_ref.extractall("./temp")
     return f"{downloaded_file_name[:-3]}gif"
@@ -239,12 +238,10 @@ def deEmojify(inputString: str) -> str:
 
 
 def Build_Poll(options):
-    i = 0
-    poll = []
-    for option in options:
-        i = i + 1
-        poll.append(PollAnswer(option, bytes(i)))
-    return poll
+    return [
+        PollAnswer(option, bytes(i))
+        for i, option in enumerate(options, start=1)
+    ]
 
 
 def convert_toimage(image):
