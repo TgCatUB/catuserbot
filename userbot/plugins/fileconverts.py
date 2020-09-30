@@ -169,7 +169,7 @@ async def _(event):
                 return await catevent.edit("`This file is not supported`")
             catresponse = response if response.media else await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
-            catfile = await event.client.download_media(catresponse, "./temp")
+            catfile = Path(await event.client.download_media(catresponse, "./temp/"))
             catgif = Path(await unzip(catfile))
             sandy = await event.client.send_file(
                 event.chat_id,
