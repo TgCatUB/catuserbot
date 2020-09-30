@@ -56,7 +56,7 @@ async def _(event):
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     stderr = (await runcmd(thumb_cmd))[1]
-    catname = Path(catname).prefix
+    catname = os.path.splitext(catname)[0]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     song_file = Path(f"{catname}mp3")
@@ -126,7 +126,7 @@ async def _(event):
     stderr = (await runcmd(thumb_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    catname = Path(catname).prefix
+    catname = os.path.splitext(catname)[0]
     vsong_file = Path(f"{catname}mp4")
     if not os.path.exists(vsong_file):
         vsong_file = Path(f"{catname}mkv")
