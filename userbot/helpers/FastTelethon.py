@@ -393,6 +393,4 @@ async def upload_file(
     file: BinaryIO,
     progress_callback: callable = None,
 ) -> TypeInputFile:
-    return (
-        await _internal_transfer_to_telegram(client, file, progress_callback)
-    )[0]
+    return (await _internal_transfer_to_telegram(client, file, progress_callback))[0]

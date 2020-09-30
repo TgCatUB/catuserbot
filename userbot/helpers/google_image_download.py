@@ -644,9 +644,7 @@ class googleimagesdownload:
             "image_height": main[2],
             "image_width": main[1],
             "image_link": main[0],
-            "image_format": main[0][
-                -1 * (len(main[0]) - main[0].rfind(".") - 1) :
-            ],
+            "image_format": main[0][-1 * (len(main[0]) - main[0].rfind(".") - 1) :],
             "image_description": info["2003"][3],
             "image_host": info["183836587"][0],
             "image_source": info["2003"][2],
@@ -1747,6 +1745,7 @@ class googleimagesdownload:
                     if not arguments["silent_mode"]:
                         print("\nErrors: " + str(errorCount) + "\n")
         return paths, total_errors
+
     records = user_input()
     total_errors = 0
     t0 = time.time()  # start the timer
