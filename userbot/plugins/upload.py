@@ -94,7 +94,7 @@ async def uploadir(event):
                             )
                         ),
                     )
-                uploaded = uploaded + 1
+                uploaded += 1
         await udir_event.edit("Uploaded {} files successfully !!".format(uploaded))
     else:
         await udir_event.edit("404: Directory Not Found")
@@ -116,7 +116,7 @@ async def _(event):
         caat = await bot.send_file(
             event.chat_id,
             input_str,
-            force_document=True,
+            force_document=False,
             supports_streaming=True,
             allow_cache=False,
             reply_to=event.message.id,
@@ -195,12 +195,12 @@ async def uploadas(event):
     supports_streaming = False
     round_message = False
     spam_big_messages = False
-    if type_of_upload == "stream":
-        supports_streaming = True
-    if type_of_upload == "vn":
-        round_message = True
     if type_of_upload == "all":
         spam_big_messages = True
+    elif type_of_upload == "stream":
+        supports_streaming = True
+    elif type_of_upload == "vn":
+        round_message = True
     thumb = None
     file_name = None
     if "|" in input_str:
@@ -210,9 +210,8 @@ async def uploadas(event):
     else:
         file_name = input_str
         thumb = vthumb = get_video_thumb(file_name)
-    if not thumb:
-        if os.path.exists(thumb_image_path):
-            thumb = thumb_image_path
+    if not thumb and os.path.exists(thumb_image_path):
+        thumb = thumb_image_path
     if os.path.exists(file_name):
         metadata = extractMetadata(createParser(file_name))
         duration = 0
