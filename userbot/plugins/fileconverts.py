@@ -3,14 +3,15 @@ import os
 import time
 from datetime import datetime
 from io import BytesIO
+from pathlib import Path
+
 from telethon import functions, types
 from telethon.errors import PhotoInvalidDimensionsError
-from telethon.tl.functions.messages import SendMediaRequest
-from pathlib import Path
-from . import CMD_HELP, unzip
-from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
 from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.messages import SendMediaRequest
 
+from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
+from . import CMD_HELP, unzip
 
 if not os.path.isdir("./temp"):
     os.makedirs("./temp")
@@ -92,6 +93,7 @@ async def silently_send_message(conv, text):
     await conv.mark_read(message=response)
     return response
 
+
 @borg.on(admin_cmd(pattern="ttf ?(.*)"))
 @borg.on(sudo_cmd(pattern="ttf ?(.*)", allow_sudo=True))
 async def get(event):
@@ -143,6 +145,7 @@ async def on_file_to_photo(event):
         return
     await catt.delete()
 
+
 @borg.on(admin_cmd(pattern="gif$"))
 @borg.on(sudo_cmd(pattern="gif$", allow_sudo=True))
 async def _(event):
@@ -193,7 +196,7 @@ async def _(event):
             await catevent.edit("Unblock @tgstogifbot")
             return
 
-        
+
 @borg.on(admin_cmd(pattern="nfc ?(.*)"))
 @borg.on(sudo_cmd(pattern="nfc ?(.*)", allow_sudo=True))
 async def _(event):
