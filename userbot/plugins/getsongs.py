@@ -4,7 +4,7 @@ credits to @mrconfused and @sandy1709
 # songs finder for catuserbot
 
 import os
-
+from pathlib import Path
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
@@ -57,12 +57,12 @@ async def _(event):
     stderr = (await runcmd(thumb_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    song_file = f"{catname[:-3]}mp3"
+    song_file = Path(f"{catname[:-3]}mp3")
     if not os.path.exists(song_file):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
-    catthumb = f"{catname[:-3]}jpg"
+    catthumb = Path(f"{catname[:-3]}jpg")
     if not os.path.exists(catthumb):
-        catthumb = f"{catname[:-3]}webp"
+        catthumb = Path(f"{catname[:-3]}webp")
     elif not os.path.exists(catthumb):
         catthumb = None
 
@@ -123,14 +123,14 @@ async def _(event):
     stderr = (await runcmd(thumb_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    vsong_file = f"{catname[:-3]}mp4"
+    vsong_file = Path(f"{catname[:-3]}mp4")
     if not os.path.exists(vsong_file):
-        vsong_file = f"{catname[:-3]}mkv"
+        vsong_file = Path(f"{catname[:-3]}mkv")
     elif not os.path.exists(vsong_file):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
-    catthumb = f"{catname[:-3]}jpg"
+    catthumb = Path(f"{catname[:-3]}jpg")
     if not os.path.exists(catthumb):
-        catthumb = f"{catname[:-3]}webp"
+        catthumb = Path(f"{catname[:-3]}webp")
     elif not os.path.exists(catthumb):
         catthumb = None
     await borg.send_file(
