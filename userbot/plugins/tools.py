@@ -15,7 +15,7 @@ from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from userbot import CMD_HELP
-from userbot.utils import admin_cmd, sudo_cmd , edit_or_reply
+from userbot.utils import admin_cmd, edit_or_reply, sudo_cmd
 
 logging.basicConfig(
     format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
@@ -23,22 +23,22 @@ logging.basicConfig(
 
 
 @borg.on(admin_cmd(pattern="scan ?(.*)"))
-@borg.on(sudo_cmd(pattern="scan ?(.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="scan ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     if not event.reply_to_msg_id:
-        await edit_or_reply(event , "```Reply to any user message.```")
+        await edit_or_reply(event, "```Reply to any user message.```")
         return
     reply_message = await event.get_reply_message()
     if not reply_message.media:
-        await edit_or_reply(event , "```reply to a media message```")
+        await edit_or_reply(event, "```reply to a media message```")
         return
     chat = "@DrWebBot"
     if reply_message.sender.bot:
-        await edit_or_reply(event , "```Reply to actual users message.```")
+        await edit_or_reply(event, "```Reply to actual users message.```")
         return
-    catevent = await edit_or_reply(event , " `Sliding my tip, of fingers over it`")
+    catevent = await edit_or_reply(event, " `Sliding my tip, of fingers over it`")
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
@@ -55,7 +55,9 @@ async def _(event):
             )
         else:
             if response.text.startswith("Select"):
-                await catevent.edit("`Please go to` @DrWebBot `and select your language.`")
+                await catevent.edit(
+                    "`Please go to` @DrWebBot `and select your language.`"
+                )
             else:
                 await catevent.edit(
                     f"**Antivirus scan was completed. I got dem final results.**\n {response.message.message}"
@@ -78,20 +80,20 @@ async def parseqr(qr_e):
         "f=@" + downloaded_file_name + "",
         "https://zxing.org/w/decode",
     ]
-    t_response , e_response = (await runcmd(command_to_exec))[:-2]
+    t_response, e_response = (await runcmd(command_to_exec))[:-2]
     if not t_response:
-        return await edit_or_reply(qr_e , f"Failed to decode.\n`{e_response}`")
+        return await edit_or_reply(qr_e, f"Failed to decode.\n`{e_response}`")
     soup = BeautifulSoup(t_response, "html.parser")
     qr_contents = soup.find_all("pre")[0].text
-    await edit_or_reply(qr_e , qr_contents)
+    await edit_or_reply(qr_e, qr_contents)
 
 
 @borg.on(admin_cmd(pattern="barcode ?(.*)"))
-@borg.on(sudo_cmd(pattern="barcode ?(.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="barcode ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    catevent = await edit_or_reply(event , "...")
+    catevent = await edit_or_reply(event, "...")
     start = datetime.now()
     input_str = event.pattern_match.group(1)
     message = "SYNTAX: `.barcode <long text to include>`"
@@ -140,7 +142,7 @@ async def _(event):
 @borg.on(admin_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", outgoing=True))
 @borg.on(sudo_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", allow_sudo=True))
 async def make_qr(makeqr):
-    #  .makeqr command, make a QR Code containing the given content. 
+    #  .makeqr command, make a QR Code containing the given content.
     input_str = makeqr.pattern_match.group(1)
     message = "SYNTAX: `.makeqr <long text to include>`"
     reply_msg_id = None
@@ -178,11 +180,11 @@ async def make_qr(makeqr):
 
 
 @borg.on(admin_cmd(pattern="calendar (.*)"))
-@borg.on(sudo_cmd(pattern="calendar (.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="calendar (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    catevent = await edit_or_reply(event , "`Gathering infomation.......`")
+    catevent = await edit_or_reply(event, "`Gathering infomation.......`")
     input_str = event.pattern_match.group(1)
     input_sgra = input_str.split("-")
     if len(input_sgra) == 3:
@@ -206,7 +208,7 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern="currency (.*)"))
-@borg.on(sudo_cmd(pattern="currency (.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="currency (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -224,23 +226,26 @@ async def _(event):
             if currency_to in current_response["rates"]:
                 current_rate = float(current_response["rates"][currency_to])
                 rebmun = round(number * current_rate, 2)
-                await edit_or_reply(event,
-                    "{} {} = {} {}".format(number, currency_from, rebmun, currency_to)
+                await edit_or_reply(
+                    event,
+                    "{} {} = {} {}".format(number, currency_from, rebmun, currency_to),
                 )
             else:
-                await edit_or_reply(event,
-                    "Welp, Hate to tell yout this but this Currency isn't supported **yet**.\n__Try__ `.currencies` __for a list of supported currencies.__"
+                await edit_or_reply(
+                    event,
+                    "Welp, Hate to tell yout this but this Currency isn't supported **yet**.\n__Try__ `.currencies` __for a list of supported currencies.__",
                 )
         except e:
-            await edit_or_reply(event,str(e))
+            await edit_or_reply(event, str(e))
     else:
-        await edit_or_reply(event,
-            "**Syntax:**\n.currency amount from to\n**Example:**\n`.currency 10 usd inr`"
+        await edit_or_reply(
+            event,
+            "**Syntax:**\n.currency amount from to\n**Example:**\n`.currency 10 usd inr`",
         )
 
 
 @borg.on(admin_cmd(pattern="currencies$"))
-@borg.on(sudo_cmd(pattern="currencies$",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="currencies$", allow_sudo=True))
 async def currencylist(ups):
     if ups.fwd_from:
         return
@@ -250,11 +255,11 @@ async def currencylist(ups):
     hmm = ""
     for key, value in dil_wale_puch_de_na_chaaa.items():
         hmm += f"`{key}`" + "\t\t\t"
-    await edit_or_reply(ups , f"**List of some currencies:**\n{hmm}\n")
+    await edit_or_reply(ups, f"**List of some currencies:**\n{hmm}\n")
 
 
 @borg.on(admin_cmd(pattern="ifsc (.*)"))
-@borg.on(sudo_cmd(pattern="ifsc (.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="ifsc (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -265,13 +270,13 @@ async def _(event):
         b = r.json()
         a = json.dumps(b, sort_keys=True, indent=4)
         # https://stackoverflow.com/a/9105132/4723940
-        await edit_or_reply(event,str(a))
+        await edit_or_reply(event, str(a))
     else:
         await edit_or_reply(event, "`{}`: {}".format(input_str, r.text))
 
 
 @borg.on(admin_cmd(pattern="color (.*)"))
-@borg.on(sudo_cmd(pattern="color (.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="color (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -301,15 +306,17 @@ async def _(event):
             os.remove("cat.png")
             await event.delete()
     else:
-        await edit_or_reply(event , "**Syntax : **`.color <color_code>` example : `.color #ff0000`")
+        await edit_or_reply(
+            event, "**Syntax : **`.color <color_code>` example : `.color #ff0000`"
+        )
 
 
 @borg.on(admin_cmd(pattern="xkcd ?(.*)"))
-@borg.on(sudo_cmd(pattern="xkcd ?(.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="xkcd ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    catevent = await edit_or_reply(event ,"`processiong...........`")
+    catevent = await edit_or_reply(event, "`processiong...........`")
     input_str = event.pattern_match.group(1)
     xkcd_id = None
     if input_str:
