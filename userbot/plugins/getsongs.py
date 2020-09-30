@@ -35,7 +35,9 @@ async def _(event):
     catevent = await edit_or_reply(event, "`wi8..! I am finding your song....`")
     video_link = await yt_search(str(query))
     if not url(video_link):
-        return await catevent.edit(f"Sorry!. I can't find any related video/audio for `{query}`")
+        return await catevent.edit(
+            f"Sorry!. I can't find any related video/audio for `{query}`"
+        )
     cmd = event.pattern_match.group(1)
     if cmd == "song":
         q = "128k"
@@ -61,7 +63,9 @@ async def _(event):
         return await catevent.edit(f"**Error :** `{stderr}`")
     song_file = Path(f"{catname}.mp3")
     if not os.path.exists(song_file):
-        return await catevent.edit(f"Sorry!. I can't find any related video/audio for `{query}`")
+        return await catevent.edit(
+            f"Sorry!. I can't find any related video/audio for `{query}`"
+        )
     await catevent.edit("`yeah..! i found something wi8..🥰`")
     catthumb = Path(f"{catname}.jpg")
     if not os.path.exists(catthumb):
@@ -113,7 +117,9 @@ async def _(event):
     catevent = await edit_or_reply(event, "`wi8..! I am finding your song....`")
     video_link = await yt_search(str(query))
     if not url(video_link):
-        return await catevent.edit(f"Sorry!. I can't find any related video/audio for `{query}`")
+        return await catevent.edit(
+            f"Sorry!. I can't find any related video/audio for `{query}`"
+        )
     thumb_cmd = thumb_dl.format(video_link=video_link)
     name_cmd = name_dl.format(video_link=video_link)
     video_cmd = video_dl.formar(video_link=video_link)
@@ -131,7 +137,9 @@ async def _(event):
     if not os.path.exists(vsong_file):
         vsong_file = Path(f"{catname}.mkv")
     elif not os.path.exists(vsong_file):
-        return await catevent.edit(f"Sorry!. I can't find any related video/audio for `{query}`")
+        return await catevent.edit(
+            f"Sorry!. I can't find any related video/audio for `{query}`"
+        )
     await catevent.edit("`yeah..! i found something wi8..🥰`")
     catthumb = Path(f"{catname}.jpg")
     if not os.path.exists(catthumb):
