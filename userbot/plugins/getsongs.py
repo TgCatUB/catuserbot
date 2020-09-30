@@ -56,15 +56,16 @@ async def _(event):
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     stderr = (await runcmd(thumb_cmd))[1]
+    catname = pathlib.Path(catname).prefix
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    song_file = Path(f"{catname[:-3]}mp3")
+    song_file = Path(f"{catname}mp3")
     print(song_file)
     if not os.path.exists(song_file):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
-    catthumb = Path(f"{catname[:-3]}jpg")
+    catthumb = Path(f"{catname}jpg")
     if not os.path.exists(catthumb):
-        catthumb = Path(f"{catname[:-3]}webp")
+        catthumb = Path(f"{catname}webp")
     elif not os.path.exists(catthumb):
         catthumb = None
 
@@ -125,14 +126,14 @@ async def _(event):
     stderr = (await runcmd(thumb_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    vsong_file = Path(f"{catname[:-3]}mp4")
+    vsong_file = Path(f"{catname}mp4")
     if not os.path.exists(vsong_file):
-        vsong_file = Path(f"{catname[:-3]}mkv")
+        vsong_file = Path(f"{catname}mkv")
     elif not os.path.exists(vsong_file):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
-    catthumb = Path(f"{catname[:-3]}jpg")
+    catthumb = Path(f"{catname}jpg")
     if not os.path.exists(catthumb):
-        catthumb = Path(f"{catname[:-3]}webp")
+        catthumb = Path(f"{catname}webp")
     elif not os.path.exists(catthumb):
         catthumb = None
     await borg.send_file(
