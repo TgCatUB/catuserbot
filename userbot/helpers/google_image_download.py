@@ -1746,9 +1746,11 @@ class googleimagesdownload:
                         print("\nErrors: " + str(errorCount) + "\n")
         return paths, total_errors
 
+
 # ------------- Main Program -------------#
 
-def main():    
+
+def main():
     records = user_input()
     total_errors = 0
     t0 = time.time()  # start the timer
