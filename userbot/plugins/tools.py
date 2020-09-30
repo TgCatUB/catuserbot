@@ -309,7 +309,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    catevent = await await edit_or_reply(event ,"`processiong...........`"
+    catevent = await edit_or_reply(event ,"`processiong...........`")
     input_str = event.pattern_match.group(1)
     xkcd_id = None
     if input_str:
