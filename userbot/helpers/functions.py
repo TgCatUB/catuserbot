@@ -1,8 +1,9 @@
 import os
 import re
 import time
-from random import choice
 import zipfile
+from random import choice
+
 import PIL.ImageOps
 import requests
 from PIL import Image
@@ -176,12 +177,13 @@ async def waifutxt(text, chat_id, reply_to_id, bot, borg):
         await cat.delete()
 
 
-#unziping file
+# unziping file
 async def unzip(downloaded_file_name):
     with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
         zip_ref.extractall("./temp")
     return f"{downloaded_file_name[:-3]}gif"
-    
+
+
 # https://github.com/pokurt/LyndaRobot/blob/7556ca0efafd357008131fa88401a8bb8057006f/lynda/modules/helper_funcs/string_handling.py#L238
 
 
@@ -238,10 +240,7 @@ def deEmojify(inputString: str) -> str:
 
 
 def Build_Poll(options):
-    return [
-        PollAnswer(option, bytes(i))
-        for i, option in enumerate(options, start=1)
-    ]
+    return [PollAnswer(option, bytes(i)) for i, option in enumerate(options, start=1)]
 
 
 def convert_toimage(image):
