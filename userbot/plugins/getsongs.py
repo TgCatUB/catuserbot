@@ -35,9 +35,9 @@ async def _(event):
     if not url(video_link):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
     cmd = event.pattern_match.group(1)
-    if cmd ="song":
+    if cmd =="song":
         q = "128k"
-    elif cmd = "song320":
+    elif cmd == "song320":
         q = "320k"
     song_cmd = song_dl.format(QUALITY=q,video_link=video_link)
     thumb_cmd= thumb_dl.format(video_link=video_link)
