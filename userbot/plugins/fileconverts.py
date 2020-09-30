@@ -8,8 +8,13 @@ from telethon import types
 from telethon.errors import PhotoInvalidDimensionsError
 from telethon.tl.functions.messages import SendMediaRequest
 
-from .. import CMD_HELP
+from . import CMD_HELP, unzip
 from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+
+
+if not os.path.isdir("./temp"):
+    os.makedirs("./temp")
 
 
 @borg.on(admin_cmd(pattern="stoi$"))
@@ -82,6 +87,12 @@ async def _(cat):
         await event.edit("Syntax : `.itos` reply to a Telegram normal sticker")
 
 
+async def silently_send_message(conv, text):
+    await conv.send_message(text)
+    response = await conv.get_response()
+    await conv.mark_read(message=response)
+    return response
+
 @borg.on(admin_cmd(pattern="ttf ?(.*)"))
 @borg.on(sudo_cmd(pattern="ttf ?(.*)", allow_sudo=True))
 async def get(event):
@@ -133,7 +144,44 @@ async def on_file_to_photo(event):
         return
     await catt.delete()
 
+@borg.on(admin_cmd(pattern="gif$"))
+@borg.on(sudo_cmd(pattern="gif$", allow_sudo=True))
+async def _(event):
+    catreply = await event.get_reply_message()
+    if not catreply or not catreply.media or not catreply.media.document:
+        return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
+    elif catreply.media.document.mime_type != "application/x-tgsticker":
+        return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
+    reply_to_id = event.message
+    if event.reply_to_msg_id:
+        reply_to_id = await event.get_reply_message()
+    chat = "@tgstogifbot"
+    catevent = await edit_or_reply(event, "`Converting to gif ...`")
+    async with event.client.conversation(chat) as conv:
+        try:
+            await silently_send_message(conv, "/start")
+            await event.client.send_file(chat, catreply.media)
+            response = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            if response.text.startswith("Send me an animated sticker!"):
+                return await catevent.edit("`This file is not supported`")
+            catresponse = response if response.media else await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            catfile = await event.client.download_media(catresponse, "./temp")
+            catgif = await unzip(catfile)
+            await event.client.send_file(
+                event.chat_id,
+                catgif,
+                support_streaming=True,
+                force_document=False,
+                reply_to=reply_to_id,
+            )
+            await catevent.delete()
+        except YouBlockedUserError:
+            await catevent.edit("Unblock @tgstogifbot")
+            return
 
+        
 @borg.on(admin_cmd(pattern="nfc ?(.*)"))
 @borg.on(sudo_cmd(pattern="nfc ?(.*)", allow_sudo=True))
 async def _(event):
@@ -261,6 +309,8 @@ CMD_HELP.update(
     \n**Usage :**Converts image to sticker\
     \n\n**Syntax :** `.ftoi` reply to image file\
     \n**Usage :** Converts Given image file to straemable form\
+    \n\n**Syntax :** `.gif` reply to animated sticker\
+    \n**Usage :** Converts Given animated sticker to gif\
     \n\n**Syntax :** `.ttf file name` reply to text message\
     \n**Usage :** Converts Given text message to required file(given file name)\
     \n\n**Syntax :**`.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\
