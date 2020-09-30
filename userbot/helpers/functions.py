@@ -54,6 +54,7 @@ async def admin_groups(cat):
 
 # for getmusic
 
+
 async def yt_search(cat):
     search = cat
     chrome_options = webdriver.ChromeOptions()
@@ -70,6 +71,7 @@ async def yt_search(cat):
         video_link = i.get_attribute("href")
         break
     return video_link if video_link else "Couldnt fetch results"
+
 
 # for stickertxt
 async def waifutxt(text, chat_id, reply_to_id, bot, borg):
@@ -149,6 +151,7 @@ async def extract_time(cat, time_val):
         )
     )
     return ""
+
 
 song_dl = f"youtube-dl -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
 thumb_dl = f"youtube-dl -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
