@@ -1,4 +1,4 @@
-# pm and tagged messages logger
+ # pm and tagged messages logger
 import asyncio
 import logging
 
@@ -39,26 +39,16 @@ async def log_tagged_messages(event):
 
     if "on" in USERAFK_ON:
         return
-    if not (await event.get_sender()).bot:
-        if Config.PM_LOGGR_BOT_API_ID:
-            await asyncio.sleep(5)
-            if not event.is_private:
-                if hmm.username:
-                    await event.client.send_message(
-                        Config.PM_LOGGR_BOT_API_ID,
-                        f"#TAGS \n<b>Group name : </b><code>{hmm.title}</code>\
+    if not (await event.get_sender()).bot and Config.PM_LOGGR_BOT_API_ID:
+        await asyncio.sleep(5)
+        if not event.is_private:
+            await event.client.send_message(
+                Config.PM_LOGGR_BOT_API_ID,
+                f"#TAGS \n<b>Group name : </b><code>{hmm.title}</code>\
                         \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
-                        parse_mode="html",
-                        link_preview=False,
-                    )
-                else:
-                    await event.client.send_message(
-                        Config.PM_LOGGR_BOT_API_ID,
-                        f"#TAGS \n<b>Group name : </b><code>{hmm.title}</code>\
-                        \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
-                        parse_mode="html",
-                        link_preview=False,
-                    )
+                parse_mode="html",
+                link_preview=False,
+            )
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"save(?: |$)([\s\S]*)"))
