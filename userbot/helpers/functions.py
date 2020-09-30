@@ -54,8 +54,7 @@ async def admin_groups(cat):
 
 # for getmusic
 
-
-async def catmusic(cat, QUALITY, hello):
+async def yt_search(cat):
     search = cat
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--ignore-certificate-errors")
@@ -70,71 +69,9 @@ async def catmusic(cat, QUALITY, hello):
     for i in user_data:
         video_link = i.get_attribute("href")
         break
-    if not os.path.isdir("./temp/"):
-        os.makedirs("./temp/")
-    if not video_link:
-        await hello.edit(f"Sorry. I can't find that song `{search}`")
-        return
-    try:
-        command = (
-            'youtube-dl -o "./temp/%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality '
-            + QUALITY
-            + " "
-            + video_link
-        )
-        os.system(command)
-    except Exception as e:
-        return await hello.edit(f"`Error:\n {e}`")
-    try:
-        thumb = (
-            'youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download '
-            + video_link
-        )
-        os.system(thumb)
-    except Exception as e:
-        return await hello.edit(f"`Error:\n {e}`")
-
-
-async def catmusicvideo(cat, hello):
-    search = cat
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--ignore-certificate-errors")
-    chrome_options.add_argument("--test-type")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.binary_location = Config.CHROME_BIN
-    driver = webdriver.Chrome(chrome_options=chrome_options)
-    driver.get("https://www.youtube.com/results?search_query=" + search)
-    user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
-    for i in user_data:
-        video_link = i.get_attribute("href")
-        break
-    if not os.path.isdir("./temp/"):
-        os.makedirs("./temp/")
-    if not video_link:
-        await hello.edit(f"Sorry. I can't find that song `{search}`")
-        return
-    try:
-        command = (
-            'youtube-dl -o "./temp/%(title)s.%(ext)s" -f "[filesize<20M]" ' + video_link
-        )
-        os.system(command)
-    except Exception as e:
-        return await hello.edit(f"`Error:\n {e}`")
-    try:
-        thumb = (
-            'youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download '
-            + video_link
-        )
-        os.system(thumb)
-    except Exception as e:
-        return await hello.edit(f"`Error:\n {e}`")
-
+    return video_link if video_link else "Couldnt fetch results"
 
 # for stickertxt
-
-
 async def waifutxt(text, chat_id, reply_to_id, bot, borg):
     animus = [
         0,
@@ -213,6 +150,10 @@ async def extract_time(cat, time_val):
     )
     return ""
 
+song_dl = f"youtube-dl -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
+thumb_dl = f"youtube-dl -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
+video_dl = f"youtube-dl -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
+name_dl = f"youtube-dl --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
 
 EMOJI_PATTERN = re.compile(
     "["
