@@ -4,19 +4,20 @@ credits to @mrconfused and @sandy1709
 # songs finder for catuserbot
 
 import os
+
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-from . import CMD_HELP, rumcmd
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import yt_search, name_dl , video_dl , song_dl ,thumb_dl
 from validators.url import url
+
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, name_dl, song_dl, thumb_dl, video_dl, yt_search
 
 
 @borg.on(admin_cmd(pattern="(song|song320)($| (.*))"))
 @borg.on(sudo_cmd(pattern="(song|song320)($| (.*))", allow_sudo=True))
 async def _(event):
     reply_to_id = None
-    if not (event.from_id== bot.uid):
+    if not (event.from_id == bot.uid):
         reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -35,13 +36,13 @@ async def _(event):
     if not url(video_link):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
     cmd = event.pattern_match.group(1)
-    if cmd =="song":
+    if cmd == "song":
         q = "128k"
     elif cmd == "song320":
         q = "320k"
-    song_cmd = song_dl.format(QUALITY=q,video_link=video_link)
-    thumb_cmd= thumb_dl.format(video_link=video_link)
-    name_cmd =name_dl.format(video_link=video_link)
+    song_cmd = song_dl.format(QUALITY=q, video_link=video_link)
+    thumb_cmd = thumb_dl.format(video_link=video_link)
+    name_cmd = name_dl.format(video_link=video_link)
     try:
         cat = Get(cat)
         await event.client(cat)
@@ -50,13 +51,13 @@ async def _(event):
     stderr = (await runcmd(song_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** {stderr}")
-    catname,stderr = (await runcmd(name_cmd))[:2]
+    catname, stderr = (await runcmd(name_cmd))[:2]
     if stderr:
         return await catevent.edit(f"**Error :** {stderr}")
     stderr = (await runcmd(thumb_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** {stderr}")
-    song_file= f"{catname[:-3]}mp3"
+    song_file = f"{catname[:-3]}mp3"
     if not os.path.exists(song_file):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
     catthumb = f"{catname[:-3]}jpg"
@@ -75,15 +76,16 @@ async def _(event):
         reply_to=reply_to_id,
     )
     await catevent.delete()
-    for files in (catthumb , song_file):
+    for files in (catthumb, song_file):
         if files and os.path.exists(files):
             os.remove(files)
+
 
 @borg.on(admin_cmd(pattern="vsong( (.*)|$)"))
 @borg.on(sudo_cmd(pattern="vsong( (.*)|$)", allow_sudo=True))
 async def _(event):
     reply_to_id = None
-    if not (event.from_id== bot.uid):
+    if not (event.from_id == bot.uid):
         reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -115,15 +117,15 @@ async def _(event):
     stderr = (await runcmd(video_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** {stderr}")
-    catname,stderr = (await runcmd(name_cmd))[:2]
+    catname, stderr = (await runcmd(name_cmd))[:2]
     if stderr:
         return await catevent.edit(f"**Error :** {stderr}")
     stderr = (await runcmd(thumb_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** {stderr}")
-    vsong_file= f"{catname[:-3]}mp4"
+    vsong_file = f"{catname[:-3]}mp4"
     if not os.path.exists(vsong_file):
-        vsong_file= f"{catname[:-3]}mkv"
+        vsong_file = f"{catname[:-3]}mkv"
     elif not os.path.exists(vsong_file):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
     catthumb = f"{catname[:-3]}jpg"
@@ -141,11 +143,11 @@ async def _(event):
         reply_to=reply_to_id,
     )
     await catevent.delete()
-    for files in (catthumb , song_file):
+    for files in (catthumb, song_file):
         if files and os.path.exists(files):
             os.remove(files)
-            
-            
+
+
 CMD_HELP.update(
     {
         "getsongs": "**Plugin : **`getsongs`\
