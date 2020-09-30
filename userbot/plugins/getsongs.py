@@ -50,13 +50,13 @@ async def _(event):
         pass
     stderr = (await runcmd(song_cmd))[1]
     if stderr:
-        return await catevent.edit(f"**Error :** {stderr}")
+        return await catevent.edit(f"**Error :** `{stderr}`")
     catname, stderr = (await runcmd(name_cmd))[:2]
     if stderr:
-        return await catevent.edit(f"**Error :** {stderr}")
+        return await catevent.edit(f"**Error :** `{stderr}`")
     stderr = (await runcmd(thumb_cmd))[1]
     if stderr:
-        return await catevent.edit(f"**Error :** {stderr}")
+        return await catevent.edit(f"**Error :** `{stderr}`")
     song_file = f"{catname[:-3]}mp3"
     if not os.path.exists(song_file):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
@@ -116,13 +116,13 @@ async def _(event):
     video_cmd = video_dl.formar(video_link=video_link)
     stderr = (await runcmd(video_cmd))[1]
     if stderr:
-        return await catevent.edit(f"**Error :** {stderr}")
+        return await catevent.edit(f"**Error :** `{stderr}`")
     catname, stderr = (await runcmd(name_cmd))[:2]
     if stderr:
-        return await catevent.edit(f"**Error :** {stderr}")
+        return await catevent.edit(f"**Error :** `{stderr}`")
     stderr = (await runcmd(thumb_cmd))[1]
     if stderr:
-        return await catevent.edit(f"**Error :** {stderr}")
+        return await catevent.edit(f"**Error :** `{stderr}`")
     vsong_file = f"{catname[:-3]}mp4"
     if not os.path.exists(vsong_file):
         vsong_file = f"{catname[:-3]}mkv"
