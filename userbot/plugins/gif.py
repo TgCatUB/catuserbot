@@ -18,7 +18,7 @@ async def _(event):
     if event.reply_to_msg_id:
         reply_to_id = await event.get_reply_message()
     chat = "@tgstogifbot"
-    catevent = await edit_or_reply(event , "`Converting to gif ..."`)
+    catevent = await edit_or_reply(event , "`Converting to gif ...`")
     async with event.client.conversation(chat) as conv:
         try:
             await silently_send_message(conv, "/start")
