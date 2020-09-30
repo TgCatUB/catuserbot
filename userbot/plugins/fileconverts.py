@@ -3,14 +3,14 @@ import os
 import time
 from datetime import datetime
 from io import BytesIO
-
-from telethon import types
+from telethon import functions, types
 from telethon.errors import PhotoInvalidDimensionsError
-from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import SendMediaRequest
 
-from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
 from . import CMD_HELP, unzip
+from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+
 
 if not os.path.isdir("./temp"):
     os.makedirs("./temp")
@@ -92,7 +92,6 @@ async def silently_send_message(conv, text):
     await conv.mark_read(message=response)
     return response
 
-
 @borg.on(admin_cmd(pattern="ttf ?(.*)"))
 @borg.on(sudo_cmd(pattern="ttf ?(.*)", allow_sudo=True))
 async def get(event):
@@ -144,7 +143,6 @@ async def on_file_to_photo(event):
         return
     await catt.delete()
 
-
 @borg.on(admin_cmd(pattern="gif$"))
 @borg.on(sudo_cmd(pattern="gif$", allow_sudo=True))
 async def _(event):
@@ -170,19 +168,32 @@ async def _(event):
             await event.client.send_read_acknowledge(conv.chat_id)
             catfile = await event.client.download_media(catresponse, "./temp")
             catgif = await unzip(catfile)
-            await event.client.send_file(
+            sandy = await event.client.send_file(
                 event.chat_id,
                 catgif,
                 support_streaming=True,
                 force_document=False,
                 reply_to=reply_to_id,
             )
+            await borg(
+                functions.messages.SaveGifRequest(
+                    id=types.InputDocument(
+                        id=sandy.media.document.id,
+                        access_hash=sandy.media.document.access_hash,
+                        file_reference=sandy.media.document.file_reference,
+                    ),
+                    unsave=True,
+                )
+            )
             await catevent.delete()
+            for files in (catgif, catfile):
+                if files and os.path.exists(files):
+                    os.remove(files)
         except YouBlockedUserError:
             await catevent.edit("Unblock @tgstogifbot")
             return
 
-
+        
 @borg.on(admin_cmd(pattern="nfc ?(.*)"))
 @borg.on(sudo_cmd(pattern="nfc ?(.*)", allow_sudo=True))
 async def _(event):
