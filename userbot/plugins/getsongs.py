@@ -59,6 +59,7 @@ async def _(event):
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     song_file = Path(f"{catname[:-3]}mp3")
+    print(song_file)
     if not os.path.exists(song_file):
         return await catevent.edit("Sorry!. I can't find any related video/audio")
     catthumb = Path(f"{catname[:-3]}jpg")
