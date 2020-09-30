@@ -153,10 +153,10 @@ async def extract_time(cat, time_val):
     return ""
 
 
-song_dl = f"youtube-dl -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
-thumb_dl = f"youtube-dl -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
-video_dl = f"youtube-dl -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
-name_dl = f"youtube-dl --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
+song_dl = "youtube-dl -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
+thumb_dl = "youtube-dl -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
+video_dl = "youtube-dl -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
+name_dl = "youtube-dl --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
 
 EMOJI_PATTERN = re.compile(
     "["
