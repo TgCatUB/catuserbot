@@ -3,14 +3,14 @@ import os
 import time
 from datetime import datetime
 from io import BytesIO
-
 from telethon import functions, types
 from telethon.errors import PhotoInvalidDimensionsError
-from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import SendMediaRequest
-
-from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
+from pathlib import Path
 from . import CMD_HELP, unzip
+from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+
 
 if not os.path.isdir("./temp"):
     os.makedirs("./temp")
@@ -92,7 +92,6 @@ async def silently_send_message(conv, text):
     await conv.mark_read(message=response)
     return response
 
-
 @borg.on(admin_cmd(pattern="ttf ?(.*)"))
 @borg.on(sudo_cmd(pattern="ttf ?(.*)", allow_sudo=True))
 async def get(event):
@@ -144,7 +143,6 @@ async def on_file_to_photo(event):
         return
     await catt.delete()
 
-
 @borg.on(admin_cmd(pattern="gif$"))
 @borg.on(sudo_cmd(pattern="gif$", allow_sudo=True))
 async def _(event):
@@ -169,7 +167,7 @@ async def _(event):
             catresponse = response if response.media else await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
             catfile = await event.client.download_media(catresponse, "./temp")
-            catgif = await unzip(catfile)
+            catgif = Path(await unzip(catfile))
             sandy = await event.client.send_file(
                 event.chat_id,
                 catgif,
@@ -195,7 +193,7 @@ async def _(event):
             await catevent.edit("Unblock @tgstogifbot")
             return
 
-
+        
 @borg.on(admin_cmd(pattern="nfc ?(.*)"))
 @borg.on(sudo_cmd(pattern="nfc ?(.*)", allow_sudo=True))
 async def _(event):
@@ -296,7 +294,6 @@ async def _(event):
         stdout.decode().strip()
         os.remove(downloaded_file_name)
         if os.path.exists(new_required_file_name):
-            end_two = datetime.now()
             await borg.send_file(
                 entity=event.chat_id,
                 file=new_required_file_name,
@@ -309,7 +306,6 @@ async def _(event):
                     progress(d, t, event, c_time, "trying to upload")
                 ),
             )
-            (end_two - end).seconds
             os.remove(new_required_file_name)
             await event.delete()
 
