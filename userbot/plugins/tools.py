@@ -72,7 +72,9 @@ async def parseqr(qr_e):
         await qr_e.get_reply_message()
     )
     # parse the Official ZXing webpage to decode the QRCode
-    command_to_exec = f"curl -X POST -F f=@{downloaded_file_name} https://zxing.org/w/decode"
+    command_to_exec = (
+        f"curl -X POST -F f=@{downloaded_file_name} https://zxing.org/w/decode"
+    )
     t_response, e_response = (await runcmd(command_to_exec))[:-2]
     if not t_response:
         return await edit_or_reply(qr_e, f"Failed to decode.\n`{e_response}`")
