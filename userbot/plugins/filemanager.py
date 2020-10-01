@@ -31,7 +31,7 @@ async def lst(event):
         files = ""
         folders = ""
         for contents in sorted(lists):
-            catpath = os.path.join(path , contents)
+            catpath = os.path.join(path, contents)
             if not os.path.isdir(catpath):
                 size = os.stat(catpath).st_size
                 if contents.endswith((".mp3", ".flac", ".wav", ".m4a")):
