@@ -14,8 +14,8 @@ from PIL import Image, ImageColor
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from . import CMD_HELP, runcmd   
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, runcmd
 
 logging.basicConfig(
     format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
