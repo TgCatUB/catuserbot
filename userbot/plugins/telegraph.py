@@ -86,11 +86,10 @@ async def _(event):
             print(response)
             end = datetime.now()
             ms = (end - start).seconds
+            cat = f"https://telegra.ph{response['path']}"
             await catevent.edit(
-                "**link : ** [telegraph](https://telegra.ph{})\
-                \n**Time Taken : **`{} seconds.`".format(
-                    response["path"], ms
-                ),
+                f"**link : ** [telegraph]({cat})\
+                 \n**Time Taken : **`{ms} seconds.`",
                 link_preview=True,
             )
     else:
