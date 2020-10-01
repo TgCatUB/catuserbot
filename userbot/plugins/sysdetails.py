@@ -1,8 +1,6 @@
 """Get the info your system. Using .neofetch then .sysd"""
-import asyncio
-import time
-from . import ALIVE_NAME, CMD_HELP, StartTime, catdef, runcmd
-from ..utils import admin_cmd , sudo_cmd , edit_or_reply
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import ALIVE_NAME, CMD_HELP, runcmd
 
 # ================= CONSTANT =================
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
@@ -14,7 +12,10 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 async def _(event):
     cmd = "cat /proc/cpuinfo | grep 'model name'"
     o = (await runcmd(cmd))[0]
-    await edit_or_reply(event , f"**[Cat's](tg://need_update_for_some_feature/) CPU Model:**\n{o}")
+    await edit_or_reply(
+        event, f"**[Cat's](tg://need_update_for_some_feature/) CPU Model:**\n{o}"
+    )
+
 
 @borg.on(admin_cmd(pattern=f"sysd$", outgoing=True))
 @borg.on(sudo_cmd(pattern=f"sysd$", allow_sudo=True))
@@ -23,7 +24,7 @@ async def sysdetails(sysd):
     await runcmd(cmd)
     neo = "neofetch/neofetch --off --color_blocks off --bold off --cpu_temp C \
                     --cpu_speed on --cpu_cores physical --kernel_shorthand off --stdout"
-    a,b,c,d = await runcmd(neo)
+    a, b, c, d = await runcmd(neo)
     result = str(a) + str(b)
     await sysd.edit("Neofetch Result: `" + result + "`")
 
