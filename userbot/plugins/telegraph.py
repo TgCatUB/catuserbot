@@ -19,6 +19,7 @@ auth_url = r["auth_url"]
 async def _(event):
     if event.fwd_from:
         return
+    catevent = await edit_or_reply(event, "`processing........`")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if BOTLOG:
@@ -39,8 +40,7 @@ async def _(event):
             )
             end = datetime.now()
             ms = (end - start).seconds
-            catevent = await edit_or_reply(
-                event,
+            await catevent.edit(
                 "Downloaded to {} in {} seconds.".format(downloaded_file_name, ms),
             )
             if downloaded_file_name.endswith((".webp")):
@@ -84,8 +84,7 @@ async def _(event):
             response = telegraph.create_page(title_of_page, html_content=page_content)
             end = datetime.now()
             ms = (end - start).seconds
-            await edit_or_reply(
-                event,
+            await catevent.edit(
                 "**link : **[telegraph](https://telegra.ph{})\
                 \n**Time Taken : **`{} seconds.`".format(
                     response["path"], ms
@@ -93,8 +92,7 @@ async def _(event):
                 link_preview=True,
             )
     else:
-        await edit_or_reply(
-            event,
+        await catevent.edit(
             "`Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)`",
         )
 
