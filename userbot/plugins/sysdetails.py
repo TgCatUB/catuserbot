@@ -30,7 +30,7 @@ async def sysdetails(sysd):
 
 CMD_HELP.update(
     {
-        "sysdetails": "**Plugin : **`sysdetails"`\
+        "sysdetails": "**Plugin : **`sysdetails`\
         \n\n**Syntax : **`.sysd`\
         \n**Usage : **Shows system information using neofetch.\
         \n\n**Syntax : **`.cpu`\
