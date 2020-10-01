@@ -14,8 +14,8 @@ from PIL import Image, ImageColor
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, runcmd   
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 logging.basicConfig(
     format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
@@ -97,6 +97,7 @@ async def _(event):
     start = datetime.now()
     input_str = event.pattern_match.group(1)
     message = "SYNTAX: `.barcode <long text to include>`"
+    reply_msg_id = event.message.id
     if input_str:
         message = input_str
     elif event.reply_to_msg_id:
