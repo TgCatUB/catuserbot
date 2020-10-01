@@ -83,10 +83,11 @@ async def _(event):
                 os.remove(downloaded_file_name)
             page_content = page_content.replace("\n", "<br>")
             response = telegraph.create_page(title_of_page, html_content=page_content)
+            print(response)
             end = datetime.now()
             ms = (end - start).seconds
             await catevent.edit(
-                "**link : **[telegraph](https://telegra.ph{})\
+                "**link : ** [telegraph](https://telegra.ph{})\
                 \n**Time Taken : **`{} seconds.`".format(
                     response["path"], ms
                 ),
