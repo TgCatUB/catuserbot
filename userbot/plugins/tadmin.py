@@ -60,7 +60,7 @@ async def tmuter(catty):
         if reason:
             await catevent.edit(
                 f"{user.first_name} was muted in {catty.chat.title}\n"
-                f"**Mutted until : **{cattime}\n"
+                f"**Mutted for : **{cattime}\n"
                 f"**Reason : **__{reason}__"
             )
             if BOTLOG:
@@ -69,13 +69,13 @@ async def tmuter(catty):
                     "#TMUTE\n"
                     f"**User : **[{user.first_name}](tg://user?id={user.id})\n"
                     f"**Chat : **{catty.chat.title}(`{catty.chat_id}`)\n"
-                    f"**Mutted until : **`{cattime}`\n"
+                    f"**Mutted for : **`{cattime}`\n"
                     f"**Reason : **`{reason}``",
                 )
         else:
             await catevent.edit(
                 f"{user.first_name} was muted in {catty.chat.title}\n"
-                f"Mutted until {cattime}\n"
+                f"Mutted for {cattime}\n"
             )
             if BOTLOG:
                 await catty.client.send_message(
@@ -83,7 +83,7 @@ async def tmuter(catty):
                     "#TMUTE\n"
                     f"**User : **[{user.first_name}](tg://user?id={user.id})\n"
                     f"**Chat : **{catty.chat.title}(`{catty.chat_id}`)\n"
-                    f"**Mutted until : **`{cattime}`",
+                    f"**Mutted for : **`{cattime}`",
                 )
         # Announce to logging group
     except UserIdInvalidError:
@@ -151,7 +151,7 @@ async def ban(catty):
     if reason:
         await catevent.edit(
             f"{user.first_name} was banned in {catty.chat.title}\n"
-            f"banned until {cattime}\n"
+            f"banned for {cattime}\n"
             f"Reason:`{reason}`"
         )
         if BOTLOG:
@@ -166,7 +166,7 @@ async def ban(catty):
     else:
         await catevent.edit(
             f"{user.first_name} was banned in {catty.chat.title}\n"
-            f"banned until {cattime}\n"
+            f"banned for {cattime}\n"
         )
         if BOTLOG:
             await catty.client.send_message(
