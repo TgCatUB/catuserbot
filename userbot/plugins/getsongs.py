@@ -146,7 +146,7 @@ async def _(event):
         catthumb = None
     await borg.send_file(
         event.chat_id,
-        song_file,
+        vsong_file,
         force_document=False,
         caption=query,
         thumb=catthumb,
@@ -154,7 +154,7 @@ async def _(event):
         reply_to=reply_to_id,
     )
     await catevent.delete()
-    for files in (catthumb, song_file):
+    for files in (catthumb, vsong_file):
         if files and os.path.exists(files):
             os.remove(files)
 
