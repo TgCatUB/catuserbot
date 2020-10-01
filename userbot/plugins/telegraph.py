@@ -1,4 +1,4 @@
-# telegraph utils for catuserbot 
+# telegraph utils for catuserbot
 
 import os
 from datetime import datetime
@@ -6,15 +6,16 @@ from datetime import datetime
 from PIL import Image
 from telegraph import Telegraph, exceptions, upload_file
 
-from ..utils import admin_cmd, sudo_cmd , edit_or_reply
-from . import CMD_HELP, BOTLOG, BOTLOG_CHATID
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 
 telegraph = Telegraph()
 r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
 auth_url = r["auth_url"]
 
+
 @borg.on(admin_cmd(pattern="telegraph (media|text) ?(.*)"))
-@borg.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -38,8 +39,9 @@ async def _(event):
             )
             end = datetime.now()
             ms = (end - start).seconds
-            catevent = await edit_or_reply(event , 
-                "Downloaded to {} in {} seconds.".format(downloaded_file_name, ms)
+            catevent = await edit_or_reply(
+                event,
+                "Downloaded to {} in {} seconds.".format(downloaded_file_name, ms),
             )
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
@@ -82,7 +84,8 @@ async def _(event):
             response = telegraph.create_page(title_of_page, html_content=page_content)
             end = datetime.now()
             ms = (end - start).seconds
-            await edit_or_reply(event ,
+            await edit_or_reply(
+                event,
                 "**link : **[telegraph](https://telegra.ph{})\
                 \n**Time Taken : **`{} seconds.`".format(
                     response["path"], ms
@@ -90,8 +93,9 @@ async def _(event):
                 link_preview=True,
             )
     else:
-        await edit_or_reply(event ,
-            "`Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)`"
+        await edit_or_reply(
+            event,
+            "`Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)`",
         )
 
 
