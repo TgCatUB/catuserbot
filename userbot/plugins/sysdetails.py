@@ -26,7 +26,7 @@ async def sysdetails(sysd):
                     --cpu_speed on --cpu_cores physical --kernel_shorthand off --stdout"
     a, b, c, d = await runcmd(neo)
     result = str(a) + str(b)
-    await edit_or_reply(sysd , "Neofetch Result: `" + result + "`")
+    await edit_or_reply(sysd, "Neofetch Result: `" + result + "`")
 
 
 CMD_HELP.update(
