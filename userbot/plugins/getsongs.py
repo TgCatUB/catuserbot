@@ -106,13 +106,6 @@ async def _(event):
         event = await edit_or_reply(event, "What I am Supposed to find")
         return
     event = await edit_or_reply(event, "wi8..! I am finding your videosong....")
-    await catmusicvideo(query, event)
-    try:
-        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-        cat = Get(cat)
-        await event.client(cat)
-    except BaseException:
-        pass
     cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     catevent = await edit_or_reply(event, "`wi8..! I am finding your song....`")
     video_link = await yt_search(str(query))
@@ -130,6 +123,11 @@ async def _(event):
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     stderr = (await runcmd(thumb_cmd))[1]
+    try:
+        cat = Get(cat)
+        await event.client(cat)
+    except BaseException:
+        pass
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     catname = os.path.splitext(catname)[0]
