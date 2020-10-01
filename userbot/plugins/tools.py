@@ -1,4 +1,4 @@
-import asyncio
+ import asyncio
 import json
 import logging
 import os
@@ -67,15 +67,30 @@ async def _(event):
 @borg.on(admin_cmd(pattern=r"decode$", outgoing=True))
 @borg.on(sudo_cmd(pattern=r"decode$", allow_sudo=True))
 async def parseqr(qr_e):
+    if not os.path.isdir(Config.TMP_DIR):
+        os.makedirs(Config.TMP_DIR)
     # For .decode command, get QR Code/BarCode content from the replied photo.
     downloaded_file_name = await qr_e.client.download_media(
-        await qr_e.get_reply_message()
+        await qr_e.get_reply_message(),
+        Config.TMP_DIR
     )
     # parse the Official ZXing webpage to decode the QRCode
-    command_to_exec = (
-        f"curl -X POST -F f=@{downloaded_file_name} https://zxing.org/w/decode"
+    command_to_exec = [
+        "curl",
+        "-X", "POST",
+        "-F", "f=@" + downloaded_file_name + "",
+        "https://zxing.org/w/decode"
+    ]
+    process = await asyncio.create_subprocess_exec(
+        *command_to_exec,
+        # stdout must a pipe to be accessible as process.stdout
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
     )
-    t_response, e_response = (await runcmd(command_to_exec))[:-2]
+    # Wait for the subprocess to finish
+    stdout, stderr = await process.communicate()
+    e_response = stderr.decode().strip()
+    t_response = stdout.decode().strip()
     if not t_response:
         return await edit_or_reply(qr_e, f"Failed to decode.\n`{e_response}`")
     soup = BeautifulSoup(t_response, "html.parser")
