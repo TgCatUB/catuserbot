@@ -7,7 +7,7 @@ import os
 import os.path
 import time
 from os.path import exists, isdir
-
+from pathlib import path
 from userbot import CMD_HELP
 
 from ..utils import admin_cmd, edit_or_reply, humanbytes, sudo_cmd
@@ -18,10 +18,7 @@ from . import runcmd
 @borg.on(sudo_cmd(pattern="ls ?(.*)", allow_sudo=True))
 async def lst(event):
     cat = event.pattern_match.group(1)
-    if cat:
-        path = cat
-    else:
-        path = os.getcwd()
+    path = Path(cat) if cat else os.getcwd()
     if not exists(path):
         await edit_or_reply(
             event,
@@ -31,10 +28,9 @@ async def lst(event):
     if isdir(path):
         if cat:
             msg = "Folders and Files in `{}` :\n".format(path)
-            lists = os.listdir(path)
         else:
             msg = "Folders and Files in Current Directory :\n"
-            lists = os.listdir(path)
+        lists = os.listdir(path)
         files = ""
         folders = ""
         for contents in sorted(lists):
@@ -59,10 +55,7 @@ async def lst(event):
                     files += "📄" + f"`{contents}`\n"
             else:
                 folders += f"📁`{contents}`\n"
-        if files or folders:
-            msg = msg + folders + files
-        else:
-            msg = msg + "__empty path__"
+        msg = msg + folders + files if files or folders else msg + "__empty path__"
     else:
         size = os.stat(path).st_size
         msg = f"The details of given file :\n"
