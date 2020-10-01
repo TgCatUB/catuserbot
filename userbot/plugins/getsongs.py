@@ -115,7 +115,7 @@ async def _(event):
         )
     thumb_cmd = thumb_dl.format(video_link=video_link)
     name_cmd = name_dl.format(video_link=video_link)
-    video_cmd = video_dl.formart(video_link=video_link)
+    video_cmd = video_dl.format(video_link=video_link)
     stderr = (await runcmd(video_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
