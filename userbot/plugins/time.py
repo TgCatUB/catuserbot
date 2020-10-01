@@ -1,4 +1,4 @@
-# Userbot timezne
+# Userbot timezone
 
 import os
 from datetime import datetime as dt
@@ -158,7 +158,7 @@ async def date_func(dat):
 
 
 @borg.on(admin_cmd(pattern="time ?(.*)"))
-@borg.on(sudo_cmd(pattern="time ?(.*)",allow_sudo))
+@borg.on(sudo_cmd(pattern="time ?(.*)",allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
