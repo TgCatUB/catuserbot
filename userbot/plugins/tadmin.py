@@ -7,9 +7,8 @@ from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChatBannedRights, MessageEntityMentionName
 
-from . import extract_time, BOTLOG_CHATID,  BOTLOG , CMD_HELP
 from ..utils import admin_cmd, errors_handler
-
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, extract_time
 
 # =================== CONSTANT ===================
 NO_ADMIN = "`I am not an admin nub nibba!`"
@@ -17,7 +16,7 @@ NO_PERM = "`I don't have sufficient permissions! This is so sed. Alexa play desp
 
 
 @borg.on(admin_cmd(pattern=r"tmute(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern=r"tmute(?: |$)(.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern=r"tmute(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def tmuter(catty):
     chat = await catty.get_chat()
@@ -25,9 +24,9 @@ async def tmuter(catty):
     creator = chat.creator
     # If not admin and not creator, return
     if not admin and not creator:
-        await edit_or_reply(catty , NO_ADMIN)
+        await edit_or_reply(catty, NO_ADMIN)
         return
-    catevent = await edit_or_reply(catty , "`muteing....`")
+    catevent = await edit_or_reply(catty, "`muteing....`")
     user, reason = await get_user_from_event(catty)
     if not user:
         return
@@ -92,7 +91,7 @@ async def tmuter(catty):
 
 
 @borg.on(admin_cmd(pattern="tban(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="tban(?: |$)(.*)",allow_sudo=True))
+@borg.on(sudo_cmd(pattern="tban(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def ban(catty):
     chat = await catty.get_chat()
@@ -100,9 +99,9 @@ async def ban(catty):
     creator = chat.creator
     # If not admin and not creator, return
     if not admin and not creator:
-        await edit_or_reply(catty , NO_ADMIN)
+        await edit_or_reply(catty, NO_ADMIN)
         return
-    catevent = await edit_or_reply(catty , "`baning....`")
+    catevent = await edit_or_reply(catty, "`baning....`")
     user, reason = await get_user_from_event(catty)
     if not user:
         return
@@ -231,4 +230,4 @@ CMD_HELP.update(
       \n\n**Time units : ** (2m = 2 minutes) ,(3h = 3hours)  ,(4d = 4 days) ,(5w = 5 weeks)\
       This times are example u can use anything with thoose untis "
     }
-)    
+)
