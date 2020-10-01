@@ -15,7 +15,7 @@ from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, runcmd
+from . import CMD_HELP
 
 logging.basicConfig(
     format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
@@ -71,15 +71,16 @@ async def parseqr(qr_e):
         os.makedirs(Config.TMP_DIR)
     # For .decode command, get QR Code/BarCode content from the replied photo.
     downloaded_file_name = await qr_e.client.download_media(
-        await qr_e.get_reply_message(),
-        Config.TMP_DIR
+        await qr_e.get_reply_message(), Config.TMP_DIR
     )
     # parse the Official ZXing webpage to decode the QRCode
     command_to_exec = [
         "curl",
-        "-X", "POST",
-        "-F", "f=@" + downloaded_file_name + "",
-        "https://zxing.org/w/decode"
+        "-X",
+        "POST",
+        "-F",
+        "f=@" + downloaded_file_name + "",
+        "https://zxing.org/w/decode",
     ]
     process = await asyncio.create_subprocess_exec(
         *command_to_exec,
