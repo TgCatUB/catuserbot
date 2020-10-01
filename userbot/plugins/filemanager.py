@@ -6,10 +6,9 @@ import io
 import os
 import time
 from pathlib import Path
-from . import CMD_HELP
 
 from ..utils import admin_cmd, edit_or_reply, humanbytes, sudo_cmd
-from . import runcmd
+from . import CMD_HELP, runcmd
 
 
 @borg.on(admin_cmd(pattern="ls ?(.*)"))
