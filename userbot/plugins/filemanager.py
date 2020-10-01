@@ -7,7 +7,7 @@ import os
 import os.path
 import time
 from os.path import exists, isdir
-from pathlib import path
+
 from userbot import CMD_HELP
 
 from ..utils import admin_cmd, edit_or_reply, humanbytes, sudo_cmd
