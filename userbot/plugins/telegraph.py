@@ -64,7 +64,8 @@ async def _(event):
                 )
         elif input_str == "text":
             user_object = await borg.get_entity(r_message.from_id)
-            title_of_page = user_object.first_name
+            title_of_page = user_object.first_name # + " " + user_object.last_name
+            # apparently, all Users do not have last_name field
             if optional_title:
                 title_of_page = optional_title
             page_content = r_message.message
