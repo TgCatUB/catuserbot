@@ -6,8 +6,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="cor(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="cor(?: |$)(.*)", allow_sudo=True))
+@borg.on(admin_cmd(pattern="covid(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern="covid(?: |$)(.*)", allow_sudo=True))
 async def corona(event):
     if event.pattern_match.group(1):
         country = event.pattern_match.group(1)
@@ -40,7 +40,7 @@ async def corona(event):
 CMD_HELP.update(
     {
         "covid": "__**PLUGIN NAME :** Covid__\
-   \n\n📌** CMD ➥** `.cor ` <country name>\
+   \n\n📌** CMD ➥** `.covid ` <country name>\
    \n**USAGE   ➥  **Get an information about covid-19 data in the given country."
     }
 )
