@@ -167,7 +167,6 @@ class Config((object)):
     ANTISPAMBOT_BAN = os.environ.get("ANTISPAMBOT_BAN", False)
 
 
-
 class Production(Config):
     LOGGER = False
 

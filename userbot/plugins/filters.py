@@ -3,7 +3,7 @@ from re import IGNORECASE, fullmatch
 
 from telethon import events
 
-from .. import CMD_HELP, bot, BOTLOG, BOTLOG_CHATID
+from .. import BOTLOG_CHATID, CMD_HELP, bot
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from .sql_helper.filter_sql import (
     add_filter,

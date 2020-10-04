@@ -8,8 +8,7 @@ from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 
 from ..utils import is_admin
-from . import spamwatch, BOTLOG_CHATID ,BOTLOG , LOGS
-
+from . import BOTLOG, BOTLOG_CHATID, LOGS, spamwatch
 
 if Config.ANTISPAMBOT_BAN:
 
@@ -62,9 +61,7 @@ if Config.ANTISPAMBOT_BAN:
                         f"[{user.first_name}](tg://user?id={user.id}) was banned by Combat anti-spam service(CAS) For the reason check {reason}"
                     )
                     try:
-                        await bot.edit_permissions(
-                            chat, user.id, view_messages=False
-                        )
+                        await bot.edit_permissions(chat, user.id, view_messages=False)
                         catbanned = True
                     except Exception as e:
                         LOGS.info(e)

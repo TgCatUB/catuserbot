@@ -1,5 +1,6 @@
 import os
 
+
 class Var((object)):
     APP_ID = int(os.environ.get("APP_ID", 6))
     # 6 is a placeholder
@@ -11,9 +12,7 @@ class Var((object)):
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
     # Here for later purposes
-    SUDO_USERS = {
-        int(x) for x in os.environ.get("SUDO_USERS", "1005520858").split()
-    }
+    SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "1005520858").split()}
 
     LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
     LESS_SPAMMY = os.environ.get("LESS_SPAMMY", None)
@@ -44,7 +43,6 @@ class Var((object)):
             raise ValueError(
                 "Invalid Private Group ID. Make sure your ID is starts with -100 and make sure that it is only numbers."
             )
-
 
 
 class Development(Var):

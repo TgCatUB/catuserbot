@@ -9,9 +9,8 @@ from userbot.plugins.sql_helper.welcome_sql import (
     update_previous_welcome,
 )
 
-from .. import CMD_HELP, LOGS, bot,  BOTLOG, BOTLOG_CHATID
+from .. import BOTLOG_CHATID, CMD_HELP, LOGS, bot
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
 
 
 @bot.on(events.ChatAction)
