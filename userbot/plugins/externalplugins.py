@@ -18,7 +18,7 @@ async def install(event):
     chat = Var.PLUGIN_CHANNEL
     documentss = await borg.get_messages(chat, None, filter=InputMessagesFilterDocument)
     total = int(documentss.total)
-    total_doxx = range(0, total)
+    total_doxx = range(total)
     await event.delete()
     for ixo in total_doxx:
         mxo = documentss[ixo].id

@@ -61,7 +61,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0, 20)
+    animation_ttl = range(20)
     event = await edit_or_reply(event, "promoting.......")
     animation_chars = [
         "**Promoting User As Admin...**",

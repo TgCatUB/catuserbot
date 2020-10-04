@@ -1,27 +1,22 @@
+# catUserbot module for having some fun with people.
+
 # Copyright (C) 2019 The Raphielscape Company LLC.
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 
-""" Userbot module for having some fun with people. """
 import asyncio
 import random
 import re
-import time
 
 import requests
 from cowpy import cow
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
-from userbot import ALIVE_NAME, CMD_HELP, memes
-from userbot.utils import admin_cmd, register
+from ..utils import admin_cmd, register
+from . import ALIVE_NAME, BOTLOG, BOTLOG_CHATID, CMD_HELP, memes
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"(\w+)say (.*)"))
@@ -43,7 +38,7 @@ async def kek(keks):
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
         uio = ["/", "\\"]
         for i in range(1, 15):
-            time.sleep(0.3)
+            await asyncio.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
 
@@ -140,7 +135,7 @@ async def slap(replied_user, event):
     hit = random.choice(memes.HIT)
     throw = random.choice(memes.THROW)
     where = random.choice(memes.WHERE)
-    caption = "..." + temp.format(
+    return "..." + temp.format(
         user1=DEFAULTUSER,
         victim=slapped,
         item=item,
@@ -148,7 +143,6 @@ async def slap(replied_user, event):
         throws=throw,
         where=where,
     )
-    return caption
 
 
 @register(outgoing=True, pattern="^-_-$")
@@ -179,7 +173,7 @@ async def decide(event):
 async def fun(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         t = ";__;"
-        for j in range(10):
+        for _ in range(10):
             t = t[:-1] + "_;"
             await e.edit(t)
 
@@ -311,7 +305,7 @@ async def metoo(hahayes):
 @borg.on(admin_cmd(outgoing=True, pattern="oof$"))
 async def Oof(e):
     t = "Oof"
-    for j in range(15):
+    for _ in range(15):
         t = t[:-1] + "of"
         await e.edit(t)
 
@@ -522,7 +516,7 @@ async def typewriter(typew):
     else:
         await typew.edit("`Give a text to type!`")
         return
-    sleep_time = 0.03
+    sleep_time = 0.1
     typing_symbol = "|"
     old_text = ""
     await typew.edit(typing_symbol)
@@ -540,69 +534,69 @@ CMD_HELP.update(
     {
         "memes": "**Plugin : **`memes`\
         \n\n**Syntax :** `.cowsay`\
-\nUsage: cow which says things.\
+\n**Usage : **cow which says things.\
 \n\n**Syntax :** `.milksay`\
-\nUsage: Weird Milk that can speak\
+\n**Usage : **Weird Milk that can speak\
 \n\n**Syntax :** `:/`\
-\nUsage: Check yourself ;)\
+\n**Usage : **Check yourself ;)\
 \n\n**Syntax :** `-_-`\
-\nUsage: Ok...\
+\n**Usage : **Ok...\
 \n\n**Syntax :** `;_;`\
-\nUsage: Like `-_-` but crying.\
+\n**Usage : **Like `-_-` but crying.\
 \n\n**Syntax :** `.10iq`\
-\nUsage: You retard !!\
+\n**Usage : **You retard !!\
 \n\n**Syntax :** `.oof`\
-\nUsage: Ooooof\
+\n**Usage : **Ooooof\
 \n\n**Syntax :** `.moon`\
-\nUsage: kensar moon animation.\
+\n**Usage : **kensar moon animation.\
 \n\n**Syntax :** `.clock`\
-\nUsage: kensar clock animation.\
+\n**Usage : **kensar clock animation.\
 \n\n**Syntax :** `.earth`\
-\nUsage: kensar earth animation.\
+\n**Usage : **kensar earth animation.\
 \n\n**Syntax :** `.coinflip <heads/tails>`\
-\nUsage: Flip a coin !!\
+\n**Usage : **Flip a coin !!\
 \n\n**Syntax :** `.owo`\
-\nUsage: UwU\
+\n**Usage : **UwU\
 \n\n**Syntax :** `.react` <type>\
-\nUsage: Make your userbot react. types are <happy ,think ,wave ,wtf ,love ,confused,dead, sad,dog>\
+\n**Usage : **Make your userbot react. types are <happy ,think ,wave ,wtf ,love ,confused,dead, sad,dog>\
 \n\n**Syntax :** `.slap`\
-\nUsage: reply to slap them with random objects !!\
+\n**Usage : **reply to slap them with random objects !!\
 \n\n**Syntax :** `.cry`\
-\nUsage: y u du dis, i cri.\
+\n**Usage : **y u du dis, i cri.\
 \n\n**Syntax :** `.shg`\
-\nUsage: Shrug at it !!\
+\n**Usage : **Shrug at it !!\
 \n\n**Syntax :** `.runs`\
-\nUsage: Run, run, RUNNN! [`.disable runs`: disable | `.enable runs`: enable]\
+\n**Usage : **Run, run, RUNNN! [`.disable runs`: disable | `.enable runs`: enable]\
 \n\n**Syntax :** `.metoo`\
-\nUsage: Haha yes\
+\n**Usage : **Haha yes\
 \n\n**Syntax :** `.clap`\
-\nUsage: Praise people!\
+\n**Usage : **Praise people!\
 \n\n**Syntax :** `.ftext <emoji/character>`\
-\nUsage: Pay Respects.\
+\n**Usage : **Pay Respects.\
 \n\n**Syntax :** `.bt`\
-\nUsage: Believe me, you will find this useful.\
+\n**Usage : **Believe me, you will find this useful.\
 \n\n**Syntax :** `.smk <text/reply>`\
-\nUsage: A shit module for ツ , who cares.\
+\n**Usage : **A shit module for ツ , who cares.\
 \n\n**Syntax :** `.type`\
-\nUsage: Just a small command to make your keyboard become a typewriter!\
+\n**Usage : **Just a small command to make your keyboard become a typewriter!\
 \n\n**Syntax :** `.lfy <query>`\
-\nUsage: Let me Google that for you real quick !!\
+\n**Usage : **Let me Google that for you real quick !!\
 \n\n**Syntax :** `.decide`\
-\nUsage: Make a quick decision.\
+\n**Usage : **Make a quick decision.\
 \n\n**Syntax :** `.abusehard`\
-\nUsage: You already got that! Ain't?.\
+\n**Usage : **You already got that! Ain't?.\
 \n\n**Syntax :** `.chu`\
-\nUsage: Incase, the person infront of you is....\
+\n**Usage : **Incase, the person infront of you is....\
 \n\n**Syntax :** `.fuk`\
-\nUsage: The onlu word that can be used fucking everywhere.\
+\n**Usage : **The onlu word that can be used fucking everywhere.\
 \n\n**Syntax :** `.thanos`\
-\nUsage: Try and then Snap.\
+\n**Usage : **Try and then Snap.\
 \n\n**Syntax :** `.noob`\
-\nUsage: Whadya want to know? Are you a NOOB?\
+\n**Usage : **Whadya want to know? Are you a NOOB?\
 \n\n**Syntax :** `.pro`\
-\nUsage: If you think you're pro, try this.\
+\n**Usage : **If you think you're pro, try this.\
 \n\n**Syntax :** `.abuse`\
-\nUsage: Protects you from unwanted peeps.\
+\n**Usage : **Protects you from unwanted peeps.\
 "
     }
 )

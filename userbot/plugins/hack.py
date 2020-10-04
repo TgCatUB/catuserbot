@@ -14,8 +14,6 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 async def _(event):
     if event.fwd_from:
         return
-    animation_interval = 3
-    animation_ttl = range(0, 11)
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
         replied_user = await event.client(GetFullUserRequest(reply_message.from_id))
@@ -39,6 +37,8 @@ async def _(event):
                 "`Hacking... 100%\n█████████HACKED███████████ `",
                 f"`Targeted Account Hacked...\n\nPay 69$ To` {DEFAULTUSER} . `To Remove this hack..`",
             ]
+            animation_interval = 3
+            animation_ttl = range(11)
             for i in animation_ttl:
                 await asyncio.sleep(animation_interval)
                 await event.edit(animation_chars[i % 11])
@@ -51,7 +51,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 2
-    animation_ttl = range(0, 12)
+    animation_ttl = range(12)
     # input_str = event.pattern_match.group(1)
     # if input_str == "thack":
     await event.edit("thack")
@@ -78,7 +78,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 2
-    animation_ttl = range(0, 15)
+    animation_ttl = range(15)
     # input_str = event.pattern_match.group(1)
     # if input_str == "wahack":
     await event.edit("wahack..")

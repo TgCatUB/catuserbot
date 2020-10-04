@@ -1,6 +1,6 @@
 from telethon import events
 
-from .. import CMD_HELP, bot
+from .. import CMD_HELP, bot, BOTLOG, BOTLOG_CHATID
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from .sql_helper import pmpermit_sql as pmpermit_sql
 from .sql_helper.welcomesql import (
@@ -8,12 +8,6 @@ from .sql_helper.welcomesql import (
     getcurrent_welcome_settings,
     rmwelcome_setting,
 )
-
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @bot.on(events.ChatAction)

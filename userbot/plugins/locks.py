@@ -149,15 +149,14 @@ async def check_incoming_messages(event):
                     "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
                 )
                 update_lock(peer_id, "commands", False)
-    if is_locked(peer_id, "forward"):
-        if event.fwd_from:
-            try:
-                await event.delete()
-            except Exception as e:
-                await event.reply(
-                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
-                )
-                update_lock(peer_id, "forward", False)
+    if is_locked(peer_id, "forward") and event.fwd_from:
+        try:
+            await event.delete()
+        except Exception as e:
+            await event.reply(
+                "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+            )
+            update_lock(peer_id, "forward", False)
     if is_locked(peer_id, "email"):
         entities = event.message.entities
         is_email = False
@@ -196,38 +195,39 @@ async def check_incoming_messages(event):
 async def _(event):
     # TODO: exempt admins from locks
     # check for "lock" "bots"
-    if is_locked(event.chat_id, "bots"):
-        # bots are limited Telegram accounts,
-        # and cannot join by themselves
-        if event.user_added:
-            users_added_by = event.action_message.from_id
-            is_ban_able = False
-            rights = types.ChatBannedRights(until_date=None, view_messages=True)
-            added_users = event.action_message.action.users
-            for user_id in added_users:
-                user_obj = await borg.get_entity(user_id)
-                if user_obj.bot:
-                    is_ban_able = True
-                    try:
-                        await borg(
-                            functions.channels.EditBannedRequest(
-                                event.chat_id, user_obj, rights
-                            )
+    if not is_locked(event.chat_id, "bots"):
+        return
+    # bots are limited Telegram accounts,
+    # and cannot join by themselves
+    if event.user_added:
+        users_added_by = event.action_message.from_id
+        is_ban_able = False
+        rights = types.ChatBannedRights(until_date=None, view_messages=True)
+        added_users = event.action_message.action.users
+        for user_id in added_users:
+            user_obj = await borg.get_entity(user_id)
+            if user_obj.bot:
+                is_ban_able = True
+                try:
+                    await borg(
+                        functions.channels.EditBannedRequest(
+                            event.chat_id, user_obj, rights
                         )
-                    except Exception as e:
-                        await event.reply(
-                            "I don't seem to have ADMIN permission here. \n`{}`".format(
-                                str(e)
-                            )
-                        )
-                        update_lock(event.chat_id, "bots", False)
-                        break
-            if Config.G_BAN_LOGGER_GROUP is not None and is_ban_able:
-                ban_reason_msg = await event.reply(
-                    "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(
-                        users_added_by
                     )
+                except Exception as e:
+                    await event.reply(
+                        "I don't seem to have ADMIN permission here. \n`{}`".format(
+                            str(e)
+                        )
+                    )
+                    update_lock(event.chat_id, "bots", False)
+                    break
+        if Config.G_BAN_LOGGER_GROUP is not None and is_ban_able:
+            ban_reason_msg = await event.reply(
+                "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(
+                    users_added_by
                 )
+            )
 
 
 CMD_HELP.update(

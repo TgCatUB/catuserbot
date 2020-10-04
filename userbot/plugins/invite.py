@@ -26,7 +26,6 @@ async def _(event):
                     )
                 except Exception as e:
                     await event.reply(str(e))
-            await event.edit("Invited Successfully")
         else:
             # https://lonamiwebs.github.io/Telethon/methods/channels/invite_to_channel.html
             for user_id in to_add_users.split(" "):
@@ -38,7 +37,8 @@ async def _(event):
                     )
                 except Exception as e:
                     await event.reply(str(e))
-            await event.edit("Invited Successfully")
+
+        await event.edit("Invited Successfully")
 
 
 @borg.on(sudo_cmd(pattern="invite ?(.*)", allow_sudo=True))
@@ -61,7 +61,6 @@ async def _(event):
                     )
                 except Exception as e:
                     await event.reply(str(e))
-            await event.reply("Invited Successfully")
         else:
             # https://lonamiwebs.github.io/Telethon/methods/channels/invite_to_channel.html
             for user_id in to_add_users.split(" "):
@@ -73,4 +72,5 @@ async def _(event):
                     )
                 except Exception as e:
                     await event.reply(str(e))
-            await event.reply("Invited Successfully")
+
+        await event.reply("Invited Successfully")

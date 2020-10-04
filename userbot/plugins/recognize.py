@@ -82,10 +82,9 @@ async def _(event):
             response = await response
             cat = response.message.message
             await event.reply(cat)
-            await cat.delete()
         else:
             await event.reply("sorry, I couldn't find it")
-            await cat.delete()
+        await cat.delete()
 
 
 CMD_HELP.update(

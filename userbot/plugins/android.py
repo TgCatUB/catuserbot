@@ -24,13 +24,19 @@ DEVICES_DATA = (
 @borg.on(sudo_cmd(pattern=r"magisk$", allow_sudo=True))
 async def kakashi(magisk):
     """ magisk latest releases """
-    releases = (
-        "__**Latest Magisk Releases:**__\n\n"
-        f"**Stable : **[ZIP v20.4](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-v20.4.zip) | [ZIP v20.3](https://bit.ly/3hXLF3L) | [Uninstaller](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-uninstaller-20200323.zip)\n"
-        f"**Magisk Manager : **[APK v7.5.0](https://bit.ly/31U1C5F)\n"
-        f"**Canary : **[ZIP vcd6eca1d](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/magisk-release.zip) | [Uninstaller](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/magisk-uninstaller.zip)\n"
-        f"**Canary Build : **[APK v87de0e7a](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/app-release.apk)"
-    )
+    magisk_dict = {
+        "Stable ": "https://raw.githubusercontent.com/topjohnwu/magisk_files/master/stable.json",
+        "Beta ": "https://raw.githubusercontent.com/topjohnwu/magisk_files/master/beta.json",
+        "Canary ": "https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/debug.json",
+    }
+    releases = "__**Latest Magisk Releases :**__\n\n"
+    for name, release_url in magisk_dict.items():
+        data = get(release_url).json()
+        releases += (
+            f'**{name}:** [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | '
+            f'[APK v{data["app"]["version"]}]({data["app"]["link"]}) | '
+            f'[Uninstaller]({data["uninstaller"]["link"]})\n'
+        )
     await edit_or_reply(magisk, releases)
 
 

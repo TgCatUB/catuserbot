@@ -26,7 +26,7 @@ async def stretch(stret):
 
 @borg.on(admin_cmd(pattern="zal(?: |$)(.*)"))
 async def zal(zgfy):
-    reply_text = list()
+    reply_text = []
     textx = await zgfy.get_reply_message()
     message = zgfy.pattern_match.group(1)
     if message:
@@ -44,7 +44,7 @@ async def zal(zgfy):
             reply_text.append(charac)
             continue
 
-        for _ in range(0, 3):
+        for _ in range(3):
             randint = random.randint(0, 2)
 
             if randint == 0:
@@ -84,10 +84,7 @@ async def copypasta(cp_e):
         elif owo.lower() == b_char:
             reply_text += "🅱️"
         else:
-            if bool(random.getrandbits(1)):
-                reply_text += owo.upper()
-            else:
-                reply_text += owo.lower()
+            reply_text += owo.upper() if bool(random.getrandbits(1)) else owo.lower()
     reply_text += random.choice(fonts.EMOJIS)
     await cp_e.edit(reply_text)
 

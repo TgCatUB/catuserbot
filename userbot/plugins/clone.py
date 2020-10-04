@@ -80,6 +80,7 @@ async def _(event):
     if event.fwd_from:
         return
     name = f"{DEFAULTUSER}"
+    blank = ""
     bio = f"{DEFAULTUSERBIO}"
     n = 1
     await borg(
@@ -89,6 +90,7 @@ async def _(event):
     )
     await borg(functions.account.UpdateProfileRequest(about=bio))
     await borg(functions.account.UpdateProfileRequest(first_name=name))
+    await borg(functions.account.UpdateProfileRequest(last_name=blank))
     await event.edit("succesfully reverted to your account back")
     if BOTLOG:
         await event.client.send_message(

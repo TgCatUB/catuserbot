@@ -59,9 +59,7 @@ async def lyrics(lyric):
             "Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`"
         )
         return
-    if r"-" in query:
-        pass
-    else:
+    if r"-" not in query:
         await lyric.edit(
             "Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`"
         )

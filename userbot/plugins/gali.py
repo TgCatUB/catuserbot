@@ -15,7 +15,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.1
-    animation_ttl = range(0, 101)
+    animation_ttl = range(101)
     animation_chars = ["👉       ✊️", "👉     ✊️", "👉  ✊️", "👉✊️💦"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -27,7 +27,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.2
-    animation_ttl = range(0, 101)
+    animation_ttl = range(101)
     animation_chars = ["🤵       👰", "🤵     👰", "🤵  👰", "🤵👼👰"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -39,7 +39,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.2
-    animation_ttl = range(0, 101)
+    animation_ttl = range(101)
     animation_chars = ["🤵       👰", "🤵     👰", "🤵  👰", "🤵💋👰"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)

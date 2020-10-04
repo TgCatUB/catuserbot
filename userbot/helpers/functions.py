@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import zipfile
 from random import choice
 
 import PIL.ImageOps
@@ -20,10 +21,7 @@ async def get_readable_time(seconds: int) -> str:
     time_suffix_list = ["s", "m", "h", "days"]
     while count < 4:
         count += 1
-        if count < 3:
-            remainder, result = divmod(seconds, 60)
-        else:
-            remainder, result = divmod(seconds, 24)
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
         if seconds == 0 and remainder == 0:
             break
         time_list.append(int(result))
@@ -45,17 +43,19 @@ async def admin_groups(cat):
     catgroups = []
     async for dialog in cat.client.iter_dialogs():
         entity = dialog.entity
-        if isinstance(entity, Channel):
-            if entity.megagroup:
-                if entity.creator or entity.admin_rights:
-                    catgroups.append(entity.id)
+        if (
+            isinstance(entity, Channel)
+            and entity.megagroup
+            and (entity.creator or entity.admin_rights)
+        ):
+            catgroups.append(entity.id)
     return catgroups
 
 
 # for getmusic
 
 
-async def catmusic(cat, QUALITY, hello):
+async def yt_search(cat):
     search = cat
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--ignore-certificate-errors")
@@ -70,71 +70,10 @@ async def catmusic(cat, QUALITY, hello):
     for i in user_data:
         video_link = i.get_attribute("href")
         break
-    if not os.path.isdir("./temp/"):
-        os.makedirs("./temp/")
-    if not video_link:
-        await hello.edit(f"Sorry. I can't find that song `{search}`")
-        return
-    try:
-        command = (
-            'youtube-dl -o "./temp/%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality '
-            + QUALITY
-            + " "
-            + video_link
-        )
-        os.system(command)
-    except Exception as e:
-        return await hello.edit(f"`Error:\n {e}`")
-    try:
-        thumb = (
-            'youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download '
-            + video_link
-        )
-        os.system(thumb)
-    except Exception as e:
-        return await hello.edit(f"`Error:\n {e}`")
-
-
-async def catmusicvideo(cat, hello):
-    search = cat
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--ignore-certificate-errors")
-    chrome_options.add_argument("--test-type")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.binary_location = Config.CHROME_BIN
-    driver = webdriver.Chrome(chrome_options=chrome_options)
-    driver.get("https://www.youtube.com/results?search_query=" + search)
-    user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
-    for i in user_data:
-        video_link = i.get_attribute("href")
-        break
-    if not os.path.isdir("./temp/"):
-        os.makedirs("./temp/")
-    if not video_link:
-        await hello.edit(f"Sorry. I can't find that song `{search}`")
-        return
-    try:
-        command = (
-            'youtube-dl -o "./temp/%(title)s.%(ext)s" -f "[filesize<20M]" ' + video_link
-        )
-        os.system(command)
-    except Exception as e:
-        return await hello.edit(f"`Error:\n {e}`")
-    try:
-        thumb = (
-            'youtube-dl -o "./temp/%(title)s.%(ext)s" --write-thumbnail --skip-download '
-            + video_link
-        )
-        os.system(thumb)
-    except Exception as e:
-        return await hello.edit(f"`Error:\n {e}`")
+    return video_link if video_link else "Couldnt fetch results"
 
 
 # for stickertxt
-
-
 async def waifutxt(text, chat_id, reply_to_id, bot, borg):
     animus = [
         0,
@@ -177,6 +116,14 @@ async def waifutxt(text, chat_id, reply_to_id, bot, borg):
         await cat.delete()
 
 
+# unziping file
+async def unzip(downloaded_file_name):
+    with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
+        zip_ref.extractall("./temp")
+    downloaded_file_name = os.path.splitext(downloaded_file_name)[0]
+    return f"{downloaded_file_name}.gif"
+
+
 # https://github.com/pokurt/LyndaRobot/blob/7556ca0efafd357008131fa88401a8bb8057006f/lynda/modules/helper_funcs/string_handling.py#L238
 
 
@@ -207,6 +154,11 @@ async def extract_time(cat, time_val):
     return ""
 
 
+song_dl = "youtube-dl -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
+thumb_dl = "youtube-dl -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
+video_dl = "youtube-dl -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
+name_dl = "youtube-dl --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
+
 EMOJI_PATTERN = re.compile(
     "["
     "\U0001F1E0-\U0001F1FF"  # flags (iOS)
@@ -233,12 +185,7 @@ def deEmojify(inputString: str) -> str:
 
 
 def Build_Poll(options):
-    i = 0
-    poll = []
-    for option in options:
-        i = i + 1
-        poll.append(PollAnswer(option, bytes(i)))
-    return poll
+    return [PollAnswer(option, bytes(i)) for i, option in enumerate(options, start=1)]
 
 
 def convert_toimage(image):

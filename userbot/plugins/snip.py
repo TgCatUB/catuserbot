@@ -3,7 +3,7 @@
 from telethon import events
 from telethon.tl import types
 
-from .. import CMD_HELP
+from .. import CMD_HELP, BOTLOG , BOTLOG_CHATID
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from .sql_helper.snip_sql import add_note, get_note, get_notes, rm_note
 from .sql_helper.snips_sql import get_all_snips, get_snips, remove_snip
@@ -12,11 +12,6 @@ TYPE_TEXT = 0
 TYPE_PHOTO = 1
 TYPE_DOCUMENT = 2
 
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @borg.on(events.NewMessage(pattern=r"\#(\S+)", outgoing=True))
@@ -56,25 +51,26 @@ async def incom_note(getnt):
             message_id_to_reply = getnt.message.reply_to_msg_id
             if not message_id_to_reply:
                 message_id_to_reply = None
-            if note and note.f_mesg_id:
-                msg_o = await bot.get_messages(
-                    entity=BOTLOG_CHATID, ids=int(note.f_mesg_id)
-                )
-                await getnt.delete()
-                await bot.send_message(
-                    getnt.chat_id,
-                    msg_o,
-                    reply_to=message_id_to_reply,
-                    link_preview=False,
-                )
-            elif note and note.reply:
-                await getnt.delete()
-                await bot.send_message(
-                    getnt.chat_id,
-                    note.reply,
-                    reply_to=message_id_to_reply,
-                    link_preview=False,
-                )
+            if note:
+                if note.f_mesg_id:
+                    msg_o = await bot.get_messages(
+                        entity=BOTLOG_CHATID, ids=int(note.f_mesg_id)
+                    )
+                    await getnt.delete()
+                    await bot.send_message(
+                        getnt.chat_id,
+                        msg_o,
+                        reply_to=message_id_to_reply,
+                        link_preview=False,
+                    )
+                elif note.reply:
+                    await getnt.delete()
+                    await bot.send_message(
+                        getnt.chat_id,
+                        note.reply,
+                        reply_to=message_id_to_reply,
+                        link_preview=False,
+                    )
     except AttributeError:
         pass
 
@@ -127,15 +123,11 @@ async def on_snip_list(event):
     for note in notes:
         if message == "There are no saved notes in this chat":
             message = "Notes saved in this chat:\n"
-            message += "👉 `#{}`\n".format(note.keyword)
-        else:
-            message += "👉 `#{}`\n".format(note.keyword)
+        message += "👉 `#{}`\n".format(note.keyword)
     for a_snip in all_snips:
         if message == "There are no saved notes in this chat":
             message = "Notes saved in this chat:\n"
-            message += "👉 `#{}`\n".format(a_snip.snip)
-        else:
-            message += "👉 `#{}`\n".format(a_snip.snip)
+        message += "👉 `#{}`\n".format(a_snip.snip)
     if len(message) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(message)) as out_file:
             out_file.name = "snips.text"

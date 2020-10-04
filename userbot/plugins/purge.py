@@ -9,14 +9,8 @@ from asyncio import sleep
 
 from telethon.errors import rpcbaseerrors
 
-from userbot import CMD_HELP
+from userbot import CMD_HELP, BOTLOG_CHATID, BOTLOG
 from userbot.utils import admin_cmd, errors_handler
-
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="purge$"))
@@ -31,7 +25,7 @@ async def fastpurger(purg):
     if purg.reply_to_msg_id is not None:
         async for msg in itermsg:
             msgs.append(msg)
-            count = count + 1
+            count += 1
             msgs.append(purg.reply_to_msg_id)
             if len(msgs) == 100:
                 await purg.client.delete_messages(chat, msgs)
@@ -69,7 +63,7 @@ async def purgeme(delme):
     async for message in delme.client.iter_messages(delme.chat_id, from_user="me"):
         if i > count + 1:
             break
-        i = i + 1
+        i += 1
         await message.delete()
 
     smsg = await delme.client.send_message(
@@ -120,7 +114,7 @@ async def editer(edit):
             await message.edit(string)
             await edit.delete()
             break
-        i = i + 1
+        i += 1
     if BOTLOG:
         await edit.client.send_message(
             BOTLOG_CHATID, "#EDIT \nEdit query was executed successfully"

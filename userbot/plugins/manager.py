@@ -51,24 +51,22 @@ if Config.DUAL_LOG:
         if Config.PM_LOGGR_BOT_API_ID is not None:
             event.pattern_match.group(1)
             chat = await event.get_chat()
-            if event.is_private:
-                if not no_log_pms_sql.is_approved(chat.id):
-                    no_log_pms_sql.approve(chat.id)
-                    await event.edit("Won't Log Messages from this chat")
-                    await asyncio.sleep(3)
-                    await event.delete()
+            if event.is_private and not no_log_pms_sql.is_approved(chat.id):
+                no_log_pms_sql.approve(chat.id)
+                await event.edit("Won't Log Messages from this chat")
+                await asyncio.sleep(3)
+                await event.delete()
 
     @borg.on(admin_cmd(pattern="log(?: |$)(.*)"))
     async def set_no_log_p_m(event):
         if Config.PM_LOGGR_BOT_API_ID is not None:
             event.pattern_match.group(1)
             chat = await event.get_chat()
-            if event.is_private:
-                if no_log_pms_sql.is_approved(chat.id):
-                    no_log_pms_sql.disapprove(chat.id)
-                    await event.edit("Will Log Messages from this chat")
-                    await asyncio.sleep(3)
-                    await event.delete()
+            if event.is_private and no_log_pms_sql.is_approved(chat.id):
+                no_log_pms_sql.disapprove(chat.id)
+                await event.edit("Will Log Messages from this chat")
+                await asyncio.sleep(3)
+                await event.delete()
 
     @borg.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):
@@ -78,10 +76,6 @@ if Config.DUAL_LOG:
             return
         if event.from_id == bot.uid:
             return
-        message_text = event.message.message
-        message_media = event.message.media
-        event.message.id
-        event.message.to_id
         chat_id = event.from_id
         # logger.info(chat_id)
         sender = await event.client.get_entity(chat_id)
@@ -95,6 +89,8 @@ if Config.DUAL_LOG:
             # don't log verified accounts
             return
         if not no_log_pms_sql.is_approved(chat_id):
+            message_text = event.message.message
+            message_media = event.message.media
             # log pms
             await do_log_pm_action(chat_id, event, message_text, message_media)
 
@@ -102,8 +98,6 @@ if Config.DUAL_LOG:
     async def on_new_chat_action_message(event):
         if Config.PM_LOGGR_BOT_API_ID is None:
             return
-        # logger.info(event.stringify())
-        chat_id = event.chat_id
         if event.created or event.user_added:
             added_by_users = event.action_message.action.users
             if borg.uid in added_by_users:
@@ -115,6 +109,8 @@ if Config.DUAL_LOG:
                 the_message += (
                     f"[User](tg://user?id={added_by_user}): `{added_by_user}`\n"
                 )
+                # logger.info(event.stringify())
+                chat_id = event.chat_id
                 the_message += (
                     f"[Private Link](https://t.me/c/{chat_id}/{message_id})\n"
                 )

@@ -19,7 +19,7 @@ ANTI_FLOOD_WARN_MODE = ChatBannedRights(
 async def _(event):
     if not CHAT_FLOOD:
         return
-    if not (str(event.chat_id) in CHAT_FLOOD):
+    if str(event.chat_id) not in CHAT_FLOOD:
         return
     should_ban = sql.update_flood(event.chat_id, event.message.from_id)
     if not should_ban:

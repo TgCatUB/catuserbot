@@ -1,15 +1,22 @@
+# by @mrconfused (@sandy1709)
+
 import asyncio
 import os
 import time
 from datetime import datetime
 from io import BytesIO
+from pathlib import Path
 
-from telethon import types
+from telethon import functions, types
 from telethon.errors import PhotoInvalidDimensionsError
+from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import SendMediaRequest
 
-from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
+from . import CMD_HELP, unzip
+
+if not os.path.isdir("./temp"):
+    os.makedirs("./temp")
 
 
 @borg.on(admin_cmd(pattern="stoi$"))
@@ -20,11 +27,11 @@ async def _(cat):
     reply_to_id = cat.message.id
     if cat.reply_to_msg_id:
         reply_to_id = cat.reply_to_msg_id
-    filename = "hi.jpg"
     event = await edit_or_reply(cat, "Converting.....")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
+        filename = "hi.jpg"
         file_name = filename
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
@@ -55,11 +62,11 @@ async def _(cat):
     reply_to_id = cat.message.id
     if cat.reply_to_msg_id:
         reply_to_id = cat.reply_to_msg_id
-    filename = "hi.webp"
     event = await edit_or_reply(cat, "Converting.....")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
+        filename = "hi.webp"
         file_name = filename
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
@@ -80,6 +87,13 @@ async def _(cat):
             await event.edit("Can't Convert")
     else:
         await event.edit("Syntax : `.itos` reply to a Telegram normal sticker")
+
+
+async def silently_send_message(conv, text):
+    await conv.send_message(text)
+    response = await conv.get_response()
+    await conv.mark_read(message=response)
+    return response
 
 
 @borg.on(admin_cmd(pattern="ttf ?(.*)"))
@@ -132,6 +146,57 @@ async def on_file_to_photo(event):
     except PhotoInvalidDimensionsError:
         return
     await catt.delete()
+
+
+@borg.on(admin_cmd(pattern="gif$"))
+@borg.on(sudo_cmd(pattern="gif$", allow_sudo=True))
+async def _(event):
+    catreply = await event.get_reply_message()
+    if not catreply or not catreply.media or not catreply.media.document:
+        return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
+    elif catreply.media.document.mime_type != "application/x-tgsticker":
+        return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
+    reply_to_id = event.message
+    if event.reply_to_msg_id:
+        reply_to_id = await event.get_reply_message()
+    chat = "@tgstogifbot"
+    catevent = await edit_or_reply(event, "`Converting to gif ...`")
+    async with event.client.conversation(chat) as conv:
+        try:
+            await silently_send_message(conv, "/start")
+            await event.client.send_file(chat, catreply.media)
+            response = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            if response.text.startswith("Send me an animated sticker!"):
+                return await catevent.edit("`This file is not supported`")
+            catresponse = response if response.media else await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            catfile = Path(await event.client.download_media(catresponse, "./temp/"))
+            catgif = Path(await unzip(catfile))
+            sandy = await event.client.send_file(
+                event.chat_id,
+                catgif,
+                support_streaming=True,
+                force_document=False,
+                reply_to=reply_to_id,
+            )
+            await borg(
+                functions.messages.SaveGifRequest(
+                    id=types.InputDocument(
+                        id=sandy.media.document.id,
+                        access_hash=sandy.media.document.access_hash,
+                        file_reference=sandy.media.document.file_reference,
+                    ),
+                    unsave=True,
+                )
+            )
+            await catevent.delete()
+            for files in (catgif, catfile):
+                if files and os.path.exists(files):
+                    os.remove(files)
+        except YouBlockedUserError:
+            await catevent.edit("Unblock @tgstogifbot")
+            return
 
 
 @borg.on(admin_cmd(pattern="nfc ?(.*)"))
@@ -234,7 +299,6 @@ async def _(event):
         stdout.decode().strip()
         os.remove(downloaded_file_name)
         if os.path.exists(new_required_file_name):
-            end_two = datetime.now()
             await borg.send_file(
                 entity=event.chat_id,
                 file=new_required_file_name,
@@ -247,7 +311,6 @@ async def _(event):
                     progress(d, t, event, c_time, "trying to upload")
                 ),
             )
-            (end_two - end).seconds
             os.remove(new_required_file_name)
             await event.delete()
 
@@ -261,6 +324,8 @@ CMD_HELP.update(
     \n**Usage :**Converts image to sticker\
     \n\n**Syntax :** `.ftoi` reply to image file\
     \n**Usage :** Converts Given image file to straemable form\
+    \n\n**Syntax :** `.gif` reply to animated sticker\
+    \n**Usage :** Converts Given animated sticker to gif\
     \n\n**Syntax :** `.ttf file name` reply to text message\
     \n**Usage :** Converts Given text message to required file(given file name)\
     \n\n**Syntax :**`.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\

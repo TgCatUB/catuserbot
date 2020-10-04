@@ -5,14 +5,8 @@ import pybase64
 from telethon import functions, types
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-from .. import CMD_HELP
+from .. import CMD_HELP, BOTLOG_CHATID, BOTLOG
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @borg.on(admin_cmd(pattern="spam (.*)"))
@@ -37,7 +31,7 @@ async def spammer(e):
     if counter > 50:
         return await edit_or_reply(e, "Use `.bigspam` for spam greater than 50")
     if len(cat) == 2:
-        spam_message = str(e.pattern_match.group(1).split(" ", 1)[1])
+        spam_message = str(("".join(e.text.split(maxsplit=1)[1:])).split(" ", 1)[1])
         await e.delete()
         for i in range(counter):
             if e.reply_to_msg_id:
@@ -172,7 +166,7 @@ async def spammer(e):
     cat = ("".join(e.text.split(maxsplit=1)[1:])).split(" ", 1)
     counter = int(cat[0])
     if len(cat) == 2:
-        spam_message = str(e.pattern_match.group(1).split(" ", 1)[1])
+        spam_message = str(("".join(e.text.split(maxsplit=1)[1:])).split(" ", 1)[1])
         await e.delete()
         for i in range(counter):
             if e.reply_to_msg_id:

@@ -1,35 +1,30 @@
-"""@telegraph Utilities
-Available Commands:
-.telegraph media as reply to a media
-.telegraph text as reply to a large text"""
+# telegraph utils for catuserbot
+
 import os
 from datetime import datetime
 
 from PIL import Image
 from telegraph import Telegraph, exceptions, upload_file
 
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 
 telegraph = Telegraph()
 r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
 auth_url = r["auth_url"]
 
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
-
 
 @borg.on(admin_cmd(pattern="telegraph (media|text) ?(.*)"))
+@borg.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
+    catevent = await edit_or_reply(event, "`processing........`")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if BOTLOG:
         await borg.send_message(
-            Config.PRIVATE_GROUP_BOT_API_ID,
+            BOTLOG_CHATID,
             "Created New Telegraph account {} for the current session. \n**Do not give this url to anyone, even if they say they are from Telegram!**".format(
                 auth_url
             ),
@@ -45,8 +40,8 @@ async def _(event):
             )
             end = datetime.now()
             ms = (end - start).seconds
-            await event.edit(
-                "Downloaded to {} in {} seconds.".format(downloaded_file_name, ms)
+            await catevent.edit(
+                "Downloaded to {} in {} seconds.".format(downloaded_file_name, ms),
             )
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
@@ -54,14 +49,15 @@ async def _(event):
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
-                await event.edit("ERROR: " + str(exc))
+                await catevent.edit("**Error : **" + str(exc))
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
                 ms_two = (end - start).seconds
                 os.remove(downloaded_file_name)
-                await event.edit(
-                    "Uploaded to https://telegra.ph{} in {} seconds.".format(
+                await catevent.edit(
+                    "**link : **[telegraph](https://telegra.ph{})\
+                    \n**Time Taken : **`{} seconds.`".format(
                         media_urls[0], (ms + ms_two)
                     ),
                     link_preview=True,
@@ -89,18 +85,30 @@ async def _(event):
             response = telegraph.create_page(title_of_page, html_content=page_content)
             end = datetime.now()
             ms = (end - start).seconds
-            await event.edit(
-                "Pasted to https://telegra.ph/{} in {} seconds.".format(
-                    response["path"], ms
-                ),
+            cat = f"https://telegra.ph/{response['path']}"
+            await catevent.edit(
+                f"**link : ** [telegraph]({cat})\
+                 \n**Time Taken : **`{ms} seconds.`",
                 link_preview=True,
             )
     else:
-        await event.edit(
-            "Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)"
+        await catevent.edit(
+            "`Reply to a message to get a permanent telegra.ph link. (Inspired by @ControllerBot)`",
         )
 
 
 def resize_image(image):
     im = Image.open(image)
     im.save(image, "PNG")
+
+
+CMD_HELP.update(
+    {
+        "telegraph": "**Plugin :**`telegraph`\
+     \n\n**Syntax :** `.telegraph media`\
+     \n**Usage :** Reply to any image or video to upload it to telgraph(video must be less than 5mb)\
+     \n\n**Syntax :** `.telegraph text`\
+     \n**Usage :** reply to any text file or any message to paste it to telegraph\
+    "
+    }
+)

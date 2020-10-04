@@ -32,8 +32,8 @@ from urllib.error import HTTPError
 
 from pySmartDL import SmartDL
 
-from userbot import CMD_HELP, LOGS
-from userbot.utils import admin_cmd, humanbytes, time_formatter
+from ..utils import admin_cmd, humanbytes
+from . import CMD_HELP, LOGS, time_formatter
 
 TEMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
@@ -116,8 +116,8 @@ async def mega_downloader(megadl):
         estimated_total_time = round(downloader.get_eta())
         progress_str = "`{0}` | [{1}{2}] `{3}%`".format(
             status,
-            "".join(["⬤" for i in range(math.floor(percentage / 10))]),
-            "".join(["◯" for i in range(10 - math.floor(percentage / 10))]),
+            "".join(["▰" for i in range(math.floor(percentage / 10))]),
+            "".join(["▱" for i in range(10 - math.floor(percentage / 10))]),
             round(percentage, 2),
         )
         diff = time.time() - start
@@ -186,7 +186,7 @@ async def decrypt_file(megadl, file_path, temp_file_path, hex_key, hex_raw_key):
 
 CMD_HELP.update(
     {
-        "mega": "**PLUGIN NAME :** `mega`\
+        "mega": "**Plugin :** `mega`\
         \n\n**Syntax :** `.mega` <MEGA.nz link>\
         \n**Usage : **Reply to a MEGA.nz link or paste your MEGA.nz link\
         \n\n__ It will download the file into your userbot server.__"

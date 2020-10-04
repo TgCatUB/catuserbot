@@ -22,10 +22,9 @@ async def stickerchat(catquotes):
         return
     fetchmsg = reply.message
     repliedreply = await reply.get_reply_message()
-    if reply.media:
-        if reply.media.document.mime_type in ("mp4"):
-            await catquotes.edit("animated stickers and mp4 formats are not supported")
-            return
+    if reply.media and reply.media.document.mime_type in ("mp4"):
+        await catquotes.edit("animated stickers and mp4 formats are not supported")
+        return
     await catquotes.delete()
     user = (
         await borg.get_entity(reply.forward.sender) if reply.fwd_from else reply.sender

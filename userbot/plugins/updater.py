@@ -208,7 +208,7 @@ async def upstream(event):
             f"**{UPSTREAM_REPO_BRANCH}**\n"
         )
         return repo.__del__()
-    if conf == "" and force_update is False:
+    if conf == "" and not force_update:
         await print_changelogs(event, ac_br, changelog)
         await event.delete()
         return await event.respond(
