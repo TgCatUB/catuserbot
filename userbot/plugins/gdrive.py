@@ -51,7 +51,6 @@ from . import (
     progress,
 )
 from .sql_helper import google_drive_sql as helper
-from .torrent import aria2, check_metadata
 
 # =========================================================== #
 #                          STATIC                             #
