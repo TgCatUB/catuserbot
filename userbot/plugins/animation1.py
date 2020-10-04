@@ -14,7 +14,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0, 14)
+    animation_ttl = range(14)
     event = await edit_or_reply(event, "brain")
     animation_chars = [
         "YOᑌᖇ ᗷᖇᗩIᑎ ➡️ 🧠\n\n🧠         <(^_^ <)🗑",
@@ -103,7 +103,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.7
-    animation_ttl = range(0, 12)
+    animation_ttl = range(12)
     event = await edit_or_reply(event, "ready to die dude.....")
     animation_chars = [
         "Ｆｉｉｉｉｉｒｅ",
@@ -130,7 +130,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.7
-    animation_ttl = range(0, 12)
+    animation_ttl = range(12)
     event = await edit_or_reply(event, "ready to die dude.....")
     animation_chars = [
         "Ｆｉｉｉｉｉｒｅ",
@@ -157,7 +157,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.8
-    animation_ttl = range(0, 5)
+    animation_ttl = range(5)
     event = await edit_or_reply(event, "wtf")
     animation_chars = [
         "What",
@@ -176,7 +176,7 @@ async def _(event):
 @borg.on(sudo_cmd(pattern="ding$", allow_sudo=True))
 async def _(event):
     animation_interval = 0.3
-    animation_ttl = range(0, 30)
+    animation_ttl = range(30)
     animation_chars = [
         "🔴⬛⬛⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
         "⬜⬜⬛⬜⬜\n⬜⬛⬜⬜⬜\n🔴⬜⬜⬜⬜",
@@ -201,7 +201,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.3
-    animation_ttl = range(0, 15)
+    animation_ttl = range(15)
     event = await edit_or_reply(event, "hypno....")
     animation_chars = [
         "⬜⬜⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜⬜⬜",
@@ -269,7 +269,7 @@ async def timer_blankx(e):
     k = j
     for j in range(j):
         await e.edit(txt + str(k))
-        k = k + 10
+        k += 10
         await asyncio.sleep(1)
     await asyncio.sleep(1)
     await e.edit(

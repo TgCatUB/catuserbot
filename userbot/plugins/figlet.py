@@ -34,6 +34,7 @@ async def figlet(event):
         await edit_or_reply(event, "Please add some text to figlet")
         return
     if cmd is not None:
+        cmd = cmd.strip()
         try:
             font = CMD_FIG[cmd]
         except KeyError:

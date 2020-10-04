@@ -1,27 +1,22 @@
+# catUserbot module for having some fun with people.
+
 # Copyright (C) 2019 The Raphielscape Company LLC.
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 
-""" Userbot module for having some fun with people. """
 import asyncio
 import random
 import re
-import time
 
 import requests
 from cowpy import cow
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
-from userbot import ALIVE_NAME, CMD_HELP, memes
-from userbot.utils import admin_cmd, register
+from ..utils import admin_cmd, register
+from . import ALIVE_NAME, BOTLOG, BOTLOG_CHATID, CMD_HELP, memes
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"(\w+)say (.*)"))
@@ -43,7 +38,7 @@ async def kek(keks):
     if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
         uio = ["/", "\\"]
         for i in range(1, 15):
-            time.sleep(0.3)
+            await asyncio.sleep(0.3)
             await keks.edit(":" + uio[i % 2])
 
 
@@ -140,7 +135,7 @@ async def slap(replied_user, event):
     hit = random.choice(memes.HIT)
     throw = random.choice(memes.THROW)
     where = random.choice(memes.WHERE)
-    caption = "..." + temp.format(
+    return "..." + temp.format(
         user1=DEFAULTUSER,
         victim=slapped,
         item=item,
@@ -148,7 +143,6 @@ async def slap(replied_user, event):
         throws=throw,
         where=where,
     )
-    return caption
 
 
 @register(outgoing=True, pattern="^-_-$")
@@ -179,7 +173,7 @@ async def decide(event):
 async def fun(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         t = ";__;"
-        for j in range(10):
+        for _ in range(10):
             t = t[:-1] + "_;"
             await e.edit(t)
 
@@ -236,29 +230,6 @@ async def fuckedd(abusehard):
     await abusehard.edit(reply_text)
 
 
-RUNSREACTS = [
-    "`Congratulations and BRAVO!`",
-    "`You did it! So proud of you!`",
-    "`This calls for celebrating! Congratulations!`",
-    "`I knew it was only a matter of time. Well done!`",
-    "`Congratulations on your well-deserved success.`",
-    "`Heartfelt congratulations to you.`",
-    "`Warmest congratulations on your achievement.`",
-    "`Congratulations and best wishes for your next adventure!”`",
-    "`So pleased to see you accomplishing great things.`",
-    "`Feeling so much joy for you today. What an impressive achievement!`",
-]
-
-
-@borg.on(admin_cmd(pattern="congo"))
-async def _(event):
-    if event.fwd_from:
-        return
-    bro = random.randint(0, len(RUNSREACTS) - 1)
-    reply_text = RUNSREACTS[bro]
-    await event.edit(reply_text)
-
-
 @borg.on(admin_cmd(outgoing=True, pattern="abuse$"))
 async def abusing(abused):
     index = random.randint(0, len(memes.ABUSE_STRINGS) - 1)
@@ -291,6 +262,89 @@ async def faces(owo):
 @borg.on(admin_cmd(outgoing=True, pattern="shg$"))
 async def shrugger(shg):
     await shg.edit(random.choice(memes.SHGS))
+
+
+@borg.on(admin_cmd(outgoing=True, pattern="runs$"))
+async def runner_lol(run):
+    await run.edit(random.choice(memes.RUNSREACTS))
+
+
+@borg.on(admin_cmd(outgoing=True, pattern="noob$"))
+async def metoo(hahayes):
+    await hahayes.edit(random.choice(memes.NOOBSTR))
+
+
+@borg.on(admin_cmd(outgoing=True, pattern="rendi$"))
+async def metoo(hahayes):
+    await hahayes.edit(random.choice(memes.RENDISTR))
+
+
+@borg.on(admin_cmd(outgoing=True, pattern="oof$"))
+async def Oof(e):
+    t = "Oof"
+    for _ in range(15):
+        t = t[:-1] + "of"
+        await e.edit(t)
+
+
+@borg.on(admin_cmd(outgoing=True, pattern="10iq$"))
+async def iqless(e):
+    await e.edit("♿")
+
+
+@borg.on(admin_cmd(outgoing=True, pattern="clap(?: |$)(.*)"))
+async def claptext(event):
+    textx = await event.get_reply_message()
+    if event.pattern_match.group(1):
+        query = event.pattern_match.group(1)
+    elif textx.message:
+        query = textx.message
+    else:
+        await event.edit("Hah, I don't clap pointlessly!")
+        return
+    reply_text = "👏 "
+    reply_text += query.replace(" ", " 👏 ")
+    reply_text += " 👏"
+    await event.edit(reply_text)
+
+
+@borg.on(admin_cmd(outgoing=True, pattern="smk(?: |$)(.*)"))
+async def smrk(smk):
+    textx = await smk.get_reply_message()
+    if smk.pattern_match.group(1):
+        message = smk.pattern_match.group(1)
+    elif textx.message:
+        message = textx.message
+    else:
+        await smk.edit("ツ")
+        return
+    if message == "dele":
+        await smk.edit(message + "te the hell" + "ツ")
+        await smk.edit("ツ")
+    else:
+        smirk = " ツ"
+        reply_text = message + smirk
+        await smk.edit(reply_text)
+
+
+@borg.on(admin_cmd(pattern="ftext ?(.*)"))
+async def payf(event):
+    paytext = event.pattern_match.group(1)
+    pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
+        paytext * 8,
+        paytext * 8,
+        paytext * 2,
+        paytext * 2,
+        paytext * 2,
+        paytext * 6,
+        paytext * 6,
+        paytext * 2,
+        paytext * 2,
+        paytext * 2,
+        paytext * 2,
+        paytext * 2,
+    )
+    await event.edit(pay)
 
 
 @borg.on(admin_cmd(pattern=f"react ?(.*)", outgoing=True))
@@ -396,89 +450,6 @@ async def _(event):
     await event.edit(output_str)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="runs$"))
-async def runner_lol(run):
-    await run.edit(random.choice(memes.RUNSREACTS))
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="noob$"))
-async def metoo(hahayes):
-    await hahayes.edit(random.choice(memes.NOOBSTR))
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="rendi$"))
-async def metoo(hahayes):
-    await hahayes.edit(random.choice(memes.RENDISTR))
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="oof$"))
-async def Oof(e):
-    t = "Oof"
-    for j in range(15):
-        t = t[:-1] + "of"
-        await e.edit(t)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="10iq$"))
-async def iqless(e):
-    await e.edit("♿")
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="clap(?: |$)(.*)"))
-async def claptext(event):
-    textx = await event.get_reply_message()
-    if event.pattern_match.group(1):
-        query = event.pattern_match.group(1)
-    elif textx.message:
-        query = textx.message
-    else:
-        await event.edit("Hah, I don't clap pointlessly!")
-        return
-    reply_text = "👏 "
-    reply_text += query.replace(" ", " 👏 ")
-    reply_text += " 👏"
-    await event.edit(reply_text)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="smk(?: |$)(.*)"))
-async def smrk(smk):
-    textx = await smk.get_reply_message()
-    if smk.pattern_match.group(1):
-        message = smk.pattern_match.group(1)
-    elif textx.message:
-        message = textx.message
-    else:
-        await smk.edit("ツ")
-        return
-    if message == "dele":
-        await smk.edit(message + "te the hell" + "ツ")
-        await smk.edit("ツ")
-    else:
-        smirk = " ツ"
-        reply_text = message + smirk
-        await smk.edit(reply_text)
-
-
-@borg.on(admin_cmd(pattern="ftext ?(.*)"))
-async def payf(event):
-    paytext = event.pattern_match.group(1)
-    pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
-        paytext * 8,
-        paytext * 8,
-        paytext * 2,
-        paytext * 2,
-        paytext * 2,
-        paytext * 6,
-        paytext * 6,
-        paytext * 2,
-        paytext * 2,
-        paytext * 2,
-        paytext * 2,
-        paytext * 2,
-    )
-    await event.edit(pay)
-
-
 @borg.on(admin_cmd(outgoing=True, pattern="bt$"))
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
@@ -522,7 +493,7 @@ async def typewriter(typew):
     else:
         await typew.edit("`Give a text to type!`")
         return
-    sleep_time = 0.03
+    sleep_time = 0.1
     typing_symbol = "|"
     old_text = ""
     await typew.edit(typing_symbol)

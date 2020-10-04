@@ -15,7 +15,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0, 9)
+    animation_ttl = range(9)
     await event.edit("unnoob")
     animation_chars = [
         "EvErYbOdY",
@@ -38,7 +38,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0, 9)
+    animation_ttl = range(9)
     await event.edit("menoob")
     animation_chars = [
         "EvErYbOdY",
@@ -61,7 +61,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0, 8)
+    animation_ttl = range(8)
     await event.edit("upro")
     animation_chars = [
         "EvErYbOdY",
@@ -83,7 +83,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0, 8)
+    animation_ttl = range(8)
     await event.edit("mepro")
     animation_chars = [
         "EvErYbOdY",
@@ -105,7 +105,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 5
-    animation_ttl = range(0, 11)
+    animation_ttl = range(11)
     await event.edit("quickheal")
     animation_chars = [
         "`Downloading File..`",
@@ -130,7 +130,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.1
-    animation_ttl = range(0, 11)
+    animation_ttl = range(11)
     await event.edit("sqh")
     animation_chars = [
         "`Downloading File..`",
@@ -155,7 +155,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 5
-    animation_ttl = range(0, 11)
+    animation_ttl = range(11)
     await event.edit("vquickheal")
     animation_chars = [
         "`Downloading File..`",
@@ -184,7 +184,7 @@ async def _(event):
 
     animation_interval = 0.5
 
-    animation_ttl = range(0, 11)
+    animation_ttl = range(11)
 
     await event.edit("macos")
 
@@ -218,7 +218,7 @@ async def _(event):
 
     animation_interval = 0.5
 
-    animation_ttl = range(0, 11)
+    animation_ttl = range(11)
 
     await event.edit("windows")
 
@@ -252,7 +252,7 @@ async def _(event):
 
     animation_interval = 0.5
 
-    animation_ttl = range(0, 11)
+    animation_ttl = range(11)
 
     await event.edit("linux")
 
@@ -286,7 +286,7 @@ async def _(event):
 
     animation_interval = 0.5
 
-    animation_ttl = range(0, 11)
+    animation_ttl = range(11)
 
     await event.edit("stock")
 
@@ -320,7 +320,7 @@ async def _(event):
 
     animation_interval = 0.1
 
-    animation_ttl = range(0, 7)
+    animation_ttl = range(7)
 
     await event.edit("os")
 

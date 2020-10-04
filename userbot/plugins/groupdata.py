@@ -1,4 +1,6 @@
+import asyncio
 import io
+from asyncio import sleep
 from datetime import datetime
 from math import sqrt
 
@@ -7,36 +9,40 @@ from telethon.errors import (
     ChannelInvalidError,
     ChannelPrivateError,
     ChannelPublicGroupNaError,
+    ChatAdminRequiredError,
+    UserAdminInvalidError,
 )
-from telethon.tl.functions.channels import (
-    GetFullChannelRequest,
-    GetParticipantsRequest,
-    LeaveChannelRequest,
-)
+from telethon.tl import functions
+from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
 from telethon.tl.functions.messages import GetFullChatRequest, GetHistoryRequest
 from telethon.tl.types import (
     ChannelParticipantAdmin,
     ChannelParticipantCreator,
     ChannelParticipantsAdmins,
+    ChannelParticipantsKicked,
+    ChatBannedRights,
     MessageActionChannelMigrateFrom,
+    UserStatusEmpty,
+    UserStatusLastMonth,
+    UserStatusLastWeek,
+    UserStatusOffline,
+    UserStatusOnline,
+    UserStatusRecently,
 )
 from telethon.utils import get_input_location
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from .. import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="leave$"))
-async def leave(e):
-    await e.edit("`I iz Leaving dis Kensur Group kek!`")
-    time.sleep(3)
-    if "-" in str(e.chat_id):
-        await bot(LeaveChannelRequest(e.chat_id))
-    else:
-        await e.edit("`Sar This is Not A Chat`")
+@bot.on(admin_cmd(outgoing=True, pattern="kickme$"))
+async def kickme(leave):
+    await leave.edit("Nope, no, no, I go away")
+    await leave.client.kick_participant(leave.chat_id, "me")
 
 
-@borg.on(admin_cmd(pattern="get_admins ?(.*)"))
+@bot.on(admin_cmd(pattern="get_admins ?(.*)"))
+@bot.on(sudo_cmd(pattern="get_admins ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -47,45 +53,49 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     to_write_chat = await event.get_input_chat()
     chat = None
-    if not input_str:
-        chat = to_write_chat
-        if not event.is_group:
-            await event.edit("Are you sure this is a group?")
-            return
-    else:
+    if input_str:
         mentions_heading = "Admins in {} Group: \n".format(input_str)
         mentions = mentions_heading
         try:
-            chat = await borg.get_entity(input_str)
+            chat = await event.client.get_entity(input_str)
         except Exception as e:
-            await event.edit(str(e))
+            await edit_or_reply(event, str(e))
             return None
+    else:
+        chat = to_write_chat
+        if not event.is_group:
+            await edit_or_reply(event, "Are you sure this is a group?")
+            return
     try:
-        async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
-            if not x.deleted:
-                if isinstance(x.participant, ChannelParticipantCreator):
-                    mentions += "\n 👑 [{}](tg://user?id={}) `{}`".format(
-                        x.first_name, x.id, x.id
-                    )
+        async for x in event.client.iter_participants(
+            chat, filter=ChannelParticipantsAdmins
+        ):
+            if not x.deleted and isinstance(x.participant, ChannelParticipantCreator):
+                mentions += "\n 👑 [{}](tg://user?id={}) `{}`".format(
+                    x.first_name, x.id, x.id
+                )
         mentions += "\n"
-        async for x in borg.iter_participants(chat, filter=ChannelParticipantsAdmins):
-            if not x.deleted:
+        async for x in event.client.iter_participants(
+            chat, filter=ChannelParticipantsAdmins
+        ):
+            if x.deleted:
+                mentions += "\n `{}`".format(x.id)
+            else:
                 if isinstance(x.participant, ChannelParticipantAdmin):
                     mentions += "\n ⚜️ [{}](tg://user?id={}) `{}`".format(
                         x.first_name, x.id, x.id
                     )
-            else:
-                mentions += "\n `{}`".format(x.id)
     except Exception as e:
         mentions += " " + str(e) + "\n"
     if reply_message:
         await reply_message.reply(mentions)
     else:
-        await borg.send_message(event.chat_id, mentions)
+        await event.client.send_message(event.chat_id, mentions)
     await event.delete()
 
 
-@borg.on(admin_cmd(pattern=r"users ?(.*)", outgoing=True))
+@bot.on(admin_cmd(pattern=r"users ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"users ?(.*)", allow_sudo=True))
 async def get_users(show):
     if show.fwd_from:
         return
@@ -97,17 +107,17 @@ async def get_users(show):
     await show.get_input_chat()
     if not input_str:
         if not show.is_group:
-            await show.edit("Are you sure this is a group?")
+            await edit_or_reply(show, "Are you sure this is a group?")
             return
     else:
         mentions_heading = "Users in {} Group: \n".format(input_str)
         mentions = mentions_heading
         try:
-            chat = await borg.get_entity(input_str)
+            chat = await event.client.get_entity(input_str)
         except Exception as e:
             await event.show(str(e))
             return None
-    await show.edit("getting users list wait...")
+    catevent = await edit_or_reply(show, "getting users list wait...")
     try:
         if not show.pattern_match.group(1):
             async for user in show.client.iter_participants(show.chat_id):
@@ -130,7 +140,7 @@ async def get_users(show):
     if len(mentions) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(mentions)) as out_file:
             out_file.name = "users.text"
-            await borg.send_file(
+            await event.client.send_file(
                 show.chat_id,
                 out_file,
                 force_document=True,
@@ -138,25 +148,270 @@ async def get_users(show):
                 caption="Users list",
                 reply_to=reply_to_id,
             )
-            await show.delete()
+            await catevent.delete()
     else:
-        await show.edit(mentions)
+        await catevent.edit(mentions)
 
 
-@borg.on(admin_cmd(pattern="chatinfo(?: |$)(.*)", outgoing=True))
+@bot.on(admin_cmd(pattern="chatinfo(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="chatinfo(?: |$)(.*)", allow_sudo=True))
 async def info(event):
-    await event.edit("`Analysing the chat...`")
-    chat = await get_chatinfo(event)
+    catevent = await edit_or_reply(event, "`Analysing the chat...`")
+    chat = await get_chatinfo(event, catevent)
     caption = await fetch_info(chat, event)
     try:
-        await event.edit(caption, parse_mode="html")
+        await catevent.edit(caption, parse_mode="html")
     except Exception as e:
-        print("Exception:", e)
-        await event.edit("`An unexpected error has occurred.`")
-    return
+        if BOTLOG:
+            await event.client.send_message(
+                BOTLOG_CHATID, f"**Error in chatinfo : **\n`{str(e)}`"
+            )
+        await catevent.edit("`An unexpected error has occurred.`")
 
 
-async def get_chatinfo(event):
+@borg.on(admin_cmd(pattern="unbanall ?(.*)"))
+@borg.on(sudo_cmd(pattern="unbanall ?(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    if input_str:
+        logger.info("TODO: Not yet Implemented")
+    else:
+        if event.is_private:
+            return False
+        et = await edit_or_reply(event, "Searching Participant Lists.")
+        p = 0
+        async for i in borg.iter_participants(
+            event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
+        ):
+            rights = ChatBannedRights(until_date=0, view_messages=False)
+            try:
+                await borg(
+                    functions.channels.EditBannedRequest(event.chat_id, i, rights)
+                )
+            except FloodWaitError as ex:
+                logger.warn("sleeping for {} seconds".format(ex.seconds))
+                await asyncio.sleep(ex.seconds)
+            except Exception as ex:
+                await et.edit(str(ex))
+            else:
+                p += 1
+        await et.edit("{}: {} unbanned".format(event.chat_id, p))
+
+
+@borg.on(admin_cmd(pattern="ikuck ?(.*)"))
+@borg.on(sudo_cmd(pattern="ikuck (.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    if event.is_private:
+        return False
+    input_str = event.pattern_match.group(1)
+    if input_str:
+        chat = await event.get_chat()
+        if not chat.admin_rights and not chat.creator:
+            await edit_or_reply(event, "`You aren't an admin here!`")
+            return False
+    p = 0
+    b = 0
+    c = 0
+    d = 0
+    e = []
+    m = 0
+    n = 0
+    y = 0
+    w = 0
+    o = 0
+    q = 0
+    r = 0
+    et = await edit_or_reply(event, "Searching Participant Lists.")
+    async for i in borg.iter_participants(event.chat_id):
+        p += 1
+        #
+        # Note that it's "reversed". You must set to ``True`` the permissions
+        # you want to REMOVE, and leave as ``None`` those you want to KEEP.
+        rights = ChatBannedRights(until_date=None, view_messages=True)
+        if isinstance(i.status, UserStatusEmpty):
+            y += 1
+            if "y" in input_str:
+                status, e = await ban_user(event.chat_id, i, rights)
+                if status:
+                    c += 1
+                else:
+                    await et.edit("I need admin priveleges to perform this action!")
+                    e.append(str(e))
+                    break
+        if isinstance(i.status, UserStatusLastMonth):
+            m += 1
+            if "m" in input_str:
+                status, e = await ban_user(event.chat_id, i, rights)
+                if status:
+                    c += 1
+                else:
+                    await et.edit("I need admin priveleges to perform this action!")
+                    e.append(str(e))
+                    break
+        if isinstance(i.status, UserStatusLastWeek):
+            w += 1
+            if "w" in input_str:
+                status, e = await ban_user(event.chat_id, i, rights)
+                if status:
+                    c += 1
+                else:
+                    await et.edit("I need admin priveleges to perform this action!")
+                    e.append(str(e))
+                    break
+        if isinstance(i.status, UserStatusOffline):
+            o += 1
+            if "o" in input_str:
+                status, e = await ban_user(event.chat_id, i, rights)
+                if not status:
+                    await et.edit("I need admin priveleges to perform this action!")
+                    e.append(str(e))
+                    break
+                else:
+                    c += 1
+        if isinstance(i.status, UserStatusOnline):
+            q += 1
+            if "q" in input_str:
+                status, e = await ban_user(event.chat_id, i, rights)
+                if not status:
+                    await et.edit("I need admin priveleges to perform this action!")
+                    e.append(str(e))
+                    break
+                else:
+                    c += 1
+        if isinstance(i.status, UserStatusRecently):
+            r += 1
+            if "r" in input_str:
+                status, e = await ban_user(event.chat_id, i, rights)
+                if status:
+                    c += 1
+                else:
+                    await et.edit("I need admin priveleges to perform this action!")
+                    e.append(str(e))
+                    break
+        if i.bot:
+            b += 1
+            if "b" in input_str:
+                status, e = await ban_user(event.chat_id, i, rights)
+                if not status:
+                    await et.edit("I need admin priveleges to perform this action!")
+                    e.append(str(e))
+                    break
+                else:
+                    c += 1
+        elif i.deleted:
+            d += 1
+            if "d" in input_str:
+                status, e = await ban_user(event.chat_id, i, rights)
+                if status:
+                    c += 1
+                else:
+                    await et.edit("I need admin priveleges to perform this action!")
+                    e.append(str(e))
+        elif i.status is None:
+            n += 1
+    if input_str:
+        required_string = """Kicked {} / {} users
+Deleted Accounts: {}
+UserStatusEmpty: {}
+UserStatusLastMonth: {}
+UserStatusLastWeek: {}
+UserStatusOffline: {}
+UserStatusOnline: {}
+UserStatusRecently: {}
+Bots: {}
+None: {}"""
+        await et.edit(required_string.format(c, p, d, y, m, w, o, q, r, b, n))
+        await asyncio.sleep(5)
+    await et.edit(
+        """Total: {} users
+Deleted Accounts: {}
+UserStatusEmpty: {}
+UserStatusLastMonth: {}
+UserStatusLastWeek: {}
+UserStatusOffline: {}
+UserStatusOnline: {}
+UserStatusRecently: {}
+Bots: {}
+None: {}""".format(
+            p, d, y, m, w, o, q, r, b, n
+        )
+    )
+
+
+# Ported by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)
+@borg.on(admin_cmd(pattern=f"zombies ?(.*)"))
+@borg.on(sudo_cmd(pattern="zombies ?(.*)", allow_sudo=True))
+async def rm_deletedacc(show):
+    con = show.pattern_match.group(1).lower()
+    del_u = 0
+    del_status = "`No deleted accounts found, Group is clean`"
+    if con != "clean":
+        event = await edit_or_reply(
+            show, "`Searching for ghost/deleted/zombie accounts...`"
+        )
+        async for user in bot.iter_participants(show.chat_id):
+            if user.deleted:
+                del_u += 1
+                await sleep(0.5)
+        if del_u > 0:
+            del_status = f"`Found` **{del_u}** ghost/deleted/zombie account(s) in this group,\
+            \nclean them by using `.zombies clean`"
+        await event.edit(del_status)
+        return
+    # Here laying the sanity check
+    chat = await show.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+    # Well
+    if not admin and not creator:
+        await edit_or_reply(show, "`I am not an admin here!`")
+        return
+    event = await edit_or_reply(
+        show, "`Deleting deleted accounts...\nOh I can do that?!?!`"
+    )
+    del_u = 0
+    del_a = 0
+    async for user in show.client.iter_participants(show.chat_id):
+        if user.deleted:
+            try:
+                await show.client.kick_participant(show.chat_id, user.id)
+                await sleep(0.5)
+            except ChatAdminRequiredError:
+                await event.edit("`I don't have ban rights in this group`")
+                return
+            except UserAdminInvalidError:
+                del_u -= 1
+                del_a += 1
+    if del_u > 0:
+        del_status = f"Cleaned **{del_u}** deleted account(s)"
+    if del_a > 0:
+        del_status = f"Cleaned **{del_u}** deleted account(s) \
+        \n**{del_a}** deleted admin accounts are not removed"
+    await event.edit(del_status)
+    await sleep(5)
+    await show.delete()
+    if BOTLOG:
+        await show.client.send_message(
+            BOTLOG_CHATID,
+            "#CLEANUP\n"
+            f"Cleaned **{del_u}** deleted account(s) !!\
+            \nCHAT: {show.chat.title}(`{show.chat_id}`)",
+        )
+
+
+async def ban_user(chat_id, i, rights):
+    try:
+        await borg(functions.channels.EditBannedRequest(chat_id, i, rights))
+        return True, None
+    except Exception as exc:
+        return False, str(exc)
+
+
+async def get_chatinfo(event, catevent):
     chat = event.pattern_match.group(1)
     chat_info = None
     if chat:
@@ -177,18 +432,18 @@ async def get_chatinfo(event):
         try:
             chat_info = await event.client(GetFullChannelRequest(chat))
         except ChannelInvalidError:
-            await event.reply("`Invalid channel/group`")
+            await catevent.edit("`Invalid channel/group`")
             return None
         except ChannelPrivateError:
-            await event.reply(
+            await catevent.edit(
                 "`This is a private channel/group or I am banned from there`"
             )
             return None
         except ChannelPublicGroupNaError:
-            await event.reply("`Channel or supergroup doesn't exist`")
+            await catevent.edit("`Channel or supergroup doesn't exist`")
             return None
         except (TypeError, ValueError) as err:
-            await event.reply(str(err))
+            await catevent.edit(str(err))
             return None
     return chat_info
 
@@ -415,12 +670,20 @@ async def fetch_info(chat, event):
 
 CMD_HELP.update(
     {
-        "groupdata": "__**PLUGIN NAME :** Group Data__\
-     \n\n📌** CMD ➥** `.chatinfo` or .chatinfo <username of group>\
-     \n**USAGE   ➥  **Shows you the total information of the required chat.\
-     \n\n📌** CMD ➥** `.get_admins` or .get_admins <username of group >\
-     \n**USAGE   ➥  **Retrieves a list of admins in the chat.\
-     \n\n📌** CMD ➥** `.users` or .users <name of member>\
-     \n**USAGE   ➥  **Retrieves all (or queried) users in the chat."
+        "groupdata": "__**PLUGIN NAME :** Groupdata__\
+    \n\n📌** CMD ➥** `.kickme`\
+    \n**USAGE   ➥  **Throws you away from that chat\
+    \n\n📌** CMD ➥** `.get_admins` or .`get_admins <username of group >`\
+    \n**USAGE   ➥  **Retrieves a list of admins in the chat.\
+    \n\n📌** CMD ➥** `.users` or `.users <name of member>`\
+    \n**USAGE   ➥  **Retrieves all (or queried) users in the chat.\
+    \n\n📌** CMD ➥** `.unbanall`\
+    \n**USAGE   ➥  **Unbans everyone who are blocked in that group \
+    \n\n📌** CMD ➥** `.ikuck`\
+    \n**USAGE   ➥  **Stats of the group like no of users no of deleted users. \
+    \n\n📌** CMD ➥** `.chatinfo` or `.chatinfo <username of group>`\
+    \n**USAGE   ➥  **Shows you the total information of the required chat.\
+    \n\n📌** CMD ➥** `.zombies`\
+    \n**USAGE   ➥  **Searches for deleted accounts in a group. Use `.zombies clean` to remove deleted accounts from the group."
     }
 )

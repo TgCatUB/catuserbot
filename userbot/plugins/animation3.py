@@ -109,7 +109,7 @@ async def _(message):
 @borg.on(admin_cmd(pattern="fleaveme$"))
 async def _(event):
     animation_interval = 1
-    animation_ttl = range(0, 10)
+    animation_ttl = range(10)
     animation_chars = [
         "⬛⬛⬛\n⬛⬛⬛\n⬛⬛⬛",
         "⬛⬛⬛\n⬛🔄⬛\n⬛⬛⬛",
@@ -136,7 +136,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.5
-    animation_ttl = range(0, 70)
+    animation_ttl = range(70)
     await event.edit("loveu")
     animation_chars = [
         "😀",
@@ -207,7 +207,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.3
-    animation_ttl = range(0, 12)
+    animation_ttl = range(12)
     await event.edit("Police")
     animation_chars = [
         "🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵\n🔴🔴🔴⬜⬜⬜🔵🔵🔵",
@@ -233,7 +233,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0, 19)
+    animation_ttl = range(19)
     await event.edit("jio network boosting...")
     animation_chars = [
         "`Connecting To JIO NETWORK ....`",
@@ -266,7 +266,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.1
-    animation_ttl = range(0, 80)
+    animation_ttl = range(80)
     await event.edit("solarsystem")
     animation_chars = [
         "`◼️◼️◼️◼️◼️\n◼️◼️◼️◼️☀\n◼️◼️🌎◼️◼️\n🌕◼️◼️◼️◼️\n◼️◼️◼️◼️◼️`",

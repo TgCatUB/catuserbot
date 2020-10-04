@@ -32,8 +32,8 @@ from urllib.error import HTTPError
 
 from pySmartDL import SmartDL
 
-from userbot import CMD_HELP, LOGS
-from userbot.utils import admin_cmd, humanbytes, time_formatter
+from ..utils import admin_cmd, humanbytes
+from . import CMD_HELP, LOGS, time_formatter
 
 TEMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
@@ -123,13 +123,13 @@ async def mega_downloader(megadl):
         diff = time.time() - start
         try:
             current_message = (
-                f"**➥file name : **`{file_name}`\n\n"
-                "**➥Status**\n"
+                f"**☞ File name : **`{file_name}`\n\n"
+                "**➥ Status**\n"
                 f"{progress_str}\n"
-                f"`{humanbytes(downloaded)}` of `{humanbytes(total_length)}`"
-                f" @ `{speed}`\n"
-                f"**➥ETA -> **`{time_formatter(estimated_total_time)}`\n"
-                f"**➥ Duration -> **`{time_formatter(round(diff))}`"
+                f"{humanbytes(downloaded)} of {humanbytes(total_length)}"
+                f" @ {speed}\n"
+                f"**➥ ETA -> **{time_formatter(estimated_total_time)}\n"
+                f"**➥ Duration -> **{time_formatter(round(diff))}"
             )
             if round(diff % 15.00) == 0 and (
                 display_message != current_message or total_length == downloaded
@@ -159,7 +159,7 @@ async def mega_downloader(megadl):
             return None
         else:
             await megadl.edit(
-                f"**➥ file name : **`{file_name}`\n\n"
+                f"**☞ File name : **`{file_name}`\n\n"
                 f"**➥ Successfully downloaded in : ** `{file_path}`.\n"
                 f"**➥ Download took :** {time_formatter(download_time)}."
             )

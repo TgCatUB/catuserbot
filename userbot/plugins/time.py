@@ -1,8 +1,6 @@
-""" It does not do to dwell on dreams and forget to live
-Syntax: .getime"""
+# Userbot timezone
 
 import os
-from datetime import datetime
 from datetime import datetime as dt
 
 from PIL import Image, ImageDraw, ImageFont
@@ -10,10 +8,10 @@ from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
-from userbot import CMD_HELP, COUNTRY, TZ_NUMBER
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, COUNTRY, TZ_NUMBER
 
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf"
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 LOCATION = Config.TZ
 
@@ -43,6 +41,13 @@ async def get_tz(con):
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
+@borg.on(
+    sudo_cmd(
+        outgoing=True,
+        pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?",
+        allow_sudo=True,
+    )
+)
 async def time_func(tdata):
     """For .time command, return the time of
     1. The country passed as an argument,
@@ -64,10 +69,10 @@ async def time_func(tdata):
         tz_num = TZ_NUMBER
         timezones = await get_tz(COUNTRY)
     else:
-        await tdata.edit(f"`It's`  **{dt.now().strftime(t_form)}**  `here.`")
+        await edit_or_reply(tdata, f"`It's`  **{dt.now().strftime(t_form)}**  `here.`")
         return
     if not timezones:
-        await tdata.edit("`Invaild country.`")
+        await edit_or_reply(tdata, "`Invaild country.`")
         return
     if len(timezones) == 1:
         time_zone = timezones[0]
@@ -85,21 +90,31 @@ async def time_func(tdata):
             return_str += "in the command.`\n"
             return_str += f"`Example: .ctime {c_name} 2`"
 
-            await tdata.edit(return_str)
+            await edit_or_reply(tdata, return_str)
             return
 
     dtnow = dt.now(tz(time_zone)).strftime(t_form)
     if c_name != COUNTRY:
-        await tdata.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
+        await edit_or_reply(
+            tdata, f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`"
+        )
         return
     if COUNTRY:
-        await tdata.edit(
-            f"`It's`  **{dtnow}**  `here, in {COUNTRY}" f"({time_zone} timezone).`"
+        await edit_or_reply(
+            tdata,
+            f"`It's`  **{dtnow}**  `here, in {COUNTRY}" f"({time_zone} timezone).`",
         )
         return
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
+@borg.on(
+    sudo_cmd(
+        outgoing=True,
+        pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?",
+        allow_sudo=True,
+    )
+)
 async def date_func(dat):
     """For .date command, return the date of
     1. The country passed as an argument,
@@ -123,11 +138,11 @@ async def date_func(dat):
         tz_num = TZ_NUMBER
         timezones = await get_tz(COUNTRY)
     else:
-        await dat.edit(f"`It's`  **{dt.now().strftime(d_form)}**  `here.`")
+        await edit_or_reply(dat, f"`It's`  **{dt.now().strftime(d_form)}**  `here.`")
         return
 
     if not timezones:
-        await dat.edit("`Invaild country.`")
+        await edit_or_reply(dat, "`Invaild country.`")
         return
 
     if len(timezones) == 1:
@@ -145,38 +160,43 @@ async def date_func(dat):
             return_str += "\n`Choose one by typing the number "
             return_str += "in the command.`\n"
             return_str += f"Example: .cdate {c_name} 2"
-            await dat.edit(return_str)
+            await edit_or_reply(dat, return_str)
             return
     dtnow = dt.now(tz(time_zone)).strftime(d_form)
     if c_name != COUNTRY:
-        await dat.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
+        await edit_or_reply(
+            dat, f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`"
+        )
         return
     if COUNTRY:
-        await dat.edit(
-            f"`It's`  **{dtnow}**  `here, in {COUNTRY}" f"({time_zone} timezone).`"
+        await edit_or_reply(
+            dat, f"`It's`  **{dtnow}**  `here, in {COUNTRY}" f"({time_zone} timezone).`"
         )
         return
 
 
 @borg.on(admin_cmd(pattern="time ?(.*)"))
+@borg.on(sudo_cmd(pattern="time ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    current_time = datetime.now().strftime(
-        f"\nUSERBOT TIMEZONE\n  {LOCATION}\n Time: %H:%M:%S \n Date: %d.%m.%y \n"
+    reply_msg_id = None
+    current_time = dt.now().strftime(
+        f"⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n⚡USERBOT TIMEZONE⚡\n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n   {LOCATION}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡"
     )
     input_str = event.pattern_match.group(1)
-    reply_msg_id = event.message.id
+    if event.from_id != bot.uid:
+        event.message.id
     if input_str:
         current_time = input_str
     elif event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         reply_msg_id = previous_message.id
-    if not os.path.isdir("./temp/"):
-        os.makedirs("./temp/")
-    required_file_name = "./temp" + " " + str(datetime.now()) + ".webp"
+    if not os.path.isdir(Config.TEMP_DIR):
+        os.makedirs(Config.TEMP_DIR)
+    required_file_name = Config.TEMP_DIR + " " + str(dt.now()) + ".webp"
     img = Image.new("RGBA", (350, 220), color=(0, 0, 0, 115))
-    fnt = ImageFont.truetype(FONT_FILE_TO_USE, 35)
+    fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
     drawn_text = ImageDraw.Draw(img)
     drawn_text.text((10, 10), current_time, font=fnt, fill=(255, 255, 255))
     img.save(required_file_name)

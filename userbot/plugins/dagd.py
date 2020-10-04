@@ -1,9 +1,10 @@
 """DA.GD helpers in @UniBorg
 Available Commands:
-.isup URL
 .dns google.com
 .url <long url>
-.unshort <short url>"""
+.unshort <short url>
+.hl <link>
+"""
 
 import requests
 
@@ -69,15 +70,27 @@ async def _(event):
         )
 
 
+# By Priyam Kalra
+@borg.on(admin_cmd(pattern="hl ?(.*)"))
+@borg.on(sudo_cmd(pattern="hl ?(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    input = event.pattern_match.group(1)
+    await edit_or_reply(event, "[ㅤㅤㅤㅤㅤㅤㅤ](" + input + ")")
+
+
 CMD_HELP.update(
     {
         "dagd": "__**PLUGIN NAME :** Dagd__\
     \n\n📌** CMD ➥** `.dns` <link>\
     \n**USAGE   ➥  **Shows you Domain Name System(dns) of the given link . example `.dns google.com` or `.dns github.cm`\
     \n\n📌** CMD ➥** `.url` <link>\
-    \n**USAGE   ➥  **shortens the given link\
+    \n**USAGE   ➥  **Shortens the given link\
     \n\n📌** CMD ➥** `.unshort` <link>\
-    \n**USAGE   ➥  **unshortens the given short link\
+    \n**USAGE   ➥  **Unshortens the given short link\
+    \n\n📌** CMD ➥** `.hl` <link>\
+    \n**USAGE   ➥  **Hide the given link\
     "
     }
 )

@@ -12,7 +12,11 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 CAT_IMG = Config.ALIVE_PIC
-JISAN = Config.CUSTOM_ALIVE_TEXT
+JISAN = (
+    str(Config.CUSTOM_ALIVE_TEXT)
+    if Config.CUSTOM_ALIVE_TEXT
+    else "✮ MY BOT IS RUNNING SUCCESFULLY ✮"
+)
 EMOJI = str(Config.CUSTOM_ALIVE_EMOJI) if Config.CUSTOM_ALIVE_EMOJI else "✧✧"
 
 
@@ -27,43 +31,8 @@ async def amireallyalive(alive):
     hmm = bot.uid
     if alive.reply_to_msg_id:
         reply_to_id = await alive.get_reply_message()
-    if JISAN:
-        if CAT_IMG:
-            cat_caption = f"<b>{JISAN}</b>\n\n"
-            cat_caption += f"<b>{EMOJI} Master :</b> <a href = tg://user?id={hmm}><b>{DEFAULTUSER}</b></a>\n"
-            cat_caption += f"<b>{EMOJI} Uptime :</b> <code>{uptime}</code>\n"
-            cat_caption += (
-                f"<b>{EMOJI} Python Version :</b> <code>{python_version()}</code>\n"
-            )
-            cat_caption += f"<b>{EMOJI} Telethon version :</b> <code>{version.__version__}</code>\n"
-            cat_caption += (
-                f"<b>{EMOJI} Catuserbot Version :</b> <code>{catversion}</code>\n"
-            )
-            cat_caption += f"<b>{EMOJI} Database :</b> <code>{check_sgnirts}</code>\n\n"
-            cat_caption += "    <a href = https://github.com/sandy1709/catuserbot><b>GoodCat</b></a> | <a href = https://github.com/Jisan09/catuserbot><b>BadCat</b></a> | <a href = https://t.me/catuserbot_support><b>Support</b></a>"
-            await borg.send_file(
-                alive.chat_id,
-                CAT_IMG,
-                caption=cat_caption,
-                parse_mode="html",
-                reply_to=reply_to_id,
-                link_preview=False,
-            )
-            await alive.delete()
-        else:
-            await edit_or_reply(
-                alive,
-                f"** {JISAN}**\n\n"
-                f"**{EMOJI} Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
-                f"**{EMOJI} Uptime :** `{uptime}\n`"
-                f"**{EMOJI} Python Version :** `{python_version()}\n`"
-                f"**{EMOJI} Telethon Version :** `{version.__version__}\n`"
-                f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
-                f"**{EMOJI} Database :** `{check_sgnirts}`\n\n"
-                "   **[GoodCat]**(https://github.com/sandy1709/catuserbot) | **[BadCat]**(https://github.com/Jisan09/catuserbot) | **[Support]**(https://t.me/catuserbot_support) ",
-            )
-    elif CAT_IMG:
-        cat_caption = "<b><i>✮ MY BOT IS RUNNING SUCCESFULLY ✮</b></i>\n\n"
+    if CAT_IMG:
+        cat_caption = f"<b>{JISAN}</b>\n\n"
         cat_caption += f"<b>{EMOJI} Master :</b> <a href = tg://user?id={hmm}><b>{DEFAULTUSER}</b></a>\n"
         cat_caption += f"<b>{EMOJI} Uptime :</b> <code>{uptime}</code>\n"
         cat_caption += (
@@ -89,7 +58,7 @@ async def amireallyalive(alive):
     else:
         await edit_or_reply(
             alive,
-            "__**✮ MY BOT IS RUNNING SUCCESFULLY ✮**__\n\n"
+            f"** {JISAN}**\n\n"
             f"**{EMOJI} Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
             f"**{EMOJI} Uptime :** `{uptime}\n`"
             f"**{EMOJI} Python Version :** `{python_version()}\n`"
@@ -100,8 +69,8 @@ async def amireallyalive(alive):
         )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="live$"))
-@borg.on(sudo_cmd(pattern="live$", allow_sudo=True))
+@borg.on(admin_cmd(outgoing=True, pattern="ialive$"))
+@borg.on(sudo_cmd(pattern="ialive$", allow_sudo=True))
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
@@ -110,7 +79,7 @@ async def amireallyalive(alive):
     if alive.reply_to_msg_id:
         reply_to_id = await alive.get_reply_message()
     hmm = bot.uid
-    cat_caption = f"__**Catuserbot is Up and Running**__\n"
+    cat_caption = f"**Catuserbot is Up and Running**\n"
     cat_caption += f"**  -Telethon version :** `{version.__version__}\n`"
     cat_caption += f"**  -Catuserbot Version :** `{catversion}`\n"
     cat_caption += f"**  -Python Version :** `{python_version()}\n`"
@@ -174,7 +143,7 @@ CMD_HELP.update(
         "alive": "__**PLUGIN NAME :** Alive__\
       \n\n📌** CMD ➥** `.alive`\
       \n**USAGE   ➥  **To see wether your bot is working or not.\
-      \n\n📌** CMD ➥** `.live`\
+      \n\n📌** CMD ➥** `.ialive`\
       \n**USAGE   ➥**  status of bot.\
       \n\n📌** CMD ➥** `.cat`\
       \n**USAGE   ➥**  Random cat stickers"

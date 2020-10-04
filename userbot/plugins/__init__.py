@@ -29,9 +29,7 @@ def check(cat):
     if "/start" in cat:
         return True
     hi = re.search(re.escape(f"\\b{cat}\\b"), "a|b|c|d")
-    if hi:
-        return True
-    return False
+    return bool(hi)
 
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
@@ -89,10 +87,7 @@ else:
 
 async def catalive():
     _, check_sgnirts = check_data_base_heal_th()
-    if Config.SUDO_USERS:
-        sudo = "Enabled"
-    else:
-        sudo = "Disabled"
+    sudo = "Enabled" if Config.SUDO_USERS else "Disabled"
     uptime = await get_readable_time((time.time() - StartTime))
     try:
         useragent = (
@@ -132,10 +127,9 @@ async def catalive():
         dyno = f"{AppHours}h {AppMinutes}m/{hours}h {minutes}m"
     except Exception as e:
         dyno = e
-    conclusion = f"🖤༄ Catuserbot Stats ༄🖤\
+    return f"🖤༄ Catuserbot Stats ༄🖤\
                  \n\nღ Database : {check_sgnirts}\
                   \nღ Sudo : {sudo}\
                   \nღ Uptime : {uptime}\
                   \nღ Dyno : {dyno}\
                   "
-    return conclusion

@@ -398,9 +398,8 @@ def human_to_bytes(size: str) -> int:
     return int(float(number) * units[unit])
 
 
+# Inputs time in milliseconds, to get beautified time, as string
 def time_formatter(milliseconds: int) -> str:
-    """Inputs time in milliseconds, to get beautified time,
-    as string"""
     seconds, milliseconds = divmod(int(milliseconds), 1000)
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)

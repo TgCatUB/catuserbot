@@ -1,5 +1,4 @@
-"""AFK Plugin for @UniBorg
-Syntax: .afk REASON"""
+# Afk plugin from catuserbot ported from uniborg
 import asyncio
 from datetime import datetime
 
@@ -78,12 +77,12 @@ async def on_afk(event):
     if USERAFK_ON and not (await event.get_sender()).bot:
         msg = None
         message_to_reply = (
-            f"__My Master Has Been In afk For__ `{total_afk_time}`\nWhere He Is: ONLY GOD KNOWS "
-            + f"\n\n__I promise He'll back in a few light years__\n**REASON**: {reason}"
+            f"__**AFK Since :-**__ `{total_afk_time}` __hrs__ "
+            + f"\n__**REASON :-** {reason}__\n\n__I promise, will be back in a few light years__"
             if reason
             else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? Soon __Whenever I feel like it__**( ಠ ʖ̯ ಠ)**  "
         )
-        if not (event.chat_id in Config.UB_BLACK_LIST_CHAT):
+        if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
             msg = await event.reply(message_to_reply)
         if event.chat_id in last_afk_message:
             await last_afk_message[event.chat_id].delete()
@@ -91,10 +90,14 @@ async def on_afk(event):
         await asyncio.sleep(5)
         hmm = await event.get_chat()
         if Config.PM_LOGGR_BOT_API_ID:
+            await asyncio.sleep(5)
             if not event.is_private:
-                await bot.send_message(
+                await event.client.send_message(
                     Config.PM_LOGGR_BOT_API_ID,
-                    f"#AFK_TAGS \nhttps://t.me/c/{hmm.id}/{event.message.id}",
+                    f"#AFK_TAGS \n<b>Group : </b><code>{hmm.title}</code>\
+                            \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
+                    parse_mode="html",
+                    link_preview=False,
                 )
 
 
@@ -114,8 +117,8 @@ async def _(event):
     afk_end = {}
     start_1 = datetime.now()
     afk_start = start_1.replace(microsecond=0)
-    reason = event.pattern_match.group(1)
     if not USERAFK_ON:
+        reason = event.pattern_match.group(1)
         last_seen_status = await borg(
             functions.account.GetPrivacyRequest(types.InputPrivacyKeyStatusTimestamp())
         )
