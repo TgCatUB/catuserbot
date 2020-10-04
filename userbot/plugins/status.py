@@ -5,7 +5,6 @@ Online = Remove Offline Tag from your name and change profile pic to vars PROFIL
 Note - If you have a last name remove it unless it automatically removed.
 """
 
-
 import os
 import urllib
 
