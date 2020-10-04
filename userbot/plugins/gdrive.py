@@ -24,7 +24,6 @@ import math
 import os
 import pickle
 import re
-import requests
 import time
 from datetime import datetime
 from mimetypes import guess_type
