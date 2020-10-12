@@ -29,29 +29,30 @@ async def catlst_of_files(path):
 @borg.on(sudo_cmd(pattern="uploadir (.*)", allow_sudo=True))
 async def uploadir(event):
     input_str = event.pattern_match.group(1)
-    hmm = event.message.id
+    event.message.id
     udir_event = await edit_or_reply(event, "Uploading....")
     if os.path.exists(input_str):
         await udir_event.edit(f"Gathering file details in directory `{input_str}`")
         global uploaded
         uploaded = 0
+
         async def upload(path):
             global uploaded
-            if os.path.isdir(path) :
-                p=path.replace(replacer,'')
+            if os.path.isdir(path):
+                p = path.replace(replacer, "")
                 await borg.send_message(
                     udir_event.chat_id,
                     p,
                     parse_mode=None,
                 )
-                Files=os.listdir(path)
+                Files = os.listdir(path)
                 Files.sort()
-                for file in Files :
-                    path=path+"/"+file
+                for file in Files:
+                    path = path + "/" + file
                     await upload(path)
-                    path= path.replace("/"+file,'')
-                    if file is Files[-1] :
-                        p=path.replace(replacer,'')
+                    path = path.replace("/" + file, "")
+                    if file is Files[-1]:
+                        p = path.replace(replacer, "")
                         await borg.send_message(
                             udir_event.chat_id,
                             p,
@@ -72,7 +73,7 @@ async def uploadir(event):
                         ),
                     )
                 else:
-                    thumb=None
+                    thumb = None
                     if os.path.exists(thumb_image_path):
                         thumb = thumb_image_path
                     c_time = time.time()
@@ -103,13 +104,12 @@ async def uploadir(event):
                             )
                         ],
                         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                            progress(
-                                d, t, udir_event, c_time, "Uploading...", path
-                            )
+                            progress(d, t, udir_event, c_time, "Uploading...", path)
                         ),
                     )
-                uploaded+=1
-        replacer=os.path.dirname(input_str)+'/'
+                uploaded += 1
+
+        replacer = os.path.dirname(input_str) + "/"
         await upload(input_str)
         await udir_event.edit("Uploaded {} files successfully !!".format(uploaded))
     else:
