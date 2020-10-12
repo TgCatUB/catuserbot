@@ -33,35 +33,50 @@ async def uploadir(event):
     udir_event = await edit_or_reply(event, "Uploading....")
     if os.path.exists(input_str):
         await udir_event.edit(f"Gathering file details in directory `{input_str}`")
-        lst_of_files = []
-        lst_of_files = await catlst_of_files(input_str)
+        global uploaded
         uploaded = 0
-        await udir_event.edit(
-            "Found {} files. Uploading will start soon. Please wait!".format(
-                len(lst_of_files)
-            )
-        )
-        for single_file in lst_of_files:
-            if os.path.exists(single_file):
-                # https://stackoverflow.com/a/678242/4723940
-                caption_rts = os.path.basename(single_file)
+        async def upload(path):
+            global uploaded
+            if os.path.isdir(path) :
+                p=path.replace(replacer,'')
+                await borg.send_message(
+                    udir_event.chat_id,
+                    p,
+                    parse_mode=None,
+                )
+                Files=os.listdir(path)
+                Files.sort()
+                for file in Files :
+                    path=path+"/"+file
+                    await upload(path)
+                    path= path.replace("/"+file,'')
+                    if file is Files[-1] :
+                        p=path.replace(replacer,'')
+                        await borg.send_message(
+                            udir_event.chat_id,
+                            p,
+                            parse_mode=None,
+                        )
+            elif os.path.isfile(path):
+                caption_rts = os.path.basename(path)
                 c_time = time.time()
                 if not caption_rts.lower().endswith(".mp4"):
                     await borg.send_file(
                         udir_event.chat_id,
-                        single_file,
+                        path,
                         caption=caption_rts,
                         force_document=False,
                         allow_cache=False,
-                        reply_to=hmm,
                         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                            progress(d, t, event, c_time, "Uploading...", single_file)
+                            progress(d, t, event, c_time, "Uploading...", path)
                         ),
                     )
                 else:
-                    thumb_image = os.path.join(input_str, "thumb.jpg")
+                    thumb=None
+                    if os.path.exists(thumb_image_path):
+                        thumb = thumb_image_path
                     c_time = time.time()
-                    metadata = extractMetadata(createParser(single_file))
+                    metadata = extractMetadata(createParser(path))
                     duration = 0
                     width = 0
                     height = 0
@@ -73,12 +88,11 @@ async def uploadir(event):
                         height = metadata.get("height")
                     await borg.send_file(
                         event.chat_id,
-                        single_file,
+                        path,
                         caption=caption_rts,
-                        thumb=thumb_image,
+                        thumb=thumb,
                         force_document=False,
                         allow_cache=False,
-                        reply_to=hmm,
                         attributes=[
                             DocumentAttributeVideo(
                                 duration=duration,
@@ -90,11 +104,13 @@ async def uploadir(event):
                         ],
                         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                             progress(
-                                d, t, udir_event, c_time, "Uploading...", single_file
+                                d, t, udir_event, c_time, "Uploading...", path
                             )
                         ),
                     )
-                uploaded += 1
+                uploaded+=1
+        replacer=os.path.dirname(input_str)+'/'
+        await upload(input_str)
         await udir_event.edit("Uploaded {} files successfully !!".format(uploaded))
     else:
         await udir_event.edit("404: Directory Not Found")
