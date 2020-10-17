@@ -5,146 +5,152 @@
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from userbot import CMD_HELP, bot
-from userbot.events import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
 @borg.on(admin_cmd(pattern="firmware(?: |$)(.*)"))
+@borg.on(sudo_cmd(outgoing=True, pattern="firmware(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
     firmware = f"firmware"
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{firmware} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
 @borg.on(admin_cmd(pattern="specs(?: |$)(.*)"))
+@borg.on(sudo_cmd(outgoing=True, pattern="specs(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
     specs = f"specs"
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{specs} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @xiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
 @borg.on(admin_cmd(pattern="fastboot(?: |$)(.*)"))
+@borg.on(sudo_cmd(outgoing=True, pattern="fastboot(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
     fboot = f"fastboot"
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{fboot} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBoot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
 @borg.on(admin_cmd(pattern="recovery(?: |$)(.*)"))
+@borg.on(sudo_cmd(outgoing=True, pattern="recovery(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
     recovery = f"recovery"
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{recovery} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
 @borg.on(admin_cmd(pattern="pb(?: |$)(.*)"))
+@borg.on(sudo_cmd(outgoing=True, pattern="pb(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
     pitch = f"pb"
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{pitch} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
 @borg.on(admin_cmd(pattern="of(?: |$)(.*)"))
+@borg.on(sudo_cmd(outgoing=True, pattern="of(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
     ofox = f"of"
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{ofox} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
 CMD_HELP.update(

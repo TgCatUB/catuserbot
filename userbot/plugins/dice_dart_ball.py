@@ -1,4 +1,4 @@
-# imported from uniborg credit goes to spechide
+# imported from unibot credit goes to spechide
 from telethon.tl.types import InputMediaDice
 
 from .. import CMD_HELP
@@ -12,10 +12,10 @@ FOOT_E_MOJI = "⚽️"
 # EMOJI CONSTANTS
 
 
-@borg.on(admin_cmd(pattern=f"({DART_E_MOJI}|dart) ([1-6])"))
-@borg.on(
+@bot.on(admin_cmd(pattern=f"({DART_E_MOJI}|dart) ([1-6])"))
+@bot.on(
     sudo_cmd(
-        pattern=f"({DART_E_MOJI}|dart) [1-6]",
+        pattern=f"({DART_E_MOJI}|dart) ([1-6])",
         allow_sudo=True,
     )
 )
@@ -34,17 +34,17 @@ async def _(event):
     if input_str:
         try:
             required_number = int(input_str)
-            while not r.media.value == required_number:
+            while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
 
 
-@borg.on(admin_cmd(pattern=f"({DICE_E_MOJI}|dice) ([1-6])"))
-@borg.on(
+@bot.on(admin_cmd(pattern=f"({DICE_E_MOJI}|dice) ([1-6])"))
+@bot.on(
     sudo_cmd(
-        pattern=f"({DICE_E_MOJI}|dice) [1-6]",
+        pattern=f"({DICE_E_MOJI}|dice) ([1-6])",
         allow_sudo=True,
     )
 )
@@ -63,17 +63,17 @@ async def _(event):
     if input_str:
         try:
             required_number = int(input_str)
-            while not r.media.value == required_number:
+            while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
 
 
-@borg.on(admin_cmd(pattern=f"({BALL_E_MOJI}|bb) ([1-5])"))
-@borg.on(
+@bot.on(admin_cmd(pattern=f"({BALL_E_MOJI}|bb) ([1-5])"))
+@bot.on(
     sudo_cmd(
-        pattern=f"({BALL_E_MOJI}|bb) [1-5]",
+        pattern=f"({BALL_E_MOJI}|bb) ([1-5])",
         allow_sudo=True,
     )
 )
@@ -92,17 +92,17 @@ async def _(event):
     if input_str:
         try:
             required_number = int(input_str)
-            while not r.media.value == required_number:
+            while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
 
 
-@borg.on(admin_cmd(pattern=f"({FOOT_E_MOJI}|fb) ([1-5])"))
-@borg.on(
+@bot.on(admin_cmd(pattern=f"({FOOT_E_MOJI}|fb) ([1-5])"))
+@bot.on(
     sudo_cmd(
-        pattern=f"({FOOT_E_MOJI}|fb) [1-5]",
+        pattern=f"({FOOT_E_MOJI}|fb) ([1-5])",
         allow_sudo=True,
     )
 )
@@ -121,7 +121,7 @@ async def _(event):
     if input_str:
         try:
             required_number = int(input_str)
-            while not r.media.value == required_number:
+            while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:

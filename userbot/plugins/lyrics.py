@@ -1,19 +1,20 @@
-"made by @mrconfused and @sandy1709"
+# credits to @mrconfused (@sandy1709)
 import io
 import os
 
 import lyricsgenius
 from tswift import Song
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="lyrics ?(.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern="lyrics ?(.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="lyrics ?(.*)"))
 async def _(event):
-    await event.edit("wi8..! I am searching your lyrics....`")
+    catevent = await edit_or_reply(event, "wi8..! I am searching your lyrics....`")
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -23,7 +24,7 @@ async def _(event):
     elif reply.text:
         query = reply.message
     else:
-        await event.edit("`What I am Supposed to find `")
+        await catevent.edit("`What I am Supposed to find `")
         return
     song = ""
     song = Song.find_song(query)
@@ -37,7 +38,7 @@ async def _(event):
     if len(reply) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(reply)) as out_file:
             out_file.name = "lyrics.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -45,30 +46,32 @@ async def _(event):
                 caption=query,
                 reply_to=reply_to_id,
             )
-            await event.delete()
+            await catevent.delete()
     else:
-        await event.edit(reply)
+        await catevent.edit(reply)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="glyrics ?(.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern="glyrics ?(.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="glyrics ?(.*)"))
 async def lyrics(lyric):
     if lyric.pattern_match.group(1):
         query = lyric.pattern_match.group(1)
     else:
-        await lyric.edit(
-            "Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`"
+        await edit_or_reply(
+            lyric,
+            "Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`",
         )
         return
-    if r"-" in query:
-        pass
-    else:
-        await lyric.edit(
-            "Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`"
+    if r"-" not in query:
+        await edit_or_reply(
+            lyric,
+            "Error: please use '-' as divider for <artist> and <song> \neg: `.glyrics Nicki Minaj - Super Bass`",
         )
         return
     if GENIUS is None:
-        await lyric.edit(
-            "`Provide genius access token to config.py or Heroku Var first kthxbye!`"
+        await edit_or_reply(
+            lyric,
+            "`Provide genius access token to config.py or Heroku Var first kthxbye!`",
         )
     else:
         genius = lyricsgenius.Genius(GENIUS)
@@ -77,21 +80,23 @@ async def lyrics(lyric):
             artist = args[0].strip(" ")
             song = args[1].strip(" ")
         except Exception as e:
-            await lyric.edit(f"Error:\n`{e}`")
+            await edit_or_reply(lyric, f"Error:\n`{e}`")
             return
     if len(args) < 1:
-        await lyric.edit("`Please provide artist and song names`")
+        await edit_or_reply(lyric, "`Please provide artist and song names`")
         return
-    await lyric.edit(f"`Searching lyrics for {artist} - {song}...`")
+    catevent = await edit_or_reply(
+        lyric, f"`Searching lyrics for {artist} - {song}...`"
+    )
     try:
         songs = genius.search_song(song, artist)
     except TypeError:
         songs = None
     if songs is None:
-        await lyric.edit(f"Song **{artist} - {song}** not found!")
+        await catevent.edit(f"Song **{artist} - {song}** not found!")
         return
     if len(songs.lyrics) > 4096:
-        await lyric.edit("`Lyrics is too big, view the file to see it.`")
+        await catevent.edit("`Lyrics is too big, view the file to see it.`")
         with open("lyrics.txt", "w+") as f:
             f.write(f"Search query: \n{artist} - {song}\n\n{songs.lyrics}")
         await lyric.client.send_file(
@@ -101,7 +106,7 @@ async def lyrics(lyric):
         )
         os.remove("lyrics.txt")
     else:
-        await lyric.edit(
+        await catevent.edit(
             f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```"
         )
     return

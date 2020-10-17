@@ -9,81 +9,73 @@ from userbot.plugins.sql_helper.welcome_sql import (
     update_previous_welcome,
 )
 
-from .. import CMD_HELP, LOGS, bot
+from .. import BOTLOG_CHATID, CMD_HELP, LOGS, bot
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @bot.on(events.ChatAction)
 async def _(event):
     cws = get_current_welcome_settings(event.chat_id)
-    if cws:
-        if (event.user_joined or event.user_added) and not (await event.get_user()).bot:
-            if Config.CLEAN_WELCOME:
-                try:
-                    await bot.delete_messages(event.chat_id, cws.previous_welcome)
-                except Exception as e:
-                    LOGS.warn(str(e))
-            a_user = await event.get_user()
-            chat = await event.get_chat()
-            me = await bot.get_me()
-            title = chat.title if chat.title else "this chat"
-            participants = await bot.get_participants(chat)
-            count = len(participants)
-            mention = "<a href='tg://user?id={}'>{}</a>".format(
-                a_user.id, a_user.first_name
-            )
-            my_mention = "<a href='tg://user?id={}'>{}</a>".format(me.id, me.first_name)
-            first = a_user.first_name
-            last = a_user.last_name
-            if last:
-                fullname = f"{first} {last}"
-            else:
-                fullname = first
-            username = f"@{a_user.username}" if a_user.username else mention
-            userid = a_user.id
-            my_first = me.first_name
-            my_last = me.last_name
-            if my_last:
-                my_fullname = f"{my_first} {my_last}"
-            else:
-                my_fullname = my_first
-            my_username = f"@{me.username}" if me.username else my_mention
-            file_media = None
-            current_saved_welcome_message = None
-            if cws and cws.f_mesg_id:
+    if (
+        cws
+        and (event.user_joined or event.user_added)
+        and not (await event.get_user()).bot
+    ):
+        if Config.CLEAN_WELCOME:
+            try:
+                await bot.delete_messages(event.chat_id, cws.previous_welcome)
+            except Exception as e:
+                LOGS.warn(str(e))
+        a_user = await event.get_user()
+        chat = await event.get_chat()
+        me = await bot.get_me()
+        title = chat.title if chat.title else "this chat"
+        participants = await bot.get_participants(chat)
+        count = len(participants)
+        mention = "<a href='tg://user?id={}'>{}</a>".format(
+            a_user.id, a_user.first_name
+        )
+        my_mention = "<a href='tg://user?id={}'>{}</a>".format(me.id, me.first_name)
+        first = a_user.first_name
+        last = a_user.last_name
+        fullname = f"{first} {last}" if last else first
+        username = f"@{a_user.username}" if a_user.username else mention
+        userid = a_user.id
+        my_first = me.first_name
+        my_last = me.last_name
+        my_fullname = f"{my_first} {my_last}" if my_last else my_first
+        my_username = f"@{me.username}" if me.username else my_mention
+        file_media = None
+        current_saved_welcome_message = None
+        if cws:
+            if cws.f_mesg_id:
                 msg_o = await event.client.get_messages(
                     entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id)
                 )
                 file_media = msg_o.media
                 current_saved_welcome_message = msg_o.message
-            elif cws and cws.reply:
+            elif cws.reply:
                 current_saved_welcome_message = cws.reply
-            current_message = await event.reply(
-                current_saved_welcome_message.format(
-                    mention=mention,
-                    title=title,
-                    count=count,
-                    first=first,
-                    last=last,
-                    fullname=fullname,
-                    username=username,
-                    userid=userid,
-                    my_first=my_first,
-                    my_last=my_last,
-                    my_fullname=my_fullname,
-                    my_username=my_username,
-                    my_mention=my_mention,
-                ),
-                file=file_media,
-                parse_mode="html",
-            )
-            update_previous_welcome(event.chat_id, current_message.id)
+        current_message = await event.reply(
+            current_saved_welcome_message.format(
+                mention=mention,
+                title=title,
+                count=count,
+                first=first,
+                last=last,
+                fullname=fullname,
+                username=username,
+                userid=userid,
+                my_first=my_first,
+                my_last=my_last,
+                my_fullname=my_fullname,
+                my_username=my_username,
+                my_mention=my_mention,
+            ),
+            file=file_media,
+            parse_mode="html",
+        )
+        update_previous_welcome(event.chat_id, current_message.id)
 
 
 @borg.on(admin_cmd(pattern=r"savewelcome ?(.*)"))
@@ -115,9 +107,11 @@ async def save_welcome(event):
         string = rep_msg.text
     success = "`Welcome note {} for this chat.`"
     if add_welcome_setting(event.chat_id, 0, string, msg_id) is True:
-        await edit_or_reply(event, success.format("saved"))
-    else:
-        await edit_or_reply(event, success.format("updated"))
+        return await edit_or_reply(event, success.format("saved"))
+    rm_welcome_setting(event.chat_id)
+    if add_welcome_setting(event.chat_id, 0, string, msg_id) is True:
+        return await edit_or_reply(event, success.format("updated"))
+    await edit_or_reply("Error while setting welcome in this group")
 
 
 @borg.on(admin_cmd(pattern="clearwelcome$"))
@@ -136,13 +130,13 @@ async def show_welcome(event):
     if not cws:
         await edit_or_reply(event, "`No welcome message saved here.`")
         return
-    elif cws and cws.f_mesg_id:
+    if cws.f_mesg_id:
         msg_o = await bot.get_messages(entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id))
         await edit_or_reply(
             event, "`I am currently welcoming new users with this welcome note.`"
         )
         await event.reply(msg_o.message, file=msg_o.media)
-    elif cws and cws.reply:
+    elif cws.reply:
         await edit_or_reply(
             event, "`I am currently welcoming new users with this welcome note.`"
         )

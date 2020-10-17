@@ -20,71 +20,71 @@ All Thenks goes to Emily ( The creater of This Plugin)
 \nSome credits goes to me ( @kirito6969 ) for ported this plugin
 \nand `SnapDragon for` Helping me.
 ----------------------------------------------------------------
-
 Type `.poto` for get **All profile pics of that User**
 \nOr type `.poto (number)` to get the **desired number of photo of a User** .
 """
 
 import asyncio
-import logging
 
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
-logger = logging.getLogger(__name__)
+name = "Profile Photos"
 
-if 1 == 1:
-    name = "Profile Photos"
-    client = borg
 
-    @borg.on(admin_cmd(pattern="poto ?(.*)"))
-    async def potocmd(event):
-        """Gets the profile photos of replied users, channels or chats"""
-        id = "".join(event.raw_text.split(maxsplit=2)[1:])
-        user = await event.get_reply_message()
-        chat = event.input_chat
-        if user:
-            photos = await event.client.get_profile_photos(user.sender)
-            u = True
+@bot.on(admin_cmd(pattern="poto ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="poto ?(.*)", allow_sudo=True))
+async def potocmd(event):
+    """Gets the profile photos of replied users, channels or chats"""
+    uid = "".join(event.raw_text.split(maxsplit=1)[1:])
+    user = await event.get_reply_message()
+    chat = event.input_chat
+    if user:
+        photos = await event.client.get_profile_photos(user.sender)
+        u = True
+    else:
+        photos = await event.client.get_profile_photos(chat)
+        u = False
+    if uid.strip() == "":
+        uid = 1
+        if int(uid) <= (len(photos)):
+            send_photos = await event.client.download_media(photos[uid - 1])
+            await event.client.send_file(event.chat_id, send_photos)
         else:
-            photos = await event.client.get_profile_photos(chat)
-            u = False
-        if id.strip() == "":
-            id = 1
-            if int(id) <= (len(photos)):
-                send_photos = await event.client.download_media(photos[id - 1])
-                await event.client.send_file(event.chat_id, send_photos)
-            else:
-                await event.edit("No photo found of this NIBBA / NIBBI. Now u Die!")
-                await asyncio.sleep(2)
-                return
-        elif id.strip() == "all":
-            if len(photos) > 0:
-                await event.client.send_file(event.chat_id, photos)
-            else:
-                try:
-                    if u is True:
-                        photo = await event.client.download_profile_photo(user.sender)
-                    else:
-                        photo = await event.client.download_profile_photo(
-                            event.input_chat
-                        )
-                    await event.client.send_file(event.chat_id, photo)
-                except a:
-                    await event.edit("**This user has no photos!**")
-                    return
+            await edit_or_reply(
+                event, "No photo found of this NIBBA / NIBBI. Now u Die!"
+            )
+            await asyncio.sleep(2)
+            return
+    elif uid.strip() == "all":
+        if len(photos) > 0:
+            await event.client.send_file(event.chat_id, photos)
         else:
             try:
-                id = int(id)
-                if id <= 0:
-                    await event.edit("```number Invalid!``` **Are you Comedy Me ?**")
-                    return
-            except BaseException:
-                await event.edit("Are you comedy me ?")
+                if u is True:
+                    photo = await event.client.download_profile_photo(user.sender)
+                else:
+                    photo = await event.client.download_profile_photo(event.input_chat)
+                await event.client.send_file(event.chat_id, photo)
+            except a:
+                await edit_or_reply(event, "**This user has no photos!**")
                 return
-            if int(id) <= (len(photos)):
-                send_photos = await event.client.download_media(photos[id - 1])
-                await event.client.send_file(event.chat_id, send_photos)
-            else:
-                await event.edit("No photo found of this NIBBA / NIBBI. Now u Die!")
-                await asyncio.sleep(2)
+    else:
+        try:
+            uid = int(uid)
+            if uid <= 0:
+                await edit_or_reply(
+                    event, "```number Invalid!``` **Are you Comedy Me ?**"
+                )
                 return
+        except BaseException:
+            await edit_or_reply(event, "Are you comedy me ?")
+            return
+        if int(uid) <= (len(photos)):
+            send_photos = await event.client.download_media(photos[uid - 1])
+            await event.client.send_file(event.chat_id, send_photos)
+        else:
+            await edit_or_reply(
+                event, "No photo found of this NIBBA / NIBBI. Now u Die!"
+            )
+            await asyncio.sleep(2)
+            return

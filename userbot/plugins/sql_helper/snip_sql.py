@@ -39,22 +39,20 @@ def add_note(keyword, reply, f_mesg_id):
         SESSION.add(adder)
         SESSION.commit()
         return True
-    else:
-        rem = SESSION.query(Note).get(keyword)
-        SESSION.delete(rem)
-        SESSION.commit()
-        adder = Note(keyword, reply, f_mesg_id)
-        SESSION.add(adder)
-        SESSION.commit()
-        return False
+    rem = SESSION.query(Note).get(keyword)
+    SESSION.delete(rem)
+    SESSION.commit()
+    adder = Note(keyword, reply, f_mesg_id)
+    SESSION.add(adder)
+    SESSION.commit()
+    return False
 
 
 def rm_note(keyword):
     to_check = get_note(keyword)
     if not to_check:
         return False
-    else:
-        rem = SESSION.query(Note).get(keyword)
-        SESSION.delete(rem)
-        SESSION.commit()
-        return True
+    rem = SESSION.query(Note).get(keyword)
+    SESSION.delete(rem)
+    SESSION.commit()
+    return True

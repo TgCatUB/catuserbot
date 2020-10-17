@@ -1,22 +1,17 @@
-"""Available Commands:
-.unoob
-.menoob
-.upro
-.mepro
-@arnab431"""
-
 import asyncio
 
-from ..utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
 @borg.on(admin_cmd(pattern="unoob$"))
+@borg.on(sudo_cmd(pattern="unoob$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(9)
-    await event.edit("unnoob")
+    event = await edit_or_reply(event, "unnoob")
     animation_chars = [
         "EvErYbOdY",
         "iZ",
@@ -34,12 +29,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern="menoob$"))
+@borg.on(sudo_cmd(pattern="menoob$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(9)
-    await event.edit("menoob")
+    event = await edit_or_reply(event, "menoob")
     animation_chars = [
         "EvErYbOdY",
         "iZ",
@@ -57,12 +53,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern="upro$"))
+@borg.on(sudo_cmd(pattern="upro$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(8)
-    await event.edit("upro")
+    event = await edit_or_reply(event, "upro")
     animation_chars = [
         "EvErYbOdY",
         "iZ",
@@ -79,12 +76,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern="mepro$"))
+@borg.on(sudo_cmd(pattern="mepro$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(8)
-    await event.edit("mepro")
+    event = await edit_or_reply(event, "mepro")
     animation_chars = [
         "EvErYbOdY",
         "iZ",
@@ -101,12 +99,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"quickheal$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"quickheal$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 5
     animation_ttl = range(11)
-    await event.edit("quickheal")
+    event = await edit_or_reply(event, "quickheal")
     animation_chars = [
         "`Downloading File..`",
         "`File Downloaded....`",
@@ -126,12 +125,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"sqh$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"sqh$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.1
     animation_ttl = range(11)
-    await event.edit("sqh")
+    event = await edit_or_reply(event, "sqh")
     animation_chars = [
         "`Downloading File..`",
         "`File Downloaded....`",
@@ -151,12 +151,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"vquickheal$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"vquickheal$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 5
     animation_ttl = range(11)
-    await event.edit("vquickheal")
+    event = await edit_or_reply(event, "vquickheal")
     animation_chars = [
         "`Downloading File..`",
         "`File Downloaded....`",
@@ -176,18 +177,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"macos$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"macos$", allow_sudo=True))
 async def _(event):
-
     if event.fwd_from:
-
         return
-
     animation_interval = 0.5
-
     animation_ttl = range(11)
-
-    await event.edit("macos")
-
+    event = await edit_or_reply(event, "macos")
     animation_chars = [
         "`Connecting To Hackintosh...`",
         "`Initiating Hackintosh Login.`",
@@ -201,27 +197,19 @@ async def _(event):
         "`Loading Hackintosh... 100%\n█████████████████████████ `",
         "`Welcome...\n\nStock OS: Symbian OS\nCurrent OS: Hackintosh`\n\n**My PC Specs:**\n\n **CPU:** __2.9GHz Intel Core i9-8950HK (hexa-core, 12MB cache, up to 4.8GHz)__\n\n**Graphics:** __Nvidia GeForce GTX 1080 OC (8GB GDDR5X)__\n\n**RAM:** __32GB DDR4 (2,666MHz)__\n\n**Screen:** __17.3-inch, QHD (2,560 x 1,440) 120Hz G-Sync__\n\n**Storage:** __512GB PCIe SSD, 1TB HDD (7,200 rpm)__\n\n**Ports:** __2 x USB 3.0, 1 x USB-C 3.0, 1 x USB-C (Thunderbolt 3), HDMI, mini DisplayPort, Ethernet, headphone jack, microphone jack__\n\n**Connectivity:** __Killer 1550 802.11ac Wi-Fi, Bluetooth 5.0__\n\n**Camera:** __Alienware FHD camera, Tobii IR Eye-tracking with Windows Hello__\n\n**Size:** __16.7 x 13.1 x 1.18 inches (42.4 x 33.2 x 2.99cm; W x D x H)__",
     ]
-
     for i in animation_ttl:
-
         await asyncio.sleep(animation_interval)
-
         await event.edit(animation_chars[i % 11])
 
 
 @borg.on(admin_cmd(pattern=f"windows$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"windows$", allow_sudo=True))
 async def _(event):
-
     if event.fwd_from:
-
         return
-
     animation_interval = 0.5
-
     animation_ttl = range(11)
-
-    await event.edit("windows")
-
+    event = await edit_or_reply(event, "windows")
     animation_chars = [
         "`Connecting To Windows 10...`",
         "`Initiating Windows 10 Login.`",
@@ -235,27 +223,19 @@ async def _(event):
         "`Loading Windows 10... 100%\n█████████████████████████ `",
         "`Welcome...\n\nStock OS: Symbian OS\nCurrent OS: Windows 10`\n\n**My PC Specs:**\n\n **CPU:** __2.9GHz Intel Core i9-8950HK (hexa-core, 12MB cache, up to 4.8GHz)__\n\n**Graphics:** __Nvidia GeForce GTX 1080 OC (8GB GDDR5X)__\n\n**RAM:** __32GB DDR4 (2,666MHz)__\n\n**Screen:** __17.3-inch, QHD (2,560 x 1,440) 120Hz G-Sync__\n\n**Storage:** __512GB PCIe SSD, 1TB HDD (7,200 rpm)__\n\n**Ports:** __2 x USB 3.0, 1 x USB-C 3.0, 1 x USB-C (Thunderbolt 3), HDMI, mini DisplayPort, Ethernet, headphone jack, microphone jack__\n\n**Connectivity:** __Killer 1550 802.11ac Wi-Fi, Bluetooth 5.0__\n\n**Camera:** __Alienware FHD camera, Tobii IR Eye-tracking with Windows Hello__\n\n**Size:** __16.7 x 13.1 x 1.18 inches (42.4 x 33.2 x 2.99cm; W x D x H)__",
     ]
-
     for i in animation_ttl:
-
         await asyncio.sleep(animation_interval)
-
         await event.edit(animation_chars[i % 11])
 
 
 @borg.on(admin_cmd(pattern=f"linux$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"linux$", allow_sudo=True))
 async def _(event):
-
     if event.fwd_from:
-
         return
-
     animation_interval = 0.5
-
     animation_ttl = range(11)
-
-    await event.edit("linux")
-
+    event = await edit_or_reply(event, "linux")
     animation_chars = [
         "`Connecting To Linux...`",
         "`Initiating Linux Login.`",
@@ -269,27 +249,19 @@ async def _(event):
         "`Loading Linux... 100%\n█████████████████████████ `",
         "`Welcome...\n\nStock OS: Symbian OS\nCurrent OS: Linux`\n\n**My PC Specs:**\n\n **CPU:** __2.9GHz Intel Core i9-8950HK (hexa-core, 12MB cache, up to 4.8GHz)__\n\n**Graphics:** __Nvidia GeForce GTX 1080 OC (8GB GDDR5X)__\n\n**RAM:** __32GB DDR4 (2,666MHz)__\n\n**Screen:** __17.3-inch, QHD (2,560 x 1,440) 120Hz G-Sync__\n\n**Storage:** __512GB PCIe SSD, 1TB HDD (7,200 rpm)__\n\n**Ports:** __2 x USB 3.0, 1 x USB-C 3.0, 1 x USB-C (Thunderbolt 3), HDMI, mini DisplayPort, Ethernet, headphone jack, microphone jack__\n\n**Connectivity:** __Killer 1550 802.11ac Wi-Fi, Bluetooth 5.0__\n\n**Camera:** __Alienware FHD camera, Tobii IR Eye-tracking with Windows Hello__\n\n**Size:** __16.7 x 13.1 x 1.18 inches (42.4 x 33.2 x 2.99cm; W x D x H)__",
     ]
-
     for i in animation_ttl:
-
         await asyncio.sleep(animation_interval)
-
         await event.edit(animation_chars[i % 11])
 
 
 @borg.on(admin_cmd(pattern=f"stock$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"stock$", allow_sudo=True))
 async def _(event):
-
     if event.fwd_from:
-
         return
-
     animation_interval = 0.5
-
     animation_ttl = range(11)
-
-    await event.edit("stock")
-
+    event = await edit_or_reply(event, "stock")
     animation_chars = [
         "`Connecting To Symbian OS...`",
         "`Initiating Symbian OS Login.`",
@@ -303,27 +275,19 @@ async def _(event):
         "`Loading Symbian OS... 100%\n▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ `",
         "`Welcome...\n\nStock OS: Symbian OS\nCurrent OS: Symbian OS`\n\n**My PC Specs:**\n\n **CPU:** __2.9GHz Intel Core i9-8950HK (hexa-core, 12MB cache, up to 4.8GHz)__\n\n**Graphics:** __Nvidia GeForce GTX 1080 OC (8GB GDDR5X)__\n\n**RAM:** __32GB DDR4 (2,666MHz)__\n\n**Screen:** __17.3-inch, QHD (2,560 x 1,440) 120Hz G-Sync__\n\n**Storage:** __512GB PCIe SSD, 1TB HDD (7,200 rpm)__\n\n**Ports:** __2 x USB 3.0, 1 x USB-C 3.0, 1 x USB-C (Thunderbolt 3), HDMI, mini DisplayPort, Ethernet, headphone jack, microphone jack__\n\n**Connectivity:** __Killer 1550 802.11ac Wi-Fi, Bluetooth 5.0__\n\n**Camera:** __Alienware FHD camera, Tobii IR Eye-tracking with Windows Hello__\n\n**Size:** __16.7 x 13.1 x 1.18 inches (42.4 x 33.2 x 2.99cm; W x D x H)__",
     ]
-
     for i in animation_ttl:
-
         await asyncio.sleep(animation_interval)
-
         await event.edit(animation_chars[i % 11])
 
 
 @borg.on(admin_cmd(pattern=f"os$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"os$", allow_sudo=True))
 async def _(event):
-
     if event.fwd_from:
-
         return
-
     animation_interval = 0.1
-
     animation_ttl = range(7)
-
-    await event.edit("os")
-
+    event = await edit_or_reply(event, "os")
     animation_chars = [
         "`Scanning OS...`",
         "`Scanning OS......`",
@@ -334,7 +298,15 @@ async def _(event):
         "__Current Loaded OS: Symbian OS__\n\n**To Boot Other OS, Use The Following Trigger:**\n✅ `.macos`\n✅ `.windows`\n✅ `.linux`\n✅ `.stock`\n\nDeveloped By: @Jisan7509",
     ]
     for i in animation_ttl:
-
         await asyncio.sleep(animation_interval)
-
         await event.edit(animation_chars[i % 7])
+
+
+CMD_HELP.update(
+    {
+        "animation6": "__**PLUGIN NAME :** Animation6__\
+\n\n📌** CMD ➥** `.unoob` | `.menoob` | `.upro` | `.mepro` | `.quickheal` | `.vquickheal` | `.macos` | `.windows` | `.linux` | `.stock` | `.os` \
+\n\n**USAGE   ➥  **These are animation bruh..Try & check yourself\
+"
+    }
+)

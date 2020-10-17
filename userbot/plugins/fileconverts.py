@@ -1,3 +1,5 @@
+# by @mrconfused (@sandy1709)
+
 import asyncio
 import os
 import time
@@ -25,11 +27,11 @@ async def _(cat):
     reply_to_id = cat.message.id
     if cat.reply_to_msg_id:
         reply_to_id = cat.reply_to_msg_id
-    filename = "hi.jpg"
     event = await edit_or_reply(cat, "Converting.....")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
+        filename = "hi.jpg"
         file_name = filename
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
@@ -60,11 +62,11 @@ async def _(cat):
     reply_to_id = cat.message.id
     if cat.reply_to_msg_id:
         reply_to_id = cat.reply_to_msg_id
-    filename = "hi.webp"
     event = await edit_or_reply(cat, "Converting.....")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
+        filename = "hi.webp"
         file_name = filename
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
@@ -152,7 +154,7 @@ async def _(event):
     catreply = await event.get_reply_message()
     if not catreply or not catreply.media or not catreply.media.document:
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
-    elif catreply.media.document.mime_type != "application/x-tgsticker":
+    if catreply.media.document.mime_type != "application/x-tgsticker":
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
     reply_to_id = event.message
     if event.reply_to_msg_id:

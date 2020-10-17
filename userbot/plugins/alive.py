@@ -1,9 +1,6 @@
 import time
 from platform import python_version
 
-import nekos
-import requests
-from PIL import Image
 from telethon import version
 
 from userbot import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion
@@ -89,24 +86,6 @@ async def amireallyalive(alive):
     await alive.delete()
 
 
-@borg.on(admin_cmd(pattern="cat$"))
-@borg.on(sudo_cmd(pattern="cat$", allow_sudo=True))
-async def _(event):
-    try:
-        await event.delete()
-    except BaseException:
-        pass
-    reply_to_id = event.message
-    if event.reply_to_msg_id:
-        reply_to_id = await event.get_reply_message()
-    with open("temp.png", "wb") as f:
-        f.write(requests.get(nekos.cat()).content)
-    img = Image.open("temp.png")
-    img.save("temp.webp", "webp")
-    img.seek(0)
-    await bot.send_file(event.chat_id, open("temp.webp", "rb"), reply_to=reply_to_id)
-
-
 # UniBorg Telegram UseRBot
 # Copyright (C) 2020 @UniBorg
 # This code is licensed under
@@ -144,8 +123,6 @@ CMD_HELP.update(
       \n\n📌** CMD ➥** `.alive`\
       \n**USAGE   ➥  **To see wether your bot is working or not.\
       \n\n📌** CMD ➥** `.ialive`\
-      \n**USAGE   ➥**  status of bot.\
-      \n\n📌** CMD ➥** `.cat`\
-      \n**USAGE   ➥**  Random cat stickers"
+      \n**USAGE   ➥**  status of bot."
     }
 )

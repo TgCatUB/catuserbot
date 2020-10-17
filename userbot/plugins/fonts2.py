@@ -1,17 +1,18 @@
 import random
 
-from userbot import CMD_HELP, fonts
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, fonts
 
 
-@borg.on(admin_cmd(pattern="egyptf(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="egyptf(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="egyptf(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("What I am Supposed to change give text")
+        await edit_or_reply(event, "What I am Supposed to change give text")
         return
     string = "  ".join(args).lower()
     for normaltextcharacter in string:
@@ -20,17 +21,18 @@ async def stylish_generator(event):
                 fonts.normaltext.index(normaltextcharacter)
             ]
             string = string.replace(normaltextcharacter, egyptfontcharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
-@borg.on(admin_cmd(pattern="maref(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="maref(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="maref(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("What I am Supposed to change give text")
+        await edit_or_reply(event, "What I am Supposed to change give text")
         return
     string = "  ".join(args).lower()
     for normaltextcharacter in string:
@@ -39,17 +41,18 @@ async def stylish_generator(event):
                 fonts.normaltext.index(normaltextcharacter)
             ]
             string = string.replace(normaltextcharacter, nightmarecharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
-@borg.on(admin_cmd(pattern="handcf(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="handcf(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="handcf(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("What I am Supposed to change give text")
+        await edit_or_reply(event, "What I am Supposed to change give text")
         return
     string = "  ".join(args).lower()
     for normaltextcharacter in string:
@@ -58,17 +61,18 @@ async def stylish_generator(event):
                 fonts.normaltext.index(normaltextcharacter)
             ]
             string = string.replace(normaltextcharacter, hwcapitalcharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
-@borg.on(admin_cmd(pattern="doublef(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="doublef(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="doublef(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("What I am Supposed to change give text")
+        await edit_or_reply(event, "What I am Supposed to change give text")
         return
     string = "  ".join(args).lower()
     for normaltextcharacter in string:
@@ -77,42 +81,42 @@ async def stylish_generator(event):
                 fonts.normaltext.index(normaltextcharacter)
             ]
             string = string.replace(normaltextcharacter, doubletextcharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
-@borg.on(admin_cmd(pattern="mock(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="mock(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="mock(?: |$)(.*)", allow_sudo=True))
 async def spongemocktext(mock):
-    """ Do it and find the real fun. """
-    if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
-        reply_text = list()
-        textx = await mock.get_reply_message()
-        message = mock.pattern_match.group(1)
-        if message:
-            pass
-        elif textx:
-            message = textx.text
+    reply_text = []
+    textx = await mock.get_reply_message()
+    message = mock.pattern_match.group(1)
+    if message:
+        pass
+    elif textx:
+        message = textx.text
+    else:
+        await edit_or_reply(mock, "`gIvE sOMEtHInG tO MoCk!`")
+        return
+
+    for charac in message:
+        if charac.isalpha() and random.randint(0, 1):
+            to_app = charac.upper() if charac.islower() else charac.lower()
+            reply_text.append(to_app)
         else:
-            await mock.edit("`gIvE sOMEtHInG tO MoCk!`")
-            return
+            reply_text.append(charac)
 
-        for charac in message:
-            if charac.isalpha() and random.randint(0, 1):
-                to_app = charac.upper() if charac.islower() else charac.lower()
-                reply_text.append(to_app)
-            else:
-                reply_text.append(charac)
-
-        await mock.edit("".join(reply_text))
+    await edit_or_reply(mock, "".join(reply_text))
 
 
-@borg.on(admin_cmd(pattern="ghostf(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="ghostf(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="ghostf(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("What I am Supposed to change give text")
+        await edit_or_reply(event, "What I am Supposed to change give text")
         return
     string = "  ".join(args).lower()
     for normaltextcharacter in string:
@@ -121,30 +125,32 @@ async def stylish_generator(event):
                 fonts.normaltext.index(normaltextcharacter)
             ]
             string = string.replace(normaltextcharacter, ghostfontcharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
-@borg.on(admin_cmd(pattern="handsf(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="handsf(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="handsf(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("What I am Supposed to change give text")
+        await edit_or_reply(event, "What I am Supposed to change give text")
         return
     string = "  ".join(args).lower()
     for normaltextcharacter in string:
         if normaltextcharacter in fonts.normaltext:
             hwslcharacter = fonts.hwslfont[fonts.normaltext.index(normaltextcharacter)]
             string = string.replace(normaltextcharacter, hwslcharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
 CMD_HELP.update(
     {
         "fonts2": "__**PLUGIN NAME :** Fonts2__\
-\n\n📌** CMD ➥** `.mock` (text) or .mock reply to message \
-\n**USAGE   ➥  **Random capital and small letters in given text."
+        \n\n📌** CMD ➥** `.egyptf` | `.maref` | `.handcf` | `.doublef` | `.mock` | `.ghostf` | `.handsf` \
+        \n\n**USAGE   ➥  **Use cmd <text> , it will change your text to that font.\
+        \n\n**Example :** `.egyptf hello there`"
     }
 )

@@ -19,6 +19,7 @@ from telethon.tl.types import (
     ChannelParticipantAdmin,
     ChannelParticipantCreator,
     ChannelParticipantsAdmins,
+    ChannelParticipantsBots,
     ChannelParticipantsKicked,
     ChatBannedRights,
     MessageActionChannelMigrateFrom,
@@ -92,6 +93,41 @@ async def _(event):
     else:
         await event.client.send_message(event.chat_id, mentions)
     await event.delete()
+
+
+@bot.on(admin_cmd(pattern="get_bots ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="get_bots ?(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    mentions = "**Bots in this Channel**: \n"
+    input_str = event.pattern_match.group(1)
+    to_write_chat = await event.get_input_chat()
+    chat = None
+    if not input_str:
+        chat = to_write_chat
+    else:
+        mentions = "Bots in {} channel: \n".format(input_str)
+        try:
+            chat = await event.client.get_entity(input_str)
+        except Exception as e:
+            await edit_or_reply(event, str(e))
+            return None
+    try:
+        async for x in event.client.iter_participants(
+            chat, filter=ChannelParticipantsBots
+        ):
+            if isinstance(x.participant, ChannelParticipantAdmin):
+                mentions += "\n ⚜️ [{}](tg://user?id={}) `{}`".format(
+                    x.first_name, x.id, x.id
+                )
+            else:
+                mentions += "\n [{}](tg://user?id={}) `{}`".format(
+                    x.first_name, x.id, x.id
+                )
+    except Exception as e:
+        mentions += " " + str(e) + "\n"
+    await edit_or_reply(event, mentions)
 
 
 @bot.on(admin_cmd(pattern=r"users ?(.*)", outgoing=True))
@@ -169,8 +205,8 @@ async def info(event):
         await catevent.edit("`An unexpected error has occurred.`")
 
 
-@borg.on(admin_cmd(pattern="unbanall ?(.*)"))
-@borg.on(sudo_cmd(pattern="unbanall ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="unbanall ?(.*)"))
+@bot.on(sudo_cmd(pattern="unbanall ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -182,12 +218,12 @@ async def _(event):
             return False
         et = await edit_or_reply(event, "Searching Participant Lists.")
         p = 0
-        async for i in borg.iter_participants(
+        async for i in bot.iter_participants(
             event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
         ):
             rights = ChatBannedRights(until_date=0, view_messages=False)
             try:
-                await borg(
+                await bot(
                     functions.channels.EditBannedRequest(event.chat_id, i, rights)
                 )
             except FloodWaitError as ex:
@@ -200,8 +236,8 @@ async def _(event):
         await et.edit("{}: {} unbanned".format(event.chat_id, p))
 
 
-@borg.on(admin_cmd(pattern="ikuck ?(.*)"))
-@borg.on(sudo_cmd(pattern="ikuck (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ikuck ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="ikuck (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -226,7 +262,7 @@ async def _(event):
     q = 0
     r = 0
     et = await edit_or_reply(event, "Searching Participant Lists.")
-    async for i in borg.iter_participants(event.chat_id):
+    async for i in bot.iter_participants(event.chat_id):
         p += 1
         #
         # Note that it's "reversed". You must set to ``True`` the permissions
@@ -343,8 +379,8 @@ None: {}""".format(
 
 
 # Ported by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)
-@borg.on(admin_cmd(pattern=f"zombies ?(.*)"))
-@borg.on(sudo_cmd(pattern="zombies ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"zombies ?(.*)"))
+@bot.on(sudo_cmd(pattern="zombies ?(.*)", allow_sudo=True))
 async def rm_deletedacc(show):
     con = show.pattern_match.group(1).lower()
     del_u = 0
@@ -405,7 +441,7 @@ async def rm_deletedacc(show):
 
 async def ban_user(chat_id, i, rights):
     try:
-        await borg(functions.channels.EditBannedRequest(chat_id, i, rights))
+        await bot(functions.channels.EditBannedRequest(chat_id, i, rights))
         return True, None
     except Exception as exc:
         return False, str(exc)
@@ -675,6 +711,8 @@ CMD_HELP.update(
     \n**USAGE   ➥  **Throws you away from that chat\
     \n\n📌** CMD ➥** `.get_admins` or .`get_admins <username of group >`\
     \n**USAGE   ➥  **Retrieves a list of admins in the chat.\
+    \n\n📌** CMD ➥** `.get_bots or .get_bots <username of group >`\
+    \n**USAGE   ➥  **Retrieves a list of bots in the chat.\
     \n\n📌** CMD ➥** `.users` or `.users <name of member>`\
     \n**USAGE   ➥  **Retrieves all (or queried) users in the chat.\
     \n\n📌** CMD ➥** `.unbanall`\

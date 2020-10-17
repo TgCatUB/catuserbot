@@ -14,14 +14,15 @@ from . import CMD_HELP, runcmd
 @borg.on(admin_cmd(pattern="ls ?(.*)"))
 @borg.on(sudo_cmd(pattern="ls ?(.*)", allow_sudo=True))
 async def lst(event):
-    cat = event.pattern_match.group(1)
-    path = Path(cat) if cat else os.getcwd()
+    cat = "".join(event.text.split(maxsplit=1)[1:])
+    path = cat if cat else os.getcwd()
     if not os.path.exists(path):
         await edit_or_reply(
             event,
             f"there is no such directory or file with the name `{cat}` check again",
         )
         return
+    path = Path(cat) if cat else os.getcwd()
     if os.path.isdir(path):
         if cat:
             msg = "Folders and Files in `{}` :\n".format(path)

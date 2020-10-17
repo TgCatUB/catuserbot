@@ -4,9 +4,8 @@ import io
 from telethon import events, functions
 from telethon.tl.functions.users import GetFullUserRequest
 
-from .. import ALIVE_NAME, CMD_HELP
 from ..utils import admin_cmd
-from . import check
+from . import ALIVE_NAME, CMD_HELP, PM_START, check
 from .sql_helper import pmpermit_sql as pmpermit_sql
 
 PM_WARNS = {}
@@ -14,7 +13,7 @@ PREV_REPLY_MESSAGE = {}
 CACHE = {}
 PMPERMIT_PIC = Config.PMPERMIT_PIC
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USER_BOT_WARN_ZERO = "`You were spamming my peru master's inbox, henceforth you are blocked by my master's userbot.` **Now GTFO, i'm playing minecraft** "
+USER_BOT_WARN_ZERO = "You were spamming my peru master's inbox, henceforth you are blocked by my master's userbot. **Now GTFO, i'm playing minecraft** "
 
 if Var.PRIVATE_GROUP_ID is not None:
 
@@ -33,20 +32,20 @@ if Var.PRIVATE_GROUP_ID is not None:
                 if chat.id in PREV_REPLY_MESSAGE:
                     await PREV_REPLY_MESSAGE[chat.id].delete()
                     del PREV_REPLY_MESSAGE[chat.id]
+                if chat.id in PM_START:
+                    PM_START.remove(chat.id)
                 pmpermit_sql.approve(chat.id, reason)
                 await event.edit(
                     "Approved to pm [{}](tg://user?id={})".format(firstname, chat.id)
                 )
-                await asyncio.sleep(3)
-                await event.delete()
             else:
                 await event.edit(
                     "[{}](tg://user?id={}) is already in approved list".format(
                         firstname, chat.id
                     )
                 )
-                await asyncio.sleep(3)
-                await event.delete()
+            await asyncio.sleep(3)
+            await event.delete()
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
@@ -59,32 +58,35 @@ if Var.PRIVATE_GROUP_ID is not None:
                 if chat in PREV_REPLY_MESSAGE:
                     await PREV_REPLY_MESSAGE[chat].delete()
                     del PREV_REPLY_MESSAGE[chat]
+                if chat in PM_START:
+                    PM_START.remove(chat)
                 pmpermit_sql.approve(chat, reason)
                 await event.edit(
                     "Approved to pm [{}](tg://user?id={})".format(firstname, chat)
                 )
-                await asyncio.sleep(3)
-                await event.delete()
             else:
                 await event.edit(
                     "[{}](tg://user?id={}) is already in approved list".format(
                         firstname, chat
                     )
                 )
-                await asyncio.sleep(3)
-                await event.delete()
+
+            await asyncio.sleep(3)
+            await event.delete()
 
     @bot.on(events.NewMessage(outgoing=True))
     async def you_dm_niqq(event):
         if event.fwd_from:
             return
         chat = await event.get_chat()
-        if event.text.startswith((".bloack", ".disapprove")):
+        if event.text.startswith((".block", ".disapprove")):
             return
-        if event.is_private:
-            if not pmpermit_sql.is_approved(chat.id):
-                if chat.id not in PM_WARNS:
-                    pmpermit_sql.approve(chat.id, "outgoing")
+        if (
+            event.is_private
+            and not pmpermit_sql.is_approved(chat.id)
+            and chat.id not in PM_WARNS
+        ):
+            pmpermit_sql.approve(chat.id, "outgoing")
 
     @borg.on(admin_cmd(pattern="disapprove ?(.*)"))
     async def disapprove_p_m(event):
@@ -94,6 +96,8 @@ if Var.PRIVATE_GROUP_ID is not None:
             replied_user = await event.client(GetFullUserRequest(event.chat_id))
             firstname = replied_user.user.first_name
             chat = await event.get_chat()
+            if chat.id in PM_START:
+                PM_START.remove(chat.id)
             if pmpermit_sql.is_approved(chat.id):
                 pmpermit_sql.disapprove(chat.id)
                 await event.edit(
@@ -110,6 +114,8 @@ if Var.PRIVATE_GROUP_ID is not None:
             reply = await event.get_reply_message()
             chat = await event.client.get_entity(reply.from_id)
             firstname = str(chat.first_name)
+            if chat.id in PM_START:
+                PM_START.remove(chat.id)
             if pmpermit_sql.is_approved(chat.id):
                 pmpermit_sql.disapprove(chat.id)
                 await event.edit(
@@ -130,6 +136,8 @@ if Var.PRIVATE_GROUP_ID is not None:
             replied_user = await event.client(GetFullUserRequest(event.chat_id))
             firstname = replied_user.user.first_name
             chat = await event.get_chat()
+            if chat.id in PM_START:
+                PM_START.remove(chat.id)
             await event.edit(
                 " ███████▄▄███████████▄  \n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓███░░░░░░░░░░░░█\n██████▀▀▀█░░░░██████▀  \n░░░░░░░░░█░░░░█  \n░░░░░░░░░░█░░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░░▀▀ \n\nYou have been blocked. Now You Can't Message Me..[{}](tg://user?id={})".format(
                     firstname, chat.id
@@ -141,6 +149,8 @@ if Var.PRIVATE_GROUP_ID is not None:
             reply = await event.get_reply_message()
             chat = await event.client.get_entity(reply.from_id)
             firstname = str(chat.first_name)
+            if chat.id in PM_START:
+                PM_START.remove(chat.id)
             await event.edit(
                 " ███████▄▄███████████▄  \n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓███░░░░░░░░░░░░█\n██████▀▀▀█░░░░██████▀  \n░░░░░░░░░█░░░░█  \n░░░░░░░░░░█░░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░░▀▀ \n\nYou have been blocked. Now You Can't Message Me..[{}](tg://user?id={})".format(
                     firstname, chat.id
@@ -202,12 +212,9 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         message_text = event.message.message
         chat_id = event.from_id
-        catid = chat_id
-        message_text.lower()
         USER_BOT_NO_WARN = (
-            f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
-            "This is auto generated message from cat security service\n\n"
-            f"Hi buddy my master {DEFAULTUSER} haven't approved you yet. so ,"
+            f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={chat_id})\n\n"
+            f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "
             "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
             "**Send** `/start` ** so that my master can decide why you're here.**"
         )
@@ -215,25 +222,26 @@ if Var.PRIVATE_GROUP_ID is not None:
             # userbot's should not reply to other userbot's
             # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
             return
-        if event.from_id in CACHE:
-            sender = CACHE[event.from_id]
+        if chat_id in CACHE:
+            sender = CACHE[chat_id]
         else:
-            sender = await bot.get_entity(event.from_id)
-            CACHE[event.from_id] = sender
-        if chat_id == bot.uid:
-            # don't log Saved Messages
+            sender = await bot.get_entity(chat_id)
+            CACHE[chat_id] = sender
+        if chat_id == bot.uid:  # don't log Saved Messages
             return
-        if sender.bot:
-            # don't log bots
+        if sender.bot:  # don't log bots
             return
-        if sender.verified:
-            # don't log verified accounts
+        if sender.verified:  # don't log verified accounts
             return
-        if len(event.raw_text) == 1:
-            if check(event.raw_text):
-                return
+        if event.raw_text == "/start":
+            if chat_id not in PM_START:
+                PM_START.append(chat_id)
+            return
+        if len(event.raw_text) == 1 and check(event.raw_text):
+            return
+        if chat_id in PM_START:
+            return
         if not pmpermit_sql.is_approved(chat_id):
-            # pm permit
             await do_pm_permit_action(chat_id, event)
 
     async def do_pm_permit_action(chat_id, event):
@@ -245,21 +253,17 @@ if Var.PRIVATE_GROUP_ID is not None:
             await event.client(functions.contacts.BlockRequest(chat_id))
             if chat_id in PREV_REPLY_MESSAGE:
                 await PREV_REPLY_MESSAGE[chat_id].delete()
+            if chat.id in PM_START:
+                PM_START.remove(chat.id)
             PREV_REPLY_MESSAGE[chat_id] = r
             the_message = ""
             the_message += "#BLOCKED_PMs\n\n"
             the_message += f"[User](tg://user?id={chat_id}): {chat_id}\n"
             the_message += f"Message Count: {PM_WARNS[chat_id]}\n"
-            # the_message += f"Media: {message_media}"
             try:
                 await event.client.send_message(
                     entity=Var.PRIVATE_GROUP_ID,
                     message=the_message,
-                    # reply_to=,
-                    # parse_mode="html",
-                    link_preview=False,
-                    # file=message_media,
-                    silent=True,
                 )
                 return
             except BaseException:
@@ -274,8 +278,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                 )
             else:
                 USER_BOT_NO_WARN = (
-                    "This is auto generated message from cat security service\n\n"
-                    f"Hi buddy my master {DEFAULTUSER} haven't approved you yet. so ,"
+                    f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "
                     "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
                     "**Send** `/start` ** so that my master can decide why you're here.**"
                 )
@@ -290,8 +293,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             else:
                 USER_BOT_NO_WARN = (
                     f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
-                    "This is auto generated message from cat security service\n\n"
-                    f"Hi buddy my master {DEFAULTUSER} haven't approved you yet. so ,"
+                    f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "
                     "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
                     "**Send** `/start` ** so that my master can decide why you're here.**"
                 )

@@ -5,13 +5,13 @@ Coded by @furki
 """
 
 import asyncio
-import logging
 import os
 import shutil
 import tarfile
 import time
 import zipfile
 from datetime import datetime
+from pathlib import Path
 
 import patoolib
 from hachoir.metadata import extractMetadata
@@ -21,32 +21,23 @@ from telethon.tl.types import DocumentAttributeVideo
 from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
 
-logging.basicConfig(
-    format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
-)
-logger = logging.getLogger(__name__)
-
-
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
-extracted = Config.TMP_DOWNLOAD_DIRECTORY
-if not os.path.isdir(extracted):
-    os.makedirs(extracted)
 
 
-@borg.on(admin_cmd(pattern=("zip ?(.*)")))
-@borg.on(sudo_cmd(pattern="zip ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=("zip ?(.*)")))
+@bot.on(sudo_cmd(pattern="zip ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    event = mone = await edit_or_reply(event, "Zipping in progress....")
+    mone = await edit_or_reply(event, "Zipping in progress....")
     if event.reply_to_msg_id:
         if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
             os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
         reply_message = await event.get_reply_message()
         try:
             c_time = time.time()
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await event.client.download_media(
                 reply_message,
                 Config.TMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -54,18 +45,18 @@ async def _(event):
                 ),
             )
             directory_name = downloaded_file_name
-            await event.edit("Finish downloading to my local")
+            await mone.edit("Finish downloading to my local")
             zipfile.ZipFile(directory_name + ".zip", "w", zipfile.ZIP_DEFLATED).write(
                 directory_name
             )
             os.remove(directory_name)
             cat = directory_name + ".zip"
-            await event.edit(f"compressed successfully into `{cat}`")
+            await mone.edit(f"compressed successfully into `{cat}`")
         except Exception as e:  # pylint:disable=C0103,W0703
             await mone.edit(str(e))
     elif input_str:
         if not os.path.exists(input_str):
-            await event.edit(
+            await mone.edit(
                 f"There is no such directory or file with the name `{input_str}` check again"
             )
             return
@@ -74,29 +65,37 @@ async def _(event):
         with zip_file:
             for file in filePaths:
                 zip_file.write(file)
-        await event.edit("Local file compressed to `{}`".format(input_str + ".zip"))
+        await mone.edit("Local file compressed to `{}`".format(input_str + ".zip"))
 
 
-@borg.on(admin_cmd(pattern="unzip ?(.*)"))
-@borg.on(sudo_cmd(pattern="unzip ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="unzip ?(.*)"))
+@bot.on(sudo_cmd(pattern="unzip ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    event = mone = await edit_or_reply(event, "Processing ...")
+    mone = await edit_or_reply(event, "Processing ...")
     if input_str:
-        if os.path.exists(input_str):
-            downloaded_file_name = input_str
+        path = Path(input_str)
+        if os.path.exists(path):
             start = datetime.now()
-            with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
-                zip_ref.extractall(Config.TMP_DOWNLOAD_DIRECTORY)
+            if not zipfile.is_zipfile(path):
+                await mone.edit(
+                    f"`the given file {str(path)} is not zip file to unzip`"
+                )
+            destination = os.path.join(
+                Config.TMP_DOWNLOAD_DIRECTORY,
+                os.path.splitext(os.path.basename(path))[0],
+            )
+            with zipfile.ZipFile(path, "r") as zip_ref:
+                zip_ref.extractall(destination)
             end = datetime.now()
             ms = (end - start).seconds
-            await event.edit(
-                f"unzipped and stored to `{downloaded_file_name[:-4]}` \n**Time Taken :** `{ms} seconds`"
+            await mone.edit(
+                f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`"
             )
         else:
-            await event.edit(f"I can't find that path `{input_str}`")
+            await mone.edit(f"I can't find that path `{input_str}`")
     else:
         if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
             os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -105,24 +104,32 @@ async def _(event):
             reply_message = await event.get_reply_message()
             try:
                 c_time = time.time()
-                downloaded_file_name = await borg.download_media(
+                path = await event.client.download_media(
                     reply_message,
                     Config.TMP_DOWNLOAD_DIRECTORY,
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                         progress(d, t, mone, c_time, "trying to download")
                     ),
                 )
-            except Exception as e:  # pylint:disable=C0103,W0703
+            except Exception as e:
                 await mone.edit(str(e))
-            await event.edit("Unzipping now")
-            with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
-                zip_ref.extractall(Config.TMP_DOWNLOAD_DIRECTORY)
+            await mone.edit("Unzipping now")
+            if not zipfile.is_zipfile(path):
+                await mone.edit(
+                    f"`the given file {str(path)} is not zip file to unzip`"
+                )
+            destination = os.path.join(
+                Config.TMP_DOWNLOAD_DIRECTORY,
+                os.path.splitext(os.path.basename(path))[0],
+            )
+            with zipfile.ZipFile(path, "r") as zip_ref:
+                zip_ref.extractall(destination)
             end = datetime.now()
             ms = (end - start).seconds
-            await event.edit(
-                f"unzipped and stored to `{downloaded_file_name[:-4]}` \n**Time Taken :** `{ms} seconds`"
+            await mone.edit(
+                f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`"
             )
-            os.remove(downloaded_file_name)
+            os.remove(path)
 
 
 def zipdir(dirName):
@@ -134,20 +141,20 @@ def zipdir(dirName):
     return filePaths
 
 
-@borg.on(admin_cmd(pattern=("rar ?(.*)")))
-@borg.on(sudo_cmd(pattern="rar ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=("rar ?(.*)")))
+@bot.on(sudo_cmd(pattern="rar ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    event = mone = await edit_or_reply(event, "Processing ...")
+    mone = await edit_or_reply(event, "Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
         try:
             c_time = time.time()
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await event.client.download_media(
                 reply_message,
                 Config.TMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -155,13 +162,11 @@ async def _(event):
                 ),
             )
             directory_name = downloaded_file_name
-            await event.edit("creating rar archive, please wait..")
-            # patoolib.create_archive(directory_name + '.7z',directory_name)
+            await mone.edit("creating rar archive, please wait..")
             patoolib.create_archive(
                 directory_name + ".rar", (directory_name, Config.TMP_DOWNLOAD_DIRECTORY)
             )
-            # patoolib.create_archive("/content/21.yy Avrupa (1).pdf.zip",("/content/21.yy Avrupa (1).pdf","/content/"))
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 directory_name + ".rar",
                 caption="rarred By cat",
@@ -174,32 +179,30 @@ async def _(event):
                 os.remove(directory_name)
             except BaseException:
                 pass
-            await event.edit("Task Completed")
+            await mone.edit("Task Completed")
             await asyncio.sleep(3)
-            await event.delete()
-        except Exception as e:  # pylint:disable=C0103,W0703
+            await mone.delete()
+        except Exception as e:
             await mone.edit(str(e))
     elif input_str:
         directory_name = input_str
-        await event.edit(
-            "Local file compressed to `{}`".format(directory_name + ".rar")
-        )
+        await mone.edit("Local file compressed to `{}`".format(directory_name + ".rar"))
 
 
-@borg.on(admin_cmd(pattern=("tar ?(.*)")))
-@borg.on(sudo_cmd(pattern="tar ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=("tar ?(.*)")))
+@bot.on(sudo_cmd(pattern="tar ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    event = mone = await edit_or_reply(event, "Processing ...")
+    mone = await edit_or_reply(event, "Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
         try:
             c_time = time.time()
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await event.client.download_media(
                 reply_message,
                 Config.TMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -207,7 +210,7 @@ async def _(event):
                 ),
             )
             directory_name = downloaded_file_name
-            await event.edit("Finish downloading to my local")
+            await mone.edit("Finish downloading to my local")
             to_upload_file = directory_name
             output = await create_archive(to_upload_file)
             is_zip = False
@@ -215,7 +218,7 @@ async def _(event):
                 check_if_file = await create_archive(to_upload_file)
                 if check_if_file is not None:
                     to_upload_file = check_if_file
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 output,
                 caption="TAR By cat",
@@ -228,14 +231,14 @@ async def _(event):
                 os.remove(output)
             except BaseException:
                 pass
-            await event.edit("Task Completed")
+            await mone.edit("Task Completed")
             await asyncio.sleep(3)
-            await event.delete()
-        except Exception as e:  # pylint:disable=C0103,W0703
+            await mone.delete()
+        except Exception as e:
             await mone.edit(str(e))
     elif input_str:
         directory_name = input_str
-        await event.edit("Local file compressed to `{}`".format(output))
+        await mone.edit("Local file compressed to `{}`".format(output))
 
 
 async def create_archive(input_directory):
@@ -243,9 +246,6 @@ async def create_archive(input_directory):
     if os.path.exists(input_directory):
         base_dir_name = os.path.basename(input_directory)
         compressed_file_name = f"{base_dir_name}.tar.gz"
-        # suffix_extention_length = 1 + 3 + 1 + 2
-        # if len(base_dir_name) > (64 - suffix_extention_length):
-        #     compressed_file_name = base_dir_name[0:(64 - suffix_extention_length)]
         compressed_file_name += ".tar.gz"
         file_genertor_command = [
             "tar",
@@ -255,11 +255,9 @@ async def create_archive(input_directory):
         ]
         process = await asyncio.create_subprocess_exec(
             *file_genertor_command,
-            # stdout must a pipe to be accessible as process.stdout
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
-        # Wait for the subprocess to finish
         stdout, stderr = await process.communicate()
         stderr.decode().strip()
         stdout.decode().strip()
@@ -272,12 +270,12 @@ async def create_archive(input_directory):
     return return_name
 
 
-@borg.on(admin_cmd(pattern="unrar"))
-@borg.on(sudo_cmd(pattern="unrar", allow_sudo=True))
+@bot.on(admin_cmd(pattern="unrar"))
+@bot.on(sudo_cmd(pattern="unrar", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    event = mone = await edit_or_reply(event, "Processing ...")
+    mone = await edit_or_reply(event, "Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -285,14 +283,14 @@ async def _(event):
         reply_message = await event.get_reply_message()
         try:
             c_time = time.time()
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await event.client.download_media(
                 reply_message,
                 Config.TMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, mone, c_time, "trying to download")
                 ),
             )
-        except Exception as e:  # pylint:disable=C0103,W0703
+        except Exception as e:
             await mone.edit(str(e))
         else:
             end = datetime.now()
@@ -302,9 +300,7 @@ async def _(event):
             )
         patoolib.extract_archive(downloaded_file_name, outdir=extracted)
         filename = sorted(get_lst_of_files(extracted, []))
-        # filename = filename + "/"
-        await event.edit("Unraring now")
-        # r=root, d=directories, f = files
+        await mone.edit("Unraring now")
         for single_file in filename:
             if os.path.exists(single_file):
                 # https://stackoverflow.com/a/678242/4723940
@@ -335,7 +331,7 @@ async def _(event):
                         )
                     ]
                 try:
-                    await borg.send_file(
+                    await event.client.send_file(
                         event.chat_id,
                         single_file,
                         caption=f"UnRarred `{caption_rts}`",
@@ -349,7 +345,7 @@ async def _(event):
                         ),
                     )
                 except Exception as e:
-                    await borg.send_message(
+                    await event.client.send_message(
                         event.chat_id,
                         "{} caused `{}`".format(caption_rts, str(e)),
                         reply_to=event.message.id,
@@ -358,21 +354,20 @@ async def _(event):
                     continue
                 os.remove(single_file)
         os.remove(downloaded_file_name)
-        await event.edit("DONE!!!")
+        await mone.edit("DONE!!!")
         await asyncio.sleep(5)
-        await event.delete()
+        await mone.delete()
 
 
-@borg.on(admin_cmd(pattern="untar"))
-@borg.on(sudo_cmd(pattern="untar", allow_sudo=True))
+@bot.on(admin_cmd(pattern="untar"))
+@bot.on(sudo_cmd(pattern="untar", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    event = mone = await edit_or_reply(event, "Processing ...")
+    mone = await edit_or_reply(event, "Processing ...")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     extracted = Config.TMP_DOWNLOAD_DIRECTORY + "extracted/"
-    Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
     if not os.path.isdir(extracted):
         os.makedirs(extracted)
     if event.reply_to_msg_id:
@@ -380,7 +375,7 @@ async def _(event):
         reply_message = await event.get_reply_message()
         try:
             c_time = time.time()
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await event.client.download_media(
                 reply_message,
                 Config.TMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -397,7 +392,7 @@ async def _(event):
             )
         with tarfile.TarFile.open(downloaded_file_name, "r") as tar_file:
             tar_file.extractall()
-        await event.edit(f"unzipped and stored to `{downloaded_file_name[:-4]}`")
+        await mone.edit(f"unzipped and stored to `{downloaded_file_name[:-4]}`")
         os.remove(downloaded_file_name)
 
 

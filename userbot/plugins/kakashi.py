@@ -3,17 +3,19 @@
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from userbot import bot
-from userbot.events import register
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="note_help$"))
+@bot.on(admin_cmd(outgoing=True, pattern="note_help$"))
+@bot.on(sudo_cmd(outgoing=True, pattern="note_help$", allow_sudo=True))
 async def kakashi(jisan):
-    await jisan.edit("All commands for note is [HERE](https://nekobin.com/xihitanafu) ")
+    await edit_or_reply(
+        jisan, "All commands for note is [HERE](https://nekobin.com/xihitanafu) "
+    )
 
 
-@register(outgoing=True, pattern="^.note(?: |$)(.*)")
+@bot.on(admin_cmd(pattern="note(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(outgoing=True, pattern="note(?: |$)(.*)", allow_sudo=True))
 async def kakashi(event):
     if event.fwd_from:
         return
@@ -68,8 +70,8 @@ async def kakashi(event):
         link = "🐱 Cat UserBot 🐱"
     elif link == "badcat":
         link = "My Repo"
-    await event.edit("```Sending your note....```")
-    async with bot.conversation("@kakashi_robot") as conv:
+    catevent = await edit_or_reply(event, "```Sending your note....```")
+    async with event.client.conversation("@kakashi_robot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=1117359246)
@@ -77,8 +79,9 @@ async def kakashi(event):
             await conv.send_message(f"{link}")
             response = await response
         except YouBlockedUserError:
-            await event.reply("```Unblock @kakashi_robot plox```")
+            await catevent.edit("```Unblock @kakashi_robot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, response.message)
+            await event.client.send_read_acknowledge(conv.chat_id)

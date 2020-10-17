@@ -2,23 +2,22 @@
 G-Drive File Downloader Plugin For Userbot.
 usage: .gdl File-Link
 By: @Zero_cool7870
-
 """
 import requests
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
-async def download_file_from_google_drive(id):
+async def download_file_from_google_drive(gid):
     URL = "https://docs.google.com/uc?export=download"
 
     session = requests.Session()
 
-    response = session.get(URL, params={"id": id}, stream=True)
+    response = session.get(URL, params={"id": gid}, stream=True)
     token = await get_confirm_token(response)
     if token:
-        params = {"id": id, "confirm": token}
+        params = {"id": gid, "confirm": token}
         response = session.get(URL, params=params, stream=True)
 
     headers = response.headers
@@ -38,8 +37,8 @@ async def get_confirm_token(response):
 
 
 async def save_response_content(response, destination):
-    CHUNK_SIZE = 32768
     with open(destination, "wb") as f:
+        CHUNK_SIZE = 32768
         for chunk in response.iter_content(CHUNK_SIZE):
             if chunk:  # filter out keep-alive new chunks
                 f.write(chunk)
@@ -55,7 +54,7 @@ async def get_id(link):  # Extract File Id from G-Drive Link
         for c in link:
             if c == "/":
                 break
-            fid = fid + c
+            fid += c
         return fid
     for c in link:
         if c == "=":
@@ -63,7 +62,7 @@ async def get_id(link):  # Extract File Id from G-Drive Link
         if c == "&":
             break
         if c_append:
-            file_id = file_id + c
+            file_id += c
     file_id = file_id[1:]
     return file_id
 
@@ -72,27 +71,27 @@ async def get_file_name(content):
     file_name = ""
     c_append = False
     for c in str(content):
-        if c == '"':
-            c_append = True
         if c == ";":
             c_append = False
+        elif c == '"':
+            c_append = True
         if c_append:
-            file_name = file_name + c
+            file_name += c
     file_name = file_name.replace('"', "")
     print("File Name: " + str(file_name))
     return file_name
 
 
-@borg.on(admin_cmd(pattern=f"gdl", outgoing=True))
+@bot.on(admin_cmd(pattern=f"gdl (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"gdl (.*)", allow_sudo=True))
 async def g_download(event):
     if event.fwd_from:
         return
     drive_link = event.text[4:]
-    print("Drive Link: " + drive_link)
     file_id = await get_id(drive_link)
-    await event.edit("Downloading Requested File from G-Drive...")
+    event = await edit_or_reply(event, "Downloading Requested File from G-Drive...")
     file_name = await download_file_from_google_drive(file_id)
-    await event.edit("File Downloaded.\nName: `" + str(file_name) + "`")
+    await event.edit("File Downloaded.\n**Name : **`" + str(file_name) + "`")
 
 
 CMD_HELP.update(

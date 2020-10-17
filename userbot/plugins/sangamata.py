@@ -1,158 +1,91 @@
 import asyncio
-import logging
 
-from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from userbot.utils import admin_cmd
-
-logging.basicConfig(
-    format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
-)
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, parse_pre, sanga_seperator
 
 
-@borg.on(admin_cmd(pattern=("sg ?(.*)")))
+@bot.on(admin_cmd(pattern="(sg|sgu)($| (.*))"))
+@bot.on(sudo_cmd(pattern="(sg|sgu)($| (.*))", allow_sudo=True))
 async def _(event):
-    if event.fwd_from:
-        return
-    if not event.reply_to_msg_id:
-        await event.edit("```Reply to any user message.```")
-        return
+    # https://t.me/catuserbot_support/181159
+    input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply_message = await event.get_reply_message()
-    if not reply_message.text:
-        await event.edit("```reply to text message```")
-        return
+    if not input_str and not reply_message:
+        catevent = await edit_or_reply(
+            event,
+            "`reply to  user's text message to get name/username history or give userid`",
+        )
+        await asyncio.sleep(5)
+        return await catevent.delete()
+    if input_str:
+        try:
+            uid = int(input_str)
+        except ValueError:
+            try:
+                u = await event.client.get_entity(input_str)
+            except ValueError:
+                catevent = await edit_or_reply(
+                    event, "`Give userid or username to find name history`"
+                )
+                await asyncio.sleep(5)
+                return await catevent.delete()
+            uid = u.id
+    else:
+        uid = reply_message.from_id
     chat = "@SangMataInfo_bot"
-    reply_message.sender
-    if reply_message.sender.bot:
-        await event.edit("```Reply to actual users message.```")
-        return
-    await event.edit("```Processing```")
-    async with borg.conversation(chat) as conv:
+    catevent = await edit_or_reply(event, "`Processing...`")
+    async with event.client.conversation(chat) as conv:
         try:
-            response = conv.wait_event(
-                events.NewMessage(incoming=True, from_users=461843263)
-            )
-            await borg.forward_messages(chat, reply_message)
-            response = await response
+            await conv.send_message(f"/search_id {uid}")
         except YouBlockedUserError:
-            await event.reply("```Please unblock @sangmatainfo_bot and try again```")
-            return
-        if response.text.startswith("Forward"):
-            await event.edit(
-                "The user have enabled privacy settings you cant get name history"
-            )
-        else:
-            await event.edit(f"{response.message.message}")
-
-
-@borg.on(admin_cmd(pattern=("fakemail ?(.*)")))
-async def _(event):
-    if event.fwd_from:
-        return
-    chat = "@fakemailbot"
-    await event.edit("```Fakemail Creating, wait```")
-    async with borg.conversation(chat) as conv:
-        try:
-            await event.client.send_message("@fakemailbot", "/generate")
+            await catevent.edit("`unblock @Sangmatainfo_bot and then try`")
             await asyncio.sleep(5)
-            k = await event.client.get_messages(
-                entity="@fakemailbot", limit=1, reverse=False
-            )
-            mail = k[0].text
-            # print(k[0].text)
-        except YouBlockedUserError:
-            await event.reply("```Please unblock @fakemailbot and try again```")
-            return
-        await event.edit(mail)
+            return await catevent.delete()
+        responses = []
+        while True:
+            try:
+                response = await conv.get_response(timeout=2)
+            except asyncio.TimeoutError:
+                break
+            responses.append(response.text)
+        await event.client.send_read_acknowledge(conv.chat_id)
+    if not responses:
+        await catevent.edit("`bot can't fetch results`")
+        await asyncio.sleep(5)
+        return await catevent.delete()
+    if "No records found" in responses:
+        await catevent.edit("`The user doesn't have any record`")
+        await asyncio.sleep(5)
+        return await catevent.delete()
+    names, usernames = await sanga_seperator(responses)
+    cmd = event.pattern_match.group(1)
+    if cmd == "sg":
+        sandy = None
+        for i in names:
+            if sandy:
+                await event.reply(i, parse_mode=parse_pre)
+            else:
+                sandy = True
+                await catevent.edit(i, parse_mode=parse_pre)
+    elif cmd == "sgu":
+        sandy = None
+        for i in usernames:
+            if sandy:
+                await event.reply(i, parse_mode=parse_pre)
+            else:
+                sandy = True
+                await catevent.edit(i, parse_mode=parse_pre)
 
 
-@borg.on(admin_cmd(pattern=("mailid ?(.*)")))
-async def _(event):
-    if event.fwd_from:
-        return
-    chat = "@fakemailbot"
-    await event.edit("```Fakemail list getting```")
-    async with borg.conversation(chat) as conv:
-        try:
-            await event.client.send_message("@fakemailbot", "/id")
-            await asyncio.sleep(5)
-            k = await event.client.get_messages(
-                entity="@fakemailbot", limit=1, reverse=False
-            )
-            mail = k[0].text
-            # print(k[0].text)
-        except YouBlockedUserError:
-            await event.reply("```Please unblock @fakemailbot and try again```")
-            return
-        await event.edit(mail)
-
-
-@borg.on(admin_cmd(pattern=("ub ?(.*)")))
-async def _(event):
-    if event.fwd_from:
-        return
-    if not event.reply_to_msg_id:
-        await event.edit("```Reply to any user message.```")
-        return
-    reply_message = await event.get_reply_message()
-    if not reply_message.text:
-        await event.edit("```reply to text message```")
-        return
-    chat = "@uploadbot"
-    reply_message.sender
-    if reply_message.sender.bot:
-        await event.edit("```Reply to actual users message.```")
-        return
-    await event.edit("```Processing```")
-    async with borg.conversation(chat) as conv:
-        try:
-            response = conv.wait_event(
-                events.NewMessage(incoming=True, from_users=97342984)
-            )
-            await borg.forward_messages(chat, reply_message)
-            response = await response
-        except YouBlockedUserError:
-            await event.reply("```Please unblock @uploadbot and try again```")
-            return
-        if response.text.startswith("Hi!,"):
-            await event.edit(
-                "```can you kindly disable your forward privacy settings for good?```"
-            )
-        else:
-            await event.edit(f"{response.message.message}")
-
-
-@borg.on(admin_cmd(pattern=("gid ?(.*)")))
-async def _(event):
-    if event.fwd_from:
-        return
-    if not event.reply_to_msg_id:
-        await event.edit("```Reply to any user message.```")
-        return
-    reply_message = await event.get_reply_message()
-    if not reply_message.text:
-        await event.edit("```reply to text message```")
-        return
-    chat = "@getidsbot"
-    reply_message.sender
-    if reply_message.sender.bot:
-        await event.edit("```Reply to actual users message.```")
-        return
-    await event.edit("```Processing```")
-    async with borg.conversation(chat) as conv:
-        try:
-            response = conv.wait_event(
-                events.NewMessage(incoming=True, from_users=186675376)
-            )
-            await borg.forward_messages(chat, reply_message)
-            response = await response
-        except YouBlockedUserError:
-            await event.reply("```you blocked bot```")
-            return
-        if response.text.startswith("Hello,"):
-            await event.edit(
-                "```can you kindly disable your forward privacy settings for good?```"
-            )
-        else:
-            await event.edit(f"{response.message.message}")
+CMD_HELP.update(
+    {
+        "sangamata": "__**PLUGIN NAME :** Sangamata__\
+    \n\n📌** CMD ➥** `.sg` <username/userid/reply>\
+    \n**USAGE   ➥  **Shows you the previous name history of user.\
+    \n\n📌** CMD ➥** `.sgu` <username/userid/reply>\
+    \n**USAGE   ➥  **Shows you the previous username history of user.\
+    "
+    }
+)

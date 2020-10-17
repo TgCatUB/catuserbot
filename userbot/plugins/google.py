@@ -7,8 +7,8 @@ from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
-from googlesearch import search
 from PIL import Image
+from search_engine_parser import GoogleSearch
 
 from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
 from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
@@ -18,44 +18,42 @@ useragent = "Mozilla/5.0 (Linux; Android 9; SM-G960F Build/PPR1.180610.011; wv) 
 opener.addheaders = [("User-agent", useragent)]
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"gs(?: |$)(\d*)? ?(.*)"))
-@borg.on(sudo_cmd(allow_sudo=True, pattern=r"gs(?: |$)(\d*)? ?(.*)"))
-async def gsearch(event):
-    if event.is_reply and not event.pattern_match.group(2):
-        query = await event.get_reply_message()
-        query = str(query.message)
-    else:
-        query = str(event.pattern_match.group(2))
-    if not query:
-        return await edit_or_reply(
-            event, "Reply to a message or pass a query to search!"
-        )
-    catevent = await edit_or_reply(event, "`Processing...`")
-    if event.pattern_match.group(1) != "":
-        lim = int(event.pattern_match.group(1))
-        if lim > 20:
-            lim = int(20)
-        if lim <= 0:
-            lim = int(1)
-    else:
-        lim = int(10)
-    catresult = ""
-    for url in search(query, stop=lim):
-        a = google_scrape(url)
-        catresult += f"👉[{a}]({url})\n\n"
+@bot.on(admin_cmd(outgoing=True, pattern=r"gs (.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern=r"gs (.*)"))
+async def gsearch(q_event):
+    catevent = await edit_or_reply(q_event, "`searching........`")
+    match = q_event.pattern_match.group(1)
+    page = re.findall(r"page=\d+", match)
+    try:
+        page = page[0]
+        page = page.replace("page=", "")
+        match = match.replace("page=" + page[0], "")
+    except IndexError:
+        page = 1
+    search_args = (str(match), int(page))
+    gsearch = GoogleSearch()
+    gresults = await gsearch.async_search(*search_args)
+    msg = ""
+    for i in range(len(gresults["links"])):
+        try:
+            title = gresults["titles"][i]
+            link = gresults["links"][i]
+            desc = gresults["descriptions"][i]
+            msg += f"👉[{title}]({link})\n`{desc}`\n\n"
+        except IndexError:
+            break
     await catevent.edit(
-        "**Search Query:**\n`" + query + "`\n\n**Results:**\n" + catresult,
-        link_preview=False,
+        "**Search Query:**\n`" + match + "`\n\n**Results:**\n" + msg, link_preview=False
     )
     if BOTLOG:
-        await event.client.send_message(
+        await q_event.client.send_message(
             BOTLOG_CHATID,
-            "Google Search query `" + query + "` was executed successfully",
+            "Google Search query `" + match + "` was executed successfully",
         )
 
 
-@borg.on(admin_cmd(pattern="grs$"))
-@borg.on(sudo_cmd(pattern="grs$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="grs$"))
+@bot.on(sudo_cmd(pattern="grs$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -161,7 +159,7 @@ async def _(img):
             await catevent.edit("`Can't find this piece of shit.`")
             return
 
-        lim = img.pattern_match.group(1) if img.pattern_match.group(1) else 3
+        lim = img.pattern_match.group(1) or 3
         images = await scam(match, lim)
         yeet = []
         for i in images:
@@ -213,43 +211,6 @@ async def scam(results, lim):
             break
     return imglinks
 
-
-def google_scrape(url):
-    thepage = (requests.get(url)).text
-    soup = BeautifulSoup(thepage, "html.parser")
-    return soup.title.text
-
-
-"""@borg.on(admin_cmd(outgoing=True, pattern=r"gs (.*)"))
-async def gsearch(q_event):
-    match = q_event.pattern_match.group(1)
-    page = findall(r"page=\d+", match)
-    try:
-        page = page[0]
-        page = page.replace("page=", "")
-        match = match.replace("page=" + page[0], "")
-    except IndexError:
-        page = 1
-    search_args = (str(match), int(page))
-    gsearch = GoogleSearch()
-    gresults = await gsearch.async_search(*search_args)
-    msg = ""
-    for i in range(len(gresults["links"])):
-        try:
-            title = gresults["titles"][i]
-            link = gresults["links"][i]
-            desc = gresults["descriptions"][i]
-            msg += f"👉[{title}]({link})\n`{desc}`\n\n"
-        except IndexError:
-            break
-    await q_event.edit(
-        "**Search Query:**\n`" + match + "`\n\n**Results:**\n" + msg, link_preview=False
-    )
-    if BOTLOG:
-        await q_event.client.send_message(
-            BOTLOG_CHATID,
-            "Google Search query `" + match + "` was executed successfully",
-        )"""
 
 CMD_HELP.update(
     {

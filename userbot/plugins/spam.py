@@ -5,14 +5,8 @@ import pybase64
 from telethon import functions, types
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-from .. import CMD_HELP
+from .. import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @borg.on(admin_cmd(pattern="spam (.*)"))
@@ -283,7 +277,7 @@ async def spammer(e):
         await edit_or_reply(e, "try again something went wrong or check `.info spam`")
 
 
-@borg.on(admin_cmd("cspam ?(.*)"))
+@borg.on(admin_cmd("cspam (.*)"))
 @borg.on(sudo_cmd(pattern="cspam (.*)", allow_sudo=True))
 async def tmeme(e):
     cspam = str("".join(e.text.split(maxsplit=1)[1:]))

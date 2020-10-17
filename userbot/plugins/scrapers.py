@@ -1,218 +1,144 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-""" Userbot module containing various scrapers. """
+# Userbot module containing various scrapers.
+# Copyright (C) 2019 The Raphielscape Company LLC.(some are ported from there)
+# Copyright (c) JeepBot | 2019(for imdb)
+# # kanged from Blank-x ;---;
 
 import os
-import random
-from asyncio import sleep
-from time import sleep
-from urllib.parse import quote_plus
+import re
 
-from emoji import get_emoji_regexp
-from googletrans import LANGUAGES, Translator
-from gtts.lang import tts_langs
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+import bs4
+import requests
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
-from userbot.utils import admin_cmd
-
-from .. import CHROME_DRIVER, GOOGLE_CHROME_BIN
-
-LANG = "en"
-CARBONLANG = "auto"
-TTS_LANG = "en"
-TRT_LANG = "en"
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import BOTLOG, BOTLOG_CHATID
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="krb"))
-async def carbon_api(e):
-    await e.edit("Processing..")
-    CARBON = "https://carbon.now.sh/?l={lang}&code={code}"
-    global CARBONLANG
-    textx = await e.get_reply_message()
-    pcode = e.text
-    if pcode[5:]:
-        pcodee = str(pcode[5:])
-        if "|" in pcodee:
-            pcode, skeme = pcodee.split("|")
-        else:
-            pcode = pcodee
-            skeme = None
-    elif textx:
-        pcode = str(textx.message)
-        skeme = None  # Importing message to module
-    pcode = deEmojify(pcode)
-    code = quote_plus(pcode)  # Converting to urlencoded
-    await e.edit("Meking Carbon...\n25%")
-    url = CARBON.format(code=code, lang=CARBONLANG)
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.binary_location = GOOGLE_CHROME_BIN
-    chrome_options.add_argument("--window-size=1920x1080")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-gpu")
-    prefs = {"download.default_directory": "./"}
-    chrome_options.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome(executable_path=CHROME_DRIVER, options=chrome_options)
-    driver.get(url)
-    await e.edit("Be Patient...\n50%")
-    download_path = "./"
-    driver.command_executor._commands["send_command"] = (
-        "POST",
-        "/session/$sessionId/chromium/send_command",
-    )
-    params = {
-        "cmd": "Page.setDownloadBehavior",
-        "params": {"behavior": "allow", "downloadPath": download_path},
-    }
-    driver.execute("send_command", params)
-    driver.find_element_by_xpath(
-        "/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]"
-    ).click()
-    if skeme is not None:
-        k_skeme = driver.find_element_by_xpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input"
-        )
-        k_skeme.send_keys(skeme)
-        k_skeme.send_keys(Keys.DOWN)
-        k_skeme.send_keys(Keys.ENTER)
-    else:
-        color_scheme = str(random.randint(1, 29))
-        driver.find_element_by_id(("downshift-0-item-" + color_scheme)).click()
-    driver.find_element_by_id("export-menu").click()
-    driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-    driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-    await e.edit("Processing..\n75%")
-    # Waiting for downloading
-    await sleep(2.5)
-    color_name = driver.find_element_by_xpath(
-        "/html/body/div[1]/main/div[3]/div[2]/div[1]/div[1]/div/span[2]/input"
-    ).get_attribute("value")
-    await e.edit("Done Dana Done...\n100%")
-    file = "./carbon.png"
-    await e.edit("Uploading..")
-    await e.client.send_file(
-        e.chat_id,
-        file,
-        caption="`Here's your carbon!` \n**Colour Scheme: **`{}`".format(color_name),
-        force_document=True,
-        reply_to=e.message.reply_to_msg_id,
-    )
-    os.remove("./carbon.png")
-    driver.quit()
-    # Removing carbon.png after uploading
-    await e.delete()  # Deleting msg
-
-
-@borg.on(admin_cmd(outgoing=True, pattern=r"wiki (.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern=r"wiki (.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern=r"wiki (.*)"))
 async def wiki(wiki_q):
     """ For .wiki command, fetch content from Wikipedia. """
     match = wiki_q.pattern_match.group(1)
     try:
         summary(match)
     except DisambiguationError as error:
-        await wiki_q.edit(f"Disambiguated page found.\n\n{error}")
+        await edit_or_reply(wiki_q, f"Disambiguated page found.\n\n{error}")
         return
     except PageError as pageerror:
-        await wiki_q.edit(f"Page not found.\n\n{pageerror}")
+        await edit_or_reply(wiki_q, f"Page not found.\n\n{pageerror}")
         return
     result = summary(match)
     if len(result) >= 4096:
-        file = open("output.txt", "w+")
-        file.write(result)
-        file.close()
+        with open("output.txt", "w+") as file:
+            file.write(result)
         await wiki_q.client.send_file(
             wiki_q.chat_id,
             "output.txt",
             reply_to=wiki_q.id,
             caption="`Output too large, sending as file`",
         )
+        await wiki_q.delete()
         if os.path.exists("output.txt"):
             os.remove("output.txt")
         return
-    await wiki_q.edit("**Search:**\n`" + match + "`\n\n**Result:**\n" + result)
+    await edit_or_reply(
+        wiki_q, "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
+    )
     if BOTLOG:
         await wiki_q.client.send_message(
             BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully"
         )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"trt(?: |$)([\s\S]*)"))
-async def translateme(trans):
-    """ For .trt command, translate the given text using Google Translate. """
-    translator = Translator()
-    textx = await trans.get_reply_message()
-    message = trans.pattern_match.group(1)
-    if message:
-        pass
-    elif textx:
-        message = textx.text
-    else:
-        await trans.edit("`Give a text or reply to a message to translate!`")
-        return
-
+@bot.on(admin_cmd(pattern="imdb (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="imdb (.*)", allow_sudo=True))
+async def imdb(e):
+    catevent = await edit_or_reply(e, "`searching........")
     try:
-        reply_text = translator.translate(deEmojify(message), dest=TRT_LANG)
-    except ValueError:
-        await trans.edit("Invalid destination language.")
-        return
-
-    source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
-    transl_lan = LANGUAGES[f"{reply_text.dest.lower()}"]
-    reply_text = f"From **{source_lan.title()}**\nTo **{transl_lan.title()}:**\n\n{reply_text.text}"
-
-    await trans.edit(reply_text)
-    if BOTLOG:
-        await trans.client.send_message(
-            BOTLOG_CHATID,
-            f"Translated some {source_lan.title()} stuff to {transl_lan.title()} just now.",
+        movie_name = e.pattern_match.group(1)
+        remove_space = movie_name.split(" ")
+        final_name = "+".join(remove_space)
+        page = requests.get(
+            "https://www.imdb.com/find?ref_=nv_sr_fn&q=" + final_name + "&s=all"
         )
-
-
-@borg.on(admin_cmd(pattern="lang (trt|tts) (.*)", outgoing=True))
-async def lang(value):
-    """ For .lang command, change the default langauge of userbot scrapers. """
-    util = value.pattern_match.group(1).lower()
-    if util == "trt":
-        scraper = "Translator"
-        global TRT_LANG
-        arg = value.pattern_match.group(2).lower()
-        if arg in LANGUAGES:
-            TRT_LANG = arg
-            LANG = LANGUAGES[arg]
-        else:
-            await value.edit(
-                f"`Invalid Language code !!`\n`Available language codes for TRT`:\n\n`{LANGUAGES}`"
-            )
-            return
-    elif util == "tts":
-        scraper = "Text to Speech"
-        global TTS_LANG
-        arg = value.pattern_match.group(2).lower()
-        if arg in tts_langs():
-            TTS_LANG = arg
-            LANG = tts_langs()[arg]
-        else:
-            await value.edit(
-                f"`Invalid Language code !!`\n`Available language codes for TTS`:\n\n`{tts_langs()}`"
-            )
-            return
-    await value.edit(f"`Language for {scraper} changed to {LANG.title()}.`")
-    if BOTLOG:
-        await value.client.send_message(
-            BOTLOG_CHATID, f"`Language for {scraper} changed to {LANG.title()}.`"
+        str(page.status_code)
+        soup = bs4.BeautifulSoup(page.content, "lxml")
+        odds = soup.findAll("tr", "odd")
+        mov_title = odds[0].findNext("td").findNext("td").text
+        mov_link = (
+            "http://www.imdb.com/" + odds[0].findNext("td").findNext("td").a["href"]
         )
-
-
-def deEmojify(inputString):
-    """ Remove emojis and other non-safe characters from string """
-    return get_emoji_regexp().sub("", inputString)
+        page1 = requests.get(mov_link)
+        soup = bs4.BeautifulSoup(page1.content, "lxml")
+        if soup.find("div", "poster"):
+            poster = soup.find("div", "poster").img["src"]
+        else:
+            poster = ""
+        if soup.find("div", "title_wrapper"):
+            pg = soup.find("div", "title_wrapper").findNext("div").text
+            mov_details = re.sub(r"\s+", " ", pg)
+        else:
+            mov_details = ""
+        credits = soup.findAll("div", "credit_summary_item")
+        director = credits[0].a.text
+        if len(credits) == 1:
+            writer = "Not available"
+            stars = "Not available"
+        elif len(credits) > 2:
+            writer = credits[1].a.text
+            actors = [x.text for x in credits[2].findAll("a")]
+            actors.pop()
+            stars = actors[0] + "," + actors[1] + "," + actors[2]
+        else:
+            writer = "Not available"
+            actors = [x.text for x in credits[1].findAll("a")]
+            actors.pop()
+            stars = actors[0] + "," + actors[1] + "," + actors[2]
+        if soup.find("div", "inline canwrap"):
+            story_line = soup.find("div", "inline canwrap").findAll("p")[0].text
+        else:
+            story_line = "Not available"
+        info = soup.findAll("div", "txt-block")
+        if info:
+            mov_country = []
+            mov_language = []
+            for node in info:
+                a = node.findAll("a")
+                for i in a:
+                    if "country_of_origin" in i["href"]:
+                        mov_country.append(i.text)
+                    elif "primary_language" in i["href"]:
+                        mov_language.append(i.text)
+        if soup.findAll("div", "ratingValue"):
+            for r in soup.findAll("div", "ratingValue"):
+                mov_rating = r.strong["title"]
+        else:
+            mov_rating = "Not available"
+        await catevent.edit(
+            "<a href=" + poster + ">&#8203;</a>"
+            "<b>Title : </b><code>"
+            + mov_title
+            + "</code>\n<code>"
+            + mov_details
+            + "</code>\n<b>Rating : </b><code>"
+            + mov_rating
+            + "</code>\n<b>Country : </b><code>"
+            + mov_country[0]
+            + "</code>\n<b>Language : </b><code>"
+            + mov_language[0]
+            + "</code>\n<b>Director : </b><code>"
+            + director
+            + "</code>\n<b>Writer : </b><code>"
+            + writer
+            + "</code>\n<b>Stars : </b><code>"
+            + stars
+            + "</code>\n<b>IMDB Url : </b>"
+            + mov_link
+            + "\n<b>Story Line : </b>"
+            + story_line,
+            link_preview=True,
+            parse_mode="HTML",
+        )
+    except IndexError:
+        await catevent.edit("Plox enter **Valid movie name** kthx")

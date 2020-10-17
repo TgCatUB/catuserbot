@@ -78,6 +78,7 @@ async def _(event):
         return
     input = event.pattern_match.group(1)
     await edit_or_reply(event, "[ㅤㅤㅤㅤㅤㅤㅤ](" + input + ")")
+    await event.delete()
 
 
 CMD_HELP.update(

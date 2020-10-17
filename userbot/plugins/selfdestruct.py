@@ -1,45 +1,40 @@
-# For @UniBorg
-# courtesy Yasir siddiqui
-"""Self Destruct Plugin
-.sd <time in seconds> <text>
-"""
+from asyncio import sleep
+
+from ..utils import admin_cmd, sudo_cmd
+from . import CMD_HELP
 
 
-import time
-
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
-
-
-@borg.on(admin_cmd(pattern="sdm", outgoing=True))
+@bot.on(admin_cmd(pattern="sdm (\d*) (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="sdm (\d*) (.*)", allow_sudo=True))
 async def selfdestruct(destroy):
-    if not destroy.text[0].isalpha() and destroy.text[0] not in ("/", "#", "@", "!"):
-        message = destroy.text
-        counter = int(message[5:7])
-        text = str(destroy.text[7:])
-        text = text
+    cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    message = cat[1]
+    ttl = int(cat[0])
+    try:
         await destroy.delete()
-        smsg = await destroy.client.send_message(destroy.chat_id, text)
-        time.sleep(counter)
-        await smsg.delete()
+    except:
+        pass
+    smsg = await destroy.client.send_message(destroy.chat_id, message)
+    await sleep(ttl)
+    await smsg.delete()
 
 
-@borg.on(admin_cmd(pattern="selfd", outgoing=True))
+@bot.on(admin_cmd(pattern="selfdm (\d*) (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="selfdm (\d*) (.*)", allow_sudo=True))
 async def selfdestruct(destroy):
-    if not destroy.text[0].isalpha() and destroy.text[0] not in ("/", "#", "@", "!"):
-        message = destroy.text
-        counter = int(message[7:9])
-        text = str(destroy.text[9:])
-        text = (
-            text
-            + "\n\n`This message shall be self-destructed in "
-            + str(counter)
-            + " seconds`"
-        )
+    cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    message = cat[1]
+    ttl = int(cat[0])
+    text = (
+        message + f"\n\n`This message shall be self-destructed in {str(ttl)} seconds`"
+    )
+    try:
         await destroy.delete()
-        smsg = await destroy.client.send_message(destroy.chat_id, text)
-        time.sleep(counter)
-        await smsg.delete()
+    except:
+        pass
+    smsg = await destroy.client.send_message(destroy.chat_id, text)
+    await sleep(counter)
+    await smsg.delete()
 
 
 CMD_HELP.update(

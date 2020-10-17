@@ -10,87 +10,18 @@ import re
 
 import requests
 from cowpy import cow
+from telethon import functions
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import MessageEntityMentionName
+from telethon.tl.types import ChannelParticipantsAdmins, MessageEntityMentionName
 
-from ..utils import admin_cmd, register
-from . import ALIVE_NAME, BOTLOG, BOTLOG_CHATID, CMD_HELP, memes
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import ALIVE_NAME, CMD_HELP, catmemes
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"(\w+)say (.*)"))
-async def univsaye(cowmsg):
-    arg = cowmsg.pattern_match.group(1).lower()
-    text = cowmsg.pattern_match.group(2)
-    if arg == "cow":
-        arg = "default"
-    if arg not in cow.COWACTERS:
-        return
-    cheese = cow.get_cow(arg)
-    cheese = cheese()
-    await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
-
-
-@register(outgoing=True, pattern="^:/$")
-async def kek(keks):
-    """ Check yourself ;)"""
-    if not keks.text[0].isalpha() and keks.text[0] not in ("/", "#", "@", "!"):
-        uio = ["/", "\\"]
-        for i in range(1, 15):
-            await asyncio.sleep(0.3)
-            await keks.edit(":" + uio[i % 2])
-
-
-@borg.on(admin_cmd(pattern="coin ?(.*)"))
-async def _(event):
-    if event.fwd_from:
-        return
-    r = random.randint(1, 100)
-    input_str = event.pattern_match.group(1)
-    if input_str:
-        input_str = input_str.lower()
-    if r % 2 == 1:
-        if input_str == "heads":
-            await event.edit("The coin landed on: **Heads**. \n You were correct.")
-        elif input_str == "tails":
-            await event.edit(
-                "The coin landed on: **Heads**. \n You weren't correct, try again ..."
-            )
-        else:
-            await event.edit("The coin landed on: **Heads**.")
-    elif r % 2 == 0:
-        if input_str == "tails":
-            await event.edit("The coin landed on: **Tails**. \n You were correct.")
-        elif input_str == "heads":
-            await event.edit(
-                "The coin landed on: **Tails**. \n You weren't correct, try again ..."
-            )
-        else:
-            await event.edit("The coin landed on: **Tails**.")
-    else:
-        await event.edit(r"¯\_(ツ)_/¯")
-
-
-@borg.on(admin_cmd(pattern=r"slap(?: |$)(.*)", outgoing=True))
-async def who(event):
-    if event.fwd_from:
-        return
-    replied_user = await get_user(event)
-    caption = await slap(replied_user, event)
-    message_id_to_reply = event.message.reply_to_msg_id
-    if not message_id_to_reply:
-        message_id_to_reply = None
-    try:
-        await event.edit(caption)
-    except BaseException:
-        await event.edit(
-            "`Can't slap this person, need to fetch some sticks and stones !!`"
-        )
-
-
 async def get_user(event):
-    """ Get the user from argument or replied message. """
+    # Get the user from argument or replied message.
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
@@ -117,127 +48,101 @@ async def get_user(event):
         except (TypeError, ValueError):
             await event.edit("`I don't slap aliens, they ugly AF !!`")
             return None
-
     return replied_user
 
 
-async def slap(replied_user, event):
-    """ Construct a funny slap sentence !! """
-    user_id = replied_user.user.id
-    first_name = replied_user.user.first_name
-    username = replied_user.user.username
-    if username:
-        slapped = "@{}".format(username)
+@bot.on(admin_cmd(outgoing=True, pattern=r"(\w+)say (.*)"))
+@bot.on(sudo_cmd(pattern="(\w+)say (.*)", allow_sudo=True))
+async def univsaye(cowmsg):
+    arg = cowmsg.pattern_match.group(1).lower()
+    text = cowmsg.pattern_match.group(2)
+    if arg == "cow":
+        arg = "default"
+    if arg not in cow.COWACTERS:
+        return
+    cheese = cow.get_cow(arg)
+    cheese = cheese()
+    await edit_or_reply(cowmsg, f"`{cheese.milk(text).replace('`', '´')}`")
+
+
+@bot.on(admin_cmd(pattern="coin ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="coin ?(.*)", allow_sudo=True))
+async def _(event):
+    r = random.randint(1, 100)
+    input_str = event.pattern_match.group(1)
+    if input_str:
+        input_str = input_str.lower()
+    if r % 2 == 1:
+        if input_str == "heads":
+            await edit_or_reply(
+                event, "The coin landed on: **Heads**. \n You were correct."
+            )
+        elif input_str == "tails":
+            await edit_or_reply(
+                event,
+                "The coin landed on: **Heads**. \n You weren't correct, try again ...",
+            )
+        else:
+            await edit_or_reply(event, "The coin landed on: **Heads**.")
+    elif r % 2 == 0:
+        if input_str == "tails":
+            await edit_or_reply(
+                event, "The coin landed on: **Tails**. \n You were correct."
+            )
+        elif input_str == "heads":
+            await edit_or_reply(
+                event,
+                "The coin landed on: **Tails**. \n You weren't correct, try again ...",
+            )
+        else:
+            await edit_or_reply(event, "The coin landed on: **Tails**.")
     else:
-        slapped = f"[{first_name}](tg://user?id={user_id})"
-    temp = random.choice(memes.SLAP_TEMPLATES)
-    item = random.choice(memes.ITEMS)
-    hit = random.choice(memes.HIT)
-    throw = random.choice(memes.THROW)
-    where = random.choice(memes.WHERE)
-    return "..." + temp.format(
-        user1=DEFAULTUSER,
-        victim=slapped,
-        item=item,
-        hits=hit,
-        throws=throw,
-        where=where,
-    )
+        await edit_or_reply(event, r"¯\_(ツ)_/¯")
 
 
-@register(outgoing=True, pattern="^-_-$")
-async def lol(lel):
-    """ Ok... """
-    if not lel.text[0].isalpha() and lel.text[0] not in ("/", "#", "@", "!"):
-        okay = "-_-"
-        for _ in range(10):
-            okay = okay[:-1] + "_-"
-            await lel.edit(okay)
+@bot.on(admin_cmd(pattern=r"slap(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="slap(?: |$)(.*)", allow_sudo=True))
+async def who(event):
+    replied_user = await get_user(event)
+    caption = await catmemes.slap(replied_user, event)
+    message_id_to_reply = event.message.reply_to_msg_id
+    if not message_id_to_reply:
+        message_id_to_reply = None
+    try:
+        await edit_or_reply(event, caption)
+    except BaseException:
+        await edit_or_reply(
+            event, "`Can't slap this person, need to fetch some sticks and stones !!`"
+        )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="(yes|no|maybe|decide)$"))
+@bot.on(admin_cmd(outgoing=True, pattern="(yes|no|maybe|decide)$"))
+@bot.on(sudo_cmd(pattern="(yes|no|maybe|decide)$", allow_sudo=True))
 async def decide(event):
     decision = event.pattern_match.group(1).lower()
-    message_id = event.reply_to_msg_id if event.reply_to_msg_id else None
+    message_id = event.reply_to_msg_id or None
     if decision != "decide":
         r = requests.get(f"https://yesno.wtf/api?force={decision}").json()
     else:
         r = requests.get(f"https://yesno.wtf/api").json()
     await event.delete()
-    await event.client.send_message(
+    sandy = await event.client.send_message(
         event.chat_id, str(r["answer"]).upper(), reply_to=message_id, file=r["image"]
     )
-
-
-@register(outgoing=True, pattern="^;_;")
-async def fun(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        t = ";__;"
-        for _ in range(10):
-            t = t[:-1] + "_;"
-            await e.edit(t)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="insult$"))
-async def insult(e):
-    await e.edit(random.choice(memes.INSULT_STRINGS))
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="repo$"))
-async def source(e):
-    await e.edit(
-        "Click [here](https://github.com/Jisan09/catuserbot) to open this lit af repo."
+    await event.client(
+        functions.messages.SaveGifRequest(
+            id=types.InputDocument(
+                id=sandy.media.document.id,
+                access_hash=sandy.media.document.access_hash,
+                file_reference=sandy.media.document.file_reference,
+            ),
+            unsave=True,
+        )
     )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="hey$"))
-async def hoi(hello):
-    await hello.edit(random.choice(memes.HELLOSTR))
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="rape$"))
-async def raping(raped):
-    index = random.randint(0, len(memes.RAPE_STRINGS) - 1)
-    reply_text = memes.RAPE_STRINGS[index]
-    await raped.edit(reply_text)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="pro$"))
-async def proo(pros):
-    index = random.randint(0, len(memes.PRO_STRINGS) - 1)
-    reply_text = memes.PRO_STRINGS[index]
-    await pros.edit(reply_text)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="fuck$"))
-async def chutiya(fuks):
-    index = random.randint(0, len(memes.CHU_STRINGS) - 1)
-    reply_text = memes.FUK_STRINGS[index]
-    await fuks.edit(reply_text)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="thanos$"))
-async def thanos(thanos):
-    index = random.randint(0, len(memes.THANOS_STRINGS) - 1)
-    reply_text = memes.THANOS_STRINGS[index]
-    await thanos.edit(reply_text)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="abusehard$"))
-async def fuckedd(abusehard):
-    index = random.randint(0, len(memes.ABUSEHARD_STRING) - 1)
-    reply_text = memes.ABUSEHARD_STRING[index]
-    await abusehard.edit(reply_text)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="abuse$"))
-async def abusing(abused):
-    index = random.randint(0, len(memes.ABUSE_STRINGS) - 1)
-    reply_text = memes.ABUSE_STRINGS[index]
-    await abused.edit(reply_text)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="owo (.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern="owo ?(.*)"))
+@bot.on(sudo_cmd(pattern="owo ?(.*)", allow_sudo=True))
 async def faces(owo):
     textx = await owo.get_reply_message()
     message = owo.pattern_match.group(1)
@@ -246,53 +151,20 @@ async def faces(owo):
     elif textx:
         message = textx.text
     else:
-        await owo.edit("` UwU no text given! `")
+        await edit_or_reply(owo, "` UwU no text given! `")
         return
-
     reply_text = re.sub(r"(r|l)", "w", message)
     reply_text = re.sub(r"(R|L)", "W", reply_text)
     reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
     reply_text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
-    reply_text = re.sub(r"\!+", " " + random.choice(memes.UWUS), reply_text)
+    reply_text = re.sub(r"\!+", " " + random.choice(catmemes.UWUS), reply_text)
     reply_text = reply_text.replace("ove", "uv")
-    reply_text += " " + random.choice(memes.UWUS)
-    await owo.edit(reply_text)
+    reply_text += " " + random.choice(catmemes.UWUS)
+    await edit_or_reply(owo, reply_text)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="shg$"))
-async def shrugger(shg):
-    await shg.edit(random.choice(memes.SHGS))
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="runs$"))
-async def runner_lol(run):
-    await run.edit(random.choice(memes.RUNSREACTS))
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="noob$"))
-async def metoo(hahayes):
-    await hahayes.edit(random.choice(memes.NOOBSTR))
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="rendi$"))
-async def metoo(hahayes):
-    await hahayes.edit(random.choice(memes.RENDISTR))
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="oof$"))
-async def Oof(e):
-    t = "Oof"
-    for _ in range(15):
-        t = t[:-1] + "of"
-        await e.edit(t)
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="10iq$"))
-async def iqless(e):
-    await e.edit("♿")
-
-
-@borg.on(admin_cmd(outgoing=True, pattern="clap(?: |$)(.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern="clap(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="clap(?: |$)(.*)", allow_sudo=True))
 async def claptext(event):
     textx = await event.get_reply_message()
     if event.pattern_match.group(1):
@@ -300,15 +172,16 @@ async def claptext(event):
     elif textx.message:
         query = textx.message
     else:
-        await event.edit("Hah, I don't clap pointlessly!")
+        await edit_or_reply(event, "Hah, I don't clap pointlessly!")
         return
     reply_text = "👏 "
     reply_text += query.replace(" ", " 👏 ")
     reply_text += " 👏"
-    await event.edit(reply_text)
+    await edit_or_reply(event, reply_text)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="smk(?: |$)(.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern="smk(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="smk(?: |$)(.*)", allow_sudo=True))
 async def smrk(smk):
     textx = await smk.get_reply_message()
     if smk.pattern_match.group(1):
@@ -316,195 +189,131 @@ async def smrk(smk):
     elif textx.message:
         message = textx.message
     else:
-        await smk.edit("ツ")
+        await edit_or_reply(smk, "ツ")
         return
     if message == "dele":
-        await smk.edit(message + "te the hell" + "ツ")
-        await smk.edit("ツ")
+        await edit_or_reply(smk, message + "te the hell" + "ツ")
     else:
         smirk = " ツ"
         reply_text = message + smirk
-        await smk.edit(reply_text)
+        await edit_or_reply(smk, reply_text)
 
 
-@borg.on(admin_cmd(pattern="ftext ?(.*)"))
-async def payf(event):
-    paytext = event.pattern_match.group(1)
-    pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
-        paytext * 8,
-        paytext * 8,
-        paytext * 2,
-        paytext * 2,
-        paytext * 2,
-        paytext * 6,
-        paytext * 6,
-        paytext * 2,
-        paytext * 2,
-        paytext * 2,
-        paytext * 2,
-        paytext * 2,
-    )
-    await event.edit(pay)
+@bot.on(admin_cmd(outgoing=True, pattern="shg$"))
+@bot.on(sudo_cmd(pattern="shg$", allow_sudo=True))
+async def shrugger(e):
+    txt = random.choice(catmemes.SHGS)
+    await edit_or_reply(e, txt)
 
 
-@borg.on(admin_cmd(pattern=f"react ?(.*)", outgoing=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
+@bot.on(admin_cmd(pattern=f"react ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="react ?(.*)", allow_sudo=True))
+async def _(e):
+    input_str = e.pattern_match.group(1)
     if input_str in "happy":
-        emoticons = [
-            "( ͡° ͜ʖ ͡°)",
-            "(ʘ‿ʘ)",
-            "(✿´‿`)",
-            "=͟͟͞͞٩(๑☉ᴗ☉)੭ु⁾⁾",
-            "(*⌒▽⌒*)θ～♪",
-            "°˖✧◝(⁰▿⁰)◜✧˖°",
-            "✌(-‿-)✌",
-            "⌒°(❛ᴗ❛)°⌒",
-            "(ﾟ<|＼(･ω･)／|>ﾟ)",
-            "ヾ(o✪‿✪o)ｼ",
-        ]
+        emoticons = catmemes.FACEREACTS[0]
     elif input_str in "think":
-        emoticons = [
-            "(҂⌣̀_⌣́)",
-            "（；¬＿¬)",
-            "(-｡-;",
-            "┌[ O ʖ̯ O ]┐",
-            "〳 ͡° Ĺ̯ ͡° 〵",
-        ]
+        emoticons = catmemes.FACEREACTS[1]
     elif input_str in "wave":
-        emoticons = [
-            "(ノ^∇^)",
-            "(;-_-)/",
-            "@(o・ェ・)@ノ",
-            "ヾ(＾-＾)ノ",
-            "ヾ(◍’౪`◍)ﾉﾞ♡",
-            "(ό‿ὸ)ﾉ",
-            "(ヾ(´・ω・｀)",
-        ]
+        emoticons = catmemes.FACEREACTS[2]
     elif input_str in "wtf":
-        emoticons = [
-            "༎ຶ‿༎ຶ",
-            "(‿ˠ‿)",
-            "╰U╯☜(◉ɷ◉ )",
-            "(;´༎ຶ益༎ຶ`)♡",
-            "╭∩╮(︶ε︶*)chu",
-            "( ＾◡＾)っ (‿|‿)",
-        ]
+        emoticons = catmemes.FACEREACTS[3]
     elif input_str in "love":
-        emoticons = [
-            "乂❤‿❤乂",
-            "(｡♥‿♥｡)",
-            "( ͡~ ͜ʖ ͡°)",
-            "໒( ♥ ◡ ♥ )७",
-            "༼♥ل͜♥༽",
-        ]
+        emoticons = catmemes.FACEREACTS[4]
     elif input_str in "confused":
-        emoticons = [
-            "(・_・ヾ",
-            "｢(ﾟﾍﾟ)",
-            "﴾͡๏̯͡๏﴿",
-            "(￣■￣;)!?",
-            "▐ ˵ ͠° (oo) °͠ ˵ ▐",
-            "(-_-)ゞ゛",
-        ]
+        emoticons = catmemes.FACEREACTS[5]
     elif input_str in "dead":
-        emoticons = [
-            "(✖╭╮✖)",
-            "✖‿✖",
-            "(+_+)",
-            "(✖﹏✖)",
-            "∑(✘Д✘๑)",
-        ]
+        emoticons = catmemes.FACEREACTS[6]
     elif input_str in "sad":
-        emoticons = [
-            "(＠´＿｀＠)",
-            "⊙︿⊙",
-            "(▰˘︹˘▰)",
-            "●︿●",
-            "(　´_ﾉ` )",
-            "彡(-_-;)彡",
-        ]
+        emoticons = catmemes.FACEREACTS[7]
     elif input_str in "dog":
-        emoticons = [
-            "-ᄒᴥᄒ-",
-            "◖⚆ᴥ⚆◗",
-        ]
+        emoticons = catmemes.FACEREACTS[8]
     else:
-        emoticons = [
-            "( ͡° ͜ʖ ͡°)",
-            r"¯\_(ツ)_/¯",
-            "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)",
-            "ʕ•ᴥ•ʔ",
-            "(▀̿Ĺ̯▀̿ ̿)",
-            "(ง ͠° ͟ل͜ ͡°)ง",
-            "༼ つ ◕_◕ ༽つ",
-            "ಠ_ಠ",
-            "(☞ ͡° ͜ʖ ͡°)☞",
-            r"¯\_༼ ି ~ ି ༽_/¯",
-            "c༼ ͡° ͜ʖ ͡° ༽⊃",
-        ]
-    index = random.randint(0, len(emoticons))
-    output_str = emoticons[index]
-    await event.edit(output_str)
+        emoticons = catmemes.FACEREACTS[9]
+    txt = random.choice(emoticons)
+    await edit_or_reply(e, txt)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="bt$"))
-async def bluetext(bt_e):
+@bot.on(admin_cmd(outgoing=True, pattern="bt$"))
+@bot.on(sudo_cmd(pattern="bt$", allow_sudo=True))
+async def bluetext(e):
     """ Believe me, you will find this useful. """
-    if bt_e.is_group:
-        await bt_e.edit(
+    if e.is_group:
+        await edit_or_reply(
+            e,
             "/BLUETEXT /MUST /CLICK.\n"
-            "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?"
+            "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?",
         )
 
 
-@borg.on(admin_cmd(pattern="ggl (.*)"))
-async def _(event):
+@bot.on(admin_cmd(pattern=f"shout (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"shout (.*)", allow_sudo=True))
+async def shout(args):
+    msg = "```"
+    messagestr = args.text
+    messagestr = messagestr[7:]
+    text = " ".join(messagestr)
+    result = []
+    result.append(" ".join([s for s in text]))
+    for pos, symbol in enumerate(text[1:]):
+        result.append(symbol + " " + "  " * pos + symbol)
+    result = list("\n".join(result))
+    result[0] = text[0]
+    result = "".join(result)
+    msg = "\n" + result
+    await edit_or_reply(args, "`" + msg + "`")
+
+
+@bot.on(admin_cmd(pattern="gbun", outgoing=True))
+@bot.on(sudo_cmd(pattern="gbun", allow_sudo=True))
+async def gbun(event):
     if event.fwd_from:
         return
-    input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=https://lmgtfy.com/?q={}%26iie=1".format(
-        input_str.replace(" ", "+")
-    )
-    response_api = requests.get(sample_url).text
-    if response_api:
-        await event.edit(
-            "[{}]({})\n`Thank me Later 🙃` ".format(input_str, response_api.rstrip())
-        )
+    gbunVar = event.text
+    gbunVar = gbunVar[6:]
+    mentions = "`Warning!! User 𝙂𝘽𝘼𝙉𝙉𝙀𝘿 By Admin...\n`"
+    catevent = await edit_or_reply(event, "**Summoning out Hatake Kakashi ❗️⚜️☠️**")
+    await asyncio.sleep(3.5)
+    chat = await event.get_input_chat()
+    async for _ in event.client.iter_participants(
+        chat, filter=ChannelParticipantsAdmins
+    ):
+        mentions += f""
+    reply_message = None
+    if event.reply_to_msg_id:
+        reply_message = await event.get_reply_message()
+        replied_user = await event.client(GetFullUserRequest(reply_message.from_id))
+        firstname = replied_user.user.first_name
+        usname = replied_user.user.username
+        idd = reply_message.from_id
+        # make meself invulnerable cuz why not xD
+        if idd == 710863476:
+            await catevent.edit(
+                "`Wait a second, This is my master!`\n**How dare you threaten to ban my master nigger!**\n\n__Your account has been hacked! Pay 69$ to my master__ [π.$](tg://user?id=710863476) __to release your account__😏"
+            )
+        else:
+            jnl = (
+                "`Warning!! `"
+                "[{}](tg://user?id={})"
+                "` 𝙂𝘽𝘼𝙉𝙉𝙀𝘿 By Admin...\n\n`"
+                "**user's Name: ** __{}__\n"
+                "**ID : ** `{}`\n"
+            ).format(firstname, idd, firstname, idd)
+            if usname is None:
+                jnl += "**Victim Nigga's username: ** `Doesn't own a username!`\n"
+            else:
+                jnl += "**Victim Nigga's username** : @{}\n".format(usname)
+            if len(gbunVar) > 0:
+                gbunm = "`{}`".format(gbunVar)
+                gbunr = "**Reason: **" + gbunm
+                jnl += gbunr
+            else:
+                no_reason = "__Reason: Potential spammer. __"
+                jnl += no_reason
+            await catevent.edit(jnl)
     else:
-        await event.edit("something is wrong. please try again later.")
-    if BOTLOG:
-        await bot.send_message(
-            BOTLOG_CHATID,
-            "LMGTFY query `" + input_str + "` was executed successfully",
-        )
-
-
-@borg.on(admin_cmd(pattern="type (.*)"))
-async def typewriter(typew):
-    textx = await typew.get_reply_message()
-    message = typew.pattern_match.group(1)
-    if message:
-        pass
-    elif textx:
-        message = textx.text
-    else:
-        await typew.edit("`Give a text to type!`")
-        return
-    sleep_time = 0.1
-    typing_symbol = "|"
-    old_text = ""
-    await typew.edit(typing_symbol)
-    await asyncio.sleep(sleep_time)
-    for character in message:
-        old_text = old_text + "" + character
-        typing_text = old_text + "" + typing_symbol
-        await typew.edit(typing_text)
-        await asyncio.sleep(sleep_time)
-        await typew.edit(old_text)
-        await asyncio.sleep(sleep_time)
+        mention = "`Warning!! User 𝙂𝘽𝘼𝙉𝙉𝙀𝘿 By Admin...\nReason: Potential spammer. `"
+        await catevent.edit(mention)
 
 
 CMD_HELP.update(
@@ -514,50 +323,28 @@ CMD_HELP.update(
 \n**USAGE   ➥  **cow which says things.\
 \n\n📌** CMD ➥** `.milksay`\
 \n**USAGE   ➥  **Weird Milk that can speak\
-\n\n📌** CMD ➥** `:/` or `-_-` or `;_;` \
-\n**USAGE   ➥  **Check yourself ;)\
-\n\n📌** CMD ➥** `.10iq`\
-\nUsage: You retard !!\
-\n\n📌** CMD ➥** `.oof`\
-\n**USAGE   ➥  **Ooooof\
-\n\n📌** CMD ➥** `.hey`\
-\n**USAGE   ➥  **Greet everyone!\
 \n\n📌** CMD ➥** `.coinflip` <heads/tails>\
 \n**USAGE   ➥  **Flip a coin !!\
-\n\n📌** CMD ➥** `.owo` <text> \
-\n**USAGE   ➥  **UwU\
-\n\n📌** CMD ➥** `.react` <type>\
-\n**USAGE   ➥  **Make your userbot react. types are <happy ,think ,wave ,wtf ,love ,confused,dead, sad,dog>\
 \n\n📌** CMD ➥** `.slap`\
 \n**USAGE   ➥  **reply to slap them with random objects !!\
-\n\n📌** CMD ➥** `.shg`\
-\n**USAGE   ➥  **Shrug at it !!\
-\n\n📌** CMD ➥** `.runs`\
-\n**USAGE   ➥  **Run, run, RUNNN! [`.disable runs`: disable | `.enable runs`: enable]\
+\n\n📌** CMD ➥** `.yes`|`.no`|`.maybe`|`.decide`\
+\n**USAGE   ➥  **Make a quick decision.\
+\n\n📌** CMD ➥** `.owo` <text> \
+\n**USAGE   ➥  **UwU\
 \n\n📌** CMD ➥** `.clap`\
 \n**USAGE   ➥  **Praise people!\
-\n\n📌** CMD ➥** `.ftext` <emoji/character>\
-\n**USAGE   ➥  **Pay Respects.\
-\n\n📌** CMD ➥** `.bt`\
-\n**USAGE   ➥  **Believe me, you will find this useful.\
 \n\n📌** CMD ➥** `.smk` <text/reply>\
 \n**USAGE   ➥  **A shit module for ツ , who cares.\
-\n\n📌** CMD ➥** `.type`\
-\n**USAGE   ➥  **Just a small command to make your keyboard become a typewriter!\
-\n\n📌** CMD ➥** `.ggl` <query>\
-\n**USAGE   ➥  **Let me Google that for you real quick !!\
-\n\n📌** CMD ➥** `.decide`\
-\n**USAGE   ➥  **Make a quick decision.\
-\n\n📌** CMD ➥** `.abusehard`\
-\n**USAGE   ➥  **You already got that! Ain't?.\
-\n\n📌** CMD ➥** `.thanos`\
-\n**USAGE   ➥  **Try and then Snap.\
-\n\n📌** CMD ➥** `.noob`\
-\n**USAGE   ➥  **Whadya want to know? Are you a NOOB?\
-\n\n📌** CMD ➥** `.pro`\
-\n**USAGE   ➥  **If you think you're pro, try this.\
-\n\n📌** CMD ➥** `.abuse`\
-\n**USAGE   ➥  **Protects you from unwanted peeps.\
+\n\n📌** CMD ➥** `.shg`\
+\n**USAGE   ➥  **Shrug at it !!\
+\n\n📌** CMD ➥** `.react` <type>\
+\n**USAGE   ➥  **Make your userbot react. types are <happy ,think ,wave ,wtf ,love ,confused,dead, sad,dog>\
+\n\n📌** CMD ➥** `.bt`\
+\n**USAGE   ➥  **Believe me, you will find this useful.\
+\n\n📌** CMD ➥** `.shout text`\
+\n**USAGE   ➥  **shouts the text in a fun way\
+\n\n📌** CMD ➥**  `.gbun <reason>`\
+\n**USAGE   ➥  **Fake gban action !!\
 "
     }
 )

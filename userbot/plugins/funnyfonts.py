@@ -2,11 +2,12 @@
 import random
 import re
 
-from userbot import CMD_HELP, fonts
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, fonts
 
 
 @borg.on(admin_cmd(pattern="str(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="str(?: |$)(.*)", allow_sudo=True))
 async def stretch(stret):
     textx = await stret.get_reply_message()
     message = stret.text
@@ -16,15 +17,16 @@ async def stretch(stret):
     elif textx:
         message = textx.text
     else:
-        await stret.edit("`GiiiiiiiB sooooooomeeeeeee teeeeeeext!`")
+        await edit_or_reply(stret, "`GiiiiiiiB sooooooomeeeeeee teeeeeeext!`")
         return
 
     count = random.randint(3, 10)
     reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count), message)
-    await stret.edit(reply_text)
+    await edit_or_reply(stret, reply_text)
 
 
 @borg.on(admin_cmd(pattern="zal(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="zal(?: |$)(.*)", allow_sudo=True))
 async def zal(zgfy):
     reply_text = list()
     textx = await zgfy.get_reply_message()
@@ -34,8 +36,8 @@ async def zal(zgfy):
     elif textx:
         message = textx.text
     else:
-        await zgfy.edit(
-            "`gͫ ̆ i̛ ̺ v͇̆ ȅͅ   a̢ͦ   s̴̪ c̸̢ ä̸ rͩͣ y͖͞   t̨͚ é̠ x̢͖  t͔͛`"
+        await edit_or_reply(
+            zgfy, "`gͫ ̆ i̛ ̺ v͇̆ ȅͅ   a̢ͦ   s̴̪ c̸̢ ä̸ rͩͣ y͖͞   t̨͚ é̠ x̢͖  t͔͛`"
         )
         return
 
@@ -56,10 +58,11 @@ async def zal(zgfy):
 
         reply_text.append(charac)
 
-    await zgfy.edit("".join(reply_text))
+    await edit_or_reply(zgfy, "".join(reply_text))
 
 
 @borg.on(admin_cmd(pattern="cp(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="cp(?: |$)(.*)", allow_sudo=True))
 async def copypasta(cp_e):
     textx = await cp_e.get_reply_message()
     message = cp_e.pattern_match.group(1)
@@ -69,7 +72,7 @@ async def copypasta(cp_e):
     elif textx:
         message = textx.text
     else:
-        await cp_e.edit("`😂🅱️IvE👐sOME👅text👅for✌️Me👌tO👐MAkE👀iT💞funNy!💦`")
+        await edit_or_reply(cp_e, "`😂🅱️IvE👐sOME👅text👅for✌️Me👌tO👐MAkE👀iT💞funNy!💦`")
         return
 
     reply_text = random.choice(fonts.EMOJIS)
@@ -89,34 +92,36 @@ async def copypasta(cp_e):
             else:
                 reply_text += owo.lower()
     reply_text += random.choice(fonts.EMOJIS)
-    await cp_e.edit(reply_text)
+    await edit_or_reply(cp_e, reply_text)
 
 
 @borg.on(admin_cmd(pattern="weeb(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="weeb(?: |$)(.*)", allow_sudo=True))
 async def weebify(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("`What I am Supposed to Weebify `")
+        await edit_or_reply(event, "`What I am Supposed to Weebify `")
         return
     string = "  ".join(args).lower()
     for normiecharacter in string:
         if normiecharacter in fonts.normiefont:
             weebycharacter = fonts.weebyfont[fonts.normiefont.index(normiecharacter)]
             string = string.replace(normiecharacter, weebycharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
 @borg.on(admin_cmd(pattern="downside(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="downside(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("What I am Supposed to change give text")
+        await edit_or_reply(event, "What I am Supposed to change give text")
         return
     string = "  ".join(args).lower()
     for upsidecharacter in string:
@@ -125,17 +130,18 @@ async def stylish_generator(event):
                 fonts.upsidefont.index(upsidecharacter)
             ]
             string = string.replace(upsidecharacter, downsidecharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
 @borg.on(admin_cmd(pattern="subscript(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="subscript(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("What I am Supposed to change give text")
+        await edit_or_reply(event, "What I am Supposed to change give text")
         return
     string = "  ".join(args).lower()
     for normaltextcharacter in string:
@@ -144,17 +150,18 @@ async def stylish_generator(event):
                 fonts.normaltext.index(normaltextcharacter)
             ]
             string = string.replace(normaltextcharacter, subscriptcharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
 @borg.on(admin_cmd(pattern="superscript(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="superscript(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await event.edit("What I am Supposed to change give text")
+        await edit_or_reply(event, "What I am Supposed to change give text")
         return
     string = "  ".join(args).lower()
     for normaltextcharacter in string:
@@ -163,20 +170,14 @@ async def stylish_generator(event):
                 fonts.normaltext.index(normaltextcharacter)
             ]
             string = string.replace(normaltextcharacter, superscriptcharacter)
-    await event.edit(string)
+    await edit_or_reply(event, string)
 
 
 CMD_HELP.update(
     {
         "funnyfonts": "__**PLUGIN NAME :** Funnyfonts__\
-\n\n📌** CMD ➥** `.cp` (text) or .cp reply to message \
-\n**USAGE   ➥  **Inserts some emojis in between the texts\
-\n\n📌** CMD ➥** `.str` (text) or .str reply to message \
-\n**USAGE   ➥  **Stretchs the given message.\
-\n\n📌** CMD ➥** `.zal` (text) or .zal reply to message \
-\n**USAGE   ➥  **Invoke the feeling of chaos.\
-\n\n📌** CMD ➥** `.weeb` (text) or .weeb reply to message \
-\n**USAGE   ➥  **A different style of alphabets .\
-"
+        \n\n📌** CMD ➥** `.str` | `.zal` | `.cp` | `.weeb` | `.downside` | `.subscript` | `.superscript` \
+        \n\n**USAGE   ➥  **Use cmd <text> , it will change your text to that font.\
+        \n\n**Example :** `.weeb hello there`"
     }
 )

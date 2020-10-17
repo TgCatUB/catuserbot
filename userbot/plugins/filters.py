@@ -1,9 +1,9 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
-from re import IGNORECASE, fullmatch
+import re
 
 from telethon import events
 
-from .. import CMD_HELP, bot
+from .. import BOTLOG_CHATID, CMD_HELP, bot
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from .sql_helper.filter_sql import (
     add_filter,
@@ -11,12 +11,6 @@ from .sql_helper.filter_sql import (
     remove_all_filters,
     remove_filter,
 )
-
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @borg.on(events.NewMessage(incoming=True))
@@ -28,14 +22,15 @@ async def filter_incoming_handler(handler):
             if not filters:
                 return
             for trigger in filters:
-                pro = fullmatch(trigger.keyword, name, flags=IGNORECASE)
-                if pro and trigger.f_mesg_id:
-                    msg_o = await handler.client.get_messages(
-                        entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
-                    )
-                    await handler.reply(msg_o.message, file=msg_o.media)
-                elif pro and trigger.reply:
-                    await handler.reply(trigger.reply)
+                pattern = r"( |^|[^\w])" + re.escape(trigger.keyword) + r"( |$|[^\w])"
+                if re.search(pattern, name, flags=re.IGNORECASE):
+                    if trigger.f_mesg_id:
+                        msg_o = await handler.client.get_messages(
+                            entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
+                        )
+                        await handler.reply(msg_o.message, file=msg_o.media)
+                    elif trigger.reply:
+                        await handler.reply(trigger.reply)
     except AttributeError:
         pass
 
@@ -89,9 +84,7 @@ async def on_snip_list(event):
     for filt in filters:
         if OUT_STR == "There are no filters in this chat.":
             OUT_STR = "Active filters in this chat:\n"
-            OUT_STR += "👉 `{}`\n".format(filt.keyword)
-        else:
-            OUT_STR += "👉 `{}`\n".format(filt.keyword)
+        OUT_STR += "👉 `{}`\n".format(filt.keyword)
     if len(OUT_STR) > 4096:
         with io.BytesIO(str.encode(OUT_STR)) as out_file:
             out_file.name = "filters.text"

@@ -1,9 +1,3 @@
-"""Get information about an user on GitHub
-Syntax: .github USERNAME
-GITHUB File Uploader Plugin for userbot. Heroku Automation should be Enabled. Else u r not that lazy // For lazy people
-Instructions:- Set GITHUB_ACCESS_TOKEN and GIT_REPO_NAME Variables in Heroku vars First
-usage:- .commit reply_to_any_plugin //can be any type of file too. but for plugin must be in .py
-"""
 import os
 import time
 from datetime import datetime
@@ -11,13 +5,14 @@ from datetime import datetime
 import requests
 from github import Github
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
-GIT_TEMP_DIR = "./userbot/temp/"
+GIT_TEMP_DIR = "./temp/"
 
 
-@borg.on(admin_cmd(pattern="github (.*)"))
+@bot.on(admin_cmd(pattern="github (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="github (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -35,15 +30,15 @@ async def _(event):
         location = b["location"]
         bio = b["bio"]
         created_at = b["created_at"]
-        await borg.send_file(
+        await bot.send_file(
             event.chat_id,
-            caption="""Name: [{}]({})
-Type: {}
-Company: {}
-Blog: {}
-Location: {}
-Bio: {}
-Profile Created: {}""".format(
+            caption="""**Name : **[{}]({})
+**Type :** {}
+**Company :** {}
+**Blog :** {}
+**Location :** {}
+**Bio :** {}
+**Profile Created :** {}""".format(
                 name, html_url, gh_type, company, blog, location, bio, created_at
             ),
             file=avatar_url,
@@ -53,27 +48,29 @@ Profile Created: {}""".format(
         )
         await event.delete()
     else:
-        await event.edit("`{}`: {}".format(input_str, r.text))
+        await edit_or_reply(event, "`{}`: {}".format(input_str, r.text))
 
 
-@borg.on(admin_cmd(pattern="commit", outgoing=True))
+@bot.on(admin_cmd(pattern="commit$", outgoing=True))
+@bot.on(sudo_cmd(pattern="commit$", allow_sudo=True))
 async def download(event):
     if event.fwd_from:
         return
     if Var.GITHUB_ACCESS_TOKEN is None:
-        await event.edit("`Please ADD Proper Access Token from github.com`")
+        await edit_or_reply(event, "`Please ADD Proper Access Token from github.com`")
         return
     if Var.GIT_REPO_NAME is None:
-        await event.edit("`Please ADD Proper Github Repo Name of your userbot`")
+        await edit_or_reply(
+            event, "`Please ADD Proper Github Repo Name of your userbot`"
+        )
         return
-    mone = await event.reply("Processing ...")
+    mone = edit_or_reply(event, "Processing ...")
     if not os.path.isdir(GIT_TEMP_DIR):
         os.makedirs(GIT_TEMP_DIR)
     start = datetime.now()
     reply_message = await event.get_reply_message()
     try:
         time.time()
-        print("Downloading to TEMP directory")
         downloaded_file_name = await bot.download_media(
             reply_message.media, GIT_TEMP_DIR
         )
@@ -107,7 +104,6 @@ async def git_commit(file_name, mone):
         create_file = True
         if i == 'ContentFile(path="' + file_name + '")':
             return await mone.edit("`File Already Exists`")
-            create_file = False
     file_name = "userbot/plugins/" + file_name
     if create_file:
         file_name = file_name.replace("./userbot/temp/", "")

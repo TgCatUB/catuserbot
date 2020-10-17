@@ -14,6 +14,7 @@ from telethon.tl.types import (
     MessageEntityItalic,
     MessageEntityPre,
     MessageEntityTextUrl,
+    MessageEntityUnderline,
 )
 from telethon.utils import add_surrogate, del_surrogate
 
@@ -78,6 +79,7 @@ PARSED_ENTITIES = (
     MessageEntityCode,
     MessageEntityPre,
     MessageEntityTextUrl,
+    MessageEntityUnderline,
 )
 # A matcher is a tuple of (regex pattern, parse function)
 # where the parse function takes the match and returns (text, entity)
@@ -87,6 +89,7 @@ MATCHERS = [
     (get_tag_parser("__", MessageEntityItalic)),
     (get_tag_parser("```", partial(MessageEntityPre, language=""))),
     (get_tag_parser("`", MessageEntityCode)),
+    (get_tag_parser("--", MessageEntityUnderline)),
     (re.compile(r"\+\+(.+?)\+\+"), parse_aesthetics),
     (re.compile(r"([^/\w]|^)(/?(r/\w+))"), parse_subreddit),
     (re.compile(r"(?<!\w)(~{2})(?!~~)(.+?)(?<!~)\1(?!\w)"), parse_strikethrough),

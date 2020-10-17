@@ -1,9 +1,10 @@
+# CatUserbot module containing various sites direct links generators
+
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-""" Userbot module containing various sites direct links generators"""
 
 import json
 import re
@@ -15,14 +16,15 @@ import requests
 from bs4 import BeautifulSoup
 from humanize import naturalsize
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"direct(?: |$)([\s\S]*)"))
+@bot.on(admin_cmd(outgoing=True, pattern=r"direct(?: |$)([\s\S]*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern=r"direct(?: |$)([\s\S]*)"))
 async def direct_link_generator(request):
     """ direct links generator """
-    await request.edit("`Processing...`")
+    catevent = await edit_or_reply(request, "`Processing...`")
     textx = await request.get_reply_message()
     message = request.pattern_match.group(1)
     if message:
@@ -30,13 +32,13 @@ async def direct_link_generator(request):
     elif textx:
         message = textx.text
     else:
-        await request.edit("`Usage: .direct <url>`")
+        await catevent.edit("`Usage: .direct <url>`")
         return
     reply = ""
     links = re.findall(r"\bhttps?://.*\.\S+", message)
     if not links:
         reply = "`No links found!`"
-        await request.edit(reply)
+        await catevent.edit(reply)
     for link in links:
         if "drive.google.com" in link:
             reply += gdrive(link)
@@ -60,7 +62,7 @@ async def direct_link_generator(request):
             reply += androidfilehost(link)
         else:
             reply += re.findall(r"\bhttps?://(.*?[^/]+)", link)[0] + "is not supported"
-    await request.edit(reply)
+    await catevent.edit(reply)
 
 
 def gdrive(url: str) -> str:
@@ -355,6 +357,6 @@ CMD_HELP.update(
     \n\n📌** CMD ➥** `.direct` <url>\
     \n**USAGE   ➥  **Reply to a link or paste a URL to generate a direct download link\
     \n\n**List of supported URLs:**\
-    `Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - AFH - ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
+    `Google Drive - Cloud Mail - Yandex.Disk - AFH - ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
     }
 )
