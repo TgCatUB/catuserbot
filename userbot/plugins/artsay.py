@@ -27,7 +27,7 @@ async def kakashi(ded):
     name = ded.pattern_match.group(1)
     await edit_or_reply(
         ded,
-        f"[{DEF}]({USR}) --- {name}          \n　　　　　|"
+        f"[{DEFAULTUSER}]({USERNAME}) --- {name}          \n　　　　　|"
         "\n　　　　　| \n"
         "　　　　　| \n"
         "　　　　　| \n"
@@ -50,7 +50,7 @@ async def kakashi(killer):
     name = killer.pattern_match.group(1)
     await edit_or_reply(
         killer,
-        f"__**Commando **__[{DEF}]({USR})          \n\n"
+        f"__**Commando **__[{DEFAULTUSER}]({USERNAME})          \n\n"
         "_/﹋\_\n"
         "(҂`_´)\n"
         f"<,︻╦╤─ ҉ - - - {name}\n"
