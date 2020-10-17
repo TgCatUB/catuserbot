@@ -1,17 +1,15 @@
 import os
 import re
 import time
+import urllib.request
 import zipfile
 from random import choice
 
 import PIL.ImageOps
 import requests
 from PIL import Image
-from selenium import webdriver
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
-
-from ..Config import Config
 
 
 async def get_readable_time(seconds: int) -> str:
@@ -56,21 +54,20 @@ async def admin_groups(cat):
 
 
 async def yt_search(cat):
-    search = cat
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--ignore-certificate-errors")
-    chrome_options.add_argument("--test-type")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.binary_location = Config.CHROME_BIN
-    driver = webdriver.Chrome(chrome_options=chrome_options)
-    driver.get("https://www.youtube.com/results?search_query=" + search)
-    user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
-    for i in user_data:
-        video_link = i.get_attribute("href")
-        break
-    return video_link if video_link else "Couldnt fetch results"
+    try:
+        cat = urllib.parse.quote(cat)
+        html = urllib.request.urlopen(
+            "https://www.youtube.com/results?search_query=" + cat
+        )
+        user_data = re.findall(r"watch\?v=(\S{11})", html.read().decode())
+        video_link = None
+        if user_data:
+            video_link = "https://www.youtube.com/watch?v=" + user_data[0]
+        if video_link:
+            return video_link
+        return "Couldnt fetch results"
+    except:
+        return "Couldnt fetch results"
 
 
 # for stickertxt
@@ -116,6 +113,20 @@ async def waifutxt(text, chat_id, reply_to_id, bot, borg):
         await cat.delete()
 
 
+async def sanga_seperator(sanga_list):
+    for i in sanga_list:
+        if i.startswith("🔗"):
+            sanga_list.remove(i)
+    s = 0
+    for i in sanga_list:
+        if i.startswith("Username History"):
+            break
+        s += 1
+    usernames = sanga_list[s:]
+    names = sanga_list[:s]
+    return names, usernames
+
+
 # unziping file
 async def unzip(downloaded_file_name):
     with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
@@ -154,10 +165,12 @@ async def extract_time(cat, time_val):
     return ""
 
 
-song_dl = "youtube-dl -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
-thumb_dl = "youtube-dl -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
-video_dl = "youtube-dl -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
-name_dl = "youtube-dl --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
+song_dl = "youtube-dl --force-ipv4 --write-thumbnail -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
+thumb_dl = "youtube-dl --force-ipv4 -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
+video_dl = "youtube-dl --force-ipv4 --write-thumbnail  -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
+name_dl = (
+    "youtube-dl --force-ipv4 --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
+)
 
 EMOJI_PATTERN = re.compile(
     "["
@@ -192,9 +205,18 @@ def convert_toimage(image):
     img = Image.open(image)
     if img.mode != "RGB":
         img = img.convert("RGB")
-    img.save("temp.jpg", "jpeg")
+    img.save("./temp/temp.jpg", "jpeg")
     os.remove(image)
-    return "temp.jpg"
+    return "./temp/temp.jpg"
+
+
+async def convert_tosticker(image):
+    img = Image.open(image)
+    if img.mode != "RGB":
+        img = img.convert("RGB")
+    img.save("./temp/temp.webp", "webp")
+    os.remove(image)
+    return "./temp/temp.webp"
 
 
 # for nekobot

@@ -21,16 +21,27 @@ if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 # thumb image
-with open(thumb_image_path, "wb") as f:
-    f.write(requests.get(Config.THUMB_IMAGE).content)
+if Config.THUMB_IMAGE is not None:
+    with open(thumb_image_path, "wb") as f:
+        f.write(requests.get(Config.THUMB_IMAGE).content)
+
+cat_users = [bot.uid]
+if Config.SUDO_USERS:
+    for user in Config.SUDO_USERS:
+        cat_users.append(user)
 
 
 def check(cat):
     if "/start" in cat:
         return True
-    hi = re.search(re.escape(f"\\b{cat}\\b"), "a|b|c|d")
+    try:
+        hi = re.search(cat, "(a|b|c|d)")
+    except:
+        hi = False
     return bool(hi)
 
+
+PM_START = []
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False

@@ -186,7 +186,7 @@ async def _(event):
     )
     input_str = event.pattern_match.group(1)
     if event.from_id != bot.uid:
-        event.message.id
+        reply_msg_id = event.message.id
     if input_str:
         current_time = input_str
     elif event.reply_to_msg_id:

@@ -1,22 +1,16 @@
-"""Available Commands:
-.unoob
-.menoob
-.upro
-.mepro
-@arnab431"""
-
 import asyncio
 
-from ..utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @borg.on(admin_cmd(pattern="unoob$"))
+@borg.on(sudo_cmd(pattern="unoob$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(9)
-    await event.edit("unnoob")
+    event = await edit_or_reply(event, "unnoob")
     animation_chars = [
         "EvErYbOdY",
         "iZ",
@@ -34,12 +28,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern="menoob$"))
+@borg.on(sudo_cmd(pattern="menoob$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(9)
-    await event.edit("menoob")
+    event = await edit_or_reply(event, "menoob")
     animation_chars = [
         "EvErYbOdY",
         "iZ",
@@ -57,12 +52,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern="upro$"))
+@borg.on(sudo_cmd(pattern="upro$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(8)
-    await event.edit("upro")
+    event = await edit_or_reply(event, "upro")
     animation_chars = [
         "EvErYbOdY",
         "iZ",
@@ -79,12 +75,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern="mepro$"))
+@borg.on(sudo_cmd(pattern="mepro$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
     animation_ttl = range(8)
-    await event.edit("mepro")
+    event = await edit_or_reply(event, "mepro")
     animation_chars = [
         "EvErYbOdY",
         "iZ",
@@ -101,12 +98,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"quickheal$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"quickheal$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 5
     animation_ttl = range(11)
-    await event.edit("quickheal")
+    event = await edit_or_reply(event, "quickheal")
     animation_chars = [
         "`Downloading File..`",
         "`File Downloaded....`",
@@ -118,7 +116,7 @@ async def _(event):
         "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nFile Scanned... 52%\n█████████████▒▒▒▒▒▒▒▒▒▒▒▒ `",
         "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nFile Scanned... 84%\n█████████████████████▒▒▒▒ `",
         "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nFile Scanned... 100%\n█████████████████████████ `",
-        "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nTask: 01 of 01 Files Scanned...\n\nReault: No Virus Found...`",
+        "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nTask: 01 of 01 Files Scanned...\n\nResult: No Virus Found...`",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -126,12 +124,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"sqh$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"sqh$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.1
     animation_ttl = range(11)
-    await event.edit("sqh")
+    event = await edit_or_reply(event, "sqh")
     animation_chars = [
         "`Downloading File..`",
         "`File Downloaded....`",
@@ -143,7 +142,7 @@ async def _(event):
         "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nFile Scanned... 52%\n█████████████▒▒▒▒▒▒▒▒▒▒▒▒ `",
         "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nFile Scanned... 84%\n█████████████████████▒▒▒▒ `",
         "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nFile Scanned... 100%\n█████████████████████████ `",
-        "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nTask: 01 of 01 Files Scanned...\n\nReault: No Virus Found...`",
+        "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nTask: 01 of 01 Files Scanned...\n\nResult: No Virus Found...`",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -151,12 +150,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"vquickheal$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"vquickheal$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 5
     animation_ttl = range(11)
-    await event.edit("vquickheal")
+    event = await edit_or_reply(event, "vquickheal")
     animation_chars = [
         "`Downloading File..`",
         "`File Downloaded....`",
@@ -168,7 +168,7 @@ async def _(event):
         "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nFile Scanned... 52%\n█████████████▒▒▒▒▒▒▒▒▒▒▒▒ `",
         "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nFile Scanned... 84%\n█████████████████████▒▒▒▒ `",
         "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nFile Scanned... 100%\n█████████████████████████ `",
-        "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nTask: 01 of 01 Files Scanned...\n\nReault:⚠️Virus Found⚠️\nMore Info: Torzan, Spyware, Adware`",
+        "`Quick Heal Total Security Checkup\n\n\nSubscription: Pru User\nValid Until: 31/12/2099\n\nTask: 01 of 01 Files Scanned...\n\nResult:⚠️Virus Found⚠️\nMore Info: Torzan, Spyware, Adware`",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -176,12 +176,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"macos$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"macos$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.5
     animation_ttl = range(11)
-    await event.edit("macos")
+    event = await edit_or_reply(event, "macos")
     animation_chars = [
         "`Connecting To Hackintosh...`",
         "`Initiating Hackintosh Login.`",
@@ -201,12 +202,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"windows$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"windows$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.5
     animation_ttl = range(11)
-    await event.edit("windows")
+    event = await edit_or_reply(event, "windows")
     animation_chars = [
         "`Connecting To Windows 10...`",
         "`Initiating Windows 10 Login.`",
@@ -226,12 +228,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"linux$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"linux$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.5
     animation_ttl = range(11)
-    await event.edit("linux")
+    event = await edit_or_reply(event, "linux")
     animation_chars = [
         "`Connecting To Linux...`",
         "`Initiating Linux Login.`",
@@ -251,12 +254,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"stock$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"stock$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.5
     animation_ttl = range(11)
-    await event.edit("stock")
+    event = await edit_or_reply(event, "stock")
     animation_chars = [
         "`Connecting To Symbian OS...`",
         "`Initiating Symbian OS Login.`",
@@ -276,12 +280,13 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=f"os$", outgoing=True))
+@borg.on(sudo_cmd(pattern=f"os$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.1
     animation_ttl = range(7)
-    await event.edit("os")
+    event = await edit_or_reply(event, "os")
     animation_chars = [
         "`Scanning OS...`",
         "`Scanning OS......`",
@@ -289,7 +294,7 @@ async def _(event):
         "__Current Loaded OS: Symbian OS__\n\n**To Boot Other OS, Use The Following Trigger:**\n✅ `.macos`\n☑️ `.windows`\n☑️ `.linux`\n☑️ `.stock`",
         "__Current Loaded OS: Symbian OS__\n\n**To Boot Other OS, Use The Following Trigger:**\n✅ `.macos`\n✅ `.windows`\n☑️ `.linux`\n☑️ `.stock`",
         "__Current Loaded OS: Symbian OS__\n\n**To Boot Other OS, Use The Following Trigger:**\n✅ `.macos`\n✅ `.windows`\n✅ `.linux`\n☑️ `.stock`",
-        "__Current Loaded OS: Symbian OS__\n\n**To Boot Other OS, Use The Following Trigger:**\n✅ `.macos`\n✅ `.windows`\n✅ `.linux`\n✅ `.stock`\n\nDeveloped By: @mrconfused",
+        "__Current Loaded OS: Symbian OS__\n\n**To Boot Other OS, Use The Following Trigger:**\n✅ `.macos`\n✅ `.windows`\n✅ `.linux`\n✅ `.stock`\n\nDeveloped By: @catuserbot17",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)

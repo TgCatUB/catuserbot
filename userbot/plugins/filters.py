@@ -1,5 +1,5 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
-from re import IGNORECASE, fullmatch
+import re
 
 from telethon import events
 
@@ -22,8 +22,8 @@ async def filter_incoming_handler(handler):
             if not filters:
                 return
             for trigger in filters:
-                pro = fullmatch(trigger.keyword, name, flags=IGNORECASE)
-                if pro:
+                pattern = r"( |^|[^\w])" + re.escape(trigger.keyword) + r"( |$|[^\w])"
+                if re.search(pattern, name, flags=re.IGNORECASE):
                     if trigger.f_mesg_id:
                         msg_o = await handler.client.get_messages(
                             entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)

@@ -5,8 +5,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="ping$"))
-@borg.on(sudo_cmd(pattern="ping$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ping$"))
+@bot.on(sudo_cmd(pattern="ping$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -17,14 +17,15 @@ async def _(event):
     await event.edit("Pong!\n`{}`".format(ms))
 
 
-@borg.on(admin_cmd(pattern=f"fping$", outgoing=True))
+@bot.on(admin_cmd(pattern=f"fping$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"fping$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     start = datetime.now()
     animation_interval = 0.2
     animation_ttl = range(26)
-    await event.edit("ping....")
+    event = await edit_or_reply(event, "ping....")
     animation_chars = [
         "⬛⬛⬛⬛⬛⬛⬛⬛⬛",
         "⬛⬛⬛⬛⬛⬛⬛⬛⬛ \n⬛‎📶‎📶‎📶‎📶‎📶‎📶‎📶⬛",
@@ -69,9 +70,9 @@ CMD_HELP.update(
     {
         "ping": "**Plugin :** `ping`\
     \n\n**Syntax :** `.ping`\
-    \n**Usage : **Shows you the ping speed of server\
+    \n**Function : **__Shows you the ping speed of server__\
     \n\n**Syntax : **`.fping`\
-    \n**Usage : **A kind ofping with extra animation\
+    \n**Function : **__A kind ofping with extra animation__\
     "
     }
 )

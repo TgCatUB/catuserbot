@@ -46,13 +46,12 @@ def add_welcome_setting(chat_id, previous_welcome, reply, f_mesg_id):
         SESSION.add(adder)
         SESSION.commit()
         return True
-    else:
-        rem = SESSION.query(Welcome).get(str(chat_id))
-        SESSION.delete(rem)
-        SESSION.commit()
-        adder = Welcome(chat_id, previous_welcome, reply, f_mesg_id)
-        SESSION.commit()
-        return False
+    rem = SESSION.query(Welcome).get(str(chat_id))
+    SESSION.delete(rem)
+    SESSION.commit()
+    adder = Welcome(chat_id, previous_welcome, reply, f_mesg_id)
+    SESSION.commit()
+    return False
 
 
 def rm_welcome_setting(chat_id):

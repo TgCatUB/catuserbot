@@ -12,6 +12,7 @@ from . import (
     cat_meeme,
     cat_meme,
     convert_toimage,
+    convert_tosticker,
     crop,
     flip_image,
     grayscale,
@@ -102,20 +103,14 @@ async def memes(cat):
     except BaseException:
         pass
     meme_file = convert_toimage(meme_file)
-    if cmd == "mmf":
-        meme = "catmeme.jpg"
-        if max(len(top), len(bottom)) < 21:
-            await cat_meme(top, bottom, meme_file, meme)
-        else:
-            await cat_meeme(top, bottom, meme_file, meme)
-        await borg.send_file(cat.chat_id, meme, reply_to=catid)
-    elif cmd == "mms":
-        meme = "catmeme.webp"
-        if max(len(top), len(bottom)) < 21:
-            await cat_meme(top, bottom, meme_file, meme)
-        else:
-            await cat_meeme(top, bottom, meme_file, meme)
-        await borg.send_file(cat.chat_id, meme, reply_to=catid)
+    meme = "catmeme.jpg"
+    if max(len(top), len(bottom)) < 21:
+        await cat_meme(top, bottom, meme_file, meme)
+    else:
+        await cat_meeme(top, bottom, meme_file, meme)
+    if cmd != "mmf":
+        meme = await convert_tosticker(meme)
+    await borg.send_file(cat.chat_id, meme, reply_to=catid)
     await cat.delete()
     os.remove(meme)
     for files in (catsticker, meme_file):
@@ -123,7 +118,7 @@ async def memes(cat):
             os.remove(files)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="invert$"))
+@borg.on(admin_cmd(pattern="invert$", outgoing=True))
 @borg.on(sudo_cmd(pattern="invert$", allow_sudo=True))
 async def memes(cat):
     reply = await cat.get_reply_message()

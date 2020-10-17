@@ -27,7 +27,7 @@ async def _(event):
 
 
 @borg.on(admin_cmd(pattern=r"nothappy$"))
-@borg.on(sudo_cmd(pattern="noathappy$", allow_sudo=True))
+@borg.on(sudo_cmd(pattern="nothappy$", allow_sudo=True))
 async def _(event):
     event = await edit_or_reply(event, "nathappy")
     deq = deque(list("😁☹️😁☹️😁☹️😁"))

@@ -2,20 +2,7 @@
 credits to @mrconfused
 dont edit credits
 """
-#    Copyright (C) 2020  sandeep.n(π.$)
-
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-
-#   You should have received a copy of the GNU Affero General Public License
-#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  Copyright (C) 2020  sandeep.n(π.$)
 
 import asyncio
 from datetime import datetime
@@ -28,10 +15,10 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import ChatBannedRights, MessageEntityMentionName
 
 import userbot.plugins.sql_helper.gban_sql_helper as gban_sql
-from userbot import CAT_ID, CMD_HELP
-from userbot.plugins import admin_groups
-from userbot.plugins.sql_helper.mute_sql import is_muted, mute, unmute
-from userbot.utils import admin_cmd, sudo_cmd
+
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import BOTLOG, BOTLOG_CHATID, CAT_ID, CMD_HELP, admin_groups
+from .sql_helper.mute_sql import is_muted, mute, unmute
 
 BANNED_RIGHTS = ChatBannedRights(
     until_date=None,
@@ -56,25 +43,20 @@ UNBAN_RIGHTS = ChatBannedRights(
     embed_links=None,
 )
 
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
-
-@borg.on(admin_cmd("gban(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern=r"gban(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern=r"gban(?: |$)(.*)", allow_sudo=True))
 async def catgban(cat):
-    await cat.edit("gbaning.......")
+    cate = await edit_or_reply(cat, "gbaning.......")
     start = datetime.now()
     user, reason = await get_user_from_event(cat)
     if not user:
         return
     if user.id == (await cat.client.get_me()).id:
-        await cat.edit("why would i ban myself")
+        await cate.edit("why would i ban myself")
         return
     if user.id in CAT_ID:
-        await cat.edit("why would i ban my DEVELOPER")
+        await cate.edit("why would i ban my dev")
         return
     try:
         hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
@@ -82,7 +64,7 @@ async def catgban(cat):
     except BaseException:
         pass
     if gban_sql.is_gbanned(user.id):
-        await cat.edit(
+        await cate.edit(
             f"the [user](tg://user?id={user.id}) is already in gbanned list any way checking again"
         )
     else:
@@ -92,9 +74,9 @@ async def catgban(cat):
     count = 0
     sandy = len(san)
     if sandy == 0:
-        await cat.edit("you are not admin of atleast one group ")
+        await cate.edit("you are not admin of atleast one group ")
         return
-    await cat.edit(
+    await cate.edit(
         f"initiating gban of the [user](tg://user?id={user.id}) in `{len(san)}` groups"
     )
     for i in range(sandy):
@@ -112,17 +94,17 @@ async def catgban(cat):
         if reply:
             await reply.delete()
     except BadRequestError:
-        await cat.edit(
+        await cate.edit(
             "`I dont have message deleting rights here! But still he was gbanned!`"
         )
     end = datetime.now()
     cattaken = (end - start).seconds
     if reason:
-        await cat.edit(
+        await cate.edit(
             f"[{user.first_name}](tg://user?id={user.id}) was gbanned in `{count}` groups in `{cattaken} seconds`!!\nReason: `{reason}`"
         )
     else:
-        await cat.edit(
+        await cate.edit(
             f"[{user.first_name}](tg://user?id={user.id}) was gbanned in `{count}` groups in `{cattaken} seconds`!!"
         )
 
@@ -134,9 +116,10 @@ async def catgban(cat):
         )
 
 
-@borg.on(admin_cmd("ungban(?: |$)(.*)"))
+@borg.on(admin_cmd(pattern=r"ungban(?: |$)(.*)"))
+@borg.on(sudo_cmd(pattern=r"ungban(?: |$)(.*)", allow_sudo=True))
 async def catgban(cat):
-    await cat.edit("ungbaning.....")
+    cate = await edit_or_reply(cat, "ungbaning.....")
     start = datetime.now()
     user, reason = await get_user_from_event(cat)
     if not user:
@@ -144,7 +127,7 @@ async def catgban(cat):
     if gban_sql.is_gbanned(user.id):
         gban_sql.catungban(user.id)
     else:
-        await cat.edit(
+        await cate.edit(
             f"the [user](tg://user?id={user.id}) is not in your gbanned list"
         )
         return
@@ -153,9 +136,9 @@ async def catgban(cat):
     count = 0
     sandy = len(san)
     if sandy == 0:
-        await cat.edit("you are not admin of atleast one group ")
+        await cate.edit("you are not even admin of atleast one group ")
         return
-    await cat.edit(
+    await cate.edit(
         f"initiating ungban of the [user](tg://user?id={user.id}) in `{len(san)}`groups"
     )
     for i in range(sandy):
@@ -171,11 +154,11 @@ async def catgban(cat):
     end = datetime.now()
     cattaken = (end - start).seconds
     if reason:
-        await cat.edit(
+        await cate.edit(
             f"[{user.first_name}](tg://user?id={user.id}) was ungbanned in `{count}` groups in `{cattaken} seconds`!!\nReason: `{reason}`"
         )
     else:
-        await cat.edit(
+        await cate.edit(
             f"[{user.first_name}](tg://user?id={user.id}) was ungbanned in `{count}` groups in `{cattaken} seconds`!!"
         )
 
@@ -188,6 +171,7 @@ async def catgban(cat):
 
 
 @borg.on(admin_cmd(pattern="listgban$"))
+@borg.on(sudo_cmd(pattern=r"listgban$", allow_sudo=True))
 async def gablist(event):
     if event.fwd_from:
         return
@@ -216,10 +200,11 @@ async def gablist(event):
             )
             await event.delete()
     else:
-        await event.edit(GBANNED_LIST)
+        await edit_or_reply(event, GBANNED_LIST)
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"gmute ?(\d+)?"))
+@borg.on(sudo_cmd(pattern=r"gmute ?(\d+)?", allow_sudo=True))
 async def startgmute(event):
     private = False
     if event.fwd_from:
@@ -238,18 +223,18 @@ async def startgmute(event):
     elif private is True:
         userid = event.chat_id
     else:
-        return await event.edit(
-            "Please reply to a user or add their into the command to gmute them."
+        return await edit_or_reply(
+            event, "Please reply to a user or add their into the command to gmute them."
         )
     replied_user = await event.client(GetFullUserRequest(userid))
     if is_muted(userid, "gmute"):
-        return await event.edit("This user is already gmuted")
+        return await edit_or_reply(event, "This user is already gmuted")
     try:
         mute(userid, "gmute")
     except Exception as e:
-        await event.edit("Error occured!\nError is " + str(e))
+        await edit_or_reply(event, "Error occured!\nError is " + str(e))
     else:
-        await event.edit("Successfully gmuted that person")
+        await edit_or_reply(event, "Successfully gmuted that person")
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -260,6 +245,7 @@ async def startgmute(event):
 
 
 @borg.on(admin_cmd(outgoing=True, pattern=r"ungmute ?(\d+)?"))
+@borg.on(sudo_cmd(pattern=r"ungmute ?(\d+)?", allow_sudo=True))
 async def endgmute(event):
     private = False
     if event.fwd_from:
@@ -277,94 +263,19 @@ async def endgmute(event):
     elif private is True:
         userid = event.chat_id
     else:
-        return await event.edit(
-            "Please reply to a user or add their into the command to ungmute them."
+        return await edit_or_reply(
+            event,
+            "Please reply to a user or add their into the command to ungmute them.",
         )
     replied_user = await event.client(GetFullUserRequest(userid))
     if not is_muted(userid, "gmute"):
-        return await event.edit("This user is not gmuted")
+        return await edit_or_reply(event, "This user is not gmuted")
     try:
         unmute(userid, "gmute")
     except Exception as e:
-        await event.edit("Error occured!\nError is " + str(e))
+        await edit_or_reply(event, "Error occured!\nError is " + str(e))
     else:
-        await event.edit("Successfully ungmuted that person")
-    if BOTLOG:
-        await event.client.send_message(
-            BOTLOG_CHATID,
-            "#UNGMUTE\n"
-            f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-            f"CHAT: {event.chat.title}(`{event.chat_id}`)",
-        )
-
-
-@borg.on(sudo_cmd(pattern=r"gmute ?(\d+)?", allow_sudo=True))
-async def startgmute(event):
-    private = False
-    if event.fwd_from:
-        return
-    if event.is_private:
-        await event.reply("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
-        private = True
-    reply = await event.get_reply_message()
-    if event.pattern_match.group(1) is not None:
-        userid = event.pattern_match.group(1)
-    elif reply is not None:
-        userid = reply.sender_id
-    elif private is True:
-        userid = event.chat_id
-    else:
-        return await event.reply(
-            "Please reply to a user or add their into the command to gmute them."
-        )
-    replied_user = await event.client(GetFullUserRequest(userid))
-    if is_muted(userid, "gmute"):
-        return await event.reply("This user is already gmuted")
-    try:
-        mute(userid, "gmute")
-    except Exception as e:
-        await event.reply("Error occured!\nError is " + str(e))
-    else:
-        await event.reply("Successfully gmuted that person")
-    if BOTLOG:
-        await event.client.send_message(
-            BOTLOG_CHATID,
-            "#GMUTE\n"
-            f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-            f"CHAT: {event.chat.title}(`{event.chat_id}`)",
-        )
-
-
-@borg.on(sudo_cmd(pattern=r"ungmute ?(\d+)?", allow_sudo=True))
-async def endgmute(event):
-    private = False
-    if event.fwd_from:
-        return
-    if event.is_private:
-        await event.reply("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
-        private = True
-    reply = await event.get_reply_message()
-    if event.pattern_match.group(1) is not None:
-        userid = event.pattern_match.group(1)
-    elif reply is not None:
-        userid = reply.sender_id
-    elif private is True:
-        userid = event.chat_id
-    else:
-        return await event.reply(
-            "Please reply to a user or add their into the command to ungmute them."
-        )
-    replied_user = await event.client(GetFullUserRequest(userid))
-    if not is_muted(userid, "gmute"):
-        return await event.reply("This user is not gmuted")
-    try:
-        unmute(userid, "gmute")
-    except Exception as e:
-        await event.reply("Error occured!\nError is " + str(e))
-    else:
-        await event.reply("Successfully ungmuted that person")
+        await edit_or_reply(event, "Successfully ungmuted that person")
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -414,15 +325,16 @@ async def get_user_from_event(event):
 
 CMD_HELP.update(
     {
-        "gadmin": ".gban <username/reply/userid> <reason (optional)>\
-\n**Usage : **Bans the person in all groups where you are admin .\
-\n\n.ungban <username/reply/userid>\
-\n**Usage : **Reply someone's message with .ungban to remove them from the gbanned list.\
-\n\n.listgban\
-\n**Usage : **Shows you the gbanned list and reason for their gban.\
-\n\n.gmute <username/reply> <reason (optional)>\
-\n**Usage : **Mutes the person in all groups you have in common with them.\
-\n\n.ungmute <username/reply>\
-\n**Usage : **Reply someone's message with .ungmute to remove them from the gmuted list."
+        "gadmin": "**Plugin : **`gadmin`\
+        \n\n**Syntax : **`.gban <username/reply/userid> <reason (optional)>`\
+\n**Function : **Bans the person in all groups where you are admin .\
+\n\n**Syntax : **`.ungban <username/reply/userid>`\
+\n**Function : **Reply someone's message with .ungban to remove them from the gbanned list.\
+\n\n**Syntax : **`.listgban`\
+\n**Function : **Shows you the gbanned list and reason for their gban.\
+\n\n**Syntax : **`.gmute <username/reply> <reason (optional)>`\
+\n**Function : **Mutes the person in all groups you have in common with them.\
+\n\n**Syntax : **`.ungmute <username/reply>`\
+\n**Function : **Reply someone's message with .ungmute to remove them from the gmuted list."
     }
 )

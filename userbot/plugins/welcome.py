@@ -130,7 +130,7 @@ async def show_welcome(event):
     if not cws:
         await edit_or_reply(event, "`No welcome message saved here.`")
         return
-    elif cws.f_mesg_id:
+    if cws.f_mesg_id:
         msg_o = await bot.get_messages(entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id))
         await edit_or_reply(
             event, "`I am currently welcoming new users with this welcome note.`"

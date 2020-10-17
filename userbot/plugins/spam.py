@@ -277,7 +277,7 @@ async def spammer(e):
         await edit_or_reply(e, "try again something went wrong or check `.info spam`")
 
 
-@borg.on(admin_cmd("cspam ?(.*)"))
+@borg.on(admin_cmd("cspam (.*)"))
 @borg.on(sudo_cmd(pattern="cspam (.*)", allow_sudo=True))
 async def tmeme(e):
     cspam = str("".join(e.text.split(maxsplit=1)[1:]))

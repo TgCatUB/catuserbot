@@ -19,8 +19,8 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 
-from userbot import CMD_HELP, bot
-from userbot.utils import admin_cmd
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 KANGING_STR = [
     "Using Witchery to kang this sticker...",
@@ -36,7 +36,8 @@ KANGING_STR = [
 ]
 
 
-@borg.on(admin_cmd(pattern="kang ?(.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern="kang ?(.*)"))
+@bot.on(sudo_cmd(pattern="kang ?(.*)", allow_sudo=True))
 async def kang(args):
     """ For .kang command, kangs stickers or creates new ones. """
     user = await bot.get_me()
@@ -53,11 +54,11 @@ async def kang(args):
     emoji = None
     if message and message.media:
         if isinstance(message.media, MessageMediaPhoto):
-            await args.edit(f"`{random.choice(KANGING_STR)}`")
+            catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
             photo = io.BytesIO()
             photo = await bot.download_media(message.photo, photo)
         elif "image" in message.media.document.mime_type.split("/"):
-            await args.edit(f"`{random.choice(KANGING_STR)}`")
+            catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
             photo = io.BytesIO()
             await bot.download_file(message.media.document, photo)
             if (
@@ -67,7 +68,7 @@ async def kang(args):
                 emoji = message.media.document.attributes[1].alt
                 emojibypass = True
         elif "tgsticker" in message.media.document.mime_type:
-            await args.edit(f"`{random.choice(KANGING_STR)}`")
+            catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
             await bot.download_file(message.media.document, "AnimatedSticker.tgs")
 
             attributes = message.media.document.attributes
@@ -79,10 +80,10 @@ async def kang(args):
             is_anim = True
             photo = 1
         else:
-            await args.edit("`Unsupported File!`")
+            await edit_or_reply(args, "`Unsupported File!`")
             return
     else:
-        await args.edit("`I can't kang that...`")
+        await edit_or_reply(args, "`I can't kang that...`")
         return
     if photo:
         splat = args.text.split()
@@ -91,14 +92,14 @@ async def kang(args):
         if len(splat) == 3:
             if char_is_emoji(splat[1]):
                 if char_is_emoji(splat[2]):
-                    return await args.edit("check `.info stickers`")
+                    return await catevent.edit("check `.info stickers`")
                 pack = splat[2]  # User sent both
                 emoji = splat[1]
             elif char_is_emoji(splat[2]):
                 pack = splat[1]  # User sent both
                 emoji = splat[2]
             else:
-                return await args.edit("check `.info stickers`")
+                return await catevent.edit("check `.info stickers`")
         elif len(splat) == 2:
             if char_is_emoji(splat[1]):
                 emoji = splat[1]
@@ -131,10 +132,7 @@ async def kang(args):
                 await bot.send_read_acknowledge(conv.chat_id)
                 await conv.send_message(packname)
                 x = await conv.get_response()
-                while (
-                    "Whoa! That's probably enough stickers for one pack, give it a break"
-                    in x.text
-                ):
+                while ("50" in x.text) or ("120" in x.text):
                     try:
                         val = int(pack)
                         pack = val + 1
@@ -146,7 +144,7 @@ async def kang(args):
                     else:
                         packname = f"{user.username}_{pack}"
                         packnick = f"@{user.username}'s_{pack}"
-                    await args.edit(
+                    await catevent.edit(
                         "`Switching to Pack "
                         + str(pack)
                         + " due to insufficient space`"
@@ -199,7 +197,7 @@ async def kang(args):
                         await conv.get_response()
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
-                        await args.edit(
+                        await catevent.edit(
                             f"Sticker added in a Different Pack !\
                             \nThis Pack is Newly created!\
                             \nYour pack can be found [here](t.me/addstickers/{packname}) and emoji of the sticker added is {emoji}",
@@ -218,7 +216,7 @@ async def kang(args):
                     not in rsp.text
                 ):
                     await bot.send_read_acknowledge(conv.chat_id)
-                    await args.edit(
+                    await catevent.edit(
                         f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.text}"
                     )
                     return
@@ -231,7 +229,7 @@ async def kang(args):
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
         else:
-            await args.edit("`Brewing a new Pack...`")
+            await catevent.edit("`Brewing a new Pack...`")
             async with bot.conversation("Stickers") as conv:
                 await conv.send_message(cmd)
                 await conv.get_response()
@@ -252,7 +250,7 @@ async def kang(args):
                     "You can list several emoji in one message, but I recommend using no more than two per sticker"
                     not in rsp.text
                 ):
-                    await args.edit(
+                    await catevent.edit(
                         f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
                     )
                     return
@@ -277,7 +275,7 @@ async def kang(args):
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
-        await args.edit(
+        await catevent.edit(
             f"Sticker kanged successfully!\
             \nPack can be found [here](t.me/addstickers/{packname}) and emoji of the sticker is {emoji}",
             parse_mode="md",
@@ -312,25 +310,28 @@ def char_is_emoji(character):
     return character in emoji.UNICODE_EMOJI
 
 
-@borg.on(admin_cmd(pattern="stkrinfo$"))
+@bot.on(admin_cmd(pattern="stkrinfo$", outgoing=True))
+@bot.on(sudo_cmd(pattern="stkrinfo$", allow_sudo=True))
 async def get_pack_info(event):
     if not event.is_reply:
-        await event.edit("`I can't fetch info from nothing, can I ?!`")
+        await edit_or_reply(event, "`I can't fetch info from nothing, can I ?!`")
         return
     rep_msg = await event.get_reply_message()
     if not rep_msg.document:
-        await event.edit("`Reply to a sticker to get the pack details`")
+        await edit_or_reply(event, "`Reply to a sticker to get the pack details`")
         return
     try:
         stickerset_attr = rep_msg.document.attributes[1]
-        await event.edit("`Fetching details of the sticker pack, please wait..`")
+        catevent = await edit_or_reply(
+            event, "`Fetching details of the sticker pack, please wait..`"
+        )
     except BaseException:
-        await event.edit("`This is not a sticker. Reply to a sticker.`")
+        await edit_or_reply(event, "`This is not a sticker. Reply to a sticker.`")
         return
     if not isinstance(stickerset_attr, DocumentAttributeSticker):
-        await event.edit("`This is not a sticker. Reply to a sticker.`")
+        await catevent.edit("`This is not a sticker. Reply to a sticker.`")
         return
-    get_stickerset = await bot(
+    get_stickerset = await event.client(
         GetStickerSetRequest(
             InputStickerSetID(
                 id=stickerset_attr.stickerset.id,
@@ -350,21 +351,21 @@ async def get_pack_info(event):
         f"**Stickers In Pack:** `{len(get_stickerset.packs)}`\n"
         f"**Emojis In Pack:**\n{' '.join(pack_emojis)}"
     )
-    await event.edit(OUTPUT)
+    await catevent.edit(OUTPUT)
 
 
 CMD_HELP.update(
     {
         "stickers": "**Plugins : **`stickers`\
     \n\n**Syntax : **`.kang`\
-\n**Usage : **Reply .kang to a sticker or an image to kang it to your userbot pack.\
+\n**Function : **__Reply .kang to a sticker or an image to kang it to your userbot pack.__\
 \n\n**Syntax : **`.kang [emoji('s)]`\
-\n**Usage : **Works just like .kang but uses the emoji('s) you picked.\
+\n**Function : **__Works just like .kang but uses the emoji('s) you picked.__\
 \n\n**Syntax : **`.kang [number]`\
-\n**Usage : **Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\
+\n**Function : **__Kang's the sticker/image to the specified pack but uses 🤔 as emoji.__\
 \n\n**Syntax : **`.kang [emoji('s)] [number]`\
-\n**Usage : **Kang's the sticker/image to the specified pack and uses the emoji('s) you picked.\
+\n**Function : **__Kang's the sticker/image to the specified pack and uses the emoji('s) you picked.__\
 \n\n**Syntax : **`.stkrinfo`\
-\n**Usage : **Gets info about the sticker pack."
+\n**Function : **__Gets info about the sticker pack.__"
     }
 )

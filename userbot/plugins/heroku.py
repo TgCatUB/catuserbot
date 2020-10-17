@@ -1,11 +1,9 @@
-"""CC- @refundisillegal\nSyntax:-\n.get var NAME\n.del var NAME\n.set var NAME"""
+# Heroku manager for your catuserbot
+
+# CC- @refundisillegal\nSyntax:-\n.get var NAME\n.del var NAME\n.set var NAME
 
 # Copyright (C) 2020 Adek Maulana.
 # All rights reserved.
-"""
-   Heroku manager for your userbot
-"""
-
 
 import asyncio
 import math
@@ -135,13 +133,13 @@ async def dyno_usage(dyno):
     quota = result["account_quota"]
     quota_used = result["quota_used"]
 
-    """ - Used - """
+    # - Used -
     remaining_quota = quota - quota_used
     percentage = math.floor(remaining_quota / quota * 100)
     minutes_remaining = remaining_quota / 60
     hours = math.floor(minutes_remaining / 60)
     minutes = math.floor(minutes_remaining % 60)
-    """ - Current - """
+    # - Current -
     App = result["apps"]
     try:
         App[0]["quota_used"]

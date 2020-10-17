@@ -154,7 +154,7 @@ async def _(event):
     catreply = await event.get_reply_message()
     if not catreply or not catreply.media or not catreply.media.document:
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
-    elif catreply.media.document.mime_type != "application/x-tgsticker":
+    if catreply.media.document.mime_type != "application/x-tgsticker":
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
     reply_to_id = event.message
     if event.reply_to_msg_id:

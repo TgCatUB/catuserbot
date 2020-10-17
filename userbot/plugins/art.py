@@ -1,14 +1,16 @@
 # Edit credit @Sur_vivor & @jisan7509
 from .. import ALIVE_NAME
-from ..utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 DEF = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
-@borg.on(admin_cmd(pattern="ded (.*)"))
+@bot.on(admin_cmd(pattern="ded (.*)"))
+@bot.on(sudo_cmd(pattern="ded (.*)", allow_sudo=True))
 async def kakashi(ded):
     name = ded.pattern_match.group(1)
-    await ded.edit(
+    await edit_or_reply(
+        ded,
         f"{DEF} --- {name}          \n　　　　　|"
         "\n　　　　　| \n"
         "　　　　　| \n"
@@ -22,19 +24,21 @@ async def kakashi(ded):
         "　|　３　 | 丶＼ \n"
         "＜ 、･　　|　　＼ \n"
         "　＼＿＿／∪ _ ∪) \n"
-        "　　　　　 Ｕ Ｕ\n"
+        "　　　　　 Ｕ Ｕ\n",
     )
 
 
-@borg.on(admin_cmd(pattern="killer (.*)"))
+@bot.on(admin_cmd(pattern="killer (.*)"))
+@bot.on(sudo_cmd(pattern="killer (.*)", allow_sudo=True))
 async def kakashi(killer):
     name = killer.pattern_match.group(1)
-    await killer.edit(
+    await edit_or_reply(
+        killer,
         f"__**Commando **__{DEF}          \n\n"
         "_/﹋\_\n"
         "(҂`_´)\n"
         f"<,︻╦╤─ ҉ - - - {name}\n"
-        "_/﹋\_\n"
+        "_/﹋\_\n",
     )
 
 
@@ -315,71 +319,85 @@ R = (
 )
 
 
-@borg.on(admin_cmd(pattern=r"monster$"))
+@bot.on(admin_cmd(pattern=r"monster$"))
+@bot.on(sudo_cmd(pattern="monster$", allow_sudo=True))
 async def bluedevilmonster(monster):
-    await monster.edit(A)
+    await edit_or_reply(monster, A)
 
 
-@borg.on(admin_cmd(pattern=r"pig$"))
+@bot.on(admin_cmd(pattern=r"pig$"))
+@bot.on(sudo_cmd(pattern="pig$", allow_sudo=True))
 async def bluedevilpig(pig):
-    await pig.edit(B)
+    await edit_or_reply(pig, B)
 
 
-@borg.on(admin_cmd(pattern=r"gun$"))
+@bot.on(admin_cmd(pattern=r"gun$"))
+@bot.on(sudo_cmd(pattern="gun$", allow_sudo=True))
 async def bluedevilgun(gun):
-    await gun.edit(D)
+    await edit_or_reply(gun, D)
 
 
-@borg.on(admin_cmd(pattern=r"dog$"))
+@bot.on(admin_cmd(pattern=r"dog$"))
+@bot.on(sudo_cmd(pattern="dog$", allow_sudo=True))
 async def bluedevildog(dog):
-    await dog.edit(E)
+    await edit_or_reply(dog, E)
 
 
-@borg.on(admin_cmd(pattern=r"hello$"))
+@bot.on(admin_cmd(pattern=r"hello$"))
+@bot.on(sudo_cmd(pattern="hello$", allow_sudo=True))
 async def bluedevilhello(hello):
-    await hello.edit(F)
+    await edit_or_reply(hello, F)
 
 
-@borg.on(admin_cmd(pattern=r"hmf$"))
+@bot.on(admin_cmd(pattern=r"hmf$"))
+@bot.on(sudo_cmd(pattern="hmf$", allow_sudo=True))
 async def bluedevilhmf(hmf):
-    await hmf.edit(G)
+    await edit_or_reply(hmf, G)
 
 
-@borg.on(admin_cmd(pattern=r"couple$"))
+@bot.on(admin_cmd(pattern=r"couple$"))
+@bot.on(sudo_cmd(pattern="couple$", allow_sudo=True))
 async def bluedevilcouple(couple):
-    await couple.edit(H)
+    await edit_or_reply(couple, H)
 
 
-@borg.on(admin_cmd(pattern=r"sup$"))
+@bot.on(admin_cmd(pattern=r"sup$"))
+@bot.on(sudo_cmd(pattern="sup$", allow_sudo=True))
 async def bluedevilsupreme(supreme):
-    await supreme.edit(I)
+    await edit_or_reply(supreme, I)
 
 
-@borg.on(admin_cmd(pattern=r"india$"))
+@bot.on(admin_cmd(pattern=r"india$"))
+@bot.on(sudo_cmd(pattern="india$", allow_sudo=True))
 async def bluedevilindia(india):
-    await india.edit(J)
+    await edit_or_reply(india, J)
 
 
-@borg.on(admin_cmd(pattern=r"wc$"))
+@bot.on(admin_cmd(pattern=r"wc$"))
+@bot.on(sudo_cmd(pattern="wc$", allow_sudo=True))
 async def bluedevilwelcome(welcome):
-    await welcome.edit(K)
+    await edit_or_reply(welcome, K)
 
 
-@borg.on(admin_cmd(pattern=r"snk$"))
+@bot.on(admin_cmd(pattern=r"snk$"))
+@bot.on(sudo_cmd(pattern="snk$", allow_sudo=True))
 async def bluedevilsnake(snake):
-    await snake.edit(L)
+    await edit_or_reply(snake, L)
 
 
-@borg.on(admin_cmd(pattern=r"bye$"))
+@bot.on(admin_cmd(pattern=r"bye$"))
+@bot.on(sudo_cmd(pattern="bye$", allow_sudo=True))
 async def bluedevilbye(bye):
-    await bye.edit(O)
+    await edit_or_reply(bye, O)
 
 
-@borg.on(admin_cmd(pattern=r"shitos$"))
+@bot.on(admin_cmd(pattern=r"shitos$"))
+@bot.on(sudo_cmd(pattern="shitos$", allow_sudo=True))
 async def bluedevilshitos(shitos):
-    await shitos.edit(P)
+    await edit_or_reply(shitos, P)
 
 
-@borg.on(admin_cmd(pattern=r"dislike$"))
+@bot.on(admin_cmd(pattern=r"dislike$"))
+@bot.on(sudo_cmd(pattern="dislike$", allow_sudo=True))
 async def bluedevildislike(dislike):
-    await dislike.edit(R)
+    await edit_or_reply(dislike, R)

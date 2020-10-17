@@ -6,9 +6,9 @@ from time import time
 from coffeehouse.api import API
 from coffeehouse.lydia import LydiaAI
 
-from userbot import CMD_HELP
-from userbot.plugins.sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
+from .sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
 
 if Var.LYDIA_API_KEY:
     api_key = Var.LYDIA_API_KEY
@@ -18,19 +18,20 @@ if Var.LYDIA_API_KEY:
     lydia = LydiaAI(coffeehouse_api)
 
 
-@borg.on(admin_cmd(pattern="(en|re|li)ai"))
+@bot.on(admin_cmd(pattern="(en|re|li)ai"))
+@bot.on(sudo_cmd(pattern="(en|re|li)ai", allow_sudo=True))
 async def lydia_disable_enable(event):
     if event.fwd_from:
         return
     if Var.LYDIA_API_KEY is None:
-        await event.edit("Please add required `LYDIA_API_KEY` env var")
+        await edit_or_reply(event, "Please add required `LYDIA_API_KEY` env var")
         return
     if event.reply_to_msg_id is not None:
         input_str = event.pattern_match.group(1)
         reply_msg = await event.get_reply_message()
         user_id = reply_msg.from_id
         chat_id = event.chat_id
-        await event.edit("Processing...")
+        catevent = await edit_or_reply(event, "Processing...")
         if input_str == "en":
             # Create a new chat session (Like a conversation)
             session = lydia.create_session()
@@ -40,10 +41,10 @@ async def lydia_disable_enable(event):
             # logger.info("Session Language: {0}".format(str(session.language)))
             # logger.info("Session Expires: {0}".format(str(session.expires)))
             logger.info(add_s(user_id, chat_id, session.id, session.expires))
-            await event.edit(f"Hello")
+            await catevent.edit(f"Hello")
         elif input_str == "re":
             logger.info(remove_s(user_id, chat_id))
-            await event.edit(f"[__signal lost__](tg://user?id={user_id})")
+            await catevent.edit(f"[__signal lost__](tg://user?id={user_id})")
         elif input_str == "li":
             lsts = get_all_s()
             if len(lsts) > 0:
@@ -64,25 +65,25 @@ async def lydia_disable_enable(event):
                         reply_to=event,
                     )
             else:
-                await event.edit(output_str)
+                await catevent.edit(output_str)
         else:
-            await event.edit(
+            await catevent.edit(
                 "Reply To User Message to Add / Delete them from Lydia Auto-Chat."
             )
     else:
-        await event.edit(
+        await catevent.edit(
             "Reply To A User's Message to Add / Delete them from Lydia Auto-Chat."
         )
 
 
-@borg.on(admin_cmd(incoming=True))
+@bot.on(admin_cmd(incoming=True))
 async def on_new_message(event):
     if event.chat_id in Config.UB_BLACK_LIST_CHAT:
         return
     if Var.LYDIA_API_KEY is None:
         return
     reply = await event.get_reply_message()
-    if reply is not None and reply.from_id != borg.uid:
+    if reply is not None and reply.from_id != bot.uid:
         return
     if not event.media:
         user_id = event.from_id
@@ -105,19 +106,22 @@ async def on_new_message(event):
             # Try to think a thought.
             try:
                 async with event.client.action(event.chat_id, "location"):
-                    await asyncio.sleep(5)
+                    await asyncio.sleep(2)
                     output = lydia.think_thought(session_id, query)
-                    await event.reply("💫" + output)
+                    await event.reply(output)
             except cf.exception.CoffeeHouseError as e:
                 logger.info(str(e))
 
 
 CMD_HELP.update(
     {
-        "lydia": "`.enai` reply to a user\
-    \nUSAGE: your bot will auto reply to the tagged user until you stops it by `.remcf`\
-    \n\n`.reai` reply to the user to who you want to disable the lydia\
-    \n\n`.liai` to list the users to whom you enabled ai(lydia)\
+        "lydia": "**Plugin : **`lydia`\
+    \n\n**Syntax : **`.enai` reply to a user\
+    \n**Usage : **your bot will auto reply to the tagged user until you stops it by `.remcf`\
+    \n\n**Syntax : **`.reai` reply to the user\
+    \n**Usage : **disables the lydia\
+    \n\n**Syntax : **`.liai`\
+    \n**Usage : ** to list the users to whom you enabled ai(lydia)\
     \n\n for functioning this plugin you need to set the heroku var\
     \n the key is `LYDIA_API_KEY` and get var from `https://coffeehouse.intellivoid.net/`\
 "

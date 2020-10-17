@@ -1,22 +1,18 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-#
-""" Userbot module for purging unneeded messages(usually spam or ot). """
+# Userbot module for purging unneeded messages(usually spam or ot).
 
 from asyncio import sleep
 
 from telethon.errors import rpcbaseerrors
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.utils import admin_cmd, errors_handler
+from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="purge$"))
+@bot.on(admin_cmd(outgoing=True, pattern="purge$"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="purge$"))
 @errors_handler
 async def fastpurger(purg):
-    """ For .purge command, purge all messages starting from the reply. """
+    # For .purge command, purge all messages starting from the reply.
     chat = await purg.get_input_chat()
     msgs = []
     itermsg = purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id)
@@ -31,7 +27,8 @@ async def fastpurger(purg):
                 await purg.client.delete_messages(chat, msgs)
                 msgs = []
     else:
-        await purg.edit(
+        await edit_or_reply(
+            purg,
             "`No message specified.`",
         )
         return
@@ -52,10 +49,11 @@ async def fastpurger(purg):
     await done.delete()
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="purgeme"))
+@bot.on(admin_cmd(outgoing=True, pattern="purgeme"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="purgeme"))
 @errors_handler
 async def purgeme(delme):
-    """ For .purgeme, delete x count of your latest message."""
+    # For .purgeme, delete x count of your latest message.
     message = delme.text
     count = int(message[9:])
     i = 1
@@ -80,7 +78,8 @@ async def purgeme(delme):
     await smsg.delete()
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="del$"))
+@bot.on(admin_cmd(outgoing=True, pattern="del$"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="del$"))
 @errors_handler
 async def delete_it(delme):
     """ For .del command, delete the replied message. """
@@ -100,36 +99,14 @@ async def delete_it(delme):
                 )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="edit"))
-@errors_handler
-async def editer(edit):
-    """ For .editme command, edit your last message. """
-    message = edit.text
-    chat = await edit.get_input_chat()
-    self_id = await edit.client.get_peer_id("me")
-    string = str(message[6:])
-    i = 1
-    async for message in edit.client.iter_messages(chat, self_id):
-        if i == 2:
-            await message.edit(string)
-            await edit.delete()
-            break
-        i += 1
-    if BOTLOG:
-        await edit.client.send_message(
-            BOTLOG_CHATID, "#EDIT \nEdit query was executed successfully"
-        )
-
-
 CMD_HELP.update(
     {
-        "purge": ".purge\
-    \nUsage: Purges all messages starting from the reply.\
-    \n\n.purgeme <x>\
-    \nUsage: Deletes x amount of your latest messages.\
-    \n\n.del\
-    \nUsage: Deletes the message you replied to.\
-    \n\n.edit <newmessage>\
-    \nUsage: Replace your last message with <newmessage>."
+        "purge": "**Plugin : **`purge`\
+        \n\n**Syntax : **`.purge reply to message to start purge from there`\
+        \n**Function : **__Purges all messages starting from the reply.__\
+        \n\n**Syntax : **`.purgeme <x>`\
+        \n**Function : **__Deletes x amount of your latest messages.__\
+        \n\n**Syntax : **`.del reply to message to delete`\
+        \n**Function : **__Deletes the message you replied to.__"
     }
 )

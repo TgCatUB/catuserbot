@@ -1,148 +1,156 @@
 # created by @eve_enryu
+# edited & fix by @Jisan7509
+
 
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from userbot import CMD_HELP, bot
-from userbot.events import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern="firmware(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="firmware(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="firmware(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
-        firmware = f"firmware"
+    firmware = f"firmware"
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{firmware} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="specs(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="specs(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="specs(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
-        specs = f"specs"
+    specs = f"specs"
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{specs} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @xiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="fastboot(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="fastboot(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="fastboot(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
-        fboot = f"fastboot"
+    fboot = f"fastboot"
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{fboot} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBoot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="recovery(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="recovery(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="recovery(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
-        recovery = f"recovery"
+    recovery = f"recovery"
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{recovery} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="pb(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="pb(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="pb(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
-        pitch = f"pb"
+    pitch = f"pb"
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{pitch} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="of(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="of(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="of(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
-    await event.edit("```Processing```")
-    async with bot.conversation("@XiaomiGeeksBot") as conv:
-        ofox = f"of"
+    ofox = f"of"
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=774181428)
             )
             await conv.send_message(f"/{ofox} {link}")
-            response = await response
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await event.reply("```Unblock @XiaomiGeeksBot plox```")
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
             return
         else:
-            await event.delete()
-            await bot.forward_messages(event.chat_id, response.message)
-        await bot.send_read_acknowledge(conv.chat_id)
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
 
 
 CMD_HELP.update(
@@ -150,16 +158,16 @@ CMD_HELP.update(
         "xiaomi": "**Plugin :** `Xiaomi`\
         \n\n__**For Xiaomeme devices only!**__\
         \n\n**Syntax :** `.firmware` (codename)\
-        \n**Usage : **Get lastest Firmware\
+        \n**Function : **Get lastest Firmware\
         \n\n**Syntax :** `.pb` (codename)\
-        \n**Usage : **Get latest PBRP\
+        \n**Function : **Get latest PBRP\
         \n\n**Syntax :** `.specs` (codename)\
-        \n**Usage : **Get quick spec information about device\
+        \n**Function : **Get quick spec information about device\
         \n\n**Syntax :** `.fastboot` (codename)\
-        \n**Usage : **Get latest fastboot MIUI\
+        \n**Function : **Get latest fastboot MIUI\
         \n\n**Syntax :** `.recovery` (codename)\
-        \n**Usage : **Get latest recovery MIUI\
+        \n**Function : **Get latest recovery MIUI\
         \n\n**Syntax :** `.of` (codename)\
-        \n**Usage : **Get latest ORangeFox Recovery"
+        \n**Function : **Get latest ORangeFox Recovery"
     }
 )

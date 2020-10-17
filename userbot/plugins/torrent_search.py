@@ -156,14 +156,14 @@ def search_idop_se(search_query):
     for item in results:
         # The content scrapped on 24.09.2018 22:56:45
         title = item["name"]
-        hash = item["info_hash"]
+        t_hash = item["info_hash"]
         age = item["create_time"]
         size = item["length"]
         seeds = str(item["seeds"])
         r.append(
             {
                 "title": title,
-                "hash": hash,
+                "hash": t_hash,
                 "age": age,
                 "size": humanbytes(size),
                 "seeds": seeds,
