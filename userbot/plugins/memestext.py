@@ -8,6 +8,7 @@ Syntax: .belo by @Deonnn
 Syntax: .tip by @Deonnn
 Userbot module for having some fun with people.
 """
+
 import asyncio
 import random
 
