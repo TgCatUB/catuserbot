@@ -1,4 +1,4 @@
-telethon
+telethon==1.16.4
 aiofiles
 aiohttp
 asyncurban
