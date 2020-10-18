@@ -252,7 +252,7 @@ CMD_HELP.update(
         \n**USAGE   ➥  **Searches the song you entered in query and sends it quality of it is 128k\
         \n\n📌** CMD ➥** `.song320` <query> or `.song320 reply to song name`\
         \n**USAGE   ➥  **Searches the song you entered in query and sends it quality of it is 320k\
-        \n\n📌** CMD ➥** .vsong` <query> or `.vsong reply to song name`\
+        \n\n📌** CMD ➥** `.vsong` <query> or `.vsong reply to song name`\
         \n**USAGE   ➥  **Searches the video song you entered in query and sends it\
         \n\n📌** CMD ➥** `.spd` <Artist - Song Title>\
         \n**USAGE   ➥  **For searching songs from Spotify.\
