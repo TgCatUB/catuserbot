@@ -27,7 +27,7 @@ async def kakashi(jisan):
 
 
 @bot.on(admin_cmd(pattern=r"bot$"))
-@bot.on(sudo_cmd(pattern="elove$", allow_sudo=True))
+@bot.on(sudo_cmd(pattern="bot$", allow_sudo=True))
 async def kakashi(jisan):
     await edit_or_reply(
         jisan,
@@ -37,7 +37,7 @@ async def kakashi(jisan):
 
 
 @bot.on(admin_cmd(pattern=r"hai$"))
-@bot.on(sudo_cmd(pattern="bot$", allow_sudo=True))
+@bot.on(sudo_cmd(pattern="hai$", allow_sudo=True))
 async def kakashi(jisan):
     await edit_or_reply(
         jisan,
