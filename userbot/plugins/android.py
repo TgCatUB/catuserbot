@@ -22,20 +22,13 @@ DEVICES_DATA = (
 @borg.on(admin_cmd(pattern=r"magisk"))
 @borg.on(sudo_cmd(pattern=r"magisk", allow_sudo=True))
 async def kakashi(magisk):
-    """ magisk latest releases """
-    magisk_dict = {
-        "Stable ": "https://raw.githubusercontent.com/topjohnwu/magisk_files/master/stable.json",
-        "Beta ": "https://raw.githubusercontent.com/topjohnwu/magisk_files/master/beta.json",
-        "Canary ": "https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/debug.json",
-    }
-    releases = "__**Latest Magisk Releases :**__\n\n"
-    for name, release_url in magisk_dict.items():
-        data = get(release_url).json()
-        releases += (
-            f'**{name}:** [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | '
-            f'[APK v{data["app"]["version"]}]({data["app"]["link"]}) | '
-            f'[Uninstaller]({data["uninstaller"]["link"]})\n'
-        )
+    """magisk latest releases"""
+    releases = (
+        "__**Latest Magisk Releases:**__\n\n"
+        f"**Stable : **[APK v8.0.2](https://github.com/topjohnwu/Magisk/releases/download/manager-v8.0.2/MagiskManager-v8.0.2.apk) | [ZIP v20.4](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-v20.4.zip) | [Uninstaller](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-uninstaller-20200323.zip)\n"
+        f"**Beta : **[APK v8.0.2](https://github.com/topjohnwu/Magisk/releases/download/manager-v8.0.2/MagiskManager-v8.0.2.apk) | [ZIP v21.0](https://github.com/topjohnwu/Magisk/releases/download/v21.0/Magisk-v21.0.zip) | [Uninstaller](https://github.com/topjohnwu/Magisk/releases/download/v21.0/Magisk-uninstaller-20201003.zip)\n"
+        f"**Canary : **[APK v4e0a3f5e](https://github.com/topjohnwu/magisk_files/blob/canary/app-debug.apk) | [ZIP v4e0a3f5e](https://github.com/topjohnwu/magisk_files/blob/canary/magisk-debug.zip) | [Uninstaller](https://github.com/topjohnwu/magisk_files/blob/canary/magisk-uninstaller.zip)"
+    )
     await edit_or_reply(magisk, releases)
 
 
