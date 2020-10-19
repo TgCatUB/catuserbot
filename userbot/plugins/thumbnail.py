@@ -97,11 +97,11 @@ async def _(event):
 CMD_HELP.update(
     {
         "thumbnail": "__**PLUGIN NAME :** Thumbnail__\
-    \n\n📌** CMD ➥** `.savethumbnail`\
+    \n\n📌** CMD ➥** `.savethumb`\
     \n**USAGE   ➥  **Reply to file or video to save it as temporary thumbimage\
-    \n\n📌** CMD ➥** `.clearthumbnail`\
+    \n\n📌** CMD ➥** `.clearthumb`\
     \n**USAGE   ➥  **To clear Thumbnail no longer you uploads uses custom thumbanail\
-    \n\n📌** CMD ➥** `.getthumbnail`\
+    \n\n📌** CMD ➥** `.getthumb`\
     \n**USAGE   ➥  **To get thumbnail of given video or gives your present thumbnail\
     "
     }
