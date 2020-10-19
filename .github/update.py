@@ -1,24 +1,21 @@
 import asyncio
-import sys
-from os import path
 
-requirements_path = path.join(
-    path.dirname(path.dirname(path.dirname(__file__))), "requirements.txt"
-)
+from userbot import runcmd
 
 
 async def update_requirements():
-    reqs = str(requirements_path)
     try:
-        process = await asyncio.create_subprocess_shell(
-            " ".join([sys.executable, "-m", "pip", "install", "-r", reqs]),
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-        )
-        await process.communicate()
-        return process.returncode
+        await runcmd("pip install --upgrade pip")
+        print("Pip is upto-date")
+    except BaseException:
+        print("Error while updating pip")
+    try:
+        await runcmd("pip install -r requirements.txt")
+        print("Succesfully Updated requirements")
     except Exception as e:
-        return repr(e)
+        print(f"Error while installing requirments {str(e)}")
 
 
-asyncio.run(update_requirements())
+loop = asyncio.get_event_loop()
+loop.run_until_complete(update_requirements())
+loop.close()
