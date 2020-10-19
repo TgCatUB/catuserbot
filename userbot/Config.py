@@ -6,7 +6,7 @@ import os
 from telethon.tl.types import ChatBannedRights
 
 
-class Config(object):
+class Config((object)):
     LOGGER = True
     # Get this value from my.telegram.org! Please do not steal
     APP_ID = int(os.environ.get("APP_ID", 6))
@@ -49,7 +49,7 @@ class Config(object):
     TG_BOT_USER_NAME_BF_HER = os.environ.get("TG_BOT_USER_NAME_BF_HER", None)
     NO_LOG_P_M_S = bool(os.environ.get("NO_LOG_P_M_S", True))
     THUMB_IMAGE = os.environ.get(
-        "THUMB_IMAGE", "https://telegra.ph/file/3d60313110c58684b31ea.jpg"
+        "THUMB_IMAGE", "https://telegra.ph/file/ca95524e4734b0d5461b5.jpg"
     )
     # Genius lyrics get this value from https://genius.com/developers both has
     # same values
@@ -58,9 +58,10 @@ class Config(object):
     # TG API limit. A message can have maximum 4096 characters!
     MAX_MESSAGE_SIZE_LIMIT = 4095
     # set blacklist_chats where you do not want userbot's features
-    UB_BLACK_LIST_CHAT = set(
+    UB_BLACK_LIST_CHAT = {
         int(x) for x in os.environ.get("UB_BLACK_LIST_CHAT", "").split()
-    )
+    }
+
     # specify LOAD and NO_LOAD
     LOAD = []
     # foloowing plugins won't work on Heroku,
@@ -108,7 +109,7 @@ class Config(object):
     # specify list of users allowed to use bot
     # WARNING: be careful who you grant access to your bot.
     # malicious users could do ".exec rm -rf /*"
-    SUDO_USERS = set(int(x) for x in os.environ.get("SUDO_USERS", "").split())
+    SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
     # Google Drive ()
     CHROME_BIN = os.environ.get("CHROME_BIN", "/app/.apt/usr/bin/google-chrome")
     CHROME_DRIVER = os.environ.get(
