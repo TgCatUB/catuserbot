@@ -50,7 +50,7 @@ async def amireallyalive(alive):
             parse_mode="html",
             reply_to=reply_to_id,
             link_preview=False,
-            allow_cache = True,
+            allow_cache=True,
         )
         await alive.delete()
     else:
