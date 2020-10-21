@@ -7,7 +7,6 @@ cairosvg
 cfscrape
 coffeehouse
 covid
-covid-india
 cowpy
 cryptg
 csvfaker
