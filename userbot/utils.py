@@ -216,14 +216,14 @@ def sudo_cmd(pattern=None, **args):
 
 # https://t.me/c/1220993104/623253
 # https://docs.telethon.dev/en/latest/misc/changelog.html#breaking-changes
-async def edit_or_reply(event, text , parsemode=None):
+async def edit_or_reply(event, text, parsemode=None):
     if parsemode:
         if event.sender_id in Config.SUDO_USERS:
             reply_to = await event.get_reply_message()
             if reply_to:
-                return await reply_to.reply(text,parse_mode=parsemode)
-            return await event.reply(text,parse_mode=parsemode)
-        return await event.edit(text,parse_mode=parsemode)
+                return await reply_to.reply(text, parse_mode=parsemode)
+            return await event.reply(text, parse_mode=parsemode)
+        return await event.edit(text, parse_mode=parsemode)
     if event.sender_id in Config.SUDO_USERS:
         reply_to = await event.get_reply_message()
         if reply_to:
@@ -231,26 +231,32 @@ async def edit_or_reply(event, text , parsemode=None):
         return await event.reply(text)
     return await event.edit(text)
 
+
 # from paperplaneextended
 on = bot.on
+
 
 def on(**args):
     def decorator(func):
         async def wrapper(event):
             # do things like check if sudo
             await func(event)
+
         client.add_event_handler(wrapper, events.NewMessage(**args))
         return wrapper
+
     return decorater
- 
-async def edit_delete(event, text , time):
+
+
+async def edit_delete(event, text, time):
     if event.sender_id in Config.SUDO_USERS:
         reply_to = await event.get_reply_message()
         catevent = await reply_to.reply(text) if reply_to else await event.reply(text)
     else:
         catevent = await event.edit(text)
     await asyncio.sleep(time)
-    return await catevent.delete()    
+    return await catevent.delete()
+
 
 def errors_handler(func):
     async def wrapper(errors):

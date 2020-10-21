@@ -1,18 +1,23 @@
 # ported from uniborg
 # https://github.com/muhammedfurkan/UniBorg/blob/master/stdplugins/ezanvakti.py
 import json
+
 import requests
+
 from ..utils import admin_cmd, sudo_cmd
 from . import CMD_HELP
 
-@bot.on(admin_cmd(pattern="ezanvakti (.*)",outgoing=True))
+
+@bot.on(admin_cmd(pattern="ezanvakti (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="ezanvakti (.*)", allow_sudo=True))
 async def get_adzan(adzan):
     LOKASI = adzan.pattern_match.group(1)
     url = f"https://api.pray.zone/v2/times/today.json?city={LOKASI}"
     request = requests.get(url)
     if request.status_code != 200:
-        await edit_delete(adzan, f"`Couldn't fetch any data about the city {LOKASI}`", 5)
+        await edit_delete(
+            adzan, f"`Couldn't fetch any data about the city {LOKASI}`", 5
+        )
         return
     result = json.loads(request.text)
     catresult = f"<b>Islamic prayer times </b>\
@@ -30,10 +35,13 @@ async def get_adzan(adzan):
             \n<b>Isha     : </b><i>{result['results']['datetime'][0]['times']['Isha']}</i>\
             \n<b>Midnight : </b><i>{result['results']['datetime'][0]['times']['Midnight']}</i>\
     "
-    await edit_or_reply(adzan, catresult , "html")
+    await edit_or_reply(adzan, catresult, "html")
 
-CMD_HELP.update({
-    "ezanvakti":"**Plugin : **`ezanvakti`\
+
+CMD_HELP.update(
+    {
+        "ezanvakti": "**Plugin : **`ezanvakti`\
     \n\n**Syntax : **`.ezanvakti <city name>`\
     \n**Function : **__Shows you the Islamic prayer times of the given city name__"
-})
+    }
+)
