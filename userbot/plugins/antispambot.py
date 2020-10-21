@@ -27,7 +27,7 @@ if Config.ANTISPAMBOT_BAN:
         ignore = None
         if event.user_added:
             try:
-                adder = event.action_message.from_id
+                adder = event.action_message.sender_id
             except AttributeError:
                 return
         async for admin in event.client.iter_participants(

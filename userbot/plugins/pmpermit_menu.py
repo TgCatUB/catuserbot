@@ -18,7 +18,7 @@ PREV_REPLY_MESSAGE = {}
 
 @bot.on(events.NewMessage(pattern=r"\/start", incoming=True))
 async def _(event):
-    chat_id = event.from_id
+    chat_id = event.sender_id
     if not pmpermit_sql.is_approved(chat_id):
         chat = await event.get_chat()
         if chat_id not in PM_START:
@@ -51,7 +51,7 @@ async def _(event):
                 if pmpermit_sql.is_approved(chat_id):
                     return
                 await event.client.send_message(chat, PM)
-                chat_id = event.from_id
+                chat_id = event.sender_id
                 response = await conv.get_response(chat)
                 y = response.text
                 if y == "a":

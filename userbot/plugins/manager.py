@@ -74,9 +74,9 @@ if Config.DUAL_LOG:
             return
         if not event.is_private:
             return
-        if event.from_id == bot.uid:
+        if event.sender_id == bot.uid:
             return
-        chat_id = event.from_id
+        chat_id = event.sender_id
         # logger.info(chat_id)
         sender = await event.client.get_entity(chat_id)
         if chat_id == borg.uid:
@@ -102,7 +102,7 @@ if Config.DUAL_LOG:
             added_by_users = event.action_message.action.users
             if borg.uid in added_by_users:
                 message_id = event.action_message.id
-                added_by_user = event.action_message.from_id
+                added_by_user = event.action_message.sender_id
                 # someone added me to chat
                 the_message = ""
                 the_message += "#MessageActionChatAddUser\n\n"

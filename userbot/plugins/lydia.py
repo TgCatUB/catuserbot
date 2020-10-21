@@ -29,7 +29,7 @@ async def lydia_disable_enable(event):
     if event.reply_to_msg_id is not None:
         input_str = event.pattern_match.group(1)
         reply_msg = await event.get_reply_message()
-        user_id = reply_msg.from_id
+        user_id = reply_msg.sender_id
         chat_id = event.chat_id
         catevent = await edit_or_reply(event, "Processing...")
         if input_str == "en":
@@ -83,10 +83,10 @@ async def on_new_message(event):
     if Var.LYDIA_API_KEY is None:
         return
     reply = await event.get_reply_message()
-    if reply is not None and reply.from_id != bot.uid:
+    if reply is not None and reply.sender_id != bot.uid:
         return
     if not event.media:
-        user_id = event.from_id
+        user_id = event.sender_id
         chat_id = event.chat_id
         s = get_s(user_id, chat_id)
         if s is not None:

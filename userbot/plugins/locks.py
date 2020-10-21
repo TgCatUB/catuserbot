@@ -200,7 +200,7 @@ async def _(event):
     # bots are limited Telegram accounts,
     # and cannot join by themselves
     if event.user_added:
-        users_added_by = event.action_message.from_id
+        users_added_by = event.action_message.sender_id
         is_ban_able = False
         rights = types.ChatBannedRights(until_date=None, view_messages=True)
         added_users = event.action_message.action.users

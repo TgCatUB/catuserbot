@@ -455,7 +455,7 @@ async def pin(msg):
         await edit_or_reply(msg, NO_PERM)
         return
     hmm = await edit_or_reply(msg, "`Pinned Successfully!`")
-    user = await get_user_from_id(msg.from_id, msg)
+    user = await get_user_from_id(msg.sender_id, msg)
     if BOTLOG:
         await msg.client.send_message(
             BOTLOG_CHATID,
@@ -535,7 +535,7 @@ async def get_user_from_event(event):
     extra = None
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.from_id)
+        user_obj = await event.client.get_entity(previous_message.sender_id)
         extra = event.pattern_match.group(1)
     elif args:
         user = args[0]

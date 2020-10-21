@@ -20,7 +20,7 @@ from . import CMD_HELP, name_dl, runcmd, song_dl, video_dl, yt_search
 @bot.on(sudo_cmd(pattern="(song|song320)($| (.*))", allow_sudo=True))
 async def _(event):
     reply_to_id = None
-    if event.from_id != bot.uid:
+    if event.sender_id != bot.uid:
         reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -94,7 +94,7 @@ async def _(event):
 @bot.on(sudo_cmd(pattern="vsong( (.*)|$)", allow_sudo=True))
 async def _(event):
     reply_to_id = None
-    if event.from_id != bot.uid:
+    if event.sender_id != bot.uid:
         reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id

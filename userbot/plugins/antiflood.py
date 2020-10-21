@@ -21,13 +21,13 @@ async def _(event):
         return
     if str(event.chat_id) not in CHAT_FLOOD:
         return
-    should_ban = sql.update_flood(event.chat_id, event.message.from_id)
+    should_ban = sql.update_flood(event.chat_id, event.message.sender_id)
     if not should_ban:
         return
     try:
         await event.client(
             EditBannedRequest(
-                event.chat_id, event.message.from_id, ANTI_FLOOD_WARN_MODE
+                event.chat_id, event.message.sender_id, ANTI_FLOOD_WARN_MODE
             )
         )
     except Exception as e:  # pylint:disable=C0103,W0703
@@ -36,7 +36,7 @@ async def _(event):
             message="""**Automatic AntiFlooder**
 @admin [User](tg://user?id={}) is flooding this chat.
 `{}`""".format(
-                event.message.from_id, str(e)
+                event.message.sender_id, str(e)
             ),
             reply_to=event.message.id,
         )
@@ -50,7 +50,7 @@ async def _(event):
             message="""**Automatic AntiFlooder**
 [User](tg://user?id={}) has been automatically restricted
 because he reached the defined flood limit.""".format(
-                event.message.from_id
+                event.message.sender_id
             ),
             reply_to=event.message.id,
         )

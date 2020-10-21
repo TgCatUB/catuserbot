@@ -167,7 +167,7 @@ async def info(event):
             string += "◆ " + f"<code>{str(i)}</code>"
             string += "   "
             catcount += 1
-        if event.from_id in Config.SUDO_USERS:
+        if event.sender_id in Config.SUDO_USERS:
             await event.reply(string.format(count=catcount), parse_mode="HTML")
         else:
             await event.edit(string.format(count=catcount), parse_mode="HTML")

@@ -23,7 +23,7 @@ async def echo(cat):
         return
     if cat.reply_to_msg_id is not None:
         reply_msg = await cat.get_reply_message()
-        user_id = reply_msg.from_id
+        user_id = reply_msg.sender_id
         chat_id = cat.chat_id
         try:
             hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
@@ -47,7 +47,7 @@ async def echo(cat):
         return
     if cat.reply_to_msg_id is not None:
         reply_msg = await cat.get_reply_message()
-        user_id = reply_msg.from_id
+        user_id = reply_msg.sender_id
         chat_id = cat.chat_id
         try:
             hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
