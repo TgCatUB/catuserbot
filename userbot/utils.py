@@ -384,8 +384,9 @@ async def is_admin(client, chat_id, user_id):
 
 
 # https://t.me/c/1220993104/623253
+#https://docs.telethon.dev/en/latest/misc/changelog.html#breaking-changes
 async def edit_or_reply(event, text):
-    if event.from_id in Config.SUDO_USERS:
+    if event.sender_id in Config.SUDO_USERS:
         reply_to = await event.get_reply_message()
         if reply_to:
             return await reply_to.reply(text)
