@@ -5,7 +5,6 @@ import requests
 from ..utils import admin_cmd, sudo_cmd
 from . import CMD_HELP
 
-
 @bot.on(admin_cmd(pattern="ezanvakti (.*)",outgoing=True))
 @bot.on(sudo_cmd(pattern="ezanvakti (.*)", allow_sudo=True))
 async def get_adzan(adzan):
@@ -19,8 +18,8 @@ async def get_adzan(adzan):
     result = f"<b>Islamic prayer times </b>\
             \n\n<b>City : </b><i>{result['results']['location']['city']}</i>\
             \n<b>Country : </b><i>{result['results']['location']['country']}</i>\
-            \n<b>Date : </b><i>{result['results']['date']['gregorian']}</i>\
-            \n<b>Hijri : </b><i>{result['results']['date']['hijri']}</i>\
+            \n<b>Date : </b><i>{result['results']["datetime"][0]['date']['gregorian']}</i>\
+            \n<b>Hijri : </b><i>{result['results']["datetime"][0]['date']['hijri']}</i>\
             \n\n<b>Imsak : </b><i>{result['results']['datetime'][0]['times']['Imsak']}</i>\
             \n<b>Sunrise : </b><i>{result['results']['datetime'][0]['times']['Sunrise']}</i>\
             \n<b>Fajr : </b><i>{result['results']['datetime'][0]['times']['Fajr']}</i>\
@@ -37,5 +36,4 @@ CMD_HELP.update({
     "ezanvakti":"**Plugin : **`ezanvakti`\
     \n\n**Syntax : **`.ezanvakti <city name>`\
     \n**Function : **__Shows you the Islamic prayer times of the given city name__"
-})    
-
+})
