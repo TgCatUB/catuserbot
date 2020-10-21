@@ -140,7 +140,7 @@ async def info(event):
             \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
         catcount = 0
         for i in sorted(SUDO_LIST):
-            string += "◆" + f"<code>{str(i)}</code>"
+            string += "• " + f"<code>{str(i)}</code>"
             string += "   "
             catcount += 1
         await event.reply(string.format(count=catcount), parse_mode="HTML")
@@ -164,7 +164,7 @@ async def info(event):
             \n<b>Usage : </b><code>.info</code> <plugin name>\n\n"
         catcount = 0
         for i in sorted(CMD_HELP):
-            string += "◆ " + f"<code>{str(i)}</code>"
+            string += "• " + f"<code>{str(i)}</code>"
             string += "   "
             catcount += 1
         if event.sender_id in Config.SUDO_USERS:
