@@ -219,8 +219,18 @@ async def convert_tosticker(image):
     return "./temp/temp.webp"
 
 
-# for nekobot
+#covid india data
 
+async def covidindia(state):
+    states = ['Andaman and Nicobar Islands', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Ladakh', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telengana', 'Tripura', 'Uttarakhand', 'Uttar Pradesh', 'West Bengal', ''] # pylint: disable=line-too-long
+    url = "https://www.mohfw.gov.in/data/datanew.json"
+    req = requests.get(url).json()
+    for i in states:
+        if i == state:
+            return req[states.index(i)]
+    return None
+
+# for nekobot
 
 async def trumptweet(text):
     r = requests.get(
