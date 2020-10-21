@@ -186,15 +186,3 @@ async def stylish_generator(event):
             ]
             string = string.replace(normaltextcharacter, smothtextcharacter)
     await edit_or_reply(event, string)
-
-
-CMD_HELP.update(
-    {
-        "extrafonts": "**extrafonts**\
-    \n**Syntax :** `.fmusical`\
-    \n        `.ancient`\
-    \n        `.vapor`\
-    \n**Usage : **differnt font styles\
-"
-    }
-)
