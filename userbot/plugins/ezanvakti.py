@@ -11,11 +11,11 @@ async def get_adzan(adzan):
     LOKASI = adzan.pattern_match.group(1)
     url = f"https://api.pray.zone/v2/times/today.json?city={LOKASI}"
     request = requests.get(url)
-    result = json.loads(request.text)
     if request.status_code != 200:
         await edit_delete(adzan, f"Couldn't fetch any data about the city", 5)
         return
-    result = f"<b>Islamic prayer times </b>\
+    result = json.loads(request.text)
+    catresult = f"<b>Islamic prayer times </b>\
             \n\n<b>City : </b><i>{result['results']['location']['city']}</i>\
             \n<b>Country : </b><i>{result['results']['location']['country']}</i>\
             \n<b>Date : </b><i>{result['results']["datetime"][0]['date']['gregorian']}</i>\
@@ -30,7 +30,7 @@ async def get_adzan(adzan):
             \n<b>Isha : </b><i>{result['results']['datetime'][0]['times']['Isha']}</i>\
             \n<b>Midnight : </b><i>{result['results']['datetime'][0]['times']['Midnight']}</i>\
     "
-    await edit_or_reply(adzan, result , "html")
+    await edit_or_reply(adzan, catresult , "html")
 
 CMD_HELP.update({
     "ezanvakti":"**Plugin : **`ezanvakti`\
