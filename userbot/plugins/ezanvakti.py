@@ -16,18 +16,18 @@ async def get_adzan(adzan):
         return
     result = json.loads(request.text)
     catresult = f"<b>Islamic prayer times </b>\
-            \n\n<b>City : </b><i>{result['results']['location']['city']}</i>\
-            \n<b>Country : </b><i>{result['results']['location']['country']}</i>\
-            \n<b>Date : </b><i>{result['results']['datetime'][0]['date']['gregorian']}</i>\
-            \n<b>Hijri : </b><i>{result['results']['datetime'][0]['date']['hijri']}</i>\
-            \n\n<b>Imsak : </b><i>{result['results']['datetime'][0]['times']['Imsak']}</i>\
-            \n<b>Sunrise : </b><i>{result['results']['datetime'][0]['times']['Sunrise']}</i>\
-            \n<b>Fajr : </b><i>{result['results']['datetime'][0]['times']['Fajr']}</i>\
-            \n<b>Dhuhr : </b><i>{result['results']['datetime'][0]['times']['Dhuhr']}</i>\
-            \n<b>Asr : </b><i>{result['results']['datetime'][0]['times']['Asr']}</i>\
-            \n<b>Sunset : </b><i>{result['results']['datetime'][0]['times']['Sunset']}</i>\
-            \n<b>Maghrib : </b><i>{result['results']['datetime'][0]['times']['Maghrib']}</i>\
-            \n<b>Isha : </b><i>{result['results']['datetime'][0]['times']['Isha']}</i>\
+            \n\n<b>City     : </b><i>{result['results']['location']['city']}</i>\
+            \n<b>Country  : </b><i>{result['results']['location']['country']}</i>\
+            \n<b>Date     : </b><i>{result['results']['datetime'][0]['date']['gregorian']}</i>\
+            \n<b>Hijri    : </b><i>{result['results']['datetime'][0]['date']['hijri']}</i>\
+            \n\n<b>Imsak    : </b><i>{result['results']['datetime'][0]['times']['Imsak']}</i>\
+            \n<b>Sunrise  : </b><i>{result['results']['datetime'][0]['times']['Sunrise']}</i>\
+            \n<b>Fajr     : </b><i>{result['results']['datetime'][0]['times']['Fajr']}</i>\
+            \n<b>Dhuhr    : </b><i>{result['results']['datetime'][0]['times']['Dhuhr']}</i>\
+            \n<b>Asr      : </b><i>{result['results']['datetime'][0]['times']['Asr']}</i>\
+            \n<b>Sunset   : </b><i>{result['results']['datetime'][0]['times']['Sunset']}</i>\
+            \n<b>Maghrib  : </b><i>{result['results']['datetime'][0]['times']['Maghrib']}</i>\
+            \n<b>Isha     : </b><i>{result['results']['datetime'][0]['times']['Isha']}</i>\
             \n<b>Midnight : </b><i>{result['results']['datetime'][0]['times']['Midnight']}</i>\
     "
     await edit_or_reply(adzan, catresult , "html")
