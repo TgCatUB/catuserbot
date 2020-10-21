@@ -49,7 +49,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            replied_user = await event.client.get_entity(reply.from_id)
+            replied_user = await event.client.get_entity(reply.sender_id)
             chat = replied_user.id
             firstname = str(replied_user.first_name)
             if not pmpermit_sql.is_approved(chat):
@@ -112,7 +112,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            chat = await event.client.get_entity(reply.from_id)
+            chat = await event.client.get_entity(reply.sender_id)
             firstname = str(chat.first_name)
             if chat.id in PM_START:
                 PM_START.remove(chat.id)
@@ -147,7 +147,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            chat = await event.client.get_entity(reply.from_id)
+            chat = await event.client.get_entity(reply.sender_id)
             firstname = str(chat.first_name)
             if chat.id in PM_START:
                 PM_START.remove(chat.id)
@@ -162,7 +162,7 @@ if Var.PRIVATE_GROUP_ID is not None:
     async def unblock_pm(event):
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            chat = await event.client.get_entity(reply.from_id)
+            chat = await event.client.get_entity(reply.sender_id)
             firstname = str(chat.first_name)
             await event.client(functions.contacts.UnblockRequest(chat.id))
             await event.edit(
@@ -204,14 +204,14 @@ if Var.PRIVATE_GROUP_ID is not None:
 
     @bot.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):
-        if event.from_id == bot.uid:
+        if event.sender_id == bot.uid:
             return
         if Var.PRIVATE_GROUP_ID is None:
             return
         if not event.is_private:
             return
         message_text = event.message.message
-        chat_id = event.from_id
+        chat_id = event.sender_id
         USER_BOT_NO_WARN = (
             f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={chat_id})\n\n"
             f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "
