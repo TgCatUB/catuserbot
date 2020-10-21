@@ -109,7 +109,9 @@ async def get_full_user(event):
                 )
             )
             return replied_user, None
-        replied_user = await event.client(GetFullUserRequest(previous_message.sender_id))
+        replied_user = await event.client(
+            GetFullUserRequest(previous_message.sender_id)
+        )
         return replied_user, None
     input_str = None
     try:
