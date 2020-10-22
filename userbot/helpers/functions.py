@@ -4,7 +4,7 @@ import time
 import urllib.request
 import zipfile
 from random import choice
-
+from .resources import states
 import PIL.ImageOps
 import requests
 from PIL import Image
@@ -223,45 +223,6 @@ async def convert_tosticker(image):
 
 
 async def covidindia(state):
-    states = [
-        "Andaman and Nicobar Islands",
-        "Andhra Pradesh",
-        "Arunachal Pradesh",
-        "Assam",
-        "Bihar",
-        "Chandigarh",
-        "Chhattisgarh",
-        "Dadra and Nagar Haveli and Daman and Diu",
-        "Delhi",
-        "Goa",
-        "Gujarat",
-        "Haryana",
-        "Himachal Pradesh",
-        "Jammu and Kashmir",
-        "Jharkhand",
-        "Karnataka",
-        "Kerala",
-        "Ladakh",
-        "Lakshadweep",
-        "Madhya Pradesh",
-        "Maharashtra",
-        "Manipur",
-        "Meghalaya",
-        "Mizoram",
-        "Nagaland",
-        "Odisha",
-        "Puducherry",
-        "Punjab",
-        "Rajasthan",
-        "Sikkim",
-        "Tamil Nadu",
-        "Telengana",
-        "Tripura",
-        "Uttarakhand",
-        "Uttar Pradesh",
-        "West Bengal",
-        "",
-    ]  # pylint --max-line-length=999
     url = "https://www.mohfw.gov.in/data/datanew.json"
     req = requests.get(url).json()
     for i in states:
