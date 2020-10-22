@@ -11,7 +11,7 @@ from PIL import Image
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
 
-from .resources import states
+from .resources.states import states
 
 
 async def get_readable_time(seconds: int) -> str:
