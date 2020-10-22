@@ -11,8 +11,8 @@ thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
-@borg.on(admin_cmd(pattern="install$"))
-@borg.on(sudo_cmd(pattern="install$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="install$"))
+@bot.on(sudo_cmd(pattern="install$", allow_sudo=True))
 async def install(event):
     if event.fwd_from:
         return
@@ -46,8 +46,8 @@ async def install(event):
     await event.delete()
 
 
-@borg.on(admin_cmd(pattern=r"send (?P<shortname>\w+)$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"send (?P<shortname>\w+)$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"send (?P<shortname>\w+)$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"send (?P<shortname>\w+)$", allow_sudo=True))
 async def send(event):
     if event.fwd_from:
         return
@@ -79,8 +79,8 @@ async def send(event):
         await edit_or_reply(event, "404: File Not Found")
 
 
-@borg.on(admin_cmd(pattern=r"unload (?P<shortname>\w+)$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"unload (?P<shortname>\w+)$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"unload (?P<shortname>\w+)$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"unload (?P<shortname>\w+)$", allow_sudo=True))
 async def unload(event):
     if event.fwd_from:
         return
@@ -94,8 +94,8 @@ async def unload(event):
         )
 
 
-@borg.on(admin_cmd(pattern=r"load (?P<shortname>\w+)$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"load (?P<shortname>\w+)$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"load (?P<shortname>\w+)$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"load (?P<shortname>\w+)$", allow_sudo=True))
 async def load(event):
     if event.fwd_from:
         return

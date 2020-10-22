@@ -11,8 +11,8 @@ from ..utils import admin_cmd, edit_or_reply, humanbytes, sudo_cmd
 from . import CMD_HELP, runcmd
 
 
-@borg.on(admin_cmd(pattern="ls ?(.*)"))
-@borg.on(sudo_cmd(pattern="ls ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ls ?(.*)"))
+@bot.on(sudo_cmd(pattern="ls ?(.*)", allow_sudo=True))
 async def lst(event):
     cat = "".join(event.text.split(maxsplit=1)[1:])
     path = cat if cat else os.getcwd()
@@ -92,8 +92,8 @@ async def lst(event):
         await edit_or_reply(event, msg)
 
 
-@borg.on(admin_cmd(pattern="rem (.*)"))
-@borg.on(sudo_cmd(pattern="rem (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="rem (.*)"))
+@bot.on(sudo_cmd(pattern="rem (.*)", allow_sudo=True))
 async def lst(event):
     cat = event.pattern_match.group(1)
     if cat:

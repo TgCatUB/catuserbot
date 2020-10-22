@@ -7,8 +7,8 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 # ============================================
 
 
-@borg.on(admin_cmd(pattern="cpu$"))
-@borg.on(sudo_cmd(pattern="cpu$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="cpu$"))
+@bot.on(sudo_cmd(pattern="cpu$", allow_sudo=True))
 async def _(event):
     cmd = "cat /proc/cpuinfo | grep 'model name'"
     o = (await runcmd(cmd))[0]
@@ -17,8 +17,8 @@ async def _(event):
     )
 
 
-@borg.on(admin_cmd(pattern=f"sysd$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"sysd$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"sysd$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"sysd$", allow_sudo=True))
 async def sysdetails(sysd):
     cmd = "git clone https://github.com/dylanaraps/neofetch.git"
     await runcmd(cmd)

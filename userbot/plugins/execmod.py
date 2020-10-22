@@ -16,8 +16,8 @@ if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
     os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="pips (.*)"))
-@borg.on(sudo_cmd(pattern="pips (.*)", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="pips (.*)"))
+@bot.on(sudo_cmd(pattern="pips (.*)", allow_sudo=True))
 async def pipcheck(pip):
     pipmodule = pip.pattern_match.group(1)
     reply_to_id = pip.message.id
@@ -63,8 +63,8 @@ async def pipcheck(pip):
             )
 
 
-@borg.on(admin_cmd(pattern="suicide$"))
-@borg.on(sudo_cmd(pattern="suicide$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="suicide$"))
+@bot.on(sudo_cmd(pattern="suicide$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -78,8 +78,8 @@ async def _(event):
     event = await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="plugins$"))
-@borg.on(sudo_cmd(pattern="plugins$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="plugins$"))
+@bot.on(sudo_cmd(pattern="plugins$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -109,8 +109,8 @@ async def _(event):
         event = await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="date$"))
-@borg.on(sudo_cmd(pattern="date$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="date$"))
+@bot.on(sudo_cmd(pattern="date$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -143,8 +143,8 @@ async def _(event):
         event = await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="env$"))
-@borg.on(sudo_cmd(pattern="env$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="env$"))
+@bot.on(sudo_cmd(pattern="env$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -180,8 +180,8 @@ async def _(event):
         event = await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="fast$"))
-@borg.on(sudo_cmd(pattern="fast$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="fast$"))
+@bot.on(sudo_cmd(pattern="fast$", allow_sudo=True))
 async def _(event):
     await event.edit("calculating...")
     if event.fwd_from:
@@ -215,8 +215,8 @@ async def _(event):
         event = await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="fortune$"))
-@borg.on(sudo_cmd(pattern="fortune$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="fortune$"))
+@bot.on(sudo_cmd(pattern="fortune$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -246,8 +246,8 @@ async def _(event):
         event = await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="qquote$"))
-@borg.on(sudo_cmd(pattern="qquote$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="qquote$"))
+@bot.on(sudo_cmd(pattern="qquote$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -277,8 +277,8 @@ async def _(event):
         event = await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="fakeid$"))
-@borg.on(sudo_cmd(pattern="fakeid$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="fakeid$"))
+@bot.on(sudo_cmd(pattern="fakeid$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -308,8 +308,8 @@ async def _(event):
         event = await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="kwot$"))
-@borg.on(sudo_cmd(pattern="kwot$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="kwot$"))
+@bot.on(sudo_cmd(pattern="kwot$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -339,8 +339,8 @@ async def _(event):
         event = await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="qpro$"))
-@borg.on(sudo_cmd(pattern="qpro$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="qpro$"))
+@bot.on(sudo_cmd(pattern="qpro$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

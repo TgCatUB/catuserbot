@@ -11,8 +11,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern=r"getc(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="getc(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"getc(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="getc(?: |$)(.*)", allow_sudo=True))
 async def get_media(event):
     if event.fwd_from:
         return
@@ -45,8 +45,8 @@ async def get_media(event):
     await event.edit("Downloaded " + output + " files.")
 
 
-@borg.on(admin_cmd(pattern="geta(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="geta(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="geta(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="geta(?: |$)(.*)", allow_sudo=True))
 async def get_media(event):
     if event.fwd_from:
         return

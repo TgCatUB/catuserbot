@@ -11,7 +11,7 @@ from .. import CMD_HELP
 from ..utils import admin_cmd
 
 
-@borg.on(admin_cmd(pattern="otransfer (.*)"))  # pylint:disable=E0602
+@bot.on(admin_cmd(pattern="otransfer (.*)"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return

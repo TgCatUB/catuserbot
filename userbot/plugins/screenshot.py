@@ -14,8 +14,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern="ss (.*)"))
-@borg.on(sudo_cmd(pattern="ss (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ss (.*)"))
+@bot.on(sudo_cmd(pattern="ss (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -79,8 +79,8 @@ async def _(event):
         await catevent.edit(traceback.format_exc())
 
 
-@borg.on(admin_cmd(pattern="scapture (.*)"))
-@borg.on(sudo_cmd(pattern="scapture (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="scapture (.*)"))
+@bot.on(sudo_cmd(pattern="scapture (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

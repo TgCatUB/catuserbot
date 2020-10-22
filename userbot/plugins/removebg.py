@@ -22,8 +22,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import convert_toimage
 
 
-@borg.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
-@borg.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
+@bot.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
 async def remove_background(event):
     if event.fwd_from:
         return

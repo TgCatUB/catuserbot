@@ -147,8 +147,8 @@ def parse(message, old_entities=None):
         pass
 
 
-@borg.on(events.MessageEdited(outgoing=True))
-@borg.on(events.NewMessage(outgoing=True))
+@bot.on(events.MessageEdited(outgoing=True))
+@bot.on(events.NewMessage(outgoing=True))
 async def reparse(event):
     old_entities = event.message.entities or []
     parser = partial(parse, old_entities=old_entities)

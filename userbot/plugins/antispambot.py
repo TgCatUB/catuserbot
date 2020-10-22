@@ -93,8 +93,8 @@ if Config.ANTISPAMBOT_BAN:
             )
 
 
-@borg.on(admin_cmd(pattern="cascheck$"))
-@borg.on(sudo_cmd(pattern="cascheck$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="cascheck$"))
+@bot.on(sudo_cmd(pattern="cascheck$", allow_sudo=True))
 async def caschecker(cas):
     catevent = await edit_or_reply(
         cas,
@@ -133,8 +133,8 @@ async def caschecker(cas):
     await catevent.edit(text)
 
 
-@borg.on(admin_cmd(pattern="spamcheck$"))
-@borg.on(sudo_cmd(pattern="spamcheck$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="spamcheck$"))
+@bot.on(sudo_cmd(pattern="spamcheck$", allow_sudo=True))
 async def caschecker(cas):
     text = ""
     chat = cas.chat_id

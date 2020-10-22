@@ -22,7 +22,7 @@ logger.info(Config.OPEN_LOAD_LOGIN)
 # https://t.me/RoseSupport/33801
 
 
-@borg.on(admin_cmd(pattern="rl"))
+@bot.on(admin_cmd(pattern="rl"))
 async def _(event):
     if event.fwd_from:
         return

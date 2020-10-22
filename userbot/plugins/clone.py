@@ -25,7 +25,7 @@ else:
     BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
-@borg.on(admin_cmd(pattern="clone ?(.*)"))
+@bot.on(admin_cmd(pattern="clone ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -75,7 +75,7 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd(pattern="revert$"))
+@bot.on(admin_cmd(pattern="revert$"))
 async def _(event):
     if event.fwd_from:
         return

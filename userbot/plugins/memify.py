@@ -24,8 +24,8 @@ from . import (
 )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
-@borg.on(sudo_cmd(pattern="(mmf|mms) ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
+@bot.on(sudo_cmd(pattern="(mmf|mms) ?(.*)", allow_sudo=True))
 async def memes(cat):
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
@@ -118,8 +118,8 @@ async def memes(cat):
             os.remove(files)
 
 
-@borg.on(admin_cmd(pattern="invert$", outgoing=True))
-@borg.on(sudo_cmd(pattern="invert$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="invert$", outgoing=True))
+@bot.on(sudo_cmd(pattern="invert$", allow_sudo=True))
 async def memes(cat):
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
@@ -198,8 +198,8 @@ async def memes(cat):
             os.remove(files)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="solarize$"))
-@borg.on(sudo_cmd(pattern="solarize$", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="solarize$"))
+@bot.on(sudo_cmd(pattern="solarize$", allow_sudo=True))
 async def memes(cat):
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
@@ -278,8 +278,8 @@ async def memes(cat):
             os.remove(files)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="mirror$"))
-@borg.on(sudo_cmd(pattern="mirror$", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="mirror$"))
+@bot.on(sudo_cmd(pattern="mirror$", allow_sudo=True))
 async def memes(cat):
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
@@ -358,8 +358,8 @@ async def memes(cat):
             os.remove(files)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="flip$"))
-@borg.on(sudo_cmd(pattern="flip$", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="flip$"))
+@bot.on(sudo_cmd(pattern="flip$", allow_sudo=True))
 async def memes(cat):
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
@@ -438,8 +438,8 @@ async def memes(cat):
             os.remove(files)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="gray$"))
-@borg.on(sudo_cmd(pattern="gray$", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="gray$"))
+@bot.on(sudo_cmd(pattern="gray$", allow_sudo=True))
 async def memes(cat):
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
@@ -518,8 +518,8 @@ async def memes(cat):
             os.remove(files)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="zoom ?(.*)"))
-@borg.on(sudo_cmd(pattern="zoom ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="zoom ?(.*)"))
+@bot.on(sudo_cmd(pattern="zoom ?(.*)", allow_sudo=True))
 async def memes(cat):
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
@@ -607,8 +607,8 @@ async def memes(cat):
             os.remove(files)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="frame ?(.*)"))
-@borg.on(sudo_cmd(pattern="frame ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="frame ?(.*)"))
+@bot.on(sudo_cmd(pattern="frame ?(.*)", allow_sudo=True))
 async def memes(cat):
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):

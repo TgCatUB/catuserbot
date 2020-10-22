@@ -19,7 +19,7 @@ last_afk_message = {}
 afk_start = {}
 
 
-@borg.on(events.NewMessage(outgoing=True))
+@bot.on(events.NewMessage(outgoing=True))
 async def set_not_afk(event):
     if event.chat_id in Config.UB_BLACK_LIST_CHAT:
         return
@@ -54,7 +54,7 @@ async def set_not_afk(event):
         afk_time = None
 
 
-@borg.on(
+@bot.on(
     events.NewMessage(incoming=True, func=lambda e: bool(e.mentioned or e.is_private))
 )
 async def on_afk(event):
@@ -101,7 +101,7 @@ async def on_afk(event):
                 )
 
 
-@borg.on(admin_cmd(pattern=r"afk ?(.*)", outgoing=True))
+@bot.on(admin_cmd(pattern=r"afk ?(.*)", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return

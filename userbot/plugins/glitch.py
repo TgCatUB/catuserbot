@@ -14,8 +14,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import runcmd, take_screen_shot
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="(glitch|glitchs)(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="(glitch|glitchs)(?: |$)(.*)", allow_sudo=True))
 async def glitch(cat):
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)

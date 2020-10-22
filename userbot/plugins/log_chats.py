@@ -14,7 +14,7 @@ logging.basicConfig(
 NO_PM_LOG_USERS = []
 
 
-@borg.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
+@bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def monito_p_m_s(event):
     sender = await event.get_sender()
     if Config.NO_LOG_P_M_S and not sender.bot:
@@ -30,7 +30,7 @@ async def monito_p_m_s(event):
                 LOGS.warn(str(e))
 
 
-@borg.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
+@bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
 async def log_tagged_messages(event):
     hmm = await event.get_chat()
     if hmm.id in NO_PM_LOG_USERS:
@@ -51,7 +51,7 @@ async def log_tagged_messages(event):
             )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"save(?: |$)([\s\S]*)"))
+@bot.on(admin_cmd(outgoing=True, pattern=r"save(?: |$)([\s\S]*)"))
 async def log(log_text):
     if BOTLOG:
         if log_text.reply_to_msg_id:
@@ -71,7 +71,7 @@ async def log(log_text):
     await log_text.delete()
 
 
-@borg.on(admin_cmd(pattern="log$"))
+@bot.on(admin_cmd(pattern="log$"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         chat = await event.get_chat()
@@ -80,7 +80,7 @@ async def set_no_log_p_m(event):
             await event.edit("Will Log Messages from this chat")
 
 
-@borg.on(admin_cmd(pattern="nolog$"))
+@bot.on(admin_cmd(pattern="nolog$"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         chat = await event.get_chat()

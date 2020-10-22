@@ -6,7 +6,7 @@ from telethon import functions
 from userbot.utils import admin_cmd, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="invite ?(.*)"))
+@bot.on(admin_cmd(pattern="invite ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -41,7 +41,7 @@ async def _(event):
         await event.edit("Invited Successfully")
 
 
-@borg.on(sudo_cmd(pattern="invite ?(.*)", allow_sudo=True))
+@bot.on(sudo_cmd(pattern="invite ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

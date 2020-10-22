@@ -7,8 +7,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="chain$"))
-@borg.on(sudo_cmd(pattern="chain$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="chain$"))
+@bot.on(sudo_cmd(pattern="chain$", allow_sudo=True))
 async def _(event):
     await event.edit("Counting...")
     count = -1

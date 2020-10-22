@@ -10,7 +10,7 @@ from userbot import CMD_HELP
 from userbot.utils import admin_cmd, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="mash ?(.*)"))
+@bot.on(admin_cmd(pattern="mash ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -37,7 +37,7 @@ async def _(event):
             await borg.send_file(event.chat_id, response.message, reply_to=reply_to_id)
 
 
-@borg.on(sudo_cmd(pattern="mash ?(.*)", allow_sudo=True))
+@bot.on(sudo_cmd(pattern="mash ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

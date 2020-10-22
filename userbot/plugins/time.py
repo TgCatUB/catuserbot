@@ -40,8 +40,8 @@ async def get_tz(con):
         return
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
-@borg.on(
+@bot.on(admin_cmd(outgoing=True, pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
+@bot.on(
     sudo_cmd(
         outgoing=True,
         pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?",
@@ -107,8 +107,8 @@ async def time_func(tdata):
         return
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
-@borg.on(
+@bot.on(admin_cmd(outgoing=True, pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
+@bot.on(
     sudo_cmd(
         outgoing=True,
         pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?",
@@ -175,8 +175,8 @@ async def date_func(dat):
         return
 
 
-@borg.on(admin_cmd(pattern="time ?(.*)"))
-@borg.on(sudo_cmd(pattern="time ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="time ?(.*)"))
+@bot.on(sudo_cmd(pattern="time ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

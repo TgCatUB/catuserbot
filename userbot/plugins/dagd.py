@@ -12,8 +12,8 @@ from userbot import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="dns (.*)"))
-@borg.on(sudo_cmd(pattern="dns (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="dns (.*)"))
+@bot.on(sudo_cmd(pattern="dns (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -30,8 +30,8 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd(pattern="url (.*)"))
-@borg.on(sudo_cmd(pattern="url (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="url (.*)"))
+@bot.on(sudo_cmd(pattern="url (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -46,8 +46,8 @@ async def _(event):
         await edit_or_reply(event, "something is wrong. please try again later.")
 
 
-@borg.on(admin_cmd(pattern="unshort (.*)"))
-@borg.on(sudo_cmd(pattern="unshort (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="unshort (.*)"))
+@bot.on(sudo_cmd(pattern="unshort (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -70,8 +70,8 @@ async def _(event):
 
 
 # By Priyam Kalra
-@borg.on(admin_cmd(pattern="hl ?(.*)"))
-@borg.on(sudo_cmd(pattern="hl ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="hl ?(.*)"))
+@bot.on(sudo_cmd(pattern="hl ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

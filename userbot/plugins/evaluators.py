@@ -9,8 +9,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="bash ?(.*)"))
-@borg.on(sudo_cmd(pattern="bash ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="bash ?(.*)"))
+@bot.on(sudo_cmd(pattern="bash ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
@@ -39,8 +39,8 @@ async def _(event):
         await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="exec ?(.*)"))
-@borg.on(sudo_cmd(pattern="exec ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="exec ?(.*)"))
+@bot.on(sudo_cmd(pattern="exec ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
@@ -78,8 +78,8 @@ async def _(event):
         await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="eval"))
-@borg.on(sudo_cmd(pattern="eval", allow_sudo=True))
+@bot.on(admin_cmd(pattern="eval"))
+@bot.on(sudo_cmd(pattern="eval", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return

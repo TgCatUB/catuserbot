@@ -10,8 +10,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="ud (.*)"))
-@borg.on(sudo_cmd(pattern="ud (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ud (.*)"))
+@bot.on(sudo_cmd(pattern="ud (.*)", allow_sudo=True))
 async def _(event):
     word = event.pattern_match.group(1)
     urban = asyncurban.UrbanDictionary()
@@ -27,8 +27,8 @@ async def _(event):
         await edit_or_reply(event, "No result found for **" + word + "**")
 
 
-@borg.on(admin_cmd(pattern="meaning (.*)"))
-@borg.on(sudo_cmd(pattern="meaning (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="meaning (.*)"))
+@bot.on(sudo_cmd(pattern="meaning (.*)", allow_sudo=True))
 async def _(event):
     word = event.pattern_match.group(1)
     dictionary = PyDictionary()

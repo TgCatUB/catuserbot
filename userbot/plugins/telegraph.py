@@ -14,8 +14,8 @@ r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
 auth_url = r["auth_url"]
 
 
-@borg.on(admin_cmd(pattern="telegraph (media|text) ?(.*)"))
-@borg.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="telegraph (media|text) ?(.*)"))
+@bot.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

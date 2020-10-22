@@ -69,8 +69,8 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
 
 
-@borg.on(admin_cmd("setgpic$"))
-@borg.on(sudo_cmd(pattern="setgpic$", allow_sudo=True))
+@bot.on(admin_cmd("setgpic$"))
+@bot.on(sudo_cmd(pattern="setgpic$", allow_sudo=True))
 @errors_handler
 async def set_group_photo(gpic):
     if not gpic.is_group:
@@ -114,8 +114,8 @@ async def set_group_photo(gpic):
             )
 
 
-@borg.on(admin_cmd("promote(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="promote(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd("promote(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="promote(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def promote(promt):
     chat = await promt.get_chat()
@@ -153,8 +153,8 @@ async def promote(promt):
         )
 
 
-@borg.on(admin_cmd("demote(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="demote(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd("demote(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="demote(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def demote(dmod):
     chat = await dmod.get_chat()
@@ -192,8 +192,8 @@ async def demote(dmod):
         )
 
 
-@borg.on(admin_cmd("ban(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="ban(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd("ban(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="ban(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def ban(bon):
     chat = await bon.get_chat()
@@ -233,8 +233,8 @@ async def ban(bon):
         )
 
 
-@borg.on(admin_cmd("unban(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="unban(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd("unban(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="unban(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def nothanos(unbon):
     chat = await unbon.get_chat()
@@ -271,8 +271,8 @@ async def watcher(event):
             LOGS.info(str(e))
 
 
-@borg.on(admin_cmd("mute(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="mute(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd("mute(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="mute(?: |$)(.*)", allow_sudo=True))
 async def startmute(event):
     if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
@@ -367,8 +367,8 @@ async def startmute(event):
             )
 
 
-@borg.on(admin_cmd("unmute(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="unmute(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd("unmute(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="unmute(?: |$)(.*)", allow_sudo=True))
 async def endmute(event):
     if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
@@ -431,8 +431,8 @@ async def endmute(event):
             )
 
 
-@borg.on(admin_cmd("pin($| (.*))"))
-@borg.on(sudo_cmd(pattern="pin($| (.*))", allow_sudo=True))
+@bot.on(admin_cmd("pin($| (.*))"))
+@bot.on(sudo_cmd(pattern="pin($| (.*))", allow_sudo=True))
 @errors_handler
 async def pin(msg):
     chat = await msg.get_chat()
@@ -471,8 +471,8 @@ async def pin(msg):
         pass
 
 
-@borg.on(admin_cmd("kick(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="kick(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd("kick(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="kick(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def kick(usr):
     chat = await usr.get_chat()
@@ -507,8 +507,8 @@ async def kick(usr):
         )
 
 
-@borg.on(admin_cmd("iundlt$"))
-@borg.on(sudo_cmd(pattern="iundlt$", allow_sudo=True))
+@bot.on(admin_cmd("iundlt$"))
+@bot.on(sudo_cmd(pattern="iundlt$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

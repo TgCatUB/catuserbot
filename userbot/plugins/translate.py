@@ -14,8 +14,8 @@ TRT_LANG = "en"
 langi = "en"
 
 
-@borg.on(admin_cmd(pattern="tl ?(.*)"))
-@borg.on(sudo_cmd(pattern="tl ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="tl ?(.*)"))
+@bot.on(sudo_cmd(pattern="tl ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

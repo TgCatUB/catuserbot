@@ -15,7 +15,7 @@ ANTI_FLOOD_WARN_MODE = ChatBannedRights(
 )
 
 
-@borg.on(admin_cmd(incoming=True))
+@bot.on(admin_cmd(incoming=True))
 async def _(event):
     if not CHAT_FLOOD:
         return
@@ -56,8 +56,8 @@ because he reached the defined flood limit.""".format(
         )
 
 
-@borg.on(admin_cmd(pattern="setflood(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="setflood(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="setflood(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="setflood(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     input_str = event.pattern_match.group(1)
     event = await edit_or_reply(event, "updating flood settings!")

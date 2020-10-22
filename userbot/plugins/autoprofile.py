@@ -34,7 +34,7 @@ DEFAULTUSER = str(AUTONAME) if AUTONAME else "cat"
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 
-@borg.on(admin_cmd(pattern="autopic$"))
+@bot.on(admin_cmd(pattern="autopic$"))
 async def autopic(event):
     await event.edit(f"Autopic has been started by my Master")
     downloaded_file_name = "userbot/original_pic.png"
@@ -68,7 +68,7 @@ async def autopic(event):
             return
 
 
-@borg.on(admin_cmd(pattern="digitalpfp$"))
+@bot.on(admin_cmd(pattern="digitalpfp$"))
 async def main(event):
     await event.edit("Starting digital Profile Pic see magic in 5 sec.")
     poto = "userbot/poto_pfp.png"
@@ -104,7 +104,7 @@ async def main(event):
         await asyncio.sleep(60)
 
 
-@borg.on(admin_cmd(pattern="bloom$"))
+@bot.on(admin_cmd(pattern="bloom$"))
 async def autopic(event):
     await event.edit("Bloom colour profile pic have been enabled by my master")
     downloaded_file_name = "userbot/original_pic.png"
@@ -146,7 +146,7 @@ async def autopic(event):
             return
 
 
-@borg.on(admin_cmd(pattern="autoname$"))  # pylint:disable=E0602
+@bot.on(admin_cmd(pattern="autoname$"))  # pylint:disable=E0602
 async def _(event):
     await event.edit(f"Auto Name has been started by my Master ")
     while True:
@@ -173,7 +173,7 @@ async def _(event):
         await asyncio.sleep(DEL_TIME_OUT)
 
 
-@borg.on(admin_cmd(pattern="autobio$"))  # pylint:disable=E0602
+@bot.on(admin_cmd(pattern="autobio$"))  # pylint:disable=E0602
 async def _(event):
     await event.edit(f"Auto bio has been started by my Master")
     while True:
@@ -259,7 +259,7 @@ BIO_STRINGS = [
 ]
 
 
-@borg.on(admin_cmd(pattern="monkeybio$"))  # pylint:disable=E0602
+@bot.on(admin_cmd(pattern="monkeybio$"))  # pylint:disable=E0602
 async def _(event):
     await event.edit(f"monkey has been started by my Master")
     while True:

@@ -6,8 +6,8 @@ import userbot.plugins.sql_helper.warns_sql as sql
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="warn (.*)"))
-@borg.on(sudo_cmd(pattern="warn (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="warn (.*)"))
+@bot.on(sudo_cmd(pattern="warn (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -38,8 +38,8 @@ async def _(event):
     await edit_or_reply(event, reply)
 
 
-@borg.on(admin_cmd(pattern="get_warns$"))
-@borg.on(sudo_cmd(pattern="get_warns$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="get_warns$"))
+@bot.on(sudo_cmd(pattern="get_warns$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -66,8 +66,8 @@ async def _(event):
         await edit_or_reply(event, "this user hasn't got any warnings!")
 
 
-@borg.on(admin_cmd(pattern="reset_warns$"))
-@borg.on(sudo_cmd(pattern="reset_warns$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="reset_warns$"))
+@bot.on(sudo_cmd(pattern="reset_warns$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

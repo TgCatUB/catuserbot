@@ -17,7 +17,7 @@ USER_BOT_WARN_ZERO = "You were spamming my peru master's inbox, henceforth you a
 
 if Var.PRIVATE_GROUP_ID is not None:
 
-    @borg.on(admin_cmd(pattern="approve ?(.*)"))
+    @bot.on(admin_cmd(pattern="approve ?(.*)"))
     async def approve_p_m(event):
         if event.fwd_from:
             return
@@ -88,7 +88,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         ):
             pmpermit_sql.approve(chat.id, "outgoing")
 
-    @borg.on(admin_cmd(pattern="disapprove ?(.*)"))
+    @bot.on(admin_cmd(pattern="disapprove ?(.*)"))
     async def disapprove_p_m(event):
         if event.fwd_from:
             return
@@ -128,7 +128,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                     )
                 )
 
-    @borg.on(admin_cmd(pattern="block$"))
+    @bot.on(admin_cmd(pattern="block$"))
     async def block_p_m(event):
         if event.fwd_from:
             return
@@ -158,7 +158,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             )
             await event.client(functions.contacts.BlockRequest(chat.id))
 
-    @borg.on(admin_cmd(pattern="unblock$"))
+    @bot.on(admin_cmd(pattern="unblock$"))
     async def unblock_pm(event):
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
@@ -171,7 +171,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                 )
             )
 
-    @borg.on(admin_cmd(pattern="listapproved$"))
+    @bot.on(admin_cmd(pattern="listapproved$"))
     async def approve_p_m(event):
         if event.fwd_from:
             return

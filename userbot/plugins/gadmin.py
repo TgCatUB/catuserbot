@@ -44,8 +44,8 @@ UNBAN_RIGHTS = ChatBannedRights(
 )
 
 
-@borg.on(admin_cmd(pattern=r"gban(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern=r"gban(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"gban(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern=r"gban(?: |$)(.*)", allow_sudo=True))
 async def catgban(cat):
     cate = await edit_or_reply(cat, "gbaning.......")
     start = datetime.now()
@@ -116,8 +116,8 @@ async def catgban(cat):
         )
 
 
-@borg.on(admin_cmd(pattern=r"ungban(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern=r"ungban(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"ungban(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern=r"ungban(?: |$)(.*)", allow_sudo=True))
 async def catgban(cat):
     cate = await edit_or_reply(cat, "ungbaning.....")
     start = datetime.now()
@@ -170,8 +170,8 @@ async def catgban(cat):
         )
 
 
-@borg.on(admin_cmd(pattern="listgban$"))
-@borg.on(sudo_cmd(pattern=r"listgban$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="listgban$"))
+@bot.on(sudo_cmd(pattern=r"listgban$", allow_sudo=True))
 async def gablist(event):
     if event.fwd_from:
         return
@@ -203,8 +203,8 @@ async def gablist(event):
         await edit_or_reply(event, GBANNED_LIST)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"gmute ?(\d+)?"))
-@borg.on(sudo_cmd(pattern=r"gmute ?(\d+)?", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern=r"gmute ?(\d+)?"))
+@bot.on(sudo_cmd(pattern=r"gmute ?(\d+)?", allow_sudo=True))
 async def startgmute(event):
     private = False
     if event.fwd_from:
@@ -244,8 +244,8 @@ async def startgmute(event):
         )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"ungmute ?(\d+)?"))
-@borg.on(sudo_cmd(pattern=r"ungmute ?(\d+)?", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern=r"ungmute ?(\d+)?"))
+@bot.on(sudo_cmd(pattern=r"ungmute ?(\d+)?", allow_sudo=True))
 async def endgmute(event):
     private = False
     if event.fwd_from:
