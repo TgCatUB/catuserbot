@@ -4,12 +4,14 @@ import time
 import urllib.request
 import zipfile
 from random import choice
-from .resources import states
+
 import PIL.ImageOps
 import requests
 from PIL import Image
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
+
+from .resources import states
 
 
 async def get_readable_time(seconds: int) -> str:
