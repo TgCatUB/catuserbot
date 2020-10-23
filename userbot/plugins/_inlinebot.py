@@ -3,7 +3,7 @@ import json
 import math
 import os
 import re
-
+import time
 from telethon import Button, custom, events
 
 from . import CMD_LIST, catalive
@@ -115,7 +115,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 u = int(u.id)
             except:
                 return
-            timestamp = int(event.query.query_id)
+            timestamp = int(time.time()*2)
             newsecret = {str(timestamp): {"userid": u, "text": txct}}
 
             buttons = [
