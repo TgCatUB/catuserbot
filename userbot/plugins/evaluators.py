@@ -78,8 +78,8 @@ async def _(event):
         await edit_or_reply(event, OUTPUT)
 
 
-@bot.on(admin_cmd(pattern="eval"))
-@bot.on(sudo_cmd(pattern="eval", allow_sudo=True))
+@bot.on(admin_cmd(pattern="eval (.*)"))
+@bot.on(sudo_cmd(pattern="eval (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
