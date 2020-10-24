@@ -147,9 +147,9 @@ CMD_HELP.update(
         "evaluators": "**Plugin : **`evaluators`\
         \n\n**Synatax : **`.eval <expr>`:\
         \n**Function : **__Execute Python script.__\
-        \n\n**Synatax : **.exec <command>`:\
+        \n\n**Synatax : **`.exec <command>`:\
         \n**Function : **__Execute a bash command on catuserbot server and shows details.__\
-        \n\n**Synatax : **.bash <command>`:\
+        \n\n**Synatax : **`.bash <command>`:\
         \n**Function : **__Execute a bash command on catuserbot server and  easy to copy output__\
      "
     }
