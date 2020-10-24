@@ -39,7 +39,7 @@ async def _(event):
         inputstr = input_str
         caturl = url(inputstr)
         if not caturl:
-            inputstr = "https://" + input_str
+            inputstr = "http://" + input_str
             caturl = url(inputstr)
         if not caturl:
             await catevent.edit(
@@ -101,7 +101,7 @@ async def _(event):
     inputstr = input_str
     caturl = url(inputstr)
     if not caturl:
-        inputstr = "https://" + input_str
+        inputstr = "http://" + input_str
         caturl = url(inputstr)
     if not caturl:
         await catevent.edit("`The given input is not supported url`")
