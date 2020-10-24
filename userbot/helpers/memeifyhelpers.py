@@ -154,3 +154,7 @@ async def silently_send_message(conv, text):
     response = await conv.get_response()
     await conv.mark_read(message=response)
     return response
+
+
+async def thumb_from_audio(audio_path, output):
+    await runcmd(f'ffmpeg -i {audio_path} -filter:v scale=500:500 -an {output}')
