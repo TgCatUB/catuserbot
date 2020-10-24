@@ -62,6 +62,7 @@ sqlalchemy
 telegraph
 tswift
 validators
+vcsi
 wand
 wikipedia
 youtube-dl
