@@ -38,9 +38,11 @@ async def _(event):
         input_str = event.pattern_match.group(1)
         caturl = url(input_str)
         if not caturl:
-            await catevent.edit(
-                "the url must be in the format `https://www.google.com`"
-            )
+            caturl = url("https://"+input_str)
+            if not caturl:
+                await catevent.edit(
+                    "the url must be in the format `https://www.google.com`"
+                )
             return
         driver.get(input_str)
         await catevent.edit("Calculating Page Dimensions")
@@ -96,8 +98,12 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     caturl = url(input_str)
     if not caturl:
-        await catevent.edit("the url must be in the format `https://www.google.com`")
-        return
+        caturl = url("https://"+input_str)
+            if not caturl:
+                await catevent.edit(
+                    "the url must be in the format `https://www.google.com`"
+                )
+            return
     response_api = requests.get(
         sample_url.format(
             Config.SCREEN_SHOT_LAYER_ACCESS_KEY, input_str, "1", "2560x1440", "PNG", "1"
