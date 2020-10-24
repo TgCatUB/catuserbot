@@ -28,7 +28,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                     Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
                 )
             ]
-            result = builder.article(
+            result = builder.document(
                 catpic,
                 title="Alive cat",
                 text=query,
