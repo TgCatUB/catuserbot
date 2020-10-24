@@ -58,7 +58,7 @@ async def time_func(tdata):
     tz_num = tdata.pattern_match.group(2)
     t_form = "%H:%M"
     d_form = "%d/%m/%y - %A"
-    c_name = ""
+    c_name = ""    
     if len(con) > 4:
         try:
             c_name = c_n[con]
@@ -70,10 +70,7 @@ async def time_func(tdata):
         tz_num = TZ_NUMBER
         timezones = await get_tz(COUNTRY)
     else:
-        await edit_or_reply(
-            tdata,
-            f"`It's`  **{dt.now().strftime(t_form)}, {dt.now().strftime(d_form)}** `here.`",
-        )
+        await edit_or_reply(tdata, f"`It's`  **{dt.now().strftime(t_form)}, {dt.now().strftime(d_form)}** `here.`")
         return
     if not timezones:
         await edit_or_reply(tdata, "`Invaild country.`")
@@ -101,15 +98,13 @@ async def time_func(tdata):
     dtnow2 = dt.now(tz(time_zone)).strftime(d_form)
     if c_name != COUNTRY:
         await edit_or_reply(
-            tdata,
-            f"`It's`  **{dtnow1}, {dtnow2}**  `in {c_name}({time_zone} timezone).`",
+            tdata, f"`It's`  **{dtnow1}, {dtnow2}**  `in {c_name}({time_zone} timezone).`"
         )
         return
     if COUNTRY:
         await edit_or_reply(
             tdata,
-            f"`It's`  **{dtnow1}, {dtnow2}**  `here, in {COUNTRY}"
-            f"({time_zone} timezone).`",
+            f"`It's`  **{dtnow1}, {dtnow2}**  `here, in {COUNTRY}" f"({time_zone} timezone).`",
         )
         return
 
@@ -153,7 +148,7 @@ CMD_HELP.update(
     {
         "time": "**Plugin : **`time`\
         \n\n**Syntax : **.ctime <country name/code> <timezone number> \
-    \n**Usage : ** Get the time of a country. If a country has multiple timezones, it will list all of them and let you select one.\
+    \n**Usage : ** Get the time of a country. If a country has multiple timezones, it will list all of them and let you select one. here are [country names](https://telegra.ph/country-names-10-24)\
     \n\n**Syntax : **`.time` \
     \n**Usage : ** shows current default time you can change by changing TZ in heroku vars"
     }
