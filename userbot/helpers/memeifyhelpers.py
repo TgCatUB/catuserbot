@@ -5,13 +5,14 @@ from os import getcwd
 from os.path import basename, join
 from textwrap import wrap
 from typing import Optional, Tuple
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from . import unzip
-from pathlib import Path
+
 from PIL import Image, ImageDraw, ImageFont
+from telethon.errors.rpcerrorlist import YouBlockedUserError
 from wand.color import Color
 from wand.drawing import Drawing
 from wand.image import Image as catimage
+
+from . import unzip
 
 MARGINS = [50, 150, 250, 350, 450]
 
@@ -128,6 +129,7 @@ async def take_screen_shot(
         print(err)
     return thumb_image_path if os.path.exists(thumb_image_path) else None
 
+
 async def make_gif(event, file):
     chat = "@tgstogifbot"
     async with event.client.conversation(chat) as conv:
@@ -147,6 +149,7 @@ async def make_gif(event, file):
             return hello
         except YouBlockedUserError:
             return "Unblock @tgstogifbot"
+
 
 async def silently_send_message(conv, text):
     await conv.send_message(text)
