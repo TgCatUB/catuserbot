@@ -50,11 +50,10 @@ async def corona(event):
                 \n😃New cured  : <code>{cat3}</code> </b>"
             await catevent.edit(result, parse_mode="html")
         else:
-            await catevent.edit(
-                "<b>Corona Virus Info of {} is not avaiable or unable to fetch</b>".format(
+            await edit_delete( catevent ,
+                "`Corona Virus Info of {} is not avaiable or unable to fetch`".format(
                     country
-                ),
-                parse_mode="html",
+                ), 5
             )
 
 
