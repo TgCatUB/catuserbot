@@ -28,12 +28,19 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                     Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
                 )
             ]
-            result = builder.document(
-                CAT_IMG,
-                title="Alive cat",
-                text=query,
-                buttons=buttons,
-            )
+            if CAT_IMG:
+                result = builder.document(
+                    CAT_IMG,
+                    title="Alive cat",
+                    text=query,
+                    buttons=buttons,
+                )
+            else:
+                result = builder.article(
+                    title="Alive cat",
+                    text=query,
+                    buttons=buttons,
+                )
             await event.answer([result] if result else None)
         elif event.query.user_id == bot.uid and query.startswith("Userbot"):
             rev_text = query[::-1]
