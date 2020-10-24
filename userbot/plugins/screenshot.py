@@ -42,7 +42,9 @@ async def _(event):
             inputstr = "http://" + input_str
             caturl = url(inputstr)
         if not caturl:
-            await catevent.edit("`The given input is not supported url`")
+            await catevent.edit(
+                "`The given input is not supported url`"
+            )
             return
         driver.get(inputstr)
         await catevent.edit("`Calculating Page Dimensions`")
@@ -78,7 +80,7 @@ async def _(event):
                 silent=True,
             )
     except Exception:
-        await catevent.edit(traceback.format_exc())
+        await catevent.edit(f"`{traceback.format_exc()}`")
 
 
 @bot.on(admin_cmd(pattern="scapture (.*)"))
@@ -129,7 +131,7 @@ async def _(event):
             except Exception as e:
                 await catevent.edit(str(e))
     else:
-        await catevent.edit(response_api.text)
+        await catevent.edit(f"`{response_api.text}`")
 
 
 CMD_HELP.update(
