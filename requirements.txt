@@ -47,6 +47,7 @@ pyfiglet
 PyGithub
 pylast
 PyLyrics
+pymediainfo
 pySmartDL
 python-barcode
 pytuneteller
