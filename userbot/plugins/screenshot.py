@@ -64,7 +64,7 @@ async def _(event):
             message_id = event.reply_to_msg_id
         end = datetime.now()
         ms = (end - start).seconds
-        hmm = f"**url : **{inputstr} \n**Time :** `{ms} seconds`"
+        hmm = f"**url : **{input_str} \n**Time :** `{ms} seconds`"
         await catevent.delete()
         with io.BytesIO(im_png) as out_file:
             out_file.name = input_str + ".PNG"
@@ -113,7 +113,7 @@ async def _(event):
     contentType = response_api.headers["content-type"]
     end = datetime.now()
     ms = (end - start).seconds
-    hmm = f"**url : **{inputstr} \n**Time :** `{ms} seconds`"
+    hmm = f"**url : **{input_str} \n**Time :** `{ms} seconds`"
     if "image" in contentType:
         with io.BytesIO(response_api.content) as screenshot_image:
             screenshot_image.name = "screencapture.png"
