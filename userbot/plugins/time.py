@@ -72,7 +72,7 @@ async def time_func(tdata):
     else:
         await edit_or_reply(
             tdata,
-            f"`It's`  **{dt.now().strftime(t_form)} on {dt.now().strftime(d_form)}** `here.`",
+            f"`It's`  **{dt.now().strftime(t_form)}**` on `**{dt.now().strftime(d_form)}** `here.`",
         )
         return
     if not timezones:
@@ -102,13 +102,13 @@ async def time_func(tdata):
     if c_name != COUNTRY:
         await edit_or_reply(
             tdata,
-            f"`It's`  **{dtnow1} on {dtnow2}**  `in {c_name}({time_zone} timezone).`",
+            f"`It's`  **{dtnow1}**` on `**{dtnow2}**  `in {c_name}({time_zone} timezone).`",
         )
         return
     if COUNTRY:
         await edit_or_reply(
             tdata,
-            f"`It's`  **{dtnow1} on {dtnow2}**  `here, in {COUNTRY}"
+            f"`It's`  **{dtnow1}**` on `**{dtnow2}**  `here, in {COUNTRY}"
             f"({time_zone} timezone).`",
         )
         return
