@@ -142,11 +142,9 @@ async def make_gif(event, file):
                 return "`This file is not supported`"
             response = response if response.media else await conv.get_response()
             catresponse = response if response.media else await conv.get_response()
-            print(catresponse)
             await event.client.send_read_acknowledge(conv.chat_id)
             catfile = await event.client.download_media(catresponse, "./temp")
-            hello = await unzip(catfile)
-            return hello
+            return await unzip(catfile)
         except YouBlockedUserError:
             return "Unblock @tgstogifbot"
 
