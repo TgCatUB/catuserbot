@@ -38,7 +38,8 @@ async def _(event):
         input_str = event.pattern_match.group(1)
         caturl = url(input_str)
         if not caturl:
-            caturl = url("https://" + input_str)
+            input_str = "https://" + input_str
+            caturl = url(input_str)
         if not caturl:
             await catevent.edit(
                 "the url must be in the format `https://www.google.com`"
@@ -98,7 +99,8 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     caturl = url(input_str)
     if not caturl:
-        caturl = url("https://" + input_str)
+        input_str = "https://" + input_str
+        caturl = url(input_str)
     if not caturl:
         await catevent.edit("the url must be in the format `https://www.google.com`")
         return
