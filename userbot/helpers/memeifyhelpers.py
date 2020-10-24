@@ -5,7 +5,9 @@ from os import getcwd
 from os.path import basename, join
 from textwrap import wrap
 from typing import Optional, Tuple
-
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+from . import unzip
+from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 from wand.color import Color
 from wand.drawing import Drawing
@@ -125,3 +127,29 @@ async def take_screen_shot(
     if err:
         print(err)
     return thumb_image_path if os.path.exists(thumb_image_path) else None
+
+async def make_gif(event, file):
+    chat = "@tgstogifbot"
+    async with event.client.conversation(chat) as conv:
+        try:
+            await silently_send_message(conv, "/start")
+            await event.client.send_file(chat, file)
+            response = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            if response.text.startswith("Send me an animated sticker!"):
+                return "`This file is not supported`"
+            response = response if response.media else await conv.get_response()
+            catresponse = response if response.media else await conv.get_response()
+            print(catresponse)
+            await event.client.send_read_acknowledge(conv.chat_id)
+            catfile = await event.client.download_media(catresponse, "./temp")
+            hello = await unzip(catfile)
+            return hello
+        except YouBlockedUserError:
+            return "Unblock @tgstogifbot"
+
+async def silently_send_message(conv, text):
+    await conv.send_message(text)
+    response = await conv.get_response()
+    await conv.mark_read(message=response)
+    return response
