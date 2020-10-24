@@ -9,8 +9,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@bot.on(admin_cmd(pattern="bash ?(.*)"))
-@bot.on(sudo_cmd(pattern="bash ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="bash (.*)"))
+@bot.on(sudo_cmd(pattern="bash (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
@@ -39,8 +39,8 @@ async def _(event):
         await edit_or_reply(event, OUTPUT)
 
 
-@bot.on(admin_cmd(pattern="exec ?(.*)"))
-@bot.on(sudo_cmd(pattern="exec ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="exec (.*)"))
+@bot.on(sudo_cmd(pattern="exec (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
@@ -144,12 +144,13 @@ async def aexec(code, event):
 
 CMD_HELP.update(
     {
-        "evaluators": "**Synatax : **.eval <expr>`:\
-     \n**Usage : **Execute Python script.\
-     \n\n**Synatax : **.exec <command>`:\
-     \n**Usage : **Execute a bash command on catuserbot server and shows details.\
-     \n\n**Synatax : **.bash <command>`:\
-     \n**Usage : **Execute a bash command on catuserbot server and  easy to copy output\
+        "evaluators": "**Plugin : **`evaluators`\
+        \n\n**Synatax : **`.eval <expr>`:\
+        \n**Function : **__Execute Python script.__\
+        \n\n**Synatax : **.exec <command>`:\
+        \n**Function : **__Execute a bash command on catuserbot server and shows details.__\
+        \n\n**Synatax : **.bash <command>`:\
+        \n**Function : **__Execute a bash command on catuserbot server and  easy to copy output__\
      "
     }
 )
