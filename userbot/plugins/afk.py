@@ -31,7 +31,7 @@ async def set_not_afk(event):
     back_alive = datetime.now()
     afk_end = back_alive.replace(microsecond=0)
     if afk_start != {}:
-        total_afk_time = (afk_end - afk_start)
+        total_afk_time = afk_end - afk_start
         time = float(total_afk_time.seconds)
         d = time // (24 * 3600)
         time %= 24 * 3600
@@ -44,17 +44,15 @@ async def set_not_afk(event):
         if d > 0:
             endtime += d + "d " + h + "h " + m + "m " + s + "s "
         else:
-            if h>0:
+            if h > 0:
                 endtime += h + "h " + m + "m " + s + "s "
             else:
-                endtime += m + "m " + s + "s " if m>0 else s + "s "
+                endtime += m + "m " + s + "s " if m > 0 else s + "s "
     current_message = event.message.message
     if "afk" not in current_message and "on" in USERAFK_ON:
         shite = await event.client.send_message(
             event.chat_id,
-            "`Back alive! No Longer afk.\nWas afk for:"
-            + endtime
-            + "`",
+            "`Back alive! No Longer afk.\nWas afk for:" + endtime + "`",
         )
         if BOTLOG:
             await event.client.send_message(
@@ -84,7 +82,7 @@ async def on_afk(event):
     back_alivee = datetime.now()
     afk_end = back_alivee.replace(microsecond=0)
     if afk_start != {}:
-        total_afk_time = (afk_end - afk_start)
+        total_afk_time = afk_end - afk_start
         time = float(total_afk_time.seconds)
         d = time // (24 * 3600)
         time %= 24 * 3600
@@ -97,10 +95,10 @@ async def on_afk(event):
         if d > 0:
             endtime += d + "d " + h + "h " + m + "m " + s + "s "
         else:
-            if h>0:
+            if h > 0:
                 endtime += h + "h " + m + "m " + s + "s "
             else:
-                endtime += m + "m " + s + "s " if m>0 else s + "s "
+                endtime += m + "m " + s + "s " if m > 0 else s + "s "
     current_message_text = event.message.message.lower()
     if "afk" in current_message_text:
         # userbot's should not reply to other userbot's
@@ -129,7 +127,8 @@ async def on_afk(event):
                             \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
                     parse_mode="html",
                     link_preview=False,
-                ) 
+                )
+
 
 @bot.on(admin_cmd(pattern=r"afk ?(.*)", outgoing=True))
 async def _(event):
@@ -156,9 +155,9 @@ async def _(event):
             afk_time = datetime.now()
         USERAFK_ON = f"on: {reason}"
         if reason:
-            await edit_delete( event, f"`I shall be Going afk! because ~ {reason}`" , 5)
+            await edit_delete(event, f"`I shall be Going afk! because ~ {reason}`", 5)
         else:
-            await edit_delete(event, f"`I shall be Going afk! `" , 5)
+            await edit_delete(event, f"`I shall be Going afk! `", 5)
         if BOTLOG:
             if reason:
                 await event.client.send_message(
