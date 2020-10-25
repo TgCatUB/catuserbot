@@ -52,13 +52,13 @@ async def set_not_afk(event):
     if "afk" not in current_message and "on" in USERAFK_ON:
         shite = await event.client.send_message(
             event.chat_id,
-            "`Back alive! No Longer afk.\nWas afk for:" + endtime + "`",
+            "`Back alive! No Longer afk.\nWas afk for " + endtime + "`",
         )
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
-                "#AFKFALSE \nSet AFK mode to False\n"
-                + "`Back alive! No Longer afk.\nWas afk for:"
+                "#AFKFALSE \n`Set AFK mode to False\n"
+                + "Back alive! No Longer afk.\nWas afk for "
                 + endtime
                 + "`",
             )
@@ -107,9 +107,9 @@ async def on_afk(event):
     if USERAFK_ON and not (await event.get_sender()).bot:
         msg = None
         message_to_reply = (
-            f"`I am afk \nSince : {endtime}\nReason : {reason}`"
+            f"`I am afk \nSince {endtime}\nReason : {reason}`"
             if reason
-            else f"`I am afk \nSince : {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            else f"`I am afk \nSince {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
         )
         if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
             msg = await event.reply(message_to_reply)
