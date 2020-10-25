@@ -124,9 +124,7 @@ async def get_full_user(event):
 @bot.on(admin_cmd(pattern="whois(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
 async def who(event):
-    cat = await edit_or_reply(
-        event, "`Fetching userinfo wait `"
-    )
+    cat = await edit_or_reply(event, "`Fetching userinfo wait `")
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     replied_user = await get_user(event)
