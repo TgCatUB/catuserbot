@@ -80,7 +80,7 @@ async def _(event):
         sw,
         cas,
     )
-    await event.edit(caption)
+    await edit_or_reply(event , caption)
 
 
 async def get_full_user(event):
