@@ -1,15 +1,17 @@
-
 # pm and tagged messages logger for catuserbot by @mrconfused (@sandy1709)
 import asyncio
 
 from telethon import events
+
 import userbot.plugins.sql_helper.no_log_pms_sql as no_log_pms_sql
+
 from ..utils import admin_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, LOGS , mentionuser
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, LOGS, mentionuser
 
 RECENT_USER = None
 NEWPM = None
-COUNT = 0 
+COUNT = 0
+
 
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def monito_p_m_s(event):
@@ -22,7 +24,7 @@ async def monito_p_m_s(event):
     if Config.NO_LOG_P_M_S and not sender.bot:
         chat = await event.get_chat()
         if not no_log_pms_sql.is_approved(chat.id):
-            if RECENT_USER ==chat.id:
+            if RECENT_USER == chat.id:
                 try:
                     if event.message:
                         await event.client.forward_messages(
@@ -32,13 +34,20 @@ async def monito_p_m_s(event):
                 except Exception as e:
                     LOGS.warn(str(e))
             else:
-                RECENT_USER ==chat.id
+                RECENT_USER == chat.id
                 if NEWPM:
                     if COUNT > 1:
-                        await NEWPM.edit(NEWPM.text.replace("new message" , f"{COUNT} messages" ))
+                        await NEWPM.edit(
+                            NEWPM.text.replace("new message", f"{COUNT} messages")
+                        )
                     else:
-                        await NEWPM.edit(NEWPM.text.replace("new message" , f"{COUNT} message" ))
-                NEWPM = await event.client.send_message(Config.PM_LOGGR_BOT_API_ID , f"👤{mentionuser(chat.first_name , chat.id)} has sent a new message \nId : {chat.id}")
+                        await NEWPM.edit(
+                            NEWPM.text.replace("new message", f"{COUNT} message")
+                        )
+                NEWPM = await event.client.send_message(
+                    Config.PM_LOGGR_BOT_API_ID,
+                    f"👤{mentionuser(chat.first_name , chat.id)} has sent a new message \nId : {chat.id}",
+                )
                 try:
                     if event.message:
                         await event.client.forward_messages(
@@ -47,7 +56,6 @@ async def monito_p_m_s(event):
                     COUNT += 1
                 except Exception as e:
                     LOGS.warn(str(e))
-
 
 
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
@@ -71,7 +79,7 @@ async def log_tagged_messages(event):
                 parse_mode="html",
                 link_preview=False,
             )
- 
+
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"save(?: |$)(.*)"))
 async def log(log_text):
@@ -99,7 +107,9 @@ async def set_no_log_p_m(event):
         chat = await event.get_chat()
         if no_log_pms_sql.is_approved(chat.id):
             no_log_pms_sql.disapprove(chat.id)
-            await edit_delete(event , "`logging of messages from this group has been started`" , 5)
+            await edit_delete(
+                event, "`logging of messages from this group has been started`", 5
+            )
 
 
 @bot.on(admin_cmd(pattern="nolog$"))
@@ -108,7 +118,9 @@ async def set_no_log_p_m(event):
         chat = await event.get_chat()
         if not no_log_pms_sql.is_approved(chat.id):
             no_log_pms_sql.approve(chat.id)
-            await edit_delete(event ,"`Logging of messages from this chat has been stopped`" , 5)
+            await edit_delete(
+                event, "`Logging of messages from this chat has been stopped`", 5
+            )
 
 
 CMD_HELP.update(
