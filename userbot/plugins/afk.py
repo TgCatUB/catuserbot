@@ -32,7 +32,7 @@ async def set_not_afk(event):
     afk_end = back_alive.replace(microsecond=0)
     if afk_start != {}:
         total_afk_time = afk_end - afk_start
-        time = float(total_afk_time.seconds)
+        time = int(total_afk_time.seconds)
         d = time // (24 * 3600)
         time %= 24 * 3600
         h = time // 3600
@@ -83,7 +83,7 @@ async def on_afk(event):
     afk_end = back_alivee.replace(microsecond=0)
     if afk_start != {}:
         total_afk_time = afk_end - afk_start
-        time = float(total_afk_time.seconds)
+        time = int(total_afk_time.seconds)
         d = time // (24 * 3600)
         time %= 24 * 3600
         h = time // 3600
