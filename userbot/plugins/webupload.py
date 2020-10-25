@@ -138,11 +138,9 @@ async def _(event):
         urls = links = re.findall(link_regex, t_response)
         result = ""
         for i in urls:
-            if result:
-                result += f"\n{i[0]}"
-            else:
+            if not result:
                 result = f"**Uploaded File link/links :**"
-                result += f"\n{i[0]}"
+            result += f"\n{i[0]}"
         await editor.edit(result)
     else:
         await editor.edit(error)

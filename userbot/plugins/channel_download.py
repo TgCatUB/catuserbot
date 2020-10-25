@@ -16,9 +16,9 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 async def get_media(event):
     if event.fwd_from:
         return
-    dir = "./temp/"
+    tempdir = Config.TMP_DOWNLOAD_DIRECTORY
     try:
-        os.makedirs("./temp/")
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     except BaseException:
         pass
     catty = event.pattern_match.group(1)
@@ -31,7 +31,7 @@ async def get_media(event):
     i = 0
     for msg in msgs:
         if msg.media is not None:
-            await borg.download_media(msg, dir)
+            await borg.download_media(msg, tempdir)
             i += 1
             await event.edit(
                 f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"
@@ -50,9 +50,9 @@ async def get_media(event):
 async def get_media(event):
     if event.fwd_from:
         return
-    dir = "./temp/"
+    tempdir = Config.TMP_DOWNLOAD_DIRECTORY
     try:
-        os.makedirs("./temp/")
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     except BaseException:
         pass
     channel_username = event.pattern_match.group(1)
@@ -63,7 +63,7 @@ async def get_media(event):
     i = 0
     for msg in msgs:
         if msg.media is not None:
-            await borg.download_media(msg, dir)
+            await borg.download_media(msg, tempdir)
             i += 1
             await event.edit(
                 f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"

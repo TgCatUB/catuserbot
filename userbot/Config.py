@@ -3,11 +3,10 @@
 # Create a new config.py file in same dir and import, then extend this class.
 import os
 
-from pymongo import MongoClient
 from telethon.tl.types import ChatBannedRights
 
 
-class Config(object):
+class Config((object)):
     LOGGER = True
     # Get this value from my.telegram.org! Please do not steal
     APP_ID = int(os.environ.get("APP_ID", 6))
@@ -50,7 +49,7 @@ class Config(object):
     TG_BOT_USER_NAME_BF_HER = os.environ.get("TG_BOT_USER_NAME_BF_HER", None)
     NO_LOG_P_M_S = bool(os.environ.get("NO_LOG_P_M_S", True))
     THUMB_IMAGE = os.environ.get(
-        "THUMB_IMAGE", "https://telegra.ph/file/3d60313110c58684b31ea.jpg"
+        "THUMB_IMAGE", "https://telegra.ph/file/ca95524e4734b0d5461b5.jpg"
     )
     # Genius lyrics get this value from https://genius.com/developers both has
     # same values
@@ -59,9 +58,10 @@ class Config(object):
     # TG API limit. A message can have maximum 4096 characters!
     MAX_MESSAGE_SIZE_LIMIT = 4095
     # set blacklist_chats where you do not want userbot's features
-    UB_BLACK_LIST_CHAT = set(
+    UB_BLACK_LIST_CHAT = {
         int(x) for x in os.environ.get("UB_BLACK_LIST_CHAT", "").split()
-    )
+    }
+
     # specify LOAD and NO_LOAD
     LOAD = []
     # foloowing plugins won't work on Heroku,
@@ -89,8 +89,6 @@ class Config(object):
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
     # For Databases
     # can be None in which case plugins requiring
-    # Set to True if you want to block users that are spamming your PMs.
-    SLAP_USERNAME = os.environ.get("SLAP_USERNAME", None)
     # DataBase would not work
     DB_URI = os.environ.get("DATABASE_URL", None)
     # number of rows of buttons to be displayed in .help command
@@ -111,16 +109,17 @@ class Config(object):
     # specify list of users allowed to use bot
     # WARNING: be careful who you grant access to your bot.
     # malicious users could do ".exec rm -rf /*"
-    SUDO_USERS = set(int(x) for x in os.environ.get("SUDO_USERS", "").split())
-    # VeryStream only supports video formats
-    VERY_STREAM_LOGIN = os.environ.get("VERY_STREAM_LOGIN", None)
-    VERY_STREAM_KEY = os.environ.get("VERY_STREAM_KEY", None)
+    SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
     # Google Drive ()
-    CHROME_BIN = os.environ.get("CHROME_BIN", "/usr/bin/google-chrome")
-    CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
+    CHROME_BIN = os.environ.get("CHROME_BIN", "/app/.apt/usr/bin/google-chrome")
+    CHROME_DRIVER = os.environ.get(
+        "CHROME_DRIVER", "/app/.chromedriver/bin/chromedriver"
+    )
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
+    G_DRIVE_FOLDER_ID = os.environ.get("G_DRIVE_FOLDER_ID", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
+    G_DRIVE_DATA = os.environ.get("G_DRIVE_DATA", None)
     #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
     # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
     # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
@@ -136,16 +135,14 @@ class Config(object):
     # Google Chrome Selenium Stuff
     # taken from
     # https://github.com/jaskaranSM/UniBorg/blob/9072e3580cc6c98d46f30e41edbe73ffc9d850d3/sample_config.py#L104-L106
-    TEMP_DIR = os.environ.get("TEMP_DIR", "./temp")
+    TEMP_DIR = os.environ.get("TEMP_DIR", "./temp/")
     # spotify stuff
     DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
     SPOTIFY_BIO_PREFIX = os.environ.get("SPOTIFY_BIO_PREFIX", None)
     SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
     SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
-    GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", None)
     LYDIA_API = os.environ.get("LYDIA_API", None)
     DEFAULT_NAME = os.environ.get("DEFAULT_NAME", None)
-    VIRUSTOTAL_API_KEY = os.environ.get("VIRUSTOTAL_API_KEY", None)
     # define "spam" in PMs
     MAX_FLOOD_IN_P_M_s = int(os.environ.get("MAX_FLOOD_IN_P_M_s", 5))
     # leave this blank, should be automatically filled for Heroku.com users
@@ -154,9 +151,6 @@ class Config(object):
         PM_LOGGR_BOT_API_ID = int(PM_LOGGR_BOT_API_ID)
     # to work manager.py
     DUAL_LOG = os.environ.get("DUAL_LOG", False)
-    # define the "types" that should be uplaoded as streamable
-    TL_VID_STREAM_TYPES = ("MKV", "MP4", "WEBM")
-    TL_MUS_STREAM_TYPES = ("MP3", "WAV", "FLAC")
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
     # MONGOCLIENT = pymongo.MongoClient(MONGO_DB_URI)
     # MONGO = MONGOCLIENT.userbot
@@ -179,17 +173,3 @@ class Production(Config):
 
 class Development(Config):
     LOGGER = True
-
-
-# Init Mongo
-MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
-MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
-MONGO = MONGOCLIENT.userbot
-
-
-def is_mongo_alive():
-    try:
-        MONGOCLIENT.server_info()
-    except BaseException as e:
-        print(e)
-        return Fa

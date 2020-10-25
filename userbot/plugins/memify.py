@@ -12,6 +12,7 @@ from . import (
     cat_meeme,
     cat_meme,
     convert_toimage,
+    convert_tosticker,
     crop,
     flip_image,
     grayscale,
@@ -102,20 +103,14 @@ async def memes(cat):
     except BaseException:
         pass
     meme_file = convert_toimage(meme_file)
-    if cmd == "mmf":
-        meme = "catmeme.jpg"
-        if max(len(top), len(bottom)) < 21:
-            await cat_meme(top, bottom, meme_file, meme)
-        else:
-            await cat_meeme(top, bottom, meme_file, meme)
-        await borg.send_file(cat.chat_id, meme, reply_to=catid)
-    elif cmd == "mms":
-        meme = "catmeme.webp"
-        if max(len(top), len(bottom)) < 21:
-            await cat_meme(top, bottom, meme_file, meme)
-        else:
-            await cat_meeme(top, bottom, meme_file, meme)
-        await borg.send_file(cat.chat_id, meme, reply_to=catid)
+    meme = "catmeme.jpg"
+    if max(len(top), len(bottom)) < 21:
+        await cat_meme(top, bottom, meme_file, meme)
+    else:
+        await cat_meeme(top, bottom, meme_file, meme)
+    if cmd != "mmf":
+        meme = await convert_tosticker(meme)
+    await borg.send_file(cat.chat_id, meme, reply_to=catid)
     await cat.delete()
     os.remove(meme)
     for files in (catsticker, meme_file):
@@ -123,7 +118,7 @@ async def memes(cat):
             os.remove(files)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="invert$"))
+@borg.on(admin_cmd(pattern="invert$", outgoing=True))
 @borg.on(sudo_cmd(pattern="invert$", allow_sudo=True))
 async def memes(cat):
     reply = await cat.get_reply_message()
@@ -193,18 +188,9 @@ async def memes(cat):
     except BaseException:
         pass
     meme_file = convert_toimage(meme_file)
-    if jisanidea:
-        outputfile = "invert.webp"
-        await invert_colors(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
-    else:
-        outputfile = "invert.jpg"
-        await invert_colors(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
+    outputfile = "invert.webp" if jisanidea else "invert.jpg"
+    await invert_colors(meme_file, outputfile)
+    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -282,18 +268,9 @@ async def memes(cat):
     except BaseException:
         pass
     meme_file = convert_toimage(meme_file)
-    if jisanidea:
-        outputfile = "solarize.webp"
-        await solarize(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
-    else:
-        outputfile = "solarize.jpg"
-        await solarize(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
+    outputfile = "solarize.webp" if jisanidea else "solarize.jpg"
+    await solarize(meme_file, outputfile)
+    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -371,18 +348,9 @@ async def memes(cat):
     except BaseException:
         pass
     meme_file = convert_toimage(meme_file)
-    if jisanidea:
-        outputfile = "mirror_file.webp"
-        await mirror_file(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
-    else:
-        outputfile = "mirror_file.jpg"
-        await mirror_file(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
+    outputfile = "mirror_file.webp" if jisanidea else "mirror_file.jpg"
+    await mirror_file(meme_file, outputfile)
+    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -460,18 +428,9 @@ async def memes(cat):
     except BaseException:
         pass
     meme_file = convert_toimage(meme_file)
-    if jisanidea:
-        outputfile = "flip_image.webp"
-        await flip_image(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
-    else:
-        outputfile = "flip_image.jpg"
-        await flip_image(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
+    outputfile = "flip_image.webp" if jisanidea else "flip_image.jpg"
+    await flip_image(meme_file, outputfile)
+    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -549,18 +508,9 @@ async def memes(cat):
     except BaseException:
         pass
     meme_file = convert_toimage(meme_file)
-    if jisanidea:
-        outputfile = "grayscale.webp"
-        await grayscale(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
-    else:
-        outputfile = "grayscale.jpg"
-        await grayscale(meme_file, outputfile)
-        await borg.send_file(
-            cat.chat_id, outputfile, force_document=False, reply_to=catid
-        )
+    outputfile = "grayscale.webp" if jisanidea else "grayscale.jpg"
+    await grayscale(meme_file, outputfile)
+    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -576,10 +526,7 @@ async def memes(cat):
         await edit_or_reply(cat, "`Reply to supported Media...`")
         return
     catinput = cat.pattern_match.group(1)
-    if not catinput:
-        catinput = 50
-    else:
-        catinput = int(catinput)
+    catinput = 50 if not catinput else int(catinput)
     catid = cat.reply_to_msg_id
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
@@ -642,30 +589,17 @@ async def memes(cat):
     except BaseException:
         pass
     meme_file = convert_toimage(meme_file)
-    if jisanidea:
-        outputfile = "grayscale.webp"
-        try:
-            await crop(meme_file, outputfile, catinput)
-        except Exception as e:
-            return await cat.edit(f"`{e}`")
-        try:
-            await borg.send_file(
-                cat.chat_id, outputfile, force_document=False, reply_to=catid
-            )
-        except Exception as e:
-            return await cat.edit(f"`{e}`")
-    else:
-        outputfile = "grayscale.jpg"
-        try:
-            await crop(meme_file, outputfile, catinput)
-        except Exception as e:
-            return await cat.edit(f"`{e}`")
-        try:
-            await borg.send_file(
-                cat.chat_id, outputfile, force_document=False, reply_to=catid
-            )
-        except Exception as e:
-            return await cat.edit(f"`{e}`")
+    outputfile = "grayscale.webp" if jisanidea else "grayscale.jpg"
+    try:
+        await crop(meme_file, outputfile, catinput)
+    except Exception as e:
+        return await cat.edit(f"`{e}`")
+    try:
+        await borg.send_file(
+            cat.chat_id, outputfile, force_document=False, reply_to=catid
+        )
+    except Exception as e:
+        return await cat.edit(f"`{e}`")
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -751,30 +685,17 @@ async def memes(cat):
     except BaseException:
         pass
     meme_file = convert_toimage(meme_file)
-    if jisanidea:
-        outputfile = "framed.webp"
-        try:
-            await add_frame(meme_file, outputfile, catinput, colr)
-        except Exception as e:
-            return await cat.edit(f"`{e}`")
-        try:
-            await borg.send_file(
-                cat.chat_id, outputfile, force_document=False, reply_to=catid
-            )
-        except Exception as e:
-            return await cat.edit(f"`{e}`")
-    else:
-        outputfile = "framed.jpg"
-        try:
-            await add_frame(meme_file, outputfile, catinput, colr)
-        except Exception as e:
-            return await cat.edit(f"`{e}`")
-        try:
-            await borg.send_file(
-                cat.chat_id, outputfile, force_document=False, reply_to=catid
-            )
-        except Exception as e:
-            return await cat.edit(f"`{e}`")
+    outputfile = "framed.webp" if jisanidea else "framed.jpg"
+    try:
+        await add_frame(meme_file, outputfile, catinput, colr)
+    except Exception as e:
+        return await cat.edit(f"`{e}`")
+    try:
+        await borg.send_file(
+            cat.chat_id, outputfile, force_document=False, reply_to=catid
+        )
+    except Exception as e:
+        return await cat.edit(f"`{e}`")
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):

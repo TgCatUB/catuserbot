@@ -20,16 +20,15 @@ DEVICES_DATA = (
 )
 
 
-@borg.on(admin_cmd(pattern=r"magisk$"))
-@borg.on(sudo_cmd(pattern=r"magisk$", allow_sudo=True))
+@borg.on(admin_cmd(pattern=r"magisk"))
+@borg.on(sudo_cmd(pattern=r"magisk", allow_sudo=True))
 async def kakashi(magisk):
-    """ magisk latest releases """
+    """magisk latest releases"""
     releases = (
         "__**Latest Magisk Releases:**__\n\n"
-        f"**Stable : **[ZIP v20.4](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-v20.4.zip) | [ZIP v20.3](https://bit.ly/3hXLF3L) | [Uninstaller](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-uninstaller-20200323.zip)\n"
-        f"**Magisk Manager : **[APK v7.5.0](https://bit.ly/31U1C5F)\n"
-        f"**Canary : **[ZIP vcd6eca1d](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/magisk-release.zip) | [Uninstaller](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/magisk-uninstaller.zip)\n"
-        f"**Canary Build : **[APK v87de0e7a](https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/app-release.apk)"
+        f"**Stable : **[APK v8.0.2](https://github.com/topjohnwu/Magisk/releases/download/manager-v8.0.2/MagiskManager-v8.0.2.apk) | [ZIP v20.4](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-v20.4.zip) | [Uninstaller](https://github.com/topjohnwu/Magisk/releases/download/v20.4/Magisk-uninstaller-20200323.zip)\n"
+        f"**Beta : **[APK v8.0.2](https://github.com/topjohnwu/Magisk/releases/download/manager-v8.0.2/MagiskManager-v8.0.2.apk) | [ZIP v21.0](https://github.com/topjohnwu/Magisk/releases/download/v21.0/Magisk-v21.0.zip) | [Uninstaller](https://github.com/topjohnwu/Magisk/releases/download/v21.0/Magisk-uninstaller-20201003.zip)\n"
+        f"**Canary : **[APK v4e0a3f5e](https://github.com/topjohnwu/magisk_files/blob/canary/app-debug.apk) | [ZIP v4e0a3f5e](https://github.com/topjohnwu/magisk_files/blob/canary/magisk-debug.zip) | [Uninstaller](https://github.com/topjohnwu/magisk_files/blob/canary/magisk-uninstaller.zip)"
     )
     await edit_or_reply(magisk, releases)
 

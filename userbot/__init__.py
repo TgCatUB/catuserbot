@@ -13,12 +13,8 @@ from telethon.sessions import StringSession
 
 from var import Var
 
-from .helpers import *
-from .helpers import functions as catdef
-from .helpers import memeshelper as memes
-
 StartTime = time.time()
-catversion = "2.7.4"
+catversion = "2.9.0"
 
 if Var.STRING_SESSION:
     session_name = str(Var.STRING_SESSION)
@@ -65,8 +61,12 @@ if bool(ENV):
     BOTLOG = sb(os.environ.get("BOTLOG", "True"))
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     # Chrome Driver and Headless Google Chrome Binaries
-    CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
-    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", "/usr/bin/google-chrome")
+    CHROME_DRIVER = os.environ.get(
+        "CHROME_DRIVER", "/app/.chromedriver/bin/chromedriver"
+    )
+    GOOGLE_CHROME_BIN = os.environ.get(
+        "GOOGLE_CHROME_BIN", "/app/.apt/usr/bin/google-chrome"
+    )
     # OpenWeatherMap API Key
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
     # Youtube API key
@@ -97,20 +97,6 @@ else:
     # Put your ppe vars here if you are using local hosting
     PLACEHOLDER = None
 
-# Setting Up CloudMail.ru and MEGA.nz extractor binaries,
-if not os.path.exists("bin"):
-    os.mkdir("bin")
-binaries = {
-    "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown": "bin/megadown",
-    "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py": "bin/cmrudl",
-    "https://raw.githubusercontent.com/adekmaulana/python-scripts/master/shell/megadirect": "bin/megadirect",
-}
-
-for binary, path in binaries.items():
-    downloader = SmartDL(binary, path, progress_bar=False)
-    downloader.start()
-    os.chmod(path, 0o755)
-
 # Global Variables
 COUNT_MSG = 0
 USERS = {}
@@ -124,3 +110,8 @@ SUDO_LIST = {}
 # for later purposes
 INT_PLUG = ""
 LOAD_PLUG = {}
+
+# showing imports error
+
+from .helpers import *
+from .helpers import functions as catdef

@@ -1,11 +1,9 @@
-"""CC- @refundisillegal\nSyntax:-\n.get var NAME\n.del var NAME\n.set var NAME"""
+# Heroku manager for your catuserbot
+
+# CC- @refundisillegal\nSyntax:-\n.get var NAME\n.del var NAME\n.set var NAME
 
 # Copyright (C) 2020 Adek Maulana.
 # All rights reserved.
-"""
-   Heroku manager for your userbot
-"""
-
 
 import asyncio
 import math
@@ -27,12 +25,8 @@ HEROKU_APP_NAME = Config.HEROKU_APP_NAME
 HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 
-@borg.on(
-    admin_cmd(pattern=r"(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)", outgoing=True)
-)
-@borg.on(
-    sudo_cmd(pattern=r"(set|get|del) var(?: |$)(.*)(?: |$)([\s\S]*)", allow_sudo=True)
-)
+@borg.on(admin_cmd(pattern=r"(set|get|del) var (.*)", outgoing=True))
+@borg.on(sudo_cmd(pattern=r"(set|get|del) var (.*)", allow_sudo=True))
 async def variable(var):
     """
     Manage most of ConfigVars setting, set new var, get current var,
@@ -81,17 +75,14 @@ async def variable(var):
             os.remove("configs.json")
             return
     elif exe == "set":
+        variable = "".join(var.text.split(maxsplit=2)[2:])
         cat = await edit_or_reply(var, "`Setting information...`")
-        variable = var.pattern_match.group(2)
         if not variable:
-            return await cat.edit(">`.set var <ConfigVars-name> <value>`")
-        value = var.pattern_match.group(3)
+            return await cat.edit("`.set var <ConfigVars-name> <value>`")
+        value = "".join(variable.split(maxsplit=1)[1:])
+        variable = "".join(variable.split(maxsplit=1)[0])
         if not value:
-            variable = variable.split()[0]
-            try:
-                value = var.pattern_match.group(2).split(" ", 1)[1]
-            except IndexError:
-                return await cat.edit(">`.set var <ConfigVars-name> <value>`")
+            return await cat.edit("`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1.5)
         if variable in heroku_var:
             await cat.edit(f"`{variable}` **successfully changed to  ->  **`{value}`")
@@ -142,13 +133,13 @@ async def dyno_usage(dyno):
     quota = result["account_quota"]
     quota_used = result["quota_used"]
 
-    """ - Used - """
+    # - Used -
     remaining_quota = quota - quota_used
     percentage = math.floor(remaining_quota / quota * 100)
     minutes_remaining = remaining_quota / 60
     hours = math.floor(minutes_remaining / 60)
     minutes = math.floor(minutes_remaining % 60)
-    """ - Current - """
+    # - Current -
     App = result["apps"]
     try:
         App[0]["quota_used"]

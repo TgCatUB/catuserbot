@@ -44,9 +44,8 @@ async def print_changelogs(event, ac_br, changelog):
     )
     if len(changelog_str) > 4096:
         await event.edit("`Changelog is too big, view the file to see it.`")
-        file = open("output.txt", "w+")
-        file.write(changelog_str)
-        file.close()
+        with open("output.txt", "w+") as file:
+            file.write(changelog_str)
         await event.client.send_file(
             event.chat_id,
             "output.txt",
@@ -208,7 +207,7 @@ async def upstream(event):
             f"**{UPSTREAM_REPO_BRANCH}**\n"
         )
         return repo.__del__()
-    if conf == "" and force_update is False:
+    if conf == "" and not force_update:
         await print_changelogs(event, ac_br, changelog)
         await event.delete()
         return await event.respond(

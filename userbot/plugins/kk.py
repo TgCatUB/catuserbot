@@ -1,5 +1,4 @@
-"""command: .kk"""
-"""By @Grandpaa_please """
+"""command: .kk By @Grandpaa_please """
 
 
 import random

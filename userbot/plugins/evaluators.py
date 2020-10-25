@@ -3,7 +3,6 @@ Syntax: .exec Code"""
 import asyncio
 import io
 import sys
-import time
 import traceback
 
 from .. import CMD_HELP
@@ -15,12 +14,10 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
-    PROCESS_RUN_TIME = 100
-    cmd = event.pattern_match.group(1)
+    cmd = "".join(event.text.split(maxsplit=1)[1:])
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -47,12 +44,10 @@ async def _(event):
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
-    PROCESS_RUN_TIME = 100
-    cmd = event.pattern_match.group(1)
+    cmd = "".join(event.text.split(maxsplit=1)[1:])
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -119,15 +114,25 @@ async def _(event):
     if len(final_output) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(final_output)) as out_file:
             out_file.name = "eval.text"
-            await borg.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                caption=cmd,
-                reply_to=reply_to_id,
-            )
-            await event.delete()
+            try:
+                await borg.send_file(
+                    event.chat_id,
+                    out_file,
+                    force_document=True,
+                    allow_cache=False,
+                    caption=cmd,
+                    reply_to=reply_to_id,
+                )
+                await event.delete()
+            except:
+                await borg.send_file(
+                    event.chat_id,
+                    out_file,
+                    force_document=True,
+                    allow_cache=False,
+                    reply_to=reply_to_id,
+                )
+                await event.delete()
     else:
         await event.edit(final_output)
 

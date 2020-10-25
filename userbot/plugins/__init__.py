@@ -7,9 +7,8 @@ import heroku3
 import requests
 import spamwatch as spam_watch
 
-from userbot.uniborgConfig import Config
-
 from .. import *
+from ..Config import Config
 
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
 heroku_api = "https://api.heroku.com"
@@ -22,18 +21,27 @@ if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 # thumb image
-with open(thumb_image_path, "wb") as f:
-    f.write(requests.get(Config.THUMB_IMAGE).content)
+if Config.THUMB_IMAGE is not None:
+    with open(thumb_image_path, "wb") as f:
+        f.write(requests.get(Config.THUMB_IMAGE).content)
+
+cat_users = [bot.uid]
+if Config.SUDO_USERS:
+    for user in Config.SUDO_USERS:
+        cat_users.append(user)
 
 
 def check(cat):
     if "/start" in cat:
         return True
-    hi = re.search(re.escape(f"\\b{cat}\\b"), "a|b|c|d")
-    if hi:
-        return True
-    return False
+    try:
+        hi = re.search(cat, "(a|b|c|d)")
+    except:
+        hi = False
+    return bool(hi)
 
+
+PM_START = []
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
@@ -41,6 +49,13 @@ if Config.PRIVATE_GROUP_BOT_API_ID is None:
 else:
     BOTLOG = True
     BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
+
+# Gdrive
+G_DRIVE_CLIENT_ID = Config.G_DRIVE_CLIENT_ID
+G_DRIVE_CLIENT_SECRET = Config.G_DRIVE_CLIENT_SECRET
+G_DRIVE_DATA = Config.G_DRIVE_DATA
+G_DRIVE_FOLDER_ID = Config.G_DRIVE_FOLDER_ID
+TMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
 # UniBorg Telegram UseRBot
 # Copyright (C) 2020 @UniBorg
@@ -83,10 +98,7 @@ else:
 
 async def catalive():
     _, check_sgnirts = check_data_base_heal_th()
-    if Config.SUDO_USERS:
-        sudo = "Enabled"
-    else:
-        sudo = "Disabled"
+    sudo = "Enabled" if Config.SUDO_USERS else "Disabled"
     uptime = await get_readable_time((time.time() - StartTime))
     try:
         useragent = (
@@ -126,10 +138,9 @@ async def catalive():
         dyno = f"{AppHours}h {AppMinutes}m/{hours}h {minutes}m"
     except Exception as e:
         dyno = e
-    conclusion = f"Catuserbot Stats\
+    return f"Catuserbot Stats\
                  \n\nDatabase : {check_sgnirts}\
                   \nSudo : {sudo}\
                   \nUptime : {uptime}\
                   \nDyno : {dyno}\
                   "
-    return conclusion

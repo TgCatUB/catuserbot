@@ -48,25 +48,23 @@ def add_filter(chat_id, keyword, reply, f_mesg_id):
         SESSION.add(adder)
         SESSION.commit()
         return True
-    else:
-        rem = SESSION.query(Filter).get((str(chat_id), keyword))
-        SESSION.delete(rem)
-        SESSION.commit()
-        adder = Filter(str(chat_id), keyword, reply, f_mesg_id)
-        SESSION.add(adder)
-        SESSION.commit()
-        return False
+    rem = SESSION.query(Filter).get((str(chat_id), keyword))
+    SESSION.delete(rem)
+    SESSION.commit()
+    adder = Filter(str(chat_id), keyword, reply, f_mesg_id)
+    SESSION.add(adder)
+    SESSION.commit()
+    return False
 
 
 def remove_filter(chat_id, keyword):
     to_check = get_filter(chat_id, keyword)
     if not to_check:
         return False
-    else:
-        rem = SESSION.query(Filter).get((str(chat_id), keyword))
-        SESSION.delete(rem)
-        SESSION.commit()
-        return True
+    rem = SESSION.query(Filter).get((str(chat_id), keyword))
+    SESSION.delete(rem)
+    SESSION.commit()
+    return True
 
 
 def remove_all_filters(chat_id):

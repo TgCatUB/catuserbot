@@ -43,15 +43,16 @@ async def _(event):
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await event.edit(str(e))
-    elif type_of_group == "g" or type_of_group == "c":
+    elif type_of_group in ["g", "c"]:
         try:
             r = await borg(
-                functions.channels.CreateChannelRequest(  # pylint:disable=E0602
+                functions.channels.CreateChannelRequest(
                     title=group_name,
                     about="This is a Test from @mrconfused",
-                    megagroup=False if type_of_group == "c" else True,
+                    megagroup=type_of_group != "c",
                 )
             )
+
             created_chat_id = r.chats[0].id
             result = await borg(
                 functions.messages.ExportChatInviteRequest(

@@ -55,7 +55,6 @@ async def _(event):
         )
         return
     chat = "@image_deepfrybot"
-    reply_message.sender
     if reply_message.sender.bot:
         event = await edit_or_reply(event, "Reply to actual users message.")
         return

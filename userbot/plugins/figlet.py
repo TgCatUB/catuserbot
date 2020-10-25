@@ -34,6 +34,7 @@ async def figlet(event):
         await edit_or_reply(event, "Please add some text to figlet")
         return
     if cmd is not None:
+        cmd = cmd.strip()
         try:
             font = CMD_FIG[cmd]
         except KeyError:
@@ -47,9 +48,9 @@ async def figlet(event):
 
 CMD_HELP.update(
     {
-        "figlet": ".figlet text or **.figlet text : type\
-    \n USAGE:the types are slant, 3D , 5line , alpha , banner ,  doh ,  iso ,  letter , allig , dotm , bubble , bulb , digi\
-    \n NOTE: Nospace must be given after : and type\
-    \nEXAMPLE : `.figlet hello :digi`"
+        "figlet": "**Plugin :**`figlet`\
+        \n\n**Syntax : **`.figlet text or .figlet text : type`\
+    \n**Usage : **the types are `slant`, `3D`, `5line`, `alpha`, `banner`, `doh`, `iso`, `letter`, `allig`, `dotm`, `bubble`, `bulb`, `digi`\
+    \n**Example : **`.figlet hello :digi`"
     }
 )

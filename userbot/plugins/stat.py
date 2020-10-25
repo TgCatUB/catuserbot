@@ -6,15 +6,17 @@ from telethon.events import NewMessage
 from telethon.tl.custom import Dialog
 from telethon.tl.types import Channel, Chat, User
 
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern="stat"))
+@bot.on(admin_cmd(pattern="stat$"))
+@bot.on(sudo_cmd(pattern="stat$", allow_sudo=True))
 async def stats(
     event: NewMessage.Event,
 ) -> None:  # pylint: disable = R0912, R0914, R0915
     """Command to get stats about the account"""
-    await event.edit("`Collecting stats, Wait man`")
+    cat = await edit_or_reply(event, "`Collecting stats, Wait man`")
     start_time = time.time()
     private_chats = 0
     bots = 0
@@ -79,7 +81,7 @@ async def stats(
     response += f"**Unread:** {unread} \n"
     response += f"**Unread Mentions:** {unread_mentions} \n\n"
     response += f"📌 __It Took:__ {stop_time:.02f}s \n"
-    await event.edit(response)
+    await cat.edit(response)
 
 
 def make_mention(user):
@@ -96,5 +98,13 @@ def inline_mention(user):
 def user_full_name(user):
     names = [user.first_name, user.last_name]
     names = [i for i in list(names) if i]
-    full_name = " ".join(names)
-    return full_name
+    return " ".join(names)
+
+
+CMD_HELP.update(
+    {
+        "stat": "**Plugin : **`stat`\
+    \n\n**Syntax : **`.stat`\
+    \n**Function : **Shows you the count of  your groups, channels, private chats...etc"
+    }
+)

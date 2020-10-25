@@ -31,7 +31,7 @@ DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ �
 DEL_TIME_OUT = 60
 DEFAULTUSER = str(AUTONAME) if AUTONAME else "cat"
 
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf"
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 
 @borg.on(admin_cmd(pattern="autopic$"))

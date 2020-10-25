@@ -14,8 +14,8 @@ from PIL import Image, ImageColor
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 logging.basicConfig(
     format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
@@ -23,50 +23,55 @@ logging.basicConfig(
 
 
 @borg.on(admin_cmd(pattern="scan ?(.*)"))
+@borg.on(sudo_cmd(pattern="scan ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     if not event.reply_to_msg_id:
-        await event.edit("```Reply to any user message.```")
+        await edit_or_reply(event, "```Reply to any user message.```")
         return
     reply_message = await event.get_reply_message()
     if not reply_message.media:
-        await event.edit("```reply to a media message```")
+        await edit_or_reply(event, "```reply to a media message```")
         return
     chat = "@DrWebBot"
-    reply_message.sender
     if reply_message.sender.bot:
-        await event.edit("```Reply to actual users message.```")
+        await edit_or_reply(event, "```Reply to actual users message.```")
         return
-    await event.edit(" `Sliding my tip, of fingers over it`")
+    catevent = await edit_or_reply(event, " `Sliding my tip, of fingers over it`")
     async with borg.conversation(chat) as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=161163358)
             )
-            await borg.forward_messages(chat, reply_message)
+            await event.client.forward_messages(chat, reply_message)
             response = await response
         except YouBlockedUserError:
-            await event.reply("```Please unblock @sangmatainfo_bot and try again```")
+            await catevent.edit("`Please unblock `@DrWebBot `and try again`")
             return
         if response.text.startswith("Forward"):
-            await event.edit(
+            await catevent.edit(
                 "```can you kindly disable your forward privacy settings for good?```"
             )
         else:
             if response.text.startswith("Select"):
-                await event.edit("`Please go to` @DrWebBot `and select your language.`")
+                await catevent.edit(
+                    "`Please go to` @DrWebBot `and select your language.`"
+                )
             else:
-                await event.edit(
+                await catevent.edit(
                     f"**Antivirus scan was completed. I got dem final results.**\n {response.message.message}"
                 )
 
 
 @borg.on(admin_cmd(pattern=r"decode$", outgoing=True))
+@borg.on(sudo_cmd(pattern=r"decode$", allow_sudo=True))
 async def parseqr(qr_e):
-    """ For .decode command, get QR Code/BarCode content from the replied photo. """
+    if not os.path.isdir(Config.TEMP_DIR):
+        os.makedirs(Config.TEMP_DIR)
+    # For .decode command, get QR Code/BarCode content from the replied photo.
     downloaded_file_name = await qr_e.client.download_media(
-        await qr_e.get_reply_message()
+        await qr_e.get_reply_message(), Config.TMP_DIR
     )
     # parse the Official ZXing webpage to decode the QRCode
     command_to_exec = [
@@ -87,22 +92,21 @@ async def parseqr(qr_e):
     stdout, stderr = await process.communicate()
     e_response = stderr.decode().strip()
     t_response = stdout.decode().strip()
-    os.remove(downloaded_file_name)
     if not t_response:
-        logger.info(e_response)
-        logger.info(t_response)
-        await qr_e.edit("Failed to decode.")
-        return
+        return await edit_or_reply(qr_e, f"Failed to decode.\n`{e_response}`")
     soup = BeautifulSoup(t_response, "html.parser")
     qr_contents = soup.find_all("pre")[0].text
-    await qr_e.edit(qr_contents)
+    await edit_or_reply(qr_e, qr_contents)
+    if os.path.exists(downloaded_file_name):
+        os.remove(downloaded_file_name)
 
 
 @borg.on(admin_cmd(pattern="barcode ?(.*)"))
+@borg.on(sudo_cmd(pattern="barcode ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    await event.edit("...")
+    catevent = await edit_or_reply(event, "...")
     start = datetime.now()
     input_str = event.pattern_match.group(1)
     message = "SYNTAX: `.barcode <long text to include>`"
@@ -140,18 +144,19 @@ async def _(event):
         )
         os.remove(filename)
     except Exception as e:
-        await event.edit(str(e))
+        await catevent.edit(str(e))
         return
     end = datetime.now()
     ms = (end - start).seconds
-    await event.edit("Created BarCode in {} seconds".format(ms))
+    await catevent.edit("Created BarCode in {} seconds".format(ms))
     await asyncio.sleep(5)
-    await event.delete()
+    await catevent.delete()
 
 
 @borg.on(admin_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", outgoing=True))
+@borg.on(sudo_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", allow_sudo=True))
 async def make_qr(makeqr):
-    """ For .makeqr command, make a QR Code containing the given content. """
+    #  .makeqr command, make a QR Code containing the given content.
     input_str = makeqr.pattern_match.group(1)
     message = "SYNTAX: `.makeqr <long text to include>`"
     reply_msg_id = None
@@ -189,10 +194,11 @@ async def make_qr(makeqr):
 
 
 @borg.on(admin_cmd(pattern="calendar (.*)"))
+@borg.on(sudo_cmd(pattern="calendar (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    start = datetime.now()
+    catevent = await edit_or_reply(event, "`Gathering infomation.......`")
     input_str = event.pattern_match.group(1)
     input_sgra = input_str.split("-")
     if len(input_sgra) == 3:
@@ -210,18 +216,16 @@ async def _(event):
             a = json.dumps(current_date_detail_arraays, sort_keys=True, indent=4)
         else:
             a = response_content["error"]
-        await event.edit(str(a))
+        await catevent.edit(str(a))
     else:
-        await event.edit("SYNTAX: .calendar YYYY-MM-DD")
-    end = datetime.now()
-    (end - start).seconds
+        await catevent.edit("**Syntax : **`.calendar YYYY-MM-DD`")
 
 
 @borg.on(admin_cmd(pattern="currency (.*)"))
+@borg.on(sudo_cmd(pattern="currency (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    start = datetime.now()
     input_str = event.pattern_match.group(1)
     input_sgra = input_str.split(" ")
     if len(input_sgra) == 3:
@@ -236,24 +240,26 @@ async def _(event):
             if currency_to in current_response["rates"]:
                 current_rate = float(current_response["rates"][currency_to])
                 rebmun = round(number * current_rate, 2)
-                await event.edit(
-                    "{} {} = {} {}".format(number, currency_from, rebmun, currency_to)
+                await edit_or_reply(
+                    event,
+                    "{} {} = {} {}".format(number, currency_from, rebmun, currency_to),
                 )
             else:
-                await event.edit(
-                    "Welp, Hate to tell yout this but this Currency isn't supported **yet**.\n__Try__ `.currencies` __for a list of supported currencies.__"
+                await edit_or_reply(
+                    event,
+                    "Welp, Hate to tell yout this but this Currency isn't supported **yet**.\n__Try__ `.currencies` __for a list of supported currencies.__",
                 )
         except e:
-            await event.edit(str(e))
+            await edit_or_reply(event, str(e))
     else:
-        await event.edit(
-            "**Syntax:**\n.currency amount from to\n**Example:**\n`.currency 10 usd inr`"
+        await edit_or_reply(
+            event,
+            "**Syntax:**\n.currency amount from to\n**Example:**\n`.currency 10 usd inr`",
         )
-    end = datetime.now()
-    (end - start).seconds
 
 
 @borg.on(admin_cmd(pattern="currencies$"))
+@borg.on(sudo_cmd(pattern="currencies$", allow_sudo=True))
 async def currencylist(ups):
     if ups.fwd_from:
         return
@@ -263,10 +269,11 @@ async def currencylist(ups):
     hmm = ""
     for key, value in dil_wale_puch_de_na_chaaa.items():
         hmm += f"`{key}`" + "\t\t\t"
-    await ups.edit(f"**List of some currencies:**\n{hmm}\n")
+    await edit_or_reply(ups, f"**List of some currencies:**\n{hmm}\n")
 
 
 @borg.on(admin_cmd(pattern="ifsc (.*)"))
+@borg.on(sudo_cmd(pattern="ifsc (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -277,17 +284,20 @@ async def _(event):
         b = r.json()
         a = json.dumps(b, sort_keys=True, indent=4)
         # https://stackoverflow.com/a/9105132/4723940
-        await event.edit(str(a))
+        await edit_or_reply(event, str(a))
     else:
-        await event.edit("`{}`: {}".format(input_str, r.text))
+        await edit_or_reply(event, "`{}`: {}".format(input_str, r.text))
 
 
 @borg.on(admin_cmd(pattern="color (.*)"))
+@borg.on(sudo_cmd(pattern="color (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    message_id = event.message.id
+    message_id = None
+    if event.from_id != bot.uid:
+        message_id = event.message.id
     if event.reply_to_msg_id:
         message_id = event.reply_to_msg_id
     if input_str.startswith("#"):
@@ -310,13 +320,17 @@ async def _(event):
             os.remove("cat.png")
             await event.delete()
     else:
-        await event.edit("Syntax: `.color <color_code>` example : `.color #ff0000`")
+        await edit_or_reply(
+            event, "**Syntax : **`.color <color_code>` example : `.color #ff0000`"
+        )
 
 
 @borg.on(admin_cmd(pattern="xkcd ?(.*)"))
+@borg.on(sudo_cmd(pattern="xkcd ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
+    catevent = await edit_or_reply(event, "`processiong...........`")
     input_str = event.pattern_match.group(1)
     xkcd_id = None
     if input_str:
@@ -353,32 +367,33 @@ Month: {}
 Year: {}""".format(
             img, input_str, xkcd_link, safe_title, alt, day, month, year
         )
-        await event.edit(output_str, link_preview=True)
+        await catevent.edit(output_str, link_preview=True)
     else:
-        await event.edit("xkcd n.{} not found!".format(xkcd_id))
+        await catevent.edit("xkcd n.{} not found!".format(xkcd_id))
 
 
 CMD_HELP.update(
     {
-        "tools": "`.scan` reply to media or file\
-\n**USEAGE : **it scans the media or file and checks either any virus is in the file or media\
-\n\n`.makeqr` <content>\
-\n**USEAGE : **Make a QR Code from the given content.\
-\nExample: .makeqr www.google.com\
-\n\n`.barcode `<content>\
-\n**USEAGE : **Make a BarCode from the given content.\
-\nExample: `.barcode` www.google.com\
-\n\n`.decode` <reply to barcode/qrcode> \
-\n**USAGE : **to get decoded content of those codes.\
-\n\n`.currency` amount (from currency) (to currency)\
-\n**USAGE : **Currency converter for userbot **Example :** `.currency 10 usd inr`\
-\n\n`.currencies`\
-\n**USAGE : **Shows you the some list of currencies\
-\n\n`.ifsc` <IFSC code>\
-\n**USAGE : ** to get details of the relevant bank or branch **Example :** `.ifsc SBIN0016086`\
-\n\n`.color` <color_code> \
-\n**USEAGE : **sends you a plain image of the color example :`.color #ff0000`\
-\n\n`.xkcd` <query>\
-\n**USEAGE : **Searches for the query for the relevant XKCD comic "
+        "tools": "**Plugin : **`tools`\
+        \n\n**Syntax : **`.scan` reply to media or file\
+        \n**Usage : **it scans the media or file and checks either any virus is in the file or media\
+        \n\n**Syntax : **`.makeqr` <content>\
+        \n**Usage : **Make a QR Code from the given content.\
+        \nExample: .makeqr www.google.com\
+        \n\n**Syntax : **`.barcode `<content>\
+        \n**Usage : **Make a BarCode from the given content.\
+        \nExample: `.barcode` www.google.com\
+        \n\n**Syntax : **`.decode` <reply to barcode/qrcode> \
+        \n**USAGE : **to get decoded content of those codes.\
+        \n\n**Syntax : **`.currency` amount (from currency) (to currency)\
+        \n**USAGE : **Currency converter for userbot **Example :** `.currency 10 usd inr`\
+        \n\n**Syntax : **`.currencies`\
+        \n**USAGE : **Shows you the some list of currencies\
+        \n\n**Syntax : **`.ifsc` <IFSC code>\
+        \n**USAGE : ** to get details of the relevant bank or branch **Example :** `.ifsc SBIN0016086`\
+        \n\n**Syntax : **`.color` <color_code> \
+        \n**Usage : **sends you a plain image of the color example :`.color #ff0000`\
+        \n\n**Syntax : **`.xkcd` <query>\
+        \n**Usage : **Searches for the query for the relevant XKCD comic "
     }
 )

@@ -70,7 +70,6 @@ async def _(event):
             diff = now - c_time
             percentage = downloader.get_progress() * 100
             downloader.get_speed()
-            round(diff) * 1000
             progress_str = "{0}{1}\nProgress: {2}%".format(
                 "".join(["█" for i in range(math.floor(percentage / 5))]),
                 "".join(["░" for i in range(20 - math.floor(percentage / 5))]),
