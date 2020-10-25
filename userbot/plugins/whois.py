@@ -125,7 +125,7 @@ async def get_full_user(event):
 @bot.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
 async def who(event):
     cat = await edit_or_reply(
-        event, "`Sit tight while I steal some data from Mark Zuckerburg...`"
+        event, "`Fetching userinfo wait `"
     )
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
@@ -133,13 +133,13 @@ async def who(event):
     try:
         photo, caption = await fetch_info(replied_user, event)
     except AttributeError:
-        await edit_or_reply(event, "`Could not fetch info of that user.`")
+        await edit_or_reply(cat, "`Could not fetch info of that user.`")
         return
     message_id_to_reply = event.message.reply_to_msg_id
     if not message_id_to_reply:
         message_id_to_reply = None
     try:
-        await borg.send_file(
+        await event.client.send_file(
             event.chat_id,
             photo,
             caption=caption,
