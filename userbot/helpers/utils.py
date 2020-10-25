@@ -8,8 +8,9 @@ from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
 
 
-def mentionuser(name , userid ):
+def mentionuser(name, userid):
     return f"[{name}](tg://user?id={userid})"
+
 
 def parse_pre(text):
     text = text.strip()
