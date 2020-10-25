@@ -40,13 +40,15 @@ async def monito_p_m_s(event):
                         await NEWPM.edit(
                             NEWPM.text.replace("new message", f"{COUNT} messages")
                         )
+                        COUNT = 0
                     else:
                         await NEWPM.edit(
                             NEWPM.text.replace("new message", f"{COUNT} message")
                         )
+                        COUNT = 0
                 NEWPM = await event.client.send_message(
                     Config.PM_LOGGR_BOT_API_ID,
-                    f"👤{mentionuser(chat.first_name , chat.id)} has sent a new message \nId : {chat.id}",
+                    f"👤{mentionuser(sender.first_name , sender.id)} has sent a new message \nId : {chat.id}",
                 )
                 try:
                     if event.message:
