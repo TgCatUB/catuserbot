@@ -34,7 +34,7 @@ async def monito_p_m_s(event):
                 except Exception as e:
                     LOGS.warn(str(e))
             else:
-                RECENT_USER == chat.id
+                RECENT_USER = chat.id
                 if NEWPM:
                     if COUNT > 1:
                         await NEWPM.edit(
