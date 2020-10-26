@@ -116,9 +116,7 @@ def admin_cmd(pattern=None, command=None, **args):
             if command is not None:
                 cmd = reg + command
             else:
-                cmd = (
-                    (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
-                )
+                cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
             except BaseException:
@@ -166,13 +164,7 @@ def sudo_cmd(pattern=None, **args):
             args["pattern"] = re.compile(pattern)
         elif pattern.startswith(r"^"):
             args["pattern"] = re.compile(pattern)
-            cmd = (
-                (pattern)
-                .replace("$", "")
-                .replace("^", "")
-                .replace("\\", "")
-                .replace("^", "")
-            )
+            cmd = pattern.replace("$", "").replace("^", "").replace("\\", "")
             try:
                 SUDO_LIST[file_test].append(cmd)
             except BaseException:
@@ -185,7 +177,10 @@ def sudo_cmd(pattern=None, **args):
                 catreg = "^\\" + Config.SUDO_COMMAND_HAND_LER
                 reg = Config.COMMAND_HAND_LER
             args["pattern"] = re.compile(catreg + pattern)
-            cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+            if command is not None:
+                cmd = reg + command
+            else:
+                cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
             try:
                 SUDO_LIST[file_test].append(cmd)
             except BaseException:
