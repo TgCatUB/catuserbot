@@ -116,7 +116,9 @@ def admin_cmd(pattern=None, command=None, **args):
             if command is not None:
                 cmd = reg + command
             else:
-                cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+                cmd = (
+                    (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+                )
             try:
                 CMD_LIST[file_test].append(cmd)
             except BaseException:
@@ -180,7 +182,9 @@ def sudo_cmd(pattern=None, **args):
             if command is not None:
                 cmd = reg + command
             else:
-                cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+                cmd = (
+                    (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+                )
             try:
                 SUDO_LIST[file_test].append(cmd)
             except BaseException:
