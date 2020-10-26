@@ -215,14 +215,16 @@ def sudo_cmd(pattern=None, command=None, **args):
 # https://t.me/c/1220993104/623253
 # https://docs.telethon.dev/en/latest/misc/changelog.html#breaking-changes
 async def edit_or_reply(event, text, parse_mode=None, link_preview=None):
-    linkpreview = linkpreview or False
+    linkpreview or False
     parse_mode = parse_mode or "md"
     if event.sender_id in Config.SUDO_USERS:
         reply_to = await event.get_reply_message()
         if reply_to:
-            return await reply_to.reply(text, parse_mode = parse_mode ,link_preview=link_preview)
-        return await event.reply(text, parse_mode = parse_mode , link_preview=link_preview)
-    return await event.edit(text, parse_mode = parse_mode , link_preview=link_preview)
+            return await reply_to.reply(
+                text, parse_mode=parse_mode, link_preview=link_preview
+            )
+        return await event.reply(text, parse_mode=parse_mode, link_preview=link_preview)
+    return await event.edit(text, parse_mode=parse_mode, link_preview=link_preview)
 
 
 # from paperplaneextended
