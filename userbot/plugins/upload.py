@@ -225,8 +225,10 @@ async def video_catfile(event):
             catthumb = os.path.join("./temp", "thumb.jpg")
             await thumb_from_audio(catfile, catthumb)
         if catthumb is None:
+            catthumb = os.path.join("./temp", "thumb.jpg")
             copyfile(thumb_loc, catthumb)
         if not catthumb and not os.path.exists(catthumb) and os.path.exists(thumb_loc):
+            catthumb = os.path.join("./temp", "thumb.jpg")
             copyfile(thumb_loc, catthumb)
         if catthumb and os.path.exists(catthumb):
             await runcmd(
