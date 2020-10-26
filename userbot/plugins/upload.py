@@ -227,10 +227,10 @@ async def video_catfile(event):
         if catthumb is None:
             catthumb = os.path.join("./temp", "thumb.jpg")
             copyfile(thumb_loc, catthumb)
-        if not catthumb and not os.path.exists(catthumb) and os.path.exists(thumb_loc):
+        if catthumb is not None and not os.path.exists(catthumb) and os.path.exists(thumb_loc):
             catthumb = os.path.join("./temp", "thumb.jpg")
             copyfile(thumb_loc, catthumb)
-        if catthumb and os.path.exists(catthumb):
+        if catthumb is not None and os.path.exists(catthumb):
             await runcmd(
                 f"ffmpeg -loop 1 -i {catthumb} -i {catfile} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -vf \"scale='iw-mod (iw,2)':'ih-mod(ih,2)',format=yuv420p\" -shortest -movflags +faststart {PATH}"
             )
