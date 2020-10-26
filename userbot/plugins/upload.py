@@ -218,12 +218,13 @@ async def video_catfile(event):
             os.rename(catfile, PATH)
     else:
         thumb_loc = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
-        catthumb = os.path.join("./temp", "thumb.jpg")
+        catthumb = None
         try:
             catthumb = await reply.download_media(thumb=-1)
         except:
+            catthumb = os.path.join("./temp", "thumb.jpg")
             await thumb_from_audio(catfile, catthumb)
-        if not catthumb and os.path.exists(thumb_loc):
+        if not catthumb and not os.path.exists(catthumb) and os.path.exists(thumb_loc):
             catthumb = thumb_loc
         if os.path.exists(catthumb):
             await runcmd(
