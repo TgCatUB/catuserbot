@@ -1,20 +1,18 @@
 import asyncio
-import json
 import os
 import subprocess
 import time
 from datetime import datetime
 from pathlib import Path
 from shutil import copyfile
+
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+from pymediainfo import MediaInfo
 from telethon.tl.types import DocumentAttributeVideo
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, LOGS, progress, runcmd , thumb_from_audio , make_gif
-
-from pymediainfo import MediaInfo
-
+from . import CMD_HELP, make_gif, progress, runcmd, thumb_from_audio
 
 PATH = os.path.join("./temp", "temp_vid.mp4")
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
@@ -41,7 +39,7 @@ def get_video_thumb(file, output=None, width=320):
             str(
                 int((0, metadata.get("duration").seconds)[metadata.has("duration")] / 2)
             ),
-# '-filter:v', 'scale={}:-1'.format(width),
+            # '-filter:v', 'scale={}:-1'.format(width),
             "-vframes",
             "1",
             output,
@@ -146,9 +144,7 @@ async def uploadir(event):
         return
     udir_event = await edit_or_reply(event, "Uploading....")
     if os.path.isdir(path):
-        await edit_or_reply(
-            udir_event, f"`Gathering file details in directory {path}`"
-        )
+        await edit_or_reply(udir_event, f"`Gathering file details in directory {path}`")
         uploaded = 0
         await upload(path, event, udir_event)
         end = datetime.now()
@@ -168,8 +164,9 @@ async def uploadir(event):
     await asyncio.sleep(5)
     await udir_event.delete()
 
-@bot.on(admin_cmd(pattern="circle ?(.*)",outgoing=True))
-@bot.on(sudo_cmd(pattern="circle ?(.*)",allow_sudo=True))
+
+@bot.on(admin_cmd(pattern="circle ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="circle ?(.*)", allow_sudo=True))
 async def video_catfile(event):
     reply = await event.get_reply_message()
     input_str = "".join(event.text.split(maxsplit=1)[1:])
@@ -181,22 +178,22 @@ async def video_catfile(event):
                 f"`there is no such directory/file with the name {path} to upload`",
             )
             return
-        catevent = await edit_or_reply(event , "`Converting to video note..........`")
+        catevent = await edit_or_reply(event, "`Converting to video note..........`")
         filename = os.path.basename(path)
-        catfile = os.path.join("./temp",filename)
+        catfile = os.path.join("./temp", filename)
         copyfile(path, catfile)
     else:
         if not reply:
-            await edit_delete(event , "`Reply to supported media`", 5)
+            await edit_delete(event, "`Reply to supported media`", 5)
             return
         if not (reply and (reply.media)):
             await edit_delete(event, "`Reply to supported Media...`", 5)
             return
-        catevent = await edit_or_reply(event , "`Converting to video note..........`")
+        catevent = await edit_or_reply(event, "`Converting to video note..........`")
         catfile = await reply.download_media(file="./temp/")
     if not catfile.endswith((".mp4", ".tgs", ".mp3", ".mov", ".gif")):
         os.remove(catfile)
-        await edit_delete(catevent, "```Supported Media not found...```" , 5)
+        await edit_delete(catevent, "```Supported Media not found...```", 5)
         return
     if catfile.endswith((".mp4", ".tgs", ".mov", ".gif")):
         if catfile.endswith((".tgs")):
@@ -204,7 +201,7 @@ async def video_catfile(event):
             if hmm.endswith(("@tgstogifbot")):
                 os.remove(catfile)
                 return await catevent.edit(hmm)
-            os.rename(hmm , "./temp/circle.mp4")
+            os.rename(hmm, "./temp/circle.mp4")
             catfile = "./temp/circle.mp4"
         media_info = MediaInfo.parse(catfile)
         aspect_ratio = 1
@@ -220,8 +217,8 @@ async def video_catfile(event):
         else:
             os.rename(catfile, PATH)
     else:
-        thumb_loc = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY , "thumb_image.jpg")
-        catthumb = os.path.join("./temp","thumb.jpg")
+        thumb_loc = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
+        catthumb = os.path.join("./temp", "thumb.jpg")
         try:
             catthumb = await reply.download_media(thumb=-1)
         except:
@@ -235,10 +232,12 @@ async def video_catfile(event):
             os.remove(catfile)
         else:
             os.remove(catfile)
-            return await edit_delete(catevent ,"`No thumb found to make it video note`" , 5)
+            return await edit_delete(
+                catevent, "`No thumb found to make it video note`", 5
+            )
     if os.path.exists(PATH):
         catid = event.reply_to_msg_id
-        await borg.send_file(event.chat_id , PATH ,reply_to =catid  ,video_note=True)
+        await borg.send_file(event.chat_id, PATH, reply_to=catid, video_note=True)
         os.remove(PATH)
     await catevent.delete()
 
