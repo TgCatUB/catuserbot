@@ -86,7 +86,7 @@ def remove_plugin(shortname):
         raise ValueError
 
 
-def admin_cmd(pattern=None, command = None , **args):
+def admin_cmd(pattern=None, command=None, **args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
@@ -116,7 +116,9 @@ def admin_cmd(pattern=None, command = None , **args):
             if command is not None:
                 cmd = reg + command
             else:
-                cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+                cmd = (
+                    (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+                )
             try:
                 CMD_LIST[file_test].append(cmd)
             except BaseException:
