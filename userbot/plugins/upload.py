@@ -225,8 +225,8 @@ async def video_catfile(event):
             catthumb = os.path.join("./temp", "thumb.jpg")
             await thumb_from_audio(catfile, catthumb)
         if not catthumb and not os.path.exists(catthumb) and os.path.exists(thumb_loc):
-            catthumb = thumb_loc
-        if os.path.exists(catthumb):
+            copyfile(thumb_loc, catthumb)
+        if catthumb and os.path.exists(catthumb):
             await runcmd(
                 f"ffmpeg -loop 1 -i {catthumb} -i {catfile} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -vf \"scale='iw-mod (iw,2)':'ih-mod(ih,2)',format=yuv420p\" -shortest -movflags +faststart {PATH}"
             )
