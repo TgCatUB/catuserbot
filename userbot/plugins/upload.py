@@ -227,7 +227,11 @@ async def video_catfile(event):
         if catthumb is None:
             catthumb = os.path.join("./temp", "thumb.jpg")
             copyfile(thumb_loc, catthumb)
-        if catthumb is not None and not os.path.exists(catthumb) and os.path.exists(thumb_loc):
+        if (
+            catthumb is not None
+            and not os.path.exists(catthumb)
+            and os.path.exists(thumb_loc)
+        ):
             catthumb = os.path.join("./temp", "thumb.jpg")
             copyfile(thumb_loc, catthumb)
         if catthumb is not None and os.path.exists(catthumb):
