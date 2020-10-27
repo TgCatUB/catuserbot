@@ -2,12 +2,12 @@
 import asyncio
 import io
 from time import time
-
+ import datetime
 from coffeehouse.api import API
 from coffeehouse.lydia import LydiaAI
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
+from . import CMD_HELP,BOTLOG, BOTLOG_CHATID  
 from .sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
 
 if Var.LYDIA_API_KEY:
@@ -35,11 +35,13 @@ async def lydia_disable_enable(event):
         if input_str == "en":
             # Create a new chat session (Like a conversation)
             session = lydia.create_session()
-            logger.info(session)
-            logger.info(f"Session ID: {session.id}")
-            logger.info(f"Session Available: {str(session.available)}")
-            logger.info(f"Session Language: {str(session.language)}")
-            logger.info(f"Session Expires: {str(session.expires)}")
+            if BOTLOG:
+                await event.client.send_message(
+                    BOTLOG_CHATID, f"**Session ID: **`{session.id}`\
+                                   \n**Session Available: **`{str(session.available)}`\
+                                   \n**Session Language: **`{str(session.language)}`\
+                                   \n**Session Expires : **`{datetime.datetime.fromtimestamp(str(session.expires)).strftime('%Y-%m-%d %H:%M:%S')}`\
+                    ")
             add_s(user_id, chat_id, session.id, session.expires)
             await catevent.edit(f"Hello")
         elif input_str == "re":
