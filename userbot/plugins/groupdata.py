@@ -175,7 +175,7 @@ async def get_users(show):
     if len(mentions) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(mentions)) as out_file:
             out_file.name = "users.text"
-            await event.client.send_file(
+            await show.client.send_file(
                 show.chat_id,
                 out_file,
                 force_document=True,
