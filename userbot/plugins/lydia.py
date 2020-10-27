@@ -1,6 +1,6 @@
 # imported from pornhub credits to pornhub
 import asyncio
-import datetime
+from datetime import datetime
 import io
 from time import time
 
@@ -42,7 +42,7 @@ async def lydia_disable_enable(event):
                     f"**Session ID: **`{session.id}`\
                                    \n**Session Available: **`{str(session.available)}`\
                                    \n**Session Language: **`{str(session.language)}`\
-                                   \n**Session Expires : **`{datetime.datetime.fromtimestamp(str(session.expires)).strftime('%Y-%m-%d %H:%M:%S')}`\
+                                   \n**Session Expires : **`{datetime.fromtimestamp(session.expires).strftime('%Y-%m-%d %H:%M:%S')}`\
                     ",
                 )
             add_s(user_id, chat_id, session.id, session.expires)
