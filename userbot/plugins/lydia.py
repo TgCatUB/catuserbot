@@ -7,7 +7,7 @@ from coffeehouse.api import API
 from coffeehouse.lydia import LydiaAI
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP,BOTLOG, BOTLOG_CHATID  
+from . import CMD_HELP
 from .sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
 
 if Var.LYDIA_API_KEY:
@@ -18,13 +18,13 @@ if Var.LYDIA_API_KEY:
     lydia = LydiaAI(coffeehouse_api)
 
 
-@bot.on(admin_cmd(pattern="(en|re|li)ai$", outgoing = True))
+@bot.on(admin_cmd(pattern="(en|re|li)ai$", outgoing=True))
 @bot.on(sudo_cmd(pattern="(en|re|li)ai$", allow_sudo=True))
 async def lydia_disable_enable(event):
     if event.fwd_from:
         return
     if Var.LYDIA_API_KEY is None:
-        await edit_delete(event, "`Please add required LYDIA_API_KEY env var`",10)
+        await edit_delete(event, "`Please add required LYDIA_API_KEY env var`", 10)
         return
     catevent = await edit_or_reply(event, "`.....`")
     if event.reply_to_msg_id is not None:
@@ -40,7 +40,7 @@ async def lydia_disable_enable(event):
             logger.info(f"Session Available: {str(session.available)}")
             logger.info(f"Session Language: {str(session.language)}")
             logger.info(f"Session Expires: {str(session.expires)}")
-            add_s(user_id, chat_id, session.id, session.expires) 
+            add_s(user_id, chat_id, session.id, session.expires)
             await catevent.edit(f"Hello")
         elif input_str == "re":
             remove_s(user_id, chat_id)
@@ -89,9 +89,10 @@ async def lydia_disable_enable(event):
             else:
                 await catevent.edit(output_str)
         else:
-            await edit_delete(catevent ,
+            await edit_delete(
+                catevent,
                 "`Reply To A User's Message to Add / Remove them from Lydia Auto-Chat.`",
-                5
+                5,
             )
 
 
