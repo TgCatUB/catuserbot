@@ -2,8 +2,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import fonts
 
 
-@bot.on(admin_cmd(pattern="fmusical(?: |$)(.*)",command= "fmusical"))
-@bot.on(sudo_cmd(pattern="fmusical(?: |$)(.*)",command= "fmusical" , allow_sudo=True))
+@bot.on(admin_cmd(pattern="fmusical(?: |$)(.*)", command="fmusical"))
+@bot.on(sudo_cmd(pattern="fmusical(?: |$)(.*)", command="fmusical", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -22,8 +22,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="ancient(?: |$)(.*)",command= "ancient" ))
-@bot.on(sudo_cmd(pattern="ancient(?: |$)(.*)",command= "ancient" , allow_sudo=True))
+@bot.on(admin_cmd(pattern="ancient(?: |$)(.*)", command="ancient"))
+@bot.on(sudo_cmd(pattern="ancient(?: |$)(.*)", command="ancient", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -42,8 +42,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="vapor(?: |$)(.*)",command= "vapor" ))
-@bot.on(sudo_cmd(pattern="vapor(?: |$)(.*)",command= "vapor" , allow_sudo=True))
+@bot.on(admin_cmd(pattern="vapor(?: |$)(.*)", command="vapor"))
+@bot.on(sudo_cmd(pattern="vapor(?: |$)(.*)", command="vapor", allow_sudo=True))
 async def vapor(vpr):
     reply_text = []
     textx = await vpr.get_reply_message()
@@ -67,8 +67,8 @@ async def vapor(vpr):
     await edit_or_reply(vpr, "".join(reply_text))
 
 
-@bot.on(admin_cmd(pattern="smallcaps(?: |$)(.*)",command= "smallcaps" ))
-@bot.on(sudo_cmd(pattern="smallcaps(?: |$)(.*)",command= "smallcaps" , allow_sudo=True))
+@bot.on(admin_cmd(pattern="smallcaps(?: |$)(.*)", command="smallcaps"))
+@bot.on(sudo_cmd(pattern="smallcaps(?: |$)(.*)", command="smallcaps", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -87,8 +87,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="blackbf(?: |$)(.*)",command= "blackbf" ))
-@bot.on(sudo_cmd(pattern="blackbf(?: |$)(.*)",command= "blackbf" , allow_sudo=True))
+@bot.on(admin_cmd(pattern="blackbf(?: |$)(.*)", command="blackbf"))
+@bot.on(sudo_cmd(pattern="blackbf(?: |$)(.*)", command="blackbf", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -107,8 +107,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="bubbles(?: |$)(.*)",command= "bubbles" ))
-@bot.on(sudo_cmd(pattern="bubbles(?: |$)(.*)",command= "bubbles" , allow_sudo=True))
+@bot.on(admin_cmd(pattern="bubbles(?: |$)(.*)", command="bubbles"))
+@bot.on(sudo_cmd(pattern="bubbles(?: |$)(.*)", command="bubbles", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -127,8 +127,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="tanf(?: |$)(.*)",command= "tanf" ))
-@bot.on(sudo_cmd(pattern="tanf(?: |$)(.*)",command= "tanf" , allow_sudo=True))
+@bot.on(admin_cmd(pattern="tanf(?: |$)(.*)", command="tanf"))
+@bot.on(sudo_cmd(pattern="tanf(?: |$)(.*)", command="tanf", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -147,8 +147,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="boxf(?: |$)(.*)",command= "boxf" ))
-@bot.on(sudo_cmd(pattern="boxf(?: |$)(.*)",command= "boxf" , allow_sudo=True))
+@bot.on(admin_cmd(pattern="boxf(?: |$)(.*)", command="boxf"))
+@bot.on(sudo_cmd(pattern="boxf(?: |$)(.*)", command="boxf", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -167,8 +167,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="smothtext(?: |$)(.*)",command= "smothtext" ))
-@bot.on(sudo_cmd(pattern="smothtext(?: |$)(.*)",command= "smothtext" , allow_sudo=True))
+@bot.on(admin_cmd(pattern="smothtext(?: |$)(.*)", command="smothtext"))
+@bot.on(sudo_cmd(pattern="smothtext(?: |$)(.*)", command="smothtext", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
