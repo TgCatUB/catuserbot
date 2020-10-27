@@ -1,4 +1,4 @@
- # Some are ported from uniborg By: @INF1N17Y
+# Some are ported from uniborg By: @INF1N17Y
 
 from telethon.tl.types import ChannelParticipantsAdmins
 
@@ -71,7 +71,7 @@ async def _(event):
         u = reply_msg.sender_id
         str = input_str
     else:
-        user , str = input_str.split(" ", 1)
+        user, str = input_str.split(" ", 1)
         try:
             u = int(user)
         except ValueError:
@@ -85,5 +85,6 @@ async def _(event):
             await event.delete()
             return
     await event.delete()
-    await event.client.send_message(event.chat_id, f"<a href='tg://user?id={u}'>{str}</a>", parse_mode="HTML")
-        
+    await event.client.send_message(
+        event.chat_id, f"<a href='tg://user?id={u}'>{str}</a>", parse_mode="HTML"
+    )
