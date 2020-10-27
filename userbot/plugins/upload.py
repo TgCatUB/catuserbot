@@ -256,7 +256,7 @@ async def video_catfile(event):
             video_note=True,
             attributes=[
                 DocumentAttributeVideo(
-                    duration=300,
+                    duration=60,
                     w=1,
                     h=1,
                     round_message=True,
