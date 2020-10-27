@@ -151,7 +151,7 @@ async def get_users(show):
         try:
             chat = await show.client.get_entity(input_str)
         except Exception as e:
-            await edit_delete(show , f"`{str(e)}`",10)
+            await edit_delete(show, f"`{str(e)}`", 10)
     catevent = await edit_or_reply(show, "`getting users list wait...`  ")
     try:
         if not show.pattern_match.group(1):
@@ -401,7 +401,7 @@ async def rm_deletedacc(show):
     admin = chat.admin_rights
     creator = chat.creator
     if not admin and not creator:
-        await edit_delete(show, "`I am not an admin here!`",5)
+        await edit_delete(show, "`I am not an admin here!`", 5)
         return
     event = await edit_or_reply(
         show, "`Deleting deleted accounts...\nOh I can do that?!?!`"
@@ -415,7 +415,7 @@ async def rm_deletedacc(show):
                 await sleep(0.5)
                 del_a += 1
             except ChatAdminRequiredError:
-                await edit_delete(event , "`I don't have ban rights in this group`", 5)
+                await edit_delete(event, "`I don't have ban rights in this group`", 5)
                 return
             except UserAdminInvalidError:
                 del_a += 1
@@ -424,7 +424,7 @@ async def rm_deletedacc(show):
     if del_a > 0:
         del_status = f"Cleaned **{del_u}** deleted account(s) \
         \n**{del_a}** deleted admin accounts are not removed"
-    await edit_delete(event , del_status , 5)
+    await edit_delete(event, del_status, 5)
     if BOTLOG:
         await show.client.send_message(
             BOTLOG_CHATID,
