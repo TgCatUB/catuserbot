@@ -120,7 +120,6 @@ async def download_video(v_url):
             v_url.chat_id,
             f"{ytdl_data['title']}.mp3",
             force_document=False,
-            
             thumb=catthumb,
             supports_streaming=True,
             attributes=[
