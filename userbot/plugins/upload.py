@@ -252,7 +252,7 @@ async def video_catfile(event):
                     event.chat_id,
                     PATH,
                     allow_cache=False,
-                    reply_to=catid
+                    reply_to=catid,
                     video_note=True,
                     attributes=[
                         DocumentAttributeVideo(
