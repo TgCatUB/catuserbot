@@ -7,7 +7,7 @@ from coffeehouse.api import API
 from coffeehouse.lydia import LydiaAI
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
+from . import CMD_HELP,BOTLOG, BOTLOG_CHATID  
 from .sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
 
 if Var.LYDIA_API_KEY:
@@ -18,34 +18,56 @@ if Var.LYDIA_API_KEY:
     lydia = LydiaAI(coffeehouse_api)
 
 
-@bot.on(admin_cmd(pattern="(en|re|li)ai"))
-@bot.on(sudo_cmd(pattern="(en|re|li)ai", allow_sudo=True))
+@bot.on(admin_cmd(pattern="(en|re|li)ai$", outgoing = True))
+@bot.on(sudo_cmd(pattern="(en|re|li)ai$", allow_sudo=True))
 async def lydia_disable_enable(event):
     if event.fwd_from:
         return
     if Var.LYDIA_API_KEY is None:
-        await edit_or_reply(event, "Please add required `LYDIA_API_KEY` env var")
+        await edit_delete(event, "`Please add required LYDIA_API_KEY env var`",10)
         return
+    catevent = await edit_or_reply(event, "`.....`")
     if event.reply_to_msg_id is not None:
         input_str = event.pattern_match.group(1)
         reply_msg = await event.get_reply_message()
         user_id = reply_msg.sender_id
         chat_id = event.chat_id
-        catevent = await edit_or_reply(event, "Processing...")
         if input_str == "en":
             # Create a new chat session (Like a conversation)
             session = lydia.create_session()
             logger.info(session)
-            # logger.info("Session ID: {0}".format(session.id))
-            # logger.info("Session Available: {0}".format(str(session.available)))
-            # logger.info("Session Language: {0}".format(str(session.language)))
-            # logger.info("Session Expires: {0}".format(str(session.expires)))
-            logger.info(add_s(user_id, chat_id, session.id, session.expires))
+            logger.info(f"Session ID: {session.id}")
+            logger.info(f"Session Available: {str(session.available)}")
+            logger.info(f"Session Language: {str(session.language)}")
+            logger.info(f"Session Expires: {str(session.expires)}")
+            add_s(user_id, chat_id, session.id, session.expires) 
             await catevent.edit(f"Hello")
         elif input_str == "re":
-            logger.info(remove_s(user_id, chat_id))
-            await catevent.edit(f"[__signal lost__](tg://user?id={user_id})")
-        elif input_str == "li":
+            remove_s(user_id, chat_id)
+            await catevent.edit(f"__[signal lost](tg://user?id={user_id})__")
+        else:
+            lsts = get_all_s()
+            if len(lsts) > 0:
+                output_str = "AI enabled users:\n\n"
+                for lydia_ai in lsts:
+                    output_str += f"[User](tg://user?id={lydia_ai.user_id}) in chat `{lydia_ai.chat_id}`\n"
+            else:
+                output_str = "No Lydia AI enabled users / chats. Start by replying `.enai` to any user in any chat!"
+            if len(output_str) > Config.MAX_MESSAGE_SIZE_LIMIT:
+                with io.BytesIO(str.encode(output_str)) as out_file:
+                    out_file.name = "lydia_ai.text"
+                    await event.client.send_file(
+                        event.chat_id,
+                        out_file,
+                        force_document=True,
+                        allow_cache=False,
+                        caption="Lydia AI enabled users",
+                        reply_to=event,
+                    )
+            else:
+                await catevent.edit(output_str)
+    else:
+        if input_str == "li":
             lsts = get_all_s()
             if len(lsts) > 0:
                 output_str = "AI enabled users:\n\n"
@@ -67,13 +89,10 @@ async def lydia_disable_enable(event):
             else:
                 await catevent.edit(output_str)
         else:
-            await catevent.edit(
-                "Reply To User Message to Add / Delete them from Lydia Auto-Chat."
+            await edit_delete(catevent ,
+                "`Reply To A User's Message to Add / Remove them from Lydia Auto-Chat.`",
+                5
             )
-    else:
-        await catevent.edit(
-            "Reply To A User's Message to Add / Delete them from Lydia Auto-Chat."
-        )
 
 
 @bot.on(admin_cmd(incoming=True))
@@ -117,11 +136,11 @@ CMD_HELP.update(
     {
         "lydia": "**Plugin : **`lydia`\
     \n\n**Syntax : **`.enai` reply to a user\
-    \n**Usage : **your bot will auto reply to the tagged user until you stops it by `.remcf`\
+    \n**Function : **your bot will auto reply to the tagged user until you stops it by `.remcf`\
     \n\n**Syntax : **`.reai` reply to the user\
-    \n**Usage : **disables the lydia\
+    \n**Function : **disables the lydia\
     \n\n**Syntax : **`.liai`\
-    \n**Usage : ** to list the users to whom you enabled ai(lydia)\
+    \n**Function : ** to list the users to whom you enabled ai(lydia)\
     \n\n for functioning this plugin you need to set the heroku var\
     \n the key is `LYDIA_API_KEY` and get var from `https://coffeehouse.intellivoid.net/`\
 "
