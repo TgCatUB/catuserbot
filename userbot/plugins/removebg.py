@@ -17,7 +17,7 @@ import os
 
 import requests
 
-from .. import CMD_HELP
+from . import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import convert_toimage
 
@@ -52,7 +52,7 @@ async def remove_background(event):
             await event.edit(str(e))
             return
         else:
-            await event.edit("`Removing Back ground od this media`")
+            await event.edit("`Removing Back ground of this media`")
             downloaded_file_name = convert_toimage(downloaded_file_name)
             output_file_name = ReTrieveFile(downloaded_file_name)
             os.remove(downloaded_file_name)
@@ -126,11 +126,11 @@ def ReTrieveURL(input_url):
 
 CMD_HELP.update(
     {
-        "removebg": "**__Plugin : __**`removebg`\
-        \n\n**__Syntax : __**`.rmbg` <Link to Image> or reply to any image\
-        \n**__Usage : __**Removes the background of images and send as png format\
-        \n\n**__Syntax : __**`.srmbg` <Link to Image> or reply to any image\
-        \n**__Usage : __**Removes the background of images and send as sticker format\
+        "removebg": "**Plugin : **`removebg`\
+        \n\n**Syntax : **`.rmbg` <Link to Image> or reply to any image\
+        \n**Function : **__Removes the background of images and send as png format__\
+        \n\n**Syntax : **`.srmbg` <Link to Image> or reply to any image\
+        \n**function : **__Removes the background of images and send as sticker format__\
         "
     }
 )
