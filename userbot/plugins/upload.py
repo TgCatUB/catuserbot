@@ -119,7 +119,7 @@ async def upload(path, event, udir_event):
                 ),
             )
         else:
-            metadata = extractMetadata(createParser(path))
+            metadata = extractMetadata(createParser(str(path)))
             duration = 0
             width = 0
             height = 0
