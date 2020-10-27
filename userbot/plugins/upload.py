@@ -213,9 +213,9 @@ async def video_catfile(event):
         if aspect_ratio != 1:
             crop_by = width if (height > width) else height
             await runcmd(f'ffmpeg -i {catfile} -vf "crop={crop_by}:{crop_by}" {PATH}')
-            os.remove(catfile)
         else:
-            os.rename(catfile, PATH)
+            copyfile(catfile, PATH)
+        os.remove(catfile)
     else:
         thumb_loc = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
         catthumb = None
