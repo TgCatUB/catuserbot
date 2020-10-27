@@ -115,11 +115,9 @@ async def info(event):
             )
             url = f"https://nekobin.com/{key}"
             reply_text = f"All commands of the catuserbot are [here]({url})"
-            await event.reply(reply_text, link_preview=False)
+            await event.reply(reply_text)
             return
-        await event.reply(
-            string.format(count=catcount, plugincount=plugincount), link_preview=False
-        )
+        await event.reply(string.format(count=catcount, plugincount=plugincount))
         return
     if input_str:
         if input_str in SUDO_LIST:
