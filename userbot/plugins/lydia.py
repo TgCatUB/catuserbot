@@ -1,13 +1,14 @@
 # imported from pornhub credits to pornhub
 import asyncio
+import datetime
 import io
 from time import time
-import datetime
+
 from coffeehouse.api import API
 from coffeehouse.lydia import LydiaAI
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP,BOTLOG, BOTLOG_CHATID  
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from .sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
 
 if Var.LYDIA_API_KEY:
@@ -37,11 +38,13 @@ async def lydia_disable_enable(event):
             session = lydia.create_session()
             if BOTLOG:
                 await event.client.send_message(
-                    BOTLOG_CHATID, f"**Session ID: **`{session.id}`\
+                    BOTLOG_CHATID,
+                    f"**Session ID: **`{session.id}`\
                                    \n**Session Available: **`{str(session.available)}`\
                                    \n**Session Language: **`{str(session.language)}`\
                                    \n**Session Expires : **`{datetime.datetime.fromtimestamp(str(session.expires)).strftime('%Y-%m-%d %H:%M:%S')}`\
-                    ")
+                    ",
+                )
             add_s(user_id, chat_id, session.id, session.expires)
             await catevent.edit(f"Hello")
         elif input_str == "re":
