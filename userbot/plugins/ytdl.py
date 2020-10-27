@@ -122,13 +122,6 @@ async def download_video(v_url):
             force_document=False,
             thumb=catthumb,
             supports_streaming=True,
-            attributes=[
-                DocumentAttributeAudio(
-                    duration=int(ytdl_data["duration"]),
-                    title=str(ytdl_data["title"]),
-                    performer=str(ytdl_data["uploader"]),
-                )
-            ],
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                 progress(
                     d, t, v_url, c_time, "Uploading..", f"{ytdl_data['title']}.mp3"
