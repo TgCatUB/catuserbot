@@ -47,7 +47,7 @@ async def download_video(v_url):
                     "preferredquality": "320",
                 }
             ],
-            "outtmpl": "%(id)s.mp3",
+            "outtmpl": "%(title)s.mp3",
             "quiet": True,
             "logtostderr": False,
         }
@@ -65,7 +65,7 @@ async def download_video(v_url):
             "postprocessors": [
                 {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}
             ],
-            "outtmpl": "%(id)s.mp4",
+            "outtmpl": "%(title)s.mp4",
             "logtostderr": False,
             "quiet": True,
         }
@@ -105,9 +105,9 @@ async def download_video(v_url):
         await v_url.edit(f"{str(type(e)): {str(e)}}")
         return
     c_time = time.time()
-    catthumb = Path(f"{ytdl_data['id']}.jpg")
+    catthumb = Path(f"{ytdl_data['title']}.jpg")
     if not os.path.exists(catthumb):
-        catthumb = Path(f"{ytdl_data['id']}.webp")
+        catthumb = Path(f"{ytdl_data['title']}.webp")
     elif not os.path.exists(catthumb):
         catthumb = None
     if song:
@@ -118,10 +118,11 @@ async def download_video(v_url):
         )
         await v_url.client.send_file(
             v_url.chat_id,
-            f"{ytdl_data['id']}.mp3",
-            supports_streaming=True,
+            f"{ytdl_data['title']}.mp3",
             force_document=False,
+            
             thumb=catthumb,
+            supports_streaming=True,
             attributes=[
                 DocumentAttributeAudio(
                     duration=int(ytdl_data["duration"]),
@@ -135,7 +136,7 @@ async def download_video(v_url):
                 )
             ),
         )
-        os.remove(f"{ytdl_data['id']}.mp3")
+        os.remove(f"{ytdl_data['title']}.mp3")
         if catthumb:
             os.remove(catthumb)
         await v_url.delete()
@@ -147,9 +148,9 @@ async def download_video(v_url):
         )
         await v_url.client.send_file(
             v_url.chat_id,
-            f"{ytdl_data['id']}.mp4",
-            supports_streaming=True,
+            f"{ytdl_data['title']}.mp4",
             force_document=False,
+            supports_streaming=True,
             caption=ytdl_data["title"],
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                 progress(
@@ -157,7 +158,7 @@ async def download_video(v_url):
                 )
             ),
         )
-        os.remove(f"{ytdl_data['id']}.mp4")
+        os.remove(f"{ytdl_data['title']}.mp4")
         if catthumb:
             os.remove(catthumb)
         await v_url.delete()
