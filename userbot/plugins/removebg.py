@@ -17,9 +17,8 @@ import os
 
 import requests
 
-from . import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import convert_toimage
+from . import CMD_HELP, convert_toimage
 
 
 @bot.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
