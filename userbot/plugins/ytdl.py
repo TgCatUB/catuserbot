@@ -7,6 +7,7 @@ from html import unescape
 from pathlib import Path
 
 from googleapiclient.discovery import build
+from telethon.tl.types import DocumentAttributeAudio
 from youtube_dl import YoutubeDL
 from youtube_dl.utils import (
     ContentTooShortError,
@@ -46,7 +47,7 @@ async def download_video(v_url):
                     "preferredquality": "320",
                 }
             ],
-            "outtmpl": "%(title)s.mp3",
+            "outtmpl": "%(id)s.mp3",
             "quiet": True,
             "logtostderr": False,
         }
@@ -64,7 +65,7 @@ async def download_video(v_url):
             "postprocessors": [
                 {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}
             ],
-            "outtmpl": "%(title)s.mp4",
+            "outtmpl": "%(id)s.mp4",
             "logtostderr": False,
             "quiet": True,
         }
@@ -104,9 +105,9 @@ async def download_video(v_url):
         await v_url.edit(f"{str(type(e)): {str(e)}}")
         return
     c_time = time.time()
-    catthumb = Path(f"{ytdl_data['title']}.jpg")
+    catthumb = Path(f"{ytdl_data['id']}.jpg")
     if not os.path.exists(catthumb):
-        catthumb = Path(f"{ytdl_data['title']}.webp")
+        catthumb = Path(f"{ytdl_data['id']}.webp")
     elif not os.path.exists(catthumb):
         catthumb = None
     if song:
@@ -115,19 +116,25 @@ async def download_video(v_url):
         \n**{ytdl_data['title']}**\
         \nby *{ytdl_data['uploader']}*"
         )
-        await v_url.client.send_file(
+        await borg.send_file(
             v_url.chat_id,
-            f"{ytdl_data['title']}.mp3",
-            force_document=False,
-            thumb=catthumb,
+            f"{ytdl_data['id']}.mp3",
             supports_streaming=True,
+            thumb=catthumb,
+            attributes=[
+                DocumentAttributeAudio(
+                    duration=int(ytdl_data["duration"]),
+                    title=str(ytdl_data["title"]),
+                    performer=str(ytdl_data["uploader"]),
+                )
+            ],
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                 progress(
                     d, t, v_url, c_time, "Uploading..", f"{ytdl_data['title']}.mp3"
                 )
             ),
         )
-        os.remove(f"{ytdl_data['title']}.mp3")
+        os.remove(f"{ytdl_data['id']}.mp3")
         if catthumb:
             os.remove(catthumb)
         await v_url.delete()
@@ -137,10 +144,9 @@ async def download_video(v_url):
         \n**{ytdl_data['title']}**\
         \nby *{ytdl_data['uploader']}*"
         )
-        await v_url.client.send_file(
+        await borg.send_file(
             v_url.chat_id,
-            f"{ytdl_data['title']}.mp4",
-            force_document=False,
+            f"{ytdl_data['id']}.mp4",
             supports_streaming=True,
             caption=ytdl_data["title"],
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -149,7 +155,7 @@ async def download_video(v_url):
                 )
             ),
         )
-        os.remove(f"{ytdl_data['title']}.mp4")
+        os.remove(f"{ytdl_data['id']}.mp4")
         if catthumb:
             os.remove(catthumb)
         await v_url.delete()
