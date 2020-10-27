@@ -27,8 +27,8 @@ async def lydia_disable_enable(event):
         await edit_delete(event, "`Please add required LYDIA_API_KEY env var`", 10)
         return
     catevent = await edit_or_reply(event, "`.....`")
+    input_str = event.pattern_match.group(1)
     if event.reply_to_msg_id is not None:
-        input_str = event.pattern_match.group(1)
         reply_msg = await event.get_reply_message()
         user_id = reply_msg.sender_id
         chat_id = event.chat_id
