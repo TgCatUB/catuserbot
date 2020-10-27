@@ -413,7 +413,7 @@ async def rm_deletedacc(show):
             try:
                 await show.client.kick_participant(show.chat_id, user.id)
                 await sleep(0.5)
-                del_a += 1
+                del_u += 1
             except ChatAdminRequiredError:
                 await edit_delete(event, "`I don't have ban rights in this group`", 5)
                 return
