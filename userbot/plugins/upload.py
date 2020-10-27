@@ -249,26 +249,27 @@ async def video_catfile(event):
         catid = event.reply_to_msg_id
         c_time = time.time()
         await event.client.send_file(
-                    event.chat_id,
-                    PATH,
-                    allow_cache=False,
-                    reply_to=catid,
-                    video_note=True,
-                    attributes=[
-                        DocumentAttributeVideo(
-                            duration=300,
-                            w=1,
-                            h=1,
-                            round_message=True,
-                            supports_streaming=True,
-                        )
-                    ],
-                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, catevent, c_time, "Uploading...", PATH)
-                    ),
+            event.chat_id,
+            PATH,
+            allow_cache=False,
+            reply_to=catid,
+            video_note=True,
+            attributes=[
+                DocumentAttributeVideo(
+                    duration=300,
+                    w=1,
+                    h=1,
+                    round_message=True,
+                    supports_streaming=True,
                 )
+            ],
+            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                progress(d, t, catevent, c_time, "Uploading...", PATH)
+            ),
+        )
         os.remove(PATH)
     await catevent.delete()
+
 
 CMD_HELP.update(
     {
