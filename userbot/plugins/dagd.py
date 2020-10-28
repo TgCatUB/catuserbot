@@ -90,7 +90,8 @@ async def _(event):
     if str(r.status_code).startswith("3"):
         await edit_or_reply(
             event,
-            f"Input URL: {input_str}\nReDirected URL: {r.headers['Location']}" , link_preview=False
+            f"Input URL: {input_str}\nReDirected URL: {r.headers['Location']}",
+            link_preview=False,
         )
     else:
         await edit_or_reply(
