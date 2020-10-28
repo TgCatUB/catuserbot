@@ -42,8 +42,8 @@ async def kickme(leave):
     await leave.client.kick_participant(leave.chat_id, "me")
 
 
-@bot.on(admin_cmd(pattern="get_admins ?(.*)"))
-@bot.on(sudo_cmd(pattern="get_admins ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="admins ?(.*)"))
+@bot.on(sudo_cmd(pattern="admins ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -95,8 +95,8 @@ async def _(event):
     await event.delete()
 
 
-@bot.on(admin_cmd(pattern="get_bots ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="get_bots ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="bots ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="bots ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -709,9 +709,9 @@ CMD_HELP.update(
         "groupdata": "**Plugin : **`groupdata`\
     \n\n**Syntax : **`.kickme`\
     \n**Usage : **Throws you away from that chat\
-    \n\n**Syntax : **`.get_admins or .get_admins <username of group >`\
+    \n\n**Syntax : **`.admins or .admins <username of group >`\
     \n**Usage : **Retrieves a list of admins in the chat.\
-    \n\n**Syntax : **`.get_bots or .get_bots <username of group >`\
+    \n\n**Syntax : **`.bots or .bots <username of group >`\
     \n**Usage : **Retrieves a list of bots in the chat.\
     \n\n**Syntax : **`.users or .users <name of member>`\
     \n**Usage : **Retrieves all (or queried) users in the chat.\
