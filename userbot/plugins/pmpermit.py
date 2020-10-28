@@ -237,7 +237,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             if chat_id not in PM_START:
                 PM_START.append(chat_id)
             return
-        if len(event.raw_text) == 1 and check(event.raw_text.lower()):
+        if len(event.raw_text) == 1 and check(event.raw_text):
             return
         if chat_id in PM_START:
             return
