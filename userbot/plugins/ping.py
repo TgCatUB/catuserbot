@@ -72,7 +72,7 @@ CMD_HELP.update(
     \n\n**Syntax :** `.ping`\
     \n**Function : **__Shows you the ping speed of server__\
     \n\n**Syntax : **`.fping`\
-    \n**Function : **__A kind ofping with extra animation__\
+    \n**Function : **__Shows the server ping with extra animation__\
     "
     }
 )
