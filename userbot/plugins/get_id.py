@@ -3,8 +3,8 @@ from telethon.utils import pack_bot_file_id
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@bot.on(admin_cmd(pattern="id"))
-@bot.on(sudo_cmd(pattern="id", allow_sudo=True))
+@bot.on(admin_cmd(pattern="get_id"))
+@bot.on(sudo_cmd(pattern="get_id", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
