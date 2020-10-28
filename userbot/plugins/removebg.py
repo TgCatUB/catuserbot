@@ -128,9 +128,9 @@ CMD_HELP.update(
     {
         "removebg": "**__Plugin : __**`removebg`\
         \n\n**__Syntax : __**`.rmbg` <Link to Image> or reply to any image\
-        \n**__Usage : __**Removes the background of images and send as png format\
+        \n**__Usage : __**Removes the background of an image and send as png format\
         \n\n**__Syntax : __**`.srmbg` <Link to Image> or reply to any image\
-        \n**__Usage : __**Removes the background of images and send as sticker format\
+        \n**__Usage : __**Removes the background of an image and send as sticker format\
         "
     }
 )
