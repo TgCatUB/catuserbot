@@ -7,7 +7,7 @@ from random import choice
 
 import PIL.ImageOps
 import requests
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
 
@@ -235,6 +235,20 @@ async def covidindia(state):
 
 # for nekobot
 
+async def fakegs(search , result):
+    imgurl = "https://i.imgur.com/wNFr5X2.jpg"
+    with open("./temp/temp.jpg", "wb") as f:
+        f.write(requests.get(imgurl).content)
+    img = Image.open(r)
+    drawing = ImageDraw.Draw(img)
+    blue = (0, 0, 255)
+    black = (0, 0, 0)
+    font1 = ImageFont.truetype("resources/ProductSans-BoldItalic.ttf", 20)
+    font2 = ImageFont.truetype("resources/ProductSans-Light.ttf", 23)
+    drawing.text((450, 258), result, fill=blue, font=font1)
+    drawing.text((270, 37), search, fill=black, font=font2)
+    img.save("temp/temp.jpg")
+    return "temp/temp.jpg"
 
 async def trumptweet(text):
     r = requests.get(
