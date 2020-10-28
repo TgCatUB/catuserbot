@@ -1,10 +1,13 @@
-#inspired from uniborg Quotes plugin
+# inspired from uniborg Quotes plugin
 import random
+
 import requests
+
 from ..utils import admin_cmd, sudo_cmd
 from . import CMD_HELP
 
-@bot.on(admin_cmd(pattern="quote ?(.*)",outgoing=True))
+
+@bot.on(admin_cmd(pattern="quote ?(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="quote ?(.*)", allow_sudo=True))
 async def quote_search(event):
     if event.fwd_from:
@@ -18,7 +21,7 @@ async def quote_search(event):
         except:
             response = None
     else:
-        api_url = f"https://quotes.cwprojects.live/search/query={input_str}" 
+        api_url = f"https://quotes.cwprojects.live/search/query={input_str}"
         try:
             response = random.choice(requests.get(api_url).json())
         except:
@@ -26,12 +29,14 @@ async def quote_search(event):
     if response is not None:
         await catevent.edit(f"`{response['text']}`")
     else:
-        await edit_delete(catevent , "`Sorry Zero results found`",5)
-                            
-CMD_HELP.update({
-    "quotes":"**Plugin : **`quotes`\
+        await edit_delete(catevent, "`Sorry Zero results found`", 5)
+
+
+CMD_HELP.update(
+    {
+        "quotes": "**Plugin : **`quotes`\
     \n\n**Syntax : **`.quote <category>`\
     \n**Function : **__An api that Fetchs random Quote from `goodreads.com`__\
     "
-}
+    }
 )
