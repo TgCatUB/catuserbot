@@ -71,6 +71,7 @@ async def yt_search(cat):
     except:
         return "Couldnt fetch results"
 
+
 async def sanga_seperator(sanga_list):
     for i in sanga_list:
         if i.startswith("🔗"):
@@ -450,6 +451,7 @@ async def crop(imagefile, endname, x):
     inverted_image = PIL.ImageOps.crop(image, border=x)
     inverted_image.save(endname)
 
+
 # for stickertxt
 async def waifutxt(text, chat_id, reply_to_id, bot, borg):
     animus = [
@@ -491,4 +493,3 @@ async def waifutxt(text, chat_id, reply_to_id, bot, borg):
     if cat:
         await bot.send_file(int(chat_id), cat, reply_to=reply_to_id)
         await cat.delete()
-    
