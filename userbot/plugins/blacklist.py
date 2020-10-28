@@ -77,7 +77,7 @@ async def on_view_blacklist(event):
         for trigger in all_blacklisted:
             OUT_STR += f"👉 {trigger} \n"
     else:
-        OUT_STR = "No BlackLists. Start Saving using `.addblacklist`"
+        OUT_STR = "No Blacklists found. Start saving using `.addblacklist`"
     if len(OUT_STR) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUT_STR)) as out_file:
             out_file.name = "blacklist.text"
@@ -86,7 +86,7 @@ async def on_view_blacklist(event):
                 out_file,
                 force_document=True,
                 allow_cache=False,
-                caption="BlackLists in the Current Chat",
+                caption="Blacklists in the Current Chat",
                 reply_to=event,
             )
             await event.delete()
@@ -98,12 +98,12 @@ CMD_HELP.update(
     {
         "blacklist": "**blacklist**\
     \n**Syntax : **`.addblacklist` <word/words>\
-    \n**Usage : **The given word or words will be added to blacklist in that specific chat if any user sends then the message deletes.\
+    \n**Usage : **The given word or words will be added to blacklist in that specific chat if any user sends then the message gets deleted.\
     \n\n**Syntax : **`.rmblacklist` <word/words>\
     \n**Usage : **The given word or words will be removed from blacklist in that specific chat\
     \n\n**Syntax : **`.listblacklist`\
     \n**Usage : **Shows you the list of blacklist words in that specific chat\
-    \n\n**Note : **if you are adding more than one word at time via this then remember that new word must be given in new line that is not [hi hello] . it must be as\
+    \n\n**Note : **if you are adding more than one word at time via this, then remember that new word must be given in a new line that is not [hi hello]. It must be as\
     \n[hi \n hello]"
     }
 )
