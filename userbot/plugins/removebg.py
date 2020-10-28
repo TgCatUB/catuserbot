@@ -52,12 +52,12 @@ async def remove_background(event):
             await event.edit(str(e))
             return
         else:
-            await event.edit("`Removing Back ground od this media`")
+            await event.edit("`Removing Background of this media`")
             downloaded_file_name = convert_toimage(downloaded_file_name)
             output_file_name = ReTrieveFile(downloaded_file_name)
             os.remove(downloaded_file_name)
     elif input_str:
-        await event.edit("`Removing Back ground of this media`")
+        await event.edit("`Removing Background of this media`")
         output_file_name = ReTrieveURL(input_str)
     else:
         await event.edit(
