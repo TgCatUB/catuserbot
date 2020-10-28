@@ -47,16 +47,16 @@ UNBAN_RIGHTS = ChatBannedRights(
 @borg.on(admin_cmd(pattern=r"gban(?: |$)(.*)"))
 @borg.on(sudo_cmd(pattern=r"gban(?: |$)(.*)", allow_sudo=True))
 async def catgban(cat):
-    cate = await edit_or_reply(cat, "gbaning.......")
+    cate = await edit_or_reply(cat, "gbanning.......")
     start = datetime.now()
     user, reason = await get_user_from_event(cat)
     if not user:
         return
     if user.id == (await cat.client.get_me()).id:
-        await cate.edit("why would i ban myself")
+        await cate.edit("why would I ban myself")
         return
     if user.id in CAT_ID:
-        await cate.edit("why would i ban my dev")
+        await cate.edit("why would I ban my dev")
         return
     try:
         hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
@@ -87,7 +87,7 @@ async def catgban(cat):
         except BadRequestError:
             await borg.send_message(
                 BOTLOG_CHATID,
-                f"You don't have required permission in :\nCHAT: {cat.chat.title}(`{cat.chat_id}`)\nFor baning here",
+                f"You don't have required permission in :\nCHAT: {cat.chat.title}(`{cat.chat_id}`)\nFor banning here",
             )
     try:
         reply = await cat.get_reply_message()
@@ -265,7 +265,7 @@ async def endgmute(event):
     else:
         return await edit_or_reply(
             event,
-            "Please reply to a user or add their into the command to ungmute them.",
+            "Please reply to a user or add their username into the command to ungmute them.",
         )
     replied_user = await event.client(GetFullUserRequest(userid))
     if not is_muted(userid, "gmute"):
