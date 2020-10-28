@@ -376,7 +376,9 @@ async def _(event):
             event, f"[{input_str}]({response_api.rstrip()})\n`Thank me Later 🙃` "
         )
     else:
-        return await edit_delete(event, "`something is wrong. please try again later.`", 5)
+        return await edit_delete(
+            event, "`something is wrong. please try again later.`", 5
+        )
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
