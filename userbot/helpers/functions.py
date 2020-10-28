@@ -235,7 +235,8 @@ async def covidindia(state):
 
 # for nekobot
 
-async def fakegs(search , result):
+
+async def fakegs(search, result):
     imgurl = "https://i.imgur.com/wNFr5X2.jpg"
     with open("./temp/temp.jpg", "wb") as f:
         f.write(requests.get(imgurl).content)
@@ -249,6 +250,7 @@ async def fakegs(search , result):
     drawing.text((270, 37), search, fill=black, font=font2)
     img.save("temp/temp.jpg")
     return "temp/temp.jpg"
+
 
 async def trumptweet(text):
     r = requests.get(
