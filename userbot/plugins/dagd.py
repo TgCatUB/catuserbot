@@ -10,7 +10,7 @@ from . import CMD_HELP
 async def _(event):
     if event.fwd_from:
         return
-    input_str = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply = await event.get_reply_message()
     if not input_str and reply:
         input_str = reply.text
@@ -39,7 +39,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    input_str = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply = await event.get_reply_message()
     if not input_str and reply:
         input_str = reply.text
@@ -68,7 +68,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    input_str = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply = await event.get_reply_message()
     if not input_str and reply:
         input_str = reply.text
@@ -105,7 +105,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    input_str = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply = await event.get_reply_message()
     if not input_str and reply:
         input_str = reply.text
