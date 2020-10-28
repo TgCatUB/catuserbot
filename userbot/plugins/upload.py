@@ -191,7 +191,7 @@ async def video_catfile(event):
             return
         catevent = await edit_or_reply(event, "`Converting to video note..........`")
         catfile = await reply.download_media(file="./temp/")
-    if not catfile.endswith((".mp4", ".tgs", ".mp3", ".mov", ".gif",".opus")):
+    if not catfile.endswith((".mp4", ".tgs", ".mp3", ".mov", ".gif", ".opus")):
         os.remove(catfile)
         await edit_delete(catevent, "```Supported Media not found...```", 5)
         return
