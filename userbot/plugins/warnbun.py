@@ -38,8 +38,8 @@ async def _(event):
     await edit_or_reply(event, reply)
 
 
-@borg.on(admin_cmd(pattern="get_warns$"))
-@borg.on(sudo_cmd(pattern="get_warns$", allow_sudo=True))
+@borg.on(admin_cmd(pattern="warns$"))
+@borg.on(sudo_cmd(pattern="warns$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
