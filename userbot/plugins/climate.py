@@ -56,7 +56,7 @@ async def get_weather(weather):
         CITY = DEFCITY
         if not CITY:
             await edit_or_reply(
-                weather, "`Please specify a city or set one as default.`"
+                weather, "`Please specify a city or set it as default.`"
             )
             return
     else:
@@ -155,7 +155,7 @@ async def set_default_city(city):
     if not city.pattern_match.group(1):
         CITY = DEFCITY
         if not CITY:
-            await edit_or_reply(city, "`Please specify a city to set one as default.`")
+            await edit_or_reply(city, "`Please specify a city to set it as default.`")
             return
     else:
         CITY = city.pattern_match.group(1)
@@ -217,7 +217,7 @@ CMD_HELP.update(
     {
         "climate": "**Plugin : **`climate`\
         \n\n**Syntax : **`.climate <city>`\
-        \n**Function : **__Gets the weather of a city.By default it is delhi change it by setcity__\n\
+        \n**Function : **__Gets the weather of a city. By default it is Delhi, change it by setcity__\n\
         \n\n**Syntax : **`.setcity <city> or .setcity <city>, <country name/code>`\
         \n**Function : **__Sets your default city so you can just use .weather.__\
         \n\n**Syntax : **`.wttr <city> `\
