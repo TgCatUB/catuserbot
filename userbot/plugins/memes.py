@@ -366,7 +366,7 @@ async def _(event):
     if not input_str and reply:
         input_str = reply.text
     if not input_str:
-        await edit_delete(
+        return await edit_delete(
             event, "`either reply to text message or give input to search`", 5
         )
     sample_url = f"https://da.gd/s?url=https://lmgtfy.com/?q={input_str.replace(' ', '+')}%26iie=1"
@@ -376,7 +376,7 @@ async def _(event):
             event, f"[{input_str}]({response_api.rstrip()})\n`Thank me Later 🙃` "
         )
     else:
-        await edit_delete(event, "`something is wrong. please try again later.`", 5)
+        return await edit_delete(event, "`something is wrong. please try again later.`", 5)
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
