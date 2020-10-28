@@ -89,7 +89,9 @@ async def spammer(e):
                         "#SPAM\n"
                         + f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} times with below message",
                     )
-                    sandy = await e.client.send_file(BOTLOG_CHATID, downloaded_file_name)
+                    sandy = await e.client.send_file(
+                        BOTLOG_CHATID, downloaded_file_name
+                    )
                     try:
                         await e.client(
                             functions.messages.SaveGifRequest(
@@ -110,7 +112,9 @@ async def spammer(e):
                         "#SPAM\n"
                         + f"Spam was executed successfully in {e.chat.title}(`{e.chat_id}`) with {counter} times with below message",
                     )
-                    sandy = await e.client.send_file(BOTLOG_CHATID, downloaded_file_name)
+                    sandy = await e.client.send_file(
+                        BOTLOG_CHATID, downloaded_file_name
+                    )
                     try:
                         await e.client(
                             functions.messages.SaveGifRequest(
@@ -208,15 +212,15 @@ async def spammer(e):
                 sandy = await e.client.send_file(e.chat_id, downloaded_file_name)
                 try:
                     await e.client(
-                            functions.messages.SaveGifRequest(
-                                id=types.InputDocument(
-                                    id=sandy.media.document.id,
-                                    access_hash=sandy.media.document.access_hash,
-                                    file_reference=sandy.media.document.file_reference,
-                                ),
-                                unsave=True,
-                            )
+                        functions.messages.SaveGifRequest(
+                            id=types.InputDocument(
+                                id=sandy.media.document.id,
+                                access_hash=sandy.media.document.access_hash,
+                                file_reference=sandy.media.document.file_reference,
+                            ),
+                            unsave=True,
                         )
+                    )
                 except:
                     pass
                 await asyncio.sleep(1)
@@ -227,7 +231,9 @@ async def spammer(e):
                         "#SPAM\n"
                         + f"Spam was executed successfully in [User](tg://user?id={e.chat_id}) chat with {counter} times with below message",
                     )
-                    sandy = await e.client.send_file(BOTLOG_CHATID, downloaded_file_name)
+                    sandy = await e.client.send_file(
+                        BOTLOG_CHATID, downloaded_file_name
+                    )
                     try:
                         await e.client(
                             functions.messages.SaveGifRequest(
@@ -248,7 +254,9 @@ async def spammer(e):
                         "#SPAM\n"
                         + f"Spam was executed successfully in {e.chat.title}(`{e.chat_id}`) with {counter} times with below message",
                     )
-                    sandy = await e.client.send_file(BOTLOG_CHATID, downloaded_file_name)
+                    sandy = await e.client.send_file(
+                        BOTLOG_CHATID, downloaded_file_name
+                    )
                     try:
                         await e.client(
                             functions.messages.SaveGifRequest(
