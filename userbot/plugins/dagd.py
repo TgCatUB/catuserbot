@@ -1,41 +1,64 @@
-"""DA.GD helpers in @UniBorg
-Available Commands:
-.isup URL
-.dns google.com
-.url <long url>
-.unshort <short url>"""
-
 import requests
 
-from userbot import CMD_HELP
-
+from . import CMD_HELP
+from validators.url import url
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@bot.on(admin_cmd(pattern="dns (.*)"))
-@bot.on(sudo_cmd(pattern="dns (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="dns( (.*)|$)"))
+@bot.on(sudo_cmd(pattern="dns( (.*)|$)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/dns/{}".format(input_str)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(
+            event, "`Either reply to link or give link as input to get data`", 5
+        )
+    check = url(input_str)
+    if not check:
+        str = f"http://{input_str}"
+        check = url(str)
+    if not check:
+        return await edit_delete(
+            event, "`the given link is not supported`", 5
+        )
+    sample_url = f"https://da.gd/dns/{input_str}"
     response_api = requests.get(sample_url).text
     if response_api:
         await edit_or_reply(
-            event, "DNS records of {} are \n{}".format(input_str, response_api)
+            event, f"DNS records of {input_str} are \n{response_api}"
         )
     else:
         await edit_or_reply(
-            event, "i can't seem to find {} on the internet".format(input_str)
+            event, f"__i can't seem to find `{input_str}` on the internet__"
         )
 
 
-@bot.on(admin_cmd(pattern="url (.*)"))
-@bot.on(sudo_cmd(pattern="url (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="url( (.*)|$)"))
+@bot.on(sudo_cmd(pattern="url( (.*)|$)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(
+            event, "`Either reply to link or give link as input to get data`", 5
+        )
+    check = url(input_str)
+    if not check:
+        str = f"http://{input_str}"
+        check = url(str)
+    if not check:
+        return await edit_delete(
+            event, "`the given link is not supported`", 5
+        )
     sample_url = "https://da.gd/s?url={}".format(input_str)
     response_api = requests.get(sample_url).text
     if response_api:
@@ -46,12 +69,27 @@ async def _(event):
         await edit_or_reply(event, "something is wrong. please try again later.")
 
 
-@bot.on(admin_cmd(pattern="unshort (.*)"))
-@bot.on(sudo_cmd(pattern="unshort (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="unshort( (.*)|$)"))
+@bot.on(sudo_cmd(pattern="unshort( (.*)|$)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(
+            event, "`Either reply to link or give link as input to get data`", 5
+        )
+    check = url(input_str)
+    if not check:
+        str = f"http://{input_str}"
+        check = url(str)
+    if not check:
+        return await edit_delete(
+            event, "`the given link is not supported`", 5
+        )
     if not input_str.startswith("http"):
         input_str = "http://" + input_str
     r = requests.get(input_str, allow_redirects=False)
@@ -70,12 +108,27 @@ async def _(event):
 
 
 # By Priyam Kalra
-@bot.on(admin_cmd(pattern="hl ?(.*)"))
-@bot.on(sudo_cmd(pattern="hl ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="hl( (.*)|$)"))
+@bot.on(sudo_cmd(pattern="hl( (.*)|$)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(
+            event, "`Either reply to link or give link as input to get data`", 5
+        )
+    check = url(input_str)
+    if not check:
+        str = f"http://{input_str}"
+        check = url(str)
+    if not check:
+        return await edit_delete(
+            event, "`the given link is not supported`", 5
+        )
     await edit_or_reply(event, "[ㅤㅤㅤㅤㅤㅤㅤ](" + input_str + ")")
 
 
