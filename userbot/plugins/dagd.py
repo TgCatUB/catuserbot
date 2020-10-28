@@ -53,14 +53,16 @@ async def _(event):
         check = url(catstr)
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
-    sample_url = "https://da.gd/s?url={}".format(input_str)
+    if not input_str.startswith("http"):
+        input_str = "http://" + input_str
+    sample_url = f"https://da.gd/s?url={input_str}"
     response_api = requests.get(sample_url).text
     if response_api:
         await edit_or_reply(
-            event, "Generated {} for {}.".format(response_api, input_str)
+            event, f"Generated {response_api} for {input_str}.", link_preview=False
         )
     else:
-        await edit_or_reply(event, "something is wrong. please try again later.")
+        await edit_or_reply(event, "`something is wrong. please try again later.`")
 
 
 @bot.on(admin_cmd(pattern="unshort( (.*)|$)"))
@@ -88,9 +90,7 @@ async def _(event):
     if str(r.status_code).startswith("3"):
         await edit_or_reply(
             event,
-            "Input URL: {}\nReDirected URL: {}".format(
-                input_str, r.headers["Location"]
-            ),
+            f"Input URL: {input_str}\nReDirected URL: {r.headers['Location']}" , link_preview=False
         )
     else:
         await edit_or_reply(
