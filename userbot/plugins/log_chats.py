@@ -23,7 +23,7 @@ async def monito_p_m_s(event):
     sender = await event.get_sender()
     if Config.NO_LOG_P_M_S and not sender.bot:
         chat = await event.get_chat()
-        if not no_log_pms_sql.is_approved(chat.id):
+        if not no_log_pms_sql.is_approved(chat.id) and not chat.id == 777000:
             if RECENT_USER == chat.id:
                 try:
                     if event.message:
