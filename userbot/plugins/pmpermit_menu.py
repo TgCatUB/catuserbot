@@ -54,60 +54,60 @@ async def _(event):
                 chat_id = event.sender_id
                 response = await conv.get_response(chat)
                 y = response.text
-                if y == "a":
+                if y == "a" or "A":
                     if pmpermit_sql.is_approved(chat_id):
                         return
                     await event.client.send_message(chat, ONE)
                     response = await conv.get_response(chat)
-                    if not response.text == "/start":
+                    if response.text != "/start":
                         if pmpermit_sql.is_approved(chat_id):
                             return
                         await event.client.send_message(chat, LWARN)
                         response = await conv.get_response(chat)
-                        if not response.text == "/start":
+                        if response.text != "/start":
                             if pmpermit_sql.is_approved(chat_id):
                                 return
                             await event.client.send_message(chat, TWO)
                             await asyncio.sleep(3)
                             await event.client(functions.contacts.BlockRequest(chat_id))
-                elif y == "b":
+                elif y == "b" or "B":
                     if pmpermit_sql.is_approved(chat_id):
                         return
                     await event.client.send_message(chat, LWARN)
                     response = await conv.get_response(chat)
-                    if not response.text == "/start":
+                    if response.text != "/start":
                         if pmpermit_sql.is_approved(chat_id):
                             return
                         await event.client.send_message(chat, TWO)
                         await asyncio.sleep(3)
                         await event.client(functions.contacts.BlockRequest(chat_id))
-                elif y == "c":
+                elif y == "c" or "C":
                     if pmpermit_sql.is_approved(chat_id):
                         return
                     await event.client.send_message(chat, THREE)
                     response = await conv.get_response(chat)
-                    if not response.text == "/start":
+                    if response.text != "/start":
                         if pmpermit_sql.is_approved(chat_id):
                             return
                         await event.client.send_message(chat, LWARN)
                         response = await conv.get_response(chat)
-                        if not response.text == "/start":
+                        if response.text != "/start":
                             if pmpermit_sql.is_approved(chat_id):
                                 return
                             await event.client.send_message(chat, TWO)
                             await asyncio.sleep(3)
                             await event.client(functions.contacts.BlockRequest(chat_id))
-                elif y == "d":
+                elif y == "d" or "D":
                     if pmpermit_sql.is_approved(chat_id):
                         return
                     await event.client.send_message(chat, FOUR)
                     response = await conv.get_response(chat)
-                    if not response.text == "/start":
+                    if response.text != "/start":
                         if pmpermit_sql.is_approved(chat_id):
                             return
                         await event.client.send_message(chat, LWARN)
                         response = await conv.get_response(chat)
-                        if not response.text == "/start":
+                        if response.text != "/start":
                             if pmpermit_sql.is_approved(chat_id):
                                 return
                             await event.client.send_message(chat, TWO)
@@ -122,12 +122,12 @@ async def _(event):
                     )
                     response = await conv.get_response(chat)
                     z = response.text
-                    if not z == "/start":
+                    if z != "/start":
                         if pmpermit_sql.is_approved(chat_id):
                             return
                         await event.client.send_message(chat, LWARN)
                         await conv.get_response(chat)
-                        if not response.text == "/start":
+                        if response.text != "/start":
                             if pmpermit_sql.is_approved(chat_id):
                                 return
                             await event.client.send_message(chat, TWO)
