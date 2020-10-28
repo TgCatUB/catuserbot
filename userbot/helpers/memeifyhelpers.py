@@ -19,7 +19,6 @@ from . import unzip
 MARGINS = [50, 150, 250, 350, 450]
 
 
-
 def asciiart(in_f, SC, GCF, out_f, color1, color2, bgcolor="black"):
     chars = np.asarray(list(" .,:irs?@9B&#"))
     font = ImageFont.load_default()
