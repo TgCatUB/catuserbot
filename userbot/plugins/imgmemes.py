@@ -14,7 +14,7 @@ from userbot.plugins import (
     fakegs,
     kannagen,
     moditweet,
-    reply_to,
+    reply_id,
     trumptweet,
     tweets,
 )
@@ -26,7 +26,7 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 @bot.on(sudo_cmd(allow_sudo=True, pattern="fakegs(?: |$)(.*)", command="fakegs"))
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
-    reply_to_id = await reply_to(cat)
+    reply_to_id = await reply_id(cat)
     if not text:
         if cat.is_reply and not reply_to_id.media:
             text = reply_to_id.message
@@ -56,7 +56,7 @@ async def nekobot(cat):
 async def nekobot(cat):
     text = cat.pattern_match.group(1)
     text = re.sub("&", "", text)
-    reply_to_id = await reply_to(cat)
+    reply_to_id = await reply_id(cat)
     if not text:
         if cat.is_reply:
             if not reply_to_id.media:
