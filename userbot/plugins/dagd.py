@@ -1,8 +1,8 @@
 import requests
-
-from . import CMD_HELP
 from validators.url import url
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="dns( (.*)|$)"))
@@ -23,15 +23,11 @@ async def _(event):
         str = f"http://{input_str}"
         check = url(str)
     if not check:
-        return await edit_delete(
-            event, "`the given link is not supported`", 5
-        )
+        return await edit_delete(event, "`the given link is not supported`", 5)
     sample_url = f"https://da.gd/dns/{input_str}"
     response_api = requests.get(sample_url).text
     if response_api:
-        await edit_or_reply(
-            event, f"DNS records of {input_str} are \n{response_api}"
-        )
+        await edit_or_reply(event, f"DNS records of {input_str} are \n{response_api}")
     else:
         await edit_or_reply(
             event, f"__i can't seem to find `{input_str}` on the internet__"
@@ -56,9 +52,7 @@ async def _(event):
         str = f"http://{input_str}"
         check = url(str)
     if not check:
-        return await edit_delete(
-            event, "`the given link is not supported`", 5
-        )
+        return await edit_delete(event, "`the given link is not supported`", 5)
     sample_url = "https://da.gd/s?url={}".format(input_str)
     response_api = requests.get(sample_url).text
     if response_api:
@@ -87,9 +81,7 @@ async def _(event):
         str = f"http://{input_str}"
         check = url(str)
     if not check:
-        return await edit_delete(
-            event, "`the given link is not supported`", 5
-        )
+        return await edit_delete(event, "`the given link is not supported`", 5)
     if not input_str.startswith("http"):
         input_str = "http://" + input_str
     r = requests.get(input_str, allow_redirects=False)
@@ -126,9 +118,7 @@ async def _(event):
         str = f"http://{input_str}"
         check = url(str)
     if not check:
-        return await edit_delete(
-            event, "`the given link is not supported`", 5
-        )
+        return await edit_delete(event, "`the given link is not supported`", 5)
     await edit_or_reply(event, "[ㅤㅤㅤㅤㅤㅤㅤ](" + input_str + ")")
 
 
