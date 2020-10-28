@@ -20,7 +20,7 @@ async def _(event):
         )
     check = url(input_str)
     if not check:
-        str = f"http://{input_str}"
+        str = "http://" + input_str
         check = url(str)
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
@@ -49,7 +49,7 @@ async def _(event):
         )
     check = url(input_str)
     if not check:
-        str = f"http://{input_str}"
+        str = f"http://" + input_str
         check = url(str)
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
@@ -78,7 +78,7 @@ async def _(event):
         )
     check = url(input_str)
     if not check:
-        str = f"http://{input_str}"
+        str = "http://" + input_str
         check = url(str)
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
@@ -115,7 +115,7 @@ async def _(event):
         )
     check = url(input_str)
     if not check:
-        str = f"http://{input_str}"
+        str = "http://" + input_str
         check = url(str)
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
