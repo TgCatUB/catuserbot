@@ -1,24 +1,26 @@
-# credits to @mrconfused (@sandy1709) 
+# credits to @mrconfused (@sandy1709)
 
 #  Copyright (C) 2020  sandeep.n(π.$)
-import re
-import os
 import asyncio
+import os
+import re
+
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 from userbot.plugins import (
     changemymind,
     deEmojify,
+    fakegs,
     kannagen,
     moditweet,
+    reply_to,
     trumptweet,
     tweets,
-    fakegs,
-    reply_to
 )
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+
 
 @bot.on(admin_cmd(outgoing=True, pattern="fakegs(?: |$)(.*)", command="fakegs"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="fakegs(?: |$)(.*)", command="fakegs"))
@@ -37,16 +39,17 @@ async def nekobot(cat):
     else:
         await edit_delete(
             cat,
-            "__How should i create meme follow the syntax as show__ `.fakegs top text ; bottom text`",5
+            "__How should i create meme follow the syntax as show__ `.fakegs top text ; bottom text`",
+            5,
         )
         return
-    catfile = await fakegs(search,result)
+    catfile = await fakegs(search, result)
     await asyncio.sleep(2)
     await cat.client.send_file(cat.chat_id, catfile, reply_to=reply_to_id)
     await cate.delete()
     if os.path.exists(catfile):
         os.remove(catfile)
-    
+
 
 @bot.on(admin_cmd(outgoing=True, pattern="trump(?: |$)(.*)"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="trump(?: |$)(.*)"))
@@ -193,7 +196,8 @@ async def nekobot(cat):
         else:
             await edit_delete(
                 cat,
-                "what should I tweet? Give some text and format must be like `.tweet username ; your text` ", 5
+                "what should I tweet? Give some text and format must be like `.tweet username ; your text` ",
+                5,
             )
             return
     try:
@@ -206,7 +210,8 @@ async def nekobot(cat):
     else:
         await edit_delete(
             cat,
-            "what should I tweet? Give some text and format must be like `.tweet username ; your text`",5
+            "what should I tweet? Give some text and format must be like `.tweet username ; your text`",
+            5,
         )
         return
     cate = await edit_or_reply(cat, f"Requesting {username} to tweet...")
