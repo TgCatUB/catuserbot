@@ -6,12 +6,19 @@ import datetime
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
-
+from ..Config import Config
 
 def mentionuser(name, userid):
     return f"[{name}](tg://user?id={userid})"
 
-
+def reply_id(event):
+    reply_to_id = None
+    if event.sender_id in Config.SUDO_USERS:
+        reply_to_id = event.id
+    if event.reply_to_msg_id:
+        reply_to_id = await event.reply_to_msg_id
+    return reply_to_id
+        
 def parse_pre(text):
     text = text.strip()
     return (
