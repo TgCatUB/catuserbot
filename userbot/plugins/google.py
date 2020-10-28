@@ -18,8 +18,8 @@ useragent = "Mozilla/5.0 (Linux; Android 9; SM-G960F Build/PPR1.180610.011; wv) 
 opener.addheaders = [("User-agent", useragent)]
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"gs (.*)"))
-@borg.on(sudo_cmd(allow_sudo=True, pattern=r"gs (.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern=r"gs (.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern=r"gs (.*)"))
 async def gsearch(q_event):
     catevent = await edit_or_reply(q_event, "`searching........`")
     match = q_event.pattern_match.group(1)
@@ -52,8 +52,8 @@ async def gsearch(q_event):
         )
 
 
-@borg.on(admin_cmd(pattern="grs$"))
-@borg.on(sudo_cmd(pattern="grs$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="grs$"))
+@bot.on(sudo_cmd(pattern="grs$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

@@ -17,7 +17,7 @@ USER_BOT_WARN_ZERO = "You were spamming my peru master's inbox, henceforth you a
 
 if Var.PRIVATE_GROUP_ID is not None:
 
-    @borg.on(admin_cmd(pattern="approve ?(.*)"))
+    @bot.on(admin_cmd(pattern="approve ?(.*)"))
     async def approve_p_m(event):
         if event.fwd_from:
             return
@@ -49,7 +49,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            replied_user = await event.client.get_entity(reply.from_id)
+            replied_user = await event.client.get_entity(reply.sender_id)
             chat = replied_user.id
             firstname = str(replied_user.first_name)
             if not pmpermit_sql.is_approved(chat):
@@ -88,7 +88,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         ):
             pmpermit_sql.approve(chat.id, "outgoing")
 
-    @borg.on(admin_cmd(pattern="disapprove ?(.*)"))
+    @bot.on(admin_cmd(pattern="disapprove ?(.*)"))
     async def disapprove_p_m(event):
         if event.fwd_from:
             return
@@ -112,7 +112,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            chat = await event.client.get_entity(reply.from_id)
+            chat = await event.client.get_entity(reply.sender_id)
             firstname = str(chat.first_name)
             if chat.id in PM_START:
                 PM_START.remove(chat.id)
@@ -128,7 +128,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                     )
                 )
 
-    @borg.on(admin_cmd(pattern="block$"))
+    @bot.on(admin_cmd(pattern="block$"))
     async def block_p_m(event):
         if event.fwd_from:
             return
@@ -147,7 +147,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            chat = await event.client.get_entity(reply.from_id)
+            chat = await event.client.get_entity(reply.sender_id)
             firstname = str(chat.first_name)
             if chat.id in PM_START:
                 PM_START.remove(chat.id)
@@ -158,11 +158,11 @@ if Var.PRIVATE_GROUP_ID is not None:
             )
             await event.client(functions.contacts.BlockRequest(chat.id))
 
-    @borg.on(admin_cmd(pattern="unblock$"))
+    @bot.on(admin_cmd(pattern="unblock$"))
     async def unblock_pm(event):
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            chat = await event.client.get_entity(reply.from_id)
+            chat = await event.client.get_entity(reply.sender_id)
             firstname = str(chat.first_name)
             await event.client(functions.contacts.UnblockRequest(chat.id))
             await event.edit(
@@ -171,7 +171,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                 )
             )
 
-    @borg.on(admin_cmd(pattern="listapproved$"))
+    @bot.on(admin_cmd(pattern="listapproved$"))
     async def approve_p_m(event):
         if event.fwd_from:
             return
@@ -204,14 +204,14 @@ if Var.PRIVATE_GROUP_ID is not None:
 
     @bot.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):
-        if event.from_id == bot.uid:
+        if event.sender_id == bot.uid:
             return
         if Var.PRIVATE_GROUP_ID is None:
             return
         if not event.is_private:
             return
         message_text = event.message.message
-        chat_id = event.from_id
+        chat_id = event.sender_id
         USER_BOT_NO_WARN = (
             f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={chat_id})\n\n"
             f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "

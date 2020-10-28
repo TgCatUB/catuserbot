@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="filext (.*)"))
-@borg.on(sudo_cmd(pattern="filext (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="filext (.*)"))
+@bot.on(sudo_cmd(pattern="filext (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

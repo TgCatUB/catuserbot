@@ -112,8 +112,8 @@ GDRIVE_ID = re.compile(
 )
 
 
-@bot.on(admin_cmd(pattern="gauth(?: |$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="gauth(?: |$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="gauth$", command="gauth", outgoing=True))
+@bot.on(sudo_cmd(pattern="gauth$", command="gauth", allow_sudo=True))
 async def generate_credentials(gdrive):
     """ - Only generate once for long run - """
     hmm = bot.uid
@@ -173,7 +173,7 @@ async def generate_credentials(gdrive):
         """ - Unpack credential objects into strings - """
         creds = base64.b64encode(pickle.dumps(creds)).decode()
         await gdrive.edit("`Credentials created...`")
-    helper.save_credentials(str(gdrive.from_id), creds)
+    helper.save_credentials(str(gdrive.sender_id), creds)
     await gdrive.delete()
     return
 
@@ -200,8 +200,8 @@ async def create_app(gdrive):
     return service
 
 
-@bot.on(admin_cmd(pattern="greset(?: |$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="greset(?: |$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="greset$", command="greset", outgoing=True))
+@bot.on(sudo_cmd(pattern="greset$", command="greset", allow_sudo=True))
 async def reset_credentials(gdrive):
     """ - Reset credentials or change account - """
     hmm = bot.uid
@@ -769,14 +769,36 @@ async def lists(gdrive):
     return
 
 
-@bot.on(admin_cmd(pattern=r"glist(?: |$)(-l \d+)?(?: |$)?(.*)?(?: |$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="glist(?: |$)(-l \d+)?(?: |$)?(.*)?(?: |$)", allow_sudo=True))
+@bot.on(
+    admin_cmd(
+        pattern=r"glist(?: |$)(-l \d+)?(?: |$)?(.*)?(?: |$)",
+        command="glist",
+        outgoing=True,
+    )
+)
+@bot.on(
+    sudo_cmd(
+        pattern="glist(?: |$)(-l \d+)?(?: |$)?(.*)?(?: |$)",
+        command="glist",
+        allow_sudo=True,
+    )
+)
 async def catlists(gdrive):
     await lists(gdrive)
 
 
-@bot.on(admin_cmd(pattern="gdf (mkdir|rm|chck) (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="gdf (mkdir|rm|chck) (.*)", allow_sudo=True))
+@bot.on(
+    admin_cmd(
+        pattern="gdf (mkdir|rm|chck) (.*)", command="gdf (mkdir|rm|chck)", outgoing=True
+    )
+)
+@bot.on(
+    sudo_cmd(
+        pattern="gdf (mkdir|rm|chck) (.*)",
+        command="gdf (mkdir|rm|chck)",
+        allow_sudo=True,
+    )
+)
 async def google_drive_managers(gdrive):
     """ - Google Drive folder/file management - """
     service = await create_app(gdrive)
@@ -932,8 +954,8 @@ async def google_drive_managers(gdrive):
     await gdrive.edit(reply)
 
 
-@bot.on(admin_cmd(pattern="gabort(?: |$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="gabort(?: |$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="gabort$", command="gabort", outgoing=True))
+@bot.on(sudo_cmd(pattern="gabort$", command="gabort", allow_sudo=True))
 async def cancel_process(gdrive):
     """
     Abort process for download and upload
@@ -949,8 +971,8 @@ async def cancel_process(gdrive):
     await gdrive.delete()
 
 
-@bot.on(admin_cmd(pattern="ugd(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="ugd(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ugd(?: |$)(.*)", command="ugd", outgoing=True))
+@bot.on(sudo_cmd(pattern="ugd(?: |$)(.*)", command="ugd", allow_sudo=True))
 async def google_drive(gdrive):
     reply = ""
     """ - Parsing all google drive function - """
@@ -1127,8 +1149,20 @@ async def google_drive(gdrive):
     return
 
 
-@bot.on(admin_cmd(pattern="(gdfset|gdfclear)(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="(gdfset|gdfclear)(?: |$)(.*)", allow_sudo=True))
+@bot.on(
+    admin_cmd(
+        pattern="(gdfset|gdfclear)(?: |$)(.*)",
+        command="(gdfset|gdfclear)",
+        outgoing=True,
+    )
+)
+@bot.on(
+    sudo_cmd(
+        pattern="(gdfset|gdfclear)(?: |$)(.*)",
+        command="(gdfset|gdfclear)",
+        allow_sudo=True,
+    )
+)
 async def set_upload_folder(gdrive):
     """ - Set parents dir for upload/check/makedir/remove - """
     global parent_Id

@@ -14,8 +14,8 @@ r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
 auth_url = r["auth_url"]
 
 
-@borg.on(admin_cmd(pattern="telegraph (media|text) ?(.*)"))
-@borg.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="telegraph (media|text) ?(.*)"))
+@bot.on(sudo_cmd(pattern="telegraph (media|text) ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -63,7 +63,7 @@ async def _(event):
                     link_preview=True,
                 )
         elif input_str == "text":
-            user_object = await borg.get_entity(r_message.from_id)
+            user_object = await borg.get_entity(r_message.sender_id)
             title_of_page = user_object.first_name  # + " " + user_object.last_name
             # apparently, all Users do not have last_name field
             if optional_title:

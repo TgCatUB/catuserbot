@@ -16,14 +16,14 @@ async def _(event):
             await edit_or_reply(
                 event,
                 "Current Chat ID: `{}`\nFrom User ID: `{}`\nBot API File ID: `{}`".format(
-                    str(event.chat_id), str(r_msg.from_id), bot_api_file_id
+                    str(event.chat_id), str(r_msg.sender_id), bot_api_file_id
                 ),
             )
         else:
             await edit_or_reply(
                 event,
                 "Current Chat ID: `{}`\nFrom User ID: `{}`".format(
-                    str(event.chat_id), str(r_msg.from_id)
+                    str(event.chat_id), str(r_msg.sender_id)
                 ),
             )
     else:

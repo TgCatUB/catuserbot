@@ -33,7 +33,7 @@ async def _(event):
                 return await catevent.delete()
             uid = u.id
     else:
-        uid = reply_message.from_id
+        uid = reply_message.sender_id
     chat = "@SangMataInfo_bot"
     catevent = await edit_or_reply(event, "`Processing...`")
     async with event.client.conversation(chat) as conv:

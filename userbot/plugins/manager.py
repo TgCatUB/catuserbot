@@ -11,7 +11,7 @@ PREV_REPLY_MESSAGE = {}
 
 if Config.DUAL_LOG:
 
-    @borg.on(admin_cmd(pattern="nccreatedch$"))
+    @bot.on(admin_cmd(pattern="nccreatedch$"))
     async def create_dump_channel(event):
         if Config.PM_LOGGR_BOT_API_ID is None:
             result = await event.client(
@@ -46,7 +46,7 @@ if Config.DUAL_LOG:
                 f"**is configured**. [please do not touch](https://t.me/c/{Config.PM_LOGGR_BOT_API_ID}/2)"
             )
 
-    @borg.on(admin_cmd(pattern="nolog(?: |$)(.*)"))
+    @bot.on(admin_cmd(pattern="nolog(?: |$)(.*)"))
     async def set_no_log_p_m(event):
         if Config.PM_LOGGR_BOT_API_ID is not None:
             event.pattern_match.group(1)
@@ -57,7 +57,7 @@ if Config.DUAL_LOG:
                 await asyncio.sleep(3)
                 await event.delete()
 
-    @borg.on(admin_cmd(pattern="log(?: |$)(.*)"))
+    @bot.on(admin_cmd(pattern="log(?: |$)(.*)"))
     async def set_no_log_p_m(event):
         if Config.PM_LOGGR_BOT_API_ID is not None:
             event.pattern_match.group(1)
@@ -68,15 +68,15 @@ if Config.DUAL_LOG:
                 await asyncio.sleep(3)
                 await event.delete()
 
-    @borg.on(events.NewMessage(incoming=True))
+    @bot.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):
         if Config.PM_LOGGR_BOT_API_ID is None:
             return
         if not event.is_private:
             return
-        if event.from_id == bot.uid:
+        if event.sender_id == bot.uid:
             return
-        chat_id = event.from_id
+        chat_id = event.sender_id
         # logger.info(chat_id)
         sender = await event.client.get_entity(chat_id)
         if chat_id == borg.uid:
@@ -94,7 +94,7 @@ if Config.DUAL_LOG:
             # log pms
             await do_log_pm_action(chat_id, event, message_text, message_media)
 
-    @borg.on(events.ChatAction(blacklist_chats=Config.UB_BLACK_LIST_CHAT))
+    @bot.on(events.ChatAction(blacklist_chats=Config.UB_BLACK_LIST_CHAT))
     async def on_new_chat_action_message(event):
         if Config.PM_LOGGR_BOT_API_ID is None:
             return
@@ -102,7 +102,7 @@ if Config.DUAL_LOG:
             added_by_users = event.action_message.action.users
             if borg.uid in added_by_users:
                 message_id = event.action_message.id
-                added_by_user = event.action_message.from_id
+                added_by_user = event.action_message.sender_id
                 # someone added me to chat
                 the_message = ""
                 the_message += "#MessageActionChatAddUser\n\n"
@@ -124,7 +124,7 @@ if Config.DUAL_LOG:
                     silent=True,
                 )
 
-    @borg.on(events.Raw())
+    @bot.on(events.Raw())
     async def on_new_channel_message(event):
         if Config.PM_LOGGR_BOT_API_ID is None:
             return

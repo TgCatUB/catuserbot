@@ -11,6 +11,8 @@ from PIL import Image
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
 
+from .resources.states import states
+
 
 async def get_readable_time(seconds: int) -> str:
     count = 0
@@ -217,6 +219,18 @@ async def convert_tosticker(image):
     img.save("./temp/temp.webp", "webp")
     os.remove(image)
     return "./temp/temp.webp"
+
+
+# covid india data
+
+
+async def covidindia(state):
+    url = "https://www.mohfw.gov.in/data/datanew.json"
+    req = requests.get(url).json()
+    for i in states:
+        if i == state:
+            return req[states.index(i)]
+    return None
 
 
 # for nekobot

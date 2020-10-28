@@ -20,8 +20,8 @@ from ..utils import admin_cmd, edit_or_reply, humanbytes, progress, sudo_cmd
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
-@borg.on(admin_cmd(pattern="download(?: |$)(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="download(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="download(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="download(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

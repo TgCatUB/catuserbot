@@ -10,7 +10,7 @@ from userbot.plugins.sql_helper.locks_sql import get_locks, is_locked, update_lo
 from userbot.utils import admin_cmd
 
 
-@borg.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
+@bot.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
 async def _(event):
     # Space weirdness in regex required because argument is optional and other
     # commands start with ".lock"
@@ -81,7 +81,7 @@ async def _(event):
             )
 
 
-@borg.on(admin_cmd(pattern="unlock ?(.*)"))
+@bot.on(admin_cmd(pattern="unlock ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -94,7 +94,7 @@ async def _(event):
         await event.edit("Use `.lock` without any parameters to unlock API locks")
 
 
-@borg.on(admin_cmd(pattern="curenabledlocks"))
+@bot.on(admin_cmd(pattern="curenabledlocks"))
 async def _(event):
     if event.fwd_from:
         return
@@ -129,8 +129,8 @@ async def _(event):
     await event.edit(res)
 
 
-@borg.on(events.MessageEdited())  # pylint:disable=E0602
-@borg.on(events.NewMessage())  # pylint:disable=E0602
+@bot.on(events.MessageEdited())  # pylint:disable=E0602
+@bot.on(events.NewMessage())  # pylint:disable=E0602
 async def check_incoming_messages(event):
     # TODO: exempt admins from locks
     peer_id = event.chat_id
@@ -191,7 +191,7 @@ async def check_incoming_messages(event):
                 update_lock(peer_id, "url", False)
 
 
-@borg.on(events.ChatAction())  # pylint:disable=E0602
+@bot.on(events.ChatAction())  # pylint:disable=E0602
 async def _(event):
     # TODO: exempt admins from locks
     # check for "lock" "bots"
@@ -200,7 +200,7 @@ async def _(event):
     # bots are limited Telegram accounts,
     # and cannot join by themselves
     if event.user_added:
-        users_added_by = event.action_message.from_id
+        users_added_by = event.action_message.sender_id
         is_ban_able = False
         rights = types.ChatBannedRights(until_date=None, view_messages=True)
         added_users = event.action_message.action.users

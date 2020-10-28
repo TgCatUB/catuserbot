@@ -53,7 +53,7 @@ async def cmd_list(event):
             string = "<b>{count} Commands found in plugin {input_str}:</b>\n\n"
             catcount = 0
             for i in CMD_LIST[input_str]:
-                string += f"  ◆  <code>{i}</code>"
+                string += f"  •  <code>{i}</code>"
                 string += "\n"
                 catcount += 1
             await event.edit(
@@ -81,7 +81,7 @@ async def cmd_list(event):
                 \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
             catcount = 0
             for i in sorted(CMD_LIST):
-                string += "◆" + f"<code>{str(i)}</code>"
+                string += "• " + f"<code>{str(i)}</code>"
                 string += "   "
                 catcount += 1
             await event.edit(string.format(count=catcount), parse_mode="HTML")
@@ -114,16 +114,18 @@ async def info(event):
             )
             url = f"https://nekobin.com/{key}"
             reply_text = f"All commands of the catuserbot are [here]({url})"
-            await event.reply(reply_text)
+            await event.reply(reply_text, link_preview=False)
             return
-        await event.reply(string.format(count=catcount, plugincount=plugincount))
+        await event.reply(
+            string.format(count=catcount, plugincount=plugincount), link_preview=False
+        )
         return
     if input_str:
         if input_str in SUDO_LIST:
             string = "<b>{count} Commands found in plugin {input_str}:</b>\n\n"
             catcount = 0
             for i in SUDO_LIST[input_str]:
-                string += f"  ◆  <code>{i}</code>"
+                string += f"  •  <code>{i}</code>"
                 string += "\n"
                 catcount += 1
             await event.reply(
@@ -140,7 +142,7 @@ async def info(event):
             \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
         catcount = 0
         for i in sorted(SUDO_LIST):
-            string += "◆" + f"<code>{str(i)}</code>"
+            string += "• " + f"<code>{str(i)}</code>"
             string += "   "
             catcount += 1
         await event.reply(string.format(count=catcount), parse_mode="HTML")
@@ -164,10 +166,10 @@ async def info(event):
             \n<b>Usage : </b><code>.info</code> <plugin name>\n\n"
         catcount = 0
         for i in sorted(CMD_HELP):
-            string += "◆ " + f"<code>{str(i)}</code>"
+            string += "• " + f"<code>{str(i)}</code>"
             string += "   "
             catcount += 1
-        if event.from_id in Config.SUDO_USERS:
+        if event.sender_id in Config.SUDO_USERS:
             await event.reply(string.format(count=catcount), parse_mode="HTML")
         else:
             await event.edit(string.format(count=catcount), parse_mode="HTML")

@@ -20,7 +20,7 @@ from userbot import CMD_HELP
 from userbot.utils import admin_cmd, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="gps ?(.*)"))
+@bot.on(admin_cmd(pattern="gps ?(.*)"))
 async def gps(event):
     if event.fwd_from:
         return
@@ -48,7 +48,7 @@ async def gps(event):
         await event.edit("i coudn't find it")
 
 
-@borg.on(sudo_cmd(pattern="gps ?(.*)", allow_sudo=True))
+@bot.on(sudo_cmd(pattern="gps ?(.*)", allow_sudo=True))
 async def gps(event):
     if event.fwd_from:
         return

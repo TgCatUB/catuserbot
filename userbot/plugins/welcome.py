@@ -78,8 +78,8 @@ async def _(event):
         update_previous_welcome(event.chat_id, current_message.id)
 
 
-@borg.on(admin_cmd(pattern=r"savewelcome ?(.*)"))
-@borg.on(sudo_cmd(pattern=r"savewelcome ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"savewelcome ?(.*)"))
+@bot.on(sudo_cmd(pattern=r"savewelcome ?(.*)", allow_sudo=True))
 async def save_welcome(event):
     msg = await event.get_reply_message()
     string = "".join(event.text.split(maxsplit=1)[1:])
@@ -114,8 +114,8 @@ async def save_welcome(event):
     await edit_or_reply("Error while setting welcome in this group")
 
 
-@borg.on(admin_cmd(pattern="clearwelcome$"))
-@borg.on(sudo_cmd(pattern="clearwelcome$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="clearwelcome$"))
+@bot.on(sudo_cmd(pattern="clearwelcome$", allow_sudo=True))
 async def del_welcome(event):
     if rm_welcome_setting(event.chat_id) is True:
         await edit_or_reply(event, "`Welcome note deleted for this chat.`")
@@ -123,8 +123,8 @@ async def del_welcome(event):
         await edit_or_reply(event, "`Do I have a welcome note here ?`")
 
 
-@borg.on(admin_cmd(pattern="listwelcome$"))
-@borg.on(sudo_cmd(pattern="listwelcome$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="listwelcome$"))
+@bot.on(sudo_cmd(pattern="listwelcome$", allow_sudo=True))
 async def show_welcome(event):
     cws = get_current_welcome_settings(event.chat_id)
     if not cws:

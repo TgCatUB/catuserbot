@@ -17,13 +17,12 @@ import os
 
 import requests
 
-from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import convert_toimage
+from . import CMD_HELP, convert_toimage
 
 
-@borg.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
-@borg.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
+@bot.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
 async def remove_background(event):
     if event.fwd_from:
         return
@@ -126,11 +125,11 @@ def ReTrieveURL(input_url):
 
 CMD_HELP.update(
     {
-        "removebg": "**__Plugin : __**`removebg`\
-        \n\n**__Syntax : __**`.rmbg` <Link to Image> or reply to any image\
-        \n**__Usage : __**Removes the background of an image and send as png format\
-        \n\n**__Syntax : __**`.srmbg` <Link to Image> or reply to any image\
-        \n**__Usage : __**Removes the background of an image and send as sticker format\
+        "removebg": "**Plugin : **`removebg`\
+        \n\n**Syntax : **`.rmbg` <Link to Image> or reply to any image/sticker\
+        \n**Function : **__Removes the background of an image/sticker and send as png format__\
+        \n\n**Syntax : **`.srmbg` <Link to Image> or reply to any image/sticker\
+        \n**function : **__Removes the background an image/sticker and send as sticker format__\
         "
     }
 )

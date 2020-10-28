@@ -20,8 +20,8 @@ from youtube_dl.utils import (
     XAttrMetadataError,
 )
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
+from .. import CMD_HELP, progress
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @bot.on(admin_cmd(pattern="yt(a|v) (.*)", outgoing=True))

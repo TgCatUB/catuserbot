@@ -17,7 +17,7 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(events.NewMessage(incoming=True))
+@bot.on(events.NewMessage(incoming=True))
 async def on_new_message(event):
     # TODO: exempt admins from locks
     name = event.raw_text
@@ -33,8 +33,8 @@ async def on_new_message(event):
             break
 
 
-@borg.on(admin_cmd(pattern="addblacklist ((.|\n)*)"))
-@borg.on(sudo_cmd(pattern="addblacklist ((.|\n)*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="addblacklist ((.|\n)*)"))
+@bot.on(sudo_cmd(pattern="addblacklist ((.|\n)*)", allow_sudo=True))
 async def on_add_black_list(event):
     text = event.pattern_match.group(1)
     to_blacklist = list(
@@ -51,8 +51,8 @@ async def on_add_black_list(event):
     )
 
 
-@borg.on(admin_cmd(pattern="rmblacklist ((.|\n)*)"))
-@borg.on(sudo_cmd(pattern="rmblacklist ((.|\n)*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="rmblacklist ((.|\n)*)"))
+@bot.on(sudo_cmd(pattern="rmblacklist ((.|\n)*)", allow_sudo=True))
 async def on_delete_blacklist(event):
     text = event.pattern_match.group(1)
     to_unblacklist = list(
@@ -68,8 +68,8 @@ async def on_delete_blacklist(event):
     )
 
 
-@borg.on(admin_cmd(pattern="listblacklist$"))
-@borg.on(sudo_cmd(pattern="listblacklist$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="listblacklist$"))
+@bot.on(sudo_cmd(pattern="listblacklist$", allow_sudo=True))
 async def on_view_blacklist(event):
     all_blacklisted = sql.get_chat_blacklist(event.chat_id)
     OUT_STR = "Blacklists in the Current Chat:\n"

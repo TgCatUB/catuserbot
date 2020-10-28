@@ -16,14 +16,14 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from .sql_helper.echo_sql import addecho, get_all_echos, is_echo, remove_echo
 
 
-@borg.on(admin_cmd(pattern="addecho$"))
-@borg.on(sudo_cmd(pattern="addecho$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="addecho$"))
+@bot.on(sudo_cmd(pattern="addecho$", allow_sudo=True))
 async def echo(cat):
     if cat.fwd_from:
         return
     if cat.reply_to_msg_id is not None:
         reply_msg = await cat.get_reply_message()
-        user_id = reply_msg.from_id
+        user_id = reply_msg.sender_id
         chat_id = cat.chat_id
         try:
             hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
@@ -40,14 +40,14 @@ async def echo(cat):
         await edit_or_reply(cat, "Reply to a User's message to echo his messages")
 
 
-@borg.on(admin_cmd(pattern="rmecho$"))
-@borg.on(sudo_cmd(pattern="rmecho$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="rmecho$"))
+@bot.on(sudo_cmd(pattern="rmecho$", allow_sudo=True))
 async def echo(cat):
     if cat.fwd_from:
         return
     if cat.reply_to_msg_id is not None:
         reply_msg = await cat.get_reply_message()
-        user_id = reply_msg.from_id
+        user_id = reply_msg.sender_id
         chat_id = cat.chat_id
         try:
             hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
@@ -64,8 +64,8 @@ async def echo(cat):
         await edit_or_reply(cat, "Reply to a User's message to echo his messages")
 
 
-@borg.on(admin_cmd(pattern="listecho$"))
-@borg.on(sudo_cmd(pattern="listecho$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="listecho$"))
+@bot.on(sudo_cmd(pattern="listecho$", allow_sudo=True))
 async def echo(cat):
     if cat.fwd_from:
         return
@@ -94,7 +94,7 @@ async def echo(cat):
         await edit_or_reply(cat, output_str)
 
 
-@borg.on(events.NewMessage(incoming=True))
+@bot.on(events.NewMessage(incoming=True))
 async def samereply(cat):
     if cat.chat_id in Config.UB_BLACK_LIST_CHAT:
         return

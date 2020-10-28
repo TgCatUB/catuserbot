@@ -9,8 +9,8 @@ from . import progress
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 
-@borg.on(admin_cmd(pattern="rename (.*)"))
-@borg.on(sudo_cmd(pattern="rename (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="rename (.*)"))
+@bot.on(sudo_cmd(pattern="rename (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -49,8 +49,8 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd(pattern="rnup (.*)"))
-@borg.on(sudo_cmd(pattern="rnup (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="rnup (.*)"))
+@bot.on(sudo_cmd(pattern="rnup (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
