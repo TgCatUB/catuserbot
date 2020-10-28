@@ -33,6 +33,29 @@ async def _(event):
             await event.client.forward_messages(event.chat_id, respond.message)
 
 
+@bot.on(admin_cmd(pattern="vendor(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="vendor(?: |$)(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    link = event.pattern_match.group(1)
+    vendor = f"vendor"
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
+        try:
+            response = conv.wait_event(
+                events.NewMessage(incoming=True, from_users=774181428)
+            )
+            await conv.send_message(f"/{vendor} {link}")
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
+        except YouBlockedUserError:
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
+            return
+        else:
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
+
 @bot.on(admin_cmd(pattern="specs(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="specs(?: |$)(.*)", allow_sudo=True))
 async def _(event):
@@ -159,6 +182,8 @@ CMD_HELP.update(
         \n\n__**For Xiaomeme devices only!**__\
         \n\n**Syntax :** `.firmware` (codename)\
         \n**Function : **Get lastest Firmware\
+        \n\n**Syntax :** `.vendor` (codename)\
+        \n**Function : **Get lastest Vendor\
         \n\n**Syntax :** `.pb` (codename)\
         \n**Function : **Get latest PBRP\
         \n\n**Syntax :** `.specs` (codename)\

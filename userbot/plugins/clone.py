@@ -71,7 +71,7 @@ async def _(event):
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
-            f"#CLONED\nSuccesfulley cloned [{first_name}](tg://user?id={user_id })",
+            f"#CLONED\nSuccesfully cloned [{first_name}](tg://user?id={user_id })",
         )
 
 
@@ -148,7 +148,7 @@ async def get_full_user(event):
 
 CMD_HELP.update(
     {
-        "clone": "**SYNTAX :** `.clone`<reply to user who you want to clone\
+        "clone": "**SYNTAX :** `.clone`<reply to user whom you want to clone\
     \n**USAGE : **clone the replied user account\
     \n\n**SYNTAX : **`.revert`\
     \n**USAGE : **Reverts back to your profile which you have set in heroku for  AUTONAME,DEFAULT_BIO\

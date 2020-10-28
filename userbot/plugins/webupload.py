@@ -152,7 +152,7 @@ CMD_HELP.update(
     {
         "webupload": "__**PLUGIN NAME :** __ `webupload`\
     \n\n**Syntax : **`.webupload` --(`fileio`|`oload`|`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`vshare`|`bayfiles`) or \
-    \n         `.webuplod` (path of file) --(`fileio`|`oload`|`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`vshare`|`bayfiles`)\
+    \n         `.webupload` (path of file) --(`fileio`|`oload`|`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`vshare`|`bayfiles`)\
     \n**Usage : **Upload the file to web according to your choice\
     \n**Example : **`.webupload --anonfiles` tag this to a file\
     \n\n**Syntax :** `.labstack` Reply to a media file or provide a directory\

@@ -144,11 +144,11 @@ async def aexec(code, event):
 
 CMD_HELP.update(
     {
-        "evaluators": "**Synatax : **.eval <expr>`:\
+        "evaluators": "**Syntax : ** `.eval <expr>`:\
      \n**Usage : **Execute Python script.\
-     \n\n**Synatax : **.exec <command>`:\
+     \n\n**Syntax : ** `.exec <command>`:\
      \n**Usage : **Execute a bash command on catuserbot server and shows details.\
-     \n\n**Synatax : **.bash <command>`:\
+     \n\n**Syntax : ** `.bash <command>`:\
      \n**Usage : **Execute a bash command on catuserbot server and  easy to copy output\
      "
     }

@@ -34,7 +34,7 @@ async def _(car):
     elif stdout:
         evaluation = stdout
     else:
-        evaluation = "Sorry I cant find result for the given equation"
+        evaluation = "Sorry I can't find result for the given equation"
     final_output = "**EQUATION**: `{}` \n\n **SOLUTION**: \n`{}` \n".format(
         cmd, evaluation
     )
@@ -50,6 +50,6 @@ CMD_HELP.update(
     {
         "calc": "**Plugin : **`calc`\
         \n\n**Syntax : **`.calc expression` \
-        \n**Function : **solves the given maths equation by bodmass rule. "
+        \n**Function : **solves the given maths equation by BODMAS rule. "
     }
 )

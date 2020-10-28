@@ -33,10 +33,10 @@ async def nekobot(cat):
             if not reply_to_id.media:
                 text = reply_to_id.message
             else:
-                await edit_or_reply(cat, "Send you text to trump so he can tweet.")
+                await edit_or_reply(cat, "Send your text to trump so he can tweet.")
                 return
         else:
-            await edit_or_reply(cat, "send you text to trump so he can tweet.")
+            await edit_or_reply(cat, "send your text to trump so he can tweet.")
             return
     cate = await edit_or_reply(cat, "Requesting trump to tweet...")
     try:
@@ -64,10 +64,10 @@ async def nekobot(cat):
             if not reply_to_id.media:
                 text = reply_to_id.message
             else:
-                await edit_or_reply(cat, "Send you text to modi so he can tweet.")
+                await edit_or_reply(cat, "Send your text to modi so he can tweet.")
                 return
         else:
-            await edit_or_reply(cat, "send you text to modi so he can tweet.")
+            await edit_or_reply(cat, "send your text to modi so he can tweet.")
             return
     cate = await edit_or_reply(cat, "Requesting modi to tweet...")
     try:
@@ -94,7 +94,7 @@ async def nekobot(cat):
         if cat.is_reply and not reply_to_id.media:
             text = reply_to_id.message
         else:
-            await edit_or_reply(cat, "Give text for to write on banner, man")
+            await edit_or_reply(cat, "Give text to write on banner, man")
             return
     cate = await edit_or_reply(cat, "Your banner is under creation wait a sec...")
     try:
@@ -158,7 +158,7 @@ async def nekobot(cat):
         else:
             await edit_or_reply(
                 cat,
-                "what should i tweet? Give some text and format must be like `.tweet username | your text` ",
+                "what should I tweet? Give some text and format must be like `.tweet username | your text` ",
             )
             return
     try:
@@ -172,7 +172,7 @@ async def nekobot(cat):
     else:
         await edit_or_reply(
             cat,
-            "what should i tweet? Give some text and format must be like `.tweet username | your text`",
+            "what should I tweet? Give some text and format must be like `.tweet username | your text`",
         )
         return
     cate = await edit_or_reply(cat, f"Requesting {username} to tweet...")

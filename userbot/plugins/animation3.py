@@ -177,7 +177,7 @@ async def _(event):
         "🤯",
         "💔",
         "❤",
-        "i Love You❤",
+        "I Love You❤",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)

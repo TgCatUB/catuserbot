@@ -314,7 +314,7 @@ CMD_HELP.update(
         \n\n**Syntax : **`.block`\
         \n**Usage : **Blocks the person.\
         \n\n**Syntax : **`.unblock`\
-        \n**Usage : **unBlocks the person.\
+        \n**Usage : **Unblocks the person.\
         \n\n**Syntax : **`.listapproved`\
         \n**Usage : **To list the all approved users.\
 "

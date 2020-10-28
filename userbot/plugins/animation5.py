@@ -93,7 +93,7 @@ async def _(event):
         "😧",
         "😡",
         "😢",
-        "__**[Good to See you guys....]**__(github.com/sandy1709/catuserbot)",
+        "__**[Good to see you guys....]**__(github.com/sandy1709/catuserbot)",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
@@ -108,7 +108,7 @@ async def _(event):
     animation_interval = 2
     animation_ttl = range(6)
     event = await edit_or_reply(event, "Hey There....")
-    animation_chars = ["😁🏿", "😁🏾", "😁🏽", "😁🏼", "‎😁", "**Good to See you friend....**"]
+    animation_chars = ["😁🏿", "😁🏾", "😁🏽", "😁🏼", "‎😁", "**Good to see you friend....**"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 6])
@@ -122,7 +122,7 @@ async def _(event):
     animation_interval = 2
     animation_ttl = range(12)
     event = await edit_or_reply(event, "Hey There....")
-    animation_chars = ["🐵", "🙉", "🙈", "🙊", "🖕‎🐵🖕", "**Good to See you friend....**"]
+    animation_chars = ["🐵", "🙉", "🙈", "🙊", "🖕‎🐵🖕", "**Good to see you friend....**"]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 6])

@@ -94,11 +94,11 @@ CMD_HELP.update(
     {
         "fake": "**fake**\
     \n\n**Syntax :** `.scam <action>` \
-    \n**Usage : **Type .scam (action name) this shows the fake action in the group  the actions are typing ,contact ,game, location, voice, round, video,photo,document, cancel.\
-    \n\n**Syntax :** `.prankpromote` reply to user to who you want to prank promote\
+    \n**Usage : **Type .scam (action name) This shows the fake action in the group, The actions are typing ,contact ,game, location, voice, round, video,photo,document, cancel.\
+    \n\n**Syntax :** `.prankpromote` reply to user to whom you want to prank promote\
     \n**Usage : **it promotes him to admin but he will not have any permission to take action that is he can see rection actions but cant take any admin action\
     \n\n**Syntax :** `.padmin`\
-    \n**Usage : ** An animation that shows enableing all permissions to him that he is admin(fake promotion)\
+    \n**Usage : ** An animation that shows enabling all permissions to him that he is admin(fake promotion)\
     "
     }
 )

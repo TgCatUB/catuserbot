@@ -33,7 +33,7 @@ async def carbon_api(e):
         pcode = str(textx.message)  # Importing message to module
     pcode = deEmojify(pcode)
     code = quote_plus(pcode)  # Converting to urlencoded
-    cat = await edit_or_reply(e, "`Meking Carbon...\n25%`")
+    cat = await edit_or_reply(e, "`Carbonizing...\n25%`")
     url = CARBON.format(code=code, lang=CARBONLANG)
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -579,7 +579,7 @@ CMD_HELP.update(
     \n  •  `.rgbk2 <reply to code>`\
     \n  •  `.kargb <reply to code>`\
     \n\n**Function : **\
-    \n__Carbon generators each command has one style of carbon (krb ,kargb shows random carbons remaining all are fixed)__\
+    \n__Carbon generators, each command has one style of carbon (krb ,kargb shows random carbons, remaining all are fixed)__\
     "
     }
 )

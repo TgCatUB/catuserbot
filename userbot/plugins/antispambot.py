@@ -42,7 +42,7 @@ if Config.ANTISPAMBOT_BAN:
             catgban = get_gbanuser(user.id)
             if catgban.reason:
                 hmm = await event.reply(
-                    f"[{user.first_name}](tg://user?id={user.id}) was gbanned by you For the reason `{catgban.reason}`"
+                    f"[{user.first_name}](tg://user?id={user.id}) was gbanned by you for the reason `{catgban.reason}`"
                 )
             else:
                 hmm = await event.reply(
@@ -57,7 +57,7 @@ if Config.ANTISPAMBOT_BAN:
             ban = spamwatch.get_ban(user.id)
             if ban:
                 hmm = await event.reply(
-                    f"[{user.first_name}](tg://user?id={user.id}) was banned by spamwatch For the reason `{ban.reason}`"
+                    f"[{user.first_name}](tg://user?id={user.id}) was banned by spamwatch for the reason `{ban.reason}`"
                 )
                 try:
                     await bot.edit_permissions(chat, user.id, view_messages=False)
@@ -76,7 +76,7 @@ if Config.ANTISPAMBOT_BAN:
                     f"[Banned by Combot Anti Spam](https://cas.chat/query?u={user.id})"
                 )
                 hmm = await event.reply(
-                    f"[{user.first_name}](tg://user?id={user.id}) was banned by Combat anti-spam service(CAS) For the reason check {reason}"
+                    f"[{user.first_name}](tg://user?id={user.id}) was banned by Combat anti-spam service(CAS) for the reason check {reason}"
                 )
                 try:
                     await bot.edit_permissions(chat, user.id, view_messages=False)
