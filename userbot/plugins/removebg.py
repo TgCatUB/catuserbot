@@ -51,12 +51,12 @@ async def remove_background(event):
             await event.edit(str(e))
             return
         else:
-            await event.edit("`Removing Back ground of this media`")
+            await event.edit("`Removing Background of this media`")
             downloaded_file_name = convert_toimage(downloaded_file_name)
             output_file_name = ReTrieveFile(downloaded_file_name)
             os.remove(downloaded_file_name)
     elif input_str:
-        await event.edit("`Removing Back ground of this media`")
+        await event.edit("`Removing Background of this media`")
         output_file_name = ReTrieveURL(input_str)
     else:
         await event.edit(
@@ -126,10 +126,10 @@ def ReTrieveURL(input_url):
 CMD_HELP.update(
     {
         "removebg": "**Plugin : **`removebg`\
-        \n\n**Syntax : **`.rmbg` <Link to Image> or reply to any image\
-        \n**Function : **__Removes the background of images and send as png format__\
-        \n\n**Syntax : **`.srmbg` <Link to Image> or reply to any image\
-        \n**function : **__Removes the background of images and send as sticker format__\
+        \n\n**Syntax : **`.rmbg` <Link to Image> or reply to any image/sticker\
+        \n**Function : **__Removes the background of an image/sticker and send as png format__\
+        \n\n**Syntax : **`.srmbg` <Link to Image> or reply to any image/sticker\
+        \n**function : **__Removes the background an image/sticker and send as sticker format__\
         "
     }
 )

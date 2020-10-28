@@ -51,7 +51,7 @@ async def _(event):
     if os.path.exists(thumb_image_path):
         os.remove(thumb_image_path)
     else:
-        await edit_or_reply(event, "No thumbnail is setted to clear")
+        await edit_or_reply(event, "No thumbnail is set to clear")
     await edit_or_reply(event, "✅ Custom thumbnail cleared succesfully.")
 
 

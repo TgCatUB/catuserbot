@@ -67,6 +67,6 @@ async def _(event):
 CMD_HELP.update(
     {
         "mashup": "`.mash` <text> :\
-      \n**USAGE:** Send you the related video message of given text . "
+      \n**USAGE:** Sends you the related video message of given text. "
     }
 )

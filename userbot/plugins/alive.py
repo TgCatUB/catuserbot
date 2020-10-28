@@ -102,8 +102,9 @@ CMD_HELP.update(
     {
         "alive": "**Plugin :** `alive`\
       \n\n**Syntax : **`.alive` \
-      \n**Usage : ** status of bot.\
+      \n**Function : **__status of bot will be showed__\
       \n\n**Syntax : **`.ialive` \
-      \n**Usage : ** inline alive."
+      \n**Function : **__inline status of bot will be shown.__\
+      \nSet `ALIVE_PIC` var for media in alive message"
     }
 )

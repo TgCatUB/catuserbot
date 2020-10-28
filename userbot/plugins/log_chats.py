@@ -133,7 +133,7 @@ CMD_HELP.update(
         \n\n**Syntax : **`.log`:\
         \n**Usage : **By default will log all private chat messages if you use .nolog and want to log again then you need to use this\
         \n\n**Syntax : **`.nolog`:\
-        \n**Usage : **to stops logging from a private chat \
-        \n\n**Note : **these resets after restart soon will try to add database so wont reset after restart"
+        \n**Usage : **stops logging from a private chat \
+        \n\n**Note : **Currently these resets after restart, will try to add database soon so wont reset after restart"
     }
 )

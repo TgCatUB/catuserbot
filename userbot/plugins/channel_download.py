@@ -80,7 +80,7 @@ async def get_media(event):
 CMD_HELP.update(
     {
         "channel_download": "Telegram Channel Media Downloader Plugin for userbot.\
-\n\n**USAGE :**\n .geta channel_username [will  get all media from channel, tho there is limit of 3000 there to prevent API limits.]\
+\n\n**USAGE :**\n .geta channel_username [will  get all media from channel, though there is limit of 3000 to prevent API limits.]\
 \n\n.getc number_of_messsages channel_username"
     }
 )

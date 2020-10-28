@@ -79,7 +79,7 @@ async def _(event):
     if not catinput:
         catinput = (await event.get_reply_message()).text
     if not catinput:
-        await edit_or_reply(event, "`Give me some thing to write in bot inline`")
+        await edit_or_reply(event, "`Give me something to write in bot inline`")
         return
     catinput = "Inline buttons " + catinput
     tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
@@ -102,10 +102,10 @@ CMD_HELP.update(
     {
         "button": "**Plugin : **`button`\
     \n\n**SYNTAX : **`.cbutton`\
-    \n**USAGE :** Buttons must be in th format as [name on button]<buttonurl:link you want to open> and markdown is Default to html\
+    \n**USAGE :** Buttons must be in the format as [Name on button]<buttonurl:link you want to open> and markdown is Default to html\
     \n**EXAMPLE :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
     \n\n**SYNTAX : **`.ibutton`\
-    \n**USAGE :** Buttons must be in th format as [name on button]<buttonurl:link you want to open>\
+    \n**USAGE :** Buttons must be in the format as [Name on button]<buttonurl:link you want to open>\
     \n**EXAMPLE :** `.ibutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
     "
     }

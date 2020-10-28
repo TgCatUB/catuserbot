@@ -30,7 +30,7 @@ async def _(event):
         await edit_or_reply(event, f"DNS records of {input_str} are \n{response_api}")
     else:
         await edit_or_reply(
-            event, f"__i can't seem to find `{input_str}` on the internet__"
+            event, f"__I can't seem to find `{input_str}` on the internet__"
         )
 
 
@@ -62,7 +62,7 @@ async def _(event):
             event, f"Generated {response_api} for {input_str}.", link_preview=False
         )
     else:
-        await edit_or_reply(event, "`something is wrong. please try again later.`")
+        await edit_or_reply(event, "`Something is wrong, please try again later.`")
 
 
 @bot.on(admin_cmd(pattern="unshort( (.*)|$)"))
@@ -127,7 +127,7 @@ CMD_HELP.update(
     {
         "dagd": "**Plugin : **`dagd`\
         \n\n**Syntax :** `.dns link`\
-        \n**Function : **__Shows you Domain Name System(dns) of the given link . example `.dns google.com` or `.dns github.cm`__\
+        \n**Function : **__Shows you Domain Name System(dns) of the given link. Ex: `.dns google.com` or `.dns github.com`__\
         \n\n**Syntax : **`.url link`\
         \n**Function : **__shortens the given link__\
         \n\n**Syntax : **`.unshort link`\

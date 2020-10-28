@@ -107,11 +107,11 @@ CMD_HELP.update(
     {
         "hack": "**Plugin : **`hack`\
         \n\n**Syntax : **`.hack reply to a person`\
-        \n**Function : **__shows a animation of hacking progess bar__\
+        \n**Function : **__shows an animation of hacking progess bar__\
         \n\n**Syntax : **`.thack reply to a person`\
-        \n**Function : **__shows aanimation of hacking replied person telegram account__\
+        \n**Function : **__shows an animation of Telegram account hacking to a replied person__\
         \n\n**Syntax : **`.wahack reply to a person`\
-        \n**Function : **__shows aanimation of hacking replied person whatsapp account__\
+        \n**Function : **__shows an animation of whatsapp account hacking to a replied person__\
     "
     }
 )

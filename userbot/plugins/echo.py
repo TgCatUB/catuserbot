@@ -37,7 +37,7 @@ async def echo(cat):
         addecho(user_id, chat_id)
         await edit_or_reply(cat, "Hi")
     else:
-        await edit_or_reply(cat, "Reply To A User's Message to echo his messages")
+        await edit_or_reply(cat, "Reply to a User's message to echo his messages")
 
 
 @bot.on(admin_cmd(pattern="rmecho$"))
@@ -61,7 +61,7 @@ async def echo(cat):
         else:
             await edit_or_reply(cat, "The user is not activated with echo")
     else:
-        await edit_or_reply(cat, "Reply To A User's Message to echo his messages")
+        await edit_or_reply(cat, "Reply to a User's message to echo his messages")
 
 
 @bot.on(admin_cmd(pattern="listecho$"))
@@ -112,12 +112,12 @@ async def samereply(cat):
 
 CMD_HELP.update(
     {
-        "echo": "**Syntax :** `.addecho` reply to user to who you want to enable\
-    \n**Usage : **replay's his every message for whom you enabled echo\
-    \n\n**Syntax : **`.rmecho` reply to user to who you want to stop\
+        "echo": "**Syntax :** `.addecho` reply to user to whom you want to enable\
+    \n**Usage : **replays his every message for whom you enabled echo\
+    \n\n**Syntax : **`.rmecho` reply to user to whom you want to stop\
     \n**Usage : **Stops replaying his messages\
     \n\n**Syntax : **`.listecho`\
-    \n**Usage : **shows the list of users for who you enabled echo\
+    \n**Usage : **shows the list of users for whom you enabled echo\
     "
     }
 )

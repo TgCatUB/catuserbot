@@ -378,8 +378,8 @@ CMD_HELP.update(
         "spam": "**Plugin : **`spam`\
         \n\n**Syntax : **`.spam <count> <text>`\
         \n**Function : **__ Floods text in the chat !!__\
-        \n\n**Syntax : **`.spam <count> replay to media`\
-        \n**Function : **__ Floods text in the media !!__\
+        \n\n**Syntax : **`.spam <count> reply to media`\
+        \n**Function : **__Sends the replied media <count> times !!__\
         \nFor above two commands use `.bigspam` instead of spam for spamming more than 50 messages\
         \n\n**Syntax : **`.cspam <text>`\
         \n**Function : **__ Spam the text letter by letter.__\

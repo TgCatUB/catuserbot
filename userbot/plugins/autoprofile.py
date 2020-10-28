@@ -70,7 +70,7 @@ async def autopic(event):
 
 @bot.on(admin_cmd(pattern="digitalpfp$"))
 async def main(event):
-    await event.edit("Starting digital Profile Pic see magic in 5 sec.")
+    await event.edit("Starting Digital Profile Pic, see magic in 5 sec.")
     poto = "userbot/poto_pfp.png"
     cat = str(
         pybase64.b64decode(
@@ -261,7 +261,7 @@ BIO_STRINGS = [
 
 @bot.on(admin_cmd(pattern="monkeybio$"))  # pylint:disable=E0602
 async def _(event):
-    await event.edit(f"monkey has been started by my Master")
+    await event.edit(f"Monkey has been started by my Master")
     while True:
         bro = random.randint(0, len(BIO_STRINGS) - 1)
         # input_str = event.pattern_match.group(1)
@@ -293,19 +293,19 @@ CMD_HELP.update(
         "autoprofile": "**autoprofile**\
     \n**Syntax : **`.autopic`\
 \n**Usage : **Rotating image along with the time on it .\
-\nfor working this you must set `DOWNLOAD_PFP_URL_CLOCK` in the heroku vars first with telegraph link of required image\
+\nSet `DOWNLOAD_PFP_URL_CLOCK` in the heroku vars first with telegraph link of required image\
 \n\n**Syntax : **`.digitalpfp`\
 \n**Usage : **Your profile pic changes to digitaltime profile picutre \
 \n\n**Syntax : **`.bloom`\
-\n**Usage : **Random colour profile pics will be setted along with time on it.\
-\nfor working this you must set `DOWNLOAD_PFP_URL_CLOCK` in the heroku vars first with telegraph link of required image\
+\n**Usage : **Random colour profile pics will be set along with time on it.\
+\nSet `DOWNLOAD_PFP_URL_CLOCK` in the heroku vars first with telegraph link of required image\
 \n\n**Syntax : **`.autoname`\
-\n**Usage : **for time along name to work this you must set `AUTONAME`in the heroku vars first \
+\n**Usage : **for time along with name, you must set `AUTONAME`in the heroku vars first for this to work \
 \n\n**Syntax : **`.autobio`\
-\n**Usage : **for time along with your bio to work this you must set `DEFAULT_BIO` in the heroku vars first \
+\n**Usage : **for time along with your bio, Set `DEFAULT_BIO` in the heroku vars first \
 \n\n**Syntax : **`.monkeybio`\
-\n**Usage : **set of funny monkey bio's\
-\n\n for stoping these aby command you need to do `.restart` and change them manually\
+\n**Usage : **sets funny monkey bio \
+\n\n for stopping any of these above commands you need to do `.restart` and change them manually\
 "
     }
 )
