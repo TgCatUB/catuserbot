@@ -357,8 +357,8 @@ CMD_HELP.update(
 \nUsage: Spam the text letter by letter.\
 \n\n.spam <count> <text>\
 \nUsage: Floods text in the chat !!\
-\n\n.spam <count> replay to media\
-\nUsage: Floods text in the media !!\
+\n\n.spam <count> reply to media\
+\nUsage: Sends the replied media <count> times !!\
 \n\n.wspam <text>\
 \nUsage: Spam the text word by word.\
 \n\n.delayspam <delay> <count> <text>\
