@@ -369,7 +369,7 @@ async def _(event):
         await edit_delete(
             event, "`either reply to text message or give input to search`", 5
         )
-    sample_url = f"https://da.gd/s?url=https://lmgtfy.com/?q={input_str.replace(" ", "+")}%26iie=1"
+    sample_url = f"https://da.gd/s?url=https://lmgtfy.com/?q={input_str.replace(' ', '+')}%26iie=1"
     response_api = requests.get(sample_url).text
     if response_api:
         await edit_or_reply(
