@@ -292,7 +292,7 @@ CMD_HELP.update(
     {
         "upload": "**Plugin :** `upload`\
     \n\n**Syntax :** `.upload path of file/folder`\
-    \n**Usage : **Uploads the file from the server or list of filesfrom that folder\
+    \n**Usage : **Uploads the file from the server or list of files from that folder\
     \n\n**Syntax : **`.uploadasstream path of video/audio`\
     \n**Usage : **Uploads video/audio as streamable from the server\
     \n\n**Syntax : **`.uploadasvn path of video`\
