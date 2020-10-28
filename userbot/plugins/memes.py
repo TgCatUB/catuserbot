@@ -366,12 +366,10 @@ async def _(event):
     if not input_str and reply:
         input_str = reply.text
     if not input_str:
-        await event_delete(
+        await edit_delete(
             event, "`either reply to text message or give input to search`", 5
         )
-    sample_url = "https://da.gd/s?url=https://lmgtfy.com/?q={}%26iie=1".format(
-        input_str.replace(" ", "+")
-    )
+    sample_url = f"https://da.gd/s?url=https://lmgtfy.com/?q={input_str.replace(" ", "+")}%26iie=1"
     response_api = requests.get(sample_url).text
     if response_api:
         await edit_or_reply(
@@ -382,7 +380,7 @@ async def _(event):
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
-            "LMGTFY query `" + input_str + "` was executed successfully",
+            f"LMGTFY query `{input_str}` was executed successfully",
         )
 
 
