@@ -4,10 +4,14 @@ memify plugin
 """
 import asyncio
 import os
+import random
 
 from ..utils import admin_cmd, sudo_cmd
 from . import (
+    CMD_HELP,
+    LOGS,
     add_frame,
+    asciiart,
     cat_meeme,
     cat_meme,
     convert_toimage,
@@ -17,14 +21,12 @@ from . import (
     grayscale,
     invert_colors,
     mirror_file,
+    reply_id,
     runcmd,
     solarize,
-    take_screen_shot,asciiart , reply_id,CMD_HELP, LOGS
+    take_screen_shot,
 )
-import random
-import numpy as np
-from colour import Color
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+
 
 def random_color():
     number_of_colors = 2
@@ -32,6 +34,7 @@ def random_color():
         "#" + "".join([random.choice("0123456789ABCDEF") for j in range(6)])
         for i in range(number_of_colors)
     ]
+
 
 @bot.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
 @bot.on(sudo_cmd(pattern="(mmf|mms) ?(.*)", allow_sudo=True))
@@ -126,6 +129,7 @@ async def memes(cat):
         if files and os.path.exists(files):
             os.remove(files)
 
+
 @bot.on(admin_cmd(outgoing=True, pattern="ascii$"))
 @bot.on(sudo_cmd(pattern="ascii$", allow_sudo=True))
 async def memes(cat):
@@ -137,7 +141,6 @@ async def memes(cat):
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
     cat = await edit_or_reply(cat, "`Downloading media......`")
-    from telethon.tl.functions.messages import ImportChatInviteRequest as Get
     await asyncio.sleep(2)
     catsticker = await reply.download_media(file="./temp/")
     if not catsticker.endswith((".mp4", ".webp", ".tgs", ".png", ".jpg", ".mov")):
@@ -192,7 +195,7 @@ async def memes(cat):
     color1 = c_list[0]
     color2 = c_list[1]
     bgcolor = "#080808"
-    asciiart(meme_file, 0.3, 1.9,outputfile, color1, color2, bgcolor)
+    asciiart(meme_file, 0.3, 1.9, outputfile, color1, color2, bgcolor)
     await borg.send_file(cat.chat_id, outputfile, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
@@ -200,7 +203,6 @@ async def memes(cat):
         if files and os.path.exists(files):
             os.remove(files)
 
-            
 
 @bot.on(admin_cmd(pattern="invert$", outgoing=True))
 @bot.on(sudo_cmd(pattern="invert$", allow_sudo=True))
