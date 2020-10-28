@@ -5,8 +5,7 @@ memify plugin
 import asyncio
 import os
 
-from .. import CMD_HELP, LOGS
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from ..utils import admin_cmd, sudo_cmd
 from . import (
     add_frame,
     cat_meeme,
@@ -20,9 +19,19 @@ from . import (
     mirror_file,
     runcmd,
     solarize,
-    take_screen_shot,
+    take_screen_shot,asciiart , reply_id,CMD_HELP, LOGS
 )
+import random
+import numpy as np
+from colour import Color
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+def random_color():
+    number_of_colors = 2
+    return [
+        "#" + "".join([random.choice("0123456789ABCDEF") for j in range(6)])
+        for i in range(number_of_colors)
+    ]
 
 @bot.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
 @bot.on(sudo_cmd(pattern="(mmf|mms) ?(.*)", allow_sudo=True))
@@ -117,6 +126,81 @@ async def memes(cat):
         if files and os.path.exists(files):
             os.remove(files)
 
+@bot.on(admin_cmd(outgoing=True, pattern="ascii$"))
+@bot.on(sudo_cmd(pattern="ascii$", allow_sudo=True))
+async def memes(cat):
+    reply = await cat.get_reply_message()
+    if not (reply and (reply.media)):
+        await edit_or_reply(cat, "`Reply to supported Media...`")
+        return
+    catid = await reply_id(cat)
+    if not os.path.isdir("./temp/"):
+        os.mkdir("./temp/")
+    cat = await edit_or_reply(cat, "`Downloading media......`")
+    from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+    await asyncio.sleep(2)
+    catsticker = await reply.download_media(file="./temp/")
+    if not catsticker.endswith((".mp4", ".webp", ".tgs", ".png", ".jpg", ".mov")):
+        os.remove(catsticker)
+        await edit_or_reply(cat, "```Supported Media not found...```")
+        return
+    jisanidea = None
+    if catsticker.endswith(".tgs"):
+        await cat.edit(
+            "```Transfiguration Time! Mwahaha converting to ascii image of this animated sticker! (」ﾟﾛﾟ)｣```"
+        )
+        catfile = os.path.join("./temp/", "meme.png")
+        catcmd = (
+            f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
+        )
+        stdout, stderr = (await runcmd(catcmd))[:2]
+        if not os.path.lexists(catfile):
+            await cat.edit("`Template not found...`")
+            LOGS.info(stdout + stderr)
+        meme_file = catfile
+        jisanidea = True
+    elif catsticker.endswith(".webp"):
+        await cat.edit(
+            "```Transfiguration Time! Mwahaha converting to ascii image of this sticker! (」ﾟﾛﾟ)｣```"
+        )
+        catfile = os.path.join("./temp/", "memes.jpg")
+        os.rename(catsticker, catfile)
+        if not os.path.lexists(catfile):
+            await cat.edit("`Template not found... `")
+            return
+        meme_file = catfile
+        jisanidea = True
+    elif catsticker.endswith((".mp4", ".mov")):
+        await cat.edit(
+            "```Transfiguration Time! Mwahaha converting to ascii image of this video! (」ﾟﾛﾟ)｣```"
+        )
+        catfile = os.path.join("./temp/", "memes.jpg")
+        await take_screen_shot(catsticker, 0, catfile)
+        if not os.path.lexists(catfile):
+            await cat.edit("```Template not found...```")
+            return
+        meme_file = catfile
+        jisanidea = True
+    else:
+        await cat.edit(
+            "```Transfiguration Time! Mwahaha converting to asci image of this image! (」ﾟﾛﾟ)｣```"
+        )
+        meme_file = catsticker
+    meme_file = convert_toimage(meme_file)
+    outputfile = "ascii_file.webp" if jisanidea else "ascii_file.jpg"
+    c_list = random_color()
+    color1 = c_list[0]
+    color2 = c_list[1]
+    bgcolor = "#080808"
+    asciiart(meme_file, 0.3, 1.9,outputfile, color1, color2, bgcolor)
+    await borg.send_file(cat.chat_id, outputfile, reply_to=catid)
+    await cat.delete()
+    os.remove(outputfile)
+    for files in (catsticker, meme_file):
+        if files and os.path.exists(files):
+            os.remove(files)
+
+            
 
 @bot.on(admin_cmd(pattern="invert$", outgoing=True))
 @bot.on(sudo_cmd(pattern="invert$", allow_sudo=True))
