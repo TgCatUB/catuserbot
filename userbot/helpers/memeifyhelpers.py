@@ -6,6 +6,8 @@ from os.path import basename, join
 from textwrap import wrap
 from typing import Optional, Tuple
 
+import numpy as np
+from colour import Color
 from PIL import Image, ImageDraw, ImageFont
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from wand.color import Color
@@ -16,8 +18,6 @@ from . import unzip
 
 MARGINS = [50, 150, 250, 350, 450]
 
-import numpy as np
-from colour import Color
 
 
 def asciiart(in_f, SC, GCF, out_f, color1, color2, bgcolor="black"):
