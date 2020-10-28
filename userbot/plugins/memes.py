@@ -356,12 +356,17 @@ async def _(event):
     await event.edit(mentions)
 
 
-@bot.on(admin_cmd(pattern="lfy (.*)"))
-@bot.on(sudo_cmd(pattern="lfy (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="lfy ?(.*)"))
+@bot.on(sudo_cmd(pattern="lfy ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text 
+    if not input_str:
+        await event_delete(event ,"`either reply to text message or give input to search`", 5)
     sample_url = "https://da.gd/s?url=https://lmgtfy.com/?q={}%26iie=1".format(
         input_str.replace(" ", "+")
     )
@@ -369,12 +374,12 @@ async def _(event):
     if response_api:
         await edit_or_reply(
             event,
-            "[{}]({})\n`Thank me Later 🙃` ".format(input_str, response_api.rstrip()),
+            f"[{input_str}]({response_api.rstrip()})\n`Thank me Later 🙃` "
         )
     else:
-        await edit_or_reply(event, "something is wrong. please try again later.")
+        await edit_delete(event, "`something is wrong. please try again later.`" , 5)
     if BOTLOG:
-        await bot.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID,
             "LMGTFY query `" + input_str + "` was executed successfully",
         )
@@ -436,53 +441,53 @@ CMD_HELP.update(
     {
         "memes": "**Plugin : **`memes`\
         \n\n**Syntax :** `.cowsay`\
-        \n**Usage : **cow which says things.\
+        \n**Function : **cow which says things.\
         \n\n**Syntax :** `.coin <heads/tails>`\
-        \n**Usage : **Flips a coin !!\
+        \n**Function : **Flips a coin !!\
         \n\n**Syntax :** `.slap`\
-        \n**Usage : **reply to slap them with random objects !!\
+        \n**Function : **reply to slap them with random objects !!\
         \n\n**Syntax :** `.yes` ,`.no` , `.maybe` , `.decide`\
-        \n**Usage : **Sends you the respectively gif of command u used\
+        \n**Function : **Sends you the respectively gif of command u used\
         \n\n**Syntax :** `.shout text`\
-        \n**Usage : **shouts the text in a fun way\
+        \n**Function : **shouts the text in a fun way\
         \n\n**Syntax :** `.owo`\
-        \n**Usage : **UwU\
+        \n**Function : **UwU\
         \n\n**Syntax :** `.clap`\
-        \n**Usage : **Praise people!\
+        \n**Function : **Praise people!\
         \n\n**Syntax :** `.smk <text/reply>`\
-        \n**Usage : **A shit module for ツ , who cares.\
+        \n**Function : **A shit module for ツ , who cares.\
         \n\n**Syntax :** `.ftext <emoji/character>`\
-        \n**Usage : **Pay Respects.\
+        \n**Function : **Pay Respects.\
         \n\n**Syntax :** `.repo`\
-        \n**Usage : **Shows to source code link of catuserbot.\
+        \n**Function : **Shows to source code link of catuserbot.\
         \n\n**Syntax :** `.congo`\
-        \n**Usage : **Congratulate the people.\
+        \n**Function : **Congratulate the people.\
         \n\n**Syntax :** `.shg`\
-        \n**Usage : **Shrug at it !!\
+        \n**Function : **Shrug at it !!\
         \n\n**Syntax :** `.runs`\
-        \n**Usage : **Run, run, RUNNN!\
+        \n**Function : **Run, run, RUNNN!\
         \n\n**Syntax :** `.noob`\
-        \n**Usage : **Whadya want to know? Are you a NOOB?\
+        \n**Function : **Whadya want to know? Are you a NOOB?\
         \n\n**Syntax :** `.insult`\
-        \n**Usage : **insult someone\
+        \n**Function : **insult someone\
         \n\n**Syntax :** `.hey`\
-        \n**Usage : **start a conversation with people\
+        \n**Function : **start a conversation with people\
         \n\n**Syntax :** `.pro`\
-        \n**Usage : **If you think you're pro, try this.\
+        \n**Function : **If you think you're pro, try this.\
         \n\n**Syntax :** `.react` <type>\
-        \n**Usage : **Make your userbot react. types are <happy ,think ,wave ,wtf ,love ,confused,dead, sad,dog>\
+        \n**Function : **Make your userbot react. types are <happy ,think ,wave ,wtf ,love ,confused,dead, sad,dog>\
         \n\n**Syntax :** `.10iq`\
-        \n**Usage : **You retard !!\
+        \n**Function : **You retard !!\
         \n\n**Syntax :** `.fp`\
-        \n**Usage : **send you face pam emoji!\
+        \n**Function : **send you face pam emoji!\
         \n\n**Syntax :** `.bt`\
-        \n**Usage : **Believe me, you will find this useful.\
+        \n**Function : **Believe me, you will find this useful.\
         \n\n**Syntax :** `.session`\
-        \n**Usage : **telethon session error code(fun)\
+        \n**Function : **telethon session error code(fun)\
         \n\n**Syntax :** `.lfy <query>`\
-        \n**Usage : **Let me Google that for you real quick !!\
+        \n**Function : **Let me Google that for you real quick !!\
         \n\n**Syntax :** `.gbun <reason>`\
-        \n**Usage : **Fake gban action !!\
+        \n**Function : **Fake gban action !!\
 "
     }
 )
