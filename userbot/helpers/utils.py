@@ -3,10 +3,13 @@ import datetime
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
+
 from ..Config import Config
+
 
 def mentionuser(name, userid):
     return f"[{name}](tg://user?id={userid})"
+
 
 async def reply_id(event):
     reply_to_id = None
@@ -15,10 +18,11 @@ async def reply_id(event):
     if event.reply_to_msg_id:
         reply_to_id = await event.reply_to_msg_id
     return reply_to_id
- 
-    
+
+
 # kanged from uniborg @spechide
 # https://github.com/SpEcHiDe/UniBorg/blob/d8b852ee9c29315a53fb27055e54df90d0197f0b/uniborg/utils.py#L250
+
 
 def parse_pre(text):
     text = text.strip()
