@@ -364,20 +364,21 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     if not input_str and reply:
-        input_str = reply.text 
+        input_str = reply.text
     if not input_str:
-        await event_delete(event ,"`either reply to text message or give input to search`", 5)
+        await event_delete(
+            event, "`either reply to text message or give input to search`", 5
+        )
     sample_url = "https://da.gd/s?url=https://lmgtfy.com/?q={}%26iie=1".format(
         input_str.replace(" ", "+")
     )
     response_api = requests.get(sample_url).text
     if response_api:
         await edit_or_reply(
-            event,
-            f"[{input_str}]({response_api.rstrip()})\n`Thank me Later 🙃` "
+            event, f"[{input_str}]({response_api.rstrip()})\n`Thank me Later 🙃` "
         )
     else:
-        await edit_delete(event, "`something is wrong. please try again later.`" , 5)
+        await edit_delete(event, "`something is wrong. please try again later.`", 5)
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
