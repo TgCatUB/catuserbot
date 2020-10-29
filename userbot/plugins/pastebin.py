@@ -1,4 +1,4 @@
- # pastebin for catuserbot
+# pastebin for catuserbot
 
 import os
 
@@ -60,7 +60,9 @@ async def _(event):
             f"**Pasted to dogbin : **[dog]({nurl}).\n**Raw url :** [raw link]({rawurl})\n**GoTo Original URL: **[link]({url})"
         )
     else:
-        await catevent.edit(f"**Pasted to dogbin : **[dog]({url})\n**Raw url :** [raw link](https://del.dog/raw/{r['key']})")
+        await catevent.edit(
+            f"**Pasted to dogbin : **[dog]({url})\n**Raw url :** [raw link](https://del.dog/raw/{r['key']})"
+        )
 
 
 @bot.on(admin_cmd(pattern="neko( (.*)|$)", outgoing=True))
