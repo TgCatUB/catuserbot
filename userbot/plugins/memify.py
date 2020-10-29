@@ -130,9 +130,10 @@ async def memes(cat):
             os.remove(files)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="ascii$"))
-@bot.on(sudo_cmd(pattern="ascii$", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="ascii ?(.*)"))
+@bot.on(sudo_cmd(pattern="ascii ?(.*)", allow_sudo=True))
 async def memes(cat):
+    catinput = cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -194,7 +195,10 @@ async def memes(cat):
     c_list = random_color()
     color1 = c_list[0]
     color2 = c_list[1]
-    bgcolor = "#080808"
+    if not catinput:
+        bgcolor = "#080808"
+    else:
+        bgcolor = catinput
     asciiart(meme_file, 0.3, 1.9, outputfile, color1, color2, bgcolor)
     await borg.send_file(cat.chat_id, outputfile, reply_to=catid)
     await cat.delete()
