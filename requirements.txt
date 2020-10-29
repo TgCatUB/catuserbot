@@ -4,7 +4,6 @@ aiohttp
 asyncurban
 beautifulsoup4
 cairosvg
-calendar
 cfscrape
 coffeehouse
 colour
