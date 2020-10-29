@@ -7,7 +7,7 @@ from . import CMD_HELP
 @bot.on(admin_cmd(pattern="sdm (\d*) (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="sdm (\d*) (.*)", allow_sudo=True))
 async def selfdestruct(destroy):
-    cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    cat = ("".join(destroy.text.split(maxsplit=1)[1:])).split(" ", 1)
     message = cat[1]
     ttl = int(cat[0])
     try:
@@ -22,7 +22,7 @@ async def selfdestruct(destroy):
 @bot.on(admin_cmd(pattern="selfdm (\d*) (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="selfdm (\d*) (.*)", allow_sudo=True))
 async def selfdestruct(destroy):
-    cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    cat = ("".join(destroy.text.split(maxsplit=1)[1:])).split(" ", 1)
     message = cat[1]
     ttl = int(cat[0])
     text = (
@@ -40,9 +40,9 @@ async def selfdestruct(destroy):
 CMD_HELP.update(
     {
         "selfdestruct": "**Plugin : **`selfdestruct`\
-        \n\n**Syntax : **`.sdm number [text]`\
+        \n\n**Syntax : **`.sdm [number] [text]`\
         \n**Function : **__self destruct this message in number seconds__\
-        \n\n**Syntax : **`.selfdm number [text]`\
+        \n\n**Syntax : **`.selfdm [number] [text]`\
         \n**Function : **__self destruct this message in number seconds with showing that it will destruct. __\
 "
     }
