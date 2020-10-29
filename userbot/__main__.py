@@ -5,10 +5,10 @@ from sys import argv
 import telethon.utils
 from telethon import TelegramClient
 
-from userbot import LOGS, bot
-from userbot.utils import load_module
+from . import LOGS, bot
+from .utils import load_module
 
-from .config import Config
+from .Config import Config
 
 
 async def add_bot(bot_token):
