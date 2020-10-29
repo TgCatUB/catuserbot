@@ -33,7 +33,7 @@ async def selfdestruct(destroy):
     except:
         pass
     smsg = await destroy.client.send_message(destroy.chat_id, text)
-    await sleep(counter)
+    await sleep(ttl)
     await smsg.delete()
 
 
