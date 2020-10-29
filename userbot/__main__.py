@@ -6,9 +6,8 @@ import telethon.utils
 from telethon import TelegramClient
 
 from . import LOGS, bot
-from .utils import load_module
-
 from .Config import Config
+from .utils import load_module
 
 
 async def add_bot(bot_token):
