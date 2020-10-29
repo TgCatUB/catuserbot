@@ -5,10 +5,9 @@ import re
 from functools import partial
 from random import choice
 
-from telethon.tl import types
-
 from telethon import events
 from telethon.extensions.markdown import DEFAULT_URL_RE
+from telethon.tl import types
 from telethon.tl.functions.messages import EditMessageRequest
 from telethon.tl.types import (
     MessageEntityBold,
@@ -20,9 +19,9 @@ from telethon.tl.types import (
 )
 from telethon.utils import add_surrogate, del_surrogate
 
-
 usernexp = re.compile(r"@(\w{3,32})\[(.+?)\]")
 nameexp = re.compile(r"\[([\w\S]+)\]\(tg://user\?id=(\d+)\)\[(.+?)\]")
+
 
 def parse_url_match(m):
     entity = MessageEntityTextUrl(
