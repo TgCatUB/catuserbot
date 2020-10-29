@@ -22,8 +22,11 @@ thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 # thumb image
 if Config.THUMB_IMAGE is not None:
-    with open(thumb_image_path, "wb") as f:
-        f.write(requests.get(Config.THUMB_IMAGE).content)
+    try:
+        with open(thumb_image_path, "wb") as f:
+            f.write(requests.get(Config.THUMB_IMAGE).content)
+    except:
+        pass
 
 cat_users = [bot.uid]
 if Config.SUDO_USERS:
