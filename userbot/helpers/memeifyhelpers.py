@@ -46,7 +46,7 @@ def asciiart(in_f, SC, GCF, out_f, color1, color2, bgcolor="black"):
         color = colorRange[lineIdx]
         draw.text((leftpadding, y), line, color.hex, font=font)
         y += letter_height
-     if newImg.mode != "RGB":
+    if newImg.mode != "RGB":
         newImg = newImg.convert("RGB")
     newImg.save(out_f)
 
