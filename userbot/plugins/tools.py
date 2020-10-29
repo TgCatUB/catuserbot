@@ -1,9 +1,10 @@
 import asyncio
+import calendar
 import json
 import os
 from datetime import datetime
 from urllib.parse import quote
-import calendar
+
 import barcode
 import qrcode
 import requests
@@ -15,7 +16,6 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
-
 
 
 @bot.on(admin_cmd(pattern="scan ?(.*)"))
@@ -201,11 +201,11 @@ async def _(event):
         mm = input_sgra[1]
         try:
             input = calendar.month(int(yyyy.strip()), int(mm.strip()))
-            await edit_or_reply(catevent ,f"```{input}```")
+            await edit_or_reply(catevent, f"```{input}```")
         except Exception as e:
-            await edit_delete(catevent ,f"`{e}`" , 5)
+            await edit_delete(catevent, f"`{e}`", 5)
     else:
-        await edit_delete(catevent ,"**Syntax : **`.cal year ; month `", 5)
+        await edit_delete(catevent, "**Syntax : **`.cal year ; month `", 5)
 
 
 @bot.on(admin_cmd(pattern="currency (.*)"))
