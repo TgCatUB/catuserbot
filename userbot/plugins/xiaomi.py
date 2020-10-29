@@ -153,7 +153,6 @@ async def _(event):
             await event.client.forward_messages(event.chat_id, respond.message)
 
 
-
 @bot.on(admin_cmd(pattern="of(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="of(?: |$)(.*)", allow_sudo=True))
 async def _(event):
