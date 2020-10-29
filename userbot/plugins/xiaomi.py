@@ -153,13 +153,13 @@ async def _(event):
             await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@bot.on(admin_cmd(pattern="twrp(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="twrp(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="xtwrp(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="xtwrp(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     link = event.pattern_match.group(1)
-    twrp = f"twrp"
+    twrp = "twrp"
     catevent = await edit_or_reply(event, "```Processing```")
     async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
@@ -217,7 +217,7 @@ CMD_HELP.update(
         \n**Function : **Get latest fastboot MIUI\
         \n\n**Syntax :** `.recovery` (codename)\
         \n**Function : **Get latest recovery MIUI\
-        \n\n**Syntax :** `.twrp` (codename)\
+        \n\n**Syntax :** `.xtwrp` (codename)\
         \n**Function : **Get latest twrp recovery\
         \n\n**Syntax :** `.of` (codename)\
         \n**Function : **Get latest ORangeFox Recovery"
