@@ -195,10 +195,7 @@ async def memes(cat):
     c_list = random_color()
     color1 = c_list[0]
     color2 = c_list[1]
-    if not catinput:
-        bgcolor = "#080808"
-    else:
-        bgcolor = catinput
+    bgcolor = "#080808" if not catinput else catinput
     asciiart(meme_file, 0.3, 1.9, outputfile, color1, color2, bgcolor)
     await borg.send_file(cat.chat_id, outputfile, reply_to=catid)
     await cat.delete()
@@ -797,23 +794,23 @@ CMD_HELP.update(
     {
         "memify": "**Plugin : **`memify`\
     \n\n**Syntax :** `.mmf toptext ; bottomtext`\
-    \n**Usage : **Creates a image meme with give text at specific locations and sends\
+    \n**Function : **Creates a image meme with give text at specific locations and sends\
     \n\n**Syntax : **`.mms toptext ; bottomtext`\
-    \n**Usage : **Creates a sticker meme with give text at specific locations and sends\
+    \n**Function : **Creates a sticker meme with give text at specific locations and sends\
     \n\n**Syntax : **`.invert`\
-    \n**Usage : **Inverts the colors in media file\
+    \n**Function : **Inverts the colors in media file\
     \n\n**Syntax : **`.solarize`\
-    \n**Usage : **Watch sun buring ur media file\
+    \n**Function : **Watch sun buring ur media file\
     \n\n**Syntax : **`.mirror`\
-    \n**Usage : **shows you the reflection of the media file\
+    \n**Function : **shows you the reflection of the media file\
     \n\n**Syntax : **`.flip`\
-    \n**Usage : **shows you the upside down image of the given media file\
+    \n**Function : **shows you the upside down image of the given media file\
     \n\n**Syntax : **`.gray`\
-    \n**Usage : **makes your media file to black and white\
+    \n**Function : **makes your media file to black and white\
     \n\n**Syntax : **`.zoom` or `.zoom range`\
-    \n**Usage : **zooms your media file\
+    \n**Function : **zooms your media file\
     \n\n**Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
-    \n**Usage : **make a frame for your media file\
+    \n**Function : **make a frame for your media file\
     \n**fill:** This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.\
     "
     }
