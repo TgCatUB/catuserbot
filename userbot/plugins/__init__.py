@@ -21,7 +21,7 @@ if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 # thumb image
-if Config.THUMB_IMAGE is not None:
+if Config.THUMB_IMAGE != None:
     try:
         with open(thumb_image_path, "wb") as f:
             f.write(requests.get(Config.THUMB_IMAGE).content)
