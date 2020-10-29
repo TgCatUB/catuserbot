@@ -1,28 +1,20 @@
 """Get the info your system. Using .neofetch then .sysd"""
 
-#.spc command is ported from  alfianandaa/ProjectAlf 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import ALIVE_NAME, CMD_HELP, runcmd
-
-
-import asyncio
+# .spc command is ported from  alfianandaa/ProjectAlf
 import platform
 import sys
-import time
-from asyncio import create_subprocess_exec as asyncrunapp
-from asyncio.subprocess import PIPE as asyncPIPE
 from datetime import datetime
-from os import remove
-from platform import python_version, uname
-from shutil import which
 
 import psutil
-from telethon import __version__, version
+from telethon import __version__
 
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import ALIVE_NAME, CMD_HELP, runcmd
 
 # ================= CONSTANT =================
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 # ============================================
+
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"spc$"))
 async def psu(event):
@@ -78,6 +70,7 @@ def get_size(bytes, suffix="B"):
         if bytes < factor:
             return f"{bytes:.2f}{unit}{suffix}"
         bytes /= factor
+
 
 @bot.on(admin_cmd(pattern="cpu$"))
 @bot.on(sudo_cmd(pattern="cpu$", allow_sudo=True))
