@@ -73,12 +73,7 @@ class Config((object)):
     )
     CHATS_TO_MONITOR_FOR_ANTI_FLOOD = []
     # specify LOAD and NO_LOAD
-    NO_LOAD = [
-        "notification_mtab_manager",
-        "dbhelper",
-        "fban_gban",
-        "unbanmute",
-    ]
+    NO_LOAD = [ x for x in os.environ.get("NO_LOAD", "").split()]
     # in alive message pic
     ALIVE_PIC = os.environ.get("ALIVE_PIC", None)
     # in pm permit pic
