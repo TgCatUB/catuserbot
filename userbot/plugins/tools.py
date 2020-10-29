@@ -201,11 +201,11 @@ async def _(event):
         mm = input_sgra[1]
         try:
             input = calendar.month(int(yyyy.strip()), int(mm.strip()))
-            await edit_or_reply(catevent, f"```{input}```")
+            await edit_or_reply(event, f"```{input}```")
         except Exception as e:
-            await edit_delete(catevent, f"`{e}`", 5)
+            await edit_delete(event, f"`{e}`", 5)
     else:
-        await edit_delete(catevent, "**Syntax : **`.cal year ; month `", 5)
+        await edit_delete(event, "**Syntax : **`.cal year ; month `", 5)
 
 
 @bot.on(admin_cmd(pattern="currency (.*)"))
