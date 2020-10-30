@@ -69,12 +69,12 @@ async def log_tagged_messages(event):
     await asyncio.sleep(5)
     if not event.is_private:
         await event.client.send_message(
-                Config.PM_LOGGR_BOT_API_ID,
-                f"#TAGS \n<b>Group : </b><code>{hmm.title}</code>\
+            Config.PM_LOGGR_BOT_API_ID,
+            f"#TAGS \n<b>Group : </b><code>{hmm.title}</code>\
                         \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
-                parse_mode="html",
-                link_preview=False,
-            )
+            parse_mode="html",
+            link_preview=False,
+        )
 
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"save(?: |$)(.*)"))
