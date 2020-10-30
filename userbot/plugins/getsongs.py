@@ -7,13 +7,12 @@ import os
 from pathlib import Path
 
 import pybase64
-from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP,hmention, name_dl, runcmd, song_dl, video_dl, yt_search
+from . import CMD_HELP, hmention, name_dl, runcmd, song_dl, video_dl, yt_search
 
 
 @bot.on(admin_cmd(pattern="(song|song320)($| (.*))"))
@@ -183,8 +182,15 @@ async def kakashi(event):
         await catevent.edit("`Sending Your Music...`")
         await asyncio.sleep(1.5)
         await catevent.delete()
-        await event.client.send_file(event.chat_id, music, caption=f"<b><i>➥ Song :- {song}</i></b>\n<b><i>➥ Uploaded by :- {hmention}</i></b>",parse_mode="html",)
-    await event.client.delete_messages(conv.chat_id, [msg_start.id, response.id, msg.id, baka.id, music.id])
+        await event.client.send_file(
+            event.chat_id,
+            music,
+            caption=f"<b><i>➥ Song :- {song}</i></b>\n<b><i>➥ Uploaded by :- {hmention}</i></b>",
+            parse_mode="html",
+        )
+    await event.client.delete_messages(
+        conv.chat_id, [msg_start.id, response.id, msg.id, baka.id, music.id]
+    )
 
 
 CMD_HELP.update(
