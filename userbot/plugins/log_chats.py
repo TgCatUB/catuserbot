@@ -23,41 +23,31 @@ async def monito_p_m_s(event):
     sender = await event.get_sender()
     if Config.NO_LOG_P_M_S and not sender.bot:
         chat = await event.get_chat()
-        if not no_log_pms_sql.is_approved(chat.id) and not chat.id == 777000:
-            if RECENT_USER == chat.id:
-                try:
-                    if event.message:
-                        await event.client.forward_messages(
-                            Config.PM_LOGGR_BOT_API_ID, event.message, silent=True
-                        )
-                    COUNT += 1
-                except Exception as e:
-                    LOGS.warn(str(e))
-            else:
+        if not no_log_pms_sql.is_approved(chat.id) and chat.id != 777000:
+            if RECENT_USER != chat.id:
                 RECENT_USER = chat.id
                 if NEWPM:
                     if COUNT > 1:
                         await NEWPM.edit(
                             NEWPM.text.replace("new message", f"{COUNT} messages")
                         )
-                        COUNT = 0
                     else:
                         await NEWPM.edit(
                             NEWPM.text.replace("new message", f"{COUNT} message")
                         )
-                        COUNT = 0
+                    COUNT = 0
                 NEWPM = await event.client.send_message(
                     Config.PM_LOGGR_BOT_API_ID,
-                    f"👤{mentionuser(sender.first_name , sender.id)} has sent a new message \nId : {chat.id}",
+                    f"👤{mentionuser(sender.first_name , sender.id)} has sent a new message \nId : `{chat.id}`",
                 )
-                try:
-                    if event.message:
-                        await event.client.forward_messages(
-                            Config.PM_LOGGR_BOT_API_ID, event.message, silent=True
-                        )
-                    COUNT += 1
-                except Exception as e:
-                    LOGS.warn(str(e))
+            try:
+                if event.message:
+                    await event.client.forward_messages(
+                        Config.PM_LOGGR_BOT_API_ID, event.message, silent=True
+                    )
+                COUNT += 1
+            except Exception as e:
+                LOGS.warn(str(e))
 
 
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
@@ -71,10 +61,14 @@ async def log_tagged_messages(event):
 
     if "on" in USERAFK_ON:
         return
-    if not (await event.get_sender()).bot:
-        await asyncio.sleep(5)
-        if not event.is_private:
-            await event.client.send_message(
+    try:
+        if (await event.get_sender()).bot:
+            return
+    except:
+        pass
+    await asyncio.sleep(5)
+    if not event.is_private:
+        await event.client.send_message(
                 Config.PM_LOGGR_BOT_API_ID,
                 f"#TAGS \n<b>Group : </b><code>{hmm.title}</code>\
                         \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
@@ -129,11 +123,11 @@ CMD_HELP.update(
     {
         "log_chats": "**Plugin : **`log_chats`\
         \n\n**Syntax : **`.save` :\
-        \n**Usage : ** saves taged message in private group .\
+        \n**Function : ** saves taged message in private group .\
         \n\n**Syntax : **`.log`:\
-        \n**Usage : **By default will log all private chat messages if you use .nolog and want to log again then you need to use this\
+        \n**Function : **By default will log all private chat messages if you use .nolog and want to log again then you need to use this\
         \n\n**Syntax : **`.nolog`:\
-        \n**Usage : **stops logging from a private chat \
+        \n**Function : **stops logging from a private chat \
         \n\n**Note : **Currently these resets after restart, will try to add database soon so wont reset after restart"
     }
 )
