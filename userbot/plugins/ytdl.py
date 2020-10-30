@@ -225,7 +225,7 @@ async def youtube_search(
         return (nexttok, videos)
 
 
-@bot.on(admin_cmd(pattern="instadl (.*)"))
+@bot.on(admin_cmd(pattern="insta (.*)"))
 @bot.on(sudo_cmd(pattern="insta (.*)", allow_sudo=True))
 async def kakashi(event):
     if event.fwd_from:
