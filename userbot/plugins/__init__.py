@@ -11,12 +11,11 @@ from validators.url import url
 from .. import *
 from ..Config import Config
 
-
 # =================== CONSTANT ===================
 USERID = bot.uid
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-#mention user
+# mention user
 mention = f"[{DEFAULTUSER}](tg://user?id={USERID})"
 hmention = f"<a href = tg://user?id={USERID}>{DEFAULTUSER}</a>"
 
@@ -84,7 +83,6 @@ def check(cat):
     except:
         hi = False
     return bool(hi)
-
 
 
 # UniBorg Telegram UseRBot
