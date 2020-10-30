@@ -1,7 +1,8 @@
-import asyncio
 import random
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import catmemes
+
 
 @bot.on(admin_cmd(pattern=f"gn$", outgoing=True))
 @bot.on(sudo_cmd(pattern="gn$", allow_sudo=True))
@@ -15,15 +16,15 @@ async def night(night):
 async def morning(morning):
     txt = random.choice(catmemes.GDMORNING)
     await edit_or_reply(morning, txt)
-    
-    
+
+
 @bot.on(admin_cmd(pattern=f"gnoon$", outgoing=True))
 @bot.on(sudo_cmd(pattern="gnoon$", allow_sudo=True))
 async def noon(noon):
     txt = random.choice(catmemes.GDNOON)
     await edit_or_reply(noon, txt)
-    
-    
+
+
 @bot.on(admin_cmd(pattern="gnt$"))
 @bot.on(sudo_cmd(pattern="gnt$", allow_sudo=True))
 async def gn(event):
