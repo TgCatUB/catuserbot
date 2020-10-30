@@ -29,7 +29,7 @@ thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 PM_START = []
 
-PMMENU = "pmpermit_menu" not in NO_LOAD
+PMMENU = "pmpermit_menu" not in Config.NO_LOAD
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
