@@ -8,9 +8,10 @@ import math
 import random
 import urllib.request
 from os import remove
+
+import emoji
 import requests
 from bs4 import BeautifulSoup as bs
-import emoji
 from PIL import Image
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.types import (
@@ -37,6 +38,7 @@ KANGING_STR = [
 ]
 
 combot_stickers_url = "https://combot.org/telegram/stickers?q="
+
 
 @bot.on(admin_cmd(outgoing=True, pattern="kang ?(.*)"))
 @bot.on(sudo_cmd(pattern="kang ?(.*)", allow_sudo=True))
@@ -284,7 +286,6 @@ async def kang(args):
         )
 
 
-
 @bot.on(admin_cmd(pattern="stkrinfo$", outgoing=True))
 @bot.on(sudo_cmd(pattern="stkrinfo$", allow_sudo=True))
 async def get_pack_info(event):
@@ -328,30 +329,31 @@ async def get_pack_info(event):
     )
     await catevent.edit(OUTPUT)
 
-    
+
 @bot.on(admin_cmd(pattern="stickers ?(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="stickers ?(.*)", allow_sudo=True))
 async def cb_sticker(event):
     split = event.pattern_match.group(1)
     if not split:
-        await edit_delete(event , "`Provide some name to search for pack.`", 5)
+        await edit_delete(event, "`Provide some name to search for pack.`", 5)
         return
-    catevent = await edit_or_reply(event , "`Searching sticker packs....`")
+    catevent = await edit_or_reply(event, "`Searching sticker packs....`")
     text = requests.get(combot_stickers_url + split).text
     soup = bs(text, "lxml")
-    results = soup.find_all("div", {'class': "sticker-pack__header"})
+    results = soup.find_all("div", {"class": "sticker-pack__header"})
     if not results:
-        await edit_delete(catevent , "`No results found :(.`",5)
+        await edit_delete(catevent, "`No results found :(.`", 5)
         return
     reply = f"**Sticker packs found for {split} are :**"
     for pack in results:
         if pack.button:
             packtitle = (pack.find("div", "sticker-pack__title")).get_text()
-            packlink = (pack.a).get('href')
-            packid = (pack.button).get('data-popup')
+            packlink = (pack.a).get("href")
+            packid = (pack.button).get("data-popup")
             reply += f"\n **• ID: **`{packid}`\n [{packtitle}]({packlink})"
     await catevent.edit(reply)
-    
+
+
 async def resize_photo(photo):
     """ Resize the given photo to 512x512 """
     image = Image.open(photo)
