@@ -11,6 +11,11 @@ from validators.url import url
 from .. import *
 from ..Config import Config
 
+USERID = bot.uid
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+mention = f"[{DEFAULTUSER}](tg://user?id={USERID})"
+hmention = f"<a href = tg://user?id={USERID}>{DEFAULTUSER}</a>"
+
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
 heroku_api = "https://api.heroku.com"
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME

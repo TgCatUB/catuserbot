@@ -7,13 +7,12 @@ import os
 from pathlib import Path
 
 import pybase64
-from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, name_dl, runcmd, song_dl, video_dl, yt_search
+from . import CMD_HELP, hmention, name_dl, runcmd, song_dl, video_dl, yt_search
 
 
 @bot.on(admin_cmd(pattern="(song|song320)($| (.*))"))
@@ -160,27 +159,38 @@ async def _(event):
             os.remove(files)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="spd(?: |$)(.*)"))
-@bot.on(sudo_cmd(outgoing=True, pattern="spd(?: |$)(.*)", allow_sudo=True))
-async def _(event):
+@bot.on(admin_cmd(pattern="music (.*)"))
+@bot.on(sudo_cmd(pattern="music (.*)", allow_sudo=True))
+async def kakashi(event):
     if event.fwd_from:
         return
-    input_str = event.pattern_match.group(1)
-    chat = "@SpotifyMusicDownloaderBot"
+    song = event.pattern_match.group(1)
+    chat = "@WooMaiBot"
+    link = f"/netease {song}"
     catevent = await edit_or_reply(event, "`wi8..! I am finding your song....`")
     async with event.client.conversation(chat) as conv:
         try:
-            response = conv.wait_event(
-                events.NewMessage(incoming=True, from_users=752979930)
-            )
-            await event.client.send_message(chat, input_str)
-            respond = await response
+            msg_start = await conv.send_message("/start")
+            response = await conv.get_response()
+            msg = await conv.send_message(link)
+            baka = await conv.get_response()
+            music = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await catevent.edit("` unblock` @SpotifyMusicDownloaderBot `and try again`")
+            await catevent.edit("```Please unblock @WooMaiBot and try again```")
             return
-        await event.delete()
-        await event.client.forward_messages(event.chat_id, respond.message)
-        await event.client.send_read_acknowledge(conv.chat_id)
+        await catevent.edit("`Sending Your Music...`")
+        await asyncio.sleep(1.5)
+        await catevent.delete()
+        await event.client.send_file(
+            event.chat_id,
+            music,
+            caption=f"<b><i>➥ Song :- {song}</i></b>\n<b><i>➥ Uploaded by :- {hmention}</i></b>",
+            parse_mode="html",
+        )
+    await event.client.delete_messages(
+        conv.chat_id, [msg_start.id, response.id, msg.id, baka.id, music.id]
+    )
 
 
 CMD_HELP.update(
@@ -192,7 +202,7 @@ CMD_HELP.update(
         \n**Usage : **searches the song you entered in query and sends it quality of it is 320k\
         \n\n**Syntax : **`.vsong query` or `.vsong reply to song name`\
         \n**Usage : **Searches the video song you entered in query and sends it\
-        \n\n**Syntax : **`.spd song`\
-        \n**Usage : **Searches the song from the bot @SpotifyMusicDownloaderBot  and sends you"
+        \n\n**Syntax : **`.music` <song name>\
+        \n**Usage : **Download your music by just name"
     }
 )
