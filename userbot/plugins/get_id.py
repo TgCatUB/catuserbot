@@ -8,7 +8,7 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 async def _(event):
     if event.fwd_from:
         return
-    input_str = event.pattern_match.group(1)
+    input_str = event.pattern_match.group(2)
     if input_str:
         p = await event.client.get_entity(input_str)
         try:
