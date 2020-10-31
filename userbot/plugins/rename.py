@@ -120,5 +120,6 @@ CMD_HELP.update({
     \n\n**Syntax : **`.rename filename`\
     \n**Function : **__Reply to media with above command to save in your server with that given filename__\
     \n\n**Syntax : **`.rnup filename`\
-    \n**Function : **__Reply to media with above command to rename and upload the file with given name__\"
+    \n**Function : **__Reply to media with above command to rename and upload the file with given name__\
+    "
 })        
