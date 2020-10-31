@@ -116,6 +116,7 @@ async def g_download(event):
                 progress(d, t, catevent, c_time, "Uploading...", file_name)
             ),
         )
+        os.remove(file_name)
         await edit_delete(
             catevent,
             "**File Downloaded and uploaded.\nName : **`" + str(file_name) + "`",
