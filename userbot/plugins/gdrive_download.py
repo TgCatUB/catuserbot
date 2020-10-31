@@ -7,7 +7,6 @@ import asyncio
 import os
 
 import requests
-from telethon.tl.types import DocumentAttributeVideo
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, progress
