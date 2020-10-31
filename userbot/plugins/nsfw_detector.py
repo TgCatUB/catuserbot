@@ -17,7 +17,6 @@ async def detect(event):
             event, "Add VAR `DEEP_AI` get Api Key from https://deepai.org/", 5
         )
     reply = await event.get_reply_message()
-    await reply_id(event)
     if not reply:
         return await edit_delete(event, "`Reply to media !`", 5)
     media = await event.client.download_media(reply)
