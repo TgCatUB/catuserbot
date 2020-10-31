@@ -99,6 +99,8 @@ async def g_download(event):
     file_id = await get_id(drive_link)
     catevent = await edit_or_reply(event, "Downloading Requested File from G-Drive...")
     file_name = await download_file_from_google_drive(file_id)
+    if os.path.exists(thumb_image_path)
+        thumb =thumb_image_path
     if not cmd:
         await catevent.edit("**File Downloaded.\nName : **`" + str(file_name) + "`")
     else:
