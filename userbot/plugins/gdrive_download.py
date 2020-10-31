@@ -117,7 +117,7 @@ async def g_download(event):
     else:
         await event.client.send_file(
                 event.chat_id,
-                ,
+                file_name,
                 caption=f"**File Name : **`{file_name}`",
                 thumb=thumb,
                 force_document=False,
