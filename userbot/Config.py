@@ -160,6 +160,8 @@ class Config((object)):
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
     # SpamWatch, CAS, SpamProtection ban Needed or not
     ANTISPAMBOT_BAN = os.environ.get("ANTISPAMBOT_BAN", False)
+    # Deepai value can get from https://deepai.org/
+    DEEP_AI= os.environ.get("DEEP_AI" , None)
 
 
 class Production(Config):
