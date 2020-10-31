@@ -1,7 +1,7 @@
 from telethon.utils import pack_bot_file_id
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
+from . import CMD_HELP
 
 @bot.on(admin_cmd(pattern="(get_id|id)( (.*)|$)"))
 @bot.on(sudo_cmd(pattern="(get_id|id)( (.*)|$)", allow_sudo=True))
@@ -10,7 +10,10 @@ async def _(event):
         return
     input_str = event.pattern_match.group(2)
     if input_str:
-        p = await event.client.get_entity(input_str)
+        try:
+            p = await event.client.get_entity(input_str)
+        except Exception as e:
+            return await edit_delete(event ,f"`{str(e)}`" ,5)
         try:
             if p.first_name:
                 return await edit_or_reply(
@@ -45,3 +48,9 @@ async def _(event):
             )
     else:
         await edit_or_reply(event, "Current Chat ID: `{}`".format(str(event.chat_id)))
+
+CMD_HELP({
+    "get_id" :"**Plugin : **`get_id`\
+    \n\n**Syntax : **`.get_id` or `.id`\
+    \n**Function : **__if given input then shows id of that given chat/channel/user else if you reply to user then shows id of the replied user \
+    along with current chat id and if not replied to user or given input then just show id of the chat where you used the command"})
