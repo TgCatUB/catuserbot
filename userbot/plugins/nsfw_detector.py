@@ -38,7 +38,7 @@ async def detect(event):
             name = parts["name"]
             confidence = int(float(parts["confidence"]) * 100)
             result += f"• {name}:\n   <code>{confidence} %</code>\n"
-    await edit_or_reply(catevent 
+    await edit_or_reply(catevent ,
         result,
         link_preview=False,
         parse_mode="HTML",
