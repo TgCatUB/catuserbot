@@ -140,7 +140,7 @@ async def show_welcome(event):
 CMD_HELP.update(
     {
         "privatewelcome": "**Plugin :** `privatewelcome`\
-\n\n**Syntax :** `.savepwel` <welcome message> or reply to a message with .setwelcome\
+\n\n**Syntax :** `.savepwel` <welcome message> or reply to a message with .savepwel\
 \n**Usage :** Saves the message as a welcome note in the chat.\
 \n\nAvailable variables for formatting welcome messages :\
 \n`{mention}, {title}, {count}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
