@@ -4,10 +4,11 @@ API Options: msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, cha
 DB Options: bots, commands, email, forward, url"""
 
 from telethon import events, functions, types
-
-from userbot import CMD_HELP
-from userbot.plugins.sql_helper.locks_sql import get_locks, is_locked, update_lock
-from userbot.utils import admin_cmd
+from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
+from telethon.tl.types import ChatBannedRights
+from . import CMD_HELP
+from .sql_helper.locks_sql import get_locks, is_locked, update_lock
+from ..utils import admin_cmd
 
 
 @bot.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
@@ -32,30 +33,56 @@ async def _(event):
         adduser = None
         cpin = None
         changeinfo = None
-        if input_str:
-            if "msg" in input_str:
-                msg = True
-            if "media" in input_str:
-                media = True
-            if "sticker" in input_str:
-                sticker = True
-            if "gif" in input_str:
-                gif = True
-            if "gamee" in input_str:
-                gamee = True
-            if "ainline" in input_str:
-                ainline = True
-            if "gpoll" in input_str:
-                gpoll = True
-            if "adduser" in input_str:
-                adduser = True
-            if "cpin" in input_str:
-                cpin = True
-            if "changeinfo" in input_str:
-                changeinfo = True
-        banned_rights = types.ChatBannedRights(
+        if input_str == "msg":
+            msg = True
+            what = "messages"
+        elif input_str == "media":
+            media = True
+            what = "media"
+        elif input_str == "sticker":
+            sticker = True
+            what = "stickers"
+        elif input_str == "gif":
+            gif = True
+            what = "GIFs"
+        elif input_str == "game":
+            gamee = True
+            what = "games"
+        elif input_str == "inline":
+            ainline = True
+            what = "inline bots"
+        elif input_str == "poll":
+            gpoll = True
+            what = "polls"
+        elif input_str == "invite":
+            adduser = True
+            what = "invites"
+        elif input_str == "pin":
+            cpin = True
+            what = "pins"
+        elif input_str == "info":
+            changeinfo = True
+            what = "chat info"
+        elif input_str == "all":
+            msg = True
+            media = True
+            sticker = True
+            gif = True
+            gamee = True
+            ainline = True
+            gpoll = True
+            adduser = True
+            cpin = True
+            changeinfo = True
+            what = "everything"
+        else:
+            if not input_str:
+                return await event.edit("`I can't lock nothing !!`")
+            else:
+                return await event.edit(f"`Invalid lock type:` {input_str}")
+
+        lock_rights = ChatBannedRights(
             until_date=None,
-            # view_messages=None,
             send_messages=msg,
             send_media=media,
             send_stickers=sticker,
@@ -68,17 +95,15 @@ async def _(event):
             change_info=changeinfo,
         )
         try:
-            result = await borg(  # pylint:disable=E0602
-                functions.messages.EditChatDefaultBannedRightsRequest(
-                    peer=peer_id, banned_rights=banned_rights
-                )
+            await event.client(
+                EditChatDefaultBannedRightsRequest(peer=peer_id, banned_rights=lock_rights)
             )
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await event.edit(str(e))
-        else:
-            await event.edit(
-                "Current Chat Default Permissions Changed Successfully, in API"
+            await event.edit(f"`Locked {what} for this chat !!`")
+        except BaseException as e:
+            return await event.edit(
+                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
             )
+
 
 
 @bot.on(admin_cmd(pattern="unlock ?(.*)"))
@@ -91,7 +116,88 @@ async def _(event):
         update_lock(peer_id, input_str, False)
         await event.edit("UnLocked {}".format(input_str))
     else:
-        await event.edit("Use `.lock` without any parameters to unlock API locks")
+        msg = None
+        media = None
+        sticker = None
+        gif = None
+        gamee = None
+        ainline = None
+        gpoll = None
+        adduser = None
+        cpin = None
+        changeinfo = None
+        if input_str == "msg":
+            msg = False
+            what = "messages"
+        elif input_str == "media":
+            media = False
+            what = "media"
+        elif input_str == "sticker":
+            sticker = False
+            what = "stickers"
+        elif input_str == "gif":
+            gif = False
+            what = "GIFs"
+        elif input_str == "game":
+            gamee = False
+            what = "games"
+        elif input_str == "inline":
+            ainline = False
+            what = "inline bots"
+        elif input_str == "poll":
+            gpoll = False
+            what = "polls"
+        elif input_str == "invite":
+            adduser = False
+            what = "invites"
+        elif input_str == "pin":
+            cpin = False
+            what = "pins"
+        elif input_str == "info":
+            changeinfo = False
+            what = "chat info"
+        elif input_str == "all":
+            msg = False
+            media = False
+            sticker = False
+            gif = False
+            gamee = False
+            ainline = False
+            gpoll = False
+            adduser = False
+            cpin = False
+            changeinfo = False
+            what = "everything"
+        else:
+            if not input_str:
+                return await event.edit("`I can't unlock nothing !!`")
+            else:
+                return await event.edit(f"`Invalid unlock type:` {input_str}")
+
+        unlock_rights = ChatBannedRights(
+            until_date=None,
+            send_messages=msg,
+            send_media=media,
+            send_stickers=sticker,
+            send_gifs=gif,
+            send_games=gamee,
+            send_inline=ainline,
+            send_polls=gpoll,
+            invite_users=adduser,
+            pin_messages=cpin,
+            change_info=changeinfo,
+        )
+        try:
+            await event.client(
+                EditChatDefaultBannedRightsRequest(
+                    peer=peer_id, banned_rights=unlock_rights
+                )
+            )
+            await event.edit(f"`Unlocked {what} for this chat !!`")
+        except BaseException as e:
+            return await event.edit(
+                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
+            )
 
 
 @bot.on(admin_cmd(pattern="curenabledlocks"))
@@ -205,11 +311,11 @@ async def _(event):
         rights = types.ChatBannedRights(until_date=None, view_messages=True)
         added_users = event.action_message.action.users
         for user_id in added_users:
-            user_obj = await borg.get_entity(user_id)
+            user_obj = await event.client.get_entity(user_id)
             if user_obj.bot:
                 is_ban_able = True
                 try:
-                    await borg(
+                    await event.client(
                         functions.channels.EditBannedRequest(
                             event.chat_id, user_obj, rights
                         )
