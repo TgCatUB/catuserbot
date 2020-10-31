@@ -3,8 +3,10 @@ G-Drive File Downloader Plugin For Userbot.
 usage: .gdl File-Link
 By: @Zero_cool7870
 """
-import requests
 import os
+
+import requests
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
@@ -23,7 +25,7 @@ async def download_file_from_google_drive(gid):
     headers = response.headers
     content = headers["Content-Disposition"]
     destination = await get_file_name(content)
-    destination = os.apth.join(Config.TMP_DOWNLOAD_DIRECTORY , destination)
+    destination = os.apth.join(Config.TMP_DOWNLOAD_DIRECTORY, destination)
     file_name = await save_response_content(response, destination)
     return file_name
 
