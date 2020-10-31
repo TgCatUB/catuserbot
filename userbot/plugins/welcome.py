@@ -146,7 +146,7 @@ async def show_welcome(event):
 CMD_HELP.update(
     {
         "welcome": "**Plugin :** `welcome`\
-\n\n**Syntax :** `.savewelcome` <welcome message> or reply to a message with .setwelcome\
+\n\n**Syntax :** `.savewelcome` <welcome message> or reply to a message with .savewelcome\
 \n**Usage :** Saves the message as a welcome note in the chat.\
 \n\nAvailable variables for formatting welcome messages :\
 \n`{mention}, {title}, {count}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
