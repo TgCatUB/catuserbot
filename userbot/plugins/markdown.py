@@ -156,7 +156,9 @@ def parse(message, old_entities=None):
 async def reparse(event):
     old_entities = event.message.entities or []
     parser = partial(parse, old_entities=old_entities)
-    message, msg_entities = await event.client._parse_message_text(event.raw_text, parser)
+    message, msg_entities = await event.client._parse_message_text(
+        event.raw_text, parser
+    )
     if len(old_entities) >= len(msg_entities) and event.raw_text == message:
         return
     await event.client(

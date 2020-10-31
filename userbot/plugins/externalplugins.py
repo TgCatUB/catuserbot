@@ -16,7 +16,9 @@ async def install(event):
     if event.fwd_from:
         return
     chat = Var.PLUGIN_CHANNEL
-    documentss = await event.client.get_messages(chat, None, filter=InputMessagesFilterDocument)
+    documentss = await event.client.get_messages(
+        chat, None, filter=InputMessagesFilterDocument
+    )
     total = int(documentss.total)
     total_doxx = range(total)
     await event.delete()

@@ -13,7 +13,9 @@ async def _(event):
         return
     to_add_users = event.pattern_match.group(1)
     if event.is_private:
-        await edit_delete(event , "`.invite` users to a chat, not to a Private Message",5)
+        await edit_delete(
+            event, "`.invite` users to a chat, not to a Private Message", 5
+        )
     else:
         if not event.is_channel and event.is_group:
             # https://lonamiwebs.github.io/Telethon/methods/messages/add_chat_user.html
@@ -25,7 +27,7 @@ async def _(event):
                         )
                     )
                 except Exception as e:
-                    await edit_delete(event , f"`{str(e)}`",5)
+                    await edit_delete(event, f"`{str(e)}`", 5)
         else:
             # https://lonamiwebs.github.io/Telethon/methods/channels/invite_to_channel.html
             for user_id in to_add_users.split(" "):
@@ -36,6 +38,6 @@ async def _(event):
                         )
                     )
                 except Exception as e:
-                    await edit_delete(event , f"`{str(e)}`",5)
+                    await edit_delete(event, f"`{str(e)}`", 5)
 
-        await edit_or_reply(event , f"`{to_add_users} is/are Invited Successfully`")
+        await edit_or_reply(event, f"`{to_add_users} is/are Invited Successfully`")

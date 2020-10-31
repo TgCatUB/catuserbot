@@ -277,7 +277,9 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "invert.webp" if jisanidea else "invert.jpg"
     await invert_colors(meme_file, outputfile)
-    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(
+        cat.chat_id, outputfile, force_document=False, reply_to=catid
+    )
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -357,7 +359,9 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "solarize.webp" if jisanidea else "solarize.jpg"
     await solarize(meme_file, outputfile)
-    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(
+        cat.chat_id, outputfile, force_document=False, reply_to=catid
+    )
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -437,7 +441,9 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "mirror_file.webp" if jisanidea else "mirror_file.jpg"
     await mirror_file(meme_file, outputfile)
-    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(
+        cat.chat_id, outputfile, force_document=False, reply_to=catid
+    )
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -517,7 +523,9 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "flip_image.webp" if jisanidea else "flip_image.jpg"
     await flip_image(meme_file, outputfile)
-    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(
+        cat.chat_id, outputfile, force_document=False, reply_to=catid
+    )
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -597,7 +605,9 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "grayscale.webp" if jisanidea else "grayscale.jpg"
     await grayscale(meme_file, outputfile)
-    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(
+        cat.chat_id, outputfile, force_document=False, reply_to=catid
+    )
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
