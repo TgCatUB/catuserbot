@@ -68,7 +68,6 @@ async def set_not_afk(event):
             )
 
 
-
 @bot.on(
     events.NewMessage(incoming=True, func=lambda e: bool(e.mentioned or e.is_private))
 )
