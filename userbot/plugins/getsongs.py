@@ -173,7 +173,7 @@ async def kakashi(event):
             response = await conv.get_response()
             msg = await conv.send_message(song)
             await conv.get_response()
-            baka = (await conv.get_response()).message
+            baka = await event.client.get_messages("@songdl_bot")
             await baka[0].click(0)
             response2 = await conv.get_response()
             music = await conv.get_response()
