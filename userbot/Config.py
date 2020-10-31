@@ -22,6 +22,10 @@ class Config((object)):
     PRIVATE_GROUP_BOT_API_ID = os.environ.get("PRIVATE_GROUP_BOT_API_ID", None)
     if PRIVATE_GROUP_BOT_API_ID:
         PRIVATE_GROUP_BOT_API_ID = int(PRIVATE_GROUP_BOT_API_ID)
+    # same as  PRIVATE_GROUP_BOT_API_ID but set only if you need pmpermit   
+    PRIVATE_GROUP_ID = os.environ.get("PRIVATE_GROUP_ID", None)
+    if PRIVATE_GROUP_ID:
+        PRIVATE_GROUP_ID = int(PRIVATE_GROUP_ID)    
     # Send .get_id in any channel to fill this value. ReQuired for @Manuel15
     # inspiration to work!
     PRIVATE_CHANNEL_BOT_API_ID = os.environ.get("PRIVATE_CHANNEL_BOT_API_ID", None)
