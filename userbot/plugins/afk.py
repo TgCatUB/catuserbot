@@ -54,6 +54,10 @@ async def set_not_afk(event):
             event.chat_id,
             "`Back alive! No Longer afk.\nWas afk for " + endtime + "`",
         )
+        USERAFK_ON = {}
+        afk_time = None
+        await asyncio.sleep(5)
+        await shite.delete()
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -62,10 +66,7 @@ async def set_not_afk(event):
                 + endtime
                 + "`",
             )
-        await asyncio.sleep(5)
-        await shite.delete()
-        USERAFK_ON = {}
-        afk_time = None
+
 
 
 @bot.on(
