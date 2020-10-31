@@ -170,9 +170,9 @@ async def kakashi(event):
     catevent = await edit_or_reply(event, "`wi8..! I am finding your song....`")
     async with event.client.conversation(chat) as conv:
         try:
-            msg_start = await conv.send_message("/start")
-            response = await conv.get_response()
-            msg = await conv.send_message(song)
+            await conv.send_message("/start")
+            await conv.get_response()
+            await conv.send_message(song)
             hmm = await conv.get_response()
             while hmm.edit_hide != True:
                 await asyncio.sleep(0.2)
