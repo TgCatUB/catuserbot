@@ -9,7 +9,7 @@ import requests
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
-
+from .upload import upload
 
 async def download_file_from_google_drive(gid):
     URL = "https://docs.google.com/uc?export=download"
@@ -84,16 +84,21 @@ async def get_file_name(content):
     return file_name
 
 
-@bot.on(admin_cmd(pattern=f"gdl (.*)", outgoing=True))
+@bot.on(admin_cmd(pattern=f"gdl ?(-u)? (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern=f"gdl (.*)", allow_sudo=True))
 async def g_download(event):
     if event.fwd_from:
         return
-    drive_link = event.text[4:]
+    cmd = event.patter_match.group(1)
+    drive_link = event.pattern_match.group(2)
     file_id = await get_id(drive_link)
-    event = await edit_or_reply(event, "Downloading Requested File from G-Drive...")
+    catevent = await edit_or_reply(event, "Downloading Requested File from G-Drive...")
     file_name = await download_file_from_google_drive(file_id)
-    await event.edit("File Downloaded.\n**Name : **`" + str(file_name) + "`")
+    if not cmd:
+        await catevent.edit("**File Downloaded.\nName : **`" + str(file_name) + "`")
+    else:
+        await upload(file_name, event, catevent)
+        await edit_delete(catevent , "**File Downloaded and uploaded.\nName : **`" + str(file_name) + "`" ,5)
 
 
 CMD_HELP.update(
