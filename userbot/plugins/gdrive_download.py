@@ -5,12 +5,13 @@ By: @Zero_cool7870
 """
 import asyncio
 import os
+import time
 
 import requests
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, progress
-import time
+
 PATH = os.path.join("./temp", "temp_vid.mp4")
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 
