@@ -81,7 +81,7 @@ async def _(event):
         end = datetime.now()
         ms_one = (end - start).seconds
         try:
-            thumb = await r.download_media(thumb=-1)
+            thumb = await reply_message.download_media(thumb=-1)
         except Exception:
             thumb = thumb
         if os.path.exists(downloaded_file_name):
