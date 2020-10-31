@@ -178,15 +178,13 @@ async def kakashi(event):
                 await asyncio.sleep(0.2)
                 hmm = await event.client.get_messages(chat, ids=hmm.id)
             baka = await event.client.get_messages(chat)
-            await baka[0].click(0)
-            response2 = await conv.get_response()
+            await baka[0].click(0)=
             music = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
             await catevent.edit("```Please unblock @songdl_bot and try again```")
             return
         await catevent.edit("`Sending Your Music...`")
-        await asyncio.sleep(1.5)
         await catevent.delete()
         await event.client.send_file(
             event.chat_id,
@@ -194,9 +192,6 @@ async def kakashi(event):
             caption=f"<b>➥ Song :- <code>{song}</code></b>",
             parse_mode="html",
         )
-    await event.client.delete_messages(
-        conv.chat_id, [msg_start.id, response.id, msg.id, response2.id, music.id]
-    )
 
 
 CMD_HELP.update(
