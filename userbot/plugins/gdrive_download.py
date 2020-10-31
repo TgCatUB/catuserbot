@@ -10,7 +10,7 @@ import requests
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, progress
-
+import time
 PATH = os.path.join("./temp", "temp_vid.mp4")
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 
@@ -103,6 +103,7 @@ async def g_download(event):
     if not cmd:
         await catevent.edit("**File Downloaded.\nName : **`" + str(file_name) + "`")
     else:
+        c_time = time.time()
         await event.client.send_file(
             event.chat_id,
             file_name,
@@ -111,7 +112,7 @@ async def g_download(event):
             force_document=False,
             supports_streaming=True,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                progress(d, t, udir_event, c_time, "Uploading...", file_name)
+                progress(d, t, catevent, c_time, "Uploading...", file_name)
             ),
         )
         await edit_delete(
