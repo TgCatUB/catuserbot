@@ -90,7 +90,7 @@ async def get_file_name(content):
 async def g_download(event):
     if event.fwd_from:
         return
-    cmd = event.patter_match.group(1)
+    cmd = event.pattern_match.group(1)
     drive_link = event.pattern_match.group(2)
     file_id = await get_id(drive_link)
     catevent = await edit_or_reply(event, "Downloading Requested File from G-Drive...")
