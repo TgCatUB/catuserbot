@@ -49,7 +49,7 @@ async def _(event):
     else:
         await edit_or_reply(event, "Current Chat ID: `{}`".format(str(event.chat_id)))
 
-CMD_HELP({
+CMD_HELP.update({
     "get_id" :"**Plugin : **`get_id`\
     \n\n**Syntax : **`.get_id` or `.id`\
     \n**Function : **__if given input then shows id of that given chat/channel/user else if you reply to user then shows id of the replied user \
