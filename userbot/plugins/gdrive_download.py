@@ -111,17 +111,8 @@ async def g_download(event):
             thumb=thumb,
             force_document=False,
             supports_streaming=True,
-            attributes=[
-                DocumentAttributeVideo(
-                    duration=duration,
-                    w=width,
-                    h=height,
-                    round_message=False,
-                    supports_streaming=True,
-                )
-            ],
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                progress(d, t, udir_event, c_time, "Uploading...", caption_rts)
+                progress(d, t, udir_event, c_time, "Uploading...", file_name)
             ),
         )
         await edit_delete(
