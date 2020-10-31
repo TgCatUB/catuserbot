@@ -108,11 +108,15 @@ async def on_afk(event):
     if USERAFK_ON and not (await event.get_sender()).bot:
         msg = None
         if link and reason:
-            message_to_reply = f"**I am AFK .\n\nAFK Since {endtime}\nReason : **{reason}"
+            message_to_reply = (
+                f"**I am AFK .\n\nAFK Since {endtime}\nReason : **{reason}"
+            )
         elif reason:
             message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : {reason}`"
         else:
-            message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            message_to_reply = (
+                f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            )
         if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
             msg = await event.reply(message_to_reply)
         if event.chat_id in last_afk_message:
