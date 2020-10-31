@@ -74,7 +74,7 @@ async def _(event):
     elif not os.path.exists(catthumb):
         catthumb = None
 
-    await borg.send_file(
+    await event.client.send_file(
         event.chat_id,
         song_file,
         force_document=False,
@@ -144,7 +144,7 @@ async def _(event):
         catthumb = Path(f"{catname}.webp")
     elif not os.path.exists(catthumb):
         catthumb = None
-    await borg.send_file(
+    await event.client.send_file(
         event.chat_id,
         vsong_file,
         force_document=False,

@@ -65,7 +65,7 @@ async def _(event):
         previous_message_text = previous_message.message
         BASE_URL = "http://www.google.com"
         if previous_message.media:
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await event.client.download_media(
                 previous_message, Config.TMP_DOWNLOAD_DIRECTORY
             )
             SEARCH_URL = "{}/searchbyimage/upload".format(BASE_URL)

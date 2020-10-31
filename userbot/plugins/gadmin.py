@@ -85,7 +85,7 @@ async def catgban(cat):
             await asyncio.sleep(0.5)
             count += 1
         except BadRequestError:
-            await borg.send_message(
+            await cat.client.send_message(
                 BOTLOG_CHATID,
                 f"You don't have required permission in :\nCHAT: {cat.chat.title}(`{cat.chat_id}`)\nFor banning here",
             )
@@ -109,7 +109,7 @@ async def catgban(cat):
         )
 
     if BOTLOG and count != 0:
-        await borg.send_message(
+        await cat.client.send_message(
             BOTLOG_CHATID,
             f"#GBAN\nGlobal BAN\nUser: [{user.first_name}](tg://user?id={user.id})\nID: `{user.id}`\
                                                 \nReason: `{reason}`\nBanned in `{count}` groups\nTime taken = `{cattaken} seconds`",
@@ -147,7 +147,7 @@ async def catgban(cat):
             await asyncio.sleep(0.5)
             count += 1
         except BadRequestError:
-            await borg.send_message(
+            await cat.client.send_message(
                 BOTLOG_CHATID,
                 f"You don't have required permission in :\nCHAT: {cat.chat.title}(`{cat.chat_id}`)\nFor unbaning here",
             )
@@ -163,7 +163,7 @@ async def catgban(cat):
         )
 
     if BOTLOG and count != 0:
-        await borg.send_message(
+        await cat.client.send_message(
             BOTLOG_CHATID,
             f"#UNGBAN\nGlobal UNBAN\nUser: [{user.first_name}](tg://user?id={user.id})\nID: {user.id}\
                                                 \nReason: `{reason}`\nUnbanned in `{count}` groups\nTime taken = `{cattaken} seconds`",

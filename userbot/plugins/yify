@@ -15,7 +15,7 @@ from userbot.utils import admin_cmd
 async def _(event):
     if event.fwd_from:
         return
-    uploadbot = await borg.get_entity("@uploadbot")
+    uploadbot = await event.client.get_entity("@uploadbot")
     BASE_URL = "https://yts.pm"
     tg_feed_link = BASE_URL + "/browse-movies"
     main_page_response = requests.get(tg_feed_link)
@@ -32,7 +32,7 @@ async def _(event):
             magnetic_link_response = requests.get(
                 href_link, allow_redirects=False)
             magnetic_link = magnetic_link_response.headers.get("Location")
-            await borg.send_message(
+            await event.client.send_message(
                 uploadbot,
                 magnetic_link
             )

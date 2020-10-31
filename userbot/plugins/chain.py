@@ -16,7 +16,7 @@ async def _(event):
     while message:
         reply = await message.get_reply_message()
         if reply is None:
-            await borg(
+            await event.client(
                 SaveDraftRequest(
                     await event.get_input_chat(), "", reply_to_msg_id=message.id
                 )

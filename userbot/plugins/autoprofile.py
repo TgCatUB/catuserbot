@@ -155,7 +155,7 @@ async def _(event):
         name = f"⌚️ {HM}||›  {DEFAULTUSER} ‹||📅 {DM}"
         logger.info(name)
         try:
-            await borg(
+            await event.client(
                 functions.account.UpdateProfileRequest(  # pylint:disable=E0602
                     first_name=name
                 )
@@ -163,13 +163,6 @@ async def _(event):
         except FloodWaitError as ex:
             logger.warning(str(e))
             await asyncio.sleep(ex.seconds)
-
-        # else:
-        # logger.info(r.stringify())
-        # await borg.send_message(  # pylint:disable=E0602
-        #     Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-        #     "Successfully Changed Profile Name"
-        # )
         await asyncio.sleep(DEL_TIME_OUT)
 
 
@@ -182,7 +175,7 @@ async def _(event):
         bio = f"📅 {DMY} | {DEFAULTUSERBIO} | ⌚️ {HM}"
         logger.info(bio)
         try:
-            await borg(
+            await event.client(
                 functions.account.UpdateProfileRequest(  # pylint:disable=E0602
                     about=bio
                 )
@@ -190,12 +183,6 @@ async def _(event):
         except FloodWaitError as ex:
             logger.warning(str(e))
             await asyncio.sleep(ex.seconds)
-        # else:
-        # logger.info(r.stringify())
-        # await borg.send_message(  # pylint:disable=E0602
-        #     Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-        #     "Changed Profile Picture"
-        # )
         await asyncio.sleep(DEL_TIME_OUT)
 
 
@@ -264,14 +251,12 @@ async def _(event):
     await event.edit(f"Monkey has been started by my Master")
     while True:
         bro = random.randint(0, len(BIO_STRINGS) - 1)
-        # input_str = event.pattern_match.group(1)
         Bio = BIO_STRINGS[bro]
         time.strftime("%d.%m.%Y")
         HM = time.strftime("%H:%M:%S")
-        # bio = f"📅 {DMY} | ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ | ⌚️ {HM}"
         logger.info(Bio)
         try:
-            await borg(
+            await event.client(
                 functions.account.UpdateProfileRequest(  # pylint:disable=E0602
                     about=Bio
                 )
@@ -279,12 +264,6 @@ async def _(event):
         except FloodWaitError as ex:
             logger.warning(str(e))
             await asyncio.sleep(ex.seconds)
-        # else:
-        # logger.info(r.stringify())
-        # await borg.send_message(  # pylint:disable=E0602
-        #     Config.PRIVATE_GROUP_BOT_API_ID,  # pylint:disable=E0602
-        #     "Successfully Changed Profile Bio"
-        # )
         await asyncio.sleep(DEL_TIME_OUT)
 
 

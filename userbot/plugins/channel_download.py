@@ -25,13 +25,13 @@ async def get_media(event):
     limit = int(catty.split(" ")[0])
     channel_username = str(catty.split(" ")[1])
     event = await edit_or_reply(event, "Downloading Media From this Channel.")
-    msgs = await borg.get_messages(channel_username, limit=int(limit))
+    msgs = await event.client.get_messages(channel_username, limit=int(limit))
     with open("log.txt", "w") as f:
         f.write(str(msgs))
     i = 0
     for msg in msgs:
         if msg.media is not None:
-            await borg.download_media(msg, tempdir)
+            await event.client.download_media(msg, tempdir)
             i += 1
             await event.edit(
                 f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"
@@ -57,13 +57,13 @@ async def get_media(event):
         pass
     channel_username = event.pattern_match.group(1)
     event = await edit_or_reply(event, "Downloading All Media From this Channel.")
-    msgs = await borg.get_messages(channel_username, limit=3000)
+    msgs = await event.client.get_messages(channel_username, limit=3000)
     with open("log.txt", "w") as f:
         f.write(str(msgs))
     i = 0
     for msg in msgs:
         if msg.media is not None:
-            await borg.download_media(msg, tempdir)
+            await event.client.download_media(msg, tempdir)
             i += 1
             await event.edit(
                 f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"

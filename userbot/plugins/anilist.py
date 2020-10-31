@@ -218,7 +218,7 @@ async def anilist(event):
         if image:
             image = image.get("large")
             await event.delete()
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id, image, caption=msg, parse_mode="md", reply_to=reply_to_id
             )
         else:
@@ -292,7 +292,7 @@ async def anilist(event):
         )
         if image:
             try:
-                await borg.send_file(
+                await event.client.send_file(
                     event.chat_id,
                     image,
                     caption=ms_ms_g,

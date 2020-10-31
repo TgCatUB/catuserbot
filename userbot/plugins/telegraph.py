@@ -23,7 +23,7 @@ async def _(event):
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if BOTLOG:
-        await borg.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID,
             "Created New Telegraph account {} for the current session. \n**Do not give this url to anyone, even if they say they are from Telegram!**".format(
                 auth_url
@@ -35,7 +35,7 @@ async def _(event):
         r_message = await event.get_reply_message()
         input_str = event.pattern_match.group(1)
         if input_str == "media":
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await event.client.download_media(
                 r_message, Config.TMP_DOWNLOAD_DIRECTORY
             )
             end = datetime.now()
@@ -63,7 +63,7 @@ async def _(event):
                     link_preview=True,
                 )
         elif input_str == "text":
-            user_object = await borg.get_entity(r_message.sender_id)
+            user_object = await event.client.get_entity(r_message.sender_id)
             title_of_page = user_object.first_name  # + " " + user_object.last_name
             # apparently, all Users do not have last_name field
             if optional_title:
@@ -72,7 +72,7 @@ async def _(event):
             if r_message.media:
                 if page_content != "":
                     title_of_page = page_content
-                downloaded_file_name = await borg.download_media(
+                downloaded_file_name = await event.client.download_media(
                     r_message, Config.TMP_DOWNLOAD_DIRECTORY
                 )
                 m_list = None

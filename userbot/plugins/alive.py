@@ -30,7 +30,7 @@ async def amireallyalive(alive):
         cat_caption += f"**✧ Python Version :** `{python_version()}\n`"
         cat_caption += f"**✧ Uptime :** `{uptime}\n`"
         cat_caption += f"**✧ Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
-        await borg.send_file(
+        await alive.client.send_file(
             alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id
         )
         await alive.delete()

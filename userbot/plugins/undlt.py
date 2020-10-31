@@ -19,7 +19,7 @@ async def _(event):
         input_str = 5
     c = await event.get_chat()
     if c.admin_rights or c.creator:
-        a = await borg.get_admin_log(
+        a = await catmemes.client.get_admin_log(
             event.chat_id, limit=input_str, search="", edit=False, delete=True
         )
         for i in a:

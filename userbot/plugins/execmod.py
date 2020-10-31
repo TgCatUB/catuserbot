@@ -37,10 +37,9 @@ async def pipcheck(pip):
         if pipout:
             if len(pipout) > 4096:
                 await pip.edit("`Output too large, sending as file`")
-                file = open("pips.txt", "w+")
-                file.write(pipout)
-                file.close()
-                await borg.send_file(
+                with open("pips.txt", "w+") as file:
+                    file.write(pipout)
+                await pip.client.send_file(
                     pip.chat_id,
                     "pips.txt",
                     reply_to=reply_to_id,
@@ -96,7 +95,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -130,7 +129,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -167,7 +166,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -202,7 +201,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -233,7 +232,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -264,7 +263,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -295,7 +294,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -326,7 +325,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "kwot.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -357,7 +356,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "env.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,

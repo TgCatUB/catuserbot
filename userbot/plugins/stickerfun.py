@@ -35,7 +35,7 @@ async def waifu(animu):
             return
     text = deEmojify(text)
     await animu.delete()
-    await waifutxt(text, animu.chat_id, reply_to_id, bot, borg)
+    await waifutxt(text, animu.chat_id, reply_to_id, bot, animu.client)
 
 
 # 12 21 28 30
@@ -54,12 +54,13 @@ async def sticklet(event):
     if not font_file_name:
         font_file_name = ""
     sticktext = event.pattern_match.group(2)
-    if not sticktext and event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        sticktext = reply_message.message
-    elif not sticktext:
-        await edit_or_reply(event, "need something, hmm")
-        return
+    if not sticktext:
+        if event.reply_to_msg_id:
+            reply_message = await event.get_reply_message()
+            sticktext = reply_message.message
+        else:
+            await edit_or_reply(event, "need something, hmm")
+            return
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
     # delete the userbot command,

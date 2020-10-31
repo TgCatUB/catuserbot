@@ -64,7 +64,7 @@ async def handler(event):
     docs = [
         utils.get_input_document(x)
         for x in (
-            await borg(
+            await event.client(
                 functions.messages.GetStickerSetRequest(
                     types.InputStickerSetShortName("DabOnHaters")
                 )
@@ -86,7 +86,7 @@ async def handler(event):
     docs = [
         utils.get_input_document(x)
         for x in (
-            await borg(
+            await event.client(
                 functions.messages.GetStickerSetRequest(
                     types.InputStickerSetShortName("supermind")
                 )

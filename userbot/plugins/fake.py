@@ -28,7 +28,7 @@ async def _(event):
         await event.delete()
     except BaseException:
         pass
-    async with borg.action(event.chat_id, action):
+    async with event.client.action(event.chat_id, action):
         await asyncio.sleep(86400)  # type for 10 seconds
 
 
@@ -48,7 +48,7 @@ async def _(event):
     elif input_str:
         to_promote_id = input_str
     try:
-        await borg(EditAdminRequest(event.chat_id, to_promote_id, rights, ""))
+        await event.client(EditAdminRequest(event.chat_id, to_promote_id, rights, ""))
     except (Exception) as exc:
         await edit_or_reply(event, str(exc))
     else:

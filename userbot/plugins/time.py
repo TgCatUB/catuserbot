@@ -139,7 +139,7 @@ async def _(event):
     drawn_text = ImageDraw.Draw(img)
     drawn_text.text((10, 10), current_time, font=fnt, fill=(255, 255, 255))
     img.save(required_file_name)
-    await borg.send_file(
+    await event.client.send_file(
         event.chat_id,
         required_file_name,
         # Courtesy: @ManueI15

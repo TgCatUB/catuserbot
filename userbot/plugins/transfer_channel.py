@@ -20,9 +20,9 @@ async def _(event):
     # not doing any validations, here FN
     # MBL
     try:
-        pwd = await borg(functions.account.GetPasswordRequest())
+        pwd = await event.client(functions.account.GetPasswordRequest())
         my_srp_password = pwd_mod.compute_check(pwd, Config.TELE_GRAM_2FA_CODE)
-        await borg(
+        await event.client(
             functions.channels.EditCreatorRequest(
                 channel=current_channel, user_id=user_name, password=my_srp_password
             )

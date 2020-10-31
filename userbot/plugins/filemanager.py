@@ -15,7 +15,7 @@ from . import CMD_HELP, runcmd
 @bot.on(sudo_cmd(pattern="ls ?(.*)", allow_sudo=True))
 async def lst(event):
     cat = "".join(event.text.split(maxsplit=1)[1:])
-    path = cat if cat else os.getcwd()
+    path = cat or os.getcwd()
     if not os.path.exists(path):
         await edit_or_reply(
             event,
@@ -80,7 +80,7 @@ async def lst(event):
     if len(msg) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(msg)) as out_file:
             out_file.name = "ls.txt"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,

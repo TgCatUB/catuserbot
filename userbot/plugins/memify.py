@@ -122,7 +122,7 @@ async def memes(cat):
         await cat_meeme(top, bottom, meme_file, meme)
     if cmd != "mmf":
         meme = await convert_tosticker(meme)
-    await borg.send_file(cat.chat_id, meme, reply_to=catid)
+    await cat.client.send_file(cat.chat_id, meme, reply_to=catid)
     await cat.delete()
     os.remove(meme)
     for files in (catsticker, meme_file):
@@ -197,7 +197,7 @@ async def memes(cat):
     color2 = c_list[1]
     bgcolor = "#080808" if not catinput else catinput
     asciiart(meme_file, 0.3, 1.9, outputfile, color1, color2, bgcolor)
-    await borg.send_file(cat.chat_id, outputfile, reply_to=catid)
+    await cat.client.send_file(cat.chat_id, outputfile, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -277,7 +277,7 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "invert.webp" if jisanidea else "invert.jpg"
     await invert_colors(meme_file, outputfile)
-    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -357,7 +357,7 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "solarize.webp" if jisanidea else "solarize.jpg"
     await solarize(meme_file, outputfile)
-    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -437,7 +437,7 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "mirror_file.webp" if jisanidea else "mirror_file.jpg"
     await mirror_file(meme_file, outputfile)
-    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -517,7 +517,7 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "flip_image.webp" if jisanidea else "flip_image.jpg"
     await flip_image(meme_file, outputfile)
-    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -597,7 +597,7 @@ async def memes(cat):
     meme_file = convert_toimage(meme_file)
     outputfile = "grayscale.webp" if jisanidea else "grayscale.jpg"
     await grayscale(meme_file, outputfile)
-    await borg.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
+    await cat.client.send_file(cat.chat_id, outputfile, force_document=False, reply_to=catid)
     await cat.delete()
     os.remove(outputfile)
     for files in (catsticker, meme_file):
@@ -682,7 +682,7 @@ async def memes(cat):
     except Exception as e:
         return await cat.edit(f"`{e}`")
     try:
-        await borg.send_file(
+        await cat.client.send_file(
             cat.chat_id, outputfile, force_document=False, reply_to=catid
         )
     except Exception as e:
@@ -778,7 +778,7 @@ async def memes(cat):
     except Exception as e:
         return await cat.edit(f"`{e}`")
     try:
-        await borg.send_file(
+        await cat.client.send_file(
             cat.chat_id, outputfile, force_document=False, reply_to=catid
         )
     except Exception as e:

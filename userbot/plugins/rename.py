@@ -71,7 +71,7 @@ async def _(event):
         c_time = time.time()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await borg.download_media(
+        downloaded_file_name = await event.client.download_media(
             reply_message,
             downloaded_file_name,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(

@@ -26,7 +26,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "bash.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -65,7 +65,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "exec.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -115,7 +115,7 @@ async def _(event):
         with io.BytesIO(str.encode(final_output)) as out_file:
             out_file.name = "eval.text"
             try:
-                await borg.send_file(
+                await event.client.send_file(
                     event.chat_id,
                     out_file,
                     force_document=True,
@@ -125,7 +125,7 @@ async def _(event):
                 )
                 await event.delete()
             except:
-                await borg.send_file(
+                await event.client.send_file(
                     event.chat_id,
                     out_file,
                     force_document=True,

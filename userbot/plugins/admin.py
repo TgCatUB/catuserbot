@@ -514,7 +514,7 @@ async def _(event):
         return
     c = await event.get_chat()
     if c.admin_rights or c.creator:
-        a = await borg.get_admin_log(event.chat_id, limit=5, edit=False, delete=True)
+        a = await event.client.get_admin_log(event.chat_id, limit=5, edit=False, delete=True)
         deleted_msg = "Deleted message in this group:"
         for i in a:
             deleted_msg += "\n👉`{}`".format(i.old.message)

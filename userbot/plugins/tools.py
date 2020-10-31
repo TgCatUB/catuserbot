@@ -35,7 +35,7 @@ async def _(event):
         await edit_or_reply(event, "```Reply to actual users message.```")
         return
     catevent = await edit_or_reply(event, " `Sliding my tip, of fingers over it`")
-    async with borg.conversation(chat) as conv:
+    async with event.client.conversation(chat) as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=161163358)
@@ -113,7 +113,7 @@ async def _(event):
         previous_message = await event.get_reply_message()
         reply_msg_id = previous_message.id
         if previous_message.media:
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await event.client.download_media(
                 previous_message,
                 Config.TMP_DOWNLOAD_DIRECTORY,
             )
@@ -132,7 +132,7 @@ async def _(event):
     try:
         bar_code_mode_f = barcode.get(bar_code_type, message, writer=ImageWriter())
         filename = bar_code_mode_f.save(bar_code_type)
-        await borg.send_file(
+        await event.client.send_file(
             event.chat_id,
             filename,
             caption=message,
@@ -297,7 +297,7 @@ async def _(event):
             im = Image.new(mode="RGB", size=(1280, 720), color=usercolor)
             im.save("cat.png", "PNG")
             input_str = input_str.replace("#", "#COLOR_")
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 "cat.png",
                 force_document=False,

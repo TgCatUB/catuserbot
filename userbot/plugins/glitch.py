@@ -75,7 +75,7 @@ async def glitch(cat):
         glitched = "./temp/" + "glitched.webp"
         glitch_img = glitcher.glitch_image(img, catinput, color_offset=True)
         glitch_img.save(glitched)
-        await borg.send_file(cat.chat_id, glitched, reply_to=catid)
+        await cat.client.send_file(cat.chat_id, glitched, reply_to=catid)
         os.remove(glitched)
         await cat.delete()
     elif cmd == "glitch":
@@ -91,8 +91,8 @@ async def glitch(cat):
             duration=DURATION,
             loop=LOOP,
         )
-        sandy = await borg.send_file(cat.chat_id, Glitched, reply_to=catid)
-        await borg(
+        sandy = await cat.client.send_file(cat.chat_id, Glitched, reply_to=catid)
+        await cat.client(
             functions.messages.SaveGifRequest(
                 id=types.InputDocument(
                     id=sandy.media.document.id,

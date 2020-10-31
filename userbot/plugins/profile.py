@@ -34,7 +34,7 @@ async def _(event):
         return
     bio = event.pattern_match.group(1)
     try:
-        await borg(
+        await event.client(
             functions.account.UpdateProfileRequest(about=bio)  # pylint:disable=E0602
         )
         await event.edit("Succesfully changed my profile bio")
@@ -52,7 +52,7 @@ async def _(event):
     if "|" in names:
         first_name, last_name = names.split("|", 1)
     try:
-        await borg(
+        await event.client(
             functions.account.UpdateProfileRequest(  # pylint:disable=E0602
                 first_name=first_name, last_name=last_name
             )
@@ -72,7 +72,7 @@ async def _(event):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)  # pylint:disable=E0602
     photo = None
     try:
-        photo = await borg.download_media(  # pylint:disable=E0602
+        photo = await event.client.download_media(  # pylint:disable=E0602
             reply_message, Config.TMP_DOWNLOAD_DIRECTORY  # pylint:disable=E0602
         )
     except Exception as e:  # pylint:disable=C0103,W0703
@@ -88,12 +88,12 @@ async def _(event):
                     os.remove(photo)
                     return
                 catpic = None
-                catvideo = await borg.upload_file(photo)
+                catvideo = await event.client.upload_file(photo)
             else:
-                catpic = await borg.upload_file(photo)  # pylint:disable=E0602
+                catpic = await event.client.upload_file(photo)  # pylint:disable=E0602
                 catvideo = None
             try:
-                await borg(
+                await event.client(
                     functions.photos.UploadProfilePhotoRequest(
                         file=catpic, video=catvideo, video_start_ts=0.01
                     )
@@ -169,15 +169,11 @@ async def remove_profilepic(delpfp):
     pfplist = await delpfp.client(
         GetUserPhotosRequest(user_id=delpfp.sender_id, offset=0, max_id=0, limit=lim)
     )
-    input_photos = []
-    for sep in pfplist.photos:
-        input_photos.append(
-            InputPhoto(
+    input_photos = [InputPhoto(
                 id=sep.id,
                 access_hash=sep.access_hash,
                 file_reference=sep.file_reference,
-            )
-        )
+            ) for sep in pfplist.photos]
     await delpfp.client(DeletePhotosRequest(id=input_photos))
     await delpfp.edit(f"`Successfully deleted {len(input_photos)} profile picture(s).`")
 

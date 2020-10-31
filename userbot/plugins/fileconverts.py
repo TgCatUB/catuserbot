@@ -36,11 +36,11 @@ async def _(cat):
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await borg.download_media(
+        downloaded_file_name = await cat.client.download_media(
             reply_message, downloaded_file_name
         )
         if os.path.exists(downloaded_file_name):
-            caat = await borg.send_file(
+            caat = await cat.client.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
@@ -71,11 +71,11 @@ async def _(cat):
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await borg.download_media(
+        downloaded_file_name = await cat.client.download_media(
             reply_message, downloaded_file_name
         )
         if os.path.exists(downloaded_file_name):
-            caat = await borg.send_file(
+            caat = await cat.client.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
@@ -108,7 +108,7 @@ async def get(event):
         with open(name, "w") as f:
             f.write(m.message)
         await event.delete()
-        await borg.send_file(event.chat_id, name, force_document=True)
+        await event.client.send_file(event.chat_id, name, force_document=True)
         os.remove(name)
     else:
         await edit_or_reply(event, "reply to text message as `.ttf <file name>`")
@@ -129,12 +129,12 @@ async def on_file_to_photo(event):
         return  # Telegram doesn't let you directly send stickers as photos
     if image.size > 10 * 1024 * 1024:
         return  # We'd get PhotoSaveFileInvalidError otherwise
-    file = await borg.download_media(target, file=BytesIO())
+    file = await event.client.download_media(target, file=BytesIO())
     file.seek(0)
-    img = await borg.upload_file(file)
+    img = await event.client.upload_file(file)
     img.name = "image.png"
     try:
-        await borg(
+        await event.client(
             SendMediaRequest(
                 peer=await event.get_input_chat(),
                 media=types.InputMediaUploadedPhoto(img),
@@ -180,7 +180,7 @@ async def _(event):
                 force_document=False,
                 reply_to=reply_to_id,
             )
-            await borg(
+            await event.client(
                 functions.messages.SaveGifRequest(
                     id=types.InputDocument(
                         id=sandy.media.document.id,
@@ -215,9 +215,7 @@ async def _(event):
     if input_str is None:
         await edit_or_reply(event, "try `.nfc voice` or`.nfc mp3`")
         return
-    if input_str == "mp3":
-        event = await edit_or_reply(event, "converting...")
-    elif input_str == "voice":
+    if input_str in ["mp3", "voice"]:
         event = await edit_or_reply(event, "converting...")
     else:
         await edit_or_reply(event, "try `.nfc voice` or`.nfc mp3`")
@@ -225,7 +223,7 @@ async def _(event):
     try:
         start = datetime.now()
         c_time = time.time()
-        downloaded_file_name = await borg.download_media(
+        downloaded_file_name = await event.client.download_media(
             reply_message,
             Config.TMP_DOWNLOAD_DIRECTORY,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -243,7 +241,6 @@ async def _(event):
         new_required_file_name = ""
         new_required_file_caption = ""
         command_to_run = []
-        force_document = False
         voice_note = False
         supports_streaming = False
         if input_str == "voice":
@@ -299,7 +296,8 @@ async def _(event):
         stdout.decode().strip()
         os.remove(downloaded_file_name)
         if os.path.exists(new_required_file_name):
-            await borg.send_file(
+            force_document = False
+            await event.client.send_file(
                 entity=event.chat_id,
                 file=new_required_file_name,
                 allow_cache=False,

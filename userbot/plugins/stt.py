@@ -1,4 +1,4 @@
-# speech to text module for catuserbot by uniborg(@spechide)
+# speech to text module for catuserbot by unievent.client(@spechide)
 import os
 from datetime import datetime
 
@@ -20,7 +20,7 @@ async def _(event):
     catevent = await edit_or_reply(event, "Downloading to my local, for analysis  🙇")
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        required_file_name = await borg.download_media(
+        required_file_name = await event.client.download_media(
             previous_message, Config.TMP_DOWNLOAD_DIRECTORY
         )
         lan = input_str
