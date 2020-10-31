@@ -6,7 +6,6 @@ import os
 import requests
 
 from ..utils import admin_cmd, sudo_cmd
-from . import reply_id
 
 
 @bot.on(admin_cmd(pattern="detect$", outgoing=True))
