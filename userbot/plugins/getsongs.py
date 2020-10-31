@@ -172,9 +172,11 @@ async def kakashi(event):
             msg_start = await conv.send_message("/start")
             response = await conv.get_response()
             msg = await conv.send_message(song)
-            await conv.get_response()
             hmm = await conv.get_response()
-            baka = await event.client.get_messages(chat, ids=hmm.id)
+            while hmm.edit_hide != True:
+                await asyncio.sleep(0.2)
+                hmm = await event.client.get_messages(chat , ids = hmm.id)
+            baka = await event.client.get_messages(chat)
             await baka[0].click(0)
             response2 = await conv.get_response()
             music = await conv.get_response()
