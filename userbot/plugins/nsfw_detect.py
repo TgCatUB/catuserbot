@@ -60,6 +60,6 @@ CMD_HELP.update(
     {
         "nsfw_detect": "**Plugin : **`nsfw_detect`\
     \n\n**Syntax : **`.detect`\
-    \n**Function : **__Reply .detect command to any image or non animated stickere to detect the nudity in that__"
+    \n**Function : **__Reply .detect command to any image or non animated sticker to detect the nudity in that__"
     }
 )
