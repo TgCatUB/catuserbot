@@ -5,7 +5,7 @@ from telethon import events, functions
 from telethon.tl.functions.users import GetFullUserRequest
 
 from ..utils import admin_cmd
-from . import ALIVE_NAME, CMD_HELP, PM_START, check, PMMENU
+from . import ALIVE_NAME, CMD_HELP, PM_START, PMMENU, check
 from .sql_helper import pmpermit_sql as pmpermit_sql
 
 PM_WARNS = {}
@@ -201,7 +201,9 @@ if Config.PRIVATE_GROUP_ID is not None:
                 await event.delete()
         else:
             await event.edit(APPROVED_PMs)
+
     if PMMENU:
+
         @bot.on(events.NewMessage(incoming=True))
         async def on_new_private_message(event):
             if event.sender_id == event.client.uid:
@@ -302,7 +304,9 @@ if Config.PRIVATE_GROUP_ID is not None:
             if chat_id in PREV_REPLY_MESSAGE:
                 await PREV_REPLY_MESSAGE[chat_id].delete()
             PREV_REPLY_MESSAGE[chat_id] = r
+
     else:
+
         @bot.on(events.NewMessage(incoming=True))
         async def on_new_private_message(event):
             if event.sender_id == event.client.uid:
@@ -385,6 +389,7 @@ if Config.PRIVATE_GROUP_ID is not None:
             if chat_id in PREV_REPLY_MESSAGE:
                 await PREV_REPLY_MESSAGE[chat_id].delete()
             PREV_REPLY_MESSAGE[chat_id] = r
+
 
 CMD_HELP.update(
     {
