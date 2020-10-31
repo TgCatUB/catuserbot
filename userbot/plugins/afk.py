@@ -175,7 +175,7 @@ async def _(event):
                     f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
                 )
 
-                
+
 CMD_HELP.update(
     {
         "afk": "**Plugin : **`afk`\
