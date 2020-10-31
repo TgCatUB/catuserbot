@@ -25,7 +25,7 @@ async def download_file_from_google_drive(gid):
     headers = response.headers
     content = headers["Content-Disposition"]
     destination = await get_file_name(content)
-    destination = os.apth.join(Config.TMP_DOWNLOAD_DIRECTORY, destination)
+    destination = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, destination)
     file_name = await save_response_content(response, destination)
     return file_name
 
