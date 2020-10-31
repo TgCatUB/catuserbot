@@ -1,8 +1,3 @@
-"""Default Permission in Telegram 5.0.1
-Available Commands: .lock <option>, .unlock <option>, .locks
-API Options: msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, changeinfo
-DB Options: bots, commands, email, forward, url"""
-
 from telethon import events, functions, types
 from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.types import ChatBannedRights
@@ -13,6 +8,7 @@ from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 
 
 @bot.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
+@bot.on(sudo_cmd(pattern=r"lock( (?P<target>\S+)|$)",allow_sudo=True))
 async def _(event):
     # Space weirdness in regex required because argument is optional and other
     # commands start with ".lock"
@@ -22,7 +18,7 @@ async def _(event):
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, True)
-        await event.edit("Locked {}".format(input_str))
+        await edit_or_reply(event ,"`Locked {}`".format(input_str))
     else:
         msg = None
         media = None
@@ -78,9 +74,9 @@ async def _(event):
             what = "everything"
         else:
             if not input_str:
-                return await event.edit("`I can't lock nothing !!`")
+                return await edit_or_reply(event,"`I can't lock nothing !!`")
             else:
-                return await event.edit(f"`Invalid lock type:` {input_str}")
+                return await edit_or_reply(event,f"`Invalid lock type:` {input_str}")
 
         lock_rights = ChatBannedRights(
             until_date=None,
@@ -101,9 +97,9 @@ async def _(event):
                     peer=peer_id, banned_rights=lock_rights
                 )
             )
-            await event.edit(f"`Locked {what} for this chat !!`")
+            await edit_or_reply(event,f"`Locked {what} for this chat !!`")
         except BaseException as e:
-            return await event.edit(
+            return await edit_or_reply(event,
                 f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
             )
 
@@ -116,7 +112,7 @@ async def _(event):
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, False)
-        await event.edit("UnLocked {}".format(input_str))
+        await edit_or_reply(event,"`UnLocked {}`".format(input_str))
     else:
         msg = None
         media = None
@@ -172,9 +168,9 @@ async def _(event):
             what = "everything"
         else:
             if not input_str:
-                return await event.edit("`I can't unlock nothing !!`")
+                return await edit_or_reply(event,"`I can't unlock nothing !!`")
             else:
-                return await event.edit(f"`Invalid unlock type:` {input_str}")
+                return await edit_or_reply(event,f"`Invalid unlock type:` {input_str}")
 
         unlock_rights = ChatBannedRights(
             until_date=None,
@@ -195,9 +191,9 @@ async def _(event):
                     peer=peer_id, banned_rights=unlock_rights
                 )
             )
-            await event.edit(f"`Unlocked {what} for this chat !!`")
+            await edit_or_reply(event,f"`Unlocked {what} for this chat !!`")
         except BaseException as e:
-            return await event.edit(
+            return await edit_or_reply(event,
                 f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
             )
 
@@ -234,11 +230,11 @@ async def _(event):
         res += "👉 `adduser`: `{}`\n".format(current_api_locks.invite_users)
         res += "👉 `cpin`: `{}`\n".format(current_api_locks.pin_messages)
         res += "👉 `changeinfo`: `{}`\n".format(current_api_locks.change_info)
-    await event.edit(res)
+    await edit_or_reply(event,res)
 
 
-@bot.on(events.MessageEdited())  # pylint:disable=E0602
-@bot.on(events.NewMessage())  # pylint:disable=E0602
+@bot.on(events.MessageEdited())
+@bot.on(events.NewMessage()) 
 async def check_incoming_messages(event):
     # TODO: exempt admins from locks
     peer_id = event.chat_id
@@ -340,13 +336,14 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "locks": ".lock <all (or) type(s)> or .unlock <all (or) type(s)>\
-\nUsage: Allows you to lock/unlock some common message types in the chat.\
-[NOTE: Requires proper admin rights in the chat !!]\
-\n\nAvailable message types to lock/unlock are: \
-\nAPI Options: msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, changeinfo\
-\nDB Options: bots, commands, email, forward, url\
-\n\n.curenabledlocks\
-\nUsage: to see the active locks"
+        "locks": "**Plugin : **`lock\
+        \n\n**Syntax : **.lock <all (or) type(s)> or .unlock <all (or) type(s)>\
+\n**Function : **__Allows you to lock/unlock some common message types in the chat.\
+\n[NOTE: Requires proper admin rights in the chat !!]__\
+\n\n**Available message types to lock/unlock are: \
+\nAPI Options : **msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, changeinfo\
+\n**DB Options : **bots, commands, email, forward, url\
+\n\n**Syntax : **`.curenabledlocks`\
+\n**Function : **__to see the active locks__"
     }
 )
