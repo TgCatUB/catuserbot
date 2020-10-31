@@ -1,4 +1,5 @@
 from telethon.utils import pack_bot_file_id
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
@@ -12,16 +13,18 @@ async def _(event):
         p = await event.client.get_entity(input_str)
         try:
             if p.first_name:
-                return await edit_or_reply( event , 
-                    f"The id of the user `{input_str}` is `{p.id}`")
+                return await edit_or_reply(
+                    event, f"The id of the user `{input_str}` is `{p.id}`"
+                )
         except:
             try:
                 if p.title:
-                    return await edit_or_reply( event , 
-                        f"The id of the chat/channel `{p.title}` is `{p.id}`")
+                    return await edit_or_reply(
+                        event, f"The id of the chat/channel `{p.title}` is `{p.id}`"
+                    )
             except:
                 pass
-        await edit_or_reply( event , "`Either give input as username or reply to user`")
+        await edit_or_reply(event, "`Either give input as username or reply to user`")
     elif event.reply_to_msg_id:
         await event.get_input_chat()
         r_msg = await event.get_reply_message()
