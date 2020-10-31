@@ -107,9 +107,9 @@ async def on_afk(event):
     if USERAFK_ON and not (await event.get_sender()).bot:
         msg = None
         message_to_reply = (
-            f"`I am afk \nSince {endtime}\nReason : {reason}`"
+            f"**I am AFK .**\n\n**AFK Since : {endtime}**\n**Reason : **{reason}"
             if reason
-            else f"`I am afk \nSince {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            else f"**I am AFK .**\n\n**AFK Since : {endtime}**\n**Reason : **`Not Mentioned ( ಠ ʖ̯ ಠ)`"
         )
         if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
             msg = await event.reply(message_to_reply)
@@ -147,7 +147,12 @@ async def _(event):
     start_1 = datetime.now()
     afk_start = start_1.replace(microsecond=0)
     if not USERAFK_ON:
-        reason = event.pattern_match.group(1)
+        input_str = event.pattern_match.group(1)
+        if ";" in input_str:
+            msg, link = input_str.split(";", 1)
+            reason = f"[{msg}]({link})"
+        else:
+            reason = f"{input_str}"
         last_seen_status = await event.client(
             functions.account.GetPrivacyRequest(types.InputPrivacyKeyStatusTimestamp())
         )
@@ -155,7 +160,7 @@ async def _(event):
             afk_time = datetime.now()
         USERAFK_ON = f"on: {reason}"
         if reason:
-            await edit_delete(event, f"`I shall be Going afk! because ~ {reason}`", 5)
+            await edit_delete(event, f"`I shall be Going afk! because ~` {reason}", 5)
         else:
             await edit_delete(event, f"`I shall be Going afk! `", 5)
         if BOTLOG:
@@ -170,7 +175,7 @@ async def _(event):
                     f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
                 )
 
-
+                
 CMD_HELP.update(
     {
         "afk": "**Plugin : **`afk`\
