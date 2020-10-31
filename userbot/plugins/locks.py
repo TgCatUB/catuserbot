@@ -6,9 +6,10 @@ DB Options: bots, commands, email, forward, url"""
 from telethon import events, functions, types
 from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.types import ChatBannedRights
+
+from ..utils import admin_cmd
 from . import CMD_HELP
 from .sql_helper.locks_sql import get_locks, is_locked, update_lock
-from ..utils import admin_cmd
 
 
 @bot.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
@@ -96,14 +97,15 @@ async def _(event):
         )
         try:
             await event.client(
-                EditChatDefaultBannedRightsRequest(peer=peer_id, banned_rights=lock_rights)
+                EditChatDefaultBannedRightsRequest(
+                    peer=peer_id, banned_rights=lock_rights
+                )
             )
             await event.edit(f"`Locked {what} for this chat !!`")
         except BaseException as e:
             return await event.edit(
                 f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
             )
-
 
 
 @bot.on(admin_cmd(pattern="unlock ?(.*)"))
