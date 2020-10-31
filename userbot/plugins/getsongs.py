@@ -178,7 +178,7 @@ async def kakashi(event):
                 await asyncio.sleep(0.2)
                 hmm = await event.client.get_messages(chat, ids=hmm.id)
             baka = await event.client.get_messages(chat)
-            await baka[0].click(0)=
+            await baka[0].click(0)
             music = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
