@@ -107,16 +107,15 @@ async def on_afk(event):
     if USERAFK_ON and not (await event.get_sender()).bot:
         msg = None
         message_to_reply = (
-            f"**I am AFK .**\n\n**AFK Since : {endtime}**\n**Reason : **{reason}"
+            f"`I am AFK .\n\nAFK Since {endtime}\nReason : {reason}`"
             if reason
-            else f"**I am AFK .**\n\n**AFK Since : {endtime}**\n**Reason : **`Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            else f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
         )
         if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
             msg = await event.reply(message_to_reply)
         if event.chat_id in last_afk_message:
             await last_afk_message[event.chat_id].delete()
         last_afk_message[event.chat_id] = msg
-        await asyncio.sleep(5)
         hmm = await event.get_chat()
         if Config.PM_LOGGR_BOT_API_ID:
             await asyncio.sleep(5)
@@ -152,7 +151,7 @@ async def _(event):
             msg, link = input_str.split(";", 1)
             reason = f"[{msg}]({link})"
         else:
-            reason = f"{input_str}"
+            reason = input_str
         last_seen_status = await event.client(
             functions.account.GetPrivacyRequest(types.InputPrivacyKeyStatusTimestamp())
         )
