@@ -159,25 +159,27 @@ async def _(event):
             os.remove(files)
 
 
-@bot.on(admin_cmd(pattern="music (.*)"))
-@bot.on(sudo_cmd(pattern="music (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="song2 (.*)"))
+@bot.on(sudo_cmd(pattern="song2 (.*)", allow_sudo=True))
 async def kakashi(event):
     if event.fwd_from:
         return
     song = event.pattern_match.group(1)
-    chat = "@WooMaiBot"
-    link = f"/netease {song}"
+    chat = "@songdl_bot"
     catevent = await edit_or_reply(event, "`wi8..! I am finding your song....`")
     async with event.client.conversation(chat) as conv:
         try:
             msg_start = await conv.send_message("/start")
             response = await conv.get_response()
-            msg = await conv.send_message(link)
-            baka = await conv.get_response()
+            msg = await conv.send_message(song)
+            await asyncio.sleep(5)
+            baka = await event.client.get_messages(chat)
+            await baka[0].click(0)
+            response2 = await conv.get_response()
             music = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await catevent.edit("```Please unblock @WooMaiBot and try again```")
+            await catevent.edit("```Please unblock @songdl_bot and try again```")
             return
         await catevent.edit("`Sending Your Music...`")
         await asyncio.sleep(1.5)
@@ -185,13 +187,13 @@ async def kakashi(event):
         await event.client.send_file(
             event.chat_id,
             music,
-            caption=f"<b><i>➥ Song :- {song}</i></b>\n<b><i>➥ Uploaded by :- {hmention}</i></b>",
+            caption=f"<b>➥ Song :- <code>{song}</code></b>",
             parse_mode="html",
         )
     await event.client.delete_messages(
-        conv.chat_id, [msg_start.id, response.id, msg.id, baka.id, music.id]
+        conv.chat_id, [msg_start.id, response.id, msg.id, response2.id, music.id]
     )
-
+    
 
 CMD_HELP.update(
     {
@@ -202,7 +204,7 @@ CMD_HELP.update(
         \n**Usage : **searches the song you entered in query and sends it quality of it is 320k\
         \n\n**Syntax : **`.vsong query` or `.vsong reply to song name`\
         \n**Usage : **Searches the video song you entered in query and sends it\
-        \n\n**Syntax : **`.music` <song name>\
-        \n**Usage : **Download your music by just name"
+        \n\n**Syntax : **`.song2` <song name>\
+        \n**Usage : **searches the song you entered in query and sends it"
     }
 )
