@@ -123,7 +123,7 @@ CMD_HELP.update(
     {
         "log_chats": "**Plugin : **`log_chats`\
         \n\n**Syntax : **`.save` :\
-        \n**Function : ** saves taged message in private group .\
+        \n**Function : ** saves tagged message in private group .\
         \n\n**Syntax : **`.log`:\
         \n**Function : **By default will log all private chat messages if you use .nolog and want to log again then you need to use this\
         \n\n**Syntax : **`.nolog`:\
