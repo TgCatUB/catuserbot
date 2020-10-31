@@ -15,6 +15,7 @@ from datetime import datetime
 from mimetypes import guess_type
 from os.path import getctime, isdir, isfile, join
 
+import requests
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
@@ -22,7 +23,6 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from telethon import events
 
-import requests
 from ..utils import admin_cmd, edit_or_reply, humanbytes, sudo_cmd, time_formatter
 from . import (
     BOTLOG_CHATID,
@@ -1381,7 +1381,8 @@ async def g_download(event):
             "**File Downloaded and uploaded.\nName : **`" + str(file_name) + "`",
             5,
         )
-        
+
+
 CMD_HELP.update(
     {
         "gdrive": "**Plugin :** `gdrive`"
