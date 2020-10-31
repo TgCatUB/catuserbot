@@ -8,7 +8,7 @@ from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 
 
 @bot.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
-@bot.on(sudo_cmd(pattern=r"lock( (?P<target>\S+)|$)",allow_sudo=True))
+@bot.on(sudo_cmd(pattern=r"lock( (?P<target>\S+)|$)", allow_sudo=True))
 async def _(event):
     # Space weirdness in regex required because argument is optional and other
     # commands start with ".lock"
@@ -18,7 +18,7 @@ async def _(event):
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, True)
-        await edit_or_reply(event ,"`Locked {}`".format(input_str))
+        await edit_or_reply(event, "`Locked {}`".format(input_str))
     else:
         msg = None
         media = None
@@ -74,9 +74,9 @@ async def _(event):
             what = "everything"
         else:
             if not input_str:
-                return await edit_or_reply(event,"`I can't lock nothing !!`")
+                return await edit_or_reply(event, "`I can't lock nothing !!`")
             else:
-                return await edit_or_reply(event,f"`Invalid lock type:` {input_str}")
+                return await edit_or_reply(event, f"`Invalid lock type:` {input_str}")
 
         lock_rights = ChatBannedRights(
             until_date=None,
@@ -97,10 +97,10 @@ async def _(event):
                     peer=peer_id, banned_rights=lock_rights
                 )
             )
-            await edit_or_reply(event,f"`Locked {what} for this chat !!`")
+            await edit_or_reply(event, f"`Locked {what} for this chat !!`")
         except BaseException as e:
-            return await edit_or_reply(event,
-                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
+            return await edit_or_reply(
+                event, f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
             )
 
 
@@ -112,7 +112,7 @@ async def _(event):
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, False)
-        await edit_or_reply(event,"`UnLocked {}`".format(input_str))
+        await edit_or_reply(event, "`UnLocked {}`".format(input_str))
     else:
         msg = None
         media = None
@@ -168,9 +168,9 @@ async def _(event):
             what = "everything"
         else:
             if not input_str:
-                return await edit_or_reply(event,"`I can't unlock nothing !!`")
+                return await edit_or_reply(event, "`I can't unlock nothing !!`")
             else:
-                return await edit_or_reply(event,f"`Invalid unlock type:` {input_str}")
+                return await edit_or_reply(event, f"`Invalid unlock type:` {input_str}")
 
         unlock_rights = ChatBannedRights(
             until_date=None,
@@ -191,10 +191,10 @@ async def _(event):
                     peer=peer_id, banned_rights=unlock_rights
                 )
             )
-            await edit_or_reply(event,f"`Unlocked {what} for this chat !!`")
+            await edit_or_reply(event, f"`Unlocked {what} for this chat !!`")
         except BaseException as e:
-            return await edit_or_reply(event,
-                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
+            return await edit_or_reply(
+                event, f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
             )
 
 
@@ -230,11 +230,11 @@ async def _(event):
         res += "👉 `adduser`: `{}`\n".format(current_api_locks.invite_users)
         res += "👉 `cpin`: `{}`\n".format(current_api_locks.pin_messages)
         res += "👉 `changeinfo`: `{}`\n".format(current_api_locks.change_info)
-    await edit_or_reply(event,res)
+    await edit_or_reply(event, res)
 
 
 @bot.on(events.MessageEdited())
-@bot.on(events.NewMessage()) 
+@bot.on(events.NewMessage())
 async def check_incoming_messages(event):
     # TODO: exempt admins from locks
     peer_id = event.chat_id
