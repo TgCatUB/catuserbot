@@ -196,7 +196,7 @@ async def kakashi(event):
 
 CMD_HELP.update(
     {
-        "getsongs": "**Plugin : **`getsongs`\
+        "getsongs": "**Plugin : **`songs`\
         \n\n**Syntax : **`.song query` or `.song reply to song name`\
         \n**Usage : **searches the song you entered in query and sends it quality of it is 128k\
         \n\n**Syntax : **`.song320 query` or `.song320 reply to song name`\
