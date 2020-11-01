@@ -13,17 +13,64 @@ from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, name_dl, runcmd, song_dl, video_dl, yt_search
+from . import CMD_HELP, name_dl, runcmd, song_dl, video_dl, yt_search,reply_id
+
+# =========================================================== #
+#                           STRINGS                           #
+# =========================================================== #
+SONG_SEARCH_STRING = "<code>wi8..! I am finding your song....</code>"
+SONG_NOT_FOUND = "<code>Sorry !I am unable to find any song like that</code>"
+SONG_SENDING_STRING = "<code>yeah..! i found something wi8..🥰...</code>"
+SONGBOT_BLOCKED_STRING = "<code>Please unblock @songdl_bot and try again</code>"
+# =========================================================== #
+#                                                             #
+# =========================================================== #
 
 
-@bot.on(admin_cmd(pattern="(song|song320)($| (.*))"))
-@bot.on(sudo_cmd(pattern="(song|song320)($| (.*))", allow_sudo=True))
+@bot.on(admin_cmd(pattern="song (.*)"))
+@bot.on(sudo_cmd(pattern="song (.*)", allow_sudo=True))
+async def cat_song_fetcer(event):
+    if event.fwd_from:
+        return
+    song = event.pattern_match.group(1)
+    chat = "@songdl_bot"
+    reply_id_ = await reply_id(event)
+    catevent = await edit_or_reply(event, SONG_SEARCH_STRING ,parse_mode="html")
+    async with event.client.conversation(chat) as conv:
+        try:
+            purgeflag = await conv.send_message("/start")
+            await conv.get_response()
+            await conv.send_message(song)
+            hmm = await conv.get_response()
+            while hmm.edit_hide != True:
+                await asyncio.sleep(0.1)
+                hmm = await event.client.get_messages(chat, ids=hmm.id)
+            baka = await event.client.get_messages(chat)
+            if baka[0].message.startswith(("I don't like to say this but I failed to find any such song.")):
+                await delete_messages(event , chat , purgeflag)
+                return await edit_delete(catevent ,SONG_NOT_FOUND ,parse_mode="html" , time = 5)
+            await catevent.edit(SONG_SENDING_STRING,parse_mode="html")
+            await baka[0].click(0)
+            music = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+        except YouBlockedUserError:
+            await catevent.edit(SONGBOT_BLOCKED_STRING,parse_mode="html")
+            return
+        await event.client.send_file(
+            event.chat_id,
+            music,
+            caption=f"<b>➥ Song :- <code>{song}</code></b>",
+            parse_mode="html",
+            reply_to = reply_id_,
+        )
+        await catevent.delete()
+        await delete_messages(event ,chat , purgeflag)
+
+
+@bot.on(admin_cmd(pattern="(song2|song320)($| (.*))"))
+@bot.on(sudo_cmd(pattern="(song2|song320)($| (.*))", allow_sudo=True))
 async def _(event):
-    reply_to_id = None
-    if event.sender_id != bot.uid:
-        reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    reply_to_id = await reply_id(event)
     reply = await event.get_reply_message()
     if event.pattern_match.group(2):
         query = event.pattern_match.group(2)
@@ -41,7 +88,7 @@ async def _(event):
             f"Sorry!. I can't find any related video/audio for `{query}`"
         )
     cmd = event.pattern_match.group(1)
-    if cmd == "song":
+    if cmd == "song2":
         q = "128k"
     elif cmd == "song320":
         q = "320k"
@@ -89,15 +136,17 @@ async def _(event):
         if files and os.path.exists(files):
             os.remove(files)
 
+async def delete_messages(event , chat , from_message):
+    itermsg = event.client.iter_messages(chat, min_id=from_message.id)
+    msgs =[from_message.id]
+    async for i in itermsg:
+        msgs.append(i.id)
+    await event.client.delete_messages(chat, msgs)            
 
 @bot.on(admin_cmd(pattern="vsong( (.*)|$)"))
 @bot.on(sudo_cmd(pattern="vsong( (.*)|$)", allow_sudo=True))
 async def _(event):
-    reply_to_id = None
-    if event.sender_id != bot.uid:
-        reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    reply_to_id = await reply_id(event)
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
@@ -160,50 +209,18 @@ async def _(event):
             os.remove(files)
 
 
-@bot.on(admin_cmd(pattern="song2 (.*)"))
-@bot.on(sudo_cmd(pattern="song2 (.*)", allow_sudo=True))
-async def kakashi(event):
-    if event.fwd_from:
-        return
-    song = event.pattern_match.group(1)
-    chat = "@songdl_bot"
-    catevent = await edit_or_reply(event, "`wi8..! I am finding your song....`")
-    async with event.client.conversation(chat) as conv:
-        try:
-            await conv.send_message("/start")
-            await conv.get_response()
-            await conv.send_message(song)
-            hmm = await conv.get_response()
-            while hmm.edit_hide != True:
-                await asyncio.sleep(0.1)
-                hmm = await event.client.get_messages(chat, ids=hmm.id)
-            baka = await event.client.get_messages(chat)
-            await baka[0].click(0)
-            music = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-        except YouBlockedUserError:
-            await catevent.edit("```Please unblock @songdl_bot and try again```")
-            return
-        await catevent.edit("`Sending Your Music...`")
-        await event.client.send_file(
-            event.chat_id,
-            music,
-            caption=f"<b>➥ Song :- <code>{song}</code></b>",
-            parse_mode="html",
-        )
-        await catevent.delete()
-
 
 CMD_HELP.update(
     {
         "getsongs": "**Plugin : **`songs`\
-        \n\n**Syntax : **`.song query` or `.song reply to song name`\
-        \n**Usage : **searches the song you entered in query and sends it quality of it is 128k\
-        \n\n**Syntax : **`.song320 query` or `.song320 reply to song name`\
-        \n**Usage : **searches the song you entered in query and sends it quality of it is 320k\
+        \n\n**Syntax : **`.song query`\
+        \n**Function : **__searches the song you entered in query and sends it quality of it is 320k__\
         \n\n**Syntax : **`.vsong query` or `.vsong reply to song name`\
-        \n**Usage : **Searches the video song you entered in query and sends it\
+        \n**Function : **__Searches the video song you entered in query and sends it__\
         \n\n**Syntax : **`.song2` <song name>\
-        \n**Usage : **searches the song you entered in query and sends it"
+        \n**Function : **__searches the song you entered in query from youtube and sends it, quality of it is 128k__\
+        \n\n**Syntax : **`.song320 query` or `.song320 reply to song name`\
+        \n**Function : **__searches the song you entered in query and sends it quality of it is 320k__\
+        "
     }
 )
