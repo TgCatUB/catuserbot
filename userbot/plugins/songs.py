@@ -48,7 +48,7 @@ async def _(event):
             f"Sorry!. I can't find any related video/audio for `{query}`"
         )
     cmd = event.pattern_match.group(1)
-    if cmd == "song2":
+    if cmd == "song":
         q = "128k"
     elif cmd == "song320":
         q = "320k"
