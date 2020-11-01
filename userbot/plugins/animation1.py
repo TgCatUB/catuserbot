@@ -1,16 +1,12 @@
 import asyncio
 from collections import deque
 
-from .. import ALIVE_NAME
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+from . import CMD_HELP, mention
 
 
-@borg.on(admin_cmd(pattern="stupid$"))
-@borg.on(sudo_cmd(pattern="stupid$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="stupid$"))
+@bot.on(sudo_cmd(pattern="stupid$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -39,8 +35,8 @@ async def _(event):
         await event.edit(animation_chars[i % 14])
 
 
-@borg.on(admin_cmd(pattern=f"bombs$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"bombs$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"bombs$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"bombs$", allow_sudo=True))
 async def _(event):
     event = await edit_or_reply(event, "bombs")
     await event.edit("▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n")
@@ -65,8 +61,8 @@ async def _(event):
     await asyncio.sleep(2)
 
 
-@borg.on(admin_cmd(pattern=r"call$"))
-@borg.on(sudo_cmd(pattern=r"call$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"call$"))
+@bot.on(sudo_cmd(pattern=r"call$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -77,13 +73,13 @@ async def _(event):
         "`Connecting To Telegram Headquarters...`",
         "`Call Connected.`",
         "`Telegram: Hello This is Telegram HQ. Who is this?`",
-        f"`Me: Yo this is` {DEFAULTUSER} ,`Please Connect me to my big bro, Rahul `",
+        f"`Me: Yo this is` {mention} ,`Please Connect me to my big bro, Rahul `",
         "`Rahul sir is busy , doing Chutiyappa.`",
         "`Calling Asmo `  `At +916969696969`",
         "`Private  Call Connected...`",
         "`Me: Hello Sir, Please Ban This Telegram Account.`",
         "`Asmo : May I Know Who Is This?`",
-        f"`Me: Yo Brah, I Am` {DEFAULTUSER} ",
+        f"`Me: Yo Brah, I Am` {mention} ",
         "`Asmo : OMG!!! Long time no see, Wassup cat...\nI'll Make Sure That Guy Account Will Get Blocked Within 24Hrs.`",
         "`Me: Thanks, See You Later Brah.`",
         "`Asmo : Please Don't Thank Brah, Telegram Is Our's. Just Gimme A Call When You Become Free.`",
@@ -98,8 +94,8 @@ async def _(event):
         await event.edit(animation_chars[i % 18])
 
 
-@borg.on(admin_cmd(pattern=f"kill$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"kill$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"kill$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"kill$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -118,15 +114,15 @@ async def _(event):
         "------------------>",
         "------>;(^。^)ノ",
         "(￣ー￣) DEAD",
-        f"[{DEFAULTUSER}]({USERNAME})` Killed targeted user by Headshot 😈.😈.😈.😈.😈.😈.😈......`\n '#Sad_Reacts_Online'\n",
+        f"**{mention}**` Killed targeted user by Headshot 😈.😈.😈.😈.😈.😈.😈......`\n '#Sad_Reacts_Online'\n",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 12])
 
 
-@borg.on(admin_cmd(pattern=f"kell$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"kell$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"kell$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"kell$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -145,15 +141,15 @@ async def _(event):
         "------------------>",
         "------>;(^。^)ノ",
         "(￣ー￣) DED",
-        f"[{DEFAULTUSER}]({USERNAME})** killed target successfully (°̥̥̥̥̥̥̥̥•̀.̫•́°̥̥̥̥̥̥̥)**",
+        f"**{mention}** **killed target successfully (°̥̥̥̥̥̥̥̥•̀.̫•́°̥̥̥̥̥̥̥)**",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 12])
 
 
-@borg.on(admin_cmd(pattern="wtf$"))
-@borg.on(sudo_cmd(pattern="wtf$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="wtf$"))
+@bot.on(sudo_cmd(pattern="wtf$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -173,8 +169,8 @@ async def _(event):
         await event.edit(animation_chars[i % 5])
 
 
-@borg.on(admin_cmd(pattern="ding$"))
-@borg.on(sudo_cmd(pattern="ding$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ding$"))
+@bot.on(sudo_cmd(pattern="ding$", allow_sudo=True))
 async def _(event):
     animation_interval = 0.3
     animation_ttl = range(30)
@@ -196,8 +192,8 @@ async def _(event):
         await event.edit(animation_chars[i % 10])
 
 
-@borg.on(admin_cmd(pattern=f"hypno$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"hypno$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"hypno$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"hypno$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -226,8 +222,8 @@ async def _(event):
         await event.edit(animation_chars[i % 15])
 
 
-@borg.on(admin_cmd(pattern=r"candy$"))
-@borg.on(sudo_cmd(pattern=r"candy$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"candy$"))
+@bot.on(sudo_cmd(pattern=r"candy$", allow_sudo=True))
 async def _(event):
     event = await edit_or_reply(event, "candy")
     deq = deque(list("🍦🍧🍩🍪🎂🍰🧁🍫🍬🍭"))
@@ -237,8 +233,8 @@ async def _(event):
         deq.rotate(1)
 
 
-@borg.on(admin_cmd(pattern="gangasta$"))
-@borg.on(sudo_cmd(pattern="gangasta$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="gangasta$"))
+@bot.on(sudo_cmd(pattern="gangasta$", allow_sudo=True))
 async def _(event):
     event = await edit_or_reply(event, "gangasta")
     await event.edit("EVERyBOdy")
@@ -258,8 +254,8 @@ async def _(event):
     await event.edit("EVERyBOdy iZ GangSTur UNtIL I ArRivE 🔥🔥🔥")
 
 
-@borg.on(admin_cmd(pattern=f"charging$"))
-@borg.on(sudo_cmd(pattern=f"charging$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"charging$"))
+@bot.on(sudo_cmd(pattern=f"charging$", allow_sudo=True))
 async def timer_blankx(e):
     e = await edit_or_reply(e, "charging")
     txt = (

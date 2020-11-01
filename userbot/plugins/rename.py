@@ -4,13 +4,13 @@ import time
 from datetime import datetime
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import progress
+from . import CMD_HELP, progress
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 
-@borg.on(admin_cmd(pattern="rename (.*)"))
-@borg.on(sudo_cmd(pattern="rename (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="rename (.*)"))
+@bot.on(sudo_cmd(pattern="rename (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -49,8 +49,8 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd(pattern="rnup (.*)"))
-@borg.on(sudo_cmd(pattern="rnup (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="rnup (.*)"))
+@bot.on(sudo_cmd(pattern="rnup (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -71,7 +71,7 @@ async def _(event):
         c_time = time.time()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await borg.download_media(
+        downloaded_file_name = await event.client.download_media(
             reply_message,
             downloaded_file_name,
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -80,6 +80,10 @@ async def _(event):
         )
         end = datetime.now()
         ms_one = (end - start).seconds
+        try:
+            thumb = await reply_message.download_media(thumb=-1)
+        except Exception:
+            thumb = thumb
         if os.path.exists(downloaded_file_name):
             c_time = time.time()
             caat = await event.client.send_file(
@@ -110,3 +114,15 @@ async def _(event):
         await catevent.edit(
             "**Syntax : **`.rnupload file.name` as reply to a Telegram media"
         )
+
+
+CMD_HELP.update(
+    {
+        "rename": "__**PLUGIN NAME :** Rename__\
+    \n\n📌** CMD ➥** `.rename` <filename>\
+    \n**USAGE   ➥  **__Reply to media with above command to save in your server with that given filename__\
+    \n\n📌** CMD ➥** `.rnup` <filename>\
+    \n**USAGE   ➥  **__Reply to media with above command to rename and upload the file with given name__\
+    "
+    }
+)

@@ -4,8 +4,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, fonts
 
 
-@bot.on(admin_cmd(pattern="egyptf(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="egyptf(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="egyptf(.*)", command="egyptf (.*)"))
+@bot.on(sudo_cmd(pattern="egyptf(.*)", command="egyptf (.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -24,8 +24,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="maref(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="maref(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="maref(.*)", command="maref (.*)"))
+@bot.on(sudo_cmd(pattern="maref(.*)", command="maref (.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -44,8 +44,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="handcf(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="handcf(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="handcf(.*)", command="handcf (.*)"))
+@bot.on(sudo_cmd(pattern="handcf(.*)", command="handcf (.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -64,8 +64,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="doublef(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="doublef(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="doublef(.*)", command="doublef (.*)"))
+@bot.on(sudo_cmd(pattern="doublef(.*)", command="doublef (.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -84,8 +84,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="mock(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="mock(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="mock(.*)", command="mock (.*)"))
+@bot.on(sudo_cmd(pattern="mock(.*)", command="mock (.*)", allow_sudo=True))
 async def spongemocktext(mock):
     reply_text = []
     textx = await mock.get_reply_message()
@@ -108,8 +108,8 @@ async def spongemocktext(mock):
     await edit_or_reply(mock, "".join(reply_text))
 
 
-@bot.on(admin_cmd(pattern="ghostf(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="ghostf(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ghostf(.*)", command="ghostf (.*)"))
+@bot.on(sudo_cmd(pattern="ghostf(.*)", command="ghostf (.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -128,8 +128,8 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="handsf(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="handsf(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="handsf(.*)", command="handsf (.*)"))
+@bot.on(sudo_cmd(pattern="handsf(.*)", command="handsf (.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
     if not args:

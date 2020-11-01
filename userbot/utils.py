@@ -58,6 +58,8 @@ def load_module(shortname):
         sys.modules["uniborg.util"] = userbot.utils
         mod.Config = Config
         mod.borg = bot
+        mod.edit_or_reply = edit_or_reply
+        mod.edit_delete = edit_delete
         # support for paperplaneextended
         sys.modules["userbot.events"] = userbot.utils
         spec.loader.exec_module(mod)
@@ -84,7 +86,7 @@ def remove_plugin(shortname):
         raise ValueError
 
 
-def admin_cmd(pattern=None, **args):
+def admin_cmd(pattern=None, command=None, **args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
@@ -98,13 +100,7 @@ def admin_cmd(pattern=None, **args):
             args["pattern"] = re.compile(pattern)
         elif pattern.startswith(r"^"):
             args["pattern"] = re.compile(pattern)
-            cmd = (
-                (pattern)
-                .replace("$", "")
-                .replace("^", "")
-                .replace("\\", "")
-                .replace("^", "")
-            )
+            cmd = pattern.replace("$", "").replace("^", "").replace("\\", "")
             try:
                 CMD_LIST[file_test].append(cmd)
             except BaseException:
@@ -117,7 +113,12 @@ def admin_cmd(pattern=None, **args):
                 catreg = "^\\" + Config.COMMAND_HAND_LER
                 reg = Config.COMMAND_HAND_LER
             args["pattern"] = re.compile(catreg + pattern)
-            cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+            if command is not None:
+                cmd = reg + command
+            else:
+                cmd = (
+                    (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+                )
             try:
                 CMD_LIST[file_test].append(cmd)
             except BaseException:
@@ -151,7 +152,7 @@ def admin_cmd(pattern=None, **args):
     return events.NewMessage(**args)
 
 
-def sudo_cmd(pattern=None, **args):
+def sudo_cmd(pattern=None, command=None, **args):
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
@@ -165,13 +166,7 @@ def sudo_cmd(pattern=None, **args):
             args["pattern"] = re.compile(pattern)
         elif pattern.startswith(r"^"):
             args["pattern"] = re.compile(pattern)
-            cmd = (
-                (pattern)
-                .replace("$", "")
-                .replace("^", "")
-                .replace("\\", "")
-                .replace("^", "")
-            )
+            cmd = pattern.replace("$", "").replace("^", "").replace("\\", "")
             try:
                 SUDO_LIST[file_test].append(cmd)
             except BaseException:
@@ -184,7 +179,12 @@ def sudo_cmd(pattern=None, **args):
                 catreg = "^\\" + Config.SUDO_COMMAND_HAND_LER
                 reg = Config.COMMAND_HAND_LER
             args["pattern"] = re.compile(catreg + pattern)
-            cmd = (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+            if command is not None:
+                cmd = reg + command
+            else:
+                cmd = (
+                    (reg + pattern).replace("$", "").replace("\\", "").replace("^", "")
+                )
             try:
                 SUDO_LIST[file_test].append(cmd)
             except BaseException:
@@ -212,6 +212,21 @@ def sudo_cmd(pattern=None, **args):
     return events.NewMessage(**args)
 
 
+# https://t.me/c/1220993104/623253
+# https://docs.telethon.dev/en/latest/misc/changelog.html#breaking-changes
+async def edit_or_reply(event, text, parse_mode=None, link_preview=None):
+    link_preview = link_preview or False
+    parse_mode = parse_mode or "md"
+    if event.sender_id in Config.SUDO_USERS:
+        reply_to = await event.get_reply_message()
+        if reply_to:
+            return await reply_to.reply(
+                text, parse_mode=parse_mode, link_preview=link_preview
+            )
+        return await event.reply(text, parse_mode=parse_mode, link_preview=link_preview)
+    return await event.edit(text, parse_mode=parse_mode, link_preview=link_preview)
+
+
 # from paperplaneextended
 on = bot.on
 
@@ -226,6 +241,27 @@ def on(**args):
         return wrapper
 
     return decorater
+
+
+async def edit_delete(event, text, time=None, parse_mode=None, link_preview=None):
+    parse_mode = parse_mode or "md"
+    link_preview = link_preview or False
+    time = time or 5
+    if event.sender_id in Config.SUDO_USERS:
+        reply_to = await event.get_reply_message()
+        catevent = (
+            await reply_to.reply(text, link_preview=link_preview, parse_mode=parse_mode)
+            if reply_to
+            else await event.reply(
+                text, link_preview=link_preview, parse_mode=parse_mode
+            )
+        )
+    else:
+        catevent = await event.edit(
+            text, link_preview=link_preview, parse_mode=parse_mode
+        )
+    await asyncio.sleep(time)
+    return await catevent.delete()
 
 
 def errors_handler(func):
@@ -381,16 +417,6 @@ async def is_admin(client, chat_id, user_id):
         return False
     else:
         return False
-
-
-# https://t.me/c/1220993104/623253
-async def edit_or_reply(event, text):
-    if event.from_id in Config.SUDO_USERS:
-        reply_to = await event.get_reply_message()
-        if reply_to:
-            return await reply_to.reply(text)
-        return await event.reply(text)
-    return await event.edit(text)
 
 
 def register(**args):

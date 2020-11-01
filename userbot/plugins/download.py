@@ -14,19 +14,16 @@ from datetime import datetime
 
 from pySmartDL import SmartDL
 
-from .. import ALIVE_NAME, CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, humanbytes, progress, sudo_cmd
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+from . import CMD_HELP, hmention
 
 
-@borg.on(admin_cmd(pattern="download(?: |$)(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="download(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="download(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="download(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    mone = await edit_or_reply(event, "`Processing ...`")
+    mone = await edit_or_reply(event, "<code>Processing ...</code>", "html")
     input_str = event.pattern_match.group(1)
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
@@ -48,7 +45,8 @@ async def _(event):
             end = datetime.now()
             ms = (end - start).seconds
             await mone.edit(
-                f"__**➥ Downloaded in {ms} seconds.**__\n__**➥ Downloaded to :- **__ `{downloaded_file_name}`\n__**➥ Downloaded by :-**__ [{DEFAULTUSER}]({USERNAME})"
+                f"<b><i>➥ Downloaded in {ms} seconds.</i></b>\n<b><i>➥ Downloaded to :-</i></b> <code>{downloaded_file_name}</code>\n<b><i>➥ Downloaded by :- {hmention}</i></b>",
+                parse_mode="html",
             )
     elif input_str:
         start = datetime.now()
@@ -88,7 +86,8 @@ async def _(event):
         ms = (end - start).seconds
         if downloader.isSuccessful():
             await mone.edit(
-                f"__**➥ Downloaded in {ms} seconds.**__\n__**➥ Downloaded to :- **__ `{downloaded_file_name}`\n__**➥ Downloaded by :-**__ [{DEFAULTUSER}]({USERNAME})"
+                f"<b><i>➥ Downloaded in {ms} seconds.</i></b>\n<b><i>➥ Downloaded to :-</i></b> <code>{downloaded_file_name}</code>\n<b><i>➥ Downloaded by :- {hmention}</i></b>",
+                parse_mode="html",
             )
         else:
             await mone.edit("Incorrect URL\n {}".format(input_str))

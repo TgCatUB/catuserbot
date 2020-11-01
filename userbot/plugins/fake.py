@@ -15,8 +15,8 @@ logging.basicConfig(
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
-@borg.on(admin_cmd(pattern="scam ?(.*)"))
-@borg.on(sudo_cmd(pattern="scam ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="scam ?(.*)"))
+@bot.on(sudo_cmd(pattern="scam ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -28,12 +28,12 @@ async def _(event):
         await event.delete()
     except BaseException:
         pass
-    async with borg.action(event.chat_id, action):
+    async with event.client.action(event.chat_id, action):
         await asyncio.sleep(86400)  # type for 10 seconds
 
 
-@borg.on(admin_cmd(pattern="prankpromote ?(.*)"))
-@borg.on(sudo_cmd(pattern="prankpromote ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="prankpromote ?(.*)"))
+@bot.on(sudo_cmd(pattern="prankpromote ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -48,15 +48,15 @@ async def _(event):
     elif input_str:
         to_promote_id = input_str
     try:
-        await borg(EditAdminRequest(event.chat_id, to_promote_id, rights, ""))
+        await event.client(EditAdminRequest(event.chat_id, to_promote_id, rights, ""))
     except (Exception) as exc:
         await edit_or_reply(event, str(exc))
     else:
         await edit_or_reply(event, "Successfully Promoted")
 
 
-@borg.on(admin_cmd(pattern=f"padmin$", outgoing=True))
-@borg.on(sudo_cmd(pattern="padmin$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"padmin$", outgoing=True))
+@bot.on(sudo_cmd(pattern="padmin$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

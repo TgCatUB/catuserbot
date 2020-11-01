@@ -6,14 +6,12 @@
 import bs4
 import requests
 
-from .. import ALIVE_NAME, CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, hmention
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
-
-@borg.on(admin_cmd(pattern="app (.*)"))
-@borg.on(sudo_cmd(pattern="app (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="app (.*)"))
+@bot.on(sudo_cmd(pattern="app (.*)", allow_sudo=True))
 async def apk(event):
     app_name = event.pattern_match.group(1)
     event = await edit_or_reply(event, "Searching!")
@@ -74,7 +72,7 @@ async def apk(event):
             + app_link
             + "'>View in Play Store</a>"
         )
-        app_details += f"\n\n===> {DEFAULTUSER} <==="
+        app_details += f"\n\n===> {hmention} <==="
         await event.edit(app_details, link_preview=True, parse_mode="HTML")
     except IndexError:
         await event.edit("No result found in search. Please enter **Valid app name**")
@@ -82,8 +80,8 @@ async def apk(event):
         await event.edit("Exception Occured:- " + str(err))
 
 
-@borg.on(admin_cmd(pattern="appr (.*)"))
-@borg.on(sudo_cmd(pattern="appr (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="appr (.*)"))
+@bot.on(sudo_cmd(pattern="appr (.*)", allow_sudo=True))
 async def apkr(event):
     app_name = event.pattern_match.group(1)
     event = await edit_or_reply(event, "searching!")

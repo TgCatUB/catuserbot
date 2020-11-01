@@ -6,8 +6,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern="thinking$"))
-@borg.on(sudo_cmd(pattern="thinking$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="thinking$"))
+@bot.on(sudo_cmd(pattern="thinking$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -57,8 +57,8 @@ async def _(event):
         await event.edit(animation_chars[i % 36])
 
 
-@borg.on(admin_cmd(pattern=f"loading$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"loading$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"loading$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"loading$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -71,8 +71,8 @@ async def _(event):
         await event.edit(animation_chars[i % 4])
 
 
-@borg.on(admin_cmd(pattern=f"square$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"square$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"square$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"square$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -85,8 +85,8 @@ async def _(event):
         await event.edit(animation_chars[i % 4])
 
 
-@borg.on(admin_cmd(pattern=f"up$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"up$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"up$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"up$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -99,8 +99,8 @@ async def _(event):
         await event.edit(animation_chars[i % 4])
 
 
-@borg.on(admin_cmd(pattern=f"round$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"round$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"round$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"round$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -113,8 +113,8 @@ async def _(event):
         await event.edit(animation_chars[i % 4])
 
 
-@borg.on(admin_cmd(pattern=f"hart$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"hart$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"hart$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"hart$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -127,8 +127,8 @@ async def _(event):
         await event.edit(animation_chars[i % 4])
 
 
-@borg.on(admin_cmd(pattern=f"anim$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"anim$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"anim$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"anim$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -152,8 +152,8 @@ async def _(event):
         await event.edit(animation_chars[i % 10])
 
 
-@borg.on(admin_cmd(pattern=f"fnl$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"fnl$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"fnl$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"fnl$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -166,8 +166,8 @@ async def _(event):
         await event.edit(animation_chars[i % 6])
 
 
-@borg.on(admin_cmd(pattern=f"monkey$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"monkey$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"monkey$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"monkey$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -180,8 +180,8 @@ async def _(event):
         await event.edit(animation_chars[i % 6])
 
 
-@borg.on(admin_cmd(pattern=f"herber$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"herber$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"herber$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"herber$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -205,8 +205,8 @@ async def _(event):
         await event.edit(animation_chars[i % 10])
 
 
-@borg.on(admin_cmd(pattern=f"hand$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"hand$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"hand$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"hand$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -233,8 +233,8 @@ async def _(event):
         await event.edit(animation_chars[i % 13])
 
 
-@borg.on(admin_cmd(pattern=f"gsg$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"gsg$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"gsg$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"gsg$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -260,8 +260,8 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=r"theart$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"theart$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"theart$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"theart$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

@@ -3,12 +3,8 @@ Created by  Md Jisan.  tg @Jisan7509
 Plugin for CatUserbot
 """
 
-from userbot import ALIVE_NAME, CMD_HELP
-
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+from . import CMD_HELP, mention
 
 
 @bot.on(admin_cmd(pattern="carry (.*)"))
@@ -27,7 +23,7 @@ async def kakashi(ded):
     name = ded.pattern_match.group(1)
     await edit_or_reply(
         ded,
-        f"[{DEFAULTUSER}]({USERNAME}) --- {name}          \n　　　　　|"
+        f"{mention} --- {name}          \n　　　　　|"
         "\n　　　　　| \n"
         "　　　　　| \n"
         "　　　　　| \n"
@@ -50,7 +46,7 @@ async def kakashi(killer):
     name = killer.pattern_match.group(1)
     await edit_or_reply(
         killer,
-        f"__**Commando **__[{DEFAULTUSER}]({USERNAME})          \n\n"
+        f"__**Commando **__{mention}          \n\n"
         "_/﹋\_\n"
         "(҂`_´)\n"
         f"<,︻╦╤─ ҉ - - - {name}\n"
@@ -79,7 +75,7 @@ G = (
 async def kakashi(think):
     name = think.pattern_match.group(1)
     A = (
-        f"**[{DEFAULTUSER}]({USERNAME}) ➥ {name} .\n\n**"
+        f"**{mention} ➥ {name} .\n\n**"
         "⠀⠀⠀⠀⢀⣀⣀⣀\n"
         "⠀⠀⠀⠰⡿⠿⠛⠛⠻⠿⣷\n"
         "⠀⠀⠀⠀⠀⠀⣀⣄⡀⠀⠀⠀⠀⢀⣀⣀⣤⣄⣀⡀\n"
@@ -104,7 +100,7 @@ async def kakashi(think):
 async def kakashi(frogsay):
     name = frogsay.pattern_match.group(1)
     C = (
-        f"**[{DEFAULTUSER}]({USERNAME}) ➥ {name} .\n\n**"
+        f"**{mention} ➥ {name} .\n\n**"
         "⠄⠄⠄⠄⠄⣀⣀⣤⣶⣿⣿⣶⣶⣶⣤⣄⣠⣴⣶⣿⣶⣦⣄⠄\n"
         "⠄⣠⣴⣾⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦\n"
         "⢠⠾⣋⣭⣄⡀⠄⠙⠻⣿⣿⡿⠛⠋⠉⠉⠉⠙⠛⠿⣿⣿⣿⣿\n"
@@ -155,7 +151,7 @@ async def kakashi(putinsay):
 async def kakashi(deadfrog):
     name = deadfrog.pattern_match.group(1)
     E = (
-        f"**Froggy ➥ {name} .\n\n**"
+        f"**{mention} ➥ {name} .\n\n**"
         "⣿⣿⣿⡇⠄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n"
         "⣿⣿⣿⡇⠄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n"
         "⣿⣿⣿⡇⠄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n"
@@ -234,7 +230,7 @@ async def kakashi(shit):
 
 CMD_HELP.update(
     {
-        "artsay": "__**PLUGIN NAME :** Carry__\
+        "artsay": "__**PLUGIN NAME :** Artsay__\
       \n\n📌** CMD ➥** `.carry` <your text>\
       \n**USAGE   ➥  **Send your text with carry's art.\
       \n\n📌** CMD ➥** `.killer` <text>\

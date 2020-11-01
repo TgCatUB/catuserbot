@@ -7,9 +7,11 @@ from random import choice
 
 import PIL.ImageOps
 import requests
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
+
+from .resources.states import states
 
 
 async def get_readable_time(seconds: int) -> str:
@@ -68,49 +70,6 @@ async def yt_search(cat):
         return "Couldnt fetch results"
     except:
         return "Couldnt fetch results"
-
-
-# for stickertxt
-async def waifutxt(text, chat_id, reply_to_id, bot, borg):
-    animus = [
-        0,
-        1,
-        2,
-        3,
-        4,
-        9,
-        15,
-        20,
-        22,
-        27,
-        29,
-        32,
-        33,
-        34,
-        37,
-        38,
-        41,
-        42,
-        44,
-        45,
-        47,
-        48,
-        51,
-        52,
-        53,
-        55,
-        56,
-        57,
-        58,
-        61,
-        62,
-        63,
-    ]
-    sticcers = await bot.inline_query("stickerizerbot", f"#{choice(animus)}{text}")
-    cat = await sticcers[0].click("me", hide_via=True)
-    if cat:
-        await borg.send_file(int(chat_id), cat, reply_to=reply_to_id)
-        await cat.delete()
 
 
 async def sanga_seperator(sanga_list):
@@ -219,7 +178,35 @@ async def convert_tosticker(image):
     return "./temp/temp.webp"
 
 
+# covid india data
+
+
+async def covidindia(state):
+    url = "https://www.mohfw.gov.in/data/datanew.json"
+    req = requests.get(url).json()
+    for i in states:
+        if i == state:
+            return req[states.index(i)]
+    return None
+
+
 # for nekobot
+
+
+async def fakegs(search, result):
+    imgurl = "https://i.imgur.com/wNFr5X2.jpg"
+    with open("./temp/temp.jpg", "wb") as f:
+        f.write(requests.get(imgurl).content)
+    img = Image.open("./temp/temp.jpg")
+    drawing = ImageDraw.Draw(img)
+    blue = (0, 0, 255)
+    black = (0, 0, 0)
+    font1 = ImageFont.truetype("userbot/helpers/styles/ProductSans-BoldItalic.ttf", 20)
+    font2 = ImageFont.truetype("userbot/helpers/styles/ProductSans-Light.ttf", 23)
+    drawing.text((450, 258), result, fill=blue, font=font1)
+    drawing.text((270, 37), search, fill=black, font=font2)
+    img.save("./temp/temp.jpg")
+    return "./temp/temp.jpg"
 
 
 async def trumptweet(text):
@@ -463,3 +450,46 @@ async def crop(imagefile, endname, x):
     image = Image.open(imagefile)
     inverted_image = PIL.ImageOps.crop(image, border=x)
     inverted_image.save(endname)
+
+
+# for stickertxt
+async def waifutxt(text, chat_id, reply_to_id, bot, borg):
+    animus = [
+        0,
+        1,
+        2,
+        3,
+        4,
+        9,
+        15,
+        20,
+        22,
+        27,
+        29,
+        32,
+        33,
+        34,
+        37,
+        38,
+        41,
+        42,
+        44,
+        45,
+        47,
+        48,
+        51,
+        52,
+        53,
+        55,
+        56,
+        57,
+        58,
+        61,
+        62,
+        63,
+    ]
+    sticcers = await bot.inline_query("stickerizerbot", f"#{choice(animus)}{text}")
+    cat = await sticcers[0].click("me", hide_via=True)
+    if cat:
+        await bot.send_file(int(chat_id), cat, reply_to=reply_to_id)
+        await cat.delete()

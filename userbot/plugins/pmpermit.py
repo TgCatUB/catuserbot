@@ -5,19 +5,18 @@ from telethon import events, functions
 from telethon.tl.functions.users import GetFullUserRequest
 
 from ..utils import admin_cmd
-from . import ALIVE_NAME, CMD_HELP, PM_START, check
+from . import CMD_HELP, PM_START, PMMENU, check, mention
 from .sql_helper import pmpermit_sql as pmpermit_sql
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
 CACHE = {}
 PMPERMIT_PIC = Config.PMPERMIT_PIC
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USER_BOT_WARN_ZERO = "You were spamming my peru master's inbox, henceforth you are blocked by my master's userbot. **Now GTFO, i'm playing minecraft** "
 
-if Var.PRIVATE_GROUP_ID is not None:
+if Config.PRIVATE_GROUP_ID is not None:
 
-    @borg.on(admin_cmd(pattern="approve ?(.*)"))
+    @bot.on(admin_cmd(pattern="approve ?(.*)"))
     async def approve_p_m(event):
         if event.fwd_from:
             return
@@ -49,7 +48,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            replied_user = await event.client.get_entity(reply.from_id)
+            replied_user = await event.client.get_entity(reply.sender_id)
             chat = replied_user.id
             firstname = str(replied_user.first_name)
             if not pmpermit_sql.is_approved(chat):
@@ -88,7 +87,7 @@ if Var.PRIVATE_GROUP_ID is not None:
         ):
             pmpermit_sql.approve(chat.id, "outgoing")
 
-    @borg.on(admin_cmd(pattern="disapprove ?(.*)"))
+    @bot.on(admin_cmd(pattern="disapprove ?(.*)"))
     async def disapprove_p_m(event):
         if event.fwd_from:
             return
@@ -112,7 +111,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            chat = await event.client.get_entity(reply.from_id)
+            chat = await event.client.get_entity(reply.sender_id)
             firstname = str(chat.first_name)
             if chat.id in PM_START:
                 PM_START.remove(chat.id)
@@ -128,7 +127,7 @@ if Var.PRIVATE_GROUP_ID is not None:
                     )
                 )
 
-    @borg.on(admin_cmd(pattern="block$"))
+    @bot.on(admin_cmd(pattern="block$"))
     async def block_p_m(event):
         if event.fwd_from:
             return
@@ -139,7 +138,7 @@ if Var.PRIVATE_GROUP_ID is not None:
             if chat.id in PM_START:
                 PM_START.remove(chat.id)
             await event.edit(
-                " ███████▄▄███████████▄  \n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓███░░░░░░░░░░░░█\n██████▀▀▀█░░░░██████▀  \n░░░░░░░░░█░░░░█  \n░░░░░░░░░░█░░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░░▀▀ \n\nYou have been blocked. Now You Can't Message Me..[{}](tg://user?id={})".format(
+                "`You have been blocked. Now You Can't Message Me..`[{}](tg://user?id={})".format(
                     firstname, chat.id
                 )
             )
@@ -147,31 +146,31 @@ if Var.PRIVATE_GROUP_ID is not None:
             return
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            chat = await event.client.get_entity(reply.from_id)
+            chat = await event.client.get_entity(reply.sender_id)
             firstname = str(chat.first_name)
             if chat.id in PM_START:
                 PM_START.remove(chat.id)
             await event.edit(
-                " ███████▄▄███████████▄  \n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓███░░░░░░░░░░░░█\n██████▀▀▀█░░░░██████▀  \n░░░░░░░░░█░░░░█  \n░░░░░░░░░░█░░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░░▀▀ \n\nYou have been blocked. Now You Can't Message Me..[{}](tg://user?id={})".format(
+                "`You have been blocked. Now You Can't Message Me..`[{}](tg://user?id={})".format(
                     firstname, chat.id
                 )
             )
             await event.client(functions.contacts.BlockRequest(chat.id))
 
-    @borg.on(admin_cmd(pattern="unblock$"))
+    @bot.on(admin_cmd(pattern="unblock$"))
     async def unblock_pm(event):
         if event.reply_to_msg_id:
             reply = await event.get_reply_message()
-            chat = await event.client.get_entity(reply.from_id)
+            chat = await event.client.get_entity(reply.sender_id)
             firstname = str(chat.first_name)
             await event.client(functions.contacts.UnblockRequest(chat.id))
             await event.edit(
-                "You have been unblocked. Now You Can Message Me..[{}](tg://user?id={})".format(
+                "`You have been unblocked. Now You Can Message Me..`[{}](tg://user?id={})".format(
                     firstname, chat.id
                 )
             )
 
-    @borg.on(admin_cmd(pattern="listapproved$"))
+    @bot.on(admin_cmd(pattern="listapproved$"))
     async def approve_p_m(event):
         if event.fwd_from:
             return
@@ -202,106 +201,193 @@ if Var.PRIVATE_GROUP_ID is not None:
         else:
             await event.edit(APPROVED_PMs)
 
-    @bot.on(events.NewMessage(incoming=True))
-    async def on_new_private_message(event):
-        if event.from_id == bot.uid:
-            return
-        if Var.PRIVATE_GROUP_ID is None:
-            return
-        if not event.is_private:
-            return
-        message_text = event.message.message
-        chat_id = event.from_id
-        USER_BOT_NO_WARN = (
-            f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={chat_id})\n\n"
-            f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "
-            "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
-            "**Send** `/start` ** so that my master can decide why you're here.**"
-        )
-        if USER_BOT_NO_WARN == message_text:
-            # userbot's should not reply to other userbot's
-            # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
-            return
-        if chat_id in CACHE:
-            sender = CACHE[chat_id]
-        else:
-            sender = await bot.get_entity(chat_id)
-            CACHE[chat_id] = sender
-        if chat_id == bot.uid:  # don't log Saved Messages
-            return
-        if sender.bot:  # don't log bots
-            return
-        if sender.verified:  # don't log verified accounts
-            return
-        if event.raw_text == "/start":
-            if chat_id not in PM_START:
-                PM_START.append(chat_id)
-            return
-        if len(event.raw_text) == 1 and check(event.raw_text):
-            return
-        if chat_id in PM_START:
-            return
-        if not pmpermit_sql.is_approved(chat_id):
-            await do_pm_permit_action(chat_id, event)
+    if PMMENU:
 
-    async def do_pm_permit_action(chat_id, event):
-        if chat_id not in PM_WARNS:
-            PM_WARNS.update({chat_id: 0})
-        if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_P_M_s:
-            r = await event.reply(USER_BOT_WARN_ZERO)
-            await asyncio.sleep(1)
-            await event.client(functions.contacts.BlockRequest(chat_id))
+        @bot.on(events.NewMessage(incoming=True))
+        async def on_new_private_message(event):
+            if event.sender_id == event.client.uid:
+                return
+            if Config.PRIVATE_GROUP_ID is None:
+                return
+            if not event.is_private:
+                return
+            message_text = event.message.message
+            chat_id = event.sender_id
+            USER_BOT_NO_WARN = (
+                f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={chat_id})\n\n"
+                f"My master {mention} haven't approved you yet. Don't spam his inbox "
+                "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
+                "**Send** `/start` ** so that my master can decide why you're here.**"
+            )
+            if USER_BOT_NO_WARN == message_text:
+                # userbot's should not reply to other userbot's
+                # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
+                return
+            if chat_id in CACHE:
+                sender = CACHE[chat_id]
+            else:
+                sender = await event.client.get_entity(chat_id)
+                CACHE[chat_id] = sender
+            if chat_id == bot.uid:  # don't log Saved Messages
+                return
+            if sender.bot:  # don't log bots
+                return
+            if sender.verified:  # don't log verified accounts
+                return
+            if event.raw_text == "/start":
+                if chat_id not in PM_START:
+                    PM_START.append(chat_id)
+                return
+            if len(event.raw_text) == 1 and check(event.raw_text):
+                return
+            if chat_id in PM_START:
+                return
+            if not pmpermit_sql.is_approved(chat_id):
+                await do_pm_permit_action(chat_id, event)
+
+        async def do_pm_permit_action(chat_id, event):
+            if chat_id not in PM_WARNS:
+                PM_WARNS.update({chat_id: 0})
+            if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_P_M_s:
+                r = await event.reply(USER_BOT_WARN_ZERO)
+                await asyncio.sleep(1)
+                await event.client(functions.contacts.BlockRequest(chat_id))
+                if chat_id in PREV_REPLY_MESSAGE:
+                    await PREV_REPLY_MESSAGE[chat_id].delete()
+                if chat_id in PM_START:
+                    PM_START.remove(chat_id)
+                PREV_REPLY_MESSAGE[chat_id] = r
+                the_message = ""
+                the_message += "#BLOCKED_PMs\n\n"
+                the_message += f"[User](tg://user?id={chat_id}): {chat_id}\n"
+                the_message += f"Message Count: {PM_WARNS[chat_id]}\n"
+                try:
+                    await event.client.send_message(
+                        entity=Config.PRIVATE_GROUP_ID,
+                        message=the_message,
+                    )
+                    return
+                except BaseException:
+                    return
+            catid = chat_id
+            if PMPERMIT_PIC:
+                if Config.CUSTOM_PMPERMIT_TEXT:
+                    USER_BOT_NO_WARN = (
+                        Config.CUSTOM_PMPERMIT_TEXT
+                        + "\n\n"
+                        + "**Send** `/start` ** so that my master can decide why you're here.**"
+                    )
+                else:
+                    USER_BOT_NO_WARN = (
+                        f"My master {mention} haven't approved you yet. Don't spam his inbox "
+                        "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
+                        "**Send** `/start` ** so that my master can decide why you're here.**"
+                    )
+                r = await event.reply(USER_BOT_NO_WARN, file=PMPERMIT_PIC)
+            else:
+                if Config.CUSTOM_PMPERMIT_TEXT:
+                    USER_BOT_NO_WARN = (
+                        Config.CUSTOM_PMPERMIT_TEXT
+                        + "\n\n"
+                        + "**Send** `/start` ** so that my master can decide why you're here.**"
+                    )
+                else:
+                    USER_BOT_NO_WARN = (
+                        f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
+                        f"My master {mention} haven't approved you yet. Don't spam his inbox "
+                        "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
+                        "**Send** `/start` ** so that my master can decide why you're here.**"
+                    )
+                r = await event.reply(USER_BOT_NO_WARN)
+            PM_WARNS[chat_id] += 1
             if chat_id in PREV_REPLY_MESSAGE:
                 await PREV_REPLY_MESSAGE[chat_id].delete()
-            if chat.id in PM_START:
-                PM_START.remove(chat.id)
             PREV_REPLY_MESSAGE[chat_id] = r
-            the_message = ""
-            the_message += "#BLOCKED_PMs\n\n"
-            the_message += f"[User](tg://user?id={chat_id}): {chat_id}\n"
-            the_message += f"Message Count: {PM_WARNS[chat_id]}\n"
-            try:
-                await event.client.send_message(
-                    entity=Var.PRIVATE_GROUP_ID,
-                    message=the_message,
-                )
+
+    else:
+
+        @bot.on(events.NewMessage(incoming=True))
+        async def on_new_private_message(event):
+            if event.sender_id == event.client.uid:
                 return
-            except BaseException:
+            if Config.PRIVATE_GROUP_ID is None:
                 return
-        catid = chat_id
-        if PMPERMIT_PIC:
-            if Config.CUSTOM_PMPERMIT_TEXT:
-                USER_BOT_NO_WARN = (
-                    Config.CUSTOM_PMPERMIT_TEXT
-                    + "\n\n"
-                    + "**Send** `/start` ** so that my master can decide why you're here.**"
-                )
+            if not event.is_private:
+                return
+            message_text = event.message.message
+            chat_id = event.sender_id
+            USER_BOT_NO_WARN = (
+                f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={chat_id})\n\n"
+                f"My master {mention} haven't approved you yet. Don't spam his inbox "
+                "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
+                "**Send** `/start` ** so that my master can decide why you're here.**"
+            )
+            if USER_BOT_NO_WARN == message_text:
+                # userbot's should not reply to other userbot's
+                # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
+                return
+            if chat_id in CACHE:
+                sender = CACHE[chat_id]
             else:
-                USER_BOT_NO_WARN = (
-                    f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "
-                    "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
-                    "**Send** `/start` ** so that my master can decide why you're here.**"
-                )
-            r = await event.reply(USER_BOT_NO_WARN, file=PMPERMIT_PIC)
-        else:
-            if Config.CUSTOM_PMPERMIT_TEXT:
-                USER_BOT_NO_WARN = (
-                    Config.CUSTOM_PMPERMIT_TEXT
-                    + "\n\n"
-                    + "**Send** `/start` ** so that my master can decide why you're here.**"
-                )
+                sender = await event.client.get_entity(chat_id)
+                CACHE[chat_id] = sender
+            if chat_id == bot.uid:  # don't log Saved Messages
+                return
+            if sender.bot:  # don't log bots
+                return
+            if sender.verified:  # don't log verified accounts
+                return
+            if not pmpermit_sql.is_approved(chat_id):
+                await do_pm_permit_action(chat_id, event)
+
+        async def do_pm_permit_action(chat_id, event):
+            if chat_id not in PM_WARNS:
+                PM_WARNS.update({chat_id: 0})
+            if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_P_M_s:
+                r = await event.reply(USER_BOT_WARN_ZERO)
+                await asyncio.sleep(1)
+                await event.client(functions.contacts.BlockRequest(chat_id))
+                if chat_id in PREV_REPLY_MESSAGE:
+                    await PREV_REPLY_MESSAGE[chat_id].delete()
+                if chat_id in PM_START:
+                    PM_START.remove(chat_id)
+                PREV_REPLY_MESSAGE[chat_id] = r
+                the_message = ""
+                the_message += "#BLOCKED_PMs\n\n"
+                the_message += f"[User](tg://user?id={chat_id}): {chat_id}\n"
+                the_message += f"Message Count: {PM_WARNS[chat_id]}\n"
+                try:
+                    await event.client.send_message(
+                        entity=Config.PRIVATE_GROUP_ID,
+                        message=the_message,
+                    )
+                    return
+                except BaseException:
+                    return
+            catid = chat_id
+            if PMPERMIT_PIC:
+                if Config.CUSTOM_PMPERMIT_TEXT:
+                    USER_BOT_NO_WARN = Config.CUSTOM_PMPERMIT_TEXT
+                else:
+                    USER_BOT_NO_WARN = (
+                        f"My master {mention} haven't approved you yet. Don't spam his inbox "
+                        "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years."
+                    )
+                r = await event.reply(USER_BOT_NO_WARN, file=PMPERMIT_PIC)
             else:
-                USER_BOT_NO_WARN = (
-                    f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
-                    f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "
-                    "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
-                    "**Send** `/start` ** so that my master can decide why you're here.**"
-                )
-            r = await event.reply(USER_BOT_NO_WARN)
-        PM_WARNS[chat_id] += 1
-        if chat_id in PREV_REPLY_MESSAGE:
-            await PREV_REPLY_MESSAGE[chat_id].delete()
-        PREV_REPLY_MESSAGE[chat_id] = r
+                if Config.CUSTOM_PMPERMIT_TEXT:
+                    USER_BOT_NO_WARN = Config.CUSTOM_PMPERMIT_TEXT
+                else:
+                    USER_BOT_NO_WARN = (
+                        f"[──▄█▀█▄─────────██ \n▄████████▄───▄▀█▄▄▄▄ \n██▀▼▼▼▼▼─▄▀──█▄▄ \n█████▄▲▲▲─▄▄▄▀───▀▄ \n██████▀▀▀▀─▀────────▀▀](tg://user?id={catid})\n\n"
+                        f"My master {mention} haven't approved you yet. Don't spam his inbox "
+                        "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years."
+                    )
+                r = await event.reply(USER_BOT_NO_WARN)
+            PM_WARNS[chat_id] += 1
+            if chat_id in PREV_REPLY_MESSAGE:
+                await PREV_REPLY_MESSAGE[chat_id].delete()
+            PREV_REPLY_MESSAGE[chat_id] = r
 
 
 CMD_HELP.update(

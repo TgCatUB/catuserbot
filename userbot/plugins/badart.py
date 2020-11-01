@@ -5,12 +5,8 @@ Plugin for CatUserbot
 """
 import asyncio
 
-from userbot import ALIVE_NAME
-
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
-name = str(ALIVE_NAME) if ALIVE_NAME else "BadCat"
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+from . import mention
 
 # ==================================================================
 
@@ -308,7 +304,7 @@ async def kakashi(dicksay):
     text = dicksay.pattern_match.group(1)
     await edit_or_reply(
         dicksay,
-        f"**[{name}]({USERNAME})  ➥ {text} .\n**"
+        f"**{mention} ➥ {text} .\n**"
         "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n"
         "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡤⠖⠲⢄\n"
         "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⠞⠁⠀⠀⠀⠀⢱\n"

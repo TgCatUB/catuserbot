@@ -26,8 +26,8 @@ HEROKU_APP_NAME = Config.HEROKU_APP_NAME
 HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 
-@borg.on(admin_cmd(pattern=r"(set|get|del) var (.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"(set|get|del) var (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"(set|get|del) var (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"(set|get|del) var (.*)", allow_sudo=True))
 async def variable(var):
     """
     Manage most of ConfigVars setting, set new var, get current var,
@@ -106,8 +106,8 @@ async def variable(var):
             return await cat.edit(f"`{variable}`**  is not exists**")
 
 
-@borg.on(admin_cmd(pattern="usage$", outgoing=True))
-@borg.on(sudo_cmd(pattern="usage$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="usage$", outgoing=True))
+@bot.on(sudo_cmd(pattern="usage$", allow_sudo=True))
 async def dyno_usage(dyno):
     """
     Get your account Dyno Usage
@@ -165,8 +165,8 @@ async def dyno_usage(dyno):
     )
 
 
-@borg.on(admin_cmd(pattern="herokulogs$", outgoing=True))
-@borg.on(sudo_cmd(pattern="herokulogs$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="herokulogs$", outgoing=True))
+@bot.on(sudo_cmd(pattern="herokulogs$", allow_sudo=True))
 async def _(dyno):
     try:
         Heroku = heroku3.from_key(HEROKU_API_KEY)

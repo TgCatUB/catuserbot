@@ -7,7 +7,7 @@ from . import CMD_HELP
 @bot.on(admin_cmd(pattern="sdm (\d*) (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="sdm (\d*) (.*)", allow_sudo=True))
 async def selfdestruct(destroy):
-    cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    cat = ("".join(destroy.text.split(maxsplit=1)[1:])).split(" ", 1)
     message = cat[1]
     ttl = int(cat[0])
     try:
@@ -22,7 +22,7 @@ async def selfdestruct(destroy):
 @bot.on(admin_cmd(pattern="selfdm (\d*) (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="selfdm (\d*) (.*)", allow_sudo=True))
 async def selfdestruct(destroy):
-    cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    cat = ("".join(destroy.text.split(maxsplit=1)[1:])).split(" ", 1)
     message = cat[1]
     ttl = int(cat[0])
     text = (
@@ -33,16 +33,16 @@ async def selfdestruct(destroy):
     except:
         pass
     smsg = await destroy.client.send_message(destroy.chat_id, text)
-    await sleep(counter)
+    await sleep(ttl)
     await smsg.delete()
 
 
 CMD_HELP.update(
     {
         "selfdestruct": "__**PLUGIN NAME :** Selfdestruct__\
-\n\n📌** CMD ➥** `.sdm` number [text]\
+\n\n📌** CMD ➥** `.sdm` [number] [text]\
 \n**USAGE   ➥  **Self destruct this message in number seconds \
-\n\n📌** CMD ➥** `.selfd` number [text]\
+\n\n📌** CMD ➥** `.selfd` [number] [text]\
 \n**USAGE   ➥  **Self destruct this message in number seconds with showing that it will destruct. \
 "
     }

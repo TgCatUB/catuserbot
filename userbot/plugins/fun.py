@@ -188,8 +188,8 @@ async def payf(event):
     await edit_or_reply(event, pay)
 
 
-@borg.on(admin_cmd(pattern=r"join$"))
-@borg.on(sudo_cmd(pattern="join$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"join$"))
+@bot.on(sudo_cmd(pattern="join$", allow_sudo=True))
 async def kakashi(event):
     await edit_or_reply(
         event,
@@ -197,8 +197,8 @@ async def kakashi(event):
     )
 
 
-@borg.on(admin_cmd(pattern=r"climb$"))
-@borg.on(sudo_cmd(pattern="climb$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"climb$"))
+@bot.on(sudo_cmd(pattern="climb$", allow_sudo=True))
 async def kakashi(event):
     await edit_or_reply(
         event,
@@ -206,8 +206,8 @@ async def kakashi(event):
     )
 
 
-@borg.on(admin_cmd(pattern=r"aag$"))
-@borg.on(sudo_cmd(pattern="aag$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"aag$"))
+@bot.on(sudo_cmd(pattern="aag$", allow_sudo=True))
 async def kakashi(event):
     await edit_or_reply(
         event,
@@ -215,8 +215,8 @@ async def kakashi(event):
     )
 
 
-@borg.on(admin_cmd(pattern=r"push$"))
-@borg.on(sudo_cmd(pattern="push$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"push$"))
+@bot.on(sudo_cmd(pattern="push$", allow_sudo=True))
 async def kakashi(event):
     await edit_or_reply(
         event,
@@ -224,8 +224,8 @@ async def kakashi(event):
     )
 
 
-@borg.on(admin_cmd(pattern=r"work$"))
-@borg.on(sudo_cmd(pattern="work$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"work$"))
+@bot.on(sudo_cmd(pattern="work$", allow_sudo=True))
 async def kakashi(event):
     await edit_or_reply(
         event,

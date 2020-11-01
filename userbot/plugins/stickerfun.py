@@ -1,5 +1,4 @@
 # Random RGB Sticklet by @PhycoNinja13b
-# modified by @UniBorg
 # imported from ppe-remix by @heyworld & @DeletedUser420
 # modified by @mrconfused
 
@@ -18,8 +17,8 @@ from . import deEmojify, waifutxt
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="st(?: |$)(.*)"))
-@borg.on(sudo_cmd(allow_sudo=True, pattern="st(?: |$)(.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern="sttxt(?: |$)(.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="sttxt(?: |$)(.*)"))
 async def waifu(animu):
     text = animu.pattern_match.group(1)
     reply_to_id = animu.message
@@ -35,14 +34,14 @@ async def waifu(animu):
             return
     text = deEmojify(text)
     await animu.delete()
-    await waifutxt(text, animu.chat_id, reply_to_id, bot, borg)
+    await waifutxt(text, animu.chat_id, reply_to_id, bot, animu.client)
 
 
 # 12 21 28 30
 
 
-@borg.on(admin_cmd(pattern=r"stcr ?(?:(.*?) \| )?(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"stcr ?(?:(.*?) \| )?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"stcr ?(?:(.*?) \| )?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"stcr ?(?:(.*?) \| )?(.*)", allow_sudo=True))
 async def sticklet(event):
     R = random.randint(0, 256)
     G = random.randint(0, 256)
@@ -54,12 +53,13 @@ async def sticklet(event):
     if not font_file_name:
         font_file_name = ""
     sticktext = event.pattern_match.group(2)
-    if not sticktext and event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        sticktext = reply_message.message
-    elif not sticktext:
-        await edit_or_reply(event, "need something, hmm")
-        return
+    if not sticktext:
+        if event.reply_to_msg_id:
+            reply_message = await event.get_reply_message()
+            sticktext = reply_message.message
+        else:
+            await edit_or_reply(event, "need something, hmm")
+            return
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
     # delete the userbot command,

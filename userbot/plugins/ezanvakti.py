@@ -1,55 +1,47 @@
-# ported from
+# ported from uniborg
 # https://github.com/muhammedfurkan/UniBorg/blob/master/stdplugins/ezanvakti.py
 import json
-import logging
 
 import requests
 
-from .. import LOGS
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
-logging.basicConfig(
-    format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
-)
-TEMPAT = ""
+from ..utils import admin_cmd, sudo_cmd
+from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern=("ezanvakti ?(.*)")))
-@borg.on(sudo_cmd(pattern="ezanvakti ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ezanvakti (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="ezanvakti (.*)", allow_sudo=True))
 async def get_adzan(adzan):
-    if not adzan.pattern_match.group(1):
-        LOKASI = TEMPAT
-        if not LOKASI:
-            await edit_or_reply(adzan, "Please specify a city or a state.")
-            return
-    else:
-        LOKASI = adzan.pattern_match.group(1)
-    url = f"http://muslimsalat.com/{LOKASI}.json?key=bd099c5825cbedb9aa934e255a81a5fc"
+    LOKASI = adzan.pattern_match.group(1)
+    url = f"https://api.pray.zone/v2/times/today.json?city={LOKASI}"
     request = requests.get(url)
-    LOGS.info(request.text)
-    result = json.loads((request.text))
     if request.status_code != 200:
-        await edit_or_reply(adzan, f"{result['status_description']}")
+        await edit_delete(
+            adzan, f"`Couldn't fetch any data about the city {LOKASI}`", 5
+        )
         return
-    tanggal = result["items"][0]["date_for"]
-    lokasi = result["query"]
-    lokasi2 = result["country"]
-    lokasi3 = result["address"]
-    lokasi4 = result["state"]
-    subuh = result["items"][0]["fajr"]
-    syuruk = result["items"][0]["shurooq"]
-    zuhur = result["items"][0]["dhuhr"]
-    ashar = result["items"][0]["asr"]
-    maghrib = result["items"][0]["maghrib"]
-    isya = result["items"][0]["isha"]
-    textkirim = (
-        f"⏱  **Tarih ** `{tanggal}`:\n"
-        + f"`{lokasi} | {lokasi2} | {lokasi3} | {lokasi4}`\n\n"
-        + f"**Güneş :** `{subuh}`\n"
-        + f"**İmsak :** `{syuruk}`\n"
-        + f"**Öğle :** `{zuhur}`\n"
-        + f"**İkindi :** `{ashar}`\n"
-        + f"**Akşam :** `{maghrib}`\n"
-        + f"**Yatsı :** `{isya}`\n"
-    )
-    await edit_or_reply(adzan, textkirim)
+    result = json.loads(request.text)
+    catresult = f"<b>Islamic prayer times </b>\
+            \n\n<b>City     : </b><i>{result['results']['location']['city']}</i>\
+            \n<b>Country  : </b><i>{result['results']['location']['country']}</i>\
+            \n<b>Date     : </b><i>{result['results']['datetime'][0]['date']['gregorian']}</i>\
+            \n<b>Hijri    : </b><i>{result['results']['datetime'][0]['date']['hijri']}</i>\
+            \n\n<b>Imsak    : </b><i>{result['results']['datetime'][0]['times']['Imsak']}</i>\
+            \n<b>Sunrise  : </b><i>{result['results']['datetime'][0]['times']['Sunrise']}</i>\
+            \n<b>Fajr     : </b><i>{result['results']['datetime'][0]['times']['Fajr']}</i>\
+            \n<b>Dhuhr    : </b><i>{result['results']['datetime'][0]['times']['Dhuhr']}</i>\
+            \n<b>Asr      : </b><i>{result['results']['datetime'][0]['times']['Asr']}</i>\
+            \n<b>Sunset   : </b><i>{result['results']['datetime'][0]['times']['Sunset']}</i>\
+            \n<b>Maghrib  : </b><i>{result['results']['datetime'][0]['times']['Maghrib']}</i>\
+            \n<b>Isha     : </b><i>{result['results']['datetime'][0]['times']['Isha']}</i>\
+            \n<b>Midnight : </b><i>{result['results']['datetime'][0]['times']['Midnight']}</i>\
+    "
+    await edit_or_reply(adzan, catresult, "html")
+
+
+CMD_HELP.update(
+    {
+        "ezanvakti": "__**PLUGIN NAME :** Ezanvakti__\
+    \n\n📌** CMD ➥** `.ezanvakti` <city name>\
+    \n**USAGE   ➥  **__Shows you the Islamic prayer times of the given city name__"
+    }
+)

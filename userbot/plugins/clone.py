@@ -18,7 +18,7 @@ DEFAULTUSERBIO = (
     if DEFAULT_BIO
     else "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙"
 )
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "Jisan_cat_09"
+# USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "Jisan_cat_09"
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
@@ -27,7 +27,7 @@ else:
     BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
-@borg.on(admin_cmd(pattern="clone ?(.*)"))
+@bot.on(admin_cmd(pattern="clone ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -59,15 +59,15 @@ async def _(event):
     user_bio = replied_user.about
     if user_bio is not None:
         user_bio = replied_user.about
-    await borg(functions.account.UpdateProfileRequest(first_name=first_name))
-    await borg(functions.account.UpdateProfileRequest(last_name=last_name))
-    await borg(functions.account.UpdateProfileRequest(about=user_bio))
-    pfile = await borg.upload_file(profile_pic)  # pylint:disable=E060
-    await borg(
+    await event.client(functions.account.UpdateProfileRequest(first_name=first_name))
+    await event.client(functions.account.UpdateProfileRequest(last_name=last_name))
+    await event.client(functions.account.UpdateProfileRequest(about=user_bio))
+    pfile = await event.client.upload_file(profile_pic)  # pylint:disable=E060
+    await event.client(
         functions.photos.UploadProfilePhotoRequest(pfile)  # pylint:disable=E0602
     )
     await event.delete()
-    await borg.send_message(
+    await event.client.send_message(
         event.chat_id, "**LET US BE AS ONE**", reply_to=reply_message
     )
     if BOTLOG:
@@ -77,7 +77,7 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd(pattern="revert$"))
+@bot.on(admin_cmd(pattern="revert$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -85,14 +85,14 @@ async def _(event):
     blank = ""
     bio = f"{DEFAULTUSERBIO}"
     n = 1
-    await borg(
+    await event.client(
         functions.photos.DeletePhotosRequest(
             await event.client.get_profile_photos("me", limit=n)
         )
     )
-    await borg(functions.account.UpdateProfileRequest(about=bio))
-    await borg(functions.account.UpdateProfileRequest(first_name=name))
-    await borg(functions.account.UpdateProfileRequest(last_name=blank))
+    await event.client(functions.account.UpdateProfileRequest(about=bio))
+    await event.client(functions.account.UpdateProfileRequest(first_name=name))
+    await event.client(functions.account.UpdateProfileRequest(last_name=blank))
     await event.edit("succesfully reverted to your account back")
     if BOTLOG:
         await event.client.send_message(
@@ -100,7 +100,8 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd(pattern="fclone ?(.*)"))
+"""
+@bot.on(admin_cmd(pattern="fclone ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -134,16 +135,16 @@ async def _(event):
         user_bio = replied_user.about
     username = replied_user.user.username
     JISAN = username + "_i"
-    await borg(functions.account.UpdateUsernameRequest(username=JISAN))
-    await borg(functions.account.UpdateProfileRequest(first_name=first_name))
-    await borg(functions.account.UpdateProfileRequest(last_name=last_name))
-    await borg(functions.account.UpdateProfileRequest(about=user_bio))
-    pfile = await borg.upload_file(profile_pic)  # pylint:disable=E060
-    await borg(
+    await event.client(functions.account.UpdateUsernameRequest(username=JISAN))
+    await event.client(functions.account.UpdateProfileRequest(first_name=first_name))
+    await event.client(functions.account.UpdateProfileRequest(last_name=last_name))
+    await event.client(functions.account.UpdateProfileRequest(about=user_bio))
+    pfile = await event.client.upload_file(profile_pic)  # pylint:disable=E060
+    await event.client(
         functions.photos.UploadProfilePhotoRequest(pfile)  # pylint:disable=E0602
     )
     await event.delete()
-    await borg.send_message(
+    await event.client.send_message(
         event.chat_id, "**LET US BE AS ONE**", reply_to=reply_message
     )
     if BOTLOG:
@@ -153,7 +154,7 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd(pattern="frevert$"))
+@bot.on(admin_cmd(pattern="frevert$"))
 async def _(event):
     if event.fwd_from:
         return
@@ -162,20 +163,30 @@ async def _(event):
     bio = f"{DEFAULTUSERBIO}"
     jisan = USERNAME[1:]
     n = 1
-    await borg(
+    await event.client(
         functions.photos.DeletePhotosRequest(
             await event.client.get_profile_photos("me", limit=n)
         )
     )
-    await borg(functions.account.UpdateUsernameRequest(username=jisan))
-    await borg(functions.account.UpdateProfileRequest(about=bio))
-    await borg(functions.account.UpdateProfileRequest(first_name=name))
-    await borg(functions.account.UpdateProfileRequest(last_name=blank))
+    await event.client(functions.account.UpdateUsernameRequest(username=jisan))
+    await event.client(functions.account.UpdateProfileRequest(about=bio))
+    await event.client(functions.account.UpdateProfileRequest(first_name=name))
+    await event.client(functions.account.UpdateProfileRequest(last_name=blank))
     await event.edit("succesfully reverted to your account back")
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID, f"#REVERT\nSuccesfully reverted back to your profile"
         )
+        
+        
+================================================================================
+    \n\n📌** CMD ➥** `.fclone`<reply to user who you want to clone\
+    \n**USAGE   ➥  **Fully clone the replied user account with username also\
+    \n\n📌** CMD ➥** `.frevert`\
+    \n**USAGE   ➥  **Reverts back to your profile use it if you used `.fclone`\
+    
+=================================================================================
+"""
 
 
 async def get_full_user(event):
@@ -184,12 +195,14 @@ async def get_full_user(event):
         if previous_message.forward:
             replied_user = await event.client(
                 GetFullUserRequest(
-                    previous_message.forward.from_id
+                    previous_message.forward.sender_id
                     or previous_message.forward.channel_id
                 )
             )
             return replied_user, None
-        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
+        replied_user = await event.client(
+            GetFullUserRequest(previous_message.sender_id)
+        )
         return replied_user, None
     input_str = None
     try:
@@ -233,10 +246,6 @@ CMD_HELP.update(
     \n**USAGE   ➥  **Clone the replied user account\
     \n\n📌** CMD ➥** `.revert`\
     \n**USAGE   ➥  **Reverts back to your profile which you have set in heroku for  AUTONAME,DEFAULT_BIO\
-    \n\n📌** CMD ➥** `.fclone`<reply to user who you want to clone\
-    \n**USAGE   ➥  **Fully clone the replied user account with username also\
-    \n\n📌** CMD ➥** `.frevert`\
-    \n**USAGE   ➥  **Reverts back to your profile use it if you used `.fclone`\
     "
     }
 )

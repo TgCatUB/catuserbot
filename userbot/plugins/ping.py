@@ -1,14 +1,11 @@
 import asyncio
 from datetime import datetime
 
-from .. import ALIVE_NAME, CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+from . import CMD_HELP, hmention
 
 
-@borg.on(admin_cmd(pattern=f"fping$", outgoing=True))
+@bot.on(admin_cmd(pattern=f"fping$", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -56,17 +53,18 @@ async def _(event):
     )
 
 
-@borg.on(admin_cmd(pattern="ping$"))
-@borg.on(sudo_cmd(pattern="ping$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ping$"))
+@bot.on(sudo_cmd(pattern="ping$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     start = datetime.now()
-    event = await edit_or_reply(event, "__**☞ Pong!__**")
+    event = await edit_or_reply(event, "<b><i>☞ Pong!</b></i>", "html")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
     await event.edit(
-        f"__**☞ Pong!__**\n➥ {ms}\n➥ __**Bot**__ __**of**__ [{DEFAULTUSER}]({USERNAME})"
+        f"<b><i>☞ Pong</b></i>\n➥ {ms}\n➥ <b><i>Bot of {hmention}</b></i>",
+        parse_mode="html",
     )
 
 

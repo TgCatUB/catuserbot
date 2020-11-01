@@ -1,6 +1,5 @@
 # Some are ported from uniborg By: @INF1N17Y
 
-
 from telethon.tl.types import ChannelParticipantsAdmins
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
@@ -43,8 +42,8 @@ async def _(event):
     await event.delete()
 
 
-@bot.on(admin_cmd(pattern="admins$"))
-@bot.on(sudo_cmd(pattern="admins$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="report$"))
+@bot.on(sudo_cmd(pattern="report$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -66,15 +65,26 @@ async def _(event):
 @bot.on(admin_cmd(pattern="men (.*)"))
 @bot.on(sudo_cmd(pattern="men (.*)", allow_sudo=True))
 async def _(event):
-    if event.fwd_from:
-        return
+    input_str = event.pattern_match.group(1)
     if event.reply_to_msg_id:
-        input_str = event.pattern_match.group(1)
         reply_msg = await event.get_reply_message()
-        caption = """<a href='tg://user?id={}'>{}</a>""".format(
-            reply_msg.from_id, input_str
-        )
-        await event.delete()
-        await event.client.send_message(event.chat_id, caption, parse_mode="HTML")
+        u = reply_msg.sender_id
+        str = input_str
     else:
-        await edit_or_reply(event, "Reply to user with `.mention <your text>`")
+        user, str = input_str.split(" ", 1)
+        try:
+            u = int(user)
+        except ValueError:
+            try:
+                u = await event.client.get_entity(user)
+            except ValueError:
+                await event.delete()
+                return
+            u = int(u.id)
+        except:
+            await event.delete()
+            return
+    await event.delete()
+    await event.client.send_message(
+        event.chat_id, f"<a href='tg://user?id={u}'>{str}</a>", parse_mode="HTML"
+    )

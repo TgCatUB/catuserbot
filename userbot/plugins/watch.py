@@ -77,8 +77,8 @@ def get_provider(url):
     return url
 
 
-@borg.on(admin_cmd(pattern="watch (.*)"))
-@borg.on(sudo_cmd(pattern="watch (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="watch (.*)"))
+@bot.on(sudo_cmd(pattern="watch (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -118,7 +118,7 @@ async def _(event):
             link = link.replace(" ", "%20")
         output_ += f"[{pretty(provider)}]({link})\n"
 
-    await borg.send_file(
+    await event.client.send_file(
         event.chat_id,
         caption=output_,
         file=thumb_link,

@@ -63,7 +63,7 @@ LastLog = False
 # ================================================
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="lastfm$"))
+@bot.on(admin_cmd(outgoing=True, pattern="lastfm$"))
 async def last_fm(lastFM):
     # For .lastfm command, fetch scrobble data from last.fm.
     await lastFM.edit("Processing...")
@@ -188,7 +188,7 @@ async def get_curr_track(lfmbio):
     RUNNING = False
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"lastbio (on|off)"))
+@bot.on(admin_cmd(outgoing=True, pattern=r"lastbio (on|off)"))
 async def lastbio(lfmbio):
     arg = lfmbio.pattern_match.group(1).lower()
     global LASTFMCHECK
@@ -212,7 +212,7 @@ async def lastbio(lfmbio):
         await lfmbio.edit(LFM_BIO_ERR)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"lastlog (on|off)"))
+@bot.on(admin_cmd(outgoing=True, pattern=r"lastlog (on|off)"))
 async def lastlog(lstlog):
     arg = lstlog.pattern_match.group(1).lower()
     global LastLog

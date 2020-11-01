@@ -4,8 +4,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern="unoob$"))
-@borg.on(sudo_cmd(pattern="unoob$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="unoob$"))
+@bot.on(sudo_cmd(pattern="unoob$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -28,8 +28,8 @@ async def _(event):
         await asyncio.sleep(animation_interval)
 
 
-@borg.on(admin_cmd(pattern="menoob$"))
-@borg.on(sudo_cmd(pattern="menoob$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="menoob$"))
+@bot.on(sudo_cmd(pattern="menoob$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -52,8 +52,8 @@ async def _(event):
         await asyncio.sleep(animation_interval)
 
 
-@borg.on(admin_cmd(pattern="upro$"))
-@borg.on(sudo_cmd(pattern="upro$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="upro$"))
+@bot.on(sudo_cmd(pattern="upro$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -75,8 +75,8 @@ async def _(event):
         await asyncio.sleep(animation_interval)
 
 
-@borg.on(admin_cmd(pattern="mepro$"))
-@borg.on(sudo_cmd(pattern="mepro$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="mepro$"))
+@bot.on(sudo_cmd(pattern="mepro$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -98,8 +98,8 @@ async def _(event):
         await asyncio.sleep(animation_interval)
 
 
-@borg.on(admin_cmd(pattern=f"quickheal$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"quickheal$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"quickheal$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"quickheal$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -124,8 +124,8 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=f"sqh$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"sqh$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"sqh$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"sqh$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -150,8 +150,8 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=f"vquickheal$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"vquickheal$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"vquickheal$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"vquickheal$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -176,8 +176,8 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=f"macos$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"macos$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"macos$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"macos$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -202,8 +202,8 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=f"windows$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"windows$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"windows$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"windows$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -228,8 +228,8 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=f"linux$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"linux$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"linux$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"linux$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -254,8 +254,8 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=f"stock$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"stock$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"stock$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"stock$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -280,8 +280,8 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@borg.on(admin_cmd(pattern=f"os$", outgoing=True))
-@borg.on(sudo_cmd(pattern=f"os$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=f"os$", outgoing=True))
+@bot.on(sudo_cmd(pattern=f"os$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

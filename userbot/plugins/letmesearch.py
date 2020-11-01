@@ -3,34 +3,41 @@ from asyncio import sleep
 import requests
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import BOTLOG, BOTLOG_CHATID
 
 
-@bot.on(admin_cmd(pattern="ggl (.*)"))
-@bot.on(sudo_cmd(pattern="ggl (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="lfy ?(.*)"))
+@bot.on(sudo_cmd(pattern="lfy ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=https://lmgtfy.com/?q={}%26iie=1".format(
-        input_str.replace(" ", "+")
-    )
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(
+            event, "`either reply to text message or give input to search`", 5
+        )
+    sample_url = f"https://da.gd/s?url=https://lmgtfy.com/?q={input_str.replace(' ', '+')}%26iie=1"
     response_api = requests.get(sample_url).text
     if response_api:
         await edit_or_reply(
-            event,
-            "[{}]({})\n`Thank me Later 🙃` ".format(input_str, response_api.rstrip()),
+            event, f"[{input_str}]({response_api.rstrip()})\n`Thank me Later 🙃` "
         )
     else:
-        await edit_or_reply(event, "something is wrong. please try again later.")
+        return await edit_delete(
+            event, "`something is wrong. please try again later.`", 5
+        )
     if BOTLOG:
-        await bot.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID,
-            "LMGTFY query `" + input_str + "` was executed successfully",
+            f"LMGTFY query `{input_str}` was executed successfully",
         )
 
 
-@borg.on(admin_cmd(pattern="lmg (.*)"))
-@borg.on(sudo_cmd(pattern="lmg (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="lmg (.*)"))
+@bot.on(sudo_cmd(pattern="lmg (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -51,8 +58,8 @@ async def _(event):
         await event.edit("Something went wrong. Please try again later.")
 
 
-@borg.on(admin_cmd(pattern="lmy (.*)"))
-@borg.on(sudo_cmd(pattern="lmy (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="lmy (.*)"))
+@bot.on(sudo_cmd(pattern="lmy (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -75,8 +82,8 @@ async def _(event):
         await event.edit("Something went wrong. Please try again later.")
 
 
-@borg.on(admin_cmd(pattern="ddg (.*)"))
-@borg.on(sudo_cmd(pattern="ddg (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ddg (.*)"))
+@bot.on(sudo_cmd(pattern="ddg (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -99,8 +106,8 @@ async def _(event):
         await event.edit("Something went wrong. Please try again later.")
 
 
-@borg.on(admin_cmd(pattern="lmalt (.*)"))
-@borg.on(sudo_cmd(pattern="lmalt (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="lmalt (.*)"))
+@bot.on(sudo_cmd(pattern="lmalt (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -121,8 +128,8 @@ async def _(event):
         await event.edit("Something went wrong. Please try again later.")
 
 
-@borg.on(admin_cmd(pattern="lmvar (.*)"))
-@borg.on(sudo_cmd(pattern="lmvar (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="lmvar (.*)"))
+@bot.on(sudo_cmd(pattern="lmvar (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -145,8 +152,8 @@ async def _(event):
         await event.edit("Something went wrong. Please try again later.")
 
 
-@borg.on(admin_cmd(pattern="lmlog (.*)"))
-@borg.on(sudo_cmd(pattern="lmlog (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="lmlog (.*)"))
+@bot.on(sudo_cmd(pattern="lmlog (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -167,8 +174,8 @@ async def _(event):
         await event.edit("Something went wrong. Please try again later.")
 
 
-@borg.on(admin_cmd(pattern="dyno(.*)"))
-@borg.on(sudo_cmd(pattern="dyno (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="dyno(.*)"))
+@bot.on(sudo_cmd(pattern="dyno (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -189,8 +196,8 @@ async def _(event):
         await event.edit("Something went wrong. Please try again later.")
 
 
-@borg.on(admin_cmd(pattern="lmkp (.*)"))
-@borg.on(sudo_cmd(pattern="lmkp (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="lmkp (.*)"))
+@bot.on(sudo_cmd(pattern="lmkp (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -211,8 +218,8 @@ async def _(event):
         await event.edit("Something went wrong. Please try again later.")
 
 
-@borg.on(admin_cmd(pattern="gem (.*)"))
-@borg.on(sudo_cmd(pattern="gem (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="gem (.*)"))
+@bot.on(sudo_cmd(pattern="gem (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -233,8 +240,8 @@ async def _(event):
         await event.edit("Something went wrong. Please try again later.")
 
 
-@borg.on(admin_cmd(pattern="archive (.*)"))
-@borg.on(sudo_cmd(pattern="archive (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="archive (.*)"))
+@bot.on(sudo_cmd(pattern="archive (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

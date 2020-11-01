@@ -42,8 +42,8 @@ async def kickme(leave):
     await leave.client.kick_participant(leave.chat_id, "me")
 
 
-@bot.on(admin_cmd(pattern="get_admins ?(.*)"))
-@bot.on(sudo_cmd(pattern="get_admins ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="admins ?(.*)"))
+@bot.on(sudo_cmd(pattern="admins ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -95,19 +95,19 @@ async def _(event):
     await event.delete()
 
 
-@bot.on(admin_cmd(pattern="get_bots ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="get_bots ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="bots ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="bots ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    mentions = "**Bots in this Channel**: \n"
+    mentions = "**Bots in this Group**: \n"
     input_str = event.pattern_match.group(1)
     to_write_chat = await event.get_input_chat()
     chat = None
     if not input_str:
         chat = to_write_chat
     else:
-        mentions = "Bots in {} channel: \n".format(input_str)
+        mentions = "Bots in {} Group: \n".format(input_str)
         try:
             chat = await event.client.get_entity(input_str)
         except Exception as e:
@@ -143,17 +143,16 @@ async def get_users(show):
     await show.get_input_chat()
     if not input_str:
         if not show.is_group:
-            await edit_or_reply(show, "Are you sure this is a group?")
+            await edit_or_reply(show, "`Are you sure this is a group?`")
             return
     else:
         mentions_heading = "Users in {} Group: \n".format(input_str)
         mentions = mentions_heading
         try:
-            chat = await event.client.get_entity(input_str)
+            chat = await show.client.get_entity(input_str)
         except Exception as e:
-            await event.show(str(e))
-            return None
-    catevent = await edit_or_reply(show, "getting users list wait...")
+            await edit_delete(show, f"`{str(e)}`", 10)
+    catevent = await edit_or_reply(show, "`getting users list wait...`  ")
     try:
         if not show.pattern_match.group(1):
             async for user in show.client.iter_participants(show.chat_id):
@@ -176,7 +175,7 @@ async def get_users(show):
     if len(mentions) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(mentions)) as out_file:
             out_file.name = "users.text"
-            await event.client.send_file(
+            await show.client.send_file(
                 show.chat_id,
                 out_file,
                 force_document=True,
@@ -237,7 +236,7 @@ async def _(event):
 
 
 @bot.on(admin_cmd(pattern="ikuck ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="ikuck (.*)", allow_sudo=True))
+@bot.on(sudo_cmd(pattern="ikuck ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -384,27 +383,25 @@ None: {}""".format(
 async def rm_deletedacc(show):
     con = show.pattern_match.group(1).lower()
     del_u = 0
-    del_status = "`No deleted accounts found, Group is clean`"
+    del_status = "`No zombies or deleted accounts found in this group, Group is clean`"
     if con != "clean":
         event = await edit_or_reply(
             show, "`Searching for ghost/deleted/zombie accounts...`"
         )
-        async for user in bot.iter_participants(show.chat_id):
+        async for user in show.client.iter_participants(show.chat_id):
             if user.deleted:
                 del_u += 1
                 await sleep(0.5)
         if del_u > 0:
-            del_status = f"`Found` **{del_u}** ghost/deleted/zombie account(s) in this group,\
-            \nclean them by using `.zombies clean`"
+            del_status = f"__Found__ **{del_u}** __ghost/deleted/zombie account(s) in this group,\
+                           \nclean them by using__ `.zombies clean`"
         await event.edit(del_status)
         return
-    # Here laying the sanity check
     chat = await show.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
-    # Well
     if not admin and not creator:
-        await edit_or_reply(show, "`I am not an admin here!`")
+        await edit_delete(show, "`I am not an admin here!`", 5)
         return
     event = await edit_or_reply(
         show, "`Deleting deleted accounts...\nOh I can do that?!?!`"
@@ -416,25 +413,23 @@ async def rm_deletedacc(show):
             try:
                 await show.client.kick_participant(show.chat_id, user.id)
                 await sleep(0.5)
+                del_u += 1
             except ChatAdminRequiredError:
-                await event.edit("`I don't have ban rights in this group`")
+                await edit_delete(event, "`I don't have ban rights in this group`", 5)
                 return
             except UserAdminInvalidError:
-                del_u -= 1
                 del_a += 1
     if del_u > 0:
         del_status = f"Cleaned **{del_u}** deleted account(s)"
     if del_a > 0:
         del_status = f"Cleaned **{del_u}** deleted account(s) \
         \n**{del_a}** deleted admin accounts are not removed"
-    await event.edit(del_status)
-    await sleep(5)
-    await show.delete()
+    await edit_delete(event, del_status, 5)
     if BOTLOG:
         await show.client.send_message(
             BOTLOG_CHATID,
-            "#CLEANUP\n"
-            f"Cleaned **{del_u}** deleted account(s) !!\
+            f"#CLEANUP\
+            \n{del_status}\
             \nCHAT: {show.chat.title}(`{show.chat_id}`)",
         )
 
@@ -708,20 +703,20 @@ CMD_HELP.update(
     {
         "groupdata": "__**PLUGIN NAME :** Groupdata__\
     \n\n📌** CMD ➥** `.kickme`\
-    \n**USAGE   ➥  **Throws you away from that chat\
-    \n\n📌** CMD ➥** `.get_admins` or .`get_admins <username of group >`\
-    \n**USAGE   ➥  **Retrieves a list of admins in the chat.\
-    \n\n📌** CMD ➥** `.get_bots or .get_bots <username of group >`\
-    \n**USAGE   ➥  **Retrieves a list of bots in the chat.\
-    \n\n📌** CMD ➥** `.users` or `.users <name of member>`\
-    \n**USAGE   ➥  **Retrieves all (or queried) users in the chat.\
+    \n**USAGE   ➥  **__Throws you away from that chat_\
+    \n\n📌** CMD ➥** `.admins` <or> `.admins <username of group >`\
+    \n**USAGE   ➥  **__Retrieves a list of admins in the chat.__\
+    \n\n📌** CMD ➥** `.bots` <or> `.bots <username of group >`\
+    \n**USAGE   ➥  **__Retrieves a list of bots in the chat.__\
+    \n\n📌** CMD ➥** `.users` <or> `.users <name of member>`\
+    \n**USAGE   ➥  **__Retrieves all (or queried) users in the chat.__\
     \n\n📌** CMD ➥** `.unbanall`\
-    \n**USAGE   ➥  **Unbans everyone who are blocked in that group \
+    \n**USAGE   ➥  **__Unbans everyone who are blocked in that group __\
     \n\n📌** CMD ➥** `.ikuck`\
-    \n**USAGE   ➥  **Stats of the group like no of users no of deleted users. \
-    \n\n📌** CMD ➥** `.chatinfo` or `.chatinfo <username of group>`\
-    \n**USAGE   ➥  **Shows you the total information of the required chat.\
+    \n**USAGE   ➥  **__stats of the group like no of users no of deleted users.__\
+    \n\n📌** CMD ➥** `.chatinfo` <or> `.chatinfo <username of group>`\
+    \n**USAGE   ➥  **__Shows you the total information of the required chat.__\
     \n\n📌** CMD ➥** `.zombies`\
-    \n**USAGE   ➥  **Searches for deleted accounts in a group. Use `.zombies clean` to remove deleted accounts from the group."
+    \n**USAGE   ➥  **__Searches for deleted accounts in a group. Use `.zombies clean` to remove deleted accounts from the group.__"
     }
 )

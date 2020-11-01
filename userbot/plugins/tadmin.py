@@ -15,8 +15,8 @@ NO_ADMIN = "`I am not an admin nub nibba!`"
 NO_PERM = "`I don't have sufficient permissions! This is so sed. Alexa play despacito`"
 
 
-@borg.on(admin_cmd(pattern=r"tmute(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern=r"tmute(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"tmute(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern=r"tmute(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def tmuter(catty):
     chat = await catty.get_chat()
@@ -90,8 +90,8 @@ async def tmuter(catty):
         return await catevent.edit("`Uh oh my mute logic broke!`")
 
 
-@borg.on(admin_cmd(pattern="tban(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="tban(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="tban(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="tban(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def ban(catty):
     chat = await catty.get_chat()
@@ -184,7 +184,7 @@ async def get_user_from_event(event):
     extra = None
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.from_id)
+        user_obj = await event.client.get_entity(previous_message.sender_id)
         extra = event.pattern_match.group(1)
     elif args:
         user = args[0]

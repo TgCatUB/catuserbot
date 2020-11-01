@@ -10,8 +10,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern="stat$"))
-@borg.on(sudo_cmd(pattern="stat$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="stat$"))
+@bot.on(sudo_cmd(pattern="stat$", allow_sudo=True))
 async def stats(
     event: NewMessage.Event,
 ) -> None:  # pylint: disable = R0912, R0914, R0915

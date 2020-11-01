@@ -1,32 +1,42 @@
+# inspired from uniborg Quotes plugin
 import random
 
 import requests
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from ..utils import admin_cmd, sudo_cmd
+from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern="quote ?(.*)"))
+@bot.on(admin_cmd(pattern="quote ?(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="quote ?(.*)", allow_sudo=True))
 async def quote_search(event):
     if event.fwd_from:
         return
-    catevent = await edit_or_reply(event, "Processing...")
-    search_string = event.pattern_match.group(1)
-    input_url = "https://bots.shrimadhavuk.me/Telegram/GoodReadsQuotesBot/?q={}".format(
-        search_string
-    )
-    headers = {"USER-AGENT": "UniBorg"}
-    try:
-        response = requests.get(input_url, headers=headers).json()
-    except BaseException:
-        response = None
+    catevent = await edit_or_reply(event, "`Processing...`")
+    input_str = event.pattern_match.group(1)
+    if not input_str:
+        api_url = "https://quotes.cwprojects.live/random"
+        try:
+            response = requests.get(api_url).json()
+        except:
+            response = None
+    else:
+        api_url = f"https://quotes.cwprojects.live/search/query={input_str}"
+        try:
+            response = random.choice(requests.get(api_url).json())
+        except:
+            response = None
     if response is not None:
-        result = (
-            random.choice(response).get("input_message_content").get("message_text")
-        )
+        await catevent.edit(f"`{response['text']}`")
     else:
-        result = None
-    if result:
-        await catevent.edit(result.replace("<code>", "`").replace("</code>", "`"))
-    else:
-        await catevent.edit("Zero results found")
+        await edit_delete(catevent, "`Sorry Zero results found`", 5)
+
+
+CMD_HELP.update(
+    {
+        "quotes": "__**PLUGIN NAME :** Quotes__\
+    \n\n📌** CMD ➥** `.quote` <category>\
+    \n**USAGE   ➥  **__An api that Fetchs random Quote from `goodreads.com`__\
+    "
+    }
+)

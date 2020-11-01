@@ -4,10 +4,7 @@ import requests
 from telethon import functions
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import ALIVE_NAME, CMD_HELP, CMD_LIST, SUDO_LIST, yaml_format
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+from . import CMD_HELP, CMD_LIST, SUDO_LIST, mention, yaml_format
 
 HELPTYPE = Config.HELP_INLINETYPE or True
 
@@ -66,7 +63,7 @@ async def cmd_list(event):
             await event.delete()
     else:
         if HELPTYPE is True:
-            help_string = f"Userbot Helper.. Provided by [{DEFAULTUSER}]({USERNAME})\
+            help_string = f"Userbot Helper.. Provided by {mention}\
                           \nUserbot Helper to reveal all the plugin names\
                           \n__Do__ `.help` __plugin_name for commands, in case popup doesn't appear.__\
                           \nDo `.info` plugin_name for usage"
@@ -82,7 +79,7 @@ async def cmd_list(event):
                 \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
             catcount = 0
             for i in sorted(CMD_LIST):
-                string += "◆" + f"<code>{str(i)}</code>"
+                string += "◆ " + f"<code>{str(i)}</code>"
                 string += "   "
                 catcount += 1
             await event.edit(string.format(count=catcount), parse_mode="HTML")
@@ -115,9 +112,11 @@ async def info(event):
             )
             url = f"https://nekobin.com/{key}"
             reply_text = f"All commands of the catuserbot are [here]({url})"
-            await event.reply(reply_text)
+            await event.reply(reply_text, link_preview=False)
             return
-        await event.reply(string.format(count=catcount, plugincount=plugincount))
+        await event.reply(
+            string.format(count=catcount, plugincount=plugincount), link_preview=False
+        )
         return
     if input_str:
         if input_str in SUDO_LIST:
@@ -141,7 +140,7 @@ async def info(event):
             \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
         catcount = 0
         for i in sorted(SUDO_LIST):
-            string += "◆" + f"<code>{str(i)}</code>"
+            string += "◆ " + f"<code>{str(i)}</code>"
             string += "   "
             catcount += 1
         await event.reply(string.format(count=catcount), parse_mode="HTML")
@@ -168,7 +167,7 @@ async def info(event):
             string += "◆ " + f"<code>{str(i)}</code>"
             string += "   "
             catcount += 1
-        if event.from_id in Config.SUDO_USERS:
+        if event.sender_id in Config.SUDO_USERS:
             await event.reply(string.format(count=catcount), parse_mode="HTML")
         else:
             await event.edit(string.format(count=catcount), parse_mode="HTML")
@@ -211,3 +210,18 @@ async def _(event):
             await event.edit("`inline mode is enabled`")
         else:
             await event.edit("`inline mode is already disabled`")
+
+
+CMD_HELP.update(
+    {
+        "help": "__**PLUGIN NAME :** Help__\
+    \n\n📌** CMD ➥** `.help` <plugin name>\
+    \n**USAGE   ➥  **Get commands of a specific plugin.\
+    \n\n📌** CMD ➥** `.info` <plugin name>\
+    \n**USAGE   ➥  **To get commands and usage of a specific plugin.\
+    \n\n📌** CMD ➥** `.dc`\
+    \n**USAGE   ➥  **To get info list of telegram data centres.\
+    \n\n📌** CMD ➥** `.setinline true` <or> `.setinline false`\
+    \n**USAGE   ➥  **To enable or disable inline mode of help menu."
+    }
+)

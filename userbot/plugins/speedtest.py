@@ -8,8 +8,8 @@ import speedtest
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="speedtest ?(.*)"))
-@borg.on(sudo_cmd(pattern="speedtest ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="speedtest ?(.*)"))
+@bot.on(sudo_cmd(pattern="speedtest ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -62,7 +62,7 @@ async def _(event):
                 )
             )
         else:
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 speedtest_image,
                 caption="**SpeedTest** completed in {} seconds".format(ms),

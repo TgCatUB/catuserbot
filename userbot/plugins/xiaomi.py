@@ -9,8 +9,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern="firmware(?: |$)(.*)"))
-@borg.on(sudo_cmd(outgoing=True, pattern="firmware(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="firmware(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="firmware(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -33,8 +33,32 @@ async def _(event):
             await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="specs(?: |$)(.*)"))
-@borg.on(sudo_cmd(outgoing=True, pattern="specs(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="vendor(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="vendor(?: |$)(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    link = event.pattern_match.group(1)
+    vendor = f"vendor"
+    catevent = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation("@XiaomiGeeksBot") as conv:
+        try:
+            response = conv.wait_event(
+                events.NewMessage(incoming=True, from_users=774181428)
+            )
+            await conv.send_message(f"/{vendor} {link}")
+            respond = await response
+            await event.client.send_read_acknowledge(conv.chat_id)
+        except YouBlockedUserError:
+            await catevent.edit("```Unblock @XiaomiGeeksBot plox```")
+            return
+        else:
+            await catevent.delete()
+            await event.client.forward_messages(event.chat_id, respond.message)
+
+
+@bot.on(admin_cmd(pattern="specs(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="specs(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -57,8 +81,8 @@ async def _(event):
             await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="fastboot(?: |$)(.*)"))
-@borg.on(sudo_cmd(outgoing=True, pattern="fastboot(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="fastboot(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="fastboot(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -81,8 +105,8 @@ async def _(event):
             await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="recovery(?: |$)(.*)"))
-@borg.on(sudo_cmd(outgoing=True, pattern="recovery(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="recovery(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="recovery(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -105,8 +129,8 @@ async def _(event):
             await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="pb(?: |$)(.*)"))
-@borg.on(sudo_cmd(outgoing=True, pattern="pb(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="pb(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="pb(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -129,8 +153,8 @@ async def _(event):
             await event.client.forward_messages(event.chat_id, respond.message)
 
 
-@borg.on(admin_cmd(pattern="of(?: |$)(.*)"))
-@borg.on(sudo_cmd(outgoing=True, pattern="of(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="of(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="of(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -159,6 +183,8 @@ CMD_HELP.update(
         \n\n__**For Xiaomeme devices only!**__\
 \n\n📌** CMD ➥** `.firmware` (codename)\
 \n**USAGE   ➥  **Get lastest Firmware\
+\n\n📌** CMD ➥** `.vendor` (codename)\
+\n**USAGE   ➥  **Get lastest Vendor\
 \n\n📌** CMD ➥** `.pb` (codename)\
 \n**USAGE   ➥  **Get latest PBRP\
 \n\n📌** CMD ➥** `.specs` (codename)\

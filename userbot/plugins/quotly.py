@@ -8,7 +8,7 @@ import os
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from .. import process
+from .. import CMD_HELP, process
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
@@ -58,9 +58,6 @@ async def _(event):
         await edit_or_reply(event, "```Reply to text message```")
         return
     chat = "@QuotLyBot"
-    if reply_message.sender.bot:
-        await edit_or_reply(event, "```Reply to actual users message.```")
-        return
     catevent = await edit_or_reply(event, "```Making a Quote```")
     async with event.client.conversation(chat) as conv:
         try:
@@ -80,3 +77,15 @@ async def _(event):
         else:
             await catevent.delete()
             await event.client.send_message(event.chat_id, response.message)
+
+
+CMD_HELP.update(
+    {
+        "quotly": "__**PLUGIN NAME :** Quotly__\
+        \n\n📌** CMD ➥** `.q` <reply to messge>`\
+        \n**USAGE   ➥  **__Makes your message as sticker quote__\
+        \n\n📌** CMD ➥** `.qbot` <reply to messge>\
+        \n**USAGE   ➥  **__Makes your message as sticker quote by @quotlybot__\
+        "
+    }
+)

@@ -40,8 +40,8 @@ async def get_tz(con):
         return
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
-@borg.on(
+@bot.on(admin_cmd(outgoing=True, pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
+@bot.on(
     sudo_cmd(
         outgoing=True,
         pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?",
@@ -57,7 +57,8 @@ async def time_func(tdata):
     con = tdata.pattern_match.group(1).title()
     tz_num = tdata.pattern_match.group(2)
     t_form = "%H:%M"
-    c_name = None
+    d_form = "%d/%m/%y - %A"
+    c_name = ""
     if len(con) > 4:
         try:
             c_name = c_n[con]
@@ -69,7 +70,10 @@ async def time_func(tdata):
         tz_num = TZ_NUMBER
         timezones = await get_tz(COUNTRY)
     else:
-        await edit_or_reply(tdata, f"`It's`  **{dt.now().strftime(t_form)}**  `here.`")
+        await edit_or_reply(
+            tdata,
+            f"`It's`  **{dt.now().strftime(t_form)}**` on `**{dt.now().strftime(d_form)}** `here.`",
+        )
         return
     if not timezones:
         await edit_or_reply(tdata, "`Invaild country.`")
@@ -93,90 +97,25 @@ async def time_func(tdata):
             await edit_or_reply(tdata, return_str)
             return
 
-    dtnow = dt.now(tz(time_zone)).strftime(t_form)
+    dtnow1 = dt.now(tz(time_zone)).strftime(t_form)
+    dtnow2 = dt.now(tz(time_zone)).strftime(d_form)
     if c_name != COUNTRY:
         await edit_or_reply(
-            tdata, f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`"
+            tdata,
+            f"`It's`  **{dtnow1}**` on `**{dtnow2}**  `in {c_name}({time_zone} timezone).`",
         )
         return
     if COUNTRY:
         await edit_or_reply(
             tdata,
-            f"`It's`  **{dtnow}**  `here, in {COUNTRY}" f"({time_zone} timezone).`",
+            f"`It's`  **{dtnow1}**` on `**{dtnow2}**  `here, in {COUNTRY}"
+            f"({time_zone} timezone).`",
         )
         return
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
-@borg.on(
-    sudo_cmd(
-        outgoing=True,
-        pattern="cdate(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?",
-        allow_sudo=True,
-    )
-)
-async def date_func(dat):
-    """For .date command, return the date of
-    1. The country passed as an argument,
-    2. The default userbot country(set it by using .settime),
-    3. The server where the userbot runs.
-    """
-    con = dat.pattern_match.group(1).title()
-    tz_num = dat.pattern_match.group(2)
-
-    d_form = "%d/%m/%y - %A"
-    c_name = ""
-
-    if len(con) > 4:
-        try:
-            c_name = c_n[con]
-        except KeyError:
-            c_name = con
-        timezones = await get_tz(con)
-    elif COUNTRY:
-        c_name = COUNTRY
-        tz_num = TZ_NUMBER
-        timezones = await get_tz(COUNTRY)
-    else:
-        await edit_or_reply(dat, f"`It's`  **{dt.now().strftime(d_form)}**  `here.`")
-        return
-
-    if not timezones:
-        await edit_or_reply(dat, "`Invaild country.`")
-        return
-
-    if len(timezones) == 1:
-        time_zone = timezones[0]
-    elif len(timezones) > 1:
-        if tz_num:
-            tz_num = int(tz_num)
-            time_zone = timezones[tz_num - 1]
-        else:
-            return_str = f"`{c_name} has multiple timezones:`\n"
-
-            for i, item in enumerate(timezones):
-                return_str += f"`{i+1}. {item}`\n"
-
-            return_str += "\n`Choose one by typing the number "
-            return_str += "in the command.`\n"
-            return_str += f"Example: .cdate {c_name} 2"
-            await edit_or_reply(dat, return_str)
-            return
-    dtnow = dt.now(tz(time_zone)).strftime(d_form)
-    if c_name != COUNTRY:
-        await edit_or_reply(
-            dat, f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`"
-        )
-        return
-    if COUNTRY:
-        await edit_or_reply(
-            dat, f"`It's`  **{dtnow}**  `here, in {COUNTRY}" f"({time_zone} timezone).`"
-        )
-        return
-
-
-@borg.on(admin_cmd(pattern="time ?(.*)"))
-@borg.on(sudo_cmd(pattern="time ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="time ?(.*)"))
+@bot.on(sudo_cmd(pattern="time ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -185,8 +124,8 @@ async def _(event):
         f"⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n⚡USERBOT TIMEZONE⚡\n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n   {LOCATION}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡"
     )
     input_str = event.pattern_match.group(1)
-    if event.from_id != bot.uid:
-        event.message.id
+    if event.sender_id != bot.uid:
+        reply_msg_id = event.message.id
     if input_str:
         current_time = input_str
     elif event.reply_to_msg_id:
@@ -200,7 +139,7 @@ async def _(event):
     drawn_text = ImageDraw.Draw(img)
     drawn_text.text((10, 10), current_time, font=fnt, fill=(255, 255, 255))
     img.save(required_file_name)
-    await borg.send_file(
+    await event.client.send_file(
         event.chat_id,
         required_file_name,
         # Courtesy: @ManueI15
@@ -213,10 +152,8 @@ async def _(event):
 CMD_HELP.update(
     {
         "time": "__**PLUGIN NAME :** Time__\
-    \n\n📌** CMD ➥** `.ctime` <country name/code> <timezone number> \
+    \n\n📌** CMD ➥** `.ctime` <[country names](https://telegra.ph/country-names-10-24)/code> <timezone number> \
     \n**USAGE   ➥  **Get the time of a country. If a country has multiple timezones, it will list all of them and let you select one.\
-    \n\n📌** CMD ➥** `.cdate` <country name/code> <timezone number> \
-    \n**USAGE   ➥  **Get the date of a country. If a country has multiple timezones, it will list all of them \and let you select one.\
     \n\n📌** CMD ➥** `.time` \
     \n**USAGE   ➥  **Shows current default time you can change by changing TZ in heroku vars"
     }

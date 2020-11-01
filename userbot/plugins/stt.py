@@ -8,8 +8,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
 
-@borg.on(admin_cmd(pattern="stt (.*)"))
-@borg.on(sudo_cmd(pattern="stt (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="stt (.*)"))
+@bot.on(sudo_cmd(pattern="stt (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -20,7 +20,7 @@ async def _(event):
     catevent = await edit_or_reply(event, "Downloading to my local, for analysis  🙇")
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        required_file_name = await borg.download_media(
+        required_file_name = await event.client.download_media(
             previous_message, Config.TMP_DOWNLOAD_DIRECTORY
         )
         lan = input_str

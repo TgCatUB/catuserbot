@@ -16,8 +16,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 
 
-@borg.on(admin_cmd(pattern=r"cbutton(?: |$)(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"cbutton(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"cbutton(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"cbutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     chat = event.chat_id
     reply_message = await event.get_reply_message()
@@ -52,7 +52,7 @@ async def _(event):
     tgbot_reply_message = None
     if reply_message:
         if reply_message.media:
-            tgbot_reply_message = await borg.download_media(reply_message.media)
+            tgbot_reply_message = await event.client.download_media(reply_message.media)
     await tgbot.send_message(
         entity=chat,
         message=message_text,
@@ -70,8 +70,8 @@ async def _(event):
 # Helpers
 
 
-@borg.on(admin_cmd(pattern=r"ibutton( (.*)|$)", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"ibutton( (.*)|$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"ibutton( (.*)|$)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"ibutton( (.*)|$)", allow_sudo=True))
 async def _(event):
     reply_to_id = None
     catinput = "".join(event.text.split(maxsplit=1)[1:])

@@ -1,16 +1,14 @@
-"""Default Permission in Telegram 5.0.1
-Available Commands: .lock <option>, .unlock <option>, .locks
-API Options: msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, changeinfo
-DB Options: bots, commands, email, forward, url"""
-
 from telethon import events, functions, types
+from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
+from telethon.tl.types import ChatBannedRights
 
-from userbot import CMD_HELP
-from userbot.plugins.sql_helper.locks_sql import get_locks, is_locked, update_lock
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd, sudo_cmd
+from . import CMD_HELP
+from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 
 
-@borg.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
+@bot.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
+@bot.on(sudo_cmd(pattern=r"lock( (?P<target>\S+)|$)", allow_sudo=True))
 async def _(event):
     # Space weirdness in regex required because argument is optional and other
     # commands start with ".lock"
@@ -20,7 +18,7 @@ async def _(event):
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, True)
-        await event.edit("Locked {}".format(input_str))
+        await edit_or_reply(event, "`Locked {}`".format(input_str))
     else:
         msg = None
         media = None
@@ -32,30 +30,58 @@ async def _(event):
         adduser = None
         cpin = None
         changeinfo = None
-        if input_str:
-            if "msg" in input_str:
-                msg = True
-            if "media" in input_str:
-                media = True
-            if "sticker" in input_str:
-                sticker = True
-            if "gif" in input_str:
-                gif = True
-            if "gamee" in input_str:
-                gamee = True
-            if "ainline" in input_str:
-                ainline = True
-            if "gpoll" in input_str:
-                gpoll = True
-            if "adduser" in input_str:
-                adduser = True
-            if "cpin" in input_str:
-                cpin = True
-            if "changeinfo" in input_str:
-                changeinfo = True
-        banned_rights = types.ChatBannedRights(
+        if input_str == "msg":
+            msg = True
+            locktype = "messages"
+        elif input_str == "media":
+            media = True
+            locktype = "media"
+        elif input_str == "sticker":
+            sticker = True
+            locktype = "stickers"
+        elif input_str == "gif":
+            gif = True
+            locktype = "GIFs"
+        elif input_str == "game":
+            gamee = True
+            locktype = "games"
+        elif input_str == "inline":
+            ainline = True
+            locktype = "inline bots"
+        elif input_str == "poll":
+            gpoll = True
+            locktype = "polls"
+        elif input_str == "invite":
+            adduser = True
+            locktype = "invites"
+        elif input_str == "pin":
+            cpin = True
+            locktype = "pins"
+        elif input_str == "info":
+            changeinfo = True
+            locktype = "chat info"
+        elif input_str == "all":
+            msg = True
+            media = True
+            sticker = True
+            gif = True
+            gamee = True
+            ainline = True
+            gpoll = True
+            adduser = True
+            cpin = True
+            changeinfo = True
+            locktype = "everything"
+        else:
+            if not input_str:
+                return await edit_or_reply(event, "`I can't lock nothing !!`")
+            else:
+                return await edit_delete(
+                    event, f"`Invalid lock type:` {input_str}", time=5
+                )
+
+        lock_rights = ChatBannedRights(
             until_date=None,
-            # view_messages=None,
             send_messages=msg,
             send_media=media,
             send_stickers=sticker,
@@ -68,20 +94,22 @@ async def _(event):
             change_info=changeinfo,
         )
         try:
-            result = await borg(  # pylint:disable=E0602
-                functions.messages.EditChatDefaultBannedRightsRequest(
-                    peer=peer_id, banned_rights=banned_rights
+            await event.client(
+                EditChatDefaultBannedRightsRequest(
+                    peer=peer_id, banned_rights=lock_rights
                 )
             )
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await event.edit(str(e))
-        else:
-            await event.edit(
-                "Current Chat Default Permissions Changed Successfully, in API"
+            await edit_or_reply(event, f"`Locked {locktype} for this chat !!`")
+        except BaseException as e:
+            await edit_delete(
+                event,
+                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}",
+                time=5,
             )
 
 
-@borg.on(admin_cmd(pattern="unlock ?(.*)"))
+@bot.on(admin_cmd(pattern="unlock (.*)"))
+@bot.on(sudo_cmd(pattern="unlock (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -89,12 +117,98 @@ async def _(event):
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, False)
-        await event.edit("UnLocked {}".format(input_str))
+        await edit_or_reply(event, "`UnLocked {}`".format(input_str))
     else:
-        await event.edit("Use `.lock` without any parameters to unlock API locks")
+        msg = None
+        media = None
+        sticker = None
+        gif = None
+        gamee = None
+        ainline = None
+        gpoll = None
+        adduser = None
+        cpin = None
+        changeinfo = None
+        if input_str == "msg":
+            msg = False
+            locktype = "messages"
+        elif input_str == "media":
+            media = False
+            locktype = "media"
+        elif input_str == "sticker":
+            sticker = False
+            locktype = "stickers"
+        elif input_str == "gif":
+            gif = False
+            locktype = "GIFs"
+        elif input_str == "game":
+            gamee = False
+            locktype = "games"
+        elif input_str == "inline":
+            ainline = False
+            locktype = "inline bots"
+        elif input_str == "poll":
+            gpoll = False
+            locktype = "polls"
+        elif input_str == "invite":
+            adduser = False
+            locktype = "invites"
+        elif input_str == "pin":
+            cpin = False
+            locktype = "pins"
+        elif input_str == "info":
+            changeinfo = False
+            locktype = "chat info"
+        elif input_str == "all":
+            msg = False
+            media = False
+            sticker = False
+            gif = False
+            gamee = False
+            ainline = False
+            gpoll = False
+            adduser = False
+            cpin = False
+            changeinfo = False
+            locktype = "everything"
+        else:
+            if not input_str:
+                return await edit_or_reply(event, "`I can't unlock nothing !!`")
+            else:
+                return await edit_delete(
+                    event, f"`Invalid unlock type:` {input_str}", time=5
+                )
+
+        unlock_rights = ChatBannedRights(
+            until_date=None,
+            send_messages=msg,
+            send_media=media,
+            send_stickers=sticker,
+            send_gifs=gif,
+            send_games=gamee,
+            send_inline=ainline,
+            send_polls=gpoll,
+            invite_users=adduser,
+            pin_messages=cpin,
+            change_info=changeinfo,
+        )
+        try:
+            await event.client(
+                EditChatDefaultBannedRightsRequest(
+                    peer=peer_id, banned_rights=unlock_rights
+                )
+            )
+            await edit_or_reply(event, f"`Unlocked {locktype} for this chat !!`")
+        except BaseException as e:
+            return await edit_delete(
+                event,
+                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}",
+                time=5,
+            )
 
 
-@borg.on(admin_cmd(pattern="curenabledlocks"))
+@bot.on(admin_cmd(pattern="locks$"))
+@bot.on(sudo_cmd(pattern="locks$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -126,11 +240,11 @@ async def _(event):
         res += "👉 `adduser`: `{}`\n".format(current_api_locks.invite_users)
         res += "👉 `cpin`: `{}`\n".format(current_api_locks.pin_messages)
         res += "👉 `changeinfo`: `{}`\n".format(current_api_locks.change_info)
-    await event.edit(res)
+    await edit_or_reply(event, res)
 
 
-@borg.on(events.MessageEdited())  # pylint:disable=E0602
-@borg.on(events.NewMessage())  # pylint:disable=E0602
+@bot.on(events.MessageEdited())
+@bot.on(events.NewMessage())
 async def check_incoming_messages(event):
     # TODO: exempt admins from locks
     peer_id = event.chat_id
@@ -149,15 +263,14 @@ async def check_incoming_messages(event):
                     "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
                 )
                 update_lock(peer_id, "commands", False)
-    if is_locked(peer_id, "forward"):
-        if event.fwd_from:
-            try:
-                await event.delete()
-            except Exception as e:
-                await event.reply(
-                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
-                )
-                update_lock(peer_id, "forward", False)
+    if is_locked(peer_id, "forward") and event.fwd_from:
+        try:
+            await event.delete()
+        except Exception as e:
+            await event.reply(
+                "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+            )
+            update_lock(peer_id, "forward", False)
     if is_locked(peer_id, "email"):
         entities = event.message.entities
         is_email = False
@@ -192,42 +305,43 @@ async def check_incoming_messages(event):
                 update_lock(peer_id, "url", False)
 
 
-@borg.on(events.ChatAction())  # pylint:disable=E0602
+@bot.on(events.ChatAction())  # pylint:disable=E0602
 async def _(event):
     # TODO: exempt admins from locks
     # check for "lock" "bots"
-    if is_locked(event.chat_id, "bots"):
-        # bots are limited Telegram accounts,
-        # and cannot join by themselves
-        if event.user_added:
-            users_added_by = event.action_message.from_id
-            is_ban_able = False
-            rights = types.ChatBannedRights(until_date=None, view_messages=True)
-            added_users = event.action_message.action.users
-            for user_id in added_users:
-                user_obj = await borg.get_entity(user_id)
-                if user_obj.bot:
-                    is_ban_able = True
-                    try:
-                        await borg(
-                            functions.channels.EditBannedRequest(
-                                event.chat_id, user_obj, rights
-                            )
+    if not is_locked(event.chat_id, "bots"):
+        return
+    # bots are limited Telegram accounts,
+    # and cannot join by themselves
+    if event.user_added:
+        users_added_by = event.action_message.sender_id
+        is_ban_able = False
+        rights = types.ChatBannedRights(until_date=None, view_messages=True)
+        added_users = event.action_message.action.users
+        for user_id in added_users:
+            user_obj = await event.client.get_entity(user_id)
+            if user_obj.bot:
+                is_ban_able = True
+                try:
+                    await event.client(
+                        functions.channels.EditBannedRequest(
+                            event.chat_id, user_obj, rights
                         )
-                    except Exception as e:
-                        await event.reply(
-                            "I don't seem to have ADMIN permission here. \n`{}`".format(
-                                str(e)
-                            )
-                        )
-                        update_lock(event.chat_id, "bots", False)
-                        break
-            if Config.G_BAN_LOGGER_GROUP is not None and is_ban_able:
-                ban_reason_msg = await event.reply(
-                    "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(
-                        users_added_by
                     )
+                except Exception as e:
+                    await event.reply(
+                        "I don't seem to have ADMIN permission here. \n`{}`".format(
+                            str(e)
+                        )
+                    )
+                    update_lock(event.chat_id, "bots", False)
+                    break
+        if Config.G_BAN_LOGGER_GROUP is not None and is_ban_able:
+            ban_reason_msg = await event.reply(
+                "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(
+                    users_added_by
                 )
+            )
 
 
 CMD_HELP.update(

@@ -1,12 +1,15 @@
 # Thanks to @AvinashReddy3108 for this plugin
+# Instadl by @Jisan7509
 
 import asyncio
 import os
 import time
+from datetime import datetime
 from html import unescape
 from pathlib import Path
 
 from googleapiclient.discovery import build
+from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.types import DocumentAttributeAudio
 from youtube_dl import YoutubeDL
 from youtube_dl.utils import (
@@ -20,8 +23,8 @@ from youtube_dl.utils import (
     XAttrMetadataError,
 )
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, hmention, progress
 
 
 @bot.on(admin_cmd(pattern="yt(a|v) (.*)", outgoing=True))
@@ -116,7 +119,7 @@ async def download_video(v_url):
         \n**{ytdl_data['title']}**\
         \nby *{ytdl_data['uploader']}*"
         )
-        await borg.send_file(
+        await v_url.client.send_file(
             v_url.chat_id,
             f"{ytdl_data['id']}.mp3",
             supports_streaming=True,
@@ -144,7 +147,7 @@ async def download_video(v_url):
         \n**{ytdl_data['title']}**\
         \nby *{ytdl_data['uploader']}*"
         )
-        await borg.send_file(
+        await v_url.client.send_file(
             v_url.chat_id,
             f"{ytdl_data['id']}.mp4",
             supports_streaming=True,
@@ -222,15 +225,60 @@ async def youtube_search(
         return (nexttok, videos)
 
 
+@bot.on(admin_cmd(outgoing=True, pattern="insta (.*)"))
+@bot.on(sudo_cmd(outgoing=True, pattern="insta (.*)", allow_sudo=True))
+async def kakashi(event):
+    if event.fwd_from:
+        return
+    chat = "@allsaverbot"
+    link = event.pattern_match.group(1)
+    if "www.instagram.com" not in link:
+        await edit_or_reply(
+            event, "` I need a Instagram link to download it's Video...`(*_*)"
+        )
+    else:
+        start = datetime.now()
+        catevent = await edit_or_reply(event, "**Downloading.....**")
+    async with event.client.conversation(chat) as conv:
+        try:
+            msg_start = await conv.send_message("/start")
+            response = await conv.get_response()
+            msg = await conv.send_message(link)
+            details = await conv.get_response()
+            await conv.get_response()
+            await conv.get_response()
+            video = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+        except YouBlockedUserError:
+            await catevent.edit("**Error:** `unblock` @allsaverbot `and retry!`")
+            return
+        await catevent.delete()
+        cat = await event.client.send_file(
+            event.chat_id,
+            video,
+        )
+        end = datetime.now()
+        ms = (end - start).seconds
+        await cat.edit(
+            f"<b><i>➥ Video uploaded in {ms} seconds.</i></b>\n<b><i>➥ Uploaded by :- {hmention}</i></b>",
+            parse_mode="html",
+        )
+    await event.client.delete_messages(
+        conv.chat_id, [msg_start.id, response.id, msg.id, details.id, video.id]
+    )
+
+
 CMD_HELP.update(
     {
         "ytdl": "__**PLUGIN NAME :** Ytdl__\
-    \n\n📌** CMD ➥** `.yta link`\
-    \n**USAGE   ➥  **Downloads th audio from the given link(Suports the all sites which support youtube-dl)\
-    \n\n📌** CMD ➥** `.ytv link`\
-    \n**USAGE   ➥  **Downloads th video from the given link(Suports the all sites which support youtube-dl)\
-    \n\n📌** CMD ➥** `.yts query`\
+    \n\n📌** CMD ➥** `.yta` <link>\
+    \n**USAGE   ➥  **Downloads the audio from the given link(Suports the all sites which support youtube-dl)\
+    \n\n📌** CMD ➥** `.ytv` <link>\
+    \n**USAGE   ➥  **Downloads the video from the given link(Suports the all sites which support youtube-dl)\
+    \n\n📌** CMD ➥** `.yts` <query>\
     \n**USAGE   ➥  **Fetches youtube results you need api token for this\
+    \n\n📌** CMD ➥** `.insta` <link>\
+    \n**USAGE   ➥  **Downloads the video from the given instagram link\
     "
     }
 )

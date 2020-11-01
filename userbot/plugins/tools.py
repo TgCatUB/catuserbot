@@ -1,6 +1,6 @@
 import asyncio
+import calendar
 import json
-import logging
 import os
 from datetime import datetime
 from urllib.parse import quote
@@ -17,13 +17,9 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
-logging.basicConfig(
-    format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
-)
 
-
-@borg.on(admin_cmd(pattern="scan ?(.*)"))
-@borg.on(sudo_cmd(pattern="scan ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="scan ?(.*)"))
+@bot.on(sudo_cmd(pattern="scan ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -39,7 +35,7 @@ async def _(event):
         await edit_or_reply(event, "```Reply to actual users message.```")
         return
     catevent = await edit_or_reply(event, " `Sliding my tip, of fingers over it`")
-    async with borg.conversation(chat) as conv:
+    async with event.client.conversation(chat) as conv:
         try:
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=161163358)
@@ -64,8 +60,8 @@ async def _(event):
                 )
 
 
-@borg.on(admin_cmd(pattern=r"decode$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"decode$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"decode$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"decode$", allow_sudo=True))
 async def parseqr(qr_e):
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
@@ -101,8 +97,8 @@ async def parseqr(qr_e):
         os.remove(downloaded_file_name)
 
 
-@borg.on(admin_cmd(pattern="barcode ?(.*)"))
-@borg.on(sudo_cmd(pattern="barcode ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="barcode ?(.*)"))
+@bot.on(sudo_cmd(pattern="barcode ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -117,7 +113,7 @@ async def _(event):
         previous_message = await event.get_reply_message()
         reply_msg_id = previous_message.id
         if previous_message.media:
-            downloaded_file_name = await borg.download_media(
+            downloaded_file_name = await event.client.download_media(
                 previous_message,
                 Config.TMP_DOWNLOAD_DIRECTORY,
             )
@@ -136,7 +132,7 @@ async def _(event):
     try:
         bar_code_mode_f = barcode.get(bar_code_type, message, writer=ImageWriter())
         filename = bar_code_mode_f.save(bar_code_type)
-        await borg.send_file(
+        await event.client.send_file(
             event.chat_id,
             filename,
             caption=message,
@@ -153,8 +149,8 @@ async def _(event):
     await catevent.delete()
 
 
-@borg.on(admin_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"makeqr(?: |$)([\s\S]*)", allow_sudo=True))
 async def make_qr(makeqr):
     #  .makeqr command, make a QR Code containing the given content.
     input_str = makeqr.pattern_match.group(1)
@@ -193,36 +189,27 @@ async def make_qr(makeqr):
     await makeqr.delete()
 
 
-@borg.on(admin_cmd(pattern="calendar (.*)"))
-@borg.on(sudo_cmd(pattern="calendar (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="cal (.*)"))
+@bot.on(sudo_cmd(pattern="cal (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    catevent = await edit_or_reply(event, "`Gathering infomation.......`")
     input_str = event.pattern_match.group(1)
-    input_sgra = input_str.split("-")
-    if len(input_sgra) == 3:
+    input_sgra = input_str.split(";")
+    if len(input_sgra) == 2:
         yyyy = input_sgra[0]
         mm = input_sgra[1]
-        dd = input_sgra[2]
-        required_url = "https://calendar.kollavarsham.org/api/years/{}/months/{}/days/{}?lang={}".format(
-            yyyy, mm, dd, "en"
-        )
-        headers = {"Accept": "application/json"}
-        response_content = requests.get(required_url, headers=headers).json()
-        a = ""
-        if "error" not in response_content:
-            current_date_detail_arraays = response_content["months"][0]["days"][0]
-            a = json.dumps(current_date_detail_arraays, sort_keys=True, indent=4)
-        else:
-            a = response_content["error"]
-        await catevent.edit(str(a))
+        try:
+            input = calendar.month(int(yyyy.strip()), int(mm.strip()))
+            await edit_or_reply(event, f"```{input}```")
+        except Exception as e:
+            await edit_delete(event, f"`{e}`", 5)
     else:
-        await catevent.edit("**Syntax : **`.calendar YYYY-MM-DD`")
+        await edit_delete(event, "**Syntax : **`.cal year ; month `", 5)
 
 
-@borg.on(admin_cmd(pattern="currency (.*)"))
-@borg.on(sudo_cmd(pattern="currency (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="currency (.*)"))
+@bot.on(sudo_cmd(pattern="currency (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -258,8 +245,8 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd(pattern="currencies$"))
-@borg.on(sudo_cmd(pattern="currencies$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="currencies$"))
+@bot.on(sudo_cmd(pattern="currencies$", allow_sudo=True))
 async def currencylist(ups):
     if ups.fwd_from:
         return
@@ -272,8 +259,8 @@ async def currencylist(ups):
     await edit_or_reply(ups, f"**List of some currencies:**\n{hmm}\n")
 
 
-@borg.on(admin_cmd(pattern="ifsc (.*)"))
-@borg.on(sudo_cmd(pattern="ifsc (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ifsc (.*)"))
+@bot.on(sudo_cmd(pattern="ifsc (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -289,14 +276,14 @@ async def _(event):
         await edit_or_reply(event, "`{}`: {}".format(input_str, r.text))
 
 
-@borg.on(admin_cmd(pattern="color (.*)"))
-@borg.on(sudo_cmd(pattern="color (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="color (.*)"))
+@bot.on(sudo_cmd(pattern="color (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
     message_id = None
-    if event.from_id != bot.uid:
+    if event.sender_id != bot.uid:
         message_id = event.message.id
     if event.reply_to_msg_id:
         message_id = event.reply_to_msg_id
@@ -310,7 +297,7 @@ async def _(event):
             im = Image.new(mode="RGB", size=(1280, 720), color=usercolor)
             im.save("cat.png", "PNG")
             input_str = input_str.replace("#", "#COLOR_")
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 "cat.png",
                 force_document=False,
@@ -325,8 +312,8 @@ async def _(event):
         )
 
 
-@borg.on(admin_cmd(pattern="xkcd ?(.*)"))
-@borg.on(sudo_cmd(pattern="xkcd ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="xkcd ?(.*)"))
+@bot.on(sudo_cmd(pattern="xkcd ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -387,6 +374,8 @@ CMD_HELP.update(
 \n**USAGE   ➥  **To get decoded content of those codes.\
 \n\n📌** CMD ➥** `.currency` amount (from currency) (to currency)\
 \n**USAGE   ➥  **Currency converter for userbot **Example :** `.currency 10 usd inr`\
+\n\n📌** CMD ➥** `cal year ; month`\
+\n**USAGE   ➥  **Shows you the calendar of given month and year.\
 \n\n📌** CMD ➥** `.currencies`\
 \n**USAGE   ➥  **Shows you the some list of currencies\
 \n\n📌** CMD ➥** `.ifsc` <IFSC code>\

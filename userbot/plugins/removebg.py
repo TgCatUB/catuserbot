@@ -1,13 +1,13 @@
 # (c) Shrimadhav U K
 #
-# This file is part of @UniBorg
+# This file is part of @Unievent.client
 #
-# @UniBorg is free software; you cannot redistribute it and/or modify
+# @Unievent.client is free software; you cannot redistribute it and/or modify
 # it under the terms of the GNU General Public License as published
 # by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# @UniBorg is not distributed in the hope that it will be useful,
+# @Unievent.client is not distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -17,13 +17,12 @@ import os
 
 import requests
 
-from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import convert_toimage
+from . import CMD_HELP, convert_toimage
 
 
-@borg.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
-@borg.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
+@bot.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
 async def remove_background(event):
     if event.fwd_from:
         return
@@ -52,12 +51,12 @@ async def remove_background(event):
             await event.edit(str(e))
             return
         else:
-            await event.edit("`Removing Back ground of this media`")
+            await event.edit("`Removing Background of this media`")
             downloaded_file_name = convert_toimage(downloaded_file_name)
             output_file_name = ReTrieveFile(downloaded_file_name)
             os.remove(downloaded_file_name)
     elif input_str:
-        await event.edit("`Removing Back ground of this media`")
+        await event.edit("`Removing Background of this media`")
         output_file_name = ReTrieveURL(input_str)
     else:
         await event.edit(
@@ -68,8 +67,8 @@ async def remove_background(event):
     if "image" in contentType:
         if cmd == "rmbg":
             with io.BytesIO(output_file_name.content) as remove_bg_image:
-                remove_bg_image.name = "CATBG_less.png"
-                await borg.send_file(
+                remove_bg_image.name = "BG_less.png"
+                await event.client.send_file(
                     event.chat_id,
                     remove_bg_image,
                     force_document=True,
@@ -79,8 +78,8 @@ async def remove_background(event):
             await event.delete()
         elif cmd == "srmbg":
             with io.BytesIO(output_file_name.content) as remove_bg_image:
-                remove_bg_image.name = "CAT.webp"
-                await borg.send_file(
+                remove_bg_image.name = "CATBG_less.webp"
+                await event.client.send_file(
                     event.chat_id,
                     remove_bg_image,
                     force_document=True,
@@ -102,14 +101,13 @@ def ReTrieveFile(input_file_name):
     files = {
         "image_file": (input_file_name, open(input_file_name, "rb")),
     }
-    r = requests.post(
+    return requests.post(
         "https://api.remove.bg/v1.0/removebg",
         headers=headers,
         files=files,
         allow_redirects=True,
         stream=True,
     )
-    return r
 
 
 def ReTrieveURL(input_url):
@@ -117,14 +115,13 @@ def ReTrieveURL(input_url):
         "X-API-Key": Config.REM_BG_API_KEY,
     }
     data = {"image_url": input_url}
-    r = requests.post(
+    return requests.post(
         "https://api.remove.bg/v1.0/removebg",
         headers=headers,
         data=data,
         allow_redirects=True,
         stream=True,
     )
-    return r
 
 
 CMD_HELP.update(

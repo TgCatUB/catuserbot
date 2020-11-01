@@ -1,17 +1,12 @@
 import asyncio
 from collections import deque
 
-from userbot import ALIVE_NAME
-
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+from . import CMD_HELP, mention
 
 
-@borg.on(admin_cmd(pattern=r"star$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"star$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"star$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"star$", allow_sudo=True))
 async def _(event):
     event = await edit_or_reply(event, "star")
     deq = deque(list("🦋✨🦋✨🦋✨🦋✨"))
@@ -21,8 +16,8 @@ async def _(event):
         deq.rotate(1)
 
 
-@borg.on(admin_cmd(pattern=r"boxs$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"boxs$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"boxs$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"boxs$", allow_sudo=True))
 async def _(event):
     event = await edit_or_reply(event, "box")
     deq = deque(list("🟥🟧🟨🟩🟦🟪🟫⬛⬜"))
@@ -32,8 +27,8 @@ async def _(event):
         deq.rotate(1)
 
 
-@borg.on(admin_cmd(pattern=r"rain$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"rain$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"rain$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"rain$", allow_sudo=True))
 async def _(event):
     event = await edit_or_reply(event, "Raining")
     deq = deque(list("🌬☁️🌩🌨🌧🌦🌥⛅🌤"))
@@ -43,8 +38,8 @@ async def _(event):
         deq.rotate(1)
 
 
-@borg.on(admin_cmd(pattern=r"deploy$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"deploy$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"deploy$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"deploy$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -53,8 +48,8 @@ async def _(event):
     event = await edit_or_reply(event, "Deploying...")
     animation_chars = [
         "**Heroku Connecting To Latest Github Build **",
-        f"**Build started by user** [{DEFAULTUSER}]({USERNAME})",
-        f"**Deploy** `535a74f0` **by user** [{DEFAULTUSER}]({USERNAME})",
+        f"**Build started by user** {mention}",
+        f"**Deploy** `535a74f0` **by user** {mention}",
         "**Restarting Heroku Server...**",
         "**State changed from up to starting**",
         "**Stopping all processes with SIGTERM**",
@@ -70,8 +65,8 @@ async def _(event):
         await event.edit(animation_chars[i % 12])
 
 
-@borg.on(admin_cmd(pattern=r"dump$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"dump$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"dump$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"dump$", allow_sudo=True))
 async def _(message):
     event = await edit_or_reply(message, "droping....")
     try:
@@ -111,8 +106,8 @@ async def _(message):
                 return
 
 
-@borg.on(admin_cmd(pattern=r"fleaveme$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"fleaveme$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"fleaveme$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"fleaveme$", allow_sudo=True))
 async def _(event):
     animation_interval = 1
     animation_ttl = range(10)
@@ -137,8 +132,8 @@ async def _(event):
         await event.edit(animation_chars[i % 10])
 
 
-@borg.on(admin_cmd(pattern=r"loveu$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"loveu$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"loveu$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"loveu$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -187,8 +182,8 @@ async def _(event):
         await event.edit(animation_chars[i % 35])
 
 
-@borg.on(admin_cmd(pattern=r"plane$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"plane$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"plane$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"plane$", allow_sudo=True))
 async def _(event):
     event = await edit_or_reply(event, "Wait for plane...")
     await event.edit("✈-------------")
@@ -208,8 +203,8 @@ async def _(event):
     await asyncio.sleep(3)
 
 
-@borg.on(admin_cmd(pattern=r"police$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"police$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"police$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"police$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -235,8 +230,8 @@ async def _(event):
         await event.edit(animation_chars[i % 12])
 
 
-@borg.on(admin_cmd(pattern=r"jio$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"jio$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"jio$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"jio$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -269,8 +264,8 @@ async def _(event):
         await event.edit(animation_chars[i % 19])
 
 
-@borg.on(admin_cmd(pattern=r"solarsystem$", outgoing=True))
-@borg.on(sudo_cmd(pattern=r"solarsystem$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"solarsystem$", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"solarsystem$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return

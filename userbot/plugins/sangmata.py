@@ -33,7 +33,7 @@ async def _(event):
                 return await catevent.delete()
             uid = u.id
     else:
-        uid = reply_message.from_id
+        uid = reply_message.sender_id
     chat = "@SangMataInfo_bot"
     catevent = await edit_or_reply(event, "`Processing...`")
     async with event.client.conversation(chat) as conv:
@@ -81,7 +81,7 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "sangamata": "__**PLUGIN NAME :** Sangamata__\
+        "sangmata": "__**PLUGIN NAME :** Sangmata__\
     \n\n📌** CMD ➥** `.sg` <username/userid/reply>\
     \n**USAGE   ➥  **Shows you the previous name history of user.\
     \n\n📌** CMD ➥** `.sgu` <username/userid/reply>\

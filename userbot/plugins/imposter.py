@@ -8,10 +8,7 @@ Userbot plugin fot CatUserbot
 import asyncio
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import ALIVE_NAME, CMD_HELP
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-USERNAME = str(Config.LIVE_USERNAME) if Config.LIVE_USERNAME else "@Jisan7509"
+from . import CMD_HELP, mention
 
 
 @bot.on(admin_cmd(pattern="imp(|n) (.*)", outgoing=True))
@@ -25,9 +22,7 @@ async def _(event):
     stcr1 = await event.client.send_file(
         event.chat_id, "CAADAQADRwADnjOcH98isYD5RJTwAg"
     )
-    text2 = await event.reply(
-        f"**[{DEFAULTUSER}]({USERNAME}) :** I have to call discussion"
-    )
+    text2 = await event.reply(f"**{mention} :** I have to call discussion")
     await asyncio.sleep(3)
     await stcr1.delete()
     await text2.delete()
@@ -35,7 +30,7 @@ async def _(event):
         event.chat_id, "CAADAQADRgADnjOcH9odHIXtfgmvAg"
     )
     text3 = await event.reply(
-        f"**[{DEFAULTUSER}]({USERNAME}) :** We have to eject the imposter or will lose "
+        f"**{mention} :** We have to eject the imposter or will lose "
     )
     await asyncio.sleep(3)
     await stcr2.delete()
@@ -47,9 +42,7 @@ async def _(event):
     await asyncio.sleep(2)
     await text4.edit(f"**Others :** Who?? ")
     await asyncio.sleep(2)
-    await text4.edit(
-        f"**[{DEFAULTUSER}]({USERNAME}) :** Its {name} , I saw {name}  using vent,"
-    )
+    await text4.edit(f"**{mention} :** Its {name} , I saw {name}  using vent,")
     await asyncio.sleep(3)
     await text4.edit(f"**Others :**Okay.. Vote {name} ")
     await asyncio.sleep(2)

@@ -27,7 +27,7 @@ if Config.ANTISPAMBOT_BAN:
         ignore = None
         if event.user_added:
             try:
-                adder = event.action_message.from_id
+                adder = event.action_message.sender_id
             except AttributeError:
                 return
         async for admin in event.client.iter_participants(
@@ -93,8 +93,8 @@ if Config.ANTISPAMBOT_BAN:
             )
 
 
-@borg.on(admin_cmd(pattern="cascheck$"))
-@borg.on(sudo_cmd(pattern="cascheck$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="cascheck$"))
+@bot.on(sudo_cmd(pattern="cascheck$", allow_sudo=True))
 async def caschecker(cas):
     catevent = await edit_or_reply(
         cas,
@@ -133,8 +133,8 @@ async def caschecker(cas):
     await catevent.edit(text)
 
 
-@borg.on(admin_cmd(pattern="spamcheck$"))
-@borg.on(sudo_cmd(pattern="spamcheck$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="spamcheck$"))
+@bot.on(sudo_cmd(pattern="spamcheck$", allow_sudo=True))
 async def caschecker(cas):
     text = ""
     chat = cas.chat_id
@@ -195,7 +195,7 @@ CMD_HELP.update(
         "antispambot": "__**PLUGIN NAME :** Aantispambot__\
         \n\n📌** CMD ➥** `.cascheck`\
         \n**USAGE   ➥  **Searches for cas(combot antispam service) banned users in group and shows you the list\
-        \n\n📌** CMD ➥** `.cascheck`\
+        \n\n📌** CMD ➥** `.spamcheck`\
         \n**USAGE   ➥  **Searches for spamwatch banned users in group and shows you the list"
     }
 )

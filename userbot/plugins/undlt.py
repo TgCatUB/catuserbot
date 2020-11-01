@@ -4,8 +4,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="undlt ?(.*)"))
-@borg.on(sudo_cmd(pattern="undlt ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="undlt ?(.*)"))
+@bot.on(sudo_cmd(pattern="undlt ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -19,7 +19,7 @@ async def _(event):
         input_str = 5
     c = await event.get_chat()
     if c.admin_rights or c.creator:
-        a = await borg.get_admin_log(
+        a = await event.client.get_admin_log(
             event.chat_id, limit=input_str, search="", edit=False, delete=True
         )
         for i in a:

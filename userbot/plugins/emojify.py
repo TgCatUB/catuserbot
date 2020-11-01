@@ -9,8 +9,8 @@ from userbot.utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import *
 
 
-@borg.on(admin_cmd(pattern="emoji(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="emoji(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="emoji(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="emoji(?: |$)(.*)", allow_sudo=True))
 async def itachi(event):
     args = event.pattern_match.group(1)
     if not args:
@@ -29,8 +29,8 @@ async def itachi(event):
     await edit_or_reply(event, string)
 
 
-@borg.on(admin_cmd(pattern="cmoji(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="cmoji(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="cmoji(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="cmoji(?: |$)(.*)", allow_sudo=True))
 async def itachi(event):
     args = event.pattern_match.group(1)
     if not args:

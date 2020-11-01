@@ -11,8 +11,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern=r"getc(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="getc(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"getc(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="getc(?: |$)(.*)", allow_sudo=True))
 async def get_media(event):
     if event.fwd_from:
         return
@@ -25,13 +25,13 @@ async def get_media(event):
     limit = int(catty.split(" ")[0])
     channel_username = str(catty.split(" ")[1])
     event = await edit_or_reply(event, "Downloading Media From this Channel.")
-    msgs = await borg.get_messages(channel_username, limit=int(limit))
+    msgs = await event.client.get_messages(channel_username, limit=int(limit))
     with open("log.txt", "w") as f:
         f.write(str(msgs))
     i = 0
     for msg in msgs:
         if msg.media is not None:
-            await borg.download_media(msg, tempdir)
+            await event.client.download_media(msg, tempdir)
             i += 1
             await event.edit(
                 f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"
@@ -45,8 +45,8 @@ async def get_media(event):
     await event.edit("Downloaded " + output + " files.")
 
 
-@borg.on(admin_cmd(pattern="geta(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="geta(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="geta(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="geta(?: |$)(.*)", allow_sudo=True))
 async def get_media(event):
     if event.fwd_from:
         return
@@ -57,13 +57,13 @@ async def get_media(event):
         pass
     channel_username = event.pattern_match.group(1)
     event = await edit_or_reply(event, "Downloading All Media From this Channel.")
-    msgs = await borg.get_messages(channel_username, limit=3000)
+    msgs = await event.client.get_messages(channel_username, limit=3000)
     with open("log.txt", "w") as f:
         f.write(str(msgs))
     i = 0
     for msg in msgs:
         if msg.media is not None:
-            await borg.download_media(msg, tempdir)
+            await event.client.download_media(msg, tempdir)
             i += 1
             await event.edit(
                 f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"

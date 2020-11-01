@@ -67,7 +67,7 @@ async def ocr(event):
 CMD_HELP.update(
     {
         "ocr": "__**PLUGIN NAME :** Ocr__\
-        \n\n📌** CMD ➥** `.ocr <language>\
+        \n\n📌** CMD ➥** `.ocr` <[LanguageCode](https://telegra.ph/Jisan-10-24-2)>\
         \n**USAGE   ➥  **Reply to an image or sticker to extract text from it.\n\nGet language codes from [here](https://ocr.space/ocrapi)"
     }
 )

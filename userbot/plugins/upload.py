@@ -1,18 +1,20 @@
 import asyncio
-import json
 import os
 import subprocess
 import time
 from datetime import datetime
 from pathlib import Path
+from shutil import copyfile
 
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+from pymediainfo import MediaInfo
 from telethon.tl.types import DocumentAttributeVideo
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, LOGS, progress
+from . import CMD_HELP, make_gif, progress, runcmd, thumb_from_audio
 
+PATH = os.path.join("./temp", "temp_vid.mp4")
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 
 
@@ -48,31 +50,6 @@ def get_video_thumb(file, output=None, width=320):
     p.communicate()
     if not p.returncode and os.path.lexists(file):
         return output
-
-
-def extract_w_h(file):
-    """ Get width and height of media """
-    command_to_run = [
-        "ffprobe",
-        "-v",
-        "quiet",
-        "-print_format",
-        "json",
-        "-show_format",
-        "-show_streams",
-        file,
-    ]
-    # https://stackoverflow.com/a/11236144/4723940
-    try:
-        t_response = subprocess.check_output(command_to_run, stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError as exc:
-        LOGS.warning(exc)
-    else:
-        x_reponse = t_response.decode("UTF-8")
-        response_json = json.loads(x_reponse)
-        width = int(response_json["streams"][0]["width"])
-        height = int(response_json["streams"][0]["height"])
-        return width, height
 
 
 def sortthings(contents, path):
@@ -115,11 +92,11 @@ async def upload(path, event, udir_event):
                 force_document=False,
                 thumb=thumb,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, udir_event, c_time, "Uploading...", path)
+                    progress(d, t, udir_event, c_time, "Uploading...", caption_rts)
                 ),
             )
         else:
-            metadata = extractMetadata(createParser(path))
+            metadata = extractMetadata(createParser(str(path)))
             duration = 0
             width = 0
             height = 0
@@ -146,7 +123,7 @@ async def upload(path, event, udir_event):
                     )
                 ],
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, udir_event, c_time, "Uploading...", path)
+                    progress(d, t, udir_event, c_time, "Uploading...", caption_rts)
                 ),
             )
         uploaded += 1
@@ -167,9 +144,7 @@ async def uploadir(event):
         return
     udir_event = await edit_or_reply(event, "Uploading....")
     if os.path.isdir(path):
-        udir_event = await edit_or_reply(
-            event, f"`Gathering file details in directory {path}`"
-        )
+        await edit_or_reply(udir_event, f"`Gathering file details in directory {path}`")
         uploaded = 0
         await upload(path, event, udir_event)
         end = datetime.now()
@@ -178,7 +153,7 @@ async def uploadir(event):
             f"`Uploaded {uploaded} files successfully in {ms} seconds. `"
         )
     else:
-        udir_event = await edit_or_reply(event, f"`Uploading.....`")
+        await edit_or_reply(udir_event, f"`Uploading.....`")
         uploaded = 0
         await upload(path, event, udir_event)
         end = datetime.now()
@@ -190,113 +165,118 @@ async def uploadir(event):
     await udir_event.delete()
 
 
-@bot.on(admin_cmd(pattern="uploadas(stream|vn|all) (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="uploadas(stream|vn|all) (.*) ", allow_sudo=True))
-async def uploadas(event):
-    # For .uploadas command, allows you to specify some arguments for upload.
-    type_of_upload = event.pattern_match.group(1)
-    input_str = event.pattern_match.group(2)
-    uas_event = await edit_or_reply(event, "uploading.....")
-    supports_streaming = False
-    round_message = False
-    spam_big_messages = False
-    if type_of_upload == "all":
-        spam_big_messages = True
-    elif type_of_upload == "stream":
-        supports_streaming = True
-    elif type_of_upload == "vn":
-        round_message = True
-    thumb = None
-    file_name = None
-    if "|" in input_str:
-        file_name, thumb = input_str.split("|")
-        file_name = file_name.strip()
-        thumb = thumb.strip()
+@bot.on(admin_cmd(pattern="circle ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="circle ?(.*)", allow_sudo=True))
+async def video_catfile(event):
+    reply = await event.get_reply_message()
+    input_str = "".join(event.text.split(maxsplit=1)[1:])
+    if input_str:
+        path = Path(input_str)
+        if not os.path.exists(path):
+            await edit_or_reply(
+                event,
+                f"`there is no such directory/file with the name {path} to upload`",
+            )
+            return
+        catevent = await edit_or_reply(event, "`Converting to video note..........`")
+        filename = os.path.basename(path)
+        catfile = os.path.join("./temp", filename)
+        copyfile(path, catfile)
     else:
-        file_name = input_str
-        thumb = vthumb = get_video_thumb(file_name)
-    if not thumb and os.path.exists(thumb_image_path):
-        thumb = thumb_image_path
-    if os.path.exists(file_name):
-        metadata = extractMetadata(createParser(file_name))
-        duration = 0
-        width = 0
-        height = 0
-        if metadata.has("duration"):
-            duration = metadata.get("duration").seconds
-        if metadata.has("width"):
-            width = metadata.get("width")
-        if metadata.has("height"):
-            height = metadata.get("height")
+        if not reply:
+            await edit_delete(event, "`Reply to supported media`", 5)
+            return
+        if not (reply and (reply.media)):
+            await edit_delete(event, "`Reply to supported Media...`", 5)
+            return
+        catevent = await edit_or_reply(event, "`Converting to video note..........`")
+        catfile = await reply.download_media(file="./temp/")
+    if not catfile.endswith((".mp4", ".tgs", ".mp3", ".mov", ".gif", ".opus")):
+        os.remove(catfile)
+        await edit_delete(catevent, "```Supported Media not found...```", 5)
+        return
+    if catfile.endswith((".mp4", ".tgs", ".mov", ".gif")):
+        if catfile.endswith((".tgs")):
+            hmm = await make_gif(catevent, catfile)
+            if hmm.endswith(("@tgstogifbot")):
+                os.remove(catfile)
+                return await catevent.edit(hmm)
+            os.rename(hmm, "./temp/circle.mp4")
+            catfile = "./temp/circle.mp4"
+        media_info = MediaInfo.parse(catfile)
+        aspect_ratio = 1
+        for track in media_info.tracks:
+            if track.track_type == "Video":
+                aspect_ratio = track.display_aspect_ratio
+                height = track.height
+                width = track.width
+        if aspect_ratio != 1:
+            crop_by = width if (height > width) else height
+            await runcmd(f'ffmpeg -i {catfile} -vf "crop={crop_by}:{crop_by}" {PATH}')
+        else:
+            copyfile(catfile, PATH)
+        if str(catfile) != str(PATH):
+            os.remove(catfile)
+    else:
+        thumb_loc = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
+        catthumb = None
         try:
-            if supports_streaming:
-                c_time = time.time()
-                await borg.send_file(
-                    uas_event.chat_id,
-                    file_name,
-                    thumb=thumb,
-                    caption=input_str,
-                    force_document=False,
-                    allow_cache=False,
-                    reply_to=event.message.id,
-                    attributes=[
-                        DocumentAttributeVideo(
-                            duration=duration,
-                            w=width,
-                            h=height,
-                            round_message=False,
-                            supports_streaming=True,
-                        )
-                    ],
-                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, uas_event, c_time, "Uploading...", file_name)
-                    ),
+            catthumb = await reply.download_media(thumb=-1)
+        except:
+            catthumb = os.path.join("./temp", "thumb.jpg")
+            await thumb_from_audio(catfile, catthumb)
+        if catthumb is None:
+            catthumb = os.path.join("./temp", "thumb.jpg")
+            copyfile(thumb_loc, catthumb)
+        if (
+            catthumb is not None
+            and not os.path.exists(catthumb)
+            and os.path.exists(thumb_loc)
+        ):
+            catthumb = os.path.join("./temp", "thumb.jpg")
+            copyfile(thumb_loc, catthumb)
+        if catthumb is not None and os.path.exists(catthumb):
+            await runcmd(
+                f"ffmpeg -loop 1 -i {catthumb} -i {catfile} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -vf \"scale='iw-mod (iw,2)':'ih-mod(ih,2)',format=yuv420p\" -shortest -movflags +faststart {PATH}"
+            )
+            os.remove(catfile)
+        else:
+            os.remove(catfile)
+            return await edit_delete(
+                catevent, "`No thumb found to make it video note`", 5
+            )
+    if os.path.exists(PATH):
+        catid = event.reply_to_msg_id
+        c_time = time.time()
+        await event.client.send_file(
+            event.chat_id,
+            PATH,
+            allow_cache=False,
+            reply_to=catid,
+            video_note=True,
+            attributes=[
+                DocumentAttributeVideo(
+                    duration=60,
+                    w=1,
+                    h=1,
+                    round_message=True,
+                    supports_streaming=True,
                 )
-            elif round_message:
-                c_time = time.time()
-                await borg.send_file(
-                    uas_event.chat_id,
-                    file_name,
-                    thumb=thumb,
-                    allow_cache=False,
-                    reply_to=event.message.id,
-                    video_note=True,
-                    attributes=[
-                        DocumentAttributeVideo(
-                            duration=60,
-                            w=1,
-                            h=1,
-                            round_message=True,
-                            supports_streaming=True,
-                        )
-                    ],
-                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, uas_event, c_time, "Uploading...", file_name)
-                    ),
-                )
-            elif spam_big_messages:
-                await uas_event.edit("TBD: Not (yet) Implemented")
-                return
-            try:
-                os.remove(vthumb)
-            except BaseException:
-                pass
-            await uas_event.edit("Uploaded successfully !!")
-        except FileNotFoundError as err:
-            await uas_event.edit(str(err))
-    else:
-        await uas_event.edit("404: File Not Found")
+            ],
+            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                progress(d, t, catevent, c_time, "Uploading...", PATH)
+            ),
+        )
+        os.remove(PATH)
+    await catevent.delete()
 
 
 CMD_HELP.update(
     {
         "upload": "__**PLUGIN NAME :** Upload__\
-    \n\n📌** CMD ➥** `.upload` path of file\
-    \n**USAGE   ➥  **Uploads the file from the server\
-    \n\n📌** CMD ➥** `.uploadasstream` path of video/audio\
-    \n**USAGE   ➥  **Uploads video/audio as streamable from the server\
-    \n\n📌** CMD ➥** `.uploadasvn path of video`\
-    \n**USAGE   ➥  **Uploads video/audio as round video from the server **Present supports few videos need to work onit takes some time to develop it **\
-    "
+    \n\n📌** CMD ➥** `.upload` <path of file/folder>\
+    \n**USAGE   ➥  **__Uploads the file from the server or list of files from that folder__\
+    \n\n📌** CMD ➥** `.circle` <reply to media or path of media>\
+    \n**USAGE   ➥  **__Uploads video/audio as streamable from the server__"
     }
 )

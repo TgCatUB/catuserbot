@@ -1,13 +1,14 @@
 # imported from pornhub credits to pornhub
 import asyncio
 import io
+from datetime import datetime
 from time import time
 
 from coffeehouse.api import API
 from coffeehouse.lydia import LydiaAI
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from .sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
 
 if Var.LYDIA_API_KEY:
@@ -18,34 +19,60 @@ if Var.LYDIA_API_KEY:
     lydia = LydiaAI(coffeehouse_api)
 
 
-@bot.on(admin_cmd(pattern="(en|re|li)ai"))
-@bot.on(sudo_cmd(pattern="(en|re|li)ai", allow_sudo=True))
+@bot.on(admin_cmd(pattern="(en|re|li)ai$", outgoing=True))
+@bot.on(sudo_cmd(pattern="(en|re|li)ai$", allow_sudo=True))
 async def lydia_disable_enable(event):
     if event.fwd_from:
         return
     if Var.LYDIA_API_KEY is None:
-        await edit_or_reply(event, "Please add required `LYDIA_API_KEY` env var")
+        await edit_delete(event, "`Please add required LYDIA_API_KEY env var`", 10)
         return
+    catevent = await edit_or_reply(event, "`.....`")
+    input_str = event.pattern_match.group(1)
     if event.reply_to_msg_id is not None:
-        input_str = event.pattern_match.group(1)
         reply_msg = await event.get_reply_message()
-        user_id = reply_msg.from_id
+        user_id = reply_msg.sender_id
         chat_id = event.chat_id
-        catevent = await edit_or_reply(event, "Processing...")
         if input_str == "en":
             # Create a new chat session (Like a conversation)
             session = lydia.create_session()
-            logger.info(session)
-            # logger.info("Session ID: {0}".format(session.id))
-            # logger.info("Session Available: {0}".format(str(session.available)))
-            # logger.info("Session Language: {0}".format(str(session.language)))
-            # logger.info("Session Expires: {0}".format(str(session.expires)))
-            logger.info(add_s(user_id, chat_id, session.id, session.expires))
+            if BOTLOG:
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    f"**Session ID: **`{session.id}`\
+                                   \n**Session Available: **`{str(session.available)}`\
+                                   \n**Session Language: **`{str(session.language)}`\
+                                   \n**Session Expires : **`{datetime.fromtimestamp(session.expires).strftime('%Y-%m-%d %H:%M:%S')}`\
+                    ",
+                )
+            add_s(user_id, chat_id, session.id, session.expires)
             await catevent.edit(f"Hello")
         elif input_str == "re":
-            logger.info(remove_s(user_id, chat_id))
-            await catevent.edit(f"[__signal lost__](tg://user?id={user_id})")
-        elif input_str == "li":
+            remove_s(user_id, chat_id)
+            await catevent.edit(f"__[signal lost](tg://user?id={user_id})__")
+        else:
+            lsts = get_all_s()
+            if len(lsts) > 0:
+                output_str = "AI enabled users:\n\n"
+                for lydia_ai in lsts:
+                    output_str += f"[User](tg://user?id={lydia_ai.user_id}) in chat `{lydia_ai.chat_id}`\n"
+            else:
+                output_str = "No Lydia AI enabled users / chats. Start by replying `.enai` to any user in any chat!"
+            if len(output_str) > Config.MAX_MESSAGE_SIZE_LIMIT:
+                with io.BytesIO(str.encode(output_str)) as out_file:
+                    out_file.name = "lydia_ai.text"
+                    await event.client.send_file(
+                        event.chat_id,
+                        out_file,
+                        force_document=True,
+                        allow_cache=False,
+                        caption="Lydia AI enabled users",
+                        reply_to=event,
+                    )
+            else:
+                await catevent.edit(output_str)
+    else:
+        if input_str == "li":
             lsts = get_all_s()
             if len(lsts) > 0:
                 output_str = "AI enabled users:\n\n"
@@ -67,13 +94,11 @@ async def lydia_disable_enable(event):
             else:
                 await catevent.edit(output_str)
         else:
-            await catevent.edit(
-                "Reply To User Message to Add / Delete them from Lydia Auto-Chat."
+            await edit_delete(
+                catevent,
+                "`Reply To A User's Message to Add / Remove them from Lydia Auto-Chat.`",
+                5,
             )
-    else:
-        await catevent.edit(
-            "Reply To A User's Message to Add / Delete them from Lydia Auto-Chat."
-        )
 
 
 @bot.on(admin_cmd(incoming=True))
@@ -83,10 +108,10 @@ async def on_new_message(event):
     if Var.LYDIA_API_KEY is None:
         return
     reply = await event.get_reply_message()
-    if reply is not None and reply.from_id != bot.uid:
+    if reply is not None and reply.sender_id != bot.uid:
         return
     if not event.media:
-        user_id = event.from_id
+        user_id = event.sender_id
         chat_id = event.chat_id
         s = get_s(user_id, chat_id)
         if s is not None:

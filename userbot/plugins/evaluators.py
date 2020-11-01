@@ -3,24 +3,21 @@ Syntax: .exec Code"""
 import asyncio
 import io
 import sys
-import time
 import traceback
 
 from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="bash ?(.*)"))
-@borg.on(sudo_cmd(pattern="bash ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="bash (.*)"))
+@bot.on(sudo_cmd(pattern="bash (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
-    PROCESS_RUN_TIME = 100
     cmd = "".join(event.text.split(maxsplit=1)[1:])
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -29,7 +26,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "bash.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -42,17 +39,15 @@ async def _(event):
         await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="exec ?(.*)"))
-@borg.on(sudo_cmd(pattern="exec ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="exec (.*)"))
+@bot.on(sudo_cmd(pattern="exec (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
-    PROCESS_RUN_TIME = 100
     cmd = "".join(event.text.split(maxsplit=1)[1:])
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
-    time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -70,7 +65,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "exec.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -83,8 +78,8 @@ async def _(event):
         await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="eval"))
-@borg.on(sudo_cmd(pattern="eval", allow_sudo=True))
+@bot.on(admin_cmd(pattern="eval (.*)"))
+@bot.on(sudo_cmd(pattern="eval (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
@@ -120,7 +115,7 @@ async def _(event):
         with io.BytesIO(str.encode(final_output)) as out_file:
             out_file.name = "eval.text"
             try:
-                await borg.send_file(
+                await event.client.send_file(
                     event.chat_id,
                     out_file,
                     force_document=True,
@@ -130,7 +125,7 @@ async def _(event):
                 )
                 await event.delete()
             except:
-                await borg.send_file(
+                await event.client.send_file(
                     event.chat_id,
                     out_file,
                     force_document=True,

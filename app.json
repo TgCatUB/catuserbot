@@ -26,10 +26,6 @@
       "description": "Give your name, like Jisan",
       "value": ""
     },
-    "LIVE_USERNAME": {
-      "description": "give your tg username, like @Jisan7509",
-      "value": ""
-    },
     "APP_ID": {
       "description": "Get this value from my.telegram.org! Please do not steal",
       "value": ""

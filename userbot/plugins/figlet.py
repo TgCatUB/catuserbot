@@ -4,8 +4,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="figlet ?(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="figlet ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="figlet ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="figlet ?(.*)", allow_sudo=True))
 async def figlet(event):
     if event.fwd_from:
         return

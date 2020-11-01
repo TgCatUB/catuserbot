@@ -12,8 +12,8 @@ from ..helpers.google_image_download import googleimagesdownload
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern=r"img(?: |$)(\d*)? ?(.*)"))
-@borg.on(sudo_cmd(pattern=r"img(?: |$)(\d*)? ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"img(?: |$)(\d*)? ?(.*)"))
+@bot.on(sudo_cmd(pattern=r"img(?: |$)(\d*)? ?(.*)", allow_sudo=True))
 async def img_sampler(event):
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
