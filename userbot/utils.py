@@ -249,9 +249,17 @@ async def edit_delete(event, text, time=None, parse_mode=None, link_preview=None
     time = time or 5
     if event.sender_id in Config.SUDO_USERS:
         reply_to = await event.get_reply_message()
-        catevent = await reply_to.reply(text, link_preview=link_preview, parse_mode=parse_mode) if reply_to else await event.reply(text, link_preview=link_preview, parse_mode=parse_mode)
+        catevent = (
+            await reply_to.reply(text, link_preview=link_preview, parse_mode=parse_mode)
+            if reply_to
+            else await event.reply(
+                text, link_preview=link_preview, parse_mode=parse_mode
+            )
+        )
     else:
-        catevent = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
+        catevent = await event.edit(
+            text, link_preview=link_preview, parse_mode=parse_mode
+        )
     await asyncio.sleep(time)
     return await catevent.delete()
 
