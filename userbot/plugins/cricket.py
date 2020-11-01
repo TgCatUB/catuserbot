@@ -39,8 +39,8 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern=r"cric(.*)"))
-@bot.on(sudo_cmd(pattern=r"cric(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"cric (.*)"))
+@bot.on(sudo_cmd(pattern=r"cric (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -73,10 +73,10 @@ async def _(event):
 CMD_HELP.update(
     {
         "cricket": "**Plugin :** `cricket`\
-      \n\n**Syntax : **`.score` \
-      \n**Function : **__To see score of ongoing matches.__\
-      \n\n**Syntax : **`.cric` <commnd> \
-      \n**Function : **__That will send details like scoreboard or commentary.__\
-      \n\n**Example :-** `.cric /scorecard_30....`"
+      \n\n**  • Syntax : **`.score` \
+      \n**  • Function : **__To see score of ongoing matches.__\
+      \n\n**  • Syntax : **`.cric <commnd>`\
+      \n**  • Function : **__That will send details like scoreboard or commentary.__\
+      \n\n**  • Example :-** `.cric /scorecard_30....`"
     }
 )
