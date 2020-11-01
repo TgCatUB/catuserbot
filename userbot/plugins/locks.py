@@ -32,34 +32,34 @@ async def _(event):
         changeinfo = None
         if input_str == "msg":
             msg = True
-            what = "messages"
+            locktype = "messages"
         elif input_str == "media":
             media = True
-            what = "media"
+            locktype = "media"
         elif input_str == "sticker":
             sticker = True
-            what = "stickers"
+            locktype = "stickers"
         elif input_str == "gif":
             gif = True
-            what = "GIFs"
+            locktype = "GIFs"
         elif input_str == "game":
             gamee = True
-            what = "games"
+            locktype = "games"
         elif input_str == "inline":
             ainline = True
-            what = "inline bots"
+            locktype = "inline bots"
         elif input_str == "poll":
             gpoll = True
-            what = "polls"
+            locktype = "polls"
         elif input_str == "invite":
             adduser = True
-            what = "invites"
+            locktype = "invites"
         elif input_str == "pin":
             cpin = True
-            what = "pins"
+            locktype = "pins"
         elif input_str == "info":
             changeinfo = True
-            what = "chat info"
+            locktype = "chat info"
         elif input_str == "all":
             msg = True
             media = True
@@ -71,12 +71,12 @@ async def _(event):
             adduser = True
             cpin = True
             changeinfo = True
-            what = "everything"
+            locktype = "everything"
         else:
             if not input_str:
                 return await edit_or_reply(event, "`I can't lock nothing !!`")
             else:
-                return await edit_or_reply(event, f"`Invalid lock type:` {input_str}")
+                return await edit_delete(event, f"`Invalid lock type:` {input_str}" ,time= 5)
 
         lock_rights = ChatBannedRights(
             until_date=None,
@@ -97,14 +97,15 @@ async def _(event):
                     peer=peer_id, banned_rights=lock_rights
                 )
             )
-            await edit_or_reply(event, f"`Locked {what} for this chat !!`")
+            await edit_or_reply(event, f"`Locked {locktype} for this chat !!`")
         except BaseException as e:
-            return await edit_or_reply(
-                event, f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
+            await edit_delete(
+                event, f"`Do I have proper rights for that ??`\n**Error:** {str(e)}" , time =5
             )
 
 
-@bot.on(admin_cmd(pattern="unlock ?(.*)"))
+@bot.on(admin_cmd(pattern="unlock (.*)"))
+@bot.on(sudo_cmd(pattern="unlock (.*)",allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -126,34 +127,34 @@ async def _(event):
         changeinfo = None
         if input_str == "msg":
             msg = False
-            what = "messages"
+            locktype = "messages"
         elif input_str == "media":
             media = False
-            what = "media"
+            locktype = "media"
         elif input_str == "sticker":
             sticker = False
-            what = "stickers"
+            locktype = "stickers"
         elif input_str == "gif":
             gif = False
-            what = "GIFs"
+            locktype = "GIFs"
         elif input_str == "game":
             gamee = False
-            what = "games"
+            locktype = "games"
         elif input_str == "inline":
             ainline = False
-            what = "inline bots"
+            locktype = "inline bots"
         elif input_str == "poll":
             gpoll = False
-            what = "polls"
+            locktype = "polls"
         elif input_str == "invite":
             adduser = False
-            what = "invites"
+            locktype = "invites"
         elif input_str == "pin":
             cpin = False
-            what = "pins"
+            locktype = "pins"
         elif input_str == "info":
             changeinfo = False
-            what = "chat info"
+            locktype = "chat info"
         elif input_str == "all":
             msg = False
             media = False
@@ -165,12 +166,12 @@ async def _(event):
             adduser = False
             cpin = False
             changeinfo = False
-            what = "everything"
+            locktype = "everything"
         else:
             if not input_str:
                 return await edit_or_reply(event, "`I can't unlock nothing !!`")
             else:
-                return await edit_or_reply(event, f"`Invalid unlock type:` {input_str}")
+                return await edit_delete(event, f"`Invalid unlock type:` {input_str}",time=5)
 
         unlock_rights = ChatBannedRights(
             until_date=None,
@@ -191,14 +192,14 @@ async def _(event):
                     peer=peer_id, banned_rights=unlock_rights
                 )
             )
-            await edit_or_reply(event, f"`Unlocked {what} for this chat !!`")
+            await edit_or_reply(event, f"`Unlocked {locktype} for this chat !!`")
         except BaseException as e:
-            return await edit_or_reply(
-                event, f"`Do I have proper rights for that ??`\n**Error:** {str(e)}"
+            return await edit_delete(
+                event, f"`Do I have proper rights for that ??`\n**Error:** {str(e)}",time=5
             )
 
-
-@bot.on(admin_cmd(pattern="curenabledlocks"))
+@bot.on(admin_cmd(pattern="locks$"))
+@bot.on(sudo_cmd(pattern="locks$",allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -343,7 +344,7 @@ CMD_HELP.update(
 \n\n**Available message types to lock/unlock are: \
 \nAPI Options : **msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, changeinfo\
 \n**DB Options : **bots, commands, email, forward, url\
-\n\n**Syntax : **`.curenabledlocks`\
-\n**Function : **__to see the active locks__"
+\n\n**Syntax : **`.locks`\
+\n**Function : **__To see the active locks__"
     }
 )
