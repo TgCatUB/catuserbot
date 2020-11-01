@@ -30,11 +30,8 @@ async def _(event):
     try:
         translated = translator.translate(text, dest=lan)
         after_tr_text = translated.text
-        output_str = (
-            "**TRANSLATED** from {} to {}\
-                        \n`{}`"
-            "".format(LANGUAGES["translated.src"], LANGUAGES["lan"], after_tr_text)
-        )
+        output_str = f"**TRANSLATED from {LANGUAGES[translated.src]} to {LANGUAGES[lan]}**\
+                \n`{}`"
         await edit_or_reply(event, output_str)
     except Exception as exc:
         await edit_delete(event, str(exc), time=5)
