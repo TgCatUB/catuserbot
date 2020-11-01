@@ -9,8 +9,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import Build_Poll
 
 
-@borg.on(admin_cmd(pattern="poll( (.*)|$)"))
-@borg.on(sudo_cmd(pattern="poll( (.*)|$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="poll( (.*)|$)"))
+@bot.on(sudo_cmd(pattern="poll( (.*)|$)", allow_sudo=True))
 async def pollcreator(catpoll):
     reply_to_id = None
     if catpoll.reply_to_msg_id:

@@ -28,13 +28,13 @@ USERNAME_TAKEN = "```This username is already taken.```"
 # ===============================================================
 
 
-@borg.on(admin_cmd(pattern="pbio (.*)"))  # pylint:disable=E0602
+@bot.on(admin_cmd(pattern="pbio (.*)"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
     bio = event.pattern_match.group(1)
     try:
-        await borg(
+        await event.client(
             functions.account.UpdateProfileRequest(about=bio)  # pylint:disable=E0602
         )
         await event.edit("Succesfully changed my profile bio")
@@ -42,7 +42,7 @@ async def _(event):
         await event.edit(str(e))
 
 
-@borg.on(admin_cmd(pattern="pname ((.|\n)*)"))  # pylint:disable=E0602,W0703
+@bot.on(admin_cmd(pattern="pname ((.|\n)*)"))  # pylint:disable=E0602,W0703
 async def _(event):
     if event.fwd_from:
         return
@@ -52,7 +52,7 @@ async def _(event):
     if "|" in names:
         first_name, last_name = names.split("|", 1)
     try:
-        await borg(
+        await event.client(
             functions.account.UpdateProfileRequest(  # pylint:disable=E0602
                 first_name=first_name, last_name=last_name
             )
@@ -62,7 +62,7 @@ async def _(event):
         await event.edit(str(e))
 
 
-@borg.on(admin_cmd(pattern="ppic"))  # pylint:disable=E0602
+@bot.on(admin_cmd(pattern="ppic"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
@@ -72,7 +72,7 @@ async def _(event):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)  # pylint:disable=E0602
     photo = None
     try:
-        photo = await borg.download_media(  # pylint:disable=E0602
+        photo = await event.client.download_media(  # pylint:disable=E0602
             reply_message, Config.TMP_DOWNLOAD_DIRECTORY  # pylint:disable=E0602
         )
     except Exception as e:  # pylint:disable=C0103,W0703
@@ -88,12 +88,12 @@ async def _(event):
                     os.remove(photo)
                     return
                 catpic = None
-                catvideo = await borg.upload_file(photo)
+                catvideo = await event.client.upload_file(photo)
             else:
-                catpic = await borg.upload_file(photo)  # pylint:disable=E0602
+                catpic = await event.client.upload_file(photo)  # pylint:disable=E0602
                 catvideo = None
             try:
-                await borg(
+                await event.client(
                     functions.photos.UploadProfilePhotoRequest(
                         file=catpic, video=catvideo, video_start_ts=0.01
                     )
@@ -108,7 +108,7 @@ async def _(event):
         logger.warn(str(e))  # pylint:
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="username (.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern="username (.*)"))
 async def update_username(username):
     """ For .username command, set a new username in Telegram. """
     newusername = username.pattern_match.group(1)
@@ -119,7 +119,7 @@ async def update_username(username):
         await username.edit(USERNAME_TAKEN)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="count$"))
+@bot.on(admin_cmd(outgoing=True, pattern="count$"))
 async def count(event):
     """ For .count command, get profile stats. """
     u = 0
@@ -156,7 +156,7 @@ async def count(event):
     await event.edit(result)
 
 
-@borg.on(admin_cmd(outgoing=True, pattern=r"delpfp"))
+@bot.on(admin_cmd(outgoing=True, pattern=r"delpfp"))
 async def remove_profilepic(delpfp):
     """ For .delpfp command, delete your current profile picture in Telegram. """
     group = delpfp.text[8:]
@@ -167,22 +167,21 @@ async def remove_profilepic(delpfp):
     else:
         lim = 1
     pfplist = await delpfp.client(
-        GetUserPhotosRequest(user_id=delpfp.from_id, offset=0, max_id=0, limit=lim)
+        GetUserPhotosRequest(user_id=delpfp.sender_id, offset=0, max_id=0, limit=lim)
     )
-    input_photos = []
-    for sep in pfplist.photos:
-        input_photos.append(
-            InputPhoto(
-                id=sep.id,
-                access_hash=sep.access_hash,
-                file_reference=sep.file_reference,
-            )
+    input_photos = [
+        InputPhoto(
+            id=sep.id,
+            access_hash=sep.access_hash,
+            file_reference=sep.file_reference,
         )
+        for sep in pfplist.photos
+    ]
     await delpfp.client(DeletePhotosRequest(id=input_photos))
     await delpfp.edit(f"`Successfully deleted {len(input_photos)} profile picture(s).`")
 
 
-@borg.on(admin_cmd(pattern="myusernames$"))
+@bot.on(admin_cmd(pattern="myusernames$"))
 async def _(event):
     if event.fwd_from:
         return

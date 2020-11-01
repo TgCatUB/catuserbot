@@ -19,8 +19,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import spamwatch
 
 
-@borg.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="userinfo(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="userinfo(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -80,7 +80,7 @@ async def _(event):
         sw,
         cas,
     )
-    await event.edit(caption)
+    await edit_or_reply(event, caption)
 
 
 async def get_full_user(event):
@@ -102,12 +102,14 @@ async def get_full_user(event):
         if previous_message.forward:
             replied_user = await event.client(
                 GetFullUserRequest(
-                    previous_message.forward.from_id
+                    previous_message.forward.sender_id
                     or previous_message.forward.channel_id
                 )
             )
             return replied_user, None
-        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
+        replied_user = await event.client(
+            GetFullUserRequest(previous_message.sender_id)
+        )
         return replied_user, None
     if event.is_private:
         try:
@@ -119,25 +121,23 @@ async def get_full_user(event):
     return None, "No input is found"
 
 
-@borg.on(admin_cmd(pattern="whois(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="whois(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
 async def who(event):
-    cat = await edit_or_reply(
-        event, "`Sit tight while I steal some data from Mark Zuckerburg...`"
-    )
+    cat = await edit_or_reply(event, "`Fetching userinfo wait....`")
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     replied_user = await get_user(event)
     try:
         photo, caption = await fetch_info(replied_user, event)
     except AttributeError:
-        await edit_or_reply(event, "`Could not fetch info of that user.`")
+        await edit_or_reply(cat, "`Could not fetch info of that user.`")
         return
     message_id_to_reply = event.message.reply_to_msg_id
     if not message_id_to_reply:
         message_id_to_reply = None
     try:
-        await borg.send_file(
+        await event.client.send_file(
             event.chat_id,
             photo,
             caption=caption,
@@ -157,7 +157,9 @@ async def get_user(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id and not event.pattern_match.group(1):
         previous_message = await event.get_reply_message()
-        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
+        replied_user = await event.client(
+            GetFullUserRequest(previous_message.sender_id)
+        )
     else:
         user = event.pattern_match.group(1)
         if user.isnumeric():
@@ -232,8 +234,8 @@ async def fetch_info(replied_user, event):
     return photo, caption
 
 
-@borg.on(admin_cmd(pattern="link(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="link(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="link(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="link(?: |$)(.*)", allow_sudo=True))
 async def permalink(mention):
     """ For .link command, generates a link to the user's PM with a custom text. """
     user, custom = await get_user_from_event(mention)
@@ -254,7 +256,7 @@ async def get_user_from_event(event):
     extra = None
     if event.reply_to_msg_id and len(args) != 2:
         previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.from_id)
+        user_obj = await event.client.get_entity(previous_message.sender_id)
         extra = event.pattern_match.group(1)
     elif len(args[0]) > 0:
         user = args[0]
@@ -293,11 +295,11 @@ async def ge(user, event):
 CMD_HELP.update(
     {
         "whois": "**Plugin : **`whois`\
-    \n\n**Syntax : **`.whois <username>` or reply to someones text with .whois\
-    \n**Function : ** Gets info of an user.\
-    \n\n**Syntax : **`.userinfo <username>` or reply to someones text with .userinfo\
-    \n**Function : ** Gets info of an user.\
-    \n\n**Syntax : **`.link` <text>\
-    \n**Function : ** Generates a link to the user's PM with a custom text."
+    \n\n**Syntax : **`.whois <username> or reply to someones text with .whois`\
+    \n**Function : **__Gets info of an user.__\
+    \n\n**Syntax : **`.userinfo <username> or reply to someones text with .userinfo`\
+    \n**Function : **__Gets information of an user such as restrictions ban by spamwatch or cas__\
+    \n\n**Syntax : **`.link id/username/reply`\
+    \n**Function : **__Generates a link to the user's PM .__"
     }
 )

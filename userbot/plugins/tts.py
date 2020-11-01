@@ -14,8 +14,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import deEmojify
 
 
-@borg.on(admin_cmd(pattern="tts (.*)"))
-@borg.on(sudo_cmd(pattern="tts (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="tts (.*)"))
+@bot.on(sudo_cmd(pattern="tts (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -65,7 +65,7 @@ async def _(event):
             required_file_name = required_file_name + ".opus"
         end = datetime.now()
         ms = (end - start).seconds
-        await borg.send_file(
+        await event.client.send_file(
             event.chat_id,
             required_file_name,
             # caption="Processed {} ({}) in {} seconds!".format(text[0:97], lan, ms),

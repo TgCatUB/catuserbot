@@ -7,6 +7,7 @@ from random import choice
 
 from telethon import events
 from telethon.extensions.markdown import DEFAULT_URL_RE
+from telethon.tl import types
 from telethon.tl.functions.messages import EditMessageRequest
 from telethon.tl.types import (
     MessageEntityBold,
@@ -17,6 +18,9 @@ from telethon.tl.types import (
     MessageEntityUnderline,
 )
 from telethon.utils import add_surrogate, del_surrogate
+
+usernexp = re.compile(r"@(\w{3,32})\[(.+?)\]")
+nameexp = re.compile(r"\[([\w\S]+)\]\(tg://user\?id=(\d+)\)\[(.+?)\]")
 
 
 def parse_url_match(m):
@@ -147,15 +151,17 @@ def parse(message, old_entities=None):
         pass
 
 
-@borg.on(events.MessageEdited(outgoing=True))
-@borg.on(events.NewMessage(outgoing=True))
+@bot.on(events.MessageEdited(outgoing=True))
+@bot.on(events.NewMessage(outgoing=True))
 async def reparse(event):
     old_entities = event.message.entities or []
     parser = partial(parse, old_entities=old_entities)
-    message, msg_entities = await borg._parse_message_text(event.raw_text, parser)
+    message, msg_entities = await event.client._parse_message_text(
+        event.raw_text, parser
+    )
     if len(old_entities) >= len(msg_entities) and event.raw_text == message:
         return
-    await borg(
+    await event.client(
         EditMessageRequest(
             peer=await event.get_input_chat(),
             id=event.message.id,
@@ -165,3 +171,35 @@ async def reparse(event):
         )
     )
     raise events.StopPropagation
+
+
+@bot.on(events.NewMessage(outgoing=True))
+async def mention(event):
+    newstr = event.text
+    if event.entities:
+        newstr = nameexp.sub(r'<a href="tg://user?id=\2">\3</a>', newstr, 0)
+        for match in usernexp.finditer(newstr):
+            user = match.group(1)
+            text = match.group(2)
+            name, entities = await bot._parse_message_text(text, "md")
+            rep = f'<a href="tg://resolve?domain={user}">{name}</a>'
+            if entities:
+                for e in entities:
+                    tag = None
+                    if isinstance(e, types.MessageEntityBold):
+                        tag = "<b>{}</b>"
+                    elif isinstance(e, types.MessageEntityItalic):
+                        tag = "<i>{}</i>"
+                    elif isinstance(e, types.MessageEntityCode):
+                        tag = "<code>{}</code>"
+                    elif isinstance(e, types.MessageEntityStrike):
+                        tag = "<s>{}</s>"
+                    elif isinstance(e, types.MessageEntityPre):
+                        tag = "<pre>{}</pre>"
+                    elif isinstance(e, types.MessageEntityUnderline):
+                        tag = "<u>{}</u>"
+                    if tag:
+                        rep = tag.format(rep)
+            newstr = re.sub(re.escape(match.group(0)), rep, newstr)
+    if newstr != event.text:
+        await event.edit(newstr, parse_mode="html")

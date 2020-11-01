@@ -1,6 +1,5 @@
 # pastebin for catuserbot
 
-import logging
 import os
 
 import requests
@@ -10,10 +9,6 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
-
-logging.basicConfig(
-    format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
-)
 
 
 def progress(current, total):
@@ -60,13 +55,14 @@ async def _(event):
     url = f"https://del.dog/{r['key']}"
     if r["isUrl"]:
         nurl = f"https://del.dog/v/{r['key']}"
+        rawurl = f"https://del.dog/raw/{r['key']}"
         await catevent.edit(
-            "**Pasted to dogbin : **[dog]({}).\n**GoTo Original URL: **[link]({})".format(
-                nurl, url
-            )
+            f"**Pasted to dogbin : **[dog]({nurl}).\n**Raw url :** [raw link]({rawurl})\n**GoTo Original URL: **[link]({url})"
         )
     else:
-        await catevent.edit("**Pasted to dogbin : **[dog]({})".format(url))
+        await catevent.edit(
+            f"**Pasted to dogbin : **[dog]({url})\n**Raw url :** [raw link](https://del.dog/raw/{r['key']})"
+        )
 
 
 @bot.on(admin_cmd(pattern="neko( (.*)|$)", outgoing=True))
@@ -121,7 +117,7 @@ async def _(event):
             .get("key")
         )
         url = f"https://nekobin.com/{key}"
-    reply_text = f"**Pasted to Nekobin : **[neko]({url})"
+    reply_text = f"**Pasted to Nekobin : **[neko]({url})\n**Raw url : **[Raw](https://nekobin.com/raw/{key})"
     await catevent.edit(reply_text)
 
 

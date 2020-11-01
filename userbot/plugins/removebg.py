@@ -1,13 +1,13 @@
 # (c) Shrimadhav U K
 #
-# This file is part of @UniBorg
+# This file is part of @Unievent.client
 #
-# @UniBorg is free software; you cannot redistribute it and/or modify
+# @Unievent.client is free software; you cannot redistribute it and/or modify
 # it under the terms of the GNU General Public License as published
 # by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# @UniBorg is not distributed in the hope that it will be useful,
+# @Unievent.client is not distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -17,13 +17,12 @@ import os
 
 import requests
 
-from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import convert_toimage
+from . import CMD_HELP, convert_toimage
 
 
-@borg.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
-@borg.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
+@bot.on(sudo_cmd(pattern="(rmbg|srmbg) ?(.*)", allow_sudo=True))
 async def remove_background(event):
     if event.fwd_from:
         return
@@ -69,7 +68,7 @@ async def remove_background(event):
         if cmd == "rmbg":
             with io.BytesIO(output_file_name.content) as remove_bg_image:
                 remove_bg_image.name = "BG_less.png"
-                await borg.send_file(
+                await event.client.send_file(
                     event.chat_id,
                     remove_bg_image,
                     force_document=True,
@@ -79,7 +78,7 @@ async def remove_background(event):
         elif cmd == "srmbg":
             with io.BytesIO(output_file_name.content) as remove_bg_image:
                 remove_bg_image.name = "CATBG_less.webp"
-                await borg.send_file(
+                await event.client.send_file(
                     event.chat_id,
                     remove_bg_image,
                     force_document=True,
@@ -126,11 +125,11 @@ def ReTrieveURL(input_url):
 
 CMD_HELP.update(
     {
-        "removebg": "**__Plugin : __**`removebg`\
-        \n\n**__Syntax : __**`.rmbg` <Link to Image> or reply to any image\
-        \n**__Usage : __**Removes the background of an image and send as png format\
-        \n\n**__Syntax : __**`.srmbg` <Link to Image> or reply to any image\
-        \n**__Usage : __**Removes the background of an image and send as sticker format\
+        "removebg": "**Plugin : **`removebg`\
+        \n\n**Syntax : **`.rmbg` <Link to Image> or reply to any image/sticker\
+        \n**Function : **__Removes the background of an image/sticker and send as png format__\
+        \n\n**Syntax : **`.srmbg` <Link to Image> or reply to any image/sticker\
+        \n**function : **__Removes the background an image/sticker and send as sticker format__\
         "
     }
 )

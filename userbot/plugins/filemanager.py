@@ -11,11 +11,11 @@ from ..utils import admin_cmd, edit_or_reply, humanbytes, sudo_cmd
 from . import CMD_HELP, runcmd
 
 
-@borg.on(admin_cmd(pattern="ls ?(.*)"))
-@borg.on(sudo_cmd(pattern="ls ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ls ?(.*)"))
+@bot.on(sudo_cmd(pattern="ls ?(.*)", allow_sudo=True))
 async def lst(event):
     cat = "".join(event.text.split(maxsplit=1)[1:])
-    path = cat if cat else os.getcwd()
+    path = cat or os.getcwd()
     if not os.path.exists(path):
         await edit_or_reply(
             event,
@@ -80,7 +80,7 @@ async def lst(event):
     if len(msg) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(msg)) as out_file:
             out_file.name = "ls.txt"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -92,8 +92,8 @@ async def lst(event):
         await edit_or_reply(event, msg)
 
 
-@borg.on(admin_cmd(pattern="rem (.*)"))
-@borg.on(sudo_cmd(pattern="rem (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="rem (.*)"))
+@bot.on(sudo_cmd(pattern="rem (.*)", allow_sudo=True))
 async def lst(event):
     cat = event.pattern_match.group(1)
     if cat:

@@ -7,8 +7,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="chain$"))
-@borg.on(sudo_cmd(pattern="chain$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="chain$"))
+@bot.on(sudo_cmd(pattern="chain$", allow_sudo=True))
 async def _(event):
     await event.edit("Counting...")
     count = -1
@@ -16,7 +16,7 @@ async def _(event):
     while message:
         reply = await message.get_reply_message()
         if reply is None:
-            await borg(
+            await event.client(
                 SaveDraftRequest(
                     await event.get_input_chat(), "", reply_to_msg_id=message.id
                 )

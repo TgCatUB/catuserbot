@@ -12,7 +12,7 @@ Now I will show a short script to show the formation of the desired script.
 ```python3
 from userbot.utils import admin_cmd
 
-@borg.on(admin_cmd(pattern="alive", outgoing=True))
+@bot.on(admin_cmd(pattern="alive", outgoing=True))
 async def hello_world(event):
     if event.fwd_from:
         return

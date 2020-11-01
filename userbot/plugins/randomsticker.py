@@ -14,8 +14,8 @@ BASE_URL = "https://headp.at/pats/{}"
 PAT_IMAGE = "pat.webp"
 
 
-@borg.on(admin_cmd(pattern="cat$"))
-@borg.on(sudo_cmd(pattern="cat$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="cat$"))
+@bot.on(sudo_cmd(pattern="cat$", allow_sudo=True))
 async def _(event):
     try:
         await event.delete()
@@ -38,8 +38,8 @@ async def _(event):
 # credit to @r4v4n4
 
 
-@borg.on(admin_cmd(pattern="dab$", outgoing=True))
-@borg.on(sudo_cmd(pattern="dab$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="dab$", outgoing=True))
+@bot.on(sudo_cmd(pattern="dab$", allow_sudo=True))
 async def handler(event):
     blacklist = {
         1653974154589768377,
@@ -64,7 +64,7 @@ async def handler(event):
     docs = [
         utils.get_input_document(x)
         for x in (
-            await borg(
+            await event.client(
                 functions.messages.GetStickerSetRequest(
                     types.InputStickerSetShortName("DabOnHaters")
                 )
@@ -75,8 +75,8 @@ async def handler(event):
     await event.respond(file=random.choice(docs))
 
 
-@borg.on(admin_cmd(pattern="brain$", outgoing=True))
-@borg.on(sudo_cmd(pattern="brain$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="brain$", outgoing=True))
+@bot.on(sudo_cmd(pattern="brain$", allow_sudo=True))
 async def handler(event):
     blacklist = {}
     try:
@@ -86,7 +86,7 @@ async def handler(event):
     docs = [
         utils.get_input_document(x)
         for x in (
-            await borg(
+            await event.client(
                 functions.messages.GetStickerSetRequest(
                     types.InputStickerSetShortName("supermind")
                 )
@@ -102,8 +102,8 @@ async def handler(event):
 # By:- git: jaskaranSM tg: @Zero_cool7870
 
 
-@borg.on(admin_cmd(pattern="pat$", outgoing=True))
-@borg.on(sudo_cmd(pattern="pat$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="pat$", outgoing=True))
+@bot.on(sudo_cmd(pattern="pat$", allow_sudo=True))
 async def lastfm(event):
     try:
         await event.delete()

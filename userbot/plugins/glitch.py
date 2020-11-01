@@ -14,8 +14,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import runcmd, take_screen_shot
 
 
-@borg.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="(glitch|glitchs)(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="(glitch|glitchs)(?: |$)(.*)", allow_sudo=True))
 async def glitch(cat):
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
@@ -75,7 +75,7 @@ async def glitch(cat):
         glitched = "./temp/" + "glitched.webp"
         glitch_img = glitcher.glitch_image(img, catinput, color_offset=True)
         glitch_img.save(glitched)
-        await borg.send_file(cat.chat_id, glitched, reply_to=catid)
+        await cat.client.send_file(cat.chat_id, glitched, reply_to=catid)
         os.remove(glitched)
         await cat.delete()
     elif cmd == "glitch":
@@ -91,8 +91,8 @@ async def glitch(cat):
             duration=DURATION,
             loop=LOOP,
         )
-        sandy = await borg.send_file(cat.chat_id, Glitched, reply_to=catid)
-        await borg(
+        sandy = await cat.client.send_file(cat.chat_id, Glitched, reply_to=catid)
+        await cat.client(
             functions.messages.SaveGifRequest(
                 id=types.InputDocument(
                     id=sandy.media.document.id,

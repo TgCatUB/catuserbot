@@ -9,8 +9,8 @@ from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
-@borg.on(admin_cmd(pattern="bash ?(.*)"))
-@borg.on(sudo_cmd(pattern="bash ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="bash (.*)"))
+@bot.on(sudo_cmd(pattern="bash (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
@@ -26,7 +26,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "bash.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -39,8 +39,8 @@ async def _(event):
         await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="exec ?(.*)"))
-@borg.on(sudo_cmd(pattern="exec ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="exec (.*)"))
+@bot.on(sudo_cmd(pattern="exec (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
@@ -65,7 +65,7 @@ async def _(event):
     if len(OUTPUT) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(OUTPUT)) as out_file:
             out_file.name = "exec.text"
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -78,8 +78,8 @@ async def _(event):
         await edit_or_reply(event, OUTPUT)
 
 
-@borg.on(admin_cmd(pattern="eval"))
-@borg.on(sudo_cmd(pattern="eval", allow_sudo=True))
+@bot.on(admin_cmd(pattern="eval (.*)"))
+@bot.on(sudo_cmd(pattern="eval (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from or event.via_bot_id:
         return
@@ -115,7 +115,7 @@ async def _(event):
         with io.BytesIO(str.encode(final_output)) as out_file:
             out_file.name = "eval.text"
             try:
-                await borg.send_file(
+                await event.client.send_file(
                     event.chat_id,
                     out_file,
                     force_document=True,
@@ -125,7 +125,7 @@ async def _(event):
                 )
                 await event.delete()
             except:
-                await borg.send_file(
+                await event.client.send_file(
                     event.chat_id,
                     out_file,
                     force_document=True,
@@ -144,12 +144,13 @@ async def aexec(code, event):
 
 CMD_HELP.update(
     {
-        "evaluators": "**Syntax : ** `.eval <expr>`:\
-     \n**Usage : **Execute Python script.\
-     \n\n**Syntax : ** `.exec <command>`:\
-     \n**Usage : **Execute a bash command on catuserbot server and shows details.\
-     \n\n**Syntax : ** `.bash <command>`:\
-     \n**Usage : **Execute a bash command on catuserbot server and  easy to copy output\
+        "evaluators": "**Plugin : **`evaluators`\
+        \n\n**Synatax : **`.eval <expr>`:\
+        \n**Function : **__Execute Python script.__\
+        \n\n**Synatax : **`.exec <command>`:\
+        \n**Function : **__Execute a bash command on catuserbot server and shows details.__\
+        \n\n**Synatax : **`.bash <command>`:\
+        \n**Function : **__Execute a bash command on catuserbot server and  easy to copy output__\
      "
     }
 )

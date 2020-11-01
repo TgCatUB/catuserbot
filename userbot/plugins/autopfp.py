@@ -57,7 +57,7 @@ async def animeppthor():
     urllib.request.urlretrieve(fy, "donottouch.jpg")
 
 
-@borg.on(admin_cmd(pattern="batmanpfp$"))
+@bot.on(admin_cmd(pattern="batmanpfp$"))
 async def main(event):
     await event.edit("Starting batman Profile Pic.")  # Owner @NihiNivi
     while True:
@@ -73,7 +73,7 @@ async def main(event):
         await asyncio.sleep(120)  # Edit this to your required needs
 
 
-@borg.on(admin_cmd(pattern="thorpfp$"))
+@bot.on(admin_cmd(pattern="thorpfp$"))
 async def main(event):
     await event.edit("Starting thor Profile Pic.")  # Owner @NihiNivi
     while True:

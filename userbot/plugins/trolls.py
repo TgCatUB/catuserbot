@@ -24,8 +24,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import *
 
 
-@borg.on(admin_cmd(pattern="threats(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="threats(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="threats(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="threats(?: |$)(.*)", allow_sudo=True))
 async def catbot(catmemes):
     replied = await catmemes.get_reply_message()
     if not os.path.isdir("./temp/"):
@@ -44,7 +44,7 @@ async def catbot(catmemes):
         await catmemes.client(cat)
     except BaseException:
         pass
-    download_location = await borg.download_media(replied, "./temp/")
+    download_location = await catmemes.client.download_media(replied, "./temp/")
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)
     size = os.stat(download_location).st_size
@@ -70,11 +70,11 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await threats(cat)
     await catmemmes.delete()
-    await borg.send_file(catmemes.chat_id, cat, reply_to=replied)
+    await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=replied)
 
 
-@borg.on(admin_cmd(pattern="trash(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="trash(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="trash(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="trash(?: |$)(.*)", allow_sudo=True))
 async def catbot(catmemes):
     replied = await catmemes.get_reply_message()
     if not os.path.isdir("./temp/"):
@@ -93,7 +93,7 @@ async def catbot(catmemes):
         await catmemes.client(cat)
     except BaseException:
         pass
-    download_location = await borg.download_media(replied, "./temp/")
+    download_location = await catmemes.client.download_media(replied, "./temp/")
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)
     size = os.stat(download_location).st_size
@@ -119,11 +119,11 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await trash(cat)
     await catmemmes.delete()
-    await borg.send_file(catmemes.chat_id, cat, reply_to=replied)
+    await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=replied)
 
 
-@borg.on(admin_cmd(pattern="trap(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="trap(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="trap(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="trap(?: |$)(.*)", allow_sudo=True))
 async def catbot(catmemes):
     input_str = catmemes.pattern_match.group(1)
     input_str = deEmojify(input_str)
@@ -152,7 +152,7 @@ async def catbot(catmemes):
         await catmemes.client(cat)
     except BaseException:
         pass
-    download_location = await borg.download_media(replied, "./temp/")
+    download_location = await catmemes.client.download_media(replied, "./temp/")
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)
     size = os.stat(download_location).st_size
@@ -178,11 +178,11 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await trap(text1, text2, cat)
     await catmemmes.delete()
-    await borg.send_file(catmemes.chat_id, cat, reply_to=replied)
+    await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=replied)
 
 
-@borg.on(admin_cmd(pattern="phub(?: |$)(.*)"))
-@borg.on(sudo_cmd(pattern="phub(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="phub(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="phub(?: |$)(.*)", allow_sudo=True))
 async def catbot(catmemes):
     input_str = catmemes.pattern_match.group(1)
     input_str = deEmojify(input_str)
@@ -211,7 +211,7 @@ async def catbot(catmemes):
         await catmemes.client(cat)
     except BaseException:
         pass
-    download_location = await borg.download_media(replied, "./temp/")
+    download_location = await catmemes.client.download_media(replied, "./temp/")
     if download_location.endswith((".webp")):
         download_location = convert_toimage(download_location)
     size = os.stat(download_location).st_size
@@ -237,7 +237,7 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await phcomment(cat, text, username)
     await catmemmes.delete()
-    await borg.send_file(catmemes.chat_id, cat, reply_to=replied)
+    await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=replied)
 
 
 CMD_HELP.update(

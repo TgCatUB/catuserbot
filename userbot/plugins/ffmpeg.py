@@ -1,4 +1,4 @@
-"""FFMpeg for @UniBorg
+"""FFMpeg for @Unievent.client
 """
 import asyncio
 import os
@@ -7,11 +7,11 @@ from datetime import datetime
 
 from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
 
-FF_MPEG_DOWN_LOAD_MEDIA_PATH = "uniborg.media.ffmpeg"
+FF_MPEG_DOWN_LOAD_MEDIA_PATH = "unievent.client.media.ffmpeg"
 
 
-@borg.on(admin_cmd(pattern="ffmpegsave$"))
-@borg.on(sudo_cmd(pattern="ffmpegsave$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ffmpegsave$"))
+@bot.on(sudo_cmd(pattern="ffmpegsave$", allow_sudo=True))
 async def ff_mpeg_trim_cmd(event):
     if event.fwd_from:
         return
@@ -23,7 +23,7 @@ async def ff_mpeg_trim_cmd(event):
             reply_message = await event.get_reply_message()
             try:
                 c_time = time.time()
-                downloaded_file_name = await borg.download_media(
+                downloaded_file_name = await event.client.download_media(
                     reply_message,
                     FF_MPEG_DOWN_LOAD_MEDIA_PATH,
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -50,8 +50,8 @@ async def ff_mpeg_trim_cmd(event):
         )
 
 
-@borg.on(admin_cmd(pattern="ffmpegtrim"))
-@borg.on(sudo_cmd(pattern="ffmpegtrim", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ffmpegtrim"))
+@bot.on(sudo_cmd(pattern="ffmpegtrim", allow_sudo=True))
 async def ff_mpeg_trim_cmd(event):
     if event.fwd_from:
         return
@@ -77,7 +77,7 @@ async def ff_mpeg_trim_cmd(event):
         logger.info(o)
         try:
             c_time = time.time()
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 o,
                 caption=" ".join(cmt[1:]),
@@ -101,7 +101,7 @@ async def ff_mpeg_trim_cmd(event):
         logger.info(o)
         try:
             c_time = time.time()
-            await borg.send_file(
+            await event.client.send_file(
                 event.chat_id,
                 o,
                 caption=" ".join(cmt[1:]),

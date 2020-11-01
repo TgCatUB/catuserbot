@@ -6,7 +6,7 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, fonts
 
 
-@borg.on(admin_cmd(pattern="str(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="str(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="str(?: |$)(.*)", allow_sudo=True))
 async def stretch(stret):
     textx = await stret.get_reply_message()
@@ -25,7 +25,7 @@ async def stretch(stret):
     await edit_or_reply(stret, reply_text)
 
 
-@borg.on(admin_cmd(pattern="zal(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="zal(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="zal(?: |$)(.*)", allow_sudo=True))
 async def zal(zgfy):
     reply_text = list()
@@ -61,7 +61,7 @@ async def zal(zgfy):
     await edit_or_reply(zgfy, "".join(reply_text))
 
 
-@borg.on(admin_cmd(pattern="cp(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="cp(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="cp(?: |$)(.*)", allow_sudo=True))
 async def copypasta(cp_e):
     textx = await cp_e.get_reply_message()
@@ -95,7 +95,7 @@ async def copypasta(cp_e):
     await edit_or_reply(cp_e, reply_text)
 
 
-@borg.on(admin_cmd(pattern="weeb(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="weeb(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="weeb(?: |$)(.*)", allow_sudo=True))
 async def weebify(event):
     args = event.pattern_match.group(1)
@@ -113,7 +113,7 @@ async def weebify(event):
     await edit_or_reply(event, string)
 
 
-@borg.on(admin_cmd(pattern="downside(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="downside(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="downside(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
@@ -133,7 +133,7 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@borg.on(admin_cmd(pattern="subscript(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="subscript(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="subscript(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)
@@ -153,7 +153,7 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@borg.on(admin_cmd(pattern="superscript(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="superscript(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="superscript(?: |$)(.*)", allow_sudo=True))
 async def stylish_generator(event):
     args = event.pattern_match.group(1)

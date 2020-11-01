@@ -19,7 +19,7 @@ last_afk_message = {}
 afk_start = {}
 
 
-@borg.on(events.NewMessage(outgoing=True))
+@bot.on(events.NewMessage(outgoing=True))
 async def set_not_afk(event):
     if event.chat_id in Config.UB_BLACK_LIST_CHAT:
         return
@@ -31,30 +31,44 @@ async def set_not_afk(event):
     back_alive = datetime.now()
     afk_end = back_alive.replace(microsecond=0)
     if afk_start != {}:
-        total_afk_time = str((afk_end - afk_start))
+        total_afk_time = afk_end - afk_start
+        time = int(total_afk_time.seconds)
+        d = time // (24 * 3600)
+        time %= 24 * 3600
+        h = time // 3600
+        time %= 3600
+        m = time // 60
+        time %= 60
+        s = time
+        endtime = ""
+        if d > 0:
+            endtime += f"{d}d {h}h {m}m {s}s"
+        else:
+            if h > 0:
+                endtime += f"{h}h {m}m {s}s"
+            else:
+                endtime += f"{m}m {s}s" if m > 0 else f"{s}s"
     current_message = event.message.message
     if "afk" not in current_message and "on" in USERAFK_ON:
-        shite = await borg.send_message(
+        shite = await event.client.send_message(
             event.chat_id,
-            "__Back alive!__\n**No Longer afk.**\n `Was afk for:``"
-            + total_afk_time
-            + "`",
+            "`Back alive! No Longer afk.\nWas afk for " + endtime + "`",
         )
-        if BOTLOG:
-            await borg.send_message(
-                BOTLOG_CHATID,
-                "#AFKFALSE \nSet AFK mode to False\n"
-                + "__Back alive!__\n**No Longer afk.**\n `Was afk for:``"
-                + total_afk_time
-                + "`",
-            )
-        await asyncio.sleep(5)
-        await shite.delete()
         USERAFK_ON = {}
         afk_time = None
+        await asyncio.sleep(5)
+        await shite.delete()
+        if BOTLOG:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#AFKFALSE \n`Set AFK mode to False\n"
+                + "Back alive! No Longer afk.\nWas afk for "
+                + endtime
+                + "`",
+            )
 
 
-@borg.on(
+@bot.on(
     events.NewMessage(incoming=True, func=lambda e: bool(e.mentioned or e.is_private))
 )
 async def on_afk(event):
@@ -65,10 +79,27 @@ async def on_afk(event):
     global last_afk_message
     global afk_start
     global afk_end
+    global link
     back_alivee = datetime.now()
     afk_end = back_alivee.replace(microsecond=0)
     if afk_start != {}:
-        total_afk_time = str((afk_end - afk_start))
+        total_afk_time = afk_end - afk_start
+        time = int(total_afk_time.seconds)
+        d = time // (24 * 3600)
+        time %= 24 * 3600
+        h = time // 3600
+        time %= 3600
+        m = time // 60
+        time %= 60
+        s = time
+        endtime = ""
+        if d > 0:
+            endtime += f"{d}d {h}h {m}m {s}s"
+        else:
+            if h > 0:
+                endtime += f"{h}h {m}m {s}s"
+            else:
+                endtime += f"{m}m {s}s" if m > 0 else f"{s}s"
     current_message_text = event.message.message.lower()
     if "afk" in current_message_text:
         # userbot's should not reply to other userbot's
@@ -76,18 +107,21 @@ async def on_afk(event):
         return False
     if USERAFK_ON and not (await event.get_sender()).bot:
         msg = None
-        message_to_reply = (
-            f"__My Master Has Been in afk For__ `{total_afk_time}`\nWhere He is: ONLY GOD KNOWS "
-            + f"\n\n__I promise He'll back in a few light years__\n**REASON**: {reason}"
-            if reason
-            else f"**Heya!**\n__I am currently unavailable. Since when, you ask? For {total_afk_time} I guess.__\n\nWhen will I be back? Soon __Whenever I feel like it__**( ಠ ʖ̯ ಠ)**  "
-        )
+        if link and reason:
+            message_to_reply = (
+                f"**I am AFK .\n\nAFK Since {endtime}\nReason : **{reason}"
+            )
+        elif reason:
+            message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : {reason}`"
+        else:
+            message_to_reply = (
+                f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            )
         if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
             msg = await event.reply(message_to_reply)
         if event.chat_id in last_afk_message:
             await last_afk_message[event.chat_id].delete()
         last_afk_message[event.chat_id] = msg
-        await asyncio.sleep(5)
         hmm = await event.get_chat()
         if Config.PM_LOGGR_BOT_API_ID:
             await asyncio.sleep(5)
@@ -101,7 +135,7 @@ async def on_afk(event):
                 )
 
 
-@borg.on(admin_cmd(pattern=r"afk ?(.*)", outgoing=True))
+@bot.on(admin_cmd(pattern=r"afk ?(.*)", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -111,6 +145,7 @@ async def _(event):
     global afk_start
     global afk_end
     global reason
+    global link
     USERAFK_ON = {}
     afk_time = None
     last_afk_message = {}
@@ -118,35 +153,46 @@ async def _(event):
     start_1 = datetime.now()
     afk_start = start_1.replace(microsecond=0)
     if not USERAFK_ON:
-        reason = event.pattern_match.group(1)
-        last_seen_status = await borg(
+        input_str = event.pattern_match.group(1)
+        if ";" in input_str:
+            msg, link = input_str.split(";", 1)
+            reason = f"[{msg.strip()}]({link.strip()})"
+            link = True
+        else:
+            reason = input_str
+            link = False
+        last_seen_status = await event.client(
             functions.account.GetPrivacyRequest(types.InputPrivacyKeyStatusTimestamp())
         )
         if isinstance(last_seen_status.rules, types.PrivacyValueAllowAll):
             afk_time = datetime.now()
         USERAFK_ON = f"on: {reason}"
         if reason:
-            await borg.send_message(
-                event.chat_id, f"**I shall be going afk!** __because ~ {reason}__"
-            )
+            await edit_delete(event, f"`I shall be Going afk! because ~` {reason}", 5)
         else:
-            await borg.send_message(event.chat_id, f"**I am Going afk!**")
-        await asyncio.sleep(5)
-        await event.delete()
+            await edit_delete(event, f"`I shall be Going afk! `", 5)
         if BOTLOG:
-            await borg.send_message(
-                BOTLOG_CHATID,
-                f"#AFKTRUE \nSet AFK mode to True, and Reason is {reason}",
-            )
+            if reason:
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    f"#AFKTRUE \nSet AFK mode to True, and Reason is {reason}",
+                )
+            else:
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
+                )
 
 
 CMD_HELP.update(
     {
         "afk": "**Plugin : **`afk`\
         \n\n**Syntax : **`.afk [Optional Reason]`\
-\n**Usage : **Sets you as afk.\nReplies to anyone who tags/PM's \
-you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
-\nafk means away from keyboard/keypad.\
+        \n**Function : **__Sets you as afk.\nReplies to anyone who tags/PM's \
+        you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
+        \nafk means away from keyboard/keypad.__\
+        \n\n**Note :** If you want AFK with hyperlink use [ ; ] after reason, then paste the media link.\
+        \n**Example :** `.afk busy now ;<Media_link>`\
 "
     }
 )

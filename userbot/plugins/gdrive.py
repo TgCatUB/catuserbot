@@ -1,21 +1,7 @@
 # ported from ProjectBish by @sandy1709
 # Copyright (C) 2020 Adek Maulana
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-""" - Catuserbot Google Drive managers  ported from Projectbish- """
+# Catuserbot Google Drive managers  ported from Projectbish and added extra things by @mrconfused
 import asyncio
 import base64
 import json
@@ -29,6 +15,7 @@ from datetime import datetime
 from mimetypes import guess_type
 from os.path import getctime, isdir, isfile, join
 
+import requests
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
@@ -83,17 +70,9 @@ if __ is not None:
                     G_DRIVE_FOLDER_ID = __.split("folderview?id=")[1]
                 except IndexError:
                     if "http://" not in __ or "https://" not in __:
-                        if any(map(str.isdigit, __)):
-                            _1 = True
-                        else:
-                            _1 = False
-                        if "-" in __ or "_" in __:
-                            _2 = True
-                        else:
-                            _2 = False
-                        if True in [_1 or _2]:
-                            pass
-                        else:
+                        _1 = any(map(str.isdigit, __))
+                        _2 = "-" in __ or "_" in __
+                        if True not in [_1 or _2]:
                             LOGS.info("G_DRIVE_FOLDER_ID " "not a valid ID...")
                             G_DRIVE_FOLDER_ID = None
                     else:
@@ -104,6 +83,8 @@ if __ is not None:
 # =========================================================== #
 logger = logging.getLogger("googleapiclient.discovery")
 logger.setLevel(logging.ERROR)
+
+thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 # =========================================================== #
 #                                                             #
 # =========================================================== #
@@ -112,8 +93,8 @@ GDRIVE_ID = re.compile(
 )
 
 
-@bot.on(admin_cmd(pattern="gauth(?: |$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="gauth(?: |$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="gauth$", command="gauth", outgoing=True))
+@bot.on(sudo_cmd(pattern="gauth$", command="gauth", allow_sudo=True))
 async def generate_credentials(gdrive):
     """ - Only generate once for long run - """
     hmm = bot.uid
@@ -173,7 +154,7 @@ async def generate_credentials(gdrive):
         """ - Unpack credential objects into strings - """
         creds = base64.b64encode(pickle.dumps(creds)).decode()
         await gdrive.edit("`Credentials created...`")
-    helper.save_credentials(str(gdrive.from_id), creds)
+    helper.save_credentials(str(gdrive.sender_id), creds)
     await gdrive.delete()
     return
 
@@ -196,12 +177,11 @@ async def create_app(gdrive):
         else:
             await gdrive.edit("`Credentials is empty, please generate it...`")
             return False
-    service = build("drive", "v3", credentials=creds, cache_discovery=False)
-    return service
+    return build("drive", "v3", credentials=creds, cache_discovery=False)
 
 
-@bot.on(admin_cmd(pattern="greset(?: |$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="greset(?: |$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="greset$", command="greset", outgoing=True))
+@bot.on(sudo_cmd(pattern="greset$", command="greset", allow_sudo=True))
 async def reset_credentials(gdrive):
     """ - Reset credentials or change account - """
     hmm = bot.uid
@@ -290,9 +270,11 @@ async def download(event, gdrive, service, uri=None):
                 ),
             )
         except CancelProcess:
-            names = []
-            for name in os.listdir(TMP_DOWNLOAD_DIRECTORY):
-                names.append(join(TMP_DOWNLOAD_DIRECTORY, name))
+            names = [
+                join(TMP_DOWNLOAD_DIRECTORY, name)
+                for name in os.listdir(TMP_DOWNLOAD_DIRECTORY)
+            ]
+
             """ asumming newest files are the cancelled one """
             newest = max(names, key=getctime)
             os.remove(newest)
@@ -456,10 +438,7 @@ async def download_gdrive(gdrive, service, uri):
         if parent_Id is not None:
             dir_id = parent_Id
     except NameError:
-        if G_DRIVE_FOLDER_ID is not None:
-            dir_id = G_DRIVE_FOLDER_ID
-        else:
-            dir_id = []
+        dir_id = G_DRIVE_FOLDER_ID if G_DRIVE_FOLDER_ID is not None else []
     try:
         file = (
             service.files()
@@ -506,7 +485,7 @@ async def change_permission(service, Id):
 
 
 async def get_information(service, Id):
-    r = (
+    return (
         service.files()
         .get(
             fileId=Id,
@@ -517,7 +496,6 @@ async def get_information(service, Id):
         )
         .execute()
     )
-    return r
 
 
 async def create_dir(service, folder_name, dir_id=None):
@@ -624,7 +602,7 @@ async def task_directory(gdrive, service, folder_path):
         return parent_Id
     root_parent_Id = None
     for f in lists:
-        if is_cancelled is True:
+        if is_cancelled:
             raise CancelProcess
 
         current_f_name = join(folder_path, f)
@@ -769,14 +747,36 @@ async def lists(gdrive):
     return
 
 
-@bot.on(admin_cmd(pattern=r"glist(?: |$)(-l \d+)?(?: |$)?(.*)?(?: |$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="glist(?: |$)(-l \d+)?(?: |$)?(.*)?(?: |$)", allow_sudo=True))
+@bot.on(
+    admin_cmd(
+        pattern=r"glist(?: |$)(-l \d+)?(?: |$)?(.*)?(?: |$)",
+        command="glist",
+        outgoing=True,
+    )
+)
+@bot.on(
+    sudo_cmd(
+        pattern="glist(?: |$)(-l \d+)?(?: |$)?(.*)?(?: |$)",
+        command="glist",
+        allow_sudo=True,
+    )
+)
 async def catlists(gdrive):
     await lists(gdrive)
 
 
-@bot.on(admin_cmd(pattern="gdf (mkdir|rm|chck) (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="gdf (mkdir|rm|chck) (.*)", allow_sudo=True))
+@bot.on(
+    admin_cmd(
+        pattern="gdf (mkdir|rm|chck) (.*)", command="gdf (mkdir|rm|chck)", outgoing=True
+    )
+)
+@bot.on(
+    sudo_cmd(
+        pattern="gdf (mkdir|rm|chck) (.*)",
+        command="gdf (mkdir|rm|chck)",
+        allow_sudo=True,
+    )
+)
 async def google_drive_managers(gdrive):
     """ - Google Drive folder/file management - """
     service = await create_app(gdrive)
@@ -932,8 +932,8 @@ async def google_drive_managers(gdrive):
     await gdrive.edit(reply)
 
 
-@bot.on(admin_cmd(pattern="gabort(?: |$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="gabort(?: |$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="gabort$", command="gabort", outgoing=True))
+@bot.on(sudo_cmd(pattern="gabort$", command="gabort", allow_sudo=True))
 async def cancel_process(gdrive):
     """
     Abort process for download and upload
@@ -949,8 +949,8 @@ async def cancel_process(gdrive):
     await gdrive.delete()
 
 
-@bot.on(admin_cmd(pattern="ugd(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="ugd(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ugd(?: |$)(.*)", command="ugd", outgoing=True))
+@bot.on(sudo_cmd(pattern="ugd(?: |$)(.*)", command="ugd", allow_sudo=True))
 async def google_drive(gdrive):
     reply = ""
     """ - Parsing all google drive function - """
@@ -1045,14 +1045,8 @@ async def google_drive(gdrive):
             uri = value.split()
         else:
             for fileId in value.split():
-                if any(map(str.isdigit, fileId)):
-                    one = True
-                else:
-                    one = False
-                if "-" in fileId or "_" in fileId:
-                    two = True
-                else:
-                    two = False
+                one = any(map(str.isdigit, fileId))
+                two = "-" in fileId or "_" in fileId
                 if True in [one or two]:
                     try:
                         reply += await download_gdrive(gdrive, service, fileId)
@@ -1127,8 +1121,20 @@ async def google_drive(gdrive):
     return
 
 
-@bot.on(admin_cmd(pattern="(gdfset|gdfclear)(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="(gdfset|gdfclear)(?: |$)(.*)", allow_sudo=True))
+@bot.on(
+    admin_cmd(
+        pattern="(gdfset|gdfclear)(?: |$)(.*)",
+        command="(gdfset|gdfclear)",
+        outgoing=True,
+    )
+)
+@bot.on(
+    sudo_cmd(
+        pattern="(gdfset|gdfclear)(?: |$)(.*)",
+        command="(gdfset|gdfclear)",
+        allow_sudo=True,
+    )
+)
 async def set_upload_folder(gdrive):
     """ - Set parents dir for upload/check/makedir/remove - """
     global parent_Id
@@ -1167,14 +1173,8 @@ async def set_upload_folder(gdrive):
         ext_id = re.findall(r"\bhttps?://drive\.google\.com\S+", inp)[0]
     except IndexError:
         """ - if given value isn't folderURL assume it's an Id - """
-        if any(map(str.isdigit, inp)):
-            c1 = True
-        else:
-            c1 = False
-        if "-" in inp or "_" in inp:
-            c2 = True
-        else:
-            c2 = False
+        c1 = any(map(str.isdigit, inp))
+        c2 = "-" in inp or "_" in inp
         if True in [c1 or c2]:
             parent_Id = inp
             await gdrive.edit(
@@ -1224,7 +1224,7 @@ async def check_progress_for_dl(event, gid, previous):
     while not complete:
         file = aria2.get_download(gid)
         complete = file.is_complete
-        if is_cancelled is True:
+        if is_cancelled:
             raise CancelProcess
         try:
             if not complete:
@@ -1275,33 +1275,144 @@ async def check_progress_for_dl(event, gid, previous):
                 )
 
 
+async def download_file_from_google_drive(gid):
+    URL = "https://docs.google.com/uc?export=download"
+
+    session = requests.Session()
+
+    response = session.get(URL, params={"id": gid}, stream=True)
+    token = await get_confirm_token(response)
+    if token:
+        params = {"id": gid, "confirm": token}
+        response = session.get(URL, params=params, stream=True)
+
+    headers = response.headers
+    content = headers["Content-Disposition"]
+    destination = await get_file_name(content)
+    destination = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, destination)
+    file_name = await save_response_content(response, destination)
+    return file_name
+
+
+async def get_confirm_token(response):
+    for key, value in response.cookies.items():
+        if key.startswith("download_warning"):
+            return value
+
+    return None
+
+
+async def save_response_content(response, destination):
+    with open(destination, "wb") as f:
+        CHUNK_SIZE = 32768
+        for chunk in response.iter_content(CHUNK_SIZE):
+            if chunk:  # filter out keep-alive new chunks
+                f.write(chunk)
+    return destination
+
+
+async def get_id(link):  # Extract File Id from G-Drive Link
+    file_id = ""
+    c_append = False
+    if link[1:33] == "https://drive.google.com/file/d/":
+        link = link[33:]
+        fid = ""
+        for c in link:
+            if c == "/":
+                break
+            fid += c
+        return fid
+    for c in link:
+        if c == "=":
+            c_append = True
+        if c == "&":
+            break
+        if c_append:
+            file_id += c
+    file_id = file_id[1:]
+    return file_id
+
+
+async def get_file_name(content):
+    file_name = ""
+    c_append = False
+    for c in str(content):
+        if c == ";":
+            c_append = False
+        elif c == '"':
+            c_append = True
+        if c_append:
+            file_name += c
+    file_name = file_name.replace('"', "")
+    print("File Name: " + str(file_name))
+    return file_name
+
+
+@bot.on(admin_cmd(pattern="gdl ?(-u)? (.*)", command="(gdl|gdl -u)", outgoing=True))
+@bot.on(sudo_cmd(pattern="gdl ?(-u)? (.*)", command="(gdl|gdl -u)", allow_sudo=True))
+async def g_download(event):
+    if event.fwd_from:
+        return
+    cmd = event.pattern_match.group(1)
+    drive_link = event.pattern_match.group(2)
+    file_id = await get_id(drive_link)
+    catevent = await edit_or_reply(event, "Downloading Requested File from G-Drive...")
+    file_name = await download_file_from_google_drive(file_id)
+    if os.path.exists(thumb_image_path):
+        thumb = thumb_image_path
+    if not cmd:
+        await catevent.edit("**File Downloaded.\nName : **`" + str(file_name) + "`")
+    else:
+        c_time = time.time()
+        await event.client.send_file(
+            event.chat_id,
+            file_name,
+            caption=f"**File Name : **`{os.path.basename(file_name)}`",
+            thumb=thumb,
+            force_document=False,
+            supports_streaming=True,
+            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                progress(d, t, catevent, c_time, "Uploading...", file_name)
+            ),
+        )
+        os.remove(file_name)
+        await edit_delete(
+            catevent,
+            "**File Downloaded and uploaded.\nName : **`" + str(file_name) + "`",
+            5,
+        )
+
+
 CMD_HELP.update(
     {
         "gdrive": "**Plugin :** `gdrive`"
         "\n\n**Syntax : **`.gauth`"
-        "\n**Usage : **generate token to enable all cmd google drive service."
+        "\n**Function : **generate token to enable all cmd google drive service."
         "\nThis only need to run once in life time."
         "\n\n**Syntax : **`.greset`"
-        "\n**Usage : **reset your token if something bad happened or change drive acc."
+        "\n**Function : **reset your token if something bad happened or change drive acc."
         "\n\n**Syntax : **`.ugd`"
-        "\n**Usage : **Upload file from local or uri/url/drivelink into google drive."
+        "\n**Function : **Upload file from local or uri/url/drivelink into google drive."
         "\nfor drivelink it's upload only if you want to."
         "\n\n**Syntax : **`.gabort`"
-        "\n**Usage : **Abort process uploading or downloading."
+        "\n**Function : **Abort process uploading or downloading."
         "\n\n**Syntax : **`.gdf mkdir`"
-        "\n**Usage : **Create gdrive folder."
+        "\n**Function : **Create gdrive folder."
         "\n\n**Syntax : **`.gdf chck`"
-        "\n**Usage : **Check file/folder in gdrive."
+        "\n**Function : **Check file/folder in gdrive."
         "\n\n**Syntax : **`.gdf rm`"
-        "\n**Usage : **Delete files/folders in gdrive."
+        "\n**Function : **Delete files/folders in gdrive."
         "\nCan't be undone, this method skipping file trash, so be caution..."
         "\n\n**Syntax : **`.gdfset`"
-        "\n**Usage : **Change upload directory in gdrive."
+        "\n**Function : **Change upload directory in gdrive."
         "\ninto **G_DRIVE_FOLDER_ID** and if empty upload will go to root."
         "\n\n**Syntax : **`.gdfclear`"
-        "\n**Usage : **remove set parentId from cmd\n>`.gfset put` "
+        "\n**Function : **remove set parentId from cmd\n>`.gfset put` "
+        "\n\n**Syntax : **`.gdl <gdrive File-Link>`\
+        \n**Function : **G-Drive File Downloader Plugin For Userbot. only gdrive files are supported now"
+        "\nUse flag `-u` to directly upload to telegram in `.gdl` command"
         "\n\n**Syntax : **`.glist`"
-        "\n**Usage : **Get list of folders and files with default size 50."
+        "\n**Function : **Get list of folders and files with default size 50."
         "\nUse flags `-l range[1-1000]` for limit output."
         "\nUse flags `-p parents-folder_id` for lists given folder in gdrive."
         "\n\n**NOTE :**"

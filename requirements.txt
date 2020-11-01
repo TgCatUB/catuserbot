@@ -1,4 +1,4 @@
-telethon==1.16.4
+telethon >= 1.17.0
 aiofiles
 aiohttp
 asyncurban
@@ -6,8 +6,8 @@ beautifulsoup4
 cairosvg
 cfscrape
 coffeehouse
+colour
 covid
-covid-india
 cowpy
 cryptg
 csvfaker
@@ -48,6 +48,7 @@ pyfiglet
 PyGithub
 pylast
 PyLyrics
+pymediainfo
 pySmartDL
 python-barcode
 pytuneteller
@@ -63,6 +64,7 @@ sqlalchemy
 telegraph
 tswift
 validators
+vcsi
 wand
 wikipedia
-youtube-dl
+youtube_dl==2020.11.1.1

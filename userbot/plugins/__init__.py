@@ -6,42 +6,30 @@ import time
 import heroku3
 import requests
 import spamwatch as spam_watch
+from validators.url import url
 
 from .. import *
 from ..Config import Config
+
+# =================== CONSTANT ===================
+USERID = bot.uid
+DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+
+# mention user
+mention = f"[{DEFAULTUSER}](tg://user?id={USERID})"
+hmention = f"<a href = tg://user?id={USERID}>{DEFAULTUSER}</a>"
+
 
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
 heroku_api = "https://api.heroku.com"
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME
 HEROKU_API_KEY = Config.HEROKU_API_KEY
 
-if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-    os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
-# thumb image
-if Config.THUMB_IMAGE is not None:
-    with open(thumb_image_path, "wb") as f:
-        f.write(requests.get(Config.THUMB_IMAGE).content)
-
-cat_users = [bot.uid]
-if Config.SUDO_USERS:
-    for user in Config.SUDO_USERS:
-        cat_users.append(user)
-
-
-def check(cat):
-    if "/start" in cat:
-        return True
-    try:
-        hi = re.search(cat, "(a|b|c|d)")
-    except:
-        hi = False
-    return bool(hi)
-
-
 PM_START = []
+
+PMMENU = "pmpermit_menu" not in Config.NO_LOAD
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
     BOTLOG = False
@@ -56,6 +44,46 @@ G_DRIVE_CLIENT_SECRET = Config.G_DRIVE_CLIENT_SECRET
 G_DRIVE_DATA = Config.G_DRIVE_DATA
 G_DRIVE_FOLDER_ID = Config.G_DRIVE_FOLDER_ID
 TMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
+
+# spamwatch support
+if Config.SPAMWATCH_API:
+    token = Config.SPAMWATCH_API
+    spamwatch = spam_watch.Client(token)
+else:
+    spamwatch = None
+
+cat_users = [bot.uid]
+if Config.SUDO_USERS:
+    for user in Config.SUDO_USERS:
+        cat_users.append(user)
+
+
+# ================================================
+
+if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+    os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+
+
+# thumb image
+if Config.THUMB_IMAGE != None:
+    check = url(Config.THUMB_IMAGE)
+    if check:
+        try:
+            with open(thumb_image_path, "wb") as f:
+                f.write(requests.get(Config.THUMB_IMAGE).content)
+        except:
+            pass
+
+
+def check(cat):
+    if "/start" in cat:
+        return True
+    try:
+        hi = re.search(cat.lower(), "(a|b|c|d)", flags=re.IGNORECASE)
+    except:
+        hi = False
+    return bool(hi)
+
 
 # UniBorg Telegram UseRBot
 # Copyright (C) 2020 @UniBorg
@@ -86,14 +114,6 @@ def check_data_base_heal_th():
         output = "Functioning"
         is_database_working = True
     return is_database_working, output
-
-
-# spamwatch support
-if Config.SPAMWATCH_API:
-    token = Config.SPAMWATCH_API
-    spamwatch = spam_watch.Client(token)
-else:
-    spamwatch = None
 
 
 async def catalive():
