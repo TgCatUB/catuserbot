@@ -1,21 +1,12 @@
-""" Google Translate
-Available Commands:
-.tr LanguageCode as reply to a message
-.tr LangaugeCode | text to translate"""
-
-from googletrans import LANGUAGES, Translator
-
-from .. import CMD_HELP
+from googletrans import LANGUAGES, Translator 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, deEmojify
+from . import BOTLOG, BOTLOG_CHATID, deEmojify, CMD_HELP
 
-TTS_LANG = "en"
 TRT_LANG = "en"
-langi = "en"
 
 
-@bot.on(admin_cmd(pattern="tl ?(.*)"))
-@bot.on(sudo_cmd(pattern="tl ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="tl (.*)"))
+@bot.on(sudo_cmd(pattern="tl (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -26,11 +17,11 @@ async def _(event):
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         text = previous_message.message
-        lan = input_str or "ml"
-    elif "|" in input_str:
-        lan, text = input_str.split("|")
+        lan = input_str or "en"
+    elif ";" in input_str:
+        lan, text = input_str.split(";")
     else:
-        await edit_or_reply(event, "`.tl LanguageCode` as reply to a message")
+        await edit_delete(event, "`.tl LanguageCode` as reply to a message",time = 5)
         return
     text = deEmojify(text.strip())
     lan = lan.strip()
@@ -38,15 +29,13 @@ async def _(event):
     try:
         translated = translator.translate(text, dest=lan)
         after_tr_text = translated.text
-        # TODO: emojify the :
-        # either here, or before translation
-        output_str = """**TRANSLATED** from {} to {}
-{}""".format(
-            translated.src, lan, after_tr_text
-        )
+        output_str = "**TRANSLATED** from {} to {}\
+                        \n`{}`""".format(
+                        LANGUAGES['translated.src'], LANGUAGES['lan'], after_tr_text
+                        )
         await edit_or_reply(event, output_str)
     except Exception as exc:
-        await edit_or_reply(event, str(exc))
+        await edit_delete(event, str(exc),time =5 )
 
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"trt(?: |$)([\s\S]*)"))
@@ -66,7 +55,7 @@ async def translateme(trans):
     try:
         reply_text = translator.translate(deEmojify(message), dest=TRT_LANG)
     except ValueError:
-        await edit_or_reply(trans, "Invalid destination language.")
+        await edit_delete(trans, "`Invalid destination language.`",time = 5)
         return
     source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
     transl_lan = LANGUAGES[f"{reply_text.dest.lower()}"]
@@ -76,7 +65,7 @@ async def translateme(trans):
     if BOTLOG:
         await trans.client.send_message(
             BOTLOG_CHATID,
-            f"Translated some {source_lan.title()} stuff to {transl_lan.title()} just now.",
+            f"`Translated some {source_lan.title()} stuff to {transl_lan.title()} just now.`",
         )
 
 
@@ -107,12 +96,13 @@ CMD_HELP.update(
     {
         "translate": "**Plugin :** `translate`\
          \n\n**Syntax : **`.tl` LanguageCode as reply to a message\
-         \n**Function : **.tl LangaugeCode | text to translate\
+         \n**Function : **.tl LangaugeCode ; text to translate\
          \n**Example :** `.tl hi`\
-         \n\n**Syntax : **`.trt Reply to a message`/`.trt message`\
+         \n\n**Syntax : **`.trt Reply to a message` or `.trt message`\
          \n**Function : **__It will translate your messege__\
          \n\n**Syntax : **`.lang trt LanguageCode`\
          \n**Function : **__It will set default langaugeCode for **trt**__\
+         \n\n**Check here ** [Language codes](https://telegra.ph/Language-codes-11-01)\
         "
     }
 )
