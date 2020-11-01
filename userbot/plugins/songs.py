@@ -147,6 +147,7 @@ async def delete_messages(event, chat, from_message):
     async for i in itermsg:
         msgs.append(i.id)
     await event.client.delete_messages(chat, msgs)
+    await event.client.send_read_acknowledge(chat)
 
 
 @bot.on(admin_cmd(pattern="vsong( (.*)|$)"))
