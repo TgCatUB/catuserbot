@@ -58,7 +58,7 @@ async def translateme(trans):
         return
     source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
     transl_lan = LANGUAGES[f"{reply_text.dest.lower()}"]
-    reply_text = f"**From {source_lan.title()}(reply_text.src.lower()) to {transl_lan.title()}(reply_text.src.lower()) :**\n\n`{reply_text.text}`"
+    reply_text = f"**From {source_lan.title()}({reply_text.src.lower()}) to {transl_lan.title()}({reply_text.dest.lower()}) :**\n`{reply_text.text}`"
 
     await edit_or_reply(trans, reply_text)
     if BOTLOG:
