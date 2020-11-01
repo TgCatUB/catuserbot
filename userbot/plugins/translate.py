@@ -94,13 +94,13 @@ async def lang(value):
 CMD_HELP.update(
     {
         "translate": "**Plugin :** `translate`\
-         \n\n**Syntax : **`.tl` LanguageCode as reply to a message\
-         \n**Function : **.tl LangaugeCode ; text to translate\
+         \n\n**Syntax : **`.tl LanguageCode as reply to a message`\
+         \n**Function : **`.tl LangaugeCode ; text to translate`\
          \n**Example :** `.tl hi`\
-         \n\n**Syntax : **`.trt Reply to a message` or `.trt message`\
-         \n**Function : **__It will translate your messege__\
+         \n\n**Syntax : **`.trt Reply to a message or .trt message`\
+         \n**Function : **it will translate your messege\
          \n\n**Syntax : **`.lang trt LanguageCode`\
-         \n**Function : **__It will set default langaugeCode for **trt**__\
+         \n**Function : **It will set default langaugeCode for **trt**\
          \n\n**Check here ** [Language codes](https://telegra.ph/Language-codes-11-01)\
         "
     }
