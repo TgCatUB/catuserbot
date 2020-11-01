@@ -30,7 +30,7 @@ async def _(event):
     try:
         translated = translator.translate(text, dest=lan)
         after_tr_text = translated.text
-        output_str = f"**TRANSLATED from {LANGUAGES[translated.src]} to {LANGUAGES[lan]}**\
+        output_str = f"**TRANSLATED from {LANGUAGES[translated.src].title()} to {LANGUAGES[lan].title()}**\
                 \n`{after_tr_text}`"
         await edit_or_reply(event, output_str)
     except Exception as exc:
@@ -58,7 +58,7 @@ async def translateme(trans):
         return
     source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
     transl_lan = LANGUAGES[f"{reply_text.dest.lower()}"]
-    reply_text = f"**From** __{source_lan.title()}__\n**To **__{transl_lan.title()}__**:**\n\n`{reply_text.text}``"
+    reply_text = f"**From** __{source_lan.title()}__ **To **__{transl_lan.title()}__**:**\n\n`{reply_text.text}``"
 
     await edit_or_reply(trans, reply_text)
     if BOTLOG:
