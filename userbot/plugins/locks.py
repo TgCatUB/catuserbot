@@ -336,8 +336,8 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "locks": "**Plugin : **`lock\
-        \n\n**Syntax : **.lock <all (or) type(s)> or .unlock <all (or) type(s)>\
+        "locks": "**Plugin : **`lock`\
+        \n\n**Syntax : **`.lock <all (or) type(s)> or .unlock <all (or) type(s)>\
 \n**Function : **__Allows you to lock/unlock some common message types in the chat.\
 \n[NOTE: Requires proper admin rights in the chat !!]__\
 \n\n**Available message types to lock/unlock are: \
