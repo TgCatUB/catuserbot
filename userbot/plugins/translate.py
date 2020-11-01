@@ -94,9 +94,9 @@ async def lang(value):
 CMD_HELP.update(
     {
         "translate": "**Plugin :** `translate`\
-         \n\n**  • Syntax : **`.tl LanguageCode as reply to a message`\
-         \n**  • Function : **`.tl LangaugeCode ; text to translate`\
+         \n\n**  • Syntax : **`.tl LanguageCode as reply to a message or .tl LangaugeCode ; text to translate`\
          \n**  • Example :** `.tl hi`\
+         \n**  • Function : **Translates given language to destination language\
          \n\n**  • Syntax : **`.trt Reply to a message or .trt message`\
          \n**  • Function : **it will translate your messege\
          \n\n**  • Syntax : **`.lang trt LanguageCode`\
