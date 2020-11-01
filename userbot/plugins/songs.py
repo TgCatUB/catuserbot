@@ -13,7 +13,7 @@ from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, name_dl, runcmd, song_dl, video_dl, yt_search,reply_id
+from . import CMD_HELP, name_dl, reply_id, runcmd, song_dl, video_dl, yt_search
 
 # =========================================================== #
 #                           STRINGS                           #
@@ -35,7 +35,7 @@ async def cat_song_fetcer(event):
     song = event.pattern_match.group(1)
     chat = "@songdl_bot"
     reply_id_ = await reply_id(event)
-    catevent = await edit_or_reply(event, SONG_SEARCH_STRING ,parse_mode="html")
+    catevent = await edit_or_reply(event, SONG_SEARCH_STRING, parse_mode="html")
     async with event.client.conversation(chat) as conv:
         try:
             purgeflag = await conv.send_message("/start")
@@ -46,25 +46,29 @@ async def cat_song_fetcer(event):
                 await asyncio.sleep(0.1)
                 hmm = await event.client.get_messages(chat, ids=hmm.id)
             baka = await event.client.get_messages(chat)
-            if baka[0].message.startswith(("I don't like to say this but I failed to find any such song.")):
-                await delete_messages(event , chat , purgeflag)
-                return await edit_delete(catevent ,SONG_NOT_FOUND ,parse_mode="html" , time = 5)
-            await catevent.edit(SONG_SENDING_STRING,parse_mode="html")
+            if baka[0].message.startswith(
+                ("I don't like to say this but I failed to find any such song.")
+            ):
+                await delete_messages(event, chat, purgeflag)
+                return await edit_delete(
+                    catevent, SONG_NOT_FOUND, parse_mode="html", time=5
+                )
+            await catevent.edit(SONG_SENDING_STRING, parse_mode="html")
             await baka[0].click(0)
             music = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await catevent.edit(SONGBOT_BLOCKED_STRING,parse_mode="html")
+            await catevent.edit(SONGBOT_BLOCKED_STRING, parse_mode="html")
             return
         await event.client.send_file(
             event.chat_id,
             music,
             caption=f"<b>➥ Song :- <code>{song}</code></b>",
             parse_mode="html",
-            reply_to = reply_id_,
+            reply_to=reply_id_,
         )
         await catevent.delete()
-        await delete_messages(event ,chat , purgeflag)
+        await delete_messages(event, chat, purgeflag)
 
 
 @bot.on(admin_cmd(pattern="(song2|song320)($| (.*))"))
@@ -136,12 +140,14 @@ async def _(event):
         if files and os.path.exists(files):
             os.remove(files)
 
-async def delete_messages(event , chat , from_message):
+
+async def delete_messages(event, chat, from_message):
     itermsg = event.client.iter_messages(chat, min_id=from_message.id)
-    msgs =[from_message.id]
+    msgs = [from_message.id]
     async for i in itermsg:
         msgs.append(i.id)
-    await event.client.delete_messages(chat, msgs)            
+    await event.client.delete_messages(chat, msgs)
+
 
 @bot.on(admin_cmd(pattern="vsong( (.*)|$)"))
 @bot.on(sudo_cmd(pattern="vsong( (.*)|$)", allow_sudo=True))
@@ -207,7 +213,6 @@ async def _(event):
     for files in (catthumb, vsong_file):
         if files and os.path.exists(files):
             os.remove(files)
-
 
 
 CMD_HELP.update(
