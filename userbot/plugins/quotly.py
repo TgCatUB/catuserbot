@@ -8,9 +8,8 @@ import os
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from .. import process , CMD_HELP
+from .. import CMD_HELP, process
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
 
 
 @bot.on(admin_cmd(pattern="q(?: |$)(.*)", outgoing=True))
@@ -79,11 +78,14 @@ async def _(event):
             await catevent.delete()
             await event.client.send_message(event.chat_id, response.message)
 
-CMD_HELP.update({
-    "quotly":"**Plugin :** `quotly`\
+
+CMD_HELP.update(
+    {
+        "quotly": "**Plugin :** `quotly`\
         \n\n**  •Syntax : **`.q reply to messge`\
         \n**  •Function : **__Makes your message as sticker quote__\
         \n\n**  •Syntax : **`.q reply to messge`\
         \n**  •Function : **__Makes your message as sticker quote by @quotlybot__\
         "
-})
+    }
+)
