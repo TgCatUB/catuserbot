@@ -1,6 +1,7 @@
-from googletrans import LANGUAGES, Translator 
+from googletrans import LANGUAGES, Translator
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, deEmojify, CMD_HELP
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, deEmojify
 
 TRT_LANG = "en"
 
@@ -21,7 +22,7 @@ async def _(event):
     elif ";" in input_str:
         lan, text = input_str.split(";")
     else:
-        await edit_delete(event, "`.tl LanguageCode` as reply to a message",time = 5)
+        await edit_delete(event, "`.tl LanguageCode` as reply to a message", time=5)
         return
     text = deEmojify(text.strip())
     lan = lan.strip()
@@ -29,13 +30,14 @@ async def _(event):
     try:
         translated = translator.translate(text, dest=lan)
         after_tr_text = translated.text
-        output_str = "**TRANSLATED** from {} to {}\
-                        \n`{}`""".format(
-                        LANGUAGES['translated.src'], LANGUAGES['lan'], after_tr_text
-                        )
+        output_str = (
+            "**TRANSLATED** from {} to {}\
+                        \n`{}`"
+            "".format(LANGUAGES["translated.src"], LANGUAGES["lan"], after_tr_text)
+        )
         await edit_or_reply(event, output_str)
     except Exception as exc:
-        await edit_delete(event, str(exc),time =5 )
+        await edit_delete(event, str(exc), time=5)
 
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"trt(?: |$)([\s\S]*)"))
@@ -55,7 +57,7 @@ async def translateme(trans):
     try:
         reply_text = translator.translate(deEmojify(message), dest=TRT_LANG)
     except ValueError:
-        await edit_delete(trans, "`Invalid destination language.`",time = 5)
+        await edit_delete(trans, "`Invalid destination language.`", time=5)
         return
     source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
     transl_lan = LANGUAGES[f"{reply_text.dest.lower()}"]
