@@ -76,7 +76,9 @@ async def _(event):
             if not input_str:
                 return await edit_or_reply(event, "`I can't lock nothing !!`")
             else:
-                return await edit_delete(event, f"`Invalid lock type:` {input_str}" ,time= 5)
+                return await edit_delete(
+                    event, f"`Invalid lock type:` {input_str}", time=5
+                )
 
         lock_rights = ChatBannedRights(
             until_date=None,
@@ -100,12 +102,14 @@ async def _(event):
             await edit_or_reply(event, f"`Locked {locktype} for this chat !!`")
         except BaseException as e:
             await edit_delete(
-                event, f"`Do I have proper rights for that ??`\n**Error:** {str(e)}" , time =5
+                event,
+                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}",
+                time=5,
             )
 
 
 @bot.on(admin_cmd(pattern="unlock (.*)"))
-@bot.on(sudo_cmd(pattern="unlock (.*)",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="unlock (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -171,7 +175,9 @@ async def _(event):
             if not input_str:
                 return await edit_or_reply(event, "`I can't unlock nothing !!`")
             else:
-                return await edit_delete(event, f"`Invalid unlock type:` {input_str}",time=5)
+                return await edit_delete(
+                    event, f"`Invalid unlock type:` {input_str}", time=5
+                )
 
         unlock_rights = ChatBannedRights(
             until_date=None,
@@ -195,11 +201,14 @@ async def _(event):
             await edit_or_reply(event, f"`Unlocked {locktype} for this chat !!`")
         except BaseException as e:
             return await edit_delete(
-                event, f"`Do I have proper rights for that ??`\n**Error:** {str(e)}",time=5
+                event,
+                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}",
+                time=5,
             )
 
+
 @bot.on(admin_cmd(pattern="locks$"))
-@bot.on(sudo_cmd(pattern="locks$",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="locks$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
