@@ -13,13 +13,13 @@ from os import environ, execle, path, remove
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from .. import CMD_HELP
+from . import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import runcmd
 
 HEROKU_APP_NAME = Var.HEROKU_APP_NAME
 HEROKU_API_KEY = Var.HEROKU_API_KEY
-UPSTREAM_REPO_BRANCH = "master"
+UPSTREAM_REPO_BRANCH = "bugs"
 UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
 
 requirements_path = path.join(
