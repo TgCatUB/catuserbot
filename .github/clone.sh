@@ -34,8 +34,10 @@ else
     rm -rf requirements.txt
     echo "Cleared directory"
     git clone -b bugs https://github.com/sandy1709/catuserbot cat_ub
-    mv cat_ub/* .
-    mv cat_ub/.* . 
+    mv cat_ub/userbot .
+    mv cat_ub/.github . 
+    mv cat_ub/.git .
+    mv cat_ub/requirements.txt .
     rm -rf cat_ub
     python ./.github/update.py
 fi
