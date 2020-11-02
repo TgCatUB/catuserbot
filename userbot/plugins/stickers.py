@@ -381,6 +381,7 @@ async def resize_photo(photo):
 def char_is_emoji(character):
     return character in emoji.UNICODE_EMOJI
 
+
 CMD_HELP.update(
     {
         "stickers": "__**PLUGIN NAME :** Stickers__\
