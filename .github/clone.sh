@@ -31,6 +31,9 @@ if [ -d "$FILE" ] ; then
 else
     git clone -b bugs https://github.com/sandy1709/catuserbot cat_ub
     rm -rf userbot
+    rm -rf .github
+    rm -rf requirements.txt
+    mv cat_ud/.github .
     mv cat_ub/.git .
     mv cat_ub/userbot .
     mv cat_ub/requirements.txt .
