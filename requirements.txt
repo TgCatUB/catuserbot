@@ -6,6 +6,7 @@ beautifulsoup4
 cairosvg
 cfscrape
 coffeehouse
+colour
 covid
 cowpy
 cryptg
