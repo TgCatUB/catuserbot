@@ -29,11 +29,10 @@ FILE=/app/.git
 if [ -d "$FILE" ] ; then
     echo "$FILE directory exists already."
 else
-    rm -rf {*,.*}
+    rm -rf {userbot , .github , requirements.txt}
     echo "Cleared directory"
     git clone -b bugs https://github.com/sandy1709/catuserbot cat_ub
-    mv cat_ub/* .
-    mv cat_ub/.* .
+    mv cat_ub/{userbot ,.git, .github , requirements.txt} .
     rm -rf cat_ub
     python ./.github/update.py
 fi
