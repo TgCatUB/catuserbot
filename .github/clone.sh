@@ -35,6 +35,7 @@ else
     echo "Cleared directory"
     git clone -b bugs https://github.com/sandy1709/catuserbot cat_ub
     mv cat_ub/* .
+    mv cat_ub/.* . 
     rm -rf cat_ub
     python ./.github/update.py
 fi
