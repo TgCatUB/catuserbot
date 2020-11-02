@@ -7,7 +7,11 @@ from textwrap import wrap
 from typing import Optional, Tuple
 
 import numpy as np
-from colour import Color as asciiColor
+
+try:
+    from colour import Color as asciiColor
+except:
+    os.system("pip install colour")
 from PIL import Image, ImageDraw, ImageFont
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from wand.color import Color
