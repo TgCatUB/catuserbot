@@ -160,7 +160,10 @@ async def silently_send_message(conv, text):
 async def thumb_from_audio(audio_path, output):
     await runcmd(f"ffmpeg -i {audio_path} -filter:v scale=500:500 -an {output}")
 
-from colour import Color as asciiColor    
+
+from colour import Color as asciiColor
+
+
 def asciiart(in_f, SC, GCF, out_f, color1, color2, bgcolor="black"):
     chars = np.asarray(list(" .,:irs?@9B&#"))
     font = ImageFont.load_default()
@@ -191,4 +194,3 @@ def asciiart(in_f, SC, GCF, out_f, color1, color2, bgcolor="black"):
     if newImg.mode != "RGB":
         newImg = newImg.convert("RGB")
     newImg.save(out_f)
-    
