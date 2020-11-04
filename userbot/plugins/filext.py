@@ -38,7 +38,7 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "corecmds": """**Plugin : **`filext`
+        "filext": """**Plugin : **`filext`
     
   • **Syntax : **`.filext <extension name>`
   • **Function : **__Shows you the detailed information that extension type__"""
