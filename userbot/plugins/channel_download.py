@@ -16,7 +16,7 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 async def get_media(event):
     if event.fwd_from:
         return
-    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY , "temp")
+    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
     try:
         os.makedirs(tempdir)
     except BaseException:
@@ -50,7 +50,7 @@ async def get_media(event):
 async def get_media(event):
     if event.fwd_from:
         return
-    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY , "temp")
+    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
     try:
         os.makedirs(tempdir)
     except BaseException:
