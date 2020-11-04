@@ -1,7 +1,7 @@
 import asyncio
 from collections import deque
 
-from .. import ALIVE_NAME , CMD_HELP
+from .. import ALIVE_NAME, CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
@@ -247,7 +247,10 @@ async def timer_blankx(e):
         link_preview=True,
     )
 
-CMD_HELP.update({"animation1" : """**Plugin : **`animation1`
+
+CMD_HELP.update(
+    {
+        "animation1": """**Plugin : **`animation1`
 **Commands in animation1 are **
   •  .stupid
   •  .bombs
@@ -260,4 +263,6 @@ CMD_HELP.update({"animation1" : """**Plugin : **`animation1`
   •  .gangasta
   •  .charging 
   
-**Function : **__Different kinds of animation commands check yourself for there animation .__"""})  
+**Function : **__Different kinds of animation commands check yourself for there animation .__"""
+    }
+)
