@@ -306,6 +306,6 @@ CMD_HELP.update(
   •  `.jio`
   •  `.solarsystem`
   
-**Function : **__Different kinds of animation commands check yourself for there animation .__"""
+**Function : **__Different kinds of animation commands check yourself for their animation .__"""
     }
 )
