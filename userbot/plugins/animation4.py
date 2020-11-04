@@ -1,7 +1,7 @@
 import asyncio
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import ALIVE_NAME
+from . import ALIVE_NAME, CMD_HELP
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -413,3 +413,25 @@ async def _(event):
         "╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝"
     )
     await asyncio.sleep(6)
+
+    
+CMD_HELP.update(
+    {
+        "animation4": """**Plugin : **`animation4`
+        
+**Commands in animation4 are **
+  •  `.kilr <text>`
+  •  `.eye`
+  •  `.thinking`
+  •  `.snake`
+  •  `.human`
+  •  `.mc`
+  •  `.virus`
+  •  `.repe`
+  •  `.nikal`
+  •  `.music`
+  •  `.squ`
+  
+**Function : **__Different kinds of animation commands check yourself for there animation .__"""
+    }
+)    
