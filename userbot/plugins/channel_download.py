@@ -36,7 +36,7 @@ async def get_media(event):
             await event.edit(
                 f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"
             )
-    ps = subprocess.Popen(("ls", tempdir+), stdout=subprocess.PIPE)
+    ps = subprocess.Popen(("ls", tempdir), stdout=subprocess.PIPE)
     output = subprocess.check_output(("wc", "-l"), stdin=ps.stdout)
     ps.wait()
     output = str(output)
