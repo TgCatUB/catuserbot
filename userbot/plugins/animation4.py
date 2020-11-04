@@ -414,7 +414,7 @@ async def _(event):
     )
     await asyncio.sleep(6)
 
-    
+
 CMD_HELP.update(
     {
         "animation4": """**Plugin : **`animation4`
@@ -434,4 +434,4 @@ CMD_HELP.update(
   
 **Function : **__Different kinds of animation commands check yourself for there animation .__"""
     }
-)    
+)
