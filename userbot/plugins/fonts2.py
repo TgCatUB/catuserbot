@@ -148,9 +148,9 @@ async def stylish_generator(event):
 
 CMD_HELP.update(
     {
-        "fonts": """**Plugin : **`fonts`
+        "fonts2": """**Plugin : **`fonts2`
         
-**Commands found in fonts are**
+**Commands found in fonts2 are**
   •  `.egyptf`
   •  `.maref`
   •  `.handcf`
