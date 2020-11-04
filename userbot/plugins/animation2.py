@@ -2,7 +2,7 @@ import asyncio
 from collections import deque
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
+from . import CMD_HELP
 
 @bot.on(admin_cmd(pattern="think$", outgoing=True))
 @bot.on(sudo_cmd(pattern="think$", allow_sudo=True))
@@ -169,3 +169,24 @@ async def _(event):
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 32])
+
+CMD_HELP.update(
+    {
+        "animation2": """**Plugin : **`animation2`
+        
+**Commands in animation2 are **
+  •  `.think`
+  •  `.lmao`
+  •  `.nothappy`
+  •  `.clock`
+  •  `.muah`
+  •  `.heart`
+  •  `.gym`
+  •  `.earth`
+  •  `.moon`
+  •  `.smoon`
+  •  `.tmoon`
+  
+**Function : **__Different kinds of animation commands check yourself for there animation .__"""
+    }
+)        
