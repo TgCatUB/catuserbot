@@ -2,7 +2,7 @@ import asyncio
 from collections import deque
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import ALIVE_NAME
+from . import ALIVE_NAME, CMD_HELP
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -287,3 +287,24 @@ async def _(event):
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 8])
+
+CMD_HELP.update(
+    {
+        "animation3": """**Plugin : **`animation3`
+        
+**Commands in animation3 are **
+  •  `.star`
+  •  `.boxs`
+  •  `.rain`
+  •  `.deploy`
+  •  `.dump`
+  •  `.fleaveme`
+  •  `.loveu`
+  •  `.plane`
+  •  `.police`
+  •  `.jio`
+  •  `.solarsystem`
+  
+**Function : **__Different kinds of animation commands check yourself for there animation .__"""
+    }
+)        
