@@ -1,6 +1,7 @@
 import asyncio
-from . import CMD_HELP
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="unoob$"))
@@ -300,6 +301,7 @@ async def _(event):
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 7])
 
+
 CMD_HELP.update(
     {
         "animation6": """**Plugin : **`animation6`
@@ -320,4 +322,4 @@ CMD_HELP.update(
   
 **Function : **__Different kinds of animation commands check yourself for there animation .__"""
     }
-)        
+)
