@@ -3,8 +3,9 @@ Syntax: .filext EXTENSION"""
 
 import requests
 from bs4 import BeautifulSoup
-from . import CMD_HELP
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="filext (.*)"))
@@ -34,8 +35,12 @@ async def _(event):
             ),
         )
 
-CMD_HELP.update({
-    "corecmds":"""**Plugin : **`filext`
+
+CMD_HELP.update(
+    {
+        "corecmds": """**Plugin : **`filext`
     
   • **Syntax : **`.filext <extension name>`
-  • **Function : **__Shows you the detailed information that extension type__"""})
+  • **Function : **__Shows you the detailed information that extension type__"""
+    }
+)
