@@ -9,8 +9,9 @@ import urllib
 
 import requests
 from telethon.tl import functions
-from . import CMD_HELP
+
 from ..utils import admin_cmd
+from . import CMD_HELP
 
 COLLECTION_STRING1 = [
     "awesome-batman-wallpapers",
