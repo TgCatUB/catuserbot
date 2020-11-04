@@ -89,7 +89,7 @@ async def main(event):
         await asyncio.sleep(120)  # Edit this to your required needs
 
 
-CMD_HElp.update(
+CMD_HElP.update(
     {
         "autopfp": """**Plugin : **`autopfp`
     
