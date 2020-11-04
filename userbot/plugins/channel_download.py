@@ -10,6 +10,8 @@ import subprocess
 from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
+location = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
+
 
 @bot.on(admin_cmd(pattern=r"getc(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="getc(?: |$)(.*)", allow_sudo=True))
@@ -42,7 +44,7 @@ async def get_media(event):
     output = str(output)
     output = output.replace("b'", " ")
     output = output.replace("\\n'", " ")
-    await event.edit("Downloaded " + output + " files.")
+    await event.edit(f"Succesfully downloaded {output} number of media files")
 
 
 @bot.on(admin_cmd(pattern="geta(?: |$)(.*)"))
@@ -74,20 +76,19 @@ async def get_media(event):
     output = str(output)
     output = output.replace("b'", "")
     output = output.replace("\\n'", "")
-    await event.edit("Downloaded " + output + " files.")
+    await event.edit(f"Succesfully downloaded {output} number of media files")
 
 
 CMD_HELP.update(
     {
         "channel_download": f"""**Plugin : **`channel_download`
 
-Telegram Channel Media Downloader Plugin for userbot.
+**Telegram Channel Media Downloader Plugin for userbot.**
   • **Syntax : **`.geta channel_username` 
   • **Function : **__will  download all media from channel into your bot server but there is limit of 3000 to prevent API limits.__
-
   • **Syntax : **`.getc number channel_username` 
   • **Function : **__will  download latest given number of media from channel into your bot server .__
   
-**Note : **__The downloaded media files will be at__ `.ls {Config.TMP_DOWNLOAD_DIRECTORY}/temp`"""
+**Note : **__The downloaded media files will be at__ `.ls {location}`"""
     }
 )
