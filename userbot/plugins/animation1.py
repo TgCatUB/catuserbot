@@ -251,17 +251,18 @@ async def timer_blankx(e):
 CMD_HELP.update(
     {
         "animation1": """**Plugin : **`animation1`
+        
 **Commands in animation1 are **
-  •  .stupid
-  •  .bombs
-  •  .call
-  •  .kill
-  •  .wtf
-  •  .ding
-  •  .hypno
-  •  .candy
-  •  .gangasta
-  •  .charging 
+  •  `.stupid`
+  •  `.bombs`
+  •  `.call`
+  •  `.kill`
+  •  `.wtf`
+  •  `.ding`
+  •  `.hypno`
+  •  `.candy`
+  •  `.gangasta`
+  •  `.charging` 
   
 **Function : **__Different kinds of animation commands check yourself for there animation .__"""
     }
