@@ -173,7 +173,6 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-
 CMD_HELP.update(
     {
         "funnyfonts": """**Plugin : **`funnyfonts`
