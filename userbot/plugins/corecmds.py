@@ -114,7 +114,7 @@ async def load(event):
         )
 
 
-CMD_HELP(
+CMD_HELP.update(
     {
         "corecmds": """**Plugin : **`corecmds`
 
