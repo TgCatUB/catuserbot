@@ -9,7 +9,7 @@ import urllib
 
 import requests
 from telethon.tl import functions
-
+from . import CMD_HELP
 from ..utils import admin_cmd
 
 COLLECTION_STRING1 = [
