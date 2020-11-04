@@ -113,8 +113,10 @@ async def load(event):
             f"Could not load {shortname} because of the following error.\n{str(e)}",
         )
 
-CMD_HELP({
-"corecmds" : """**Plugin : **`corecmds`
+
+CMD_HELP(
+    {
+        "corecmds": """**Plugin : **`corecmds`
 
   •  **Command : **`install`
   •  **Function : **__Reply to any external plugin to install in bot__
@@ -126,4 +128,5 @@ CMD_HELP({
   •  **Function : **__To load that plugin again__
   
 **Note : **__To unload a plugin permenantly from bot set __`NO_LOAD`__ var in heroku with that plugin name with space between plugin names__"""
-})   
+    }
+)
