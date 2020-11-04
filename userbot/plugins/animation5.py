@@ -1,7 +1,7 @@
 # https://github.com/Jisan09/catuserbot credits to @Jisan7509
 
 import asyncio
-
+from . import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
