@@ -402,8 +402,10 @@ async def bluedevilshitos(shitos):
 async def bluedevildislike(dislike):
     await edit_or_reply(dislike, R)
 
-CMD_HELP.update({
-    "art" :"""**Plugin : **`art`
+
+CMD_HELP.update(
+    {
+        "art": """**Plugin : **`art`
     
 **Commands found in art are **
   •  `.ded <text>`
@@ -424,4 +426,5 @@ CMD_HELP.update({
   •  `.dislike`
   
 **Function : **__Different kind of art plugins try out yourself__"""
-})  
+    }
+)
