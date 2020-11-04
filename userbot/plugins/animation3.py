@@ -288,6 +288,7 @@ async def _(event):
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 8])
 
+
 CMD_HELP.update(
     {
         "animation3": """**Plugin : **`animation3`
@@ -307,4 +308,4 @@ CMD_HELP.update(
   
 **Function : **__Different kinds of animation commands check yourself for there animation .__"""
     }
-)        
+)
