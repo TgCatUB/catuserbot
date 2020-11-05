@@ -44,7 +44,7 @@ async def get_media(event):
     output = str(output)
     output = output.replace("b'", " ")
     output = output.replace("\\n'", " ")
-    await event.edit(f"Succesfully downloaded {output} number of media files")
+    await event.edit(f"Successfully downloaded {output} number of media files")
 
 
 @bot.on(admin_cmd(pattern="geta(?: |$)(.*)"))
@@ -76,7 +76,7 @@ async def get_media(event):
     output = str(output)
     output = output.replace("b'", "")
     output = output.replace("\\n'", "")
-    await event.edit(f"Succesfully downloaded {output} number of media files")
+    await event.edit(f"Successfully downloaded {output} number of media files")
 
 
 CMD_HELP.update(
