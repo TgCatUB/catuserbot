@@ -76,7 +76,7 @@ async def collage(cat):
 CMD_HELP.update(
     {
         "collage": "**Plugin : **`collage`\
-        \n\n**Syntax : **`.collage <grid size>`\
-        \n**Function : **__Shows you the grid image of images extracted from video \n Grid size must be between 1 to 9 by default it is 3__"
+        \n\n  •  **Syntax : **`.collage <grid size>`\
+        \n  •  **Function : **__Shows you the grid image of images extracted from video \n Grid size must be between 1 to 9 by default it is 3__"
     }
 )
