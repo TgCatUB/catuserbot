@@ -68,11 +68,11 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "ping": "**Plugin :** `ping`\
-    \n\n**Syntax :** `.ping`\
-    \n**Function : **__Shows you the ping speed of server__\
-    \n\n**Syntax : **`.fping`\
-    \n**Function : **__Shows the server ping with extra animation__\
+        "ping":   "**Plugin :** `ping`\
+    \n\n  •  **Syntax :** `.ping`\
+    \n  •  **Function : **__Shows you the ping speed of server__\
+    \n\n  •  **Syntax : **`.fping`\
+    \n  •  **Function : **__Shows the server ping with extra animation__\
     "
     }
 )
