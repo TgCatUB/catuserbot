@@ -75,7 +75,7 @@ def yaml_format(obj, indent=0, max_str_len=256, max_byte_len=64):
         return result
     if isinstance(obj, bytes):
         # repr() bytes if it's printable, hex like "FF EE BB" otherwise
-        if all(0x20 <= c < 0x7F for c in obj):
+        if all(0x20 <= c < 0x7f for c in obj):
             return repr(obj)
         return "<…>" if len(obj) > max_byte_len else " ".join(f"{b:02X}" for b in obj)
     if isinstance(obj, datetime.datetime):
