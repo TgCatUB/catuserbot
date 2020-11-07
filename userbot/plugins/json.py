@@ -2,7 +2,7 @@
 import io
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import yaml_format,parse_pre
+from . import parse_pre, yaml_format
 
 
 @bot.on(admin_cmd(pattern="json$"))
@@ -60,4 +60,4 @@ async def _(event):
             )
             await event.delete()
     else:
-        await edit_or_reply(event, the_real_message , parse_mode=parse_pre)
+        await edit_or_reply(event, the_real_message, parse_mode=parse_pre)
