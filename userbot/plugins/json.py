@@ -13,8 +13,8 @@ async def _(event):
     the_real_message = None
     reply_to_id = await reply_id(event)
     if event.reply_to_msg_id:
-        event = await event.get_reply_message()
-    the_real_message = event.stringify()
+        catevent = await event.get_reply_message()
+    the_real_message = catevent.stringify()
     if len(the_real_message) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(the_real_message)) as out_file:
             out_file.name = "json.text"
@@ -37,8 +37,8 @@ async def _(event):
     the_real_message = None
     reply_to_id = await reply_id(event)
     if event.reply_to_msg_id:
-        event = await event.get_reply_message()
-    the_real_message = yaml_format(event)
+        catevent = await event.get_reply_message()
+    the_real_message = yaml_format(catevent)
     if len(the_real_message) > Config.MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(the_real_message)) as out_file:
             out_file.name = "yaml.text"
