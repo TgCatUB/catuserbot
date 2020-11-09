@@ -49,7 +49,7 @@ async def remove_background(event):
             remove_bg_image.name = "backgroundless.png"
     else:
         await edit_delete(
-            catevent, f"`{output_file_name.content.decode("UTF-8")}`" , 5
+            catevent, f"`{output_file_name.content.decode('UTF-8')}`" , 5
         )
         return
     if cmd == "srmbg":
