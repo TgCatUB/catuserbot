@@ -5,6 +5,7 @@ import os
 
 import requests
 from Pil import Image
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, convert_toimage, reply_id
 
@@ -14,7 +15,9 @@ from . import CMD_HELP, convert_toimage, reply_id
 async def remove_background(event):
     if Config.REM_BG_API_KEY is None:
         return await edit_delete(
-            event, "`You have to set REM_BG_API_KEY in Config vars with API token from remove.bg to use this plugin .`", 5
+            event,
+            "`You have to set REM_BG_API_KEY in Config vars with API token from remove.bg to use this plugin .`",
+            5,
         )
     cmd = event.pattern_match.group(1)
     input_str = event.pattern_match.group(2)
@@ -22,11 +25,9 @@ async def remove_background(event):
     if event.reply_to_msg_id and not input_str:
         reply_message = await event.get_reply_message()
         catevent = await edit_or_reply(event, "`Analysing this Image/Sticker...`")
-        file_name = os.path.join(Config.TEMP_DIR ,"rmbg.png")
+        file_name = os.path.join(Config.TEMP_DIR, "rmbg.png")
         try:
-            await event.client.download_media(
-                reply_message, file_name
-            )
+            await event.client.download_media(reply_message, file_name)
         except Exception as e:
             await edit_delete(catevent, f"`{str(e)}`", 5)
             return
@@ -36,11 +37,13 @@ async def remove_background(event):
             output_file_name = ReTrieveFile(file_name)
             os.remove(file_name)
     elif input_str:
-        catevent = await edit_or_reply(event , "`Removing Background of this media`")
+        catevent = await edit_or_reply(event, "`Removing Background of this media`")
         output_file_name = ReTrieveURL(input_str)
     else:
-        await edit_delete(event ,
-            "`Reply to any image or sticker with rmbg/srmbg to get background less png file or webp format or provide image link along with command`" , 5
+        await edit_delete(
+            event,
+            "`Reply to any image or sticker with rmbg/srmbg to get background less png file or webp format or provide image link along with command`",
+            5,
         )
         return
     contentType = output_file_name.headers.get("content-type")
@@ -48,20 +51,18 @@ async def remove_background(event):
         with io.BytesIO(output_file_name.content) as remove_bg_image:
             remove_bg_image.name = "backgroundless.png"
     else:
-        await edit_delete(
-            catevent, f"`{output_file_name.content.decode('UTF-8')}`" , 5
-        )
+        await edit_delete(catevent, f"`{output_file_name.content.decode('UTF-8')}`", 5)
         return
     if cmd == "srmbg":
-        file = convert_to_webp(remove_bg_image,"backgroundless.webp")
+        file = convert_to_webp(remove_bg_image, "backgroundless.webp")
     else:
         file = remove_bg_image
     await event.client.send_file(
-                    event.chat_id,
-                    file,
-                    force_document=True,
-                    reply_to=message_id,
-                )
+        event.chat_id,
+        file,
+        force_document=True,
+        reply_to=message_id,
+    )
     await catevent.delete()
 
 
@@ -96,11 +97,13 @@ def ReTrieveURL(input_url):
         stream=True,
     )
 
-def convert_to_webp(file_name,output_file_name):
+
+def convert_to_webp(file_name, output_file_name):
     image = Image.open(file_name).convert("RGB")
-    image.save(output_file_name,"webp")
+    image.save(output_file_name, "webp")
     os.remove(file_name)
     return output_file_name
+
 
 CMD_HELP.update(
     {
