@@ -4,7 +4,7 @@ import io
 import os
 
 import requests
-from Pil import Image
+from PIL import Image
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, convert_toimage, reply_id
