@@ -99,7 +99,9 @@ def ReTrieveURL(input_url):
 
 
 def convert_to_webp(file_name, output_file_name):
-    image = Image.open(file_name).convert("RGB")
+    image = Image.open(file_name)
+    if image.mode != "RGB":
+        image.convert("RGB")
     image.save(output_file_name, "webp")
     os.remove(file_name)
     return output_file_name
