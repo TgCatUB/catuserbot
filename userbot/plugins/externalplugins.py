@@ -1,12 +1,17 @@
-import os
 import asyncio
+import os
 from pathlib import Path
+
 from telethon.tl.types import InputMessagesFilterDocument
+
 from ..utils import load_module
 from . import BOTLOG_CHATID
 
+
 async def install():
-    documentss = await bot.get_messages(Config.PLUGIN_CHANNEL, None, filter=InputMessagesFilterDocument)
+    documentss = await bot.get_messages(
+        Config.PLUGIN_CHANNEL, None, filter=InputMessagesFilterDocument
+    )
     total = int(documentss.total)
     for module in range(total):
         plugin_to_install = documentss[module].id
@@ -19,12 +24,14 @@ async def install():
             load_module(shortname.replace(".py", ""))
             await bot.send_message(
                 BOTLOG_CHATID,
-                f"Installed Plugin `{os.path.basename(downloaded_file_name)}` successfully."
-                ),
+                f"Installed Plugin `{os.path.basename(downloaded_file_name)}` successfully.",
+            ),
         else:
-            await bot.send_message( BOTLOG_CHATID,
-                f"Plugin `{os.path.basename(downloaded_file_name)}` has been pre-installed and cannot be installed."
+            await bot.send_message(
+                BOTLOG_CHATID,
+                f"Plugin `{os.path.basename(downloaded_file_name)}` has been pre-installed and cannot be installed.",
             )
+
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(install())
