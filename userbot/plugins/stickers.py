@@ -73,7 +73,9 @@ async def kang(args):
                 emojibypass = True
         elif "tgsticker" in message.media.document.mime_type:
             catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
-            await args.client.download_file(message.media.document, "AnimatedSticker.tgs")
+            await args.client.download_file(
+                message.media.document, "AnimatedSticker.tgs"
+            )
 
             attributes = message.media.document.attributes
             for attribute in attributes:
@@ -149,7 +151,9 @@ async def kang(args):
                     if Config.CUSTOM_STICKER_PACKNAME:
                         if is_anim:
                             packname = f"{Config.CUSTOM_STICKER_PACKNAME}_{pack}_anim"
-                            packnick = f"@{Config.CUSTOM_STICKER_PACKNAME}'s_{pack} (Animated)"
+                            packnick = (
+                                f"@{Config.CUSTOM_STICKER_PACKNAME}'s_{pack} (Animated)"
+                            )
                         else:
                             packname = f"{Config.CUSTOM_STICKER_PACKNAME}_{pack}"
                             packnick = f"@{Config.CUSTOM_STICKER_PACKNAME}'s_{pack}"
@@ -211,12 +215,13 @@ async def kang(args):
                         await conv.get_response()
                         # Ensure user doesn't get spamming notifications
                         await args.client.send_read_acknowledge(conv.chat_id)
-                        await edit_delete( catevent ,
+                        await edit_delete(
+                            catevent,
                             f"`Sticker added in a Different Pack !\
                             \nThis Pack is Newly created!\
                             \nYour pack can be found` [here](t.me/addstickers/{packname}) `and emoji of the sticker added is {emoji}`",
                             parse_mode="md",
-                            time = 7
+                            time=7,
                         )
                         return
                 if is_anim:
@@ -290,11 +295,12 @@ async def kang(args):
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
                 await args.client.send_read_acknowledge(conv.chat_id)
-        await edit_delete( catevent,
+        await edit_delete(
+            catevent,
             f"`Sticker kanged successfully!\
             \nPack can be found` [here](t.me/addstickers/{packname}) `and emoji of the sticker is {emoji}`",
             parse_mode="md",
-            time = 7 
+            time=7,
         )
 
 
@@ -302,7 +308,7 @@ async def kang(args):
 @bot.on(sudo_cmd(pattern="stkrinfo$", allow_sudo=True))
 async def get_pack_info(event):
     if not event.is_reply:
-        await edit_delete(event, "`I can't fetch info from nothing, can I ?!`",5)
+        await edit_delete(event, "`I can't fetch info from nothing, can I ?!`", 5)
         return
     rep_msg = await event.get_reply_message()
     if not rep_msg.document:
@@ -314,7 +320,7 @@ async def get_pack_info(event):
             event, "`Fetching details of the sticker pack, please wait..`"
         )
     except BaseException:
-        await edit_delete(event, "`This is not a sticker. Reply to a sticker.`",5)
+        await edit_delete(event, "`This is not a sticker. Reply to a sticker.`", 5)
         return
     if not isinstance(stickerset_attr, DocumentAttributeSticker):
         await catevent.edit("`This is not a sticker. Reply to a sticker.`")
