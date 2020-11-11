@@ -23,8 +23,7 @@ async def install():
                 ),
             )
         else:
-            await bot.send_message(
-                BOTLOG_CHATID,
+            await bot.send_message( BOTLOG_CHATID,
                 f"Plugin `{os.path.basename(downloaded_file_name)}` has been pre-installed and cannot be installed."
             )
 
