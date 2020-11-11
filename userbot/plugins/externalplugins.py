@@ -1,4 +1,4 @@
-if Config.PLUGIN_CHANNEL:    
+if Config.PLUGIN_CHANNEL:
     import asyncio
     import os
     from pathlib import Path
@@ -7,7 +7,6 @@ if Config.PLUGIN_CHANNEL:
 
     from ..utils import load_module
     from . import BOTLOG_CHATID
-
 
     async def install():
         documentss = await bot.get_messages(
@@ -32,7 +31,6 @@ if Config.PLUGIN_CHANNEL:
                     BOTLOG_CHATID,
                     f"Plugin `{os.path.basename(downloaded_file_name)}` has been pre-installed and cannot be installed.",
                 )
-
 
     loop = asyncio.get_event_loop()
     loop.run_until_complete(install())
