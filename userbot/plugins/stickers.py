@@ -290,7 +290,7 @@ async def kang(args):
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
                 await args.client.send_read_acknowledge(conv.chat_id)
-        await edit_delete( catevent
+        await edit_delete( catevent,
             f"`Sticker kanged successfully!\
             \nPack can be found` [here](t.me/addstickers/{packname}) `and emoji of the sticker is {emoji}`",
             parse_mode="md",
