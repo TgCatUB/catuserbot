@@ -153,7 +153,7 @@ async def kang(args):
                         else:
                             packname = f"{Config.CUSTOM_STICKER_PACKNAME}_{pack}"
                             packnick = f"@{Config.CUSTOM_STICKER_PACKNAME}'s_{pack}"
-                    else
+                    else:
                         if is_anim:
                             packname = f"{user.username}_{pack}_anim"
                             packnick = f"@{user.username}'s_{pack} (Animated)"
