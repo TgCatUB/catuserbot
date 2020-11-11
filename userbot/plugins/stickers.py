@@ -112,11 +112,10 @@ async def kang(args):
             else:
                 pack = splat[1]
         if Config.CUSTOM_STICKER_PACKNAME:
-            packname = f"{Config.CUSTOM_STICKER_PACKNAME}_{pack}"
-            packnick = f"@{Config.CUSTOM_STICKER_PACKNAME}'s_{pack}"
+            packnick = f"@{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack}"
         else:
-            packname = f"{user.username}_{pack}"
-            packnick = f"@{user.username}'s_{pack}"
+            packnick = f"@{user.username} Vol.{pack}"
+        packname = f"{user.username}_{pack}"
         cmd = "/newpack"
         file = io.BytesIO()
         if is_anim:
@@ -150,20 +149,20 @@ async def kang(args):
                         pack = 1
                     if Config.CUSTOM_STICKER_PACKNAME:
                         if is_anim:
-                            packname = f"{Config.CUSTOM_STICKER_PACKNAME}_{pack}_anim"
+                            packname = f"{user.username}_{pack}_anim"
                             packnick = (
-                                f"@{Config.CUSTOM_STICKER_PACKNAME}'s_{pack} (Animated)"
+                                f"@{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack} (Animated)"
                             )
                         else:
-                            packname = f"{Config.CUSTOM_STICKER_PACKNAME}_{pack}"
-                            packnick = f"@{Config.CUSTOM_STICKER_PACKNAME}'s_{pack}"
+                            packname = f"{user.username}_{pack}"
+                            packnick = f"@{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack}"
                     else:
                         if is_anim:
                             packname = f"{user.username}_{pack}_anim"
-                            packnick = f"@{user.username}'s_{pack} (Animated)"
+                            packnick = f"@{user.username} Vol.{pack} (Animated)"
                         else:
                             packname = f"{user.username}_{pack}"
-                            packnick = f"@{user.username}'s_{pack}"
+                            packnick = f"@{user.username} Vol.{pack}"
                     await catevent.edit(
                         f"`Switching to Pack {str(pack)} due to insufficient space`"
                     )
@@ -183,7 +182,7 @@ async def kang(args):
                             remove("AnimatedSticker.tgs")
                         else:
                             file.seek(0)
-                            await conv.send_file(file, force_document=True)
+                            await conv.send_file(file, force_document=Trupackname = f"{Config.CUSTOM_STICKER_PACKNAME}_{pack}"e)
                         rsp = await conv.get_response()
                         if (
                             "You can list several emoji in one message, but I recommend using no more than two per sticker"
