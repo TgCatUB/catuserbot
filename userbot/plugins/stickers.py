@@ -112,7 +112,7 @@ async def kang(args):
             else:
                 pack = splat[1]
         if Config.CUSTOM_STICKER_PACKNAME:
-            packnick = f"@{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack}"
+            packnick = f"{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack}"
         else:
             packnick = f"@{user.username} Vol.{pack}"
         packname = f"{user.username}_{pack}"
@@ -150,10 +150,10 @@ async def kang(args):
                     if Config.CUSTOM_STICKER_PACKNAME:
                         if is_anim:
                             packname = f"{user.username}_{pack}_anim"
-                            packnick = f"@{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack} (Animated)"
+                            packnick = f"{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack} (Animated)"
                         else:
                             packname = f"{user.username}_{pack}"
-                            packnick = f"@{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack}"
+                            packnick = f"{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack}"
                     else:
                         if is_anim:
                             packname = f"{user.username}_{pack}_anim"
