@@ -47,9 +47,10 @@ async def remove_background(event):
         )
         return
     contentType = output_file_name.headers.get("content-type")
+    remove_bg_image = "backgroundless.png"
     if "image" in contentType:
-        with io.BytesIO(output_file_name.content) as remove_bg_image:
-            remove_bg_image.name = "backgroundless.png"
+        with open("backgroundless.png", 'wb') as removed_bg_file:
+            removed_bg_file.write(response.content)
     else:
         await edit_delete(catevent, f"`{output_file_name.content.decode('UTF-8')}`", 5)
         return
