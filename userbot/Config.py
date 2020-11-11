@@ -26,6 +26,9 @@ class Config((object)):
     PRIVATE_GROUP_ID = os.environ.get("PRIVATE_GROUP_ID", None)
     if PRIVATE_GROUP_ID:
         PRIVATE_GROUP_ID = int(PRIVATE_GROUP_ID)
+    PLUGIN_CHANNEL = os.environ.get("PLUGIN_CHANNEL", None)
+    if PLUGIN_CHANNEL:
+        PLUGIN_CHANNEL = int(PLUGIN_CHANNEL)
     # Send .get_id in any channel to fill this value. ReQuired for @Manuel15
     # inspiration to work!
     PRIVATE_CHANNEL_BOT_API_ID = os.environ.get("PRIVATE_CHANNEL_BOT_API_ID", None)
