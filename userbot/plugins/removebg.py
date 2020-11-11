@@ -60,7 +60,6 @@ async def remove_background(event):
     await event.client.send_file(
         event.chat_id,
         file,
-        force_document=True,
         reply_to=message_id,
     )
     await catevent.delete()
