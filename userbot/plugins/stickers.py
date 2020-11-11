@@ -182,7 +182,7 @@ async def kang(args):
                             remove("AnimatedSticker.tgs")
                         else:
                             file.seek(0)
-                            await conv.send_file(file, force_document=Trupackname = f"{Config.CUSTOM_STICKER_PACKNAME}_{pack}"e)
+                            await conv.send_file(file, force_document=True)
                         rsp = await conv.get_response()
                         if (
                             "You can list several emoji in one message, but I recommend using no more than two per sticker"
