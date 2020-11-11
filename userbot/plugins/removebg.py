@@ -33,11 +33,11 @@ async def remove_background(event):
         else:
             await catevent.edit("`Removing Background of this media`")
             file_name = convert_toimage(file_name)
-            output_file_name = ReTrieveFile(file_name)
+            response = ReTrieveFile(file_name)
             os.remove(file_name)
     elif input_str:
         catevent = await edit_or_reply(event, "`Removing Background of this media`")
-        output_file_name = ReTrieveURL(input_str)
+        response = ReTrieveURL(input_str)
     else:
         await edit_delete(
             event,
@@ -45,13 +45,13 @@ async def remove_background(event):
             5,
         )
         return
-    contentType = output_file_name.headers.get("content-type")
+    contentType = response.headers.get("content-type")
     remove_bg_image = "backgroundless.png"
     if "image" in contentType:
         with open("backgroundless.png", "wb") as removed_bg_file:
             removed_bg_file.write(response.content)
     else:
-        await edit_delete(catevent, f"`{output_file_name.content.decode('UTF-8')}`", 5)
+        await edit_delete(catevent, f"`{response.content.decode('UTF-8')}`", 5)
         return
     if cmd == "srmbg":
         file = convert_to_webp(remove_bg_image, "backgroundless.webp")
@@ -98,13 +98,13 @@ def ReTrieveURL(input_url):
     )
 
 
-def convert_to_webp(file_name, output_file_name):
+def convert_to_webp(file_name, response):
     image = Image.open(file_name)
     if image.mode != "RGB":
         image.convert("RGB")
-    image.save(output_file_name, "webp")
+    image.save(response, "webp")
     os.remove(file_name)
-    return output_file_name
+    return response
 
 
 CMD_HELP.update(
