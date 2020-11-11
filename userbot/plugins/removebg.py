@@ -55,13 +55,19 @@ async def remove_background(event):
         return
     if cmd == "srmbg":
         file = convert_to_webp(remove_bg_image, "backgroundless.webp")
+        await event.client.send_file(
+            event.chat_id,
+            file,
+            reply_to=message_id,
+        )
     else:
         file = remove_bg_image
-    await event.client.send_file(
-        event.chat_id,
-        file,
-        reply_to=message_id,
-    )
+        await event.client.send_file(
+            event.chat_id,
+            file,
+            force_document=True,
+            reply_to=message_id,
+        )
     await catevent.delete()
 
 
