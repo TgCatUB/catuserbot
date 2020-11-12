@@ -15,7 +15,7 @@ if Config.PLUGIN_CHANNEL:
         for module in range(total):
             plugin_to_install = documentss[module].id
             downloaded_file_name = await bot.download_media(
-                await bot.get_messages(chat, ids=plugin_to_install), "userbot/plugins/"
+                await bot.get_messages(Config.PLUGIN_CHANNEL, ids=plugin_to_install), "userbot/plugins/"
             )
             if "(" not in downloaded_file_name:
                 path1 = Path(downloaded_file_name)
