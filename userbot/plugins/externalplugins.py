@@ -1,5 +1,4 @@
 if Config.PLUGIN_CHANNEL:
-    import asyncio
     import os
     from pathlib import Path
 
