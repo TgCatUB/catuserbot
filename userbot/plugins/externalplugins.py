@@ -31,4 +31,4 @@ if Config.PLUGIN_CHANNEL:
                     f"Plugin `{os.path.basename(downloaded_file_name)}` has been pre-installed and cannot be installed.",
                 )
 
-    install()
+    bot.loop.create_task(install())
