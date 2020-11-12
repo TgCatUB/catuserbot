@@ -32,6 +32,4 @@ if Config.PLUGIN_CHANNEL:
                     f"Plugin `{os.path.basename(downloaded_file_name)}` has been pre-installed and cannot be installed.",
                 )
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(install())
-    loop.close()
+    await install()
