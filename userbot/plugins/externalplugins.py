@@ -31,4 +31,4 @@ if Config.PLUGIN_CHANNEL:
                     f"Plugin `{os.path.basename(downloaded_file_name)}` has been pre-installed and cannot be installed.",
                 )
 
-    loop.run_until_complete(install())
+    install()
