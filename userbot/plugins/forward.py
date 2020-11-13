@@ -68,7 +68,7 @@ async def _(event):
         if c not in string.ascii_lowercase:
             continue
         if c not in msg_cache:
-            async for i in groupsid:
+            for i in groupsid:
                 async for msg in event.client.iter_messages(i, search=c):
                     if msg.raw_text.lower() == c and msg.media is None:
                         msg_cache[c] = msg
