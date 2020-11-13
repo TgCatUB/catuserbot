@@ -1,9 +1,9 @@
 import string
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
 from telethon.tl.types import Channel
 
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 global msg_cache
 msg_cache = {}
@@ -66,7 +66,7 @@ async def _(event):
     await event.delete()
     text = event.pattern_match.group(1)
     destination = await event.get_input_chat()
-    if len(groupsid)==0:
+    if len(groupsid) == 0:
         groupsid = await all_groups_id(event)
     for c in text.lower():
         if c not in string.ascii_lowercase:
