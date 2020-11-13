@@ -64,14 +64,13 @@ async def download(event):
             event, "`Please ADD Proper Github Repo Name of your userbot`"
         )
         return
-    mone = edit_or_reply(event, "Processing ...")
+    mone = await edit_or_reply(event, "Processing ...")
     if not os.path.isdir(GIT_TEMP_DIR):
         os.makedirs(GIT_TEMP_DIR)
     start = datetime.now()
     reply_message = await event.get_reply_message()
     try:
-        time.time()
-        downloaded_file_name = await bot.download_media(
+        downloaded_file_name = await event.client.download_media(
             reply_message.media, GIT_TEMP_DIR
         )
     except Exception as e:
