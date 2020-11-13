@@ -1,6 +1,5 @@
-import asyncio
 import datetime
-
+import asyncio
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
@@ -24,9 +23,8 @@ async def reply_id(event):
 # kanged from uniborg @spechide
 # https://github.com/SpEcHiDe/UniBorg/blob/d8b852ee9c29315a53fb27055e54df90d0197f0b/uniborg/utils.py#L250
 
-
-def run_async(coro):
-    return asyncio.run(loop)
+def run_async(function):
+    return asyncio.run(function)
 
 
 def parse_pre(text):
