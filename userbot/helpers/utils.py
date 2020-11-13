@@ -1,13 +1,11 @@
-import asyncio
 import datetime
+from subprocess import PIPE, Popen
 
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
 
 from ..Config import Config
-from subprocess import Popen, PIPE
-
 
 
 def mentionuser(name, userid):
@@ -28,7 +26,7 @@ async def reply_id(event):
 
 
 def install_pip(pipfile):
-    process = Popen(['pip', 'install', f'{pipfile}'], stdout=PIPE, stderr=PIPE)
+    process = Popen(["pip", "install", f"{pipfile}"], stdout=PIPE, stderr=PIPE)
     stdout, stderr = process.communicate()
     return stdout
 
