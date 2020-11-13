@@ -114,8 +114,8 @@ async def set_group_photo(gpic):
             )
 
 
-@bot.on(admin_cmd(pattern="promote(?: |$)(.*)",command = "promote"))
-@bot.on(sudo_cmd(pattern="promote(?: |$)(.*)",command = "promote", allow_sudo=True))
+@bot.on(admin_cmd(pattern="promote(?: |$)(.*)", command="promote"))
+@bot.on(sudo_cmd(pattern="promote(?: |$)(.*)", command="promote", allow_sudo=True))
 @errors_handler
 async def promote(promt):
     chat = await promt.get_chat()
@@ -153,8 +153,8 @@ async def promote(promt):
         )
 
 
-@bot.on(admin_cmd(pattern="demote(?: |$)(.*)",command = "demote"))
-@bot.on(sudo_cmd(pattern="demote(?: |$)(.*)",command = "demote", allow_sudo=True))
+@bot.on(admin_cmd(pattern="demote(?: |$)(.*)", command="demote"))
+@bot.on(sudo_cmd(pattern="demote(?: |$)(.*)", command="demote", allow_sudo=True))
 @errors_handler
 async def demote(dmod):
     chat = await dmod.get_chat()
@@ -192,8 +192,8 @@ async def demote(dmod):
         )
 
 
-@bot.on(admin_cmd(pattern="ban(?: |$)(.*)",command = "ban"))
-@bot.on(sudo_cmd(pattern="ban(?: |$)(.*)",command = "ban", allow_sudo=True))
+@bot.on(admin_cmd(pattern="ban(?: |$)(.*)", command="ban"))
+@bot.on(sudo_cmd(pattern="ban(?: |$)(.*)", command="ban", allow_sudo=True))
 @errors_handler
 async def ban(bon):
     chat = await bon.get_chat()
@@ -233,8 +233,8 @@ async def ban(bon):
         )
 
 
-@bot.on(admin_cmd(pattern="unban(?: |$)(.*)",command = "unban"))
-@bot.on(sudo_cmd(pattern="unban(?: |$)(.*)",command = "unban", allow_sudo=True))
+@bot.on(admin_cmd(pattern="unban(?: |$)(.*)", command="unban"))
+@bot.on(sudo_cmd(pattern="unban(?: |$)(.*)", command="unban", allow_sudo=True))
 @errors_handler
 async def nothanos(unbon):
     chat = await unbon.get_chat()
@@ -271,8 +271,8 @@ async def watcher(event):
             LOGS.info(str(e))
 
 
-@bot.on(admin_cmd(pattern="mute(?: |$)(.*)",command = "mute"))
-@bot.on(sudo_cmd(pattern="mute(?: |$)(.*)",command = "mute", allow_sudo=True))
+@bot.on(admin_cmd(pattern="mute(?: |$)(.*)", command="mute"))
+@bot.on(sudo_cmd(pattern="mute(?: |$)(.*)", command="mute", allow_sudo=True))
 async def startmute(event):
     if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
@@ -367,8 +367,8 @@ async def startmute(event):
             )
 
 
-@bot.on(admin_cmd(pattern="unmute(?: |$)(.*)",command = "unmute"))
-@bot.on(sudo_cmd(pattern="unmute(?: |$)(.*)",command = "unmute", allow_sudo=True))
+@bot.on(admin_cmd(pattern="unmute(?: |$)(.*)", command="unmute"))
+@bot.on(sudo_cmd(pattern="unmute(?: |$)(.*)", command="unmute", allow_sudo=True))
 async def endmute(event):
     if event.is_private:
         await event.edit("Unexpected issues or ugly errors may occur!")
@@ -431,8 +431,8 @@ async def endmute(event):
             )
 
 
-@bot.on(admin_cmd(pattern="pin($| (.*))",command = "pin"))
-@bot.on(sudo_cmd(pattern="pin($| (.*))",command = "pin", allow_sudo=True))
+@bot.on(admin_cmd(pattern="pin($| (.*))", command="pin"))
+@bot.on(sudo_cmd(pattern="pin($| (.*))", command="pin", allow_sudo=True))
 @errors_handler
 async def pin(msg):
     chat = await msg.get_chat()
@@ -471,8 +471,8 @@ async def pin(msg):
         pass
 
 
-@bot.on(admin_cmd(pattern="kick(?: |$)(.*)",command = "kick"))
-@bot.on(sudo_cmd(pattern="kick(?: |$)(.*)",command = "kick", allow_sudo=True))
+@bot.on(admin_cmd(pattern="kick(?: |$)(.*)", command="kick"))
+@bot.on(sudo_cmd(pattern="kick(?: |$)(.*)", command="kick", allow_sudo=True))
 @errors_handler
 async def kick(usr):
     chat = await usr.get_chat()
@@ -507,8 +507,8 @@ async def kick(usr):
         )
 
 
-@bot.on(admin_cmd(pattern="iundlt$",command = "iundlt"))
-@bot.on(sudo_cmd(pattern="iundlt$",command = "iundlt", allow_sudo=True))
+@bot.on(admin_cmd(pattern="iundlt$", command="iundlt"))
+@bot.on(sudo_cmd(pattern="iundlt$", command="iundlt", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
