@@ -434,11 +434,12 @@ async def endmute(event):
 @bot.on(sudo_cmd(pattern="pin($| (.*))", command="pin", allow_sudo=True))
 @errors_handler
 async def pin(msg):
-    chat = await msg.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
-    if not admin and not creator and not msg.is_private:
-        return await edit_delete(msg, NO_ADMIN, 5)
+    if not msg.is_private:
+        chat = await msg.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            return await edit_delete(msg, NO_ADMIN, 5)
     to_pin = msg.reply_to_msg_id
     if not to_pin:
         return await edit_delete(msg, "`Reply to a message to pin it.`", 5)
@@ -468,12 +469,13 @@ async def pin(msg):
 @bot.on(sudo_cmd(pattern="unpin($| (.*))", command="unpin", allow_sudo=True))
 @errors_handler
 async def pin(msg):
-    chat = await msg.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
-    if not admin and not creator and not msg.is_private:
-        await edit_delete(msg, NO_ADMIN, 5)
-        return
+    if not msg.is_private:
+        chat = await msg.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            await edit_delete(msg, NO_ADMIN, 5)
+            return
     to_unpin = msg.reply_to_msg_id
     options = (msg.pattern_match.group(1)).strip()
     if not to_unpin and options != "all":
