@@ -476,7 +476,8 @@ async def pin(msg):
         return
     to_unpin = msg.reply_to_msg_id
     options = msg.pattern_match.group(1)
-    if not to_unpin or options.lower() != "all":
+    print(options)
+    if not to_unpin and options.lower() != "all":
         await edit_delete(msg, "`Reply to a message to unpin it or use .unpin all`", 5)
         return
     if to_unpin and not options:
