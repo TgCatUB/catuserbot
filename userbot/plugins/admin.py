@@ -444,7 +444,7 @@ async def pin(msg):
         return await edit_delete(msg, "`Reply to a message to pin it.`", 5)
     options = msg.pattern_match.group(1)
     is_silent = False
-    if options.lower() == "loud":
+    if options == "loud":
         is_silent = True
     try:
         await msg.client.pin_message(msg.chat_id, to_pin, notify=is_silent)
