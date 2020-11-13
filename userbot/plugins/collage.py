@@ -53,7 +53,7 @@ async def collage(cat):
     else:
         collagefile = catsticker
     endfile = "./temp/collage.png"
-    catcmd = f"vcsi -g {catinput}x{catinput} {collagefile} -o {endfile}"
+    catcmd = f"vcsi -g {catinput}x{catinput} '{collagefile}' -o {endfile}"
     stdout, stderr = (await runcmd(catcmd))[:2]
     if not os.path.exists(endfile):
         for files in (catsticker, collagefile):
