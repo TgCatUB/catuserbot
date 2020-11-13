@@ -2,9 +2,12 @@ import string
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
-
-msg_cache = {}
 from telethon.tl.types import Channel
+
+
+global msg_cache
+msg_cache = {}
+
 
 global groupsid
 groupsid = []
@@ -59,17 +62,23 @@ async def _(event):
 @bot.on(sudo_cmd(pattern=r"fpost (.*)", allow_sudo=True))
 async def _(event):
     global groupsid
+    global msg_cache
     await event.delete()
     text = event.pattern_match.group(1)
     destination = await event.get_input_chat()
-    if event.chat_id not in groupsid:
+    if len(groupsid)==0:
         groupsid = await all_groups_id(event)
     for c in text.lower():
         if c not in string.ascii_lowercase:
             continue
         if c not in msg_cache:
+            async for msg in event.client.iter_messages(event.chat_id, search=c):
+                if msg.raw_text.lower() == c and msg.media is None:
+                    msg_cache[c] = msg
+                    break
+        if c not in msg_cache:
             for i in groupsid:
-                async for msg in event.client.iter_messages(i, search=c):
+                async for msg in event.client.iter_messages(event.chat_id, search=c):
                     if msg.raw_text.lower() == c and msg.media is None:
                         msg_cache[c] = msg
                         break
