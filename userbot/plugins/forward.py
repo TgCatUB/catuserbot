@@ -16,7 +16,7 @@ async def all_groups_id(cat):
     return catgroups
 
 
-groupsid = []
+global groupsid = []
 
 
 @bot.on(admin_cmd(pattern="frwd$"))
@@ -58,6 +58,7 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"fpost (.*)"))
 @bot.on(sudo_cmd(pattern=r"fpost (.*)", allow_sudo=True))
 async def _(event):
+    global groupsid
     await event.delete()
     text = event.pattern_match.group(1)
     destination = await event.get_input_chat()
