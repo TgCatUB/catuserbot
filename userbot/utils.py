@@ -44,7 +44,9 @@ def load_module(shortname):
         LOGS.info("Successfully imported " + shortname)
     else:
         import userbot.utils
+
         from .helpers.utils import install_pip
+
         path = Path(f"userbot/plugins/{shortname}.py")
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
