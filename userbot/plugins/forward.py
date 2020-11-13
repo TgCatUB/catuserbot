@@ -7,6 +7,11 @@ msg_cache = {}
 from telethon.tl.types import Channel
 
 
+
+
+global groupsid
+groupsid = []
+
 async def all_groups_id(cat):
     catgroups = []
     async for dialog in cat.client.iter_dialogs():
@@ -14,9 +19,6 @@ async def all_groups_id(cat):
         if isinstance(entity, Channel) and entity.megagroup:
             catgroups.append(entity.id)
     return catgroups
-
-
-global groupsid = []
 
 
 @bot.on(admin_cmd(pattern="frwd$"))
