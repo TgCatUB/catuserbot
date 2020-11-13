@@ -448,7 +448,7 @@ async def pin(msg):
     if options.lower() == "loud":
         is_silent = True
     try:
-        await msg.client.pin_message(msg.chat_id, to_pin, notify=is_silent))
+        await msg.client.pin_message(msg.chat_id, to_pin, notify=is_silent)
     except BadRequestError:
         return await edit_delete(msg, NO_PERM,5)
     except Exception as e:
