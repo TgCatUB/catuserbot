@@ -1,4 +1,4 @@
-telethon >= 1.17.0
+telethon >= 1.17.5
 aiofiles
 aiohttp
 asyncurban
