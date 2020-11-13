@@ -6,11 +6,9 @@ from . import CMD_HELP
 msg_cache = {}
 from telethon.tl.types import Channel
 
-
-
-
 global groupsid
 groupsid = []
+
 
 async def all_groups_id(cat):
     catgroups = []
