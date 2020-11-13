@@ -44,7 +44,7 @@ def load_module(shortname):
         LOGS.info("Successfully imported " + shortname)
     else:
         import userbot.utils
-
+        from .helpers.utils import install_pip
         path = Path(f"userbot/plugins/{shortname}.py")
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
@@ -60,6 +60,7 @@ def load_module(shortname):
         mod.borg = bot
         mod.edit_or_reply = edit_or_reply
         mod.edit_delete = edit_delete
+        mod.install_pip = install_pip
         # support for paperplaneextended
         sys.modules["userbot.events"] = userbot.utils
         spec.loader.exec_module(mod)
