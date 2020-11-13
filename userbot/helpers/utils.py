@@ -6,6 +6,8 @@ from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
 
 from ..Config import Config
+from subprocess import Popen, PIPE
+
 
 
 def mentionuser(name, userid):
@@ -25,8 +27,10 @@ async def reply_id(event):
 # https://github.com/SpEcHiDe/UniBorg/blob/d8b852ee9c29315a53fb27055e54df90d0197f0b/uniborg/utils.py#L250
 
 
-def run_async(function):
-    return asyncio.run(function)
+def install_pip(pipfile):
+    process = Popen(['pip', 'install', f'{pipfile}'], stdout=PIPE, stderr=PIPE)
+    stdout, stderr = process.communicate()
+    return stdout
 
 
 def parse_pre(text):
