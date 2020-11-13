@@ -476,10 +476,10 @@ async def pin(msg):
         return
     to_unpin = msg.reply_to_msg_id
     options = msg.pattern_match.group(1)
-    if not to_unpin and options.lower() != "all":
+    if not to_unpin or options.lower() != "all":
         await edit_delete(msg, "`Reply to a message to unpin it or use .unpin all`", 5)
         return
-    if to_unpin:
+    if to_unpin and not options:
         try:
             await msg.client.unpin_message(msg.chat_id, to_unpin)
         except BadRequestError:
