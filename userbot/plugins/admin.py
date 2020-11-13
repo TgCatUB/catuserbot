@@ -490,7 +490,7 @@ async def pin(msg):
         try:
             await msg.client.unpin_message(msg.chat_id)
         except BadRequestError:
-            returnawait edit_delete(msg, NO_PERM,5)
+            return await edit_delete(msg, NO_PERM,5)
         except Exception as e:
             return await edit_delete(msg, f"`{str(e)}`",5)
     else:
