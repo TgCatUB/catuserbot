@@ -803,27 +803,27 @@ async def memes(cat):
 CMD_HELP.update(
     {
         "memify": "**Plugin : **`memify`\
-    \n\n**Syntax :** `.mmf toptext ; bottomtext`\
-    \n**Function : **Creates a image meme with give text at specific locations and sends\
-    \n\n**Syntax : **`.mms toptext ; bottomtext`\
-    \n**Function : **Creates a sticker meme with give text at specific locations and sends\
-    \n\n**Syntax : **`.ascii`\
-    \n**Function : **reply to media file to get ascii image of that media\
-    \n\n**Syntax : **`.invert`\
-    \n**Function : **Inverts the colors in media file\
-    \n\n**Syntax : **`.solarize`\
-    \n**Function : **Watch sun buring ur media file\
-    \n\n**Syntax : **`.mirror`\
-    \n**Function : **shows you the reflection of the media file\
-    \n\n**Syntax : **`.flip`\
-    \n**Function : **shows you the upside down image of the given media file\
-    \n\n**Syntax : **`.gray`\
-    \n**Function : **makes your media file to black and white\
-    \n\n**Syntax : **`.zoom` or `.zoom range`\
-    \n**Function : **zooms your media file\
-    \n\n**Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
-    \n**Function : **make a frame for your media file\
-    \n**fill:** This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.\
+    \n\n  • **Syntax :** `.mmf toptext ; bottomtext`\
+    \n  • **Function : **Creates a image meme with give text at specific locations and sends\
+    \n\n  • **Syntax : **`.mms toptext ; bottomtext`\
+    \n  • **Function : **Creates a sticker meme with give text at specific locations and sends\
+    \n\n  • **Syntax : **`.ascii`\
+    \n  • **Function : **reply to media file to get ascii image of that media\
+    \n\n  • **Syntax : **`.invert`\
+    \n  • **Function : **Inverts the colors in media file\
+    \n\n  • **Syntax : **`.solarize`\
+    \n  • **Function : **Watch sun buring ur media file\
+    \n\n  • **Syntax : **`.mirror`\
+    \n  • **Function : **shows you the reflection of the media file\
+    \n\n  • **Syntax : **`.flip`\
+    \n  • **Function : **shows you the upside down image of the given media file\
+    \n\n  • **Syntax : **`.gray`\
+    \n  • **Function : **makes your media file to black and white\
+    \n\n  • **Syntax : **`.zoom` or `.zoom range`\
+    \n  • **Function : **zooms your media file\
+    \n\n  • **Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
+    \n  • **Function : **make a frame for your media file\
+    \n  • **fill:** This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.\
     "
     }
 )
