@@ -30,13 +30,13 @@ if Config.PRIVATE_GROUP_ID is not None:
         ):
             pmpermit_sql.approve(chat.id, "outgoing")
 
-    @bot.on(admin_cmd(pattern="(a|approve) ?(.*)"))
+    @bot.on(admin_cmd(pattern="(a|approve)(?: |$)(.*)"))
     async def approve_p_m(event):
         if event.is_private:
             user = await event.get_chat()
             reason = event.pattern_match.group(1)
         else:
-            user, reason = await get_user_from_event(event, secondgroup=True)
+            user, reason = await get_user_from_event(event,secondgroup=True)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
             if not reason:
@@ -60,12 +60,12 @@ if Config.PRIVATE_GROUP_ID is not None:
                 5,
             )
 
-    @bot.on(admin_cmd(pattern="(da|disapprove)$"))
+    @bot.on(admin_cmd(pattern="(da|disapprove)(?: |$)(.*)"))
     async def disapprove_p_m(event):
         if event.is_private:
             user = await event.get_chat()
         else:
-            user, reason = await get_user_from_event(event, secondgroup=True)
+            user, reason = await get_user_from_event(event,secondgroup=True)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
         if user.id in PM_START:
@@ -84,12 +84,12 @@ if Config.PRIVATE_GROUP_ID is not None:
                 5,
             )
 
-    @bot.on(admin_cmd(pattern="block$"))
+    @bot.on(admin_cmd(pattern="block(?: |$)(.*)"))
     async def block_p_m(event):
         if event.is_private:
             user = await event.get_chat()
         else:
-            user, reason = await get_user_from_event(event, secondgroup=True)
+            user, reason = await get_user_from_event(event)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
         if user.id in PM_START:
@@ -99,12 +99,12 @@ if Config.PRIVATE_GROUP_ID is not None:
         )
         await event.client(functions.contacts.BlockRequest(user.id))
 
-    @bot.on(admin_cmd(pattern="unblock$"))
+    @bot.on(admin_cmd(pattern="unblock(?: |$)(.*)"))
     async def unblock_pm(event):
         if event.is_private:
             user = await event.get_chat()
         else:
-            user, reason = await get_user_from_event(event, secondgroup=True)
+            user, reason = await get_user_from_event(event)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
         await event.client(functions.contacts.UnblockRequest(user.id))
