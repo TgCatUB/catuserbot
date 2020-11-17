@@ -27,7 +27,7 @@ from telethon.tl.types import (
 )
 
 from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, LOGS
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, LOGS, get_user_from_event
 from .sql_helper.mute_sql import is_muted, mute, unmute
 
 # =================== CONSTANT ===================
@@ -575,38 +575,6 @@ async def _(event):
             await event.delete()
         except:
             pass
-
-
-async def get_user_from_event(event):
-    args = event.pattern_match.group(1).split(" ", 1)
-    extra = None
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.sender_id)
-        extra = event.pattern_match.group(1)
-    elif args:
-        user = args[0]
-        if len(args) == 2:
-            extra = args[1]
-        if user.isnumeric():
-            user = int(user)
-        if not user:
-            await event.edit("`Pass the user's username, id or reply!`")
-            return
-        if event.message.entities:
-            probable_user_mention_entity = event.message.entities[0]
-
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                user_obj = await event.client.get_entity(user_id)
-                return user_obj
-        try:
-            user_obj = await event.client.get_entity(user)
-        except (TypeError, ValueError):
-            await event.edit("Could not fetch info of that user.")
-            return None
-    return user_obj, extra
-
 
 async def get_user_from_id(user, event):
     if isinstance(user, str):
