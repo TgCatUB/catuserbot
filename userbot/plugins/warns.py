@@ -82,7 +82,7 @@ async def _(event):
 CMD_HELP.update(
     {
         "warns": "**Plugin : **`warns`\
-    \n\n  •  **Syntax : **`.warn reason`reply to user\
+    \n\n  •  **Syntax : **`.warn reason` reply to user\
     \n  •  **Function : **__warns the given user in the chat you used__\
     \n\n  •  **Syntax : **`.warns reply`\
     \n  •  **Function : **__gets the warns of the given user in the chat you used__\
