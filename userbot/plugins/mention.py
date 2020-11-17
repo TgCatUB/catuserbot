@@ -1,4 +1,5 @@
 from telethon.tl.types import ChannelParticipantsAdmins
+
 from ..utils import admin_cmd, sudo_cmd
 from . import CMD_HELP, reply_id
 
@@ -14,7 +15,7 @@ async def _(event):
     async for x in event.client.iter_participants(chat, 100):
         if x.username:
             mentions += f" @{x.username}"
-    await event.client.send_message(event.chat_id , mentions , reply_to = reply_to_id)
+    await event.client.send_message(event.chat_id, mentions, reply_to=reply_to_id)
     await event.delete()
 
 
@@ -29,7 +30,7 @@ async def _(event):
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
         mentions += f"[\u2063](tg://user?id={x.id})"
-    await event.client.send_message(event.chat_id , mentions , reply_to = reply_to_id)
+    await event.client.send_message(event.chat_id, mentions, reply_to=reply_to_id)
     await event.delete()
 
 
@@ -45,7 +46,7 @@ async def _(event):
         chat, filter=ChannelParticipantsAdmins
     ):
         mentions += f"[\u2063](tg://user?id={x.id})"
-    await event.client.send_message(event.chat_id , mentions , reply_to = reply_to_id)
+    await event.client.send_message(event.chat_id, mentions, reply_to=reply_to_id)
     await event.delete()
 
 
@@ -74,7 +75,10 @@ async def _(event):
             return
     await event.delete()
     await event.client.send_message(
-        event.chat_id, f"<a href='tg://user?id={u}'>{str}</a>", parse_mode="HTML", reply_to = reply_to_id
+        event.chat_id,
+        f"<a href='tg://user?id={u}'>{str}</a>",
+        parse_mode="HTML",
+        reply_to=reply_to_id,
     )
 
 
