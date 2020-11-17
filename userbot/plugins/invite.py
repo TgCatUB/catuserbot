@@ -3,6 +3,7 @@ from telethon import functions
 from ..utils import admin_cmd, sudo_cmd
 from . import CMD_HELP
 
+
 @bot.on(admin_cmd(pattern="invite ?(.*)"))
 @bot.on(sudo_cmd(pattern="invite ?(.*)", allow_sudo=True))
 async def _(event):
@@ -39,10 +40,13 @@ async def _(event):
 
         await edit_or_reply(event, f"`{to_add_users} is/are Invited Successfully`")
 
-CMD_HELP.update({
-    "invite":"""**Plugin : **`invite`
+
+CMD_HELP.update(
+    {
+        "invite": """**Plugin : **`invite`
 
   •  **Syntax : **`.invite username(s)/userid(s)`
   •  **Function : **__Add the given user/users to the group where u used the command__
-"""    
-})        
+"""
+    }
+)
