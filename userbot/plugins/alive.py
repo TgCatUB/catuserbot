@@ -3,7 +3,7 @@ from platform import python_version
 
 from telethon import version
 
-from userbot import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion, mention
+from userbot import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion, mention,reply_id
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
@@ -16,12 +16,9 @@ CAT_IMG = Config.ALIVE_PIC
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
-    reply_to_id = alive.message
+    reply_to_id = await reply_id(alive)
     uptime = await catdef.get_readable_time((time.time() - StartTime))
     _, check_sgnirts = check_data_base_heal_th()
-    bot.uid
-    if alive.reply_to_msg_id:
-        reply_to_id = await alive.get_reply_message()
     if CAT_IMG:
         cat_caption = f"**✮ MY BOT IS RUNNING SUCCESFULLY ✮**\n\n"
         cat_caption += f"**✧ Database :** `{check_sgnirts}`\n"
@@ -53,10 +50,7 @@ async def amireallyalive(alive):
     if alive.fwd_from:
         return
     tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
-    reply_to_id = alive.message
-    if alive.reply_to_msg_id:
-        reply_to_id = await alive.get_reply_message()
-    bot.uid
+    reply_to_id = await reply_id(alive)
     cat_caption = f"**Catuserbot is Up and Running**\n"
     cat_caption += f"**  -Telethon version :** `{version.__version__}\n`"
     cat_caption += f"**  -Catuserbot Version :** `{catversion}`\n"
