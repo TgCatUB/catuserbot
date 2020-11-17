@@ -108,7 +108,6 @@ if Config.PRIVATE_GROUP_ID is not None:
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
         await event.client(functions.contacts.UnblockRequest(user.id))
-        await asyncio.sleep(2)
         await event.edit(
             f"`You are Unblocked Now .You Can Message Me From now..`[{user.first_name}](tg://user?id={user.id})"
         )
