@@ -1,6 +1,7 @@
 import nekos
-from . import CMD_HELP
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="tcat$"))
@@ -30,8 +31,9 @@ async def hmm(cat):
     await edit_or_reply(cat, factcat)
 
 
-CMD_HELP.update({
-    "funtxts":"""**Plugin : **`funtxts`
+CMD_HELP.update(
+    {
+        "funtxts": """**Plugin : **`funtxts`
 
 **Syntax : **`.tcat`
 **Function : **__Sens you some random cat facial text art__
@@ -41,4 +43,5 @@ CMD_HELP.update({
 
 **Syntax : **`.fact`
 **Function : **__Sends you some random facts__"""
-})
+    }
+)
