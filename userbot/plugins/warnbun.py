@@ -6,6 +6,7 @@ import userbot.plugins.sql_helper.warns_sql as sql
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
+
 @bot.on(admin_cmd(pattern="warn (.*)"))
 @bot.on(sudo_cmd(pattern="warn (.*)", allow_sudo=True))
 async def _(event):
@@ -77,12 +78,15 @@ async def _(event):
     sql.reset_warns(reply_message.sender_id, event.chat_id)
     await edit_or_reply(event, "Warnings have been reset!")
 
-CMD_HELP.update({
-    "warns":"**Plugin : **`warns`\
+
+CMD_HELP.update(
+    {
+        "warns": "**Plugin : **`warns`\
     \n\n  •  **Syntax : **`.warn reason`reply to user\
     \n  •  **Function : **__warns the given user in the chat you used__\
     \n\n  •  **Syntax : **`.warns reply`\
     \n  •  **Function : **__gets the warns of the given user in the chat you used__\
     \n\n  •  **Syntax : **`resetwarns reply`\
     \n  •  **Function : **__resets the warns of the replied users in the chat where u used command__"
-})
+    }
+)
