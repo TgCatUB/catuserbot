@@ -25,28 +25,18 @@ DEVICES_DATA = (
 async def kakashi(magisk):
     magisk_repo = "https://raw.githubusercontent.com/topjohnwu/magisk_files/"
     magisk_dict = {
-        "⦁ **Stable**":
-        magisk_repo + "master/stable.json",
-        "⦁ **Beta**":
-        magisk_repo + "master/beta.json",
-        "⦁ **Canary**":
-        magisk_repo + "canary/canary.json"
+        "⦁ **Stable**": magisk_repo + "master/stable.json",
+        "⦁ **Beta**": magisk_repo + "master/beta.json",
+        "⦁ **Canary**": magisk_repo + "canary/canary.json",
     }
     releases = "**Latest Magisk Releases**\n\n"
     for name, release_url in magisk_dict.items():
         data = get(release_url).json()
         if "canary" in release_url:
-            data['app']['link'] = (
-                magisk_repo +
-                "canary/" + data['app']['link']
-            )
-            data['magisk']['link'] = (
-                magisk_repo +
-                "canary/" + data['magisk']['link']
-            )
-            data['uninstaller']['link'] = (
-                magisk_repo +
-                "canary/" + data['uninstaller']['link']
+            data["app"]["link"] = magisk_repo + "canary/" + data["app"]["link"]
+            data["magisk"]["link"] = magisk_repo + "canary/" + data["magisk"]["link"]
+            data["uninstaller"]["link"] = (
+                magisk_repo + "canary/" + data["uninstaller"]["link"]
             )
 
         releases += (
