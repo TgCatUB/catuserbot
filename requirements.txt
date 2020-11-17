@@ -38,6 +38,7 @@ lyricsgenius
 nekos.py
 patool
 Pillow
+prettytable
 programmingquotes
 psutil
 psycopg2
