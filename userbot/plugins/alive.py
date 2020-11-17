@@ -3,7 +3,7 @@ from platform import python_version
 
 from telethon import version
 
-from userbot import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion
+from userbot import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion,mention
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
@@ -29,7 +29,7 @@ async def amireallyalive(alive):
         cat_caption += f"**✧ Catuserbot Version :** `{catversion}`\n"
         cat_caption += f"**✧ Python Version :** `{python_version()}\n`"
         cat_caption += f"**✧ Uptime :** `{uptime}\n`"
-        cat_caption += f"**✧ Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
+        cat_caption += f"**✧ Master:** {mention}\n"
         await alive.client.send_file(
             alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id
         )
@@ -43,7 +43,7 @@ async def amireallyalive(alive):
             f"**✧ Catuserbot Version :** `{catversion}`\n"
             f"**✧ Python Version :** `{python_version()}\n`"
             f"**✧ Uptime :** `{uptime}\n`"
-            f"**✧ Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n",
+            f"**✧ Master:** {mention}\n",
         )
 
 
@@ -61,7 +61,7 @@ async def amireallyalive(alive):
     cat_caption += f"**  -Telethon version :** `{version.__version__}\n`"
     cat_caption += f"**  -Catuserbot Version :** `{catversion}`\n"
     cat_caption += f"**  -Python Version :** `{python_version()}\n`"
-    cat_caption += f"**  -Master:** [{DEFAULTUSER}](tg://user?id={hmm})\n"
+    cat_caption += f"**  -Master:** {mention}\n"
     results = await bot.inline_query(tgbotusername, cat_caption)  # pylint:disable=E0602
     await results[0].click(alive.chat_id, reply_to=reply_to_id, hide_via=True)
     await alive.delete()
@@ -101,10 +101,10 @@ def check_data_base_heal_th():
 CMD_HELP.update(
     {
         "alive": "**Plugin :** `alive`\
-      \n\n**Syntax : **`.alive` \
-      \n**Function : **__status of bot will be showed__\
-      \n\n**Syntax : **`.ialive` \
-      \n**Function : **__inline status of bot will be shown.__\
+      \n\n  •  **Syntax : **`.alive` \
+      \n  •  **Function : **__status of bot will be showed__\
+      \n\n  •  **Syntax : **`.ialive` \
+      \n  •  **Function : **__inline status of bot will be shown.__\
       \nSet `ALIVE_PIC` var for media in alive message"
     }
 )
