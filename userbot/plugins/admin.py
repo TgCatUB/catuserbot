@@ -513,7 +513,7 @@ async def pin(msg):
                 f"**Chat : **{msg.chat.title}(`{msg.chat_id}`)\n",
             )
         except:
-           pass
+            pass
 
 
 @bot.on(admin_cmd(pattern="kick(?: |$)(.*)", command="kick"))
