@@ -74,12 +74,12 @@ async def group_has_sedbot(group):
     return any(KNOWN_RE_BOTS.match(x.username or "") for x in full.users)
 
 
-@command()
+@bot.on(admin_cmd())
 async def on_message(event):
     last_msgs[event.chat_id].appendleft(event.message)
 
 
-@command(allow_edited_updates=True)
+@bot.on(admin_cmd(allow_edited_updates=True))
 async def on_edit(event):
     for m in last_msgs[event.chat_id]:
         if m.id == event.id:
@@ -87,7 +87,7 @@ async def on_edit(event):
             break
 
 
-@command(pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True)
+@bot.on(admin_cmd(pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True))
 async def on_regex(event):
     if event.fwd_from:
         return
@@ -111,9 +111,10 @@ async def on_regex(event):
 
 CMD_HELP.update(
     {
-        "sed": ".s<delimiter><old word(s)><delimiter><new word(s)>\
-    \nUsage: Replaces a word or words using sed.\
-    \nDelimiters: `/, :, |, _`\
-    example: tag any sentence and type s/a/b. where is required word to replace and b is correct word."
+        "sed": "**Plugin : ** `sed\
+    \n\n  •  **Syntax : ** .s<delimiter><old word(s)><delimiter><new word(s)>\
+    \n  •  **Function : **Replaces a word or words using sed.\
+    \n  •  **Delimiters : **`/, :, |, _`\
+    \n  •  **Example : **tag any sentence and type s/a/b. where is required word to replace and b is correct word."
     }
 )
