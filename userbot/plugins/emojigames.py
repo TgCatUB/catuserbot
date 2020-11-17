@@ -41,7 +41,7 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id==event.client.uid:
+        if event.sender_id == event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
@@ -75,7 +75,7 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id==event.client.uid:
+        if event.sender_id == event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
@@ -109,7 +109,7 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id==event.client.uid:
+        if event.sender_id == event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
@@ -143,10 +143,11 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id==event.client.uid:
+        if event.sender_id == event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
+
 
 @bot.on(admin_cmd(pattern=f"({SLOT_E_MOJI}|jp)( ([1-64])|$)"))
 @bot.on(
@@ -176,7 +177,7 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id==event.client.uid:
+        if event.sender_id == event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
