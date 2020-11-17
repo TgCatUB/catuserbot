@@ -115,7 +115,7 @@ async def on_regex(event):
 
 CMD_HELP.update(
     {
-        "sed": "**Plugin : ** `sed\
+        "sed": "**Plugin : ** `sed`\
     \n\n  •  **Syntax : ** .s<delimiter><old word(s)><delimiter><new word(s)>\
     \n  •  **Function : **Replaces a word or words using sed.\
     \n  •  **Delimiters : **`/, :, |, _`\
