@@ -394,7 +394,7 @@ if Config.PRIVATE_GROUP_ID is not None:
 CMD_HELP.update(
     {
         "pmpermit": "**Plugin : **`pmpermit`\
-        \n\n**Syntax : **.approve`\
+        \n\n**Syntax : **`.approve`\
         \n**Function : **__Approves the mentioned/replied person to PM.__\
         \n\n**Syntax : **`.disapprove`\
         \n**Function : **__dispproves the mentioned/replied person to PM.__\
