@@ -125,7 +125,7 @@ async def download_video(v_url):
             f"{ytdl_data['id']}.mp3",
             supports_streaming=True,
             thumb=catthumb,
-            reply_to = reply_to_id,
+            reply_to=reply_to_id,
             attributes=[
                 DocumentAttributeAudio(
                     duration=int(ytdl_data["duration"]),
@@ -149,7 +149,7 @@ async def download_video(v_url):
         await v_url.client.send_file(
             v_url.chat_id,
             f"{ytdl_data['id']}.mp4",
-            reply_to = reply_to_id,
+            reply_to=reply_to_id,
             supports_streaming=True,
             caption=ytdl_data["title"],
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
