@@ -3,6 +3,7 @@
 from telethon.tl.types import ChannelParticipantsAdmins
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="tagall$"))
@@ -16,10 +17,10 @@ async def _(event):
     mentions = "@all"
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
-        mentions += f"[\u2063](tg://user?id={x.id})"
+        if x.username:
+            mentions += f" @{x.username}"
     await reply_to_id.reply(mentions)
     await event.delete()
-
 
 @bot.on(admin_cmd(pattern="all (.*)"))
 @bot.on(sudo_cmd(pattern="all (.*)", allow_sudo=True))
@@ -33,8 +34,7 @@ async def _(event):
 
     if not input_str:
         return await edit_or_reply(event, "what should i do try `.all hello`.")
-
-    mentions = input_str
+    mentions = input_str or "@all"
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
         mentions += f"[\u2063](tg://user?id={x.id})"
@@ -88,3 +88,20 @@ async def _(event):
     await event.client.send_message(
         event.chat_id, f"<a href='tg://user?id={u}'>{str}</a>", parse_mode="HTML"
     )
+
+
+CMD_HELP.update({
+    "mention":"""**Plugin : **`mention`
+
+  •  **Syntax : **`.all`
+  •  **Function : **__tags recent 100 persons in the group may not work for all__  
+
+  •  **Syntax : **`.tagall`
+  •  **Function : **__tags recent 100 persons in the group with usernames__ 
+
+  •  **Syntax : **`.report`
+  •  **Function : **__tags admins in group__  
+
+  •  **Syntax : **`.men username/userid text`
+  •  **Function : **__tags that person with the given custom text__  """        
+})
