@@ -37,7 +37,7 @@ async def get_user_from_event(event):
             user = int(user)
         if not user:
             await edit_delete(event, "`Pass the user's username, id or reply!`", 5)
-            return
+            return None , None
         if event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
             if isinstance(probable_user_mention_entity, MessageEntityMentionName):
@@ -47,8 +47,7 @@ async def get_user_from_event(event):
         try:
             user_obj = await event.client.get_entity(user)
         except (TypeError, ValueError):
-            await edit_delete(event, "Could not fetch info of that user.", 5)
-            return
+            return None , None
     return user_obj, extra
 
 
