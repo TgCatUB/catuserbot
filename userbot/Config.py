@@ -171,8 +171,9 @@ class Config((object)):
     DEEP_AI = os.environ.get("DEEP_AI", None)
     # For custom stickerpack names
     CUSTOM_STICKER_PACKNAME = os.environ.get("CUSTOM_STICKER_PACKNAME", None)
-    #Owner id to show profile link of given id as owner
+    # Owner id to show profile link of given id as owner
     OWNER_ID = int(os.environ.get("OWNER_ID", None))
+
 
 class Production(Config):
     LOGGER = False
