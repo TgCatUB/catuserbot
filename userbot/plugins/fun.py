@@ -1,5 +1,5 @@
 from telethon.tl.types import ChannelParticipantsAdmins
-
+from . import CMD_HELP
 from ..utils import admin_cmd, sudo_cmd
 
 
@@ -101,3 +101,16 @@ async def _(event):
     else:
         await event.reply(mentions)
     await event.delete()
+
+CMD_HELP.update({
+    "fun":"""**Plugin : **`fun`
+
+**Commands : **
+  •  `.join`
+  •  `.climb`
+  •  `.aag`
+  •  `.push`
+  •  `.work`
+
+**Function : **__Just like art plugin this are some other arts__"""  
+})    
