@@ -456,13 +456,16 @@ async def pin(msg):
     await edit_delete(msg, "`Pinned Successfully!`", 3)
     user = await get_user_from_id(msg.sender_id, msg)
     if BOTLOG and not msg.is_private:
-        await msg.client.send_message(
-            BOTLOG_CHATID,
-            "#PIN\n"
-            f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
-            f"LOUD: {is_silent}",
-        )
+        try:
+            await msg.client.send_message(
+                BOTLOG_CHATID,
+                "#PIN\n"
+                f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
+                f"LOUD: {is_silent}",
+            )
+        except:
+            pass
 
 
 @bot.on(admin_cmd(pattern="unpin($| (.*))", command="unpin"))
@@ -502,12 +505,15 @@ async def pin(msg):
     await edit_delete(msg, "`Unpinned Successfully!`", 3)
     user = await get_user_from_id(msg.sender_id, msg)
     if BOTLOG and not msg.is_private:
-        await msg.client.send_message(
-            BOTLOG_CHATID,
-            "#UNPIN\n"
-            f"**Admin : **[{user.first_name}](tg://user?id={user.id})\n"
-            f"**Chat : **{msg.chat.title}(`{msg.chat_id}`)\n",
-        )
+        try:
+            await msg.client.send_message(
+                BOTLOG_CHATID,
+                "#UNPIN\n"
+                f"**Admin : **[{user.first_name}](tg://user?id={user.id})\n"
+                f"**Chat : **{msg.chat.title}(`{msg.chat_id}`)\n",
+            )
+        except:
+           pass
 
 
 @bot.on(admin_cmd(pattern="kick(?: |$)(.*)", command="kick"))
