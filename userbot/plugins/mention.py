@@ -107,6 +107,6 @@ CMD_HELP.update(
   •  **Syntax : **`.men username/userid text`
   •  **Function : **__tags that person with the given custom text other way for this is __
   •  **syntax : **`Hi username[custom text]`
-""""
+"""
     }
 )
