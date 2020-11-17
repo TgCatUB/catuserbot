@@ -13,8 +13,8 @@ from ..Config import Config
 
 # =================== CONSTANT ===================
 
-if OWNER_ID:
-    USERID = OWNER_ID
+if Config.OWNER_ID:
+    USERID = Config.OWNER_ID
 else:
     USERID = bot.uid
 
