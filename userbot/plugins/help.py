@@ -67,8 +67,8 @@ async def cmd_list(event):
         if HELPTYPE is True:
             help_string = f"Userbot Helper.. Provided by {DEFAULTUSER}\
                           \nUserbot Helper to reveal all the plugin names\
-                          \n__Do__ `.help` __plugin_name for commands, in case popup doesn't appear.__\
-                          \nDo `.info` plugin_name for usage"
+                          \n__Check__ `.help plugin_name`__ for commands, in case popup doesn't appear.__\
+                          \nCheck `.info plugin_name` for usage of thoose plugins and commands"
             tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
             results = await bot.inline_query(  # pylint:disable=E0602
                 tgbotusername, help_string
@@ -78,7 +78,7 @@ async def cmd_list(event):
         else:
             string = "<b>Please specify which plugin do you want help for !!\
                 \nNumber of plugins : </b><code>{count}</code>\
-                \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
+                \n<b>Usage:</b> <code>.help plugin name</code> \n\n"
             catcount = 0
             for i in sorted(CMD_LIST):
                 string += "• " + f"<code>{str(i)}</code>"
@@ -139,7 +139,7 @@ async def info(event):
     else:
         string = "<b>Please specify which plugin do you want help for !!\
             \nNumber of plugins : </b><code>{count}</code>\
-            \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
+            \n<b>Usage:</b> <code>.help plugin name</code>\n\n"
         catcount = 0
         for i in sorted(SUDO_LIST):
             string += "• " + f"<code>{str(i)}</code>"
@@ -163,7 +163,7 @@ async def info(event):
     else:
         string = "<b>Please specify which plugin do you want help for !!\
             \nNumber of plugins : </b><code>{count}</code>\
-            \n<b>Usage : </b><code>.info</code> <plugin name>\n\n"
+            \n<b>Usage : </b><code>.info plugin name</code>\n\n"
         catcount = 0
         for i in sorted(CMD_HELP):
             string += "• " + f"<code>{str(i)}</code>"
@@ -212,3 +212,19 @@ async def _(event):
             await event.edit("`inline mode is enabled`")
         else:
             await event.edit("`inline mode is already disabled`")
+
+CMD_HELP.update({
+    "help":"""**Plugin : **`help`
+
+  •  **Syntax : **`.help/.help plugin_name`
+  •  **Function : **__If you just type .help then shows you help menu, if plugin name is given then shows you only commands in thst plugin and if you use `.help text` then shows you all commands in your userbot__
+
+  •  **Syntax : **`.info/.info plugin_name`
+  •  **Function : **__To get details/information/usage of that plugin__
+
+  •  **Syntax : **`.dc`
+  •  **Function : **__Shows your dc id and dc ids list__
+
+  •  **Syntax : **`.setinline (true|false)`
+  •  **Function : **__Sets help menu either in inline or text format__"""
+})
