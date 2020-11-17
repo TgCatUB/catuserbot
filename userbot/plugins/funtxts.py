@@ -44,4 +44,4 @@ CMD_HELP.update(
   •  **Syntax : **`.fact`
   •  **Function : **__Sends you some random facts__"""
     }
-) 
+)
