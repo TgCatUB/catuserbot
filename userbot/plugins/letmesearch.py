@@ -3,7 +3,7 @@ from asyncio import sleep
 import requests
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
+from . import CMD_HELP
 
 @bot.on(admin_cmd(pattern="lmg (.*)"))
 @bot.on(sudo_cmd(pattern="lmg (.*)", allow_sudo=True))
@@ -231,7 +231,7 @@ async def _(event):
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
-CMD_HElP.update(
+CMD_HELP.update(
     {
         "letmesearch": """**Plugin : **`letmesearch`
 
