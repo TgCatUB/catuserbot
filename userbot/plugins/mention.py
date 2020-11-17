@@ -11,10 +11,10 @@ from . import CMD_HELP
 async def _(event):
     if event.fwd_from:
         return
-    reply_to_id = event.message
+    reply_to_id = None
     if event.reply_to_msg_id:
         reply_to_id = await event.get_reply_message()
-    mentions = "@all"
+    mentions = "hi all"
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
         if x.username:
@@ -28,13 +28,10 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    reply_to_id = event.message
+    reply_to_id = None
     if event.reply_to_msg_id:
         reply_to_id = await event.get_reply_message()
     input_str = event.pattern_match.group(1)
-
-    if not input_str:
-        return await edit_or_reply(event, "what should i do try `.all hello`.")
     mentions = input_str or "@all"
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
