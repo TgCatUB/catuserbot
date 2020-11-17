@@ -4,10 +4,11 @@ from subprocess import PIPE, Popen
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
-
+from ..utils import edit_delete
 from ..Config import Config
 
-
+from telethon.tl.types import MessageEntityMentionName
+ 
 def mentionuser(name, userid):
     return f"[{name}](tg://user?id={userid})"
 
@@ -20,6 +21,34 @@ async def reply_id(event):
         reply_to_id = event.reply_to_msg_id
     return reply_to_id
 
+async def get_user_from_event(event):
+    args = event.pattern_match.group(1).split(" ", 1)
+    extra = None
+    if event.reply_to_msg_id:
+        previous_message = await event.get_reply_message()
+        user_obj = await event.client.get_entity(previous_message.sender_id)
+        extra = event.pattern_match.group(1)
+    elif args:
+        user = args[0]
+        if len(args) == 2:
+            extra = args[1]
+        if user.isnumeric():
+            user = int(user)
+        if not user:
+            await edit_delete(event,"`Pass the user's username, id or reply!`" , 5)
+            return
+        if event.message.entities:
+            probable_user_mention_entity = event.message.entities[0]
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
+                user_id = probable_user_mention_entity.user_id
+                user_obj = await event.client.get_entity(user_id)
+                return user_obj,extra
+        try:
+            user_obj = await event.client.get_entity(user)
+        except (TypeError, ValueError):
+            await edit_delete(event , "Could not fetch info of that user." , 5)
+            return
+    return user_obj, extra
 
 # kanged from uniborg @spechide
 # https://github.com/SpEcHiDe/UniBorg/blob/d8b852ee9c29315a53fb27055e54df90d0197f0b/uniborg/utils.py#L250
