@@ -213,8 +213,10 @@ async def _(event):
         else:
             await event.edit("`inline mode is already disabled`")
 
-CMD_HELP.update({
-    "help":"""**Plugin : **`help`
+
+CMD_HELP.update(
+    {
+        "help": """**Plugin : **`help`
 
   •  **Syntax : **`.help/.help plugin_name`
   •  **Function : **__If you just type .help then shows you help menu, if plugin name is given then shows you only commands in thst plugin and if you use `.help text` then shows you all commands in your userbot__
@@ -227,4 +229,5 @@ CMD_HELP.update({
 
   •  **Syntax : **`.setinline (true|false)`
   •  **Function : **__Sets help menu either in inline or text format__"""
-})
+    }
+)
