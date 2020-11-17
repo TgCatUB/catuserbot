@@ -2,7 +2,6 @@ import asyncio
 import io
 
 from telethon import events, functions
-from telethon.tl.functions.users import GetFullUserRequest
 
 from ..utils import admin_cmd
 from . import ALIVE_NAME, CMD_HELP, PM_START, PMMENU, check, get_user_from_event
@@ -16,6 +15,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USER_BOT_WARN_ZERO = "You were spamming my peru master's inbox, henceforth you are blocked by my master's userbot. **Now GTFO, i'm playing minecraft** "
 
 if Config.PRIVATE_GROUP_ID is not None:
+
     @bot.on(admin_cmd(outgoing=True))
     async def you_dm_niqq(event):
         if event.fwd_from:
@@ -38,7 +38,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         else:
             user, reason = await get_user_from_event(event)
             if not user:
-                return await edit_delete(event , "`Couldn't Fectch user`", 5)
+                return await edit_delete(event, "`Couldn't Fectch user`", 5)
             if not reason:
                 reason = "Not mentioned"
         if not pmpermit_sql.is_approved(user.id):
@@ -50,12 +50,14 @@ if Config.PRIVATE_GROUP_ID is not None:
             if user.id in PM_START:
                 PM_START.remove(user.id)
             pmpermit_sql.approve(user.id, reason)
-            await edit_delete(event , 
-                "Approved to pm [{user.first_name}](tg://user?id={user.id})", 5
+            await edit_delete(
+                event, "Approved to pm [{user.first_name}](tg://user?id={user.id})", 5
             )
         else:
-            await edit_delete(event,
-                "[{user.first_name}](tg://user?id={user.id}) is already in approved list", 5
+            await edit_delete(
+                event,
+                "[{user.first_name}](tg://user?id={user.id}) is already in approved list",
+                5,
             )
 
     @bot.on(admin_cmd(pattern="(da|disapprove)$"))
@@ -65,17 +67,21 @@ if Config.PRIVATE_GROUP_ID is not None:
         else:
             user, reason = await get_user_from_event(event)
             if not user:
-                return await edit_delete(event , "`Couldn't Fectch user`", 5)
+                return await edit_delete(event, "`Couldn't Fectch user`", 5)
         if user.id in PM_START:
             PM_START.remove(user.id)
         if pmpermit_sql.is_approved(user.id):
             pmpermit_sql.disapprove(user.id)
-            await edit_delete(event,
-                "disapproved to pm [{user.first_name}](tg://user?id={user.id})" , 5
+            await edit_delete(
+                event,
+                "disapproved to pm [{user.first_name}](tg://user?id={user.id})",
+                5,
             )
         else:
-            await edit_delete(event,
-                "[{user.first_name}](tg://user?id={user.id}) is not yet approved", 5
+            await edit_delete(
+                event,
+                "[{user.first_name}](tg://user?id={user.id}) is not yet approved",
+                5,
             )
 
     @bot.on(admin_cmd(pattern="block$"))
@@ -85,7 +91,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         else:
             user, reason = await get_user_from_event(event)
             if not user:
-                return await edit_delete(event , "`Couldn't Fectch user`", 5)
+                return await edit_delete(event, "`Couldn't Fectch user`", 5)
         if user.id in PM_START:
             PM_START.remove(user.id)
         await event.edit(
@@ -100,7 +106,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         else:
             user, reason = await get_user_from_event(event)
             if not user:
-                return await edit_delete(event , "`Couldn't Fectch user`", 5)
+                return await edit_delete(event, "`Couldn't Fectch user`", 5)
         await event.client(functions.contacts.UnblockRequest(user.id))
         await asyncio.sleep(2)
         await event.edit(
@@ -203,7 +209,6 @@ if Config.PRIVATE_GROUP_ID is not None:
                     return
                 except BaseException:
                     return
-            catid = chat_id
             if Config.CUSTOM_PMPERMIT_TEXT:
                 USER_BOT_NO_WARN = (
                     Config.CUSTOM_PMPERMIT_TEXT
@@ -284,7 +289,6 @@ if Config.PRIVATE_GROUP_ID is not None:
                     return
                 except BaseException:
                     return
-            catid = chat_id
             if Config.CUSTOM_PMPERMIT_TEXT:
                 USER_BOT_NO_WARN = Config.CUSTOM_PMPERMIT_TEXT
             else:
