@@ -35,13 +35,13 @@ CMD_HELP.update(
     {
         "funtxts": """**Plugin : **`funtxts`
 
-**Syntax : **`.tcat`
-**Function : **__Sens you some random cat facial text art__
+  •  **Syntax : **`.tcat`
+  •  **Function : **__Sens you some random cat facial text art__
 
-**Syntax : **`.why`
-**Function : **__Asks some random Funny questions__
+  •  **Syntax : **`.why`
+  •  **Function : **__Asks some random Funny questions__
 
-**Syntax : **`.fact`
-**Function : **__Sends you some random facts__"""
+  •  **Syntax : **`.fact`
+  •  **Function : **__Sends you some random facts__"""
     }
-)
+) 
