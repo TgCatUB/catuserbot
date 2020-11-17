@@ -36,7 +36,7 @@ if Config.PRIVATE_GROUP_ID is not None:
             user = await event.get_chat()
             reason = event.pattern_match.group(1)
         else:
-            user, reason = await get_user_from_event(event)
+            user, reason = await get_user_from_event(event,secondgroup=True)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
             if not reason:
@@ -65,7 +65,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         if event.is_private:
             user = await event.get_chat()
         else:
-            user, reason = await get_user_from_event(event)
+            user, reason = await get_user_from_event(event,secondgroup=True)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
         if user.id in PM_START:
@@ -89,7 +89,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         if event.is_private:
             user = await event.get_chat()
         else:
-            user, reason = await get_user_from_event(event)
+            user, reason = await get_user_from_event(event,secondgroup=True)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
         if user.id in PM_START:
@@ -104,7 +104,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         if event.is_private:
             user = await event.get_chat()
         else:
-            user, reason = await get_user_from_event(event)
+            user, reason = await get_user_from_event(event,secondgroup=True)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
         await event.client(functions.contacts.UnblockRequest(user.id))
