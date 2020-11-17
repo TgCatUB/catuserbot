@@ -248,9 +248,9 @@ CMD_HELP.update(
   •  `.gem query`
   •  `.archive query`
 
-**Functions : **__searches the given query and shows you the link of that query . here are there sites\
-let me google(lmg),let me youtube(lmy),Duck buck go (ddg) , let me altnews(lmalt),\
-let me var(lmvar) var from heroku ,let me log(lmlog) logs link for heroku , heroku dyno link (dyno)\
+**Functions : **__searches the given query and shows you the link of that query . here are there sites \
+let me google(lmg),let me youtube(lmy),Duck buck go (ddg) , let me altnews(lmalt), \
+let me var(lmvar) var from heroku ,let me log(lmlog) logs link for heroku , heroku dyno link (dyno) \
 indian kanoon (lmkp) , Government e marketplace(gem) , web archive (archive)__\
 """
     }
