@@ -8,7 +8,9 @@ import re
 import pybase64
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import (
+    CMD_HELP,
     changemymind,
     deEmojify,
     fakegs,
@@ -17,10 +19,7 @@ from . import (
     reply_id,
     trumptweet,
     tweets,
-    CMD_HELP
 )
-
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="fakegs(?: |$)(.*)", command="fakegs"))
@@ -210,8 +209,10 @@ async def nekobot(cat):
     if os.path.exists(catfile):
         os.remove(catfile)
 
-CMD_HELP.update({
-    "imgmemes":"""**Plugin : **`imgmemes`
+
+CMD_HELP.update(
+    {
+        "imgmemes": """**Plugin : **`imgmemes`
 
   •  **Syntax : **`.fakegs search query ; what you mean text`
   •  **Function : **__Shows you image meme for your google search query__  
@@ -231,4 +232,5 @@ CMD_HELP.update({
   •  **Syntax : **`.tweet reply/<username> ; <text>`
   •  **Function : **__sends you the desired person tweet sticker with given custom text__ 
   """
-})
+    }
+)
