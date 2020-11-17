@@ -51,12 +51,12 @@ if Config.PRIVATE_GROUP_ID is not None:
                 PM_START.remove(user.id)
             pmpermit_sql.approve(user.id, reason)
             await edit_delete(
-                event, "Approved to pm [{user.first_name}](tg://user?id={user.id})", 5
+                event, f"Approved to pm [{user.first_name}](tg://user?id={user.id})", 5
             )
         else:
             await edit_delete(
                 event,
-                "[{user.first_name}](tg://user?id={user.id}) is already in approved list",
+                f"[{user.first_name}](tg://user?id={user.id}) is already in approved list",
                 5,
             )
 
@@ -74,13 +74,13 @@ if Config.PRIVATE_GROUP_ID is not None:
             pmpermit_sql.disapprove(user.id)
             await edit_delete(
                 event,
-                "disapproved to pm [{user.first_name}](tg://user?id={user.id})",
+                f"disapproved to pm [{user.first_name}](tg://user?id={user.id})",
                 5,
             )
         else:
             await edit_delete(
                 event,
-                "[{user.first_name}](tg://user?id={user.id}) is not yet approved",
+                f"[{user.first_name}](tg://user?id={user.id}) is not yet approved",
                 5,
             )
 
@@ -95,7 +95,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         if user.id in PM_START:
             PM_START.remove(user.id)
         await event.edit(
-            "`You are blocked Now .You Can't Message Me from now..`[{user.first_name}](tg://user?id={user.id})"
+            f"`You are blocked Now .You Can't Message Me from now..`[{user.first_name}](tg://user?id={user.id})"
         )
         await event.client(functions.contacts.BlockRequest(user.id))
 
@@ -110,7 +110,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         await event.client(functions.contacts.UnblockRequest(user.id))
         await asyncio.sleep(2)
         await event.edit(
-            "`You are Unblocked Now .You Can Message Me From now..`[{user.first_name}](tg://user?id={user.id})"
+            f"`You are Unblocked Now .You Can Message Me From now..`[{user.first_name}](tg://user?id={user.id})"
         )
 
     @bot.on(admin_cmd(pattern="listapproved$"))
