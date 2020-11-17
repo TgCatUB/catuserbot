@@ -19,12 +19,7 @@ from telethon.tl.functions.channels import (
     EditPhotoRequest,
 )
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import (
-    ChatAdminRights,
-    ChatBannedRights,
-    MessageEntityMentionName,
-    MessageMediaPhoto,
-)
+from telethon.tl.types import ChatAdminRights, ChatBannedRights, MessageMediaPhoto
 
 from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
 from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, LOGS, get_user_from_event
@@ -575,6 +570,7 @@ async def _(event):
             await event.delete()
         except:
             pass
+
 
 async def get_user_from_id(user, event):
     if isinstance(user, str):

@@ -3,17 +3,8 @@ from platform import python_version
 
 from telethon import version
 
-from . import (
-    ALIVE_NAME,
-    CMD_HELP,
-    StartTime,
-    catdef,
-    catversion,
-    mention,
-    reply_id,
-)
-
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion, mention, reply_id
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 CAT_IMG = Config.ALIVE_PIC
