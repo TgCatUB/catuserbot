@@ -2,7 +2,7 @@
 import io
 
 from ..utils import admin_cmd, sudo_cmd
-from . import parse_pre, reply_id, yaml_format
+from . import parse_pre, reply_id, yaml_format,CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="json$"))
@@ -51,3 +51,13 @@ async def _(event):
             await event.delete()
     else:
         await edit_or_reply(event, the_real_message, parse_mode=parse_pre)
+
+CMD_HELP.update({
+    "json":"""**Plugin : **`json`
+
+  •  **Syntax : **`.json reply`
+  •  **Function : **__reply to a message to get details of that message in json format__  
+
+  •  **Syntax : **`.yaml reply`
+  •  **Function : **__reply to a message to get details of that message in yaml format__ """
+})        
