@@ -41,7 +41,7 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id=event.client.uid:
+        if event.sender_id==event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
@@ -75,7 +75,7 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id=event.client.uid:
+        if event.sender_id==event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
@@ -109,7 +109,7 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id=event.client.uid:
+        if event.sender_id==event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
@@ -143,7 +143,7 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id=event.client.uid:
+        if event.sender_id==event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
@@ -176,7 +176,7 @@ async def _(event):
         except BaseException:
             pass
     else:
-        if event.sender_id=event.client.uid:
+        if event.sender_id==event.client.uid:
             await event.edit(file=InputMediaDice(emoticon=emoticon))
         else:
             await event.reply(file=InputMediaDice(emoticon=emoticon))
