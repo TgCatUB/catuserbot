@@ -103,10 +103,39 @@ async def _(event):
         await event.reply(mentions)
     await event.delete()
 
+# by  @Halto_Tha
+@bot.on(admin_cmd(pattern=r"lmoon$"))
+@bot.on(sudo_cmd(pattern="lmoon$", allow_sudo=True))
+async def test(event):
+    if event.fwd_from:
+        return
+    await edit_or_reply(
+        event,
+        "🌕🌕🌕🌕🌕🌕🌕🌕\n🌕🌕🌖🌔🌖🌔🌕🌕\n🌕🌕🌗🌔🌖🌓🌕🌕\n🌕🌕🌗🌔🌖🌓🌕🌕\n🌕🌕🌖🌓🌗🌔🌕🌕\n🌕🌕🌗🌑🌑🌓🌕🌕\n🌕🌕🌗👀🌑🌓🌕🌕\n🌕🌕🌘👄🌑🌓🌕🌕\n🌕🌕🌗🌑🌑🌒🌕🌕\n🌕🌖🌑🌑🌑🌑🌔🌕\n🌕🌘🌑🌑🌑🌑🌒🌕\n🌖🌑🌑🌑🌑🌑🌑🌔\n🌕🤜🏻🌑🌑🌑🌑🤛🏻🌕\n🌕🌖🌑🌑🌑🌑🌔🌕\n🌘🌑🌑🌑🌑🌑🌑🌒\n🌕🌕🌕🌕🌕🌕🌕🌕",
+    )
 
+
+@bot.on(admin_cmd(pattern=r"city$"))
+@bot.on(sudo_cmd(pattern="city$", allow_sudo=True))
+async def test(event):
+    if event.fwd_from:
+        return
+    await edit_or_reply(
+        event,
+        """☁☁🌞      ☁           ☁
+       ☁  ✈         ☁    🚁    ☁    ☁        ☁          ☁     ☁   ☁
+🏬🏨🏫🏢🏤🏥🏦🏪🏫
+              🌲/     l🚍\🌳👭
+           🌳/  🚘 l  🏃 \🌴 👬                        👬     🌴/            l  🚔    \🌲
+      🌲/   🚖     l        \
+          🌳/🚶           |   🚍         \ 🌴🚴🚴
+🌴/                    |                     \🌲""",
+    )
+
+    
 CMD_HELP.update(
     {
-        "fun": """**Plugin : **`fun`
+        "funarts": """**Plugin : **`funarts`
 
 **Commands : **
   •  `.join`
@@ -114,7 +143,9 @@ CMD_HELP.update(
   •  `.aag`
   •  `.push`
   •  `.work`
-
+  •  `.lmoon`
+  •  `.city`
+  
 **Function : **__Just like art plugin this are some other arts__"""
     }
 )
