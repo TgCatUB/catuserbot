@@ -3,7 +3,7 @@ from asyncio import sleep
 import requests
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HElP
+from . import CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="lmg (.*)"))
