@@ -4,8 +4,9 @@ Available Options: image, file, text"""
 from datetime import datetime
 
 import speedtest
-from . import CMD_HELP,reply_id
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, reply_id
 
 
 @bot.on(admin_cmd(pattern="speedtest ?(.*)"))
@@ -97,7 +98,12 @@ def convert_from_bytes(size):
         n += 1
     return f"{round(size, 2)} {units[n]}"
 
-CMD_HELP.update({"speedtest":"""**Plugin : **`speedtest`
+
+CMD_HELP.update(
+    {
+        "speedtest": """**Plugin : **`speedtest`
 
   •  **Syntax : **`.speedtest text/image/file`
-  •  **function : **__Shows your server speed in the given format if nothing is given then shows as image__"""})    
+  •  **function : **__Shows your server speed in the given format if nothing is given then shows as image__"""
+    }
+)
