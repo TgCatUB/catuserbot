@@ -105,6 +105,8 @@ CMD_HELP.update(
   •  **Function : **__tags admins in group__  
 
   •  **Syntax : **`.men username/userid text`
-  •  **Function : **__tags that person with the given custom text__  """
+  •  **Function : **__tags that person with the given custom text other way for this is __
+  •  **syntax : **`Hi username[custom text]`
+""""
     }
 )
