@@ -3,7 +3,7 @@ from platform import python_version
 
 from telethon import version
 
-from userbot import (
+from . import (
     ALIVE_NAME,
     CMD_HELP,
     StartTime,
