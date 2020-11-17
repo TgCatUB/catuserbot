@@ -103,6 +103,7 @@ async def _(event):
         await event.reply(mentions)
     await event.delete()
 
+
 # by  @Halto_Tha
 @bot.on(admin_cmd(pattern=r"lmoon$"))
 @bot.on(sudo_cmd(pattern="lmoon$", allow_sudo=True))
@@ -132,7 +133,7 @@ async def test(event):
 🌴/                    |                     \🌲""",
     )
 
-    
+
 CMD_HELP.update(
     {
         "funarts": """**Plugin : **`funarts`
