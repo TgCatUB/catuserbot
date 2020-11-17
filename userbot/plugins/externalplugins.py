@@ -31,5 +31,6 @@ if Config.PLUGIN_CHANNEL:
                     BOTLOG_CHATID,
                     f"Plugin `{os.path.basename(downloaded_file_name)}` has been pre-installed and cannot be installed.",
                 )
+                os.remove(downloaded_file_name)
 
     bot.loop.create_task(install())
