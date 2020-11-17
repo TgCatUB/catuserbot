@@ -77,7 +77,7 @@ async def group_has_sedbot(group):
 
 
 @bot.on(admin_cmd())
-@bot.on(sudo_cmd())
+@bot.on(sudo_cmd(allow_sudo=True))
 async def on_message(event):
     last_msgs[event.chat_id].appendleft(event.message)
 
@@ -97,7 +97,7 @@ async def on_edit(event):
 )
 @bot.on(
     sudo_cmd(
-        pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True
+        pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), allow_sudo=True
     )
 )
 async def on_regex(event):
