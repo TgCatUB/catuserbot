@@ -92,12 +92,12 @@ async def on_edit(event):
 
 @bot.on(
     admin_cmd(
-        pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True
+        pattern=r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?", outgoing=True
     )
 )
 @bot.on(
     sudo_cmd(
-        pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), allow_sudo=True
+        pattern=r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?", allow_sudo=True
     )
 )
 async def on_regex(event):
