@@ -87,7 +87,11 @@ async def on_edit(event):
             break
 
 
-@bot.on(admin_cmd(pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True))
+@bot.on(
+    admin_cmd(
+        pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True
+    )
+)
 async def on_regex(event):
     if event.fwd_from:
         return
