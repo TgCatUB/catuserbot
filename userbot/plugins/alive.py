@@ -3,7 +3,15 @@ from platform import python_version
 
 from telethon import version
 
-from userbot import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion, mention,reply_id
+from userbot import (
+    ALIVE_NAME,
+    CMD_HELP,
+    StartTime,
+    catdef,
+    catversion,
+    mention,
+    reply_id,
+)
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
