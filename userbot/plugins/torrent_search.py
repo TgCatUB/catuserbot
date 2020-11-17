@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup as bs
 from ..utils import admin_cmd, humanbytes
 from . import CMD_HELP
 
+
 def dogbin(magnets):
     counter = 0
     urls = []
@@ -101,9 +102,7 @@ async def tor_search(event):
     await event.edit(msg, link_preview=False)
 
 
-@bot.on(
-    admin_cmd(pattern=r"movie (torrentz2\.eu|idop\.se) (.*)") 
-)
+@bot.on(admin_cmd(pattern=r"movie (torrentz2\.eu|idop\.se) (.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -116,7 +115,7 @@ async def _(event):
         search_results = search_torrentz_eu(input_str)
     elif input_type == "idop.se":
         search_results = search_idop_se(input_str)
-    logger.info(search_results)  
+    logger.info(search_results)
     output_str = ""
     i = 0
     for result in search_results:
@@ -214,8 +213,10 @@ def search_torrentz_eu(search_query):
                 pass
     return r
 
-CMD_HELP.update({
-    "torrent_search":"""**Plugin : **`torrent_search`
+
+CMD_HELP.update(
+    {
+        "torrent_search": """**Plugin : **`torrent_search`
 
   •  **Syntax : **`.tsearch query`
   •  **Function : **__Fetches torrent links of given query__
@@ -224,4 +225,5 @@ CMD_HELP.update({
                 `.movie torrentz2.eu query`
   •  **Function : **__Fetches torrent links of given query alternative way__
 """
-})
+    }
+)
