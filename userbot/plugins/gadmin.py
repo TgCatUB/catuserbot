@@ -17,7 +17,7 @@ from telethon.tl.types import ChatBannedRights, MessageEntityMentionName
 import userbot.plugins.sql_helper.gban_sql_helper as gban_sql
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CAT_ID, CMD_HELP, admin_groups
+from . import BOTLOG, BOTLOG_CHATID, CAT_ID, CMD_HELP, admin_groups, get_user_from_event
 from .sql_helper.mute_sql import is_muted, mute, unmute
 
 BANNED_RIGHTS = ChatBannedRights(
@@ -291,50 +291,18 @@ async def watcher(event):
         await event.delete()
 
 
-async def get_user_from_event(event):
-    """ Get the user from argument or replied message. """
-    args = event.pattern_match.group(1).split(" ", 1)
-    extra = None
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.sender_id)
-        extra = event.pattern_match.group(1)
-    elif args:
-        user = args[0]
-        if len(args) == 2:
-            extra = args[1]
-        if user.isnumeric():
-            user = int(user)
-        if not user:
-            await event.edit("`Pass the user's username, id or reply!`")
-            return
-        if event.message.entities:
-            probable_user_mention_entity = event.message.entities[0]
-
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                user_obj = await event.client.get_entity(user_id)
-                return user_obj
-        try:
-            user_obj = await event.client.get_entity(user)
-        except (TypeError, ValueError):
-            await event.edit("Could not fetch info of that user.")
-            return None
-    return user_obj, extra
-
-
 CMD_HELP.update(
     {
         "gadmin": "**Plugin : **`gadmin`\
-        \n\n**Syntax : **`.gban <username/reply/userid> <reason (optional)>`\
-\n**Function : **Bans the person in all groups where you are admin .\
-\n\n**Syntax : **`.ungban <username/reply/userid>`\
-\n**Function : **Reply someone's message with .ungban to remove them from the gbanned list.\
-\n\n**Syntax : **`.listgban`\
-\n**Function : **Shows you the gbanned list and reason for their gban.\
-\n\n**Syntax : **`.gmute <username/reply> <reason (optional)>`\
-\n**Function : **Mutes the person in all groups you have in common with them.\
-\n\n**Syntax : **`.ungmute <username/reply>`\
-\n**Function : **Reply someone's message with .ungmute to remove them from the gmuted list."
+        \n\n  •  **Syntax : **`.gban <username/reply/userid> <reason (optional)>`\
+\n  •  **Function : **__Bans the person in all groups where you are admin .__\
+\n\n  •  **Syntax : **`.ungban <username/reply/userid>`\
+\n  •  **Function : **__Reply someone's message with .ungban to remove them from the gbanned list.__\
+\n\n  •  **Syntax : **`.listgban`\
+\n  •  **Function : **__Shows you the gbanned list and reason for their gban.__\
+\n\n  •  **Syntax : **`.gmute <username/reply> <reason (optional)>`\
+\n  •  **Function : **__Mutes the person in all groups you have in common with them.__\
+\n\n  •  **Syntax : **`.ungmute <username/reply>`\
+\n  •  **Function : **__Reply someone's message with .ungmute to remove them from the gmuted list.__"
     }
 )
