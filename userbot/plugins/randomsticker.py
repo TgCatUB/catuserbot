@@ -120,7 +120,10 @@ async def lastfm(event):
     )
     remove(PAT_IMAGE)
 
-CMD_HELP.update({"randomsticker":"""**Plugin : **`randomsticker`
+
+CMD_HELP.update(
+    {
+        "randomsticker": """**Plugin : **`randomsticker`
 
 **Commands : **
   •  `.cat`
@@ -128,5 +131,6 @@ CMD_HELP.update({"randomsticker":"""**Plugin : **`randomsticker`
   •  `.brain`
   •  `.pat`
 
-**Function : **__sends you random stickers of that category__ """ 
-  })
+**Function : **__sends you random stickers of that category__ """
+    }
+)

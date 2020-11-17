@@ -22,6 +22,7 @@ async def _(event):
     await reply_to_id.reply(mentions)
     await event.delete()
 
+
 @bot.on(admin_cmd(pattern="all (.*)"))
 @bot.on(sudo_cmd(pattern="all (.*)", allow_sudo=True))
 async def _(event):
@@ -90,8 +91,9 @@ async def _(event):
     )
 
 
-CMD_HELP.update({
-    "mention":"""**Plugin : **`mention`
+CMD_HELP.update(
+    {
+        "mention": """**Plugin : **`mention`
 
   •  **Syntax : **`.all`
   •  **Function : **__tags recent 100 persons in the group may not work for all__  
@@ -103,5 +105,6 @@ CMD_HELP.update({
   •  **Function : **__tags admins in group__  
 
   •  **Syntax : **`.men username/userid text`
-  •  **Function : **__tags that person with the given custom text__  """        
-})
+  •  **Function : **__tags that person with the given custom text__  """
+    }
+)

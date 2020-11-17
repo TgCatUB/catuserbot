@@ -1,8 +1,9 @@
 from asyncio import sleep
 
 import requests
-from . import CMD_HElP
+
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HElP
 
 
 @bot.on(admin_cmd(pattern="lmg (.*)"))
@@ -24,7 +25,7 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmy (.*)"))
@@ -48,7 +49,7 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="ddg (.*)"))
@@ -72,7 +73,7 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmalt (.*)"))
@@ -94,7 +95,7 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmvar (.*)"))
@@ -118,7 +119,7 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmlog (.*)"))
@@ -140,7 +141,7 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="dyno (.*)"))
@@ -162,7 +163,7 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmkp (.*)"))
@@ -184,7 +185,7 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="gem (.*)"))
@@ -206,7 +207,7 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="archive (.*)"))
@@ -228,10 +229,12 @@ async def _(event):
             )
         )
     else:
-        await edit_delete(event , "`Something went wrong. Please try again later.`", 5)
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
-CMD_HElP.update({
-    "letmesearch":"""**Plugin : **`letmesearch`
+
+CMD_HElP.update(
+    {
+        "letmesearch": """**Plugin : **`letmesearch`
 
 **Syntax : **
   •  `.lmg query`
@@ -249,5 +252,6 @@ CMD_HElP.update({
 let me google(lmg),let me youtube(lmy),Duck buck go (ddg) , let me altnews(lmalt),\
 let me var(lmvar) var from heroku ,let me log(lmlog) logs link for heroku , heroku dyno link (dyno)\
 indian kanoon (lmkp) , Government e marketplace(gem) , web archive (archive)\
-""" 
-})
+"""
+    }
+)

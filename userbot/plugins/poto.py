@@ -91,9 +91,13 @@ async def potocmd(event):
             await asyncio.sleep(2)
             return
 
-CMD_HELP.update({
-    "poto":"""**Plugin : **`poto`
+
+CMD_HELP.update(
+    {
+        "poto": """**Plugin : **`poto`
 
   •  **Syntax : **`.poto`
   •  **Function : **__reply to user to get his profile pic use command along \
-with profile pic number to get desired pic else use .poto all to get all if you dont reply then gets group pics__"""})
+with profile pic number to get desired pic else use .poto all to get all if you dont reply then gets group pics__"""
+    }
+)

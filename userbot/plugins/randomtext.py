@@ -14,6 +14,7 @@ from asyncio import sleep
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP
 
+
 @bot.on(admin_cmd(pattern=r"sing$", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"sing$", allow_sudo=True))
 async def _(event):
@@ -1882,8 +1883,10 @@ async def _(event):
     if x == 104:
         await event.edit("`Do You Know, We can't see Ghosts But Ghosts Can see Us...`")
 
-CMD_HELP.update({
-    "randomtext":"""**Plugin : **`randomtext`
+
+CMD_HELP.update(
+    {
+        "randomtext": """**Plugin : **`randomtext`
 
 **Commands : **
   •  `.sing`
@@ -1895,5 +1898,6 @@ CMD_HELP.update({
   •  `.qt`
   •  `.logic`  
 
-**Function : **__Random text strings are shown__"""    
-})
+**Function : **__Random text strings are shown__"""
+    }
+)
