@@ -1,9 +1,6 @@
-# Some are ported from uniborg By: @INF1N17Y
-
 from telethon.tl.types import ChannelParticipantsAdmins
-
 from ..utils import admin_cmd, sudo_cmd
-from . import CMD_HELP
+from . import CMD_HELP, reply_id
 
 
 @bot.on(admin_cmd(pattern="tagall$"))
@@ -11,15 +8,13 @@ from . import CMD_HELP
 async def _(event):
     if event.fwd_from:
         return
-    reply_to_id = None
-    if event.reply_to_msg_id:
-        reply_to_id = await event.get_reply_message()
+    reply_to_id = await reply_id(event)
     mentions = "hi all"
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
         if x.username:
             mentions += f" @{x.username}"
-    await reply_to_id.reply(mentions)
+    await event.client.send_message(event.chat_id , mentions , reply_to = reply_to_id)
     await event.delete()
 
 
@@ -28,15 +23,13 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    reply_to_id = None
-    if event.reply_to_msg_id:
-        reply_to_id = await event.get_reply_message()
+    reply_to_id = await reply_id(event)
     input_str = event.pattern_match.group(1)
     mentions = input_str or "@all"
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
         mentions += f"[\u2063](tg://user?id={x.id})"
-    await reply_to_id.reply(mentions)
+    await event.client.send_message(event.chat_id , mentions , reply_to = reply_to_id)
     await event.delete()
 
 
@@ -47,16 +40,12 @@ async def _(event):
         return
     mentions = "@admin: **Spam Spotted**"
     chat = await event.get_input_chat()
+    reply_to_id = await reply_id(event)
     async for x in event.client.iter_participants(
         chat, filter=ChannelParticipantsAdmins
     ):
         mentions += f"[\u2063](tg://user?id={x.id})"
-    reply_message = None
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        await reply_message.reply(mentions)
-    else:
-        await event.reply(mentions)
+    await event.client.send_message(event.chat_id , mentions , reply_to = reply_to_id)
     await event.delete()
 
 
@@ -64,6 +53,7 @@ async def _(event):
 @bot.on(sudo_cmd(pattern="men (.*)", allow_sudo=True))
 async def _(event):
     input_str = event.pattern_match.group(1)
+    reply_to_id = await reply_id(event)
     if event.reply_to_msg_id:
         reply_msg = await event.get_reply_message()
         u = reply_msg.sender_id
@@ -84,7 +74,7 @@ async def _(event):
             return
     await event.delete()
     await event.client.send_message(
-        event.chat_id, f"<a href='tg://user?id={u}'>{str}</a>", parse_mode="HTML"
+        event.chat_id, f"<a href='tg://user?id={u}'>{str}</a>", parse_mode="HTML", reply_to = reply_to_id
     )
 
 
