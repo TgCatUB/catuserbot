@@ -1,6 +1,7 @@
 from telethon.tl.types import ChannelParticipantsAdmins
-from . import CMD_HELP
+
 from ..utils import admin_cmd, sudo_cmd
+from . import CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="join$"))
@@ -102,8 +103,10 @@ async def _(event):
         await event.reply(mentions)
     await event.delete()
 
-CMD_HELP.update({
-    "fun":"""**Plugin : **`fun`
+
+CMD_HELP.update(
+    {
+        "fun": """**Plugin : **`fun`
 
 **Commands : **
   •  `.join`
@@ -112,5 +115,6 @@ CMD_HELP.update({
   •  `.push`
   •  `.work`
 
-**Function : **__Just like art plugin this are some other arts__"""  
-})    
+**Function : **__Just like art plugin this are some other arts__"""
+    }
+)
