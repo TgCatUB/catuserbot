@@ -1,5 +1,3 @@
-
-
 def media_type(message):
     if message and message.photo:
         media = "Photo"
