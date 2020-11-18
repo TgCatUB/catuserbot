@@ -10,7 +10,8 @@ import urllib
 import requests
 from telethon.tl import functions
 
-from userbot.utils import admin_cmd
+from ..utils import admin_cmd
+from . import CMD_HELP
 
 COLLECTION_STRING1 = [
     "awesome-batman-wallpapers",
@@ -87,3 +88,16 @@ async def main(event):
         await event.client(functions.photos.UploadProfilePhotoRequest(file))
         os.system("rm -rf donottouch.jpg")
         await asyncio.sleep(120)  # Edit this to your required needs
+
+
+CMD_HELP.update(
+    {
+        "autopfp": """**Plugin : **`autopfp`
+    
+**Commands found in autopfp are **
+  •  `.batmanpfp`
+  •  `.thorpfp`
+
+**Function : **__Changes your profile pic every 2 minutes with the command you used(mean the batman of thor)__"""
+    }
+)

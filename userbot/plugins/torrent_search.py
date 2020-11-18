@@ -11,7 +11,8 @@ import cfscrape  # https://github.com/Anorov/cloudflare-scrape
 import requests
 from bs4 import BeautifulSoup as bs
 
-from userbot.utils import admin_cmd, humanbytes
+from ..utils import admin_cmd, humanbytes
+from . import CMD_HELP
 
 
 def dogbin(magnets):
@@ -101,9 +102,7 @@ async def tor_search(event):
     await event.edit(msg, link_preview=False)
 
 
-@bot.on(
-    admin_cmd(pattern=r"movie (torrentz2\.eu|idop\.se) (.*)")  # pylint:disable=E0602
-)
+@bot.on(admin_cmd(pattern=r"movie (torrentz2\.eu|idop\.se) (.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -116,7 +115,7 @@ async def _(event):
         search_results = search_torrentz_eu(input_str)
     elif input_type == "idop.se":
         search_results = search_idop_se(input_str)
-    logger.info(search_results)  # pylint:disable=E0602
+    logger.info(search_results)
     output_str = ""
     i = 0
     for result in search_results:
@@ -175,7 +174,7 @@ def search_idop_se(search_query):
 
 def search_torrentz_eu(search_query):
     r = []
-    url = "https://torrentz2.eu/searchA?safe=1&f=" + search_query + ""
+    url = "https://torrentz2eu.org/searchA?safe=1&f=" + search_query + ""
     scraper = cfscrape.create_scraper()  # returns a CloudflareScraper instance
     raw_html = scraper.get(url).content
     # print(raw_html)
@@ -213,3 +212,18 @@ def search_torrentz_eu(search_query):
             except BaseException:
                 pass
     return r
+
+
+CMD_HELP.update(
+    {
+        "torrent_search": """**Plugin : **`torrent_search`
+
+  •  **Syntax : **`.tsearch query`
+  •  **Function : **__Fetches torrent links of given query__
+
+  •  **Syntax : **`.movie idop.se query`
+                `.movie torrentz2.eu query`
+  •  **Function : **__Fetches torrent links of given query alternative way__
+"""
+    }
+)

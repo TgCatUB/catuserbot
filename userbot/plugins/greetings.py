@@ -1,14 +1,7 @@
 import random
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import catmemes
-
-
-@bot.on(admin_cmd(pattern=f"gn$", outgoing=True))
-@bot.on(sudo_cmd(pattern="gn$", allow_sudo=True))
-async def night(night):
-    txt = random.choice(catmemes.GDNIGHT)
-    await edit_or_reply(night, txt)
+from . import CMD_HELP, catmemes
 
 
 @bot.on(admin_cmd(pattern=f"gm$", outgoing=True))
@@ -25,13 +18,11 @@ async def noon(noon):
     await edit_or_reply(noon, txt)
 
 
-@bot.on(admin_cmd(pattern="gnt$"))
-@bot.on(sudo_cmd(pattern="gnt$", allow_sudo=True))
-async def gn(event):
-    await edit_or_reply(
-        event,
-        "｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･\n╱╱╱╱╱╱╱╭╮╱╱╱╭╮╱╭╮╭╮\n╭━┳━┳━┳╯┃╭━┳╋╋━┫╰┫╰╮\n┃╋┃╋┃╋┃╋┃┃┃┃┃┃╋┃┃┃╭┫\n┣╮┣━┻━┻━╯╰┻━┻╋╮┣┻┻━╯\n╰━╯╱╱╱╱╱╱╱╱╱╱╰━╯\n｡♥｡･ﾟ♡ﾟ･｡♥° ♥｡･ﾟ♡ﾟ･",
-    )
+@bot.on(admin_cmd(pattern=f"gn$", outgoing=True))
+@bot.on(sudo_cmd(pattern="gn$", allow_sudo=True))
+async def night(night):
+    txt = random.choice(catmemes.GDNIGHT)
+    await edit_or_reply(night, txt)
 
 
 @bot.on(admin_cmd(pattern="gmg$"))
@@ -43,33 +34,12 @@ async def gm(event):
     )
 
 
-# by  @Halto_Tha
-@bot.on(admin_cmd(pattern=r"lmoon$"))
-@bot.on(sudo_cmd(pattern="lmoon$", allow_sudo=True))
-async def test(event):
-    if event.fwd_from:
-        return
+@bot.on(admin_cmd(pattern="gnt$"))
+@bot.on(sudo_cmd(pattern="gnt$", allow_sudo=True))
+async def gn(event):
     await edit_or_reply(
         event,
-        "🌕🌕🌕🌕🌕🌕🌕🌕\n🌕🌕🌖🌔🌖🌔🌕🌕\n🌕🌕🌗🌔🌖🌓🌕🌕\n🌕🌕🌗🌔🌖🌓🌕🌕\n🌕🌕🌖🌓🌗🌔🌕🌕\n🌕🌕🌗🌑🌑🌓🌕🌕\n🌕🌕🌗👀🌑🌓🌕🌕\n🌕🌕🌘👄🌑🌓🌕🌕\n🌕🌕🌗🌑🌑🌒🌕🌕\n🌕🌖🌑🌑🌑🌑🌔🌕\n🌕🌘🌑🌑🌑🌑🌒🌕\n🌖🌑🌑🌑🌑🌑🌑🌔\n🌕🤜🏻🌑🌑🌑🌑🤛🏻🌕\n🌕🌖🌑🌑🌑🌑🌔🌕\n🌘🌑🌑🌑🌑🌑🌑🌒\n🌕🌕🌕🌕🌕🌕🌕🌕",
-    )
-
-
-@bot.on(admin_cmd(pattern=r"city$"))
-@bot.on(sudo_cmd(pattern="city$", allow_sudo=True))
-async def test(event):
-    if event.fwd_from:
-        return
-    await edit_or_reply(
-        event,
-        """☁☁🌞      ☁           ☁
-       ☁  ✈         ☁    🚁    ☁    ☁        ☁          ☁     ☁   ☁
-🏬🏨🏫🏢🏤🏥🏦🏪🏫
-              🌲/     l🚍\🌳👭
-           🌳/  🚘 l  🏃 \🌴 👬                        👬     🌴/            l  🚔    \🌲
-      🌲/   🚖     l        \
-          🌳/🚶           |   🚍         \ 🌴🚴🚴
-🌴/                    |                     \🌲""",
+        "｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･\n╱╱╱╱╱╱╱╭╮╱╱╱╭╮╱╭╮╭╮\n╭━┳━┳━┳╯┃╭━┳╋╋━┫╰┫╰╮\n┃╋┃╋┃╋┃╋┃┃┃┃┃┃╋┃┃┃╭┫\n┣╮┣━┻━┻━╯╰┻━┻╋╮┣┻┻━╯\n╰━╯╱╱╱╱╱╱╱╱╱╱╰━╯\n｡♥｡･ﾟ♡ﾟ･｡♥° ♥｡･ﾟ♡ﾟ･",
     )
 
 
@@ -129,3 +99,26 @@ async def sprinkle(event):
         event,
         "✨.•*¨*.¸.•*¨*.¸¸.•*¨*• ƸӜƷ\n🌸🌺🌸🌺🌸🌺🌸🌺\n Sprinkled with love❤\n🌷🌻🌷🌻🌷🌻🌷🌻\n ¨*.¸.•*¨*. ¸.•*¨*.¸¸.•*¨`*•.✨\n🌹🍀🌹🍀🌹🍀🌹🍀",
     )
+
+
+CMD_HELP.update(
+    {
+        "greetings": """**Plugin : **`greetings`
+
+**Syntax : **
+  •  `.gm`
+  •  `.gnoon`
+  •  `.gn`  
+**Function : **__sends you random good morning , afternoon and night quotes respectively.__
+
+**Syntax : **
+  •  `.gnt`
+  •  `.gmg`
+  •  `.hi/.hi emoji`
+  •  `.cheer`
+  •  `.getwell`
+  •  `.luck`
+  •  `.sprinkle`
+**Function : **__shows you some text arts for these greeting commands.__"""
+    }
+)

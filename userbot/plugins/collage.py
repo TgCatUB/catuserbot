@@ -53,7 +53,7 @@ async def collage(cat):
     else:
         collagefile = catsticker
     endfile = "./temp/collage.png"
-    catcmd = f"vcsi -g {catinput}x{catinput} {collagefile} -o {endfile}"
+    catcmd = f"vcsi -g {catinput}x{catinput} '{collagefile}' -o {endfile}"
     stdout, stderr = (await runcmd(catcmd))[:2]
     if not os.path.exists(endfile):
         for files in (catsticker, collagefile):
@@ -76,7 +76,7 @@ async def collage(cat):
 CMD_HELP.update(
     {
         "collage": "**Plugin : **`collage`\
-        \n\n**Syntax : **`.collage <grid size>`\
-        \n**Function : **__Shows you the grid image of images extracted from video \n Grid size must be between 1 to 9 by default it is 3__"
+        \n\n  •  **Syntax : **`.collage <grid size>`\
+        \n  •  **Function : **__Shows you the grid image of images extracted from video \n Grid size must be between 1 to 9 by default it is 3__"
     }
 )

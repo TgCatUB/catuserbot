@@ -222,16 +222,16 @@ async def twrp(request):
 
 CMD_HELP.update(
     {
-        "android": "**android**\
-\n\n**Syntax : **`.magisk`\
-\n**Usage :** Get latest Magisk releases\
-\n\n**Syntax : **`.device <codename>`\
-\n**Usage :** Get info about android device codename or model.\
-\n\n**Syntax : **`.codename <brand> <device>`\
-\n**Usage :** Search for android device codename.\
-\n\n**Syntax : **`.specs <brand> <device>`\
-\n**Usage :** Get device specifications info.\
-\n\n**Syntax : **`.twrp <codename>`\
-\n**Usage :** Get latest twrp download for android device."
+        "android": "**Plugin : **`android`\
+\n\n  •  **Syntax : **`.magisk`\
+\n  •  **Function :** __Get latest Magisk releases__\
+\n\n  •  **Syntax : **`.device <codename>`\
+\n  •  **Function :** __Get info about android device codename or model.__\
+\n\n  •  **Syntax : **`.codename <brand> <device>`\
+\n  •  **Function :** __Search for android device codename.__\
+\n\n  •  **Syntax : **`.specs <brand> <device>`\
+\n  •  **Function :** __Get device specifications info.__\
+\n\n  •  **Syntax : **`.twrp <codename>`\
+\n  •  **Function : **__Get latest twrp download for android device.__"
     }
 )

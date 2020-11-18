@@ -12,7 +12,7 @@ from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"wiki (.*)"))
@@ -142,3 +142,17 @@ async def imdb(e):
         )
     except IndexError:
         await catevent.edit("Plox enter **Valid movie name** kthx")
+
+
+CMD_HELP.update(
+    {
+        "scrapers": """**Plugin : **`scrapers`
+
+  •  **Syntax : ** `.wiki query`
+  •  **Function : **__Fetches given query in wikipedia and shows you__
+
+  •  **Syntax : ** `.imdb query`
+  •  **Function : **__Fetches Given movie details from imdb__
+"""
+    }
+)

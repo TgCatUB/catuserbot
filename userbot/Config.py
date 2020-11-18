@@ -169,6 +169,12 @@ class Config((object)):
     ANTISPAMBOT_BAN = os.environ.get("ANTISPAMBOT_BAN", False)
     # Deepai value can get from https://deepai.org/
     DEEP_AI = os.environ.get("DEEP_AI", None)
+    # For custom stickerpack names
+    CUSTOM_STICKER_PACKNAME = os.environ.get("CUSTOM_STICKER_PACKNAME", None)
+    # Owner id to show profile link of given id as owner
+    OWNER_ID = os.environ.get("OWNER_ID", None)
+    if OWNER_ID:
+        OWNER_ID = int(OWNER_ID)
 
 
 class Production(Config):

@@ -1,5 +1,5 @@
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import fonts
+from . import CMD_HELP, fonts
 
 
 @bot.on(admin_cmd(pattern="fmusical(?: |$)(.*)", command="fmusical"))
@@ -185,3 +185,23 @@ async def stylish_generator(event):
             ]
             string = string.replace(normaltextcharacter, smothtextcharacter)
     await edit_or_reply(event, string)
+
+
+CMD_HELP.update(
+    {
+        "fonts": """**Plugin : **`fonts`
+
+**Commands found in fonts are**
+  •  `.fmusical`
+  •  `.ancient`
+  •  `.vapor`
+  •  `.smallcaps`
+  •  `.blackbf`
+  •  `.bubbles`
+  •  `.tanf`
+  •  `.boxf`
+  •  `.smothtext`
+
+**Function : **__Reply the command to the text message or give input along with command to convert that text to given font style__"""
+    }
+)

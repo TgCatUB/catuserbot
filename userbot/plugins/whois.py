@@ -295,11 +295,11 @@ async def ge(user, event):
 CMD_HELP.update(
     {
         "whois": "**Plugin : **`whois`\
-    \n\n**Syntax : **`.whois <username> or reply to someones text with .whois`\
-    \n**Function : **__Gets info of an user.__\
-    \n\n**Syntax : **`.userinfo <username> or reply to someones text with .userinfo`\
-    \n**Function : **__Gets information of an user such as restrictions ban by spamwatch or cas__\
-    \n\n**Syntax : **`.link id/username/reply`\
-    \n**Function : **__Generates a link to the user's PM .__"
+    \n\n  •  **Syntax : **`.whois <username> or reply to someones text with .whois`\
+    \n  •  **Function : **__Gets info of an user.__\
+    \n\n  •  **Syntax : **`.userinfo <username> or reply to someones text with .userinfo`\
+    \n  •  **Function : **__Gets information of an user such as restrictions ban by spamwatch or cas__\
+    \n\n  •  **Syntax : **`.link id/username/reply`\
+    \n  •  **Function : **__Generates a link to the user's PM .__"
     }
 )

@@ -218,7 +218,7 @@ async def cat_song_fetcer(event):
 
 CMD_HELP.update(
     {
-        "getsongs": "**Plugin : **`songs`\
+        "songs": "**Plugin : **`songs`\
         \n\n  •**Syntax : **`.song <query/reply>`\
         \n  •**Function : **__searches the song you entered in query from youtube and sends it, quality of it is 128k__\
         \n\n  •**Syntax : **`.song320 <query/reply>`\
