@@ -70,13 +70,9 @@ async def _(event):
             if message.file.size > media_dict[media]["max_size"]:
                 media_dict[media]["max_size"] = message.file.size
                 if type(chatdata).__name__ == "Channel":
-                    media_dict[media][
-                        "max_file_link"
-                    ] = f"https://t.me/c/{chatdata.id}/{message.id}"
+                    media_dict[media]["max_file_link"] = f"https://t.me/c/{chatdata.id}/{message.id}" # pylint: disable=line-too-long
                 else:
-                    media_dict[media][
-                        "max_file_link"
-                    ] = f"tg://openmessage?user_id={chatdata.id}&message_id={message.id}"
+                    media_dict[media]["max_file_link"] = f"tg://openmessage?user_id={chatdata.id}&message_id={message.id}" # pylint: disable=line-too-long
             totalsize += message.file.size
             totalcount += 1
     for mediax in TYPES:
