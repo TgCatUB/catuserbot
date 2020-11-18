@@ -12,6 +12,8 @@ from ..utils import edit_delete
 def mentionuser(name, userid):
     return f"[{name}](tg://user?id={userid})"
 
+def htmlmentionuser(name, userid):
+    return f"<a href='tg://user?id={userid}'>{name}</a>"
 
 async def reply_id(event):
     reply_to_id = None
