@@ -10,6 +10,7 @@ from ..Config import Config
 def mentionuser(name, userid):
     return f"[{name}](tg://user?id={userid})"
 
+
 def htmlmentionuser(name, userid):
     return f"<a href='tg://user?id={userid}'>{name}</a>"
 
