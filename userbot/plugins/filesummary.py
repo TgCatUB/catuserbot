@@ -1,12 +1,11 @@
 # file summary plugin for catuserbot  by @mrconfused
 
 import time
-from prettytable import PrettyTable
-from ..utils import admin_cmd , sudo_cmd
-from . import humanbytes , htmlmentionuser ,media_type, CMD_HELP
-import re
-import math
 
+from prettytable import PrettyTable
+
+from ..utils import admin_cmd, sudo_cmd
+from . import CMD_HELP, htmlmentionuser, humanbytes, media_type
 
 TYPES = [
     "Photo",
@@ -19,11 +18,13 @@ TYPES = [
     "Round Video",
 ]
 
+
 def weird_division(n, d):
     return n / d if d else 0
 
-@borg.on(admin_cmd(pattern="chatfs ?(.*)",outgoing=True))
-@borg.on(sudo_cmd(pattern="chatfs ?(.*)",allow_sudo=True))
+
+@borg.on(admin_cmd(pattern="chatfs ?(.*)", outgoing=True))
+@borg.on(sudo_cmd(pattern="chatfs ?(.*)", allow_sudo=True))
 async def _(event):
     entity = event.chat_id
     input_str = event.pattern_match.group(1)
@@ -41,7 +42,9 @@ async def _(event):
     try:
         chatdata = await event.client.get_entity(entity)
     except Exception as e:
-        return await edit_delete(event,f"<b>Error : </b><code>{str(e)}</code>", time=5,parse_mode="HTML")
+        return await edit_delete(
+            event, f"<b>Error : </b><code>{str(e)}</code>", time=5, parse_mode="HTML"
+        )
     if type(chatdata).__name__ == "Channel":
         if chatdata.username:
             link = f"<a href='t.me/{chatdata.username}'>{chatdata.title}</a>"
@@ -49,7 +52,11 @@ async def _(event):
             link = chatdata.title
     else:
         link = f"<a href='tg://user?id={chatdata.id}'>{chatdata.first_name}</a>"
-    catevent = await edit_or_reply(event , f"<code>Counting files and file size of </code><b>{link}</b>\n<code>This may take some time also depends on number of group messages</code>" , parse_mode="HTML")
+    catevent = await edit_or_reply(
+        event,
+        f"<code>Counting files and file size of </code><b>{link}</b>\n<code>This may take some time also depends on number of group messages</code>",
+        parse_mode="HTML",
+    )
     media_dict = {
         m: {"file_size": 0, "count": 0, "max_size": 0, "max_file_link": ""}
         for m in TYPES
@@ -63,9 +70,13 @@ async def _(event):
             if message.file.size > media_dict[media]["max_size"]:
                 media_dict[media]["max_size"] = message.file.size
                 if type(chatdata).__name__ == "Channel":
-                    media_dict[media]["max_file_link"] = f"https://t.me/c/{chatdata.id}/{message.id}"
+                    media_dict[media][
+                        "max_file_link"
+                    ] = f"https://t.me/c/{chatdata.id}/{message.id}"
                 else:
-                    media_dict[media]["max_file_link"] = f"tg://openmessage?user_id={chatdata.id}&message_id={message.id}" 
+                    media_dict[media][
+                        "max_file_link"
+                    ] = f"tg://openmessage?user_id={chatdata.id}&message_id={message.id}"
             totalsize += message.file.size
             totalcount += 1
     for mediax in TYPES:
@@ -84,7 +95,10 @@ async def _(event):
     else:
         runtime = str(endtime - starttime) + " seconds"
     avghubytes = humanbytes(weird_division(totalsize, totalcount))
-    avgruntime = (str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2)) + " ms")
+    avgruntime = (
+        str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))
+        + " ms"
+    )
     totalstring = f"<code><b>Total files : </b>       | {str(totalcount)}\
                   \nTotal file size :    | {humanbytes(totalsize)}\
                   \nAvg. file size :     | {avghubytes}\
@@ -98,11 +112,12 @@ async def _(event):
     result += "<b>File Summary : </b>\n"
     result += f"<code>{str(x)}</code>\n"
     result += f"{largest}"
-    result +=line + totalstring + line + runtimestring + line
-    await catevent.edit(result , parse_mode="HTML", link_preview=False)
+    result += line + totalstring + line + runtimestring + line
+    await catevent.edit(result, parse_mode="HTML", link_preview=False)
 
-@borg.on(admin_cmd(pattern="userfs ?(.*)",outgoing=True))
-@borg.on(sudo_cmd(pattern="userfs ?(.*)",allow_sudo=True))
+
+@borg.on(admin_cmd(pattern="userfs ?(.*)", outgoing=True))
+@borg.on(sudo_cmd(pattern="userfs ?(.*)", allow_sudo=True))
 async def _(event):
     reply = await event.get_reply_message()
     input_str = event.pattern_match.group(1)
@@ -133,11 +148,15 @@ async def _(event):
     try:
         chatdata = await event.client.get_entity(entity)
     except Exception as e:
-        return await edit_delete(event,f"<b>Error : </b><code>{str(e)}</code>", 5,parse_mode="HTML")
+        return await edit_delete(
+            event, f"<b>Error : </b><code>{str(e)}</code>", 5, parse_mode="HTML"
+        )
     try:
         userdata = await event.client.get_entity(userentity)
     except Exception as e:
-        return await edit_delete(event,f"<b>Error : </b><code>{str(e)}</code>", time=5,parse_mode="HTML")
+        return await edit_delete(
+            event, f"<b>Error : </b><code>{str(e)}</code>", time=5, parse_mode="HTML"
+        )
     if type(chatdata).__name__ == "Channel":
         if chatdata.username:
             link = f"<a href='t.me/{chatdata.username}'>{chatdata.title}</a>"
@@ -145,13 +164,19 @@ async def _(event):
             link = chatdata.title
     else:
         link = f"<a href='tg://user?id={chatdata.id}'>{chatdata.first_name}</a>"
-    catevent = await edit_or_reply(event , f"<code>Counting files and file size by </code>{htmlmentionuser(userdata.first_name,userdata.id)}<code> in Group </code><b>{link}</b>\n<code>This may take some time also depends on number of user messages</code>" , parse_mode="HTML")
+    catevent = await edit_or_reply(
+        event,
+        f"<code>Counting files and file size by </code>{htmlmentionuser(userdata.first_name,userdata.id)}<code> in Group </code><b>{link}</b>\n<code>This may take some time also depends on number of user messages</code>",
+        parse_mode="HTML",
+    )
 
     media_dict = {
         m: {"file_size": 0, "count": 0, "max_size": 0, "max_file_link": ""}
         for m in TYPES
     }
-    async for message in event.client.iter_messages(entity=entity, limit=None,from_user=userentity):
+    async for message in event.client.iter_messages(
+        entity=entity, limit=None, from_user=userentity
+    ):
         msg_count += 1
         media = media_type(message)
         if media is not None:
@@ -160,9 +185,13 @@ async def _(event):
             if message.file.size > media_dict[media]["max_size"]:
                 media_dict[media]["max_size"] = message.file.size
                 if type(chatdata).__name__ == "Channel":
-                    media_dict[media]["max_file_link"] = f"https://t.me/c/{chatdata.id}/{message.id}"
+                    media_dict[media][
+                        "max_file_link"
+                    ] = f"https://t.me/c/{chatdata.id}/{message.id}"
                 else:
-                    media_dict[media]["max_file_link"] = f"tg://openmessage?user_id={chatdata.id}&message_id={message.id}" 
+                    media_dict[media][
+                        "max_file_link"
+                    ] = f"tg://openmessage?user_id={chatdata.id}&message_id={message.id}"
             totalsize += message.file.size
             totalcount += 1
     for mediax in TYPES:
@@ -181,7 +210,10 @@ async def _(event):
     else:
         runtime = str(endtime - starttime) + " seconds"
     avghubytes = humanbytes(weird_division(totalsize, totalcount))
-    avgruntime = (str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2)) + " ms")
+    avgruntime = (
+        str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))
+        + " ms"
+    )
     totalstring = f"<code><b>Total files : </b>       | {str(totalcount)}\
                   \nTotal file size :    | {humanbytes(totalsize)}\
                   \nAvg. file size :     | {avghubytes}\
@@ -195,12 +227,13 @@ async def _(event):
     result += "<b>File Summary : </b>\n"
     result += f"<code>{str(x)}</code>\n"
     result += f"{largest}"
-    result +=line + totalstring + line + runtimestring+line
-    await catevent.edit(result , parse_mode="HTML", link_preview=False)    
+    result += line + totalstring + line + runtimestring + line
+    await catevent.edit(result, parse_mode="HTML", link_preview=False)
 
 
-CMD_HELP.update({
-    "filesummary":"""**Plugin : **`filesummary`
+CMD_HELP.update(
+    {
+        "filesummary": """**Plugin : **`filesummary`
 
 **Syntax : **
   •  `.chatfs`
@@ -214,6 +247,6 @@ CMD_HELP.update({
   •  `.userfs user username/id`
 **Function : **
   •  __Shows you the complete media/file summary of the that User in the group where you want__
-"""  
-
-})    
+"""
+    }
+)
