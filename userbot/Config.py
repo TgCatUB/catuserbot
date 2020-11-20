@@ -11,6 +11,9 @@ class Config((object)):
     # Get this value from my.telegram.org! Please do not steal
     APP_ID = int(os.environ.get("APP_ID", 6))
     API_HASH = os.environ.get("API_HASH", "eb06d4abfb49dc3eeb1aeb98ae0f581e")
+    STRING_SESSION = os.environ.get("STRING_SESSION", None)
+    # For Databases
+    DB_URI = os.environ.get("DATABASE_URL", None)
     SCREEN_SHOT_LAYER_ACCESS_KEY = os.environ.get("SCREEN_SHOT_LAYER_ACCESS_KEY", None)
     # string session for running on Heroku
     # some people upload their session files on GitHub or other third party hosting
@@ -89,10 +92,6 @@ class Config((object)):
     # Get your own API key from https://www.remove.bg/ or
     # feel free to use http://telegram.dog/Remove_BGBot
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
-    # For Databases
-    # can be None in which case plugins requiring
-    # DataBase would not work
-    DB_URI = os.environ.get("DATABASE_URL", None)
     # number of rows of buttons to be displayed in .help command
     NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD = int(
         os.environ.get("NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD", 7)
@@ -169,6 +168,8 @@ class Config((object)):
     ANTISPAMBOT_BAN = os.environ.get("ANTISPAMBOT_BAN", False)
     # Deepai value can get from https://deepai.org/
     DEEP_AI = os.environ.get("DEEP_AI", None)
+    # can get from https://coffeehouse.intellivoid.net/
+    LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
 
 
 class Production(Config):
