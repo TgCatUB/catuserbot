@@ -24,7 +24,7 @@ async def amireallyalive(alive):
         reply_to_id = await alive.get_reply_message()
     if CAT_IMG:
         cat_caption = f"**✮ MY BOT IS RUNNING SUCCESFULLY ✮**\n\n"
-        cat_caption = f"**✮ WIND FLOW WITH A LIGHTNINING GLOW ✮**\n\n"
+        cat_caption = f"**✮ WIND FLOW WITH A LIGHTNING GLOW ✮**\n\n"
         cat_caption += f"**☞ Database :** `{check_sgnirts}`\n"
         cat_caption += f"**☞ Telethon version :** `{version.__version__}\n`"
         cat_caption += f"**☞ Catuserbot Version :** `{catversion}`\n"
@@ -39,7 +39,7 @@ async def amireallyalive(alive):
         await edit_or_reply(
             alive,
             f"**✮ MY BOT IS RUNNING SUCCESFULLY ✮**\n\n"
-            f"**✮ WIND FLOW WITH A LIGHTNINING GLOW ✮**\n\n"
+            f"**✮ WIND FLOW WITH A LIGHTNING GLOW ✮**\n\n"
             f"**☞ Database :** `{check_sgnirts}`\n"
             f"**☞ Telethon Version :** `{version.__version__}\n`"
             f"**☞ Catuserbot Version :** `{catversion}`\n"
