@@ -2,7 +2,7 @@ import threading
 
 from sqlalchemy import Column, String, UnicodeText, distinct, func
 
-from .sql_helper import BASE, SESSION
+from . import BASE, SESSION
 
 
 class CatBroadcast(BASE):
