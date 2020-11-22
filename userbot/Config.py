@@ -198,7 +198,7 @@ class Config((object)):
     UPSTREAM_REPO_URL = os.environ.get(
         "UPSTREAM_REPO_URL", "https://github.com/sandy1709/catuserbot.git"
     )
-    UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
+    UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "bugs")
     # can get from https://coffeehouse.intellivoid.net/
     LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
     CHANGE_TIME = int(os.environ.get("CHANGE_TIME", 60))
