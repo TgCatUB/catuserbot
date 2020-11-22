@@ -12,11 +12,10 @@ import traceback
 from pathlib import Path
 from time import gmtime, strftime
 
+import requests
 from telethon import events
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
-
-from var import Var
 
 from . import CMD_LIST, LOAD_PLUG, LOGS, SUDO_LIST, bot
 from .helpers.exceptions import CancelProcess
@@ -45,13 +44,15 @@ def load_module(shortname):
     else:
         import userbot.utils
 
+        from .helpers.utils import install_pip
+
         path = Path(f"userbot/plugins/{shortname}.py")
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
         mod.bot = bot
         mod.tgbot = bot.tgbot
-        mod.Var = Var
+        mod.Config = Config
         mod.command = command
         mod.logger = logging.getLogger(shortname)
         # support for uniborg
@@ -60,6 +61,7 @@ def load_module(shortname):
         mod.borg = bot
         mod.edit_or_reply = edit_or_reply
         mod.edit_delete = edit_delete
+        mod.install_pip = install_pip
         # support for paperplaneextended
         sys.modules["userbot.events"] = userbot.utils
         spec.loader.exec_module(mod)
@@ -144,7 +146,6 @@ def admin_cmd(pattern=None, command=None, **args):
 
     # add blacklist chats, UB should not respond in these chats
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
-        args["allow_edited_updates"]
         del args["allow_edited_updates"]
 
     # check if the plugin should listen for outgoing 'messages'
@@ -206,7 +207,6 @@ def sudo_cmd(pattern=None, command=None, **args):
         args["chats"] = black_list_chats
     # add blacklist chats, UB should not respond in these chats
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
-        args["allow_edited_updates"]
         del args["allow_edited_updates"]
     # check if the plugin should listen for outgoing 'messages'
     return events.NewMessage(**args)
@@ -214,33 +214,70 @@ def sudo_cmd(pattern=None, command=None, **args):
 
 # https://t.me/c/1220993104/623253
 # https://docs.telethon.dev/en/latest/misc/changelog.html#breaking-changes
-async def edit_or_reply(event, text, parse_mode=None, link_preview=None):
+async def edit_or_reply(
+    event,
+    text,
+    parse_mode=None,
+    link_preview=None,
+    file_name=None,
+    aslink=False,
+    linktext=None,
+    caption=None,
+):
     link_preview = link_preview or False
-    parse_mode = parse_mode or "md"
-    if event.sender_id in Config.SUDO_USERS:
-        reply_to = await event.get_reply_message()
-        if reply_to:
-            return await reply_to.reply(
+    reply_to = await event.get_reply_message()
+    if len(text) < 4096:
+        parse_mode = parse_mode or "md"
+        if event.sender_id in Config.SUDO_USERS:
+            if reply_to:
+                return await reply_to.reply(
+                    text, parse_mode=parse_mode, link_preview=link_preview
+                )
+            return await event.reply(
                 text, parse_mode=parse_mode, link_preview=link_preview
             )
-        return await event.reply(text, parse_mode=parse_mode, link_preview=link_preview)
-    return await event.edit(text, parse_mode=parse_mode, link_preview=link_preview)
-
-
-# from paperplaneextended
-on = bot.on
-
-
-def on(**args):
-    def decorator(func):
-        async def wrapper(event):
-            # do things like check if sudo
-            await func(event)
-
-        client.add_event_handler(wrapper, events.NewMessage(**args))
-        return wrapper
-
-    return decorater
+        return await event.edit(text, parse_mode=parse_mode, link_preview=link_preview)
+    asciich = ["*", "`", "_"]
+    for i in asciich:
+        text = re.sub(rf"\{i}", "", text)
+    if aslink:
+        linktext = linktext or "Message was to big so pasted to bin"
+        try:
+            key = (
+                requests.post(
+                    "https://nekobin.com/api/documents", json={"content": text}
+                )
+                .json()
+                .get("result")
+                .get("key")
+            )
+            text = linktext + f" [here](https://nekobin.com/{key})"
+        except:
+            text = re.sub(r"•", ">>", text)
+            kresult = requests.post(
+                "https://del.dog/documents", data=text.encode("UTF-8")
+            ).json()
+            text = linktext + f" [here](https://del.dog/{kresult['key']})"
+        if event.sender_id in Config.SUDO_USERS:
+            if reply_to:
+                return await reply_to.reply(text, link_preview=link_preview)
+            return await event.reply(text, link_preview=link_preview)
+        return await event.edit(text, link_preview=link_preview)
+    file_name = file_name or "output.txt"
+    caption = caption or None
+    with open(file_name, "w+") as output:
+        output.write(text)
+    if reply_to:
+        await reply_to.reply(caption, file=file_name)
+        await event.delete()
+        return os.remove(file_name)
+    if event.sender_id in Config.SUDO_USERS:
+        await event.reply(caption, file=file_name)
+        await event.delete()
+        return os.remove(file_name)
+    await event.client.send_file(event.chat_id, file_name, caption=caption)
+    await event.delete()
+    os.remove(file_name)
 
 
 async def edit_delete(event, text, time=None, parse_mode=None, link_preview=None):
@@ -398,7 +435,7 @@ def time_formatter(milliseconds: int) -> str:
 
 class Loader:
     def __init__(self, func=None, **args):
-        self.Var = Var
+        self.Config = Config
         bot.add_event_handler(func, events.NewMessage(**args))
 
 

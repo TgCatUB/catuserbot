@@ -11,23 +11,21 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.8
-
+          python-version: 3.9
       - name: Install Python lint libraries
         run: |
-          pip install autopep8 autoflake isort black
-      - name: Check for showstoppers
-        run: |
-          autopep8 --verbose --in-place --recursive --aggressive --aggressive --ignore=W605. *.py
+          pip install autoflake isort black
       - name: Remove unused imports and variables
         run: |
           autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables --ignore-init-module-imports .
-      - name: lint with isort and black
+      - name: lint with isort
         run: |
           isort .
+      - name: lint with black
+        run: |
           black .
       # commit changes
-      - uses: stefanzweifel/git-auto-commit-action@v4.7.2
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: 'pylint: auto fixes'
           commit_options: '--no-verify'

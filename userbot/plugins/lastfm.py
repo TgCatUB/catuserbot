@@ -16,18 +16,13 @@ from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
 from ..utils import admin_cmd
-from . import (
-    BIO_PREFIX,
-    BOTLOG,
-    BOTLOG_CHATID,
-    CMD_HELP,
-    DEFAULT_BIO,
-    LASTFM_API,
-    LASTFM_PASSWORD_PLAIN,
-    LASTFM_SECRET,
-    LASTFM_USERNAME,
-    bot,
-)
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, DEFAULT_BIO
+
+BIO_PREFIX = Config.BIO_PREFIX
+LASTFM_API = Config.LASTFM_API
+LASTFM_SECRET = Config.LASTFM_SECRET
+LASTFM_USERNAME = Config.LASTFM_USERNAME
+LASTFM_PASSWORD_PLAIN = Config.LASTFM_PASSWORD_PLAIN
 
 LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN)
 if LASTFM_API and LASTFM_SECRET and LASTFM_USERNAME and LASTFM_PASS:
@@ -56,7 +51,6 @@ ARTIST = 0
 SONG = 0
 USER_ID = 0
 
-BIOPREFIX = BIO_PREFIX if BIO_PREFIX else None
 LASTFMCHECK = False
 RUNNING = False
 LastLog = False

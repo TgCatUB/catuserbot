@@ -151,6 +151,8 @@ async def on_file_to_photo(event):
 @bot.on(admin_cmd(pattern="gif$"))
 @bot.on(sudo_cmd(pattern="gif$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     catreply = await event.get_reply_message()
     if not catreply or not catreply.media or not catreply.media.document:
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")

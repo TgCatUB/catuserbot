@@ -10,10 +10,10 @@ from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 @bot.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
 @bot.on(sudo_cmd(pattern=r"lock( (?P<target>\S+)|$)", allow_sudo=True))
 async def _(event):
-    # Space weirdness in regex required because argument is optional and other
-    # commands start with ".lock"
     if event.fwd_from:
         return
+    # Space weirdness in regex required because argument is optional and other
+    # commands start with ".lock"
     input_str = event.pattern_match.group("target")
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):
@@ -346,14 +346,14 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "locks": "**Plugin : **`lock`\
-        \n\n**Syntax : **`.lock <all (or) type(s)> or .unlock <all (or) type(s)>`\
-\n**Function : **__Allows you to lock/unlock some common message types in the chat.\
-\n[NOTE: Requires proper admin rights in the chat !!]__\
-\n\n**Available message types to lock/unlock are: \
-\nAPI Options : **msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, changeinfo\
-\n**DB Options : **bots, commands, email, forward, url\
-\n\n**Syntax : **`.locks`\
-\n**Function : **__To see the active locks__"
+        "locks": "**Plugin : **`locks`\
+        \n\n**  •  Syntax : **`.lock <all (or) type(s)> or .unlock <all (or) type(s)>`\
+        \n  •  **Function : **__Allows you to lock/unlock some common message types in the chat.\
+        \n  •  [NOTE: Requires proper admin rights in the chat !!]__\
+        \n\n  •  **Available message types to lock/unlock are: \
+        \n  •  API Options : **msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, changeinfo\
+        \n**  •  DB Options : **bots, commands, email, forward, url\
+        \n\n  •  **Syntax : **`.locks`\
+        \n  •  **Function : **__To see the active locks__"
     }
 )

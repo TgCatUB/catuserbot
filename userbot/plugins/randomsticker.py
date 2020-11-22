@@ -9,6 +9,7 @@ from PIL import Image
 from telethon import functions, types, utils
 
 from ..utils import admin_cmd, sudo_cmd
+from . import CMD_HELP
 
 BASE_URL = "https://headp.at/pats/{}"
 PAT_IMAGE = "pat.webp"
@@ -17,6 +18,8 @@ PAT_IMAGE = "pat.webp"
 @bot.on(admin_cmd(pattern="cat$"))
 @bot.on(sudo_cmd(pattern="cat$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     try:
         await event.delete()
     except BaseException:
@@ -118,3 +121,18 @@ async def lastfm(event):
         event.chat_id, PAT_IMAGE, reply_to=event.reply_to_msg_id
     )
     remove(PAT_IMAGE)
+
+
+CMD_HELP.update(
+    {
+        "randomsticker": """**Plugin : **`randomsticker`
+
+**Commands : **
+  •  `.cat`
+  •  `.dab`
+  •  `.brain`
+  •  `.pat`
+
+**Function : **__sends you random stickers of that category__ """
+    }
+)

@@ -1,6 +1,7 @@
 import asyncio
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="unoob$"))
@@ -299,3 +300,26 @@ async def _(event):
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 7])
+
+
+CMD_HELP.update(
+    {
+        "animation6": """**Plugin : **`animation6`
+        
+**Commands in animation6 are **
+  •  `.unoob`
+  •  `.menoob`
+  •  `.upro`
+  •  `.mepro`
+  •  `.quickheal`
+  •  `.sqh`
+  •  `.vquickheal`
+  •  `.macos`
+  •  `.windows`
+  •  `.linux`
+  •  `.stock`
+  •  `.os`
+  
+**Function : **__Different kinds of animation commands check yourself for their animation .__"""
+    }
+)

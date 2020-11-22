@@ -12,7 +12,11 @@ from .. import *
 from ..Config import Config
 
 # =================== CONSTANT ===================
-USERID = bot.uid
+
+USERID = Config.OWNER_ID or bot.uid
+ALIVE_NAME = Config.ALIVE_NAME
+AUTONAME = Config.AUTONAME
+DEFAULT_BIO = Config.DEFAULT_BIO
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 # mention user

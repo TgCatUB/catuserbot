@@ -148,8 +148,17 @@ async def stylish_generator(event):
 
 CMD_HELP.update(
     {
-        "funnyfonts": ".mock (text) or .mock reply to message \
-\nUsage: random capital and small letters in given text.\
-"
+        "fonts2": """**Plugin : **`fonts2`
+        
+**Commands found in fonts2 are**
+  •  `.egyptf`
+  •  `.maref`
+  •  `.handcf`
+  •  `.doublef`
+  •  `.mock`
+  •  `.ghostf`
+  •  `.handsf`
+  
+**Function : **__Reply the command to the text message or give input along with command to convert that text to given font style__"""
     }
 )

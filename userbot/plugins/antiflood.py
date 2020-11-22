@@ -59,6 +59,8 @@ because he reached the defined flood limit.""".format(
 @bot.on(admin_cmd(pattern="setflood(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="setflood(?: |$)(.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     input_str = event.pattern_match.group(1)
     event = await edit_or_reply(event, "updating flood settings!")
     try:

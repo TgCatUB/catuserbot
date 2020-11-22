@@ -9,8 +9,8 @@ from telethon.tl import functions
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
-from .. import ALIVE_NAME, AUTONAME, CMD_HELP, DEFAULT_BIO
 from ..utils import admin_cmd
+from . import ALIVE_NAME, AUTONAME, CMD_HELP, DEFAULT_BIO
 
 DEFAULTUSER = str(AUTONAME) if AUTONAME else str(ALIVE_NAME)
 DEFAULTUSERBIO = (
@@ -60,10 +60,8 @@ async def _(event):
     await event.client(functions.account.UpdateProfileRequest(first_name=first_name))
     await event.client(functions.account.UpdateProfileRequest(last_name=last_name))
     await event.client(functions.account.UpdateProfileRequest(about=user_bio))
-    pfile = await event.client.upload_file(profile_pic)  # pylint:disable=E060
-    await event.client(
-        functions.photos.UploadProfilePhotoRequest(pfile)  # pylint:disable=E0602
-    )
+    pfile = await event.client.upload_file(profile_pic)
+    await event.client(functions.photos.UploadProfilePhotoRequest(pfile))
     await event.delete()
     await event.client.send_message(
         event.chat_id, "**LET US BE AS ONE**", reply_to=reply_message
@@ -150,10 +148,11 @@ async def get_full_user(event):
 
 CMD_HELP.update(
     {
-        "clone": "**SYNTAX :** `.clone`<reply to user whom you want to clone\
-    \n**USAGE : **clone the replied user account\
-    \n\n**SYNTAX : **`.revert`\
-    \n**USAGE : **Reverts back to your profile which you have set in heroku for  AUTONAME,DEFAULT_BIO\
+        "clone": "**Plugin : **`clone`\
+        \n\n  •  **Syntax :** `.clone`<reply to user whom you want to clone\
+        \n  •  **Function : **clone the replied user account\
+        \n\n  •  **Syntax : **`.revert`\
+        \n  •  **Function : **Reverts back to your profile which you have set in heroku for  AUTONAME, DEFAULT_BIO\
     "
     }
 )

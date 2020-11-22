@@ -182,6 +182,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern="fast$"))
 @bot.on(sudo_cmd(pattern="fast$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     await event.edit("calculating...")
     if event.fwd_from:
         return

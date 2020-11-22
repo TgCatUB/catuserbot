@@ -3,8 +3,8 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-from .. import ALIVE_NAME
 from ..utils import admin_cmd, edit_or_reply, load_module, remove_plugin, sudo_cmd
+from . import ALIVE_NAME, CMD_HELP
 
 DELETE_TIMEOUT = 5
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
@@ -112,3 +112,21 @@ async def load(event):
             event,
             f"Could not load {shortname} because of the following error.\n{str(e)}",
         )
+
+
+CMD_HELP.update(
+    {
+        "corecmds": """**Plugin : **`corecmds`
+
+  •  **Command : **`install`
+  •  **Function : **__Reply to any external plugin to install in bot__
+  •  **Command : **`.send <plugin name>`  
+  •  **Function : **__to send any plugin__
+  •  **Command : **`.unload <plugin name>`
+  •  **Function : **__To stop functioning of that plugin__  
+  •  **Command : **`load <plugin name>`
+  •  **Function : **__To load that plugin again__
+  
+**Note : **__To unload a plugin permenantly from bot set __`NO_LOAD`__ var in heroku with that plugin name with space between plugin names__"""
+    }
+)

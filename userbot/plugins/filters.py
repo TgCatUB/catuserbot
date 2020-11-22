@@ -1,10 +1,8 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
 import re
 
-from telethon import events
-
-from .. import BOTLOG_CHATID, CMD_HELP, bot
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from .sql_helper.filter_sql import (
     add_filter,
     get_filters,
@@ -13,7 +11,7 @@ from .sql_helper.filter_sql import (
 )
 
 
-@bot.on(events.NewMessage(incoming=True))
+@bot.on(admin_cmd(incoming=True))
 async def filter_incoming_handler(handler):
     try:
         if not (await handler.get_sender()).bot:
@@ -38,12 +36,14 @@ async def filter_incoming_handler(handler):
 @bot.on(admin_cmd(pattern="filter (.*)"))
 @bot.on(sudo_cmd(pattern="filter (.*)", allow_sudo=True))
 async def add_new_filter(new_handler):
+    if new_handler.fwd_from:
+        return
     keyword = new_handler.pattern_match.group(1)
     string = new_handler.text.partition(keyword)[2]
     msg = await new_handler.get_reply_message()
     msg_id = None
     if msg and msg.media and not string:
-        if BOTLOG_CHATID:
+        if BOTLOG:
             await new_handler.client.send_message(
                 BOTLOG_CHATID,
                 f"#FILTER\
@@ -79,31 +79,27 @@ async def add_new_filter(new_handler):
 @bot.on(admin_cmd(pattern="filters$"))
 @bot.on(sudo_cmd(pattern="filters$", allow_sudo=True))
 async def on_snip_list(event):
+    if event.fwd_from:
+        return
     OUT_STR = "There are no filters in this chat."
     filters = get_filters(event.chat_id)
     for filt in filters:
         if OUT_STR == "There are no filters in this chat.":
             OUT_STR = "Active filters in this chat:\n"
         OUT_STR += "👉 `{}`\n".format(filt.keyword)
-    if len(OUT_STR) > 4096:
-        with io.BytesIO(str.encode(OUT_STR)) as out_file:
-            out_file.name = "filters.text"
-            await bot.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                caption="Available Filters in the Current Chat",
-                reply_to=event,
-            )
-            await event.delete()
-    else:
-        await edit_or_reply(event, OUT_STR)
+    await edit_or_reply(
+        event,
+        OUT_STR,
+        caption="Available Filters in the Current Chat",
+        file_name="filters.text",
+    )
 
 
 @bot.on(admin_cmd(pattern="stop (.*)"))
 @bot.on(sudo_cmd(pattern="stop (.*)", allow_sudo=True))
 async def remove_a_filter(r_handler):
+    if r_handler.fwd_from:
+        return
     filt = r_handler.pattern_match.group(1)
     if not remove_filter(r_handler.chat_id, filt):
         await r_handler.edit("Filter` {} `doesn't exist.".format(filt))
@@ -114,6 +110,8 @@ async def remove_a_filter(r_handler):
 @bot.on(admin_cmd(pattern="rmfilters$"))
 @bot.on(sudo_cmd(pattern="rmfilters$", allow_sudo=True))
 async def on_all_snip_delete(event):
+    if event.fwd_from:
+        return
     filters = get_filters(event.chat_id)
     if filters:
         remove_all_filters(event.chat_id)

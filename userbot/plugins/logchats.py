@@ -121,13 +121,12 @@ async def set_no_log_p_m(event):
 
 CMD_HELP.update(
     {
-        "log_chats": "**Plugin : **`log_chats`\
-        \n\n**Syntax : **`.save` :\
-        \n**Function : ** saves tagged message in private group .\
-        \n\n**Syntax : **`.log`:\
-        \n**Function : **By default will log all private chat messages if you use .nolog and want to log again then you need to use this\
-        \n\n**Syntax : **`.nolog`:\
-        \n**Function : **stops logging from a private chat \
-        \n\n**Note : **Currently these resets after restart, will try to add database soon so wont reset after restart"
+        "logchats": "**Plugin : **`logchats`\
+        \n\n  •  **Syntax : **`.save` :\
+        \n  •  **Function : **__Saves tagged message in private group .__\
+        \n\n  •  **Syntax : **`.log`:\
+        \n  •  **Function : **__By default will log all private chat messages if you use .nolog and want to log again then you need to use this__\
+        \n\n  •  **Syntax : **`.nolog`:\
+        \n  •  **Function : **__Stops logging from a private chat or group where you used__"
     }
 )

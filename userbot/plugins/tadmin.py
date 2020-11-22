@@ -5,10 +5,10 @@ made by @mrconfused
 from telethon.errors import BadRequestError
 from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import EditBannedRequest
-from telethon.tl.types import ChatBannedRights, MessageEntityMentionName
+from telethon.tl.types import ChatBannedRights
 
 from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, extract_time
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, extract_time, get_user_from_event
 
 # =================== CONSTANT ===================
 NO_ADMIN = "`I am not an admin nub nibba!`"
@@ -178,56 +178,14 @@ async def ban(catty):
             )
 
 
-async def get_user_from_event(event):
-    """ Get the user from argument or replied message. """
-    args = event.pattern_match.group(1).split(" ", 1)
-    extra = None
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.sender_id)
-        extra = event.pattern_match.group(1)
-    elif args:
-        user = args[0]
-        if len(args) == 2:
-            extra = args[1]
-        if user.isnumeric():
-            user = int(user)
-        if not user:
-            await event.edit("`Pass the user's username, id or reply!`")
-            return
-        if event.message.entities:
-            probable_user_mention_entity = event.message.entities[0]
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                user_obj = await event.client.get_entity(user_id)
-                return user_obj
-        try:
-            user_obj = await event.client.get_entity(user)
-        except (TypeError, ValueError):
-            await event.edit("Could not fetch info of that user.")
-            return None
-    return user_obj, extra
-
-
-async def get_user_from_id(user, event):
-    if isinstance(user, str):
-        user = int(user)
-    try:
-        user_obj = await event.client.get_entity(user)
-    except (TypeError, ValueError) as err:
-        await event.edit(str(err))
-        return None
-    return user_obj
-
-
 CMD_HELP.update(
     {
         "tadmin": "**Plugin :** `tadmin`\
-      \n\n**Syntax : **`.tmute <reply/username/userid> <time> <reason>`\
-      \n**Usage : **Temporary mutes the user for given time.\
-      \n\n**Syntax : **`.tban <reply/username/userid> <time> <reason>`\
-      \n**Usage : **Temporary bans the user for given time.\
-      \n\n**Time units : ** (2m = 2 minutes) ,(3h = 3hours)  ,(4d = 4 days) ,(5w = 5 weeks)\
-      These times are example u can use anything with those units "
+      \n\n  •  **Syntax : **`.tmute <reply/username/userid> <time> <reason>`\
+      \n  •  **Function : **__Temporary mutes the user for given time.__\
+      \n\n  •  **Syntax : **`.tban <reply/username/userid> <time> <reason>`\
+      \n  •  **Function : **__Temporary bans the user for given time.__\
+      \n\n  •  **Time units : ** __(2m = 2 minutes) ,(3h = 3hours)  ,(4d = 4 days) ,(5w = 5 weeks)\
+      These times are example u can use anything with those units __"
     }
 )

@@ -1,11 +1,6 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-# The entire source code is OSSRPL except
-# 'download, uploadir, uploadas, upload' which is MPL
-# License: MPL and OSSRPL
-""" Userbot module which contains everything related to \
-    downloading/uploading from/to the server. """
+
 import asyncio
 import math
 import os
@@ -14,8 +9,8 @@ from datetime import datetime
 
 from pySmartDL import SmartDL
 
-from .. import ALIVE_NAME, CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, humanbytes, progress, sudo_cmd
+from ..utils import admin_cmd, sudo_cmd
+from . import ALIVE_NAME, CMD_HELP, humanbytes, progress
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -34,7 +29,7 @@ async def _(event):
         reply_message = await event.get_reply_message()
         try:
             c_time = time.time()
-            downloaded_file_name = await bot.download_media(
+            downloaded_file_name = await event.client.download_media(
                 reply_message,
                 Config.TMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -63,7 +58,7 @@ async def _(event):
         downloader.start(blocking=False)
         c_time = time.time()
         while not downloader.isFinished():
-            total_length = downloader.filesize if downloader.filesize else None
+            total_length = downloader.filesize or None
             downloaded = downloader.get_dl_size()
             display_message = ""
             now = time.time()

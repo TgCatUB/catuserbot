@@ -187,12 +187,12 @@ async def _(event):
 CMD_HELP.update(
     {
         "afk": "**Plugin : **`afk`\
-        \n\n**Syntax : **`.afk [Optional Reason]`\
-        \n**Function : **__Sets you as afk.\nReplies to anyone who tags/PM's \
-        you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
-        \nafk means away from keyboard/keypad.__\
-        \n\n**Note :** If you want AFK with hyperlink use [ ; ] after reason, then paste the media link.\
-        \n**Example :** `.afk busy now ;<Media_link>`\
+        \n\n  •  **Syntax : **`.afk [Optional Reason]`\
+        \n  •  **Function : **__Sets you as afk.\nReplies to anyone who tags/PM's \
+        \you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
+        \afk means away from keyboard/keypad.__\
+        \n\n  •  **Note :** If you want AFK with hyperlink use [ ; ] after reason, then paste the media link.\
+        \n  •  **Example :** `.afk busy now ;<Media_link>`\
 "
     }
 )

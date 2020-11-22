@@ -1,7 +1,7 @@
 import asyncio
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import ALIVE_NAME
+from . import ALIVE_NAME, CMD_HELP
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -9,11 +9,11 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 @bot.on(admin_cmd(outgoing=True, pattern="kilr( (.*)|$)"))
 @bot.on(sudo_cmd(pattern="kilr( (.*)|$)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     name = event.pattern_match.group(1)
     if not name:
         name = "die"
-    if event.fwd_from:
-        return
     animation_interval = 0.7
     animation_ttl = range(8)
     event = await edit_or_reply(event, f"**Ready Commando **__{DEFAULTUSER}....")
@@ -368,7 +368,6 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-
     event = await edit_or_reply(
         event, "╔═══════════════════╗ \n  \n╚═══════════════════╝"
     )
@@ -413,3 +412,25 @@ async def _(event):
         "╔═══════════════════╗ \n ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ \n╚═══════════════════╝"
     )
     await asyncio.sleep(6)
+
+
+CMD_HELP.update(
+    {
+        "animation4": """**Plugin : **`animation4`
+        
+**Commands in animation4 are **
+  •  `.kilr <text>`
+  •  `.eye`
+  •  `.thinking`
+  •  `.snake`
+  •  `.human`
+  •  `.mc`
+  •  `.virus`
+  •  `.repe`
+  •  `.nikal`
+  •  `.music`
+  •  `.squ`
+  
+**Function : **__Different kinds of animation commands check yourself for their animation .__"""
+    }
+)

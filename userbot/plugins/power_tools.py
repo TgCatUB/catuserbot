@@ -35,6 +35,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern="sleep( [0-9]+)?$"))
 @bot.on(sudo_cmd(pattern="sleep( [0-9]+)?$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     if " " not in event.pattern_match.group(1):
         return await edit_or_reply(event, "Syntax: `.sleep time`")
     counter = int(event.pattern_match.group(1))

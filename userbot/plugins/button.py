@@ -17,6 +17,8 @@ BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>
 @bot.on(admin_cmd(pattern=r"cbutton(?: |$)(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"cbutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     chat = event.chat_id
     reply_message = await event.get_reply_message()
     if reply_message:
@@ -70,6 +72,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"ibutton( (.*)|$)", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"ibutton( (.*)|$)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     reply_to_id = None
     catinput = "".join(event.text.split(maxsplit=1)[1:])
     if event.reply_to_msg_id:
@@ -82,7 +86,7 @@ async def _(event):
         await edit_or_reply(event, "`Give me something to write in bot inline`")
         return
     catinput = "Inline buttons " + catinput
-    tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
+    tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
     results = await bot.inline_query(tgbotusername, catinput)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()

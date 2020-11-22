@@ -9,8 +9,8 @@ from userbot.plugins.sql_helper.welcome_sql import (
     update_previous_welcome,
 )
 
-from .. import BOTLOG_CHATID, CMD_HELP, LOGS, bot
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import BOTLOG_CHATID, CMD_HELP, LOGS
 
 
 @bot.on(events.ChatAction)
@@ -29,7 +29,7 @@ async def _(event):
         a_user = await event.get_user()
         chat = await event.get_chat()
         me = await bot.get_me()
-        title = chat.title if chat.title else "this chat"
+        title = chat.title or "this chat"
         participants = await bot.get_participants(chat)
         count = len(participants)
         mention = "<a href='tg://user?id={}'>{}</a>".format(
@@ -81,6 +81,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"savewelcome ?(.*)"))
 @bot.on(sudo_cmd(pattern=r"savewelcome ?(.*)", allow_sudo=True))
 async def save_welcome(event):
+    if event.fwd_from:
+        return
     msg = await event.get_reply_message()
     string = "".join(event.text.split(maxsplit=1)[1:])
     msg_id = None
@@ -117,6 +119,8 @@ async def save_welcome(event):
 @bot.on(admin_cmd(pattern="clearwelcome$"))
 @bot.on(sudo_cmd(pattern="clearwelcome$", allow_sudo=True))
 async def del_welcome(event):
+    if event.fwd_from:
+        return
     if rm_welcome_setting(event.chat_id) is True:
         await edit_or_reply(event, "`Welcome note deleted for this chat.`")
     else:
@@ -126,6 +130,8 @@ async def del_welcome(event):
 @bot.on(admin_cmd(pattern="listwelcome$"))
 @bot.on(sudo_cmd(pattern="listwelcome$", allow_sudo=True))
 async def show_welcome(event):
+    if event.fwd_from:
+        return
     cws = get_current_welcome_settings(event.chat_id)
     if not cws:
         await edit_or_reply(event, "`No welcome message saved here.`")
@@ -146,14 +152,14 @@ async def show_welcome(event):
 CMD_HELP.update(
     {
         "welcome": "**Plugin :** `welcome`\
-\n\n**Syntax :** `.savewelcome` <welcome message> or reply to a message with .savewelcome\
-\n**Usage :** Saves the message as a welcome note in the chat.\
-\n\nAvailable variables for formatting welcome messages :\
+\n\n  •  **Syntax :** `.savewelcome` <welcome message> or reply to a message with .savewelcome\
+\n  •  **Function :** Saves the message as a welcome note in the chat.\
+\n\n  •  Available variables for formatting welcome messages :\
 \n`{mention}, {title}, {count}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
-\n\n**Syntax :** `.listwelcome`\
-\n**Usage :** Check whether you have a welcome note in the chat.\
-\n\n**Syntax :** `.clearwelcome`\
-\n**Usage :** Deletes the welcome note for the current chat.\
+\n\n  •  **Syntax :** `.listwelcome`\
+\n  •  **Function :** Check whether you have a welcome note in the chat.\
+\n\n  •  **Syntax :** `.clearwelcome`\
+\n  •  **Function :** Deletes the welcome note for the current chat.\
 "
     }
 )

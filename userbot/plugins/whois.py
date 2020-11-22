@@ -14,9 +14,10 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 
-from .. import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import spamwatch
+from . import CMD_HELP, LOGS, spamwatch
+
+TMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
 
 @bot.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
@@ -125,8 +126,8 @@ async def get_full_user(event):
 @bot.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
 async def who(event):
     cat = await edit_or_reply(event, "`Fetching userinfo wait....`")
-    if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
+    if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(TMP_DOWNLOAD_DIRECTORY)
     replied_user = await get_user(event)
     try:
         photo, caption = await fetch_info(replied_user, event)
@@ -208,7 +209,7 @@ async def fetch_info(replied_user, event):
     restricted = replied_user.user.restricted
     verified = replied_user.user.verified
     photo = await event.client.download_profile_photo(
-        user_id, TEMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg", download_big=True
+        user_id, TMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg", download_big=True
     )
     first_name = (
         first_name.replace("\u2060", "")
@@ -295,11 +296,11 @@ async def ge(user, event):
 CMD_HELP.update(
     {
         "whois": "**Plugin : **`whois`\
-    \n\n**Syntax : **`.whois <username> or reply to someones text with .whois`\
-    \n**Function : **__Gets info of an user.__\
-    \n\n**Syntax : **`.userinfo <username> or reply to someones text with .userinfo`\
-    \n**Function : **__Gets information of an user such as restrictions ban by spamwatch or cas__\
-    \n\n**Syntax : **`.link id/username/reply`\
-    \n**Function : **__Generates a link to the user's PM .__"
+    \n\n  •  **Syntax : **`.whois <username> or reply to someones text with .whois`\
+    \n  •  **Function : **__Gets info of an user.__\
+    \n\n  •  **Syntax : **`.userinfo <username> or reply to someones text with .userinfo`\
+    \n  •  **Function : **__Gets information of an user such as restrictions ban by spamwatch or cas__\
+    \n\n  •  **Syntax : **`.link id/username/reply`\
+    \n  •  **Function : **__Generates a link to the user's PM .__"
     }
 )

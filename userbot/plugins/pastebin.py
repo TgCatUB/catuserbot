@@ -25,6 +25,8 @@ DOGBIN_URL = "https://del.dog/"
 @bot.on(admin_cmd(pattern="paste( (.*)|$)", outgoing=True))
 @bot.on(sudo_cmd(pattern="paste( (.*)|$)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     catevent = await edit_or_reply(event, "`pasting to del dog.....`")
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     if input_str:
@@ -68,6 +70,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern="neko( (.*)|$)", outgoing=True))
 @bot.on(sudo_cmd(pattern="neko( (.*)|$)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     catevent = await edit_or_reply(event, "`pasting to neko bin.....`")
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     if input_str:
@@ -124,6 +128,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern="iffuci( (.*)|$)", outgoing=True))
 @bot.on(sudo_cmd(pattern="iffuci( (.*)|$)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     catevent = await edit_or_reply(event, "`pasting to del dog.....`")
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     if input_str:
@@ -205,6 +211,8 @@ async def get_dogbin_content(dog_url):
 @bot.on(admin_cmd(pattern="paster( (.*)|$)", outgoing=True))
 @bot.on(sudo_cmd(pattern="paster( (.*)|$)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     catevent = await edit_or_reply(event, "`pasting to del dog.....`")
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     previous_message = None

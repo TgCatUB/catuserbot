@@ -8,6 +8,13 @@ from telethon.tl.types import ChatBannedRights
 
 class Config((object)):
     LOGGER = True
+    # Default .alive name
+    ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
+    # For customizing there alive message
+    CUSTOM_ALIVE_TEXT = os.environ.get("CUSTOM_ALIVE_TEXT", None)
+    CUSTOM_ALIVE_EMOJI = os.environ.get("CUSTOM_ALIVE_EMOJI", None)
+    # for profile default name
+    AUTONAME = os.environ.get("AUTONAME", None)
     # Get this value from my.telegram.org! Please do not steal
     APP_ID = int(os.environ.get("APP_ID", 6))
     API_HASH = os.environ.get("API_HASH", "eb06d4abfb49dc3eeb1aeb98ae0f581e")
@@ -37,9 +44,7 @@ class Config((object)):
     PRIVATE_CHANNEL_BOT_API_ID = os.environ.get("PRIVATE_CHANNEL_BOT_API_ID", None)
     if PRIVATE_CHANNEL_BOT_API_ID:
         PRIVATE_CHANNEL_BOT_API_ID = int(PRIVATE_CHANNEL_BOT_API_ID)
-        # This is required for the plugins involving the file system.
-    TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./DOWNLOADS/")
-    # This is required for the speech to text module. Get your USERNAME from
+    # This is required for the speech to text plugin. Get your USERNAME from
     # https://console.bluemix.net/docs/services/speech-to-text/getting-started.html
     IBM_WATSON_CRED_URL = os.environ.get("IBM_WATSON_CRED_URL", None)
     IBM_WATSON_CRED_PASSWORD = os.environ.get("IBM_WATSON_CRED_PASSWORD", None)
@@ -92,6 +97,10 @@ class Config((object)):
     # Get your own API key from https://www.remove.bg/ or
     # feel free to use http://telegram.dog/Remove_BGBot
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
+    # For Databases
+    # can be None in which case plugins requiring
+    # DataBase would not work
+    DB_URI = os.environ.get("DATABASE_URL", None)
     # number of rows of buttons to be displayed in .help command
     NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD = int(
         os.environ.get("NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD", 7)
@@ -116,18 +125,19 @@ class Config((object)):
     CHROME_DRIVER = os.environ.get(
         "CHROME_DRIVER", "/app/.chromedriver/bin/chromedriver"
     )
+    # Google Drive plugin
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     G_DRIVE_FOLDER_ID = os.environ.get("G_DRIVE_FOLDER_ID", None)
     G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
     G_DRIVE_DATA = os.environ.get("G_DRIVE_DATA", None)
-    #  AUTH_TOKEN_DATA = os.environ.get("AUTH_TOKEN_DATA", None)
-    # os.makedirs(TMP_DOWNLOAD_DIRECTORY, exist_ok=True)
-    # t_file = open(TMP_DOWNLOAD_DIRECTORY+"auth_token.txt","w")
+    TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads")
+    # for heroku plugin
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     # For transfer channel
     TELE_GRAM_2FA_CODE = os.environ.get("TELE_GRAM_2FA_CODE", None)
+    # for sed plugin
     GROUP_REG_SED_EX_BOT_S = os.environ.get(
         "GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot"
     )
@@ -168,8 +178,30 @@ class Config((object)):
     ANTISPAMBOT_BAN = os.environ.get("ANTISPAMBOT_BAN", False)
     # Deepai value can get from https://deepai.org/
     DEEP_AI = os.environ.get("DEEP_AI", None)
+    # For custom stickerpack names
+    CUSTOM_STICKER_PACKNAME = os.environ.get("CUSTOM_STICKER_PACKNAME", None)
+    # Owner id to show profile link of given id as owner
+    OWNER_ID = os.environ.get("OWNER_ID", None)
+    if OWNER_ID:
+        OWNER_ID = int(OWNER_ID)
+    # Last.fm plugin
+    BIO_PREFIX = os.environ.get("BIO_PREFIX", None)
+    DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
+    LASTFM_API = os.environ.get("LASTFM_API", None)
+    LASTFM_SECRET = os.environ.get("LASTFM_SECRET", None)
+    LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
+    LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD", None)
+    # time.py
+    COUNTRY = str(os.environ.get("COUNTRY", ""))
+    TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
+    #  for updater plugin
+    UPSTREAM_REPO_URL = os.environ.get(
+        "UPSTREAM_REPO_URL", "https://github.com/sandy1709/catuserbot.git"
+    )
+    UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
     # can get from https://coffeehouse.intellivoid.net/
     LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
+    CHANGE_TIME = int(os.environ.get("CHANGE_TIME", 60))
 
 
 class Production(Config):

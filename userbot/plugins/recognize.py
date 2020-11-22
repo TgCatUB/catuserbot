@@ -41,10 +41,10 @@ async def _(event):
             response = await response
             msg = response.message.message
             await cat.edit(msg)
-            await event.client.send_read_acknowledge(conv.chat_id)
         else:
             await cat.edit("sorry, I couldnt find it")
-            await event.client.send_read_acknowledge(conv.chat_id)
+
+        await event.client.send_read_acknowledge(conv.chat_id)
 
 
 CMD_HELP.update(

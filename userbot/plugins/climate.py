@@ -17,7 +17,6 @@ from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
 from .. import CMD_HELP
-from .. import OPEN_WEATHER_MAP_APPID as OWM_API
 from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
 
 logging.basicConfig(
@@ -27,6 +26,7 @@ logging.basicConfig(
 # ===== CONSTANT =====
 DEFCITY = "Delhi"
 # ====================
+OWM_API = Config.OPEN_WEATHER_MAP_APPID
 
 
 async def get_tz(con):
@@ -192,6 +192,8 @@ async def set_default_city(city):
 @bot.on(admin_cmd(pattern="wttr ?(.*)"))
 @bot.on(sudo_cmd(pattern="wttr ?(.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     global DEFCITY
     reply_to_id = None
     if event.reply_to_msg_id:
@@ -216,11 +218,11 @@ async def _(event):
 CMD_HELP.update(
     {
         "climate": "**Plugin : **`climate`\
-        \n\n**Syntax : **`.climate <city>`\
-        \n**Function : **__Gets the weather of a city. By default it is Delhi, change it by setcity__\n\
-        \n\n**Syntax : **`.setcity <city> or .setcity <city>, <country name/code>`\
-        \n**Function : **__Sets your default city so you can just use .weather.__\
-        \n\n**Syntax : **`.wttr <city> `\
-        \n**Function : **__Shows you the climate data of 3 days from today in a image.__"
+        \n\n  •  **Syntax : **`.climate <city>`\
+        \n  •  **Function : **__Gets the weather of a city. By default it is Delhi, change it by setcity__\n\
+        \n\n  •  **Syntax : **`.setcity <city> or .setcity <city>, <country name/code>`\
+        \n  •  **Function : **__Sets your default city so you can just use .weather.__\
+        \n\n  •  **Syntax : **`.wttr <city> `\
+        \n  •  **Function : **__Shows you the climate data of 3 days from today in a image.__"
     }
 )

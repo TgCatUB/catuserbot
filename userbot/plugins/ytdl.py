@@ -24,7 +24,7 @@ from youtube_dl.utils import (
 )
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, hmention, progress
+from . import CMD_HELP, hmention, progress, reply_id
 
 
 @bot.on(admin_cmd(pattern="yt(a|v) (.*)", outgoing=True))
@@ -34,6 +34,7 @@ async def download_video(v_url):
     url = v_url.pattern_match.group(2)
     ytype = v_url.pattern_match.group(1).lower()
     v_url = await edit_or_reply(v_url, "`Preparing to download...`")
+    reply_to_id = await reply_id(v_url)
     if ytype == "a":
         opts = {
             "format": "bestaudio",
@@ -124,6 +125,7 @@ async def download_video(v_url):
             f"{ytdl_data['id']}.mp3",
             supports_streaming=True,
             thumb=catthumb,
+            reply_to=reply_to_id,
             attributes=[
                 DocumentAttributeAudio(
                     duration=int(ytdl_data["duration"]),
@@ -138,9 +140,6 @@ async def download_video(v_url):
             ),
         )
         os.remove(f"{ytdl_data['id']}.mp3")
-        if catthumb:
-            os.remove(catthumb)
-        await v_url.delete()
     elif video:
         await v_url.edit(
             f"`Preparing to upload video:`\
@@ -150,6 +149,7 @@ async def download_video(v_url):
         await v_url.client.send_file(
             v_url.chat_id,
             f"{ytdl_data['id']}.mp4",
+            reply_to=reply_to_id,
             supports_streaming=True,
             caption=ytdl_data["title"],
             progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -159,9 +159,9 @@ async def download_video(v_url):
             ),
         )
         os.remove(f"{ytdl_data['id']}.mp4")
-        if catthumb:
-            os.remove(catthumb)
-        await v_url.delete()
+    if catthumb:
+        os.remove(catthumb)
+    await v_url.delete()
 
 
 @bot.on(admin_cmd(pattern="yts (.*)"))
@@ -271,14 +271,14 @@ async def kakashi(event):
 CMD_HELP.update(
     {
         "ytdl": "**Plugin :** `ytdl`\
-    \n\n**Syntax :** `.yta link`\
-    \n**Usage : **downloads the audio from the given link(Suports the all sites which support youtube-dl)\
-    \n\n**Syntax : **`.ytv link`\
-    \n**Usage : **downloads the video from the given link(Suports the all sites which support youtube-dl)\
-    \n\n**Syntax : ** `.yts query`\
-    \n**Usage : **Fetches youtube results you need api token for this\
-    \n\n**Syntax : ** `.insta` <link>\
-    \n**Usage : **Downloads the video from the given instagram link\
+    \n\n  •  **Syntax :** `.yta link`\
+    \n  •  **Function : **__downloads the audio from the given link(Suports the all sites which support youtube-dl)__\
+    \n\n  •  **Syntax : **`.ytv link`\
+    \n  •  **Function : **__downloads the video from the given link(Suports the all sites which support youtube-dl)__\
+    \n\n  •  **Syntax : **`.yts query`\
+    \n  •  **Function : **__Fetches youtube results you need api token for this__\
+    \n\n  •  **Syntax : **`.insta` <link>\
+    \n  •  **Function : **__Downloads the video from the given instagram link__\
     "
     }
 )

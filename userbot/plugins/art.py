@@ -1,6 +1,6 @@
 # Edit credit @Sur_vivor & @jisan7509
-from .. import ALIVE_NAME
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import ALIVE_NAME, CMD_HELP
 
 DEF = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -401,3 +401,30 @@ async def bluedevilshitos(shitos):
 @bot.on(sudo_cmd(pattern="dislike$", allow_sudo=True))
 async def bluedevildislike(dislike):
     await edit_or_reply(dislike, R)
+
+
+CMD_HELP.update(
+    {
+        "art": """**Plugin : **`art`
+    
+**Commands found in art are **
+  •  `.ded <text>`
+  •  `.killer <text>`
+  •  `.monster`
+  •  `.pig`
+  •  `.gun`
+  •  `.dog`
+  •  `.hello`
+  •  `.hmf`
+  •  `.couple`
+  •  `.sup`
+  •  `.india`
+  •  `.wc`
+  •  `.snk`
+  •  `.bye`
+  •  `.shitos`
+  •  `.dislike`
+  
+**Function : **__Different kind of art plugins try out yourself__"""
+    }
+)

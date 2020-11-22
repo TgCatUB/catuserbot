@@ -2,7 +2,7 @@
 ```python3
 None
 ```
-There is None Mandatory Imports. Because Var, bot and command are already automatically imported.
+There is None Mandatory Imports. Because Config, bot and command are already automatically imported.
 
 ## Explanation
 The Mandatory Imports are now automatically imported.
@@ -16,5 +16,5 @@ from userbot.utils import admin_cmd
 async def hello_world(event):
     if event.fwd_from:
         return
-    await event.edit("**HELLO WORLD**\n\nThe following is controlling me too!\n" + Var.SUDO_USERS)
+    await event.edit("**HELLO WORLD**\n\nThe following is controlling me too!\n" + Config.SUDO_USERS)
 ```

@@ -10,6 +10,8 @@ from ..utils import admin_cmd, sudo_cmd
 @bot.on(admin_cmd(pattern="chain$"))
 @bot.on(sudo_cmd(pattern="chain$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     await event.edit("Counting...")
     count = -1
     message = event.message
@@ -28,8 +30,9 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "chain": "**SYNTAX :** `.chain`\
-    \n**USAGE : **Reply this command to any converstion where you want to find length of converstion(Only tagged chain will count ) \
-    "
+        "chain": """**Plugin :**`chain`
+        
+  • **Syntax : **`.chain reply to message`
+  • **Function : **__Reply this command to any converstion(or message) so that it finds chain length of that message__"""
     }
 )
