@@ -43,6 +43,7 @@ def get_all_approved():
     SESSION.close()
     return rem
 
+
 def disapprove_all():
     rem = SESSION.query(PMPermit).all()
     if rem:
