@@ -54,11 +54,22 @@ def rm_from_broadcastlist(keywoard, group_id):
 
         SESSION.close()
         return False
+    
+def is_in_broadcastlist(keywoard, group_id):
+    with CATBROADCAST_INSERTION_LOCK:
+        broadcast_group = SESSION.query(CatBroadcast).get((keywoard, str(group_id)))
+        return bool(broadcast_group)    
 
 
 def get_chat_broadcastlist(keywoard):
     return BROADCAST_CHANNELS.get(keywoard, set())
 
+def get_broadcastlist_chats():
+    try:
+        chats = SESSION.query(CatBroadcast.keywoard).distinct().all()
+        return [i for i in chats]
+    finally:
+        SESSION.close()  
 
 def num_broadcastlist():
     try:
