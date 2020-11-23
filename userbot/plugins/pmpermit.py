@@ -3,15 +3,15 @@ import asyncio
 from telethon import events, functions
 
 from ..utils import admin_cmd
-from . import ALIVE_NAME, CMD_HELP, PM_START, PMMENU, check, get_user_from_event
+from . import ALIVE_NAME, CMD_HELP, PM_START, PMMENU, check, get_user_from_event, set_key, PMMESSAGE_CACHE
 from .sql_helper import pmpermit_sql as pmpermit_sql
-
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
 CACHE = {}
 PMPERMIT_PIC = Config.PMPERMIT_PIC
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USER_BOT_WARN_ZERO = "You were spamming my peru master's inbox, henceforth you are blocked by my master's userbot. **Now GTFO, i'm playing minecraft** "
+
 
 if Config.PRIVATE_GROUP_ID is not None:
 
@@ -71,15 +71,14 @@ if Config.PRIVATE_GROUP_ID is not None:
             PM_START.remove(user.id)
         if pmpermit_sql.is_approved(user.id):
             pmpermit_sql.disapprove(user.id)
-            await edit_delete(
+            await edit_or_reply(
                 event,
-                f"disapproved to pm [{user.first_name}](tg://user?id={user.id})",
-                5,
+                f"`disapproved to pm` [{user.first_name}](tg://user?id={user.id})",
             )
         else:
-            await edit_delete(
+            await edit_or_reply(
                 event,
-                f"[{user.first_name}](tg://user?id={user.id}) is not yet approved",
+                f"[{user.first_name}](tg://user?id={user.id}) `is not yet approved`",
                 5,
             )
 
@@ -152,8 +151,10 @@ if Config.PRIVATE_GROUP_ID is not None:
             if event.raw_text == "/start":
                 if chat_id not in PM_START:
                     PM_START.append(chat_id)
+                set_key(PMMESSAGE_CACHE , event.chat_id , event.id)
                 return
             if len(event.raw_text) == 1 and check(event.raw_text):
+                set_key(PMMESSAGE_CACHE , event.chat_id , event.id)
                 return
             if chat_id in PM_START:
                 return
@@ -248,6 +249,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         if chat_id in PREV_REPLY_MESSAGE:
             await PREV_REPLY_MESSAGE[chat_id].delete()
         PREV_REPLY_MESSAGE[chat_id] = r
+        return None
 
 
 CMD_HELP.update(
