@@ -85,7 +85,7 @@ if Config.PRIVATE_GROUP_ID is not None:
             user, reason = await get_user_from_event(event, secondgroup=True)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
-        if reason = "all":
+        if reason == "all":
             return
         if user.id in PM_START:
             PM_START.remove(user.id)
