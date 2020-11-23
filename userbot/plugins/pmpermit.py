@@ -11,8 +11,8 @@ from . import (
     PMMESSAGE_CACHE,
     check,
     get_user_from_event,
+    parse_pre,
     set_key,
-    parse_pre
 )
 from .sql_helper import pmpermit_sql as pmpermit_sql
 
@@ -157,8 +157,7 @@ if Config.PRIVATE_GROUP_ID is not None:
             return
         result = "ok , everyone is disapproved now"
         pmpermit_sql.disapprove_all()
-        await edit_delete(event , result , parse_mode=parse_pre,time = 10)
-            
+        await edit_delete(event, result, parse_mode=parse_pre, time=10)
 
     @bot.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):
@@ -225,7 +224,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         my_last = me.last_name
         my_fullname = f"{my_first} {my_last}" if my_last else my_first
         my_username = f"@{me.username}" if me.username else my_mention
-        totalwarns = Config.MAX_FLOOD_IN_P_M_s + 1
+        Config.MAX_FLOOD_IN_P_M_s + 1
         if PMMENU:
             if Config.CUSTOM_PMPERMIT_TEXT:
                 USER_BOT_NO_WARN = (
