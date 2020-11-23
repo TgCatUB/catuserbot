@@ -90,12 +90,14 @@ def check(cat):
 
 
 def set_key(dictionary, key, value):
-    if key not in dictionary:
-        dictionary[key] = value
-    elif type(dictionary[key]) == list:
-        dictionary[key].append(value)
-    else:
-        dictionary[key] = [dictionary[key], value]
+     if key not in dictionary:
+         dictionary[key] = value
+     elif type(dictionary[key]) == list:
+         if value in dictionary[key]:
+             return 
+         dictionary[key].append(value)
+     else:
+         dictionary[key] = [dictionary[key], value]
 
 
 # UniBorg Telegram UseRBot
