@@ -16,8 +16,8 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, runcmd
 
-HEROKU_APP_NAME = Config.HEROKU_APP_NAME
-HEROKU_API_KEY = Config.HEROKU_API_KEY
+HEROKU_APP_NAME = Config.HEROKU_APP_NAME or None
+HEROKU_API_KEY = Config.HEROKU_API_KEY or None
 UPSTREAM_REPO_BRANCH = Config.UPSTREAM_REPO_BRANCH
 UPSTREAM_REPO_URL = Config.UPSTREAM_REPO_URL
 
@@ -30,10 +30,7 @@ async def gen_chlog(repo, diff):
     ch_log = ""
     d_form = "%d/%m/%y"
     for c in repo.iter_commits(diff):
-        ch_log += (
-            f"•[{c.committed_datetime.strftime(d_form)}]: "
-            f"{c.summary} <{c.author}>\n"
-        )
+        ch_log +=  f"  • {c.summary} ({c.committed_datetime.strftime(d_form)}) <{c.author}>\n"
     return ch_log
 
 
@@ -83,7 +80,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         heroku_applications = heroku.apps()
         if HEROKU_APP_NAME is None:
             await event.edit(
-                "`[HEROKU]`\n`Please set up the` **HEROKU_APP_NAME** `Var`"
+                "`Please set up the` **HEROKU_APP_NAME** `Var`"
                 " to be able to deploy your userbot...`"
             )
             repo.__del__()
@@ -98,7 +95,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             )
             return repo.__del__()
         await event.edit(
-            "`[HEROKU]`" "\n`Userbot dyno build in progress, please wait...`"
+               "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
         )
         ups_rem.fetch(ac_br)
         repo.git.reset("--hard", "FETCH_HEAD")
@@ -125,7 +122,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
     else:
         await event.edit(
-            "`[HEROKU]`\n" "`Please set up`  **HEROKU_API_KEY**  ` Var...`"
+            "`Please set up`  **HEROKU_API_KEY**  ` Var...`"
         )
     return
 
@@ -153,6 +150,8 @@ async def upstream(event):
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
+    if HEROKU_API_KEY or HEROKU_APP_NAME is None:
+        return await edit_or_reply(event,"`Set the required vars first to update the bot`")
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
