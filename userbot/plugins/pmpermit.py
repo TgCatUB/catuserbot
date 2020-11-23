@@ -3,8 +3,18 @@ import asyncio
 from telethon import events, functions
 
 from ..utils import admin_cmd
-from . import ALIVE_NAME, CMD_HELP, PM_START, PMMENU, check, get_user_from_event, set_key, PMMESSAGE_CACHE
+from . import (
+    ALIVE_NAME,
+    CMD_HELP,
+    PM_START,
+    PMMENU,
+    PMMESSAGE_CACHE,
+    check,
+    get_user_from_event,
+    set_key,
+)
 from .sql_helper import pmpermit_sql as pmpermit_sql
+
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
 CACHE = {}
@@ -151,10 +161,10 @@ if Config.PRIVATE_GROUP_ID is not None:
             if event.raw_text == "/start":
                 if chat_id not in PM_START:
                     PM_START.append(chat_id)
-                set_key(PMMESSAGE_CACHE , event.chat_id , event.id)
+                set_key(PMMESSAGE_CACHE, event.chat_id, event.id)
                 return
             if len(event.raw_text) == 1 and check(event.raw_text):
-                set_key(PMMESSAGE_CACHE , event.chat_id , event.id)
+                set_key(PMMESSAGE_CACHE, event.chat_id, event.id)
                 return
             if chat_id in PM_START:
                 return
