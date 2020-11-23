@@ -224,7 +224,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         my_last = me.last_name
         my_fullname = f"{my_first} {my_last}" if my_last else my_first
         my_username = f"@{me.username}" if me.username else my_mention
-        Config.MAX_FLOOD_IN_P_M_s + 1
+        totalwarns = Config.MAX_FLOOD_IN_P_M_s + 1
         if PMMENU:
             if Config.CUSTOM_PMPERMIT_TEXT:
                 USER_BOT_NO_WARN = (
