@@ -249,7 +249,7 @@ if Config.PRIVATE_GROUP_ID is not None:
                 USER_BOT_NO_WARN = (
                     f"`Hi `{mention} `,I haven't approved you yet to personal message me, Don't spam my inbox."
                     "Just say reason and wait untill for approval.\
-                    \nyou have {PM_WARNS[chat_id]}/{totalwarns}`\
+                    \n\nyou have {PM_WARNS[chat_id]}/{totalwarns}`\
                     \n\n**Send** `/start` ** so that my master can decide why you're here.**"
                 )
         else:
@@ -270,8 +270,8 @@ if Config.PRIVATE_GROUP_ID is not None:
             else:
                 USER_BOT_NO_WARN = (
                     f"`Hi `{mention} `,I haven't approved you yet to personal message me, Don't spam my inbox."
-                    "Just say reason and wait untill for approval.\
-                    \nyou have {PM_WARNS[chat_id]}/{totalwarns}`"
+                    f"Just say reason and wait untill for approval.\
+                    \n\nyou have {PM_WARNS[chat_id]}/{totalwarns}`"
                 )
         if PMPERMIT_PIC:
             r = await event.reply(USER_BOT_NO_WARN, file=PMPERMIT_PIC)
