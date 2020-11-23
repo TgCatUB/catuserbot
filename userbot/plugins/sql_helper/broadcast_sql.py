@@ -69,7 +69,7 @@ def get_chat_broadcastlist(keywoard):
 def get_broadcastlist_chats():
     try:
         chats = SESSION.query(CatBroadcast.keywoard).distinct().all()
-        return [i for i in chats]
+        return [i[0] for i in chats]
     finally:
         SESSION.close()
 
