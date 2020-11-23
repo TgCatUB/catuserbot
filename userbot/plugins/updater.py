@@ -30,7 +30,9 @@ async def gen_chlog(repo, diff):
     ch_log = ""
     d_form = "%d/%m/%y"
     for c in repo.iter_commits(diff):
-        ch_log +=  f"  • {c.summary} ({c.committed_datetime.strftime(d_form)}) <{c.author}>\n"
+        ch_log += (
+            f"  • {c.summary} ({c.committed_datetime.strftime(d_form)}) <{c.author}>\n"
+        )
     return ch_log
 
 
@@ -95,7 +97,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             )
             return repo.__del__()
         await event.edit(
-               "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
+            "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
         )
         ups_rem.fetch(ac_br)
         repo.git.reset("--hard", "FETCH_HEAD")
@@ -121,9 +123,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             return await event.delete()
         await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
     else:
-        await event.edit(
-            "`Please set up`  **HEROKU_API_KEY**  ` Var...`"
-        )
+        await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
     return
 
 
@@ -151,7 +151,9 @@ async def upstream(event):
     off_repo = UPSTREAM_REPO_URL
     force_update = False
     if HEROKU_API_KEY or HEROKU_APP_NAME is None:
-        return await edit_or_reply(event,"`Set the required vars first to update the bot`")
+        return await edit_or_reply(
+            event, "`Set the required vars first to update the bot`"
+        )
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
