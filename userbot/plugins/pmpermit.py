@@ -58,13 +58,15 @@ if Config.PRIVATE_GROUP_ID is not None:
                 del PREV_REPLY_MESSAGE[user.id]
             if user.id in PM_START:
                 PM_START.remove(user.id)
-            pmpermit_sql.approve(user.id, reason) 
+            pmpermit_sql.approve(user.id, reason)
             await edit_delete(
                 event, f"Approved to pm [{user.first_name}](tg://user?id={user.id})", 5
             )
             if chat in PMMESSAGE_CACHE:
                 try:
-                    await event.client.delete_messages(user.id , PMMESSAGE_CACHE[user.id])
+                    await event.client.delete_messages(
+                        user.id, PMMESSAGE_CACHE[user.id]
+                    )
                 except:
                     pass
         else:
