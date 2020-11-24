@@ -1,22 +1,25 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 
-#torrent module for catuserbot
-import math
-import os
+# torrent module for catuserbot
 from asyncio import sleep
-from . import CMD_HELP, LOGS , humanbytes
-from ..utils import admin_cmd , sudo_cmd
+
+from ..utils import admin_cmd, sudo_cmd
+from . import CMD_HELP, LOGS
+
 
 @bot.on(admin_cmd(pattern="fromurl(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="fromurl(?: |$)(.*)",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="fromurl(?: |$)(.*)", allow_sudo=True))
 async def aurl_download(event):
     if event.fwd_from:
         return
     uri = [event.pattern_match.group(1)]
     try:
-        from .torrentutils import aria2 , check_metadata, check_progress_for_dls, subprocess_run
+        from .torrentutils import aria2, check_metadata
     except:
-        return await edit_delete(event,"`You also need to have torrentutils file ask in `@catuserbot_support `to get it`")
+        return await edit_delete(
+            event,
+            "`You also need to have torrentutils file ask in `@catuserbot_support `to get it`",
+        )
     try:  # Add URL Into Queue
         download = aria2.add_uris(uri, options=None, position=None)
     except Exception as e:
@@ -28,18 +31,22 @@ async def aurl_download(event):
     if file.followed_by_ids:
         new_gid = await check_metadata(gid)
         await check_progress_for_dl(gid=new_gid, event=event, previous=None)
-        
+
+
 @bot.on(admin_cmd(pattern="amag(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="amag(?: |$)(.*)",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="amag(?: |$)(.*)", allow_sudo=True))
 async def magnet_download(event):
     if event.fwd_from:
         return
     magnet_uri = event.pattern_match.group(1)
     # Add Magnet URI Into Queue
     try:
-        from .torrentutils import aria2 , check_metadata, check_progress_for_dls, subprocess_run
+        from .torrentutils import aria2, check_metadata
     except:
-        return await edit_delete(event,"`You also need to have torrentutils file ask in `@catuserbot_support `to get it`")
+        return await edit_delete(
+            event,
+            "`You also need to have torrentutils file ask in `@catuserbot_support `to get it`",
+        )
     try:
         download = aria2.add_magnet(magnet_uri)
     except Exception as e:
@@ -53,16 +60,19 @@ async def magnet_download(event):
 
 
 @bot.on(admin_cmd(pattern="ator(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="ator(?: |$)(.*)",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="ator(?: |$)(.*)", allow_sudo=True))
 async def torrent_download(event):
     if event.fwd_from:
         return
     torrent_file_path = event.pattern_match.group(1)
     # Add Torrent Into Queue
     try:
-        from .torrentutils import aria2 , check_metadata, check_progress_for_dls, subprocess_run
+        from .torrentutils import aria2
     except:
-        return await edit_delete(event,"`You also need to have torrentutils file ask in `@catuserbot_support `to get it`")
+        return await edit_delete(
+            event,
+            "`You also need to have torrentutils file ask in `@catuserbot_support `to get it`",
+        )
     try:
         download = aria2.add_torrent(
             torrent_file_path, uris=None, options=None, position=None
@@ -73,17 +83,18 @@ async def torrent_download(event):
     await check_progress_for_dl(gid=gid, event=event, previous=None)
 
 
-
-
 @bot.on(admin_cmd(pattern="aclear$"))
-@bot.on(sudo_cmd(pattern="aclear$",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="aclear$", allow_sudo=True))
 async def remove_all(event):
     if event.fwd_from:
         return
     try:
-        from .torrentutils import aria2 , check_metadata, check_progress_for_dls, subprocess_run
+        from .torrentutils import aria2, subprocess_run
     except:
-        return await edit_delete(event,"`You also need to have torrentutils file ask in `@catuserbot_support `to get it`")
+        return await edit_delete(
+            event,
+            "`You also need to have torrentutils file ask in `@catuserbot_support `to get it`",
+        )
     try:
         removed = aria2.remove_all(force=True)
         aria2.purge_all()
@@ -98,14 +109,17 @@ async def remove_all(event):
 
 
 @bot.on(admin_cmd(pattern="apause$"))
-@bot.on(sudo_cmd(pattern="apause$",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="apause$", allow_sudo=True))
 async def pause_all(event):
     if event.fwd_from:
         return
     try:
-        from .torrentutils import aria2 , check_metadata, check_progress_for_dls, subprocess_run
+        from .torrentutils import aria2
     except:
-        return await edit_delete(event,"`You also need to have torrentutils file ask in `@catuserbot_support `to get it`")
+        return await edit_delete(
+            event,
+            "`You also need to have torrentutils file ask in `@catuserbot_support `to get it`",
+        )
     # Pause ALL Currently Running Downloads.
     await event.edit("`Pausing downloads...`")
     aria2.pause_all(force=True)
@@ -115,14 +129,17 @@ async def pause_all(event):
 
 
 @bot.on(admin_cmd(pattern="aresume$"))
-@bot.on(sudo_cmd(pattern="aresume$",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="aresume$", allow_sudo=True))
 async def resume_all(event):
     if event.fwd_from:
         return
     try:
-        from .torrentutils import aria2 , check_metadata, check_progress_for_dls, subprocess_run
+        from .torrentutils import aria2
     except:
-        return await edit_delete(event,"`You also need to have torrentutils file ask in `@catuserbot_support `to get it`")
+        return await edit_delete(
+            event,
+            "`You also need to have torrentutils file ask in `@catuserbot_support `to get it`",
+        )
     await event.edit("`Resuming downloads...`")
     aria2.resume_all()
     await sleep(1)
@@ -131,16 +148,18 @@ async def resume_all(event):
     await event.delete()
 
 
-
 @bot.on(admin_cmd(pattern="ashow$"))
-@bot.on(sudo_cmd(pattern="ashow$",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="ashow$", allow_sudo=True))
 async def show_all(event):
     if event.fwd_from:
         return
     try:
-        from .torrentutils import aria2 , check_metadata, check_progress_for_dls, subprocess_run
+        from .torrentutils import aria2
     except:
-        return await edit_delete(event,"`You also need to have torrentutils file ask in `@catuserbot_support `to get it`")
+        return await edit_delete(
+            event,
+            "`You also need to have torrentutils file ask in `@catuserbot_support `to get it`",
+        )
     output = "output.txt"
     downloads = aria2.get_downloads()
     msg = ""
@@ -179,8 +198,6 @@ async def show_all(event):
             allow_cache=False,
             reply_to=event.message.id,
         )
-
-
 
 
 CMD_HELP.update(
