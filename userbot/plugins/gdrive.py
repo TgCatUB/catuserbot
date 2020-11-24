@@ -210,12 +210,11 @@ async def get_file_id(input_str):
     link = input_str
     found = GDRIVE_ID.search(link)
     if found and "folder" in link:
-        out = (found.group(1), "folder")
+        return found.group(1), "folder"
     elif found:
-        out = (found.group(1), "file")
+        return found.group(1), "file"
     else:
-        out = (link, "unknown")
-    return out
+        return link, "unknown"
 
 
 async def download(event, gdrive, service, uri=None):
@@ -1036,11 +1035,10 @@ async def google_drive(gdrive):
                         f"**Reason : **`{str(e)}`\n\n"
                     )
                     continue
-            if reply:
-                await gdrive.edit(reply, link_preview=False)
-                return True
-            else:
+            if not reply:
                 return None
+            await gdrive.edit(reply, link_preview=False)
+            return True
         elif re.findall(r"\bhttps?://.*\.\S+", value) or "magnet:?" in value:
             uri = value.split()
         else:
@@ -1063,11 +1061,10 @@ async def google_drive(gdrive):
                             f"**Reason : **`{str(e)}`\n\n"
                         )
                         continue
-            if reply:
-                await gdrive.edit(reply, link_preview=False)
-                return True
-            else:
+            if not reply:
                 return None
+            await gdrive.edit(reply, link_preview=False)
+            return True
         if not uri and not event.reply_to_msg_id:
             await gdrive.edit(
                 "**[VALUE - ERROR]**\n\n"
