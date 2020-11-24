@@ -68,7 +68,7 @@ def sortthings(contents, path):
 
 async def upload(path, event, udir_event, catflag=None):
     global uploaded
-    flag = flag or False
+    catflag = catflag or False
     reply_to_id = await reply_id(event)
     if os.path.isdir(path):
         await event.client.send_message(
@@ -91,7 +91,7 @@ async def upload(path, event, udir_event, catflag=None):
                 event.chat_id,
                 path,
                 caption=f"**File Name : **`{caption_rts}`",
-                force_document=flag,
+                force_document=catflag,
                 thumb=thumb,
                 reply_to=reply_to_id,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -114,7 +114,7 @@ async def upload(path, event, udir_event, catflag=None):
                 path,
                 caption=f"**File Name : **`{caption_rts}`",
                 thumb=thumb,
-                force_document=flag,
+                force_document=catflag,
                 reply_to=reply_to_id,
                 supports_streaming=True,
                 attributes=[
