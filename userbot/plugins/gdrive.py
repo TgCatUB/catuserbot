@@ -306,6 +306,7 @@ async def download(event, gdrive, service, uri=None):
         return reply
     mimeType = await get_mimeType(required_file_name)
     print(2)
+    print(required_file_name)
     try:
         status = "[FILE - UPLOAD]"
         print(3)
@@ -331,6 +332,7 @@ async def download(event, gdrive, service, uri=None):
                 )
                 return reply
         else:
+            print(5)
             status = status.replace("[FILE", "[FOLDER")
             global parent_Id
             folder = await create_dir(service, file_name)
@@ -356,12 +358,12 @@ async def download(event, gdrive, service, uri=None):
                 await reset_parentId()
                 return reply
     except Exception as e:
+        print(6)
         status = status.replace("DOWNLOAD]", "ERROR]")
         reply += (
             f"**{status}**\n\n" "**Status : **`failed`\n" f"**Reason : **`{str(e)}`\n\n"
         )
         return reply
-    return
 
 
 async def list_drive_dir(service, file_id):
