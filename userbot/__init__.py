@@ -61,7 +61,9 @@ if bool(ENV):
         )
         quit(1)
     if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:
-        HEROKU_APP = heroku3.from_key(Config.HEROKU_API_KEY).apps()[Config.HEROKU_APP_NAME]
+        HEROKU_APP = heroku3.from_key(Config.HEROKU_API_KEY).apps()[
+            Config.HEROKU_APP_NAME
+        ]
     else:
         HEROKU_APP = None
 
