@@ -39,6 +39,7 @@ from . import (
 )
 from .sql_helper import google_drive_sql as helper
 
+
 # =========================================================== #
 #                          STATIC                             #
 # =========================================================== #
@@ -228,12 +229,12 @@ async def download(event, gdrive, service, uri=None):
     if uri:
         try:
             from .torrentutils import aria2, check_metadata
-
             cattorrent = True
         except:
             cattorrent = False
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
         if cattorrent:
+            LOGS.info("torrentutils exists")
             if isfile(uri) and uri.endswith(".torrent"):
                 downloads = aria2.add_torrent(
                     uri, uris=None, options={"dir": full_path}, position=None
@@ -244,6 +245,7 @@ async def download(event, gdrive, service, uri=None):
                     uri, options={"dir": full_path}, position=None
                 )
         else:
+            LOGS.info("No torrentutils")
             await edit_or_reply(
                 gdrive,
                 "`To use torrent files or download files from link install torrentutils from` @catplugins",
