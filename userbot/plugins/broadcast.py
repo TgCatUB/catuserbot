@@ -273,10 +273,10 @@ async def catbroadcast_remove(event):
             parse_mode=parse_pre,
         )
     if args[0].isnumeric():
-        args[0]
+        groupid = args[0]
         keyword = args[1].lower()
     elif args[1].isnumeric():
-        args[1]
+        groupid = args[1]
         keyword = args[0].lower()
     else:
         return await edit_delete(
@@ -285,12 +285,12 @@ async def catbroadcast_remove(event):
             parse_mode=parse_pre,
         )
     keyword = catinput_str.lower()
-    check = sql.is_in_broadcastlist(keyword, event.chat_id)
+    check = sql.is_in_broadcastlist(keyword, groupid)
     if check:
         return await edit_delete(
-            event, f"This chat is not in the category {keyword}", parse_mode=parse_pre
+            event, f"This chat {groupid} is not in the category {keyword}", parse_mode=parse_pre
         )
-    sql.rm_from_broadcastlist(keyword, event.chat_id)
+    sql.rm_from_broadcastlist(keyword, groupid)
     await edit_delete(
         event,
         f"This chat is Now removed from the category {keyword}",
