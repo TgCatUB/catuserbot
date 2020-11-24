@@ -66,7 +66,7 @@ def sortthings(contents, path):
     return catsort
 
 
-async def upload(path, event, udir_event,catflag=None):
+async def upload(path, event, udir_event, catflag=None):
     global uploaded
     flag = flag or False
     if os.path.isdir(path):
@@ -165,6 +165,7 @@ async def uploadir(event):
     await asyncio.sleep(5)
     await udir_event.delete()
 
+
 @bot.on(admin_cmd(pattern="uploadf (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="uploadf (.*)", allow_sudo=True))
 async def uploadir(event):
@@ -182,7 +183,7 @@ async def uploadir(event):
     if os.path.isdir(path):
         await edit_or_reply(udir_event, f"`Gathering file details in directory {path}`")
         uploaded = 0
-        await upload(path, event, udir_event,catflag=True)
+        await upload(path, event, udir_event, catflag=True)
         end = datetime.now()
         ms = (end - start).seconds
         await udir_event.edit(
@@ -191,14 +192,14 @@ async def uploadir(event):
     else:
         await edit_or_reply(udir_event, f"`Uploading.....`")
         uploaded = 0
-        await upload(path, event, udir_event,catflag=True)
+        await upload(path, event, udir_event, catflag=True)
         end = datetime.now()
         ms = (end - start).seconds
         await udir_event.edit(
             f"`Uploaded file {str(path)} successfully in {ms} seconds. `"
         )
     await asyncio.sleep(5)
-    await udir_event.delete()    
+    await udir_event.delete()
 
 
 @bot.on(admin_cmd(pattern="circle ?(.*)", outgoing=True))
