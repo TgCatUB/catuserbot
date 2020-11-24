@@ -245,10 +245,11 @@ async def download(event, gdrive, service, uri=None):
                     uri, options={"dir": full_path}, position=None
                 )
         else:
-            return await edit_or_reply(
+            await edit_or_reply(
                 gdrive,
                 "`To use torrent files or download files from link install torrentutils from` @catplugins",
             )
+            return "install torrentutils"
         gid = downloads.gid
         await check_progress_for_dl(gdrive, gid, previous=None)
         file = aria2.get_download(gid)
@@ -1027,7 +1028,10 @@ async def google_drive(gdrive):
             await reset_parentId()
             return True
     elif not value and event.reply_to_msg_id:
-        reply += await download(event, gdrive, service)
+        output = await download(event, gdrive, service)
+        if output =="install torrentutils":
+            return
+        reply += output
         await gdrive.edit(reply, link_preview=False)
         return None
     else:
@@ -1093,7 +1097,10 @@ async def google_drive(gdrive):
     if uri and not event.reply_to_msg_id:
         for dl in uri:
             try:
-                reply += await download(event, gdrive, service, dl)
+                output = await download(event, gdrive, service)
+                if output =="install torrentutils":
+                    return
+                reply += output
             except Exception as e:
                 if " not found" in str(e) or "'file'" in str(e):
                     reply += (
