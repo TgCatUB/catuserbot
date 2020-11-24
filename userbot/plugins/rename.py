@@ -116,6 +116,7 @@ async def _(event):
             "**Syntax : **`.rnupload file.name` as reply to a Telegram media"
         )
 
+
 @bot.on(admin_cmd(pattern="rnupf (.*)"))
 @bot.on(sudo_cmd(pattern="rnupf (.*)", allow_sudo=True))
 async def _(event):
@@ -182,7 +183,7 @@ async def _(event):
         await catevent.edit(
             "**Syntax : **`.rnupload file.name` as reply to a Telegram media"
         )
-        
+
 
 CMD_HELP.update(
     {
