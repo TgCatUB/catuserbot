@@ -300,13 +300,17 @@ async def download(event, gdrive, service, uri=None):
             required_file_name = downloaded_file_name
     try:
         file_name = await get_raw_name(required_file_name)
+        print(1)
     except AttributeError:
         reply += "**[ENTRY - ERROR]**\n\n" "**Status : **`BAD`\n"
         return reply
     mimeType = await get_mimeType(required_file_name)
+    print(2)
     try:
         status = "[FILE - UPLOAD]"
+        print(3)
         if isfile(required_file_name):
+            print(4)
             try:
                 result = await upload(
                     gdrive, service, required_file_name, file_name, mimeType
