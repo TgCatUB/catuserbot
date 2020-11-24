@@ -61,7 +61,7 @@ if Config.PRIVATE_GROUP_ID is not None:
                 PM_START.remove(user.id)
             pmpermit_sql.approve(user.id, reason)
             await edit_delete(
-                event, f"Approved to pm [{user.first_name}](tg://user?id={user.id})", 5
+                event, f"`Approved to pm `[{user.first_name}](tg://user?id={user.id})", 5
             )
             if user.id in PMMESSAGE_CACHE:
                 try:
@@ -73,7 +73,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         else:
             await edit_delete(
                 event,
-                f"[{user.first_name}](tg://user?id={user.id}) is already in approved list",
+                f"[{user.first_name}](tg://user?id={user.id}) `is already in approved list`",
                 5,
             )
 
@@ -155,7 +155,7 @@ if Config.PRIVATE_GROUP_ID is not None:
     async def disapprove_p_m(event):
         if event.fwd_from:
             return
-        result = "ok , everyone is disapproved now"
+        result = "`ok , everyone is disapproved now`"
         pmpermit_sql.disapprove_all()
         await edit_delete(event, result, parse_mode=parse_pre, time=10)
 
