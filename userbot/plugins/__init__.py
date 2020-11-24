@@ -69,7 +69,7 @@ if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
 
 
 # thumb image
-if Config.THUMB_IMAGE != None:
+if Config.THUMB_IMAGE is not None:
     check = url(Config.THUMB_IMAGE)
     if check:
         try:
