@@ -241,8 +241,8 @@ if Config.PRIVATE_GROUP_ID is not None:
                         my_fullname=my_fullname,
                         my_username=my_username,
                         my_mention=my_mention,
-                        totalwarns = totalwarns,
-                        warns = warns,
+                        totalwarns=totalwarns,
+                        warns=warns,
                     )
                     + "\n\n"
                     + "**Send** `/start` ** so that my master can decide why you're here.**"
@@ -269,8 +269,8 @@ if Config.PRIVATE_GROUP_ID is not None:
                     my_fullname=my_fullname,
                     my_username=my_username,
                     my_mention=my_mention,
-                        totalwarns = totalwarns,
-                        warns = warns,
+                    totalwarns=totalwarns,
+                    warns=warns,
                 )
             else:
                 USER_BOT_NO_WARN = (
