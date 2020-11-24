@@ -14,7 +14,7 @@ async def aurl_download(event):
         return
     uri = [event.pattern_match.group(1)]
     try:
-        from .torrentutils import aria2, check_metadata,check_progress_for_dl
+        from .torrentutils import aria2, check_metadata, check_progress_for_dl
     except:
         return await edit_delete(
             event,
@@ -41,7 +41,7 @@ async def magnet_download(event):
     magnet_uri = event.pattern_match.group(1)
     # Add Magnet URI Into Queue
     try:
-        from .torrentutils import aria2, check_metadata,check_progress_for_dl
+        from .torrentutils import aria2, check_metadata, check_progress_for_dl
     except:
         return await edit_delete(
             event,
@@ -67,7 +67,7 @@ async def torrent_download(event):
     torrent_file_path = event.pattern_match.group(1)
     # Add Torrent Into Queue
     try:
-        from .torrentutils import aria2,check_progress_for_dl
+        from .torrentutils import aria2, check_progress_for_dl
     except:
         return await edit_delete(
             event,
