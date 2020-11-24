@@ -39,12 +39,6 @@ from . import (
 )
 from .sql_helper import google_drive_sql as helper
 
-try:
-    from .torrentutils import aria2, check_metadata
-
-    cattorrent = True
-except:
-    cattorrent = False
 
 # =========================================================== #
 #                          STATIC                             #
@@ -233,6 +227,11 @@ async def download(event, gdrive, service, uri=None):
         os.makedirs(TMP_DOWNLOAD_DIRECTORY)
         required_file_name = ""
     if uri:
+        try:
+            from .torrentutils import aria2, check_metadata
+            cattorrent = True
+        except:
+            cattorrent = False
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
         if cattorrent:
             if isfile(uri) and uri.endswith(".torrent"):
