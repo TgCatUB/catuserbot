@@ -225,6 +225,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         my_fullname = f"{my_first} {my_last}" if my_last else my_first
         my_username = f"@{me.username}" if me.username else my_mention
         totalwarns = Config.MAX_FLOOD_IN_P_M_s + 1
+        warns = PM_WARNS[chat_id] + 1
         if PMMENU:
             if Config.CUSTOM_PMPERMIT_TEXT:
                 USER_BOT_NO_WARN = (
@@ -240,6 +241,8 @@ if Config.PRIVATE_GROUP_ID is not None:
                         my_fullname=my_fullname,
                         my_username=my_username,
                         my_mention=my_mention,
+                        totalwarns = totalwarns,
+                        warns = warns,
                     )
                     + "\n\n"
                     + "**Send** `/start` ** so that my master can decide why you're here.**"
@@ -249,7 +252,7 @@ if Config.PRIVATE_GROUP_ID is not None:
                 USER_BOT_NO_WARN = (
                     f"`Hi `{mention} `,I haven't approved you yet to personal message me, Don't spam my inbox."
                     f"Just say reason and wait untill for approval.\
-                    \n\nyou have {PM_WARNS[chat_id]}/{totalwarns}`\
+                    \n\nyou have {warns}/{totalwarns} warns`\
                     \n\n**Send** `/start` ** so that my master can decide why you're here.**"
                 )
         else:
@@ -266,12 +269,14 @@ if Config.PRIVATE_GROUP_ID is not None:
                     my_fullname=my_fullname,
                     my_username=my_username,
                     my_mention=my_mention,
+                        totalwarns = totalwarns,
+                        warns = warns,
                 )
             else:
                 USER_BOT_NO_WARN = (
                     f"`Hi `{mention} `,I haven't approved you yet to personal message me, Don't spam my inbox."
                     f"Just say reason and wait untill for approval.\
-                    \n\nyou have {PM_WARNS[chat_id]}/{totalwarns}`"
+                    \n\nyou have {PM_WARNS[chat_id]}/{totalwarns} warns`"
                 )
         if PMPERMIT_PIC:
             r = await event.reply(USER_BOT_NO_WARN, file=PMPERMIT_PIC)
@@ -300,7 +305,7 @@ CMD_HELP.update(
         \n\n  •  **Syntax : **`.disapprove all or da all`\
         \n  •  **Function : **__To disapprove all the approved users.__\
         \n\n  •  Available variables for formatting `CUSTOM_PMPERMIT_TEXT` :\
-        \n`{mention}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
+        \n`{mention}`, `{first}`, `{last} `, `{fullname}`, `{userid}`, `{username}`, `{my_first}`, `{my_fullname}`, `{my_last}`, `{my_mention}`, `{my_username}`,`{warns}` , `{totalwarns}`.\
 "
     }
 )
