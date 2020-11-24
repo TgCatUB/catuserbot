@@ -12,7 +12,7 @@ from pymediainfo import MediaInfo
 from telethon.tl.types import DocumentAttributeVideo
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, make_gif, progress, runcmd, thumb_from_audio
+from . import CMD_HELP, make_gif, progress, runcmd, thumb_from_audio, reply_id
 
 PATH = os.path.join("./temp", "temp_vid.mp4")
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
@@ -69,6 +69,7 @@ def sortthings(contents, path):
 async def upload(path, event, udir_event, catflag=None):
     global uploaded
     flag = flag or False
+    reply_to_id = await reply_id(event)
     if os.path.isdir(path):
         await event.client.send_message(
             event.chat_id,
@@ -92,6 +93,7 @@ async def upload(path, event, udir_event, catflag=None):
                 caption=f"**File Name : **`{caption_rts}`",
                 force_document=flag,
                 thumb=thumb,
+                reply_to = reply_to_id
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, udir_event, c_time, "Uploading...", caption_rts)
                 ),
@@ -113,6 +115,7 @@ async def upload(path, event, udir_event, catflag=None):
                 caption=f"**File Name : **`{caption_rts}`",
                 thumb=thumb,
                 force_document=flag,
+                reply_to = reply_to_id
                 supports_streaming=True,
                 attributes=[
                     DocumentAttributeVideo(
