@@ -252,6 +252,7 @@ async def download(event, gdrive, service, uri=None):
             )
             return "install torrentutils"
         from .torrentutils import aria2, check_metadata
+
         gid = downloads.gid
         await check_progress_for_dl(gdrive, gid, previous=None)
         file = aria2.get_download(gid)
@@ -958,7 +959,8 @@ async def cancel_process(gdrive):
     global is_cancelled
     gdrive = await edit_or_reply(gdrive, "`Cancelling...`")
     try:
-        from .torrentutils import aria2, check_metadata
+        from .torrentutils import aria2
+
         downloads = aria2.get_downloads()
         if len(downloads) != 0:
             aria2.remove_all(force=True)
@@ -1246,7 +1248,8 @@ async def check_progress_for_dl(event, gid, previous):
     global is_cancelled
     global filenames
     is_cancelled = False
-    from .torrentutils import aria2, check_metadata
+    from .torrentutils import aria2
+
     while not complete:
         file = aria2.get_download(gid)
         complete = file.is_complete
