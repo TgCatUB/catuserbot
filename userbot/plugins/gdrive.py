@@ -1,9 +1,9 @@
 # ported from ProjectBish by @sandy1709
-# Copyright (C) 2020 Adek Maulana
 
 # Catuserbot Google Drive managers  ported from Projectbish and added extra things by @mrconfused
-import asyncio
+
 import base64
+import asyncio
 import json
 import logging
 import math
@@ -14,7 +14,7 @@ import time
 from datetime import datetime
 from mimetypes import guess_type
 from os.path import getctime, isdir, isfile, join
-
+from pySmartDL import SmartDL
 import requests
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -38,6 +38,11 @@ from . import (
     progress,
 )
 from .sql_helper import google_drive_sql as helper
+try:
+    from .torrentutils import check_metadata,aria2
+    cattorrent = True
+except:
+    cattorrent = False
 
 # =========================================================== #
 #                          STATIC                             #
@@ -227,13 +232,16 @@ async def download(event, gdrive, service, uri=None):
         required_file_name = ""
     if uri:
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
-        if isfile(uri) and uri.endswith(".torrent"):
-            downloads = aria2.add_torrent(
-                uri, uris=None, options={"dir": full_path}, position=None
-            )
+        if cattorrent:
+            if isfile(uri) and uri.endswith(".torrent"):
+                downloads = aria2.add_torrent(
+                    uri, uris=None, options={"dir": full_path}, position=None
+                )
+            else:
+                uri = [uri]
+                downloads = aria2.add_uris(uri, options={"dir": full_path}, position=None)
         else:
-            uri = [uri]
-            downloads = aria2.add_uris(uri, options={"dir": full_path}, position=None)
+            return await edit_or_reply(gdrive,"`To use torrent files or download files from link install torrentutils from` @catplugins")
         gid = downloads.gid
         await check_progress_for_dl(gdrive, gid, previous=None)
         file = aria2.get_download(gid)
@@ -969,7 +977,7 @@ async def google_drive(gdrive):
         return None
     service = await create_app(gdrive)
     event = gdrive
-    gdrive = await edit_or_reply(gdrive, "Uploading...")
+    gdrive = await edit_or_reply(gdrive, "`Uploading...`")
     if service is False:
         return None
     if isfile(value):
