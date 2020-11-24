@@ -66,8 +66,9 @@ def sortthings(contents, path):
     return catsort
 
 
-async def upload(path, event, udir_event):
+async def upload(path, event, udir_event,catflag=None):
     global uploaded
+    flag = flag or False
     if os.path.isdir(path):
         await event.client.send_message(
             event.chat_id,
@@ -89,7 +90,7 @@ async def upload(path, event, udir_event):
                 event.chat_id,
                 path,
                 caption=f"**File Name : **`{caption_rts}`",
-                force_document=False,
+                force_document=flag,
                 thumb=thumb,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, udir_event, c_time, "Uploading...", caption_rts)
@@ -111,7 +112,7 @@ async def upload(path, event, udir_event):
                 path,
                 caption=f"**File Name : **`{caption_rts}`",
                 thumb=thumb,
-                force_document=False,
+                force_document=flag,
                 supports_streaming=True,
                 attributes=[
                     DocumentAttributeVideo(
@@ -163,6 +164,41 @@ async def uploadir(event):
         )
     await asyncio.sleep(5)
     await udir_event.delete()
+
+@bot.on(admin_cmd(pattern="uploadf (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="uploadf (.*)", allow_sudo=True))
+async def uploadir(event):
+    global uploaded
+    input_str = "".join(event.text.split(maxsplit=1)[1:])
+    path = Path(input_str)
+    start = datetime.now()
+    if not os.path.exists(path):
+        await edit_or_reply(
+            event,
+            f"`there is no such directory/file with the name {path} to upload`",
+        )
+        return
+    udir_event = await edit_or_reply(event, "Uploading....")
+    if os.path.isdir(path):
+        await edit_or_reply(udir_event, f"`Gathering file details in directory {path}`")
+        uploaded = 0
+        await upload(path, event, udir_event,catflag=True)
+        end = datetime.now()
+        ms = (end - start).seconds
+        await udir_event.edit(
+            f"`Uploaded {uploaded} files successfully in {ms} seconds. `"
+        )
+    else:
+        await edit_or_reply(udir_event, f"`Uploading.....`")
+        uploaded = 0
+        await upload(path, event, udir_event,catflag=True)
+        end = datetime.now()
+        ms = (end - start).seconds
+        await udir_event.edit(
+            f"`Uploaded file {str(path)} successfully in {ms} seconds. `"
+        )
+    await asyncio.sleep(5)
+    await udir_event.delete()    
 
 
 @bot.on(admin_cmd(pattern="circle ?(.*)", outgoing=True))
@@ -274,9 +310,11 @@ async def video_catfile(event):
 CMD_HELP.update(
     {
         "upload": "**Plugin :** `upload`\
-    \n\n**Syntax :** `.upload path of file/folder`\
-    \n**Function : **__Uploads the file from the server or list of files from that folder__\
-    \n\n**Syntax : **`.circle reply to media or path of media`\
-    \n**Function : **__Uploads video/audio as streamable from the server__"
+    \n\n  •  **Syntax :** `.upload path of file/folder`\
+    \n  •  **Function : **__Uploads the file from the server or list of files from that folder as steamable__\
+    \n\n  •  **Syntax :** `.uploadf path of file/folder`\
+    \n  •  **Function : **__Uploads the file from the server or list of files from that folder as a file__\
+    \n\n  •  **Syntax : **`.circle reply to media or path of media`\
+    \n  •  **Function : **__Uploads video/audio as streamable from the server__"
     }
 )
