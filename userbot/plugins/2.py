@@ -14,7 +14,7 @@ async def aurl_download(event):
         return
     uri = [event.pattern_match.group(1)]
     try:
-        from .torrentutils import aria2, check_metadata
+        from .torrentutils import aria2, check_metadata,check_progress_for_dl
     except:
         return await edit_delete(
             event,
@@ -41,7 +41,7 @@ async def magnet_download(event):
     magnet_uri = event.pattern_match.group(1)
     # Add Magnet URI Into Queue
     try:
-        from .torrentutils import aria2, check_metadata
+        from .torrentutils import aria2, check_metadata,check_progress_for_dl
     except:
         return await edit_delete(
             event,
@@ -67,7 +67,7 @@ async def torrent_download(event):
     torrent_file_path = event.pattern_match.group(1)
     # Add Torrent Into Queue
     try:
-        from .torrentutils import aria2
+        from .torrentutils import aria2,check_progress_for_dl
     except:
         return await edit_delete(
             event,
@@ -160,7 +160,6 @@ async def show_all(event):
             event,
             "`You also need to have torrentutils file ask in `@catuserbot_support `to get it`",
         )
-    output = "output.txt"
     downloads = aria2.get_downloads()
     msg = ""
     for download in downloads:
@@ -186,6 +185,7 @@ async def show_all(event):
         await event.delete()
     else:
         await event.edit("`Output is too big, sending it as a file...`")
+        output = "output.txt"
         with open(output, "w") as f:
             f.write(msg)
         await sleep(2)
