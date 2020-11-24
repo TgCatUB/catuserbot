@@ -256,10 +256,10 @@ async def download(event, gdrive, service, uri=None):
         gid = downloads.gid
         await check_progress_for_dl(gdrive, gid, previous=None)
         file = aria2.get_download(gid)
-        filename = file.name
         if file.followed_by_ids:
             new_gid = await check_metadata(gid)
             await check_progress_for_dl(gdrive, new_gid, previous=None)
+        filename = file.name
         try:
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filenames
         except Exception:
@@ -300,12 +300,10 @@ async def download(event, gdrive, service, uri=None):
             required_file_name = downloaded_file_name
     try:
         file_name = await get_raw_name(required_file_name)
-        print(1)
     except AttributeError:
         reply += "**[ENTRY - ERROR]**\n\n" "**Status : **`BAD`\n"
         return reply
     mimeType = await get_mimeType(required_file_name)
-    print(2)
     print(required_file_name)
     try:
         status = "[FILE - UPLOAD]"
