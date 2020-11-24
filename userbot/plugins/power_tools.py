@@ -62,12 +62,11 @@ async def _(event):
 CMD_HELP.update(
     {
         "power_tools": "**Plugin : **`power_tools`\
-                \n\n**Syntax : **`.restart`\
-                \n**Usage : **Restarts the bot !!\
-                \n\n**Syntax : **'.sleep <seconds>\
-                \n**Usage: **Userbots get tired too. Let yours snooze for a few seconds.\
-                \n\n**Syntax : **`.shutdown`\
-                \n**Usage : **Sometimes you need to shut down your bot. Sometimes you just hope to\
-                hear Windows XP shutdown sound... but you don't."
+        \n\n  •  **Syntax : **`.restart`\
+        \n  •  **Function : **__Restarts the bot !!__\
+        \n\n  •  **Syntax : **`.sleep <seconds>`\
+        \n  •  **Function: **__Userbots get tired too. Let yours snooze for a few seconds.__\
+        \n\n  •  **Syntax : **`.shutdown`\
+        \n**  •  Function : **__To turn off the dyno of heroku. you cant turn on by bot you need to got to heroku and turn on or use__ @hk_heroku_bot"
     }
 )
