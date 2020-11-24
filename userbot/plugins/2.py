@@ -199,3 +199,4 @@ CMD_HELP.update(
         "\n\n  •  **Syntax : **`.ashow`"
         "\n  •  **Function : **__Shows progress of the on-going downloads.__"
     }
+)
