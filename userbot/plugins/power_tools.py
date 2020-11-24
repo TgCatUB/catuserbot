@@ -29,8 +29,8 @@ async def _(event):
     if HEROKU_APP is not None:
         if BOTLOG:
             await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n" "Bot shut down")
-    await edit_or_reply(event, "`Turning off bot now ...Manually turn me on later`")
-    HEROKU_APP.process_formation()['userbot'].scale(0)  
+        await edit_or_reply(event, "`Turning off bot now ...Manually turn me on later`")
+        HEROKU_APP.process_formation()['userbot'].scale(0)  
     else:
         await edit_or_reply(event, "`Set HEROKU_APP_NAME and HEROKU_API_KEY to work this function properly`")
         await bot.disconnect()
