@@ -22,8 +22,8 @@ async def _(event):
     if event.fwd_from:
         return
     catevent = await edit_or_reply(event, "`processing........`")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    if not os.path.isdir(Config.TEMP_DIR):
+        os.makedirs(Config.TEMP_DIR)
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -36,14 +36,14 @@ async def _(event):
         start = datetime.now()
         r_message = await event.get_reply_message()
         input_str = event.pattern_match.group(1)
-        if input_str == "media" or "m":
+        if input_str in ["media", "m"]:
             downloaded_file_name = await event.client.download_media(
-                r_message, Config.TMP_DOWNLOAD_DIRECTORY
+                r_message, Config.TEMP_DIR
             )
             end = datetime.now()
             ms = (end - start).seconds
             await catevent.edit(
-                "Downloaded to {} in {} seconds.".format(downloaded_file_name, ms),
+                f"`Downloaded to {downloaded_file_name} in {ms} seconds.`"
             )
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
@@ -64,7 +64,7 @@ async def _(event):
                     ),
                     link_preview=True,
                 )
-        elif input_str == "text" or "t":
+        elif input_str in ["text", "t"]:
             user_object = await event.client.get_entity(r_message.sender_id)
             title_of_page = user_object.first_name  # + " " + user_object.last_name
             # apparently, all Users do not have last_name field
@@ -75,7 +75,7 @@ async def _(event):
                 if page_content != "":
                     title_of_page = page_content
                 downloaded_file_name = await event.client.download_media(
-                    r_message, Config.TMP_DOWNLOAD_DIRECTORY
+                    r_message, Config.TEMP_DIR
                 )
                 m_list = None
                 with open(downloaded_file_name, "rb") as fd:
@@ -107,10 +107,10 @@ def resize_image(image):
 CMD_HELP.update(
     {
         "telegraph": "**Plugin :**`telegraph`\
-     \n\n**Syntax :** `.telegraph media`\
-     \n**Usage :** Reply to any image or video to upload it to telegraph (video must be less than 5mb)\
-     \n\n**Syntax :** `.telegraph text`\
-     \n**Usage :** reply to any text file or any message to paste it to telegraph\
+     \n\n  •  **Syntax :** `.telegraph media`\
+     \n  •  **Function :**__Reply to any image or video to upload it to telegraph (video must be less than 5mb)__\
+     \n\n  •  **Syntax :** `.telegraph text`\
+     \n  •  **Function :** __reply to any text file or any message to paste it to telegraph__\
     "
     }
 )
