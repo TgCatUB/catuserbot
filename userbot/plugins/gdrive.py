@@ -254,12 +254,11 @@ async def download(event, gdrive, service, uri=None):
         from .torrentutils import aria2, check_metadata
 
         gid = downloads.gid
-        await check_progress_for_dl(gdrive, gid, previous=None)
+        filename = await check_progress_for_dl(gdrive, gid, previous=None)
         file = aria2.get_download(gid)
         if file.followed_by_ids:
             new_gid = await check_metadata(gid)
-            await check_progress_for_dl(gdrive, new_gid, previous=None)
-        filename = file.name
+            filename = await check_progress_for_dl(gdrive, new_gid, previous=None)
         try:
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filenames
         except Exception:
@@ -1290,7 +1289,7 @@ async def check_progress_for_dl(event, gid, previous):
                     f"**Path : **`{TMP_DOWNLOAD_DIRECTORY + file.name}`\n"
                     "**Resp : **`OK - Successfully downloaded...`"
                 )
-                return
+                return file.name
         except Exception as e:
             if " not found" in str(e) or "'file'" in str(e):
                 await event.edit("Download Canceled :\n`{}`".format(file.name))
