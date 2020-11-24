@@ -6,7 +6,7 @@ from subprocess import PIPE, Popen
 import aria2p
 from requests import get
 
-from userbot import CMD_HELP, LOGS, humanbytes
+from userbot import LOGS, humanbytes
 
 
 def subprocess_run(cmd):
@@ -50,6 +50,7 @@ download_path = os.getcwd() + TEMP_DOWNLOAD_DIRECTORY.strip(".")
 aria2 = aria2p.API(aria2p.Client(host="http://localhost", port=8210, secret=""))
 
 aria2.set_global_options({"dir": download_path})
+
 
 async def check_metadata(gid):
     file = aria2.get_download(gid)
