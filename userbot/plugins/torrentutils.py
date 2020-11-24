@@ -2,8 +2,11 @@ import math
 import os
 from asyncio import sleep
 from subprocess import PIPE, Popen
-
-import aria2p
+try:
+    import aria2p
+except:
+    install_pip(aria2p)
+    import aria2p
 from requests import get
 
 from userbot import LOGS, humanbytes
