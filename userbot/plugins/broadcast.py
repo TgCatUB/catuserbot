@@ -288,7 +288,9 @@ async def catbroadcast_remove(event):
     check = sql.is_in_broadcastlist(keyword, groupid)
     if check:
         return await edit_delete(
-            event, f"This chat {groupid} is not in the category {keyword}", parse_mode=parse_pre
+            event,
+            f"This chat {groupid} is not in the category {keyword}",
+            parse_mode=parse_pre,
         )
     sql.rm_from_broadcastlist(keyword, groupid)
     await edit_delete(
