@@ -65,14 +65,19 @@ async def _(event):
             diff = now - c_time
             percentage = downloader.get_progress() * 100
             downloader.get_speed()
-            progress_str = "{0}{1}\nProgress: {2}%".format(
+            progress_str = "`{0}{1} {2}`%".format(
                 "".join(["▰" for i in range(math.floor(percentage / 5))]),
                 "".join(["▱" for i in range(20 - math.floor(percentage / 5))]),
                 round(percentage, 2),
             )
             estimated_total_time = downloader.get_eta(human=True)
             try:
-                current_message = f"trying to download\nURL: {url}\nFile Name: {file_name}\n{progress_str}\n{humanbytes(downloaded)} of {humanbytes(total_length)}\nETA: {estimated_total_time}"
+                current_message = f"Downloading the file\
+                                \n\n**URL : **`{url}`\
+                                \n**File Name :** `{file_name}`\
+                                \n{progress_str}\
+                                \n`{humanbytes(downloaded)} of {humanbytes(total_length)}`\
+                                \n**ETA : **`{estimated_total_time}``"
                 if round(diff % 10.00) == 0 and current_message != display_message:
                     await mone.edit(current_message)
                     display_message = current_message
