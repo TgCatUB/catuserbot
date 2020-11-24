@@ -1,9 +1,11 @@
+# sourcery skip: de-morgan
 import os
 import sys
 import time
 from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
 
+import heroku3
 from dotenv import load_dotenv
 from requests import get
 from telethon import TelegramClient
@@ -12,7 +14,7 @@ from telethon.sessions import StringSession
 from .Config import Config
 
 StartTime = time.time()
-catversion = "2.9.2"
+catversion = "2.9.3"
 
 if Config.STRING_SESSION:
     session_name = str(Config.STRING_SESSION)
@@ -58,6 +60,13 @@ if bool(ENV):
             "Please remove the line mentioned in the first hashtag from the config.env file"
         )
         quit(1)
+    if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:
+        HEROKU_APP = heroku3.from_key(Config.HEROKU_API_KEY).apps()[
+            Config.HEROKU_APP_NAME
+        ]
+    else:
+        HEROKU_APP = None
+
 else:
     # Put your ppe Configs here if you are using local hosting
     PLACEHOLDER = None

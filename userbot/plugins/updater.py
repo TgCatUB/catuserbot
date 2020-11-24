@@ -16,8 +16,8 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, runcmd
 
-HEROKU_APP_NAME = Config.HEROKU_APP_NAME
-HEROKU_API_KEY = Config.HEROKU_API_KEY
+HEROKU_APP_NAME = Config.HEROKU_APP_NAME or None
+HEROKU_API_KEY = Config.HEROKU_API_KEY or None
 UPSTREAM_REPO_BRANCH = Config.UPSTREAM_REPO_BRANCH
 UPSTREAM_REPO_URL = Config.UPSTREAM_REPO_URL
 
@@ -31,8 +31,7 @@ async def gen_chlog(repo, diff):
     d_form = "%d/%m/%y"
     for c in repo.iter_commits(diff):
         ch_log += (
-            f"•[{c.committed_datetime.strftime(d_form)}]: "
-            f"{c.summary} <{c.author}>\n"
+            f"  • {c.summary} ({c.committed_datetime.strftime(d_form)}) <{c.author}>\n"
         )
     return ch_log
 
@@ -83,7 +82,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         heroku_applications = heroku.apps()
         if HEROKU_APP_NAME is None:
             await event.edit(
-                "`[HEROKU]`\n`Please set up the` **HEROKU_APP_NAME** `Var`"
+                "`Please set up the` **HEROKU_APP_NAME** `Var`"
                 " to be able to deploy your userbot...`"
             )
             repo.__del__()
@@ -98,7 +97,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             )
             return repo.__del__()
         await event.edit(
-            "`[HEROKU]`" "\n`Userbot dyno build in progress, please wait...`"
+            "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
         )
         ups_rem.fetch(ac_br)
         repo.git.reset("--hard", "FETCH_HEAD")
@@ -124,9 +123,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             return await event.delete()
         await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
     else:
-        await event.edit(
-            "`[HEROKU]`\n" "`Please set up`  **HEROKU_API_KEY**  ` Var...`"
-        )
+        await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
     return
 
 
@@ -153,6 +150,10 @@ async def upstream(event):
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
+    if HEROKU_API_KEY is None or HEROKU_APP_NAME is None:
+        return await edit_or_reply(
+            event, "`Set the required vars first to update the bot`"
+        )
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
@@ -264,16 +265,16 @@ async def upstream(event):
 CMD_HELP.update(
     {
         "updater": "**Plugin : **`updater`"
-        "\n\n**Syntax : **`.update`"
-        "\n**Usage :** Checks if the main userbot repository has any updates "
+        "\n\n  •  **Syntax : **`.update`"
+        "\n  •  **Function :** Checks if the main userbot repository has any updates "
         "and shows a changelog if so."
-        "\n\n**Syntax : **`.update now`"
-        "\n**Usage :** Update your userbot, "
+        "\n\n  •  **Syntax : **`.update now`"
+        "\n  •  **Function :** Update your userbot, "
         "if there are any updates in your userbot repository.if you restart these goes back to last time when you deployed"
-        "\n\n**Syntax : **`.update deploy`"
-        "\n**Usage :** Deploy your userbot.So even you restart it doesnt go back to previous version"
+        "\n\n  •  **Syntax : **`.update deploy`"
+        "\n  •  **Function :** Deploy your userbot.So even you restart it doesnt go back to previous version"
         "\nThis will triggered deploy always, even no updates."
-        "\n\n**Syntax : **`.badcat`"
-        "\n**Usage :** Shifts from official cat repo to jisan's repo(for gali commands)"
+        "\n\n  •  **Syntax : **`.badcat`"
+        "\n  •  **Function :** Shifts from official cat repo to jisan's repo(for gali commands)"
     }
 )

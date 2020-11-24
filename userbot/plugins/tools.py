@@ -67,7 +67,7 @@ async def parseqr(qr_e):
         os.makedirs(Config.TEMP_DIR)
     # For .decode command, get QR Code/BarCode content from the replied photo.
     downloaded_file_name = await qr_e.client.download_media(
-        await qr_e.get_reply_message(), Config.TMP_DIR
+        await qr_e.get_reply_message(), Config.TEMP_DIR
     )
     # parse the Official ZXing webpage to decode the QRCode
     command_to_exec = [

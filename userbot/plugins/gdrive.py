@@ -1,7 +1,7 @@
 # ported from ProjectBish by @sandy1709
-# Copyright (C) 2020 Adek Maulana
 
 # Catuserbot Google Drive managers  ported from Projectbish and added extra things by @mrconfused
+
 import asyncio
 import base64
 import json
@@ -210,12 +210,11 @@ async def get_file_id(input_str):
     link = input_str
     found = GDRIVE_ID.search(link)
     if found and "folder" in link:
-        out = (found.group(1), "folder")
+        return found.group(1), "folder"
     elif found:
-        out = (found.group(1), "file")
+        return found.group(1), "file"
     else:
-        out = (link, "unknown")
-    return out
+        return link, "unknown"
 
 
 async def download(event, gdrive, service, uri=None):
@@ -227,30 +226,43 @@ async def download(event, gdrive, service, uri=None):
         os.makedirs(TMP_DOWNLOAD_DIRECTORY)
         required_file_name = ""
     if uri:
+        try:
+            from .torrentutils import aria2, check_metadata
+
+            cattorrent = True
+        except:
+            cattorrent = False
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
-        if isfile(uri) and uri.endswith(".torrent"):
-            downloads = aria2.add_torrent(
-                uri, uris=None, options={"dir": full_path}, position=None
-            )
+        if cattorrent:
+            LOGS.info("torrentutils exists")
+            if isfile(uri) and uri.endswith(".torrent"):
+                downloads = aria2.add_torrent(
+                    uri, uris=None, options={"dir": full_path}, position=None
+                )
+            else:
+                uri = [uri]
+                downloads = aria2.add_uris(
+                    uri, options={"dir": full_path}, position=None
+                )
         else:
-            uri = [uri]
-            downloads = aria2.add_uris(uri, options={"dir": full_path}, position=None)
+            LOGS.info("No torrentutils")
+            await edit_or_reply(
+                gdrive,
+                "`To use torrent files or download files from link install torrentutils from` @catplugins",
+            )
+            return "install torrentutils"
+        from .torrentutils import aria2, check_metadata
+
         gid = downloads.gid
-        await check_progress_for_dl(gdrive, gid, previous=None)
+        filename = await check_progress_for_dl(gdrive, gid, previous=None)
         file = aria2.get_download(gid)
-        filename = file.name
-        LOGS.info(f"1. {filename}")
         if file.followed_by_ids:
             new_gid = await check_metadata(gid)
-            await check_progress_for_dl(gdrive, new_gid, previous=None)
+            filename = await check_progress_for_dl(gdrive, new_gid, previous=None)
         try:
-            LOGS.info(f"4. {filenames}")
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filenames
-            LOGS.info(f"2. {required_file_name}")
         except Exception:
-            LOGS.info(f"5. {filename}")
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filename
-            LOGS.info(f"3. {required_file_name}")
     else:
         try:
             current_time = time.time()
@@ -344,7 +356,6 @@ async def download(event, gdrive, service, uri=None):
             f"**{status}**\n\n" "**Status : **`failed`\n" f"**Reason : **`{str(e)}`\n\n"
         )
         return reply
-    return
 
 
 async def list_drive_dir(service, file_id):
@@ -939,11 +950,16 @@ async def cancel_process(gdrive):
     Abort process for download and upload
     """
     global is_cancelled
-    downloads = aria2.get_downloads()
     gdrive = await edit_or_reply(gdrive, "`Cancelling...`")
-    if len(downloads) != 0:
-        aria2.remove_all(force=True)
-        aria2.autopurge()
+    try:
+        from .torrentutils import aria2
+
+        downloads = aria2.get_downloads()
+        if len(downloads) != 0:
+            aria2.remove_all(force=True)
+            aria2.autopurge()
+    except:
+        pass
     is_cancelled = True
     await asyncio.sleep(3.5)
     await gdrive.delete()
@@ -970,7 +986,7 @@ async def google_drive(gdrive):
         return None
     service = await create_app(gdrive)
     event = gdrive
-    gdrive = await edit_or_reply(gdrive, "Uploading...")
+    gdrive = await edit_or_reply(gdrive, "`Uploading...`")
     if service is False:
         return None
     if isfile(value):
@@ -1013,7 +1029,10 @@ async def google_drive(gdrive):
             await reset_parentId()
             return True
     elif not value and event.reply_to_msg_id:
-        reply += await download(event, gdrive, service)
+        output = await download(event, gdrive, service)
+        if output == "install torrentutils":
+            return
+        reply += output
         await gdrive.edit(reply, link_preview=False)
         return None
     else:
@@ -1036,11 +1055,10 @@ async def google_drive(gdrive):
                         f"**Reason : **`{str(e)}`\n\n"
                     )
                     continue
-            if reply:
-                await gdrive.edit(reply, link_preview=False)
-                return True
-            else:
+            if not reply:
                 return None
+            await gdrive.edit(reply, link_preview=False)
+            return True
         elif re.findall(r"\bhttps?://.*\.\S+", value) or "magnet:?" in value:
             uri = value.split()
         else:
@@ -1063,11 +1081,10 @@ async def google_drive(gdrive):
                             f"**Reason : **`{str(e)}`\n\n"
                         )
                         continue
-            if reply:
-                await gdrive.edit(reply, link_preview=False)
-                return True
-            else:
+            if not reply:
                 return None
+            await gdrive.edit(reply, link_preview=False)
+            return True
         if not uri and not event.reply_to_msg_id:
             await gdrive.edit(
                 "**[VALUE - ERROR]**\n\n"
@@ -1081,7 +1098,10 @@ async def google_drive(gdrive):
     if uri and not event.reply_to_msg_id:
         for dl in uri:
             try:
-                reply += await download(event, gdrive, service, dl)
+                output = await download(event, gdrive, service, dl)
+                if output == "install torrentutils":
+                    return
+                reply += str(output)
             except Exception as e:
                 if " not found" in str(e) or "'file'" in str(e):
                     reply += (
@@ -1221,6 +1241,8 @@ async def check_progress_for_dl(event, gid, previous):
     global is_cancelled
     global filenames
     is_cancelled = False
+    from .torrentutils import aria2
+
     while not complete:
         file = aria2.get_download(gid)
         complete = file.is_complete
@@ -1255,12 +1277,13 @@ async def check_progress_for_dl(event, gid, previous):
                     await event.edit("Error : `{}`".format(str(file.error_message)))
                     return
             else:
-                return await event.edit(
+                await event.edit(
                     f"**Name : **`{file.name}`\n"
                     f"**Size : **`{file.total_length_string()}`\n"
                     f"**Path : **`{TMP_DOWNLOAD_DIRECTORY + file.name}`\n"
                     "**Resp : **`OK - Successfully downloaded...`"
                 )
+                return file.name
         except Exception as e:
             if " not found" in str(e) or "'file'" in str(e):
                 await event.edit("Download Canceled :\n`{}`".format(file.name))
@@ -1386,36 +1409,36 @@ async def g_download(event):
 CMD_HELP.update(
     {
         "gdrive": "**Plugin :** `gdrive`"
-        "\n\n**Syntax : **`.gauth`"
-        "\n**Function : **generate token to enable all cmd google drive service."
+        "\n\n  •  **Syntax : **`.gauth`"
+        "\n  •  **Function : **generate token to enable all cmd google drive service."
         "\nThis only need to run once in life time."
-        "\n\n**Syntax : **`.greset`"
-        "\n**Function : **reset your token if something bad happened or change drive acc."
-        "\n\n**Syntax : **`.ugd`"
-        "\n**Function : **Upload file from local or uri/url/drivelink into google drive."
+        "\n\n  •  **Syntax : **`.greset`"
+        "\n  •  **Function : **reset your token if something bad happened or change drive acc."
+        "\n\n  •  **Syntax : **`.ugd`"
+        "\n  •  **Function : **Upload file from local or uri/url/drivelink into google drive."
         "\nfor drivelink it's upload only if you want to."
-        "\n\n**Syntax : **`.gabort`"
-        "\n**Function : **Abort process uploading or downloading."
-        "\n\n**Syntax : **`.gdf mkdir`"
-        "\n**Function : **Create gdrive folder."
-        "\n\n**Syntax : **`.gdf chck`"
-        "\n**Function : **Check file/folder in gdrive."
-        "\n\n**Syntax : **`.gdf rm`"
-        "\n**Function : **Delete files/folders in gdrive."
+        "\n\n  •  **Syntax : **`.gabort`"
+        "\n  •  **Function : **Abort process uploading or downloading."
+        "\n\n  •  **Syntax : **`.gdf mkdir`"
+        "\n  •  **Function : **Create gdrive folder."
+        "\n\n  •  **Syntax : **`.gdf chck`"
+        "\n  •  **Function : **Check file/folder in gdrive."
+        "\n\n  •  **Syntax : **`.gdf rm`"
+        "\n  •  **Function : **Delete files/folders in gdrive."
         "\nCan't be undone, this method skipping file trash, so be caution..."
-        "\n\n**Syntax : **`.gdfset`"
-        "\n**Function : **Change upload directory in gdrive."
+        "\n\n  •  **Syntax : **`.gdfset`"
+        "\n  •  **Function : **Change upload directory in gdrive."
         "\ninto **G_DRIVE_FOLDER_ID** and if empty upload will go to root."
-        "\n\n**Syntax : **`.gdfclear`"
-        "\n**Function : **remove set parentId from cmd\n>`.gfset put` "
-        "\n\n**Syntax : **`.gdl <gdrive File-Link>`\
-        \n**Function : **G-Drive File Downloader Plugin For Userbot. only gdrive files are supported now"
+        "\n\n  •  **Syntax : **`.gdfclear`"
+        "\n  •  **Function : **remove set parentId from cmd\n>`.gfset put` "
+        "\n\n  •  **Syntax : **`.gdl <gdrive File-Link>`\
+        \n  •  **Function : **G-Drive File Downloader Plugin For Userbot. only gdrive files are supported now"
         "\nUse flag `-u` to directly upload to telegram in `.gdl` command"
-        "\n\n**Syntax : **`.glist`"
-        "\n**Function : **Get list of folders and files with default size 50."
+        "\n\n  •  **Syntax : **`.glist`"
+        "\n  •  **Function : **Get list of folders and files with default size 50."
         "\nUse flags `-l range[1-1000]` for limit output."
         "\nUse flags `-p parents-folder_id` for lists given folder in gdrive."
-        "\n\n**NOTE :**"
+        "\n\n  •  **NOTE :**"
         "\nfor `.glist` you can combine -l and -p flags with or without name "
         "at the same time, it must be `-l` flags first before use `-p` flags.\n"
         "And by default it lists from latest 'modifiedTime' and then folders."

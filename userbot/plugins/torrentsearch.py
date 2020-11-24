@@ -216,7 +216,7 @@ def search_torrentz_eu(search_query):
 
 CMD_HELP.update(
     {
-        "torrent_search": """**Plugin : **`torrent_search`
+        "torrentsearch": """**Plugin : **`torrentsearch`
 
   •  **Syntax : **`.tsearch query`
   •  **Function : **__Fetches torrent links of given query__

@@ -3,7 +3,7 @@ from os import execl
 from time import sleep
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, HEROKU_APP, bot
 
 
 @bot.on(admin_cmd(pattern="restart$"))
@@ -26,10 +26,19 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    if BOTLOG:
-        await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n" "Bot shut down")
-    await edit_or_reply(event, "Turning off ...Manually turn me on later")
-    await bot.disconnect()
+    if HEROKU_APP is not None:
+        if BOTLOG:
+            await event.client.send_message(
+                BOTLOG_CHATID, "#SHUTDOWN \n" "Bot shut down"
+            )
+        await edit_or_reply(event, "`Turning off bot now ...Manually turn me on later`")
+        HEROKU_APP.process_formation()["userbot"].scale(0)
+    else:
+        await edit_or_reply(
+            event,
+            "`Set HEROKU_APP_NAME and HEROKU_API_KEY to work this function properly`",
+        )
+        await bot.disconnect()
 
 
 @bot.on(admin_cmd(pattern="sleep( [0-9]+)?$"))
@@ -52,13 +61,12 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "power_tools": "**Plugin : **`power_tools`\
-                \n\n**Syntax : **`.restart`\
-                \n**Usage : **Restarts the bot !!\
-                \n\n**Syntax : **'.sleep <seconds>\
-                \n**Usage: **Userbots get tired too. Let yours snooze for a few seconds.\
-                \n\n**Syntax : **`.shutdown`\
-                \n**Usage : **Sometimes you need to shut down your bot. Sometimes you just hope to\
-                hear Windows XP shutdown sound... but you don't."
+        "powertools": "**Plugin : **`powertools`\
+        \n\n  •  **Syntax : **`.restart`\
+        \n  •  **Function : **__Restarts the bot !!__\
+        \n\n  •  **Syntax : **`.sleep <seconds>`\
+        \n  •  **Function: **__Userbots get tired too. Let yours snooze for a few seconds.__\
+        \n\n  •  **Syntax : **`.shutdown`\
+        \n**  •  Function : **__To turn off the dyno of heroku. you cant turn on by bot you need to got to heroku and turn on or use__ @hk_heroku_bot"
     }
 )

@@ -21,7 +21,7 @@ async def ff_mpeg_trim_cmd(event):
         if reply_message:
             start = datetime.now()
             media = media_type(reply_message)
-            if media not in ["Video", "Audio", "Voice", "Round Video"]:
+            if media not in ["Video", "Audio", "Voice", "Round Video", "Gif"]:
                 return await edit_delete(event, "`Only media files are supported`", 5)
             catevent = await edit_or_reply(event, "`Saving the file...`")
             try:

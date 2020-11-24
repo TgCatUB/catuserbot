@@ -3,7 +3,17 @@ import asyncio
 from telethon import events, functions
 
 from ..utils import admin_cmd
-from . import ALIVE_NAME, CMD_HELP, PM_START, PMMENU, check, get_user_from_event
+from . import (
+    ALIVE_NAME,
+    CMD_HELP,
+    PM_START,
+    PMMENU,
+    PMMESSAGE_CACHE,
+    check,
+    get_user_from_event,
+    parse_pre,
+    set_key,
+)
 from .sql_helper import pmpermit_sql as pmpermit_sql
 
 PM_WARNS = {}
@@ -13,6 +23,7 @@ PMPERMIT_PIC = Config.PMPERMIT_PIC
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USER_BOT_WARN_ZERO = "You were spamming my peru master's inbox, henceforth you are blocked by my master's userbot. **Now GTFO, i'm playing minecraft** "
 
+
 if Config.PRIVATE_GROUP_ID is not None:
 
     @bot.on(admin_cmd(outgoing=True))
@@ -20,7 +31,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         if event.fwd_from:
             return
         chat = await event.get_chat()
-        if event.text.startswith((".block", ".disapprove")):
+        if event.text.startswith((".block", ".disapprove", ".a", ".da", ".approve")):
             return
         if (
             event.is_private
@@ -50,12 +61,21 @@ if Config.PRIVATE_GROUP_ID is not None:
                 PM_START.remove(user.id)
             pmpermit_sql.approve(user.id, reason)
             await edit_delete(
-                event, f"Approved to pm [{user.first_name}](tg://user?id={user.id})", 5
+                event,
+                f"`Approved to pm `[{user.first_name}](tg://user?id={user.id})",
+                5,
             )
+            if user.id in PMMESSAGE_CACHE:
+                try:
+                    await event.client.delete_messages(
+                        user.id, PMMESSAGE_CACHE[user.id]
+                    )
+                except:
+                    pass
         else:
             await edit_delete(
                 event,
-                f"[{user.first_name}](tg://user?id={user.id}) is already in approved list",
+                f"[{user.first_name}](tg://user?id={user.id}) `is already in approved list`",
                 5,
             )
 
@@ -67,19 +87,20 @@ if Config.PRIVATE_GROUP_ID is not None:
             user, reason = await get_user_from_event(event, secondgroup=True)
             if not user:
                 return await edit_delete(event, "`Couldn't Fectch user`", 5)
+            if reason == "all":
+                return
         if user.id in PM_START:
             PM_START.remove(user.id)
         if pmpermit_sql.is_approved(user.id):
             pmpermit_sql.disapprove(user.id)
-            await edit_delete(
+            await edit_or_reply(
                 event,
-                f"disapproved to pm [{user.first_name}](tg://user?id={user.id})",
-                5,
+                f"`disapproved to pm` [{user.first_name}](tg://user?id={user.id})",
             )
         else:
-            await edit_delete(
+            await edit_or_reply(
                 event,
-                f"[{user.first_name}](tg://user?id={user.id}) is not yet approved",
+                f"[{user.first_name}](tg://user?id={user.id}) `is not yet approved`",
                 5,
             )
 
@@ -124,13 +145,21 @@ if Config.PRIVATE_GROUP_ID is not None:
                         f"👉 [{sender.chat_id}](tg://user?id={sender.chat_id})\n"
                     )
         else:
-            APPROVED_PMs = "no Approved PMs (yet)"
+            APPROVED_PMs = "`You havent approved anyone yet`"
         await edit_or_reply(
             event,
             APPROVED_PMs,
             file_name="approvedpms.txt",
             caption="`Current Approved PMs`",
         )
+
+    @bot.on(admin_cmd(pattern="(disapprove all|da all)$"))
+    async def disapprove_p_m(event):
+        if event.fwd_from:
+            return
+        result = "`ok , everyone is disapproved now`"
+        pmpermit_sql.disapprove_all()
+        await edit_delete(event, result, parse_mode=parse_pre, time=10)
 
     @bot.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):
@@ -152,8 +181,10 @@ if Config.PRIVATE_GROUP_ID is not None:
             if event.raw_text == "/start":
                 if chat_id not in PM_START:
                     PM_START.append(chat_id)
+                set_key(PMMESSAGE_CACHE, event.chat_id, event.id)
                 return
             if len(event.raw_text) == 1 and check(event.raw_text):
+                set_key(PMMESSAGE_CACHE, event.chat_id, event.id)
                 return
             if chat_id in PM_START:
                 return
@@ -195,6 +226,8 @@ if Config.PRIVATE_GROUP_ID is not None:
         my_last = me.last_name
         my_fullname = f"{my_first} {my_last}" if my_last else my_first
         my_username = f"@{me.username}" if me.username else my_mention
+        totalwarns = Config.MAX_FLOOD_IN_P_M_s + 1
+        warns = PM_WARNS[chat_id] + 1
         if PMMENU:
             if Config.CUSTOM_PMPERMIT_TEXT:
                 USER_BOT_NO_WARN = (
@@ -210,15 +243,19 @@ if Config.PRIVATE_GROUP_ID is not None:
                         my_fullname=my_fullname,
                         my_username=my_username,
                         my_mention=my_mention,
+                        totalwarns=totalwarns,
+                        warns=warns,
                     )
                     + "\n\n"
                     + "**Send** `/start` ** so that my master can decide why you're here.**"
                 )
             else:
+
                 USER_BOT_NO_WARN = (
-                    f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "
-                    "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years.\n\n"
-                    "**Send** `/start` ** so that my master can decide why you're here.**"
+                    f"`Hi `{mention}`, I haven't approved you yet to personal message me, Don't spam my inbox."
+                    f"Just say the reason and wait until you get approved.\
+                                    \n\nyou have {warns}/{totalwarns} warns`\
+                                    \n\n**Send** `/start` **so that my master can decide why you're here.**"
                 )
         else:
             if Config.CUSTOM_PMPERMIT_TEXT:
@@ -234,11 +271,14 @@ if Config.PRIVATE_GROUP_ID is not None:
                     my_fullname=my_fullname,
                     my_username=my_username,
                     my_mention=my_mention,
+                    totalwarns=totalwarns,
+                    warns=warns,
                 )
             else:
                 USER_BOT_NO_WARN = (
-                    f"My master {DEFAULTUSER} haven't approved you yet. Don't spam his inbox "
-                    "Leave your name,reason and 10k$ and hopefully you'll get a reply within 2 light years."
+                    f"`Hi `{mention}`, I haven't approved you yet to personal message me, Don't spam my inbox."
+                    f"Just say the reason and wait until you get approved.\
+                                    \n\nyou have {warns}/{totalwarns} warns`"
                 )
         if PMPERMIT_PIC:
             r = await event.reply(USER_BOT_NO_WARN, file=PMPERMIT_PIC)
@@ -248,6 +288,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         if chat_id in PREV_REPLY_MESSAGE:
             await PREV_REPLY_MESSAGE[chat_id].delete()
         PREV_REPLY_MESSAGE[chat_id] = r
+        return None
 
 
 CMD_HELP.update(
@@ -263,8 +304,10 @@ CMD_HELP.update(
         \n  •  **Function : **__Unblocks the person.__\
         \n\n  •  **Syntax : **`.listapproved`\
         \n  •  **Function : **__To list the all approved users.__\
+        \n\n  •  **Syntax : **`.disapprove all or da all`\
+        \n  •  **Function : **__To disapprove all the approved users.__\
         \n\n  •  Available variables for formatting `CUSTOM_PMPERMIT_TEXT` :\
-        \n`{mention}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
+        \n`{mention}`, `{first}`, `{last} `, `{fullname}`, `{userid}`, `{username}`, `{my_first}`, `{my_fullname}`, `{my_last}`, `{my_mention}`, `{my_username}`,`{warns}` , `{totalwarns}`.\
 "
     }
 )
