@@ -303,12 +303,9 @@ async def download(event, gdrive, service, uri=None):
         reply += "**[ENTRY - ERROR]**\n\n" "**Status : **`BAD`\n"
         return reply
     mimeType = await get_mimeType(required_file_name)
-    print(required_file_name)
     try:
         status = "[FILE - UPLOAD]"
-        print(3)
         if isfile(required_file_name):
-            print(4)
             try:
                 result = await upload(
                     gdrive, service, required_file_name, file_name, mimeType
@@ -329,7 +326,6 @@ async def download(event, gdrive, service, uri=None):
                 )
                 return reply
         else:
-            print(5)
             status = status.replace("[FILE", "[FOLDER")
             global parent_Id
             folder = await create_dir(service, file_name)
@@ -355,7 +351,6 @@ async def download(event, gdrive, service, uri=None):
                 await reset_parentId()
                 return reply
     except Exception as e:
-        print(6)
         status = status.replace("DOWNLOAD]", "ERROR]")
         reply += (
             f"**{status}**\n\n" "**Status : **`failed`\n" f"**Reason : **`{str(e)}`\n\n"
@@ -1104,7 +1099,6 @@ async def google_drive(gdrive):
         for dl in uri:
             try:
                 output = await download(event, gdrive, service, dl)
-                print(str(output))
                 if output == "install torrentutils":
                     return
                 reply += str(output)
