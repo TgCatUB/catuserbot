@@ -39,7 +39,6 @@ from . import (
 )
 from .sql_helper import google_drive_sql as helper
 
-
 # =========================================================== #
 #                          STATIC                             #
 # =========================================================== #
@@ -229,6 +228,7 @@ async def download(event, gdrive, service, uri=None):
     if uri:
         try:
             from .torrentutils import aria2, check_metadata
+
             cattorrent = True
         except:
             cattorrent = False
