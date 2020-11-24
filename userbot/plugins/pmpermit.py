@@ -31,7 +31,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         if event.fwd_from:
             return
         chat = await event.get_chat()
-        if event.text.startswith((".block", ".disapprove",".a",".da",".approve")):
+        if event.text.startswith((".block", ".disapprove", ".a", ".da", ".approve")):
             return
         if (
             event.is_private
