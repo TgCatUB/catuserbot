@@ -93,7 +93,7 @@ async def upload(path, event, udir_event, catflag=None):
                 caption=f"**File Name : **`{caption_rts}`",
                 force_document=flag,
                 thumb=thumb,
-                reply_to = reply_to_id
+                reply_to = reply_to_id,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, udir_event, c_time, "Uploading...", caption_rts)
                 ),
@@ -115,7 +115,7 @@ async def upload(path, event, udir_event, catflag=None):
                 caption=f"**File Name : **`{caption_rts}`",
                 thumb=thumb,
                 force_document=flag,
-                reply_to = reply_to_id
+                reply_to = reply_to_id,
                 supports_streaming=True,
                 attributes=[
                     DocumentAttributeVideo(
