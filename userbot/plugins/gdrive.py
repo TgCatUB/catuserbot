@@ -251,6 +251,7 @@ async def download(event, gdrive, service, uri=None):
                 "`To use torrent files or download files from link install torrentutils from` @catplugins",
             )
             return "install torrentutils"
+        from .torrentutils import aria2, check_metadata
         gid = downloads.gid
         await check_progress_for_dl(gdrive, gid, previous=None)
         file = aria2.get_download(gid)
@@ -955,11 +956,15 @@ async def cancel_process(gdrive):
     Abort process for download and upload
     """
     global is_cancelled
-    downloads = aria2.get_downloads()
     gdrive = await edit_or_reply(gdrive, "`Cancelling...`")
-    if len(downloads) != 0:
-        aria2.remove_all(force=True)
-        aria2.autopurge()
+    try:
+        from .torrentutils import aria2, check_metadata
+        downloads = aria2.get_downloads()
+        if len(downloads) != 0:
+            aria2.remove_all(force=True)
+            aria2.autopurge()
+    except:
+        pass
     is_cancelled = True
     await asyncio.sleep(3.5)
     await gdrive.delete()
@@ -1241,6 +1246,7 @@ async def check_progress_for_dl(event, gid, previous):
     global is_cancelled
     global filenames
     is_cancelled = False
+    from .torrentutils import aria2, check_metadata
     while not complete:
         file = aria2.get_download(gid)
         complete = file.is_complete
