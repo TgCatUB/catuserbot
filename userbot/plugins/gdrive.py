@@ -1098,7 +1098,7 @@ async def google_drive(gdrive):
     if uri and not event.reply_to_msg_id:
         for dl in uri:
             try:
-                output = await download(event, gdrive, service)
+                output = await download(event, gdrive, service, dl)
                 if output == "install torrentutils":
                     return
                 reply += output
