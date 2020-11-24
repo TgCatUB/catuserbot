@@ -61,7 +61,7 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "power_tools": "**Plugin : **`power_tools`\
+        "powertools": "**Plugin : **`powertools`\
         \n\n  •  **Syntax : **`.restart`\
         \n  •  **Function : **__Restarts the bot !!__\
         \n\n  •  **Syntax : **`.sleep <seconds>`\
