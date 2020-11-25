@@ -66,14 +66,9 @@ def del_keyword_broadcastlist(keywoard):
     with CATBROADCAST_INSERTION_LOCK:
         broadcast_group = SESSION.query(CatBroadcast.keywoard).filter(
             CatBroadcast.keywoard == keywoard
-        )
-        if broadcast_group:
-            BROADCAST_CHANNELS.pop(keywoard)
-            SESSION.delete(broadcast_group)
-            SESSION.commit()
-            return True
-        SESSION.close()
-        return False
+        ).delete()
+        BROADCAST_CHANNELS.pop(keywoard)
+        SESSION.commit()
 
 
 def get_chat_broadcastlist(keywoard):
