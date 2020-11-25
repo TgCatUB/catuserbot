@@ -344,8 +344,8 @@ async def catbroadcast_delete(event):
             str(e),
             parse_mode=parse_pre,
         )
-        
-        
+
+
 CMD_HELP.update(
     {
         "broadcast": "__**PLUGIN NAME :** Broadcast__\
