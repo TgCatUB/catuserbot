@@ -9,8 +9,8 @@ from userbot.plugins.sql_helper.welcome_sql import (
     update_previous_welcome,
 )
 
-from .. import BOTLOG_CHATID, CMD_HELP, LOGS, bot
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import BOTLOG_CHATID, CMD_HELP, LOGS
 
 
 @bot.on(events.ChatAction)
@@ -29,7 +29,7 @@ async def _(event):
         a_user = await event.get_user()
         chat = await event.get_chat()
         me = await bot.get_me()
-        title = chat.title if chat.title else "this chat"
+        title = chat.title or "this chat"
         participants = await bot.get_participants(chat)
         count = len(participants)
         mention = "<a href='tg://user?id={}'>{}</a>".format(
@@ -81,6 +81,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"savewelcome ?(.*)"))
 @bot.on(sudo_cmd(pattern=r"savewelcome ?(.*)", allow_sudo=True))
 async def save_welcome(event):
+    if event.fwd_from:
+        return
     msg = await event.get_reply_message()
     string = "".join(event.text.split(maxsplit=1)[1:])
     msg_id = None
@@ -90,7 +92,7 @@ async def save_welcome(event):
                 BOTLOG_CHATID,
                 f"#WELCOME_NOTE\
                 \nCHAT ID: {event.chat_id}\
-                \nThe following message is saved as the welcome note for the {event.chat.title}, Dont delete this message !!",
+                \nThe following message is saved as the welcome note for the {event.chat.title}, Don't delete this message !!",
             )
             msg_o = await event.client.forward_messages(
                 entity=BOTLOG_CHATID, messages=msg, from_peer=event.chat_id, silent=True
@@ -117,6 +119,8 @@ async def save_welcome(event):
 @bot.on(admin_cmd(pattern="clearwelcome$"))
 @bot.on(sudo_cmd(pattern="clearwelcome$", allow_sudo=True))
 async def del_welcome(event):
+    if event.fwd_from:
+        return
     if rm_welcome_setting(event.chat_id) is True:
         await edit_or_reply(event, "`Welcome note deleted for this chat.`")
     else:
@@ -126,6 +130,8 @@ async def del_welcome(event):
 @bot.on(admin_cmd(pattern="listwelcome$"))
 @bot.on(sudo_cmd(pattern="listwelcome$", allow_sudo=True))
 async def show_welcome(event):
+    if event.fwd_from:
+        return
     cws = get_current_welcome_settings(event.chat_id)
     if not cws:
         await edit_or_reply(event, "`No welcome message saved here.`")

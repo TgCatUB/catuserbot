@@ -35,7 +35,7 @@ from pySmartDL import SmartDL
 from ..utils import admin_cmd, edit_or_reply, humanbytes, sudo_cmd
 from . import CMD_HELP, LOGS, time_formatter
 
-TEMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
+TMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
 
 async def subprocess_run(megadl, cmd):
@@ -57,8 +57,8 @@ async def subprocess_run(megadl, cmd):
 @bot.on(sudo_cmd(allow_sudo=True, pattern=r"mega(?: |$)(.*)"))
 async def mega_downloader(megadl):
     catevent = await edit_or_reply(megadl, "`Collecting information...`")
-    if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
+    if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(TMP_DOWNLOAD_DIRECTORY)
     msg_link = await megadl.get_reply_message()
     link = megadl.pattern_match.group(1)
     if link:
@@ -92,8 +92,8 @@ async def mega_downloader(megadl):
     hex_key = data["hex_key"]
     hex_raw_key = data["hex_raw_key"]
     temp_file_name = file_name + ".temp"
-    temp_file_path = os.path.join(TEMP_DOWNLOAD_DIRECTORY, temp_file_name)
-    file_path = os.path.join(TEMP_DOWNLOAD_DIRECTORY, file_name)
+    temp_file_path = os.path.join(TMP_DOWNLOAD_DIRECTORY, temp_file_name)
+    file_path = os.path.join(TMP_DOWNLOAD_DIRECTORY, file_name)
     if os.path.isfile(file_path):
         try:
             raise FileExistsError(errno.EEXIST, os.strerror(errno.EEXIST), file_path)

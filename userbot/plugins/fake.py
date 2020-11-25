@@ -1,35 +1,57 @@
 import asyncio
-import logging
 from datetime import datetime
+from random import choice, randint
 
 from telethon.tl.functions.channels import EditAdminRequest
 from telethon.tl.types import ChatAdminRights
 
-from .. import ALIVE_NAME, CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
-logging.basicConfig(
-    format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s", level=logging.WARNING
-)
+from . import ALIVE_NAME, CMD_HELP
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
-@bot.on(admin_cmd(pattern="scam ?(.*)"))
-@bot.on(sudo_cmd(pattern="scam ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="scam(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="scam(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
+    options = [
+        "typing",
+        "contact",
+        "game",
+        "location",
+        "voice",
+        "round",
+        "video",
+        "photo",
+        "document",
+    ]
     input_str = event.pattern_match.group(1)
-    action = "typing"
-    if input_str:
-        action = input_str
+    args = input_str.split()
+    if len(args) == 0:
+        scam_action = choice(options)
+        scam_time = randint(300, 360)
+    elif len(args) == 1:
+        try:
+            scam_action = str(args[0]).lower()
+            scam_time = randint(200, 300)
+        except ValueError:
+            scam_action = choice(options)
+            scam_time = int(args[0])
+    elif len(args) == 2:
+        scam_action = str(args[0]).lower()
+        scam_time = int(args[1])
+    else:
+        await edit_delete(event, "`Invalid Syntax !!`")
+        return
     try:
-        await event.delete()
+        if scam_time > 0:
+            await event.delete()
+            async with event.client.action(event.chat_id, scam_action):
+                await asyncio.sleep(scam_time)
     except BaseException:
-        pass
-    async with event.client.action(event.chat_id, action):
-        await asyncio.sleep(86400)  # type for 10 seconds
+        return
 
 
 @bot.on(admin_cmd(pattern="prankpromote ?(.*)"))
@@ -61,7 +83,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0, 20)
+    animation_ttl = range(20)
     event = await edit_or_reply(event, "promoting.......")
     animation_chars = [
         "**Promoting User As Admin...**",
@@ -93,7 +115,7 @@ async def _(event):
 CMD_HELP.update(
     {
         "fake": "__**PLUGIN NAME :** Fake__\
-    \n\n📌** CMD ➥** `.scam` <action> \
+    \n\n📌** CMD ➥** `.scam` <action> <time>\
     \n**USAGE   ➥  **Type .scam (action name) this shows the fake action in the group  the actions are typing ,contact ,game, location, voice, round, video,photo,document, cancel.\
     \n\n📌** CMD ➥** `.prankpromote` reply to user to who you want to prank promote\
     \n**USAGE   ➥  **It promotes him to admin but he will not have any permission to take action that is he can see rection actions but cant take any admin action\

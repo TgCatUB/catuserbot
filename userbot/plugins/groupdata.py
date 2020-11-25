@@ -32,8 +32,8 @@ from telethon.tl.types import (
 )
 from telethon.utils import get_input_location
 
-from .. import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="kickme$"))

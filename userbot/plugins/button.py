@@ -1,8 +1,6 @@
-"""
-Copyright (C) 2020  sandeep.n(π.$)
-#button post makker for catuserbot thanks to uniborg for the base 
+#    Copyright (C) 2020  sandeep.n(π.$)
+# button post makker for catuserbot thanks to uniborg for the base
 # by @sandy1709 (@mrconfused)
-"""
 import os
 import re
 
@@ -19,6 +17,8 @@ BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>
 @bot.on(admin_cmd(pattern=r"cbutton(?: |$)(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"cbutton(?: |$)(.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     chat = event.chat_id
     reply_message = await event.get_reply_message()
     if reply_message:
@@ -50,9 +50,8 @@ async def _(event):
     message_text = note_data.strip()
     tl_ib_buttons = build_keyboard(buttons)
     tgbot_reply_message = None
-    if reply_message:
-        if reply_message.media:
-            tgbot_reply_message = await event.client.download_media(reply_message.media)
+    if reply_message and reply_message.media:
+        tgbot_reply_message = await event.client.download_media(reply_message.media)
     await tgbot.send_message(
         entity=chat,
         message=message_text,
@@ -73,6 +72,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"ibutton( (.*)|$)", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"ibutton( (.*)|$)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     reply_to_id = None
     catinput = "".join(event.text.split(maxsplit=1)[1:])
     if event.reply_to_msg_id:
@@ -82,10 +83,10 @@ async def _(event):
     if not catinput:
         catinput = (await event.get_reply_message()).text
     if not catinput:
-        await edit_or_reply(event, "`Give me some thing to write in bot inline`")
+        await edit_or_reply(event, "`Give me something to write in bot inline`")
         return
     catinput = "Inline buttons " + catinput
-    tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
+    tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
     results = await bot.inline_query(tgbotusername, catinput)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()

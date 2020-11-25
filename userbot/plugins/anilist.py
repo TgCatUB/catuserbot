@@ -199,6 +199,8 @@ url = "https://graphql.anilist.co"
 @bot.on(admin_cmd(pattern="char (.*)"))
 @bot.on(sudo_cmd(pattern="char (.*)", allow_sudo=True))
 async def anilist(event):
+    if event.fwd_from:
+        return
     search = event.pattern_match.group(1)
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -230,6 +232,8 @@ async def anilist(event):
 @bot.on(admin_cmd(pattern="airing (.*)"))
 @bot.on(sudo_cmd(pattern="airing (.*)", allow_sudo=True))
 async def anilist(event):
+    if event.fwd_from:
+        return
     search = event.pattern_match.group(1)
     variables = {"search": search}
     response = requests.post(
@@ -248,6 +252,8 @@ async def anilist(event):
 @bot.on(admin_cmd(pattern="manga (.*)"))
 @bot.on(sudo_cmd(pattern="manga (.*)", allow_sudo=True))
 async def anilist(event):
+    if event.fwd_from:
+        return
     search = event.pattern_match.group(1)
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
@@ -310,6 +316,8 @@ async def anilist(event):
 @bot.on(admin_cmd(pattern="anilist (.*)"))
 @bot.on(sudo_cmd(pattern="anilist (.*)", allow_sudo=True))
 async def anilist(event):
+    if event.fwd_from:
+        return
     input_str = event.pattern_match.group(1)
     event = await edit_or_reply(event, "Searching...")
     result = await callAPI(input_str)

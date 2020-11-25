@@ -3,7 +3,7 @@ from asyncio import sleep
 import requests
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID
+from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="lfy ?(.*)"))
@@ -55,7 +55,7 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmy (.*)"))
@@ -79,7 +79,7 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="ddg (.*)"))
@@ -103,7 +103,7 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmalt (.*)"))
@@ -125,7 +125,7 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmvar (.*)"))
@@ -149,7 +149,7 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmlog (.*)"))
@@ -171,10 +171,10 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
-@bot.on(admin_cmd(pattern="dyno(.*)"))
+@bot.on(admin_cmd(pattern="dyno (.*)"))
 @bot.on(sudo_cmd(pattern="dyno (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
@@ -193,7 +193,7 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="lmkp (.*)"))
@@ -215,7 +215,7 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="gem (.*)"))
@@ -237,7 +237,7 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
 
 
 @bot.on(admin_cmd(pattern="archive (.*)"))
@@ -259,4 +259,34 @@ async def _(event):
             )
         )
     else:
-        await event.edit("Something went wrong. Please try again later.")
+        await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
+
+
+CMD_HELP.update(
+    {
+        "letmesearch": "__**PLUGIN NAME :** Letmesearch__\
+\n\n**Functions : **__Searches the given query and shows you the link of that query .\
+\n\n📌** CMD ➥** `.lfy` <query>\
+\n**USAGE   ➥  **let me LMGTFY(lfy)\
+\n\n📌** CMD ➥** `.lmg` <query>\
+\n**USAGE   ➥  **let me google(lmg)\
+\n\n📌** CMD ➥** `.lmy` <query>\
+\n**USAGE   ➥  **let me youtube(lmy)\
+\n\n📌** CMD ➥** `.ddg` <query>\
+\n**USAGE   ➥  **Duck buck go (ddg)\
+\n\n📌** CMD ➥** `.lmalt` <query>\
+\n**USAGE   ➥  **let me altnews(lmalt)\
+\n\n📌** CMD ➥** `.lmvar` <heroku app name>\
+\n**USAGE   ➥  **let me var(lmvar) var from heroku\
+\n\n📌** CMD ➥** `.lmlog` <heroku app name>\
+\n**USAGE   ➥  **let me log(lmlog) logs link for heroku\
+\n\n📌** CMD ➥** `.dyno` <heroku app name>\
+\n**USAGE   ➥  **heroku dyno link (dyno)\
+\n\n📌** CMD ➥** `.lmkp` <query>\
+\n**USAGE   ➥  **indian kanoon (lmkp)\
+\n\n📌** CMD ➥** `.gem` <query>\
+\n**USAGE   ➥  **Government e marketplace(gem)\
+\n\n📌** CMD ➥** `.archive` <query>\
+\n**USAGE   ➥  **web archive (archive)"
+    }
+)

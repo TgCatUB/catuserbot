@@ -1,57 +1,36 @@
-import os
-from pathlib import Path
+if Config.PLUGIN_CHANNEL:
+    import os
+    from pathlib import Path
 
-from telethon.tl.types import InputMessagesFilterDocument
+    from telethon.tl.types import InputMessagesFilterDocument
 
-from userbot.utils import load_module
-from var import Var
+    from ..utils import load_module
+    from . import BOTLOG_CHATID
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd
-
-
-@bot.on(admin_cmd(pattern="extdl$", outgoing=True))
-@bot.on(sudo_cmd(pattern="extdl$", allow_sudo=True))
-async def install(event):
-    if event.fwd_from:
-        return
-    chat = Var.PLUGIN_CHANNEL
-    documentss = await event.client.get_messages(
-        chat, None, filter=InputMessagesFilterDocument
-    )
-    total = int(documentss.total)
-    total_doxx = range(0, total)
-    await event.delete()
-    for ixo in total_doxx:
-        mxo = documentss[ixo].id
-        downloaded_file_name = await event.client.download_media(
-            await event.client.get_messages(chat, ids=mxo), "userbot/plugins/"
+    async def install():
+        documentss = await bot.get_messages(
+            Config.PLUGIN_CHANNEL, None, filter=InputMessagesFilterDocument
         )
-        if "(" not in downloaded_file_name:
-            path1 = Path(downloaded_file_name)
-            shortname = path1.stem
-            load_module(shortname.replace(".py", ""))
-            await event.client.send_message(
-                event.chat_id,
-                "Installed Plugin `{}` successfully.".format(
-                    os.path.basename(downloaded_file_name)
-                ),
+        total = int(documentss.total)
+        for module in range(total):
+            plugin_to_install = documentss[module].id
+            downloaded_file_name = await bot.download_media(
+                await bot.get_messages(Config.PLUGIN_CHANNEL, ids=plugin_to_install),
+                "userbot/plugins/",
             )
-        else:
-            await event.client.send_message(
-                event.chat_id,
-                "Plugin `{}` has been pre-installed and cannot be installed.".format(
-                    os.path.basename(downloaded_file_name)
+            if "(" not in downloaded_file_name:
+                path1 = Path(downloaded_file_name)
+                shortname = path1.stem
+                load_module(shortname.replace(".py", ""))
+                await bot.send_message(
+                    BOTLOG_CHATID,
+                    f"Installed Plugin `{os.path.basename(downloaded_file_name)}` successfully.",
                 ),
-            )
+            else:
+                await bot.send_message(
+                    BOTLOG_CHATID,
+                    f"Plugin `{os.path.basename(downloaded_file_name)}` has been pre-installed and cannot be installed.",
+                )
+                os.remove(downloaded_file_name)
 
-
-CMD_HELP.update(
-    {
-        "externalplugins": "__**PLUGIN NAME :** External Plugins__\
-    \n\n📌** CMD ➥** `.extdl`\
-    \n**USAGE   ➥  **To install external plugins Create a private channel and post there all your external modules and set a var in heroku as `PLUGIN_CHANNEL` and value with channel id \
-    so after each restart or update simply type  `.extdl` to install all external modules\
-    "
-    }
-)
+    bot.loop.create_task(install())

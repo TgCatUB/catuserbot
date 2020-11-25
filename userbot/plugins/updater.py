@@ -16,10 +16,10 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, runcmd
 
-HEROKU_APP_NAME = Var.HEROKU_APP_NAME
-HEROKU_API_KEY = Var.HEROKU_API_KEY
-UPSTREAM_REPO_BRANCH = "master"
-UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot"
+HEROKU_APP_NAME = Config.HEROKU_APP_NAME or None
+HEROKU_API_KEY = Config.HEROKU_API_KEY or None
+UPSTREAM_REPO_BRANCH = Config.UPSTREAM_REPO_BRANCH
+UPSTREAM_REPO_URL = Config.UPSTREAM_REPO_URL
 
 requirements_path = path.join(
     path.dirname(path.dirname(path.dirname(__file__))), "requirements.txt"
@@ -31,8 +31,7 @@ async def gen_chlog(repo, diff):
     d_form = "%d/%m/%y"
     for c in repo.iter_commits(diff):
         ch_log += (
-            f"•[{c.committed_datetime.strftime(d_form)}]: "
-            f"{c.summary} <{c.author}>\n"
+            f"  • {c.summary} ({c.committed_datetime.strftime(d_form)}) <{c.author}>\n"
         )
     return ch_log
 
@@ -43,9 +42,8 @@ async def print_changelogs(event, ac_br, changelog):
     )
     if len(changelog_str) > 4096:
         await event.edit("`Changelog is too big, view the file to see it.`")
-        file = open("output.txt", "w+")
-        file.write(changelog_str)
-        file.close()
+        with open("output.txt", "w+") as file:
+            file.write(changelog_str)
         await event.client.send_file(
             event.chat_id,
             "output.txt",
@@ -84,7 +82,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         heroku_applications = heroku.apps()
         if HEROKU_APP_NAME is None:
             await event.edit(
-                "`[HEROKU]`\n`Please set up the` **HEROKU_APP_NAME** `variable"
+                "`[HEROKU]`\n`Please set up the` **HEROKU_APP_NAME** `Var`"
                 " to be able to deploy your userbot...`"
             )
             repo.__del__()
@@ -123,11 +121,10 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             )
             await asyncio.sleep(5)
             return await event.delete()
-        else:
-            await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
+        await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
     else:
         await event.edit(
-            "`[HEROKU]`\n" "`Please set up`  **HEROKU_API_KEY**  `variable...`"
+            "`[HEROKU]`\n" "`Please set up`  **HEROKU_API_KEY**  ` Var...`"
         )
     return
 
@@ -155,6 +152,8 @@ async def upstream(event):
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
+    # if HEROKU_API_KEY or HEROKU_APP_NAME is None:
+    # return await edit_or_reply(event, "`Set the required vars first to update the bot`")
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
@@ -197,7 +196,7 @@ async def upstream(event):
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
     changelog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
-    """ - Special case for deploy - """
+    # Special case for deploy
     if conf == "deploy":
         await event.edit("`Deploying userbot, please wait....`")
         await deploy(event, repo, ups_rem, ac_br, txt)
@@ -208,7 +207,7 @@ async def upstream(event):
             f"**{UPSTREAM_REPO_BRANCH}**\n"
         )
         return repo.__del__()
-    if conf == "" and force_update is False:
+    if conf == "" and not force_update:
         await print_changelogs(event, ac_br, changelog)
         await event.delete()
         return await event.respond(

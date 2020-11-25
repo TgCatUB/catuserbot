@@ -51,7 +51,7 @@ async def cmd_list(event):
             string = "<b>{count} Commands found in plugin {input_str}:</b>\n\n"
             catcount = 0
             for i in CMD_LIST[input_str]:
-                string += f"  ◆  <code>{i}</code>"
+                string += f"  •  <code>{i}</code>"
                 string += "\n"
                 catcount += 1
             await event.edit(
@@ -63,11 +63,10 @@ async def cmd_list(event):
             await event.delete()
     else:
         if HELPTYPE is True:
-            help_string = f"Userbot Helper.. Provided by {mention}\
-                          \nUserbot Helper to reveal all the plugin names\
-                          \n__Do__ `.help` __plugin_name for commands, in case popup doesn't appear.__\
-                          \nDo `.info` plugin_name for usage"
-            tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
+            help_string = f"Userbot Helper. Provided by {mention} to reveal all the plugins\
+                          \nCheck `.help plugin name` for commands, in case popup doesn't appear.\
+                          \nCheck `.info plugin name` for usage of thoose plugins and commands"
+            tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
             results = await bot.inline_query(  # pylint:disable=E0602
                 tgbotusername, help_string
             )
@@ -76,11 +75,11 @@ async def cmd_list(event):
         else:
             string = "<b>Please specify which plugin do you want help for !!\
                 \nNumber of plugins : </b><code>{count}</code>\
-                \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
+                \n<b>Usage:</b> <code>.help plugin name</code> \n\n"
             catcount = 0
             for i in sorted(CMD_LIST):
                 string += "◆ " + f"<code>{str(i)}</code>"
-                string += "   "
+                string += " "
                 catcount += 1
             await event.edit(string.format(count=catcount), parse_mode="HTML")
 
@@ -123,7 +122,7 @@ async def info(event):
             string = "<b>{count} Commands found in plugin {input_str}:</b>\n\n"
             catcount = 0
             for i in SUDO_LIST[input_str]:
-                string += f"  ◆  <code>{i}</code>"
+                string += f"  •  <code>{i}</code>"
                 string += "\n"
                 catcount += 1
             await event.reply(
@@ -137,11 +136,11 @@ async def info(event):
     else:
         string = "<b>Please specify which plugin do you want help for !!\
             \nNumber of plugins : </b><code>{count}</code>\
-            \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
+            \n<b>Usage:</b> <code>.help plugin name</code>\n\n"
         catcount = 0
         for i in sorted(SUDO_LIST):
             string += "◆ " + f"<code>{str(i)}</code>"
-            string += "   "
+            string += " "
             catcount += 1
         await event.reply(string.format(count=catcount), parse_mode="HTML")
 
@@ -161,11 +160,11 @@ async def info(event):
     else:
         string = "<b>Please specify which plugin do you want help for !!\
             \nNumber of plugins : </b><code>{count}</code>\
-            \n<b>Usage : </b><code>.info</code> <plugin name>\n\n"
+            \n<b>Usage : </b><code>.info plugin name</code>\n\n"
         catcount = 0
         for i in sorted(CMD_HELP):
             string += "◆ " + f"<code>{str(i)}</code>"
-            string += "   "
+            string += " "
             catcount += 1
         if event.sender_id in Config.SUDO_USERS:
             await event.reply(string.format(count=catcount), parse_mode="HTML")
@@ -176,6 +175,8 @@ async def info(event):
 @bot.on(admin_cmd(pattern="dc$"))
 @bot.on(sudo_cmd(pattern="dc$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     result = await bot(functions.help.GetNearestDcRequest())
     result = (
         yaml_format(result)
@@ -192,6 +193,8 @@ async def _(event):
 
 @bot.on(admin_cmd(outgoing=True, pattern="setinline (true|false)"))
 async def _(event):
+    if event.fwd_from:
+        return
     global HELPTYPE
     input_str = event.pattern_match.group(1)
     if input_str == "true":

@@ -144,6 +144,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"ohyaah$"))
 @bot.on(sudo_cmd(pattern="ohyaah$", allow_sudo=True))
 async def kakashi(baby):
+    if event.fwd_from:
+        return
     await edit_or_reply(
         baby,
         "**💪💪Ohhh Yeeah Baby**...\n\n"

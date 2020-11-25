@@ -17,7 +17,6 @@ from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
 from .. import CMD_HELP
-from .. import OPEN_WEATHER_MAP_APPID as OWM_API
 from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
 
 logging.basicConfig(
@@ -27,6 +26,7 @@ logging.basicConfig(
 # ===== CONSTANT =====
 DEFCITY = "Kolkata"
 # ====================
+OWM_API = Config.OPEN_WEATHER_MAP_APPID
 
 
 async def get_tz(con):
@@ -56,7 +56,7 @@ async def get_weather(weather):
         CITY = DEFCITY
         if not CITY:
             await edit_or_reply(
-                weather, "`Please specify a city or set one as default.`"
+                weather, "`Please specify a city or set it as default.`"
             )
             return
     else:
@@ -155,7 +155,7 @@ async def set_default_city(city):
     if not city.pattern_match.group(1):
         CITY = DEFCITY
         if not CITY:
-            await edit_or_reply(city, "`Please specify a city to set one as default.`")
+            await edit_or_reply(city, "`Please specify a city to set it as default.`")
             return
     else:
         CITY = city.pattern_match.group(1)
@@ -192,6 +192,8 @@ async def set_default_city(city):
 @bot.on(admin_cmd(pattern="wttr ?(.*)"))
 @bot.on(sudo_cmd(pattern="wttr ?(.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     global DEFCITY
     reply_to_id = None
     if event.reply_to_msg_id:

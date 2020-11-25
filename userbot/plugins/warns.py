@@ -4,6 +4,7 @@ import html
 import userbot.plugins.sql_helper.warns_sql as sql
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 
 @bot.on(admin_cmd(pattern="warn (.*)"))
@@ -12,6 +13,8 @@ async def _(event):
     if event.fwd_from:
         return
     warn_reason = event.pattern_match.group(1)
+    if not warn_reason:
+        warn_reason = "No reason"
     reply_message = await event.get_reply_message()
     limit, soft_warn = sql.get_warn_setting(event.chat_id)
     num_warns, reasons = sql.warn_user(
@@ -66,11 +69,24 @@ async def _(event):
         await edit_or_reply(event, "this user hasn't got any warnings!")
 
 
-@bot.on(admin_cmd(pattern="reset_warns$"))
-@bot.on(sudo_cmd(pattern="reset_warns$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="resetwarns$"))
+@bot.on(sudo_cmd(pattern="resetwarns$", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     reply_message = await event.get_reply_message()
     sql.reset_warns(reply_message.sender_id, event.chat_id)
     await edit_or_reply(event, "Warnings have been reset!")
+
+
+CMD_HELP.update(
+    {
+        "warns": "__**PLUGIN NAME :** Warns__\
+      \n\n📌** CMD ➥** `.warn` <reason> <reply to user>\
+      \n**USAGE   ➥  **__Warns the given user in the chat you used__\
+      \n\n📌** CMD ➥** `.warns` <reply>\
+      \n**USAGE   ➥  **__Gets the warns of the given user in the chat you used__\
+      \n\n📌** CMD ➥** `.resetwarns` <reply>\
+      \n**USAGE   ➥  **__Resets the warns of the replied users in the chat where u used command__"
+    }
+)

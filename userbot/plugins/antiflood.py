@@ -19,7 +19,7 @@ ANTI_FLOOD_WARN_MODE = ChatBannedRights(
 async def _(event):
     if not CHAT_FLOOD:
         return
-    if not (str(event.chat_id) in CHAT_FLOOD):
+    if str(event.chat_id) not in CHAT_FLOOD:
         return
     should_ban = sql.update_flood(event.chat_id, event.message.sender_id)
     if not should_ban:
@@ -42,7 +42,7 @@ async def _(event):
         )
         await asyncio.sleep(10)
         await no_admin_privilege_message.edit(
-            "This is useless SPAM dude . stop this enjoy chat man ", link_preview=False
+            "This is useless SPAM dude. Stop this, enjoy chat man ", link_preview=False
         )
     else:
         await event.client.send_message(
@@ -59,6 +59,8 @@ because he reached the defined flood limit.""".format(
 @bot.on(admin_cmd(pattern="setflood(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="setflood(?: |$)(.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     input_str = event.pattern_match.group(1)
     event = await edit_or_reply(event, "updating flood settings!")
     try:

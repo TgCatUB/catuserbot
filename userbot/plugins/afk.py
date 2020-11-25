@@ -79,6 +79,7 @@ async def on_afk(event):
     global last_afk_message
     global afk_start
     global afk_end
+    global link
     back_alivee = datetime.now()
     afk_end = back_alivee.replace(microsecond=0)
     if afk_start != {}:
@@ -106,11 +107,18 @@ async def on_afk(event):
         return False
     if USERAFK_ON and not (await event.get_sender()).bot:
         msg = None
-        message_to_reply = (
-            f"**I am AFK**\n\n**AFK Since :** `{endtime}`\n**Reason : **{reason}"
-            if reason
-            else f"**I am AFK**\n\n**AFK Since :** `{endtime}`\n**Reason : **`Not Mentioned ( ಠ ʖ̯ ಠ)`"
-        )
+        if link and reason:
+            message_to_reply = (
+                f"**I am AFK**\n\n**AFK Since :** `{endtime}`\n**Reason : **{reason}"
+            )
+        elif reason:
+            message_to_reply = (
+                f"**I am AFK\n\nAFK Since :** `{endtime}`\n**Reason : **`{reason}`"
+            )
+        else:
+            message_to_reply = (
+                f"`I am AFK\n\nAFK Since :{endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            )
         if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
             msg = await event.reply(message_to_reply)
         if event.chat_id in last_afk_message:
@@ -139,6 +147,7 @@ async def _(event):
     global afk_start
     global afk_end
     global reason
+    global link
     USERAFK_ON = {}
     afk_time = None
     last_afk_message = {}
@@ -149,9 +158,11 @@ async def _(event):
         input_str = event.pattern_match.group(1)
         if ";" in input_str:
             msg, link = input_str.split(";", 1)
-            reason = f"[{msg}]({link})"
+            reason = f"[{msg.strip()}]({link.strip()})"
+            link = True
         else:
             reason = input_str
+            link = False
         last_seen_status = await event.client(
             functions.account.GetPrivacyRequest(types.InputPrivacyKeyStatusTimestamp())
         )

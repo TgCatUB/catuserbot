@@ -2,9 +2,9 @@
 
 #    Copyright (C) 2020  sandeep.n(π.$)
 
+import base64
 import os
 
-import pybase64
 from telegraph import exceptions, upload_file
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -60,7 +60,7 @@ async def catbot(catmemes):
         await edit_or_reply(catmemes, "reply to a supported media file")
         return
     try:
-        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         cat = Get(cat)
         await catmemes.client(cat)
     except BaseException:
@@ -111,7 +111,7 @@ async def catbot(catmemes):
         await edit_or_reply(catmemes, "reply to a supported media file")
         return
     try:
-        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         cat = Get(cat)
         await catmemes.client(cat)
     except BaseException:
@@ -162,7 +162,7 @@ async def catbot(catmemes):
         await edit_or_reply(catmemes, "reply to a supported media file")
         return
     try:
-        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         cat = Get(cat)
         await catmemes.client(cat)
     except BaseException:
@@ -213,7 +213,7 @@ async def catbot(catmemes):
         await edit_or_reply(catmemes, "reply to a supported media file")
         return
     try:
-        cat = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
         cat = Get(cat)
         await catmemes.client(cat)
     except BaseException:

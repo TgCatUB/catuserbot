@@ -75,6 +75,8 @@ def get_size(bytes, suffix="B"):
 @bot.on(admin_cmd(pattern="cpu$"))
 @bot.on(sudo_cmd(pattern="cpu$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     cmd = "cat /proc/cpuinfo | grep 'model name'"
     o = (await runcmd(cmd))[0]
     await edit_or_reply(

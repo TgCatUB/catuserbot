@@ -1,4 +1,4 @@
-telethon >= 1.17.0
+git+https://github.com/LonamiWebs/Telethon
 aiofiles
 aiohttp
 asyncurban
@@ -38,12 +38,11 @@ lyricsgenius
 nekos.py
 patool
 Pillow
+prettytable
 programmingquotes
 psutil
 psycopg2
-pybase64
 PyDictionary
-pyDownload
 pyfiglet
 PyGithub
 pylast
@@ -67,4 +66,4 @@ validators
 vcsi
 wand
 wikipedia
-youtube_dl==2020.11.1.1
+youtube_dl > 2020.11.12

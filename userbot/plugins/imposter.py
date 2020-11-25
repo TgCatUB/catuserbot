@@ -11,9 +11,11 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import CMD_HELP, mention
 
 
-@bot.on(admin_cmd(pattern="imp(|n) (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="imp(|n) (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="(imp|impn) (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="(imp|impn) (.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     name = event.pattern_match.group(2)
     cmd = event.pattern_match.group(1).lower()
     text1 = await edit_or_reply(event, "Uhmm... Something is wrong here!!")
@@ -74,14 +76,14 @@ async def _(event):
     await catevent.edit("ㅤㅤㅤㅤㅤㅤㅤㅤ ㅤ")
     await asyncio.sleep(0.2)
     await stcr4.delete()
-    if cmd == "":
+    if cmd == "imp":
         await catevent.edit(
             f". 　　　。　　　　•　 　ﾟ　　。 　　.\n .　　　 　　.　　　　　。　　 。　. 　\n\n  . 　　 。   　     ඞ         。 . 　　 • 　　　　•\n\n  ﾟ{name} was an Imposter.      。　. 　 　       。　.                                        。　. \n                                   　.          。　  　. \n　'         0 Impostor remains    　 。　.  　　.                。　.        。 　     .          。 　            .               .         .    ,      。\n　　ﾟ　　　.　　.    ,　 　。　 　. 　 .     。"
         )
         await asyncio.sleep(4)
         await catevent.delete()
         await event.client.send_file(event.chat_id, "CAADAQADLQADnjOcH39IqwyR6Q_0Ag")
-    elif cmd == "n":
+    elif cmd == "impn":
         await catevent.edit(
             f". 　　　。　　　　•　 　ﾟ　　。 　　.\n .　　　 　　.　　　　　。　　 。　. 　\n\n  . 　　 。   　     ඞ         。 . 　　 • 　　　　•\n\n  ﾟ{name} was not an Imposter.      。　. 　 　       。　.                                        。　. \n                                   　.          。　  　. \n　'         1 Impostor remains    　 。　.  　　.                。　.        。 　     .          。 　            .               .         .    ,      。\n　　ﾟ　　　.　　.    ,　 　。　 　. 　 .     。"
         )
@@ -90,9 +92,11 @@ async def _(event):
         await event.client.send_file(event.chat_id, "CAADAQADQAADnjOcH-WOkB8DEctJAg")
 
 
-@bot.on(admin_cmd(pattern="timp(|n) (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="timp(|n) (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="(timp|timpn) (.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="(timp|timpn) (.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     name = event.pattern_match.group(2)
     cmd = event.pattern_match.group(1).lower()
     catevent = await edit_or_reply(event, f"{name} is ejected.......")
@@ -117,11 +121,11 @@ async def _(event):
     await asyncio.sleep(0.8)
     await catevent.edit("ㅤㅤㅤㅤㅤㅤㅤㅤ ㅤ")
     await asyncio.sleep(0.2)
-    if cmd == "":
+    if cmd == "timp":
         await catevent.edit(
             f". 　　　。　　　　•　 　ﾟ　　。 　　.\n .　　　 　　.　　　　　。　　 。　. 　\n\n  . 　　 。   　     ඞ         。 . 　　 • 　　　　•\n\n  ﾟ {name} was an Imposter.      。　. 　 　       。　.                                        。　. \n                                   　.          。　  　. \n　'         0 Impostor remains    　 。　.  　　.                。　.        。 　     .          。 　            .               .         .    ,      。\n　　ﾟ　　　.　　.    ,　 　。　 　. 　 .     。"
         )
-    elif cmd == "n":
+    elif cmd == "timpn":
         await catevent.edit(
             f". 　　　。　　　　•　 　ﾟ　　。 　　.\n .　　　 　　.　　　　　。　　 。　. 　\n\n  . 　　 。   　     ඞ         。 . 　　 • 　　　　•\n\n  ﾟ {name} was not an Imposter.      。　. 　 　       。　.                                        。　. \n                                   　.          。　  　. \n　'         1 Impostor remains    　 。　.  　　.                。　.        。 　     .          。 　            .               .         .    ,      。\n　　ﾟ　　　.　　.    ,　 　。　 　. 　 .     。"
         )

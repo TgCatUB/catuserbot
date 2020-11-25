@@ -11,8 +11,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from .sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
 
-if Var.LYDIA_API_KEY:
-    api_key = Var.LYDIA_API_KEY
+if Config.LYDIA_API_KEY:
+    api_key = Config.LYDIA_API_KEY
     # Create the coffeehouse API
     coffeehouse_api = API(api_key)
     # Create Lydia instance
@@ -24,7 +24,7 @@ if Var.LYDIA_API_KEY:
 async def lydia_disable_enable(event):
     if event.fwd_from:
         return
-    if Var.LYDIA_API_KEY is None:
+    if Config.LYDIA_API_KEY is None:
         await edit_delete(event, "`Please add required LYDIA_API_KEY env var`", 10)
         return
     catevent = await edit_or_reply(event, "`.....`")
@@ -105,7 +105,7 @@ async def lydia_disable_enable(event):
 async def on_new_message(event):
     if event.chat_id in Config.UB_BLACK_LIST_CHAT:
         return
-    if Var.LYDIA_API_KEY is None:
+    if Config.LYDIA_API_KEY is None:
         return
     reply = await event.get_reply_message()
     if reply is not None and reply.sender_id != bot.uid:

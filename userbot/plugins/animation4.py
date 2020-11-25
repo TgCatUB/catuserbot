@@ -10,9 +10,9 @@ from . import CMD_HELP, mention
 @bot.on(admin_cmd(outgoing=True, pattern="kilr (.*)"))
 @bot.on(sudo_cmd(pattern="kilr (.*)", allow_sudo=True))
 async def _(event):
-    name = event.pattern_match.group(1)
     if event.fwd_from:
         return
+    name = event.pattern_match.group(1)
     animation_interval = 0.7
     animation_ttl = range(8)
     event = await edit_or_reply(event, f"**Ready Commando **__{mention}....")
@@ -375,6 +375,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern="squ$", outgoing=True))
 @bot.on(sudo_cmd(pattern="squ$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "squ...")
     await event.edit("╔═══════════════════╗ \n  \n╚═══════════════════╝")
     await asyncio.sleep(1)

@@ -13,6 +13,8 @@ from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 @bot.on(admin_cmd(pattern="ud (.*)"))
 @bot.on(sudo_cmd(pattern="ud (.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     word = event.pattern_match.group(1)
     urban = asyncurban.UrbanDictionary()
     try:
@@ -30,6 +32,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern="meaning (.*)"))
 @bot.on(sudo_cmd(pattern="meaning (.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     word = event.pattern_match.group(1)
     dictionary = PyDictionary()
     cat = dictionary.meaning(word)

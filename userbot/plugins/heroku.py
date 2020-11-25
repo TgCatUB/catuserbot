@@ -1,10 +1,9 @@
-"""CC- @refundisillegal\nSyntax:-\n.get var NAME\n.del var NAME\n.set var NAME"""
+# Heroku manager for your catuserbot
+
+# CC- @refundisillegal\nSyntax:-\n.get var NAME\n.del var NAME\n.set var NAME
 
 # Copyright (C) 2020 Adek Maulana.
 # All rights reserved.
-"""
-   Heroku manager for your userbot
-"""
 
 import asyncio
 import math
@@ -33,8 +32,8 @@ async def variable(var):
     Manage most of ConfigVars setting, set new var, get current var,
     or delete var...
     """
-    if Var.HEROKU_APP_NAME is not None:
-        app = Heroku.app(Var.HEROKU_APP_NAME)
+    if Config.HEROKU_APP_NAME is not None:
+        app = Heroku.app(Config.HEROKU_APP_NAME)
     else:
         return await edit_or_reply(
             var, "`[HEROKU]:" "\nPlease setup your` **HEROKU_APP_NAME**"
@@ -121,7 +120,7 @@ async def dyno_usage(dyno):
     user_id = Heroku.account().id
     headers = {
         "User-Agent": useragent,
-        "Authorization": f"Bearer {Var.HEROKU_API_KEY}",
+        "Authorization": f"Bearer {Config.HEROKU_API_KEY}",
         "Accept": "application/vnd.heroku+json; version=3.account-quotas",
     }
     path = "/accounts/" + user_id + "/actions/get-quota"
@@ -134,13 +133,13 @@ async def dyno_usage(dyno):
     quota = result["account_quota"]
     quota_used = result["quota_used"]
 
-    """ - Used - """
+    # - Used -
     remaining_quota = quota - quota_used
     percentage = math.floor(remaining_quota / quota * 100)
     minutes_remaining = remaining_quota / 60
     hours = math.floor(minutes_remaining / 60)
     minutes = math.floor(minutes_remaining % 60)
-    """ - Current - """
+    # - Current -
     App = result["apps"]
     try:
         App[0]["quota_used"]
@@ -155,7 +154,7 @@ async def dyno_usage(dyno):
     await asyncio.sleep(1.5)
     return await dyno.edit(
         "**Dyno Usage**:\n\n"
-        f" -> `Dyno usage for`  **{Var.HEROKU_APP_NAME}**:\n"
+        f" -> `Dyno usage for`  **{Config.HEROKU_APP_NAME}**:\n"
         f"     •  `{AppHours}`**h**  `{AppMinutes}`**m**  "
         f"**|**  [`{AppPercentage}`**%**]"
         "\n\n"

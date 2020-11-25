@@ -4,15 +4,11 @@ from platform import python_version
 from telethon import version
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, StartTime, catdef, catversion, hmention, mention
+from . import CMD_HELP, StartTime, catdef, catversion, hmention, mention, reply_id
 
 CAT_IMG = Config.ALIVE_PIC
-JISAN = (
-    str(Config.CUSTOM_ALIVE_TEXT)
-    if Config.CUSTOM_ALIVE_TEXT
-    else "✮ MY BOT IS RUNNING SUCCESFULLY ✮"
-)
-EMOJI = str(Config.CUSTOM_ALIVE_EMOJI) if Config.CUSTOM_ALIVE_EMOJI else "✧✧"
+CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESFULLY ✮"
+EMOJI = Config.CUSTOM_ALIVE_EMOJI or "✧✧"
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="alive$"))
@@ -20,13 +16,11 @@ EMOJI = str(Config.CUSTOM_ALIVE_EMOJI) if Config.CUSTOM_ALIVE_EMOJI else "✧✧
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
-    reply_to_id = alive.message
+    reply_to_id = await reply_id(alive)
     uptime = await catdef.get_readable_time((time.time() - StartTime))
     _, check_sgnirts = check_data_base_heal_th()
-    if alive.reply_to_msg_id:
-        reply_to_id = await alive.get_reply_message()
     if CAT_IMG:
-        cat_caption = f"<b>{JISAN}</b>\n\n"
+        cat_caption = f"<b>{CUSTOM_ALIVE_TEXT}</b>\n\n"
         cat_caption += f"<b>{EMOJI} Master : {hmention}</b>\n"
         cat_caption += f"<b>{EMOJI} Uptime :</b> <code>{uptime}</code>\n"
         cat_caption += (
@@ -53,7 +47,7 @@ async def amireallyalive(alive):
     else:
         await edit_or_reply(
             alive,
-            f"<b>{JISAN}</b>\n\n"
+            f"<b>{CUSTOM_ALIVE_TEXT}</b>\n\n"
             f"<b>{EMOJI} Master : {hmention}</b>\n"
             f"<b>{EMOJI} Uptime :</b> <code>{uptime}</code>\n"
             f"<b>{EMOJI} Python Version :</b> <code>{python_version()}</code>\n"
@@ -70,10 +64,8 @@ async def amireallyalive(alive):
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
-    tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
-    reply_to_id = alive.message
-    if alive.reply_to_msg_id:
-        reply_to_id = await alive.get_reply_message()
+    tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
+    reply_to_id = await reply_id(alive)
     cat_caption = f"**Catuserbot is Up and Running**\n"
     cat_caption += f"**  -Master :** {mention}\n"
     cat_caption += f"**  -Python Version :** `{python_version()}\n`"
@@ -99,7 +91,7 @@ def check_data_base_heal_th():
     # https://stackoverflow.com/a/41961968
     is_database_working = False
     output = "No Database is set"
-    if not Var.DB_URI:
+    if not Config.DB_URI:
         return is_database_working, output
     from userbot.plugins.sql_helper import SESSION
 

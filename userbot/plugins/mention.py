@@ -1,8 +1,7 @@
-# Some are ported from uniborg By: @INF1N17Y
-
 from telethon.tl.types import ChannelParticipantsAdmins
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from ..utils import admin_cmd, sudo_cmd
+from . import CMD_HELP, reply_id
 
 
 @bot.on(admin_cmd(pattern="tagall$"))
@@ -21,24 +20,18 @@ async def _(event):
     await event.delete()
 
 
-@bot.on(admin_cmd(pattern="all (.*)"))
-@bot.on(sudo_cmd(pattern="all (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="all( (.*)|$)"))
+@bot.on(sudo_cmd(pattern="all( (.*)|$)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    reply_to_id = event.message
-    if event.reply_to_msg_id:
-        reply_to_id = await event.get_reply_message()
+    reply_to_id = await reply_id(event)
     input_str = event.pattern_match.group(1)
-
-    if not input_str:
-        return await edit_or_reply(event, "what should i do try `.all hello`.")
-
-    mentions = input_str
+    mentions = input_str or "@all"
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
         mentions += f"[\u2063](tg://user?id={x.id})"
-    await reply_to_id.reply(mentions)
+    await event.client.send_message(event.chat_id, mentions, reply_to=reply_to_id)
     await event.delete()
 
 
@@ -49,23 +42,22 @@ async def _(event):
         return
     mentions = "@admin: **Spam Spotted**"
     chat = await event.get_input_chat()
+    reply_to_id = await reply_id(event)
     async for x in event.client.iter_participants(
         chat, filter=ChannelParticipantsAdmins
     ):
         mentions += f"[\u2063](tg://user?id={x.id})"
-    reply_message = None
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        await reply_message.reply(mentions)
-    else:
-        await event.reply(mentions)
+    await event.client.send_message(event.chat_id, mentions, reply_to=reply_to_id)
     await event.delete()
 
 
 @bot.on(admin_cmd(pattern="men (.*)"))
 @bot.on(sudo_cmd(pattern="men (.*)", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     input_str = event.pattern_match.group(1)
+    reply_to_id = await reply_id(event)
     if event.reply_to_msg_id:
         reply_msg = await event.get_reply_message()
         u = reply_msg.sender_id
@@ -86,5 +78,25 @@ async def _(event):
             return
     await event.delete()
     await event.client.send_message(
-        event.chat_id, f"<a href='tg://user?id={u}'>{str}</a>", parse_mode="HTML"
+        event.chat_id,
+        f"<a href='tg://user?id={u}'>{str}</a>",
+        parse_mode="HTML",
+        reply_to=reply_to_id,
     )
+
+
+CMD_HELP.update(
+    {
+        "mention": """__**PLUGIN NAME :** Mention__
+\n\n📌** CMD ➥** `.all`
+\n**USAGE   ➥  **__Tags recent 100 persons in the group may not work for all__  
+\n\n📌** CMD ➥** `.tagall`
+\n**USAGE   ➥  **__Tags recent 100 persons in the group may not work for all__ 
+\n\n📌** CMD ➥** `.report`
+\n**USAGE   ➥  **__Tags admins in group__  
+\n\n📌** CMD ➥** `.men` <username/userid text>
+\n**USAGE   ➥  **__Tags that person with the given custom text other way for this is __
+\n\n📌** CMD ➥** `Hi @username[custom text]`
+"""
+    }
+)

@@ -10,10 +10,10 @@ from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 @bot.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
 @bot.on(sudo_cmd(pattern=r"lock( (?P<target>\S+)|$)", allow_sudo=True))
 async def _(event):
-    # Space weirdness in regex required because argument is optional and other
-    # commands start with ".lock"
     if event.fwd_from:
         return
+    # Space weirdness in regex required because argument is optional and other
+    # commands start with ".lock"
     input_str = event.pattern_match.group("target")
     peer_id = event.chat_id
     if input_str in (("bots", "commands", "email", "forward", "url")):

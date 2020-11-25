@@ -6,6 +6,7 @@ from datetime import datetime
 import speedtest
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP, reply_id
 
 
 @bot.on(admin_cmd(pattern="speedtest ?(.*)"))
@@ -39,9 +40,7 @@ async def _(event):
     client_infos = response.get("client")
     i_s_p = client_infos.get("isp")
     i_s_p_rating = client_infos.get("isprating")
-    reply_msg_id = None
-    if event.reply_to_msg_id:
-        reply_msg_id = event.reply_to_msg_id
+    reply_msg_id = await reply_id(event)
     try:
         response = s.results.share()
         speedtest_image = response
@@ -96,3 +95,12 @@ def convert_from_bytes(size):
         size /= power
         n += 1
     return f"{round(size, 2)} {units[n]}"
+
+
+CMD_HELP.update(
+    {
+        "speedtest": "__**PLUGIN NAME :** Speedtest__\
+      \n\n📌** CMD ➥** `.speedtest` <text/image/file>\
+      \n**USAGE   ➥  **__Shows your server speed in the given format if nothing is given then shows as image__"
+    }
+)

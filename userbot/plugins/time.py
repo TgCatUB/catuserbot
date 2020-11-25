@@ -9,11 +9,13 @@ from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, COUNTRY, TZ_NUMBER
+from . import CMD_HELP
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 LOCATION = Config.TZ
+COUNTRY = Config.COUNTRY
+TZ_NUMBER = Config.TZ_NUMBER
 
 
 async def get_tz(con):
@@ -102,7 +104,7 @@ async def time_func(tdata):
     if c_name != COUNTRY:
         await edit_or_reply(
             tdata,
-            f"`It's`  **{dtnow1}**` on `**{dtnow2}**  `in {c_name}({time_zone} timezone).`",
+            f"`It's`  **{dtnow1}**` on `**{dtnow2}**  `in {c_name} ({time_zone} timezone).`",
         )
         return
     if COUNTRY:

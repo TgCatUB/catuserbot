@@ -59,7 +59,7 @@ async def detect(event):
 
 CMD_HELP.update(
     {
-        "nsfw_detect": "__**PLUGIN NAME :** Nsfw_detect__\
+        "nsfwdetect": "__**PLUGIN NAME :** Nsfwdetect__\
     \n\n📌** CMD ➥** `.detect`\
     \n**USAGE   ➥  **__Reply .detect command to any image or non animated sticker to detect the nudity in that__"
     }

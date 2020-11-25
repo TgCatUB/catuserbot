@@ -10,15 +10,17 @@ import subprocess
 from .. import CMD_HELP
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
+location = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
+
 
 @bot.on(admin_cmd(pattern=r"getc(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="getc(?: |$)(.*)", allow_sudo=True))
 async def get_media(event):
     if event.fwd_from:
         return
-    tempdir = Config.TMP_DOWNLOAD_DIRECTORY
+    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
     try:
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+        os.makedirs(tempdir)
     except BaseException:
         pass
     catty = event.pattern_match.group(1)
@@ -36,13 +38,13 @@ async def get_media(event):
             await event.edit(
                 f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"
             )
-    ps = subprocess.Popen(("ls", "temp"), stdout=subprocess.PIPE)
+    ps = subprocess.Popen(("ls", tempdir), stdout=subprocess.PIPE)
     output = subprocess.check_output(("wc", "-l"), stdin=ps.stdout)
     ps.wait()
     output = str(output)
     output = output.replace("b'", " ")
     output = output.replace("\\n'", " ")
-    await event.edit("Downloaded " + output + " files.")
+    await event.edit(f"Successfully downloaded {output} number of media files")
 
 
 @bot.on(admin_cmd(pattern="geta(?: |$)(.*)"))
@@ -50,9 +52,9 @@ async def get_media(event):
 async def get_media(event):
     if event.fwd_from:
         return
-    tempdir = Config.TMP_DOWNLOAD_DIRECTORY
+    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
     try:
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+        os.makedirs(tempdir)
     except BaseException:
         pass
     channel_username = event.pattern_match.group(1)
@@ -68,13 +70,13 @@ async def get_media(event):
             await event.edit(
                 f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`"
             )
-    ps = subprocess.Popen(("ls", "temp"), stdout=subprocess.PIPE)
+    ps = subprocess.Popen(("ls", tempdir), stdout=subprocess.PIPE)
     output = subprocess.check_output(("wc", "-l"), stdin=ps.stdout)
     ps.wait()
     output = str(output)
     output = output.replace("b'", "")
     output = output.replace("\\n'", "")
-    await event.edit("Downloaded " + output + " files.")
+    await event.edit(f"Successfully downloaded {output} number of media files")
 
 
 CMD_HELP.update(

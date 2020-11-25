@@ -8,6 +8,8 @@ from . import CMD_HELP, mention
 @bot.on(admin_cmd(pattern=r"star$", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"star$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "star")
     deq = deque(list("🦋✨🦋✨🦋✨🦋✨"))
     for _ in range(48):
@@ -19,6 +21,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"boxs$", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"boxs$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "box")
     deq = deque(list("🟥🟧🟨🟩🟦🟪🟫⬛⬜"))
     for _ in range(999):
@@ -30,6 +34,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"rain$", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"rain$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "Raining")
     deq = deque(list("🌬☁️🌩🌨🌧🌦🌥⛅🌤"))
     for _ in range(48):
@@ -68,6 +74,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"dump$", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"dump$", allow_sudo=True))
 async def _(message):
+    if message.fwd_from:
+        return
     event = await edit_or_reply(message, "droping....")
     try:
         obj = message.pattern_match.group(1)
@@ -109,6 +117,8 @@ async def _(message):
 @bot.on(admin_cmd(pattern=r"fleaveme$", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"fleaveme$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     animation_interval = 1
     animation_ttl = range(10)
     animation_chars = [
@@ -123,8 +133,6 @@ async def _(event):
         "⬛⬆️↗️\n⬅️🔄➡️\n↙️⬇️↘️",
         "↖️⬆️↗️\n⬅️🔄➡️\n↙️⬇️↘️",
     ]
-    if event.fwd_from:
-        return
     event = await edit_or_reply(event, "fleaveme....")
     await asyncio.sleep(2)
     for i in animation_ttl:
@@ -185,6 +193,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"plane$", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"plane$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "Wait for plane...")
     await event.edit("✈-------------")
     await event.edit("-✈------------")

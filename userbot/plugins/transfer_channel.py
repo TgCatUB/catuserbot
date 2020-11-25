@@ -7,10 +7,11 @@ import telethon.password as pwd_mod
 # https://t.me/TelethonChat/140200
 from telethon.tl import functions
 
-from userbot import utils
+from .. import CMD_HELP
+from ..utils import admin_cmd
 
 
-@bot.on(utils.admin_cmd(pattern="otransfer (.*)"))  # pylint:disable=E0602
+@bot.on(admin_cmd(pattern="otransfer (.*)"))  # pylint:disable=E0602
 async def _(event):
     if event.fwd_from:
         return
@@ -30,3 +31,13 @@ async def _(event):
         await event.edit(str(e))
     else:
         await event.edit("Transferred 🌚")
+
+
+CMD_HELP.update(
+    {
+        "transfer_channel": "__**PLUGIN NAME :** Transfer_channel__\
+        \n\n📌** CMD ➥** `.otransfer` [username to whom you want to transfer]\
+        \n**USAGE   ➥  **Transfers ownership to the given username for this set this var `TELE_GRAM_2FA_CODE` in heroku with your 2-step verification code \
+        "
+    }
+)

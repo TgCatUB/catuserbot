@@ -12,7 +12,11 @@ from .. import *
 from ..Config import Config
 
 # =================== CONSTANT ===================
-USERID = bot.uid
+
+USERID = Config.OWNER_ID or bot.uid
+ALIVE_NAME = Config.ALIVE_NAME
+AUTONAME = Config.AUTONAME
+DEFAULT_BIO = Config.DEFAULT_BIO
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 # mention user
@@ -28,7 +32,7 @@ HEROKU_API_KEY = Config.HEROKU_API_KEY
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
 
 PM_START = []
-
+PMMESSAGE_CACHE = {}
 PMMENU = "pmpermit_menu" not in Config.NO_LOAD
 
 if Config.PRIVATE_GROUP_BOT_API_ID is None:
@@ -65,7 +69,7 @@ if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
 
 
 # thumb image
-if Config.THUMB_IMAGE != None:
+if Config.THUMB_IMAGE is not None:
     check = url(Config.THUMB_IMAGE)
     if check:
         try:
@@ -83,6 +87,17 @@ def check(cat):
     except:
         hi = False
     return bool(hi)
+
+
+def set_key(dictionary, key, value):
+    if key not in dictionary:
+        dictionary[key] = value
+    elif isinstance(dictionary[key], list):
+        if value in dictionary[key]:
+            return
+        dictionary[key].append(value)
+    else:
+        dictionary[key] = [dictionary[key], value]
 
 
 # UniBorg Telegram UseRBot

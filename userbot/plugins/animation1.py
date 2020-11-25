@@ -38,6 +38,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=f"bombs$", outgoing=True))
 @bot.on(sudo_cmd(pattern=f"bombs$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "bombs")
     await event.edit("▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n")
     await asyncio.sleep(0.5)
@@ -67,7 +69,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 3
-    animation_ttl = range(0, 18)
+    animation_ttl = range(18)
     event = await edit_or_reply(event, "Calling Rahul (peru of telegram)......")
     animation_chars = [
         "`Connecting To Telegram Headquarters...`",
@@ -166,12 +168,14 @@ async def _(event):
     for i in animation_ttl:
 
         await asyncio.sleep(animation_interval)
-        await event.edit(animation_chars[i % 5])
+        await event.edit(animation_chars[i % 5], link_preview=True)
 
 
 @bot.on(admin_cmd(pattern="ding$"))
 @bot.on(sudo_cmd(pattern="ding$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     animation_interval = 0.3
     animation_ttl = range(30)
     animation_chars = [
@@ -225,6 +229,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"candy$"))
 @bot.on(sudo_cmd(pattern=r"candy$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "candy")
     deq = deque(list("🍦🍧🍩🍪🎂🍰🧁🍫🍬🍭"))
     for _ in range(999):
@@ -236,6 +242,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern="gangasta$"))
 @bot.on(sudo_cmd(pattern="gangasta$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "gangasta")
     await event.edit("EVERyBOdy")
     await asyncio.sleep(0.3)
@@ -257,6 +265,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=f"charging$"))
 @bot.on(sudo_cmd(pattern=f"charging$", allow_sudo=True))
 async def timer_blankx(e):
+    if e.fwd_from:
+        return
     e = await edit_or_reply(e, "charging")
     txt = (
         e.text[10:]

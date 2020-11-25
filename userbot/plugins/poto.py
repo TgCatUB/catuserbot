@@ -27,6 +27,7 @@ Type `.poto` for get **All profile pics of that User**
 import asyncio
 
 from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import CMD_HELP
 
 name = "Profile Photos"
 
@@ -88,3 +89,13 @@ async def potocmd(event):
             )
             await asyncio.sleep(2)
             return
+
+
+CMD_HELP.update(
+    {
+        "poto": "__**PLUGIN NAME :** Poto__\
+\n\n📌** CMD ➥** `.poto` <reply to msg>\
+\n**USAGE   ➥  **__Reply to user to get his profile pic use command along \
+with profile pic number to get desired pic else use `.poto all` to get all if you don't reply then gets group pics__"
+    }
+)

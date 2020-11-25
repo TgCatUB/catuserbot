@@ -7,10 +7,10 @@ from telethon.tl import functions, types
 
 from userbot import CMD_HELP
 
+from ..utils import admin_cmd, sudo_cmd
+
 HEADER = "「sed」\n"
-KNOWN_RE_BOTS = re.compile(
-    r"(regex|moku|BananaButler_|rgx|l4mR)bot", flags=re.IGNORECASE
-)
+KNOWN_RE_BOTS = re.compile(Config.GROUP_REG_SED_EX_BOT_S, flags=re.IGNORECASE)
 
 # Heavily based on
 # https://github.com/SijmenSchoon/regexbot/blob/master/regexbot.py
@@ -74,12 +74,13 @@ async def group_has_sedbot(group):
     return any(KNOWN_RE_BOTS.match(x.username or "") for x in full.users)
 
 
-@command()
+@bot.on(admin_cmd())
+@bot.on(sudo_cmd(allow_sudo=True))
 async def on_message(event):
     last_msgs[event.chat_id].appendleft(event.message)
 
 
-@command(allow_edited_updates=True)
+@bot.on(admin_cmd(allow_edited_updates=True))
 async def on_edit(event):
     for m in last_msgs[event.chat_id]:
         if m.id == event.id:
@@ -87,7 +88,8 @@ async def on_edit(event):
             break
 
 
-@command(pattern=re.compile(r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?"), outgoing=True)
+@bot.on(admin_cmd(pattern=r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"^s/((?:\\/|[^/])+)/((?:\\/|[^/])*)(/.*)?", allow_sudo=True))
 async def on_regex(event):
     if event.fwd_from:
         return

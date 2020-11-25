@@ -2,25 +2,10 @@
 created by @mrconfused and @sandy1709
 Idea by @BlazingRobonix
 """
-#    Copyright (C) 2020  sandeep.n(π.$)
-
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-
-#   You should have received a copy of the GNU Affero General Public License
-#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 
 import asyncio
+import base64
 
-import pybase64
 import requests
 from telethon import events
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
@@ -40,7 +25,7 @@ async def echo(cat):
         user_id = reply_msg.sender_id
         chat_id = cat.chat_id
         try:
-            hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+            hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
             hmm = Get(hmm)
             await cat.client(hmm)
         except BaseException:
@@ -51,7 +36,7 @@ async def echo(cat):
         addecho(user_id, chat_id)
         await edit_or_reply(cat, "Hi")
     else:
-        await edit_or_reply(cat, "Reply To A User's Message to echo his messages")
+        await edit_or_reply(cat, "Reply to a User's message to echo his messages")
 
 
 @bot.on(admin_cmd(pattern="rmecho$"))
@@ -64,7 +49,7 @@ async def echo(cat):
         user_id = reply_msg.sender_id
         chat_id = cat.chat_id
         try:
-            hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+            hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
             hmm = Get(hmm)
             await cat.client(hmm)
         except BaseException:
@@ -75,7 +60,7 @@ async def echo(cat):
         else:
             await edit_or_reply(cat, "The user is not activated with echo")
     else:
-        await edit_or_reply(cat, "Reply To A User's Message to echo his messages")
+        await edit_or_reply(cat, "Reply to a User's message to echo his messages")
 
 
 @bot.on(admin_cmd(pattern="listecho$"))
@@ -115,7 +100,7 @@ async def samereply(cat):
     if is_echo(cat.sender_id, cat.chat_id):
         await asyncio.sleep(2)
         try:
-            hmm = pybase64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+            hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
             hmm = Get(hmm)
             await cat.client(hmm)
         except BaseException:

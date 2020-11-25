@@ -3,8 +3,8 @@
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd, edit_or_reply, sudo_cmd
+from .. import CMD_HELP
+from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 
 
 @bot.on(admin_cmd(pattern="recognize ?(.*)"))
@@ -41,9 +41,9 @@ async def _(event):
             response = await response
             msg = response.message.message
             await cat.edit(msg)
-
         else:
             await cat.edit("sorry, I couldnt find it")
+        await event.client.send_read_acknowledge(conv.chat_id)
 
 
 CMD_HELP.update(

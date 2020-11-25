@@ -1,25 +1,23 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
+# catuserbot module containing hash and encode/decode commands.
 
-""" Userbot module containing hash and encode/decode commands. """
-
+import asyncio
+import base64
+import os
+import time
 from subprocess import PIPE
 from subprocess import run as runapp
 
-import pybase64
-
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
+from ..utils import admin_cmd, errors_handler, sudo_cmd
+from . import CMD_HELP, media_type, progress
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="hash (.*)"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="hash (.*)"))
 @errors_handler
 async def gethash(hash_q):
-    """ For .hash command, find the md5, sha1, sha256, sha512 of the string. """
-    hashtxt_ = hash_q.pattern_match.group(1)
+    if hash_q.fwd_from:
+        return
+    hashtxt_ = "".join(hash_q.text.split(maxsplit=1)[1:])
     with open("hashdis.txt", "w+") as hashtxt:
         hashtxt.write(hashtxt_)
     md5 = runapp(["md5sum", "hashdis.txt"], stdout=PIPE)
@@ -31,50 +29,64 @@ async def gethash(hash_q):
     sha512 = runapp(["sha512sum", "hashdis.txt"], stdout=PIPE)
     runapp(["rm", "hashdis.txt"], stdout=PIPE)
     sha512 = sha512.stdout.decode()
-    ans = (
-        "**Text : **`"
-        + hashtxt_
-        + "`\n**MD5 : **`"
-        + md5
-        + "`**SHA1 : **`"
-        + sha1
-        + "`**SHA256 : **`"
-        + sha256
-        + "`**SHA512 : **`"
-        + sha512[:-1]
-        + "`"
-    )
-    if len(ans) > 4096:
-        with open("hashes.txt", "w+") as hashfile:
-            hashfile.write(ans)
-        await hash_q.client.send_file(
-            hash_q.chat_id,
-            "hashes.txt",
-            reply_to=hash_q.id,
-            caption="`It's too big, sending a text file instead. `",
-        )
-        runapp(["rm", "hashes.txt"], stdout=PIPE)
-    else:
-        await edit_or_reply(hash_q, ans)
+    ans = f"**Text : **\
+            \n`{hashtxt_}`\
+            \n**MD5 : **`\
+            \n`{md5}`\
+            \n**SHA1 : **`\
+            \n`{sha1}`\
+            \n**SHA256 : **`\
+            \n`{sha256}`\
+            \n**SHA512 : **`\
+            \n`{sha512[:-1]}`\
+         "
+    await edit_or_reply(hash_q, ans)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="hbase (en|de) (.*)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="hbase (en|de) (.*)"))
+@bot.on(admin_cmd(outgoing=True, pattern="hbase (en|de) ?(.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="hbase (en|de) ?(.*)"))
 @errors_handler
-async def endecrypt(query):
-    """ For .base64 command, find the base64 encoding of the given string. """
-    if query.pattern_match.group(1) == "en":
-        lething = str(pybase64.b64encode(bytes(query.pattern_match.group(2), "utf-8")))[
-            2:
-        ]
-        await edit_or_reply(query, "Shhh! It's Encoded: `" + lething[:-1] + "`")
+async def endecrypt(event):
+    if event.fwd_from:
+        return
+    string = "".join(event.text.split(maxsplit=2)[2:])
+    catevent = event
+    if event.pattern_match.group(1) == "en":
+        if string:
+            result = base64.b64encode(bytes(string, "utf-8")).decode("utf-8")
+            result = f"**Shhh! It's Encoded : **\n`{result}`"
+        else:
+            reply = await event.get_reply_message()
+            if not reply:
+                return await edit_delete(event, "`What should i encode`")
+            mediatype = media_type(reply)
+            if mediatype is None:
+                result = base64.b64encode(bytes(reply.text, "utf-8")).decode("utf-8")
+                result = f"**Shhh! It's Encoded : **\n`{result}`"
+            else:
+                catevent = await edit_or_reply(event, "`Encoding ...`")
+                c_time = time.time()
+                downloaded_file_name = await event.client.download_media(
+                    reply,
+                    Config.TMP_DOWNLOAD_DIRECTORY,
+                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                        progress(d, t, catevent, c_time, "trying to download")
+                    ),
+                )
+                catevent = await edit_or_reply(event, "`Encoding ...`")
+                with open(downloaded_file_name, "rb") as image_file:
+                    result = base64.b64encode(image_file.read()).decode("utf-8")
+        await edit_or_reply(
+            catevent, result, file_name="encodedfile.txt", caption="It's Encoded"
+        )
+        os.remove(downloaded_file_name)
     else:
         lething = str(
-            pybase64.b64decode(
-                bytes(query.pattern_match.group(2), "utf-8"), validate=True
+            base64.b64decode(
+                bytes(event.pattern_match.group(2), "utf-8"), validate=True
             )
         )[2:]
-        await edit_or_reply(query, "Decoded: `" + lething[:-1] + "`")
+        await edit_or_reply(event, "Decoded: `" + lething[:-1] + "`")
 
 
 CMD_HELP.update(

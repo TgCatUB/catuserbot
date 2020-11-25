@@ -8,6 +8,8 @@ from . import CMD_HELP
 @bot.on(admin_cmd(pattern="think$", outgoing=True))
 @bot.on(sudo_cmd(pattern="think$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "think")
     deq = deque(list("🤔🧐🤔🧐🤔🧐"))
     for _ in range(48):
@@ -19,6 +21,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"lmao$"))
 @bot.on(sudo_cmd(pattern="lmao$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "lmao")
     deq = deque(list("😂🤣😂🤣😂🤣"))
     for _ in range(48):
@@ -30,6 +34,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"nothappy$"))
 @bot.on(sudo_cmd(pattern="nothappy$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "nathappy")
     deq = deque(list("😁☹️😁☹️😁☹️😁"))
     for _ in range(48):
@@ -41,6 +47,8 @@ async def _(event):
 @bot.on(admin_cmd(outgoing=True, pattern="clock$"))
 @bot.on(sudo_cmd(pattern="clock$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "clock")
     deq = deque(list("🕙🕘🕗🕖🕕🕔🕓🕒🕑🕐🕛"))
     for _ in range(48):
@@ -52,6 +60,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"muah$"))
 @bot.on(sudo_cmd(pattern="muah$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "muah")
     deq = deque(list("😗😙😚😚😘"))
     for _ in range(48):
@@ -63,6 +73,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern="heart$"))
 @bot.on(sudo_cmd(pattern="heart$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "heart")
     deq = deque(list("❤️🧡💛💚💙💜🖤"))
     for _ in range(48):
@@ -74,6 +86,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern="gym$", outgoing=True))
 @bot.on(sudo_cmd(pattern="gym$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "gym")
     deq = deque(list("🏃‍🏋‍🤸‍🏃‍🏋‍🤸‍🏃‍🏋‍🤸‍"))
     for _ in range(48):
@@ -85,6 +99,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=f"earth$", outgoing=True))
 @bot.on(sudo_cmd(pattern="earth$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "earth")
     deq = deque(list("🌏🌍🌎🌎🌍🌏🌍🌎"))
     for _ in range(48):
@@ -96,6 +112,8 @@ async def _(event):
 @bot.on(admin_cmd(outgoing=True, pattern="moon$"))
 @bot.on(sudo_cmd(pattern="moon$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "moon")
     deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
     for _ in range(48):
@@ -107,6 +125,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=f"smoon$", outgoing=True))
 @bot.on(sudo_cmd(pattern="smoon$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "smoon")
     animation_interval = 0.1
     animation_ttl = range(101)
@@ -129,6 +149,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=f"tmoon$", outgoing=True))
 @bot.on(sudo_cmd(pattern="tmoon$", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     event = await edit_or_reply(event, "tmoon")
     animation_interval = 0.1
     animation_ttl = range(117)
