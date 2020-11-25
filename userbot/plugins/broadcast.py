@@ -285,7 +285,7 @@ async def catbroadcast_remove(event):
             parse_mode=parse_pre,
         )
     keyword = keyword.lower()
-    check = sql.is_in_broadcastlist(keyword, groupid)
+    check = sql.is_in_broadcastlist(keyword, int(groupid))
     if check:
         return await edit_delete(
             event,
