@@ -63,7 +63,7 @@ def is_in_broadcastlist(keywoard, group_id):
 
 
 def del_keyword_broadcastlist(keyword):
-    SESSION.query(CatBroadcast).get(keywoard, set()).delete()
+    SESSION.query(CatBroadcast.keywoard).delete()
     SESSION.commit()
 
 
