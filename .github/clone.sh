@@ -32,7 +32,7 @@ else
     rm -rf userbot
     rm -rf .github
     rm -rf requirements.txt
-    git clone https://github.com/sandy1709/catuserbot cat_ub
+    git clone -b bugs https://github.com/sandy1709/catuserbot cat_ub
     mv cat_ub/userbot .
     mv cat_ub/.github . 
     mv cat_ub/.git .
