@@ -20,6 +20,7 @@ async def catbroadcast_send(event):
         )
     reply = await event.get_reply_message()
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+    catchat = await event.get_chat()
     if not reply:
         return await edit_delete(
             event, "what should i send to to this category ?", parse_mode=parse_pre
@@ -46,7 +47,7 @@ async def catbroadcast_send(event):
     i = 0
     for chat in chats:
         try:
-            if int(event.chat_id) == int(chat):
+            if int(catchat.id) == int(chat):
                 continue
             await event.client.send_message(int(chat), reply)
             i += 1
@@ -75,6 +76,7 @@ async def catbroadcast_send(event):
         )
     reply = await event.get_reply_message()
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+    catchat = await event.get_chat()
     if not reply:
         return await edit_delete(
             event, "what should i send to to this category ?", parse_mode=parse_pre
@@ -101,7 +103,7 @@ async def catbroadcast_send(event):
     i = 0
     for chat in chats:
         try:
-            if int(event.chat_id) == int(chat):
+            if int(catchat.id) == int(chat):
                 continue
             await event.client.forward_messages(int(chat), reply)
             i += 1
@@ -129,14 +131,15 @@ async def catbroadcast_add(event):
             event, "In which category should i add this chat", parse_mode=parse_pre
         )
     keyword = catinput_str.lower()
-    check = sql.is_in_broadcastlist(keyword, event.chat_id)
+    chat = await event.get_chat()
+    check = sql.is_in_broadcastlist(keyword, chat.id)
     if check:
         return await edit_delete(
             event,
             f"This chat is already in this category {keyword}",
             parse_mode=parse_pre,
         )
-    sql.add_to_broadcastlist(keyword, event.chat_id)
+    sql.add_to_broadcastlist(keyword, chat.id)
     await edit_delete(
         event, f"This chat is Now added to category {keyword}", parse_mode=parse_pre
     )
@@ -167,12 +170,13 @@ async def catbroadcast_remove(event):
             event, "From which category should i remove this chat", parse_mode=parse_pre
         )
     keyword = catinput_str.lower()
-    check = sql.is_in_broadcastlist(keyword, event.chat_id)
+    chat = await event.get_chat()
+    check = sql.is_in_broadcastlist(keyword, chat.id)
     if not check:
         return await edit_delete(
             event, f"This chat is not in the category {keyword}", parse_mode=parse_pre
         )
-    sql.rm_from_broadcastlist(keyword, event.chat_id)
+    sql.rm_from_broadcastlist(keyword, chat.id)
     await edit_delete(
         event,
         f"This chat is Now removed from the category {keyword}",
