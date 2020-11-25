@@ -239,11 +239,12 @@ async def payf(event):
     )
     await edit_or_reply(event, pay)
 
+
 @bot.on(admin_cmd(pattern="wish ?(.*)"))
 @bot.on(sudo_cmd(pattern="wish ?(.*)", allow_sudo=True))
 async def wish_check(event):
     wishtxt = event.pattern_match.group(1)
-    chance = random.randint(0,100)
+    chance = random.randint(0, 100)
     if wishtxt:
         reslt = f"**Your wish **_{wishtxt}_ **has been cast.** ✨\
               \n\n__Chance of success :__ **{chance}%**"
@@ -253,8 +254,7 @@ async def wish_check(event):
                   \n\n__Chance of success :__ **{chance}%**"
         else:
             reslt = f"What's your Wish? Should I consider you as Idiot by default ? 😜"
-    await edit_or_reply(event,reslt)
-
+    await edit_or_reply(event, reslt)
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="repo$"))
