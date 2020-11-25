@@ -317,6 +317,29 @@ async def catbroadcast_remove(event):
                 parse_mode=parse_pre,
             )
 
+@bot.on(admin_cmd(pattern="delc(?: |$)(.*)", command="delc"))
+@bot.on(sudo_cmd(pattern="delc(?: |$)(.*)", command="delc", allow_sudo=True))
+async def catbroadcast_delete(event):
+    if event.fwd_from:
+        return
+    catinput_str = event.pattern_match.group(1)
+    check1 = sql.num_broadcastlist_chat(catinput_str)
+    if check1 <1:
+        return await edit_delete(
+            event,
+            f"Are you sure that there is category {catinput_str}",
+            parse_mode=parse_pre,
+        )
+    try:
+        sql.del_keyword_broadcastlist(catinput_str)
+        await edit_or_reply(event,f"Successfully deleted the category {catinput_str}",parse_mode=parse_pre)
+    except Exception as e:
+        await edit_delete(
+            event,
+            str(e),
+            parse_mode=parse_pre,
+        )
+
 
 CMD_HELP.update(
     {
@@ -342,6 +365,9 @@ CMD_HELP.update(
 
   •  **Syntax : **`.frmfrom category_name chat_id`
   •  **Function : **__To force remove the given chat_id from the given category name usefull when you left that chat or banned you there__
+
+  •  **Syntax : **`delc category_name`
+  •  **Function : **__Deletes the category completely in database__
 """
     }
 )
