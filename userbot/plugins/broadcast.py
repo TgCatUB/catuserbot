@@ -246,7 +246,7 @@ async def catbroadcast_list(event):
 async def catbroadcast_list(event):
     if event.fwd_from:
         return
-    if sql.num_broadcastlist_chats == 0:
+    if sql.num_broadcastlist_chats() == 0:
         return await edit_delete(
             event,
             "you haven't created at least one category  check info for more help",
