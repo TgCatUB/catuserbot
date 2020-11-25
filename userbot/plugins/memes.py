@@ -246,7 +246,7 @@ async def wish_check(event):
     wishtxt = event.pattern_match.group(1)
     chance = random.randint(0, 100)
     if wishtxt:
-        reslt = f"**Your wish **_{wishtxt}_ **has been cast.** ✨\
+        reslt = f"**Your wish **__{wishtxt}__ **has been cast.** ✨\
               \n\n__Chance of success :__ **{chance}%**"
     else:
         if event.is_reply:
