@@ -317,6 +317,7 @@ async def catbroadcast_remove(event):
                 parse_mode=parse_pre,
             )
 
+
 @bot.on(admin_cmd(pattern="delc(?: |$)(.*)", command="delc"))
 @bot.on(sudo_cmd(pattern="delc(?: |$)(.*)", command="delc", allow_sudo=True))
 async def catbroadcast_delete(event):
@@ -324,7 +325,7 @@ async def catbroadcast_delete(event):
         return
     catinput_str = event.pattern_match.group(1)
     check1 = sql.num_broadcastlist_chat(catinput_str)
-    if check1 <1:
+    if check1 < 1:
         return await edit_delete(
             event,
             f"Are you sure that there is category {catinput_str}",
@@ -332,7 +333,11 @@ async def catbroadcast_delete(event):
         )
     try:
         sql.del_keyword_broadcastlist(catinput_str)
-        await edit_or_reply(event,f"Successfully deleted the category {catinput_str}",parse_mode=parse_pre)
+        await edit_or_reply(
+            event,
+            f"Successfully deleted the category {catinput_str}",
+            parse_mode=parse_pre,
+        )
     except Exception as e:
         await edit_delete(
             event,
