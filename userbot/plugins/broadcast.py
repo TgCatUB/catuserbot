@@ -284,7 +284,7 @@ async def catbroadcast_remove(event):
             "Use proper syntax as shown .frmfrom category_name groupid",
             parse_mode=parse_pre,
         )
-    keyword = catinput_str.lower()
+    keyword = keyword.lower()
     check = sql.is_in_broadcastlist(keyword, groupid)
     if check:
         return await edit_delete(
@@ -295,7 +295,7 @@ async def catbroadcast_remove(event):
     sql.rm_from_broadcastlist(keyword, groupid)
     await edit_delete(
         event,
-        f"This chat is Now removed from the category {keyword}",
+        f"This chat {groupid} is Now removed from the category {keyword}",
         parse_mode=parse_pre,
     )
     chat = await event.get_chat()
