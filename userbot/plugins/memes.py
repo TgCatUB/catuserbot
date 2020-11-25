@@ -262,7 +262,7 @@ async def shout(args):
     msg = "\n" + result
     await edit_or_reply(args, "`" + msg + "`")
 
-                        
+
 @bot.on(admin_cmd(pattern="wish ?(.*)"))
 @bot.on(sudo_cmd(pattern="wish ?(.*)", allow_sudo=True))
 async def wish_check(event):
