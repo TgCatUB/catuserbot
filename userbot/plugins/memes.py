@@ -151,8 +151,7 @@ async def shout(args):
     messagestr = args.text
     messagestr = messagestr[7:]
     text = " ".join(messagestr)
-    result = []
-    result.append(" ".join([s for s in text]))
+    result = [" ".join([s for s in text])]
     for pos, symbol in enumerate(text[1:]):
         result.append(symbol + " " + "  " * pos + symbol)
     result = list("\n".join(result))
@@ -239,6 +238,23 @@ async def payf(event):
         paytext * 2,
     )
     await edit_or_reply(event, pay)
+
+
+@bot.on(admin_cmd(pattern="wish ?(.*)"))
+@bot.on(sudo_cmd(pattern="wish ?(.*)", allow_sudo=True))
+async def wish_check(event):
+    wishtxt = event.pattern_match.group(1)
+    chance = random.randint(0, 100)
+    if wishtxt:
+        reslt = f"**Your wish **__{wishtxt}__ **has been cast.** ✨\
+              \n\n__Chance of success :__ **{chance}%**"
+    else:
+        if event.is_reply:
+            reslt = f"**Your wish has been cast. **✨\
+                  \n\n__Chance of success :__ **{chance}%**"
+        else:
+            reslt = f"What's your Wish? Should I consider you as Idiot by default ? 😜"
+    await edit_or_reply(event, reslt)
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="repo$"))
@@ -353,6 +369,8 @@ CMD_HELP.update(
         \n  •  **Function : **A shit module for ツ , who cares.\
         \n\n  •  **Syntax :** `.ftext <emoji/character>`\
         \n  •  **Function : **Pay Respects.\
+        \n\n  •  **Syntax :** `.wish <reply/text>`\
+        \n  •  **Function : **Shows the chance of your success inspired from @CalsiBot.\
         \n\n  •  **Syntax :** `.repo`\
         \n  •  **Function : **Shows to source code link of catuserbot.\
         \n\n  •  **Syntax :** `.lfy <query>`\
