@@ -67,7 +67,6 @@ CMD_HELP.update(
                 \n\n**Syntax : **'.sleep <seconds>\
                 \n**Usage: **Userbots get tired too. Let yours snooze for a few seconds.\
                 \n\n**Syntax : **`.shutdown`\
-                \n**Usage : **Sometimes you need to shut down your bot. Sometimes you just hope to\
-                hear Windows XP shutdown sound... but you don't."
+                \n**Usage : **To turn off the dyno of heroku. you cant turn on by bot you need to got to heroku and turn on or use @hk_heroku_bot"
     }
 )
