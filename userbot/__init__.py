@@ -14,7 +14,7 @@ from telethon.sessions import StringSession
 from .Config import Config
 
 StartTime = time.time()
-catversion = "2.9.3"
+catversion = "2.9.4"
 
 if Config.STRING_SESSION:
     session_name = str(Config.STRING_SESSION)
