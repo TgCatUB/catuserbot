@@ -251,8 +251,8 @@ async def wish_check(event):
         if event.is_reply:
             reslt = f"**Your wish has been cast. **✨\
                   \n\n__Chance of success :__ **{chance}%**"
-            else:
-                reslt = f"What's your Wish? Should I consider you as Idiot by default ? 😜"
+        else:
+            reslt = f"What's your Wish? Should I consider you as Idiot by default ? 😜"
     await edit_or_reply(event,reslt)
 
 
