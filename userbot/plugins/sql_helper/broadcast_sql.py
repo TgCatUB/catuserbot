@@ -68,8 +68,7 @@ def del_keyword_broadcastlist(keywoard):
             CatBroadcast.keywoard == keywoard
         )
         if broadcast_group:
-            BROADCAST_CHANNELS.get(keywoard, set()).delete()
-
+            BROADCAST_CHANNELS.pop(keywoard)
             SESSION.delete(broadcast_group)
             SESSION.commit()
             return True
