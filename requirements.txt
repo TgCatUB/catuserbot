@@ -22,7 +22,7 @@ glitch_this
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
-googletrans
+googletrans==3.1.0a0
 gsearch
 gtts
 hachoir
