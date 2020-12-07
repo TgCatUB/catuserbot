@@ -294,9 +294,9 @@ if Config.PRIVATE_GROUP_ID is not None:
 CMD_HELP.update(
     {
         "pmpermit": "__**PLUGIN NAME :** Pm Permit__\
-\n\n📌** CMD ➥** `.approve or .a`\
+\n\n📌** CMD ➥** `.approve` or `.a`\
 \n**USAGE   ➥  **__Approves the mentioned/replied person to PM.__\
-\n\n📌** CMD ➥** `.disapprove or .da`\
+\n\n📌** CMD ➥** `.disapprove` or `.da`\
 \n**USAGE   ➥  **__Dispproves the mentioned/replied person to PM.__\
 \n\n📌** CMD ➥** `.block`\
 \n**USAGE   ➥  **__Blocks the person.__\
@@ -304,6 +304,8 @@ CMD_HELP.update(
 \n**USAGE   ➥  **__Unblocks the person.__\
 \n\n📌** CMD ➥** `.listapproved`\
 \n**USAGE   ➥  **__To list the all approved users.__\
+\n\n📌** CMD ➥** `.disapprove all` or `da all`\
+\n**USAGE   ➥  **__To disapprove all the approved users.__\
 \n\n**Note :** Available variables for formatting `CUSTOM_PMPERMIT_TEXT` :\
 \n`{mention}`,`{first}`,`{last}`,`{fullname}`,`{userid}`,`{username}`,`{my_first}`,`{my_fullname}`,`{my_last}`,`{my_mention}`,`{my_username}`\
 "
