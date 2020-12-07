@@ -79,12 +79,12 @@ async def labstack(event):
 
 @bot.on(
     admin_cmd(
-        pattern="webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|vshare|bayfiles)"
+        pattern="wu ?(.+?|) (fileio|anonfiles|filebin|anonymousfiles|vshare|bayfiles|filebin)"
     )
 )
 @bot.on(
     sudo_cmd(
-        pattern="webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|vshare|bayfiles)",
+        pattern="wu ?(.+?|) (fileio|anonfiles|filebin|anonymousfiles|vshare|bayfiles|filebin)",
         allow_sudo=True,
     )
 )
@@ -105,15 +105,12 @@ async def _(event):
         catcheck = True
     # a dictionary containing the shell commands
     CMD_WEB = {
-        "fileio": 'curl -F "file=@{full_file_path}" https://file.io',
-        "oload": 'curl -F "file=@{full_file_path}" https://api.openload.cc/upload',
-        "anonfiles": 'curl -F "file=@{full_file_path}" https://anonfiles.com/api/upload',
-        "transfer": 'curl --upload-file "{full_file_path}" https://transfer.sh/'
-        + os.path.basename(file_name),
-        "filebin": 'curl -X POST --data-binary "@{full_file_path}" -H "filename: {bare_local_name}" "https://filebin.net"',
+        "fileio": 'curl -F "file=@{full_file_path}" https://file.io/?expires=1w', 
+        "anonfiles": 'curl -F "file=@{full_file_path}" https://api.anonfiles.com/upload', 
         "anonymousfiles": 'curl -F file="@{full_file_path}" https://api.anonymousfiles.io/',
         "vshare": 'curl -F "file=@{full_file_path}" https://api.vshare.is/upload',
-        "bayfiles": 'curl -F "file=@{full_file_path}" https://bayfiles.com/api/upload',
+        "bayfiles": 'curl -F "file=@{full_file_path}" https://api.bayfiles.com/upload',
+        "filebin": 'curl --data-binary "@{full_file_path}" https://filebin.net/ \ -H "bin: custombin" -H "filename: {bare_local_name}"'  
     }
     filename = os.path.basename(file_name)
     try:
@@ -153,10 +150,11 @@ async def _(event):
 CMD_HELP.update(
     {
         "webupload": "__**PLUGIN NAME :** __ `webupload`\
-    \n\n**Syntax : **`.webupload` --(`fileio`|`oload`|`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`vshare`|`bayfiles`) or \
-    \n         `.webupload` (path of file) --(`fileio`|`oload`|`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`vshare`|`bayfiles`)\
+    \n\n**Syntax : **`.wu` (`anonfiles` | `anonymousfiles` | `filebin` | `bayfiles` | `vshare` | `fileio`)\
+    \n\nOR\
+    \n\n`.wu` (path of file) (`anonfiles` | `anonymousfiles` | `filebin` | `bayfiles` | `vshare` | `fileio`)\
     \n**Usage : **Upload the file to web according to your choice\
-    \n**Example : **`.webupload --anonfiles` tag this to a file\
+    \n**Example : **`.wu anonfiles` tag this to a file\
     \n\n**Syntax :** `.labstack` Reply to a media file or provide a directory\
     \n**Usage : **Upload the file to labstack for 7 days."
     }
