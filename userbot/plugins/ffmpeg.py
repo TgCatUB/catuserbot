@@ -267,9 +267,10 @@ async def cult_small_video(
         return out_put_file_name
     return None
 
+
 CMD_HELP.update(
     {
-        "ffmpeg":  "__**PLUGIN NAME :** Ffmpeg__\
+        "ffmpeg": "__**PLUGIN NAME :** Ffmpeg__\
 \n\n📌** CMD ➥** `.ffmpegsave`\
 \n**USAGE   ➥  **__Saves the media file in bot to trim mutliple times__\
 \n\n📌** CMD ➥** `.vtrim time`\
