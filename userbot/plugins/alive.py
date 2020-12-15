@@ -8,8 +8,8 @@ from . import ALIVE_NAME, CMD_HELP, StartTime, catdef, catversion, mention, repl
 
 DEFAULTUSER = ALIVE_NAME or "cat"
 CAT_IMG = Config.ALIVE_PIC
-CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESFULLY ✮"
-EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
+CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "× MY USERBOT IS ALIVE ×"
+EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  🚨 "
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="alive$"))
@@ -24,10 +24,10 @@ async def amireallyalive(alive):
         cat_caption = f"**{CUSTOM_ALIVE_TEXT}**\n\n"
         cat_caption += f"**{EMOJI} Database :** `{check_sgnirts}`\n"
         cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
-        cat_caption += f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
+        cat_caption += f"**{EMOJI} BadBoy Version :** `{catversion}`\n"
         cat_caption += f"**{EMOJI} Python Version :** `{python_version()}\n`"
         cat_caption += f"**{EMOJI} Uptime :** `{uptime}\n`"
-        cat_caption += f"**{EMOJI} Master:** {mention}\n"
+        cat_caption += f"**{EMOJI} Owner:** {mention}\n"
         await alive.client.send_file(
             alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id
         )
@@ -38,10 +38,10 @@ async def amireallyalive(alive):
             f"**{CUSTOM_ALIVE_TEXT}**\n\n"
             f"**{EMOJI} Database :** `{check_sgnirts}`\n"
             f"**{EMOJI} Telethon Version :** `{version.__version__}\n`"
-            f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
+            f"**{EMOJI} BadBoy Version :** `{catversion}`\n"
             f"**{EMOJI} Python Version :** `{python_version()}\n`"
             f"**{EMOJI} Uptime :** `{uptime}\n`"
-            f"**{EMOJI} Master:** {mention}\n",
+            f"**{EMOJI} Owner:** {mention}\n",
         )
 
 
@@ -52,11 +52,11 @@ async def amireallyalive(alive):
         return
     tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
     reply_to_id = await reply_id(alive)
-    cat_caption = f"**Catuserbot is Up and Running**\n"
+    cat_caption = f"**BadBoy is Up and Running**\n"
     cat_caption += f"**  -Telethon version :** `{version.__version__}\n`"
-    cat_caption += f"**  -Catuserbot Version :** `{catversion}`\n"
+    cat_caption += f"**  -BadBoy Version :** `{catversion}`\n"
     cat_caption += f"**  -Python Version :** `{python_version()}\n`"
-    cat_caption += f"**  -Master:** {mention}\n"
+    cat_caption += f"**  -Owner:** {mention}\n"
     results = await bot.inline_query(tgbotusername, cat_caption)  # pylint:disable=E0602
     await results[0].click(alive.chat_id, reply_to=reply_to_id, hide_via=True)
     await alive.delete()
@@ -96,10 +96,10 @@ def check_data_base_heal_th():
 CMD_HELP.update(
     {
         "alive": "**Plugin :** `alive`\
-      \n\n  •  **Syntax : **`.alive` \
-      \n  •  **Function : **__status of bot will be showed__\
-      \n\n  •  **Syntax : **`.ialive` \
-      \n  •  **Function : **__inline status of bot will be shown.__\
+      \n\n  ×  **Syntax : **`.alive` \
+      \n  ×  **Function : **__status of bot will be showed__\
+      \n\n  ×  **Syntax : **`.ialive` \
+      \n  ×  **Function : **__inline status of bot will be shown.__\
       \nSet `ALIVE_PIC` var for media in alive message"
     }
 )
