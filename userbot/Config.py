@@ -64,7 +64,7 @@ class Config((object)):
     TG_BOT_USER_NAME_BF_HER = os.environ.get("TG_BOT_USER_NAME_BF_HER", None)
     NO_LOG_P_M_S = bool(os.environ.get("NO_LOG_P_M_S", True))
     THUMB_IMAGE = os.environ.get(
-        "THUMB_IMAGE", "https://telegra.ph/file/ca95524e4734b0d5461b5.jpg"
+        "THUMB_IMAGE", "https://telegra.ph/file/7fff6e4f2ea9593daa2c0.jpg"
     )
     # Genius lyrics get this value from https://genius.com/developers both has
     # same values
@@ -113,8 +113,8 @@ class Config((object)):
     EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", " ")
     # specify command handler that should be used for the plugins
     # this should be a valid "regex" pattern
-    COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r"\.")
-    SUDO_COMMAND_HAND_LER = os.environ.get("SUDO_COMMAND_HAND_LER", r"\.")
+    COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r"\-")
+    SUDO_COMMAND_HAND_LER = os.environ.get("SUDO_COMMAND_HAND_LER", r"\-")
     HELP_INLINETYPE = os.environ.get("HELP_INLINETYPE", None)
     # specify list of users allowed to use bot
     # WARNING: be careful who you grant access to your bot.
