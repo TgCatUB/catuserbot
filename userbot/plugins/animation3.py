@@ -76,8 +76,9 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"dump$", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"dump$", allow_sudo=True))
 async def _(message):
-    if event.fwd_from:
+    if message.fwd_from:
         return
+    event = await edit_or_reply(message, "droping....")
     try:
         obj = message.pattern_match.group(1)
         if len(obj) != 3:
@@ -85,7 +86,6 @@ async def _(message):
         inp = " ".join(obj)
     except IndexError:
         inp = "🥞 🎂 🍫"
-    event = await edit_or_reply(message, "`droping....`")
     u, t, g, o, s, n = inp.split(), "🗑", "<(^_^ <)", "(> ^_^)>", "⠀ ", "\n"
     h = [(u[0], u[1], u[2]), (u[0], u[1], ""), (u[0], "", "")]
     for something in reversed(
