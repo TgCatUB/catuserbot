@@ -52,7 +52,7 @@ async def set_not_afk(event):
     if "afk" not in current_message and "on" in USERAFK_ON:
         shite = await event.client.send_message(
             event.chat_id,
-            "`Back alive! No Longer afk.\nWas afk for " + endtime + "`",
+            "`Kembali hidup! Tidak lagi afk.\nWas afk for " + endtime + "`",
         )
         USERAFK_ON = {}
         afk_time = None
@@ -62,7 +62,7 @@ async def set_not_afk(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#AFKFALSE \n`Set AFK mode to False\n"
-                + "Back alive! No Longer afk.\nWas afk for "
+                + "Kembali hidup! Tidak lagi afk.\nWas afk for "
                 + endtime
                 + "`",
             )
@@ -109,13 +109,13 @@ async def on_afk(event):
         msg = None
         if link and reason:
             message_to_reply = (
-                f"**I am AFK .\n\nAFK Since {endtime}\nReason : **{reason}"
+                f"**Saya AFK .\n\nAFK Sejak {endtime}\nReason : **{reason}"
             )
         elif reason:
-            message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : {reason}`"
+            message_to_reply = f"`Saya AFK .\n\nAFK Sejak {endtime}\nReason : {reason}`"
         else:
             message_to_reply = (
-                f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+                f"`Saya AFK .\n\nAFK Sejak {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
             )
         if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
             msg = await event.reply(message_to_reply)
@@ -168,9 +168,9 @@ async def _(event):
             afk_time = datetime.now()
         USERAFK_ON = f"on: {reason}"
         if reason:
-            await edit_delete(event, f"`I shall be Going afk! because ~` {reason}", 5)
+            await edit_delete(event, f"`Aku akan pergi afk! karena ~` {reason}", 5)
         else:
-            await edit_delete(event, f"`I shall be Going afk! `", 5)
+            await edit_delete(event, f"`Aku akan pergi afk! `", 5)
         if BOTLOG:
             if reason:
                 await event.client.send_message(
@@ -187,12 +187,12 @@ async def _(event):
 CMD_HELP.update(
     {
         "afk": "**Plugin : **`afk`\
-        \n\n  •  **Syntax : **`.afk [Optional Reason]`\
-        \n  •  **Function : **__Sets you as afk.\nReplies to anyone who tags/PM's \
-        \you telling them that you are AFK(reason).\n\nSwitches off AFK when you type back anything, anywhere.\
-        \afk means away from keyboard/keypad.__\
-        \n\n  •  **Note :** If you want AFK with hyperlink use [ ; ] after reason, then paste the media link.\
-        \n  •  **Example :** `.afk busy now ;<Media_link>`\
+        \n\n  ×  **Syntax : **`.afk [Optional Reason]`\
+        \n  ×  **Function : **__Sets you as afk.\nReplies to anyone who tags/PM's \
+        \Anda memberi tahu mereka bahwa Anda AFK(reason).\n\n Mematikan AFK saat Anda mengetik kembali apa pun, di mana pun.\
+        \afk artinya jauh dari keyboard/keypad.__\
+        \n\n  ×  **Note :** Jika Anda ingin AFK dengan menggunakan hyperlink [ ; ] after alasan, dan tempel media link.\
+        \n  ×  **Example :** `.afk sibuk sekarang ;<Media_link>`\
 "
     }
 )
