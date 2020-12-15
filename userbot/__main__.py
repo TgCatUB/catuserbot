@@ -44,8 +44,8 @@ for name in files:
 
 LOGS.info("Yay your userbot is officially working.!!!")
 LOGS.info(
-    "Congratulation, now type .alive to see message if bot is live\n"
-    "If you need assistance, head to https://t.me/catuserbot_support"
+    "Selamat, sekarang ketik .alive untuk melihat pesan jika bot aktif \ n"
+    "Jika Anda membutuhkan bantuan, pergilah ke https://t.me/catuserbot_support"
 )
 
 if len(argv) not in (1, 3, 4):
