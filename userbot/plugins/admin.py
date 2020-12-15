@@ -310,17 +310,17 @@ async def startmute(event):
         if not user:
             return
         if user.id == bot.uid:
-            return await edit_or_reply(event, "Sorry, I can't mute myself")
+            return await edit_or_reply(event, "Maaf, saya tidak dapat menonaktifkan diri saya sendiri ")
         if is_muted(user.id, event.chat_id):
             return await edit_or_reply(
-                event, "This user is already muted in this chat ~~lmfao sed rip~~"
+                event, "Pengguna ini telah dibungkam dalam obrolan ini ~~ lmfao sed rip ~~"
             )
         try:
             admin = chat.admin_rights
             creator = chat.creator
             if not admin and not creator:
                 await edit_or_reply(
-                    event, "`You can't mute a person without admin rights niqq.` ಥ﹏ಥ  "
+                    event, "`Anda tidak dapat membungkam seseorang tanpa hak admin niqq.` ಥ﹏ಥ  "
                 )
                 return
             result = await event.client(
@@ -332,7 +332,7 @@ async def startmute(event):
                 if result.participant.banned_rights.send_messages:
                     return await edit_or_reply(
                         event,
-                        "This user is already muted in this chat ~~lmfao sed rip~~",
+                        "Pengguna ini telah dibungkam dalam obrolan ini ~~ lmfao sed rip ~~",
                     )
             except:
                 pass
