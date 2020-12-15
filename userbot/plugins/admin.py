@@ -27,12 +27,12 @@ from .sql_helper.mute_sql import is_muted, mute, unmute
 
 # =================== CONSTANT ===================
 
-PP_TOO_SMOL = "`The image is too small`"
-PP_ERROR = "`Failure while processing the image`"
-NO_ADMIN = "`I am not an admin nub nibba!`"
-NO_PERM = "`I don't have sufficient permissions! This is so sed. Alexa play despacito`"
-CHAT_PP_CHANGED = "`Chat Picture Changed`"
-INVALID_MEDIA = "`Invalid Extension`"
+PP_TOO_SMOL = "`Gambar terlalu kecil`"
+PP_ERROR = "`Kegagalan saat memproses gambar`"
+NO_ADMIN = "`Saya bukan admin!`"
+NO_PERM = "`Saya tidak memiliki izin yang memadai! Ini sangat menyedihkan.`"
+CHAT_PP_CHANGED = "`Gambar Obrolan Berubah`"
+INVALID_MEDIA = "`Ekstensi Tidak Valid`"
 
 BANNED_RIGHTS = ChatBannedRights(
     until_date=None,
@@ -70,7 +70,7 @@ async def set_group_photo(gpic):
     if gpic.fwd_from:
         return
     if not gpic.is_group:
-        await edit_or_reply(gpic, "`I don't think this is a group.`")
+        await edit_or_reply(gpic, "`Saya tidak berpikir ini adalah grup.`")
         return
     replymsg = await gpic.get_reply_message()
     chat = await gpic.get_chat()
@@ -105,7 +105,7 @@ async def set_group_photo(gpic):
             await gpic.client.send_message(
                 BOTLOG_CHATID,
                 "#GROUPPIC\n"
-                f"Group profile pic changed "
+                f"Foto profil grup berubah "
                 f"CHAT: {gpic.chat.title}(`{gpic.chat_id}`)",
             )
 
@@ -130,7 +130,7 @@ async def promote(promt):
         delete_messages=True,
         pin_messages=True,
     )
-    catevent = await edit_or_reply(promt, "`Promoting...`")
+    catevent = await edit_or_reply(promt, "`Mengangkat...`")
     user, rank = await get_user_from_event(promt)
     if not rank:
         rank = "Admin"
@@ -138,7 +138,7 @@ async def promote(promt):
         return
     try:
         await promt.client(EditAdminRequest(promt.chat_id, user.id, new_rights, rank))
-        await catevent.edit("`Promoted Successfully! Now gib Party`")
+        await catevent.edit("`Berhasil Dipromosikan! Sekarang pesta grup`")
     except BadRequestError:
         await catevent.edit(NO_PERM)
         return
@@ -163,7 +163,7 @@ async def demote(dmod):
     if not admin and not creator:
         await edit_or_reply(dmod, NO_ADMIN)
         return
-    catevent = await edit_or_reply(dmod, "`Demoting...`")
+    catevent = await edit_or_reply(dmod, "`penurunan...`")
     rank = "admeme"
     user = await get_user_from_event(dmod)
     user = user[0]
@@ -182,7 +182,7 @@ async def demote(dmod):
     except BadRequestError:
         await catevent.edit(NO_PERM)
         return
-    await catevent.edit("`Demoted Successfully! Betterluck next time`")
+    await catevent.edit("`Berhasil diturunkan! Semoga lain kali lebih beruntung`")
     if BOTLOG:
         await dmod.client.send_message(
             BOTLOG_CHATID,
@@ -207,7 +207,7 @@ async def ban(bon):
     user, reason = await get_user_from_event(bon)
     if not user:
         return
-    catevent = await edit_or_reply(bon, "`Whacking the pest!`")
+    catevent = await edit_or_reply(bon, "`Mendera pelaku!`")
     try:
         await bon.client(EditBannedRequest(bon.chat_id, user.id, BANNED_RIGHTS))
     except BadRequestError:
@@ -219,7 +219,7 @@ async def ban(bon):
             await reply.delete()
     except BadRequestError:
         await catevent.edit(
-            "`I dont have message nuking rights! But still he is banned!`"
+            "`Saya tidak memiliki hak ini! Tapi tetap saja dia dilarang!`"
         )
         return
     if reason:
@@ -247,14 +247,14 @@ async def nothanos(unbon):
     if not admin and not creator:
         await edit_or_reply(unbon, NO_ADMIN)
         return
-    catevent = await edit_or_reply(unbon, "`Unbanning...`")
+    catevent = await edit_or_reply(unbon, "`Melepaskan...`")
     user = await get_user_from_event(unbon)
     user = user[0]
     if not user:
         return
     try:
         await unbon.client(EditBannedRequest(unbon.chat_id, user.id, UNBAN_RIGHTS))
-        await catevent.edit("```Unbanned Successfully. Granting another chance.```")
+        await catevent.edit("```Pelepasan tersangka sukses```")
         if BOTLOG:
             await unbon.client.send_message(
                 BOTLOG_CHATID,
@@ -263,7 +263,7 @@ async def nothanos(unbon):
                 f"CHAT: {unbon.chat.title}(`{unbon.chat_id}`)",
             )
     except UserIdInvalidError:
-        await catevent.edit("`Uh oh my unban logic broke!`")
+        await catevent.edit("`Uh oh logika unban saya rusak!`")
 
 
 @bot.on(admin_cmd(incoming=True))
@@ -464,7 +464,7 @@ async def pin(msg):
         return await edit_delete(msg, NO_PERM, 5)
     except Exception as e:
         return await edit_delete(msg, f"`{str(e)}`", 5)
-    await edit_delete(msg, "`Pinned Successfully!`", 3)
+    await edit_delete(msg, "`Pin Sukses!`", 3)
     user = await get_user_from_id(msg.sender_id, msg)
     if BOTLOG and not msg.is_private:
         try:
@@ -495,7 +495,7 @@ async def pin(msg):
     to_unpin = msg.reply_to_msg_id
     options = (msg.pattern_match.group(1)).strip()
     if not to_unpin and options != "all":
-        await edit_delete(msg, "`Reply to a message to unpin it or use .unpin all`", 5)
+        await edit_delete(msg, "`Balas pesan untuk melepas pinnya atau gunakan. Lepaskan semua`", 5)
         return
     if to_unpin and not options:
         try:
@@ -513,9 +513,9 @@ async def pin(msg):
             return await edit_delete(msg, f"`{str(e)}`", 5)
     else:
         return await edit_delete(
-            msg, "`Reply to a message to unpin it or use .unpin all`", 5
+            msg, "`Balas pesan untuk melepas pinnya atau gunakan. Lepaskan semua`", 5
         )
-    await edit_delete(msg, "`Unpinned Successfully!`", 3)
+    await edit_delete(msg, "`Pin Terlepas!`", 3)
     user = await get_user_from_id(msg.sender_id, msg)
     if BOTLOG and not msg.is_private:
         try:
@@ -543,9 +543,9 @@ async def kick(usr):
         return
     user, reason = await get_user_from_event(usr)
     if not user:
-        await edit_or_reply(usr, "`Couldn't fetch user.`")
+        await edit_or_reply(usr, "`Tidak dapat mengambil pengguna.`")
         return
-    catevent = await edit_or_reply(usr, "`Kicking...`")
+    catevent = await edit_or_reply(usr, "`keluarkan...`")
     try:
         await usr.client.kick_participant(usr.chat_id, user.id)
         await sleep(0.5)
@@ -557,7 +557,7 @@ async def kick(usr):
             f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`\nReason: {reason}"
         )
     else:
-        await catevent.edit(f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`")
+        await catevent.edit(f"`Tertendang` [{user.first_name}](tg://user?id={user.id})`!`")
     if BOTLOG:
         await usr.client.send_message(
             BOTLOG_CHATID,
@@ -583,7 +583,7 @@ async def _(event):
         await edit_or_reply(event, deleted_msg)
     else:
         await edit_or_reply(
-            event, "`You need administrative permissions in order to do this command`"
+            event, "`Anda memerlukan izin administratif untuk melakukan perintah ini`"
         )
         await sleep(3)
         try:
@@ -606,27 +606,27 @@ async def get_user_from_id(user, event):
 CMD_HELP.update(
     {
         "admin": "**Plugin : **`admin`\
-        \n\n  •  **Syntax : **`.setgpic` <reply to image>\
-        \n  •  **Usage : **Changes the group's display picture\
-        \n\n  •  **Syntax : **`.promote` <username/reply> <custom rank (optional)>\
-        \n  •  **Usage : **Provides admin rights to the person in the chat.\
-        \n\n  •  **Syntax : **`.demote `<username/reply>\
-        \n  •  **Usage : **Revokes the person's admin permissions in the chat.\
-        \n\n  •  **Syntax : **`.ban` <username/reply> <reason (optional)>\
-        \n  •  **Usage : **Bans the person off your chat.\
-        \n\n  •  **Syntax : **`.unban` <username/reply>\
-        \n  •  **Usage : **Removes the ban from the person in the chat.\
-        \n\n  •  **Syntax : **`.mute` <username/reply> <reason (optional)>\
-        \n  •  **Usage : **Mutes the person in the chat, works on admins too.\
-        \n\n  •  **Syntax : **`.unmute` <username/reply>\
-        \n  •  **Usage : **Removes the person from the muted list.\
-        \n\n  •  **Syntax : **`.pin `<reply> or `.pin loud`\
-        \n  •  **Usage : **Pins the replied message in Group\
-        \n\n  •  **Syntax : **`.unpin `<reply> or `.unpin all`\
-        \n  •  **Usage : **Unpins the replied message in Group\
-        \n\n  •  **Syntax : **`.kick `<username/reply> \
-        \n  •  **Usage : **kick the person off your chat.\
-        \n\n  •  **Syntax : **`.iundlt`\
-        \n  •  **Usage : **display last 5 deleted messages in group."
+        \n\n  ×  **Syntax : **`.setgpic` <reply to image>\
+        \n  ×  **Usage : **Mengubah gambar tampilan grup\
+        \n\n  ×  **Syntax : **`.promote` <username/reply> <custom rank (optional)>\
+        \n  ×  **Usage : **Memberikan hak admin kepada orang dalam obrolan.\
+        \n\n  ×  **Syntax : **`.demote `<username/reply>\
+        \n  ×  **Usage : **Mencabut izin admin orang tersebut dalam obrolan.\
+        \n\n  ×  **Syntax : **`.ban` <username/reply> <reason (optional)>\
+        \n  ×  **Usage : **Larang orang tersebut keluar dari obrolan Anda.\
+        \n\n  ×  **Syntax : **`.unban` <username/reply>\
+        \n  ×  **Usage : **Menghapus larangan dari orang dalam obrolan.\
+        \n\n  ×  **Syntax : **`.mute` <username/reply> <reason (optional)>\
+        \n  ×  **Usage : **Membungkam orang dalam obrolan, juga berfungsi pada admin.\
+        \n\n  ×  **Syntax : **`.unmute` <username/reply>\
+        \n  ×  **Usage : **Menghapus orang tersebut dari daftar yang dibungkam.\
+        \n\n  ×  **Syntax : **`.pin `<reply> or `.pin loud`\
+        \n  ×  **Usage : **Pin pesan balasan di Grup\
+        \n\n  ×  **Syntax : **`.unpin `<reply> or `.unpin all`\
+        \n  ×  **Usage : **Lepas pin pesan balasan di Grup\
+        \n\n  ×  **Syntax : **`.kick `<username/reply> \
+        \n  ×  **Usage : **keluarkan orang tersebut dari obrolan Anda.\
+        \n\n  ×  **Syntax : **`.iundlt`\
+        \n  ×  **Usage : **menampilkan 5 pesan terakhir yang dihapus dalam grup."
     }
 )
