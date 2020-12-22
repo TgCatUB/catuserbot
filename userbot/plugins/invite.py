@@ -1,8 +1,5 @@
 from telethon import functions
 
-from ..utils import admin_cmd, sudo_cmd
-from . import CMD_HELP
-
 
 @bot.on(admin_cmd(pattern="invite ?(.*)"))
 @bot.on(sudo_cmd(pattern="invite ?(.*)", allow_sudo=True))

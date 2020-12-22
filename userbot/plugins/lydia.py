@@ -7,8 +7,7 @@ from time import time
 from coffeehouse.api import API
 from coffeehouse.lydia import LydiaAI
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from . import BOTLOG, BOTLOG_CHATID
 from .sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
 
 if Config.LYDIA_API_KEY:
@@ -141,13 +140,13 @@ async def on_new_message(event):
 CMD_HELP.update(
     {
         "lydia": "**Plugin : **`lydia`\
-    \n\n**Syntax : **`.enai` reply to a user\
-    \n**Function : **your bot will auto reply to the tagged user until you stops it by `.remcf`\
-    \n\n**Syntax : **`.reai` reply to the user\
-    \n**Function : **disables the lydia\
-    \n\n**Syntax : **`.liai`\
-    \n**Function : ** to list the users to whom you enabled ai(lydia)\
-    \n\n for functioning this plugin you need to set the heroku var\
+    \n\n  •  **Syntax : **`.enai reply`\
+    \n  •  **Function : **your bot will auto reply to the tagged user until you stop it by `.remcf`\
+    \n\n  •  **Syntax : **`.reai reply`\
+    \n  •  **Function : **disables the lydia(auto reply )\
+    \n\n  •  **Syntax : **`.liai`\
+    \n  •  **Function : **to list the users to whom you enabled ai(lydia)\
+    \n\n  •  **NOTE : **for functioning this plugin you need to set the heroku var\
     \n the key is `LYDIA_API_KEY` and get var from `https://coffeehouse.intellivoid.net/`\
 "
     }

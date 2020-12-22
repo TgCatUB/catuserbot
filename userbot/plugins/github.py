@@ -4,8 +4,7 @@ from datetime import datetime
 import requests
 from github import Github
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, reply_id
+from . import reply_id
 
 GIT_TEMP_DIR = "./temp/"
 
@@ -57,11 +56,11 @@ async def download(event):
     if event.fwd_from:
         return
     if Config.GITHUB_ACCESS_TOKEN is None:
-        await edit_or_reply(event, "`Please ADD Proper Access Token from github.com`")
+        await edit_delete(event, "`Please ADD Proper Access Token from github.com`", 5)
         return
     if Config.GIT_REPO_NAME is None:
-        await edit_or_reply(
-            event, "`Please ADD Proper Github Repo Name of your userbot`"
+        await edit_delete(
+            event, "`Please ADD Proper Github Repo Name of your userbot`", 5
         )
         return
     mone = await edit_or_reply(event, "Processing ...")
@@ -70,15 +69,12 @@ async def download(event):
     start = datetime.now()
     reply_message = await event.get_reply_message()
     try:
-        downloaded_file_name = await event.client.download_media(
-            reply_message.media, GIT_TEMP_DIR
-        )
+        downloaded_file_name = await event.client.download_media(reply_message.media)
     except Exception as e:
         await mone.edit(str(e))
     else:
         end = datetime.now()
         ms = (end - start).seconds
-        await event.delete()
         await mone.edit(
             "Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms)
         )
@@ -105,7 +101,6 @@ async def git_commit(file_name, mone):
             return await mone.edit("`File Already Exists`")
     file_name = "userbot/plugins/" + file_name
     if create_file:
-        file_name = file_name.replace("./userbot/temp/", "")
         print(file_name)
         try:
             repo.create_file(

@@ -1,8 +1,7 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
 import re
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from . import BOTLOG, BOTLOG_CHATID
 from .sql_helper.filter_sql import (
     add_filter,
     get_filters,
@@ -123,15 +122,14 @@ async def on_all_snip_delete(event):
 CMD_HELP.update(
     {
         "filters": "**Plugin :**`filters`\
-    \n\n**Synatx :** `.filters`\
-    \n**Usage: **Lists all active (of your userbot) filters in a chat.\
-    \n\n*Synatx :** `.filter`  reply to a message with .filter <keyword>\
-    \n**Usage: **Saves the replied message as a reply to the 'keyword'.\
-    \nThe bot will reply to the message whenever 'keyword' is mentioned.\
-    \nWorks with everything from files to stickers.\
-    \n\n*Synatx :** `.stop <keyword>`\
-    \n**Usage: **Stops the specified keyword.\
-    \n\n*Synatx :** `.rmfilters` \
-    \n**Usage: **Removes all filters of your userbot in the chat."
+    \n\n  •  **Synatx :** `.filters`\
+    \n  •  **Usage: **Lists all active (of your userbot) filters in a chat.\
+    \n\n  •  **Synatx :** `.filter`  reply to a message with .filter <keyword>\
+    \n  •  **Usage: **Saves the replied message as a reply to the 'keyword'.\
+    \nThe bot will reply to the message whenever 'keyword' is mentioned. Works with everything from files to stickers.\
+    \n\n  •  *Synatx :** `.stop <keyword>`\
+    \n  •  **Usage: **Stops the specified keyword.\
+    \n\n  •  *Synatx :** `.rmfilters` \
+    \n  •  **Usage: **Removes all filters of your userbot in the chat."
     }
 )

@@ -9,8 +9,6 @@ from datetime import datetime
 
 from gtts import gTTS
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import deEmojify
 
 

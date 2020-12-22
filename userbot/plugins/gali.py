@@ -1,8 +1,7 @@
 import asyncio
 import random
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, catmemes
+from . import catmemes
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="abuse$"))

@@ -4,12 +4,15 @@ import re
 import time
 
 import heroku3
+import lottie
 import requests
 import spamwatch as spam_watch
 from validators.url import url
 
 from .. import *
 from ..Config import Config
+from ..helpers import *
+from ..helpers import functions as catdef
 
 # =================== CONSTANT ===================
 
@@ -18,7 +21,7 @@ ALIVE_NAME = Config.ALIVE_NAME
 AUTONAME = Config.AUTONAME
 DEFAULT_BIO = Config.DEFAULT_BIO
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-
+BOT_USERNAME = Config.TG_BOT_USER_NAME_BF_HER
 # mention user
 mention = f"[{DEFAULTUSER}](tg://user?id={USERID})"
 hmention = f"<a href = tg://user?id={USERID}>{DEFAULTUSER}</a>"
@@ -29,7 +32,7 @@ heroku_api = "https://api.heroku.com"
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME
 HEROKU_API_KEY = Config.HEROKU_API_KEY
 
-thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "thumb_image.jpg"
+thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 
 PM_START = []
 PMMESSAGE_CACHE = {}
@@ -179,3 +182,13 @@ async def catalive():
                   \nUptime : {uptime}\
                   \nDyno : {dyno}\
                   "
+
+
+async def make_gif(event, reply, quality=None, fps=None):
+    fps = fps or 1
+    quality = quality or 256
+    result_p = os.path.join("temp", "animation.gif")
+    animation = lottie.parsers.tgs.parse_tgs(reply)
+    with open(result_p, "wb") as result:
+        await run_sync(lottie.exporters.gif.export_gif, animation, result, quality, fps)
+    return result_p

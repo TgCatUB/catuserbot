@@ -7,8 +7,8 @@ from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChatBannedRights
 
-from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, extract_time, get_user_from_event
+from ..utils import errors_handler
+from . import BOTLOG, BOTLOG_CHATID, extract_time, get_user_from_event
 
 # =================== CONSTANT ===================
 NO_ADMIN = "`I am not an admin nub nibba!`"

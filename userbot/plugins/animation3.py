@@ -1,8 +1,7 @@
 import asyncio
 from collections import deque
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import ALIVE_NAME, CMD_HELP
+from . import ALIVE_NAME
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -73,12 +72,11 @@ async def _(event):
         await event.edit(animation_chars[i % 12])
 
 
-@bot.on(admin_cmd(pattern=r"dump$", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"dump$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"dump ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"dump ?(.*)", allow_sudo=True))
 async def _(message):
     if message.fwd_from:
         return
-    event = await edit_or_reply(message, "droping....")
     try:
         obj = message.pattern_match.group(1)
         if len(obj) != 3:
@@ -86,6 +84,7 @@ async def _(message):
         inp = " ".join(obj)
     except IndexError:
         inp = "🥞 🎂 🍫"
+    event = await edit_or_reply(message, "`droping....`")
     u, t, g, o, s, n = inp.split(), "🗑", "<(^_^ <)", "(> ^_^)>", "⠀ ", "\n"
     h = [(u[0], u[1], u[2]), (u[0], u[1], ""), (u[0], "", "")]
     for something in reversed(

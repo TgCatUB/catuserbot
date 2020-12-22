@@ -1,8 +1,5 @@
 from telethon.utils import pack_bot_file_id
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
 
 @bot.on(admin_cmd(pattern="(get_id|id)( (.*)|$)"))
 @bot.on(sudo_cmd(pattern="(get_id|id)( (.*)|$)", allow_sudo=True))

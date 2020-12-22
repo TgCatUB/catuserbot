@@ -2,8 +2,7 @@ from asyncio import sleep
 
 from googletrans import LANGUAGES, Translator
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, deEmojify
+from . import BOTLOG, BOTLOG_CHATID, deEmojify
 
 TRT_LANG = "en"
 

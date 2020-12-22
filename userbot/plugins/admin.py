@@ -21,8 +21,8 @@ from telethon.tl.functions.channels import (
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import ChatAdminRights, ChatBannedRights, MessageMediaPhoto
 
-from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, LOGS, get_user_from_event
+from ..utils import errors_handler
+from . import BOTLOG, BOTLOG_CHATID, LOGS, get_user_from_event
 from .sql_helper.mute_sql import is_muted, mute, unmute
 
 # =================== CONSTANT ===================
@@ -73,13 +73,8 @@ async def set_group_photo(gpic):
         await edit_or_reply(gpic, "`I don't think this is a group.`")
         return
     replymsg = await gpic.get_reply_message()
-    chat = await gpic.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
+    await gpic.get_chat()
     photo = None
-    if not admin and not creator:
-        await edit_or_reply(gpic, NO_ADMIN)
-        return
     if replymsg and replymsg.media:
         if isinstance(replymsg.media, MessageMediaPhoto):
             photo = await gpic.client.download_media(message=replymsg.photo)
@@ -439,96 +434,6 @@ async def endmute(event):
             )
 
 
-@bot.on(admin_cmd(pattern="pin($| (.*))", command="pin"))
-@bot.on(sudo_cmd(pattern="pin($| (.*))", command="pin", allow_sudo=True))
-@errors_handler
-async def pin(msg):
-    if msg.fwd_from:
-        return
-    if not msg.is_private:
-        chat = await msg.get_chat()
-        admin = chat.admin_rights
-        creator = chat.creator
-        if not admin and not creator:
-            return await edit_delete(msg, NO_ADMIN, 5)
-    to_pin = msg.reply_to_msg_id
-    if not to_pin:
-        return await edit_delete(msg, "`Reply to a message to pin it.`", 5)
-    options = msg.pattern_match.group(1)
-    is_silent = False
-    if options == "loud":
-        is_silent = True
-    try:
-        await msg.client.pin_message(msg.chat_id, to_pin, notify=is_silent)
-    except BadRequestError:
-        return await edit_delete(msg, NO_PERM, 5)
-    except Exception as e:
-        return await edit_delete(msg, f"`{str(e)}`", 5)
-    await edit_delete(msg, "`Pinned Successfully!`", 3)
-    user = await get_user_from_id(msg.sender_id, msg)
-    if BOTLOG and not msg.is_private:
-        try:
-            await msg.client.send_message(
-                BOTLOG_CHATID,
-                "#PIN\n"
-                f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
-                f"LOUD: {is_silent}",
-            )
-        except:
-            pass
-
-
-@bot.on(admin_cmd(pattern="unpin($| (.*))", command="unpin"))
-@bot.on(sudo_cmd(pattern="unpin($| (.*))", command="unpin", allow_sudo=True))
-@errors_handler
-async def pin(msg):
-    if msg.fwd_from:
-        return
-    if not msg.is_private:
-        chat = await msg.get_chat()
-        admin = chat.admin_rights
-        creator = chat.creator
-        if not admin and not creator:
-            await edit_delete(msg, NO_ADMIN, 5)
-            return
-    to_unpin = msg.reply_to_msg_id
-    options = (msg.pattern_match.group(1)).strip()
-    if not to_unpin and options != "all":
-        await edit_delete(msg, "`Reply to a message to unpin it or use .unpin all`", 5)
-        return
-    if to_unpin and not options:
-        try:
-            await msg.client.unpin_message(msg.chat_id, to_unpin)
-        except BadRequestError:
-            return await edit_delete(msg, NO_PERM, 5)
-        except Exception as e:
-            return await edit_delete(msg, f"`{str(e)}`", 5)
-    elif options == "all":
-        try:
-            await msg.client.unpin_message(msg.chat_id)
-        except BadRequestError:
-            return await edit_delete(msg, NO_PERM, 5)
-        except Exception as e:
-            return await edit_delete(msg, f"`{str(e)}`", 5)
-    else:
-        return await edit_delete(
-            msg, "`Reply to a message to unpin it or use .unpin all`", 5
-        )
-    await edit_delete(msg, "`Unpinned Successfully!`", 3)
-    user = await get_user_from_id(msg.sender_id, msg)
-    if BOTLOG and not msg.is_private:
-        try:
-            await msg.client.send_message(
-                BOTLOG_CHATID,
-                "#UNPIN\n"
-                f"**Admin : **[{user.first_name}](tg://user?id={user.id})\n"
-                f"**Chat : **{msg.chat.title}(`{msg.chat_id}`)\n",
-            )
-        except:
-            pass
-
-
 @bot.on(admin_cmd(pattern="kick(?: |$)(.*)", command="kick"))
 @bot.on(sudo_cmd(pattern="kick(?: |$)(.*)", command="kick", allow_sudo=True))
 @errors_handler
@@ -565,6 +470,87 @@ async def kick(usr):
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n",
         )
+
+
+@bot.on(admin_cmd(pattern="pin($| (.*))", command="pin"))
+@bot.on(sudo_cmd(pattern="pin($| (.*))", command="pin", allow_sudo=True))
+@errors_handler
+async def pin(msg):
+    if msg.fwd_from:
+        return
+    if not msg.is_private:
+        await msg.get_chat()
+    to_pin = msg.reply_to_msg_id
+    if not to_pin:
+        return await edit_delete(msg, "`Reply to a message to pin it.`", 5)
+    options = msg.pattern_match.group(1)
+    is_silent = False
+    if options == "loud":
+        is_silent = True
+    try:
+        await msg.client.pin_message(msg.chat_id, to_pin, notify=is_silent)
+    except BadRequestError:
+        return await edit_delete(msg, NO_PERM, 5)
+    except Exception as e:
+        return await edit_delete(msg, f"`{str(e)}`", 5)
+    await edit_delete(msg, "`Pinned Successfully!`", 3)
+    user = await get_user_from_id(msg.sender_id, msg)
+    if BOTLOG and not msg.is_private:
+        try:
+            await msg.client.send_message(
+                BOTLOG_CHATID,
+                "#PIN\n"
+                f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
+                f"LOUD: {is_silent}",
+            )
+        except:
+            pass
+
+
+@bot.on(admin_cmd(pattern="unpin($| (.*))", command="unpin"))
+@bot.on(sudo_cmd(pattern="unpin($| (.*))", command="unpin", allow_sudo=True))
+@errors_handler
+async def pin(msg):
+    if msg.fwd_from:
+        return
+    if not msg.is_private:
+        await msg.get_chat()
+    to_unpin = msg.reply_to_msg_id
+    options = (msg.pattern_match.group(1)).strip()
+    if not to_unpin and options != "all":
+        await edit_delete(msg, "`Reply to a message to unpin it or use .unpin all`", 5)
+        return
+    if to_unpin and not options:
+        try:
+            await msg.client.unpin_message(msg.chat_id, to_unpin)
+        except BadRequestError:
+            return await edit_delete(msg, NO_PERM, 5)
+        except Exception as e:
+            return await edit_delete(msg, f"`{str(e)}`", 5)
+    elif options == "all":
+        try:
+            await msg.client.unpin_message(msg.chat_id)
+        except BadRequestError:
+            return await edit_delete(msg, NO_PERM, 5)
+        except Exception as e:
+            return await edit_delete(msg, f"`{str(e)}`", 5)
+    else:
+        return await edit_delete(
+            msg, "`Reply to a message to unpin it or use .unpin all`", 5
+        )
+    await edit_delete(msg, "`Unpinned Successfully!`", 3)
+    user = await get_user_from_id(msg.sender_id, msg)
+    if BOTLOG and not msg.is_private:
+        try:
+            await msg.client.send_message(
+                BOTLOG_CHATID,
+                "#UNPIN\n"
+                f"**Admin : **[{user.first_name}](tg://user?id={user.id})\n"
+                f"**Chat : **{msg.chat.title}(`{msg.chat_id}`)\n",
+            )
+        except:
+            pass
 
 
 @bot.on(admin_cmd(pattern="iundlt$", command="iundlt"))

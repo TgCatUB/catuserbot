@@ -9,8 +9,7 @@ from glitch_this import ImageGlitcher
 from PIL import Image
 from telethon import functions, types
 
-from .. import CMD_HELP, LOGS
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from .. import LOGS
 from . import runcmd, take_screen_shot
 
 

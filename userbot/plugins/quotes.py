@@ -3,9 +3,6 @@ import random
 
 import requests
 
-from ..utils import admin_cmd, sudo_cmd
-from . import CMD_HELP
-
 
 @bot.on(admin_cmd(pattern="quote ?(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="quote ?(.*)", allow_sudo=True))

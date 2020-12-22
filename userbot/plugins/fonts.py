@@ -1,5 +1,4 @@
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, fonts
+from . import fonts
 
 
 @bot.on(admin_cmd(pattern="fmusical(?: |$)(.*)", command="fmusical"))

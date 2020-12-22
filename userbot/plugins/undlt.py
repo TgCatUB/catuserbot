@@ -1,8 +1,5 @@
 import asyncio
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
 
 @bot.on(admin_cmd(pattern="undlt ?(.*)"))
 @bot.on(sudo_cmd(pattern="undlt ?(.*)", allow_sudo=True))

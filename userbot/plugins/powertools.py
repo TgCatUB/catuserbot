@@ -2,8 +2,7 @@ import sys
 from os import execl
 from time import sleep
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, HEROKU_APP, bot
+from . import BOTLOG, BOTLOG_CHATID, HEROKU_APP, bot
 
 
 @bot.on(admin_cmd(pattern="restart$"))

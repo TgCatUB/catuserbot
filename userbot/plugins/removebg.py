@@ -3,10 +3,8 @@
 import os
 
 import requests
-from PIL import Image
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, convert_toimage, reply_id
+from . import convert_toimage, convert_tosticker, reply_id
 
 
 @bot.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
@@ -54,7 +52,7 @@ async def remove_background(event):
         await edit_delete(catevent, f"`{response.content.decode('UTF-8')}`", 5)
         return
     if cmd == "srmbg":
-        file = convert_to_webp(remove_bg_image, "backgroundless.webp")
+        file = convert_tosticker(remove_bg_image, filename="backgroundless.webp")
         await event.client.send_file(
             event.chat_id,
             file,
@@ -101,15 +99,6 @@ def ReTrieveURL(input_url):
         allow_redirects=True,
         stream=True,
     )
-
-
-def convert_to_webp(file_name, response):
-    image = Image.open(file_name)
-    if image.mode != "RGB":
-        image.convert("RGB")
-    image.save(response, "webp")
-    os.remove(file_name)
-    return response
 
 
 CMD_HELP.update(

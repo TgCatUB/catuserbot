@@ -1,7 +1,6 @@
 from telethon import events
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG_CHATID, CMD_HELP, bot
+from . import BOTLOG_CHATID, bot
 from .sql_helper import pmpermit_sql as pmpermit_sql
 from .sql_helper.welcomesql import (
     addwelcome_setting,

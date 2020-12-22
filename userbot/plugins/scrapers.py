@@ -11,8 +11,7 @@ import requests
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from . import BOTLOG, BOTLOG_CHATID
 
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"wiki (.*)"))

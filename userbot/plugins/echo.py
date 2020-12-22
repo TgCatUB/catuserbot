@@ -11,8 +11,6 @@ import requests
 from telethon import events
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from .sql_helper.echo_sql import addecho, get_all_echos, is_echo, remove_echo
 
 

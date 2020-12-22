@@ -10,8 +10,8 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from search_engine_parser import GoogleSearch
 
-from ..utils import admin_cmd, edit_or_reply, errors_handler, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
+from ..utils import errors_handler
+from . import BOTLOG, BOTLOG_CHATID
 
 opener = urllib.request.build_opener()
 useragent = "Mozilla/5.0 (Linux; Android 9; SM-G960F Build/PPR1.180610.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.157 Mobile Safari/537.36"
@@ -215,11 +215,11 @@ async def scam(results, lim):
 CMD_HELP.update(
     {
         "google": "**Plugin :**`google`\
-        \n\n**Syntax :** `.gs <limit> <query>` or `.gs <limit> (replied message)`\
-        \n**Function : **will google  search and sends you top 10 results links.\
-        \n\n**Syntax :** `.grs` reply to image\
-        \n**Function : **will google reverse search the image and shows you the result.\
-        \n\n**Syntax : **`.reverse limit`\
-        \n**Function : **Reply to a pic/sticker to revers-search it on Google Images !!"
+        \n\n  •  **Syntax :** `.gs <limit> <query>` or `.gs <limit> (replied message)`\
+        \n  •  **Function : **will google  search and sends you top 10 results links.\
+        \n\n  •  **Syntax :** `.grs` reply to image\
+        \n  •  **Function : **will google reverse search the image and shows you the result.\
+        \n\n  •  **Syntax : **`.reverse limit`\
+        \n  •  **Function : **Reply to a pic/sticker to revers-search it on Google Images !!"
     }
 )

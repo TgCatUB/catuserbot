@@ -4,9 +4,6 @@ Syntax: .filext EXTENSION"""
 import requests
 from bs4 import BeautifulSoup
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
 
 @bot.on(admin_cmd(pattern="filext (.*)"))
 @bot.on(sudo_cmd(pattern="filext (.*)", allow_sudo=True))

@@ -7,8 +7,6 @@ from telethon.tl import functions, types
 
 from userbot import CMD_HELP
 
-from ..utils import admin_cmd, sudo_cmd
-
 HEADER = "「sed」\n"
 KNOWN_RE_BOTS = re.compile(Config.GROUP_REG_SED_EX_BOT_S, flags=re.IGNORECASE)
 

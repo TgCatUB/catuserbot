@@ -7,9 +7,6 @@ import telethon.password as pwd_mod
 # https://t.me/TelethonChat/140200
 from telethon.tl import functions
 
-from .. import CMD_HELP
-from ..utils import admin_cmd
-
 
 @bot.on(admin_cmd(pattern="otransfer (.*)"))  # pylint:disable=E0602
 async def _(event):

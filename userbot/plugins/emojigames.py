@@ -1,9 +1,6 @@
 # imported from uniborg credit goes to spechide
 from telethon.tl.types import InputMediaDice
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd
-
 # EMOJI CONSTANTS
 DART_E_MOJI = "🎯"
 DICE_E_MOJI = "🎲"

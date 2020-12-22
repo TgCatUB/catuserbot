@@ -3,9 +3,6 @@
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
 
 @bot.on(admin_cmd(pattern="recognize ?(.*)"))
 @bot.on(sudo_cmd(pattern="recognize ?(.*)", allow_sudo=True))

@@ -8,9 +8,6 @@ import os
 
 import requests
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
 OCR_SPACE_API_KEY = Config.OCR_SPACE_API_KEY
 
 

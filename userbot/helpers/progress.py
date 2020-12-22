@@ -93,7 +93,7 @@ async def progress(
             status = "Downloading"
         else:
             status = "Unknown"
-        progress_str = "`{0}` | [{1}{2}] `{3}%`".format(
+        progress_str = "`{0}` | `[{1}{2}] {3}%`".format(
             status,
             "".join(["▰" for i in range(math.floor(percentage / 10))]),
             "".join(["▱" for i in range(10 - math.floor(percentage / 10))]),

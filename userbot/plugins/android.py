@@ -10,9 +10,6 @@ import re
 from bs4 import BeautifulSoup
 from requests import get
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
 GITHUB = "https://github.com"
 DEVICES_DATA = (
     "https://raw.githubusercontent.com/androidtrackers/"

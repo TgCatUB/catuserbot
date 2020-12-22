@@ -1,8 +1,5 @@
 from asyncio import sleep
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, sudo_cmd
-
 
 @bot.on(admin_cmd(pattern="schd (\d*) (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="schd (\d*) (.*)", allow_sudo=True))
