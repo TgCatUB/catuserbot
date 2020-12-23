@@ -16,6 +16,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"spc$"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern=r"spc$"))
 async def psu(event):
     uname = platform.uname()
     softw = "**System Information**\n"
