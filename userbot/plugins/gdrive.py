@@ -1622,7 +1622,7 @@ CMD_HELP.update(
         "\n  •  **Function : **remove set parentId from cmd\n>`.gfset put` "
         "\n\n  •  **Syntax : **`.gdown <gdrive File-Link>`\
         \n  •  **Function : **G-Drive File Downloader Plugin For Userbot. only gdrive files are supported now"
-        "\nUse flag `-u` to directly upload to telegram in `.gdl` command"
+        "\nUse flag `-u` to directly upload to telegram in `.gdown` command"
         "\n\n  •  **Syntax : **`.glist`"
         "\n  •  **Function : **Get list of folders and files with default size 50."
         "\nUse flags `-l range[1-1000]` for limit output."
