@@ -143,7 +143,7 @@ CMD_HELP.update(
     \n\n  •  **Syntax : **`.enai reply`\
     \n  •  **Function : **your bot will auto reply to the tagged user until you stop it by `.remcf`\
     \n\n  •  **Syntax : **`.reai reply`\
-    \n  •  **Function : **disables the lydia(auto reply )\
+    \n  •  **Function : **disables the lydia(auto reply)\
     \n\n  •  **Syntax : **`.liai`\
     \n  •  **Function : **to list the users to whom you enabled ai(lydia)\
     \n\n  •  **NOTE : **for functioning this plugin you need to set the heroku var\
