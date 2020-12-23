@@ -3,8 +3,7 @@ import asyncio
 import requests
 from telethon import functions
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, CMD_LIST, SUDO_LIST, mention, yaml_format
+from . import CMD_LIST, SUDO_LIST, mention, yaml_format
 
 HELPTYPE = Config.HELP_INLINETYPE or True
 

@@ -1,6 +1,3 @@
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
 # ================= CONSTANT =================
 A = (
     "`▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄ `\n"

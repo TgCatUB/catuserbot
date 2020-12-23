@@ -8,12 +8,44 @@ import os
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from .. import CMD_HELP, process
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
+from . import convert_tosticker, process
 
 
 @bot.on(admin_cmd(pattern="q(?: |$)(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="q(?: |$)(.*)", allow_sudo=True))
+async def stickerchat(catquotes):
+    if catquotes.fwd_from:
+        return
+    reply = await catquotes.get_reply_message()
+    if not reply:
+        await edit_or_reply(
+            catquotes, "`I cant quote the message . reply to a message`"
+        )
+        return
+    fetchmsg = reply.message
+    repliedreply = None
+    if reply.media and reply.media.document.mime_type in ("mp4"):
+        await edit_or_reply(catquotes, "`this format is not supported now`")
+        return
+    catevent = await edit_or_reply(catquotes, "`Making quote...`")
+    user = (
+        await event.client.get_entity(reply.forward.sender)
+        if reply.fwd_from
+        else reply.sender
+    )
+    res, catmsg = await process(fetchmsg, user, catquotes.client, reply, repliedreply)
+    if not res:
+        return
+    outfi = os.path.join("./temp", "sticker.png")
+    catmsg.save(outfi)
+    endfi = convert_tosticker(outfi)
+    await catquotes.client.send_file(catquotes.chat_id, endfi, reply_to=reply)
+    await catevent.delete()
+    os.remove(endfi)
+
+
+@bot.on(admin_cmd(pattern="rq(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="rq(?: |$)(.*)", allow_sudo=True))
 async def stickerchat(catquotes):
     if catquotes.fwd_from:
         return
@@ -37,12 +69,12 @@ async def stickerchat(catquotes):
     res, catmsg = await process(fetchmsg, user, catquotes.client, reply, repliedreply)
     if not res:
         return
-    catmsg.save("./temp/sticker.webp")
-    await catquotes.client.send_file(
-        catquotes.chat_id, "./temp/sticker.webp", reply_to=reply
-    )
+    outfi = os.path.join("./temp", "sticker.png")
+    catmsg.save(outfi)
+    endfi = convert_tosticker(outfi)
+    await catquotes.client.send_file(catquotes.chat_id, endfi, reply_to=reply)
     await catevent.delete()
-    os.remove("./temp/sticker.webp")
+    os.remove(endfi)
 
 
 @bot.on(admin_cmd(pattern="qbot(?: |$)(.*)", outgoing=True))

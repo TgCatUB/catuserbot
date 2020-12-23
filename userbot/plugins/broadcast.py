@@ -3,8 +3,7 @@ from asyncio import sleep
 
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-from ..utils import admin_cmd, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, parse_pre
+from . import BOTLOG, BOTLOG_CHATID, parse_pre
 from .sql_helper import broadcast_sql as sql
 
 
@@ -234,7 +233,7 @@ async def catbroadcast_list(event):
                     resultlist += f" 👉 👥 **Group** \n  •  **Name : **{chatinfo.title} \n  •  **id : **`{int(chat)}`\n\n"
             except AttributeError:
                 resultlist += f" 👉 👤 **User** \n  •  **Name : **{chatinfo.first_name} \n  •  **id : **`{int(chat)}`\n\n"
-        except ValueError:
+        except:
             errorlist += f" 👉 __This id {int(chat)} in database probably you may left the chat/channel or may be invalid id.\
                             \nRemove this id from the database by using this command__ `.frmfrom {keyword} {int(chat)}` \n\n"
     finaloutput = resultlist + errorlist

@@ -6,7 +6,6 @@ import os
 import sys
 import traceback
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import *
 
 

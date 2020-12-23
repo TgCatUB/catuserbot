@@ -5,8 +5,7 @@ from random import choice, randint
 from telethon.tl.functions.channels import EditAdminRequest
 from telethon.tl.types import ChatAdminRights
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import ALIVE_NAME, CMD_HELP
+from . import ALIVE_NAME
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -117,6 +116,7 @@ CMD_HELP.update(
         "fake": "__**PLUGIN NAME :** Fake__\
     \n\n📌** CMD ➥** `.scam` <action> <time>\
     \n**USAGE   ➥  **Type .scam (action name) this shows the fake action in the group  the actions are typing ,contact ,game, location, voice, round, video,photo,document, cancel.\
+    \n***NOTE :-** Time use sec, __Example :__ `.scam game 120`  , will do scam for 120s.\
     \n\n📌** CMD ➥** `.prankpromote` reply to user to who you want to prank promote\
     \n**USAGE   ➥  **It promotes him to admin but he will not have any permission to take action that is he can see rection actions but cant take any admin action\
     \n\n📌** CMD ➥** `.padmin`\

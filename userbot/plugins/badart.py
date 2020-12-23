@@ -5,7 +5,6 @@ Plugin for CatUserbot
 """
 import asyncio
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
 from . import mention
 
 # ==================================================================
@@ -144,7 +143,7 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"ohyaah$"))
 @bot.on(sudo_cmd(pattern="ohyaah$", allow_sudo=True))
 async def kakashi(baby):
-    if event.fwd_from:
+    if baby.fwd_from:
         return
     await edit_or_reply(
         baby,

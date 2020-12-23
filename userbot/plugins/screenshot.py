@@ -10,9 +10,6 @@ import requests
 from selenium import webdriver
 from validators.url import url
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
 
 @bot.on(admin_cmd(pattern="ss (.*)"))
 @bot.on(sudo_cmd(pattern="ss (.*)", allow_sudo=True))

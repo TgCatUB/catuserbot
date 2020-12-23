@@ -5,7 +5,7 @@
 import random
 import re
 
-from userbot.utils import admin_cmd
+
 
 
 @bot.on(admin_cmd(pattern=r"scramble(\s+[\S\s]+|$)"))

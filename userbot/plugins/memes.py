@@ -14,8 +14,7 @@ from telethon import functions
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import ChannelParticipantsAdmins, MessageEntityMentionName
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, catmemes, mention
+from . import catmemes, mention
 
 
 async def get_user(event):

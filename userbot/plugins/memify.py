@@ -6,9 +6,7 @@ import asyncio
 import os
 import random
 
-from ..utils import admin_cmd, sudo_cmd
 from . import (
-    CMD_HELP,
     LOGS,
     add_frame,
     asciiart,
@@ -50,6 +48,8 @@ font_list = [
 @bot.on(admin_cmd(outgoing=True, pattern="(mmf|mms) ?(.*)"))
 @bot.on(sudo_cmd(pattern="(mmf|mms) ?(.*)", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
     reply = await cat.get_reply_message()
@@ -132,7 +132,7 @@ async def memes(cat):
     else:
         await cat_meeme(top, bottom, CNG_FONTS, meme_file, meme)
     if cmd != "mmf":
-        meme = await convert_tosticker(meme)
+        meme = convert_tosticker(meme)
     await cat.client.send_file(cat.chat_id, meme, reply_to=catid)
     await cat.delete()
     os.remove(meme)
@@ -141,11 +141,16 @@ async def memes(cat):
             os.remove(files)
 
 
-@bot.on(admin_cmd(pattern="cfont (.*)"))
-@bot.on(sudo_cmd(pattern="cfont (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="cfont(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="cfont(?: |$)(.*)", allow_sudo=True))
 async def lang(event):
+    if event.fwd_from:
+        return
     global CNG_FONTS
     input_str = event.pattern_match.group(1)
+    if not input_str:
+        await event.edit(f"**Available Fonts names are here:-**\n\n{FONTS}")
+        return
     if input_str not in font_list:
         catevent = await edit_or_reply(event, "`Give me a correct font name...`")
         await asyncio.sleep(1)
@@ -159,6 +164,8 @@ async def lang(event):
 @bot.on(admin_cmd(outgoing=True, pattern="ascii ?(.*)"))
 @bot.on(sudo_cmd(pattern="ascii ?(.*)", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     catinput = cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
@@ -234,6 +241,8 @@ async def memes(cat):
 @bot.on(admin_cmd(pattern="invert$", outgoing=True))
 @bot.on(sudo_cmd(pattern="invert$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -316,6 +325,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="solarize$"))
 @bot.on(sudo_cmd(pattern="solarize$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -398,6 +409,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="mirror$"))
 @bot.on(sudo_cmd(pattern="mirror$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -480,6 +493,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="flip$"))
 @bot.on(sudo_cmd(pattern="flip$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -562,6 +577,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="gray$"))
 @bot.on(sudo_cmd(pattern="gray$", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -644,6 +661,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="zoom ?(.*)"))
 @bot.on(sudo_cmd(pattern="zoom ?(.*)", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
@@ -733,6 +752,8 @@ async def memes(cat):
 @bot.on(admin_cmd(outgoing=True, pattern="frame ?(.*)"))
 @bot.on(sudo_cmd(pattern="frame ?(.*)", allow_sudo=True))
 async def memes(cat):
+    if cat.fwd_from:
+        return
     reply = await cat.get_reply_message()
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")

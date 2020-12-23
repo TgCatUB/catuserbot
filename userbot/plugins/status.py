@@ -10,8 +10,6 @@ import urllib
 
 from telethon.tl import functions
 
-from userbot.utils import admin_cmd
-
 OFFLINE_TAG = "[OFFLINE]"
 PROFILE_IMAGE = os.environ.get(
     "DOWNLOAD_PFP_URL_CLOCK", "https://telegra.ph/file/9f0638dbfa028162a8682.jpg"

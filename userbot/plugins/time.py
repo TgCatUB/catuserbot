@@ -8,9 +8,6 @@ from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 LOCATION = Config.TZ

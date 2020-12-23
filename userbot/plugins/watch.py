@@ -6,9 +6,6 @@
 
 from justwatch import JustWatch, justwatchapi
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
 justwatchapi.__dict__["HEADER"] = {
     "User-Agent": "JustWatch client (github.com/dawoudt/JustWatchAPI)"
 }

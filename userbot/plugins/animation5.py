@@ -2,9 +2,6 @@
 
 import asyncio
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
 
 @bot.on(admin_cmd(pattern="thinking$"))
 @bot.on(sudo_cmd(pattern="thinking$", allow_sudo=True))

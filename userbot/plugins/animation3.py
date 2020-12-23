@@ -1,8 +1,7 @@
 import asyncio
 from collections import deque
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP, mention
+from . import mention
 
 
 @bot.on(admin_cmd(pattern=r"star$", outgoing=True))
@@ -71,8 +70,8 @@ async def _(event):
         await event.edit(animation_chars[i % 12])
 
 
-@bot.on(admin_cmd(pattern=r"dump$", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"dump$", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"dump ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"dump ?(.*)", allow_sudo=True))
 async def _(message):
     if message.fwd_from:
         return

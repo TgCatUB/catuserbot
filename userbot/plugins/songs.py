@@ -12,17 +12,9 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import (
-    CMD_HELP,
-    hmention,
-    name_dl,
-    reply_id,
-    runcmd,
-    song_dl,
-    video_dl,
-    yt_search,
-)
+from . import hmention, name_dl, runcmd, song_dl, video_dl
+from . import yt_search as yt_search_no
+from . import yt_search_api
 
 # =========================================================== #
 #                           STRINGS                           #
@@ -39,6 +31,8 @@ SONGBOT_BLOCKED_STRING = "<code>Please unblock @songdl_bot and try again</code>"
 @bot.on(admin_cmd(pattern="(song|song320)($| (.*))"))
 @bot.on(sudo_cmd(pattern="(song|song320)($| (.*))", allow_sudo=True))
 async def _(event):
+    if event.fwd_from:
+        return
     reply_to_id = await reply_id(event)
     reply = await event.get_reply_message()
     if event.pattern_match.group(2):
@@ -183,6 +177,20 @@ async def _(event):
     for files in (catthumb, vsong_file):
         if files and os.path.exists(files):
             os.remove(files)
+
+
+async def yt_search(cat):
+    videol = None
+    try:
+        if Config.YOUTUBE_API_KEY:
+            vi = await yt_search_api(cat)
+            video = f"https://youtu.be/{vi[0]['id']['videoId']}"
+    except:
+        pass
+    if videol is None:
+        vi = await yt_search_no(cat)
+        video = vi[0]
+    return video
 
 
 @bot.on(admin_cmd(pattern="song2 (.*)"))

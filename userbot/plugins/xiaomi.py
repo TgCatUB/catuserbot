@@ -5,9 +5,6 @@
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import CMD_HELP
-
 
 @bot.on(admin_cmd(pattern="firmware(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="firmware(?: |$)(.*)", allow_sudo=True))

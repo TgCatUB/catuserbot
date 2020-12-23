@@ -173,6 +173,7 @@ async def reparse(event):
     raise events.StopPropagation
 
 
+@bot.on(events.MessageEdited(outgoing=True))
 @bot.on(events.NewMessage(outgoing=True))
 async def mention(event):
     newstr = event.text

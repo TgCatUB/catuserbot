@@ -13,9 +13,6 @@ from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
 from telethon.tl.functions.photos import DeletePhotosRequest, GetUserPhotosRequest
 from telethon.tl.types import Channel, Chat, InputPhoto, User
 
-from userbot import CMD_HELP
-from userbot.utils import admin_cmd
-
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
 PP_CHANGED = "```Profile picture changed successfully.```"

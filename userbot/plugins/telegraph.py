@@ -6,8 +6,7 @@ from datetime import datetime
 from PIL import Image
 from telegraph import Telegraph, exceptions, upload_file
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP, mention
+from . import BOTLOG, BOTLOG_CHATID, mention
 
 telegraph = Telegraph()
 r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
@@ -107,9 +106,9 @@ def resize_image(image):
 CMD_HELP.update(
     {
         "telegraph": "__**PLUGIN NAME :** Telegraph__\
-     \n\n📌** CMD ➥** `.telegraph media`\
+     \n\n📌** CMD ➥** `.telegraph media` < or > `.tgm`\
      \n**USAGE   ➥  **Reply to any image or video to upload it to telgraph(video must be less than 5mb)\
-     \n\n📌** CMD ➥** `.telegraph text`\
+     \n\n📌** CMD ➥** `.telegraph text` < or > `.tgt`\
      \n**USAGE   ➥  **Reply to any text file or any message to paste it to telegraph\
     "
     }

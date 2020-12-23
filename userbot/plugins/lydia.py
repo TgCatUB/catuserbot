@@ -7,8 +7,7 @@ from time import time
 from coffeehouse.api import API
 from coffeehouse.lydia import LydiaAI
 
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-from . import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from . import BOTLOG, BOTLOG_CHATID
 from .sql_helper.lydia_ai_sql import add_s, get_all_s, get_s, remove_s
 
 if Config.LYDIA_API_KEY:
@@ -142,7 +141,7 @@ CMD_HELP.update(
     {
         "lydia": "__**PLUGIN NAME :** Lydia__\
     \n\n📌** CMD ➥** `.enai` <reply to user>\
-    \n**USAGE   ➥  **your bot will auto reply to the tagged user until you stops it by `.remcf`\
+    \n**USAGE   ➥  **your bot will auto reply to the tagged user until you stops it by `.reai`\
     \n\n📌** CMD ➥** `.reai`<replay to user > \
     \n**USAGE   ➥  **reply to the user to who you want to disable the lydia\
     \n\n📌** CMD ➥** `.liai` \

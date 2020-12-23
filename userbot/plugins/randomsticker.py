@@ -8,9 +8,6 @@ import requests
 from PIL import Image
 from telethon import functions, types, utils
 
-from ..utils import admin_cmd, sudo_cmd
-from . import CMD_HELP
-
 BASE_URL = "https://headp.at/pats/{}"
 PAT_IMAGE = "pat.webp"
 

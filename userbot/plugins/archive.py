@@ -1,8 +1,4 @@
-"""
-usage: reply with file : .rar , .7z  create archived file
-unzip usage: reply with zipped file .unzipper
-Coded by @furki
-"""
+# by @mrconfused and some part by @furki
 
 import asyncio
 import os
@@ -18,10 +14,9 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, progress, sudo_cmd
+from . import progress
 
-thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 
 
 @bot.on(admin_cmd(pattern=("zip ?(.*)")))

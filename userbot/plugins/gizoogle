@@ -1,7 +1,7 @@
 import re
 import bs4
 import requests
-from userbot.utils import admin_cmd
+
 
 @bot.on(admin_cmd(pattern="giz ?(.*)"))
 async def gizoogle(event):

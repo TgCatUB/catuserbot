@@ -7,9 +7,6 @@ By: @Zero_cool7870
 import os
 import subprocess
 
-from .. import CMD_HELP
-from ..utils import admin_cmd, edit_or_reply, sudo_cmd
-
 location = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
 
 
