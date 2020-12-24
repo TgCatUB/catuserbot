@@ -23,7 +23,7 @@ jobs:
           isort .
       - name: lint with black
         run: |
-          black .
+          black --exclude "exampleconfig.py" .
       # commit changes
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
