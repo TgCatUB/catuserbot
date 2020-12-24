@@ -977,8 +977,8 @@ async def lists(gdrive):
     if query == "":
         query = "Not specified"
     await edit_or_reply(
-            gdrive, "**Google Drive Query**:\n" f"`{query}`\n\n**Results**\n\n{message}"
-        )
+        gdrive, "**Google Drive Query**:\n" f"`{query}`\n\n**Results**\n\n{message}"
+    )
 
 
 @bot.on(
