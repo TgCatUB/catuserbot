@@ -150,8 +150,8 @@ async def _(event):
         return
     event = await edit_or_reply(event, "tmoon")
     animation_interval = 0.1
-    animation_ttl = range(117)
-    await event.edit("tmoon")
+    animation_ttl = range(96)
+    await event.edit("tmoon..")
     animation_chars = [
         "🌗",
         "🌘",
