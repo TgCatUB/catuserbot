@@ -2,15 +2,18 @@ from sample_config import Config
 
 class Development(Config):
   #get this values from the my.telegram.org
-  APP_ID = 
-  API_HASH = 
+  APP_ID =  your value
+  API_HASH = "your value"
   # the name to display in your alive message
-  ALIVE_NAME = 
+  ALIVE_NAME = "Your value"
+  # create any PostgreSQL database (i recommend to use elephantsql) and paste that link here
+  DB_URI = "Your value"
   #After cloning the repo and installing requirements do python3 telesetup.py an fill that value with this
-  STRING_SESSION = 
+  STRING_SESSION = "Your value"
   #create a new bot in @botfather and fill the following vales with bottoken and username respectively
-  TG_BOT_TOKEN_BF_HER =
-  TG_BOT_USER_NAME_BF_HER = 
+  TG_BOT_TOKEN_BF_HER = "Your value"
+  TG_BOT_USER_NAME_BF_HER = "Your value"
   #create a private group and a rose bot to it and type /id and paste that id here (replace that -100 with that group id)
   PRIVATE_GROUP_BOT_API_ID = -100
+  
   
