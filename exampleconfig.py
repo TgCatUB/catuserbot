@@ -1,5 +1,6 @@
 from sample_config import Config
 
+
 class Development(Config):
   #get this values from the my.telegram.org
   APP_ID = Your value
