@@ -1,8 +1,10 @@
 import base64
+
 from telethon import events, functions, types
 from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import ChatBannedRights
+
 from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 
 
