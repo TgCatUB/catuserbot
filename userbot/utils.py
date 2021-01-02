@@ -33,7 +33,7 @@ def load_module(shortname):
     else:
         import userbot.utils
 
-        from .helpers.tools import media_type
+        from .helpers.tools import media_type, unsavegif
         from .helpers.utils import install_pip, parse_pre, reply_id, run_async, run_sync
         from .managers import edit_delete, edit_or_reply
 
@@ -51,6 +51,7 @@ def load_module(shortname):
         mod.run_async = run_async
         mod.admin_cmd = admin_cmd
         mod.parse_pre = parse_pre
+        mod.unsavegif = unsavegif
         mod.media_type = media_type
         mod.edit_delete = edit_delete
         mod.install_pip = install_pip
