@@ -151,7 +151,7 @@ async def newpacksticker(
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     if not pkang:
-        return otherpack,packname,emoji
+        return otherpack, packname, emoji
     else:
         return pack, packname
 
@@ -222,7 +222,7 @@ async def add_to_pack(
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     if not pkang:
-        return packname , emoji
+        return packname, emoji
     else:
         return pack, packname
 
@@ -318,7 +318,7 @@ async def kang(args):
             not in htmlstr
         ):
             async with args.client.conversation("Stickers") as conv:
-                otherpack,packname,emoji = await add_to_pack(
+                otherpack, packname, emoji = await add_to_pack(
                     catevent,
                     conv,
                     args,
@@ -350,7 +350,7 @@ async def kang(args):
         else:
             await catevent.edit("`Brewing a new Pack...`")
             async with args.client.conversation("Stickers") as conv:
-                packname , emoji = await newpacksticker(
+                packname, emoji = await newpacksticker(
                     catevent,
                     conv,
                     cmd,
@@ -363,12 +363,12 @@ async def kang(args):
                     is_anim,
                 )
             await edit_delete(
-                    catevent,
-                    f"`Sticker kanged successfully!\
+                catevent,
+                f"`Sticker kanged successfully!\
                     \nYour Pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
-                    parse_mode="md",
-                    time=10,
-                )
+                parse_mode="md",
+                time=10,
+            )
 
 
 @bot.on(admin_cmd(pattern="pkang ?(.*)", outgoing=True))
