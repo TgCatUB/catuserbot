@@ -76,7 +76,7 @@ async def _(event):
             await conv.send_message("/start")
             await conv.get_response()
             await conv.send_message(reply_message)
-            await conv.get_response()
+            #await conv.get_response()
             pic = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
