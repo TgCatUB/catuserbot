@@ -186,7 +186,7 @@ async def set_default_city(city):
     fullc_n = c_n[f"{country}"]
     await edit_or_reply(city, f"`Set default city as {cityname}, {fullc_n}.`")
 
-    
+
 @bot.on(admin_cmd(pattern="weather ?(.*)"))
 @bot.on(sudo_cmd(pattern="weather ?(.*)", allow_sudo=True))
 async def _(event):
@@ -196,10 +196,10 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     if not input_str:
         input_str = DEFCITY
-    output = requests.get(f'https://wttr.in/{input_str}?mnTC0&lang=en').text
-    await edit_or_reply(event, output , parse_mode=parse_pre)
-    
-    
+    output = requests.get(f"https://wttr.in/{input_str}?mnTC0&lang=en").text
+    await edit_or_reply(event, output, parse_mode=parse_pre)
+
+
 @bot.on(admin_cmd(pattern="wttr ?(.*)"))
 @bot.on(sudo_cmd(pattern="wttr ?(.*)", allow_sudo=True))
 async def _(event):
@@ -223,7 +223,6 @@ async def _(event):
     except:
         pass
 
-    
 
 CMD_HELP.update(
     {
