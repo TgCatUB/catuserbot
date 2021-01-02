@@ -31,13 +31,13 @@ async def spammer(event):
             else:
                 await event.client.send_message(event.chat_id, spam_message)
             await asyncio.sleep(sleeptimet)
-    elif reply_to_id.text and event.reply_to_msg_id:
+    elif event.reply_to_msg_id and sandy.text:
         spam_message = reply_to_id.text
         await event.delete()
         for _ in range(counter):
             await event.client.send_message(event.chat_id, spam_message)
             await asyncio.sleep(sleeptimet)
-    elif reply_to_id.media:
+    elif event.reply_to_msg_id and sandy.media:
         for _ in range(counter):
             sandy = await event.client.send_file(event.chat_id, sandy)
             await unsavegif(event, sandy)
