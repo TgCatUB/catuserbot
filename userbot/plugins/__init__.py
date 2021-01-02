@@ -12,7 +12,6 @@ from validators.url import url
 from .. import *
 from ..Config import Config
 from ..helpers import *
-from ..helpers import functions as catdef
 
 # =================== CONSTANT ===================
 
