@@ -120,23 +120,27 @@ async def unload(event):
     os.remove(path)
     try:
         remove_plugin(shortname)
-        await edit_or_reply(event, f"Unloaded {shortname} successfully")
+        await edit_or_reply(event, f"{shortname} is Uninstalled successfully")
     except Exception as e:
-        await edit_or_reply(event, f"Successfully unload {shortname}\n{str(e)}")
+        await edit_or_reply(event, f"Successfully uninstalled {shortname}\n{str(e)}")
 
 
 CMD_HELP.update(
     {
         "corecmds": """**Plugin : **`corecmds`
 
-  •  **Command : **`install`
+  •  **Command : **`.install`
   •  **Function : **__Reply to any external plugin to install in bot__ 
-  •  **Command : **`load <plugin name>`
+  
+  •  **Command : **`.load <plugin name>`
   •  **Function : **__To load that plugin again__
+  
   •  **Command : **`.send <plugin name>`  
   •  **Function : **__to send any plugin__
+  
   •  **Command : **`.unload <plugin name>`
   •  **Function : **__To stop functioning of that plugin__ 
+  
   •  **Command : **`.uninstall <plugin name>`
   •  **Function : **__To stop functioning of that plugin and remove that plugin from bot__ 
   
