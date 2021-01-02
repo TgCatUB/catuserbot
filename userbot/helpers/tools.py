@@ -1,20 +1,36 @@
+from telethon import functions, types
+
 def media_type(message):
     if message and message.photo:
-        media = "Photo"
+        return "Photo"
     elif message and message.audio:
-        media = "Audio"
+        return "Audio"
     elif message and message.voice:
-        media = "Voice"
+        return "Voice"
     elif message and message.video_note:
-        media = "Round Video"
+        return "Round Video"
     elif message and message.gif:
-        media = "Gif"
+        return "Gif"
     elif message and message.sticker:
-        media = "Sticker"
+        return "Sticker"
     elif message and message.video:
-        media = "Video"
+        return "Video"
     elif message and message.document:
-        media = "Document"
+        return "Document"
     else:
-        media = None
-    return media
+        return None
+
+async def unsavegif(event,sandy)
+    try:
+        await event.client(
+            functions.messages.SaveGifRequest(
+                id=types.InputDocument(
+                            id=sandy.media.document.id,
+                            access_hash=sandy.media.document.access_hash,
+                            file_reference=sandy.media.document.file_reference,
+                        ),
+                        unsave=True,
+                    )
+                )
+    except:
+        pass
