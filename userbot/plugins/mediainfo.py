@@ -5,7 +5,7 @@ import os
 
 from html_telegraph_poster import TelegraphPoster
 
-from ..utils import humanbytes
+from . import humanbytes
 from . import runcmd, yaml_format
 
 
