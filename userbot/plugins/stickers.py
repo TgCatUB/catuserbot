@@ -318,7 +318,7 @@ async def kang(args):
             not in htmlstr
         ):
             async with args.client.conversation("Stickers") as conv:
-                otherpack, packname, emoji = await add_to_pack(
+                packname, emoji = await add_to_pack(
                     catevent,
                     conv,
                     args,
@@ -330,6 +330,28 @@ async def kang(args):
                     stfile,
                     emoji,
                     cmd,
+                )
+            await edit_delete(
+                catevent,
+                f"`Sticker kanged successfully!\
+                    \nYour Pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
+                parse_mode="md",
+                time=10,
+            )
+        else:
+            await catevent.edit("`Brewing a new Pack...`")
+            async with args.client.conversation("Stickers") as conv:
+                otherpack, packname, emoji = await newpacksticker(
+                    catevent,
+                    conv,
+                    cmd,
+                    args,
+                    pack,
+                    packnick,
+                    stfile,
+                    emoji,
+                    packname,
+                    is_anim,
                 )
             if otherpack:
                 await edit_delete(
@@ -347,28 +369,6 @@ async def kang(args):
                     parse_mode="md",
                     time=10,
                 )
-        else:
-            await catevent.edit("`Brewing a new Pack...`")
-            async with args.client.conversation("Stickers") as conv:
-                packname, emoji = await newpacksticker(
-                    catevent,
-                    conv,
-                    cmd,
-                    args,
-                    pack,
-                    packnick,
-                    stfile,
-                    emoji,
-                    packname,
-                    is_anim,
-                )
-            await edit_delete(
-                catevent,
-                f"`Sticker kanged successfully!\
-                    \nYour Pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
-                parse_mode="md",
-                time=10,
-            )
 
 
 @bot.on(admin_cmd(pattern="pkang ?(.*)", outgoing=True))
