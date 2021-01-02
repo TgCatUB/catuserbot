@@ -11,7 +11,7 @@ from . import BOTLOG, BOTLOG_CHATID
 async def spammer(event):
     if event.fwd_from:
         return
-    reply_to_id = await reply_id(e)
+    reply_to_id = await reply_id(event)
     sandy = await event.get_reply_message()
     hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
