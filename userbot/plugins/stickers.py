@@ -151,22 +151,7 @@ async def newpacksticker(
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     if not pkang:
-        if otherpack:
-            await edit_delete(
-                catevent,
-                f"`Sticker kanged to a Different Pack !\
-                \nAnd Newly created pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
-                parse_mode="md",
-                time=10,
-            )
-        else:
-            await edit_delete(
-                catevent,
-                f"`Sticker kanged successfully!\
-                \nYour Pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
-                parse_mode="md",
-                time=10,
-            )
+        return otherpack,packname,emoji
     else:
         return pack, packname
 
@@ -237,13 +222,7 @@ async def add_to_pack(
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     if not pkang:
-        await edit_delete(
-            catevent,
-            f"`Sticker kanged successfully!\
-             \nYour Pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
-            parse_mode="md",
-            time=10,
-        )
+        return packname , emoji
     else:
         return pack, packname
 
@@ -338,7 +317,7 @@ async def kang(args):
             "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
             not in htmlstr
         ):
-            async with args.client.conversation("Stickers") as conv:
+            otherpack,packname,emoji = async with args.client.conversation("Stickers") as conv:
                 await add_to_pack(
                     catevent,
                     conv,
@@ -352,10 +331,26 @@ async def kang(args):
                     emoji,
                     cmd,
                 )
+            if otherpack:
+                await edit_delete(
+                    catevent,
+                    f"`Sticker kanged to a Different Pack !\
+                    \nAnd Newly created pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
+                    parse_mode="md",
+                    time=10,
+                )
+            else:
+                await edit_delete(
+                    catevent,
+                    f"`Sticker kanged successfully!\
+                    \nYour Pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
+                    parse_mode="md",
+                    time=10,
+                )
         else:
             await catevent.edit("`Brewing a new Pack...`")
             async with args.client.conversation("Stickers") as conv:
-                await newpacksticker(
+                packname , emoji = await newpacksticker(
                     catevent,
                     conv,
                     cmd,
@@ -366,6 +361,13 @@ async def kang(args):
                     emoji,
                     packname,
                     is_anim,
+                )
+            await edit_delete(
+                    catevent,
+                    f"`Sticker kanged successfully!\
+                    \nYour Pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
+                    parse_mode="md",
+                    time=10,
                 )
 
 
