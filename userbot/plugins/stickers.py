@@ -317,8 +317,8 @@ async def kang(args):
             "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
             not in htmlstr
         ):
-            otherpack,packname,emoji = async with args.client.conversation("Stickers") as conv:
-                await add_to_pack(
+            async with args.client.conversation("Stickers") as conv:
+                otherpack,packname,emoji = await add_to_pack(
                     catevent,
                     conv,
                     args,
