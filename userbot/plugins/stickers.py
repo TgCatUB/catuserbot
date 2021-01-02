@@ -188,7 +188,6 @@ async def add_to_pack(
     await conv.send_message("/addsticker")
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
-    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     await conv.send_message(packname)
     x = await conv.get_response()
     while ("50" in x.text) or ("120" in x.text):
@@ -234,11 +233,6 @@ async def add_to_pack(
     await conv.send_message(emoji)
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
-    try:
-        cat = Get(cat)
-        await catevent.client(cat)
-    except BaseException:
-        pass
     await conv.send_message("/done")
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
