@@ -20,7 +20,7 @@ def media_type(message):
     else:
         return None
 
-async def unsavegif(event,sandy)
+async def unsavegif(event,sandy):
     try:
         await event.client(
             functions.messages.SaveGifRequest(
