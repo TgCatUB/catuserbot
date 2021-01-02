@@ -232,7 +232,7 @@ CMD_HELP.update(
         \n\n  •  **Syntax : **`.setcity <city> or <country name/code>`\
         \n  •  **Function : **__Sets your default city so you can just use .weather or .climate.__\
         \n\n  •  **Syntax : **`.weather <city>`\
-        \n  •  **Function : **__Gets the simple climate/weather information a city. By default it is Delhi, change it by setcity c,d__\
+        \n  •  **Function : **__Gets the simple climate/weather information a city. By default it is Delhi, change it by setcity cmd__\
         \n\n  •  **Syntax : **`.wttr <city> `\
         \n  •  **Function : **__sends you the weather information for upcoming 3 days from today.__"
     }
