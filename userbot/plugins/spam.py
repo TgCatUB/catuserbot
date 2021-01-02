@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import os
 
 from telethon import functions, types
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
@@ -17,9 +18,11 @@ async def spammer(event):
     hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
     counter = int(cat[0])
-    if counter > 50:
+    if counter>50:
+        sleeptimet = 0.5
         sleeptimem = 1
     else:
+        sleeptimet = 0.1
         sleeptimem = 0.3
     if len(cat) == 2:
         spam_message = str(("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)[1])
@@ -29,31 +32,19 @@ async def spammer(event):
                 await reply_to_id.reply(spam_message)
             else:
                 await event.client.send_message(event.chat_id, spam_message)
-            await asyncio.sleep(sleeptime)
+            await asyncio.sleep(sleeptimet)
     elif reply_to_id.text and event.reply_to_msg_id:
         spam_message = reply_to_id.text
         await event.delete()
         for _ in range(counter):
             await event.client.send_message(event.chat_id, spam_message)
-            await asyncio.sleep(sleeptime)
+            await asyncio.sleep(sleeptimet)
     elif reply_to_id.media:
         for _ in range(counter):
-            sandy = await event.client.send_file(event.chat_id, sandy)
-            try:
-                await event.client(
-                    functions.messages.SaveGifRequest(
-                        id=types.InputDocument(
-                            id=sandy.media.document.id,
-                            access_hash=sandy.media.document.access_hash,
-                            file_reference=sandy.media.document.file_reference,
-                        ),
-                        unsave=True,
-                    )
-                )
-            except:
-                pass
-            await asyncio.sleep(sleeptimem)
-        try:
+                sandy = await event.client.send_file(event.chat_id, sandy)
+                await unsavegif(event, sandy)
+                await asyncio.sleep(sleeptimem)
+        try: 
             hmm = Get(hmm)
             await event.client(hmm)
         except BaseException:
@@ -71,36 +62,26 @@ async def spammer(event):
                     "#SPAM\n"
                     + f"Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) with {counter} times with below message",
                 )
-            sandy = await event.client.send_file(BOTLOG_CHATID, sandy)
-            try:
-                await event.client(
-                    functions.messages.SaveGifRequest(
-                        id=types.InputDocument(
-                            id=sandy.media.document.id,
-                            access_hash=sandy.media.document.access_hash,
-                            file_reference=sandy.media.document.file_reference,
-                        ),
-                        unsave=True,
-                    )
-                )
-            except:
-                pass
+            sandy = await event.client.send_file(
+                BOTLOG_CHATID, sandy
+            )
+            await unsavegif(event, sandy)
         return
     if BOTLOG:
         if event.is_private:
-            await event.client.send_message(
-                BOTLOG_CHATID,
-                "#SPAM\n"
-                + f"Spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with {counter} messages of \n"
-                + f"`{spam_message}`",
-            )
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    "#SPAM\n"
+                    + f"Spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with {counter} messages of \n"
+                    + f"`{spam_message}`",
+                )
         else:
-            await event.client.send_message(
-                BOTLOG_CHATID,
-                "#SPAM\n"
-                + f"Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat  with {counter} messages of \n"
-                + f"`{spam_message}`",
-            )
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    "#SPAM\n"
+                    + f"Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat  with {counter} messages of \n"
+                    + f"`{spam_message}`",
+                )
 
 
 @bot.on(admin_cmd("cspam (.*)"))
