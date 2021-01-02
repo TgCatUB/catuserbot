@@ -7,7 +7,7 @@ from ..utils import load_module, remove_plugin
 from . import ALIVE_NAME
 
 DELETE_TIMEOUT = 5
-thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY , "thumb_image.jpg")
+thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
 
@@ -18,11 +18,9 @@ async def install(event):
         return
     if event.reply_to_msg_id:
         try:
-            downloaded_file_name = (
-                await event.client.download_media(
-                    await event.get_reply_message(),
-                    "userbot/plugins/", 
-                )
+            downloaded_file_name = await event.client.download_media(
+                await event.get_reply_message(),
+                "userbot/plugins/",
             )
             if "(" not in downloaded_file_name:
                 path1 = Path(downloaded_file_name)
@@ -30,7 +28,7 @@ async def install(event):
                 load_module(shortname.replace(".py", ""))
                 await edit_or_reply(
                     event,
-                    f"Installed Plugin `{os.path.basename(downloaded_file_name)}`"
+                    f"Installed Plugin `{os.path.basename(downloaded_file_name)}`",
                 )
             else:
                 os.remove(downloaded_file_name)
@@ -42,6 +40,7 @@ async def install(event):
             os.remove(downloaded_file_name)
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
+
 
 @bot.on(admin_cmd(pattern=r"load (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"load (.*)", allow_sudo=True))
@@ -61,7 +60,8 @@ async def load(event):
             event,
             f"Could not load {shortname} because of the following error.\n{str(e)}",
         )
-        
+
+
 @bot.on(admin_cmd(pattern=r"send (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"send (.*)", allow_sudo=True))
 async def send(event):
@@ -75,7 +75,7 @@ async def send(event):
     the_plugin_file = f"./userbot/plugins/{input_str}.py"
     if os.path.exists(the_plugin_file):
         start = datetime.now()
-        caat = await event.client.send_file( 
+        caat = await event.client.send_file(
             event.chat_id,
             the_plugin_file,
             force_document=True,
@@ -103,9 +103,8 @@ async def unload(event):
         remove_plugin(shortname)
         await edit_or_reply(event, f"Unloaded {shortname} successfully")
     except Exception as e:
-        await edit_or_reply(
-            event, f"Successfully unload {shortname}\n{str(e)}"
-        )
+        await edit_or_reply(event, f"Successfully unload {shortname}\n{str(e)}")
+
 
 @bot.on(admin_cmd(pattern=r"uninstall (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern=r"uninstall (.*)", allow_sudo=True))
@@ -115,16 +114,15 @@ async def unload(event):
     shortname = event.pattern_match.group(1)
     path = f"userbot/plugins/{shortname}.py"
     if not os.path.exists(shortname):
-        return await edit_delete(event,f"There is no plugin with path {path} to uninstall it")
+        return await edit_delete(
+            event, f"There is no plugin with path {path} to uninstall it"
+        )
     os.remove(path)
     try:
         remove_plugin(shortname)
         await edit_or_reply(event, f"Unloaded {shortname} successfully")
     except Exception as e:
-        await edit_or_reply(
-            event, f"Successfully unload {shortname}\n{str(e)}"
-        )        
-
+        await edit_or_reply(event, f"Successfully unload {shortname}\n{str(e)}")
 
 
 CMD_HELP.update(
