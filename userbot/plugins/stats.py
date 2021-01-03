@@ -83,7 +83,10 @@ async def stats(event):
         output += f"<b>{k} .)</b>  <a href='https://t.me/c/{i[1]}/1'>{i[0]}</a>\n"
     stop_time = time.time() - start_time
     output += f"<b>Time Taken : </b> {stop_time:.02f}s \n"
-    await edit_or_reply(catevent, output, parse_mode="html")
+    try:
+        await catevent.edit( output, parse_mode="html")
+    except:
+        await edit_or_reply(catevent ,output, parse_mode="html",caption="The list of channels in which you are")
 
 
 def inline_mention(user):
