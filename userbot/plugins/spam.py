@@ -91,16 +91,16 @@ async def stickerpack_spam(event):
     reply = await event.get_reply_message()
     if not reply or media_type(reply) is None or media_type(reply) != "Sticker":
         return await edit_delete(
-            event, "reply to any sticker to send all stickers in that pack"
+            event, "`reply to any sticker to send all stickers in that pack`"
         )
     hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     try:
         stickerset_attr = reply.document.attributes[1]
         catevent = await edit_or_reply(
-            event, "Fetching details of the sticker pack, please wait.."
+            event, "`Fetching details of the sticker pack, please wait..`"
         )
     except BaseException:
-        await edit_delete(event, "This is not a sticker. Reply to a sticker.", 5)
+        await edit_delete(event, "`This is not a sticker. Reply to a sticker.`", 5)
         return
     try:
         get_stickerset = await event.client(
@@ -114,7 +114,7 @@ async def stickerpack_spam(event):
     except:
         return await edit_delete(
             catevent,
-            "I guess this sticker is not part of any pack so i cant kang this sticker pack try kang for this sticker",
+            "`I guess this sticker is not part of any pack so i cant kang this sticker pack try kang for this sticker`",
         )
     try:
         hmm = Get(hmm)
@@ -135,13 +135,13 @@ async def stickerpack_spam(event):
         if event.is_private:
             await event.client.send_message(
                 BOTLOG_CHATID,
-                "#SPAM\n"
+                "#SPSPAM\n"
                 + f"Sticker Pack Spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with pack ",
             )
         else:
             await event.client.send_message(
                 BOTLOG_CHATID,
-                "#SPAM\n"
+                "#SPSPAM\n"
                 + f"Sticker Pack Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with pack",
             )
         await event.client.send_file(BOTLOG_CHATID, reqd_sticker_set.documents[0])
