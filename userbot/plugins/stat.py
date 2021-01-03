@@ -1,5 +1,3 @@
-"""Count the Number of Dialogs you have in your Telegram Account
-Syntax: .stat"""
 import time
 
 from telethon.events import NewMessage
@@ -9,10 +7,7 @@ from telethon.tl.types import Channel, Chat, User
 
 @bot.on(admin_cmd(pattern="stat$"))
 @bot.on(sudo_cmd(pattern="stat$", allow_sudo=True))
-async def stats(
-    event: NewMessage.Event,
-) -> None:  # pylint: disable = R0912, R0914, R0915
-    """Command to get stats about the account"""
+async def stats(event):
     cat = await edit_or_reply(event, "`Collecting stats, Wait man`")
     start_time = time.time()
     private_chats = 0
@@ -29,8 +24,6 @@ async def stats(
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if isinstance(entity, Channel):
-            # participants_count = (await event.get_participants(dialog,
-            # limit=0)).total
             if entity.broadcast:
                 broadcast_channels += 1
                 if entity.creator or entity.admin_rights:
@@ -39,11 +32,7 @@ async def stats(
                     creator_in_channels += 1
             elif entity.megagroup:
                 groups += 1
-                # if participants_count > largest_group_member_count:
-                #     largest_group_member_count = participants_count
                 if entity.creator or entity.admin_rights:
-                    # if participants_count > largest_group_with_admin:
-                    #     largest_group_with_admin = participants_count
                     admin_in_groups += 1
                 if entity.creator:
                     creator_in_groups += 1
@@ -79,12 +68,6 @@ async def stats(
     response += f"**Unread Mentions:** {unread_mentions} \n\n"
     response += f"📌 __It Took:__ {stop_time:.02f}s \n"
     await cat.edit(response)
-
-
-def make_mention(user):
-    if user.username:
-        return f"@{user.username}"
-    return inline_mention(user)
 
 
 def inline_mention(user):
