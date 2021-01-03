@@ -82,7 +82,7 @@ async def stats(event):
     for k, i in enumerate(hi, start=1):
         output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
     stop_time = time.time() - start_time
-    output += f"**Time Taken : ** {stop_time:.02f}s \n"
+    output += f"\n**Time Taken : ** {stop_time:.02f}s"
     try:
         await catevent.edit(output)
     except:
@@ -91,6 +91,70 @@ async def stats(event):
             output,
             caption="The list of channels in which you are",
         )
+
+@bot.on(admin_cmd(pattern="mygroups$"))
+@bot.on(sudo_cmd(pattern="mygroups$", allow_sudo=True))
+async def stats(event):
+    catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
+    start_time = time.time()
+    hi = []
+    async for dialog in event.client.iter_dialogs():
+        entity = dialog.entity
+        if isinstance(entity, Channel) and entity.broadcast:
+            continue
+        elif (
+            isinstance(entity, Channel)
+            and entity.megagroup
+            or not isinstance(entity, Channel)
+            and not isinstance(entity, User)
+            and isinstance(entity, Chat)
+        ):
+           hi.append([entity.title, entity.id])
+    output = "**The groups you are in are: **\n\n"
+    for k, i in enumerate(hi, start=1):
+        output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
+    stop_time = time.time() - start_time
+    output += f"\n**Time Taken : ** {stop_time:.02f}s"
+    try:
+        await catevent.edit(output)
+    except:
+        await edit_or_reply(
+            catevent,
+            output,
+            caption="The list of groups in which you are",
+        )        
+
+@bot.on(admin_cmd(pattern="mygroups$"))
+@bot.on(sudo_cmd(pattern="mygroups$", allow_sudo=True))
+async def stats(event):
+    catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
+    start_time = time.time()
+    hi = []
+    async for dialog in event.client.iter_dialogs():
+        entity = dialog.entity
+        if isinstance(entity, Channel) and entity.broadcast:
+            continue
+        elif (
+            isinstance(entity, Channel)
+            and entity.megagroup
+            or not isinstance(entity, Channel)
+            and not isinstance(entity, User)
+            and isinstance(entity, Chat)
+        ):
+           hi.append([entity.title, entity.id])
+    output = "**The groups you are in are: **\n\n"
+    for k, i in enumerate(hi, start=1):
+        output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
+    stop_time = time.time() - start_time
+    output += f"\n**Time Taken : ** {stop_time:.02f}s"
+    try:
+        await catevent.edit(output)
+    except:
+        await edit_or_reply(
+            catevent,
+            output,
+            caption="The list of groups in which you are",
+        )        
 
 
 def inline_mention(user):
