@@ -84,9 +84,14 @@ async def stats(event):
     stop_time = time.time() - start_time
     output += f"<b>Time Taken : </b> {stop_time:.02f}s \n"
     try:
-        await catevent.edit( output, parse_mode="html")
+        await catevent.edit(output, parse_mode="html")
     except:
-        await edit_or_reply(catevent ,output, parse_mode="html",caption="The list of channels in which you are")
+        await edit_or_reply(
+            catevent,
+            output,
+            parse_mode="html",
+            caption="The list of channels in which you are",
+        )
 
 
 def inline_mention(user):
