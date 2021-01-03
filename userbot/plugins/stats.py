@@ -67,22 +67,24 @@ async def stats(event):
     response += f"📌 __It Took:__ {stop_time:.02f}s \n"
     await cat.edit(response)
 
+
 @bot.on(admin_cmd(pattern="mychannels$"))
 @bot.on(sudo_cmd(pattern="mychannels$", allow_sudo=True))
 async def stats(event):
-    catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
+    await edit_or_reply(event, "`Collecting stats, Wait man`")
     start_time = time.time()
     hi = []
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if isinstance(entity, Channel) and entity.broadcast:
-            hi.append([entity.title , entity.id])
+            hi.append([entity.title, entity.id])
     output = "<b>The channels you are in are: </b>\n\n"
     for k, i in enumerate(hi, start=1):
         output += f"<b>{k} .)</b>  <a href='https://t.me/c/{i[1]}/1'>{i[0]}</a>\n"
     stop_time = time.time() - start_time
     output += f"<b>Time Taken : </b> {stop_time:.02f}s \n"
-    await edit_or_reply(catevenet, output , parse_mode='html')
+    await edit_or_reply(catevenet, output, parse_mode="html")
+
 
 def inline_mention(user):
     full_name = user_full_name(user) or "No Name"
