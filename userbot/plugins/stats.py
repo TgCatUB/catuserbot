@@ -67,8 +67,8 @@ async def stats(event):
     response += f"📌 __It Took:__ {stop_time:.02f}s \n"
     await cat.edit(response)
 
-@bot.on(admin_cmd(pattern="stats$"))
-@bot.on(sudo_cmd(pattern="stats$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="mychannels$"))
+@bot.on(sudo_cmd(pattern="mychannels$", allow_sudo=True))
 async def stats(event):
     catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
     start_time = time.time()
