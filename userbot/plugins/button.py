@@ -46,7 +46,7 @@ async def _(event):
             prev = match.start(1) - 1
     else:
         note_data += markdown_note[prev:]
-    message_text = note_data.strip()
+    message_text = note_data.strip() or None
     tl_ib_buttons = build_keyboard(buttons)
     tgbot_reply_message = None
     if reply_message and reply_message.media:
@@ -58,7 +58,6 @@ async def _(event):
         file=tgbot_reply_message,
         link_preview=False,
         buttons=tl_ib_buttons,
-        silent=True,
     )
     await event.delete()
     if tgbot_reply_message:
@@ -106,7 +105,7 @@ CMD_HELP.update(
         "button": f"**Plugin : **`button`\
     \n\n**Button post helper**\
     \n  •  **Syntax : **`.cbutton`\
-    \n  •  **Usage :** __For working of this you need your bot({BOT_USERNAME}) in the group/channel you are using and Buttons must be in the format as [Name on button]<buttonurl:link you want to open> and markdown is Default to html__\
+    \n  •  **Function :** __For working of this you need your bot({BOT_USERNAME}) in the group/channel you are using and Buttons must be in the format as [Name on button]<buttonurl:link you want to open> and markdown is Default to html__\
     \n  •  **Example :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
     \n\n  •  **Syntax : **`.ibutton`\
     \n  •  **Function :** __Buttons must be in the format as [Name on button]<buttonurl:link you want to open>__\
