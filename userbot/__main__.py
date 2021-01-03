@@ -58,7 +58,7 @@ async def startupmessage():
         \nIf you need assistance, **head to https://t.me/catuserbot_support",
                 link_preview=False,
             )
-    except Exception as e:
+    except Exception:
         pass
 
 
