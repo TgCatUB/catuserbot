@@ -4,8 +4,8 @@ from telethon.tl.custom import Dialog
 from telethon.tl.types import Channel, Chat, User
 
 
-@bot.on(admin_cmd(pattern="stat$"))
-@bot.on(sudo_cmd(pattern="stat$", allow_sudo=True))
+@bot.on(admin_cmd(pattern="stats$"))
+@bot.on(sudo_cmd(pattern="stats$", allow_sudo=True))
 async def stats(event):
     cat = await edit_or_reply(event, "`Collecting stats, Wait man`")
     start_time = time.time()
@@ -67,6 +67,22 @@ async def stats(event):
     response += f"📌 __It Took:__ {stop_time:.02f}s \n"
     await cat.edit(response)
 
+@bot.on(admin_cmd(pattern="stats$"))
+@bot.on(sudo_cmd(pattern="stats$", allow_sudo=True))
+async def stats(event):
+    catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
+    start_time = time.time()
+    hi = []
+    async for dialog in event.client.iter_dialogs():
+        entity = dialog.entity
+        if isinstance(entity, Channel) and entity.broadcast:
+            hi.append([entity.title , entity.id])
+    output = "<b>The channels you are in are: </b>\n\n"
+    for k, i in enumerate(hi, start=1):
+        output += f"<b>{k} .)</b>  <a href='https://t.me/c/{i[1]}/1'>{i[0]}</a>\n"
+    stop_time = time.time() - start_time
+    output += f"<b>Time Taken : </b> {stop_time:.02f}s \n"
+    await edit_or_reply(catevenet, output , parse_mode='html')
 
 def inline_mention(user):
     full_name = user_full_name(user) or "No Name"
@@ -81,8 +97,8 @@ def user_full_name(user):
 
 CMD_HELP.update(
     {
-        "stat": "**Plugin : **`stat`\
-    \n\n**Syntax : **`.stat`\
+        "stats": "**Plugin : **`stats`\
+    \n\n**Syntax : **`.stats`\
     \n**Function : **Shows you the count of  your groups, channels, private chats...etc"
     }
 )
