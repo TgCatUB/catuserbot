@@ -71,7 +71,7 @@ async def stats(event):
 @bot.on(admin_cmd(pattern="mychannels$"))
 @bot.on(sudo_cmd(pattern="mychannels$", allow_sudo=True))
 async def stats(event):
-    await edit_or_reply(event, "`Collecting stats, Wait man`")
+    catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
     start_time = time.time()
     hi = []
     async for dialog in event.client.iter_dialogs():
@@ -83,7 +83,7 @@ async def stats(event):
         output += f"<b>{k} .)</b>  <a href='https://t.me/c/{i[1]}/1'>{i[0]}</a>\n"
     stop_time = time.time() - start_time
     output += f"<b>Time Taken : </b> {stop_time:.02f}s \n"
-    await edit_or_reply(catevenet, output, parse_mode="html")
+    await edit_or_reply(catevent, output, parse_mode="html")
 
 
 def inline_mention(user):
