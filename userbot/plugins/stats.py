@@ -78,18 +78,17 @@ async def stats(event):
         entity = dialog.entity
         if isinstance(entity, Channel) and entity.broadcast:
             hi.append([entity.title, entity.id])
-    output = "<b>The channels you are in are: </b>\n\n"
+    output = "**The channels you are in are: **\n\n"
     for k, i in enumerate(hi, start=1):
-        output += f"<b>{k} .)</b>  <a href='https://t.me/c/{i[1]}/1'>{i[0]}</a>\n"
+        output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
     stop_time = time.time() - start_time
-    output += f"<b>Time Taken : </b> {stop_time:.02f}s \n"
+    output += f"**Time Taken : ** {stop_time:.02f}s \n"
     try:
-        await catevent.edit(output, parse_mode="html")
+        await catevent.edit(output)
     except:
         await edit_or_reply(
             catevent,
             output,
-            parse_mode="html",
             caption="The list of channels in which you are",
         )
 
