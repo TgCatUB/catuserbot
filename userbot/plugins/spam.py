@@ -32,7 +32,7 @@ async def spammer(event):
                 await event.client.send_message(event.chat_id, spam_message)
             await asyncio.sleep(sleeptimet)
     elif event.reply_to_msg_id and sandy.text:
-        spam_message = reply_to_id.text
+        spam_message = sandy.text
         await event.delete()
         for _ in range(counter):
             await event.client.send_message(event.chat_id, spam_message)
