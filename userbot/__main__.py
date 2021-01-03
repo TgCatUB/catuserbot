@@ -49,12 +49,14 @@ LOGS.info(
 )
 try:
     if Config.PRIVATE_GROUP_BOT_API_ID:
-        bot.send_message(Config.PRIVATE_GROUP_BOT_API_ID,"Congratulation, now type .alive to see message if bot is live\
-    \nIf you need assistance, head to https://t.me/catuserbot_support"
-    )
+        bot.send_message(
+            Config.PRIVATE_GROUP_BOT_API_ID,
+            "Congratulation, now type .alive to see message if bot is live\
+    \nIf you need assistance, head to https://t.me/catuserbot_support",
+        )
 except Exception as e:
     LOGS.info(str(e))
-    
+
 if len(argv) not in (1, 3, 4):
     bot.disconnect()
 else:
