@@ -47,6 +47,8 @@ LOGS.info(
     "Congratulation, now type .alive to see message if bot is live\
     \nIf you need assistance, head to https://t.me/catuserbot_support"
 )
+
+
 async def startupmessage():
     try:
         if Config.PRIVATE_GROUP_BOT_API_ID:
@@ -57,7 +59,8 @@ async def startupmessage():
             )
     except Exception as e:
         LOGS.info(str(e))
-        
+
+
 bot.loop.create_task(startupmessage())
 
 if len(argv) not in (1, 3, 4):
