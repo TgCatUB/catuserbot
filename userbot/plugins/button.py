@@ -51,6 +51,10 @@ async def _(event):
     tgbot_reply_message = None
     if reply_message and reply_message.media:
         tgbot_reply_message = await event.client.download_media(reply_message.media)
+    print(chat)
+    print(message_text)
+    print(tgbot_reply_message)
+    print(tl_ib_buttons)
     await tgbot.send_message(
         entity=chat,
         message=message_text,
