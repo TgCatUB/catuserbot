@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 from ..utils import load_module, remove_plugin
-from . import ALIVE_NAME
+from . import ALIVE_NAME, CMD_LIST ,SUDO_LIST
 
 DELETE_TIMEOUT = 5
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
@@ -118,6 +118,12 @@ async def unload(event):
             event, f"There is no plugin with path {path} to uninstall it"
         )
     os.remove(path)
+    if shortname in CMD_LIST:
+        CMD_LIST.pop(shortname)
+    if shortname in SUDO_LIST:
+        SUDO_LIST.pop(shortname)
+    if shortname in CMD_HELP:
+        CMD_HELP.pop(shortname)
     try:
         remove_plugin(shortname)
         await edit_or_reply(event, f"{shortname} is Uninstalled successfully")
