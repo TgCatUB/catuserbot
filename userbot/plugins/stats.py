@@ -87,21 +87,21 @@ async def stats(event):
                 hica.append([entity.title, entity.id])
             if entity.creator:
                 hico.append([entity.title, entity.id])
-    if catcmd =="c":
+    if catcmd == "c":
         output = "**The channels you are in are: **\n\n"
         for k, i in enumerate(hi, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption="The list of channels in which you are"
-    elif catcmd =="ca":
+        caption = "The list of channels in which you are"
+    elif catcmd == "ca":
         output = "**The channels in which you are admin are : **\n\n"
         for k, i in enumerate(hica, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption="The list of channels in which you are admin "
-    elif catcmd =="co":
+        caption = "The list of channels in which you are admin "
+    elif catcmd == "co":
         output = "**The channels in which you are owner are : **\n\n"
         for k, i in enumerate(hico, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption="The list of channels in which you are owner "
+        caption = "The list of channels in which you are owner "
     stop_time = time.time() - start_time
     output += f"\n**Time Taken : ** {stop_time:.02f}s"
     try:
@@ -112,7 +112,6 @@ async def stats(event):
             output,
             caption=caption,
         )
-
 
 
 @bot.on(admin_cmd(pattern="stat (g|ga|go)$"))
@@ -142,21 +141,21 @@ async def stats(event):
                 higa.append([entity.title, entity.id])
             if entity.creator:
                 higo.append([entity.title, entity.id])
-    if catcmd =="g":
+    if catcmd == "g":
         output = "**The groups you are in are: **\n\n"
         for k, i in enumerate(hi, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption="The list of groups in which you are"
-    elif catcmd =="ga":
+        caption = "The list of groups in which you are"
+    elif catcmd == "ga":
         output = "**The groups in which you are admin are : **\n\n"
         for k, i in enumerate(higa, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption="The list of groups in which you are admin "
-    elif catcmd =="go":
+        caption = "The list of groups in which you are admin "
+    elif catcmd == "go":
         output = "**The groups in which you are owner are : **\n\n"
         for k, i in enumerate(higo, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption="The list of groups in which you are owner "
+        caption = "The list of groups in which you are owner "
     stop_time = time.time() - start_time
     output += f"\n**Time Taken : ** {stop_time:.02f}s"
     try:
@@ -167,6 +166,7 @@ async def stats(event):
             output,
             caption=caption,
         )
+
 
 def inline_mention(user):
     full_name = user_full_name(user) or "No Name"
