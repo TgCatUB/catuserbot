@@ -1,14 +1,26 @@
-import base64
 import time
-
+import base64
 from telethon.tl.custom import Dialog
 from telethon.tl.types import Channel, Chat, User
 
+# =========================================================== #
+#                           STRINGS                           #
+# =========================================================== #
+STAT_INDICATION = "`Collecting stats, Wait man`"
+CHANNELS_STR = "**The list of channels in which you are their are here **\n\n"
+CHANNELS_ADMINSTR = "**The list of channels in which you are admin are here **\n\n"
+CHANNELS_OWNERSTR = "**The list of channels in which you are owner are here **\n\n"
+GROUPS_STR = "**The list of groups in which you are their are here **\n\n"
+GROUPS_ADMINSTR = "**The list of groups in which you are admin are here **\n\n"
+GROUPS_OWNERSTR = "**The list of groups in which you are owner are here **\n\n"
+# =========================================================== #
+#                                                             #
+# =========================================================== #
 
 @bot.on(admin_cmd(pattern="stat$"))
 @bot.on(sudo_cmd(pattern="stat$", allow_sudo=True))
 async def stats(event):
-    cat = await edit_or_reply(event, "`Collecting stats, Wait man`")
+    cat = await edit_or_reply(event, STAT_INDICATION)
     start_time = time.time()
     private_chats = 0
     bots = 0
@@ -75,7 +87,7 @@ async def stats(event):
     if event.fwd_from:
         return
     catcmd = event.pattern_match.group(1)
-    catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
+    catevent = await edit_or_reply(event, STAT_INDICATION)
     start_time = time.time()
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     hi = []
@@ -90,20 +102,20 @@ async def stats(event):
             if entity.creator:
                 hico.append([entity.title, entity.id])
     if catcmd == "c":
-        output = "**The channels you are in are: **\n\n"
+        output = CHANNELS_STR
         for k, i in enumerate(hi, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = "The list of channels in which you are"
+        caption = CHANNELS_STR
     elif catcmd == "ca":
-        output = "**The channels in which you are admin are : **\n\n"
+        output = CHANNELS_ADMINSTR
         for k, i in enumerate(hica, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = "The list of channels in which you are admin "
+        caption = CHANNELS_ADMINSTR
     elif catcmd == "co":
-        output = "**The channels in which you are owner are : **\n\n"
+        output = CHANNELS_OWNERSTR
         for k, i in enumerate(hico, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = "The list of channels in which you are owner "
+        caption = CHANNELS_OWNERSTR
     stop_time = time.time() - start_time
     try:
         cat = Get(cat)
@@ -120,14 +132,13 @@ async def stats(event):
             caption=caption,
         )
 
-
 @bot.on(admin_cmd(pattern="stat (g|ga|go)$"))
 @bot.on(sudo_cmd(pattern="stat (g|ga|go)$", allow_sudo=True))
 async def stats(event):
     if event.fwd_from:
         return
     catcmd = event.pattern_match.group(1)
-    catevent = await edit_or_reply(event, "`Collecting stats, Wait man`")
+    catevent = await edit_or_reply(event, STAT_INDICATION)
     start_time = time.time()
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     hi = []
@@ -150,20 +161,20 @@ async def stats(event):
             if entity.creator:
                 higo.append([entity.title, entity.id])
     if catcmd == "g":
-        output = "**The groups you are in are: **\n\n"
+        output = GROUPS_STR
         for k, i in enumerate(hi, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = "The list of groups in which you are"
+        caption = GROUPS_STR
     elif catcmd == "ga":
-        output = "**The groups in which you are admin are : **\n\n"
+        output = GROUPS_ADMINSTR
         for k, i in enumerate(higa, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = "The list of groups in which you are admin "
+        caption = GROUPS_ADMINSTR
     elif catcmd == "go":
-        output = "**The groups in which you are owner are : **\n\n"
+        output = GROUPS_OWNERSTR
         for k, i in enumerate(higo, start=1):
             output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = "The list of groups in which you are owner "
+        caption = GROUPS_OWNERSTR
     stop_time = time.time() - start_time
     try:
         cat = Get(cat)
@@ -195,7 +206,11 @@ def user_full_name(user):
 CMD_HELP.update(
     {
         "stats": "**Plugin : **`stats`\
-    \n\n**Syntax : **`.stat`\
-    \n**Function : **Shows you the count of  your groups, channels, private chats...etc"
+    \n\n  •  **Syntax : **`.stat`\
+    \n  •  **Function : **Shows you the count of  your groups, channels, private chats...etc\
+    \n\n  •  **Syntax : **`.stat (g|ga|go)`\
+    \n  •  **Function : **Shows you the list of all groups  in which you are if you use g , all groups in which you are admin if you use ga and all groups created by you if you use go\
+    \n\n  •  **Syntax : **`.stat (c|ca|co)`\
+    \n  •  **Function : **Shows you the list of all channels in which you are if you use c , all channels in which you are admin if you use ca and all channels created by you if you use co\
     }
 )
