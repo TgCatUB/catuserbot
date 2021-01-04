@@ -1,5 +1,6 @@
-import time
 import base64
+import time
+
 from telethon.tl.custom import Dialog
 from telethon.tl.types import Channel, Chat, User
 
