@@ -229,7 +229,7 @@ async def stats(event):
             and not isinstance(entity, User)
             and isinstance(entity, Chat)
         ):
-            if entity.creator or entity.admin_rights:
+            if entity.creator:
                 hi.append([entity.title, entity.id])
     output = "**The groups in which you are owmer are: **\n\n"
     for k, i in enumerate(hi, start=1):
