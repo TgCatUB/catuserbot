@@ -118,6 +118,7 @@ async def stats(event):
             caption="The list of channels in which you are admin ",
         )
 
+
 @bot.on(admin_cmd(pattern="stat co$"))
 @bot.on(sudo_cmd(pattern="stat co$", allow_sudo=True))
 async def stats(event):
@@ -142,7 +143,8 @@ async def stats(event):
             output,
             caption="The list of channels in which you are owner ",
         )
-        
+
+
 @bot.on(admin_cmd(pattern="stat g$"))
 @bot.on(sudo_cmd(pattern="stat g$", allow_sudo=True))
 async def stats(event):
@@ -174,6 +176,7 @@ async def stats(event):
             output,
             caption="The list of groups in which you are",
         )
+
 
 @bot.on(admin_cmd(pattern="stat ga$"))
 @bot.on(sudo_cmd(pattern="stat ga$", allow_sudo=True))
@@ -208,6 +211,7 @@ async def stats(event):
             caption="The list of groups in which you admin ",
         )
 
+
 @bot.on(admin_cmd(pattern="stat go$"))
 @bot.on(sudo_cmd(pattern="stat go$", allow_sudo=True))
 async def stats(event):
@@ -240,7 +244,7 @@ async def stats(event):
             output,
             caption="The list of groups in which you owner ",
         )
-        
+
 
 def inline_mention(user):
     full_name = user_full_name(user) or "No Name"
