@@ -24,7 +24,7 @@ glitch_this
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
-googletrans==3.1.0a0
+googletrans==4.0.0-rc1
 gsearch
 gtts
 hachoir
@@ -68,4 +68,5 @@ validators
 vcsi
 wand
 wikipedia
-youtube_dl > 2020.11.12
+youtube_dl
+youtube-search-python
