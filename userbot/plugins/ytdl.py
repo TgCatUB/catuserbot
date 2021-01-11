@@ -8,7 +8,6 @@ import os
 import re
 import time
 from datetime import datetime
-from html import unescape
 from pathlib import Path
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -25,8 +24,8 @@ from youtube_dl.utils import (
     XAttrMetadataError,
 )
 
-from . import hmention, progress
-from . import ytsearch
+from . import hmention, progress, ytsearch
+
 
 @bot.on(admin_cmd(pattern="yt(a|v)(?: |$)(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="yt(a|v)(?: |$)(.*)", allow_sudo=True))
@@ -172,8 +171,8 @@ async def download_video(v_url):
     await v_url.delete()
 
 
-@bot.on(admin_cmd(pattern="yts(?: |$)(\d*)? ?(.*)",command="yts"))
-@bot.on(sudo_cmd(pattern="yts(?: |$)(\d*)? ?(.*)",command="yts", allow_sudo=True))
+@bot.on(admin_cmd(pattern="yts(?: |$)(\d*)? ?(.*)", command="yts"))
+@bot.on(sudo_cmd(pattern="yts(?: |$)(\d*)? ?(.*)", command="yts", allow_sudo=True))
 async def yt_search(event):
     if event.fwd_from:
         return
@@ -201,8 +200,6 @@ async def yt_search(event):
         f"**•  Search Query:**\n`{query}`\n\n**•  Results:**\n\n{full_response}"
     )
     await video_q.edit(reply_text)
-
-
 
 
 @bot.on(admin_cmd(pattern="insta (.*)"))
