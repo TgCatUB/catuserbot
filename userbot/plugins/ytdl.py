@@ -248,8 +248,8 @@ CMD_HELP.update(
     \n  •  **Function : **__downloads the audio from the given link(Suports the all sites which support youtube-dl)__\
     \n\n  •  **Syntax : **`.ytv link`\
     \n  •  **Function : **__downloads the video from the given link(Suports the all sites which support youtube-dl)__\
-    \n\n  •  **Syntax : **`.yts query`\
-    \n  •  **Function : **__Fetches youtube search results with views and duration__\
+    \n\n  •  **Syntax : **`.yts query`/`.yts count query`\
+    \n  •  **Function : **__Fetches youtube search results with views and duration with required no of count results by default it fetches 10 results__\
     \n\n  •  **Syntax : **`.insta` <link>\
     \n  •  **Function : **__Downloads the video from the given instagram link__\
     "
