@@ -29,7 +29,7 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
     hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     counter = int(cat[0])
     if len(cat) == 2:
-        spam_message = str(("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)[1])
+        spam_message = str(cat[1])
         await event.delete()
         for _ in range(counter):
             if event.reply_to_msg_id:
@@ -233,8 +233,8 @@ async def spammer(event):
     if event.fwd_from:
         return
     reply = await event.get_reply_message()
-    input_str = "".join(event.text.split(maxsplit=1)[1:])
-    sleeptimet = sleeptimem = float(input_str.split(" ", 2)[0])
+    input_str = "".join(event.text.split(maxsplit=1)[1:]).split(" ", 2)
+    sleeptimet = sleeptimem = float(input_str[0])
     cat = input_str[1:]
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)
 
