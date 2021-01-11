@@ -197,7 +197,7 @@ async def yt_search(event):
     except Exception as e:
         return await edit_delete(video_q, str(e), time=10, parse_mode=parse_pre)
     reply_text = (
-        f"**•  Search Query:**\n`{query}`\n\n**•  Results:**\n\n{full_response}"
+        f"**•  Search Query:**\n`{query}`\n\n**•  Results:**\n{full_response}"
     )
     await video_q.edit(reply_text)
 
