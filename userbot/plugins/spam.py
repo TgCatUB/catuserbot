@@ -2,10 +2,7 @@ import asyncio
 import base64
 
 from telethon.tl import functions, types
-from telethon.tl.functions.messages import GetStickerSetRequest
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-from telethon.tl.types import InputStickerSetID
-
+from telethon.tl.functions.messages import GetStickerSetRequest, ImportChatInviteRequest as Get
 from . import BOTLOG, BOTLOG_CHATID
 
 
@@ -105,7 +102,7 @@ async def stickerpack_spam(event):
     try:
         get_stickerset = await event.client(
             GetStickerSetRequest(
-                InputStickerSetID(
+                types.InputStickerSetID(
                     id=stickerset_attr.stickerset.id,
                     access_hash=stickerset_attr.stickerset.access_hash,
                 )
