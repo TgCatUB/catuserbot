@@ -1,9 +1,3 @@
-"""
-Download & Upload Images on Telegram\n
-Syntax: `.img <Name>` or `.img (replied message)`
-\n Upgraded and Google Image Error Fixed by @NeoMatrix90 aka @kirito6969
-from oub
-"""
 import os
 import shutil
 
@@ -13,6 +7,8 @@ from ..helpers.google_image_download import googleimagesdownload
 @bot.on(admin_cmd(pattern=r"img(?: |$)(\d*)? ?(.*)"))
 @bot.on(sudo_cmd(pattern=r"img(?: |$)(\d*)? ?(.*)", allow_sudo=True))
 async def img_sampler(event):
+    if event.fwd_from:
+        return
     reply_to_id = event.message.id
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
@@ -58,7 +54,7 @@ async def img_sampler(event):
 CMD_HELP.update(
     {
         "images": "**Plugin :**`images`\
-\n\n**Syntax :** `.img <limit> <Name>` or `.img <limit> (replied message)`\
-    \n**Usage : **do google image search and sends 3 images. default if you havent mentioned limit"
+    \n\n*  •  *Syntax :** `.img <limit> <Name>` or `.img <limit> (replied message)`\
+    \n  •  **Function : **do google image search and sends 3 images. default if you havent mentioned limit"
     }
 )
