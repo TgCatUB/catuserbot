@@ -2,7 +2,9 @@ import asyncio
 import base64
 
 from telethon.tl import functions, types
-from telethon.tl.functions.messages import GetStickerSetRequest, ImportChatInviteRequest as Get
+from telethon.tl.functions.messages import GetStickerSetRequest
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+
 from . import BOTLOG, BOTLOG_CHATID
 
 
@@ -20,9 +22,10 @@ async def spammer(event):
     else:
         sleeptimet = 0.1
         sleeptimem = 0.3
-    await spam_function(event,sandy,cat,sleeptimem,sleeptimet)
+    await spam_function(event, sandy, cat, sleeptimem, sleeptimet)
 
-async def spam_function(event , sandy , cat, sleeptimem, sleeptimet , DelaySpam=False):        
+
+async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=False):
     hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     counter = int(cat[0])
     if len(cat) == 2:
@@ -112,7 +115,6 @@ async def spam_function(event , sandy , cat, sleeptimem, sleeptimet , DelaySpam=
                     + f"Delay spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
                     + f"`{spam_message}`",
                 )
-
 
 
 @bot.on(admin_cmd(pattern="spspam$"))
@@ -232,9 +234,9 @@ async def spammer(event):
         return
     reply = await event.get_reply_message()
     input_str = "".join(event.text.split(maxsplit=1)[1:])
-    sleeptimet= sleeptimem = float(input_str.split(" ", 2)[0])
+    sleeptimet = sleeptimem = float(input_str.split(" ", 2)[0])
     cat = input_str[1:]
-    await spam_function(event , reply , cat, sleeptimem, sleeptimet , DelaySpam=True)
+    await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)
 
 
 CMD_HELP.update(
