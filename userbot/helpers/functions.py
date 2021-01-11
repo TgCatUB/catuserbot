@@ -4,7 +4,7 @@ import time
 import urllib.request
 import zipfile
 from random import choice
-
+from youtubesearchpython import VideosSearch
 import PIL.ImageOps
 import requests
 from PIL import Image, ImageDraw, ImageFont
@@ -126,6 +126,16 @@ async def unzip(downloaded_file_name):
     downloaded_file_name = os.path.splitext(downloaded_file_name)[0]
     return f"{downloaded_file_name}.gif"
 
+
+async def ytsearch(query , limit):
+    result = ""
+    videolinks = VideosSearch(query.lower(), limit=limit)
+    for v in videolinks.result()["result"]:
+        textresult = f"[{v['title']}](https://www.youtube.com/watch?v={v['id']})\n"
+        textresult += f"`{v['descriptionSnippet'][-1]['text']}`\n"
+        textresult += f"**Duration : **__{v['duration']}__  **Views : **__{v['viewCount']['short']}__\n"
+        result += f"☞{textresult}\n"
+    return result
 
 # https://github.com/pokurt/LyndaRobot/blob/7556ca0efafd357008131fa88401a8bb8057006f/lynda/modules/helper_funcs/string_handling.py#L238
 
