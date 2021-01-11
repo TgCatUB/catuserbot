@@ -26,9 +26,7 @@ from youtube_dl.utils import (
 )
 
 from . import hmention, progress
-from . import yt_search as yt_search_no
-from . import yt_search_api
-
+from . import ytsearch
 
 @bot.on(admin_cmd(pattern="yt(a|v)(?: |$)(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="yt(a|v)(?: |$)(.*)", allow_sudo=True))
@@ -174,17 +172,29 @@ async def download_video(v_url):
     await v_url.delete()
 
 
-@bot.on(admin_cmd(pattern="yts(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="yts(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="yts(?: |$)(\d*)? ?(.*)",command="yts"))
+@bot.on(sudo_cmd(pattern="yts(?: |$)(\d*)? ?(.*)",command="yts", allow_sudo=True))
 async def yt_search(event):
     if event.fwd_from:
         return
-    query = event.pattern_match.group(1)
+    if event.is_reply and not event.pattern_match.group(2):
+        query = await event.get_reply_message()
+        query = str(query.message)
+    else:
+        query = str(event.pattern_match.group(2))
     if not query:
-        return await edit_delete(event, "what should i search", parse_mode=parse_pre)
-    video_q = await edit_or_reply(event, "```Searching...```")
+        return await edit_delete(
+            event, "`Reply to a message or pass a query to search!`"
+        )
+    video_q = await edit_or_reply(event, "`Searching...`")
+    if event.pattern_match.group(1) != "":
+        lim = int(event.pattern_match.group(1))
+        if lim <= 0:
+            lim = int(10)
+    else:
+        lim = int(10)
     try:
-        full_response = await youtube_search(query)
+        full_response = await ytsearch(query, limit=lim)
     except Exception as e:
         return await edit_delete(video_q, str(e), time=10, parse_mode=parse_pre)
     reply_text = (
@@ -193,21 +203,6 @@ async def yt_search(event):
     await video_q.edit(reply_text)
 
 
-async def youtube_search(cat):
-    result = ""
-    try:
-        if Config.YOUTUBE_API_KEY:
-            vi = await yt_search_api(cat)
-            for v in vi:
-                result += f"☞ [{unescape(v['snippet']['title'])}](https://youtu.be/{v['id']['videoId']})"
-                result += f"\n`{unescape(v['snippet']['description'])}`\n\n"
-    except:
-        pass
-    if result == "":
-        vi = await yt_search_no(cat)
-        for v in vi:
-            result += f"☞ {v}\n"
-    return result
 
 
 @bot.on(admin_cmd(pattern="insta (.*)"))
@@ -259,7 +254,7 @@ CMD_HELP.update(
     \n\n  •  **Syntax : **`.ytv link`\
     \n  •  **Function : **__downloads the video from the given link(Suports the all sites which support youtube-dl)__\
     \n\n  •  **Syntax : **`.yts query`\
-    \n  •  **Function : **__Fetches youtube results you need api token for this__\
+    \n  •  **Function : **__Fetches youtube search results with views and duration__\
     \n\n  •  **Syntax : **`.insta` <link>\
     \n  •  **Function : **__Downloads the video from the given instagram link__\
     "
