@@ -4,12 +4,13 @@ import time
 import urllib.request
 import zipfile
 from random import choice
-from youtubesearchpython import VideosSearch
+
 import PIL.ImageOps
 import requests
 from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
+from youtubesearchpython import VideosSearch
 
 from ..Config import Config
 from .resources.states import states
@@ -127,7 +128,7 @@ async def unzip(downloaded_file_name):
     return f"{downloaded_file_name}.gif"
 
 
-async def ytsearch(query , limit):
+async def ytsearch(query, limit):
     result = ""
     videolinks = VideosSearch(query.lower(), limit=limit)
     for v in videolinks.result()["result"]:
@@ -136,6 +137,7 @@ async def ytsearch(query , limit):
         textresult += f"**Duration : **__{v['duration']}__  **Views : **__{v['viewCount']['short']}__\n"
         result += f"☞{textresult}\n"
     return result
+
 
 # https://github.com/pokurt/LyndaRobot/blob/7556ca0efafd357008131fa88401a8bb8057006f/lynda/modules/helper_funcs/string_handling.py#L238
 
