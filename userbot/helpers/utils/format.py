@@ -16,31 +16,11 @@ def htmlmentionuser(name, userid):
 # kanged from uniborg @spechide
 # https://github.com/SpEcHiDe/UniBorg/blob/d8b852ee9c29315a53fb27055e54df90d0197f0b/uniborg/utils.py#L250
 
-
 def reformattext(text):
-    return (
-        text.replace("~", "")
-        .replace("_", "")
-        .replace(
-            '"',
-            "",
-        )
-        .replace(
-            "\\r",
-            "",
-        )
-        .replace(
-            "\\n",
-            "",
-        )
-        .replace(
-            "\\",
-            "",
-        )
-        .replace("*", "")
-        .replace("`", "")
-    )
+    return text.replace('~','').replace('_' ,'').replace('*' ,'').replace('`' , '')
 
+def replacetext(text):
+    return text.replace('"','',).replace('\\r', '',).replace('\\n','',).replace('\\','',)
 
 def parse_pre(text):
     text = text.strip()
