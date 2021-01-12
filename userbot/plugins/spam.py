@@ -39,7 +39,9 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
             await asyncio.sleep(sleeptimet)
     elif event.reply_to_msg_id and sandy.media:
         for _ in range(counter):
-            sandy = await event.client.send_file(event.chat_id, sandy,caption=sandy.text)
+            sandy = await event.client.send_file(
+                event.chat_id, sandy, caption=sandy.text
+            )
             await unsavegif(event, sandy)
             await asyncio.sleep(sleeptimem)
     elif event.reply_to_msg_id and sandy.text:
