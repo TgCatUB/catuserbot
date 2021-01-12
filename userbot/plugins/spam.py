@@ -22,6 +22,7 @@ async def spammer(event):
     else:
         sleeptimet = 0.1
         sleeptimem = 0.3
+    await event.delete()
     await spam_function(event, sandy, cat, sleeptimem, sleeptimet)
 
 
@@ -30,24 +31,22 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
     counter = int(cat[0])
     if len(cat) == 2:
         spam_message = str(cat[1])
-        await event.delete()
         for _ in range(counter):
             if event.reply_to_msg_id:
                 await sandy.reply(spam_message)
             else:
                 await event.client.send_message(event.chat_id, spam_message)
             await asyncio.sleep(sleeptimet)
+    elif event.reply_to_msg_id and sandy.media:
+        for _ in range(counter):
+            sandy = await event.client.send_file(event.chat_id, sandy,caption=sandy.text)
+            await unsavegif(event, sandy)
+            await asyncio.sleep(sleeptimem)
     elif event.reply_to_msg_id and sandy.text:
         spam_message = sandy.text
-        await event.delete()
         for _ in range(counter):
             await event.client.send_message(event.chat_id, spam_message)
             await asyncio.sleep(sleeptimet)
-    elif event.reply_to_msg_id and sandy.media:
-        for _ in range(counter):
-            sandy = await event.client.send_file(event.chat_id, sandy)
-            await unsavegif(event, sandy)
-            await asyncio.sleep(sleeptimem)
         try:
             hmm = Get(hmm)
             await event.client(hmm)
@@ -236,6 +235,7 @@ async def spammer(event):
     input_str = "".join(event.text.split(maxsplit=1)[1:]).split(" ", 2)
     sleeptimet = sleeptimem = float(input_str[0])
     cat = input_str[1:]
+    await event.delete()
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)
 
 
