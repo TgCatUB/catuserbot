@@ -31,12 +31,13 @@ def load_module(shortname):
         spec.loader.exec_module(mod)
         LOGS.info("Successfully imported " + shortname)
     else:
+        import userbot.helpers.utils.format as _format
         import userbot.utils
 
         from .helpers.tools import media_type, unsavegif
         from .helpers.utils import install_pip, parse_pre, reply_id, run_async, run_sync
         from .managers import edit_delete, edit_or_reply
-        import userbot.helpers.utils.format as _format 
+
         path = Path(f"userbot/plugins/{shortname}.py")
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
