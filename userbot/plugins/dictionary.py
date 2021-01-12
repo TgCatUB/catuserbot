@@ -1,6 +1,6 @@
 # Urban Dictionary for catuserbot by @mrconfused
 from PyDictionary import PyDictionary
-
+from . import AioHttp
 
 @bot.on(admin_cmd(pattern="ud (.*)"))
 @bot.on(sudo_cmd(pattern="ud (.*)", allow_sudo=True))
