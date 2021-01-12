@@ -10,12 +10,12 @@ async def _(event):
     word = event.pattern_match.group(1)
     try:
         response = await AioHttp().get_json(
-            f'http://api.urbandictionary.com/v0/define?term={word}',
+            f"http://api.urbandictionary.com/v0/define?term={word}",
         )
-        word = response['list'][0]['word']
-        definition = response['list'][0]['definition']
-        example = response['list'][0]['example']
-        result = '**Text: {}**\n**Meaning:**\n`{}`\n\n**Example:**\n`{}`'.format(
+        word = response["list"][0]["word"]
+        definition = response["list"][0]["definition"]
+        example = response["list"][0]["example"]
+        result = "**Text: {}**\n**Meaning:**\n`{}`\n\n**Example:**\n`{}`".format(
             _format.replace_text(word),
             _format.replace_text(definition),
             _format.replace_text(example),
@@ -23,7 +23,8 @@ async def _(event):
         await edit_or_reply(event, result)
     except Exception as e:
         await edit_delete(
-            event, text='`The Unban Dictionary API could not be reached`',
+            event,
+            text="`The Unban Dictionary API could not be reached`",
         )
         print(e)
 
