@@ -749,7 +749,6 @@ async def memes(cat):
             os.remove(files)
 
 
-            
 @bot.on(admin_cmd(outgoing=True, pattern="frame ?(.*)"))
 @bot.on(sudo_cmd(pattern="frame ?(.*)", allow_sudo=True))
 async def memes(cat):
