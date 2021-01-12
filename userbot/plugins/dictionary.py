@@ -18,9 +18,9 @@ async def _(event):
         definition = response["list"][0]["definition"]
         example = response["list"][0]["example"]
         result = "**Text: {}**\n**Meaning:**\n`{}`\n\n**Example:**\n`{}`".format(
-            _format.replace_text(word),
-            _format.replace_text(definition),
-            _format.replace_text(example),
+            _format.replacetext(word),
+            _format.replacetext(definition),
+            _format.replacetext(example),
         )
         await edit_or_reply(event, result)
     except Exception as e:
