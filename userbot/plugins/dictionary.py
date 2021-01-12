@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """Urban Dictionary
 Syntax: .ud Query"""
-#import asyncurban
+# import asyncurban
 from PyDictionary import PyDictionary
 
 
