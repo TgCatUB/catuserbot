@@ -1,5 +1,5 @@
 # yaml_format is ported from uniborg
-import io
+
 
 @bot.on(admin_cmd(pattern="json$"))
 @bot.on(sudo_cmd(pattern="json$", allow_sudo=True))
@@ -7,7 +7,7 @@ async def _(event):
     if event.fwd_from:
         return
     the_real_message = None
-    reply_to_id = await reply_id(event)
+    await reply_id(event)
     if event.reply_to_msg_id:
         catevent = await event.get_reply_message()
     else:
@@ -22,7 +22,7 @@ async def _(event):
     if event.fwd_from:
         return
     the_real_message = None
-    reply_to_id = await reply_id(event)
+    await reply_id(event)
     if event.reply_to_msg_id:
         catevent = await event.get_reply_message()
     the_real_message = _format.yaml_format(catevent)
