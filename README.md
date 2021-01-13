@@ -35,8 +35,8 @@ __The Userbot should work by setting only the first two variables__
 from heroku_config import Var
 
 class Development(Var):
-  APP_ID = 6
-  API_HASH = "eb06d4abfb49dc3eeb1aeb98ae0f581e"
+  APP_ID = 6 # `6` Is Just A PlaceHolder
+  API_HASH = "eb06d4abfb49dc3eeb1aeb98ae0f581e" # Your Value Looks Nearly Like This !
 ```
 
 ### UniBorg Configuration
@@ -52,9 +52,10 @@ Fortunately there are no Mandatory vars for the UniBorg Support Config.
 
 ## Mandatory Vars
 
-- Only two of the environment variables are mandatory.
+- Only three of the environment variables are mandatory.
 - This is because of `telethon.errors.rpc_error_list.ApiIdPublishedFloodError`
 
+    - `SESSION_STRING`: Get It By Running Localy Or On Repl.it
     - `APP_ID`:   You can get this value from https://my.telegram.org
     - `API_HASH`:   You can get this value from https://my.telegram.org
 - The userbot will not work without setting the mandatory vars.
