@@ -14,13 +14,13 @@
   "success_url": "#TODO",
   "env": {
     "ENV": {
-      "description": "Setting this to ANYTHING will enable heroku.",
-      "value": "ANYTHING"
+      "description": "Setting this to True will enable heroku.",
+      "value": "True"
     },
     "TMP_DOWNLOAD_DIRECTORY": {
       "description": "Where downloaded files will go.",
       "value": "./DOWNLOADS/",
-      "required": false
+      "required": true
     },
     "ALIVE_NAME": {
       "description": "give your name",
@@ -28,15 +28,18 @@
     },
     "APP_ID": {
       "description": "Get this value from my.telegram.org! Please do not steal",
-      "value": ""
+      "value": "",
+      "required": true
     },
     "API_HASH": {
       "description": "Get this value from my.telegram.org! Please do not steal",
-      "value": ""
+      "value": "",
+      "required": true
     },
     "STRING_SESSION": {
       "description": "Get this value by running python3 telesetup.py locally",
-      "value": ""
+      "value": "",
+      "required": true
     },
     "TG_BOT_USER_NAME_BF_HER": {
       "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the username of your bot",
@@ -104,7 +107,7 @@
     "TZ": {
       "description": "Required for Correct Time on autopic/get time. Know your timezone from http://www.timezoneconverter.com/cgi-bin/findzone.tzc",
       "value": "Asia/Kolkata",
-      "required": false
+      "required": true
     }
   },
   "addons": [{
