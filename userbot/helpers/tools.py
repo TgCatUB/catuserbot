@@ -1,5 +1,3 @@
-
-
 def media_type(message):
     if message and message.photo:
         return "Photo"
@@ -19,4 +17,3 @@ def media_type(message):
         return "Document"
     else:
         return None
-   
