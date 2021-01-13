@@ -52,12 +52,6 @@ async def media_to_pic(event, reply):
 async def take_screen_shot(
     video_file: str, duration: int, path: str = ""
 ) -> Optional[str]:
-    print(
-        "[[[Extracting a frame from %s ||| Video duration => %s]]]",
-        video_file,
-        duration,
-    )
-    ttl = duration // 2
     thumb_image_path = path or os.path.join(
         "./temp/", f"{os.path.basename(video_file)}.jpg"
     )
