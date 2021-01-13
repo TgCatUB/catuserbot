@@ -1,4 +1,3 @@
-from . import format, tools
+from . import format, tools, utils
 from .events import *
 from .extdl import *
-from .managers import *
