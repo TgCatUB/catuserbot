@@ -1,5 +1,3 @@
-# executing of terminal commands
-
 import asyncio
 import os
 import shlex
@@ -8,7 +6,7 @@ from typing import Tuple
 from telethon import functions, types
 
 
-
+# executing of terminal commands
 async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
     args = shlex.split(cmd)
     process = await asyncio.create_subprocess_exec(
