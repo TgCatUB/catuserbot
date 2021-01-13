@@ -5,7 +5,6 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
 
-
 from ..tools import media_type
 from .utils import runcmd
 
@@ -59,7 +58,9 @@ async def take_screen_shot(
         duration,
     )
     ttl = duration // 2
-    thumb_image_path = path or os.path.join("./temp/", f"{os.path.basename(video_file)}.jpg")
+    thumb_image_path = path or os.path.join(
+        "./temp/", f"{os.path.basename(video_file)}.jpg"
+    )
     command = f"ffmpeg -ss {ttl} -i '{video_file}' -vframes 1 '{thumb_image_path}'"
     err = (await runcmd(command))[1]
     if err:
