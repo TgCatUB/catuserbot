@@ -1,14 +1,11 @@
 import datetime
+import re
 
+import requests
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
 
-import asyncio
-import functools
-import re
-
-import requests
 
 def paste_text(text):
     asciich = ["*", "`", "_"]
@@ -29,9 +26,6 @@ def paste_text(text):
         ).json()
         link = f"https://del.dog/{kresult['key']}"
     return link
-
-
-
 
 
 def mentionuser(name, userid):
