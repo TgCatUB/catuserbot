@@ -34,14 +34,11 @@ async def media_to_pic(event, reply):
     elif mediatype in ["Round Video", "Video", "Gif"]:
         extractMetadata(createParser(catmedia))
         await runcmd(f"rm -rf '{catfile}'")
-        err = (
-            await runcmd(f"ffmpeg -i '{catmedia}' -vframes 1 -an -ss 1 '{catfile}'")
-        )[1]
+        await take_screen_shot(catmedia , 0 , catfile)
         if not os.path.exists(catfile):
             await edit_delete(
                 catevent, f"`Sorry. I can't extract a image from this {mediatype}`"
             )
-            print(err)
             return None
     else:
         im = Image.open(catmedia)
