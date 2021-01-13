@@ -7,7 +7,7 @@ from PIL import Image
 
 from ..tools import media_type
 from .utils import runcmd
-
+from ...managers import edit_or_reply , edit_delete
 
 async def media_to_pic(event, reply):
     mediatype = media_type(reply)
