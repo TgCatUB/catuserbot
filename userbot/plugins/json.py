@@ -1,7 +1,7 @@
 # yaml_format is ported from uniborg
 import io
 
-from . import parse_pre,
+from . import parse_pre
 
 
 @bot.on(admin_cmd(pattern="json$"))

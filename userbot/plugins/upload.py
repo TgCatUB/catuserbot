@@ -251,7 +251,9 @@ async def video_catfile(event):
                 width = track.width
         if aspect_ratio != 1:
             crop_by = width if (height > width) else height
-            await _catutils.runcmd(f'ffmpeg -i {catfile} -vf "crop={crop_by}:{crop_by}" {PATH}')
+            await _catutils.runcmd(
+                f'ffmpeg -i {catfile} -vf "crop={crop_by}:{crop_by}" {PATH}'
+            )
         else:
             copyfile(catfile, PATH)
         if str(catfile) != str(PATH):

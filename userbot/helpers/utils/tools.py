@@ -34,7 +34,9 @@ async def media_to_pic(event, reply):
         extractMetadata(createParser(catmedia))
         await _catutils.runcmd(f"rm -rf '{catfile}'")
         err = (
-            await _catutils.runcmd(f"ffmpeg -i '{catmedia}' -vframes 1 -an -ss 1 '{catfile}'")
+            await _catutils.runcmd(
+                f"ffmpeg -i '{catmedia}' -vframes 1 -an -ss 1 '{catfile}'"
+            )
         )[1]
         if not os.path.exists(catfile):
             await edit_delete(
