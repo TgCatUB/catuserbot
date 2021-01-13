@@ -2,7 +2,9 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
 from telethon import functions, types
+
 from ..tools import media_type
+
 
 async def media_to_pic(event, reply):
     mediatype = media_type(reply)
@@ -42,7 +44,6 @@ async def media_to_pic(event, reply):
         im.save(catfile)
     await runcmd(f"rm -rf '{catmedia}'")
     return [catevent, catfile, mediatype]
-
 
 
 async def unsavegif(event, sandy):
