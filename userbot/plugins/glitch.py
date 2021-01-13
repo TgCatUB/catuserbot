@@ -10,7 +10,6 @@ from PIL import Image
 from telethon import functions, types
 
 from .. import LOGS
-from . import runcmd, take_screen_shot
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
@@ -49,7 +48,7 @@ async def glitch(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`catsticker not found...`")
             LOGS.info(stdout + stderr)
@@ -63,7 +62,7 @@ async def glitch(cat):
         glitch_file = catfile
     elif catsticker.endswith(".mp4"):
         catfile = os.path.join("./temp/", "glitch.png")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```catsticker not found...```")
             return

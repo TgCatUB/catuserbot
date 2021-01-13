@@ -31,11 +31,11 @@ def load_module(shortname):
         spec.loader.exec_module(mod)
         LOGS.info("Successfully imported " + shortname)
     else:
-        import userbot.helpers.utils.format as _format
+        from .helpers.utils import _format , _catutils , _cattools 
+        from .helpers.utils import install_pip, reply_id
         import userbot.utils
 
-        from .helpers.tools import media_type, unsavegif
-        from .helpers.utils import install_pip, parse_pre, reply_id, run_async, run_sync
+        from .helpers.tools import media_type
         from .managers import edit_delete, edit_or_reply
 
         path = Path(f"userbot/plugins/{shortname}.py")
@@ -44,19 +44,17 @@ def load_module(shortname):
         mod = importlib.util.module_from_spec(spec)
         mod.bot = bot
         mod.Config = Config
+        mod._format = _format
         mod.tgbot = bot.tgbot
         mod.sudo_cmd = sudo_cmd
         mod.CMD_HELP = CMD_HELP
-        mod.run_sync = run_sync
         mod.reply_id = reply_id
-        mod.run_async = run_async
         mod.admin_cmd = admin_cmd
-        mod.parse_pre = parse_pre
-        mod.unsavegif = unsavegif
+        mod._catutils = _catutils
+        mod._cattools = _cattools
         mod.media_type = media_type
         mod.edit_delete = edit_delete
         mod.install_pip = install_pip
-        mod._format = _format
         mod.edit_or_reply = edit_or_reply
         mod.logger = logging.getLogger(shortname)
         # support for uniborg

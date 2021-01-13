@@ -20,9 +20,7 @@ from . import (
     invert_colors,
     mirror_file,
     reply_id,
-    runcmd,
     solarize,
-    take_screen_shot,
 )
 
 
@@ -89,7 +87,7 @@ async def memes(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`Template not found...`")
             LOGS.info(stdout + stderr)
@@ -109,7 +107,7 @@ async def memes(cat):
             "```Transfiguration Time! Mwahaha memifying this video! (」ﾟﾛﾟ)｣```"
         )
         catfile = os.path.join("./temp/", "memes.jpg")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```Template not found...```")
             return
@@ -190,7 +188,7 @@ async def memes(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`Template not found...`")
             LOGS.info(stdout + stderr)
@@ -212,7 +210,7 @@ async def memes(cat):
             "```Transfiguration Time! Mwahaha converting to ascii image of this video! (」ﾟﾛﾟ)｣```"
         )
         catfile = os.path.join("./temp/", "memes.jpg")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```Template not found...```")
             return
@@ -270,7 +268,7 @@ async def memes(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`Template not found...`")
             LOGS.info(stdout + stderr)
@@ -292,7 +290,7 @@ async def memes(cat):
             "```Transfiguration Time! Mwahaha inverting colors of this video! (」ﾟﾛﾟ)｣```"
         )
         catfile = os.path.join("./temp/", "memes.jpg")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```Template not found...```")
             return
@@ -354,7 +352,7 @@ async def memes(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`Template not found...`")
             LOGS.info(stdout + stderr)
@@ -376,7 +374,7 @@ async def memes(cat):
             "```Transfiguration Time! Mwahaha solarizeing this video! (」ﾟﾛﾟ)｣```"
         )
         catfile = os.path.join("./temp/", "memes.jpg")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```Template not found...```")
             return
@@ -438,7 +436,7 @@ async def memes(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`Template not found...`")
             LOGS.info(stdout + stderr)
@@ -460,7 +458,7 @@ async def memes(cat):
             "```Transfiguration Time! Mwahaha converting to mirror image of this video! (」ﾟﾛﾟ)｣```"
         )
         catfile = os.path.join("./temp/", "memes.jpg")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```Template not found...```")
             return
@@ -522,7 +520,7 @@ async def memes(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`Template not found...`")
             LOGS.info(stdout + stderr)
@@ -544,7 +542,7 @@ async def memes(cat):
             "```Transfiguration Time! Mwahaha fliping this video! (」ﾟﾛﾟ)｣```"
         )
         catfile = os.path.join("./temp/", "memes.jpg")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```Template not found...```")
             return
@@ -606,7 +604,7 @@ async def memes(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`Template not found...`")
             LOGS.info(stdout + stderr)
@@ -628,7 +626,7 @@ async def memes(cat):
             "```Transfiguration Time! Mwahaha changing to black-and-white this video! (」ﾟﾛﾟ)｣```"
         )
         catfile = os.path.join("./temp/", "memes.jpg")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```Template not found...```")
             return
@@ -692,7 +690,7 @@ async def memes(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`Template not found...`")
             LOGS.info(stdout + stderr)
@@ -714,7 +712,7 @@ async def memes(cat):
             "```Transfiguration Time! Mwahaha zooming this video! (」ﾟﾛﾟ)｣```"
         )
         catfile = os.path.join("./temp/", "memes.jpg")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```Template not found...```")
             return
@@ -790,7 +788,7 @@ async def memes(cat):
         catcmd = (
             f"lottie_convert.py --frame 0 -if lottie -of png {catsticker} {catfile}"
         )
-        stdout, stderr = (await runcmd(catcmd))[:2]
+        stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
         if not os.path.lexists(catfile):
             await cat.edit("`Template not found...`")
             LOGS.info(stdout + stderr)
@@ -812,7 +810,7 @@ async def memes(cat):
             "```Transfiguration Time! Mwahaha framing this video! (」ﾟﾛﾟ)｣```"
         )
         catfile = os.path.join("./temp/", "memes.jpg")
-        await take_screen_shot(catsticker, 0, catfile)
+        await _cattools.take_screen_shot(catsticker, 0, catfile)
         if not os.path.lexists(catfile):
             await cat.edit("```Template not found...```")
             return

@@ -24,10 +24,7 @@ async def _(event):
     stdout, stderr = await process.communicate()
     result = str(stdout.decode().strip()) + str(stderr.decode().strip())
     catuser = await event.client.get_me()
-    if catuser.username:
-        curruser = catuser.username
-    else:
-        curruser = "catuserbot"
+    curruser = catuser.username or "catuserbot"
     uid = os.geteuid()
     if uid == 0:
         cresult = f"`{curruser}:~#` `{cmd}`\n`{result}`"
@@ -93,7 +90,7 @@ async def _(event):
 
 async def aexec(code, smessatatus):
     message = event = smessatatus
-    p = lambda _x: print(yaml_format(_x))
+    p = lambda _x: print(_format.yaml_format(_x))
     reply = await event.get_reply_message()
     exec(
         f"async def __aexec(message, event , reply, client, p, chat): "

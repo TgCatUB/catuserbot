@@ -12,7 +12,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
 
-from . import name_dl, runcmd, song_dl, video_dl
+from . import name_dl, song_dl, video_dl
 from . import yt_search as yt_search_no
 from . import yt_search_api
 
@@ -63,10 +63,10 @@ async def _(event):
         await event.client(cat)
     except BaseException:
         pass
-    stderr = (await runcmd(song_cmd))[1]
+    stderr = (await _catutils.runcmd(song_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    catname, stderr = (await runcmd(name_cmd))[:2]
+    catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     # stderr = (await runcmd(thumb_cmd))[1]
@@ -134,10 +134,10 @@ async def _(event):
     # thumb_cmd = thumb_dl.format(video_link=video_link)
     name_cmd = name_dl.format(video_link=video_link)
     video_cmd = video_dl.format(video_link=video_link)
-    stderr = (await runcmd(video_cmd))[1]
+    stderr = (await _catutils.runcmd(video_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    catname, stderr = (await runcmd(name_cmd))[:2]
+    catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     # stderr = (await runcmd(thumb_cmd))[1]

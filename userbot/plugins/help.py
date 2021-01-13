@@ -3,7 +3,7 @@ import asyncio
 import requests
 from telethon import functions
 
-from . import ALIVE_NAME, CMD_LIST, SUDO_LIST, yaml_format
+from . import ALIVE_NAME, CMD_LIST, SUDO_LIST
 
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 
@@ -180,7 +180,7 @@ async def _(event):
         return
     result = await bot(functions.help.GetNearestDcRequest())
     result = (
-        yaml_format(result)
+        _format.yaml_format(result)
         + "\n\n**List Of Telegram Data Centres:**\
                 \nDC1 : Miami FL, USA\
                 \nDC2 : Amsterdam, NL\
