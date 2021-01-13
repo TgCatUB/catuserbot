@@ -3,9 +3,12 @@ Created by @mrconfused and @sandy1709
 memify plugin
 """
 import asyncio
+import base64
 import os
 import random
-import base64
+
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+
 from . import (
     LOGS,
     add_frame,
@@ -21,7 +24,7 @@ from . import (
     mirror_file,
     solarize,
 )
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+
 
 def random_color():
     number_of_colors = 2
@@ -61,17 +64,19 @@ async def memes(cat):
             top = catinput
             bottom = ""
     else:
-        return await edit_delete(cat, "`what should i write on that u idiot give text to memify`")
+        return await edit_delete(
+            cat, "`what should i write on that u idiot give text to memify`"
+        )
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
-    output = await _cattools.media_to_pic(cat , reply)
+    output = await _cattools.media_to_pic(cat, reply)
     try:
         san = Get(san)
         await cat.client(san)
     except BaseException:
         pass
     meme_file = convert_toimage(output[1])
-    meme = os.path.join("./temp","catmeme.jpg")
+    meme = os.path.join("./temp", "catmeme.jpg")
     if max(len(top), len(bottom)) < 21:
         await cat_meme(CNG_FONTS, top, bottom, meme_file, meme)
     else:
@@ -118,11 +123,15 @@ async def memes(cat):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await _cattools.media_to_pic(cat,reply)
+    output = await _cattools.media_to_pic(cat, reply)
     meme_file = convert_toimage(output[1])
-    if output[2] in [ "Round Video", "Gif", "Sticker", "Video"]:
+    if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
-    outputfile = os.path.join("./temp" , "ascii_file.webp") if jisanidea else os.path.join("./temp" , "ascii_file.jpg")
+    outputfile = (
+        os.path.join("./temp", "ascii_file.webp")
+        if jisanidea
+        else os.path.join("./temp", "ascii_file.jpg")
+    )
     c_list = random_color()
     color1 = c_list[0]
     color2 = c_list[1]
