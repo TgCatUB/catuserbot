@@ -98,9 +98,7 @@ async def ff_mpeg_trim_cmd(event):
     elif len(cmt) == 2:
         # output should be image
         cmd, start_time = cmt
-        o = await _cattools.take_screen_shot(
-            FF_MPEG_DOWN_LOAD_MEDIA_PATH, start_time
-        )
+        o = await _cattools.take_screen_shot(FF_MPEG_DOWN_LOAD_MEDIA_PATH, start_time)
         if o is None:
             return await edit_delete(
                 catevent, f"**Error : **`Can't complete the process`"
