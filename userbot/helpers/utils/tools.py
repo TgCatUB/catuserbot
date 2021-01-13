@@ -6,7 +6,7 @@ from hachoir.parser import createParser
 from PIL import Image
 
 from ..tools import media_type
-from .utils import _catutils
+from . import _catutils
 
 
 async def media_to_pic(event, reply):
