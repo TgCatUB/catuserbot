@@ -34,7 +34,7 @@ async def media_to_pic(event, reply):
     elif mediatype in ["Round Video", "Video", "Gif"]:
         extractMetadata(createParser(catmedia))
         await runcmd(f"rm -rf '{catfile}'")
-        await take_screen_shot(catmedia , 0 , catfile)
+        await take_screen_shot(catmedia, 0, catfile)
         if not os.path.exists(catfile):
             await edit_delete(
                 catevent, f"`Sorry. I can't extract a image from this {mediatype}`"
