@@ -4,7 +4,7 @@ from PIL import Image
 from telethon import functions, types
 
 from ..tools import media_type
-
+from .utils import runcmd
 
 async def media_to_pic(event, reply):
     mediatype = media_type(reply)
@@ -46,17 +46,19 @@ async def media_to_pic(event, reply):
     return [catevent, catfile, mediatype]
 
 
-async def unsavegif(event, sandy):
-    try:
-        await event.client(
-            functions.messages.SaveGifRequest(
-                id=types.InputDocument(
-                    id=sandy.media.document.id,
-                    access_hash=sandy.media.document.access_hash,
-                    file_reference=sandy.media.document.file_reference,
-                ),
-                unsave=True,
-            )
-        )
-    except:
-        pass
+async def take_screen_shot(
+    video_file: str, duration: int, path: str = ""
+) -> Optional[str]:
+    print(
+        "[[[Extracting a frame from %s ||| Video duration => %s]]]",
+        video_file,
+        duration,
+    )
+    ttl = duration // 2
+    thumb_image_path = path or os.path.join("./temp/", f"{basename(video_file)}.jpg")
+    command = f"ffmpeg -ss {ttl} -i '{video_file}' -vframes 1 '{thumb_image_path}'"
+    err = (await runcmd(command))[1]
+    if err:
+        print(err)
+    return thumb_image_path if os.path.exists(thumb_image_path) else None
+
