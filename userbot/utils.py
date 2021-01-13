@@ -246,9 +246,9 @@ def errors_handler(func):
             stdout, stderr = await process.communicate()
             result = str(stdout.decode().strip()) + str(stderr.decode().strip())
             ftext += result
-            from .helpers.utils.managers import paste_text
+            from .helpers.utils import _format
 
-            pastelink = paste_text(ftext)
+            pastelink = _format.paste_text(ftext)
             text = "**CatUserbot Error report**\n\n"
             link = "[here](https://t.me/catuserbot_support)"
             text += "If you wanna you can report it"
