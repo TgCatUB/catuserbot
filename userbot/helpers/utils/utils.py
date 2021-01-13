@@ -4,6 +4,11 @@ from typing import Tuple
 
 from telethon import functions, types
 
+import asyncio
+import functools
+import re
+
+import requests
 
 # executing of terminal commands
 async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
@@ -19,6 +24,16 @@ async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
         process.pid,
     )
 
+
+
+def run_sync(func, *args, **kwargs):
+    return asyncio.get_event_loop().run_in_executor(
+        None, functools.partial(func, *args, **kwargs)
+    )
+
+
+def run_async(loop, coro):
+    return asyncio.run_coroutine_threadsafe(coro, loop).result()    
 
 async def unsavegif(event, sandy):
     try:
