@@ -9,7 +9,6 @@ import random
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 from . import (
-    LOGS,
     add_frame,
     asciiart,
     cat_meeme,
@@ -193,7 +192,7 @@ async def memes(cat):
 async def memes(cat):
     if cat.fwd_from:
         return
-    catinput = cat.pattern_match.group(1)
+    cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
@@ -231,7 +230,7 @@ async def memes(cat):
 async def memes(cat):
     if cat.fwd_from:
         return
-    catinput = cat.pattern_match.group(1)
+    cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
@@ -269,7 +268,7 @@ async def memes(cat):
 async def memes(cat):
     if cat.fwd_from:
         return
-    catinput = cat.pattern_match.group(1)
+    cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
@@ -307,7 +306,7 @@ async def memes(cat):
 async def memes(cat):
     if cat.fwd_from:
         return
-    catinput = cat.pattern_match.group(1)
+    cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
