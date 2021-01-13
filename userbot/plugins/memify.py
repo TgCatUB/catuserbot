@@ -83,7 +83,7 @@ async def memes(cat):
         await cat_meeme(top, bottom, CNG_FONTS, meme_file, meme)
     if cmd != "mmf":
         meme = convert_tosticker(meme)
-    await cat.client.send_file(cat.chat_id, meme, reply_to=catid,force_document=False)
+    await cat.client.send_file(cat.chat_id, meme, reply_to=catid, force_document=False)
     await output[0].delete()
     for files in (meme, meme_file):
         if files and os.path.exists(files):
@@ -143,7 +143,9 @@ async def memes(cat):
     color2 = c_list[1]
     bgcolor = "#080808" if not catinput else catinput
     asciiart(meme_file, 0.3, 1.9, outputfile, color1, color2, bgcolor)
-    await cat.client.send_file(cat.chat_id, outputfile, reply_to=catid,force_document=False)
+    await cat.client.send_file(
+        cat.chat_id, outputfile, reply_to=catid, force_document=False
+    )
     await output[0].delete()
     for files in (outputfile, meme_file):
         if files and os.path.exists(files):
