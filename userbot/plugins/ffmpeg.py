@@ -99,7 +99,7 @@ async def ff_mpeg_trim_cmd(event):
         # output should be image
         cmd, start_time = cmt
         o = await _cattools.take_screen_shot(
-            FF_MPEG_DOWN_LOAD_MEDIA_PATH, Config.TMP_DOWNLOAD_DIRECTORY, int(start_time)
+            FF_MPEG_DOWN_LOAD_MEDIA_PATH, int(start_time), Config.TMP_DOWNLOAD_DIRECTORY
         )
         if o is None:
             return await edit_delete(
