@@ -192,7 +192,6 @@ async def memes(cat):
 async def memes(cat):
     if cat.fwd_from:
         return
-    cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
@@ -230,7 +229,6 @@ async def memes(cat):
 async def memes(cat):
     if cat.fwd_from:
         return
-    cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
@@ -268,7 +266,6 @@ async def memes(cat):
 async def memes(cat):
     if cat.fwd_from:
         return
-    cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
@@ -306,7 +303,6 @@ async def memes(cat):
 async def memes(cat):
     if cat.fwd_from:
         return
-    cat.pattern_match.group(1)
     reply = await cat.get_reply_message()
     if not reply:
         return await edit_delete(cat, "`Reply to supported Media...`")
