@@ -55,7 +55,7 @@ async def take_screen_shot(
     thumb_image_path = path or os.path.join(
         "./temp/", f"{os.path.basename(video_file)}.jpg"
     )
-    command = f"ffmpeg -ss {ttl} -i '{video_file}' -vframes 1 '{thumb_image_path}'"
+    command = f"ffmpeg -ss {duration} -i '{video_file}' -vframes 1 '{thumb_image_path}'"
     err = (await runcmd(command))[1]
     if err:
         print(err)
