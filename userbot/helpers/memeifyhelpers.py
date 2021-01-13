@@ -1,10 +1,7 @@
-import asyncio
 import os
-import shlex
 from os import getcwd
-from os.path import basename, join
+from os.path import join
 from textwrap import wrap
-from typing import Optional, Tuple
 
 import numpy as np
 
@@ -125,7 +122,6 @@ async def cat_meeme(upper_text, lower_text, CNG_FONTS, picture_name, endname):
         )
     text_draw(main_image)
     main_image.save(filename=endname)
-
 
 
 async def silently_send_message(conv, text):
