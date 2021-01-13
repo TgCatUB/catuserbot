@@ -7,10 +7,6 @@ from typing import Tuple
 
 from telethon import functions, types
 
-try:
-    pass
-except:
-    os.system("pip install colour")
 
 
 async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
