@@ -13,17 +13,18 @@ from . import BOT_USERNAME
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 
 
-@bot.on(admin_cmd(pattern=r"cbutton(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"cbutton(?: |$)(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"cbutton ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"cbutton ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    chat = event.chat_id
     reply_message = await event.get_reply_message()
     if reply_message:
         markdown_note = reply_message.text
     else:
         markdown_note = "".join(event.text.split(maxsplit=1)[1:])
+    if not markdown_note:
+        return await edit_delete(event , "`what text should i use in button post`")
     prev = 0
     note_data = ""
     buttons = []
@@ -54,7 +55,7 @@ async def _(event):
     if tl_ib_buttons == []:
         tl_ib_buttons = None
     await tgbot.send_message(
-        entity=chat,
+        entity=event.chat_id,
         message=message_text,
         parse_mode="html",
         file=tgbot_reply_message,
@@ -69,25 +70,22 @@ async def _(event):
 # Helpers
 
 
-@bot.on(admin_cmd(pattern=r"ibutton( (.*)|$)", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"ibutton( (.*)|$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern=r"ibutton ?(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern=r"ibutton ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
-    reply_to_id = None
-    catinput = "".join(event.text.split(maxsplit=1)[1:])
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
-    await event.get_reply_message()
+    reply_to_id = await reply_id(event)
     # soon will try to add media support
-    if not catinput:
-        catinput = (await event.get_reply_message()).text
-    if not catinput:
-        await edit_or_reply(event, "`Give me something to write in bot inline`")
-        return
-    catinput = "Inline buttons " + catinput
-    tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
-    results = await bot.inline_query(tgbotusername, catinput)
+    reply_message = await event.get_reply_message()
+    if reply_message:
+        markdown_note = reply_message.text
+    else:
+        markdown_note = "".join(event.text.split(maxsplit=1)[1:])
+    if not markdown_note:
+        return await edit_delete(event , "`what text should i use in button post`")
+    catinput = "Inline buttons " + markdown_note
+    results = await bot.inline_query(BOT_USERNAME, catinput)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()
 
