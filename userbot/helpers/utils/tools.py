@@ -5,9 +5,10 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
 
+from ...managers import edit_delete, edit_or_reply
 from ..tools import media_type
 from .utils import runcmd
-from ...managers import edit_or_reply , edit_delete
+
 
 async def media_to_pic(event, reply):
     mediatype = media_type(reply)
