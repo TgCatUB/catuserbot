@@ -1,28 +1,20 @@
+import os
+from os.path import basename
+from typing import Optional
+
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
 
-
-import asyncio
-import os
-import shlex
-from os import getcwd
-from os.path import basename, join
-from textwrap import wrap
-from typing import Optional, Tuple
-
-import numpy as np
-
 try:
-    from colour import Color as asciiColor
+    pass
 except:
     os.system("pip install colour")
-from PIL import Image, ImageDraw, ImageFont
-from wand.color import Color
-from wand.drawing import Drawing
-from wand.image import Image as catimage
+from PIL import Image
+
 from ..tools import media_type
 from .utils import runcmd
+
 
 async def media_to_pic(event, reply):
     mediatype = media_type(reply)
@@ -79,4 +71,3 @@ async def take_screen_shot(
     if err:
         print(err)
     return thumb_image_path if os.path.exists(thumb_image_path) else None
-

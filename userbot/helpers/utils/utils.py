@@ -3,21 +3,14 @@
 import asyncio
 import os
 import shlex
-from os import getcwd
-from os.path import basename, join
-from textwrap import wrap
-from typing import Optional, Tuple
+from typing import Tuple
+
 from telethon import functions, types
-import numpy as np
 
 try:
-    from colour import Color as asciiColor
+    pass
 except:
     os.system("pip install colour")
-from PIL import Image, ImageDraw, ImageFont
-from wand.color import Color
-from wand.drawing import Drawing
-from wand.image import Image as catimage
 
 
 async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
@@ -34,7 +27,6 @@ async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
     )
 
 
-
 async def unsavegif(event, sandy):
     try:
         await event.client(
@@ -49,4 +41,3 @@ async def unsavegif(event, sandy):
         )
     except:
         pass
-
