@@ -14,7 +14,7 @@ from . import *
 async def _(event):
     if event.fwd_from:
         return
-    _text =event.message
+    _text = event.message
     cmd = "".join(_text.split(maxsplit=1)[1:])
     if not cmd:
         return await edit_delete(event, "`What should i execute?..`")
@@ -49,7 +49,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    _text =event.message
+    _text = event.message
     cmd = "".join(_text.split(maxsplit=1)[1:])
     if not cmd:
         return await edit_delete(event, "`What should i run ?..`")
