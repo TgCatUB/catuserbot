@@ -24,7 +24,7 @@ async def _(event):
     else:
         markdown_note = "".join(event.text.split(maxsplit=1)[1:])
     if not markdown_note:
-        return await edit_delete(event , "`what text should i use in button post`")
+        return await edit_delete(event, "`what text should i use in button post`")
     prev = 0
     note_data = ""
     buttons = []
@@ -83,7 +83,7 @@ async def _(event):
     else:
         markdown_note = "".join(event.text.split(maxsplit=1)[1:])
     if not markdown_note:
-        return await edit_delete(event , "`what text should i use in button post`")
+        return await edit_delete(event, "`what text should i use in button post`")
     catinput = "Inline buttons " + markdown_note
     results = await bot.inline_query(BOT_USERNAME, catinput)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
