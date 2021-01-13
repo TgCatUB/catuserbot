@@ -1,8 +1,26 @@
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
-from telethon import functions, types
 
+
+import asyncio
+import os
+import shlex
+from os import getcwd
+from os.path import basename, join
+from textwrap import wrap
+from typing import Optional, Tuple
+
+import numpy as np
+
+try:
+    from colour import Color as asciiColor
+except:
+    os.system("pip install colour")
+from PIL import Image, ImageDraw, ImageFont
+from wand.color import Color
+from wand.drawing import Drawing
+from wand.image import Image as catimage
 from ..tools import media_type
 from .utils import runcmd
 
