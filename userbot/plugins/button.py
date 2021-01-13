@@ -23,7 +23,7 @@ async def _(event):
     if reply_message:
         markdown_note = reply_message.text
     else:
-        markdown_note = event.pattern_match.group(1)
+        markdown_note = "".join(event.text.split(maxsplit=1)[1:])
     prev = 0
     note_data = ""
     buttons = []
