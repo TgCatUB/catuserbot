@@ -138,7 +138,7 @@ async def ytsearch(query, limit):
         except:
             textresult += "**Description : **`None`\n"
         textresult += f"**Duration : **__{v['duration']}__  **Views : **__{v['viewCount']['short']}__\n"
-        result += f"☞{textresult}\n"
+        result += f"☞ {textresult}\n"
     return result
 
 
