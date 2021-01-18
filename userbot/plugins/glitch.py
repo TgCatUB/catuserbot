@@ -7,9 +7,6 @@ import os
 
 from glitch_this import ImageGlitcher
 from PIL import Image
-from telethon import functions, types
-
-from .. import LOGS
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
@@ -35,12 +32,12 @@ async def glitch(cat):
     glitcher = ImageGlitcher()
     img = Image.open(glitch_file[1])
     if cmd == "glitchs":
-        glitched = os.path.join("./temp" , "glitched.webp")
+        glitched = os.path.join("./temp", "glitched.webp")
         glitch_img = glitcher.glitch_image(img, catinput, color_offset=True)
         glitch_img.save(glitched)
         await cat.client.send_file(cat.chat_id, glitched, reply_to=catid)
     elif cmd == "glitch":
-        glitched = os.path.join("./temp" , "glitched.gif")
+        glitched = os.path.join("./temp", "glitched.gif")
         glitch_img = glitcher.glitch_image(img, catinput, color_offset=True, gif=True)
         DURATION = 200
         LOOP = 0
@@ -52,13 +49,12 @@ async def glitch(cat):
             duration=DURATION,
             loop=LOOP,
         )
-        sandy = await cat.client.send_file(cat.chat_id, glitched, reply_to=catid)  
+        sandy = await cat.client.send_file(cat.chat_id, glitched, reply_to=catid)
         await _cattools.unsavegif(cat, sandy)
     await glitch_file[0].delete()
     for files in (glitch_file[0], glitched):
         if files and os.path.exists(files):
             os.remove(files)
-
 
 
 CMD_HELP.update(
