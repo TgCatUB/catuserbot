@@ -391,7 +391,7 @@ async def _(event):
 @bot.on(events.MessageEdited())
 @bot.on(events.NewMessage())
 async def check_incoming_messages(event):
-    cathi = await is_admin(event.client, event.chat_id, event.from_id)
+    cathi = await is_admin(event.client, event.chat_id, event.sender_id)
     if cathi:
         return
     peer_id = event.chat_id
@@ -454,7 +454,7 @@ async def check_incoming_messages(event):
 
 @bot.on(events.ChatAction())
 async def _(event):
-    cathi = await is_admin(event.client, event.chat_id, event.from_id)
+    cathi = await is_admin(event.client, event.chat_id, event.sender_id)
     if cathi:
         return
     # check for "lock" "bots"
