@@ -4,7 +4,7 @@ ported to telethon by @mrconfused and @sandy1709
 """
 
 import os
-
+import base64
 from glitch_this import ImageGlitcher
 from PIL import Image
 
