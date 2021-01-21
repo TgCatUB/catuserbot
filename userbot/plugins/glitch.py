@@ -3,8 +3,9 @@ designed By @Krishna_Singhal in userge
 ported to telethon by @mrconfused and @sandy1709
 """
 
-import os
 import base64
+import os
+
 from glitch_this import ImageGlitcher
 from PIL import Image
 
