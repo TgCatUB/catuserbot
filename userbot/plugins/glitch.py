@@ -63,7 +63,7 @@ async def glitch(cat):
         sandy = await cat.client.send_file(cat.chat_id, glitched, reply_to=catid)
         await _cattools.unsavegif(cat, sandy)
     await glitch_file[0].delete()
-    for files in (glitch_file[0], glitched):
+    for files in (glitch_file[1], glitched):
         if files and os.path.exists(files):
             os.remove(files)
 
