@@ -24,6 +24,16 @@ async def glitch(cat):
     san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
+    if catinput:
+        if not catinput.isdigit():
+            await cat.edit("`You input is invalid, check help`")
+            return
+        catinput = int(catinput)
+        if not 0 < catinput < 9:
+            await cat.edit("`Invalid Range...`")
+            return
+    else:
+        catinput = 2
     glitch_file = await _cattools.media_to_pic(cat, reply)
     try:
         san = Get(san)
