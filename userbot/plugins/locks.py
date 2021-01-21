@@ -5,7 +5,6 @@ from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import ChatBannedRights
 
-from ..utils import is_admin
 from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 
 
