@@ -390,11 +390,12 @@ async def _(event):
 @bot.on(events.MessageEdited())
 @bot.on(events.NewMessage())
 async def check_incoming_messages(event):
-    chat = await event.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
-    if not admin and not creator:
-        return
+    if not event.is_private:
+        chat = await event.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            return
     peer_id = event.chat_id
     if is_locked(peer_id, "commands"):
         entities = event.message.entities
@@ -455,11 +456,12 @@ async def check_incoming_messages(event):
 
 @bot.on(events.ChatAction())
 async def _(event):
-    chat = await event.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
-    if not admin and not creator:
-        return
+    if not event.is_private:
+        chat = await event.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            return
     # check for "lock" "bots"
     if not is_locked(event.chat_id, "bots"):
         return
