@@ -27,7 +27,7 @@ async def catlst_of_files(path):
 
 
 def get_video_thumb(file, output=None, width=320):
-    output = file + ".jpg"
+    output = file 
     metadata = extractMetadata(createParser(file))
     p = subprocess.Popen(
         [
