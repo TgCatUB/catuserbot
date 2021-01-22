@@ -13,8 +13,8 @@ from telethon.tl.types import DocumentAttributeVideo
 
 from . import make_gif, progress, reply_id, runcmd, thumb_from_audio
 
-PATH = os.path.join("./temp", "temp_vid.mp4")
-thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+PATH = os.path.join("temp_vid.mp4")
+thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY
 
 
 async def catlst_of_files(path):
