@@ -16,7 +16,7 @@ csvfaker
 DateTime
 fontTools
 python-dotenv
-emoji
+emoji==0.6.0
 fonttools
 geopy
 gitpython
