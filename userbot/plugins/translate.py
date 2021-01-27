@@ -109,7 +109,7 @@ CMD_HELP.update(
     {
         "translate": "**Plugin :** `translate`\
          \n\n**  • Syntax : **`.tl LanguageCode <text/reply>`\
-         \n**  • Function : **Translates given language to destination language\
+         \n**  • Function : **Translates given language to destination language. For <text> use .tl LanguageCode ; <text>\
          \n\n**  • Syntax : **`.trt <Reply/text>`\
          \n**  • Function : **it will translate your messege\
          \n\n**  • Syntax : **`.lang trt LanguageCode`\
