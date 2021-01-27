@@ -9,6 +9,7 @@ No Logic Pligon for @PepeBot
 """
 
 import random
+import asyncio
 from asyncio import sleep
 
 

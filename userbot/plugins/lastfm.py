@@ -139,8 +139,8 @@ async def get_curr_track(lfmbio):
             if playing is not None and SONG != oldsong and ARTIST != oldartist:
                 environ["oldsong"] = str(SONG)
                 environ["oldartist"] = str(ARTIST)
-                if BIOPREFIX:
-                    lfmbio = f"{BIOPREFIX} 🎧: {ARTIST} - {SONG}"
+                if BIO_PREFIX:
+                    lfmbio = f"{BIO_PREFIX} 🎧: {ARTIST} - {SONG}"
                 else:
                     lfmbio = f"🎧: {ARTIST} - {SONG}"
                 try:
