@@ -20,11 +20,11 @@ def paste_text(text):
         )
         link = f"https://nekobin.com/{key}"
     except:
-        text = re.sub(r"•", ">>", text)
-        kresult = requests.post(
-            "https://del.dog/documents", data=text.encode("UTF-8")
-        ).json()
-        link = f"https://del.dog/{kresult['key']}"
+        url = "https://del.dog/documents"
+        r = requests.post(url, data=text.encode("UTF-8")).json()
+        url = f"https://del.dog/{r['key']}"
+        if r["isUrl"]:
+            url = f"https://del.dog/v/{r['key']}"
     return link
 
 
