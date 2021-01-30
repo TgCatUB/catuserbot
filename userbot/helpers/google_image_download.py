@@ -8,18 +8,15 @@ import requests
 from .. import LOGS
 
 
-class googleimagesdownload:
-    def __init__(self):
-        pass
 
-    def download(self, keywords, limit, extensions={".jpg", ".png", ".jpeg"}):
+def googleimagesdownload( keywords, limit, extensions={".jpg", ".png", ".jpeg"}):
         LOGS.info("Searching..")
         keyword_to_search = [str(item).strip() for item in keywords.split(",")]
         main_directory = os.path.join("./", "temp")
         len(keyword_to_search) * limit
 
         for item_ in keyword_to_search:
-            self._create_directories(main_directory, item_)
+            _create_directories(main_directory, item_)
             url = (
                 (
                     "https://www.google.com/search?q="
@@ -28,7 +25,7 @@ class googleimagesdownload:
                 + "&biw=1536&bih=674&tbm=isch&sxsrf=ACYBGNSXXpS6YmAKUiLKKBs6xWb4uUY5gA:1581168823770&source=lnms&sa=X&ved=0ahUKEwioj8jwiMLnAhW9AhAIHbXTBMMQ_AUI3QUoAQ"
             )
 
-            raw_html = self._download_page(url)
+            raw_html = _download_page(url)
 
             end_object = -1
             google_image_seen = False
@@ -73,7 +70,7 @@ class googleimagesdownload:
                 j += 1
         LOGS.info("downloaded")
 
-    def _create_directories(self, main_directory, name):
+def _create_directories( main_directory, name):
         name = name.replace(" ", "_")
         try:
             if not os.path.exists(main_directory):
@@ -88,7 +85,7 @@ class googleimagesdownload:
                 raise
         return
 
-    def _download_page(self, url):
+def _download_page( url):
 
         try:
             headers = {
@@ -98,7 +95,5 @@ class googleimagesdownload:
             req = urllib.request.Request(url, headers=headers)
             resp = urllib.request.urlopen(req)
             return str(resp.read())
-
         except Exception as e:
             print(e)
-            exit(0)
