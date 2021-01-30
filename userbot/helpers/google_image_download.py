@@ -15,8 +15,8 @@ import re
 import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
+
 from . import paste_text
-import requests
 
 version = (3, 0)
 cur_version = sys.version_info
