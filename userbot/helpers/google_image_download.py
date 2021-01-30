@@ -11,12 +11,10 @@ import requests
 class googleimagesdownload:
     def __init__(self):
         pass
-    
-    def download(
-        self, keywords, limit, extensions={".jpg", ".png", ".jpeg"}
-    ):
+
+    def download(self, keywords, limit, extensions={".jpg", ".png", ".jpeg"}):
         keyword_to_search = [str(item).strip() for item in keywords.split(",")]
-        main_directory = os.path.join("./" , "temp")
+        main_directory = os.path.join("./", "temp")
         things = len(keyword_to_search) * limit
 
         bar = progressbar.ProgressBar(
