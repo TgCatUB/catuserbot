@@ -21,7 +21,8 @@ def paste_text(text):
         link = f"https://nekobin.com/{key}"
     except:
         url = "https://del.dog/documents"
-        r = requests.post(url, data=text.encode("UTF-8")).json()
+        r = requests.post(url, data=text).json()
+        print(r)
         url = f"https://del.dog/{r['key']}"
         if r["isUrl"]:
             url = f"https://del.dog/v/{r['key']}"
