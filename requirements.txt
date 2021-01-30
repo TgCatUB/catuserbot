@@ -51,6 +51,7 @@ PyLyrics
 pymediainfo
 pySmartDL
 python-barcode
+python-magic
 pytuneteller
 pytz
 qrcode
