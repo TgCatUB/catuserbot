@@ -30,7 +30,7 @@ async def img_sampler(event):
         lim = int(3)
     response = googleimagesdownload()
     # passing the arguments to the function
-    paths = response.download("keywords": query,"limit": lim,)
+    paths = response.download( keywords=query,limit=lim)
     lst = paths[0][query]
     await bot.send_file(
         await bot.get_input_entity(event.chat_id), lst, reply_to=reply_to_id
