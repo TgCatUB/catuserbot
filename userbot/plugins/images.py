@@ -30,7 +30,7 @@ async def img_sampler(event):
         lim = int(3)
     # passing the arguments to the function
     try:
-        paths = googleimagesdownload(keywords=query, limit=lim)
+        paths = await googleimagesdownload(keywords=query, limit=lim)
     except Exception as e:
         return await edit_or_reply(cat, f"`{str(e)}`")
     lst = paths[0][query]
