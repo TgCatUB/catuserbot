@@ -63,7 +63,6 @@ class googleimagesdownload:
                         file_name = str(item_) + "_" + str(j + 1) + file_extension
                         with open(os.path.join(path, file_name), "wb") as file:
                             file.write(r.content)
-                        bar.update(bar.currval + 1)
                     else:
                         j -= 1
                 except Exception:
