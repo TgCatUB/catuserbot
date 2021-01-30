@@ -1,9 +1,6 @@
 import datetime
 import re
-import os
 
-import requests
-from requests import exceptions, get
 import requests
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
