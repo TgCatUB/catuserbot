@@ -29,7 +29,10 @@ async def img_sampler(event):
     else:
         lim = int(3)
     # passing the arguments to the function
-    paths = googleimagesdownload(keywords=query, limit=lim)
+    try:
+        paths = googleimagesdownload(keywords=query, limit=lim)
+    except Exception as e:
+        return await edit_or_reply(cat , f"`{str(e)}`")
     lst = paths[0][query]
     await bot.send_file(
         await bot.get_input_entity(event.chat_id), lst, reply_to=reply_to_id
