@@ -1,21 +1,21 @@
 import os
 import time
 import urllib
-
+import asyncio
 import magic
 import requests
 
 from .. import LOGS
 
 
-def googleimagesdownload(keywords, limit, extensions={".jpg", ".png", ".jpeg"}):
+async def googleimagesdownload(keywords, limit, extensions={".jpg", ".png", ".jpeg"}):
     LOGS.info("Searching..")
     keyword_to_search = [str(item).strip() for item in keywords.split(",")]
     main_directory = os.path.join("./", "temp")
     len(keyword_to_search) * limit
 
     for item_ in keyword_to_search:
-        _create_directories(main_directory, item_)
+        await _create_directories(main_directory, item_)
         url = (
             (
                 "https://www.google.com/search?q="
@@ -24,7 +24,7 @@ def googleimagesdownload(keywords, limit, extensions={".jpg", ".png", ".jpeg"}):
             + "&biw=1536&bih=674&tbm=isch&sxsrf=ACYBGNSXXpS6YmAKUiLKKBs6xWb4uUY5gA:1581168823770&source=lnms&sa=X&ved=0ahUKEwioj8jwiMLnAhW9AhAIHbXTBMMQ_AUI3QUoAQ"
         )
 
-        raw_html = _download_page(url)
+        raw_html = await _download_page(url)
 
         end_object = -1
         google_image_seen = False
@@ -70,12 +70,12 @@ def googleimagesdownload(keywords, limit, extensions={".jpg", ".png", ".jpeg"}):
     LOGS.info("downloaded")
 
 
-def _create_directories(main_directory, name):
+async def _create_directories(main_directory, name):
     name = name.replace(" ", "_")
     try:
         if not os.path.exists(main_directory):
             os.makedirs(main_directory)
-            time.sleep(0.2)
+            await asyncio.sleep(0.2)
         path = name
         sub_directory = os.path.join(main_directory, path)
         if not os.path.exists(sub_directory):
@@ -86,7 +86,7 @@ def _create_directories(main_directory, name):
     return
 
 
-def _download_page(url):
+async def _download_page(url):
 
     try:
         headers = {
