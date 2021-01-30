@@ -1400,12 +1400,15 @@ class googleimagesdownload:
 
     def _get_image_objects(self, s):
         start_line = s.find("AF_initDataCallback({key: \\'ds:1\\'") - 10
+        LOGS.info(f"start_line {start_line}")
         start_object = s.find("[", start_line + 1)
+        LOGS.info(f"start_object {start_object}")
         end_object = s.find("</script>", start_object + 1) - 4
+        LOGS.info(f"end_object {end_object}")
         object_raw = str(s[start_object:end_object])
-        LOGS.info(object_raw)
+        LOGS.info(f"1 {object_raw}")
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
-        LOGS.info(object_decode)
+        LOGS.info(f"2 {object_decode}")
         LOGS.info(_format.paste_text(object_decode[:-15]))
         image_objects = json.loads(object_decode[:-15])[31][0][12][2]
         return image_objects
@@ -1416,7 +1419,7 @@ class googleimagesdownload:
         errorCount = 0
         i = 0
         count = 1
-        LOGS.info(f"page : {page}")
+        LOGS.info(f"page : {_format.paste_text(page)}")
         image_objects = self._get_image_objects(page)
         while count < limit + 1:
             if len(image_objects) == 0:
