@@ -1,7 +1,6 @@
 import os
 import time
 import urllib
-from urllib.parse import quote
 
 import magic
 import progressbar
@@ -27,7 +26,7 @@ class googleimagesdownload:
         for item_ in keyword_to_search:
             self._create_directories(main_directory, item_)
             url = (
-                ("https://www.google.com/search?q=" + quote(item_.encode("utf-8")))
+                ("https://www.google.com/search?q=" + urllib.parse.quote(item_.encode("utf-8")))
                 + "&biw=1536&bih=674&tbm=isch&sxsrf=ACYBGNSXXpS6YmAKUiLKKBs6xWb4uUY5gA:1581168823770&source=lnms&sa=X&ved=0ahUKEwioj8jwiMLnAhW9AhAIHbXTBMMQ_AUI3QUoAQ"
             )
 
