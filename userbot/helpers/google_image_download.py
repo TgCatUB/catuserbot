@@ -1,7 +1,7 @@
-import os
-import time
-import urllib
 import asyncio
+import os
+import urllib
+
 import magic
 import requests
 
