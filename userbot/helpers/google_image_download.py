@@ -1,9 +1,11 @@
 import os
 import time
 import urllib
-from .. import LOGS
+
 import magic
 import requests
+
+from .. import LOGS
 
 
 class googleimagesdownload:
@@ -69,7 +71,7 @@ class googleimagesdownload:
                 except Exception:
                     j -= 1
                 j += 1
-        LOGS.info("downloaded") 
+        LOGS.info("downloaded")
 
     def _create_directories(self, main_directory, name):
         name = name.replace(" ", "_")
