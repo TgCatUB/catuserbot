@@ -1403,6 +1403,7 @@ class googleimagesdownload:
         start_object = s.find("[", start_line + 1)
         end_object = s.find("</script>", start_object + 1) - 4
         object_raw = str(s[start_object:end_object])
+        LOGS.info(object_raw)
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
         LOGS.info(object_decode)
         LOGS.info(_format.paste_text(object_decode[:-15]))
@@ -1415,6 +1416,7 @@ class googleimagesdownload:
         errorCount = 0
         i = 0
         count = 1
+        LOGS.info(f"page : {page}")
         image_objects = self._get_image_objects(page)
         while count < limit + 1:
             if len(image_objects) == 0:
