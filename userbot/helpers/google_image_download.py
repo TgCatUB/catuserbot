@@ -1403,7 +1403,7 @@ class googleimagesdownload:
         end_object = s.find("</script>", start_object + 1) - 4
         object_raw = str(s[start_object:end_object])
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
-        LOGS.info(_format.paste_text(object_decode))
+        paste(_format.paste_text(object_decode))
         image_objects = json.loads(object_decode[:-15])[31][0][12][2]
         return image_objects
 
