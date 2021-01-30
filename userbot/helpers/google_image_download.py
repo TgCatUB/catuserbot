@@ -1,7 +1,7 @@
 import os
 import time
 import urllib
-
+from .. import LOGS
 import magic
 import requests
 
@@ -11,6 +11,7 @@ class googleimagesdownload:
         pass
 
     def download(self, keywords, limit, extensions={".jpg", ".png", ".jpeg"}):
+        LOGS.info("Searching..")
         keyword_to_search = [str(item).strip() for item in keywords.split(",")]
         main_directory = os.path.join("./", "temp")
         len(keyword_to_search) * limit
@@ -68,6 +69,7 @@ class googleimagesdownload:
                 except Exception:
                     j -= 1
                 j += 1
+        LOGS.info("downloaded") 
 
     def _create_directories(self, main_directory, name):
         name = name.replace(" ", "_")
