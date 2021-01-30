@@ -1,6 +1,9 @@
 import datetime
 import re
+import os
 
+import requests
+from requests import exceptions, get
 import requests
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
@@ -12,13 +15,13 @@ def paste_text(text):
     for i in asciich:
         text = re.sub(rf"\{i}", "", text)
     try:
-        key = (
+        nekokey = (
             requests.post("https://nekobin.com/api/documents", json={"content": text})
             .json()
             .get("result")
             .get("key")
         )
-        link = f"https://nekobin.com/{key}"
+        link = f"https://nekobin.com/{nekokey}"
     except:
         url = "https://del.dog/documents"
         r = requests.post(url, data=text).json()
