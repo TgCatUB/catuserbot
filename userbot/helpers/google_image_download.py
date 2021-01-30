@@ -1,9 +1,7 @@
 import os
 import time
 import urllib
-
 import magic
-import progressbar
 import requests
 
 
@@ -15,13 +13,6 @@ class googleimagesdownload:
         keyword_to_search = [str(item).strip() for item in keywords.split(",")]
         main_directory = os.path.join("./", "temp")
         things = len(keyword_to_search) * limit
-
-        bar = progressbar.ProgressBar(
-            maxval=things,
-            widgets=[progressbar.Bar("=", "[", "]"), " ", progressbar.Percentage()],
-        )
-
-        bar.start()
 
         for item_ in keyword_to_search:
             self._create_directories(main_directory, item_)
@@ -77,8 +68,6 @@ class googleimagesdownload:
                 except Exception:
                     j -= 1
                 j += 1
-
-        bar.finish()
 
     def _create_directories(self, main_directory, name):
         name = name.replace(" ", "_")
