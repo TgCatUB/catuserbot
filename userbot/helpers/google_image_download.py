@@ -1,7 +1,7 @@
-import asyncio
 import os
+import time
 import urllib
-
+import asyncio
 import magic
 import requests
 
@@ -13,7 +13,7 @@ async def googleimagesdownload(keywords, limit, extensions={".jpg", ".png", ".jp
     keyword_to_search = [str(item).strip() for item in keywords.split(",")]
     main_directory = os.path.join("./", "temp")
     len(keyword_to_search) * limit
-
+    location = []
     for item_ in keyword_to_search:
         await _create_directories(main_directory, item_)
         url = (
@@ -60,14 +60,17 @@ async def googleimagesdownload(keywords, limit, extensions={".jpg", ".png", ".jp
                         google_image_seen = True
                         raise ValueError()
                     file_name = str(item_) + "_" + str(j + 1) + file_extension
-                    with open(os.path.join(path, file_name), "wb") as file:
+                    loc = os.path.join(path, file_name)
+                    with open(loc, "wb") as file:
                         file.write(r.content)
+                    location.append(loc)
                 else:
                     j -= 1
             except Exception:
                 j -= 1
             j += 1
     LOGS.info("downloaded")
+    return location
 
 
 async def _create_directories(main_directory, name):
