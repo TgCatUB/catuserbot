@@ -37,10 +37,7 @@ async def img_sampler(event):
         "no_directory": "no_directory",
     }
     # passing the arguments to the function
-    try:
-        paths = response.download(arguments)
-    except Exception as e:
-        return await cat.edit(f"Error: \n`{e}`")
+    paths = response.download(arguments)
     lst = paths[0][query]
     await bot.send_file(
         await bot.get_input_entity(event.chat_id), lst, reply_to=reply_to_id
