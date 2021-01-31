@@ -12,7 +12,6 @@ from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
 from youtubesearchpython import VideosSearch
 
-from ..Config import Config
 from .resources.states import states
 
 
@@ -77,6 +76,7 @@ async def yt_search(cat):
         return "Couldnt fetch results"
     except:
         return "Couldnt fetch results"
+
 
 async def sanga_seperator(sanga_list):
     for i in sanga_list:
