@@ -16,9 +16,6 @@ import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
 
-from .. import LOGS
-from . import _format
-
 version = (3, 0)
 cur_version = sys.version_info
 if cur_version >= version:  # If the Current Version of Python is 3.0 or above
