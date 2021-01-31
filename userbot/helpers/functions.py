@@ -78,34 +78,6 @@ async def yt_search(cat):
     except:
         return "Couldnt fetch results"
 
-
-from googleapiclient.discovery import build
-
-
-async def yt_search_api(cat):
-    youtube = build(
-        "youtube", "v3", developerKey=Config.YOUTUBE_API_KEY, cache_discovery=False
-    )
-    order = "relevance"
-    search_response = (
-        youtube.search()
-        .list(
-            q=cat,
-            type="video",
-            order=order,
-            part="id,snippet",
-            maxResults=10,
-        )
-        .execute()
-    )
-    videos = [
-        search_result
-        for search_result in search_response.get("items", [])
-        if search_result["id"]["kind"] == "youtube#video"
-    ]
-    return videos
-
-
 async def sanga_seperator(sanga_list):
     for i in sanga_list:
         if i.startswith("🔗"):
