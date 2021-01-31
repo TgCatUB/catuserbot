@@ -1,3 +1,4 @@
+# image search for catuserbot
 import os
 import shutil
 
@@ -28,15 +29,21 @@ async def img_sampler(event):
             lim = int(1)
     else:
         lim = int(3)
+    response = googleimagesdownload()
+    # creating list of arguments
+    arguments = {
+        "keywords": query,
+        "limit": lim,
+        "format": "jpg",
+        "no_directory": "no_directory",
+    }
     # passing the arguments to the function
     try:
-        paths = await googleimagesdownload(keywords=query, limit=lim)
+        paths = response.download(arguments)
     except Exception as e:
-        return await edit_or_reply(cat, f"`{str(e)}`")
+        return await cat.edit(f"Error: \n`{e}`")
     lst = paths[0][query]
-    await bot.send_file(
-        await bot.get_input_entity(event.chat_id), lst, reply_to=reply_to_id
-    )
+    await event.client.send_file(event.chat_id , lst, reply_to=reply_to_id)
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await cat.delete()
 
@@ -45,6 +52,6 @@ CMD_HELP.update(
     {
         "images": "**Plugin :**`images`\
     \n\n**  •  Syntax :** `.img <limit> <Name>` or `.img <limit> (replied message)`\
-    \n  •  **Function : **do google image search and sends 3 images. default if you havent mentioned limit"
+    \n**  •  Function : **do google image search and sends 3 images. default if you havent mentioned limit"
     }
 )
