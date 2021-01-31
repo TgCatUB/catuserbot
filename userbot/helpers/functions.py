@@ -69,10 +69,10 @@ async def yt_search(cat):
             if user_data:
                 video_link.append("https://www.youtube.com/watch?v=" + user_data[k])
             k += 1
-            if k > 10:
+            if k > 3:
                 break
         if video_link:
-            return video_link
+            return video_link[0]
         return "Couldnt fetch results"
     except:
         return "Couldnt fetch results"
