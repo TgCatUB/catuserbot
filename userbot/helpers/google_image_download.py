@@ -16,25 +16,13 @@ import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
 
-version = (3, 0)
-cur_version = sys.version_info
-if cur_version >= version:  # If the Current Version of Python is 3.0 or above
-    import http.client
-    import urllib.request
-    from http.client import BadStatusLine, IncompleteRead
-    from urllib.parse import quote
-    from urllib.request import HTTPError, Request, URLError, urlopen
+import http.client
+import urllib.request
+from http.client import BadStatusLine, IncompleteRead
+from urllib.parse import quote
+from urllib.request import HTTPError, Request, URLError, urlopen
 
-    http.client._MAXHEADERS = 1000
-else:  # If the Current Version of Python is 2.x
-    from urllib import quote
-
-    import httplib
-    import urllib2
-    from httplib import BadStatusLine, IncompleteRead
-    from urllib2 import HTTPError, Request, URLError, urlopen
-
-    httplib._MAXHEADERS = 1000
+http.client._MAXHEADERS = 1000
 
 args_list = [
     "keywords",
@@ -486,9 +474,6 @@ class googleimagesdownload:
 
     # Downloading entire Web Document (Raw Page Content)
     def download_page(self, url):
-        version = (3, 0)
-        cur_version = sys.version_info
-        if cur_version >= version:  # If the Current Version of Python is 3.0 or above
             try:
                 headers = {
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
@@ -503,26 +488,6 @@ class googleimagesdownload:
                     "If you are using proxy, make sure your proxy settings is configured correctly"
                 )
                 sys.exit()
-        else:  # If the Current Version of Python is 2.x
-            try:
-                headers = {
-                    "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
-                }
-
-                req = urllib2.Request(url, headers=headers)
-                try:
-                    response = urllib2.urlopen(req)
-                except URLError:  # Handling SSL certificate failed
-                    context = ssl._create_unverified_context()
-                    response = urlopen(req, context=context)
-                return response.read()
-            except BaseException:
-                print(
-                    "Could not open URL. Please check your internet connection and/or ssl settings \n"
-                    "If you are using proxy, make sure your proxy settings is configured correctly"
-                )
-                sys.exit()
-                return "Page Not found"
 
     # Download Page for more than 100 images
 
@@ -695,70 +660,34 @@ class googleimagesdownload:
         )
 
     def similar_images(self, similar_images):
-        version = (3, 0)
-        cur_version = sys.version_info
-        if cur_version >= version:  # If the Current Version of Python is 3.0 or above
-            try:
-                searchUrl = (
-                    "https://www.google.com/searchbyimage?site=search&sa=X&image_url="
-                    + similar_images
-                )
-                headers = {}
-                headers[
-                    "User-Agent"
-                ] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
+        try:
+            searchUrl = (
+                "https://www.google.com/searchbyimage?site=search&sa=X&image_url="
+                + similar_images
+            )
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
+            }
 
-                req1 = urllib.request.Request(searchUrl, headers=headers)
-                resp1 = urllib.request.urlopen(req1)
-                content = str(resp1.read())
-                l1 = content.find("AMhZZ")
-                l2 = content.find("&", l1)
-                urll = content[l1:l2]
+            req1 = urllib.request.Request(searchUrl, headers=headers)
+            resp1 = urllib.request.urlopen(req1)
+            content = str(resp1.read())
+            l1 = content.find("AMhZZ")
+            l2 = content.find("&", l1)
+            urll = content[l1:l2]
 
-                newurl = (
-                    "https://www.google.com/search?tbs=sbi:"
-                    + urll
-                    + "&site=search&sa=X"
-                )
-                req2 = urllib.request.Request(newurl, headers=headers)
-                urllib.request.urlopen(req2)
-                l3 = content.find("/search?sa=X&amp;q=")
-                l4 = content.find(";", l3 + 19)
-                urll2 = content[l3 + 19 : l4]
-                return urll2
-            except BaseException:
-                return "Cloud not connect to Google Images endpoint"
-        else:  # If the Current Version of Python is 2.x
-            try:
-                searchUrl = (
-                    "https://www.google.com/searchbyimage?site=search&sa=X&image_url="
-                    + similar_images
-                )
-                headers = {}
-                headers[
-                    "User-Agent"
-                ] = "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
-
-                req1 = urllib2.Request(searchUrl, headers=headers)
-                resp1 = urllib2.urlopen(req1)
-                content = str(resp1.read())
-                l1 = content.find("AMhZZ")
-                l2 = content.find("&", l1)
-                urll = content[l1:l2]
-
-                newurl = (
-                    "https://www.google.com/search?tbs=sbi:"
-                    + urll
-                    + "&site=search&sa=X"
-                )
-                req2 = urllib2.Request(newurl, headers=headers)
-                urllib2.urlopen(req2)
-                l3 = content.find("/search?sa=X&amp;q=")
-                l4 = content.find(";", l3 + 19)
-                urll2 = content[l3 + 19 : l4]
-                return urll2
-            except BaseException:
-                return "Cloud not connect to Google Images endpoint"
+            newurl = (
+                "https://www.google.com/search?tbs=sbi:"
+                + urll
+                + "&site=search&sa=X"
+            )
+            req2 = urllib.request.Request(newurl, headers=headers)
+            urllib.request.urlopen(req2)
+            l3 = content.find("/search?sa=X&amp;q=")
+            l4 = content.find(";", l3 + 19)
+            return content[l3 + 19 : l4]
+        except BaseException:
+            return "Cloud not connect to Google Images endpoint"
 
     # Building URL parameters
     def build_url_parameters(self, arguments):
@@ -1375,19 +1304,11 @@ class googleimagesdownload:
         end_object = s.find("</div>", start_object + 1)
         object_raw = str(s[start_object:end_object])
         # remove escape characters based on python version
-        version = (3, 0)
-        cur_version = sys.version_info
-        if cur_version >= version:  # python3
-            try:
-                object_decode = bytes(object_raw, "utf-8").decode("unicode_escape")
-                final_object = json.loads(object_decode)
-            except BaseException:
-                final_object = ""
-        else:  # python2
-            try:
-                final_object = json.loads(self.repair(object_raw))
-            except BaseException:
-                final_object = ""
+        try:
+            object_decode = bytes(object_raw, "utf-8").decode("unicode_escape")
+            final_object = json.loads(object_decode)
+        except BaseException:
+            final_object = ""
         return final_object, end_object
 
     # Getting all links with the help of '_images_get_next_image'
