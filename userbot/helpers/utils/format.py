@@ -23,9 +23,9 @@ def paste_text(text):
         url = "https://del.dog/documents"
         r = requests.post(url, data=text).json()
         print(r)
-        url = f"https://del.dog/{r['key']}"
+        link = f"https://del.dog/{r['key']}"
         if r["isUrl"]:
-            url = f"https://del.dog/v/{r['key']}"
+            link = f"https://del.dog/v/{r['key']}"
     return link
 
 
