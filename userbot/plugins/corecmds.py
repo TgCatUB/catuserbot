@@ -135,19 +135,19 @@ CMD_HELP.update(
     {
         "corecmds": """**Plugin : **`corecmds`
 
-  •  **Command : **`.install`
+  •  **Syntax : **`.install`
   •  **Function : **__Reply to any external plugin to install in bot__ 
   
-  •  **Command : **`.load <plugin name>`
+  •  **Syntax : **`.load <plugin name>`
   •  **Function : **__To load that plugin again__
   
-  •  **Command : **`.send <plugin name>`  
+  •  **Syntax : **`.send <plugin name>`  
   •  **Function : **__to send any plugin__
   
-  •  **Command : **`.unload <plugin name>`
+  •  **Syntax : **`.unload <plugin name>`
   •  **Function : **__To stop functioning of that plugin__ 
   
-  •  **Command : **`.uninstall <plugin name>`
+  •  **Syntax : **`.uninstall <plugin name>`
   •  **Function : **__To stop functioning of that plugin and remove that plugin from bot__ 
   
 **Note : **__To unload a plugin permenantly from bot set __`NO_LOAD`__ var in heroku with that plugin name with space between plugin names__"""
