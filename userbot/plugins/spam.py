@@ -42,7 +42,7 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
             sandy = await event.client.send_file(
                 event.chat_id, sandy, caption=sandy.text
             )
-            await _cattools.unsavegif(event, sandy)
+            await _catutils.unsavegif(event, sandy)
             await asyncio.sleep(sleeptimem)
     elif event.reply_to_msg_id and sandy.text:
         spam_message = sandy.text
@@ -83,7 +83,7 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                     )
 
             sandy = await event.client.send_file(BOTLOG_CHATID, sandy)
-            await _cattools.unsavegif(event, sandy)
+            await _catutils.unsavegif(event, sandy)
         return
     if BOTLOG:
         if DelaySpam is not True:
