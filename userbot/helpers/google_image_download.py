@@ -493,10 +493,6 @@ class googleimagesdownload:
     def download_extended_page(self, url, chromedriver):
         from selenium import webdriver
         from selenium.webdriver.common.keys import Keys
-
-        if sys.version_info[0] < 3:
-            reload(sys)
-            sys.setdefaultencoding("utf8")
         options = webdriver.ChromeOptions()
         options.add_argument("--no-sandbox")
         options.add_argument("--headless")
@@ -1552,10 +1548,7 @@ class googleimagesdownload:
                         + (search_keyword[i])
                         + (sky)
                     )
-                    if not arguments["silent_mode"]:
-                        print(iteration.encode("raw_unicode_escape").decode("utf-8"))
-                        print("Evaluating...")
-                    else:
+                    if arguments["silent_mode"]:
                         print(
                             "Downloading images for: "
                             + (pky)
@@ -1563,6 +1556,9 @@ class googleimagesdownload:
                             + (sky)
                             + " ..."
                         )
+                    else:
+                        print(iteration.encode("raw_unicode_escape").decode("utf-8"))
+                        print("Evaluating...")
                     search_term = pky + search_keyword[i] + sky
 
                     if arguments["image_directory"]:
