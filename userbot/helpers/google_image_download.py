@@ -12,7 +12,6 @@ async def googleimagesdownload(keywords, limit, extensions={".jpg", ".png", ".jp
     LOGS.info("Searching..")
     keyword_to_search = [str(item).strip() for item in keywords.split(",")]
     main_directory = os.path.join("./", "temp")
-    len(keyword_to_search) * limit
     location = []
     for item_ in keyword_to_search:
         await _create_directories(main_directory, item_)
@@ -47,6 +46,7 @@ async def googleimagesdownload(keywords, limit, extensions={".jpg", ".png", ".jp
                 except Exception:
                     break
             path = main_directory + item_.replace(" ", "_")
+            LOGS.info(f"path {path}")
 
             try:
                 r = requests.get(object_raw, allow_redirects=True, timeout=1)
