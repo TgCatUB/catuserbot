@@ -9,14 +9,13 @@ import argparse
 # Import Libraries
 import codecs
 import datetime
+import http.client
 import json
 import os
 import re
 import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
-
-import http.client
 import urllib.request
 from http.client import BadStatusLine, IncompleteRead
 from urllib.parse import quote
@@ -474,20 +473,20 @@ class googleimagesdownload:
 
     # Downloading entire Web Document (Raw Page Content)
     def download_page(self, url):
-            try:
-                headers = {
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
-                }
+        try:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
+            }
 
-                req = urllib.request.Request(url, headers=headers)
-                resp = urllib.request.urlopen(req)
-                return str(resp.read())
-            except Exception:
-                print(
-                    "Could not open URL. Please check your internet connection and/or ssl settings \n"
-                    "If you are using proxy, make sure your proxy settings is configured correctly"
-                )
-                sys.exit()
+            req = urllib.request.Request(url, headers=headers)
+            resp = urllib.request.urlopen(req)
+            return str(resp.read())
+        except Exception:
+            print(
+                "Could not open URL. Please check your internet connection and/or ssl settings \n"
+                "If you are using proxy, make sure your proxy settings is configured correctly"
+            )
+            sys.exit()
 
     # Download Page for more than 100 images
 
@@ -677,9 +676,7 @@ class googleimagesdownload:
             urll = content[l1:l2]
 
             newurl = (
-                "https://www.google.com/search?tbs=sbi:"
-                + urll
-                + "&site=search&sa=X"
+                "https://www.google.com/search?tbs=sbi:" + urll + "&site=search&sa=X"
             )
             req2 = urllib.request.Request(newurl, headers=headers)
             urllib.request.urlopen(req2)
