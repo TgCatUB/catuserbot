@@ -22,7 +22,6 @@ def paste_text(text):
     except:
         url = "https://del.dog/documents"
         r = requests.post(url, data=text).json()
-        print(r)
         link = f"https://del.dog/{r['key']}"
         if r["isUrl"]:
             link = f"https://del.dog/v/{r['key']}"
