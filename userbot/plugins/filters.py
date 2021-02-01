@@ -125,14 +125,14 @@ async def on_all_snip_delete(event):
 CMD_HELP.update(
     {
         "filters": "**Plugin :**`filters`\
-    \n\n  •  **Synatx :** `.filters`\
+    \n\n  •  **Syntax :** `.filters`\
     \n  •  **Usage: **Lists all active (of your userbot) filters in a chat.\
-    \n\n  •  **Synatx :** `.filter`  reply to a message with .filter <keyword>\
+    \n\n  •  **Syntax :** `.filter`  reply to a message with .filter <keyword>\
     \n  •  **Usage: **Saves the replied message as a reply to the 'keyword'.\
     \nThe bot will reply to the message whenever 'keyword' is mentioned. Works with everything from files to stickers.\
-    \n\n  •  *Synatx :** `.stop <keyword>`\
+    \n\n  •  **Syntax :** `.stop <keyword>`\
     \n  •  **Usage: **Stops the specified keyword.\
-    \n\n  •  *Synatx :** `.rmfilters` \
+    \n\n  •  **Syntax :** `.rmfilters` \
     \n  •  **Usage: **Removes all filters of your userbot in the chat."
     }
 )
