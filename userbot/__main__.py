@@ -44,9 +44,25 @@ for name in files:
 
 LOGS.info("Yay your userbot is officially working.!!!")
 LOGS.info(
-    "Congratulation, now type .alive to see message if bot is live\n"
-    "If you need assistance, head to https://t.me/catuserbot_support"
+    "Congratulation, now type .alive to see message if bot is live\
+    \nIf you need assistance, head to https://t.me/catuserbot_support"
 )
+
+
+async def startupmessage():
+    try:
+        if Config.PRIVATE_GROUP_BOT_API_ID:
+            await bot.send_message(
+                Config.PRIVATE_GROUP_BOT_API_ID,
+                "**Congratulation, now type .alive to see message if bot is live\
+        \nIf you need assistance, **head to https://t.me/catuserbot_support",
+                link_preview=False,
+            )
+    except Exception:
+        pass
+
+
+bot.loop.create_task(startupmessage())
 
 if len(argv) not in (1, 3, 4):
     bot.disconnect()

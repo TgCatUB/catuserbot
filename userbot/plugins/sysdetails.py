@@ -8,7 +8,7 @@ from datetime import datetime
 import psutil
 from telethon import __version__
 
-from . import ALIVE_NAME, runcmd
+from . import ALIVE_NAME
 
 # ================= CONSTANT =================
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
@@ -78,7 +78,7 @@ async def _(event):
     if event.fwd_from:
         return
     cmd = "cat /proc/cpuinfo | grep 'model name'"
-    o = (await runcmd(cmd))[0]
+    o = (await _catutils.runcmd(cmd))[0]
     await edit_or_reply(
         event, f"**[Cat's](tg://need_update_for_some_feature/) CPU Model:**\n{o}"
     )
@@ -88,10 +88,10 @@ async def _(event):
 @bot.on(sudo_cmd(pattern=f"sysd$", allow_sudo=True))
 async def sysdetails(sysd):
     cmd = "git clone https://github.com/dylanaraps/neofetch.git"
-    await runcmd(cmd)
+    await _catutils.runcmd(cmd)
     neo = "neofetch/neofetch --off --color_blocks off --bold off --cpu_temp C \
                     --cpu_speed on --cpu_cores physical --kernel_shorthand off --stdout"
-    a, b, c, d = await runcmd(neo)
+    a, b, c, d = await _catutils.runcmd(neo)
     result = str(a) + str(b)
     await edit_or_reply(sysd, "Neofetch Result: `" + result + "`")
 

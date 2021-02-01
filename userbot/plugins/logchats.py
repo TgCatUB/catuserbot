@@ -5,7 +5,7 @@ from telethon import events
 
 import userbot.plugins.sql_helper.no_log_pms_sql as no_log_pms_sql
 
-from . import BOTLOG, BOTLOG_CHATID, LOGS, htmlmentionuser, mentionuser
+from . import BOTLOG, BOTLOG_CHATID, LOGS
 
 RECENT_USER = None
 NEWPM = None
@@ -37,7 +37,7 @@ async def monito_p_m_s(event):
                     COUNT = 0
                 NEWPM = await event.client.send_message(
                     Config.PM_LOGGR_BOT_API_ID,
-                    f"👤{mentionuser(sender.first_name , sender.id)} has sent a new message \nId : `{chat.id}`",
+                    f"👤{_format.mentionuser(sender.first_name , sender.id)} has sent a new message \nId : `{chat.id}`",
                 )
             try:
                 if event.message:
@@ -73,7 +73,9 @@ async def log_tagged_messages(event):
     messaget = media_type(event)
     resalt = f"#TAGS \n<b>Group : </b><code>{hmm.title}</code>"
     if full is not None:
-        resalt += f"\n<b>From : </b> 👤{htmlmentionuser(full.first_name , full.id)}"
+        resalt += (
+            f"\n<b>From : </b> 👤{_format.htmlmentionuser(full.first_name , full.id)}"
+        )
     if messaget is not None:
         resalt += f"\n<b>Message type : </b><code>{messaget}</code>"
     else:

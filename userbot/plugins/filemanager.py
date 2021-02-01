@@ -9,7 +9,7 @@ import shutil
 import time
 from pathlib import Path
 
-from . import humanbytes, runcmd
+from . import humanbytes
 
 
 @bot.on(admin_cmd(pattern="ls ?(.*)", command="ls"))
@@ -110,10 +110,10 @@ async def lst(event):
         return
     catcmd = f"rm -rf {path}"
     if os.path.isdir(path):
-        await runcmd(catcmd)
+        await _catutils.runcmd(catcmd)
         await edit_or_reply(event, f"Succesfully removed `{path}` directory")
     else:
-        await runcmd(catcmd)
+        await _catutils.runcmd(catcmd)
         await edit_or_reply(event, f"Succesfully removed `{path}` file")
 
 
@@ -142,7 +142,7 @@ async def _(event):
     )
     await asyncio.sleep(2)
     try:
-        await runcmd(f"mkdir {original}")
+        await _catutils.runcmd(f"mkdir {original}")
         await mone.edit(f"Successfully created the directory `{original}`")
     except Exception as e:
         await edit_delete(mone, str(e), parse_mode=parse_pre)
@@ -178,7 +178,7 @@ async def _(event):
     mone = await edit_or_reply(event, "copying the file ...", parse_mode=parse_pre)
     await asyncio.sleep(2)
     try:
-        await runcmd(f"cp -r {original} {location}")
+        await _catutils.runcmd(f"cp -r {original} {location}")
         await mone.edit(f"Successfully copied the `{original}` to `{location}`")
     except Exception as e:
         await edit_delete(mone, str(e), parse_mode=parse_pre)

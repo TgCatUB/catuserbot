@@ -13,8 +13,6 @@ from os import environ, execle, path, remove
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from . import runcmd
-
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME or None
 HEROKU_API_KEY = Config.HEROKU_API_KEY or None
 UPSTREAM_REPO_BRANCH = Config.UPSTREAM_REPO_BRANCH
@@ -230,7 +228,7 @@ async def upstream(event):
     off_repo = "https://github.com/Jisan09/catuserbot"
     catcmd = f"rm -rf .git"
     try:
-        await runcmd(catcmd)
+        await _catutils.runcmd(catcmd)
     except BaseException:
         pass
     try:

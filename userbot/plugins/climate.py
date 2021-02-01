@@ -187,15 +187,26 @@ async def set_default_city(city):
     await edit_or_reply(city, f"`Set default city as {cityname}, {fullc_n}.`")
 
 
+@bot.on(admin_cmd(pattern="weather ?(.*)"))
+@bot.on(sudo_cmd(pattern="weather ?(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    global DEFCITY
+    input_str = event.pattern_match.group(1)
+    if not input_str:
+        input_str = DEFCITY
+    output = requests.get(f"https://wttr.in/{input_str}?mnTC0&lang=en").text
+    await edit_or_reply(event, output, parse_mode=parse_pre)
+
+
 @bot.on(admin_cmd(pattern="wttr ?(.*)"))
 @bot.on(sudo_cmd(pattern="wttr ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     global DEFCITY
-    reply_to_id = None
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    reply_to_id = await reply_id(event)
     input_str = event.pattern_match.group(1)
     if not input_str:
         input_str = DEFCITY
@@ -217,10 +228,12 @@ CMD_HELP.update(
     {
         "climate": "**Plugin : **`climate`\
         \n\n  •  **Syntax : **`.climate <city>`\
-        \n  •  **Function : **__Gets the weather of a city. By default it is Delhi, change it by setcity__\n\
-        \n\n  •  **Syntax : **`.setcity <city> or .setcity <city>, <country name/code>`\
-        \n  •  **Function : **__Sets your default city so you can just use .weather.__\
+        \n  •  **Function : **__Gets the weather of a city. By default it is Delhi, change it by setcity__\
+        \n\n  •  **Syntax : **`.setcity <city> or <country name/code>`\
+        \n  •  **Function : **__Sets your default city so you can just use .weather or .climate.__\
+        \n\n  •  **Syntax : **`.weather <city>`\
+        \n  •  **Function : **__Gets the simple climate/weather information a city. By default it is Delhi, change it by setcity cmd__\
         \n\n  •  **Syntax : **`.wttr <city> `\
-        \n  •  **Function : **__Shows you the climate data of 3 days from today in a image.__"
+        \n  •  **Function : **__sends you the weather information for upcoming 3 days from today.__"
     }
 )
