@@ -8,7 +8,6 @@ No Logic Pligon for @PepeBot
 \nType .logic to see many logical fact
 """
 
-import asyncio
 import random
 from asyncio import sleep
 
