@@ -32,7 +32,7 @@ else
     rm -rf userbot
     rm -rf .github
     rm -rf sample_config.py
-    git clone https://github.com/sandy1709/catuserbot cat_ub
+    git clone https://github.com/ashdroid4/catuserbot
     mv cat_ub/userbot .
     mv cat_ub/.github . 
     mv cat_ub/.git .
