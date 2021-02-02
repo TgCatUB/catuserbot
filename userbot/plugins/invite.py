@@ -1,8 +1,5 @@
 from telethon import functions
 
-from telethon.functions.channels import GetFullChannelRequest
-from telethon.functions.messages import GetFullChatRequest
-
 
 @bot.on(admin_cmd(pattern="add ?(.*)"))
 @bot.on(sudo_cmd(pattern="add ?(.*)", allow_sudo=True))
