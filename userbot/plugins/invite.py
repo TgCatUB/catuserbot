@@ -4,8 +4,8 @@ from telethon.functions.channels import GetFullChannelRequest
 from telethon.functions.messages import GetFullChatRequest
 
 
-@bot.on(admin_cmd(pattern="invite ?(.*)"))
-@bot.on(sudo_cmd(pattern="invite ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="add ?(.*)"))
+@bot.on(sudo_cmd(pattern="add ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -81,9 +81,9 @@ async def get_users(event):
 
 CMD_HELP.update(
     {
-        "invite": """**Plugin : **`invite`
+        "add": """**Plugin : **`add`
 
-  •  **Syntax : **`.invite username(s)/userid(s)`
+  •  **Syntax : **`.add username(s)/userid(s)`
   •  **Function : **__Add the given user/users to the group where u used the command__
 """
     }
