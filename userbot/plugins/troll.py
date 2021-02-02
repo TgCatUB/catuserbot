@@ -15,6 +15,7 @@ from userbot import bot
 async def _(event):
     if event.fwd_from:
         return
+    reply_to_id = await reply_id(event)
     jisan = event.pattern_match.group(1)
     sf = f"sf"
     cat = await edit_or_reply(event, "```Fox is on your way...```")
@@ -30,7 +31,11 @@ async def _(event):
             return
         else:
             await cat.delete()
-            await event.client.send_message(event.chat_id, response.message)
+            await event.client.send_message(
+                event.chat_id,
+                response.message,
+                reply_to=reply_to_id,
+            )
             await event.client.send_read_acknowledge(conv.chat_id)
 
 
@@ -39,6 +44,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
+    reply_to_id = await reply_id(event)
     jisan = event.pattern_match.group(1)
     ttm = f"ttm"
     cat = await edit_or_reply(event, "```Wait making your hardcore meme...```")
@@ -54,7 +60,11 @@ async def _(event):
             return
         else:
             await cat.delete()
-            await event.client.send_message(event.chat_id, response.message)
+            await event.client.send_message(
+                event.chat_id,
+                response.message,
+                reply_to=reply_to_id,
+            )
             await event.client.send_read_acknowledge(conv.chat_id)
 
 
@@ -63,6 +73,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
+    reply_to_id = await reply_id(event)
     jisan = event.pattern_match.group(1)
     bbs = f"bbs"
     cat = await edit_or_reply(event, "```You can't stop your brain...```")
@@ -78,7 +89,11 @@ async def _(event):
             return
         else:
             await cat.delete()
-            await event.client.send_message(event.chat_id, response.message)
+            await event.client.send_message(
+                event.chat_id,
+                response.message,
+                reply_to=reply_to_id,
+            )
             await event.client.send_read_acknowledge(conv.chat_id)
 
 
@@ -87,6 +102,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
+    reply_to_id = await reply_id(event)
     jisan = event.pattern_match.group(1)
     sp = f"sp"
     cat = await edit_or_reply(event, "```Yaah wait for spongebob...```")
@@ -102,7 +118,11 @@ async def _(event):
             return
         else:
             await cat.delete()
-            await event.client.send_message(event.chat_id, response.message)
+            await event.client.send_message(
+                event.chat_id,
+                response.message,
+                reply_to=reply_to_id,
+            )
             await event.client.send_read_acknowledge(conv.chat_id)
 
 
@@ -111,6 +131,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
+    reply_to_id = await reply_id(event)
     jisan = event.pattern_match.group(1)
     love = f"love"
     cat = await edit_or_reply(event, "```Wait for your son...```")
@@ -126,7 +147,11 @@ async def _(event):
             return
         else:
             await cat.delete()
-            await event.client.send_message(event.chat_id, response.message)
+            await event.client.send_message(
+                event.chat_id,
+                response.message,
+                reply_to=reply_to_id,
+            )
             await event.client.send_read_acknowledge(conv.chat_id)
 
 

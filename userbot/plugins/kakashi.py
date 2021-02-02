@@ -17,6 +17,7 @@ async def kakashi(jisan):
 async def kakashi(event):
     if event.fwd_from:
         return
+    reply_to_id = await reply_id(event)
     link = event.pattern_match.group(1)
     if link in ("alivepic", "ap"):
         link = "Alive Picture"
@@ -74,15 +75,20 @@ async def kakashi(event):
             response = conv.wait_event(
                 events.NewMessage(incoming=True, from_users=1117359246)
             )
-            await conv.send_message(f"{link}")
+            msg = await conv.send_message(f"{link}")
             response = await response
         except YouBlockedUserError:
             await catevent.edit("```Unblock @kakashi_robot plox```")
             return
         else:
             await catevent.delete()
-            await event.client.forward_messages(event.chat_id, response.message)
+            await event.client.send_message(
+                event.chat_id,
+                response.message,
+                reply_to=reply_to_id,
+            )
             await event.client.send_read_acknowledge(conv.chat_id)
+        await event.client.delete_messages(conv.chat_id, [msg.id, response.id])
 
 
 CMD_HELP.update(

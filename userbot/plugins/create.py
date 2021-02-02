@@ -11,6 +11,10 @@ async def _(event):
         return
     type_of_group = event.pattern_match.group(1)
     group_name = event.pattern_match.group(2)
+    if type_of_group == "c":
+        descript = "This is a Test Channel created using catuserbot"
+    else:
+        descript = "This is a Test Group created using catuserbot"
     event = await edit_or_reply(event, "creating......")
     if type_of_group == "b":
         try:
@@ -40,15 +44,16 @@ async def _(event):
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await event.edit(str(e))
-    elif type_of_group == "g" or type_of_group == "c":
+    elif type_of_group in ["g", "c"]:
         try:
             r = await event.client(
-                functions.channels.CreateChannelRequest(  # pylint:disable=E0602
+                functions.channels.CreateChannelRequest(
                     title=group_name,
-                    about="This is a Test from @mrconfused",
-                    megagroup=False if type_of_group == "c" else True,
+                    about=descript,
+                    megagroup=type_of_group != "c",
                 )
             )
+
             created_chat_id = r.chats[0].id
             result = await event.client(
                 functions.messages.ExportChatInviteRequest(

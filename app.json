@@ -19,7 +19,7 @@
     },
     "TMP_DOWNLOAD_DIRECTORY": {
       "description": "Where downloaded files will go.",
-      "value": "./DOWNLOADS/",
+      "value": "./downloads/",
       "required": false
     },
     "ALIVE_NAME": {
@@ -35,7 +35,7 @@
       "value": ""
     },
     "STRING_SESSION": {
-      "description": "Get this value by running python3 telesetup.py locally",
+      "description": "Get this value by running python3 telesetup.py locally or https://generatestringsession.sandeep1709.repl.run",
       "value": ""
     },
     "TG_BOT_USER_NAME_BF_HER": {
@@ -89,11 +89,6 @@
     "LYDIA_API_KEY": {
       "description": "Needed for Lydia AI. Follow https://telegra.ph/Lydia-09-05 to get your API.",
       "value": "",
-      "required": false
-    },
-    "UB_BLACK_LIST_CHAT": {
-      "description": "set blacklist_chats where you do not want userbot features",
-      "value": "-1051754159",
       "required": false
     },
     "DOWNLOAD_PFP_URL_CLOCK": {

@@ -163,7 +163,6 @@ class Config(object):
         PM_LOGGR_BOT_API_ID = int(PM_LOGGR_BOT_API_ID)
     # to work manager.py
     DUAL_LOG = os.environ.get("DUAL_LOG", False)
-    YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
     # MONGOCLIENT = pymongo.MongoClient(MONGO_DB_URI)
     # MONGO = MONGOCLIENT.userbot
     # JustWatch Country

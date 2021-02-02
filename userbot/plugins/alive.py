@@ -3,7 +3,7 @@ from platform import python_version
 
 from telethon import version
 
-from . import StartTime, catdef, catversion, hmention, mention, reply_id
+from . import StartTime, catversion, get_readable_time, hmention, mention, reply_id
 
 # backup
 
@@ -19,7 +19,7 @@ async def amireallyalive(alive):
     if alive.fwd_from:
         return
     reply_to_id = await reply_id(alive)
-    uptime = await catdef.get_readable_time((time.time() - StartTime))
+    uptime = await get_readable_time((time.time() - StartTime))
     _, check_sgnirts = check_data_base_heal_th()
     if CAT_IMG:
         cat_caption = f"<b>{CUSTOM_ALIVE_TEXT}</b>\n\n"

@@ -3,7 +3,6 @@ by  @sandy1709 ( https://t.me/mrconfused  )
 """
 # songs finder for catuserbot
 
-import asyncio
 import base64
 import os
 from pathlib import Path
@@ -12,9 +11,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
 
-from . import hmention, name_dl, runcmd, song_dl, video_dl
-from . import yt_search as yt_search_no
-from . import yt_search_api
+from . import hmention, name_dl, song_dl, video_dl, yt_search
 
 # =========================================================== #
 #                           STRINGS                           #
@@ -63,10 +60,10 @@ async def _(event):
         await event.client(cat)
     except BaseException:
         pass
-    stderr = (await runcmd(song_cmd))[1]
+    stderr = (await _catutils.runcmd(song_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    catname, stderr = (await runcmd(name_cmd))[:2]
+    catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     # stderr = (await runcmd(thumb_cmd))[1]
@@ -135,10 +132,10 @@ async def _(event):
     # thumb_cmd = thumb_dl.format(video_link=video_link)
     name_cmd = name_dl.format(video_link=video_link)
     video_cmd = video_dl.format(video_link=video_link)
-    stderr = (await runcmd(video_cmd))[1]
+    stderr = (await _catutils.runcmd(video_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    catname, stderr = (await runcmd(name_cmd))[:2]
+    catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     # stderr = (await runcmd(thumb_cmd))[1]
@@ -179,20 +176,7 @@ async def _(event):
             os.remove(files)
 
 
-async def yt_search(cat):
-    videol = None
-    try:
-        if Config.YOUTUBE_API_KEY:
-            vi = await yt_search_api(cat)
-            video = f"https://youtu.be/{vi[0]['id']['videoId']}"
-    except:
-        pass
-    if videol is None:
-        vi = await yt_search_no(cat)
-        video = vi[0]
-    return video
-
-
+""""
 @bot.on(admin_cmd(pattern="song2 (.*)"))
 @bot.on(sudo_cmd(pattern="song2 (.*)", allow_sudo=True))
 async def cat_song_fetcer(event):
@@ -269,6 +253,12 @@ async def kakashi(event):
     await event.client.delete_messages(
         conv.chat_id, [msg_start.id, response.id, msg.id, baka.id, music.id]
     )
+    
+        \n\n📌** CMD ➥** `.song2` <query>\
+        \n**USAGE   ➥  **Searches the song you entered in query and sends it.\
+        \n\n📌** CMD ➥** `.music` <Artist - Song Title>\
+        \n**USAGE   ➥  **Download your music by just name.\
+"""
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="dzd (.*)"))
@@ -288,7 +278,7 @@ async def kakashi(event):
         try:
             msg_start = await conv.send_message("/start")
             response = await conv.get_response()
-            r = await conv.get_response()
+            # r = await conv.get_response()
             msg = await conv.send_message(link)
             details = await conv.get_response()
             song = await conv.get_response()
@@ -300,7 +290,7 @@ async def kakashi(event):
         await catevent.delete()
         await event.client.send_file(event.chat_id, song, caption=details.text)
         await event.client.delete_messages(
-            conv.chat_id, [msg_start.id, response.id, r.id, msg.id, details.id, song.id]
+            conv.chat_id, [msg_start.id, response.id, msg.id, details.id, song.id]
         )
 
 
@@ -313,10 +303,6 @@ CMD_HELP.update(
         \n**USAGE   ➥  **Searches the song you entered in query and sends it,quality of it is 320k\
         \n\n📌** CMD ➥** `.vsong` <query> or `.vsong reply to song name`\
         \n**USAGE   ➥  **Searches the video song you entered in query and sends it\
-        \n\n📌** CMD ➥** `.song2` <query>\
-        \n**USAGE   ➥  **Searches the song you entered in query and sends it.\
-        \n\n📌** CMD ➥** `.music` <Artist - Song Title>\
-        \n**USAGE   ➥  **Download your music by just name.\
         \n\n📌** CMD ➥** `.dzd` <Spotify/Deezer Link>\
         \n**USAGE   ➥  **Download music from Spotify or Deezer."
     }

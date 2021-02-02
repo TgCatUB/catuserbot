@@ -390,7 +390,12 @@ async def _(event):
 @bot.on(events.MessageEdited())
 @bot.on(events.NewMessage())
 async def check_incoming_messages(event):
-    # TODO: exempt admins from locks
+    if not event.is_private:
+        chat = await event.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            return
     peer_id = event.chat_id
     if is_locked(peer_id, "commands"):
         entities = event.message.entities
@@ -451,7 +456,12 @@ async def check_incoming_messages(event):
 
 @bot.on(events.ChatAction())
 async def _(event):
-    # TODO: exempt admins from locks
+    if not event.is_private:
+        chat = await event.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            return
     # check for "lock" "bots"
     if not is_locked(event.chat_id, "bots"):
         return
@@ -480,7 +490,7 @@ async def _(event):
                     )
                     update_lock(event.chat_id, "bots", False)
                     break
-        if Config.G_BAN_LOGGER_GROUP is not None and is_ban_able:
+        if Config.BOTLOG_CHATID is not None and is_ban_able:
             ban_reason_msg = await event.reply(
                 "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(
                     users_added_by

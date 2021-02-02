@@ -11,7 +11,7 @@ from hachoir.parser import createParser
 from pymediainfo import MediaInfo
 from telethon.tl.types import DocumentAttributeVideo
 
-from . import make_gif, progress, reply_id, runcmd, thumb_from_audio
+from . import make_gif, progress, reply_id, thumb_from_audio
 
 PATH = os.path.join("./temp", "temp_vid.mp4")
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
@@ -251,7 +251,9 @@ async def video_catfile(event):
                 width = track.width
         if aspect_ratio != 1:
             crop_by = width if (height > width) else height
-            await runcmd(f'ffmpeg -i {catfile} -vf "crop={crop_by}:{crop_by}" {PATH}')
+            await _catutils.runcmd(
+                f'ffmpeg -i {catfile} -vf "crop={crop_by}:{crop_by}" {PATH}'
+            )
         else:
             copyfile(catfile, PATH)
         if str(catfile) != str(PATH):
@@ -275,7 +277,7 @@ async def video_catfile(event):
             catthumb = os.path.join("./temp", "thumb.jpg")
             copyfile(thumb_loc, catthumb)
         if catthumb is not None and os.path.exists(catthumb):
-            await runcmd(
+            await _catutils.runcmd(
                 f"ffmpeg -loop 1 -i {catthumb} -i {catfile} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -vf \"scale='iw-mod (iw,2)':'ih-mod(ih,2)',format=yuv420p\" -shortest -movflags +faststart {PATH}"
             )
             os.remove(catfile)

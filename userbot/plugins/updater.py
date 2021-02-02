@@ -13,8 +13,6 @@ from os import environ, execle, path, remove
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from . import runcmd
-
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME or None
 HEROKU_API_KEY = Config.HEROKU_API_KEY or None
 UPSTREAM_REPO_BRANCH = Config.UPSTREAM_REPO_BRANCH
@@ -81,7 +79,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         heroku_applications = heroku.apps()
         if HEROKU_APP_NAME is None:
             await event.edit(
-                "`[HEROKU]`\n`Please set up the` **HEROKU_APP_NAME** `Var`"
+                "`Please set up the` **HEROKU_APP_NAME** `Var`"
                 " to be able to deploy your userbot...`"
             )
             repo.__del__()
@@ -96,7 +94,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             )
             return repo.__del__()
         await event.edit(
-            "`[HEROKU]`" "\n`Userbot dyno build in progress, please wait...`"
+            "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
         )
         ups_rem.fetch(ac_br)
         repo.git.reset("--hard", "FETCH_HEAD")
@@ -122,9 +120,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             return await event.delete()
         await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
     else:
-        await event.edit(
-            "`[HEROKU]`\n" "`Please set up`  **HEROKU_API_KEY**  ` Var...`"
-        )
+        await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
     return
 
 
@@ -151,8 +147,10 @@ async def upstream(event):
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
-    # if HEROKU_API_KEY or HEROKU_APP_NAME is None:
-    # return await edit_or_reply(event, "`Set the required vars first to update the bot`")
+    if HEROKU_API_KEY is None or HEROKU_APP_NAME is None:
+        return await edit_or_reply(
+            event, "`Set the required vars first to update the bot`"
+        )
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
@@ -230,7 +228,7 @@ async def upstream(event):
     off_repo = "https://github.com/sandy1709/catuserbot"
     catcmd = f"rm -rf .git"
     try:
-        await runcmd(catcmd)
+        await _catutils.runcmd(catcmd)
     except BaseException:
         pass
     try:

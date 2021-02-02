@@ -20,8 +20,6 @@ import math
 import re
 import time
 
-from .exceptions import CancelProcess
-
 
 async def md5(fname: str) -> str:
     hash_md5 = hashlib.md5()
@@ -113,3 +111,9 @@ async def progress(
             )
         else:
             await gdrive.edit(f"**{prog_type}**\n\n" f"**Status**\n{tmp}")
+
+
+class CancelProcess(Exception):
+    """
+    Cancel Process
+    """

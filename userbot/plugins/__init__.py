@@ -12,7 +12,7 @@ from validators.url import url
 from .. import *
 from ..Config import Config
 from ..helpers import *
-from ..helpers import functions as catdef
+from ..helpers import _cattools, _catutils, _format
 
 # =================== CONSTANT ===================
 
@@ -190,5 +190,7 @@ async def make_gif(event, reply, quality=None, fps=None):
     result_p = os.path.join("temp", "animation.gif")
     animation = lottie.parsers.tgs.parse_tgs(reply)
     with open(result_p, "wb") as result:
-        await run_sync(lottie.exporters.gif.export_gif, animation, result, quality, fps)
+        await _catutils.run_sync(
+            lottie.exporters.gif.export_gif, animation, result, quality, fps
+        )
     return result_p

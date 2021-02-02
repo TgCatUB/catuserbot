@@ -3,7 +3,7 @@ import asyncio
 import requests
 from telethon import functions
 
-from . import CMD_LIST, SUDO_LIST, mention, yaml_format
+from . import CMD_LIST, SUDO_LIST, mention
 
 HELPTYPE = Config.HELP_INLINETYPE or True
 
@@ -178,7 +178,7 @@ async def _(event):
         return
     result = await bot(functions.help.GetNearestDcRequest())
     result = (
-        yaml_format(result)
+        _format.yaml_format(result)
         + "\n\n**List Of Telegram Data Centres:**\
                 \nDC1 : Miami FL, USA\
                 \nDC2 : Amsterdam, NL\

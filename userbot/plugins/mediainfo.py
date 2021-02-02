@@ -5,8 +5,7 @@ import os
 
 from html_telegraph_poster import TelegraphPoster
 
-from ..utils import humanbytes
-from . import runcmd, yaml_format
+from . import humanbytes
 
 
 async def post_to_telegraph(page_title, html_format_content):
@@ -31,7 +30,7 @@ async def file_data(reply):
     if reply.file.size:
         hmm += f"Size  :  {humanbytes(reply.file.size)}<br>"
     if reply.date:
-        hmm += f"Date  :  {yaml_format(reply.date)}<br>"
+        hmm += f"Date  :  {_format.yaml_format(reply.date)}<br>"
     if reply.file.id:
         hmm += f"Id  :  {reply.file.id}<br>"
     if reply.file.ext:
@@ -50,11 +49,11 @@ async def file_data(reply):
         hmm += f"Width  :  {reply.file.width}<br>"
     if reply.file.sticker_set:
         hmm += f"Sticker set  :\
-            \n {yaml_format(reply.file.sticker_set)}<br>"
+            \n {_format.yaml_format(reply.file.sticker_set)}<br>"
     try:
         if reply.media.document.thumbs:
             hmm += f"Thumb  :\
-                \n {yaml_format(reply.media.document.thumbs[-1])}<br>"
+                \n {_format.yaml_format(reply.media.document.thumbs[-1])}<br>"
     except:
         pass
     return hmm
@@ -77,7 +76,7 @@ async def mediainfo(event):
         return await catevent.edit("Reply To a supported Media Format")
     hmm = await file_data(reply)
     file_path = await reply.download_media(Config.TEMP_DIR)
-    out, err, ret, pid = await runcmd(f"mediainfo '{file_path}'")
+    out, err, ret, pid = await _catutils.runcmd(f"mediainfo '{file_path}'")
     if not out:
         out = "Not Supported"
     body_text = f"""

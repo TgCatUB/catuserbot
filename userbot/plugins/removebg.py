@@ -4,7 +4,7 @@ import os
 
 import requests
 
-from . import convert_toimage, convert_tosticker, reply_id
+from . import convert_toimage, convert_tosticker
 
 
 @bot.on(admin_cmd(pattern="(rmbg|srmbg) ?(.*)"))
