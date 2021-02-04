@@ -36,7 +36,7 @@ async def _(event):
         try:
             await conv.send_message(f"/search_id {uid}")
         except YouBlockedUserError:
-            await edit_delete(catevent , "`unblock @Sangmatainfo_bot and then try`")
+            await edit_delete(catevent, "`unblock @Sangmatainfo_bot and then try`")
         responses = []
         while True:
             try:
@@ -46,9 +46,9 @@ async def _(event):
             responses.append(response.text)
         await event.client.send_read_acknowledge(conv.chat_id)
     if not responses:
-        await edit_delete(catevent , "`bot can't fetch results`")
+        await edit_delete(catevent, "`bot can't fetch results`")
     if "No records found" in responses:
-        await edit_delete(catevent , "`The user doesn't have any record`")
+        await edit_delete(catevent, "`The user doesn't have any record`")
     names, usernames = await sanga_seperator(responses)
     cmd = event.pattern_match.group(1)
     if cmd == "sg":
