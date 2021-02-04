@@ -4,8 +4,6 @@ import time
 from telethon.tl.custom import Dialog
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import Channel, Chat, User
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-
 
 # =========================================================== #
 #                           STRINGS                           #
@@ -197,7 +195,7 @@ async def stats(event):
             caption=caption,
         )
 
-        
+
 @bot.on(admin_cmd(pattern="ustat ?(.*)"))
 @bot.on(sudo_cmd(pattern="ustat ?(.*)", allow_sudo=True))
 async def _(event):
@@ -229,7 +227,7 @@ async def _(event):
         try:
             await conv.send_message(f"{uid}")
         except:
-            await edit_delete(catevent , "`unblock `@tgscanrobot` and then try`")
+            await edit_delete(catevent, "`unblock `@tgscanrobot` and then try`")
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
         await catevent.edit(response.text)
