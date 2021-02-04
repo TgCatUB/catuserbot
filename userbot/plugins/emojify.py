@@ -63,7 +63,7 @@ async def itachi(event):
 
 
 def char_is_emoji(character):
-    return character in emoji.UNICODE_EMOJI
+    return character in emoji.UNICODE_EMOJI["en"]
 
 
 CMD_HELP.update(
