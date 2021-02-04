@@ -10,13 +10,12 @@ from . import parse_pre, sanga_seperator
 async def _(event):
     if event.fwd_from:
         return
-    # https://t.me/catuserbot_support/181159
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply_message = await event.get_reply_message()
     if not input_str and not reply_message:
         catevent = await edit_or_reply(
             event,
-            "`reply to  user's text message to get name/username history or give userid`",
+            "`reply to  user's text message to get name/username history or give userid/username`",
         )
         await asyncio.sleep(5)
         return await catevent.delete()
