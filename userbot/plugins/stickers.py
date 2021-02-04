@@ -55,7 +55,7 @@ def pack_name(userid, pack, is_anim):
 
 
 def char_is_emoji(character):
-    return character in catemoji.UNICODE_EMOJI
+    return character in catemoji.UNICODE_EMOJI["en"]
 
 
 def pack_nick(username, pack, is_anim):
@@ -309,7 +309,6 @@ async def kang(args):
             image = await resize_photo(photo)
             stfile.name = "sticker.png"
             image.save(stfile, "PNG")
-        print(f"http://t.me/addstickers/{packname}")
         response = urllib.request.urlopen(
             urllib.request.Request(f"http://t.me/addstickers/{packname}")
         )
