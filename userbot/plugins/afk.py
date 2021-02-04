@@ -122,16 +122,31 @@ async def on_afk(event):
             await last_afk_message[event.chat_id].delete()
         last_afk_message[event.chat_id] = msg
         hmm = await event.get_chat()
-        if Config.PM_LOGGR_BOT_API_ID:
-            await asyncio.sleep(5)
-            if not event.is_private:
-                await event.client.send_message(
-                    Config.PM_LOGGR_BOT_API_ID,
-                    f"#AFK_TAGS \n<b>Group : </b><code>{hmm.title}</code>\
-                            \n<b>Message : </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>",
-                    parse_mode="html",
-                    link_preview=False,
-                )
+        if not Config.PM_LOGGR_BOT_API_ID:
+            return
+        full = None
+        try:
+            full = await event.client.get_entity(event.message.from_id)
+        except:
+            pass
+        messaget = media_type(event)
+        resalt = f"#AFK_TAGS \n<b>Group : </b><code>{hmm.title}</code>"
+        if full is not None:
+            resalt += (
+                f"\n<b>From : </b> 👤{_format.htmlmentionuser(full.first_name , full.id)}"
+            )
+        if messaget is not None:
+            resalt += f"\n<b>Message type : </b><code>{messaget}</code>"
+        else:
+            resalt += f"\n<b>Message : </b>{event.message.message}"
+        resalt += f"\n<b>Message link: </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>"
+        if not event.is_private:
+            await event.client.send_message(
+                Config.PM_LOGGR_BOT_API_ID,
+                resalt,
+                parse_mode="html",
+                link_preview=False,
+            )
 
 
 @bot.on(admin_cmd(pattern=r"afk ?(.*)", outgoing=True))
@@ -192,6 +207,6 @@ CMD_HELP.update(
         \afk means away from keyboard/keypad.__\
         \n\n  •  **Note :** If you want AFK with hyperlink use [ ; ] after reason, then paste the media link.\
         \n  •  **Example :** `.afk busy now ;<Media_link>`\
-"
+        "
     }
 )
