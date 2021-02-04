@@ -3,6 +3,7 @@ import time
 
 from telethon.tl.custom import Dialog
 from telethon.tl.types import Channel, Chat, User
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 # =========================================================== #
 #                           STRINGS                           #
