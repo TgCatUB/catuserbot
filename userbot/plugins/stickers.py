@@ -309,6 +309,7 @@ async def kang(args):
             image = await resize_photo(photo)
             stfile.name = "sticker.png"
             image.save(stfile, "PNG")
+        print(f"http://t.me/addstickers/{packname}")
         response = urllib.request.urlopen(
             urllib.request.Request(f"http://t.me/addstickers/{packname}")
         )
