@@ -3,7 +3,7 @@ import asyncio
 
 from telethon import events
 
-import userbot.plugins.sql_helper.no_log_pms_sql as no_log_pms_sql
+from .sql_helper import no_log_pms_sql
 
 from . import BOTLOG, BOTLOG_CHATID, LOGS
 
@@ -81,7 +81,6 @@ async def log_tagged_messages(event):
     else:
         resalt += f"\n<b>Message : </b>{event.message.message}"
     resalt += f"\n<b>Message link: </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>"
-    await asyncio.sleep(3)
     if not event.is_private:
         await event.client.send_message(
             Config.PM_LOGGR_BOT_API_ID,
@@ -100,7 +99,7 @@ async def log(log_text):
         elif log_text.pattern_match.group(1):
             user = f"#LOG / Chat ID: {log_text.chat_id}\n\n"
             textx = user + log_text.pattern_match.group(1)
-            await bot.send_message(BOTLOG_CHATID, textx)
+            await log_text.client.send_message(BOTLOG_CHATID, textx)
         else:
             await log_text.edit("`What am I supposed to log?`")
             return
