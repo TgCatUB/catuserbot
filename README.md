@@ -34,8 +34,8 @@ A simple Telegram userbot based on Telethon .
   </details>
   
 ## Support
-   - Telegram Channel     <a href="https://t.me/catuserbot17"><img src="https://img.shields.io/badge/Channel%20Support-blue?&logo=telegram" width=220px></a></p>
-   - Telegram Group       <a href="https://t.me/catuserbot_support"><img src="https://img.shields.io/badge/Group%20Support-blue?&logo=telegram" width=220px></a></p>
+   - Telegram Channel     <a href="https://t.me/catuserbot17"><img src="https://img.shields.io/badge/Channel%20Support-yes-green?&style=flat-square?&logo=telegram" width=220px></a></p>
+   - Telegram Group       <a href="https://t.me/catuserbot_support"><img src="https://img.shields.io/badge/Group%20Support-yes-green?&style=flat-square?&logo=telegram" width=220px></a></p>
    
 ## Inspiration
    - [X-tra-Telegram](https://github.com/Dark-Princ3/X-tra-Telegram)
