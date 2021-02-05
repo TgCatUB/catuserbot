@@ -111,6 +111,9 @@ async def set_group_photo(gpic):
 async def promote(promt):
     if promt.fwd_from:
         return
+    if not promt.is_group:
+        await edit_or_reply(promt, "`I don't think this is a group.`")
+        return
     chat = await promt.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
@@ -152,6 +155,9 @@ async def promote(promt):
 async def demote(dmod):
     if dmod.fwd_from:
         return
+    if not dmod.is_group:
+        await edit_or_reply(dmod, "`I don't think this is a group.`")
+        return
     chat = await dmod.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
@@ -192,6 +198,9 @@ async def demote(dmod):
 @errors_handler
 async def ban(bon):
     if bon.fwd_from:
+        return
+    if not bon.is_group:
+        await edit_or_reply(bon, "`I don't think this is a group.`")
         return
     chat = await bon.get_chat()
     admin = chat.admin_rights
@@ -235,6 +244,9 @@ async def ban(bon):
 @errors_handler
 async def nothanos(unbon):
     if unbon.fwd_from:
+        return
+    if not unbon.is_group:
+        await edit_or_reply(unbon, "`I don't think this is a group.`")
         return
     chat = await unbon.get_chat()
     admin = chat.admin_rights
@@ -444,6 +456,9 @@ async def endmute(event):
 async def kick(usr):
     if usr.fwd_from:
         return
+    if not usr.is_group:
+        await edit_or_reply(usr, "`I don't think this is a group.`")
+        return
     chat = await usr.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
@@ -561,6 +576,9 @@ async def pin(msg):
 @bot.on(sudo_cmd(pattern="iundlt$", command="iundlt", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
+        return
+    if not event.is_group:
+        await edit_or_reply(event, "`I don't think this is a group.`")
         return
     c = await event.get_chat()
     if c.admin_rights or c.creator:
