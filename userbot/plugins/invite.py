@@ -44,10 +44,8 @@ async def _(event):
 @bot.on(sudo_cmd(pattern="inviteall ?(.*)", allow_sudo=True))     
 async def get_users(event):
     if not sender.id == me.id:
-                    
-await edit_delete(event, "`processing...`")
-                        else:
-                                await edit_or_delete(event, "`processing...`")
+ 
+                              await edit_or_delete(event, "`processing...`")
                                     await get_chatinfo(event)
                                         chat = await event.get_chat()
                                             if event.is_private:
