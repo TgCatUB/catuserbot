@@ -467,7 +467,6 @@ async def kick(usr):
         return
     user, reason = await get_user_from_event(usr)
     if not user:
-        await edit_or_reply(usr, "`Couldn't fetch user.`")
         return
     catevent = await edit_or_reply(usr, "`Kicking...`")
     try:
