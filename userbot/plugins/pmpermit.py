@@ -1,4 +1,4 @@
- import asyncio
+import asyncio
 
 from telethon import events, functions
 
