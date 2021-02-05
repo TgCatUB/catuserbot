@@ -28,7 +28,7 @@ async def figlet(event):
     style = event.pattern_match.group(1)
     text = event.pattern_match.group(2)
     try:
-        font = style_list[style]
+        font = CMD_FIG[style]
     except KeyError:
         return await edit_delete(
             event, "**Invalid styleselected**, __Check__ `.info figlet`."
@@ -41,8 +41,8 @@ async def figlet(event):
 CMD_HELP.update(
     {
         "figlet": "**Plugin :**`figlet`\
-        \n\n• **Syntax : **`.figlet text or .figlet text ; type`\
+        \n\n• **Syntax : **`.figlet type text`\
     \n• **Usage : **the types are `slant`, `3D`, `5line`, `alpha`, `banner`, `doh`, `iso`, `letter`, `allig`, `dotm`, `bubble`, `bulb`, `digi`, `binary`, `basic`\
-    \n• **Example : **`.figlet hello ; digi`"
+    \n• **Example : **`.figlet digi hello`"
     }
 )
