@@ -190,7 +190,7 @@ async def cat_song_fetcer(event):
             await conv.get_response()
             await conv.send_message(song)
             hmm = await conv.get_response()
-            while hmm.edit_hide is Not True:
+            while hmm.edit_hide != True:
                 await asyncio.sleep(0.1)
                 hmm = await event.client.get_messages(chat, ids=hmm.id)
             baka = await event.client.get_messages(chat)
