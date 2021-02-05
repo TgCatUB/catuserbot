@@ -11,7 +11,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green?&style=flat-square)](https://GitHub.com/sandy1709/catuserbot/graphs/commit-activity) 
 [![GitHub contributors](https://img.shields.io/github/contributors/sandy1709/catuserbot?&style=flat-square)](https://GitHub.com/sandy1709/catuserbot/graphs/contributors/)
 
-[![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/network)
+[![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/fork)
 [![GitHub stars](https://img.shields.io/github/stars/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/stargazers)
 
 ### The Easy Way to deploy the bot
