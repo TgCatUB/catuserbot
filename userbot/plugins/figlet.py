@@ -1,8 +1,8 @@
 import pyfiglet
 from . import deEmojify
 
-@bot.on(admin_cmd(pattern="figlet ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="figlet ?(.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="figlet (\w+) (.+)", outgoing=True))
+@bot.on(sudo_cmd(pattern="figlet (\w+) (.+)", allow_sudo=True))
 async def figlet(event):
     if event.fwd_from:
         return
@@ -23,26 +23,15 @@ async def figlet(event):
         "bulb": "bulbhead",
         "digi": "digital",
     }
-    input_str = event.pattern_match.group(1)
-    if ":" in input_str:
-        text, cmd = input_str.split(";", maxsplit=1)
-    elif input_str is not None:
-        cmd = None
-        text = input_str
-    else:
-        await edit_or_reply(event, "Please add some text to figlet")
-        return
-    if cmd is not None:
-        cmd = cmd.strip()
-        try:
-            font = CMD_FIG[cmd]
-        except KeyError:
-            await edit_or_reply(event, "Invalid selected font.")
-            return
-        result = pyfiglet.figlet_format(deEmojify(text), font=font)
-    else:
-        result = pyfiglet.figlet_format(deEmojifytext))
-    await edit_or_reply(event, "‌‌‎`{}`".format(result))
+    style = event.pattern_match.group(1)
+    text = event.pattern_match.group(2)
+    try:
+        font = style_list[style]
+    except KeyError:
+        return await edit_delete(event , "**Invalid styleselected**, __Check__ `.info figlet`.")
+    result = pyfiglet.figlet_format(deEmojify(text), font=font)
+    await event.respond(f"‌‌‎`{result}`")
+    await event.delete()
 
 
 CMD_HELP.update(
