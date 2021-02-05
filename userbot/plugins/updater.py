@@ -208,7 +208,7 @@ async def upstream(event):
         await print_changelogs(event, ac_br, changelog)
         await event.delete()
         return await event.respond(
-            'do "[`.update now`] or [`.update deploy`]" to update.Check `.info updater` for details'
+            'do `.update deploy` to update the catuserbot'
         )
 
     if force_update:
