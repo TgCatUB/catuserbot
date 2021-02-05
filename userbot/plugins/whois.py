@@ -1,9 +1,4 @@
-# Userbot module for getiing info about any user on Telegram(including you!).
-
-# Copyright (C) 2019 The Raphielscape Company LLC.(who is from raphielscape)
-
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
+# Userbot module for fetching info about any user on Telegram(including you!).
 
 import html
 import os
@@ -100,7 +95,7 @@ async def get_full_user(event):
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         if previous_message.from_id is None and not event.is_private:
-            return None, "Well that's an anonymous admin. I can't fetch deatils!"
+            return None, "Well that's an anonymous admin. I can't fetch details!"
         if previous_message.forward:
             replied_user = await event.client(
                 GetFullUserRequest(
@@ -132,7 +127,7 @@ async def who(event):
     replied_user = await get_user(event)
     if replied_user is None:
         return await edit_or_reply(
-            cat, "`Well that's an anonymous admin. I can't fetch deatils!`"
+            cat, "`Well that's an anonymous admin. I can't fetch details!`"
         )
     try:
         photo, caption = await fetch_info(replied_user, event)
