@@ -7,11 +7,12 @@ from random import choice
 
 import PIL.ImageOps
 import requests
+from emoji import get_emoji_regexp
 from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
 from youtubesearchpython import VideosSearch
-from emoji import get_emoji_regexp
+
 from .resources.states import states
 
 
@@ -148,7 +149,6 @@ video_dl = "youtube-dl --force-ipv4 --write-thumbnail  -o './temp/%(title)s.%(ex
 name_dl = (
     "youtube-dl --force-ipv4 --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
 )
-
 
 
 def deEmojify(inputString: str) -> str:
