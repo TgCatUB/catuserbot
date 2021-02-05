@@ -44,5 +44,6 @@ async def get_user_from_event(event, secondgroup=None):
         try:
             user_obj = await event.client.get_entity(user)
         except (TypeError, ValueError):
+            await edit_delete(event, "`Couldn't fetch user to procced further`", 5)
             return None, None
     return user_obj, extra
