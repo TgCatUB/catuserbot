@@ -14,7 +14,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 
-from . import LOGS, spamwatch, get_user_from_event
+from . import LOGS, get_user_from_event, spamwatch
 
 TMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
@@ -100,7 +100,7 @@ async def get_full_user(event):
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         if previous_message.from_id is None and not event.is_private:
-            return None , "Well that's an anonymous admin. I can't fetch deatils!"
+            return None, "Well that's an anonymous admin. I can't fetch deatils!"
         if previous_message.forward:
             replied_user = await event.client(
                 GetFullUserRequest(
@@ -131,8 +131,8 @@ async def who(event):
         os.makedirs(TMP_DOWNLOAD_DIRECTORY)
     replied_user = await get_user(event)
     if replied_user is None:
-        return await edit_or_reply(cat,
-            "`Well that's an anonymous admin. I can't fetch deatils!`"
+        return await edit_or_reply(
+            cat, "`Well that's an anonymous admin. I can't fetch deatils!`"
         )
     try:
         photo, caption = await fetch_info(replied_user, event)
@@ -164,7 +164,7 @@ async def get_user(event):
     if event.reply_to_msg_id and not event.pattern_match.group(1):
         previous_message = await event.get_reply_message()
         if previous_message.from_id is None and not event.is_private:
-            return None 
+            return None
         replied_user = await event.client(
             GetFullUserRequest(previous_message.sender_id)
         )
@@ -256,7 +256,6 @@ async def permalink(mention):
             user.first_name.replace("\u2060", "") if user.first_name else user.username
         )
         await edit_or_reply(mention, f"[{tag}](tg://user?id={user.id})")
-
 
 
 async def ge(user, event):
