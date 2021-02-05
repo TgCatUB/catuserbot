@@ -1,4 +1,7 @@
 from telethon import functions
+from telethon.tl.functions.channels import GetFullChannelRequest
+from telethon.tl.functions.messages import GetFullChatRequest
+
 
 
 @bot.on(admin_cmd(pattern="add ?(.*)"))
