@@ -159,6 +159,7 @@ async def memes(cat):
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
         return
+    san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     catid = await reply_id(cat)
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
