@@ -1,5 +1,7 @@
 import pyfiglet
+
 from . import deEmojify
+
 
 @bot.on(admin_cmd(pattern="figlet (\w+) (.+)", outgoing=True))
 @bot.on(sudo_cmd(pattern="figlet (\w+) (.+)", allow_sudo=True))
@@ -28,7 +30,9 @@ async def figlet(event):
     try:
         font = style_list[style]
     except KeyError:
-        return await edit_delete(event , "**Invalid styleselected**, __Check__ `.info figlet`.")
+        return await edit_delete(
+            event, "**Invalid styleselected**, __Check__ `.info figlet`."
+        )
     result = pyfiglet.figlet_format(deEmojify(text), font=font)
     await event.respond(f"‌‌‎`{result}`")
     await event.delete()
