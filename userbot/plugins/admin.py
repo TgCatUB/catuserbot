@@ -357,7 +357,8 @@ async def startmute(event):
             )
         else:
             await edit_or_reply(
-                event, f"{_format.mentionuser(user.first_name ,user.id)} `is muted in {event.chat.title}`\n"
+                event,
+                f"{_format.mentionuser(user.first_name ,user.id)} `is muted in {event.chat.title}`\n",
             )
         if BOTLOG:
             await event.client.send_message(
@@ -388,7 +389,9 @@ async def endmute(event):
         except Exception as e:
             await event.edit(f"**Error **\n`{str(e)}`")
         else:
-            await event.edit("`Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍`")
+            await event.edit(
+                "`Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍`"
+            )
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -423,7 +426,8 @@ async def endmute(event):
         except Exception as e:
             return await edit_or_reply(event, f"**Error : **`{str(e)}`")
         await edit_or_reply(
-            event, f"{_format.mentionuser(user.first_name ,user.id)} `is unmuted in {event.chat.title}\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍`"
+            event,
+            f"{_format.mentionuser(user.first_name ,user.id)} `is unmuted in {event.chat.title}\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍`",
         )
         if BOTLOG:
             await event.client.send_message(
