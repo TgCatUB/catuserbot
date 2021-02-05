@@ -88,6 +88,8 @@ async def tmuter(catty):
         # Announce to logging group
     except UserIdInvalidError:
         return await catevent.edit("`Uh oh my mute logic broke!`")
+    except Exception as e:
+        return await catevent.edit(f"`{str(e)}`")
 
 
 @bot.on(admin_cmd(pattern="tban(?: |$)(.*)"))
