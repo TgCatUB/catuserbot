@@ -62,7 +62,6 @@ A simple Telegram userbot based on Telethon .
     support group mentioned below or ask your friend.
     Open issues if you think there's a bug/problem.
     Open pr if you think you can improve the existing code.
-    #stayremixed
 /**
 ```
 ## Credits
