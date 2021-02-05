@@ -43,11 +43,4 @@ else
     rm -rf cat_ub
 fi
 
-FILE=/app/bin/
-if [ -d "$FILE" ] ; then
-    echo "$FILE directory exists already."
-else
-    bash ./.github/bins.sh
-fi
-
 python -m userbot
