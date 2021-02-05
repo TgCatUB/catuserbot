@@ -237,25 +237,25 @@ async def _(event):
             await edit_delete(event, "`Autopic has been stopped now`")
         else:
             await edit_delete(event, "`Autopic haven't enabled`")
-    elif input_str == "digitalpfp":
+    if input_str == "digitalpfp":
         if DIGITALPICSTART:
             DIGITALPICSTART = False
             await edit_delete(event, "`Digital profile pic has been stopped now`")
         else:
             await edit_delete(event, "`Digital profile pic haven't enabled`")
-    elif input_str == "bloom":
+    if input_str == "bloom":
         if BLOOMSTART:
             BLOOMSTART = False
             await edit_delete(event, "`Bloom has been stopped now`")
         else:
             await edit_delete(event, "`Bloom haven't enabled`")
-    elif input_str == "autoname":
+    if input_str == "autoname":
         if AUTONAMESTART:
             AUTONAMESTART = False
             await edit_delete(event, "`Autoname has been stopped now`")
         else:
             await edit_delete(event, "`Autoname haven't enabled`")
-    elif input_str == "autobio":
+    if input_str == "autobio":
         if AUTOBIOSTART:
             AUTOBIOSTART = False
             await edit_delete(event, "`Autobio has been stopped now`")
