@@ -17,16 +17,19 @@
 
 
 ## How to deploy catuserbot
-### The Easy Way to deploy the bot
+### Deploy to Heroku
 <details>
   <summary>Steps to deploy on Heroku !! </summary>
   
-```
-Get APP ID and API HASH from [HERE](https://my.telegram.org) and BOT TOKEN from [Bot Father](https://t.me/botfather) and then Generate stringsession by clicking on run.on.repl.it button below and then click on deploy to heroku .
-```
+#### Get Required values First 
+
+1) Get APP_ID and API_HASH from [HERE](https://my.telegram.org) 
+2) Create a bot in [Bot Father](https://t.me/botfather) and get BOT_TOKEN 
+3) Then Generate stringsession from [Repl](https://generatestringsession.sandeep1709.repl.run/).
+
+
 </details>
 
-[![Get string session](https://repl.it/badge/github/sandy1709/sandeep1709)](https://generatestringsession.sandeep1709.repl.run/)
 
 [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot%2Ftree%2Fbugs&template=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot)
 
