@@ -152,8 +152,7 @@ async def newpacksticker(
     await args.client.send_read_acknowledge(conv.chat_id)
     if not pkang:
         return otherpack, packname, emoji
-    else:
-        return pack, packname
+    return pack, packname
 
 
 async def add_to_pack(
@@ -528,7 +527,7 @@ async def pack_kang(event):
         kangst += 1
         await asyncio.sleep(2)
     result = "`This sticker pack is kanged into the following your sticker pack(s):`\n"
-    for i in range(len(blablapacks)):
+    for i in enumerate(blablapacks):
         result += f"  •  [pack {blablapacknames[i]}](t.me/addstickers/{blablapacks[i]})"
     await catevent.edit(result)
 
