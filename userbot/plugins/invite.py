@@ -41,9 +41,7 @@ async def _(event):
         await edit_or_reply(event, f"`{to_add_users} is/are Invited Successfully`")
      
 async def get_users(event):
-    sender = await event.get_sender()
-        me = await event.client.get_me()
-            if not sender.id == me.id:
+    if not sender.id == me.id:
                     
 await edit_delete(event, "`processing...`")
                         else:
