@@ -1,5 +1,11 @@
 
 # CAT USERBOT
+[![HitCount](http://hits.dwyl.com/sandy1709/catuser.svg)](http://hits.dwyl.com/sandy1709/catuser) 
+![Repo Size](https://img.shields.io/github/repo-size/sandy1709/catuserbot)
+[![GitHub license](https://img.shields.io/github/license/sandy1709/catuserbot)](https://github.com/sandy1709/catuserbot/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/sandy1709/catuserbot)](https://github.com/sandy1709/catuserbot/issues)
+[![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot)](https://github.com/sandy1709/catuserbot/network)
+[![GitHub stars](https://img.shields.io/github/stars/sandy1709/catuserbot)](https://github.com/sandy1709/catuserbot/stargazers)
 
 ### The Easy Way to deploy the bot
 Get APP ID and API HASH from [HERE](https://my.telegram.org) and BOT TOKEN from [Bot Father](https://t.me/botfather) and then Generate stringsession by clicking on run.on.repl.it button below and then click on deploy to heroku . Before clicking on deploy to heroku just click on fork and star just below
@@ -7,15 +13,6 @@ Get APP ID and API HASH from [HERE](https://my.telegram.org) and BOT TOKEN from 
 [![Get string session](https://repl.it/badge/github/sandy1709/sandeep1709)](https://generatestringsession.sandeep1709.repl.run/)
 
 [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot%2Ftree%2Fbugs&template=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot)
-<p align="center">
-  <a href="https://github.com/sandy1709/catuserbot/fork">
-    <img src="https://img.shields.io/github/forks/sandy1709/catuserbot?label=Fork&style=social">
-    
-  </a>
-  <a href="https://github.com/sandy1709/catuserbot">
-    <img src="https://img.shields.io/github/stars/sandy1709/catuserbot?style=social">
-  </a>
-</p>
 
 
 ### Join [here](https://t.me/catuserbot17) for updates and tuts and [here](https://t.me/catuserbot_support) for discussion and bugs
