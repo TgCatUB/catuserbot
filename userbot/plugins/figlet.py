@@ -1,5 +1,5 @@
 import pyfiglet
-
+from . import deEmojify
 
 @bot.on(admin_cmd(pattern="figlet ?(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="figlet ?(.*)", allow_sudo=True))
@@ -13,6 +13,8 @@ async def figlet(event):
         "alpha": "alphabet",
         "banner": "banner3-D",
         "doh": "doh",
+        "basic": "basic",
+        "binary": "binary",
         "iso": "isometric1",
         "letter": "letters",
         "allig": "alligator",
@@ -23,7 +25,7 @@ async def figlet(event):
     }
     input_str = event.pattern_match.group(1)
     if ":" in input_str:
-        text, cmd = input_str.split(":", maxsplit=1)
+        text, cmd = input_str.split(";", maxsplit=1)
     elif input_str is not None:
         cmd = None
         text = input_str
@@ -37,17 +39,17 @@ async def figlet(event):
         except KeyError:
             await edit_or_reply(event, "Invalid selected font.")
             return
-        result = pyfiglet.figlet_format(text, font=font)
+        result = pyfiglet.figlet_format(deEmojify(text), font=font)
     else:
-        result = pyfiglet.figlet_format(text)
+        result = pyfiglet.figlet_format(deEmojifytext))
     await edit_or_reply(event, "‌‌‎`{}`".format(result))
 
 
 CMD_HELP.update(
     {
         "figlet": "**Plugin :**`figlet`\
-        \n\n**Syntax : **`.figlet text or .figlet text : type`\
-    \n**Usage : **the types are `slant`, `3D`, `5line`, `alpha`, `banner`, `doh`, `iso`, `letter`, `allig`, `dotm`, `bubble`, `bulb`, `digi`\
-    \n**Example : **`.figlet hello :digi`"
+        \n\n• **Syntax : **`.figlet text or .figlet text ; type`\
+    \n• **Usage : **the types are `slant`, `3D`, `5line`, `alpha`, `banner`, `doh`, `iso`, `letter`, `allig`, `dotm`, `bubble`, `bulb`, `digi`, `binary`, `basic`\
+    \n• **Example : **`.figlet hello ; digi`"
     }
 )
