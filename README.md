@@ -43,7 +43,7 @@ A simple Telegram userbot based on Telethon .
    - [Nana-Remix](https://github.com/pokurt/Nana-Remix)
    - [Userge-X](https://github.com/code-rgb/USERGE-X/)
    
-## Warning
+## Disclaimer
 
 ```
               YOU ARE FOREWARNED
