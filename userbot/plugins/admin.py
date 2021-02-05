@@ -276,22 +276,22 @@ async def startmute(event):
     if event.fwd_from:
         return
     if event.is_private:
-        await event.edit("Unexpected issues or ugly errors may occur!")
-        await sleep(3)
+        await event.edit("`Unexpected issues or ugly errors may occur!`")
+        await sleep(2)
         await event.get_reply_message()
         userid = event.chat_id
         replied_user = await event.client(GetFullUserRequest(userid))
         chat_id = event.chat_id
         if is_muted(userid, chat_id):
             return await event.edit(
-                "This user is already muted in this chat ~~lmfao sed rip~~"
+                "`This user is already muted in this chat ~~lmfao sed rip~~`"
             )
         try:
             mute(userid, chat_id)
         except Exception as e:
-            await event.edit("Error occured!\nError is " + str(e))
+            await event.edit(f"**Error **\n`{str(e)}`")
         else:
-            await event.edit("Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **")
+            await event.edit("`Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **`")
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -305,10 +305,10 @@ async def startmute(event):
         if not user:
             return
         if user.id == bot.uid:
-            return await edit_or_reply(event, "Sorry, I can't mute myself")
+            return await edit_or_reply(event, "`Sorry, I can't mute myself`")
         if is_muted(user.id, event.chat_id):
             return await edit_or_reply(
-                event, "This user is already muted in this chat ~~lmfao sed rip~~"
+                event, "`This user is already muted in this chat ~~lmfao sed rip~~`"
             )
         try:
             admin = chat.admin_rights
@@ -327,7 +327,7 @@ async def startmute(event):
                 if result.participant.banned_rights.send_messages:
                     return await edit_or_reply(
                         event,
-                        "This user is already muted in this chat ~~lmfao sed rip~~",
+                        "`This user is already muted in this chat ~~lmfao sed rip~~`",
                     )
             except:
                 pass
@@ -346,18 +346,18 @@ async def startmute(event):
             try:
                 mute(user.id, event.chat_id)
             except Exception as e:
-                return await edit_or_reply(event, "Error occured!\nError is " + str(e))
+                return await edit_or_reply(event, f"**Error**\n`{str(e)}`")
         except Exception as e:
             return await edit_or_reply(event, f"**Error : **`{str(e)}`")
         if reason:
             await edit_or_reply(
                 event,
-                f"{user.first_name} is muted in {event.chat.title}\n"
+                f"{_format.mentionuser(user.first_name ,user.id)} `is muted in {event.chat.title}`\n"
                 f"`Reason:`{reason}",
             )
         else:
             await edit_or_reply(
-                event, f"{user.first_name} is muted in {event.chat.title}"
+                event, f"{_format.mentionuser(user.first_name ,user.id)} `is muted in {event.chat.title}`\n"
             )
         if BOTLOG:
             await event.client.send_message(
@@ -374,21 +374,21 @@ async def endmute(event):
     if event.fwd_from:
         return
     if event.is_private:
-        await event.edit("Unexpected issues or ugly errors may occur!")
-        await sleep(3)
+        await event.edit("`Unexpected issues or ugly errors may occur!`")
+        await sleep(1)
         userid = event.chat_id
         replied_user = await event.client(GetFullUserRequest(userid))
         chat_id = event.chat_id
         if not is_muted(userid, chat_id):
             return await event.edit(
-                "__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）"
+                "`__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）`"
             )
         try:
             unmute(userid, chat_id)
         except Exception as e:
-            await event.edit("Error occured!\nError is " + str(e))
+            await event.edit(f"**Error **\n`{str(e)}`")
         else:
-            await event.edit("Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍")
+            await event.edit("`Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍`")
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -418,12 +418,12 @@ async def endmute(event):
                 except:
                     return await edit_or_reply(
                         event,
-                        "This user can already speak freely in this chat ~~lmfao sed rip~~",
+                        "`This user can already speak freely in this chat ~~lmfao sed rip~~`",
                     )
         except Exception as e:
             return await edit_or_reply(event, f"**Error : **`{str(e)}`")
         await edit_or_reply(
-            event, "Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍"
+            event, f"{_format.mentionuser(user.first_name ,user.id)} `is unmuted in {event.chat.title}\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍`"
         )
         if BOTLOG:
             await event.client.send_message(
