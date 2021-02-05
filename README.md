@@ -30,3 +30,13 @@
 
 
   </details>
+  
+## Support
+   - Telegram Channel     <a href="https://t.me/catuserbot17"><img src="https://img.shields.io/badge/Support%20Channel-Catuserbot-blue?&logo=telegram&style=social" width=220px></a></p>
+   - Telegram Group       <a href="https://t.me/catuserbot_support"><img src="https://img.shields.io/badge/Support%20Group-Catuserbot-blue?&logo=telegram&style=social" width=220px></a></p>
+## Inspiration
+   - [X-tra-Telegram](https://github.com/Dark-Princ3/X-tra-Telegram)
+   - [Uniborg](https://github.com/SpEcHiDe/UniBorg) & [Uniborg fork](https://github.com/ravana69/PornHub)
+   - [Nana-Remix](https://github.com/pokurt/Nana-Remix)
+   - [Userge-X](https://github.com/code-rgb/USERGE-X/)
+   
