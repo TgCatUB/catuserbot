@@ -11,24 +11,23 @@
 [![PR Closed](https://img.shields.io/github/issues-pr-closed/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/pulls?q=is:closed)
 [![GitHub contributors](https://img.shields.io/github/contributors/sandy1709/catuserbot?&style=flat-square&logo=github)](https://GitHub.com/sandy1709/catuserbot/graphs/contributors/)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/graphs/commit-activity)
-
 [![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/fork)
 [![GitHub stars](https://img.shields.io/github/stars/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/stargazers)
 
 
 ## How to deploy catuserbot
-### Deploy to Heroku
-<details>
-  <summary>Steps to deploy on Heroku !! </summary>
-  
-#### Get Required values First 
+  ### Deploy to Heroku
+  <details>
+    <summary>Steps to deploy on Heroku !! </summary>
 
-1) Get APP_ID and API_HASH from [HERE](https://my.telegram.org) 
-2) Create a bot in [Bot Father](https://t.me/botfather) and get BOT_TOKEN 
-3) Then Generate stringsession from [Repl](https://generatestringsession.sandeep1709.repl.run/).
+  #### Get Required values First 
+
+  1) Get App Id and Api Hash from [HERE](https://my.telegram.org) 
+  2) Create a bot in [Bot Father](https://t.me/botfather) and get Bot Token
+  3) Then Generate stringsession from [Repl](https://generatestringsession.sandeep1709.repl.run/).
 
 
-</details>
+  </details>
 
 
 [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot%2Ftree%2Fbugs&template=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot)
