@@ -7,6 +7,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/issues)
 [![PR Open](https://img.shields.io/github/issues-pr/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/pulls)
 [![PR Closed](https://img.shields.io/github/issues-pr-closed/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/pulls?q=is:closed)
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green?&style=flat-square)](https://GitHub.com/sandy1709/catuserbot/graphs/commit-activity) 
+[![GitHub contributors](https://img.shields.io/github/contributors/sandy1709/catuserbot?&style=flat-square)](https://GitHub.com/sandy1709/catuserbot/graphs/contributors/)
 
 [![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/network)
 [![GitHub stars](https://img.shields.io/github/stars/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/stargazers)
