@@ -39,7 +39,9 @@ async def _(event):
                     await edit_delete(event, f"`{str(e)}`", 5)
 
         await edit_or_reply(event, f"`{to_add_users} is/are Invited Successfully`")
-     
+
+@bot.on(admin_cmd(pattern="inviteall ?(.*)"))
+@bot.on(sudo_cmd(pattern="inviteall ?(.*)", allow_sudo=True))     
 async def get_users(event):
     if not sender.id == me.id:
                     
