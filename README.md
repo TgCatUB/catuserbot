@@ -40,3 +40,7 @@
    - [Nana-Remix](https://github.com/pokurt/Nana-Remix)
    - [Userge-X](https://github.com/code-rgb/USERGE-X/)
    
+## Credits
+   - Special thanks to [LonamiWebs](https://github.com/LonamiWebs/Telethon/) for Telethon libraray
+   - To all devs of this [Userbots](https://github.com/sandy1709/catuserbot/tree/bugs#inspiration)
+   - Finally to all [contributors of Catuserbot](https://github.com/sandy1709/catuserbot/graphs/contributors)
