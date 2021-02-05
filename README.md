@@ -2,18 +2,22 @@
 # CAT USERBOT
 [![HitCount](http://hits.dwyl.com/sandy1709/catuser.svg)](http://hits.dwyl.com/sandy1709/catuser)
 [![CodeFactor](https://www.codefactor.io/repository/github/sandy1709/catuserbot/badge?&style=flat-square)](https://www.codefactor.io/repository/github/sandy1709/catuserbot)
-![Repo Size](https://img.shields.io/github/repo-size/sandy1709/catuserbot?&style=flat-square)
-[![GitHub license](https://img.shields.io/github/license/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/blob/master/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/issues)
-[![PR Open](https://img.shields.io/github/issues-pr/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/pulls)
-[![PR Closed](https://img.shields.io/github/issues-pr-closed/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/pulls?q=is:closed)
+![Repo Size](https://img.shields.io/github/repo-size/sandy1709/catuserbot?&style=flat-square&logo=github)
+[![GitHub license](https://img.shields.io/github/license/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/issues)
+[![PR Open](https://img.shields.io/github/issues-pr/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/pulls)
+[![PR Closed](https://img.shields.io/github/issues-pr-closed/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/pulls?q=is:closed)
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green?&style=flat-square)](https://GitHub.com/sandy1709/catuserbot/graphs/commit-activity) 
-[![GitHub contributors](https://img.shields.io/github/contributors/sandy1709/catuserbot?&style=flat-square)](https://GitHub.com/sandy1709/catuserbot/graphs/contributors/)
+[![GitHub contributors](https://img.shields.io/github/contributors/sandy1709/catuserbot?&style=flat-square&logo=github)](https://GitHub.com/sandy1709/catuserbot/graphs/contributors/)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/graphs/commit-activity)
 
-[![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/fork)
-[![GitHub stars](https://img.shields.io/github/stars/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/fork)
+[![GitHub stars](https://img.shields.io/github/stars/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/stargazers)
 
+## Requirements
+
+## How to deploy userbot
 ### The Easy Way to deploy the bot
 Get APP ID and API HASH from [HERE](https://my.telegram.org) and BOT TOKEN from [Bot Father](https://t.me/botfather) and then Generate stringsession by clicking on run.on.repl.it button below and then click on deploy to heroku . Before clicking on deploy to heroku just click on fork and star just below
 
