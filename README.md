@@ -2,7 +2,6 @@
 # CAT USERBOT
 [![HitCount](http://hits.dwyl.com/sandy1709/catuser.svg)](http://hits.dwyl.com/sandy1709/catuser)
 [![CodeFactor](https://www.codefactor.io/repository/github/sandy1709/catuserbot/badge?&style=flat-square)](https://www.codefactor.io/repository/github/sandy1709/catuserbot)
-
 ![Repo Size](https://img.shields.io/github/repo-size/sandy1709/catuserbot?&style=flat-square)
 [![GitHub license](https://img.shields.io/github/license/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/issues)
