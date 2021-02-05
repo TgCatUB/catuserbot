@@ -223,8 +223,7 @@ async def add_to_pack(
     await args.client.send_read_acknowledge(conv.chat_id)
     if not pkang:
         return packname, emoji
-    else:
-        return pack, packname
+    return pack, packname
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="kang ?(.*)"))
