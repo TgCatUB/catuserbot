@@ -43,6 +43,18 @@ A simple Telegram userbot based on Telethon .
    - [Nana-Remix](https://github.com/pokurt/Nana-Remix)
    - [Userge-X](https://github.com/code-rgb/USERGE-X/)
    
+## Warning
+
+```
+              YOU ARE FOREWARNED
+Your Telegram account may get banned.   
+Catuserbot or we are not responsible for your account , This bot is intended for the purpose of having fun with some fun commands and group management with some helpfull commands.
+If  you ended up spamming groups, getting reported left and right, and you ended up in being fight with Telegram and at the end Telegram Team deleted your account. DON'T BLAME US.
+No personal support will be provided / We won't spoon feed you. If you need help ask in our support group and we or our friends will try to help you.
+
+Thanks for using our bot 😀
+```
+
 ## Credits
    - Special thanks to [LonamiWebs](https://github.com/LonamiWebs/Telethon/) for Telethon libraray
    - To all devs of this [Userbots](https://github.com/sandy1709/catuserbot/tree/bugs#inspiration)
