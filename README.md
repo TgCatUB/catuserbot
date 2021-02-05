@@ -34,12 +34,35 @@
 ## Support
    - Telegram Channel     <a href="https://t.me/catuserbot17"><img src="https://img.shields.io/badge/Support%20Channel-Catuserbot-blue?&logo=telegram&style=social" width=220px></a></p>
    - Telegram Group       <a href="https://t.me/catuserbot_support"><img src="https://img.shields.io/badge/Support%20Group-Catuserbot-blue?&logo=telegram&style=social" width=220px></a></p>
+   
 ## Inspiration
    - [X-tra-Telegram](https://github.com/Dark-Princ3/X-tra-Telegram)
    - [Uniborg](https://github.com/SpEcHiDe/UniBorg) & [Uniborg fork](https://github.com/ravana69/PornHub)
    - [Nana-Remix](https://github.com/pokurt/Nana-Remix)
    - [Userge-X](https://github.com/code-rgb/USERGE-X/)
    
+## Disclaimer
+
+```
+#include <std/disclaimer.h>
+/**
+    Your Telegram account may get banned.
+    I am not responsible for any improper use of this bot
+    This bot is intended for the purpose of having fun with memes,
+    as well as efficiently managing groups.
+    You ended up spamming groups, getting reported left and right,
+    and you ended up in a Finale Battle with Telegram and at the end
+    Telegram Team deleted your account?
+    And after that, then you pointed your fingers at us
+    for getting your account deleted?
+    I will be rolling on the floor laughing at you.
+    No personal support will be provided/I won't spoonfeed. If you need help ask in 
+    support group mentioned below or ask your friend.
+    Open issues if you think there's a bug/problem.
+    Open pr if you think you can improve the existing code.
+    #stayremixed
+/**
+```
 ## Credits
    - Special thanks to [LonamiWebs](https://github.com/LonamiWebs/Telethon/) for Telethon libraray
    - To all devs of this [Userbots](https://github.com/sandy1709/catuserbot/tree/bugs#inspiration)
