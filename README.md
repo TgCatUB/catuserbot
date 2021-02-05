@@ -1,11 +1,16 @@
 
 # CAT USERBOT
-[![HitCount](http://hits.dwyl.com/sandy1709/catuser.svg)](http://hits.dwyl.com/sandy1709/catuser) 
-![Repo Size](https://img.shields.io/github/repo-size/sandy1709/catuserbot)
-[![GitHub license](https://img.shields.io/github/license/sandy1709/catuserbot)](https://github.com/sandy1709/catuserbot/blob/master/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/sandy1709/catuserbot)](https://github.com/sandy1709/catuserbot/issues)
-[![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot)](https://github.com/sandy1709/catuserbot/network)
-[![GitHub stars](https://img.shields.io/github/stars/sandy1709/catuserbot)](https://github.com/sandy1709/catuserbot/stargazers)
+[![HitCount](http://hits.dwyl.com/sandy1709/catuser.svg)](http://hits.dwyl.com/sandy1709/catuser)
+[![CodeFactor](https://www.codefactor.io/repository/github/sandy1709/catuserbot/badge?&style=flat-square)](https://www.codefactor.io/repository/github/sandy1709/catuserbot)
+
+![Repo Size](https://img.shields.io/github/repo-size/sandy1709/catuserbot?&style=flat-square)
+[![GitHub license](https://img.shields.io/github/license/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/issues)
+[![PR Open](https://img.shields.io/github/issues-pr/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/pulls)
+[![PR Closed](https://img.shields.io/github/issues-pr-closed/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/pulls?q=is:closed)
+
+[![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/network)
+[![GitHub stars](https://img.shields.io/github/stars/sandy1709/catuserbot?&style=flat-square)](https://github.com/sandy1709/catuserbot/stargazers)
 
 ### The Easy Way to deploy the bot
 Get APP ID and API HASH from [HERE](https://my.telegram.org) and BOT TOKEN from [Bot Father](https://t.me/botfather) and then Generate stringsession by clicking on run.on.repl.it button below and then click on deploy to heroku . Before clicking on deploy to heroku just click on fork and star just below
