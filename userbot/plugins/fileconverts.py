@@ -163,7 +163,7 @@ async def _(event):
                 event,
                 "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
             )
-        elif len(loc) == 2:
+        if len(loc) == 2:
             if 0 < loc[0] < 721:
                 quality = loc[0].strip()
             else:
@@ -172,7 +172,7 @@ async def _(event):
                 quality = loc[1].strip()
             else:
                 return await edit_delete(event, "Use quality of range 0 to 20")
-        elif len(loc) == 1:
+        if len(loc) == 1:
             if 0 < loc[0] < 721:
                 quality = loc[0].strip()
             else:
