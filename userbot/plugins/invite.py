@@ -48,8 +48,8 @@ async def _(event):
         await edit_or_reply(event, f"`{to_add_users} is/are Invited Successfully`")
 
 
-@bot.on(admin_cmd(pattern="inviteall ?(.*)"))
-@bot.on(sudo_cmd(pattern="inviteall ?(.*)", allow_sudo=True))
+
+
 async def get_chatinfo(event):
     chat = event.pattern_match.group(1)
     chat_info = None
@@ -93,6 +93,8 @@ def user_full_name(user):
     full_name = " ".join(names)
     return full_name
 
+@bot.on(admin_cmd(pattern="add ?(.*)"))
+@bot.on(sudo_cmd(pattern="add ?(.*)", allow_sudo=True))
 async def get_users(event):
     sender = await event.get_sender()
     me = await event.client.get_me()
