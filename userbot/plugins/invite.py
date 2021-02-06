@@ -58,9 +58,8 @@ async def _(event):
                         functions.messages.GetAllChatsRequest(
                             except_ids=[42]
                         )
-                    )
-                except Exception as e:
-                    await edit_delete(event, f"`{str(e)}`", 5)
+                   )
+  
 else:
             # https://lonamiwebs.github.io/Telethon/methods/channels/invite_to_channel.html
                     await event.client(
