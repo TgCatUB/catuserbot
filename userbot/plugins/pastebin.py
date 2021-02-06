@@ -2,14 +2,14 @@
 
 import os
 
+import pygments
 import requests
+from pygments.formatters import ImageFormatter
+from pygments.lexers import Python3Lexer
 from requests import exceptions, get
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-import pygments
-from pygments.lexers import Python3Lexer
-from pygments.formatters import ImageFormatter
 
 def progress(current, total):
     logger.info(
@@ -207,21 +207,22 @@ async def get_dogbin_content(dog_url):
     reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + resp.text
     await catevent.edit(reply_text)
 
+
 @bot.on(admin_cmd(pattern="pcode ?(.*)"))
 @bot.on(sudo_cmd(pattern="pcode ?(.*)"))
 async def code_print(event):
     if event.fwd_from:
         return
     reply_to = await reply_id(event)
-    catevent = await edit_or_reply(event , "`printing the text on blank page`")
+    catevent = await edit_or_reply(event, "`printing the text on blank page`")
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     text_to_print = ""
     if reply:
         mediatype = media_type(reply)
-        if mediatype =="Document":
-            d_file_name = await event.client.download_media( reply, "./temp/")
-            f = open(d_file_name , "r")
+        if mediatype == "Document":
+            d_file_name = await event.client.download_media(reply, "./temp/")
+            f = open(d_file_name, "r")
             text_to_print = f.read()
     if text_to_print == "":
         if input_str:
@@ -229,13 +230,24 @@ async def code_print(event):
         elif event.reply_to_msg_id:
             text_to_print = reply.message
         else:
-            await edit_delete(catevent , "`Either reply to document or reply to text message or give text along with command`")
-    pygments.highlight(text_to_print, Python3Lexer(), ImageFormatter(font_name="DejaVu Sans Mono", line_numbers=True), "out.png")
-    await event.client.send_file(event.chat_id, "out.png", force_document=False,reply_to=reply_to)
+            await edit_delete(
+                catevent,
+                "`Either reply to document or reply to text message or give text along with command`",
+            )
+    pygments.highlight(
+        text_to_print,
+        Python3Lexer(),
+        ImageFormatter(font_name="DejaVu Sans Mono", line_numbers=True),
+        "out.png",
+    )
+    await event.client.send_file(
+        event.chat_id, "out.png", force_document=False, reply_to=reply_to
+    )
     await catevent.delete()
-    os.remove('out.png')
-    os.remove('d_file_name')
-    
+    os.remove("out.png")
+    os.remove("d_file_name")
+
+
 @bot.on(admin_cmd(pattern="paster( (.*)|$)", outgoing=True))
 @bot.on(sudo_cmd(pattern="paster( (.*)|$)", allow_sudo=True))
 async def _(event):
