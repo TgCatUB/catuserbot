@@ -54,8 +54,6 @@ async def _(event):
         )
     else:
         if not event.is_channel and event.is_group:
-for user_id in to_add_users.split(" "):
-                try:
                     await event.client(
                         functions.messages.GetAllChatsRequest(
                             except_ids=[42]
@@ -65,8 +63,6 @@ for user_id in to_add_users.split(" "):
                     await edit_delete(event, f"`{str(e)}`", 5)
 else:
             # https://lonamiwebs.github.io/Telethon/methods/channels/invite_to_channel.html
-            for user_id in to_add_users.split(" "):
-                try:
                     await event.client(
                         functions.channels.GetFullChannelRequest(
                             channel=event.chat_id
