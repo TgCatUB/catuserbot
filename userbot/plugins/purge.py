@@ -63,7 +63,7 @@ async def fastpurger(event):
             BOTLOG_CHATID,
             "#PURGE \n`Purge of " + str(count) + " messages done successfully.`",
         )
-    await sleep(2)
+    await sleep(5)
     await done.delete()
 
 
