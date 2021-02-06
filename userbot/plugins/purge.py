@@ -8,42 +8,54 @@ from ..utils import errors_handler
 from . import BOTLOG, BOTLOG_CHATID
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="purge$"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="purge$"))
+@bot.on(admin_cmd(outgoing=True, pattern="purge(?: |$)(.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="purge(?: |$)(.*)"))
 @errors_handler
-async def fastpurger(purg):
-    # For .purge command, purge all messages starting from the reply.
-    chat = await purg.get_input_chat()
+async def fastpurger(event):
+    chat = await event.get_input_chat()
     msgs = []
-    itermsg = purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id)
     count = 0
-
-    if purg.reply_to_msg_id is not None:
-        async for msg in itermsg:
-            msgs.append(msg)
-            count += 1
-            msgs.append(purg.reply_to_msg_id)
-            if len(msgs) == 100:
-                await purg.client.delete_messages(chat, msgs)
-                msgs = []
+    input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if reply:
+        if input_str and input_str.isnumeric():
+            async for message in event.client.iter_messages(
+                event.chat_id,
+                limit=(int(input_str) - 1),
+                offset_id=reply.id,
+                reverse=True,):
+                msgs.append(msg)
+                count += 1
+                msgs.append(event.reply_to_msg_id)
+                if len(msgs) == 100:
+                    await event.client.delete_messages(chat, msgs)
+                    msgs = []
+        elif input_str:
+            return await edit_or_reply(event , f"**Error**\n`{input_str} is not an integer. Use proper syntax.`")
+        else:
+            async for msg in event.client.iter_messages(chat, min_id=event.reply_to_msg_id):
+                msgs.append(msg)
+                count += 1
+                msgs.append(event.reply_to_msg_id)
+                if len(msgs) == 100:
+                    await event.client.delete_messages(chat, msgs)
+                    msgs = []
     else:
         await edit_or_reply(
-            purg,
+            event,
             "`No message specified.`",
         )
         return
-
     if msgs:
-        await purg.client.delete_messages(chat, msgs)
-    done = await purg.client.send_message(
-        purg.chat_id,
-        "Fast purge complete!\nPurged " + str(count) + " messages.",
+        await event.client.delete_messages(chat, msgs)
+    done = await event.client.send_message(
+        event.chat_id,
+        "`Fast purge complete!\nPurged " + str(count) + " messages.`",
     )
-
     if BOTLOG:
-        await purg.client.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID,
-            "#PURGE \nPurge of " + str(count) + " messages done successfully.",
+            "#PURGE \n`Purge of " + str(count) + " messages done successfully.`",
         )
     await sleep(2)
     await done.delete()
@@ -52,24 +64,23 @@ async def fastpurger(purg):
 @bot.on(admin_cmd(outgoing=True, pattern="purgeme"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="purgeme"))
 @errors_handler
-async def purgeme(delme):
-    # For .purgeme, delete x count of your latest message.
-    message = delme.text
+async def purgeme(event):
+    message = event.text
     count = int(message[9:])
     i = 1
 
-    async for message in delme.client.iter_messages(delme.chat_id, from_user="me"):
+    async for message in event.client.iter_messages(event.chat_id, from_user="me"):
         if i > count + 1:
             break
         i += 1
         await message.delete()
 
-    smsg = await delme.client.send_message(
-        delme.chat_id,
+    smsg = await event.client.send_message(
+        event.chat_id,
         "`Purge complete!` Purged " + str(count) + " messages.",
     )
     if BOTLOG:
-        await delme.client.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID,
             "#PURGEME \nPurge of " + str(count) + " messages done successfully.",
         )
@@ -81,32 +92,30 @@ async def purgeme(delme):
 @bot.on(admin_cmd(outgoing=True, pattern="del$"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="del$"))
 @errors_handler
-async def delete_it(delme):
-    """ For .del command, delete the replied message. """
-    msg_src = await delme.get_reply_message()
-    if delme.reply_to_msg_id:
+async def delete_it(event):
+    msg_src = await event.get_reply_message()
+    if event.reply_to_msg_id:
         try:
             await msg_src.delete()
-            await delme.delete()
             if BOTLOG:
-                await delme.client.send_message(
-                    BOTLOG_CHATID, "#DEL \nDeletion of message was successful"
+                await event.client.send_message(
+                    BOTLOG_CHATID, "#DEL \n`Deletion of message was successful`"
                 )
         except rpcbaseerrors.BadRequestError:
-            if BOTLOG:
-                await delme.client.send_message(
-                    BOTLOG_CHATID, "Well, I can't delete a message"
-                )
+            await edit_or_reply(event, "`Well, I can't delete a message`")
+    else:
+        await event.delete()
 
 
 CMD_HELP.update(
     {
         "purge": "**Plugin : **`purge`\
-        \n\n**Syntax : **`.purge reply to message to start purge from there`\
-        \n**Function : **__Purges all messages starting from the reply.__\
-        \n\n**Syntax : **`.purgeme <x>`\
-        \n**Function : **__Deletes x amount of your latest messages.__\
-        \n\n**Syntax : **`.del reply to message to delete`\
-        \n**Function : **__Deletes the message you replied to.__"
+        \n\n•  **Syntax : **`.purge reply to message to start purge from there`\
+        \n•  **Function : **__Purges all messages starting from the reply.__\
+        \n\n•  **Syntax : **`.purgeme <x>`\
+        \n•  **Function : **__Deletes x amount of your latest messages.__\
+        \n\n•  **Syntax : **`.del reply to message to delete`\
+        \n•  **Function : **__Deletes the message you replied to.__"
     }
 )
+ 
