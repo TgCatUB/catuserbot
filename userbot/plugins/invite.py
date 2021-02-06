@@ -1,3 +1,9 @@
+from telethon.errors import (
+    ChannelInvalidError,
+    ChannelPrivateError,
+    ChannelPublicGroupNaError,
+)
+
 from telethon import functions
 from telethon.sync import TelegramClient
 from telethon.tl.functions.channels import GetFullChannelRequest
@@ -44,21 +50,48 @@ async def _(event):
 
 @bot.on(admin_cmd(pattern="inviteall ?(.*)"))
 @bot.on(sudo_cmd(pattern="inviteall ?(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    to_add_users = event.pattern_match.group(1)
-    if event.is_private:
-        await edit_delete(
-            event, "`.invite` users to a chat, not to a Private Message", 5
-        )
-    else:
-        if not event.is_channel and event.is_group:
-                    await event.client(
-                        functions.messages.GetAllChatsRequest(
-                            chat_id=event.chat_id, except_ids=event.except_ids
-                        )
-                   )
+async def get_chatinfo(event):
+    chat = event.pattern_match.group(1)
+    chat_info = None
+    if chat:
+        try:
+            chat = int(chat)
+        except ValueError:
+            pass
+    if not chat:
+        if event.reply_to_msg_id:
+            replied_msg = await event.get_reply_message()
+            if replied_msg.fwd_from and replied_msg.fwd_from.channel_id is not None:
+                chat = replied_msg.fwd_from.channel_id
+        else:
+            chat = event.chat_id
+    try:
+        chat_info = await event.client(GetFullChatRequest(chat))
+    except:
+        try:
+            chat_info = await event.client(GetFullChannelRequest(chat))
+        except ChannelInvalidError:
+            await event.reply("`Invalid channel/group`")
+            return None
+        except ChannelPrivateError:
+            await event.reply(
+                "`This is a private channel/group or I am banned from there`"
+            )
+            return None
+        except ChannelPublicGroupNaError:
+            await event.reply("`Channel or supergroup doesn't exist`")
+            return None
+        except (TypeError, ValueError):
+            await event.reply("`Invalid channel/group`")
+            return None
+    return chat_info
+
+
+def user_full_name(user):
+    names = [user.first_name, user.last_name]
+    names = [i for i in list(names) if i]
+    full_name = " ".join(names)
+    return full_name
 
 
 CMD_HELP.update(
