@@ -87,7 +87,7 @@ async def _(event):
     message = ""
     if reply:
         messages_id = []
-        if input_str.isnumeric():
+        if input_str is not None and input_str.isnumeric():
             async for message in event.client.iter_messages(
                 event.chat_id, limit=input_str, offset_id=reply.id, reverse=True
             ):
@@ -112,7 +112,7 @@ async def _(event):
             )
             if messages_id != []:
                 await event.client.forward_messages(chat, messsages_id)
-            elif message != []:
+            elif message != "":
                 await event.client.send_message(conv.chat_id, message)
             else:
                 return await edit_delete(
