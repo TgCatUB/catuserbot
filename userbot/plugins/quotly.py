@@ -111,7 +111,7 @@ async def _(event):
                 events.NewMessage(incoming=True, from_users=1031952739)
             )
             if messages_id != []:
-                await event.client.forward_messages(chat, messages_id)
+                await event.client.forward_messages(chat, messages_id, event.chat_id)
             elif message != "":
                 await event.client.send_message(conv.chat_id, message)
             else:
