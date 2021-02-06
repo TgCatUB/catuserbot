@@ -226,31 +226,40 @@ async def startgmute(event):
     try:
         user = await event.client(GetFullUserRequest(userid))
     except:
-        return await edit_or_reply(event , "`Sorry. I am unable to fetch the user`")
+        return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
     if is_muted(userid, "gmute"):
-        return await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} ` is already gmuted`")
+        return await edit_or_reply(
+            event,
+            f"{_format.mentionuser(user.first_name ,user.id)} ` is already gmuted`",
+        )
     try:
         mute(userid, "gmute")
     except Exception as e:
         await edit_or_reply(event, f"**Error**\n`{str(e)}`")
     else:
         if reason:
-            await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully gmuted`\n**Reason :** `{reason}`")
+            await edit_or_reply(
+                event,
+                f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully gmuted`\n**Reason :** `{reason}`",
+            )
         else:
-            await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully gmuted`")
+            await edit_or_reply(
+                event,
+                f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully gmuted`",
+            )
     if BOTLOG:
         if reason:
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#GMUTE\n"
                 f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n"
-                f"**Reason :** `{reason}`"
+                f"**Reason :** `{reason}`",
             )
         else:
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#GMUTE\n"
-                f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n"
+                f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n",
             )
 
 
@@ -274,32 +283,40 @@ async def endgmute(event):
     try:
         user = await event.client(GetFullUserRequest(userid))
     except:
-        return await edit_or_reply(event , "`Sorry. I am unable to fetch the user`")
-   
+        return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
+
     if not is_muted(userid, "gmute"):
-        return await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is not gmuted`")
+        return await edit_or_reply(
+            event, f"{_format.mentionuser(user.first_name ,user.id)} `is not gmuted`"
+        )
     try:
         unmute(userid, "gmute")
     except Exception as e:
         await edit_or_reply(event, f"**Error**\n`{str(e)}`")
     else:
         if reason:
-            await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully ungmuted`\n**Reason :** `{reason}`")
+            await edit_or_reply(
+                event,
+                f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully ungmuted`\n**Reason :** `{reason}`",
+            )
         else:
-            await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully ungmuted`")
+            await edit_or_reply(
+                event,
+                f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully ungmuted`",
+            )
     if BOTLOG:
         if reason:
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#UNGMUTE\n"
                 f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n"
-                f"**Reason :** `{reason}`"
+                f"**Reason :** `{reason}`",
             )
         else:
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#UNGMUTE\n"
-                f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n"
+                f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n",
             )
 
 
