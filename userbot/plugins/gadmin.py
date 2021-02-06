@@ -224,7 +224,7 @@ async def startgmute(event):
             return await edit_or_reply(event, "`Sorry, I can't gmute myself`")
         userid = user.id
     try:
-        user = await event.client(GetFullUserRequest(userid))
+        user = (await event.client(GetFullUserRequest(userid))).user
     except:
         return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
     if is_muted(userid, "gmute"):
@@ -263,8 +263,8 @@ async def startgmute(event):
             )
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"ungmute ?(\d+)?"))
-@bot.on(sudo_cmd(pattern=r"ungmute ?(\d+)?", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern=r"ungmute(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern=r"ungmute(?: |$)(.*)", allow_sudo=True))
 async def endgmute(event):
     if event.fwd_from:
         return
@@ -281,7 +281,7 @@ async def endgmute(event):
             return await edit_or_reply(event, "`Sorry, I can't gmute myself`")
         userid = user.id
     try:
-        user = await event.client(GetFullUserRequest(userid))
+        user = (await event.client(GetFullUserRequest(userid))).user
     except:
         return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
 
