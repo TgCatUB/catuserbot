@@ -301,7 +301,7 @@ CMD_HELP.update(
         \n\n**Syntax : **`.getpaste`\
         \n**Function : **Gets the content of a paste or shortened url from dogbin `https://del.dog/`\
         \n\n**Syntax : **`.pcode reply/input`\
-        \n**Function : **Will paste the entire text on the blank page\
+        \n**Function : **Will paste the entire text on the blank page and will send as image\
         \n\n**Syntax : **`.paster <text/reply>`\
         \n**Function : **Create a instant view or a paste it in telegraph file\
   "
