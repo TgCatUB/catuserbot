@@ -56,7 +56,7 @@ async def _(event):
         if not event.is_channel and event.is_group:
                     await event.client(
                         functions.messages.GetAllChatsRequest(
-                            except_ids=[42]
+                            chat_id=event.chat_id, except_ids=event.except_ids
                         )
                    )
                 else:
