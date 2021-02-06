@@ -88,7 +88,9 @@ async def _(event):
     if reply:
         messages_id = []
         if input_str.isnumeric():
-            async for message in event.client.iter_messages(event.chat_id ,limit=input_str, offset_id=reply.id, reverse=True):
+            async for message in event.client.iter_messages(
+                event.chat_id, limit=input_str, offset_id=reply.id, reverse=True
+            ):
                 if message.id != event.id:
                     messages_id.append(message.id)
         elif input_str is not None:
@@ -98,7 +100,9 @@ async def _(event):
     elif input_str is not None:
         message = input_str
     else:
-        return await edit_delete(event , "`Either reply to message or give input to function properly`")
+        return await edit_delete(
+            event, "`Either reply to message or give input to function properly`"
+        )
     chat = "@QuotLyBot"
     catevent = await edit_or_reply(event, "```Making a Quote```")
     async with event.client.conversation(chat) as conv:
@@ -109,9 +113,11 @@ async def _(event):
             if messages_id != []:
                 await event.client.forward_messages(chat, messsages_id)
             elif message != []:
-                await event.client.send_message(conv.chat_id , message)
+                await event.client.send_message(conv.chat_id, message)
             else:
-                return await edit_delete(catevent , "`I guess you have used a invalid syntax`")
+                return await edit_delete(
+                    catevent, "`I guess you have used a invalid syntax`"
+                )
             response = await response
         except YouBlockedUserError:
             await catevent.edit("```Please unblock me (@QuotLyBot) u Nigga```")
