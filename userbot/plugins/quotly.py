@@ -85,8 +85,8 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     message = ""
+    messages_id = []
     if reply:
-        messages_id = []
         if input_str and input_str.isnumeric():
             async for message in event.client.iter_messages(
                 event.chat_id, limit=input_str, offset_id=reply.id, reverse=True
