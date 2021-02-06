@@ -23,7 +23,8 @@ async def fastpurger(event):
                 event.chat_id,
                 limit=(int(input_str) - 1),
                 offset_id=reply.id,
-                reverse=True,):
+                reverse=True,
+            ):
                 msgs.append(msg)
                 count += 1
                 msgs.append(event.reply_to_msg_id)
@@ -31,9 +32,13 @@ async def fastpurger(event):
                     await event.client.delete_messages(chat, msgs)
                     msgs = []
         elif input_str:
-            return await edit_or_reply(event , f"**Error**\n`{input_str} is not an integer. Use proper syntax.`")
+            return await edit_or_reply(
+                event, f"**Error**\n`{input_str} is not an integer. Use proper syntax.`"
+            )
         else:
-            async for msg in event.client.iter_messages(chat, min_id=event.reply_to_msg_id):
+            async for msg in event.client.iter_messages(
+                chat, min_id=event.reply_to_msg_id
+            ):
                 msgs.append(msg)
                 count += 1
                 msgs.append(event.reply_to_msg_id)
@@ -118,4 +123,3 @@ CMD_HELP.update(
         \n•  **Function : **__Deletes the message you replied to.__"
     }
 )
- 
