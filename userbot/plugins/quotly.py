@@ -87,17 +87,17 @@ async def _(event):
     message = ""
     if reply:
         messages_id = []
-        if input_str is not None and input_str.isnumeric():
+        if input_str and input_str.isnumeric():
             async for message in event.client.iter_messages(
                 event.chat_id, limit=input_str, offset_id=reply.id, reverse=True
             ):
                 if message.id != event.id:
                     messages_id.append(message.id)
-        elif input_str is not None:
+        elif input_str:
             message = input_str
         else:
             messages_id.append(reply.id)
-    elif input_str is not None:
+    elif input_str:
         message = input_str
     else:
         return await edit_delete(
