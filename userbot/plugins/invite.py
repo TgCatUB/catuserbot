@@ -59,16 +59,6 @@ async def _(event):
                             chat_id=event.chat_id, except_ids=event.except_ids
                         )
                    )
-                else:
-                    await event.client(
-                        functions.channels.GetFullChannelRequest(
-                            channel=event.chat_id
-                        )
-                    )
-                except Exception as e:
-                    await edit_delete(event, f"`{str(e)}`", 5)
-
-        await edit_or_reply(event, f"`{to_add_users} is/are Invited Successfully`")
 
 
 CMD_HELP.update(
