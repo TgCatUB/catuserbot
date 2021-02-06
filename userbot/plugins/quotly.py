@@ -89,7 +89,7 @@ async def _(event):
     if reply:
         if input_str and input_str.isnumeric():
             async for message in event.client.iter_messages(
-                event.chat_id, limit=input_str, offset_id=reply.id, reverse=True
+                event.chat_id, limit=int(input_str), offset_id=reply.id, reverse=True
             ):
                 if message.id != event.id:
                     messages_id.append(message.id)
