@@ -19,7 +19,7 @@ async def fastpurger(event):
     reply = await event.get_reply_message()
     if reply:
         if input_str and input_str.isnumeric():
-            count +=1
+            count += 1
             async for msg in event.client.iter_messages(
                 event.chat_id,
                 limit=(int(input_str) - 1),
