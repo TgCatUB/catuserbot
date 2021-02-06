@@ -206,86 +206,101 @@ async def gablist(event):
         await edit_or_reply(event, GBANNED_LIST)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"gmute ?(\d+)?"))
-@bot.on(sudo_cmd(pattern=r"gmute ?(\d+)?", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern=r"gmute(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern=r"gmute(?: |$)(.*)", allow_sudo=True))
 async def startgmute(event):
-    private = False
     if event.fwd_from:
         return
     if event.is_private:
-        await event.edit("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
-        private = True
-
-    reply = await event.get_reply_message()
-
-    if event.pattern_match.group(1) is not None:
-        userid = event.pattern_match.group(1)
-    elif reply is not None:
-        userid = reply.sender_id
-    elif private is True:
+        await event.edit("`Unexpected issues or ugly errors may occur!`")
+        await asyncio.sleep(2)
         userid = event.chat_id
+        reason = event.pattern_match.group(1)
     else:
-        return await edit_or_reply(
-            event, "Please reply to a user or add their into the command to gmute them."
-        )
-    replied_user = await event.client(GetFullUserRequest(userid))
+        user, reason = await get_user_from_event(event)
+        if not user:
+            return
+        if user.id == bot.uid:
+            return await edit_or_reply(event, "`Sorry, I can't gmute myself`")
+        userid = user.id
+    try:
+        user = await event.client(GetFullUserRequest(userid))
+    except:
+        return await edit_or_reply(event , "`Sorry. I am unable to fetch the user`")
     if is_muted(userid, "gmute"):
-        return await edit_or_reply(event, "This user is already gmuted")
+        return await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} ` is already gmuted`")
     try:
         mute(userid, "gmute")
     except Exception as e:
-        await edit_or_reply(event, "Error occured!\nError is " + str(e))
+        await edit_or_reply(event, f"**Error**\n`{str(e)}`")
     else:
-        await edit_or_reply(event, "Successfully gmuted that person")
+        if reason:
+            await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully gmuted`\n**Reason :** `{reason}`")
+        else:
+            await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully gmuted`")
     if BOTLOG:
-        await event.client.send_message(
-            BOTLOG_CHATID,
-            "#GMUTE\n"
-            f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-            f"CHAT: {event.chat.title}(`{event.chat_id}`)",
-        )
+        if reason:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#GMUTE\n"
+                f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n"
+                f"**Reason :** `{reason}`"
+            )
+        else:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#GMUTE\n"
+                f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n"
+            )
 
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"ungmute ?(\d+)?"))
 @bot.on(sudo_cmd(pattern=r"ungmute ?(\d+)?", allow_sudo=True))
 async def endgmute(event):
-    private = False
     if event.fwd_from:
         return
     if event.is_private:
-        await event.edit("Unexpected issues or ugly errors may occur!")
-        await asyncio.sleep(3)
-        private = True
-    reply = await event.get_reply_message()
-
-    if event.pattern_match.group(1) is not None:
-        userid = event.pattern_match.group(1)
-    elif reply is not None:
-        userid = reply.sender_id
-    elif private is True:
+        await event.edit("`Unexpected issues or ugly errors may occur!`")
+        await asyncio.sleep(2)
         userid = event.chat_id
+        reason = event.pattern_match.group(1)
     else:
-        return await edit_or_reply(
-            event,
-            "Please reply to a user or add their username into the command to ungmute them.",
-        )
-    replied_user = await event.client(GetFullUserRequest(userid))
+        user, reason = await get_user_from_event(event)
+        if not user:
+            return
+        if user.id == bot.uid:
+            return await edit_or_reply(event, "`Sorry, I can't gmute myself`")
+        userid = user.id
+    try:
+        user = await event.client(GetFullUserRequest(userid))
+    except:
+        return await edit_or_reply(event , "`Sorry. I am unable to fetch the user`")
+   
     if not is_muted(userid, "gmute"):
-        return await edit_or_reply(event, "This user is not gmuted")
+        return await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is not gmuted`")
     try:
         unmute(userid, "gmute")
     except Exception as e:
-        await edit_or_reply(event, "Error occured!\nError is " + str(e))
+        await edit_or_reply(event, f"**Error**\n`{str(e)}`")
     else:
-        await edit_or_reply(event, "Successfully ungmuted that person")
+        if reason:
+            await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully ungmuted`\n**Reason :** `{reason}`")
+        else:
+            await edit_or_reply(event, f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully ungmuted`")
     if BOTLOG:
-        await event.client.send_message(
-            BOTLOG_CHATID,
-            "#UNGMUTE\n"
-            f"USER: [{replied_user.user.first_name}](tg://user?id={userid})\n"
-            f"CHAT: {event.chat.title}(`{event.chat_id}`)",
-        )
+        if reason:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#UNGMUTE\n"
+                f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n"
+                f"**Reason :** `{reason}`"
+            )
+        else:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#UNGMUTE\n"
+                f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n"
+            )
 
 
 @bot.on(admin_cmd(incoming=True))
