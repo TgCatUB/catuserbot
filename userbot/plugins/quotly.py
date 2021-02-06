@@ -82,6 +82,7 @@ async def stickerchat(catquotes):
 async def _(event):
     if event.fwd_from:
         return
+    reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     message = ""
@@ -124,7 +125,7 @@ async def _(event):
             return
         await event.client.send_read_acknowledge(conv.chat_id)
         await catevent.delete()
-        await event.client.send_message(event.chat_id, response.message)
+        await event.client.send_message(event.chat_id, response.message,reply_to = reply_to)
 
 
 CMD_HELP.update(
