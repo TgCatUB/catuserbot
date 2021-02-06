@@ -245,7 +245,7 @@ async def code_print(event):
     )
     await catevent.delete()
     os.remove("out.png")
-    os.remove("d_file_name")
+    os.remove(d_file_name)
 
 
 @bot.on(admin_cmd(pattern="paster( (.*)|$)", outgoing=True))
