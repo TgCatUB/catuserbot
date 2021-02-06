@@ -46,6 +46,7 @@ psycopg2
 PyDictionary
 pyfiglet
 PyGithub
+pygments
 pylast
 PyLyrics
 pymediainfo
