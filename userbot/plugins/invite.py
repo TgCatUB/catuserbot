@@ -59,8 +59,8 @@ async def _(event):
                             except_ids=[42]
                         )
                    )
-  else:
-            # https://lonamiwebs.github.io/Telethon/methods/channels/invite_to_channel.html
+                else:
+                    # https://lonamiwebs.github.io/Telethon/methods/channels/invite_to_channel.html
                     await event.client(
                         functions.channels.GetFullChannelRequest(
                             channel=event.chat_id
