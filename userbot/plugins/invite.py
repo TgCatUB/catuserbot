@@ -134,10 +134,12 @@ async def get_users(event):
 
 CMD_HELP.update(
     {
-        "add": """**Plugin : **`add`
+        "invite": """**Plugin : **`invite`
 
-  •  **Syntax : **`.add username(s)/userid(s)`
+  •  **Syntax : **`!add username(s)/userid(s)`
   •  **Function : **__Add the given user/users to the group where u used the command__
+  •  **Syntax : **`!invite channel/groupname`
+  •  **Function : **__Kidnaps user/users from the specified channel/group to the channel/group where u used the command__
 """
     }
 )
