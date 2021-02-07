@@ -178,7 +178,7 @@ async def delete_it(event):
     if msg_src:
         if input_str and input_str.isnumeric():
             await event.delete()
-            await sleep(input_str)
+            await sleep(int(input_str))
             try:
                 await msg_src.delete()
                 if BOTLOG:
