@@ -43,5 +43,5 @@ async def unsavegif(event, sandy):
                 unsave=True,
             )
         )
-    except:
+    except Exception:
         pass

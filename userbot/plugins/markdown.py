@@ -147,7 +147,7 @@ def parse(message, old_entities=None):
             i += len(text)
 
         return del_surrogate(message), entities + old_entities
-    except:
+    except Exception:
         pass
 
 

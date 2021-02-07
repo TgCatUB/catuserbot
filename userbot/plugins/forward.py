@@ -49,7 +49,7 @@ async def _(event):
         return
     try:
         await event.delete()
-    except:
+    except Exception:
         pass
     m = await event.get_reply_message()
     if not m:

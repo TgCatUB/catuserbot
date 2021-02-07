@@ -7,7 +7,7 @@ import numpy as np
 
 try:
     from colour import Color as asciiColor
-except:
+except Exception:
     os.system("pip install colour")
 from PIL import Image, ImageDraw, ImageFont
 from wand.color import Color

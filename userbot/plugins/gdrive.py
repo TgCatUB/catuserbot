@@ -245,7 +245,7 @@ async def download(event, gdrive, service, uri=None):
             from .torrentutils import aria2, check_metadata
 
             cattorrent = True
-        except:
+        except Exception:
             cattorrent = False
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
         if cattorrent:
@@ -1181,7 +1181,7 @@ async def cancel_process(gdrive):
         if len(downloads) != 0:
             aria2.remove_all(force=True)
             aria2.autopurge()
-    except:
+    except Exception:
         pass
     is_cancelled = True
     await asyncio.sleep(3.5)

@@ -128,7 +128,7 @@ async def stats(event):
     output += f"\n**Time Taken : ** {stop_time:.02f}s"
     try:
         await catevent.edit(output)
-    except:
+    except Exception:
         await edit_or_reply(
             catevent,
             output,
@@ -188,7 +188,7 @@ async def stats(event):
     output += f"\n**Time Taken : ** {stop_time:.02f}s"
     try:
         await catevent.edit(output)
-    except:
+    except Exception:
         await edit_or_reply(
             catevent,
             output,
@@ -226,7 +226,7 @@ async def _(event):
     async with event.client.conversation(chat) as conv:
         try:
             await conv.send_message(f"{uid}")
-        except:
+        except Exception:
             await edit_delete(catevent, "`unblock `@tgscanrobot` and then try`")
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)

@@ -45,7 +45,7 @@ async def itachi(event):
         return
     try:
         emoji, arg = args.split(" ", 1)
-    except:
+    except Exception:
         arg = args
         emoji = "😺"
     if not char_is_emoji(emoji):

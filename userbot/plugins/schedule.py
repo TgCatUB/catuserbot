@@ -11,7 +11,7 @@ async def _(event):
     ttl = int(cat[0])
     try:
         await event.delete()
-    except:
+    except Exception:
         pass
     await sleep(ttl)
     await event.respond(message)

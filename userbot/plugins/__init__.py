@@ -78,7 +78,7 @@ if Config.THUMB_IMAGE is not None:
         try:
             with open(thumb_image_path, "wb") as f:
                 f.write(requests.get(Config.THUMB_IMAGE).content)
-        except:
+        except Exception:
             pass
 
 
@@ -87,7 +87,7 @@ def check(cat):
         return True
     try:
         hi = re.search(cat.lower(), "(a|b|c|d)", flags=re.IGNORECASE)
-    except:
+    except Exception:
         hi = False
     return bool(hi)
 
