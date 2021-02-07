@@ -21,10 +21,10 @@ async def _(event):
 
 CMD_HELP.update(
        {
-           "undlt":   """**plugin : **`undlt`
+           "undlt":   """**Plugin : **`undlt`
 
-     •**Syntax: **`!undlt`
-     •**Function: **Sends 7 recently deleted messages in a group. Admin privileges required
-     """
+   •**Syntax: **`!undlt`
+   •**Function: **Sends 7 recently deleted messages in a group. Admin privileges required
+    """
         }
         )
