@@ -73,7 +73,7 @@ async def purge_to(event):
                 "#PURGE \n`Purge of " + str(count) + " messages done successfully.`",
             )
     except Exception as e:
-        await edit_delete(event , f"**Error**\n`{str(e)}`")
+        await edit_delete(event, f"**Error**\n`{str(e)}`")
 
 
 @bot.on(admin_cmd(pattern="purge(?: |$)(.*)"))
