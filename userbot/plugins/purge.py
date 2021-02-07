@@ -43,34 +43,37 @@ async def purge_to(event):
             event,
             "`First mark the messsage with purgefrom and then mark purgeto .So, I can delete in between Messages`",
         )
-    if not reply or not from_message.isnumeric():
+    if not reply or not from_message:
         return await edit_delete(
             event,
             "`First mark the messsage with purgefrom and then mark purgeto .So, I can delete in between Messages`",
         )
-    to_message = await reply_id(event)
-    msgs = []
-    count = 0
-    async for msg in event.client.iter_messages(
-        event.chat_id, min_id=(from_message - 1), max_id=(to_message + 1)
-    ):
-        msgs.append(msg)
-        count += 1
-        msgs.append(event.reply_to_msg_id)
-        if len(msgs) == 100:
+    try:
+        to_message = await reply_id(event)
+        msgs = []
+        count = 0
+        async for msg in event.client.iter_messages(
+            event.chat_id, min_id=(from_message - 1), max_id=(to_message + 1)
+        ):
+            msgs.append(msg)
+            count += 1
+            msgs.append(event.reply_to_msg_id)
+            if len(msgs) == 100:
+                await event.client.delete_messages(chat, msgs)
+                msgs = []
+        if msgs:
             await event.client.delete_messages(chat, msgs)
-            msgs = []
-    if msgs:
-        await event.client.delete_messages(chat, msgs)
-    await edit_delete(
-        event,
-        "`Fast purge complete!\nPurged " + str(count) + " messages.`",
-    )
-    if BOTLOG:
-        await event.client.send_message(
-            BOTLOG_CHATID,
-            "#PURGE \n`Purge of " + str(count) + " messages done successfully.`",
+        await edit_delete(
+            event,
+            "`Fast purge complete!\nPurged " + str(count) + " messages.`",
         )
+        if BOTLOG:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#PURGE \n`Purge of " + str(count) + " messages done successfully.`",
+            )
+    except Exception as e:
+        await edit_delete(event , f"**Error**\n`{str(e)}`")
 
 
 @bot.on(admin_cmd(pattern="purge(?: |$)(.*)"))
