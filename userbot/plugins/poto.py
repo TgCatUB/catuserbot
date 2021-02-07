@@ -25,7 +25,6 @@ Type `.poto` for get **All profile pics of that User**
 \nOr type `.poto (number)` to get the **desired number of photo of a User** .
 """
 
-import asyncio
 
 name = "Profile Photos"
 
@@ -60,7 +59,7 @@ async def potocmd(event):
                 else:
                     photo = await event.client.download_profile_photo(event.input_chat)
                 await event.client.send_file(event.chat_id, photo)
-            except Exception as a:
+            except Exception:
                 return await edit_delete(event, "`This user has no photos to show you`")
     else:
         try:
@@ -81,7 +80,6 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
-        
 
 
 CMD_HELP.update(
