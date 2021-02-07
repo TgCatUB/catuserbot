@@ -227,9 +227,13 @@ async def ban(bon):
         )
         return
     if reason:
-        await catevent.edit(f"{_format.mentionuser(user.first_name ,user.id)}` is banned !!`\n**Reason : **`{reason}`")
+        await catevent.edit(
+            f"{_format.mentionuser(user.first_name ,user.id)}` is banned !!`\n**Reason : **`{reason}`"
+        )
     else:
-        await catevent.edit(f"{_format.mentionuser(user.first_name ,user.id)} `is banned !!`")
+        await catevent.edit(
+            f"{_format.mentionuser(user.first_name ,user.id)} `is banned !!`"
+        )
     if BOTLOG:
         await bon.client.send_message(
             BOTLOG_CHATID,
@@ -261,7 +265,9 @@ async def nothanos(unbon):
         return
     try:
         await unbon.client(EditBannedRequest(unbon.chat_id, user.id, UNBAN_RIGHTS))
-        await catevent.edit(f"{_format.mentionuser(user.first_name ,user.id)} `is Unbanned Successfully. Granting another chance.`")
+        await catevent.edit(
+            f"{_format.mentionuser(user.first_name ,user.id)} `is Unbanned Successfully. Granting another chance.`"
+        )
         if BOTLOG:
             await unbon.client.send_message(
                 BOTLOG_CHATID,
