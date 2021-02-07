@@ -182,7 +182,7 @@ CMD_HELP.update(
     {
         "purge": "**Plugin : **`purge`\
         \n\n•  **Syntax : **`.purge <count>`\
-        \n•  **Function : **__Deletes the x(count) amount messages from the replied message if you don'y use count then deletes all messages from there.__\
+        \n•  **Function : **__Deletes the x(count) amount of messages from the replied message if you don'y use count then deletes all messages from there.__\
         \n\n•  **Syntax : **`.purgefrom reply`\
         \n•  **Function : **__Will Mark that message as oldest message of interval to delete messages.__\
         \n\n•  **Syntax : **`.purgeto reply`\
