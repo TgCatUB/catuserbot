@@ -19,9 +19,6 @@ def progress(current, total):
     )
 
 
-DOGBIN_URL = "https://del.dog/"
-
-
 @bot.on(admin_cmd(pattern="paste( (.*)|$)", outgoing=True))
 @bot.on(sudo_cmd(pattern="paste( (.*)|$)", allow_sudo=True))
 async def _(event):
@@ -175,8 +172,8 @@ async def get_dogbin_content(dog_url):
     catevent = await edit_or_reply(dog_url, "`Getting dogbin content...`")
     if not message and textx:
         message = str(textx.message)
-    format_normal = f"{DOGBIN_URL}"
-    format_view = f"{DOGBIN_URL}v/"
+    format_normal = "https://del.dog/"
+    format_view = "https://del.dog/v/"
 
     if message.startswith(format_view):
         message = message[len(format_view) :]
@@ -187,7 +184,7 @@ async def get_dogbin_content(dog_url):
     else:
         await catevent.edit("`Is that even a dogbin url?`")
         return
-    resp = get(f"{DOGBIN_URL}raw/{message}")
+    resp = get(f"https://del.dog/raw/{message}")
     try:
         resp.raise_for_status()
     except exceptions.HTTPError as HTTPErr:
@@ -204,7 +201,7 @@ async def get_dogbin_content(dog_url):
             + str(RedirectsErr)
         )
         return
-    reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + resp.text
+    reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` \n" + resp.text
     await catevent.edit(reply_text)
 
 
