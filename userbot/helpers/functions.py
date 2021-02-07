@@ -75,7 +75,7 @@ async def yt_search(cat):
         if video_link:
             return video_link[0]
         return "Couldnt fetch results"
-    except:
+    except Exception:
         return "Couldnt fetch results"
 
 
@@ -108,7 +108,7 @@ async def ytsearch(query, limit):
         textresult = f"[{v['title']}](https://www.youtube.com/watch?v={v['id']})\n"
         try:
             textresult += f"**Description : **`{v['descriptionSnippet'][-1]['text']}`\n"
-        except:
+        except Exception:
             textresult += "**Description : **`None`\n"
         textresult += f"**Duration : **__{v['duration']}__  **Views : **__{v['viewCount']['short']}__\n"
         result += f"☞ {textresult}\n"

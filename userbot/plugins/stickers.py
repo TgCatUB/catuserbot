@@ -411,7 +411,7 @@ async def pack_kang(event):
                 )
             )
         )
-    except:
+    except Exception:
         return await edit_delete(
             catevent,
             "`I guess this sticker is not part of any pack. So, i cant kang this sticker pack try kang for this sticker`",

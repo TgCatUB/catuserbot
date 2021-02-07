@@ -68,8 +68,8 @@ if Config.PRIVATE_GROUP_ID is not None:
                     await event.client.delete_messages(
                         user.id, PMMESSAGE_CACHE[user.id]
                     )
-                except:
-                    pass
+                except Exception as e:
+                    LOGS.info(str(e))
         else:
             await edit_delete(
                 event,
