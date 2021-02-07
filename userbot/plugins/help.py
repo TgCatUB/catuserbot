@@ -199,17 +199,17 @@ async def _(event):
     global HELPTYPE
     input_str = event.pattern_match.group(1)
     if input_str == "true":
-        type = True
+        h_type = True
     else:
-        type = False
+        h_type = False
     if HELPTYPE is True:
-        if type is True:
+        if h_type is True:
             await event.edit("`inline mode is already enabled`")
         else:
             HELPTYPE = type
             await event.edit("`inline mode is disabled`")
     else:
-        if type is True:
+        if h_type is True:
             HELPTYPE = type
             await event.edit("`inline mode is enabled`")
         else:
