@@ -9,6 +9,7 @@ from . import BOTLOG, BOTLOG_CHATID
 
 purgelist = {}
 
+
 @bot.on(admin_cmd(pattern="purgefrom$"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="purgefrom$"))
 @errors_handler
@@ -19,10 +20,14 @@ async def purge_from(event):
     if reply:
         reply_message = await reply_id(event)
         purgelist[event.chat_id] = reply_message
-        await edit_delete(event , "`This Message marked for deletion. Reply to another message with purgeto to delete all messages in between.`")
+        await edit_delete(
+            event,
+            "`This Message marked for deletion. Reply to another message with purgeto to delete all messages in between.`",
+        )
     else:
-        await edit_delete(event , "`Reply to a message to let me know what to delete.`")
-    
+        await edit_delete(event, "`Reply to a message to let me know what to delete.`")
+
+
 @bot.on(admin_cmd(pattern="purgeto$"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="purgeto$"))
 @errors_handler
@@ -31,16 +36,24 @@ async def purge_to(event):
     if event.fwd_from:
         return
     reply = await event.get_reply_message()
-    try: 
+    try:
         from_message = purgelist[event.chat_id]
     except KeyError:
-        return await edit_delete(event , "`First mark the messsage with purgefrom and then mark purgeto .So, I can delete in between Messages`")
+        return await edit_delete(
+            event,
+            "`First mark the messsage with purgefrom and then mark purgeto .So, I can delete in between Messages`",
+        )
     if not reply or not from_message.isnumeric():
-        return await edit_delete(event , "`First mark the messsage with purgefrom and then mark purgeto .So, I can delete in between Messages`")
+        return await edit_delete(
+            event,
+            "`First mark the messsage with purgefrom and then mark purgeto .So, I can delete in between Messages`",
+        )
     to_message = await reply_id(event)
     msgs = []
     count = 0
-    async for msg in event.client.iter_messages(event.chat_id, min_id = (from_message-1),max_id = (to_message+1)):
+    async for msg in event.client.iter_messages(
+        event.chat_id, min_id=(from_message - 1), max_id=(to_message + 1)
+    ):
         msgs.append(msg)
         count += 1
         msgs.append(event.reply_to_msg_id)
@@ -58,9 +71,6 @@ async def purge_to(event):
             BOTLOG_CHATID,
             "#PURGE \n`Purge of " + str(count) + " messages done successfully.`",
         )
-
-
-
 
 
 @bot.on(admin_cmd(pattern="purge(?: |$)(.*)"))
