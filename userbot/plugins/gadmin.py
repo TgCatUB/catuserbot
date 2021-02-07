@@ -325,6 +325,7 @@ async def watcher(event):
     if is_muted(event.sender_id, "gmute"):
         await event.delete()
 
+
 @bot.on(admin_cmd(pattern=r"gkick(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern=r"gkick(?: |$)(.*)", allow_sudo=True))
 async def catgkick(event):
@@ -388,6 +389,7 @@ async def catgkick(event):
             \n__Kicked in {count} groups__\
             \n**Time taken : **`{cattaken} seconds`",
         )
+
 
 CMD_HELP.update(
     {
