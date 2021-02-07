@@ -406,5 +406,6 @@ CMD_HELP.update(
         \n•  **Function : **__Reply someone's message with .ungmute to remove them from the gmuted list.__\
         \n\n•  **Syntax : **`.gkick <username/reply/userid> <reason (optional)>`\
         \n•  **Function : **__kicks the person in all groups where you are admin .__\
+        "
     }
 )
