@@ -188,7 +188,8 @@ async def delete_it(event):
             except rpcbaseerrors.BadRequestError:
                 if BOTLOG:
                     await event.client.send_message(
-                        BOTLOG_CHATID, "`Well, I can't delete a message. I am not an admin`"
+                        BOTLOG_CHATID,
+                        "`Well, I can't delete a message. I am not an admin`",
                     )
         elif input_str:
             await edit_or_reply(event, "`Well the time you mentioned is invalid.`")
