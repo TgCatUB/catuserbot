@@ -5,10 +5,7 @@ from textwrap import wrap
 
 import numpy as np
 
-try:
-    from colour import Color as asciiColor
-except Exception:
-    os.system("pip install colour")
+from colour import Color as asciiColor
 from PIL import Image, ImageDraw, ImageFont
 from wand.color import Color
 from wand.drawing import Drawing
