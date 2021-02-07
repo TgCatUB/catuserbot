@@ -83,15 +83,14 @@ async def purgeme(event):
 
     smsg = await event.client.send_message(
         event.chat_id,
-        "`Purge complete!` Purged " + str(count) + " messages.",
+        "**Purge complete!**` Purged " + str(count) + " messages.`",
     )
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
-            "#PURGEME \nPurge of " + str(count) + " messages done successfully.",
+            "#PURGEME \n`Purge of " + str(count) + " messages done successfully.`",
         )
-    await sleep(2)
-    i = 1
+    await sleep(5)
     await smsg.delete()
 
 
