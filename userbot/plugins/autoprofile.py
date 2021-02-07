@@ -60,8 +60,7 @@ async def autopic(event):
         input_str = 0
     if AUTOPICSTART:
         return await edit_delete(event, f"`Autopic is already enabled`")
-    else:
-        AUTOPICSTART = True
+    AUTOPICSTART = True
     counter = input_str
     await edit_delete(event, f"`Autopic has been started by my Master`")
     while AUTOPICSTART:
@@ -100,8 +99,7 @@ async def main(event):
     downloader.start(blocking=False)
     if DIGITALPICSTART:
         return await edit_delete(event, f"`Digitalpfp is already enabled`")
-    else:
-        DIGITALPICSTART = True
+    DIGITALPICSTART = True
     await edit_delete(event, f"`digitalpfp has been started by my Master`")
     while DIGITALPICSTART:
         shutil.copy(downloaded_file_name, poto)
@@ -141,8 +139,7 @@ async def autopic(event):
         pass
     if BLOOMSTART:
         return await edit_delete(event, f"`Bloom is already enabled`")
-    else:
-        BLOOMSTART = True
+    BLOOMSTART = True
     await edit_delete(
         event, "`Bloom colour profile pic have been enabled by my master`"
     )
@@ -182,8 +179,7 @@ async def _(event):
     global AUTONAMESTART
     if AUTONAMESTART:
         return await edit_delete(event, f"`Autoname is already enabled`")
-    else:
-        AUTONAMESTART = True
+    AUTONAMESTART = True
     await edit_delete(event, "`Auto Name has been started by my Master `")
     while AUTONAMESTART:
         DM = time.strftime("%d-%m-%y")
@@ -205,8 +201,7 @@ async def _(event):
         return
     if AUTOBIOSTART:
         return await edit_delete(event, f"`Autobio is already enabled`")
-    else:
-        AUTOBIOSTART = True
+    AUTOBIOSTART = True
     await edit_delete(event, "`Autobio has been started by my Master`")
     while AUTOBIOSTART:
         DMY = time.strftime("%d.%m.%Y")
