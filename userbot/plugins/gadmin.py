@@ -394,15 +394,17 @@ async def catgkick(event):
 CMD_HELP.update(
     {
         "gadmin": "**Plugin : **`gadmin`\
-        \n\n  •  **Syntax : **`.gban <username/reply/userid> <reason (optional)>`\
-\n  •  **Function : **__Bans the person in all groups where you are admin .__\
-\n\n  •  **Syntax : **`.ungban <username/reply/userid>`\
-\n  •  **Function : **__Reply someone's message with .ungban to remove them from the gbanned list.__\
-\n\n  •  **Syntax : **`.listgban`\
-\n  •  **Function : **__Shows you the gbanned list and reason for their gban.__\
-\n\n  •  **Syntax : **`.gmute <username/reply> <reason (optional)>`\
-\n  •  **Function : **__Mutes the person in all groups you have in common with them.__\
-\n\n  •  **Syntax : **`.ungmute <username/reply>`\
-\n  •  **Function : **__Reply someone's message with .ungmute to remove them from the gmuted list.__"
+        \n\n•  **Syntax : **`.gban <username/reply/userid> <reason (optional)>`\
+        \n•  **Function : **__Bans the person in all groups where you are admin .__\
+        \n\n•  **Syntax : **`.ungban <username/reply/userid>`\
+        \n•  **Function : **__Reply someone's message with .ungban to remove them from the gbanned list.__\
+        \n\n•  **Syntax : **`.listgban`\
+        \n•  **Function : **__Shows you the gbanned list and reason for their gban.__\
+        \n\n•  **Syntax : **`.gmute <username/reply> <reason (optional)>`\
+        \n•  **Function : **__Mutes the person in all groups you have in common with them.__\
+        \n\n•  **Syntax : **`.ungmute <username/reply>`\
+        \n•  **Function : **__Reply someone's message with .ungmute to remove them from the gmuted list.__\
+        \n\n•  **Syntax : **`.gkick <username/reply/userid> <reason (optional)>`\
+        \n•  **Function : **__kicks the person in all groups where you are admin .__\
     }
 )
