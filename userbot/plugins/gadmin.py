@@ -48,7 +48,7 @@ UNBAN_RIGHTS = ChatBannedRights(
 async def catgban(cat):
     if cat.fwd_from:
         return
-    cate = await edit_or_reply(cat, "gbanning.......")
+    cate = await edit_or_reply(cat, "`gbanning.......`")
     start = datetime.now()
     user, reason = await get_user_from_event(cat)
     if not user:
@@ -66,7 +66,7 @@ async def catgban(cat):
         pass
     if gban_sql.is_gbanned(user.id):
         await cate.edit(
-            f"the [user](tg://user?id={user.id}) is already in gbanned list any way checking again"
+            f"`the `[user](tg://user?id={user.id})` is already in gbanned list any way checking again`"
         )
     else:
         gban_sql.catgban(user.id, reason)
@@ -75,10 +75,10 @@ async def catgban(cat):
     count = 0
     sandy = len(san)
     if sandy == 0:
-        await cate.edit("you are not admin of atleast one group ")
+        await cate.edit("`you are not admin of atleast one group` ")
         return
     await cate.edit(
-        f"initiating gban of the [user](tg://user?id={user.id}) in `{len(san)}` groups"
+        f"`initiating gban of the `[user](tg://user?id={user.id}) `in {len(san)} groups`"
     )
     for i in range(sandy):
         try:
@@ -88,7 +88,7 @@ async def catgban(cat):
         except BadRequestError:
             await cat.client.send_message(
                 BOTLOG_CHATID,
-                f"You don't have required permission in :\nCHAT: {cat.chat.title}(`{cat.chat_id}`)\nFor banning here",
+                f"`You don't have required permission in :`\n**Chat :** {cat.chat.title}(`{cat.chat_id}`)\n`For banning here`",
             )
     try:
         reply = await cat.get_reply_message()
@@ -102,11 +102,11 @@ async def catgban(cat):
     cattaken = (end - start).seconds
     if reason:
         await cate.edit(
-            f"[{user.first_name}](tg://user?id={user.id}) was gbanned in `{count}` groups in `{cattaken} seconds`!!\nReason: `{reason}`"
+            f"[{user.first_name}](tg://user?id={user.id}) `was gbanned in {count} groups in {cattaken} seconds`!!\n**Reason :** `{reason}`"
         )
     else:
         await cate.edit(
-            f"[{user.first_name}](tg://user?id={user.id}) was gbanned in `{count}` groups in `{cattaken} seconds`!!"
+            f"[{user.first_name}](tg://user?id={user.id}) `was gbanned in {count} groups in {cattaken} seconds`!!"
         )
 
     if BOTLOG and count != 0:
@@ -122,7 +122,7 @@ async def catgban(cat):
 async def catgban(cat):
     if cat.fwd_from:
         return
-    cate = await edit_or_reply(cat, "ungbaning.....")
+    cate = await edit_or_reply(cat, "`ungbanning.....`")
     start = datetime.now()
     user, reason = await get_user_from_event(cat)
     if not user:
@@ -131,7 +131,7 @@ async def catgban(cat):
         gban_sql.catungban(user.id)
     else:
         await cate.edit(
-            f"the [user](tg://user?id={user.id}) is not in your gbanned list"
+            f"the [user](tg://user?id={user.id}) `is not in your gbanned list`"
         )
         return
     san = []
@@ -139,7 +139,7 @@ async def catgban(cat):
     count = 0
     sandy = len(san)
     if sandy == 0:
-        await cate.edit("you are not even admin of atleast one group ")
+        await cate.edit("`you are not even admin of atleast one group `")
         return
     await cate.edit(
         f"initiating ungban of the [user](tg://user?id={user.id}) in `{len(san)}` groups"
@@ -152,17 +152,17 @@ async def catgban(cat):
         except BadRequestError:
             await cat.client.send_message(
                 BOTLOG_CHATID,
-                f"You don't have required permission in :\nCHAT: {cat.chat.title}(`{cat.chat_id}`)\nFor unbaning here",
+                f"`You don't have required permission in :`\n**Chat : **{cat.chat.title}(`{cat.chat_id}`)\n`For unbaning here`",
             )
     end = datetime.now()
     cattaken = (end - start).seconds
     if reason:
         await cate.edit(
-            f"[{user.first_name}](tg://user?id={user.id}) was ungbanned in `{count}` groups in `{cattaken} seconds`!!\nReason: `{reason}`"
+            f"[{user.first_name}](tg://user?id={user.id}`) was ungbanned in {count} groups in {cattaken} seconds`!!\n**Reason :** `{reason}`"
         )
     else:
         await cate.edit(
-            f"[{user.first_name}](tg://user?id={user.id}) was ungbanned in `{count}` groups in `{cattaken} seconds`!!"
+            f"[{user.first_name}](tg://user?id={user.id}) `was ungbanned in {count} groups in {cattaken} seconds`!!"
         )
 
     if BOTLOG and count != 0:
