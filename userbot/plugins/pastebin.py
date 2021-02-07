@@ -19,8 +19,8 @@ def progress(current, total):
     )
 
 
-@bot.on(admin_cmd(pattern="paste( (.*)|$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="paste( (.*)|$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="paste(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="paste(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -64,8 +64,8 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern="neko( (.*)|$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="neko( (.*)|$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="neko(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="neko(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -122,8 +122,8 @@ async def _(event):
     await catevent.edit(reply_text)
 
 
-@bot.on(admin_cmd(pattern="iffuci( (.*)|$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="iffuci( (.*)|$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="iffuci(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="iffuci(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -164,8 +164,8 @@ async def _(event):
         await catevent.edit("code is pasted to {}".format(url))
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="getpaste( (.*)|$)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="getpaste( (.*)|$)"))
+@bot.on(admin_cmd(outgoing=True, pattern="getpaste(?: |$)(.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="getpaste(?: |$)(.*)"))
 async def get_dogbin_content(dog_url):
     textx = await dog_url.get_reply_message()
     message = dog_url.pattern_match.group(1)
@@ -204,11 +204,11 @@ async def get_dogbin_content(dog_url):
     reply_text = (
         "`Fetched dogbin URL content successfully!`\n\n`Content:` \n" + resp.text
     )
-    await catevent.edit(reply_text)
+    await edit_or_reply(catevent, reply_text)
 
 
-@bot.on(admin_cmd(pattern="pcode ?(.*)"))
-@bot.on(sudo_cmd(pattern="pcode ?(.*)"))
+@bot.on(admin_cmd(pattern="pcode(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="pcode(?: |$)(.*)"))
 async def code_print(event):
     if event.fwd_from:
         return
@@ -247,8 +247,8 @@ async def code_print(event):
     os.remove(d_file_name)
 
 
-@bot.on(admin_cmd(pattern="paster( (.*)|$)", outgoing=True))
-@bot.on(sudo_cmd(pattern="paster( (.*)|$)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="paster(?: |$)(.*)", outgoing=True))
+@bot.on(sudo_cmd(pattern="paster(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
