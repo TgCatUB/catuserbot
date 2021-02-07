@@ -110,11 +110,27 @@ async def catgban(event):
         )
 
     if BOTLOG and count != 0:
-        await event.client.send_message(
-            BOTLOG_CHATID,
-            f"#GBAN\nGlobal BAN\nUser: [{user.first_name}](tg://user?id={user.id})\nID: `{user.id}`\
-                                                \nReason: `{reason}`\nBanned in `{count}` groups\nTime taken = `{cattaken} seconds`",
-        )
+        if reason:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#GBAN\
+                \nGlobal Ban\
+                \n**User : **[{user.first_name}](tg://user?id={user.id})\
+                \n**ID : **`{user.id}`\
+                \n**Reason :** `{reason}`\
+                \n__Banned in {count} groups__\
+                \n**Time taken : **`{cattaken} seconds`",
+            )
+        else:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#GBAN\
+                \nGlobal Ban\
+                \n**User : **[{user.first_name}](tg://user?id={user.id})\
+                \n**ID : **`{user.id}`\
+                \n__Banned in {count} groups__\
+                \n**Time taken : **`{cattaken} seconds`",
+            )
 
 
 @bot.on(admin_cmd(pattern=r"ungban(?: |$)(.*)"))
@@ -166,11 +182,27 @@ async def catgban(event):
         )
 
     if BOTLOG and count != 0:
-        await event.client.send_message(
-            BOTLOG_CHATID,
-            f"#UNGBAN\nGlobal UNBAN\nUser: [{user.first_name}](tg://user?id={user.id})\nID: {user.id}\
-                                                \nReason: `{reason}`\nUnbanned in `{count}` groups\nTime taken = `{cattaken} seconds`",
-        )
+        if reason:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#UNGBAN\
+                \nGlobal Unban\
+                \n**User : **[{user.first_name}](tg://user?id={user.id})\
+                \n**ID : **`{user.id}`\
+                \n**Reason :** `{reason}`\
+                \n__Unbanned in {count} groups__\
+                \n**Time taken : **`{cattaken} seconds`",
+            )
+        else:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#UNGBAN\
+                \nGlobal Unban\
+                \n**User : **[{user.first_name}](tg://user?id={user.id})\
+                \n**ID : **`{user.id}`\
+                \n__Unbanned in {count} groups__\
+                \n**Time taken : **`{cattaken} seconds`",
+            )
 
 
 @bot.on(admin_cmd(pattern="listgban$"))
@@ -379,17 +411,27 @@ async def catgkick(event):
         )
 
     if BOTLOG and count != 0:
-        await event.client.send_message(
-            BOTLOG_CHATID,
-            f"#GKICK\
-            \nGlobal Kick\
-            \n**User : **[{user.first_name}](tg://user?id={user.id})\
-            \n**ID : **`{user.id}`\
-            \n**Reason :** `{reason}`\
-            \n__Kicked in {count} groups__\
-            \n**Time taken : **`{cattaken} seconds`",
-        )
-
+        if reason:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#GKICK\
+                \nGlobal Kick\
+                \n**User : **[{user.first_name}](tg://user?id={user.id})\
+                \n**ID : **`{user.id}`\
+                \n**Reason :** `{reason}`\
+                \n__Kicked in {count} groups__\
+                \n**Time taken : **`{cattaken} seconds`",
+            )
+        else:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#GKICK\
+                \nGlobal Kick\
+                \n**User : **[{user.first_name}](tg://user?id={user.id})\
+                \n**ID : **`{user.id}`\
+                \n__Kicked in {count} groups__\
+                \n**Time taken : **`{cattaken} seconds`",
+            )
 
 CMD_HELP.update(
     {
