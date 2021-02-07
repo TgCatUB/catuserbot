@@ -45,15 +45,15 @@ UNBAN_RIGHTS = ChatBannedRights(
 
 @bot.on(admin_cmd(pattern=r"gban(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern=r"gban(?: |$)(.*)", allow_sudo=True))
-async def catgban(cat):
-    if cat.fwd_from:
+async def catgban(event):
+    if event.fwd_from:
         return
-    cate = await edit_or_reply(cat, "`gbanning.......`")
+    cate = await edit_or_reply(event, "`gbanning.......`")
     start = datetime.now()
-    user, reason = await get_user_from_event(cat)
+    user, reason = await get_user_from_event(event)
     if not user:
         return
-    if user.id == (await cat.client.get_me()).id:
+    if user.id == (await event.client.get_me()).id:
         await cate.edit("why would I ban myself")
         return
     if user.id in CAT_ID:
@@ -61,7 +61,7 @@ async def catgban(cat):
         return
     try:
         hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-        await cat.client(ImportChatInviteRequest(hmm))
+        await event.client(ImportChatInviteRequest(hmm))
     except BaseException:
         pass
     if gban_sql.is_gbanned(user.id):
@@ -71,7 +71,7 @@ async def catgban(cat):
     else:
         gban_sql.catgban(user.id, reason)
     san = []
-    san = await admin_groups(cat)
+    san = await admin_groups(event)
     count = 0
     sandy = len(san)
     if sandy == 0:
@@ -82,16 +82,16 @@ async def catgban(cat):
     )
     for i in range(sandy):
         try:
-            await cat.client(EditBannedRequest(san[i], user.id, BANNED_RIGHTS))
+            await event.client(EditBannedRequest(san[i], user.id, BANNED_RIGHTS))
             await asyncio.sleep(0.5)
             count += 1
         except BadRequestError:
-            await cat.client.send_message(
+            await event.client.send_message(
                 BOTLOG_CHATID,
-                f"`You don't have required permission in :`\n**Chat :** {cat.chat.title}(`{cat.chat_id}`)\n`For banning here`",
+                f"`You don't have required permission in :`\n**Chat :** {event.chat.title}(`{event.chat_id}`)\n`For banning here`",
             )
     try:
-        reply = await cat.get_reply_message()
+        reply = await event.get_reply_message()
         if reply:
             await reply.delete()
     except BadRequestError:
@@ -110,7 +110,7 @@ async def catgban(cat):
         )
 
     if BOTLOG and count != 0:
-        await cat.client.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID,
             f"#GBAN\nGlobal BAN\nUser: [{user.first_name}](tg://user?id={user.id})\nID: `{user.id}`\
                                                 \nReason: `{reason}`\nBanned in `{count}` groups\nTime taken = `{cattaken} seconds`",
@@ -119,12 +119,12 @@ async def catgban(cat):
 
 @bot.on(admin_cmd(pattern=r"ungban(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern=r"ungban(?: |$)(.*)", allow_sudo=True))
-async def catgban(cat):
-    if cat.fwd_from:
+async def catgban(event):
+    if event.fwd_from:
         return
-    cate = await edit_or_reply(cat, "`ungbanning.....`")
+    cate = await edit_or_reply(event, "`ungbanning.....`")
     start = datetime.now()
-    user, reason = await get_user_from_event(cat)
+    user, reason = await get_user_from_event(event)
     if not user:
         return
     if gban_sql.is_gbanned(user.id):
@@ -135,7 +135,7 @@ async def catgban(cat):
         )
         return
     san = []
-    san = await admin_groups(cat)
+    san = await admin_groups(event)
     count = 0
     sandy = len(san)
     if sandy == 0:
@@ -146,13 +146,13 @@ async def catgban(cat):
     )
     for i in range(sandy):
         try:
-            await cat.client(EditBannedRequest(san[i], user.id, UNBAN_RIGHTS))
+            await event.client(EditBannedRequest(san[i], user.id, UNBAN_RIGHTS))
             await asyncio.sleep(0.5)
             count += 1
         except BadRequestError:
-            await cat.client.send_message(
+            await event.client.send_message(
                 BOTLOG_CHATID,
-                f"`You don't have required permission in :`\n**Chat : **{cat.chat.title}(`{cat.chat_id}`)\n`For unbaning here`",
+                f"`You don't have required permission in :`\n**Chat : **{event.chat.title}(`{event.chat_id}`)\n`For unbaning here`",
             )
     end = datetime.now()
     cattaken = (end - start).seconds
@@ -166,7 +166,7 @@ async def catgban(cat):
         )
 
     if BOTLOG and count != 0:
-        await cat.client.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID,
             f"#UNGBAN\nGlobal UNBAN\nUser: [{user.first_name}](tg://user?id={user.id})\nID: {user.id}\
                                                 \nReason: `{reason}`\nUnbanned in `{count}` groups\nTime taken = `{cattaken} seconds`",
