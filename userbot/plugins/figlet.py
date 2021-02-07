@@ -35,11 +35,11 @@ async def figlet(event):
     else:
         await edit_or_reply(event, "`Give some text to change it`")
         return
-    style = cmd.strip()
+    style = cmd
     text = text.strip()
     if style is not None:
         try:
-            font = CMD_FIG[style]
+            font = CMD_FIG[style.strip()]
         except KeyError:
             return await edit_delete(
                 event, "**Invalid style selected**, __Check__ `.info figlet`."
