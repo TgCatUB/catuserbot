@@ -19,6 +19,12 @@ async def _(event):
         await asyncio.sleep(3)
         await event.delete()
 
-CmdHelp("undlt").add_command(
-  "undlt", None, "Sends 5 recently deleted message from that group. Requires admin position"
-).add()
+CMD_HELP.update(
+       {
+           "undlt":   """**plugin : **`undlt`
+
+     •**Syntax: **`!undlt`
+     •**Function: **Sends 7 recently deleted messages in a group. Admin privileges required
+     """
+        }
+        )
