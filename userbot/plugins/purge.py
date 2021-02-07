@@ -9,6 +9,7 @@ from . import BOTLOG, BOTLOG_CHATID
 
 purgelist = {}
 
+
 @bot.on(admin_cmd(pattern="purge(?: |$)(.*)"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="purge(?: |$)(.*)"))
 @errors_handler
@@ -64,6 +65,7 @@ async def fastpurger(event):
             BOTLOG_CHATID,
             "#PURGE \n`Purge of " + str(count) + " messages done successfully.`",
         )
+
 
 @bot.on(admin_cmd(pattern="purgefrom$"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="purgefrom$"))
@@ -129,6 +131,7 @@ async def purge_to(event):
             )
     except Exception as e:
         await edit_delete(event, f"**Error**\n`{str(e)}`")
+
 
 @bot.on(admin_cmd(pattern="purgeme"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern="purgeme"))
