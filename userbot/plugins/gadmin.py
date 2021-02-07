@@ -257,7 +257,7 @@ async def startgmute(event):
         userid = user.id
     try:
         user = (await event.client(GetFullUserRequest(userid))).user
-    except Exception as e:
+    except Exception:
         return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
     if is_muted(userid, "gmute"):
         return await edit_or_reply(
@@ -314,7 +314,7 @@ async def endgmute(event):
         userid = user.id
     try:
         user = (await event.client(GetFullUserRequest(userid))).user
-    except Exception as e:
+    except Exception:
         return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
 
     if not is_muted(userid, "gmute"):

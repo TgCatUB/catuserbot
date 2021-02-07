@@ -82,7 +82,7 @@ async def _(event):
         ms_one = (end - start).seconds
         try:
             thumb = await reply_message.download_media(thumb=-1)
-        except Exception as e:
+        except Exception:
             thumb = thumb
         if os.path.exists(downloaded_file_name):
             c_time = time.time()
@@ -150,7 +150,7 @@ async def _(event):
         ms_one = (end - start).seconds
         try:
             thumb = await reply_message.download_media(thumb=-1)
-        except Exception as e:
+        except Exception:
             thumb = thumb
         if os.path.exists(downloaded_file_name):
             c_time = time.time()

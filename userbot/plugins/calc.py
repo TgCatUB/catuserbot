@@ -17,7 +17,7 @@ async def _(car):
     san = f"print({cmd})"
     try:
         await aexec(san, event)
-    except Exception as e:
+    except Exception:
         exc = traceback.format_exc()
     stdout = redirected_output.getvalue()
     stderr = redirected_error.getvalue()

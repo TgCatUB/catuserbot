@@ -17,7 +17,7 @@ async def _(event):
                 return await edit_or_reply(
                     event, f"The id of the user `{input_str}` is `{p.id}`"
                 )
-        except Exception as e:
+        except Exception:
             try:
                 if p.title:
                     return await edit_or_reply(

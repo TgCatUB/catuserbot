@@ -481,7 +481,7 @@ class googleimagesdownload:
             req = urllib.request.Request(url, headers=headers)
             resp = urllib.request.urlopen(req)
             return str(resp.read())
-        except Exception as e:
+        except Exception:
             print(
                 "Could not open URL. Please check your internet connection and/or ssl settings \n"
                 "If you are using proxy, make sure your proxy settings is configured correctly"

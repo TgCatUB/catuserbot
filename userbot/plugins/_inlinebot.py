@@ -102,7 +102,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             secret = os.path.join("./userbot", "secrets.txt")
             try:
                 jsondata = json.load(open(secret))
-            except Exception as e:
+            except Exception:
                 jsondata = False
             try:
                 # if u is user id
@@ -127,7 +127,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 else:
                     sandy = f"[{u.first_name}](tg://user?id={u.id})"
                 u = int(u.id)
-            except Exception as e:
+            except Exception:
                 return
             timestamp = int(time.time() * 2)
             newsecret = {str(timestamp): {"userid": u, "text": txct}}

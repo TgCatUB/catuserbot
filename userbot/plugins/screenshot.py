@@ -74,7 +74,7 @@ async def _(event):
                 allow_cache=False,
                 silent=True,
             )
-    except Exception as e:
+    except Exception:
         await catevent.edit(f"`{traceback.format_exc()}`")
 
 

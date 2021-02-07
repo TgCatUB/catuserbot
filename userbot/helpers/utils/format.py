@@ -19,7 +19,7 @@ def paste_text(text):
             .get("key")
         )
         link = f"https://nekobin.com/{nekokey}"
-    except Exception as e:
+    except Exception:
         url = "https://del.dog/documents"
         r = requests.post(url, data=text).json()
         link = f"https://del.dog/{r['key']}"

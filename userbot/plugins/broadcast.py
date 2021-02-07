@@ -147,7 +147,7 @@ async def catbroadcast_add(event):
                 f"The Chat {chat.title} is added to category {keyword}",
                 parse_mode=parse_pre,
             )
-        except Exception as e:
+        except Exception:
             await event.client.send_message(
                 BOTLOG_CHATID,
                 f"The user {chat.first_name} is added to category {keyword}",
@@ -185,7 +185,7 @@ async def catbroadcast_remove(event):
                 f"The Chat {chat.title} is removed from category {keyword}",
                 parse_mode=parse_pre,
             )
-        except Exception as e:
+        except Exception:
             await event.client.send_message(
                 BOTLOG_CHATID,
                 f"The user {chat.first_name} is removed from category {keyword}",
@@ -229,7 +229,7 @@ async def catbroadcast_list(event):
                     resultlist += f" 👉 👥 **Group** \n  •  **Name : **{chatinfo.title} \n  •  **id : **`{int(chat)}`\n\n"
             except AttributeError:
                 resultlist += f" 👉 👤 **User** \n  •  **Name : **{chatinfo.first_name} \n  •  **id : **`{int(chat)}`\n\n"
-        except Exception as e:
+        except Exception:
             errorlist += f" 👉 __This id {int(chat)} in database probably you may left the chat/channel or may be invalid id.\
                             \nRemove this id from the database by using this command__ `.frmfrom {keyword} {int(chat)}` \n\n"
     finaloutput = resultlist + errorlist
@@ -306,7 +306,7 @@ async def catbroadcast_remove(event):
                 f"The Chat {chat.title} is removed from category {keyword}",
                 parse_mode=parse_pre,
             )
-        except Exception as e:
+        except Exception:
             await event.client.send_message(
                 BOTLOG_CHATID,
                 f"The user {chat.first_name} is removed from category {keyword}",

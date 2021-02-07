@@ -245,7 +245,7 @@ async def download(event, gdrive, service, uri=None):
             from .torrentutils import aria2, check_metadata
 
             cattorrent = True
-        except Exception as e:
+        except Exception:
             cattorrent = False
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
         if cattorrent:
@@ -276,7 +276,7 @@ async def download(event, gdrive, service, uri=None):
             filename = await check_progress_for_dl(gdrive, new_gid, previous=None)
         try:
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filenames
-        except Exception as e:
+        except Exception:
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filename
     else:
         try:
@@ -355,7 +355,7 @@ async def download(event, gdrive, service, uri=None):
                 )
                 await reset_parentId()
                 return reply
-            except Exception as e:
+            except Exception:
                 await reset_parentId()
             else:
                 reply += (
@@ -478,7 +478,7 @@ async def gdrive_download(event, gdrive, service, uri):
                             + "\n"
                             + page.find("p", {"class": "uc-error-subcaption"}).text
                         )
-                    except Exception as e:
+                    except Exception:
                         reply += (
                             "**[FILE - ERROR]**\n\n"
                             "**Status : **BAD - failed to download.\n"

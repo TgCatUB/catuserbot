@@ -52,7 +52,7 @@ try:
         ]
     else:
         HEROKU_APP = None
-except Exception as e:
+except Exception:
     HEROKU_APP = None
 
 # Global Configiables

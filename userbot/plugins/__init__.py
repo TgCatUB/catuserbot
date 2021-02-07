@@ -87,7 +87,7 @@ def check(cat):
         return True
     try:
         hi = re.search(cat.lower(), "(a|b|c|d)", flags=re.IGNORECASE)
-    except Exception as e:
+    except Exception:
         hi = False
     return bool(hi)
 

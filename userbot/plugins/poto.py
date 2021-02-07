@@ -59,7 +59,7 @@ async def potocmd(event):
                 else:
                     photo = await event.client.download_profile_photo(event.input_chat)
                 await event.client.send_file(event.chat_id, photo)
-            except Exception as e:
+            except Exception:
                 return await edit_delete(event, "`This user has no photos to show you`")
     else:
         try:
