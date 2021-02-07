@@ -1,23 +1,25 @@
 import pyfiglet
+
 from . import deEmojify
 
 CMD_FIG = {
-        "slant": "slant",
-        "3D": "3-d",
-        "5line": "5lineoblique",
-        "alpha": "alphabet",
-        "banner": "banner3-D",
-        "doh": "doh",
-        "basic": "basic",
-        "binary": "binary",
-        "iso": "isometric1",
-        "letter": "letters",
-        "allig": "alligator",
-        "dotm": "dotmatrix",
-        "bubble": "bubble",
-        "bulb": "bulbhead",
-        "digi": "digital",
-    }
+    "slant": "slant",
+    "3D": "3-d",
+    "5line": "5lineoblique",
+    "alpha": "alphabet",
+    "banner": "banner3-D",
+    "doh": "doh",
+    "basic": "basic",
+    "binary": "binary",
+    "iso": "isometric1",
+    "letter": "letters",
+    "allig": "alligator",
+    "dotm": "dotmatrix",
+    "bubble": "bubble",
+    "bulb": "bulbhead",
+    "digi": "digital",
+}
+
 
 @bot.on(admin_cmd(pattern="figlet(?: |$)(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="figlet(?: |$)(.*)", allow_sudo=True))
@@ -45,7 +47,7 @@ async def figlet(event):
         result = pyfiglet.figlet_format(deEmojify(text), font=font)
     else:
         result = pyfiglet.figlet_format(deEmojify(text))
-    await edit_or_reply(event, result , parse_mode=parse_pre)
+    await edit_or_reply(event, result, parse_mode=parse_pre)
 
 
 CMD_HELP.update(
