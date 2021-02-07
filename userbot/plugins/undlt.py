@@ -23,8 +23,8 @@ CMD_HELP.update(
        {
            "undlt":   """**Plugin : **`undlt`
 
-   •**Syntax: **`!undlt`
-   •**Function: **Sends 7 recently deleted messages in a group. Admin privileges required
+  •  **Syntax: **`!undlt`
+  •  **Function: **Sends 7 recently deleted messages in a group. Admin privileges required
     """
         }
         )
