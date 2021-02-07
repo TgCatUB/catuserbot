@@ -54,8 +54,8 @@ def doit(chat_id, match, original):
     if original is not None:
         return actually_doit(original)
     # Try matching the last few messages
-    for original in last_msgs[chat_id]:
-        m, s = actually_doit(original)
+    for org in last_msgs[chat_id]:
+        m, s = actually_doit(org)
         if s is not None:
             return m, s
     return None, None
@@ -112,9 +112,9 @@ async def on_regex(event):
 CMD_HELP.update(
     {
         "sed": "**Plugin : ** `sed`\
-    \n\n  •  **Syntax : ** .s<delimiter><old word(s)><delimiter><new word(s)>\
-    \n  •  **Function : **Replaces a word or words using sed.\
-    \n  •  **Delimiters : **`/, :, |, _`\
-    \n  •  **Example : **tag any sentence and type s/a/b. where is required word to replace and b is correct word."
+    \n\n•  **Syntax : ** `.s<delimiter><old word(s)><delimiter><new word(s)>`\
+    \n•  **Function : **__Replaces a word or words using sed.__\
+    \n•  **Delimiters : **`/, :, |, _`\
+    \n•  **Example : **__tag any sentence and type s/a/b. where is required word to replace and b is correct word__."
     }
 )
