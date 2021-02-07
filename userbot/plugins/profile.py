@@ -5,6 +5,7 @@
 #
 
 import os
+
 from telethon.errors.rpcerrorlist import UsernameOccupiedError
 from telethon.tl import functions
 from telethon.tl.functions.account import UpdateUsernameRequest
@@ -24,15 +25,13 @@ USERNAME_TAKEN = "```This username is already taken.```"
 # ===============================================================
 
 
-@bot.on(admin_cmd(pattern="pbio (.*)"))  
+@bot.on(admin_cmd(pattern="pbio (.*)"))
 async def _(event):
     if event.fwd_from:
         return
     bio = event.pattern_match.group(1)
     try:
-        await event.client(
-            functions.account.UpdateProfileRequest(about=bio)  
-        )
+        await event.client(functions.account.UpdateProfileRequest(about=bio))
         await event.edit("Succesfully changed my profile bio")
     except Exception as e:
         await event.edit(str(e))
@@ -49,29 +48,29 @@ async def _(event):
         first_name, last_name = names.split("|", 1)
     try:
         await event.client(
-            functions.account.UpdateProfileRequest(  
+            functions.account.UpdateProfileRequest(
                 first_name=first_name, last_name=last_name
             )
         )
         await event.edit("My name was changed successfully")
-    except Exception as e: 
+    except Exception as e:
         await event.edit(str(e))
 
 
-@bot.on(admin_cmd(pattern="ppic"))  
+@bot.on(admin_cmd(pattern="ppic"))
 async def _(event):
     if event.fwd_from:
         return
     reply_message = await event.get_reply_message()
     await event.edit("Downloading Profile Picture to my local ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):  
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)  
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     photo = None
     try:
-        photo = await event.client.download_media(  
-            reply_message, Config.TMP_DOWNLOAD_DIRECTORY  
+        photo = await event.client.download_media(
+            reply_message, Config.TMP_DOWNLOAD_DIRECTORY
         )
-    except Exception as e: 
+    except Exception as e:
         await event.edit(str(e))
     else:
         if photo:
@@ -86,7 +85,7 @@ async def _(event):
                 catpic = None
                 catvideo = await event.client.upload_file(photo)
             else:
-                catpic = await event.client.upload_file(photo)  
+                catpic = await event.client.upload_file(photo)
                 catvideo = None
             try:
                 await event.client(
@@ -94,13 +93,13 @@ async def _(event):
                         file=catpic, video=catvideo, video_start_ts=0.01
                     )
                 )
-            except Exception as e: 
+            except Exception as e:
                 await event.edit(str(e))
             else:
                 await event.edit("My profile picture was succesfully changed")
     try:
         os.remove(photo)
-    except Exception as e: 
+    except Exception as e:
         print(str(e))
 
 
