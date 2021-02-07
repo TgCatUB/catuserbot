@@ -49,8 +49,8 @@ async def _(event):
         return
     try:
         await event.delete()
-    except Exception:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     m = await event.get_reply_message()
     if not m:
         return

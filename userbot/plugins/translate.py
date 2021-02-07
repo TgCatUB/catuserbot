@@ -99,7 +99,7 @@ async def getTranslate(text, **kwargs):
     for _ in range(10):
         try:
             result = translator.translate(text, **kwargs)
-        except Exception:
+        except Exception as e:
             translator = Translator()
             await sleep(0.1)
     return result

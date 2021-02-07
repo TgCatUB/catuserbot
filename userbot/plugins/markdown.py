@@ -147,8 +147,8 @@ def parse(message, old_entities=None):
             i += len(text)
 
         return del_surrogate(message), entities + old_entities
-    except Exception:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
 
 
 @bot.on(events.MessageEdited(outgoing=True))

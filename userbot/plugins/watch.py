@@ -16,7 +16,7 @@ def get_stream_data(query):
     # Compatibility for Current Userge Users
     try:
         country = Config.WATCH_COUNTRY
-    except Exception:
+    except Exception as e:
         country = "IN"
     # Cooking Data
     just_watch = JustWatch(country=country)

@@ -58,8 +58,8 @@ async def startupmessage():
         \nIf you need assistance, **head to https://t.me/catuserbot_support",
                 link_preview=False,
             )
-    except Exception:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
 
 
 bot.loop.create_task(startupmessage())

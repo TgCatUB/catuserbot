@@ -70,7 +70,7 @@ async def _(event):
                 await event.delete()
                 return
             u = int(u.id)
-        except Exception:
+        except Exception as e:
             await event.delete()
             return
     await event.delete()

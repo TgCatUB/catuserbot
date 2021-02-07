@@ -245,7 +245,7 @@ async def download(event, gdrive, service, uri=None):
             from .torrentutils import aria2, check_metadata
 
             cattorrent = True
-        except Exception:
+        except Exception as e:
             cattorrent = False
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
         if cattorrent:
@@ -276,7 +276,7 @@ async def download(event, gdrive, service, uri=None):
             filename = await check_progress_for_dl(gdrive, new_gid, previous=None)
         try:
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filenames
-        except Exception:
+        except Exception as e:
             required_file_name = TMP_DOWNLOAD_DIRECTORY + filename
     else:
         try:
@@ -355,7 +355,7 @@ async def download(event, gdrive, service, uri=None):
                 )
                 await reset_parentId()
                 return reply
-            except Exception:
+            except Exception as e:
                 await reset_parentId()
             else:
                 reply += (
@@ -478,7 +478,7 @@ async def gdrive_download(event, gdrive, service, uri):
                             + "\n"
                             + page.find("p", {"class": "uc-error-subcaption"}).text
                         )
-                    except Exception:
+                    except Exception as e:
                         reply += (
                             "**[FILE - ERROR]**\n\n"
                             "**Status : **BAD - failed to download.\n"
@@ -711,8 +711,8 @@ async def create_dir(service, folder_name, dir_id=None):
 async def upload(gdrive, service, file_path, file_name, mimeType):
     try:
         await gdrive.edit("`Processing upload...`")
-    except Exception:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     body = {
         "name": file_name,
         "description": "Uploaded from Telegram using Catuserbot.",
@@ -1181,8 +1181,8 @@ async def cancel_process(gdrive):
         if len(downloads) != 0:
             aria2.remove_all(force=True)
             aria2.autopurge()
-    except Exception:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     is_cancelled = True
     await asyncio.sleep(3.5)
     await gdrive.delete()

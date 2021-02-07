@@ -59,7 +59,7 @@ async def _(event):
     stdout, stderr, exc = None, None, None
     try:
         await aexec(cmd, event)
-    except Exception:
+    except Exception as e:
         exc = traceback.format_exc()
     stdout = redirected_output.getvalue()
     stderr = redirected_error.getvalue()

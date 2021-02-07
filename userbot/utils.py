@@ -360,7 +360,8 @@ async def is_admin(client, chat_id, user_id):
             chat_participant, (ChannelParticipantCreator, ChannelParticipantAdmin)
         ):
             return True
-    except Exception:
+    except Exception as e:
+        LOGS.info(str(e))
         return False
     else:
         return False
@@ -420,7 +421,7 @@ def register(**args):
         bot.add_event_handler(func, events.NewMessage(**args))
         try:
             LOAD_PLUG[file_test].append(func)
-        except Exception:
+        except Exception as e:
             LOAD_PLUG.update({file_test: [func]})
         return func
 

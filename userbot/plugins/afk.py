@@ -127,8 +127,8 @@ async def on_afk(event):
         full = None
         try:
             full = await event.client.get_entity(event.message.from_id)
-        except Exception:
-            pass
+        except Exception as e:
+            LOGS.info(str(e))
         messaget = media_type(event)
         resalt = f"#AFK_TAGS \n<b>Group : </b><code>{hmm.title}</code>"
         if full is not None:

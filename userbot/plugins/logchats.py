@@ -62,13 +62,13 @@ async def log_tagged_messages(event):
     try:
         if (await event.get_sender()).bot:
             return
-    except Exception:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     full = None
     try:
         full = await event.client.get_entity(event.message.from_id)
-    except Exception:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     messaget = media_type(event)
     resalt = f"#TAGS \n<b>Group : </b><code>{hmm.title}</code>"
     if full is not None:

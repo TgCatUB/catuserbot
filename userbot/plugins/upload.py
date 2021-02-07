@@ -263,7 +263,7 @@ async def video_catfile(event):
         catthumb = None
         try:
             catthumb = await reply.download_media(thumb=-1)
-        except Exception:
+        except Exception as e:
             catthumb = os.path.join("./temp", "thumb.jpg")
             await thumb_from_audio(catfile, catthumb)
         if catthumb is None:

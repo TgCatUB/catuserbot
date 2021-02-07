@@ -220,8 +220,8 @@ async def _(event):
             )
     try:
         await event.delete()
-    except Exception:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
 
 
 CMD_HELP.update(
