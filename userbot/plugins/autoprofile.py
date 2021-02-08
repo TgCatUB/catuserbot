@@ -251,7 +251,9 @@ async def _(event):
     if input_str == "digitalpfp":
         if DIGITALPICSTART:
             DIGITALPICSTART = False
-            return await edit_delete(event, "`Digital profile pic has been stopped now`")
+            return await edit_delete(
+                event, "`Digital profile pic has been stopped now`"
+            )
         return await edit_delete(event, "`Digital profile pic haven't enabled`")
     if input_str == "bloom":
         if BLOOMSTART:
