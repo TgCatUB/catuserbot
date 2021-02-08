@@ -8,7 +8,7 @@ from telethon.utils import add_surrogate
 
 
 def paste_text(text):
-    asciich = ["*", "`", "_"]
+    asciich = ["**", "`", "__"]
     for i in asciich:
         text = re.sub(rf"\{i}", "", text)
     try:
