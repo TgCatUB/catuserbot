@@ -246,58 +246,52 @@ async def _(event):
     if input_str == "autopic":
         if gvarstatus("autopic") is not None and gvarstatus("autopic") == "true":
             delgvar("autopic")
-            await edit_delete(event, "`Autopic has been stopped now`")
-        else:
-            await edit_delete(event, "`Autopic haven't enabled`")
+            return await edit_delete(event, "`Autopic has been stopped now`")
+        return await edit_delete(event, "`Autopic haven't enabled`")
     if input_str == "digitalpfp":
         if DIGITALPICSTART:
             DIGITALPICSTART = False
-            await edit_delete(event, "`Digital profile pic has been stopped now`")
-        else:
-            await edit_delete(event, "`Digital profile pic haven't enabled`")
+            return await edit_delete(event, "`Digital profile pic has been stopped now`")
+        return await edit_delete(event, "`Digital profile pic haven't enabled`")
     if input_str == "bloom":
         if BLOOMSTART:
             BLOOMSTART = False
-            await edit_delete(event, "`Bloom has been stopped now`")
-        else:
-            await edit_delete(event, "`Bloom haven't enabled`")
+            return await edit_delete(event, "`Bloom has been stopped now`")
+        return await edit_delete(event, "`Bloom haven't enabled`")
     if input_str == "autoname":
         if AUTONAMESTART:
             AUTONAMESTART = False
-            await edit_delete(event, "`Autoname has been stopped now`")
-        else:
-            await edit_delete(event, "`Autoname haven't enabled`")
+            return await edit_delete(event, "`Autoname has been stopped now`")
+        return await edit_delete(event, "`Autoname haven't enabled`")
     if input_str == "autobio":
         if AUTOBIOSTART:
             AUTOBIOSTART = False
-            await edit_delete(event, "`Autobio has been stopped now`")
-        else:
-            await edit_delete(event, "`Autobio haven't enabled`")
-    else:
-        await edit_delete(event, "`What should i end ?..`")
+            return await edit_delete(event, "`Autobio has been stopped now`")
+        return await edit_delete(event, "`Autobio haven't enabled`")
+    await edit_delete(event, "`What should i end ?..`")
 
 
 CMD_HELP.update(
     {
         "autoprofile": """**Plugin : **`autoprofile`
 
-  •  **Syntax : **`.autopic angle`
-  •  **Function : **__Rotating image along with the time on it with given angle if no angle is given then doesnt rotate. You need to set __`DOWNLOAD_PFP_URL_CLOCK`__ in heroku__
+•  **Syntax : **`.autopic angle`
+•  **Function : **__Rotating image along with the time on it with given angle if no angle is given then doesnt rotate. You need to set __`DOWNLOAD_PFP_URL_CLOCK`__ in heroku__
 
-  •  **Syntax : **`.digitalpfp`
-  •  **Function : **__Your profile pic changes to digitaltime profile picutre__
+•  **Syntax : **`.digitalpfp`
+•  **Function : **__Your profile pic changes to digitaltime profile picutre__
 
-  •  **Syntax : **`.bloom`
-  •  **Function : **__Random colour profile pics will be set along with time on it. You need to set__ `DOWNLOAD_PFP_URL_CLOCK`__ in heroku__
+•  **Syntax : **`.bloom`
+•  **Function : **__Random colour profile pics will be set along with time on it. You need to set__ `DOWNLOAD_PFP_URL_CLOCK`__ in heroku__
 
-  •  **Syntax : **`.autoname`
-  •  **Function : **__for time along with name, you must set __`AUTONAME`__ in the heroku vars first for this to work__
+•  **Syntax : **`.autoname`
+•  **Function : **__for time along with name, you must set __`AUTONAME`__ in the heroku vars first for this to work__
 
-  •  **Syntax : **`.autobio`
-  •  **Function : **__for time along with your bio, Set __`DEFAULT_BIO`__ in the heroku vars first__
+•  **Syntax : **`.autobio`
+•  **Function : **__for time along with your bio, Set __`DEFAULT_BIO`__ in the heroku vars first__
 
-  •  **Syntax : **`.end function`
-  •  **Function : **__To stop the given functions like autopic ,difitalpfp , bloom , autoname and autobio__
+•  **Syntax : **`.end function`
+•  **Function : **__To stop the given functions like autopic ,difitalpfp , bloom , autoname and autobio__
 
 **⚠️DISCLAIMER⚠️**
 __USING THIS PLUGIN CAN RESULT IN ACCOUNT BAN. WE ARE NOT RESPONSIBLE FOR YOUR BAN.__
