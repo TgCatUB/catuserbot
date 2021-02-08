@@ -13,7 +13,7 @@ async def reply_id(event):
     return reply_to_id
 
 
-async def get_user_from_event(event, catevent , secondgroup=None):
+async def get_user_from_event(event, catevent, secondgroup=None):
     if secondgroup:
         args = event.pattern_match.group(2).split(" ", 1)
     else:
