@@ -27,7 +27,7 @@ async def tmuter(catty):
         await edit_or_reply(catty, NO_ADMIN)
         return
     catevent = await edit_or_reply(catty, "`muting....`")
-    user, reason = await get_user_from_event(catty)
+    user, reason = await get_user_from_event(catty,catevent)
     if not user:
         return
     if reason:
@@ -108,7 +108,7 @@ async def ban(catty):
         await edit_or_reply(catty, NO_ADMIN)
         return
     catevent = await edit_or_reply(catty, "`banning....`")
-    user, reason = await get_user_from_event(catty)
+    user, reason = await get_user_from_event(catty,catevent)
     if not user:
         return
     if reason:

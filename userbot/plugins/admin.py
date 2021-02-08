@@ -129,7 +129,7 @@ async def promote(promt):
         pin_messages=True,
     )
     catevent = await edit_or_reply(promt, "`Promoting...`")
-    user, rank = await get_user_from_event(promt)
+    user, rank = await get_user_from_event(promt,catevent)
     if not rank:
         rank = "Admin"
     if not user:
@@ -166,7 +166,7 @@ async def demote(dmod):
         return
     catevent = await edit_or_reply(dmod, "`Demoting...`")
     rank = "admeme"
-    user = await get_user_from_event(dmod)
+    user = await get_user_from_event(dmod,catevent)
     user = user[0]
     if not user:
         return
@@ -208,10 +208,10 @@ async def ban(bon):
     if not admin and not creator:
         await edit_or_reply(bon, NO_ADMIN)
         return
-    user, reason = await get_user_from_event(bon)
+    catevent = await edit_or_reply(bon, "`Whacking the pest!`")
+    user, reason = await get_user_from_event(bon,catevent)
     if not user:
         return
-    catevent = await edit_or_reply(bon, "`Whacking the pest!`")
     try:
         await bon.client(EditBannedRequest(bon.chat_id, user.id, BANNED_RIGHTS))
     except BadRequestError:
@@ -259,7 +259,7 @@ async def nothanos(unbon):
         await edit_or_reply(unbon, NO_ADMIN)
         return
     catevent = await edit_or_reply(unbon, "`Unbanning...`")
-    user = await get_user_from_event(unbon)
+    user = await get_user_from_event(unbon,catevent)
     user = user[0]
     if not user:
         return

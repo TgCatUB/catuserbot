@@ -50,7 +50,7 @@ async def catgban(event):
         return
     cate = await edit_or_reply(event, "`gbanning.......`")
     start = datetime.now()
-    user, reason = await get_user_from_event(event)
+    user, reason = await get_user_from_event(event,cate)
     if not user:
         return
     if user.id == (await event.client.get_me()).id:
@@ -140,7 +140,7 @@ async def catgban(event):
         return
     cate = await edit_or_reply(event, "`ungbanning.....`")
     start = datetime.now()
-    user, reason = await get_user_from_event(event)
+    user, reason = await get_user_from_event(event,cate)
     if not user:
         return
     if gban_sql.is_gbanned(user.id):
@@ -365,7 +365,7 @@ async def catgkick(event):
         return
     cate = await edit_or_reply(event, "`gkicking.......`")
     start = datetime.now()
-    user, reason = await get_user_from_event(event)
+    user, reason = await get_user_from_event(event,cate)
     if not user:
         return
     if user.id == (await event.client.get_me()).id:
