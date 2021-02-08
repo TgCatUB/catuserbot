@@ -59,7 +59,7 @@ async def tmuter(catty):
         # Announce that the function is done
         if reason:
             await catevent.edit(
-                f"{user.first_name} was muted in {catty.chat.title}\n"
+                f"{_format.mentionuser(user.first_name ,user.id)} was muted in {catty.chat.title}\n"
                 f"**Muted for : **{cattime}\n"
                 f"**Reason : **__{reason}__"
             )
@@ -74,7 +74,7 @@ async def tmuter(catty):
                 )
         else:
             await catevent.edit(
-                f"{user.first_name} was muted in {catty.chat.title}\n"
+                f"{_format.mentionuser(user.first_name ,user.id)} was muted in {catty.chat.title}\n"
                 f"Muted for {cattime}\n"
             )
             if BOTLOG:
@@ -88,6 +88,8 @@ async def tmuter(catty):
         # Announce to logging group
     except UserIdInvalidError:
         return await catevent.edit("`Uh oh my mute logic broke!`")
+    except UserAdminInvalidError:
+        return await catevent.edit("`Either you're not an admin or you tried to mute an admin that you didn't promote`")
     except Exception as e:
         return await catevent.edit(f"`{str(e)}`")
 
@@ -134,6 +136,8 @@ async def ban(catty):
                 ChatBannedRights(until_date=ctime, view_messages=True),
             )
         )
+    except UserAdminInvalidError:
+        return await catevent.edit("`Either you're not an admin or you tried to ban an admin that you didn't promote`")
     except BadRequestError:
         await catevent.edit(NO_PERM)
         return
@@ -152,7 +156,7 @@ async def ban(catty):
     # Shout out the ID, so that fedadmins can fban later
     if reason:
         await catevent.edit(
-            f"{user.first_name} was banned in {catty.chat.title}\n"
+            f"{_format.mentionuser(user.first_name ,user.id)} was banned in {catty.chat.title}\n"
             f"banned for {cattime}\n"
             f"Reason:`{reason}`"
         )
@@ -167,7 +171,7 @@ async def ban(catty):
             )
     else:
         await catevent.edit(
-            f"{user.first_name} was banned in {catty.chat.title}\n"
+            f"{_format.mentionuser(user.first_name ,user.id)} was banned in {catty.chat.title}\n"
             f"banned for {cattime}\n"
         )
         if BOTLOG:
@@ -183,11 +187,11 @@ async def ban(catty):
 CMD_HELP.update(
     {
         "tadmin": "**Plugin :** `tadmin`\
-      \n\n  •  **Syntax : **`.tmute <reply/username/userid> <time> <reason>`\
-      \n  •  **Function : **__Temporary mutes the user for given time.__\
-      \n\n  •  **Syntax : **`.tban <reply/username/userid> <time> <reason>`\
-      \n  •  **Function : **__Temporary bans the user for given time.__\
-      \n\n  •  **Time units : ** __(2m = 2 minutes) ,(3h = 3hours)  ,(4d = 4 days) ,(5w = 5 weeks)\
+      \n\n•  **Syntax : **`.tmute <reply/username/userid> <time> <reason>`\
+      \n•  **Function : **__Temporary mutes the user for given time.__\
+      \n\n•  **Syntax : **`.tban <reply/username/userid> <time> <reason>`\
+      \n•  **Function : **__Temporary bans the user for given time.__\
+      \n\n•  **Time units : ** __(2m = 2 minutes) ,(3h = 3hours)  ,(4d = 4 days) ,(5w = 5 weeks)\
       These times are example u can use anything with those units __"
     }
 )
