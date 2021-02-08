@@ -86,6 +86,8 @@ async def autopic(event):
             return
         if gvarstatus("autopic") != "true":
             AUTOPICSTART = False
+        else:
+            AUTOPICSTART = True
 
 
 @bot.on(admin_cmd(pattern="digitalpfp$"))
