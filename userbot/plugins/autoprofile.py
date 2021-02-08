@@ -64,6 +64,7 @@ async def autopic(event):
     if input_str:
         addgvar("autopic_counter", input_str)
     await edit_delete(event, f"`Autopic has been started by my Master`")
+    await autopicloop()
 
 
 async def autopicloop():
