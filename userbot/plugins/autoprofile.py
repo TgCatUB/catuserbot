@@ -36,6 +36,7 @@ AUTOBIOSTART = False
 AUTONAMESTART = False
 DIGITALPICSTART = False
 
+
 @bot.on(admin_cmd(pattern="autopic ?(.*)"))
 async def autopic(event):
     if event.fwd_from:
