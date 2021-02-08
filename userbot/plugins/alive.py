@@ -6,10 +6,7 @@ from telethon import version
 from . import ALIVE_NAME, StartTime, catversion, get_readable_time, mention, reply_id
 
 DEFAULTUSER = ALIVE_NAME or "cat"
-CAT_IMG = [
-       "https://telegra.ph/file/890cabd6f3adb64b455db.jpg"
-       "https://telegra.ph/file/fa4c4c715679bb64c6973.jpg"
-  ]
+CAT_IMG = Config.ALIVE_PIC and Config.ALIVE_PIC_2
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
 EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
 
