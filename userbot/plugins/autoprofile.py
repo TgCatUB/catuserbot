@@ -26,8 +26,8 @@ DEFAULTUSER = str(AUTONAME) if AUTONAME else "cat"
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
-autopic_path = os.path.join(os.getcwd(),"userbot","original_pic.png")
-autophoto_path = os.path.join(os.getcwd(),"userbot","photo_pfp.png")
+autopic_path = os.path.join(os.getcwd(), "userbot", "original_pic.png")
+autophoto_path = os.path.join(os.getcwd(), "userbot", "photo_pfp.png")
 global DIGITALPICSTART
 global BLOOMSTART
 global AUTONAMESTART
@@ -99,7 +99,9 @@ async def autopicloop():
             return
         AUTOPICSTART = gvarstatus("autopic") == "true"
 
+
 bot.loop.create_task(autopicloop())
+
 
 @bot.on(admin_cmd(pattern="digitalpfp$"))
 async def main(event):
@@ -148,9 +150,7 @@ async def autopic(event):
         return
     global BLOOMSTART
     autopic_path = "userbot/original_pic.png"
-    downloader = SmartDL(
-        Config.DOWNLOAD_PFP_URL_CLOCK, autopic_path, progress_bar=True
-    )
+    downloader = SmartDL(Config.DOWNLOAD_PFP_URL_CLOCK, autopic_path, progress_bar=True)
     downloader.start(blocking=False)
     autophoto_path = "userbot/photo_pfp.png"
     while not downloader.isFinished():
