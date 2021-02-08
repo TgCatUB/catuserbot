@@ -18,7 +18,7 @@ from telethon.errors import FloodWaitError
 from telethon.tl import functions
 
 from . import AUTONAME, DEFAULT_BIO
-from .sql_helpers.globals import addgvar, delgvar, gvarstatus
+from .sql_helper.globals import addgvar, delgvar, gvarstatus
 
 DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
 CHANGE_TIME = Config.CHANGE_TIME
