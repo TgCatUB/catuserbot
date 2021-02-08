@@ -73,7 +73,7 @@ async def autopicloop():
     except Exception as e:
         LOGS.info(str(e))
     while AUTOPICSTART:
-        if os.path.exists():
+        if not os.path.exists(autopic_path ):
             downloader = SmartDL(
                 Config.DOWNLOAD_PFP_URL_CLOCK, autopic_path, progress_bar=False
             )
