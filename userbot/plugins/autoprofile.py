@@ -24,18 +24,6 @@ CHANGE_TIME = Config.CHANGE_TIME
 DEFAULTUSER = str(AUTONAME) if AUTONAME else "cat"
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
-global AUTOPICSTART
-global DIGITALPICSTART
-global BLOOMSTART
-global AUTONAMESTART
-global AUTOBIOSTART
-
-BLOOMSTART = False
-AUTOPICSTART = False
-AUTOBIOSTART = False
-AUTONAMESTART = False
-DIGITALPICSTART = False
-
 
 @bot.on(admin_cmd(pattern="autopic ?(.*)"))
 async def autopic(event):
