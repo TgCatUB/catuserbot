@@ -246,6 +246,13 @@ async def _(event):
     if input_str == "autopic":
         if gvarstatus("autopic") is not None and gvarstatus("autopic") == "true":
             delgvar("autopic")
+            if os.path.exists(autopic_path):
+                file = await bot.upload_file(autopic_path)
+                try:
+                    await event.client(functions.photos.UploadProfilePhotoRequest(file))
+                    os.remove(autopic_path)
+                except BaseException:
+                    return
             return await edit_delete(event, "`Autopic has been stopped now`")
         return await edit_delete(event, "`Autopic haven't enabled`")
     if input_str == "digitalpfp":
