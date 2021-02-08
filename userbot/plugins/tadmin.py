@@ -89,7 +89,9 @@ async def tmuter(catty):
     except UserIdInvalidError:
         return await catevent.edit("`Uh oh my mute logic broke!`")
     except UserAdminInvalidError:
-        return await catevent.edit("`Either you're not an admin or you tried to mute an admin that you didn't promote`")
+        return await catevent.edit(
+            "`Either you're not an admin or you tried to mute an admin that you didn't promote`"
+        )
     except Exception as e:
         return await catevent.edit(f"`{str(e)}`")
 
@@ -137,7 +139,9 @@ async def ban(catty):
             )
         )
     except UserAdminInvalidError:
-        return await catevent.edit("`Either you're not an admin or you tried to ban an admin that you didn't promote`")
+        return await catevent.edit(
+            "`Either you're not an admin or you tried to ban an admin that you didn't promote`"
+        )
     except BadRequestError:
         await catevent.edit(NO_PERM)
         return
