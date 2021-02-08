@@ -18,7 +18,7 @@ from telethon.errors import FloodWaitError
 from telethon.tl import functions
 
 from . import AUTONAME, DEFAULT_BIO
-from .sql_helpers.globals import gvarstatus, addgvar, delgvar
+from .sql_helpers.globals import addgvar, delgvar, gvarstatus
 
 DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
 CHANGE_TIME = Config.CHANGE_TIME
@@ -35,6 +35,8 @@ BLOOMSTART = False
 AUTOBIOSTART = False
 AUTONAMESTART = False
 DIGITALPICSTART = False
+
+
 @bot.on(admin_cmd(pattern="autopic ?(.*)"))
 async def autopic(event):
     if event.fwd_from:
@@ -56,11 +58,11 @@ async def autopic(event):
     else:
         if gvarstatus("autopic_counter") is None:
             addgvar("autopic_counter", 0)
-    if gvarstatus("autopic") is not None and gvarstatus("autopic") == "true" :
+    if gvarstatus("autopic") is not None and gvarstatus("autopic") == "true":
         return await edit_delete(event, f"`Autopic is already enabled`")
-    addgvar("autopic" , True)
+    addgvar("autopic", True)
     if input_str:
-        addgvar("autopic_counter",input_str)
+        addgvar("autopic_counter", input_str)
     counter = int(gvarstatus("autopic_counter"))
     await edit_delete(event, f"`Autopic has been started by my Master`")
     AUTOPICSTART = True
@@ -82,7 +84,7 @@ async def autopic(event):
             await asyncio.sleep(CHANGE_TIME)
         except BaseException:
             return
-        if gvarstatus("autopic") !=True:
+        if gvarstatus("autopic") != True:
             AUTOPICSTART = False
 
 
@@ -229,7 +231,7 @@ async def _(event):
     global AUTOBIOSTART
     input_str = event.pattern_match.group(1)
     if input_str == "autopic":
-        if gvarstatus("autopic") is not None and gvarstatus("autopic")=="true":
+        if gvarstatus("autopic") is not None and gvarstatus("autopic") == "true":
             delgvar("autopic")
             await edit_delete(event, "`Autopic has been stopped now`")
         else:
