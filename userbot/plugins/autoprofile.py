@@ -18,30 +18,27 @@ from telethon.errors import FloodWaitError
 from telethon.tl import functions
 
 from . import AUTONAME, DEFAULT_BIO
+from .sql_helpers.globals import gvarstatus, addgvar, delgvar
 
 DEFAULTUSERBIO = str(DEFAULT_BIO) if DEFAULT_BIO else " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
 CHANGE_TIME = Config.CHANGE_TIME
 DEFAULTUSER = str(AUTONAME) if AUTONAME else "cat"
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
-global AUTOPICSTART
+
 global DIGITALPICSTART
 global BLOOMSTART
 global AUTONAMESTART
 global AUTOBIOSTART
 
 BLOOMSTART = False
-AUTOPICSTART = False
 AUTOBIOSTART = False
 AUTONAMESTART = False
 DIGITALPICSTART = False
-
-
 @bot.on(admin_cmd(pattern="autopic ?(.*)"))
 async def autopic(event):
     if event.fwd_from:
         return
-    global AUTOPICSTART
     downloaded_file_name = "userbot/original_pic.png"
     downloader = SmartDL(
         Config.DOWNLOAD_PFP_URL_CLOCK, downloaded_file_name, progress_bar=False
@@ -57,12 +54,16 @@ async def autopic(event):
         except ValueError:
             input_str = -60
     else:
-        input_str = 0
-    if AUTOPICSTART:
+        if gvarstatus("autopic_counter") is None:
+            addgvar("autopic_counter", 0)
+    if gvarstatus("autopic") is not None and gvarstatus("autopic") == "true" :
         return await edit_delete(event, f"`Autopic is already enabled`")
-    AUTOPICSTART = True
-    counter = input_str
+    addgvar("autopic" , True)
+    if input_str:
+        addgvar("autopic_counter",input_str)
+    counter = int(gvarstatus("autopic_counter"))
     await edit_delete(event, f"`Autopic has been started by my Master`")
+    AUTOPICSTART = True
     while AUTOPICSTART:
         shutil.copy(downloaded_file_name, photo)
         im = Image.open(photo)
@@ -77,10 +78,12 @@ async def autopic(event):
         try:
             await event.client(functions.photos.UploadProfilePhotoRequest(file))
             os.remove(photo)
-            counter -= input_str
+            counter -= counter
             await asyncio.sleep(CHANGE_TIME)
         except BaseException:
             return
+        if gvarstatus("autopic") !=True:
+            AUTOPICSTART = False
 
 
 @bot.on(admin_cmd(pattern="digitalpfp$"))
@@ -220,15 +223,14 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    global AUTOPICSTART
     global DIGITALPICSTART
     global BLOOMSTART
     global AUTONAMESTART
     global AUTOBIOSTART
     input_str = event.pattern_match.group(1)
     if input_str == "autopic":
-        if AUTOPICSTART:
-            AUTOPICSTART = False
+        if gvarstatus("autopic") is not None and gvarstatus("autopic")=="true":
+            delgvar("autopic")
             await edit_delete(event, "`Autopic has been stopped now`")
         else:
             await edit_delete(event, "`Autopic haven't enabled`")
