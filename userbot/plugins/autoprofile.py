@@ -84,7 +84,7 @@ async def autopic(event):
             await asyncio.sleep(CHANGE_TIME)
         except BaseException:
             return
-        if gvarstatus("autopic") != True:
+        if gvarstatus("autopic") != "true":
             AUTOPICSTART = False
 
 
