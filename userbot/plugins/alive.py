@@ -8,8 +8,8 @@ from . import ALIVE_NAME, StartTime, catversion, get_readable_time, mention, rep
 
 DEFAULTUSER = ALIVE_NAME or "cat"
 CAT_IMG = [
-          "https://telegra.ph/file/f68abf4658c5283aa1df2.jpg",
-          "https://telegra.ph/file/3ef4e5a99b5874cbdcbd2.jpg"
+          "Config.ALIVE_PIC",
+          "CONFIG.ALIVE_PIC_2",
   ]
 random.choice(CAT_IMG)
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
