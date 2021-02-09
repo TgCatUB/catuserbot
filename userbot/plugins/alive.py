@@ -1,4 +1,5 @@
 import time
+import random
 from platform import python_version
 
 from telethon import version
@@ -10,6 +11,7 @@ CAT_IMG = [
           "https://telegra.ph/file/f68abf4658c5283aa1df2.jpg",
           "https://telegra.ph/file/3ef4e5a99b5874cbdcbd2.jpg"
   ]
+random.choice(CAT_IMG)
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
 EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
 
