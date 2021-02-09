@@ -7,10 +7,7 @@ from telethon import version
 from . import ALIVE_NAME, StartTime, catversion, get_readable_time, mention, reply_id
 
 DEFAULTUSER = ALIVE_NAME or "cat"
-CAT_IMG = [
-          "Config.ALIVE_PIC",
-          "CONFIG.ALIVE_PIC_2",
-  ]
+CAT_IMG= random.choice(Config.ALIVE_PIC)
 random.choice(CAT_IMG)
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
 EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
@@ -33,7 +30,7 @@ async def amireallyalive(alive):
         cat_caption += f"**{EMOJI} Uptime :** `{uptime}\n`"
         cat_caption += f"**{EMOJI} Master:** {mention}\n"
         await alive.client.send_file(
-            alive.chat_id, random.choice(CAT_IMG), caption=cat_caption, reply_to=reply_to_id
+            alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id
         )
         await alive.delete()
     else:
