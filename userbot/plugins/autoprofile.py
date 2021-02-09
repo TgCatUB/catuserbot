@@ -44,7 +44,7 @@ async def autopic(event):
     if event.fwd_from:
         return
     downloader = SmartDL(
-        Config.DOWNLOAD_PFP_URL_CLOCK, autopic_path, progress_bar=False
+        Config.DEFAULT_PIC, autopic_path, progress_bar=False
     )
     downloader.start(blocking=False)
     while not downloader.isFinished():
@@ -64,7 +64,6 @@ async def autopic(event):
     if input_str:
         addgvar("autopic_counter", input_str)
     await edit_delete(event, f"`Autopic has been started by my Master`")
-    await autopicloop()
 
 
 async def autopicloop():
@@ -76,7 +75,7 @@ async def autopicloop():
     while AUTOPICSTART:
         if not os.path.exists(autopic_path):
             downloader = SmartDL(
-                Config.DOWNLOAD_PFP_URL_CLOCK, autopic_path, progress_bar=False
+                Config.DEFAULT_PIC, autopic_path, progress_bar=False
             )
             downloader.start(blocking=False)
             while not downloader.isFinished():
@@ -151,7 +150,7 @@ async def autopic(event):
         return
     global BLOOMSTART
     autopic_path = "userbot/original_pic.png"
-    downloader = SmartDL(Config.DOWNLOAD_PFP_URL_CLOCK, autopic_path, progress_bar=True)
+    downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=True)
     downloader.start(blocking=False)
     autophoto_path = "userbot/photo_pfp.png"
     while not downloader.isFinished():
@@ -286,13 +285,13 @@ CMD_HELP.update(
         "autoprofile": """**Plugin : **`autoprofile`
 
 •  **Syntax : **`.autopic angle`
-•  **Function : **__Rotating image along with the time on it with given angle if no angle is given then doesnt rotate. You need to set __`DOWNLOAD_PFP_URL_CLOCK`__ in heroku__
+•  **Function : **__Rotating image along with the time on it with given angle if no angle is given then doesnt rotate. You need to set __`DEFAULT_PIC`__ in heroku__
 
 •  **Syntax : **`.digitalpfp`
 •  **Function : **__Your profile pic changes to digitaltime profile picutre__
 
 •  **Syntax : **`.bloom`
-•  **Function : **__Random colour profile pics will be set along with time on it. You need to set__ `DOWNLOAD_PFP_URL_CLOCK`__ in heroku__
+•  **Function : **__Random colour profile pics will be set along with time on it. You need to set__ `DEFAULT_PIC`__ in heroku__
 
 •  **Syntax : **`.autoname`
 •  **Function : **__for time along with name, you must set __`AUTONAME`__ in the heroku vars first for this to work__
