@@ -43,9 +43,7 @@ DIGITALPICSTART = False
 async def autopic(event):
     if event.fwd_from:
         return
-    downloader = SmartDL(
-        Config.DEFAULT_PIC, autopic_path, progress_bar=False
-    )
+    downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
     downloader.start(blocking=False)
     while not downloader.isFinished():
         pass
@@ -74,9 +72,7 @@ async def autopicloop():
         LOGS.info(str(e))
     while AUTOPICSTART:
         if not os.path.exists(autopic_path):
-            downloader = SmartDL(
-                Config.DEFAULT_PIC, autopic_path, progress_bar=False
-            )
+            downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
             downloader.start(blocking=False)
             while not downloader.isFinished():
                 pass
