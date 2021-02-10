@@ -133,10 +133,10 @@ async def _(event):
         if gvarstatus("digitalpic") is not None and gvarstatus("digitalpic") == "true":
             delgvar("digitalpic")
             await event.client(
-                    functions.photos.DeletePhotosRequest(
-                        await bot.get_profile_photos("me", limit=1)
-                    )
+                functions.photos.DeletePhotosRequest(
+                    await bot.get_profile_photos("me", limit=1)
                 )
+            )
             return await edit_delete(event, "`Autopic has been stopped now`")
         return await edit_delete(event, "`Autopic haven't enabled`")
     if input_str == "bloom":
@@ -154,13 +154,17 @@ async def _(event):
     if input_str == "autoname":
         if gvarstatus("autoname") is not None and gvarstatus("autoname") == "true":
             delgvar("autoname")
-            await event.client(functions.account.UpdateProfileRequest(first_name=DEFAULTUSER))
+            await event.client(
+                functions.account.UpdateProfileRequest(first_name=DEFAULTUSER)
+            )
             return await edit_delete(event, "`Autoname has been stopped now`")
         return await edit_delete(event, "`Autoname haven't enabled`")
     if input_str == "autobio":
         if gvarstatus("autobio") is not None and gvarstatus("autobio") == "true":
             delgvar("autoname")
-            await event.client(functions.account.UpdateProfileRequest(about=DEFAULTUSERBIO))
+            await event.client(
+                functions.account.UpdateProfileRequest(about=DEFAULTUSERBIO)
+            )
             return await edit_delete(event, "`Autobio has been stopped now`")
         return await edit_delete(event, "`Autobio haven't enabled`")
     await edit_delete(event, "`What should i end ?..`")
@@ -220,13 +224,13 @@ async def digitalpicloop():
         img.save(autophoto_path)
         file = await bot.upload_file(autophoto_path)
         try:
-            if i >0:
+            if i > 0:
                 await bot(
                     functions.photos.DeletePhotosRequest(
                         await bot.get_profile_photos("me", limit=1)
                     )
                 )
-            i+=1
+            i += 1
             await bot(functions.photos.UploadProfilePhotoRequest(file))
             os.remove(autophoto_path)
             await asyncio.sleep(CHANGE_TIME)
@@ -234,8 +238,9 @@ async def digitalpicloop():
             return
         AUTOPICSTART = gvarstatus("digitalpic") == "true"
 
+
 async def bloom_pfploop():
-    BLOOMSTART = gvarstatus("bloom") =="true"
+    BLOOMSTART = gvarstatus("bloom") == "true"
     while BLOOMSTART:
         if not os.path.exists(autopic_path):
             downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
@@ -268,10 +273,11 @@ async def bloom_pfploop():
             await asyncio.sleep(CHANGE_TIME)
         except BaseException:
             return
-        BLOOMSTART = gvarstatus("bloom") =="true"
+        BLOOMSTART = gvarstatus("bloom") == "true"
+
 
 async def autoname_loop():
-    AUTONAMESTART = gvarstatus("autoname") =="true"
+    AUTONAMESTART = gvarstatus("autoname") == "true"
     while AUTONAMESTART:
         DM = time.strftime("%d-%m-%y")
         HM = time.strftime("%H:%M")
@@ -283,10 +289,11 @@ async def autoname_loop():
             LOGS.warning(str(ex))
             await asyncio.sleep(ex.seconds)
         await asyncio.sleep(CHANGE_TIME)
-        AUTONAMESTART = gvarstatus("autoname") =="true"
+        AUTONAMESTART = gvarstatus("autoname") == "true"
+
 
 async def autobio_loop():
-    AUTOBIOSTART = gvarstatus("autobio") =="true"
+    AUTOBIOSTART = gvarstatus("autobio") == "true"
     while AUTOBIOSTART:
         DMY = time.strftime("%d.%m.%Y")
         HM = time.strftime("%H:%M:%S")
@@ -298,7 +305,8 @@ async def autobio_loop():
             LOGS.warning(str(ex))
             await asyncio.sleep(ex.seconds)
         await asyncio.sleep(CHANGE_TIME)
-        AUTOBIOSTART = gvarstatus("autobio") =="true"
+        AUTOBIOSTART = gvarstatus("autobio") == "true"
+
 
 bot.loop.create_task(autopicloop())
 bot.loop.create_task(digitalpicloop())
