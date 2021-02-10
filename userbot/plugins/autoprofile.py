@@ -56,8 +56,8 @@ async def autopic(event):
     addgvar("autopic", True)
     if input_str:
         addgvar("autopic_counter", input_str)
-    await autopicloop()
     await edit_delete(event, f"`Autopic has been started by my Master`")
+    await autopicloop()
 
 
 @bot.on(admin_cmd(pattern="digitalpfp$"))
@@ -71,8 +71,8 @@ async def main(event):
     if gvarstatus("digitalpic") is not None and gvarstatus("digitalpic") == "true":
         return await edit_delete(event, f"`Digitalpic is already enabled`")
     addgvar("digitalpic", True)
-    await digitalpicloop()
     await edit_delete(event, f"`digitalpfp has been started by my Master`")
+    await digitalpicloop()
 
 
 @bot.on(admin_cmd(pattern="bloom$"))
@@ -86,8 +86,8 @@ async def autopic(event):
     if gvarstatus("bloom") is not None and gvarstatus("bloom") == "true":
         return await edit_delete(event, f"`Bloom is already enabled`")
     addgvar("bloom", True)
-    await bloom_pfploop()
     await edit_delete(event, f"`Bloom has been started by my Master`")
+    await bloom_pfploop()
 
 
 @bot.on(admin_cmd(pattern="autoname$"))
@@ -97,8 +97,8 @@ async def _(event):
     if gvarstatus("autoname") is not None and gvarstatus("autoname") == "true":
         return await edit_delete(event, f"`Autoname is already enabled`")
     addgvar("bloom", True)
-    await autoname_loop()
     await edit_delete(event, "`AutoName has been started by my Master `")
+    await autoname_loop()
 
 
 @bot.on(admin_cmd(pattern="autobio$"))
@@ -108,8 +108,8 @@ async def _(event):
     if gvarstatus("autobio") is not None and gvarstatus("autobio") == "true":
         return await edit_delete(event, f"`Autobio is already enabled`")
     addgvar("autobio", True)
-    await autobio_loop()
     await edit_delete(event, "`Autobio has been started by my Master `")
+    await autobio_loop()
 
 
 @bot.on(admin_cmd(pattern="end (.*)"))
