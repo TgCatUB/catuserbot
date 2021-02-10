@@ -93,6 +93,8 @@ class Config(object):
     ALIVE_PIC = os.environ.get("ALIVE_PIC", None)
     # in pm permit pic
     PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
+    DIGITAL_PIC = os.environ.get("DIGITAL_PIC", None)
+    DEFAULT_PIC = os.environ.get("DEFAULT_PIC", None)
     CUSTOM_PMPERMIT_TEXT = os.environ.get("CUSTOM_PMPERMIT_TEXT", None)
     # Get your own API key from https://www.remove.bg/ or
     # feel free to use http://telegram.dog/Remove_BGBot
@@ -143,7 +145,6 @@ class Config(object):
         "GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot"
     )
     # rapidleech plugins
-    DEFAULT_PIC = os.environ.get("DEFAULT_PIC", None)
     # Google Chrome Selenium Stuff
     # taken from
     # https://github.com/jaskaranSM/UniBorg/blob/9072e3580cc6c98d46f30e41edbe73ffc9d850d3/sample_config.py#L104-L106
