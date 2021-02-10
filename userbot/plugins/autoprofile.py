@@ -27,8 +27,14 @@ DEFAULTUSER = str(AUTONAME) if AUTONAME else "cat"
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 autopic_path = os.path.join(os.getcwd(), "userbot", "original_pic.png")
+digitalpic_path = os.path.join(os.getcwd(), "userbot", "digital_pic.png")
 autophoto_path = os.path.join(os.getcwd(), "userbot", "photo_pfp.png")
-global DIGITALPICSTART
+
+digitalpfp = (
+    Config.DIGITAL_PIC or "https://telegra.ph/file/aeaebe33b1f3988a0b690.jpg"
+)
+
+
 global BLOOMSTART
 global AUTONAMESTART
 global AUTOBIOSTART
@@ -36,7 +42,6 @@ global AUTOBIOSTART
 BLOOMSTART = False
 AUTOBIOSTART = False
 AUTONAMESTART = False
-DIGITALPICSTART = False
 
 
 @bot.on(admin_cmd(pattern="autopic ?(.*)"))
@@ -55,89 +60,28 @@ async def autopic(event):
             input_str = -60
     else:
         if gvarstatus("autopic_counter") is None:
-            addgvar("autopic_counter", 0)
+            addgvar("autopic_counter", 30)
     if gvarstatus("autopic") is not None and gvarstatus("autopic") == "true":
         return await edit_delete(event, f"`Autopic is already enabled`")
     addgvar("autopic", True)
     if input_str:
         addgvar("autopic_counter", input_str)
+    await autopicloop()
     await edit_delete(event, f"`Autopic has been started by my Master`")
-
-
-async def autopicloop():
-    AUTOPICSTART = gvarstatus("autopic") == "true"
-    try:
-        counter = int(gvarstatus("autopic_counter"))
-    except Exception as e:
-        LOGS.info(str(e))
-    while AUTOPICSTART:
-        if not os.path.exists(autopic_path):
-            downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
-            downloader.start(blocking=False)
-            while not downloader.isFinished():
-                pass
-        shutil.copy(autopic_path, autophoto_path)
-        im = Image.open(autophoto_path)
-        file_test = im.rotate(counter, expand=False).save(autophoto_path, "PNG")
-        current_time = datetime.now().strftime("  Time: %H:%M \n  Date: %d.%m.%y ")
-        img = Image.open(autophoto_path)
-        drawn_text = ImageDraw.Draw(img)
-        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 50)
-        drawn_text.text((150, 250), current_time, font=fnt, fill=(124, 252, 0))
-        img.save(autophoto_path)
-        file = await bot.upload_file(autophoto_path)
-        try:
-            await bot(functions.photos.UploadProfilePhotoRequest(file))
-            os.remove(autophoto_path)
-            counter -= counter
-            await asyncio.sleep(CHANGE_TIME)
-        except BaseException:
-            return
-        AUTOPICSTART = gvarstatus("autopic") == "true"
-
-
-bot.loop.create_task(autopicloop())
-
 
 @bot.on(admin_cmd(pattern="digitalpfp$"))
 async def main(event):
     if event.fwd_from:
         return
-    global DIGITALPICSTART
-    poto = "userbot/poto_pfp.png"
-    cat = str(
-        base64.b64decode(
-            "aHR0cHM6Ly90ZWxlZ3JhLnBoL2ZpbGUvYWVhZWJlMzNiMWYzOTg4YTBiNjkwLmpwZw=="
-        )
-    )[2:51]
-    autopic_path = "userbot/digital_pic.png"
-    downloader = SmartDL(cat, autopic_path, progress_bar=False)
+    downloader = SmartDL(digitalpfp, digitalpic_path, progress_bar=False)
     downloader.start(blocking=False)
-    if DIGITALPICSTART:
-        return await edit_delete(event, f"`Digitalpfp is already enabled`")
-    DIGITALPICSTART = True
+    while not downloader.isFinished():
+        pass
+    if gvarstatus("digitalpic") is not None and gvarstatus("digitalpic") == "true":
+        return await edit_delete(event, f"`Digitalpic is already enabled`")
+    addgvar("digitalpic", True)
+    await digitalpicloop()
     await edit_delete(event, f"`digitalpfp has been started by my Master`")
-    while DIGITALPICSTART:
-        shutil.copy(autopic_path, poto)
-        Image.open(poto)
-        current_time = datetime.now().strftime("%H:%M")
-        img = Image.open(poto)
-        drawn_text = ImageDraw.Draw(img)
-        cat = str(base64.b64decode("dXNlcmJvdC9oZWxwZXJzL3N0eWxlcy9kaWdpdGFsLnR0Zg=="))[
-            2:36
-        ]
-        fnt = ImageFont.truetype(cat, 200)
-        drawn_text.text((350, 100), current_time, font=fnt, fill=(124, 252, 0))
-        img.save(poto)
-        file = await event.client.upload_file(poto)
-        await event.client(
-            functions.photos.DeletePhotosRequest(
-                await event.client.get_profile_photos("me", limit=1)
-            )
-        )
-        await event.client(functions.photos.UploadProfilePhotoRequest(file))
-        os.remove(poto)
-        await asyncio.sleep(CHANGE_TIME)
 
 
 @bot.on(admin_cmd(pattern="bloom$"))
@@ -274,6 +218,73 @@ async def _(event):
             return await edit_delete(event, "`Autobio has been stopped now`")
         return await edit_delete(event, "`Autobio haven't enabled`")
     await edit_delete(event, "`What should i end ?..`")
+
+async def autopicloop():
+    AUTOPICSTART = gvarstatus("autopic") == "true"
+    try:
+        counter = int(gvarstatus("autopic_counter"))
+    except Exception as e:
+        LOGS.info(str(e))
+    while AUTOPICSTART:
+        if not os.path.exists(autopic_path):
+            downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
+            downloader.start(blocking=False)
+            while not downloader.isFinished():
+                pass
+        shutil.copy(autopic_path, autophoto_path)
+        im = Image.open(autophoto_path)
+        file_test = im.rotate(counter, expand=False).save(autophoto_path, "PNG")
+        current_time = datetime.now().strftime("  Time: %H:%M \n  Date: %d.%m.%y ")
+        img = Image.open(autophoto_path)
+        drawn_text = ImageDraw.Draw(img)
+        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 100)
+        drawn_text.text((150, 250), current_time, font=fnt, fill=(124, 252, 0))
+        img.save(autophoto_path)
+        file = await bot.upload_file(autophoto_path)
+        try:
+            await bot(functions.photos.UploadProfilePhotoRequest(file))
+            os.remove(autophoto_path)
+            counter -= counter
+            await asyncio.sleep(CHANGE_TIME)
+        except BaseException:
+            return
+        AUTOPICSTART = gvarstatus("autopic") == "true"
+
+async def digitalpicloop():
+    DIGITALPICSTART =  gvarstatus("digitalpic") == "true"
+    while DIGITALPICSTART:
+            if not os.path.exists(digitalpic_path):
+                downloader = SmartDL(digitalpfp , digitalpic_path, progress_bar=False)
+                downloader.start(blocking=False)
+                while not downloader.isFinished():
+                    pass
+            shutil.copy(digitalpic_path, autophoto_path)
+            Image.open(autophoto_path)
+            current_time = datetime.now().strftime("%H:%M")
+            img = Image.open(autophoto_path)
+            drawn_text = ImageDraw.Draw(img)
+            cat = str(base64.b64decode("dXNlcmJvdC9oZWxwZXJzL3N0eWxlcy9kaWdpdGFsLnR0Zg=="))[
+                2:36
+            ]
+            fnt = ImageFont.truetype(cat, 200)
+            drawn_text.text((350, 100), current_time, font=fnt, fill=(124, 252, 0))
+            img.save(autophoto_path)
+            file = await event.client.upload_file(autophoto_path)
+            try:
+                await event.client(
+                    functions.photos.DeletePhotosRequest(
+                        await event.client.get_profile_photos("me", limit=1)
+                    )
+                )
+                await event.client(functions.photos.UploadProfilePhotoRequest(file))
+                os.remove(autophoto_path)
+                await asyncio.sleep(CHANGE_TIME)
+            except BaseException:
+                return
+            AUTOPICSTART = gvarstatus("digitalpic") == "true"
+            
+bot.loop.create_task(autopicloop())
+bot.loop.create_task(digitalpicloop())
 
 
 CMD_HELP.update(
