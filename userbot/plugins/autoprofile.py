@@ -184,7 +184,7 @@ async def _(event):
 
 async def autopicloop():
     AUTOPICSTART = gvarstatus("autopic") == "true"
-    if Config.DEFAULT_PIC is None:
+    if AUTOPICSTART and Config.DEFAULT_PIC is None:
         if BOTLOG:
             return await bot.send_message(
                 BOTLOG_CHATID,
@@ -260,7 +260,7 @@ async def digitalpicloop():
 
 async def bloom_pfploop():
     BLOOMSTART = gvarstatus("bloom") == "true"
-    if Config.DEFAULT_PIC is None:
+    if BLOOMSTART and Config.DEFAULT_PIC is None:
         if BOTLOG:
             return await bot.send_message(
                 BOTLOG_CHATID,
