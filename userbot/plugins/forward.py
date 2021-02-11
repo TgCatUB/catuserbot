@@ -2,10 +2,10 @@ import string
 
 from telethon.tl.types import Channel
 
-
 groupsid = []
 msg_cache = {}
-    
+
+
 async def all_groups_id(cat):
     catgroups = []
     async for dialog in cat.client.iter_dialogs():
