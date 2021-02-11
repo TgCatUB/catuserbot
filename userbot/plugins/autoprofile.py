@@ -179,7 +179,6 @@ async def _(event):
             )
             return await edit_delete(event, "`Autobio has been stopped now`")
         return await edit_delete(event, "`Autobio haven't enabled`")
-    await edit_delete(event, "`What should i end ?..`")
 
 
 async def autopicloop():
