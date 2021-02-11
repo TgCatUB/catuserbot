@@ -279,6 +279,7 @@ async def startgmute(event):
                 f"{_format.mentionuser(user.first_name ,user.id)} `is Successfully gmuted`",
             )
     if BOTLOG:
+        reply = await event.get_reply_message()
         if reason:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -292,6 +293,9 @@ async def startgmute(event):
                 "#GMUTE\n"
                 f"**User :** {_format.mentionuser(user.first_name ,user.id)} \n",
             )
+        if reply:
+            await reply.forward_to(BOTLOG_CHATID)
+
 
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"ungmute(?: |$)(.*)"))
@@ -410,6 +414,7 @@ async def catgkick(event):
         )
 
     if BOTLOG and count != 0:
+        reply = await event.get_reply_message()
         if reason:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -431,6 +436,8 @@ async def catgkick(event):
                 \n__Kicked in {count} groups__\
                 \n**Time taken : **`{cattaken} seconds`",
             )
+        if reply:
+            await reply.forward_to(BOTLOG_CHATID)
 
 
 CMD_HELP.update(
