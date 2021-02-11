@@ -19,7 +19,7 @@ thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg"
 
 class UPLOAD:
     def __init__(self):
-        self.uploaded = uploaded
+        self.uploaded = 0
 
 
 UPLOAD_ = UPLOAD()
