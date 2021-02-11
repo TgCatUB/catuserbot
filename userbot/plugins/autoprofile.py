@@ -188,8 +188,7 @@ async def autopicloop():
         if BOTLOG:
             return await bot.send_message(
                 BOTLOG_CHATID,
-                "**Error**\nFor functing of autopic you need to set DEFAULT_PIC var in Heroku vars",
-                parse_mode=parse_pre,
+                "**Error**\n`For functing of autopic you need to set DEFAULT_PIC var in Heroku vars`",
             )
         return
     try:
@@ -265,8 +264,7 @@ async def bloom_pfploop():
         if BOTLOG:
             return await bot.send_message(
                 BOTLOG_CHATID,
-                "**Error**\nFor functing of bloom you need to set DEFAULT_PIC var in Heroku vars",
-                parse_mode=parse_pre,
+                "**Error**\n`For functing of bloom you need to set DEFAULT_PIC var in Heroku vars`",
             )
         return
     while BLOOMSTART:
