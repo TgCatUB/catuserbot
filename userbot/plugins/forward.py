@@ -2,8 +2,8 @@ import string
 
 from telethon.tl.types import Channel
 
-groupsid = []
-msg_cache = {}
+GROUPSID = []
+MSG_CACHE = {}
 
 
 async def all_groups_id(cat):
@@ -35,7 +35,10 @@ async def _(event):
         # https://t.me/telethonofftopic/78166
         fwd_message = await event.client.forward_messages(e, re_message, silent=True)
         await event.client.forward_messages(event.chat_id, fwd_message)
-        await event.delete()
+        try:
+            await event.delete()
+        except Exception as e:
+            LOGS.info(str(e))
 
 
 @bot.on(admin_cmd(pattern="resend$"))
@@ -58,26 +61,29 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    await event.delete()
+    try:
+        await event.delete()
+    except Exception as e:
+        LOGS.info(str(e))
     text = event.pattern_match.group(1)
     destination = await event.get_input_chat()
-    if len(groupsid) == 0:
-        groupsid = await all_groups_id(event)
+    if len(GROUPSID) == 0:
+        GROUPSID = await all_groups_id(event)
     for c in text.lower():
         if c not in string.ascii_lowercase:
             continue
-        if c not in msg_cache:
+        if c not in MSG_CACHE:
             async for msg in event.client.iter_messages(event.chat_id, search=c):
                 if msg.raw_text.lower() == c and msg.media is None:
-                    msg_cache[c] = msg
+                    MSG_CACHE[c] = msg
                     break
-        if c not in msg_cache:
-            for i in groupsid:
+        if c not in MSG_CACHE:
+            for i in GROUPSID:
                 async for msg in event.client.iter_messages(event.chat_id, search=c):
                     if msg.raw_text.lower() == c and msg.media is None:
-                        msg_cache[c] = msg
+                        MSG_CACHE[c] = msg
                         break
-        await event.client.forward_messages(destination, msg_cache[c])
+        await event.client.forward_messages(destination, MSG_CACHE[c])
 
 
 CMD_HELP.update(
