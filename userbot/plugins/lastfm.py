@@ -57,7 +57,9 @@ class LASTFM:
         self.RUNNING = False
         self.LastLog = False
 
+
 LASTFM_ = LASTFM()
+
 
 @bot.on(admin_cmd(outgoing=True, pattern="lastfm$"))
 async def last_fm(lastFM):
@@ -134,7 +136,11 @@ async def get_curr_track(lfmbio):
             LASTFM_.ARTIST = playing.get_artist()
             oldsong = environ.get("oldsong", None)
             oldartist = environ.get("oldartist", None)
-            if playing is not None and LASTFM_.SONG != oldsong and LASTFM_.ARTIST != oldartist:
+            if (
+                playing is not None
+                and LASTFM_.SONG != oldsong
+                and LASTFM_.ARTIST != oldartist
+            ):
                 environ["oldsong"] = str(LASTFM_.SONG)
                 environ["oldartist"] = str(LASTFM_.ARTIST)
                 if BIO_PREFIX:
