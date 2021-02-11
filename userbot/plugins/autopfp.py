@@ -10,7 +10,7 @@ import urllib
 import requests
 from telethon.tl import functions
 
-from .sql_helper.globals import addgvar, gvarstatus, delgvar
+from .sql_helper.globals import addgvar, delgvar, gvarstatus
 
 COLLECTION_STRINGS = {
     "batmampfp_strings": [
