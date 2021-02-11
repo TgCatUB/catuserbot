@@ -10,7 +10,7 @@ import urllib
 import requests
 from telethon.tl import functions
 
-from .sql_helper.globals import addgvar, gvarstatus
+from .sql_helper.globals import addgvar, gvarstatus, delgvar
 
 COLLECTION_STRINGS = {
     "batmampfp_strings": [
@@ -103,6 +103,7 @@ async def _(event):
                 await bot.get_profile_photos("me", limit=1)
             )
         )
+        delgvar("autopfp_strings")
         return await edit_delete(event, "`thorpfp has been stopped now`")
     if input_str == "batmanpfp" and gvarstatus("autopfp_strings") is not None:
         pfp_string = gvarstatus("autopfp_strings")[:-8]
@@ -113,6 +114,7 @@ async def _(event):
                 await bot.get_profile_photos("me", limit=1)
             )
         )
+        delgvar("autopfp_strings")
         return await edit_delete(event, "`batmanpfp has been stopped now`")
     END_CMDS = [
         "autopic",
