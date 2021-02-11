@@ -137,8 +137,8 @@ async def _(event):
                     await bot.get_profile_photos("me", limit=1)
                 )
             )
-            return await edit_delete(event, "`Autopic has been stopped now`")
-        return await edit_delete(event, "`Autopic haven't enabled`")
+            return await edit_delete(event, "`Digitalpfp has been stopped now`")
+        return await edit_delete(event, "`Digitalpfp haven't enabled`")
     if input_str == "bloom":
         if gvarstatus("bloom") is not None and gvarstatus("bloom") == "true":
             delgvar("bloom")
@@ -236,7 +236,7 @@ async def digitalpicloop():
             await asyncio.sleep(CHANGE_TIME)
         except BaseException:
             return
-        AUTOPICSTART = gvarstatus("digitalpic") == "true"
+        DIGITALPICSTART = gvarstatus("digitalpic") == "true"
 
 
 async def bloom_pfploop():
