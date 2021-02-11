@@ -14,7 +14,8 @@ from telethon.tl.types import DocumentAttributeVideo
 from . import make_gif, progress, reply_id, thumb_from_audio
 
 PATH = os.path.join("./temp", "temp_vid.mp4")
-thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY , "thumb_image.jpg")
+thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
+
 
 class UPLOAD:
     def __init__(self):
@@ -22,6 +23,7 @@ class UPLOAD:
 
 
 UPLOAD_ = UPLOAD()
+
 
 async def catlst_of_files(path):
     files = []
