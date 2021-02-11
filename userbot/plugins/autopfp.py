@@ -7,23 +7,25 @@ import random
 import re
 import urllib
 
-from .sql_helper.globals import addgvar, delgvar, gvarstatus
 import requests
 from telethon.tl import functions
 
-COLLECTION_STRINGS = { "batmampfp_strings" : [
-    "awesome-batman-wallpapers",
-    "batman-arkham-knight-4k-wallpaper",
-    "batman-hd-wallpapers-1080p",
-    "the-joker-hd-wallpaper",
-    "dark-knight-joker-wallpaper",
-] ,
-"thorpfp_strings" : [
-    "thor-wallpapers",
-    "thor-wallpaper",
-    "thor-iphone-wallpaper",
-    "thor-wallpaper-hd",
-]
+from .sql_helper.globals import addgvar, gvarstatus
+
+COLLECTION_STRINGS = {
+    "batmampfp_strings": [
+        "awesome-batman-wallpapers",
+        "batman-arkham-knight-4k-wallpaper",
+        "batman-hd-wallpapers-1080p",
+        "the-joker-hd-wallpaper",
+        "dark-knight-joker-wallpaper",
+    ],
+    "thorpfp_strings": [
+        "thor-wallpapers",
+        "thor-wallpaper",
+        "thor-iphone-wallpaper",
+        "thor-wallpaper-hd",
+    ],
 }
 
 
@@ -41,6 +43,7 @@ async def animeprofilepic(collection_images):
         )
     urllib.request.urlretrieve(fy, "donottouch.jpg")
 
+
 async def autopfp_start():
     if gvarstatus("autopfp_strings") is not None:
         AUTOPFP_START = True
@@ -49,13 +52,13 @@ async def autopfp_start():
     while AUTOPFP_START:
         await animeprofilepic(string_list)
         file = await bot.upload_file("donottouch.jpg")
-        if i>0:
+        if i > 0:
             await bot(
                 functions.photos.DeletePhotosRequest(
                     await bot.get_profile_photos("me", limit=1)
                 )
             )
-        i+=1    
+        i += 1
         await bot(functions.photos.UploadProfilePhotoRequest(file))
         os.system("rm -rf donottouch.jpg")
         await asyncio.sleep(Config.CHANGE_TIME)
@@ -68,7 +71,7 @@ async def main(event):
         return
     if gvarstatus("autopfp_strings") is not None:
         pfp_string = gvarstatus("autopfp_strings")[:-8]
-        return await edit_delete(event , f"`{pfp_string} is already running.`")
+        return await edit_delete(event, f"`{pfp_string} is already running.`")
     addgvar("autopfp_strings", "batmanpfp_strings")
     await event.edit("Starting batman Profile Pic.")
     await autopfp_start()
@@ -80,11 +83,12 @@ async def main(event):
         return
     if gvarstatus("autopfp_strings") is not None:
         pfp_string = gvarstatus("autopfp_strings")[:-8]
-        return await edit_delete(event , f"`{pfp_string} is already running.`")
+        return await edit_delete(event, f"`{pfp_string} is already running.`")
     addgvar("autopfp_strings", "thorpfp_strings")
     await event.edit("Starting thor Profile Pic.")
     await autopfp_start()
-    
+
+
 @bot.on(admin_cmd(pattern="end (.*)"))
 async def _(event):
     if event.fwd_from:
@@ -93,7 +97,7 @@ async def _(event):
     if input_str == "thorpfp" and gvarstatus("autopfp_strings") is not None:
         pfp_string = gvarstatus("autopfp_strings")[:-8]
         if pfp_string != "thorpfp":
-            return await edit_delete(event , f"`thorpfp is not started`")
+            return await edit_delete(event, f"`thorpfp is not started`")
         await event.client(
             functions.photos.DeletePhotosRequest(
                 await bot.get_profile_photos("me", limit=1)
@@ -103,17 +107,28 @@ async def _(event):
     if input_str == "batmanpfp" and gvarstatus("autopfp_strings") is not None:
         pfp_string = gvarstatus("autopfp_strings")[:-8]
         if pfp_string != "batmanpfp":
-            return await edit_delete(event , f"`batmanpfp is not started`")
+            return await edit_delete(event, f"`batmanpfp is not started`")
         await event.client(
             functions.photos.DeletePhotosRequest(
                 await bot.get_profile_photos("me", limit=1)
             )
         )
         return await edit_delete(event, "`batmanpfp has been stopped now`")
-    END_CMDS = ["autopic","digitalpfp","bloom","autoname","autobio", "thorpfp","batmanpfp"]
+    END_CMDS = [
+        "autopic",
+        "digitalpfp",
+        "bloom",
+        "autoname",
+        "autobio",
+        "thorpfp",
+        "batmanpfp",
+    ]
     if input_str not in END_CMDS:
-        await edit_delete(event, f"{input_str} is invalid end command.Mention clearly what should i end.",parse_mode=parse_pre)
-
+        await edit_delete(
+            event,
+            f"{input_str} is invalid end command.Mention clearly what should i end.",
+            parse_mode=parse_pre,
+        )
 
 
 bot.loop.create_task(autopfp_start())
