@@ -90,14 +90,6 @@ async def catgban(event):
                 BOTLOG_CHATID,
                 f"`You don't have required permission in :`\n**Chat :** {event.chat.title}(`{event.chat_id}`)\n`For banning here`",
             )
-    try:
-        reply = await event.get_reply_message()
-        if reply:
-            await reply.delete()
-    except BadRequestError:
-        await cate.edit(
-            "`I dont have message deleting rights here! But still he was gbanned!`"
-        )
     end = datetime.now()
     cattaken = (end - start).seconds
     if reason:
@@ -110,6 +102,7 @@ async def catgban(event):
         )
 
     if BOTLOG and count != 0:
+        reply = await event.get_reply_message()
         if reason:
             await event.client.send_message(
                 BOTLOG_CHATID,
@@ -131,6 +124,12 @@ async def catgban(event):
                 \n__Banned in {count} groups__\
                 \n**Time taken : **`{cattaken} seconds`",
             )
+        try:
+            if reply:
+                await reply.forward_to(BOTLOG_CHATID)
+                await reply.delete()
+        except BadRequestError:
+            pass
 
 
 @bot.on(admin_cmd(pattern=r"ungban(?: |$)(.*)"))
