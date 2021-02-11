@@ -297,7 +297,6 @@ async def startgmute(event):
             await reply.forward_to(BOTLOG_CHATID)
 
 
-
 @bot.on(admin_cmd(outgoing=True, pattern=r"ungmute(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern=r"ungmute(?: |$)(.*)", allow_sudo=True))
 async def endgmute(event):
