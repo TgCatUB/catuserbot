@@ -2,9 +2,6 @@ import string
 
 from telethon.tl.types import Channel
 
-GROUPSID = []
-MSG_CACHE = {}
-
 
 async def all_groups_id(cat):
     catgroups = []
@@ -56,36 +53,39 @@ async def _(event):
     await event.respond(m)
 
 
-@bot.on(admin_cmd(pattern=r"fpost (.*)"))
-@bot.on(sudo_cmd(pattern=r"fpost (.*)", allow_sudo=True))
-async def _(event):
-    global GROUPSID
-    global MSG_CACHE
-    if event.fwd_from:
-        return
-    try:
-        await event.delete()
-    except Exception as e:
-        LOGS.info(str(e))
-    text = event.pattern_match.group(1)
-    destination = await event.get_input_chat()
-    if len(GROUPSID) == 0:
-        GROUPSID = await all_groups_id(event)
-    for c in text.lower():
-        if c not in string.ascii_lowercase:
-            continue
-        if c not in MSG_CACHE:
-            async for msg in event.client.iter_messages(event.chat_id, search=c):
-                if msg.raw_text.lower() == c and msg.media is None:
-                    MSG_CACHE[c] = msg
-                    break
-        if c not in MSG_CACHE:
-            for i in GROUPSID:
+class _fpost:
+    def __init__(Self) -> None :
+        self.GROUPSID = GROUPSID
+        self.MSG_CACHE = MSG_CACHE
+
+    @bot.on(admin_cmd(pattern=r"fpost (.*)"))
+    @bot.on(sudo_cmd(pattern=r"fpost (.*)", allow_sudo=True))
+    async def _(event):
+        if event.fwd_from:
+            return
+        try:
+            await event.delete()
+        except Exception as e:
+            LOGS.info(str(e))
+        text = event.pattern_match.group(1)
+        destination = await event.get_input_chat()
+        if len(self.GROUPSID) == 0:
+            self.GROUPSID = await all_groups_id(event)
+        for c in text.lower():
+            if c not in string.ascii_lowercase:
+                continue
+            if c not in self.MSG_CACHE:
                 async for msg in event.client.iter_messages(event.chat_id, search=c):
                     if msg.raw_text.lower() == c and msg.media is None:
-                        MSG_CACHE[c] = msg
+                        self.MSG_CACHE[c] = msg
                         break
-        await event.client.forward_messages(destination, MSG_CACHE[c])
+            if c not in self.MSG_CACHE:
+                for i in self.GROUPSID:
+                    async for msg in event.client.iter_messages(event.chat_id, search=c):
+                        if msg.raw_text.lower() == c and msg.media is None:
+                            self.MSG_CACHE[c] = msg
+                            break
+            await event.client.forward_messages(destination, self.MSG_CACHE[c])
 
 
 CMD_HELP.update(
