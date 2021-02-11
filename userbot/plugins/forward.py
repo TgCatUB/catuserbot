@@ -59,6 +59,8 @@ async def _(event):
 @bot.on(admin_cmd(pattern=r"fpost (.*)"))
 @bot.on(sudo_cmd(pattern=r"fpost (.*)", allow_sudo=True))
 async def _(event):
+    global GROUPSID
+    global MSG_CACHE
     if event.fwd_from:
         return
     try:
