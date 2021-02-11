@@ -73,7 +73,7 @@ async def main(event):
         pfp_string = gvarstatus("autopfp_strings")[:-8]
         return await edit_delete(event, f"`{pfp_string} is already running.`")
     addgvar("autopfp_strings", "batmanpfp_strings")
-    await event.edit("Starting batman Profile Pic.")
+    await event.edit("`Starting batman Profile Pic.`")
     await autopfp_start()
 
 
@@ -85,7 +85,7 @@ async def main(event):
         pfp_string = gvarstatus("autopfp_strings")[:-8]
         return await edit_delete(event, f"`{pfp_string} is already running.`")
     addgvar("autopfp_strings", "thorpfp_strings")
-    await event.edit("Starting thor Profile Pic.")
+    await event.edit("`Starting thor Profile Pic.`")
     await autopfp_start()
 
 
@@ -142,7 +142,7 @@ CMD_HELP.update(
   •  `.thorpfp`
 
 
-**Function : **__Changes your profile pic every 2 minutes with the command you used(mean the batman of thor).\
+**Function : **__Changes your profile pic every 1 minute with the command you used (mean the batman or thor pics ).\
 If you like to chnge the time then set CHNAGE_TIME var in Heroku with time between each chnage in seconds.__"""
     }
 )
