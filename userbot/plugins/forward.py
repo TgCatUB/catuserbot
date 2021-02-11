@@ -2,13 +2,6 @@ import string
 
 from telethon.tl.types import Channel
 
-global msg_cache
-msg_cache = {}
-
-
-global groupsid
-groupsid = []
-
 
 async def all_groups_id(cat):
     catgroups = []
@@ -63,7 +56,9 @@ async def _(event):
     if event.fwd_from:
         return
     global groupsid
+    groupsid = []
     global msg_cache
+    msg_cache = {}
     await event.delete()
     text = event.pattern_match.group(1)
     destination = await event.get_input_chat()
