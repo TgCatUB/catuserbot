@@ -48,6 +48,8 @@ async def autopfp_start():
     if gvarstatus("autopfp_strings") is not None:
         AUTOPFP_START = True
         string_list = COLLECTION_STRINGS[gvarstatus("autopfp_strings")]
+    else:
+        AUTOPFP_START = False
     i = 0
     while AUTOPFP_START:
         await animeprofilepic(string_list)
