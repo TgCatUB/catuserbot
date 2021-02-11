@@ -38,6 +38,8 @@ digitalpfp = Config.DIGITAL_PIC or "https://telegra.ph/file/aeaebe33b1f3988a0b69
 async def autopic(event):
     if event.fwd_from:
         return
+    if Config.DEFAULT_PIC is None:
+        return await edit_delete(event , "**Error**\nFor functing of autopic you need to set DEFAULT_PIC var in Heroku vars", parse_mode=parse_pre)
     downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
     downloader.start(blocking=False)
     while not downloader.isFinished():
@@ -79,6 +81,8 @@ async def main(event):
 async def autopic(event):
     if event.fwd_from:
         return
+    if Config.DEFAULT_PIC is None:
+        return await edit_delete(event , "**Error**\nFor functing of bloom you need to set DEFAULT_PIC var in Heroku vars", parse_mode=parse_pre)
     downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=True)
     downloader.start(blocking=False)
     while not downloader.isFinished():
@@ -172,6 +176,10 @@ async def _(event):
 
 async def autopicloop():
     AUTOPICSTART = gvarstatus("autopic") == "true"
+    if Config.DEFAULT_PIC is None:
+        if BOTLOG:
+            return await bot.send_message(BOTLOG_CHATID, "**Error**\nFor functing of autopic you need to set DEFAULT_PIC var in Heroku vars", parse_mode=parse_pre)
+        return
     try:
         counter = int(gvarstatus("autopic_counter"))
     except Exception as e:
@@ -241,6 +249,10 @@ async def digitalpicloop():
 
 async def bloom_pfploop():
     BLOOMSTART = gvarstatus("bloom") == "true"
+    if Config.DEFAULT_PIC is None:
+        if BOTLOG:
+            return await bot.send_message(BOTLOG_CHATID, "**Error**\nFor functing of bloom you need to set DEFAULT_PIC var in Heroku vars", parse_mode=parse_pre)
+        return
     while BLOOMSTART:
         if not os.path.exists(autopic_path):
             downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
