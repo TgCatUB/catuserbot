@@ -54,7 +54,7 @@ async def _(event):
 
 
 class _fpost:
-    def __init__(Self) -> None :
+    def __init__(Self) -> None:
         self.GROUPSID = GROUPSID
         self.MSG_CACHE = MSG_CACHE
 
@@ -81,7 +81,9 @@ class _fpost:
                         break
             if c not in self.MSG_CACHE:
                 for i in self.GROUPSID:
-                    async for msg in event.client.iter_messages(event.chat_id, search=c):
+                    async for msg in event.client.iter_messages(
+                        event.chat_id, search=c
+                    ):
                         if msg.raw_text.lower() == c and msg.media is None:
                             self.MSG_CACHE[c] = msg
                             break
