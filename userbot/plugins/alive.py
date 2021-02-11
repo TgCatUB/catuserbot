@@ -8,7 +8,7 @@ from . import ALIVE_NAME, StartTime, catversion, get_readable_time, mention, rep
 
 DEFAULTUSER = ALIVE_NAME or "cat"
 CAT_IMG = Config.ALIVE_PIC
-TAT_IMG = Config.LIVE_PIC_2
+TAT_IMG = Config.ALIVE_PIC_2
 FAT_IMG = [
             CAT_IMG,
             TAT_IMG,
