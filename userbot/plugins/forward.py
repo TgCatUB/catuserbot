@@ -53,13 +53,16 @@ async def _(event):
     await event.respond(m)
 
 
-class _fpost:
-    GROUPSID = []
-    MSG_CACHE = {}
+class FPOST:
+    def __init__(self) -> None:
+        self.GROUPSID = [] 
+        self.MSG_CACHE = {}
 
-    @bot.on(admin_cmd(pattern=r"fpost (.*)"))
-    @bot.on(sudo_cmd(pattern=r"fpost (.*)", allow_sudo=True))
-    async def _(event):
+FPOST_ = FPOST()
+
+@bot.on(admin_cmd(pattern=r"fpost (.*)"))
+@bot.on(sudo_cmd(pattern=r"fpost (.*)", allow_sudo=True))
+async def _(event):
         if event.fwd_from:
             return
         try:
@@ -68,25 +71,25 @@ class _fpost:
             LOGS.info(str(e))
         text = event.pattern_match.group(1)
         destination = await event.get_input_chat()
-        if len(GROUPSID) == 0:
-            GROUPSID = await all_groups_id(event)
+        if len(FPOST_.GROUPSID) == 0:
+            FPOST_.GROUPSID = await all_groups_id(event)
         for c in text.lower():
             if c not in string.ascii_lowercase:
                 continue
-            if c not in MSG_CACHE:
+            if c not in FPOST_.MSG_CACHE:
                 async for msg in event.client.iter_messages(event.chat_id, search=c):
                     if msg.raw_text.lower() == c and msg.media is None:
-                        MSG_CACHE[c] = msg
+                        FPOST_.MSG_CACHE[c] = msg
                         break
-            if c not in MSG_CACHE:
-                for i in GROUPSID:
+            if c not in FPOST_.MSG_CACHE:
+                for i in FPOST_.GROUPSID:
                     async for msg in event.client.iter_messages(
                         event.chat_id, search=c
                     ):
                         if msg.raw_text.lower() == c and msg.media is None:
                             MSG_CACHE[c] = msg
                             break
-            await event.client.forward_messages(destination, MSG_CACHE[c])
+            await event.client.forward_messages(destination, FPOST_.MSG_CACHE[c])
 
 
 CMD_HELP.update(
