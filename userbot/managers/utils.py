@@ -31,7 +31,8 @@ async def edit_or_reply(
             return await event.reply(
                 text, parse_mode=parse_mode, link_preview=link_preview
             )
-        return await event.edit(text, parse_mode=parse_mode, link_preview=link_preview)
+        await event.edit(text, parse_mode=parse_mode, link_preview=link_preview)
+        return event
     asciich = ["*", "`", "_"]
     for i in asciich:
         text = re.sub(rf"\{i}", "", text)
@@ -57,7 +58,8 @@ async def edit_or_reply(
             if reply_to:
                 return await reply_to.reply(text, link_preview=link_preview)
             return await event.reply(text, link_preview=link_preview)
-        return await event.edit(text, link_preview=link_preview)
+        await event.edit(text, link_preview=link_preview)
+        return event
     file_name = file_name or "output.txt"
     caption = caption or None
     with open(file_name, "w+") as output:
