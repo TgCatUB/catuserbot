@@ -13,7 +13,7 @@ from telethon.tl import functions
 from .sql_helper.globals import addgvar, delgvar, gvarstatus
 
 COLLECTION_STRINGS = {
-    "batmampfp_strings": [
+    "batmanpfp_strings": [
         "awesome-batman-wallpapers",
         "batman-arkham-knight-4k-wallpaper",
         "batman-hd-wallpapers-1080p",
