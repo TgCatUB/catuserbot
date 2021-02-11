@@ -207,7 +207,7 @@ async def autopicloop():
         current_time = datetime.now().strftime("  Time: %H:%M \n  Date: %d.%m.%y ")
         img = Image.open(autophoto_path)
         drawn_text = ImageDraw.Draw(img)
-        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 100)
+        fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
         drawn_text.text((150, 250), current_time, font=fnt, fill=(124, 252, 0))
         img.save(autophoto_path)
         file = await bot.upload_file(autophoto_path)
