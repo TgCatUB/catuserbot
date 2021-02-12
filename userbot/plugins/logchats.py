@@ -7,35 +7,36 @@ from . import BOTLOG, BOTLOG_CHATID, LOGS
 from .afk import AFK_
 from .sql_helper import no_log_pms_sql
 
-RECENT_USER = None
-NEWPM = None
-COUNT = 0
 
+class LOG_CHATS:
+    def __init__(self):
+        self.RECENT_USER = None
+        self.NEWPM = None
+        self.COUNT = 0
+
+LOG_CHATS_ = LOG_CHATS()
 
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def monito_p_m_s(event):
-    global RECENT_USER
-    global NEWPM
-    global COUNT
     if not Config.PM_LOGGR_BOT_API_ID:
         return
     sender = await event.get_sender()
     if Config.NO_LOG_P_M_S and not sender.bot:
         chat = await event.get_chat()
         if not no_log_pms_sql.is_approved(chat.id) and chat.id != 777000:
-            if RECENT_USER != chat.id:
-                RECENT_USER = chat.id
-                if NEWPM:
-                    if COUNT > 1:
-                        await NEWPM.edit(
-                            NEWPM.text.replace("new message", f"{COUNT} messages")
+            if LOG_CHATS.RECENT_USER != chat.id:
+                LOG_CHATS.RECENT_USER = chat.id
+                if LOG_CHATS.NEWPM:
+                    if LOG_CHATS.COUNT > 1:
+                        await LOG_CHATS.NEWPM.edit(
+                            LOG_CHATS.NEWPM.text.replace("new message", f"{LOG_CHATS.COUNT} messages")
                         )
                     else:
-                        await NEWPM.edit(
-                            NEWPM.text.replace("new message", f"{COUNT} message")
+                        await LOG_CHATS.NEWPM.edit(
+                            LOG_CHATS.NEWPM.text.replace("new message", f"{LOG_CHATS.COUNT} message")
                         )
-                    COUNT = 0
-                NEWPM = await event.client.send_message(
+                    LOG_CHATS.COUNT = 0
+                LOG_CHATS.NEWPM = await event.client.send_message(
                     Config.PM_LOGGR_BOT_API_ID,
                     f"👤{_format.mentionuser(sender.first_name , sender.id)} has sent a new message \nId : `{chat.id}`",
                 )
@@ -44,7 +45,7 @@ async def monito_p_m_s(event):
                     await event.client.forward_messages(
                         Config.PM_LOGGR_BOT_API_ID, event.message, silent=True
                     )
-                COUNT += 1
+                LOG_CHATS.COUNT += 1
             except Exception as e:
                 LOGS.warn(str(e))
 
@@ -52,17 +53,10 @@ async def monito_p_m_s(event):
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
 async def log_tagged_messages(event):
     hmm = await event.get_chat()
-    if no_log_pms_sql.is_approved(hmm.id):
+    if (no_log_pms_sql.is_approved(hmm.id)) or (not Config.PM_LOGGR_BOT_API_ID) or ("on" in AFK_.USERAFK_ON):
         return
-    if not Config.PM_LOGGR_BOT_API_ID:
+    if await event.get_sender() and (await event.get_sender()).bot:
         return
-    if "on" in AFK_.USERAFK_ON:
-        return
-    try:
-        if (await event.get_sender()).bot:
-            return
-    except Exception as e:
-        LOGS.info(str(e))
     full = None
     try:
         full = await event.client.get_entity(event.message.from_id)
