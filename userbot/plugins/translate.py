@@ -74,7 +74,7 @@ async def lang(value):
         return
     arg = value.pattern_match.group(1).lower()
     if arg in LANGUAGES:
-        addgvar(TRT_LANG", arg)
+        addgvar("TRT_LANG", arg)
         LANG = LANGUAGES[arg]
     else:
         await edit_or_reply(
