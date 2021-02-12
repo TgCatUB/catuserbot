@@ -104,7 +104,9 @@ async def _(event):
             img_size_div = soup.find(id="jHnbRc")
             img_size = img_size_div.find_all("div")
         except Exception:
-            return await edit_delete(catevent,"`Sorry. I am unable to find similar images`")
+            return await edit_delete(
+                catevent, "`Sorry. I am unable to find similar images`"
+            )
         end = datetime.now()
         ms = (end - start).seconds
         OUTPUT_STR = """{img_size}
