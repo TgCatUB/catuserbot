@@ -18,7 +18,9 @@ class AFK:
         self.reason = None
         self.msg_link = False
 
+
 AFK_ = AFK()
+
 
 @bot.on(events.NewMessage(outgoing=True))
 async def set_not_afk(event):
@@ -102,7 +104,9 @@ async def on_afk(event):
                 f"**I am AFK .\n\nAFK Since {endtime}\nReason : **{AFK_.reason}"
             )
         elif AFK_.reason:
-            message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
+            message_to_reply = (
+                f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
+            )
         else:
             message_to_reply = (
                 f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
@@ -164,7 +168,9 @@ async def _(event):
             AFK_.afk_time = datetime.now()
         AFK_.USERAFK_ON = f"on: {AFK_.reason}"
         if AFK_.reason:
-            await edit_delete(event, f"`I shall be Going afk! because ~` {AFK_.reason}", 5)
+            await edit_delete(
+                event, f"`I shall be Going afk! because ~` {AFK_.reason}", 5
+            )
         else:
             await edit_delete(event, f"`I shall be Going afk! `", 5)
         if BOTLOG:
