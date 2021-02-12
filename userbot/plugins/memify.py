@@ -437,29 +437,29 @@ async def memes(cat):
 CMD_HELP.update(
     {
         "memify": "**Plugin : **`memify`\
-    \n\n  • **Syntax :** `.mmf toptext ; bottomtext`\
-    \n  • **Function : **Creates a image meme with give text at specific locations and sends\
-    \n\n  • **Syntax : **`.mms toptext ; bottomtext`\
-    \n  • **Function : **Creates a sticker meme with give text at specific locations and sends\
-    \n\n  • **Syntax : **`.cfont` <Font Name>\
-    \n  • **Function : **Change the font style use for memify,\nTo get fonts name use this cmd (`.ls userbot/helpers/styles`)\
-    \n\n  • **Syntax : **`.ascii`\
-    \n  • **Function : **reply to media file to get ascii image of that media\
-    \n\n  • **Syntax : **`.invert`\
-    \n  • **Function : **Inverts the colors in media file\
-    \n\n  • **Syntax : **`.solarize`\
-    \n  • **Function : **Watch sun buring ur media file\
-    \n\n  • **Syntax : **`.mirror`\
-    \n  • **Function : **shows you the reflection of the media file\
-    \n\n  • **Syntax : **`.flip`\
-    \n  • **Function : **shows you the upside down image of the given media file\
-    \n\n  • **Syntax : **`.gray`\
-    \n  • **Function : **makes your media file to black and white\
-    \n\n  • **Syntax : **`.zoom` or `.zoom range`\
-    \n  • **Function : **zooms your media file\
-    \n\n  • **Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
-    \n  • **Function : **make a frame for your media file\
-    \n  • **fill:** This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.\
+    \n\n• **Syntax : **`.mmf toptext ; bottomtext`\
+    \n• **Function : **__Creates a image meme with give text at specific locations and sends__\
+    \n\n• **Syntax : **`.mms toptext ; bottomtext`\
+    \n• **Function : **__Creates a sticker meme with give text at specific locations and sends__\
+    \n\n• **Syntax : **`.cfont` <Font Name>\
+    \n• **Function : **__Change the font style use for memify,\nTo get fonts name use this cmd__ (`.ls userbot/helpers/styles`)\
+    \n\n• **Syntax : **`.ascii`\
+    \n• **Function : **__reply to media file to get ascii image of that media__\
+    \n\n• **Syntax : **`.invert`\
+    \n• **Function : **__Inverts the colors in media file__\
+    \n\n• **Syntax : **`.solarize`\
+    \n• **Function : **__Watch sun buring ur media file__\
+    \n\n• **Syntax : **`.mirror`\
+    \n• **Function : **__shows you the reflection of the media file__\
+    \n\n• **Syntax : **`.flip`\
+    \n• **Function : **__shows you the upside down image of the given media file__\
+    \n\n• **Syntax : **`.gray`\
+    \n• **Function : **__makes your media file to black and white__\
+    \n\n• **Syntax : **`.zoom` or `.zoom range`\
+    \n• **Function : **__zooms your media file__\
+    \n\n• **Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
+    \n• **Function : **__make a frame for your media file__\
+    \n• **fill:** __This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.__\
     "
     }
 )
