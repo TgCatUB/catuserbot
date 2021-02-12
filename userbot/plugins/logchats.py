@@ -4,7 +4,6 @@ import asyncio
 from telethon import events
 
 from . import BOTLOG, BOTLOG_CHATID, LOGS
-from .afk import AFK_
 from .sql_helper import no_log_pms_sql
 
 
@@ -59,13 +58,12 @@ async def monito_p_m_s(event):
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
 async def log_tagged_messages(event):
     hmm = await event.get_chat()
+    from .afk import AFK_
     if (
         (no_log_pms_sql.is_approved(hmm.id))
         or (not Config.PM_LOGGR_BOT_API_ID)
         or ("on" in AFK_.USERAFK_ON)
-    ):
-        return
-    if await event.get_sender() and (await event.get_sender()).bot:
+        or (await event.get_sender() and (await event.get_sender()).bot):
         return
     full = None
     try:
