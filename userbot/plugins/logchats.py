@@ -14,7 +14,9 @@ class LOG_CHATS:
         self.NEWPM = None
         self.COUNT = 0
 
+
 LOG_CHATS_ = LOG_CHATS()
+
 
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def monito_p_m_s(event):
@@ -29,11 +31,15 @@ async def monito_p_m_s(event):
                 if LOG_CHATS.NEWPM:
                     if LOG_CHATS.COUNT > 1:
                         await LOG_CHATS.NEWPM.edit(
-                            LOG_CHATS.NEWPM.text.replace("new message", f"{LOG_CHATS.COUNT} messages")
+                            LOG_CHATS.NEWPM.text.replace(
+                                "new message", f"{LOG_CHATS.COUNT} messages"
+                            )
                         )
                     else:
                         await LOG_CHATS.NEWPM.edit(
-                            LOG_CHATS.NEWPM.text.replace("new message", f"{LOG_CHATS.COUNT} message")
+                            LOG_CHATS.NEWPM.text.replace(
+                                "new message", f"{LOG_CHATS.COUNT} message"
+                            )
                         )
                     LOG_CHATS.COUNT = 0
                 LOG_CHATS.NEWPM = await event.client.send_message(
@@ -53,7 +59,11 @@ async def monito_p_m_s(event):
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
 async def log_tagged_messages(event):
     hmm = await event.get_chat()
-    if (no_log_pms_sql.is_approved(hmm.id)) or (not Config.PM_LOGGR_BOT_API_ID) or ("on" in AFK_.USERAFK_ON):
+    if (
+        (no_log_pms_sql.is_approved(hmm.id))
+        or (not Config.PM_LOGGR_BOT_API_ID)
+        or ("on" in AFK_.USERAFK_ON)
+    ):
         return
     if await event.get_sender() and (await event.get_sender()).bot:
         return
