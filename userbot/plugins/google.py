@@ -95,13 +95,16 @@ async def _(event):
         response = requests.get(the_location, headers=headers)
         soup = BeautifulSoup(response.text, "html.parser")
         # document.getElementsByClassName("r5a77d"): PRS
-        prs_div = soup.find_all("div", {"class": "r5a77d"})[0]
-        prs_anchor_element = prs_div.find("a")
-        prs_url = BASE_URL + prs_anchor_element.get("href")
-        prs_text = prs_anchor_element.text
-        # document.getElementById("jHnbRc")
-        img_size_div = soup.find(id="jHnbRc")
-        img_size = img_size_div.find_all("div")
+        try:
+            prs_div = soup.find_all("div", {"class": "r5a77d"})[0]
+            prs_anchor_element = prs_div.find("a")
+            prs_url = BASE_URL + prs_anchor_element.get("href")
+            prs_text = prs_anchor_element.text
+            # document.getElementById("jHnbRc")
+            img_size_div = soup.find(id="jHnbRc")
+            img_size = img_size_div.find_all("div")
+        except Exception:
+            return await edit_delete(catevent,"`Sorry. I am unable to find similar images`")
         end = datetime.now()
         ms = (end - start).seconds
         OUTPUT_STR = """{img_size}
