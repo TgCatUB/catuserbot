@@ -7,6 +7,7 @@ from telethon.tl import functions, types
 
 from . import BOTLOG, BOTLOG_CHATID, bot
 
+
 class AFK:
     def __init__(self):
         self.USERAFK_ON = {}
