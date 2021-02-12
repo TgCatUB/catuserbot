@@ -97,6 +97,8 @@ async def on_afk(event):
         # userbot's should not reply to other userbot's
         # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
         return False
+    if not await event.get_sender():
+        return
     if AFK_.USERAFK_ON and not (await event.get_sender()).bot:
         msg = None
         if AFK_.msg_link and AFK_.reason:
@@ -188,14 +190,14 @@ async def _(event):
 
 CMD_HELP.update(
     {
-        "afk": "**Plugin : **`afk`\
-        \n\n•  **Syntax : **`.afk [Optional Reason]`\
-        \n•  **Function : **__Sets you as afk.\nReplies to anyone who tags/PM's \
-        you telling them that you are AFK(reason).\
-        \n\nSwitches off AFK when you type back anything, anywhere.\
-        afk means away from keyboard/keypad.__\
-        \n\n•  **Note :** If you want AFK with hyperlink use [ ; ] after reason, then paste the media link.\
-        \n•  **Example :** `.afk busy now ;<Media_link>`\
-        "
+        "afk": """**Plugin : **`afk`
+•  **Syntax : **`.afk [Optional Reason]`
+•  **Function : **__Sets you as afk and Replies to anyone who tags/PM's you telling them that you are in AFK(reason).\
+Switches off AFK when you type back anything, anywhere.
+
+afk means away from keyboard/keypad.__
+•  **Note :** If you want AFK with hyperlink use [ ; ] after reason, then paste the media link.\
+•  **Example :** `.afk busy now ; <Media_link>`\
+        """
     }
 )
