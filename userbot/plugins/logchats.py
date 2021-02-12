@@ -5,7 +5,7 @@ from telethon import events
 
 from . import BOTLOG, BOTLOG_CHATID, LOGS
 from .sql_helper import no_log_pms_sql
-
+from .afk import AFK_
 RECENT_USER = None
 NEWPM = None
 COUNT = 0
@@ -55,9 +55,7 @@ async def log_tagged_messages(event):
         return
     if not Config.PM_LOGGR_BOT_API_ID:
         return
-    from .afk import USERAFK_ON
-
-    if "on" in USERAFK_ON:
+    if "on" in AFK_.USERAFK_ON:
         return
     try:
         if (await event.get_sender()).bot:
@@ -134,11 +132,11 @@ async def set_no_log_p_m(event):
 CMD_HELP.update(
     {
         "logchats": "**Plugin : **`logchats`\
-        \n\n  •  **Syntax : **`.save` :\
-        \n  •  **Function : **__Saves tagged message in private group .__\
-        \n\n  •  **Syntax : **`.log`:\
-        \n  •  **Function : **__By default will log all private chat messages if you use .nolog and want to log again then you need to use this__\
-        \n\n  •  **Syntax : **`.nolog`:\
-        \n  •  **Function : **__Stops logging from a private chat or group where you used__"
+        \n\n•  **Syntax : **`.save`\
+        \n•  **Function : **__Saves tagged message in private group .__\
+        \n\n•  **Syntax : **`.log`\
+        \n•  **Function : **__By default will log all private chat messages if you use .nolog and want to log again then you need to use this__\
+        \n\n•  **Syntax : **`.nolog`\
+        \n•  **Function : **__Stops logging from a private chat or group where you used__"
     }
 )
