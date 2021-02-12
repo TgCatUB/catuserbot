@@ -1,9 +1,11 @@
 import asyncio
+
 import requests
 from telethon import functions
-from . import ALIVE_NAME, CMD_LIST, SUDO_LIST
 
-from .sql_helper.globals import addgvar, delgvar, gvarstatus
+from . import ALIVE_NAME, CMD_LIST, SUDO_LIST
+from .sql_helper.globals import addgvar, gvarstatus
+
 
 @bot.on(admin_cmd(outgoing=True, pattern="help ?(.*)"))
 async def cmd_list(event):
@@ -63,9 +65,7 @@ async def cmd_list(event):
                           \nCheck `.help plugin name` for commands, in case popup doesn't appear.\
                           \nCheck `.info plugin name` for usage of thoose plugins and commands"
             tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
-            results = await event.client.inline_query(
-                tgbotusername, help_string
-            )
+            results = await event.client.inline_query(tgbotusername, help_string)
             await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
             await event.delete()
         else:
@@ -201,11 +201,11 @@ async def _(event):
         if h_type:
             await event.edit("`inline mode is already enabled`")
         else:
-            addgvar("HELPTYPE" , h_type)
+            addgvar("HELPTYPE", h_type)
             await event.edit("`inline mode is disabled`")
     else:
         if h_type:
-            addgvar("HELPTYPE" , h_type)
+            addgvar("HELPTYPE", h_type)
             await event.edit("`inline mode is enabled`")
         else:
             await event.edit("`inline mode is already disabled`")
