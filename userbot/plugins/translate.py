@@ -5,6 +5,7 @@ from googletrans import LANGUAGES, Translator
 from . import BOTLOG, BOTLOG_CHATID, deEmojify
 from .sql_helper.globals import addgvar, gvarstatus
 
+
 @bot.on(admin_cmd(pattern="tl (.*)"))
 @bot.on(sudo_cmd(pattern="tl (.*)", allow_sudo=True))
 async def _(event):
