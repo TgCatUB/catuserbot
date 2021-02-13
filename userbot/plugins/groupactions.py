@@ -14,8 +14,20 @@ from telethon.tl.types import (
     UserStatusRecently,
 )
 
+from telethon.tl.functions.channels import EditBannedRequest
 from . import BOTLOG, BOTLOG_CHATID
 
+BANNED_RIGHTS = ChatBannedRights(
+    until_date=None,
+    view_messages=True,
+    send_messages=True,
+    send_media=True,
+    send_stickers=True,
+    send_gifs=True,
+    send_games=True,
+    send_inline=True,
+    embed_links=True,
+)
 
 @bot.on(admin_cmd(outgoing=True, pattern="kickme$"))
 async def kickme(leave):
@@ -106,7 +118,7 @@ async def _(event):
         total += 1
         try:
             if user.id not in admins_id:
-                await event.client.kick_participant(event.chat_id, user.id)
+                await event.client(EditBannedRequest(event.chat_id, user.id, BANNED_RIGHTS))
                 success += 1
                 await sleep(0.5)
         except Exception as e:
