@@ -2,6 +2,7 @@ from asyncio import sleep
 
 from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError
 from telethon.tl import functions
+from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import (
     ChannelParticipantsAdmins,
     ChannelParticipantsKicked,
@@ -14,7 +15,6 @@ from telethon.tl.types import (
     UserStatusRecently,
 )
 
-from telethon.tl.functions.channels import EditBannedRequest
 from . import BOTLOG, BOTLOG_CHATID
 
 BANNED_RIGHTS = ChatBannedRights(
@@ -28,6 +28,7 @@ BANNED_RIGHTS = ChatBannedRights(
     send_inline=True,
     embed_links=True,
 )
+
 
 @bot.on(admin_cmd(outgoing=True, pattern="kickme$"))
 async def kickme(leave):
@@ -118,7 +119,9 @@ async def _(event):
         total += 1
         try:
             if user.id not in admins_id:
-                await event.client(EditBannedRequest(event.chat_id, user.id, BANNED_RIGHTS))
+                await event.client(
+                    EditBannedRequest(event.chat_id, user.id, BANNED_RIGHTS)
+                )
                 success += 1
                 await sleep(0.5)
         except Exception as e:
