@@ -3,6 +3,7 @@ from asyncio import sleep
 from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError
 from telethon.tl import functions
 from telethon.tl.types import (
+    ChannelParticipantsAdmins,
     ChannelParticipantsKicked,
     ChatBannedRights,
     UserStatusEmpty,
@@ -15,13 +16,6 @@ from telethon.tl.types import (
 
 from . import BOTLOG, BOTLOG_CHATID
 
-from telethon.tl.types import (
-    ChannelParticipantAdmin,
-    ChannelParticipantCreator,
-    ChannelParticipantsAdmins,
-    ChannelParticipantsBots,
-    MessageActionChannelMigrateFrom,
-)
 
 @bot.on(admin_cmd(outgoing=True, pattern="kickme$"))
 async def kickme(leave):
