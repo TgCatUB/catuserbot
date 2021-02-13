@@ -62,7 +62,7 @@ async def monito_p_m_s(event):
 async def log_tagged_messages(event):
     hmm = await event.get_chat()
     from .afk import AFK_
-    
+
     if gvarstatus("GRPLOG") and gvarstatus("GRPLOG") == "false":
         return
     if (
@@ -165,6 +165,7 @@ async def set_pmlog(event):
         else:
             await event.edit("`Pm logging is already disabled`")
 
+
 @bot.on(admin_cmd(pattern="grplog (on|off)$"))
 async def set_grplog(event):
     if event.fwd_from:
@@ -174,7 +175,11 @@ async def set_grplog(event):
         h_type = False
     elif input_str == "on":
         h_type = True
-    if gvarstatus("GRPLOG") and gvarstatus("GRPLOG") == "true" or not gvarstatus("GRPLOG"):
+    if (
+        gvarstatus("GRPLOG")
+        and gvarstatus("GRPLOG") == "true"
+        or not gvarstatus("GRPLOG")
+    ):
         PMLOG = True
     else:
         PMLOG = False
@@ -190,7 +195,7 @@ async def set_grplog(event):
             await event.edit("`Group logging is enabled`")
         else:
             await event.edit("`Group logging is already disabled`")
-            
+
 
 CMD_HELP.update(
     {
