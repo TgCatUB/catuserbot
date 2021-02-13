@@ -95,12 +95,12 @@ async def catbot(catmemes):
         return
     input_str = catmemes.pattern_match.group(1)
     input_str = deEmojify(input_str)
-    if "|" in input_str:
-        text1, text2 = input_str.split("|")
+    if ";" in input_str:
+        text1, text2 = input_str.split(";")
     else:
         await edit_or_reply(
             catmemes,
-            "**Syntax :** reply to image or sticker with `.trap (name of the person to trap)|(trapper name)`",
+            "**Syntax :** reply to image or sticker with `.trap (name of the person to trap);(trapper name)`",
         )
         return
     replied = await catmemes.get_reply_message()
@@ -144,12 +144,12 @@ async def catbot(catmemes):
         return
     input_str = catmemes.pattern_match.group(1)
     input_str = deEmojify(input_str)
-    if "|" in input_str:
-        username, text = input_str.split("|")
+    if ";" in input_str:
+        username, text = input_str.split(";")
     else:
         await edit_or_reply(
             catmemes,
-            "**Syntax :** reply to image or sticker with `.phub (username)|(text in comment)`",
+            "**Syntax :** reply to image or sticker with `.phub (username);(text in comment)`",
         )
         return
     replied = await catmemes.get_reply_message()
@@ -193,9 +193,9 @@ CMD_HELP.update(
       \n• **Function :** __Just a troll meme try yourself by replying cmd to image/sticker.__\
       \n\n• **Syntax :** `.trash`\
       \n• **Function :** __Just a troll meme try yourself by replying cmd to image/sticker.__\
-      \n\n• **Syntax :** `.trap (name of the person to trap)|(trapper name)`\
+      \n\n• **Syntax :** `.trap (name of the person to trap);(trapper name)`\
       \n• **Function :** __Just a troll meme try yourself by replying cmd to image/sticker. (trap card)__\
-      \n\n• **Syntax :** `.phub (username)|(text in comment)`\
+      \n\n• **Syntax :** `.phub (username);(text in comment)`\
       \n• **Function :** __Just a troll meme try yourself by replying cmd to image/sticker. (pornhub comment)__\
       "
     }
