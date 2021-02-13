@@ -149,54 +149,6 @@ async def on_afk(event):
             )
 
 
-@bot.on(admin_cmd(pattern=r"mafk ?(.*)", outgoing=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    reply = await event.get_reply_message()
-    media_t = media_type(reply)
-    if media_t == "Sticker" or not media_t:
-        return await edit_or_reply(
-            event, "`You haven't replied to any media to activate medai afk`"
-        )
-    if not BOTLOG:
-        return await edit_or_reply(
-            event, "`To use media afk you need to set PRIVATE_GROUP_BOT_API_ID config`"
-        )
-    AFK_.MUSERAFK_ON = {}
-    AFK_.mafk_time = None
-    AFK_.mlast_afk_message = {}
-    AFK_.mafk_end = {}
-    AFK_.media_afk = None
-    start_1 = datetime.now()
-    AFK_.mafk_star = start_1.replace(microsecond=0)
-    if not AFK_.MUSERAFK_ON:
-        input_str = event.pattern_match.group(1)
-        AFK_.mreason = input_str
-        last_seen_status = await event.client(
-            functions.account.GetPrivacyRequest(types.InputPrivacyKeyStatusTimestamp())
-        )
-        if isinstance(last_seen_status.rules, types.PrivacyValueAllowAll):
-            AFK_.mafk_time = datetime.now()
-        AFK_.MUSERAFK_ON = f"on: {AFK_.mreason}"
-        if AFK_.mreason:
-            await edit_delete(
-                event, f"`I shall be Going afk! because ~` {AFK_.mreason}", 5
-            )
-        else:
-            await edit_delete(event, f"`I shall be Going afk! `", 5)
-        AFK_.media_afk = await reply.forward_to(BOTLOG_CHATID)
-        if AFK_.mreason:
-            await event.client.send_message(
-                BOTLOG_CHATID,
-                f"#AFKTRUE \nSet AFK mode to True, and Reason is {AFK_.mreason}",
-            )
-        else:
-            await event.client.send_message(
-                BOTLOG_CHATID,
-                f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
-            )
-
 
 @bot.on(events.NewMessage(outgoing=True))
 async def set_not_afk(event):
@@ -365,6 +317,53 @@ async def _(event):
                     f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
                 )
 
+@bot.on(admin_cmd(pattern=r"mafk ?(.*)", outgoing=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    reply = await event.get_reply_message()
+    media_t = media_type(reply)
+    if media_t == "Sticker" or not media_t:
+        return await edit_or_reply(
+            event, "`You haven't replied to any media to activate media afk`"
+        )
+    if not BOTLOG:
+        return await edit_or_reply(
+            event, "`To use media afk you need to set PRIVATE_GROUP_BOT_API_ID config`"
+        )
+    AFK_.MUSERAFK_ON = {}
+    AFK_.mafk_time = None
+    AFK_.mlast_afk_message = {}
+    AFK_.mafk_end = {}
+    AFK_.media_afk = None
+    start_1 = datetime.now()
+    AFK_.mafk_star = start_1.replace(microsecond=0)
+    if not AFK_.MUSERAFK_ON:
+        input_str = event.pattern_match.group(1)
+        AFK_.mreason = input_str
+        last_seen_status = await event.client(
+            functions.account.GetPrivacyRequest(types.InputPrivacyKeyStatusTimestamp())
+        )
+        if isinstance(last_seen_status.rules, types.PrivacyValueAllowAll):
+            AFK_.mafk_time = datetime.now()
+        AFK_.MUSERAFK_ON = f"on: {AFK_.mreason}"
+        if AFK_.mreason:
+            await edit_delete(
+                event, f"`I shall be Going afk! because ~` {AFK_.mreason}", 5
+            )
+        else:
+            await edit_delete(event, f"`I shall be Going afk! `", 5)
+        AFK_.media_afk = await reply.forward_to(BOTLOG_CHATID)
+        if AFK_.mreason:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#AFKTRUE \nSet AFK mode to True, and Reason is {AFK_.mreason}",
+            )
+        else:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
+            )
 
 CMD_HELP.update(
     {
