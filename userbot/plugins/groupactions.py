@@ -15,6 +15,13 @@ from telethon.tl.types import (
 
 from . import BOTLOG, BOTLOG_CHATID
 
+from telethon.tl.types import (
+    ChannelParticipantAdmin,
+    ChannelParticipantCreator,
+    ChannelParticipantsAdmins,
+    ChannelParticipantsBots,
+    MessageActionChannelMigrateFrom,
+)
 
 @bot.on(admin_cmd(outgoing=True, pattern="kickme$"))
 async def kickme(leave):
