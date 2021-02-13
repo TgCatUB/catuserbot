@@ -119,7 +119,7 @@ async def on_afk(event):
                 f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
             )
         if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
-            msg = await event.reply(message_to_reply,file=AFK_.media_afk.media)
+            msg = await event.reply(message_to_reply, file=AFK_.media_afk.media)
         if event.chat_id in AFK_.mlast_afk_message:
             await AFK_.mlast_afk_message[event.chat_id].delete()
         AFK_.mlast_afk_message[event.chat_id] = msg
@@ -156,9 +156,13 @@ async def _(event):
     reply = await event.get_reply_message()
     media_t = media_type(reply)
     if media_t == "Sticker" or not media_t:
-        return await edit_reply(event,"`You haven't replied to any media to activate medai afk`")
+        return await edit_reply(
+            event, "`You haven't replied to any media to activate medai afk`"
+        )
     if not BOTLOG:
-        return await edit_reply(event,"`To use media afk you need to set PRIVATE_GROUP_BOT_API_ID config`")
+        return await edit_reply(
+            event, "`To use media afk you need to set PRIVATE_GROUP_BOT_API_ID config`"
+        )
     AFK_.MUSERAFK_ON = {}
     AFK_.mafk_time = None
     AFK_.mlast_afk_message = {}
@@ -192,7 +196,6 @@ async def _(event):
                 BOTLOG_CHATID,
                 f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
             )
-
 
 
 @bot.on(events.NewMessage(outgoing=True))
