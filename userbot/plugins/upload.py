@@ -37,8 +37,7 @@ async def catlst_of_files(path):
 def get_video_thumb(file, output=None, width=320):
     output = file + ".jpg"
     metadata = extractMetadata(createParser(file))
-    p = subprocess.Popen(
-        [
+    cmd = [
             "ffmpeg",
             "-i",
             file,
@@ -50,7 +49,9 @@ def get_video_thumb(file, output=None, width=320):
             "-vframes",
             "1",
             output,
-        ],
+        ]
+    p = subprocess.Popen(
+        cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
     )
