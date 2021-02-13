@@ -88,7 +88,6 @@ def num_blacklist_filter_chats():
 
 
 def __load_chat_blacklists():
-    global BLACKLIST_SQL_.CHAT_BLACKLISTS
     try:
         chats = SESSION.query(BlackListFilters.chat_id).distinct().all()
         for (chat_id,) in chats:  # remove tuple by ( ,)
