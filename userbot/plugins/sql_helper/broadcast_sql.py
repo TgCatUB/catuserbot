@@ -29,11 +29,14 @@ CatBroadcast.__table__.create(checkfirst=True)
 
 CATBROADCAST_INSERTION_LOCK = threading.RLock()
 
-class BROADCAST_SQL():
+
+class BROADCAST_SQL:
     def __init__(self):
         self.BROADCAST_CHANNELS = {}
 
+
 BROADCAST_SQL_ = BROADCAST_SQL()
+
 
 def add_to_broadcastlist(keywoard, group_id):
     with CATBROADCAST_INSERTION_LOCK:
@@ -49,7 +52,9 @@ def rm_from_broadcastlist(keywoard, group_id):
         broadcast_group = SESSION.query(CatBroadcast).get((keywoard, str(group_id)))
         if broadcast_group:
             if str(group_id) in BROADCAST_SQL_.BROADCAST_CHANNELS.get(keywoard, set()):
-                BROADCAST_SQL_.BROADCAST_CHANNELS.get(keywoard, set()).remove(str(group_id))
+                BROADCAST_SQL_.BROADCAST_CHANNELS.get(keywoard, set()).remove(
+                    str(group_id)
+                )
 
             SESSION.delete(broadcast_group)
             SESSION.commit()
@@ -123,7 +128,9 @@ def __load_chat_broadcastlists():
         for x in all_groups:
             BROADCAST_SQL_.BROADCAST_CHANNELS[x.keywoard] += [x.group_id]
 
-        BROADCAST_SQL_.BROADCAST_CHANNELS = {x: set(y) for x, y in BROADCAST_SQL_.BROADCAST_CHANNELS.items()}
+        BROADCAST_SQL_.BROADCAST_CHANNELS = {
+            x: set(y) for x, y in BROADCAST_SQL_.BROADCAST_CHANNELS.items()
+        }
 
     finally:
         SESSION.close()
