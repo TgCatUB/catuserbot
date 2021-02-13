@@ -53,6 +53,7 @@ async def _(event):
         if input_str == "scan":
             await edit_or_reply(catevent, response4.text)
         else:
+            await catevent.delete()
             await event.client.send_file(
                 event.chat_id, response3.media, reply_to=(await reply_id(event))
             )
