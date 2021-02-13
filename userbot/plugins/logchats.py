@@ -17,6 +17,7 @@ class LOG_CHATS:
 LOG_CHATS_ = LOG_CHATS()
 
 if Config.NO_LOG_PMS:
+
     @bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
     async def monito_p_m_s(event):
         if not Config.PM_LOGGR_BOT_API_ID:
@@ -54,7 +55,9 @@ if Config.NO_LOG_PMS:
                 except Exception as e:
                     LOGS.warn(str(e))
 
+
 if Config.NO_LOG_GROUPS:
+
     @bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
     async def log_tagged_messages(event):
         hmm = await event.get_chat()
@@ -75,9 +78,7 @@ if Config.NO_LOG_GROUPS:
         messaget = media_type(event)
         resalt = f"#TAGS \n<b>Group : </b><code>{hmm.title}</code>"
         if full is not None:
-            resalt += (
-                f"\n<b>From : </b> 👤{_format.htmlmentionuser(full.first_name , full.id)}"
-            )
+            resalt += f"\n<b>From : </b> 👤{_format.htmlmentionuser(full.first_name , full.id)}"
         if messaget is not None:
             resalt += f"\n<b>Message type : </b><code>{messaget}</code>"
         else:
