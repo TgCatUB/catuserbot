@@ -44,7 +44,7 @@ async def _(event):
             channel=event.chat_id, user_id=event.client.uid
         )
     )
-    if not result:
+    if not result.participant.admin_rights.ban_users:
         return await edit_or_reply(
             event, "`It seems like you dont have ban users permission in this group.`"
         )
