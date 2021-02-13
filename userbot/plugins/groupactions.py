@@ -12,7 +12,7 @@ from telethon.tl.types import (
     UserStatusOnline,
     UserStatusRecently,
 )
-from telethon.tl.types import ChannelParticipantAdmins
+
 from . import BOTLOG, BOTLOG_CHATID
 
 
@@ -34,27 +34,40 @@ async def _(event):
     admin = chat.admin_rights
     creator = chat.creator
     if not admin and not creator:
-        await edit_or_reply(event, "`You are not admin of this chat to perform this action`")
+        await edit_or_reply(
+            event, "`You are not admin of this chat to perform this action`"
+        )
         return
-    result =await  event.client(functions.channels.GetParticipantRequest(channel=event.chat_id,user_id=event.client.uid))
+    result = await event.client(
+        functions.channels.GetParticipantRequest(
+            channel=event.chat_id, user_id=event.client.uid
+        )
+    )
     if not result:
-        return await edit_or_reply(event,"`It seems like you dont have ban users permission in this group.`")
+        return await edit_or_reply(
+            event, "`It seems like you dont have ban users permission in this group.`"
+        )
     catevent = await edit_or_reply(event, "`Kicking...`")
-    admins = await event.client.get_participants(event.chat_id, filter=ChannelParticipantsAdmins)
+    admins = await event.client.get_participants(
+        event.chat_id, filter=ChannelParticipantsAdmins
+    )
     admins_id = [i.id for i in admins]
-    total = 0 
-    success = 0 
+    total = 0
+    success = 0
     async for user in event.client.iter_participants(event.chat_id):
-        total +=1
+        total += 1
         try:
             if user.id not in admins_id:
                 await event.client.kick_participant(event.chat_id, user.id)
-                success +=1
+                success += 1
                 await sleep(0.5)
         except Exception as e:
             LOGS.info(str(e))
             await sleep(0.5)
-    await catevent.edit(f"`Sucessfully i have completed kickall process with {success} members kicked out of {total} members`")
+    await catevent.edit(
+        f"`Sucessfully i have completed kickall process with {success} members kicked out of {total} members`"
+    )
+
 
 @bot.on(admin_cmd(pattern="banall ?(.*)"))
 @bot.on(sudo_cmd(pattern="banall ?(.*)", allow_sudo=True))
@@ -68,29 +81,39 @@ async def _(event):
     admin = chat.admin_rights
     creator = chat.creator
     if not admin and not creator:
-        await edit_or_reply(event, "`You are not admin of this chat to perform this action`")
+        await edit_or_reply(
+            event, "`You are not admin of this chat to perform this action`"
+        )
         return
-    result =await  event.client(functions.channels.GetParticipantRequest(channel=event.chat_id,user_id=event.client.uid))
+    result = await event.client(
+        functions.channels.GetParticipantRequest(
+            channel=event.chat_id, user_id=event.client.uid
+        )
+    )
     if not result:
-        return await edit_or_reply(event,"`It seems like you dont have ban users permission in this group.`")
+        return await edit_or_reply(
+            event, "`It seems like you dont have ban users permission in this group.`"
+        )
     catevent = await edit_or_reply(event, "`banning...`")
-    admins = await event.client.get_participants(event.chat_id, filter=ChannelParticipantsAdmins)
+    admins = await event.client.get_participants(
+        event.chat_id, filter=ChannelParticipantsAdmins
+    )
     admins_id = [i.id for i in admins]
-    total = 0 
-    success = 0 
+    total = 0
+    success = 0
     async for user in event.client.iter_participants(event.chat_id):
-        total +=1
+        total += 1
         try:
             if user.id not in admins_id:
                 await event.client.kick_participant(event.chat_id, user.id)
-                success +=1
+                success += 1
                 await sleep(0.5)
         except Exception as e:
             LOGS.info(str(e))
             await sleep(0.5)
-    await catevent.edit(f"`Sucessfully i have completed banall process with {success} members banned out of {total} members`")    
-
-
+    await catevent.edit(
+        f"`Sucessfully i have completed banall process with {success} members banned out of {total} members`"
+    )
 
 
 @bot.on(admin_cmd(pattern="unbanall ?(.*)"))
