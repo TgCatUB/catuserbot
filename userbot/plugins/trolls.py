@@ -152,7 +152,7 @@ async def catbot(catmemes):
             catmemes,
             "**Syntax :** reply to image or sticker with `.phub (username)|(text in comment)`",
         )
-        return=
+        return
     replied = await catmemes.get_reply_message()
     catid = await reply_id(catmemes)
     if not replied:
