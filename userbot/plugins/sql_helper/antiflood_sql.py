@@ -84,7 +84,6 @@ def migrate_chat(old_chat_id, new_chat_id):
 
 
 def __load_flood_settings():
-    global ANTIFLOOD_SQL_.CHAT_FLOOD
     try:
         all_chats = SESSION.query(FloodControl).all()
         ANTIFLOOD_SQL_.CHAT_FLOOD = {chat.chat_id: (None, DEF_COUNT, chat.limit) for chat in all_chats}
