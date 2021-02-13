@@ -39,14 +39,16 @@ async def _(event):
             await event.client.forward_messages(chat, reply_message)
             response1 = await conv.get_response()
             if reponse1.text:
-                return await catevent.edit(response1.text,parse_mode=parse_pre)
+                return await catevent.edit(response1.text, parse_mode=parse_pre)
             await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
             response3 = await conv.get_response()
             response4 = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            return await catevent.edit("`You blocked `@VS_Robot` Unblock it and give a try`")
+            return await catevent.edit(
+                "`You blocked `@VS_Robot` Unblock it and give a try`"
+            )
         if input_str == "scan":
             await edit_or_reply(catevent, response4.text)
         else:
