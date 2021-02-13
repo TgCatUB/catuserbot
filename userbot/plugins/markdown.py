@@ -31,7 +31,6 @@ def parse_url_match(m):
 
 
 def get_tag_parser(tag, entity):
-    # TODO unescape escaped tags?
     def tag_parser(m):
         return m.group(1), entity(offset=m.start(), length=len(m.group(1)))
 
