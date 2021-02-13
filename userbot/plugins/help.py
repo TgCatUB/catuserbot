@@ -11,12 +11,10 @@ from .sql_helper.globals import addgvar, gvarstatus
 async def cmd_list(event):
     if event.fwd_from:
         return
-    if (gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "true") or not gvarstatus(
-        "HELPTYPE"
-    ):
-        HELPTYPE = True
-    else:
+    if gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "false":
         HELPTYPE = False
+    else:
+        HELPTYPE = True
     reply_to_id = await reply_id(event)
     input_str = event.pattern_match.group(1)
     if input_str == "text":
@@ -201,14 +199,10 @@ async def _(event):
         return
     input_str = event.pattern_match.group(1)
     h_type = input_str == "true"
-    if (
-        gvarstatus("HELPTYPE")
-        and gvarstatus("HELPTYPE") == "true"
-        or not gvarstatus("HELPTYPE")
-    ):
-        HELPTYPE = True
-    else:
+    if gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "false":
         HELPTYPE = False
+    else:
+        HELPTYPE = True
     if HELPTYPE:
         if h_type:
             await event.edit("`inline mode is already enabled`")
