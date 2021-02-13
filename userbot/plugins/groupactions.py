@@ -260,7 +260,7 @@ async def ban_user(chat_id, i, rights):
 
 CMD_HELP.update(
     {
-        "groupdata": "**Plugin : **`groupdata`\
+        "groupactions": "**Plugin : **`groupactions`\
     \n\n•  **Syntax : **`.kickme`\
     \n•  **Function : **__Throws you away from that chat_\
     \n\n•  **Syntax : **`.unbanall`\
