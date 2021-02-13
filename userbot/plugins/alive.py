@@ -8,9 +8,10 @@ from . import ALIVE_NAME, StartTime, catversion, get_readable_time, mention, rep
 
 DEFAULTUSER = ALIVE_NAME or "cat"
 CAT_IMG = Config.ALIVE_PIC
+LAT_IMG = random.choice(Config.ALIVE_PIC)
 TAT_IMG = Config.ALIVE_PIC_2
 FAT_IMG = [
-            CAT_IMG,
+            LAT_IMG,
             TAT_IMG,
     ]
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
