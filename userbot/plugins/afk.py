@@ -156,11 +156,11 @@ async def _(event):
     reply = await event.get_reply_message()
     media_t = media_type(reply)
     if media_t == "Sticker" or not media_t:
-        return await edit_reply(
+        return await edit_or_reply(
             event, "`You haven't replied to any media to activate medai afk`"
         )
     if not BOTLOG:
-        return await edit_reply(
+        return await edit_or_reply(
             event, "`To use media afk you need to set PRIVATE_GROUP_BOT_API_ID config`"
         )
     AFK_.MUSERAFK_ON = {}
