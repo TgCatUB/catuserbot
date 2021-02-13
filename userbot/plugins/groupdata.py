@@ -1,6 +1,4 @@
-import asyncio
 import io
-from asyncio import sleep
 from datetime import datetime
 from math import sqrt
 
@@ -9,10 +7,7 @@ from telethon.errors import (
     ChannelInvalidError,
     ChannelPrivateError,
     ChannelPublicGroupNaError,
-    ChatAdminRequiredError,
-    UserAdminInvalidError,
 )
-from telethon.tl import functions
 from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
 from telethon.tl.functions.messages import GetFullChatRequest, GetHistoryRequest
 from telethon.tl.types import (
@@ -20,15 +15,7 @@ from telethon.tl.types import (
     ChannelParticipantCreator,
     ChannelParticipantsAdmins,
     ChannelParticipantsBots,
-    ChannelParticipantsKicked,
-    ChatBannedRights,
     MessageActionChannelMigrateFrom,
-    UserStatusEmpty,
-    UserStatusLastMonth,
-    UserStatusLastWeek,
-    UserStatusOffline,
-    UserStatusOnline,
-    UserStatusRecently,
 )
 from telethon.utils import get_input_location
 
@@ -195,8 +182,6 @@ async def info(event):
                 BOTLOG_CHATID, f"**Error in chatinfo : **\n`{str(e)}`"
             )
         await catevent.edit("`An unexpected error has occurred.`")
-
-
 
 
 async def get_chatinfo(event, catevent):
