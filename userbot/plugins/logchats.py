@@ -62,7 +62,9 @@ async def monito_p_m_s(event):
 async def log_tagged_messages(event):
     hmm = await event.get_chat()
     from .afk import AFK_
-
+    
+    if gvarstatus("GRPLOG") and gvarstatus("GRPLOG") == "false":
+        return
     if (
         (no_log_pms_sql.is_approved(hmm.id))
         or (not Config.PM_LOGGR_BOT_API_ID)
@@ -163,6 +165,32 @@ async def set_pmlog(event):
         else:
             await event.edit("`Pm logging is already disabled`")
 
+@bot.on(admin_cmd(pattern="grplog (on|off)$"))
+async def set_grplog(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    if input_str == "off":
+        h_type = False
+    elif input_str == "on":
+        h_type = True
+    if gvarstatus("GRPLOG") and gvarstatus("GRPLOG") == "true" or not gvarstatus("GRPLOG"):
+        PMLOG = True
+    else:
+        PMLOG = False
+    if PMLOG:
+        if h_type:
+            await event.edit("`Group logging is already enabled`")
+        else:
+            addgvar("GRPLOG", h_type)
+            await event.edit("`Group logging is disabled`")
+    else:
+        if h_type:
+            addgvar("GRPLOG", h_type)
+            await event.edit("`Group logging is enabled`")
+        else:
+            await event.edit("`Group logging is already disabled`")
+            
 
 CMD_HELP.update(
     {
@@ -172,6 +200,10 @@ CMD_HELP.update(
         \n\n•  **Syntax : **`.log`\
         \n•  **Function : **__By default will log all private chat messages if you use .nolog and want to log again then you need to use this__\
         \n\n•  **Syntax : **`.nolog`\
-        \n•  **Function : **__Stops logging from a private chat or group where you used__"
+        \n•  **Function : **__Stops logging from a private chat or group where you used__\
+        \n\n•  **Syntax : **`.pmlog on/off`\
+        \n•  **Function : **__To turn on and turn off personal messages logging__\
+        \n\n•  **Syntax : **`.nolog`\
+        \n•  **Function : **__To turn on and turn off Group messages(tagged) logging__"
     }
 )
