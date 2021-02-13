@@ -254,13 +254,14 @@ async def _(event):
 CMD_HELP.update(
     {
         "afk": """**Plugin : **`afk`
+__afk means away from keyboard/keypad__
+
 •  **Syntax : **`.mafk [Optional Reason]`
 •  **Function : **__Sets you as afk and Replies to anyone who tags/PM's you telling them that you are in AFK(reason) with the media which you replied using mafk.__
 
 •  **Syntax : **`.afk [Optional Reason]`
-•  **Function : **__Sets you as afk and Replies to anyone who tags/PM's you telling them that you are in AFK(reason).\
+•  **Function : **__Sets you as afk and Replies to anyone who tags/PM's you telling them that you are in AFK(reason).__
 
-afk means away from keyboard/keypad.__
 •  **Note :** If you want AFK with hyperlink use [ ; ] after reason, then paste the media link.
 •  **Example :** `.afk busy now ; <Media_link>`
 
