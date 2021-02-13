@@ -38,7 +38,7 @@ async def _(event):
             await conv.get_response()
             await event.client.forward_messages(chat, reply_message)
             response1 = await conv.get_response()
-            if reponse1.text:
+            if response1.text:
                 return await catevent.edit(response1.text, parse_mode=parse_pre)
             await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
