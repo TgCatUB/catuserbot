@@ -35,11 +35,14 @@ async def _(event):
     async with event.client.conversation(chat) as conv:
         try:
             await conv.send_message("/start")
+            await conv.get_response()
             await event.client.forward_messages(chat, reply_message)
             await conv.get_response()
             await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
             response3 = await conv.get_response()
             response4 = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
             await catevent.edit("`You blocked `@VS_Robot` Unblock it and give a try`")
             return
