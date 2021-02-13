@@ -38,18 +38,16 @@ def get_video_thumb(file, output=None, width=320):
     output = file + ".jpg"
     metadata = extractMetadata(createParser(file))
     cmd = [
-            "ffmpeg",
-            "-i",
-            file,
-            "-ss",
-            str(
-                int((0, metadata.get("duration").seconds)[metadata.has("duration")] / 2)
-            ),
-            # '-filter:v', 'scale={}:-1'.format(width),
-            "-vframes",
-            "1",
-            output,
-        ]
+        "ffmpeg",
+        "-i",
+        file,
+        "-ss",
+        str(int((0, metadata.get("duration").seconds)[metadata.has("duration")] / 2)),
+        # '-filter:v', 'scale={}:-1'.format(width),
+        "-vframes",
+        "1",
+        output,
+    ]
     p = subprocess.Popen(
         cmd,
         stdout=subprocess.PIPE,

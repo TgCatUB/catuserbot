@@ -7,7 +7,7 @@ import os
 from telegraph import exceptions, upload_file
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-from . import threats, trash,deEmojify,trap,phcomment
+from . import deEmojify, phcomment, threats, trap, trash
 
 
 @bot.on(admin_cmd(pattern="threats$"))
@@ -31,8 +31,8 @@ async def catbot(catmemes):
         pass
     if size > 5242880:
         await output[0].edit(
-                "the replied file size is not supported it must me below 5 mb"
-            )
+            "the replied file size is not supported it must me below 5 mb"
+        )
         os.remove(download_location)
         return
     await output[0].edit("generating image..")
@@ -70,8 +70,8 @@ async def catbot(catmemes):
         pass
     if size > 5242880:
         await output[0].edit(
-                "the replied file size is not supported it must me below 5 mb"
-            )
+            "the replied file size is not supported it must me below 5 mb"
+        )
         os.remove(download_location)
         return
     await output[0].edit("generating image..")
@@ -86,7 +86,6 @@ async def catbot(catmemes):
     cat = await trash(cat)
     await output[0].delete()
     await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=catid)
-
 
 
 @bot.on(admin_cmd(pattern="trap(?: |$)(.*)"))
@@ -120,8 +119,8 @@ async def catbot(catmemes):
         pass
     if size > 5242880:
         await output[0].edit(
-                "the replied file size is not supported it must me below 5 mb"
-            )
+            "the replied file size is not supported it must me below 5 mb"
+        )
         os.remove(download_location)
         return
     await output[0].edit("generating image..")
@@ -169,8 +168,8 @@ async def catbot(catmemes):
         pass
     if size > 5242880:
         await output[0].edit(
-                "the replied file size is not supported it must me below 5 mb"
-            )
+            "the replied file size is not supported it must me below 5 mb"
+        )
         os.remove(download_location)
         return
     await output[0].edit("generating image..")
