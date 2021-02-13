@@ -11,7 +11,10 @@ from .sql_helper.globals import addgvar, gvarstatus
 async def cmd_list(event):
     if event.fwd_from:
         return
-    HELPTYPE = gvarstatus("HELPTYPE") or True
+    if (gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE")=="true") or not gvarstatus("HELPTYPE"):
+        HELPTYPE=True
+    else:
+        HELPTYPE = False
     reply_to_id = await reply_id(event)
     input_str = event.pattern_match.group(1)
     if input_str == "text":
