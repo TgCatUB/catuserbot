@@ -5,7 +5,7 @@ from telethon import events
 
 from . import BOTLOG, BOTLOG_CHATID, LOGS
 from .sql_helper import no_log_pms_sql
-
+from .sql_helper.globals import addgvar, gvarstatus
 
 class LOG_CHATS:
     def __init__(self):
@@ -16,11 +16,11 @@ class LOG_CHATS:
 
 LOG_CHATS_ = LOG_CHATS()
 
-if Config.NO_LOG_PMS:
-
-    @bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
-    async def monito_p_m_s(event):
+@bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
+async def monito_p_m_s(event):
         if not Config.PM_LOGGR_BOT_API_ID:
+            return
+        if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
             return
         sender = await event.get_sender()
         if not sender.bot:
@@ -56,10 +56,8 @@ if Config.NO_LOG_PMS:
                     LOGS.warn(str(e))
 
 
-if Config.NO_LOG_GROUPS:
-
-    @bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
-    async def log_tagged_messages(event):
+@bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
+async def log_tagged_messages(event):
         hmm = await event.get_chat()
         from .afk import AFK_
 
@@ -134,7 +132,37 @@ async def set_no_log_p_m(event):
                 event, "`Logging of messages from this chat has been stopped`", 5
             )
 
+@bot.on(admin_cmd(pattern="pmlog (on|off)$"))
+async def set_pmlog(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    if input_str == "off":
+        h_type = False
+    elif input_str == "on":
+        h_type = True
+    if (
+        gvarstatus("PMLOG")
+        and gvarstatus("PMLOG") == "true"
+        or not gvarstatus("PMLOG")
+    ):
+        PMLOG = True
+    else:
+        PMLOG = False
+    if PMLOG:
+        if h_type:
+            await event.edit("`Pm logging is already enabled`")
+        else:
+            addgvar("PMLOG", h_type)
+            await event.edit("`Pm logging is disabled`")
+    else:
+        if h_type:
+            addgvar("PMLOG", h_type)
+            await event.edit("`Pm logging is enabled`")
+        else:
+            await event.edit("`Pm logging is already disabled`")
 
+    
 CMD_HELP.update(
     {
         "logchats": "**Plugin : **`logchats`\
