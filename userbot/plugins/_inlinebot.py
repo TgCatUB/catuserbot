@@ -81,9 +81,11 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                     note_data += markdown_note[prev : match.start(1)]
                     prev = match.end(1)
                 # if odd, escaped -> move along
-                else:
+                elif n_escapes % 2 == 1:
                     note_data += markdown_note[prev:to_check]
                     prev = match.start(1) - 1
+                else:
+                    break
             else:
                 note_data += markdown_note[prev:]
             message_text = note_data.strip()
