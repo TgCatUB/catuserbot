@@ -69,6 +69,7 @@ async def set_not_afk(event):
                 + "`",
             )
 
+
 @bot.on(
     events.NewMessage(incoming=True, func=lambda e: bool(e.mentioned or e.is_private))
 )
@@ -114,9 +115,7 @@ async def on_afk(event):
                     f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
                 )
             else:
-                message_to_reply = (
-                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
-                )
+                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
             if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
                 msg = await event.reply(message_to_reply)
         elif AFK_.afk_type == "media":
@@ -125,9 +124,7 @@ async def on_afk(event):
                     f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
                 )
             else:
-                message_to_reply = (
-                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
-                )
+                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
             if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
                 msg = await event.reply(message_to_reply, file=AFK_.media_afk.media)
         if event.chat_id in AFK_.last_afk_message:
@@ -220,7 +217,7 @@ async def _(event):
         )
     AFK_.USERAFK_ON = {}
     AFK_.afk_time = None
-    AFK_.last_afk_message  = {}
+    AFK_.last_afk_message = {}
     AFK_.afk_end = {}
     AFK_.media_afk = None
     AFK_.afk_type = "media"
