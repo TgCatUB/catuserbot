@@ -257,6 +257,43 @@ async def timer_blankx(e):
     )
 
 
+@bot.on(admin_cmd(pattern=r"lol$"))
+@bot.on(sudo_cmd(pattern="lol$", allow_sudo=True))
+async def lol(event):
+    if event.fwd_from:
+        return
+    await edit_or_reply(
+        event, "😂\n😂\n😂\n😂\n😂😂😂😂\n\n   😂😂😂\n 😂         😂\n😂           😂\n 😂         😂\n   😂😂😂\n\n😂\n😂\n😂\n😂\n😂😂😂😂"
+    )
+
+
+@bot.on(admin_cmd(pattern=r"wtff$"))
+@bot.on(sudo_cmd(pattern="wtff$", allow_sudo=True))
+async def wtff(event):
+    if event.fwd_from:
+        return
+    await edit_or_reply(
+        event, "🤬               🤬\n🤬               🤬\n🤬               🤬\n🤬     🤬     🤬\n🤬🤬    🤬🤬\n\n🤬🤬🤬🤬\n       🤬\n       🤬\n       🤬\n       🤬\n\n🤬🤬🤬🤬\n🤬\n🤬🤬🤬\n🤬\n🤬"
+    )
+
+
+@bot.on(admin_cmd(pattern=r"bro$"))
+@bot.on(sudo_cmd(pattern="bro$", allow_sudo=True))
+async def bro(event):
+    if event.fwd_from:
+        return
+    await edit_or_reply(
+        event, ("`\n╱╭━━╮╱╱╱╱╱╱╱ `"
+                "`\n╱┃╭╮┃╱╱╱╱╱╱╱ `"       
+                "`\n╱┃╰╯╰┳━┳━━╮╱ `" 
+                "`\n╱┃╭━╮┃╭┫╭╮┃╱ `"
+                "`\n╱┃╰━╯┃┃┃╰╯┃╱ `"
+                "`\n╱╰━━━┻╯╰━━╯╱ `")
+		
+    )
+
+
+
 CMD_HELP.update(
     {
         "animation1": """**Plugin : **`animation1`
@@ -272,7 +309,10 @@ CMD_HELP.update(
   •  `.candy`
   •  `.gangasta`
   •  `.charging` 
-  
+  •  `.lol`
+  •  `.wtff`
+  •  `.bro`
+
 **Function : **__Different kinds of animation commands check yourself for their animation .__"""
     }
 )
