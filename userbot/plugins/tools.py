@@ -35,14 +35,12 @@ async def _(event):
     catevent = await edit_or_reply(event, " `Sliding my tip, of fingers over it`")
     async with event.client.conversation(chat) as conv:
         try:
-            response = conv.wait_event(
-                events.NewMessage(incoming=True, from_users=299969270)
-            )
+            await conv.send_message("/start")
             await event.client.forward_messages(chat, reply_message)
-            await response
-            await response
-            response3 = await response
-            response4 = await response
+            await conv.get_response()
+            await conv.get_response()
+            response3 = await conv.get_response()
+            response4 = await conv.get_response()
         except YouBlockedUserError:
             await catevent.edit("`You blocked `@VS_Robot` Unblock it and give a try`")
             return
