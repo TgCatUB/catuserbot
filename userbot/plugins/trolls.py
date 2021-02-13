@@ -7,7 +7,7 @@ import os
 from telegraph import exceptions, upload_file
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-from . import deEmojify, phcomment, threats, trap, trash
+from . import deEmojify, phcomment, threats, trap, trash,convert_toimage
 
 
 @bot.on(admin_cmd(pattern="threats$"))
