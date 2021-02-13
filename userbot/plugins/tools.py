@@ -39,18 +39,19 @@ async def _(event):
                 events.NewMessage(incoming=True, from_users=299969270)
             )
             await event.client.forward_messages(chat, reply_message)
-            response1 = await response
-            response2 = await response
+            await response
+            await response
             response3 = await response
             response4 = await response
         except YouBlockedUserError:
             await catevent.edit("`You blocked `@VS_Robot` Unblock it and give a try`")
             return
         if input_str == "scan":
-            await edit_or_reply(catevent,response4.text)
+            await edit_or_reply(catevent, response4.text)
         else:
-            await event.client.send_file(event.chat_id , response3.media , reply_to=(await reply_id(event)))
-            
+            await event.client.send_file(
+                event.chat_id, response3.media, reply_to=(await reply_id(event))
+            )
 
 
 @bot.on(admin_cmd(pattern=r"decode$", outgoing=True))
@@ -243,8 +244,7 @@ async def currencylist(ups):
     current_response = requests.get(request_url).json()
     dil_wale_puch_de_na_chaaa = current_response["rates"]
     hmm = "".join(
-        f"`{key}`" + "\t\t\t"
-        for key, value in dil_wale_puch_de_na_chaaa.items()
+        f"`{key}`" + "\t\t\t" for key, value in dil_wale_puch_de_na_chaaa.items()
     )
 
     await edit_or_reply(ups, f"**List of some currencies:**\n{hmm}\n")
