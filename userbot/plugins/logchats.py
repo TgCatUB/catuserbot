@@ -148,10 +148,10 @@ async def set_pmlog(event):
         h_type = False
     elif input_str == "on":
         h_type = True
-    if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "true" or not gvarstatus("PMLOG"):
-        PMLOG = True
-    else:
+    if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
         PMLOG = False
+    else:
+        PMLOG = True
     if PMLOG:
         if h_type:
             await event.edit("`Pm logging is already enabled`")
@@ -175,15 +175,11 @@ async def set_grplog(event):
         h_type = False
     elif input_str == "on":
         h_type = True
-    if (
-        gvarstatus("GRPLOG")
-        and gvarstatus("GRPLOG") == "true"
-        or not gvarstatus("GRPLOG")
-    ):
-        PMLOG = True
+    if gvarstatus("GRPLOG") and gvarstatus("GRPLOG") == "false":
+        GRPLOG = False
     else:
-        PMLOG = False
-    if PMLOG:
+        GRPLOG = True
+    if GRPLOG:
         if h_type:
             await event.edit("`Group logging is already enabled`")
         else:
