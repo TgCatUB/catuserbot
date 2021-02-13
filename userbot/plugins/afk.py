@@ -149,7 +149,6 @@ async def on_afk(event):
             )
 
 
-
 @bot.on(events.NewMessage(outgoing=True))
 async def set_not_afk(event):
     if event.chat_id in Config.UB_BLACK_LIST_CHAT:
@@ -317,6 +316,7 @@ async def _(event):
                     f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
                 )
 
+
 @bot.on(admin_cmd(pattern=r"mafk ?(.*)", outgoing=True))
 async def _(event):
     if event.fwd_from:
@@ -364,6 +364,7 @@ async def _(event):
                 BOTLOG_CHATID,
                 f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
             )
+
 
 CMD_HELP.update(
     {
