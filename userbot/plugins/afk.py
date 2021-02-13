@@ -130,6 +130,8 @@ async def on_afk(event):
         if event.chat_id in AFK_.last_afk_message:
             await AFK_.last_afk_message[event.chat_id].delete()
         AFK_.last_afk_message[event.chat_id] = msg
+        if event.is_private:
+            return
         hmm = await event.get_chat()
         if not Config.PM_LOGGR_BOT_API_ID:
             return
