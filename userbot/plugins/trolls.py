@@ -26,7 +26,7 @@ async def catbot(catmemes):
     size = os.stat(download_location).st_size
     try:
         san = Get(san)
-        await cat.client(san)
+        await catmemes.client(san)
     except BaseException:
         pass
     if size > 5242880:
@@ -65,7 +65,7 @@ async def catbot(catmemes):
     size = os.stat(download_location).st_size
     try:
         san = Get(san)
-        await cat.client(san)
+        await catmemes.client(san)
     except BaseException:
         pass
     if size > 5242880:
@@ -114,7 +114,7 @@ async def catbot(catmemes):
     size = os.stat(download_location).st_size
     try:
         san = Get(san)
-        await cat.client(san)
+        await catmemes.client(san)
     except BaseException:
         pass
     if size > 5242880:
@@ -163,7 +163,7 @@ async def catbot(catmemes):
     size = os.stat(download_location).st_size
     try:
         san = Get(san)
-        await cat.client(san)
+        await catmemes.client(san)
     except BaseException:
         pass
     if size > 5242880:
