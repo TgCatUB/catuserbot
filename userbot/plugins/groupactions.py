@@ -1,28 +1,11 @@
 import asyncio
-import io
 from asyncio import sleep
-from datetime import datetime
-from math import sqrt
 
-from emoji import emojize
-from telethon.errors import (
-    ChannelInvalidError,
-    ChannelPrivateError,
-    ChannelPublicGroupNaError,
-    ChatAdminRequiredError,
-    UserAdminInvalidError,
-)
+from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError
 from telethon.tl import functions
-from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
-from telethon.tl.functions.messages import GetFullChatRequest, GetHistoryRequest
 from telethon.tl.types import (
-    ChannelParticipantAdmin,
-    ChannelParticipantCreator,
-    ChannelParticipantsAdmins,
-    ChannelParticipantsBots,
     ChannelParticipantsKicked,
     ChatBannedRights,
-    MessageActionChannelMigrateFrom,
     UserStatusEmpty,
     UserStatusLastMonth,
     UserStatusLastWeek,
@@ -30,15 +13,16 @@ from telethon.tl.types import (
     UserStatusOnline,
     UserStatusRecently,
 )
-from telethon.utils import get_input_location
 
 from . import BOTLOG, BOTLOG_CHATID
+
 
 @bot.on(admin_cmd(outgoing=True, pattern="kickme$"))
 async def kickme(leave):
     await leave.edit("Nope, no, no, I go away")
     await leave.client.kick_participant(leave.chat_id, "me")
-    
+
+
 @bot.on(admin_cmd(pattern="unbanall ?(.*)"))
 @bot.on(sudo_cmd(pattern="unbanall ?(.*)", allow_sudo=True))
 async def _(event):
@@ -273,6 +257,7 @@ async def ban_user(chat_id, i, rights):
     except Exception as exc:
         return False, str(exc)
 
+
 CMD_HELP.update(
     {
         "groupdata": "**Plugin : **`groupdata`\
@@ -286,4 +271,3 @@ CMD_HELP.update(
     \n•  **Function : **__Searches for deleted accounts in a group. Use `.zombies clean` to remove deleted accounts from the group.__"
     }
 )
-    
