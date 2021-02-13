@@ -22,26 +22,26 @@ async def monito_p_m_s(event):
     if not Config.PM_LOGGR_BOT_API_ID:
         return
     sender = await event.get_sender()
-    if Config.NO_LOG_P_M_S and not sender.bot:
+    if Config.NO_LOG_PMS and not sender.bot:
         chat = await event.get_chat()
         if not no_log_pms_sql.is_approved(chat.id) and chat.id != 777000:
-            if LOG_CHATS.RECENT_USER != chat.id:
-                LOG_CHATS.RECENT_USER = chat.id
-                if LOG_CHATS.NEWPM:
-                    if LOG_CHATS.COUNT > 1:
-                        await LOG_CHATS.NEWPM.edit(
-                            LOG_CHATS.NEWPM.text.replace(
-                                "new message", f"{LOG_CHATS.COUNT} messages"
+            if LOG_CHATS_.RECENT_USER != chat.id:
+                LOG_CHATS_.RECENT_USER = chat.id
+                if LOG_CHATS_.NEWPM:
+                    if LOG_CHATS_.COUNT > 1:
+                        await LOG_CHATS_.NEWPM.edit(
+                            LOG_CHATS_.NEWPM.text.replace(
+                                "new message", f"{LOG_CHATS_.COUNT} messages"
                             )
                         )
                     else:
-                        await LOG_CHATS.NEWPM.edit(
-                            LOG_CHATS.NEWPM.text.replace(
-                                "new message", f"{LOG_CHATS.COUNT} message"
+                        await LOG_CHATS_.NEWPM.edit(
+                            LOG_CHATS_.NEWPM.text.replace(
+                                "new message", f"{LOG_CHATS_.COUNT} message"
                             )
                         )
-                    LOG_CHATS.COUNT = 0
-                LOG_CHATS.NEWPM = await event.client.send_message(
+                    LOG_CHATS_.COUNT = 0
+                LOG_CHATS_.NEWPM = await event.client.send_message(
                     Config.PM_LOGGR_BOT_API_ID,
                     f"👤{_format.mentionuser(sender.first_name , sender.id)} has sent a new message \nId : `{chat.id}`",
                 )
@@ -50,7 +50,7 @@ async def monito_p_m_s(event):
                     await event.client.forward_messages(
                         Config.PM_LOGGR_BOT_API_ID, event.message, silent=True
                     )
-                LOG_CHATS.COUNT += 1
+                LOG_CHATS_.COUNT += 1
             except Exception as e:
                 LOGS.warn(str(e))
 
