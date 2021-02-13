@@ -196,8 +196,15 @@ async def _(event):
         return
     input_str = event.pattern_match.group(1)
     h_type = input_str == "true"
-    HELPTYPE = gvarstatus("HELPTYPE") or True
-    if HELPTYPE is True:
+    if (
+        gvarstatus("HELPTYPE")
+        and gvarstatus("HELPTYPE") == "true"
+        or not gvarstatus("HELPTYPE")
+    ):
+        HELPTYPE = True
+    else:
+        HELPTYPE = False
+    if HELPTYPE:
         if h_type:
             await event.edit("`inline mode is already enabled`")
         else:
