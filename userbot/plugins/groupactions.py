@@ -1,4 +1,3 @@
-import asyncio
 from asyncio import sleep
 
 from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError
@@ -13,7 +12,7 @@ from telethon.tl.types import (
     UserStatusOnline,
     UserStatusRecently,
 )
-
+from telethon.tl.types import ChannelParticipantAdmins
 from . import BOTLOG, BOTLOG_CHATID
 
 
@@ -21,6 +20,77 @@ from . import BOTLOG, BOTLOG_CHATID
 async def kickme(leave):
     await leave.edit("Nope, no, no, I go away")
     await leave.client.kick_participant(leave.chat_id, "me")
+
+
+@bot.on(admin_cmd(pattern="kickall ?(.*)"))
+@bot.on(sudo_cmd(pattern="kickall ?(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    if not event.is_group:
+        await edit_or_reply(event, "`I don't think this is a group.`")
+        return
+    chat = await event.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+    if not admin and not creator:
+        await edit_or_reply(event, "`You are not admin of this chat to perform this action`")
+        return
+    result =await  event.client(functions.channels.GetParticipantRequest(channel=event.chat_id,user_id=event.client.uid))
+    if not result:
+        return await edit_or_reply(event,"`It seems like you dont have ban users permission in this group.`")
+    catevent = await edit_or_reply(event, "`Kicking...`")
+    admins = await event.client.get_participants(event.chat_id, filter=ChannelParticipantsAdmins)
+    admins_id = [i.id for i in admins]
+    total = 0 
+    success = 0 
+    async for user in event.client.iter_participants(event.chat_id):
+        total +=1
+        try:
+            if user.id not in admins_id:
+                await event.client.kick_participant(event.chat_id, user.id)
+                success +=1
+                await sleep(0.5)
+        except Exception as e:
+            LOGS.info(str(e))
+            await sleep(0.5)
+    await catevent.edit(f"`Sucessfully i have completed kickall process with {success} members kicked out of {total} members`")
+
+@bot.on(admin_cmd(pattern="banall ?(.*)"))
+@bot.on(sudo_cmd(pattern="banall ?(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    if not event.is_group:
+        await edit_or_reply(event, "`I don't think this is a group.`")
+        return
+    chat = await event.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+    if not admin and not creator:
+        await edit_or_reply(event, "`You are not admin of this chat to perform this action`")
+        return
+    result =await  event.client(functions.channels.GetParticipantRequest(channel=event.chat_id,user_id=event.client.uid))
+    if not result:
+        return await edit_or_reply(event,"`It seems like you dont have ban users permission in this group.`")
+    catevent = await edit_or_reply(event, "`banning...`")
+    admins = await event.client.get_participants(event.chat_id, filter=ChannelParticipantsAdmins)
+    admins_id = [i.id for i in admins]
+    total = 0 
+    success = 0 
+    async for user in event.client.iter_participants(event.chat_id):
+        total +=1
+        try:
+            if user.id not in admins_id:
+                await event.client.kick_participant(event.chat_id, user.id)
+                success +=1
+                await sleep(0.5)
+        except Exception as e:
+            LOGS.info(str(e))
+            await sleep(0.5)
+    await catevent.edit(f"`Sucessfully i have completed banall process with {success} members banned out of {total} members`")    
+
+
 
 
 @bot.on(admin_cmd(pattern="unbanall ?(.*)"))
@@ -176,7 +246,7 @@ UserStatusRecently: {}
 Bots: {}
 None: {}"""
         await et.edit(required_string.format(c, p, d, y, m, w, o, q, r, b, n))
-        await asyncio.sleep(5)
+        await sleep(5)
     await et.edit(
         """Total: {} users
 Deleted Accounts: {}
