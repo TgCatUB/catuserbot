@@ -62,7 +62,7 @@ async def autopfp_start():
             )
         i += 1
         await bot(functions.photos.UploadProfilePhotoRequest(file))
-        os.system("rm -rf donottouch.jpg")
+        await _catutils.runcmd("rm -rf donottouch.jpg")
         await asyncio.sleep(Config.CHANGE_TIME)
         AUTOPFP_START = gvarstatus("autopfp_strings") is not None
 
