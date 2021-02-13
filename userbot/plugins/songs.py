@@ -204,6 +204,7 @@ async def cat_song_fetcer(event):
             await catevent.edit(SONG_SENDING_STRING, parse_mode="html")
             await baka[0].click(0)
             await conv.get_response()
+            await conv.get_response()
             music = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
