@@ -17,9 +17,182 @@ class AFK:
         self.afk_end = {}
         self.reason = None
         self.msg_link = False
+        self.MUSERAFK_ON = {}
+        self.mafk_time = None
+        self.mlast_afk_message = {}
+        self.mafk_star = {}
+        self.mafk_end = {}
+        self.mreason = None
+        self.media_afk = None
 
 
 AFK_ = AFK()
+
+
+@bot.on(events.NewMessage(outgoing=True))
+async def set_not_afk(event):
+    if event.chat_id in Config.UB_BLACK_LIST_CHAT:
+        return
+    back_alive = datetime.now()
+    AFK_.mafk_end = back_alive.replace(microsecond=0)
+    if AFK_.mafk_star != {}:
+        total_afk_time = AFK_.mafk_end - AFK_.mafk_star
+        time = int(total_afk_time.seconds)
+        d = time // (24 * 3600)
+        time %= 24 * 3600
+        h = time // 3600
+        time %= 3600
+        m = time // 60
+        time %= 60
+        s = time
+        endtime = ""
+        if d > 0:
+            endtime += f"{d}d {h}h {m}m {s}s"
+        else:
+            if h > 0:
+                endtime += f"{h}h {m}m {s}s"
+            else:
+                endtime += f"{m}m {s}s" if m > 0 else f"{s}s"
+    current_message = event.message.message
+    if (("afk" not in current_message) or ("#afk" not in current_message)) and (
+        "on" in AFK_.MUSERAFK_ON
+    ):
+        shite = await event.client.send_message(
+            event.chat_id,
+            "`Back alive! No Longer afk.\nWas afk for " + endtime + "`",
+        )
+        AFK_.MUSERAFK_ON = {}
+        AFK_.mafk_time = None
+        await asyncio.sleep(5)
+        await shite.delete()
+        if BOTLOG:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#AFKFALSE \n`Set AFK mode to False\n"
+                + "Back alive! No Longer afk.\nWas afk for "
+                + endtime
+                + "`",
+            )
+
+
+@bot.on(
+    events.NewMessage(incoming=True, func=lambda e: bool(e.mentioned or e.is_private))
+)
+async def on_afk(event):
+    if event.fwd_from:
+        return
+    back_alivee = datetime.now()
+    AFK_.mafk_end = back_alivee.replace(microsecond=0)
+    if AFK_.mafk_star != {}:
+        total_afk_time = AFK_.mafk_end - AFK_.mafk_star
+        time = int(total_afk_time.seconds)
+        d = time // (24 * 3600)
+        time %= 24 * 3600
+        h = time // 3600
+        time %= 3600
+        m = time // 60
+        time %= 60
+        s = time
+        endtime = ""
+        if d > 0:
+            endtime += f"{d}d {h}h {m}m {s}s"
+        else:
+            if h > 0:
+                endtime += f"{h}h {m}m {s}s"
+            else:
+                endtime += f"{m}m {s}s" if m > 0 else f"{s}s"
+    current_message_text = event.message.message.lower()
+    if "afk" in current_message_text or "#afk" in current_message_text:
+        # userbot's should not reply to other userbot's
+        # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
+        return False
+    if not await event.get_sender():
+        return
+    if AFK_.MUSERAFK_ON and not (await event.get_sender()).bot:
+        msg = None
+        if AFK_.mreason:
+            message_to_reply = (
+                f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.mreason}`"
+            )
+        else:
+            message_to_reply = (
+                f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            )
+        if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
+            msg = await event.reply(message_to_reply,file=AFK_.media_afk.media)
+        if event.chat_id in AFK_.mlast_afk_message:
+            await AFK_.mlast_afk_message[event.chat_id].delete()
+        AFK_.mlast_afk_message[event.chat_id] = msg
+        hmm = await event.get_chat()
+        if not Config.PM_LOGGR_BOT_API_ID:
+            return
+        full = None
+        try:
+            full = await event.client.get_entity(event.message.from_id)
+        except Exception as e:
+            LOGS.info(str(e))
+        messaget = media_type(event)
+        resalt = f"#AFK_TAGS \n<b>Group : </b><code>{hmm.title}</code>"
+        if full is not None:
+            resalt += f"\n<b>From : </b> 👤{_format.htmlmentionuser(full.first_name , full.id)}"
+        if messaget is not None:
+            resalt += f"\n<b>Message type : </b><code>{messaget}</code>"
+        else:
+            resalt += f"\n<b>Message : </b>{event.message.message}"
+        resalt += f"\n<b>Message link: </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>"
+        if not event.is_private:
+            await event.client.send_message(
+                Config.PM_LOGGR_BOT_API_ID,
+                resalt,
+                parse_mode="html",
+                link_preview=False,
+            )
+
+
+@bot.on(admin_cmd(pattern=r"mafk ?(.*)", outgoing=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    reply = await event.get_reply_message()
+    media_t = media_type(reply)
+    if media_t == "Sticker" or not media_t:
+        return await edit_reply(event,"`You haven't replied to any media to activate medai afk`")
+    if not BOTLOG:
+        return await edit_reply(event,"`To use media afk you need to set PRIVATE_GROUP_BOT_API_ID config`")
+    AFK_.MUSERAFK_ON = {}
+    AFK_.mafk_time = None
+    AFK_.mlast_afk_message = {}
+    AFK_.mafk_end = {}
+    AFK_.media_afk = None
+    start_1 = datetime.now()
+    AFK_.mafk_star = start_1.replace(microsecond=0)
+    if not AFK_.MUSERAFK_ON:
+        input_str = event.pattern_match.group(1)
+        AFK_.mreason = input_str
+        last_seen_status = await event.client(
+            functions.account.GetPrivacyRequest(types.InputPrivacyKeyStatusTimestamp())
+        )
+        if isinstance(last_seen_status.rules, types.PrivacyValueAllowAll):
+            AFK_.mafk_time = datetime.now()
+        AFK_.MUSERAFK_ON = f"on: {AFK_.mreason}"
+        if AFK_.mreason:
+            await edit_delete(
+                event, f"`I shall be Going afk! because ~` {AFK_.mreason}", 5
+            )
+        else:
+            await edit_delete(event, f"`I shall be Going afk! `", 5)
+        AFK_.media_afk = await reply.forward_to(BOTLOG_CHATID)
+        if AFK_.mreason:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#AFKTRUE \nSet AFK mode to True, and Reason is {AFK_.mreason}",
+            )
+        else:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#AFKTRUE \nSet AFK mode to True, and Reason is Not Mentioned",
+            )
+
 
 
 @bot.on(events.NewMessage(outgoing=True))
