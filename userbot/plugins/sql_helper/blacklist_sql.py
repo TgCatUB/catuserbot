@@ -29,11 +29,15 @@ BlackListFilters.__table__.create(checkfirst=True)
 
 BLACKLIST_FILTER_INSERTION_LOCK = threading.RLock()
 
+
 class BLACKLIST_SQL:
     def __init__(self):
         self.CHAT_BLACKLISTS = {}
 
+
 BLACKLIST_SQL_ = BLACKLIST_SQL()
+
+
 def add_to_blacklist(chat_id, trigger):
     with BLACKLIST_FILTER_INSERTION_LOCK:
         blacklist_filt = BlackListFilters(str(chat_id), trigger)
@@ -47,7 +51,9 @@ def rm_from_blacklist(chat_id, trigger):
     with BLACKLIST_FILTER_INSERTION_LOCK:
         blacklist_filt = SESSION.query(BlackListFilters).get((str(chat_id), trigger))
         if blacklist_filt:
-            if trigger in BLACKLIST_SQL_.CHAT_BLACKLISTS.get(str(chat_id), set()):  # sanity check
+            if trigger in BLACKLIST_SQL_.CHAT_BLACKLISTS.get(
+                str(chat_id), set()
+            ):  # sanity check
                 BLACKLIST_SQL_.CHAT_BLACKLISTS.get(str(chat_id), set()).remove(trigger)
 
             SESSION.delete(blacklist_filt)
@@ -97,7 +103,9 @@ def __load_chat_blacklists():
         for x in all_filters:
             BLACKLIST_SQL_.CHAT_BLACKLISTS[x.chat_id] += [x.trigger]
 
-        BLACKLIST_SQL_.CHAT_BLACKLISTS = {x: set(y) for x, y in BLACKLIST_SQL_.CHAT_BLACKLISTS.items()}
+        BLACKLIST_SQL_.CHAT_BLACKLISTS = {
+            x: set(y) for x, y in BLACKLIST_SQL_.CHAT_BLACKLISTS.items()
+        }
 
     finally:
         SESSION.close()
