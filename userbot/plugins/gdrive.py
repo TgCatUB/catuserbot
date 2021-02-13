@@ -871,7 +871,7 @@ async def get_output(service, file_id):
     if Config.G_DRIVE_INDEX_LINK:
         link = os.path.join(
             Config.G_DRIVE_INDEX_LINK.rstrip("/"),
-            quote(file_name)),
+            quote(file_name),
         )
         if mime_type == "application/vnd.google-apps.folder":
             link += "/"
