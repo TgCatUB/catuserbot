@@ -42,7 +42,7 @@ async def _(event):
         pin = "✅" if result.participant.admin_rights.pin_messages else "❌"
         add_a = "✅" if result.participant.admin_rights.add_admins else "❌"
         call = "✅" if result.participant.admin_rights.manage_call else "❌"
-    except:
+    except Exception:
         return await edit_or_reply(
             event,
             f"{_format.mentionuser(user.first_name ,user.id)} `is not admin of this this {event.chat.title} chat`",
