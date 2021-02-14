@@ -9,8 +9,8 @@ async def selfdestruct(destroy):
     ttl = int(cat[0])
     try:
         await destroy.delete()
-    except:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     smsg = await destroy.client.send_message(destroy.chat_id, message)
     await sleep(ttl)
     await smsg.delete()
@@ -27,8 +27,8 @@ async def selfdestruct(destroy):
     )
     try:
         await destroy.delete()
-    except:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     smsg = await destroy.client.send_message(destroy.chat_id, text)
     await sleep(ttl)
     await smsg.delete()

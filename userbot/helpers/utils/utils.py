@@ -5,6 +5,8 @@ from typing import Tuple
 
 from telethon import functions, types
 
+from userbot import LOGS
+
 
 # executing of terminal commands
 async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
@@ -43,5 +45,5 @@ async def unsavegif(event, sandy):
                 unsave=True,
             )
         )
-    except:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))

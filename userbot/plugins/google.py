@@ -14,7 +14,7 @@ from ..utils import errors_handler
 from . import BOTLOG, BOTLOG_CHATID
 
 opener = urllib.request.build_opener()
-useragent = "Mozilla/5.0 (Linux; Android 9; SM-G960F Build/PPR1.180610.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.157 Mobile Safari/537.36"
+useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
 opener.addheaders = [("User-agent", useragent)]
 
 
@@ -90,18 +90,23 @@ async def _(event):
             the_location = google_rs_response.headers.get("Location")
         await catevent.edit("Found Google Result. Pouring some soup on it!")
         headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"
+            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
         }
         response = requests.get(the_location, headers=headers)
         soup = BeautifulSoup(response.text, "html.parser")
         # document.getElementsByClassName("r5a77d"): PRS
-        prs_div = soup.find_all("div", {"class": "r5a77d"})[0]
-        prs_anchor_element = prs_div.find("a")
-        prs_url = BASE_URL + prs_anchor_element.get("href")
-        prs_text = prs_anchor_element.text
-        # document.getElementById("jHnbRc")
-        img_size_div = soup.find(id="jHnbRc")
-        img_size = img_size_div.find_all("div")
+        try:
+            prs_div = soup.find_all("div", {"class": "r5a77d"})[0]
+            prs_anchor_element = prs_div.find("a")
+            prs_url = BASE_URL + prs_anchor_element.get("href")
+            prs_text = prs_anchor_element.text
+            # document.getElementById("jHnbRc")
+            img_size_div = soup.find(id="jHnbRc")
+            img_size = img_size_div.find_all("div")
+        except Exception:
+            return await edit_delete(
+                catevent, "`Sorry. I am unable to find similar images`"
+            )
         end = datetime.now()
         ms = (end - start).seconds
         OUTPUT_STR = """{img_size}
@@ -215,11 +220,11 @@ async def scam(results, lim):
 CMD_HELP.update(
     {
         "google": "**Plugin :**`google`\
-        \n\n  •  **Syntax :** `.gs <limit> <query>` or `.gs <limit> (replied message)`\
-        \n  •  **Function : **will google  search and sends you top 10 results links.\
-        \n\n  •  **Syntax :** `.grs` reply to image\
-        \n  •  **Function : **will google reverse search the image and shows you the result.\
-        \n\n  •  **Syntax : **`.reverse limit`\
-        \n  •  **Function : **Reply to a pic/sticker to revers-search it on Google Images !!"
+        \n\n•  **Syntax :** `.gs <limit> <query>` or `.gs <limit> (replied message)`\
+        \n•  **Function : **will google  search and sends you top 10 results links.\
+        \n\n•  **Syntax :** `.grs` reply to image\
+        \n•  **Function : **will google reverse search the image and shows you the result.\
+        \n\n•  **Syntax : **`.reverse limit`\
+        \n•  **Function : **Reply to a pic/sticker to revers-search it on Google Images !!"
     }
 )

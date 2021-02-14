@@ -10,16 +10,13 @@ from . import parse_pre, sanga_seperator
 async def _(event):
     if event.fwd_from:
         return
-    # https://t.me/catuserbot_support/181159
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply_message = await event.get_reply_message()
     if not input_str and not reply_message:
-        catevent = await edit_or_reply(
+        await edit_delete(
             event,
-            "`reply to  user's text message to get name/username history or give userid`",
+            "`reply to  user's text message to get name/username history or give userid/username`",
         )
-        await asyncio.sleep(5)
-        return await catevent.delete()
     if input_str:
         try:
             uid = int(input_str)
@@ -27,11 +24,9 @@ async def _(event):
             try:
                 u = await event.client.get_entity(input_str)
             except ValueError:
-                catevent = await edit_or_reply(
+                await edit_delete(
                     event, "`Give userid or username to find name history`"
                 )
-                await asyncio.sleep(5)
-                return await catevent.delete()
             uid = u.id
     else:
         uid = reply_message.sender_id
@@ -41,9 +36,7 @@ async def _(event):
         try:
             await conv.send_message(f"/search_id {uid}")
         except YouBlockedUserError:
-            await catevent.edit("`unblock @Sangmatainfo_bot and then try`")
-            await asyncio.sleep(5)
-            return await catevent.delete()
+            await edit_delete(catevent, "`unblock @Sangmatainfo_bot and then try`")
         responses = []
         while True:
             try:
@@ -53,13 +46,9 @@ async def _(event):
             responses.append(response.text)
         await event.client.send_read_acknowledge(conv.chat_id)
     if not responses:
-        await catevent.edit("`bot can't fetch results`")
-        await asyncio.sleep(5)
-        return await catevent.delete()
+        await edit_delete(catevent, "`bot can't fetch results`")
     if "No records found" in responses:
-        await catevent.edit("`The user doesn't have any record`")
-        await asyncio.sleep(5)
-        return await catevent.delete()
+        await edit_delete(catevent, "`The user doesn't have any record`")
     names, usernames = await sanga_seperator(responses)
     cmd = event.pattern_match.group(1)
     if cmd == "sg":

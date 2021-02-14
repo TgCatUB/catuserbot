@@ -22,9 +22,9 @@ __Let's make this smooth and let me know why you are here.__
 `b`. To spam my master's inbox.
 `c`. To enquire something
 `d`. To request something\n"""
-ONE = """__Okay. Your request has been registered. Do not spam my master's inbox.You can expect a reply within 24 light years. He/She is a busy man, unlike you probably.__
+ONE = """__Okay. Your request has been registered. Do not spam my master's inbox.You can expect a reply within next few years. He/She is a busy man, unlike you probably.__
 
-**⚠️ You will be blocked and reported if you spam nibba. ⚠️**\n\n"""
+**⚠️ You will be blocked and reported if you spam. ⚠️**\n\n"""
 TWO = " `███████▄▄███████████▄  \n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n▓▓▓▓▓▓███░░░░░░░░░░░░█\n██████▀▀▀█░░░░██████▀  \n░░░░░░░░░█░░░░█  \n░░░░░░░░░░█░░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░█░░█  \n░░░░░░░░░░░░▀▀ `\n\n**So uncool, this is not your home. Go bother someone else. You have been blocked and reported until further notice.**"
 THREE = "__Okay. My master has not seen your message yet.He/She usually responds to people,though idk about retarted ones.__\n __He'll respond when he/she comes back, if he/she wants to.There's already a lot of pending messages😶__\n **Please do not spam unless you wish to be blocked and reported.**"
 FOUR = "`Okay. please have the basic manners as to not bother my master too much. If he/she wishes to help you, he/she will respond to you soon.`\n**Do not ask repeatdly else you will be blocked and reported.**"
@@ -157,5 +157,5 @@ async def _(event):
                             set_key(PMMESSAGE_CACHE, event.chat_id, test14.id)
                             await asyncio.sleep(3)
                             await event.client(functions.contacts.BlockRequest(chat_id))
-        except:
-            pass
+        except Exception as e:
+            LOGS.info(str(e))

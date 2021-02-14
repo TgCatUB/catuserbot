@@ -111,8 +111,8 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         except Exception as error:
             await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
             return repo.__del__()
-        build = app.builds(order_by="created_at", sort="desc")[0]
-        if build.status == "failed":
+        build_status = app.builds(order_by="created_at", sort="desc")[0]
+        if build_status.status == "failed":
             await event.edit(
                 "`Build failed!\n" "Cancelled or there were some errors...`"
             )
@@ -207,9 +207,7 @@ async def upstream(event):
     if conf == "" and not force_update:
         await print_changelogs(event, ac_br, changelog)
         await event.delete()
-        return await event.respond(
-            'do "[`.update now`] or [`.update deploy`]" to update.Check `.info updater` for details'
-        )
+        return await event.respond("do `.update deploy` to update the catuserbot")
 
     if force_update:
         await event.edit(

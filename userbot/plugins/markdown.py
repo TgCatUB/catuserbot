@@ -31,7 +31,6 @@ def parse_url_match(m):
 
 
 def get_tag_parser(tag, entity):
-    # TODO unescape escaped tags?
     def tag_parser(m):
         return m.group(1), entity(offset=m.start(), length=len(m.group(1)))
 
@@ -147,8 +146,8 @@ def parse(message, old_entities=None):
             i += len(text)
 
         return del_surrogate(message), entities + old_entities
-    except:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
 
 
 @bot.on(events.MessageEdited(outgoing=True))

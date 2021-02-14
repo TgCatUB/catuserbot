@@ -16,11 +16,7 @@ from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
 from ..utils import errors_handler
-
-# ===== CONSTANT =====
-DEFCITY = "Delhi"
-# ====================
-OWM_API = Config.OPEN_WEATHER_MAP_APPID
+from .sql_helper.globals import addgvar, gvarstatus
 
 
 async def get_tz(con):
@@ -39,21 +35,15 @@ async def get_tz(con):
 @bot.on(sudo_cmd(pattern="climate( (.*)|$)", allow_sudo=True))
 @errors_handler
 async def get_weather(weather):
-    """ For .weather command, gets the current weather of a city. """
-    if not OWM_API:
-        await edit_or_reply(
+    if weather.fwd_from:
+        return
+    if not Config.OPEN_WEATHER_MAP_APPID:
+        return await edit_or_reply(
             weather, "`Get an API key from` https://openweathermap.org/ `first.`"
         )
-        return
-    APPID = OWM_API
     input_str = "".join(weather.text.split(maxsplit=1)[1:])
     if not input_str:
-        CITY = DEFCITY
-        if not CITY:
-            await edit_or_reply(
-                weather, "`Please specify a city or set it as default.`"
-            )
-            return
+        CITY = gvarstatus("DEFCITY") or "Delhi"
     else:
         CITY = input_str
     timezone_countries = {
@@ -70,18 +60,16 @@ async def get_weather(weather):
             try:
                 countrycode = timezone_countries[f"{country}"]
             except KeyError:
-                await weather.edit("`Invalid country.`")
-                return
+                return await edit_or_reply(weather, "`Invalid country.`")
             CITY = newcity[0].strip() + "," + countrycode.strip()
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={APPID}"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={Config.OPEN_WEATHER_MAP_APPID}"
     async with aiohttp.ClientSession() as _session:
         async with _session.get(url) as request:
             requeststatus = request.status
             requesttext = await request.text()
     result = json.loads(requesttext)
     if requeststatus != 200:
-        await weather.edit(f"`Invalid city/country.`")
-        return
+        return await edit_or_reply(weather, "`Invalid country.`")
     cityname = result["name"]
     curtemp = result["main"]["temp"]
     humidity = result["main"]["humidity"]
@@ -142,19 +130,14 @@ async def get_weather(weather):
 @bot.on(sudo_cmd(pattern="setcity(?: |$)(.*)", allow_sudo=True))
 @errors_handler
 async def set_default_city(city):
-    """ For .ctime command, change the default userbot country for date and time commands. """
-    if not OWM_API:
-        await edit_or_reply(
+    if city.fwd_from:
+        return
+    if not Config.OPEN_WEATHER_MAP_APPID:
+        return await edit_or_reply(
             city, "`Get an API key from` https://openweathermap.org/ `first.`"
         )
-        return
-    global DEFCITY
-    APPID = OWM_API
     if not city.pattern_match.group(1):
-        CITY = DEFCITY
-        if not CITY:
-            await edit_or_reply(city, "`Please specify a city to set it as default.`")
-            return
+        CITY = gvarstatus("DEFCITY") or "Delhi"
     else:
         CITY = city.pattern_match.group(1)
     timezone_countries = {
@@ -171,16 +154,14 @@ async def set_default_city(city):
             try:
                 countrycode = timezone_countries[f"{country}"]
             except KeyError:
-                await edit_or_reply(city, "`Invalid country.`")
-                return
+                return await edit_or_reply(city, "`Invalid country.`")
             CITY = newcity[0].strip() + "," + countrycode.strip()
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={APPID}"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={Config.OPEN_WEATHER_MAP_APPID}"
     request = requests.get(url)
     result = json.loads(request.text)
     if request.status_code != 200:
-        await city.edit(f"`Invalid country.`")
-        return
-    DEFCITY = CITY
+        return await edit_or_reply(city, "`Invalid country.`")
+    addgvar("DEFCITY", CITY)
     cityname = result["name"]
     country = result["sys"]["country"]
     fullc_n = c_n[f"{country}"]
@@ -192,10 +173,9 @@ async def set_default_city(city):
 async def _(event):
     if event.fwd_from:
         return
-    global DEFCITY
     input_str = event.pattern_match.group(1)
     if not input_str:
-        input_str = DEFCITY
+        input_str = gvarstatus("DEFCITY") or "Delhi"
     output = requests.get(f"https://wttr.in/{input_str}?mnTC0&lang=en").text
     await edit_or_reply(event, output, parse_mode=parse_pre)
 
@@ -205,11 +185,10 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    global DEFCITY
     reply_to_id = await reply_id(event)
     input_str = event.pattern_match.group(1)
     if not input_str:
-        input_str = DEFCITY
+        input_str = gvarstatus("DEFCITY") or "Delhi"
     async with aiohttp.ClientSession() as session:
         sample_url = "https://wttr.in/{}.png"
         response_api_zero = await session.get(sample_url.format(input_str))
@@ -220,20 +199,20 @@ async def _(event):
             )
     try:
         await event.delete()
-    except:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
 
 
 CMD_HELP.update(
     {
         "climate": "**Plugin : **`climate`\
-        \n\n  •  **Syntax : **`.climate <city>`\
-        \n  •  **Function : **__Gets the weather of a city. By default it is Delhi, change it by setcity__\
-        \n\n  •  **Syntax : **`.setcity <city> or <country name/code>`\
-        \n  •  **Function : **__Sets your default city so you can just use .weather or .climate.__\
-        \n\n  •  **Syntax : **`.weather <city>`\
-        \n  •  **Function : **__Gets the simple climate/weather information a city. By default it is Delhi, change it by setcity cmd__\
-        \n\n  •  **Syntax : **`.wttr <city> `\
-        \n  •  **Function : **__sends you the weather information for upcoming 3 days from today.__"
+        \n\n•  **Syntax : **`.climate <city>`\
+        \n•  **Function : **__Gets the weather of a city. By default it is Delhi, change it by setcity__\
+        \n\n•  **Syntax : **`.setcity <city> or <country name/code>`\
+        \n•  **Function : **__Sets your default city so you can just use .weather or .climate.__\
+        \n\n•  **Syntax : **`.weather <city>`\
+        \n•  **Function : **__Gets the simple climate/weather information a city. By default it is Delhi, change it by setcity cmd__\
+        \n\n•  **Syntax : **`.wttr <city> `\
+        \n•  **Function : **__sends you the weather information for upcoming 3 days from today.__"
     }
 )

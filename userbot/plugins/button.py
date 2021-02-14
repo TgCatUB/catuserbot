@@ -42,9 +42,11 @@ async def _(event):
             note_data += markdown_note[prev : match.start(1)]
             prev = match.end(1)
         # if odd, escaped -> move along
-        else:
+        elif n_escapes % 2 == 1:
             note_data += markdown_note[prev:to_check]
             prev = match.start(1) - 1
+        else:
+            break
     else:
         note_data += markdown_note[prev:]
     message_text = note_data.strip() or None
@@ -85,7 +87,7 @@ async def _(event):
     if not markdown_note:
         return await edit_delete(event, "`what text should i use in button post`")
     catinput = "Inline buttons " + markdown_note
-    results = await bot.inline_query(BOT_USERNAME, catinput)
+    results = await event.client.inline_query(BOT_USERNAME, catinput)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()
 
@@ -104,12 +106,12 @@ CMD_HELP.update(
     {
         "button": f"**Plugin : **`button`\
     \n\n**Button post helper**\
-    \n  •  **Syntax : **`.cbutton`\
-    \n  •  **Function :** __For working of this you need your bot({BOT_USERNAME}) in the group/channel you are using and Buttons must be in the format as [Name on button]<buttonurl:link you want to open> and markdown is Default to html__\
-    \n  •  **Example :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
-    \n\n  •  **Syntax : **`.ibutton`\
-    \n  •  **Function :** __Buttons must be in the format as [Name on button]<buttonurl:link you want to open>__\
-    \n  •  **Example :** `.ibutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
+    \n•  **Syntax : **`.cbutton`\
+    \n•  **Function :** __For working of this you need your bot({BOT_USERNAME}) in the group/channel you are using and Buttons must be in the format as [Name on button]<buttonurl:link you want to open> and markdown is Default to html__\
+    \n•  **Example :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
+    \n\n•  **Syntax : **`.ibutton`\
+    \n•  **Function :** __Buttons must be in the format as [Name on button]<buttonurl:link you want to open>__\
+    \n•  **Example :** `.ibutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
     "
     }
 )

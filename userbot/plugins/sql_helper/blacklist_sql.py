@@ -29,7 +29,13 @@ BlackListFilters.__table__.create(checkfirst=True)
 
 BLACKLIST_FILTER_INSERTION_LOCK = threading.RLock()
 
-CHAT_BLACKLISTS = {}
+
+class BLACKLIST_SQL:
+    def __init__(self):
+        self.CHAT_BLACKLISTS = {}
+
+
+BLACKLIST_SQL_ = BLACKLIST_SQL()
 
 
 def add_to_blacklist(chat_id, trigger):
@@ -38,15 +44,17 @@ def add_to_blacklist(chat_id, trigger):
 
         SESSION.merge(blacklist_filt)  # merge to avoid duplicate key issues
         SESSION.commit()
-        CHAT_BLACKLISTS.setdefault(str(chat_id), set()).add(trigger)
+        BLACKLIST_SQL_.CHAT_BLACKLISTS.setdefault(str(chat_id), set()).add(trigger)
 
 
 def rm_from_blacklist(chat_id, trigger):
     with BLACKLIST_FILTER_INSERTION_LOCK:
         blacklist_filt = SESSION.query(BlackListFilters).get((str(chat_id), trigger))
         if blacklist_filt:
-            if trigger in CHAT_BLACKLISTS.get(str(chat_id), set()):  # sanity check
-                CHAT_BLACKLISTS.get(str(chat_id), set()).remove(trigger)
+            if trigger in BLACKLIST_SQL_.CHAT_BLACKLISTS.get(
+                str(chat_id), set()
+            ):  # sanity check
+                BLACKLIST_SQL_.CHAT_BLACKLISTS.get(str(chat_id), set()).remove(trigger)
 
             SESSION.delete(blacklist_filt)
             SESSION.commit()
@@ -57,7 +65,7 @@ def rm_from_blacklist(chat_id, trigger):
 
 
 def get_chat_blacklist(chat_id):
-    return CHAT_BLACKLISTS.get(str(chat_id), set())
+    return BLACKLIST_SQL_.CHAT_BLACKLISTS.get(str(chat_id), set())
 
 
 def num_blacklist_filters():
@@ -86,17 +94,18 @@ def num_blacklist_filter_chats():
 
 
 def __load_chat_blacklists():
-    global CHAT_BLACKLISTS
     try:
         chats = SESSION.query(BlackListFilters.chat_id).distinct().all()
         for (chat_id,) in chats:  # remove tuple by ( ,)
-            CHAT_BLACKLISTS[chat_id] = []
+            BLACKLIST_SQL_.CHAT_BLACKLISTS[chat_id] = []
 
         all_filters = SESSION.query(BlackListFilters).all()
         for x in all_filters:
-            CHAT_BLACKLISTS[x.chat_id] += [x.trigger]
+            BLACKLIST_SQL_.CHAT_BLACKLISTS[x.chat_id] += [x.trigger]
 
-        CHAT_BLACKLISTS = {x: set(y) for x, y in CHAT_BLACKLISTS.items()}
+        BLACKLIST_SQL_.CHAT_BLACKLISTS = {
+            x: set(y) for x, y in BLACKLIST_SQL_.CHAT_BLACKLISTS.items()
+        }
 
     finally:
         SESSION.close()

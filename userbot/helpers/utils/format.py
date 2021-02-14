@@ -6,9 +6,11 @@ from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
 
+from ..functions import utc_to_local
+
 
 def paste_text(text):
-    asciich = ["*", "`", "_"]
+    asciich = ["**", "`", "__"]
     for i in asciich:
         text = re.sub(rf"\{i}", "", text)
     try:
@@ -19,7 +21,7 @@ def paste_text(text):
             .get("key")
         )
         link = f"https://nekobin.com/{nekokey}"
-    except:
+    except Exception:
         url = "https://del.dog/documents"
         r = requests.post(url, data=text).json()
         link = f"https://del.dog/{r['key']}"
@@ -118,13 +120,10 @@ def yaml_format(obj, indent=0, max_str_len=256, max_byte_len=64):
         # repr() bytes if it's printable, hex like "FF EE BB" otherwise
         if all(0x20 <= c < 0x7F for c in obj):
             return repr(obj)
-        else:
-            return (
-                "<…>" if len(obj) > max_byte_len else " ".join(f"{b:02X}" for b in obj)
-            )
+        return "<…>" if len(obj) > max_byte_len else " ".join(f"{b:02X}" for b in obj)
     elif isinstance(obj, datetime.datetime):
         # ISO-8601 without timezone offset (telethon dates are always UTC)
-        return obj.strftime("%Y-%m-%d %H:%M:%S")
+        return utc_to_local(obj).strftime("%Y-%m-%d %H:%M:%S")
     elif hasattr(obj, "__iter__"):
         # display iterables one after another at the base indentation level
         result.append("\n")
