@@ -16,6 +16,14 @@ from youtubesearchpython import VideosSearch
 from .resources.states import states
 
 
+from datetime import datetime
+import time
+
+def utc_to_local(utc_datetime):
+    now_timestamp = time.time()
+    offset = datetime.fromtimestamp(now_timestamp) - datetime.utcfromtimestamp(now_timestamp)
+    return utc_datetime + offset
+
 async def get_readable_time(seconds: int) -> str:
     count = 0
     up_time = ""
