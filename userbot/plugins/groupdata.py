@@ -22,6 +22,41 @@ from telethon.utils import get_input_location
 from . import BOTLOG, BOTLOG_CHATID
 
 
+from telethon import functions
+from . import get_user_from_event
+
+@bot.on(admin_cmd(pattern="adminperm(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="adminperm(?: |$)(.*)",allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    user, reason = await get_user_from_event(event)
+    if not user:
+        return
+    result =await event.client(functions.channels.GetParticipantRequest(
+            channel=event.chat_id,
+            user_id=user.id
+        ))
+    try:
+        c_info = "✅" if result.participant.admin_rights.change_info else "❌"
+        del_me = "✅" if result.participant.admin_rights.delete_messages else "❌"
+        ban = "✅" if result.participant.admin_rights.ban_users else "❌"
+        invite_u = "✅" if result.participant.admin_rights.invite_users else "❌"
+        pin = "✅" if result.participant.admin_rights.pin_messages else "❌"
+        add_a = "✅" if result.participant.admin_rights.add_admins else "❌"
+        call = "✅" if result.participant.admin_rights.manage_call else "❌"
+    except:
+        return await edit_or_reply(event , f"{_format.mentionuser(user.first_name ,user.id)} `is not admin of this this {event.chat.title} chat`")
+    output = f"**Admin rights of **{_format.mentionuser(user.first_name ,user.id)} **in {event.chat.title} chat are **\n"
+    output += f"__Change info :__ {c_info}\n"
+    output += f"__Delete messages :__ {del_me}\n"
+    output += f"__Ban users :__ {ban}\n"
+    output += f"__Invite users :__ {invite_u}\n"
+    output += f"__Pin messages :__ {pin}\n"
+    output += f"__Add admins :__ {add_a}\n"
+    output += f"__Managecall :__ {call}\n"
+    await edit_or_reply(event , output)
+
 @bot.on(admin_cmd(pattern="admins ?(.*)"))
 @bot.on(sudo_cmd(pattern="admins ?(.*)", allow_sudo=True))
 async def _(event):
