@@ -374,7 +374,7 @@ CMD_HELP.update(
     \n•  **Function : **__Throws you away from that chat_\
     \n\n•  **Syntax : **`.kickall`\
     \n•  **Function : **__To kick all users except admins from the chat__\
-    \n\n•  **Syntax : **`.kickme`\
+    \n\n•  **Syntax : **`.banall`\
     \n•  **Function : **__To ban all users except admins from the chat__\
     \n\n•  **Syntax : **`.unbanall`\
     \n•  **Function : **__Unbans everyone who are blocked in that group __\
