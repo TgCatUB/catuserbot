@@ -2,7 +2,7 @@ import asyncio
 import functools
 import shlex
 from typing import Tuple
-
+from userbot import LOGS
 from telethon import functions, types
 
 
