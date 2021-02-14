@@ -4,16 +4,18 @@ import requests
 from telethon import functions
 
 from . import CMD_LIST, SUDO_LIST, mention
-
-HELPTYPE = Config.HELP_INLINETYPE or True
+from .sql_helper.globals import addgvar, gvarstatus
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="help ?(.*)"))
 async def cmd_list(event):
-    global HELPTYPE
-    reply_to_id = None
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    if event.fwd_from:
+        return
+    if gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "false":
+        HELPTYPE = False
+    else:
+        HELPTYPE = True
+    reply_to_id = await reply_id(event)
     input_str = event.pattern_match.group(1)
     if input_str == "text":
         string = (
@@ -66,9 +68,7 @@ async def cmd_list(event):
                           \nCheck `.help plugin name` for commands, in case popup doesn't appear.\
                           \nCheck `.info plugin name` for usage of thoose plugins and commands"
             tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
-            results = await bot.inline_query(  # pylint:disable=E0602
-                tgbotusername, help_string
-            )
+            results = await event.client.inline_query(tgbotusername, help_string)
             await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
             await event.delete()
         else:
@@ -85,6 +85,8 @@ async def cmd_list(event):
 
 @bot.on(sudo_cmd(allow_sudo=True, pattern="help ?(.*)"))
 async def info(event):
+    if event.fwd_from:
+        return
     input_str = event.pattern_match.group(1)
     if input_str == "text":
         string = "Total {count} commands found in {plugincount} sudo plugins of catuserbot\n\n"
@@ -147,7 +149,8 @@ async def info(event):
 @bot.on(admin_cmd(outgoing=True, pattern="info ?(.*)"))
 @bot.on(sudo_cmd(pattern="info ?(.*)", allow_sudo=True))
 async def info(event):
-    """ For .info command,"""
+    if event.fwd_from:
+        return
     args = event.pattern_match.group(1).lower()
     if args:
         if args in CMD_HELP:
@@ -176,7 +179,7 @@ async def info(event):
 async def _(event):
     if event.fwd_from:
         return
-    result = await bot(functions.help.GetNearestDcRequest())
+    result = await event.client(functions.help.GetNearestDcRequest())
     result = (
         _format.yaml_format(result)
         + "\n\n**List Of Telegram Data Centres:**\
@@ -194,21 +197,21 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    global HELPTYPE
     input_str = event.pattern_match.group(1)
-    if input_str == "true":
-        type = True
+    h_type = input_str == "true"
+    if gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "false":
+        HELPTYPE = False
     else:
-        type = False
-    if HELPTYPE is True:
-        if type is True:
+        HELPTYPE = True
+    if HELPTYPE:
+        if h_type:
             await event.edit("`inline mode is already enabled`")
         else:
-            HELPTYPE = type
+            addgvar("HELPTYPE", h_type)
             await event.edit("`inline mode is disabled`")
     else:
-        if type is True:
-            HELPTYPE = type
+        if h_type:
+            addgvar("HELPTYPE", h_type)
             await event.edit("`inline mode is enabled`")
         else:
             await event.edit("`inline mode is already disabled`")

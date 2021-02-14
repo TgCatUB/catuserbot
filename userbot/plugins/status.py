@@ -1,7 +1,7 @@
 """
 Commands - .offline .online
 Offline = Add an offline tag in your name and change profile pic to black.
-Online = Remove Offline Tag from your name and change profile pic to vars PROFILE_IMAGE.
+Online = Remove Offline Tag from your name and change profile pic.
 Note - If you have a last name remove it unless it automatically removed.
 """
 
@@ -11,9 +11,6 @@ import urllib
 from telethon.tl import functions
 
 OFFLINE_TAG = "[OFFLINE]"
-PROFILE_IMAGE = os.environ.get(
-    "DOWNLOAD_PFP_URL_CLOCK", "https://telegra.ph/file/9f0638dbfa028162a8682.jpg"
-)
 
 
 @bot.on(admin_cmd(pattern="offline"))  # pylint:disable=E0602
@@ -35,11 +32,6 @@ async def _(event):
     if photo:
         file = await event.client.upload_file(photo)
         try:
-            await event.client(
-                functions.photos.DeletePhotosRequest(
-                    await event.client.get_profile_photos("me", limit=1)
-                )
-            )
             await event.client(functions.photos.UploadProfilePhotoRequest(file))
         except Exception as e:  # pylint:disable=C0103,W0703
             await event.edit(str(e))
@@ -74,27 +66,16 @@ async def _(event):
     else:
         await event.edit("**Already Online.**")
         return
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):  # pylint:disable=E0602
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)  # pylint:disable=E0602
-    urllib.request.urlretrieve(PROFILE_IMAGE, "donottouch.jpg")
-    photo = "donottouch.jpg"
-    if photo:
-        file = await event.client.upload_file(photo)
-        try:
-            await event.client(
-                functions.photos.DeletePhotosRequest(
-                    await event.client.get_profile_photos("me", limit=1)
-                )
-            )
-            await event.client(functions.photos.UploadProfilePhotoRequest(file))
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await event.edit(str(e))
-        else:
-            await event.edit("**Changed profile to Online.**")
     try:
-        os.system("rm -fr donottouch.jpg")
+        await event.client(
+            functions.photos.DeletePhotosRequest(
+                await event.client.get_profile_photos("me", limit=1)
+            )
+        )
     except Exception as e:  # pylint:disable=C0103,W0703
-        logger.warn(str(e))  # pylint:disable=E0602
+        await event.edit(str(e))
+    else:
+        await event.edit("**Changed profile to Online.**")
     first_name = user.last_name
     last_name = ""
     try:

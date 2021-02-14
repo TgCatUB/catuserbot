@@ -13,7 +13,7 @@ async def gizoogle(event):
         return await event.edit("I can't gizoogle nothing.")
     try:
         result = text(input_str)
-    except:
+    except Exception as e:
         result = "Failed to gizoogle the text."
     finally:
         return await event.edit(result)

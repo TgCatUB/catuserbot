@@ -10,7 +10,7 @@ async def _(event):
         try:
             cat = int(event.pattern_match.group(1))
             input_str = cat
-        except:
+        except Exception:
             input_str = 5
     else:
         input_str = 5

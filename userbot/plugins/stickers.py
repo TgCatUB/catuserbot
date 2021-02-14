@@ -55,7 +55,7 @@ def pack_name(userid, pack, is_anim):
 
 
 def char_is_emoji(character):
-    return character in catemoji.UNICODE_EMOJI
+    return character in catemoji.UNICODE_EMOJI["en"]
 
 
 def pack_nick(username, pack, is_anim):
@@ -152,8 +152,7 @@ async def newpacksticker(
     await args.client.send_read_acknowledge(conv.chat_id)
     if not pkang:
         return otherpack, packname, emoji
-    else:
-        return pack, packname
+    return pack, packname
 
 
 async def add_to_pack(
@@ -223,8 +222,7 @@ async def add_to_pack(
     await args.client.send_read_acknowledge(conv.chat_id)
     if not pkang:
         return packname, emoji
-    else:
-        return pack, packname
+    return pack, packname
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="kang ?(.*)"))
@@ -413,7 +411,7 @@ async def pack_kang(event):
                 )
             )
         )
-    except:
+    except Exception:
         return await edit_delete(
             catevent,
             "`I guess this sticker is not part of any pack. So, i cant kang this sticker pack try kang for this sticker`",
@@ -529,7 +527,7 @@ async def pack_kang(event):
         kangst += 1
         await asyncio.sleep(2)
     result = "`This sticker pack is kanged into the following your sticker pack(s):`\n"
-    for i in range(len(blablapacks)):
+    for i in enumerate(blablapacks):
         result += f"  •  [pack {blablapacknames[i]}](t.me/addstickers/{blablapacks[i]})"
     await catevent.edit(result)
 

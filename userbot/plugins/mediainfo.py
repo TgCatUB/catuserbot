@@ -54,8 +54,8 @@ async def file_data(reply):
         if reply.media.document.thumbs:
             hmm += f"Thumb  :\
                 \n {_format.yaml_format(reply.media.document.thumbs[-1])}<br>"
-    except:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     return hmm
 
 

@@ -146,7 +146,7 @@ async def stickerpack_spam(event):
                 )
             )
         )
-    except:
+    except Exception:
         return await edit_delete(
             catevent,
             "`I guess this sticker is not part of any pack so i cant kang this sticker pack try kang for this sticker`",

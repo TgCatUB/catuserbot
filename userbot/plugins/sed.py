@@ -5,6 +5,8 @@ import regex
 from telethon import events, utils
 from telethon.tl import functions, types
 
+from userbot import CMD_HELP
+
 HEADER = "「sed」\n"
 KNOWN_RE_BOTS = re.compile(Config.GROUP_REG_SED_EX_BOT_S, flags=re.IGNORECASE)
 
@@ -52,8 +54,8 @@ def doit(chat_id, match, original):
     if original is not None:
         return actually_doit(original)
     # Try matching the last few messages
-    for original in last_msgs[chat_id]:
-        m, s = actually_doit(original)
+    for org in last_msgs[chat_id]:
+        m, s = actually_doit(org)
         if s is not None:
             return m, s
     return None, None

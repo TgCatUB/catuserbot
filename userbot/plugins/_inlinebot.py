@@ -10,6 +10,10 @@ from telethon import Button, custom, events
 from . import CMD_LIST, catalive
 
 CAT_IMG = Config.ALIVE_PIC or None
+TEXT_TO_DISPLAY_IN_HELP = (
+    Config.TEXT_TO_DISPLAY_IN_HELP
+    or "Yeh mera maal hai !! Haat kese laga diya be tune ise? \n\nNikal, jaake apna catuserbot bana..."
+)
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 
 if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
@@ -81,9 +85,11 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                     note_data += markdown_note[prev : match.start(1)]
                     prev = match.end(1)
                 # if odd, escaped -> move along
-                else:
+                elif n_escapes % 2 == 1:
                     note_data += markdown_note[prev:to_check]
                     prev = match.start(1) - 1
+                else:
+                    break
             else:
                 note_data += markdown_note[prev:]
             message_text = note_data.strip()
@@ -102,7 +108,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             secret = os.path.join("./userbot", "secrets.txt")
             try:
                 jsondata = json.load(open(secret))
-            except:
+            except Exception:
                 jsondata = False
             try:
                 # if u is user id
@@ -127,7 +133,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 else:
                     sandy = f"[{u.first_name}](tg://user?id={u.id})"
                 u = int(u.id)
-            except:
+            except Exception:
                 return
             timestamp = int(time.time() * 2)
             newsecret = {str(timestamp): {"userid": u, "text": txct}}
@@ -159,7 +165,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
-            reply_pop_up_alert = "Yeh mera maal hai !! Haat kese laga diya be tune ise? \n\nNikal, jaake apna catuserbot bana..."
+            reply_pop_up_alert = TEXT_TO_DISPLAY_IN_HELP
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
     @tgbot.on(
@@ -176,7 +182,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             # https://t.me/TelethonChat/115200
             await event.edit(buttons=buttons)
         else:
-            reply_pop_up_alert = "Yeh mera maal hai !! Haat kese laga diya be tune ise? \n\nNikal, jaake apna catuserbot bana..."
+            reply_pop_up_alert = TEXT_TO_DISPLAY_IN_HELP
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
     @tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"secret_(.*)")))
@@ -235,7 +241,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                         caption=plugin_name,
                     )
         else:
-            reply_pop_up_alert = "Yeh mera maal hai !! Haat kese laga diya be tune ise? \n\nNikal, jaake apna catuserbot bana..."
+            reply_pop_up_alert = TEXT_TO_DISPLAY_IN_HELP
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
     @tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"close")))
@@ -243,7 +249,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         if event.query.user_id == bot.uid:
             await event.edit("menu closed")
         else:
-            reply_pop_up_alert = "Yeh mera maal hai !! Haat kese laga diya be tune ise? \n\nNikal, jaake apna catuserbot bana..."
+            reply_pop_up_alert = TEXT_TO_DISPLAY_IN_HELP
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
     @tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"stats")))

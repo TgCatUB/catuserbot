@@ -42,9 +42,11 @@ async def _(event):
             note_data += markdown_note[prev : match.start(1)]
             prev = match.end(1)
         # if odd, escaped -> move along
-        else:
+        elif n_escapes % 2 == 1:
             note_data += markdown_note[prev:to_check]
             prev = match.start(1) - 1
+        else:
+            break
     else:
         note_data += markdown_note[prev:]
     message_text = note_data.strip() or None
@@ -85,7 +87,7 @@ async def _(event):
     if not markdown_note:
         return await edit_delete(event, "`what text should i use in button post`")
     catinput = "Inline buttons " + markdown_note
-    results = await bot.inline_query(BOT_USERNAME, catinput)
+    results = await event.client.inline_query(BOT_USERNAME, catinput)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()
 

@@ -8,7 +8,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 @bot.on(sudo_cmd(outgoing=True, pattern="note_help$", allow_sudo=True))
 async def kakashi(jisan):
     await edit_or_reply(
-        jisan, "All commands for note is [HERE](https://nekobin.com/yajifahajo) "
+        jisan, "All commands for note is [HERE](https://nekobin.com/pizacisawi) "
     )
 
 
@@ -63,8 +63,10 @@ async def kakashi(event):
         link = "Custom Alive Text"
     elif link in ("customaliveemoji", "cae"):
         link = "Custom Alive Emoji"
-    elif link == "status":
-        link = "Status"
+    elif link == "rmbg":
+        link = "Rmbg"
+    elif link in ("lastfm", "lf"):
+        link = "LastFm"
     elif link == "goodcat":
         link = "🐱 Cat UserBot 🐱"
     elif link == "badcat":

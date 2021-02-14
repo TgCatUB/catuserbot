@@ -46,7 +46,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         else:
             user, reason = await get_user_from_event(event, secondgroup=True)
             if not user:
-                return await edit_delete(event, "`Couldn't Fectch user`", 5)
+                return
             if not reason:
                 reason = "Not mentioned"
         if not pmpermit_sql.is_approved(user.id):
@@ -68,8 +68,8 @@ if Config.PRIVATE_GROUP_ID is not None:
                     await event.client.delete_messages(
                         user.id, PMMESSAGE_CACHE[user.id]
                     )
-                except:
-                    pass
+                except Exception as e:
+                    LOGS.info(str(e))
         else:
             await edit_delete(
                 event,
@@ -89,7 +89,7 @@ if Config.PRIVATE_GROUP_ID is not None:
             if reason == "all":
                 return
             if not user:
-                return await edit_delete(event, "`Couldn't Fectch user`", 5)
+                return
         if user.id in PM_START:
             PM_START.remove(user.id)
         if pmpermit_sql.is_approved(user.id):
@@ -112,7 +112,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         else:
             user, reason = await get_user_from_event(event)
             if not user:
-                return await edit_delete(event, "`Couldn't Fectch user`", 5)
+                return
         if user.id in PM_START:
             PM_START.remove(user.id)
         await event.edit(
@@ -127,7 +127,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         else:
             user, reason = await get_user_from_event(event)
             if not user:
-                return await edit_delete(event, "`Couldn't Fectch user`", 5)
+                return
         await event.client(functions.contacts.UnblockRequest(user.id))
         await event.edit(
             f"`You are Unblocked Now .You Can Message Me From now..`[{user.first_name}](tg://user?id={user.id})"

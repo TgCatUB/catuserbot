@@ -104,11 +104,11 @@ async def _(event):
     CMD_WEB = {
         "fileio": 'curl -F "file=@{full_file_path}" https://file.io',
         "oload": 'curl -F "file=@{full_file_path}" https://api.openload.cc/upload',
-        "anonfiles": 'curl -F "file=@{full_file_path}" https://anonfiles.com/api/upload',
+        "anonfiles": 'curl -F "file=@{full_file_path}" https://api.anonfiles.com/upload',
         "transfer": 'curl --upload-file "{full_file_path}" https://transfer.sh/'
         + os.path.basename(file_name),
         "filebin": 'curl -X POST --data-binary "@{full_file_path}" -H "filename: {bare_local_name}" "https://filebin.net"',
-        "anonymousfiles": 'curl -F file="@{full_file_path}" https://api.anonymousfiles.io/',
+        "anonymousfiles": 'curl -F "file=@{full_file_path}" https://api.anonymousfiles.io/',
         "vshare": 'curl -F "file=@{full_file_path}" https://api.vshare.is/upload',
         "bayfiles": 'curl -F "file=@{full_file_path}" https://bayfiles.com/api/upload',
     }
@@ -131,17 +131,15 @@ async def _(event):
     if t_response:
         try:
             t_response = json.dumps(json.loads(t_response), sort_keys=True, indent=4)
-        except Exception:
+        except Exception as e:
             # some sites don't return valid JSONs
-            pass
+            LOGS.info(str(e))
         urls = links = re.findall(link_regex, t_response)
         result = ""
         for i in urls:
-            if result:
-                result += f"\n{i[0]}"
-            else:
+            if not result:
                 result = f"**Uploaded File link/links :**"
-                result += f"\n{i[0]}"
+            result += f"\n{i[0]}"
         await editor.edit(result)
     else:
         await editor.edit(error)

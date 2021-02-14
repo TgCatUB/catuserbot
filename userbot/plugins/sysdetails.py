@@ -64,12 +64,12 @@ async def psu(event):
     await event.edit(help_string)
 
 
-def get_size(bytes, suffix="B"):
+def get_size(inputbytes, suffix="B"):
     factor = 1024
     for unit in ["", "K", "M", "G", "T", "P"]:
-        if bytes < factor:
-            return f"{bytes:.2f}{unit}{suffix}"
-        bytes /= factor
+        if inputbytes < factor:
+            return f"{inputbytes:.2f}{unit}{suffix}"
+        inputbytes /= factor
 
 
 @bot.on(admin_cmd(pattern="cpu$"))

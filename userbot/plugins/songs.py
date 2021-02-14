@@ -2,7 +2,6 @@
 by  @sandy1709 ( https://t.me/mrconfused  )
 """
 # songs finder for catuserbot
-
 import base64
 import os
 from pathlib import Path
@@ -176,7 +175,6 @@ async def _(event):
             os.remove(files)
 
 
-""""
 @bot.on(admin_cmd(pattern="song2 (.*)"))
 @bot.on(sudo_cmd(pattern="song2 (.*)", allow_sudo=True))
 async def cat_song_fetcer(event):
@@ -205,6 +203,8 @@ async def cat_song_fetcer(event):
                 )
             await catevent.edit(SONG_SENDING_STRING, parse_mode="html")
             await baka[0].click(0)
+            await conv.get_response()
+            await conv.get_response()
             music = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
@@ -213,7 +213,7 @@ async def cat_song_fetcer(event):
         await event.client.send_file(
             event.chat_id,
             music,
-            caption=f"<b><i>➥ Song :-</i></b> <code>{song}</code>\n<b><i>➥ Uploaded by :- {hmention}</i></b>",
+            caption=f"<b>➥ Song :- <code>{song}</code></b>",
             parse_mode="html",
             reply_to=reply_id_,
         )
@@ -221,6 +221,7 @@ async def cat_song_fetcer(event):
         await delete_messages(event, chat, purgeflag)
 
 
+"""
 @bot.on(admin_cmd(pattern="music (.*)"))
 @bot.on(sudo_cmd(pattern="music (.*)", allow_sudo=True))
 async def kakashi(event):
@@ -303,6 +304,8 @@ CMD_HELP.update(
         \n**USAGE   ➥  **Searches the song you entered in query and sends it,quality of it is 320k\
         \n\n📌** CMD ➥** `.vsong` <query> or `.vsong reply to song name`\
         \n**USAGE   ➥  **Searches the video song you entered in query and sends it\
+        \n\n📌** CMD ➥** `.song2` query\
+        \n**USAGE   ➥  **Searches the song you entered in query and sends it quality of it is 320k\
         \n\n📌** CMD ➥** `.dzd` <Spotify/Deezer Link>\
         \n**USAGE   ➥  **Download music from Spotify or Deezer."
     }

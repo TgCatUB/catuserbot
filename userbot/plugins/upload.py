@@ -14,7 +14,15 @@ from telethon.tl.types import DocumentAttributeVideo
 from . import make_gif, progress, reply_id, thumb_from_audio
 
 PATH = os.path.join("./temp", "temp_vid.mp4")
-thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
+
+
+class UPLOAD:
+    def __init__(self):
+        self.uploaded = 0
+
+
+UPLOAD_ = UPLOAD()
 
 
 async def catlst_of_files(path):
@@ -29,20 +37,19 @@ async def catlst_of_files(path):
 def get_video_thumb(file, output=None, width=320):
     output = file + ".jpg"
     metadata = extractMetadata(createParser(file))
+    cmd = [
+        "ffmpeg",
+        "-i",
+        file,
+        "-ss",
+        str(int((0, metadata.get("duration").seconds)[metadata.has("duration")] / 2)),
+        # '-filter:v', 'scale={}:-1'.format(width),
+        "-vframes",
+        "1",
+        output,
+    ]
     p = subprocess.Popen(
-        [
-            "ffmpeg",
-            "-i",
-            file,
-            "-ss",
-            str(
-                int((0, metadata.get("duration").seconds)[metadata.has("duration")] / 2)
-            ),
-            # '-filter:v', 'scale={}:-1'.format(width),
-            "-vframes",
-            "1",
-            output,
-        ],
+        cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
     )
@@ -66,7 +73,6 @@ def sortthings(contents, path):
 
 
 async def upload(path, event, udir_event, catflag=None):
-    global uploaded
     catflag = catflag or False
     reply_to_id = await reply_id(event)
     if os.path.isdir(path):
@@ -129,13 +135,12 @@ async def upload(path, event, udir_event, catflag=None):
                     progress(d, t, udir_event, c_time, "Uploading...", caption_rts)
                 ),
             )
-        uploaded += 1
+        UPLOAD_.uploaded += 1
 
 
 @bot.on(admin_cmd(pattern="upload (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="upload (.*)", allow_sudo=True))
 async def uploadir(event):
-    global uploaded
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     path = Path(input_str)
     start = datetime.now()
@@ -148,16 +153,16 @@ async def uploadir(event):
     udir_event = await edit_or_reply(event, "Uploading....")
     if os.path.isdir(path):
         await edit_or_reply(udir_event, f"`Gathering file details in directory {path}`")
-        uploaded = 0
+        UPLOAD_.uploaded = 0
         await upload(path, event, udir_event)
         end = datetime.now()
         ms = (end - start).seconds
         await udir_event.edit(
-            f"`Uploaded {uploaded} files successfully in {ms} seconds. `"
+            f"`Uploaded {UPLOAD_.uploaded} files successfully in {ms} seconds. `"
         )
     else:
         await edit_or_reply(udir_event, f"`Uploading.....`")
-        uploaded = 0
+        UPLOAD_.uploaded = 0
         await upload(path, event, udir_event)
         end = datetime.now()
         ms = (end - start).seconds
@@ -171,7 +176,6 @@ async def uploadir(event):
 @bot.on(admin_cmd(pattern="uploadf (.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="uploadf (.*)", allow_sudo=True))
 async def uploadir(event):
-    global uploaded
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     path = Path(input_str)
     start = datetime.now()
@@ -184,16 +188,16 @@ async def uploadir(event):
     udir_event = await edit_or_reply(event, "Uploading....")
     if os.path.isdir(path):
         await edit_or_reply(udir_event, f"`Gathering file details in directory {path}`")
-        uploaded = 0
+        UPLOAD_.uploaded = 0
         await upload(path, event, udir_event, catflag=True)
         end = datetime.now()
         ms = (end - start).seconds
         await udir_event.edit(
-            f"`Uploaded {uploaded} files successfully in {ms} seconds. `"
+            f"`Uploaded {UPLOAD_.uploaded} files successfully in {ms} seconds. `"
         )
     else:
         await edit_or_reply(udir_event, f"`Uploading.....`")
-        uploaded = 0
+        UPLOAD_.uploaded = 0
         await upload(path, event, udir_event, catflag=True)
         end = datetime.now()
         ms = (end - start).seconds
@@ -263,7 +267,7 @@ async def video_catfile(event):
         catthumb = None
         try:
             catthumb = await reply.download_media(thumb=-1)
-        except:
+        except Exception:
             catthumb = os.path.join("./temp", "thumb.jpg")
             await thumb_from_audio(catfile, catthumb)
         if catthumb is None:

@@ -51,7 +51,7 @@ async def kakashi(magisk):
 async def device_info(request):
     if request.fwd_from:
         return
-    """ get android device basic info from its codename """
+    # get android device basic info from its codename
     textx = await request.get_reply_message()
     codename = request.pattern_match.group(1)
     if codename:
@@ -86,7 +86,7 @@ async def device_info(request):
 async def codename_info(request):
     if request.fwd_from:
         return
-    """ search for android codename """
+    # search for android codename
     textx = await request.get_reply_message()
     brand = request.pattern_match.group(1).lower()
     device = request.pattern_match.group(2).lower()
@@ -128,12 +128,12 @@ async def codename_info(request):
     await edit_or_reply(request, reply)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"aspecs(?: |)([\S]*)(?: |)([\s\S]*)"))
-@bot.on(sudo_cmd(pattern=r"aspecs(?: |)([\S]*)(?: |)([\s\S]*)", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern=r"specs(?: |)([\S]*)(?: |)([\s\S]*)"))
+@bot.on(sudo_cmd(pattern=r"specs(?: |)([\S]*)(?: |)([\s\S]*)", allow_sudo=True))
 async def devices_specifications(request):
     if request.fwd_from:
         return
-    """ Mobile devices specifications """
+    # Mobile devices specifications
     textx = await request.get_reply_message()
     brand = request.pattern_match.group(1).lower()
     device = request.pattern_match.group(2).lower()
@@ -143,7 +143,7 @@ async def devices_specifications(request):
         brand = textx.text.split(" ")[0]
         device = " ".join(textx.text.split(" ")[1:])
     else:
-        await edit_or_reply(request, "`Usage: .aspecs <brand> <device>`")
+        await edit_or_reply(request, "`Usage: .specs <brand> <device>`")
         return
     all_brands = (
         BeautifulSoup(
@@ -198,7 +198,7 @@ async def devices_specifications(request):
 async def twrp(request):
     if request.fwd_from:
         return
-    """ get android device twrp """
+    # get android device twrp
     textx = await request.get_reply_message()
     device = request.pattern_match.group(1)
     if device:
@@ -236,7 +236,7 @@ CMD_HELP.update(
 \n**USAGE   ➥  **Get info about android device codename or model.\
 \n\n📌** CMD ➥** `.codename` <brand> <device>\
 \n**USAGE   ➥  **Search for android device codename.\
-\n\n📌** CMD ➥** `.aspecs` <brand> <device>\
+\n\n📌** CMD ➥** `.specs` <brand> <device>\
 \n**USAGE   ➥  **Get device specifications info.\
 \n\n📌** CMD ➥** `.twrp` <codename>\
 \n**USAGE   ➥  **Get latest twrp download for android device."
