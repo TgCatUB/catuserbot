@@ -3,6 +3,7 @@ from datetime import datetime
 from math import sqrt
 
 from emoji import emojize
+from telethon import functions
 from telethon.errors import (
     ChannelInvalidError,
     ChannelPrivateError,
@@ -19,24 +20,20 @@ from telethon.tl.types import (
 )
 from telethon.utils import get_input_location
 
-from . import BOTLOG, BOTLOG_CHATID
+from . import BOTLOG, BOTLOG_CHATID, get_user_from_event
 
-
-from telethon import functions
-from . import get_user_from_event
 
 @bot.on(admin_cmd(pattern="adminperm(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="adminperm(?: |$)(.*)",allow_sudo=True))
+@bot.on(sudo_cmd(pattern="adminperm(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
     user, reason = await get_user_from_event(event)
     if not user:
         return
-    result =await event.client(functions.channels.GetParticipantRequest(
-            channel=event.chat_id,
-            user_id=user.id
-        ))
+    result = await event.client(
+        functions.channels.GetParticipantRequest(channel=event.chat_id, user_id=user.id)
+    )
     try:
         c_info = "✅" if result.participant.admin_rights.change_info else "❌"
         del_me = "✅" if result.participant.admin_rights.delete_messages else "❌"
@@ -46,7 +43,10 @@ async def _(event):
         add_a = "✅" if result.participant.admin_rights.add_admins else "❌"
         call = "✅" if result.participant.admin_rights.manage_call else "❌"
     except:
-        return await edit_or_reply(event , f"{_format.mentionuser(user.first_name ,user.id)} `is not admin of this this {event.chat.title} chat`")
+        return await edit_or_reply(
+            event,
+            f"{_format.mentionuser(user.first_name ,user.id)} `is not admin of this this {event.chat.title} chat`",
+        )
     output = f"**Admin rights of **{_format.mentionuser(user.first_name ,user.id)} **in {event.chat.title} chat are **\n"
     output += f"__Change info :__ {c_info}\n"
     output += f"__Delete messages :__ {del_me}\n"
@@ -55,7 +55,8 @@ async def _(event):
     output += f"__Pin messages :__ {pin}\n"
     output += f"__Add admins :__ {add_a}\n"
     output += f"__Managecall :__ {call}\n"
-    await edit_or_reply(event , output)
+    await edit_or_reply(event, output)
+
 
 @bot.on(admin_cmd(pattern="admins ?(.*)"))
 @bot.on(sudo_cmd(pattern="admins ?(.*)", allow_sudo=True))
