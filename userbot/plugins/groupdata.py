@@ -54,7 +54,7 @@ async def _(event):
     output += f"__Invite users :__ {invite_u}\n"
     output += f"__Pin messages :__ {pin}\n"
     output += f"__Add admins :__ {add_a}\n"
-    output += f"__Managecall :__ {call}\n"
+    output += f"__Manage call :__ {call}\n"
     await edit_or_reply(event, output)
 
 
