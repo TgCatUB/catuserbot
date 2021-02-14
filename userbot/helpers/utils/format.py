@@ -5,7 +5,7 @@ import requests
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
-
+from ..functions import utc_to_local
 
 def paste_text(text):
     asciich = ["**", "`", "__"]
@@ -121,7 +121,7 @@ def yaml_format(obj, indent=0, max_str_len=256, max_byte_len=64):
         return "<…>" if len(obj) > max_byte_len else " ".join(f"{b:02X}" for b in obj)
     elif isinstance(obj, datetime.datetime):
         # ISO-8601 without timezone offset (telethon dates are always UTC)
-        return obj.strftime("%Y-%m-%d %H:%M:%S")
+        return utc_to_local(obj.strftime("%Y-%m-%d %H:%M:%S"))
     elif hasattr(obj, "__iter__"):
         # display iterables one after another at the base indentation level
         result.append("\n")
