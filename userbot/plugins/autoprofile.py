@@ -173,7 +173,7 @@ async def _(event):
         return await edit_delete(event, "`Autoname haven't enabled`")
     if input_str == "autobio":
         if gvarstatus("autobio") is not None and gvarstatus("autobio") == "true":
-            delgvar("autoname")
+            delgvar("autobio")
             await event.client(
                 functions.account.UpdateProfileRequest(about=DEFAULTUSERBIO)
             )
