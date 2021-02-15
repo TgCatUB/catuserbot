@@ -1607,7 +1607,7 @@ CMD_HELP.update(
         "\ninto **G_DRIVE_FOLDER_ID** and if that var empty, then upload will go to root."
         "\n\n📌** CMD ➥** `.gdfclear`"
         "\n**USAGE   ➥  **remove set parentId from cmd\n>`.gdfset` "
-        "\n\n📌** CMD ➥** `.gdl` <gdrive File-Link>"
+        "\n\n📌** CMD ➥** `.gdown` <gdrive File-Link>"
         "\n**USAGE   ➥  **G-Drive File Downloader Plugin For Userbot. only gdrive files are supported now"
         "\nUse flag `-u` to directly upload to telegram in `.gdl` command"
         "\n\n📌** CMD ➥** `.glist`"
