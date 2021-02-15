@@ -203,6 +203,8 @@ async def cat_song_fetcer(event):
                 )
             await catevent.edit(SONG_SENDING_STRING, parse_mode="html")
             await baka[0].click(0)
+            await conv.get_response()
+            await conv.get_response()
             music = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
@@ -222,14 +224,14 @@ async def cat_song_fetcer(event):
 CMD_HELP.update(
     {
         "songs": "**Plugin : **`songs`\
-        \n\n  •**Syntax : **`.song <query/reply>`\
-        \n  •**Function : **__searches the song you entered in query from youtube and sends it, quality of it is 128k__\
-        \n\n  •**Syntax : **`.song320 <query/reply>`\
-        \n  •**Function : **__searches the song you entered in query from youtube and sends it quality of it is 320k__\
-        \n\n  •**Syntax : **`.vsong <query/reply>`\
-        \n  •**Function : **__Searches the video song you entered in query and sends it__\
-        \n\n  •**Syntax : **`.song2 query`\
-        \n  •**Function : **__searches the song you entered in query and sends it quality of it is 320k__\
+        \n\n•**Syntax : **`.song <query/reply>`\
+        \n•**Function : **__searches the song you entered in query from youtube and sends it, quality of it is 128k__\
+        \n\n•**Syntax : **`.song320 <query/reply>`\
+        \n•**Function : **__searches the song you entered in query from youtube and sends it quality of it is 320k__\
+        \n\n•**Syntax : **`.vsong <query/reply>`\
+        \n•**Function : **__Searches the video song you entered in query and sends it__\
+        \n\n•**Syntax : **`.song2 query`\
+        \n•**Function : **__searches the song you entered in query and sends it quality of it is 320k__\
         "
     }
 )

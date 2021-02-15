@@ -4,18 +4,18 @@ import requests
 from telethon import functions
 
 from . import ALIVE_NAME, CMD_LIST, SUDO_LIST
-
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-
-HELPTYPE = Config.HELP_INLINETYPE or True
+from .sql_helper.globals import addgvar, gvarstatus
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="help ?(.*)"))
 async def cmd_list(event):
-    global HELPTYPE
-    reply_to_id = None
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    if event.fwd_from:
+        return
+    if gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "false":
+        HELPTYPE = False
+    else:
+        HELPTYPE = True
+    reply_to_id = await reply_id(event)
     input_str = event.pattern_match.group(1)
     if input_str == "text":
         string = (
@@ -64,13 +64,11 @@ async def cmd_list(event):
             await event.delete()
     else:
         if HELPTYPE is True:
-            help_string = f"Userbot Helper. Provided by {DEFAULTUSER} to reveal all the plugins\
+            help_string = f"Userbot Helper. Provided by {ALIVE_NAME} to reveal all the plugins\
                           \nCheck `.help plugin name` for commands, in case popup doesn't appear.\
                           \nCheck `.info plugin name` for usage of thoose plugins and commands"
             tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
-            results = await bot.inline_query(  # pylint:disable=E0602
-                tgbotusername, help_string
-            )
+            results = await event.client.inline_query(tgbotusername, help_string)
             await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
             await event.delete()
         else:
@@ -87,6 +85,8 @@ async def cmd_list(event):
 
 @bot.on(sudo_cmd(allow_sudo=True, pattern="help ?(.*)"))
 async def info(event):
+    if event.fwd_from:
+        return
     input_str = event.pattern_match.group(1)
     if input_str == "text":
         string = "Total {count} commands found in {plugincount} sudo plugins of catuserbot\n\n"
@@ -149,7 +149,8 @@ async def info(event):
 @bot.on(admin_cmd(outgoing=True, pattern="info ?(.*)"))
 @bot.on(sudo_cmd(pattern="info ?(.*)", allow_sudo=True))
 async def info(event):
-    """ For .info command,"""
+    if event.fwd_from:
+        return
     args = event.pattern_match.group(1).lower()
     if args:
         if args in CMD_HELP:
@@ -178,7 +179,7 @@ async def info(event):
 async def _(event):
     if event.fwd_from:
         return
-    result = await bot(functions.help.GetNearestDcRequest())
+    result = await event.client(functions.help.GetNearestDcRequest())
     result = (
         _format.yaml_format(result)
         + "\n\n**List Of Telegram Data Centres:**\
@@ -196,21 +197,21 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    global HELPTYPE
     input_str = event.pattern_match.group(1)
-    if input_str == "true":
-        type = True
+    h_type = input_str == "true"
+    if gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "false":
+        HELPTYPE = False
     else:
-        type = False
-    if HELPTYPE is True:
-        if type is True:
+        HELPTYPE = True
+    if HELPTYPE:
+        if h_type:
             await event.edit("`inline mode is already enabled`")
         else:
-            HELPTYPE = type
+            addgvar("HELPTYPE", h_type)
             await event.edit("`inline mode is disabled`")
     else:
-        if type is True:
-            HELPTYPE = type
+        if h_type:
+            addgvar("HELPTYPE", h_type)
             await event.edit("`inline mode is enabled`")
         else:
             await event.edit("`inline mode is already disabled`")
@@ -220,16 +221,16 @@ CMD_HELP.update(
     {
         "help": """**Plugin : **`help`
 
-  •  **Syntax : **`.help/.help plugin_name`
-  •  **Function : **__If you just type .help then shows you help menu, if plugin name is given then shows you only commands in thst plugin and if you use `.help text` then shows you all commands in your userbot__
+•  **Syntax : **`.help/.help plugin_name`
+•  **Function : **__If you just type .help then shows you help menu, if plugin name is given then shows you only commands in thst plugin and if you use `.help text` then shows you all commands in your userbot__
 
-  •  **Syntax : **`.info/.info plugin_name`
-  •  **Function : **__To get details/information/usage of that plugin__
+•  **Syntax : **`.info/.info plugin_name`
+•  **Function : **__To get details/information/usage of that plugin__
 
-  •  **Syntax : **`.dc`
-  •  **Function : **__Shows your dc id and dc ids list__
+•  **Syntax : **`.dc`
+•  **Function : **__Shows your dc id and dc ids list__
 
-  •  **Syntax : **`.setinline (true|false)`
-  •  **Function : **__Sets help menu either in inline or text format__"""
+•  **Syntax : **`.setinline (true|false)`
+•  **Function : **__Sets help menu either in inline or text format__"""
     }
 )

@@ -1,9 +1,4 @@
-# Userbot module for getiing info about any user on Telegram(including you!).
-
-# Copyright (C) 2019 The Raphielscape Company LLC.(who is from raphielscape)
-
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
+# Userbot module for fetching info about any user on Telegram(including you!).
 
 import html
 import os
@@ -14,7 +9,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 
-from . import LOGS, spamwatch
+from . import LOGS, get_user_from_event, spamwatch
 
 TMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
@@ -40,7 +35,7 @@ async def _(event):
     common_chats = replied_user.common_chats_count
     try:
         dc_id, location = get_input_location(replied_user.profile_photo)
-    except:
+    except Exception:
         dc_id = "Couldn't fetch DC ID!"
     if spamwatch:
         ban = spamwatch.get_ban(user_id)
@@ -89,8 +84,8 @@ async def get_full_user(event):
         try:
             try:
                 input_str = int(input_str)
-            except:
-                pass
+            except Exception as e:
+                LOGS.info(str(e))
             user_object = await event.client.get_entity(input_str)
             user_id = user_object.id
             replied_user = await event.client(GetFullUserRequest(user_id))
@@ -99,6 +94,8 @@ async def get_full_user(event):
             return None, e
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
+        if previous_message.from_id is None and not event.is_private:
+            return None, "Well that's an anonymous admin. I can't fetch details!"
         if previous_message.forward:
             replied_user = await event.client(
                 GetFullUserRequest(
@@ -128,6 +125,10 @@ async def who(event):
     if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TMP_DOWNLOAD_DIRECTORY)
     replied_user = await get_user(event)
+    if replied_user is None:
+        return await edit_or_reply(
+            cat, "`Well that's an anonymous admin. I can't fetch details!`"
+        )
     try:
         photo, caption = await fetch_info(replied_user, event)
     except AttributeError:
@@ -157,6 +158,8 @@ async def get_user(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id and not event.pattern_match.group(1):
         previous_message = await event.get_reply_message()
+        if previous_message.from_id is None and not event.is_private:
+            return None
         replied_user = await event.client(
             GetFullUserRequest(previous_message.sender_id)
         )
@@ -199,7 +202,7 @@ async def fetch_info(replied_user, event):
     last_name = replied_user.user.last_name
     try:
         dc_id, location = get_input_location(replied_user.profile_photo)
-    except:
+    except Exception:
         dc_id = "Couldn't fetch DC ID!"
     common_chat = replied_user.common_chats_count
     username = replied_user.user.username
@@ -248,37 +251,6 @@ async def permalink(mention):
             user.first_name.replace("\u2060", "") if user.first_name else user.username
         )
         await edit_or_reply(mention, f"[{tag}](tg://user?id={user.id})")
-
-
-async def get_user_from_event(event):
-    """ Get the user from argument or replied message. """
-    args = event.pattern_match.group(1).split(":", 1)
-    extra = None
-    if event.reply_to_msg_id and len(args) != 2:
-        previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.sender_id)
-        extra = event.pattern_match.group(1)
-    elif len(args[0]) > 0:
-        user = args[0]
-        if len(args) == 2:
-            extra = args[1]
-        if user.isnumeric():
-            user = int(user)
-        if not user:
-            await event.edit("`Pass the user's username, id or reply!`")
-            return
-        if event.message.entities:
-            probable_user_mention_entity = event.message.entities[0]
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                user_obj = await event.client.get_entity(user_id)
-                return user_obj
-        try:
-            user_obj = await event.client.get_entity(user)
-        except (TypeError, ValueError) as err:
-            await event.edit(str(err))
-            return None
-    return user_obj, extra
 
 
 async def ge(user, event):

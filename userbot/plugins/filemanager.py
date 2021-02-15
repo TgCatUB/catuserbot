@@ -122,7 +122,7 @@ async def lst(event):
 async def _(event):
     if event.fwd_from:
         return
-    pwd = "./"
+    pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(
@@ -153,7 +153,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    pwd = "./"
+    pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(
@@ -189,7 +189,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    pwd = "./"
+    pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(
@@ -225,20 +225,20 @@ CMD_HELP.update(
         "filemanager": "**Plugin :**`filemanager`\
      \n\nList Files plugin for userbot \
      \n  •  **Syntax :** `.ls`\
-     \n  •  **Usage :** will return files from current working directory\
+     \n  •  **Function :** will return files from current working directory\
      \n\n  •  **Syntax :** .ls path\
-     \n  •  **Usage :** will return output according to path  \
+     \n  •  **Function :** will return output according to path  \
      \n\n  •  **Syntax :** .ls file path\
-     \n  •  **Usage :** will return file details\
+     \n  •  **Function :** will return file details\
      \n\nSimple Module for people who dont wanna use shell executor for listing files.\
      \n\n  •  **Syntax :** `.rem path`\
-     \n  •  **Usage :** To delete the required item from the bot server\
+     \n  •  **Function :** To delete the required item from the bot server\
      \n\n  •  **Syntax :** `.mkdir foldername`\
-     \n  •  **Usage :** Creates a new empty folder in the server\
+     \n  •  **Function :** Creates a new empty folder in the server\
      \n\n  •  **Syntax :** `.mvto frompath ; topath`\
-     \n  •  **Usage :** Move a file from one location to other location in bot server\
+     \n  •  **Function :** Move a file from one location to other location in bot server\
      \n\n  •  **Syntax :** `.cpto frompath ; topath`\
-     \n  •  **Usage :** Copy a file from one location to other location in bot server\
+     \n  •  **Function :** Copy a file from one location to other location in bot server\
 "
     }
 )

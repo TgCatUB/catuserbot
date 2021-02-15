@@ -3,39 +3,48 @@ import asyncio
 
 from telethon import events
 
-import userbot.plugins.sql_helper.no_log_pms_sql as no_log_pms_sql
-
 from . import BOTLOG, BOTLOG_CHATID, LOGS
+from .sql_helper import no_log_pms_sql
+from .sql_helper.globals import addgvar, gvarstatus
 
-RECENT_USER = None
-NEWPM = None
-COUNT = 0
+
+class LOG_CHATS:
+    def __init__(self):
+        self.RECENT_USER = None
+        self.NEWPM = None
+        self.COUNT = 0
+
+
+LOG_CHATS_ = LOG_CHATS()
 
 
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def monito_p_m_s(event):
-    global RECENT_USER
-    global NEWPM
-    global COUNT
     if not Config.PM_LOGGR_BOT_API_ID:
         return
+    if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
+        return
     sender = await event.get_sender()
-    if Config.NO_LOG_P_M_S and not sender.bot:
+    if not sender.bot:
         chat = await event.get_chat()
         if not no_log_pms_sql.is_approved(chat.id) and chat.id != 777000:
-            if RECENT_USER != chat.id:
-                RECENT_USER = chat.id
-                if NEWPM:
-                    if COUNT > 1:
-                        await NEWPM.edit(
-                            NEWPM.text.replace("new message", f"{COUNT} messages")
+            if LOG_CHATS_.RECENT_USER != chat.id:
+                LOG_CHATS_.RECENT_USER = chat.id
+                if LOG_CHATS_.NEWPM:
+                    if LOG_CHATS_.COUNT > 1:
+                        await LOG_CHATS_.NEWPM.edit(
+                            LOG_CHATS_.NEWPM.text.replace(
+                                "new message", f"{LOG_CHATS_.COUNT} messages"
+                            )
                         )
                     else:
-                        await NEWPM.edit(
-                            NEWPM.text.replace("new message", f"{COUNT} message")
+                        await LOG_CHATS_.NEWPM.edit(
+                            LOG_CHATS_.NEWPM.text.replace(
+                                "new message", f"{LOG_CHATS_.COUNT} message"
+                            )
                         )
-                    COUNT = 0
-                NEWPM = await event.client.send_message(
+                    LOG_CHATS_.COUNT = 0
+                LOG_CHATS_.NEWPM = await event.client.send_message(
                     Config.PM_LOGGR_BOT_API_ID,
                     f"👤{_format.mentionuser(sender.first_name , sender.id)} has sent a new message \nId : `{chat.id}`",
                 )
@@ -44,7 +53,7 @@ async def monito_p_m_s(event):
                     await event.client.forward_messages(
                         Config.PM_LOGGR_BOT_API_ID, event.message, silent=True
                     )
-                COUNT += 1
+                LOG_CHATS_.COUNT += 1
             except Exception as e:
                 LOGS.warn(str(e))
 
@@ -52,24 +61,22 @@ async def monito_p_m_s(event):
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
 async def log_tagged_messages(event):
     hmm = await event.get_chat()
-    if no_log_pms_sql.is_approved(hmm.id):
-        return
-    if not Config.PM_LOGGR_BOT_API_ID:
-        return
-    from .afk import USERAFK_ON
+    from .afk import AFK_
 
-    if "on" in USERAFK_ON:
+    if gvarstatus("GRPLOG") and gvarstatus("GRPLOG") == "false":
         return
-    try:
-        if (await event.get_sender()).bot:
-            return
-    except:
-        pass
+    if (
+        (no_log_pms_sql.is_approved(hmm.id))
+        or (not Config.PM_LOGGR_BOT_API_ID)
+        or ("on" in AFK_.USERAFK_ON)
+        or (await event.get_sender() and (await event.get_sender()).bot)
+    ):
+        return
     full = None
     try:
         full = await event.client.get_entity(event.message.from_id)
-    except:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     messaget = media_type(event)
     resalt = f"#TAGS \n<b>Group : </b><code>{hmm.title}</code>"
     if full is not None:
@@ -81,7 +88,6 @@ async def log_tagged_messages(event):
     else:
         resalt += f"\n<b>Message : </b>{event.message.message}"
     resalt += f"\n<b>Message link: </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>"
-    await asyncio.sleep(3)
     if not event.is_private:
         await event.client.send_message(
             Config.PM_LOGGR_BOT_API_ID,
@@ -100,7 +106,7 @@ async def log(log_text):
         elif log_text.pattern_match.group(1):
             user = f"#LOG / Chat ID: {log_text.chat_id}\n\n"
             textx = user + log_text.pattern_match.group(1)
-            await bot.send_message(BOTLOG_CHATID, textx)
+            await log_text.client.send_message(BOTLOG_CHATID, textx)
         else:
             await log_text.edit("`What am I supposed to log?`")
             return
@@ -133,14 +139,72 @@ async def set_no_log_p_m(event):
             )
 
 
+@bot.on(admin_cmd(pattern="pmlog (on|off)$"))
+async def set_pmlog(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    if input_str == "off":
+        h_type = False
+    elif input_str == "on":
+        h_type = True
+    if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
+        PMLOG = False
+    else:
+        PMLOG = True
+    if PMLOG:
+        if h_type:
+            await event.edit("`Pm logging is already enabled`")
+        else:
+            addgvar("PMLOG", h_type)
+            await event.edit("`Pm logging is disabled`")
+    else:
+        if h_type:
+            addgvar("PMLOG", h_type)
+            await event.edit("`Pm logging is enabled`")
+        else:
+            await event.edit("`Pm logging is already disabled`")
+
+
+@bot.on(admin_cmd(pattern="grplog (on|off)$"))
+async def set_grplog(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    if input_str == "off":
+        h_type = False
+    elif input_str == "on":
+        h_type = True
+    if gvarstatus("GRPLOG") and gvarstatus("GRPLOG") == "false":
+        GRPLOG = False
+    else:
+        GRPLOG = True
+    if GRPLOG:
+        if h_type:
+            await event.edit("`Group logging is already enabled`")
+        else:
+            addgvar("GRPLOG", h_type)
+            await event.edit("`Group logging is disabled`")
+    else:
+        if h_type:
+            addgvar("GRPLOG", h_type)
+            await event.edit("`Group logging is enabled`")
+        else:
+            await event.edit("`Group logging is already disabled`")
+
+
 CMD_HELP.update(
     {
         "logchats": "**Plugin : **`logchats`\
-        \n\n  •  **Syntax : **`.save` :\
-        \n  •  **Function : **__Saves tagged message in private group .__\
-        \n\n  •  **Syntax : **`.log`:\
-        \n  •  **Function : **__By default will log all private chat messages if you use .nolog and want to log again then you need to use this__\
-        \n\n  •  **Syntax : **`.nolog`:\
-        \n  •  **Function : **__Stops logging from a private chat or group where you used__"
+        \n\n•  **Syntax : **`.save`\
+        \n•  **Function : **__Saves tagged message in private group .__\
+        \n\n•  **Syntax : **`.log`\
+        \n•  **Function : **__By default will log all private chat messages if you use .nolog and want to log again then you need to use this__\
+        \n\n•  **Syntax : **`.nolog`\
+        \n•  **Function : **__Stops logging from a private chat or group where you used__\
+        \n\n•  **Syntax : **`.pmlog on/off`\
+        \n•  **Function : **__To turn on and turn off personal messages logging__\
+        \n\n•  **Syntax : **`.nolog`\
+        \n•  **Function : **__To turn on and turn off Group messages(tagged) logging__"
     }
 )

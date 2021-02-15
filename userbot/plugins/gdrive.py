@@ -245,7 +245,7 @@ async def download(event, gdrive, service, uri=None):
             from .torrentutils import aria2, check_metadata
 
             cattorrent = True
-        except:
+        except Exception:
             cattorrent = False
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
         if cattorrent:
@@ -711,8 +711,8 @@ async def create_dir(service, folder_name, dir_id=None):
 async def upload(gdrive, service, file_path, file_name, mimeType):
     try:
         await gdrive.edit("`Processing upload...`")
-    except Exception:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     body = {
         "name": file_name,
         "description": "Uploaded from Telegram using Catuserbot.",
@@ -1181,8 +1181,8 @@ async def cancel_process(gdrive):
         if len(downloads) != 0:
             aria2.remove_all(force=True)
             aria2.autopurge()
-    except:
-        pass
+    except Exception as e:
+        LOGS.info(str(e))
     is_cancelled = True
     await asyncio.sleep(3.5)
     await gdrive.delete()

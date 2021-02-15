@@ -91,7 +91,7 @@
       "value": "",
       "required": false
     },
-    "DOWNLOAD_PFP_URL_CLOCK": {
+    "DEFAULT_PIC": {
       "description": "Needed for autopic module. A url that is a preview link of your Profile Pic",
       "value": "",
       "required": false
