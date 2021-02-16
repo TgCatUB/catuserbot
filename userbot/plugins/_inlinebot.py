@@ -112,12 +112,12 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 try:
                     u = await event.client.get_entity(u)
                     if u.username:
-                        sandy = f"@{u.username}"
+                        user = f"@{u.username}"
                     else:
-                        sandy = f"[{u.first_name}](tg://user?id={u.id})"
+                        user = f"[{u.first_name}](tg://user?id={u.id})"
                 except ValueError:
                     # ValueError: Could not find the input entity
-                    sandy = f"[user](tg://user?id={u})"
+                    user = f"[user](tg://user?id={u})"
             except ValueError:
                 # if u is username
                 try:
@@ -125,9 +125,9 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 except ValueError:
                     return
                 if u.username:
-                    sandy = f"@{u.username}"
+                    user = f"@{u.username}"
                 else:
-                    sandy = f"[{u.first_name}](tg://user?id={u.id})"
+                    user = f"[{u.first_name}](tg://user?id={u.id})"
                 u = int(u.id)
             except Exception:
                 return
@@ -139,7 +139,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             ]
             result = builder.article(
                 title="secret message",
-                text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
+                text=f"🔒 A whisper message to {user}, Only he/she can open it.",
                 buttons=buttons,
             )
             await event.answer([result] if result else None)
