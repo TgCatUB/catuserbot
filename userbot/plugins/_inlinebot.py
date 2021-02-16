@@ -25,7 +25,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             buttons = [
                 (
                     custom.Button.inline("Stats", data="stats"),
-                    Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
+                    Button.url("Repo", "https://github.com/priest1966/catuserbot"),
                 )
             ]
             if CAT_IMG and CAT_IMG.endswith((".jpg", ".png")):
