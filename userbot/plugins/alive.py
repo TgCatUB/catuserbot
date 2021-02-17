@@ -8,10 +8,9 @@ from . import ALIVE_NAME, StartTime, catversion, get_readable_time, mention, rep
 
 DEFAULTUSER = ALIVE_NAME or "cat"
 CAT_IMG = Config.ALIVE_PIC
-LAT_IMG = random.choice(Config.ALIVE_PIC)
 TAT_IMG = Config.ALIVE_PIC_2
 FAT_IMG = [
-            LAT_IMG,
+            CAT_IMG,
             TAT_IMG,
     ]
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
@@ -35,7 +34,7 @@ async def amireallyalive(alive):
         cat_caption += f"**{EMOJI} Uptime :** `{uptime}\n`"
         cat_caption += f"**{EMOJI} Master:** {mention}\n"
         await alive.client.send_file(
-            alive.chat_id, LAT_IMG, caption=cat_caption, reply_to=reply_to_id
+            alive.chat_id, FAT_IMG, caption=cat_caption, reply_to=reply_to_id
         )
         await alive.delete()
     else:
