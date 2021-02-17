@@ -34,7 +34,7 @@ async def amireallyalive(alive):
         cat_caption += f"**{EMOJI} Uptime :** `{uptime}\n`"
         cat_caption += f"**{EMOJI} Master:** {mention}\n"
         await alive.client.send_file(
-            alive.chat_id, FAT_IMG, caption=cat_caption, reply_to=reply_to_id
+            alive.chat_id, random.choice(FAT_IMG), caption=cat_caption, reply_to=reply_to_id
         )
         await alive.delete()
     else:
