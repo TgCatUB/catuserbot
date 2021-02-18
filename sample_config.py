@@ -9,18 +9,18 @@ from telethon.tl.types import ChatBannedRights
 class Config(object):
     LOGGER = True
     # Default .alive name
-    ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
+    ALIVE_NAME = os.environ.get("DEVANG", None)
     # For customizing there alive message
-    CUSTOM_ALIVE_TEXT = os.environ.get("CUSTOM_ALIVE_TEXT", None)
+    CUSTOM_ALIVE_TEXT = os.environ.get("Master i am running", None)
     CUSTOM_ALIVE_EMOJI = os.environ.get("CUSTOM_ALIVE_EMOJI", None)
     # for profile default name
     AUTONAME = os.environ.get("AUTONAME", None)
     # Get this value from my.telegram.org! Please do not steal
-    APP_ID = int(os.environ.get("APP_ID", 6))
-    API_HASH = os.environ.get("API_HASH", "eb06d4abfb49dc3eeb1aeb98ae0f581e")
-    STRING_SESSION = os.environ.get("STRING_SESSION", None)
+    APP_ID = int(os.environ.get("3267900", 6))
+    API_HASH = os.environ.get("611271b9866da3ecd8be1a5dde2ba1fd", "eb06d4abfb49dc3eeb1aeb98ae0f581e")
+    STRING_SESSION = os.environ.get("1AZWarzoBu8RaBumD93T-cMIXgZSm6j8G42aH5EgyD1ZG-0bNFGEzzsHK_3zlfDdlADEojr3lET55uHQiKa73sXuUsZvzzq6GQcwRSRS-QCYYJr0sQKUKuL9jV1m2Hw_EFXgAUE8mfKWbrAvvXQoPQonhQWoBdZNSWxRkfd-smQeN17jSzXciyrAE_4RfQaMLrmcJox2RYP0zl_F-9B0bNIYFUrpzm8VkBcwkrn-Ue-ygkuUPM1WeInlxPsiDfwh8RVGcMso84KLnNeiGtG78oUxqSAPzzAnjDUzVrW9I3WCPEVGgWmbEXV-x1A9jksAPhCkPmNFQZI9F8kLhCc0xbwnsJrS5m3A=", None)
     # For Databases
-    DB_URI = os.environ.get("DATABASE_URL", None)
+    DB_URI = os.environ.get("postgres://joqxxwqf:COAJCG...@ziggy.db.elephantsql.com:5432/joqxxwqf", None)
     SCREEN_SHOT_LAYER_ACCESS_KEY = os.environ.get("SCREEN_SHOT_LAYER_ACCESS_KEY", None)
     # string session for running on Heroku
     # some people upload their session files on GitHub or other third party hosting
@@ -60,8 +60,8 @@ class Config(object):
     # TG API limit. An album can have atmost 10 media!
     TG_GLOBAL_ALBUM_LIMIT = int(os.environ.get("TG_GLOBAL_ALBUM_LIMIT", 9))
     # Telegram BOT Token from @BotFather
-    TG_BOT_TOKEN_BF_HER = os.environ.get("TG_BOT_TOKEN_BF_HER", None)
-    TG_BOT_USER_NAME_BF_HER = os.environ.get("TG_BOT_USER_NAME_BF_HER", None)
+    TG_BOT_TOKEN_BF_HER = os.environ.get("1636346579:AAE0e4s8n9BttxwtYGFG5D5R87sPT2iI1bE", None)
+    TG_BOT_USER_NAME_BF_HER = os.environ.get("@Devcatubot", None)
     THUMB_IMAGE = os.environ.get(
         "THUMB_IMAGE", "https://telegra.ph/file/ca95524e4734b0d5461b5.jpg"
     )
