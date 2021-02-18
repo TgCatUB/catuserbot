@@ -485,7 +485,7 @@ async def kick(usr):
         )
     else:
         await catevent.edit(f"Kicked [{user.first_name}](tg://user?id={user.id})!")
-    if BOTLOG
+    if BOTLOG:
         await usr.client.send_message(
             BOTLOG_CHATID,
             "#KICK\n"
