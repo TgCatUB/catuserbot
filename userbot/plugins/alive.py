@@ -17,8 +17,8 @@ CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFU
 EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="alive$"))
-@bot.on(sudo_cmd(pattern="alive$", allow_sudo=True))
+@bot.on(admin_cmd(outgoing=True, pattern="^alive$"))
+@bot.on(sudo_cmd(pattern="alive$", allow_sudo=FALSE))
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
