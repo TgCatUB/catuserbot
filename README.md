@@ -18,20 +18,7 @@ A simple Telegram userbot based on Telethon .
 
 
 ## How to deploy catuserbot
-
-[![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot%2Ftree%2Fbugs&template=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot)
-
-  <details>
-    <summary>Steps to deploy on Heroku !! </summary>
-
-  #### Get Required values First 
-
-  1) Get App Id and Api Hash from [HERE](https://my.telegram.org) 
-  2) Create a bot in [Bot Father](https://t.me/botfather) and get Bot Token
-  3) Then Generate stringsession from [Repl](https://generatestringsession.sandeep1709.repl.run/).
-
-
-  </details>
+  - [check this](https://catuserbot.gitbook.io/catuserbot/tutorial/self-host)
   
 ## Support
    <a href="https://t.me/catuserbot17"><img src="https://img.shields.io/badge/Channel%20Support%3F-yes-green?&style=flat-square?&logo=telegram" width=220px></a></p>
