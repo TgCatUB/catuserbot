@@ -1,7 +1,7 @@
-FROM sandy1709/catuserbot:latest
+FROM LEGENDXOP/LEGEND-BOT:latest
 
 #clonning repo 
-RUN git clone https://github.com/sandy1709/catuserbot.git /root/userbot
+RUN git clone https://github.com/legendx22/LEGEND-BOT.git /root/userbot
 #working directory 
 WORKDIR /root/userbot
 
