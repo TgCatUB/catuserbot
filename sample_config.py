@@ -194,8 +194,8 @@ class Config(object):
     COUNTRY = str(os.environ.get("COUNTRY", ""))
     TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
     #  for updater plugin
-    UPSTREAM_REPO_URL = os.environ.get(
-        "UPSTREAM_REPO_URL", "https://github.com/sandy1709/catuserbot.git"
+    UPSTREAM_REPO = os.environ.get(
+        "UPSTREAM_REPO", "https://github.com/sandy1709/catuserbot.git"
     )
     UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
     # can get from https://coffeehouse.intellivoid.net/
