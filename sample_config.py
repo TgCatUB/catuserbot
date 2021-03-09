@@ -10,7 +10,7 @@ class Config(object):
     LOGGER = True
     # Default .alive name
     ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
-    
+
     # For customizing there alive message
     CUSTOM_ALIVE_TEXT = os.environ.get("CUSTOM_ALIVE_TEXT", None)
     CUSTOM_ALIVE_EMOJI = os.environ.get("CUSTOM_ALIVE_EMOJI", None)
@@ -22,7 +22,6 @@ class Config(object):
     APP_ID = int(os.environ.get("APP_ID", 6))
     API_HASH = os.environ.get("API_HASH", "eb06d4abfb49dc3eeb1aeb98ae0f581e")
     STRING_SESSION = os.environ.get("STRING_SESSION", None)
-
 
     # For Databases
     # can be None in which case plugins requiring
@@ -162,10 +161,10 @@ class Config(object):
     # for heroku plugin
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
-    
+
     # For transfer channel
     TG_2STEP_VERIFICATION_CODE = os.environ.get("TG_2STEP_VERIFICATION_CODE", None)
-    
+
     # for sed plugin
     GROUP_REG_SED_EX_BOT_S = os.environ.get(
         "GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot"
@@ -227,7 +226,7 @@ class Config(object):
     COUNTRY = str(os.environ.get("COUNTRY", ""))
     TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
 
-    #For updater plugin
+    # For updater plugin
     UPSTREAM_REPO = os.environ.get(
         "UPSTREAM_REPO", "https://github.com/sandy1709/catuserbot.git"
     )
