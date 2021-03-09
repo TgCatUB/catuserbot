@@ -195,7 +195,7 @@ if Config.PRIVATE_GROUP_ID is not None:
     async def do_pm_permit_action(chat_id, event, sender):
         if chat_id not in PM_WARNS:
             PM_WARNS.update({chat_id: 0})
-        if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_P_M_s:
+        if PM_WARNS[chat_id] == Config.MAX_FLOOD_IN_PMS:
             r = await event.reply(USER_BOT_WARN_ZERO)
             await asyncio.sleep(1)
             await event.client(functions.contacts.BlockRequest(chat_id))
@@ -227,7 +227,7 @@ if Config.PRIVATE_GROUP_ID is not None:
         my_last = me.last_name
         my_fullname = f"{my_first} {my_last}" if my_last else my_first
         my_username = f"@{me.username}" if me.username else my_mention
-        totalwarns = Config.MAX_FLOOD_IN_P_M_s + 1
+        totalwarns = Config.MAX_FLOOD_IN_PMS + 1
         warns = PM_WARNS[chat_id] + 1
         if PMMENU:
             if Config.CUSTOM_PMPERMIT_TEXT:

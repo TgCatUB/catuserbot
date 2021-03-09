@@ -49,7 +49,7 @@ async def amireallyalive(alive):
 async def amireallyalive(alive):
     if alive.fwd_from:
         return
-    tgbotusername = Config.TG_BOT_USER_NAME_BF_HER
+    tgbotusername = Config.TG_BOT_USERNAME
     reply_to_id = await reply_id(alive)
     cat_caption = f"**Catuserbot is Up and Running**\n"
     cat_caption += f"**  -Telethon version :** `{version.__version__}\n`"
