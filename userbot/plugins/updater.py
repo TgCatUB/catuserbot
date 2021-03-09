@@ -154,8 +154,8 @@ async def upstream(event):
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
-        repo = Repo(path.abspath("{}/..".format(getcwd()))).git
-        print(repo)
+        repo = Repo()
+        LOGS.info(repo)
     except NoSuchPathError as error:
         await event.edit(f"{txt}\n`directory {error} is not found`")
         return repo.__del__()
@@ -163,8 +163,7 @@ async def upstream(event):
         await event.edit(f"{txt}\n`Early failure! {error}`")
         return repo.__del__()
     except InvalidGitRepositoryError as error:
-        print(error)
-        print(repo)
+        LOGS.info(error)
         if conf is None:
             return await event.edit(
                 f"`Unfortunately, the directory {error} "
