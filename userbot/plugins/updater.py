@@ -155,7 +155,7 @@ async def upstream(event):
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
         upath = path.dirname(path.abspath(__file__))
-        repo = Repo('{}/..'.format(upath)).git
+        repo = Repo("{}/..".format(upath)).git
         print(repo)
     except NoSuchPathError as error:
         await event.edit(f"{txt}\n`directory {error} is not found`")
