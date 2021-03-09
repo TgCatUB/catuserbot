@@ -60,7 +60,7 @@ class Config(object):
     # TG API limit. An album can have atmost 10 media!
     TG_GLOBAL_ALBUM_LIMIT = int(os.environ.get("TG_GLOBAL_ALBUM_LIMIT", 9))
     # Telegram BOT Token from @BotFather
-    
+
     TG_BOT_USERNAME = os.environ.get("TG_BOT_USERNAME", None)
     if TG_BOT_USERNAME is None:
         TG_BOT_USERNAME = os.environ.get("TG_BOT_USER_NAME_BF_HER", None)
