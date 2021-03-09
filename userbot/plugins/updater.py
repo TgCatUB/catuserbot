@@ -8,7 +8,7 @@ Ported from Kensurbot
 """
 import asyncio
 import sys
-from os import environ, execle, getcwd, path, remove
+from os import environ, execle, path, remove
 
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
