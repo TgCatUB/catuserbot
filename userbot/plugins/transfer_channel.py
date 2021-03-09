@@ -18,7 +18,7 @@ async def _(event):
     # MBL
     try:
         pwd = await event.client(functions.account.GetPasswordRequest())
-        my_srp_password = pwd_mod.compute_check(pwd, Config.TELE_GRAM_2FA_CODE)
+        my_srp_password = pwd_mod.compute_check(pwd, Config.TG_2STEP_VERIFICATION_CODE)
         await event.client(
             functions.channels.EditCreatorRequest(
                 channel=current_channel, user_id=user_name, password=my_srp_password
@@ -34,7 +34,7 @@ CMD_HELP.update(
     {
         "transfer_channel": "**Plugin :** `transfer_channel`\
         \n**Syntax : **`.otransfer [username to whom you want to transfer]`\
-        \n**Usage: **Transfers ownership to the given username for this set this var `TELE_GRAM_2FA_CODE` in heroku with your 2-step verification code \
+        \n**Usage: **Transfers ownership to the given username for this set this var `TG_2STEP_VERIFICATION_CODE` in heroku with your 2-step verification code \
         "
     }
 )
