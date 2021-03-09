@@ -8,7 +8,7 @@ Ported from Kensurbot
 """
 import asyncio
 import sys
-from os import environ, execle, path, remove, getcwd
+from os import environ, execle, getcwd, path, remove
 
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
@@ -154,7 +154,7 @@ async def upstream(event):
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
-        repo = Repo(path.abspath('{}/..'.format(getcwd()))).git
+        repo = Repo(path.abspath("{}/..".format(getcwd()))).git
         print(repo)
     except NoSuchPathError as error:
         await event.edit(f"{txt}\n`directory {error} is not found`")
