@@ -1,7 +1,7 @@
 # CatUserbot
 A simple Telegram userbot based on Telethon .
 [![catuserbot logo](https://telegra.ph/file/b7dc845e3a48cde0d7bb1.jpg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot%2Ftree%2Fbugs&template=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot)
-![ViewCount](https://views.whatilearened.today/views/github/sandy1709/catuserbot.svg)
+![Hits](https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot)
 [![CodeFactor](https://www.codefactor.io/repository/github/sandy1709/catuserbot/badge?&style=flat-square)](https://www.codefactor.io/repository/github/sandy1709/catuserbot)
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green?&style=flat-square)](https://GitHub.com/sandy1709/catuserbot/graphs/commit-activity) 
