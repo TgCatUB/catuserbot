@@ -28,8 +28,8 @@ else:
             LOGS.info("Initiating Inline Bot")
             # ForTheGreatrerGood of beautification
             bot.tgbot = TelegramClient(
-                    "TG_BOT_TOKEN", api_id=Config.APP_ID, api_hash=Config.API_HASH
-                ).start(bot_token=Config.TG_BOT_TOKEN)
+                "TG_BOT_TOKEN", api_id=Config.APP_ID, api_hash=Config.API_HASH
+            ).start(bot_token=Config.TG_BOT_TOKEN)
             LOGS.info("Initialisation finished with no errors")
             LOGS.info("Starting Userbot")
             bot.loop.run_until_complete(add_bot(Config.TG_BOT_USERNAME))
