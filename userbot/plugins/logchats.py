@@ -20,7 +20,7 @@ LOG_CHATS_ = LOG_CHATS()
 
 @bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def monito_p_m_s(event):
-    if not Config.PM_LOGGR_BOT_API_ID:
+    if not Config.PM_LOGGER_GROUP_ID:
         return
     if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
         return
@@ -45,13 +45,13 @@ async def monito_p_m_s(event):
                         )
                     LOG_CHATS_.COUNT = 0
                 LOG_CHATS_.NEWPM = await event.client.send_message(
-                    Config.PM_LOGGR_BOT_API_ID,
+                    Config.PM_LOGGER_GROUP_ID,
                     f"👤{_format.mentionuser(sender.first_name , sender.id)} has sent a new message \nId : `{chat.id}`",
                 )
             try:
                 if event.message:
                     await event.client.forward_messages(
-                        Config.PM_LOGGR_BOT_API_ID, event.message, silent=True
+                        Config.PM_LOGGER_GROUP_ID, event.message, silent=True
                     )
                 LOG_CHATS_.COUNT += 1
             except Exception as e:
@@ -67,7 +67,7 @@ async def log_tagged_messages(event):
         return
     if (
         (no_log_pms_sql.is_approved(hmm.id))
-        or (not Config.PM_LOGGR_BOT_API_ID)
+        or (not Config.PM_LOGGER_GROUP_ID)
         or ("on" in AFK_.USERAFK_ON)
         or (await event.get_sender() and (await event.get_sender()).bot)
     ):
@@ -90,7 +90,7 @@ async def log_tagged_messages(event):
     resalt += f"\n<b>Message link: </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>"
     if not event.is_private:
         await event.client.send_message(
-            Config.PM_LOGGR_BOT_API_ID,
+            Config.PM_LOGGER_GROUP_ID,
             resalt,
             parse_mode="html",
             link_preview=False,
@@ -119,7 +119,7 @@ async def log(log_text):
 
 @bot.on(admin_cmd(pattern="log$"))
 async def set_no_log_p_m(event):
-    if Config.PM_LOGGR_BOT_API_ID is not None:
+    if Config.PM_LOGGER_GROUP_ID is not None:
         chat = await event.get_chat()
         if no_log_pms_sql.is_approved(chat.id):
             no_log_pms_sql.disapprove(chat.id)
@@ -130,7 +130,7 @@ async def set_no_log_p_m(event):
 
 @bot.on(admin_cmd(pattern="nolog$"))
 async def set_no_log_p_m(event):
-    if Config.PM_LOGGR_BOT_API_ID is not None:
+    if Config.PM_LOGGER_GROUP_ID is not None:
         chat = await event.get_chat()
         if not no_log_pms_sql.is_approved(chat.id):
             no_log_pms_sql.approve(chat.id)

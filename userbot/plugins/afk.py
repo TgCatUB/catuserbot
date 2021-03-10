@@ -133,7 +133,7 @@ async def on_afk(event):
         if event.is_private:
             return
         hmm = await event.get_chat()
-        if not Config.PM_LOGGR_BOT_API_ID:
+        if not Config.PM_LOGGER_GROUP_ID:
             return
         full = None
         try:
@@ -151,7 +151,7 @@ async def on_afk(event):
         resalt += f"\n<b>Message link: </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>"
         if not event.is_private:
             await event.client.send_message(
-                Config.PM_LOGGR_BOT_API_ID,
+                Config.PM_LOGGER_GROUP_ID,
                 resalt,
                 parse_mode="html",
                 link_preview=False,
