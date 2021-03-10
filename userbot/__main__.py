@@ -17,6 +17,7 @@ async def add_bot(bot_token):
         bot.uid = telethon.utils.get_peer_id(bot.me)
     except Exception as e:
         LOGS.error(str(e))
+        bot.disconnect()
 
 
 if len(argv) not in (1, 3, 4):
@@ -38,6 +39,7 @@ else:
             bot.start()
     except Exception as e:
         LOGS.error(str(e))
+        bot.disconnect()
 
 path = "userbot/plugins/*.py"
 files = glob.glob(path)
