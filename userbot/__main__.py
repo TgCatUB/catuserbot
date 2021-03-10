@@ -14,7 +14,7 @@ async def add_bot(bot_token):
     try:
         await bot.start(bot_token)
     except Exception as e:
-        LOGS.warn(str(e))
+        LOGS.error(str(e))
     bot.me = await bot.get_me()
     bot.uid = telethon.utils.get_peer_id(bot.me)
 
@@ -31,7 +31,7 @@ else:
                 "TG_BOT_TOKEN", api_id=Config.APP_ID, api_hash=Config.API_HASH
             ).start(bot_token=Config.TG_BOT_TOKEN)
         except Exception as e:
-            LOGS.warn(str(e))
+            LOGS.error(str(e))
         LOGS.info("Initialisation finished with no errors")
         LOGS.info("Starting Userbot")
         bot.loop.run_until_complete(add_bot(Config.TG_BOT_USERNAME))
