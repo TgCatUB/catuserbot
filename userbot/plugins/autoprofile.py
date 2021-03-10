@@ -193,7 +193,7 @@ async def autopicloop():
     try:
         counter = int(gvarstatus("autopic_counter"))
     except Exception as e:
-        LOGS.info(str(e))
+        LOGS.warn(str(e))
     while AUTOPICSTART:
         if not os.path.exists(autopic_path):
             downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
