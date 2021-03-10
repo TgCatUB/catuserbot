@@ -23,9 +23,12 @@ else:
     if Config.TG_BOT_USERNAME is not None:
         LOGS.info("Initiating Inline Bot")
         # ForTheGreatrerGood of beautification
-        bot.tgbot = TelegramClient(
-            "TG_BOT_TOKEN", api_id=Config.APP_ID, api_hash=Config.API_HASH
-        ).start(bot_token=Config.TG_BOT_TOKEN)
+        try:
+            bot.tgbot = TelegramClient(
+                "TG_BOT_TOKEN", api_id=Config.APP_ID, api_hash=Config.API_HASH
+            ).start(bot_token=Config.TG_BOT_TOKEN)
+        except Exception as e:
+            LOGS.warn(str(e))
         LOGS.info("Initialisation finished with no errors")
         LOGS.info("Starting Userbot")
         bot.loop.run_until_complete(add_bot(Config.TG_BOT_USERNAME))
