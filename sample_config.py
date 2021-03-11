@@ -15,7 +15,7 @@ class Config(object):
     ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
     # Get the values for following 2 from my.telegram.org
     APP_ID = int(os.environ.get("APP_ID", 6))
-    API_HASH = os.environ.get("API_HASH", "eb06d4abfb49dc3eeb1aeb98ae0f581e")
+    API_HASH = os.environ.get("API_HASH") or None
     # Datbase url heroku sets it automatically else get this from elephantsql
     DB_URI = os.environ.get("DATABASE_URL", None)
     # Get this value by running python3 stringsetup.py or https://repl.it/@sandeep1709/generatestringsession
@@ -38,13 +38,11 @@ class Config(object):
     # for profile default name
     AUTONAME = os.environ.get("AUTONAME", None)
     # Set this value with group id of private group(can be found this value by .id)
-    PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID")) or None
+    PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID") or 0)
     # Set this value same as PRIVATE_GROUP_BOT_API_ID if you need pmgaurd
-    PRIVATE_GROUP_ID = int(os.environ.get("PRIVATE_GROUP_ID")) or None
+    PRIVATE_GROUP_ID = int(os.environ.get("PRIVATE_GROUP_ID") or 0)
     # set this value with channel id of private channel use full for .frwd cmd
-    PRIVATE_CHANNEL_BOT_API_ID = (
-        int(os.environ.get("PRIVATE_CHANNEL_BOT_API_ID")) or None
-    )
+    PRIVATE_CHANNEL_BOT_API_ID = int(os.environ.get("PRIVATE_CHANNEL_BOT_API_ID") or 0)
     # for heroku plugin you can get this value from https://dashboard.heroku.com/account
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     # set this with same app name you given for heroku
@@ -54,11 +52,7 @@ class Config(object):
     # Maximum no of pms should be sent before he get block will work only if you set PRIVATE_GROUP_ID
     MAX_FLOOD_IN_PMS = int(os.environ.get("MAX_FLOOD_IN_PMS", 5))
     # set this with group id so it keeps notifying about your tagged messages or pms
-    PM_LOGGER_GROUP_ID = (
-        int(os.environ.get("PM_LOGGER_GROUP_ID"))
-        or int(os.environ.get("PM_LOGGR_BOT_API_ID"))
-        or None
-    )
+    PM_LOGGER_GROUP_ID =int(os.environ.get("PM_LOGGER_GROUP_ID") or os.environ.get("PM_LOGGR_BOT_API_ID") or 0 )
     # set this with users id for whom this bot to act as sudo
     SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
 
