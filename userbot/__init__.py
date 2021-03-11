@@ -71,6 +71,7 @@ if Config.STRING_SESSION:
             ).start(bot_token=Config.STRING_SESSION)
     except Exception as e:
         LOGS.warn(f"STRING_SESSION - {str(e)}")
+        sys.exit()
 else:
     session_name = "startup"
     bot = TelegramClient(session_name, Config.APP_ID, Config.API_HASH)
