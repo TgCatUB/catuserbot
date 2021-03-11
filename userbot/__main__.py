@@ -38,7 +38,7 @@ else:
         else:
             bot.start()
     except Exception as e:
-        LOGS.error(f"TG_BOT_TOKEN-{str(e)}")
+        LOGS.error(f"TG_BOT_TOKEN - {str(e)}")
         exit()
 
 path = "userbot/plugins/*.py"
