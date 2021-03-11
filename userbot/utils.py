@@ -216,7 +216,7 @@ def errors_handler(func):
         try:
             await func(errors)
         except BaseException:
-            if Config.PRIVATE_GROUP_BOT_API_ID is None:
+            if Config.PRIVATE_GROUP_BOT_API_ID != 0:
                 return
             date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
             ftext = "\nDisclaimer:\nThis file is pasted only here ONLY here,"
