@@ -16,23 +16,6 @@ StartTime = time.time()
 catversion = "2.10.4"
 
 
-if Config.STRING_SESSION:
-    session_name = str(Config.STRING_SESSION)
-    try:
-        if session_name.endswith("="):
-            bot = TelegramClient(
-                StringSession(session_name), Config.APP_ID, Config.API_HASH
-            )
-        else:
-            bot = TelegramClient(
-                "TG_BOT_TOKEN", api_id=Config.APP_ID, api_hash=Config.API_HASH
-            ).start(bot_token=Config.STRING_SESSION)
-    except Exception as e:
-        LOGS.warn(str(e))
-else:
-    session_name = "startup"
-    bot = TelegramClient(session_name, Config.APP_ID, Config.API_HASH)
-
 
 CAT_ID = ["1035034432", "551290198"]
 
@@ -48,6 +31,7 @@ else:
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=INFO
     )
 LOGS = getLogger(__name__)
+
 
 try:
     if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:
@@ -72,3 +56,20 @@ SUDO_LIST = {}
 # for later purposes
 INT_PLUG = ""
 LOAD_PLUG = {}
+
+if Config.STRING_SESSION:
+    session_name = str(Config.STRING_SESSION)
+    try:
+        if session_name.endswith("="):
+            bot = TelegramClient(
+                StringSession(session_name), Config.APP_ID, Config.API_HASH
+            )
+        else:
+            bot = TelegramClient(
+                "TG_BOT_TOKEN", api_id=Config.APP_ID, api_hash=Config.API_HASH
+            ).start(bot_token=Config.STRING_SESSION)
+    except Exception as e:
+        LOGS.warn(str(e))
+else:
+    session_name = "startup"
+    bot = TelegramClient(session_name, Config.APP_ID, Config.API_HASH)
