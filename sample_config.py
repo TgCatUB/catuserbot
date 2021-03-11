@@ -10,7 +10,7 @@ from telethon.tl.types import ChatBannedRights
 class Config(object):
     LOGGER = True
 
-    #MUST NEEDED VARS
+    # MUST NEEDED VARS
     # set this value with your name
     ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
     # Get the values for following 2 from my.telegram.org
@@ -18,18 +18,23 @@ class Config(object):
     API_HASH = os.environ.get("API_HASH", "eb06d4abfb49dc3eeb1aeb98ae0f581e")
     # Datbase url heroku sets it automatically else get this from elephantsql
     DB_URI = os.environ.get("DATABASE_URL", None)
-    #Get this value by running python3 stringsetup.py or https://repl.it/@sandeep1709/generatestringsession
+    # Get this value by running python3 stringsetup.py or https://repl.it/@sandeep1709/generatestringsession
     STRING_SESSION = os.environ.get("STRING_SESSION", None)
     # Telegram BOT Token and bot username from @BotFather
-    TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN") or os.environ.get("TG_BOT_TOKEN_BF_HER", None)
-    TG_BOT_USERNAME = os.environ.get("TG_BOT_USERNAME") or os.environ.get("TG_BOT_USER_NAME_BF_HER", None)
+    TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN") or os.environ.get(
+        "TG_BOT_TOKEN_BF_HER", None
+    )
+    TG_BOT_USERNAME = os.environ.get("TG_BOT_USERNAME") or os.environ.get(
+        "TG_BOT_USER_NAME_BF_HER", None
+    )
     # get this value from http://www.timezoneconverter.com/cgi-bin/findzone.tzc
     TZ = os.environ.get("TZ", "Asia/Kolkata")
     # set this with required cat repo link
-    UPSTREAM_REPO = os.environ.get("UPSTREAM_REPO", "https://github.com/sandy1709/catuserbot.git")
+    UPSTREAM_REPO = os.environ.get(
+        "UPSTREAM_REPO", "https://github.com/sandy1709/catuserbot.git"
+    )
 
-
-    #BASIC and MAIN CONFIG VARS
+    # BASIC and MAIN CONFIG VARS
     # for profile default name
     AUTONAME = os.environ.get("AUTONAME", None)
     # Set this value with group id of private group(can be found this value by .id)
@@ -37,23 +42,28 @@ class Config(object):
     # Set this value same as PRIVATE_GROUP_BOT_API_ID if you need pmgaurd
     PRIVATE_GROUP_ID = int(os.environ.get("PRIVATE_GROUP_ID")) or None
     # set this value with channel id of private channel use full for .frwd cmd
-    PRIVATE_CHANNEL_BOT_API_ID = int(os.environ.get("PRIVATE_CHANNEL_BOT_API_ID")) or None
+    PRIVATE_CHANNEL_BOT_API_ID = (
+        int(os.environ.get("PRIVATE_CHANNEL_BOT_API_ID")) or None
+    )
     # for heroku plugin you can get this value from https://dashboard.heroku.com/account
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
     # set this with same app name you given for heroku
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     # Owner id to show profile link of given id as owner
-    OWNER_ID = int(os.environ.get("OWNER_ID")) or None    
+    OWNER_ID = int(os.environ.get("OWNER_ID")) or None
     # Maximum no of pms should be sent before he get block will work only if you set PRIVATE_GROUP_ID
     MAX_FLOOD_IN_PMS = int(os.environ.get("MAX_FLOOD_IN_PMS", 5))
     # set this with group id so it keeps notifying about your tagged messages or pms
-    PM_LOGGER_GROUP_ID = int(os.environ.get("PM_LOGGER_GROUP_ID")) or int(os.environ.get("PM_LOGGR_BOT_API_ID")) or None
-    # set this with users id for whom this bot to act as sudo 
+    PM_LOGGER_GROUP_ID = (
+        int(os.environ.get("PM_LOGGER_GROUP_ID"))
+        or int(os.environ.get("PM_LOGGR_BOT_API_ID"))
+        or None
+    )
+    # set this with users id for whom this bot to act as sudo
     SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
 
-
-    #Custom vars for userbot
-    #set this will channel id of your custom plugins
+    # Custom vars for userbot
+    # set this will channel id of your custom plugins
     PLUGIN_CHANNEL = int(os.environ.get("PLUGIN_CHANNEL")) or None
     # For customizing there alive message
     CUSTOM_ALIVE_TEXT = os.environ.get("CUSTOM_ALIVE_TEXT", None)
@@ -62,7 +72,7 @@ class Config(object):
     TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "catuserbot")
     # Set False to stop deleting old welcome messages
     CLEAN_WELCOME = os.environ.get("CLEAN_WELCOME", True)
-    #for custom thumb image set this with your required thumb telegraoh link    
+    # for custom thumb image set this with your required thumb telegraoh link
     THUMB_IMAGE = os.environ.get(
         "THUMB_IMAGE", "https://telegra.ph/file/ca95524e4734b0d5461b5.jpg"
     )
@@ -72,7 +82,7 @@ class Config(object):
     }
     # specify NO_LOAD with plugin names for not loading in userbot
     NO_LOAD = [x for x in os.environ.get("NO_LOAD", "").split()]
-    # For custom alive pic 
+    # For custom alive pic
     ALIVE_PIC = os.environ.get("ALIVE_PIC", None)
     # for Custom pmpermit pic
     PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
@@ -100,7 +110,7 @@ class Config(object):
     # this should be a valid "regex" pattern
     COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r"\.")
     SUDO_COMMAND_HAND_LER = os.environ.get("SUDO_COMMAND_HAND_LER", r"\.")
-    #set this with required folder path to act as download folder
+    # set this with required folder path to act as download folder
     TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads")
     # set this with required folder path to act as temparary folder
     TEMP_DIR = os.environ.get("TEMP_DIR", "./temp/")
@@ -110,11 +120,10 @@ class Config(object):
     CHANGE_TIME = int(os.environ.get("CHANGE_TIME", 60))
     # SpamWatch, CAS, SpamProtection ban Needed or not
     ANTISPAMBOT_BAN = os.environ.get("ANTISPAMBOT_BAN", False)
-    # is dual logging needed or not true or false 
+    # is dual logging needed or not true or false
     DUAL_LOG = os.environ.get("DUAL_LOG", False)
 
-
-    #API VARS FOR USERBOT
+    # API VARS FOR USERBOT
     # Get your own ACCESS_KEY from http://api.screenshotlayer.com/api/capture for screen shot
     SCREEN_SHOT_LAYER_ACCESS_KEY = os.environ.get("SCREEN_SHOT_LAYER_ACCESS_KEY", None)
     # Get your own APPID from https://api.openweathermap.org/data/2.5/weather
@@ -127,7 +136,7 @@ class Config(object):
     OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
     # Genius lyrics get this value from https://genius.com/developers both has
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN", None)
-    # Get your own API key from https://www.remove.bg/ 
+    # Get your own API key from https://www.remove.bg/
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
     # Google Drive plugin https://telegra.ph/G-Drive-guide-for-catuserbot-01-01
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
@@ -155,7 +164,6 @@ class Config(object):
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
     # Deepai value can get from https://deepai.org/
     DEEP_AI = os.environ.get("DEEP_AI", None)
-
 
     # DO NOT EDIT BELOW THIS LINE IF YOU DO NOT KNOW WHAT YOU ARE DOING
     # TG API limit. A message can have maximum 4096 characters!
