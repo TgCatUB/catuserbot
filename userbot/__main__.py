@@ -59,7 +59,7 @@ LOGS.info(
 
 async def startupmessage():
     try:
-        if Config.PRIVATE_GROUP_BOT_API_ID:
+        if Config.PRIVATE_GROUP_BOT_API_ID != 0:
             await bot.send_message(
                 Config.PRIVATE_GROUP_BOT_API_ID,
                 "**Congratulation, now type .alive to see message if bot is live\
