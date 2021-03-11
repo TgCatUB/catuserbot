@@ -48,21 +48,18 @@ class Config(object):
     # set this with same app name you given for heroku
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     # Owner id to show profile link of given id as owner
-    OWNER_ID = int(os.environ.get("OWNER_ID")) or None
+    OWNER_ID = int(os.environ.get("OWNER_ID") or -777000)
     # Maximum no of pms should be sent before he get block will work only if you set PRIVATE_GROUP_ID
     MAX_FLOOD_IN_PMS = int(os.environ.get("MAX_FLOOD_IN_PMS", 5))
     # set this with group id so it keeps notifying about your tagged messages or pms
-    PM_LOGGER_GROUP_ID = int(
-        os.environ.get("PM_LOGGER_GROUP_ID")
-        or os.environ.get("PM_LOGGR_BOT_API_ID")
-        or 0
-    )
+    PM_LOGGER_GROUP_ID =int(os.environ.get("PM_LOGGER_GROUP_ID") or os.environ.get("PM_LOGGR_BOT_API_ID") or 0 )
     # set this with users id for whom this bot to act as sudo
     SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
 
+    
     # Custom vars for userbot
     # set this will channel id of your custom plugins
-    PLUGIN_CHANNEL = int(os.environ.get("PLUGIN_CHANNEL")) or None
+    PLUGIN_CHANNEL = int(os.environ.get("PLUGIN_CHANNEL") or 0)
     # For customizing there alive message
     CUSTOM_ALIVE_TEXT = os.environ.get("CUSTOM_ALIVE_TEXT", None)
     CUSTOM_ALIVE_EMOJI = os.environ.get("CUSTOM_ALIVE_EMOJI", None)
@@ -121,6 +118,7 @@ class Config(object):
     # is dual logging needed or not true or false
     DUAL_LOG = os.environ.get("DUAL_LOG", False)
 
+    
     # API VARS FOR USERBOT
     # Get your own ACCESS_KEY from http://api.screenshotlayer.com/api/capture for screen shot
     SCREEN_SHOT_LAYER_ACCESS_KEY = os.environ.get("SCREEN_SHOT_LAYER_ACCESS_KEY", None)
