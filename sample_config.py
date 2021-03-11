@@ -52,7 +52,11 @@ class Config(object):
     # Maximum no of pms should be sent before he get block will work only if you set PRIVATE_GROUP_ID
     MAX_FLOOD_IN_PMS = int(os.environ.get("MAX_FLOOD_IN_PMS", 5))
     # set this with group id so it keeps notifying about your tagged messages or pms
-    PM_LOGGER_GROUP_ID =int(os.environ.get("PM_LOGGER_GROUP_ID") or os.environ.get("PM_LOGGR_BOT_API_ID") or 0 )
+    PM_LOGGER_GROUP_ID = int(
+        os.environ.get("PM_LOGGER_GROUP_ID")
+        or os.environ.get("PM_LOGGR_BOT_API_ID")
+        or 0
+    )
     # set this with users id for whom this bot to act as sudo
     SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
 
