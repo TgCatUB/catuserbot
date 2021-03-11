@@ -26,9 +26,7 @@ if CONSOLE_LOGGER_VERBOSE:
         level=DEBUG,
     )
 else:
-    basicConfig(
-        format="[%(asctime)s]-%(name)s-%(levelname)s-%(message)s", level=INFO
-    )
+    basicConfig(format="[%(asctime)s]-%(name)s-%(levelname)s-%(message)s", level=INFO)
 LOGS = getLogger(__name__)
 
 
