@@ -27,7 +27,7 @@ if CONSOLE_LOGGER_VERBOSE:
     )
 else:
     basicConfig(
-        format="[%(asctime)s]- %(name)s-%(levelname)s- %(message)s",
+        format="[%(asctime)s]- %(name)s- %(levelname)s- %(message)s",
         level=INFO,
         datefmt="%m-%d %H:%M:%S",
     )
