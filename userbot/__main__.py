@@ -16,7 +16,7 @@ async def add_bot(bot_token):
         bot.me = await bot.get_me()
         bot.uid = telethon.utils.get_peer_id(bot.me)
     except Exception as e:
-        LOGS.error(str(e))
+        LOGS.error(f"STRING_SESSION - {str(e)}")
         exit()
 
 
