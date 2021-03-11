@@ -1,6 +1,6 @@
 import glob
 from pathlib import Path
-from sys import argv , exit
+from sys import argv, exit
 
 import telethon.utils
 from telethon import TelegramClient
