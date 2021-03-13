@@ -3,24 +3,11 @@
 # you may not use this file except in compliance with the License.
 # credits to @AvinashReddy3108
 
+import asyncio
+import os
 import sys
 
 import git
-import asyncio
-import random
-import re
-import time
-
-from collections import deque
-
-import requests
-
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import MessageEntityMentionName
-from telethon import events
-
-from contextlib import suppress
-import os
 
 # -- Constants -- #
 
@@ -41,7 +28,7 @@ RESTARTING_APP = "re-starting heroku application"
 
 
 @borg.on(admin_cmd("update ?(.*)", outgoing=True))
-async def updater(message):  
+async def updater(message):
     try:
         repo = git.Repo()
     except git.exc.InvalidGitRepositoryError as e:
@@ -53,9 +40,9 @@ async def updater(message):
 
     active_branch_name = repo.active_branch.name
     if active_branch_name != IFFUCI_ACTIVE_BRANCH_NAME:
-        await message.edit(IS_SELECTED_DIFFERENT_BRANCH.format(
-            branch_name=active_branch_name
-        ))
+        await message.edit(
+            IS_SELECTED_DIFFERENT_BRANCH.format(branch_name=active_branch_name)
+        )
         return False
 
     try:
@@ -68,6 +55,7 @@ async def updater(message):
 
     if Config.HEROKU_API_KEY is not None:
         import heroku3
+
         heroku = heroku3.from_key(Config.HEROKU_API_KEY)
         heroku_applications = heroku.apps()
         if len(heroku_applications) >= 1:
@@ -77,31 +65,38 @@ async def updater(message):
                     if i.name == Config.HEROKU_APP_NAME:
                         heroku_app = i
                 if heroku_app is None:
-                    await message.edit("Invalid APP Name. Please set the name of your bot in heroku in the var `HEROKU_APP_NAME.`")
+                    await message.edit(
+                        "Invalid APP Name. Please set the name of your bot in heroku in the var `HEROKU_APP_NAME.`"
+                    )
                     return
                 heroku_git_url = heroku_app.git_url.replace(
-                    "https://",
-                    "https://api:" + Config.HEROKU_API_KEY + "@"
+                    "https://", "https://api:" + Config.HEROKU_API_KEY + "@"
                 )
                 if "heroku" in repo.remotes:
                     remote = repo.remote("heroku")
                     remote.set_url(heroku_git_url)
                 else:
                     remote = repo.create_remote("heroku", heroku_git_url)
-                asyncio.get_event_loop().create_task(deploy_start(bot, message, HEROKU_GIT_REF_SPEC, remote))
+                asyncio.get_event_loop().create_task(
+                    deploy_start(bot, message, HEROKU_GIT_REF_SPEC, remote)
+                )
 
             else:
-                await message.edit("Please create the var `HEROKU_APP_NAME` as the key and the name of your bot in heroku as your value.")
+                await message.edit(
+                    "Please create the var `HEROKU_APP_NAME` as the key and the name of your bot in heroku as your value."
+                )
                 return
         else:
             await message.edit(NO_HEROKU_APP_CFGD)
     else:
         await message.edit("No heroku api key found in `HEROKU_API_KEY` var")
-        
+
 
 async def deploy_start(tgbot, message, refspec, remote):
     await message.edit(RESTARTING_APP)
-    await message.edit("Updating and Deploying the code. Please wait for 5 minutes then use `.alive` to check wheather I am online or not.")
+    await message.edit(
+        "Updating and Deploying the code. Please wait for 5 minutes then use `.alive` to check wheather I am online or not."
+    )
     await remote.push(refspec=refspec)
     await tgbot.disconnect()
     os.execl(sys.executable, sys.executable, *sys.argv)
