@@ -28,6 +28,7 @@ EMOJI_SEN = [
     "Можно отправить несколько смайлов в одном сообщении, однако мы рекомендуем использовать не больше одного или двух на каждый стикер.",
     "You can list several emoji in one message, but I recommend using no more than two per sticker",
     "Du kannst auch mehrere Emoji eingeben, ich empfehle dir aber nicht mehr als zwei pro Sticker zu benutzen.",
+    "Você pode listar vários emojis em uma mensagem, mas recomendo não usar mais do que dois por cada sticker.",
 ]
 
 KANGING_STR = [
