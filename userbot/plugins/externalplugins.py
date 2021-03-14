@@ -4,7 +4,7 @@ from pathlib import Path
 from telethon.tl.types import InputMessagesFilterDocument
 
 from ..utils import load_module
-from . import BOTLOG_CHATID, BOTLOG
+from . import BOTLOG, BOTLOG_CHATID
 
 if Config.PLUGIN_CHANNEL:
 
