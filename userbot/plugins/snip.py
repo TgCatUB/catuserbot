@@ -2,7 +2,7 @@
 
 from telethon import events
 
-from . import BOTLOG_CHATID, cat_users, BOTLOG
+from . import BOTLOG, BOTLOG_CHATID, cat_users
 from .sql_helper.snip_sql import add_note, get_note, get_notes, rm_note
 
 
