@@ -9,7 +9,6 @@ import re
 
 import requests
 from cowpy import cow
-from telethon import functions, types
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import ChannelParticipantsAdmins, MessageEntityMentionName
 
@@ -131,16 +130,7 @@ async def decide(event):
     sandy = await event.client.send_message(
         event.chat_id, str(r["answer"]).upper(), reply_to=message_id, file=r["image"]
     )
-    await event.client(
-        functions.messages.SaveGifRequest(
-            id=types.InputDocument(
-                id=sandy.media.document.id,
-                access_hash=sandy.media.document.access_hash,
-                file_reference=sandy.media.document.file_reference,
-            ),
-            unsave=True,
-        )
-    )
+    await _catutils.unsavegif(event, sandy)
 
 
 @bot.on(admin_cmd(pattern=f"shout", outgoing=True))

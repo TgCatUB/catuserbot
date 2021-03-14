@@ -3,16 +3,26 @@ import re
 import time
 import urllib.request
 import zipfile
+from datetime import datetime
 from random import choice
 
 import PIL.ImageOps
 import requests
+from emoji import get_emoji_regexp
 from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import Channel, PollAnswer
 from validators.url import url
+from youtubesearchpython import VideosSearch
 
-from ..Config import Config
 from .resources.states import states
+
+
+def utc_to_local(utc_datetime):
+    now_timestamp = time.time()
+    offset = datetime.fromtimestamp(now_timestamp) - datetime.utcfromtimestamp(
+        now_timestamp
+    )
+    return utc_datetime + offset
 
 
 async def get_readable_time(seconds: int) -> str:
@@ -69,40 +79,13 @@ async def yt_search(cat):
             if user_data:
                 video_link.append("https://www.youtube.com/watch?v=" + user_data[k])
             k += 1
-            if k > 10:
+            if k > 3:
                 break
         if video_link:
-            return video_link
+            return video_link[0]
         return "Couldnt fetch results"
-    except:
+    except Exception:
         return "Couldnt fetch results"
-
-
-from googleapiclient.discovery import build
-
-
-async def yt_search_api(cat):
-    youtube = build(
-        "youtube", "v3", developerKey=Config.YOUTUBE_API_KEY, cache_discovery=False
-    )
-    order = "relevance"
-    search_response = (
-        youtube.search()
-        .list(
-            q=cat,
-            type="video",
-            order=order,
-            part="id,snippet",
-            maxResults=10,
-        )
-        .execute()
-    )
-    videos = [
-        search_result
-        for search_result in search_response.get("items", [])
-        if search_result["id"]["kind"] == "youtube#video"
-    ]
-    return videos
 
 
 async def sanga_seperator(sanga_list):
@@ -125,6 +108,20 @@ async def unzip(downloaded_file_name):
         zip_ref.extractall("./temp")
     downloaded_file_name = os.path.splitext(downloaded_file_name)[0]
     return f"{downloaded_file_name}.gif"
+
+
+async def ytsearch(query, limit):
+    result = ""
+    videolinks = VideosSearch(query.lower(), limit=limit)
+    for v in videolinks.result()["result"]:
+        textresult = f"[{v['title']}](https://www.youtube.com/watch?v={v['id']})\n"
+        try:
+            textresult += f"**Description : **`{v['descriptionSnippet'][-1]['text']}`\n"
+        except Exception:
+            textresult += "**Description : **`None`\n"
+        textresult += f"**Duration : **__{v['duration']}__  **Views : **__{v['viewCount']['short']}__\n"
+        result += f"☞ {textresult}\n"
+    return result
 
 
 # https://github.com/pokurt/LyndaRobot/blob/7556ca0efafd357008131fa88401a8bb8057006f/lynda/modules/helper_funcs/string_handling.py#L238
@@ -162,26 +159,10 @@ name_dl = (
     "youtube-dl --force-ipv4 --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
 )
 
-EMOJI_PATTERN = re.compile(
-    "["
-    "\U0001F1E0-\U0001F1FF"  # flags (iOS)
-    "\U0001F300-\U0001F5FF"  # symbols & pictographs
-    "\U0001F600-\U0001F64F"  # emoticons
-    "\U0001F680-\U0001F6FF"  # transport & map symbols
-    "\U0001F700-\U0001F77F"  # alchemical symbols
-    "\U0001F780-\U0001F7FF"  # Geometric Shapes Extended
-    "\U0001F800-\U0001F8FF"  # Supplemental Arrows-C
-    "\U0001F900-\U0001F9FF"  # Supplemental Symbols and Pictographs
-    "\U0001FA00-\U0001FA6F"  # Chess Symbols
-    "\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
-    "\U00002702-\U000027B0"  # Dingbats
-    "]+"
-)
-
 
 def deEmojify(inputString: str) -> str:
     """Remove emojis and other non-safe characters from string"""
-    return re.sub(EMOJI_PATTERN, "", inputString)
+    return get_emoji_regexp().sub("", inputString)
 
 
 # For polls

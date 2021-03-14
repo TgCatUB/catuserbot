@@ -9,7 +9,7 @@ import shutil
 import time
 from pathlib import Path
 
-from . import humanbytes, runcmd
+from . import humanbytes
 
 
 @bot.on(admin_cmd(pattern="ls ?(.*)", command="ls"))
@@ -110,10 +110,10 @@ async def lst(event):
         return
     catcmd = f"rm -rf {path}"
     if os.path.isdir(path):
-        await runcmd(catcmd)
+        await _catutils.runcmd(catcmd)
         await edit_or_reply(event, f"Succesfully removed `{path}` directory")
     else:
-        await runcmd(catcmd)
+        await _catutils.runcmd(catcmd)
         await edit_or_reply(event, f"Succesfully removed `{path}` file")
 
 
@@ -122,7 +122,7 @@ async def lst(event):
 async def _(event):
     if event.fwd_from:
         return
-    pwd = "./"
+    pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(
@@ -142,7 +142,7 @@ async def _(event):
     )
     await asyncio.sleep(2)
     try:
-        await runcmd(f"mkdir {original}")
+        await _catutils.runcmd(f"mkdir {original}")
         await mone.edit(f"Successfully created the directory `{original}`")
     except Exception as e:
         await edit_delete(mone, str(e), parse_mode=parse_pre)
@@ -153,7 +153,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    pwd = "./"
+    pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(
@@ -178,7 +178,7 @@ async def _(event):
     mone = await edit_or_reply(event, "copying the file ...", parse_mode=parse_pre)
     await asyncio.sleep(2)
     try:
-        await runcmd(f"cp -r {original} {location}")
+        await _catutils.runcmd(f"cp -r {original} {location}")
         await mone.edit(f"Successfully copied the `{original}` to `{location}`")
     except Exception as e:
         await edit_delete(mone, str(e), parse_mode=parse_pre)
@@ -189,7 +189,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    pwd = "./"
+    pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(
@@ -225,20 +225,20 @@ CMD_HELP.update(
         "filemanager": "**Plugin :**`filemanager`\
      \n\nList Files plugin for userbot \
      \n  •  **Syntax :** `.ls`\
-     \n  •  **Usage :** will return files from current working directory\
+     \n  •  **Function :** will return files from current working directory\
      \n\n  •  **Syntax :** .ls path\
-     \n  •  **Usage :** will return output according to path  \
+     \n  •  **Function :** will return output according to path  \
      \n\n  •  **Syntax :** .ls file path\
-     \n  •  **Usage :** will return file details\
+     \n  •  **Function :** will return file details\
      \n\nSimple Module for people who dont wanna use shell executor for listing files.\
      \n\n  •  **Syntax :** `.rem path`\
-     \n  •  **Usage :** To delete the required item from the bot server\
+     \n  •  **Function :** To delete the required item from the bot server\
      \n\n  •  **Syntax :** `.mkdir foldername`\
-     \n  •  **Usage :** Creates a new empty folder in the server\
+     \n  •  **Function :** Creates a new empty folder in the server\
      \n\n  •  **Syntax :** `.mvto frompath ; topath`\
-     \n  •  **Usage :** Move a file from one location to other location in bot server\
+     \n  •  **Function :** Move a file from one location to other location in bot server\
      \n\n  •  **Syntax :** `.cpto frompath ; topath`\
-     \n  •  **Usage :** Copy a file from one location to other location in bot server\
+     \n  •  **Function :** Copy a file from one location to other location in bot server\
 "
     }
 )

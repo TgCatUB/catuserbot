@@ -100,7 +100,7 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    pwd = "./"
+    pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(

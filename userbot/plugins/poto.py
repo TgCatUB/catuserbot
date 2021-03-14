@@ -25,7 +25,6 @@ Type `.poto` for get **All profile pics of that User**
 \nOr type `.poto (number)` to get the **desired number of photo of a User** .
 """
 
-import asyncio
 
 name = "Profile Photos"
 
@@ -33,7 +32,6 @@ name = "Profile Photos"
 @bot.on(admin_cmd(pattern="poto ?(.*)", outgoing=True))
 @bot.on(sudo_cmd(pattern="poto ?(.*)", allow_sudo=True))
 async def potocmd(event):
-    """Gets the profile photos of replied users, channels or chats"""
     uid = "".join(event.raw_text.split(maxsplit=1)[1:])
     user = await event.get_reply_message()
     chat = event.input_chat
@@ -45,28 +43,24 @@ async def potocmd(event):
         u = False
     if uid.strip() == "":
         uid = 1
-        if int(uid) <= (len(photos)):
-            send_photos = await event.client.download_media(photos[uid - 1])
-            await event.client.send_file(event.chat_id, send_photos)
-        else:
-            await edit_or_reply(
-                event, "No photo found of this NIBBA / NIBBI. Now u Die!"
+        if int(uid) > (len(photos)):
+            return await edit_delete(
+                event, "`No photo found of this NIBBA / NIBBI. Now u Die!`"
             )
-            await asyncio.sleep(2)
-            return
+        send_photos = await event.client.download_media(photos[uid - 1])
+        await event.client.send_file(event.chat_id, send_photos)
     elif uid.strip() == "all":
         if len(photos) > 0:
             await event.client.send_file(event.chat_id, photos)
         else:
             try:
-                if u is True:
+                if u:
                     photo = await event.client.download_profile_photo(user.sender)
                 else:
                     photo = await event.client.download_profile_photo(event.input_chat)
                 await event.client.send_file(event.chat_id, photo)
-            except a:
-                await edit_or_reply(event, "**This user has no photos!**")
-                return
+            except Exception:
+                return await edit_delete(event, "`This user has no photos to show you`")
     else:
         try:
             uid = int(uid)
@@ -76,25 +70,24 @@ async def potocmd(event):
                 )
                 return
         except BaseException:
-            await edit_or_reply(event, "Are you comedy me ?")
+            await edit_or_reply(event, "`Are you comedy me ?`")
             return
-        if int(uid) <= (len(photos)):
-            send_photos = await event.client.download_media(photos[uid - 1])
-            await event.client.send_file(event.chat_id, send_photos)
-        else:
-            await edit_or_reply(
-                event, "No photo found of this NIBBA / NIBBI. Now u Die!"
+        if int(uid) > (len(photos)):
+            return await edit_delere(
+                event, "`No photo found of this NIBBA / NIBBI. Now u Die!`"
             )
-            await asyncio.sleep(2)
-            return
+
+        send_photos = await event.client.download_media(photos[uid - 1])
+        await event.client.send_file(event.chat_id, send_photos)
+    await event.delete()
 
 
 CMD_HELP.update(
     {
         "poto": """**Plugin : **`poto`
 
-  •  **Syntax : **`.poto`
-  •  **Function : **__reply to user to get his profile pic use command along \
+•  **Syntax : **`.poto`
+•  **Function : **__reply to user to get his profile pic use command along \
 with profile pic number to get desired pic else use .poto all to get all if you dont reply then gets group pics__"""
     }
 )

@@ -20,15 +20,15 @@ if len(argv) not in (1, 3, 4):
     bot.disconnect()
 else:
     bot.tgbot = None
-    if Config.TG_BOT_USER_NAME_BF_HER is not None:
+    if Config.TG_BOT_USERNAME is not None:
         LOGS.info("Initiating Inline Bot")
         # ForTheGreatrerGood of beautification
         bot.tgbot = TelegramClient(
             "TG_BOT_TOKEN", api_id=Config.APP_ID, api_hash=Config.API_HASH
-        ).start(bot_token=Config.TG_BOT_TOKEN_BF_HER)
+        ).start(bot_token=Config.TG_BOT_TOKEN)
         LOGS.info("Initialisation finished with no errors")
         LOGS.info("Starting Userbot")
-        bot.loop.run_until_complete(add_bot(Config.TG_BOT_USER_NAME_BF_HER))
+        bot.loop.run_until_complete(add_bot(Config.TG_BOT_USERNAME))
         LOGS.info("Startup Completed")
     else:
         bot.start()
@@ -44,9 +44,25 @@ for name in files:
 
 LOGS.info("Yay your userbot is officially working.!!!")
 LOGS.info(
-    "Congratulation, now type .alive to see message if bot is live\n"
-    "If you need assistance, head to https://t.me/catuserbot_support"
+    "Congratulation, now type .alive to see message if bot is live\
+    \nIf you need assistance, head to https://t.me/catuserbot_support"
 )
+
+
+async def startupmessage():
+    try:
+        if Config.PRIVATE_GROUP_BOT_API_ID:
+            await bot.send_message(
+                Config.PRIVATE_GROUP_BOT_API_ID,
+                "**Congratulation, now type .alive to see message if bot is live\
+        \nIf you need assistance, **head to https://t.me/catuserbot_support",
+                link_preview=False,
+            )
+    except Exception as e:
+        LOGS.info(str(e))
+
+
+bot.loop.create_task(startupmessage())
 
 if len(argv) not in (1, 3, 4):
     bot.disconnect()

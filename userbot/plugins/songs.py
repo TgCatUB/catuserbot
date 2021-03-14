@@ -12,9 +12,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
 
-from . import name_dl, runcmd, song_dl, video_dl
-from . import yt_search as yt_search_no
-from . import yt_search_api
+from . import name_dl, song_dl, video_dl, yt_search
 
 # =========================================================== #
 #                           STRINGS                           #
@@ -63,10 +61,10 @@ async def _(event):
         await event.client(cat)
     except BaseException:
         pass
-    stderr = (await runcmd(song_cmd))[1]
+    stderr = (await _catutils.runcmd(song_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    catname, stderr = (await runcmd(name_cmd))[:2]
+    catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     # stderr = (await runcmd(thumb_cmd))[1]
@@ -134,10 +132,10 @@ async def _(event):
     # thumb_cmd = thumb_dl.format(video_link=video_link)
     name_cmd = name_dl.format(video_link=video_link)
     video_cmd = video_dl.format(video_link=video_link)
-    stderr = (await runcmd(video_cmd))[1]
+    stderr = (await _catutils.runcmd(video_cmd))[1]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
-    catname, stderr = (await runcmd(name_cmd))[:2]
+    catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
     if stderr:
         return await catevent.edit(f"**Error :** `{stderr}`")
     # stderr = (await runcmd(thumb_cmd))[1]
@@ -205,6 +203,8 @@ async def cat_song_fetcer(event):
                 )
             await catevent.edit(SONG_SENDING_STRING, parse_mode="html")
             await baka[0].click(0)
+            await conv.get_response()
+            await conv.get_response()
             music = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
@@ -221,31 +221,17 @@ async def cat_song_fetcer(event):
         await delete_messages(event, chat, purgeflag)
 
 
-async def yt_search(cat):
-    videol = None
-    try:
-        if Config.YOUTUBE_API_KEY:
-            vi = await yt_search_api(cat)
-            video = f"https://youtu.be/{vi[0]['id']['videoId']}"
-    except:
-        pass
-    if videol is None:
-        vi = await yt_search_no(cat)
-        video = vi[0]
-    return video
-
-
 CMD_HELP.update(
     {
         "songs": "**Plugin : **`songs`\
-        \n\n  •**Syntax : **`.song <query/reply>`\
-        \n  •**Function : **__searches the song you entered in query from youtube and sends it, quality of it is 128k__\
-        \n\n  •**Syntax : **`.song320 <query/reply>`\
-        \n  •**Function : **__searches the song you entered in query from youtube and sends it quality of it is 320k__\
-        \n\n  •**Syntax : **`.vsong <query/reply>`\
-        \n  •**Function : **__Searches the video song you entered in query and sends it__\
-        \n\n  •**Syntax : **`.song2 query`\
-        \n  •**Function : **__searches the song you entered in query and sends it quality of it is 320k__\
+        \n\n•**Syntax : **`.song <query/reply>`\
+        \n•**Function : **__searches the song you entered in query from youtube and sends it, quality of it is 128k__\
+        \n\n•**Syntax : **`.song320 <query/reply>`\
+        \n•**Function : **__searches the song you entered in query from youtube and sends it quality of it is 320k__\
+        \n\n•**Syntax : **`.vsong <query/reply>`\
+        \n•**Function : **__Searches the video song you entered in query and sends it__\
+        \n\n•**Syntax : **`.song2 query`\
+        \n•**Function : **__searches the song you entered in query and sends it quality of it is 320k__\
         "
     }
 )

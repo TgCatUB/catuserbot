@@ -1493,7 +1493,6 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    await asyncio.sleep(0.5)
     x = random.randrange(1, 104)
     event = await edit_or_reply(event, "`Wait me getting a logic for you`")
     await sleep(2)

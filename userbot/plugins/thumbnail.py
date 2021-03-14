@@ -7,8 +7,6 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
 
-from . import take_screen_shot
-
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 
 
@@ -28,7 +26,7 @@ async def _(event):
             metadata = extractMetadata(createParser(downloaded_file_name))
             if metadata and metadata.has("duration"):
                 duration = metadata.get("duration").seconds
-            downloaded_file_name = await take_screen_shot(
+            downloaded_file_name = await _cattools.take_screen_shot(
                 downloaded_file_name, duration
             )
         # https://stackoverflow.com/a/21669827/4723940

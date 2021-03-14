@@ -17,7 +17,7 @@ from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
 
 from . import CMD_HELP, CMD_LIST, LOAD_PLUG, LOGS, SUDO_LIST, bot
 from .Config import Config
-from .helpers.exceptions import CancelProcess
+from .helpers.progress import CancelProcess
 
 
 def load_module(shortname):
@@ -34,7 +34,7 @@ def load_module(shortname):
         import userbot.utils
 
         from .helpers.tools import media_type
-        from .helpers.utils import install_pip, parse_pre, reply_id, run_async, run_sync
+        from .helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
         from .managers import edit_delete, edit_or_reply
 
         path = Path(f"userbot/plugins/{shortname}.py")
@@ -42,18 +42,20 @@ def load_module(shortname):
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
         mod.bot = bot
+        mod.LOGS = LOGS
         mod.Config = Config
+        mod._format = _format
         mod.tgbot = bot.tgbot
         mod.sudo_cmd = sudo_cmd
         mod.CMD_HELP = CMD_HELP
-        mod.run_sync = run_sync
         mod.reply_id = reply_id
-        mod.run_async = run_async
         mod.admin_cmd = admin_cmd
-        mod.parse_pre = parse_pre
+        mod._catutils = _catutils
+        mod._cattools = _cattools
         mod.media_type = media_type
         mod.edit_delete = edit_delete
         mod.install_pip = install_pip
+        mod.parse_pre = _format.parse_pre
         mod.edit_or_reply = edit_or_reply
         mod.logger = logging.getLogger(shortname)
         # support for uniborg
@@ -245,9 +247,9 @@ def errors_handler(func):
             stdout, stderr = await process.communicate()
             result = str(stdout.decode().strip()) + str(stderr.decode().strip())
             ftext += result
-            from .helpers.utils.managers import paste_text
+            from .helpers.utils import _format
 
-            pastelink = paste_text(ftext)
+            pastelink = _format.paste_text(ftext)
             text = "**CatUserbot Error report**\n\n"
             link = "[here](https://t.me/catuserbot_support)"
             text += "If you wanna you can report it"
@@ -358,7 +360,8 @@ async def is_admin(client, chat_id, user_id):
             chat_participant, (ChannelParticipantCreator, ChannelParticipantAdmin)
         ):
             return True
-    except Exception:
+    except Exception as e:
+        LOGS.info(str(e))
         return False
     else:
         return False

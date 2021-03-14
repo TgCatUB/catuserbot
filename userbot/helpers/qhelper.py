@@ -22,7 +22,7 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from telethon.tl import functions, types
 
-from . import runcmd
+from .utils import _catutils
 
 COLORS = [
     "#F07975",
@@ -165,7 +165,7 @@ async def process(msg, user, client, reply, replied=None):
                 cmd = (
                     f"lottie_convert.py --frame 0 -if lottie -of png {sticker} {file_1}"
                 )
-                stdout, stderr = (await runcmd(cmd))[:2]
+                stdout, stderr = (await _catutils.runcmd(cmd))[:2]
                 stimg = Image.open("./temp/q.png")
             else:
                 stimg = Image.open(sticker)
@@ -206,7 +206,7 @@ async def process(msg, user, client, reply, replied=None):
         file_1 = os.path.join("./temp/", "q.png")
         if sticker.endswith(("tgs")):
             cmd = f"lottie_convert.py --frame 0 -if lottie -of png {sticker} {file_1}"
-            stdout, stderr = (await runcmd(cmd))[:2]
+            stdout, stderr = (await _catutils.runcmd(cmd))[:2]
             stimg = Image.open("./temp/q.png")
         else:
             stimg = Image.open(sticker)
@@ -252,7 +252,7 @@ async def process(msg, user, client, reply, replied=None):
     space = pfpbg.width + 30
     namefallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
     for letter in tot:
-        if letter in emoji.UNICODE_EMOJI:
+        if letter in emoji.UNICODE_EMOJI["en"]:
             newemoji, mask = await emoji_fetch(letter)
             canvas.paste(newemoji, (space, 24), mask)
             space += 40
@@ -305,7 +305,7 @@ async def process(msg, user, client, reply, replied=None):
                         "./temp/Roboto-Regular.ttf", 30, encoding="utf-16"
                     )
                     textcolor = "#898989"
-            if letter in emoji.UNICODE_EMOJI:
+            if letter in emoji.UNICODE_EMOJI["en"]:
                 newemoji, mask = await emoji_fetch(letter)
                 canvas.paste(newemoji, (x, y - 2), mask)
                 x += 45

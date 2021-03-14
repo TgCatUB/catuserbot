@@ -29,7 +29,13 @@ CatBroadcast.__table__.create(checkfirst=True)
 
 CATBROADCAST_INSERTION_LOCK = threading.RLock()
 
-BROADCAST_CHANNELS = {}
+
+class BROADCAST_SQL:
+    def __init__(self):
+        self.BROADCAST_CHANNELS = {}
+
+
+BROADCAST_SQL_ = BROADCAST_SQL()
 
 
 def add_to_broadcastlist(keywoard, group_id):
@@ -38,15 +44,17 @@ def add_to_broadcastlist(keywoard, group_id):
 
         SESSION.merge(broadcast_group)
         SESSION.commit()
-        BROADCAST_CHANNELS.setdefault(keywoard, set()).add(str(group_id))
+        BROADCAST_SQL_.BROADCAST_CHANNELS.setdefault(keywoard, set()).add(str(group_id))
 
 
 def rm_from_broadcastlist(keywoard, group_id):
     with CATBROADCAST_INSERTION_LOCK:
         broadcast_group = SESSION.query(CatBroadcast).get((keywoard, str(group_id)))
         if broadcast_group:
-            if str(group_id) in BROADCAST_CHANNELS.get(keywoard, set()):
-                BROADCAST_CHANNELS.get(keywoard, set()).remove(str(group_id))
+            if str(group_id) in BROADCAST_SQL_.BROADCAST_CHANNELS.get(keywoard, set()):
+                BROADCAST_SQL_.BROADCAST_CHANNELS.get(keywoard, set()).remove(
+                    str(group_id)
+                )
 
             SESSION.delete(broadcast_group)
             SESSION.commit()
@@ -69,12 +77,12 @@ def del_keyword_broadcastlist(keywoard):
             .filter(CatBroadcast.keywoard == keywoard)
             .delete()
         )
-        BROADCAST_CHANNELS.pop(keywoard)
+        BROADCAST_SQL_.BROADCAST_CHANNELS.pop(keywoard)
         SESSION.commit()
 
 
 def get_chat_broadcastlist(keywoard):
-    return BROADCAST_CHANNELS.get(keywoard, set())
+    return BROADCAST_SQL_.BROADCAST_CHANNELS.get(keywoard, set())
 
 
 def get_broadcastlist_chats():
@@ -111,17 +119,18 @@ def num_broadcastlist_chats():
 
 
 def __load_chat_broadcastlists():
-    global BROADCAST_CHANNELS
     try:
         chats = SESSION.query(CatBroadcast.keywoard).distinct().all()
         for (keywoard,) in chats:
-            BROADCAST_CHANNELS[keywoard] = []
+            BROADCAST_SQL_.BROADCAST_CHANNELS[keywoard] = []
 
         all_groups = SESSION.query(CatBroadcast).all()
         for x in all_groups:
-            BROADCAST_CHANNELS[x.keywoard] += [x.group_id]
+            BROADCAST_SQL_.BROADCAST_CHANNELS[x.keywoard] += [x.group_id]
 
-        BROADCAST_CHANNELS = {x: set(y) for x, y in BROADCAST_CHANNELS.items()}
+        BROADCAST_SQL_.BROADCAST_CHANNELS = {
+            x: set(y) for x, y in BROADCAST_SQL_.BROADCAST_CHANNELS.items()
+        }
 
     finally:
         SESSION.close()
