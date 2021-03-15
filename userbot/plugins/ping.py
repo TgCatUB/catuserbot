@@ -8,10 +8,10 @@ async def _(event):
     if event.fwd_from:
         return
     start = datetime.now()
-    event = await edit_or_reply(event, "Pong!")
+    event = await edit_or_reply(event, "Kiw!")
     end = datetime.now()
     ms = (end - start).microseconds / 1000
-    await event.edit("Pong!\n`{}`".format(ms))
+    await event.edit("Kiw!\n`{}`".format(ms))
 
 
 @bot.on(admin_cmd(pattern=f"fping$", outgoing=True))
