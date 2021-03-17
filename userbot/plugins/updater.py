@@ -6,31 +6,12 @@
 import asyncio
 import os
 import sys
+
+import git
 import heroku3
-import git
-import git
-import asyncio
-import random
-import re
-import time
-from os import remove
-from os import execl
-import sys
-from collections import deque
-
-import requests
-
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import MessageEntityMentionName
-from telethon import events
 
 from userbot.utils import admin_cmd
 
-
-from contextlib import suppress
-import os
-import sys
-import asyncio
 # -- Constants -- #
 
 IS_SELECTED_DIFFERENT_BRANCH = (
@@ -76,7 +57,7 @@ async def updater(message):
     repo.git.reset("--hard", "FETCH_HEAD")
 
     if Config.HEROKU_API_KEY is not None:
-        
+
         heroku = heroku3.from_key(Config.HEROKU_API_KEY)
         heroku_applications = heroku.apps()
         if len(heroku_applications) >= 1:
