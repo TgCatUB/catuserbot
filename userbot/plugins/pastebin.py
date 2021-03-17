@@ -244,7 +244,7 @@ async def code_print(event):
             event.chat_id, "out.png", force_document=False, reply_to=reply_to
         )
     except Exception as e:
-        await edit_delete(catevent, str(e),parse_mode=parse_pre)
+        await edit_delete(catevent, str(e), parse_mode=parse_pre)
     await catevent.delete()
     os.remove("out.png")
     os.remove(d_file_name)
