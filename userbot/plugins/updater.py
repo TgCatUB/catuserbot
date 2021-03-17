@@ -10,8 +10,6 @@ import sys
 import git
 import heroku3
 
-from userbot.utils import admin_cmd
-
 # -- Constants -- #
 
 IS_SELECTED_DIFFERENT_BRANCH = (
