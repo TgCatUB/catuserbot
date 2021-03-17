@@ -20,7 +20,7 @@ IS_SELECTED_DIFFERENT_BRANCH = (
 )
 OFFICIAL_UPSTREAM_REPO = "https://github.com/Mr-confused/catpack"
 REPO_REMOTE_NAME = "temponame"
-IFFUCI_ACTIVE_BRANCH_NAME = "master"
+IFFUCI_ACTIVE_BRANCH_NAME = "main"
 NO_HEROKU_APP_CFGD = "no heroku application found, but a key given? 😕 "
 HEROKU_GIT_REF_SPEC = "HEAD:refs/heads/master"
 RESTARTING_APP = "re-starting heroku application"
