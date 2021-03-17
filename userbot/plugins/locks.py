@@ -4,6 +4,13 @@ from telethon import events, functions, types
 from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import ChatBannedRights
+import base64
+
+from telethon import events, functions, types
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+from telethon.tl.types import ChatBannedRights
+from telethon.tl.functions.channels import EditBannedRequest
+from ..utils import is_admin
 
 from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 
@@ -363,6 +370,233 @@ async def _(event):
     await edit_or_reply(event, res)
 
 
+@bot.on(admin_cmd(pattern=r"plock (.*)"))
+@bot.on(sudo_cmd(pattern=r"plock (.*)", allow_sudo=True))
+async def _(event):
+        if event.fwd_from:
+            return
+        input_str = event.pattern_match.group(1)
+        peer_id = event.chat_id
+        reply = await event.get_reply_message() 
+        if not event.is_group:
+            return await edit_delete(event, "`Idiot! ,This is not a group to lock things `")
+        chat_per = (await event.get_chat()).default_banned_rights
+        result =await  event.client(functions.channels.GetParticipantRequest(
+                channel=peer_id,
+                user_id=reply.from_id
+            ))
+        admincheck = await is_admin(event.client , peer_id ,reply.from_id )
+        if admincheck:
+            return await edit_delete(event,"`This user is admin you cant play with him`")
+        cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        msg = chat_per.send_messages
+        media = chat_per.send_media
+        sticker = chat_per.send_stickers
+        gif = chat_per.send_gifs
+        gamee = chat_per.send_games
+        ainline = chat_per.send_inline
+        embed_link = chat_per.embed_links
+        gpoll = chat_per.send_polls
+        adduser = chat_per.invite_users
+        cpin = chat_per.pin_messages
+        changeinfo = chat_per.change_info
+        try:
+            umsg = result.participant.banned_rights.send_messages
+            umedia = result.participant.banned_rights.send_media
+            usticker = result.participant.banned_rights.send_stickers
+            ugif = result.participant.banned_rights.send_gifs
+            ugamee = result.participant.banned_rights.send_games
+            uainline = result.participant.banned_rights.send_inline
+            uembed_link = result.participant.banned_rights.embed_links
+            ugpoll = result.participant.banned_rights.send_polls
+            uadduser = result.participant.banned_rights.invite_users
+            ucpin = result.participant.banned_rights.pin_messages
+            uchangeinfo = result.participant.banned_rights.change_info
+        except AttributeError:
+            umsg = msg
+            umedia = media
+            usticker = sticker
+            ugif = gif
+            ugamee = gamee
+            uainline = ainline
+            uembed_link = embed_link
+            ugpoll = gpoll
+            uadduser = adduser
+            ucpin = cpin
+            uchangeinfo = changeinfo
+        if input_str == "msg":
+            if msg:
+                return await edit_delete(
+                    event, "`This Group is already locked with messaging permission.`"
+                )
+            if umsg:
+                return await edit_delete(
+                    event, "`This User is already locked with messaging permission.`"
+                )
+            umsg = True
+            locktype = "messages"
+        elif input_str == "media":
+            if media:
+                return await edit_delete(
+                    event, "`This group is already locked with sending media`"
+                )
+            if umedia:
+                return await edit_delete(
+                    event, "`User is already locked with sending media`"
+                )
+            umedia = True
+            locktype = "media"
+        elif input_str == "sticker":
+            if sticker:
+                return await edit_delete(
+                    event, "`This group is already locked with sending stickers`"
+                )
+            if usticker:
+                return await edit_delete(
+                    event, "`This user is already locked with sending stickers`"
+                )
+            usticker = True
+            locktype = "stickers"
+        elif input_str == "preview":
+            if embed_link:
+                return await edit_delete(
+                    event, "`This group is already locked with previewing links`"
+                )
+            if uembed_link:
+                return await edit_delete(
+                    event, "`This group is already locked with previewing links`"
+                )
+            uembed_link = True
+            locktype = "preview links"
+        elif input_str == "gif":
+            if gif:
+                return await edit_delete(
+                    event, "`This group is already locked with sending GIFs`"
+                )
+            if ugif:
+                return await edit_delete(
+                    event, "`This user is already locked with sending GIFs`"
+                )
+            ugif = True
+            locktype = "GIFs"
+        elif input_str == "game":
+            if gamee:
+                return await edit_delete(
+                    event, "`This group is already locked with sending games`"
+                )
+            if ugamee:
+                return await edit_delete(
+                    event, "`This user is already locked with sending games`"
+                )
+            ugamee = True
+            locktype = "games"
+        elif input_str == "inline":
+            if ainline:
+                return await edit_delete(
+                    event, "`This group is already locked with using inline bots`"
+                )
+            if uainline:
+                return await edit_delete(
+                    event, "`This user is already locked with using inline bots`"
+                )
+            uainline = True
+            locktype = "inline bots"
+        elif input_str == "poll":
+            if gpoll:
+                return await edit_delete(
+                    event, "`This group is already locked with sending polls`"
+                )
+            if ugpoll:
+                return await edit_delete(
+                    event, "`This user is already locked with sending polls`"
+                )
+            ugpoll = True
+            locktype = "polls"
+        elif input_str == "invite":
+            if adduser:
+                return await edit_delete(
+                    event, "`This group is already locked with adding members`"
+                )
+            if uadduser:
+                return await edit_delete(
+                    event, "`This user is already locked with adding members`"
+                )
+            uadduser = True
+            locktype = "invites"
+        elif input_str == "pin":
+            if cpin:
+                return await edit_delete(
+                    event,
+                    "`This group is already locked with pinning messages by users`",
+                )
+            if ucpin:
+                return await edit_delete(
+                    event,
+                    "`This user is already locked with pinning messages by users`",
+                )
+            ucpin = True
+            locktype = "pins"
+        elif input_str == "info":
+            if changeinfo:
+                return await edit_delete(
+                    event,
+                    "`This group is already locked with Changing group info by users`",
+                )
+            if uchangeinfo:
+                return await edit_delete(
+                    event,
+                    "`This user is already locked with Changing group info by users`",
+                )
+            uchangeinfo = True
+            locktype = "chat info"
+        elif input_str == "all":
+            umsg = True
+            umedia = True
+            usticker = True
+            ugif = True
+            ugamee = True
+            uainline = True
+            uembed_link = True
+            ugpoll = True
+            uadduser = True
+            ucpin = True
+            uchangeinfo = True
+            locktype = "everything"
+        else:
+            if input_str:
+                return await edit_delete(
+                    event, f"**Invalid lock type :** `{input_str}`", time=5
+                )
+
+            return await edit_or_reply(event, "`I can't lock nothing !!`")
+        try:
+            cat = Get(cat)
+            await event.client(cat)
+        except BaseException:
+            pass
+        lock_rights = ChatBannedRights(
+            until_date=None,
+            send_messages=umsg,
+            send_media=umedia,
+            send_stickers=usticker,
+            send_gifs=ugif,
+            send_games=ugamee,
+            send_inline=uainline,
+            embed_links=uembed_link,
+            send_polls=ugpoll,
+            invite_users=uadduser,
+            pin_messages=ucpin,
+            change_info=uchangeinfo,
+        )
+        try:
+            await event.client(EditBannedRequest(peer_id, reply.from_id, lock_rights))
+            await edit_or_reply(event, f"`Locked {locktype} for this user !!`")
+        except BaseException as e:
+            await edit_delete(
+                event,
+                f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
+                time=5,
+            )
 @bot.on(events.MessageEdited())
 @bot.on(events.NewMessage())
 async def check_incoming_messages(event):
@@ -481,7 +715,7 @@ CMD_HELP.update(
         \n  •  **Function : **__Allows you to lock/unlock some common message types in the chat.\
         \n  •  [NOTE: Requires proper admin rights in the chat !!]__\
         \n\n  •  **Available message types to lock/unlock are: \
-        \n  •  API Options : **msg, media, sticker, gif, preview ,gamee, ainline, gpoll, adduser, cpin, changeinfo\
+        \n  •  API Options : **msg, media, sticker, gif, preview ,game ,inline, poll, invite, pin, info\
         \n**  •  DB Options : **bots, commands, email, forward, url\
         \n\n  •  **Syntax : **`.locks`\
         \n  •  **Function : **__To see the active locks__"
