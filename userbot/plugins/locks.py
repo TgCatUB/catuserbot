@@ -703,6 +703,7 @@ async def _(event):
                 )
             )
 
+
 @bot.on(admin_cmd(pattern=r"punlock (.*)"))
 @bot.on(sudo_cmd(pattern=r"punlock (.*)", allow_sudo=True))
 async def _(event):
@@ -769,9 +770,7 @@ async def _(event):
         locktype = "messages"
     elif input_str == "media":
         if media:
-            return await edit_delete(
-                event, "`This Group is locked with sending media`"
-            )
+            return await edit_delete(event, "`This Group is locked with sending media`")
         if not umedia:
             return await edit_delete(
                 event, "`User is already unlocked with sending media`"
@@ -802,9 +801,7 @@ async def _(event):
         locktype = "preview links"
     elif input_str == "gif":
         if gif:
-            return await edit_delete(
-                event, "`This Group is locked with sending GIFs`"
-            )
+            return await edit_delete(event, "`This Group is locked with sending GIFs`")
         if not ugif:
             return await edit_delete(
                 event, "`This user is already unlocked with sending GIFs`"
@@ -813,9 +810,7 @@ async def _(event):
         locktype = "GIFs"
     elif input_str == "game":
         if gamee:
-            return await edit_delete(
-                event, "`This Group is locked with sending games`"
-            )
+            return await edit_delete(event, "`This Group is locked with sending games`")
         if not ugamee:
             return await edit_delete(
                 event, "`This user is already unlocked with sending games`"
@@ -835,9 +830,7 @@ async def _(event):
         locktype = "inline bots"
     elif input_str == "poll":
         if gpoll:
-            return await edit_delete(
-                event, "`This Group is locked with sending polls`"
-            )
+            return await edit_delete(event, "`This Group is locked with sending polls`")
         if not ugpoll:
             return await edit_delete(
                 event, "`This user is already unlocked with sending polls`"
@@ -939,7 +932,8 @@ async def _(event):
             event,
             f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
             time=5,
-        )            
+        )
+
 
 CMD_HELP.update(
     {
