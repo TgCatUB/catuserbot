@@ -938,13 +938,20 @@ async def _(event):
 CMD_HELP.update(
     {
         "locks": "**Plugin : **`locks`\
-        \n\n**  •  Syntax : **`.lock <all (or) type(s)> or .unlock <all (or) type(s)>`\
-        \n  •  **Function : **__Allows you to lock/unlock some common message types in the chat.\
-        \n  •  [NOTE: Requires proper admin rights in the chat !!]__\
-        \n\n  •  **Available message types to lock/unlock are: \
-        \n  •  API Options : **msg, media, sticker, gif, preview ,game ,inline, poll, invite, pin, info\
-        \n**  •  DB Options : **bots, commands, email, forward, url\
-        \n\n  •  **Syntax : **`.locks`\
-        \n  •  **Function : **__To see the active locks__"
+        \n\n**•  Syntax : **`.lock <all/type>`\
+        \n•  **Function : **__Allows you to lock the permissions of the chat.__\
+        \n\n**•  Syntax : **`.unlock <all/type>`\
+        \n•  **Function : **__Allows you to unlock the permissions of the chat.__\
+        \n\n•  **Syntax : **`.locks`\
+        \n•  **Function : **__To see the active locks__\
+        \n\n**•  Syntax : **`.plock <all/type>`\
+        \n•  **Function : **__Allows you to lock the permissions of the replied user in that chat.__\
+        \n\n**•  Syntax : **`.punlock <all/type>`\
+        \n•  **Function : **__Allows you to unlock the permissions of the replied user in that chat.__\
+        \n\n•  **[NOTE: Requires proper admin rights in the chat !!]**\
+        \n•  **Available message types to lock/unlock are: \
+        \n•  API Options : **`msg`, `media`, `sticker`, `gif`, `preview` ,`game` ,`inline`, `poll`, `invite`, `pin`, `info`\
+        \n**•  DB Options : **`bots`, `commands`, `email`, `forward`, `url`\
+        "
     }
 )
