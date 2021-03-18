@@ -5,8 +5,9 @@ from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import ChatBannedRights
-from . import get_user_from_event, BOTLOG, BOTLOG_CHATID
+
 from ..utils import is_admin
+from . import BOTLOG, get_user_from_event
 from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 
 
@@ -592,6 +593,7 @@ async def _(event):
             time=5,
         )
 
+
 @bot.on(admin_cmd(pattern=r"punlock (.*)"))
 @bot.on(sudo_cmd(pattern=r"punlock (.*)", allow_sudo=True))
 async def _(event):
@@ -822,6 +824,7 @@ async def _(event):
             time=5,
         )
 
+
 @bot.on(admin_cmd(pattern="uperm(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="uperm(?: |$)(.*)", allow_sudo=True))
 async def _(event):
@@ -892,7 +895,8 @@ async def _(event):
         output += f"__Add Users :__ {uadduser}\n"
         output += f"__Pin messages :__ {ucpin}\n"
         output += f"__Change Chat Info :__ {uchangeinfo}\n"
-    await edit_or_reply(event, output)        
+    await edit_or_reply(event, output)
+
 
 @bot.on(events.MessageEdited())
 @bot.on(events.NewMessage())
@@ -1004,7 +1008,7 @@ async def _(event):
                 )
             )
 
-            
+
 CMD_HELP.update(
     {
         "locks": "**Plugin : **`locks`\
