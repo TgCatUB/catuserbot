@@ -5,7 +5,7 @@ from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import ChatBannedRights
-
+from . import get_user_from_event, BOTLOG, BOTLOG_CHATID
 from ..utils import is_admin
 from .sql_helper.locks_sql import get_locks, is_locked, update_lock
 
@@ -592,118 +592,6 @@ async def _(event):
             time=5,
         )
 
-
-@bot.on(events.MessageEdited())
-@bot.on(events.NewMessage())
-async def check_incoming_messages(event):
-    if not event.is_private:
-        chat = await event.get_chat()
-        admin = chat.admin_rights
-        creator = chat.creator
-        if not admin and not creator:
-            return
-    peer_id = event.chat_id
-    if is_locked(peer_id, "commands"):
-        entities = event.message.entities
-        is_command = False
-        if entities:
-            for entity in entities:
-                if isinstance(entity, types.MessageEntityBotCommand):
-                    is_command = True
-        if is_command:
-            try:
-                await event.delete()
-            except Exception as e:
-                await event.reply(
-                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
-                )
-                update_lock(peer_id, "commands", False)
-    if is_locked(peer_id, "forward") and event.fwd_from:
-        try:
-            await event.delete()
-        except Exception as e:
-            await event.reply(
-                "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
-            )
-            update_lock(peer_id, "forward", False)
-    if is_locked(peer_id, "email"):
-        entities = event.message.entities
-        is_email = False
-        if entities:
-            for entity in entities:
-                if isinstance(entity, types.MessageEntityEmail):
-                    is_email = True
-        if is_email:
-            try:
-                await event.delete()
-            except Exception as e:
-                await event.reply(
-                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
-                )
-                update_lock(peer_id, "email", False)
-    if is_locked(peer_id, "url"):
-        entities = event.message.entities
-        is_url = False
-        if entities:
-            for entity in entities:
-                if isinstance(
-                    entity, (types.MessageEntityTextUrl, types.MessageEntityUrl)
-                ):
-                    is_url = True
-        if is_url:
-            try:
-                await event.delete()
-            except Exception as e:
-                await event.reply(
-                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
-                )
-                update_lock(peer_id, "url", False)
-
-
-@bot.on(events.ChatAction())
-async def _(event):
-    if not event.is_private:
-        chat = await event.get_chat()
-        admin = chat.admin_rights
-        creator = chat.creator
-        if not admin and not creator:
-            return
-    # check for "lock" "bots"
-    if not is_locked(event.chat_id, "bots"):
-        return
-    # bots are limited Telegram accounts,
-    # and cannot join by themselves
-    if event.user_added:
-        users_added_by = event.action_message.sender_id
-        is_ban_able = False
-        rights = types.ChatBannedRights(until_date=None, view_messages=True)
-        added_users = event.action_message.action.users
-        for user_id in added_users:
-            user_obj = await event.client.get_entity(user_id)
-            if user_obj.bot:
-                is_ban_able = True
-                try:
-                    await event.client(
-                        functions.channels.EditBannedRequest(
-                            event.chat_id, user_obj, rights
-                        )
-                    )
-                except Exception as e:
-                    await event.reply(
-                        "I don't seem to have ADMIN permission here. \n`{}`".format(
-                            str(e)
-                        )
-                    )
-                    update_lock(event.chat_id, "bots", False)
-                    break
-        if Config.BOTLOG_CHATID is not None and is_ban_able:
-            ban_reason_msg = await event.reply(
-                "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(
-                    users_added_by
-                )
-            )
-
-
 @bot.on(admin_cmd(pattern=r"punlock (.*)"))
 @bot.on(sudo_cmd(pattern=r"punlock (.*)", allow_sudo=True))
 async def _(event):
@@ -934,7 +822,189 @@ async def _(event):
             time=5,
         )
 
+@bot.on(admin_cmd(pattern="uperm(?: |$)(.*)"))
+@bot.on(sudo_cmd(pattern="uperm(?: |$)(.*)", allow_sudo=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    peer_id = event.chat_id
+    user, reason = await get_user_from_event(event)
+    if not user:
+        return
+    if not event.is_group:
+        return await edit_delete(event, "`Idiot! ,This is not a group to lock things `")
+    admincheck = await is_admin(event.client, peer_id, user.id)
+    result = await event.client(
+        functions.channels.GetParticipantRequest(channel=peer_id, user_id=user.id)
+    )
+    output = ""
+    if admincheck:
+        c_info = "✅" if result.participant.admin_rights.change_info else "❌"
+        del_me = "✅" if result.participant.admin_rights.delete_messages else "❌"
+        ban = "✅" if result.participant.admin_rights.ban_users else "❌"
+        invite_u = "✅" if result.participant.admin_rights.invite_users else "❌"
+        pin = "✅" if result.participant.admin_rights.pin_messages else "❌"
+        add_a = "✅" if result.participant.admin_rights.add_admins else "❌"
+        call = "✅" if result.participant.admin_rights.manage_call else "❌"
+        output += f"**Admin rights of **{_format.mentionuser(user.first_name ,user.id)} **in {event.chat.title} chat are **\n"
+        output += f"__Change info :__ {c_info}\n"
+        output += f"__Delete messages :__ {del_me}\n"
+        output += f"__Ban users :__ {ban}\n"
+        output += f"__Invite users :__ {invite_u}\n"
+        output += f"__Pin messages :__ {pin}\n"
+        output += f"__Add admins :__ {add_a}\n"
+        output += f"__Manage call :__ {call}\n"
+    else:
+        chat_per = (await event.get_chat()).default_banned_rights
+        try:
+            umsg = "❌" if result.participant.banned_rights.send_messages else "✅"
+            umedia = "❌" if result.participant.banned_rights.send_media else "✅"
+            usticker = "❌" if result.participant.banned_rights.send_stickers else "✅"
+            ugif = "❌" if result.participant.banned_rights.send_gifs else "✅"
+            ugamee = "❌" if result.participant.banned_rights.send_games else "✅"
+            uainline = "❌" if result.participant.banned_rights.send_inline else "✅"
+            uembed_link = "❌" if result.participant.banned_rights.embed_links else "✅"
+            ugpoll = "❌" if result.participant.banned_rights.send_polls else "✅"
+            uadduser = "❌" if result.participant.banned_rights.invite_users else "✅"
+            ucpin = "❌" if result.participant.banned_rights.pin_messages else "✅"
+            uchangeinfo = "❌" if result.participant.banned_rights.change_info else "✅"
+        except AttributeError:
+            umsg = "❌" if chat_per.send_messages else "✅"
+            umedia = "❌" if chat_per.send_media else "✅"
+            usticker = "❌" if chat_per.send_stickers else "✅"
+            ugif = "❌" if chat_per.send_gifs else "✅"
+            ugamee = "❌" if chat_per.send_games else "✅"
+            uainline = "❌" if chat_per.send_inline else "✅"
+            uembed_link = "❌" if chat_per.embed_links else "✅"
+            ugpoll = "❌" if chat_per.send_polls else "✅"
+            uadduser = "❌" if chat_per.invite_users else "✅"
+            ucpin = "❌" if chat_per.pin_messages else "✅"
+            uchangeinfo = "❌" if chat_per.change_info else "✅"
+        output += f"{_format.mentionuser(user.first_name ,user.id)} **permissions in {event.chat.title} chat are **\n"
+        output += f"__Send Messages :__ {umsg}\n"
+        output += f"__Send Media :__ {umedia}\n"
+        output += f"__Send Stickers :__ {usticker}\n"
+        output += f"__Send Gifs :__ {ugif}\n"
+        output += f"__Send Games :__ {ugamee}\n"
+        output += f"__Send Inline bots :__ {uainline}\n"
+        output += f"__Send Polls :__ {ugpoll}\n"
+        output += f"__Embed links :__ {uembed_link}\n"
+        output += f"__Add Users :__ {uadduser}\n"
+        output += f"__Pin messages :__ {ucpin}\n"
+        output += f"__Change Chat Info :__ {uchangeinfo}\n"
+    await edit_or_reply(event, output)        
 
+@bot.on(events.MessageEdited())
+@bot.on(events.NewMessage())
+async def check_incoming_messages(event):
+    if not event.is_private:
+        chat = await event.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            return
+    peer_id = event.chat_id
+    if is_locked(peer_id, "commands"):
+        entities = event.message.entities
+        is_command = False
+        if entities:
+            for entity in entities:
+                if isinstance(entity, types.MessageEntityBotCommand):
+                    is_command = True
+        if is_command:
+            try:
+                await event.delete()
+            except Exception as e:
+                await event.reply(
+                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+                )
+                update_lock(peer_id, "commands", False)
+    if is_locked(peer_id, "forward") and event.fwd_from:
+        try:
+            await event.delete()
+        except Exception as e:
+            await event.reply(
+                "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+            )
+            update_lock(peer_id, "forward", False)
+    if is_locked(peer_id, "email"):
+        entities = event.message.entities
+        is_email = False
+        if entities:
+            for entity in entities:
+                if isinstance(entity, types.MessageEntityEmail):
+                    is_email = True
+        if is_email:
+            try:
+                await event.delete()
+            except Exception as e:
+                await event.reply(
+                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+                )
+                update_lock(peer_id, "email", False)
+    if is_locked(peer_id, "url"):
+        entities = event.message.entities
+        is_url = False
+        if entities:
+            for entity in entities:
+                if isinstance(
+                    entity, (types.MessageEntityTextUrl, types.MessageEntityUrl)
+                ):
+                    is_url = True
+        if is_url:
+            try:
+                await event.delete()
+            except Exception as e:
+                await event.reply(
+                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+                )
+                update_lock(peer_id, "url", False)
+
+
+@bot.on(events.ChatAction())
+async def _(event):
+    if not event.is_private:
+        chat = await event.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+        if not admin and not creator:
+            return
+    # check for "lock" "bots"
+    if not is_locked(event.chat_id, "bots"):
+        return
+    # bots are limited Telegram accounts,
+    # and cannot join by themselves
+    if event.user_added:
+        users_added_by = event.action_message.sender_id
+        is_ban_able = False
+        rights = types.ChatBannedRights(until_date=None, view_messages=True)
+        added_users = event.action_message.action.users
+        for user_id in added_users:
+            user_obj = await event.client.get_entity(user_id)
+            if user_obj.bot:
+                is_ban_able = True
+                try:
+                    await event.client(
+                        functions.channels.EditBannedRequest(
+                            event.chat_id, user_obj, rights
+                        )
+                    )
+                except Exception as e:
+                    await event.reply(
+                        "I don't seem to have ADMIN permission here. \n`{}`".format(
+                            str(e)
+                        )
+                    )
+                    update_lock(event.chat_id, "bots", False)
+                    break
+        if BOTLOG and is_ban_able:
+            ban_reason_msg = await event.reply(
+                "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(
+                    users_added_by
+                )
+            )
+
+            
 CMD_HELP.update(
     {
         "locks": "**Plugin : **`locks`\
@@ -948,7 +1018,7 @@ CMD_HELP.update(
         \n•  **Function : **__Allows you to lock the permissions of the replied user in that chat.__\
         \n\n**•  Syntax : **`.punlock <all/type>`\
         \n•  **Function : **__Allows you to unlock the permissions of the replied user in that chat.__\
-        \n\n•  **[NOTE: Requires proper admin rights in the chat !!]**\
+        \n\n•  **Note :** __Requires proper admin rights in the chat !!__\
         \n•  **Available message types to lock/unlock are: \
         \n•  API Options : **`msg`, `media`, `sticker`, `gif`, `preview` ,`game` ,`inline`, `poll`, `invite`, `pin`, `info`\
         \n**•  DB Options : **`bots`, `commands`, `email`, `forward`, `url`\
