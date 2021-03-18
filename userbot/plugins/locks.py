@@ -1024,7 +1024,7 @@ CMD_HELP.update(
         \n•  **Function : **__Allows you to unlock the permissions of the replied user in that chat.__\
         \n\n**•  Syntax : **`.uperm <reply/username>`\
         \n•  **Function : **__Shows you the admin rights if he is admin else will show his permissions in the chat__\
-        \n\n•  **Note :** __Requires proper admin rights in the chat !!__\
+        \n\n•  **Note :** __Requires proper admin rights in the chat !! and DB Options are available only for lock and unlock commands.__\
         \n•  **Available message types to lock/unlock are: \
         \n•  API Options : **`msg`, `media`, `sticker`, `gif`, `preview` ,`game` ,`inline`, `poll`, `invite`, `pin`, `info`\
         \n**•  DB Options : **`bots`, `commands`, `email`, `forward`, `url`\
