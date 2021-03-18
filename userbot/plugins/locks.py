@@ -1022,6 +1022,8 @@ CMD_HELP.update(
         \n•  **Function : **__Allows you to lock the permissions of the replied user in that chat.__\
         \n\n**•  Syntax : **`.punlock <all/type>`\
         \n•  **Function : **__Allows you to unlock the permissions of the replied user in that chat.__\
+        \n\n**•  Syntax : **`.uperm <reply/username>`\
+        \n•  **Function : **__Shows you the admin rights if he is admin else will show his permissions in the chat__\
         \n\n•  **Note :** __Requires proper admin rights in the chat !!__\
         \n•  **Available message types to lock/unlock are: \
         \n•  API Options : **`msg`, `media`, `sticker`, `gif`, `preview` ,`game` ,`inline`, `poll`, `invite`, `pin`, `info`\
