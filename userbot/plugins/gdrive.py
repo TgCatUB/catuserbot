@@ -1506,6 +1506,7 @@ async def check_progress_for_dl(event, gid, previous):
                     f"**Path : **`{os.path.join(TMP_DOWNLOAD_DIRECTORY , file.name)}`\n"
                     "**Resp : **`OK - Successfully downloaded...`"
                 )
+                LOGS.info(file.name)
                 return file.name
         except Exception as e:
             if " not found" in str(e) or "'file'" in str(e):
