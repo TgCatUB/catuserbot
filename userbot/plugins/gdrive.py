@@ -246,7 +246,7 @@ async def download(event, gdrive, service, uri=None):
             cattorrent = True
         except Exception:
             cattorrent = False
-        full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
+        full_path = os.path.join(os.getcwd() , TMP_DOWNLOAD_DIRECTORY.strip("."))
         if cattorrent:
             LOGS.info("torrentutils exists")
             if os.path.isfile(uri) and uri.endswith(".torrent"):
@@ -274,9 +274,9 @@ async def download(event, gdrive, service, uri=None):
             new_gid = await check_metadata(gid)
             filename = await check_progress_for_dl(gdrive, new_gid, previous=None)
         try:
-            required_file_name = TMP_DOWNLOAD_DIRECTORY + filenames
+            required_file_name = os.path.join(TMP_DOWNLOAD_DIRECTORY , filenames)
         except Exception:
-            required_file_name = TMP_DOWNLOAD_DIRECTORY + filename
+            required_file_name = os.path.join(TMP_DOWNLOAD_DIRECTORY , filename)
     else:
         try:
             current_time = time.time()
@@ -1503,7 +1503,7 @@ async def check_progress_for_dl(event, gid, previous):
                 await event.edit(
                     f"**Name : **`{file.name}`\n"
                     f"**Size : **`{file.total_length_string()}`\n"
-                    f"**Path : **`{TMP_DOWNLOAD_DIRECTORY + file.name}`\n"
+                    f"**Path : **`{os.path.join(TMP_DOWNLOAD_DIRECTORY , file.name)}`\n"
                     "**Resp : **`OK - Successfully downloaded...`"
                 )
                 return file.name
