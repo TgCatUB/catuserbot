@@ -246,7 +246,7 @@ async def download(event, gdrive, service, uri=None):
             cattorrent = True
         except Exception:
             cattorrent = False
-        full_path = os.path.join(os.getcwd(), TMP_DOWNLOAD_DIRECTORY.strip("."))
+        full_path = os.path.join(os.getcwd(), TMP_DOWNLOAD_DIRECTORY)
         if cattorrent:
             LOGS.info("torrentutils exists")
             if os.path.isfile(uri) and uri.endswith(".torrent"):
