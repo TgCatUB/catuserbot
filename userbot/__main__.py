@@ -52,9 +52,9 @@ for name in files:
             if shortname.replace(".py", "") not in Config.NO_LOAD:
                 load_module(shortname.replace(".py", ""))
             else:
-                os.remove(os.path.join("userbot", "plugins", shortname))
+                os.remove(Path(f"userbot/plugins/{shortname}.py"))
         except Exception as e:
-            os.remove(os.path.join("userbot", "plugins", shortname))
+            os.remove(Path(f"userbot/plugins/{shortname}.py"))
             LOGS.info(f"unable to load {shortname} because of error {e}")
 
 LOGS.info("Yay your userbot is officially working.!!!")
