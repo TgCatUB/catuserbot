@@ -12,7 +12,6 @@ import re
 import time
 from datetime import datetime
 from mimetypes import guess_type
-from os.path import getctime, isdir, isfile, join
 from urllib.parse import quote
 
 import requests
@@ -237,7 +236,7 @@ async def download(event, gdrive, service, uri=None):
     global is_cancelled
     reply = ""
     """ - Download files to local then upload - """
-    if not isdir(TMP_DOWNLOAD_DIRECTORY):
+    if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TMP_DOWNLOAD_DIRECTORY)
         required_file_name = ""
     if uri:
@@ -250,7 +249,7 @@ async def download(event, gdrive, service, uri=None):
         full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
         if cattorrent:
             LOGS.info("torrentutils exists")
-            if isfile(uri) and uri.endswith(".torrent"):
+            if os.path.isfile(uri) and uri.endswith(".torrent"):
                 downloads = aria2.add_torrent(
                     uri, uris=None, options={"dir": full_path}, position=None
                 )
@@ -298,12 +297,12 @@ async def download(event, gdrive, service, uri=None):
             )
         except CancelProcess:
             names = [
-                join(TMP_DOWNLOAD_DIRECTORY, name)
+                os.path.join(TMP_DOWNLOAD_DIRECTORY, name)
                 for name in os.listdir(TMP_DOWNLOAD_DIRECTORY)
             ]
 
             """ asumming newest files are the cancelled one """
-            newest = max(names, key=getctime)
+            newest = max(names, key=os.path.getctime)
             os.remove(newest)
             reply += (
                 "**FILE - CANCELLED**\n\n"
@@ -320,7 +319,7 @@ async def download(event, gdrive, service, uri=None):
     mimeType = await get_mimeType(required_file_name)
     try:
         status = "[FILE - UPLOAD]"
-        if isfile(required_file_name):
+        if os.path.isfile(required_file_name):
             try:
                 result = await upload(
                     gdrive, service, required_file_name, file_name, mimeType
@@ -524,8 +523,8 @@ async def gdrive_download(event, gdrive, service, uri):
                     speed = round(downloaded / diff, 2)
                     eta = round((file_size - downloaded) / speed)
                     prog_str = "`[{0}{1}] {2}%`".format(
-                        "".join("▰" for i in range(math.floor(percentage / 10))),
-                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
+                        "".os.path.join("▰" for i in range(math.floor(percentage / 10))),
+                        "".os.path.join("▱" for i in range(10 - math.floor(percentage / 10))),
                         round(percentage, 2),
                     )
                     current_message = (
@@ -565,8 +564,8 @@ async def gdrive_download(event, gdrive, service, uri):
                     speed = round(downloaded / diff, 2)
                     eta = round((file_size - downloaded) / speed)
                     prog_str = "`[{0}{1}] {2}%`".format(
-                        "".join("▰" for i in range(math.floor(percentage / 10))),
-                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
+                        "".os.path.join("▰" for i in range(math.floor(percentage / 10))),
+                        "".os.path.join("▱" for i in range(10 - math.floor(percentage / 10))),
                         round(percentage, 2),
                     )
                     current_message = (
@@ -753,8 +752,8 @@ async def upload(gdrive, service, file_path, file_name, mimeType):
             speed = round(uploaded / diff, 2)
             eta = round((file_size - uploaded) / speed)
             prog_str = "`Uploading :`\n`[{0}{1}] {2}`".format(
-                "".join(["▰" for i in range(math.floor(percentage / 10))]),
-                "".join(["▱" for i in range(10 - math.floor(percentage / 10))]),
+                "".os.path.join(["▰" for i in range(math.floor(percentage / 10))]),
+                "".os.path.join(["▱" for i in range(10 - math.floor(percentage / 10))]),
                 round(percentage, 2),
             )
             current_message = (
@@ -788,8 +787,8 @@ async def task_directory(gdrive, service, folder_path):
         if is_cancelled:
             raise CancelProcess
 
-        current_f_name = join(folder_path, f)
-        if isdir(current_f_name):
+        current_f_name = os.path.join(folder_path, f)
+        if os.path.isdir(current_f_name):
             folder = await create_dir(service, f)
             parent_Id = folder.get("id")
             root_parent_Id = await task_directory(gdrive, service, current_f_name)
@@ -847,7 +846,7 @@ def get_file_path(service, file_id, file_name):
             .execute()
         )
         tmp_path.append(response["name"])
-    return "/".join(reversed(tmp_path[:-1]))
+    return "/".os.path.join(reversed(tmp_path[:-1]))
 
 
 async def get_output(service, file_id):
@@ -1212,12 +1211,12 @@ async def google_drive(gdrive):
     if service is False:
         return None
     gdrive = await edit_or_reply(gdrive, "`Uploading...`")
-    if isfile(value):
+    if os.path.isfile(value):
         file_path = value
         if file_path.endswith(".torrent"):
             uri = [file_path]
             file_path = None
-    elif isdir(value):
+    elif os.path.isdir(value):
         folder_path = value
         global parent_Id
         folder_name = await get_raw_name(folder_path)
@@ -1477,8 +1476,8 @@ async def check_progress_for_dl(event, gid, previous):
                     percentage = int(file.progress)
                     downloaded = percentage * int(file.total_length) / 100
                     prog_str = "**Downloading : **`[{0}{1}] {2}`".format(
-                        "".join("▰" for i in range(math.floor(percentage / 10))),
-                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
+                        "".os.path.join("▰" for i in range(math.floor(percentage / 10))),
+                        "".os.path.join("▱" for i in range(10 - math.floor(percentage / 10))),
                         file.progress_string(),
                     )
 
