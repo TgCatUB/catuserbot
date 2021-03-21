@@ -1,7 +1,7 @@
 import glob
 from pathlib import Path
 from sys import argv, exit
-
+import os
 import telethon.utils
 from telethon import TelegramClient
 
@@ -47,8 +47,13 @@ for name in files:
     with open(name) as f:
         path1 = Path(f.name)
         shortname = path1.stem
-        if shortname.replace(".py", "") not in Config.NO_LOAD:
-            load_module(shortname.replace(".py", ""))
+        try:
+            if shortname.replace(".py", "") not in Config.NO_LOAD:
+                load_module(shortname.replace(".py", ""))
+            else:
+                os.remove(os.path.join("userbot","plugins", shortname))
+        except:
+            LOGS.info(f"unable to load {shortname}")
 
 LOGS.info("Yay your userbot is officially working.!!!")
 LOGS.info(
