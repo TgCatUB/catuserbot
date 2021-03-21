@@ -53,8 +53,9 @@ for name in files:
                 load_module(shortname.replace(".py", ""))
             else:
                 os.remove(os.path.join("userbot", "plugins", shortname))
-        except:
-            LOGS.info(f"unable to load {shortname}")
+        except Exception as e:
+            os.remove(os.path.join("userbot", "plugins", shortname))
+            LOGS.info(f"unable to load {shortname} because of error {e}")
 
 LOGS.info("Yay your userbot is officially working.!!!")
 LOGS.info(
