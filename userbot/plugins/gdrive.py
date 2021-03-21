@@ -523,12 +523,8 @@ async def gdrive_download(event, gdrive, service, uri):
                     speed = round(downloaded / diff, 2)
                     eta = round((file_size - downloaded) / speed)
                     prog_str = "`[{0}{1}] {2}%`".format(
-                        "".os.path.join(
-                            "▰" for i in range(math.floor(percentage / 10))
-                        ),
-                        "".os.path.join(
-                            "▱" for i in range(10 - math.floor(percentage / 10))
-                        ),
+                        "".join("▰" for i in range(math.floor(percentage / 10))),
+                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
                         round(percentage, 2),
                     )
                     current_message = (
@@ -568,12 +564,8 @@ async def gdrive_download(event, gdrive, service, uri):
                     speed = round(downloaded / diff, 2)
                     eta = round((file_size - downloaded) / speed)
                     prog_str = "`[{0}{1}] {2}%`".format(
-                        "".os.path.join(
-                            "▰" for i in range(math.floor(percentage / 10))
-                        ),
-                        "".os.path.join(
-                            "▱" for i in range(10 - math.floor(percentage / 10))
-                        ),
+                        "".join("▰" for i in range(math.floor(percentage / 10))),
+                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
                         round(percentage, 2),
                     )
                     current_message = (
@@ -760,8 +752,8 @@ async def upload(gdrive, service, file_path, file_name, mimeType):
             speed = round(uploaded / diff, 2)
             eta = round((file_size - uploaded) / speed)
             prog_str = "`Uploading :`\n`[{0}{1}] {2}`".format(
-                "".os.path.join(["▰" for i in range(math.floor(percentage / 10))]),
-                "".os.path.join(["▱" for i in range(10 - math.floor(percentage / 10))]),
+                "".join(["▰" for i in range(math.floor(percentage / 10))]),
+                "".join(["▱" for i in range(10 - math.floor(percentage / 10))]),
                 round(percentage, 2),
             )
             current_message = (
@@ -854,7 +846,7 @@ def get_file_path(service, file_id, file_name):
             .execute()
         )
         tmp_path.append(response["name"])
-    return "/".os.path.join(reversed(tmp_path[:-1]))
+    return "/".join(reversed(tmp_path[:-1]))
 
 
 async def get_output(service, file_id):
@@ -1484,12 +1476,8 @@ async def check_progress_for_dl(event, gid, previous):
                     percentage = int(file.progress)
                     downloaded = percentage * int(file.total_length) / 100
                     prog_str = "**Downloading : **`[{0}{1}] {2}`".format(
-                        "".os.path.join(
-                            "▰" for i in range(math.floor(percentage / 10))
-                        ),
-                        "".os.path.join(
-                            "▱" for i in range(10 - math.floor(percentage / 10))
-                        ),
+                        "".join("▰" for i in range(math.floor(percentage / 10))),
+                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
                         file.progress_string(),
                     )
 
