@@ -167,8 +167,8 @@ async def purgeme(event):
     await smsg.delete()
 
 
-@bot.on(admin_cmd(pattern="del(?: |$)(\d+)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="del(?: |$)(\d+)"))
+@bot.on(admin_cmd(pattern="del ?(\d+)?"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="del ?(\d+)?"))
 @errors_handler
 async def delete_it(event):
     if event.fwd_from:
