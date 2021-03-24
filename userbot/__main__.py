@@ -1,7 +1,7 @@
 import glob
 import os
 from pathlib import Path
-from sys import argv, exit
+import sys
 
 import telethon.utils
 from telethon import TelegramClient
@@ -18,10 +18,10 @@ async def add_bot(bot_token):
         bot.uid = telethon.utils.get_peer_id(bot.me)
     except Exception as e:
         LOGS.error(f"STRING_SESSION - {str(e)}")
-        exit()
+        sys.exit()
 
 
-if len(argv) not in (1, 3, 4):
+if len(sys.argv) not in (1, 3, 4):
     bot.disconnect()
 else:
     bot.tgbot = None
@@ -40,7 +40,7 @@ else:
             bot.start()
     except Exception as e:
         LOGS.error(f"TG_BOT_TOKEN - {str(e)}")
-        exit()
+        sys.exit()
 
 path = "userbot/plugins/*.py"
 files = glob.glob(path)
@@ -79,7 +79,7 @@ async def startupmessage():
 
 bot.loop.create_task(startupmessage())
 
-if len(argv) not in (1, 3, 4):
+if len(sys.argv) not in (1, 3, 4):
     bot.disconnect()
 else:
     bot.tgbot = None
