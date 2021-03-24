@@ -337,32 +337,48 @@ async def _(event):
     res = ""
     current_db_locks = get_locks(event.chat_id)
     if not current_db_locks:
-        res = "There are no DataBase locks in this chat"
+        res = "There are no DataBase settings in this chat"
     else:
-        res = "Following are the DataBase locks in this chat: \n"
-        res += "👉 `bots`: `{}`\n".format(current_db_locks.bots)
-        res += "👉 `commands`: `{}`\n".format(current_db_locks.commands)
-        res += "👉 `email`: `{}`\n".format(current_db_locks.email)
-        res += "👉 `forward`: `{}`\n".format(current_db_locks.forward)
-        res += "👉 `url`: `{}`\n".format(current_db_locks.url)
+        res = "Following are the DataBase permissions in this chat: \n"
+        ubots =  "❌" if current_db_locks.bots else "✅"
+        ucommands = "❌" if current_db_locks.commands else "✅"
+        uemail =  "❌" if current_db_locks.email else "✅"
+        uforward =  "❌" if current_db_locks.forward else "✅"
+        uurl = "❌" if current_db_locks.url else "✅"
+        res += f"👉 `bots`: `{ubots}`\n"
+        res += f"👉 `commands`: `{ucommands}`\n"
+        res += f"👉 `email`: `{uemail}`\n"
+        res += f"👉 `forward`: `{uforward}`\n"
+        res += f"👉 `url`: `{uurl}`\n"
     current_chat = await event.get_chat()
     try:
-        current_api_locks = current_chat.default_banned_rights
+        chat_per = current_chat.default_banned_rights
     except AttributeError as e:
         logger.info(str(e))
     else:
-        res += "\nFollowing are the API locks in this chat: \n"
-        res += "👉 `msg`: `{}`\n".format(current_api_locks.send_messages)
-        res += "👉 `media`: `{}`\n".format(current_api_locks.send_media)
-        res += "👉 `sticker`: `{}`\n".format(current_api_locks.send_stickers)
-        res += "👉 `gif`: `{}`\n".format(current_api_locks.send_gifs)
-        res += "👉 `preview`: `{}`\n".format(current_api_locks.embed_links)
-        res += "👉 `gamee`: `{}`\n".format(current_api_locks.send_games)
-        res += "👉 `ainline`: `{}`\n".format(current_api_locks.send_inline)
-        res += "👉 `gpoll`: `{}`\n".format(current_api_locks.send_polls)
-        res += "👉 `adduser`: `{}`\n".format(current_api_locks.invite_users)
-        res += "👉 `cpin`: `{}`\n".format(current_api_locks.pin_messages)
-        res += "👉 `changeinfo`: `{}`\n".format(current_api_locks.change_info)
+        umsg = "❌" if chat_per.send_messages else "✅"
+        umedia = "❌" if chat_per.send_media else "✅"
+        usticker = "❌" if chat_per.send_stickers else "✅"
+        ugif = "❌" if chat_per.send_gifs else "✅"
+        ugamee = "❌" if chat_per.send_games else "✅"
+        uainline = "❌" if chat_per.send_inline else "✅"
+        uembed_link = "❌" if chat_per.embed_links else "✅"
+        ugpoll = "❌" if chat_per.send_polls else "✅"
+        uadduser = "❌" if chat_per.invite_users else "✅"
+        ucpin = "❌" if chat_per.pin_messages else "✅"
+        uchangeinfo = "❌" if chat_per.change_info else "✅"
+        res += "\nThis are current permissions of this chat: \n"
+        res += f"👉 `msg`: `{umsg}`\n"
+        res += f"👉 `media`: `{umedia}`\n"
+        res += f"👉 `sticker`: `{usticker}`\n"
+        res += f"👉 `gif`: `{ugif}`\n"
+        res += f"👉 `preview`: `{uembed_link}`\n"
+        res += f"👉 `gamee`: `{ugamee}`\n"
+        res += f"👉 `ainline`: `{uainline}`\n"
+        res += f"👉 `gpoll`: `{ugpoll}`\n"
+        res += f"👉 `adduser`: `{uadduser}`\n"
+        res += f"👉 `cpin`: `{ucpin}`\n"
+        res += f"👉 `changeinfo`: `{uchangeinfo}`\n"
     await edit_or_reply(event, res)
 
 
