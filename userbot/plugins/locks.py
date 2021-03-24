@@ -340,10 +340,10 @@ async def _(event):
         res = "There are no DataBase settings in this chat"
     else:
         res = "Following are the DataBase permissions in this chat: \n"
-        ubots =  "❌" if current_db_locks.bots else "✅"
+        ubots = "❌" if current_db_locks.bots else "✅"
         ucommands = "❌" if current_db_locks.commands else "✅"
-        uemail =  "❌" if current_db_locks.email else "✅"
-        uforward =  "❌" if current_db_locks.forward else "✅"
+        uemail = "❌" if current_db_locks.email else "✅"
+        uforward = "❌" if current_db_locks.forward else "✅"
         uurl = "❌" if current_db_locks.url else "✅"
         res += f"👉 `bots`: `{ubots}`\n"
         res += f"👉 `commands`: `{ucommands}`\n"
