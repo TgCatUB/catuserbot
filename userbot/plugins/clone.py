@@ -9,7 +9,7 @@ from telethon.tl import functions
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
-from . import ALIVE_NAME, AUTONAME, DEFAULT_BIO
+from . import ALIVE_NAME, AUTONAME, BOTLOG, BOTLOG_CHATID, DEFAULT_BIO
 
 DEFAULTUSER = str(AUTONAME) if AUTONAME else str(ALIVE_NAME)
 DEFAULTUSERBIO = (
@@ -17,11 +17,6 @@ DEFAULTUSERBIO = (
     if DEFAULT_BIO
     else "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙"
 )
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
-    BOTLOG = False
-else:
-    BOTLOG = True
-    BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
 
 
 @bot.on(admin_cmd(pattern="clone ?(.*)"))

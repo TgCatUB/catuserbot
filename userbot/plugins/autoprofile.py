@@ -190,10 +190,11 @@ async def autopicloop():
                 "**Error**\n`For functing of autopic you need to set DEFAULT_PIC var in Heroku vars`",
             )
         return
-    try:
-        counter = int(gvarstatus("autopic_counter"))
-    except Exception as e:
-        LOGS.info(str(e))
+    if gvarstatus("autopic") is not None:
+        try:
+            counter = int(gvarstatus("autopic_counter"))
+        except Exception as e:
+            LOGS.warn(str(e))
     while AUTOPICSTART:
         if not os.path.exists(autopic_path):
             downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
