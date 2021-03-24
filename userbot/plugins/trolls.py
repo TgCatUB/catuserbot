@@ -89,7 +89,6 @@ async def catbot(catmemes):
     await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=catid)
 
 
-
 @bot.on(admin_cmd(pattern="trap(?: |$)(.*)"))
 @bot.on(sudo_cmd(pattern="trap(?: |$)(.*)", allow_sudo=True))
 async def catbot(catmemes):
