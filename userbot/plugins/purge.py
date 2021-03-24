@@ -204,9 +204,10 @@ async def delete_it(event):
             except rpcbaseerrors.BadRequestError:
                 await edit_or_reply(event, "`Well, I can't delete a message`")
     else:
-        await event.delete()
+        if not input_Str:
+            await event.delete()
 
-
+ 
 CMD_HELP.update(
     {
         "purge": "**Plugin : **`purge`\
