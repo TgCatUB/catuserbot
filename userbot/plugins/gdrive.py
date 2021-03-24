@@ -12,7 +12,6 @@ import re
 import time
 from datetime import datetime
 from mimetypes import guess_type
-from os.path import getctime, isdir, isfile, join
 from urllib.parse import quote
 
 import requests
@@ -237,7 +236,7 @@ async def download(event, gdrive, service, uri=None):
     global is_cancelled
     reply = ""
     """ - Download files to local then upload - """
-    if not isdir(TMP_DOWNLOAD_DIRECTORY):
+    if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TMP_DOWNLOAD_DIRECTORY)
         required_file_name = ""
     if uri:
@@ -247,10 +246,10 @@ async def download(event, gdrive, service, uri=None):
             cattorrent = True
         except Exception:
             cattorrent = False
-        full_path = os.getcwd() + TMP_DOWNLOAD_DIRECTORY.strip(".")
+        full_path = os.path.join(os.getcwd(), TMP_DOWNLOAD_DIRECTORY)
         if cattorrent:
             LOGS.info("torrentutils exists")
-            if isfile(uri) and uri.endswith(".torrent"):
+            if os.path.isfile(uri) and uri.endswith(".torrent"):
                 downloads = aria2.add_torrent(
                     uri, uris=None, options={"dir": full_path}, position=None
                 )
@@ -275,9 +274,9 @@ async def download(event, gdrive, service, uri=None):
             new_gid = await check_metadata(gid)
             filename = await check_progress_for_dl(gdrive, new_gid, previous=None)
         try:
-            required_file_name = TMP_DOWNLOAD_DIRECTORY + filenames
+            required_file_name = os.path.join(TMP_DOWNLOAD_DIRECTORY, filenames)
         except Exception:
-            required_file_name = TMP_DOWNLOAD_DIRECTORY + filename
+            required_file_name = os.path.join(TMP_DOWNLOAD_DIRECTORY, filename)
     else:
         try:
             current_time = time.time()
@@ -298,12 +297,12 @@ async def download(event, gdrive, service, uri=None):
             )
         except CancelProcess:
             names = [
-                join(TMP_DOWNLOAD_DIRECTORY, name)
+                os.path.join(TMP_DOWNLOAD_DIRECTORY, name)
                 for name in os.listdir(TMP_DOWNLOAD_DIRECTORY)
             ]
 
             """ asumming newest files are the cancelled one """
-            newest = max(names, key=getctime)
+            newest = max(names, key=os.path.getctime)
             os.remove(newest)
             reply += (
                 "**FILE - CANCELLED**\n\n"
@@ -320,7 +319,7 @@ async def download(event, gdrive, service, uri=None):
     mimeType = await get_mimeType(required_file_name)
     try:
         status = "[FILE - UPLOAD]"
-        if isfile(required_file_name):
+        if os.path.isfile(required_file_name):
             try:
                 result = await upload(
                     gdrive, service, required_file_name, file_name, mimeType
@@ -788,8 +787,8 @@ async def task_directory(gdrive, service, folder_path):
         if is_cancelled:
             raise CancelProcess
 
-        current_f_name = join(folder_path, f)
-        if isdir(current_f_name):
+        current_f_name = os.path.join(folder_path, f)
+        if os.path.isdir(current_f_name):
             folder = await create_dir(service, f)
             parent_Id = folder.get("id")
             root_parent_Id = await task_directory(gdrive, service, current_f_name)
@@ -1202,22 +1201,22 @@ async def google_drive(gdrive):
     elif value and gdrive.reply_to_msg_id:
         await edit_or_reply(
             gdrive,
-            "**[UNKNOWN - ERROR]\n\n"
+            "**[UNKNOWN - ERROR]**\n\n"
             "**Status : **`failed`\n"
             "**Reason : **`Confused to upload file or the replied message/media.`",
         )
         return None
     service = await create_app(gdrive)
     event = gdrive
-    gdrive = await edit_or_reply(gdrive, "`Uploading...`")
     if service is False:
         return None
-    if isfile(value):
+    gdrive = await edit_or_reply(gdrive, "`Uploading...`")
+    if os.path.isfile(value):
         file_path = value
         if file_path.endswith(".torrent"):
             uri = [file_path]
             file_path = None
-    elif isdir(value):
+    elif os.path.isdir(value):
         folder_path = value
         global parent_Id
         folder_name = await get_raw_name(folder_path)
@@ -1504,9 +1503,10 @@ async def check_progress_for_dl(event, gid, previous):
                 await event.edit(
                     f"**Name : **`{file.name}`\n"
                     f"**Size : **`{file.total_length_string()}`\n"
-                    f"**Path : **`{TMP_DOWNLOAD_DIRECTORY + file.name}`\n"
+                    f"**Path : **`{os.path.join(TMP_DOWNLOAD_DIRECTORY , file.name)}`\n"
                     "**Resp : **`OK - Successfully downloaded...`"
                 )
+                LOGS.info(file.name)
                 return file.name
         except Exception as e:
             if " not found" in str(e) or "'file'" in str(e):

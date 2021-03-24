@@ -22,7 +22,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
 USER_BOT_WARN_ZERO = "You were spamming my peru master's inbox, henceforth you are blocked by my master's userbot. **Now GTFO, i'm playing minecraft** "
 
 
-if Config.PRIVATE_GROUP_ID is not None:
+if Config.PRIVATE_GROUP_ID != 0:
 
     @bot.on(admin_cmd(outgoing=True))
     async def you_dm_niqq(event):

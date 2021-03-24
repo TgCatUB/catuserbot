@@ -173,7 +173,7 @@ async def _(event):
         return await edit_delete(event, "`Autoname haven't enabled`")
     if input_str == "autobio":
         if gvarstatus("autobio") is not None and gvarstatus("autobio") == "true":
-            delgvar("autoname")
+            delgvar("autobio")
             await event.client(
                 functions.account.UpdateProfileRequest(about=DEFAULTUSERBIO)
             )
@@ -190,10 +190,11 @@ async def autopicloop():
                 "**Error**\n`For functing of autopic you need to set DEFAULT_PIC var in Heroku vars`",
             )
         return
-    try:
-        counter = int(gvarstatus("autopic_counter"))
-    except Exception as e:
-        LOGS.info(str(e))
+    if gvarstatus("autopic") is not None:
+        try:
+            counter = int(gvarstatus("autopic_counter"))
+        except Exception as e:
+            LOGS.warn(str(e))
     while AUTOPICSTART:
         if not os.path.exists(autopic_path):
             downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)

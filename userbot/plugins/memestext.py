@@ -22,7 +22,8 @@ from . import catmemes
 async def source(e):
     await edit_or_reply(
         e,
-        "Click [here](https://github.com/Jisan09/catuserbot) to open this lit af repo.",
+        "Click [here](https://github.com/Jisan09/catuserbot) to open this lit af repo.\
+        \nClick [here](https://github.com/Mr-confused/catpack) to open supported link for heroku",
     )
 
 

@@ -221,20 +221,7 @@ async def gablist(event):
                 )
     else:
         GBANNED_LIST = "no Gbanned Users (yet)"
-    if len(GBANNED_LIST) > 4095:
-        with io.BytesIO(str.encode(GBANNED_LIST)) as out_file:
-            out_file.name = "Gbannedusers.text"
-            await event.client.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                caption="Current Gbanned Users",
-                reply_to=event,
-            )
-            await event.delete()
-    else:
-        await edit_or_reply(event, GBANNED_LIST)
+    await edit_or_reply(event, GBANNED_LIST)
 
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"gmute(?: |$)(.*)"))

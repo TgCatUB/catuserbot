@@ -167,8 +167,8 @@ async def purgeme(event):
     await smsg.delete()
 
 
-@bot.on(admin_cmd(pattern="del(?: |$)(.*)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="del(?: |$)(.*)"))
+@bot.on(admin_cmd(pattern="del ?(\d+)?"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="del ?(\d+)?"))
 @errors_handler
 async def delete_it(event):
     if event.fwd_from:
@@ -210,19 +210,6 @@ async def delete_it(event):
 CMD_HELP.update(
     {
         "purge": "__**PLUGIN NAME :** Purge__\
-    \n\n📌** CMD ➥** `.purge`\
-    \n**USAGE   ➥  **Purges all messages starting from the reply.\
-    \n\n📌** CMD ➥** `.purgeme` <x>\
-    \n**USAGE   ➥  **Deletes x amount of your latest messages.\
-    \n\n📌** CMD ➥** `.del`\
-    \n**USAGE   ➥  **Deletes the message you replied to.\
-    .edit` <newmessage>\
-    \n**USAGE   ➥  **Replace your last message with <newmessage>."
-    }
-)
-CMD_HELP.update(
-    {
-        "purge": "**Plugin : **`purge`\
         \n\n📌** CMD ➥** `.purge` <count> reply\
         \n**USAGE   ➥  **__Deletes the x(count) amount of messages from the replied message if you don't use count then deletes all messages from there.__\
         \n\n📌** CMD ➥** `.purgefrom` reply\
