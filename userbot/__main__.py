@@ -1,7 +1,7 @@
 import glob
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import telethon.utils
 from telethon import TelegramClient
