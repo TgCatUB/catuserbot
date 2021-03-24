@@ -36,6 +36,7 @@ async def catbot(catmemes):
         os.remove(download_location)
         return
     LOGS.info(download_location)
+    await event.reply(file=download_location)
     await output[0].edit("generating image..")
     try:
         response = upload_file(download_location)
