@@ -39,13 +39,13 @@ async def catbot(catmemes):
     await output[0].edit("generating image..")
     try:
         response = upload_file(download_location)
-        os.remove(download_location)
     except exceptions.TelegraphException as exc:
         await output[0].edit(f"**Error: **\n`{str(exc)}`")
         os.remove(download_location)
         return
     cat = f"https://telegra.ph{response[0]}"
     cat = await trash(cat)
+    os.remove(download_location)
     await output[0].delete()
     await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=catid)
 
@@ -78,7 +78,6 @@ async def catbot(catmemes):
     await output[0].edit("generating image..")
     try:
         response = upload_file(download_location)
-        os.remove(download_location)
     except exceptions.TelegraphException as exc:
         await output[0].edit(f"**Error: **\n`{str(exc)}`")
         os.remove(download_location)
@@ -86,6 +85,7 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await threats(cat)
     await output[0].delete()
+    os.remove(download_location)
     await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=catid)
 
 
@@ -127,7 +127,6 @@ async def catbot(catmemes):
     await output[0].edit("generating image..")
     try:
         response = upload_file(download_location)
-        os.remove(download_location)
     except exceptions.TelegraphException as exc:
         await output[0].edit(f"**Error: **\n`{str(exc)}`")
         os.remove(download_location)
@@ -135,6 +134,7 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await trap(text1, text2, cat)
     await output[0].delete()
+    os.remove(download_location)
     await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=catid)
 
 
@@ -176,7 +176,6 @@ async def catbot(catmemes):
     await output[0].edit("generating image..")
     try:
         response = upload_file(download_location)
-        os.remove(download_location)
     except exceptions.TelegraphException as exc:
         await output[0].edit(f"**Error: **\n`{str(exc)}`")
         os.remove(download_location)
@@ -184,6 +183,7 @@ async def catbot(catmemes):
     cat = f"https://telegra.ph{response[0]}"
     cat = await phcomment(cat, text, username)
     await output[0].delete()
+    os.remove(download_location)
     await catmemes.client.send_file(catmemes.chat_id, cat, reply_to=catid)
 
 
