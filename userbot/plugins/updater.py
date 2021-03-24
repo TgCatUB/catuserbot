@@ -98,6 +98,6 @@ async def deploy_start(tgbot, message, refspec, remote):
     await message.edit(
         "Updating and Deploying the code. Please wait for 5 minutes then use `.alive` to check wheather I am online or not."
     )
-    await remote.push(refspec="HEAD:refs/heads/master", force=True)
+    await remote.push(refspec=refspec)
     await tgbot.disconnect()
     os.execl(sys.executable, sys.executable, *sys.argv)
