@@ -1,7 +1,6 @@
 import asyncio
 import os
 import sys
-from os import environ, execle, path, remove
 
 import git
 from git import Repo
@@ -27,8 +26,8 @@ RESTARTING_APP = "re-starting heroku application"
 # -- Constants End -- #
 
 
-requirements_path = path.join(
-    path.dirname(path.dirname(path.dirname(__file__))), "requirements.txt"
+requirements_path = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "requirements.txt"
 )
 
 
@@ -53,7 +52,7 @@ async def print_changelogs(event, ac_br, changelog):
             "output.txt",
             reply_to=event.id,
         )
-        remove("output.txt")
+        os.remove("output.txt")
     else:
         await event.client.send_message(
             event.chat_id,
@@ -98,7 +97,7 @@ async def update(event, repo, ups_rem, ac_br):
     )
     # Spin a new instance of bot
     args = [sys.executable, "-m", "userbot"]
-    execle(sys.executable, *args, environ)
+    os.execle(sys.executable, *args, os.environ)
     return
 
 
