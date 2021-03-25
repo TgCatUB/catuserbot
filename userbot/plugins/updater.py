@@ -1,7 +1,7 @@
 import asyncio
 import os
 import sys
-
+import heroku3
 import git
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
@@ -209,7 +209,6 @@ async def updater(message):
     repo.git.reset("--hard", "FETCH_HEAD")
 
     if Config.HEROKU_API_KEY is not None:
-        import heroku3
 
         heroku = heroku3.from_key(Config.HEROKU_API_KEY)
         heroku_applications = heroku.apps()
@@ -233,7 +232,7 @@ async def updater(message):
                 else:
                     remote = repo.create_remote("heroku", heroku_git_url)
                 asyncio.get_event_loop().create_task(
-                    deploy_start(tgbot, message, HEROKU_GIT_REF_SPEC, remote)
+                    deploy_start(bot, message, HEROKU_GIT_REF_SPEC, remote)
                 )
 
             else:
