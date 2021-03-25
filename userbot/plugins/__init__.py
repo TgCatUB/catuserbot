@@ -38,7 +38,7 @@ PM_START = []
 PMMESSAGE_CACHE = {}
 PMMENU = "pmpermit_menu" not in Config.NO_LOAD
 
-if Config.PRIVATE_GROUP_BOT_API_ID is None:
+if Config.PRIVATE_GROUP_BOT_API_ID == 0:
     BOTLOG = False
     BOTLOG_CHATID = "me"
 else:

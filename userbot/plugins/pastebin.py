@@ -239,9 +239,12 @@ async def code_print(event):
         ImageFormatter(font_name="DejaVu Sans Mono", line_numbers=True),
         "out.png",
     )
-    await event.client.send_file(
-        event.chat_id, "out.png", force_document=False, reply_to=reply_to
-    )
+    try:
+        await event.client.send_file(
+            event.chat_id, "out.png", force_document=False, reply_to=reply_to
+        )
+    except Exception as e:
+        await edit_delete(catevent, str(e), parse_mode=parse_pre)
     await catevent.delete()
     os.remove("out.png")
     os.remove(d_file_name)

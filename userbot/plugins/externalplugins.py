@@ -4,7 +4,7 @@ from pathlib import Path
 from telethon.tl.types import InputMessagesFilterDocument
 
 from ..utils import load_module
-from . import BOTLOG_CHATID
+from . import BOTLOG, BOTLOG_CHATID
 
 if Config.PLUGIN_CHANNEL:
 
@@ -25,9 +25,10 @@ if Config.PLUGIN_CHANNEL:
             path1 = Path(downloaded_file_name)
             shortname = path1.stem
             load_module(shortname.replace(".py", ""))
-            await bot.send_message(
-                BOTLOG_CHATID,
-                f"Installed Plugin `{os.path.basename(downloaded_file_name)}` successfully.",
-            )
+            if BOTLOG:
+                await bot.send_message(
+                    BOTLOG_CHATID,
+                    f"Installed Plugin `{os.path.basename(downloaded_file_name)}` successfully.",
+                )
 
     bot.loop.create_task(install())
