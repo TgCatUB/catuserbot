@@ -208,8 +208,8 @@ async def smrk(smk):
         await edit_or_reply(smk, reply_text)
 
 
-@bot.on(admin_cmd(pattern="ftext (.*)"))
-@bot.on(sudo_cmd(pattern="ftext (.*)", allow_sudo=True))
+@bot.on(admin_cmd(pattern="f (.*)"))
+@bot.on(sudo_cmd(pattern="f (.*)", allow_sudo=True))
 async def payf(event):
     paytext = event.pattern_match.group(1)
     pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
@@ -357,7 +357,7 @@ CMD_HELP.update(
         \n  •  **Function : **Praise people!\
         \n\n  •  **Syntax :** `.smk <text/reply>`\
         \n  •  **Function : **A shit module for ツ , who cares.\
-        \n\n  •  **Syntax :** `.ftext <emoji/character>`\
+        \n\n  •  **Syntax :** `.f <emoji/character>`\
         \n  •  **Function : **Pay Respects.\
         \n\n  •  **Syntax :** `.wish <reply/text>`\
         \n  •  **Function : **Shows the chance of your success inspired from @CalsiBot.\
