@@ -167,8 +167,8 @@ async def purgeme(event):
     await smsg.delete()
 
 
-@bot.on(admin_cmd(pattern="del ?(\d+)?"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="del ?(\d+)?"))
+@bot.on(admin_cmd(pattern="del(?: |$)(.*)"))
+@bot.on(sudo_cmd(allow_sudo=True, pattern="del(?: |$)(.*)"))
 @errors_handler
 async def delete_it(event):
     if event.fwd_from:
@@ -192,7 +192,8 @@ async def delete_it(event):
                         "`Well, I can't delete a message. I am not an admin`",
                     )
         elif input_str:
-            await edit_or_reply(event, "`Well the time you mentioned is invalid.`")
+            if not input_str.startswith("var"):
+                await edit_or_reply(event, "`Well the time you mentioned is invalid.`")
         else:
             try:
                 await msg_src.delete()
@@ -204,9 +205,10 @@ async def delete_it(event):
             except rpcbaseerrors.BadRequestError:
                 await edit_or_reply(event, "`Well, I can't delete a message`")
     else:
-        await event.delete()
+        if not input_Str:
+            await event.delete()
 
-
+            
 CMD_HELP.update(
     {
         "purge": "__**PLUGIN NAME :** Purge__\
