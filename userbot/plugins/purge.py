@@ -208,7 +208,7 @@ async def delete_it(event):
         if not input_Str:
             await event.delete()
 
-            
+
 CMD_HELP.update(
     {
         "purge": "__**PLUGIN NAME :** Purge__\
