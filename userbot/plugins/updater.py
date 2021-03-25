@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+
 import heroku3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
@@ -165,6 +166,7 @@ async def upstream(event):
         await update(event, repo, ups_rem, ac_br)
     return
 
+
 async def deploy(event, repo, ups_rem, ac_br, txt):
     if HEROKU_API_KEY is not None:
         heroku = heroku3.from_key(HEROKU_API_KEY)
@@ -254,6 +256,7 @@ async def upstream(event):
     ups_rem.fetch(ac_br)
     await event.edit("`Deploying userbot, please wait....`")
     await deploy(event, repo, ups_rem, ac_br, txt)
+
 
 CMD_HELP.update(
     {
