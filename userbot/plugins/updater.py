@@ -1,7 +1,7 @@
 import asyncio
 import os
 import sys
-
+import heroku3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
@@ -165,6 +165,95 @@ async def upstream(event):
         await update(event, repo, ups_rem, ac_br)
     return
 
+async def deploy(event, repo, ups_rem, ac_br, txt):
+    if HEROKU_API_KEY is not None:
+        heroku = heroku3.from_key(HEROKU_API_KEY)
+        heroku_app = None
+        heroku_applications = heroku.apps()
+        if HEROKU_APP_NAME is None:
+            await event.edit(
+                "`Please set up the` **HEROKU_APP_NAME** `Var`"
+                " to be able to deploy your userbot...`"
+            )
+            repo.__del__()
+            return
+        for app in heroku_applications:
+            if app.name == HEROKU_APP_NAME:
+                heroku_app = app
+                break
+        if heroku_app is None:
+            await event.edit(
+                f"{txt}\n" "`Invalid Heroku credentials for deploying userbot dyno.`"
+            )
+            return repo.__del__()
+        await event.edit(
+            "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
+        )
+        ups_rem.fetch(ac_br)
+        repo.git.reset("--hard", "FETCH_HEAD")
+        heroku_git_url = heroku_app.git_url.replace(
+            "https://", "https://api:" + HEROKU_API_KEY + "@"
+        )
+        if "heroku" in repo.remotes:
+            remote = repo.remote("heroku")
+            remote.set_url(heroku_git_url)
+        else:
+            remote = repo.create_remote("heroku", heroku_git_url)
+        try:
+            remote.push(refspec="HEAD:refs/heads/master", force=True)
+        except Exception as error:
+            await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
+            return repo.__del__()
+        build_status = app.builds(order_by="created_at", sort="desc")[0]
+        if build_status.status == "failed":
+            await event.edit(
+                "`Build failed!\n" "Cancelled or there were some errors...`"
+            )
+            await asyncio.sleep(5)
+            return await event.delete()
+        await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
+    else:
+        await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
+    return
+
+
+@bot.on(admin_cmd(outgoing=True, pattern=r"update deploy$"))
+@bot.on(sudo_cmd(pattern="update deploy$", allow_sudo=True))
+async def upstream(event):
+    event = await edit_or_reply(event, "`Pulling the catpack repo wait a sec ....`")
+    off_repo = "https://github.com/Mr-confused/catpack"
+    os.chdir("/app")
+    catcmd = f"rm -rf .git"
+    try:
+        await _catutils.runcmd(catcmd)
+    except BaseException:
+        pass
+    try:
+        txt = "`Oops.. Updater cannot continue due to "
+        txt += "some problems occured`\n\n**LOGTRACE:**\n"
+        repo = Repo()
+    except NoSuchPathError as error:
+        await event.edit(f"{txt}\n`directory {error} is not found`")
+        return repo.__del__()
+    except GitCommandError as error:
+        await event.edit(f"{txt}\n`Early failure! {error}`")
+        return repo.__del__()
+    except InvalidGitRepositoryError:
+        repo = Repo.init()
+        origin = repo.create_remote("upstream", off_repo)
+        origin.fetch()
+        repo.create_head("master", origin.refs.master)
+        repo.heads.master.set_tracking_branch(origin.refs.master)
+        repo.heads.master.checkout(True)
+    try:
+        repo.create_remote("upstream", off_repo)
+    except BaseException:
+        pass
+    ac_br = repo.active_branch.name
+    ups_rem = repo.remote("upstream")
+    ups_rem.fetch(ac_br)
+    await event.edit("`Deploying userbot, please wait....`")
+    await deploy(event, repo, ups_rem, ac_br, txt)
 
 CMD_HELP.update(
     {
