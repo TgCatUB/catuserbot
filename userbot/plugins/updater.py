@@ -180,10 +180,11 @@ async def upstream(event):
 @bot.on(admin_cmd("update deploy$", outgoing=True))
 async def updater(message):
     OFFICIAL_UPSTREAM_REPO = "https://github.com/Mr-confused/catpack"
+    folder = os.path.abspath("/app")
     try:
-        repo = git.Repo()
+        repo = git.Repo(folder)
     except git.exc.InvalidGitRepositoryError as e:
-        repo = git.Repo.init()
+        repo = git.Repo.init(folder)
         origin = repo.create_remote(REPO_REMOTE_NAME, OFFICIAL_UPSTREAM_REPO)
         origin.fetch()
         repo.create_head(IFFUCI_ACTIVE_BRANCH_NAME, origin.refs.master)
