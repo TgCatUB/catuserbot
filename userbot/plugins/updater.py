@@ -2,11 +2,8 @@ import asyncio
 import os
 import sys
 
-import requests
-import urllib3
-
-
 import heroku3
+import urllib3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
@@ -287,7 +284,8 @@ async def variable(var):
     heroku_var = app.config()
     await edit_or_reply(var, f"`Changing goodcat to badcat wait for 2-3 minutes.`")
     heroku_var["UPSTREAM_REPO"] = "https://github.com/Jisan09/catuserbot"
-    
+
+
 CMD_HELP.update(
     {
         "updater": "**Plugin : **`updater`"
