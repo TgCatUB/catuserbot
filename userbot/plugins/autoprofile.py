@@ -51,9 +51,9 @@ async def autopic(event):
     input_str = event.pattern_match.group(1)
     if input_str:
         try:
-            input_str = -int(input_str)
+            input_str = int(input_str)
         except ValueError:
-            input_str = -60
+            input_str = 60
     else:
         if gvarstatus("autopic_counter") is None:
             addgvar("autopic_counter", 30)
@@ -125,7 +125,7 @@ async def _(event):
 
 
 @bot.on(admin_cmd(pattern="end (.*)"))
-async def _(event):
+async def _(event):  # sourcery no-metrics
     if event.fwd_from:
         return
     input_str = event.pattern_match.group(1)
@@ -214,7 +214,7 @@ async def autopicloop():
         try:
             await bot(functions.photos.UploadProfilePhotoRequest(file))
             os.remove(autophoto_path)
-            counter -= counter
+            counter += counter
             await asyncio.sleep(CHANGE_TIME)
         except BaseException:
             return

@@ -11,6 +11,7 @@ async def incom_note(getnt):
     try:
         if not (await getnt.get_sender()).bot:
             notename = getnt.text[1:]
+            notename = notename.lower()
             note = get_note(notename)
             message_id_to_reply = getnt.message.reply_to_msg_id
             if not message_id_to_reply:
@@ -46,6 +47,7 @@ async def add_snip(fltr):
     string = fltr.text.partition(keyword)[2]
     msg = await fltr.get_reply_message()
     msg_id = None
+    keyword = keyword.lower()
     if msg and msg.media and not string:
         if BOTLOG:
             await bot.send_message(
@@ -87,26 +89,14 @@ async def on_snip_list(event):
         if message == "There are no saved notes in this chat":
             message = "Notes saved in this chat:\n"
         message += "👉 `#{}`\n".format(note.keyword)
-    if len(message) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(message)) as out_file:
-            out_file.name = "snips.text"
-            await bot.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                caption="Available Snips",
-                reply_to=event,
-            )
-            await event.delete()
-    else:
-        await edit_or_reply(event, message)
+    await edit_or_reply(event, message)
 
 
 @bot.on(admin_cmd(pattern=r"snipd (\S+)"))
 @bot.on(sudo_cmd(pattern=r"snipd (\S+)", allow_sudo=True))
 async def on_snip_delete(event):
     name = event.pattern_match.group(1)
+    name = name.lower()
     catsnip = get_note(name)
     if catsnip:
         rm_note(name)
