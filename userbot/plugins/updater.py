@@ -15,7 +15,13 @@ Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
 heroku_api = "https://api.heroku.com"
 
 UPSTREAM_REPO_BRANCH = Config.UPSTREAM_REPO_BRANCH
-UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
+
+if Config.UPSTREAM_REPO =="goodcat":
+    UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
+elif Config.UPSTREAM_REPO =="badcat":
+    UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot"
+else:
+    UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
 REPO_REMOTE_NAME = "temponame"
 IFFUCI_ACTIVE_BRANCH_NAME = "master"
