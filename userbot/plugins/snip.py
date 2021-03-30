@@ -96,15 +96,15 @@ async def add_snip(event):
 @bot.on(admin_cmd(pattern="snipl$"))
 @bot.on(sudo_cmd(pattern=r"snipl$", allow_sudo=True))
 async def on_snip_list(event):
-    message = "No saved notes in this chat"
+    message = "You havent saved any notes/snip"
     notes = get_notes()
     if not BOTLOG:
         return await edit_delete(
             event, "`For saving snip you must set PRIVATE_GROUP_BOT_API_ID`"
         )
     for note in notes:
-        if message == "No saved notes in this chat":
-            message = "Notes saved in this chat are\n"
+        if message == "You havent saved any notes/snip"
+            message = "Notes saved in your bot are\n\n"
         message += f"👉 `#{note.keyword}`"
         if note.f_mesg_id:
             msglink = await get_message_link(Config.PRIVATE_GROUP_ID, note.f_mesg_id)
