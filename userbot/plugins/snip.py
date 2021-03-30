@@ -46,7 +46,9 @@ async def add_snip(event):
     if event.fwd_from:
         return
     if not BOTLOG:
-        return await edit_delete(event, "`To save snip or notes you need to set PRIVATE_GROUP_BOT_API_ID`")
+        return await edit_delete(
+            event, "`To save snip or notes you need to set PRIVATE_GROUP_BOT_API_ID`"
+        )
     keyword = event.pattern_match.group(1)
     string = event.text.partition(keyword)[2]
     msg = await event.get_reply_message()
@@ -64,7 +66,10 @@ async def add_snip(event):
         )
         msg_id = msg_o.id
     elif msg:
-        return await edit_delete(event , "`What should i save for your snip either do reply or give snip text along with keyword`")
+        return await edit_delete(
+            event,
+            "`What should i save for your snip either do reply or give snip text along with keyword`",
+        )
     if string:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -76,7 +81,7 @@ async def add_snip(event):
         msg_id = msg_o.id
         string = None
     else:
-        return await edit_delete(event,"`what should i save for your snip`")
+        return await edit_delete(event, "`what should i save for your snip`")
     success = "Note {} is successfully {}. Use` #{} `to get it"
     if add_note(keyword, string, msg_id) is False:
         rm_note(keyword)
@@ -94,7 +99,9 @@ async def on_snip_list(event):
     message = "No saved notes in this chat"
     notes = get_notes()
     if not BOTLOG:
-        return await edit_delete(event, "`For saving snip you must set PRIVATE_GROUP_BOT_API_ID`")
+        return await edit_delete(
+            event, "`For saving snip you must set PRIVATE_GROUP_BOT_API_ID`"
+        )
     for note in notes:
         if message == "No saved notes in this chat":
             message = "Notes saved in this chat are\n"
