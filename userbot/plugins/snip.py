@@ -105,7 +105,7 @@ async def on_snip_list(event):
     for note in notes:
         if message == "No saved notes in this chat":
             message = "Notes saved in this chat are\n"
-        message += "👉 `#{note.keyword}`"
+        message += f"👉 `#{note.keyword}`"
         if note.f_mesg_id:
             msglink = await get_message_link(Config.PRIVATE_GROUP_ID, note.f_mesg_id)
             message += f"  [preview]({msglink})\n"
