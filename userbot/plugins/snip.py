@@ -70,18 +70,19 @@ async def add_snip(event):
             event,
             "`What should i save for your snip either do reply or give snip text along with keyword`",
         )
-    if string:
-        await event.client.send_message(
-            BOTLOG_CHATID,
-            f"#NOTE\
+    if not msg:
+        if string:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"#NOTE\
             \n**Keyword :** `#{keyword}`\
             \n\nThe following message is saved as the snip in your bot , do NOT delete it !!",
-        )
-        msg_o = await event.client.send_messages(BOTLOG_CHATID, string)
-        msg_id = msg_o.id
-        string = None
-    else:
-        return await edit_delete(event, "`what should i save for your snip`")
+            )
+            msg_o = await event.client.send_message(BOTLOG_CHATID, string)
+            msg_id = msg_o.id
+            string = None
+        else:
+            return await edit_delete(event, "`what should i save for your snip`")
     success = "Note {} is successfully {}. Use` #{} `to get it"
     if add_note(keyword, string, msg_id) is False:
         rm_note(keyword)
