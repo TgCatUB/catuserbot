@@ -103,7 +103,7 @@ async def on_snip_list(event):
             event, "`For saving snip you must set PRIVATE_GROUP_BOT_API_ID`"
         )
     for note in notes:
-        if message == "You havent saved any notes/snip"
+        if message == "You havent saved any notes/snip":
             message = "Notes saved in your bot are\n\n"
         message += f"👉 `#{note.keyword}`"
         if note.f_mesg_id:
