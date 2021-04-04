@@ -54,7 +54,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 2
-    animation_ttl = range(12)
+    animation_ttl = range(11)
     event = await edit_or_reply(event, "thack")
     animation_chars = [
         "**Connecting To Telegram Data Centre**",
