@@ -102,7 +102,7 @@ async def variable(var):
             return await cat.edit("`Please specify ConfigVars you want to delete`")
         await asyncio.sleep(1.5)
         if variable not in heroku_var:
-            return await cat.edit(f"`{variable}`**  is not exists**")
+            return await cat.edit(f"`{variable}`**  does not exist**")
 
         await cat.edit(f"`{variable}`  **successfully deleted**")
         del heroku_var[variable]
