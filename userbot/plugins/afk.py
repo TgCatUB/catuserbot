@@ -54,7 +54,7 @@ async def set_not_afk(event):
     ):
         shite = await event.client.send_message(
             event.chat_id,
-            "`Back alive! No Longer afk.\nWas afk for " + endtime + "`",
+            "`Thirumbi Vandhutenu Sollu!!.\nWas afk for " + endtime + "`",
         )
         AFK_.USERAFK_ON = {}
         AFK_.afk_time = None
@@ -64,7 +64,7 @@ async def set_not_afk(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#AFKFALSE \n`Set AFK mode to False\n"
-                + "Back alive! No Longer afk.\nWas afk for "
+                + "Thirumbi Vandhutenu Sollu!!.\nWas afk for "
                 + endtime
                 + "`",
             )
@@ -108,23 +108,23 @@ async def on_afk(event):
         if AFK_.afk_type == "text":
             if AFK_.msg_link and AFK_.reason:
                 message_to_reply = (
-                    f"**I am AFK .\n\nAFK Since {endtime}\nReason : **{AFK_.reason}"
+                    f"**Naan Romba Busy.... .\n\nBusy Since {endtime}\nReason : **{AFK_.reason}"
                 )
             elif AFK_.reason:
                 message_to_reply = (
-                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
+                    f"`Naan Romba Busy....\n\nBusy Since {endtime}\nReason : {AFK_.reason}`"
                 )
             else:
-                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+                message_to_reply = f"`Naan Romba Busy....\n\nBusy Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
             if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
                 msg = await event.reply(message_to_reply)
         elif AFK_.afk_type == "media":
             if AFK_.reason:
                 message_to_reply = (
-                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
+                    f"`Naan Romba Busy... .\n\nBusy Since {endtime}\nReason : {AFK_.reason}`"
                 )
             else:
-                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+                message_to_reply = f"`Naan Romba Busy... .\n\nBusy Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
             if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
                 msg = await event.reply(message_to_reply, file=AFK_.media_afk.media)
         if event.chat_id in AFK_.last_afk_message:
@@ -236,7 +236,7 @@ async def _(event):
         AFK_.USERAFK_ON = f"on: {AFK_.reason}"
         if AFK_.reason:
             await edit_delete(
-                event, f"`I shall be Going afk! because ~` {AFK_.reason}", 5
+                event, f"`Busy Now....! because ~` {AFK_.reason}", 5
             )
         else:
             await edit_delete(event, f"`I shall be Going afk! `", 5)
