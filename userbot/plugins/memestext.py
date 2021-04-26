@@ -97,7 +97,7 @@ async def facepalm(e):
 @bot.on(admin_cmd(outgoing=True, pattern="bt$"))
 @bot.on(sudo_cmd(pattern="bt$", allow_sudo=True))
 async def bluetext(e):
-    """ Believe me, you will find this useful. """
+    """Believe me, you will find this useful."""
     if e.is_group:
         await edit_or_reply(
             e,

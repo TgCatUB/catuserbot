@@ -75,7 +75,7 @@ def pack_nick(username, pack, is_anim):
 
 
 async def resize_photo(photo):
-    """ Resize the given photo to 512x512 """
+    """Resize the given photo to 512x512"""
     image = Image.open(photo)
     if (image.width and image.height) < 512:
         size1 = image.width

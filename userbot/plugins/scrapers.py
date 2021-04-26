@@ -17,7 +17,7 @@ from . import BOTLOG, BOTLOG_CHATID
 @bot.on(admin_cmd(outgoing=True, pattern=r"wiki (.*)"))
 @bot.on(sudo_cmd(allow_sudo=True, pattern=r"wiki (.*)"))
 async def wiki(wiki_q):
-    """ For .wiki command, fetch content from Wikipedia. """
+    """For .wiki command, fetch content from Wikipedia."""
     match = wiki_q.pattern_match.group(1)
     try:
         summary(match)
