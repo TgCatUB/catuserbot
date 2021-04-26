@@ -105,7 +105,7 @@ async def _(event):
 
 @bot.on(admin_cmd(outgoing=True, pattern="username (.*)"))
 async def update_username(username):
-    """ For .username command, set a new username in Telegram. """
+    """For .username command, set a new username in Telegram."""
     newusername = username.pattern_match.group(1)
     try:
         await username.client(UpdateUsernameRequest(newusername))
@@ -116,7 +116,7 @@ async def update_username(username):
 
 @bot.on(admin_cmd(outgoing=True, pattern="count$"))
 async def count(event):
-    """ For .count command, get profile stats. """
+    """For .count command, get profile stats."""
     u = 0
     g = 0
     c = 0
@@ -153,7 +153,7 @@ async def count(event):
 
 @bot.on(admin_cmd(outgoing=True, pattern=r"delpfp"))
 async def remove_profilepic(delpfp):
-    """ For .delpfp command, delete your current profile picture in Telegram. """
+    """For .delpfp command, delete your current profile picture in Telegram."""
     group = delpfp.text[8:]
     if group == "all":
         lim = 0

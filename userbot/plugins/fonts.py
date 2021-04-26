@@ -44,7 +44,7 @@ async def stylish_generator(event):
 @bot.on(admin_cmd(pattern="vapor(.*)", command="vapor (.*)"))
 @bot.on(sudo_cmd(pattern="vapor(.*)", command="vapor (.*)", allow_sudo=True))
 async def vapor(vpr):
-    """ Vaporize everything! """
+    """Vaporize everything!"""
     if not vpr.text[0].isalpha() and vpr.text[0] not in (";"):
         reply_text = list()
         textx = await vpr.get_reply_message()
