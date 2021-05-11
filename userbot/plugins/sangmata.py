@@ -35,7 +35,7 @@ async def _(event):  # sourcery no-metrics
             event,
             "`reply to  user's text message to get name/username history or give userid/username`",
         )
-    user, rank = await get_user_from_event(event)
+    user, rank = await get_user_from_event(event,secondgroup=True)
     if not user:
         return
     uid = user.id
