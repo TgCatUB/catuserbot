@@ -6,7 +6,7 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format
-from . import _format, sanga_seperator
+from ..helpers import sanga_seperator, get_user_from_event
 
 plugin_category = "utils"
 
@@ -35,19 +35,10 @@ async def _(event):  # sourcery no-metrics
             event,
             "`reply to  user's text message to get name/username history or give userid/username`",
         )
-    if input_str:
-        try:
-            uid = int(input_str)
-        except ValueError:
-            try:
-                u = await event.client.get_entity(input_str)
-            except ValueError:
-                await edit_delete(
-                    event, "`Give userid or username to find name history`"
-                )
-            uid = u.id
-    else:
-        uid = reply_message.sender_id
+    user, rank = await get_user_from_event(event)
+    if not user:
+        return
+    uid = user.id
     chat = "@SangMataInfo_bot"
     catevent = await edit_or_reply(event, "`Processing...`")
     async with event.client.conversation(chat) as conv:
