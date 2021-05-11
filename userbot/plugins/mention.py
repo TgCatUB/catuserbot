@@ -9,7 +9,7 @@ plugin_category = "extra"
 
 @catub.cat_cmd(
     pattern="(tagall|all)(?: |$)(.*)",
-    command=("all", plugin_category),
+    command=("tagall", plugin_category),
     info={
         "header": "tags recent 100 persons in the group may not work for all",
         "usage": [
@@ -21,7 +21,7 @@ plugin_category = "extra"
 async def _(event):
     "To tag all."
     reply_to_id = await reply_id(event)
-    input_str = event.pattern_match.group(1)
+    input_str = event.pattern_match.group(2)
     mentions = input_str or "@all"
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
