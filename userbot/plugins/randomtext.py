@@ -1,5 +1,6 @@
 """
 inspired from @Deonnn @Mayur_Karaniya
+from ..helpers.utils import _format
 Quotes credits: Being Biblical Channel : @BeingBiblical
 AlenPaulVarghese(@STARKTM1)[hp]
 Sing credits :By @PhycoNinja13b
@@ -11,12 +12,23 @@ No Logic Pligon for @PepeBot
 import random
 from asyncio import sleep
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern=r"sing$", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"sing$", allow_sudo=True))
+from ..core.managers import edit_or_reply
+
+plugin_category = "extra"
+
+
+@catub.cat_cmd(
+    pattern="sing$",
+    command=("sing", plugin_category),
+    info={
+        "header": "To get random lyrics of a song.",
+        "usage": "{tr}sing",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To get random lyrics of a song."
     event = await edit_or_reply(event, "Singing...")
     await sleep(2)
     x = random.randrange(1, 33)
@@ -152,11 +164,16 @@ async def _(event):
         await event.edit("Not in a mood to sing. Sorry!")
 
 
-@bot.on(admin_cmd(pattern=f"hps$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"hps$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="hp$",
+    command=("hp", plugin_category),
+    info={
+        "header": "To get random harrypotter spells.",
+        "usage": "{tr}hp",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "To get random harry potter spells."
     event = await edit_or_reply(event, "`.....`")
     await sleep(2)
     x = random.randrange(1, 40)
@@ -242,11 +259,16 @@ async def _(event):
         await event.edit("**Wingardium Leviosa**")
 
 
-@bot.on(admin_cmd(pattern=f"gott$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"gott$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="gott$",
+    command=("gott", plugin_category),
+    info={
+        "header": "To get random game of thrones thoughts.",
+        "usage": "{tr}gott",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "To get random game of thrones thoughts.."
     event = await edit_or_reply(event, "Typing...")
     await sleep(2)
     x = random.randrange(1, 40)
@@ -392,11 +414,16 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern=f"gotm$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"gotm$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="gotm$",
+    command=("gotm", plugin_category),
+    info={
+        "header": "To get random game of thrones memes.",
+        "usage": "{tr}gotm",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To get random game of thrones memes."
     event = await edit_or_reply(event, "Thinking... 🤔")
     await sleep(2)
     x = random.randrange(1, 30)
@@ -552,11 +579,16 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern="bello$", outgoing=True))
-@bot.on(sudo_cmd(pattern="bello$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="bello$",
+    command=("bello", plugin_category),
+    info={
+        "header": "To get random sentences to start conversation.",
+        "usage": "{tr}bello",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "To get random sentences to start conversation."
     event = await edit_or_reply(event, "Typing....")
     await sleep(2)
     x = random.randrange(1, 101)
@@ -938,11 +970,16 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern=r"tip$", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"tip$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="tip$",
+    command=("tip", plugin_category),
+    info={
+        "header": "To get random life tips.",
+        "usage": "{tr}tip",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "To get random life tips."
     await edit_or_reply(event, "Well, let me give you a life-pro tip... 😉")
     await sleep(2)
     x = random.randrange(1, 87)
@@ -1300,11 +1337,16 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern=r"qt$"))
-@bot.on(sudo_cmd(pattern=r"qt$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="qt$",
+    command=("qt", plugin_category),
+    info={
+        "header": "To ask random questions.",
+        "usage": "{tr}qt",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "To ask random questions."
     event = await edit_or_reply(event, "selecting question...")
     await sleep(2)
     x = random.randrange(1, 60)
@@ -1488,11 +1530,16 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern=f"logic$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"logic$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="logic$",
+    command=("logic", plugin_category),
+    info={
+        "header": "To get random logical sentences.",
+        "usage": "{tr}logic",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "To get random logical sentences."
     x = random.randrange(1, 104)
     event = await edit_or_reply(event, "`Wait me getting a logic for you`")
     await sleep(2)
@@ -1878,22 +1925,3 @@ async def _(event):
         )
     if x == 104:
         await event.edit("`Do You Know, We can't see Ghosts But Ghosts Can see Us...`")
-
-
-CMD_HELP.update(
-    {
-        "randomtext": """**Plugin : **`randomtext`
-
-**Commands : **
-  •  `.sing`
-  •  `.hps`
-  •  `.gott`
-  •  `.gotm`
-  •  `.bello`
-  •  `.tip`
-  •  `.qt`
-  •  `.logic`  
-
-**Function : **__Random text strings are shown__"""
-    }
-)

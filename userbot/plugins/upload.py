@@ -1,5 +1,7 @@
 import asyncio
+import io
 import os
+import pathlib
 import subprocess
 import time
 from datetime import datetime
@@ -9,12 +11,23 @@ from shutil import copyfile
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from pymediainfo import MediaInfo
+from telethon.tl import types
 from telethon.tl.types import DocumentAttributeVideo
+from telethon.utils import get_attributes
 
-from . import make_gif, progress, reply_id, thumb_from_audio
+from userbot import catub
+
+from ..Config import Config
+from ..helpers.utils import _catutils, reply_id
+from . import edit_delete, edit_or_reply, make_gif, progress, reply_id, thumb_from_audio
+
+plugin_category = "misc"
 
 PATH = os.path.join("./temp", "temp_vid.mp4")
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
+plugin_category = "misc"
+downloads = pathlib.Path("./downloads/").absolute()
+NAME = "untitled"
 
 
 class UPLOAD:
@@ -72,7 +85,11 @@ def sortthings(contents, path):
     return catsort
 
 
-async def upload(path, event, udir_event, catflag=None):
+async def _get_file_name(path: pathlib.Path, full: bool = True) -> str:
+    return str(path.absolute()) if full else path.stem + path.suffix
+
+
+async def upload(path, event, udir_event, catflag=None):  # sourcery no-metrics
     catflag = catflag or False
     reply_to_id = await reply_id(event)
     if os.path.isdir(path):
@@ -84,160 +101,119 @@ async def upload(path, event, udir_event, catflag=None):
         Files = sortthings(Files, path)
         for file in Files:
             catpath = os.path.join(path, file)
-            await upload(catpath, event, udir_event)
+            await upload(Path(catpath), event, udir_event)
     elif os.path.isfile(path):
-        caption_rts = os.path.basename(path)
+        fname = os.path.basename(path)
         c_time = time.time()
         thumb = None
         if os.path.exists(thumb_image_path):
             thumb = thumb_image_path
-        if not caption_rts.lower().endswith(".mp4"):
-            await event.client.send_file(
-                event.chat_id,
-                path,
-                caption=f"**File Name : **`{caption_rts}`",
-                force_document=catflag,
-                thumb=thumb,
-                reply_to=reply_to_id,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, udir_event, c_time, "Uploading...", caption_rts)
-                ),
-            )
-        else:
-            metadata = extractMetadata(createParser(str(path)))
-            duration = 0
-            width = 0
-            height = 0
-            if metadata.has("duration"):
-                duration = metadata.get("duration").seconds
-            if metadata.has("width"):
-                width = metadata.get("width")
-            if metadata.has("height"):
-                height = metadata.get("height")
-            await event.client.send_file(
-                event.chat_id,
-                path,
-                caption=f"**File Name : **`{caption_rts}`",
-                thumb=thumb,
-                force_document=catflag,
-                reply_to=reply_to_id,
-                supports_streaming=True,
-                attributes=[
-                    DocumentAttributeVideo(
-                        duration=duration,
-                        w=width,
-                        h=height,
-                        round_message=False,
-                        supports_streaming=True,
-                    )
-                ],
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, udir_event, c_time, "Uploading...", caption_rts)
-                ),
-            )
+        f = path.absolute()
+        attributes, mime_type = get_attributes(str(f))
+        ul = io.open(f, "rb")
+        uploaded = await event.client.fast_upload_file(
+            file=ul,
+            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                progress(d, t, event, c_time, "trying to upload", file_name=fname)
+            ),
+        )
+        ul.close()
+        media = types.InputMediaUploadedDocument(
+            file=uploaded,
+            mime_type=mime_type,
+            attributes=attributes,
+            force_file=catflag,
+            thumb=await event.client.upload_file(thumb) if thumb else None,
+        )
+        await event.client.send_file(
+            event.chat_id,
+            file=media,
+            caption=f"**File Name : **`{fname}`",
+            reply_to=reply_to_id,
+        )
+
         UPLOAD_.uploaded += 1
 
 
-@bot.on(admin_cmd(pattern="upload (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="upload (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="upload( -f)? (.*)",
+    command=("upload", plugin_category),
+    info={
+        "header": "To upload files from server to telegram",
+        "description": "To upload files which downloaded to bot.",
+        "flags": {"f": "Use this to make upload files as documents."},
+        "examples": [
+            "{tr}upload <file/folder path>",
+            "{tr}upload -f <file/folder path>",
+        ],
+    },
+)
 async def uploadir(event):
-    input_str = "".join(event.text.split(maxsplit=1)[1:])
+    "To upload files to telegram."
+    input_str = event.pattern_match.group(2)
     path = Path(input_str)
     start = datetime.now()
+    flag = event.pattern_match.group(1)
+    flag = bool(flag)
     if not os.path.exists(path):
-        await edit_or_reply(
+        return await edit_or_reply(
             event,
             f"`there is no such directory/file with the name {path} to upload`",
         )
-        return
     udir_event = await edit_or_reply(event, "Uploading....")
     if os.path.isdir(path):
         await edit_or_reply(udir_event, f"`Gathering file details in directory {path}`")
         UPLOAD_.uploaded = 0
-        await upload(path, event, udir_event)
+        await upload(path, event, udir_event, catflag=flag)
         end = datetime.now()
         ms = (end - start).seconds
-        await udir_event.edit(
-            f"`Uploaded {UPLOAD_.uploaded} files successfully in {ms} seconds. `"
+        await edit_delete(
+            udir_event,
+            f"`Uploaded {UPLOAD_.uploaded} files successfully in {ms} seconds. `",
         )
     else:
-        await edit_or_reply(udir_event, f"`Uploading.....`")
+        await edit_or_reply(udir_event, f"`Uploading file .....`")
         UPLOAD_.uploaded = 0
-        await upload(path, event, udir_event)
+        await upload(path, event, udir_event, catflag=flag)
         end = datetime.now()
         ms = (end - start).seconds
-        await udir_event.edit(
-            f"`Uploaded file {str(path)} successfully in {ms} seconds. `"
+        await edit_delete(
+            udir_event, f"`Uploaded file {str(path)} successfully in {ms} seconds. `"
         )
-    await asyncio.sleep(5)
-    await udir_event.delete()
 
 
-@bot.on(admin_cmd(pattern="uploadf (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="uploadf (.*)", allow_sudo=True))
-async def uploadir(event):
-    input_str = "".join(event.text.split(maxsplit=1)[1:])
-    path = Path(input_str)
-    start = datetime.now()
-    if not os.path.exists(path):
-        await edit_or_reply(
-            event,
-            f"`there is no such directory/file with the name {path} to upload`",
-        )
-        return
-    udir_event = await edit_or_reply(event, "Uploading....")
-    if os.path.isdir(path):
-        await edit_or_reply(udir_event, f"`Gathering file details in directory {path}`")
-        UPLOAD_.uploaded = 0
-        await upload(path, event, udir_event, catflag=True)
-        end = datetime.now()
-        ms = (end - start).seconds
-        await udir_event.edit(
-            f"`Uploaded {UPLOAD_.uploaded} files successfully in {ms} seconds. `"
-        )
-    else:
-        await edit_or_reply(udir_event, f"`Uploading.....`")
-        UPLOAD_.uploaded = 0
-        await upload(path, event, udir_event, catflag=True)
-        end = datetime.now()
-        ms = (end - start).seconds
-        await udir_event.edit(
-            f"`Uploaded file {str(path)} successfully in {ms} seconds. `"
-        )
-    await asyncio.sleep(5)
-    await udir_event.delete()
-
-
-@bot.on(admin_cmd(pattern="circle ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="circle ?(.*)", allow_sudo=True))
-async def video_catfile(event):
+@catub.cat_cmd(
+    pattern="circle(?: |$)(.*)",
+    command=("circle", plugin_category),
+    info={
+        "header": "To make circular video note.",
+        "description": "crcular video note supports atmost 60 sec so give appropariate video.",
+        "usage": "{tr}circle <reply to video or provide video path>",
+    },
+)
+async def video_catfile(event):  # sourcery no-metrics
+    "To make circular video note."
     reply = await event.get_reply_message()
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     if input_str:
         path = Path(input_str)
         if not os.path.exists(path):
-            await edit_or_reply(
+            return await edit_or_reply(
                 event,
                 f"`there is no such directory/file with the name {path} to upload`",
             )
-            return
         catevent = await edit_or_reply(event, "`Converting to video note..........`")
         filename = os.path.basename(path)
         catfile = os.path.join("./temp", filename)
         copyfile(path, catfile)
     else:
-        if not reply:
-            await edit_delete(event, "`Reply to supported media`", 5)
-            return
-        if not (reply and (reply.media)):
-            await edit_delete(event, "`Reply to supported Media...`", 5)
-            return
+        if not reply or not reply.media:
+            return await edit_delete(event, "`Reply to supported media`", 5)
         catevent = await edit_or_reply(event, "`Converting to video note..........`")
         catfile = await reply.download_media(file="./temp/")
     if not catfile.endswith((".mp4", ".tgs", ".mp3", ".mov", ".gif", ".opus")):
         os.remove(catfile)
-        await edit_delete(catevent, "```Supported Media not found...```", 5)
-        return
+        return await edit_delete(catevent, "```Supported Media not found...```", 5)
     if catfile.endswith((".mp4", ".tgs", ".mov", ".gif")):
         if catfile.endswith((".tgs")):
             hmm = await make_gif(catevent, catfile)
@@ -314,16 +290,3 @@ async def video_catfile(event):
         )
         os.remove(PATH)
     await catevent.delete()
-
-
-CMD_HELP.update(
-    {
-        "upload": "**Plugin :** `upload`\
-    \n\n  •  **Syntax :** `.upload path of file/folder`\
-    \n  •  **Function : **__Uploads the file from the server or list of files from that folder as steamable__\
-    \n\n  •  **Syntax :** `.uploadf path of file/folder`\
-    \n  •  **Function : **__Uploads the file from the server or list of files from that folder as a file__\
-    \n\n  •  **Syntax : **`.circle reply to media or path of media`\
-    \n  •  **Function : **__Uploads video/audio as streamable from the server__"
-    }
-)

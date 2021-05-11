@@ -3,6 +3,7 @@
 # Create a new config.py file in same directory and import, then extend this class.
 
 import os
+from typing import Set
 
 from telethon.tl.types import ChatBannedRights
 
@@ -57,8 +58,6 @@ class Config(object):
         or os.environ.get("PM_LOGGR_BOT_API_ID")
         or 0
     )
-    # set this with users id for whom this bot to act as sudo
-    SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
 
     # Custom vars for userbot
     # set this will channel id of your custom plugins
@@ -106,10 +105,10 @@ class Config(object):
     EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", " ")
     # specify command handler that should be used for the plugins
     # this should be a valid "regex" pattern
-    COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r"\.")
-    SUDO_COMMAND_HAND_LER = os.environ.get("SUDO_COMMAND_HAND_LER", r"\.")
+    COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r".")
+    SUDO_COMMAND_HAND_LER = os.environ.get("SUDO_COMMAND_HAND_LER", r".")
     # set this with required folder path to act as download folder
-    TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads")
+    TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "downloads")
     # set this with required folder path to act as temparary folder
     TEMP_DIR = os.environ.get("TEMP_DIR", "./temp/")
     # For custom stickerpack names
@@ -156,7 +155,7 @@ class Config(object):
     # SpamWatch API you can get it from get api from http://t.me/SpamWatchBot?start=token
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
     # can get from https://coffeehouse.intellivoid.net/
-    LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
+    RANDOM_STUFF_API_KEY = os.environ.get("RANDOM_STUFF_API_KEY", None)
     # github vars
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
@@ -185,6 +184,8 @@ class Config(object):
     TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
     # For updater plugin
     UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
+    # dont touch this at all
+    SUDO_USERS: Set[int] = set()
 
 
 class Production(Config):

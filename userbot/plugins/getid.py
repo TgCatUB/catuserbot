@@ -1,11 +1,27 @@
 from telethon.utils import pack_bot_file_id
 
+from userbot import catub
+from userbot.core.logger import logging
 
-@bot.on(admin_cmd(pattern="(get_id|id)( (.*)|$)"))
-@bot.on(sudo_cmd(pattern="(get_id|id)( (.*)|$)", allow_sudo=True))
+from ..core.managers import edit_delete, edit_or_reply
+
+plugin_category = "utils"
+
+LOGS = logging.getLogger(__name__)
+
+
+@catub.cat_cmd(
+    pattern="(get_id|id)(?: |$)(.*)",
+    command=("id", plugin_category),
+    info={
+        "header": "To get id of the group or user.",
+        "description": "if given input then shows id of that given chat/channel/user else if you reply to user then shows id of the replied user \
+    along with current chat id and if not replied to user or given input then just show id of the chat where you used the command",
+        "usage": "{tr}id <reply/username>",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To get id of the group or user."
     input_str = event.pattern_match.group(2)
     if input_str:
         try:
@@ -42,13 +58,3 @@ async def _(event):
             )
     else:
         await edit_or_reply(event, f"**Current Chat ID : **`{str(event.chat_id)}`")
-
-
-CMD_HELP.update(
-    {
-        "getid": "**Plugin : **`getid`\
-    \n\n  •  **Syntax : **`.get_id` or `.id`\
-    \n  •  **Function : **__if given input then shows id of that given chat/channel/user else if you reply to user then shows id of the replied user \
-    along with current chat id and if not replied to user or given input then just show id of the chat where you used the command__"
-    }
-)

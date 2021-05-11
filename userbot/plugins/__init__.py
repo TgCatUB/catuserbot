@@ -11,12 +11,19 @@ from validators.url import url
 
 from .. import *
 from ..Config import Config
+from ..core.logger import logging
+from ..core.managers import edit_delete, edit_or_reply
+from ..core.session import catub
 from ..helpers import *
 from ..helpers import _cattools, _catutils, _format
+from ..helpers.tools import media_type
+from ..helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
+from ..utils import admin_cmd, sudo_cmd
 
 # =================== CONSTANT ===================
-
-USERID = bot.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
+bot = catub
+LOGS = logging.getLogger(__name__)
+USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
 ALIVE_NAME = Config.ALIVE_NAME
 AUTONAME = Config.AUTONAME
 DEFAULT_BIO = Config.DEFAULT_BIO
@@ -59,7 +66,7 @@ if Config.SPAMWATCH_API:
 else:
     spamwatch = None
 
-cat_users = [bot.uid]
+cat_users = [catub.uid]
 if Config.SUDO_USERS:
     for user in Config.SUDO_USERS:
         cat_users.append(user)
@@ -120,7 +127,7 @@ def check_data_base_heal_th():
     output = "No Database is set"
     if not Config.DB_URI:
         return is_database_working, output
-    from userbot.plugins.sql_helper import SESSION
+    from ..sql_helper import SESSION
 
     try:
         # to check database we will execute raw query

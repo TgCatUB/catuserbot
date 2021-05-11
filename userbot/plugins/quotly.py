@@ -3,30 +3,40 @@ imported from nicegrill
 modified by @mrconfused
 QuotLy: Avaible commands: .qbot
 """
+
 import os
 
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import reply_id
 from . import convert_tosticker, process
 
+plugin_category = "utils"
 
-@bot.on(admin_cmd(pattern="q(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="q(?: |$)(.*)", allow_sudo=True))
+
+@catub.cat_cmd(
+    pattern="q(?: |$)(.*)",
+    command=("q", plugin_category),
+    info={
+        "header": "Makes your message as sticker quote.",
+        "usage": "{tr}q",
+    },
+)
 async def stickerchat(catquotes):
-    if catquotes.fwd_from:
-        return
+    "Makes your message as sticker quote"
     reply = await catquotes.get_reply_message()
     if not reply:
-        await edit_or_reply(
+        return await edit_or_reply(
             catquotes, "`I cant quote the message . reply to a message`"
         )
-        return
     fetchmsg = reply.message
     repliedreply = None
     if reply.media and reply.media.document.mime_type in ("mp4"):
-        await edit_or_reply(catquotes, "`this format is not supported now`")
-        return
+        return await edit_or_reply(catquotes, "`this format is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
         await event.client.get_entity(reply.forward.sender)
@@ -44,22 +54,25 @@ async def stickerchat(catquotes):
     os.remove(endfi)
 
 
-@bot.on(admin_cmd(pattern="rq(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="rq(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="rq(?: |$)(.*)",
+    command=("rq", plugin_category),
+    info={
+        "header": "Makes your message along with the previous replied message as sticker quote",
+        "usage": "{tr}rq",
+    },
+)
 async def stickerchat(catquotes):
-    if catquotes.fwd_from:
-        return
+    "To make sticker message."
     reply = await catquotes.get_reply_message()
     if not reply:
-        await edit_or_reply(
+        return await edit_or_reply(
             catquotes, "`I cant quote the message . reply to a message`"
         )
-        return
     fetchmsg = reply.message
     repliedreply = await reply.get_reply_message()
     if reply.media and reply.media.document.mime_type in ("mp4"):
-        await edit_or_reply(catquotes, "`this format is not supported now`")
-        return
+        return await edit_or_reply(catquotes, "`this format is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
         await event.client.get_entity(reply.forward.sender)
@@ -77,11 +90,16 @@ async def stickerchat(catquotes):
     os.remove(endfi)
 
 
-@bot.on(admin_cmd(pattern="qbot(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="qbot(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="qbot(?: |$)(.*)",
+    command=("qbot", plugin_category),
+    info={
+        "header": "Makes your message as sticker quote by @quotlybot",
+        "usage": "{tr}qbot",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Makes your message as sticker quote by @quotlybot"
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
@@ -125,24 +143,9 @@ async def _(event):
                 )
             response = await response
         except YouBlockedUserError:
-            await catevent.edit("```Please unblock me (@QuotLyBot) u Nigga```")
-            return
+            return await catevent.edit("```Please unblock me (@QuotLyBot) u Nigga```")
         await event.client.send_read_acknowledge(conv.chat_id)
         await catevent.delete()
         await event.client.send_message(
             event.chat_id, response.message, reply_to=reply_to
         )
-
-
-CMD_HELP.update(
-    {
-        "quotly": "**Plugin :** `quotly`\
-        \n\n**•  Syntax : **`.q reply to messge`\
-        \n**•  Function : **__Makes your message as sticker quote__\
-        \n\n**•  Syntax : **`.rq reply to messge`\
-        \n**•  Function : **__Makes your message along with the previous replied message as sticker quote__\
-        \n\n**•  Syntax : **`.qbot reply to messge`\
-        \n**•  Function : **__Makes your message as sticker quote by @quotlybot__\
-        "
-    }
-)

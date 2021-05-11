@@ -1,14 +1,27 @@
-"""Create Private Groups
-Available Commands:
-.create (b|g) GroupName"""
 from telethon.tl import functions
 
+from . import catub, edit_or_reply
 
-@bot.on(admin_cmd(pattern="create (b|g|c) (.*)"))  # pylint:disable=E0602
-@bot.on(sudo_cmd(pattern="create (b|g|c) (.*)", allow_sudo=True))
+plugin_category = "tools"
+
+
+@catub.cat_cmd(
+    pattern="create (b|g|c) (.*)",
+    command=("create", plugin_category),
+    info={
+        "header": "To create a private group/channel with userbot.",
+        "description": "Use this cmd to create super group , normal group or channel.",
+        "flags": {
+            "b": "to create a private super group",
+            "g": "To create a private basic group.",
+            "c": "to create a private channel",
+        },
+        "usage": "{tr}create (b|g|c) <name of group/channel>",
+        "examples": "{tr}create b catuserbot",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To create a private group/channel with userbot"
     type_of_group = event.pattern_match.group(1)
     group_name = event.pattern_match.group(2)
     if type_of_group == "c":
@@ -19,10 +32,8 @@ async def _(event):
     if type_of_group == "b":
         try:
             result = await event.client(
-                functions.messages.CreateChatRequest(  # pylint:disable=E0602
+                functions.messages.CreateChatRequest(
                     users=["@sarah_robot"],
-                    # Not enough users (to create a chat, for example)
-                    # Telegram, no longer allows creating a chat with ourselves
                     title=group_name,
                 )
             )
@@ -42,7 +53,7 @@ async def _(event):
                     group_name, result.link
                 )
             )
-        except Exception as e:  # pylint:disable=C0103,W0703
+        except Exception as e:
             await event.edit(str(e))
     elif type_of_group in ["g", "c"]:
         try:
@@ -65,21 +76,7 @@ async def _(event):
                     group_name, result.link
                 )
             )
-        except Exception as e:  # pylint:disable=C0103,W0703
+        except Exception as e:
             await event.edit(str(e))
     else:
-        await event.edit("Read `.info create` to know how to use me")
-
-
-CMD_HELP.update(
-    {
-        "create": "**SYNTAX :** `.create b`\
-    \n**USAGE : **Creates a super group and send you link\
-    \n\n**SYNTAX : **`.create g`\
-    \n**USAGE : **Creates a private group and sends you link\
-    \n\n**SYNTAX : **`.create c`\
-    \n**USAGE : **Creates a Channel and sends you link\
-    \n\nhere the bot accout is owner\
-    "
-    }
-)
+        await event.edit("Read `.help create` to know how to use me")

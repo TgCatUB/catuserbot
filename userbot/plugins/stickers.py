@@ -1,5 +1,3 @@
-# modified and developed by @mrconfused
-
 import asyncio
 import base64
 import io
@@ -21,6 +19,17 @@ from telethon.tl.types import (
     InputStickerSetID,
     MessageMediaPhoto,
 )
+
+from userbot import catub
+
+from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.tools import media_type
+
+plugin_category = "fun"
+
+# modified and developed by @mrconfused
+
 
 combot_stickers_url = "https://combot.org/telegram/stickers?q="
 
@@ -227,9 +236,17 @@ async def add_to_pack(
     return pack, packname
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="kang ?(.*)"))
-@bot.on(sudo_cmd(pattern="kang ?(.*)", allow_sudo=True))
-async def kang(args):
+@catub.cat_cmd(
+    pattern="kang(?: |$)(.*)",
+    command=("kang", plugin_category),
+    info={
+        "header": "To kang a sticker.",
+        "description": "Kang's the sticker/image to the specified pack and uses the emoji('s) you picked",
+        "usage": "{tr}kang [emoji('s)] [number]",
+    },
+)
+async def kang(args):  # sourcery no-metrics
+    "To kang a sticker."
     photo = None
     emojibypass = False
     is_anim = False
@@ -371,11 +388,17 @@ async def kang(args):
                 )
 
 
-@bot.on(admin_cmd(pattern="pkang ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="pkang ?(.*)", allow_sudo=True))
-async def pack_kang(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="pkang(?: |$)(.*)",
+    command=("pkang", plugin_category),
+    info={
+        "header": "To kang entire sticker sticker.",
+        "description": "Kang's the entire sticker pack of replied sticker to the specified pack",
+        "usage": "{tr}pkang [number]",
+    },
+)
+async def pack_kang(event):  # sourcery no-metrics
+    "To kang entire sticker sticker."
     user = await event.client.get_me()
     if user.username:
         username = user.username
@@ -534,27 +557,37 @@ async def pack_kang(event):
     await catevent.edit(result)
 
 
-@bot.on(admin_cmd(pattern="stkrinfo$", outgoing=True))
-@bot.on(sudo_cmd(pattern="stkrinfo$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="stkrinfo$",
+    command=("stkrinfo", plugin_category),
+    info={
+        "header": "To get information about a sticker pick.",
+        "description": "Gets info about the sticker packk",
+        "usage": "{tr}stkrinfo",
+    },
+)
 async def get_pack_info(event):
+    "To get information about a sticker pick."
     if not event.is_reply:
-        await edit_delete(event, "`I can't fetch info from nothing, can I ?!`", 5)
-        return
+        return await edit_delete(
+            event, "`I can't fetch info from nothing, can I ?!`", 5
+        )
     rep_msg = await event.get_reply_message()
     if not rep_msg.document:
-        await edit_delete(event, "`Reply to a sticker to get the pack details`", 5)
-        return
+        return await edit_delete(
+            event, "`Reply to a sticker to get the pack details`", 5
+        )
     try:
         stickerset_attr = rep_msg.document.attributes[1]
         catevent = await edit_or_reply(
             event, "`Fetching details of the sticker pack, please wait..`"
         )
     except BaseException:
-        await edit_delete(event, "`This is not a sticker. Reply to a sticker.`", 5)
-        return
+        return await edit_delete(
+            event, "`This is not a sticker. Reply to a sticker.`", 5
+        )
     if not isinstance(stickerset_attr, DocumentAttributeSticker):
-        await catevent.edit("`This is not a sticker. Reply to a sticker.`")
-        return
+        return await catevent.edit("`This is not a sticker. Reply to a sticker.`")
     get_stickerset = await event.client(
         GetStickerSetRequest(
             InputStickerSetID(
@@ -578,20 +611,26 @@ async def get_pack_info(event):
     await catevent.edit(OUTPUT)
 
 
-@bot.on(admin_cmd(pattern="stickers ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="stickers ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="stickers ?(.*)",
+    command=("stickers", plugin_category),
+    info={
+        "header": "To get list of sticker packs with given name.",
+        "description": "shows you the list of non-animated sticker packs with that name.",
+        "usage": "{tr}stickers <query>",
+    },
+)
 async def cb_sticker(event):
+    "To get list of sticker packs with given name."
     split = event.pattern_match.group(1)
     if not split:
-        await edit_delete(event, "`Provide some name to search for pack.`", 5)
-        return
+        return await edit_delete(event, "`Provide some name to search for pack.`", 5)
     catevent = await edit_or_reply(event, "`Searching sticker packs....`")
     text = requests.get(combot_stickers_url + split).text
     soup = bs(text, "lxml")
     results = soup.find_all("div", {"class": "sticker-pack__header"})
     if not results:
-        await edit_delete(catevent, "`No results found :(.`", 5)
-        return
+        return await edit_delete(catevent, "`No results found :(.`", 5)
     reply = f"**Sticker packs found for {split} are :**"
     for pack in results:
         if pack.button:
@@ -600,18 +639,3 @@ async def cb_sticker(event):
             packid = (pack.button).get("data-popup")
             reply += f"\n **• ID: **`{packid}`\n [{packtitle}]({packlink})"
     await catevent.edit(reply)
-
-
-CMD_HELP.update(
-    {
-        "stickers": "**Plugins : **`stickers`\
-\n\n**  •  Syntax : **`.kang [emoji('s)] [number]`\
-\n**  •  Function : **__Kang's the sticker/image to the specified pack and uses the emoji('s) you picked.__\
-\n\n**  •  Syntax : **`.pkang [number]`\
-\n**  •  Function : **__Kang's the entire sticker pack of replied sticker to the specified pack __\
-\n\n**  •  Syntax : **`.stickers name`\
-\n**  •  Function : **__shows you the list of non-animated sticker packs with that name.__\
-\n\n**  •  Syntax : **`.stkrinfo`\
-\n**  •  Function : **__Gets info about the sticker pack.__"
-    }
-)

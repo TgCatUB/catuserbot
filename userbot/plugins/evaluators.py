@@ -1,19 +1,26 @@
-# Execute GNU/Linux commands inside Telegram
-
 import asyncio
 import io
 import os
 import sys
 import traceback
 
+from ..helpers.utils import _format
 from . import *
 
+plugin_category = "tools"
 
-@bot.on(admin_cmd(pattern="exec(?: |$|\n)(.*)", command="exec"))
-@bot.on(sudo_cmd(pattern="exec(?: |$|\n)(.*)", command="exec", allow_sudo=True))
+
+@catub.cat_cmd(
+    pattern="exec(?: |$|\n)(.*)",
+    command=("exec", plugin_category),
+    info={
+        "header": "To Execute terminal commands in a subprocess.",
+        "usage": "{tr}exec <command>",
+        "examples": "{tr}exec cat stringsetup.py",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To Execute terminal commands in a subprocess."
     cmd = "".join(event.message.message.split(maxsplit=1)[1:])
     if not cmd:
         return await edit_delete(event, "`What should i execute?..`")
@@ -43,11 +50,17 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern="eval(?: |$|\n)(.*)", command="eval"))
-@bot.on(sudo_cmd(pattern="eval(?: |$|\n)(.*)", command="eval", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="eval(?: |$|\n)(.*)",
+    command=("eval", plugin_category),
+    info={
+        "header": "To Execute python script/statements in a subprocess.",
+        "usage": "{tr}eval <command>",
+        "examples": "{tr}eval print('catuserbot')",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To Execute python script/statements in a subprocess."
     cmd = "".join(event.message.message.split(maxsplit=1)[1:])
     if not cmd:
         return await edit_delete(event, "`What should i run ?..`")
@@ -99,15 +112,3 @@ async def aexec(code, smessatatus):
     return await locals()["__aexec"](
         message, event, reply, message.client, p, message.chat_id
     )
-
-
-CMD_HELP.update(
-    {
-        "evaluators": "**Plugin : **`evaluators`\
-        \n\n  •  **Synatax : **`.eval <expr>`:\
-        \n  •  **Function : **__Execute Python script.__\
-        \n\n  •  **Synatax : **`.exec <command>`:\
-        \n  •  **Function : **__Execute a Terminal command on catuserbot server and shows details.__\
-     "
-    }
-)

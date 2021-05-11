@@ -3,8 +3,14 @@ import asyncio
 import requests
 from telethon import functions
 
-from . import ALIVE_NAME, CMD_LIST, SUDO_LIST
-from .sql_helper.globals import addgvar, gvarstatus
+from userbot import catub as bot
+
+from ..Config import Config
+from ..core.managers import edit_or_reply
+from ..helpers.utils import _format, reply_id
+from ..sql_helper.globals import addgvar, gvarstatus
+from ..utils import admin_cmd, sudo_cmd
+from . import ALIVE_NAME, CMD_HELP, CMD_LIST, SUDO_LIST
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="help ?(.*)"))
@@ -63,7 +69,7 @@ async def cmd_list(event):
             await asyncio.sleep(3)
             await event.delete()
     else:
-        if HELPTYPE is True:
+        if HELPTYPE:
             help_string = f"Userbot Helper. Provided by {ALIVE_NAME} to reveal all the plugins\
                           \nCheck `.help plugin name` for commands, in case popup doesn't appear.\
                           \nCheck `.info plugin name` for usage of thoose plugins and commands"
@@ -177,8 +183,6 @@ async def info(event):
 @bot.on(admin_cmd(pattern="dc$"))
 @bot.on(sudo_cmd(pattern="dc$", allow_sudo=True))
 async def _(event):
-    if event.fwd_from:
-        return
     result = await event.client(functions.help.GetNearestDcRequest())
     result = (
         _format.yaml_format(result)
@@ -195,8 +199,6 @@ async def _(event):
 
 @bot.on(admin_cmd(outgoing=True, pattern="setinline (true|false)"))
 async def _(event):
-    if event.fwd_from:
-        return
     input_str = event.pattern_match.group(1)
     h_type = input_str == "true"
     if gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "false":

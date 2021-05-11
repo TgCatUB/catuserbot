@@ -1,37 +1,53 @@
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
-"""Filters
-Available Commands:
-.addblacklist
-.listblacklist
-.rmblacklist"""
-
 import re
 
-from telethon import events
+from telethon.utils import get_display_name
 
-import userbot.plugins.sql_helper.blacklist_sql as sql
+from ..sql_helper import blacklist_sql as sql
+from ..utils import is_admin
+from . import catub, edit_or_reply
+
+plugin_category = "admin"
 
 
-@bot.on(events.NewMessage(incoming=True))
+@catub.cat_cmd(incoming=True, groups_only=True)
 async def on_new_message(event):
     name = event.raw_text
     snips = sql.get_chat_blacklist(event.chat_id)
+    catadmin = await is_admin(event.client, event.chat_id, event.client.uid)
+    if not catadmin:
+        return
     for snip in snips:
         pattern = r"( |^|[^\w])" + re.escape(snip) + r"( |$|[^\w])"
         if re.search(pattern, name, flags=re.IGNORECASE):
             try:
                 await event.delete()
             except Exception:
-                await event.reply("I do not have DELETE permission in this chat")
-                sql.rm_from_blacklist(event.chat_id, snip.lower())
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    f"I do not have DELETE permission in {get_display_name(await event.get_chat())}.\
+                     So removing blacklist words from this group",
+                )
+                for word in snips:
+                    sql.rm_from_blacklist(event.chat_id, word.lower())
             break
 
 
-@bot.on(admin_cmd(pattern="addblacklist ((.|\n)*)"))
-@bot.on(sudo_cmd(pattern="addblacklist ((.|\n)*)", allow_sudo=True))
-async def on_add_black_list(event):
+@catub.cat_cmd(
+    pattern="addblacklist ((.|\n)*)",
+    command=("addblacklist", plugin_category),
+    info={
+        "header": "To add blacklist words to database",
+        "description": "The given word or words will be added to blacklist in that specific chat if any user sends then the message gets deleted.",
+        "note": "if you are adding more than one word at time via this, then remember that new word must be given in a new line that is not [hi hello]. It must be as\
+            \n[hi \n hello]",
+        "usage": "{tr}addblacklist <word(s)>",
+        "examples": ["{tr}addblacklist fuck", "{tr}addblacklist fuck\nsex"],
+    },
+    groups_only=True,
+    require_admin=True,
+)
+async def _(event):
+    "To add blacklist words to database"
     text = event.pattern_match.group(1)
     to_blacklist = list(
         {trigger.strip() for trigger in text.split("\n") if trigger.strip()}
@@ -47,28 +63,48 @@ async def on_add_black_list(event):
     )
 
 
-@bot.on(admin_cmd(pattern="rmblacklist ((.|\n)*)"))
-@bot.on(sudo_cmd(pattern="rmblacklist ((.|\n)*)", allow_sudo=True))
-async def on_delete_blacklist(event):
+@catub.cat_cmd(
+    pattern="rmblacklist ((.|\n)*)",
+    command=("rmblacklist", plugin_category),
+    info={
+        "header": "To remove blacklist words to database",
+        "description": "The given word or words will be removed from blacklist in that specific chat",
+        "note": "if you are remove more than one word at time via this, then remember that new word must be given in a new line that is not [hi hello]. It must be as\
+            \n[hi \n hello]",
+        "usage": "{tr}rmblacklist <word(s)>",
+        "examples": ["{tr}rmblacklist fuck", "{tr}rmblacklist fuck\nsex"],
+    },
+    groups_only=True,
+    require_admin=True,
+)
+async def _(event):
+    "To add blacklist words to database"
     text = event.pattern_match.group(1)
     to_unblacklist = list(
         {trigger.strip() for trigger in text.split("\n") if trigger.strip()}
     )
-
     successful = sum(
-        1
+        bool(sql.rm_from_blacklist(event.chat_id, trigger.lower()))
         for trigger in to_unblacklist
-        if sql.rm_from_blacklist(event.chat_id, trigger.lower())
     )
-
     await edit_or_reply(
         event, f"Removed {successful} / {len(to_unblacklist)} from the blacklist"
     )
 
 
-@bot.on(admin_cmd(pattern="listblacklist$"))
-@bot.on(sudo_cmd(pattern="listblacklist$", allow_sudo=True))
-async def on_view_blacklist(event):
+@catub.cat_cmd(
+    pattern="listblacklist$",
+    command=("listblacklist", plugin_category),
+    info={
+        "header": "To show the black list words",
+        "description": "Shows you the list of blacklist words in that specific chat",
+        "usage": "{tr}listblacklist",
+    },
+    groups_only=True,
+    require_admin=True,
+)
+async def _(event):
+    "To show the blacklist words in that specific chat"
     all_blacklisted = sql.get_chat_blacklist(event.chat_id)
     OUT_STR = "Blacklists in the Current Chat:\n"
     if len(all_blacklisted) > 0:
@@ -76,32 +112,4 @@ async def on_view_blacklist(event):
             OUT_STR += f"👉 {trigger} \n"
     else:
         OUT_STR = "No Blacklists found. Start saving using `.addblacklist`"
-    if len(OUT_STR) > Config.MAX_MESSAGE_SIZE_LIMIT:
-        with io.BytesIO(str.encode(OUT_STR)) as out_file:
-            out_file.name = "blacklist.text"
-            await event.client.send_file(
-                event.chat_id,
-                out_file,
-                force_document=True,
-                allow_cache=False,
-                caption="Blacklists in the Current Chat",
-                reply_to=event,
-            )
-            await event.delete()
-    else:
-        await edit_or_reply(event, OUT_STR)
-
-
-CMD_HELP.update(
-    {
-        "blacklist": "**blacklist**\
-    \n**Syntax : **`.addblacklist` <word/words>\
-    \n**Usage : **The given word or words will be added to blacklist in that specific chat if any user sends then the message gets deleted.\
-    \n\n**Syntax : **`.rmblacklist` <word/words>\
-    \n**Usage : **The given word or words will be removed from blacklist in that specific chat\
-    \n\n**Syntax : **`.listblacklist`\
-    \n**Usage : **Shows you the list of blacklist words in that specific chat\
-    \n\n**Note : **if you are adding more than one word at time via this, then remember that new word must be given in a new line that is not [hi hello]. It must be as\
-    \n[hi \n hello]"
-    }
-)
+    await edit_or_reply(event, OUT_STR)

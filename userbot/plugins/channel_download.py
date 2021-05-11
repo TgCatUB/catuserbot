@@ -4,32 +4,43 @@ usage: .geta channel_username [will  get all media from channel, tho there is li
        .getc number_of_messsages channel_username
 By: @Zero_cool7870
 """
+
+
 import os
 import subprocess
 
-location = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
+from ..Config import Config
+from . import catub, edit_or_reply
+
+plugin_category = "tools"
 
 
-@bot.on(admin_cmd(pattern=r"getc(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="getc(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="getc(?: |$)(.*)",
+    command=("getc", plugin_category),
+    info={
+        "header": "To download channel media files",
+        "description": "pass username and no of latest messages to check to command \
+             so the bot will download media files from that latest no of messages to server ",
+        "usage": "{tr}getc count channel_username",
+        "examples": "{tr}getc 10 @catuserbot17",
+    },
+)
 async def get_media(event):
-    if event.fwd_from:
-        return
-    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
+    catty = event.pattern_match.group(1)
+    limit = int(catty.split(" ")[0])
+    channel_username = str(catty.split(" ")[1])
+    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, channel_username)
     try:
         os.makedirs(tempdir)
     except BaseException:
         pass
-    catty = event.pattern_match.group(1)
-    limit = int(catty.split(" ")[0])
-    channel_username = str(catty.split(" ")[1])
-    event = await edit_or_reply(event, "Downloading Media From this Channel.")
+    event = await edit_or_reply(event, "`Downloading Media From this Channel.`")
     msgs = await event.client.get_messages(channel_username, limit=int(limit))
-    with open("log.txt", "w") as f:
-        f.write(str(msgs))
     i = 0
     for msg in msgs:
-        if msg.media is not None:
+        mediatype = media_type(msg)
+        if mediatype is not None:
             await event.client.download_media(msg, tempdir)
             i += 1
             await event.edit(
@@ -41,27 +52,35 @@ async def get_media(event):
     output = str(output)
     output = output.replace("b'", " ")
     output = output.replace("\\n'", " ")
-    await event.edit(f"Successfully downloaded {output} number of media files")
+    await event.edit(
+        f"Successfully downloaded {output} number of media files from {channel_username} to tempdir"
+    )
 
 
-@bot.on(admin_cmd(pattern="geta(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="geta(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="geta(?: |$)(.*)",
+    command=("geta", plugin_category),
+    info={
+        "header": "To download channel all media files",
+        "description": "pass username to command so the bot will download all media files from that latest no of messages to server ",
+        "note": "there is limit of 3000 messages for this process to prevent API limits. that is will download all media files from latest 3000 messages",
+        "usage": "{tr}geta channel_username",
+        "examples": "{tr}geta @catuserbot17",
+    },
+)
 async def get_media(event):
-    if event.fwd_from:
-        return
-    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "temp")
+    channel_username = event.pattern_match.group(1)
+    tempdir = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, channel_username)
     try:
         os.makedirs(tempdir)
     except BaseException:
         pass
-    channel_username = event.pattern_match.group(1)
-    event = await edit_or_reply(event, "Downloading All Media From this Channel.")
+    event = await edit_or_reply(event, "`Downloading All Media From this Channel.`")
     msgs = await event.client.get_messages(channel_username, limit=3000)
-    with open("log.txt", "w") as f:
-        f.write(str(msgs))
     i = 0
     for msg in msgs:
-        if msg.media is not None:
+        mediatype = media_type(msg)
+        if mediatype is not None:
             await event.client.download_media(msg, tempdir)
             i += 1
             await event.edit(
@@ -73,21 +92,6 @@ async def get_media(event):
     output = str(output)
     output = output.replace("b'", "")
     output = output.replace("\\n'", "")
-    await event.edit(f"Successfully downloaded {output} number of media files")
-
-
-CMD_HELP.update(
-    {
-        "channel_download": f"""**Plugin : **`channel_download`
-
-**Telegram Channel Media Downloader Plugin for userbot.**
-
-  • **Syntax : **`.geta channel_username` 
-  • **Function : **__will  download all media from channel into your bot server but there is limit of 3000 to prevent API limits.__
-  
-  • **Syntax : **`.getc number channel_username` 
-  • **Function : **__will  download latest given number of media from channel into your bot server .__
-  
-**Note : **__The downloaded media files will be at__ `.ls {location}`"""
-    }
-)
+    await event.edit(
+        f"Successfully downloaded {output} number of media files from {channel_username} to tempdir"
+    )

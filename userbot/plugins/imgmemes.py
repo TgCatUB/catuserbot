@@ -1,13 +1,13 @@
-# credits to @mrconfused (@sandy1709)
-
 #  Copyright (C) 2020  sandeep.n(π.$)
+# credits to @mrconfused (@sandy1709)
 import asyncio
-import base64
 import os
 import re
 
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+from userbot import catub
 
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import reply_id
 from . import (
     changemymind,
     deEmojify,
@@ -19,20 +19,27 @@ from . import (
     tweets,
 )
 
+plugin_category = "fun"
 
-@bot.on(admin_cmd(outgoing=True, pattern="fakegs(?: |$)(.*)", command="fakegs"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="fakegs(?: |$)(.*)", command="fakegs"))
+
+@catub.cat_cmd(
+    pattern="fakegs(?: |$)(.*)",
+    command=("fakegs", plugin_category),
+    info={
+        "header": "Fake google search meme",
+        "usage": "{tr}fakegs search query ; what you mean text",
+        "examples": "{tr}fakegs Catuserbot ; One of the Popular userbot",
+    },
+)
 async def nekobot(cat):
-    if cat.fwd_from:
-        return
+    "Fake google search meme"
     text = cat.pattern_match.group(1)
     reply_to_id = await reply_id(cat)
     if not text:
         if cat.is_reply and not reply_to_id.media:
             text = reply_to_id.message
         else:
-            await edit_delete(cat, "`What should i search in google.`", 5)
-            return
+            return await edit_delete(cat, "`What should i search in google.`", 5)
     cate = await edit_or_reply(cat, "`Connecting to https://www.google.com/ ...`")
     text = deEmojify(text)
     if ";" in text:
@@ -52,28 +59,28 @@ async def nekobot(cat):
         os.remove(catfile)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="trump(?: |$)(.*)", command="trump"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="trump(?: |$)(.*)", command="trump"))
+@catub.cat_cmd(
+    pattern="trump(?: |$)(.*)",
+    command=("trump", plugin_category),
+    info={
+        "header": "trump tweet sticker with given custom text",
+        "usage": "{tr}trump <text>",
+        "examples": "{tr}trump Catuserbot is One of the Popular userbot",
+    },
+)
 async def nekobot(cat):
-    if cat.fwd_from:
-        return
+    "trump tweet sticker with given custom text_"
     text = cat.pattern_match.group(1)
     text = re.sub("&", "", text)
     reply_to_id = await reply_id(cat)
-    hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+
     reply = await cat.get_reply_message()
     if not text:
         if cat.is_reply and not reply.media:
             text = reply.message
         else:
-            await edit_delete(cat, "**Trump : **`What should I tweet`", 5)
-            return
+            return await edit_delete(cat, "**Trump : **`What should I tweet`", 5)
     cate = await edit_or_reply(cat, "`Requesting trump to tweet...`")
-    try:
-        hmm = Get(hmm)
-        await cat.client(hmm)
-    except BaseException:
-        pass
     text = deEmojify(text)
     await asyncio.sleep(2)
     catfile = await trumptweet(text)
@@ -83,28 +90,28 @@ async def nekobot(cat):
         os.remove(catfile)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="modi(?: |$)(.*)", command="modi"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="modi(?: |$)(.*)", command="modi"))
+@catub.cat_cmd(
+    pattern="modi(?: |$)(.*)",
+    command=("modi", plugin_category),
+    info={
+        "header": "modi tweet sticker with given custom text",
+        "usage": "{tr}modi <text>",
+        "examples": "{tr}modi Catuserbot is One of the Popular userbot",
+    },
+)
 async def nekobot(cat):
-    if cat.fwd_from:
-        return
+    "modi tweet sticker with given custom text"
     text = cat.pattern_match.group(1)
     text = re.sub("&", "", text)
     reply_to_id = await reply_id(cat)
-    hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+
     reply = await cat.get_reply_message()
     if not text:
         if cat.is_reply and not reply.media:
             text = reply.message
         else:
-            await edit_delete(cat, "**Modi : **`What should I tweet`", 5)
-            return
+            return await edit_delete(cat, "**Modi : **`What should I tweet`", 5)
     cate = await edit_or_reply(cat, "Requesting modi to tweet...")
-    try:
-        hmm = Get(hmm)
-        await cat.client(hmm)
-    except BaseException:
-        pass
     text = deEmojify(text)
     await asyncio.sleep(2)
     catfile = await moditweet(text)
@@ -114,28 +121,27 @@ async def nekobot(cat):
         os.remove(catfile)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="cmm(?: |$)(.*)", command="cmm"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="cmm(?: |$)(.*)", command="cmm"))
+@catub.cat_cmd(
+    pattern="cmm(?: |$)(.*)",
+    command=("cmm", plugin_category),
+    info={
+        "header": "Change my mind banner with given custom text",
+        "usage": "{tr}cmm <text>",
+        "examples": "{tr}cmm Catuserbot is One of the Popular userbot",
+    },
+)
 async def nekobot(cat):
-    if cat.fwd_from:
-        return
     text = cat.pattern_match.group(1)
     text = re.sub("&", "", text)
     reply_to_id = await reply_id(cat)
-    hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+
     reply = await cat.get_reply_message()
     if not text:
         if cat.is_reply and not reply.media:
             text = reply.message
         else:
-            await edit_delete(cat, "`Give text to write on banner, man`", 5)
-            return
+            return await edit_delete(cat, "`Give text to write on banner, man`", 5)
     cate = await edit_or_reply(cat, "`Your banner is under creation wait a sec...`")
-    try:
-        hmm = Get(hmm)
-        await cat.client(hmm)
-    except BaseException:
-        pass
     text = deEmojify(text)
     await asyncio.sleep(2)
     catfile = await changemymind(text)
@@ -145,28 +151,28 @@ async def nekobot(cat):
         os.remove(catfile)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="kanna(?: |$)(.*)", command="kanna"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="kanna(?: |$)(.*)", command="kanna"))
+@catub.cat_cmd(
+    pattern="kanna(?: |$)(.*)",
+    command=("kanna", plugin_category),
+    info={
+        "header": "kanna chan sticker with given custom text",
+        "usage": "{tr}kanna text",
+        "examples": "{tr}kanna Catuserbot is One of the Popular userbot",
+    },
+)
 async def nekobot(cat):
-    if cat.fwd_from:
-        return
+    "kanna chan sticker with given custom text"
     text = cat.pattern_match.group(1)
     text = re.sub("&", "", text)
     reply_to_id = await reply_id(cat)
-    hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+
     reply = await cat.get_reply_message()
     if not text:
         if cat.is_reply and not reply.media:
             text = reply.message
         else:
-            await edit_delete(cat, "**Kanna : **`What should i show you`", 5)
-            return
+            return await edit_delete(cat, "**Kanna : **`What should i show you`", 5)
     cate = await edit_or_reply(cat, "`Kanna is writing your text...`")
-    try:
-        hmm = Get(hmm)
-        await e.client(hmm)
-    except BaseException:
-        pass
     text = deEmojify(text)
     await asyncio.sleep(2)
     catfile = await kannagen(text)
@@ -176,31 +182,31 @@ async def nekobot(cat):
         os.remove(catfile)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="tweet(?: |$)(.*)", command="tweet"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="tweet(?: |$)(.*)", command="tweet"))
+@catub.cat_cmd(
+    pattern="tweet(?: |$)(.*)",
+    command=("tweet", plugin_category),
+    info={
+        "header": "The desired person tweet sticker with given custom text",
+        "usage": "{tr}tweet <username> ; <text>",
+        "examples": "{tr}tweet iamsrk ; Catuserbot is One of the Popular userbot",
+    },
+)
 async def nekobot(cat):
-    if cat.fwd_from:
-        return
+    "The desired person tweet sticker with given custom text"
     text = cat.pattern_match.group(1)
     text = re.sub("&", "", text)
     reply_to_id = await reply_id(cat)
-    hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+
     reply = await cat.get_reply_message()
     if not text:
         if cat.is_reply and not reply.media:
             text = reply.message
         else:
-            await edit_delete(
+            return await edit_delete(
                 cat,
                 "what should I tweet? Give some text and format must be like `.tweet username ; your text` ",
                 5,
             )
-            return
-    try:
-        hmm = Get(hmm)
-        await cat.client(hmm)
-    except BaseException:
-        pass
     if ";" in text:
         username, text = text.split(";")
     else:
@@ -218,29 +224,3 @@ async def nekobot(cat):
     await cate.delete()
     if os.path.exists(catfile):
         os.remove(catfile)
-
-
-CMD_HELP.update(
-    {
-        "imgmemes": """**Plugin : **`imgmemes`
-
-  •  **Syntax : **`.fakegs search query ; what you mean text`
-  •  **Function : **__Shows you image meme for your google search query__  
-
-  •  **Syntax : **`.trump reply/text`
-  •  **Function : **__sends you the trump tweet sticker with given custom text__
-
-  •  **Syntax : **`.modi reply/text`
-  •  **Function : **__sends you the modi tweet sticker with given custom text__ 
-
-  •  **Syntax : **`.cmm reply/text`
-  •  **Function : **__sends you the  Change my mind banner with given custom text__ 
-
-  •  **Syntax : **`.kanna reply/text`
-  •  **Function : **__sends you the kanna chan sticker with given custom text__  
-
-  •  **Syntax : **`.tweet reply/<username> ; <text>`
-  •  **Function : **__sends you the desired person tweet sticker with given custom text__ 
-  """
-    }
-)

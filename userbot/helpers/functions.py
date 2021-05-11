@@ -16,6 +16,16 @@ from youtubesearchpython import VideosSearch
 
 from .resources.states import states
 
+## to generate message link
+
+
+async def get_message_link(channelid, msgid):
+    if str(channelid).startswith("-"):
+        channelid = str(channelid)[1:]
+    if channelid.startswith("100"):
+        channelid = channelid[3:]
+    return f"https://t.me/c/{channelid}/{msgid}"
+
 
 def utc_to_local(utc_datetime):
     now_timestamp = time.time()

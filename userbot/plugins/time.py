@@ -1,5 +1,3 @@
-# Userbot timezone
-
 import os
 from datetime import datetime as dt
 
@@ -8,11 +6,18 @@ from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+from userbot import catub
 
-LOCATION = Config.TZ
-COUNTRY = Config.COUNTRY
-TZ_NUMBER = Config.TZ_NUMBER
+from ..Config import Config
+from ..core.managers import edit_or_reply
+from . import reply_id
+
+plugin_category = "utils"
+
+# Userbot timezone
+
+
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 
 async def get_tz(con):
@@ -39,20 +44,17 @@ async def get_tz(con):
         return
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?"))
-@bot.on(
-    sudo_cmd(
-        outgoing=True,
-        pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?",
-        allow_sudo=True,
-    )
+@catub.cat_cmd(
+    pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?",
+    command=("ctime", plugin_category),
+    info={
+        "header": "To get current time of a paticular country",
+        "usage": "{tr}ctime <country name/code> <timezone number>",
+        "examples": "{tr}ctime Brazil 2",
+    },
 )
 async def time_func(tdata):
-    """For .time command, return the time of
-    1. The country passed as an argument,
-    2. The default userbot country(set it by using .settime),
-    3. The server where the userbot runs.
-    """
+    """To get current time of a paticular country"""
     con = tdata.pattern_match.group(1).title()
     tz_num = tdata.pattern_match.group(2)
     t_form = "%H:%M"
@@ -64,19 +66,17 @@ async def time_func(tdata):
         except KeyError:
             c_name = con
         timezones = await get_tz(con)
-    elif COUNTRY:
-        c_name = COUNTRY
-        tz_num = TZ_NUMBER
-        timezones = await get_tz(COUNTRY)
+    elif Config.COUNTRY:
+        c_name = Config.COUNTRY
+        tz_num = Config.TZ_NUMBER
+        timezones = await get_tz(Config.COUNTRY)
     else:
-        await edit_or_reply(
+        return await edit_or_reply(
             tdata,
             f"`It's`  **{dt.now().strftime(t_form)}**` on `**{dt.now().strftime(d_form)}** `here.`",
         )
-        return
     if not timezones:
-        await edit_or_reply(tdata, "`Invaild country.`")
-        return
+        return await edit_or_reply(tdata, "`Invaild country.`")
     if len(timezones) == 1:
         time_zone = timezones[0]
     elif len(timezones) > 1:
@@ -93,43 +93,41 @@ async def time_func(tdata):
             return_str += "in the command.`\n"
             return_str += f"`Example: .ctime {c_name} 2`"
 
-            await edit_or_reply(tdata, return_str)
-            return
+            return await edit_or_reply(tdata, return_str)
 
     dtnow1 = dt.now(tz(time_zone)).strftime(t_form)
     dtnow2 = dt.now(tz(time_zone)).strftime(d_form)
-    if c_name != COUNTRY:
+    if c_name != Config.COUNTRY:
         await edit_or_reply(
             tdata,
             f"`It's`  **{dtnow1}**` on `**{dtnow2}**  `in {c_name} ({time_zone} timezone).`",
         )
-        return
-    if COUNTRY:
+    if Config.COUNTRY:
         await edit_or_reply(
             tdata,
-            f"`It's`  **{dtnow1}**` on `**{dtnow2}**  `here, in {COUNTRY}"
+            f"`It's`  **{dtnow1}**` on `**{dtnow2}**  `here, in {Config.COUNTRY}"
             f"({time_zone} timezone).`",
         )
-        return
 
 
-@bot.on(admin_cmd(pattern="time ?(.*)"))
-@bot.on(sudo_cmd(pattern="time ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="time(?: |$)(.*)",
+    command=("time", plugin_category),
+    info={
+        "header": "To show current time.",
+        "description": "shows current default time you can change by changing TZ in heroku vars.",
+        "usage": "{tr}time",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
-    reply_msg_id = None
+    "To show current time"
+    reply_msg_id = await reply_id(event)
     current_time = dt.now().strftime(
-        f"⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n⚡USERBOT TIMEZONE⚡\n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n   {LOCATION}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡"
+        f"⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n⚡USERBOT TIMEZONE⚡\n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n   {os.path.basename(Config.TZ)}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡"
     )
     input_str = event.pattern_match.group(1)
-    if event.sender_id != bot.uid:
-        reply_msg_id = event.message.id
     if input_str:
         current_time = input_str
-    elif event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        reply_msg_id = previous_message.id
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
     required_file_name = Config.TEMP_DIR + " " + str(dt.now()) + ".webp"
@@ -141,19 +139,7 @@ async def _(event):
     await event.client.send_file(
         event.chat_id,
         required_file_name,
-        # Courtesy: @ManueI15
         reply_to=reply_msg_id,
     )
     os.remove(required_file_name)
     await event.delete()
-
-
-CMD_HELP.update(
-    {
-        "time": "**Plugin : **`time`\
-        \n\n**Syntax : **`.ctime <country name/code> <timezone number>` \
-    \n**Function : **__Get the time of a country. If a country has multiple timezones, it will list all of them and let you select one. here are [country names](https://telegra.ph/country-names-10-24)__\
-    \n\n**Syntax : **`.time` \
-    \n**Function : **__shows current default time you can change by changing TZ in heroku vars__"
-    }
-)

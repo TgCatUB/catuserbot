@@ -2,17 +2,28 @@ import asyncio
 
 from telethon import events, functions
 
+from userbot import catub as bot
+from userbot.core.logger import logging
+
+from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import _format
+from ..sql_helper import pmpermit_sql as pmpermit_sql
+from ..utils import admin_cmd
 from . import (
     ALIVE_NAME,
+    CMD_HELP,
     PM_START,
     PMMENU,
     PMMESSAGE_CACHE,
+    _format,
     check,
     get_user_from_event,
-    parse_pre,
     set_key,
 )
-from .sql_helper import pmpermit_sql as pmpermit_sql
+
+plugin_category = "utils"
+LOGS = logging.getLogger(__name__)
 
 PM_WARNS = {}
 PREV_REPLY_MESSAGE = {}
@@ -160,7 +171,7 @@ if Config.PRIVATE_GROUP_ID != 0:
             return
         result = "`ok , everyone is disapproved now`"
         pmpermit_sql.disapprove_all()
-        await edit_delete(event, result, parse_mode=parse_pre, time=10)
+        await edit_delete(event, result, parse_mode=_format.parse_pre, time=10)
 
     @bot.on(events.NewMessage(incoming=True))
     async def on_new_private_message(event):

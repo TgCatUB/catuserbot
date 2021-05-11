@@ -1,11 +1,3 @@
-# CatUserbot module containing various sites direct links generators
-
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-#
-
 import json
 import re
 import urllib.parse
@@ -16,21 +8,43 @@ import requests
 from bs4 import BeautifulSoup
 from humanize import naturalsize
 
+from userbot import catub
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"direct(?: |$)([\s\S]*)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern=r"direct(?: |$)([\s\S]*)"))
-async def direct_link_generator(request):
-    """direct links generator"""
-    catevent = await edit_or_reply(request, "`Processing...`")
-    textx = await request.get_reply_message()
-    message = request.pattern_match.group(1)
-    if message:
-        pass
-    elif textx:
-        message = textx.text
-    else:
-        await catevent.edit("`Usage: .direct <url>`")
-        return
+from ..core.managers import edit_or_reply
+
+plugin_category = "misc"
+
+
+@catub.cat_cmd(
+    pattern="direct(?: |$)([\s\S]*)",
+    command=("direct", plugin_category),
+    info={
+        "header": "To generate a direct download link from a URL.",
+        "description": "Reply to a link or paste a URL to generate a direct download link.",
+        "supported links": [
+            "Google Drive",
+            "Cloud Mail",
+            "Yandex.Disk",
+            "AFH",
+            "ZippyShare",
+            "MediaFire",
+            "SourceForge",
+            "OSDN",
+            "GitHub",
+        ],
+        "usage": "{tr}direct <url>",
+    },
+)
+async def direct_link_generator(event):
+    """To generate a direct download link from a URL."""
+    textx = await event.get_reply_message()
+    message = event.pattern_match.group(1)
+    if not message:
+        if textx:
+            message = textx.text
+        else:
+            return await edit_delete(event, "`Usage: .direct <url>`")
+    catevent = await edit_or_reply(event, "`Processing...`")
     reply = ""
     links = re.findall(r"\bhttps?://.*\.\S+", message)
     if not links:
@@ -346,16 +360,3 @@ def useragent():
     ).findAll("td", {"class": "useragent"})
     user_agent = choice(useragents)
     return user_agent.text
-
-
-CMD_HELP.update(
-    {
-        "direct_links": "**Plugin : **`direct`\
-        \n\n**Syntax : **`.direct <url>`\n"
-        "**Function : **Reply to a link or paste a URL to\n"
-        "generate a direct download link\n\n"
-        "List of supported URLs:\n"
-        "`Google Drive - Cloud Mail - Yandex.Disk - AFH - "
-        "ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
-    }
-)

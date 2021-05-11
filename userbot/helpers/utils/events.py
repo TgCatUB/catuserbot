@@ -1,7 +1,7 @@
 from telethon.tl.types import MessageEntityMentionName
 
 from ...Config import Config
-from ...managers import edit_delete
+from ...core.managers import edit_delete
 
 
 async def reply_id(event):
@@ -13,13 +13,14 @@ async def reply_id(event):
     return reply_to_id
 
 
-async def get_user_from_event(event, catevent=None, secondgroup=None):
+async def get_user_from_event(event, catevent=None, secondgroup=None, nogroup=False):
     if catevent is None:
         catevent = event
-    if secondgroup:
-        args = event.pattern_match.group(2).split(" ", 1)
-    else:
-        args = event.pattern_match.group(1).split(" ", 1)
+    if nogroup is False:
+        if secondgroup:
+            args = event.pattern_match.group(2).split(" ", 1)
+        else:
+            args = event.pattern_match.group(1).split(" ", 1)
     extra = None
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
@@ -27,7 +28,8 @@ async def get_user_from_event(event, catevent=None, secondgroup=None):
             await edit_delete(catevent, "`Well that's an anonymous admin !`")
             return None, None
         user_obj = await event.client.get_entity(previous_message.sender_id)
-        extra = event.pattern_match.group(1)
+        if nogroup is False:
+            extra = event.pattern_match.group(1)
     elif args:
         user = args[0]
         if len(args) == 2:

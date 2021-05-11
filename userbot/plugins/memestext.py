@@ -1,62 +1,132 @@
 import random
 
-from . import ALIVE_NAME, catmemes
+from userbot import catub
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+from ..core.managers import edit_or_reply
+from . import catmemes
+
+plugin_category = "fun"
 
 
-@bot.on(admin_cmd(pattern="congo$"))
-@bot.on(sudo_cmd(pattern="congo$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="congo$",
+    command=("congo", plugin_category),
+    info={
+        "header": " Congratulate the people..",
+        "usage": "{tr}congo",
+    },
+)
 async def _(e):
+    "Congratulate the people."
     txt = random.choice(catmemes.CONGOREACTS)
     await edit_or_reply(e, txt)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="shg$"))
-@bot.on(sudo_cmd(pattern="shg$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="shg$",
+    command=("shg", plugin_category),
+    info={
+        "header": "Shrug at it !!",
+        "usage": "{tr}shg",
+    },
+)
 async def shrugger(e):
+    "Shrug at it !!"
     txt = random.choice(catmemes.SHGS)
     await edit_or_reply(e, txt)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="runs$"))
-@bot.on(sudo_cmd(pattern="runs$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="runs$",
+    command=("runs", plugin_category),
+    info={
+        "header": "Run, run, RUNNN!.",
+        "usage": "{tr}runs",
+    },
+)
 async def runner_lol(e):
+    "Run, run, RUNNN!"
     txt = random.choice(catmemes.RUNSREACTS)
     await edit_or_reply(e, txt)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="noob$"))
-@bot.on(sudo_cmd(pattern="noob$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="noob$",
+    command=("noob", plugin_category),
+    info={
+        "header": "Whadya want to know? Are you a NOOB?",
+        "usage": "{tr}noob",
+    },
+)
 async def metoo(e):
+    "Whadya want to know? Are you a NOOB?"
     txt = random.choice(catmemes.NOOBSTR)
     await edit_or_reply(e, txt)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="insult$"))
-@bot.on(sudo_cmd(pattern="insult$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="insult$",
+    command=("insult", plugin_category),
+    info={
+        "header": "insult someone.",
+        "usage": "{tr}insult",
+    },
+)
 async def insult(e):
+    "insult someone."
     txt = random.choice(catmemes.INSULT_STRINGS)
     await edit_or_reply(e, txt)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="hey$"))
-@bot.on(sudo_cmd(pattern="hey$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="hey$",
+    command=("hey", plugin_category),
+    info={
+        "header": "start a conversation with people",
+        "usage": "{tr}hey",
+    },
+)
 async def hoi(e):
+    "start a conversation with people."
     txt = random.choice(catmemes.HELLOSTR)
     await edit_or_reply(e, txt)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="pro$"))
-@bot.on(sudo_cmd(pattern="pro$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="pro$",
+    command=("pro", plugin_category),
+    info={
+        "header": "If you think you're pro, try this.",
+        "usage": "{tr}pro",
+    },
+)
 async def proo(e):
+    "If you think you're pro, try this."
     txt = random.choice(catmemes.PRO_STRINGS)
     await edit_or_reply(e, txt)
 
 
-@bot.on(admin_cmd(pattern=f"react ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="react ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="react ?(.*)",
+    command=("react", plugin_category),
+    info={
+        "header": "Make your userbot react",
+        "types": [
+            "happy",
+            "think",
+            "wave",
+            "wtf",
+            "love",
+            "confused",
+            "dead",
+            "sad",
+            "dog",
+        ],
+        "usage": ["{tr}react <type>", "{tr}react"],
+    },
+)
 async def _(e):
+    "Make your userbot react."
     input_str = e.pattern_match.group(1)
     if input_str in "happy":
         emoticons = catmemes.FACEREACTS[0]
@@ -82,66 +152,59 @@ async def _(e):
     await edit_or_reply(e, txt)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="10iq$"))
-@bot.on(sudo_cmd(pattern="10iq$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="10iq$",
+    command=("10iq", plugin_category),
+    info={
+        "header": "You retard !!",
+        "usage": "{tr}10iq",
+    },
+)
 async def iqless(e):
+    "You retard !!"
     await edit_or_reply(e, "♿")
 
 
-@bot.on(admin_cmd(pattern="fp$"))
-@bot.on(sudo_cmd(pattern=f"fp$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="fp$",
+    command=("fp", plugin_category),
+    info={
+        "header": "send you face pam emoji!",
+        "usage": "{tr}fp",
+    },
+)
 async def facepalm(e):
-    await e.edit("🤦‍♂")
+    "send you face pam emoji!"
+    await edit_or_reply(e, "🤦‍♂")
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="bt$"))
-@bot.on(sudo_cmd(pattern="bt$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="bt$",
+    command=("bt", plugin_category),
+    info={
+        "header": "Believe me, you will find this useful.",
+        "usage": "{tr}bt",
+    },
+    groups_only=True,
+)
 async def bluetext(e):
     """Believe me, you will find this useful."""
-    if e.is_group:
-        await edit_or_reply(
-            e,
-            "/BLUETEXT /MUST /CLICK.\n"
-            "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?",
-        )
+    await edit_or_reply(
+        e,
+        "/BLUETEXT /MUST /CLICK.\n"
+        "/ARE /YOU /A /STUPID /ANIMAL /WHICH /IS /ATTRACTED /TO /COLOURS?",
+    )
 
 
-@bot.on(admin_cmd(pattern="session$"))
-@bot.on(sudo_cmd(pattern="session$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    mentions = "**telethon.errors.rpcerrorlist.AuthKeyDuplicatedError: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetMessagesRequest)**"
-    await event.edit(mentions)
-
-
-CMD_HELP.update(
-    {
-        "memestext": "**Plugin : **`memestext`\
-        \n\n  •  **Syntax :** `.congo`\
-        \n  •  **Function : **Congratulate the people.\
-        \n\n  •  **Syntax :** `.shg`\
-        \n  •  **Function : **Shrug at it !!\
-        \n\n  •  **Syntax :** `.runs`\
-        \n  •  **Function : **Run, run, RUNNN!\
-        \n\n  •  **Syntax :** `.noob`\
-        \n  •  **Function : **Whadya want to know? Are you a NOOB?\
-        \n\n  •  **Syntax :** `.insult`\
-        \n  •  **Function : **insult someone\
-        \n\n  •  **Syntax :** `.hey`\
-        \n  •  **Function : **start a conversation with people\
-        \n\n  •  **Syntax :** `.pro`\
-        \n  •  **Function : **If you think you're pro, try this.\
-        \n\n  •  **Syntax :** `.react` <type>\
-        \n  •  **Function : **Make your userbot react. types are <happy ,think ,wave ,wtf ,love ,confused,dead, sad,dog>\
-        \n\n  •  **Syntax :** `.10iq`\
-        \n  •  **Function : **You retard !!\
-        \n\n  •  **Syntax :** `.fp`\
-        \n  •  **Function : **send you face pam emoji!\
-        \n\n  •  **Syntax :** `.bt`\
-        \n  •  **Function : **Believe me, you will find this useful.\
-        \n\n  •  **Syntax :** `.session`\
-        \n  •  **Function : **telethon session error code(fun)\
-        "
-    }
+@catub.cat_cmd(
+    pattern="session$",
+    command=("session", plugin_category),
+    info={
+        "header": "telethon session error code(fun)",
+        "usage": "{tr}session",
+    },
 )
+async def _(event):
+    "telethon session error code(fun)."
+    mentions = "**telethon.errors.rpcerrorlist.AuthKeyDuplicatedError: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetMessagesRequest)**"
+    await edit_or_reply(event, mentions)

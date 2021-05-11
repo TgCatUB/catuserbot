@@ -10,7 +10,9 @@ import re
 
 import requests
 
-from ..utils import time_formatter as t
+from . import catub, edit_or_reply, reply_id, time_formatter
+
+plugin_category = "extra"
 
 
 def shorten(description, info="anilist.co"):
@@ -194,15 +196,19 @@ async def formatJSON(outData):
 url = "https://graphql.anilist.co"
 
 
-@bot.on(admin_cmd(pattern="char (.*)"))
-@bot.on(sudo_cmd(pattern="char (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="char (.*)",
+    command=("char", plugin_category),
+    info={
+        "header": "Shows you the information of that character in anime with pic",
+        "usage": "{tr}char",
+        "examples": "{tr}char erza",
+    },
+)
 async def anilist(event):
-    if event.fwd_from:
-        return
+    "Get info on any anime character."
     search = event.pattern_match.group(1)
-    reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    reply_to_id = await reply_id(event)
     variables = {"query": search}
     json = (
         requests.post(url, json={"query": character_query, "variables": variables})
@@ -227,11 +233,17 @@ async def anilist(event):
         await edit_or_reply(event, "Sorry, No such results")
 
 
-@bot.on(admin_cmd(pattern="airing (.*)"))
-@bot.on(sudo_cmd(pattern="airing (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="airing (.*)",
+    command=("airing", plugin_category),
+    info={
+        "header": "Shows you the time left for the new episode of current running anime show.",
+        "usage": "{tr}airing",
+        "examples": "{tr}airing one piece",
+    },
+)
 async def anilist(event):
-    if event.fwd_from:
-        return
+    "Get airing date & time of any anime"
     search = event.pattern_match.group(1)
     variables = {"search": search}
     response = requests.post(
@@ -240,22 +252,26 @@ async def anilist(event):
     ms_g = f"**Name**: **{response['title']['romaji']}**(`{response['title']['native']}`)\n**ID**: `{response['id']}`"
     if response["nextAiringEpisode"]:
         airing_time = response["nextAiringEpisode"]["timeUntilAiring"] * 1000
-        airing_time_final = t(airing_time)
+        airing_time_final = time_formatter(airing_time)
         ms_g += f"\n**Episode**: `{response['nextAiringEpisode']['episode']}`\n**Airing In**: `{airing_time_final}`"
     else:
         ms_g += f"\n**Episode**:{response['episodes']}\n**Status**: `N/A`"
     await edit_or_reply(event, ms_g)
 
 
-@bot.on(admin_cmd(pattern="manga (.*)"))
-@bot.on(sudo_cmd(pattern="manga (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="manga (.*)",
+    command=("manga", plugin_category),
+    info={
+        "header": "Shows you the information of that character in anime with pic",
+        "usage": "{tr}manga <name of manga>",
+        "examples": "{tr}manga one piece",
+    },
+)
 async def anilist(event):
-    if event.fwd_from:
-        return
+    "Get info on any manga"
     search = event.pattern_match.group(1)
-    reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    reply_to_id = await reply_id(event)
     variables = {"search": search}
     json = (
         requests.post(url, json={"query": manga_query, "variables": variables})
@@ -306,34 +322,24 @@ async def anilist(event):
                 await event.delete()
             except BaseException:
                 ms_g += f" [〽️]({image})"
-                await edit_or_reply(event, ms_g)
+                await edit_or_reply(event, ms_g, link_preview=True)
         else:
             await edit_or_reply(event, ms_g)
 
 
-@bot.on(admin_cmd(pattern="anilist (.*)"))
-@bot.on(sudo_cmd(pattern="anilist (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="anime (.*)",
+    command=("anime", plugin_category),
+    info={
+        "header": "Shows you the details of the anime.",
+        "usage": "{tr}anime <name of anime>",
+        "examples": "{tr}anime fairy tail",
+    },
+)
 async def anilist(event):
-    if event.fwd_from:
-        return
+    "Get info on any anime."
     input_str = event.pattern_match.group(1)
-    event = await edit_or_reply(event, "Searching...")
+    event = await edit_or_reply(event, "`Searching...`")
     result = await callAPI(input_str)
     msg = await formatJSON(result)
     await event.edit(msg, link_preview=True)
-
-
-CMD_HELP.update(
-    {
-        "anilist": "**Plugin : **`anilist`\
-    \n\n**Syntax : **`.anilist <anime name >`\
-    \n**Usage : **Shows you the details of the anime.\
-    \n\n**Syntax : **`.char <character name >`\
-    \n**Usage : **Shows you the details of that character in anime with pic.\
-    \n\n**Syntax : **`.manga <anime name >`\
-    \n**Usage : **Shows you the details of the manga.\
-    \n\n**Syntax : **`.airing <anime name >`\
-    \n**Usage : **Shows you the time for that current running anime show.\
-    "
-    }
-)

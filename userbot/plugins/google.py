@@ -10,17 +10,64 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from search_engine_parser import GoogleSearch
 
-from ..utils import errors_handler
+from userbot import catub
+
+from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
 from . import BOTLOG, BOTLOG_CHATID
 
 opener = urllib.request.build_opener()
 useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
 opener.addheaders = [("User-agent", useragent)]
 
+plugin_category = "tools"
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"gs (.*)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern=r"gs (.*)"))
+
+async def ParseSauce(googleurl):
+    """Parse/Scrape the HTML code for the info we want."""
+    source = opener.open(googleurl).read()
+    soup = BeautifulSoup(source, "html.parser")
+    results = {"similar_images": "", "best_guess": ""}
+    try:
+        for similar_image in soup.findAll("input", {"class": "gLFyf"}):
+            url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
+                similar_image.get("value")
+            )
+            results["similar_images"] = url
+    except BaseException:
+        pass
+    for best_guess in soup.findAll("div", attrs={"class": "r5a77d"}):
+        results["best_guess"] = best_guess.get_text()
+    return results
+
+
+async def scam(results, lim):
+    single = opener.open(results["similar_images"]).read()
+    decoded = single.decode("utf-8")
+    imglinks = []
+    counter = 0
+    pattern = r"^,\[\"(.*[.png|.jpg|.jpeg])\",[0-9]+,[0-9]+\]$"
+    oboi = re.findall(pattern, decoded, re.I | re.M)
+    for imglink in oboi:
+        counter += 2
+        if counter <= int(lim):
+            imglinks.append(imglink)
+        else:
+            break
+    return imglinks
+
+
+@catub.cat_cmd(
+    pattern="gs (.*)",
+    command=("gs", plugin_category),
+    info={
+        "header": "Google search command.",
+        "usage": "{tr}gs <query>",
+        "examples": "{tr}gs catuserbot",
+    },
+)
 async def gsearch(q_event):
+    "Google search command."
     catevent = await edit_or_reply(q_event, "`searching........`")
     match = q_event.pattern_match.group(1)
     page = re.findall(r"page=\d+", match)
@@ -52,11 +99,17 @@ async def gsearch(q_event):
         )
 
 
-@bot.on(admin_cmd(pattern="grs$"))
-@bot.on(sudo_cmd(pattern="grs$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="grs$",
+    command=("grs", plugin_category),
+    info={
+        "header": "Google reverse search command.",
+        "description": "reverse search replied image or sticker in google and shows results.",
+        "usage": "{tr}grs",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Google Reverse Search"
     start = datetime.now()
     OUTPUT_STR = "Reply to an image to do Google Reverse Search"
     if event.reply_to_msg_id:
@@ -118,16 +171,23 @@ async def _(event):
     await catevent.edit(OUTPUT_STR, parse_mode="HTML", link_preview=False)
 
 
-@bot.on(admin_cmd(pattern=r"reverse(?: |$)(\d*)", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"reverse(?: |$)(\d*)", allow_sudo=True))
-@errors_handler
+@catub.cat_cmd(
+    pattern="reverse$",
+    command=("reverse", plugin_category),
+    info={
+        "header": "Google reverse search command.",
+        "description": "reverse search replied image or sticker in google and shows results.",
+        "usage": "{tr}reverse",
+    },
+)
 async def _(img):
+    "Google Reverse Search"
     if os.path.isfile("okgoogle.png"):
         os.remove("okgoogle.png")
     message = await img.get_reply_message()
     if message and message.media:
         photo = io.BytesIO()
-        await bot.download_media(message, photo)
+        await img.client.download_media(message, photo)
     else:
         await edit_or_reply(img, "`Reply to photo or sticker nigger.`")
         return
@@ -181,50 +241,3 @@ async def _(img):
         await catevent.edit(
             f"[{guess}]({fetchUrl})\n\n[Visually similar images]({imgspage})"
         )
-
-
-async def ParseSauce(googleurl):
-    """Parse/Scrape the HTML code for the info we want."""
-    source = opener.open(googleurl).read()
-    soup = BeautifulSoup(source, "html.parser")
-    results = {"similar_images": "", "best_guess": ""}
-    try:
-        for similar_image in soup.findAll("input", {"class": "gLFyf"}):
-            url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
-                similar_image.get("value")
-            )
-            results["similar_images"] = url
-    except BaseException:
-        pass
-    for best_guess in soup.findAll("div", attrs={"class": "r5a77d"}):
-        results["best_guess"] = best_guess.get_text()
-    return results
-
-
-async def scam(results, lim):
-    single = opener.open(results["similar_images"]).read()
-    decoded = single.decode("utf-8")
-    imglinks = []
-    counter = 0
-    pattern = r"^,\[\"(.*[.png|.jpg|.jpeg])\",[0-9]+,[0-9]+\]$"
-    oboi = re.findall(pattern, decoded, re.I | re.M)
-    for imglink in oboi:
-        counter += 2
-        if counter <= int(lim):
-            imglinks.append(imglink)
-        else:
-            break
-    return imglinks
-
-
-CMD_HELP.update(
-    {
-        "google": "**Plugin :**`google`\
-        \n\n•  **Syntax :** `.gs <limit> <query>` or `.gs <limit> (replied message)`\
-        \n•  **Function : **will google  search and sends you top 10 results links.\
-        \n\n•  **Syntax :** `.grs` reply to image\
-        \n•  **Function : **will google reverse search the image and shows you the result.\
-        \n\n•  **Syntax : **`.reverse limit`\
-        \n•  **Function : **Reply to a pic/sticker to revers-search it on Google Images !!"
-    }
-)

@@ -5,10 +5,25 @@ import os
 
 import requests
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="detect$", outgoing=True))
-@bot.on(sudo_cmd(pattern="detect$", allow_sudo=True))
+from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
+
+plugin_category = "utils"
+
+
+@catub.cat_cmd(
+    pattern="detect$",
+    command=("detect", plugin_category),
+    info={
+        "header": "To detect the nudity in reply image.",
+        "description": "Reply detect command to any image or non animated sticker to detect the nudity in that",
+        "usage": "{tr}detect",
+    },
+)
 async def detect(event):
+    "To detect the nudity in reply image."
     if Config.DEEP_AI is None:
         return await edit_delete(
             event, "Add VAR `DEEP_AI` get Api Key from https://deepai.org/", 5
@@ -52,12 +67,3 @@ async def detect(event):
         link_preview=False,
         parse_mode="HTML",
     )
-
-
-CMD_HELP.update(
-    {
-        "nsfwdetect": "**Plugin : **`nsfwdetect`\
-    \n\n  •  **Syntax : **`.detect`\
-    \n  •  **Function : **__Reply .detect command to any image or non animated sticker to detect the nudity in that__"
-    }
-)

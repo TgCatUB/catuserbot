@@ -19,6 +19,15 @@ import hashlib
 import math
 import re
 import time
+from typing import Dict, Tuple
+
+from telethon.errors.rpcerrorlist import MessageNotModifiedError
+
+from ..core.logger import logging
+
+LOGS = logging.getLogger(__name__)
+
+_TASKS: Dict[str, Tuple[int, int]] = {}
 
 
 async def md5(fname: str) -> str:
@@ -73,28 +82,50 @@ def human_to_bytes(size: str) -> int:
 
 
 async def progress(
-    current, total, gdrive, start, prog_type, file_name=None, is_cancelled=False
+    current,
+    total,
+    gdrive,
+    start,
+    prog_type,
+    file_name=None,
+    is_cancelled=False,
+    delay=10,
 ):
-    now = time.time()
-    diff = now - start
     if is_cancelled is True:
         raise CancelProcess
-
-    if round(diff % 10.00) == 0 or current == total:
+    task_id = f"{gdrive.chat_id}.{gdrive.id}"
+    if current == total:
+        if task_id not in _TASKS:
+            return
+        del _TASKS[task_id]
+        try:
+            await gdrive.edit("`finalizing process ...`")
+        except MessageNotModifiedError:
+            pass
+        except Exception as e:
+            LOGS.error(str(e))
+        return
+    now = time.time()
+    if task_id not in _TASKS:
+        _TASKS[task_id] = (now, now)
+    start, last = _TASKS[task_id]
+    elapsed_time = now - start
+    if (now - last) >= delay:
+        _TASKS[task_id] = (start, now)
         percentage = current * 100 / total
-        speed = current / diff
-        elapsed_time = round(diff)
+        speed = current / elapsed_time
         eta = round((total - current) / speed)
+        elapsed_time = round(elapsed_time)
         if "upload" in prog_type.lower():
-            status = "Uploading"
+            status = f"Uploading"
         elif "download" in prog_type.lower():
-            status = "Downloading"
+            status = f"Downloading"
         else:
             status = "Unknown"
         progress_str = "`{0}` | `[{1}{2}] {3}%`".format(
             status,
-            "".join(["▰" for i in range(math.floor(percentage / 10))]),
-            "".join(["▱" for i in range(10 - math.floor(percentage / 10))]),
+            "".join(["▰" for i in range(math.floor(percentage / 5))]),
+            "".join(["▱" for i in range(20 - math.floor(percentage / 5))]),
             round(percentage, 2),
         )
         tmp = (

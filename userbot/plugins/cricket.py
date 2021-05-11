@@ -5,14 +5,23 @@ plugin for Cat_Userbot
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
+from . import catub, edit_or_reply, reply_id
 
-@bot.on(admin_cmd(pattern=r"score$"))
-@bot.on(sudo_cmd(pattern=r"score$", allow_sudo=True))
+plugin_category = "extra"
+
+
+@catub.cat_cmd(
+    pattern="score$",
+    command=("score", plugin_category),
+    info={
+        "header": "To see the score of an ongoing match.",
+        "usage": "{tr}score",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To see the score of an ongoing match."
     chat = "@cricbuzz_bot"
-    reply_to_id = event.message
+    reply_to_id = await reply_id(event)
     catevent = await edit_or_reply(event, "```Gathering info...```")
     async with event.client.conversation(chat) as conv:
         try:
@@ -36,14 +45,21 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern=r"cric (.*)"))
-@bot.on(sudo_cmd(pattern=r"cric (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="cric (.*)",
+    command=("cric", plugin_category),
+    info={
+        "header": "To see the scoreboard or commentary of a match",
+        "description": "To check commands showed in {tr}score cmd that is for getting scoreboard or commentary.",
+        "usage": "{tr}cric <command showed in {tr}score>",
+        "examples": "{tr}cric /scorecard_30....",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To see the scoreboard or commentary of a match"
     details = event.pattern_match.group(1)
     chat = "@cricbuzz_bot"
-    reply_to_id = event.message
+    reply_to_id = await reply_id(event)
     catevent = await edit_or_reply(event, "```Gathering info...```")
     async with event.client.conversation(chat) as conv:
         try:
@@ -65,15 +81,3 @@ async def _(event):
         await event.client.delete_messages(
             conv.chat_id, [msg_start.id, msg.id, response.id, respond.id]
         )
-
-
-CMD_HELP.update(
-    {
-        "cricket": "**Plugin :** `cricket`\
-      \n\n**  • Syntax : **`.score` \
-      \n**  • Function : **__To see score of ongoing matches.__\
-      \n\n**  • Syntax : **`.cric <commnd>`\
-      \n**  • Function : **__That will send details like scoreboard or commentary.__\
-      \n\n**  • Example :-** `.cric /scorecard_30....`"
-    }
-)

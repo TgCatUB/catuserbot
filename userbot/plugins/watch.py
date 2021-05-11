@@ -2,9 +2,22 @@
 # Author: Sumanjay (https://github.com/cyberboysumanjay) (@cyberboysumanjay)
 # All rights reserved.
 
-# imported from uniborg
+import os
 
+# imported from uniborg
 from justwatch import JustWatch, justwatchapi
+from pySmartDL import SmartDL
+
+from userbot import catub
+
+from ..Config import Config
+from ..core.logger import logging
+from ..core.managers import edit_or_reply
+
+LOGS = logging.getLogger(__name__)
+plugin_category = "utils"
+
+moviepath = os.path.join(os.getcwd(), "temp", "moviethumb.jpg")
 
 justwatchapi.__dict__["HEADER"] = {
     "User-Agent": "JustWatch client (github.com/dawoudt/JustWatchAPI)"
@@ -30,7 +43,7 @@ def get_stream_data(query):
     )
     stream_data["release_year"] = movie["original_release_year"]
     try:
-        print(movie["cinema_release_date"])
+        LOGS.info(movie["cinema_release_date"])
         stream_data["release_date"] = movie["cinema_release_date"]
     except KeyError:
         try:
@@ -74,13 +87,20 @@ def get_provider(url):
     return url
 
 
-@bot.on(admin_cmd(pattern="watch (.*)"))
-@bot.on(sudo_cmd(pattern="watch (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="watch (.*)",
+    command=("watch", plugin_category),
+    info={
+        "header": "To search online streaming sites for that movie.",
+        "description": "Fetches the list of sites(standard) where you can watch that movie.",
+        "usage": "{tr}watch <movie name>",
+        "examples": "{tr}watch aquaman",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To search online streaming sites for that movie."
     query = event.pattern_match.group(1)
-    et = await edit_or_reply(event, "Finding Sites...")
+    et = await edit_or_reply(event, "`Finding Sites...`")
     try:
         streams = get_stream_data(query)
     except Exception as e:
@@ -114,23 +134,16 @@ async def _(event):
         if "sonyliv" in link:
             link = link.replace(" ", "%20")
         output_ += f"[{pretty(provider)}]({link})\n"
-
+    downloader = SmartDL(thumb_link, moviepath, progress_bar=False)
+    downloader.start(blocking=False)
+    while not downloader.isFinished():
+        pass
     await event.client.send_file(
         event.chat_id,
         caption=output_,
-        file=thumb_link,
+        file=moviepath,
         force_document=False,
         allow_cache=False,
         silent=True,
     )
     await et.delete()
-
-
-CMD_HELP.update(
-    {
-        "watch": "**Plugin :** `watch`\
-    \n\n**Syntax :** `.watch query`\
-    \n**Usage : **Fetches the list of sites(standard) where you can watch that movie\
-    "
-    }
-)

@@ -1,7 +1,3 @@
-"""
-By:- @Mrconfused & @sandy1709
-idea from userage
-"""
 import asyncio
 import io
 import os
@@ -9,12 +5,28 @@ import shutil
 import time
 from pathlib import Path
 
+from userbot import catub
+
+from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import _catutils, _format
 from . import humanbytes
 
+plugin_category = "utils"
 
-@bot.on(admin_cmd(pattern="ls ?(.*)", command="ls"))
-@bot.on(sudo_cmd(pattern="ls ?(.*)", allow_sudo=True, command="ls"))
-async def lst(event):
+
+@catub.cat_cmd(
+    pattern="ls(?: |$)(.*)",
+    command=("ls", plugin_category),
+    info={
+        "header": "To list all files and folders.",
+        "description": "Will show all files and folders if no path is given or folder path is given else will show file details(if file path os given).",
+        "usage": "{tr}ls <path>",
+        "examples": "{tr}ls userbot",
+    },
+)
+async def lst(event):  # sourcery no-metrics
+    "To list all files and folders."
     cat = "".join(event.text.split(maxsplit=1)[1:])
     path = cat or os.getcwd()
     if not os.path.exists(path):
@@ -93,9 +105,17 @@ async def lst(event):
         await edit_or_reply(event, msg)
 
 
-@bot.on(admin_cmd(pattern="rem (.*)", command="rem"))
-@bot.on(sudo_cmd(pattern="rem (.*)", command="rem", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="rem (.*)",
+    command=("rem", plugin_category),
+    info={
+        "header": "To delete a file or folder from the server",
+        "usage": "{tr}rem <path>",
+        "examples": "{tr}rem Dockerfile",
+    },
+)
 async def lst(event):
+    "To delete a file or folder."
     cat = event.pattern_match.group(1)
     if cat:
         path = Path(cat)
@@ -117,18 +137,24 @@ async def lst(event):
         await edit_or_reply(event, f"Succesfully removed `{path}` file")
 
 
-@bot.on(admin_cmd(pattern="mkdir(?: |$)(.*)", outgoing=True, command="mkdir"))
-@bot.on(sudo_cmd(pattern="mkdir(?: |$)(.*)", allow_sudo=True, command="mkdir"))
+@catub.cat_cmd(
+    pattern="mkdir(?: |$)(.*)",
+    command=("mkdir", plugin_category),
+    info={
+        "header": "To create a new directory.",
+        "usage": "{tr}mkdir <topic>",
+        "examples": "{tr}mkdir cat",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To create a new directory."
     pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(
             event,
             "What should i create ?",
-            parse_mode=parse_pre,
+            parse_mode=_format.parse_pre,
         )
     original = os.path.join(pwd, input_str.strip())
     if os.path.exists(original):
@@ -138,33 +164,41 @@ async def _(event):
         )
         return
     mone = await edit_or_reply(
-        event, "creating the directory ...", parse_mode=parse_pre
+        event, "creating the directory ...", parse_mode=_format.parse_pre
     )
     await asyncio.sleep(2)
     try:
         await _catutils.runcmd(f"mkdir {original}")
         await mone.edit(f"Successfully created the directory `{original}`")
     except Exception as e:
-        await edit_delete(mone, str(e), parse_mode=parse_pre)
+        await edit_delete(mone, str(e), parse_mode=_format.parse_pre)
 
 
-@bot.on(admin_cmd(pattern="cpto(?: |$)(.*)", outgoing=True, command="cpto"))
-@bot.on(sudo_cmd(pattern="cpto(?: |$)(.*)", allow_sudo=True, command="cpto"))
+@catub.cat_cmd(
+    pattern="cpto(?: |$)(.*)",
+    command=("cpto", plugin_category),
+    info={
+        "header": "To copy a file from one directory to other directory",
+        "usage": "{tr}cpto from ; to destination",
+        "examples": "{tr}cpto sample_config.py ; downloads",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To copy a file from one directory to other directory"
     pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(
             event,
             "What and where should i move the file/folder.",
-            parse_mode=parse_pre,
+            parse_mode=_format.parse_pre,
         )
     loc = input_str.split(";")
     if len(loc) != 2:
         return await edit_delete(
-            event, "use proper syntax .cpto from ; to destination", parse_mode=parse_pre
+            event,
+            "use proper syntax .cpto from ; to destination",
+            parse_mode=_format.parse_pre,
         )
     original = os.path.join(pwd, loc[0].strip())
     location = os.path.join(pwd, loc[1].strip())
@@ -175,70 +209,57 @@ async def _(event):
             f"there is no such directory or file with the name `{cat}` check again",
         )
         return
-    mone = await edit_or_reply(event, "copying the file ...", parse_mode=parse_pre)
+    mone = await edit_or_reply(
+        event, "copying the file ...", parse_mode=_format.parse_pre
+    )
     await asyncio.sleep(2)
     try:
         await _catutils.runcmd(f"cp -r {original} {location}")
         await mone.edit(f"Successfully copied the `{original}` to `{location}`")
     except Exception as e:
-        await edit_delete(mone, str(e), parse_mode=parse_pre)
+        await edit_delete(mone, str(e), parse_mode=_format.parse_pre)
 
 
-@bot.on(admin_cmd(pattern="mvto(?: |$)(.*)", outgoing=True, command="mvto"))
-@bot.on(sudo_cmd(pattern="mvto(?: |$)(.*)", allow_sudo=True, command="mvto"))
+@catub.cat_cmd(
+    pattern="mvto(?: |$)(.*)",
+    command=("mvto", plugin_category),
+    info={
+        "header": "To move a file from one directory to other directory.",
+        "usage": "{tr}mvto frompath ; topath",
+        "examples": "{tr}mvto stringsession.py ; downloads",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To move a file from one directory to other directory"
     pwd = os.getcwd()
     input_str = event.pattern_match.group(1)
     if not input_str:
         return await edit_delete(
             event,
             "What and where should i move the file/folder.",
-            parse_mode=parse_pre,
+            parse_mode=_format.parse_pre,
         )
     loc = input_str.split(";")
     if len(loc) != 2:
         return await edit_delete(
-            event, "use proper syntax .mvto from ; to destination", parse_mode=parse_pre
+            event,
+            "use proper syntax .mvto from ; to destination",
+            parse_mode=_format.parse_pre,
         )
     original = os.path.join(pwd, loc[0].strip())
     location = os.path.join(pwd, loc[1].strip())
 
     if not os.path.exists(original):
-        await edit_delete(
+        return await edit_delete(
             event,
-            f"there is no such directory or file with the name `{cat}` check again",
+            f"there is no such directory or file with the name `{original}` check again",
         )
-        return
-    mone = await edit_or_reply(event, "Moving the file ...", parse_mode=parse_pre)
+    mone = await edit_or_reply(
+        event, "Moving the file ...", parse_mode=_format.parse_pre
+    )
     await asyncio.sleep(2)
     try:
         shutil.move(original, location)
         await mone.edit(f"Successfully moved the `{original}` to `{location}`")
     except Exception as e:
-        await edit_delete(mone, str(e), parse_mode=parse_pre)
-
-
-CMD_HELP.update(
-    {
-        "filemanager": "**Plugin :**`filemanager`\
-     \n\nList Files plugin for userbot \
-     \n  •  **Syntax :** `.ls`\
-     \n  •  **Function :** will return files from current working directory\
-     \n\n  •  **Syntax :** .ls path\
-     \n  •  **Function :** will return output according to path  \
-     \n\n  •  **Syntax :** .ls file path\
-     \n  •  **Function :** will return file details\
-     \n\nSimple Module for people who dont wanna use shell executor for listing files.\
-     \n\n  •  **Syntax :** `.rem path`\
-     \n  •  **Function :** To delete the required item from the bot server\
-     \n\n  •  **Syntax :** `.mkdir foldername`\
-     \n  •  **Function :** Creates a new empty folder in the server\
-     \n\n  •  **Syntax :** `.mvto frompath ; topath`\
-     \n  •  **Function :** Move a file from one location to other location in bot server\
-     \n\n  •  **Syntax :** `.cpto frompath ; topath`\
-     \n  •  **Function :** Copy a file from one location to other location in bot server\
-"
-    }
-)
+        await edit_delete(mone, str(e), parse_mode=_format.parse_pre)

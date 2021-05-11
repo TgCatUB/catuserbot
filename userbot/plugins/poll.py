@@ -4,20 +4,32 @@ from telethon.errors.rpcbaseerrors import ForbiddenError
 from telethon.errors.rpcerrorlist import PollOptionInvalidError
 from telethon.tl.types import InputMediaPoll, Poll
 
-from . import Build_Poll
+from userbot import catub
+
+from ..core.managers import edit_or_reply
+from . import Build_Poll, reply_id
+
+plugin_category = "extra"
 
 
-@bot.on(admin_cmd(pattern="poll( (.*)|$)"))
-@bot.on(sudo_cmd(pattern="poll( (.*)|$)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="poll(?: |$)(.*)",
+    command=("poll", plugin_category),
+    info={
+        "header": "To create a poll.",
+        "description": "If you doesnt give any input it sends a default poll",
+        "usage": ["{tr}poll", "{tr}poll question ; option 1; option2"],
+        "examples": "{tr}poll Are you an early bird or a night owl ;Early bird ; Night owl",
+    },
+)
 async def pollcreator(catpoll):
-    reply_to_id = None
-    if catpoll.reply_to_msg_id:
-        reply_to_id = catpoll.reply_to_msg_id
+    "To create a poll"
+    reply_to_id = await reply_id(catpoll)
     string = "".join(catpoll.text.split(maxsplit=1)[1:])
     if not string:
         options = Build_Poll(["Yah sure 😊✌️", "Nah 😏😕", "Whatever die sur 🥱🙄"])
         try:
-            await bot.send_message(
+            await catpoll.client.send_message(
                 catpoll.chat_id,
                 file=InputMediaPoll(
                     poll=Poll(
@@ -42,7 +54,7 @@ async def pollcreator(catpoll):
         if len(catinput) > 2 and len(catinput) < 12:
             options = Build_Poll(catinput[1:])
             try:
-                await bot.send_message(
+                await catpoll.client.send_message(
                     catpoll.chat_id,
                     file=InputMediaPoll(
                         poll=Poll(
@@ -68,15 +80,3 @@ async def pollcreator(catpoll):
                 catpoll,
                 "Make sure that you used Correct syntax `.poll question ; option1 ; option2`",
             )
-
-
-CMD_HELP.update(
-    {
-        "poll": "**Plugin :**`poll`\
-        \n\n**Syntax :** `.poll`\
-        \n**Usage : **If you doesnt give any input it sends a default poll. if you like customize it then use this syntax :\
-        \n `.poll question ; option 1; option2 ;`\
-        \n ';' this seperates the each option and question \
-        "
-    }
-)

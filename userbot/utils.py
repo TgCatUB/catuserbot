@@ -2,7 +2,6 @@ import asyncio
 import datetime
 import importlib
 import inspect
-import logging
 import math
 import re
 import sys
@@ -15,9 +14,14 @@ from telethon import events
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
 
-from . import CMD_HELP, CMD_LIST, LOAD_PLUG, LOGS, SUDO_LIST, bot
+from . import CMD_LIST, LOAD_PLUG, SUDO_LIST
 from .Config import Config
+from .core.logger import logging
+from .core.session import catub
 from .helpers.progress import CancelProcess
+
+bot = catub
+LOGS = logging.getLogger(__name__)
 
 
 def load_module(shortname):
@@ -31,39 +35,18 @@ def load_module(shortname):
         spec.loader.exec_module(mod)
         LOGS.info("Successfully imported " + shortname)
     else:
-        import userbot.utils
-
-        from .helpers.tools import media_type
-        from .helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
-        from .managers import edit_delete, edit_or_reply
-
         path = Path(f"userbot/plugins/{shortname}.py")
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
-        mod.bot = bot
-        mod.LOGS = LOGS
-        mod.Config = Config
-        mod._format = _format
-        mod.tgbot = bot.tgbot
-        mod.sudo_cmd = sudo_cmd
-        mod.CMD_HELP = CMD_HELP
-        mod.reply_id = reply_id
-        mod.admin_cmd = admin_cmd
-        mod._catutils = _catutils
-        mod._cattools = _cattools
-        mod.media_type = media_type
-        mod.edit_delete = edit_delete
-        mod.install_pip = install_pip
-        mod.parse_pre = _format.parse_pre
-        mod.edit_or_reply = edit_or_reply
-        mod.logger = logging.getLogger(shortname)
+        import userbot.utils
+
         # support for uniborg
         sys.modules["uniborg.util"] = userbot.utils
-        mod.borg = bot
         # support for paperplaneextended
         sys.modules["userbot.events"] = userbot.utils
         spec.loader.exec_module(mod)
+
         # for imports
         sys.modules["userbot.plugins." + shortname] = mod
         LOGS.info("Successfully imported " + shortname)
@@ -350,11 +333,11 @@ class Loader:
 
 
 # Admin checker by uniborg
-async def is_admin(client, chat_id, user_id):
+async def is_admin(catub, chat_id, userid):
     if not str(chat_id).startswith("-100"):
         return False
     try:
-        req_jo = await client(GetParticipantRequest(channel=chat_id, user_id=user_id))
+        req_jo = await catub(GetParticipantRequest(chat_id, userid))
         chat_participant = req_jo.participant
         if isinstance(
             chat_participant, (ChannelParticipantCreator, ChannelParticipantAdmin)

@@ -3,22 +3,29 @@ Created by @Jisan7509
 Credit @Infinity20998
 Userbot plugin fot CatUserbot
 """
-
-
 import asyncio
 
+from userbot import catub
+
+from ..core.managers import edit_or_reply
 from . import ALIVE_NAME
 
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
+plugin_category = "extra"
 
 
-@bot.on(admin_cmd(pattern="imp(|n) (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="imp(|n) (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="imp(|n) (.*)",
+    command=("imp", plugin_category),
+    info={
+        "header": "Find imposter with stickers animation.",
+        "description": "Imp for imposter impn for not imposter",
+        "usage": ["{tr}imp <name>", "{tr}impn <name>"],
+        "examples": ["{tr}imp blabla", "{tr}impn blabla"],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
-    hmm = bot.uid
-    USERNAME = f"tg://user?id={hmm}"
+    "Find imposter with stickers animation."
+    USERNAME = f"tg://user?id={event.client.uid}"
     name = event.pattern_match.group(2)
     cmd = event.pattern_match.group(1).lower()
     text1 = await edit_or_reply(event, "Uhmm... Something is wrong here!!")
@@ -28,7 +35,7 @@ async def _(event):
         event.chat_id, "CAADAQADRwADnjOcH98isYD5RJTwAg"
     )
     text2 = await event.reply(
-        f"**[{DEFAULTUSER}]({USERNAME}) :** I have to call discussion"
+        f"**[{ALIVE_NAME}]({USERNAME}) :** I have to call discussion"
     )
     await asyncio.sleep(3)
     await stcr1.delete()
@@ -37,7 +44,7 @@ async def _(event):
         event.chat_id, "CAADAQADRgADnjOcH9odHIXtfgmvAg"
     )
     text3 = await event.reply(
-        f"**[{DEFAULTUSER}]({USERNAME}) :** We have to eject the imposter or will lose "
+        f"**[{ALIVE_NAME}]({USERNAME}) :** We have to eject the imposter or will lose "
     )
     await asyncio.sleep(3)
     await stcr2.delete()
@@ -50,7 +57,7 @@ async def _(event):
     await text4.edit(f"**Others :** Who?? ")
     await asyncio.sleep(2)
     await text4.edit(
-        f"**[{DEFAULTUSER}]({USERNAME}) :** Its {name} , I saw {name}  using vent,"
+        f"**[{ALIVE_NAME}]({USERNAME}) :** Its {name} , I saw {name}  using vent,"
     )
     await asyncio.sleep(3)
     await text4.edit(f"**Others :**Okay.. Vote {name} ")
@@ -99,11 +106,18 @@ async def _(event):
         await event.client.send_file(event.chat_id, "CAADAQADQAADnjOcH-WOkB8DEctJAg")
 
 
-@bot.on(admin_cmd(pattern="timp(|n) (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="timp(|n) (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="timp(|n) (.*)",
+    command=("timp", plugin_category),
+    info={
+        "header": "Find imposter with text animation.",
+        "description": "timp for imposter timpn for not imposter",
+        "usage": ["{tr}timp <name>", "{tr}timpn <name>"],
+        "examples": ["{tr}timp blabla", "{tr}timpn blabla"],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Find imposter with text animation."
     name = event.pattern_match.group(2)
     cmd = event.pattern_match.group(1).lower()
     catevent = await edit_or_reply(event, f"{name} is ejected.......")
@@ -136,14 +150,3 @@ async def _(event):
         await catevent.edit(
             f". 　　　。　　　　•　 　ﾟ　　。 　　.\n .　　　 　　.　　　　　。　　 。　. 　\n\n  . 　　 。   　     ඞ         。 . 　　 • 　　　　•\n\n  ﾟ {name} was not an Imposter.      。　. 　 　       。　.                                        。　. \n                                   　.          。　  　. \n　'         1 Impostor remains    　 。　.  　　.                。　.        。 　     .          。 　            .               .         .    ,      。\n　　ﾟ　　　.　　.    ,　 　。　 　. 　 .     。"
         )
-
-
-CMD_HELP.update(
-    {
-        "imposter": "**Plugin :** `imposter__`\
-\n\n**Syntax : **`.imp` / `.impn` <text>\
-\n**Usage : ** Find imposter with stickers.\
-\n\n**Syntax : **`.timp` / `.timpn` <text>\
-\n**Usage : ** Find imposter only text."
-    }
-)

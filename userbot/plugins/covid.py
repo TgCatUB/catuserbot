@@ -1,16 +1,25 @@
 # corona virus stats for catuserbot
 from covid import Covid
 
-from . import covidindia
+from . import catub, covidindia, edit_delete, edit_or_reply
+
+plugin_category = "extra"
 
 
-@bot.on(admin_cmd(pattern="covid(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="covid(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="covid(?: |$)(.*)",
+    command=("covid", plugin_category),
+    info={
+        "header": "To get latest information about covid-19.",
+        "description": "Get information about covid-19 data in the given country/state(only Indian States).",
+        "usage": "{tr}covid <state_name/country_name>",
+        "examples": ["{tr}covid andhra pradesh", "{tr}covid india", "{tr}covid world"],
+    },
+)
 async def corona(event):
-    if event.pattern_match.group(1):
-        country = (event.pattern_match.group(1)).title()
-    else:
-        country = "World"
+    "To get latest information about covid-19."
+    input_str = event.pattern_match.group(1)
+    country = (input_str).title() if input_str else "World"
     catevent = await edit_or_reply(event, "`Collecting data...`")
     covid = Covid(source="worldometers")
     try:
@@ -56,15 +65,3 @@ async def corona(event):
                 ),
                 5,
             )
-
-
-CMD_HELP.update(
-    {
-        "covid": "**Plugin : **`covid`\
-        \n\n  •  **Syntax : **`.covid <country name>`\
-        \n  •  **Function :** __Get an information about covid-19 data in the given country.__\
-        \n\n  •  **Syntax : **`.covid <state name>`\
-        \n  •  **Function :** __Get an information about covid-19 data in the given state of India only.__\
-        "
-    }
-)

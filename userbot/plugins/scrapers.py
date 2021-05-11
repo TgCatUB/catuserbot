@@ -11,13 +11,24 @@ import requests
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
+from userbot import catub
+
+from ..core.managers import edit_or_reply
 from . import BOTLOG, BOTLOG_CHATID
 
+plugin_category = "utils"
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"wiki (.*)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern=r"wiki (.*)"))
+
+@catub.cat_cmd(
+    pattern="wiki (.*)",
+    command=("wiki", plugin_category),
+    info={
+        "header": "To get wikipedia data about query.",
+        "usage": "{tr}wiki <query>",
+    },
+)
 async def wiki(wiki_q):
-    """For .wiki command, fetch content from Wikipedia."""
+    """To fetch content from Wikipedia."""
     match = wiki_q.pattern_match.group(1)
     try:
         summary(match)
@@ -50,9 +61,16 @@ async def wiki(wiki_q):
         )
 
 
-@bot.on(admin_cmd(pattern="imdb (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="imdb (.*)", allow_sudo=True))
-async def imdb(e):
+@catub.cat_cmd(
+    pattern="imdb (.*)",
+    command=("imdb", plugin_category),
+    info={
+        "header": "To fetch imdb data about the given movie or series.",
+        "usage": "{tr}imdb <movie/series name>",
+    },
+)
+async def imdb(e):  # sourcery no-metrics
+    """To fetch imdb data about the given movie or series."""
     catevent = await edit_or_reply(e, "`searching........")
     try:
         movie_name = e.pattern_match.group(1)
@@ -141,17 +159,3 @@ async def imdb(e):
         )
     except IndexError:
         await catevent.edit("Plox enter **Valid movie name** kthx")
-
-
-CMD_HELP.update(
-    {
-        "scrapers": """**Plugin : **`scrapers`
-
-  •  **Syntax : ** `.wiki query`
-  •  **Function : **__Fetches given query in wikipedia and shows you__
-
-  •  **Syntax : ** `.imdb query`
-  •  **Function : **__Fetches Given movie details from imdb__
-"""
-    }
-)

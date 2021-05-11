@@ -13,6 +13,13 @@ import heroku3
 import requests
 import urllib3
 
+from userbot import catub
+
+from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
+
+plugin_category = "tools"
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # =================
 
@@ -22,25 +29,36 @@ HEROKU_APP_NAME = Config.HEROKU_APP_NAME
 HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 
-@bot.on(admin_cmd(pattern=r"(set|get|del) var (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"(set|get|del) var (.*)", allow_sudo=True))
-async def variable(var):
+@catub.cat_cmd(
+    pattern="(set|get|del) var (.*)",
+    command=("var", plugin_category),
+    info={
+        "header": "To manage heroku vars.",
+        "flags": {
+            "set": "To set new var in heroku or modify the old var",
+            "get": "To show the already existing var value.",
+            "del": "To delete the existing value",
+        },
+        "usage": [
+            "{tr}set var <var name> <var value>",
+            "{tr}get var <var name>",
+            "{tr}del var <var name>",
+        ],
+        "examples": [
+            "{tr}get var ALIVE_NAME",
+        ],
+    },
+)
+async def variable(var):  # sourcery no-metrics
     """
-    Manage most of ConfigVars setting, set new var, get current var,
-    or delete var...
+    Manage most of ConfigVars setting, set new var, get current var, or delete var...
     """
-    if Config.HEROKU_API_KEY is None:
+    if (Config.HEROKU_API_KEY is None) or (Config.HEROKU_APP_NAME is None):
         return await edit_delete(
             var,
-            "Set the required var in heroku to function this normally `HEROKU_API_KEY`.",
+            "Set the required vars in heroku to function this normally `HEROKU_API_KEY` and `HEROKU_APP_NAME`.",
         )
-    if Config.HEROKU_APP_NAME is not None:
-        app = Heroku.app(Config.HEROKU_APP_NAME)
-    else:
-        return await edit_delete(
-            var,
-            "Set the required var in heroku to function this normally `HEROKU_APP_NAME`.",
-        )
+    app = Heroku.app(Config.HEROKU_APP_NAME)
     exe = var.pattern_match.group(1)
     heroku_var = app.config()
     if exe == "get":
@@ -52,7 +70,7 @@ async def variable(var):
                 return await cat.edit(
                     "**ConfigVars**:" f"\n\n`{variable} = {heroku_var[variable]}`\n"
                 )
-            return await cat.edit(
+            await cat.edit(
                 "**ConfigVars**:" f"\n\n`Error:\n-> {variable} don't exists`"
             )
         except IndexError:
@@ -76,7 +94,6 @@ async def variable(var):
                         "================================"
                     )
             os.remove("configs.json")
-            return
     elif exe == "set":
         variable = "".join(var.text.split(maxsplit=2)[2:])
         cat = await edit_or_reply(var, "`Setting information...`")
@@ -108,21 +125,22 @@ async def variable(var):
         del heroku_var[variable]
 
 
-@bot.on(admin_cmd(pattern="usage$", outgoing=True))
-@bot.on(sudo_cmd(pattern="usage$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="usage$",
+    command=("usage", plugin_category),
+    info={
+        "header": "To Check dyno usage of userbot and also to know how much left.",
+        "usage": "{tr}usage",
+    },
+)
 async def dyno_usage(dyno):
     """
     Get your account Dyno Usage
     """
-    if HEROKU_APP_NAME is None:
+    if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):
         return await edit_delete(
             dyno,
-            "Set the required var in heroku to function this normally `HEROKU_APP_NAME`.",
-        )
-    if HEROKU_API_KEY is None:
-        return await edit_delete(
-            dyno,
-            "Set the required var in heroku to function this normally `HEROKU_API_KEY`.",
+            "Set the required vars in heroku to function this normally `HEROKU_API_KEY` and `HEROKU_APP_NAME`.",
         )
     dyno = await edit_or_reply(dyno, "`Processing...`")
     useragent = (
@@ -177,18 +195,20 @@ async def dyno_usage(dyno):
     )
 
 
-@bot.on(admin_cmd(pattern="herokulogs$", outgoing=True))
-@bot.on(sudo_cmd(pattern="herokulogs$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="(herokulogs|logs)$",
+    command=("logs", plugin_category),
+    info={
+        "header": "To get recent 100 lines logs from heroku.",
+        "usage": ["{tr}herokulogs", "{tr}logs"],
+    },
+)
 async def _(dyno):
-    if HEROKU_APP_NAME is None:
+    "To get recent 100 lines logs from heroku"
+    if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):
         return await edit_delete(
             dyno,
-            "Set the required var in heroku to function this normally `HEROKU_APP_NAME`.",
-        )
-    if HEROKU_API_KEY is None:
-        return await edit_delete(
-            dyno,
-            "Set the required var in heroku to function this normally `HEROKU_API_KEY`.",
+            "Set the required vars in heroku to function this normally `HEROKU_API_KEY` and `HEROKU_APP_NAME`.",
         )
     try:
         Heroku = heroku3.from_key(HEROKU_API_KEY)
@@ -220,10 +240,3 @@ def prettyjson(obj, indent=2, maxlinelength=80):
         indent=indent,
     )
     return indentitems(items, indent, level=0)
-
-
-CMD_HELP.update(
-    {
-        "heroku": "Info for Module to Manage Heroku:**\n\n`.usage`\nUsage:__Check your heroku dyno hours status.__\n\n`.set var <NEW VAR> <VALUE>`\nUsage: __add new variable or update existing value variable__\n**!!! WARNING !!!, after setting a variable the bot will restart.**\n\n`.get var or .get var <VAR>`\nUsage: __get your existing varibles, use it only on your private group!__\n**This returns all of your private information, please be cautious...**\n\n`.del var <VAR>`\nUsage: __delete existing variable__\n**!!! WARNING !!!, after deleting variable the bot will restarted**\n\n`.herokulogs`\nUsage:sends you recent 100 lines of logs in heroku"
-    }
-)

@@ -1,11 +1,20 @@
 import asyncio
 
+from . import catub, edit_or_reply
 
-@bot.on(admin_cmd(pattern="unoob$"))
-@bot.on(sudo_cmd(pattern="unoob$", allow_sudo=True))
+plugin_category = "fun"
+
+
+@catub.cat_cmd(
+    pattern="unoob$",
+    command=("unoob", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}unoob",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 1
     animation_ttl = range(9)
     event = await edit_or_reply(event, "unnoob")
@@ -25,11 +34,16 @@ async def _(event):
         await asyncio.sleep(animation_interval)
 
 
-@bot.on(admin_cmd(pattern="menoob$"))
-@bot.on(sudo_cmd(pattern="menoob$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="menoob$",
+    command=("menoob", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}menoob",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 1
     animation_ttl = range(9)
     event = await edit_or_reply(event, "menoob")
@@ -49,11 +63,16 @@ async def _(event):
         await asyncio.sleep(animation_interval)
 
 
-@bot.on(admin_cmd(pattern="upro$"))
-@bot.on(sudo_cmd(pattern="upro$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="upro$",
+    command=("upro", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}upro",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 1
     animation_ttl = range(8)
     event = await edit_or_reply(event, "upro")
@@ -72,11 +91,16 @@ async def _(event):
         await asyncio.sleep(animation_interval)
 
 
-@bot.on(admin_cmd(pattern="mepro$"))
-@bot.on(sudo_cmd(pattern="mepro$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="mepro$",
+    command=("mepro", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}mepro",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 1
     animation_ttl = range(8)
     event = await edit_or_reply(event, "mepro")
@@ -95,11 +119,16 @@ async def _(event):
         await asyncio.sleep(animation_interval)
 
 
-@bot.on(admin_cmd(pattern=f"quickheal$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"quickheal$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="quickheal$",
+    command=("quickheal", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}quickheal",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 5
     animation_ttl = range(11)
     event = await edit_or_reply(event, "quickheal")
@@ -121,11 +150,16 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@bot.on(admin_cmd(pattern=f"sqh$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"sqh$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="sqh$",
+    command=("sqh", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}sqh",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 0.1
     animation_ttl = range(11)
     event = await edit_or_reply(event, "sqh")
@@ -147,11 +181,16 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@bot.on(admin_cmd(pattern=f"vquickheal$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"vquickheal$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="vquickheal$",
+    command=("vquickheal", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}vquickheal",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 5
     animation_ttl = range(11)
     event = await edit_or_reply(event, "vquickheal")
@@ -173,11 +212,16 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@bot.on(admin_cmd(pattern=f"macos$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"macos$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="macoc$",
+    command=("macoc", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}macoc",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 0.5
     animation_ttl = range(11)
     event = await edit_or_reply(event, "macos")
@@ -199,11 +243,16 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@bot.on(admin_cmd(pattern=f"windows$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"windows$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="windows$",
+    command=("windows", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}windows",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 0.5
     animation_ttl = range(11)
     event = await edit_or_reply(event, "windows")
@@ -225,11 +274,16 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@bot.on(admin_cmd(pattern=f"linux$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"linux$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="linux$",
+    command=("linux", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}linux",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 0.5
     animation_ttl = range(11)
     event = await edit_or_reply(event, "linux")
@@ -251,11 +305,16 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@bot.on(admin_cmd(pattern=f"stock$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"stock$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="stock$",
+    command=("stock", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}stock",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 0.5
     animation_ttl = range(11)
     event = await edit_or_reply(event, "stock")
@@ -277,11 +336,16 @@ async def _(event):
         await event.edit(animation_chars[i % 11])
 
 
-@bot.on(admin_cmd(pattern=f"os$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"os$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="os$",
+    command=("os", plugin_category),
+    info={
+        "header": "Fun animation try yourself to know more",
+        "usage": "{tr}os",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "animation command"
     animation_interval = 0.1
     animation_ttl = range(7)
     event = await edit_or_reply(event, "os")
@@ -297,26 +361,3 @@ async def _(event):
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 7])
-
-
-CMD_HELP.update(
-    {
-        "animation6": """**Plugin : **`animation6`
-        
-**Commands in animation6 are **
-  •  `.unoob`
-  •  `.menoob`
-  •  `.upro`
-  •  `.mepro`
-  •  `.quickheal`
-  •  `.sqh`
-  •  `.vquickheal`
-  •  `.macos`
-  •  `.windows`
-  •  `.linux`
-  •  `.stock`
-  •  `.os`
-  
-**Function : **__Different kinds of animation commands check yourself for their animation .__"""
-    }
-)

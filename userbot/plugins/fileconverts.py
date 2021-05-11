@@ -1,5 +1,3 @@
-# by @mrconfused (@sandy1709)
-
 import asyncio
 import base64
 import os
@@ -12,21 +10,33 @@ from telethon.errors import PhotoInvalidDimensionsError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.functions.messages import SendMediaRequest
 
-from . import make_gif, progress
+from userbot import catub
+
+from ..Config import Config
+from ..helpers.utils import _format
+from . import edit_delete, edit_or_reply, make_gif, progress, reply_id
+
+plugin_category = "utils"
+
+# by @mrconfused (@sandy1709)
+
 
 if not os.path.isdir("./temp"):
     os.makedirs("./temp")
 
 
-@bot.on(admin_cmd(pattern="stoi$"))
-@bot.on(sudo_cmd(pattern="stoi$", allow_sudo=True))
-async def _(cat):
-    if cat.fwd_from:
-        return
-    reply_to_id = cat.message.id
-    if cat.reply_to_msg_id:
-        reply_to_id = cat.reply_to_msg_id
-    event = await edit_or_reply(cat, "Converting.....")
+@catub.cat_cmd(
+    pattern="stoi$",
+    command=("stoi", plugin_category),
+    info={
+        "header": "Reply this command to a sticker to get image.",
+        "usage": "{tr}stoi",
+    },
+)
+async def _(cat_event):
+    "Sticker to image Conversion."
+    reply_to_id = await reply_id(cat_event)
+    event = await edit_or_reply(cat_event, "Converting.....")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -35,11 +45,11 @@ async def _(cat):
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await cat.client.download_media(
+        downloaded_file_name = await cat_event.client.download_media(
             reply_message, downloaded_file_name
         )
         if os.path.exists(downloaded_file_name):
-            caat = await cat.client.send_file(
+            caat = await cat_event.client.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
@@ -53,15 +63,18 @@ async def _(cat):
         await event.edit("Syntax : `.stoi` reply to a Telegram normal sticker")
 
 
-@bot.on(admin_cmd(pattern="itos$"))
-@bot.on(sudo_cmd(pattern="itos$", allow_sudo=True))
-async def _(cat):
-    if cat.fwd_from:
-        return
-    reply_to_id = cat.message.id
-    if cat.reply_to_msg_id:
-        reply_to_id = cat.reply_to_msg_id
-    event = await edit_or_reply(cat, "Converting.....")
+@catub.cat_cmd(
+    pattern="itos$",
+    command=("itos", plugin_category),
+    info={
+        "header": "Reply this command to a image to get sticker.",
+        "usage": "{tr}itos",
+    },
+)
+async def _(cat_event):
+    "Image to Sticker conversion"
+    reply_to_id = await reply_id(cat_event)
+    event = await edit_or_reply(cat_event, "Converting.....")
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -70,11 +83,11 @@ async def _(cat):
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await cat.client.download_media(
+        downloaded_file_name = await cat_event.client.download_media(
             reply_message, downloaded_file_name
         )
         if os.path.exists(downloaded_file_name):
-            caat = await cat.client.send_file(
+            caat = await cat_event.client.send_file(
                 event.chat_id,
                 downloaded_file_name,
                 force_document=False,
@@ -95,9 +108,16 @@ async def silently_send_message(conv, text):
     return response
 
 
-@bot.on(admin_cmd(pattern="ttf ?(.*)"))
-@bot.on(sudo_cmd(pattern="ttf ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="ttf (.*)",
+    command=("ttf", plugin_category),
+    info={
+        "header": "Reply this command to a text message to convert it into file with given name.",
+        "usage": "{tr}ttf <file name>",
+    },
+)
 async def get(event):
+    "text to file conversion"
     name = event.text[5:]
     if name is None:
         await edit_or_reply(event, "reply to text message as `.ttf <file name>`")
@@ -113,21 +133,28 @@ async def get(event):
         await edit_or_reply(event, "reply to text message as `.ttf <file name>`")
 
 
-@bot.on(admin_cmd(pattern="ftoi$"))
-@bot.on(sudo_cmd(pattern="ftoi$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="ftoi$",
+    command=("ftoi", plugin_category),
+    info={
+        "header": "Reply this command to a image file to convert it to image",
+        "usage": "{tr}ftoi",
+    },
+)
 async def on_file_to_photo(event):
+    "image file(png) to streamable image."
     target = await event.get_reply_message()
-    catt = await edit_or_reply(event, "Converting.....")
     try:
         image = target.media.document
     except AttributeError:
-        return
+        return await edit_delete(event, "`This isn't an image`")
     if not image.mime_type.startswith("image/"):
-        return  # This isn't an image
+        return await edit_delete(event, "`This isn't an image`")
     if image.mime_type == "image/webp":
-        return  # Telegram doesn't let you directly send stickers as photos
+        return await edit_delete(event, "`For sticker to image use stoi command`")
     if image.size > 10 * 1024 * 1024:
         return  # We'd get PhotoSaveFileInvalidError otherwise
+    catt = await edit_or_reply(event, "`Converting.....`")
     file = await event.client.download_media(target, file=BytesIO())
     file.seek(0)
     img = await event.client.upload_file(file)
@@ -147,16 +174,21 @@ async def on_file_to_photo(event):
     await catt.delete()
 
 
-@bot.on(admin_cmd(pattern="gif(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="gif(?: |$)(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="gif$",
+    command=("gif", plugin_category),
+    info={
+        "header": "Converts Given animated sticker to gif.",
+        "usage": "{tr}gif quality ; fps(frames per second)",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "Converts Given animated sticker to gif"
     input_str = event.pattern_match.group(1)
     if not input_str:
         quality = None
         fps = None
-    elif input_str:
+    else:
         loc = input_str.split(";")
         if len(loc) > 2:
             return await edit_delete(
@@ -178,7 +210,7 @@ async def _(event):
             else:
                 return await edit_delete(event, "Use quality of range 0 to 721")
     catreply = await event.get_reply_message()
-    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+    cat_event = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if not catreply or not catreply.media or not catreply.media.document:
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
     if catreply.media.document.mime_type != "application/x-tgsticker":
@@ -186,11 +218,11 @@ async def _(event):
     catevent = await edit_or_reply(
         event,
         "Converting this Sticker to GiF...\n This may takes upto few mins..",
-        parse_mode=parse_pre,
+        parse_mode=_format.parse_pre,
     )
     try:
-        cat = Get(cat)
-        await event.client(cat)
+        cat_event = Get(cat_event)
+        await event.client(cat_event)
     except BaseException:
         pass
     reply_to_id = await reply_id(event)
@@ -219,11 +251,19 @@ async def _(event):
             os.remove(files)
 
 
-@bot.on(admin_cmd(pattern="nfc ?(.*)"))
-@bot.on(sudo_cmd(pattern="nfc ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="nfc (mp3|voice)",
+    command=("nfc", plugin_category),
+    info={
+        "header": "Converts the required media file to voice or mp3 file.",
+        "usage": [
+            "{tr}nfc mp3",
+            "{tr}nfc voice",
+        ],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Converts the required media file to voice or mp3 file."
     if not event.reply_to_msg_id:
         await edit_or_reply(event, "```Reply to any media file.```")
         return
@@ -232,14 +272,7 @@ async def _(event):
         await edit_or_reply(event, "reply to media file")
         return
     input_str = event.pattern_match.group(1)
-    if input_str is None:
-        await edit_or_reply(event, "try `.nfc voice` or`.nfc mp3`")
-        return
-    if input_str in ["mp3", "voice"]:
-        event = await edit_or_reply(event, "converting...")
-    else:
-        await edit_or_reply(event, "try `.nfc voice` or`.nfc mp3`")
-        return
+    event = await edit_or_reply(event, "`Converting...`")
     try:
         start = datetime.now()
         c_time = time.time()
@@ -302,7 +335,6 @@ async def _(event):
             await event.edit("not supported")
             os.remove(downloaded_file_name)
             return
-        logger.info(command_to_run)
         process = await asyncio.create_subprocess_exec(
             *command_to_run,
             stdout=asyncio.subprocess.PIPE,
@@ -328,23 +360,3 @@ async def _(event):
             )
             os.remove(new_required_file_name)
             await event.delete()
-
-
-CMD_HELP.update(
-    {
-        "fileconverts": "**Plugin : **`fileconverts`\
-    \n\n**Syntax : **`.stoi` reply to sticker\
-    \n**Usage :**Converts sticker to image\
-    \n\n**Syntax : **`.itos` reply to image\
-    \n**Usage :**Converts image to sticker\
-    \n\n**Syntax :** `.ftoi` reply to image file\
-    \n**Usage :** Converts Given image file to straemable form\
-    \n\n**Syntax :** `.gif` reply to animated sticker\
-    \n**Usage :** Converts Given animated sticker to gif\
-    \n\n**Syntax :** `.ttf file name` reply to text message\
-    \n**Usage :** Converts Given text message to required file(given file name)\
-    \n\n**Syntax :**`.nfc voice` or `.nfc mp3` reply to required media to extract voice/mp3 :\
-    \n**Usage :**Converts the required media file to voice or mp3 file.\
-    "
-    }
-)

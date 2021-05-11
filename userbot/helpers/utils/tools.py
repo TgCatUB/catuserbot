@@ -5,9 +5,12 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
 
-from ...managers import edit_delete, edit_or_reply
+from ...core.logger import logging
+from ...core.managers import edit_delete, edit_or_reply
 from ..tools import media_type
 from .utils import runcmd
+
+LOGS = logging.getLogger(__name__)
 
 
 async def media_to_pic(event, reply):
@@ -54,5 +57,5 @@ async def take_screen_shot(
     command = f"ffmpeg -ss {duration} -i '{video_file}' -vframes 1 '{thumb_image_path}'"
     err = (await runcmd(command))[1]
     if err:
-        print(err)
+        LOGS.error(err)
     return thumb_image_path if os.path.exists(thumb_image_path) else None

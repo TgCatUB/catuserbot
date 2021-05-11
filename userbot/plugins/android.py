@@ -1,27 +1,24 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-
-""" Userbot module containing commands related to android"""
-
 import json
 import re
 
 from bs4 import BeautifulSoup
 from requests import get
 
-GITHUB = "https://github.com"
-DEVICES_DATA = (
-    "https://raw.githubusercontent.com/androidtrackers/"
-    "certified-android-devices/master/devices.json"
+from . import catub, edit_delete, edit_or_reply
+
+plugin_category = "extra"
+
+
+@catub.cat_cmd(
+    pattern="magisk$",
+    command=("magisk", plugin_category),
+    info={
+        "header": "To Get latest Magisk releases",
+        "usage": "{tr}magisk",
+    },
 )
-
-
-@bot.on(admin_cmd(pattern=r"magisk"))
-@bot.on(sudo_cmd(pattern=r"magisk", allow_sudo=True))
-async def kakashi(magisk):
-    if magisk.fwd_from:
-        return
+async def kakashi(event):
+    "Get latest Magisk releases"
     magisk_repo = "https://raw.githubusercontent.com/topjohnwu/magisk_files/"
     magisk_dict = {
         "⦁ **Stable**": magisk_repo + "master/stable.json",
@@ -43,24 +40,27 @@ async def kakashi(magisk):
             f'[APK v{data["app"]["version"]}]({data["app"]["link"]}) | '
             f'[Uninstaller]({data["uninstaller"]["link"]})\n'
         )
-    await edit_or_reply(magisk, releases)
+    await edit_or_reply(event, releases)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"device(?: |$)(\S*)"))
-@bot.on(sudo_cmd(pattern=r"device(?: |$)(\S*)", allow_sudo=True))
-async def device_info(request):
-    if request.fwd_from:
-        return
-    # get android device basic info from its codename
-    textx = await request.get_reply_message()
-    codename = request.pattern_match.group(1)
-    if codename:
-        pass
-    elif textx:
-        codename = textx.text
-    else:
-        await edit_or_reply(request, "`Usage: .device <codename> / <model>`")
-        return
+@catub.cat_cmd(
+    pattern="device(?: |$)(\S*)",
+    command=("device", plugin_category),
+    info={
+        "header": "To get android device name/model from its codename",
+        "usage": "{tr}device <codename>",
+        "examples": "{tr}device whyred",
+    },
+)
+async def device_info(event):
+    "get android device name from its codename"
+    textx = await event.get_reply_message()
+    codename = event.pattern_match.group(1)
+    if not codename:
+        if textx:
+            codename = textx.text
+        else:
+            return await edit_delete(event, "`Usage: .device <codename> / <model>`")
     data = json.loads(
         get(
             "https://raw.githubusercontent.com/androidtrackers/"
@@ -78,18 +78,22 @@ async def device_info(request):
             )
     else:
         reply = f"`Couldn't find info about {codename}!`\n"
-    await edit_or_reply(request, reply)
+    await edit_or_reply(event, reply)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"codename(?: |)([\S]*)(?: |)([\s\S]*)"))
-@bot.on(sudo_cmd(pattern=r"codename(?: |)([\S]*)(?: |)([\s\S]*)", allow_sudo=True))
-async def codename_info(request):
-    if request.fwd_from:
-        return
-    # search for android codename
-    textx = await request.get_reply_message()
-    brand = request.pattern_match.group(1).lower()
-    device = request.pattern_match.group(2).lower()
+@catub.cat_cmd(
+    pattern="codename(?: |)([\S]*)(?: |)([\s\S]*)",
+    command=("codename", plugin_category),
+    info={
+        "header": "To Search for android device codename",
+        "usage": "{tr}codename <brand> <device>",
+        "examples": "{tr}codename Xiaomi Redmi Note 5 Pro",
+    },
+)
+async def codename_info(event):
+    textx = await event.get_reply_message()
+    brand = event.pattern_match.group(1).lower()
+    device = event.pattern_match.group(2).lower()
 
     if brand and device:
         pass
@@ -97,8 +101,7 @@ async def codename_info(request):
         brand = textx.text.split(" ")[0]
         device = " ".join(textx.text.split(" ")[1:])
     else:
-        await edit_or_reply(request, "`Usage: .codename <brand> <device>`")
-        return
+        return await edit_delete(event, "`Usage: .codename <brand> <device>`")
 
     data = json.loads(
         get(
@@ -106,7 +109,7 @@ async def codename_info(request):
             "certified-android-devices/master/by_brand.json"
         ).text
     )
-    devices_lower = {k.lower(): v for k, v in data.items()}  # Lower brand names in JSON
+    devices_lower = {k.lower(): v for k, v in data.items()}
     devices = devices_lower.get(brand)
     results = [
         i
@@ -125,26 +128,30 @@ async def codename_info(request):
             )
     else:
         reply = f"`Couldn't find {device} codename!`\n"
-    await edit_or_reply(request, reply)
+    await edit_or_reply(event, reply)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"specs(?: |)([\S]*)(?: |)([\s\S]*)"))
-@bot.on(sudo_cmd(pattern=r"specs(?: |)([\S]*)(?: |)([\s\S]*)", allow_sudo=True))
-async def devices_specifications(request):
-    if request.fwd_from:
-        return
-    # Mobile devices specifications
-    textx = await request.get_reply_message()
-    brand = request.pattern_match.group(1).lower()
-    device = request.pattern_match.group(2).lower()
+@catub.cat_cmd(
+    pattern="specs(?: |)([\S]*)(?: |)([\s\S]*)",
+    command=("specs", plugin_category),
+    info={
+        "header": "To Get info about android device .",
+        "usage": "{tr}specs",
+        "examples": "{tr}specs Xiaomi Redmi Note 5 Pro",
+    },
+)
+async def devices_specifications(event):
+    "Mobile devices specifications"
+    textx = await event.get_reply_message()
+    brand = event.pattern_match.group(1).lower()
+    device = event.pattern_match.group(2).lower()
     if brand and device:
         pass
     elif textx:
         brand = textx.text.split(" ")[0]
         device = " ".join(textx.text.split(" ")[1:])
     else:
-        await edit_or_reply(request, "`Usage: .specs <brand> <device>`")
-        return
+        return await edit_delete(event, "`Usage: .specs <brand> <device>`")
     all_brands = (
         BeautifulSoup(
             get("https://www.devicespecifications.com/en/brand-more").content, "lxml"
@@ -158,8 +165,7 @@ async def devices_specifications(request):
             i["href"] for i in all_brands if brand == i.text.strip().lower()
         ][0]
     except IndexError:
-        await edit_or_reply(request, f"`{brand} is unknown brand!`")
-        return
+        return await edit_delete(event, f"`{brand} is unknown brand!`")
     devices = BeautifulSoup(get(brand_page_url).content, "lxml").findAll(
         "div", {"class": "model-listing-container-80"}
     )
@@ -171,8 +177,7 @@ async def devices_specifications(request):
             if device in i.text.strip().lower()
         ]
     except IndexError:
-        await edit_or_reply(request, f"`can't find {device}!`")
-        return
+        return await edit_delete(event, f"`can't find {device}!`")
     if len(device_page_url) > 2:
         device_page_url = device_page_url[:2]
     reply = ""
@@ -190,29 +195,32 @@ async def devices_specifications(request):
                 .strip()
             )
             reply += f"**{title}**: {data}\n"
-    await edit_or_reply(request, reply)
+    await edit_or_reply(event, reply)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"twrp(?: |$)(\S*)"))
-@bot.on(sudo_cmd(pattern=r"twrp(?: |$)(\S*)", allow_sudo=True))
-async def twrp(request):
-    if request.fwd_from:
-        return
-    # get android device twrp
-    textx = await request.get_reply_message()
-    device = request.pattern_match.group(1)
+@catub.cat_cmd(
+    pattern="twrp(?: |$)(\S*)",
+    command=("twrp", plugin_category),
+    info={
+        "header": "To Get latest twrp download links for android device.",
+        "usage": "{tr}twrp <codename>",
+        "examples": "{tr}twrp whyred",
+    },
+)
+async def twrp(event):
+    "get android device twrp"
+    textx = await event.get_reply_message()
+    device = event.pattern_match.group(1)
     if device:
         pass
     elif textx:
         device = textx.text.split(" ")[0]
     else:
-        await edit_or_reply(request, "`Usage: .twrp <codename>`")
-        return
+        return await edit_delete(event, "`Usage: .twrp <codename>`")
     url = get(f"https://dl.twrp.me/{device}/")
     if url.status_code == 404:
         reply = f"`Couldn't find twrp downloads for {device}!`\n"
-        await edit_or_reply(request, reply)
-        return
+        return await edit_delete(event, reply)
     page = BeautifulSoup(url.content, "lxml")
     download = page.find("table").find("tr").find("a")
     dl_link = f"https://dl.twrp.me{download['href']}"
@@ -224,21 +232,4 @@ async def twrp(request):
         f"[{dl_file}]({dl_link}) - __{size}__\n"
         f"**Updated:** __{date}__\n"
     )
-    await edit_or_reply(request, reply)
-
-
-CMD_HELP.update(
-    {
-        "android": "**Plugin : **`android`\
-\n\n  •  **Syntax : **`.magisk`\
-\n  •  **Function :** __Get latest Magisk releases__\
-\n\n  •  **Syntax : **`.device <codename>`\
-\n  •  **Function :** __Get info about android device codename or model.__\
-\n\n  •  **Syntax : **`.codename <brand> <device>`\
-\n  •  **Function :** __Search for android device codename.__\
-\n\n  •  **Syntax : **`.specs <brand> <device>`\
-\n  •  **Function :** __Get device specifications info.__\
-\n\n  •  **Syntax : **`.twrp <codename>`\
-\n  •  **Function : **__Get latest twrp download for android device.__"
-    }
-)
+    await edit_or_reply(event, reply)

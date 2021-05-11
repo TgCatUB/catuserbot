@@ -9,73 +9,15 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 
-from . import LOGS, get_user_from_event, spamwatch
+from userbot import catub
+from userbot.core.logger import logging
 
-TMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
+from ..Config import Config
+from ..core.managers import edit_or_reply
+from . import get_user_from_event, reply_id, spamwatch
 
-
-@bot.on(admin_cmd(pattern="userinfo(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="userinfo(?: |$)(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    replied_user, error_i_a = await get_full_user(event)
-    if replied_user is None:
-        return await edit_or_reply(event, f"`{str(error_i_a)}`")
-    user_id = replied_user.user.id
-    # some people have weird HTML in their names
-    first_name = html.escape(replied_user.user.first_name)
-    # https://stackoverflow.com/a/5072031/4723940
-    # some Deleted Accounts do not have first_name
-    if first_name is not None:
-        # some weird people (like me) have more than 4096 characters in their
-        # names
-        first_name = first_name.replace("\u2060", "")
-    # inspired by https://telegram.dog/afsaI181
-    common_chats = replied_user.common_chats_count
-    try:
-        dc_id, location = get_input_location(replied_user.profile_photo)
-    except Exception:
-        dc_id = "Couldn't fetch DC ID!"
-    if spamwatch:
-        ban = spamwatch.get_ban(user_id)
-        if ban:
-            sw = f"**Spamwatch Banned :** `True` \n       **-**🤷‍♂️**Reason : **`{ban.reason}`"
-        else:
-            sw = f"**Spamwatch Banned :** `False`"
-    else:
-        sw = "**Spamwatch Banned :**`Not Connected`"
-    try:
-        casurl = "https://api.cas.chat/check?user_id={}".format(user_id)
-        data = get(casurl).json()
-    except Exception as e:
-        LOGS.info(e)
-        data = None
-    if data:
-        if data["ok"]:
-            cas = "**Antispam(CAS) Banned :** `True`"
-        else:
-            cas = "**Antispam(CAS) Banned :** `False`"
-    else:
-        cas = "**Antispam(CAS) Banned :** `Couldn't Fetch`"
-    caption = """**Info of [{}](tg://user?id={}):
-   -🔖ID : **`{}`
-   **-**👥**Groups in Common : **`{}`
-   **-**🌏**Data Centre Number : **`{}`
-   **-**🔏**Restricted by telegram : **`{}`
-   **-**🦅{}
-   **-**👮‍♂️{}
-""".format(
-        first_name,
-        user_id,
-        user_id,
-        common_chats,
-        dc_id,
-        replied_user.user.restricted,
-        sw,
-        cas,
-    )
-    await edit_or_reply(event, caption)
+plugin_category = "utils"
+LOGS = logging.getLogger(__name__)
 
 
 async def get_full_user(event):
@@ -116,42 +58,6 @@ async def get_full_user(event):
         except Exception as e:
             return None, e
     return None, "No input is found"
-
-
-@bot.on(admin_cmd(pattern="whois(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="whois(?: |$)(.*)", allow_sudo=True))
-async def who(event):
-    cat = await edit_or_reply(event, "`Fetching userinfo wait....`")
-    if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(TMP_DOWNLOAD_DIRECTORY)
-    replied_user = await get_user(event)
-    if replied_user is None:
-        return await edit_or_reply(
-            cat, "`Well that's an anonymous admin. I can't fetch details!`"
-        )
-    try:
-        photo, caption = await fetch_info(replied_user, event)
-    except AttributeError:
-        await edit_or_reply(cat, "`Could not fetch info of that user.`")
-        return
-    message_id_to_reply = event.message.reply_to_msg_id
-    if not message_id_to_reply:
-        message_id_to_reply = None
-    try:
-        await event.client.send_file(
-            event.chat_id,
-            photo,
-            caption=caption,
-            link_preview=False,
-            force_document=False,
-            reply_to=message_id_to_reply,
-            parse_mode="html",
-        )
-        if not photo.startswith("http"):
-            os.remove(photo)
-        await cat.delete()
-    except TypeError:
-        await cat.edit(caption, parse_mode="html")
 
 
 async def get_user(event):
@@ -211,7 +117,9 @@ async def fetch_info(replied_user, event):
     restricted = replied_user.user.restricted
     verified = replied_user.user.verified
     photo = await event.client.download_profile_photo(
-        user_id, TMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg", download_big=True
+        user_id,
+        Config.TMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg",
+        download_big=True,
     )
     first_name = (
         first_name.replace("\u2060", "")
@@ -237,41 +145,131 @@ async def fetch_info(replied_user, event):
     return photo, caption
 
 
-@bot.on(admin_cmd(pattern="link(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="link(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="userinfo(?: |$)(.*)",
+    command=("userinfo", plugin_category),
+    info={
+        "header": "Gets information of an user such as restrictions ban by spamwatch or cas.",
+        "description": "That is like whether he banned is spamwatch or cas and small info like groups in common, dc ..etc.",
+        "usage": "{tr}userinfo <username/userid/reply>",
+    },
+)
+async def _(event):
+    "Gets information of an user such as restrictions ban by spamwatch or cas"
+    replied_user, error_i_a = await get_full_user(event)
+    if replied_user is None:
+        return await edit_or_reply(event, f"`{str(error_i_a)}`")
+    user_id = replied_user.user.id
+    # some people have weird HTML in their names
+    first_name = html.escape(replied_user.user.first_name)
+    # https://stackoverflow.com/a/5072031/4723940
+    # some Deleted Accounts do not have first_name
+    if first_name is not None:
+        # some weird people (like me) have more than 4096 characters in their
+        # names
+        first_name = first_name.replace("\u2060", "")
+    # inspired by https://telegram.dog/afsaI181
+    common_chats = replied_user.common_chats_count
+    try:
+        dc_id, location = get_input_location(replied_user.profile_photo)
+    except Exception:
+        dc_id = "Couldn't fetch DC ID!"
+    if spamwatch:
+        ban = spamwatch.get_ban(user_id)
+        if ban:
+            sw = f"**Spamwatch Banned :** `True` \n       **-**🤷‍♂️**Reason : **`{ban.reason}`"
+        else:
+            sw = f"**Spamwatch Banned :** `False`"
+    else:
+        sw = "**Spamwatch Banned :**`Not Connected`"
+    try:
+        casurl = "https://api.cas.chat/check?user_id={}".format(user_id)
+        data = get(casurl).json()
+    except Exception as e:
+        LOGS.info(e)
+        data = None
+    if data:
+        if data["ok"]:
+            cas = "**Antispam(CAS) Banned :** `True`"
+        else:
+            cas = "**Antispam(CAS) Banned :** `False`"
+    else:
+        cas = "**Antispam(CAS) Banned :** `Couldn't Fetch`"
+    caption = """**Info of [{}](tg://user?id={}):
+   -🔖ID : **`{}`
+   **-**👥**Groups in Common : **`{}`
+   **-**🌏**Data Centre Number : **`{}`
+   **-**🔏**Restricted by telegram : **`{}`
+   **-**🦅{}
+   **-**👮‍♂️{}
+""".format(
+        first_name,
+        user_id,
+        user_id,
+        common_chats,
+        dc_id,
+        replied_user.user.restricted,
+        sw,
+        cas,
+    )
+    await edit_or_reply(event, caption)
+
+
+@catub.cat_cmd(
+    pattern="whois(?: |$)(.*)",
+    command=("whois", plugin_category),
+    info={
+        "header": "Gets info of an user.",
+        "description": "User compelete details.",
+        "usage": "{tr}whois <username/userid/reply>",
+    },
+)
+async def who(event):
+    "Gets info of an user"
+    cat = await edit_or_reply(event, "`Fetching userinfo wait....`")
+    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
+    replied_user = await get_user(event)
+    if replied_user is None:
+        return await edit_or_reply(
+            cat, "`Well that's an anonymous admin. I can't fetch details!`"
+        )
+    try:
+        photo, caption = await fetch_info(replied_user, event)
+    except AttributeError:
+        return await edit_or_reply(cat, "`Could not fetch info of that user.`")
+    message_id_to_reply = await reply_id(event)
+    try:
+        await event.client.send_file(
+            event.chat_id,
+            photo,
+            caption=caption,
+            link_preview=False,
+            force_document=False,
+            reply_to=message_id_to_reply,
+            parse_mode="html",
+        )
+        if not photo.startswith("http"):
+            os.remove(photo)
+        await cat.delete()
+    except TypeError:
+        await cat.edit(caption, parse_mode="html")
+
+
+@catub.cat_cmd(
+    pattern="link(?: |$)(.*)",
+    command=("link", plugin_category),
+    info={
+        "header": "Generates a link to the user's PM .",
+        "usage": "{tr}link <username/userid/reply>",
+    },
+)
 async def permalink(mention):
-    """For .link command, generates a link to the user's PM with a custom text."""
+    """Generates a link to the user's PM with a custom text."""
     user, custom = await get_user_from_event(mention)
     if not user:
         return
     if custom:
-        await edit_or_reply(mention, f"[{custom}](tg://user?id={user.id})")
-    else:
-        tag = (
-            user.first_name.replace("\u2060", "") if user.first_name else user.username
-        )
-        await edit_or_reply(mention, f"[{tag}](tg://user?id={user.id})")
-
-
-async def ge(user, event):
-    if isinstance(user, str):
-        user = int(user)
-    try:
-        user_obj = await event.client.get_entity(user)
-    except (TypeError, ValueError) as err:
-        await event.edit(str(err))
-        return None
-    return user_obj
-
-
-CMD_HELP.update(
-    {
-        "whois": "**Plugin : **`whois`\
-    \n\n  •  **Syntax : **`.whois <username> or reply to someones text with .whois`\
-    \n  •  **Function : **__Gets info of an user.__\
-    \n\n  •  **Syntax : **`.userinfo <username> or reply to someones text with .userinfo`\
-    \n  •  **Function : **__Gets information of an user such as restrictions ban by spamwatch or cas__\
-    \n\n  •  **Syntax : **`.link id/username/reply`\
-    \n  •  **Function : **__Generates a link to the user's PM .__"
-    }
-)
+        return await edit_or_reply(mention, f"[{custom}](tg://user?id={user.id})")
+    tag = user.first_name.replace("\u2060", "") if user.first_name else user.username
+    await edit_or_reply(mention, f"[{tag}](tg://user?id={user.id})")

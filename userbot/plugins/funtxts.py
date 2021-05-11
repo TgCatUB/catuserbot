@@ -1,44 +1,49 @@
 import nekos
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="tcat$"))
-@bot.on(sudo_cmd(pattern="tcat$", allow_sudo=True))
+from ..core.managers import edit_or_reply
+
+plugin_category = "fun"
+
+
+@catub.cat_cmd(
+    pattern="tcat$",
+    command=("tcat", plugin_category),
+    info={
+        "header": "Some random cat facial text art",
+        "usage": "{tr}tcat",
+    },
+)
 async def hmm(cat):
-    if cat.fwd_from:
-        return
+    "Some random cat facial text art"
     reactcat = nekos.textcat()
     await edit_or_reply(cat, reactcat)
 
 
-@bot.on(admin_cmd(pattern="why$"))
-@bot.on(sudo_cmd(pattern="why$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="why$",
+    command=("why", plugin_category),
+    info={
+        "header": "Sends you some random Funny questions",
+        "usage": "{tr}why",
+    },
+)
 async def hmm(cat):
-    if cat.fwd_from:
-        return
+    "Some random Funny questions"
     whycat = nekos.why()
     await edit_or_reply(cat, whycat)
 
 
-@bot.on(admin_cmd(pattern="fact$"))
-@bot.on(sudo_cmd(pattern="fact$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="fact$",
+    command=("fact", plugin_category),
+    info={
+        "header": "Sends you some random facts",
+        "usage": "{tr}fact",
+    },
+)
 async def hmm(cat):
-    if cat.fwd_from:
-        return
+    "Some random facts"
     factcat = nekos.fact()
     await edit_or_reply(cat, factcat)
-
-
-CMD_HELP.update(
-    {
-        "funtxts": """**Plugin : **`funtxts`
-
-  •  **Syntax : **`.tcat`
-  •  **Function : **__Sens you some random cat facial text art__
-
-  •  **Syntax : **`.why`
-  •  **Function : **__Asks some random Funny questions__
-
-  •  **Syntax : **`.fact`
-  •  **Function : **__Sends you some random facts__"""
-    }
-)

@@ -5,8 +5,9 @@ from typing import Tuple
 
 from telethon import functions, types
 
-from userbot import LOGS
+from ...core.logger import logging
 
+LOGS = logging.getLogger(__name__)
 
 # executing of terminal commands
 async def runcmd(cmd: str) -> Tuple[str, str, int, int]:

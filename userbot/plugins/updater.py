@@ -7,6 +7,14 @@ import urllib3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
+from userbot import catub
+
+from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import _catutils
+
+plugin_category = "tools"
+
 # -- Constants -- #
 
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME or None
@@ -105,10 +113,73 @@ async def update(event, repo, ups_rem, ac_br):
     return
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"update(| now)$"))
-@bot.on(sudo_cmd(pattern="update(| now)$", allow_sudo=True))
+async def deploy(event, repo, ups_rem, ac_br, txt):
+    if HEROKU_API_KEY is None:
+        return await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
+    heroku = heroku3.from_key(HEROKU_API_KEY)
+    heroku_app = None
+    heroku_applications = heroku.apps()
+    if HEROKU_APP_NAME is None:
+        await event.edit(
+            "`Please set up the` **HEROKU_APP_NAME** `Var`"
+            " to be able to deploy your userbot...`"
+        )
+        repo.__del__()
+        return
+    for app in heroku_applications:
+        if app.name == HEROKU_APP_NAME:
+            heroku_app = app
+            break
+    if heroku_app is None:
+        await event.edit(
+            f"{txt}\n" "`Invalid Heroku credentials for deploying userbot dyno.`"
+        )
+        return repo.__del__()
+    await event.edit(
+        "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
+    )
+    ups_rem.fetch(ac_br)
+    repo.git.reset("--hard", "FETCH_HEAD")
+    heroku_git_url = heroku_app.git_url.replace(
+        "https://", "https://api:" + HEROKU_API_KEY + "@"
+    )
+    if "heroku" in repo.remotes:
+        remote = repo.remote("heroku")
+        remote.set_url(heroku_git_url)
+    else:
+        remote = repo.create_remote("heroku", heroku_git_url)
+    try:
+        remote.push(refspec="HEAD:refs/heads/master", force=True)
+    except Exception as error:
+        await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
+        return repo.__del__()
+    build_status = app.builds(order_by="created_at", sort="desc")[0]
+    if build_status.status == "failed":
+        await event.edit("`Build failed!\n" "Cancelled or there were some errors...`")
+        await asyncio.sleep(5)
+        return await event.delete()
+    await event.edit("`Deply was failed better to do manual deploy.`")
+
+
+@catub.cat_cmd(
+    pattern="update(| now)?$",
+    command=("update", plugin_category),
+    info={
+        "header": "To update userbot.",
+        "description": "I recommend you to do update deploy atlest once a week.",
+        "options": {
+            "now": "Will update bot but requirements doesnt update.",
+            "deploy": "Bot will update completly with requirements also.",
+        },
+        "usage": [
+            "{tr}update",
+            "{tr}update now",
+            "{tr}update deploy",
+        ],
+    },
+)
 async def upstream(event):
-    "For .update command, check if the bot is up to date, update if specified"
+    "To check if the bot is up to date and update if specified"
     conf = event.pattern_match.group(1).strip()
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
@@ -181,69 +252,14 @@ async def upstream(event):
     return
 
 
-async def deploy(event, repo, ups_rem, ac_br, txt):
-    if HEROKU_API_KEY is not None:
-        heroku = heroku3.from_key(HEROKU_API_KEY)
-        heroku_app = None
-        heroku_applications = heroku.apps()
-        if HEROKU_APP_NAME is None:
-            await event.edit(
-                "`Please set up the` **HEROKU_APP_NAME** `Var`"
-                " to be able to deploy your userbot...`"
-            )
-            repo.__del__()
-            return
-        for app in heroku_applications:
-            if app.name == HEROKU_APP_NAME:
-                heroku_app = app
-                break
-        if heroku_app is None:
-            await event.edit(
-                f"{txt}\n" "`Invalid Heroku credentials for deploying userbot dyno.`"
-            )
-            return repo.__del__()
-        await event.edit(
-            "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
-        )
-        ups_rem.fetch(ac_br)
-        repo.git.reset("--hard", "FETCH_HEAD")
-        heroku_git_url = heroku_app.git_url.replace(
-            "https://", "https://api:" + HEROKU_API_KEY + "@"
-        )
-        if "heroku" in repo.remotes:
-            remote = repo.remote("heroku")
-            remote.set_url(heroku_git_url)
-        else:
-            remote = repo.create_remote("heroku", heroku_git_url)
-        try:
-            remote.push(refspec="HEAD:refs/heads/master", force=True)
-        except Exception as error:
-            await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
-            return repo.__del__()
-        build_status = app.builds(order_by="created_at", sort="desc")[0]
-        if build_status.status == "failed":
-            await event.edit(
-                "`Build failed!\n" "Cancelled or there were some errors...`"
-            )
-            await asyncio.sleep(5)
-            return await event.delete()
-        await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
-    else:
-        await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
-    return
-
-
-@bot.on(admin_cmd(outgoing=True, pattern=r"update deploy$"))
-@bot.on(sudo_cmd(pattern="update deploy$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="update deploy$",
+)
 async def upstream(event):
     event = await edit_or_reply(event, "`Pulling the catpack repo wait a sec ....`")
     off_repo = "https://github.com/Mr-confused/catpack"
     os.chdir("/app")
-    catcmd = f"rm -rf .git"
-    try:
-        await _catutils.runcmd(catcmd)
-    except BaseException:
-        pass
+    await _catutils.runcmd(f"rm -rf .git")
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
@@ -272,9 +288,16 @@ async def upstream(event):
     await deploy(event, repo, ups_rem, ac_br, txt)
 
 
-@bot.on(admin_cmd(pattern=r"badcat$", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"badcat$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="badcat$",
+    command=("badcat", plugin_category),
+    info={
+        "header": "To update to badcat( for extra masala and gali).",
+        "usage": "{tr}badcat",
+    },
+)
 async def variable(var):
+    "To update to badcat( for extra masala and gali)."
     if Config.HEROKU_API_KEY is None:
         return await edit_delete(
             var,
@@ -290,21 +313,3 @@ async def variable(var):
     heroku_var = app.config()
     await edit_or_reply(var, f"`Changing goodcat to badcat wait for 2-3 minutes.`")
     heroku_var["UPSTREAM_REPO"] = "https://github.com/Jisan09/catuserbot"
-
-
-CMD_HELP.update(
-    {
-        "updater": "**Plugin : **`updater`"
-        "\n\n•  **Syntax : **`.update`"
-        "\n•  **Function :** Checks if the main userbot repository has any updates "
-        "and shows a changelog if so."
-        "\n\n•  **Syntax : **`.update now`"
-        "\n•  **Function :** Update your userbot, "
-        "if there are any updates in your userbot repository.if you restart these goes back to last time when you deployed"
-        "\n\n•  **Syntax : **`.update deploy`"
-        "\n•  **Function :** Deploy your userbot.So even you restart it doesnt go back to previous version"
-        "\nThis will triggered deploy always, even no updates."
-        "\n\n•  **Syntax : **`.badcat`"
-        "\n•  **Function :** Shifts from official cat repo to jisan's repo(for gali commands)"
-    }
-)

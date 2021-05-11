@@ -1,14 +1,25 @@
 # credits: @Mr_Hops
-
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="recognize ?(.*)"))
-@bot.on(sudo_cmd(pattern="recognize ?(.*)", allow_sudo=True))
+from ..core.managers import edit_or_reply
+
+plugin_category = "utils"
+
+
+@catub.cat_cmd(
+    pattern="recognize ?(.*)",
+    command=("recognize ?(.*)", plugin_category),
+    info={
+        "header": "To recognize a image",
+        "description": "Get information about an image using AWS Rekognition. Find out information including detected labels, faces. text and moderation tags",
+        "usage": "{tr}recognize",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To recognize a image.",
     if not event.reply_to_msg_id:
         await edit_or_reply(event, "Reply to any user's media message.")
         return
@@ -42,13 +53,3 @@ async def _(event):
             await cat.edit("sorry, I couldnt find it")
 
         await event.client.send_read_acknowledge(conv.chat_id)
-
-
-CMD_HELP.update(
-    {
-        "recognize": "**Plugin : **`recognize`\
-        \n\n**Syntax : **`.recognize reply this to any image file`\
-    \n**Function : **__Get information about an image using AWS Rekognition.\
-    \nFind out information including detected labels, faces. text and moderation tags.__"
-    }
-)

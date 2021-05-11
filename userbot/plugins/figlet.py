@@ -1,6 +1,9 @@
 import pyfiglet
 
-from . import deEmojify
+from ..helpers.utils import _format
+from . import _format, catub, deEmojify, edit_delete, edit_or_reply
+
+plugin_category = "extra"
 
 CMD_FIG = {
     "slant": "slant",
@@ -21,11 +24,34 @@ CMD_FIG = {
 }
 
 
-@bot.on(admin_cmd(pattern="figlet(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="figlet(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="figlet(?: |$)(.*)",
+    command=("figlet", plugin_category),
+    info={
+        "header": "Changes the given text into the given style",
+        "usage": ["{tr}figlet <style> ; <text>", "{tr}figlet <text>"],
+        "examples": ["{tr}figlet digi ; hello", "{tr}figlet hello"],
+        "styles": [
+            "slant",
+            "3D",
+            "5line",
+            "alpha",
+            "banner",
+            "doh",
+            "iso",
+            "letter",
+            "allig",
+            "dotm",
+            "bubble",
+            "bulb",
+            "digi",
+            "binary",
+            "basic",
+        ],
+    },
+)
 async def figlet(event):
-    if event.fwd_from:
-        return
+    "Changes the given text into the given style"
     input_str = event.pattern_match.group(1)
     if ";" in input_str:
         cmd, text = input_str.split(";", maxsplit=1)
@@ -47,14 +73,4 @@ async def figlet(event):
         result = pyfiglet.figlet_format(deEmojify(text), font=font)
     else:
         result = pyfiglet.figlet_format(deEmojify(text))
-    await edit_or_reply(event, result, parse_mode=parse_pre)
-
-
-CMD_HELP.update(
-    {
-        "figlet": "**Plugin :**`figlet`\
-        \n\n• **Syntax : **`.figlet type ; text`\
-    \n• **Usage : **the types are `slant`, `3D`, `5line`, `alpha`, `banner`, `doh`, `iso`, `letter`, `allig`, `dotm`, `bubble`, `bulb`, `digi`, `binary`, `basic`\
-    \n• **Example : **`.figlet digi ; hello`"
-    }
-)
+    await edit_or_reply(event, result, parse_mode=_format.parse_pre)

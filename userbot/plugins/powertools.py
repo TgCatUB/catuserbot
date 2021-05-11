@@ -2,29 +2,45 @@ import sys
 from os import execl
 from time import sleep
 
-from . import BOTLOG, BOTLOG_CHATID, HEROKU_APP, bot
+from userbot import catub
+
+from ..core.managers import edit_or_reply
+from . import BOTLOG, BOTLOG_CHATID, HEROKU_APP
+
+plugin_category = "tools"
 
 
-@bot.on(admin_cmd(pattern="restart$"))
-@bot.on(sudo_cmd(pattern="restart$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="restart$",
+    command=("restart", plugin_category),
+    info={
+        "header": "Restarts the bot !!",
+        "usage": "{tr}restart",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Restarts the bot !!"
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#RESTART \n" "Bot Restarted")
     await edit_or_reply(
         event,
         "Restarted. `.ping` me or `.help` to check if I am online, actually it takes 1-2 min for restarting",
     )
-    await bot.disconnect()
+    await event.client.disconnect()
     execl(sys.executable, sys.executable, *sys.argv)
 
 
-@bot.on(admin_cmd(pattern="shutdown$"))
-@bot.on(sudo_cmd(pattern="shutdown$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="shutdown$",
+    command=("shutdown", plugin_category),
+    info={
+        "header": "Shutdowns the bot !!",
+        "description": "To turn off the dyno of heroku. you cant turn on by bot you need to got to heroku and turn on or use @hk_heroku_bot",
+        "usage": "{tr}shutdown",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Shutdowns the bot"
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n" "Bot shut down")
     await edit_or_reply(event, "`Turning off bot now ...Manually turn me on later`")
@@ -34,11 +50,17 @@ async def _(event):
         sys.exit(0)
 
 
-@bot.on(admin_cmd(pattern="sleep( [0-9]+)?$"))
-@bot.on(sudo_cmd(pattern="sleep( [0-9]+)?$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="sleep( [0-9]+)?$",
+    command=("sleep", plugin_category),
+    info={
+        "header": "Userbot will stop working for the mentioned time.",
+        "usage": "{tr}sleep <seconds>",
+        "examples": "{tr}sleep 60",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To sleep the userbot"
     if " " not in event.pattern_match.group(1):
         return await edit_or_reply(event, "Syntax: `.sleep time`")
     counter = int(event.pattern_match.group(1))
@@ -50,16 +72,3 @@ async def _(event):
     event = await edit_or_reply(event, f"`ok, let me sleep for {counter} seconds`")
     sleep(counter)
     await event.edit("`OK, I'm awake now.`")
-
-
-CMD_HELP.update(
-    {
-        "powertools": "**Plugin : **`powertools`\
-        \n\n  •  **Syntax : **`.restart`\
-        \n  •  **Function : **__Restarts the bot !!__\
-        \n\n  •  **Syntax : **`.sleep <seconds>`\
-        \n  •  **Function: **__Userbots get tired too. Let yours snooze for a few seconds.__\
-        \n\n  •  **Syntax : **`.shutdown`\
-        \n**  •  Function : **__To turn off the dyno of heroku. you cant turn on by bot you need to got to heroku and turn on or use__ @hk_heroku_bot"
-    }
-)

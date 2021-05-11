@@ -1,15 +1,24 @@
-"""Get info about a File Extension
-Syntax: .filext EXTENSION"""
-
 import requests
 from bs4 import BeautifulSoup
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="filext (.*)"))
-@bot.on(sudo_cmd(pattern="filext (.*)", allow_sudo=True))
+from ..core.managers import edit_or_reply
+
+plugin_category = "utils"
+
+
+@catub.cat_cmd(
+    pattern="filext(?: |$)(.*)",
+    command=("filext", plugin_category),
+    info={
+        "header": "Shows you the detailed information of given extension type.",
+        "usage": "{tr}filext <extension>",
+        "examples": "{tr}filext py",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Shows you the detailed information of given extension type."
     sample_url = "https://www.fileext.com/file-extension/{}.html"
     input_str = event.pattern_match.group(1).lower()
     response_api = requests.get(sample_url.format(input_str))
@@ -20,24 +29,10 @@ async def _(event):
         ext_details = soup.find_all("td", {"colspan": "3"})[-1].text
         await edit_or_reply(
             event,
-            "**File Extension**: `{}`\n**Description**: `{}`".format(
-                input_str, ext_details
-            ),
+            f"**File Extension**: `{input_str}`\n**Description**: `{ext_details}`",
         )
     else:
         await edit_or_reply(
             event,
-            "https://www.fileext.com/ responded with {} for query: {}".format(
-                status_code, input_str
-            ),
+            f"https://www.fileext.com/ responded with {status_code} for query: {input_str}",
         )
-
-
-CMD_HELP.update(
-    {
-        "filext": """**Plugin : **`filext`
-    
-  • **Syntax : **`.filext <extension name>`
-  • **Function : **__Shows you the detailed information that extension type__"""
-    }
-)
