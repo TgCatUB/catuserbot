@@ -3,7 +3,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
-
+from .. import catub
 # the secret configuration specific things
 from ..Config import Config
 from ..core.logger import logging
