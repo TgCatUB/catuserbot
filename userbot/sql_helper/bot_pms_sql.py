@@ -11,7 +11,6 @@ from . import (
 
 
 class Bot_Users(BASE):
-    """ Table to store the received messages """
     __tablename__ = "bot_users"
     message_id = Column(Integer, primary_key=True)
     first_name = Column(UnicodeText)
@@ -34,14 +33,12 @@ def add_user_to_db(
     chat_id,
     reply_id,
 ):
-    """ add the message to the table """
     user = Bot_Users(message_id,first_name, str(chat_id), reply_id)
     SESSION.add(user)
     SESSION.commit()
     return True
 
 def get_user_id(message_id):
-    """ get the user_id from the message_id """
     try:
         _result = SESSION.query(Bot_Users).get(str(message_id))
         if _result:
@@ -51,7 +48,6 @@ def get_user_id(message_id):
         SESSION.close() 
 
 def get_user_name(message_id):
-    """ get the user name from the message_id """
     try:
         _result = SESSION.query(Bot_Users).get(str(message_id))
         if _result:
