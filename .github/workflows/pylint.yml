@@ -27,7 +27,7 @@ jobs:
       # commit changes
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'pylint: autofixes'
+          commit_message: 'pylint: auto fixes'
           commit_options: '--no-verify'
           repository: .
           commit_user_name: sandy1709
