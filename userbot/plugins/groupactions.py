@@ -3,11 +3,17 @@ from asyncio import sleep
 from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError
 from telethon.tl import functions
 from telethon.tl.functions.channels import EditBannedRequest
-from telethon.tl.types import (ChannelParticipantsAdmins,
-                               ChannelParticipantsKicked, ChatBannedRights,
-                               UserStatusEmpty, UserStatusLastMonth,
-                               UserStatusLastWeek, UserStatusOffline,
-                               UserStatusOnline, UserStatusRecently)
+from telethon.tl.types import (
+    ChannelParticipantsAdmins,
+    ChannelParticipantsKicked,
+    ChatBannedRights,
+    UserStatusEmpty,
+    UserStatusLastMonth,
+    UserStatusLastWeek,
+    UserStatusOffline,
+    UserStatusOnline,
+    UserStatusRecently,
+)
 
 from userbot import catub
 from userbot.core.logger import logging

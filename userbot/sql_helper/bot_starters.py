@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, UnicodeText
+from sqlalchemy import Column, String, UnicodeText
 
 from . import BASE, SESSION
 

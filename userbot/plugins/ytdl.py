@@ -10,14 +10,19 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import types
 from telethon.utils import get_attributes
 from youtube_dl import YoutubeDL
-from youtube_dl.utils import (ContentTooShortError, DownloadError,
-                              ExtractorError, GeoRestrictedError,
-                              MaxDownloadsReached, PostProcessingError,
-                              UnavailableVideoError, XAttrMetadataError)
+from youtube_dl.utils import (
+    ContentTooShortError,
+    DownloadError,
+    ExtractorError,
+    GeoRestrictedError,
+    MaxDownloadsReached,
+    PostProcessingError,
+    UnavailableVideoError,
+    XAttrMetadataError,
+)
 
 from ..helpers.utils import _format
-from . import (catub, edit_delete, edit_or_reply, hmention, progress, reply_id,
-               ytsearch)
+from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, ytsearch
 
 plugin_category = "misc"
 

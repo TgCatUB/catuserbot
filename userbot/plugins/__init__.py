@@ -17,8 +17,7 @@ from ..core.session import catub
 from ..helpers import *
 from ..helpers import _cattools, _catutils, _format
 from ..helpers.tools import media_type
-from ..helpers.utils import (_cattools, _catutils, _format, install_pip,
-                             reply_id)
+from ..helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
 from ..utils import admin_cmd, sudo_cmd
 
 # =================== CONSTANT ===================

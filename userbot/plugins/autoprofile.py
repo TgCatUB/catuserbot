@@ -19,8 +19,16 @@ from telethon.tl import functions
 from ..Config import Config
 from ..helpers.utils import _format
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from . import (AUTONAME, BOTLOG, BOTLOG_CHATID, DEFAULT_BIO, _catutils, catub,
-               edit_delete, logging)
+from . import (
+    AUTONAME,
+    BOTLOG,
+    BOTLOG_CHATID,
+    DEFAULT_BIO,
+    _catutils,
+    catub,
+    edit_delete,
+    logging,
+)
 
 plugin_category = "tools"
 DEFAULTUSERBIO = DEFAULT_BIO or " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "

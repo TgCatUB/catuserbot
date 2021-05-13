@@ -6,8 +6,15 @@ Idea by @BlazingRobonix
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..sql_helper.echo_sql import (addecho, get_all_echos, get_echos, is_echo,
-                                   remove_all_echos, remove_echo, remove_echos)
+from ..sql_helper.echo_sql import (
+    addecho,
+    get_all_echos,
+    get_echos,
+    is_echo,
+    remove_all_echos,
+    remove_echo,
+    remove_echos,
+)
 from . import get_user_from_event
 
 plugin_category = "fun"

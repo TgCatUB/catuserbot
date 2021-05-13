@@ -4,8 +4,16 @@ import html
 from telethon.tl import functions
 
 from ..Config import Config
-from . import (ALIVE_NAME, AUTONAME, BOTLOG, BOTLOG_CHATID, DEFAULT_BIO, catub,
-               edit_delete, get_user_from_event)
+from . import (
+    ALIVE_NAME,
+    AUTONAME,
+    BOTLOG,
+    BOTLOG_CHATID,
+    DEFAULT_BIO,
+    catub,
+    edit_delete,
+    get_user_from_event,
+)
 
 plugin_category = "utils"
 DEFAULTUSER = str(AUTONAME) if AUTONAME else str(ALIVE_NAME)

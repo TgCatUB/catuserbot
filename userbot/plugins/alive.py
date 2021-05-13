@@ -4,8 +4,16 @@ from platform import python_version
 from telethon import version
 
 from ..Config import Config
-from . import (StartTime, catub, catversion, check_data_base_heal_th,
-               edit_or_reply, get_readable_time, mention, reply_id)
+from . import (
+    StartTime,
+    catub,
+    catversion,
+    check_data_base_heal_th,
+    edit_or_reply,
+    get_readable_time,
+    mention,
+    reply_id,
+)
 
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
 EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "

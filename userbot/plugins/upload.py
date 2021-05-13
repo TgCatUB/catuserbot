@@ -19,8 +19,7 @@ from userbot import catub
 
 from ..Config import Config
 from ..helpers.utils import _catutils, reply_id
-from . import (edit_delete, edit_or_reply, make_gif, progress, reply_id,
-               thumb_from_audio)
+from . import edit_delete, edit_or_reply, make_gif, progress, reply_id, thumb_from_audio
 
 plugin_category = "misc"
 

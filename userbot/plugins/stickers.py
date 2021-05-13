@@ -13,9 +13,12 @@ from PIL import Image
 from telethon.tl import functions, types
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-from telethon.tl.types import (DocumentAttributeFilename,
-                               DocumentAttributeSticker, InputStickerSetID,
-                               MessageMediaPhoto)
+from telethon.tl.types import (
+    DocumentAttributeFilename,
+    DocumentAttributeSticker,
+    InputStickerSetID,
+    MessageMediaPhoto,
+)
 
 from userbot import catub
 
