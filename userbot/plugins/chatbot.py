@@ -4,15 +4,9 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import get_user_from_event, randomstuff
-from ..sql_helper.chatbot_sql import (
-    addai,
-    get_all_users,
-    get_users,
-    is_added,
-    remove_ai,
-    remove_all_users,
-    remove_users,
-)
+from ..sql_helper.chatbot_sql import (addai, get_all_users, get_users,
+                                      is_added, remove_ai, remove_all_users,
+                                      remove_users)
 from ..sql_helper.globals import gvarstatus
 
 plugin_category = "fun"

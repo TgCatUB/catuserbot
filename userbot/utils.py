@@ -12,7 +12,8 @@ from time import gmtime, strftime
 
 from telethon import events
 from telethon.tl.functions.channels import GetParticipantRequest
-from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
+from telethon.tl.types import (ChannelParticipantAdmin,
+                               ChannelParticipantCreator)
 
 from . import CMD_LIST, LOAD_PLUG, SUDO_LIST
 from .Config import Config

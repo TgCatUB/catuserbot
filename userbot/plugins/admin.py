@@ -1,37 +1,21 @@
 from asyncio import sleep
 
 from telethon import functions
-from telethon.errors import (
-    BadRequestError,
-    ImageProcessFailedError,
-    PhotoCropSizeSmallError,
-)
-from telethon.errors.rpcerrorlist import UserAdminInvalidError, UserIdInvalidError
-from telethon.tl.functions.channels import (
-    EditAdminRequest,
-    EditBannedRequest,
-    EditPhotoRequest,
-)
+from telethon.errors import (BadRequestError, ImageProcessFailedError,
+                             PhotoCropSizeSmallError)
+from telethon.errors.rpcerrorlist import (UserAdminInvalidError,
+                                          UserIdInvalidError)
+from telethon.tl.functions.channels import (EditAdminRequest,
+                                            EditBannedRequest,
+                                            EditPhotoRequest)
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import (
-    ChatAdminRights,
-    ChatBannedRights,
-    InputChatPhotoEmpty,
-    MessageMediaPhoto,
-)
+from telethon.tl.types import (ChatAdminRights, ChatBannedRights,
+                               InputChatPhotoEmpty, MessageMediaPhoto)
 
 from ..helpers.utils import _format
 from ..sql_helper.mute_sql import is_muted, mute, unmute
-from . import (
-    BOTLOG,
-    BOTLOG_CHATID,
-    catub,
-    edit_delete,
-    edit_or_reply,
-    get_user_from_event,
-    logging,
-    media_type,
-)
+from . import (BOTLOG, BOTLOG_CHATID, catub, edit_delete, edit_or_reply,
+               get_user_from_event, logging, media_type)
 
 # =================== STRINGS ============
 PP_TOO_SMOL = "`The image is too small`"

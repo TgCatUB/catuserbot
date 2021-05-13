@@ -6,12 +6,10 @@ from userbot.core.logger import logging
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
-from ..sql_helper.welcome_sql import (
-    add_welcome_setting,
-    get_current_welcome_settings,
-    rm_welcome_setting,
-    update_previous_welcome,
-)
+from ..sql_helper.welcome_sql import (add_welcome_setting,
+                                      get_current_welcome_settings,
+                                      rm_welcome_setting,
+                                      update_previous_welcome)
 from . import BOTLOG_CHATID
 
 plugin_category = "utils"

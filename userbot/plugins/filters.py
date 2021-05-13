@@ -4,12 +4,8 @@ import re
 from userbot import catub
 
 from ..core.managers import edit_or_reply
-from ..sql_helper.filter_sql import (
-    add_filter,
-    get_filters,
-    remove_all_filters,
-    remove_filter,
-)
+from ..sql_helper.filter_sql import (add_filter, get_filters,
+                                     remove_all_filters, remove_filter)
 from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "utils"

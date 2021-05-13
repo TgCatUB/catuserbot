@@ -10,17 +10,8 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format
 from ..sql_helper import pmpermit_sql as pmpermit_sql
 from ..utils import admin_cmd
-from . import (
-    ALIVE_NAME,
-    CMD_HELP,
-    PM_START,
-    PMMENU,
-    PMMESSAGE_CACHE,
-    _format,
-    check,
-    get_user_from_event,
-    set_key,
-)
+from . import (ALIVE_NAME, CMD_HELP, PM_START, PMMENU, PMMESSAGE_CACHE,
+               _format, check, get_user_from_event, set_key)
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)

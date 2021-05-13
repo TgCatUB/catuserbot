@@ -5,7 +5,8 @@ from telethon.errors import BadRequestError
 from telethon.tl.functions.channels import EditAdminRequest
 from telethon.tl.types import ChatAdminRights
 
-from . import ALIVE_NAME, catub, edit_delete, edit_or_reply, get_user_from_event
+from . import (ALIVE_NAME, catub, edit_delete, edit_or_reply,
+               get_user_from_event)
 
 plugin_category = "fun"
 

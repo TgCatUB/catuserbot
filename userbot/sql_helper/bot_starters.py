@@ -1,20 +1,13 @@
-from sqlalchemy import (
-    Column,
-    String,
-    Integer,
-    UnicodeText
-)
-from . import (
-    SESSION,
-    BASE
-)
+from sqlalchemy import Column, Integer, String, UnicodeText
+
+from . import BASE, SESSION
+
 
 class Bot_Starters(BASE):
-    """ Table to store the received messages """
     __tablename__ = "bot_starters"
     user_id = Column(String(14), primary_key=True)
     first_name = Column(UnicodeText)
-    date = Column(UnicodeText))
+    date = Column(UnicodeText)
     username = Column(UnicodeText)
 
     def __init__(self, user_id, first_name, date, username):
@@ -24,8 +17,8 @@ class Bot_Starters(BASE):
         self.username = username
 
 
-
 Bot_Starters.__table__.create(checkfirst=True)
+
 
 def add_starter_to_db(
     user_id,
@@ -33,10 +26,11 @@ def add_starter_to_db(
     date,
     username,
 ):
-    user = Bot_Starters(str(user_id),first_name, date, username)
+    user = Bot_Starters(str(user_id), first_name, date, username)
     SESSION.add(user)
     SESSION.commit()
     return True
+
 
 def get_starter_details(user_id):
     try:
@@ -47,10 +41,11 @@ def get_starter_details(user_id):
     finally:
         SESSION.close()
 
+
 def get_all_starters():
     try:
         return SESSION.query(Bot_Starters).all()
     except BaseException:
         return None
     finally:
-        SESSION.close()        
+        SESSION.close()

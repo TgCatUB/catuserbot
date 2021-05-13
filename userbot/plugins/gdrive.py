@@ -28,19 +28,9 @@ from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format
 from ..sql_helper import google_drive_sql as helper
-from . import (
-    BOTLOG,
-    BOTLOG_CHATID,
-    G_DRIVE_CLIENT_ID,
-    G_DRIVE_CLIENT_SECRET,
-    G_DRIVE_DATA,
-    G_DRIVE_FOLDER_ID,
-    TMP_DOWNLOAD_DIRECTORY,
-    CancelProcess,
-    humanbytes,
-    progress,
-    time_formatter,
-)
+from . import (BOTLOG, BOTLOG_CHATID, G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET,
+               G_DRIVE_DATA, G_DRIVE_FOLDER_ID, TMP_DOWNLOAD_DIRECTORY,
+               CancelProcess, humanbytes, progress, time_formatter)
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "misc"

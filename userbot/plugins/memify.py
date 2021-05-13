@@ -12,20 +12,9 @@ from userbot import catub
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _cattools, reply_id
 from ..sql_helper.globals import addgvar, gvarstatus
-from . import (
-    add_frame,
-    asciiart,
-    cat_meeme,
-    cat_meme,
-    convert_toimage,
-    convert_tosticker,
-    crop,
-    flip_image,
-    grayscale,
-    invert_colors,
-    mirror_file,
-    solarize,
-)
+from . import (add_frame, asciiart, cat_meeme, cat_meme, convert_toimage,
+               convert_tosticker, crop, flip_image, grayscale, invert_colors,
+               mirror_file, solarize)
 
 plugin_category = "fun"
 

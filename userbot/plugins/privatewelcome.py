@@ -4,11 +4,9 @@ from userbot import catub
 
 from ..core.managers import edit_or_reply
 from ..sql_helper import pmpermit_sql as pmpermit_sql
-from ..sql_helper.welcomesql import (
-    addwelcome_setting,
-    getcurrent_welcome_settings,
-    rmwelcome_setting,
-)
+from ..sql_helper.welcomesql import (addwelcome_setting,
+                                     getcurrent_welcome_settings,
+                                     rmwelcome_setting)
 from . import BOTLOG_CHATID
 
 plugin_category = "utils"

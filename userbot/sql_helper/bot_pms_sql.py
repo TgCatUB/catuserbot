@@ -1,13 +1,6 @@
-from sqlalchemy import (
-    Column,
-    String,
-    Integer,
-    UnicodeText
-)
-from . import (
-    SESSION,
-    BASE
-)
+from sqlalchemy import Column, Integer, String, UnicodeText
+
+from . import BASE, SESSION
 
 
 class Bot_Users(BASE):
@@ -24,8 +17,8 @@ class Bot_Users(BASE):
         self.reply_id = reply_id
 
 
-
 Bot_Users.__table__.create(checkfirst=True)
+
 
 def add_user_to_db(
     message_id,
@@ -33,10 +26,11 @@ def add_user_to_db(
     chat_id,
     reply_id,
 ):
-    user = Bot_Users(message_id,first_name, str(chat_id), reply_id)
+    user = Bot_Users(message_id, first_name, str(chat_id), reply_id)
     SESSION.add(user)
     SESSION.commit()
     return True
+
 
 def get_user_id(message_id):
     try:
@@ -45,7 +39,8 @@ def get_user_id(message_id):
             return int(_result.chat_id), _result.um_id
         return None, None
     finally:
-        SESSION.close() 
+        SESSION.close()
+
 
 def get_user_name(message_id):
     try:

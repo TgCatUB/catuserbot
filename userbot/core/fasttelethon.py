@@ -7,41 +7,23 @@ import logging
 import math
 import os
 from collections import defaultdict
-from typing import (
-    AsyncGenerator,
-    Awaitable,
-    BinaryIO,
-    DefaultDict,
-    List,
-    Optional,
-    Tuple,
-    Union,
-)
+from typing import (AsyncGenerator, Awaitable, BinaryIO, DefaultDict, List,
+                    Optional, Tuple, Union)
 
 from telethon import TelegramClient, helpers, utils
 from telethon.crypto import AuthKey
 from telethon.network import MTProtoSender
 from telethon.tl.alltlobjects import LAYER
 from telethon.tl.functions import InvokeWithLayerRequest
-from telethon.tl.functions.auth import (
-    ExportAuthorizationRequest,
-    ImportAuthorizationRequest,
-)
-from telethon.tl.functions.upload import (
-    GetFileRequest,
-    SaveBigFilePartRequest,
-    SaveFilePartRequest,
-)
-from telethon.tl.types import (
-    Document,
-    InputDocumentFileLocation,
-    InputFile,
-    InputFileBig,
-    InputFileLocation,
-    InputPeerPhotoFileLocation,
-    InputPhotoFileLocation,
-    TypeInputFile,
-)
+from telethon.tl.functions.auth import (ExportAuthorizationRequest,
+                                        ImportAuthorizationRequest)
+from telethon.tl.functions.upload import (GetFileRequest,
+                                          SaveBigFilePartRequest,
+                                          SaveFilePartRequest)
+from telethon.tl.types import (Document, InputDocumentFileLocation, InputFile,
+                               InputFileBig, InputFileLocation,
+                               InputPeerPhotoFileLocation,
+                               InputPhotoFileLocation, TypeInputFile)
 
 try:
     from mautrix.crypto.attachments import async_encrypt_attachment

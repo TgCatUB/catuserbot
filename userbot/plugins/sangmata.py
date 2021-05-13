@@ -5,8 +5,8 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
+from ..helpers import get_user_from_event, sanga_seperator
 from ..helpers.utils import _format
-from ..helpers import sanga_seperator, get_user_from_event
 
 plugin_category = "utils"
 
@@ -35,7 +35,7 @@ async def _(event):  # sourcery no-metrics
             event,
             "`reply to  user's text message to get name/username history or give userid/username`",
         )
-    user, rank = await get_user_from_event(event,secondgroup=True)
+    user, rank = await get_user_from_event(event, secondgroup=True)
     if not user:
         return
     uid = user.id

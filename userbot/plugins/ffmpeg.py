@@ -5,15 +5,8 @@ import time
 from datetime import datetime
 
 from ..Config import Config
-from . import (
-    _cattools,
-    catub,
-    edit_delete,
-    edit_or_reply,
-    media_type,
-    progress,
-    reply_id,
-)
+from . import (_cattools, catub, edit_delete, edit_or_reply, media_type,
+               progress, reply_id)
 
 plugin_category = "utils"
 
