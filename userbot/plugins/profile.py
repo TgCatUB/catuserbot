@@ -74,7 +74,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="ppic (.*)",
+    pattern="ppic$",
     command=("ppic", plugin_category),
     info={
         "header": "To set profile pic for this account.",
