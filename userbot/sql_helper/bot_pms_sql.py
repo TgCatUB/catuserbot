@@ -4,17 +4,19 @@ from . import BASE, SESSION
 
 
 class Bot_Users(BASE):
-    __tablename__ = "bot_users"
+    __tablename__ = "bot_pms_data"
     message_id = Column(Integer, primary_key=True)
     first_name = Column(UnicodeText)
     chat_id = Column(String(14))
     reply_id = Column(Integer)
+    result_id = Column(Integer)
 
-    def __init__(self, message_id, first_name, chat_id, reply_id):
+    def __init__(self, message_id, first_name, chat_id, reply_id, result_id):
         self.message_id = message_id
         self.first_name = first_name
         self.chat_id = str(chat_id)
         self.reply_id = reply_id
+        self.result_id = result_id
 
 
 Bot_Users.__table__.create(checkfirst=True)
@@ -25,8 +27,9 @@ def add_user_to_db(
     first_name,
     chat_id,
     reply_id,
+    result_id
 ):
-    user = Bot_Users(message_id, first_name, str(chat_id), reply_id)
+    user = Bot_Users(message_id, first_name, str(chat_id), reply_id, result_id)
     SESSION.add(user)
     SESSION.commit()
     return True
