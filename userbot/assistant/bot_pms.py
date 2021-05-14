@@ -4,8 +4,8 @@ from telethon import Button, events
 from telethon.utils import get_display_name
 
 from userbot import UPSTREAM_REPO_URL, catub
-from userbot.core.logger import logging
-
+from ..core.logger import logging
+from ..core.session import tgbot
 from ..Config import Config
 from ..helpers import reply_id
 from ..helpers.utils import _format
@@ -186,7 +186,7 @@ async def bot_pms_edit(event):  # sourcery no-metrics
                     LOGS.error(str(e))
 
 
-@catub.tgbot.on(events.MessageDeleted)
+@tgbot.on(events.MessageDeleted)
 async def handler(event):
     print(event)
     for msg_id in event.deleted_ids:
