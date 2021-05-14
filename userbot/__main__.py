@@ -3,8 +3,7 @@ import os
 import sys
 from pathlib import Path
 
-import telethon.utils
-from telethon import functions, types
+from telethon import functions, types, utils
 
 import userbot
 from userbot import BOTLOG, BOTLOG_CHATID
@@ -35,7 +34,7 @@ async def testing_bot():
                 break
         await catub.start(bot_token=Config.TG_BOT_USERNAME)
         catub.me = await catub.get_me()
-        catub.uid = telethon.utils.get_peer_id(catub.me)
+        catub.uid = utils.get_peer_id(catub.me)
     except Exception as e:
         LOGS.error(f"STRING_SESSION - {str(e)}")
         sys.exit()
@@ -73,13 +72,11 @@ def add_bot_to_logger_group():
     try:
         bot_details = catub.loop.run_until_complete(catub.tgbot.get_me())
         Config.TG_BOT_USERNAME = f"@{bot_details.username}"
-        catub.loop.run_until_complete(
-            catub(
-                functions.messages.AddChatUserRequest(
-                    chat_id=BOTLOG_CHATID, user_id=bot_details.id, fwd_limit=1000000
-                )
+        catub.loop.run_until_complete(catub(
+            functions.messages.AddChatUserRequest(
+                chat_id=BOTLOG_CHATID, user_id= Config.TG_BOT_USERNAME, fwd_limit=1000000
             )
-        )
+        ))
     except Exception as e:
         LOGS.error(str(e))
 
