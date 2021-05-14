@@ -163,22 +163,37 @@ async def bot_pms_edit(event):
                     )
     else:
         reply_to = await reply_id(event)
-        if reply_to is None:
-            return
-        user_id, reply_msg, result_id = get_user_id(reply_to)
-        if user_id is not None and result_id != 0:
-            try:
-                await event.client.edit_message(
-                    user_id, result_id, event.text, file=event.media
-                )
-            except Exception as e:
-                LOGS.error(str(e))
+        if reply_to is not None:
+            print(reply_to)
+            user_id, reply_msg, result_id = get_user_id(reply_to)
+            print(user_id)
+            print(reply_msg)
+            print(result_id)
+            if user_id is not None and result_id != 0:
+                try:
+                    await event.client.edit_message(
+                        user_id, result_id, event.text, file=event.media
+                    )
+                except Exception as e:
+                    LOGS.error(str(e))
 
 
 @catub.tgbot.on(events.MessageDeleted)
 async def handler(event):
     for msg_id in event.deleted_ids:
         users = get_user_reply(msg_id)
+        reply_to = await reply_id(msg_id)
+        print(reply_to)
+        if reply_to is not None:
+            user_id, reply_msg, result_id = get_user_id(reply_to)
+            print(user_id)
+            print(reply_msg)
+            print(result_id)
+            if user_id is not None and user_id == Config.OWNER_ID and result_id != 0:
+                try:
+                    await event.client.delete_messages(user_id, result_id)
+                except Exception as e:
+                    LOGS.error(str(e))
         if users is not None:
             for user in users:
                 if user.chat_id != Config.OWNER_ID:
@@ -194,15 +209,3 @@ async def handler(event):
                     )
             except Exception as e:
                 LOGS.error(str(e))
-        reply_to = await reply_id(msg_id)
-        print(reply_to)
-        if reply_to is not None:
-            user_id, reply_msg, result_id = get_user_id(reply_to)
-            print(user_id)
-            print(reply_msg)
-            print(result_id)
-            if user_id is not None and user_id == Config.OWNER_ID and result_id != 0:
-                try:
-                    await event.client.delete_messages(user_id, result_id)
-                except Exception as e:
-                    LOGS.error(str(e))
