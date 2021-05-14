@@ -20,12 +20,22 @@ class Bot_Starters(BASE):
 Bot_Starters.__table__.create(checkfirst=True)
 
 
+        
 def add_starter_to_db(
     user_id,
     first_name,
     date,
     username,
 ):
+    to_check = get_starter_details(user_id)
+    if not to_check:
+        user = Bot_Starters(str(user_id), first_name, date, username)
+        SESSION.add(user)
+        SESSION.commit()
+        return True
+    _result = SESSION.query(Bot_Starters).get(str(user_id))
+    SESSION.delete(rem)
+    SESSION.commit()
     user = Bot_Starters(str(user_id), first_name, date, username)
     SESSION.add(user)
     SESSION.commit()
