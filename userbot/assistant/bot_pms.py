@@ -67,6 +67,7 @@ async def bot_start(event):
             \nHow can i help you ?"
         buttons = None
     try:
+        LOGS.info(event.chat_id)
         await event.client.tgbot.send_message(
             event.chat_id,
             start_msg,
