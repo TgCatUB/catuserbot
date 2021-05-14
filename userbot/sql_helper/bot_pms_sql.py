@@ -71,7 +71,8 @@ def get_user_reply(reply_id):
         return None
     finally:
         SESSION.close()
-        
+
+
 def get_user_results(result_id):
     try:
         _result = (
@@ -81,4 +82,4 @@ def get_user_results(result_id):
             return _result
         return None
     finally:
-        SESSION.close()        
+        SESSION.close()
