@@ -32,7 +32,7 @@ def add_starter_to_db(
         SESSION.add(user)
         SESSION.commit()
         return True
-    SESSION.query(Bot_Starters).get(str(user_id))
+    rem = SESSION.query(Bot_Starters).get(str(user_id))
     SESSION.delete(rem)
     SESSION.commit()
     user = Bot_Starters(str(user_id), first_name, date, username)
