@@ -190,6 +190,7 @@ class CatUserBotClient(TelegramClient):
         **kwargs,
     ) -> callable:  # sourcery no-metrics
         kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
+
         def decorator(func):
             async def wrapper(check):
                 try:
@@ -241,6 +242,7 @@ class CatUserBotClient(TelegramClient):
                         )
 
             from .session import catub
+
             catub.tgbot.add_event_handler(func, events.NewMessage(**kwargs))
             return wrapper
 
