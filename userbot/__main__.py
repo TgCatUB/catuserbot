@@ -75,7 +75,7 @@ async def add_bot_to_logger_group():
         Config.TG_BOT_USERNAME = f"@{bot_details.username}"
         await catub(
             functions.messages.AddChatUserRequest(
-                channel=BOTLOG_CHATID, users=bot_details.id, fwd_limit=1000000
+                chat_id=BOTLOG_CHATID, user_id=bot_details.id, fwd_limit=1000000
             )
         )
     except Exception as e:
