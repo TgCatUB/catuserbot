@@ -177,6 +177,7 @@ async def bot_pms_edit(event):
 
 @catub.tgbot.on(events.MessageDeleted)
 async def handler(event):
+    print(event)
     chat = await event.get_chat()
     for msg_id in event.deleted_ids:
         if chat.id != Config.OWNER_ID:
