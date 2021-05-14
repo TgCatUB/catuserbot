@@ -10,7 +10,6 @@ class Bot_Users(BASE):
     chat_id = Column(String(14))
     reply_id = Column(Integer)
     result_id = Column(Integer, primary_key=True)
-    repl
 
     def __init__(self, message_id, first_name, chat_id, reply_id, result_id):
         self.message_id = message_id
