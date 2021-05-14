@@ -108,37 +108,36 @@ async def bot_pms(event):
                 )
     else:
         reply_to = await reply_id(event)
-        if reply_to is None:
-            return
-        users = get_user_id(reply_to)
-        for usr in users:
-            user_id = int(usr.chat_id)
-            reply_msg = usr.reply_id
-            user_name = usr.first_name
-            break
-        if user_id is not None:
-            try:
-                if event.media:
-                    msg = await event.client.send_file(
-                        user_id, event.media, caption=event.text, reply_to=reply_msg
+        if reply_to is not None:
+            users = get_user_id(reply_to)
+            for usr in users:
+                user_id = int(usr.chat_id)
+                reply_msg = usr.reply_id
+                user_name = usr.first_name
+                break
+            if user_id is not None:
+                try:
+                    if event.media:
+                        msg = await event.client.send_file(
+                            user_id, event.media, caption=event.text, reply_to=reply_msg
+                        )
+                    else:
+                        msg = await event.client.send_message(
+                            user_id, event.text, reply_to=reply_msg
+                        )
+                except Exception as e:
+                    await event.reply(f"**Error:**\n`{str(e)}`")
+                try:
+                    add_user_to_db(
+                        reply_to, user_name, user_id, reply_msg, event.id, msg.id
                     )
-                else:
-                    msg = await event.client.send_message(
-                        user_id, event.text, reply_to=reply_msg
-                    )
-            except Exception as e:
-                await event.reply(f"**Error:**\n`{str(e)}`")
-            try:
-                add_user_to_db(
-                    reply_to, user_name, user_id, reply_msg, event.id, msg.id
-                )
-            except Exception as e:
-                LOGS.error(str(e))
-                if BOTLOG:
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
-                    )
+                except Exception as e:
+                    LOGS.error(str(e))
+                    if BOTLOG:
+                        await event.client.send_message(
+                            BOTLOG_CHATID,
+                            f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
+                        )
 
 
 @catub.bot_cmd(edited=True)
@@ -189,15 +188,12 @@ async def bot_pms_edit(event):  # sourcery no-metrics
 
 @tgbot.on(events.MessageDeleted)
 async def handler(event):
-    print(event)
     for msg_id in event.deleted_ids:
         users_1 = get_user_reply(msg_id)
         users_2 = get_user_logging(msg_id)
         if users_2 is not None:
             result_id = 0
             for usr in users_2:
-                print(msg_id)
-                print(usr.logger_id)
                 if msg_id == usr.logger_id:
                     user_id = int(usr.chat_id)
                     result_id = usr.result_id
