@@ -42,6 +42,23 @@ def get_user_id(message_id):
         return None, None, None
     finally:
         SESSION.close()
+        
+def del_user_from_db(message_id):
+    try:
+        _result = (
+            SESSION.query(Bot_Users)
+            .filter(Bot_Users.message_id == str(message_id))
+            .all()
+        )
+        if _result:
+            for rst in _result:
+                rem = SESSION.query(Bot_Users).get((str(rst.message_id), rst.result_id))
+                SESSION.delete(rem)
+                SESSION.commit()
+            return True
+        return False
+    finally:
+        SESSION.close()        
 
 
 def get_user_name(message_id):
