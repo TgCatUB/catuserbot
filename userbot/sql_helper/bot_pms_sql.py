@@ -12,7 +12,7 @@ class Bot_Users(BASE):
     logger_id = Column(Integer)
     result_id = Column(Integer, primary_key=True)
 
-    def __init__(self, message_id, first_name, chat_id, reply_id,logger_id, result_id):
+    def __init__(self, message_id, first_name, chat_id, reply_id, logger_id, result_id):
         self.message_id = message_id
         self.first_name = first_name
         self.chat_id = str(chat_id)
@@ -24,8 +24,10 @@ class Bot_Users(BASE):
 Bot_Users.__table__.create(checkfirst=True)
 
 
-def add_user_to_db(message_id, first_name, chat_id, reply_id,logger_id, result_id):
-    user = Bot_Users(message_id, first_name, str(chat_id), reply_id,logger_id, result_id)
+def add_user_to_db(message_id, first_name, chat_id, reply_id, logger_id, result_id):
+    user = Bot_Users(
+        message_id, first_name, str(chat_id), reply_id, logger_id, result_id
+    )
     SESSION.add(user)
     SESSION.commit()
     return True
@@ -75,7 +77,6 @@ def get_user_reply(reply_id):
         SESSION.close()
 
 
-
 def get_user_results(result_id):
     try:
         _result = (
@@ -87,6 +88,7 @@ def get_user_results(result_id):
     finally:
         SESSION.close()
 
+
 def get_user_logging(logger_id):
     try:
         _result = (
@@ -96,4 +98,4 @@ def get_user_logging(logger_id):
             return _result
         return None
     finally:
-        SESSION.close()        
+        SESSION.close()
