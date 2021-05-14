@@ -7,7 +7,7 @@ import urllib3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import catub
+from userbot import catub, UPSTREAM_REPO_URL
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
@@ -23,13 +23,6 @@ Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
 heroku_api = "https://api.heroku.com"
 
 UPSTREAM_REPO_BRANCH = Config.UPSTREAM_REPO_BRANCH
-
-if Config.UPSTREAM_REPO == "goodcat":
-    UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
-elif Config.UPSTREAM_REPO == "badcat":
-    UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot"
-else:
-    UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
 REPO_REMOTE_NAME = "temponame"
 IFFUCI_ACTIVE_BRANCH_NAME = "master"
