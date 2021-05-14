@@ -43,8 +43,8 @@ def get_user_name(message_id):
     try:
         _result = SESSION.query(Bot_Users).get(str(message_id))
         if _result:
-            return int(_result.chat_id), _result.first_name
-        return None, None
+            return int(_result.chat_id), _result.first_name, _result.result_id
+        return None, None, None
     finally:
         SESSION.close()
 
