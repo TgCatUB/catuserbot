@@ -76,7 +76,7 @@ def add_bot_to_logger_group():
             catub(
                 functions.messages.AddChatUserRequest(
                     chat_id=BOTLOG_CHATID,
-                    user_id=Config.TG_BOT_USERNAME,
+                    user_id=bot_details.username,
                     fwd_limit=1000000,
                 )
             )
@@ -87,7 +87,7 @@ def add_bot_to_logger_group():
                 catub(
                     functions.channels.InviteToChannelRequest(
                         channel=BOTLOG_CHATID,
-                        users=Config.TG_BOT_USERNAME,
+                        users=[bot_details.username],
                     )
                 )
             )
