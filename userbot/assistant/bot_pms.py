@@ -92,13 +92,48 @@ async def bot_start(event):
 
 @catub.bot_cmd(incoming=True, func=lambda e: e.is_private)
 async def bot_pms(event):  # sourcery no-metrics
-        if event.text.startswith("/start"):
+    if event.text.startswith("/start"):
+        return
+    chat = await event.get_chat()
+    if chat.id != Config.OWNER_ID:
+        msg = await event.forward_to(Config.OWNER_ID)
+        try:
+            add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0, 0)
+        except Exception as e:
+            LOGS.error(str(e))
+            if BOTLOG:
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
+                )
+    else:
+        reply_to = await reply_id(event)
+        if reply_to is None:
             return
-        chat = await event.get_chat()
-        if chat.id != Config.OWNER_ID:
-            msg = await event.forward_to(Config.OWNER_ID)
+        users = get_user_id(reply_to)
+        if users is None:
+            return
+        for usr in users:
+            user_id = int(usr.chat_id)
+            reply_msg = usr.reply_id
+            user_name = usr.first_name
+            break
+        if user_id is not None:
             try:
-                add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0, 0)
+                if event.media:
+                    msg = await event.client.send_file(
+                        user_id, event.media, caption=event.text, reply_to=reply_msg
+                    )
+                else:
+                    msg = await event.client.send_message(
+                        user_id, event.text, reply_to=reply_msg
+                    )
+            except Exception as e:
+                await event.reply(f"**Error:**\n`{str(e)}`")
+            try:
+                add_user_to_db(
+                    reply_to, user_name, user_id, reply_msg, event.id, msg.id
+                )
             except Exception as e:
                 LOGS.error(str(e))
                 if BOTLOG:
@@ -106,41 +141,6 @@ async def bot_pms(event):  # sourcery no-metrics
                         BOTLOG_CHATID,
                         f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
                     )
-        else:
-            reply_to = await reply_id(event)
-            if reply_to is None:
-                return
-            users = get_user_id(reply_to)
-            if users is None:
-                return
-            for usr in users:
-                user_id = int(usr.chat_id)
-                reply_msg = usr.reply_id
-                user_name = usr.first_name
-                break
-            if user_id is not None:
-                try:
-                    if event.media:
-                        msg = await event.client.send_file(
-                            user_id, event.media, caption=event.text, reply_to=reply_msg
-                        )
-                    else:
-                        msg = await event.client.send_message(
-                            user_id, event.text, reply_to=reply_msg
-                        )
-                except Exception as e:
-                    await event.reply(f"**Error:**\n`{str(e)}`")
-                try:
-                    add_user_to_db(
-                        reply_to, user_name, user_id, reply_msg, event.id, msg.id
-                    )
-                except Exception as e:
-                    LOGS.error(str(e))
-                    if BOTLOG:
-                        await event.client.send_message(
-                            BOTLOG_CHATID,
-                            f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
-                        )
 
 
 @catub.bot_cmd(edited=True)
