@@ -93,7 +93,6 @@ async def bot_pms(event):
     if chat.id != Config.OWNER_ID:
         msg = await event.forward_to(Config.OWNER_ID)
         try:
-            LOGS.info(msg.id, chat.id, event.id)
             add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id)
         except Exception as e:
             LOGS.error(str(e))
