@@ -129,11 +129,11 @@ for name in files:
         shortname = path1.stem
         try:
             if shortname.replace(".py", "") not in Config.NO_LOAD:
-                load_module(shortname.replace(".py", ""))
+                load_module(shortname.replace(".py", ""),path="userbot/assistant")
             else:
-                os.remove(Path(f"userbot/plugins/{shortname}.py"))
+                os.remove(Path(f"userbot/assistant/{shortname}.py"))
         except Exception as e:
-            os.remove(Path(f"userbot/plugins/{shortname}.py"))
+            os.remove(Path(f"userbot/assistant/{shortname}.py"))
             LOGS.info(f"unable to load {shortname} because of error {e}")
 
 print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
