@@ -237,7 +237,11 @@ async def bot_start(event):
     reply_to = await reply_id(event)
     if not reply_to:
         return await event.reply("Reply to a message to get message info")
-    info_msg = await event.client.send_message(event.chat_id,"`🔎 Searching for this user in my database ...`",reply_to=reply_to)
+    info_msg = await event.client.send_message(
+        event.chat_id,
+        "`🔎 Searching for this user in my database ...`",
+        reply_to=reply_to,
+    )
     users = get_user_id(reply_to)
     if users is None:
         return await info_msg.edit(
