@@ -141,6 +141,7 @@ async def bot_pms_edit(event):
         users = get_user_reply(event.id)
         if users is None:
             return
+        print(users)
         for user in users:
             if user.chat_id == str(chat.id):
                 reply_msg = user.reply_id
