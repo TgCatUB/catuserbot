@@ -144,7 +144,9 @@ async def bot_pms_edit(event):
         for user in users:
             if user.chat_id == str(chat.id):
                 reply_msg = user.reply_id
+                print(user.reply_id)
                 break
+        print(reply_msg)
         if reply_msg:
             await event.client.send_message(
                 Config.OWNER_ID,
