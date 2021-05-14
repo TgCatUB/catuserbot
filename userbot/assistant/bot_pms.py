@@ -188,6 +188,7 @@ async def bot_pms_edit(event):  # sourcery no-metrics
 
 @catub.tgbot.on(events.MessageDeleted)
 async def handler(event):
+    print(event)
     for msg_id in event.deleted_ids:
         users_1 = get_user_reply(msg_id)
         users_2 = get_user_logging(msg_id)
