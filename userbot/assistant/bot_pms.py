@@ -12,7 +12,6 @@ from ..helpers.utils import _format
 from ..sql_helper.bot_pms_sql import (
     add_user_to_db,
     get_user_id,
-    get_user_name,
     get_user_reply,
 )
 from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
@@ -109,8 +108,12 @@ async def bot_pms(event):
         reply_to = await reply_id(event)
         if reply_to is None:
             return
-        user_id, reply_msg, result_id = get_user_id(reply_to)
-        user_id, user_name = get_user_name(reply_to)
+        users = get_user_id(reply_to)
+        for usr in users:
+            user_id = int(usr.chat_id)
+            reply_msg = usr.reply_id
+            user_name = usr.first_name
+            break
         if user_id is not None:
             try:
                 if event.media:
@@ -135,7 +138,7 @@ async def bot_pms(event):
 
 
 @catub.bot_cmd(edited=True)
-async def bot_pms_edit(event):
+async def bot_pms_edit(event):  # sourcery no-metrics
     chat = await event.get_chat()
     if chat.id != Config.OWNER_ID:
         users = get_user_reply(event.id)
@@ -165,11 +168,17 @@ async def bot_pms_edit(event):
         reply_to = await reply_id(event)
         if reply_to is not None:
             print(reply_to)
-            user_id, reply_msg, result_id = get_user_id(reply_to)
+            users = get_user_id(reply_to)
+            for usr in users:
+                if event.id == usr.result_id:
+                    user_id = int(usr.chat_id)
+                    reply_msg = usr.reply_id
+                    user_name = usr.first_name
+                    break
             print(user_id)
             print(reply_msg)
             print(result_id)
-            if user_id is not None and result_id != 0:
+            if result_id != 0:
                 try:
                     await event.client.edit_message(
                         user_id, result_id, event.text, file=event.media
@@ -185,11 +194,18 @@ async def handler(event):
         reply_to = await reply_id(msg_id)
         print(reply_to)
         if reply_to is not None:
-            user_id, reply_msg, result_id = get_user_id(reply_to)
+            print(reply_to)
+            users = get_user_id(reply_to)
+            for usr in users:
+                if event.id == usr.result_id:
+                    user_id = int(usr.chat_id)
+                    reply_msg = usr.reply_id
+                    user_name = usr.first_name
+                    break
             print(user_id)
             print(reply_msg)
             print(result_id)
-            if user_id is not None and user_id == Config.OWNER_ID and result_id != 0:
+            if result_id != 0:
                 try:
                     await event.client.delete_messages(user_id, result_id)
                 except Exception as e:
@@ -200,7 +216,11 @@ async def handler(event):
                     reply_msg = user.message_id
                     break
             try:
-                user_id, user_name = get_user_name(reply_msg)
+                users = get_user_id(reply_msg)
+                for usr in users:
+                    user_id = int(usr.chat_id)
+                    user_name = usr.first_name
+                    break
                 if reply_msg:
                     await event.client.send_message(
                         Config.OWNER_ID,
