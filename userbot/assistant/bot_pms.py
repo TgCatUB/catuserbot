@@ -92,7 +92,7 @@ async def bot_pms(event):
     if chat.id != Config.OWNER_ID:
         msg = await event.forward_to(Config.OWNER_ID)
         try:
-            add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0)
+            add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id,0, 0)
         except Exception as e:
             LOGS.error(str(e))
             if BOTLOG:
@@ -123,7 +123,7 @@ async def bot_pms(event):
             except Exception as e:
                 await event.reply(f"**Error:**\n`{str(e)}`")
             try:
-                add_user_to_db(reply_to, user_name, user_id, reply_msg, msg.id)
+                add_user_to_db(reply_to, user_name, user_id, reply_msg, event.id, msg.id)
             except Exception as e:
                 LOGS.error(str(e))
                 if BOTLOG:
@@ -152,7 +152,7 @@ async def bot_pms_edit(event):  # sourcery no-metrics
             )
             msg = await event.forward_to(Config.OWNER_ID)
             try:
-                add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0)
+                add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0, 0)
             except Exception as e:
                 LOGS.error(str(e))
                 if BOTLOG:
@@ -165,7 +165,7 @@ async def bot_pms_edit(event):  # sourcery no-metrics
         if reply_to is not None:
             users = get_user_id(reply_to)
             for usr in users:
-                if event.id == usr.message_id:
+                if event.id == usr.logger_id:
                     user_id = int(usr.chat_id)
                     reply_msg = usr.reply_id
                     result_id = usr.result_id
@@ -187,7 +187,7 @@ async def handler(event):
         if reply_to is not None:
             users = get_user_id(reply_to)
             for usr in users:
-                if event.id == usr.result_id:
+                if event.id == usr.logger_id:
                     user_id = int(usr.chat_id)
                     reply_msg = usr.reply_id
                     user_name = usr.first_name
