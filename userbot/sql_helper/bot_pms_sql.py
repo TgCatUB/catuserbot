@@ -61,7 +61,7 @@ def get_user_name(message_id):
 
 def get_user_reply(reply_id):
     try:
-        _result = SESSION.query(Bot_Users).filter(Bot_Users.reply_id == reply_id).all()
+        _result = SESSION.query(Bot_Users).filter(Bot_Users.reply_id == str(reply_id)).all()
         if _result:
             return _result
         return None
