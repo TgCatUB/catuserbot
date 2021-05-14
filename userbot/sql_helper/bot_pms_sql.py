@@ -31,7 +31,11 @@ def add_user_to_db(message_id, first_name, chat_id, reply_id, result_id):
 
 def get_user_id(message_id):
     try:
-        _result = SESSION.query(Bot_Users).filter(Bot_Users.message_id == str(message_id)).all()
+        _result = (
+            SESSION.query(Bot_Users)
+            .filter(Bot_Users.message_id == str(message_id))
+            .all()
+        )
         if _result:
             _result = _result[-1]
             return int(_result.chat_id), _result.reply_id, _result.result_id
@@ -42,7 +46,11 @@ def get_user_id(message_id):
 
 def get_user_name(message_id):
     try:
-        _result = SESSION.query(Bot_Users).filter(Bot_Users.message_id == str(message_id)).all()
+        _result = (
+            SESSION.query(Bot_Users)
+            .filter(Bot_Users.message_id == str(message_id))
+            .all()
+        )
         if _result:
             _result = _result[-1]
             return int(_result.chat_id), _result.first_name
