@@ -195,8 +195,12 @@ async def handler(event):
             except Exception as e:
                 LOGS.error(str(e))
         reply_to = await reply_id(msg_id)
+        print(reply_to)
         if reply_to is not None:
             user_id, reply_msg, result_id = get_user_id(reply_to)
+            print(user_id)
+            print(reply_msg)
+            print(result_id)
             if user_id is not None and user_id == Config.OWNER_ID and result_id != 0:
                 try:
                     await event.client.delete_messages(user_id, result_id)
