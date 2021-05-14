@@ -42,7 +42,8 @@ def get_user_id(message_id):
         return None, None, None
     finally:
         SESSION.close()
-        
+
+
 def del_user_from_db(message_id):
     try:
         _result = (
@@ -58,7 +59,7 @@ def del_user_from_db(message_id):
             return True
         return False
     finally:
-        SESSION.close()        
+        SESSION.close()
 
 
 def get_user_name(message_id):
