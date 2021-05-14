@@ -177,32 +177,26 @@ async def bot_pms_edit(event):
 
 @catub.tgbot.on(events.MessageDeleted)
 async def handler(event):
-    print(event)
     for msg_id in event.deleted_ids:
-        if str(event.chat_id) != str(Config.OWNER_ID):
-            users = get_user_reply(msg_id)
-            if users is None:
-                return
-            print(event.chat_id)
+        users = get_user_reply(msg_id)
+        if users is not None:
             for user in users:
-                print(user.chat_id)
-                if user.chat_id == str(event.chat_id):
+                if user.chat_id != Config.OWNER_ID:
                     reply_msg = user.message_id
                     break
             try:
                 user_id, user_name = get_user_name(reply_msg)
                 if reply_msg:
                     await event.client.send_message(
-                        Config.OWNER_ID,
-                        f"⬆️ **This message was deleted by the user** {_format.mentionuser(user_name , event.chat_id)}.",
-                        reply_to=reply_msg,
+                            Config.OWNER_ID,
+                            f"⬆️ **This message was deleted by the user** {_format.mentionuser(user_name , user_id)}.",
+                            reply_to=reply_msg,
                     )
             except Exception as e:
                 LOGS.error(str(e))
-        else:
-            user_id, reply_msg, result_id = get_user_id(msg_id)
-            if user_id is not None and result_id != 0:
-                try:
-                    await event.client.delete_messages(user_id, result_id)
-                except Exception as e:
-                    LOGS.error(str(e))
+        user_id, reply_msg, result_id = get_user_id(msg_id)
+        if user_id is not None and user_id == Config.OWNER_ID and result_id != 0:
+            try:
+                await event.client.delete_messages(user_id, result_id)
+            except Exception as e:
+                LOGS.error(str(e))
