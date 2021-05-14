@@ -87,10 +87,12 @@ async def bot_start(event):
 
 @catub.tgbot.cat_cmd(incoming=True, func=lambda e: e.is_private)
 async def bot_pms(event):
+    LOGS.info(event)
     if event.text.startswith("/start"):
         return
     chat = await event.get_chat()
     if chat.id != Config.OWNER_ID:
+        LOGS.info(1)
         msg = await event.forward_to(Config.OWNER_ID)
         try:
             LOGS.info(msg.id, chat.id, event.id)
@@ -103,6 +105,7 @@ async def bot_pms(event):
                     f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
                 )
     else:
+        LOGS.info(2)
         reply_to = await reply_id(event)
         user_id, reply_msg = get_user_id(reply_to)
         if user_id is not None:
