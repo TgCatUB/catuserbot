@@ -69,15 +69,15 @@ def verifyLoggerGroup():
         )
 
 
-async def add_bot_to_logger_group():
+def add_bot_to_logger_group():
     try:
-        bot_details = await catub.tgbot.get_me()
+        bot_details = catub.loop.run_until_complete(catub.tgbot.get_me())
         Config.TG_BOT_USERNAME = f"@{bot_details.username}"
-        await catub(
+        catub.loop.run_until_complete(catub(
             functions.messages.AddChatUserRequest(
                 chat_id=BOTLOG_CHATID, user_id=bot_details.id, fwd_limit=1000000
             )
-        )
+        ))
     except Exception as e:
         LOGS.error(str(e))
 
@@ -147,7 +147,7 @@ print(
 print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
 
 verifyLoggerGroup()
-catub.loop.create_task(add_bot_to_logger_group())
+add_bot_to_logger_group()
 catub.loop.create_task(startupmessage())
 
 if len(sys.argv) not in (1, 3, 4):
