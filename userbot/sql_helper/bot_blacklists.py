@@ -21,9 +21,9 @@ class Bot_BlackList(BASE):
 Bot_BlackList.__table__.create(checkfirst=True)
 
 
-def add_user_to_bl(chat_id: int,username: str, reason: str):
+def add_user_to_bl(chat_id: int, username: str, reason: str):
     """add the user to the blacklist"""
-    __user = Bot_BlackList(str(chat_id),username, reason)
+    __user = Bot_BlackList(str(chat_id), username, reason)
     SESSION.add(__user)
     SESSION.commit()
 
