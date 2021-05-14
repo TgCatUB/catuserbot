@@ -24,7 +24,7 @@ bot = catub
 LOGS = logging.getLogger(__name__)
 
 
-def load_module(shortname,plugin_path=None):
+def load_module(shortname, plugin_path=None):
     if shortname.startswith("__"):
         pass
     elif shortname.endswith("_"):
@@ -40,7 +40,7 @@ def load_module(shortname,plugin_path=None):
             name = f"userbot.plugins.{shortname}"
         else:
             path = Path((f"{plugin_path}/{shortname}.py"))
-            name = f"{plugin_path}/{shortname}".replace("/",".")
+            name = f"{plugin_path}/{shortname}".replace("/", ".")
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
         import userbot.utils
