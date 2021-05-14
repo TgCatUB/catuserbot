@@ -194,6 +194,8 @@ async def handler(event):
         if users_2 is not None:
             result_id = 0
             for usr in users_2:
+                print(msg_id)
+                print(usr.logger_id)
                 if msg_id == usr.logger_id:
                     user_id = int(usr.chat_id)
                     result_id = usr.result_id
