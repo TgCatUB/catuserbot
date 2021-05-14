@@ -72,11 +72,15 @@ def add_bot_to_logger_group():
     try:
         bot_details = catub.loop.run_until_complete(catub.tgbot.get_me())
         Config.TG_BOT_USERNAME = f"@{bot_details.username}"
-        catub.loop.run_until_complete(catub(
-            functions.messages.AddChatUserRequest(
-                chat_id=BOTLOG_CHATID, user_id= Config.TG_BOT_USERNAME, fwd_limit=1000000
+        catub.loop.run_until_complete(
+            catub(
+                functions.messages.AddChatUserRequest(
+                    chat_id=BOTLOG_CHATID,
+                    user_id=Config.TG_BOT_USERNAME,
+                    fwd_limit=1000000,
+                )
             )
-        ))
+        )
     except Exception as e:
         LOGS.error(str(e))
 
