@@ -184,22 +184,21 @@ async def bot_pms_edit(event):  # sourcery no-metrics
 @catub.tgbot.on(events.MessageDeleted)
 async def handler(event):
     for msg_id in event.deleted_ids:
-        users = get_user_reply(msg_id)
-        reply_to = await reply_id(msg_id)
-        if reply_to is not None:
-            users = get_user_id(reply_to)
-            for usr in users:
+        users_1 = get_user_reply(msg_id)
+        users_2 = get_user_logging(msg_id)
+        if users_2 is not None:
+            result_id = 0
+            for usr in users_2:
                 if event.id == usr.logger_id:
                     user_id = int(usr.chat_id)
-                    reply_msg = usr.reply_id
-                    user_name = usr.first_name
+                    result_id = usr.result_id
                     break
             if result_id != 0:
                 try:
                     await event.client.delete_messages(user_id, result_id)
                 except Exception as e:
                     LOGS.error(str(e))
-        if users is not None:
+        if users_1 is not None:
             for user in users:
                 if user.chat_id != Config.OWNER_ID:
                     reply_msg = user.message_id
