@@ -26,7 +26,7 @@ async def _(event):
         event,
         "Restarted. `.ping` me or `.help` to check if I am online, actually it takes 1-2 min for restarting",
     )
-    await event.client.disconnect()
+    await catub.disconnect()
     execl(sys.executable, sys.executable, *sys.argv)
 
 
