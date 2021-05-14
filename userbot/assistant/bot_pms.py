@@ -31,12 +31,12 @@ async def check_bot_started_users(user, event):
     if check is None:
         start_date = str(datetime.now().strftime("%B %d, %Y"))
         notification = f"👤 {_format.mentionuser(user.first_name , user.id)} has started me.\
-                \n**ID: **{user.id}\
+                \n**ID: **`{user.id}`\
                 \n**Name: **{get_display_name(user)}"
     else:
         start_date = check.date
         notification = f"👤 {_format.mentionuser(user.first_name , user.id)} has restarted me.\
-                \n**ID: **{user.id}\
+                \n**ID: **`{user.id}`\
                 \n**Name: **{get_display_name(user)}"
     try:
         add_starter_to_db(user.id, get_display_name(user), start_date, user.username)
