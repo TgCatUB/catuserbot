@@ -92,7 +92,7 @@ async def bot_pms(event):
     if chat.id != Config.OWNER_ID:
         msg = await event.forward_to(Config.OWNER_ID)
         try:
-            add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id,0, 0)
+            add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0, 0)
         except Exception as e:
             LOGS.error(str(e))
             if BOTLOG:
@@ -123,7 +123,9 @@ async def bot_pms(event):
             except Exception as e:
                 await event.reply(f"**Error:**\n`{str(e)}`")
             try:
-                add_user_to_db(reply_to, user_name, user_id, reply_msg, event.id, msg.id)
+                add_user_to_db(
+                    reply_to, user_name, user_id, reply_msg, event.id, msg.id
+                )
             except Exception as e:
                 LOGS.error(str(e))
                 if BOTLOG:
