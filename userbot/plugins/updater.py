@@ -7,7 +7,7 @@ import urllib3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import catub, UPSTREAM_REPO_URL
+from userbot import UPSTREAM_REPO_URL, catub
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
