@@ -9,7 +9,12 @@ from userbot.core.logger import logging
 from ..Config import Config
 from ..helpers import reply_id
 from ..helpers.utils import _format
-from ..sql_helper.bot_pms_sql import add_user_to_db, get_user_id, get_user_reply, get_user_name
+from ..sql_helper.bot_pms_sql import (
+    add_user_to_db,
+    get_user_id,
+    get_user_name,
+    get_user_reply,
+)
 from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
 from . import BOTLOG, BOTLOG_CHATID
 
@@ -34,9 +39,7 @@ async def check_bot_started_users(user, event):
                 \n**ID: **{user.id}\
                 \n**Name: **{get_display_name(user)}"
     try:
-        add_starter_to_db(
-            user.id, get_display_name(user), start_date, user.username
-        )
+        add_starter_to_db(user.id, get_display_name(user), start_date, user.username)
     except Exception as e:
         LOGS.error(str(e))
     if BOTLOG:
@@ -94,7 +97,7 @@ async def bot_pms(event):
     if chat.id != Config.OWNER_ID:
         msg = await event.forward_to(Config.OWNER_ID)
         try:
-            add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id,0)
+            add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0)
         except Exception as e:
             LOGS.error(str(e))
             if BOTLOG:
@@ -129,7 +132,7 @@ async def bot_pms(event):
                         BOTLOG_CHATID,
                         f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
                     )
-        
+
 
 @catub.bot_cmd(edited=True)
 async def bot_pms_edit(event):
@@ -143,10 +146,13 @@ async def bot_pms_edit(event):
                 reply_msg = user.reply_id
                 break
         if reply_msg:
-            await event.client.send_message(chat.id,f"⬆️ This message was edited by the user {get_display_name(chat)} as :")
+            await event.client.send_message(
+                chat.id,
+                f"⬆️ This message was edited by the user {get_display_name(chat)} as :",
+            )
             msg = await event.forward_to(Config.OWNER_ID)
             try:
-                add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id,0)
+                add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id, 0)
             except Exception as e:
                 LOGS.error(str(e))
                 if BOTLOG:
@@ -159,8 +165,10 @@ async def bot_pms_edit(event):
         if reply_to is None:
             return
         user_id, reply_msg, result_id = get_user_id(reply_to)
-        if user_id is not None and result_id !=0:
+        if user_id is not None and result_id != 0:
             try:
-                await event.client.edit_message(user_id,result_id,event.text,file=event.media)
+                await event.client.edit_message(
+                    user_id, result_id, event.text, file=event.media
+                )
             except Exception as e:
                 LOGS.error(str(e))
