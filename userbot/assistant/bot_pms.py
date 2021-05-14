@@ -110,6 +110,8 @@ async def bot_pms(event):
         reply_to = await reply_id(event)
         if reply_to is not None:
             users = get_user_id(reply_to)
+            if users is None:
+                return
             for usr in users:
                 user_id = int(usr.chat_id)
                 reply_msg = usr.reply_id
