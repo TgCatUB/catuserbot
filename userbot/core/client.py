@@ -17,7 +17,7 @@ from .fasttelethon import download_file, upload_file
 from .logger import logging
 from .managers import edit_delete
 from .sudo import _sudousers_list
-
+from ..helpers.utils import _catutils
 LOGS = logging.getLogger(__name__)
 
 
@@ -96,59 +96,38 @@ class CatUserBotClient(TelegramClient):
                         if Config.PRIVATE_GROUP_BOT_API_ID == 0:
                             return
                         date = (datetime.datetime.now()).strftime("%m/%d/%Y, %H:%M:%S")
-                        ftext = f"\nDisclaimer:\
-                                    \nThis file is pasted only here ONLY here,\
-                                    \nwe logged only fact of error and date,\
-                                    \nwe respect your privacy,\
-                                    \nyou may not report this error if you've\
-                                    \nany confidential data here, no one will see your data\
-                                    \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
-                                    \nDate: {date}\
-                                    \nGroup ID: {str(check.chat_id)}\
-                                    \nSender ID: {str(check.sender_id)}\
-                                    \n\nEvent Trigger:\
-                                    \n{str(check.text)}\
-                                    \n\nTraceback info:\
-                                    \n{str(traceback.format_exc())}\
-                                    \n\nError text:\
-                                    \n{str(sys.exc_info()[1])}"
+                        ftext = f"\nDisclaimer:\nThis file is pasted only here ONLY here,\
+                                  \nwe logged only fact of error and date,\nwe respect your privacy,\
+                                  \nyou may not report this error if you've\
+                                  \nany confidential data here, no one will see your data\
+                                  \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
+                                  \nDate: {date}\nGroup ID: {str(check.chat_id)}\
+                                  \nSender ID: {str(check.sender_id)}\
+                                  \n\nEvent Trigger:\n{str(check.text)}\
+                                  \n\nTraceback info:\n{str(traceback.format_exc())}\
+                                  \n\nError text:\n{str(sys.exc_info()[1])}"
                         new = {
                             "error": str(sys.exc_info()[1]),
                             "date": datetime.datetime.now(),
                         }
                         ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
-
                         command = 'git log --pretty=format:"%an: %s" -5'
-
                         ftext += "\n\n\nLast 5 commits:\n"
-
-                        process = await asyncio.create_subprocess_shell(
-                            command,
-                            stdout=asyncio.subprocess.PIPE,
-                            stderr=asyncio.subprocess.PIPE,
-                        )
-                        stdout, stderr = await process.communicate()
-                        result = str(stdout.decode().strip()) + str(
-                            stderr.decode().strip()
-                        )
+                        output = (await _catutils.runcmd(command))[:2]
+                        result = output[0]+output[1]
                         ftext += result
                         from ..helpers.utils.format import paste_text
-
                         pastelink = paste_text(ftext)
                         text = "**CatUserbot Error report**\n\n"
                         link = "[here](https://t.me/catuserbot_support)"
                         text += "If you wanna you can report it"
                         text += f"- just forward this message {link}.\n"
-                        text += (
-                            "Nothing is logged except the fact of error and date\n\n"
-                        )
+                        text += "Nothing is logged except the fact of error and date\n\n"
                         text += f"**Error report : ** [{new['error']}]({pastelink})"
                         await check.client.send_message(
                             Config.PRIVATE_GROUP_BOT_API_ID, text, link_preview=False
                         )
-
             from .session import catub
-
             if not func.__doc__ is None:
                 CMD_INFO[command[0]].append((func.__doc__).strip())
             if pattern is not None:
@@ -199,6 +178,101 @@ class CatUserBotClient(TelegramClient):
             return wrapper
 
         return decorator
+    
+    def bot_cmd(
+            self: TelegramClient,
+            pattern: str or tuple = None,
+            edited: bool = True,
+            disable_errors: bool = False,
+            **kwargs,
+        ) -> callable:  # sourcery no-metrics
+            kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
+            kwargs.setdefault("forwards", False)
+            stack = inspect.stack()
+            previous_stack_frame = stack[1]
+            file_test = Path(previous_stack_frame.filename)
+            file_test = file_test.stem.replace(".py", "")
+            # get the pattern from the decorator
+            if pattern is not None:
+                if (
+                    pattern.startswith(r"\#")
+                    or not pattern.startswith(r"\#")
+                    and pattern.startswith(r"^")
+                ):
+                    regex = re.compile(pattern)
+
+            def decorator(func):
+                async def wrapper(check):
+                    try:
+                        await func(check)
+                    except events.StopPropagation:
+                        raise events.StopPropagation
+                    except KeyboardInterrupt:
+                        pass
+                    except BaseException as e:
+                        # Check if we have to disable error logging.
+                        LOGS.exception(e)  # Log the error in console
+                        if not disable_errors:
+                            if Config.PRIVATE_GROUP_BOT_API_ID == 0:
+                                return
+                            date = (datetime.datetime.now()).strftime("%m/%d/%Y, %H:%M:%S")
+                            ftext = f"\nDisclaimer:\nThis file is pasted only here ONLY here,\
+                                    \nwe logged only fact of error and date,\nwe respect your privacy,\
+                                    \nyou may not report this error if you've\
+                                    \nany confidential data here, no one will see your data\
+                                    \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
+                                    \nDate: {date}\nGroup ID: {str(check.chat_id)}\
+                                    \nSender ID: {str(check.sender_id)}\
+                                    \n\nEvent Trigger:\n{str(check.text)}\
+                                    \n\nTraceback info:\n{str(traceback.format_exc())}\
+                                    \n\nError text:\n{str(sys.exc_info()[1])}"
+                            new = {
+                                "error": str(sys.exc_info()[1]),
+                                "date": datetime.datetime.now(),
+                            }
+                            ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
+                            command = 'git log --pretty=format:"%an: %s" -5'
+                            ftext += "\n\n\nLast 5 commits:\n"
+                            output = (await _catutils.runcmd(command))[:2]
+                            result = output[0]+output[1]
+                            ftext += result
+                            from ..helpers.utils.format import paste_text
+                            pastelink = paste_text(ftext)
+                            text = "**CatUserbot Error report**\n\n"
+                            link = "[here](https://t.me/catuserbot_support)"
+                            text += "If you wanna you can report it"
+                            text += f"- just forward this message {link}.\n"
+                            text += "Nothing is logged except the fact of error and date\n\n"
+                            text += f"**Error report : ** [{new['error']}]({pastelink})"
+                            await check.client.send_message(
+                                Config.PRIVATE_GROUP_BOT_API_ID, text, link_preview=False
+                            )
+                from .session import catub
+                if pattern is not None:
+                    if edited:
+                            catub.tgbot.add_event_handler(
+                                wrapper,
+                                MessageEdited(
+                                    incoming=True,
+                                    pattern=regex,
+                                    **kwargs,
+                                ),
+                            )
+                    catub.tgbot.add_event_handler(
+                            wrapper,
+                            NewMessage(
+                                incoming=True,
+                                pattern=regex,
+                                **kwargs,
+                            ),
+                        )
+                else:
+                    if edited:
+                        catub.tgbot.add_event_handler(func, events.MessageEdited(**kwargs))
+                    catub.tgbot.add_event_handler(func, events.NewMessage(**kwargs))
+                return wrapper
+            return decorator
+    
 
     async def get_traceback(self, exc: Exception) -> str:
         return "".join(
