@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 import telethon.utils
-from telethon import functions
+from telethon import functions,types
 
 import userbot
 from userbot import BOTLOG, BOTLOG_CHATID
