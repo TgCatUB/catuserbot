@@ -178,20 +178,20 @@ async def bot_pms_edit(event):
 @catub.tgbot.on(events.MessageDeleted)
 async def handler(event):
     print(event)
-    chat = await event.get_chat()
     for msg_id in event.deleted_ids:
-        if chat.id != Config.OWNER_ID:
+        if str(event.chat_id) != str(Config.OWNER_ID):
             users = get_user_reply(msg_id)
             if users is None:
                 return
             for user in users:
-                if user.chat_id == str(chat.id):
+                if user.chat_id == str(event.chat_id):
                     reply_msg = user.message_id
                     break
+            user_id, user_name = get_user_name(reply_msg)
             if reply_msg:
                 await event.client.send_message(
                     Config.OWNER_ID,
-                    f"⬆️ **This message was deleted by the user** {_format.mentionuser(get_display_name(chat) , chat.id)}.",
+                    f"⬆️ **This message was deleted by the user** {_format.mentionuser(user_name , event.chat_id)}.",
                     reply_to=reply_msg,
                 )
         else:
