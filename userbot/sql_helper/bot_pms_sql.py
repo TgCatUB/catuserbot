@@ -5,7 +5,7 @@ from . import BASE, SESSION
 
 class Bot_Users(BASE):
     __tablename__ = "bot_pms_data"
-    #pm logger message id
+    # pm logger message id
     message_id = Column(Integer, primary_key=True)
     first_name = Column(UnicodeText)
     chat_id = Column(String(14))
