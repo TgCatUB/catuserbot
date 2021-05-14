@@ -129,7 +129,7 @@ for name in files:
         shortname = path1.stem
         try:
             if shortname.replace(".py", "") not in Config.NO_LOAD:
-                load_module(shortname.replace(".py", ""),path="userbot/assistant")
+                load_module(shortname.replace(".py", ""), path="userbot/assistant")
             else:
                 os.remove(Path(f"userbot/assistant/{shortname}.py"))
         except Exception as e:
