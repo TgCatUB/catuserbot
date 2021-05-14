@@ -65,7 +65,9 @@ def verifyLoggerGroup():
                 + str(e)
             )
         try:
-            entity = catub.loop.run_until_complete(catub.get_entity(Config.PM_LOGGER_GROUP_ID))
+            entity = catub.loop.run_until_complete(
+                catub.get_entity(Config.PM_LOGGER_GROUP_ID)
+            )
             if not isinstance(entity, types.User) and not entity.creator:
                 if entity.default_banned_rights.send_messages:
                     LOGS.info(
