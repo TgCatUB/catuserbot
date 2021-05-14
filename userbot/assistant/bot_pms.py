@@ -67,7 +67,7 @@ async def bot_start(event):
             \nHow can i help you ?"
         buttons = None
     try:
-        await event.client.tgbot.send_message(
+        await event.client.send_message(
             chat.id,
             start_msg,
             link_preview=False,
@@ -100,7 +100,7 @@ async def bot_pms(event):
         except Exception as e:
             LOGS.error(str(e))
             if BOTLOG:
-                await event.client.tgbot.send_message(
+                await event.client.send_message(
                     BOTLOG_CHATID,
                     f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
                 )
@@ -111,11 +111,11 @@ async def bot_pms(event):
         if user_id is not None:
             try:
                 if event.media:
-                    await event.client.tgbot.send_file(
+                    await event.client.send_file(
                         user_id, event.media, caption=event.text, reply_to=reply_msg
                     )
                 else:
-                    await event.client.tgbot.send_message(
+                    await event.client.send_message(
                         user_id, event.text, reply_to=reply_msg
                     )
             except Exception as e:
