@@ -69,9 +69,9 @@ def verifyLoggerGroup():
 
 
 def add_bot_to_logger_group():
+    bot_details = catub.loop.run_until_complete(catub.tgbot.get_me())
+    Config.TG_BOT_USERNAME = f"@{bot_details.username}"
     try:
-        bot_details = catub.loop.run_until_complete(catub.tgbot.get_me())
-        Config.TG_BOT_USERNAME = f"@{bot_details.username}"
         catub.loop.run_until_complete(
             catub(
                 functions.messages.AddChatUserRequest(
@@ -81,8 +81,18 @@ def add_bot_to_logger_group():
                 )
             )
         )
-    except Exception as e:
-        LOGS.error(str(e))
+    except BaseException:
+        try:
+            catub.loop.run_until_complete(
+                catub(
+                    functions.channels.InviteToChannelRequest(
+                        channel=BOTLOG_CHATID,
+                        users=Config.TG_BOT_USERNAME,
+                    )
+                )
+            ) 
+        except Exception as e:
+            LOGS.error(str(e))
 
 
 async def startupmessage():
