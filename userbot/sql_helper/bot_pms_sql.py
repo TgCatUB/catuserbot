@@ -36,7 +36,7 @@ def get_user_id(message_id):
     try:
         _result = SESSION.query(Bot_Users).get(str(message_id))
         if _result:
-            return int(_result.chat_id), _result.um_id
+            return int(_result.chat_id), _result.reply_id
         return None, None
     finally:
         SESSION.close()
