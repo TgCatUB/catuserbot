@@ -163,17 +163,15 @@ async def bot_pms_edit(event):  # sourcery no-metrics
     else:
         reply_to = await reply_id(event)
         if reply_to is not None:
-            print(reply_to)
             users = get_user_id(reply_to)
             for usr in users:
+                print(usr.result_id)
+                print(event.id)
                 if event.id == usr.result_id:
                     user_id = int(usr.chat_id)
                     reply_msg = usr.reply_id
                     usr.first_name
                     break
-            print(user_id)
-            print(reply_msg)
-            print(result_id)
             if result_id != 0:
                 try:
                     await event.client.edit_message(
@@ -188,9 +186,7 @@ async def handler(event):
     for msg_id in event.deleted_ids:
         users = get_user_reply(msg_id)
         reply_to = await reply_id(msg_id)
-        print(reply_to)
         if reply_to is not None:
-            print(reply_to)
             users = get_user_id(reply_to)
             for usr in users:
                 if event.id == usr.result_id:
@@ -198,9 +194,6 @@ async def handler(event):
                     reply_msg = usr.reply_id
                     user_name = usr.first_name
                     break
-            print(user_id)
-            print(reply_msg)
-            print(result_id)
             if result_id != 0:
                 try:
                     await event.client.delete_messages(user_id, result_id)
