@@ -35,7 +35,7 @@ def load_module(shortname, plugin_path=None):
         spec.loader.exec_module(mod)
         LOGS.info("Successfully imported " + shortname)
     else:
-        if path is None:
+        if plugin_path is None:
             path = Path(f"userbot/plugins/{shortname}.py")
             name = f"userbot.plugins.{shortname}"
         else:
