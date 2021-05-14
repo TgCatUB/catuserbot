@@ -99,7 +99,7 @@ async def startupmessage():
     if BOTLOG:
         await catub.tgbot.send_message(
             BOTLOG_CHATID,
-            f"**Congratulation, now type {Config.COMMAND_HAND_LER}alive to see message if catub is working or not\
+            f"**Congratulation, now type {Config.COMMAND_HAND_LER}alive to see message if catub is working or not.\
                 \nIf you need assistance, **head to https://t.me/catuserbot_support",
             link_preview=False,
         )
