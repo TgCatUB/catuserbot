@@ -43,7 +43,7 @@ async def check_bot_started_users(user, event):
 
 
 @catub.tgbot.cat_cmd(
-    pattern="^/start({username})?([\s]+)?$", incoming=True, func=lambda e: e.is_private
+    pattern=f"(?i)^/start({username})?([\s]+)?$", incoming=True, func=lambda e: e.is_private
 )
 async def bot_start(event):
     chat = await event.get_chat()
