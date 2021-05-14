@@ -204,7 +204,7 @@ async def handler(event):
                 except Exception as e:
                     LOGS.error(str(e))
         if users_1 is not None:
-            for user in users:
+            for user in users_1:
                 if user.chat_id != Config.OWNER_ID:
                     reply_msg = user.message_id
                     break
