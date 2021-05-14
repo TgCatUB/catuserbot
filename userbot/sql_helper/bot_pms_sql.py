@@ -10,6 +10,7 @@ class Bot_Users(BASE):
     chat_id = Column(String(14))
     reply_id = Column(Integer)
     result_id = Column(Integer, primary_key=True)
+    repl
 
     def __init__(self, message_id, first_name, chat_id, reply_id, result_id):
         self.message_id = message_id
@@ -37,9 +38,8 @@ def get_user_id(message_id):
             .all()
         )
         if _result:
-            _result = _result[-1]
-            return int(_result.chat_id), _result.reply_id, _result.result_id
-        return None, None, None
+            return _result
+        return None
     finally:
         SESSION.close()
 
@@ -58,21 +58,6 @@ def del_user_from_db(message_id):
                 SESSION.commit()
             return True
         return False
-    finally:
-        SESSION.close()
-
-
-def get_user_name(message_id):
-    try:
-        _result = (
-            SESSION.query(Bot_Users)
-            .filter(Bot_Users.message_id == str(message_id))
-            .all()
-        )
-        if _result:
-            _result = _result[-1]
-            return int(_result.chat_id), _result.first_name
-        return None, None
     finally:
         SESSION.close()
 
