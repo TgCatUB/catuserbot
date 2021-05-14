@@ -50,7 +50,8 @@ def get_user_name(message_id):
         return None, None
     finally:
         SESSION.close()
-        
+
+
 def get_user_reply(reply_id):
     try:
         _result = SESSION.query(Bot_Users).filter(Bot_Users.reply_id == reply_id).all()
@@ -58,4 +59,4 @@ def get_user_reply(reply_id):
             return _result
         return None
     finally:
-        SESSION.close()        
+        SESSION.close()
