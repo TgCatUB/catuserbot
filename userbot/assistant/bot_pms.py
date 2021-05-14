@@ -147,8 +147,9 @@ async def bot_pms_edit(event):
                 break
         if reply_msg:
             await event.client.send_message(
-                chat.id,
+                Config.OWNER_ID,
                 f"⬆️ This message was edited by the user {get_display_name(chat)} as :",
+                reply_to = reply_msg
             )
             msg = await event.forward_to(Config.OWNER_ID)
             try:
