@@ -22,13 +22,7 @@ class Bot_Users(BASE):
 Bot_Users.__table__.create(checkfirst=True)
 
 
-def add_user_to_db(
-    message_id,
-    first_name,
-    chat_id,
-    reply_id,
-    result_id
-):
+def add_user_to_db(message_id, first_name, chat_id, reply_id, result_id):
     user = Bot_Users(message_id, first_name, str(chat_id), reply_id, result_id)
     SESSION.add(user)
     SESSION.commit()
