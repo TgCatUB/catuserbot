@@ -6,10 +6,12 @@ from . import BASE, SESSION
 class Bot_BlackList(BASE):
     __tablename__ = "bot_blacklist"
     chat_id = Column(String(14), primary_key=True)
+    username = Column(UnicodeText)
     reason = Column(UnicodeText)
 
     def __init__(self, chat_id, reason):
         self.chat_id = str(chat_id)
+        self.username = username
         self.reason = reason
 
     def __repr__(self):
@@ -19,9 +21,9 @@ class Bot_BlackList(BASE):
 Bot_BlackList.__table__.create(checkfirst=True)
 
 
-def add_user_to_bl(chat_id: int, reason: str):
+def add_user_to_bl(chat_id: int,username: str, reason: str):
     """add the user to the blacklist"""
-    __user = Bot_BlackList(str(chat_id), reason)
+    __user = Bot_BlackList(str(chat_id),username, reason)
     SESSION.add(__user)
     SESSION.commit()
 
