@@ -91,7 +91,6 @@ async def bot_pms(event):
         return
     chat = await event.get_chat()
     if chat.id != Config.OWNER_ID:
-        LOGS.info(1)
         msg = await event.forward_to(Config.OWNER_ID)
         try:
             LOGS.info(msg.id, chat.id, event.id)
@@ -104,8 +103,9 @@ async def bot_pms(event):
                     f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
                 )
     else:
-        LOGS.info(2)
         reply_to = await reply_id(event)
+        if reply_to is None:
+            return
         user_id, reply_msg = get_user_id(reply_to)
         if user_id is not None:
             try:
