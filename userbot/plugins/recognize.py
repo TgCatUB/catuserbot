@@ -19,18 +19,15 @@ plugin_category = "utils"
     },
 )
 async def _(event):
-    "To recognize a image.",
+    "To recognize a image."
     if not event.reply_to_msg_id:
-        await edit_or_reply(event, "Reply to any user's media message.")
-        return
+        return await edit_or_reply(event, "Reply to any user's media message.")
     reply_message = await event.get_reply_message()
     if not reply_message.media:
-        await edit_or_reply(event, "reply to media file")
-        return
+        return await edit_or_reply(event, "reply to media file")
     chat = "@Rekognition_Bot"
     if reply_message.sender.bot:
-        await event.edit("Reply to actual users message.")
-        return
+        return await event.edit("Reply to actual users message.")
     cat = await edit_or_reply(event, "recognizeing this media")
     async with event.client.conversation(chat) as conv:
         try:
@@ -51,5 +48,4 @@ async def _(event):
             await cat.edit(msg)
         else:
             await cat.edit("sorry, I couldnt find it")
-
         await event.client.send_read_acknowledge(conv.chat_id)
