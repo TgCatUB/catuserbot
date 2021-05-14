@@ -67,9 +67,8 @@ async def bot_start(event):
             \nHow can i help you ?"
         buttons = None
     try:
-        LOGS.info(event.chat_id)
         await event.client.tgbot.send_message(
-            event.chat_id,
+            chat.id,
             start_msg,
             link_preview=False,
             buttons=buttons,
@@ -94,6 +93,7 @@ async def bot_pms(event):
     if chat.id != Config.OWNER_ID:
         msg = await event.forward_to(Config.OWNER_ID)
         try:
+            LOGS.info(msg.id , chat.id, event.id)
             add_user_to_db(msg.id, get_display_name(chat), chat.id, event.id)
         except Exception as e:
             LOGS.error(str(e))
