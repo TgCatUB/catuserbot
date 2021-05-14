@@ -186,25 +186,10 @@ class CatUserBotClient(TelegramClient):
 
     def bot_cmd(
         self: TelegramClient,
-        pattern: str or tuple = None,
         disable_errors: bool = False,
         **kwargs,
     ) -> callable:  # sourcery no-metrics
         kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
-        kwargs.setdefault("forwards", False)
-        stack = inspect.stack()
-        previous_stack_frame = stack[1]
-        file_test = Path(previous_stack_frame.filename)
-        file_test = file_test.stem.replace(".py", "")
-        # get the pattern from the decorator
-        if pattern is not None:
-            if (
-                pattern.startswith(r"\#")
-                or not pattern.startswith(r"\#")
-                and pattern.startswith(r"^")
-            ):
-                regex = re.compile(pattern)
-
         def decorator(func):
             async def wrapper(check):
                 try:
@@ -256,18 +241,7 @@ class CatUserBotClient(TelegramClient):
                         )
 
             from .session import catub
-
-            if pattern is not None:
-                catub.tgbot.add_event_handler(
-                    wrapper,
-                    NewMessage(
-                        incoming=True,
-                        pattern=regex,
-                        **kwargs,
-                    ),
-                )
-            else:
-                catub.tgbot.add_event_handler(func, events.NewMessage(**kwargs))
+            catub.tgbot.add_event_handler(func, events.NewMessage(**kwargs))
             return wrapper
 
         return decorator
