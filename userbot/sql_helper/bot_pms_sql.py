@@ -5,11 +5,15 @@ from . import BASE, SESSION
 
 class Bot_Users(BASE):
     __tablename__ = "bot_pms_data"
+    #pm logger message id
     message_id = Column(Integer, primary_key=True)
     first_name = Column(UnicodeText)
     chat_id = Column(String(14))
+    # in opposite user message id
     reply_id = Column(Integer)
+    # pm logger message reply id
     logger_id = Column(Integer)
+    # pm opposite user reply message id
     result_id = Column(Integer, primary_key=True)
 
     def __init__(self, message_id, first_name, chat_id, reply_id, logger_id, result_id):
