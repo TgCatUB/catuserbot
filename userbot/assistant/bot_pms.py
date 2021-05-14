@@ -188,9 +188,9 @@ async def handler(event):
                 user_id, user_name = get_user_name(reply_msg)
                 if reply_msg:
                     await event.client.send_message(
-                            Config.OWNER_ID,
-                            f"⬆️ **This message was deleted by the user** {_format.mentionuser(user_name , user_id)}.",
-                            reply_to=reply_msg,
+                        Config.OWNER_ID,
+                        f"⬆️ **This message was deleted by the user** {_format.mentionuser(user_name , user_id)}.",
+                        reply_to=reply_msg,
                     )
             except Exception as e:
                 LOGS.error(str(e))
