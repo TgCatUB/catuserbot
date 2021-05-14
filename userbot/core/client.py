@@ -187,6 +187,7 @@ class CatUserBotClient(TelegramClient):
     def bot_cmd(
         self: TelegramClient,
         disable_errors: bool = False,
+        edited: bool = False,
         **kwargs,
     ) -> callable:  # sourcery no-metrics
         kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
@@ -242,8 +243,11 @@ class CatUserBotClient(TelegramClient):
                         )
 
             from .session import tgbot
-
-            tgbot.add_event_handler(func, events.NewMessage(**kwargs))
+            if edited is True:
+                tgbot.add_event_handler(func, events.MessageEdited(**kwargs))
+            else:
+                tgbot.add_event_handler(func, events.NewMessage(**kwargs))
+            
             return wrapper
 
         return decorator
