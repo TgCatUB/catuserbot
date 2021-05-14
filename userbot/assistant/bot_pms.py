@@ -183,17 +183,22 @@ async def handler(event):
             users = get_user_reply(msg_id)
             if users is None:
                 return
+            print(event.chat_id)
             for user in users:
+                print(user.chat_id)
                 if user.chat_id == str(event.chat_id):
                     reply_msg = user.message_id
                     break
-            user_id, user_name = get_user_name(reply_msg)
-            if reply_msg:
-                await event.client.send_message(
-                    Config.OWNER_ID,
-                    f"⬆️ **This message was deleted by the user** {_format.mentionuser(user_name , event.chat_id)}.",
-                    reply_to=reply_msg,
-                )
+            try:
+                user_id, user_name = get_user_name(reply_msg)
+                if reply_msg:
+                    await event.client.send_message(
+                        Config.OWNER_ID,
+                        f"⬆️ **This message was deleted by the user** {_format.mentionuser(user_name , event.chat_id)}.",
+                        reply_to=reply_msg,
+                    )
+            except Exception as e:
+                LOGS.error(str(e))
         else:
             user_id, reply_msg, result_id = get_user_id(msg_id)
             if user_id is not None and result_id != 0:
