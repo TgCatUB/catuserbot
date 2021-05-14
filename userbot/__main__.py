@@ -90,7 +90,7 @@ def add_bot_to_logger_group():
                         users=Config.TG_BOT_USERNAME,
                     )
                 )
-            ) 
+            )
         except Exception as e:
             LOGS.error(str(e))
 
