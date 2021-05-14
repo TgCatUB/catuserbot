@@ -67,9 +67,9 @@ def doit(chat_id, match, original):
 
 async def group_has_sedbot(group):
     if isinstance(group, types.InputPeerChannel):
-        full = await bot(functions.channels.GetFullChannelRequest(group))
+        full = await catub(functions.channels.GetFullChannelRequest(group))
     elif isinstance(group, types.InputPeerChat):
-        full = await bot(functions.messages.GetFullChatRequest(group.chat_id))
+        full = await catub(functions.messages.GetFullChatRequest(group.chat_id))
     else:
         return False
 
