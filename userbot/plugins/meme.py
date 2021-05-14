@@ -118,7 +118,7 @@ async def _(event):
     cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
     message = cat[1]
     count = int(cat[0])
-    (f"{message} ") * count
+    repsmessage = (f"{message} ") * count
     await edit_or_reply(event, repsmessage)
 
 
