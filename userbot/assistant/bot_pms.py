@@ -9,11 +9,7 @@ from userbot.core.logger import logging
 from ..Config import Config
 from ..helpers import reply_id
 from ..helpers.utils import _format
-from ..sql_helper.bot_pms_sql import (
-    add_user_to_db,
-    get_user_id,
-    get_user_reply,
-)
+from ..sql_helper.bot_pms_sql import add_user_to_db, get_user_id, get_user_reply
 from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
 from . import BOTLOG, BOTLOG_CHATID
 
@@ -173,7 +169,7 @@ async def bot_pms_edit(event):  # sourcery no-metrics
                 if event.id == usr.result_id:
                     user_id = int(usr.chat_id)
                     reply_msg = usr.reply_id
-                    user_name = usr.first_name
+                    usr.first_name
                     break
             print(user_id)
             print(reply_msg)
