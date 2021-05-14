@@ -42,7 +42,7 @@ async def check_bot_started_users(user, event):
             await event.client.tgbot.send_message(BOTLOG_CHATID, notification)
 
 
-@catub.tgbot.cat_cmd(
+@catub.bot_cmd(
     pattern=f"^/start({botusername})?([\s]+)?$",
     incoming=True,
     func=lambda e: e.is_private,
@@ -85,7 +85,7 @@ async def bot_start(event):
         await check_bot_started_users(chat, event)
 
 
-@catub.tgbot.cat_cmd(incoming=True, func=lambda e: e.is_private)
+@catub.bot_cmd(incoming=True, func=lambda e: e.is_private)
 async def bot_pms(event):
     LOGS.info(event)
     if event.text.startswith("/start"):
