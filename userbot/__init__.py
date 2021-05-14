@@ -18,9 +18,12 @@ bot = catub
 StartTime = time.time()
 catversion = "2.10.6"
 
-
-CAT_ID = ["1035034432", "551290198"]
-
+if Config.UPSTREAM_REPO == "goodcat":
+    UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
+elif Config.UPSTREAM_REPO == "badcat":
+    UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot"
+else:
+    UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
 try:
     if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:
