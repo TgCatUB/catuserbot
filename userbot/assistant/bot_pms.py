@@ -165,12 +165,10 @@ async def bot_pms_edit(event):  # sourcery no-metrics
         if reply_to is not None:
             users = get_user_id(reply_to)
             for usr in users:
-                print(usr.result_id)
-                print(event.id)
-                if event.id == usr.result_id:
+                if event.id == usr.message_id:
                     user_id = int(usr.chat_id)
                     reply_msg = usr.reply_id
-                    usr.first_name
+                    result_id = usr.result_id
                     break
             if result_id != 0:
                 try:
