@@ -7,7 +7,7 @@ import requests
 from userbot import catub
 
 from ..Config import Config
-from ..core.managers import edit_or_reply, edit_delete
+from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "utils"
 
@@ -29,8 +29,8 @@ async def _(event):
     if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     if not event.reply_to_msg_id:
-        return await edit_delete(event,
-            "`Reply to a voice message, to get the relevant transcript.`"
+        return await edit_delete(
+            event, "`Reply to a voice message, to get the relevant transcript.`"
         )
 
     catevent = await edit_or_reply(event, "`Downloading to my local, for analysis  🙇`")
