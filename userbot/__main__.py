@@ -35,6 +35,8 @@ async def testing_bot():
         await catub.start(bot_token=Config.TG_BOT_USERNAME)
         catub.me = await catub.get_me()
         catub.uid = utils.get_peer_id(catub.me)
+        if Config.OWNER_ID == 0:
+            Config.OWNER_ID = utils.get_peer_id(catub.me)
     except Exception as e:
         LOGS.error(f"STRING_SESSION - {str(e)}")
         sys.exit()
