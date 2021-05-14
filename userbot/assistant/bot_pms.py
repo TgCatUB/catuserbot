@@ -87,7 +87,6 @@ async def bot_start(event):
 
 @catub.bot_cmd(incoming=True, func=lambda e: e.is_private)
 async def bot_pms(event):
-    LOGS.info(event)
     if event.text.startswith("/start"):
         return
     chat = await event.get_chat()
