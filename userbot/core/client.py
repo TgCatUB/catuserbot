@@ -187,7 +187,6 @@ class CatUserBotClient(TelegramClient):
     def bot_cmd(
         self: TelegramClient,
         pattern: str or tuple = None,
-        edited: bool = True,
         disable_errors: bool = False,
         **kwargs,
     ) -> callable:  # sourcery no-metrics
@@ -259,15 +258,6 @@ class CatUserBotClient(TelegramClient):
             from .session import catub
 
             if pattern is not None:
-                if edited:
-                    catub.tgbot.add_event_handler(
-                        wrapper,
-                        MessageEdited(
-                            incoming=True,
-                            pattern=regex,
-                            **kwargs,
-                        ),
-                    )
                 catub.tgbot.add_event_handler(
                     wrapper,
                     NewMessage(
@@ -277,8 +267,6 @@ class CatUserBotClient(TelegramClient):
                     ),
                 )
             else:
-                if edited:
-                    catub.tgbot.add_event_handler(func, events.MessageEdited(**kwargs))
                 catub.tgbot.add_event_handler(func, events.NewMessage(**kwargs))
             return wrapper
 
