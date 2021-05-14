@@ -225,3 +225,29 @@ async def handler(event):
                     )
             except Exception as e:
                 LOGS.error(str(e))
+
+@catub.bot_cmd(
+    pattern=f"^/uinfo$",
+    from_users=Config.OWNER_ID,
+)
+async def bot_start(event):
+    reply_to = await reply_id(event)
+    if not reply_to:
+        return await event.reply("Reply to a message to get message info")
+    info_msg = await event.reply("`🔎 Searching for this user in my database ...`")
+    users = get_user_id(reply_to)
+    if users is None:
+        return await info_msg.edit("**ERROR:** \n`Sorry !, Can't Find this user in my database :(`")
+    for usr in users:
+        user_id = int(usr.chat_id)
+        reply_msg = usr.reply_id
+        user_name = usr.first_name
+        break
+    if user_id is None:
+        return await info_msg.edit("**ERROR:** \n`Sorry !, Can't Find this user in my database :(`")
+    uinfo = (
+            f"This message was sent by 👤 {_format.mentionuser(user_name , user_id)}\
+            \n**First Name:** {user_name}\
+            \n**User ID:** `{user_id}`"
+        )
+    await info_msg.edit(uinfo)
