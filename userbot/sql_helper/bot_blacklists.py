@@ -8,11 +8,13 @@ class Bot_BlackList(BASE):
     chat_id = Column(String(14), primary_key=True)
     username = Column(UnicodeText)
     reason = Column(UnicodeText)
+    date = Column(UnicodeText)
 
     def __init__(self, chat_id, reason):
         self.chat_id = str(chat_id)
         self.username = username
         self.reason = reason
+        self.date = date
 
     def __repr__(self):
         return "<BL %s>" % self.chat_id
@@ -21,11 +23,20 @@ class Bot_BlackList(BASE):
 Bot_BlackList.__table__.create(checkfirst=True)
 
 
-def add_user_to_bl(chat_id: int, username: str, reason: str):
+def add_user_to_bl(chat_id: int, username: str, reason: str, date: str):
     """add the user to the blacklist"""
-    __user = Bot_BlackList(str(chat_id), username, reason)
-    SESSION.add(__user)
+    to_check = check_is_black_list(chat_id)
+    if not to_check:
+        __user = Bot_BlackList(str(chat_id), username, reason, date)
+        SESSION.add(__user)
+        SESSION.commit()
+    rem = SESSION.query(Bot_BlackList).get(str(chat_id))
+    SESSION.delete(rem)
     SESSION.commit()
+    user = Bot_BlackList(str(chat_id), username, reason, date)
+    SESSION.add(user)
+    SESSION.commit()
+    return True
 
 
 def check_is_black_list(chat_id: int):
