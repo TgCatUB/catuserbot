@@ -76,7 +76,7 @@ async def ban_starters(event):
         return await edit_delete(event, "`No one started your bot yet.`")
     msg = "**The list of users who started your bot are :\n\n**"
     for user in list:
-        msg += f"• 👤 {_format.mentionuser(user.first_name , user.user_id)}\n**ID:** `{user.user_id}`\n**UserName:** {user.username}\n**Date: **__{user.date}__\n"
+        msg += f"• 👤 {_format.mentionuser(user.first_name , user.user_id)}\n**ID:** `{user.user_id}`\n**UserName:** @{user.username}\n**Date: **__{user.date}__\n\n"
     await edit_or_reply(event, msg)
 
 
