@@ -66,7 +66,7 @@ def progress_str(total: int, current: int) -> str:
     )
 
 
-async def ban_user_from_bot(user, reason, reply_to):
+async def ban_user_from_bot(user, reason, reply_to=None):
     try:
         date = str(datetime.now().strftime("%B %d, %Y"))
         add_user_to_bl(user.id, get_display_name(user), user.username, reason, date)
@@ -86,7 +86,7 @@ async def ban_user_from_bot(user, reason, reply_to):
     return info
 
 
-async def unban_user_from_bot(user, reason, reply_to):
+async def unban_user_from_bot(user, reason, reply_to=None):
     try:
         rem_user_from_bl(user.id)
     except Exception as e:
