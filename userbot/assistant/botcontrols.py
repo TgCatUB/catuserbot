@@ -110,14 +110,14 @@ async def unban_user_from_bot(user, reason, event, reply_to):
 async def bot_broadcast(event):
     replied = await event.get_reply_message()
     if not replied:
-        return await edit_delete(event, "Reply to a message for Broadcasting First !")
+        return await event.reply("Reply to a message for Broadcasting First !")
     start_ = datetime.now()
     br_cast = await replied.reply("Broadcasting ...")
     blocked_users = []
     count = 0
     bot_users_count = len(get_all_starters())
     if bot_users_count == 0:
-        return await edit_delete(event, "`No one started your bot yet.`")
+        return await event.reply("`No one started your bot yet.`")
     for user in get_all_starters():
         try:
             await event.client.send_message(
