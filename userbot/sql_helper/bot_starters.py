@@ -40,6 +40,14 @@ def add_starter_to_db(
     SESSION.commit()
     return True
 
+def del_starter_from_db(user_id):
+    to_check = get_starter_details(user_id)
+    if not to_check:
+        return False
+    rem = SESSION.query(Bot_Starters).get(str(user_id))
+    SESSION.delete(rem)
+    SESSION.commit()
+    return True
 
 def get_starter_details(user_id):
     try:
