@@ -1,6 +1,6 @@
 import asyncio
 from datetime import datetime
-
+from math import floor
 from telethon.errors import BadRequestError, FloodWaitError, ForbiddenError
 from telethon.utils import get_display_name
 
