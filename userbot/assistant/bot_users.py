@@ -13,6 +13,7 @@ from ..sql_helper.bot_blacklists import (
     add_user_to_bl,
     check_is_black_list,
     rem_user_from_bl,
+    get_all_bl_users
 )
 from ..sql_helper.bot_pms_sql import get_user_id
 from ..sql_helper.bot_starters import get_all_starters
@@ -165,3 +166,22 @@ async def ban_botpms(event):
         )
     msg = await unban_user_from_bot(user, reason, event, reply_to)
     await event.reply(msg)
+
+@catub.cat_cmd(
+    pattern=f"bblist$",
+    command=("bblist", plugin_category),
+    info={
+        "header": "To get users list who are banned in bot.",
+        "description": "To get list of users who are banned in bot.",
+        "usage": "{tr}bblist",
+    },
+)
+async def ban_starters(event):
+    "To get list of users who are banned in bot."
+    list = get_all_bl_users()
+    if len(list) == 0:
+        return await edit_delete(event, "`No one are banned in your bot yet.`")
+    msg = "**The list of users who are banned in your bot are :\n\n**"
+    for user in list:
+        msg += f"• 👤 {_format.mentionuser(user.first_name , user.chat_id)}\n**ID:** `{user.chat_id}`\n**UserName:** @{user.username}\n**Date: **__{user.date}__\n**Reason:** __{user.reason}__\n\n"
+    await edit_or_reply(event, msg)    
