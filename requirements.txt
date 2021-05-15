@@ -29,6 +29,7 @@ humanize
 justwatch
 lottie
 lyricsgenius
+motor
 nekos.py
 patool
 Pillow
