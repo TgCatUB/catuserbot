@@ -141,7 +141,7 @@ async def ban_botpms(event):
 
 
 @catub.bot_cmd(
-    pattern=f"^/unban\s+(.*)?",
+    pattern=f"^/unban(?: |$)(.*)",
     from_users=Config.OWNER_ID,
 )
 async def ban_botpms(event):
@@ -161,7 +161,7 @@ async def ban_botpms(event):
         return await event.client.send_message(
             event.chat_id,
             f"#User_Not_Banned\
-            \nUser doesn't exist in my Banned Users list.",
+            \n👤 {_format.mentionuser(user.first_name , user.user_id)} doesn't exist in my Banned Users list.",
         )
     msg = await unban_user_from_bot(user, reason, event, reply_to)
     await event.reply(msg)
