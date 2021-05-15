@@ -45,11 +45,13 @@ async def get_user_and_reason(event):
 
 async def ban_user_from_bot(user, reason, event, reply_to):
     try:
-        start_date = str(datetime.now().strftime("%B %d, %Y"))
+        str(datetime.now().strftime("%B %d, %Y"))
         add_user_to_bl(user.id, get_display_name(user), reason, date)
     except Exception as e:
         LOGS.error(str(e))
-    banned_msg = f"**You Have been Banned Forever for using this bot\nReason** : {reason}"
+    banned_msg = (
+        f"**You Have been Banned Forever for using this bot\nReason** : {reason}"
+    )
     await event.client.send_message(user.id, banned_msg)
     info = f"**#Banned_Bot_PM_User**\
             \n\n👤 {_format.mentionuser(get_display_name(user) , user.id)}\
