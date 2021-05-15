@@ -111,7 +111,7 @@ async def bot_broadcast(event):
     replied = await event.get_reply_message()
     if not replied:
         return await edit_delete(event, "Reply to a message for Broadcasting First !")
-    start_ = time()
+    start_ = datetime.now()
     br_cast = await replied.reply("Broadcasting ...")
     blocked_users = []
     count = 0
@@ -151,7 +151,7 @@ async def bot_broadcast(event):
                     await br_cast.edit(prog_)
                 except FloodWaitError as e:
                     await asyncio.sleep(e.seconds)
-    end_ = time()
+    end_ = datetime.now()
     b_info = f"🔊  Successfully broadcasted message to ➜  <b>{count} users.</b>"
     if len(blocked_users) != 0:
         b_info += f"\n🚫  <b>{len(blocked_users)} users</b> blocked your bot recently, so have been removed."
