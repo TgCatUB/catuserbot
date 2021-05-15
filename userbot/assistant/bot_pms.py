@@ -107,7 +107,7 @@ async def bot_pms(event):  # sourcery no-metrics
                     f"**Error**\nWhile storing messages details in database\n`{str(e)}`",
                 )
     else:
-        if event.text in ["/uinfo"]:
+        if event.text.startswith("/"):
             return
         reply_to = await reply_id(event)
         if reply_to is None:
