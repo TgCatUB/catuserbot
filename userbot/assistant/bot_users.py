@@ -1,25 +1,6 @@
-from telethon.utils import get_display_name
-
 from datetime import datetime
 
-from telethon import Button, events
 from telethon.utils import get_display_name
-
-from userbot import UPSTREAM_REPO_URL, catub
-
-from ..Config import Config
-from ..core.logger import logging
-from ..core.session import tgbot
-from ..helpers import reply_id
-from ..helpers.utils import _format
-from ..sql_helper.bot_pms_sql import (
-    add_user_to_db,
-    get_user_id,
-    get_user_logging,
-    get_user_reply,
-)
-from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
-from . import BOTLOG, BOTLOG_CHATID
 
 from userbot import catub
 
