@@ -4,7 +4,7 @@ from math import floor
 
 from telethon.errors import BadRequestError, FloodWaitError, ForbiddenError
 from telethon.utils import get_display_name
-
+from ..helpers import time_formatter 
 from userbot import catub
 
 from ..Config import Config
