@@ -102,6 +102,7 @@ async def ban_botpms(event):
         )
     try:
         user = await event.client.get_entity(user_id)
+        user_id = user.id
     except Exception as e:
         return await event.reply(f"**Error:**\n`{str(e)}`")
     if user_id == Config.OWNER_ID:
