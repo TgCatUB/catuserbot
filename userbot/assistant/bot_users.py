@@ -1,13 +1,24 @@
+
+from datetime import datetime
+
+from telethon import Button, events
 from telethon.utils import get_display_name
 
-from userbot import catub
+from userbot import UPSTREAM_REPO_URL, catub
 
 from ..Config import Config
 from ..core.logger import logging
+from ..core.session import tgbot
 from ..helpers import reply_id
 from ..helpers.utils import _format
-from ..sql_helper.bot_blacklists import add_user_to_bl, check_is_black_list
-from ..sql_helper.bot_pms_sql import get_user_id
+from ..sql_helper.bot_pms_sql import (
+    add_user_to_db,
+    get_user_id,
+    get_user_logging,
+    get_user_reply,
+)
+from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details, get_all_starters
+from ..sql_helper.bot_blacklists import add_user_to_bl, check_is_black_list, rem_user_from_bl, get_all_bl_users
 from . import BOTLOG, BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
@@ -16,7 +27,7 @@ plugin_category = "bot"
 botusername = Config.TG_BOT_USERNAME
 
 
-async def get_user_and_reason(event):  # Modified a bound method
+async def get_user_and_reason(event):
     id_reason = event.pattern_match.group(1)
     replied = await reply_id(event)
     user_id, reason = None, None
@@ -57,6 +68,26 @@ async def ban_user_from_bot(user, reason, event, reply_to):
         await event.client.send_message(BOTLOG_CHATID, info)
     return info
 
+@catub.cat_cmd(
+    pattern=f"bot_users$",
+    command=("bot_users", plugin_category),
+    info={
+        "header": "To get users list who started bot.",
+        "description": "To get compelete list of users who started your bot",
+        "usage": "{tr}bot_users",
+    },
+)
+async def ban_starters(event):
+    "To get list of users who started bot."
+    list = get_all_starters()
+    if len(list)==0:
+        return await edit_delete(event, "`No one started your bot yet.`")
+    msg = "**The list of users who started your bot are :\n\n**"
+    for user in list:
+        msg+=f"• 👤 {_format.mentionuser(user.first_name , user.user_id)} | `{user.user_id}\n**Date: **__{user.date}__\n"
+    await edit_or_reply(event, msg)
+
+
 
 @catub.bot_cmd(
     pattern=f"^/ban({botusername})?([\s]+)?$",
@@ -84,9 +115,8 @@ async def ban_botpms(event):
         return await event.client.send_message(
             event.chat_id,
             f"#Already_in_ban\
-                                \nUser Already Exists in My Bot BAN List.\
-                                \n**Reason For Bot BAN:** `{check.reason}`",
+            \nUser Already Exists in My Bot BAN List.\
+            \n**Reason For Bot BAN:** `{check.reason}`",
         )
-    else:
-        msg = await ban_user_from_bot(user, reason, event, reply_to)
-        await event.reply(msg)
+    msg = await ban_user_from_bot(user, reason, event, reply_to)
+    await event.reply(msg)
