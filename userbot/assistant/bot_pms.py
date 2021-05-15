@@ -4,7 +4,12 @@ from telethon import Button, events
 from telethon.utils import get_display_name
 
 from userbot import UPSTREAM_REPO_URL, catub
-
+from ..sql_helper.bot_blacklists import (
+    add_user_to_bl,
+    check_is_black_list,
+    rem_user_from_bl,
+    get_all_bl_users
+)
 from ..Config import Config
 from ..core.logger import logging
 from ..core.session import tgbot
@@ -55,6 +60,8 @@ async def check_bot_started_users(user, event):
 async def bot_start(event):
     chat = await event.get_chat()
     user = await catub.get_me()
+    if check_is_black_list(chat.id):
+        return
     reply_to = await reply_id(event)
     if chat.id != Config.OWNER_ID:
         start_msg = f"Hey! 👤{_format.mentionuser(chat.first_name , chat.id)},\
@@ -95,6 +102,8 @@ async def bot_pms(event):  # sourcery no-metrics
     if event.text.startswith("/start"):
         return
     chat = await event.get_chat()
+    if check_is_black_list(chat.id):
+        return
     if chat.id != Config.OWNER_ID:
         msg = await event.forward_to(Config.OWNER_ID)
         try:
@@ -148,6 +157,8 @@ async def bot_pms(event):  # sourcery no-metrics
 @catub.bot_cmd(edited=True)
 async def bot_pms_edit(event):  # sourcery no-metrics
     chat = await event.get_chat()
+    if check_is_black_list(chat.id):
+        return
     if chat.id != Config.OWNER_ID:
         users = get_user_reply(event.id)
         if users is None:
@@ -219,6 +230,8 @@ async def handler(event):
                     user_id = int(usr.chat_id)
                     user_name = usr.first_name
                     break
+                if check_is_black_list(user_id):
+                    return
                 if reply_msg:
                     await event.client.send_message(
                         Config.OWNER_ID,
