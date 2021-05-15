@@ -9,7 +9,7 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import reply_id
 from ..helpers.utils import _format
-from ..sql_helper.bot_blacklists import add_user_to_bl, check_is_black_list
+from ..sql_helper.bot_blacklists import add_user_to_bl, check_is_black_list, rem_user_from_bl
 from ..sql_helper.bot_pms_sql import get_user_id
 from ..sql_helper.bot_starters import get_all_starters
 from . import BOTLOG, BOTLOG_CHATID
@@ -60,6 +60,23 @@ async def ban_user_from_bot(user, reason, event, reply_to):
             \n**First Name:** {user.first_name}\
             \n**User ID:** `{user.id}`\
             \n**Reason:** `{reason}`"
+    if BOTLOG:
+        await event.client.send_message(BOTLOG_CHATID, info)
+    return info
+
+async def unban_user_from_bot(user, reason, event, reply_to):
+    try:
+        rem_user_from_bl(user.id)
+    except Exception as e:
+        LOGS.error(str(e))
+    banned_msg = (
+        f"**You have been Unbanned Forever from using this bot.**"
+    )
+    await event.client.send_message(user.id, banned_msg)
+    info = f"**#Unbanned_Bot_PM_User**\
+            \n\n👤 {_format.mentionuser(get_display_name(user) , user.id)}\
+            \n**First Name:** {user.first_name}\
+            \n**User ID:** `{user.id}`"
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, info)
     return info
@@ -118,3 +135,29 @@ async def ban_botpms(event):
         )
     msg = await ban_user_from_bot(user, reason, event, reply_to)
     await event.reply(msg)
+    
+@catub.bot_cmd(
+    pattern=f"^/unban\s+(.*)",
+    from_users=Config.OWNER_ID,
+)
+async def ban_botpms(event):
+    user_id, reason = await get_user_and_reason(event)
+    reply_to = await reply_id(event)
+    if not user_id:
+        return await event.client.send_message(
+            event.chat_id, "`I can't find user to unban`", reply_to=reply_to
+        )
+    try:
+        user = await event.client.get_entity(user_id)
+        user_id = user.id
+    except Exception as e:
+        return await event.reply(f"**Error:**\n`{str(e)}`")
+    check = check_is_black_list(user.id)
+    if not check:
+        return await event.client.send_message(
+            event.chat_id,
+            f"#User_Not_Banned\
+            \nUser doesn't exist in my Banned Users list.",
+        )
+    msg = await unban_user_from_bot(user, reason, event, reply_to)
+    await event.reply(msg)    
