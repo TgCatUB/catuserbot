@@ -112,7 +112,8 @@ async def ban_botpms(event):
             event.chat_id,
             f"#Already_in_ban\
             \nUser Already Exists in My Bot BAN List.\
-            \n**Reason For Bot BAN:** `{check.reason}`",
+            \n**Reason For Bot BAN:** `{check.reason}`\
+            \n**Date:** `{check.date}`",
         )
     msg = await ban_user_from_bot(user, reason, event, reply_to)
     await event.reply(msg)
