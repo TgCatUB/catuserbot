@@ -20,7 +20,7 @@ import math
 import re
 import time
 from typing import Dict, Tuple
-
+from ..Config import Config
 from telethon.errors.rpcerrorlist import MessageNotModifiedError
 
 from ..core.logger import logging
@@ -89,8 +89,8 @@ async def progress(
     prog_type,
     file_name=None,
     is_cancelled=False,
-    delay=10,
-):
+    delay=5,
+):  # sourcery no-metrics
     if is_cancelled is True:
         raise CancelProcess
     task_id = f"{gdrive.chat_id}.{gdrive.id}"
@@ -124,10 +124,17 @@ async def progress(
             status = "Unknown"
         progress_str = "`{0}` | `[{1}{2}] {3}%`".format(
             status,
-            "".join(["▰" for i in range(math.floor(percentage / 5))]),
-            "".join(["▱" for i in range(20 - math.floor(percentage / 5))]),
+            "".join(
+                Config.FINISHED_PROGRESS_STR
+                for i in range(math.floor(percentage / 5))
+            ),
+            "".join(
+                Config.UNFINISHED_PROGRESS_STR
+                for i in range(20 - math.floor(percentage / 5))
+            ),
             round(percentage, 2),
         )
+
         tmp = (
             f"{progress_str}\n"
             f"`{humanbytes(current)} of {humanbytes(total)}"
