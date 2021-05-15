@@ -1,7 +1,10 @@
-from telethon.errors import FloodWaitError, MessageNotModidied
-from ..Config import Config
-from telethon.events import CallbackQuery
 import asyncio
+
+from telethon.errors import FloodWaitError
+from telethon.events import CallbackQuery
+
+from ..Config import Config
+
 
 def check_owner(func):
     async def wrapper(_, c_q: CallbackQuery):
