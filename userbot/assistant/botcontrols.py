@@ -66,7 +66,7 @@ def progress_str(total: int, current: int) -> str:
     )
 
 
-async def ban_user_from_bot(user, reason, event, reply_to):
+async def ban_user_from_bot(user, reason, reply_to):
     try:
         date = str(datetime.now().strftime("%B %d, %Y"))
         add_user_to_bl(user.id, get_display_name(user), user.username, reason, date)
@@ -75,18 +75,18 @@ async def ban_user_from_bot(user, reason, event, reply_to):
     banned_msg = (
         f"**You have been Banned Forever from using this bot.\nReason** : {reason}"
     )
-    await event.client.send_message(user.id, banned_msg)
+    await catub.send_message(user.id, banned_msg)
     info = f"**#Banned_Bot_PM_User**\
             \n\n👤 {_format.mentionuser(get_display_name(user) , user.id)}\
             \n**First Name:** {user.first_name}\
             \n**User ID:** `{user.id}`\
             \n**Reason:** `{reason}`"
     if BOTLOG:
-        await event.client.send_message(BOTLOG_CHATID, info)
+        await catub.send_message(BOTLOG_CHATID, info)
     return info
 
 
-async def unban_user_from_bot(user, reason, event, reply_to):
+async def unban_user_from_bot(user, reason, reply_to):
     try:
         rem_user_from_bl(user.id)
     except Exception as e:
@@ -94,13 +94,13 @@ async def unban_user_from_bot(user, reason, event, reply_to):
     banned_msg = f"**You have been Unbanned from this bot. From now on you can send messages here to contact my master.**"
     if reason is not None:
         banned_msg += f"\n**Reason:** __{reason}__"
-    await event.client.send_message(user.id, banned_msg)
+    await catub.send_message(user.id, banned_msg)
     info = f"**#Unbanned_Bot_PM_User**\
             \n\n👤 {_format.mentionuser(get_display_name(user) , user.id)}\
             \n**First Name:** {user.first_name}\
             \n**User ID:** `{user.id}`"
     if BOTLOG:
-        await event.client.send_message(BOTLOG_CHATID, info)
+        await catub.send_message(BOTLOG_CHATID, info)
     return info
 
 
@@ -213,7 +213,7 @@ async def ban_botpms(event):
             \n**Reason For Bot BAN:** `{check.reason}`\
             \n**Date:** `{check.date}`.",
         )
-    msg = await ban_user_from_bot(user, reason, event, reply_to)
+    msg = await ban_user_from_bot(user, reason, reply_to)
     await event.reply(msg)
 
 
@@ -240,7 +240,7 @@ async def ban_botpms(event):
             f"#User_Not_Banned\
             \n👤 {_format.mentionuser(user.first_name , user.id)} doesn't exist in my Banned Users list.",
         )
-    msg = await unban_user_from_bot(user, reason, event, reply_to)
+    msg = await unban_user_from_bot(user, reason, reply_to)
     await event.reply(msg)
 
 
