@@ -111,7 +111,7 @@ async def ban_botpms(event):
         return await event.client.send_message(
             event.chat_id,
             f"#Already_in_ban\
-            \nUser Already Exists in My Bot BAN List.\
+            \nUser already exists in my Banned Users list.\
             \n**Reason For Bot BAN:** `{check.reason}`\
             \n**Date:** `{check.date}`",
         )
