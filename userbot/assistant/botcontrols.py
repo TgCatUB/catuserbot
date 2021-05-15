@@ -49,6 +49,17 @@ async def get_user_and_reason(event):
                 user_id = user
     return user_id, reason
 
+#taken from https://github.com/code-rgb/USERGE-X/blob/f95766027ef95854d05e523b42cd158c2e8cdbd0/userge/plugins/bot/bot_forwards.py#L420
+def progress_str(total: int, current: int) -> str:
+    percentage = current * 100 / total
+    prog_arg = "**Progress** : `{}%`\n" "```[{}{}]```"
+    return prog_arg.format(
+        percentage,
+        "".join((Config.FINISHED_PROGRESS_STR for i in range(floor(percentage / 5)))),
+        "".join(
+            (Config.UNFINISHED_PROGRESS_STR for i in range(20 - floor(percentage / 5)))
+        ),
+    )
 
 async def ban_user_from_bot(user, reason, event, reply_to):
     try:
