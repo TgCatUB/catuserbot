@@ -52,7 +52,7 @@ async def ban_user_from_bot(user, reason, event, reply_to):
     except Exception as e:
         LOGS.error(str(e))
     banned_msg = (
-        f"**You Have been Banned Forever for using this bot\nReason** : {reason}"
+        f"**You have been Banned Forever from using this bot.\nReason** : {reason}"
     )
     await event.client.send_message(user.id, banned_msg)
     info = f"**#Banned_Bot_PM_User**\
