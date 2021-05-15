@@ -3,7 +3,7 @@ from datetime import datetime
 from telethon.utils import get_display_name
 
 from userbot import catub
-
+import asyncio
 from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
@@ -16,9 +16,9 @@ from ..sql_helper.bot_blacklists import (
     rem_user_from_bl,
 )
 from ..sql_helper.bot_pms_sql import get_user_id
-from ..sql_helper.bot_starters import get_all_starters
+from ..sql_helper.bot_starters import get_all_starters, del_starter_from_db
 from . import BOTLOG, BOTLOG_CHATID
-
+from telethon.errors import FloodWaitError, BadRequestError, ForbiddenError
 LOGS = logging.getLogger(__name__)
 
 plugin_category = "bot"
@@ -100,6 +100,56 @@ async def unban_user_from_bot(user, reason, event, reply_to):
         await event.client.send_message(BOTLOG_CHATID, info)
     return info
 
+@catub.bot_cmd(
+    pattern=f"^/broadcast$",
+    from_users=Config.OWNER_ID,
+)
+async def bot_broadcast(event):
+        replied = await event.get_reply_message()
+        if not replied:
+            return await edit_delete(event,"Reply to a message for Broadcasting First !")
+        start_ = time()
+        br_cast = await replied.reply("Broadcasting ...")
+        blocked_users = []
+        count = 0
+        bot_users_count = len(get_all_starters())
+        if bot_users_count ==0:
+            return await edit_delete(event, "`No one started your bot yet.`")
+        for user in get_all_starters():
+            try:
+                await event.client.send_message(int(user.user_id), "🔊 You received a **new** Broadcast.")
+                await event.client.send_message(int(user.user_id), replied)
+                await asyncio.sleep(0.8)
+            except FloodWaitError as e:
+                await asyncio.sleep(e.seconds)
+            except (BadRequestError, ForbiddenError):
+                del_starter_from_db(int(user.user_id))
+            except Exception as err:
+                LOGS.error(str(e))
+                if BOTLOG:
+                    await event.client.send_message(BOTLOG_CHATID, f"**Error while broadcasting**\n`{str(e)}`")
+            else:
+                count += 1
+                if count % 5 == 0:
+                    try:
+                        prog_ = (
+                            "🔊 Broadcasting ...\n\n"
+                            + progress_str(
+                                total=bot_users_count,
+                                current=count + len(blocked_users),
+                            )
+                            + f"\n\n• ✔️ **Success** :  `{count}`\n"
+                            + f"• ✖️ **Failed** :  `{len(blocked_users)}`"
+                        )
+                        await br_cast.edit(prog_)
+                    except FloodWaitError as e:
+                        await asyncio.sleep(e.seconds)
+        end_ = time()
+        b_info = f"🔊  Successfully broadcasted message to ➜  <b>{count} users.</b>"
+        if len(blocked_users) != 0:
+            b_info += f"\n🚫  <b>{len(blocked_users)} users</b> blocked your bot recently, so have been removed."
+        b_info += f"\n⏳  <code>Process took: {time_formatter(end_ - start_)}</code>."
+        await br_cast.edit(b_info,parse_mode="html")
 
 @catub.cat_cmd(
     pattern=f"bot_users$",
