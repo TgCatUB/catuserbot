@@ -202,7 +202,6 @@ async def bot_pms_edit(event):  # sourcery no-metrics
 async def handler(event):
     print(event)
     for msg_id in event.deleted_ids:
-        print(msg_id)
         users_1 = get_user_reply(msg_id)
         users_2 = get_user_logging(msg_id)
         if users_2 is not None:
@@ -219,11 +218,9 @@ async def handler(event):
                     LOGS.error(str(e))
         if users_1 is not None:
             for user in users_1:
-                print(user.message_id)
                 if user.chat_id != Config.OWNER_ID:
                     reply_msg = user.message_id
                     break
-                print(reply_msg)
             try:
                 users = get_user_id(reply_msg)
                 for usr in users:
@@ -231,10 +228,8 @@ async def handler(event):
                     user_id = int(usr.chat_id)
                     user_name = usr.first_name
                     break
-                print(user_id)
                 if check_is_black_list(user_id):
                     return
-                print(user_name)
                 if reply_msg:
                     await event.client.send_message(
                         Config.OWNER_ID,
