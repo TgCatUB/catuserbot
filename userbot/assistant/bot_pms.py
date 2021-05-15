@@ -258,7 +258,6 @@ async def bot_start(event):
         )
     for usr in users:
         user_id = int(usr.chat_id)
-        usr.reply_id
         user_name = usr.first_name
         break
     if user_id is None:
