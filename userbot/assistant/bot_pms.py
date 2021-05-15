@@ -200,7 +200,9 @@ async def bot_pms_edit(event):  # sourcery no-metrics
 
 @tgbot.on(events.MessageDeleted)
 async def handler(event):
+    print(event)
     for msg_id in event.deleted_ids:
+        print(msg_id)
         users_1 = get_user_reply(msg_id)
         users_2 = get_user_logging(msg_id)
         if users_2 is not None:
@@ -217,7 +219,7 @@ async def handler(event):
                     LOGS.error(str(e))
         if users_1 is not None:
             for user in users_1:
-                print(user)
+                print(user.message_id)
                 if user.chat_id != Config.OWNER_ID:
                     reply_msg = user.message_id
                     break
@@ -225,7 +227,7 @@ async def handler(event):
             try:
                 users = get_user_id(reply_msg)
                 for usr in users:
-                    print(usr)
+                    print(usr.chat_id)
                     user_id = int(usr.chat_id)
                     user_name = usr.first_name
                     break
