@@ -9,7 +9,11 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import reply_id
 from ..helpers.utils import _format
-from ..sql_helper.bot_blacklists import add_user_to_bl, check_is_black_list, rem_user_from_bl
+from ..sql_helper.bot_blacklists import (
+    add_user_to_bl,
+    check_is_black_list,
+    rem_user_from_bl,
+)
 from ..sql_helper.bot_pms_sql import get_user_id
 from ..sql_helper.bot_starters import get_all_starters
 from . import BOTLOG, BOTLOG_CHATID
@@ -64,14 +68,13 @@ async def ban_user_from_bot(user, reason, event, reply_to):
         await event.client.send_message(BOTLOG_CHATID, info)
     return info
 
+
 async def unban_user_from_bot(user, reason, event, reply_to):
     try:
         rem_user_from_bl(user.id)
     except Exception as e:
         LOGS.error(str(e))
-    banned_msg = (
-        f"**You have been Unbanned Forever from using this bot.**"
-    )
+    banned_msg = f"**You have been Unbanned Forever from using this bot.**"
     await event.client.send_message(user.id, banned_msg)
     info = f"**#Unbanned_Bot_PM_User**\
             \n\n👤 {_format.mentionuser(get_display_name(user) , user.id)}\
@@ -135,7 +138,8 @@ async def ban_botpms(event):
         )
     msg = await ban_user_from_bot(user, reason, event, reply_to)
     await event.reply(msg)
-    
+
+
 @catub.bot_cmd(
     pattern=f"^/unban\s+(.*)",
     from_users=Config.OWNER_ID,
@@ -160,4 +164,4 @@ async def ban_botpms(event):
             \nUser doesn't exist in my Banned Users list.",
         )
     msg = await unban_user_from_bot(user, reason, event, reply_to)
-    await event.reply(msg)    
+    await event.reply(msg)
