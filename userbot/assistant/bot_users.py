@@ -76,6 +76,8 @@ async def unban_user_from_bot(user, reason, event, reply_to):
     except Exception as e:
         LOGS.error(str(e))
     banned_msg = f"**You have been Unbanned from this bot. From now on you can send messages here to contact my master.**"
+    if reason is not None:
+        banned_msg += f"\n**Reason:** __{reason}__"
     await event.client.send_message(user.id, banned_msg)
     info = f"**#Unbanned_Bot_PM_User**\
             \n\n👤 {_format.mentionuser(get_display_name(user) , user.id)}\
