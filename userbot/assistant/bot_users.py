@@ -48,7 +48,7 @@ async def get_user_and_reason(event):
 async def ban_user_from_bot(user, reason, event, reply_to):
     try:
         date = str(datetime.now().strftime("%B %d, %Y"))
-        add_user_to_bl(user.id, get_display_name(user), reason, date)
+        add_user_to_bl(user.id, get_display_name(user),user.username, reason, date)
     except Exception as e:
         LOGS.error(str(e))
     banned_msg = (
