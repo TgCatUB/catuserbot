@@ -156,7 +156,9 @@ async def bot_broadcast(event):
     b_info = f"🔊  Successfully broadcasted message to ➜  <b>{count} users.</b>"
     if len(blocked_users) != 0:
         b_info += f"\n🚫  <b>{len(blocked_users)} users</b> blocked your bot recently, so have been removed."
-    b_info += f"\n⏳  <code>Process took: {time_formatter((end_ - start_).seconds)}</code>."
+    b_info += (
+        f"\n⏳  <code>Process took: {time_formatter((end_ - start_).seconds)}</code>."
+    )
     await br_cast.edit(b_info, parse_mode="html")
 
 
