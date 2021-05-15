@@ -141,7 +141,7 @@ async def ban_botpms(event):
 
 
 @catub.bot_cmd(
-    pattern=f"^/unban\s+(.*)",
+    pattern=f"^/unban\s+(.*)?",
     from_users=Config.OWNER_ID,
 )
 async def ban_botpms(event):
