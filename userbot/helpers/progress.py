@@ -20,9 +20,10 @@ import math
 import re
 import time
 from typing import Dict, Tuple
-from ..Config import Config
+
 from telethon.errors.rpcerrorlist import MessageNotModifiedError
 
+from ..Config import Config
 from ..core.logger import logging
 
 LOGS = logging.getLogger(__name__)
@@ -125,8 +126,7 @@ async def progress(
         progress_str = "`{0}` | `[{1}{2}] {3}%`".format(
             status,
             "".join(
-                Config.FINISHED_PROGRESS_STR
-                for i in range(math.floor(percentage / 5))
+                Config.FINISHED_PROGRESS_STR for i in range(math.floor(percentage / 5))
             ),
             "".join(
                 Config.UNFINISHED_PROGRESS_STR
