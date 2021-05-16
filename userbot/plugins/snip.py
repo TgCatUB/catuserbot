@@ -128,7 +128,7 @@ async def on_snip_list(event):
             message = "Notes saved in your bot are\n\n"
         message += f"👉 `#{note.keyword}`"
         if note.f_mesg_id:
-            msglink = await get_message_link(Config.PRIVATE_GROUP_ID, note.f_mesg_id)
+            msglink = await get_message_link(BOTLOG_CHATID, note.f_mesg_id)
             message += f"  [preview]({msglink})\n"
         else:
             message += "  No preview\n"
