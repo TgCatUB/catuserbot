@@ -7,7 +7,7 @@ from typing import Optional, Union
 from telethon import Button, events
 from telethon.events import CallbackQuery
 from telethon.utils import get_display_name
-
+from telethon.events import StopPropagation
 from userbot import Config, catub
 
 from ..core import check_owner, pool
@@ -279,7 +279,7 @@ async def bot_start(event):
 
 
 class FloodConfig:
-    BANNED_USERS = {}
+    BANNED_USERS = []
     USERS = defaultdict(list)
     MESSAGES = 3
     SECONDS = 6
@@ -360,7 +360,7 @@ async def send_flood_alert(user_) -> None:
         except UserIsBlocked:
             if BOTLOG:
                 await catub.tgbot.send_message(
-                    Config.BOTLOG_CHATID, "**Unblock your bot !**"
+                    BOTLOG_CHATID, "**Unblock your bot !**"
                 )
     if FloodConfig.ALERT[user_.id].get("fa_id") is None and fa_msg:
         FloodConfig.ALERT[user_.id]["fa_id"] = fa_msg.message_id
@@ -427,10 +427,10 @@ async def antif_on_msg(event):
         return
     user_id = chat.id
     if check_is_black_list(user_id):
-        await event.stop_propagation()
+        raise StopPropagation
     elif await is_flood(user_id):
         await send_flood_alert(chat)
         FloodConfig.BANNED_USERS.add(user_id)
-        await event.stop_propagation()
+        raise StopPropagation
     elif user_id in FloodConfig.BANNED_USERS:
         FloodConfig.BANNED_USERS.remove(user_id)
