@@ -9,7 +9,6 @@ from telethon.utils import get_display_name
 
 from userbot import Config, catub
 
-from ..Config import Config
 from ..core import check_owner, pool
 from ..core.logger import logging
 from ..core.session import tgbot
@@ -283,7 +282,7 @@ class FloodConfig:
     USERS = defaultdict(list)
     MESSAGES = 3
     SECONDS = 6
-    OWNER = list(Config.OWNER_ID)
+    OWNER = [Config.OWNER_ID]
     ALERT = defaultdict(dict)
     AUTOBAN = 10
 
