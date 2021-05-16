@@ -293,7 +293,7 @@ async def send_flood_alert(user_) -> None:
     buttons = [
         (
             Button.inline("🚫  BAN", data=f"bot_pm_ban_{user_.id}"),
-            Buttton.inline(
+            Button.inline(
                 "➖ Bot Antiflood [OFF]",
                 data="toggle_bot-antiflood_off",
             ),
