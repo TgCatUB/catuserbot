@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import Optional, Union
 
 from telethon import Button, events
-from telethon.custom import Button
 from telethon.events import CallbackQuery
 from telethon.utils import get_display_name
 
