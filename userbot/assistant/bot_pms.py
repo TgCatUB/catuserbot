@@ -24,13 +24,22 @@ from ..sql_helper.bot_pms_sql import (
 )
 from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
 from . import BOTLOG, BOTLOG_CHATID
-from .botmanagers import ban_user_from_bot
+
+from .botmanagers import get_user_and_reason, progress_str, ban_user_from_bot, unban_user_from_bot
 
 LOGS = logging.getLogger(__name__)
 
 plugin_category = "bot"
 botusername = Config.TG_BOT_USERNAME
 
+class FloodConfig:
+    BANNED_USERS = set()
+    USERS = defaultdict(list)
+    MESSAGES = 3
+    SECONDS = 6
+    OWNER = [Config.OWNER_ID]
+    ALERT = defaultdict(dict)
+    AUTOBAN = 10
 
 async def check_bot_started_users(user, event):
     if user.id == Config.OWNER_ID:
@@ -278,15 +287,6 @@ async def bot_start(event):
     await info_msg.edit(uinfo)
 
 
-class FloodConfig:
-    BANNED_USERS = []
-    USERS = defaultdict(list)
-    MESSAGES = 3
-    SECONDS = 6
-    OWNER = [Config.OWNER_ID]
-    ALERT = defaultdict(dict)
-    AUTOBAN = 10
-
 
 async def send_flood_alert(user_) -> None:
     # sourcery no-metrics
@@ -339,7 +339,7 @@ async def send_flood_alert(user_) -> None:
         if not fa_id:
             return
         try:
-            msg_ = await catub.tgbot.get_messages(Config.BOTLOG_CHATID, fa_id)
+            msg_ = await catub.tgbot.get_messages(BOTLOG_CHATID, fa_id)
             if msg_.text != flood_msg:
                 await msg_.edit(flood_msg, reply_markup=buttons)
         except Exception as fa_id_err:
@@ -348,7 +348,7 @@ async def send_flood_alert(user_) -> None:
     else:
         if BOTLOG:
             fa_msg = await catub.tgbot.send_message(
-                Config.BOTLOG_CHATID,
+                BOTLOG_CHATID,
                 flood_msg,
                 reply_markup=buttons,
             )
