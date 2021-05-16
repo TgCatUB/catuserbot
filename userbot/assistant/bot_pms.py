@@ -374,11 +374,9 @@ async def bot_pm_ban_cb(c_q: CallbackQuery):
     except Exception as e:
         await c_q.answer(f"Error:\n{str(e)}")
     else:
-        await asyncio.gather(
-            c_q.answer(f"Banning UserID -> {user_id} ...", show_alert=False),
-            ban_user_from_bot(user, "Spamming Bot"),
-            c_q.edit(f"✅ **Successfully Banned**  User ID: {user_id}"),
-        )
+        await c_q.answer(f"Banning UserID -> {user_id} ...", show_alert=False)
+        await ban_user_from_bot(user, "Spamming Bot")
+        await c_q.edit(f"✅ **Successfully Banned**  User ID: {user_id}")
 
 
 def time_now() -> Union[float, int]:
@@ -413,10 +411,8 @@ def is_flood(uid: int) -> Optional[bool]:
 @check_owner
 async def settings_toggle(c_q: CallbackQuery):
     Config.BOT_ANTIFLOOD = False
-    await asyncio.gather(
-        c_q.answer(),
-        c_q.edit_message_text("BOT_ANTIFLOOD is now disabled !"),
-    )
+    await c_q.answer()
+    await c_q.edit("BOT_ANTIFLOOD is now disabled !")
 
 
 @catub.bot_cmd(incoming=True, func=lambda e: e.is_private)
