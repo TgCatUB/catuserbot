@@ -639,7 +639,7 @@ async def pin(event):
     command=("undlt", plugin_category),
     info={
         "header": "To get recent deleted messages in group",
-        "description": "To check recent deleted messages in group, by default will show 5.you can get 1 to 15 messages.",
+        "description": "To check recent deleted messages in group, by default will show 5. you can get 1 to 15 messages.",
         "flags": {
             "u": "use this flag to upload media to chat else will just show as media."
         },
