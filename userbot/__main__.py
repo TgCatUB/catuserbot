@@ -181,18 +181,13 @@ for name in files:
     with open(name) as f:
         path1 = Path(f.name)
         shortname = path1.stem
-        try:
-            if shortname.replace(".py", "") not in Config.NO_LOAD:
+        if shortname.replace(".py", "") not in Config.NO_LOAD:
                 load_module(
                     shortname.replace(".py", ""), plugin_path="userbot/assistant"
                 )
-            else:
+        else:
                 os.remove(Path(f"userbot/assistant/{shortname}.py"))
-        except Exception as e:
-            os.remove(Path(f"userbot/assistant/{shortname}.py"))
-            LOGS.info(f"unable to load {shortname} because of error {e}")
-            LOGS.info(f"{e.args}")
-
+        
 print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
 print("Yay your userbot is officially working.!!!")
 print(
