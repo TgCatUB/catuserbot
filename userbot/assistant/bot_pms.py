@@ -353,7 +353,7 @@ async def send_flood_alert(user_) -> None:
                 buttons=buttons,
             )
         try:
-            chat = await event.client.get_entity(BOTLOG_CHATID)
+            chat = await catub.tgbot.get_entity(BOTLOG_CHATID)
             await catub.tgbot.send_message(
                 Config.OWNER_ID,
                 f"⚠️  **[Bot Flood Warning !](https://t.me/c/{chat.id}/{fa_msg.id})**",
