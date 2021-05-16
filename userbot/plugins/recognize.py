@@ -11,7 +11,7 @@ plugin_category = "utils"
 
 @catub.cat_cmd(
     pattern="recognize ?(.*)",
-    command=("recognize ?(.*)", plugin_category),
+    command=("recognize", plugin_category),
     info={
         "header": "To recognize a image",
         "description": "Get information about an image using AWS Rekognition. Find out information including detected labels, faces. text and moderation tags",
