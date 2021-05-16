@@ -182,12 +182,10 @@ for name in files:
         path1 = Path(f.name)
         shortname = path1.stem
         if shortname.replace(".py", "") not in Config.NO_LOAD:
-                load_module(
-                    shortname.replace(".py", ""), plugin_path="userbot/assistant"
-                )
+            load_module(shortname.replace(".py", ""), plugin_path="userbot/assistant")
         else:
-                os.remove(Path(f"userbot/assistant/{shortname}.py"))
-        
+            os.remove(Path(f"userbot/assistant/{shortname}.py"))
+
 print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
 print("Yay your userbot is officially working.!!!")
 print(
