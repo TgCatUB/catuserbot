@@ -305,6 +305,7 @@ async def send_flood_alert(user_) -> None:
         try:
             FloodConfig.ALERT[user_.id]["count"] += 1
         except KeyError:
+            found = False
             FloodConfig.ALERT[user_.id]["count"] = 1
         except Exception as e:
             if BOTLOG:
