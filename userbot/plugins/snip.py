@@ -2,7 +2,6 @@
 
 from userbot import catub
 
-from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import reply_id
 from ..sql_helper.snip_sql import add_note, get_note, get_notes, rm_note
