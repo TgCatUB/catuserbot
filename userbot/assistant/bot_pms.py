@@ -151,6 +151,8 @@ async def bot_pms(event):  # sourcery no-metrics
                     msg = await event.client.send_message(
                         user_id, event.text, reply_to=reply_msg
                     )
+            except UserIsBlockedError:
+                return await event.reply("𝗧𝗵𝗶𝘀 𝗯𝗼𝘁 𝘄𝗮𝘀 𝗯𝗹𝗼𝗰𝗸𝗲𝗱 𝗯𝘆 𝘁𝗵𝗲 𝘂𝘀𝗲𝗿. ❌")
             except Exception as e:
                 return await event.reply(f"**Error:**\n`{str(e)}`")
             try:
