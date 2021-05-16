@@ -321,7 +321,7 @@ async def send_flood_alert(user_) -> None:
         f"  ID: `{user_.id}`\n"
         f"  Name: {get_display_name(user_)}\n"
         f"  👤 User: {_format.mentionuser(get_display_name(user_), user_.id)}"
-        f"\n\n**Is spamming your bot !** ->  [ Flood rate **({flood_count})** ]\n"
+        f"\n\n**Is spamming your bot !** ->  [ Flood rate ({flood_count}) ]\n"
         "__Quick Action__: Ignored from bot for a while."
     )
 
@@ -337,7 +337,7 @@ async def send_flood_alert(user_) -> None:
             else:
                 await ban_user_from_bot(
                     user_,
-                    f"Automated Ban for Flooding bot [exceeded flood rate of **({FloodConfig.AUTOBAN})**]",
+                    f"Automated Ban for Flooding bot [exceeded flood rate of ({FloodConfig.AUTOBAN})]",
                 )
                 FloodConfig.USERS[user_.id].clear()
                 FloodConfig.ALERT[user_.id].clear()
