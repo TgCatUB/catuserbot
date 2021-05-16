@@ -22,6 +22,7 @@ from telethon import TelegramClient, helpers, utils
 from telethon.crypto import AuthKey
 from telethon.network import MTProtoSender
 from telethon.tl.alltlobjects import LAYER
+from telethon.errors import FloodWaitError
 from telethon.tl.functions import InvokeWithLayerRequest
 from telethon.tl.functions.auth import (
     ExportAuthorizationRequest,
@@ -48,7 +49,7 @@ try:
 except ImportError:
     async_encrypt_attachment = None
 
-log: logging.Logger = logging.getLogger("telethon")
+log: logging.Logger = logging.getLogger("fasttelethon")
 
 TypeLocation = Union[
     Document,
@@ -85,7 +86,13 @@ class DownloadSender:
     async def next(self) -> Optional[bytes]:
         if not self.remaining:
             return None
-        result = await self.client._call(self.sender, self.request)
+        while True:
+            try:
+                result = await self.client._call(self.sender, self.request)
+            except FloodWaitError as e:
+                await asyncio.sleep(e.seconds)
+            else:
+                break
         self.remaining -= 1
         self.request.offset += self.stride
         return result.bytes
