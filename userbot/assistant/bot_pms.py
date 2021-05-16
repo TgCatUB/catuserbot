@@ -355,7 +355,7 @@ async def send_flood_alert(user_) -> None:
         try:
             await catub.tgbot.send_message(
                 Config.OWNER_ID,
-                f"⚠️  **[Bot Flood Warning !](https://t.me/c/{BOTLOG_CHATID}/{fa_msg.id})**",
+                f"⚠️  **[Bot Flood Warning !](https://t.me/c/{BOTLOG_CHATID.replace("-","")}/{fa_msg.id})**",
             )
         except UserIsBlockedError:
             if BOTLOG:
