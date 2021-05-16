@@ -53,7 +53,7 @@ async def cmdinfo(input_str, event, plugin=False):
         category = getkey(plugin)
         if category is not None:
             outstr += f"**Category :** `{category}`\n\n"
-    outstr += f"**Intro**\n{about[0]}"
+    outstr += f"**•  Intro :**\n{about[0]}"
     return outstr
 
 
