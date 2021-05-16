@@ -191,6 +191,7 @@ for name in files:
         except Exception as e:
             os.remove(Path(f"userbot/assistant/{shortname}.py"))
             LOGS.info(f"unable to load {shortname} because of error {e}")
+            LOGS.info(f"{e.args}")
 
 print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
 print("Yay your userbot is officially working.!!!")
