@@ -1,13 +1,13 @@
-import asyncio
 import re
 from collections import defaultdict
 from datetime import datetime
 from typing import Optional, Union
 
 from telethon import Button, events
+from telethon.errors import UserIsBlockedError
 from telethon.events import CallbackQuery, StopPropagation
 from telethon.utils import get_display_name
-from telethon.errors import UserIsBlockedError
+
 from userbot import Config, catub
 
 from ..core import check_owner, pool
@@ -24,13 +24,13 @@ from ..sql_helper.bot_pms_sql import (
 )
 from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
 from . import BOTLOG, BOTLOG_CHATID
-
-from .botmanagers import get_user_and_reason, progress_str, ban_user_from_bot, unban_user_from_bot
+from .botmanagers import ban_user_from_bot
 
 LOGS = logging.getLogger(__name__)
 
 plugin_category = "bot"
 botusername = Config.TG_BOT_USERNAME
+
 
 class FloodConfig:
     BANNED_USERS = set()
@@ -40,6 +40,7 @@ class FloodConfig:
     OWNER = [Config.OWNER_ID]
     ALERT = defaultdict(dict)
     AUTOBAN = 10
+
 
 async def check_bot_started_users(user, event):
     if user.id == Config.OWNER_ID:
@@ -287,7 +288,6 @@ async def bot_start(event):
     await info_msg.edit(uinfo)
 
 
-
 async def send_flood_alert(user_) -> None:
     # sourcery no-metrics
     buttons = [
@@ -308,7 +308,9 @@ async def send_flood_alert(user_) -> None:
             FloodConfig.ALERT[user_.id]["count"] = 1
         except Exception as e:
             if BOTLOG:
-                await catub.tgbot.send_message(BOTLOG_CHATID,f"**Error:**\nWhile updating flood count\n`{str(e)}`")
+                await catub.tgbot.send_message(
+                    BOTLOG_CHATID, f"**Error:**\nWhile updating flood count\n`{str(e)}`"
+                )
         flood_count = FloodConfig.ALERT[user_.id]["count"]
     else:
         flood_count = FloodConfig.ALERT[user_.id]["count"] = 1
