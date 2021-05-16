@@ -171,7 +171,7 @@ async def on_afk(event):  # sourcery no-metrics
     info={
         "header": "Enables afk for your account",
         "description": "When you are in afk if any one tags you then your bot will reply as he is offline.\
-             AFK mean away from keyboard.",
+        AFK mean away from keyboard.",
         "options": "If you want AFK reason with hyperlink use [ ; ] after reason, then paste the media link.",
         "usage": [
             "{tr}afk <reason>",
@@ -231,7 +231,7 @@ async def _(event):
     info={
         "header": "Enables afk for your account",
         "description": "When you are in afk if any one tags you then your bot will reply as he is offline.\
-             AFK mean away from keyboard. Here it supports media unlike afk command",
+         AFK mean away from keyboard. Here it supports media unlike afk command",
         "options": "If you want AFK reason with hyperlink use [ ; ] after reason, then paste the media link.",
         "usage": [
             "{tr}mafk <reason> and reply to media",
