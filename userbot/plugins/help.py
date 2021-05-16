@@ -96,7 +96,7 @@ async def grpinfo():
 
 
 @catub.cat_cmd(
-    pattern="help ?(-c)? ?(\w+)?",
+    pattern="help ?(-c)? ?(\.*)?",
     command=("help", plugin_category),
     info={
         "header": "To get guide for catuserbot.",
