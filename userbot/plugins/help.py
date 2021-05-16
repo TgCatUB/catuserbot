@@ -10,7 +10,6 @@ cmdprefix = Config.COMMAND_HAND_LER
 
 plugin_category = "tools"
 
-
 def get_key(val):
     for key, value in PLG_INFO.items():
         for cmd in value:
@@ -94,7 +93,7 @@ async def grpinfo():
 
 
 @catub.cat_cmd(
-    pattern="help (-c)? ?(\w+)",
+    pattern="help (-c)? ?(\w+)?",
     command=("help", plugin_category),
     info={
         "header": "To get guide for catuserbot.",
