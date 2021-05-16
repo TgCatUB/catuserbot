@@ -1,7 +1,6 @@
 name: PyLint
 
 on: [push, pull_request]
-
 jobs:
   PEP8:
     runs-on: ubuntu-latest
