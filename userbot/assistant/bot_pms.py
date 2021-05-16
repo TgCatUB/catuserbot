@@ -302,7 +302,13 @@ async def send_flood_alert(user_) -> None:
     found = False
     if FloodConfig.ALERT and (user_.id in FloodConfig.ALERT.keys()):
         found = True
-        FloodConfig.ALERT[user_.id]["count"] += 1
+        try:
+            FloodConfig.ALERT[user_.id]["count"] += 1
+        except KeyError:
+            FloodConfig.ALERT[user_.id]["count"] = 1
+        except Exception as e:
+            if BOTLOG:
+                await catub.tgbot.send_message(BOTLOG_CHATID,f"**Error:**\nWhile updating flood count\n`{str(e)}`")
         flood_count = FloodConfig.ALERT[user_.id]["count"]
     else:
         flood_count = FloodConfig.ALERT[user_.id]["count"] = 1
