@@ -61,10 +61,11 @@ async def plugininfo(input_str, event):
         cmds = PLG_INFO[input_str]
     except KeyError:
         outstr = await cmdinfo(input_str, event, plugin=True)
+        return outstr
     except Exception as e:
         await edit_delete(event, f"**Error**\n`{str(e)}`")
         return None
-    outstr = f"**Plugin : **`{input_str}\n"
+    outstr = f"**Plugin : **`{input_str}`\n"
     outstr += f"**Commands Available :** `{len(cmds)}`\n"
     category = getkey(input_str)
     if category is not None:
