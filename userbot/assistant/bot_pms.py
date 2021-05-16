@@ -24,13 +24,13 @@ from ..sql_helper.bot_pms_sql import (
 )
 from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
 from . import BOTLOG, BOTLOG_CHATID
-
-from .botmanagers import get_user_and_reason, progress_str, ban_user_from_bot, unban_user_from_bot
+from .botmanagers import ban_user_from_bot
 
 LOGS = logging.getLogger(__name__)
 
 plugin_category = "bot"
 botusername = Config.TG_BOT_USERNAME
+
 
 class FloodConfig:
     BANNED_USERS = set()
@@ -40,6 +40,7 @@ class FloodConfig:
     OWNER = [Config.OWNER_ID]
     ALERT = defaultdict(dict)
     AUTOBAN = 10
+
 
 async def check_bot_started_users(user, event):
     if user.id == Config.OWNER_ID:
@@ -285,7 +286,6 @@ async def bot_start(event):
             \n**First Name:** {user_name}\
             \n**User ID:** `{user_id}`"
     await info_msg.edit(uinfo)
-
 
 
 async def send_flood_alert(user_) -> None:
