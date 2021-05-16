@@ -431,6 +431,6 @@ async def antif_on_msg(event):
     elif await is_flood(user_id):
         await send_flood_alert(chat)
         FloodConfig.BANNED_USERS.add(user_id)
-        await msg.stop_propagation()
+        await event.stop_propagation()
     elif user_id in FloodConfig.BANNED_USERS:
         FloodConfig.BANNED_USERS.remove(user_id)
