@@ -3,6 +3,7 @@ from datetime import datetime
 
 from telethon.errors import BadRequestError, FloodWaitError, ForbiddenError
 
+from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from userbot import catub
 
 from ..Config import Config
