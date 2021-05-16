@@ -374,7 +374,7 @@ async def bot_pm_ban_cb(c_q: CallbackQuery):
     except Exception as e:
         await c_q.answer(f"Error:\n{str(e)}")
     else:
-        await c_q.answer(f"Banning UserID -> {user_id} ...", show_alert=False)
+        await c_q.answer(f"Banning UserID -> {user_id} ...", alert=False)
         await ban_user_from_bot(user, "Spamming Bot")
         await c_q.edit(f"✅ **Successfully Banned**  User ID: {user_id}")
 
