@@ -202,10 +202,10 @@ async def ban_antiflood(event):
     if input_str == "on":
         if gvarstatus("bot_antif") is not None:
             return await edit_delete(event, "`Bot Antiflood was already enabled.`")
-       addgvar("bot_antif", True)
-       await edit_delete(event, "`Bot Antiflood Enabled.`")
+        addgvar("bot_antif", True)
+        await edit_delete(event, "`Bot Antiflood Enabled.`")
     elif input_str == "off":
         if gvarstatus("bot_antif") is None:
             return await edit_delete(event, "`Bot Antiflood was already disabled.`")
-       delgvar("bot_antif")
-       await edit_delete(event, "`Bot Antiflood Disabled.`")
+        delgvar("bot_antif")
+        await edit_delete(event, "`Bot Antiflood Disabled.`")
