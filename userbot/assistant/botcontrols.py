@@ -1,9 +1,7 @@
 import asyncio
 from datetime import datetime
-from math import floor
 
 from telethon.errors import BadRequestError, FloodWaitError, ForbiddenError
-from telethon.utils import get_display_name
 
 from userbot import catub
 
@@ -12,16 +10,16 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import reply_id, time_formatter
 from ..helpers.utils import _format
-from ..sql_helper.bot_blacklists import (
-    add_user_to_bl,
-    check_is_black_list,
-    get_all_bl_users,
-    rem_user_from_bl,
-)
-from ..sql_helper.bot_pms_sql import get_user_id
+from ..sql_helper.bot_blacklists import check_is_black_list, get_all_bl_users
 from ..sql_helper.bot_starters import del_starter_from_db, get_all_starters
 from . import BOTLOG, BOTLOG_CHATID
-from .botmanagers import get_user_and_reason, progress_str, ban_user_from_bot, unban_user_from_bot
+from .botmanagers import (
+    ban_user_from_bot,
+    get_user_and_reason,
+    progress_str,
+    unban_user_from_bot,
+)
+
 LOGS = logging.getLogger(__name__)
 
 plugin_category = "bot"
