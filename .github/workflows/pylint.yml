@@ -25,7 +25,7 @@ jobs:
         run: |
           black --exclude "exampleconfig\.py" .
       # commit changes
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
           commit_message: 'pylint: auto fixes'
           commit_options: '--no-verify'
