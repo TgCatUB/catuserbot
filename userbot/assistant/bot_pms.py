@@ -316,9 +316,9 @@ async def send_flood_alert(user_) -> None:
         flood_count = FloodConfig.ALERT[user_.id]["count"] = 1
 
     flood_msg = (
-        r"⚠️ <b>\\#Flood_Warning//</b>"
+        r"⚠️ **#Flood_Warning</b>"
         "\n\n"
-        f"  ID: <code>{user_.id}</code>\n"
+        f"  ID: `{user_.id}`\n"
         f"  Name: {get_display_name(user_)}\n"
         f"  👤 User: {_format.mentionuser(get_display_name(user_), user_.id)}"
         f"\n\n**Is spamming your bot !** ->  [ Flood rate **({flood_count})** ]\n"
