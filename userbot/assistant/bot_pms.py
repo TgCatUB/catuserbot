@@ -37,7 +37,6 @@ class FloodConfig:
     USERS = defaultdict(list)
     MESSAGES = 3
     SECONDS = 6
-    OWNER = [Config.OWNER_ID]
     ALERT = defaultdict(dict)
     AUTOBAN = 10
 
