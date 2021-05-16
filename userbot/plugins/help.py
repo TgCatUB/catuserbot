@@ -1,17 +1,13 @@
-import asyncio
-
-import requests
 from telethon import functions
 
 from userbot import catub
 
 from ..Config import Config
+from ..core import CMD_INFO, GRP_INFO, PLG_INFO
 from ..core.managers import edit_or_reply
-from ..helpers.utils import _format, reply_id
-from ..sql_helper.globals import addgvar, gvarstatus
-from ..core import CMD_INFO, PLG_INFO, GRP_INFO, BOT_INFO
 
 cmdprefix = Config.COMMAND_HAND_LER
+
 
 def get_key(val):
     for key, value in PLG_INFO.items():
@@ -20,25 +16,32 @@ def get_key(val):
                 return key
     return None
 
+
 def getkey(val):
     for key, value in GRP_INFO.items():
         if val == value:
             return key
     return None
 
-async def cmdinfo(input_str,event,plugin=False):
-    if input_str[0]==cmdprefix:
+
+async def cmdinfo(input_str, event, plugin=False):
+    if input_str[0] == cmdprefix:
         input_str = input_str[1:]
     try:
         about = CMD_INFO[input_str]
     except KeyError:
         if plugin:
-            await edit_delete(event,f"**There is no plugin or command as **`{input_str}`** in your bot.**")
+            await edit_delete(
+                event,
+                f"**There is no plugin or command as **`{input_str}`** in your bot.**",
+            )
             return None
-        await edit_delete(event,f"**There is no command as **`{input_str}`** in your bot.**")
+        await edit_delete(
+            event, f"**There is no command as **`{input_str}`** in your bot.**"
+        )
         return None
     except Exception as e:
-        await edit_delete(event,f"**Error**\n`{str(e)}`")
+        await edit_delete(event, f"**Error**\n`{str(e)}`")
         return None
     outstr = f"**Command :** `{cmdprefix}{input_str}`\n"
     plugin = get_key(input_str)
@@ -50,13 +53,14 @@ async def cmdinfo(input_str,event,plugin=False):
     outstr += f"**Intro**\n{about[0]}"
     return outstr
 
-async def plugininfo(input_str,event):
+
+async def plugininfo(input_str, event):
     try:
         cmds = PLG_INFO[input_str]
     except KeyError:
-        outstr = await cmdinfo(input_str,event,plugin=True)
+        outstr = await cmdinfo(input_str, event, plugin=True)
     except Exception as e:
-        await edit_delete(event,f"**Error**\n`{str(e)}`")
+        await edit_delete(event, f"**Error**\n`{str(e)}`")
         return None
     outstr = f"**Plugin : **`{input_str}\n"
     outstr += f"**Commands Available :** `{len(cmds)}`\n"
@@ -73,9 +77,10 @@ async def plugininfo(input_str,event):
         \n**Note : **If command name is same as plugin name then use this `{cmdprefix}help -c <command name>`."
     return outstr
 
+
 async def grpinfo():
     outstr = "**Plugins in Catuserbot are:**\n\n"
-    category = [ "admin","bot", "extra","fun", "misc","tools", "utils"]
+    category = ["admin", "bot", "extra", "fun", "misc", "tools", "utils"]
     for cat in category:
         outstr += f"**•  Category : **`{cat}`\n"
         plugins = GRP_INFO[cat]
@@ -84,7 +89,6 @@ async def grpinfo():
         outstr += "\n\n"
     outstr += f"**Usage : ** `{cmdprefix}help <plugin name>`"
     return outstr
-
 
 
 @catub.cat_cmd(
@@ -96,7 +100,10 @@ async def grpinfo():
         "flags": {
             "c": "if command name and plugin name is same then you get guide for plugin. So by using this flag you get command guide.",
         },
-        "usage": ["{tr}help (plugin/command name)","{tr}help -c (command name)",],
+        "usage": [
+            "{tr}help (plugin/command name)",
+            "{tr}help -c (command name)",
+        ],
         "examples": ["{tr}help help", "{tr}help -c help"],
     },
 )
@@ -105,7 +112,7 @@ async def _(event):
     flag = event.pattern_match.group(1)
     input_str = event.pattern_match.group(2)
     if flag and input_str:
-        outstr = await cmdinfo(input_str,event)
+        outstr = await cmdinfo(input_str, event)
         if outstr is None:
             return
     elif input_str:
@@ -114,7 +121,7 @@ async def _(event):
             return
     else:
         outstr = await grpinfo()
-    await edit_or_reply(event,outstr)
+    await edit_or_reply(event, outstr)
 
 
 @catub.cat_cmd(
@@ -129,8 +136,7 @@ async def _(event):
 async def _(event):
     "To get dc of your bot"
     result = await event.client(functions.help.GetNearestDcRequest())
-    result = (
-              f"**Dc details of your account:**\
+    result = f"**Dc details of your account:**\
               \n**Country :** {result.country}\
               \n**Current Dc :** {result.this_dc}\
               \n**Nearest Dc :** {result.nearest_dc}\
@@ -141,5 +147,4 @@ async def _(event):
               \n**DC4 :** Amsterdam, NL\
               \n**DC5 : **Singapore, SG\
                 "
-    )
     await edit_or_reply(event, result)
