@@ -25,7 +25,7 @@ from ..sql_helper.bot_pms_sql import (
 from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
 from . import BOTLOG, BOTLOG_CHATID
 from .botmanagers import ban_user_from_bot
-
+from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 LOGS = logging.getLogger(__name__)
 
 plugin_category = "bot"
@@ -418,14 +418,18 @@ def is_flood(uid: int) -> Optional[bool]:
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"toggle_bot-antiflood_off$")))
 @check_owner
 async def settings_toggle(c_q: CallbackQuery):
-    Config.BOT_ANTIFLOOD = False
-    await c_q.answer()
+    if gvarstatus("bot_antif") is None:
+        return await c_q.answer(f"Bot Antiflood was already disabled.", alert=False)
+    delgvar("bot_antif")
+    await c_q.answer(f"Bot Antiflood disabled.", alert=False)
     await c_q.edit("BOT_ANTIFLOOD is now disabled !")
 
 
 @catub.bot_cmd(incoming=True, func=lambda e: e.is_private)
 @catub.bot_cmd(edited=True)
 async def antif_on_msg(event):
+    if gvarstatus("bot_antif") is None:
+        return
     chat = await event.get_chat()
     if chat.id == Config.OWNER_ID:
         return
