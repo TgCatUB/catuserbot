@@ -77,7 +77,7 @@ async def plugininfo(input_str, event):
             outstr += f"•  **info :** `{CMD_INFO[cmd][1]}`\n\n"
         except IndexError:
             outstr += f"•  **info :** `None`\n\n"
-    outstr += f"**Usage : ** `{cmdprefix}help <command name>`\
+    outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help <command name>`\
         \n**Note : **If command name is same as plugin name then use this `{cmdprefix}help -c <command name>`."
     return outstr
 
@@ -86,12 +86,12 @@ async def grpinfo():
     outstr = "**Plugins in Catuserbot are:**\n\n"
     category = ["admin", "bot", "extra", "fun", "misc", "tools", "utils"]
     for cat in category:
-        outstr += f"**•  Category : **`{cat}`\n"
+        outstr += f"**•  [Category] : **`{cat}`\n"
         plugins = GRP_INFO[cat]
         for plugin in plugins:
             outstr += f"`{plugin}`  "
         outstr += "\n\n"
-    outstr += f"**Usage : ** `{cmdprefix}help <plugin name>`"
+    outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help <plugin name>`"
     return outstr
 
 
