@@ -1,6 +1,6 @@
 import asyncio
 
-from telethon.errors import FloodWaitError
+from telethon.errors import FloodWaitError, MessageNotModifiedError
 from telethon.events import CallbackQuery
 
 from ..Config import Config
@@ -15,7 +15,7 @@ def check_owner(func):
                 await func(c_q)
             except FloodWaitError as e:
                 await asyncio.sleep(e.seconds + 5)
-            except MessageNotModified:
+            except MessageNotModifiedError:
                 pass
         else:
             await c_q.answer(
