@@ -67,7 +67,7 @@ async def plugininfo(input_str, event):
         await edit_delete(event, f"**Error**\n`{str(e)}`")
         return None
     outstr = f"**Plugin : **`{input_str}`\n"
-    outstr += f"**Commands Available :** `{len(cmds)}`\n\n"
+    outstr += f"**Commands Available :** `{len(cmds)}`\n"
     category = getkey(input_str)
     if category is not None:
         outstr += f"**Category :** `{category}`\n\n"
