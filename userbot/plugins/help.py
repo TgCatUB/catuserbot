@@ -8,6 +8,7 @@ from ..core.managers import edit_or_reply
 
 cmdprefix = Config.COMMAND_HAND_LER
 
+plugin_category = "tools"
 
 def get_key(val):
     for key, value in PLG_INFO.items():
