@@ -152,7 +152,7 @@ async def bot_pms(event):  # sourcery no-metrics
                         user_id, event.text, reply_to=reply_msg
                     )
             except Exception as e:
-                await event.reply(f"**Error:**\n`{str(e)}`")
+                return await event.reply(f"**Error:**\n`{str(e)}`")
             try:
                 add_user_to_db(
                     reply_to, user_name, user_id, reply_msg, event.id, msg.id
