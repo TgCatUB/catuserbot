@@ -312,7 +312,7 @@ async def send_flood_alert(user_) -> None:
         "\n\n"
         f"  ID: <code>{user_.id}</code>\n"
         f"  Name: {get_display_name(user_)}\n"
-        f"  👤 User: {user_.mention}"
+        f"  👤 User: {_format.mentionuser(get_display_name(user_), user_.id)}"
         f"\n\n**Is spamming your bot !** ->  [ Flood rate **({flood_count})** ]\n"
         "__Quick Action__: Ignored from bot for a while."
     )
