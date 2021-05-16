@@ -21,8 +21,9 @@ def get_key(val):
 
 def getkey(val):
     for key, value in GRP_INFO.items():
-        if val == value:
-            return key
+        for cmd in value:
+            if val == value:
+                return key
     return None
 
 
