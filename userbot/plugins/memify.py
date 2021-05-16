@@ -472,7 +472,6 @@ async def memes(event):
     else:
         colr = 0
     catinput = int(catinput)
-    colr = int(colr)
     reply = await event.get_reply_message()
     if not reply:
         return await edit_delete(event, "`Reply to supported Media...`")
