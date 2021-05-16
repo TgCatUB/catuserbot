@@ -424,6 +424,7 @@ async def settings_toggle(c_q: CallbackQuery):
 
 
 @catub.bot_cmd(incoming=True, func=lambda e: e.is_private)
+@catub.bot_cmd(edited=True)
 async def antif_on_msg(event):
     chat = await event.get_chat()
     if chat.id == Config.OWNER_ID:
