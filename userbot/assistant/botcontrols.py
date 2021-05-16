@@ -20,6 +20,8 @@ from .botmanagers import (
     unban_user_from_bot,
 )
 
+from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
+
 LOGS = logging.getLogger(__name__)
 
 plugin_category = "bot"
@@ -184,3 +186,26 @@ async def ban_starters(event):
     for user in list:
         msg += f"• 👤 {_format.mentionuser(user.first_name , user.chat_id)}\n**ID:** `{user.chat_id}`\n**UserName:** @{user.username}\n**Date: **__{user.date}__\n**Reason:** __{user.reason}__\n\n"
     await edit_or_reply(event, msg)
+    
+@catub.cat_cmd(
+    pattern=f"bot_antif (on/off)$",
+    command=("bot_antif", plugin_category),
+    info={
+        "header": "To enable or disable bot antiflood.",
+        "description": "if it was turned on then after 10 messages or 10 edits of same messages in less time then your bot auto loacks them.",
+        "usage": ["{tr}bot_antif on","{tr}bot_antif off",],
+    },
+)
+async def ban_antiflood(event):
+    "To enable or disable bot antiflood."
+    input_str = event.pattern_match.group(1)
+    if input_str == "on":
+        if gvarstatus("bot_antif") is not None:
+            return await edit_delete(event, "`Bot Antiflood was already enabled.`")
+       addgvar("bot_antif", True)
+       await edit_delete(event, "`Bot Antiflood Enabled.`")
+    elif input_str == "off":
+        if gvarstatus("bot_antif") is None:
+            return await edit_delete(event, "`Bot Antiflood was already disabled.`")
+       delgvar("bot_antif")
+       await edit_delete(event, "`Bot Antiflood Disabled.`")
