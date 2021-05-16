@@ -180,7 +180,7 @@ async def ban_starters(event):
     "To get list of users who are banned in bot."
     list = get_all_bl_users()
     if len(list) == 0:
-        return await edit_delete(event, "`No one are banned in your bot yet.`")
+        return await edit_delete(event, "`No one is banned in your bot yet.`")
     msg = "**The list of users who are banned in your bot are :\n\n**"
     for user in list:
         msg += f"• 👤 {_format.mentionuser(user.first_name , user.chat_id)}\n**ID:** `{user.chat_id}`\n**UserName:** @{user.username}\n**Date: **__{user.date}__\n**Reason:** __{user.reason}__\n\n"
