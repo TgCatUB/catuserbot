@@ -188,7 +188,7 @@ async def ban_starters(event):
     await edit_or_reply(event, msg)
     
 @catub.cat_cmd(
-    pattern=f"bot_antif (on/off)$",
+    pattern=f"bot_antif (on|off)$",
     command=("bot_antif", plugin_category),
     info={
         "header": "To enable or disable bot antiflood.",
