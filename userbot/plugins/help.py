@@ -66,12 +66,12 @@ async def plugininfo(input_str, event):
         await edit_delete(event, f"**Error**\n`{str(e)}`")
         return None
     outstr = f"**Plugin : **`{input_str}`\n"
-    outstr += f"**Commands Available :** `{len(cmds)}`\n"
+    outstr += f"**Commands Available :** `{len(cmds)}`\n\n"
     category = getkey(input_str)
     if category is not None:
         outstr += f"**Category :** `{category}`\n\n"
     for cmd in cmds:
-        outstr += f"•  **cmd  :** `{cmdprefix}{cmd}`\n"
+        outstr += f"•  **cmd :** `{cmdprefix}{cmd}`\n"
         try:
             outstr += f"•  **info :** `{CMD_INFO[cmd][1]}`\n\n"
         except IndexError:
