@@ -14,6 +14,7 @@ plugin_category = "tools"
     info={
         "header": "check how long it takes to ping your userbot",
         "flags": {"-a": "average ping"},
+        "usage" : ["{tr}ping","{tr}ping -a"],
     },
 )
 async def _(event):
@@ -42,6 +43,7 @@ async def _(event):
     command=("fping", plugin_category),
     info={
         "header": "Shows the server ping with extra animation",
+        "usage" : "{tr}fping"
     },
 )
 async def _(event):
