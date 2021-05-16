@@ -19,6 +19,21 @@ from ..sql_helper.bot_pms_sql import (
 )
 from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
 from . import BOTLOG, BOTLOG_CHATID
+from telethon.events import StopPropagation, CallbackQuery
+
+import asyncio
+from collections import defaultdict
+from datetime import date, datetime, timedelta
+from re import compile as comp_regex
+from typing import Optional, Union
+
+from telethon.errors import BadRequestError, FloodWaitError, UserIsBlockedError
+
+from telethon.custom import Button
+from userbot import catub, Config
+from ..core import pool, check_owner
+
+from .botcontrols import ban_user_from_bot
 
 LOGS = logging.getLogger(__name__)
 
@@ -270,3 +285,162 @@ async def bot_start(event):
             \n**First Name:** {user_name}\
             \n**User ID:** `{user_id}`"
     await info_msg.edit(uinfo)
+
+
+
+
+class FloodConfig:
+    BANNED_USERS = {}
+    USERS = defaultdict(list)
+    MESSAGES = 3
+    SECONDS = 6
+    OWNER = list(Config.OWNER_ID)
+    ALERT = defaultdict(dict)
+    AUTOBAN = 10
+
+
+async def send_flood_alert(user_) -> None:
+    # sourcery no-metrics
+        buttons = [
+                (
+                    Button.inline(
+                        "🚫  BAN", data=f"bot_pm_ban_{user_.id}"
+                    ),
+                    Buttton.inline(
+                        "➖ Bot Antiflood [OFF]",
+                        data="toggle_bot-antiflood_off",
+                    ),
+                )
+            ]
+        found = False
+        if FloodConfig.ALERT and (user_.id in FloodConfig.ALERT.keys()):
+            found = True
+            FloodConfig.ALERT[user_.id]["count"] += 1
+            flood_count = FloodConfig.ALERT[user_.id]["count"]
+        else:
+            flood_count = FloodConfig.ALERT[user_.id]["count"] = 1
+
+        flood_msg = (
+            r"⚠️ <b>\\#Flood_Warning//</b>"
+            "\n\n"
+            f"  ID: <code>{user_.id}</code>\n"
+            f"  Name: {user_.flname}\n"
+            f"  👤 User: {user_.mention}"
+            f"\n\n**Is spamming your bot !** ->  [ Flood rate **({flood_count})** ]\n"
+            "__Quick Action__: Ignored from bot for a while."
+        )
+
+        if found:
+            if flood_count >= FloodConfig.AUTOBAN:
+                if user_.id in Config.SUDO_USERS:
+                    sudo_spam = (
+                        f"**Sudo User** {_format.mentionuser(user_.first_name , user_.id)}:\n  ID: {user_.id}\n\n"
+                        "Is Flooding your bot !, Check `.help delsudo` to remove the user from Sudo."
+                    )
+                    if BOTLOG:
+                        await catub.tgbot.send_message(BOTLOG_CHATID, sudo_spam)
+                else:
+                    await ban_user_from_bot(
+                        user_,
+                        f"Automated Ban for Flooding bot [exceeded flood rate of **({FloodConfig.AUTOBAN})**]",
+                    )
+                    FloodConfig.USERS[user_.id].clear()
+                    FloodConfig.ALERT[user_.id].clear()
+                    FloodConfig.BANNED_USERS.remove(user_.id)
+                return
+            fa_id = FloodConfig.ALERT[user_.id].get("fa_id")
+            if not fa_id:
+                return
+            try:
+                msg_ = await catub.tgbot.get_messages(Config.BOTLOG_CHATID, fa_id)
+                if msg_.text != flood_msg:
+                    await msg_.edit(flood_msg, reply_markup=buttons)
+            except Exception as fa_id_err:
+                LOGS.debug(fa_id_err)
+                return
+        else:
+            if BOTLOG:
+                fa_msg = await catub.tgbot.send_message(
+                    Config.BOTLOG_CHATID,
+                    flood_msg,
+                    reply_markup=buttons,
+                )
+            try:
+                await catub.tgbot.send_message(
+                    Config.OWNER_ID,
+                    f"⚠️  **[Bot Flood Warning !]({fa_msg.link})**",
+                )
+            except UserIsBlocked:
+                if BOTLOG:
+                    await catub.tgbot.send_message(
+                        Config.BOTLOG_CHATID,"**Unblock your bot !**")
+        if FloodConfig.ALERT[user_.id].get("fa_id") is None and fa_msg:
+            FloodConfig.ALERT[user_.id]["fa_id"] = fa_msg.message_id
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"bot_pm_ban_([0-9]+)")))
+@check_owner
+async def bot_pm_ban_cb(c_q: CallbackQuery):
+        user_id = int(c_q.pattern_match.group(1))
+        try:
+            user = await catub.get_entity(user_id)
+        except Exception as e:
+            await c_q.answer(f"Error:\n{str(e)}")
+        else:
+            await asyncio.gather(
+                c_q.answer(f"Banning UserID -> {user_id} ...", show_alert=False),
+                ban_user_from_bot(user, "Spamming Bot"),
+                c_q.edit(f"✅ **Successfully Banned**  User ID: {user_id}"),
+            )
+
+def time_now() -> Union[float, int]:
+        return datetime.timestamp(datetime.now())
+
+@pool.run_in_thread
+def is_flood(uid: int) -> Optional[bool]:
+        """Checks if a user is flooding"""
+        FloodConfig.USERS[uid].append(time_now())
+        if (
+            len(
+                list(
+                    filter(
+                        lambda x: time_now() - int(x) < FloodConfig.SECONDS,
+                        FloodConfig.USERS[uid],
+                    )
+                )
+            )
+            > FloodConfig.MESSAGES
+        ):
+            FloodConfig.USERS[uid] = list(
+                filter(
+                    lambda x: time_now() - int(x) < FloodConfig.SECONDS,
+                    FloodConfig.USERS[uid],
+                )
+            )
+            return True
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"toggle_bot-antiflood_off$")))
+@check_owner
+async def settings_toggle(c_q: CallbackQuery):
+        Config.BOT_ANTIFLOOD = False
+        await asyncio.gather(
+            c_q.answer(),
+            c_q.edit_message_text("BOT_ANTIFLOOD is now disabled !"),
+        )
+
+
+@catub.bot_cmd(incoming=True,
+        func = lambda e: e.is_private
+    )
+async def antif_on_msg(event):
+        chat = await event.get_chat()
+        if chat.id == Config.OWNER_ID:
+            return
+        user_id = chat.id
+        if check_is_black_list(user_id):
+            await event.stop_propagation()
+        elif await is_flood(user_id):
+            await send_flood_alert(chat)
+            FloodConfig.BANNED_USERS.add(user_id)
+            await msg.stop_propagation()
+        elif user_id in FloodConfig.BANNED_USERS:
+            FloodConfig.BANNED_USERS.remove(user_id)
