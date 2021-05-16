@@ -7,9 +7,9 @@ from ..Config import Config
 
 
 def check_owner(func):
-    async def wrapper(_, c_q: CallbackQuery):
-        if c_q.from_user and (
-            c_q.from_user.id == Config.OWNER_ID or c_q.from_user.id in Config.SUDO_USERS
+    async def wrapper(c_q: CallbackQuery):
+        if c_q.query.user_id and (
+            c_q.query.user_id == Config.OWNER_ID or c_q.query.user_id in Config.SUDO_USERS
         ):
             try:
                 await func(c_q)
