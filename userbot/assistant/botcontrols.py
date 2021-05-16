@@ -3,7 +3,6 @@ from datetime import datetime
 
 from telethon.errors import BadRequestError, FloodWaitError, ForbiddenError
 
-from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from userbot import catub
 
 from ..Config import Config
@@ -13,6 +12,7 @@ from ..helpers import reply_id, time_formatter
 from ..helpers.utils import _format
 from ..sql_helper.bot_blacklists import check_is_black_list, get_all_bl_users
 from ..sql_helper.bot_starters import del_starter_from_db, get_all_starters
+from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from . import BOTLOG, BOTLOG_CHATID
 from .botmanagers import (
     ban_user_from_bot,
@@ -20,8 +20,6 @@ from .botmanagers import (
     progress_str,
     unban_user_from_bot,
 )
-
-from ..sql_helper.bot_starters import add_starter_to_db, get_starter_details
 
 LOGS = logging.getLogger(__name__)
 
@@ -187,14 +185,18 @@ async def ban_starters(event):
     for user in list:
         msg += f"• 👤 {_format.mentionuser(user.first_name , user.chat_id)}\n**ID:** `{user.chat_id}`\n**UserName:** @{user.username}\n**Date: **__{user.date}__\n**Reason:** __{user.reason}__\n\n"
     await edit_or_reply(event, msg)
-    
+
+
 @catub.cat_cmd(
     pattern=f"bot_antif (on|off)$",
     command=("bot_antif", plugin_category),
     info={
         "header": "To enable or disable bot antiflood.",
         "description": "if it was turned on then after 10 messages or 10 edits of same messages in less time then your bot auto loacks them.",
-        "usage": ["{tr}bot_antif on","{tr}bot_antif off",],
+        "usage": [
+            "{tr}bot_antif on",
+            "{tr}bot_antif off",
+        ],
     },
 )
 async def ban_antiflood(event):
