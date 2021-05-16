@@ -426,7 +426,7 @@ async def settings_toggle(c_q: CallbackQuery):
 
 
 @catub.bot_cmd(incoming=True, func=lambda e: e.is_private)
-@catub.bot_cmd(edited=True)
+@catub.bot_cmd(edited=True, func=lambda e: e.is_private)
 async def antif_on_msg(event):
     if gvarstatus("bot_antif") is None:
         return
