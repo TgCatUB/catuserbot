@@ -5,9 +5,9 @@ from datetime import datetime
 from typing import Optional, Union
 
 from telethon import Button, events
-from telethon.events import CallbackQuery
+from telethon.events import CallbackQuery, StopPropagation
 from telethon.utils import get_display_name
-from telethon.events import StopPropagation
+
 from userbot import Config, catub
 
 from ..core import check_owner, pool
@@ -359,9 +359,7 @@ async def send_flood_alert(user_) -> None:
             )
         except UserIsBlocked:
             if BOTLOG:
-                await catub.tgbot.send_message(
-                    BOTLOG_CHATID, "**Unblock your bot !**"
-                )
+                await catub.tgbot.send_message(BOTLOG_CHATID, "**Unblock your bot !**")
     if FloodConfig.ALERT[user_.id].get("fa_id") is None and fa_msg:
         FloodConfig.ALERT[user_.id]["fa_id"] = fa_msg.message_id
 
