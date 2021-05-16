@@ -361,7 +361,7 @@ async def send_flood_alert(user_) -> None:
             if BOTLOG:
                 await catub.tgbot.send_message(BOTLOG_CHATID, "**Unblock your bot !**")
     if FloodConfig.ALERT[user_.id].get("fa_id") is None and fa_msg:
-        FloodConfig.ALERT[user_.id]["fa_id"] = fa_msg.message_id
+        FloodConfig.ALERT[user_.id]["fa_id"] = fa_msg.id
 
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"bot_pm_ban_([0-9]+)")))
