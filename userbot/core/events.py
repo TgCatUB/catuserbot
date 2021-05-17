@@ -91,7 +91,48 @@ class InlineQuery(events.common.EventBuilder):
         @property
         def catbuilder(self):
             return InlineBuilder(self._client)
+        async def answer(
+            self,
+            results=None,
+            cache_time=0,
+            *,
+            gallery=False,
+            next_offset=None,
+            private=False,
+            switch_pm=None,
+            switch_pm_param=""
+        ):
+            if self._answered:
+                return
+            if results:
+                futures = [self._as_future(x) for x in results]
 
+                await asyncio.wait(futures)
+                results = [x.result() for x in futures]
+            else:
+                results = []
+            if switch_pm:
+                switch_pm = types.InlineBotSwitchPM(switch_pm, switch_pm_param)
+            return await self._client(
+                functions.messages.SetInlineBotResultsRequest(
+                    query_id=self.query.query_id,
+                    results=results,
+                    cache_time=cache_time,
+                    gallery=gallery,
+                    next_offset=next_offset,
+                    private=private,
+                    switch_pm=switch_pm,
+                )
+            )
+
+        @staticmethod
+        def _as_future(obj):
+            if inspect.isawaitable(obj):
+                return asyncio.ensure_future(obj)
+
+            f = asyncio.get_event_loop().create_future()
+            f.set_result(obj)
+            return f
 
 @events.common.name_inner_event
 class MessageEdited(NewMessage):
