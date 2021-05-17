@@ -1,20 +1,7 @@
 import os
-import re
-import time
-import urllib.request
-import zipfile
-from datetime import datetime
-from random import choice
 
 import PIL.ImageOps
-import requests
-from emoji import get_emoji_regexp
-from PIL import Image, ImageDraw, ImageFont
-from telethon.tl.types import Channel, PollAnswer
-from validators.url import url
-from youtubesearchpython import VideosSearch
-
-from ..resources.states import states
+from PIL import Image
 
 
 def convert_toimage(image, filename=None):
