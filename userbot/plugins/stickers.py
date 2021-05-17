@@ -5,7 +5,7 @@ import math
 import random
 import urllib.request
 from os import remove
-
+import cloudscraper
 import emoji as catemoji
 import requests
 from bs4 import BeautifulSoup as bs
@@ -626,7 +626,8 @@ async def cb_sticker(event):
     if not split:
         return await edit_delete(event, "`Provide some name to search for pack.`", 5)
     catevent = await edit_or_reply(event, "`Searching sticker packs....`")
-    text = requests.get(combot_stickers_url + split).text
+    scraper = cloudscraper.create_scraper()
+    text = scraper.get(combot_stickers_url + split).text
     soup = bs(text, "lxml")
     results = soup.find_all("div", {"class": "sticker-pack__header"})
     if not results:
