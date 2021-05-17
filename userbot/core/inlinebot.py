@@ -6,7 +6,7 @@ import time
 from telethon import Button, events
 
 from userbot import catub
-
+from ..helpers.functions import catalive
 from ..Config import Config
 
 CAT_IMG = Config.ALIVE_PIC or None
