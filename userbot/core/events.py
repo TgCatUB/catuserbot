@@ -61,7 +61,7 @@ class NewMessage(events.NewMessage):
 
 @events.common.name_inner_event
 class InlineQuery(events.common.EventBuilder):
-    def __init__(self, **kwargse):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     @classmethod
