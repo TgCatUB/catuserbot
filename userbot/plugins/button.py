@@ -7,8 +7,8 @@ import re
 
 from telethon import Button
 
-from . import BOT_USERNAME, catub, edit_delete, reply_id
 from ..Config import Config
+from . import BOT_USERNAME, catub, edit_delete, reply_id
 
 plugin_category = "tools"
 # regex obtained from:
