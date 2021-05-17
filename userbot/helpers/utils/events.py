@@ -17,9 +17,11 @@ async def get_user_from_event(event, catevent=None, secondgroup=None, nogroup=Fa
     if catevent is None:
         catevent = event
     if nogroup is False:
+        print(1)
         if secondgroup:
             args = event.pattern_match.group(2).split(" ", 1)
         else:
+            print(2)
             args = event.pattern_match.group(1).split(" ", 1)
     extra = None
     if event.reply_to_msg_id:
