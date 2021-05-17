@@ -1,8 +1,8 @@
 import json
 import os
 import re
+
 from telethon.events import CallbackQuery
-from telethon import events
 
 from userbot import catub
 
