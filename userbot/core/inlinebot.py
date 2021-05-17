@@ -167,9 +167,10 @@ async def inline_handler(event):  # sourcery no-metrics
             CAT_LOGO,
             title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
             description="https://github.com/sandy1709/catuserbot",
-            text="Deploy your own catuserbot",
+            text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗰𝗮𝘁𝘂𝘀𝗲𝗿𝗯𝗼𝘁.",
             link_preview=False,
             include_media=True,
+            force_document=False,
             buttons=buttons,
         )
         await event.answer([result] if result else None)
