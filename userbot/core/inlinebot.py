@@ -12,7 +12,7 @@ from ..Config import Config
 
 CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
-CAT_LOGO = "https://telegra.ph/file/3f91309862d81438e6710.jpg"
+CAT_LOGO = "https://telegra.ph/file/cbb366e4d7378d37eb452.jpg"
 
 
 def ibuild_keyboard(buttons):
