@@ -165,7 +165,6 @@ async def inline_handler(event):  # sourcery no-metrics
         ]
         result = builder.photo(
             CAT_LOGO,
-            url="https://github.com/sandy1709/catuserbot",
             text="Deploy your own catuserbot",
             link_preview=False,
             buttons=buttons,
