@@ -7,8 +7,8 @@ from ..Config import Config
 
 from userbot import StartTime, catub, catversion
 
-from ..helpers.functions import check_data_base_heal_th, get_readable_time,
-from ..core.managers import edit_or_reply,
+from ..helpers.functions import check_data_base_heal_th, get_readable_time
+from ..core.managers import edit_or_reply
 from . import mention
 from ..helpers.utils reply_id
 
