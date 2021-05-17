@@ -1,19 +1,7 @@
-from youtubesearchpython import VideosSearch
-
-import os
 import re
-import time
 import urllib.request
-import zipfile
-from datetime import datetime
-from random import choice
 
-import PIL.ImageOps
-import requests
-from emoji import get_emoji_regexp
-from PIL import Image, ImageDraw, ImageFont
-from telethon.tl.types import Channel, PollAnswer
-from validators.url import url
+from youtubesearchpython import VideosSearch
 
 song_dl = "youtube-dl --force-ipv4 --write-thumbnail -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
 thumb_dl = "youtube-dl --force-ipv4 -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
@@ -43,8 +31,8 @@ async def yt_search(cat):
         return "Couldnt fetch results"
     except Exception:
         return "Couldnt fetch results"
-    
-    
+
+
 async def ytsearch(query, limit):
     result = ""
     videolinks = VideosSearch(query.lower(), limit=limit)
