@@ -8,7 +8,6 @@ from telethon import Button, events
 from userbot import catub
 
 from ..Config import Config
-from ..helpers.functions import catalive
 
 CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
@@ -144,6 +143,7 @@ async def inline_handler(event):  # sourcery no-metrics
             json.dump(jsondata, open(secret, "w"))
         else:
             json.dump(newsecret, open(secret, "w"))
+
 
 @catub.tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"close")))
 async def on_plug_in_callback_query_handler(event):

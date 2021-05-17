@@ -1,13 +1,11 @@
 import json
 import os
 import re
-import time
 
-from telethon import Button, events
+from telethon import events
 
 from userbot import catub
 
-from ..Config import Config
 
 @catub.tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"secret_(.*)")))
 async def on_plug_in_callback_query_handler(event):
