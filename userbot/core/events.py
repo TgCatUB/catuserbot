@@ -1,8 +1,7 @@
 from telethon import events
 from telethon.tl import functions, types
-
 from .managers import edit_or_reply
-
+from . import inlinebuilder
 
 @events.common.name_inner_event
 class NewMessage(events.NewMessage):
@@ -57,9 +56,35 @@ class NewMessage(events.NewMessage):
                 return
         return event
 
+@events.common.name_inner_event
+class InlineQuery(events.common.EventBuilder):
+    def __init__(self, **kwargse):
+        super().__init__(**kwargs)
+
+    @classmethod
+    def build(cls, update, others=None, self_id=None):
+        if isinstance(update, types.UpdateBotInlineQuery):
+            return cls.Event(update)
+
+    class Event(EventCommon, SenderGetter):
+        def __init__(self, query):
+            super().__init__(chat_peer=types.PeerUser(query.user_id))
+            SenderGetter.__init__(self, query.user_id)
+            self.query = query
+            self.pattern_match = None
+            self._answered = False
+        
+        def _set_client(self, client):
+            super()._set_client(client)
+            self._sender, self._input_sender = utils._get_entity_pair(
+                self.sender_id, self._entities, client._entity_cache)
+
+        @property
+        def catbuilder(self):
+            return inlinebuilder.InlineBuilder(self._client)
 
 @events.common.name_inner_event
-class MessageEdited(NewMessage):
+class MessageEdited(events.NewMessage):
     @classmethod
     def build(cls, update, others=None, self_id=None):
         if isinstance(update, types.UpdateEditMessage):
