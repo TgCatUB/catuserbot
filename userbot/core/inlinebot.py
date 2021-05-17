@@ -177,11 +177,12 @@ async def inline_handler(event):  # sourcery no-metrics
         attributes, mime_type = get_attributes(CAT_LOGO)
         result = builder.article(
             title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
+            description="Deploy yourself",
             url="https://github.com/sandy1709/catuserbot",
             text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
             link_preview=False,
             thumb=types.InputWebDocument(
-                url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
+                url=CAT_LOGO, size=97, mime_type=mime_type, attributes=attributes
             ),
             content=types.InputWebDocument(
                 url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
