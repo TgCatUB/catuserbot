@@ -181,7 +181,7 @@ async def inline_handler(event):  # sourcery no-metrics
             text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
             link_preview=False,
             thumb=types.InputWebDocument(
-                url=CATLOGO, size=96.95, mime_type=mime_type, attributes=attributes
+                url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
             ),
             buttons=buttons,
         )
