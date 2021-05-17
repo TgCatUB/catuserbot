@@ -3,7 +3,7 @@ import os
 import re
 import time
 
-from telethon import Button, events
+from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery
 
 from userbot import catub
