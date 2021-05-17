@@ -4,7 +4,7 @@ from userbot import catub
 
 from ..Config import Config
 from ..core import CMD_INFO, GRP_INFO, PLG_INFO
-from ..core.managers import edit_or_reply, edit_delete
+from ..core.managers import edit_delete, edit_or_reply
 
 cmdprefix = Config.COMMAND_HAND_LER
 
