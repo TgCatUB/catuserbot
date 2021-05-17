@@ -1,20 +1,8 @@
-import os
-import re
 import time
-import urllib.request
-import zipfile
 from datetime import datetime
-from random import choice
 
-import PIL.ImageOps
-import requests
 from emoji import get_emoji_regexp
-from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import Channel, PollAnswer
-from validators.url import url
-from youtubesearchpython import VideosSearch
-
-from ..resources.states import states
 
 
 async def get_message_link(channelid, msgid):
@@ -57,6 +45,7 @@ async def get_readable_time(seconds: int) -> str:
 
 # gban
 
+
 async def admin_groups(cat):
     catgroups = []
     async for dialog in cat.client.iter_dialogs():
@@ -68,8 +57,8 @@ async def admin_groups(cat):
         ):
             catgroups.append(entity.id)
     return catgroups
-    
-    
+
+
 # https://github.com/pokurt/LyndaRobot/blob/7556ca0efafd357008131fa88401a8bb8057006f/lynda/modules/helper_funcs/string_handling.py#L238
 
 
@@ -96,12 +85,12 @@ async def extract_time(cat, time_val):
         f"Invalid time type specified. Expected m , h , d or w but got: {time_val[-1]}"
     )
     return ""
-    
+
 
 def Build_Poll(options):
     return [PollAnswer(option, bytes(i)) for i, option in enumerate(options, start=1)]
-    
+
 
 def deEmojify(inputString: str) -> str:
     """Remove emojis and other non-safe characters from string"""
-    return get_emoji_regexp().sub("", inputString)    
+    return get_emoji_regexp().sub("", inputString)
