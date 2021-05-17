@@ -91,6 +91,7 @@ class InlineQuery(events.common.EventBuilder):
         @property
         def catbuilder(self):
             return InlineBuilder(self._client)
+
         async def answer(
             self,
             results=None,
@@ -133,6 +134,7 @@ class InlineQuery(events.common.EventBuilder):
             f = asyncio.get_event_loop().create_future()
             f.set_result(obj)
             return f
+
 
 @events.common.name_inner_event
 class MessageEdited(NewMessage):
