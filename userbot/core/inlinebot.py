@@ -175,7 +175,7 @@ async def inline_handler(event):  # sourcery no-metrics
             )
         ]
         attributes, mime_type = get_attributes(CAT_LOGO)
-       """ result = builder.article(
+        """ result = builder.article(
             title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
             description="Deploy yourself",
             url="https://github.com/sandy1709/catuserbot",
