@@ -6,9 +6,10 @@ import time
 import requests
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
+from telethon.utils import get_attributes
 
 from userbot import catub
-from telethon.utils import get_attributes
+
 from ..Config import Config
 from .logger import logging
 
@@ -20,9 +21,7 @@ CAT_LOGO = os.path.join("downloads", "catlogo.jpg")
 CATLOGO = "https://telegra.ph/file/cbb366e4d7378d37eb452.jpg"
 try:
     with open(CAT_LOGO, "wb") as f:
-        f.write(
-            requests.get(CATLOGO).content
-        )
+        f.write(requests.get(CATLOGO).content)
 except Exception as e:
     LOGS.info(str(e))
 
@@ -181,7 +180,9 @@ async def inline_handler(event):  # sourcery no-metrics
             url="https://github.com/sandy1709/catuserbot",
             text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
             link_preview=False,
-            thumb=types.InputWebDocument(url=CATLOGO,mime_type=mime_type,attributes=attributes),
+            thumb=types.InputWebDocument(
+                url=CATLOGO, mime_type=mime_type, attributes=attributes
+            ),
             buttons=buttons,
         )
         await event.answer([result] if result else None)
