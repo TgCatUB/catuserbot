@@ -6,8 +6,9 @@ import time
 from telethon import Button, events
 
 from userbot import catub
-from ..helpers.functions import catalive
+
 from ..Config import Config
+from ..helpers.functions import catalive
 
 CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
