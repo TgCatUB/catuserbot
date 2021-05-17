@@ -80,10 +80,7 @@ async def _(event):
                     )
     except Exception as e:
         mentions += " " + str(e) + "\n"
-    if reply_message:
-        await reply_message.reply(mentions)
-    else:
-        await event.client.send_message(event.chat_id, mentions, reply_to=reply_message)
+    await event.client.send_message(event.chat_id, mentions, reply_to=reply_message)
     await event.delete()
 
 
