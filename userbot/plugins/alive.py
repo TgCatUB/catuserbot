@@ -3,13 +3,14 @@ from platform import python_version
 
 from telethon import version
 
-from userbot import StartTime, catub, catversion
-
 from ..Config import Config
-from ..core.managers import edit_or_reply
+
+from userbot import StartTime, catub, catversion
+from telethon.events import CallbackQuery
 from ..helpers.functions import check_data_base_heal_th, get_readable_time
-from ..helpers.utils import reply_id
+from ..core.managers import edit_or_reply
 from . import mention
+from ..helpers.utils import reply_id
 
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
 EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
@@ -80,9 +81,8 @@ async def amireallyalive(event):
     results = await event.client.inline_query(Config.TG_BOT_USERNAME, cat_caption)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()
-
-
-@catub.tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"stats")))
+    
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"stats")))
 async def on_plug_in_callback_query_handler(event):
     statstext = await catalive(StartTime)
     await event.answer(statstext, cache_time=0, alert=True)
