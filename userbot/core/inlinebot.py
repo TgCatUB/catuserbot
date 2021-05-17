@@ -4,7 +4,7 @@ import re
 import time
 
 from telethon import Button, events
-from telethon.events import CallbackQuery
+from telethon.events import CallbackQuery, InlineQuery
 
 from userbot import catub
 
@@ -24,7 +24,7 @@ def ibuild_keyboard(buttons):
     return keyb
 
 
-@catub.tgbot.on(events.InlineQuery)
+@catub.tgbot.on(InlineQuery)
 async def inline_handler(event):  # sourcery no-metrics
     builder = event.builder
     result = None
