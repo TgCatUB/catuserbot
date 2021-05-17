@@ -14,6 +14,7 @@ CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 CAT_LOGO = "https://telegra.ph/file/3f91309862d81438e6710.jpg"
 
+
 def ibuild_keyboard(buttons):
     keyb = []
     for btn in buttons:
@@ -30,9 +31,9 @@ async def inline_handler(event):  # sourcery no-metrics
     result = None
     query = event.text
     string = query.lower()
-    str_x = query.split(" ", 2)
-    str_y = query.split(" ", 1)
-    string_split = string.split()
+    query.split(" ", 2)
+    query.split(" ", 1)
+    string.split()
     query_user_id = event.query.user_id
     if query_user_id == Config.OWNER_ID or query_user_id in Config.SUDO_USERS:
         hmm = re.compile("secret (.*) (.*)")
@@ -81,7 +82,9 @@ async def inline_handler(event):  # sourcery no-metrics
                 if n_escapes % 2 == 0:
                     # create a thruple with button label, url, and newline
                     # status
-                    buttons.append((match.group(2), match.group(3), bool(match.group(4))))
+                    buttons.append(
+                        (match.group(2), match.group(3), bool(match.group(4)))
+                    )
                     note_data += markdown_note[prev : match.start(1)]
                     prev = match.end(1)
                 # if odd, escaped -> move along
@@ -161,15 +164,14 @@ async def inline_handler(event):  # sourcery no-metrics
             )
         ]
         result = builder.photo(
-                    CAT_LOGO,
-                    title="Alive cat",
-                    url="https://github.com/sandy1709/catuserbot",
-                    text="Deploy your own catuserbot",
-                    link_preview=False,
-                    buttons=buttons,
-                )
+            CAT_LOGO,
+            title="Alive cat",
+            url="https://github.com/sandy1709/catuserbot",
+            text="Deploy your own catuserbot",
+            link_preview=False,
+            buttons=buttons,
+        )
         await event.answer([result] if result else None)
-
 
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"close")))
