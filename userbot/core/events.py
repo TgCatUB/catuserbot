@@ -1,6 +1,6 @@
-import inspect
 import asyncio
-import re
+import inspect
+
 from telethon import events, functions, types, utils
 from telethon.events.common import EventCommon
 from telethon.tl.custom.sendergetter import SenderGetter
