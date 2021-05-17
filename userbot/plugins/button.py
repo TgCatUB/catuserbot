@@ -17,7 +17,7 @@ BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>
 
 
 @catub.cat_cmd(
-    pattern="cbutton (.*)",
+    pattern="cbutton(?: |$)(.*)",
     command=("cbutton", plugin_category),
     info={
         "header": "To create button posts",
@@ -85,7 +85,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="ibutton (.*)",
+    pattern="ibutton(?: |$)(.*)",
     command=("ibutton", plugin_category),
     info={
         "header": "To create button posts via inline",
