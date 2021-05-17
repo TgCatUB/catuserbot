@@ -26,7 +26,7 @@ plugin_category = "utils"
         "examples": "{tr}sg @missrose_bot",
     },
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "To get name/username history."
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply_message = await event.get_reply_message()
@@ -64,7 +64,7 @@ async def _(event):    # sourcery no-metrics
     check = usernames if cmd == "u" else names
     for i in check:
         if sandy:
-                await event.reply(i, parse_mode=_format.parse_pre)
+            await event.reply(i, parse_mode=_format.parse_pre)
         else:
-                sandy = True
-                await catevent.edit(i, parse_mode=_format.parse_pre)
+            sandy = True
+            await catevent.edit(i, parse_mode=_format.parse_pre)
