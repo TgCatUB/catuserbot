@@ -6,6 +6,8 @@ from ..core.managers import edit_or_reply
 from ..helpers.utils import _format
 from ..sql_helper import global_collection as sql
 from . import _format, get_user_from_event
+import sys
+import os
 
 plugin_category = "tools"
 
@@ -36,7 +38,7 @@ async def _init() -> None:
         "usage": "{tr}addsudo <username/reply/mention>",
     },
 )
-async def _(event: NewMessage.Event) -> None:
+async def _(event):
     "To add user to sudo."
     replied_user, error_i_a = await get_user_from_event(event)
     if replied_user is None:
@@ -58,6 +60,8 @@ async def _(event: NewMessage.Event) -> None:
             )
     sql.add_to_collectionlist(__keyword__, userdata)
     Config.SUDO_USERS.add(replied_user.id)
+    args = [sys.executable, "-m", "userbot"]
+    os.execle(sys.executable, *args, os.environ)
     return await edit_or_reply(
         event,
         f"[{replied_user.first_name}](tg://user?id={replied_user.id}) " + SUDO_STRING3,
@@ -72,7 +76,7 @@ async def _(event: NewMessage.Event) -> None:
         "usage": "{tr}delsudo <username/reply/mention>",
     },
 )
-async def _(event: NewMessage.Event) -> None:
+async def _(event):
     "To del user from sudo."
     replied_user, error_i_a = await get_user_from_event(event)
     if replied_user is None:
@@ -101,7 +105,7 @@ async def _(event: NewMessage.Event) -> None:
         "usage": "{tr}sudousers",
     },
 )
-async def _(event: NewMessage.Event) -> None:
+async def _(event):
     "To list Your sudo users"
     sudocount = sql.num_collectionlist_item(__keyword__)
     if sudocount == 0:
