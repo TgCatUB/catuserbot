@@ -1,7 +1,9 @@
+import inspect
+
 from telethon import events, functions, types, utils
 from telethon.events.common import EventCommon
 from telethon.tl.custom.sendergetter import SenderGetter
-import inspect
+
 from .inlinebuilder import InlineBuilder
 from .managers import edit_or_reply
 
