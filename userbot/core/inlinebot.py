@@ -3,7 +3,7 @@ import os
 import re
 import time
 
-from telethon import Button, custom, events
+from telethon import Button, events
 
 from userbot import catub
 
