@@ -5,9 +5,9 @@ import math
 import random
 import urllib.request
 from os import remove
+
 import cloudscraper
 import emoji as catemoji
-import requests
 from bs4 import BeautifulSoup as bs
 from PIL import Image
 from telethon.tl import functions, types
