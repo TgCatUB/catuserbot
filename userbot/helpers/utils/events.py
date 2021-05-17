@@ -21,7 +21,6 @@ async def get_user_from_event(event, catevent=None, secondgroup=None, nogroup=Fa
             args = event.pattern_match.group(2).split(" ", 1)
         else:
             args = event.pattern_match.group(1).split(" ", 1)
-            print(args)
     extra = None
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
@@ -33,7 +32,6 @@ async def get_user_from_event(event, catevent=None, secondgroup=None, nogroup=Fa
             extra = event.pattern_match.group(1)
     elif args:
         user = args[0]
-        print(user)
         if len(args) == 2:
             extra = args[1]
         if user.isnumeric():
