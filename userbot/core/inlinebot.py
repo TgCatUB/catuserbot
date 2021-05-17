@@ -185,7 +185,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
             ),
             content=types.InputWebDocument(
-               url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
+                url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
             ),
             buttons=buttons,
         )
