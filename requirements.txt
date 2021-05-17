@@ -4,6 +4,7 @@ aiofiles
 aiohttp[speedups]
 cairosvg
 cfscrape
+cloudscraper
 colour
 covid
 cowpy
