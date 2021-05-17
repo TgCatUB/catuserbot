@@ -4,7 +4,7 @@ import re
 import time
 
 import requests
-from telethon import Button, types
+from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery
 from telethon.utils import get_attributes
 
@@ -190,11 +190,11 @@ async def inline_handler(event):  # sourcery no-metrics
             buttons=buttons,
         )"""
         result = builder.photo(
-                    CAT_LOGO,
-                    # title="Alive cat",
-                    text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
-                    buttons=buttons,
-                )
+            CAT_LOGO,
+            # title="Alive cat",
+            text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
+            buttons=buttons,
+        )
         await event.answer([result] if result else None)
 
 
