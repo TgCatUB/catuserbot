@@ -89,7 +89,7 @@ class InlineQuery(events.common.EventBuilder):
 
 
 @events.common.name_inner_event
-class MessageEdited(events.NewMessage):
+class MessageEdited(NewMessage):
     @classmethod
     def build(cls, update, others=None, self_id=None):
         if isinstance(update, types.UpdateEditMessage):
