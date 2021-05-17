@@ -38,6 +38,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
             )
         ]
+        print(query)
         if CAT_IMG and CAT_IMG.endswith((".jpg", ".png")):
             result = builder.photo(
                 CAT_IMG,
