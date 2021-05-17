@@ -83,6 +83,9 @@ class InlineQuery(events.common.EventBuilder):
             self._sender, self._input_sender = utils._get_entity_pair(
                 self.sender_id, self._entities, client._entity_cache
             )
+        @property
+        def text(self):
+            return self.query.query
 
         @property
         def catbuilder(self):
