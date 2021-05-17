@@ -2,7 +2,7 @@ from telethon import events, functions, types, utils
 from telethon.events.common import EventCommon
 from telethon.tl.custom.sendergetter import SenderGetter
 
-from . import inlinebuilder
+from .inlinebuilder import InlineBuilder
 from .managers import edit_or_reply
 
 
@@ -90,7 +90,7 @@ class InlineQuery(events.common.EventBuilder):
 
         @property
         def catbuilder(self):
-            return inlinebuilder.InlineBuilder(self._client)
+            return InlineBuilder(self._client)
 
 
 @events.common.name_inner_event
