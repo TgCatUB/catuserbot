@@ -2,6 +2,7 @@
 import html
 
 from telethon.tl import functions
+from telethon.tl.functions.users import GetFullUserRequest
 
 from ..Config import Config
 from . import (
@@ -48,6 +49,7 @@ async def _(event):
         last_name = last_name.replace("\u2060", "")
     if last_name is None:
         last_name = "⁪⁬⁮⁮⁮⁮ ‌‌‌‌"
+    replied_user = await event.client(GetFullUserRequest(replied_user.id))
     user_bio = replied_user.about
     if user_bio is not None:
         user_bio = replied_user.about
