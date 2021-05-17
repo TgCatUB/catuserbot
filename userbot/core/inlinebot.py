@@ -181,20 +181,14 @@ async def inline_handler(event):  # sourcery no-metrics
             url="https://github.com/sandy1709/catuserbot",
             text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
             link_preview=False,
-            """thumb=types.InputWebDocument(
+            thumb=types.InputWebDocument(
                 url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
-            ),"""
+            ),
             content=types.InputWebDocument(
                url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
             ),
             buttons=buttons,
-        )"""
-        result = builder.photo(
-            CAT_LOGO,
-            # title="Alive cat",
-            text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
-            buttons=buttons,
-        )"""
+        )
         await event.answer([result] if result else None)
 
 
