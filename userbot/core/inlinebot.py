@@ -163,10 +163,13 @@ async def inline_handler(event):  # sourcery no-metrics
                 ),
             )
         ]
-        result = builder.photo(
+        result = builder.document(
             CAT_LOGO,
+            title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
+            description="https://github.com/sandy1709/catuserbot",
             text="Deploy your own catuserbot",
             link_preview=False,
+            include_media=True,
             buttons=buttons,
         )
         await event.answer([result] if result else None)
