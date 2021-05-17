@@ -2,18 +2,25 @@ import json
 import os
 import re
 import time
-
+import requests
 from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery
-
+from .logger import logging
 from userbot import catub
 
 from ..Config import Config
 
+LOGS = logging.getLogger(__name__)
+
 CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
-CAT_LOGO = "https://telegra.ph/file/cbb366e4d7378d37eb452.jpg"
+CAT_LOGO = os.join.path("downloads","catlogo.jpg")
 
+try:
+    with open(CAT_LOGO, "wb") as f:
+        f.write(requests.get("https://telegra.ph/file/cbb366e4d7378d37eb452.jpg").content)
+except Exception as e:
+    LOGS.info(str(e))
 
 def ibuild_keyboard(buttons):
     keyb = []
