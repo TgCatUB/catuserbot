@@ -157,6 +157,8 @@ else:
         LOGS.error(f"{str(e)}")
         sys.exit()
 
+verifyLoggerGroup()
+add_bot_to_logger_group()
 
 path = "userbot/plugins/*.py"
 files = glob.glob(path)
