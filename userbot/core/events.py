@@ -1,11 +1,5 @@
-import asyncio
-import inspect
+from telethon import events, functions, types
 
-from telethon import events, functions, types, utils
-from telethon.events.common import EventCommon
-from telethon.tl.custom.sendergetter import SenderGetter
-
-from .inlinebuilder import InlineBuilder
 from .managers import edit_or_reply
 
 
@@ -61,7 +55,6 @@ class NewMessage(events.NewMessage):
                 event._client.loop.create_task(edit_or_reply(event, text))
                 return
         return event
-
 
 
 @events.common.name_inner_event
