@@ -3,9 +3,6 @@ import time
 
 import heroku3
 import requests
-
-from userbot import StartTime
-
 from ...Config import Config
 from .utils import get_readable_time
 
@@ -44,6 +41,7 @@ def check_data_base_heal_th():
 
 
 async def catalive():
+    from userbot import StartTime
     _, check_sgnirts = check_data_base_heal_th()
     sudo = "Enabled" if Config.SUDO_USERS else "Disabled"
     uptime = await get_readable_time((time.time() - StartTime))
