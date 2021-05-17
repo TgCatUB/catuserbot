@@ -1,6 +1,4 @@
-import io
 import json
-import math
 import os
 import re
 import time
@@ -14,6 +12,7 @@ from ..Config import Config
 CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 
+
 def ibuild_keyboard(buttons):
     keyb = []
     for btn in buttons:
@@ -22,6 +21,7 @@ def ibuild_keyboard(buttons):
         else:
             keyb.append([Button.url(btn[0], btn[1])])
     return keyb
+
 
 @catub.tgbot.on(events.InlineQuery)
 async def inline_handler(event):  # sourcery no-metrics
@@ -143,7 +143,6 @@ async def inline_handler(event):  # sourcery no-metrics
             json.dump(jsondata, open(secret, "w"))
         else:
             json.dump(newsecret, open(secret, "w"))
-
 
 
 @catub.tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"secret_(.*)")))
