@@ -60,12 +60,12 @@ async def _(event):
             )
     sql.add_to_collectionlist(__keyword__, userdata)
     Config.SUDO_USERS.add(replied_user.id)
-    args = [sys.executable, "-m", "userbot"]
-    os.execle(sys.executable, *args, os.environ)
-    return await edit_or_reply(
+    await edit_or_reply(
         event,
         f"[{replied_user.first_name}](tg://user?id={replied_user.id}) " + SUDO_STRING3,
     )
+    args = [sys.executable, "-m", "userbot"]
+    os.execle(sys.executable, *args, os.environ)
 
 
 @catub.cat_cmd(
