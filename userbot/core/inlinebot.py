@@ -4,11 +4,11 @@ import re
 import time
 
 import requests
-from telethon import Button
+from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
 
 from userbot import catub
-
+from telethon.utils import get_attributes
 from ..Config import Config
 from .logger import logging
 
@@ -17,11 +17,11 @@ LOGS = logging.getLogger(__name__)
 CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 CAT_LOGO = os.path.join("downloads", "catlogo.jpg")
-
+CATLOGO = "https://telegra.ph/file/cbb366e4d7378d37eb452.jpg"
 try:
     with open(CAT_LOGO, "wb") as f:
         f.write(
-            requests.get("https://telegra.ph/file/cbb366e4d7378d37eb452.jpg").content
+            requests.get(CATLOGO).content
         )
 except Exception as e:
     LOGS.info(str(e))
@@ -175,14 +175,13 @@ async def inline_handler(event):  # sourcery no-metrics
                 ),
             )
         ]
-        result = builder.document(
-            CAT_LOGO,
+        attributes, mime_type = get_attributes(CAT_LOGO)
+        result = builder.article(
             title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
-            description="https://github.com/sandy1709/catuserbot",
+            url="https://github.com/sandy1709/catuserbot",
             text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
             link_preview=False,
-            include_media=True,
-            force_document=False,
+            thumb=types.InputWebDocument(url=CATLOGO,mime_type=mime_type,attributes=attributes),
             buttons=buttons,
         )
         await event.answer([result] if result else None)
