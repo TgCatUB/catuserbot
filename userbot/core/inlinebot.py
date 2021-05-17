@@ -38,7 +38,6 @@ async def inline_handler(event):  # sourcery no-metrics
                 Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
             )
         ]
-        print(query)
         if CAT_IMG and CAT_IMG.endswith((".jpg", ".png")):
             result = builder.photo(
                 CAT_IMG,
@@ -180,5 +179,5 @@ async def on_plug_in_callback_query_handler(event):
 @catub.tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"stats")))
 async def on_plug_in_callback_query_handler(event):
     statstext = await catalive()
-    reply_pop_up_alert = statstext
-    await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+    print(statstext)
+    await event.answer(statstext, cache_time=0, alert=True)
