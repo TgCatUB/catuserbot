@@ -1,7 +1,7 @@
-from telethon import events
-from telethon.events.common import EventCommon, SenderGetter
+from telethon import custom, events
+from telethon.tl.custom.sendergetter import SenderGetter
 from telethon.tl import functions, types
-
+from telethon.events.common import EventCommon
 from . import inlinebuilder
 from .managers import edit_or_reply
 
@@ -69,7 +69,7 @@ class InlineQuery(events.common.EventBuilder):
     def build(cls, update, others=None, self_id=None):
         if isinstance(update, types.UpdateBotInlineQuery):
             return cls.Event(update)
-
+    
     class Event(EventCommon, SenderGetter):
         def __init__(self, query):
             super().__init__(chat_peer=types.PeerUser(query.user_id))
