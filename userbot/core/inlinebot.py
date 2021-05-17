@@ -145,28 +145,6 @@ async def inline_handler(event):  # sourcery no-metrics
         else:
             json.dump(newsecret, open(secret, "w"))
 
-
-@catub.tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"secret_(.*)")))
-async def on_plug_in_callback_query_handler(event):
-    timestamp = int(event.pattern_match.group(1).decode("UTF-8"))
-    if os.path.exists("./userbot/secrets.txt"):
-        jsondata = json.load(open("./userbot/secrets.txt"))
-        try:
-            message = jsondata[f"{timestamp}"]
-            userid = message["userid"]
-            ids = [userid, catub.uid]
-            if event.query.user_id in ids:
-                encrypted_tcxt = message["text"]
-                reply_pop_up_alert = encrypted_tcxt
-            else:
-                reply_pop_up_alert = "why were you looking at this shit go away and do your own work, idiot"
-        except KeyError:
-            reply_pop_up_alert = "This message no longer exists in catub server"
-    else:
-        reply_pop_up_alert = "This message no longer exists "
-    await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-
-
 @catub.tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"close")))
 async def on_plug_in_callback_query_handler(event):
     if event.query.user_id == catub.uid:
@@ -174,9 +152,3 @@ async def on_plug_in_callback_query_handler(event):
     else:
         reply_pop_up_alert = "Please get your own catuserbot, and don't use mine! Join @catuserbot17 help "
         await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-
-
-@catub.tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"stats")))
-async def on_plug_in_callback_query_handler(event):
-    statstext = await catalive()
-    await event.answer(statstext, cache_time=0, alert=True)
