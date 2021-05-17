@@ -1,14 +1,10 @@
 import math
-import os
-import re
 import time
 
 import heroku3
 import requests
 
 from ...Config import Config
-
-
 
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
 heroku_api = "https://api.heroku.com"
