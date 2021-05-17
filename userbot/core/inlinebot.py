@@ -4,7 +4,7 @@ import re
 import time
 
 from telethon import Button, events
-
+from telethon.events import CallbackQuery
 from userbot import catub
 
 from ..Config import Config
@@ -145,7 +145,7 @@ async def inline_handler(event):  # sourcery no-metrics
             json.dump(newsecret, open(secret, "w"))
 
 
-@catub.tgbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"close")))
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"close")))
 async def on_plug_in_callback_query_handler(event):
     if event.query.user_id == catub.uid:
         await event.edit("menu closed")
