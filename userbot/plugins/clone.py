@@ -37,12 +37,12 @@ async def _(event):
     replied_user, error_i_a = await get_user_from_event(event)
     if replied_user is None:
         return
-    user_id = replied_user.user.id
+    user_id = replied_user.id
     profile_pic = await event.client.download_profile_photo(user_id, Config.TEMP_DIR)
-    first_name = html.escape(replied_user.user.first_name)
+    first_name = html.escape(replied_user.first_name)
     if first_name is not None:
         first_name = first_name.replace("\u2060", "")
-    last_name = replied_user.user.last_name
+    last_name = replied_user.last_name
     if last_name is not None:
         last_name = html.escape(last_name)
         last_name = last_name.replace("\u2060", "")
