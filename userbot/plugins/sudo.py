@@ -31,7 +31,7 @@ async def _init() -> None:
 
 
 @catub.cat_cmd(
-    pattern="addsudo(:? |$)(.*)",
+    pattern="addsudo(?: |$)(.*)",
     command=("addsudo", plugin_category),
     info={
         "header": "To add user as your sudo.",
@@ -69,7 +69,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="delsudo(:? |$)(.*)",
+    pattern="delsudo(?: |$)(.*)",
     command=("delsudo", plugin_category),
     info={
         "header": "To remove user from your sudo.",
