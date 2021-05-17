@@ -1,6 +1,5 @@
-from telethon import events, utils
+from telethon import events, functions, types, utils
 from telethon.events.common import EventCommon
-from telethon import functions, types
 from telethon.tl.custom.sendergetter import SenderGetter
 
 from . import inlinebuilder
