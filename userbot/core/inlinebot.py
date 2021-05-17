@@ -16,7 +16,7 @@ LOGS = logging.getLogger(__name__)
 
 CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
-CAT_LOGO = os.join.path("downloads", "catlogo.jpg")
+CAT_LOGO = os.path.join("downloads", "catlogo.jpg")
 
 try:
     with open(CAT_LOGO, "wb") as f:
