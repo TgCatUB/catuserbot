@@ -17,7 +17,7 @@ SUDO_STRING1 = "This user is already in your sudo Users list"
 SUDO_STRING2 = (
     "This user is already in your sudo users list and his userdata has been updated now"
 )
-SUDO_STRING3 = "is successfully added to your sudo users list."
+SUDO_STRING3 = "is successfully added to your sudo users list. Wait for a minute to reload your bot."
 SUDO_STRING4 = "is successfully removed from your sudo users list."
 SUDO_STRING5 = "is not in your sudo users list."
 SUDO_STRING6 = "There are no sudo users for your bot"
