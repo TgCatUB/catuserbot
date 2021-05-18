@@ -187,6 +187,7 @@ class Config(object):
     UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
     # dont touch this at all
     SUDO_USERS: Set[int] = set()
+    CATUBLOGO = None
 
 
 class Production(Config):
