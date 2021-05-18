@@ -210,7 +210,7 @@ print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
 
 verifyLoggerGroup()
 add_bot_to_logger_group()
-userbot.catublogo = catub.loop.create_task(startupmessage())
+Config.CATUBLOGO = catub.loop.create_task(startupmessage())
 
 if len(sys.argv) not in (1, 3, 4):
     catub.disconnect()
