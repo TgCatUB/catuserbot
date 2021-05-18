@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 from telethon import functions, types, utils
-
+from telethon import Button, events
 import userbot
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.Config import Config
@@ -137,14 +137,23 @@ def add_bot_to_logger_group():
 
 
 async def startupmessage():
-    if BOTLOG:
-        await catub.tgbot.send_message(
-            BOTLOG_CHATID,
-            f"**Congratulation, now type {Config.COMMAND_HAND_LER}alive to see message if catub is working or not.\
-                \nIf you need assistance, **head to https://t.me/catuserbot_support",
-            link_preview=False,
-        )
-
+    try:
+        if BOTLOG:
+            return await catub.tgbot.send_file(
+                BOTLOG_CHATID,
+                "https://telegra.ph/file/2d36d118f140ff059065b.jpg",
+                caption="**Your CatUserbot has been started successfully.**",
+                    buttons = [
+                                (
+                                    Button.url("Support", "https://t.me/catuserbot"),
+                                )
+                              ]
+            )    
+        return None
+    except Exception as e:
+        LOGS.error(e)
+        return None
+            
 
 if len(sys.argv) not in (1, 3, 4):
     catub.disconnect()
@@ -205,7 +214,7 @@ print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
 
 verifyLoggerGroup()
 add_bot_to_logger_group()
-catub.loop.create_task(startupmessage())
+userbot.catublogo = catub.loop.create_task(startupmessage())
 
 if len(sys.argv) not in (1, 3, 4):
     catub.disconnect()
