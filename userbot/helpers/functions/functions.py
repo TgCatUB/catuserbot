@@ -42,7 +42,7 @@ async def covidindia(state):
 
 
 # for stickertxt
-async def waifutxt(text, chat_id, reply_to_id, bot, borg):
+async def waifutxt(text, chat_id, reply_to_id, bot):
     animus = [
         0,
         1,
