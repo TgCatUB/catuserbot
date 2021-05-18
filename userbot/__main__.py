@@ -139,13 +139,12 @@ def add_bot_to_logger_group():
 async def startupmessage():
     try:
         if BOTLOG:
-            return await catub.tgbot.send_file(
+            Config.CATUBLOGO = await catub.tgbot.send_file(
                 BOTLOG_CHATID,
                 "https://telegra.ph/file/2d36d118f140ff059065b.jpg",
                 caption="**Your CatUserbot has been started successfully.**",
                 buttons=[(Button.url("Support", "https://t.me/catuserbot"),)],
             )
-        return None
     except Exception as e:
         LOGS.error(e)
         return None
@@ -210,7 +209,7 @@ print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
 
 verifyLoggerGroup()
 add_bot_to_logger_group()
-catub.loop.create_task(Config.CATUBLOGO = startupmessage())
+catub.loop.create_task(startupmessage())
 
 if len(sys.argv) not in (1, 3, 4):
     catub.disconnect()
