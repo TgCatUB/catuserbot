@@ -10,7 +10,7 @@ __version__ = "2.10.6"
 __license__ = "GNU Affero General Public License v3.0"
 __author__ = "CatUserBot <https://github.com/sandy1709/catuserbot>"
 __copyright__ = "CatUserBot Copyright (C) 2020 - 2021  " + __author__
-catublogo = None
+
 catub.version = __version__
 catub.tgbot.version = __version__
 bot = catub
