@@ -60,7 +60,7 @@ async def waifu(animu):
             )
     text = deEmojify(text)
     await animu.delete()
-    await waifutxt(text, animu.chat_id, reply_to_id, bot, animu.client)
+    await waifutxt(text, animu.chat_id, reply_to_id, animu.client)
 
 
 # 12 21 28 30
