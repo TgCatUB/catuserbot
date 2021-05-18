@@ -1,4 +1,4 @@
-git+https://github.com/sandy-1709/Telethon
+telethon
 setuptools
 aiofiles
 aiohttp[speedups]
