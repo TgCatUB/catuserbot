@@ -3,8 +3,8 @@ import os
 import sys
 from pathlib import Path
 
-from telethon import functions, types, utils
-from telethon import Button, events
+from telethon import Button, functions, types, utils
+
 import userbot
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.Config import Config
@@ -143,17 +143,13 @@ async def startupmessage():
                 BOTLOG_CHATID,
                 "https://telegra.ph/file/2d36d118f140ff059065b.jpg",
                 caption="**Your CatUserbot has been started successfully.**",
-                    buttons = [
-                                (
-                                    Button.url("Support", "https://t.me/catuserbot"),
-                                )
-                              ]
-            )    
+                buttons=[(Button.url("Support", "https://t.me/catuserbot"),)],
+            )
         return None
     except Exception as e:
         LOGS.error(e)
         return None
-            
+
 
 if len(sys.argv) not in (1, 3, 4):
     catub.disconnect()
