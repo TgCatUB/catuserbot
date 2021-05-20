@@ -142,10 +142,10 @@ async def _(event):
     found = [i for i in sorted(list(CMD_INFO)) if cmd in i]
     if found:
         out_str = "".join(f"`{i}`    " for i in found)
-        out = f"**I found ({len(found)}) commands for: **`{cmd}`\n\n{out_str}"
+        out = f"**I found {len(found)} command(s) for: **`{cmd}`\n\n{out_str}"
         out += f"\n\n__For more info check {cmdprefix}help -c <command>__"
     else:
-        out = f"I can't find any such command `{cmd}` in catuserbot"
+        out = f"I can't find any such command `{cmd}` in CatUserbot"
     await edit_or_reply(event, out)
 
 
