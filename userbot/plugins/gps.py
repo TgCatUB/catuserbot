@@ -30,7 +30,7 @@ async def gps(event):
         lon = geoloc.longitude
         lat = geoloc.latitude
         await event.client.send_file(
-            event,
+            event.chat_id,
             file=types.InputMediaGeoPoint(types.InputGeoPoint(lat, lon)),
             caption=f"**Location : **`{input_str}`",
             reply_to=reply_to_id,
