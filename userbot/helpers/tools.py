@@ -1,5 +1,6 @@
 from html_telegraph_poster import TelegraphPoster
 
+
 def media_type(message):
     if message and message.photo:
         return "Photo"
@@ -18,6 +19,7 @@ def media_type(message):
     if message and message.document:
         return "Document"
     return None
+
 
 async def post_to_telegraph(page_title, html_format_content):
     post_client = TelegraphPoster(use_api=True)

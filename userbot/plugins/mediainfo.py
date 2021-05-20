@@ -2,15 +2,13 @@
 # ported to telethon by @mrconfused (@sandy1709)
 import os
 
-from html_telegraph_poster import TelegraphPoster
-
 from userbot import catub
 from userbot.core.logger import logging
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
+from ..helpers import humanbytes, post_to_telegraph
 from ..helpers.utils import _catutils, _format
-from ..helpers import humanbytes,post_to_telegraph
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
