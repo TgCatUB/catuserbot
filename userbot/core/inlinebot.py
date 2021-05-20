@@ -2,13 +2,18 @@ import json
 import os
 import re
 import time
-from ..core import pool, check_owner
+
 import requests
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
 from telethon.utils import get_attributes
 from youtubesearchpython import VideosSearch
+
 from userbot import catub
+
+from ..Config import Config
+from ..core import check_owner
+from ..helpers.functions import rand_key
 from .assistant.iytdl import (
     download_button,
     get_yt_video_id,
@@ -16,8 +21,6 @@ from .assistant.iytdl import (
     result_formatter,
     ytsearch_data,
 )
-from ..helpers.functions import rand_key
-from ..Config import Config
 from .logger import logging
 
 LOGS = logging.getLogger(__name__)
@@ -49,9 +52,9 @@ async def inline_handler(event):  # sourcery no-metrics
     result = None
     query = event.text
     string = query.lower()
-    str_x = query.split(" ", 2)
+    query.split(" ", 2)
     str_y = query.split(" ", 1)
-    string_split = string.split()
+    string.split()
     query_user_id = event.query.user_id
     if query_user_id == Config.OWNER_ID or query_user_id in Config.SUDO_USERS:
         hmm = re.compile("secret (.*) (.*)")
@@ -167,59 +170,59 @@ async def inline_handler(event):  # sourcery no-metrics
             else:
                 json.dump(newsecret, open(secret, "w"))
         if str_y[0].lower() == "ytdl" and len(str_y) == 2:
-                link = get_yt_video_id(str_y[1].strip())
-                found_ = True
-                if link is None:
-                    search = VideosSearch(str_y[1].strip(), limit=15)
-                    resp = (search.result()).get("result")
-                    if len(resp) == 0:
-                        found_ = False
-                    else:
-                        outdata = await result_formatter(resp)
-                        key_ = rand_key()
-                        ytsearch_data.store_(key_, outdata)
-                        buttons = [
-                                (
-                                    Button.inline(
-                                        f"1 / {len(outdata)}",
-                                        data=f"ytdl_next_{key_}_1",
-                                    )
-                                ),
-                                (
-                                    Button.inline(
-                                        "📜  List all",
-                                        data=f"ytdl_listall_{key_}_1",
-                                    ),
-                                    Button.inline(
-                                        "⬇️  Download",
-                                        data=f'ytdl_download_{outdata[1]["video_id"]}_0',
-                                    ),
-                                ),
-                            ]
-                        caption = outdata[1]["message"]
-                        photo = outdata[1]["thumb"]
+            link = get_yt_video_id(str_y[1].strip())
+            found_ = True
+            if link is None:
+                search = VideosSearch(str_y[1].strip(), limit=15)
+                resp = (search.result()).get("result")
+                if len(resp) == 0:
+                    found_ = False
                 else:
-                    caption, buttons = await download_button(link, body=True)
-                    photo = await get_ytthumb(link)
-                if found_:
-                    results.append(
-                        builder.photo(
-                            photo,
-                            #title=link,
-                            #description="⬇️ Click to Download",
-                            text=caption,
-                            buttons=buttons,
-                        )
+                    outdata = await result_formatter(resp)
+                    key_ = rand_key()
+                    ytsearch_data.store_(key_, outdata)
+                    buttons = [
+                        (
+                            Button.inline(
+                                f"1 / {len(outdata)}",
+                                data=f"ytdl_next_{key_}_1",
+                            )
+                        ),
+                        (
+                            Button.inline(
+                                "📜  List all",
+                                data=f"ytdl_listall_{key_}_1",
+                            ),
+                            Button.inline(
+                                "⬇️  Download",
+                                data=f'ytdl_download_{outdata[1]["video_id"]}_0',
+                            ),
+                        ),
+                    ]
+                    caption = outdata[1]["message"]
+                    photo = outdata[1]["thumb"]
+            else:
+                caption, buttons = await download_button(link, body=True)
+                photo = await get_ytthumb(link)
+            if found_:
+                results.append(
+                    builder.photo(
+                        photo,
+                        # title=link,
+                        # description="⬇️ Click to Download",
+                        text=caption,
+                        buttons=buttons,
                     )
-                else:
-                    results.append(
-                        builder.article(
-                            title="Not Found",
-                            text=f"No Results found for `{str_y[1]}`",
-                            description="INVALID",
-                        )
+                )
+            else:
+                results.append(
+                    builder.article(
+                        title="Not Found",
+                        text=f"No Results found for `{str_y[1]}`",
+                        description="INVALID",
                     )
-                await event.answer([result] if result else None)
+                )
+            await event.answer([result] if result else None)
     else:
         buttons = [
             (
