@@ -1,3 +1,4 @@
+# ported from uniborg by @spechide
 import asyncio
 import io
 import os
@@ -5,22 +6,16 @@ import time
 from datetime import datetime
 
 from ..Config import Config
-from . import (
-    _cattools,
-    catub,
-    edit_delete,
-    edit_or_reply,
-    media_type,
-    progress,
-    reply_id,
-)
+from ..helpers import _cattools, media_type, progress, reply_id
+from userbot import catub
+from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "utils"
 
-# ported from uniborg by @spechide
 
 
-FF_MPEG_DOWN_LOAD_MEDIA_PATH = "./downloads/catuserbot.media.ffmpeg"
+
+FF_MPEG_DOWN_LOAD_MEDIA_PATH = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "catuserbot.media.ffmpeg")
 
 # https://github.com/Nekmo/telegram-upload/blob/master/telegram_upload/video.py#L26
 
@@ -80,7 +75,7 @@ async def ff_mpeg_trim_cmd(event):
             catevent = await edit_or_reply(event, "`Saving the file...`")
             try:
                 c_time = time.time()
-                dl = io.FileIO(file_name.absolute(), "a")
+                dl = io.FileIO(FF_MPEG_DOWN_LOAD_MEDIA_PATH, "a")
                 await event.client.fast_download_file(
                     location=reply.document,
                     out=dl,
@@ -90,7 +85,7 @@ async def ff_mpeg_trim_cmd(event):
                 )
                 dl.close()
             except Exception as e:
-                await catevent.edit(str(e))
+                await catevent.edit(f"**Error:**\n`{str(e)}`")
             else:
                 end = datetime.now()
                 ms = (end - start).seconds
