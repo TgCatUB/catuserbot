@@ -198,7 +198,7 @@ async def ytdl_callback(c_q: CallbackQuery):
         back_vid = search_data.get(str(index))
         await c_q.edit(
             text=back_vid.get("message"),
-            file=back_vid.get("thumb"),
+            file=await get_ytthumb(back_vid.get("video_id")),
             buttons=yt_search_btns(
                 del_back=del_back,
                 data_key=data_key,
@@ -215,7 +215,7 @@ async def ytdl_callback(c_q: CallbackQuery):
         front_vid = search_data.get(str(index))
         await c_q.edit(
             text=back_vid.get("message"),
-            file=back_vid.get("thumb"),
+            file=await get_ytthumb(back_vid.get("video_id")),
             buttons=yt_search_btns(
                 data_key=data_key,
                 page=index,
@@ -256,7 +256,7 @@ async def ytdl_callback(c_q: CallbackQuery):
         first = search_data.get(str(index))
         await c_q.edit(
             text=first.get("message"),
-            file=first.get("thumb"),
+            file=await get_ytthumb(first.get("video_id")),
             buttons=yt_search_btns(
                 del_back=True,
                 data_key=data_key,
