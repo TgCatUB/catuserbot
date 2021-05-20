@@ -197,7 +197,7 @@ async def inline_handler(event):  # sourcery no-metrics
             photo = types.InputWebDocument(
                 url=photo, size=0, mime_type="image/jpeg", attributes=[]
             )
-            text, msg_entities = await event.client._parse_message_text("caption", "md")
+            text, msg_entities = await event.client._parse_message_text(caption, "md")
             if found_:
                 result = types.InputBotInlineResult(
                     id=str(uuid4()),
@@ -216,6 +216,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     text=f"No Results found for `{str_y[1]}`",
                     description="INVALID",
                 )
+            
             await event.answer([result] if result else None)
     else:
         buttons = [
