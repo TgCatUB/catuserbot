@@ -178,7 +178,7 @@ async def ytdl_download_callback(c_q: CallbackQuery):
         caption=f"**File Name : **`{os.path.basename(Path(_path))}`",
     )
     await c_q.edit(
-        text=f"📹  **[{uploaded_media.caption}]({yt_url})**", file=uploaded_media.media
+        text=f"📹  **[{uploaded_media.text}]({yt_url})**", file=uploaded_media.media
     )
 
 
