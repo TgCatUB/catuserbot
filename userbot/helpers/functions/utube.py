@@ -141,25 +141,25 @@ async def result_formatter(results: list):
         v_deo_id = r.get("id")
         thumb = await get_ytthumb(v_deo_id)
         upld = r.get("channel")
-        title = f'<a href={r.get("link")}>**{r.get("title")}**</a>\n'
+        title = f'<a href={r.get("link")}><b>{r.get("title")}</b></a>\n'
         out = title
         if r.get("descriptionSnippet"):
             out += "<code>{}</code>\n\n".format(
                 "".join(x.get("text") for x in r.get("descriptionSnippet"))
             )
-        out += f'**❯  Duration:** {r.get("accessibility").get("duration")}\n'
-        views = f'**❯  Views:** {r.get("viewCount").get("short")}\n'
+        out += f'<b>❯  Duration:</b> {r.get("accessibility").get("duration")}\n'
+        views = f'<b>❯  Views:</b> {r.get("viewCount").get("short")}\n'
         out += views
-        out += f'**❯  Upload date:** {r.get("publishedTime")}\n'
+        out += f'<b>❯  Upload date:</b> {r.get("publishedTime")}\n'
         if upld:
-            out += "**❯  Uploader:** "
+            out += "<b>❯  Uploader:</b> "
             out += f'<a href={upld.get("link")}>{upld.get("name")}</a>'
 
         output[index] = dict(
             message=out,
             thumb=thumb,
             video_id=v_deo_id,
-            list_view=f'<img src={thumb}>**<a href={r.get("link")}>{index}. {r.get("accessibility").get("title")}</a>**<br>',
+            list_view=f'<img src={thumb}><b><a href={r.get("link")}>{index}. {r.get("accessibility").get("title")}</a></b><br>',
         )
 
     return output
@@ -257,7 +257,7 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
         width=2,
     )
     if body:
-        vid_body = f"**[{vid_data.get('title')}]({vid_data.get('webpage_url')})**"
+        vid_body = f"<a href={vid_data.get('webpage_url')}><b>[{vid_data.get('title')}]</b></a>"
         return vid_body, buttons
     return buttons
 
