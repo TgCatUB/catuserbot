@@ -257,7 +257,7 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
         width=2,
     )
     if body:
-        vid_body = f"<a href=f"{vid_data.get('webpage_url')}"><b>[{vid_data.get('title')}]</b></a>"
+        vid_body = f"<a href=f'{vid_data.get('webpage_url')}'><b>[{vid_data.get('title')}]</b></a>"
         return vid_body, buttons
     return buttons
 
