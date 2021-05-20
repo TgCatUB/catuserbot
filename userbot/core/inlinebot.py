@@ -240,8 +240,8 @@ async def inline_handler(event):  # sourcery no-metrics
             title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
             description="Deploy yourself",
             url="https://github.com/sandy1709/catuserbot",
-            thumb=None,
-            content=photo,
+            thumb=photo,
+            content=None,
             send_message=types.InputBotInlineMessageMediaAuto(
                 reply_markup=markup, message=text, entities=msg_entities
             ),
