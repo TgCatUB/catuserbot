@@ -214,8 +214,8 @@ async def ytdl_callback(c_q: CallbackQuery):
         await c_q.answer()
         front_vid = search_data.get(str(index))
         await c_q.edit(
-            text=back_vid.get("message"),
-            file=await get_ytthumb(back_vid.get("video_id")),
+            text=front_vid.get("message"),
+            file=await get_ytthumb(front_vid.get("video_id")),
             buttons=yt_search_btns(
                 data_key=data_key,
                 page=index,
