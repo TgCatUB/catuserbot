@@ -6,6 +6,10 @@ import requests
 
 from ..resources.states import states
 
+from uuid import uuid4
+
+def rand_key():
+    return str(uuid4())[:8]
 
 async def sanga_seperator(sanga_list):
     for i in sanga_list:
