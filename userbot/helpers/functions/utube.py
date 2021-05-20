@@ -141,7 +141,7 @@ async def result_formatter(results: list):
         v_deo_id = r.get("id")
         thumb = await get_ytthumb(v_deo_id)
         upld = r.get("channel")
-        title = f'<a href={r.get("link")}><b>{r.get("title")}</b></a>\n'
+        title = f'<a href=f"{r.get("link")}"><b>{r.get("title")}</b></a>\n'
         out = title
         if r.get("descriptionSnippet"):
             out += "<code>{}</code>\n\n".format(
@@ -153,13 +153,13 @@ async def result_formatter(results: list):
         out += f'<b>❯  Upload date:</b> {r.get("publishedTime")}\n'
         if upld:
             out += "<b>❯  Uploader:</b> "
-            out += f'<a href={upld.get("link")}>{upld.get("name")}</a>'
+            out += f'<a href=f"{upld.get("link")}">{upld.get("name")}</a>'
 
         output[index] = dict(
             message=out,
             thumb=thumb,
             video_id=v_deo_id,
-            list_view=f'<img src={thumb}><b><a href={r.get("link")}>{index}. {r.get("accessibility").get("title")}</a></b><br>',
+            list_view=f'<img src={thumb}><b><a href=f"{r.get("link")}">{index}. {r.get("accessibility").get("title")}</a></b><br>',
         )
 
     return output
@@ -257,7 +257,7 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
         width=2,
     )
     if body:
-        vid_body = f"<a href={vid_data.get('webpage_url')}><b>[{vid_data.get('title')}]</b></a>"
+        vid_body = f"<a href=f"{vid_data.get('webpage_url')}"><b>[{vid_data.get('title')}]</b></a>"
         return vid_body, buttons
     return buttons
 
