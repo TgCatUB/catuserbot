@@ -34,7 +34,7 @@ YOUTUBE_REGEX = re.compile(
     r"(?:youtube\.com|youtu\.be)/(?:[\w-]+\?v=|embed/|v/|shorts/)?([\w-]{11})"
 )
 PATH = "./userbot/cache/ytsearch.json"
-
+plugin_category="bot"
 
 class YT_Search_X:
     def __init__(self):
