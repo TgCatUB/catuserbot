@@ -106,14 +106,14 @@ async def iytdl_inline(event):
 
 @catub.tgbot.on(
     CallbackQuery(
-        data=re.compile(r"^ytdl_download_(.*)_([\d]+|mkv|mp4|mp3)(?:_(a|v))?")
+        data=re.compile(b"^ytdl_download_(.*)_([\d]+|mkv|mp4|mp3)(?:_(a|v))?")
     )
 )
 @check_owner
 async def ytdl_download_callback(c_q: CallbackQuery):
-    yt_code = c_q.pattern_match.group(1)
-    choice_id = c_q.pattern_match.group(2)
-    downtype = c_q.pattern_match.group(3)
+    yt_code = str(c_q.pattern_match.group(1).decode("UTF-8"))
+    choice_id = str(c_q.pattern_match.group(2).decode("UTF-8"))
+    downtype = str(c_q.pattern_match.group(3).decode("UTF-8"))
     if str(choice_id).isdigit():
         choice_id = int(choice_id)
         if choice_id == 0:
@@ -183,13 +183,13 @@ async def ytdl_download_callback(c_q: CallbackQuery):
 
 
 @catub.tgbot.on(
-    CallbackQuery(data=re.compile(r"^ytdl_(listall|back|next|detail)_([a-z0-9]+)_(.*)"))
+    CallbackQuery(data=re.compile(b"^ytdl_(listall|back|next|detail)_([a-z0-9]+)_(.*)"))
 )
 @check_owner
 async def ytdl_callback(c_q: CallbackQuery):
-    choosen_btn = c_q.pattern_match.group(1)
-    data_key = c_q.pattern_match.group(2)
-    page = c_q.pattern_match.group(3)
+    choosen_btn = str(c_q.pattern_match.group(1).decode("UTF-8"))
+    data_key = str(c_q.pattern_match.group(2).decode("UTF-8"))
+    page = str(c_q.pattern_match.group(3).decode("UTF-8"))
     if not os.path.exists(PATH):
         return await c_q.answer(
             "Search data doesn't exists anymore, please perform search again ...",
