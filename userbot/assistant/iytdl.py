@@ -68,7 +68,7 @@ async def get_ytthumb(videoid: str):
     thumb_link = "https://i.imgur.com/4LwPLai.png"
     for qualiy in thumb_quality:
         link = f"https://i.ytimg.com/vi/{videoid}/{qualiy}"
-        if await AioHttp().status(link) == 200:
+        if await AioHttp().get_status(link) == 200:
             thumb_link = link
             break
     return thumb_link
