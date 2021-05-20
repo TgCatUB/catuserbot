@@ -2,11 +2,12 @@
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.from asyncio import sleep
+from asyncio import sleep
 from os import environ
 from re import sub
 from sys import setrecursionlimit
 from urllib import parse
-from asyncio import sleep
+
 from pylast import LastFMNetwork, User, WSError, md5
 from telethon.errors import AboutTooLongError
 from telethon.errors.rpcerrorlist import FloodWaitError
