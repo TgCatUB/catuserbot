@@ -116,7 +116,7 @@ async def ytdl_download_callback(c_q: CallbackQuery):
     if str(choice_id).isdigit():
         choice_id = int(choice_id)
         if choice_id == 0:
-            await c_q.answer("🔄  Processing...", show_alert=False)
+            await c_q.answer("🔄  Processing...", alert=False)
             await c_q.edit(buttons=(await download_button(yt_code)))
             return
     startTime = time()
@@ -124,11 +124,11 @@ async def ytdl_download_callback(c_q: CallbackQuery):
     media_type = "Video" if downtype == "v" else "Audio"
     callback_continue = f"Downloading {media_type} Please Wait..."
     callback_continue += f"\n\nFormat Code : {disp_str}"
-    await c_q.answer(callback_continue, show_alert=True)
+    await c_q.answer(callback_continue, alert=True)
     upload_msg = await c_q.client.send_message(BOTLOG_CHATID, "Uploading...")
     yt_url = BASE_YT_URL + yt_code
     await c_q.edit(
-        f"**⬇️ Downloading {media_type} ...**\n\n🔗  [<b>Link</b>]({yt_url})\n🆔  <b>Format Code</b> : {disp_str}"
+        f"**⬇️ Downloading {media_type} ...**\n\n🔗  [**Link**]({yt_url})\n🆔  **Format Code** : {disp_str}"
     )
     if downtype == "v":
         retcode = await _tubeDl(url=yt_url, starttime=startTime, uid=choice_str)
@@ -192,7 +192,7 @@ async def ytdl_callback(c_q: CallbackQuery):
     if not os.path.exists(PATH):
         return await c_q.answer(
             "Search data doesn't exists anymore, please perform search again ...",
-            show_alert=True,
+            alert=True,
         )
     with open(PATH) as f:
         view_data = ujson.load(f)
@@ -217,7 +217,7 @@ async def ytdl_callback(c_q: CallbackQuery):
     elif choosen_btn == "next":
         index = int(page) + 1
         if index > total:
-            return await c_q.answer("That's All Folks !", show_alert=True)
+            return await c_q.answer("That's All Folks !", alert=True)
         await c_q.answer()
         front_vid = search_data.get(str(index))
         await c_q.edit(
@@ -231,7 +231,7 @@ async def ytdl_callback(c_q: CallbackQuery):
             ),
         )
     elif choosen_btn == "listall":
-        await c_q.answer("View Changed to:  📜  List", show_alert=False)
+        await c_q.answer("View Changed to:  📜  List", alert=False)
         list_res = "".join(
             search_data.get(vid_s).get("list_view") for vid_s in search_data
         )
@@ -259,7 +259,7 @@ async def ytdl_callback(c_q: CallbackQuery):
         )
     else:  # Detailed
         index = 1
-        await c_q.answer("View Changed to:  📰  Detailed", show_alert=False)
+        await c_q.answer("View Changed to:  📰  Detailed", alert=False)
         first = search_data.get(str(index))
         await c_q.edit(
             text=first.get("message"),
@@ -374,25 +374,25 @@ async def result_formatter(results: list):
     for index, r in enumerate(results, start=1):
         thumb = (r.get("thumbnails").pop()).get("url")
         upld = r.get("channel")
-        title = f'<a href={r.get("link")}><b>{r.get("title")}</b></a>\n'
+        title = f'<a href={r.get("link")}>**{r.get("title")}**</a>\n'
         out = title
         if r.get("descriptionSnippet"):
             out += "<code>{}</code>\n\n".format(
                 "".join(x.get("text") for x in r.get("descriptionSnippet"))
             )
-        out += f'<b>❯  Duration:</b> {r.get("accessibility").get("duration")}\n'
-        views = f'<b>❯  Views:</b> {r.get("viewCount").get("short")}\n'
+        out += f'**❯  Duration:** {r.get("accessibility").get("duration")}\n'
+        views = f'**❯  Views:** {r.get("viewCount").get("short")}\n'
         out += views
-        out += f'<b>❯  Upload date:</b> {r.get("publishedTime")}\n'
+        out += f'**❯  Upload date:** {r.get("publishedTime")}\n'
         if upld:
-            out += "<b>❯  Uploader:</b> "
+            out += "**❯  Uploader:** "
             out += f'<a href={upld.get("link")}>{upld.get("name")}</a>'
         v_deo_id = r.get("id")
         output[index] = dict(
             message=out,
             thumb=thumb,
             video_id=v_deo_id,
-            list_view=f'<img src={thumb}><b><a href={r.get("link")}>{index}. {r.get("accessibility").get("title")}</a></b><br>',
+            list_view=f'<img src={thumb}>**<a href={r.get("link")}>{index}. {r.get("accessibility").get("title")}</a>**<br>',
         )
 
     return output
@@ -490,6 +490,6 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
         width=2,
     )
     if body:
-        vid_body = f"<b>[{vid_data.get('title')}]({vid_data.get('webpage_url')})</b>"
+        vid_body = f"**[{vid_data.get('title')}]({vid_data.get('webpage_url')})**"
         return vid_body, buttons
     return buttons
