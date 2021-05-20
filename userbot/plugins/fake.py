@@ -106,7 +106,7 @@ async def _(event):
 
 @catub.cat_cmd(
     pattern="padmin$",
-    command=("padmin$", plugin_category),
+    command=("padmin", plugin_category),
     info={
         "header": "Fun animation for faking user promotion",
         "description": "An animation that shows enabling all permissions to him that he is admin(fake promotion)",
