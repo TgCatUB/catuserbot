@@ -57,7 +57,7 @@ async def cmdinfo(input_str, event, plugin=False):
     return outstr
 
 
-async def plugininfo(input_str, event):
+async def plugininfo(input_str, event,flag):
     try:
         cmds = PLG_INFO[input_str]
     except KeyError:
@@ -66,6 +66,9 @@ async def plugininfo(input_str, event):
     except Exception as e:
         await edit_delete(event, f"**Error**\n`{str(e)}`")
         return None
+    if len(cmds)==1 and (flag and flag!="-p"):
+        outstr = await cmdinfo(input_str, event, plugin=False)
+        return outstr
     outstr = f"**Plugin : **`{input_str}`\n"
     outstr += f"**Commands Available :** `{len(cmds)}`\n"
     category = getkey(input_str)
@@ -96,7 +99,7 @@ async def grpinfo():
 
 
 @catub.cat_cmd(
-    pattern="help ?(-c)? ?(.*)?",
+    pattern="help ?(-c|-p)? ?(.*)?",
     command=("help", plugin_category),
     info={
         "header": "To get guide for catuserbot.",
@@ -115,12 +118,12 @@ async def _(event):
     "To get guide for catuserbot."
     flag = event.pattern_match.group(1)
     input_str = event.pattern_match.group(2)
-    if flag and input_str:
+    if flag and flag=="-c" and input_str:
         outstr = await cmdinfo(input_str, event)
         if outstr is None:
             return
     elif input_str:
-        outstr = await plugininfo(input_str, event)
+        outstr = await plugininfo(input_str, event,flag)
         if outstr is None:
             return
     else:
