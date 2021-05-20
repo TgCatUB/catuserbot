@@ -168,6 +168,7 @@ async def inline_handler(event):  # sourcery no-metrics
             if link is None:
                 search = VideosSearch(str_y[1].strip(), limit=15)
                 resp = (search.result()).get("result")
+                print(resp)
                 if len(resp) == 0:
                     found_ = False
                 else:
@@ -190,6 +191,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     ]
                     caption = outdata[1]["message"]
                     photo = outdata[1]["thumb"]
+                    print(photo)
             else:
                 caption, buttons = await download_button(link, body=True)
                 photo = await get_ytthumb(link)
