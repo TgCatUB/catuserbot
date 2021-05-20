@@ -2,7 +2,7 @@ import json
 import os
 import re
 import time
-
+from uuid import uuid4
 import requests
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
@@ -27,13 +27,7 @@ LOGS = logging.getLogger(__name__)
 
 CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
-CAT_LOGO = os.path.join("downloads", "catlogo.jpg")
-CATLOGO = "https://telegra.ph/file/cbb366e4d7378d37eb452.jpg"
-try:
-    with open(CAT_LOGO, "wb") as f:
-        f.write(requests.get(CATLOGO).content)
-except Exception as e:
-    LOGS.info(str(e))
+CATLOGO = "https://telegra.ph/file/493268c1f5ebedc967eba.jpg"
 
 
 def ibuild_keyboard(buttons):
@@ -234,21 +228,30 @@ async def inline_handler(event):  # sourcery no-metrics
                 ),
             )
         ]
-        attributes, mime_type = get_attributes(CAT_LOGO)
-        result = builder.article(
-            title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
-            description="Deploy yourself",
-            url="https://github.com/sandy1709/catuserbot",
-            text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
-            link_preview=False,
-            thumb=types.InputWebDocument(
-                url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
-            ),
-            content=types.InputWebDocument(
-                url=CATLOGO, size=97, mime_type=mime_type, attributes=attributes
-            ),
-            buttons=buttons,
-        )
+        markup = event.client.build_reply_markup(buttons)
+        photo = types.InputWebDocument(
+                url=CATLOGO,
+                size=0,
+                mime_type="image/jpeg",
+                attributes=[]
+            )  
+        text, msg_entities = await client._parse_message_text(
+                    "𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.", "md"
+                )
+        result = types.InputBotInlineResult(
+                id=str(uuid4()),
+                type="photo",
+                title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
+                description="Deploy yourself",
+                url="https://github.com/sandy1709/catuserbot",
+                thumb=thumb,
+                content=photo,
+                send_message=types.InputBotInlineMessageMediaAuto(
+                        reply_markup=markup,
+                        message=text,
+                        entities=msg_entities
+                    )
+            )
         await event.answer([result] if result else None)
 
 
