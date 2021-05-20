@@ -110,9 +110,9 @@ async def iytdl_inline(event):
 )
 @check_owner
 async def ytdl_download_callback(c_q: CallbackQuery):
-    yt_code = c_q.matches[0].group(1)
-    choice_id = c_q.matches[0].group(2)
-    downtype = c_q.matches[0].group(3)
+    yt_code = c_q.pattern_match.group(1)
+    choice_id = c_q.pattern_match.group(2)
+    downtype = c_q.pattern_match.group(3)
     if str(choice_id).isdigit():
         choice_id = int(choice_id)
         if choice_id == 0:
@@ -186,9 +186,9 @@ async def ytdl_download_callback(c_q: CallbackQuery):
 )
 @check_owner
 async def ytdl_callback(c_q: CallbackQuery):
-    choosen_btn = c_q.matches[0].group(1)
-    data_key = c_q.matches[0].group(2)
-    page = c_q.matches[0].group(3)
+    choosen_btn = c_q.pattern_match.group(1)
+    data_key = c_q.pattern_match.group(2)
+    page = c_q.pattern_match.group(3)
     if not os.path.exists(PATH):
         return await c_q.answer(
             "Search data doesn't exists anymore, please perform search again ...",
