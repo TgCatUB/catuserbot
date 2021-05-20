@@ -157,7 +157,7 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
         BOTLOG_CHATID,
         file=media,
         caption=f"<b>File Name : </b><code>{os.path.basename(Path(_path))}</code>",
-        parse_mode="html"
+        parse_mode="html",
     )
     await upload_msg.delete()
     await c_q.edit(
