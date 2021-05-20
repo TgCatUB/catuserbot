@@ -79,9 +79,21 @@ async def iytdl_inline(event):
 )
 @check_owner
 async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
-    yt_code = str(c_q.pattern_match.group(1).decode("UTF-8")) if c_q.pattern_match.group(1) is not None else None
-    choice_id = str(c_q.pattern_match.group(2).decode("UTF-8")) if c_q.pattern_match.group(2) is not None else None
-    downtype = str(c_q.pattern_match.group(3).decode("UTF-8")) if c_q.pattern_match.group(3) is not None else None
+    yt_code = (
+        str(c_q.pattern_match.group(1).decode("UTF-8"))
+        if c_q.pattern_match.group(1) is not None
+        else None
+    )
+    choice_id = (
+        str(c_q.pattern_match.group(2).decode("UTF-8"))
+        if c_q.pattern_match.group(2) is not None
+        else None
+    )
+    downtype = (
+        str(c_q.pattern_match.group(3).decode("UTF-8"))
+        if c_q.pattern_match.group(3) is not None
+        else None
+    )
     if str(choice_id).isdigit():
         choice_id = int(choice_id)
         if choice_id == 0:
@@ -155,9 +167,21 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
 )
 @check_owner
 async def ytdl_callback(c_q: CallbackQuery):
-    choosen_btn = str(c_q.pattern_match.group(1).decode("UTF-8")) if c_q.pattern_match.group(1) is not None else None
-    data_key = str(c_q.pattern_match.group(2).decode("UTF-8")) if c_q.pattern_match.group(2) is not None else None
-    page = str(c_q.pattern_match.group(3).decode("UTF-8")) if c_q.pattern_match.group(3) is not None else None
+    choosen_btn = (
+        str(c_q.pattern_match.group(1).decode("UTF-8"))
+        if c_q.pattern_match.group(1) is not None
+        else None
+    )
+    data_key = (
+        str(c_q.pattern_match.group(2).decode("UTF-8"))
+        if c_q.pattern_match.group(2) is not None
+        else None
+    )
+    page = (
+        str(c_q.pattern_match.group(3).decode("UTF-8"))
+        if c_q.pattern_match.group(3) is not None
+        else None
+    )
     if not os.path.exists(PATH):
         return await c_q.answer(
             "Search data doesn't exists anymore, please perform search again ...",
@@ -210,7 +234,7 @@ async def ytdl_callback(c_q: CallbackQuery):
             list_res,
         )
         await c_q.edit(
-            file= await get_ytthumb(search_data.get("1").get("video_id")),
+            file=await get_ytthumb(search_data.get("1").get("video_id")),
             buttons=[
                 (
                     Button.url(
