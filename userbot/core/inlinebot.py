@@ -2,14 +2,21 @@ import json
 import os
 import re
 import time
-
+from ..core import pool, check_owner
 import requests
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
 from telethon.utils import get_attributes
-
+from youtubesearchpython import VideosSearch
 from userbot import catub
-
+from .assistant.iytdl import (
+    download_button,
+    get_yt_video_id,
+    get_ytthumb,
+    result_formatter,
+    ytsearch_data,
+)
+from ..helpers.functions import rand_key
 from ..Config import Config
 from .logger import logging
 
@@ -42,9 +49,9 @@ async def inline_handler(event):  # sourcery no-metrics
     result = None
     query = event.text
     string = query.lower()
-    query.split(" ", 2)
-    query.split(" ", 1)
-    string.split()
+    str_x = query.split(" ", 2)
+    str_y = query.split(" ", 1)
+    string_split = string.split()
     query_user_id = event.query.user_id
     if query_user_id == Config.OWNER_ID or query_user_id in Config.SUDO_USERS:
         hmm = re.compile("secret (.*) (.*)")
@@ -83,22 +90,17 @@ async def inline_handler(event):  # sourcery no-metrics
             note_data = ""
             buttons = []
             for match in BTN_URL_REGEX.finditer(markdown_note):
-                # Check if btnurl is escaped
                 n_escapes = 0
                 to_check = match.start(1) - 1
                 while to_check > 0 and markdown_note[to_check] == "\\":
                     n_escapes += 1
                     to_check -= 1
-                # if even, not escaped -> create button
                 if n_escapes % 2 == 0:
-                    # create a thruple with button label, url, and newline
-                    # status
                     buttons.append(
                         (match.group(2), match.group(3), bool(match.group(4)))
                     )
                     note_data += markdown_note[prev : match.start(1)]
                     prev = match.end(1)
-                # if odd, escaped -> move along
                 elif n_escapes % 2 == 1:
                     note_data += markdown_note[prev:to_check]
                     prev = match.start(1) - 1
@@ -164,6 +166,60 @@ async def inline_handler(event):  # sourcery no-metrics
                 json.dump(jsondata, open(secret, "w"))
             else:
                 json.dump(newsecret, open(secret, "w"))
+        if str_y[0].lower() == "ytdl" and len(str_y) == 2:
+                link = get_yt_video_id(str_y[1].strip())
+                found_ = True
+                if link is None:
+                    search = VideosSearch(str_y[1].strip(), limit=15)
+                    resp = (search.result()).get("result")
+                    if len(resp) == 0:
+                        found_ = False
+                    else:
+                        outdata = await result_formatter(resp)
+                        key_ = rand_key()
+                        ytsearch_data.store_(key_, outdata)
+                        buttons = [
+                                (
+                                    Button.inline(
+                                        f"1 / {len(outdata)}",
+                                        data=f"ytdl_next_{key_}_1",
+                                    )
+                                ),
+                                (
+                                    Button.inline(
+                                        "📜  List all",
+                                        data=f"ytdl_listall_{key_}_1",
+                                    ),
+                                    Button.inline(
+                                        "⬇️  Download",
+                                        data=f'ytdl_download_{outdata[1]["video_id"]}_0',
+                                    ),
+                                ),
+                            ]
+                        caption = outdata[1]["message"]
+                        photo = outdata[1]["thumb"]
+                else:
+                    caption, buttons = await download_button(link, body=True)
+                    photo = await get_ytthumb(link)
+                if found_:
+                    results.append(
+                        builder.photo(
+                            photo,
+                            #title=link,
+                            #description="⬇️ Click to Download",
+                            text=caption,
+                            buttons=buttons,
+                        )
+                    )
+                else:
+                    results.append(
+                        builder.article(
+                            title="Not Found",
+                            text=f"No Results found for `{str_y[1]}`",
+                            description="INVALID",
+                        )
+                    )
+                await event.answer([result] if result else None)
     else:
         buttons = [
             (
@@ -193,9 +249,6 @@ async def inline_handler(event):  # sourcery no-metrics
 
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"close")))
+@check_owner
 async def on_plug_in_callback_query_handler(event):
-    if event.query.user_id == catub.uid:
-        await event.edit("menu closed")
-    else:
-        reply_pop_up_alert = "Please get your own catuserbot, and don't use mine! Join @catuserbot17 help "
-        await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+    await event.edit("menu closed")
