@@ -1,31 +1,18 @@
-import re
-import urllib.request
-import asyncio
-import glob
-import io
 import os
 import re
+import urllib.request
 from collections import defaultdict
-from pathlib import Path
-from time import time
 
 import ujson
 import youtube_dl
-from telethon import Button, types
-from telethon.events import CallbackQuery
-from telethon.utils import get_attributes
-from wget import download
+from telethon import Button
 from youtube_dl.utils import DownloadError, ExtractorError, GeoRestrictedError
-
-from userbot import catub
+from youtubesearchpython import VideosSearch
 
 from ...Config import Config
-from ...core import check_owner, pool
+from ...core import pool
 from ...core.logger import logging
-from ...core.managers import edit_delete, edit_or_reply
-from ..helpers import AioHttp, humanbytes, post_to_telegraph, progress, sublists
-
-from youtubesearchpython import VideosSearch
+from ..helpers import AioHttp, humanbytes, sublists
 
 LOGS = logging.getLogger(__name__)
 BASE_YT_URL = "https://www.youtube.com/watch?v="
@@ -77,6 +64,7 @@ async def ytsearch(query, limit):
         result += f"☞ {textresult}\n"
     return result
 
+
 class YT_Search_X:
     def __init__(self):
         if not os.path.exists(PATH):
@@ -96,6 +84,7 @@ class YT_Search_X:
 
 ytsearch_data = YT_Search_X()
 
+
 async def get_ytthumb(videoid: str):
     thumb_quality = [
         "maxresdefault.jpg",  # Best quality
@@ -112,13 +101,14 @@ async def get_ytthumb(videoid: str):
             break
     return thumb_link
 
+
 def get_yt_video_id(url: str):
     # https://regex101.com/r/c06cbV/1
     match = YOUTUBE_REGEX.search(url)
     if match:
         return match.group(1)
-    
-    
+
+
 # Based on https://gist.github.com/AgentOak/34d47c65b1d28829bb17c24c04a0096f
 def get_choice_by_id(choice_id, media_type: str):
     if choice_id == "mkv":
@@ -170,6 +160,8 @@ async def result_formatter(results: list):
         )
 
     return output
+
+
 def yt_search_btns(
     data_key: str, page: int, vid: str, total: int, del_back: bool = False
 ):
@@ -198,6 +190,7 @@ def yt_search_btns(
     if del_back:
         buttons[0].pop(0)
     return buttons
+
 
 @pool.run_in_thread
 def download_button(vid: str, body: bool = False):  # sourcery no-metrics
@@ -264,6 +257,7 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
         vid_body = f"**[{vid_data.get('title')}]({vid_data.get('webpage_url')})**"
         return vid_body, buttons
     return buttons
+
 
 @pool.run_in_thread
 def _tubeDl(url: str, starttime, uid: str):
