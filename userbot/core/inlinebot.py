@@ -228,7 +228,7 @@ async def inline_handler(event):  # sourcery no-metrics
             )
         ]
         markup = event.client.build_reply_markup(buttons)
-        photo = thumb = types.InputWebDocument(
+        photo = types.InputWebDocument(
             url=CATLOGO, size=0, mime_type="image/jpeg", attributes=[]
         )
         text, msg_entities = await event.client._parse_message_text(
@@ -241,7 +241,7 @@ async def inline_handler(event):  # sourcery no-metrics
             description="Deploy yourself",
             url="https://github.com/sandy1709/catuserbot",
             thumb=photo,
-            content=None,
+            content=photo,
             send_message=types.InputBotInlineMessageMediaAuto(
                 reply_markup=markup, message=text, entities=msg_entities
             ),
