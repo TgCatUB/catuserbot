@@ -197,7 +197,7 @@ async def purgeme(event):
 
 
 @catub.cat_cmd(
-    pattern="del(?: |$)(\d+)?",
+    pattern="del(\s*| \d+)$",
     command=("del", plugin_category),
     info={
         "header": "To delete replied message.",
