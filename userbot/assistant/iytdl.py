@@ -23,7 +23,7 @@ from ..Config import Config
 from ..core import check_owner, pool
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import progress, reply_id
+from ..helpers import post_to_telegraph, progress, reply_id
 from ..helpers.functions.utube import (
     _mp3Dl,
     _tubeDl,
@@ -205,7 +205,7 @@ async def ytdl_callback(c_q: CallbackQuery):
             search_data.get(vid_s).get("list_view") for vid_s in search_data
         )
 
-        telegraph = await post_to_telegraphpost_to_telegraph(
+        telegraph = await post_to_telegraph(
             f"Showing {total} youtube video results for the given query ...",
             list_res,
         )
