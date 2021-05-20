@@ -189,7 +189,7 @@ async def inline_handler(event):  # sourcery no-metrics
                         ),
                     ]
                     caption = outdata[1]["message"]
-                    photo = outdata[1]["thumb"]
+                    photo = await get_ytthumb(outdata[1]["video_id"])
             else:
                 caption, buttons = await download_button(link, body=True)
                 photo = await get_ytthumb(link)
