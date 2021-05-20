@@ -66,8 +66,8 @@ async def plugininfo(input_str, event, flag):
     except Exception as e:
         await edit_delete(event, f"**Error**\n`{str(e)}`")
         return None
-    if len(cmds) == 1 and (flag and flag != "-p"):
-        outstr = await cmdinfo(input_str, event, plugin=False)
+    if len(cmds) == 1 and (flag is None or (flag and flag != "-p")):
+        outstr = await cmdinfo(cmds[0], event, plugin=False)
         return outstr
     outstr = f"**Plugin : **`{input_str}`\n"
     outstr += f"**Commands Available :** `{len(cmds)}`\n"
