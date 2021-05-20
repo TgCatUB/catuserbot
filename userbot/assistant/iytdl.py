@@ -8,26 +8,30 @@ import glob
 import io
 import os
 import re
-from collections import defaultdict
 from pathlib import Path
 from time import time
 
 import ujson
-import youtube_dl
 from telethon import Button, types
 from telethon.events import CallbackQuery
 from telethon.utils import get_attributes
 from wget import download
-from youtube_dl.utils import DownloadError, ExtractorError, GeoRestrictedError
 
 from userbot import catub
-from ..helpers.functions.utube import ytsearch_data, get_ytthumb,get_yt_video_id, get_choice_by_id, result_formatter, yt_search_btns,download_button, _mp3Dl, _tubeDl
 
 from ..Config import Config
 from ..core import check_owner, pool
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import AioHttp, humanbytes, post_to_telegraph, progress, sublists
+from ..helpers import post_to_telegraph, progress
+from ..helpers.functions.utube import (
+    _mp3Dl,
+    _tubeDl,
+    download_button,
+    get_choice_by_id,
+    get_ytthumb,
+    yt_search_btns,
+)
 from ..plugins import BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
@@ -37,8 +41,6 @@ YOUTUBE_REGEX = re.compile(
 )
 PATH = "./userbot/cache/ytsearch.json"
 plugin_category = "bot"
-
-
 
 
 @catub.cat_cmd(
@@ -239,16 +241,3 @@ async def ytdl_callback(c_q: CallbackQuery):
                 total=total,
             ),
         )
-
-
-
-
-
-
-
-
-
-
-
-
-
