@@ -29,8 +29,10 @@ async def gps(event):
     if geoloc:
         lon = geoloc.longitude
         lat = geoloc.latitude
-        await reply_to_id.reply(
-            input_str, file=types.InputMediaGeoPoint(types.InputGeoPoint(lat, lon))
+        await event.client.send_file(event,
+            file=types.InputMediaGeoPoint(types.InputGeoPoint(lat, lon)),
+            caption=f"**Location : **`{input_str}`",
+            reply_to=reply_to_id
         )
         await catevent.delete()
     else:
