@@ -151,7 +151,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         await event.edit("`Build failed!\n" "Cancelled or there were some errors...`")
         await asyncio.sleep(5)
         return await event.delete()
-    await event.edit("`Deply was failed better to do manual deploy.`")
+    await event.edit("`Deploy was failed better to do manual deploy.`")
 
 
 @catub.cat_cmd(
