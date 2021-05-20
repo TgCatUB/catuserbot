@@ -78,7 +78,7 @@ async def ff_mpeg_trim_cmd(event):
                 c_time = time.time()
                 dl = io.FileIO(FF_MPEG_DOWN_LOAD_MEDIA_PATH, "a")
                 await event.client.fast_download_file(
-                    location=reply.document,
+                    location=reply_message.document,
                     out=dl,
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                         progress(d, t, catevent, c_time, "trying to download")
