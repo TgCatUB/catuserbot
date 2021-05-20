@@ -154,7 +154,7 @@ async def result_formatter(results: list):
         if upld:
             out += "**❯  Uploader:** "
             out += f'<a href={upld.get("link")}>{upld.get("name")}</a>'
-        
+
         output[index] = dict(
             message=out,
             thumb=thumb,
