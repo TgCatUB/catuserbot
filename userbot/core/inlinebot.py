@@ -175,18 +175,19 @@ async def inline_handler(event):  # sourcery no-metrics
                     outdata = await result_formatter(resp)
                     key_ = rand_key()
                     ytsearch_data.store_(key_, outdata)
-                    buttons = [Button.inline(
-                                f"1 / {len(outdata)}",
-                                data=f"ytdl_next_{key_}_1",
-                            ),
-                            Button.inline(
-                                "📜  List all",
-                                data=f"ytdl_listall_{key_}_1",
-                            ),
-                            Button.inline(
-                                "⬇️  Download",
-                                data=f'ytdl_download_{outdata[1]["video_id"]}_0',
-                            ),
+                    buttons = [
+                        Button.inline(
+                            f"1 / {len(outdata)}",
+                            data=f"ytdl_next_{key_}_1",
+                        ),
+                        Button.inline(
+                            "📜  List all",
+                            data=f"ytdl_listall_{key_}_1",
+                        ),
+                        Button.inline(
+                            "⬇️  Download",
+                            data=f'ytdl_download_{outdata[1]["video_id"]}_0',
+                        ),
                     ]
                     caption = outdata[1]["message"]
                     photo = outdata[1]["thumb"]
