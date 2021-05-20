@@ -206,8 +206,8 @@ async def ytdl_callback(c_q: CallbackQuery):
         )
 
         telegraph = post_to_telegraph(
-            a_title=f"Showing {total} youtube video results for the given query ...",
-            content=list_res,
+            f"Showing {total} youtube video results for the given query ...",
+            list_res,
         )
         await c_q.edit(
             file=search_data.get("1").get("thumb"),
