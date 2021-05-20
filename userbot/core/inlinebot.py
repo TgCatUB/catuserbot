@@ -200,11 +200,9 @@ async def inline_handler(event):  # sourcery no-metrics
                 photo = await get_ytthumb(link)
             markup = event.client.build_reply_markup(buttons)
             photo = types.InputWebDocument(
-            url=photo, size=0, mime_type="image/jpeg", attributes=[]
-                )
-            text, msg_entities = await event.client._parse_message_text(
-                    "caption", "md"
-                )
+                url=photo, size=0, mime_type="image/jpeg", attributes=[]
+            )
+            text, msg_entities = await event.client._parse_message_text("caption", "md")
             if found_:
                 results.append(
                     types.InputBotInlineResult(
