@@ -109,7 +109,8 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
     upload_msg = await c_q.client.send_message(BOTLOG_CHATID, "Uploading...")
     yt_url = BASE_YT_URL + yt_code
     await c_q.edit(
-        f"**⬇️ Downloading {media_type} ...**\n\n🔗  [**Link**]({yt_url})\n🆔  **Format Code** : {disp_str}"
+        f"<b>⬇️ Downloading {media_type} ....</b>\n\n🔗  <a href={yt_url}> <b>Link</b></a>\n🆔  <b>Format Code</b> : {disp_str}",
+        parse_mode="html",
     )
     if downtype == "v":
         retcode = await _tubeDl(url=yt_url, starttime=startTime, uid=choice_str)
@@ -155,10 +156,10 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
     uploaded_media = await c_q.client.send_file(
         BOTLOG_CHATID,
         file=media,
-        caption=f"**File Name : **`{os.path.basename(Path(_path))}`",
+        caption=f"<b>File Name : </b><code>{os.path.basename(Path(_path))}</code>",
     )
     await c_q.edit(
-        text=f"📹  **[{uploaded_media.text}]({yt_url})**", file=uploaded_media.media
+        text=f"📹  <a href={yt_url}><b>{uploaded_media.text}</b>", file=uploaded_media.media, parse_mode="html"
     )
 
 
@@ -206,6 +207,7 @@ async def ytdl_callback(c_q: CallbackQuery):
                 vid=back_vid.get("video_id"),
                 total=total,
             ),
+            parse_mode="html",
         )
     elif choosen_btn == "next":
         index = int(page) + 1
@@ -222,6 +224,7 @@ async def ytdl_callback(c_q: CallbackQuery):
                 vid=front_vid.get("video_id"),
                 total=total,
             ),
+            parse_mode="html",
         )
     elif choosen_btn == "listall":
         await c_q.answer("View Changed to:  📜  List", alert=False)
@@ -264,4 +267,5 @@ async def ytdl_callback(c_q: CallbackQuery):
                 vid=first.get("video_id"),
                 total=total,
             ),
+            parse_mode="html",
         )
