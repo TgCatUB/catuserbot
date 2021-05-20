@@ -12,7 +12,9 @@ from youtubesearchpython import VideosSearch
 from ...Config import Config
 from ...core import pool
 from ...core.logger import logging
-from .. import AioHttp, humanbytes, sublists
+from ..aiohttp_helper import AioHttp
+from ..progress import humanbytes
+from .functions import sublists
 
 LOGS = logging.getLogger(__name__)
 BASE_YT_URL = "https://www.youtube.com/watch?v="
