@@ -3,10 +3,9 @@ import os
 import re
 import time
 from uuid import uuid4
-import requests
+
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
-from telethon.utils import get_attributes
 from youtubesearchpython import VideosSearch
 
 from userbot import catub
@@ -230,28 +229,23 @@ async def inline_handler(event):  # sourcery no-metrics
         ]
         markup = event.client.build_reply_markup(buttons)
         photo = thumb = types.InputWebDocument(
-                url=CATLOGO,
-                size=0,
-                mime_type="image/jpeg",
-                attributes=[]
-            )  
+            url=CATLOGO, size=0, mime_type="image/jpeg", attributes=[]
+        )
         text, msg_entities = await event.client._parse_message_text(
-                    "𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.", "md"
-                )
+            "𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.", "md"
+        )
         result = types.InputBotInlineResult(
-                id=str(uuid4()),
-                type="photo",
-                title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
-                description="Deploy yourself",
-                url="https://github.com/sandy1709/catuserbot",
-                thumb=thumb,
-                content=photo,
-                send_message=types.InputBotInlineMessageMediaAuto(
-                        reply_markup=markup,
-                        message=text,
-                        entities=msg_entities
-                    )
-            )
+            id=str(uuid4()),
+            type="photo",
+            title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
+            description="Deploy yourself",
+            url="https://github.com/sandy1709/catuserbot",
+            thumb=thumb,
+            content=photo,
+            send_message=types.InputBotInlineMessageMediaAuto(
+                reply_markup=markup, message=text, entities=msg_entities
+            ),
+        )
         await event.answer([result] if result else None)
 
 
