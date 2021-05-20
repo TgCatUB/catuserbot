@@ -200,8 +200,7 @@ async def inline_handler(event):  # sourcery no-metrics
             )
             text, msg_entities = await event.client._parse_message_text("caption", "md")
             if found_:
-                results.append(
-                    types.InputBotInlineResult(
+                result = types.InputBotInlineResult(
                         id=str(uuid4()),
                         type="photo",
                         title=link,
@@ -212,16 +211,13 @@ async def inline_handler(event):  # sourcery no-metrics
                             reply_markup=markup, message=text, entities=msg_entities
                         ),
                     )
-                )
             else:
-                results.append(
-                    builder.article(
+                result = builder.article(
                         title="Not Found",
                         text=f"No Results found for `{str_y[1]}`",
                         description="INVALID",
                     )
-                )
-            await event.answer(results)
+            await event.answer([result] if result else None)
     else:
         buttons = [
             (
