@@ -138,7 +138,8 @@ def get_choice_by_id(choice_id, media_type: str):
 async def result_formatter(results: list):
     output = {}
     for index, r in enumerate(results, start=1):
-        thumb = (r.get("thumbnails").pop()).get("url")
+        v_deo_id = r.get("id")
+        thumb = await get_ytthumb(v_deo_id)
         upld = r.get("channel")
         title = f'<a href={r.get("link")}>**{r.get("title")}**</a>\n'
         out = title
@@ -153,7 +154,7 @@ async def result_formatter(results: list):
         if upld:
             out += "**❯  Uploader:** "
             out += f'<a href={upld.get("link")}>{upld.get("name")}</a>'
-        v_deo_id = r.get("id")
+        
         output[index] = dict(
             message=out,
             thumb=thumb,
