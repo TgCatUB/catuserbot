@@ -49,7 +49,8 @@ def ibuild_keyboard(buttons):
 @catub.tgbot.on(InlineQuery)
 async def inline_handler(event):  # sourcery no-metrics
     builder = event.builder
-    result = []
+    result = None
+    results = []
     query = event.text
     string = query.lower()
     query.split(" ", 2)
@@ -205,7 +206,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 caption, buttons = await download_button(link, body=True)
                 photo = await get_ytthumb(link)
             if found_:
-                result.append(
+                results.append(
                     builder.photo(
                         photo,
                         # title=link,
@@ -215,14 +216,14 @@ async def inline_handler(event):  # sourcery no-metrics
                     )
                 )
             else:
-                result.append(
+                results.append(
                     builder.article(
                         title="Not Found",
                         text=f"No Results found for `{str_y[1]}`",
                         description="INVALID",
                     )
                 )
-            await event.answer([result] if result else None)
+            await event.answer(results)
     else:
         buttons = [
             (
