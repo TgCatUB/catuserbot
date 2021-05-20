@@ -205,7 +205,7 @@ async def ytdl_callback(c_q: CallbackQuery):
             search_data.get(vid_s).get("list_view") for vid_s in search_data
         )
 
-        telegraph = post_to_telegraph(
+        telegraph = await post_to_telegraphpost_to_telegraph(
             f"Showing {total} youtube video results for the given query ...",
             list_res,
         )
