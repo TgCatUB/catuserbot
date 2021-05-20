@@ -48,7 +48,7 @@ plugin_category = "bot"
     command=("iytdl", plugin_category),
     info={
         "header": "ytdl with inline buttons.",
-        "description": "An api that Fetchs random Quote from `goodreads.com`",
+        "description": "To search and download youtube videos by inline buttons.",
         "usage": "{tr}iytdl [URL / Text] or [Reply to URL / Text]",
     },
 )
