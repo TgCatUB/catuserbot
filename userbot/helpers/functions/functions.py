@@ -1,19 +1,21 @@
 import os
 import zipfile
 from random import choice
+from uuid import uuid4
 
 import requests
 
 from ..resources.states import states
 
-from uuid import uuid4
 
 def rand_key():
     return str(uuid4())[:8]
 
+
 # https://www.tutorialspoint.com/How-do-you-split-a-list-into-evenly-sized-chunks-in-Python
 def sublists(input_list: list, width: int = 3):
     return [input_list[x : x + width] for x in range(0, len(input_list), width)]
+
 
 async def sanga_seperator(sanga_list):
     for i in sanga_list:
