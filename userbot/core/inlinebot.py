@@ -10,7 +10,8 @@ from youtubesearchpython import VideosSearch
 
 from userbot import catub
 
-from ..assistant.iytdl import (
+
+from ..helpers.functions.utube import (
     download_button,
     get_yt_video_id,
     get_ytthumb,
