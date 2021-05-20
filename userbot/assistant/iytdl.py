@@ -27,6 +27,7 @@ from ..core import check_owner, pool
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import AioHttp, humanbytes, post_to_telegraph, progress, sublists
+from . import BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
 BASE_YT_URL = "https://www.youtube.com/watch?v="
