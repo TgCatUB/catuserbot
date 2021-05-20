@@ -89,7 +89,7 @@ async def grpinfo():
     outstr = "**Plugins in Catuserbot are:**\n\n"
     category = ["admin", "bot", "extra", "fun", "misc", "tools", "utils"]
     for cat in category:
-        outstr += f"**•  [Category] : **`{cat}`\n"
+        outstr += f"**•  [{cat}] : **\n"
         plugins = GRP_INFO[cat]
         for plugin in plugins:
             outstr += f"`{plugin}`  "
