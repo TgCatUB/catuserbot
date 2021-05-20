@@ -42,7 +42,7 @@ async def ocr_space_file(
 
 @catub.cat_cmd(
     pattern="ocr(?: |$)(.*)",
-    command=("quote", plugin_category),
+    command=("ocr", plugin_category),
     info={
         "header": "To read text in image and print it.",
         "description": "Reply to an image or sticker to extract text from it.\n\nGet language codes from [here](https://ocr.space/ocrapi).",
