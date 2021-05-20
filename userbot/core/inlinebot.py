@@ -204,7 +204,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     types.InputBotInlineResult(
                         id=str(uuid4()),
                         type="photo",
-                        title="link",
+                        title=link,
                         description="⬇️ Click to Download",
                         thumb=photo,
                         content=photo,
