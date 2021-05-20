@@ -127,6 +127,7 @@ async def _(event):
         outstr = await grpinfo()
     await edit_or_reply(event, outstr)
 
+
 @catub.cat_cmd(
     pattern="s (.*)",
     command=("s", plugin_category),
@@ -145,8 +146,8 @@ async def _(event):
     else:
         out = f"I can't find any such command `{cmd}` in catuserbot"
     await message.edit(text=out, del_in=0)
-    
-    
+
+
 @catub.cat_cmd(
     pattern="dc$",
     command=("dc", plugin_category),
