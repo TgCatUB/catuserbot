@@ -2,7 +2,7 @@ import random
 from os import remove
 from random import choice
 from urllib import parse
-
+from ..helpers import reply_id
 import nekos
 import requests
 from PIL import Image
