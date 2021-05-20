@@ -1,5 +1,5 @@
 from userbot import catub
-
+import random
 from ..core.managers import edit_or_reply
 from . import fonts
 
