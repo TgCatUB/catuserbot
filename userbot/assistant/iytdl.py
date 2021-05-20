@@ -3,29 +3,30 @@
 #   Modded ytdl by code-rgb   #
 # --------------------------- #
 
-import glob
-import os
-import io
 import asyncio
+import glob
+import io
+import os
+import re
 from collections import defaultdict
 from pathlib import Path
-import re
 from time import time
-from telethon.utils import get_attributes
-from ..core.managers import edit_delete, edit_or_reply
+
 import ujson
 import youtube_dl
-from telethon import Button,types
-from telethon.events import CallbackQuery, InlineQuery
+from telethon import Button, types
+from telethon.events import CallbackQuery
+from telethon.utils import get_attributes
 from wget import download
 from youtube_dl.utils import DownloadError, ExtractorError, GeoRestrictedError
-from youtubesearchpython import VideosSearch
-from ..Config import Config
-from ..core import pool, check_owner
-from userbot import catub
-from ..core.logger import logging
-from ..helpers import AioHttp, humanbytes,post_to_telegraph,rand_key,sublists,progress
 
+from userbot import catub
+
+from ..Config import Config
+from ..core import check_owner, pool
+from ..core.logger import logging
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers import AioHttp, humanbytes, post_to_telegraph, progress, sublists
 
 LOGS = logging.getLogger(__name__)
 BASE_YT_URL = "https://www.youtube.com/watch?v="
@@ -71,6 +72,7 @@ async def get_ytthumb(videoid: str):
             break
     return thumb_link
 
+
 @catub.cat_cmd(
     pattern="iytdl(?: |$)(.*)",
     command=("iytdl", plugin_category),
@@ -84,182 +86,191 @@ async def iytdl_inline(event):
     "ytdl with inline buttons."
     reply = await event.get_reply_message()
     reply_to_id = await reply_id(event)
-    input_str =event.pattern_match.group(1)
+    input_str = event.pattern_match.group(1)
     input_url = None
     if input_str:
         input_url = (input_str).strip()
     elif reply and reply.text:
         input_url = (reply.text).strip()
     if not input_url:
-        return await edit_delete(event,"Give input or reply to a valid youtube URL")
-    catevent = await edit_or_reply(event,f"🔎 Searching Youtube for: `'{input_url}'`")
-    results = await event.client.inline_query(Config.TG_BOT_USERNAME, f"ytdl {input_url}")
+        return await edit_delete(event, "Give input or reply to a valid youtube URL")
+    catevent = await edit_or_reply(event, f"🔎 Searching Youtube for: `'{input_url}'`")
+    results = await event.client.inline_query(
+        Config.TG_BOT_USERNAME, f"ytdl {input_url}"
+    )
     await catevent.delete()
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
 
 
-
-@catub.tgbot.on(CallbackQuery(data=re.compile(r"^ytdl_download_(.*)_([\d]+|mkv|mp4|mp3)(?:_(a|v))?")))
+@catub.tgbot.on(
+    CallbackQuery(
+        data=re.compile(r"^ytdl_download_(.*)_([\d]+|mkv|mp4|mp3)(?:_(a|v))?")
+    )
+)
 @check_owner
 async def ytdl_download_callback(c_q: CallbackQuery):
-        yt_code = c_q.matches[0].group(1)
-        choice_id = c_q.matches[0].group(2)
-        downtype = c_q.matches[0].group(3)
-        if str(choice_id).isdigit():
-            choice_id = int(choice_id)
-            if choice_id == 0:
-                await c_q.answer("🔄  Processing...", show_alert=False)
-                await c_q.edit(
-                    buttons=(await download_button(yt_code))
-                )
-                return
-        startTime = time()
-        choice_str, disp_str = get_choice_by_id(choice_id, downtype)
-        media_type = "Video" if downtype == "v" else "Audio"
-        callback_continue = f"Downloading {media_type} Please Wait..."
-        callback_continue += f"\n\nFormat Code : {disp_str}"
-        await c_q.answer(callback_continue, show_alert=True)
-        upload_msg = await c_q.client.send_message(BOTLOG_CHATID, "Uploading...")
-        yt_url = BASE_YT_URL + yt_code
-        await c_q.edit(
-            f"**⬇️ Downloading {media_type} ...**\n\n🔗  [<b>Link</b>]({yt_url})\n🆔  <b>Format Code</b> : {disp_str}"
-        )
-        if downtype == "v":
-            retcode = await _tubeDl(url=yt_url, starttime=startTime, uid=choice_str)
-        else:
-            retcode = await _mp3Dl(url=yt_url, starttime=startTime, uid=choice_str)
-        if retcode != 0:
-            return await upload_msg.edit(str(retcode))
-        _fpath = ""
-        thumb_pic = None
-        for _path in glob.glob(os.path.join(Config.TEMP_DIR , str(startTime), "*")):
-            if _path.lower().endswith((".jpg", ".png", ".webp")):
-                thumb_pic = _path
-            else:
-                _fpath = _path
-        if not _fpath:
-            await edit_delete(upload_msg,"nothing found !")
+    yt_code = c_q.matches[0].group(1)
+    choice_id = c_q.matches[0].group(2)
+    downtype = c_q.matches[0].group(3)
+    if str(choice_id).isdigit():
+        choice_id = int(choice_id)
+        if choice_id == 0:
+            await c_q.answer("🔄  Processing...", show_alert=False)
+            await c_q.edit(buttons=(await download_button(yt_code)))
             return
-        if not thumb_pic and downtype == "v":
-            thumb_pic = str(
-                await pool.run_in_thread(download)(await get_ytthumb(yt_code))
+    startTime = time()
+    choice_str, disp_str = get_choice_by_id(choice_id, downtype)
+    media_type = "Video" if downtype == "v" else "Audio"
+    callback_continue = f"Downloading {media_type} Please Wait..."
+    callback_continue += f"\n\nFormat Code : {disp_str}"
+    await c_q.answer(callback_continue, show_alert=True)
+    upload_msg = await c_q.client.send_message(BOTLOG_CHATID, "Uploading...")
+    yt_url = BASE_YT_URL + yt_code
+    await c_q.edit(
+        f"**⬇️ Downloading {media_type} ...**\n\n🔗  [<b>Link</b>]({yt_url})\n🆔  <b>Format Code</b> : {disp_str}"
+    )
+    if downtype == "v":
+        retcode = await _tubeDl(url=yt_url, starttime=startTime, uid=choice_str)
+    else:
+        retcode = await _mp3Dl(url=yt_url, starttime=startTime, uid=choice_str)
+    if retcode != 0:
+        return await upload_msg.edit(str(retcode))
+    _fpath = ""
+    thumb_pic = None
+    for _path in glob.glob(os.path.join(Config.TEMP_DIR, str(startTime), "*")):
+        if _path.lower().endswith((".jpg", ".png", ".webp")):
+            thumb_pic = _path
+        else:
+            _fpath = _path
+    if not _fpath:
+        await edit_delete(upload_msg, "nothing found !")
+        return
+    if not thumb_pic and downtype == "v":
+        thumb_pic = str(await pool.run_in_thread(download)(await get_ytthumb(yt_code)))
+    attributes, mime_type = get_attributes(str(_fpath))
+    ul = io.open(Path(_fpath), "rb")
+    uploaded = await event.client.fast_upload_file(
+        file=ul,
+        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+            progress(
+                d,
+                t,
+                event,
+                startTime,
+                "trying to upload",
+                file_name=os.path.basename(Path(_path)),
             )
-        attributes, mime_type = get_attributes(str(_fpath))
-        ul = io.open(Path(_fpath), "rb")
-        uploaded = await event.client.fast_upload_file(
-            file=ul,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                progress(d, t, event, startTime, "trying to upload", file_name=os.path.basename(Path(_path)))
-            ),
-        )
-        ul.close()
-        media = types.InputMediaUploadedDocument(
-            file=uploaded,
-            mime_type=mime_type,
-            attributes=attributes,
-            force_file=False,
-            thumb=await event.client.upload_file(thumb_pic) if thumb_pic else None,
-        )
-        uploaded_media = await event.client.send_file(
-            BOTLOG_CHATID,
-            file=media,
-            caption=f"**File Name : **`{os.path.basename(Path(_path))}`",
-        )
-        await c_q.edit(
-                text=f"📹  **[{uploaded_media.caption}]({yt_url})**",
-                file=uploaded_media.media
-            )
+        ),
+    )
+    ul.close()
+    media = types.InputMediaUploadedDocument(
+        file=uploaded,
+        mime_type=mime_type,
+        attributes=attributes,
+        force_file=False,
+        thumb=await event.client.upload_file(thumb_pic) if thumb_pic else None,
+    )
+    uploaded_media = await event.client.send_file(
+        BOTLOG_CHATID,
+        file=media,
+        caption=f"**File Name : **`{os.path.basename(Path(_path))}`",
+    )
+    await c_q.edit(
+        text=f"📹  **[{uploaded_media.caption}]({yt_url})**", file=uploaded_media.media
+    )
 
-    
-@catub.tgbot.on(CallbackQuery(data=re.compile(r"^ytdl_(listall|back|next|detail)_([a-z0-9]+)_(.*)")))
+
+@catub.tgbot.on(
+    CallbackQuery(data=re.compile(r"^ytdl_(listall|back|next|detail)_([a-z0-9]+)_(.*)"))
+)
 @check_owner
 async def ytdl_callback(c_q: CallbackQuery):
-        choosen_btn = c_q.matches[0].group(1)
-        data_key = c_q.matches[0].group(2)
-        page = c_q.matches[0].group(3)
-        if not os.path.exists(PATH):
-            return await c_q.answer(
-                "Search data doesn't exists anymore, please perform search again ...",
-                show_alert=True,
-            )
-        with open(PATH) as f:
-            view_data = ujson.load(f)
-        search_data = view_data.get(data_key)
-        total = len(search_data)
-        if choosen_btn == "back":
-            index = int(page) - 1
-            del_back = index == 1
-            await c_q.answer()
-            back_vid = search_data.get(str(index))
-            await c_q.edit(
-                text=back_vid.get("message"),
-                file=back_vid.get("thumb"),
-                reply_markup=yt_search_btns(
-                    del_back=del_back,
-                    data_key=data_key,
-                    page=index,
-                    vid=back_vid.get("video_id"),
-                    total=total,
-                ),
-            )
-        elif choosen_btn == "next":
-            index = int(page) + 1
-            if index > total:
-                return await c_q.answer("That's All Folks !", show_alert=True)
-            await c_q.answer()
-            front_vid = search_data.get(str(index))
-            await c_q.edit(
-                text=back_vid.get("message"),
-                file=back_vid.get("thumb"),
-                reply_markup=yt_search_btns(
-                    data_key=data_key,
-                    page=index,
-                    vid=front_vid.get("video_id"),
-                    total=total,
-                ),
-            )
-        elif choosen_btn == "listall":
-            await c_q.answer("View Changed to:  📜  List", show_alert=False)
-            list_res = "".join(
-                search_data.get(vid_s).get("list_view") for vid_s in search_data
-            )
+    choosen_btn = c_q.matches[0].group(1)
+    data_key = c_q.matches[0].group(2)
+    page = c_q.matches[0].group(3)
+    if not os.path.exists(PATH):
+        return await c_q.answer(
+            "Search data doesn't exists anymore, please perform search again ...",
+            show_alert=True,
+        )
+    with open(PATH) as f:
+        view_data = ujson.load(f)
+    search_data = view_data.get(data_key)
+    total = len(search_data)
+    if choosen_btn == "back":
+        index = int(page) - 1
+        del_back = index == 1
+        await c_q.answer()
+        back_vid = search_data.get(str(index))
+        await c_q.edit(
+            text=back_vid.get("message"),
+            file=back_vid.get("thumb"),
+            reply_markup=yt_search_btns(
+                del_back=del_back,
+                data_key=data_key,
+                page=index,
+                vid=back_vid.get("video_id"),
+                total=total,
+            ),
+        )
+    elif choosen_btn == "next":
+        index = int(page) + 1
+        if index > total:
+            return await c_q.answer("That's All Folks !", show_alert=True)
+        await c_q.answer()
+        front_vid = search_data.get(str(index))
+        await c_q.edit(
+            text=back_vid.get("message"),
+            file=back_vid.get("thumb"),
+            reply_markup=yt_search_btns(
+                data_key=data_key,
+                page=index,
+                vid=front_vid.get("video_id"),
+                total=total,
+            ),
+        )
+    elif choosen_btn == "listall":
+        await c_q.answer("View Changed to:  📜  List", show_alert=False)
+        list_res = "".join(
+            search_data.get(vid_s).get("list_view") for vid_s in search_data
+        )
 
-            telegraph = post_to_telegraph(
-                a_title=f"Showing {total} youtube video results for the given query ...",
-                content=list_res,
-            )
-            await c_q.edit(
-                file=search_data.get("1").get("thumb"),
-                reply_markup=[
-                        (
-                            Button.url(
-                                "↗️  Click To Open",
-                                url=telegraph,
-                            )
-                        ),
-                        (
-                            Button.inline(
-                                "📰  Detailed View",
-                                data=f"ytdl_detail_{data_key}_{page}",
-                            )
-                        ),
-                    ]
-                )
-        else:  # Detailed
-            index = 1
-            await c_q.answer("View Changed to:  📰  Detailed", show_alert=False)
-            first = search_data.get(str(index))
-            await c_q.edit(
-                        text=first.get("message"),
-                        file=first.get("thumb"),
-                        reply_markup=yt_search_btns(
-                            del_back=True,
-                            data_key=data_key,
-                            page=index,
-                            vid=first.get("video_id"),
-                            total=total,
-                        ),
-            )
+        telegraph = post_to_telegraph(
+            a_title=f"Showing {total} youtube video results for the given query ...",
+            content=list_res,
+        )
+        await c_q.edit(
+            file=search_data.get("1").get("thumb"),
+            reply_markup=[
+                (
+                    Button.url(
+                        "↗️  Click To Open",
+                        url=telegraph,
+                    )
+                ),
+                (
+                    Button.inline(
+                        "📰  Detailed View",
+                        data=f"ytdl_detail_{data_key}_{page}",
+                    )
+                ),
+            ],
+        )
+    else:  # Detailed
+        index = 1
+        await c_q.answer("View Changed to:  📰  Detailed", show_alert=False)
+        first = search_data.get(str(index))
+        await c_q.edit(
+            text=first.get("message"),
+            file=first.get("thumb"),
+            reply_markup=yt_search_btns(
+                del_back=True,
+                data_key=data_key,
+                page=index,
+                vid=first.get("video_id"),
+                total=total,
+            ),
+        )
 
 
 @pool.run_in_thread
@@ -269,7 +280,7 @@ def _tubeDl(url: str, starttime, uid: str):
         "geo_bypass": True,
         "nocheckcertificate": True,
         "outtmpl": os.path.join(
-            Config.TEMP_DIR , str(starttime), "%(title)s-%(format)s.%(ext)s"
+            Config.TEMP_DIR, str(starttime), "%(title)s-%(format)s.%(ext)s"
         ),
         "logger": LOGS,
         "format": uid,
@@ -298,7 +309,7 @@ def _tubeDl(url: str, starttime, uid: str):
 @pool.run_in_thread
 def _mp3Dl(url: str, starttime, uid: str):
     _opts = {
-        "outtmpl": os.path.join(Config.TEMP_DIR , str(starttime), "%(title)s.%(ext)s"),
+        "outtmpl": os.path.join(Config.TEMP_DIR, str(starttime), "%(title)s.%(ext)s"),
         "logger": LOGS,
         "writethumbnail": True,
         "prefer_ffmpeg": True,
@@ -426,9 +437,7 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
         vid_data = {"formats": []}
     buttons = [
         (
-            Button.inline(
-                "⭐️ BEST - 📹 MKV", data=f"ytdl_download_{vid}_mkv_v"
-            ),
+            Button.inline("⭐️ BEST - 📹 MKV", data=f"ytdl_download_{vid}_mkv_v"),
             Button.inline(
                 "⭐️ BEST - 📹 WebM/MP4",
                 data=f"ytdl_download_{vid}_mp4_v",
@@ -470,17 +479,11 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
             )
     buttons += sublists(video_btns, width=2)
     buttons += [
-        (
-            Button.inline(
-                "⭐️ BEST - 🎵 320Kbps - MP3", data=f"ytdl_download_{vid}_mp3_a"
-            )
-        )
+        (Button.inline("⭐️ BEST - 🎵 320Kbps - MP3", data=f"ytdl_download_{vid}_mp3_a"))
     ]
     buttons += sublists(
         [
-            Button.inline(
-                audio_dict.get(key_), data=f"ytdl_download_{vid}_{key_}_a"
-            )
+            Button.inline(audio_dict.get(key_), data=f"ytdl_download_{vid}_{key_}_a")
             for key_ in sorted(audio_dict.keys())
         ],
         width=2,
