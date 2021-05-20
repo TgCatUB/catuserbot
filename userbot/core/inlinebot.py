@@ -12,9 +12,9 @@ from youtubesearchpython import VideosSearch
 from userbot import catub
 
 from ..Config import Config
-from ..core import check_owner
+from . import check_owner
 from ..helpers.functions import rand_key
-from .assistant.iytdl import (
+from ..assistant.iytdl import (
     download_button,
     get_yt_video_id,
     get_ytthumb,
