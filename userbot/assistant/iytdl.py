@@ -151,13 +151,13 @@ async def ytdl_download_callback(c_q: CallbackQuery):
         thumb_pic = str(await pool.run_in_thread(download)(await get_ytthumb(yt_code)))
     attributes, mime_type = get_attributes(str(_fpath))
     ul = io.open(Path(_fpath), "rb")
-    uploaded = await event.client.fast_upload_file(
+    uploaded = await c_q.client.fast_upload_file(
         file=ul,
         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
             progress(
                 d,
                 t,
-                event,
+                c_q,
                 startTime,
                 "trying to upload",
                 file_name=os.path.basename(Path(_path)),
@@ -170,9 +170,9 @@ async def ytdl_download_callback(c_q: CallbackQuery):
         mime_type=mime_type,
         attributes=attributes,
         force_file=False,
-        thumb=await event.client.upload_file(thumb_pic) if thumb_pic else None,
+        thumb=await c_q.client.upload_file(thumb_pic) if thumb_pic else None,
     )
-    uploaded_media = await event.client.send_file(
+    uploaded_media = await c_q.client.send_file(
         BOTLOG_CHATID,
         file=media,
         caption=f"**File Name : **`{os.path.basename(Path(_path))}`",
