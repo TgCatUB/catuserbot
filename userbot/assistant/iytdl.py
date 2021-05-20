@@ -175,7 +175,7 @@ async def ytdl_callback(c_q: CallbackQuery):
         await c_q.edit(
             text=back_vid.get("message"),
             file=back_vid.get("thumb"),
-            reply_markup=yt_search_btns(
+            buttons=yt_search_btns(
                 del_back=del_back,
                 data_key=data_key,
                 page=index,
@@ -192,7 +192,7 @@ async def ytdl_callback(c_q: CallbackQuery):
         await c_q.edit(
             text=back_vid.get("message"),
             file=back_vid.get("thumb"),
-            reply_markup=yt_search_btns(
+            buttons=yt_search_btns(
                 data_key=data_key,
                 page=index,
                 vid=front_vid.get("video_id"),
@@ -211,7 +211,7 @@ async def ytdl_callback(c_q: CallbackQuery):
         )
         await c_q.edit(
             file=search_data.get("1").get("thumb"),
-            reply_markup=[
+            buttons=[
                 (
                     Button.url(
                         "↗️  Click To Open",
@@ -233,7 +233,7 @@ async def ytdl_callback(c_q: CallbackQuery):
         await c_q.edit(
             text=first.get("message"),
             file=first.get("thumb"),
-            reply_markup=yt_search_btns(
+            buttons=yt_search_btns(
                 del_back=True,
                 data_key=data_key,
                 page=index,
