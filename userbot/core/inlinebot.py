@@ -198,14 +198,25 @@ async def inline_handler(event):  # sourcery no-metrics
             else:
                 caption, buttons = await download_button(link, body=True)
                 photo = await get_ytthumb(link)
+            markup = event.client.build_reply_markup(buttons)
+            photo = types.InputWebDocument(
+            url=photo, size=0, mime_type="image/jpeg", attributes=[]
+                )
+            text, msg_entities = await event.client._parse_message_text(
+                    "caption", "md"
+                )
             if found_:
                 results.append(
-                    builder.photo(
-                        photo,
-                        # title=link,
-                        # description="⬇️ Click to Download",
-                        text=caption,
-                        buttons=buttons,
+                    types.InputBotInlineResult(
+                        id=str(uuid4()),
+                        type="photo",
+                        title="link",
+                        description="⬇️ Click to Download",
+                        thumb=photo,
+                        content=photo,
+                        send_message=types.InputBotInlineMessageMediaAuto(
+                            reply_markup=markup, message=text, entities=msg_entities
+                        ),
                     )
                 )
             else:
