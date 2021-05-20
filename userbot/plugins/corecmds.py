@@ -127,8 +127,8 @@ async def unload(event):
 
 
 @catub.cat_cmd(
-    pattern="unload (.*)",
-    command=("unload", plugin_category),
+    pattern="uninstall (.*)",
+    command=("uninstall", plugin_category),
     info={
         "header": "To uninstall a plugin temporarily.",
         "description": "To stop functioning of that plugin and remove that plugin from bot.",
