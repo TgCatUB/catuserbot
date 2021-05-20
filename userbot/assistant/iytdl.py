@@ -109,7 +109,7 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
     upload_msg = await c_q.client.send_message(BOTLOG_CHATID, "Uploading...")
     yt_url = BASE_YT_URL + yt_code
     await c_q.edit(
-        f"<b>⬇️ Downloading {media_type} ....</b>\n\n🔗  <a href={yt_url}> <b>Link</b></a>\n🆔  <b>Format Code</b> : {disp_str}",
+        f"<b>⬇️ Downloading {media_type} ....</b>\n\n🔗  <a href=f"{yt_url}"> <b>Link</b></a>\n🆔  <b>Format Code</b> : {disp_str}",
         parse_mode="html",
     )
     if downtype == "v":
