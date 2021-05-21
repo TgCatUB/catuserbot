@@ -27,7 +27,7 @@ LOGS = logging.getLogger(__name__)
 CAT_IMG = Config.ALIVE_PIC or None
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 CATLOGO = "https://telegra.ph/file/493268c1f5ebedc967eba.jpg"
-
+tr = Config.COMMAND_HAND_LER
 
 def ibuild_keyboard(buttons):
     keyb = []
