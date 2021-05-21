@@ -144,6 +144,12 @@ def paginate_help(page_number, loaded_plugins, prefix):
                 Button.inline("⌦", data=f"{prefix}_next({modulo_page})"),
             )
         ]
+    else:
+        pairs = pairs+ [
+            (
+                Button.inline("Main Menu", data="main_menu"),
+            )
+        ]
     return pairs
 
 
