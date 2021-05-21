@@ -423,10 +423,10 @@ async def on_plug_in_callback_query_handler(event):
 @check_owner
 async def on_plugin_callback_query_handler(event):
     text = f"𝙿𝚕𝚞𝚐𝚒𝚗𝚜: {len(PLG_INFO)}\
-        \nC𝚘𝚖𝚖𝚊𝚗𝚍𝚜: {len(CMD_INFO)}\
-        \n\n{tr}help <plugin> : For specific plugin info.\
-        \n{tr}help -c <command> : For any command info.\
-        \n{tr}s <query> : To search any commands\
+        \n𝙲𝚘𝚖𝚖𝚊𝚗𝚍𝚜: {len(CMD_INFO)}\
+        \n\n{tr}𝚑𝚎𝚕𝚙 <𝚙𝚕𝚞𝚐𝚒𝚗> : 𝙵𝚘𝚛 𝚜𝚙𝚎𝚌𝚒𝚏𝚒𝚌 𝚙𝚕𝚞𝚐𝚒𝚗 𝚒𝚗𝚏𝚘.\
+        \n{tr}𝚑𝚎𝚕𝚙 -𝚌 <𝚌𝚘𝚖𝚖𝚊𝚗𝚍> : 𝙵𝚘𝚛 𝚊𝚗𝚢 𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚒𝚗𝚏𝚘.\
+        \n{tr}𝚜 <𝚚𝚞𝚎𝚛𝚢> : 𝚃𝚘 𝚜𝚎𝚊𝚛𝚌𝚑 𝚊𝚗𝚢 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜.\
         "
     await event.answer(text, cache_time=0, alert=True)
 
