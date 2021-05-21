@@ -25,9 +25,6 @@ USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
 ALIVE_NAME = Config.ALIVE_NAME
 AUTONAME = Config.AUTONAME
 DEFAULT_BIO = Config.DEFAULT_BIO
-# mention user
-mention = f"[{ALIVE_NAME}](tg://user?id={USERID})"
-hmention = f"<a href = tg://user?id={USERID}>{ALIVE_NAME}</a>"
 
 
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
