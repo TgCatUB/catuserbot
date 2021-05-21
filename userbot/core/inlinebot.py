@@ -405,6 +405,7 @@ async def on_plug_in_callback_query_handler(event):
     _result = main_menu()
     await event.edit(_result[0], buttons=_result[1])
 
+
 @catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
