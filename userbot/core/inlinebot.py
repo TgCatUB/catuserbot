@@ -20,7 +20,7 @@ from ..helpers.functions.utube import (
     ytsearch_data,
 )
 from ..plugins import mention
-from . import CMD_INFO, PLG_INFO, check_owner
+from . import CMD_INFO, PLG_INFO, check_owner,GRP_INFO
 from .logger import logging
 
 LOGS = logging.getLogger(__name__)
@@ -43,47 +43,47 @@ def ibuild_keyboard(buttons):
 
 def main_menu():
     text = f"𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁 𝗛𝗲𝗹𝗽𝗲𝗿\
-        \n𝗣𝗿𝗼𝘃𝗶𝗱𝗲𝗱 𝗯𝘆 {mention}\
-        \n\n𝙿𝚕𝚞𝚐𝚒𝚗𝚜 𝙸𝚗𝚜𝚝𝚊𝚕𝚕𝚎𝚍 : `{len(PLG_INFO)}`\
-        \n𝚃𝚘𝚝𝚊𝚕 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜 : `{len(CMD_INFO)}`\
-        \n\nCheck ⬇️\
-        \n`{tr}help <plugin name>` : For specific plugin info.\
-        \n`{tr}help -c <command name>` : For any command info.\
-        \n`{tr}s <query>` : To search any command which is same as query."
+        \n𝗣𝗿𝗼𝘃𝗶𝗱𝗲𝗱 𝗯𝘆 {mention}"
     buttons = [
         (
             Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Admin {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Check {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                data="check"
+            )
+        ),
+        (
+            Button.inline(
+                f"🙋🏻‍♂️ Admin - {len(GRP_INFO['admin'])}",
                 data=f"admin_menu",
             ),
             Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Bot {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                f"🤖 Bot - {len(GRP_INFO['bot'])}",
                 data=f"bot_menu",
             ),
         ),
         (
             Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Extra {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                f"➕ Extra {len(GRP_INFO['extra'])}",
                 data=f"extra_menu",
             ),
             Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Fun {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                f"🎨 Fun {len(GRP_INFO['fun'])}",
                 data=f"fun_menu",
             ),
         ),
         (
             Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Misc {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                f"🧩 Misc {len(GRP_INFO['misc'])}",
                 data=f"misc_menu",
             ),
             Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Tools {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                f"🧰 Tools {len(GRP_INFO['tools'])}",
                 data=f"tools_menu",
             ),
         ),
         (
             Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Utils {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                f"🗂 Utils {len(GRP_INFO['utils'])}",
                 data=f"utils_menu",
             ),
             Button.inline(
@@ -320,3 +320,15 @@ async def inline_handler(event):  # sourcery no-metrics
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     await event.edit("menu closed")
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"check")))
+@check_owner
+async def on_plugin_callback_query_handler(event):
+    text = f"𝙿𝚕𝚞𝚐𝚒𝚗𝚜 𝙸𝚗𝚜𝚝𝚊𝚕𝚕𝚎𝚍 : {len(PLG_INFO)}\
+        \n𝚃𝚘𝚝𝚊𝚕 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜 : {len(CMD_INFO)}\
+        \n\nNote:\
+        \n{tr}help <plugin name> : For specific plugin info.\
+        \n{tr}help -c <command name> : For any command info.\
+        \n{tr}s <query> : To search any command which is same as query\
+        "
+    await event.answer(text, cache_time=0, alert=True)
