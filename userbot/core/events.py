@@ -63,7 +63,7 @@ class MessageEdited(NewMessage):
     def build(cls, update, others=None, self_id=None):
         if isinstance(update, types.UpdateEditMessage):
             return cls.Event(update.message)
-        elif isinstance(update, types.UpdateEditChannelMessage):
+        if isinstance(update, types.UpdateEditChannelMessage):
             if (
                 update.message.edit_date
                 and update.message.is_channel
