@@ -89,19 +89,17 @@ async def labstack(event):
 
 
 @catub.cat_cmd(
-    pattern="webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|vshare|bayfiles)",
+    pattern="webupload ?(.+?|) --(fileio|anonfiles|transfer|filebin|anonymousfiles|bayfiles)",
     command=("webupload", plugin_category),
     info={
         "header": "To upload media to some online media sharing platforms.",
         "description": "you can upload media to any of the sites mentioned. so you can share link to others.",
         "options": {
             "fileio": "to file.io site",
-            "oload": "To openload site",
             "anonfiles": "to anonfiles site",
             "transfer": "to transfer.sh site",
             "filebin": "to file bin site",
             "anonymousfiles": "to anonymousfiles site",
-            "vshare": "to vshare site",
             "bayfiles": "to bayfiles site",
         },
         "usage": [
