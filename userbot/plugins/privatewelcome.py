@@ -1,7 +1,7 @@
 from telethon import events
 
 from userbot import catub
-
+from asyncio import sleep
 from ..core.managers import edit_or_reply
 from ..sql_helper import pmpermit_sql as pmpermit_sql
 from ..sql_helper.welcomesql import (
@@ -54,6 +54,7 @@ async def _(event):  # sourcery no-metrics
                 current_saved_welcome_message = cws.reply
         if not pmpermit_sql.is_approved(userid):
             pmpermit_sql.approve(userid, "Due to private welcome")
+        await sleep(1)
         current_message = await event.client.send_message(
             userid,
             current_saved_welcome_message.format(
