@@ -42,7 +42,6 @@ try:
 except Exception:
     HEROKU_APP = None
 
-    
 
 USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
 
