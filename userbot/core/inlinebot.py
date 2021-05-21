@@ -413,3 +413,11 @@ async def on_plug_in_callback_query_handler(event):
     current_page_number = int(event.data_match.group(2).decode("UTF-8"))
     buttons = paginate_help(current_page_number - 1, GRP_INFO[category], category)
     await event.edit(buttons=buttons)
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)")))
+@check_owner
+async def on_plug_in_callback_query_handler(event):
+    category = str(event.pattern_match.group(1).decode("UTF-8"))
+    current_page_number = int(event.data_match.group(2).decode("UTF-8"))
+    buttons = paginate_help(current_page_number + 1, GRP_INFO[category], category)
+    await event.edit(buttons=buttons)    
