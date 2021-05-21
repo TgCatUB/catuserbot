@@ -248,7 +248,7 @@ async def _(event):
 
 @catub.cat_cmd(
     pattern="szm$",
-    command=("szm$", plugin_category),
+    command=("szm", plugin_category),
     info={
         "header": "To reverse search music file.",
         "description": "music file lenght must be around 10 sec so use ffmpeg plugin to trim it.",
