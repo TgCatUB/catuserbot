@@ -145,11 +145,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
             )
         ]
     else:
-        pairs = pairs+ [
-            (
-                Button.inline("Main Menu", data="main_menu"),
-            )
-        ]
+        pairs = pairs + [(Button.inline("Main Menu", data="main_menu"),)]
     return pairs
 
 
