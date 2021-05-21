@@ -63,28 +63,28 @@ def main_menu():
         ),
         (
             Button.inline(
-                f"➕ Extra ({len(GRP_INFO['extra'])})",
-                data=f"extra_menu",
-            ),
-            Button.inline(
                 f"🎨 Fun ({len(GRP_INFO['fun'])})",
                 data=f"fun_menu",
             ),
-        ),
-        (
             Button.inline(
                 f"🧩 Misc ({len(GRP_INFO['misc'])})",
                 data=f"misc_menu",
             ),
+        ),
+        (
             Button.inline(
                 f"🧰 Tools ({len(GRP_INFO['tools'])})",
                 data=f"tools_menu",
             ),
-        ),
-        (
             Button.inline(
                 f"🗂 Utils ({len(GRP_INFO['utils'])})",
                 data=f"utils_menu",
+            ),
+        ),
+        (
+            Button.inline(
+                f"➕ Extra ({len(GRP_INFO['extra'])})",
+                data=f"extra_menu",
             ),
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Close Menu {Config.EMOJI_TO_DISPLAY_IN_HELP}",
