@@ -36,7 +36,7 @@ AFK_ = AFK()
 
 @catub.cat_cmd(outgoing=True)
 async def set_not_afk(event):
-    if AFK_.afk_on == False:
+    if AFK_.afk_on is False:
         return
     back_alive = datetime.now()
     AFK_.afk_end = back_alive.replace(microsecond=0)
@@ -83,7 +83,7 @@ async def set_not_afk(event):
 
 @catub.cat_cmd(incoming=True, func=lambda e: bool(e.mentioned or e.is_private))
 async def on_afk(event):  # sourcery no-metrics
-    if AFK_.afk_on == False:
+    if AFK_.afk_on is False:
         return
     back_alivee = datetime.now()
     AFK_.afk_end = back_alivee.replace(microsecond=0)
