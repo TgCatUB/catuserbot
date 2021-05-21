@@ -93,11 +93,11 @@ class Config(object):
     CUSTOM_PMPERMIT_TEXT = os.environ.get("CUSTOM_PMPERMIT_TEXT", None)
     # number of rows of buttons to be displayed in .help command
     NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD = int(
-        os.environ.get("NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD", 7)
+        os.environ.get("NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD", 5)
     )
     # number of rows of buttons to be displayed in .helpme command
     NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD = int(
-        os.environ.get("NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD", 3)
+        os.environ.get("NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD", 2)
     )
     # emoji to be displayed in .help
     EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", " ")
