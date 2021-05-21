@@ -123,7 +123,7 @@ def paginate_help(
         modules = [
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data=f"{x}_prev(1)_command_{loaded_plugins}",
+                data=f"{x}_prev(1)_command_{prefix}",
             )
             for x in helpable_plugins
         ]
