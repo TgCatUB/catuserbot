@@ -43,9 +43,6 @@ except Exception:
     HEROKU_APP = None
 
 
-
-
-
 # Global Configiables
 COUNT_MSG = 0
 USERS = {}

@@ -19,9 +19,9 @@ from ..helpers.functions.utube import (
     result_formatter,
     ytsearch_data,
 )
+from ..plugins import mention
 from . import CMD_INFO, PLG_INFO, check_owner
 from .logger import logging
-from ..plugins import mention 
 
 LOGS = logging.getLogger(__name__)
 
