@@ -43,11 +43,7 @@ except Exception:
     HEROKU_APP = None
 
 
-USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
 
-# mention user
-mention = f"[{Config.ALIVE_NAME}](tg://user?id={USERID})"
-hmention = f"<a href = tg://user?id={USERID}>{Config.ALIVE_NAME}</a>"
 
 
 # Global Configiables
