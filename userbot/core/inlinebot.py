@@ -104,18 +104,27 @@ def command_in_category(cname):
     return cmds
 
 
-def paginate_help(page_number, loaded_plugins, prefix):
+def paginate_help(page_number, loaded_plugins, prefix,plugins=True):
     number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
     number_of_cols = Config.NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD
     helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
     helpable_plugins = sorted(helpable_plugins)
-    modules = [
-        Button.inline(
-            f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-            data=f"us_plugin_{x}",
-        )
-        for x in helpable_plugins
-    ]
+    if plugins:
+        modules = [
+            Button.inline(
+                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                data=f"us_plugin_{x}",
+            )
+            for x in helpable_plugins
+        ]
+    else:
+        modules = [
+            Button.inline(
+                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                data=f"{x}_next(0)_command",
+            )
+            for x in helpable_plugins
+        ]
     if number_of_cols == 1:
         pairs = list(zip(modules[::number_of_cols]))
     elif number_of_cols == 2:
@@ -134,18 +143,32 @@ def paginate_help(page_number, loaded_plugins, prefix):
         pairs.append((modules[-2], modules[-1]))
     max_num_pages = math.ceil(len(pairs) / number_of_rows)
     modulo_page = page_number % max_num_pages
-    if len(pairs) > number_of_rows:
-        pairs = pairs[
-            modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
-        ] + [
-            (
-                Button.inline("⌫", data=f"{prefix}_prev({modulo_page})"),
-                Button.inline("Main Menu", data="mainmenu"),
-                Button.inline("⌦", data=f"{prefix}_next({modulo_page})"),
-            )
-        ]
+    if plugins:
+        if len(pairs) > number_of_rows:
+            pairs = pairs[
+                modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
+            ] + [
+                (
+                    Button.inline("⌫", data=f"{prefix}_prev({modulo_page})_plugin"),
+                    Button.inline("Main Menu", data="mainmenu"),
+                    Button.inline("⌦", data=f"{prefix}_next({modulo_page})_plugin"),
+                )
+            ]
+        else:
+            pairs = pairs + [(Button.inline("Main Menu", data="mainmenu"),)]
     else:
-        pairs = pairs + [(Button.inline("Main Menu", data="mainmenu"),)]
+        if len(pairs) > number_of_rows:
+            pairs = pairs[
+                modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
+            ] + [
+                (
+                    Button.inline("⌫", data=f"{prefix}_prev({modulo_page})_command"),
+                    Button.inline("Back", data=f"back_{modulo_page}_{prefix}"),
+                    Button.inline("⌦", data=f"{prefix}_next({modulo_page})_command"),
+                )
+            ]
+        else:
+            pairs = pairs + [(Button.inline("Back", data="back"),)]
     return pairs
 
 
@@ -393,10 +416,21 @@ async def on_plugin_callback_query_handler(event):
 async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     buttons = paginate_help(0, GRP_INFO[category], category)
-    text = f"**Category: **Admin\
+    text = f"**Category: **{category}\
         \n**Total plugins :** {len(GRP_INFO[category])}\
         \n**Total Commands:** {command_in_category(category)}"
     await event.edit(text, buttons=buttons)
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_(.*)_(.*)")))
+@check_owner
+async def on_plug_in_callback_query_handler(event):
+    pgno = int(event.pattern_match.group(1).decode("UTF-8"))
+    category = str(event.pattern_match.group(1).decode("UTF-8"))
+    buttons = paginate_help(pgno, GRP_INFO[category], category)
+    text = f"**Category: **{category}\
+        \n**Total plugins :** {len(GRP_INFO[category])}\
+        \n**Total Commands:** {command_in_category(category)}"
+    await event.edit(text, buttons=buttons)    
 
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(rb"mainmenu")))
@@ -406,19 +440,27 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(_result[0], buttons=_result[1])
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)")))
+@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)_(.*)")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     current_page_number = int(event.data_match.group(2).decode("UTF-8"))
-    buttons = paginate_help(current_page_number - 1, GRP_INFO[category], category)
+    htype = str(event.pattern_match.group(3).decode("UTF-8"))
+    if htype=="plugin":
+        buttons = paginate_help(current_page_number - 1, GRP_INFO[category], category)
+    else:
+        buttons = paginate_help(current_page_number - 1, PLG_INFO[category], category,plugins=False)
     await event.edit(buttons=buttons)
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)")))
+@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)_(.*)")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     current_page_number = int(event.data_match.group(2).decode("UTF-8"))
-    buttons = paginate_help(current_page_number + 1, GRP_INFO[category], category)
+    htype = str(event.pattern_match.group(3).decode("UTF-8"))
+    if htype=="plugin":
+        buttons = paginate_help(current_page_number + 1, GRP_INFO[category], category)
+    else:
+        buttons = paginate_help(current_page_number + 1, PLG_INFO[category], category,plugins=False)
     await event.edit(buttons=buttons)
