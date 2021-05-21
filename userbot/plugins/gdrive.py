@@ -1578,7 +1578,7 @@ async def set_upload_folder(gdrive):
     pattern="gdown ?(-u)? (.*)",
     command=("gdown", plugin_category),
     info={
-        "header": "To get random quotes on given topic.",
+        "header": "To download files form gdrive.",
         "description": "G-Drive File Downloader Plugin For Userbot. only gdrive files are supported now",
         "flags": {
             "u": "to directly upload to telegram",
