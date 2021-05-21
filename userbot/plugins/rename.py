@@ -6,7 +6,7 @@ from datetime import datetime
 from userbot import catub
 
 from ..Config import Config
-from ..core.managers import edit_or_reply
+from ..core.managers import edit_or_reply,edit_delete
 from ..helpers.utils import reply_id
 from . import progress, reply_id
 
