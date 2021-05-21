@@ -140,7 +140,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
         ] + [
             (
                 Button.inline("⌫", data=f"{prefix}_prev({modulo_page})"),
-                Button.inline("Main Menu", data="main_menu"),
+                Button.inline("Main Menu", data="mainmenu"),
                 Button.inline("⌦", data=f"{prefix}_next({modulo_page})"),
             )
         ]
@@ -398,6 +398,12 @@ async def on_plug_in_callback_query_handler(event):
         \n**Total Commands:** {command_in_category(category)}"
     await event.edit(text, buttons=buttons)
 
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(rb"mainmenu")))
+@check_owner
+async def on_plug_in_callback_query_handler(event):
+    _result = main_menu()
+    await event.edit(_result[0], buttons=_result[1])
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)")))
 @check_owner
