@@ -1,10 +1,8 @@
 import json
+import math
 import os
 import re
 import time
-
-import io
-import math
 from uuid import uuid4
 
 from telethon import Button, types
