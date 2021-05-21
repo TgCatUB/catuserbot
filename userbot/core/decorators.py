@@ -21,7 +21,6 @@ def check_owner(func):
         else:
             await c_q.answer(
                 "Only My Master can Access This !!\n\nDeploy your own Catuserbot.",
-                show_alert=True,
+                alert=True,
             )
-
     return wrapper
