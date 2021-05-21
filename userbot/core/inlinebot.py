@@ -1,8 +1,10 @@
 import json
-import math
 import os
 import re
 import time
+
+import io
+import math
 from uuid import uuid4
 
 from telethon import Button, types
@@ -392,8 +394,8 @@ async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     buttons = paginate_help(0, GRP_INFO[category], category)
     text = f"**Category: **Admin\
-        **Total plugins :** {len(GRP_INFO[category])}\
-        **Total Commands:** {command_in_category(category)}"
+        \n**Total plugins :** {len(GRP_INFO[category])}\
+        \n**Total Commands:** {command_in_category(category)}"
     await event.edit(text, buttons=buttons)
 
 
