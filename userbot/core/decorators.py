@@ -23,4 +23,5 @@ def check_owner(func):
                 "Only My Master can Access This !!\n\nDeploy your own Catuserbot.",
                 alert=True,
             )
+
     return wrapper
