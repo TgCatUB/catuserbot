@@ -31,12 +31,14 @@ BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>
 CATLOGO = "https://telegra.ph/file/493268c1f5ebedc967eba.jpg"
 tr = Config.COMMAND_HAND_LER
 
+
 def getkey(val):
     for key, value in GRP_INFO.items():
         for plugin in value:
             if val == plugin:
                 return key
     return None
+
 
 def ibuild_keyboard(buttons):
     keyb = []
@@ -110,7 +112,9 @@ def command_in_category(cname):
     return cmds
 
 
-def paginate_help(page_number, loaded_plugins, prefix, plugins=True,category_plugins=None):
+def paginate_help(
+    page_number, loaded_plugins, prefix, plugins=True, category_plugins=None
+):
     number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
     number_of_cols = Config.NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD
     helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
@@ -168,9 +172,17 @@ def paginate_help(page_number, loaded_plugins, prefix, plugins=True,category_plu
                 modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
             ] + [
                 (
-                    Button.inline("⌫", data=f"{prefix}_prev({modulo_page})_command_{category_plugins}"),
-                    Button.inline("Back", data=f"back_{modulo_page}_{category_plugins}"),
-                    Button.inline("⌦", data=f"{prefix}_next({modulo_page})_command_{category_plugins}"),
+                    Button.inline(
+                        "⌫",
+                        data=f"{prefix}_prev({modulo_page})_command_{category_plugins}",
+                    ),
+                    Button.inline(
+                        "Back", data=f"back_{modulo_page}_{category_plugins}"
+                    ),
+                    Button.inline(
+                        "⌦",
+                        data=f"{prefix}_next({modulo_page})_command_{category_plugins}",
+                    ),
                 )
             ]
         else:
@@ -448,6 +460,7 @@ async def on_plug_in_callback_query_handler(event):
     _result = main_menu()
     await event.edit(_result[0], buttons=_result[1])
 
+
 @catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)_(.*)_?(.*)?")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
@@ -461,13 +474,17 @@ async def on_plug_in_callback_query_handler(event):
         buttons = paginate_help(current_page_number - 1, GRP_INFO[category], category)
     else:
         buttons = paginate_help(
-            current_page_number - 1, PLG_INFO[category], category, plugins=False,category_plugins=category_plugins
+            current_page_number - 1,
+            PLG_INFO[category],
+            category,
+            plugins=False,
+            category_plugins=category_plugins,
         )
         if event.text.startswith("Category"):
             text = f"**Plugin: **{category}\
                 \n**Category: **{getkey(category)}\
                 \n**Total Commands:** {len(PLG_INFO[category])}"
-            return await event.edit(text,buttons=buttons)
+            return await event.edit(text, buttons=buttons)
     await event.edit(buttons=buttons)
 
 
@@ -484,6 +501,10 @@ async def on_plug_in_callback_query_handler(event):
         buttons = paginate_help(current_page_number + 1, GRP_INFO[category], category)
     else:
         buttons = paginate_help(
-            current_page_number + 1, PLG_INFO[category], category, plugins=False,category_plugins=category_plugins
+            current_page_number + 1,
+            PLG_INFO[category],
+            category,
+            plugins=False,
+            category_plugins=category_plugins,
         )
     await event.edit(buttons=buttons)
