@@ -34,6 +34,12 @@ HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 
+USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
+
+# mention user
+mention = f"[{Config.ALIVE_NAME}](tg://user?id={USERID})"
+hmention = f"<a href = tg://user?id={USERID}>{Config.ALIVE_NAME}</a>"
+
 PM_START = []
 PMMESSAGE_CACHE = {}
 PMMENU = "pmpermit_menu" not in Config.NO_LOAD
