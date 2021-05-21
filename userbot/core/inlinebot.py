@@ -47,9 +47,9 @@ def main_menu():
         \n\n𝙿𝚕𝚞𝚐𝚒𝚗𝚜 𝙸𝚗𝚜𝚝𝚊𝚕𝚕𝚎𝚍 : `{len(PLG_INFO)}`\
         \n𝚃𝚘𝚝𝚊𝚕 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜 : `{len(CMD_INFO)}`\
         \n\nCheck ⬇️\
-        \n{tr}help <plugin name> : For specific plugin info.\
-        \n{tr}help -c <command name> : For any command info.\
-        \n{tr}s <query> : To search any command which is same as query."
+        \n`{tr}help <plugin name>` : For specific plugin info.\
+        \n`{tr}help -c <command name>` : For any command info.\
+        \n`{tr}s <query>` : To search any command which is same as query."
     buttons = [
         (
             Button.inline(
