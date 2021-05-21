@@ -19,7 +19,7 @@ from ..helpers.functions.utube import (
     result_formatter,
     ytsearch_data,
 )
-from . import check_owner,PLG_INFO, CMD_INFO , GRP_INFO, BOT_INFO
+from . import CMD_INFO, PLG_INFO, check_owner
 from .logger import logging
 
 LOGS = logging.getLogger(__name__)
@@ -39,6 +39,7 @@ def ibuild_keyboard(buttons):
             keyb.append([Button.url(btn[0], btn[1])])
     return keyb
 
+
 def main_menu():
     text = f"𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁 𝗛𝗲𝗹𝗽𝗲𝗿\
         \n𝗣𝗿𝗼𝘃𝗶𝗱𝗲𝗱 𝗯𝘆 {mention}\
@@ -52,43 +53,42 @@ def main_menu():
         (
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Admin {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data= f"admin_menu",
+                data=f"admin_menu",
             ),
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Bot {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data= f"bot_menu",
-            )
-
+                data=f"bot_menu",
+            ),
         ),
         (
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Extra {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data= f"extra_menu",
+                data=f"extra_menu",
             ),
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Fun {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data= f"fun_menu",
-            )
+                data=f"fun_menu",
+            ),
         ),
         (
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Misc {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data= f"misc_menu",
+                data=f"misc_menu",
             ),
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Tools {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data= f"tools_menu",
-            )
+                data=f"tools_menu",
+            ),
         ),
         (
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Utils {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data= f"utils_menu",
+                data=f"utils_menu",
             ),
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Close Menu {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data= f"close",
-            )
+                data=f"close",
+            ),
         ),
     ]
     return text, buttons
@@ -220,12 +220,12 @@ async def inline_handler(event):  # sourcery no-metrics
         elif query == "help":
             _result = main_menu()
             result = builder.article(
-                            title= "© CatUserbot Help",
-                            description="Help menu for CatUserbot",
-                            text=_result[0],
-                            buttons=_result[1],
-                            link_preview=False,
-                        )
+                title="© CatUserbot Help",
+                description="Help menu for CatUserbot",
+                text=_result[0],
+                buttons=_result[1],
+                link_preview=False,
+            )
             await event.answer([result] if result else None)
         if str_y[0].lower() == "ytdl" and len(str_y) == 2:
             link = get_yt_video_id(str_y[1].strip())
