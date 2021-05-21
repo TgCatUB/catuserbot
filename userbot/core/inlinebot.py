@@ -480,11 +480,13 @@ async def on_plug_in_callback_query_handler(event):
             plugins=False,
             category_plugins=category_plugins,
         )
-        if event.message.startswith("Category"):
-            text = f"**Plugin: **{category}\
+        text = f"**Plugin: **{category}\
                 \n**Category: **{getkey(category)}\
                 \n**Total Commands:** {len(PLG_INFO[category])}"
+        try:
             return await event.edit(text, buttons=buttons)
+        except Exception:
+            pass
     await event.edit(buttons=buttons)
 
 
