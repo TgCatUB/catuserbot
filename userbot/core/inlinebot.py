@@ -20,7 +20,7 @@ from ..helpers.functions.utube import (
     ytsearch_data,
 )
 from ..plugins import mention
-from . import CMD_INFO, PLG_INFO, check_owner,GRP_INFO
+from . import CMD_INFO, GRP_INFO, PLG_INFO, check_owner
 from .logger import logging
 
 LOGS = logging.getLogger(__name__)
@@ -48,7 +48,7 @@ def main_menu():
         (
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Check {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data="check"
+                data="check",
             )
         ),
         (
@@ -320,6 +320,7 @@ async def inline_handler(event):  # sourcery no-metrics
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     await event.edit("menu closed")
+
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"check")))
 @check_owner
