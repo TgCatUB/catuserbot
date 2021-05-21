@@ -321,6 +321,7 @@ async def inline_handler(event):  # sourcery no-metrics
 async def on_plug_in_callback_query_handler(event):
     await event.edit("menu closed")
 
+
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"check")))
 @check_owner
 async def on_plugin_callback_query_handler(event):
