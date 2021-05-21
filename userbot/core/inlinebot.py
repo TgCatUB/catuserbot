@@ -168,7 +168,9 @@ def paginate_help(page_number, loaded_plugins, prefix, plugins=True):
                 )
             ]
         else:
-            pairs = pairs + [(Button.inline("Back", data=f"back_{modulo_page}_{prefix}"),)]
+            pairs = pairs + [
+                (Button.inline("Back", data=f"back_{modulo_page}_{prefix}"),)
+            ]
     return pairs
 
 
