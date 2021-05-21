@@ -94,12 +94,14 @@ def main_menu():
     ]
     return text, buttons
 
+
 def command_in_category(cname):
     cmds = 0
     for i in GRP_INFO[cname]:
         for _ in PLG_INFO[i]:
-            cmds +=1
+            cmds += 1
     return cmds
+
 
 def paginate_help(page_number, loaded_plugins, prefix):
     number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
@@ -109,7 +111,7 @@ def paginate_help(page_number, loaded_plugins, prefix):
     modules = [
         Button.inline(
             f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-            data= f"us_plugin_{x}",
+            data=f"us_plugin_{x}",
         )
         for x in helpable_plugins
     ]
@@ -136,16 +138,13 @@ def paginate_help(page_number, loaded_plugins, prefix):
             modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
         ] + [
             (
-                Button.inline(
-                    "⌫", data=f"{prefix}_prev({modulo_page})"
-                ),
+                Button.inline("⌫", data=f"{prefix}_prev({modulo_page})"),
                 Button.inline("Main Menu", data="main_menu"),
-                Button.inline(
-                    "⌦", data=f"{prefix}_next({modulo_page})"
-                ),
+                Button.inline("⌦", data=f"{prefix}_next({modulo_page})"),
             )
         ]
     return pairs
+
 
 @catub.tgbot.on(InlineQuery)
 async def inline_handler(event):  # sourcery no-metrics
@@ -373,6 +372,7 @@ async def inline_handler(event):  # sourcery no-metrics
 async def on_plug_in_callback_query_handler(event):
     await event.edit("menu closed")
 
+
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"check")))
 @check_owner
 async def on_plugin_callback_query_handler(event):
@@ -384,22 +384,22 @@ async def on_plugin_callback_query_handler(event):
         "
     await event.answer(text, cache_time=0, alert=True)
 
+
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"(.*)_menu")))
 @check_owner
-async def on_plug_in_callback_query_handler(event):    
+async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     buttons = paginate_help(0, GRP_INFO[category], category)
     text = f"**Category: **Admin\
         **Total plugins :** {len(GRP_INFO[category])}\
         **Total Commands:** {command_in_category(category)}"
-    await event.edit(text,buttons=buttons)
+    await event.edit(text, buttons=buttons)
+
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     current_page_number = int(event.data_match.group(2).decode("UTF-8"))
-    buttons = paginate_help(
-                current_page_number - 1, GRP_INFO[category], category
-            )
+    buttons = paginate_help(current_page_number - 1, GRP_INFO[category], category)
     await event.edit(buttons=buttons)
