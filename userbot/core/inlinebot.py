@@ -53,37 +53,37 @@ def main_menu():
         ),
         (
             Button.inline(
-                f"🙋🏻‍♂️ Admin - {len(GRP_INFO['admin'])}",
+                f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})",
                 data=f"admin_menu",
             ),
             Button.inline(
-                f"🤖 Bot - {len(GRP_INFO['bot'])}",
+                f"🤖 Bot ({len(GRP_INFO['bot'])})",
                 data=f"bot_menu",
             ),
         ),
         (
             Button.inline(
-                f"➕ Extra {len(GRP_INFO['extra'])}",
+                f"➕ Extra ({len(GRP_INFO['extra'])})",
                 data=f"extra_menu",
             ),
             Button.inline(
-                f"🎨 Fun {len(GRP_INFO['fun'])}",
+                f"🎨 Fun ({len(GRP_INFO['fun'])})",
                 data=f"fun_menu",
             ),
         ),
         (
             Button.inline(
-                f"🧩 Misc {len(GRP_INFO['misc'])}",
+                f"🧩 Misc ({len(GRP_INFO['misc'])})",
                 data=f"misc_menu",
             ),
             Button.inline(
-                f"🧰 Tools {len(GRP_INFO['tools'])}",
+                f"🧰 Tools ({len(GRP_INFO['tools'])})",
                 data=f"tools_menu",
             ),
         ),
         (
             Button.inline(
-                f"🗂 Utils {len(GRP_INFO['utils'])}",
+                f"🗂 Utils ({len(GRP_INFO['utils'])})",
                 data=f"utils_menu",
             ),
             Button.inline(
@@ -325,11 +325,11 @@ async def on_plug_in_callback_query_handler(event):
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"check")))
 @check_owner
 async def on_plugin_callback_query_handler(event):
-    text = f"𝙿𝚕𝚞𝚐𝚒𝚗𝚜 𝙸𝚗𝚜𝚝𝚊𝚕𝚕𝚎𝚍 : {len(PLG_INFO)}\
-        \n𝚃𝚘𝚝𝚊𝚕 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜 : {len(CMD_INFO)}\
+    text = f"𝙿𝚕𝚞𝚐𝚒𝚗𝚜 𝙸𝚗𝚜𝚝𝚊𝚕l𝚎𝚍: {len(PLG_INFO)}\
+        \n𝚃𝚘𝚝𝚊𝚕 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜: {len(CMD_INFO)}\
         \n\nNote:\
-        \n{tr}help <plugin name> : For specific plugin info.\
-        \n{tr}help -c <command name> : For any command info.\
-        \n{tr}s <query> : To search any command which is same as query\
+        \n{tr}help <plugin> : For specific plugin info.\
+        \n{tr}help -c <command> : For any command info.\
+        \n{tr}s <query> : To search any commands\
         "
     await event.answer(text, cache_time=0, alert=True)
