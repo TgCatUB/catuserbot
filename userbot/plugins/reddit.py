@@ -33,7 +33,7 @@ plugin_category = "misc"
 )
 async def reddit_fetch(event):
     """Random reddit post"""
-    reply_id = await reply_id(event)
+    reply_to = await reply_id(event)
     sub_r = event.pattern_match.group(1)
     subreddit_api = f"{API}/{sub_r}" if sub_r else API
     try:
@@ -74,7 +74,7 @@ async def reddit_fetch(event):
         await event.delete()
         captionx += f"Source: [r/{subreddit}]({postlink})"
         sandy = await event.client.send_message(
-            event.chat_id, media_url, caption=captionx, reply_to=reply_id
+            event.chat_id, media_url, caption=captionx, reply_to=reply_to
         )
         if media_url.endswith(".gif"):
             await _catutils.unsavegif(event, sandy)
