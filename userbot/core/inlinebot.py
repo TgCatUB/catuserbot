@@ -113,7 +113,7 @@ def command_in_category(cname):
 
 
 def paginate_help(
-    page_number, loaded_plugins, prefix, plugins=True, category_plugins=None
+    page_number, loaded_plugins, prefix, plugins=True, category_plugins=None, category_pgno=0
 ):
     number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
     number_of_cols = Config.NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD
@@ -174,20 +174,20 @@ def paginate_help(
                 (
                     Button.inline(
                         "⌫",
-                        data=f"{prefix}_prev({modulo_page})_command_{category_plugins}",
+                        data=f"{prefix}_prev({modulo_page})_command_{category_plugins}_{category_pgno}",
                     ),
                     Button.inline(
-                        "Back", data=f"back_{modulo_page}_{category_plugins}"
+                        "Back", data=f"back_plugins_{category_pgno}_{category_plugins}"
                     ),
                     Button.inline(
                         "⌦",
-                        data=f"{prefix}_next({modulo_page})_command_{category_plugins}",
+                        data=f"{prefix}_next({modulo_page})_command_{category_plugins}_{category_pgno}",
                     ),
                 )
             ]
         else:
             pairs = pairs + [
-                (Button.inline("Back", data=f"back_{modulo_page}_{category_plugins}"),)
+                (Button.inline("Back", data=f"back_plugin_{category_pgno}_{category_plugins}"),)
             ]
     return pairs
 
@@ -442,11 +442,12 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(text, buttons=buttons)
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_(.*)_(.*)")))
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_(.*)_(.*)_(.*)")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
-    pgno = int(event.pattern_match.group(1).decode("UTF-8"))
-    category = str(event.pattern_match.group(2).decode("UTF-8"))
+    mtype = str(event.pattern_match.group(1).decode("UTF-8"))
+    pgno = int(event.pattern_match.group(2).decode("UTF-8"))
+    category = str(event.pattern_match.group(3).decode("UTF-8"))
     buttons = paginate_help(pgno, GRP_INFO[category], category)
     text = f"**Category: **{category}\
         \n**Total plugins :** {len(GRP_INFO[category])}\
@@ -461,7 +462,7 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(_result[0], buttons=_result[1])
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)_([a-z]+)_?(.*)?")))
+@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)_([a-z]+)_?(.*)?_?(.*)?")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
@@ -470,6 +471,9 @@ async def on_plug_in_callback_query_handler(event):
     category_plugins = event.pattern_match.group(4)
     if category_plugins:
         category_plugins = str(category_plugins.decode("UTF-8"))
+    category_pgno = event.pattern_match.group(5)
+    if category_pgno:
+        category_pgno = int(category_pgno.decode("UTF-8"))
     if htype == "plugin":
         buttons = paginate_help(current_page_number - 1, GRP_INFO[category], category)
     else:
@@ -479,6 +483,8 @@ async def on_plug_in_callback_query_handler(event):
             category,
             plugins=False,
             category_plugins=category_plugins,
+            category_pgno=category_pgno,
+
         )
         text = f"**Plugin: **{category}\
                 \n**Category: **{getkey(category)}\
@@ -490,7 +496,7 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(buttons=buttons)
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)_(.*)_?(.*)?")))
+@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)_(.*)_?(.*)?_?(.*)?")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
@@ -499,6 +505,9 @@ async def on_plug_in_callback_query_handler(event):
     category_plugins = event.pattern_match.group(4)
     if category_plugins:
         category_plugins = str(category_plugins.decode("UTF-8"))
+    category_pgno = event.pattern_match.group(5)
+    if category_pgno:
+        category_pgno = int(category_pgno.decode("UTF-8"))
     if htype == "plugin":
         buttons = paginate_help(current_page_number + 1, GRP_INFO[category], category)
     else:
@@ -508,5 +517,6 @@ async def on_plug_in_callback_query_handler(event):
             category,
             plugins=False,
             category_plugins=category_plugins,
+            category_pgno=category_pgno,
         )
     await event.edit(buttons=buttons)
