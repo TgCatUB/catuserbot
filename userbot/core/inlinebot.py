@@ -451,13 +451,17 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(text, buttons=buttons)
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_([a-z]+)_([a-z]+)_([0-9]+)_?([a-z]+)?_?([0-9]+)?")))
+@catub.tgbot.on(
+    CallbackQuery(
+        data=re.compile(b"back_([a-z]+)_([a-z]+)_([0-9]+)_?([a-z]+)?_?([0-9]+)?")
+    )
+)
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     mtype = str(event.pattern_match.group(1).decode("UTF-8"))
     category = str(event.pattern_match.group(2).decode("UTF-8"))
     pgno = int(event.pattern_match.group(3).decode("UTF-8"))
-    if mtype=="plugins":
+    if mtype == "plugins":
         buttons = paginate_help(pgno, GRP_INFO[category], category)
         text = f"**Category: **{category}\
             \n**Total plugins :** {len(GRP_INFO[category])}\
@@ -545,7 +549,9 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(buttons=buttons)
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(b"(.*)_cmdhelp_([a-z]+)_([0-9]+)_([a-z]+)_([0-9]+)")))
+@catub.tgbot.on(
+    CallbackQuery(data=re.compile(b"(.*)_cmdhelp_([a-z]+)_([0-9]+)_([a-z]+)_([0-9]+)"))
+)
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     cmd = str(event.pattern_match.group(1).decode("UTF-8"))
@@ -553,12 +559,17 @@ async def on_plug_in_callback_query_handler(event):
     pgno = int(event.pattern_match.group(3).decode("UTF-8"))
     category_plugins = str(event.pattern_match.group(4).decode("UTF-8"))
     category_pgno = int(event.pattern_match.group(5).decode("UTF-8"))
-    buttons = [(
-        Button.inline("Back",data=f"back_command_{category}_{pgno}_{category_plugins}_{category_pgno}"),
-        Button.inline("Main Menu", data="mainmenu"),
-    )]
+    buttons = [
+        (
+            Button.inline(
+                "Back",
+                data=f"back_command_{category}_{pgno}_{category_plugins}_{category_pgno}",
+            ),
+            Button.inline("Main Menu", data="mainmenu"),
+        )
+    ]
     text = f"**Command :** `{tr}{cmd}`\
         \n**Plugin :** `{category}`\
         \n**Category :** `{category_plugins}`\
         \n\n**•  Intro :**\n{CMD_INFO[cmd][0]}"
-    await event.edit(text, buttons=buttons)    
+    await event.edit(text, buttons=buttons)
