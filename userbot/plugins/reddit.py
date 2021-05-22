@@ -6,15 +6,14 @@
 
 
 import requests
-from telethon import Button
 
 from userbot import catub
+
 from ..core.logger import logging
+from ..core.managers import edit_delete
 from ..helpers.functions import age_verification
-from ..helpers.utils import reply_id
+from ..helpers.utils import reply_id, unsavegif
 from . import BOTLOG, BOTLOG_CHATID
-from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import unsavegif
 
 LOGS = logging.getLogger(__name__)
 API = "https://meme-api.herokuapp.com/gimme"
@@ -34,7 +33,7 @@ plugin_category = "misc"
 )
 async def reddit_fetch(event):
     """Random reddit post"""
-    reply = await event.get_reply_message()
+    await event.get_reply_message()
     reply_id = await reply_id(event)
     sub_r = event.pattern_match.group(1)
     subreddit_api = f"{API}/{sub_r}" if sub_r else API
@@ -47,10 +46,13 @@ async def reddit_fetch(event):
         if BOTLOG:
             code = r["code"]
             code_message = r["message"]
-            await event.client.send_message(BOTLOG_CHATID,f"*Error Code: {code}*\n`{code_message}`")
+            await event.client.send_message(
+                BOTLOG_CHATID, f"*Error Code: {code}*\n`{code_message}`"
+            )
     else:
         if "url" not in r:
-            return await edit_delete(event,
+            return await edit_delete(
+                event,
                 "Coudn't Find a post with Image, Please Try Again",
             )
         postlink = r["postLink"]
@@ -73,7 +75,7 @@ async def reddit_fetch(event):
         await event.delete()
         captionx += f"Source: [r/{subreddit}]({postlink})"
         sandy = await event.client.send_message(
-            event.chat_id, media_url,caption=captionx,reply_to=reply_id
+            event.chat_id, media_url, caption=captionx, reply_to=reply_id
         )
         if media_url.endswith(".gif"):
             await unsavegif(event, sandy)
