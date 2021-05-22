@@ -209,7 +209,7 @@ async def inline_handler(event):  # sourcery no-metrics
     string = query.lower()
     query.split(" ", 2)
     str_y = query.split(" ", 1)
-    string_split = string.split()
+    string.split()
     query_user_id = event.query.user_id
     if query_user_id == Config.OWNER_ID or query_user_id in Config.SUDO_USERS:
         hmm = re.compile("secret (.*) (.*)")
@@ -391,18 +391,20 @@ async def inline_handler(event):  # sourcery no-metrics
 
             await event.answer([result] if result else None)
         elif string == "age_verification_alert":
-            buttons = [Button.inline(
-                            text="Yes I'm 18+", data="age_verification_true"
-                        ),
-                        Button.inline(
-                            text="No I'm Not", data="age_verification_false"
-                        ),
-                    ]
+            buttons = [
+                Button.inline(text="Yes I'm 18+", data="age_verification_true"),
+                Button.inline(text="No I'm Not", data="age_verification_false"),
+            ]
             markup = event.client.build_reply_markup(buttons)
             photo = types.InputWebDocument(
-                url="https://i.imgur.com/Zg58iXc.jpg", size=0, mime_type="image/jpeg", attributes=[]
+                url="https://i.imgur.com/Zg58iXc.jpg",
+                size=0,
+                mime_type="image/jpeg",
+                attributes=[],
             )
-            text, msg_entities = await event.client._parse_message_text("<b>ARE YOU OLD ENOUGH FOR THIS ?</b>", "html")
+            text, msg_entities = await event.client._parse_message_text(
+                "<b>ARE YOU OLD ENOUGH FOR THIS ?</b>", "html"
+            )
             result = types.InputBotInlineResult(
                 id=str(uuid4()),
                 type="photo",
