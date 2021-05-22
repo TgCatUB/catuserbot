@@ -182,7 +182,7 @@ def paginate_help(
                         data=f"{prefix}_prev({modulo_page})_command_{category_plugins}_{category_pgno}",
                     ),
                     Button.inline(
-                        "Back", data=f"back_plugins_{category_plugins}_{category_pgno}"
+                        "Back", data=f"back_plugin_{category_plugins}_{category_pgno}"
                     ),
                     Button.inline(
                         "⌦",
