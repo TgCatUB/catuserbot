@@ -73,7 +73,7 @@ async def reddit_fetch(event):
 
         await event.delete()
         captionx += f"Source: [r/{subreddit}]({postlink})"
-        sandy = await event.client.send_message(
+        sandy = await event.client.send_file(
             event.chat_id, media_url, caption=captionx, reply_to=reply_to
         )
         if media_url.endswith(".gif"):
