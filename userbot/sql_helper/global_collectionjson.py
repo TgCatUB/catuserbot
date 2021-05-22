@@ -41,7 +41,7 @@ def rm_from_collectionlist(keywoard, contents):
 
 def get_item_collectionlist(keywoard):
     try:
-        return SESSION.query(Cat_GlobalCollection_Json).get((keywoard))
+        return SESSION.query(Cat_GlobalCollection_Json).get(keywoard)
     finally:
         SESSION.close()
 
