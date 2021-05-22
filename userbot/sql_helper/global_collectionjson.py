@@ -6,7 +6,7 @@ from . import BASE, SESSION
 class Cat_GlobalCollection_Json(BASE):
     __tablename__ = "cat_globalcollectionjson"
     keywoard = Column(UnicodeText, primary_key=True)
-    contents = Column(JSON, primary_key=True, nullable=False)
+    contents = Column(JSON, nullable=False, unique=True)
 
     def __init__(self, keywoard, contents):
         self.keywoard = keywoard
