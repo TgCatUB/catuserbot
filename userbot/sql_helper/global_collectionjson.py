@@ -1,4 +1,4 @@
-from sqlalchemy import Column, PickleType, UnicodeText
+from sqlalchemy import Column, JSON, UnicodeText
 
 from . import BASE, SESSION
 
@@ -6,7 +6,7 @@ from . import BASE, SESSION
 class Cat_GlobalCollection_Json(BASE):
     __tablename__ = "cat_globalcollection_json"
     keywoard = Column(UnicodeText, primary_key=True)
-    contents = Column(PickleType, primary_key=True, nullable=False)
+    contents = Column(JSON, primary_key=True, nullable=False)
 
     def __init__(self, keywoard, contents):
         self.keywoard = keywoard
