@@ -20,8 +20,6 @@ async def age_verification_true(event: CallbackQuery):
             alert=True,
         )
     await event.answer("Yes I'm 18+", alert=False)
-    msg = await userge.bot.get_messages("useless_x", 19)
-    get_file_id(msg)
     buttons = [
         Button.inline(
             text="Unsure / Change of Decision ❔",
