@@ -14,7 +14,7 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import _format
+from ..helpers.utils import _format,unsavegif
 from . import make_gif, progress, reply_id
 
 plugin_category = "utils"
@@ -236,16 +236,7 @@ async def _(event):  # sourcery no-metrics
         force_document=False,
         reply_to=reply_to_id,
     )
-    await event.client(
-        functions.messages.SaveGifRequest(
-            id=types.InputDocument(
-                id=sandy.media.document.id,
-                access_hash=sandy.media.document.access_hash,
-                file_reference=sandy.media.document.file_reference,
-            ),
-            unsave=True,
-        )
-    )
+    await unsavegif(event, sandy)
     await catevent.delete()
     for files in (catgif, catfile):
         if files and os.path.exists(files):
