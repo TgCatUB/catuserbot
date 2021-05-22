@@ -56,7 +56,7 @@ def main_menu():
     buttons = [
         (
             Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Check {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                f"Check",
                 data="check",
             ),
         ),
@@ -96,7 +96,7 @@ def main_menu():
                 data=f"extra_menu",
             ),
             Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} Close Menu {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                f"Close Menu",
                 data=f"close",
             ),
         ),
