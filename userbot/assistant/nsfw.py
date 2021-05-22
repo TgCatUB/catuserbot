@@ -1,8 +1,9 @@
 import re
 
 from telethon import Button
+from telethon.errors import MessageNotModifiedError
 from telethon.events import CallbackQuery
-from telethon.errors import MessageNotModifiedError 
+
 from userbot import catub
 
 from ..Config import Config
@@ -32,7 +33,7 @@ async def age_verification_true(event: CallbackQuery):
             file="https://telegra.ph/file/85f3071c31279bcc280ef.jpg",
             reply_markup=buttons,
         )
-    except MessageNotModifiedError :
+    except MessageNotModifiedError:
         pass
 
 
