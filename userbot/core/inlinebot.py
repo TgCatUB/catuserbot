@@ -113,7 +113,12 @@ def command_in_category(cname):
 
 
 def paginate_help(
-    page_number, loaded_plugins, prefix, plugins=True, category_plugins=None, category_pgno=0
+    page_number,
+    loaded_plugins,
+    prefix,
+    plugins=True,
+    category_plugins=None,
+    category_pgno=0,
 ):
     number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
     number_of_cols = Config.NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD
@@ -187,7 +192,11 @@ def paginate_help(
             ]
         else:
             pairs = pairs + [
-                (Button.inline("Back", data=f"back_plugin_{category_pgno}_{category_plugins}"),)
+                (
+                    Button.inline(
+                        "Back", data=f"back_plugin_{category_pgno}_{category_plugins}"
+                    ),
+                )
             ]
     return pairs
 
@@ -445,7 +454,7 @@ async def on_plug_in_callback_query_handler(event):
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"back_(.*)_(.*)_(.*)")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
-    mtype = str(event.pattern_match.group(1).decode("UTF-8"))
+    str(event.pattern_match.group(1).decode("UTF-8"))
     pgno = int(event.pattern_match.group(2).decode("UTF-8"))
     category = str(event.pattern_match.group(3).decode("UTF-8"))
     buttons = paginate_help(pgno, GRP_INFO[category], category)
@@ -462,7 +471,9 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(_result[0], buttons=_result[1])
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)_([a-z]+)_?(.*)?_?(.*)?")))
+@catub.tgbot.on(
+    CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)_([a-z]+)_?(.*)?_?(.*)?"))
+)
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
@@ -484,7 +495,6 @@ async def on_plug_in_callback_query_handler(event):
             plugins=False,
             category_plugins=category_plugins,
             category_pgno=category_pgno,
-
         )
         text = f"**Plugin: **{category}\
                 \n**Category: **{getkey(category)}\
@@ -496,7 +506,9 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(buttons=buttons)
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)_(.*)_?(.*)?_?(.*)?")))
+@catub.tgbot.on(
+    CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)_(.*)_?(.*)?_?(.*)?"))
+)
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
