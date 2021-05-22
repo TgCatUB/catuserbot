@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 from io import BytesIO
 
-from telethon import functions, types
+from telethon import types
 from telethon.errors import PhotoInvalidDimensionsError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.functions.messages import SendMediaRequest
@@ -14,7 +14,7 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import _format,unsavegif
+from ..helpers.utils import _format, unsavegif
 from . import make_gif, progress, reply_id
 
 plugin_category = "utils"
