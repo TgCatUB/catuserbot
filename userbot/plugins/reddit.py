@@ -12,7 +12,7 @@ from userbot import catub
 from ..core.logger import logging
 from ..core.managers import edit_delete
 from ..helpers.functions import age_verification
-from ..helpers.utils import reply_id,_catutils
+from ..helpers.utils import _catutils, reply_id
 from . import BOTLOG, BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
