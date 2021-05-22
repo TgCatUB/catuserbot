@@ -119,27 +119,45 @@ def paginate_help(
     plugins=True,
     category_plugins=None,
     category_pgno=0,
-):
+):  # sourcery no-metrics
     number_of_rows = Config.NO_OF_ROWS_IN_HELP
     number_of_cols = Config.NO_OF_COLUMNS_IN_HELP
     helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
     helpable_plugins = sorted(helpable_plugins)
-    if plugins:
-        modules = [
-            Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data=f"{x}_prev(1)_command_{prefix}_{page_number}",
-            )
-            for x in helpable_plugins
-        ]
+    if len(Config.EMOJI_TO_DISPLAY_IN_HELP)==2:
+        if plugins:
+            modules = [
+                Button.inline(
+                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP[0]} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP[1]}",
+                    data=f"{x}_prev(1)_command_{prefix}_{page_number}",
+                )
+                for x in helpable_plugins
+            ]
+        else:
+            modules = [
+                Button.inline(
+                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP[0]} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP[1]}",
+                    data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
+                )
+                for x in helpable_plugins
+            ]
     else:
-        modules = [
-            Button.inline(
-                f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
-            )
-            for x in helpable_plugins
-        ]
+        if plugins:
+            modules = [
+                Button.inline(
+                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                    data=f"{x}_prev(1)_command_{prefix}_{page_number}",
+                )
+                for x in helpable_plugins
+            ]
+        else:
+            modules = [
+                Button.inline(
+                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                    data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
+                )
+                for x in helpable_plugins
+            ]
     if number_of_cols == 1:
         pairs = list(zip(modules[::number_of_cols]))
     elif number_of_cols == 2:
