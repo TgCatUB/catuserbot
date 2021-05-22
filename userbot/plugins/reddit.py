@@ -69,7 +69,7 @@ async def reddit_fetch(event):
         if r["nsfw"]:
             captionx += "🔞 Post marked Adult \n"
 
-            if await age_verification(event,reply_to):
+            if await age_verification(event, reply_to):
                 return
 
         await event.delete()

@@ -13,7 +13,7 @@ def rand_key():
     return str(uuid4())[:8]
 
 
-async def age_verification(event,reply_to_id):
+async def age_verification(event, reply_to_id):
     if Config.ALLOW_NSFW.lower() == "true":
         return False
     results = await event.client.inline_query(
