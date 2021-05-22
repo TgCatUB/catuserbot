@@ -182,7 +182,7 @@ def paginate_help(
                         data=f"{prefix}_prev({modulo_page})_command_{category_plugins}_{category_pgno}",
                     ),
                     Button.inline(
-                        "Back", data=f"back_plugins_{category_pgno}_{category_plugins}"
+                        "Back", data=f"back_plugins_{category_plugins}_{category_pgno}"
                     ),
                     Button.inline(
                         "⌦",
@@ -194,7 +194,7 @@ def paginate_help(
             pairs = pairs + [
                 (
                     Button.inline(
-                        "Back", data=f"back_plugin_{category_pgno}_{category_plugins}"
+                        "Back", data=f"back_plugin_{category_plugins}_{category_pgno}"
                     ),
                 )
             ]
@@ -451,7 +451,7 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(text, buttons=buttons)
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_([a-z]+)_([0-9]+)_([a-z]+)")))
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_([a-z]+)_([a-z]+)_(.*)")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     str(event.pattern_match.group(1).decode("UTF-8"))
