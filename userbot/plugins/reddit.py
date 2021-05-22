@@ -34,7 +34,6 @@ plugin_category = "misc"
 )
 async def reddit_fetch(event):
     """Random reddit post"""
-    reply = await event.get_reply_message()
     reply_id = await reply_id(event)
     sub_r = event.pattern_match.group(1)
     subreddit_api = f"{API}/{sub_r}" if sub_r else API
