@@ -81,6 +81,7 @@ if Config.THUMB_IMAGE is not None:
         except Exception as e:
             LOGS.info(str(e))
 
+
 def set_key(dictionary, key, value):
     if key not in dictionary:
         dictionary[key] = value
