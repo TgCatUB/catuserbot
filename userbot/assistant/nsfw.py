@@ -1,13 +1,7 @@
-from telethon.errors import MessageNotModifiedError
-import json
-import math
-import os
 import re
-import time
-from uuid import uuid4
 
-from telethon import Button, types
-from telethon.events import CallbackQuery, InlineQuery
+from telethon import Button
+from telethon.events import CallbackQuery
 
 from userbot import catub
 
@@ -17,84 +11,78 @@ from ..core.logger import logging
 LOGS = logging.getLogger(__name__)
 
 
-@catub.tgbot.on(
-    CallbackQuery(data=re.compile(r"^age_verification_true"))
-)
+@catub.tgbot.on(CallbackQuery(data=re.compile(r"^age_verification_true")))
 async def age_verification_true(event: CallbackQuery):
-        u_id = event.query.user_id
-        if u_id != Config.OWNER_ID and u_id not in Config.SUDO_USERS:
-            return await event.answer(
-                "Given That It's A Stupid-Ass Decision, I've Elected To Ignore It.",
-                alert=True,
-            )
-        await event.answer("Yes I'm 18+", alert=False)
-        msg = await userge.bot.get_messages("useless_x", 19)
-        f_id = get_file_id(msg)
-        buttons = [Button.inline(
-                    text="Unsure / Change of Decision ❔",
-                    data="chg_of_decision_",
-                )
-        ]
-        try:
-            await event.edit_message_media(
-                text="Set `ALLOW_NSFW` = True in Heroku Vars to access this plugin",
-                file="https://telegra.ph/file/85f3071c31279bcc280ef.jpg",
-                reply_markup=buttons,
-            )
-        except MessageNotModifiederror:
-            pass
+    u_id = event.query.user_id
+    if u_id != Config.OWNER_ID and u_id not in Config.SUDO_USERS:
+        return await event.answer(
+            "Given That It's A Stupid-Ass Decision, I've Elected To Ignore It.",
+            alert=True,
+        )
+    await event.answer("Yes I'm 18+", alert=False)
+    msg = await userge.bot.get_messages("useless_x", 19)
+    get_file_id(msg)
+    buttons = [
+        Button.inline(
+            text="Unsure / Change of Decision ❔",
+            data="chg_of_decision_",
+        )
+    ]
+    try:
+        await event.edit_message_media(
+            text="Set `ALLOW_NSFW` = True in Heroku Vars to access this plugin",
+            file="https://telegra.ph/file/85f3071c31279bcc280ef.jpg",
+            reply_markup=buttons,
+        )
+    except MessageNotModifiederror:
+        pass
 
-@catub.tgbot.on(
-    CallbackQuery(data=re.compile(r"^age_verification_false"))
-)
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(r"^age_verification_false")))
 async def age_verification_false(event: CallbackQuery):
-        u_id = event.query.user_id
-        if u_id != Config.OWNER_ID and u_id not in Config.SUDO_USERS:
-            return await event.answer(
-                "Given That It's A Stupid-Ass Decision, I've Elected To Ignore It.",
-                alert=True,
-            )        
-        await event.answer("No I'm Not", alert=False)
-        buttons = [Button.inline(
-                    text="Unsure / Change of Decision ❔",
-                    data="chg_of_decision_",
-                )
-        ]
-        try:
-            await event.edit_message_media(
-                text="GO AWAY KID !",
-                file="https://telegra.ph/file/1140f16a883d35224e6a1.jpg",
-                reply_markup=buttons,
-            )
-        except MessageNotModifiederror:
-            pass
+    u_id = event.query.user_id
+    if u_id != Config.OWNER_ID and u_id not in Config.SUDO_USERS:
+        return await event.answer(
+            "Given That It's A Stupid-Ass Decision, I've Elected To Ignore It.",
+            alert=True,
+        )
+    await event.answer("No I'm Not", alert=False)
+    buttons = [
+        Button.inline(
+            text="Unsure / Change of Decision ❔",
+            data="chg_of_decision_",
+        )
+    ]
+    try:
+        await event.edit_message_media(
+            text="GO AWAY KID !",
+            file="https://telegra.ph/file/1140f16a883d35224e6a1.jpg",
+            reply_markup=buttons,
+        )
+    except MessageNotModifiederror:
+        pass
 
-@catub.tgbot.on(
-    CallbackQuery(data=re.compile(r"^chg_of_decision_"))
-)
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(r"^chg_of_decision_")))
 async def chg_of_decision_(event: CallbackQuery):
-        u_id = event.query.user_id
-        if u_id != Config.OWNER_ID and u_id not in Config.SUDO_USERS:
-            return await event.answer(
-                "Given That It's A Stupid-Ass Decision, I've Elected To Ignore It.",
-                alert=True,
-            )        
-        await event.answer("Unsure", alert=False)
-        buttons = [
-            (
-                Buttons.inline(
-                    text="Yes I'm 18+", data="age_verification_true"
-                ),
-                Buttons.inline(
-                    text="No I'm Not", data="age_verification_false"
-                ),
-            )
-        ]
-        try:
-            await event.edit_message_media(
-                text="**ARE YOU OLD ENOUGH FOR THIS ?**",
-                file="https://telegra.ph/file/238f2c55930640e0e8c56.jpg",
-                reply_markup=buttons,
-            )
-        except MessageNotModifiederror:
-            pass
+    u_id = event.query.user_id
+    if u_id != Config.OWNER_ID and u_id not in Config.SUDO_USERS:
+        return await event.answer(
+            "Given That It's A Stupid-Ass Decision, I've Elected To Ignore It.",
+            alert=True,
+        )
+    await event.answer("Unsure", alert=False)
+    buttons = [
+        (
+            Buttons.inline(text="Yes I'm 18+", data="age_verification_true"),
+            Buttons.inline(text="No I'm Not", data="age_verification_false"),
+        )
+    ]
+    try:
+        await event.edit_message_media(
+            text="**ARE YOU OLD ENOUGH FOR THIS ?**",
+            file="https://telegra.ph/file/238f2c55930640e0e8c56.jpg",
+            reply_markup=buttons,
+        )
+    except MessageNotModifiederror:
+        pass
