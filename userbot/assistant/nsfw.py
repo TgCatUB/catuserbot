@@ -28,10 +28,10 @@ async def age_verification_true(event: CallbackQuery):
         )
     ]
     try:
-        await event.edit_message_media(
+        await event.edit(
             text="Set `ALLOW_NSFW` = True in Heroku Vars to access this plugin",
             file="https://telegra.ph/file/85f3071c31279bcc280ef.jpg",
-            reply_markup=buttons,
+            buttons=buttons,
         )
     except MessageNotModifiedError:
         pass
@@ -53,10 +53,10 @@ async def age_verification_false(event: CallbackQuery):
         )
     ]
     try:
-        await event.edit_message_media(
+        await event.edit(
             text="GO AWAY KID !",
             file="https://telegra.ph/file/1140f16a883d35224e6a1.jpg",
-            reply_markup=buttons,
+            buttons=buttons,
         )
     except MessageNotModifiedError:
         pass
@@ -78,10 +78,10 @@ async def chg_of_decision_(event: CallbackQuery):
         )
     ]
     try:
-        await event.edit_message_media(
+        await event.edit(
             text="**ARE YOU OLD ENOUGH FOR THIS ?**",
             file="https://telegra.ph/file/238f2c55930640e0e8c56.jpg",
-            reply_markup=buttons,
+            buttons=buttons,
         )
     except MessageNotModifiedError:
         pass
