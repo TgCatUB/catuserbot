@@ -30,28 +30,28 @@ Cat_GlobalCollection_Json.__table__.create(checkfirst=True)
 
 
 def add_to_collectionlist(keywoard, contents):
-        keyword_items = Cat_GlobalCollection_Json(keywoard, contents)
-        SESSION.merge(keyword_items)
-        SESSION.commit()
+    keyword_items = Cat_GlobalCollection_Json(keywoard, contents)
+    SESSION.merge(keyword_items)
+    SESSION.commit()
 
 
 def rm_from_collectionlist(keywoard, contents):
-        keyword_items = SESSION.query(Cat_GlobalCollection_Json).get(
-            (keywoard, contents)
-        )
-        if keyword_items:
-            SESSION.delete(keyword_items)
-            SESSION.commit()
-            return True
-        SESSION.close()
-        return False
+    keyword_items = SESSION.query(Cat_GlobalCollection_Json).get((keywoard, contents))
+    if keyword_items:
+        SESSION.delete(keyword_items)
+        SESSION.commit()
+        return True
+    SESSION.close()
+    return False
 
 
 def get_item_collectionlist(keywoard):
-        try:
-            return SESSION.query(Cat_GlobalCollection_Json.keywoard).filter(Cat_GlobalCollection_Json.keywoard == keywoard)
-        finally:
-            SESSION.close()
+    try:
+        return SESSION.query(Cat_GlobalCollection_Json.keywoard).filter(
+            Cat_GlobalCollection_Json.keywoard == keywoard
+        )
+    finally:
+        SESSION.close()
 
 
 def num_collectionlist():
