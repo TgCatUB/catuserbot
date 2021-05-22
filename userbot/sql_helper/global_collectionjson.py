@@ -6,7 +6,7 @@ from . import BASE, SESSION
 class Cat_GlobalCollection_Json(BASE):
     __tablename__ = "cat_globalcollectionjson"
     keywoard = Column(UnicodeText, primary_key=True)
-    contents = Column(JSON, nullable=False, unique=True)
+    contents = Column(JSON, nullable=False)
 
     def __init__(self, keywoard, contents):
         self.keywoard = keywoard
@@ -31,7 +31,7 @@ Cat_GlobalCollection_Json.__table__.create(checkfirst=True)
 
 def add_to_collectionlist(keywoard, contents):
     keyword_items = Cat_GlobalCollection_Json(keywoard, contents)
-    SESSION.merge(keyword_items)
+    SESSION.add(keyword_items)
     SESSION.commit()
 
 
