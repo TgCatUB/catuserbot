@@ -1,6 +1,4 @@
-import threading
-
-from sqlalchemy import Column, PickleType, UnicodeText, distinct, func
+from sqlalchemy import Column, PickleType, UnicodeText
 
 from . import BASE, SESSION
 
@@ -29,8 +27,6 @@ class Cat_GlobalCollection_Json(BASE):
 
 
 Cat_GlobalCollection_Json.__table__.create(checkfirst=True)
-
-
 
 
 def add_to_collectionlist(keywoard, contents):
