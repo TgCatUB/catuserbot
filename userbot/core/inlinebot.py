@@ -455,8 +455,8 @@ async def on_plug_in_callback_query_handler(event):
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     str(event.pattern_match.group(1).decode("UTF-8"))
-    pgno = int(event.pattern_match.group(2).decode("UTF-8"))
-    category = str(event.pattern_match.group(3).decode("UTF-8"))
+    pgno = str(event.pattern_match.group(2).decode("UTF-8"))
+    category = int(event.pattern_match.group(3).decode("UTF-8"))
     buttons = paginate_help(pgno, GRP_INFO[category], category)
     text = f"**Category: **{category}\
         \n**Total plugins :** {len(GRP_INFO[category])}\
