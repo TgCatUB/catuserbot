@@ -120,8 +120,8 @@ def paginate_help(
     category_plugins=None,
     category_pgno=0,
 ):
-    number_of_rows = Config.NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD
-    number_of_cols = Config.NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD
+    number_of_rows = Config.NO_OF_ROWS_IN_HELP
+    number_of_cols = Config.NO_OF_COLUMNS_IN_HELP
     helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
     helpable_plugins = sorted(helpable_plugins)
     if plugins:
