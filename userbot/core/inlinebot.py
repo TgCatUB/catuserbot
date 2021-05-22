@@ -56,7 +56,7 @@ def main_menu():
     buttons = [
         (
             Button.inline(
-                f"Check",
+                f"ℹ️ Check",
                 data="check",
             ),
         ),
@@ -96,7 +96,7 @@ def main_menu():
                 data=f"extra_menu",
             ),
             Button.inline(
-                f"Close Menu",
+                f"🔒 Close Menu",
                 data=f"close",
             ),
         ),
@@ -183,12 +183,12 @@ def paginate_help(
             ] + [
                 (
                     Button.inline("⌫", data=f"{prefix}_prev({modulo_page})_plugin"),
-                    Button.inline("Main Menu", data="mainmenu"),
+                    Button.inline("⚙️ Main Menu", data="mainmenu"),
                     Button.inline("⌦", data=f"{prefix}_next({modulo_page})_plugin"),
                 )
             ]
         else:
-            pairs = pairs + [(Button.inline("Main Menu", data="mainmenu"),)]
+            pairs = pairs + [(Button.inline("⚙️ Main Menu", data="mainmenu"),)]
     else:
         if len(pairs) > number_of_rows:
             pairs = pairs[
@@ -200,7 +200,7 @@ def paginate_help(
                         data=f"{prefix}_prev({modulo_page})_command_{category_plugins}_{category_pgno}",
                     ),
                     Button.inline(
-                        "Back", data=f"back_plugin_{category_plugins}_{category_pgno}"
+                        "🔙 Back ", data=f"back_plugin_{category_plugins}_{category_pgno}"
                     ),
                     Button.inline(
                         "⌦",
@@ -212,7 +212,7 @@ def paginate_help(
             pairs = pairs + [
                 (
                     Button.inline(
-                        "Back", data=f"back_plugin_{category_plugins}_{category_pgno}"
+                        "🔙 Back ", data=f"back_plugin_{category_plugins}_{category_pgno}"
                     ),
                 )
             ]
@@ -606,10 +606,10 @@ async def on_plug_in_callback_query_handler(event):
     buttons = [
         (
             Button.inline(
-                "Back",
+                "🔙 Back",
                 data=f"back_command_{category}_{pgno}_{category_plugins}_{category_pgno}",
             ),
-            Button.inline("Main Menu", data="mainmenu"),
+            Button.inline("⚙️ Main Menu", data="mainmenu"),
         )
     ]
     text = f"**Command :** `{tr}{cmd}`\
