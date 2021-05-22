@@ -451,7 +451,7 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(text, buttons=buttons)
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_(.*)_(.*)_(.*)")))
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_([a-z]+)_([a-z]+)_(.*)")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     str(event.pattern_match.group(1).decode("UTF-8"))
