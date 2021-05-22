@@ -12,7 +12,7 @@ from userbot import catub
 from ..core.logger import logging
 from ..core.managers import edit_delete
 from ..helpers.functions import age_verification, unsavegif
-from ..helpers.utils import reply_id
+from ..helpers.utils import reply_id,_catutils
 from . import BOTLOG, BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
@@ -77,4 +77,4 @@ async def reddit_fetch(event):
             event.chat_id, media_url, caption=captionx, reply_to=reply_id
         )
         if media_url.endswith(".gif"):
-            await unsavegif(event, sandy)
+            await _catutils.unsavegif(event, sandy)
