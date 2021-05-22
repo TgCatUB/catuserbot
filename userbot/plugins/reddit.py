@@ -60,9 +60,9 @@ async def reddit_fetch(event):
         media_url = r["url"]
         author = r["author"]
         upvote = r["ups"]
-        captionx = f"<b>{title}</b>\n"
+        captionx = f"**{title}**\n"
         captionx += f"`Posted by u/{author}`\n"
-        captionx += f"↕️ <code>{upvote}</code>\n"
+        captionx += f"↕️ `{upvote}`\n"
         if r["spoiler"]:
             captionx += "⚠️ Post marked as SPOILER\n"
         if r["nsfw"]:
