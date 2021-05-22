@@ -12,12 +12,6 @@ class Cat_GlobalCollection_Json(BASE):
         self.keywoard = keywoard
         self.contents = contents
 
-    def __repr__(self):
-        return "<Cat Global Collection lists '%s' for %s>" % (
-            self.contents,
-            self.keywoard,
-        )
-
     def __eq__(self, other):
         return bool(
             isinstance(other, Cat_GlobalCollection_Json)
