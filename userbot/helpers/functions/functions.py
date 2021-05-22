@@ -2,7 +2,7 @@ import os
 import zipfile
 from random import choice
 from uuid import uuid4
-
+from ...Config import Config
 import requests
 
 from ..resources.states import states
@@ -11,6 +11,13 @@ from ..resources.states import states
 def rand_key():
     return str(uuid4())[:8]
 
+async def age_verification(event):
+    if Config.ALLOW_NSFW.lower() == "true":
+        return False
+    results = await event.client.inline_query(Config.TG_BOT_USERNAME, "age_verification_alert")
+    await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+    await event.delete()
+    return True
 
 # https://www.tutorialspoint.com/How-do-you-split-a-list-into-evenly-sized-chunks-in-Python
 def sublists(input_list: list, width: int = 3):
