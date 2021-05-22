@@ -34,7 +34,7 @@ async def edit_or_reply(
             )
         await event.edit(text, parse_mode=parse_mode, link_preview=link_preview)
         return event
-    asciich = ["*", "`", "_"]
+    asciich = ["**", "`", "__"]
     for i in asciich:
         text = re.sub(rf"\{i}", "", text)
     if aslink:
