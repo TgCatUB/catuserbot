@@ -4,7 +4,7 @@ from . import BASE, SESSION
 
 
 class Cat_GlobalCollection_Json(BASE):
-    __tablename__ = "cat_globalcollection_json"
+    __tablename__ = "cat_globalcollectionjson"
     keywoard = Column(UnicodeText, primary_key=True)
     contents = Column(JSON, primary_key=True, nullable=False)
 
