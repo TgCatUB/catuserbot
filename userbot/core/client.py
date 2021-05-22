@@ -38,6 +38,7 @@ class CatUserBotClient(TelegramClient):
         info: Union[str, Dict[str, Union[str, List[str], Dict[str, str]]]]
         or tuple = None,
         groups_only: bool = False,
+        private_only: bool = False,
         allow_sudo: bool = True,
         edited: bool = True,
         disable_errors: bool = False,
@@ -82,6 +83,9 @@ class CatUserBotClient(TelegramClient):
             async def wrapper(check):
                 if groups_only and not check.is_group:
                     await edit_delete(check, "`I don't think this is a group.`", 10)
+                    return
+                if private_only and not check.is_private:
+                    await edit_delete(check, "`I don't think this is a personal Chat.`", 10)
                     return
                 try:
                     await func(check)
