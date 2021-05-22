@@ -475,7 +475,6 @@ async def on_plug_in_callback_query_handler(event):
 
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"check")))
-@check_owner
 async def on_plugin_callback_query_handler(event):
     text = f"𝙿𝚕𝚞𝚐𝚒𝚗𝚜: {len(PLG_INFO)}\
         \n𝙲𝚘𝚖𝚖𝚊𝚗𝚍𝚜: {len(CMD_INFO)}\
