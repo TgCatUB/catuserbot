@@ -136,7 +136,7 @@ def paginate_help(
         modules = [
             Button.inline(
                 f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                data=f"us_plugin_{x}",
+                data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
             )
             for x in helpable_plugins
         ]
@@ -451,16 +451,31 @@ async def on_plug_in_callback_query_handler(event):
     await event.edit(text, buttons=buttons)
 
 
-@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_([a-z]+)_([a-z]+)_(.*)")))
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"back_([a-z]+)_([a-z]+)_([0-9]+)_?([a-z]+)?_?([0-9]+)?")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
-    str(event.pattern_match.group(1).decode("UTF-8"))
+    mtype = str(event.pattern_match.group(1).decode("UTF-8"))
     category = str(event.pattern_match.group(2).decode("UTF-8"))
     pgno = int(event.pattern_match.group(3).decode("UTF-8"))
-    buttons = paginate_help(pgno, GRP_INFO[category], category)
-    text = f"**Category: **{category}\
-        \n**Total plugins :** {len(GRP_INFO[category])}\
-        \n**Total Commands:** {command_in_category(category)}"
+    if mtype=="plugins":
+        buttons = paginate_help(pgno, GRP_INFO[category], category)
+        text = f"**Category: **{category}\
+            \n**Total plugins :** {len(GRP_INFO[category])}\
+            \n**Total Commands:** {command_in_category(category)}"
+    else:
+        category_plugins = str(event.pattern_match.group(4).decode("UTF-8"))
+        category_pgno = int(event.pattern_match.group(5).decode("UTF-8"))
+        buttons = paginate_help(
+            pgno,
+            PLG_INFO[category],
+            category,
+            plugins=False,
+            category_plugins=category_plugins,
+            category_pgno=category_pgno,
+        )
+        text = f"**Plugin: **{category}\
+                \n**Category: **{getkey(category)}\
+                \n**Total Commands:** {len(PLG_INFO[category])}"
     await event.edit(text, buttons=buttons)
 
 
@@ -479,15 +494,11 @@ async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     current_page_number = int(event.data_match.group(2).decode("UTF-8"))
     htype = str(event.pattern_match.group(3).decode("UTF-8"))
-    category_plugins = event.pattern_match.group(4)
-    if category_plugins:
-        category_plugins = str(category_plugins.decode("UTF-8"))
-    category_pgno = event.pattern_match.group(5)
-    if category_pgno:
-        category_pgno = int(category_pgno.decode("UTF-8"))
     if htype == "plugin":
         buttons = paginate_help(current_page_number - 1, GRP_INFO[category], category)
     else:
+        category_plugins = str(event.pattern_match.group(4).decode("UTF-8"))
+        category_pgno = int(event.pattern_match.group(5).decode("UTF-8"))
         buttons = paginate_help(
             current_page_number - 1,
             PLG_INFO[category],
@@ -532,3 +543,22 @@ async def on_plug_in_callback_query_handler(event):
             category_pgno=category_pgno,
         )
     await event.edit(buttons=buttons)
+
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"(.*)_cmdhelp_([a-z]+)_([0-9]+)_([a-z]+)_([0-9]+)")))
+@check_owner
+async def on_plug_in_callback_query_handler(event):
+    cmd = str(event.pattern_match.group(1).decode("UTF-8"))
+    category = str(event.pattern_match.group(2).decode("UTF-8"))
+    pgno = int(event.pattern_match.group(3).decode("UTF-8"))
+    category_plugins = str(event.pattern_match.group(4).decode("UTF-8"))
+    category_pgno = int(event.pattern_match.group(5).decode("UTF-8"))
+    buttons = [(
+        Button.inline("Back",data=f"back_command_{category}_{pgno}_{category_plugins}_{category_pgno}"),
+        Button.inline("Main Menu", data="mainmenu"),
+    )]
+    text = f"**Command :** `{tr}{cmd}`\
+        \n**Plugin :** `{category}`\
+        \n**Category :** `{category_plugins}`\
+        \n\n**•  Intro :**\n{CMD_INFO[cmd][0]}"
+    await event.edit(text, buttons=buttons)    
