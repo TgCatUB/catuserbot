@@ -33,6 +33,7 @@ def reddit_thumb_link(preview, thumb=None):
         thumb = preview.pop()
     return thumb.replace("\u0026", "&")
 
+
 # https://www.tutorialspoint.com/How-do-you-split-a-list-into-evenly-sized-chunks-in-Python
 def sublists(input_list: list, width: int = 3):
     return [input_list[x : x + width] for x in range(0, len(input_list), width)]
