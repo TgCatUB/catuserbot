@@ -85,7 +85,9 @@ class CatUserBotClient(TelegramClient):
                     await edit_delete(check, "`I don't think this is a group.`", 10)
                     return
                 if private_only and not check.is_private:
-                    await edit_delete(check, "`I don't think this is a personal Chat.`", 10)
+                    await edit_delete(
+                        check, "`I don't think this is a personal Chat.`", 10
+                    )
                     return
                 try:
                     await func(check)
