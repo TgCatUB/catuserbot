@@ -73,8 +73,8 @@ async def chg_of_decision_(event: CallbackQuery):
     await event.answer("Unsure", alert=False)
     buttons = [
         (
-            Buttons.inline(text="Yes I'm 18+", data="age_verification_true"),
-            Buttons.inline(text="No I'm Not", data="age_verification_false"),
+            Button.inline(text="Yes I'm 18+", data="age_verification_true"),
+            Button.inline(text="No I'm Not", data="age_verification_false"),
         )
     ]
     try:
