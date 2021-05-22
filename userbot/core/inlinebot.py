@@ -472,7 +472,7 @@ async def on_plug_in_callback_query_handler(event):
 
 
 @catub.tgbot.on(
-    CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)_([a-z]+)_?(.*)?_?(.*)?"))
+    CallbackQuery(data=re.compile(rb"(.*)_prev\((.+?)\)_([a-z]+)_?([a-z]+)?_?(.*)?"))
 )
 @check_owner
 async def on_plug_in_callback_query_handler(event):
@@ -507,7 +507,7 @@ async def on_plug_in_callback_query_handler(event):
 
 
 @catub.tgbot.on(
-    CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)_(.*)_?(.*)?_?(.*)?"))
+    CallbackQuery(data=re.compile(rb"(.*)_next\((.+?)\)_([a-z]+)_?([a-z]+)?_?(.*)?"))
 )
 @check_owner
 async def on_plug_in_callback_query_handler(event):
