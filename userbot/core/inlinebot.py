@@ -124,7 +124,7 @@ def paginate_help(
     number_of_cols = Config.NO_OF_COLUMNS_IN_HELP
     helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
     helpable_plugins = sorted(helpable_plugins)
-    if len(Config.EMOJI_TO_DISPLAY_IN_HELP)==2:
+    if len(Config.EMOJI_TO_DISPLAY_IN_HELP) == 2:
         if plugins:
             modules = [
                 Button.inline(
