@@ -14,7 +14,7 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import _format, unsavegif
+from ..helpers.utils import _format, _catutils
 from . import make_gif, progress, reply_id
 
 plugin_category = "utils"
@@ -236,7 +236,7 @@ async def _(event):  # sourcery no-metrics
         force_document=False,
         reply_to=reply_to_id,
     )
-    await unsavegif(event, sandy)
+    await _catutils.unsavegif(event, sandy)
     await catevent.delete()
     for files in (catgif, catfile):
         if files and os.path.exists(files):
