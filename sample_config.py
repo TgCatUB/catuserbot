@@ -92,13 +92,9 @@ class Config(object):
     # forcustomizing pmpermit text
     CUSTOM_PMPERMIT_TEXT = os.environ.get("CUSTOM_PMPERMIT_TEXT", None)
     # number of rows of buttons to be displayed in .help command
-    NO_OF_ROWS_IN_HELP = int(
-        os.environ.get("NO_OF_ROWS_IN_HELP", 5)
-    )
+    NO_OF_ROWS_IN_HELP = int(os.environ.get("NO_OF_ROWS_IN_HELP", 5))
     # number of columns of buttons to be displayed in .helpme command
-    NO_OF_COLUMNS_IN_HELP = int(
-        os.environ.get("NO_OF_COLUMNS_IN_HELP", 2)
-    )
+    NO_OF_COLUMNS_IN_HELP = int(os.environ.get("NO_OF_COLUMNS_IN_HELP", 2))
     # emoji to be displayed in .help
     EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", " ")
     # specify command handler that should be used for the plugins
