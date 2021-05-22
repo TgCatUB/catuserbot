@@ -48,9 +48,7 @@ async def reddit_fetch(event):
             await event.client.send_message(
                 BOTLOG_CHATID, f"**Error Code: {code}**\n`{code_message}`"
             )
-            await edit_delete(
-                event, f"**Error Code: {code}**\n`{code_message}`"
-            )
+            await edit_delete(event, f"**Error Code: {code}**\n`{code_message}`")
     else:
         if "url" not in r:
             return await edit_delete(
