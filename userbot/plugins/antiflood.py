@@ -61,7 +61,7 @@ because he reached the defined flood limit.""",
     info={
         "header": "To setup antiflood in a group",
         "description": "It warns the user if he spams the chat and if you are an admin with proper rights then it mutes him in that group.",
-        "note": "To stop antiflood setflood with hing value like 999999",
+        "note": "To stop antiflood setflood with high value like 999999",
         "usage": "{tr}setflood <count>",
         "examples": [
             "{tr}setflood 10",
