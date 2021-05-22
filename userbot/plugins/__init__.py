@@ -16,7 +16,6 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..core.session import catub
 from ..helpers import *
 from ..helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
-from ..utils import admin_cmd, sudo_cmd
 
 # =================== CONSTANT ===================
 bot = catub
@@ -65,11 +64,6 @@ if Config.SPAMWATCH_API:
 else:
     spamwatch = None
 
-cat_users = [catub.uid]
-if Config.SUDO_USERS:
-    for user in Config.SUDO_USERS:
-        cat_users.append(user)
-
 
 # ================================================
 
@@ -86,17 +80,6 @@ if Config.THUMB_IMAGE is not None:
                 f.write(requests.get(Config.THUMB_IMAGE).content)
         except Exception as e:
             LOGS.info(str(e))
-
-
-def check(cat):
-    if "/start" in cat:
-        return True
-    try:
-        hi = re.search(cat.lower(), "(a|b|c|d)", flags=re.IGNORECASE)
-    except Exception:
-        hi = False
-    return bool(hi)
-
 
 def set_key(dictionary, key, value):
     if key not in dictionary:
