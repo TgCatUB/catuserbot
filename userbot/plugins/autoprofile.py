@@ -257,7 +257,7 @@ async def autopfp_start():
     info={
         "header": "Changes profile pic with random batman pics every 1 minute",
         "description": "Changes your profile pic every 1 minute with random batman pics.\
-        If you like to change the time then set CHNAGE_TIME var in Heroku with time(in seconds) between each chnage of profilepic.",
+        If you like to change the time then set CHANGE_TIME var in Heroku with time (in seconds) between each change of profilepic.",
         "note": "To stop this do '.end batmanpfp'",
         "usage": "{tr}batmanpfp",
     },
