@@ -17,7 +17,7 @@ thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg"
     info={
         "header": "To install an external plugin.",
         "description": "Reply to any external plugin(supported by cat) to install it in your bot.",
-        "usage": "{tr}install reply",
+        "usage": "{tr}install",
     },
 )
 async def install(event):
