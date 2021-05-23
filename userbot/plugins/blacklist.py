@@ -69,7 +69,7 @@ async def _(event):
     info={
         "header": "To remove blacklist words to database",
         "description": "The given word or words will be removed from blacklist in that specific chat",
-        "note": "if you are remove more than one word at time via this, then remember that new word must be given in a new line that is not [hi hello]. It must be as\
+        "note": "if you are removing more than one word at time via this, then remember that new word must be given in a new line that is not [hi hello]. It must be as\
             \n[hi \n hello]",
         "usage": "{tr}rmblacklist <word(s)>",
         "examples": ["{tr}rmblacklist fuck", "{tr}rmblacklist fuck\nsex"],
