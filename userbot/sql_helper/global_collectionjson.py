@@ -1,64 +1,56 @@
 from sqlalchemy import JSON, Column, UnicodeText
-
+from sqlalchemy_json import (
+    MutableJson,
+    NestedMutableDict,
+    NestedMutableJson,
+)
 from . import BASE, SESSION
 
 
 class Cat_GlobalCollection_Json(BASE):
     __tablename__ = "cat_globalcollectionjson"
     keywoard = Column(UnicodeText, primary_key=True)
-    contents = Column(JSON, nullable=False)
+    json = Column(MutableJson)
+    ndict = Column(NestedMutableDict)
+    njson = Column(NestedMutableJson)
 
-    def __init__(self, keywoard, contents):
+    def __init__(self, keywoard, json,ndict,njson):
         self.keywoard = keywoard
-        self.contents = contents
-
-    def __eq__(self, other):
-        return bool(
-            isinstance(other, Cat_GlobalCollection_Json)
-            and self.keywoard == other.keywoard
-            and self.contents == other.contents
-        )
+        self.json = json
+        self.ndict = ndict
+        self.njson = njson
 
 
 Cat_GlobalCollection_Json.__table__.create(checkfirst=True)
 
 
-def add_to_collectionlist(keywoard, contents):
-    keyword_items = Cat_GlobalCollection_Json(keywoard, contents)
-    SESSION.add(keyword_items)
-    SESSION.commit()
-
-
-def rm_from_collectionlist(keywoard, contents):
-    keyword_items = SESSION.query(Cat_GlobalCollection_Json).get((keywoard, contents))
-    if keyword_items:
-        SESSION.delete(keyword_items)
-        SESSION.commit()
-        return True
-    SESSION.close()
-    return False
-
-
-def get_item_collectionlist(keywoard):
+def get_collection(keywoard):
     try:
         return SESSION.query(Cat_GlobalCollection_Json).get(keywoard)
     finally:
         SESSION.close()
 
+def add_collection(keywoard, json,ndict,njson):
+    to_check = get_collection(keywoard)
+    if not to_check:
+        keyword_items = Cat_GlobalCollection_Json(keywoard, json,ndict,njson)
+        SESSION.add(keyword_items)
+        SESSION.commit()
+        return True
+    return False
 
-def num_collectionlist():
+
+def del_collection(keywoard, json,ndict,njson):
+    to_check = get_collection(keywoard)
+    if not to_check:
+        return False
+    keyword_items = SESSION.query(Cat_GlobalCollection_Json).get(keywoard)
+    SESSION.delete(keyword_items)
+    SESSION.commit()
+    return True
+
+def get_collections():
     try:
-        return SESSION.query(Cat_GlobalCollection_Json).count()
+        return SESSION.query(Cat_GlobalCollection_Json).all()
     finally:
-        SESSION.close()
-
-
-def num_collectionlist_item(keywoard):
-    try:
-        return (
-            SESSION.query(Cat_GlobalCollection_Json.keywoard)
-            .filter(Cat_GlobalCollection_Json.keywoard == keywoard)
-            .count()
-        )
-    finally:
-        SESSION.close()
+        SESSION.close()    
