@@ -278,7 +278,7 @@ async def _(event):
     info={
         "header": "Changes profile pic with random thor pics every 1 minute",
         "description": "Changes your profile pic every 1 minute with random thor pics.\
-        If you like to change the time then set CHNAGE_TIME var in Heroku with time(in seconds) between each chnage of profilepic.",
+        If you like to change the time then set CHANGE_TIME var in Heroku with time(in seconds) between each change of profilepic.",
         "note": "To stop this do '.end thorpfp'",
         "usage": "{tr}thorpfp",
     },
@@ -298,8 +298,8 @@ async def _(event):
     command=("autopic", plugin_category),
     info={
         "header": "Changes profile pic every 1 minute with the custom pic with time",
-        "description": "If you like to change the time interval for every new pic chnage \
-            then set CHNAGE_TIME var in Heroku with time(in seconds) between each chnage of profilepic.",
+        "description": "If you like to change the time interval for every new pic change \
+            then set CHANGE_TIME var in Heroku with time(in seconds) between each change of profilepic.",
         "options": "you can give integer input with cmd like 40,55,75 ..etc.\
              So that your profile pic will rotate with that specific angle",
         "note": "For functioning of this cmd you need to set DEFAULT_PIC var in heroku. \
@@ -346,7 +346,7 @@ async def _(event):
     info={
         "header": "Updates your profile pic every 1 minute with time on it",
         "description": "Deletes old profile pic and Update profile pic with new image with time on it.\
-             You can chnage this image by setting DIGITAL_PIC var in heroku with telegraph image link",
+             You can change this image by setting DIGITAL_PIC var in heroku with telegraph image link",
         "note": "To stop this do '.end digitalpfp'",
         "usage": "{tr}digitalpfp",
     },
@@ -370,7 +370,7 @@ async def _(event):
     info={
         "header": "Changes profile pic every 1 minute with the random colour pic with time on it",
         "description": "If you like to change the time interval for every new pic chnage \
-            then set CHNAGE_TIME var in Heroku with time(in seconds) between each chnage of profilepic.",
+            then set CHANGE_TIME var in Heroku with time(in seconds) between each change of profilepic.",
         "note": "For functioning of this cmd you need to set DEFAULT_PIC var in heroku. \
             To stop this do '.end bloom'",
         "usage": "{tr}bloom",
