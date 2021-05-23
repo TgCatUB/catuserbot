@@ -44,7 +44,7 @@ async def _(event):
     pattern="bombs$",
     command=("bombs", plugin_category),
     info={
-        "header": "throwing brain in dustbin animation",
+        "header": "bomb animation",
         "usage": "{tr}bombs",
     },
 )
