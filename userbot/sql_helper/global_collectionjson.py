@@ -1,9 +1,6 @@
-from sqlalchemy import JSON, Column, UnicodeText
-from sqlalchemy_json import (
-    MutableJson,
-    NestedMutableDict,
-    NestedMutableJson,
-)
+from sqlalchemy import Column, UnicodeText
+from sqlalchemy_json import MutableJson, NestedMutableDict, NestedMutableJson
+
 from . import BASE, SESSION
 
 
@@ -14,7 +11,7 @@ class Cat_GlobalCollection_Json(BASE):
     ndict = Column(NestedMutableDict)
     njson = Column(NestedMutableJson)
 
-    def __init__(self, keywoard, json,ndict,njson):
+    def __init__(self, keywoard, json, ndict, njson):
         self.keywoard = keywoard
         self.json = json
         self.ndict = ndict
@@ -30,17 +27,18 @@ def get_collection(keywoard):
     finally:
         SESSION.close()
 
-def add_collection(keywoard, json,ndict,njson):
+
+def add_collection(keywoard, json, ndict, njson):
     to_check = get_collection(keywoard)
     if not to_check:
-        keyword_items = Cat_GlobalCollection_Json(keywoard, json,ndict,njson)
+        keyword_items = Cat_GlobalCollection_Json(keywoard, json, ndict, njson)
         SESSION.add(keyword_items)
         SESSION.commit()
         return True
     return False
 
 
-def del_collection(keywoard, json,ndict,njson):
+def del_collection(keywoard, json, ndict, njson):
     to_check = get_collection(keywoard)
     if not to_check:
         return False
@@ -49,8 +47,9 @@ def del_collection(keywoard, json,ndict,njson):
     SESSION.commit()
     return True
 
+
 def get_collections():
     try:
         return SESSION.query(Cat_GlobalCollection_Json).all()
     finally:
-        SESSION.close()    
+        SESSION.close()
