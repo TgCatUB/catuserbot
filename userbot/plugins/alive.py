@@ -23,7 +23,7 @@ async def amireallyalive(alive):
         cat_caption = f"**{CUSTOM_ALIVE_TEXT}**\n\n"
         cat_caption += f"**{EMOJI} ❤️ Database ❤️ :** `{check_sgnirts}`\n"
         cat_caption += f"**{EMOJI} 🧡 Telethon 🧡 :** `{version.__version__}\n`"
-        cat_caption += f"**{EMOJI} 💛 PriyoBot Version 💛 :** `{catversion}`\n"
+        cat_caption += f"**{EMOJI} 💛 Bot Version 💛 :** `{catversion}`\n"
         cat_caption += f"**{EMOJI} 💚 Python Version 💛 :** `{python_version()}\n`"
         cat_caption += f"**{EMOJI} 💙 Boot Time 💙 :** `{uptime}\n`"
         cat_caption += f"**{EMOJI} 🖤 Developer 🖤:** {mention}\n"
