@@ -14,6 +14,7 @@ while flag:
         from .qhelper import process
         from .tools import *
         from .utils import _cattools, _catutils, _format
+
         flag = False
     except ModuleNotFoundError as e:
         install_pip(e.name)
