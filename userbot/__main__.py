@@ -233,9 +233,18 @@ for name in files:
         shortname = path1.stem
         try:
             if shortname.replace(".py", "") not in Config.NO_LOAD:
-                load_module(
-                    shortname.replace(".py", ""), plugin_path="userbot/assistant"
-                )
+                flag = True
+                check = 0
+                while flag:
+                    try:
+                        load_module(shortname.replace(".py", ""), plugin_path="userbot/assistant")
+                        break
+                    except ModuleNotFoundError as e:
+                        install_pip(e.name)
+                        check += 1
+                        if check > 5:
+                            break
+                    
             else:
                 os.remove(Path(f"userbot/assistant/{shortname}.py"))
         except Exception as e:
