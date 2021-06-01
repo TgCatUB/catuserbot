@@ -6,6 +6,7 @@ from ..Config import Config
 from ..core import CMD_INFO, GRP_INFO, PLG_INFO
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import reply_id
+
 cmdprefix = Config.COMMAND_HAND_LER
 
 plugin_category = "tools"
@@ -134,7 +135,7 @@ async def cmdlist():
         "flags": {
             "c": "To get info of command.",
             "p": "To get info of plugin.",
-            "t": "To get all plugins in text format."
+            "t": "To get all plugins in text format.",
         },
         "usage": [
             "{tr}help (plugin/command name)",
@@ -157,13 +158,13 @@ async def _(event):
         if outstr is None:
             return
     else:
-        if flag =="t":
+        if flag == "t":
             outstr = await grpinfo()
         else:
             results = await event.client.inline_query(Config.TG_BOT_USERNAME, "help")
             await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
             await event.delete()
-            return 
+            return
     await edit_or_reply(event, outstr)
 
 

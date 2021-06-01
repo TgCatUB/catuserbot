@@ -2,6 +2,7 @@ from telethon.errors import BadRequestError
 from telethon.tl import functions
 from telethon.tl.functions.channels import EditAdminRequest
 from telethon.tl.types import ChatAdminRights
+
 from ..Config import Config
 from . import catub, edit_or_reply
 
