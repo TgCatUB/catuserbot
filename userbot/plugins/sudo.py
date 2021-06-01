@@ -386,7 +386,7 @@ async def _(event):  # sourcery no-metrics
         ],
     },
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "To show list of enabled cmds for sudo."
     input_str = event.pattern_match.group(1)
     sudocmds = sudo_enabled_cmds()
