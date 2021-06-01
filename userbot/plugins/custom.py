@@ -45,6 +45,7 @@ extractor = URLExtract()
     },
 )
 async def custom_catuserbot(event):
+    "To customize your CatUserbot."
     reply = await event.get_reply_message()
     text = reply.text
     if not reply:
@@ -78,7 +79,7 @@ async def custom_catuserbot(event):
     },
 )
 async def custom_catuserbot(event):
-    await event.get_reply_message()
+    "To delete costomization of your CatUserbot."
     input_str = event.pattern_match.group(1)
     if input_str == "pmpermit":
         if gvarstatus("pmpermit_txt") is None:
