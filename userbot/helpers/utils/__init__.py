@@ -1,4 +1,5 @@
 from .extdl import *
+
 flag = True
 check = 0
 while flag:
@@ -8,6 +9,7 @@ while flag:
         from . import utils as _catutils
         from .events import *
         from .format import htmlmentionuser, mentionuser, parse_pre
+
         flag = False
     except ModuleNotFoundError as e:
         install_pip(e.name)
