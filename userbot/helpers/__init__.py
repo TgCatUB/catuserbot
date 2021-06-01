@@ -15,7 +15,7 @@ while flag:
         from .tools import *
         from .utils import _cattools, _catutils, _format
 
-        flag = False
+        break
     except ModuleNotFoundError as e:
         install_pip(e.name)
         check += 1

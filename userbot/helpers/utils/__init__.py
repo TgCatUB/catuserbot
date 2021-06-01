@@ -10,7 +10,7 @@ while flag:
         from .events import *
         from .format import htmlmentionuser, mentionuser, parse_pre
 
-        flag = False
+        break
     except ModuleNotFoundError as e:
         install_pip(e.name)
         check += 1

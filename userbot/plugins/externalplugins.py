@@ -33,7 +33,7 @@ if Config.PLUGIN_CHANNEL:
             while flag:
                 try:
                     load_module(shortname.replace(".py", ""))
-                    flag = False
+                    break
                 except ModuleNotFoundError as e:
                     install_pip(e.name)
                     if check > 5:

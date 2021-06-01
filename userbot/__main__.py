@@ -212,7 +212,7 @@ for name in files:
                 while flag:
                     try:
                         load_module(shortname.replace(".py", ""))
-                        flag = False
+                        break
                     except ModuleNotFoundError as e:
                         install_pip(e.name)
                         check += 1
