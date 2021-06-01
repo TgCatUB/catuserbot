@@ -8,16 +8,17 @@ from telethon import Button, functions, types, utils
 
 import userbot
 from userbot import BOTLOG, BOTLOG_CHATID
+
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
-from .utils import load_module
 from .helpers.utils import install_pip
 from .sql_helper.global_collection import (
     del_keyword_collectionlist,
     get_item_collectionlist,
 )
 from .sql_helper.globals import gvarstatus
+from .utils import load_module
 
 LOGS = logging.getLogger("CatUserbot")
 
@@ -214,7 +215,7 @@ for name in files:
                         flag = False
                     except ModuleNotFoundError as e:
                         install_pip(e.name)
-                        check +=1
+                        check += 1
                         if check > 5:
                             break
             else:
