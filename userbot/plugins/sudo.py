@@ -386,7 +386,7 @@ async def _(event):  # sourcery no-metrics
         ],
     },
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics
     "To show list of enabled cmds for sudo."
     input_str = event.pattern_match.group(1)
     sudocmds = sudo_enabled_cmds()
@@ -423,8 +423,8 @@ async def _(event):  # sourcery no-metrics
     if error != "":
         return await edit_delete(event, error, 10)
     pkeys = clist.keys()
-    print(pkeys)
-    pkeys = sorted(pkeys)
+    n_pkeys = [i for i in pkeys if i is not None]
+    pkeys = sorted(n_pkeys)
     output = ""
     for plugin in pkeys:
         output += f"• {plugin}\n"
