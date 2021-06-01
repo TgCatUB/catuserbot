@@ -1,4 +1,3 @@
-from . import pool
 from .decorators import check_owner
 
 CMD_INFO = {}

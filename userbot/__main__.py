@@ -8,16 +8,17 @@ from telethon import Button, functions, types, utils
 
 import userbot
 from userbot import BOTLOG, BOTLOG_CHATID
-from userbot.Config import Config
-from userbot.core.logger import logging
-from userbot.core.session import catub
-from userbot.utils import load_module
 
+from .Config import Config
+from .core.logger import logging
+from .core.session import catub
+from .helpers.utils import install_pip
 from .sql_helper.global_collection import (
     del_keyword_collectionlist,
     get_item_collectionlist,
 )
 from .sql_helper.globals import gvarstatus
+from .utils import load_module
 
 LOGS = logging.getLogger("CatUserbot")
 
@@ -206,7 +207,17 @@ for name in files:
         shortname = path1.stem
         try:
             if shortname.replace(".py", "") not in Config.NO_LOAD:
-                load_module(shortname.replace(".py", ""))
+                flag = True
+                check = 0
+                while flag:
+                    try:
+                        load_module(shortname.replace(".py", ""))
+                        break
+                    except ModuleNotFoundError as e:
+                        install_pip(e.name)
+                        check += 1
+                        if check > 5:
+                            break
             else:
                 os.remove(Path(f"userbot/plugins/{shortname}.py"))
         except Exception as e:
@@ -222,9 +233,21 @@ for name in files:
         shortname = path1.stem
         try:
             if shortname.replace(".py", "") not in Config.NO_LOAD:
-                load_module(
-                    shortname.replace(".py", ""), plugin_path="userbot/assistant"
-                )
+                flag = True
+                check = 0
+                while flag:
+                    try:
+                        load_module(
+                            shortname.replace(".py", ""),
+                            plugin_path="userbot/assistant",
+                        )
+                        break
+                    except ModuleNotFoundError as e:
+                        install_pip(e.name)
+                        check += 1
+                        if check > 5:
+                            break
+
             else:
                 os.remove(Path(f"userbot/assistant/{shortname}.py"))
         except Exception as e:
