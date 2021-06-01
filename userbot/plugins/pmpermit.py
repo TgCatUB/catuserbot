@@ -595,7 +595,9 @@ async def pmpermit_on(event):
                 event, "__Pmpermit has been disabled for your account succesfully__"
             )
         else:
-            await edit_delete(event, "__Pmpermit is already disabled for your account__")
+            await edit_delete(
+                event, "__Pmpermit is already disabled for your account__"
+            )
 
 
 @catub.cat_cmd(
