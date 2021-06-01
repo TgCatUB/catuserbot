@@ -614,7 +614,7 @@ async def approve_p_m(event):
     if gvarstatus("pmpermit") is None:
         return await edit_delete(
             event,
-            f"__Turn on pmpermit by doing __`{cmdhd}pmpermit on` __for working of this plugin__",
+            f"__Turn on pmpermit by doing __`{cmdhd}pmguard on` __for working of this plugin__",
         )
     if event.is_private:
         user = await event.get_chat()
@@ -693,7 +693,7 @@ async def disapprove_p_m(event):
     if gvarstatus("pmpermit") is None:
         return await edit_delete(
             event,
-            f"__Turn on pmpermit by doing __`{cmdhd}pmpermit on` __for working of this plugin__",
+            f"__Turn on pmpermit by doing __`{cmdhd}pmguard on` __for working of this plugin__",
         )
     if event.is_private:
         user = await event.get_chat()
@@ -741,7 +741,7 @@ async def block_p_m(event):
     if gvarstatus("pmpermit") is None:
         return await edit_delete(
             event,
-            f"__Turn on pmpermit by doing __`{cmdhd}pmpermit on` __for working of this plugin__",
+            f"__Turn on pmpermit by doing __`{cmdhd}pmguard on` __for working of this plugin__",
         )
     if event.is_private:
         user = await event.get_chat()
@@ -797,7 +797,7 @@ async def unblock_pm(event):
     if gvarstatus("pmpermit") is None:
         return await edit_delete(
             event,
-            f"__Turn on pmpermit by doing __`{cmdhd}pmpermit on` __for working of this plugin__",
+            f"__Turn on pmpermit by doing __`{cmdhd}pmguard on` __for working of this plugin__",
         )
     if event.is_private:
         user = await event.get_chat()
@@ -828,7 +828,7 @@ async def approve_p_m(event):
     if gvarstatus("pmpermit") is None:
         return await edit_delete(
             event,
-            f"__Turn on pmpermit by doing __`{cmdhd}pmpermit on` __to work this plugin__",
+            f"__Turn on pmpermit by doing __`{cmdhd}pmguard on` __to work this plugin__",
         )
     approved_users = pmpermit_sql.get_all_approved()
     APPROVED_PMs = "**Current Approved PMs**\n\n"
