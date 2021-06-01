@@ -1,14 +1,24 @@
-""".admin Plugin for @UniBorg"""
 import html
 
-import userbot.plugins.sql_helper.warns_sql as sql
+from userbot import catub
+
+from ..core.managers import edit_or_reply
+from ..sql_helper import warns_sql as sql
+
+plugin_category = "admin"
 
 
-@bot.on(admin_cmd(pattern="warn (.*)"))
-@bot.on(sudo_cmd(pattern="warn (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="warn(?: |$)(.*)",
+    command=("warn", plugin_category),
+    info={
+        "header": "To warn a user.",
+        "description": "will warn the replied user.",
+        "usage": "{tr}warn <reason>",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To warn a user"
     warn_reason = event.pattern_match.group(1)
     if not warn_reason:
         warn_reason = "No reason"
@@ -38,52 +48,51 @@ async def _(event):
     await edit_or_reply(event, reply)
 
 
-@bot.on(admin_cmd(pattern="warns$"))
-@bot.on(sudo_cmd(pattern="warns$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="warns",
+    command=("warns", plugin_category),
+    info={
+        "header": "To get users warns list.",
+        "usage": "{tr}warns <reply>",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To get users warns list"
     reply_message = await event.get_reply_message()
     result = sql.get_warns(reply_message.sender_id, event.chat_id)
-    if result and result[0] != 0:
-        num_warns, reasons = result
-        limit, soft_warn = sql.get_warn_setting(event.chat_id)
-        if reasons:
-            text = "This user has {}/{} warnings, for the following reasons:".format(
+    if not result or result[0] == 0:
+        return await edit_or_reply(event, "this user hasn't got any warnings!")
+    num_warns, reasons = result
+    limit, soft_warn = sql.get_warn_setting(event.chat_id)
+    if not reasons:
+        return await edit_or_reply(
+            event,
+            "this user has {} / {} warning, but no reasons for any of them.".format(
                 num_warns, limit
-            )
-            text += "\r\n"
-            text += reasons
-            await event.edit(text)
-        else:
-            await edit_or_reply(
-                event,
-                "this user has {} / {} warning, but no reasons for any of them.".format(
-                    num_warns, limit
-                ),
-            )
-    else:
-        await edit_or_reply(event, "this user hasn't got any warnings!")
+            ),
+        )
+
+    text = "This user has {}/{} warnings, for the following reasons:".format(
+        num_warns, limit
+    )
+    text += "\r\n"
+    text += reasons
+    await event.edit(text)
 
 
-@bot.on(admin_cmd(pattern="resetwarns$"))
-@bot.on(sudo_cmd(pattern="resetwarns$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="r(eset)?warns$",
+    command=("resetwarns", plugin_category),
+    info={
+        "header": "To reset warns of the replied user",
+        "usage": [
+            "{tr}rwarns",
+            "{tr}resetwarns",
+        ],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To reset warns"
     reply_message = await event.get_reply_message()
     sql.reset_warns(reply_message.sender_id, event.chat_id)
-    await edit_or_reply(event, "Warnings have been reset!")
-
-
-CMD_HELP.update(
-    {
-        "warns": "**Plugin : **`warns`\
-    \n\n  •  **Syntax : **`.warn reason` reply to user\
-    \n  •  **Function : **__warns the given user in the chat you used__\
-    \n\n  •  **Syntax : **`.warns reply`\
-    \n  •  **Function : **__gets the warns of the given user in the chat you used__\
-    \n\n  •  **Syntax : **`resetwarns reply`\
-    \n  •  **Function : **__resets the warns of the replied users in the chat where u used command__"
-    }
-)
+    await edit_or_reply(event, "__Warnings have been reset!__")

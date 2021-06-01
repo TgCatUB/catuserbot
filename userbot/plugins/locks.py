@@ -6,16 +6,51 @@ from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import ChatBannedRights
 
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import _format
+from ..sql_helper.locks_sql import get_locks, is_locked, update_lock
 from ..utils import is_admin
 from . import BOTLOG, get_user_from_event
-from .sql_helper.locks_sql import get_locks, is_locked, update_lock
+
+plugin_category = "admin"
 
 
-@bot.on(admin_cmd(pattern=r"lock (.*)"))
-@bot.on(sudo_cmd(pattern=r"lock (.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="lock (.*)",
+    command=("lock", plugin_category),
+    info={
+        "header": "To lock the given permission for entire group.",
+        "description": "Db options will lock for admins also,",
+        "api options": {
+            "msg": "To lock messages",
+            "media": "To lock media like videos/photo",
+            "sticker": "To lock stickers",
+            "gif": "To lock gif.",
+            "preview": "To lock link previews.",
+            "game": "To lock games",
+            "inline": "To lock using inline bots",
+            "poll": "To lock sending polls.",
+            "invite": "To lock add users permission",
+            "pin": "To lock pin permission for users",
+            "info": "To lock changing group description",
+            "all": "To lock above all options",
+        },
+        "db options": {
+            "bots": "To lock adding bots by users",
+            "commands": "To lock users using commands",
+            "email": "To lock sending emails",
+            "forward": "To lock forwording messages for group",
+            "url": "To lock sending links to group",
+        },
+        "usage": "{tr}lock <permission>",
+    },
+    groups_only=True,
+    require_admin=True,
+)
+async def _(event):  # sourcery no-metrics
+    "To lock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
     if not event.is_group:
@@ -170,11 +205,40 @@ async def _(event):
             )
 
 
-@bot.on(admin_cmd(pattern="unlock (.*)"))
-@bot.on(sudo_cmd(pattern="unlock (.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="unlock (.*)",
+    command=("unlock", plugin_category),
+    info={
+        "header": "To unlock the given permission for entire group.",
+        "description": "Db options/api options will unlock only if they are locked.",
+        "api options": {
+            "msg": "To unlock messages",
+            "media": "To unlock media like videos/photo",
+            "sticker": "To unlock stickers",
+            "gif": "To unlock gif.",
+            "preview": "To unlock link previews.",
+            "game": "To unlock games",
+            "inline": "To unlock using inline bots",
+            "poll": "To unlock sending polls.",
+            "invite": "To unlock add users permission",
+            "pin": "To unlock pin permission for users",
+            "info": "To unlock changing group description",
+            "all": "To unlock above all options",
+        },
+        "db options": {
+            "bots": "To unlock adding bots by users",
+            "commands": "To unlock users using commands",
+            "email": "To unlock sending emails",
+            "forward": "To unlock forwording messages for group",
+            "url": "To unlock sending links to group",
+        },
+        "usage": "{tr}unlock <permission>",
+    },
+    groups_only=True,
+    require_admin=True,
+)
+async def _(event):  # sourcery no-metrics
+    "To unlock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
     if not event.is_group:
@@ -329,11 +393,17 @@ async def _(event):
             )
 
 
-@bot.on(admin_cmd(pattern="locks$"))
-@bot.on(sudo_cmd(pattern="locks$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="locks$",
+    command=("locks", plugin_category),
+    info={
+        "header": "To see the active locks in the current group",
+        "usage": "{tr}locks",
+    },
+    groups_only=True,
+)
+async def _(event):  # sourcery no-metrics
+    "To see the active locks in the current group"
     res = ""
     current_db_locks = get_locks(event.chat_id)
     if not current_db_locks:
@@ -382,19 +452,38 @@ async def _(event):
     await edit_or_reply(event, res)
 
 
-@bot.on(admin_cmd(pattern=r"plock (.*)"))
-@bot.on(sudo_cmd(pattern=r"plock (.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="plock (.*)",
+    command=("plock", plugin_category),
+    info={
+        "header": "To lock the given permission for replied person only.",
+        "api options": {
+            "msg": "To lock messages",
+            "media": "To lock media like videos/photo",
+            "sticker": "To lock stickers",
+            "gif": "To lock gif.",
+            "preview": "To lock link previews.",
+            "game": "To lock games",
+            "inline": "To lock using inline bots",
+            "poll": "To lock sending polls.",
+            "invite": "To lock add users permission",
+            "pin": "To lock pin permission for users",
+            "info": "To lock changing group description",
+            "all": "To lock all above permissions",
+        },
+        "usage": "{tr}plock <api option>",
+    },
+    groups_only=True,
+    require_admin=True,
+)
+async def _(event):  # sourcery no-metrics
+    "To lock the given permission for replied person only."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
     reply = await event.get_reply_message()
-    if not event.is_group:
-        return await edit_delete(event, "`Idiot! ,This is not a group to lock things `")
     chat_per = (await event.get_chat()).default_banned_rights
     result = await event.client(
-        functions.channels.GetParticipantRequest(channel=peer_id, user_id=reply.from_id)
+        functions.channels.GetParticipantRequest(peer_id, reply.from_id)
     )
     admincheck = await is_admin(event.client, peer_id, reply.from_id)
     if admincheck:
@@ -610,19 +699,39 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern=r"punlock (.*)"))
-@bot.on(sudo_cmd(pattern=r"punlock (.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="punlock (.*)",
+    command=("punlock", plugin_category),
+    info={
+        "header": "To unlock the given permission for replied person only.",
+        "note": "If entire group is locked with that permission then you cant unlock that permission only for him.",
+        "api options": {
+            "msg": "To unlock messages",
+            "media": "To unlock media like videos/photo",
+            "sticker": "To unlock stickers",
+            "gif": "To unlock gif.",
+            "preview": "To unlock link previews.",
+            "game": "To unlock games",
+            "inline": "To unlock using inline bots",
+            "poll": "To unlock sending polls.",
+            "invite": "To unlock add users permission",
+            "pin": "To unlock pin permission for users",
+            "info": "To unlock changing group description",
+            "all": "To unlock all above permissions",
+        },
+        "usage": "{tr}punlock <api option>",
+    },
+    groups_only=True,
+    require_admin=True,
+)
+async def _(event):  # sourcery no-metrics
+    "To unlock the given permission for replied person only."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
     reply = await event.get_reply_message()
-    if not event.is_group:
-        return await edit_delete(event, "`Idiot! ,This is not a group to lock things `")
     chat_per = (await event.get_chat()).default_banned_rights
     result = await event.client(
-        functions.channels.GetParticipantRequest(channel=peer_id, user_id=reply.from_id)
+        functions.channels.GetParticipantRequest(peer_id, reply.from_id)
     )
     admincheck = await is_admin(event.client, peer_id, reply.from_id)
     if admincheck:
@@ -841,20 +950,24 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern="uperm(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="uperm(?: |$)(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="uperm(?: |$)(.*)",
+    command=("uperm", plugin_category),
+    info={
+        "header": "To get permissions of replied user or mentioned user in that group.",
+        "usage": "{tr}uperm <reply/username>",
+    },
+    groups_only=True,
+)
+async def _(event):  # sourcery no-metrics
+    "To get permissions of user."
     peer_id = event.chat_id
     user, reason = await get_user_from_event(event)
     if not user:
         return
-    if not event.is_group:
-        return await edit_delete(event, "`Idiot! ,This is not a group to lock things `")
     admincheck = await is_admin(event.client, peer_id, user.id)
     result = await event.client(
-        functions.channels.GetParticipantRequest(channel=peer_id, user_id=user.id)
+        functions.channels.GetParticipantRequest(peer_id, user.id)
     )
     output = ""
     if admincheck:
@@ -914,9 +1027,8 @@ async def _(event):
     await edit_or_reply(event, output)
 
 
-@bot.on(events.MessageEdited())
-@bot.on(events.NewMessage())
-async def check_incoming_messages(event):
+@catub.cat_cmd(incoming=True)
+async def check_incoming_messages(event):  # sourcery no-metrics
     if not event.is_private:
         chat = await event.get_chat()
         admin = chat.admin_rights
@@ -981,7 +1093,7 @@ async def check_incoming_messages(event):
                 update_lock(peer_id, "url", False)
 
 
-@bot.on(events.ChatAction())
+@catub.on(events.ChatAction())
 async def _(event):
     if not event.is_private:
         chat = await event.get_chat()
@@ -1023,27 +1135,3 @@ async def _(event):
                     users_added_by
                 )
             )
-
-
-CMD_HELP.update(
-    {
-        "locks": "**Plugin : **`locks`\
-        \n\n**•  Syntax : **`.lock <all/type>`\
-        \n•  **Function : **__Allows you to lock the permissions of the chat.__\
-        \n\n**•  Syntax : **`.unlock <all/type>`\
-        \n•  **Function : **__Allows you to unlock the permissions of the chat.__\
-        \n\n•  **Syntax : **`.locks`\
-        \n•  **Function : **__To see the active locks__\
-        \n\n**•  Syntax : **`.plock <all/type>`\
-        \n•  **Function : **__Allows you to lock the permissions of the replied user in that chat.__\
-        \n\n**•  Syntax : **`.punlock <all/type>`\
-        \n•  **Function : **__Allows you to unlock the permissions of the replied user in that chat.__\
-        \n\n**•  Syntax : **`.uperm <reply/username>`\
-        \n•  **Function : **__Shows you the admin rights if he is admin else will show his permissions in the chat__\
-        \n\n•  **Note :** __Requires proper admin rights in the chat !! and DB Options are available only for lock and unlock commands.__\
-        \n•  **Available message types to lock/unlock are: \
-        \n•  API Options : **`msg`, `media`, `sticker`, `gif`, `preview` ,`game` ,`inline`, `poll`, `invite`, `pin`, `info`\
-        \n**•  DB Options : **`bots`, `commands`, `email`, `forward`, `url`\
-        "
-    }
-)

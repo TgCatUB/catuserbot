@@ -1,23 +1,37 @@
 #    Copyright (C) 2020  sandeep.n(π.$)
 # button post makker for catuserbot thanks to uniborg for the base
+
 # by @sandy1709 (@mrconfused)
 import os
 import re
 
 from telethon import Button
 
-from . import BOT_USERNAME
+from ..Config import Config
+from . import catub, edit_delete, reply_id
 
+plugin_category = "tools"
 # regex obtained from:
 # https://github.com/PaulSonOfLars/tgbot/blob/master/tg_bot/modules/helper_funcs/string_handling.py#L23
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 
 
-@bot.on(admin_cmd(pattern=r"cbutton ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"cbutton ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="cbutton(?: |$)(.*)",
+    command=("cbutton", plugin_category),
+    info={
+        "header": "To create button posts",
+        "note": f"For working of this you need your bot ({Config.TG_BOT_USERNAME}) in the group/channel \
+        where you are using and Markdown is Default to html",
+        "options": "If you button to be in same row as other button then follow this <buttonurl:link:same> in 2nd button.",
+        "usage": [
+            "{tr}cbutton <text> [Name on button]<buttonurl:link you want to open>",
+        ],
+        "examples": "{tr}cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To create button posts."
     reply_message = await event.get_reply_message()
     if reply_message:
         markdown_note = reply_message.text
@@ -56,7 +70,7 @@ async def _(event):
         tgbot_reply_message = await event.client.download_media(reply_message.media)
     if tl_ib_buttons == []:
         tl_ib_buttons = None
-    await tgbot.send_message(
+    await event.client.tgbot.send_message(
         entity=event.chat_id,
         message=message_text,
         parse_mode="html",
@@ -69,14 +83,21 @@ async def _(event):
         os.remove(tgbot_reply_message)
 
 
-# Helpers
-
-
-@bot.on(admin_cmd(pattern=r"ibutton ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern=r"ibutton ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="ibutton(?: |$)(.*)",
+    command=("ibutton", plugin_category),
+    info={
+        "header": "To create button posts via inline",
+        "note": f"Markdown is Default to html",
+        "options": "If you button to be in same row as other button then follow this <buttonurl:link:same> in 2nd button.",
+        "usage": [
+            "{tr}ibutton <text> [Name on button]<buttonurl:link you want to open>",
+        ],
+        "examples": "{tr}ibutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To create button posts via inline"
     reply_to_id = await reply_id(event)
     # soon will try to add media support
     reply_message = await event.get_reply_message()
@@ -87,7 +108,7 @@ async def _(event):
     if not markdown_note:
         return await edit_delete(event, "`what text should i use in button post`")
     catinput = "Inline buttons " + markdown_note
-    results = await event.client.inline_query(BOT_USERNAME, catinput)
+    results = await event.client.inline_query(Config.TG_BOT_USERNAME, catinput)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()
 
@@ -100,18 +121,3 @@ def build_keyboard(buttons):
         else:
             keyb.append([Button.url(btn[0], btn[1])])
     return keyb
-
-
-CMD_HELP.update(
-    {
-        "button": f"**Plugin : **`button`\
-    \n\n**Button post helper**\
-    \n•  **Syntax : **`.cbutton`\
-    \n•  **Function :** __For working of this you need your bot({BOT_USERNAME}) in the group/channel you are using and Buttons must be in the format as [Name on button]<buttonurl:link you want to open> and markdown is Default to html__\
-    \n•  **Example :** `.cbutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
-    \n\n•  **Syntax : **`.ibutton`\
-    \n•  **Function :** __Buttons must be in the format as [Name on button]<buttonurl:link you want to open>__\
-    \n•  **Example :** `.ibutton test [google]<buttonurl:https://www.google.com> [catuserbot]<buttonurl:https://t.me/catuserbot17:same> [support]<buttonurl:https://t.me/catuserbot_support>`\
-    "
-    }
-)

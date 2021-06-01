@@ -1,24 +1,17 @@
 # plugin by @deleteduser420
 # ported to telethon by @mrconfused (@sandy1709)
-
 import os
 
-from html_telegraph_poster import TelegraphPoster
+from userbot import catub
+from userbot.core.logger import logging
 
-from . import humanbytes
+from ..Config import Config
+from ..core.managers import edit_or_reply
+from ..helpers import humanbytes, post_to_telegraph
+from ..helpers.utils import _catutils, _format
 
-
-async def post_to_telegraph(page_title, html_format_content):
-    post_client = TelegraphPoster(use_api=True)
-    auth_name = "CatUserbot"
-    post_client.create_api_token(auth_name)
-    post_page = post_client.post(
-        title=page_title,
-        author=auth_name,
-        author_url="https://t.me/catuserbot17",
-        text=html_format_content,
-    )
-    return post_page["url"]
+plugin_category = "utils"
+LOGS = logging.getLogger(__name__)
 
 
 async def file_data(reply):
@@ -59,9 +52,17 @@ async def file_data(reply):
     return hmm
 
 
-@bot.on(admin_cmd(pattern="minfo$"))
-@bot.on(sudo_cmd(pattern="minfo$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="minfo$",
+    command=("minfo", plugin_category),
+    info={
+        "header": "To get media information.",
+        "description": "reply to media to get information about it",
+        "usage": "{tr}minfo",
+    },
+)
 async def mediainfo(event):
+    "Media information"
     X_MEDIA = None
     reply = await event.get_reply_message()
     if not reply:
@@ -95,12 +96,3 @@ async def mediainfo(event):
         link_preview=True,
     )
     os.remove(file_path)
-
-
-CMD_HELP.update(
-    {
-        "mediainfo": "**Plugin :** `mediainfo`\
-      \n\n**Syntax : **`.minfo` reply to media \
-      \n**Usage : ** shows you the media information."
-    }
-)

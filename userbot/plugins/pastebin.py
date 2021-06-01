@@ -1,5 +1,3 @@
-# pastebin for catuserbot
-
 import os
 
 import pygments
@@ -10,6 +8,15 @@ from requests import exceptions, get
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
+from userbot import catub
+
+from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.tools import media_type
+from ..helpers.utils import _format, reply_id
+
+plugin_category = "utils"
+
 
 def progress(current, total):
     logger.info(
@@ -19,11 +26,17 @@ def progress(current, total):
     )
 
 
-@bot.on(admin_cmd(pattern="paste(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="paste(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="paste(?: |$)(.*)",
+    command=("paste", plugin_category),
+    info={
+        "header": "To paste text to a paste bin.",
+        "description": "Create a paste or a shortened url using dogbin https://del.dog/",
+        "usage": ["{tr}paste <reply>", "{tr}paste text"],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To paste text to a paste bin."
     catevent = await edit_or_reply(event, "`pasting to del dog.....`")
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     if input_str:
@@ -64,11 +77,17 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern="neko(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="neko(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="neko(?: |$)(.*)",
+    command=("neko", plugin_category),
+    info={
+        "header": "To paste text to a paste bin.",
+        "description": "Create a paste or a shortened url using dogbin https://nekobin.com",
+        "usage": ["{tr}neko <reply>", "{tr}neko text"],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To paste text to a paste bin."
     catevent = await edit_or_reply(event, "`pasting to neko bin.....`")
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     if input_str:
@@ -122,11 +141,17 @@ async def _(event):
     await catevent.edit(reply_text)
 
 
-@bot.on(admin_cmd(pattern="iffuci(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="iffuci(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="iffuci(?: |$)(.*)",
+    command=("iffuci", plugin_category),
+    info={
+        "header": "To paste text to a paste bin.",
+        "description": "Create a paste or a shortened url using dogbin https://www.iffuci.tk",
+        "usage": ["{tr}iffuci <reply>", "{tr}iffuci text"],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To paste text to a paste bin."
     catevent = await edit_or_reply(event, "`pasting to del dog.....`")
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     if input_str:
@@ -164,9 +189,17 @@ async def _(event):
         await catevent.edit("code is pasted to {}".format(url))
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="getpaste(?: |$)(.*)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="getpaste(?: |$)(.*)"))
+@catub.cat_cmd(
+    pattern="getpaste(?: |$)(.*)",
+    command=("getpaste", plugin_category),
+    info={
+        "header": "To paste text into telegram from del dog link.",
+        "description": "Gets the content of a paste or shortened url from dogbin https://del.dog/",
+        "usage": ["{tr}getpaste <del dog link>"],
+    },
+)
 async def get_dogbin_content(dog_url):
+    "To paste text into telegram from del dog link."
     textx = await dog_url.get_reply_message()
     message = dog_url.pattern_match.group(1)
     catevent = await edit_or_reply(dog_url, "`Getting dogbin content...`")
@@ -207,12 +240,18 @@ async def get_dogbin_content(dog_url):
     await edit_or_reply(catevent, reply_text)
 
 
-@bot.on(admin_cmd(pattern="pcode(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="pcode(?: |$)(.*)"))
-async def code_print(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="pcode(?: |$)(.*)",
+    command=("pcode", plugin_category),
+    info={
+        "header": "Will paste the entire text on the blank page and will send as image",
+        "usage": ["{tr}pcode <reply>", "{tr}paste text"],
+    },
+)
+async def _(event):
+    "To paste text to image."
     reply_to = await reply_id(event)
+    d_file_name = None
     catevent = await edit_or_reply(event, "`printing the text on blank page`")
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
@@ -244,17 +283,23 @@ async def code_print(event):
             event.chat_id, "out.png", force_document=False, reply_to=reply_to
         )
     except Exception as e:
-        await edit_delete(catevent, str(e), parse_mode=parse_pre)
+        await edit_delete(catevent, str(e), parse_mode=_format.parse_pre)
     await catevent.delete()
     os.remove("out.png")
-    os.remove(d_file_name)
+    if d_file_name is not None:
+        os.remove(d_file_name)
 
 
-@bot.on(admin_cmd(pattern="paster(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="paster(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="paster(?: |$)(.*)",
+    command=("paster", plugin_category),
+    info={
+        "header": "Create a instant view or a paste it in telegraph file.",
+        "usage": ["{tr}paster <reply>", "{tr}paster text"],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Create a instant view or a paste it in telegraph file."
     catevent = await edit_or_reply(event, "`pasting to del dog.....`")
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     previous_message = None
@@ -301,23 +346,3 @@ async def _(event):
         await event.client.send_message(
             event.chat_id, response.message, reply_to=previous_message
         )
-
-
-CMD_HELP.update(
-    {
-        "pastebin": "**Plugin : **`pastebin`\
-        \n\n•  **Syntax : **`.paste <text/reply>`\
-        \n•  **Function : **__Create a paste or a shortened url using dogbin__`https://del.dog/`\
-        \n\n•  **Syntax : **`.neko <text/reply>`\
-        \n•  **Function : **__Create a paste or a shortened url using nekobin __`https://nekobin.com`\
-        \n\n•  **Syntax : **`.iffuci <text/reply>`\
-        \n•  **Function : **__Create a paste or a shortened url using iffuci __`https://www.iffuci.tk`\
-        \n\n•  **Syntax : **`.getpaste`\
-        \n•  **Function : **__Gets the content of a paste or shortened url from dogbin__ `https://del.dog/`\
-        \n\n•  **Syntax : **`.pcode reply/input`\
-        \n•  **Function : **__Will paste the entire text on the blank page and will send as image__\
-        \n\n•  **Syntax : **`.paster <text/reply>`\
-        \n•  **Function : **__Create a instant view or a paste it in telegraph file__\
-  "
-    }
-)

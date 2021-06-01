@@ -1,236 +1,247 @@
-import asyncio
-
-import requests
 from telethon import functions
 
-from . import ALIVE_NAME, CMD_LIST, SUDO_LIST
-from .sql_helper.globals import addgvar, gvarstatus
+from userbot import catub
+
+from ..Config import Config
+from ..core import CMD_INFO, GRP_INFO, PLG_INFO
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import reply_id
+cmdprefix = Config.COMMAND_HAND_LER
+
+plugin_category = "tools"
+
+hemojis = {
+    "admin": "👮‍♂️",
+    "bot": "🤖",
+    "fun": "🎨",
+    "misc": "🧩",
+    "tools": "🧰",
+    "utils": "🗂",
+    "extra": "➕",
+}
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="help ?(.*)"))
-async def cmd_list(event):
-    if event.fwd_from:
-        return
-    if gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "false":
-        HELPTYPE = False
-    else:
-        HELPTYPE = True
-    reply_to_id = await reply_id(event)
-    input_str = event.pattern_match.group(1)
-    if input_str == "text":
-        string = (
-            "Total {count} commands found in {plugincount} plugins of catuserbot\n\n"
+def get_key(val):
+    for key, value in PLG_INFO.items():
+        for cmd in value:
+            if val == cmd:
+                return key
+    return None
+
+
+def getkey(val):
+    for key, value in GRP_INFO.items():
+        for plugin in value:
+            if val == plugin:
+                return key
+    return None
+
+
+async def cmdinfo(input_str, event, plugin=False):
+    if input_str[0] == cmdprefix:
+        input_str = input_str[1:]
+    try:
+        about = CMD_INFO[input_str]
+    except KeyError:
+        if plugin:
+            await edit_delete(
+                event,
+                f"**There is no plugin or command as **`{input_str}`** in your bot.**",
+            )
+            return None
+        await edit_delete(
+            event, f"**There is no command as **`{input_str}`** in your bot.**"
         )
-        catcount = 0
-        plugincount = 0
-        for i in sorted(CMD_LIST):
-            plugincount += 1
-            string += f"{plugincount}) Commands found in Plugin " + i + " are \n"
-            for iter_list in CMD_LIST[i]:
-                string += "    " + str(iter_list)
-                string += "\n"
-                catcount += 1
-            string += "\n"
-        if len(string) > 4095:
-            data = string.format(count=catcount, plugincount=plugincount)
-            key = (
-                requests.post(
-                    "https://nekobin.com/api/documents", json={"content": data}
-                )
-                .json()
-                .get("result")
-                .get("key")
-            )
-            url = f"https://nekobin.com/{key}"
-            reply_text = f"**All commands of the catuserbot can be seen [here]({url})**"
-            await event.edit(reply_text)
+        return None
+    except Exception as e:
+        await edit_delete(event, f"**Error**\n`{str(e)}`")
+        return None
+    outstr = f"**Command :** `{cmdprefix}{input_str}`\n"
+    plugin = get_key(input_str)
+    if plugin is not None:
+        outstr += f"**Plugin :** `{plugin}`\n"
+        category = getkey(plugin)
+        if category is not None:
+            outstr += f"**Category :** `{category}`\n\n"
+    outstr += f"**•  Intro :**\n{about[0]}"
+    return outstr
+
+
+async def plugininfo(input_str, event, flag):
+    try:
+        cmds = PLG_INFO[input_str]
+    except KeyError:
+        outstr = await cmdinfo(input_str, event, plugin=True)
+        return outstr
+    except Exception as e:
+        await edit_delete(event, f"**Error**\n`{str(e)}`")
+        return None
+    if len(cmds) == 1 and (flag is None or (flag and flag != "-p")):
+        outstr = await cmdinfo(cmds[0], event, plugin=False)
+        return outstr
+    outstr = f"**Plugin : **`{input_str}`\n"
+    outstr += f"**Commands Available :** `{len(cmds)}`\n"
+    category = getkey(input_str)
+    if category is not None:
+        outstr += f"**Category :** `{category}`\n\n"
+    for cmd in cmds:
+        outstr += f"•  **cmd :** `{cmdprefix}{cmd}`\n"
+        try:
+            outstr += f"•  **info :** `{CMD_INFO[cmd][1]}`\n\n"
+        except IndexError:
+            outstr += f"•  **info :** `None`\n\n"
+    outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help <command name>`\
+        \n**Note : **If command name is same as plugin name then use this `{cmdprefix}help -c <command name>`."
+    return outstr
+
+
+async def grpinfo():
+    outstr = "**Plugins in Catuserbot are:**\n\n"
+    outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help <plugin name>`\n\n"
+    category = ["admin", "bot", "fun", "misc", "tools", "utils", "extra"]
+    for cat in category:
+        plugins = GRP_INFO[cat]
+        outstr += f"**{hemojis[cat]} {cat.title()} **({len(plugins)})\n"
+        for plugin in plugins:
+            outstr += f"`{plugin}`  "
+        outstr += "\n\n"
+    return outstr
+
+
+async def cmdlist():
+    outstr = "**Total list of Commands in your Catuserbot are :**\n\n"
+    category = ["admin", "bot", "fun", "misc", "tools", "utils", "extra"]
+    for cat in category:
+        plugins = GRP_INFO[cat]
+        outstr += f"**{hemojis[cat]} {cat.title()} ** - {len(plugins)}\n\n"
+        for plugin in plugins:
+            cmds = PLG_INFO[plugin]
+            outstr += f"• **{plugin.title()} has {len(cmds)} commands**\n"
+            for cmd in cmds:
+                outstr += f"  - `{cmdprefix}{cmd}`\n"
+            outstr += "\n"
+    outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help -c <command name>`"
+    return outstr
+
+
+@catub.cat_cmd(
+    pattern="help ?(-)?(c|p|t)? ?(.*)?",
+    command=("help", plugin_category),
+    info={
+        "header": "To get guide for catuserbot.",
+        "description": "To get information or guide for the command or plugin",
+        "note": "if command name and plugin name is same then you get guide for plugin. So by using this flag you get command guide",
+        "flags": {
+            "c": "To get info of command.",
+            "p": "To get info of plugin.",
+            "t": "To get all plugins in text format."
+        },
+        "usage": [
+            "{tr}help (plugin/command name)",
+            "{tr}help -c (command name)",
+        ],
+        "examples": ["{tr}help help", "{tr}help -c help"],
+    },
+)
+async def _(event):
+    "To get guide for catuserbot."
+    flag = event.pattern_match.group(2)
+    input_str = event.pattern_match.group(3)
+    reply_to_id = await reply_id(event)
+    if flag and flag == "-c" and input_str:
+        outstr = await cmdinfo(input_str, event)
+        if outstr is None:
             return
-        await event.edit(string.format(count=catcount, plugincount=plugincount))
-        return
-    if input_str:
-        if input_str in CMD_LIST:
-            string = "<b>{count} Commands found in plugin {input_str}:</b>\n\n"
-            catcount = 0
-            for i in CMD_LIST[input_str]:
-                string += f"  •  <code>{i}</code>"
-                string += "\n"
-                catcount += 1
-            await event.edit(
-                string.format(count=catcount, input_str=input_str), parse_mode="HTML"
-            )
-        else:
-            await event.edit(input_str + " is not a valid plugin!")
-            await asyncio.sleep(3)
-            await event.delete()
+    elif input_str:
+        outstr = await plugininfo(input_str, event, flag)
+        if outstr is None:
+            return
     else:
-        if HELPTYPE is True:
-            help_string = f"Userbot Helper. Provided by {ALIVE_NAME} to reveal all the plugins\
-                          \nCheck `.help plugin name` for commands, in case popup doesn't appear.\
-                          \nCheck `.info plugin name` for usage of thoose plugins and commands"
-            tgbotusername = Config.TG_BOT_USERNAME
-            results = await event.client.inline_query(tgbotusername, help_string)
+        if flag =="t":
+            outstr = await grpinfo()
+        else:
+            results = await event.client.inline_query(Config.TG_BOT_USERNAME, "help")
             await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
             await event.delete()
-        else:
-            string = "<b>Please specify which plugin do you want help for !!\
-                \nNumber of plugins : </b><code>{count}</code>\
-                \n<b>Usage:</b> <code>.help plugin name</code> \n\n"
-            catcount = 0
-            for i in sorted(CMD_LIST):
-                string += "◆ " + f"<code>{str(i)}</code>"
-                string += " "
-                catcount += 1
-            await event.edit(string.format(count=catcount), parse_mode="HTML")
+            return 
+    await edit_or_reply(event, outstr)
 
 
-@bot.on(sudo_cmd(allow_sudo=True, pattern="help ?(.*)"))
-async def info(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    if input_str == "text":
-        string = "Total {count} commands found in {plugincount} sudo plugins of catuserbot\n\n"
-        catcount = 0
-        plugincount = 0
-        for i in sorted(SUDO_LIST):
-            plugincount += 1
-            string += f"{plugincount}) Commands found in Plugin " + i + " are \n"
-            for iter_list in SUDO_LIST[i]:
-                string += "    " + str(iter_list)
-                string += "\n"
-                catcount += 1
-            string += "\n"
-        if len(string) > 4095:
-            data = string.format(count=catcount, plugincount=plugincount)
-            key = (
-                requests.post(
-                    "https://nekobin.com/api/documents", json={"content": data}
-                )
-                .json()
-                .get("result")
-                .get("key")
-            )
-            url = f"https://nekobin.com/{key}"
-            reply_text = f"All commands of the catuserbot are [here]({url})"
-            await event.reply(reply_text, link_preview=False)
-            return
-        await event.reply(
-            string.format(count=catcount, plugincount=plugincount), link_preview=False
-        )
-        return
-    if input_str:
-        if input_str in SUDO_LIST:
-            string = "<b>{count} Commands found in plugin {input_str}:</b>\n\n"
-            catcount = 0
-            for i in SUDO_LIST[input_str]:
-                string += f"  •  <code>{i}</code>"
-                string += "\n"
-                catcount += 1
-            await event.reply(
-                string.format(count=catcount, input_str=input_str), parse_mode="HTML"
-            )
-        else:
-            reply = await event.reply(input_str + " is not a valid plugin!")
-            await asyncio.sleep(3)
-            await event.delete()
-            await reply.delete()
-    else:
-        string = "<b>Please specify which plugin do you want help for !!\
-            \nNumber of plugins : </b><code>{count}</code>\
-            \n<b>Usage:</b> <code>.help plugin name</code>\n\n"
-        catcount = 0
-        for i in sorted(SUDO_LIST):
-            string += "◆ " + f"<code>{str(i)}</code>"
-            string += " "
-            catcount += 1
-        await event.reply(string.format(count=catcount), parse_mode="HTML")
-
-
-@bot.on(admin_cmd(outgoing=True, pattern="info ?(.*)"))
-@bot.on(sudo_cmd(pattern="info ?(.*)", allow_sudo=True))
-async def info(event):
-    if event.fwd_from:
-        return
-    args = event.pattern_match.group(1).lower()
-    if args:
-        if args in CMD_HELP:
-            await edit_or_reply(event, str(CMD_HELP[args]))
-        else:
-            event = await edit_or_reply(event, "Please specify a valid plugin name.")
-            await asyncio.sleep(3)
-            await event.delete()
-    else:
-        string = "<b>Please specify which plugin do you want help for !!\
-            \nNumber of plugins : </b><code>{count}</code>\
-            \n<b>Usage : </b><code>.info plugin name</code>\n\n"
-        catcount = 0
-        for i in sorted(CMD_HELP):
-            string += "◆ " + f"<code>{str(i)}</code>"
-            string += " "
-            catcount += 1
-        if event.sender_id in Config.SUDO_USERS:
-            await event.reply(string.format(count=catcount), parse_mode="HTML")
-        else:
-            await event.edit(string.format(count=catcount), parse_mode="HTML")
-
-
-@bot.on(admin_cmd(pattern="dc$"))
-@bot.on(sudo_cmd(pattern="dc$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    result = await event.client(functions.help.GetNearestDcRequest())
-    result = (
-        _format.yaml_format(result)
-        + "\n\n**List Of Telegram Data Centres:**\
-                \nDC1 : Miami FL, USA\
-                \nDC2 : Amsterdam, NL\
-                \nDC3 : Miami FL, USA\
-                \nDC4 : Amsterdam, NL\
-                \nDC5 : Singapore, SG\
-                "
-    )
-    await edit_or_reply(event, result)
-
-
-@bot.on(admin_cmd(outgoing=True, pattern="setinline (true|false)"))
-async def _(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    h_type = input_str == "true"
-    if gvarstatus("HELPTYPE") and gvarstatus("HELPTYPE") == "false":
-        HELPTYPE = False
-    else:
-        HELPTYPE = True
-    if HELPTYPE:
-        if h_type:
-            await event.edit("`inline mode is already enabled`")
-        else:
-            addgvar("HELPTYPE", h_type)
-            await event.edit("`inline mode is disabled`")
-    else:
-        if h_type:
-            addgvar("HELPTYPE", h_type)
-            await event.edit("`inline mode is enabled`")
-        else:
-            await event.edit("`inline mode is already disabled`")
-
-
-CMD_HELP.update(
-    {
-        "help": """**Plugin : **`help`
-
-•  **Syntax : **`.help/.help plugin_name`
-•  **Function : **__If you just type .help then shows you help menu, if plugin name is given then shows you only commands in thst plugin and if you use `.help text` then shows you all commands in your userbot__
-
-•  **Syntax : **`.info/.info plugin_name`
-•  **Function : **__To get details/information/usage of that plugin__
-
-•  **Syntax : **`.dc`
-•  **Function : **__Shows your dc id and dc ids list__
-
-•  **Syntax : **`.setinline (true|false)`
-•  **Function : **__Sets help menu either in inline or text format__"""
-    }
+@catub.cat_cmd(
+    pattern="cmds(?: |$)(.*)",
+    command=("cmds", plugin_category),
+    info={
+        "header": "To show list of cmds.",
+        "description": "if no input is given then will show list of all commands.",
+        "usage": [
+            "{tr}cmds for all cmds",
+            "{tr}cmds <plugin name> for paticular plugin",
+        ],
+    },
 )
+async def _(event):
+    "To get list of commands."
+    input_str = event.pattern_match.group(1)
+    if not input_str:
+        outstr = await cmdlist()
+    else:
+        try:
+            cmds = PLG_INFO[input_str]
+        except KeyError:
+            return await edit_delete(event, "__Invalid plugin name recheck it.__")
+        except Exception as e:
+            return await edit_delete(event, f"**Error**\n`{str(e)}`")
+        outstr = f"• **{input_str.title()} has {len(cmds)} commands**\n"
+        for cmd in cmds:
+            outstr += f"  - `{cmdprefix}{cmd}`\n"
+        outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help -c <command name>`"
+    await edit_or_reply(
+        event, outstr, aslink=True, linktext="Total Commands of Catuserbot are :"
+    )
+
+
+@catub.cat_cmd(
+    pattern="s (.*)",
+    command=("s", plugin_category),
+    info={
+        "header": "To search commands.",
+        "examples": "{tr}s song",
+    },
+)
+async def _(event):
+    "To search commands."
+    cmd = event.pattern_match.group(1)
+    found = [i for i in sorted(list(CMD_INFO)) if cmd in i]
+    if found:
+        out_str = "".join(f"`{i}`    " for i in found)
+        out = f"**I found {len(found)} command(s) for: **`{cmd}`\n\n{out_str}"
+        out += f"\n\n__For more info check {cmdprefix}help -c <command>__"
+    else:
+        out = f"I can't find any such command `{cmd}` in CatUserbot"
+    await edit_or_reply(event, out)
+
+
+@catub.cat_cmd(
+    pattern="dc$",
+    command=("dc", plugin_category),
+    info={
+        "header": "To show dc of your account.",
+        "description": "Dc of your account and list of dc's will be showed",
+        "usage": "{tr}dc",
+    },
+)
+async def _(event):
+    "To get dc of your bot"
+    result = await event.client(functions.help.GetNearestDcRequest())
+    result = f"**Dc details of your account:**\
+              \n**Country :** {result.country}\
+              \n**Current Dc :** {result.this_dc}\
+              \n**Nearest Dc :** {result.nearest_dc}\
+              \n\n**List Of Telegram Data Centres:**\
+              \n**DC1 : **Miami FL, USA\
+              \n**DC2 :** Amsterdam, NL\
+              \n**DC3 :** Miami FL, USA\
+              \n**DC4 :** Amsterdam, NL\
+              \n**DC5 : **Singapore, SG\
+                "
+    await edit_or_reply(event, result)

@@ -1,29 +1,27 @@
 from telethon.tl.types import ChannelParticipantsAdmins
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="tagall$"))
-@bot.on(sudo_cmd(pattern="tagall$", allow_sudo=True))
+from ..helpers.utils import reply_id
+
+plugin_category = "extra"
+
+
+@catub.cat_cmd(
+    pattern="(tagall|all)(?: |$)(.*)",
+    command=("tagall", plugin_category),
+    info={
+        "header": "tags recent 100 persons in the group may not work for all",
+        "usage": [
+            "{tr}all <text>",
+            "{tr}tagall",
+        ],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
-    reply_to_id = event.message
-    if event.reply_to_msg_id:
-        reply_to_id = await event.get_reply_message()
-    mentions = "@all"
-    chat = await event.get_input_chat()
-    async for x in event.client.iter_participants(chat, 100):
-        mentions += f"[\u2063](tg://user?id={x.id})"
-    await reply_to_id.reply(mentions)
-    await event.delete()
-
-
-@bot.on(admin_cmd(pattern="all( (.*)|$)"))
-@bot.on(sudo_cmd(pattern="all( (.*)|$)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+    "To tag all."
     reply_to_id = await reply_id(event)
-    input_str = event.pattern_match.group(1)
+    input_str = event.pattern_match.group(2)
     mentions = input_str or "@all"
     chat = await event.get_input_chat()
     async for x in event.client.iter_participants(chat, 100):
@@ -32,11 +30,16 @@ async def _(event):
     await event.delete()
 
 
-@bot.on(admin_cmd(pattern="report$"))
-@bot.on(sudo_cmd(pattern="report$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="report$",
+    command=("report", plugin_category),
+    info={
+        "header": "To tags admins in group.",
+        "usage": "{tr}report",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To tags admins in group."
     mentions = "@admin: **Spam Spotted**"
     chat = await event.get_input_chat()
     reply_to_id = await reply_id(event)
@@ -49,11 +52,20 @@ async def _(event):
     await event.delete()
 
 
-@bot.on(admin_cmd(pattern="men (.*)"))
-@bot.on(sudo_cmd(pattern="men (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="men (.*)",
+    command=("mention", plugin_category),
+    info={
+        "header": "Tags that person with the given custom text.",
+        "usage": [
+            "{tr}men username/userid text",
+            "text (username/mention)[custom text] text",
+        ],
+        "examples": ["{tr}men @mrconfused hi", "Hi @mrconfused[How are you?]"],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Tags that person with the given custom text."
     input_str = event.pattern_match.group(1)
     reply_to_id = await reply_id(event)
     if event.reply_to_msg_id:
@@ -80,24 +92,3 @@ async def _(event):
         parse_mode="HTML",
         reply_to=reply_to_id,
     )
-
-
-CMD_HELP.update(
-    {
-        "mention": """**Plugin : **`mention`
-
-  •  **Syntax : **`.all`
-  •  **Function : **__tags recent 100 persons in the group may not work for all__  
-
-  •  **Syntax : **`.tagall`
-  •  **Function : **__tags recent 100 persons in the group may not work for all__ 
-
-  •  **Syntax : **`.report`
-  •  **Function : **__tags admins in group__  
-
-  •  **Syntax : **`.men username/userid text`
-  •  **Function : **__tags that person with the given custom text other way for this is __
-  •  **syntax : **`Hi username[custom text]`
-"""
-    }
-)

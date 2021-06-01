@@ -1,11 +1,20 @@
 # pm and tagged messages logger for catuserbot by @mrconfused (@sandy1709)
 import asyncio
 
-from telethon import events
+from userbot import catub
+from userbot.core.logger import logging
 
-from . import BOTLOG, BOTLOG_CHATID, LOGS
-from .sql_helper import no_log_pms_sql
-from .sql_helper.globals import addgvar, gvarstatus
+from ..Config import Config
+from ..core.managers import edit_delete
+from ..helpers.tools import media_type
+from ..helpers.utils import _format
+from ..sql_helper import no_log_pms_sql
+from ..sql_helper.globals import addgvar, gvarstatus
+from . import BOTLOG, BOTLOG_CHATID
+
+LOGS = logging.getLogger(__name__)
+
+plugin_category = "utils"
 
 
 class LOG_CHATS:
@@ -18,8 +27,8 @@ class LOG_CHATS:
 LOG_CHATS_ = LOG_CHATS()
 
 
-@bot.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
-async def monito_p_m_s(event):
+@catub.cat_cmd(incoming=True, func=lambda e: e.is_private, edited=False, forword=None)
+async def monito_p_m_s(event):  # sourcery no-metrics
     if not Config.PM_LOGGER_GROUP_ID:
         return
     if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
@@ -58,7 +67,7 @@ async def monito_p_m_s(event):
                 LOGS.warn(str(e))
 
 
-@bot.on(events.NewMessage(incoming=True, func=lambda e: e.mentioned))
+@catub.cat_cmd(incoming=True, func=lambda e: e.mentioned, edited=False, forword=None)
 async def log_tagged_messages(event):
     hmm = await event.get_chat()
     from .afk import AFK_
@@ -97,8 +106,19 @@ async def log_tagged_messages(event):
         )
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"save(?: |$)(.*)"))
+@catub.cat_cmd(
+    pattern="save(?: |$)(.*)",
+    command=("save", plugin_category),
+    info={
+        "header": "To log the replied message to bot log group so you can check later.",
+        "description": "Set PRIVATE_GROUP_BOT_API_ID in vars for functioning of this",
+        "usage": [
+            "{tr}save",
+        ],
+    },
+)
 async def log(log_text):
+    "To log the replied message to bot log group"
     if BOTLOG:
         if log_text.reply_to_msg_id:
             reply_msg = await log_text.get_reply_message()
@@ -117,8 +137,19 @@ async def log(log_text):
     await log_text.delete()
 
 
-@bot.on(admin_cmd(pattern="log$"))
+@catub.cat_cmd(
+    pattern="log$",
+    command=("log", plugin_category),
+    info={
+        "header": "To turn on logging of messages from that chat.",
+        "description": "Set PM_LOGGER_GROUP_ID in vars to work this",
+        "usage": [
+            "{tr}log",
+        ],
+    },
+)
 async def set_no_log_p_m(event):
+    "To turn on logging of messages from that chat."
     if Config.PM_LOGGER_GROUP_ID is not None:
         chat = await event.get_chat()
         if no_log_pms_sql.is_approved(chat.id):
@@ -128,8 +159,19 @@ async def set_no_log_p_m(event):
             )
 
 
-@bot.on(admin_cmd(pattern="nolog$"))
+@catub.cat_cmd(
+    pattern="nolog$",
+    command=("nolog", plugin_category),
+    info={
+        "header": "To turn off logging of messages from that chat.",
+        "description": "Set PM_LOGGER_GROUP_ID in vars to work this",
+        "usage": [
+            "{tr}nolog",
+        ],
+    },
+)
 async def set_no_log_p_m(event):
+    "To turn off logging of messages from that chat."
     if Config.PM_LOGGER_GROUP_ID is not None:
         chat = await event.get_chat()
         if not no_log_pms_sql.is_approved(chat.id):
@@ -139,10 +181,20 @@ async def set_no_log_p_m(event):
             )
 
 
-@bot.on(admin_cmd(pattern="pmlog (on|off)$"))
+@catub.cat_cmd(
+    pattern="pmlog (on|off)$",
+    command=("pmlog", plugin_category),
+    info={
+        "header": "To turn on or turn off logging of Private messages in pmlogger group.",
+        "description": "Set PM_LOGGER_GROUP_ID in vars to work this",
+        "usage": [
+            "{tr}pmlog on",
+            "{tr}pmlog off",
+        ],
+    },
+)
 async def set_pmlog(event):
-    if event.fwd_from:
-        return
+    "To turn on or turn off logging of Private messages"
     input_str = event.pattern_match.group(1)
     if input_str == "off":
         h_type = False
@@ -166,10 +218,20 @@ async def set_pmlog(event):
             await event.edit("`Pm logging is already disabled`")
 
 
-@bot.on(admin_cmd(pattern="grplog (on|off)$"))
+@catub.cat_cmd(
+    pattern="grplog (on|off)$",
+    command=("grplog", plugin_category),
+    info={
+        "header": "To turn on or turn off group tags logging in pmlogger group.",
+        "description": "Set PM_LOGGER_GROUP_ID in vars to work this",
+        "usage": [
+            "{tr}grplog on",
+            "{tr}grplog off",
+        ],
+    },
+)
 async def set_grplog(event):
-    if event.fwd_from:
-        return
+    "To turn on or turn off group tags logging"
     input_str = event.pattern_match.group(1)
     if input_str == "off":
         h_type = False
@@ -191,20 +253,3 @@ async def set_grplog(event):
             await event.edit("`Group logging is enabled`")
         else:
             await event.edit("`Group logging is already disabled`")
-
-
-CMD_HELP.update(
-    {
-        "logchats": "**Plugin : **`logchats`\
-        \n\n•  **Syntax : **`.save`\
-        \n•  **Function : **__Saves tagged message in private group .__\
-        \n\n•  **Syntax : **`.log`\
-        \n•  **Function : **__By default will log all private chat messages if you use .nolog and want to log again then you need to use this__\
-        \n\n•  **Syntax : **`.nolog`\
-        \n•  **Function : **__Stops logging from a private chat or group where you used__\
-        \n\n•  **Syntax : **`.pmlog on/off`\
-        \n•  **Function : **__To turn on and turn off personal messages logging__\
-        \n\n•  **Syntax : **`.nolog`\
-        \n•  **Function : **__To turn on and turn off Group messages(tagged) logging__"
-    }
-)

@@ -1,25 +1,41 @@
+import re
 import time
 from platform import python_version
 
 from telethon import version
+from telethon.events import CallbackQuery
 
-from . import ALIVE_NAME, StartTime, catversion, get_readable_time, mention, reply_id
+from userbot import StartTime, catub, catversion
 
-DEFAULTUSER = ALIVE_NAME or "cat"
-CAT_IMG = Config.ALIVE_PIC
+from ..Config import Config
+from ..core.managers import edit_or_reply
+from ..helpers.functions import catalive, check_data_base_heal_th, get_readable_time
+from ..helpers.utils import reply_id
+from . import mention
+
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
 EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
 
+plugin_category = "utils"
 
-@bot.on(admin_cmd(outgoing=True, pattern="alive$"))
-@bot.on(sudo_cmd(pattern="alive$", allow_sudo=True))
-async def amireallyalive(alive):
-    if alive.fwd_from:
-        return
-    reply_to_id = await reply_id(alive)
+
+@catub.cat_cmd(
+    pattern="alive$",
+    command=("alive", plugin_category),
+    info={
+        "header": "To check bot's alive status",
+        "options": "To show media in this cmd you need to set ALIVE_PIC with media link, get this by replying the media by .tgm",
+        "usage": [
+            "{tr}alive",
+        ],
+    },
+)
+async def amireallyalive(event):
+    "A kind of showing bot details"
+    reply_to_id = await reply_id(event)
     uptime = await get_readable_time((time.time() - StartTime))
     _, check_sgnirts = check_data_base_heal_th()
-    if CAT_IMG:
+    if Config.ALIVE_PIC:
         cat_caption = f"**{CUSTOM_ALIVE_TEXT}**\n\n"
         cat_caption += f"**{EMOJI} Database :** `{check_sgnirts}`\n"
         cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
@@ -27,13 +43,13 @@ async def amireallyalive(alive):
         cat_caption += f"**{EMOJI} Python Version :** `{python_version()}\n`"
         cat_caption += f"**{EMOJI} Uptime :** `{uptime}\n`"
         cat_caption += f"**{EMOJI} Master:** {mention}\n"
-        await alive.client.send_file(
-            alive.chat_id, CAT_IMG, caption=cat_caption, reply_to=reply_to_id
+        await event.client.send_file(
+            event.chat_id, Config.ALIVE_PIC, caption=cat_caption, reply_to=reply_to_id
         )
-        await alive.delete()
+        await event.delete()
     else:
         await edit_or_reply(
-            alive,
+            event,
             f"**{CUSTOM_ALIVE_TEXT}**\n\n"
             f"**{EMOJI} Database :** `{check_sgnirts}`\n"
             f"**{EMOJI} Telethon Version :** `{version.__version__}\n`"
@@ -44,61 +60,31 @@ async def amireallyalive(alive):
         )
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="ialive$"))
-@bot.on(sudo_cmd(pattern="ialive$", allow_sudo=True))
-async def amireallyalive(alive):
-    if alive.fwd_from:
-        return
-    tgbotusername = Config.TG_BOT_USERNAME
-    reply_to_id = await reply_id(alive)
-    cat_caption = f"**Catuserbot is Up and Running**\n"
-    cat_caption += f"**  -Telethon version :** `{version.__version__}\n`"
-    cat_caption += f"**  -Catuserbot Version :** `{catversion}`\n"
-    cat_caption += f"**  -Python Version :** `{python_version()}\n`"
-    cat_caption += f"**  -Master:** {mention}\n"
-    results = await bot.inline_query(tgbotusername, cat_caption)  # pylint:disable=E0602
-    await results[0].click(alive.chat_id, reply_to=reply_to_id, hide_via=True)
-    await alive.delete()
-
-
-# UniBorg Telegram UseRBot
-# Copyright (C) 2020 @UniBorg
-# This code is licensed under
-# the "you can't use this for anything - public or private,
-# unless you know the two prime factors to the number below" license
-# 543935563961418342898620676239017231876605452284544942043082635399903451854594062955
-# വിവരണം അടിച്ചുമാറ്റിക്കൊണ്ട് പോകുന്നവർ
-# ക്രെഡിറ്റ് വെച്ചാൽ സന്തോഷമേ ഉള്ളു..!
-# uniborg
-
-
-def check_data_base_heal_th():
-    # https://stackoverflow.com/a/41961968
-    is_database_working = False
-    output = "No Database is set"
-    if not Config.DB_URI:
-        return is_database_working, output
-    from userbot.plugins.sql_helper import SESSION
-
-    try:
-        # to check database we will execute raw query
-        SESSION.execute("SELECT 1")
-    except Exception as e:
-        output = f"❌ {str(e)}"
-        is_database_working = False
-    else:
-        output = "Functioning Normally"
-        is_database_working = True
-    return is_database_working, output
-
-
-CMD_HELP.update(
-    {
-        "alive": "**Plugin :** `alive`\
-      \n\n  •  **Syntax : **`.alive` \
-      \n  •  **Function : **__status of bot will be showed__\
-      \n\n  •  **Syntax : **`.ialive` \
-      \n  •  **Function : **__inline status of bot will be shown.__\
-      \nSet `ALIVE_PIC` var for media in alive message"
-    }
+@catub.cat_cmd(
+    pattern="ialive$",
+    command=("ialive", plugin_category),
+    info={
+        "header": "To check bot's alive status via inline mode",
+        "options": "To show media in this cmd you need to set ALIVE_PIC with media link, get this by replying the media by .tgm",
+        "usage": [
+            "{tr}alive",
+        ],
+    },
 )
+async def amireallyalive(event):
+    "A kind of showing bot details by your inline bot"
+    reply_to_id = await reply_id(event)
+    cat_caption = f"**Catuserbot is Up and Running**\n"
+    cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
+    cat_caption += f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
+    cat_caption += f"**{EMOJI} Python Version :** `{python_version()}\n`"
+    cat_caption += f"**{EMOJI} Master:** {mention}\n"
+    results = await event.client.inline_query(Config.TG_BOT_USERNAME, cat_caption)
+    await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+    await event.delete()
+
+
+@catub.tgbot.on(CallbackQuery(data=re.compile(b"stats")))
+async def on_plug_in_callback_query_handler(event):
+    statstext = await catalive(StartTime)
+    await event.answer(statstext, cache_time=0, alert=True)

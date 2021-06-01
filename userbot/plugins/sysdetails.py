@@ -1,6 +1,7 @@
 """Get the info your system. Using .neofetch then .sysd"""
 
 # .spc command is ported from  alfianandaa/ProjectAlf
+
 import platform
 import sys
 from datetime import datetime
@@ -8,16 +9,32 @@ from datetime import datetime
 import psutil
 from telethon import __version__
 
-from . import ALIVE_NAME
+from userbot import catub
 
-# ================= CONSTANT =================
-DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "cat"
-# ============================================
+from ..core.managers import edit_or_reply
+from ..helpers.utils import _catutils
+
+plugin_category = "tools"
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"spc$"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern=r"spc$"))
+def get_size(inputbytes, suffix="B"):
+    factor = 1024
+    for unit in ["", "K", "M", "G", "T", "P"]:
+        if inputbytes < factor:
+            return f"{inputbytes:.2f}{unit}{suffix}"
+        inputbytes /= factor
+
+
+@catub.cat_cmd(
+    pattern="spc$",
+    command=("spc", plugin_category),
+    info={
+        "header": "To show system specification.",
+        "usage": "{tr}spc",
+    },
+)
 async def psu(event):
+    "shows system specification"
     uname = platform.uname()
     softw = "**System Information**\n"
     softw += f"`System   : {uname.system}`\n"
@@ -64,19 +81,16 @@ async def psu(event):
     await event.edit(help_string)
 
 
-def get_size(inputbytes, suffix="B"):
-    factor = 1024
-    for unit in ["", "K", "M", "G", "T", "P"]:
-        if inputbytes < factor:
-            return f"{inputbytes:.2f}{unit}{suffix}"
-        inputbytes /= factor
-
-
-@bot.on(admin_cmd(pattern="cpu$"))
-@bot.on(sudo_cmd(pattern="cpu$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="cpu$",
+    command=("cpu", plugin_category),
+    info={
+        "header": "To show cpu information.",
+        "usage": "{tr}cpu",
+    },
+)
+async def cpu(event):
+    "shows cpu information"
     cmd = "cat /proc/cpuinfo | grep 'model name'"
     o = (await _catutils.runcmd(cmd))[0]
     await edit_or_reply(
@@ -84,27 +98,21 @@ async def _(event):
     )
 
 
-@bot.on(admin_cmd(pattern=f"sysd$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"sysd$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="sysd$",
+    command=("sysd", plugin_category),
+    info={
+        "header": "Shows system information using neofetch",
+        "usage": "{tr}cpu",
+    },
+)
 async def sysdetails(sysd):
+    "Shows system information using neofetch"
+    catevent = await edit_or_reply(sysd, "`Fectching system information.`")
     cmd = "git clone https://github.com/dylanaraps/neofetch.git"
     await _catutils.runcmd(cmd)
     neo = "neofetch/neofetch --off --color_blocks off --bold off --cpu_temp C \
                     --cpu_speed on --cpu_cores physical --kernel_shorthand off --stdout"
     a, b, c, d = await _catutils.runcmd(neo)
     result = str(a) + str(b)
-    await edit_or_reply(sysd, "Neofetch Result: `" + result + "`")
-
-
-CMD_HELP.update(
-    {
-        "sysdetails": "**Plugin : **`sysdetails`\
-        \n\n**Syntax : **`.spc`\
-        \n**Function : **__Show system specification.__\
-        \n\n**Syntax : **`.sysd`\
-        \n**Function : **__Shows system information using neofetch.__\
-        \n\n**Syntax : **`.cpu`\
-        \n**Function : **__shows the cpu information__\
-    "
-    }
-)
+    await edit_or_reply(catevent, "**Neofetch Result:** `" + result + "`")

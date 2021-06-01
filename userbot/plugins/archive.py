@@ -1,130 +1,21 @@
-# by @mrconfused and some part by @furki
-
 import asyncio
+import io
 import os
-import shutil
-import tarfile
 import time
 import zipfile
 from datetime import datetime
 from pathlib import Path
+from tarfile import is_tarfile
+from tarfile import open as tar_open
 
-import patoolib
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
-from telethon.tl.types import DocumentAttributeVideo
+from telethon import types
+from telethon.utils import get_extension
 
-from . import progress
+from ..Config import Config
+from . import catub, edit_delete, edit_or_reply, progress
 
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
-
-
-@bot.on(admin_cmd(pattern=("zip ?(.*)")))
-@bot.on(sudo_cmd(pattern="zip ?(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    mone = await edit_or_reply(event, "Zipping in progress....")
-    if event.reply_to_msg_id:
-        if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-            os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-        reply_message = await event.get_reply_message()
-        try:
-            c_time = time.time()
-            downloaded_file_name = await event.client.download_media(
-                reply_message,
-                Config.TMP_DOWNLOAD_DIRECTORY,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "trying to download")
-                ),
-            )
-            directory_name = downloaded_file_name
-            await mone.edit("Finish downloading to my local")
-            zipfile.ZipFile(directory_name + ".zip", "w", zipfile.ZIP_DEFLATED).write(
-                directory_name
-            )
-            os.remove(directory_name)
-            cat = directory_name + ".zip"
-            await mone.edit(f"compressed successfully into `{cat}`")
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await mone.edit(str(e))
-    elif input_str:
-        if not os.path.exists(input_str):
-            await mone.edit(
-                f"There is no such directory or file with the name `{input_str}` check again"
-            )
-            return
-        filePaths = zipdir(input_str)
-        zip_file = zipfile.ZipFile(input_str + ".zip", "w")
-        with zip_file:
-            for file in filePaths:
-                zip_file.write(file)
-        await mone.edit("Local file compressed to `{}`".format(input_str + ".zip"))
-
-
-@bot.on(admin_cmd(pattern="unzip ?(.*)"))
-@bot.on(sudo_cmd(pattern="unzip ?(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    mone = await edit_or_reply(event, "Processing ...")
-    if input_str:
-        path = Path(input_str)
-        if os.path.exists(path):
-            start = datetime.now()
-            if not zipfile.is_zipfile(path):
-                await mone.edit(
-                    f"`the given file {str(path)} is not zip file to unzip`"
-                )
-            destination = os.path.join(
-                Config.TMP_DOWNLOAD_DIRECTORY,
-                os.path.splitext(os.path.basename(path))[0],
-            )
-            with zipfile.ZipFile(path, "r") as zip_ref:
-                zip_ref.extractall(destination)
-            end = datetime.now()
-            ms = (end - start).seconds
-            await mone.edit(
-                f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`"
-            )
-        else:
-            await mone.edit(f"I can't find that path `{input_str}`")
-    else:
-        if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-            os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-        if event.reply_to_msg_id:
-            start = datetime.now()
-            reply_message = await event.get_reply_message()
-            try:
-                c_time = time.time()
-                path = await event.client.download_media(
-                    reply_message,
-                    Config.TMP_DOWNLOAD_DIRECTORY,
-                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, mone, c_time, "trying to download")
-                    ),
-                )
-            except Exception as e:
-                await mone.edit(str(e))
-            await mone.edit("Unzipping now")
-            if not zipfile.is_zipfile(path):
-                await mone.edit(
-                    f"`the given file {str(path)} is not zip file to unzip`"
-                )
-            destination = os.path.join(
-                Config.TMP_DOWNLOAD_DIRECTORY,
-                os.path.splitext(os.path.basename(path))[0],
-            )
-            with zipfile.ZipFile(path, "r") as zip_ref:
-                zip_ref.extractall(destination)
-            end = datetime.now()
-            ms = (end - start).seconds
-            await mone.edit(
-                f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`"
-            )
-            os.remove(path)
+plugin_category = "misc"
 
 
 def zipdir(dirName):
@@ -136,286 +27,257 @@ def zipdir(dirName):
     return filePaths
 
 
-@bot.on(admin_cmd(pattern=("rar ?(.*)")))
-@bot.on(sudo_cmd(pattern="rar ?(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    mone = await edit_or_reply(event, "Processing ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        try:
-            c_time = time.time()
-            downloaded_file_name = await event.client.download_media(
-                reply_message,
-                Config.TMP_DOWNLOAD_DIRECTORY,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "trying to download")
-                ),
-            )
-            directory_name = downloaded_file_name
-            await mone.edit("creating rar archive, please wait..")
-            patoolib.create_archive(
-                directory_name + ".rar", (directory_name, Config.TMP_DOWNLOAD_DIRECTORY)
-            )
-            await event.client.send_file(
-                event.chat_id,
-                directory_name + ".rar",
-                caption="rarred By cat",
-                force_document=True,
-                allow_cache=False,
-                reply_to=event.message.id,
-            )
-            try:
-                os.remove(directory_name + ".rar")
-                os.remove(directory_name)
-            except BaseException:
-                pass
-            await mone.edit("Task Completed")
-            await asyncio.sleep(3)
-            await mone.delete()
-        except Exception as e:
-            await mone.edit(str(e))
-    elif input_str:
-        directory_name = input_str
-        await mone.edit("Local file compressed to `{}`".format(directory_name + ".rar"))
-
-
-@bot.on(admin_cmd(pattern=("tar ?(.*)")))
-@bot.on(sudo_cmd(pattern="tar ?(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
-    mone = await edit_or_reply(event, "Processing ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        try:
-            c_time = time.time()
-            downloaded_file_name = await event.client.download_media(
-                reply_message,
-                Config.TMP_DOWNLOAD_DIRECTORY,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "trying to download")
-                ),
-            )
-            directory_name = downloaded_file_name
-            await mone.edit("Finish downloading to my local")
-            to_upload_file = directory_name
-            output = await create_archive(to_upload_file)
-            is_zip = False
-            if is_zip:
-                check_if_file = await create_archive(to_upload_file)
-                if check_if_file is not None:
-                    to_upload_file = check_if_file
-            await event.client.send_file(
-                event.chat_id,
-                output,
-                caption="TAR By cat",
-                force_document=True,
-                allow_cache=False,
-                reply_to=event.message.id,
-            )
-            try:
-                os.remove(output)
-                os.remove(output)
-            except BaseException:
-                pass
-            await mone.edit("Task Completed")
-            await asyncio.sleep(3)
-            await mone.delete()
-        except Exception as e:
-            await mone.edit(str(e))
-    elif input_str:
-        directory_name = input_str
-        await mone.edit("Local file compressed to `{}`".format(output))
-
-
-async def create_archive(input_directory):
-    return_name = None
-    if os.path.exists(input_directory):
-        base_dir_name = os.path.basename(input_directory)
-        compressed_file_name = f"{base_dir_name}.tar.gz"
-        compressed_file_name += ".tar.gz"
-        file_genertor_command = [
-            "tar",
-            "-zcvf",
-            compressed_file_name,
-            f"{input_directory}",
-        ]
-        process = await asyncio.create_subprocess_exec(
-            *file_genertor_command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-        )
-        stdout, stderr = await process.communicate()
-        stderr.decode().strip()
-        stdout.decode().strip()
-        if os.path.exists(compressed_file_name):
-            try:
-                shutil.rmtree(input_directory)
-            except BaseException:
-                pass
-            return_name = compressed_file_name
-    return return_name
-
-
-@bot.on(admin_cmd(pattern="unrar"))
-@bot.on(sudo_cmd(pattern="unrar", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    mone = await edit_or_reply(event, "Processing ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if event.reply_to_msg_id:
-        start = datetime.now()
-        reply_message = await event.get_reply_message()
-        try:
-            c_time = time.time()
-            downloaded_file_name = await event.client.download_media(
-                reply_message,
-                Config.TMP_DOWNLOAD_DIRECTORY,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "trying to download")
-                ),
-            )
-        except Exception as e:
-            await mone.edit(str(e))
-        else:
-            end = datetime.now()
-            ms = (end - start).seconds
-            await mone.edit(
-                "Stored the rar to `{}` in {} seconds.".format(downloaded_file_name, ms)
-            )
-        patoolib.extract_archive(downloaded_file_name, outdir=extracted)
-        filename = sorted(get_lst_of_files(extracted, []))
-        await mone.edit("Unraring now")
-        for single_file in filename:
-            if os.path.exists(single_file):
-                # https://stackoverflow.com/a/678242/4723940
-                caption_rts = os.path.basename(single_file)
-                force_document = True
-                supports_streaming = False
-                document_attributes = []
-                if single_file.endswith((".mp4", ".mp3", ".flac", ".webm")):
-                    metadata = extractMetadata(createParser(single_file))
-                    duration = 0
-                    width = 0
-                    height = 0
-                    if metadata.has("duration"):
-                        duration = metadata.get("duration").seconds
-                    if os.path.exists(thumb_image_path):
-                        metadata = extractMetadata(createParser(thumb_image_path))
-                        if metadata.has("width"):
-                            width = metadata.get("width")
-                        if metadata.has("height"):
-                            height = metadata.get("height")
-                    document_attributes = [
-                        DocumentAttributeVideo(
-                            duration=duration,
-                            w=width,
-                            h=height,
-                            round_message=False,
-                            supports_streaming=True,
-                        )
-                    ]
-                try:
-                    await event.client.send_file(
-                        event.chat_id,
-                        single_file,
-                        caption=f"UnRarred `{caption_rts}`",
-                        force_document=force_document,
-                        supports_streaming=supports_streaming,
-                        allow_cache=False,
-                        reply_to=event.message.id,
-                        attributes=document_attributes,
-                        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                            progress(d, t, event, c_time, "trying to upload")
-                        ),
-                    )
-                except Exception as e:
-                    await event.client.send_message(
-                        event.chat_id,
-                        "{} caused `{}`".format(caption_rts, str(e)),
-                        reply_to=event.message.id,
-                    )
-                    # some media were having some issues
-                    continue
-                os.remove(single_file)
-        os.remove(downloaded_file_name)
-        await mone.edit("DONE!!!")
-        await asyncio.sleep(5)
-        await mone.delete()
-
-
-@bot.on(admin_cmd(pattern="untar"))
-@bot.on(sudo_cmd(pattern="untar", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    mone = await edit_or_reply(event, "Processing ...")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    extracted = Config.TMP_DOWNLOAD_DIRECTORY + "extracted/"
-    if not os.path.isdir(extracted):
-        os.makedirs(extracted)
-    if event.reply_to_msg_id:
-        start = datetime.now()
-        reply_message = await event.get_reply_message()
-        try:
-            c_time = time.time()
-            downloaded_file_name = await event.client.download_media(
-                reply_message,
-                Config.TMP_DOWNLOAD_DIRECTORY,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "trying to download")
-                ),
-            )
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await mone.edit(str(e))
-        else:
-            end = datetime.now()
-            ms = (end - start).seconds
-            await mone.edit(
-                "Stored the tar to `{}` in {} seconds.".format(downloaded_file_name, ms)
-            )
-        with tarfile.TarFile.open(downloaded_file_name, "r") as tar_file:
-            tar_file.extractall()
-        await mone.edit(f"unzipped and stored to `{downloaded_file_name[:-4]}`")
-        os.remove(downloaded_file_name)
-
-
-def get_lst_of_files(input_directory, output_lst):
-    filesinfolder = os.listdir(input_directory)
-    for file_name in filesinfolder:
-        current_file_name = os.path.join(input_directory, file_name)
-        if os.path.isdir(current_file_name):
-            return get_lst_of_files(current_file_name, output_lst)
-        output_lst.append(current_file_name)
-    return output_lst
-
-
-CMD_HELP.update(
-    {
-        "archive": "**Plugin : **`archive`\
-    \n\n  •  **Syntax : **`.zip (reply/path)`\
-    \n  •  **Usage : **it will zip that file which you replied or will zip the folder/file in the given path\
-    \n\n  •  **Syntax : **`.unzip (reply to zip file/path`\
-    \n  •  **Usage : **it will unzip that zip file or the zip file in the given path\
-    \n\n  •  **Syntax : **`.rar reply to a file/media`\
-    \n  •  **Usage : **it will rar that file/media\
-    \n\n  •  **Syntax : **`.tar reply to a file/media`\
-    \n  •  **Usage : **it will tar that file/media\
-    \n\n  •  **Syntax : **`.unrar reply to a .rar file`\
-    \n  •  **Usage : **it will unrar that .rar file\
-    \n\n  •  **Syntax : **`.untar reply to a .tar`\
-    \n  •  **Usage : **it will untar that .tar file\
-"
-    }
+@catub.cat_cmd(
+    pattern="zip(?: |$)(.*)",
+    command=("zip", plugin_category),
+    info={
+        "header": "To compress the file/folders",
+        "description": "Will create a zip file for the given file path or folder path",
+        "usage": [
+            "{tr}zip <file/folder path>",
+        ],
+        "examples": ["{tr}zip downloads", "{tr}zip sample_config.py"],
+    },
 )
+async def zip_file(event):
+    "To create zip file"
+    input_str = event.pattern_match.group(1)
+    if not input_str:
+        return await edit_delete(event, "`Provide file path to zip`")
+    start = datetime.now()
+    if not os.path.exists(Path(input_str)):
+        return await edit_or_reply(
+            event,
+            f"There is no such directory or file with the name `{input_str}` check again",
+        )
+    if os.path.isfile(Path(input_str)):
+        return await edit_delete(event, "`File compressing is not implemented yet`")
+    mone = await edit_or_reply(event, "`Zipping in progress....`")
+    filePaths = zipdir(input_str)
+    filepath = os.path.join(
+        Config.TMP_DOWNLOAD_DIRECTORY, os.path.basename(Path(input_str))
+    )
+    zip_file = zipfile.ZipFile(filepath + ".zip", "w")
+    with zip_file:
+        for file in filePaths:
+            zip_file.write(file)
+    end = datetime.now()
+    ms = (end - start).seconds
+    await mone.edit(
+        f"Zipped the path `{input_str}` into `{filepath+'.zip'}` in __{ms}__ Seconds"
+    )
+
+
+@catub.cat_cmd(
+    pattern="tar(?: |$)(.*)",
+    command=("tar", plugin_category),
+    info={
+        "header": "To compress the file/folders to tar file",
+        "description": "Will create a tar file for the given file path or folder path",
+        "usage": [
+            "{tr}tar <file/folder path>",
+        ],
+        "examples": ["{tr}tar downloads", "{tr}tar sample_config.py"],
+    },
+)
+async def tar_file(event):
+    "To create tar file"
+    input_str = event.pattern_match.group(1)
+    if not input_str:
+        return await edit_delete(event, "`Provide file path to compress`")
+    if not os.path.exists(Path(input_str)):
+        return await edit_or_reply(
+            event,
+            f"There is no such directory or file with the name `{input_str}` check again",
+        )
+    if os.path.isfile(Path(input_str)):
+        return await edit_delete(event, "`File compressing is not implemented yet`")
+    mone = await edit_or_reply(event, "`Tar creation in progress....`")
+    start = datetime.now()
+    filePaths = zipdir(input_str)
+    filepath = os.path.join(
+        Config.TMP_DOWNLOAD_DIRECTORY, os.path.basename(Path(input_str))
+    )
+    destination = f"{filepath}.tar.gz"
+    zip_file = tar_open(destination, "w:gz")
+    with zip_file:
+        for file in filePaths:
+            zip_file.add(file)
+    end = datetime.now()
+    ms = (end - start).seconds
+    await mone.edit(
+        f"Created a tar file for the given path {input_str} as `{destination}` in __{ms}__ Seconds"
+    )
+
+
+@catub.cat_cmd(
+    pattern="unzip(?: |$)(.*)",
+    command=("unzip", plugin_category),
+    info={
+        "header": "To unpack the given zip file",
+        "description": "Reply to a zip file or provide zip file path with command to unzip the given file",
+        "usage": [
+            "{tr}unzip <reply/file path>",
+        ],
+    },
+)
+async def zip_file(event):  # sourcery no-metrics
+    "To unpack the zip file"
+    input_str = event.pattern_match.group(1)
+    if input_str:
+        path = Path(input_str)
+        if os.path.exists(path):
+            start = datetime.now()
+            if not zipfile.is_zipfile(path):
+                return await edit_delete(
+                    event, f"`The Given path {str(path)} is not zip file to unpack`"
+                )
+            mone = await edit_or_reply(event, "`Unpacking....`")
+            destination = os.path.join(
+                Config.TMP_DOWNLOAD_DIRECTORY,
+                os.path.splitext(os.path.basename(path))[0],
+            )
+            with zipfile.ZipFile(path, "r") as zip_ref:
+                zip_ref.extractall(destination)
+            end = datetime.now()
+            ms = (end - start).seconds
+            await mone.edit(
+                f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`"
+            )
+        else:
+            await edit_delete(event, f"I can't find that path `{input_str}`", 10)
+    elif event.reply_to_msg_id:
+        start = datetime.now()
+        reply = await event.get_reply_message()
+        ext = get_extension(reply.document)
+        if ext != ".zip":
+            return await edit_delete(
+                event,
+                "`The replied file is not a zip file recheck the replied message`",
+            )
+        mone = await edit_or_reply(event, "`Unpacking....`")
+        for attr in getattr(reply.document, "attributes", []):
+            if isinstance(attr, types.DocumentAttributeFilename):
+                filename = attr.file_name
+        filename = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, filename)
+        c_time = time.time()
+        try:
+            dl = io.FileIO(filename, "a")
+            await event.client.fast_download_file(
+                location=reply.document,
+                out=dl,
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, mone, c_time, "trying to download")
+                ),
+            )
+            dl.close()
+        except Exception as e:
+            return await edit_delete(mone, f"**Error:**\n__{str(e)}__")
+        await mone.edit("`Download finished Unpacking now`")
+        destination = os.path.join(
+            Config.TMP_DOWNLOAD_DIRECTORY,
+            os.path.splitext(os.path.basename(filename))[0],
+        )
+        with zipfile.ZipFile(filename, "r") as zip_ref:
+            zip_ref.extractall(destination)
+        end = datetime.now()
+        ms = (end - start).seconds
+        await mone.edit(
+            f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`"
+        )
+        os.remove(filename)
+    else:
+        await edit_delete(
+            mone,
+            "`Either reply to the zipfile or provide path of zip file along with command`",
+        )
+
+
+@catub.cat_cmd(
+    pattern="untar(?: |$)(.*)",
+    command=("untar", plugin_category),
+    info={
+        "header": "To unpack the given tar file",
+        "description": "Reply to a tar file or provide tar file path with command to unpack the given tar file",
+        "usage": [
+            "{tr}untar <reply/file path>",
+        ],
+    },
+)
+async def untar_file(event):  # sourcery no-metrics
+    "To unpack the tar file"
+    input_str = event.pattern_match.group(1)
+    if input_str:
+        path = Path(input_str)
+        if os.path.exists(path):
+            start = datetime.now()
+            if not is_tarfile(path):
+                return await edit_delete(
+                    event, f"`The Given path {str(path)} is not tar file to unpack`"
+                )
+            mone = await edit_or_reply(event, "`Unpacking....`")
+            destination = os.path.join(
+                Config.TMP_DOWNLOAD_DIRECTORY, (os.path.basename(path).split("."))[0]
+            )
+            if not os.path.exists(destination):
+                os.mkdir(destination)
+            file = tar_open(path)
+            # extracting file
+            file.extractall(destination)
+            file.close()
+            end = datetime.now()
+            ms = (end - start).seconds
+            await mone.edit(
+                f"**Time Taken :** `{ms} seconds`\
+                \nUnpacked the input path `{input_str}` and stored to `{destination}`"
+            )
+        else:
+            await edit_delete(event, f"I can't find that path `{input_str}`", 10)
+    elif event.reply_to_msg_id:
+        start = datetime.now()
+        reply = await event.get_reply_message()
+        mone = await edit_or_reply(event, "`Unpacking....`")
+        for attr in getattr(reply.document, "attributes", []):
+            if isinstance(attr, types.DocumentAttributeFilename):
+                filename = attr.file_name
+        filename = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, filename)
+        c_time = time.time()
+        try:
+            dl = io.FileIO(filename, "a")
+            await event.client.fast_download_file(
+                location=reply.document,
+                out=dl,
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, mone, c_time, "trying to download")
+                ),
+            )
+            dl.close()
+        except Exception as e:
+            return await edit_delete(mone, f"**Error:**\n__{str(e)}__")
+        if not is_tarfile(filename):
+            return await edit_delete(
+                mone, "`The replied file is not tar file to unpack it recheck it`"
+            )
+        await mone.edit("`Download finished Unpacking now`")
+        destination = os.path.join(
+            Config.TMP_DOWNLOAD_DIRECTORY, (os.path.basename(filename).split("."))[0]
+        )
+
+        if not os.path.exists(destination):
+            os.mkdir(destination)
+        file = tar_open(filename)
+        # extracting file
+        file.extractall(destination)
+        file.close()
+        end = datetime.now()
+        ms = (end - start).seconds
+        await mone.edit(
+            f"**Time Taken :** `{ms} seconds`\
+                \nUnpacked the replied file and stored to `{destination}`"
+        )
+        os.remove(filename)
+    else:
+        await edit_delete(
+            mone,
+            "`Either reply to the tarfile or provide path of tarfile along with command`",
+        )

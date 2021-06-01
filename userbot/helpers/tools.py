@@ -1,3 +1,6 @@
+from html_telegraph_poster import TelegraphPoster
+
+
 def media_type(message):
     if message and message.photo:
         return "Photo"
@@ -16,3 +19,16 @@ def media_type(message):
     if message and message.document:
         return "Document"
     return None
+
+
+async def post_to_telegraph(page_title, html_format_content):
+    post_client = TelegraphPoster(use_api=True)
+    auth_name = "CatUserbot"
+    post_client.create_api_token(auth_name)
+    post_page = post_client.post(
+        title=page_title,
+        author=auth_name,
+        author_url="https://t.me/catuserbot17",
+        text=html_format_content,
+    )
+    return post_page["url"]

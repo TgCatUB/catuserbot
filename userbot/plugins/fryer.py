@@ -1,27 +1,3 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
-
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
-# you may not use this file except in compliance with the License.
-# Original source for the deepfrying code (used under the following license): https://github.com/Ovyerus/deeppyer
-# MIT License
-# Copyright (c) 2017 Ovyerus
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-""" Userbot module for frying stuff. ported by @NeoMatrix90 """
-
 import io
 from random import randint, uniform
 
@@ -30,86 +6,12 @@ from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.types import DocumentAttributeFilename
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="frybot$"))
-@bot.on(sudo_cmd(pattern="frybot$", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
-    if not event.reply_to_msg_id:
-        event = await edit_or_reply(event, "Reply to any user message.")
-        return
-    reply_message = await event.get_reply_message()
-    if event.is_reply:
-        reply_message = await event.get_reply_message()
-        data = await check_media(reply_message)
-        if isinstance(data, bool):
-            event = await edit_or_reply(event, "`I can't deep fry that!`")
-            return
-    if not event.is_reply:
-        event = await edit_or_reply(
-            event, "`Reply to an image or sticker to deep fry it!`"
-        )
-        return
-    chat = "@image_deepfrybot"
-    if reply_message.sender.bot:
-        event = await edit_or_reply(event, "Reply to actual users message.")
-        return
-    event = await edit_or_reply(event, "```Processing```")
-    async with event.client.conversation(chat) as conv:
-        try:
-            response = conv.wait_event(
-                events.NewMessage(incoming=True, from_users=432858024)
-            )
-            await event.client.forward_messages(chat, reply_message)
-            response = await response
-        except YouBlockedUserError:
-            await event.reply("unblock @image_deepfrybot and try again")
-            return
-        await bot.send_read_acknowledge(conv.chat_id)
-        if response.text.startswith("Forward"):
-            await event.edit(
-                "```can you kindly disable your forward privacy settings for good?```"
-            )
-        else:
-            await event.client.send_file(event.chat_id, response.message.media)
-        await event.delete()
+from ..core.managers import edit_or_reply
+from ..helpers import reply_id
 
-
-@bot.on(admin_cmd(pattern="deepfry(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="deepfry(?: |$)(.*)", allow_sudo=True))
-async def deepfryer(event):
-    try:
-        frycount = int(event.pattern_match.group(1))
-        if frycount < 1:
-            raise ValueError
-    except ValueError:
-        frycount = 1
-    if event.is_reply:
-        reply_message = await event.get_reply_message()
-        data = await check_media(reply_message)
-        if isinstance(data, bool):
-            event = await edit_or_reply(event, "`I can't deep fry that!`")
-            return
-    if not event.is_reply:
-        event = await edit_or_reply(
-            event, "`Reply to an image or sticker to deep fry it!`"
-        )
-        return
-    # download last photo (highres) as byte array
-    image = io.BytesIO()
-    await event.client.download_media(data, image)
-    image = Image.open(image)
-    # fry the image
-    hmm = await edit_or_reply(event, "`Deep frying media…`")
-    for _ in range(frycount):
-        image = await deepfry(image)
-    fried_io = io.BytesIO()
-    fried_io.name = "image.jpeg"
-    image.save(fried_io, "JPEG")
-    fried_io.seek(0)
-    await event.reply(file=fried_io)
-    await hmm.delete()
+plugin_category = "extra"
 
 
 async def deepfry(img: Image) -> Image:
@@ -171,12 +73,99 @@ async def check_media(reply_message):
     return data
 
 
-CMD_HELP.update(
-    {
-        "fryer": "**Syntax :** `.frybot` reply to image or sticker\
-    \n**Usage : **Fries the given sticker or image\
-    \n\n**Syntax : **`.deepfry <1 to 9>` reply to image or sticker\
-    \n**Usage : **Fries the given sticker or image based on level if you dont give anything then it is default to 1\
-    "
-    }
+@catub.cat_cmd(
+    pattern="frybot",
+    command=("frybot", plugin_category),
+    info={
+        "header": "Fries the given sticker or image.",
+        "usage": "{tr}frybot",
+    },
 )
+async def _(event):
+    "Fries the given sticker or image"
+    reply_to = await reply_id(event)
+    if not event.reply_to_msg_id:
+        event = await edit_or_reply(event, "Reply to any user message.")
+        return
+    reply_message = await event.get_reply_message()
+    if event.is_reply:
+        reply_message = await event.get_reply_message()
+        data = await check_media(reply_message)
+        if isinstance(data, bool):
+            event = await edit_or_reply(event, "`I can't deep fry that!`")
+            return
+    if not event.is_reply:
+        event = await edit_or_reply(
+            event, "`Reply to an image or sticker to deep fry it!`"
+        )
+        return
+    chat = "@image_deepfrybot"
+    if reply_message.sender.bot:
+        event = await edit_or_reply(event, "Reply to actual users message.")
+        return
+    event = await edit_or_reply(event, "```Processing```")
+    async with event.client.conversation(chat) as conv:
+        try:
+            response = conv.wait_event(
+                events.NewMessage(incoming=True, from_users=432858024)
+            )
+            await event.client.forward_messages(chat, reply_message)
+            response = await response
+        except YouBlockedUserError:
+            await event.reply("unblock @image_deepfrybot and try again")
+            return
+        await bot.send_read_acknowledge(conv.chat_id)
+        if response.text.startswith("Forward"):
+            await event.edit(
+                "```can you kindly disable your forward privacy settings for good?```"
+            )
+        else:
+            await event.client.send_file(
+                event.chat_id, response.message.media, reply_to=reply_to
+            )
+        await event.delete()
+
+
+@catub.cat_cmd(
+    pattern="deepfry(?: |$)([1-9])?",
+    command=("deepfry", plugin_category),
+    info={
+        "header": "image fryer",
+        "description": "Fries the given sticker or image based on level if you dont give anything then it is default to 1",
+        "usage": [
+            "{tr}deepfry <1 to 9>",
+            "{tr}deepfry",
+        ],
+    },
+)
+async def deepfryer(event):
+    "image fryer"
+    reply_to = await reply_id(event)
+    input_str = event.pattern_match.group(1)
+    if input_str:
+        frycount = int(input_str)
+    else:
+        frycount = 1
+    if event.is_reply:
+        reply_message = await event.get_reply_message()
+        data = await check_media(reply_message)
+        if isinstance(data, bool):
+            return await edit_or_reply(event, "`I can't deep fry that!`")
+    if not event.is_reply:
+        return await edit_or_reply(
+            event, "`Reply to an image or sticker to deep fry it!`"
+        )
+    # download last photo (highres) as byte array
+    image = io.BytesIO()
+    await event.client.download_media(data, image)
+    image = Image.open(image)
+    # fry the image
+    hmm = await edit_or_reply(event, "`Deep frying media…`")
+    for _ in range(frycount):
+        image = await deepfry(image)
+    fried_io = io.BytesIO()
+    fried_io.name = "image.jpeg"
+    image.save(fried_io, "JPEG")
+    fried_io.seek(0)
+    await event.client.send_file(event.chat_id, fried_io, reply_to=reply_to)
+    await hmm.delete()

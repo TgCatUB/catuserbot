@@ -1,27 +1,48 @@
 import os
 from typing import Optional
 
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
+from moviepy.editor import VideoFileClip
 from PIL import Image
 
-from ...managers import edit_delete, edit_or_reply
+from ...core.logger import logging
+from ...core.managers import edit_or_reply
 from ..tools import media_type
 from .utils import runcmd
 
+LOGS = logging.getLogger(__name__)
 
-async def media_to_pic(event, reply):
+
+async def media_to_pic(event, reply, noedits=False):
     mediatype = media_type(reply)
-    if mediatype not in ["Photo", "Round Video", "Gif", "Sticker", "Video"]:
-        await edit_delete(
-            event,
-            "`In the replied message. I cant extract any image to procced further reply to proper media`",
+    if mediatype not in [
+        "Photo",
+        "Round Video",
+        "Gif",
+        "Sticker",
+        "Video",
+        "Voice",
+        "Audio",
+        "Document",
+    ]:
+        return event, None
+    if not noedits:
+        catevent = await edit_or_reply(
+            event, f"`Transfiguration Time! Converting to ....`"
         )
-        return None
-    catmedia = await reply.download_media(file="./temp")
-    catevent = await edit_or_reply(event, f"`Transfiguration Time! Converting....`")
+    else:
+        catevent = event
+    catmedia = None
     catfile = os.path.join("./temp/", "meme.png")
-    if mediatype == "Sticker":
+    if os.path.exists(catfile):
+        os.remove(catfile)
+    if mediatype == "Photo":
+        catmedia = await reply.download_media(file="./temp")
+        im = Image.open(catmedia)
+        im.save(catfile)
+    elif mediatype in ["Audio", "Voice"]:
+        await event.client.download_media(reply, catfile, thumb=-1)
+    elif mediatype == "Sticker":
+        catmedia = await reply.download_media(file="./temp")
         if catmedia.endswith(".tgs"):
             await runcmd(
                 f"lottie_convert.py --frame 0 -if lottie -of png '{catmedia}' '{catfile}'"
@@ -30,19 +51,26 @@ async def media_to_pic(event, reply):
             im = Image.open(catmedia)
             im.save(catfile)
     elif mediatype in ["Round Video", "Video", "Gif"]:
-        extractMetadata(createParser(catmedia))
-        await runcmd(f"rm -rf '{catfile}'")
-        await take_screen_shot(catmedia, 0, catfile)
+        await event.client.download_media(reply, catfile, thumb=-1)
         if not os.path.exists(catfile):
-            await edit_delete(
-                catevent, f"`Sorry. I can't extract a image from this {mediatype}`"
-            )
-            return None
-    else:
-        im = Image.open(catmedia)
-        im.save(catfile)
-    await runcmd(f"rm -rf '{catmedia}'")
-    return [catevent, catfile, mediatype]
+            catmedia = await reply.download_media(file="./temp")
+            clip = VideoFileClip(media)
+            try:
+                clip = clip.save_frame(catfile, 0.1)
+            except:
+                clip = clip.save_frame(catfile, 0)
+    elif mediatype == "Document":
+        mimetype = reply.document.mime_type
+        mtype = mimetype.split("/")
+        if mtype[0].lower() == "image":
+            catmedia = await reply.download_media(file="./temp")
+            im = Image.open(catmedia)
+            im.save(catfile)
+    if catmedia and os.path.exists(catmedia):
+        os.remove(catmedia)
+    if os.path.exists(catfile):
+        return catevent, catfile, mediatype
+    return catevent, None
 
 
 async def take_screen_shot(
@@ -54,5 +82,5 @@ async def take_screen_shot(
     command = f"ffmpeg -ss {duration} -i '{video_file}' -vframes 1 '{thumb_image_path}'"
     err = (await runcmd(command))[1]
     if err:
-        print(err)
+        LOGS.error(err)
     return thumb_image_path if os.path.exists(thumb_image_path) else None

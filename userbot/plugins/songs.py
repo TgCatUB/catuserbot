@@ -1,18 +1,28 @@
 # by  @sandy1709 ( https://t.me/mrconfused  )
 
 # songs finder for catuserbot
-# reverse search by  @Lal_bakthan
-
 import asyncio
 import base64
+import io
 import os
 from pathlib import Path
 
+from ShazamAPI import Shazam
+from telethon import types
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
 
-from . import name_dl, song_dl, video_dl, yt_search
+from userbot import catub
+
+from ..core.logger import logging
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.functions import name_dl, song_dl, video_dl, yt_search
+from ..helpers.tools import media_type
+from ..helpers.utils import _catutils, reply_id
+
+plugin_category = "utils"
+LOGS = logging.getLogger(__name__)
 
 # =========================================================== #
 #                           STRINGS                           #
@@ -26,11 +36,21 @@ SONGBOT_BLOCKED_STRING = "<code>Please unblock @songdl_bot and try again</code>"
 # =========================================================== #
 
 
-@bot.on(admin_cmd(pattern="(song|song320)($| (.*))"))
-@bot.on(sudo_cmd(pattern="(song|song320)($| (.*))", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="song(320)?(?: |$)(.*)",
+    command=("song", plugin_category),
+    info={
+        "header": "To get songs from youtube.",
+        "description": "Basically this command searches youtube and send the first video as audio file.",
+        "flags": {
+            "320": "if you use song320 then you get 320k quality else 128k quality",
+        },
+        "usage": "{tr}song <song name>",
+        "examples": "{tr}song memories song",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To search songs"
     reply_to_id = await reply_id(event)
     reply = await event.get_reply_message()
     if event.pattern_match.group(2):
@@ -39,8 +59,7 @@ async def _(event):
         if reply.message:
             query = reply.message
     else:
-        await edit_or_reply(event, "`What I am Supposed to find `")
-        return
+        return await edit_or_reply(event, "`What I am Supposed to find `")
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     catevent = await edit_or_reply(event, "`wi8..! I am finding your song....`")
     video_link = await yt_search(str(query))
@@ -49,10 +68,7 @@ async def _(event):
             f"Sorry!. I can't find any related video/audio for `{query}`"
         )
     cmd = event.pattern_match.group(1)
-    if cmd == "song":
-        q = "128k"
-    elif cmd == "song320":
-        q = "320k"
+    q = "320k" if cmd == "320" else "128k"
     song_cmd = song_dl.format(QUALITY=q, video_link=video_link)
     # thumb_cmd = thumb_dl.format(video_link=video_link)
     name_cmd = name_dl.format(video_link=video_link)
@@ -107,11 +123,18 @@ async def delete_messages(event, chat, from_message):
     await event.client.send_read_acknowledge(chat)
 
 
-@bot.on(admin_cmd(pattern="vsong( (.*)|$)"))
-@bot.on(sudo_cmd(pattern="vsong( (.*)|$)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="vsong(?: |$)(.*)",
+    command=("vsong", plugin_category),
+    info={
+        "header": "To get video songs from youtube.",
+        "description": "Basically this command searches youtube and sends the first video",
+        "usage": "{tr}vsong <song name>",
+        "examples": "{tr}vsong memories song",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To search video songs"
     reply_to_id = await reply_id(event)
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
@@ -120,8 +143,7 @@ async def _(event):
         if reply.message:
             query = reply.messag
     else:
-        event = await edit_or_reply(event, "What I am Supposed to find")
-        return
+        return await edit_or_reply(event, "`What I am Supposed to find`")
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     catevent = await edit_or_reply(event, "`wi8..! I am finding your song....`")
     video_link = await yt_search(str(query))
@@ -175,11 +197,63 @@ async def _(event):
             os.remove(files)
 
 
-@bot.on(admin_cmd(pattern="song2 (.*)"))
-@bot.on(sudo_cmd(pattern="song2 (.*)", allow_sudo=True))
-async def cat_song_fetcer(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="shazam$",
+    command=("shazam", plugin_category),
+    info={
+        "header": "To reverse search song.",
+        "description": "Reverse search audio file using shazam api",
+        "usage": "{tr}shazam <reply to voice/audio>",
+    },
+)
+async def shazamcmd(event):
+    "To reverse search song."
+    reply = await event.get_reply_message()
+    mediatype = media_type(reply)
+    if not reply or not mediatype or mediatype not in ["Voice", "Audio"]:
+        return await edit_delete(
+            event, "__Reply to Voice clip or Audio clip to reverse search that song.__"
+        )
+    catevent = await edit_or_reply(event, "__Downloading the audio clip...__")
+    try:
+        for attr in getattr(reply.document, "attributes", []):
+            if isinstance(attr, types.DocumentAttributeFilename):
+                name = attr.file_name
+        dl = io.FileIO(name, "a")
+        await event.client.fast_download_file(
+            location=reply.document,
+            out=dl,
+        )
+        dl.close()
+        mp3_fileto_recognize = open(name, "rb").read()
+        shazam = Shazam(mp3_fileto_recognize)
+        recognize_generator = shazam.recognizeSong()
+        track = next(recognize_generator)[1]["track"]
+    except Exception as e:
+        LOGS.error(e)
+        return await edit_delete(
+            catevent, f"**Error while reverse searching song:**\n__{str(e)}__"
+        )
+    image = track["images"]["background"]
+    song = track["share"]["subject"]
+    await event.client.send_file(
+        event.chat_id, image, caption=f"**Song:** `{song}`", reply_to=reply
+    )
+    await catevent.delete()
+
+
+@catub.cat_cmd(
+    pattern="song2(?: |$)(.*)",
+    command=("song2", plugin_category),
+    info={
+        "header": "To search songs and upload to telegram",
+        "description": "Searches the song you entered in query and sends it quality of it is 320k",
+        "usage": "{tr}song2 <song name>",
+        "examples": "{tr}song2 memories song",
+    },
+)
+async def _(event):
+    "To search songs"
     song = event.pattern_match.group(1)
     chat = "@songdl_bot"
     reply_id_ = await reply_id(event)
@@ -190,7 +264,7 @@ async def cat_song_fetcer(event):
             await conv.get_response()
             await conv.send_message(song)
             hmm = await conv.get_response()
-            while hmm.edit_hide != True:
+            while hmm.edit_hide is not True:
                 await asyncio.sleep(0.1)
                 hmm = await event.client.get_messages(chat, ids=hmm.id)
             baka = await event.client.get_messages(chat)
@@ -208,8 +282,7 @@ async def cat_song_fetcer(event):
             music = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await catevent.edit(SONGBOT_BLOCKED_STRING, parse_mode="html")
-            return
+            return await catevent.edit(SONGBOT_BLOCKED_STRING, parse_mode="html")
         await event.client.send_file(
             event.chat_id,
             music,
@@ -221,14 +294,20 @@ async def cat_song_fetcer(event):
         await delete_messages(event, chat, purgeflag)
 
 
-@bot.on(admin_cmd(pattern="szm$", outgoing=True))
-@bot.on(sudo_cmd(pattern="szm$", allow_sudo=True))
+# reverse search by  @Lal_bakthan
+@catub.cat_cmd(
+    pattern="szm$",
+    command=("szm", plugin_category),
+    info={
+        "header": "To reverse search music file.",
+        "description": "music file lenght must be around 10 sec so use ffmpeg plugin to trim it.",
+        "usage": "{tr}szm",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To reverse search music by bot."
     if not event.reply_to_msg_id:
-        await edit_delete(event, "```Reply to an audio message.```")
-        return
+        return await edit_delete(event, "```Reply to an audio message.```")
     reply_message = await event.get_reply_message()
     chat = "@auddbot"
     catevent = await edit_or_reply(event, "```Identifying the song```")
@@ -251,21 +330,3 @@ async def _(event):
     namem = f"**Song Name : **`{result.text.splitlines()[0]}`\
         \n\n**Details : **__{result.text.splitlines()[2]}__"
     await catevent.edit(namem)
-
-
-CMD_HELP.update(
-    {
-        "songs": "**Plugin : **`songs`\
-        \n\n•  **Syntax : **`.song <query/reply>`\
-        \n•  **Function : **__searches the song you entered in query from youtube and sends it, quality of it is 128k__\
-        \n\n•  **Syntax : **`.song320 <query/reply>`\
-        \n•  **Function : **__searches the song you entered in query from youtube and sends it quality of it is 320k__\
-        \n\n•  **Syntax : **`.vsong <query/reply>`\
-        \n•  **Function : **__Searches the video song you entered in query and sends it__\
-        \n\n•  **Syntax : **`.song2 query`\
-        \n•  **Function : **__searches the song you entered in query and sends it quality of it is 320k__\
-        \n\n**•  Syntax : **`.szm` reply to an audio file\
-        \n**•  Function :**Reverse searchs of song/music\
-        "
-    }
-)

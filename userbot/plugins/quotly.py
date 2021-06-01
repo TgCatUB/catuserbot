@@ -3,30 +3,154 @@ imported from nicegrill
 modified by @mrconfused
 QuotLy: Avaible commands: .qbot
 """
-import os
 
+import io
+import os
+import re
+import textwrap
+from textwrap import wrap
+
+import requests
+from PIL import Image, ImageDraw, ImageFont
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.utils import get_display_name
 
-from . import convert_tosticker, process
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers import convert_tosticker, media_type, process
+from ..helpers.utils import _cattools, reply_id
+
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+
+plugin_category = "fun"
 
 
-@bot.on(admin_cmd(pattern="q(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="q(?: |$)(.*)", allow_sudo=True))
+def get_warp_length(width):
+    return int((20.0 / 1024.0) * (width + 0.0))
+
+
+@catub.cat_cmd(
+    pattern="qpic(?: |$)(.*)",
+    command=("qpic", plugin_category),
+    info={
+        "header": "Makes quote pic.",
+        "flags": {
+            "-b": "To get black and white output.",
+            "-s": "To output file as sticker",
+        },
+        "usage": "{tr}qpic <flag> <input/reply to text msg>",
+        "examples": ["{tr}qpic CatUserbot.", "{tr}qpic -b CatUserbot."],
+    },
+)
+async def q_pic(event):
+    args = event.pattern_match.group(1)
+    black = re.findall(r"-b", args)
+    sticker = re.findall(r"-s", args)
+    args = args.replace("-b", "")
+    args = args.replace("-s", "")
+    input_str = args.strip()
+    reply_to = await reply_id(event)
+    reply = await event.get_reply_message()
+    if reply and input_str or not reply and input_str:
+        text = input_str
+    elif reply and reply.raw_text:
+        text = reply.raw_text
+    else:
+        return await edit_delete(
+            event, "__Provide input along with cmd or reply to text message.__"
+        )
+    catevent = await edit_or_reply(event, "__Making Quote pic....__")
+    mediatype = media_type(reply)
+    if (
+        (not reply)
+        or (not mediatype)
+        or (mediatype not in ["Photo", "Sticker"])
+        or (
+            mediatype == "Sticker"
+            and reply.document.mime_type == "application/i-tgsticker"
+        )
+    ):
+        user = reply.sender_id if reply else event.client.uid
+        pfp = await event.client.download_profile_photo(user)
+    else:
+        imag = await _cattools.media_to_pic(event, reply, noedits=True)
+        if imag[1] is None:
+            return await edit_delete(
+                imag[0], "__Unable to extract image from the replied message.__"
+            )
+        user = event.client.uid
+    try:
+        user = await event.client.get_entity(user)
+    except Exception as e:
+        LOGS.info(str(e))
+        user = None
+    if not pfp:
+        pfp = "profilepic.jpg"
+        with open(pfp, "wb") as f:
+            f.write(
+                requests.get(
+                    "https://telegra.ph/file/1fd74fa4a4dbf1655f3ec.jpg"
+                ).content
+            )
+    text = "\n".join(textwrap.wrap(text, 25))
+    text = "“" + text + "„"
+    font = ImageFont.truetype(FONT_FILE_TO_USE, 50)
+    img = Image.open(pfp)
+    if black:
+        img = img.convert("L")
+    img = img.convert("RGBA").resize((1024, 1024))
+    w, h = img.size
+    nw, nh = 20 * (w // 100), 20 * (h // 100)
+    nimg = Image.new("RGBA", (w - nw, h - nh), (0, 0, 0))
+    nimg.putalpha(150)
+    img.paste(nimg, (nw // 2, nh // 2), nimg)
+    draw = ImageDraw.Draw(img)
+    tw, th = draw.textsize(text=text, font=font)
+    x, y = (w - tw) // 2, (h - th) // 2
+    draw.text((x, y), text=text, font=font, fill="#ffffff", align="center")
+    if user is not None:
+        credit = "\n".join(
+            wrap(f"by {get_display_name(user)}", int(get_warp_length(w / 2.5)))
+        )
+        tw, th = draw.textsize(text=credit, font=font)
+        draw.text(
+            ((w - nw + tw) // 1.6, (h - nh - th)),
+            text=credit,
+            font=font,
+            fill="#ffffff",
+            align="left",
+        )
+    output = io.BytesIO()
+    if sticker:
+        img.save(output, "webp")
+    else:
+        img.save(output, "PNG")
+    output.seek(0)
+    await event.client.send_file(event.chat_id, output, reply_to=reply_to)
+    await catevent.delete()
+
+
+@catub.cat_cmd(
+    pattern="q(?: |$)(.*)",
+    command=("q", plugin_category),
+    info={
+        "header": "Makes your message as sticker quote.",
+        "usage": "{tr}q",
+    },
+)
 async def stickerchat(catquotes):
-    if catquotes.fwd_from:
-        return
+    "Makes your message as sticker quote"
     reply = await catquotes.get_reply_message()
     if not reply:
-        await edit_or_reply(
+        return await edit_or_reply(
             catquotes, "`I cant quote the message . reply to a message`"
         )
-        return
     fetchmsg = reply.message
     repliedreply = None
     if reply.media and reply.media.document.mime_type in ("mp4"):
-        await edit_or_reply(catquotes, "`this format is not supported now`")
-        return
+        return await edit_or_reply(catquotes, "`this format is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
         await event.client.get_entity(reply.forward.sender)
@@ -44,22 +168,25 @@ async def stickerchat(catquotes):
     os.remove(endfi)
 
 
-@bot.on(admin_cmd(pattern="rq(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="rq(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="rq(?: |$)(.*)",
+    command=("rq", plugin_category),
+    info={
+        "header": "Makes your message along with the previous replied message as sticker quote",
+        "usage": "{tr}rq",
+    },
+)
 async def stickerchat(catquotes):
-    if catquotes.fwd_from:
-        return
+    "To make sticker message."
     reply = await catquotes.get_reply_message()
     if not reply:
-        await edit_or_reply(
+        return await edit_or_reply(
             catquotes, "`I cant quote the message . reply to a message`"
         )
-        return
     fetchmsg = reply.message
     repliedreply = await reply.get_reply_message()
     if reply.media and reply.media.document.mime_type in ("mp4"):
-        await edit_or_reply(catquotes, "`this format is not supported now`")
-        return
+        return await edit_or_reply(catquotes, "`this format is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
         await event.client.get_entity(reply.forward.sender)
@@ -77,11 +204,16 @@ async def stickerchat(catquotes):
     os.remove(endfi)
 
 
-@bot.on(admin_cmd(pattern="qbot(?: |$)(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="qbot(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="qbot(?: |$)(.*)",
+    command=("qbot", plugin_category),
+    info={
+        "header": "Makes your message as sticker quote by @quotlybot",
+        "usage": "{tr}qbot",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Makes your message as sticker quote by @quotlybot"
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
@@ -125,24 +257,9 @@ async def _(event):
                 )
             response = await response
         except YouBlockedUserError:
-            await catevent.edit("```Please unblock me (@QuotLyBot) u Nigga```")
-            return
+            return await catevent.edit("```Please unblock me (@QuotLyBot) u Nigga```")
         await event.client.send_read_acknowledge(conv.chat_id)
         await catevent.delete()
         await event.client.send_message(
             event.chat_id, response.message, reply_to=reply_to
         )
-
-
-CMD_HELP.update(
-    {
-        "quotly": "**Plugin :** `quotly`\
-        \n\n**•  Syntax : **`.q reply to messge`\
-        \n**•  Function : **__Makes your message as sticker quote__\
-        \n\n**•  Syntax : **`.rq reply to messge`\
-        \n**•  Function : **__Makes your message along with the previous replied message as sticker quote__\
-        \n\n**•  Syntax : **`.qbot reply to messge`\
-        \n**•  Function : **__Makes your message as sticker quote by @quotlybot__\
-        "
-    }
-)

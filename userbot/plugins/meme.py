@@ -1,9 +1,22 @@
 import asyncio
 
+from userbot import catub
 
-@bot.on(admin_cmd(outgoing=True, pattern="^\:/$"))
-@bot.on(sudo_cmd(pattern="^\:/$", allow_sudo=True))
+from ..core.managers import edit_or_reply
+
+plugin_category = "fun"
+
+
+@catub.cat_cmd(
+    pattern="^\:/$",
+    command=("\:", plugin_category),
+    info={
+        "header": "Animation command",
+        "usage": "\:",
+    },
+)
 async def kek(keks):
+    "Animation command"
     keks = await edit_or_reply(keks, ":\\")
     uio = ["/", "\\"]
     for i in range(15):
@@ -12,9 +25,16 @@ async def kek(keks):
         await keks.edit(txt)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="^\-_-$"))
-@bot.on(sudo_cmd(pattern="^\-_-$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="^\-_-$",
+    command=("-_-", plugin_category),
+    info={
+        "header": "Animation command",
+        "usage": "-_-",
+    },
+)
 async def lol(lel):
+    "Animation command"
     lel = await edit_or_reply(lel, "-__-")
     okay = "-__-"
     for _ in range(15):
@@ -23,9 +43,16 @@ async def lol(lel):
         await lel.edit(okay)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="^\;_;$"))
-@bot.on(sudo_cmd(pattern="^\;_;$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="^\;_;$",
+    command=(";_;", plugin_category),
+    info={
+        "header": "Animation command",
+        "usage": ";_;",
+    },
+)
 async def fun(e):
+    "Animation command"
     e = await edit_or_reply(e, ";__;")
     t = ";__;"
     for _ in range(15):
@@ -34,9 +61,16 @@ async def fun(e):
         await e.edit(t)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="oof$"))
-@bot.on(sudo_cmd(pattern="oof$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="oof$",
+    command=("oof", plugin_category),
+    info={
+        "header": "Animation command",
+        "usage": "{tr}oof",
+    },
+)
 async def Oof(e):
+    "Animation command."
     t = "Oof"
     catevent = await edit_or_reply(e, t)
     for _ in range(15):
@@ -45,9 +79,16 @@ async def Oof(e):
         await catevent.edit(t)
 
 
-@bot.on(admin_cmd(outgoing=True, pattern="type (.*)"))
-@bot.on(sudo_cmd(pattern="type (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="type (.*)",
+    command=("type", plugin_category),
+    info={
+        "header": "Type writter animation.",
+        "usage": "{tr}type text",
+    },
+)
 async def typewriter(typew):
+    "Type writter animation."
     message = typew.pattern_match.group(1)
     sleep_time = 0.2
     typing_symbol = "|"
@@ -63,22 +104,37 @@ async def typewriter(typew):
         await asyncio.sleep(sleep_time)
 
 
-@bot.on(admin_cmd(pattern="repeat (\d*) (.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="repeat (\d*) (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="repeat (\d*) (.*)",
+    command=("repeat", plugin_category),
+    info={
+        "header": "repeats the given text with given no of times.",
+        "usage": "{tr}repeat <count> <text>",
+        "examples": "{tr}repeat 10 catuserbot",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To repeat the given text."
     cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
     message = cat[1]
     count = int(cat[0])
-    repmessage = (f"{message} ") * count
-    await asyncio.wait([event.respond(repmessage)])
-    await event.delete()
+    repsmessage = (f"{message} ") * count
+    await edit_or_reply(event, repsmessage)
 
 
-@bot.on(admin_cmd(pattern=f"meme", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"meme", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="meme",
+    command=("meme", plugin_category),
+    info={
+        "header": "Animation command",
+        "usage": [
+            "{tr}meme <emoji/text>",
+            "{tr}meme",
+        ],
+    },
+)
 async def meme(event):
+    "Animation command."
     memeVar = event.text
     sleepValue = 0.5
     memeVar = memeVar[6:]
@@ -143,11 +199,19 @@ async def meme(event):
     await event.edit(memeVar)
 
 
-@bot.on(admin_cmd(pattern=f"give", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"give", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="give",
+    command=("give", plugin_category),
+    info={
+        "header": "Animation command",
+        "usage": [
+            "{tr}give <emoji/text>",
+            "{tr}give",
+        ],
+    },
+)
 async def give(event):
-    if event.fwd_from:
-        return
+    "Animation command."
     giveVar = event.text
     sleepValue = 0.5
     lp = giveVar[6:]
@@ -190,11 +254,16 @@ async def give(event):
     await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + lp)
 
 
-@bot.on(admin_cmd(pattern=f"sadmin$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"sadmin$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="sadmin$",
+    command=("sadmin", plugin_category),
+    info={
+        "header": "Shouts Admin Animation command",
+        "usage": "{tr}sadmin",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Shouts Admin Animation command."
     animation_ttl = range(13)
     event = await edit_or_reply(event, "sadmin")
     animation_chars = [
@@ -215,29 +284,3 @@ async def _(event):
     for i in animation_ttl:
         await asyncio.sleep(1)
         await event.edit(animation_chars[i % 13])
-
-
-CMD_HELP.update(
-    {
-        "meme": "**Plugin : **`meme`\
-        \n\n**Commands :**\
-        \n  •  `:/`\
-        \n  •  `-_-`\
-        \n  •  `;_;`\
-        \n  •  `.oof`\
-        \n\n**Functions :**\
-        \n__The above four commands are animation commands__\
-        \n\n**Commands :**\
-        \n  •  `.meme`\
-        \n  •  `.give`\
-        \n\n**Functions :**\
-        \n__The above two commands are animation memes meme by default takes ✈️ and give by default takes 🍭__\
-        \n\n**Syntax : **`.repeat count message`\
-        \n**Function : **try out and check Yourself `.repeat 5 hello`\
-        \n\n**Syntax :** `.type`\
-        \n**Function : **Just a small command to make your keyboard become a typewriter!\
-        \n\n**Syntax :** `.sadmin`\
-        \n**Function : **Fun animation of @admin!\
-        "
-    }
-)

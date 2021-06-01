@@ -3,21 +3,31 @@ Created by @Jisan7509
 modified by  @mrconfused
 Userbot plugin for CatUserbot
 """
-import emoji
 
+from . import catub, edit_or_reply
 from . import fonts as emojify
 
+plugin_category = "fun"
 
-@bot.on(admin_cmd(pattern="emoji(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="emoji(?: |$)(.*)", allow_sudo=True))
+
+@catub.cat_cmd(
+    pattern="emoji(?: |$)(.*)",
+    command=("emoji", plugin_category),
+    info={
+        "header": "Converts your text to big emoji text, with some default emojis.",
+        "usage": "{tr}emoji <text>",
+        "examples": ["{tr}emoji catuserbot"],
+    },
+)
 async def itachi(event):
+    "To get emoji art text."
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
         await edit_or_reply(
-            event, "`What am I Supposed to do with this stupid, Give me a text. `"
+            event, "`What am I Supposed to do with this idiot, Give me a text. `"
         )
         return
     result = ""
@@ -31,24 +41,28 @@ async def itachi(event):
     await edit_or_reply(event, result)
 
 
-@bot.on(admin_cmd(pattern="cmoji(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="cmoji(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="cmoji(?: |$)(.*)",
+    command=("cmoji", plugin_category),
+    info={
+        "header": "Converts your text to big emoji text, with your custom emoji.",
+        "usage": "{tr}cmoji <emoji> <text>",
+        "examples": ["{tr}cmoji 😺 catuserbot"],
+    },
+)
 async def itachi(event):
+    "To get custom emoji art text."
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
         args = get.text
     if not args:
-        await edit_or_reply(
-            event, "`What am I Supposed to do with this stupid, Give me a text. `"
+        return await edit_or_reply(
+            event, "`What am I Supposed to do with this idiot, Give me a text. `"
         )
-        return
     try:
         emoji, arg = args.split(" ", 1)
     except Exception:
-        arg = args
-        emoji = "😺"
-    if not char_is_emoji(emoji):
         arg = args
         emoji = "😺"
     result = ""
@@ -60,19 +74,3 @@ async def itachi(event):
         else:
             result += a
     await edit_or_reply(event, result)
-
-
-def char_is_emoji(character):
-    return character in emoji.UNICODE_EMOJI["en"]
-
-
-CMD_HELP.update(
-    {
-        "emojify": "**Plugin :** `emojify`\
-      \n\n**Syntax :** `.emoji` <text>\
-      \n****Usage : **Converts your text to big emoji text, with default emoji. \
-      \n\n**Syntax :** `.cmoji` <emoji> <text>\
-      \n****Usage : **Converts your text to big emoji text, with your custom emoji.\
-      "
-    }
-)

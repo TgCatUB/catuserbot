@@ -1,41 +1,81 @@
 import random
 
+from userbot import catub
+
+from ..core.managers import edit_or_reply
 from . import catmemes
 
+plugin_category = "extra"
 
-@bot.on(admin_cmd(pattern=f"gm$", outgoing=True))
-@bot.on(sudo_cmd(pattern="gm$", allow_sudo=True))
+
+@catub.cat_cmd(
+    pattern="gm$",
+    command=("gm", plugin_category),
+    info={
+        "header": "Good morning random strings.",
+        "usage": "{tr}gm",
+    },
+)
 async def morning(morning):
+    "Good morning random strings."
     txt = random.choice(catmemes.GDMORNING)
     await edit_or_reply(morning, txt)
 
 
-@bot.on(admin_cmd(pattern=f"gnoon$", outgoing=True))
-@bot.on(sudo_cmd(pattern="gnoon$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="gnoon$",
+    command=("gnoon", plugin_category),
+    info={
+        "header": "Good afternoon random strings.",
+        "usage": "{tr}gnoon",
+    },
+)
 async def noon(noon):
+    "Good afternoon random strings."
     txt = random.choice(catmemes.GDNOON)
     await edit_or_reply(noon, txt)
 
 
-@bot.on(admin_cmd(pattern=f"gn$", outgoing=True))
-@bot.on(sudo_cmd(pattern="gn$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="gn$",
+    command=("gn", plugin_category),
+    info={
+        "header": "Good night random strings.",
+        "usage": "{tr}gm",
+    },
+)
 async def night(night):
+    "Good night random strings."
     txt = random.choice(catmemes.GDNIGHT)
     await edit_or_reply(night, txt)
 
 
-@bot.on(admin_cmd(pattern="gmg$"))
-@bot.on(sudo_cmd(pattern="gmg$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="gmg$",
+    command=("gmg", plugin_category),
+    info={
+        "header": "Good morning art.",
+        "usage": "{tr}gmg",
+    },
+)
 async def gm(event):
+    "Good morning art."
     await edit_or_reply(
         event,
         "｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･｡♥｡･ﾟ♡ﾟ･\n╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╱╱╭╮\n╭━┳━┳━┳╯┃╭━━┳━┳┳┳━┳╋╋━┳┳━╮\n┃╋┃╋┃╋┃╋┃┃┃┃┃╋┃╭┫┃┃┃┃┃┃┃╋┃\n┣╮┣━┻━┻━╯╰┻┻┻━┻╯╰┻━┻┻┻━╋╮┃\n╰━╯╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰━╯\n｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･｡♥｡･ﾟ♡ﾟ･",
     )
 
 
-@bot.on(admin_cmd(pattern="gnt$"))
-@bot.on(sudo_cmd(pattern="gnt$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="gnt$",
+    command=("gnt", plugin_category),
+    info={
+        "header": "Good night art.",
+        "usage": "{tr}gnt",
+    },
+)
 async def gn(event):
+    "Good night art."
     await edit_or_reply(
         event,
         "｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･\n╱╱╱╱╱╱╱╭╮╱╱╱╭╮╱╭╮╭╮\n╭━┳━┳━┳╯┃╭━┳╋╋━┫╰┫╰╮\n┃╋┃╋┃╋┃╋┃┃┃┃┃┃╋┃┃┃╭┫\n┣╮┣━┻━┻━╯╰┻━┻╋╮┣┻┻━╯\n╰━╯╱╱╱╱╱╱╱╱╱╱╰━╯\n｡♥｡･ﾟ♡ﾟ･｡♥° ♥｡･ﾟ♡ﾟ･",
@@ -45,9 +85,19 @@ async def gn(event):
 # @PhycoNinja13b 's Part begin from here
 
 
-@bot.on(admin_cmd(pattern=r"hi ?(.*)"))
-@bot.on(sudo_cmd(pattern=r"hi ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="hi ?(.*)",
+    command=("hi", plugin_category),
+    info={
+        "header": "Hi text art.",
+        "usage": [
+            "{tr}hi <emoji>",
+            "{tr}hi",
+        ],
+    },
+)
 async def hi(event):
+    "Hi text art."
     giveVar = event.text
     cat = giveVar[4:5]
     if not cat:
@@ -58,66 +108,63 @@ async def hi(event):
     )
 
 
-@bot.on(admin_cmd(pattern=r"cheer$"))
-@bot.on(sudo_cmd(pattern="cheer$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="cheer$",
+    command=("cheer", plugin_category),
+    info={
+        "header": "Cheer text art.",
+        "usage": "{tr}cheer",
+    },
+)
 async def cheer(event):
-    if event.fwd_from:
-        return
+    "cheer text art."
     await edit_or_reply(
         event,
         "💐💐😉😊💐💐\n☕ Cheer Up  🍵\n🍂 ✨ )) ✨  🍂\n🍂┃ (( * ┣┓ 🍂\n🍂┃*💗 ┣┛ 🍂 \n🍂┗━━┛  🍂🎂 For YOU  🍰\n💐💐😌😚💐💐",
     )
 
 
-@bot.on(admin_cmd(pattern=r"getwell$"))
-@bot.on(sudo_cmd(pattern="getwell$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="getwell$",
+    command=("getwell", plugin_category),
+    info={
+        "header": "Get Well art.",
+        "usage": "{tr}getwell",
+    },
+)
 async def getwell(event):
-    if event.fwd_from:
-        return
+    "Get Well art."
     await edit_or_reply(
         event, "🌹🌹🌹🌹🌹🌹🌹🌹 \n🌹😷😢😓😷😢💨🌹\n🌹💝💉🍵💊💐💝🌹\n🌹 GetBetter Soon! 🌹\n🌹🌹🌹🌹🌹🌹🌹🌹"
     )
 
 
-@bot.on(admin_cmd(pattern=r"luck$"))
-@bot.on(sudo_cmd(pattern="luck$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="luck$",
+    command=("luck", plugin_category),
+    info={
+        "header": "luck art.",
+        "usage": "{tr}luck",
+    },
+)
 async def luck(event):
-    if event.fwd_from:
-        return
+    "Luck art."
     await edit_or_reply(
         event, "💚~🍀🍀🍀🍀🍀\n🍀╔╗╔╗╔╗╦╗✨🍀\n🍀║╦║║║║║║👍🍀\n🍀╚╝╚╝╚╝╩╝。 🍀\n🍀・・ⓁⓊⒸⓀ🍀\n🍀🍀🍀 to you💚"
     )
 
 
-@bot.on(admin_cmd(pattern=r"sprinkle$"))
-@bot.on(sudo_cmd(pattern="sprinkle$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="sprinkle$",
+    command=("sprinkle", plugin_category),
+    info={
+        "header": "sprinkle art.",
+        "usage": "{tr}sprinkle",
+    },
+)
 async def sprinkle(event):
-    if event.fwd_from:
-        return
+    "Sprinkle text art."
     await edit_or_reply(
         event,
         "✨.•*¨*.¸.•*¨*.¸¸.•*¨*• ƸӜƷ\n🌸🌺🌸🌺🌸🌺🌸🌺\n Sprinkled with love❤\n🌷🌻🌷🌻🌷🌻🌷🌻\n ¨*.¸.•*¨*. ¸.•*¨*.¸¸.•*¨`*•.✨\n🌹🍀🌹🍀🌹🍀🌹🍀",
     )
-
-
-CMD_HELP.update(
-    {
-        "greetings": """**Plugin : **`greetings`
-
-**Syntax : **
-  •  `.gm`
-  •  `.gnoon`
-  •  `.gn`  
-**Function : **__sends you random good morning , afternoon and night quotes respectively.__
-
-**Syntax : **
-  •  `.gnt`
-  •  `.gmg`
-  •  `.hi/.hi emoji`
-  •  `.cheer`
-  •  `.getwell`
-  •  `.luck`
-  •  `.sprinkle`
-**Function : **__shows you some text arts for these greeting commands.__"""
-    }
-)

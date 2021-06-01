@@ -1,21 +1,35 @@
 # Userbot module for purging unneeded messages(usually spam or ot).
-
 from asyncio import sleep
 
 from telethon.errors import rpcbaseerrors
 
-from ..utils import errors_handler
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import reply_id
 from . import BOTLOG, BOTLOG_CHATID
+
+plugin_category = "utils"
+
 
 purgelist = {}
 
 
-@bot.on(admin_cmd(pattern="purge(?: |$)(.*)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="purge(?: |$)(.*)"))
-@errors_handler
+@catub.cat_cmd(
+    pattern="purge(?: |$)(.*)",
+    command=("purge", plugin_category),
+    info={
+        "header": "To purge messages from the replied message.",
+        "description": "Deletes the x(count) amount of messages from the replied message if you don't use count then deletes all messages from there",
+        "usage": [
+            "{tr}purge <count> <reply>",
+            "{tr}purge <reply>",
+        ],
+        "examples": "{tr}purge 10",
+    },
+)
 async def fastpurger(event):
-    if event.fwd_from:
-        return
+    "To purge messages from the replied message"
     chat = await event.get_input_chat()
     msgs = []
     count = 0
@@ -72,12 +86,17 @@ async def fastpurger(event):
     await hi.delete()
 
 
-@bot.on(admin_cmd(pattern="purgefrom$"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="purgefrom$"))
-@errors_handler
+@catub.cat_cmd(
+    pattern="purgefrom$",
+    command=("purgefrom", plugin_category),
+    info={
+        "header": "To mark the replied message as starting message of purge list.",
+        "description": "After using this u must use purgeto command also so that the messages in between this will delete.",
+        "usage": "{tr}purgefrom",
+    },
+)
 async def purge_from(event):
-    if event.fwd_from:
-        return
+    "To mark the message for purging"
     reply = await event.get_reply_message()
     if reply:
         reply_message = await reply_id(event)
@@ -90,13 +109,18 @@ async def purge_from(event):
         await edit_delete(event, "`Reply to a message to let me know what to delete.`")
 
 
-@bot.on(admin_cmd(pattern="purgeto$"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="purgeto$"))
-@errors_handler
+@catub.cat_cmd(
+    pattern="purgeto$",
+    command=("purgeto", plugin_category),
+    info={
+        "header": "To mark the replied message as end message of purge list.",
+        "description": "U need to use purgefrom command before using this command to function this.",
+        "usage": "{tr}purgeto",
+    },
+)
 async def purge_to(event):
+    "To mark the message for purging"
     chat = await event.get_input_chat()
-    if event.fwd_from:
-        return
     reply = await event.get_reply_message()
     try:
         from_message = purgelist[event.chat_id]
@@ -138,16 +162,21 @@ async def purge_to(event):
         await edit_delete(event, f"**Error**\n`{str(e)}`")
 
 
-@bot.on(admin_cmd(pattern="purgeme"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="purgeme"))
-@errors_handler
+@catub.cat_cmd(
+    pattern="purgeme",
+    command=("purgeme", plugin_category),
+    info={
+        "header": "To purge your latest messages.",
+        "description": "Deletes x(count) amount of your latest messages.",
+        "usage": "{tr}purgeme <count>",
+        "examples": "{tr}purgeme 2",
+    },
+)
 async def purgeme(event):
-    if event.fwd_from:
-        return
+    "To purge your latest messages."
     message = event.text
     count = int(message[9:])
     i = 1
-
     async for message in event.client.iter_messages(event.chat_id, from_user="me"):
         if i > count + 1:
             break
@@ -167,13 +196,19 @@ async def purgeme(event):
     await smsg.delete()
 
 
-@bot.on(admin_cmd(pattern="del(?: |$)(.*)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern="del(?: |$)(.*)"))
-@errors_handler
+@catub.cat_cmd(
+    pattern="del(\s*| \d+)$",
+    command=("del", plugin_category),
+    info={
+        "header": "To delete replied message.",
+        "description": "Deletes the message you replied to in x(count) seconds if count is not used then deletes immediately",
+        "usage": ["{tr}del <time in seconds>", "{tr}del"],
+        "examples": "{tr}del 2",
+    },
+)
 async def delete_it(event):
-    if event.fwd_from:
-        return
-    input_str = event.pattern_match.group(1)
+    "To delete replied message."
+    input_str = event.pattern_match.group(1).strip()
     msg_src = await event.get_reply_message()
     if msg_src:
         if input_str and input_str.isnumeric():
@@ -205,22 +240,5 @@ async def delete_it(event):
             except rpcbaseerrors.BadRequestError:
                 await edit_or_reply(event, "`Well, I can't delete a message`")
     else:
-        if not input_Str:
+        if not input_str:
             await event.delete()
-
-
-CMD_HELP.update(
-    {
-        "purge": "**Plugin : **`purge`\
-        \n\n•  **Syntax : **`.purge <count> reply`\
-        \n•  **Function : **__Deletes the x(count) amount of messages from the replied message if you don't use count then deletes all messages from there.__\
-        \n\n•  **Syntax : **`.purgefrom reply`\
-        \n•  **Function : **__Will Mark that message as oldest message of interval to delete messages.__\
-        \n\n•  **Syntax : **`.purgeto reply`\
-        \n•  **Function : **__Will Mark that message as newest message of interval to delete messages and will delete all messages in that interval.__\
-        \n\n•  **Syntax : **`.purgeme <count>`\
-        \n•  **Function : **__Deletes x(count) amount of your latest messages.__\
-        \n\n•  **Syntax : **`.del <count> reply`\
-        \n•  **Function : **__Deletes the message you replied to in x(count) seconds if count is not used then deletes immediately.__"
-    }
-)

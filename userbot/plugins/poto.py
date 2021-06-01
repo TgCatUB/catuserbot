@@ -1,37 +1,34 @@
-#    Friendly Telegram (telegram userbot)
-#    Copyright (C) 2018-2019 The Authors
-
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 """
-----------------------------------------------------------------
-All Thenks goes to Emily ( The creater of This Plugin)
-\nSome credits goes to me ( @kirito6969 ) for ported this plugin
-\nand `SnapDragon for` Helping me.
-----------------------------------------------------------------
-
-Type `.poto` for get **All profile pics of that User**
-\nOr type `.poto (number)` to get the **desired number of photo of a User** .
+All Thenks goes to Emily ( The creater of This Plugin) from ftg userbot
 """
 
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
+
+plugin_category = "extra"
 
 name = "Profile Photos"
 
 
-@bot.on(admin_cmd(pattern="poto ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="poto ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="poto(?: |$)(.*)",
+    command=("poto", plugin_category),
+    info={
+        "header": "To get user or group profile pic.",
+        "description": "Reply to a user to get his profile pic or use command along\
+        with profile pic number to get desired pic else use .poto all to get\
+        all pics. If you don't reply to any one\
+        then the bot will get the chat profile pic.",
+        "usage": [
+            "{tr}poto <number>",
+            "{tr}poto all",
+            "{tr}poto",
+        ],
+    },
+)
 async def potocmd(event):
+    "To get user or group profile pic"
     uid = "".join(event.raw_text.split(maxsplit=1)[1:])
     user = await event.get_reply_message()
     chat = event.input_chat
@@ -80,14 +77,3 @@ async def potocmd(event):
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
-
-
-CMD_HELP.update(
-    {
-        "poto": """**Plugin : **`poto`
-
-•  **Syntax : **`.poto`
-•  **Function : **__reply to user to get his profile pic use command along \
-with profile pic number to get desired pic else use .poto all to get all if you dont reply then gets group pics__"""
-    }
-)

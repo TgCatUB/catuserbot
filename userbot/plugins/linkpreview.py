@@ -1,12 +1,23 @@
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="ctg$", outgoing=True))
-@bot.on(sudo_cmd(pattern="ctg$", allow_sudo=True))
+from ..core.managers import edit_or_reply
+
+plugin_category = "utils"
+
+
+@catub.cat_cmd(
+    pattern="ctg$",
+    command=("ctg", plugin_category),
+    info={
+        "header": "Reply to link To get link preview using telegrah.s.",
+        "usage": "{tr}ctg",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To get link preview"
     reply_message = await event.get_reply_message()
     if not reply_message:
         await edit_or_reply(event, "```Reply to a Link.```")
@@ -34,12 +45,3 @@ async def _(event):
         else:
             await catevent.delete()
             await event.client.send_message(event.chat_id, response.message)
-
-
-CMD_HELP.update(
-    {
-        "linkpreview": "**Plugin : **`linkpreview`\
-    \n\n**Syntax : **`.ctg` reply to link\
-    \n**Function : **Converts the given link to link preview"
-    }
-)

@@ -1,13 +1,25 @@
-""" plugin is modified by @sn12384 """
 import random
 import re
 
+from userbot import catub
+
+from ..core.managers import edit_or_reply
 from . import fonts
 
+plugin_category = "fun"
 
-@bot.on(admin_cmd(pattern="str(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="str(?: |$)(.*)", allow_sudo=True))
+
+@catub.cat_cmd(
+    pattern="str(?: |$)(.*)",
+    command=("str", plugin_category),
+    info={
+        "header": "stretches the given text",
+        "usage": ["{tr}str <text>", "{tr}str reply this command to text message"],
+        "examples": "{tr}str catuserbot",
+    },
+)
 async def stretch(stret):
+    "stretches the given text"
     textx = await stret.get_reply_message()
     message = stret.text
     message = stret.pattern_match.group(1)
@@ -24,10 +36,18 @@ async def stretch(stret):
     await edit_or_reply(stret, reply_text)
 
 
-@bot.on(admin_cmd(pattern="zal(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="zal(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="zal(?: |$)(.*)",
+    command=("zal", plugin_category),
+    info={
+        "header": "chages given text into some funny way",
+        "usage": ["{tr}zal <text>", "{tr}zal reply this command to text message"],
+        "examples": "{tr}zal catuserbot",
+    },
+)
 async def zal(zgfy):
-    reply_text = list()
+    "chages given text into some funny way"
+    reply_text = []
     textx = await zgfy.get_reply_message()
     message = zgfy.pattern_match.group(1)
     if message:
@@ -45,7 +65,7 @@ async def zal(zgfy):
             reply_text.append(charac)
             continue
 
-        for _ in range(0, 3):
+        for _ in range(3):
             randint = random.randint(0, 2)
 
             if randint == 0:
@@ -60,9 +80,17 @@ async def zal(zgfy):
     await edit_or_reply(zgfy, "".join(reply_text))
 
 
-@bot.on(admin_cmd(pattern="cp(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="cp(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="cp(?: |$)(.*)",
+    command=("cp", plugin_category),
+    info={
+        "header": "chages given text into some funny way",
+        "usage": ["{tr}cp <text>", "{tr}cp reply this command to text message"],
+        "examples": "{tr}cp catuserbot",
+    },
+)
 async def copypasta(cp_e):
+    "chages given text into some funny way"
     textx = await cp_e.get_reply_message()
     message = cp_e.pattern_match.group(1)
 
@@ -86,17 +114,22 @@ async def copypasta(cp_e):
         elif owo.lower() == b_char:
             reply_text += "🅱️"
         else:
-            if bool(random.getrandbits(1)):
-                reply_text += owo.upper()
-            else:
-                reply_text += owo.lower()
+            reply_text += owo.upper() if bool(random.getrandbits(1)) else owo.lower()
     reply_text += random.choice(fonts.EMOJIS)
     await edit_or_reply(cp_e, reply_text)
 
 
-@bot.on(admin_cmd(pattern="weeb(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="weeb(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="weeb(?: |$)(.*)",
+    command=("weeb", plugin_category),
+    info={
+        "header": "chages given text into some funny way",
+        "usage": ["{tr}weeb <text>", "{tr}weeb reply this command to text message"],
+        "examples": "{tr}weeb catuserbot",
+    },
+)
 async def weebify(event):
+    "chages given text into some funny way"
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
@@ -112,9 +145,20 @@ async def weebify(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="downside(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="downside(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="downside(?: |$)(.*)",
+    command=("downside", plugin_category),
+    info={
+        "header": "chages given text into upside down",
+        "usage": [
+            "{tr}downside <text>",
+            "{tr}downside reply this command to text message",
+        ],
+        "examples": "{tr}downside catuserbot",
+    },
+)
 async def stylish_generator(event):
+    "chages given text into upside down"
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
@@ -132,9 +176,20 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="subscript(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="subscript(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="subscript(?: |$)(.*)",
+    command=("subscript", plugin_category),
+    info={
+        "header": "chages given text into subscript",
+        "usage": [
+            "{tr}subscript <text>",
+            "{tr}subscript reply this command to text message",
+        ],
+        "examples": "{tr}subscript catuserbot",
+    },
+)
 async def stylish_generator(event):
+    "chages given text into subscript"
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
@@ -152,9 +207,20 @@ async def stylish_generator(event):
     await edit_or_reply(event, string)
 
 
-@bot.on(admin_cmd(pattern="superscript(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="superscript(?: |$)(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="superscript(?: |$)(.*)",
+    command=("superscript", plugin_category),
+    info={
+        "header": "chages given text into superscript",
+        "usage": [
+            "{tr}superscript <text>",
+            "{tr}superscript reply this command to text message",
+        ],
+        "examples": "{tr}superscript catuserbot",
+    },
+)
 async def stylish_generator(event):
+    "chages given text into superscript"
     args = event.pattern_match.group(1)
     if not args:
         get = await event.get_reply_message()
@@ -170,21 +236,3 @@ async def stylish_generator(event):
             ]
             string = string.replace(normaltextcharacter, superscriptcharacter)
     await edit_or_reply(event, string)
-
-
-CMD_HELP.update(
-    {
-        "funnyfonts": """**Plugin : **`funnyfonts`
-        
-**Commands found in funnyfonts are**
-  •  `.str`
-  •  `.zal`
-  •  `.cp`
-  •  `.weeb`
-  •  `.downside`
-  •  `.subscript`
-  •  `.superscript`
-  
-**Function : **__Reply the command to the text message or give input along with command to convert that text to given font style__"""
-    }
-)

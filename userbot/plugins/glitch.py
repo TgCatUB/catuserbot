@@ -3,51 +3,57 @@ designed By @Krishna_Singhal in userge
 ported to telethon by @mrconfused and @sandy1709
 """
 
-import base64
 import os
 
 from glitch_this import ImageGlitcher
 from PIL import Image
 
+from userbot import catub
 
-@bot.on(admin_cmd(outgoing=True, pattern="(glitch|glitchs)(?: |$)(.*)"))
-@bot.on(sudo_cmd(pattern="(glitch|glitchs)(?: |$)(.*)", allow_sudo=True))
-async def glitch(cat):
-    if cat.fwd_from:
-        return
-    cmd = cat.pattern_match.group(1)
-    catinput = cat.pattern_match.group(2)
-    reply = await cat.get_reply_message()
+from ..core.managers import edit_delete
+from ..helpers.utils import _cattools, _catutils, reply_id
+
+plugin_category = "fun"
+
+
+@catub.cat_cmd(
+    pattern="glitch(s)?(?: |$)([1-8])?",
+    command=("glitch", plugin_category),
+    info={
+        "header": "Glitches the given Image.",
+        "description": "Glitches the given mediafile (gif , stickers , image, videos) to a sticker/image and glitch range is from 1 to 8.\
+                    If nothing is mentioned then by default it is 2",
+        "options": {
+            "glitch": "To output result as gif.",
+            "glitchs": "To output result as sticker.",
+        },
+        "usage": ["{tr}glitch <1-8>", "{tr}glitch", "{tr}glitchs", "{tr}glitchs <1-8>"],
+    },
+)
+async def glitch(event):
+    "Glitches the given Image."
+    cmd = event.pattern_match.group(1)
+    catinput = event.pattern_match.group(2)
+    reply = await event.get_reply_message()
     if not reply:
-        return await edit_delete(cat, "`Reply to supported Media...`")
-    catid = await reply_id(cat)
-    san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
+        return await edit_delete(event, "`Reply to supported Media...`")
+    catid = await reply_id(event)
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
-    if catinput:
-        if not catinput.isdigit():
-            await cat.edit("`You input is invalid, check help`")
-            return
-        catinput = int(catinput)
-        if not 0 < catinput < 9:
-            await cat.edit("`Invalid Range...`")
-            return
-    else:
-        catinput = 2
-    glitch_file = await _cattools.media_to_pic(cat, reply)
-    try:
-        san = Get(san)
-        await cat.client(san)
-    except BaseException:
-        pass
+    catinput = int(catinput) if catinput else 2
+    glitch_file = await _cattools.media_to_pic(event, reply)
+    if glitch_file[1] is None:
+        return await edit_delete(
+            glitch_file[0], "__Unable to extract image from the replied message.__"
+        )
     glitcher = ImageGlitcher()
     img = Image.open(glitch_file[1])
-    if cmd == "glitchs":
+    if cmd:
         glitched = os.path.join("./temp", "glitched.webp")
         glitch_img = glitcher.glitch_image(img, catinput, color_offset=True)
         glitch_img.save(glitched)
-        await cat.client.send_file(cat.chat_id, glitched, reply_to=catid)
-    elif cmd == "glitch":
+        await event.client.send_file(event.chat_id, glitched, reply_to=catid)
+    else:
         glitched = os.path.join("./temp", "glitched.gif")
         glitch_img = glitcher.glitch_image(img, catinput, color_offset=True, gif=True)
         DURATION = 200
@@ -60,23 +66,9 @@ async def glitch(cat):
             duration=DURATION,
             loop=LOOP,
         )
-        sandy = await cat.client.send_file(cat.chat_id, glitched, reply_to=catid)
-        await _catutils.unsavegif(cat, sandy)
+        sandy = await event.client.send_file(event.chat_id, glitched, reply_to=catid)
+        await _catutils.unsavegif(event, sandy)
     await glitch_file[0].delete()
     for files in (glitch_file[1], glitched):
         if files and os.path.exists(files):
             os.remove(files)
-
-
-CMD_HELP.update(
-    {
-        "glitch": "**Plugin : **`glitch`\
-    \n\n  •  **Syntax : **`.glitch` reply to media file\
-    \n  •   **Function :** glitches the given mediafile (gif , stickers , image, videos) to a gif and glitch range is from 1 to 8.\
-    If nothing is mentioned then by default it is 2\
-    \n\n  •  **Syntax : **`.glitchs` reply to media file\
-    \n  •  **Function :** glitches the given mediafile (gif , stickers , image, videos) to a sticker and glitch range is from 1 to 8.\
-    If nothing is mentioned then by default it is 2\
-    "
-    }
-)

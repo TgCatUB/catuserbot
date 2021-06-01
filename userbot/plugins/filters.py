@@ -1,16 +1,21 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
 import re
 
-from . import BOTLOG, BOTLOG_CHATID
-from .sql_helper.filter_sql import (
+from userbot import catub
+
+from ..core.managers import edit_or_reply
+from ..sql_helper.filter_sql import (
     add_filter,
     get_filters,
     remove_all_filters,
     remove_filter,
 )
+from . import BOTLOG, BOTLOG_CHATID
+
+plugin_category = "utils"
 
 
-@bot.on(admin_cmd(incoming=True))
+@catub.cat_cmd(incoming=True)
 async def filter_incoming_handler(handler):
     try:
         if (
@@ -35,11 +40,18 @@ async def filter_incoming_handler(handler):
         pass
 
 
-@bot.on(admin_cmd(pattern="filter (.*)"))
-@bot.on(sudo_cmd(pattern="filter (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="filter (.*)",
+    command=("filter", plugin_category),
+    info={
+        "header": "To save filter for the given keyword.",
+        "description": "If any user sends that filter then your bot will reply.",
+        "note": "For saving media/stickers as filters you need to set PRIVATE_GROUP_BOT_API_ID.",
+        "usage": "{tr}filter <keyword>",
+    },
+)
 async def add_new_filter(new_handler):
-    if new_handler.fwd_from:
-        return
+    "To save the filter"
     keyword = new_handler.pattern_match.group(1)
     string = new_handler.text.partition(keyword)[2]
     msg = await new_handler.get_reply_message()
@@ -63,7 +75,7 @@ async def add_new_filter(new_handler):
         else:
             await edit_or_reply(
                 new_handler,
-                "`Saving media as reply to the filter requires the PRIVATE_GROUP_BOT_API_ID to be set.`",
+                "__Saving media as reply to the filter requires the__ `PRIVATE_GROUP_BOT_API_ID` __to be set.__",
             )
             return
     elif new_handler.reply_to_msg_id and not string:
@@ -78,11 +90,17 @@ async def add_new_filter(new_handler):
     await edit_or_reply(new_handler, f"Error while setting filter for {keyword}")
 
 
-@bot.on(admin_cmd(pattern="filters$"))
-@bot.on(sudo_cmd(pattern="filters$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="filters$",
+    command=("filters", plugin_category),
+    info={
+        "header": "To list all filters in that chat.",
+        "description": "Lists all active (of your userbot) filters in a chat.",
+        "usage": "{tr}filters",
+    },
+)
 async def on_snip_list(event):
-    if event.fwd_from:
-        return
+    "To list all filters in that chat."
     OUT_STR = "There are no filters in this chat."
     filters = get_filters(event.chat_id)
     for filt in filters:
@@ -97,11 +115,16 @@ async def on_snip_list(event):
     )
 
 
-@bot.on(admin_cmd(pattern="stop (.*)"))
-@bot.on(sudo_cmd(pattern="stop (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="stop (.*)",
+    command=("stop", plugin_category),
+    info={
+        "header": "To delete that filter . so if user send that keyword bot will not reply",
+        "usage": "{tr}stop <keyword>",
+    },
+)
 async def remove_a_filter(r_handler):
-    if r_handler.fwd_from:
-        return
+    "Stops the specified keyword."
     filt = r_handler.pattern_match.group(1)
     if not remove_filter(r_handler.chat_id, filt):
         await r_handler.edit("Filter` {} `doesn't exist.".format(filt))
@@ -109,30 +132,19 @@ async def remove_a_filter(r_handler):
         await r_handler.edit("Filter `{} `was deleted successfully".format(filt))
 
 
-@bot.on(admin_cmd(pattern="rmfilters$"))
-@bot.on(sudo_cmd(pattern="rmfilters$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="rmfilters$",
+    command=("rmfilters", plugin_category),
+    info={
+        "header": "To delete all filters in that group.",
+        "usage": "{tr}rmfilters",
+    },
+)
 async def on_all_snip_delete(event):
-    if event.fwd_from:
-        return
+    "To delete all filters in that group."
     filters = get_filters(event.chat_id)
     if filters:
         remove_all_filters(event.chat_id)
         await edit_or_reply(event, f"filters in current chat deleted successfully")
     else:
         await edit_or_reply(event, f"There are no filters in this group")
-
-
-CMD_HELP.update(
-    {
-        "filters": "**Plugin :**`filters`\
-    \n\n•  **Syntax :** `.filters`\
-    \n•  **Function : **Lists all active (of your userbot) filters in a chat.\
-    \n\n•  **Syntax :** `.filter`  reply to a message with .filter <keyword>\
-    \n•  **Function : **Saves the replied message as a reply to the 'keyword'.\
-    \nThe bot will reply to the message whenever 'keyword' is mentioned. Works with everything from files to stickers.\
-    \n\n•  **Syntax :** `.stop <keyword>`\
-    \n•  **Function : **Stops the specified keyword.\
-    \n\n•  **Syntax :** `.rmfilters` \
-    \n•  **Function : **Removes all filters of your userbot in the chat."
-    }
-)

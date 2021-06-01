@@ -3,12 +3,26 @@ import random
 
 import requests
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="quote ?(.*)", outgoing=True))
-@bot.on(sudo_cmd(pattern="quote ?(.*)", allow_sudo=True))
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers import catmemes
+
+plugin_category = "extra"
+
+
+@catub.cat_cmd(
+    pattern="quote(?: |$)(.*)",
+    command=("quote", plugin_category),
+    info={
+        "header": "To get random quotes on given topic.",
+        "description": "An api that Fetchs random Quote from `goodreads.com`",
+        "usage": "{tr}quote <topic>",
+        "examples": "{tr}quote love",
+    },
+)
 async def quote_search(event):
-    if event.fwd_from:
-        return
+    "shows random quotes on given topic."
     catevent = await edit_or_reply(event, "`Processing...`")
     input_str = event.pattern_match.group(1)
     if not input_str:
@@ -29,11 +43,15 @@ async def quote_search(event):
         await edit_delete(catevent, "`Sorry Zero results found`", 5)
 
 
-CMD_HELP.update(
-    {
-        "quotes": "**Plugin : **`quotes`\
-    \n\n**Syntax : **`.quote <category>`\
-    \n**Function : **__An api that Fetchs random Quote from `goodreads.com`__\
-    "
-    }
+@catub.cat_cmd(
+    pattern="pquote$",
+    command=("pquote", plugin_category),
+    info={
+        "header": "To get random quotes on programming.",
+        "usage": "{tr}pquote",
+    },
 )
+async def _(event):
+    "Shows random programming quotes"
+    txt = random.choice(catmemes.PROGQUOTES)
+    await edit_or_reply(event, txt)

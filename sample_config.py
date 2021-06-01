@@ -3,6 +3,7 @@
 # Create a new config.py file in same directory and import, then extend this class.
 
 import os
+from typing import Set
 
 from telethon.tl.types import ChatBannedRights
 
@@ -24,9 +25,7 @@ class Config(object):
     TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN") or os.environ.get(
         "TG_BOT_TOKEN_BF_HER", None
     )
-    TG_BOT_USERNAME = os.environ.get("TG_BOT_USERNAME") or os.environ.get(
-        "TG_BOT_USER_NAME_BF_HER", None
-    )
+    TG_BOT_USERNAME = None
     # get this value from http://www.timezoneconverter.com/cgi-bin/findzone.tzc
     TZ = os.environ.get("TZ", "Asia/Kolkata")
     # set this with required cat repo link
@@ -57,8 +56,6 @@ class Config(object):
         or os.environ.get("PM_LOGGR_BOT_API_ID")
         or 0
     )
-    # set this with users id for whom this bot to act as sudo
-    SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
 
     # Custom vars for userbot
     # set this will channel id of your custom plugins
@@ -68,8 +65,6 @@ class Config(object):
     CUSTOM_ALIVE_EMOJI = os.environ.get("CUSTOM_ALIVE_EMOJI", None)
     # set this value with your required name for telegraph plugin
     TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "catuserbot")
-    # Set False to stop deleting old welcome messages
-    CLEAN_WELCOME = os.environ.get("CLEAN_WELCOME", True)
     # for custom thumb image set this with your required thumb telegraoh link
     THUMB_IMAGE = os.environ.get(
         "THUMB_IMAGE", "https://telegra.ph/file/ca95524e4734b0d5461b5.jpg"
@@ -95,21 +90,17 @@ class Config(object):
     # forcustomizing pmpermit text
     CUSTOM_PMPERMIT_TEXT = os.environ.get("CUSTOM_PMPERMIT_TEXT", None)
     # number of rows of buttons to be displayed in .help command
-    NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD = int(
-        os.environ.get("NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD", 7)
-    )
-    # number of rows of buttons to be displayed in .helpme command
-    NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD = int(
-        os.environ.get("NO_OF_COLOUMS_DISPLAYED_IN_H_ME_CMD", 3)
-    )
+    NO_OF_ROWS_IN_HELP = int(os.environ.get("NO_OF_ROWS_IN_HELP", 5))
+    # number of columns of buttons to be displayed in .helpme command
+    NO_OF_COLUMNS_IN_HELP = int(os.environ.get("NO_OF_COLUMNS_IN_HELP", 2))
     # emoji to be displayed in .help
     EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", " ")
     # specify command handler that should be used for the plugins
     # this should be a valid "regex" pattern
-    COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r"\.")
-    SUDO_COMMAND_HAND_LER = os.environ.get("SUDO_COMMAND_HAND_LER", r"\.")
+    COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r".")
+    SUDO_COMMAND_HAND_LER = os.environ.get("SUDO_COMMAND_HAND_LER", r".")
     # set this with required folder path to act as download folder
-    TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads")
+    TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "downloads")
     # set this with required folder path to act as temparary folder
     TEMP_DIR = os.environ.get("TEMP_DIR", "./temp/")
     # For custom stickerpack names
@@ -120,6 +111,9 @@ class Config(object):
     ANTISPAMBOT_BAN = os.environ.get("ANTISPAMBOT_BAN", False)
     # is dual logging needed or not true or false
     DUAL_LOG = os.environ.get("DUAL_LOG", False)
+    # progress bar progress
+    FINISHED_PROGRESS_STR = os.environ.get("FINISHED_PROGRESS_STR", "▰")
+    UNFINISHED_PROGRESS_STR = os.environ.get("UNFINISHED_PROGRESS_STR", "▱")
 
     # API VARS FOR USERBOT
     # Get your own ACCESS_KEY from http://api.screenshotlayer.com/api/capture for screen shot
@@ -140,7 +134,6 @@ class Config(object):
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
     G_DRIVE_FOLDER_ID = os.environ.get("G_DRIVE_FOLDER_ID", None)
-    G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
     G_DRIVE_DATA = os.environ.get("G_DRIVE_DATA", None)
     G_DRIVE_INDEX_LINK = os.environ.get("G_DRIVE_INDEX_LINK", None)
     # For transfer channel 2 step verification code of telegram
@@ -156,12 +149,13 @@ class Config(object):
     # SpamWatch API you can get it from get api from http://t.me/SpamWatchBot?start=token
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
     # can get from https://coffeehouse.intellivoid.net/
-    LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
+    RANDOM_STUFF_API_KEY = os.environ.get("RANDOM_STUFF_API_KEY", None)
     # github vars
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
     # Deepai value can get from https://deepai.org/
     DEEP_AI = os.environ.get("DEEP_AI", None)
+    ALLOW_NSFW = os.environ.get("ALLOW_NSFW", "False")
 
     # DO NOT EDIT BELOW THIS LINE IF YOU DO NOT KNOW WHAT YOU ARE DOING
     # TG API limit. A message can have maximum 4096 characters!
@@ -185,6 +179,9 @@ class Config(object):
     TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
     # For updater plugin
     UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH", "master")
+    # dont touch this at all
+    SUDO_USERS: Set[int] = set()
+    CATUBLOGO = None
 
 
 class Production(Config):

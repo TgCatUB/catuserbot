@@ -3,4 +3,4 @@ from . import tools as _cattools
 from . import utils as _catutils
 from .events import *
 from .extdl import *
-from .format import parse_pre
+from .format import htmlmentionuser, mentionuser, parse_pre

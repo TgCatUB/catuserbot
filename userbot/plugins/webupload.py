@@ -1,6 +1,3 @@
-# originally created by
-# https://github.com/Total-Noob-69/X-tra-Telegram/blob/master/userbot/plugins/webupload.py
-
 import asyncio
 import json
 import os
@@ -9,16 +6,35 @@ import subprocess
 
 import requests
 
+from userbot import catub
+from userbot.core.logger import logging
+
+from ..Config import Config
+from ..core.managers import edit_or_reply
+
+plugin_category = "misc"
+LOGS = logging.getLogger(__name__)
+
+# originally created by
+# https://github.com/Total-Noob-69/X-tra-Telegram/blob/master/userbot/plugins/webupload.py
+
+
 link_regex = re.compile(
     "((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)", re.DOTALL
 )
 
 
-@bot.on(admin_cmd(pattern="labstack( (.*)|$)"))
-@bot.on(sudo_cmd(pattern="labstack( (.*)|$)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="labstack(?: |$)(.*)",
+    command=("labstack", plugin_category),
+    info={
+        "header": "To upload media to labstack.",
+        "description": "Will upload media to labstack and shares you link so that you can share with friends and it expires automatically after 7 days",
+        "usage": "{tr}labstack <reply to media or provide path of media>",
+    },
+)
 async def labstack(event):
-    if event.fwd_from:
-        return
+    "to upload media to labstack"
     editor = await edit_or_reply(event, "Processing...")
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
@@ -29,10 +45,9 @@ async def labstack(event):
             reply.media, Config.TMP_DOWNLOAD_DIRECTORY
         )
     else:
-        await editor.edit(
+        return await editor.edit(
             "Reply to a media file or provide a directory to upload the file to labstack"
         )
-        return
     filesize = os.path.getsize(filebase)
     filename = os.path.basename(filebase)
     headers2 = {"Up-User-ID": "IZfFbjUcgoo3Ao3m"}
@@ -58,14 +73,12 @@ async def labstack(event):
         url,
     ]
     try:
-        logger.info(command_to_exec)
         t_response = subprocess.check_output(command_to_exec, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as exc:
-        logger.info("Status : FAIL", exc.returncode, exc.output)
-        await editor.edit(exc.output.decode("UTF-8"))
-        return
+        LOGS.info("Status : FAIL", exc.returncode, exc.output)
+        return await editor.edit(exc.output.decode("UTF-8"))
     else:
-        logger.info(t_response)
+        LOGS.info(t_response)
         t_response_arry = "https://up.labstack.com/api/v1/links/{}/receive".format(
             r2json["code"]
         )
@@ -74,20 +87,29 @@ async def labstack(event):
     )
 
 
-@bot.on(
-    admin_cmd(
-        pattern="webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|vshare|bayfiles)"
-    )
-)
-@bot.on(
-    sudo_cmd(
-        pattern="webupload ?(.+?|) --(fileio|oload|anonfiles|transfer|filebin|anonymousfiles|vshare|bayfiles)",
-        allow_sudo=True,
-    )
+@catub.cat_cmd(
+    pattern="webupload ?(.+?|) --(fileio|anonfiles|transfer|filebin|anonymousfiles|bayfiles)",
+    command=("webupload", plugin_category),
+    info={
+        "header": "To upload media to some online media sharing platforms.",
+        "description": "you can upload media to any of the sites mentioned. so you can share link to others.",
+        "options": {
+            "fileio": "to file.io site",
+            "anonfiles": "to anonfiles site",
+            "transfer": "to transfer.sh site",
+            "filebin": "to file bin site",
+            "anonymousfiles": "to anonymousfiles site",
+            "bayfiles": "to bayfiles site",
+        },
+        "usage": [
+            "{tr}webupload --option",
+            "{tr}webupload path --option",
+        ],
+        "examples": "{tr}.webupload --fileio reply this to media file.",
+    },
 )
 async def _(event):
-    if event.fwd_from:
-        return
+    "To upload media to some online media sharing platforms"
     editor = await edit_or_reply(event, "processing ...")
     input_str = event.pattern_match.group(1)
     selected_transfer = event.pattern_match.group(2)
@@ -118,8 +140,7 @@ async def _(event):
             full_file_path=file_name, bare_local_name=filename
         )
     except KeyError:
-        await editor.edit("Invalid selected Transfer")
-        return
+        return await editor.edit("Invalid selected Transfer")
     cmd = selected_one
     # start the subprocess $SHELL
     process = await asyncio.create_subprocess_shell(
@@ -145,16 +166,3 @@ async def _(event):
         await editor.edit(error)
     if catcheck:
         os.remove(file_name)
-
-
-CMD_HELP.update(
-    {
-        "webupload": "**Plugin :** `webupload`\
-    \n\n•  **Syntax : **`.webupload` --(`fileio`|`oload`|`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`vshare`|`bayfiles`) or \
-    \n         `.webupload` (path of file) --(`fileio`|`oload`|`anonfiles`|`transfer`|`filebin`|`anonymousfiles`|`vshare`|`bayfiles`)\
-    \n•  **Usage : **__Upload the file to web according to your choice__\
-    \n•  **Example : **`.webupload --anonfiles` tag this to a file\
-    \n\n•  **Syntax :** `.labstack` Reply to a media file or provide a directory\
-    \n•  **Usage : **__Upload the file to labstack for 7 days.__"
-    }
-)

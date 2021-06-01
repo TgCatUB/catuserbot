@@ -19,6 +19,13 @@ from telethon.tl.types import (
 )
 from telethon.utils import add_surrogate, del_surrogate
 
+from userbot import catub
+from userbot.core.logger import logging
+
+LOGS = logging.getLogger(__name__)
+
+plugin_category = "utils"
+
 usernexp = re.compile(r"@(\w{3,32})\[(.+?)\]")
 nameexp = re.compile(r"\[([\w\S]+)\]\(tg://user\?id=(\d+)\)\[(.+?)\]")
 
@@ -150,30 +157,29 @@ def parse(message, old_entities=None):
         LOGS.info(str(e))
 
 
-@bot.on(events.MessageEdited(outgoing=True))
-@bot.on(events.NewMessage(outgoing=True))
+@catub.cat_cmd(outgoing=True)
 async def reparse(event):
     old_entities = event.message.entities or []
     parser = partial(parse, old_entities=old_entities)
-    message, msg_entities = await event.client._parse_message_text(
-        event.raw_text, parser
-    )
-    if len(old_entities) >= len(msg_entities) and event.raw_text == message:
-        return
-    await event.client(
-        EditMessageRequest(
-            peer=await event.get_input_chat(),
-            id=event.message.id,
-            message=message,
-            no_webpage=not bool(event.message.media),
-            entities=msg_entities,
+    if event.raw_text:
+        message, msg_entities = await event.client._parse_message_text(
+            event.raw_text, parser
         )
-    )
-    raise events.StopPropagation
+        if len(old_entities) >= len(msg_entities) and event.raw_text == message:
+            return
+        await event.client(
+            EditMessageRequest(
+                peer=await event.get_input_chat(),
+                id=event.message.id,
+                message=message,
+                no_webpage=not bool(event.message.media),
+                entities=msg_entities,
+            )
+        )
+        raise events.StopPropagation
 
 
-@bot.on(events.MessageEdited(outgoing=True))
-@bot.on(events.NewMessage(outgoing=True))
+@catub.cat_cmd(outgoing=True)
 async def mention(event):
     newstr = event.text
     if event.entities:
@@ -181,7 +187,7 @@ async def mention(event):
         for match in usernexp.finditer(newstr):
             user = match.group(1)
             text = match.group(2)
-            name, entities = await bot._parse_message_text(text, "md")
+            name, entities = await event.client._parse_message_text(text, "md")
             rep = f'<a href="tg://resolve?domain={user}">{name}</a>'
             if entities:
                 for e in entities:

@@ -1,7 +1,9 @@
 """
 `Credits` @amnd33p
+from ..helpers.utils import _format
 Modified by @mrconfused
 """
+
 import io
 import traceback
 from datetime import datetime
@@ -10,15 +12,30 @@ import requests
 from selenium import webdriver
 from validators.url import url
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="ss (.*)"))
-@bot.on(sudo_cmd(pattern="ss (.*)", allow_sudo=True))
+from ..Config import Config
+from ..core.managers import edit_or_reply
+from . import reply_id
+
+plugin_category = "utils"
+
+
+@catub.cat_cmd(
+    pattern="ss (.*)",
+    command=("ss", plugin_category),
+    info={
+        "header": "To Take a screenshot of a website.",
+        "usage": "{tr}ss <link>",
+        "examples": "{tr}ss https://github.com/sandy1709/catuserbot",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To Take a screenshot of a website."
     if Config.CHROME_BIN is None:
-        await edit_or_reply(event, "Need to install Google Chrome. Module Stopping.")
-        return
+        return await edit_or_reply(
+            event, "Need to install Google Chrome. Module Stopping."
+        )
     catevent = await edit_or_reply(event, "`Processing ...`")
     start = datetime.now()
     try:
@@ -39,8 +56,7 @@ async def _(event):
             inputstr = "http://" + input_str
             caturl = url(inputstr)
         if not caturl:
-            await catevent.edit("`The given input is not supported url`")
-            return
+            return await catevent.edit("`The given input is not supported url`")
         driver.get(inputstr)
         await catevent.edit("`Calculating Page Dimensions`")
         height = driver.execute_script(
@@ -56,9 +72,7 @@ async def _(event):
         # saves screenshot of entire page
         await catevent.edit("`Stoppping Chrome Bin`")
         driver.close()
-        message_id = None
-        if event.reply_to_msg_id:
-            message_id = event.reply_to_msg_id
+        message_id = await reply_id(event)
         end = datetime.now()
         ms = (end - start).seconds
         hmm = f"**url : **{input_str} \n**Time :** `{ms} seconds`"
@@ -78,18 +92,25 @@ async def _(event):
         await catevent.edit(f"`{traceback.format_exc()}`")
 
 
-@bot.on(admin_cmd(pattern="scapture (.*)"))
-@bot.on(sudo_cmd(pattern="scapture (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="scapture (.*)",
+    command=("scapture", plugin_category),
+    info={
+        "header": "To Take a screenshot of a website.",
+        "description": "For functioning of this command you need to set SCREEN_SHOT_LAYER_ACCESS_KEY var",
+        "usage": "{tr}scapture <link>",
+        "examples": "{tr}scapture https://github.com/sandy1709/catuserbot",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To Take a screenshot of a website."
     start = datetime.now()
+    message_id = await reply_id(event)
     if Config.SCREEN_SHOT_LAYER_ACCESS_KEY is None:
-        await edit_or_reply(
+        return await edit_or_reply(
             event,
             "`Need to get an API key from https://screenshotlayer.com/product and need to set it SCREEN_SHOT_LAYER_ACCESS_KEY !`",
         )
-        return
     catevent = await edit_or_reply(event, "`Processing ...`")
     sample_url = "https://api.screenshotlayer.com/api/capture?access_key={}&url={}&fullpage={}&viewport={}&format={}&force={}"
     input_str = event.pattern_match.group(1)
@@ -99,8 +120,7 @@ async def _(event):
         inputstr = "http://" + input_str
         caturl = url(inputstr)
     if not caturl:
-        await catevent.edit("`The given input is not supported url`")
-        return
+        return await catevent.edit("`The given input is not supported url`")
     response_api = requests.get(
         sample_url.format(
             Config.SCREEN_SHOT_LAYER_ACCESS_KEY, inputstr, "1", "2560x1440", "PNG", "1"
@@ -120,21 +140,10 @@ async def _(event):
                     screenshot_image,
                     caption=hmm,
                     force_document=True,
-                    reply_to=event.message.reply_to_msg_id,
+                    reply_to=message_id,
                 )
                 await catevent.delete()
             except Exception as e:
                 await catevent.edit(str(e))
     else:
         await catevent.edit(f"`{response_api.text}`")
-
-
-CMD_HELP.update(
-    {
-        "screenshot": "**Plugin : **`screenshot`\
-        \n\n**Syntax : **`.ss <url>`\
-        \n**Function : **__Takes a screenshot of a website and sends the screenshot.__\
-        \n\n**Syntax : **`.scapture <url>`\
-        \n**Function : **__Takes a screenshot of a website and sends the screenshot need to set config var for this.__"
-    }
-)

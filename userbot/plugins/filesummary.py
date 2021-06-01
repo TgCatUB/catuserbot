@@ -1,10 +1,17 @@
 # file summary plugin for catuserbot  by @mrconfused
-
 import time
 
 from prettytable import PrettyTable
 
-from . import humanbytes, media_type
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.tools import media_type
+from ..helpers.utils import _format
+from . import humanbytes
+
+plugin_category = "utils"
+
 
 TYPES = [
     "Photo",
@@ -22,11 +29,18 @@ def weird_division(n, d):
     return n / d if d else 0
 
 
-@borg.on(admin_cmd(pattern="chatfs ?(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="chatfs ?(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="chatfs(?: |$)(.*)",
+    command=("chatfs", plugin_category),
+    info={
+        "header": "Shows you the complete media/file summary of the that group.",
+        "description": "As of now limited to last 10000 in the group u used",
+        "usage": "{tr}chatfs <Username/id>",
+        "examples": "{tr}chatfs @catuserbot_support",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "Shows you the complete media/file summary of the that group"
     entity = event.chat_id
     input_str = event.pattern_match.group(1)
     if input_str:
@@ -117,11 +131,18 @@ async def _(event):
     await catevent.edit(result, parse_mode="HTML", link_preview=False)
 
 
-@borg.on(admin_cmd(pattern="userfs ?(.*)", outgoing=True))
-@borg.on(sudo_cmd(pattern="userfs ?(.*)", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="userfs(?: |$)(.*)",
+    command=("userfs", plugin_category),
+    info={
+        "header": "Shows you the complete media/file summary of the that user in that group.",
+        "description": "As of now limited to last 10000 messages of that person in the group u used",
+        "usage": "{tr}userfs <reply/username/id>",
+        "examples": "{tr}userfs @MissRose_bot",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "Shows you the complete media/file summary of the that user in that group."
     reply = await event.get_reply_message()
     input_str = event.pattern_match.group(1)
     if reply and input_str:
@@ -232,24 +253,3 @@ async def _(event):
     result += f"{largest}"
     result += line + totalstring + line + runtimestring + line
     await catevent.edit(result, parse_mode="HTML", link_preview=False)
-
-
-CMD_HELP.update(
-    {
-        "filesummary": """**Plugin : **`filesummary`
-
-**Syntax : **
-  •  `.chatfs`
-  •  `.chatfs username/id`
-**Function : **
-  •  __Shows you the complete media/file summary of the that group__
-
-**Syntax : **
-  •  `.userfs reply`
-  •  `.userfs chat username/id`
-  •  `.userfs user username/id`
-**Function : **
-  •  __Shows you the complete media/file summary of the that User in the group where you want__
-"""
-    }
-)

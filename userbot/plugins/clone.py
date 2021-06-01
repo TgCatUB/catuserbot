@@ -1,16 +1,22 @@
-"""Get Telegram Profile Picture and other information
-and set as own profile.
-Syntax: .clone @username"""
 # Credits of Plugin @ViperAdnan and @mrconfused(revert)[will add sql soon]
-
 import html
 
 from telethon.tl import functions
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import MessageEntityMentionName
 
-from . import ALIVE_NAME, AUTONAME, BOTLOG, BOTLOG_CHATID, DEFAULT_BIO
+from ..Config import Config
+from . import (
+    ALIVE_NAME,
+    AUTONAME,
+    BOTLOG,
+    BOTLOG_CHATID,
+    DEFAULT_BIO,
+    catub,
+    edit_delete,
+    get_user_from_event,
+)
 
+plugin_category = "utils"
 DEFAULTUSER = str(AUTONAME) if AUTONAME else str(ALIVE_NAME)
 DEFAULTUSERBIO = (
     str(DEFAULT_BIO)
@@ -19,35 +25,31 @@ DEFAULTUSERBIO = (
 )
 
 
-@bot.on(admin_cmd(pattern="clone ?(.*)"))
+@catub.cat_cmd(
+    pattern="clone(?: |$)(.*)",
+    command=("clone", plugin_category),
+    info={
+        "header": "To clone account of mentiond user or replied user",
+        "usage": "{tr}clone <username/userid/reply>",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
-    reply_message = await event.get_reply_message()
-    replied_user, error_i_a = await get_full_user(event)
+    "To clone account of mentiond user or replied user"
+    replied_user, error_i_a = await get_user_from_event(event)
     if replied_user is None:
-        await event.edit(str(error_i_a))
-        return False
-    user_id = replied_user.user.id
-    profile_pic = await event.client.download_profile_photo(
-        user_id, Config.TMP_DOWNLOAD_DIRECTORY
-    )
-    # some people have weird HTML in their names
-    first_name = html.escape(replied_user.user.first_name)
-    # https://stackoverflow.com/a/5072031/4723940
-    # some Deleted Accounts do not have first_name
+        return
+    user_id = replied_user.id
+    profile_pic = await event.client.download_profile_photo(user_id, Config.TEMP_DIR)
+    first_name = html.escape(replied_user.first_name)
     if first_name is not None:
-        # some weird people (like me) have more than 4096 characters in their
-        # names
         first_name = first_name.replace("\u2060", "")
-    last_name = replied_user.user.last_name
-    # last_name is not Manadatory in @Telegram
+    last_name = replied_user.last_name
     if last_name is not None:
         last_name = html.escape(last_name)
         last_name = last_name.replace("\u2060", "")
     if last_name is None:
         last_name = "⁪⁬⁮⁮⁮⁮ ‌‌‌‌"
-    # inspired by https://telegram.dog/afsaI181
+    replied_user = await event.client(GetFullUserRequest(replied_user.id))
     user_bio = replied_user.about
     if user_bio is not None:
         user_bio = replied_user.about
@@ -56,10 +58,7 @@ async def _(event):
     await event.client(functions.account.UpdateProfileRequest(about=user_bio))
     pfile = await event.client.upload_file(profile_pic)
     await event.client(functions.photos.UploadProfilePhotoRequest(pfile))
-    await event.delete()
-    await event.client.send_message(
-        event.chat_id, "**LET US BE AS ONE**", reply_to=reply_message
-    )
+    await edit_delete(event, "**LET US BE AS ONE**")
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -67,86 +66,30 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern="revert$"))
+@catub.cat_cmd(
+    pattern="revert$",
+    command=("revert", plugin_category),
+    info={
+        "header": "To revert back to your original name , bio and profile pic",
+        "note": "For proper Functioning of this command you need to set AUTONAME and DEFAULT_BIO with your profile name and bio respectively.",
+        "usage": "{tr}revert",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To reset your original details"
     name = f"{DEFAULTUSER}"
     blank = ""
     bio = f"{DEFAULTUSERBIO}"
-    n = 1
     await event.client(
         functions.photos.DeletePhotosRequest(
-            await event.client.get_profile_photos("me", limit=n)
+            await event.client.get_profile_photos("me", limit=1)
         )
     )
     await event.client(functions.account.UpdateProfileRequest(about=bio))
     await event.client(functions.account.UpdateProfileRequest(first_name=name))
     await event.client(functions.account.UpdateProfileRequest(last_name=blank))
-    await event.edit("succesfully reverted to your account back")
+    await edit_delete(evenr, "succesfully reverted to your account back")
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID, f"#REVERT\nSuccesfully reverted back to your profile"
         )
-
-
-async def get_full_user(event):
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        if previous_message.forward:
-            replied_user = await event.client(
-                GetFullUserRequest(
-                    previous_message.forward.sender_id
-                    or previous_message.forward.channel_id
-                )
-            )
-            return replied_user, None
-        replied_user = await event.client(
-            GetFullUserRequest(previous_message.sender_id)
-        )
-        return replied_user, None
-    input_str = None
-    try:
-        input_str = event.pattern_match.group(1)
-    except IndexError as e:
-        return None, e
-    if event.message.entities is not None:
-        mention_entity = event.message.entities
-        probable_user_mention_entity = mention_entity[0]
-        if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-            user_id = probable_user_mention_entity.user_id
-            replied_user = await event.client(GetFullUserRequest(user_id))
-            return replied_user, None
-        try:
-            user_object = await event.client.get_entity(input_str)
-            user_id = user_object.id
-            replied_user = await event.client(GetFullUserRequest(user_id))
-            return replied_user, None
-        except Exception as e:
-            return None, e
-    if event.is_private:
-        try:
-            user_id = event.chat_id
-            replied_user = await event.client(GetFullUserRequest(user_id))
-            return replied_user, None
-        except Exception as e:
-            return None, e
-    try:
-        user_object = await event.client.get_entity(int(input_str))
-        user_id = user_object.id
-        replied_user = await event.client(GetFullUserRequest(user_id))
-        return replied_user, None
-    except Exception as e:
-        return None, e
-
-
-CMD_HELP.update(
-    {
-        "clone": "**Plugin : **`clone`\
-        \n\n  •  **Syntax :** `.clone`<reply to user whom you want to clone\
-        \n  •  **Function : **clone the replied user account\
-        \n\n  •  **Syntax : **`.revert`\
-        \n  •  **Function : **Reverts back to your profile which you have set in heroku for  AUTONAME, DEFAULT_BIO\
-    "
-    }
-)

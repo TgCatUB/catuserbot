@@ -1,26 +1,52 @@
 import asyncio
 from datetime import datetime
 
+from userbot import catub
 
-@bot.on(admin_cmd(pattern="ping$"))
-@bot.on(sudo_cmd(pattern="ping$", allow_sudo=True))
+from ..core.managers import edit_or_reply
+
+plugin_category = "tools"
+
+
+@catub.cat_cmd(
+    pattern="ping( -a|$)",
+    command=("ping", plugin_category),
+    info={
+        "header": "check how long it takes to ping your userbot",
+        "flags": {"-a": "average ping"},
+        "usage": ["{tr}ping", "{tr}ping -a"],
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To check ping"
+    flag = event.pattern_match.group(1)
     start = datetime.now()
-    event = await edit_or_reply(event, "Pong!")
-    end = datetime.now()
-    ms = (end - start).microseconds / 1000
-    await event.edit("Pong!\n`{} ms`".format(ms))
+    if flag == " -a":
+        catevent = await edit_or_reply(event, "`!....`")
+        await asyncio.sleep(0.3)
+        await catevent.edit("`..!..`")
+        await asyncio.sleep(0.3)
+        await catevent.edit("`....!`")
+        end = datetime.now()
+        tms = (end - start).microseconds / 1000
+        ms = round((tms - 0.6) / 3, 3)
+        await catevent.edit(f"Average Pong!\n`{ms} ms`")
+    else:
+        catevent = await edit_or_reply(event, "Pong!")
+        end = datetime.now()
+        ms = (end - start).microseconds / 1000
+        await catevent.edit(f"Pong!\n`{ms} ms`")
 
 
-@bot.on(admin_cmd(pattern=f"fping$", outgoing=True))
-@bot.on(sudo_cmd(pattern=f"fping$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="fping$",
+    command=("fping", plugin_category),
+    info={"header": "Shows the server ping with extra animation", "usage": "{tr}fping"},
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To check ping with animation"
     start = datetime.now()
-    animation_interval = 0.2
+    animation_interval = 0.3
     animation_ttl = range(26)
     event = await edit_or_reply(event, "ping....")
     animation_chars = [
@@ -57,19 +83,5 @@ async def _(event):
     end = datetime.now()
     ms = (end - start).microseconds / 1000
     await event.edit(
-        "‎‎‎‎‎‎‎‎‎⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛⬛📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛📶⬛⬛⬛\n⬛⬛⬛⬛📶⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛📶⬛⬛⬛📶⬛\n⬛⬛📶📶⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶⬛📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛ \n‎‎‎‎‎‎‎‎‎ \n \n My 🇵 🇮 🇳 🇬  Is : {} ms".format(
-            ms
-        )
+        f"‎‎‎‎‎‎‎‎‎⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛📶⬛⬛📶⬛\n⬛⬛⬛⬛⬛📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛📶⬛⬛⬛\n⬛⬛⬛⬛📶⬛⬛⬛⬛\n⬛📶📶📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛⬛📶📶📶📶📶⬛⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛⬛⬛⬛⬛📶⬛\n⬛📶⬛📶⬛⬛⬛📶⬛\n⬛⬛📶📶⬛⬛📶⬛⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛\n⬛📶⬛📶📶📶📶📶⬛\n⬛⬛⬛⬛⬛⬛⬛⬛⬛ \n‎‎‎‎‎‎‎‎‎ \n \n My 🇵 🇮 🇳 🇬  Is : {ms} ms"
     )
-
-
-CMD_HELP.update(
-    {
-        "ping": "**Plugin :** `ping`\
-    \n\n•  **Syntax :** `.ping`\
-    \n•  **Function : **__Shows you the ping speed of server__\
-    \n\n•  **Syntax : **`.fping`\
-    \n•  **Function : **__Shows the server ping with extra animation__\
-    "
-    }
-)

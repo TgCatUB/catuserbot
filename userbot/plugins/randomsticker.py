@@ -8,22 +8,28 @@ import requests
 from PIL import Image
 from telethon import functions, types, utils
 
+from userbot import catub
+
+from ..helpers import reply_id
+
+plugin_category = "extra"
+
 BASE_URL = "https://headp.at/pats/{}"
 PAT_IMAGE = "pat.webp"
 
 
-@bot.on(admin_cmd(pattern="cat$"))
-@bot.on(sudo_cmd(pattern="cat$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="cat$",
+    command=("cat", plugin_category),
+    info={
+        "header": "To get random cat stickers.",
+        "usage": "{tr}cat",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
-    try:
-        await event.delete()
-    except BaseException:
-        pass
-    reply_to_id = event.message
-    if event.reply_to_msg_id:
-        reply_to_id = await event.get_reply_message()
+    "To get random cat stickers."
+    await event.delete()
+    reply_to_id = await reply_id(event)
     with open("temp.png", "wb") as f:
         f.write(requests.get(nekos.cat()).content)
     img = Image.open("temp.png")
@@ -38,9 +44,17 @@ async def _(event):
 # credit to @r4v4n4
 
 
-@bot.on(admin_cmd(pattern="dab$", outgoing=True))
-@bot.on(sudo_cmd(pattern="dab$", allow_sudo=True))
-async def handler(event):
+@catub.cat_cmd(
+    pattern="dab$",
+    command=("dab", plugin_category),
+    info={
+        "header": "To get random dabbing pose stickers.",
+        "usage": "{tr}dab",
+    },
+)
+async def _(event):
+    "To get random dabbing pose stickers."
+    reply_to_id = await reply_id(event)
     blacklist = {
         1653974154589768377,
         1653974154589768312,
@@ -57,10 +71,7 @@ async def handler(event):
         1653974154589767852,
         1653974154589768677,
     }
-    try:
-        await event.delete()
-    except BaseException:
-        pass
+    await event.delete()
     docs = [
         utils.get_input_document(x)
         for x in (
@@ -72,17 +83,22 @@ async def handler(event):
         ).documents
         if x.id not in blacklist
     ]
-    await event.respond(file=random.choice(docs))
+    await event.respond(file=random.choice(docs), reply_to=reply_to_id)
 
 
-@bot.on(admin_cmd(pattern="brain$", outgoing=True))
-@bot.on(sudo_cmd(pattern="brain$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="brain$",
+    command=("brain", plugin_category),
+    info={
+        "header": "To get random brain stickers.",
+        "usage": "{tr}brain",
+    },
+)
 async def handler(event):
+    "To get random brain stickers."
+    reply_to_id = await reply_id(event)
     blacklist = {}
-    try:
-        await event.delete()
-    except BaseException:
-        pass
+    await event.delete()
     docs = [
         utils.get_input_document(x)
         for x in (
@@ -94,7 +110,7 @@ async def handler(event):
         ).documents
         if x.id not in blacklist
     ]
-    await event.respond(file=random.choice(docs))
+    await event.respond(file=random.choice(docs), reply_to=reply_to_id)
 
 
 # HeadPat Module for Userbot (http://headp.at)
@@ -102,34 +118,22 @@ async def handler(event):
 # By:- git: jaskaranSM tg: @Zero_cool7870
 
 
-@bot.on(admin_cmd(pattern="pat$", outgoing=True))
-@bot.on(sudo_cmd(pattern="pat$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="pat$",
+    command=("pat", plugin_category),
+    info={
+        "header": "To get random pat stickers.",
+        "usage": "{tr}pat",
+    },
+)
 async def lastfm(event):
-    try:
-        await event.delete()
-    except BaseException:
-        pass
+    "To get random pat stickers."
+    await event.delete()
+    reply_to_id = await reply_id(event)
     resp = requests.get("http://headp.at/js/pats.json")
     pats = resp.json()
     pat = BASE_URL.format(parse.quote(choice(pats)))
     with open(PAT_IMAGE, "wb") as f:
         f.write(requests.get(pat).content)
-    await event.client.send_file(
-        event.chat_id, PAT_IMAGE, reply_to=event.reply_to_msg_id
-    )
+    await event.client.send_file(event.chat_id, PAT_IMAGE, reply_to=reply_to_id)
     remove(PAT_IMAGE)
-
-
-CMD_HELP.update(
-    {
-        "randomsticker": """**Plugin : **`randomsticker`
-
-**Commands : **
-  •  `.cat`
-  •  `.dab`
-  •  `.brain`
-  •  `.pat`
-
-**Function : **__sends you random stickers of that category__ """
-    }
-)

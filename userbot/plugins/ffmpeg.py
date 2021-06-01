@@ -1,20 +1,71 @@
 # ported from uniborg by @spechide
-
 import asyncio
+import io
 import os
 import time
 from datetime import datetime
 
-from . import media_type, progress, reply_id
+from userbot import catub
 
-FF_MPEG_DOWN_LOAD_MEDIA_PATH = "./downloads/catuserbot.media.ffmpeg"
+from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers import _cattools, media_type, progress, reply_id
+
+plugin_category = "utils"
 
 
-@bot.on(admin_cmd(pattern="ffmpegsave$"))
-@bot.on(sudo_cmd(pattern="ffmpegsave$", allow_sudo=True))
+FF_MPEG_DOWN_LOAD_MEDIA_PATH = os.path.join(
+    Config.TMP_DOWNLOAD_DIRECTORY, "catuserbot.media.ffmpeg"
+)
+
+# https://github.com/Nekmo/telegram-upload/blob/master/telegram_upload/video.py#L26
+
+
+async def cult_small_video(
+    video_file, output_directory, start_time, end_time, out_put_file_name=None
+):
+    # https://stackoverflow.com/a/13891070/4723940
+    out_put_file_name = out_put_file_name or os.path.join(
+        output_directory, f"{str(round(time.time()))}.mp4"
+    )
+    file_genertor_command = [
+        "ffmpeg",
+        "-i",
+        video_file,
+        "-ss",
+        start_time,
+        "-to",
+        end_time,
+        "-async",
+        "1",
+        "-strict",
+        "-2",
+        out_put_file_name,
+    ]
+    process = await asyncio.create_subprocess_exec(
+        *file_genertor_command,
+        # stdout must a pipe to be accessible as process.stdout
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    # Wait for the subprocess to finish
+    await process.communicate()
+    if os.path.lexists(out_put_file_name):
+        return out_put_file_name
+    return None
+
+
+@catub.cat_cmd(
+    pattern="ffmpegsave$",
+    command=("ffmpegsave", plugin_category),
+    info={
+        "header": "Saves the media file in bot to trim mutliple times",
+        "description": "Will download the replied media into the bot so that you an trim it as your needs.",
+        "usage": "{tr}ffmpegsave <reply>",
+    },
+)
 async def ff_mpeg_trim_cmd(event):
-    if event.fwd_from:
-        return
+    "Saves the media file in bot to trim mutliple times"
     if not os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
         reply_message = await event.get_reply_message()
         if reply_message:
@@ -25,20 +76,22 @@ async def ff_mpeg_trim_cmd(event):
             catevent = await edit_or_reply(event, "`Saving the file...`")
             try:
                 c_time = time.time()
-                downloaded_file_name = await event.client.download_media(
-                    reply_message,
-                    FF_MPEG_DOWN_LOAD_MEDIA_PATH,
+                dl = io.FileIO(FF_MPEG_DOWN_LOAD_MEDIA_PATH, "a")
+                await event.client.fast_download_file(
+                    location=reply_message.document,
+                    out=dl,
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                         progress(d, t, catevent, c_time, "trying to download")
                     ),
                 )
+                dl.close()
             except Exception as e:
-                await catevent.edit(str(e))
+                await catevent.edit(f"**Error:**\n`{str(e)}`")
             else:
                 end = datetime.now()
                 ms = (end - start).seconds
                 await catevent.edit(
-                    f"Saved file to `{downloaded_file_name}` in `{ms}` seconds."
+                    f"Saved file to `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}` in `{ms}` seconds."
                 )
         else:
             await edit_delete(event, "`Reply to a any media file`")
@@ -49,17 +102,24 @@ async def ff_mpeg_trim_cmd(event):
         )
 
 
-@bot.on(admin_cmd(pattern="vtrim"))
-@bot.on(sudo_cmd(pattern="vtrim", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="vtrim(?: |$)(.*)",
+    command=("vtrim", plugin_category),
+    info={
+        "header": "Trims the saved media with specific given time internval and outputs as video if it is video",
+        "description": "Will trim the saved media with given given time interval.",
+        "note": "if you haven't mentioned time interval and just time then will send screenshot at that location.",
+        "usage": "{tr}vtrim <time interval>",
+        "examples": "{tr}vtrim 00:00 00:10",
+    },
+)
 async def ff_mpeg_trim_cmd(event):
-    if event.fwd_from:
-        return
+    "Trims the saved media with specific given time internval and outputs as video if it is video"
     if not os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
-        await edit_delete(
+        return await edit_delete(
             event,
             f"a media file needs to be download, and save to the following path: `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}`",
         )
-        return
     reply_to_id = await reply_id(event)
     catevent = await edit_or_reply(event, "`Triming the media......`")
     current_message_text = event.raw_text
@@ -128,17 +188,23 @@ async def ff_mpeg_trim_cmd(event):
     await edit_delete(catevent, f"`Completed Process in {ms} seconds`", 3)
 
 
-@bot.on(admin_cmd(pattern="atrim"))
-@bot.on(sudo_cmd(pattern="atrim", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="atrim(?: |$)(.*)",
+    command=("atrim", plugin_category),
+    info={
+        "header": "Trims the saved media with specific given time internval and outputs as audio",
+        "description": "Will trim the saved media with given given time interval. and output only audio part",
+        "usage": "{tr}atrim <time interval>",
+        "examples": "{tr}atrim 00:00 00:10",
+    },
+)
 async def ff_mpeg_trim_cmd(event):
-    if event.fwd_from:
-        return
+    "Trims the saved media with specific given time internval and outputs as audio"
     if not os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
-        await edit_delete(
+        return await edit_delete(
             event,
             f"a media file needs to be download, and save to the following path: `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}`",
         )
-        return
     reply_to_id = await reply_id(event)
     catevent = await edit_or_reply(event, "`Triming the media...........`")
     current_message_text = event.raw_text
@@ -186,11 +252,17 @@ async def ff_mpeg_trim_cmd(event):
     await edit_delete(catevent, f"`Completed Process in {ms} seconds`", 3)
 
 
-@bot.on(admin_cmd(pattern="ffmpegclear$"))
-@bot.on(sudo_cmd(pattern="ffmpegclear$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="ffmpegclear$",
+    command=("ffmpegclear", plugin_category),
+    info={
+        "header": "Deletes the saved media so you can save new one",
+        "description": "Only after deleting the old saved file you can add new file",
+        "usage": "{tr}ffmpegclear",
+    },
+)
 async def ff_mpeg_trim_cmd(event):
-    if event.fwd_from:
-        return
+    "Deletes the saved media so you can save new one"
     if not os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
         await edit_delete(event, "`There is no media saved in bot for triming`")
     else:
@@ -199,58 +271,3 @@ async def ff_mpeg_trim_cmd(event):
             event,
             "`The media saved in bot for triming is deleted now . you can save now new one `",
         )
-
-
-# https://github.com/Nekmo/telegram-upload/blob/master/telegram_upload/video.py#L26
-
-
-async def cult_small_video(
-    video_file, output_directory, start_time, end_time, out_put_file_name=None
-):
-    # https://stackoverflow.com/a/13891070/4723940
-    out_put_file_name = out_put_file_name or os.path.join(
-        output_directory, f"{str(round(time.time()))}.mp4"
-    )
-    file_genertor_command = [
-        "ffmpeg",
-        "-i",
-        video_file,
-        "-ss",
-        start_time,
-        "-to",
-        end_time,
-        "-async",
-        "1",
-        "-strict",
-        "-2",
-        out_put_file_name,
-    ]
-    process = await asyncio.create_subprocess_exec(
-        *file_genertor_command,
-        # stdout must a pipe to be accessible as process.stdout
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
-    # Wait for the subprocess to finish
-    await process.communicate()
-    if os.path.lexists(out_put_file_name):
-        return out_put_file_name
-    return None
-
-
-CMD_HELP.update(
-    {
-        "ffmpeg": "**Plugin : **`ffmpeg`\
-    \n\n  •  **Syntax : **`.ffmpegsave`\
-    \n  •  **Function : **__Saves the media file in bot to trim mutliple times__\
-    \n\n  •  **Syntax : **`.vtrim time`\
-    \n  •  **Function : **__Sends you the screenshot of the video at the given specific time__\
-    \n\n  •  **Syntax : **`.vtrim starttime endtime`\
-    \n  •  **Function : **__Trims the saved media with specific given time internval and outputs as video__\
-    \n\n  •  **Syntax : **`.atrim starttime endtime`\
-    \n  •  **Function : **__Trims the saved media with specific given time internval and outputs as audio__\
-    \n\n  •  **Syntax : **`.ffmpegclear`\
-    \n  •  **Function : **__Deletes the saved media so you can save new one__\
-    "
-    }
-)

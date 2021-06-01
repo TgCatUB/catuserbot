@@ -2,6 +2,25 @@ import string
 
 from telethon.tl.types import Channel
 
+from userbot import catub
+from userbot.core.logger import logging
+
+from ..Config import Config
+from ..core.managers import edit_or_reply
+
+plugin_category = "extra"
+
+LOGS = logging.getLogger(__name__)
+
+
+class FPOST:
+    def __init__(self) -> None:
+        self.GROUPSID = []
+        self.MSG_CACHE = {}
+
+
+FPOST_ = FPOST()
+
 
 async def all_groups_id(cat):
     catgroups = []
@@ -12,11 +31,16 @@ async def all_groups_id(cat):
     return catgroups
 
 
-@bot.on(admin_cmd(pattern="frwd$"))
-@bot.on(sudo_cmd(pattern="frwd$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="frwd$",
+    command=("frwd", plugin_category),
+    info={
+        "header": "To get view counter for the message. that is will delete old message and send new message where you can see how any people saw your message",
+        "usage": "{tr}frwd",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To get view counter for the message"
     if Config.PRIVATE_CHANNEL_BOT_API_ID is None:
         await edit_or_reply(
             event,
@@ -38,11 +62,16 @@ async def _(event):
             LOGS.info(str(e))
 
 
-@bot.on(admin_cmd(pattern="resend$"))
-@bot.on(sudo_cmd(pattern="resend$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="resend$",
+    command=("resend", plugin_category),
+    info={
+        "header": "To resend the message again. Useful to remove forword tag",
+        "usage": "{tr}resend",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To resend the message again"
     try:
         await event.delete()
     except Exception as e:
@@ -53,24 +82,18 @@ async def _(event):
     await event.respond(m)
 
 
-class FPOST:
-    def __init__(self) -> None:
-        self.GROUPSID = []
-        self.MSG_CACHE = {}
-
-
-FPOST_ = FPOST()
-
-
-@bot.on(admin_cmd(pattern=r"fpost (.*)"))
-@bot.on(sudo_cmd(pattern=r"fpost (.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="fpost (.*)",
+    command=("fpost", plugin_category),
+    info={
+        "header": "Split the word and forwards each letter from previous messages in that group",
+        "usage": "{tr}fpost <text>",
+        "examples": "{tr}fpost catuserbot",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
-    try:
-        await event.delete()
-    except Exception as e:
-        LOGS.info(str(e))
+    "Split the word and forwards each letter from previous messages in that group"
+    await event.delete()
     text = event.pattern_match.group(1)
     destination = await event.get_input_chat()
     if len(FPOST_.GROUPSID) == 0:
@@ -90,16 +113,3 @@ async def _(event):
                         MSG_CACHE[c] = msg
                         break
         await event.client.forward_messages(destination, FPOST_.MSG_CACHE[c])
-
-
-CMD_HELP.update(
-    {
-        "forward": "**Plugin : **`forward`\
-    \n\n  •  **Synatax : **`frwd reply to any message`\
-    \n  •  **Function :  **__Enable Seen Counter in any message, to know how many users have seen your message__\
-    \n\n  •  **Syntax : **`.resend reply to message`\
-    \n  •  **Function : **__Just resend the replied message again in that chat__\
-    \n\n  •  **Syntax : **`.fpost text`\
-    \n  •  **Function : **__Split the word and forwards each letter from the messages cache if exists__"
-    }
-)

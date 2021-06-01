@@ -5,6 +5,12 @@ from telethon.tl.custom import Dialog
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import Channel, Chat, User
 
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
+
+plugin_category = "utils"
+
 # =========================================================== #
 #                           STRINGS                           #
 # =========================================================== #
@@ -20,9 +26,37 @@ GROUPS_OWNERSTR = "**The list of groups in which you are owner are here **\n\n"
 # =========================================================== #
 
 
-@bot.on(admin_cmd(pattern="stat$"))
-@bot.on(sudo_cmd(pattern="stat$", allow_sudo=True))
-async def stats(event):
+def inline_mention(user):
+    full_name = user_full_name(user) or "No Name"
+    return f"[{full_name}](tg://user?id={user.id})"
+
+
+def user_full_name(user):
+    names = [user.first_name, user.last_name]
+    names = [i for i in list(names) if i]
+    return " ".join(names)
+
+
+@catub.cat_cmd(
+    pattern="stat$",
+    command=("stat", plugin_category),
+    info={
+        "header": "To get statistics of your telegram account.",
+        "description": "Shows you the count of  your groups, channels, private chats...etc if no input is given.",
+        "flags": {
+            "g": "To get list of all group you in",
+            "ga": "To get list of all groups where you are admin",
+            "go": "To get list of all groups where you are owner/creator.",
+            "c": "To get list of all channels you in",
+            "ca": "To get list of all channels where you are admin",
+            "co": "To get list of all channels where you are owner/creator.",
+        },
+        "usage": ["{tr}stat", "{tr}stat <flag>"],
+        "examples": ["{tr}stat g", "{tr}stat ca"],
+    },
+)
+async def stats(event):  # sourcery no-metrics
+    "To get statistics of your telegram account."
     cat = await edit_or_reply(event, STAT_INDICATION)
     start_time = time.time()
     private_chats = 0
@@ -84,11 +118,10 @@ async def stats(event):
     await cat.edit(response)
 
 
-@bot.on(admin_cmd(pattern="stat (c|ca|co)$"))
-@bot.on(sudo_cmd(pattern="stat (c|ca|co)$", allow_sudo=True))
-async def stats(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="stat (c|ca|co)$",
+)
+async def stats(event):  # sourcery no-metrics
     catcmd = event.pattern_match.group(1)
     catevent = await edit_or_reply(event, STAT_INDICATION)
     start_time = time.time()
@@ -136,11 +169,10 @@ async def stats(event):
         )
 
 
-@bot.on(admin_cmd(pattern="stat (g|ga|go)$"))
-@bot.on(sudo_cmd(pattern="stat (g|ga|go)$", allow_sudo=True))
-async def stats(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="stat (g|ga|go)$",
+)
+async def stats(event):  # sourcery no-metrics
     catcmd = event.pattern_match.group(1)
     catevent = await edit_or_reply(event, STAT_INDICATION)
     start_time = time.time()
@@ -196,15 +228,20 @@ async def stats(event):
         )
 
 
-@bot.on(admin_cmd(pattern="ustat ?(.*)"))
-@bot.on(sudo_cmd(pattern="ustat ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="ustat(?: |$)(.*)",
+    command=("ustat", plugin_category),
+    info={
+        "header": "To get list of public groups of repled person or mentioned person.",
+        "usage": "{tr}ustat <reply/userid/username>",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To get replied users public groups."
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply_message = await event.get_reply_message()
     if not input_str and not reply_message:
-        await edit_delete(
+        return await edit_delete(
             event,
             "`reply to  user's text message to get name/username history or give userid/username`",
         )
@@ -231,30 +268,3 @@ async def _(event):
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
         await catevent.edit(response.text)
-
-
-def inline_mention(user):
-    full_name = user_full_name(user) or "No Name"
-    return f"[{full_name}](tg://user?id={user.id})"
-
-
-def user_full_name(user):
-    names = [user.first_name, user.last_name]
-    names = [i for i in list(names) if i]
-    return " ".join(names)
-
-
-CMD_HELP.update(
-    {
-        "stats": "**Plugin : **`stats`\
-    \n\n  •  **Syntax : **`.stat`\
-    \n  •  **Function : **__Shows you the count of  your groups, channels, private chats...etc__\
-    \n\n  •  **Syntax : **`.stat (g|ga|go)`\
-    \n  •  **Function : **__Shows you the list of all groups  in which you are if you use g , all groups in which you are admin if you use ga and all groups created by you if you use go__\
-    \n\n  •  **Syntax : **`.stat (c|ca|co)`\
-    \n  •  **Function : **__Shows you the list of all channels in which you are if you use c , all channels in which you are admin if you use ca and all channels created by you if you use co__\
-    \n\n  •  **Syntax : **`.ustat (reply/userid/username)`\
-    \n  •  **Function : **__Shows the list of public groups of that paticular user__\
-    "
-    }
-)

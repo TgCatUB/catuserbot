@@ -32,8 +32,17 @@ from urllib.error import HTTPError
 
 from pySmartDL import SmartDL
 
-from ..utils import humanbytes
-from . import LOGS, time_formatter
+from userbot import catub
+from userbot.core.logger import logging
+
+from ..Config import Config
+from ..core.managers import edit_or_reply
+from . import humanbytes, time_formatter
+
+LOGS = logging.getLogger(__name__)
+
+plugin_category = "misc"
+
 
 TMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 
@@ -53,9 +62,17 @@ async def subprocess_run(megadl, cmd):
     return stdout.decode().strip(), stderr.decode().strip(), exitCode
 
 
-@bot.on(admin_cmd(outgoing=True, pattern=r"mega(?: |$)(.*)"))
-@bot.on(sudo_cmd(allow_sudo=True, pattern=r"mega(?: |$)(.*)"))
-async def mega_downloader(megadl):
+@catub.cat_cmd(
+    pattern="mega(?: |$)(.*)",
+    command=("mega", plugin_category),
+    info={
+        "header": "Downloads mega files from it links.",
+        "description": "Pass mega link to command so that it will download to bot server, for uploading to TG, check .help -c upload. Folder is not supported currently and only mega file links are supported.",
+        "usage": "{tr}mega <mega.nz link>",
+    },
+)
+async def mega_downloader(megadl):  # sourcery no-metrics
+    "To download mega files from mega.nz links."
     catevent = await edit_or_reply(megadl, "`Collecting information...`")
     if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TMP_DOWNLOAD_DIRECTORY)
@@ -117,10 +134,11 @@ async def mega_downloader(megadl):
         estimated_total_time = round(downloader.get_eta())
         progress_str = "`{0}` | [{1}{2}] `{3}%`".format(
             status,
-            "".join(["▰" for i in range(math.floor(percentage / 10))]),
-            "".join(["▱" for i in range(10 - math.floor(percentage / 10))]),
+            "".join("▰" for i in range(math.floor(percentage / 10))),
+            "".join("▱" for i in range(10 - math.floor(percentage / 10))),
             round(percentage, 2),
         )
+
         diff = time.time() - start
         try:
             current_message = (
@@ -183,13 +201,3 @@ async def decrypt_file(megadl, file_path, temp_file_path, hex_key, hex_raw_key):
     else:
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_path)
     return
-
-
-CMD_HELP.update(
-    {
-        "mega": "**Plugin :** `mega`\
-        \n\n**Syntax :** `.mega` <MEGA.nz link>\
-        \n**Usage : **Reply to a MEGA.nz link or paste your MEGA.nz link\
-        \n\n__ It will download the file into your userbot server.__"
-    }
-)

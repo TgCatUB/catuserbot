@@ -2,14 +2,32 @@ import asyncio
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from . import parse_pre, sanga_seperator
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers import get_user_from_event, sanga_seperator
+from ..helpers.utils import _format
+
+plugin_category = "utils"
 
 
-@bot.on(admin_cmd(pattern="(sg|sgu)($| (.*))"))
-@bot.on(sudo_cmd(pattern="(sg|sgu)($| (.*))", allow_sudo=True))
-async def _(event):
-    if event.fwd_from:
-        return
+@catub.cat_cmd(
+    pattern="sg(u)?(?: |$)(.*)",
+    command=("sg", plugin_category),
+    info={
+        "header": "To get name history of the user.",
+        "flags": {
+            "u": "That is sgu to get username history.",
+        },
+        "usage": [
+            "{tr}sg <username/userid/reply>",
+            "{tr}sgu <username/userid/reply>",
+        ],
+        "examples": "{tr}sg @missrose_bot",
+    },
+)
+async def _(event):  # sourcery no-metrics
+    "To get name/username history."
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply_message = await event.get_reply_message()
     if not input_str and not reply_message:
@@ -17,19 +35,10 @@ async def _(event):
             event,
             "`reply to  user's text message to get name/username history or give userid/username`",
         )
-    if input_str:
-        try:
-            uid = int(input_str)
-        except ValueError:
-            try:
-                u = await event.client.get_entity(input_str)
-            except ValueError:
-                await edit_delete(
-                    event, "`Give userid or username to find name history`"
-                )
-            uid = u.id
-    else:
-        uid = reply_message.sender_id
+    user, rank = await get_user_from_event(event, secondgroup=True)
+    if not user:
+        return
+    uid = user.id
     chat = "@SangMataInfo_bot"
     catevent = await edit_or_reply(event, "`Processing...`")
     async with event.client.conversation(chat) as conv:
@@ -51,31 +60,11 @@ async def _(event):
         await edit_delete(catevent, "`The user doesn't have any record`")
     names, usernames = await sanga_seperator(responses)
     cmd = event.pattern_match.group(1)
-    if cmd == "sg":
-        sandy = None
-        for i in names:
-            if sandy:
-                await event.reply(i, parse_mode=parse_pre)
-            else:
-                sandy = True
-                await catevent.edit(i, parse_mode=parse_pre)
-    elif cmd == "sgu":
-        sandy = None
-        for i in usernames:
-            if sandy:
-                await event.reply(i, parse_mode=parse_pre)
-            else:
-                sandy = True
-                await catevent.edit(i, parse_mode=parse_pre)
-
-
-CMD_HELP.update(
-    {
-        "sangmata": "**Plugin : **`sangmata`\
-    \n\n**Syntax : **`.sg <username/userid/reply>`\
-    \n**Function : **__Shows you the previous name history of user.__\
-    \n\n**Syntax : **`.sgu <username/userid/reply>`\
-    \n**Function : **__Shows you the previous username history of user.__\
-    "
-    }
-)
+    sandy = None
+    check = usernames if cmd == "u" else names
+    for i in check:
+        if sandy:
+            await event.reply(i, parse_mode=_format.parse_pre)
+        else:
+            sandy = True
+            await catevent.edit(i, parse_mode=_format.parse_pre)

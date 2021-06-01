@@ -1,30 +1,66 @@
 import sys
-from os import execl
 from time import sleep
 
-from . import BOTLOG, BOTLOG_CHATID, HEROKU_APP, bot
+from userbot import catub
+
+from ..core.logger import logging
+from ..core.managers import edit_or_reply
+from ..sql_helper.global_collection import (
+    add_to_collectionlist,
+    del_keyword_collectionlist,
+    get_collectionlist_items,
+)
+from ..sql_helper.globals import addgvar, delgvar, gvarstatus
+from . import BOTLOG, BOTLOG_CHATID, HEROKU_APP
+
+LOGS = logging.getLogger(__name__)
+plugin_category = "tools"
 
 
-@bot.on(admin_cmd(pattern="restart$"))
-@bot.on(sudo_cmd(pattern="restart$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="restart$",
+    command=("restart", plugin_category),
+    info={
+        "header": "Restarts the bot !!",
+        "usage": "{tr}restart",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Restarts the bot !!"
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#RESTART \n" "Bot Restarted")
-    await edit_or_reply(
+    sandy = await edit_or_reply(
         event,
         "Restarted. `.ping` me or `.help` to check if I am online, actually it takes 1-2 min for restarting",
     )
-    await bot.disconnect()
-    execl(sys.executable, sys.executable, *sys.argv)
+    try:
+        ulist = get_collectionlist_items()
+        for i in ulist:
+            if i == "restart_update":
+                del_keyword_collectionlist("restart_update")
+    except Exception as e:
+        LOGS.error(e)
+    try:
+        add_to_collectionlist("restart_update", [sandy.chat_id, sandy.id])
+    except Exception as e:
+        LOGS.error(e)
+    try:
+        await catub.disconnect()
+    except Exception as e:
+        LOGS.error(e)
 
 
-@bot.on(admin_cmd(pattern="shutdown$"))
-@bot.on(sudo_cmd(pattern="shutdown$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="shutdown$",
+    command=("shutdown", plugin_category),
+    info={
+        "header": "Shutdowns the bot !!",
+        "description": "To turn off the dyno of heroku. you cant turn on by bot you need to got to heroku and turn on or use @hk_heroku_bot",
+        "usage": "{tr}shutdown",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "Shutdowns the bot"
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n" "Bot shut down")
     await edit_or_reply(event, "`Turning off bot now ...Manually turn me on later`")
@@ -34,11 +70,17 @@ async def _(event):
         sys.exit(0)
 
 
-@bot.on(admin_cmd(pattern="sleep( [0-9]+)?$"))
-@bot.on(sudo_cmd(pattern="sleep( [0-9]+)?$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="sleep( [0-9]+)?$",
+    command=("sleep", plugin_category),
+    info={
+        "header": "Userbot will stop working for the mentioned time.",
+        "usage": "{tr}sleep <seconds>",
+        "examples": "{tr}sleep 60",
+    },
+)
 async def _(event):
-    if event.fwd_from:
-        return
+    "To sleep the userbot"
     if " " not in event.pattern_match.group(1):
         return await edit_or_reply(event, "Syntax: `.sleep time`")
     counter = int(event.pattern_match.group(1))
@@ -52,14 +94,26 @@ async def _(event):
     await event.edit("`OK, I'm awake now.`")
 
 
-CMD_HELP.update(
-    {
-        "powertools": "**Plugin : **`powertools`\
-        \n\n  •  **Syntax : **`.restart`\
-        \n  •  **Function : **__Restarts the bot !!__\
-        \n\n  •  **Syntax : **`.sleep <seconds>`\
-        \n  •  **Function: **__Userbots get tired too. Let yours snooze for a few seconds.__\
-        \n\n  •  **Syntax : **`.shutdown`\
-        \n**  •  Function : **__To turn off the dyno of heroku. you cant turn on by bot you need to got to heroku and turn on or use__ @hk_heroku_bot"
-    }
+@catub.cat_cmd(
+    pattern="notify (on|off)$",
+    command=("notify", plugin_category),
+    info={
+        "header": "To update the your chat after restart or reload .",
+        "description": "Will send the ping cmd as reply to the previous last msg of (restart/reload/update cmds).",
+        "usage": [
+            "{tr}notify <on/off>",
+        ],
+    },
 )
+async def set_pmlog(event):
+    "To update the your chat after restart or reload ."
+    input_str = event.pattern_match.group(1)
+    if input_str == "off":
+        if gvarstatus("restartupdate") is None:
+            return await edit_delete(event, "__Notify was already disabled__")
+        delgvar("restartupdate")
+        return await edit_or_reply(event, "__Notify was disabled succesfully.__")
+    if gvarstatus("restartupdate") is None:
+        addgvar("restartupdate", "turn-oned")
+        return await edit_or_reply(event, "__Notify was enabled succesfully.__")
+    await edit_delete(event, "__Notify was already enabled.__")

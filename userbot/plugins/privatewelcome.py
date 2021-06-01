@@ -1,16 +1,23 @@
+from asyncio import sleep
+
 from telethon import events
 
-from . import BOTLOG_CHATID, bot
-from .sql_helper import pmpermit_sql as pmpermit_sql
-from .sql_helper.welcomesql import (
+from userbot import catub
+
+from ..core.managers import edit_or_reply
+from ..sql_helper import pmpermit_sql as pmpermit_sql
+from ..sql_helper.welcomesql import (
     addwelcome_setting,
     getcurrent_welcome_settings,
     rmwelcome_setting,
 )
+from . import BOTLOG_CHATID
+
+plugin_category = "utils"
 
 
-@bot.on(events.ChatAction)
-async def _(event):
+@catub.on(events.ChatAction)
+async def _(event):  # sourcery no-metrics
     cws = getcurrent_welcome_settings(event.chat_id)
     if (
         cws
@@ -19,9 +26,9 @@ async def _(event):
     ):
         a_user = await event.get_user()
         chat = await event.get_chat()
-        me = await bot.get_me()
+        me = await event.client.get_me()
         title = chat.title or "this chat"
-        participants = await bot.get_participants(chat)
+        participants = await event.client.get_participants(chat)
         count = len(participants)
         mention = "<a href='tg://user?id={}'>{}</a>".format(
             a_user.id, a_user.first_name
@@ -49,6 +56,7 @@ async def _(event):
                 current_saved_welcome_message = cws.reply
         if not pmpermit_sql.is_approved(userid):
             pmpermit_sql.approve(userid, "Due to private welcome")
+        await sleep(1)
         current_message = await event.client.send_message(
             userid,
             current_saved_welcome_message.format(
@@ -71,17 +79,42 @@ async def _(event):
         )
 
 
-@bot.on(admin_cmd(pattern=r"savepwel ?(.*)"))
-@bot.on(sudo_cmd(pattern=r"savepwel ?(.*)", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="savepwel(?: |$)(.*)",
+    command=("savepwel", plugin_category),
+    info={
+        "header": "To welcome user(sends welcome message to here private messages).",
+        "description": "Saves the message as a welcome note in the chat. And will send welcome message to every new user who ever joins newly in group.",
+        "option": {
+            "{mention}": "To mention the user",
+            "{title}": "To get chat name in message",
+            "{count}": "To get group members",
+            "{first}": "To use user first name",
+            "{last}": "To use user last name",
+            "{fullname}": "To use user full name",
+            "{userid}": "To use userid",
+            "{username}": "To use user username",
+            "{my_first}": "To use my first name",
+            "{my_fullname}": "To use my full name",
+            "{my_last}": "To use my last name",
+            "{my_mention}": "To mention myself",
+            "{my_username}": "To use my username.",
+        },
+        "usage": [
+            "{tr}savepwel <welcome message>",
+            "reply {tr}savepwel to text message or supported media with text as media caption",
+        ],
+        "examples": "{tr}savepwel Hi {mention}, Welcome to {title} chat",
+    },
+)
 async def save_welcome(event):
-    if event.fwd_from:
-        return
+    "To set private welcome message."
     msg = await event.get_reply_message()
     string = "".join(event.text.split(maxsplit=1)[1:])
     msg_id = None
     if msg and msg.media and not string:
         if BOTLOG_CHATID:
-            await bot.send_message(
+            await event.client.send_message(
                 BOTLOG_CHATID,
                 f"#WELCOME_NOTE\
                 \nCHAT ID: {event.chat_id}\
@@ -109,28 +142,41 @@ async def save_welcome(event):
     await edit_or_reply("Error while setting welcome in this group")
 
 
-@bot.on(admin_cmd(pattern="clearpwel$"))
-@bot.on(sudo_cmd(pattern="clearpwel$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="clearpwel$",
+    command=("clearpwel", plugin_category),
+    info={
+        "header": "To turn off private welcome message.",
+        "description": "Deletes the private welcome note for the current chat.",
+        "usage": "{tr}clearpwel",
+    },
+)
 async def del_welcome(event):
-    if event.fwd_from:
-        return
+    "To turn off private welcome message"
     if rmwelcome_setting(event.chat_id) is True:
         await edit_or_reply(event, "`Welcome note deleted for this chat.`")
     else:
         await edit_or_reply(event, "`Do I have a welcome note here ?`")
 
 
-@bot.on(admin_cmd(pattern="listpwel$"))
-@bot.on(sudo_cmd(pattern="listpwel$", allow_sudo=True))
+@catub.cat_cmd(
+    pattern="listpwel$",
+    command=("listpwel", plugin_category),
+    info={
+        "header": "To check current private welcome message in group.",
+        "usage": "{tr}listpwel",
+    },
+)
 async def show_welcome(event):
-    if event.fwd_from:
-        return
+    "To show current private welcome message in group"
     cws = getcurrent_welcome_settings(event.chat_id)
     if not cws:
         await edit_or_reply(event, "`No pwelcome message saved here.`")
         return
     if cws.f_mesg_id:
-        msg_o = await bot.get_messages(entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id))
+        msg_o = await event.client.get_messages(
+            entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id)
+        )
         await edit_or_reply(
             event, "`I am currently pwelcoming new users with this welcome note.`"
         )
@@ -140,19 +186,3 @@ async def show_welcome(event):
             event, "`I am currently pwelcoming new users with this welcome note.`"
         )
         await event.reply(cws.reply)
-
-
-CMD_HELP.update(
-    {
-        "privatewelcome": "**Plugin :** `privatewelcome`\
-\n\n  •  **Syntax :** `.savepwel` <welcome message> or reply to a message with .savepwel\
-\n  •  **Function :** Saves the message as a welcome note in the chat.\
-\n\n  •  Available variables for formatting welcome messages :\
-\n`{mention}, {title}, {count}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
-\n\n  •  **Syntax :** `.listpwel`\
-\n  •  **Function :** Check whether you have a welcome note in the chat.\
-\n\n  •  **Syntax :** `.clearpwel`\
-\n  •  **Function :** Deletes the welcome note for the current chat.\
-"
-    }
-)
