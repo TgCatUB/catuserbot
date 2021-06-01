@@ -36,8 +36,8 @@ if Config.PLUGIN_CHANNEL:
                     break
                 except ModuleNotFoundError as e:
                     install_pip(e.name)
+                    check += 1
                     if check > 5:
-                        check += 1
                         break
             if BOTLOG:
                 await catub.send_message(
