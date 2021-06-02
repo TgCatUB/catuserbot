@@ -31,8 +31,10 @@ def convert_from_bytes(size):
         "header": "Botserver's speedtest by ookla.",
         "options": {
             "text": "will give output as text",
-            "image": ("Will give output as image this is default option if "
-                      "no input is given."),
+            "image": (
+                "Will give output as image this is default option if "
+                "no input is given."
+            ),
             "file": "will give output as png file.",
         },
         "usage": ["{tr}speedtest <option>", "{tr}speedtest"],
@@ -58,7 +60,7 @@ async def _(event):
     s.download()
     s.upload()
     end = time()
-    ms = round(end-start, 2)
+    ms = round(end - start, 2)
     response = s.results.dict()
     download_speed = response.get("download")
     upload_speed = response.get("upload")
@@ -79,11 +81,11 @@ async def _(event):
 `Ping: {} ms`
 `Internet Service Provider: {}`
 `ISP Rating: {}`""".format(
-                    ms, 
-                    convert_from_bytes(download_speed), 
-                    round(download_speed/8E6, 2),
-                    convert_from_bytes(upload_speed), 
-                    round(upload_speed/8E6, 2),
+                    ms,
+                    convert_from_bytes(download_speed),
+                    round(download_speed / 8e6, 2),
+                    convert_from_bytes(upload_speed),
+                    round(upload_speed / 8e6, 2),
                     ping_time,
                     i_s_p,
                     i_s_p_rating,
@@ -109,10 +111,10 @@ Ping: {} ms
 __With the Following ERRORs__
 {}""".format(
                 ms,
-                convert_from_bytes(download_speed), 
-                round(download_speed/8E6, 2),
-                convert_from_bytes(upload_speed), 
-                round(upload_speed/8E6, 2),
+                convert_from_bytes(download_speed),
+                round(download_speed / 8e6, 2),
+                convert_from_bytes(upload_speed),
+                round(upload_speed / 8e6, 2),
                 ping_time,
                 str(exc),
             )
