@@ -1,61 +1,79 @@
-# CatUserbot
-A simple Telegram userbot based on Telethon .
-[![catuserbot logo](https://telegra.ph/file/b7dc845e3a48cde0d7bb1.jpg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot%2Ftree%2Fbugs&template=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot)
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://github.com/sandy1709/catuserbot)
-[![CodeFactor](https://www.codefactor.io/repository/github/sandy1709/catuserbot/badge?&style=flat-square)](https://www.codefactor.io/repository/github/sandy1709/catuserbot)
-[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green?&style=flat-square)](https://GitHub.com/sandy1709/catuserbot/graphs/commit-activity) 
-![Repo Size](https://img.shields.io/github/repo-size/sandy1709/catuserbot?&style=flat-square&logo=github)
-[![GitHub license](https://img.shields.io/github/license/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/blob/master/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/issues)
-[![PR Open](https://img.shields.io/github/issues-pr/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/pulls)
-[![PR Closed](https://img.shields.io/github/issues-pr-closed/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/pulls?q=is:closed)
-[![GitHub contributors](https://img.shields.io/github/contributors/sandy1709/catuserbot?&style=flat-square&logo=github)](https://GitHub.com/sandy1709/catuserbot/graphs/contributors/)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/graphs/commit-activity)
-[![GitHub forks](https://img.shields.io/github/forks/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/fork)
-[![GitHub stars](https://img.shields.io/github/stars/sandy1709/catuserbot?&style=flat-square&logo=github)](https://github.com/sandy1709/catuserbot/stargazers)
+---
+description: How to deploy catuserbot
+---
 
+# Deploy Procedures
 
+## Deploy to Heroku
 
-## How to deploy catuserbot
-### Heroku Deploy
-  - [Source Code](https://github.com/Mr-confused/catpack)
-  - [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack&template=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack)
+1. **By Repl**
+2. **By Termux**
 
-### Self host
-  - [check this](https://catuserbot.gitbook.io/catuserbot/tutorial/self-host)
+## 1\) Repl
+
+How to Deploy your UserBot to Heroku using Repl
+
+👉 Create an account on [Github](https://github.com/join) & [Heroku ](https://signup.heroku.com/login)
+
+👉 Open this [repo](https://github.com/sandy1709/catuserbot)
+
+👉 Fork this repo to your Github.
+
+👉 App name,ALIVE\_NAME, APP\_ID, API\_HASH, STRING\_SESSION, TG\_BOT\_TOKEN\_BF\_HER and TG\_BOT\_USER\_NAME\_BF\_HER are mandatory fields. Rest of the fields can be left with the default values.
+
+=======================================================  
+ ✍️ You can get your app id and api hash from @cattgorgbot or [http://my.telegram.org](http://my.telegram.org)
+
+✍️  You can generate string season [here](https://generatestringsession.sandeep1709.repl.run/)  
+      [**VIDEO GUIDE OF REPL**](https://drive.google.com/open?id=1uT313HBEIuTwjLhVNygbbWEsFuIRdtZM)  
+========================================================
+
+👉 Wait for deploy to finish.
+
+👉 After deploy press Manage App then go to Resources
+
+👉 Enable the worker dyno, by toggling the slide-toggle.
+
+👉 Done. Your UserBot is alive. Check with .alive in any chat.
+
+ℹ️ @catuserbot17
+
+## 2\) Termux
+
+How to Deploy your UserBot to Heroku using Termux  
   
-## Support
-   <a href="https://t.me/catuserbot17"><img src="https://img.shields.io/badge/Channel%20Support%3F-yes-green?&style=flat-square?&logo=telegram" width=220px></a></p>
-   <a href="https://t.me/catuserbot_support"><img src="https://img.shields.io/badge/Group%20Support%3F-yes-green?&style=flat-square?&logo=telegram" width=220px></a></p>
-   
-## Inspiration
-   - [X-tra-Telegram](https://github.com/Dark-Princ3/X-tra-Telegram)
-   - [Uniborg](https://github.com/SpEcHiDe/UniBorg) & [Uniborg fork](https://github.com/ravana69/PornHub)
-   - [Nana-Remix](https://github.com/pokurt/Nana-Remix)
-   - [Userge-X](https://github.com/code-rgb/USERGE-X/)
-   
-## Disclaimer
+👉 Create an account on [Github](https://github.com/join) & [Heroku ](https://signup.heroku.com/login)
 
-```
-              YOU ARE FOREWARNED
-Your Telegram account may get banned.   
-Catuserbot or we are not responsible for your account, 
-This bot is intended for the purpose of having fun with some fun commands 
-and group management with some helpfull commands.
+👉 Open this [repo](https://github.com/sandy1709/catuserbot)
 
-If  you ended up spamming groups, getting reported left and right, 
-and you ended up in being fight with Telegram 
-and at the end Telegram Team deleted your account. DON'T BLAME US.
+👉 Fork this repo to your Github.
 
-No personal support will be provided / We won't spoon feed you. 
-If you need help ask in our support group 
-and we or our friends will try to help you.
+👉 App name,ALIVE\_NAME, APP\_ID, API\_HASH, STRING\_SESSION, TG\_BOT\_TOKEN\_BF\_HER and TG\_BOT\_USER\_NAME\_BF\_HER are mandatory fields. Rest of the fields can be left with the default values.
 
-Thanks for using our bot 😺
-```
+=======================================================  
+ ✍️ You can get your app id and api hash from @cattgorgbot or [http://my.telegram.org](http://my.telegram.org)  
+  
+ ✍️ Generate String Session, Follow below steps  
+  
+[**VIDEO GUIDE FOR BETTER UNDERSTANDING**](https://drive.google.com/open?id=1Qri7T4-hsQnA_urKDjBOoTjoHxkhyjOt)  
+**\[ OR \]**  
+**Follow steps below**  
+Install [termux](https://play.google.com/store/apps/details?id=com.termux) from playstore,   
+Then run these 2 codes .
 
-## Credits
-   - Special thanks to [LonamiWebs](https://github.com/LonamiWebs/Telethon/) for Telethon library.
-   - To all devs of these [Userbots](https://github.com/sandy1709/catuserbot/tree/bugs#inspiration)
-   - Finally to all [contributors of Catuserbot](https://github.com/sandy1709/catuserbot/graphs/contributors)
+`termux-setup-storage`
+
+Press enter \(on your keyboard\) and then paste
+
+`pkg install python git openssl wget -y && pip install telethon && wget https://raw.githubusercontent.com/sandy1709/catuserbot/master/stringsetup.py && python3 stringsetup.py`
+
+========================================================
+
+👉 Wait for deploy to finish.
+
+👉 After deploy press Manage App then go to Resources
+
+👉 Enable the worker dyno, by toggling the slide-toggle.
+
+👉 Done. Your UserBot is alive. Check with .alive in any chat.
+
