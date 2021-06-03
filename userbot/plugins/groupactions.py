@@ -20,8 +20,9 @@ from telethon.tl.types import (
     UserStatusRecently,
 )
 
+from ..helpere import readable_time
 from userbot import catub
-from userbot.core.logger import logging
+from ..core.logger import logging
 
 from ..core.managers import edit_delete, edit_or_reply
 from . import BOTLOG, BOTLOG_CHATID
@@ -189,12 +190,15 @@ async def _(event):
             )
         except FloodWaitError as e:
             LOGS.warn(f"A flood wait of {e.seconds} occurred.")
+            await catevent.edit(f"__A wait of {readable_time(e.seconds)} needed again to continue the process.__")
             await sleep(e.seconds + 5)
         except Exception as ex:
             await catevent.edit(str(ex))
         else:
             succ += 1
             if flag:
+                await sleep(2)
+            else:
                 await sleep(1)
             try:
                 if succ % 10 == 0:
