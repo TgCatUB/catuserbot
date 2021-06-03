@@ -1,6 +1,6 @@
 from asyncio import sleep
 
-from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError
+from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError, FloodWaitError, MessageNotModifiedError
 from telethon.tl import functions
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import (
@@ -183,17 +183,17 @@ async def _(event):
                 functions.channels.EditBannedRequest(event.chat_id, i, rights)
             )
         except FloodWaitError as e:
-            await asyncio.sleep(e.seconds + 5)
+            await sleep(e.seconds + 5)
         except Exception as ex:
             await catevent.edit(str(ex))
         else:
             succ += 1
             if flag:
-                await asyncio.sleep(1)
+                await sleep(1)
             try:
                 if succ % 10 == 0:
                     await catevent.edit(
-                        f"__Unbanning all banned accounts...\n.{succ} accounts are unbanned untill now.__**"
+                        f"__Unbanning all banned accounts...,\n{succ} accounts are unbanned untill now.__"
                     )
             except MessageNotModifiedError:
                 pass
