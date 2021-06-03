@@ -1027,7 +1027,7 @@ async def _(event):  # sourcery no-metrics
     await edit_or_reply(event, output)
 
 
-@catub.cat_cmd(incoming=True)
+@catub.cat_cmd(incoming=True, forword=None)
 async def check_incoming_messages(event):  # sourcery no-metrics
     if not event.is_private:
         chat = await event.get_chat()
