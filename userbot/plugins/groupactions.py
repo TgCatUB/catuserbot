@@ -36,6 +36,7 @@ BANNED_RIGHTS = ChatBannedRights(
     embed_links=True,
 )
 
+
 async def ban_user(chat_id, i, rights):
     try:
         await catub(functions.channels.EditBannedRequest(chat_id, i, rights))
@@ -165,7 +166,9 @@ async def _(event):
 )
 async def _(event):
     "To unban all banned users from group."
-    catevent = await edit_or_reply(event, "__Unbanning all banned accounts in this group.__")
+    catevent = await edit_or_reply(
+        event, "__Unbanning all banned accounts in this group.__"
+    )
     succ = 0
     total = 0
     flag = False
@@ -181,7 +184,6 @@ async def _(event):
             )
         except FloodWaitError as e:
             await asyncio.sleep(e.seconds + 5)
-            Flag = True
         except Exception as ex:
             await catevent.edit(str(ex))
         else:
@@ -189,11 +191,14 @@ async def _(event):
             if flag:
                 await asyncio.sleep(1)
             try:
-                if (succ%10 ==0):
-                    await catevent.edit(f"__Unbanning all banned accounts...\n.{succ} accounts are unbanned untill now.__**")
+                if succ % 10 == 0:
+                    await catevent.edit(
+                        f"__Unbanning all banned accounts...\n.{succ} accounts are unbanned untill now.__**"
+                    )
             except MessageNotModifiedError:
                 pass
     await catevent.edit(f"**Unbanned :**__{succ}/{total} in the chat {chat.title}__")
+
 
 # Ported by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)
 @catub.cat_cmd(
@@ -259,6 +264,7 @@ async def rm_deletedacc(show):
             \n{del_status}\
             \nCHAT: {show.chat.title}(`{show.chat_id}`)",
         )
+
 
 @catub.cat_cmd(
     pattern="ikuck ?(.*)",
