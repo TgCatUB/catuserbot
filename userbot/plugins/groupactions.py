@@ -157,29 +157,29 @@ async def _(event):
     require_admin=True,
 )
 async def _(event):
-        "To unban all banned users from group."
-        #     input_str = event.pattern_match.group(1)
-        #     if input_str:
-        #         LOGS.info("TODO: Not yet Implemented")
-        #     else:
-        et = await edit_or_reply(event, "`Searching Participant Lists.`")
-        succ = 0
-        total = 0
-        chat = await event.get_chat()
-        async for i in event.client.iter_participants(
-            event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
-        ):
-            total += 1
-            rights = ChatBannedRights(until_date=0, view_messages=False)
-            try:
-                await event.client(
-                    functions.channels.EditBannedRequest(event.chat_id, i, rights)
-                )
-            except Exception as ex:
-                await et.edit(str(ex))
-            else:
-                succ += 1
-        await et.edit(f"**Unbanned :**__{succ}/{total} in this chat {chat.title}__")
+    "To unban all banned users from group."
+    #     input_str = event.pattern_match.group(1)
+    #     if input_str:
+    #         LOGS.info("TODO: Not yet Implemented")
+    #     else:
+    et = await edit_or_reply(event, "`Searching Participant Lists.`")
+    succ = 0
+    total = 0
+    chat = await event.get_chat()
+    async for i in event.client.iter_participants(
+        event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
+    ):
+        total += 1
+        rights = ChatBannedRights(until_date=0, view_messages=False)
+        try:
+            await event.client(
+                functions.channels.EditBannedRequest(event.chat_id, i, rights)
+            )
+        except Exception as ex:
+            await et.edit(str(ex))
+        else:
+            succ += 1
+    await et.edit(f"**Unbanned :**__{succ}/{total} in this chat {chat.title}__")
 
 
 @catub.cat_cmd(
