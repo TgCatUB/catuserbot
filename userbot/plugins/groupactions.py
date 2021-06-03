@@ -36,6 +36,13 @@ BANNED_RIGHTS = ChatBannedRights(
     embed_links=True,
 )
 
+async def ban_user(chat_id, i, rights):
+    try:
+        await catub(functions.channels.EditBannedRequest(chat_id, i, rights))
+        return True, None
+    except Exception as exc:
+        return False, str(exc)
+
 
 @catub.cat_cmd(
     pattern="kickme$",
@@ -158,13 +165,10 @@ async def _(event):
 )
 async def _(event):
     "To unban all banned users from group."
-    #     input_str = event.pattern_match.group(1)
-    #     if input_str:
-    #         LOGS.info("TODO: Not yet Implemented")
-    #     else:
-    et = await edit_or_reply(event, "`Searching Participant Lists.`")
+    catevent = await edit_or_reply(event, "__Unbanning all banned accounts in this group.__")
     succ = 0
     total = 0
+    flag = False
     chat = await event.get_chat()
     async for i in event.client.iter_participants(
         event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
@@ -175,12 +179,86 @@ async def _(event):
             await event.client(
                 functions.channels.EditBannedRequest(event.chat_id, i, rights)
             )
+        except FloodWaitError as e:
+            await asyncio.sleep(e.seconds + 5)
+            Flag = True
         except Exception as ex:
-            await et.edit(str(ex))
+            await catevent.edit(str(ex))
         else:
             succ += 1
-    await et.edit(f"**Unbanned :**__{succ}/{total} in this chat {chat.title}__")
+            if flag:
+                await asyncio.sleep(1)
+            try:
+                if (succ%10 ==0):
+                    await catevent.edit(f"__Unbanning all banned accounts...\n.{succ} accounts are unbanned untill now.__**")
+            except MessageNotModifiedError:
+                pass
+    await catevent.edit(f"**Unbanned :**__{succ}/{total} in the chat {chat.title}__")
 
+# Ported by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)
+@catub.cat_cmd(
+    pattern="zombies ?(.*)",
+    command=("zombies", plugin_category),
+    info={
+        "header": "To check deleted accounts and clean",
+        "description": "Searches for deleted accounts in a group. Use `.zombies clean` to remove deleted accounts from the group.",
+        "usage": ["{tr}zombies", "{tr}zombies clean"],
+    },
+    groups_only=True,
+)
+async def rm_deletedacc(show):
+    "To check deleted accounts and clean"
+    con = show.pattern_match.group(1).lower()
+    del_u = 0
+    del_status = "`No zombies or deleted accounts found in this group, Group is clean`"
+    if con != "clean":
+        event = await edit_or_reply(
+            show, "`Searching for ghost/deleted/zombie accounts...`"
+        )
+        async for user in show.client.iter_participants(show.chat_id):
+            if user.deleted:
+                del_u += 1
+                await sleep(0.5)
+        if del_u > 0:
+            del_status = f"__Found__ **{del_u}** __ghost/deleted/zombie account(s) in this group,\
+                           \nclean them by using__ `.zombies clean`"
+        await event.edit(del_status)
+        return
+    chat = await show.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+    if not admin and not creator:
+        await edit_delete(show, "`I am not an admin here!`", 5)
+        return
+    event = await edit_or_reply(
+        show, "`Deleting deleted accounts...\nOh I can do that?!?!`"
+    )
+    del_u = 0
+    del_a = 0
+    async for user in show.client.iter_participants(show.chat_id):
+        if user.deleted:
+            try:
+                await show.client.kick_participant(show.chat_id, user.id)
+                await sleep(0.5)
+                del_u += 1
+            except ChatAdminRequiredError:
+                await edit_delete(event, "`I don't have ban rights in this group`", 5)
+                return
+            except UserAdminInvalidError:
+                del_a += 1
+    if del_u > 0:
+        del_status = f"Cleaned **{del_u}** deleted account(s)"
+    if del_a > 0:
+        del_status = f"Cleaned **{del_u}** deleted account(s) \
+        \n**{del_a}** deleted admin accounts are not removed"
+    await edit_delete(event, del_status, 5)
+    if BOTLOG:
+        await show.client.send_message(
+            BOTLOG_CHATID,
+            f"#CLEANUP\
+            \n{del_status}\
+            \nCHAT: {show.chat.title}(`{show.chat_id}`)",
+        )
 
 @catub.cat_cmd(
     pattern="ikuck ?(.*)",
@@ -329,77 +407,3 @@ None: {}""".format(
             p, d, y, m, w, o, q, r, b, n
         )
     )
-
-
-# Ported by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)
-@catub.cat_cmd(
-    pattern="zombies ?(.*)",
-    command=("zombies", plugin_category),
-    info={
-        "header": "To check deleted accounts and clean",
-        "description": "Searches for deleted accounts in a group. Use `.zombies clean` to remove deleted accounts from the group.",
-        "usage": ["{tr}zombies", "{tr}zombies clean"],
-    },
-    groups_only=True,
-)
-async def rm_deletedacc(show):
-    "To check deleted accounts and clean"
-    con = show.pattern_match.group(1).lower()
-    del_u = 0
-    del_status = "`No zombies or deleted accounts found in this group, Group is clean`"
-    if con != "clean":
-        event = await edit_or_reply(
-            show, "`Searching for ghost/deleted/zombie accounts...`"
-        )
-        async for user in show.client.iter_participants(show.chat_id):
-            if user.deleted:
-                del_u += 1
-                await sleep(0.5)
-        if del_u > 0:
-            del_status = f"__Found__ **{del_u}** __ghost/deleted/zombie account(s) in this group,\
-                           \nclean them by using__ `.zombies clean`"
-        await event.edit(del_status)
-        return
-    chat = await show.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
-    if not admin and not creator:
-        await edit_delete(show, "`I am not an admin here!`", 5)
-        return
-    event = await edit_or_reply(
-        show, "`Deleting deleted accounts...\nOh I can do that?!?!`"
-    )
-    del_u = 0
-    del_a = 0
-    async for user in show.client.iter_participants(show.chat_id):
-        if user.deleted:
-            try:
-                await show.client.kick_participant(show.chat_id, user.id)
-                await sleep(0.5)
-                del_u += 1
-            except ChatAdminRequiredError:
-                await edit_delete(event, "`I don't have ban rights in this group`", 5)
-                return
-            except UserAdminInvalidError:
-                del_a += 1
-    if del_u > 0:
-        del_status = f"Cleaned **{del_u}** deleted account(s)"
-    if del_a > 0:
-        del_status = f"Cleaned **{del_u}** deleted account(s) \
-        \n**{del_a}** deleted admin accounts are not removed"
-    await edit_delete(event, del_status, 5)
-    if BOTLOG:
-        await show.client.send_message(
-            BOTLOG_CHATID,
-            f"#CLEANUP\
-            \n{del_status}\
-            \nCHAT: {show.chat.title}(`{show.chat_id}`)",
-        )
-
-
-async def ban_user(chat_id, i, rights):
-    try:
-        await catub(functions.channels.EditBannedRequest(chat_id, i, rights))
-        return True, None
-    except Exception as exc:
-        return False, str(exc)
