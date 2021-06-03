@@ -188,6 +188,7 @@ async def _(event):
                 functions.channels.EditBannedRequest(event.chat_id, i, rights)
             )
         except FloodWaitError as e:
+            LOGS.warn(f"A flood wait of {e.seconds} occurred.")
             await sleep(e.seconds + 5)
         except Exception as ex:
             await catevent.edit(str(ex))
