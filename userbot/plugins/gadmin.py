@@ -64,7 +64,6 @@ async def catgban(event):  # sourcery no-metrics
         )
     else:
         gban_sql.catgban(user.id, reason)
-    san = []
     san = await admin_groups(event)
     count = 0
     sandy = len(san)
@@ -146,7 +145,6 @@ async def catgban(event):
         return await edit_delete(
             cate, f"the [user](tg://user?id={user.id}) `is not in your gbanned list`"
         )
-    san = []
     san = await admin_groups(event)
     count = 0
     sandy = len(san)
@@ -318,7 +316,6 @@ async def endgmute(event):
         user = (await event.client(GetFullUserRequest(userid))).user
     except Exception:
         return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
-
     if not is_muted(userid, "gmute"):
         return await edit_or_reply(
             event, f"{_format.mentionuser(user.first_name ,user.id)} `is not gmuted`"
@@ -377,7 +374,6 @@ async def catgkick(event):  # sourcery no-metrics
         return
     if user.id == catub.uid:
         return await edit_delete(cate, "`why would I kick myself`")
-    san = []
     san = await admin_groups(event)
     count = 0
     sandy = len(san)
