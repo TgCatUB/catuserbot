@@ -52,7 +52,7 @@ async def tmuter(event):  # sourcery no-metrics
         return await catevent.edit("you haven't mentioned time, check `.help tmute`")
     reason = reason.split(" ", 1)
     hmm = len(reason)
-    cattime = reason[0]
+    cattime = reason[0].strip()
     reason = "".join(reason[1:]) if hmm > 1 else None
     ctime = await extract_time(catevent, cattime)
     if not ctime:
@@ -139,7 +139,7 @@ async def tban(event):  # sourcery no-metrics
         return await catevent.edit("you haven't mentioned time, check `.help tban`")
     reason = reason.split(" ", 1)
     hmm = len(reason)
-    cattime = reason[0]
+    cattime = reason[0].strip()
     reason = "".join(reason[1:]) if hmm > 1 else None
     ctime = await extract_time(catevent, cattime)
     if not ctime:
