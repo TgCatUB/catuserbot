@@ -10,8 +10,8 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from userbot import catub
 
-from ..core.logger import logging
 from ..Config import Config
+from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.tools import media_type
 from ..helpers.utils import _format, reply_id
@@ -19,6 +19,8 @@ from ..helpers.utils import _format, reply_id
 plugin_category = "utils"
 
 LOGS = logging.getLogger(__name__)
+
+
 def progress(current, total):
     logger.info(
         "Downloaded {} of {}\nCompleted {}".format(
@@ -123,7 +125,9 @@ async def _(event):
         if downloaded_file_name and downloaded_file_name.endswith(".py"):
             py_file = ".py"
             key = (
-                requests.post("https://nekobin.com/api/documents", json={"content": message})
+                requests.post(
+                    "https://nekobin.com/api/documents", json={"content": message}
+                )
                 .json()
                 .get("result")
                 .get("key")
@@ -131,7 +135,9 @@ async def _(event):
             url = f"https://nekobin.com/{key}{py_file}"
         else:
             key = (
-                requests.post("https://nekobin.com/api/documents", json={"content": message})
+                requests.post(
+                    "https://nekobin.com/api/documents", json={"content": message}
+                )
                 .json()
                 .get("result")
                 .get("key")
@@ -139,7 +145,12 @@ async def _(event):
             url = f"https://nekobin.com/{key}"
     except Exception as e:
         LOGS.error(f"Nekobin is down due to {str(e)}")
-        return await edit_or_reply(catevent,message,aslink=True,linktesxt=f"Nekobin is down so pasted to deldog")
+        return await edit_or_reply(
+            catevent,
+            message,
+            aslink=True,
+            linktesxt=f"Nekobin is down so pasted to deldog",
+        )
     reply_text = f"**Pasted to Nekobin : **[neko]({url})\n**Raw url : **[Raw](https://nekobin.com/raw/{key})"
     await catevent.edit(reply_text)
 
