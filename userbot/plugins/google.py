@@ -198,8 +198,8 @@ async def _(event):
             **locals()
         )
     else:
-        catevent= event
-    await edit_or_reply(catevent,OUTPUT_STR, parse_mode="HTML", link_preview=False)
+        catevent = event
+    await edit_or_reply(catevent, OUTPUT_STR, parse_mode="HTML", link_preview=False)
 
 
 @catub.cat_cmd(
