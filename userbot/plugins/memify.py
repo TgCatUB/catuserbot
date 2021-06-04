@@ -181,8 +181,7 @@ async def memes(event):
         await event.client(san)
     except BaseException:
         pass
-    # meme_file = convert_toimage(output[1])
-    meme_file = output[1]
+    meme_file = convert_toimage(output[1])
     meme = os.path.join("./temp", "catmeme.jpg")
     if gvarstatus("CNG_FONTS") is None:
         CNG_FONTS = "userbot/helpers/styles/impact.ttf"
