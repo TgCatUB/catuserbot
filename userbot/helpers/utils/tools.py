@@ -50,7 +50,7 @@ async def media_to_pic(event, reply, noedits=False):
             stdout, stderr = (await runcmd(catcmd))[:2]
             if stderr:
                 LOGS.info(stdout + stderr)
-            if os.path.exits(catsvg):
+            if os.path.lexists(catsvg):
                 svg_code = open(catsvg, "rt").read()
                 svg2png(bytestring=svg_code, write_to=catfile)
         elif catmedia.endswith(".webp"):
