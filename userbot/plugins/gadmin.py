@@ -64,7 +64,7 @@ async def catgban(event):  # sourcery no-metrics
         )
     else:
         gban_sql.catgban(user.id, reason)
-    san = await admin_groups(event)
+    san = await admin_groups()
     count = 0
     sandy = len(san)
     if sandy == 0:
@@ -145,7 +145,7 @@ async def catgban(event):
         return await edit_delete(
             cate, f"the [user](tg://user?id={user.id}) `is not in your gbanned list`"
         )
-    san = await admin_groups(event)
+    san = await admin_groups()
     count = 0
     sandy = len(san)
     if sandy == 0:
@@ -374,7 +374,7 @@ async def catgkick(event):  # sourcery no-metrics
         return
     if user.id == catub.uid:
         return await edit_delete(cate, "`why would I kick myself`")
-    san = await admin_groups(event)
+    san = await admin_groups()
     count = 0
     sandy = len(san)
     if sandy == 0:
