@@ -1,9 +1,10 @@
 import os
 from typing import Optional
 
+from cairosvg import svg2png
 from moviepy.editor import VideoFileClip
 from PIL import Image
-from cairosvg import svg2png
+
 from ...core.logger import logging
 from ...core.managers import edit_or_reply
 from ..tools import media_type
@@ -50,8 +51,8 @@ async def media_to_pic(event, reply, noedits=False):
             if stderr:
                 LOGS.info(stdout + stderr)
             if os.path.exits(catsvg):
-                svg_code = open(catsvg, 'rt').read()
-                svg2png(bytestring=svg_code,write_to=catfile)
+                svg_code = open(catsvg, "rt").read()
+                svg2png(bytestring=svg_code, write_to=catfile)
         elif catmedia.endswith(".webp"):
             im = Image.open(catmedia)
             im.save(catfile)
