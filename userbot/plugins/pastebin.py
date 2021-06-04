@@ -148,7 +148,7 @@ async def _(event):
         return await edit_or_reply(
             catevent,
             message,
-            aslink=True,
+            deflink=True,
             linktext=f"Nekobin is down so pasted to deldog",
         )
     reply_text = f"**Pasted to Nekobin : **[neko]({url})\n**Raw url : **[Raw](https://nekobin.com/raw/{key})"
