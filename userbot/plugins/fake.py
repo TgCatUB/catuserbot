@@ -4,8 +4,10 @@ from random import choice, randint
 from telethon.errors import BadRequestError
 from telethon.tl.functions.channels import EditAdminRequest
 from telethon.tl.types import ChatAdminRights
-
-from . import ALIVE_NAME, catub, edit_delete, edit_or_reply, get_user_from_event
+from ..core.managers import edit_delete, edit_or_reply
+from . import ALIVE_NAME
+from userbot import catub
+from ..helpers.utils import get_user_from_event
 
 plugin_category = "fun"
 
@@ -90,7 +92,7 @@ async def _(event):
 )
 async def _(event):
     "To promote a person without admin rights"
-    new_rights = ChatAdminRights(post_messages=True)
+    new_rights = ChatAdminRights(post_messages=None)
     catevent = await edit_or_reply(event, "`Promoting...`")
     user, rank = await get_user_from_event(event, catevent)
     if not rank:
