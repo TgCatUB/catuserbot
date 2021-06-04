@@ -69,6 +69,8 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
         for _ in range(counter):
             await event.client.send_message(event.chat_id, spam_message)
             await asyncio.sleep(sleeptimet)
+    else:
+        return
     if BOTLOG:
         if DelaySpam is not True:
             if event.is_private:
@@ -116,7 +118,10 @@ async def spammer(event):
     "Floods the text in the chat !!"
     sandy = await event.get_reply_message()
     cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
-    counter = int(cat[0])
+    try:
+        counter = int(cat[0])
+    except Exception as e:
+        return await edit_delete(event,"__Use proper syntax to spam. Foe syntax refer help menu.__")
     if counter > 50:
         sleeptimet = 0.5
         sleeptimem = 1
@@ -278,7 +283,10 @@ async def spammer(event):
     "To spam with custom sleep time between each message"
     reply = await event.get_reply_message()
     input_str = "".join(event.text.split(maxsplit=1)[1:]).split(" ", 2)
-    sleeptimet = sleeptimem = float(input_str[0])
+    try:
+        sleeptimet = sleeptimem = float(input_str[0])
+    except Exception as e:
+        return await edit_delete(event,"__Use proper syntax to spam. Foe syntax refer help menu.__")
     cat = input_str[1:]
     await event.delete()
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)
