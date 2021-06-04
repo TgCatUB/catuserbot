@@ -16,6 +16,7 @@ from telethon.errors import PhotoInvalidDimensionsError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.functions.messages import SendMediaRequest
 from telethon.utils import get_attributes
+
 from userbot import catub
 
 from ..Config import Config
@@ -314,7 +315,9 @@ async def _(event):
     reply_to_id = await reply_id(event)
     reply = await event.get_reply_message()
     if not reply:
-        return await edit_delete(event,"Reply to any sticker/media to convert it to image.__")
+        return await edit_delete(
+            event, "Reply to any sticker/media to convert it to image.__"
+        )
     output = await _cattools.media_to_pic(event, reply)
     if output[1] is None:
         return await edit_delete(
@@ -340,7 +343,9 @@ async def _(event):
     reply_to_id = await reply_id(event)
     reply = await event.get_reply_message()
     if not reply:
-        return await edit_delete(event,"Reply to any image/media to convert it to sticker.__")
+        return await edit_delete(
+            event, "Reply to any image/media to convert it to sticker.__"
+        )
     output = await _cattools.media_to_pic(event, reply)
     if output[1] is None:
         return await edit_delete(
