@@ -178,6 +178,7 @@ async def bot_pms_edit(event):  # sourcery no-metrics
         users = get_user_reply(event.id)
         if users is None:
             return
+        reply_msg = None
         for user in users:
             if user.chat_id == str(chat.id):
                 reply_msg = user.message_id
@@ -236,19 +237,20 @@ async def handler(event):
                 except Exception as e:
                     LOGS.error(str(e))
         if users_1 is not None:
+            reply_msg = None
             for user in users_1:
                 if user.chat_id != Config.OWNER_ID:
                     reply_msg = user.message_id
                     break
             try:
-                users = get_user_id(reply_msg)
-                for usr in users:
-                    user_id = int(usr.chat_id)
-                    user_name = usr.first_name
-                    break
-                if check_is_black_list(user_id):
-                    return
                 if reply_msg:
+                    users = get_user_id(reply_msg)
+                    for usr in users:
+                        user_id = int(usr.chat_id)
+                        user_name = usr.first_name
+                        break
+                    if check_is_black_list(user_id):
+                        return
                     await event.client.send_message(
                         Config.OWNER_ID,
                         f"⬆️ **This message was deleted by the user** {_format.mentionuser(user_name , user_id)}.",
