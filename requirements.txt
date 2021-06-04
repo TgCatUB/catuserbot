@@ -29,7 +29,6 @@ moviepy
 nekos.py
 Pillow
 prettytable
-prsaw
 psutil
 psycopg2
 PyDictionary
@@ -43,6 +42,7 @@ python-barcode
 python-dotenv
 pytz
 qrcode
+randomstuff.py
 regex
 requests
 search-engine-parser
