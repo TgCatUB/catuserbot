@@ -1,9 +1,9 @@
 import re
 
 from userbot import catub
-
+from telethon.utils import get_display_name
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import get_user_from_event, randomstuff
+from ..helpers import get_user_from_event, rs_client
 from ..sql_helper.chatbot_sql import (
     addai,
     get_all_users,
@@ -195,8 +195,6 @@ async def list_chatbot(event):  # sourcery no-metrics
 async def ai_reply(event):
     if is_added(event.chat_id, event.sender_id) and (event.message.text):
         AI_LANG = gvarstatus("AI_LANG") or "en"
-        response = await randomstuff.get_ai_response(event.message.text, lang=AI_LANG)
-        # This is because the person pgamerx is from discord .
-        # If i use here there is other person in telegram named pgamerx so to avoid him.
-        insensitive_replace = re.compile(re.escape("pgamerx"), re.IGNORECASE)
-        await event.reply(insensitive_replace.sub("sandy1709", response))
+        master_name = get_display_name(await client.get_me())
+        response = await rs_client.get_ai_response(message=event.message.text,server="primary",master=master_name,bot="CatUserbot",uid=event.client.uid, language=AI_LANG)
+        await event.reply(response)
