@@ -327,6 +327,7 @@ async def _(event):
     await event.client.send_file(
         event.chat_id, meme_file, reply_to=reply_to_id, force_document=False
     )
+    await output[0].delete()
 
 
 @catub.cat_cmd(
@@ -355,6 +356,7 @@ async def _(event):
     await event.client.send_file(
         event.chat_id, meme_file, reply_to=reply_to_id, force_document=False
     )
+    await output[0].delete()
 
 
 @catub.cat_cmd(
