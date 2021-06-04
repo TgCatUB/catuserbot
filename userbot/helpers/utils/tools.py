@@ -44,9 +44,12 @@ async def media_to_pic(event, reply, noedits=False):
     elif mediatype == "Sticker":
         catmedia = await reply.download_media(file="./temp")
         if catmedia.endswith(".tgs"):
-            await runcmd(
+            catcmd = (
                 f"lottie_convert.py --frame 0 -if lottie -of png {catmedia} {catfile}"
             )
+            stdout, stderr = (await runcmd(catcmd))[:2]
+            if stderr:
+                LOGS.info(stdout + stderr)
         elif catmedia.endswith(".webp"):
             im = Image.open(catmedia)
             im.save(catfile)
