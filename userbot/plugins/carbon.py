@@ -229,9 +229,9 @@ async def carbon_api(event):
     driver.execute("send_command", params)
 
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await cat.edit("🔳🔳🔳🔲🔲")
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await cat.edit("🔳🔳🔳🔳🔳")
     file = "./carbon.png"
     await cat.edit("☣️Karbon1 Completed, Uploading Karbon☣️")
@@ -294,9 +294,9 @@ async def carbon_api(event):
     }
     driver.execute("send_command", params)
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await cat.edit("🔘🔘🔘📛📛")
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await cat.edit("🔘🔘🔘🔘🔘")
     file = "./carbon.png"
     await cat.edit("☣️Karbon2 Completed, Uploading Karbon☣️")
@@ -363,11 +363,9 @@ async def carbon_api(event):
     driver.execute("send_command", params)
 
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await cat.edit("🔵🔵🔵🎛🎛")
-
-    await asyncio.sleep(2)
-
+    await asyncio.sleep(1)
     await cat.edit("🔵🔵🔵🔵🔵")
     file = "./carbon.png"
     await cat.edit("☣️Karbon3 Completed, Uploading Karbon⬆️")
@@ -378,9 +376,7 @@ async def carbon_api(event):
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
-
     os.remove("./carbon.png")
-
     await cat.delete()
 
 
@@ -417,7 +413,6 @@ async def carbon_api(event):
     prefs = {"download.default_directory": "./"}
     chrome_options.add_experimental_option("prefs", prefs)
     await cat.edit("🌝🌝🌚🌚🌚")
-
     driver = webdriver.Chrome(
         executable_path=Config.CHROME_DRIVER, options=chrome_options
     )
@@ -432,13 +427,10 @@ async def carbon_api(event):
         "params": {"behavior": "allow", "downloadPath": download_path},
     }
     driver.execute("send_command", params)
-
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await cat.edit("🌝🌝🌝🌚🌚")
-
-    await asyncio.sleep(2)
-
+    await asyncio.sleep(1)
     await cat.edit("🌝🌝🌝🌝🌝")
     file = "./carbon.png"
     await cat.edit("✅Karbon4 Completed, Uploading Karbon✅")
@@ -449,9 +441,7 @@ async def carbon_api(event):
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
-
     os.remove("./carbon.png")
-
     await cat.delete()
 
 
@@ -524,7 +514,6 @@ async def carbon_api(event):
     prefs = {"download.default_directory": "./"}
     chrome_options.add_experimental_option("prefs", prefs)
     await cat.edit("⬛⬛⬜⬜⬜")
-
     driver = webdriver.Chrome(
         executable_path=Config.CHROME_DRIVER, options=chrome_options
     )
@@ -540,10 +529,9 @@ async def carbon_api(event):
     }
     driver.execute("send_command", params)
     driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await cat.edit("⬛⬛⬛⬜⬜")
-
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await cat.edit("⬛⬛⬛⬛⬛")
     file = "./carbon.png"
     await cat.edit("✅RGB Karbon Completed, Uploading Karbon✅")
