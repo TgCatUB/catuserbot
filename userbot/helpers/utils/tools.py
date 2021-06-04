@@ -45,7 +45,7 @@ async def media_to_pic(event, reply, noedits=False):
         catmedia = await reply.download_media(file="./temp")
         if catmedia.endswith(".tgs"):
             catcmd = (
-                f"lottie_convert.py --frame 0 -if lottie -of png {catmedia} {catfile}"
+                f"lottie_convert.py --frame 0 -if lottie -of svg {catmedia} {catfile}"
             )
             stdout, stderr = (await runcmd(catcmd))[:2]
             if stderr:
