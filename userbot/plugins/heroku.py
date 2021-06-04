@@ -212,7 +212,7 @@ async def _(dyno):
         )
     data = app.get_log()
     await edit_or_reply(
-        dyno, data, aslink=True, linktext="**Recent 100 lines of heroku logs: **"
+        dyno, data, deflink=True, linktext="**Recent 100 lines of heroku logs: **"
     )
 
 
