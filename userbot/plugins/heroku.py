@@ -211,7 +211,9 @@ async def _(dyno):
             " Please make sure your Heroku API Key, Your App name are configured correctly in the heroku"
         )
     data = app.get_log()
-    await edit_or_reply(dyno, data,aslink=True,linktext="**Recent 100 lines of heroku logs: **")
+    await edit_or_reply(
+        dyno, data, aslink=True, linktext="**Recent 100 lines of heroku logs: **"
+    )
 
 
 def prettyjson(obj, indent=2, maxlinelength=80):
