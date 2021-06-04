@@ -7,7 +7,8 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 from telethon import TelegramClient, events
-from telethon.errors import MessageNotModifiedError, MessageIdInvalidError
+from telethon.errors import MessageIdInvalidError, MessageNotModifiedError
+
 from ..Config import Config
 from ..helpers.utils.events import checking
 from ..helpers.utils.format import paste_text
