@@ -4,7 +4,7 @@ import base64
 from telethon.tl import functions, types
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-
+from telethon.utils import get_display_name
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
@@ -45,7 +45,7 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                     await event.client.send_message(
                         BOTLOG_CHATID,
                         "#SPAM\n"
-                        + f"Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) with {counter} times with below message",
+                        + f"Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) with {counter} times with below message",
                     )
             else:
                 if event.is_private:
@@ -58,7 +58,7 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                     await event.client.send_message(
                         BOTLOG_CHATID,
                         "#DELAYSPAM\n"
-                        + f"Delay spam was executed successfully in {event.chat.title}(`{event.chat_id}`) with {counter} times with below message with delay {sleeptimet} seconds",
+                        + f"Delay spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) with {counter} times with below message with delay {sleeptimet} seconds",
                     )
 
             sandy = await event.client.send_file(BOTLOG_CHATID, sandy)
@@ -84,7 +84,7 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                 await event.client.send_message(
                     BOTLOG_CHATID,
                     "#SPAM\n"
-                    + f"Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat  with {counter} messages of \n"
+                    + f"Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat  with {counter} messages of \n"
                     + f"`{spam_message}`",
                 )
         else:
@@ -99,7 +99,7 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                 await event.client.send_message(
                     BOTLOG_CHATID,
                     "#DELAYSPAM\n"
-                    + f"Delay spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
+                    + f"Delay spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
                     + f"`{spam_message}`",
                 )
 
@@ -199,7 +199,7 @@ async def stickerpack_spam(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#SPSPAM\n"
-                + f"Sticker Pack Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with pack",
+                + f"Sticker Pack Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with pack",
             )
         await event.client.send_file(BOTLOG_CHATID, reqd_sticker_set.documents[0])
 
@@ -232,7 +232,7 @@ async def tmeme(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#CSPAM\n"
-                + f"Letter Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with : `{message}`",
+                + f"Letter Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with : `{message}`",
             )
 
 
@@ -264,7 +264,7 @@ async def tmeme(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#WSPAM\n"
-                + f"Word Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with : `{message}`",
+                + f"Word Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with : `{message}`",
             )
 
 
