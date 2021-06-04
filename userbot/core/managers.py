@@ -16,13 +16,14 @@ async def edit_or_reply(
     link_preview=None,
     file_name=None,
     aslink=False,
+    deflink=False,
     linktext=None,
     caption=None,
 ):  # sourcery no-metrics
     sudo_users = _sudousers_list()
     link_preview = link_preview or False
     reply_to = await event.get_reply_message()
-    if len(text) < 4096:
+    if len(text) < 4096 and not deflink:
         parse_mode = parse_mode or "md"
         if event.sender_id in sudo_users:
             if reply_to:
@@ -37,7 +38,7 @@ async def edit_or_reply(
     asciich = ["**", "`", "__"]
     for i in asciich:
         text = re.sub(rf"\{i}", "", text)
-    if aslink:
+    if aslink or deflink:
         linktext = linktext or "Message was to big so pasted to bin"
         try:
             key = (
