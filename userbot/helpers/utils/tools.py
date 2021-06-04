@@ -43,6 +43,7 @@ async def media_to_pic(event, reply, noedits=False):
         await event.client.download_media(reply, catfile, thumb=-1)
     elif mediatype == "Sticker":
         catmedia = await reply.download_media(file="./temp")
+        catfile = os.path.join("./temp/", "meme.svg")
         if catmedia.endswith(".tgs"):
             catcmd = (
                 f"lottie_convert.py --frame 0 -if lottie -of svg {catmedia} {catfile}"
