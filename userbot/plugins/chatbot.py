@@ -195,7 +195,7 @@ async def list_chatbot(event):  # sourcery no-metrics
 async def ai_reply(event):
     if is_added(event.chat_id, event.sender_id) and (event.message.text):
         AI_LANG = gvarstatus("AI_LANG") or "en"
-        master_name = get_display_name(await client.get_me())
+        master_name = get_display_name(await event.client.get_me())
         response = await rs_client.get_ai_response(
             message=event.message.text,
             server="primary",
