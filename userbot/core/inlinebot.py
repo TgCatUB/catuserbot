@@ -21,7 +21,7 @@ from ..helpers.functions.utube import (
     ytsearch_data,
 )
 from ..plugins import mention
-from ..sql_helper.globals import gvarstatusP_IMG = 
+from ..sql_helper.globals import gvarstatus
 from . import CMD_INFO, GRP_INFO, PLG_INFO, check_owner
 from .logger import logging
 
