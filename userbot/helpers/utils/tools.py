@@ -1,7 +1,6 @@
 import os
 from typing import Optional
 
-from cairosvg import svg2png
 from moviepy.editor import VideoFileClip
 from PIL import Image
 
