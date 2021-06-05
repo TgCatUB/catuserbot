@@ -126,12 +126,17 @@ async def q_pic(event):  # sourcery no-metrics
         )
     output = io.BytesIO()
     if sticker:
+        output.name = "CatUserbot.Webp"
         img.save(output, "webp")
     else:
+        output.name = "CatUserbot.png"
         img.save(output, "PNG")
     output.seek(0)
     await event.client.send_file(event.chat_id, output, reply_to=reply_to)
     await catevent.delete()
+    for i in [output,pfp]:
+        if os.path.lexists(i):
+            os.remove(i)
 
 
 @catub.cat_cmd(
