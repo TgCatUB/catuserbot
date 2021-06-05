@@ -4,7 +4,7 @@ import os
 import re
 import time
 from uuid import uuid4
-
+import random
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
 from youtubesearchpython import VideosSearch
