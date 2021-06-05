@@ -7,13 +7,12 @@ from telethon.events import CallbackQuery
 
 from userbot import StartTime, catub, catversion
 
-from ..sql_helper.globals import gvarstatus
 from ..Config import Config
 from ..core.managers import edit_or_reply
 from ..helpers.functions import catalive, check_data_base_heal_th, get_readable_time
 from ..helpers.utils import reply_id
+from ..sql_helper.globals import gvarstatus
 from . import mention
-
 
 plugin_category = "utils"
 
