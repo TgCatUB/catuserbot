@@ -9,6 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from ...Config import Config
+from ...sql_helper.globals import gvarstatus
 from ..resources.states import states
 
 
@@ -17,7 +18,8 @@ def rand_key():
 
 
 async def age_verification(event, reply_to_id):
-    if Config.ALLOW_NSFW.lower() == "true":
+    ALLOW_NSFW = gvarstatus("ALLOW_NSFW") or "False"
+    if ALLOW_NSFW.lower() == "true":
         return False
     results = await event.client.inline_query(
         Config.TG_BOT_USERNAME, "age_verification_alert"
