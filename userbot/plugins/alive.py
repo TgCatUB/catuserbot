@@ -7,14 +7,13 @@ from telethon.events import CallbackQuery
 
 from userbot import StartTime, catub, catversion
 
+from ..sql_helper.globals import gvarstatus
 from ..Config import Config
 from ..core.managers import edit_or_reply
 from ..helpers.functions import catalive, check_data_base_heal_th, get_readable_time
 from ..helpers.utils import reply_id
 from . import mention
 
-CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
-EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
 
 plugin_category = "utils"
 
@@ -35,7 +34,13 @@ async def amireallyalive(event):
     reply_to_id = await reply_id(event)
     uptime = await get_readable_time((time.time() - StartTime))
     _, check_sgnirts = check_data_base_heal_th()
-    if Config.ALIVE_PIC:
+    EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
+    CUSTOM_ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
+    CAT_IMG = gvarstatus("ALIVE_PIC")
+    if CAT_IMG:
+        CAT = [x for x in CAT_IMG.split()]
+        A_IMG = list(CAT)
+        PIC = random.choice(A_IMG)
         cat_caption = f"**{CUSTOM_ALIVE_TEXT}**\n\n"
         cat_caption += f"**{EMOJI} Database :** `{check_sgnirts}`\n"
         cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
@@ -44,7 +49,7 @@ async def amireallyalive(event):
         cat_caption += f"**{EMOJI} Uptime :** `{uptime}\n`"
         cat_caption += f"**{EMOJI} Master:** {mention}\n"
         await event.client.send_file(
-            event.chat_id, Config.ALIVE_PIC, caption=cat_caption, reply_to=reply_to_id
+            event.chat_id, PIC, caption=cat_caption, reply_to=reply_to_id
         )
         await event.delete()
     else:
@@ -74,6 +79,7 @@ async def amireallyalive(event):
 async def amireallyalive(event):
     "A kind of showing bot details by your inline bot"
     reply_to_id = await reply_id(event)
+    EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
     cat_caption = f"**Catuserbot is Up and Running**\n"
     cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
     cat_caption += f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
