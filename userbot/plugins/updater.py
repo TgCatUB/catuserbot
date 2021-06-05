@@ -169,8 +169,6 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         )
         return
     elif build_status.status == "succeeded":
-        await catub.disconnect()
-        os.execl(sys.executable, sys.executable, *sys.argv)
         return
     await event.edit("`Deploy was failed better to do manual deploy.`")
 
@@ -274,8 +272,6 @@ async def upstream(event):
 async def upstream(event):
     event = await edit_or_reply(event, "`Pulling the catpack repo wait a sec ....`")
     off_repo = "https://github.com/Mr-confused/catpack"
-    os.chdir("/app")
-    await _catutils.runcmd(f"rm -rf .git")
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
