@@ -169,7 +169,8 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         )
         return
     elif build_status.status == "succeeded":
-        print(2)
+        await catub.disconnect()
+        os.execl(sys.executable, sys.executable, *sys.argv)
         return
     await event.edit("`Deploy was failed better to do manual deploy.`")
 
