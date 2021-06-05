@@ -1,7 +1,9 @@
 import requests
 from validators.url import url
 
-from . import catub, edit_delete, edit_or_reply
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "utils"
 
