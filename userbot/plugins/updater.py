@@ -127,12 +127,21 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     for app in heroku_applications:
         if app.name == HEROKU_APP_NAME:
             heroku_app = app
-            break
     if heroku_app is None:
         await event.edit(
             f"{txt}\n" "`Invalid Heroku credentials for deploying userbot dyno.`"
         )
         return repo.__del__()
+    ups_rem.fetch(ac_br)
+    repo.git.reset("--hard", "FETCH_HEAD")
+    heroku_git_url = heroku_app.git_url.replace(
+        "https://", "https://api:" + HEROKU_API_KEY + "@"
+    )
+    if "heroku" in repo.remotes:
+        remote = repo.remote("heroku")
+        remote.set_url(heroku_git_url)
+    else:
+        remote = repo.create_remote("heroku", heroku_git_url)
     sandy = await event.edit(
         "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
     )
@@ -147,26 +156,17 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         add_to_collectionlist("restart_update", [sandy.chat_id, sandy.id])
     except Exception as e:
         LOGS.error(e)
-    ups_rem.fetch(ac_br)
-    repo.git.reset("--hard", "FETCH_HEAD")
-    heroku_git_url = heroku_app.git_url.replace(
-        "https://", "https://api:" + HEROKU_API_KEY + "@"
-    )
-    if "heroku" in repo.remotes:
-        remote = repo.remote("heroku")
-        remote.set_url(heroku_git_url)
-    else:
-        remote = repo.create_remote("heroku", heroku_git_url)
     try:
-        remote.push(refspec="HEAD:refs/heads/master", force=True)
+        remote.push(refspec="HEAD:refs/heads/master")
     except Exception as error:
         await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
         return repo.__del__()
     build_status = heroku_app.builds(order_by="created_at", sort="desc")[0]
     if build_status.status == "failed":
-        await event.edit("`Build failed!\n" "Cancelled or there were some errors...`")
-        await asyncio.sleep(5)
-        return await event.delete()
+        await edit_delete(event,"`Build failed!\n" "Cancelled or there were some errors...`")
+        return
+    elif build_status.status == "succeeded":
+        return   
     await event.edit("`Deploy was failed better to do manual deploy.`")
 
 
