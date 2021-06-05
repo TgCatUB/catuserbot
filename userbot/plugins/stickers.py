@@ -575,7 +575,7 @@ async def pack_kang(event):  # sourcery no-metrics
     },
 )
 async def pic2packcmd(event):
-    "To split the replied image and make sticker pack.",
+    "To split the replied image and make sticker pack."
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
