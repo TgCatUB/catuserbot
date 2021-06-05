@@ -44,13 +44,14 @@ def get_warp_length(width):
         "examples": ["{tr}qpic CatUserbot.", "{tr}qpic -b CatUserbot."],
     },
 )
-async def q_pic(event):
+async def q_pic(event):  # sourcery no-metrics
     args = event.pattern_match.group(1)
     black = re.findall(r"-b", args)
     sticker = re.findall(r"-s", args)
     args = args.replace("-b", "")
     args = args.replace("-s", "")
     input_str = args.strip()
+    pfp = None
     reply_to = await reply_id(event)
     reply = await event.get_reply_message()
     if reply and input_str or not reply and input_str:
@@ -81,6 +82,7 @@ async def q_pic(event):
                 imag[0], "__Unable to extract image from the replied message.__"
             )
         user = event.client.uid
+        pfp = imag[1]
     try:
         user = await event.client.get_entity(user)
     except Exception as e:
