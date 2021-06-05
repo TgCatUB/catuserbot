@@ -52,7 +52,7 @@ info={
         "types": list or string - "types u are using in your plugin",
         "usage": "Usage for your command",
         "examples": "Example for the command",
-        "your custom name if you want to use other": str or list or dicr - "date about it",
+        "your custom name if you want to use other": str or list or dict - "data/information about it",
     },
 
 groups_only=True or False(by default False) - Either your command should work only in group or not
