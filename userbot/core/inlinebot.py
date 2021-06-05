@@ -241,17 +241,27 @@ async def inline_handler(event):  # sourcery no-metrics
                     Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
                 )
             ]
-            CAT_IMG = Config.ALIVE_PIC or None
-            if CAT_IMG and CAT_IMG.endswith((".jpg", ".png")):
+            ALIVE_PIC = gvarstatus("ALIVE_PIC")
+            IALIVE_PIC = gvarstatus("IALIVE_PIC")
+            if IALIVE_PIC:
+                CAT = [x for x in IALIVE_PIC.split()]
+                PIC = list(CAT)
+                I_IMG = random.choice(PIC)
+            if not IALIVE_PIC and ALIVE_PIC:
+                CAT = [x for x in ALIVE_PIC.split()]
+                PIC = list(CAT)
+                I_IMG = random.choice(PIC)
+            elif not IALIVE_PIC:
+                I_IMG = None
+            if I_IMG and I_IMG.endswith((".jpg", ".png")):
                 result = builder.photo(
-                    CAT_IMG,
-                    # title="Alive cat",
+                    I_IMG,
                     text=query,
                     buttons=buttons,
                 )
-            elif CAT_IMG:
+            elif I_IMG:
                 result = builder.document(
-                    CAT_IMG,
+                    I_IMG,
                     title="Alive cat",
                     text=query,
                     buttons=buttons,
