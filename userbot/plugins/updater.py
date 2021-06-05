@@ -162,7 +162,6 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
         return repo.__del__()
     build_status = heroku_app.builds(order_by="created_at", sort="desc")[0]
-    print(1)
     if build_status.status == "failed":
         await edit_delete(
             event, "`Build failed!\n" "Cancelled or there were some errors...`"
