@@ -276,18 +276,11 @@ async def upstream(event):
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
         repo = Repo()
-    except NoSuchPathError as error:
-        await event.edit(f"{txt}\n`directory {error} is not found`")
-        return repo.__del__()
-    except GitCommandError as error:
-        await event.edit(f"{txt}\n`Early failure! {error}`")
-        return repo.__del__()
     except InvalidGitRepositoryError:
         repo = Repo.init()
         origin = repo.create_remote("upstream", off_repo)
         origin.fetch()
         repo.create_head("master", origin.refs.master)
-        repo.heads.master.set_tracking_branch(origin.refs.master)
         repo.heads.master.checkout(True)
     try:
         repo.create_remote("upstream", off_repo)
