@@ -456,13 +456,13 @@ async def inline_handler(event):  # sourcery no-metrics
             if PM_PIC:
                 CAT = [x for x in PM_PIC.split()]
                 PIC = list(CAT)
-                random.choice(PIC)
+                CAT_IMG =random.choice(PIC)
             else:
-                pass
+                CAT_IMG =pass
             query = gvarstatus("pmpermit_text")
             if CAT_IMG and CAT_IMG.endswith((".jpg", ".jpeg", ".png")):
                 result = builder.photo(
-                    CAT_IMG,
+                    P_IMG,
                     # title="Alive cat",
                     text=query,
                     buttons=buttons,
