@@ -12,7 +12,6 @@ from userbot import UPSTREAM_REPO_URL, catub
 from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import _catutils
 from ..sql_helper.global_collection import (
     add_to_collectionlist,
     del_keyword_collectionlist,
