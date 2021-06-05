@@ -271,6 +271,7 @@ async def upstream(event):
 async def upstream(event):
     event = await edit_or_reply(event, "`Pulling the catpack repo wait a sec ....`")
     off_repo = "https://github.com/Mr-confused/catpack"
+    os.chdir("/app")
     await _catutils.runcmd("rm -rf .git")
     try:
         txt = "`Oops.. Updater cannot continue due to "
