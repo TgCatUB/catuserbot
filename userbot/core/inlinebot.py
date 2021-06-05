@@ -21,7 +21,7 @@ from ..helpers.functions.utube import (
     ytsearch_data,
 )
 from ..plugins import mention
-from ..sql_helper.globals import gvarstatus
+from ..sql_helper.globals import gvarstatusP_IMG = 
 from . import CMD_INFO, GRP_INFO, PLG_INFO, check_owner
 from .logger import logging
 
@@ -456,9 +456,9 @@ async def inline_handler(event):  # sourcery no-metrics
             if PM_PIC:
                 CAT = [x for x in PM_PIC.split()]
                 PIC = list(CAT)
-                CAT_IMG =random.choice(PIC)
+                CAT_IMG = random.choice(PIC)
             else:
-                CAT_IMG =pass
+                CAT_IMG = None
             query = gvarstatus("pmpermit_text")
             if CAT_IMG and CAT_IMG.endswith((".jpg", ".jpeg", ".png")):
                 result = builder.photo(
