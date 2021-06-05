@@ -29,6 +29,7 @@ async def kakashi(event):
     }
     releases = "**Latest Magisk Releases**\n\n"
     for name, release_url in magisk_dict.items():
+        data = get(release_url).json()
         releases += (
             f'{name}: [APK v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | '
             f'[Changelog]({data["magisk"]["note"]})\n'
