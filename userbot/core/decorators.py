@@ -5,6 +5,7 @@ from telethon.events import CallbackQuery
 
 from ..Config import Config
 
+from ..sql_helper.globals import gvarstatus
 
 def check_owner(func):
     async def wrapper(c_q: CallbackQuery):
@@ -19,8 +20,12 @@ def check_owner(func):
             except MessageNotModifiedError:
                 pass
         else:
+            HELP_TEXT = (
+                gvarstatus("HELP_TEXT")
+                or "Only My Master can Access This !!\n\nDeploy your own Catuserbot."
+            )
             await c_q.answer(
-                "Only My Master can Access This !!\n\nDeploy your own Catuserbot.",
+                HELP_TEXT,
                 alert=True,
             )
 
