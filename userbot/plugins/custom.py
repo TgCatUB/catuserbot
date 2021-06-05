@@ -1,10 +1,11 @@
+from validators.url import url
+
 from userbot import catub
 from userbot.core.logger import logging
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from validators.url import url
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
