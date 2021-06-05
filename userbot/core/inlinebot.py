@@ -122,13 +122,14 @@ def paginate_help(
 ):  # sourcery no-metrics
     number_of_rows = Config.NO_OF_ROWS_IN_HELP
     number_of_cols = Config.NO_OF_COLUMNS_IN_HELP
+    HELP_EMOJI = gvarstatus("HELP_EMOJI") or " "
     helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
     helpable_plugins = sorted(helpable_plugins)
-    if len(Config.EMOJI_TO_DISPLAY_IN_HELP) == 2:
+    if len(HELP_EMOJI) == 2:
         if plugins:
             modules = [
                 Button.inline(
-                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP[0]} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP[1]}",
+                    f"{HELP_EMOJI[0]} {x} {HELP_EMOJI[1]}",
                     data=f"{x}_prev(1)_command_{prefix}_{page_number}",
                 )
                 for x in helpable_plugins
@@ -136,7 +137,7 @@ def paginate_help(
         else:
             modules = [
                 Button.inline(
-                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP[0]} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP[1]}",
+                    f"{HELP_EMOJI[0]} {x} {HELP_EMOJI[1]}",
                     data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
                 )
                 for x in helpable_plugins
@@ -145,7 +146,7 @@ def paginate_help(
         if plugins:
             modules = [
                 Button.inline(
-                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                    f"{HELP_EMOJI} {x} {HELP_EMOJI}",
                     data=f"{x}_prev(1)_command_{prefix}_{page_number}",
                 )
                 for x in helpable_plugins
@@ -153,7 +154,7 @@ def paginate_help(
         else:
             modules = [
                 Button.inline(
-                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
+                    f"{HELP_EMOJI} {x} {HELP_EMOJI}",
                     data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
                 )
                 for x in helpable_plugins
