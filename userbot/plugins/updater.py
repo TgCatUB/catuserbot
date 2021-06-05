@@ -156,7 +156,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     except Exception as e:
         LOGS.error(e)
     try:
-        remote.push(refspec="HEAD:refs/heads/master")
+        remote.push(refspec="HEAD:refs/heads/master",force=True)
     except Exception as error:
         await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
         return repo.__del__()
