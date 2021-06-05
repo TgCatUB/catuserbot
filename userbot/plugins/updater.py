@@ -12,7 +12,7 @@ from userbot import UPSTREAM_REPO_URL, catub
 from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import _cattools
+from ..helpers.utils import _catutils
 from ..sql_helper.global_collection import (
     add_to_collectionlist,
     del_keyword_collectionlist,
@@ -271,7 +271,7 @@ async def upstream(event):
 async def upstream(event):
     event = await edit_or_reply(event, "`Pulling the catpack repo wait a sec ....`")
     off_repo = "https://github.com/Mr-confused/catpack"
-    await _cattools.runcmd("rm -rf .git")
+    await _catutils.runcmd("rm -rf .git")
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
