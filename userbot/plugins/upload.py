@@ -16,7 +16,7 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import progress, reply_id
+from ..helpers import progress
 from ..helpers.utils import reply_id
 
 plugin_category = "misc"
