@@ -270,7 +270,7 @@ async def upstream(event):
 )
 async def upstream(event):
     event = await edit_or_reply(event, "`Pulling the catpack repo wait a sec ....`")
-    off_repo = "https://github.com/Mr-confused/catpack"
+    off_repo = "https://github.com/Mr-confused/catpack.git"
     os.chdir("/app")
     await _catutils.runcmd("rm -rf .git")
     try:
@@ -282,12 +282,13 @@ async def upstream(event):
         origin = repo.create_remote("upstream", off_repo)
         origin.fetch()
         repo.create_head("master", origin.refs.master)
+        repo.heads.master.set_tracking_branch(origin.refs.master)
         repo.heads.master.checkout(True)
+    ac_br = repo.active_branch.name
     try:
         repo.create_remote("upstream", off_repo)
     except BaseException:
         pass
-    ac_br = repo.active_branch.name
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
     await event.edit("`Deploying userbot, please wait....`")
