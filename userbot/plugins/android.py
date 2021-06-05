@@ -4,7 +4,8 @@ import re
 from bs4 import BeautifulSoup
 from requests import get
 
-from . import catub, edit_delete, edit_or_reply
+from userbot import catub
+from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "extra"
 
@@ -19,7 +20,7 @@ plugin_category = "extra"
 )
 async def kakashi(event):
     "Get latest Magisk releases"
-    magisk_repo = "https://raw.githubusercontent.com/topjohnwu/magisk_files/"
+    magisk_repo = "https://raw.githubusercontent.com/topjohnwu/magisk-files/"
     magisk_dict = {
         "⦁ **Stable**": magisk_repo + "master/stable.json",
         "⦁ **Beta**": magisk_repo + "master/beta.json",
