@@ -162,9 +162,9 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     except Exception as error:
         await event.edit(f"{txt}\nHere is the error log:\n`{error}`")
         return repo.__del__()
-    build_status = heroku_app.builds(order_by="created_at", sort="desc")[0]
-    if build_status.status == "failed":
-        print(build_status)
+    build = heroku_app.builds(order_by="created_at", sort="desc")[0]
+    if build.status == "failed":
+        print(build.error)
         await edit_delete(
             event,
             "`Build failed!\n"
@@ -277,7 +277,6 @@ async def upstream(event):
     event = await edit_or_reply(event, "`Pulling the catpack repo wait a sec ....`")
     off_repo = "https://github.com/Mr-confused/catpack.git"
     os.chdir("/app")
-    await _catutils.runcmd("rm -rf .git")
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
