@@ -163,12 +163,12 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             return repo.__del__()
         build_status = app.builds(order_by="created_at", sort="desc")[0]
         if build_status.status == "failed":
-            await event.edit(
+            await edit_delete(event,
                 "`Build failed!\n" "Cancelled or there were some errors...`"
             )
-            await asyncio.sleep(5)
-            return await event.delete()
+            return
         await event.edit("`Successfully deployed!\n" "Restarting, please wait...`")
+        await event.client.disconnect()
     else:
         await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
     return
