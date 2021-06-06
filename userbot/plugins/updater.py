@@ -162,17 +162,15 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     except Exception as error:
         await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
         return repo.__del__()
-    build = heroku_app.builds(order_by="created_at", sort="desc")[0]
-    if build.status == "failed":
-        await edit_delete(
-            event, "`Build failed!\n" "Cancelled or there were some errors...`"
-        )
+    build_status = heroku_app.builds(order_by="created_at", sort="desc")[0]
+    if build_status.status == "failed":
+        await edit_delete(event,"`Build failed!\n" "Cancelled or there were some errors...`")
         return
     await event.edit("`Deploy was failed better to do manual deploy.`")
 
 
 @catub.cat_cmd(
-    pattern="update ?(now)?$",
+    pattern="update(| now)?$",
     command=("update", plugin_category),
     info={
         "header": "To update userbot.",
@@ -190,7 +188,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
 )
 async def upstream(event):
     "To check if the bot is up to date and update if specified"
-    conf = event.pattern_match.group(1)
+    conf = event.pattern_match.group(1).strip()
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
@@ -269,13 +267,9 @@ async def upstream(event):
 )
 async def upstream(event):
     event = await edit_or_reply(event, "`Pulling the catpack repo wait a sec ....`")
-    off_repo = "https://github.com/Mr-confused/catpack.git"
+    off_repo = "https://github.com/Mr-confused/catpack"
     os.chdir("/app")
-    catcmd = f"rm -rf .git"
-    try:
-        await _catutils.runcmd(catcmd)
-    except BaseException:
-        pass
+    await _catutils.runcmd(f"rm -rf .git")
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
