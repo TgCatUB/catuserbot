@@ -77,11 +77,13 @@ async def bad(event):  # sourcery no-metrics
                 return await edit_delete(
                     event, f"Give some values which you want to save for **{vname}**"
                 )
-            if "PIC" in vname and not url(vinfo):
-                await edit_delete(event, "**Give me a correct link...**")
-            else:
-                addgvar(vname, vinfo)
-                await edit_delete(
+            check = vinfo.split(" ")
+            for i in check:
+                if "PIC" in vname and not url(i):
+                    await edit_delete(event, "**Give me a correct link...**")
+                    return
+            addgvar(vname, vinfo)
+            await edit_delete(
                     event, f"📑 Value of **{vname}** is changed to :- `{vinfo}`", time=20
                 )
         if cmd == "get":
