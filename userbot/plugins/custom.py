@@ -84,8 +84,8 @@ async def bad(event):  # sourcery no-metrics
                     return
             addgvar(vname, vinfo)
             await edit_delete(
-                    event, f"📑 Value of **{vname}** is changed to :- `{vinfo}`", time=20
-                )
+                event, f"📑 Value of **{vname}** is changed to :- `{vinfo}`", time=20
+            )
         if cmd == "get":
             var_data = gvarstatus(vname)
             await edit_delete(
