@@ -163,9 +163,11 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         return repo.__del__()
     build_status = heroku_app.builds(order_by="created_at", sort="desc")[0]
     if build_status.status == "failed":
+        print(build_status)
         await edit_delete(
-            event, "`Build failed!\n" "Cancelled or there were some errors...`"
+            event, "`Build failed!\n" "Cancelled or there were some errors...`\n**So restarting the bot.**"
         )
+        await event.client.disconnect()
         return
     elif build_status.status == "succeeded":
         return
@@ -173,7 +175,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
 
 
 @catub.cat_cmd(
-    pattern="update(| now)?$",
+    pattern="update( now)?$",
     command=("update", plugin_category),
     info={
         "header": "To update userbot.",
