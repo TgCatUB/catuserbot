@@ -110,6 +110,7 @@ async def update(event, repo, ups_rem, ac_br):
     )
     await event.client.reload(sandy)
 
+
 async def deploy(event, repo, ups_rem, ac_br, txt):
     if HEROKU_API_KEY is not None:
         heroku = heroku3.from_key(HEROKU_API_KEY)
@@ -131,7 +132,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
                 f"{txt}\n" "`Invalid Heroku credentials for deploying userbot dyno.`"
             )
             return repo.__del__()
-        sandy=await event.edit(
+        sandy = await event.edit(
             "`Userbot dyno build in progress, please wait until the process finishes it usually takes 4 to 5 minutes .`"
         )
         try:
@@ -171,6 +172,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     else:
         await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
     return
+
 
 @catub.cat_cmd(
     pattern="update ?(now)?$",
