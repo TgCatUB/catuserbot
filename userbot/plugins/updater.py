@@ -165,7 +165,9 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     if build_status.status == "failed":
         print(build_status)
         await edit_delete(
-            event, "`Build failed!\n" "Cancelled or there were some errors...`\n**So restarting the bot.**"
+            event,
+            "`Build failed!\n"
+            "Cancelled or there were some errors...`\n**So restarting the bot.**",
         )
         await event.client.disconnect()
         return
