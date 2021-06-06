@@ -171,7 +171,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             "Cancelled or there were some errors...`\n**So restarting the bot.**",
         )
         await event.client.disconnect()
-        return 
+        return
     elif build_status.status == "succeeded":
         return
     await event.edit("`Deploy was failed better to do manual deploy.`")
