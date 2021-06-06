@@ -65,8 +65,12 @@ async def bad(event):  # sourcery no-metrics
         return await edit_delete(
             event, f"**📑 Give correct var name from the list :\n\n**{vnlist}", time=60
         )
+    vinfo = None
     if " " in vname:
         vname, vinfo = vname.split(" ", 1)
+    reply = await event.get_reply_message()
+    if not vinfo and reply:
+        vinfo = reply.text
     if vname in vlist:
         if cmd == "set":
             if not vinfo:
@@ -131,7 +135,9 @@ async def bad(event):  # sourcery no-metrics
 async def custom_catuserbot(event):
     "To customize your CatUserbot."
     reply = await event.get_reply_message()
-    text = reply.text
+    text = None
+    if reply:
+        text = reply.text
     if not reply and text:
         return await edit_delete(event, "__Reply to custom text or url__")
     input_str = event.pattern_match.group(1)
