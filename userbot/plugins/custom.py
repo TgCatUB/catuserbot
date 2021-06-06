@@ -23,7 +23,7 @@ vlist = [
 
 
 @catub.cat_cmd(
-    pattern="(set|get|del)dv(?: |$)(.*)",
+    pattern="(set|get|del)dv(?: |$)([\s\S]*)",
     command=("dv", plugin_category),
     info={
         "header": "Set vars in database or Check or Delete",
