@@ -127,6 +127,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     for app in heroku_applications:
         if app.name == HEROKU_APP_NAME:
             heroku_app = app
+            break
     if heroku_app is None:
         await event.edit(
             f"{txt}\n" "`Invalid Heroku credentials for deploying userbot dyno.`"
@@ -159,7 +160,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     try:
         remote.push(refspec="HEAD:refs/heads/master", force=True)
     except Exception as error:
-        await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
+        await event.edit(f"{txt}\nHere is the error log:\n`{error}`")
         return repo.__del__()
     build_status = heroku_app.builds(order_by="created_at", sort="desc")[0]
     if build_status.status == "failed":
@@ -170,7 +171,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             "Cancelled or there were some errors...`\n**So restarting the bot.**",
         )
         await event.client.disconnect()
-        return
+        return 
     elif build_status.status == "succeeded":
         return
     await event.edit("`Deploy was failed better to do manual deploy.`")
