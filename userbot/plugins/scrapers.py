@@ -34,26 +34,30 @@ async def wiki(event):
     try:
         result = summary(match, auto_suggest=False)
     except DisambiguationError as error:
-        error = error.split('\n')
-        result = ''.join(
-            f'`{i}`' if lineno > 1 else f'*{i}*'
+        error = error.split("\n")
+        result = "".join(
+            f"`{i}`" if lineno > 1 else f"*{i}*"
             for lineno, i in enumerate(error, start=1)
         )
-        return await edit_or_reply(event, f'**Disambiguated page found.**\n\n{result}')
+        return await edit_or_reply(event, f"**Disambiguated page found.**\n\n{result}")
     except PageError:
         pass
     if not result:
         try:
             result = summary(match, auto_suggest=True)
         except DisambiguationError as error:
-            error = error.split('\n')
-            result = ''.join(
-                f'`{i}`' if lineno > 1 else f'*{i}*'
+            error = error.split("\n")
+            result = "".join(
+                f"`{i}`" if lineno > 1 else f"*{i}*"
                 for lineno, i in enumerate(error, start=1)
             )
-            return await edit_or_reply(event, f'**Disambiguated page found.**\n\n{result}')
+            return await edit_or_reply(
+                event, f"**Disambiguated page found.**\n\n{result}"
+            )
         except PageError:
-            return await edit_or_delete(event,f"**Sorry i Can't find any results for **`{match}`")
+            return await edit_or_delete(
+                event, f"**Sorry i Can't find any results for **`{match}`"
+            )
     await edit_or_reply(
         event, "**Search:**\n`" + match + "`\n\n**Result:**\n" + f"__{result}__"
     )
