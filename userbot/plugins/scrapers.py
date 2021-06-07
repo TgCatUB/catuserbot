@@ -1,16 +1,18 @@
 import bs4
 import requests
+from pySmartDL import SmartDL
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
 from userbot import catub
-from pySmartDL import SmartDL
-from ..helpers.utils import reply_id
+
 from ..core.managers import edit_or_reply
+from ..helpers.utils import reply_id
 from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "utils"
 moviepath = os.path.join(os.getcwd(), "temp", "moviethumb.jpg")
+
 
 @catub.cat_cmd(
     pattern="wiki (.*)",
@@ -196,15 +198,15 @@ async def imdb(event):  # sourcery no-metrics
         )
         story_line = story.findAll("div")[0].text if story else "Not available"
         imageurl = None
-        image_link = soup.find('a', attrs={"class": "ipc-lockup-overlay ipc-focusable"})
+        image_link = soup.find("a", attrs={"class": "ipc-lockup-overlay ipc-focusable"})
         image_content = await _get(
-                "https://imdb.com" + image_link.get("href").replace("/?ref_=tt_ov_i", "")
-            )
-        soup = bs4.BeautifulSoup(image_content.content, 'lxml')
+            "https://imdb.com" + image_link.get("href").replace("/?ref_=tt_ov_i", "")
+        )
+        soup = bs4.BeautifulSoup(image_content.content, "lxml")
         for i in soup.findAll("img"):
-            if "portraitimage" in i.attrs['class'][0].lower():
+            if "portraitimage" in i.attrs["class"][0].lower():
                 imageurl = i.get("src")
-        resulttext =  f"""<b>Title : </b><code>{mov_title}</code>
+        resulttext = f"""<b>Title : </b><code>{mov_title}</code>
 <b>Info : </b><code>{mov_details}</code>
 <b>Genres : </b><code>{mov_geners}</code>
 <b>Rating : </b><code>{mov_rating}</code>
