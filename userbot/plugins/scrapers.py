@@ -10,6 +10,7 @@ import requests
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
+from ..helpers.utils.format import paste_text
 from userbot import catub
 
 from ..core.managers import edit_or_reply
@@ -92,8 +93,7 @@ async def imdb(event):  # sourcery no-metrics
         )
         page1 = requests.get(mov_link)
         soup = bs4.BeautifulSoup(page1.content, "lxml")
-        # print(_format.paste_text(soup))
-        print(soup)
+        print(paste_text(soup))
         if soup.find("div", "poster"):
             poster = soup.find("div", "poster").img["src"]
         else:
