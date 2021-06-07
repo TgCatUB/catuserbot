@@ -4,12 +4,13 @@ from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
 from userbot import catub
-
+from pySmartDL import SmartDL
+from ..helpers.utils import reply_id
 from ..core.managers import edit_or_reply
 from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "utils"
-
+moviepath = os.path.join(os.getcwd(), "temp", "moviethumb.jpg")
 
 @catub.cat_cmd(
     pattern="wiki (.*)",
@@ -70,6 +71,7 @@ async def wiki(event):
 async def imdb(event):  # sourcery no-metrics
     """To fetch imdb data about the given movie or series."""
     catevent = await edit_or_reply(event, "`searching........`")
+    reply_to = await reply_id(event)
     try:
         movie_name = event.pattern_match.group(1)
         remove_space = movie_name.split(" ")
@@ -193,8 +195,16 @@ async def imdb(event):  # sourcery no-metrics
             "div", attrs={"class": "ipc-html-content ipc-html-content--base"}
         )
         story_line = story.findAll("div")[0].text if story else "Not available"
-        await catevent.edit(
-            f"""<b>Title : </b><code>{mov_title}</code>
+        imageurl = None
+        image_link = soup.find('a', attrs={"class": "ipc-lockup-overlay ipc-focusable"})
+        image_content = await _get(
+                "https://imdb.com" + image_link.get("href").replace("/?ref_=tt_ov_i", "")
+            )
+        soup = bs4.BeautifulSoup(image_content.content, 'lxml')
+        for i in soup.findAll("img"):
+            if "portraitimage" in i.attrs['class'][0].lower():
+                imageurl = i.get("src")
+        resulttext =  f"""<b>Title : </b><code>{mov_title}</code>
 <b>Info : </b><code>{mov_details}</code>
 <b>Genres : </b><code>{mov_geners}</code>
 <b>Rating : </b><code>{mov_rating}</code>
@@ -204,8 +214,26 @@ async def imdb(event):  # sourcery no-metrics
 <b>Writer : </b><code>{writers}</code>
 <b>Stars : </b><code>{stars}</code>
 <b>IMDB Url : </b>{mov_link}
-<b>Story Line : </b><i>{story_line}</i>""",
-            link_preview=True,
+
+<b>Story Line : </b><i>{story_line}</i>"""
+        if imageurl:
+            downloader = SmartDL(thumb_link, moviepath, progress_bar=False)
+            downloader.start(blocking=False)
+            while not downloader.isFinished():
+                pass
+        if os.path.exists(moviepath):
+            await event.client.send_file(
+                event.chat_id,
+                moviepath,
+                caption=resultext,
+                reply_to=reply_to,
+                parse_mode="HTML",
+            )
+            os.remove(moviepath)
+            return await catevent.delete()
+        await catevent.edit(
+            resulttext,
+            link_preview=False,
             parse_mode="HTML",
         )
     except IndexError:
