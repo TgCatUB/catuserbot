@@ -10,7 +10,7 @@ import bs4
 import requests
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
-
+from ..helpers.utils import _format
 from userbot import catub
 
 from ..core.managers import edit_or_reply
@@ -39,19 +39,6 @@ async def wiki(wiki_q):
         await edit_or_reply(wiki_q, f"Page not found.\n\n{pageerror}")
         return
     result = summary(match)
-    if len(result) >= 4096:
-        with open("output.txt", "w+") as file:
-            file.write(result)
-        await wiki_q.client.send_file(
-            wiki_q.chat_id,
-            "output.txt",
-            reply_to=wiki_q.id,
-            caption="`Output too large, sending as file`",
-        )
-        await wiki_q.delete()
-        if os.path.exists("output.txt"):
-            os.remove("output.txt")
-        return
     await edit_or_reply(
         wiki_q, "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
     )
@@ -69,17 +56,16 @@ async def wiki(wiki_q):
         "usage": "{tr}imdb <movie/series name>",
     },
 )
-async def imdb(e):  # sourcery no-metrics
+async def imdb(event):  # sourcery no-metrics
     """To fetch imdb data about the given movie or series."""
-    catevent = await edit_or_reply(e, "`searching........")
+    catevent = await edit_or_reply(event, "`searching........`")
     try:
-        movie_name = e.pattern_match.group(1)
+        movie_name = event.pattern_match.group(1)
         remove_space = movie_name.split(" ")
         final_name = "+".join(remove_space)
         page = requests.get(
             "https://www.imdb.com/find?ref_=nv_sr_fn&q=" + final_name + "&s=all"
         )
-        str(page.status_code)
         soup = bs4.BeautifulSoup(page.content, "lxml")
         odds = soup.findAll("tr", "odd")
         mov_title = odds[0].findNext("td").findNext("td").text
@@ -88,6 +74,7 @@ async def imdb(e):  # sourcery no-metrics
         )
         page1 = requests.get(mov_link)
         soup = bs4.BeautifulSoup(page1.content, "lxml")
+        print(_format.paste_text(soup))
         if soup.find("div", "poster"):
             poster = soup.find("div", "poster").img["src"]
         else:
