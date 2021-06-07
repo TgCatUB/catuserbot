@@ -229,7 +229,7 @@ async def imdb(event):  # sourcery no-metrics
             await event.client.send_file(
                 event.chat_id,
                 moviepath,
-                caption=resultext,
+                caption=resulttext,
                 reply_to=reply_to,
                 parse_mode="HTML",
             )
