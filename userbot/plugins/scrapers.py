@@ -93,7 +93,8 @@ async def imdb(event):  # sourcery no-metrics
         )
         page1 = requests.get(mov_link)
         soup = bs4.BeautifulSoup(page1.content, "lxml")
-        print(_format.paste_text(soup))
+        #print(_format.paste_text(soup))
+        print(soup)
         if soup.find("div", "poster"):
             poster = soup.find("div", "poster").img["src"]
         else:
