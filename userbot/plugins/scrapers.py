@@ -46,7 +46,7 @@ async def wiki(event):
         try:
             result = summary(match, auto_suggest=True)
         except DisambiguationError as error:
-            error = error.split("\n")
+            error = str(error).split("\n")
             result = "".join(
                 f"`{i}`" if lineno > 1 else f"*{i}*"
                 for lineno, i in enumerate(error, start=1)
