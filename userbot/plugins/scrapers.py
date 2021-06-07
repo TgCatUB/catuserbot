@@ -110,7 +110,9 @@ async def imdb(event):  # sourcery no-metrics
         if movgeners:
             for gener in movgeners.findAll("a"):
                 mov_geners += (
-                    " | " + gener.text.strip() if mov_geners != "" else gener.text.strip()
+                    " | " + gener.text.strip()
+                    if mov_geners != ""
+                    else gener.text.strip()
                 )
         else:
             mov_geners = "Not Found!"
@@ -183,7 +185,7 @@ async def imdb(event):  # sourcery no-metrics
                         )
         if directors == "":
             directors = "Not Found!"
-        if writers == "" :
+        if writers == "":
             writers = "Not Found!"
         if stars == "":
             stars = "Not Found!"
