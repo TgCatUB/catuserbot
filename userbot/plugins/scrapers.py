@@ -96,7 +96,7 @@ async def imdb(event):  # sourcery no-metrics
         if info_details and [
             "titleblockmetadata" in a.lower() for a in info_details.attrs["class"]
         ]:
-            for movdetails in inline.findAll("li"):
+            for movdetails in info_details.findAll("li"):
                 mov_details += (
                     " | " + movdetails.strip()
                     if mov_details != ""
