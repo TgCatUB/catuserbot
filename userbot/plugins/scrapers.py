@@ -27,23 +27,38 @@ plugin_category = "utils"
         "usage": "{tr}wiki <query>",
     },
 )
-async def wiki(wiki_q):
+async def wiki(event):
     """To fetch content from Wikipedia."""
-    match = wiki_q.pattern_match.group(1)
+    match = event.pattern_match.group(1)
+    result = None
     try:
-        summary(match)
+        result = summary(match, auto_suggest=False)
     except DisambiguationError as error:
-        await edit_or_reply(wiki_q, f"Disambiguated page found.\n\n{error}")
-        return
-    except PageError as pageerror:
-        await edit_or_reply(wiki_q, f"Page not found.\n\n{pageerror}")
-        return
-    result = summary(match)
+        error = error.split('\n')
+        result = ''.join(
+            f'`{i}`' if lineno > 1 else f'*{i}*'
+            for lineno, i in enumerate(error, start=1)
+        )
+        return await edit_or_reply(event, f'**Disambiguated page found.**\n\n{result}')
+    except PageError:
+        pass
+    if not result:
+        try:
+            result = summary(match, auto_suggest=True)
+        except DisambiguationError as error:
+            error = error.split('\n')
+            result = ''.join(
+                f'`{i}`' if lineno > 1 else f'*{i}*'
+                for lineno, i in enumerate(error, start=1)
+            )
+            return await edit_or_reply(event, f'**Disambiguated page found.**\n\n{result}')
+        except PageError:
+            return await edit_or_delete(event,f"**Sorry i Can't find any results for **`{match}`")
     await edit_or_reply(
-        wiki_q, "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
+        event, "**Search:**\n`" + match + "`\n\n**Result:**\n" + f"__{result}__"
     )
     if BOTLOG:
-        await wiki_q.client.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID, f"Wiki query `{match}` was executed successfully"
         )
 
