@@ -36,7 +36,7 @@ async def wiki(event):
     except DisambiguationError as error:
         error = str(error).split("\n")
         result = "".join(
-            f"`{i}`" if lineno > 1 else f"*{i}*"
+            f"`{i}`\n" if lineno > 1 else f"**{i}**\n"
             for lineno, i in enumerate(error, start=1)
         )
         return await edit_or_reply(event, f"**Disambiguated page found.**\n\n{result}")
@@ -48,7 +48,7 @@ async def wiki(event):
         except DisambiguationError as error:
             error = str(error).split("\n")
             result = "".join(
-                f"`{i}`" if lineno > 1 else f"*{i}*"
+                f"`{i}`\n" if lineno > 1 else f"**{i}**\n"
                 for lineno, i in enumerate(error, start=1)
             )
             return await edit_or_reply(
