@@ -13,7 +13,6 @@ from wikipedia.exceptions import DisambiguationError, PageError
 from userbot import catub
 
 from ..core.managers import edit_or_reply
-from ..helpers.utils import _format
 from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "utils"
@@ -93,7 +92,7 @@ async def imdb(event):  # sourcery no-metrics
         )
         page1 = requests.get(mov_link)
         soup = bs4.BeautifulSoup(page1.content, "lxml")
-        #print(_format.paste_text(soup))
+        # print(_format.paste_text(soup))
         print(soup)
         if soup.find("div", "poster"):
             poster = soup.find("div", "poster").img["src"]
