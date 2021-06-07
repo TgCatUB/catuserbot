@@ -10,10 +10,10 @@ import requests
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
-from ..helpers.utils.format import paste_text
 from userbot import catub
 
 from ..core.managers import edit_or_reply
+from ..helpers.utils.format import paste_text
 from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "utils"
