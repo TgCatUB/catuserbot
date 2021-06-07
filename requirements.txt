@@ -64,6 +64,6 @@ validators
 vcsi
 wand
 wget
-wikipedia
+git+https://github.com/goldsmith/Wikipedia
 youtube-search-python
 youtube_dl
