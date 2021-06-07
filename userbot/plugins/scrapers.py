@@ -97,11 +97,18 @@ async def imdb(event):  # sourcery no-metrics
             "titleblockmetadata" in a.lower() for a in info_details.attrs["class"]
         ]:
             for movdetails in info_details.findAll("li"):
-                mov_details += (
-                    " | " + movdetails.strip()
-                    if mov_details != ""
-                    else movdetails.strip()
-                )
+                if movdetails.span:
+                    mov_details += (
+                        " | " + movdetails.span.text.strip()
+                        if mov_details != ""
+                        else movdetails.span.text.strip()
+                    )
+                else:
+                    mov_details += (
+                        " | " + movdetails.text.strip()
+                        if mov_details != ""
+                        else movdetails.text.strip()
+                    )
         else:
             mov_details = "Not Found!"
         mov_geners = ""
@@ -109,7 +116,7 @@ async def imdb(event):  # sourcery no-metrics
         if movgeners:
             for gener in movgeners.findAll("a"):
                 mov_geners += (
-                    " | " + gener.strip() if mov_geners != "" else gener.strip()
+                    " | " + gener.text.strip() if mov_geners != "" else gener.text.strip()
                 )
         else:
             mov_geners = "Not Found!"
