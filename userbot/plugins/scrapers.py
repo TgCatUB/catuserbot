@@ -1,9 +1,3 @@
-# Userbot module containing various scrapers.
-# Copyright (C) 2019 The Raphielscape Company LLC.(some are ported from there)
-# Copyright (c) JeepBot | 2019(for imdb)
-# # kanged from Blank-x ;---;
-
-
 import bs4
 import requests
 from wikipedia import summary
