@@ -75,7 +75,7 @@ async def wiki(event):
         "usage": "{tr}imdb <movie/series name>",
     },
 )
-async def imdb(event):  # sourcery no-metrics
+async def imdb(event):    # sourcery no-metrics
     """To fetch imdb data about the given movie or series."""
     catevent = await edit_or_reply(event, "`searching........`")
     try:
@@ -93,73 +93,84 @@ async def imdb(event):  # sourcery no-metrics
         )
         page1 = requests.get(mov_link)
         soup = bs4.BeautifulSoup(page1.content, "lxml")
-        print(paste_text(str(soup)))
-        if soup.find("div", "poster"):
-            poster = soup.find("div", "poster").img["src"]
+        mov_details = ""
+        info_details = soup.find('ul', attrs={"class": "ipc-inline-list"})
+        if info_details and [
+            "titleblockmetadata" in a.lower()
+            for a in info_details.attrs['class']
+        ]:
+            for movdetails in inline.findAll('li'):
+                mov_details += " | " + movdetails.strip() if mov_details != "" else movdetails.strip()
         else:
-            poster = ""
-        if soup.find("div", "title_wrapper"):
-            pg = soup.find("div", "title_wrapper").findNext("div").text
-            mov_details = re.sub(r"\s+", " ", pg)
+            mov_details = "Not Found!"
+        mov_geners = ""
+        movgeners = soup.find('div', attrs={"class": "ipc-chip-list"})
+        if movgeners:
+            for gener in movgeners.findAll('a'):
+                mov_geners += " | " + gener.strip() if mov_geners != "" else gener.strip()
         else:
-            mov_details = ""
-        moviecredits = soup.findAll("div", "credit_summary_item")
-        director = moviecredits[0].a.text
-        if len(moviecredits) == 1:
-            writer = "Not available"
-            stars = "Not available"
-        elif len(moviecredits) > 2:
-            writer = moviecredits[1].a.text
-            actors = [x.text for x in moviecredits[2].findAll("a")]
-            actors.pop()
-            stars = actors[0] + "," + actors[1] + "," + actors[2]
+            mov_geners = "Not Found!"
+        movrating = soup.find('div', attrs={"data-testid": "hero-title-block__aggregate-rating__score"})
+        if movrating:
+            rating = [rate.text for rate in movrating]
+            voted_users = movrating.findNext('div').findNext('div').text
+            mov_rating = f"{rating[0]}{rating[1]} based on {voted_users} users ratings."
         else:
-            writer = "Not available"
-            actors = [x.text for x in moviecredits[1].findAll("a")]
-            actors.pop()
-            stars = actors[0] + "," + actors[1] + "," + actors[2]
-        if soup.find("div", "inline canwrap"):
-            story_line = soup.find("div", "inline canwrap").findAll("p")[0].text
-        else:
-            story_line = "Not available"
-        info = soup.findAll("div", "txt-block")
-        if info:
-            mov_country = []
-            mov_language = []
-            for node in info:
-                a = node.findAll("a")
-                for i in a:
-                    if "country_of_origin" in i["href"]:
-                        mov_country.append(i.text)
-                    elif "primary_language" in i["href"]:
-                        mov_language.append(i.text)
-        if soup.findAll("div", "ratingValue"):
-            for r in soup.findAll("div", "ratingValue"):
-                mov_rating = r.strong["title"]
-        else:
-            mov_rating = "Not available"
+            mov_rating = 'Not available'
+        mov_country = ""
+        mov_language = ""
+        mov_location = soup.find('div', attrs={"data-testid": "title-details-section"})
+        if mov_location:
+            for li in mov_location.findNext('ul'):
+                detail_header = li.span.text if li.span else None
+                if detail_header == "Country of origin":
+                    for ct in li.findAll(
+                        'a', attrs={"class": "ipc-metadata-list-item__list-content-item"}
+                    ):
+                        mov_country += ", " + ct.text.strip() if mov_country != "" else ct.text.strip()
+                elif detail_header == "Languages":
+                    for lg in li.findAll(
+                        'a', attrs={"class": "ipc-metadata-list-item__list-content-item"}
+                    ):
+                        mov_language += ", " + lg.text.strip() if mov_language != "" else lg.text.strip()
+        if mov_country == "":
+            mov_country = "Not Found!"
+        if mov_language:
+            mov_language = "Not Found!"
+        directors = ""
+        writers = ""
+        stars = ""
+        mov_credit = soup.find('ul', attrs={"class": "ipc-metadata-list"})
+        if mov_credit:
+            for data in mov_credit:
+                credit_name = data.span.text if data.span else data.a.text
+                for credit in data.findAll('a', {"class": "ipc-metadata-list-item__list-content-item"}):
+                    if credit_name == "Director":
+                        directors += ", " + credit.text.strip() if directors != "" else credit.text.strip()
+                    if credit_name == "Writers":
+                        writers += ", " + credit.text.strip() if writers != "" else credit.text.strip()
+                    if credit_name == "Stars":
+                        stars += ", " + credit.text.strip() if stars != "" else credit.text.strip()
+        if directors == "":
+            directors = "Not Found!"
+        if writers:
+            writers = "Not Found!"
+        if stars:
+            stars = "Not Found!"
+        story = soup.find('div', attrs={"class": "ipc-html-content ipc-html-content--base"})
+        story_line = story.findAll('div')[0].text if story else 'Not available'
         await catevent.edit(
-            "<a href=" + poster + ">&#8203;</a>"
-            "<b>Title : </b><code>"
-            + mov_title
-            + "</code>\n<code>"
-            + mov_details
-            + "</code>\n<b>Rating : </b><code>"
-            + mov_rating
-            + "</code>\n<b>Country : </b><code>"
-            + mov_country[0]
-            + "</code>\n<b>Language : </b><code>"
-            + mov_language[0]
-            + "</code>\n<b>Director : </b><code>"
-            + director
-            + "</code>\n<b>Writer : </b><code>"
-            + writer
-            + "</code>\n<b>Stars : </b><code>"
-            + stars
-            + "</code>\n<b>IMDB Url : </b>"
-            + mov_link
-            + "\n<b>Story Line : </b>"
-            + story_line,
+            f"""<b>Title : </b><code>{mov_title}</code>
+<b>Info : </b><code>{mov_details}</code>
+<b>Genres : </b><code>{mov_geners}</code>
+<b>Rating : </b><code>{mov_rating}</code>
+<b>Country : </b><code>{mov_country}</code>
+<b>Language : </b><code>{mov_language}</code>
+<b>Director : </b><code>{directors}</code>
+<b>Writer : </b><code>{writers}</code>
+<b>Stars : </b><code>{stars}</code>
+<b>IMDB Url : </b>{mov_link}
+<b>Story Line : </b><i>{story_line}</i>""",
             link_preview=True,
             parse_mode="HTML",
         )
