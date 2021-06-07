@@ -221,7 +221,7 @@ async def imdb(event):  # sourcery no-metrics
 
 <b>Story Line : </b><i>{story_line}</i>"""
         if imageurl:
-            downloader = SmartDL(thumb_link, moviepath, progress_bar=False)
+            downloader = SmartDL(imageurl, moviepath, progress_bar=False)
             downloader.start(blocking=False)
             while not downloader.isFinished():
                 pass
