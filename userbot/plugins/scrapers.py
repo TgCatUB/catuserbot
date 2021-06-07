@@ -3,17 +3,17 @@
 # Copyright (c) JeepBot | 2019(for imdb)
 # # kanged from Blank-x ;---;
 
-import os
 import re
 
 import bs4
 import requests
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
-from ..helpers.utils import _format
+
 from userbot import catub
 
 from ..core.managers import edit_or_reply
+from ..helpers.utils import _format
 from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "utils"
