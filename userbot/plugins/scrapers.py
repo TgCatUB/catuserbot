@@ -201,13 +201,14 @@ async def imdb(event):  # sourcery no-metrics
         story_line = story.findAll("div")[0].text if story else "Not available"
         imageurl = None
         image_link = soup.find("a", attrs={"class": "ipc-lockup-overlay ipc-focusable"})
-        image_content = requests.get(
-            "https://imdb.com" + image_link.get("href").replace("/?ref_=tt_ov_i", "")
-        )
-        soup = bs4.BeautifulSoup(image_content.content, "lxml")
-        for i in soup.findAll("img"):
-            if "portraitimage" in i.attrs["class"][0].lower():
-                imageurl = i.get("src")
+        if image_link:
+            image_content = requests.get(
+                "https://imdb.com" + image_link.get("href").replace("/?ref_=tt_ov_i", "")
+            )
+            soup = bs4.BeautifulSoup(image_content.content, "lxml")
+            for i in soup.findAll("img"):
+                if "portraitimage" in i.attrs["class"][0].lower():
+                    imageurl = i.get("src")
         resulttext = f"""<b>Title : </b><code>{mov_title}</code>
 <b>Info : </b><code>{mov_details}</code>
 <b>Genres : </b><code>{mov_geners}</code>
