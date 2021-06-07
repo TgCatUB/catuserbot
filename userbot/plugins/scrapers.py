@@ -203,7 +203,8 @@ async def imdb(event):  # sourcery no-metrics
         image_link = soup.find("a", attrs={"class": "ipc-lockup-overlay ipc-focusable"})
         if image_link:
             image_content = requests.get(
-                "https://imdb.com" + image_link.get("href").replace("/?ref_=tt_ov_i", "")
+                "https://imdb.com"
+                + image_link.get("href").replace("/?ref_=tt_ov_i", "")
             )
             soup = bs4.BeautifulSoup(image_content.content, "lxml")
             for i in soup.findAll("img"):
