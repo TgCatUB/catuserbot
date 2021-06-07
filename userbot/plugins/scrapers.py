@@ -116,9 +116,7 @@ async def imdb(event):  # sourcery no-metrics
         if movgeners:
             for gener in movgeners.findAll("a"):
                 mov_geners += (
-                    " | " + gener.text.strip()
-                    if mov_geners != ""
-                    else gener.text.strip()
+                    " | " + gener.text.strip() if mov_geners != "" else gener.text.strip()
                 )
         else:
             mov_geners = "Not Found!"
@@ -159,7 +157,7 @@ async def imdb(event):  # sourcery no-metrics
                         )
         if mov_country == "":
             mov_country = "Not Found!"
-        if mov_language:
+        if mov_language == "":
             mov_language = "Not Found!"
         directors = ""
         writers = ""
@@ -191,9 +189,9 @@ async def imdb(event):  # sourcery no-metrics
                         )
         if directors == "":
             directors = "Not Found!"
-        if writers:
+        if writers == "" :
             writers = "Not Found!"
-        if stars:
+        if stars == "":
             stars = "Not Found!"
         story = soup.find(
             "div", attrs={"class": "ipc-html-content ipc-html-content--base"}
