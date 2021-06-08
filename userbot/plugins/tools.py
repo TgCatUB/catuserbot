@@ -56,6 +56,9 @@ async def currency(event):
         aresponse = await AioHttp().get_json(
             f"https://free.currconv.com/api/v7/convert?q={fromcurrency}_{tocurrency}&compact=ultra&apiKey={Config.CURRENCY_API}"
         )
+        symbols = await AioHttp().get_json(
+            f"https://raw.githubusercontent.com/sandy1709/CatUserbot-Resources/master/Resources/Data/currency.py"
+        )
         try:
             result = aresponse[f"{fromcurrency}_{tocurrency}"]
         except KeyError:
@@ -67,7 +70,7 @@ async def currency(event):
         output = round(output, 4)
         await edit_or_reply(
             event,
-            f"__The Currency value of__ `{value} {fromcurrency}` __in__ `{tocurrency}`__ is__ `{output}`",
+            f"__The Currency value of__ **{symbols[fromcurrency]} {value} {fromcurrency}** __in__ **{tocurrency}**__ is__ **{symbols[tocurrency]} {output}**",
         )
     else:
         await edit_or_reply(
