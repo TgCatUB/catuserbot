@@ -130,6 +130,8 @@ class Config(object):
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN", None)
     # Get your own API key from https://www.remove.bg/
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
+    # Get this value from https://free.currencyconverterapi.com/
+    CURRENCY_API = os.environ.get("CURRENCY_API", None)
     # Google Drive plugin https://telegra.ph/G-Drive-guide-for-catuserbot-01-01
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
