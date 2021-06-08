@@ -160,7 +160,7 @@ async def stickerchat(catquotes):
         return await edit_or_reply(catquotes, "`this format is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
-        await event.client.get_entity(reply.forward.sender)
+        await catquotes.client.get_entity(reply.forward.sender)
         if reply.fwd_from
         else reply.sender
     )
@@ -196,7 +196,7 @@ async def stickerchat(catquotes):
         return await edit_or_reply(catquotes, "`this format is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
-        await event.client.get_entity(reply.forward.sender)
+        await catquotes.client.get_entity(reply.forward.sender)
         if reply.fwd_from
         else reply.sender
     )
