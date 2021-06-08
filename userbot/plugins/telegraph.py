@@ -4,10 +4,14 @@ from datetime import datetime
 from PIL import Image
 from telegraph import Telegraph, exceptions, upload_file
 
+import random
+import re
+import string
 from userbot import catub
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
+from ..core.logger import logging
 from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "utils"
@@ -84,7 +88,7 @@ async def _(event):
             )
     elif input_str in ["text", "t"]:
         user_object = await event.client.get_entity(r_message.sender_id)
-        title_of_page = user_object.first_name  # + " " + user_object.last_name
+        title_of_page = get_display_name(user_object) 
         # apparently, all Users do not have last_name field
         if optional_title:
             title_of_page = optional_title
@@ -102,7 +106,15 @@ async def _(event):
                 page_content += m.decode("UTF-8") + "\n"
             os.remove(downloaded_file_name)
         page_content = page_content.replace("\n", "<br>")
-        response = telegraph.create_page(title_of_page, html_content=page_content)
+        try:
+            response = telegraph.create_page(title_of_page, html_content=page_content)
+        except Exception as e:
+            LOGS.info(e)
+            title_of_page = "".join(
+                            random.choice(list(string.ascii_lowercase + string.ascii_uppercase))
+                            for _ in range(16)
+                        )
+            response = telegraph.create_page(title_of_page, html_content=page_content)
         end = datetime.now()
         ms = (end - start).seconds
         cat = f"https://telegra.ph/{response['path']}"
