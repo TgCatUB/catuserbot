@@ -13,7 +13,9 @@ from userbot import catub
 from ..Config import Config
 from ..core.managers import edit_or_reply
 from . import BOTLOG, BOTLOG_CHATID
+from ..core.logger import logging
 
+LOGS = logging.getLogger(__name__)
 plugin_category = "utils"
 
 
