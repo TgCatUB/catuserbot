@@ -8,6 +8,8 @@ from userbot import catub
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import catmemes
 
+from ..core.logger import logging
+LOGS = logging.getLogger(__name__)
 plugin_category = "extra"
 
 
