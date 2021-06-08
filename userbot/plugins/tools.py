@@ -1,6 +1,7 @@
 import calendar
 import json
 import os
+import re
 from datetime import datetime
 from urllib.parse import quote
 
@@ -61,8 +62,7 @@ async def currency(event):
         symbols = await AioHttp().get_raw(
             f"https://raw.githubusercontent.com/sandy1709/CatUserbot-Resources/master/Resources/Data/currency.py"
         )
-        print(symbols)
-        symbols = json.loads(symbols)
+        symbols = json.loads(re.sub(", *\n *}", "}", symbols.decode("utf-8")))
         try:
             result = aresponse[f"{fromcurrency}_{tocurrency}"]
         except KeyError:
