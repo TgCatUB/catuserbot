@@ -13,14 +13,55 @@ from PIL import Image, ImageColor
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from userbot import catub
+import json
+from ..config import Config
+from ..core.logger import logging
 
-from ..Config import Config
+from ..helpers import AioHttp
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _catutils, _format, reply_id
 
 plugin_category = "tools"
 
 
+LOGS = logging.getLogger(__name__)
+
+
+@catub.cat_cmd(
+    pattern="cur(?: |$)(.*)",
+    command=("cur", plugin_category),
+    info={
+        "header": "To convert one currency value to other.",
+        "description": "To find exchange rates of currencies.",
+        "usage": "{tr}cur <value> <from currency> <to currency>",
+        "examples": "{tr}cur 10 USD INR",
+    },
+)
+async def currency(event):
+    """To convert one currency value to other."""
+    if Config.CURRENCY_API is None:
+        return await edit_delete(event, "__You haven't set the api value. Set Api var __`CURRENCY_API` __in heroku get value from https://free.currencyconverterapi.com__.",link_preview=False,time = 10)
+    input_str = event.pattern_match.group(1)
+    values = input_str.split(" ")
+    if len(values) == 3:
+        value, fromcurrency,tocurrency = values
+    else:
+        return await edit_delete(event,"__Use proper syntax. check__ `.help -c cur`")
+    if value.isdigit():
+        aresponse = await AioHttp().get_json(
+            f"https://free.currconv.com/api/v7/convert?q={fromcurrency}_{tocurrency}&compact=ultra&apiKey={Config.CURRENCY_API}"
+        )
+        try:
+            result = aresponse[f"{fromcurrency}_{tocurrency}"]
+        except KeyError:
+            return await edit_delete(event,"__You have used wrong currency codes or Api can't fetch details.__")
+        output = float(value) * float(result)
+        output = round(output, 4)
+        await edit_or_reply(event,f"__The Currency value of__ `{value} {fromcurrency}` __in__ `{tocurrency}`__ is__ `{output}`")
+    else:
+        await edit_or_reply(event,f"__It seems you are using different currency value. which doesn't exist on earth.__")
+        
+        
 @catub.cat_cmd(
     pattern="scan( -i)?$",
     command=("scan", plugin_category),
