@@ -74,7 +74,7 @@ async def currency(event):
         output = round(output, 4)
         await edit_or_reply(
             event,
-            f"__The Currency value of__ **{symbols[fromcurrency]} {value} {fromcurrency}** __in__ **{tocurrency}**__ is__ **{symbols[tocurrency]} {output}**",
+            f"The Currency value of **{symbols[fromcurrency]} {value} {fromcurrency}** in **{tocurrency}** is **{symbols[tocurrency]} {output}**",
         )
     else:
         await edit_or_reply(
