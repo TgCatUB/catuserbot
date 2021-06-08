@@ -52,12 +52,14 @@ async def currency(event):
         value, fromcurrency, tocurrency = values
     else:
         return await edit_delete(event, "__Use proper syntax. check__ `.help -c cur`")
+    fromcurrency = fromcurrency.upper()
+    tocurrency = tocurrency.upper()
     if value.isdigit():
         aresponse = await AioHttp().get_json(
             f"https://free.currconv.com/api/v7/convert?q={fromcurrency}_{tocurrency}&compact=ultra&apiKey={Config.CURRENCY_API}"
         )
         symbols = await AioHttp().get_json(
-            f"https://raw.githubusercontent.com/sandy1709/CatUserbot-Resources/master/Resources/Data/currency.py"
+            f"https://raw.githubusercontent.com/sandy1709/CatUserbot-Resources/master/Resources/Data/currency.txt"
         )
         try:
             result = aresponse[f"{fromcurrency}_{tocurrency}"]
