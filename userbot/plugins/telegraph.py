@@ -1,3 +1,4 @@
+# telegraph utils for catuserbot
 import os
 import random
 import string
@@ -5,7 +6,7 @@ from datetime import datetime
 
 from PIL import Image
 from telegraph import Telegraph, exceptions, upload_file
-
+from telethon.utils import get_display_name
 from userbot import catub
 
 from ..Config import Config
@@ -14,7 +15,7 @@ from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "utils"
 
-# telegraph utils for catuserbot
+
 
 
 telegraph = Telegraph()
