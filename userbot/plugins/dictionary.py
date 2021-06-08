@@ -2,7 +2,9 @@
 from PyDictionary import PyDictionary
 
 from ..helpers.utils import _format
-from . import AioHttp, catub, edit_delete, edit_or_reply
+from ..helpers import AioHttp
+from userbot import catub
+from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "utils"
 
