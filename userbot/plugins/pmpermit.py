@@ -599,7 +599,7 @@ async def on_plug_in_callback_query_handler(event):
          \n░░░░░░░░░░░░▀▀`\
          \n**So uncool, this is not your home. Go bother somewhere else.\
          \n\nAnd this is your last warning if you send one more message you will be blocked automatically.**"
-    sqllist.add_to_list("pmrequesr", event.query.user_id)
+    sqllist.add_to_list("pmspam", event.query.user_id)
     try:
         PM_WARNS = sql.get_collection("pmspam").json
     except AttributeError:
