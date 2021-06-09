@@ -87,7 +87,7 @@ async def bot_start(event):
     my_fullname = f"{my_first} {my_last}" if my_last else my_first
     my_username = f"@{user.username}" if user.username else my_mention
     if chat.id != Config.OWNER_ID:
-        customstrmsg = gvarstatus("customstartmsg") or None
+        customstrmsg = gvarstatus("START_MSG") or None
         if customstrmsg is not None:
             start_msg = customstrmsg.format(
                 mention=mention,
