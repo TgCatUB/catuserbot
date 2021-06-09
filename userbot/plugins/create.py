@@ -39,10 +39,11 @@ async def _(event):
             new_rights = ChatAdminRights(
                 add_admins=False,
                 invite_users=True,
-                change_info=False,
+                change_info=True,
                 ban_users=True,
                 delete_messages=True,
                 pin_messages=True,
+                manage_call=True,
             )
             result = await event.client(
                 functions.messages.CreateChatRequest(
@@ -56,11 +57,6 @@ async def _(event):
                     peer=created_chat_id,
                 )
             )
-            await event.edit(
-                "Group `{}` created successfully. Join {}".format(
-                    group_name, result.link
-                )
-            )
             flag = True
             try:
                 rank = "admin"
@@ -68,8 +64,14 @@ async def _(event):
                 result = await event.client(
                     EditAdminRequest(created_chat_id, p.id, new_rights, rank)
                 )
+                print(1)
             except BadRequestError:
                 pass
+            await event.edit(
+                "Group `{}` created successfully. Join {}".format(
+                    group_name, result.link
+                )
+            )
         except Exception as e:
             if not flag:
                 await event.edit(str(e))
