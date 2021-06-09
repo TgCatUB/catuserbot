@@ -114,6 +114,7 @@ async def create_supergroup(group_name, client, botusername, descript):
         )
     except Exception as e:
         return "error", str(e)
+    print(created_chat_id)
     lock_rights = ChatBannedRights(
         until_date=None,
         send_messages=False,
