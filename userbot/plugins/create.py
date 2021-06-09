@@ -1,9 +1,7 @@
-from telethon.errors import BadRequestError
-from telethon.tl import functions
-from telethon.tl.functions.channels import EditAdminRequest
-from telethon.tl.types import ChatAdminRights
-from telethon.tl.types import ChatBannedRights
 from telethon.errors import FloodWaitError
+from telethon.tl import functions
+from telethon.tl.types import ChatBannedRights
+
 from .. import catub
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
@@ -96,19 +94,19 @@ async def _(event):
 async def create_supergroup(group_name, client, botusername, descript):
     try:
         result = await client(
-                functions.messages.CreateChatRequest(
-                    users=[Config.TG_BOT_USERNAME],
-                    # Not enough users (to create a chat, for example)
-                    # Telegram, no longer allows creating a chat with ourselves
-                    title=group_name,
-                )
+            functions.messages.CreateChatRequest(
+                users=[Config.TG_BOT_USERNAME],
+                # Not enough users (to create a chat, for example)
+                # Telegram, no longer allows creating a chat with ourselves
+                title=group_name,
             )
+        )
         created_chat_id = result.chats[0].id
         result = await client(
-                functions.messages.ExportChatInviteRequest(
-                    peer=created_chat_id,
-                )
+            functions.messages.ExportChatInviteRequest(
+                peer=created_chat_id,
             )
+        )
         await client(
             functions.channels.InviteToChannelRequest(
                 channel=created_chat_id,
@@ -118,27 +116,27 @@ async def create_supergroup(group_name, client, botusername, descript):
     except Exception as e:
         return "error", str(e)
     lock_rights = ChatBannedRights(
-            until_date=None,
-            send_messages=False,
-            send_media=False,
-            send_stickers=False,
-            send_gifs=False,
-            send_games=False,
-            send_inline=False,
-            embed_links=False,
-            send_polls=False,
-            invite_users=False,
-            pin_messages=True,
-            change_info=False,
-        )
+        until_date=None,
+        send_messages=False,
+        send_media=False,
+        send_stickers=False,
+        send_gifs=False,
+        send_games=False,
+        send_inline=False,
+        embed_links=False,
+        send_polls=False,
+        invite_users=False,
+        pin_messages=True,
+        change_info=False,
+    )
     flag = True
     while flag:
         try:
             await event.client(
-                    EditChatDefaultBannedRightsRequest(
-                        peer=created_chat_id, banned_rights=lock_rights
-                    )
+                EditChatDefaultBannedRightsRequest(
+                    peer=created_chat_id, banned_rights=lock_rights
                 )
+            )
             flag = False
         except FloodWaitError as e:
             await asyncio.sleep(e.seconds)
