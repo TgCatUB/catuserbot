@@ -130,7 +130,7 @@ async def create_supergroup(group_name, client, botusername, descript):
     flag = True
     while flag:
         try:
-            await event.client(
+            await client(
                 EditChatDefaultBannedRightsRequest(
                     peer=created_chat_id, banned_rights=lock_rights
                 )
@@ -140,5 +140,5 @@ async def create_supergroup(group_name, client, botusername, descript):
             await asyncio.sleep(e.seconds)
         except Exception as e:
             return "error", str(e)
-    created_chat_id = (await event.client.get_entity(result.link)).id
+    created_chat_id = (await client.get_entity(result.link)).id
     return result, created_chat_id
