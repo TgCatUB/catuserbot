@@ -94,19 +94,20 @@ async def _(event):
 
 async def create_supergroup(group_name, client, botusername, descript):
     try:
-        r = await client(
-            functions.channels.CreateChannelRequest(
-                title=group_name,
-                about=descript,
-                megagroup=False,
-            )
-        )
-        created_chat_id = r.chats[0].id
         result = await client(
-            functions.messages.ExportChatInviteRequest(
-                peer=created_chat_id,
+                functions.messages.CreateChatRequest(
+                    users=[Config.TG_BOT_USERNAME],
+                    # Not enough users (to create a chat, for example)
+                    # Telegram, no longer allows creating a chat with ourselves
+                    title=group_name,
+                )
             )
-        )
+        created_chat_id = result.chats[0].id
+        result = await client(
+                functions.messages.ExportChatInviteRequest(
+                    peer=created_chat_id,
+                )
+            )
         new_rights = ChatAdminRights(
             add_admins=False,
             invite_users=True,
