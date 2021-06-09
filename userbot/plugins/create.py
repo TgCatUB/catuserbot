@@ -92,7 +92,7 @@ async def _(event):
         await edit_delete(event, "Read `.help create` to know how to use me")
 
 
-async def create_supergroup(groupname, client, botusername):
+async def create_supergroup(group_name, client, botusername):
     try:
         r = await client(
             functions.channels.CreateChannelRequest(
