@@ -22,15 +22,16 @@ vlist = [
     "PM_TEXT",
     "PM_BLOCK",
     "MAX_FLOOD_IN_PMS",
-    "START_TEXT"
+    "START_TEXT",
 ]
 
 oldvars = {
     "PM_PIC": "pmpermit_pic",
     "PM_TEXT": "pmpermit_txt",
     "PM_BLOCK": "pmblock",
-
 }
+
+
 @catub.cat_cmd(
     pattern="(set|get|del)dv(?: |$)([\s\S]*)",
     command=("dv", plugin_category),
@@ -163,8 +164,8 @@ async def custom_catuserbot(event):
         addgvar("pmpermit_txt", text)
     if input_str == "pmblock":
         addgvar("pmblock", text)
-    if input_str =="startmsg":
-        addgvar("START_TEXT",text)
+    if input_str == "startmsg":
+        addgvar("START_TEXT", text)
     if input_str == "pmpic":
         urls = extractor.find_urls(reply.text)
         if not urls:
@@ -206,7 +207,9 @@ async def custom_catuserbot(event):
         delgvar("pmpermit_pic")
     if input_str == "startmsg":
         if gvarstatus("START_TEXT") is None:
-            return await edit_delete(event, "__You haven't customzied your start msg in bot.__")
+            return await edit_delete(
+                event, "__You haven't customzied your start msg in bot.__"
+            )
         delgvar("START_TEXT")
     await edit_or_reply(
         event, f"__Succesfully deleted your customization of {input_str}.__"
