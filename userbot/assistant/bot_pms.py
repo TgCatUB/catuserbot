@@ -75,11 +75,38 @@ async def bot_start(event):
     if check_is_black_list(chat.id):
         return
     reply_to = await reply_id(event)
+    mention = f"[{chat.first_name}](tg://user?id={chat.id})"
+    my_mention = f"[{user.first_name}](tg://user?id={user.id})"
+    first = chat.first_name
+    last = chat.last_name
+    fullname = f"{first} {last}" if last else first
+    username = f"@{chat.username}" if chat.username else mention
+    userid = chat.id
+    my_first = user.first_name
+    my_last = user.last_name
+    my_fullname = f"{my_first} {my_last}" if my_last else my_first
+    my_username = f"@{user.username}" if user.username else my_mention
     if chat.id != Config.OWNER_ID:
-        start_msg = f"Hey! 👤{_format.mentionuser(chat.first_name , chat.id)},\
-                    \nI am {_format.mentionuser(user.first_name , user.id)}'s assistant bot.\
-                    \nYou can contact to my master from here.\
-                    \n\nPowered by [Catuserbot](https://t.me/catuserbot17)"
+        customstrmsg = gvarstatus("customstartmsg") or None
+        if customstrmsg is not None:
+            start_msg = customstrmsg.format(
+                mention=mention,
+                first=first,
+                last=last,
+                fullname=fullname,
+                username=username,
+                userid=userid,
+                my_first=my_first,
+                my_last=my_last,
+                my_fullname=my_fullname,
+                my_username=my_username,
+                my_mention=my_mention,
+            )
+        else:
+            start_msg = f"Hey! 👤{mention},\
+                        \nI am {my_mention}'s assistant bot.\
+                        \nYou can contact to my master from here.\
+                        \n\nPowered by [Catuserbot](https://t.me/catuserbot)"
         buttons = [
             (
                 Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
