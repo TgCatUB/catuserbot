@@ -84,7 +84,6 @@ async def _(event):
                 event,
                 f"Mega group `{group_name}` created successfully. Join {answer[0].link}",
             )
-            print(answer[1])
         else:
             await edit_delete(event, f"**Error:**\n{str(answer[1])}")
     else:
@@ -114,33 +113,4 @@ async def create_supergroup(group_name, client, botusername, descript):
         )
     except Exception as e:
         return "error", str(e)
-    print(created_chat_id)
-    lock_rights = ChatBannedRights(
-        until_date=None,
-        send_messages=False,
-        send_media=False,
-        send_stickers=False,
-        send_gifs=False,
-        send_games=False,
-        send_inline=False,
-        embed_links=False,
-        send_polls=False,
-        invite_users=False,
-        pin_messages=True,
-        change_info=False,
-    )
-    flag = True
-    while flag:
-        try:
-            await client(
-                EditChatDefaultBannedRightsRequest(
-                    peer=created_chat_id, banned_rights=lock_rights
-                )
-            )
-            flag = False
-        except FloodWaitError as e:
-            await asyncio.sleep(e.seconds)
-        except Exception as e:
-            return "error", str(e)
-    created_chat_id = (await client.get_entity(result.link)).id
     return result, created_chat_id
