@@ -19,9 +19,18 @@ vlist = [
     "HELP_TEXT",
     "IALIVE_PIC",
     "PM_PIC",
+    "PM_TEXT",
+    "PM_BLOCK",
+    "MAX_FLOOD_IN_PMS",
+    "START_TEXT"
 ]
 
+oldvars = {
+    "PM_PIC": "pmpermit_pic",
+    "PM_TEXT": "pmpermit_txt",
+    "PM_BLOCK": "pmblock",
 
+}
 @catub.cat_cmd(
     pattern="(set|get|del)dv(?: |$)([\s\S]*)",
     command=("dv", plugin_category),
@@ -42,6 +51,10 @@ vlist = [
             "HELP_EMOJI": "To set custom emoji in help",
             "HELP_TEXT": "To set custom text in help",
             "PM_PIC": "To customize pmpermit pic",
+            "PM_TEXT": "To customize pmpermit text. For custom options check `{tr}help -c custom`",
+            "START_TEXT": "To customize start text of bot. For custom options check `{tr}help -c custom`",
+            "PM_BLOCK": "To customize pmpermit block message. For custom options check `{tr}help -c custom`",
+            "MAX_FLOOD_IN_PMS": "To set max nimber of flood message in pm",
         },
         "usage": [
             "{tr}setdv <var name> <var value>",
@@ -72,6 +85,8 @@ async def bad(event):  # sourcery no-metrics
     if not vinfo and reply:
         vinfo = reply.text
     if vname in vlist:
+        if vname in oldvars:
+            vname = oldvars[vname]
         if cmd == "set":
             if not vinfo:
                 return await edit_delete(
@@ -79,9 +94,8 @@ async def bad(event):  # sourcery no-metrics
                 )
             check = vinfo.split(" ")
             for i in check:
-                if "PIC" in vname and not url(i):
-                    await edit_delete(event, "**Give me a correct link...**")
-                    return
+                if (("PIC" in vname) or ("pic" in vname)) and not url(i):
+                    return await edit_delete(event, "**Give me a correct link...**")
             addgvar(vname, vinfo)
             await edit_delete(
                 event, f"📑 Value of **{vname}** is changed to :- `{vinfo}`", time=20
@@ -105,13 +119,15 @@ async def bad(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="custom (pmpermit|pmblock)$",
+    pattern="custom (pmpermit|pmblock|startmsg)$",
     command=("custom", plugin_category),
     info={
         "header": "To customize your CatUserbot.",
         "options": {
             "pmpermit": "To customize pmpermit text. ",
             "pmblock": "To customize pmpermit block message.",
+            "startmsg": "To customize startmsg of bot when some one started it."
+            "pmpic": "To customize pmpermit pic. Reply to media url or text containing media.",
         },
         "custom": {
             "{mention}": "mention user",
@@ -147,17 +163,26 @@ async def custom_catuserbot(event):
         addgvar("pmpermit_txt", text)
     if input_str == "pmblock":
         addgvar("pmblock", text)
+    if input_str =="startmsg":
+        addgvar("START_TEXT",text)
+    if input_str == "pmpic":
+        urls = extractor.find_urls(reply.text)
+        if not urls:
+            return await edit_delete(event, "`the given link is not supported`", 5)
+        addgvar("pmpermit_pic", urls[0])
     await edit_or_reply(event, f"__Your custom {input_str} has been updated__")
 
 
 @catub.cat_cmd(
-    pattern="delcustom (pmpermit|pmblock)$",
+    pattern="delcustom (pmpermit|pmblock|startmsg)$",
     command=("delcustom", plugin_category),
     info={
         "header": "To delete costomization of your CatUserbot.",
         "options": {
             "pmpermit": "To delete custom pmpermit text",
             "pmblock": "To delete custom pmpermit block message",
+            "pmpic": "To delete custom pmpermit pic.",
+            "startmsg": "To delete custom start message of bot when some one started it."
         },
         "usage": [
             "{tr}delcustom <option>",
@@ -175,6 +200,14 @@ async def custom_catuserbot(event):
         if gvarstatus("pmblock") is None:
             return await edit_delete(event, "__You haven't customzied your pmblock.__")
         delgvar("pmblock")
+    if input_str == "pmpic":
+        if gvarstatus("pmpermit_pic") is None:
+            return await edit_delete(event, "__You haven't customzied your pmpic.__")
+        delgvar("pmpermit_pic")
+    if input_str == "startmsg":
+        if gvarstatus("START_TEXT") is None:
+            return await edit_delete(event, "__You haven't customzied your start msg in bot.__")
+        delgvar("START_TEXT")
     await edit_or_reply(
         event, f"__Succesfully deleted your customization of {input_str}.__"
     )
