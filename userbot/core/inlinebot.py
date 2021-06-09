@@ -453,7 +453,7 @@ async def inline_handler(event):  # sourcery no-metrics
             buttons = [
                 Button.inline(text="Show Options.", data="show_pmpermit_options"),
             ]
-            PM_PIC = gvarstatus("pmpermit_pic"")
+            PM_PIC = gvarstatus("pmpermit_pic")
             if PM_PIC:
                 CAT = [x for x in PM_PIC.split()]
                 PIC = list(CAT)
