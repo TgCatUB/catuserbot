@@ -1,5 +1,5 @@
-import re
 import random
+import re
 from datetime import datetime
 
 from telethon import Button, functions
@@ -121,17 +121,20 @@ async def do_pm_permit_action(event, chat):  # sourcery no-metrics
 You have {warns}/{totalwarns} warns until you get blocked by the CatUserbot.
 
 Choose an option from below to specify the reason of your message and wait for me to check it. __⬇️"""
-        else:f"""__Hi__ {mention}__, I haven't approved you yet to personal message me. 
+        else:
+            f"""__Hi__ {mention}__, I haven't approved you yet to personal message me.
 
-You have {warns}/{totalwarns} warns until you get blocked by the CatUserbot.
+            You have {warns}/{totalwarns} warns until you get blocked by the CatUserbot.
 
-Don't spam my inbox. say reason and wait until my response.__"""
+            Don't spam my inbox. say reason and wait until my response.__"""
 
     addgvar("pmpermit_text", USER_BOT_NO_WARN)
     PM_WARNS[str(chat.id)] += 1
     try:
         if gvarstatus("pmmenu") is None:
-            results = await event.client.inline_query(Config.TG_BOT_USERNAME, "pmpermit")
+            results = await event.client.inline_query(
+                Config.TG_BOT_USERNAME, "pmpermit"
+            )
             msg = await results[0].click(chat.id, reply_to=reply_to_id, hide_via=True)
         else:
             PM_PIC = gvarstatus("PM_PIC")
@@ -142,9 +145,17 @@ Don't spam my inbox. say reason and wait until my response.__"""
             else:
                 CAT_IMG = None
             if CAT_IMG is not None:
-                msg = await event.client.send_file(chat.id,CAT_IMG,caption=USER_BOT_NO_WARN,reply_to=reply_to_id,force_document=False)
+                msg = await event.client.send_file(
+                    chat.id,
+                    CAT_IMG,
+                    caption=USER_BOT_NO_WARN,
+                    reply_to=reply_to_id,
+                    force_document=False,
+                )
             else:
-                msg = await event.client.send_message(chat.id,USER_BOT_NO_WARN,reply_to=reply_to_id)
+                msg = await event.client.send_message(
+                    chat.id, USER_BOT_NO_WARN, reply_to=reply_to_id
+                )
     except Exception as e:
         LOGS.error(e)
         msg = await event.reply(USER_BOT_NO_WARN)
@@ -632,6 +643,7 @@ async def pmpermit_on(event):
                 event, "__Pmpermit is already disabled for your account__"
             )
 
+
 @catub.cat_cmd(
     pattern="pmmenu (on|off)$",
     command=("pmmenu", plugin_category),
@@ -647,10 +659,13 @@ async def pmpermit_on(event):
         if gvarstatus("pmmenu") is None:
             addgvar("pmmenu", "false")
             await edit_delete(
-                event, "__Pmpermit Menu has been disabled for your account succesfully.__"
+                event,
+                "__Pmpermit Menu has been disabled for your account succesfully.__",
             )
         else:
-            await edit_delete(event, "__Pmpermit Menu is already disabled for your account__")
+            await edit_delete(
+                event, "__Pmpermit Menu is already disabled for your account__"
+            )
     else:
         if gvarstatus("pmmenu") is not None:
             delgvar("pmmenu")
@@ -661,7 +676,7 @@ async def pmpermit_on(event):
             await edit_delete(
                 event, "__Pmpermit Menu is already enabled for your account__"
             )
-            
+
 
 @catub.cat_cmd(
     pattern="(a|approve)(?: |$)(.*)",
