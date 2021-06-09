@@ -78,7 +78,7 @@ async def _(event):
             await edit_delete(event, f"**Error:**\n{str(e)}")
     elif type_of_group == "b":
         answer = await create_supergroup(
-            group_name, event.client, Config.TG_BOT_USERNAME
+            group_name, event.client, Config.TG_BOT_USERNAME,descript
         )
         if answer[0] != "error":
             await edit_or_reply(
@@ -92,7 +92,7 @@ async def _(event):
         await edit_delete(event, "Read `.help create` to know how to use me")
 
 
-async def create_supergroup(group_name, client, botusername):
+async def create_supergroup(group_name, client, botusername,descript):
     try:
         r = await client(
             functions.channels.CreateChannelRequest(
