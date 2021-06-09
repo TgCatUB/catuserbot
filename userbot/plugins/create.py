@@ -2,6 +2,7 @@ from telethon.errors import FloodWaitError
 from telethon.tl import functions
 from telethon.tl.types import ChatBannedRights
 
+from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from .. import catub
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
