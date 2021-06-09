@@ -62,7 +62,6 @@ async def _(event):
                     megagroup=False,
                 )
             )
-
             created_chat_id = r.chats[0].id
             result = await event.client(
                 functions.messages.ExportChatInviteRequest(
@@ -94,12 +93,11 @@ async def _(event):
 async def create_supergroup(group_name, client, botusername, descript):
     try:
         result = await client(
-            functions.messages.CreateChatRequest(
-                users=[Config.TG_BOT_USERNAME],
-                # Not enough users (to create a chat, for example)
-                # Telegram, no longer allows creating a chat with ourselves
-                title=group_name,
-            )
+            functions.channels.CreateChannelRequest(
+                    title=group_name,
+                    about=descript,
+                    megagroup=True,
+                )
         )
         created_chat_id = result.chats[0].id
         result = await client(
