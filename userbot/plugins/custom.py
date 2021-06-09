@@ -126,7 +126,7 @@ async def bad(event):  # sourcery no-metrics
         "options": {
             "pmpermit": "To customize pmpermit text. ",
             "pmblock": "To customize pmpermit block message.",
-            "startmsg": "To customize startmsg of bot when some one started it."
+            "startmsg": "To customize startmsg of bot when some one started it.",
             "pmpic": "To customize pmpermit pic. Reply to media url or text containing media.",
         },
         "custom": {
@@ -169,7 +169,7 @@ async def custom_catuserbot(event):
         urls = extractor.find_urls(reply.text)
         if not urls:
             return await edit_delete(event, "`the given link is not supported`", 5)
-        addgvar("pmpermit_pic", urls[0])
+        addgvar("pmpermit_pic", urls)
     await edit_or_reply(event, f"__Your custom {input_str} has been updated__")
 
 
@@ -182,7 +182,7 @@ async def custom_catuserbot(event):
             "pmpermit": "To delete custom pmpermit text",
             "pmblock": "To delete custom pmpermit block message",
             "pmpic": "To delete custom pmpermit pic.",
-            "startmsg": "To delete custom start message of bot when some one started it."
+            "startmsg": "To delete custom start message of bot when some one started it.",
         },
         "usage": [
             "{tr}delcustom <option>",
