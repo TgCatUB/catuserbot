@@ -94,10 +94,10 @@ async def create_supergroup(group_name, client, botusername, descript):
     try:
         result = await client(
             functions.channels.CreateChannelRequest(
-                    title=group_name,
-                    about=descript,
-                    megagroup=True,
-                )
+                title=group_name,
+                about=descript,
+                megagroup=True,
+            )
         )
         created_chat_id = result.chats[0].id
         result = await client(
