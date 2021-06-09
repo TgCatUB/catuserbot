@@ -427,27 +427,16 @@ async def you_dm_other(event):
     chat = await event.get_chat()
     if chat.bot or chat.verified:
         return
-    print(1)
     if str(chat.id) in sqllist.get_collection_list("pmspam"):
-        print(7)
         return
-    print(2)
     if str(chat.id) in sqllist.get_collection_list("pmchat"):
-        print(8)
         return
-    print(3)
     if str(chat.id) in sqllist.get_collection_list("pmrequest"):
-        print(9)
         return
-    print(4)
     if str(chat.id) in sqllist.get_collection_list("pmenquire"):
-        print(10)
         return
-    print(5)
     if str(chat.id) in sqllist.get_collection_list("pmoptions"):
-        print(11)
         return
-    print(6)
     if event.text and event.text.startswith(
         (
             f"{cmdhd}block",
@@ -464,7 +453,6 @@ async def you_dm_other(event):
         PM_WARNS = {}
     start_date = str(datetime.now().strftime("%B %d, %Y"))
     if not pmpermit_sql.is_approved(chat.id) and str(chat.id) not in PM_WARNS:
-        print(12)
         pmpermit_sql.approve(
             chat.id, get_display_name(chat), start_date, chat.username, "For Outgoing"
         )
