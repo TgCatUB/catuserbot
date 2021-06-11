@@ -32,6 +32,7 @@ from ..helpers.functions.utube import (
     get_ytthumb,
     yt_search_btns,
 )
+from telethon.errors import BotResponseTimeoutError
 from ..plugins import BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
@@ -65,11 +66,24 @@ async def iytdl_inline(event):
     if not input_url:
         return await edit_delete(event, "Give input or reply to a valid youtube URL")
     catevent = await edit_or_reply(event, f"🔎 Searching Youtube for: `'{input_url}'`")
-    results = await event.client.inline_query(
-        Config.TG_BOT_USERNAME, f"ytdl {input_url}"
-    )
+    flag = True
+    cout = 0
+    results = None
+    while flag:
+        try:
+            results = await event.client.inline_query(
+                Config.TG_BOT_USERNAME, f"ytdl {input_url}"
+            )
+            flag = False
+        except BotResponseTimeoutError as e:
+            LOGS.error(f"BotResponseTimeoutError: {str(e)}")
+            await asyncio.sleep(2)
+        cout +=1
+        if cout>5:
+            flag = False
     await catevent.delete()
-    await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+    if results:
+        await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
 
 
 @catub.tgbot.on(
