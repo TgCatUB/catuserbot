@@ -34,7 +34,7 @@ async def _(event):
     except Exception as e:
         await edit_delete(
             event,
-            text="`The Unban Dictionary API could not be reached`",
+            text="`The Urban Dictionary API could not be reached`",
         )
         print(e)
 
