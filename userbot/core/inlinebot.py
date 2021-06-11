@@ -5,8 +5,9 @@ import random
 import re
 import time
 from uuid import uuid4
-from telethon.errors import QueryIdInvalidError
+
 from telethon import Button, types
+from telethon.errors import QueryIdInvalidError
 from telethon.events import CallbackQuery, InlineQuery
 from youtubesearchpython import VideosSearch
 
@@ -668,4 +669,4 @@ async def on_plug_in_callback_query_handler(event):
         \n**Plugin :** `{category}`\
         \n**Category :** `{category_plugins}`\
         \n\n**•  Intro :**\n{CMD_INFO[cmd][0]}"
-    await event.edit(text, buttons=buttons) 
+    await event.edit(text, buttons=buttons)
