@@ -48,8 +48,6 @@ class Config(object):
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
     # Owner id to show profile link of given id as owner
     OWNER_ID = int(os.environ.get("OWNER_ID") or 0)
-    # Maximum no of pms should be sent before he get block will work only if you set PRIVATE_GROUP_ID
-    MAX_FLOOD_IN_PMS = int(os.environ.get("MAX_FLOOD_IN_PMS", 5))
     # set this with group id so it keeps notifying about your tagged messages or pms
     PM_LOGGER_GROUP_ID = int(
         os.environ.get("PM_LOGGER_GROUP_ID")
