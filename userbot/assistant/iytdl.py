@@ -156,7 +156,7 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
                 c_q,
                 startTime,
                 "trying to upload",
-                file_name=os.path.basename(Path(_path)),
+                file_name=os.path.basename(Path(_fpath)),
             )
         ),
     )
@@ -171,12 +171,12 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
     uploaded_media = await c_q.client.send_file(
         BOTLOG_CHATID,
         file=media,
-        caption=f"<b>File Name : </b><code>{os.path.basename(Path(_path))}</code>",
+        caption=f"<b>File Name : </b><code>{os.path.basename(Path(_fpath))}</code>",
         parse_mode="html",
     )
     await upload_msg.delete()
     await c_q.edit(
-        text=f"📹  <a href={yt_url}><b>{os.path.basename(Path(_path))}</b></a>",
+        text=f"📹  <a href={yt_url}><b>{os.path.basename(Path(_fpath))}</b></a>",
         file=uploaded_media.media,
         parse_mode="html",
     )
