@@ -81,9 +81,12 @@ async def iytdl_inline(event):
         cout += 1
         if cout > 5:
             flag = False
-    await catevent.delete()
     if results:
+        await catevent.delete()
         await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+    else:
+        await catevent.edit("`Sorry!. Can't find any results`")
+        
 
 
 @catub.tgbot.on(
