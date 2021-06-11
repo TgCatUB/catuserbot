@@ -75,7 +75,7 @@ async def iytdl_inline(event):
                 Config.TG_BOT_USERNAME, f"ytdl {input_url}"
             )
             flag = False
-        except BotResponseTimeoutError as e:
+        except BotResponseTimeoutError:
             await asyncio.sleep(2)
         cout += 1
         if cout > 5:
