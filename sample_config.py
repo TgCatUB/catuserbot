@@ -169,8 +169,10 @@ class Config(object):
     SUDO_USERS: Set[int] = set()
     CATUBLOGO = None
 
+
 class Production(Config):
     LOGGER = False
+
 
 class Development(Config):
     LOGGER = True
