@@ -76,7 +76,6 @@ async def iytdl_inline(event):
             )
             flag = False
         except BotResponseTimeoutError as e:
-            LOGS.error(f"BotResponseTimeoutError: {str(e)}")
             await asyncio.sleep(2)
         cout += 1
         if cout > 5:
