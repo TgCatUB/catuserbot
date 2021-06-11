@@ -5,7 +5,7 @@ import random
 import re
 import time
 from uuid import uuid4
-
+from telethon.errors import QueryIdInvalidError
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
 from youtubesearchpython import VideosSearch
@@ -143,23 +143,22 @@ def paginate_help(
                 )
                 for x in helpable_plugins
             ]
+    elif plugins:
+        modules = [
+            Button.inline(
+                f"{HELP_EMOJI} {x} {HELP_EMOJI}",
+                data=f"{x}_prev(1)_command_{prefix}_{page_number}",
+            )
+            for x in helpable_plugins
+        ]
     else:
-        if plugins:
-            modules = [
-                Button.inline(
-                    f"{HELP_EMOJI} {x} {HELP_EMOJI}",
-                    data=f"{x}_prev(1)_command_{prefix}_{page_number}",
-                )
-                for x in helpable_plugins
-            ]
-        else:
-            modules = [
-                Button.inline(
-                    f"{HELP_EMOJI} {x} {HELP_EMOJI}",
-                    data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
-                )
-                for x in helpable_plugins
-            ]
+        modules = [
+            Button.inline(
+                f"{HELP_EMOJI} {x} {HELP_EMOJI}",
+                data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
+            )
+            for x in helpable_plugins
+        ]
     if number_of_cols == 1:
         pairs = list(zip(modules[::number_of_cols]))
     elif number_of_cols == 2:
@@ -191,35 +190,34 @@ def paginate_help(
             ]
         else:
             pairs = pairs + [(Button.inline("⚙️ Main Menu", data="mainmenu"),)]
+    elif len(pairs) > number_of_rows:
+        pairs = pairs[
+            modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
+        ] + [
+            (
+                Button.inline(
+                    "⌫",
+                    data=f"{prefix}_prev({modulo_page})_command_{category_plugins}_{category_pgno}",
+                ),
+                Button.inline(
+                    "⬅️ Back ",
+                    data=f"back_plugin_{category_plugins}_{category_pgno}",
+                ),
+                Button.inline(
+                    "⌦",
+                    data=f"{prefix}_next({modulo_page})_command_{category_plugins}_{category_pgno}",
+                ),
+            )
+        ]
     else:
-        if len(pairs) > number_of_rows:
-            pairs = pairs[
-                modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
-            ] + [
-                (
-                    Button.inline(
-                        "⌫",
-                        data=f"{prefix}_prev({modulo_page})_command_{category_plugins}_{category_pgno}",
-                    ),
-                    Button.inline(
-                        "⬅️ Back ",
-                        data=f"back_plugin_{category_plugins}_{category_pgno}",
-                    ),
-                    Button.inline(
-                        "⌦",
-                        data=f"{prefix}_next({modulo_page})_command_{category_plugins}_{category_pgno}",
-                    ),
-                )
-            ]
-        else:
-            pairs = pairs + [
-                (
-                    Button.inline(
-                        "⬅️ Back ",
-                        data=f"back_plugin_{category_plugins}_{category_pgno}",
-                    ),
-                )
-            ]
+        pairs = pairs + [
+            (
+                Button.inline(
+                    "⬅️ Back ",
+                    data=f"back_plugin_{category_plugins}_{category_pgno}",
+                ),
+            )
+        ]
     return pairs
 
 
@@ -423,7 +421,10 @@ async def inline_handler(event):  # sourcery no-metrics
                     text=f"No Results found for `{str_y[1]}`",
                     description="INVALID",
                 )
-            await event.answer([result] if result else None)
+            try:
+                await event.answer([result] if result else None)
+            except QueryIdInvalidError:
+                await event.answer([None])
         elif string == "age_verification_alert":
             buttons = [
                 Button.inline(text="Yes I'm 18+", data="age_verification_true"),
@@ -667,4 +668,4 @@ async def on_plug_in_callback_query_handler(event):
         \n**Plugin :** `{category}`\
         \n**Category :** `{category_plugins}`\
         \n\n**•  Intro :**\n{CMD_INFO[cmd][0]}"
-    await event.edit(text, buttons=buttons)
+    await event.edit(text, buttons=buttons) 
