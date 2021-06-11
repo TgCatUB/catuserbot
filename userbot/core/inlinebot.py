@@ -425,7 +425,11 @@ async def inline_handler(event):  # sourcery no-metrics
             try:
                 await event.answer([result] if result else None)
             except QueryIdInvalidError:
-                await event.answer([None])
+                await event.answer([builder.article(
+                    title="Not Found",
+                    text=f"No Results found for `{str_y[1]}`",
+                    description="INVALID",
+                )])
         elif string == "age_verification_alert":
             buttons = [
                 Button.inline(text="Yes I'm 18+", data="age_verification_true"),
