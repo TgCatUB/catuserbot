@@ -149,7 +149,8 @@ async def bad(event):  # sourcery no-metrics
         "usage": [
             "{tr}custom <option> reply",
         ],
-    },
+        "NOTE": "You can set,fetch or delete these by `{tr}setdv` , `{tr}getdv` & `{tr}deldv` as well.",
+    },  
 )
 async def custom_catuserbot(event):
     "To customize your CatUserbot."
@@ -188,6 +189,7 @@ async def custom_catuserbot(event):
         "usage": [
             "{tr}delcustom <option>",
         ],
+        "NOTE": "You can set,fetch or delete these by `{tr}setdv` , `{tr}getdv` & `{tr}deldv` as well.",
     },
 )
 async def custom_catuserbot(event):
