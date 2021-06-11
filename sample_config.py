@@ -60,25 +60,14 @@ class Config(object):
     # Custom vars for userbot
     # set this will channel id of your custom plugins
     PLUGIN_CHANNEL = int(os.environ.get("PLUGIN_CHANNEL") or 0)
-    # For customizing there alive message
-    CUSTOM_ALIVE_TEXT = os.environ.get("CUSTOM_ALIVE_TEXT", None)
-    CUSTOM_ALIVE_EMOJI = os.environ.get("CUSTOM_ALIVE_EMOJI", None)
     # set this value with your required name for telegraph plugin
     TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "catuserbot")
     # for custom thumb image set this with your required thumb telegraoh link
     THUMB_IMAGE = os.environ.get(
         "THUMB_IMAGE", "https://telegra.ph/file/ca95524e4734b0d5461b5.jpg"
     )
-    # set blacklist_chats where you do not want userbot's features
-    UB_BLACK_LIST_CHAT = {
-        int(x) for x in os.environ.get("UB_BLACK_LIST_CHAT", "").split()
-    }
     # specify NO_LOAD with plugin names for not loading in userbot
     NO_LOAD = [x for x in os.environ.get("NO_LOAD", "").split()]
-    # For custom alive pic
-    ALIVE_PIC = os.environ.get("ALIVE_PIC", None)
-    # for Custom pmpermit pic
-    PMPERMIT_PIC = os.environ.get("PMPERMIT_PIC", None)
     # for custom pic for .digitalpfp
     DIGITAL_PIC = os.environ.get("DIGITAL_PIC", None)
     # your default pic telegraph link
@@ -87,14 +76,10 @@ class Config(object):
     DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
     # set this with your deafult name
     DEFAULT_NAME = os.environ.get("DEFAULT_NAME", None)
-    # forcustomizing pmpermit text
-    CUSTOM_PMPERMIT_TEXT = os.environ.get("CUSTOM_PMPERMIT_TEXT", None)
     # number of rows of buttons to be displayed in .help command
     NO_OF_ROWS_IN_HELP = int(os.environ.get("NO_OF_ROWS_IN_HELP", 5))
     # number of columns of buttons to be displayed in .helpme command
     NO_OF_COLUMNS_IN_HELP = int(os.environ.get("NO_OF_COLUMNS_IN_HELP", 2))
-    # emoji to be displayed in .help
-    EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", " ")
     # specify command handler that should be used for the plugins
     # this should be a valid "regex" pattern
     COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r".")
@@ -157,7 +142,6 @@ class Config(object):
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
     # Deepai value can get from https://deepai.org/
     DEEP_AI = os.environ.get("DEEP_AI", None)
-    ALLOW_NSFW = os.environ.get("ALLOW_NSFW", "False")
 
     # DO NOT EDIT BELOW THIS LINE IF YOU DO NOT KNOW WHAT YOU ARE DOING
     # TG API limit. A message can have maximum 4096 characters!
@@ -185,10 +169,8 @@ class Config(object):
     SUDO_USERS: Set[int] = set()
     CATUBLOGO = None
 
-
 class Production(Config):
     LOGGER = False
-
 
 class Development(Config):
     LOGGER = True
