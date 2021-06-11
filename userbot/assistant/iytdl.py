@@ -13,6 +13,7 @@ from time import time
 
 import ujson
 from telethon import Button, types
+from telethon.errors import BotResponseTimeoutError
 from telethon.events import CallbackQuery
 from telethon.utils import get_attributes
 from wget import download
@@ -32,7 +33,6 @@ from ..helpers.functions.utube import (
     get_ytthumb,
     yt_search_btns,
 )
-from telethon.errors import BotResponseTimeoutError
 from ..plugins import BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
@@ -78,8 +78,8 @@ async def iytdl_inline(event):
         except BotResponseTimeoutError as e:
             LOGS.error(f"BotResponseTimeoutError: {str(e)}")
             await asyncio.sleep(2)
-        cout +=1
-        if cout>5:
+        cout += 1
+        if cout > 5:
             flag = False
     await catevent.delete()
     if results:
