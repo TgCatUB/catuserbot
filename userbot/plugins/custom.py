@@ -120,7 +120,7 @@ async def bad(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="custom (pmpermit|pmblock|startmsg)$",
+    pattern="custom (pmpermit|pmpic|pmblock|startmsg)$",
     command=("custom", plugin_category),
     info={
         "header": "To customize your CatUserbot.",
@@ -175,7 +175,7 @@ async def custom_catuserbot(event):
 
 
 @catub.cat_cmd(
-    pattern="delcustom (pmpermit|pmblock|startmsg)$",
+    pattern="delcustom (pmpermit|pmpic|pmblock|startmsg)$",
     command=("delcustom", plugin_category),
     info={
         "header": "To delete costomization of your CatUserbot.",
