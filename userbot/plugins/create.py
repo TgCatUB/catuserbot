@@ -3,6 +3,7 @@ from telethon.tl import functions
 from .. import catub
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
+from ..utils.tools import create_supergroup
 
 plugin_category = "tools"
 
@@ -85,29 +86,3 @@ async def _(event):
             await edit_delete(event, f"**Error:**\n{str(answer[1])}")
     else:
         await edit_delete(event, "Read `.help create` to know how to use me")
-
-
-async def create_supergroup(group_name, client, botusername, descript):
-    try:
-        result = await client(
-            functions.channels.CreateChannelRequest(
-                title=group_name,
-                about=descript,
-                megagroup=True,
-            )
-        )
-        created_chat_id = result.chats[0].id
-        result = await client(
-            functions.messages.ExportChatInviteRequest(
-                peer=created_chat_id,
-            )
-        )
-        await client(
-            functions.channels.InviteToChannelRequest(
-                channel=created_chat_id,
-                users=[botusername],
-            )
-        )
-    except Exception as e:
-        return "error", str(e)
-    return result, created_chat_id
