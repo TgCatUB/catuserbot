@@ -9,7 +9,7 @@ from telethon.utils import add_surrogate
 from ..functions.utils import utc_to_local
 
 
-def paste_text(text,nomarkdown=True):
+def paste_text(text, nomarkdown=True):
     if nomarkdown:
         asciich = ["**", "`", "__"]
         for i in asciich:
