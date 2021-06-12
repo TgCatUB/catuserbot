@@ -49,7 +49,7 @@ async def do_pm_permit_action(event, chat):  # sourcery no-metrics
         PM_WARNS[str(chat.id)] = 0
     try:
         MAX_FLOOD_IN_PMS = int(gvarstatus("MAX_FLOOD_IN_PMS") or 6)
-    except (ValueError,TypeError):
+    except (ValueError, TypeError):
         MAX_FLOOD_IN_PMS = 6
     totalwarns = MAX_FLOOD_IN_PMS + 1
     warns = PM_WARNS[str(chat.id)] + 1
@@ -628,9 +628,7 @@ async def pmpermit_on(event):
             event, "__Pmpermit has been disabled for your account succesfully__"
         )
     else:
-        await edit_delete(
-            event, "__Pmpermit is already disabled for your account__"
-        )
+        await edit_delete(event, "__Pmpermit is already disabled for your account__")
 
 
 @catub.cat_cmd(
