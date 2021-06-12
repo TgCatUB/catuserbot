@@ -148,13 +148,15 @@ async def parseqr(event):
     # parse the Official ZXing webpage to decode the QRCode
     command_to_exec = f"curl -s -F f=@{downloaded_file_name} https://zxing.org/w/decode"
     t_response, e_response = (await _catutils.runcmd(command_to_exec))[:2]
+    print(t_response)
+    print(e_response)
     soup = BeautifulSoup(t_response, "html.parser")
     try:
         qr_contents = soup.find_all("pre")[0].text
         await edit_or_reply(catevent, f"**The decoded message is :**\n`{qr_contents}`")
     except IndexError:
-        qr_contents = soup.text
-        await edit_or_reply(catevent, f"**Failed to Decode:**\n`{qr_contents}`")
+        result = soup.text
+        await edit_or_reply(catevent, f"**Failed to Decode:**\n`{result}`")
     if os.path.exists(downloaded_file_name):
         os.remove(downloaded_file_name)
 
