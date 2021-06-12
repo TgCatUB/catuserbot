@@ -1,5 +1,5 @@
 aiofiles
-aiohttp[speedups]
+aiohttp
 cairosvg
 cloudscraper
 colour
