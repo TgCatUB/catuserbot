@@ -148,8 +148,6 @@ async def parseqr(event):
     t_response, e_response = (await _catutils.runcmd(command_to_exec))[:2]
     if os.path.exists(downloaded_file_name):
         os.remove(downloaded_file_name)
-    print(t_response)
-    print(e_response)
     soup = BeautifulSoup(t_response, "html.parser")
     try:
         qr_contents = soup.find_all("pre")[0].text
