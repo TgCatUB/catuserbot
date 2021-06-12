@@ -147,9 +147,7 @@ async def parseqr(event):
     )
     # parse the Official ZXing webpage to decode the QRCode
     command_to_exec = f"curl -s -F f=@{downloaded_file_name} https://zxing.org/w/decode"
-    t_response, e_response = (await _catutils.runcmd(command_to_exec))[:2]
-    if not t_response:
-        return await edit_or_reply(catevent, f"Failed to decode.\n`{e_response}`")
+    t_response, e_response = (await _catutils.runcmd(command_to_exec))[:2]e
     soup = BeautifulSoup(t_response, "html.parser")
     try:
         qr_contents = soup.find_all("pre")[0].text
