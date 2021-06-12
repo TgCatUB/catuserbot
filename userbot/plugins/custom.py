@@ -3,7 +3,6 @@ from validators.url import url
 from userbot import catub
 from userbot.core.logger import logging
 
-from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
