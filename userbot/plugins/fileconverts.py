@@ -423,6 +423,7 @@ async def get(event):
     await edit_or_reply(
         event,
         file_content,
+        aslink=True,
         noformat=True,
         linktext="**Telegram allows only 4096 charcters in a single message. But replied file has much more. So pasting it to pastebin\nlink :**",
     )
