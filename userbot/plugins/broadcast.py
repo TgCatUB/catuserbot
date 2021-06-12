@@ -43,7 +43,7 @@ async def catbroadcast_add(event):
             if reason:
                 msg = await event.client.send_message(BOTLOG_CHATID, reason)
             elif reply:
-                msg = await event.client.send_file(BOTLOG_CHATID, reply)
+                msg = await event.client.send_message(BOTLOG_CHATID, reply)
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "The replied message was failed to send to the user. Confusion between to whom it should send.",
@@ -56,7 +56,7 @@ async def catbroadcast_add(event):
     if reason:
         msg = await event.client.send_message(user.id, reason)
     elif reply.media:
-        msg = await event.client.send_file(user.id, reply)
+        msg = await event.client.send_message(user.id, reply)
     await edit_delete(event, "__Successfully sent the message.__")
 
 
