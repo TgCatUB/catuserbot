@@ -40,10 +40,9 @@ async def get_chat_link(
             else:
                 username = f"c/{username}"
             extra = f"[{entity.title}](https://t.me/{username}/{reply})"
+        elif isinstance(username, int):
+            username = f"`{username}`"
+            extra = f"{entity.title} ( {username} )"
         else:
-            if isinstance(username, int):
-                username = f"`{username}`"
-                extra = f"{entity.title} ( {username} )"
-            else:
-                extra = f"[{entity.title}](tg://resolve?domain={username})"
+            extra = f"[{entity.title}](tg://resolve?domain={username})"
     return extra
