@@ -392,7 +392,7 @@ async def get(event):
     info={
         "header": "File to text.",
         "description": "Reply this command to a file to print text in that file to text message.",
-        "support types": ["txt", "py", "that is any writing file is supported.","pdf"],
+        "support types": ["txt", "py", "that is any writing file is supported.", "pdf"],
         "usage": "{tr}ftt <reply to document>",
     },
 )
