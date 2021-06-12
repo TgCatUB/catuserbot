@@ -33,7 +33,7 @@ from ..helpers.functions import (
     ud_frames,
     vid_to_gif,
 )
-from ..helpers.utils import _cattools, _catutils, _format, reply_id,parse_pre
+from ..helpers.utils import _cattools, _catutils, _format, parse_pre, reply_id
 from . import make_gif
 
 plugin_category = "misc"
@@ -425,7 +425,7 @@ async def get(event):
     await edit_or_reply(
         event,
         file_content,
-        parse_mode = parse_pre,
+        parse_mode=parse_pre,
         aslink=True,
         noformat=True,
         linktext="**Telegram allows only 4096 charcters in a single message. But replied file has much more. So pasting it to pastebin\nlink :**",
