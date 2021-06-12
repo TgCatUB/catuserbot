@@ -25,6 +25,32 @@ LOGS = logging.getLogger(__name__)
 
 plugin_category = "bot"
 botusername = Config.TG_BOT_USERNAME
+cmhd = Config.COMMAND_HAND_LER
+
+@catub.bot_cmd(
+    pattern=f"^/help$",
+    from_users=Config.OWNER_ID,
+)
+async def bot_help(event):
+    await event.reply(f"""The commands in the bot are:
+**Note : ** This commands work only in this bot {botusername}
+
+• **Cmd : **/uinfo <reply to user message>
+• **Info : **You have noticed that forwarded stickers/emoji doesn't have forward tag so you can identify the user who sent thoose messages by this cmd.
+• **Note : **It works for all forwarded messages. even for users who's permission forward message nobody
+
+• **Cmd : **/ban <reason> or /ban <username/userid> <reason>
+• **Info : **Reply to a user message with reason so he will be notified as you banned from the bot and his messages will not be forworded to you further.
+• **Note : **Reason is must. without reason it won't work. 
+
+• **Cmd : **/unban <reason(optional)> or /unban <username/userid>
+• **Info : **Reply to user message or provide username/userid to unban from the bot.
+• **Note : **To check banned users list use `{cmhd}bblist` cmd
+
+• **Cmd : **/broadcast
+• **Info : **Reply to a message to get broadcasted to every user who started your bot. To get list of users use `{cmhd}bot_users`
+• **Note : **if user stoped/blocked the bot then he will be removed from your database that is he will erased from the bot_starters list.
+""")
 
 
 @catub.bot_cmd(
