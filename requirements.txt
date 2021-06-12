@@ -38,6 +38,7 @@ PyGithub
 pygments
 pylast
 pymediainfo
+PyMuPDF
 pySmartDL
 python-barcode
 python-dotenv
