@@ -39,7 +39,7 @@ async def bot_help(event):
 
 • **Cmd : **/uinfo <reply to user message>
 • **Info : **__You have noticed that forwarded stickers/emoji doesn't have forward tag so you can identify the user who sent thoose messages by this cmd.__
-• **Note : **__It works for all forwarded messages. even for users who's permission forward message nobody__
+• **Note : **__It works for all forwarded messages. even for users who's permission forward message nobody.__
 
 • **Cmd : **/ban <reason> or /ban <username/userid> <reason>
 • **Info : **__Reply to a user message with reason so he will be notified as you banned from the bot and his messages will not be forworded to you further.__
@@ -47,10 +47,10 @@ async def bot_help(event):
 
 • **Cmd : **/unban <reason(optional)> or /unban <username/userid>
 • **Info : **__Reply to user message or provide username/userid to unban from the bot.__
-• **Note : **__To check banned users list use__ `{cmhd}bblist`
+• **Note : **__To check banned users list use__ `{cmhd}bblist`.
 
 • **Cmd : **/broadcast
-• **Info : **__Reply to a message to get broadcasted to every user who started your bot. To get list of users use__ `{cmhd}bot_users`
+• **Info : **__Reply to a message to get broadcasted to every user who started your bot. To get list of users use__ `{cmhd}bot_users`.
 • **Note : **__if user stoped/blocked the bot then he will be removed from your database that is he will erased from the bot_starters list.__
 """
     )
