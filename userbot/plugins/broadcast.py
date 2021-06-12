@@ -3,13 +3,12 @@ from asyncio import sleep
 
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-from ..helpers.utils import _format
+from .. import catub
+from ..core.logger import logging
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import _format, get_user_from_event
 from ..sql_helper import broadcast_sql as sql
 from . import BOTLOG, BOTLOG_CHATID
-from .. import catub
-from ..core.managers import edit_delete, edit_or_reply
-from ..core.logger import logging
-from ..helpers.utils import get_user_from_event
 
 plugin_category = "tools"
 
@@ -22,7 +21,10 @@ LOGS = logging.getLogger(__name__)
     info={
         "header": "To message to person or to a chat.",
         "description": "Suppose you want to message directly to a person/chat from a paticular chat. Then simply reply to a person with this cmd and text or to a text with cmd and username/userid/chatid,",
-        "usage": ["{tr}msgto <username/userid/chatid/chatusername> reply to message","{tr}msgto <username/userid/chatid/chatusername> <text>" ],
+        "usage": [
+            "{tr}msgto <username/userid/chatid/chatusername> reply to message",
+            "{tr}msgto <username/userid/chatid/chatusername> <text>",
+        ],
         "examples": "{tr}msgto @catuserbotot just a testmessage",
     },
 )
@@ -33,20 +35,30 @@ async def catbroadcast_add(event):
     if not user:
         return
     if not reason and not reply:
-        return await edit_delete(event, "__What should i send to the person. reply to msg or give text__")
+        return await edit_delete(
+            event, "__What should i send to the person. reply to msg or give text__"
+        )
     if user.id != reply.sender_id:
         if BOTLOG:
             if reason:
-                msg = await event.client.send_message(BOTLOG_CHATID,reason)
+                msg = await event.client.send_message(BOTLOG_CHATID, reason)
             elif reply:
-                msg = await event.client.send_file(BOTLOG_CHATID,reply)
-            await event.client.send_message(BOTLOG_CHATID,"The replied message was failed to send to the user. Confusion between to whom it should send.",reply_to=msg.id)
-        return await edit_or_reply(event,f"__Sorry! Confusion between users to whom should i send the person mentioned in message or to the person replied.text message ws logged in log group. you can resend message from there__")
+                msg = await event.client.send_file(BOTLOG_CHATID, reply)
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "The replied message was failed to send to the user. Confusion between to whom it should send.",
+                reply_to=msg.id,
+            )
+        return await edit_or_reply(
+            event,
+            f"__Sorry! Confusion between users to whom should i send the person mentioned in message or to the person replied.text message ws logged in log group. you can resend message from there__",
+        )
     if reason:
-        msg = await event.client.send_message(user.id,reason)
+        msg = await event.client.send_message(user.id, reason)
     elif reply.media:
-        msg = await event.client.send_file(user.id,reply)
-    await edit_delete(event,"__Successfully sent the message.__")
+        msg = await event.client.send_file(user.id, reply)
+    await edit_delete(event, "__Successfully sent the message.__")
+
 
 @catub.cat_cmd(
     pattern="addto(?: |$)(.*)",
