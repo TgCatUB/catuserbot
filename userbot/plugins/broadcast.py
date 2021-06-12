@@ -38,7 +38,7 @@ async def catbroadcast_add(event):
         return await edit_delete(
             event, "__What should i send to the person. reply to msg or give text__"
         )
-    if user.id != reply.sender_id:
+    if user.id != reply.sender_id and reason:
         if BOTLOG:
             if reason:
                 msg = await event.client.send_message(BOTLOG_CHATID, reason)
