@@ -17,6 +17,7 @@ async def edit_or_reply(
     file_name=None,
     aslink=False,
     deflink=False,
+    noformat=False,
     linktext=None,
     caption=None,
 ):  # sourcery no-metrics
@@ -35,9 +36,10 @@ async def edit_or_reply(
             )
         await event.edit(text, parse_mode=parse_mode, link_preview=link_preview)
         return event
-    asciich = ["**", "`", "__"]
-    for i in asciich:
-        text = re.sub(rf"\{i}", "", text)
+    if not noformat:
+        asciich = ["**", "`", "__"]
+        for i in asciich:
+            text = re.sub(rf"\{i}", "", text)
     if aslink or deflink:
         linktext = linktext or "Message was to big so pasted to bin"
         try:
