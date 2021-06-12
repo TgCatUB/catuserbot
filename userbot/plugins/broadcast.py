@@ -54,8 +54,10 @@ async def catbroadcast_add(event):
             f"__Sorry! Confusion between users to whom should i send the person mentioned in message or to the person replied.text message ws logged in log group. you can resend message from there__",
         )
     if reason:
+        print(1)
         msg = await event.client.send_message(user.id, reason)
     elif reply.media:
+        print(2)
         msg = await event.client.send_message(user.id, reply)
     await edit_delete(event, "__Successfully sent the message.__")
 
