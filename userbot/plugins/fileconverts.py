@@ -5,11 +5,11 @@ import io
 import logging
 import os
 import time
-import fitz
 from datetime import datetime
 from io import BytesIO
 from shutil import copyfile
 
+import fitz
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
 from pymediainfo import MediaInfo
 from telethon import types
@@ -384,12 +384,13 @@ async def get(event):
     else:
         await edit_or_reply(event, "reply to text message as `.ttf <file name>`")
 
+
 @catub.cat_cmd(
     pattern="ftt$",
     command=("ftt", plugin_category),
     info={
         "header": "Reply this command to a file to print text in that file to text message.",
-        "support types": ["txt","py","that is any writing file is supported."],
+        "support types": ["txt", "py", "that is any writing file is supported."],
         "usage": "{tr}ttf <file name>",
     },
 )
@@ -398,7 +399,9 @@ async def get(event):
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if mediatype != "Document":
-        return await edit_delete(event,"__It seems this is not writable file. Reply to writable file.__")
+        return await edit_delete(
+            event, "__It seems this is not writable file. Reply to writable file.__"
+        )
     file_loc = await reply.download_media()
     file_content = ""
     try:
@@ -416,10 +419,15 @@ async def get(event):
         except Exception as e:
             if os.path.exists(file_loc):
                 os.remove(file_loc)
-            return await edit_delete(event,f"**Error**\n__{str(e)}__")
-    await edit_or_reply(event,file_content,noformat=True,linktext="**Telegram allows only 4096 charcters in a single message. But replied file has much more. So pasting it to pastebin\nlink :**")
+            return await edit_delete(event, f"**Error**\n__{str(e)}__")
+    await edit_or_reply(
+        event,
+        file_content,
+        noformat=True,
+        linktext="**Telegram allows only 4096 charcters in a single message. But replied file has much more. So pasting it to pastebin\nlink :**",
+    )
     if os.path.exists(file_loc):
-        os.remove(file_loc)   
+        os.remove(file_loc)
 
 
 @catub.cat_cmd(
