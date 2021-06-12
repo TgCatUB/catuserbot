@@ -3,6 +3,7 @@ from validators.url import url
 from userbot import catub
 from userbot.core.logger import logging
 
+from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
@@ -10,6 +11,7 @@ from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
 cmdhd = Config.COMMAND_HAND_LER
+
 vlist = [
     "ALIVE_PIC",
     "ALIVE_EMOJI",
@@ -23,6 +25,9 @@ vlist = [
     "PM_BLOCK",
     "MAX_FLOOD_IN_PMS",
     "START_TEXT",
+    "NO_OF_ROWS_IN_HELP",
+    "NO_OF_COLUMNS_IN_HELP",
+    "CUSTOM_STICKER_PACKNAME",
 ]
 
 oldvars = {

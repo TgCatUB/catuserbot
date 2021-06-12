@@ -74,10 +74,6 @@ class Config(object):
     DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
     # set this with your deafult name
     DEFAULT_NAME = os.environ.get("DEFAULT_NAME", None)
-    # number of rows of buttons to be displayed in .help command
-    NO_OF_ROWS_IN_HELP = int(os.environ.get("NO_OF_ROWS_IN_HELP", 5))
-    # number of columns of buttons to be displayed in .helpme command
-    NO_OF_COLUMNS_IN_HELP = int(os.environ.get("NO_OF_COLUMNS_IN_HELP", 2))
     # specify command handler that should be used for the plugins
     # this should be a valid "regex" pattern
     COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r".")
@@ -86,8 +82,6 @@ class Config(object):
     TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "downloads")
     # set this with required folder path to act as temparary folder
     TEMP_DIR = os.environ.get("TEMP_DIR", "./temp/")
-    # For custom stickerpack names
-    CUSTOM_STICKER_PACKNAME = os.environ.get("CUSTOM_STICKER_PACKNAME", None)
     # time to update autoprofile cmds
     CHANGE_TIME = int(os.environ.get("CHANGE_TIME", 60))
     # SpamWatch, CAS, SpamProtection ban Needed or not
