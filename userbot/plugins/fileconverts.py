@@ -364,7 +364,8 @@ async def _(event):
     pattern="ttf (.*)",
     command=("ttf", plugin_category),
     info={
-        "header": "Reply this command to a text message to convert it into file with given name.",
+        "header": "Text to file.",
+        "description": "Reply this command to a text message to convert it into file with given name.",
         "usage": "{tr}ttf <file name>",
     },
 )
@@ -389,8 +390,9 @@ async def get(event):
     pattern="ftt$",
     command=("ftt", plugin_category),
     info={
-        "header": "Reply this command to a file to print text in that file to text message.",
-        "support types": ["txt", "py", "that is any writing file is supported.", "pdf"],
+        "header": "File to text.",
+        "description": "Reply this command to a file to print text in that file to text message.",
+        "support types": ["txt", "py", "that is any writing file is supported.","pdf"],
         "usage": "{tr}ftt <reply to document>",
     },
 )
