@@ -139,7 +139,7 @@ async def _(event):
 )
 async def parseqr(event):
     "To decode qrcode or barcode"
-    catevent= await edit_or_reply(event,"`Decoding....`")
+    catevent = await edit_or_reply(event, "`Decoding....`")
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
     downloaded_file_name = await event.client.download_media(
