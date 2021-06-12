@@ -59,7 +59,8 @@ async def catbroadcast_add(event):
     elif reply:
         msg = await event.client.send_message(user.id, reply)
         await edit_delete(event, "__Successfully sent the message.__")
-    
+
+
 @catub.cat_cmd(
     pattern="addto(?: |$)(.*)",
     command=("addto", plugin_category),
