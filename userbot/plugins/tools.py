@@ -158,7 +158,7 @@ async def parseqr(event):
         result = soup.text
         await edit_or_reply(catevent, f"**Failed to Decode:**\n`{result}`")
     except Exception as e:
-        await edit_or_reply(catevent,f"**Error:**\n`{str(e)}`")
+        await edit_or_reply(catevent, f"**Error:**\n`{str(e)}`")
 
 
 @catub.cat_cmd(
