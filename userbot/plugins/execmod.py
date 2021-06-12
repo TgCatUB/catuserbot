@@ -1,6 +1,7 @@
-from ..helpers.utils import _catutils, parse_pre
 from userbot import catub
-from ..core.managers import edit_or_reply,edit_delete
+
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import _catutils, parse_pre
 
 plugin_category = "tools"
 
@@ -55,6 +56,7 @@ async def _(event):
     )
     await edit_or_reply(event, OUTPUT)
 
+
 @catub.cat_cmd(
     pattern="noformat$",
     command=("noformat", plugin_category),
@@ -67,6 +69,7 @@ async def _(event):
     "Replied message without markdown format."
     reply = await event.get_reply_message()
     if not reply or not reply.text:
-        return await edit_delete(event,"__Reply to text message to get text without markdown formating.__")
-    await edit_or_reply(event,reply.text,parse_mode=parse_pre)
-       
+        return await edit_delete(
+            event, "__Reply to text message to get text without markdown formating.__"
+        )
+    await edit_or_reply(event, reply.text, parse_mode=parse_pre)
