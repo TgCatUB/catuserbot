@@ -123,13 +123,17 @@ def paginate_help(
     category_pgno=0,
 ):  # sourcery no-metrics
     try:
-        number_of_rows = int(gvarstatus("NO_OF_ROWS_IN_HELP")) or 5
+        number_of_rows = int(gvarstatus("NO_OF_ROWS_IN_HELP") or 5)
     except ValueError:
         number_of_rows = 5
+    except TypeError:
+        number_of_rows = 5
     try:
-        number_of_rows = int(gvarstatus("NO_OF_COLUMNS_IN_HELP")) or 2
+        number_of_cols = int(gvarstatus("NO_OF_COLUMNS_IN_HELP") or 2)
     except ValueError:
-        number_of_rows = 2
+        number_of_cols = 2
+    except TypeError:
+        number_of_cols = 2
     HELP_EMOJI = gvarstatus("HELP_EMOJI") or " "
     helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
     helpable_plugins = sorted(helpable_plugins)
