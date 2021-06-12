@@ -21,7 +21,7 @@ from .events import MessageEdited, NewMessage
 from .fasttelethon import download_file, upload_file
 from .logger import logging
 from .managers import edit_delete
-from .pluginManager import restart_script, get_message_link
+from .pluginManager import get_message_link, restart_script
 
 LOGS = logging.getLogger(__name__)
 
