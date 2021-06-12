@@ -21,7 +21,7 @@ from .events import MessageEdited, NewMessage
 from .fasttelethon import download_file, upload_file
 from .logger import logging
 from .managers import edit_delete
-from .pluginManager import restart_script
+from .pluginManager import restart_script, get_message_link
 
 LOGS = logging.getLogger(__name__)
 
@@ -123,6 +123,7 @@ class CatUserBotClient(TelegramClient):
                                   \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
                                   \nDate: {date}\nGroup ID: {str(check.chat_id)}\
                                   \nSender ID: {str(check.sender_id)}\
+                                  \nMessage Link: {await get_msg_link(event)}\
                                   \n\nEvent Trigger:\n{str(check.text)}\
                                   \n\nTraceback info:\n{str(traceback.format_exc())}\
                                   \n\nError text:\n{str(sys.exc_info()[1])}"
@@ -237,6 +238,7 @@ class CatUserBotClient(TelegramClient):
                                     \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
                                     \nDate: {date}\nGroup ID: {str(check.chat_id)}\
                                     \nSender ID: {str(check.sender_id)}\
+                                    \nMessage Link: {await get_msg_link(event)}\
                                     \n\nEvent Trigger:\n{str(check.text)}\
                                     \n\nTraceback info:\n{str(traceback.format_exc())}\
                                     \n\nError text:\n{str(sys.exc_info()[1])}"
@@ -293,4 +295,5 @@ class CatUserBotClient(TelegramClient):
 CatUserBotClient.fast_download_file = download_file
 CatUserBotClient.fast_upload_file = upload_file
 CatUserBotClient.reload = restart_script
+CatUserBotClient.get_msg_link = get_message_link
 CatUserBotClient.check_testcases = checking
