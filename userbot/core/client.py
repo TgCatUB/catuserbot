@@ -123,7 +123,7 @@ class CatUserBotClient(TelegramClient):
                                   \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
                                   \nDate: {date}\nGroup ID: {str(check.chat_id)}\
                                   \nSender ID: {str(check.sender_id)}\
-                                  \nMessage Link: {await get_msg_link(event)}\
+                                  \nMessage Link: {await check.client.get_msg_link(check)}\
                                   \n\nEvent Trigger:\n{str(check.text)}\
                                   \n\nTraceback info:\n{str(traceback.format_exc())}\
                                   \n\nError text:\n{str(sys.exc_info()[1])}"
@@ -238,7 +238,7 @@ class CatUserBotClient(TelegramClient):
                                     \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
                                     \nDate: {date}\nGroup ID: {str(check.chat_id)}\
                                     \nSender ID: {str(check.sender_id)}\
-                                    \nMessage Link: {await get_msg_link(event)}\
+                                    \nMessage Link: {await check.client.get_msg_link(check)}\
                                     \n\nEvent Trigger:\n{str(check.text)}\
                                     \n\nTraceback info:\n{str(traceback.format_exc())}\
                                     \n\nError text:\n{str(sys.exc_info()[1])}"
