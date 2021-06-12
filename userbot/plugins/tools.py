@@ -134,20 +134,20 @@ async def _(event):
     command=("decode", plugin_category),
     info={
         "header": "To decode qrcode or barcode",
+        "description": "Reply to qrcode or barcode to decode it and get text.",
         "usage": "{tr}decode",
     },
 )
 async def parseqr(event):
     "To decode qrcode or barcode"
     catevent = await edit_or_reply(event, "`Decoding....`")
-    if not os.path.isdir(Config.TEMP_DIR):
-        os.makedirs(Config.TEMP_DIR)
-    downloaded_file_name = await event.client.download_media(
-        await event.get_reply_message(), Config.TEMP_DIR
-    )
+    reply = await event.get_reply_message()
+    downloaded_file_name = await reply.download_media()
     # parse the Official ZXing webpage to decode the QRCode
     command_to_exec = f"curl -s -F f=@{downloaded_file_name} https://zxing.org/w/decode"
     t_response, e_response = (await _catutils.runcmd(command_to_exec))[:2]
+    if os.path.exists(downloaded_file_name):
+        os.remove(downloaded_file_name)
     print(t_response)
     print(e_response)
     soup = BeautifulSoup(t_response, "html.parser")
@@ -157,8 +157,8 @@ async def parseqr(event):
     except IndexError:
         result = soup.text
         await edit_or_reply(catevent, f"**Failed to Decode:**\n`{result}`")
-    if os.path.exists(downloaded_file_name):
-        os.remove(downloaded_file_name)
+    except Exception as e:
+        await edit_or_reply(catevent,f"**Error:**\n`{str(e)}`")
 
 
 @catub.cat_cmd(
