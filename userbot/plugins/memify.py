@@ -578,7 +578,7 @@ async def memes(event):
     "make a frame for your media file"
     catinput = event.pattern_match.group(1)
     if not catinput:
-        catinput = 50
+        catinput = "50"
     if ";" in str(catinput):
         catinput, colr = catinput.split(";", 1)
     else:
