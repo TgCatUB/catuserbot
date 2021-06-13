@@ -1,24 +1,18 @@
-import glob
-import os
 import sys
-from datetime import timedelta
-from pathlib import Path
-
-from telethon import Button, functions, types, utils
 
 import userbot
-from userbot import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID
+from userbot import BOTLOG_CHATID, PM_LOGGER_GROUP_ID
 
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
-from .helpers.utils import install_pip
-from .sql_helper.global_collection import (
-    del_keyword_collectionlist,
-    get_item_collectionlist,
+from .utils import (
+    add_bot_to_logger_group,
+    load_plugins,
+    setup_bot,
+    startupmessage,
+    verifyLoggerGroup,
 )
-from .sql_helper.globals import gvarstatus,addgvar
-from .utils import load_module, verifyLoggerGroup, setup_bot, startupmessage, add_bot_to_logger_group, load_plugins
 
 LOGS = logging.getLogger("CatUserbot")
 
@@ -36,6 +30,7 @@ except Exception as e:
     LOGS.error(f"{str(e)}")
     sys.exit()
 
+
 async def startup_process():
     await verifyLoggerGroup()
     await load_plugins("plugins")
@@ -51,6 +46,7 @@ async def startup_process():
     await add_bot_to_logger_group(BOTLOG_CHATID)
     await add_bot_to_logger_group(PM_LOGGER_GROUP_ID)
     await startupmessage()
+
 
 catub.loop.run_until_complete(startup_process())
 
