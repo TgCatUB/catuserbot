@@ -4,6 +4,7 @@ try:
     import randomstuff
 except ModuleNotFoundError:
     install_pip("randomstuff.py")
+    import randomstuff
 
 from ..Config import Config
 
