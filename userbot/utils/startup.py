@@ -22,6 +22,7 @@ from .pluginmanager import load_module
 LOGS = logging.getLogger("CatUserbot")
 cmdhr = Config.COMMAND_HAND_LER
 
+
 async def setup_bot():
     """
     To set up bot for userbot
@@ -47,6 +48,7 @@ async def setup_bot():
     except Exception as e:
         LOGS.error(f"STRING_SESSION - {str(e)}")
         sys.exit()
+
 
 async def startupmessage():
     """
