@@ -7,7 +7,7 @@ from pathlib import Path
 from telethon import Button, functions, types, utils
 
 import userbot
-from userbot import BOTLOG, BOTLOG_CHATID,PM_LOGGER_GROUP_ID
+from userbot import BOTLOG, BOTLOG_CHATID
 
 from .Config import Config
 from .core.logger import logging
