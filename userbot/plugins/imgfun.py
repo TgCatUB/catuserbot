@@ -28,8 +28,8 @@ plugin_category = "fun"
             "-b": "upper half will be reflection of bottom half.",
         },
         "usage": [
-            "{tr}imirror <flag>",
-            "{tr}imirrors <flag>",
+            "{tr}imirror <flag> - gives output as image",
+            "{tr}imirrors <flag> - gives output as sticker",
         ],
         "examples": [
             "{tr}imirror -l",
@@ -41,8 +41,8 @@ async def imirror(event):  # sourcery no-metrics
     "imgae refelection fun."
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
-    if not reply or not mediatype or mediatype not in ["Photo"]:
-        return await edit_delete(event, "__Reply to photo or sticker to make pack.__")
+    if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
+        return await edit_delete(event, "__Reply to photo or sticker to make mirror.__")
     catevent = await event.edit("__Reflecting the image....__")
     args = event.pattern_match.group(1)
     if args:
@@ -121,7 +121,7 @@ async def irotate(event):
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
-        return await edit_delete(event, "__Reply to photo or sticker to make pack.__")
+        return await edit_delete(event, "__Reply to photo or sticker to rotate it with given angle.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker":
         return await edit_delete(
             event,
@@ -165,7 +165,7 @@ async def iresize(event):
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
-        return await edit_delete(event, "__Reply to photo or sticker to make pack.__")
+        return await edit_delete(event, "__Reply to photo or sticker to resize it.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker":
         return await edit_delete(
             event,
@@ -221,7 +221,7 @@ async def square_cmd(event):
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo"]:
-        return await edit_delete(event, "__Reply to photo or sticker to make pack.__")
+        return await edit_delete(event, "__Reply to photo to make it square image.__")
     catevent = await event.edit("__Adding borders to make it square....__")
     try:
         imag = await _cattools.media_to_pic(catevent, reply, noedits=True)
@@ -265,7 +265,7 @@ async def pic_gifcmd(event):
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
-        return await edit_delete(event, "__Reply to photo or sticker to make pack.__")
+        return await edit_delete(event, "__Reply to photo or sticker to make it doted image.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker":
         return await edit_delete(
             event,
