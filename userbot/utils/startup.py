@@ -1,16 +1,62 @@
-from telethon import types
+import glob
+import os
+import sys
+from datetime import timedelta
+from pathlib import Path
 
+from telethon import Button, functions, types, utils
+
+import userbot
 from userbot import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID
 
 from ..Config import Config
 from ..core.logger import logging
 from ..core.session import catub
+from ..helpers.utils import install_pip
+from ..sql_helper.global_collection import (
+    del_keyword_collectionlist,
+    get_item_collectionlist,
+)
+from ..sql_helper.globals import gvarstatus,addgvar
+from .pluginmanager import load_module
 
 LOGS = logging.getLogger("CatUserbot")
 cmdhr = Config.COMMAND_HAND_LER
 
+async def load_plugins(folder):
+    """
+        To load plugins from the mentioned folder
+    """
+    path = f"userbot/{folder}/*.py"
+    files = glob.glob(path)
+    files.sort()
+    for name in files:
+        with open(name) as f:
+            path1 = Path(f.name)
+            shortname = path1.stem
+            try:
+                if shortname.replace(".py", "") not in Config.NO_LOAD:
+                    flag = True
+                    check = 0
+                    while flag:
+                        try:
+                            load_module(shortname.replace(".py", ""),plugin_path=f"userbot/{folder}",)
+                            break
+                        except ModuleNotFoundError as e:
+                            install_pip(e.name)
+                            check += 1
+                            if check > 5:
+                                break
+                else:
+                    os.remove(Path(f"userbot/{folder}/{shortname}.py"))
+            except Exception as e:
+                os.remove(Path(f"userbot/{folder}/{shortname}.py"))
+                LOGS.info(f"unable to load {shortname} because of error {e}")
 
 async def verifyLoggerGroup():
+    """
+        Will verify the both loggers group
+    """
     flag = False
     if BOTLOG:
         try:
@@ -80,3 +126,5 @@ async def verifyLoggerGroup():
         flag = True
     if flag:
         await catub.reload()
+
+        
