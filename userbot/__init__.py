@@ -26,7 +26,7 @@ elif Config.UPSTREAM_REPO == "goodcat":
 else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
-    
+
 try:
     if Config.PRIVATE_GROUP_BOT_API_ID == 0:
         if gvarstatus("PRIVATE_GROUP_BOT_API_ID") is None:
@@ -34,7 +34,9 @@ try:
             Config.BOTLOG_CHATID = "me"
         else:
             Config.BOTLOG_CHATID = int(gvarstatus("PRIVATE_GROUP_BOT_API_ID"))
-            Config.PRIVATE_GROUP_BOT_API_ID = int(gvarstatus("PRIVATE_GROUP_BOT_API_ID"))
+            Config.PRIVATE_GROUP_BOT_API_ID = int(
+                gvarstatus("PRIVATE_GROUP_BOT_API_ID")
+            )
             Config.BOTLOG = True
     else:
         if str(Config.PRIVATE_GROUP_BOT_API_ID)[0] != "-":
@@ -44,7 +46,7 @@ try:
         Config.BOTLOG = True
 except Exception as e:
     print(gvarstatus("PRIVATE_GROUP_BOT_API_ID"))
-    print(e)   
+    print(e)
 
 try:
     if Config.PM_LOGGER_GROUP_ID == 0:
