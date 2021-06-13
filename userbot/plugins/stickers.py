@@ -25,7 +25,7 @@ from telethon.tl.types import (
 )
 
 from userbot import catub
-
+from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import crop_and_divide
 from ..helpers.tools import media_type
