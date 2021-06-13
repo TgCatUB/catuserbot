@@ -5,6 +5,7 @@ import heroku3
 from .Config import Config
 from .core import logger
 from .core.session import catub
+from .sql_helper.globals import gvarstatus
 
 __version__ = "3.0.0"
 __license__ = "GNU Affero General Public License v3.0"
@@ -26,8 +27,13 @@ else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
 if Config.PRIVATE_GROUP_BOT_API_ID == 0:
-    BOTLOG = False
-    BOTLOG_CHATID = "me"
+    if gvarstatus("PRIVATE_GROUP_BOT_API_ID") is None:
+        BOTLOG = False
+        BOTLOG_CHATID = "me"
+    else:
+        BOTLOG_CHATID = int(gvarstatus("PRIVATE_GROUP_BOT_API_ID"))
+        Config.PRIVATE_GROUP_BOT_API_ID = int(gvarstatus("PRIVATE_GROUP_BOT_API_ID"))
+        BOTLOG = True
 else:
     if str(Config.PRIVATE_GROUP_BOT_API_ID)[0] != "-":
         BOTLOG_CHATID = int("-" + str(Config.PRIVATE_GROUP_BOT_API_ID))
@@ -36,7 +42,11 @@ else:
     BOTLOG = True
 
 if Config.PM_LOGGER_GROUP_ID == 0:
-    PM_LOGGER_GROUP_ID = None
+    if gvarstatus("PM_LOGGER_GROUP_ID") is None:
+        PM_LOGGER_GROUP_ID = None
+    else:
+       PM_LOGGER_GROUP_ID = int(gvarstatus("PM_LOGGER_GROUP_ID"))
+       Config.PM_LOGGER_GROUP_ID = int(gvarstatus("PM_LOGGER_GROUP_ID"))
 elif str(Config.PM_LOGGER_GROUP_ID)[0] != "-":
     PM_LOGGER_GROUP_ID = int("-" + str(Config.PM_LOGGER_GROUP_ID))
 else:
