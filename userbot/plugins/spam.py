@@ -48,19 +48,18 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                         "#SPAM\n"
                         + f"Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) with {counter} times with below message",
                     )
+            elif event.is_private:
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    "#DELAYSPAM\n"
+                    + f"Delay spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with {counter} times with below message with delay {sleeptimet} seconds",
+                )
             else:
-                if event.is_private:
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        "#DELAYSPAM\n"
-                        + f"Delay spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with {counter} times with below message with delay {sleeptimet} seconds",
-                    )
-                else:
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        "#DELAYSPAM\n"
-                        + f"Delay spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) with {counter} times with below message with delay {sleeptimet} seconds",
-                    )
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    "#DELAYSPAM\n"
+                    + f"Delay spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) with {counter} times with below message with delay {sleeptimet} seconds",
+                )
 
             sandy = await event.client.send_file(BOTLOG_CHATID, sandy)
             await _catutils.unsavegif(event, sandy)
@@ -72,8 +71,8 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
             await asyncio.sleep(sleeptimet)
     else:
         return
-    if BOTLOG:
-        if DelaySpam is not True:
+    if DelaySpam is not True:
+        if BOTLOG:
             if event.is_private:
                 await event.client.send_message(
                     BOTLOG_CHATID,
@@ -88,21 +87,21 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                     + f"Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat  with {counter} messages of \n"
                     + f"`{spam_message}`",
                 )
+    elif BOTLOG:
+        if event.is_private:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#DELAYSPAM\n"
+                + f"Delay Spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
+                + f"`{spam_message}`",
+            )
         else:
-            if event.is_private:
-                await event.client.send_message(
-                    BOTLOG_CHATID,
-                    "#DELAYSPAM\n"
-                    + f"Delay Spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
-                    + f"`{spam_message}`",
-                )
-            else:
-                await event.client.send_message(
-                    BOTLOG_CHATID,
-                    "#DELAYSPAM\n"
-                    + f"Delay spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
-                    + f"`{spam_message}`",
-                )
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#DELAYSPAM\n"
+                + f"Delay spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
+                + f"`{spam_message}`",
+            )
 
 
 @catub.cat_cmd(
