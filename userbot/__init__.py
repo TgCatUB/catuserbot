@@ -30,7 +30,7 @@ if Config.PRIVATE_GROUP_BOT_API_ID == 0:
     BOTLOG_CHATID = "me"
 else:
     if str(Config.PRIVATE_GROUP_BOT_API_ID)[0] != "-":
-        BOTLOG_CHATID = int("-"+str(Config.PRIVATE_GROUP_BOT_API_ID))
+        BOTLOG_CHATID = int("-" + str(Config.PRIVATE_GROUP_BOT_API_ID))
     else:
         BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
     BOTLOG = True
@@ -38,7 +38,7 @@ else:
 if Config.PM_LOGGER_GROUP_ID == 0:
     PM_LOGGER_GROUP_ID = None
 elif str(Config.PM_LOGGER_GROUP_ID)[0] != "-":
-    PM_LOGGER_GROUP_ID = int("-"+str(Config.PM_LOGGER_GROUP_ID))
+    PM_LOGGER_GROUP_ID = int("-" + str(Config.PM_LOGGER_GROUP_ID))
 else:
     PM_LOGGER_GROUP_ID = Config.PM_LOGGER_GROUP_ID
 
