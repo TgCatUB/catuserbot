@@ -583,9 +583,9 @@ async def memes(event):
         catinput, colr = catinput.split(";", 1)
     else:
         colr = 0
-    catinput = int(catinput.strip())
+    catinput = int(catinput)
     try:
-        colr = int(colr.strip())
+        colr = int(colr)
     except Exception as e:
         return await edit_delete(event, f"**Error**\n`{e}`")
     reply = await event.get_reply_message()
