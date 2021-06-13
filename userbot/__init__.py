@@ -4,7 +4,7 @@ import heroku3
 import requests
 
 from .Config import Config
-from .core import logger
+from .core.logger import logging
 from .core.session import catub
 from .sql_helper.globals import addgvar, delgvar, gvarstatus
 
