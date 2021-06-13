@@ -41,7 +41,9 @@ async def setup_bot():
                 catub.session.set_dc(option.id, option.ip_address, option.port)
                 catub.session.save()
                 break
-        await catub.start(bot_token=Config.TG_BOT_USERNAME)
+        bot_details = await catub.tgbot.get_me()
+        Config.TG_BOT_USERNAME = f"@{bot_details.username}"
+        # await catub.start(bot_token=Config.TG_BOT_USERNAME)
         catub.me = await catub.get_me()
         catub.uid = catub.tgbot.uid = utils.get_peer_id(catub.me)
         if Config.OWNER_ID == 0:
@@ -97,7 +99,6 @@ async def add_bot_to_logger_group(chat_id):
     To add bot to logger groups
     """
     bot_details = await catub.tgbot.get_me()
-    Config.TG_BOT_USERNAME = f"@{bot_details.username}"
     try:
         await catub(
             functions.messages.AddChatUserRequest(
