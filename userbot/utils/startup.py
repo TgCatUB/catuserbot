@@ -1,21 +1,52 @@
 import glob
 import os
+import sys
+from datetime import timedelta
 from pathlib import Path
 
-from telethon import types
+from telethon import Button, functions, types, utils
 
+import userbot
 from userbot import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID
 
 from ..Config import Config
 from ..core.logger import logging
 from ..core.session import catub
 from ..helpers.utils import install_pip
-from ..sql_helper.globals import addgvar
+from ..sql_helper.global_collection import (
+    del_keyword_collectionlist,
+    get_item_collectionlist,
+)
+from ..sql_helper.globals import gvarstatus,addgvar
 from .pluginmanager import load_module
 
 LOGS = logging.getLogger("CatUserbot")
 cmdhr = Config.COMMAND_HAND_LER
 
+async def add_bot_to_logger_group(chat_id):
+    """
+    To add bot to logger groups
+    """
+    bot_details = await catub.tgbot.get_me()
+    Config.TG_BOT_USERNAME = f"@{bot_details.username}"
+    try:
+        await catub(
+                functions.messages.AddChatUserRequest(
+                    chat_id=chat_id,
+                    user_id=bot_details.username,
+                    fwd_limit=1000000,
+                )
+            )
+    except BaseException:
+        try:
+            await catub(
+                    functions.channels.InviteToChannelRequest(
+                        channel=chat_id,
+                        users=[bot_details.username],
+                    )
+                )
+        except Exception as e:
+            LOGS.error(str(e))
 
 async def load_plugins(folder):
     """
