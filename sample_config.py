@@ -160,6 +160,7 @@ class Config(object):
     # dont touch this at all
     SUDO_USERS: Set[int] = set()
     CATUBLOGO = None
+    BOTLOG = False
 
 
 class Production(Config):
