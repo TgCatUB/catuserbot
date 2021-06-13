@@ -184,10 +184,10 @@ async def verifyLoggerGroup():
             )
     else:
         descript = "Don't delete this group or change to group(If you change group all your previous snips, welcome will be lost.)"
-        group_data = await create_supergroup(
+        _,groupid = await create_supergroup(
             "CatUserbot BotLog Group", catub, Config.TG_BOT_USERNAME, descript
         )
-        addgvar("PRIVATE_GROUP_BOT_API_ID", group_data[1])
+        addgvar("PRIVATE_GROUP_BOT_API_ID", groupid)
         print(
             "Private Group for PRIVATE_GROUP_BOT_API_ID is created succesfully and added to vars."
         )
@@ -215,10 +215,10 @@ async def verifyLoggerGroup():
             )
     else:
         descript = "Don't delete this group or change to group."
-        group_data = await create_supergroup(
+        _,groupid = await create_supergroup(
             "CatUserbot PM Logger Group", catub, Config.TG_BOT_USERNAME, descript
         )
-        addgvar("PM_LOGGER_GROUP_ID", group_data[1])
+        addgvar("PM_LOGGER_GROUP_ID", groupid)
         print(
             "Private Group for PM_LOGGER_GROUP_ID is created succesfully and added to vars."
         )
