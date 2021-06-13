@@ -162,7 +162,6 @@ class Config(object):
     CATUBLOGO = None
     BOTLOG = False
     BOTLOG_CHATID = 0
-    PM_LOGGER_GROUP_ID = 0
 
 
 class Production(Config):
