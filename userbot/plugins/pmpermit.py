@@ -1,3 +1,4 @@
+import random
 import re
 from datetime import datetime
 
@@ -46,10 +47,14 @@ async def do_pm_permit_action(event, chat):  # sourcery no-metrics
     my_username = f"@{me.username}" if me.username else my_mention
     if str(chat.id) not in PM_WARNS:
         PM_WARNS[str(chat.id)] = 0
-    totalwarns = Config.MAX_FLOOD_IN_PMS + 1
+    try:
+        MAX_FLOOD_IN_PMS = int(gvarstatus("MAX_FLOOD_IN_PMS") or 6)
+    except (ValueError, TypeError):
+        MAX_FLOOD_IN_PMS = 6
+    totalwarns = MAX_FLOOD_IN_PMS + 1
     warns = PM_WARNS[str(chat.id)] + 1
     remwarns = totalwarns - warns
-    if PM_WARNS[str(chat.id)] >= Config.MAX_FLOOD_IN_PMS:
+    if PM_WARNS[str(chat.id)] >= MAX_FLOOD_IN_PMS:
         try:
             if str(chat.id) in PMMESSAGE_CACHE:
                 await event.client.delete_messages(
@@ -113,17 +118,46 @@ async def do_pm_permit_action(event, chat):  # sourcery no-metrics
             warns=warns,
             remwarns=remwarns,
         )
-    else:
+    elif gvarstatus("pmmenu") is None:
         USER_BOT_NO_WARN = f"""__Hi__ {mention}__, I haven't approved you yet to personal message me. 
 
 You have {warns}/{totalwarns} warns until you get blocked by the CatUserbot.
 
 Choose an option from below to specify the reason of your message and wait for me to check it. __⬇️"""
+    else:
+        USER_BOT_NO_WARN = f"""__Hi__ {mention}__, I haven't approved you yet to personal message me.
+
+You have {warns}/{totalwarns} warns until you get blocked by the CatUserbot.
+
+Don't spam my inbox. say reason and wait until my response.__"""
     addgvar("pmpermit_text", USER_BOT_NO_WARN)
     PM_WARNS[str(chat.id)] += 1
     try:
-        results = await event.client.inline_query(Config.TG_BOT_USERNAME, "pmpermit")
-        msg = await results[0].click(chat.id, reply_to=reply_to_id, hide_via=True)
+        if gvarstatus("pmmenu") is None:
+            results = await event.client.inline_query(
+                Config.TG_BOT_USERNAME, "pmpermit"
+            )
+            msg = await results[0].click(chat.id, reply_to=reply_to_id, hide_via=True)
+        else:
+            PM_PIC = gvarstatus("PM_PIC")
+            if PM_PIC:
+                CAT = [x for x in PM_PIC.split()]
+                PIC = list(CAT)
+                CAT_IMG = random.choice(PIC)
+            else:
+                CAT_IMG = None
+            if CAT_IMG is not None:
+                msg = await event.client.send_file(
+                    chat.id,
+                    CAT_IMG,
+                    caption=USER_BOT_NO_WARN,
+                    reply_to=reply_to_id,
+                    force_document=False,
+                )
+            else:
+                msg = await event.client.send_message(
+                    chat.id, USER_BOT_NO_WARN, reply_to=reply_to_id
+                )
     except Exception as e:
         LOGS.error(e)
         msg = await event.reply(USER_BOT_NO_WARN)
@@ -556,7 +590,7 @@ async def on_plug_in_callback_query_handler(event):
          \n░░░░░░░░░░░░▀▀`\
          \n**So uncool, this is not your home. Go bother somewhere else.\
          \n\nAnd this is your last warning if you send one more message you will be blocked automatically.**"
-    sqllist.add_to_list("pmrequesr", event.query.user_id)
+    sqllist.add_to_list("pmspam", event.query.user_id)
     try:
         PM_WARNS = sql.get_collection("pmspam").json
     except AttributeError:
@@ -588,16 +622,46 @@ async def pmpermit_on(event):
             )
         else:
             await edit_delete(event, "__Pmpermit is already enabled for your account__")
+    elif gvarstatus("pmpermit") is not None:
+        delgvar("pmpermit")
+        await edit_delete(
+            event, "__Pmpermit has been disabled for your account succesfully__"
+        )
     else:
-        if gvarstatus("pmpermit") is not None:
-            delgvar("pmpermit")
+        await edit_delete(event, "__Pmpermit is already disabled for your account__")
+
+
+@catub.cat_cmd(
+    pattern="pmmenu (on|off)$",
+    command=("pmmenu", plugin_category),
+    info={
+        "header": "To turn on or turn off pmmenu.",
+        "usage": "{tr}pmmenu on/off",
+    },
+)
+async def pmpermit_on(event):
+    "Turn on/off pmmenu."
+    input_str = event.pattern_match.group(1)
+    if input_str == "off":
+        if gvarstatus("pmmenu") is None:
+            addgvar("pmmenu", "false")
             await edit_delete(
-                event, "__Pmpermit has been disabled for your account succesfully__"
+                event,
+                "__Pmpermit Menu has been disabled for your account succesfully.__",
             )
         else:
             await edit_delete(
-                event, "__Pmpermit is already disabled for your account__"
+                event, "__Pmpermit Menu is already disabled for your account__"
             )
+    elif gvarstatus("pmmenu") is not None:
+        delgvar("pmmenu")
+        await edit_delete(
+            event, "__Pmpermit Menu has been enabled for your account succesfully__"
+        )
+    else:
+        await edit_delete(
+            event, "__Pmpermit Menu is already enabled for your account__"
+        )
 
 
 @catub.cat_cmd(
@@ -611,7 +675,7 @@ async def pmpermit_on(event):
         ],
     },
 )
-async def approve_p_m(event):
+async def approve_p_m(event):  # sourcery no-metrics
     "To approve user to pm"
     if gvarstatus("pmpermit") is None:
         return await edit_delete(

@@ -71,10 +71,7 @@ class Main(object):
         return None
 
     def dict_has_props(self, dic, props):
-        for p in props:
-            if not p in dic:
-                return False
-        return True
+        return all(p in dic for p in props)
 
     def assert_status_code(self, code, expected):
         if code != expected:
@@ -333,7 +330,7 @@ class Main(object):
 
     def create_out_dir(self):
         opt_dir = self.options.dir
-        return opt_dir if opt_dir else ""
+        return opt_dir or ""
 
     def create_file_name_temp(self, storage):
         return ".%s.%s" % (__prog__, urllib_quote(storage["hash"]))
@@ -364,7 +361,7 @@ class Main(object):
             self.log("Output dir: %s" % (out_dir))
 
         file_name = self.create_file_name(None)
-        if not file_name is None:
+        if file_name is not None:
             self.log("Output file: %s" % (file_name))
             self.assert_not_exists(os.path.join(out_dir, file_name))
 

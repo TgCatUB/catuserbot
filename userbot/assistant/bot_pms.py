@@ -75,11 +75,38 @@ async def bot_start(event):
     if check_is_black_list(chat.id):
         return
     reply_to = await reply_id(event)
+    mention = f"[{chat.first_name}](tg://user?id={chat.id})"
+    my_mention = f"[{user.first_name}](tg://user?id={user.id})"
+    first = chat.first_name
+    last = chat.last_name
+    fullname = f"{first} {last}" if last else first
+    username = f"@{chat.username}" if chat.username else mention
+    userid = chat.id
+    my_first = user.first_name
+    my_last = user.last_name
+    my_fullname = f"{my_first} {my_last}" if my_last else my_first
+    my_username = f"@{user.username}" if user.username else my_mention
     if chat.id != Config.OWNER_ID:
-        start_msg = f"Hey! 👤{_format.mentionuser(chat.first_name , chat.id)},\
-                    \nI am {_format.mentionuser(user.first_name , user.id)}'s assistant bot.\
-                    \nYou can contact to my master from here.\
-                    \n\nPowered by [Catuserbot](https://t.me/catuserbot17)"
+        customstrmsg = gvarstatus("START_TEXT") or None
+        if customstrmsg is not None:
+            start_msg = customstrmsg.format(
+                mention=mention,
+                first=first,
+                last=last,
+                fullname=fullname,
+                username=username,
+                userid=userid,
+                my_first=my_first,
+                my_last=my_last,
+                my_fullname=my_fullname,
+                my_username=my_username,
+                my_mention=my_mention,
+            )
+        else:
+            start_msg = f"Hey! 👤{mention},\
+                        \nI am {my_mention}'s assistant bot.\
+                        \nYou can contact to my master from here.\
+                        \n\nPowered by [Catuserbot](https://t.me/catuserbot)"
         buttons = [
             (
                 Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
@@ -178,6 +205,7 @@ async def bot_pms_edit(event):  # sourcery no-metrics
         users = get_user_reply(event.id)
         if users is None:
             return
+        reply_msg = None
         for user in users:
             if user.chat_id == str(chat.id):
                 reply_msg = user.message_id
@@ -236,19 +264,20 @@ async def handler(event):
                 except Exception as e:
                     LOGS.error(str(e))
         if users_1 is not None:
+            reply_msg = None
             for user in users_1:
                 if user.chat_id != Config.OWNER_ID:
                     reply_msg = user.message_id
                     break
             try:
-                users = get_user_id(reply_msg)
-                for usr in users:
-                    user_id = int(usr.chat_id)
-                    user_name = usr.first_name
-                    break
-                if check_is_black_list(user_id):
-                    return
                 if reply_msg:
+                    users = get_user_id(reply_msg)
+                    for usr in users:
+                        user_id = int(usr.chat_id)
+                        user_name = usr.first_name
+                        break
+                    if check_is_black_list(user_id):
+                        return
                     await event.client.send_message(
                         Config.OWNER_ID,
                         f"⬆️ **This message was deleted by the user** {_format.mentionuser(user_name , user_id)}.",

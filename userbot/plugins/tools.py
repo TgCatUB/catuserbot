@@ -1,6 +1,7 @@
 import calendar
 import json
 import os
+import re
 from datetime import datetime
 from urllib.parse import quote
 
@@ -15,10 +16,71 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from userbot import catub
 
 from ..Config import Config
+from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
+from ..helpers import AioHttp
 from ..helpers.utils import _catutils, _format, reply_id
 
 plugin_category = "tools"
+
+
+LOGS = logging.getLogger(__name__)
+
+
+@catub.cat_cmd(
+    pattern="cur(?: |$)(.*)",
+    command=("cur", plugin_category),
+    info={
+        "header": "To convert one currency value to other.",
+        "description": "To find exchange rates of currencies.",
+        "usage": "{tr}cur <value> <from currencyid> <to currencyid>",
+        "examples": "{tr}cur 10 USD INR",
+        "note": "List of currency ids are [here](https://nekobin.com/vacuwocesa)",
+    },
+)
+async def currency(event):
+    """To convert one currency value to other."""
+    if Config.CURRENCY_API is None:
+        return await edit_delete(
+            event,
+            "__You haven't set the api value. Set Api var __`CURRENCY_API` __in heroku get value from https://free.currencyconverterapi.com__.",
+            link_preview=False,
+            time=10,
+        )
+    input_str = event.pattern_match.group(1)
+    values = input_str.split(" ")
+    if len(values) == 3:
+        value, fromcurrency, tocurrency = values
+    else:
+        return await edit_delete(event, "__Use proper syntax. check__ `.help -c cur`")
+    fromcurrency = fromcurrency.upper()
+    tocurrency = tocurrency.upper()
+    if value.isdigit():
+        aresponse = await AioHttp().get_json(
+            f"https://free.currconv.com/api/v7/convert?q={fromcurrency}_{tocurrency}&compact=ultra&apiKey={Config.CURRENCY_API}"
+        )
+        symbols = await AioHttp().get_raw(
+            f"https://raw.githubusercontent.com/sandy1709/CatUserbot-Resources/master/Resources/Data/currency.py"
+        )
+        symbols = json.loads(re.sub(", *\n *}", "}", symbols.decode("utf-8")))
+        try:
+            result = aresponse[f"{fromcurrency}_{tocurrency}"]
+        except KeyError:
+            return await edit_delete(
+                event,
+                "__You have used wrong currency codes or Api can't fetch details.__",
+            )
+        output = float(value) * float(result)
+        output = round(output, 4)
+        await edit_or_reply(
+            event,
+            f"The Currency value of **{symbols[fromcurrency]}{value} {fromcurrency}** in **{tocurrency}** is **{symbols[tocurrency]}{output}**",
+        )
+    else:
+        await edit_or_reply(
+            event,
+            f"__It seems you are using different currency value. which doesn't exist on earth.__",
+        )
 
 
 @catub.cat_cmd(
@@ -38,8 +100,6 @@ async def _(event):
     if not reply_message.media:
         return await edit_or_reply(event, "```reply to a media message```")
     chat = "@VS_Robot"
-    if reply_message.sender.bot:
-        return await edit_or_reply(event, "```Reply to actual users message.```")
     catevent = await edit_or_reply(event, " `Sliding my tip, of fingers over it`")
     async with event.client.conversation(chat) as conv:
         try:
@@ -72,34 +132,29 @@ async def _(event):
     command=("decode", plugin_category),
     info={
         "header": "To decode qrcode or barcode",
+        "description": "Reply to qrcode or barcode to decode it and get text.",
         "usage": "{tr}decode",
     },
 )
-async def parseqr(qr_e):
+async def parseqr(event):
     "To decode qrcode or barcode"
-    if not os.path.isdir(Config.TEMP_DIR):
-        os.makedirs(Config.TEMP_DIR)
-    # For .decode command, get QR Code/BarCode content from the replied photo.
-    downloaded_file_name = await qr_e.client.download_media(
-        await qr_e.get_reply_message(), Config.TEMP_DIR
-    )
+    catevent = await edit_or_reply(event, "`Decoding....`")
+    reply = await event.get_reply_message()
+    downloaded_file_name = await reply.download_media()
     # parse the Official ZXing webpage to decode the QRCode
-    command_to_exec = [
-        "curl",
-        "-X",
-        "POST",
-        "-F",
-        "f=@" + downloaded_file_name + "",
-        "https://zxing.org/w/decode",
-    ]
+    command_to_exec = f"curl -s -F f=@{downloaded_file_name} https://zxing.org/w/decode"
     t_response, e_response = (await _catutils.runcmd(command_to_exec))[:2]
-    if not t_response:
-        return await edit_or_reply(qr_e, f"Failed to decode.\n`{e_response}`")
-    soup = BeautifulSoup(t_response, "html.parser")
-    qr_contents = soup.find_all("pre")[0].text
-    await edit_or_reply(qr_e, qr_contents)
     if os.path.exists(downloaded_file_name):
         os.remove(downloaded_file_name)
+    soup = BeautifulSoup(t_response, "html.parser")
+    try:
+        qr_contents = soup.find_all("pre")[0].text
+        await edit_or_reply(catevent, f"**The decoded message is :**\n`{qr_contents}`")
+    except IndexError:
+        result = soup.text
+        await edit_or_reply(catevent, f"**Failed to Decode:**\n`{result}`")
+    except Exception as e:
+        await edit_or_reply(catevent, f"**Error:**\n`{str(e)}`")
 
 
 @catub.cat_cmd(

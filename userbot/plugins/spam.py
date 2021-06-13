@@ -4,6 +4,7 @@ import base64
 from telethon.tl import functions, types
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+from telethon.utils import get_display_name
 
 from userbot import catub
 
@@ -45,21 +46,20 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                     await event.client.send_message(
                         BOTLOG_CHATID,
                         "#SPAM\n"
-                        + f"Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) with {counter} times with below message",
+                        + f"Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) with {counter} times with below message",
                     )
+            elif event.is_private:
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    "#DELAYSPAM\n"
+                    + f"Delay spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with {counter} times with below message with delay {sleeptimet} seconds",
+                )
             else:
-                if event.is_private:
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        "#DELAYSPAM\n"
-                        + f"Delay spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with {counter} times with below message with delay {sleeptimet} seconds",
-                    )
-                else:
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        "#DELAYSPAM\n"
-                        + f"Delay spam was executed successfully in {event.chat.title}(`{event.chat_id}`) with {counter} times with below message with delay {sleeptimet} seconds",
-                    )
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    "#DELAYSPAM\n"
+                    + f"Delay spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) with {counter} times with below message with delay {sleeptimet} seconds",
+                )
 
             sandy = await event.client.send_file(BOTLOG_CHATID, sandy)
             await _catutils.unsavegif(event, sandy)
@@ -69,8 +69,10 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
         for _ in range(counter):
             await event.client.send_message(event.chat_id, spam_message)
             await asyncio.sleep(sleeptimet)
-    if BOTLOG:
-        if DelaySpam is not True:
+    else:
+        return
+    if DelaySpam is not True:
+        if BOTLOG:
             if event.is_private:
                 await event.client.send_message(
                     BOTLOG_CHATID,
@@ -82,24 +84,24 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                 await event.client.send_message(
                     BOTLOG_CHATID,
                     "#SPAM\n"
-                    + f"Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat  with {counter} messages of \n"
+                    + f"Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat  with {counter} messages of \n"
                     + f"`{spam_message}`",
                 )
+    elif BOTLOG:
+        if event.is_private:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#DELAYSPAM\n"
+                + f"Delay Spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
+                + f"`{spam_message}`",
+            )
         else:
-            if event.is_private:
-                await event.client.send_message(
-                    BOTLOG_CHATID,
-                    "#DELAYSPAM\n"
-                    + f"Delay Spam was executed successfully in [User](tg://user?id={event.chat_id}) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
-                    + f"`{spam_message}`",
-                )
-            else:
-                await event.client.send_message(
-                    BOTLOG_CHATID,
-                    "#DELAYSPAM\n"
-                    + f"Delay spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
-                    + f"`{spam_message}`",
-                )
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#DELAYSPAM\n"
+                + f"Delay spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with delay {sleeptimet} seconds and with {counter} messages of \n"
+                + f"`{spam_message}`",
+            )
 
 
 @catub.cat_cmd(
@@ -116,7 +118,12 @@ async def spammer(event):
     "Floods the text in the chat !!"
     sandy = await event.get_reply_message()
     cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
-    counter = int(cat[0])
+    try:
+        counter = int(cat[0])
+    except Exception:
+        return await edit_delete(
+            event, "__Use proper syntax to spam. Foe syntax refer help menu.__"
+        )
     if counter > 50:
         sleeptimet = 0.5
         sleeptimem = 1
@@ -192,7 +199,7 @@ async def stickerpack_spam(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#SPSPAM\n"
-                + f"Sticker Pack Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with pack",
+                + f"Sticker Pack Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with pack",
             )
         await event.client.send_file(BOTLOG_CHATID, reqd_sticker_set.documents[0])
 
@@ -225,7 +232,7 @@ async def tmeme(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#CSPAM\n"
-                + f"Letter Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with : `{message}`",
+                + f"Letter Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with : `{message}`",
             )
 
 
@@ -257,7 +264,7 @@ async def tmeme(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#WSPAM\n"
-                + f"Word Spam was executed successfully in {event.chat.title}(`{event.chat_id}`) chat with : `{message}`",
+                + f"Word Spam was executed successfully in {get_display_name(await event.get_chat())}(`{event.chat_id}`) chat with : `{message}`",
             )
 
 
@@ -278,7 +285,12 @@ async def spammer(event):
     "To spam with custom sleep time between each message"
     reply = await event.get_reply_message()
     input_str = "".join(event.text.split(maxsplit=1)[1:]).split(" ", 2)
-    sleeptimet = sleeptimem = float(input_str[0])
+    try:
+        sleeptimet = sleeptimem = float(input_str[0])
+    except Exception:
+        return await edit_delete(
+            event, "__Use proper syntax to spam. Foe syntax refer help menu.__"
+        )
     cat = input_str[1:]
     await event.delete()
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)

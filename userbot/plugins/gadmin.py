@@ -5,6 +5,7 @@ from telethon.errors import BadRequestError
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import ChatBannedRights
+from telethon.utils import get_display_name
 
 from userbot import catub
 
@@ -64,8 +65,7 @@ async def catgban(event):  # sourcery no-metrics
         )
     else:
         gban_sql.catgban(user.id, reason)
-    san = []
-    san = await admin_groups(event)
+    san = await admin_groups(event.client)
     count = 0
     sandy = len(san)
     if sandy == 0:
@@ -79,9 +79,10 @@ async def catgban(event):  # sourcery no-metrics
             await asyncio.sleep(0.5)
             count += 1
         except BadRequestError:
+            achat = await event.client.get_entity(san[i])
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"`You don't have required permission in :`\n**Chat :** {event.chat.title}(`{event.chat_id}`)\n`For banning here`",
+                f"`You don't have required permission in :`\n**Chat :** {get_display_name(achat)}(`{achat.id}`)\n`For banning here`",
             )
     end = datetime.now()
     cattaken = (end - start).seconds
@@ -146,8 +147,7 @@ async def catgban(event):
         return await edit_delete(
             cate, f"the [user](tg://user?id={user.id}) `is not in your gbanned list`"
         )
-    san = []
-    san = await admin_groups(event)
+    san = await admin_groups(event.client)
     count = 0
     sandy = len(san)
     if sandy == 0:
@@ -161,9 +161,10 @@ async def catgban(event):
             await asyncio.sleep(0.5)
             count += 1
         except BadRequestError:
+            achat = await event.client.get_entity(san[i])
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"`You don't have required permission in :`\n**Chat : **{event.chat.title}(`{event.chat_id}`)\n`For unbaning here`",
+                f"`You don't have required permission in :`\n**Chat :** {get_display_name(achat)}(`{achat.id}`)\n`For Unbanning here`",
             )
     end = datetime.now()
     cattaken = (end - start).seconds
@@ -318,7 +319,6 @@ async def endgmute(event):
         user = (await event.client(GetFullUserRequest(userid))).user
     except Exception:
         return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
-
     if not is_muted(userid, "gmute"):
         return await edit_or_reply(
             event, f"{_format.mentionuser(user.first_name ,user.id)} `is not gmuted`"
@@ -377,8 +377,7 @@ async def catgkick(event):  # sourcery no-metrics
         return
     if user.id == catub.uid:
         return await edit_delete(cate, "`why would I kick myself`")
-    san = []
-    san = await admin_groups(event)
+    san = await admin_groups(event.client)
     count = 0
     sandy = len(san)
     if sandy == 0:
@@ -392,9 +391,10 @@ async def catgkick(event):  # sourcery no-metrics
             await asyncio.sleep(0.5)
             count += 1
         except BadRequestError:
+            achat = await event.client.get_entity(san[i])
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"`You don't have required permission in :`\n**Chat :** {event.chat.title}(`{event.chat_id}`)\n`For kicking there`",
+                f"`You don't have required permission in :`\n**Chat :** {get_display_name(achat)}(`{achat.id}`)\n`For kicking there`",
             )
     end = datetime.now()
     cattaken = (end - start).seconds

@@ -13,6 +13,7 @@ from time import time
 
 import ujson
 from telethon import Button, types
+from telethon.errors import BotResponseTimeoutError
 from telethon.events import CallbackQuery
 from telethon.utils import get_attributes
 from wget import download
@@ -65,11 +66,25 @@ async def iytdl_inline(event):
     if not input_url:
         return await edit_delete(event, "Give input or reply to a valid youtube URL")
     catevent = await edit_or_reply(event, f"🔎 Searching Youtube for: `'{input_url}'`")
-    results = await event.client.inline_query(
-        Config.TG_BOT_USERNAME, f"ytdl {input_url}"
-    )
-    await catevent.delete()
-    await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+    flag = True
+    cout = 0
+    results = None
+    while flag:
+        try:
+            results = await event.client.inline_query(
+                Config.TG_BOT_USERNAME, f"ytdl {input_url}"
+            )
+            flag = False
+        except BotResponseTimeoutError:
+            await asyncio.sleep(2)
+        cout += 1
+        if cout > 5:
+            flag = False
+    if results:
+        await catevent.delete()
+        await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+    else:
+        await catevent.edit("`Sorry!. Can't find any results`")
 
 
 @catub.tgbot.on(
@@ -141,7 +156,7 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
                 c_q,
                 startTime,
                 "trying to upload",
-                file_name=os.path.basename(Path(_path)),
+                file_name=os.path.basename(Path(_fpath)),
             )
         ),
     )
@@ -156,12 +171,12 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
     uploaded_media = await c_q.client.send_file(
         BOTLOG_CHATID,
         file=media,
-        caption=f"<b>File Name : </b><code>{os.path.basename(Path(_path))}</code>",
+        caption=f"<b>File Name : </b><code>{os.path.basename(Path(_fpath))}</code>",
         parse_mode="html",
     )
     await upload_msg.delete()
     await c_q.edit(
-        text=f"📹  <a href={yt_url}><b>{os.path.basename(Path(_path))}</b></a>",
+        text=f"📹  <a href={yt_url}><b>{os.path.basename(Path(_fpath))}</b></a>",
         file=uploaded_media.media,
         parse_mode="html",
     )

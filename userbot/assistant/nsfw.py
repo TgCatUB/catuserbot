@@ -29,7 +29,7 @@ async def age_verification_true(event: CallbackQuery):
     ]
     try:
         await event.edit(
-            text="Set `ALLOW_NSFW` = True in Heroku Vars to access this plugin",
+            text="Set `ALLOW_NSFW` = True in Database Vars to access this plugin",
             file="https://telegra.ph/file/85f3071c31279bcc280ef.jpg",
             buttons=buttons,
         )

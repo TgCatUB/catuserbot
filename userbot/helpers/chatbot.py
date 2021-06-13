@@ -1,5 +1,5 @@
-from prsaw import RandomStuff
+import randomstuff
 
 from ..Config import Config
 
-randomstuff = RandomStuff(async_mode=True, api_key=Config.RANDOM_STUFF_API_KEY)
+rs_client = randomstuff.AsyncClient(api_key=Config.RANDOM_STUFF_API_KEY, version="4")

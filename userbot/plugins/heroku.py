@@ -211,15 +211,9 @@ async def _(dyno):
             " Please make sure your Heroku API Key, Your App name are configured correctly in the heroku"
         )
     data = app.get_log()
-    key = (
-        requests.post("https://nekobin.com/api/documents", json={"content": data})
-        .json()
-        .get("result")
-        .get("key")
+    await edit_or_reply(
+        dyno, data, deflink=True, linktext="**Recent 100 lines of heroku logs: **"
     )
-    url = f"https://nekobin.com/{key}"
-    reply_text = f"Recent 100 lines of heroku logs: [here]({url})"
-    await edit_or_reply(dyno, reply_text)
 
 
 def prettyjson(obj, indent=2, maxlinelength=80):

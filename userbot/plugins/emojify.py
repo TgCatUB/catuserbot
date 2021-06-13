@@ -4,8 +4,10 @@ modified by  @mrconfused
 Userbot plugin for CatUserbot
 """
 
-from . import catub, edit_or_reply
-from . import fonts as emojify
+from userbot import catub
+
+from ..core.managers import edit_or_reply
+from ..helpers import fonts as emojify
 
 plugin_category = "fun"
 
@@ -22,12 +24,12 @@ plugin_category = "fun"
 async def itachi(event):
     "To get emoji art text."
     args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
+    get = await event.get_reply_message()
+    if not args and get:
         args = get.text
     if not args:
         await edit_or_reply(
-            event, "`What am I Supposed to do with this idiot, Give me a text. `"
+            event, "__What am I Supposed to do with this idiot, Give me a text.__"
         )
         return
     result = ""
@@ -53,12 +55,12 @@ async def itachi(event):
 async def itachi(event):
     "To get custom emoji art text."
     args = event.pattern_match.group(1)
-    if not args:
-        get = await event.get_reply_message()
+    get = await event.get_reply_message()
+    if not args and get:
         args = get.text
     if not args:
         return await edit_or_reply(
-            event, "`What am I Supposed to do with this idiot, Give me a text. `"
+            event, "__What am I Supposed to do with this idiot, Give me a text.__"
         )
     try:
         emoji, arg = args.split(" ", 1)

@@ -5,9 +5,11 @@ import requests
 
 from userbot import catub
 
+from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import catmemes
 
+LOGS = logging.getLogger(__name__)
 plugin_category = "extra"
 
 

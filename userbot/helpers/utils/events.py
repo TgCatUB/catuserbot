@@ -21,7 +21,7 @@ async def reply_id(event):
 
 async def get_user_from_event(
     event, catevent=None, secondgroup=None, nogroup=False, noedits=False
-):
+):  # sourcery no-metrics
     if catevent is None:
         catevent = event
     if nogroup is False:
@@ -35,7 +35,7 @@ async def get_user_from_event(
             user = args[0]
             if len(args) > 1:
                 extra = "".join(args[1:])
-            if user.isnumeric():
+            if user.isnumeric() or (user.startswith("-") and user[1:].isnumeric()):
                 user = int(user)
             if event.message.entities:
                 probable_user_mention_entity = event.message.entities[0]

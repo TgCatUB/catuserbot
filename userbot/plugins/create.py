@@ -1,10 +1,9 @@
-from telethon.errors import BadRequestError
 from telethon.tl import functions
-from telethon.tl.functions.channels import EditAdminRequest
-from telethon.tl.types import ChatAdminRights
 
+from .. import catub
 from ..Config import Config
-from . import catub, edit_or_reply
+from ..core.managers import edit_delete, edit_or_reply
+from ..utils.tools import create_supergroup
 
 plugin_category = "tools"
 
@@ -32,21 +31,13 @@ async def _(event):
         descript = "This is a Test Channel created using catuserbot"
     else:
         descript = "This is a Test Group created using catuserbot"
-    event = await edit_or_reply(event, "creating......")
-    flag = False
-    if type_of_group == "b":
+    if type_of_group == "g":
         try:
-            new_rights = ChatAdminRights(
-                add_admins=False,
-                invite_users=True,
-                change_info=False,
-                ban_users=True,
-                delete_messages=True,
-                pin_messages=True,
-            )
             result = await event.client(
                 functions.messages.CreateChatRequest(
                     users=[Config.TG_BOT_USERNAME],
+                    # Not enough users (to create a chat, for example)
+                    # Telegram, no longer allows creating a chat with ourselves
                     title=group_name,
                 )
             )
@@ -56,47 +47,42 @@ async def _(event):
                     peer=created_chat_id,
                 )
             )
-            await event.edit(
-                "Group `{}` created successfully. Join {}".format(
-                    group_name, result.link
-                )
+            await edit_or_reply(
+                event, f"Group `{group_name}` created successfully. Join {result.link}"
             )
-            flag = True
-            try:
-                rank = "admin"
-                p = await event.client.get_entity(Config.TG_BOT_USERNAME)
-                result = await event.client(
-                    EditAdminRequest(created_chat_id, p.id, new_rights, rank)
-                )
-            except BadRequestError:
-                pass
         except Exception as e:
-            if not flag:
-                await event.edit(str(e))
-            else:
-                LOGS.error(e)
-    elif type_of_group in ["g", "c"]:
+            await edit_delete(event, f"**Error:**\n{str(e)}")
+    elif type_of_group == "c":
         try:
             r = await event.client(
                 functions.channels.CreateChannelRequest(
                     title=group_name,
                     about=descript,
-                    megagroup=type_of_group != "c",
+                    megagroup=False,
                 )
             )
-
             created_chat_id = r.chats[0].id
             result = await event.client(
                 functions.messages.ExportChatInviteRequest(
                     peer=created_chat_id,
                 )
             )
-            await event.edit(
-                "Channel `{}` created successfully. Join {}".format(
-                    group_name, result.link
-                )
+            await edit_or_reply(
+                event,
+                f"Channel `{group_name}` created successfully. Join {result.link}",
             )
         except Exception as e:
-            await event.edit(str(e))
+            await edit_delete(event, f"**Error:**\n{str(e)}")
+    elif type_of_group == "b":
+        answer = await create_supergroup(
+            group_name, event.client, Config.TG_BOT_USERNAME, descript
+        )
+        if answer[0] != "error":
+            await edit_or_reply(
+                event,
+                f"Mega group `{group_name}` created successfully. Join {answer[0].link}",
+            )
+        else:
+            await edit_delete(event, f"**Error:**\n{str(answer[1])}")
     else:
-        await event.edit("Read `.help create` to know how to use me")
+        await edit_delete(event, "Read `.help create` to know how to use me")

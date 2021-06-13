@@ -30,17 +30,16 @@ async def get_user_and_reason(event):
                 user_id = int(usr.chat_id)
                 break
             reason = id_reason
-    else:
-        if id_reason:
-            data = id_reason.split(maxsplit=1)
-            if len(data) == 2:
-                user, reason = data
-            elif len(data) == 1:
-                user = data[0]
-            if user.isdigit():
-                user_id = int(user)
-            if user.startswith("@"):
-                user_id = user
+    elif id_reason:
+        data = id_reason.split(maxsplit=1)
+        if len(data) == 2:
+            user, reason = data
+        elif len(data) == 1:
+            user = data[0]
+        if user.isdigit():
+            user_id = int(user)
+        if user.startswith("@"):
+            user_id = user
     return user_id, reason
 
 

@@ -67,11 +67,11 @@ async def maccmd(event):  # sourcery no-metrics
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
-        return await edit_delete(event, "__Reply to photo or sticker to make pack.__")
+        return await edit_delete(event, "__Reply to photo or sticker to frame it.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker":
         return await edit_delete(
             event,
-            "__Reply to photo or sticker to make pack. Animated sticker is not supported__",
+            "__Reply to photo or sticker to frame it. Animated sticker is not supported__",
         )
     catevent = await event.edit("__Adding frame for media....__")
     args = event.pattern_match.group(1)
@@ -159,16 +159,15 @@ async def memes(event):
         return await edit_delete(event, "`Reply to supported Media...`")
     catid = await reply_id(event)
     san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    if catinput:
-        if ";" in catinput:
-            top, bottom = catinput.split(";", 1)
-        else:
-            top = catinput
-            bottom = ""
-    else:
+    if not catinput:
         return await edit_delete(
             event, "`what should i write on that u idiot give text to memify`"
         )
+    if ";" in catinput:
+        top, bottom = catinput.split(";", 1)
+    else:
+        top = catinput
+        bottom = ""
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     output = await _cattools.media_to_pic(event, reply)
@@ -579,14 +578,14 @@ async def memes(event):
     "make a frame for your media file"
     catinput = event.pattern_match.group(1)
     if not catinput:
-        catinput = 50
+        catinput = "50"
     if ";" in str(catinput):
         catinput, colr = catinput.split(";", 1)
     else:
         colr = 0
-    catinput = int(catinput.strip())
+    catinput = int(catinput)
     try:
-        colr = int(colr.strip())
+        colr = int(colr)
     except Exception as e:
         return await edit_delete(event, f"**Error**\n`{e}`")
     reply = await event.get_reply_message()

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 from telethon import TelegramClient, events
+from telethon.errors import MessageIdInvalidError, MessageNotModifiedError
 
 from ..Config import Config
 from ..helpers.utils.events import checking
@@ -20,7 +21,7 @@ from .events import MessageEdited, NewMessage
 from .fasttelethon import download_file, upload_file
 from .logger import logging
 from .managers import edit_delete
-from .pluginManager import restart_script
+from .pluginManager import get_message_link, restart_script
 
 LOGS = logging.getLogger(__name__)
 
@@ -105,6 +106,10 @@ class CatUserBotClient(TelegramClient):
                     raise events.StopPropagation
                 except KeyboardInterrupt:
                     pass
+                except MessageNotModifiedError:
+                    LOGS.error("Message was same as previous message")
+                except MessageIdInvalidError:
+                    LOGS.error("Message was deleted or cant be found")
                 except BaseException as e:
                     LOGS.exception(e)
                     if not disable_errors:
@@ -118,6 +123,7 @@ class CatUserBotClient(TelegramClient):
                                   \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
                                   \nDate: {date}\nGroup ID: {str(check.chat_id)}\
                                   \nSender ID: {str(check.sender_id)}\
+                                  \nMessage Link: {await check.client.get_msg_link(check)}\
                                   \n\nEvent Trigger:\n{str(check.text)}\
                                   \n\nTraceback info:\n{str(traceback.format_exc())}\
                                   \n\nError text:\n{str(sys.exc_info()[1])}"
@@ -131,7 +137,7 @@ class CatUserBotClient(TelegramClient):
                         output = (await runcmd(command))[:2]
                         result = output[0] + output[1]
                         ftext += result
-                        pastelink = paste_text(ftext)
+                        pastelink = paste_text(ftext, markdown=False)
                         text = "**CatUserbot Error report**\n\n"
                         link = "[here](https://t.me/catuserbot_support)"
                         text += "If you wanna you can report it"
@@ -214,6 +220,10 @@ class CatUserBotClient(TelegramClient):
                     raise events.StopPropagation
                 except KeyboardInterrupt:
                     pass
+                except MessageNotModifiedError:
+                    LOGS.error("Message was same as previous message")
+                except MessageIdInvalidError:
+                    LOGS.error("Message was deleted or cant be found")
                 except BaseException as e:
                     # Check if we have to disable error logging.
                     LOGS.exception(e)  # Log the error in console
@@ -228,6 +238,7 @@ class CatUserBotClient(TelegramClient):
                                     \n\n--------BEGIN USERBOT TRACEBACK LOG--------\
                                     \nDate: {date}\nGroup ID: {str(check.chat_id)}\
                                     \nSender ID: {str(check.sender_id)}\
+                                    \nMessage Link: {await check.client.get_msg_link(check)}\
                                     \n\nEvent Trigger:\n{str(check.text)}\
                                     \n\nTraceback info:\n{str(traceback.format_exc())}\
                                     \n\nError text:\n{str(sys.exc_info()[1])}"
@@ -241,7 +252,7 @@ class CatUserBotClient(TelegramClient):
                         output = (await runcmd(command))[:2]
                         result = output[0] + output[1]
                         ftext += result
-                        pastelink = paste_text(ftext)
+                        pastelink = paste_text(ftext, markdown=False)
                         text = "**CatUserbot Error report**\n\n"
                         link = "[here](https://t.me/catuserbot_support)"
                         text += "If you wanna you can report it"
@@ -284,4 +295,5 @@ class CatUserBotClient(TelegramClient):
 CatUserBotClient.fast_download_file = download_file
 CatUserBotClient.fast_upload_file = upload_file
 CatUserBotClient.reload = restart_script
+CatUserBotClient.get_msg_link = get_message_link
 CatUserBotClient.check_testcases = checking

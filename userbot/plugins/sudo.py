@@ -106,7 +106,7 @@ async def add_sudo_user(event):
     if replied_user.id in _sudousers_list():
         return await edit_delete(
             event,
-            f"{mentionuser(get_display_name(replied_user)),replied_user.id} __is already in your sudo list.__",
+            f"{mentionuser(get_display_name(replied_user),replied_user.id)} __is already in your sudo list.__",
         )
     date = str(datetime.now().strftime("%B %d, %Y"))
     userdata = {
@@ -148,7 +148,7 @@ async def _(event):
     if str(replied_user.id) not in sudousers:
         return await edit_delete(
             event,
-            f"{mentionuser(get_display_name(replied_user)),replied_user.id} __is not in your sudo__.",
+            f"{mentionuser(get_display_name(replied_user),replied_user.id)} __is not in your sudo__.",
         )
     del sudousers[str(replied_user.id)]
     sql.del_collection("sudousers_list")

@@ -2,7 +2,7 @@ from telethon.tl.types import ChannelParticipantsAdmins
 
 from userbot import catub
 
-from ..helpers.utils import reply_id
+from ..helpers.utils import get_user_from_event, reply_id
 
 plugin_category = "extra"
 
@@ -66,29 +66,14 @@ async def _(event):
 )
 async def _(event):
     "Tags that person with the given custom text."
-    input_str = event.pattern_match.group(1)
+    user, input_str = await get_user_from_event(event)
+    if not user:
+        return
     reply_to_id = await reply_id(event)
-    if event.reply_to_msg_id:
-        reply_msg = await event.get_reply_message()
-        u = reply_msg.sender_id
-    else:
-        user, input_str = input_str.split(" ", 1)
-        try:
-            u = int(user)
-        except ValueError:
-            try:
-                u = await event.client.get_entity(user)
-            except ValueError:
-                await event.delete()
-                return
-            u = int(u.id)
-        except Exception:
-            await event.delete()
-            return
     await event.delete()
     await event.client.send_message(
         event.chat_id,
-        f"<a href='tg://user?id={u}'>{input_str}</a>",
+        f"<a href='tg://user?id={user.id}'>{input_str}</a>",
         parse_mode="HTML",
         reply_to=reply_to_id,
     )

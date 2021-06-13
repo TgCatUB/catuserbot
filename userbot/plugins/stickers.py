@@ -26,11 +26,11 @@ from telethon.tl.types import (
 
 from userbot import catub
 
-from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import crop_and_divide
 from ..helpers.tools import media_type
 from ..helpers.utils import _cattools
+from ..sql_helper.globals import gvarstatus
 
 plugin_category = "fun"
 
@@ -76,16 +76,15 @@ def char_is_emoji(character):
 
 
 def pack_nick(username, pack, is_anim):
-    if Config.CUSTOM_STICKER_PACKNAME:
+    if gvarstatus("CUSTOM_STICKER_PACKNAME"):
         if is_anim:
-            packnick = f"{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack} (Animated)"
+            packnick = f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack} (Animated)"
         else:
-            packnick = f"{Config.CUSTOM_STICKER_PACKNAME} Vol.{pack}"
+            packnick = f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack}"
+    elif is_anim:
+        packnick = f"@{username} Vol.{pack} (Animated)"
     else:
-        if is_anim:
-            packnick = f"@{username} Vol.{pack} (Animated)"
-        else:
-            packnick = f"@{username} Vol.{pack}"
+        packnick = f"@{username} Vol.{pack}"
     return packnick
 
 
@@ -575,7 +574,7 @@ async def pack_kang(event):  # sourcery no-metrics
     },
 )
 async def pic2packcmd(event):
-    "To split the replied image and make sticker pack.",
+    "To split the replied image and make sticker pack."
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:

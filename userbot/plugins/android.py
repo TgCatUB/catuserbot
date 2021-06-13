@@ -4,7 +4,9 @@ import re
 from bs4 import BeautifulSoup
 from requests import get
 
-from . import catub, edit_delete, edit_or_reply
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "extra"
 
@@ -19,26 +21,18 @@ plugin_category = "extra"
 )
 async def kakashi(event):
     "Get latest Magisk releases"
-    magisk_repo = "https://raw.githubusercontent.com/topjohnwu/magisk_files/"
+    magisk_repo = "https://raw.githubusercontent.com/topjohnwu/magisk-files/"
     magisk_dict = {
         "⦁ **Stable**": magisk_repo + "master/stable.json",
         "⦁ **Beta**": magisk_repo + "master/beta.json",
-        "⦁ **Canary**": magisk_repo + "canary/canary.json",
+        "⦁ **Canary**": magisk_repo + "master/canary.json",
     }
     releases = "**Latest Magisk Releases**\n\n"
     for name, release_url in magisk_dict.items():
         data = get(release_url).json()
-        if "canary" in release_url:
-            data["app"]["link"] = magisk_repo + "canary/" + data["app"]["link"]
-            data["magisk"]["link"] = magisk_repo + "canary/" + data["magisk"]["link"]
-            data["uninstaller"]["link"] = (
-                magisk_repo + "canary/" + data["uninstaller"]["link"]
-            )
-
         releases += (
-            f'{name}: [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | '
-            f'[APK v{data["app"]["version"]}]({data["app"]["link"]}) | '
-            f'[Uninstaller]({data["uninstaller"]["link"]})\n'
+            f'{name}: [APK v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | '
+            f'[Changelog]({data["magisk"]["note"]})\n'
         )
     await edit_or_reply(event, releases)
 

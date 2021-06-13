@@ -1,9 +1,9 @@
-import re
+from telethon.utils import get_display_name
 
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import get_user_from_event, randomstuff
+from ..helpers import get_user_from_event, rs_client
 from ..sql_helper.chatbot_sql import (
     addai,
     get_all_users,
@@ -149,23 +149,23 @@ async def list_chatbot(event):  # sourcery no-metrics
     if input_str:
         lsts = get_all_users()
         group_chats = ""
-        if len(lsts) > 0:
-            for echos in lsts:
-                if echos.chat_type == "Personal":
-                    if echos.user_username:
-                        private_chats += f"☞ [{echos.user_name}](https://t.me/{echos.user_username})\n"
-                    else:
-                        private_chats += (
-                            f"☞ [{echos.user_name}](tg://user?id={echos.user_id})\n"
-                        )
-                else:
-                    if echos.user_username:
-                        group_chats += f"☞ [{echos.user_name}](https://t.me/{echos.user_username}) in chat {echos.chat_name} of chat id `{echos.chat_id}`\n"
-                    else:
-                        group_chats += f"☞ [{echos.user_name}](tg://user?id={echos.user_id}) in chat {echos.chat_name} of chat id `{echos.chat_id}`\n"
-
-        else:
+        if len(lsts) <= 0:
             return await edit_or_reply(event, "There are no ai enabled users")
+        for echos in lsts:
+            if echos.chat_type == "Personal":
+                if echos.user_username:
+                    private_chats += (
+                        f"☞ [{echos.user_name}](https://t.me/{echos.user_username})\n"
+                    )
+                else:
+                    private_chats += (
+                        f"☞ [{echos.user_name}](tg://user?id={echos.user_id})\n"
+                    )
+            elif echos.user_username:
+                group_chats += f"☞ [{echos.user_name}](https://t.me/{echos.user_username}) in chat {echos.chat_name} of chat id `{echos.chat_id}`\n"
+            else:
+                group_chats += f"☞ [{echos.user_name}](tg://user?id={echos.user_id}) in chat {echos.chat_name} of chat id `{echos.chat_id}`\n"
+
         if private_chats != "":
             output_str += "**Private Chats**\n" + private_chats + "\n\n"
         if group_chats != "":
@@ -176,7 +176,6 @@ async def list_chatbot(event):  # sourcery no-metrics
             return await edit_or_reply(
                 event, "There are no ai enabled users in this chat"
             )
-
         for echos in lsts:
             if echos.user_username:
                 private_chats += (
@@ -187,7 +186,6 @@ async def list_chatbot(event):  # sourcery no-metrics
                     f"☞ [{echos.user_name}](tg://user?id={echos.user_id})\n"
                 )
         output_str = f"**Ai enabled users in this chat are:**\n" + private_chats
-
     await edit_or_reply(event, output_str)
 
 
@@ -195,8 +193,13 @@ async def list_chatbot(event):  # sourcery no-metrics
 async def ai_reply(event):
     if is_added(event.chat_id, event.sender_id) and (event.message.text):
         AI_LANG = gvarstatus("AI_LANG") or "en"
-        response = await randomstuff.get_ai_response(event.message.text, lang=AI_LANG)
-        # This is because the person pgamerx is from discord .
-        # If i use here there is other person in telegram named pgamerx so to avoid him.
-        insensitive_replace = re.compile(re.escape("pgamerx"), re.IGNORECASE)
-        await event.reply(insensitive_replace.sub("sandy1709", response))
+        master_name = get_display_name(await event.client.get_me())
+        response = await rs_client.get_ai_response(
+            message=event.message.text,
+            server="primary",
+            master="CatUserbot",
+            bot=master_name,
+            uid=event.client.uid,
+            language=AI_LANG,
+        )
+        await event.reply(response.message)

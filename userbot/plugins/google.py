@@ -197,7 +197,9 @@ async def _(event):
 <i>fetched in {ms} seconds</i>""".format(
             **locals()
         )
-    await catevent.edit(OUTPUT_STR, parse_mode="HTML", link_preview=False)
+    else:
+        catevent = event
+    await edit_or_reply(catevent, OUTPUT_STR, parse_mode="HTML", link_preview=False)
 
 
 @catub.cat_cmd(

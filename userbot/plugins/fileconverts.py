@@ -9,6 +9,7 @@ from datetime import datetime
 from io import BytesIO
 from shutil import copyfile
 
+import fitz
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
 from pymediainfo import MediaInfo
 from telethon import types
@@ -24,6 +25,7 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import media_type, progress, thumb_from_audio
 from ..helpers.functions import (
     convert_toimage,
+    convert_tosticker,
     invert_frames,
     l_frames,
     r_frames,
@@ -31,7 +33,7 @@ from ..helpers.functions import (
     ud_frames,
     vid_to_gif,
 )
-from ..helpers.utils import _cattools, _catutils, _format, reply_id
+from ..helpers.utils import _cattools, _catutils, _format, parse_pre, reply_id
 from . import make_gif
 
 plugin_category = "misc"
@@ -305,89 +307,65 @@ async def video_catfile(event):  # sourcery no-metrics
     command=("stoi", plugin_category),
     info={
         "header": "Reply this command to a sticker to get image.",
+        "description": "This also converts every media to image. that is if video then extracts image from that video.if audio then extracts thumb.",
         "usage": "{tr}stoi",
     },
 )
-async def _(cat_event):
+async def _(event):
     "Sticker to image Conversion."
-    reply_to_id = await reply_id(cat_event)
-    event = await edit_or_reply(cat_event, "Converting.....")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if event.reply_to_msg_id:
-        filename = "hi.jpg"
-        file_name = filename
-        reply_message = await event.get_reply_message()
-        to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
-        downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await cat_event.client.download_media(
-            reply_message, downloaded_file_name
+    reply_to_id = await reply_id(event)
+    reply = await event.get_reply_message()
+    if not reply:
+        return await edit_delete(
+            event, "Reply to any sticker/media to convert it to image.__"
         )
-        if os.path.exists(downloaded_file_name):
-            caat = await cat_event.client.send_file(
-                event.chat_id,
-                downloaded_file_name,
-                force_document=False,
-                reply_to=reply_to_id,
-            )
-            os.remove(downloaded_file_name)
-            await event.delete()
-        else:
-            await event.edit("Can't Convert")
-    else:
-        await event.edit("Syntax : `.stoi` reply to a Telegram normal sticker")
+    output = await _cattools.media_to_pic(event, reply)
+    if output[1] is None:
+        return await edit_delete(
+            output[0], "__Unable to extract image from the replied message.__"
+        )
+    meme_file = convert_toimage(output[1])
+    await event.client.send_file(
+        event.chat_id, meme_file, reply_to=reply_to_id, force_document=False
+    )
+    await output[0].delete()
 
 
 @catub.cat_cmd(
     pattern="itos$",
     command=("itos", plugin_category),
     info={
-        "header": "Reply this command to a image to get sticker.",
+        "header": "Reply this command to image to get sticker.",
+        "description": "This also converts every media to sticker. that is if video then extracts image from that video. if audio then extracts thumb.",
         "usage": "{tr}itos",
     },
 )
-async def _(cat_event):
-    "Image to Sticker conversion"
-    reply_to_id = await reply_id(cat_event)
-    event = await edit_or_reply(cat_event, "Converting.....")
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if event.reply_to_msg_id:
-        filename = "hi.webp"
-        file_name = filename
-        reply_message = await event.get_reply_message()
-        to_download_directory = Config.TMP_DOWNLOAD_DIRECTORY
-        downloaded_file_name = os.path.join(to_download_directory, file_name)
-        downloaded_file_name = await cat_event.client.download_media(
-            reply_message, downloaded_file_name
+async def _(event):
+    "Image to Sticker Conversion."
+    reply_to_id = await reply_id(event)
+    reply = await event.get_reply_message()
+    if not reply:
+        return await edit_delete(
+            event, "Reply to any image/media to convert it to sticker.__"
         )
-        if os.path.exists(downloaded_file_name):
-            caat = await cat_event.client.send_file(
-                event.chat_id,
-                downloaded_file_name,
-                force_document=False,
-                reply_to=reply_to_id,
-            )
-            os.remove(downloaded_file_name)
-            await event.delete()
-        else:
-            await event.edit("Can't Convert")
-    else:
-        await event.edit("Syntax : `.itos` reply to a Telegram normal sticker")
-
-
-async def silently_send_message(conv, text):
-    await conv.send_message(text)
-    response = await conv.get_response()
-    await conv.mark_read(message=response)
-    return response
+    output = await _cattools.media_to_pic(event, reply)
+    if output[1] is None:
+        return await edit_delete(
+            output[0], "__Unable to extract image from the replied message.__"
+        )
+    meme_file = convert_tosticker(output[1])
+    await event.client.send_file(
+        event.chat_id, meme_file, reply_to=reply_to_id, force_document=False
+    )
+    await output[0].delete()
 
 
 @catub.cat_cmd(
     pattern="ttf (.*)",
     command=("ttf", plugin_category),
     info={
-        "header": "Reply this command to a text message to convert it into file with given name.",
+        "header": "Text to file.",
+        "description": "Reply this command to a text message to convert it into file with given name.",
         "usage": "{tr}ttf <file name>",
     },
 )
@@ -406,6 +384,54 @@ async def get(event):
         os.remove(name)
     else:
         await edit_or_reply(event, "reply to text message as `.ttf <file name>`")
+
+
+@catub.cat_cmd(
+    pattern="ftt$",
+    command=("ftt", plugin_category),
+    info={
+        "header": "File to text.",
+        "description": "Reply this command to a file to print text in that file to text message.",
+        "support types": "txt, py, pdf and many more files in text format",
+        "usage": "{tr}ftt <reply to document>",
+    },
+)
+async def get(event):
+    "File to text message conversion."
+    reply = await event.get_reply_message()
+    mediatype = media_type(reply)
+    if mediatype != "Document":
+        return await edit_delete(
+            event, "__It seems this is not writable file. Reply to writable file.__"
+        )
+    file_loc = await reply.download_media()
+    file_content = ""
+    try:
+        with open(file_loc) as f:
+            file_content = f.read().rstrip("\n")
+    except UnicodeDecodeError:
+        pass
+    except Exception as e:
+        LOGS.info(e)
+    if file_content == "":
+        try:
+            with fitz.open(file_loc) as doc:
+                for page in doc:
+                    file_content += page.getText()
+        except Exception as e:
+            if os.path.exists(file_loc):
+                os.remove(file_loc)
+            return await edit_delete(event, f"**Error**\n__{str(e)}__")
+    await edit_or_reply(
+        event,
+        file_content,
+        parse_mode=parse_pre,
+        aslink=True,
+        noformat=True,
+        linktext="**Telegram allows only 4096 charcters in a single message. But replied file has much more. So pasting it to pastebin\nlink :**",
+    )
+    if os.path.exists(file_loc):
+        os.remove(file_loc)
 
 
 @catub.cat_cmd(
@@ -648,16 +674,16 @@ async def _(event):
         "examples": ["{tr}itog s", "{tr}itog -s"],
     },
 )
-async def pic_gifcmd(event):
+async def pic_gifcmd(event):  # sourcery no-metrics
     "To convert replied image or sticker to gif"
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
-        return await edit_delete(event, "__Reply to photo or sticker to make pack.__")
+        return await edit_delete(event, "__Reply to photo or sticker to make it gif.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker":
         return await edit_delete(
             event,
-            "__Reply to photo or sticker to make pack. Animated sticker is not supported__",
+            "__Reply to photo or sticker to make it gif. Animated sticker is not supported__",
         )
     args = event.pattern_match.group(1)
     args = "i" if not args else args.replace("-", "")

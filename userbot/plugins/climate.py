@@ -187,8 +187,8 @@ async def set_default_city(event):
         "header": "To get the weather report of a city.",
         "description": "Shows you the weather report of a city . By default it is Delhi, you can change it by {tr}setcity command.",
         "usage": [
-            "{tr}wttr",
-            "{tr}wttr <city name>",
+            "{tr}weather",
+            "{tr}weather <city name>",
         ],
     },
 )

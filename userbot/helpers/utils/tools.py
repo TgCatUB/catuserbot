@@ -12,7 +12,7 @@ from .utils import runcmd
 LOGS = logging.getLogger(__name__)
 
 
-async def media_to_pic(event, reply, noedits=False):
+async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
     mediatype = media_type(reply)
     if mediatype not in [
         "Photo",
@@ -44,9 +44,10 @@ async def media_to_pic(event, reply, noedits=False):
     elif mediatype == "Sticker":
         catmedia = await reply.download_media(file="./temp")
         if catmedia.endswith(".tgs"):
-            await runcmd(
-                f"lottie_convert.py --frame 0 -if lottie -of png '{catmedia}' '{catfile}'"
-            )
+            catcmd = f"lottie_convert.py --frame 0 -if lottie -of png '{catmedia}' '{catfile}'"
+            stdout, stderr = (await runcmd(catcmd))[:2]
+            if stderr:
+                LOGS.info(stdout + stderr)
         elif catmedia.endswith(".webp"):
             im = Image.open(catmedia)
             im.save(catfile)
@@ -66,9 +67,9 @@ async def media_to_pic(event, reply, noedits=False):
             catmedia = await reply.download_media(file="./temp")
             im = Image.open(catmedia)
             im.save(catfile)
-    if catmedia and os.path.exists(catmedia):
+    if catmedia and os.path.lexists(catmedia):
         os.remove(catmedia)
-    if os.path.exists(catfile):
+    if os.path.lexists(catfile):
         return catevent, catfile, mediatype
     return catevent, None
 

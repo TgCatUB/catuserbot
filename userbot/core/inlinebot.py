@@ -1,11 +1,13 @@
 import json
 import math
 import os
+import random
 import re
 import time
 from uuid import uuid4
 
 from telethon import Button, types
+from telethon.errors import QueryIdInvalidError
 from telethon.events import CallbackQuery, InlineQuery
 from youtubesearchpython import VideosSearch
 
@@ -120,15 +122,26 @@ def paginate_help(
     category_plugins=None,
     category_pgno=0,
 ):  # sourcery no-metrics
-    number_of_rows = Config.NO_OF_ROWS_IN_HELP
-    number_of_cols = Config.NO_OF_COLUMNS_IN_HELP
+    try:
+        number_of_rows = int(gvarstatus("NO_OF_ROWS_IN_HELP") or 5)
+    except ValueError:
+        number_of_rows = 5
+    except TypeError:
+        number_of_rows = 5
+    try:
+        number_of_cols = int(gvarstatus("NO_OF_COLUMNS_IN_HELP") or 2)
+    except ValueError:
+        number_of_cols = 2
+    except TypeError:
+        number_of_cols = 2
+    HELP_EMOJI = gvarstatus("HELP_EMOJI") or " "
     helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
     helpable_plugins = sorted(helpable_plugins)
-    if len(Config.EMOJI_TO_DISPLAY_IN_HELP) == 2:
+    if len(HELP_EMOJI) == 2:
         if plugins:
             modules = [
                 Button.inline(
-                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP[0]} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP[1]}",
+                    f"{HELP_EMOJI[0]} {x} {HELP_EMOJI[1]}",
                     data=f"{x}_prev(1)_command_{prefix}_{page_number}",
                 )
                 for x in helpable_plugins
@@ -136,28 +149,27 @@ def paginate_help(
         else:
             modules = [
                 Button.inline(
-                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP[0]} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP[1]}",
+                    f"{HELP_EMOJI[0]} {x} {HELP_EMOJI[1]}",
                     data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
                 )
                 for x in helpable_plugins
             ]
+    elif plugins:
+        modules = [
+            Button.inline(
+                f"{HELP_EMOJI} {x} {HELP_EMOJI}",
+                data=f"{x}_prev(1)_command_{prefix}_{page_number}",
+            )
+            for x in helpable_plugins
+        ]
     else:
-        if plugins:
-            modules = [
-                Button.inline(
-                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                    data=f"{x}_prev(1)_command_{prefix}_{page_number}",
-                )
-                for x in helpable_plugins
-            ]
-        else:
-            modules = [
-                Button.inline(
-                    f"{Config.EMOJI_TO_DISPLAY_IN_HELP} {x} {Config.EMOJI_TO_DISPLAY_IN_HELP}",
-                    data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
-                )
-                for x in helpable_plugins
-            ]
+        modules = [
+            Button.inline(
+                f"{HELP_EMOJI} {x} {HELP_EMOJI}",
+                data=f"{x}_cmdhelp_{prefix}_{page_number}_{category_plugins}_{category_pgno}",
+            )
+            for x in helpable_plugins
+        ]
     if number_of_cols == 1:
         pairs = list(zip(modules[::number_of_cols]))
     elif number_of_cols == 2:
@@ -189,35 +201,34 @@ def paginate_help(
             ]
         else:
             pairs = pairs + [(Button.inline("⚙️ Main Menu", data="mainmenu"),)]
+    elif len(pairs) > number_of_rows:
+        pairs = pairs[
+            modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
+        ] + [
+            (
+                Button.inline(
+                    "⌫",
+                    data=f"{prefix}_prev({modulo_page})_command_{category_plugins}_{category_pgno}",
+                ),
+                Button.inline(
+                    "⬅️ Back ",
+                    data=f"back_plugin_{category_plugins}_{category_pgno}",
+                ),
+                Button.inline(
+                    "⌦",
+                    data=f"{prefix}_next({modulo_page})_command_{category_plugins}_{category_pgno}",
+                ),
+            )
+        ]
     else:
-        if len(pairs) > number_of_rows:
-            pairs = pairs[
-                modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
-            ] + [
-                (
-                    Button.inline(
-                        "⌫",
-                        data=f"{prefix}_prev({modulo_page})_command_{category_plugins}_{category_pgno}",
-                    ),
-                    Button.inline(
-                        "⬅️ Back ",
-                        data=f"back_plugin_{category_plugins}_{category_pgno}",
-                    ),
-                    Button.inline(
-                        "⌦",
-                        data=f"{prefix}_next({modulo_page})_command_{category_plugins}_{category_pgno}",
-                    ),
-                )
-            ]
-        else:
-            pairs = pairs + [
-                (
-                    Button.inline(
-                        "⬅️ Back ",
-                        data=f"back_plugin_{category_plugins}_{category_pgno}",
-                    ),
-                )
-            ]
+        pairs = pairs + [
+            (
+                Button.inline(
+                    "⬅️ Back ",
+                    data=f"back_plugin_{category_plugins}_{category_pgno}",
+                ),
+            )
+        ]
     return pairs
 
 
@@ -241,17 +252,27 @@ async def inline_handler(event):  # sourcery no-metrics
                     Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
                 )
             ]
-            CAT_IMG = Config.ALIVE_PIC or None
-            if CAT_IMG and CAT_IMG.endswith((".jpg", ".png")):
+            ALIVE_PIC = gvarstatus("ALIVE_PIC")
+            IALIVE_PIC = gvarstatus("IALIVE_PIC")
+            if IALIVE_PIC:
+                CAT = [x for x in IALIVE_PIC.split()]
+                PIC = list(CAT)
+                I_IMG = random.choice(PIC)
+            if not IALIVE_PIC and ALIVE_PIC:
+                CAT = [x for x in ALIVE_PIC.split()]
+                PIC = list(CAT)
+                I_IMG = random.choice(PIC)
+            elif not IALIVE_PIC:
+                I_IMG = None
+            if I_IMG and I_IMG.endswith((".jpg", ".png")):
                 result = builder.photo(
-                    CAT_IMG,
-                    # title="Alive cat",
+                    I_IMG,
                     text=query,
                     buttons=buttons,
                 )
-            elif CAT_IMG:
+            elif I_IMG:
                 result = builder.document(
-                    CAT_IMG,
+                    I_IMG,
                     title="Alive cat",
                     text=query,
                     buttons=buttons,
@@ -386,12 +407,14 @@ async def inline_handler(event):  # sourcery no-metrics
             else:
                 caption, buttons = await download_button(link, body=True)
                 photo = await get_ytthumb(link)
-            markup = event.client.build_reply_markup(buttons)
-            photo = types.InputWebDocument(
-                url=photo, size=0, mime_type="image/jpeg", attributes=[]
-            )
-            text, msg_entities = await event.client._parse_message_text(caption, "html")
             if found_:
+                markup = event.client.build_reply_markup(buttons)
+                photo = types.InputWebDocument(
+                    url=photo, size=0, mime_type="image/jpeg", attributes=[]
+                )
+                text, msg_entities = await event.client._parse_message_text(
+                    caption, "html"
+                )
                 result = types.InputBotInlineResult(
                     id=str(uuid4()),
                     type="photo",
@@ -409,8 +432,18 @@ async def inline_handler(event):  # sourcery no-metrics
                     text=f"No Results found for `{str_y[1]}`",
                     description="INVALID",
                 )
-
-            await event.answer([result] if result else None)
+            try:
+                await event.answer([result] if result else None)
+            except QueryIdInvalidError:
+                await event.answer(
+                    [
+                        builder.article(
+                            title="Not Found",
+                            text=f"No Results found for `{str_y[1]}`",
+                            description="INVALID",
+                        )
+                    ]
+                )
         elif string == "age_verification_alert":
             buttons = [
                 Button.inline(text="Yes I'm 18+", data="age_verification_true"),
@@ -441,7 +474,13 @@ async def inline_handler(event):  # sourcery no-metrics
             buttons = [
                 Button.inline(text="Show Options.", data="show_pmpermit_options"),
             ]
-            CAT_IMG = gvarstatus("pmpermit_pic") or None
+            PM_PIC = gvarstatus("pmpermit_pic")
+            if PM_PIC:
+                CAT = [x for x in PM_PIC.split()]
+                PIC = list(CAT)
+                CAT_IMG = random.choice(PIC)
+            else:
+                CAT_IMG = None
             query = gvarstatus("pmpermit_text")
             if CAT_IMG and CAT_IMG.endswith((".jpg", ".jpeg", ".png")):
                 result = builder.photo(

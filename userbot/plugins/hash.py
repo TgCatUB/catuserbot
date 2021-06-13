@@ -99,9 +99,12 @@ async def endecrypt(event):
             catevent, result, file_name="encodedfile.txt", caption="It's Encoded"
         )
     else:
-        lething = str(
-            base64.b64decode(
-                bytes(event.pattern_match.group(2), "utf-8"), validate=True
-            )
-        )[2:]
-        await edit_or_reply(event, "**Decoded text :**\n`" + lething[:-1] + "`")
+        try:
+            lething = str(
+                base64.b64decode(
+                    bytes(event.pattern_match.group(2), "utf-8"), validate=True
+                )
+            )[2:]
+            await edit_or_reply(event, "**Decoded text :**\n`" + lething[:-1] + "`")
+        except Exception as e:
+            await edit_delete(event, f"**Error:**\n__{str(e)}__")
