@@ -1,9 +1,8 @@
+from .utils.extdl import install_pip
 try:
     import randomstuff
 except ModuleNotFoundError:
-    from .utils.extdl import install_pip
-
-    install_pip(randomstuff.py)
+    install_pip("randomstuff.py")
 
 from ..Config import Config
 
