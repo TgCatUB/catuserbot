@@ -30,11 +30,11 @@ if Config.PRIVATE_GROUP_BOT_API_ID == 0:
     BOTLOG_CHATID = "me"
 else:
     if str(Config.PRIVATE_GROUP_BOT_API_ID)[0] != "-":
-        BOTLOG_CHATID = int("-"+str(Config.PRIVATE_GROUP_BOT_API_ID))
+        BOTLOG_CHATID = int("-" + str(Config.PRIVATE_GROUP_BOT_API_ID))
     else:
         BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
     BOTLOG = True
-    
+
 try:
     if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:
         HEROKU_APP = heroku3.from_key(Config.HEROKU_API_KEY).apps()[
