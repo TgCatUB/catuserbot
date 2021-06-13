@@ -1,5 +1,6 @@
 import glob
 import os
+import requests
 import sys
 from datetime import timedelta
 from pathlib import Path
@@ -16,7 +17,8 @@ from ..sql_helper.global_collection import (
     del_keyword_collectionlist,
     get_item_collectionlist,
 )
-from ..sql_helper.globals import addgvar, gvarstatus
+
+from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from .pluginmanager import load_module
 from .tools import create_supergroup
 
@@ -93,6 +95,21 @@ async def startupmessage():
         LOGS.error(e)
         return None
 
+# don't know work or not just a try in future will use sleep
+async def ipchange():
+    """
+    Just to check if ip change or not
+    """
+    newip = (requests.get("https://httpbin.org/ip").json())["origin"]
+    if gvarstatus("ipaddress") is None:
+        addgvar("ipaddress", newip)
+        return
+    oldip = gvarstatus("ipaddress")
+    if oldip != newip:
+        delgvar("ipaddress")
+        LOGS.info("Ip Change detected")
+        await catub.disconnect()
+        return    
 
 async def add_bot_to_logger_group(chat_id):
     """
