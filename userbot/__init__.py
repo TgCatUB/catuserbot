@@ -1,6 +1,7 @@
 import time
-import requests
+
 import heroku3
+import requests
 
 from .Config import Config
 from .core import logger
@@ -19,10 +20,11 @@ bot = catub
 StartTime = time.time()
 catversion = "3.0.0"
 
+
 def ipchange():
     newip = (requests.get("https://httpbin.org/ip").json())["origin"]
     if gvarstatus("ipaddress") is None:
-        addgvar("ipaddress",newip)
+        addgvar("ipaddress", newip)
         return
     oldip = gvarstatus("ipaddress")
     if oldip != newip:
@@ -30,8 +32,9 @@ def ipchange():
         LOGS.info("Ip Change detected")
         catub.disconnect()
         return
-    
-ipchange()    
+
+
+ipchange()
 
 if Config.UPSTREAM_REPO == "badcat":
     UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot"
