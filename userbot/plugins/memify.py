@@ -67,11 +67,11 @@ async def maccmd(event):  # sourcery no-metrics
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
-        return await edit_delete(event, "__Reply to photo or sticker to make pack.__")
+        return await edit_delete(event, "__Reply to photo or sticker to frame it.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker":
         return await edit_delete(
             event,
-            "__Reply to photo or sticker to make pack. Animated sticker is not supported__",
+            "__Reply to photo or sticker to frame it. Animated sticker is not supported__",
         )
     catevent = await event.edit("__Adding frame for media....__")
     args = event.pattern_match.group(1)
