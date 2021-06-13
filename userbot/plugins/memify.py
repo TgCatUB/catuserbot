@@ -128,7 +128,6 @@ async def maccmd(event):  # sourcery no-metrics
     if os.path.exists(output):
         os.remove(output)
 
-
 @catub.cat_cmd(
     pattern="(mmf|mms)(?: |$)(.*)",
     command=("mmf", plugin_category),
@@ -159,16 +158,15 @@ async def memes(event):
         return await edit_delete(event, "`Reply to supported Media...`")
     catid = await reply_id(event)
     san = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    if catinput:
-        if ";" in catinput:
-            top, bottom = catinput.split(";", 1)
-        else:
-            top = catinput
-            bottom = ""
-    else:
+    if not catinput:
         return await edit_delete(
             event, "`what should i write on that u idiot give text to memify`"
         )
+    if ";" in catinput:
+        top, bottom = catinput.split(";", 1)
+    else:
+        top = catinput
+        bottom = ""
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     output = await _cattools.media_to_pic(event, reply)
