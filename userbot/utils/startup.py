@@ -224,4 +224,7 @@ async def verifyLoggerGroup():
         )
         flag = True
     if flag:
-        await catub.reload()
+        executable = sys.executable.replace(" ", "\\ ")
+        args = [executable, "-m", "userbot"]
+        os.execle(executable, *args, os.environ)
+        sys.exit(0)
