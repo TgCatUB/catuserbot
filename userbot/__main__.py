@@ -12,6 +12,7 @@ from .utils import (
     setup_bot,
     startupmessage,
     verifyLoggerGroup,
+    ipchange,
 )
 
 LOGS = logging.getLogger("CatUserbot")
@@ -32,6 +33,7 @@ except Exception as e:
 
 
 async def startup_process():
+    await ipchange()
     await verifyLoggerGroup()
     await load_plugins("plugins")
     await load_plugins("assistant")
