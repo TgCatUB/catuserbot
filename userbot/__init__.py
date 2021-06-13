@@ -63,7 +63,6 @@ except Exception:
     HEROKU_APP = None
 
 
-    
 # Global Configiables
 COUNT_MSG = 0
 USERS = {}
@@ -78,7 +77,7 @@ SUDO_LIST = {}
 INT_PLUG = ""
 LOAD_PLUG = {}
 
-#Variables
+# Variables
 BOTLOG = Config.BOTLOG
 BOTLOG_CHATID = Config.BOTLOG_CHATID
 PM_LOGGER_GROUP_ID = Config.PM_LOGGER_GROUP_ID
