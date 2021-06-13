@@ -1,11 +1,11 @@
 import time
-
+import requests
 import heroku3
 
 from .Config import Config
 from .core import logger
 from .core.session import catub
-from .sql_helper.globals import gvarstatus
+from .sql_helper.globals import addgvar, delgvar, gvarstatus
 
 __version__ = "3.0.0"
 __license__ = "GNU Affero General Public License v3.0"
@@ -18,6 +18,20 @@ bot = catub
 
 StartTime = time.time()
 catversion = "3.0.0"
+
+def ipchange():
+    newip = (requests.get("https://httpbin.org/ip").json())["origin"]
+    if gvarstatus("ipaddress") is None:
+        addgvar("ipaddress",newip)
+        return
+    oldip = gvarstatus("ipaddress")
+    if oldip != newip:
+        delgvar("ipaddress")
+        LOGS.info("Ip Change detected")
+        catub.disconnect()
+        return
+    
+ipchange()    
 
 if Config.UPSTREAM_REPO == "badcat":
     UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot"

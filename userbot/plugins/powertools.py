@@ -45,6 +45,7 @@ async def _(event):
     except Exception as e:
         LOGS.error(e)
     try:
+        delgvar("ipaddress")
         await catub.disconnect()
     except Exception as e:
         LOGS.error(e)

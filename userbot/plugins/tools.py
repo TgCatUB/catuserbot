@@ -100,8 +100,6 @@ async def _(event):
     if not reply_message.media:
         return await edit_or_reply(event, "```reply to a media message```")
     chat = "@VS_Robot"
-    if reply_message.sender.bot:
-        return await edit_or_reply(event, "```Reply to actual users message.```")
     catevent = await edit_or_reply(event, " `Sliding my tip, of fingers over it`")
     async with event.client.conversation(chat) as conv:
         try:
