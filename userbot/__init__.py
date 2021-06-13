@@ -25,7 +25,7 @@ elif Config.UPSTREAM_REPO == "goodcat":
     UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
 else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
-  
+
 
 BOTLOG = Config.BOTLOG
 BOTLOG_CHATID = Config.BOTLOG_CHATID
@@ -47,7 +47,7 @@ else:
         Config.BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
     Config.BOTLOG = True
 
-    
+
 if Config.PM_LOGGER_GROUP_ID == 0:
     if gvarstatus("PM_LOGGER_GROUP_ID") is None:
         Config.PM_LOGGER_GROUP_ID = None
@@ -59,7 +59,7 @@ elif str(Config.PM_LOGGER_GROUP_ID)[0] != "-":
 else:
     Config.PM_LOGGER_GROUP_ID = Config.PM_LOGGER_GROUP_ID
 
-    
+
 try:
     if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:
         HEROKU_APP = heroku3.from_key(Config.HEROKU_API_KEY).apps()[
