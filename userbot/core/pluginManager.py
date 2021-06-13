@@ -62,19 +62,18 @@ def run_async(func: callable):
     return loop.run_until_complete(func)
 
 
-async def restart_script(client: TelegramClient, sandy=None):
+async def restart_script(client: TelegramClient, sandy):
     """Restart the current script."""
-    if not sandy:
-        try:
+    try:
             ulist = get_collectionlist_items()
             for i in ulist:
                 if i == "restart_update":
                     del_keyword_collectionlist("restart_update")
-        except Exception as e:
+    except Exception as e:
             LOGS.error(e)
-        try:
+    try:
             add_to_collectionlist("restart_update", [sandy.chat_id, sandy.id])
-        except Exception as e:
+    except Exception as e:
             LOGS.error(e)
     executable = sys.executable.replace(" ", "\\ ")
     args = [executable, "-m", "userbot"]
