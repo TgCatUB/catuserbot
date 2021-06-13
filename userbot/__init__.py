@@ -27,11 +27,6 @@ else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
 
-BOTLOG = Config.BOTLOG
-BOTLOG_CHATID = Config.BOTLOG_CHATID
-PM_LOGGER_GROUP_ID = Config.PM_LOGGER_GROUP_ID
-
-
 if Config.PRIVATE_GROUP_BOT_API_ID == 0:
     if gvarstatus("PRIVATE_GROUP_BOT_API_ID") is None:
         Config.BOTLOG = False
@@ -68,6 +63,7 @@ except Exception:
     HEROKU_APP = None
 
 
+    
 # Global Configiables
 COUNT_MSG = 0
 USERS = {}
@@ -81,3 +77,8 @@ SUDO_LIST = {}
 # for later purposes
 INT_PLUG = ""
 LOAD_PLUG = {}
+
+#Variables
+BOTLOG = Config.BOTLOG
+BOTLOG_CHATID = Config.BOTLOG_CHATID
+PM_LOGGER_GROUP_ID = Config.PM_LOGGER_GROUP_ID
