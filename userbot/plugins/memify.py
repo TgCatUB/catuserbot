@@ -128,6 +128,7 @@ async def maccmd(event):  # sourcery no-metrics
     if os.path.exists(output):
         os.remove(output)
 
+
 @catub.cat_cmd(
     pattern="(mmf|mms)(?: |$)(.*)",
     command=("mmf", plugin_category),
