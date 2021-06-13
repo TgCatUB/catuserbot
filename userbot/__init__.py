@@ -26,9 +26,7 @@ elif Config.UPSTREAM_REPO == "goodcat":
 else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
-
-try:
-    if Config.PRIVATE_GROUP_BOT_API_ID == 0:
+if Config.PRIVATE_GROUP_BOT_API_ID == 0:
         if gvarstatus("PRIVATE_GROUP_BOT_API_ID") is None:
             Config.BOTLOG = False
             Config.BOTLOG_CHATID = "me"
@@ -38,27 +36,20 @@ try:
                 gvarstatus("PRIVATE_GROUP_BOT_API_ID")
             )
             Config.BOTLOG = True
-    else:
+else:
         if str(Config.PRIVATE_GROUP_BOT_API_ID)[0] != "-":
             Config.BOTLOG_CHATID = int("-" + str(Config.PRIVATE_GROUP_BOT_API_ID))
         else:
             Config.BOTLOG_CHATID = Config.PRIVATE_GROUP_BOT_API_ID
         Config.BOTLOG = True
-except Exception as e:
-    print(gvarstatus("PRIVATE_GROUP_BOT_API_ID"))
-    print(e)
 
-try:
-    if Config.PM_LOGGER_GROUP_ID == 0:
+if Config.PM_LOGGER_GROUP_ID == 0:
         if gvarstatus("PM_LOGGER_GROUP_ID") is None:
             Config.PM_LOGGER_GROUP_ID = 0
         else:
             Config.PM_LOGGER_GROUP_ID = int(gvarstatus("PM_LOGGER_GROUP_ID"))
-    elif str(Config.PM_LOGGER_GROUP_ID)[0] != "-":
+elif str(Config.PM_LOGGER_GROUP_ID)[0] != "-":
         Config.PM_LOGGER_GROUP_ID = int("-" + str(Config.PM_LOGGER_GROUP_ID))
-except Exception as e:
-    print(gvarstatus("PM_LOGGER_GROUP_ID"))
-    print(e)
 
 try:
     if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:
