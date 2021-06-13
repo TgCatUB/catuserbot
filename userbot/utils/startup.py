@@ -1,9 +1,10 @@
 import glob
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 
-from telethon import Button, functions, types
+from telethon import Button, functions, types, utils
 
 from userbot import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID
 
@@ -21,6 +22,31 @@ from .pluginmanager import load_module
 LOGS = logging.getLogger("CatUserbot")
 cmdhr = Config.COMMAND_HAND_LER
 
+async def setup_bot():
+    """
+    To set up bot for userbot
+    """
+    try:
+        await catub.connect()
+        config = await catub(functions.help.GetConfigRequest())
+        for option in config.dc_options:
+            if option.ip_address == catub.session.server_address:
+                if catub.session.dc_id != option.id:
+                    LOGS.warning(
+                        f"Fixed DC ID in session from {catub.session.dc_id}"
+                        f" to {option.id}"
+                    )
+                catub.session.set_dc(option.id, option.ip_address, option.port)
+                catub.session.save()
+                break
+        await catub.start(bot_token=Config.TG_BOT_USERNAME)
+        catub.me = await catub.get_me()
+        catub.uid = catub.tgbot.uid = utils.get_peer_id(catub.me)
+        if Config.OWNER_ID == 0:
+            Config.OWNER_ID = utils.get_peer_id(catub.me)
+    except Exception as e:
+        LOGS.error(f"STRING_SESSION - {str(e)}")
+        sys.exit()
 
 async def startupmessage():
     """
