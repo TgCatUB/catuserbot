@@ -33,7 +33,9 @@ except Exception as e:
 
 
 async def startup_process():
-    await ipchange()
+    check = await ipchange()
+    if check is not None:
+        return
     await verifyLoggerGroup()
     await load_plugins("plugins")
     await load_plugins("assistant")
