@@ -6,14 +6,12 @@ from platform import python_version
 from telethon import version
 from telethon.events import CallbackQuery
 
-from userbot import StartTime, catub, catversion
-
 from ..Config import Config
 from ..core.managers import edit_or_reply
 from ..helpers.functions import catalive, check_data_base_heal_th, get_readable_time
 from ..helpers.utils import reply_id
 from ..sql_helper.globals import gvarstatus
-from . import mention
+from . import StartTime, catub, catversion, mention
 
 plugin_category = "utils"
 
@@ -34,8 +32,8 @@ async def amireallyalive(event):
     reply_to_id = await reply_id(event)
     uptime = await get_readable_time((time.time() - StartTime))
     _, check_sgnirts = check_data_base_heal_th()
-    EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
-    CUSTOM_ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
+    EMOJI = gvarstatus("ALIVE_EMOJI") or "✧✧"
+    ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
     CAT_IMG = gvarstatus("ALIVE_PIC")
     if CAT_IMG:
         CAT = [x for x in CAT_IMG.split()]
@@ -50,7 +48,6 @@ async def amireallyalive(event):
         cat_caption += f"┃**{EMOJI} Python Version :** `{python_version()}\n`"
         cat_caption += f"┃**{EMOJI} Uptime :** `{uptime}\n`"
         cat_caption += f"┗━━━━━━━━━━━━━━━━┛"
-        
         await event.client.send_file(
             event.chat_id, PIC, caption=cat_caption, reply_to=reply_to_id
         )
@@ -58,16 +55,14 @@ async def amireallyalive(event):
     else:
         await edit_or_reply(
             event,
-            f"**{CUSTOM_ALIVE_TEXT}**\n\n"
-            f"┏━━━━━━━━━━━━━━━━┓"
+      f"┏━━━━━━━━━━━━━━━━┓"
             f"**{EMOJI} Lord:** {mention}\n"
             f"**{EMOJI} Database :** `{check_sgnirts}`\n"
             f"**{EMOJI} Telethon Version :** `{version.__version__}\n`"
             f"**{EMOJI} Fury Version :** `{catversion}`\n"
             f"**{EMOJI} Python Version :** `{python_version()}\n`"
             f"**{EMOJI} Uptime :** `{uptime}\n`"
-            f"┗━━━━━━━━━━━━━━━━┛"
-            ,
+            f"┗━━━━━━━━━━━━━━━━┛",
         )
 
 
@@ -85,15 +80,16 @@ async def amireallyalive(event):
 async def amireallyalive(event):
     "A kind of showing bot details by your inline bot"
     reply_to_id = await reply_id(event)
-    EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
-    cat_caption = f"**Fury is Up and Running**\n"
+    EMOJI = gvarstatus("ALIVE_EMOJI") or "✧✧"
+    cat_caption = f"**Catuserbot is Up and Running**\n"
     cat_caption += f"┏━━━━━━━━━━━━━━━━┓"
-    cat_caption += f"┃**{EMOJI} Lord:** {mention}\n"
-    cat_caption += f"┃**{EMOJI} Telethon version :** `{version.__version__}\n`"
-    cat_caption += f"┃**{EMOJI} Fury Version :** `{catversion}`\n"
-    cat_caption += f"┃**{EMOJI} Python Version :** `{python_version()}\n`"
-    cat_caption += f"┗━━━━━━━━━━━━━━━━┛"
-    
+     cat_caption += f"┃**{EMOJI} Lord:** {mention}\n"
+     cat_caption += f"┃**{EMOJI} Database :** `{check_sgnirts}`\n"
+     cat_caption += f"┃**{EMOJI} Telethon version :** `{version.__version__}\n`"
+     cat_caption += f"┃**{EMOJI} Fury Version :** `{catversion}`\n"
+     cat_caption += f"┃**{EMOJI} Python Version :** `{python_version()}\n`"
+     cat_caption += f"┃**{EMOJI} Uptime :** `{uptime}\n`"
+     cat_caption += f"┗━━━━━━━━━━━━━━━━┛"
     results = await event.client.inline_query(Config.TG_BOT_USERNAME, cat_caption)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()
