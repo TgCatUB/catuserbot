@@ -24,13 +24,13 @@ plugin_category = "tools"
     },
 )
 async def _(event):
-    "To create a private group/channel with userbot"
+    "To create a private group/channel."
     type_of_group = event.pattern_match.group(1)
     group_name = event.pattern_match.group(2)
     if type_of_group == "c":
-        descript = "This is a Test Channel created using catuserbot"
+        descript = "This is a Test Channel."
     else:
-        descript = "This is a Test Group created using catuserbot"
+        descript = "This is a Test Group."
     if type_of_group == "g":
         try:
             result = await event.client(
@@ -48,7 +48,7 @@ async def _(event):
                 )
             )
             await edit_or_reply(
-                event, f"Group `{group_name}` created successfully. Join {result.link}"
+                event, f"Group `{group_name}` created successfully. Link: {result.link}"
             )
         except Exception as e:
             await edit_delete(event, f"**Error:**\n{str(e)}")

@@ -115,23 +115,23 @@ async def on_afk(event):  # sourcery no-metrics
         if AFK_.afk_type == "text":
             if AFK_.msg_link and AFK_.reason:
                 message_to_reply = (
-                    f"**I am AFK .\n\nAFK Since {endtime}\nReason : **{AFK_.reason}"
+                    f"**I am AFK!\nLast seen {endtime} ago.\n\nReason: {AFK_.reason}**"
                 )
             elif AFK_.reason:
                 message_to_reply = (
-                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
+                    f"**I am AFK!\nLast seen {endtime} ago.\n\nReason: {AFK_.reason}**"
                 )
             else:
-                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+                message_to_reply = f"**I am AFK!\nLast seen {endtime} ago.**"
             if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
                 msg = await event.reply(message_to_reply)
         elif AFK_.afk_type == "media":
             if AFK_.reason:
                 message_to_reply = (
-                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
+                    f"`I am AFK!\nLast seen {endtime} ago.\n\nReason: {AFK_.reason}`"
                 )
             else:
-                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+                message_to_reply = f"**I am AFK!\nLast seen {endtime} ago.**"
             if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
                 msg = await event.reply(message_to_reply, file=AFK_.media_afk.media)
         if event.chat_id in AFK_.last_afk_message:

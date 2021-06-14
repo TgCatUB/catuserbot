@@ -55,10 +55,10 @@ async def catbroadcast_add(event):
         )
     if reason:
         msg = await event.client.send_message(user.id, reason)
-        await edit_delete(event, "__Successfully sent the message.__")
+        await edit_delete(event, "__Done.__")
     elif reply:
         msg = await event.client.send_message(user.id, reply)
-        await edit_delete(event, "__Successfully sent the message.__")
+        await edit_delete(event, "__Done.__")
 
 
 @catub.cat_cmd(

@@ -20,7 +20,7 @@ plugin_category = "utils"
 async def _(event):
     "Searches the given query in Google and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=http://google.com/search?q={}".format(
+    sample_url = "https://da.gd/s?url=http://bing.com/search?q={}".format(
         input_str.replace(" ", "+")
     )
     response_api = requests.get(sample_url).text
@@ -28,7 +28,7 @@ async def _(event):
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **Google** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
+            "Let me **Bing** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
                 input_str, response_api.rstrip()
             )
         )
