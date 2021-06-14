@@ -46,6 +46,7 @@ async def _(event):
         LOGS.error(e)
     try:
         delgvar("ipaddress")
+        await asyncio.sleep(0)
         await catub.disconnect()
     except Exception as e:
         LOGS.error(e)
