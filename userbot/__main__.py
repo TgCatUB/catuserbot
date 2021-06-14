@@ -57,4 +57,7 @@ catub.loop.run_until_complete(startup_process())
 if len(sys.argv) not in (1, 3, 4):
     catub.disconnect()
 else:
-    catub.run_until_disconnected()
+    try:
+        catub.run_until_disconnected()
+    except ConnectionError:
+        pass
