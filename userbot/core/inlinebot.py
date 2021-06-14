@@ -354,7 +354,7 @@ async def inline_handler(event):  # sourcery no-metrics
             timestamp = int(time.time() * 2)
             newsecret = {str(timestamp): {"userid": u, "text": txct}}
 
-            buttons = [Button.inline("show message 🔐", data=f"secret_{timestamp}")]
+            buttons = [Button.inline("reveal the secret 🔐", data=f"secret_{timestamp}")]
             result = builder.article(
                 title="secret message",
                 text=f"🔒 A top-secret message to {sandy}, Only he/she can open and read it.",
@@ -509,7 +509,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 Button.url("MY BIO", "t.me/plutoniumx1"),
                 Button.url(
                     "CONTACT",
-                    "t.me/pmplutoniumxbot",
+                    "t.me/pmplutoniumxbot?start",
                 ),
             )
         ]

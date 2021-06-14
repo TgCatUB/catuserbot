@@ -112,7 +112,7 @@ async def bot_start(event):
                 Button.url("MY BIO", "t.me/plutoniumx1"),
                 Button.url(
                     "CONTACT",
-                    "t.me/pmplutoniumxbot",
+                    "t.me/pmplutoniumxbot?start",
                 ),
             )
         ]

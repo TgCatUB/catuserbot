@@ -82,7 +82,7 @@ async def do_pm_permit_action(event, chat):  # sourcery no-metrics
                 remwarns=remwarns,
             )
         else:
-            USER_BOT_WARN_ZERO = f"**You were spamming @plutoniumx** {my_mention}**'s inbox, henceforth you have been blocked.**"
+            USER_BOT_WARN_ZERO = f"**You were spamming @plutoniumx's inbox, henceforth you have been blocked.**"
         msg = await event.reply(USER_BOT_WARN_ZERO)
         await event.client(functions.contacts.BlockRequest(chat.id))
         the_message = f"#BLOCKED_PM\
@@ -480,7 +480,7 @@ async def on_plug_in_callback_query_handler(event):
     if event.query.user_id == event.client.uid:
         text = "Idoit these options are for users who messages you, not for you"
         return await event.answer(text, cache_time=0, alert=True)
-    text = f"""Ok, Now you are accessing the availabe menu of @plutoniumx, {mention}.
+    text = f"""Ok, Now you are accessing the availabe menu of @plutoniumx.
 __Let's make this smooth and let him know why you are here.__
 
 **Choose one of the following reasons why you are here:**"""
