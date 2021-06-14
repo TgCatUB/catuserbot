@@ -25,6 +25,7 @@ plugin_category = "tools"
         "header": "Restarts the bot !!",
         "usage": "{tr}restart",
     },
+    disable_errors=True,
 )
 async def _(event):
     "Restarts the bot !!"
