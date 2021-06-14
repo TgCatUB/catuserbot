@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+from asyncio.exceptions import CancelledError
 
 import heroku3
 import urllib3
@@ -9,7 +10,6 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 from userbot import UPSTREAM_REPO_URL, catub
 
-from asyncio.exceptions import CancelledError
 from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply

@@ -1,7 +1,7 @@
 import sys
-import asyncio
-from time import sleep
 from asyncio.exceptions import CancelledError
+from time import sleep
+
 from userbot import catub
 
 from ..core.logger import logging

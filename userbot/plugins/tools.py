@@ -77,7 +77,7 @@ async def currency(event):
             event,
             f"The Currency value of **{symbols[fromcurrency]}{value} {fromcurrency}** in **{tocurrency}** is **{symbols[tocurrency]}{output}**",
         )
-    except Exception as e:
+    except Exception:
         await edit_or_reply(
             event,
             f"__It seems you are using different currency value. which doesn't exist on earth.__",
