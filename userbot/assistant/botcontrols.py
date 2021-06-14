@@ -72,7 +72,7 @@ async def bot_broadcast(event):
     if bot_users_count == 0:
         return await event.reply("`No one started your bot yet.`")
     users = get_all_starters()
-    if users == None:
+    if users is None:
         return await event.reply("`Errors ocured while fetching users list.`")
     for user in users:
         try:
