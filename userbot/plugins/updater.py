@@ -9,6 +9,7 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 from userbot import UPSTREAM_REPO_URL, catub
 
+from asyncio.exceptions import CancelledError
 from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
@@ -170,7 +171,10 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         return await event.delete()
     await event.edit("`Deploy was failed. So restarting to update`")
     delgvar("ipaddress")
-    await event.client.disconnect()
+    try:
+        await event.client.disconnect()
+    except CancelledError:
+        pass
 
 
 @catub.cat_cmd(
