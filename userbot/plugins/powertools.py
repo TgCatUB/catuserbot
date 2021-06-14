@@ -1,7 +1,7 @@
 import sys
 import asyncio
 from time import sleep
-
+from asyncio.exceptions import CancelledError
 from userbot import catub
 
 from ..core.logger import logging
@@ -48,8 +48,9 @@ async def _(event):
         LOGS.error(e)
     try:
         delgvar("ipaddress")
-        await asyncio.sleep(0)
         await catub.disconnect()
+    except CancelledError:
+        pass
     except Exception as e:
         LOGS.error(e)
 
