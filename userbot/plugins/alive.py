@@ -42,12 +42,14 @@ async def amireallyalive(event):
         A_IMG = list(CAT)
         PIC = random.choice(A_IMG)
         cat_caption = f"**{CUSTOM_ALIVE_TEXT}**\n\n"
-        cat_caption += f"**{EMOJI} Lord:** {mention}\n"
-        cat_caption += f"**{EMOJI} Database :** `{check_sgnirts}`\n"
-        cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
-        cat_caption += f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
-        cat_caption += f"**{EMOJI} Python Version :** `{python_version()}\n`"
-        cat_caption += f"**{EMOJI} Uptime :** `{uptime}\n`"
+        cat_caption += f"┏━━━━━━━━━━━━━━━━┓"
+        cat_caption += f"┃**{EMOJI} Lord:** {mention}\n"
+        cat_caption += f"┃**{EMOJI} Database :** `{check_sgnirts}`\n"
+        cat_caption += f"┃**{EMOJI} Telethon version :** `{version.__version__}\n`"
+        cat_caption += f"┃**{EMOJI} Fury Version :** `{catversion}`\n"
+        cat_caption += f"┃**{EMOJI} Python Version :** `{python_version()}\n`"
+        cat_caption += f"┃**{EMOJI} Uptime :** `{uptime}\n`"
+        cat_caption += f"┗━━━━━━━━━━━━━━━━┛"
         
         await event.client.send_file(
             event.chat_id, PIC, caption=cat_caption, reply_to=reply_to_id
@@ -57,12 +59,14 @@ async def amireallyalive(event):
         await edit_or_reply(
             event,
             f"**{CUSTOM_ALIVE_TEXT}**\n\n"
+            f"┏━━━━━━━━━━━━━━━━┓"
             f"**{EMOJI} Lord:** {mention}\n"
             f"**{EMOJI} Database :** `{check_sgnirts}`\n"
             f"**{EMOJI} Telethon Version :** `{version.__version__}\n`"
-            f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
+            f"**{EMOJI} Fury Version :** `{catversion}`\n"
             f"**{EMOJI} Python Version :** `{python_version()}\n`"
             f"**{EMOJI} Uptime :** `{uptime}\n`"
+            f"┗━━━━━━━━━━━━━━━━┛"
             ,
         )
 
@@ -82,11 +86,14 @@ async def amireallyalive(event):
     "A kind of showing bot details by your inline bot"
     reply_to_id = await reply_id(event)
     EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
-    cat_caption = f"**Catuserbot is Up and Running**\n"
-    cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
-    cat_caption += f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
-    cat_caption += f"**{EMOJI} Python Version :** `{python_version()}\n`"
-    cat_caption += f"**{EMOJI} Master:** {mention}\n"
+    cat_caption = f"**Fury is Up and Running**\n"
+    cat_caption += f"┏━━━━━━━━━━━━━━━━┓"
+    cat_caption += f"┃**{EMOJI} Lord:** {mention}\n"
+    cat_caption += f"┃**{EMOJI} Telethon version :** `{version.__version__}\n`"
+    cat_caption += f"┃**{EMOJI} Fury Version :** `{catversion}`\n"
+    cat_caption += f"┃**{EMOJI} Python Version :** `{python_version()}\n`"
+    cat_caption += f"┗━━━━━━━━━━━━━━━━┛"
+    
     results = await event.client.inline_query(Config.TG_BOT_USERNAME, cat_caption)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()
