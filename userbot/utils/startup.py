@@ -4,7 +4,7 @@ import sys
 from datetime import timedelta
 from pathlib import Path
 
-from asyncio.exceptions import CancelledError
+from asyncio.exceptions import CancelledError,ConnectionError
 import requests
 from telethon import Button, functions, types, utils
 
@@ -111,7 +111,7 @@ async def ipchange():
         LOGS.info("Ip Change detected")
         try:
             await catub.disconnect()
-        except CancelledError:
+        except (ConnectionError, CancelledError):
             pass
         return "ip change"
 
