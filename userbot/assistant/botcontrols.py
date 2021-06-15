@@ -71,7 +71,10 @@ async def bot_broadcast(event):
     bot_users_count = len(get_all_starters())
     if bot_users_count == 0:
         return await event.reply("`No one started your bot yet.`")
-    for user in get_all_starters():
+    users = get_all_starters()
+    if users is None:
+        return await event.reply("`Errors ocured while fetching users list.`")
+    for user in users:
         try:
             await event.client.send_message(
                 int(user.user_id), "🔊 You received a **new** Broadcast."
@@ -80,9 +83,9 @@ async def bot_broadcast(event):
             await asyncio.sleep(0.8)
         except FloodWaitError as e:
             await asyncio.sleep(e.seconds)
-        except (BadRequestError, ForbiddenError):
+        except (BadRequestError, ValueError, ForbiddenError):
             del_starter_from_db(int(user.user_id))
-        except Exception:
+        except Exception as e:
             LOGS.error(str(e))
             if BOTLOG:
                 await event.client.send_message(

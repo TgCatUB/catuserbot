@@ -1,6 +1,7 @@
 import glob
 import os
 import sys
+from asyncio.exceptions import CancelledError
 from datetime import timedelta
 from pathlib import Path
 
@@ -103,13 +104,16 @@ async def ipchange():
     newip = (requests.get("https://httpbin.org/ip").json())["origin"]
     if gvarstatus("ipaddress") is None:
         addgvar("ipaddress", newip)
-        return
+        return None
     oldip = gvarstatus("ipaddress")
     if oldip != newip:
         delgvar("ipaddress")
         LOGS.info("Ip Change detected")
-        await catub.disconnect()
-        return
+        try:
+            await catub.disconnect()
+        except (ConnectionError, CancelledError):
+            pass
+        return "ip change"
 
 
 async def add_bot_to_logger_group(chat_id):

@@ -1,4 +1,5 @@
 import sys
+from asyncio.exceptions import CancelledError
 from time import sleep
 
 from userbot import catub
@@ -24,6 +25,7 @@ plugin_category = "tools"
         "header": "Restarts the bot !!",
         "usage": "{tr}restart",
     },
+    disable_errors=True,
 )
 async def _(event):
     "Restarts the bot !!"
@@ -47,6 +49,8 @@ async def _(event):
     try:
         delgvar("ipaddress")
         await catub.disconnect()
+    except CancelledError:
+        pass
     except Exception as e:
         LOGS.error(e)
 

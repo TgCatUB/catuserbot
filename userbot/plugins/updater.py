@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+from asyncio.exceptions import CancelledError
 
 import heroku3
 import urllib3
@@ -170,7 +171,10 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         return await event.delete()
     await event.edit("`Deploy was failed. So restarting to update`")
     delgvar("ipaddress")
-    await event.client.disconnect()
+    try:
+        await event.client.disconnect()
+    except CancelledError:
+        pass
 
 
 @catub.cat_cmd(

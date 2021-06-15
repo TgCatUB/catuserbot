@@ -55,7 +55,8 @@ async def currency(event):
         return await edit_delete(event, "__Use proper syntax. check__ `.help -c cur`")
     fromcurrency = fromcurrency.upper()
     tocurrency = tocurrency.upper()
-    if value.isdigit():
+    try:
+        value = float(value)
         aresponse = await AioHttp().get_json(
             f"https://free.currconv.com/api/v7/convert?q={fromcurrency}_{tocurrency}&compact=ultra&apiKey={Config.CURRENCY_API}"
         )
@@ -76,7 +77,7 @@ async def currency(event):
             event,
             f"The Currency value of **{symbols[fromcurrency]}{value} {fromcurrency}** in **{tocurrency}** is **{symbols[tocurrency]}{output}**",
         )
-    else:
+    except Exception:
         await edit_or_reply(
             event,
             f"__It seems you are using different currency value. which doesn't exist on earth.__",

@@ -23,6 +23,7 @@ def paste_text(text, markdown=True):
         )
         link = f"https://nekobin.com/{nekokey}"
     except Exception:
+        text = text.encode(encoding="latin-1", errors="namereplace")
         url = "https://del.dog/documents"
         r = requests.post(url, data=text).json()
         link = f"https://del.dog/{r['key']}"
