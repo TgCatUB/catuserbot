@@ -53,11 +53,10 @@ async def set_not_afk(event):
         endtime = ""
         if d > 0:
             endtime += f"{d}d {h}h {m}m {s}s"
+        elif h > 0:
+            endtime += f"{h}h {m}m {s}s"
         else:
-            if h > 0:
-                endtime += f"{h}h {m}m {s}s"
-            else:
-                endtime += f"{m}m {s}s" if m > 0 else f"{s}s"
+            endtime += f"{m}m {s}s" if m > 0 else f"{s}s"
     current_message = event.message.message
     if (("afk" not in current_message) or ("#afk" not in current_message)) and (
         "on" in AFK_.USERAFK_ON
@@ -100,11 +99,10 @@ async def on_afk(event):  # sourcery no-metrics
         endtime = ""
         if d > 0:
             endtime += f"{d}d {h}h {m}m {s}s"
+        elif h > 0:
+            endtime += f"{h}h {m}m {s}s"
         else:
-            if h > 0:
-                endtime += f"{h}h {m}m {s}s"
-            else:
-                endtime += f"{m}m {s}s" if m > 0 else f"{s}s"
+            endtime += f"{m}m {s}s" if m > 0 else f"{s}s"
     current_message_text = event.message.message.lower()
     if "afk" in current_message_text or "#afk" in current_message_text:
         return False
@@ -112,28 +110,28 @@ async def on_afk(event):  # sourcery no-metrics
         return
     if AFK_.USERAFK_ON and not (await event.get_sender()).bot:
         msg = None
-        if AFK_.afk_type == "text":
+        if AFK_.afk_type == "media":
+            if AFK_.reason:
+                message_to_reply = (
+                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
+                )
+            else:
+                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            if event.chat_id:
+                msg = await event.reply(message_to_reply, file=AFK_.media_afk.media)
+        elif AFK_.afk_type == "text":
             if AFK_.msg_link and AFK_.reason:
                 message_to_reply = (
-                    f"**I am AFK!\nLast seen {endtime} ago.\n\nReason: {AFK_.reason}**"
+                    f"**I am AFK .\n\nAFK Since {endtime}\nReason : **{AFK_.reason}"
                 )
             elif AFK_.reason:
                 message_to_reply = (
-                    f"**I am AFK!\nLast seen {endtime} ago.\n\nReason: {AFK_.reason}**"
+                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
                 )
             else:
-                message_to_reply = f"**I am AFK!\nLast seen {endtime} ago.**"
-            if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
+                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+            if event.chat_id:
                 msg = await event.reply(message_to_reply)
-        elif AFK_.afk_type == "media":
-            if AFK_.reason:
-                message_to_reply = (
-                    f"`I am AFK!\nLast seen {endtime} ago.\n\nReason: {AFK_.reason}`"
-                )
-            else:
-                message_to_reply = f"**I am AFK!\nLast seen {endtime} ago.**"
-            if event.chat_id not in Config.UB_BLACK_LIST_CHAT:
-                msg = await event.reply(message_to_reply, file=AFK_.media_afk.media)
         if event.chat_id in AFK_.last_afk_message:
             await AFK_.last_afk_message[event.chat_id].delete()
         AFK_.last_afk_message[event.chat_id] = msg
