@@ -8,7 +8,7 @@ from . import ALIVE_NAME, StartTime, catversion, get_readable_time, mention, rep
 DEFAULTUSER = ALIVE_NAME or "cat"
 CAT_IMG = Config.ALIVE_PIC
 CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "🥰 Hi Master, I'm Alive 🥰"
-EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
+EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  🥰 "
 
 
 @bot.on(admin_cmd(outgoing=True, pattern="alive$"))
@@ -24,7 +24,7 @@ async def amireallyalive(alive):
         cat_caption += f"**{EMOJI} ❤️ Database ❤️ :** `{check_sgnirts}`\n"
         cat_caption += f"**{EMOJI} 🧡 Telethon 🧡 :** `{version.__version__}\n`"
         cat_caption += f"**{EMOJI} 💛 Bot Version 💛 :** `{catversion}`\n"
-        cat_caption += f"**{EMOJI} 💚 Python Version 💚 :** `{python_version()}\n`"
+        cat_caption += f"**{EMOJI} 💚 Tuktuky Version 💚 :** `{python_version()}\n`"
         cat_caption += f"**{EMOJI} 💙 Boot Time 💙 :** `{uptime}\n`"
         cat_caption += f"**{EMOJI} 🖤 Developer 🖤:** {mention}\n"
         await alive.client.send_file(
@@ -55,7 +55,7 @@ async def amireallyalive(alive):
         cat_caption += f"**{EMOJI} ❤️ Database ❤️ :** `{check_sgnirts}`\n"
         cat_caption += f"**{EMOJI} 🧡 Telethon 🧡 :** `{version.__version__}\n`"
         cat_caption += f"**{EMOJI} 💛 Bot Version 💛 :** `{catversion}`\n"
-        cat_caption += f"**{EMOJI} 💚 Python Version 💚 :** `{python_version()}\n`"
+        cat_caption += f"**{EMOJI} 💚 Tuktuky Version 💚 :** `{python_version()}\n`"
         cat_caption += f"**{EMOJI} 💙 Boot Time 💙 :** `{uptime}\n`"
         cat_caption += f"**{EMOJI} 🖤 Developer 🖤:** {mention}\n"
     results = await bot.inline_query(tgbotusername, cat_caption)  # pylint:disable=E0602
