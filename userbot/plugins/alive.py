@@ -7,7 +7,7 @@ from . import ALIVE_NAME, StartTime, catversion, get_readable_time, mention, rep
 
 DEFAULTUSER = ALIVE_NAME or "cat"
 CAT_IMG = Config.ALIVE_PIC
-CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "✮ MY BOT IS RUNNING SUCCESSFULLY ✮"
+CUSTOM_ALIVE_TEXT = Config.CUSTOM_ALIVE_TEXT or "🥰 Hi Master, I'm Alive 🥰"
 EMOJI = Config.CUSTOM_ALIVE_EMOJI or "  ✥ "
 
 
@@ -24,7 +24,7 @@ async def amireallyalive(alive):
         cat_caption += f"**{EMOJI} ❤️ Database ❤️ :** `{check_sgnirts}`\n"
         cat_caption += f"**{EMOJI} 🧡 Telethon 🧡 :** `{version.__version__}\n`"
         cat_caption += f"**{EMOJI} 💛 Bot Version 💛 :** `{catversion}`\n"
-        cat_caption += f"**{EMOJI} 💚 Python Version 💛 :** `{python_version()}\n`"
+        cat_caption += f"**{EMOJI} 💚 Python Version 💚 :** `{python_version()}\n`"
         cat_caption += f"**{EMOJI} 💙 Boot Time 💙 :** `{uptime}\n`"
         cat_caption += f"**{EMOJI} 🖤 Developer 🖤:** {mention}\n"
         await alive.client.send_file(
@@ -35,12 +35,12 @@ async def amireallyalive(alive):
         await edit_or_reply(
             alive,
             f"**{CUSTOM_ALIVE_TEXT}**\n\n"
-            f"**{EMOJI} Database :** `{check_sgnirts}`\n"
-            f"**{EMOJI} Telethon Version :** `{version.__version__}\n`"
-            f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
-            f"**{EMOJI} Python Version :** `{python_version()}\n`"
-            f"**{EMOJI} Uptime :** `{uptime}\n`"
-            f"**{EMOJI} Master:** {mention}\n",
+            f"**{EMOJI} ❤️ Database ❤️ :** `{check_sgnirts}`\n"
+            f"**{EMOJI} 🧡 Telethon 🧡 :** `{version.__version__}\n`"
+            f"**{EMOJI} 💛 Tuktuky Version 💛 :** `{catversion}`\n"
+            f"**{EMOJI} 💚 Python Version 💚 :** `{python_version()}\n`"
+            f"**{EMOJI} 💙 Boot Time 💙 :** `{uptime}\n`"
+            f"**{EMOJI} 🖤 Developer 🖤:** {mention}\n",
         )
 
 
@@ -51,11 +51,13 @@ async def amireallyalive(alive):
         return
     tgbotusername = Config.TG_BOT_USERNAME
     reply_to_id = await reply_id(alive)
-    cat_caption = f"**Catuserbot is Up and Running**\n"
-    cat_caption += f"**  -Telethon version :** `{version.__version__}\n`"
-    cat_caption += f"**  -Catuserbot Version :** `{catversion}`\n"
-    cat_caption += f"**  -Python Version :** `{python_version()}\n`"
-    cat_caption += f"**  -Master:** {mention}\n"
+    cat_caption = f"**{CUSTOM_ALIVE_TEXT}**\n\n"
+        cat_caption += f"**{EMOJI} ❤️ Database ❤️ :** `{check_sgnirts}`\n"
+        cat_caption += f"**{EMOJI} 🧡 Telethon 🧡 :** `{version.__version__}\n`"
+        cat_caption += f"**{EMOJI} 💛 Bot Version 💛 :** `{catversion}`\n"
+        cat_caption += f"**{EMOJI} 💚 Python Version 💚 :** `{python_version()}\n`"
+        cat_caption += f"**{EMOJI} 💙 Boot Time 💙 :** `{uptime}\n`"
+        cat_caption += f"**{EMOJI} 🖤 Developer 🖤:** {mention}\n"
     results = await bot.inline_query(tgbotusername, cat_caption)  # pylint:disable=E0602
     await results[0].click(alive.chat_id, reply_to=reply_to_id, hide_via=True)
     await alive.delete()
