@@ -34,14 +34,14 @@ async def _(event):
     curruser = catuser.username or "catuserbot"
     uid = os.geteuid()
     if uid == 0:
-        cresult = f"`{curruser}:~#` `{cmd}`\n`{result}`"
+        cresult = f"```{curruser}:~#``` ```{cmd}```\n```{result}```"
     else:
-        cresult = f"`{curruser}:~$` `{cmd}`\n`{result}`"
+        cresult = f"```{curruser}:~$``` ```{cmd}```\n```{result}```"
     await edit_or_reply(
         catevent,
         text=cresult,
         aslink=True,
-        linktext=f"**•  Exec : **\n`{cmd}` \n\n**•  Result : **\n",
+        linktext=f"**•  Exec : **\n```{cmd}``` \n\n**•  Result : **\n",
     )
     if BOTLOG:
         await event.client.send_message(
@@ -87,12 +87,14 @@ async def _(event):
         evaluation = stdout
     else:
         evaluation = "Success"
-    final_output = f"**•  Eval : **\n`{cmd}` \n\n**•  Result : **\n`{evaluation}` \n"
+    final_output = (
+        f"**•  Eval : **\n```{cmd}``` \n\n**•  Result : **\n```{evaluation}``` \n"
+    )
     await edit_or_reply(
         catevent,
         text=final_output,
         aslink=True,
-        linktext=f"**•  Eval : **\n`{cmd}` \n\n**•  Result : **\n",
+        linktext=f"**•  Eval : **\n```{cmd}``` \n\n**•  Result : **\n",
     )
     if BOTLOG:
         await event.client.send_message(
