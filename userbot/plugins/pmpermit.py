@@ -618,14 +618,14 @@ async def pmpermit_on(event):
         if gvarstatus("pmpermit") is None:
             addgvar("pmpermit", "true")
             await edit_delete(
-                event, "__Pmpermit has been enabled for your account succesfully.__"
+                event, "__Pmpermit has been enabled for your account successfully.__"
             )
         else:
             await edit_delete(event, "__Pmpermit is already enabled for your account__")
     elif gvarstatus("pmpermit") is not None:
         delgvar("pmpermit")
         await edit_delete(
-            event, "__Pmpermit has been disabled for your account succesfully__"
+            event, "__Pmpermit has been disabled for your account successfully__"
         )
     else:
         await edit_delete(event, "__Pmpermit is already disabled for your account__")
@@ -647,7 +647,7 @@ async def pmpermit_on(event):
             addgvar("pmmenu", "false")
             await edit_delete(
                 event,
-                "__Pmpermit Menu has been disabled for your account succesfully.__",
+                "__Pmpermit Menu has been disabled for your account successfully.__",
             )
         else:
             await edit_delete(
@@ -656,7 +656,7 @@ async def pmpermit_on(event):
     elif gvarstatus("pmmenu") is not None:
         delgvar("pmmenu")
         await edit_delete(
-            event, "__Pmpermit Menu has been enabled for your account succesfully__"
+            event, "__Pmpermit Menu has been enabled for your account successfully__"
         )
     else:
         await edit_delete(
@@ -774,7 +774,7 @@ async def disapprove_p_m(event):
     if reason == "all":
         pmpermit_sql.disapprove_all()
         return await edit_delete(
-            event, "__Ok! I have disapproved everyone succesfully.__"
+            event, "__Ok! I have disapproved everyone successfully.__"
         )
     if not reason:
         reason = "Not Mentioned."
