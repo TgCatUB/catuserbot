@@ -20,15 +20,15 @@ async def filter_incoming_handler(handler):
     try:
         if (
             not (await handler.get_sender()).bot
-            and (handler.sender_id) != handler.client.uid
+#            and (handler.sender_id) != handler.client.uid
         ):
             name = handler.raw_text
             filters = get_filters(handler.chat_id)
             if not filters:
                 return
             for trigger in filters:
-                pattern = r"( |^|[^\w])" + re.escape(trigger.keyword) + r"( |$|[^\w])"
-                if re.search(pattern, name, flags=re.IGNORECASE):
+#                pattern = r"( |^|[^\w])" + re.escape(trigger.keyword) + r"( |$|[^\w])"
+                if re.search(trigger, name, flags=re.IGNORECASE):
                     if trigger.f_mesg_id:
                         msg_o = await handler.client.get_messages(
                             entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
