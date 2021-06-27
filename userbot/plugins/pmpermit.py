@@ -183,6 +183,28 @@ async def do_pm_options_action(event, chat):
         PMMESSAGE_CACHE = sql.get_collection("pmmessagecache").json
     except AttributeError:
         PMMESSAGE_CACHE = {}
+    me = await event.client.get_me()
+    mention = f"[{chat.first_name}](tg://user?id={chat.id})"
+    my_mention = f"[{me.first_name}](tg://user?id={me.id})"
+    first = chat.first_name
+    last = chat.last_name
+    fullname = f"{first} {last}" if last else first
+    username = f"@{chat.username}" if chat.username else mention
+    userid = chat.id
+    my_first = me.first_name
+    my_last = me.last_name
+    my_fullname = f"{my_first} {my_last}" if my_last else my_first
+    my_username = f"@{me.username}" if me.username else my_mention
+    try:
+        MAX_FLOOD_IN_PMS = int(gvarstatus("MAX_FLOOD_IN_PMS") or 6)
+    except (ValueError, TypeError):
+        MAX_FLOOD_IN_PMS = 6
+    totalwarns = MAX_FLOOD_IN_PMS + 1
+    if str(chat.id) not in PM_WARNS:
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
+    remwarns = totalwarns - warns
     if str(chat.id) not in PM_WARNS:
         text = "__Select option from above message and wait. Don't spam my inbox, this is your last warning.__"
         await event.reply(text)
@@ -203,7 +225,26 @@ async def do_pm_options_action(event, chat):
         LOGS.info(str(e))
     sql.del_collection("pmmessagecache")
     sql.add_collection("pmmessagecache", PMMESSAGE_CACHE, {})
-    USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message that this is not the right place for you to spam. \
+    custompmblock = gvarstatus("pmblock") or None
+    if custompmblock is not None:
+        USER_BOT_WARN_ZERO = custompmblock.format(
+            mention=mention,
+            first=first,
+            last=last,
+            fullname=fullname,
+            username=username,
+            userid=userid,
+            my_first=my_first,
+            my_last=my_last,
+            my_fullname=my_fullname,
+            my_username=my_username,
+            my_mention=my_mention,
+            totalwarns=totalwarns,
+            warns=warns,
+            remwarns=remwarns,
+        )
+    else:
+        USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message that this is not the right place for you to spam. \
 Though you ignored that message.So, I simply blocked you. \
 Now you can't do anything unless my master comes online and unblocks you.**"
     await event.reply(USER_BOT_WARN_ZERO)
@@ -229,7 +270,29 @@ async def do_pm_enquire_action(event, chat):
     try:
         PMMESSAGE_CACHE = sql.get_collection("pmmessagecache").json
     except AttributeError:
-        PMMESSAGE_CACHE = {}
+        PMMESSAGE_CACHE = {}   
+    me = await event.client.get_me()
+    mention = f"[{chat.first_name}](tg://user?id={chat.id})"
+    my_mention = f"[{me.first_name}](tg://user?id={me.id})"
+    first = chat.first_name
+    last = chat.last_name
+    fullname = f"{first} {last}" if last else first
+    username = f"@{chat.username}" if chat.username else mention
+    userid = chat.id
+    my_first = me.first_name
+    my_last = me.last_name
+    my_fullname = f"{my_first} {my_last}" if my_last else my_first
+    my_username = f"@{me.username}" if me.username else my_mention
+    try:
+        MAX_FLOOD_IN_PMS = int(gvarstatus("MAX_FLOOD_IN_PMS") or 6)
+    except (ValueError, TypeError):
+        MAX_FLOOD_IN_PMS = 6
+    totalwarns = MAX_FLOOD_IN_PMS + 1
+    if str(chat.id) not in PM_WARNS:
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
+    remwarns = totalwarns - warns
     if str(chat.id) not in PM_WARNS:
         text = """__Hey! Have some patience. My master has not seen your message yet. \
 My master usually responds to people, though idk about some exceptional users.__
@@ -253,7 +316,26 @@ __My master will respond when he/she comes online, if he/she wants to.__
         LOGS.info(str(e))
     sql.del_collection("pmmessagecache")
     sql.add_collection("pmmessagecache", PMMESSAGE_CACHE, {})
-    USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message that this is not the right place for you to spam. \
+    custompmblock = gvarstatus("pmblock") or None
+    if custompmblock is not None:
+        USER_BOT_WARN_ZERO = custompmblock.format(
+            mention=mention,
+            first=first,
+            last=last,
+            fullname=fullname,
+            username=username,
+            userid=userid,
+            my_first=my_first,
+            my_last=my_last,
+            my_fullname=my_fullname,
+            my_username=my_username,
+            my_mention=my_mention,
+            totalwarns=totalwarns,
+            warns=warns,
+            remwarns=remwarns,
+        )
+    else:
+        USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message that this is not the right place for you to spam. \
 Though you ignored that message. So, I simply blocked you. \
 Now you can't do anything unless my master comes online and unblocks you.**"
     await event.reply(USER_BOT_WARN_ZERO)
@@ -280,6 +362,28 @@ async def do_pm_request_action(event, chat):
         PMMESSAGE_CACHE = sql.get_collection("pmmessagecache").json
     except AttributeError:
         PMMESSAGE_CACHE = {}
+    me = await event.client.get_me()
+    mention = f"[{chat.first_name}](tg://user?id={chat.id})"
+    my_mention = f"[{me.first_name}](tg://user?id={me.id})"
+    first = chat.first_name
+    last = chat.last_name
+    fullname = f"{first} {last}" if last else first
+    username = f"@{chat.username}" if chat.username else mention
+    userid = chat.id
+    my_first = me.first_name
+    my_last = me.last_name
+    my_fullname = f"{my_first} {my_last}" if my_last else my_first
+    my_username = f"@{me.username}" if me.username else my_mention
+    try:
+        MAX_FLOOD_IN_PMS = int(gvarstatus("MAX_FLOOD_IN_PMS") or 6)
+    except (ValueError, TypeError):
+        MAX_FLOOD_IN_PMS = 6
+    totalwarns = MAX_FLOOD_IN_PMS + 1
+    if str(chat.id) not in PM_WARNS:
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
+    remwarns = totalwarns - warns
     if str(chat.id) not in PM_WARNS:
         text = """__Hey have some patience. My master has not seen your message yet. \
 My master usually responds to people, though idk about some exceptional users.__
@@ -303,7 +407,26 @@ __My master will respond when he/she comes back online, if he/she wants to.__
         LOGS.info(str(e))
     sql.del_collection("pmmessagecache")
     sql.add_collection("pmmessagecache", PMMESSAGE_CACHE, {})
-    USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message that this is not the right place for you to spam. \
+    custompmblock = gvarstatus("pmblock") or None
+    if custompmblock is not None:
+        USER_BOT_WARN_ZERO = custompmblock.format(
+            mention=mention,
+            first=first,
+            last=last,
+            fullname=fullname,
+            username=username,
+            userid=userid,
+            my_first=my_first,
+            my_last=my_last,
+            my_fullname=my_fullname,
+            my_username=my_username,
+            my_mention=my_mention,
+            totalwarns=totalwarns,
+            warns=warns,
+            remwarns=remwarns,
+        )
+    else:
+        USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message that this is not the right place for you to spam. \
 Though you ignored me and messaged me. So, i simply blocked you. \
 Now you can't do anything unless my master comes online and unblocks you.**"
     await event.reply(USER_BOT_WARN_ZERO)
@@ -330,8 +453,30 @@ async def do_pm_chat_action(event, chat):
         PMMESSAGE_CACHE = sql.get_collection("pmmessagecache").json
     except AttributeError:
         PMMESSAGE_CACHE = {}
+    me = await event.client.get_me()
+    mention = f"[{chat.first_name}](tg://user?id={chat.id})"
+    my_mention = f"[{me.first_name}](tg://user?id={me.id})"
+    first = chat.first_name
+    last = chat.last_name
+    fullname = f"{first} {last}" if last else first
+    username = f"@{chat.username}" if chat.username else mention
+    userid = chat.id
+    my_first = me.first_name
+    my_last = me.last_name
+    my_fullname = f"{my_first} {my_last}" if my_last else my_first
+    my_username = f"@{me.username}" if me.username else my_mention
+    try:
+        MAX_FLOOD_IN_PMS = int(gvarstatus("MAX_FLOOD_IN_PMS") or 6)
+    except (ValueError, TypeError):
+        MAX_FLOOD_IN_PMS = 6
+    totalwarns = MAX_FLOOD_IN_PMS + 1
     if str(chat.id) not in PM_WARNS:
-        text = """__Heyy! I am busy right now I already asked you to wait know. After my work finishes. \
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
+    remwarns = totalwarns - warns
+    if str(chat.id) not in PM_WARNS:
+        text = """__Hey! I am busy right now I already asked you to wait know. After my work finishes. \
 We can talk but not right know. Hope you understand.__
 __My master will respond when he/she comes back online, if he/she wants to.__
 **Please do not spam unless you wish to be blocked and reported.**"""
@@ -353,7 +498,26 @@ __My master will respond when he/she comes back online, if he/she wants to.__
         LOGS.info(str(e))
     sql.del_collection("pmmessagecache")
     sql.add_collection("pmmessagecache", PMMESSAGE_CACHE, {})
-    USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message this is not the right place for you to spam. \
+    custompmblock = gvarstatus("pmblock") or None
+    if custompmblock is not None:
+        USER_BOT_WARN_ZERO = custompmblock.format(
+            mention=mention,
+            first=first,
+            last=last,
+            fullname=fullname,
+            username=username,
+            userid=userid,
+            my_first=my_first,
+            my_last=my_last,
+            my_fullname=my_fullname,
+            my_username=my_username,
+            my_mention=my_mention,
+            totalwarns=totalwarns,
+            warns=warns,
+            remwarns=remwarns,
+        )
+    else:
+        USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message this is not the right place for you to spam. \
 Though you ignored that message. So, I simply blocked you. \
 Now you can't do anything unless my master comes online and unblocks you.**"
     await event.reply(USER_BOT_WARN_ZERO)
@@ -382,7 +546,52 @@ async def do_pm_spam_action(event, chat):
             del PMMESSAGE_CACHE[str(chat.id)]
     except Exception as e:
         LOGS.info(str(e))
-    USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message this is not the right place for you to spam. \
+    try:
+        PM_WARNS = sql.get_collection("pmwarns").json
+    except AttributeError:
+        PM_WARNS = {}
+    me = await event.client.get_me()
+    mention = f"[{chat.first_name}](tg://user?id={chat.id})"
+    my_mention = f"[{me.first_name}](tg://user?id={me.id})"
+    first = chat.first_name
+    last = chat.last_name
+    fullname = f"{first} {last}" if last else first
+    username = f"@{chat.username}" if chat.username else mention
+    userid = chat.id
+    my_first = me.first_name
+    my_last = me.last_name
+    my_fullname = f"{my_first} {my_last}" if my_last else my_first
+    my_username = f"@{me.username}" if me.username else my_mention
+    try:
+        MAX_FLOOD_IN_PMS = int(gvarstatus("MAX_FLOOD_IN_PMS") or 6)
+    except (ValueError, TypeError):
+        MAX_FLOOD_IN_PMS = 6
+    totalwarns = MAX_FLOOD_IN_PMS + 1
+    if str(chat.id) not in PM_WARNS:
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
+    remwarns = totalwarns - warns
+    custompmblock = gvarstatus("pmblock") or None
+    if custompmblock is not None:
+        USER_BOT_WARN_ZERO = custompmblock.format(
+            mention=mention,
+            first=first,
+            last=last,
+            fullname=fullname,
+            username=username,
+            userid=userid,
+            my_first=my_first,
+            my_last=my_last,
+            my_fullname=my_fullname,
+            my_username=my_username,
+            my_mention=my_mention,
+            totalwarns=totalwarns,
+            warns=warns,
+            remwarns=remwarns,
+        )
+    else:
+        USER_BOT_WARN_ZERO = f"**If I remember correctly I mentioned in my previous message this is not the right place for you to spam. \
 Though you ignored that message. So, I simply blocked you. \
 Now you can't do anything unless my master comes online and unblocks you.**"
     await event.reply(USER_BOT_WARN_ZERO)
