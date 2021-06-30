@@ -3,9 +3,14 @@ import zipfile
 from random import choice
 from textwrap import wrap
 from uuid import uuid4
+from ..utils.extdl import install_pip
 
 import requests
-from imdb import IMDb
+try:
+    from imdb import IMDb
+except ModuleNotFoundError:
+    install_pip("IMDbPY")
+    from imdb import IMDb
 from PIL import Image, ImageColor, ImageDraw, ImageFont
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
