@@ -1,13 +1,8 @@
 # Created by @Jisan7509
 
-import base64
 import random
 
 import requests
-from telethon import functions, types
-from telethon.errors.rpcerrorlist import UserNotParticipantError
-from telethon.tl.functions.channels import GetFullChannelRequest
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _catutils, reply_id
