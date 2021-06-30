@@ -25,7 +25,7 @@ def convert_from_bytes(size):
 
 
 @catub.cat_cmd(
-    pattern="speedtest(?: |$)(.*)",
+    pattern="speedtest(?:\s|$)([\s\S]*)",
     command=("speedtest", plugin_category),
     info={
         "header": "Botserver's speedtest by ookla.",

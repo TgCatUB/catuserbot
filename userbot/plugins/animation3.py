@@ -93,7 +93,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="dump(?: |$)(.*)",
+    pattern="dump(?:\s|$)([\s\S]*)",
     command=("dump", plugin_category),
     info={
         "header": "Fun animation try yourself to know more",

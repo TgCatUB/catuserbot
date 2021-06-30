@@ -12,7 +12,7 @@ name = "Profile Photos"
 
 
 @catub.cat_cmd(
-    pattern="poto(?: |$)(.*)",
+    pattern="poto(?:\s|$)([\s\S]*)",
     command=("poto", plugin_category),
     info={
         "header": "To get user or group profile pic.",

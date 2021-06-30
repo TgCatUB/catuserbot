@@ -15,9 +15,16 @@ from PIL import Image, ImageDraw, ImageFont
 from pySmartDL import SmartDL
 from telethon.errors import FloodWaitError
 from telethon.tl import functions
+from urlextract import URLExtract
 
 from ..Config import Config
 from ..helpers.utils import _format
+from ..sql_helper.global_list import (
+    add_to_list,
+    get_collection_list,
+    is_in_list,
+    rm_from_list,
+)
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from . import (
     AUTONAME,
@@ -98,6 +105,32 @@ async def autopicloop():
         except BaseException:
             return
         AUTOPICSTART = gvarstatus("autopic") == "true"
+
+
+async def custompfploop():
+    CUSTOMPICSTART = gvarstatus("CUSTOM_PFP") == "true"
+    i = 0
+    while CUSTOMPICSTART:
+        if len(get_collection_list("CUSTOM_PFP_LINKS")) == 0:
+            LOGS.error("No custom pfp images to set.")
+            return
+        pic = random.choice(list(get_collection_list("CUSTOM_PFP_LINKS")))
+        urllib.request.urlretrieve(pic, "donottouch.jpg")
+        file = await catub.upload_file("donottouch.jpg")
+        try:
+            if i > 0:
+                await catub(
+                    functions.photos.DeletePhotosRequest(
+                        await catub.get_profile_photos("me", limit=1)
+                    )
+                )
+            i += 1
+            await catub(functions.photos.UploadProfilePhotoRequest(file))
+            os.remove("donottouch.jpg")
+            await asyncio.sleep(Config.CHANGE_TIME)
+        except BaseException:
+            return
+        CUSTOMPICSTART = gvarstatus("CUSTOM_PFP") == "true"
 
 
 async def digitalpicloop():
@@ -297,7 +330,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="autopic ?(.*)",
+    pattern="autopic ?([\s\S]*)",
     command=("autopic", plugin_category),
     info={
         "header": "Changes profile pic every 1 minute with the custom pic with time",
@@ -331,9 +364,8 @@ async def _(event):
             input_str = int(input_str)
         except ValueError:
             input_str = 60
-    else:
-        if gvarstatus("autopic_counter") is None:
-            addgvar("autopic_counter", 30)
+    elif gvarstatus("autopic_counter") is None:
+        addgvar("autopic_counter", 30)
     if gvarstatus("autopic") is not None and gvarstatus("autopic") == "true":
         return await edit_delete(event, f"`Autopic is already enabled`")
     addgvar("autopic", True)
@@ -399,6 +431,92 @@ async def _(event):
 
 
 @catub.cat_cmd(
+    pattern="c(ustom)?pfp(?: |$)([\s\S]*)",
+    command=("custompfp", plugin_category),
+    info={
+        "header": "Set Your Custom pfps",
+        "description": "Set links of pic to use them as auto profile. You can use cpfp or custompp as command",
+        "flags": {
+            "a": "To add links for custom pfp",
+            "r": "To remove links for custom pfp",
+            "l": "To get links of custom pfp",
+            "s": "To stop custom pfp",
+        },
+        "usage": [
+            "{tr}cpfp - to start",
+            "{tr}cpfp <flags> <links(optional)>",
+        ],
+    },
+)
+async def useless(event):  # sourcery no-metrics
+    """Custom profile pics"""
+    input_str = event.pattern_match.group(2)
+    ext = re.findall(r"-\w+", input_str)
+    try:
+        flag = ext[0].replace("-", "")
+        input_str = input_str.replace(ext[0], "").strip()
+    except IndexError:
+        flag = None
+    list_link = get_collection_list("CUSTOM_PFP_LINKS")
+    if flag is None:
+        if gvarstatus("CUSTOM_PFP") is not None and gvarstatus("CUSTOM_PFP") == "true":
+            return await edit_delete(event, f"`Custom pfp is already enabled`")
+        if not list_link:
+            return await edit_delete(event, "**ಠ∀ಠ  There no links for custom pfp...**")
+        addgvar("CUSTOM_PFP", True)
+        await edit_delete(event, "`Starting custom pfp....`")
+        await custompfploop()
+        return
+    if flag == "l":
+        if not list_link:
+            return await edit_delete(
+                event, "**ಠ∀ಠ  There no links set for custom pfp...**"
+            )
+        links = "**Available links for custom pfp are here:-**\n\n"
+        for i, each in enumerate(list_link, start=1):
+            links += f"**{i}.**  {each}\n"
+        await edit_delete(event, links, 60)
+        return
+    if flag == "s":
+        if gvarstatus("CUSTOM_PFP") is not None and gvarstatus("CUSTOM_PFP") == "true":
+            delgvar("CUSTOM_PFP")
+            await event.client(
+                functions.photos.DeletePhotosRequest(
+                    await event.client.get_profile_photos("me", limit=1)
+                )
+            )
+            return await edit_delete(event, "`Custompfp has been stopped now`")
+        return await edit_delete(event, "`Custompfp haven't enabled`")
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(
+            event, "**ಠ∀ಠ  Reply to valid link or give valid link url as input...**"
+        )
+    extractor = URLExtract()
+    plink = extractor.find_urls(input_str)
+    if len(plink) == 0:
+        return await edit_delete(
+            event, "**ಠ∀ಠ  Reply to valid link or give valid link url as input...**"
+        )
+    if flag == "a":
+        for i in plink:
+            if not is_in_list("CUSTOM_PFP_LINKS", i):
+                add_to_list("CUSTOM_PFP_LINKS", i)
+        await edit_delete(
+            event, f"**{len(plink)} pictures sucessfully added to custom pfps**"
+        )
+    elif flag == "r":
+        for i in plink:
+            if is_in_list("CUSTOM_PFP_LINKS", i):
+                rm_from_list("CUSTOM_PFP_LINKS", i)
+        await edit_delete(
+            event, f"**{len(plink)} pictures sucessfully removed from custom pfps**"
+        )
+
+
+@catub.cat_cmd(
     pattern="autoname$",
     command=("autoname", plugin_category),
     info={
@@ -437,7 +555,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="end (.*)",
+    pattern="end ([\s\S]*)",
     command=("end", plugin_category),
     info={
         "header": "To stop the functions of autoprofile",
@@ -450,6 +568,7 @@ async def _(event):
             "autobio": "To stop autobio",
             "thorpfp": "To stop thorpfp",
             "batmanpfp": "To stop batmanpfp",
+            "spam": "To stop spam",
         },
         "usage": "{tr}end <option>",
         "examples": ["{tr}end autopic"],
@@ -530,6 +649,11 @@ async def _(event):  # sourcery no-metrics
             )
             return await edit_delete(event, "`Autobio has been stopped now`")
         return await edit_delete(event, "`Autobio haven't enabled`")
+    if input_str == "spam":
+        if gvarstatus("spamwork") is not None and gvarstatus("spamwork") == "true":
+            delgvar("spamwork")
+            return await edit_delete(event, "`Spam cmd has been stopped now`")
+        return await edit_delete(event, "`You haven't started spam`")
     END_CMDS = [
         "autopic",
         "digitalpfp",
@@ -538,6 +662,7 @@ async def _(event):  # sourcery no-metrics
         "autobio",
         "thorpfp",
         "batmanpfp",
+        "spam",
     ]
     if input_str not in END_CMDS:
         await edit_delete(
@@ -553,3 +678,4 @@ catub.loop.create_task(digitalpicloop())
 catub.loop.create_task(bloom_pfploop())
 catub.loop.create_task(autoname_loop())
 catub.loop.create_task(autobio_loop())
+catub.loop.create_task(custompfploop())

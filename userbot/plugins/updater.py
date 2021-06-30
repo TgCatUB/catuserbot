@@ -8,12 +8,11 @@ import urllib3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import UPSTREAM_REPO_URL, catub
+from userbot import HEROKU_APP, UPSTREAM_REPO_URL, catub
 
 from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import _catutils
 from ..sql_helper.global_collection import (
     add_to_collectionlist,
     del_keyword_collectionlist,
@@ -162,17 +161,24 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     try:
         remote.push(refspec="HEAD:refs/heads/master", force=True)
     except Exception as error:
-        await event.edit(f"{txt}\n`Here is the error log:\n{error}`")
+        await event.edit(f"{txt}\n**Error log:**\n`{error}`")
         return repo.__del__()
     build_status = heroku_app.builds(order_by="created_at", sort="desc")[0]
     if build_status.status == "failed":
-        await event.edit("`Build failed!\n" "Cancelled or there were some errors...`")
-        await asyncio.sleep(5)
-        return await event.delete()
+        return await edit_Delete(
+            event, "`Build failed!\n" "Cancelled or there were some errors...`"
+        )
+    try:
+        remote.push("master:main", force=True)
+    except Exception as error:
+        await event.edit(f"{txt}\n**Here is the error log:**\n`{error}`")
+        return repo.__del__()
     await event.edit("`Deploy was failed. So restarting to update`")
     delgvar("ipaddress")
     try:
         await event.client.disconnect()
+        if HEROKU_APP is not None:
+            HEROKU_APP.restart()
     except CancelledError:
         pass
 
@@ -274,10 +280,9 @@ async def upstream(event):
     pattern="update deploy$",
 )
 async def upstream(event):
-    event = await edit_or_reply(event, "`Pulling the catpack repo wait a sec ....`")
-    off_repo = "https://github.com/Mr-confused/catpack"
+    event = await edit_or_reply(event, "`Pulling the nekopack repo wait a sec ....`")
+    off_repo = "https://github.com/Mr-confused/nekopack"
     os.chdir("/app")
-    await _catutils.runcmd(f"rm -rf .git")
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"

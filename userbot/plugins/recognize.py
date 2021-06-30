@@ -10,7 +10,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="recognize ?(.*)",
+    pattern="recognize ?([\s\S]*)",
     command=("recognize", plugin_category),
     info={
         "header": "To recognize a image",

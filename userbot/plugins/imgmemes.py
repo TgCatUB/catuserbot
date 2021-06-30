@@ -23,7 +23,7 @@ plugin_category = "fun"
 
 
 @catub.cat_cmd(
-    pattern="fakegs(?: |$)(.*)",
+    pattern="fakegs(?:\s|$)([\s\S]*)",
     command=("fakegs", plugin_category),
     info={
         "header": "Fake google search meme",
@@ -60,7 +60,7 @@ async def nekobot(cat):
 
 
 @catub.cat_cmd(
-    pattern="trump(?: |$)(.*)",
+    pattern="trump(?:\s|$)([\s\S]*)",
     command=("trump", plugin_category),
     info={
         "header": "trump tweet sticker with given custom text",
@@ -91,7 +91,7 @@ async def nekobot(cat):
 
 
 @catub.cat_cmd(
-    pattern="modi(?: |$)(.*)",
+    pattern="modi(?:\s|$)([\s\S]*)",
     command=("modi", plugin_category),
     info={
         "header": "modi tweet sticker with given custom text",
@@ -122,7 +122,7 @@ async def nekobot(cat):
 
 
 @catub.cat_cmd(
-    pattern="cmm(?: |$)(.*)",
+    pattern="cmm(?:\s|$)([\s\S]*)",
     command=("cmm", plugin_category),
     info={
         "header": "Change my mind banner with given custom text",
@@ -152,7 +152,7 @@ async def nekobot(cat):
 
 
 @catub.cat_cmd(
-    pattern="kanna(?: |$)(.*)",
+    pattern="kanna(?:\s|$)([\s\S]*)",
     command=("kanna", plugin_category),
     info={
         "header": "kanna chan sticker with given custom text",
@@ -183,7 +183,7 @@ async def nekobot(cat):
 
 
 @catub.cat_cmd(
-    pattern="tweet(?: |$)(.*)",
+    pattern="tweet(?:\s|$)([\s\S]*)",
     command=("tweet", plugin_category),
     info={
         "header": "The desired person tweet sticker with given custom text",

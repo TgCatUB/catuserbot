@@ -7,7 +7,7 @@ plugin_category = "extra"
 
 
 @catub.cat_cmd(
-    pattern="covid(?: |$)(.*)",
+    pattern="covid(?:\s|$)([\s\S]*)",
     command=("covid", plugin_category),
     info={
         "header": "To get latest information about covid-19.",

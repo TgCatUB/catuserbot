@@ -5,12 +5,51 @@ from textwrap import wrap
 from uuid import uuid4
 
 import requests
+from imdb import IMDb
 from PIL import Image, ImageColor, ImageDraw, ImageFont
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from ...Config import Config
 from ...sql_helper.globals import gvarstatus
 from ..resources.states import states
+
+imdb = IMDb()
+
+mov_titles = [
+    "long imdb title",
+    "long imdb canonical title",
+    "smart long imdb canonical title",
+    "smart canonical title",
+    "canonical title",
+    "localized title",
+]
+
+
+async def get_cast(casttype, movie):
+    mov_casttype = ""
+    if casttype in list(movie.keys()):
+        i = 0
+        for j in movie[casttype]:
+            if i < 1:
+                mov_casttype += str(j)
+            elif i < 5:
+                mov_casttype += ", " + str(j)
+            else:
+                break
+            i += 1
+    else:
+        mov_casttype += "Not Data"
+    return mov_casttype
+
+
+async def get_moviecollections(movie):
+    result = ""
+    if "box office" in movie.keys():
+        for i in movie["box office"].keys():
+            result += f"\n•  <b>{i}:</b> <code>{movie['box office'][i]}</code>"
+    else:
+        result = "<code>No Data</code>"
+    return result
 
 
 def rand_key():

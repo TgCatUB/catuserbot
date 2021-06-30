@@ -84,5 +84,5 @@ async def restart_script(client: TelegramClient, sandy):
 async def get_message_link(client, event):
     chat = await event.get_chat()
     if event.is_private:
-        return f"tg://openmessage?user_id={chat.id}&message_id={event.message.id}"
-    return f"https://t.me/c/{chat.id}/{event.message.id}"
+        return f"tg://openmessage?user_id={chat.id}&message_id={event.id}"
+    return f"https://t.me/c/{chat.id}/{event.id}"

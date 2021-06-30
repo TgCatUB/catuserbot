@@ -120,18 +120,18 @@ async def set_group_photo(event):  # sourcery no-metrics
         except Exception as e:
             return await edit_delete(event, f"**Error : **`{str(e)}`")
         process = "deleted"
-        await edit_delete(event, "```Succesfully group profile pic deleted.```")
+        await edit_delete(event, "```successfully group profile pic deleted.```")
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
             "#GROUPPIC\n"
-            f"Group profile pic {process} succesfully "
+            f"Group profile pic {process} successfully "
             f"CHAT: {event.chat.title}(`{event.chat_id}`)",
         )
 
 
 @catub.cat_cmd(
-    pattern="promote(?: |$)(.*)",
+    pattern="promote(?:\s|$)([\s\S]*)",
     command=("promote", plugin_category),
     info={
         "header": "To give admin rights for a person",
@@ -176,7 +176,7 @@ async def promote(event):
 
 
 @catub.cat_cmd(
-    pattern="demote(?: |$)(.*)",
+    pattern="demote(?:\s|$)([\s\S]*)",
     command=("demote", plugin_category),
     info={
         "header": "To remove a person from admin list",
@@ -220,7 +220,7 @@ async def demote(event):
 
 
 @catub.cat_cmd(
-    pattern="ban(?: |$)(.*)",
+    pattern="ban(?:\s|$)([\s\S]*)",
     command=("ban", plugin_category),
     info={
         "header": "Will ban the guy in the group where you used this command.",
@@ -281,7 +281,7 @@ async def _ban_person(event):
 
 
 @catub.cat_cmd(
-    pattern="unban(?: |$)(.*)",
+    pattern="unban(?:\s|$)([\s\S]*)",
     command=("unban", plugin_category),
     info={
         "header": "Will unban the guy in the group where you used this command.",
@@ -329,7 +329,7 @@ async def watcher(event):
 
 
 @catub.cat_cmd(
-    pattern="mute(?: |$)(.*)",
+    pattern="mute(?:\s|$)([\s\S]*)",
     command=("mute", plugin_category),
     info={
         "header": "To stop sending messages from that user",
@@ -434,7 +434,7 @@ async def startmute(event):
 
 
 @catub.cat_cmd(
-    pattern="unmute(?: |$)(.*)",
+    pattern="unmute(?:\s|$)([\s\S]*)",
     command=("unmute", plugin_category),
     info={
         "header": "To allow user to send messages again",
@@ -479,9 +479,7 @@ async def endmute(event):
                 unmute(user.id, event.chat_id)
             else:
                 result = await event.client(
-                    functions.channels.GetParticipantRequest(
-                        channel=event.chat_id, user_id=user.id
-                    )
+                    functions.channels.GetParticipantRequest(event.chat_id, user.id)
                 )
                 if result.participant.banned_rights.send_messages:
                     await event.client(
@@ -508,7 +506,7 @@ async def endmute(event):
 
 
 @catub.cat_cmd(
-    pattern="kick(?: |$)(.*)",
+    pattern="kick(?:\s|$)([\s\S]*)",
     command=("kick", plugin_category),
     info={
         "header": "To kick a person from the group",
@@ -579,7 +577,7 @@ async def pin(event):
         await event.client.send_message(
             BOTLOG_CHATID,
             f"#PIN\
-                \n__Succesfully pinned a message in chat__\
+                \n__successfully pinned a message in chat__\
                 \nCHAT: {event.chat.title}(`{event.chat_id}`)\
                 \nLOUD: {is_silent}",
         )
@@ -626,8 +624,8 @@ async def pin(event):
     if BOTLOG and not event.is_private:
         await event.client.send_message(
             BOTLOG_CHATID,
-            "#UNPIN\
-                \n__Succesfully unpinned message(s) in chat__\
+            f"#UNPIN\
+                \n__successfully unpinned message(s) in chat__\
                 \nCHAT: {event.chat.title}(`{event.chat_id}`)",
         )
 

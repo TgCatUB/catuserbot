@@ -8,7 +8,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="invite (.*)",
+    pattern="invite ([\s\S]*)",
     command=("invite", plugin_category),
     info={
         "header": "Add the given user/users to the group where u used the command.",

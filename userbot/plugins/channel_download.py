@@ -16,7 +16,7 @@ plugin_category = "tools"
 
 
 @catub.cat_cmd(
-    pattern="getc(?: |$)(.*)",
+    pattern="getc(?:\s|$)([\s\S]*)",
     command=("getc", plugin_category),
     info={
         "header": "To download channel media files",
@@ -58,7 +58,7 @@ async def get_media(event):
 
 
 @catub.cat_cmd(
-    pattern="geta(?: |$)(.*)",
+    pattern="geta(?:\s|$)([\s\S]*)",
     command=("geta", plugin_category),
     info={
         "header": "To download channel all media files",

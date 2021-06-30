@@ -13,7 +13,7 @@ plugin_category = "fun"
 
 
 @catub.cat_cmd(
-    pattern="emoji(?: |$)(.*)",
+    pattern="emoji(?:\s|$)([\s\S]*)",
     command=("emoji", plugin_category),
     info={
         "header": "Converts your text to big emoji text, with some default emojis.",
@@ -44,7 +44,7 @@ async def itachi(event):
 
 
 @catub.cat_cmd(
-    pattern="cmoji(?: |$)(.*)",
+    pattern="cmoji(?:\s|$)([\s\S]*)",
     command=("cmoji", plugin_category),
     info={
         "header": "Converts your text to big emoji text, with your custom emoji.",

@@ -13,7 +13,7 @@ plugin_category = "extra"
 
 
 @catub.cat_cmd(
-    pattern="poll(?: |$)(.*)",
+    pattern="poll(?:\s|$)([\s\S]*)",
     command=("poll", plugin_category),
     info={
         "header": "To create a poll.",

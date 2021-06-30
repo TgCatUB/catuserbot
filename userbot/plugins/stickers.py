@@ -45,6 +45,7 @@ EMOJI_SEN = [
     "Du kannst auch mehrere Emoji eingeben, ich empfehle dir aber nicht mehr als zwei pro Sticker zu benutzen.",
     "Você pode listar vários emojis em uma mensagem, mas recomendo não usar mais do que dois por cada sticker.",
     "Puoi elencare diverse emoji in un singolo messaggio, ma ti consiglio di non usarne più di due per sticker.",
+    "emoji",
 ]
 
 KANGING_STR = [
@@ -236,7 +237,7 @@ async def add_to_pack(
 
 
 @catub.cat_cmd(
-    pattern="kang(?: |$)(.*)",
+    pattern="kang(?:\s|$)([\s\S]*)",
     command=("kang", plugin_category),
     info={
         "header": "To kang a sticker.",
@@ -388,7 +389,7 @@ async def kang(args):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="pkang(?: |$)(.*)",
+    pattern="pkang(?:\s|$)([\s\S]*)",
     command=("pkang", plugin_category),
     info={
         "header": "To kang entire sticker sticker.",
@@ -552,12 +553,14 @@ async def pack_kang(event):  # sourcery no-metrics
         await asyncio.sleep(2)
     result = "`This sticker pack is kanged into the following your sticker pack(s):`\n"
     for i in enumerate(blablapacks):
-        result += f"  •  [pack {blablapacknames[i]}](t.me/addstickers/{blablapacks[i]})"
+        result += (
+            f"  •  [pack {blablapacknames[i[0]]}](t.me/addstickers/{blablapacks[i[0]]})"
+        )
     await catevent.edit(result)
 
 
 @catub.cat_cmd(
-    pattern="gridpack(?: |$)(.*)",
+    pattern="gridpack(?:\s|$)([\s\S]*)",
     command=("gridpack", plugin_category),
     info={
         "header": "To split the replied image and make sticker pack.",
@@ -654,7 +657,7 @@ async def pic2packcmd(event):
                 if packname.startswith("https://t.me/"):
                     break
             await catevent.edit(
-                f"__Succesfully created the pack for the replied media : __[{args}]({packname})"
+                f"__successfully created the pack for the replied media : __[{args}]({packname})"
             )
 
         except YouBlockedUserError:
@@ -718,7 +721,7 @@ async def get_pack_info(event):
 
 
 @catub.cat_cmd(
-    pattern="stickers ?(.*)",
+    pattern="stickers ?([\s\S]*)",
     command=("stickers", plugin_category),
     info={
         "header": "To get list of sticker packs with given name.",

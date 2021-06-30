@@ -1,9 +1,7 @@
 import asyncio
 import os
-import re
 
-import requests
-
+from ..helpers.utils.format import md_to_text, paste_message
 from .data import _sudousers_list
 
 
@@ -37,27 +35,11 @@ async def edit_or_reply(
         await event.edit(text, parse_mode=parse_mode, link_preview=link_preview)
         return event
     if not noformat:
-        asciich = ["**", "`", "__"]
-        for i in asciich:
-            text = re.sub(rf"\{i}", "", text)
+        text = md_to_text(text)
     if aslink or deflink:
         linktext = linktext or "Message was to big so pasted to bin"
-        try:
-            key = (
-                requests.post(
-                    "https://nekobin.com/api/documents", json={"content": text}
-                )
-                .json()
-                .get("result")
-                .get("key")
-            )
-            text = linktext + f" [here](https://nekobin.com/{key})"
-        except Exception:
-            text = re.sub(r"•", ">>", text)
-            kresult = requests.post(
-                "https://del.dog/documents", data=text.encode("UTF-8")
-            ).json()
-            text = linktext + f" [here](https://del.dog/{kresult['key']})"
+        response = await paste_message(text, pastetype="s")
+        text = linktext + f" [here]({response})"
         if event.sender_id in sudo_users:
             if reply_to:
                 return await reply_to.reply(text, link_preview=link_preview)

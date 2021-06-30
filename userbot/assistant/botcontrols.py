@@ -138,7 +138,7 @@ async def ban_starters(event):
 
 
 @catub.bot_cmd(
-    pattern=f"^/ban\s+(.*)",
+    pattern=f"^/ban\s+([\s\S]*)",
     from_users=Config.OWNER_ID,
 )
 async def ban_botpms(event):
@@ -173,7 +173,7 @@ async def ban_botpms(event):
 
 
 @catub.bot_cmd(
-    pattern=f"^/unban(?: |$)(.*)",
+    pattern=f"^/unban(?:\s|$)([\s\S]*)",
     from_users=Config.OWNER_ID,
 )
 async def ban_botpms(event):

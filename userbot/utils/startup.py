@@ -212,10 +212,10 @@ async def verifyLoggerGroup():
         )
         addgvar("PRIVATE_GROUP_BOT_API_ID", groupid)
         print(
-            "Private Group for PRIVATE_GROUP_BOT_API_ID is created succesfully and added to vars."
+            "Private Group for PRIVATE_GROUP_BOT_API_ID is created successfully and added to vars."
         )
         flag = True
-    if PM_LOGGER_GROUP_ID:
+    if PM_LOGGER_GROUP_ID != -100:
         try:
             entity = await catub.get_entity(PM_LOGGER_GROUP_ID)
             if not isinstance(entity, types.User) and not entity.creator:
@@ -236,16 +236,6 @@ async def verifyLoggerGroup():
                 "An Exception occured upon trying to verify the PM_LOGGER_GROUP_ID.\n"
                 + str(e)
             )
-    else:
-        descript = "Don't delete this group or change to group."
-        _, groupid = await create_supergroup(
-            "CatUserbot PM Logger Group", catub, Config.TG_BOT_USERNAME, descript
-        )
-        addgvar("PM_LOGGER_GROUP_ID", groupid)
-        print(
-            "Private Group for PM_LOGGER_GROUP_ID is created succesfully and added to vars."
-        )
-        flag = True
     if flag:
         executable = sys.executable.replace(" ", "\\ ")
         args = [executable, "-m", "userbot"]

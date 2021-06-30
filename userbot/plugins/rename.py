@@ -16,7 +16,7 @@ thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg"
 
 
 @catub.cat_cmd(
-    pattern="rnup ?(-f)? (.*)",
+    pattern="rnup ?(-f)? ([\s\S]*)",
     command=("rnup", plugin_category),
     info={
         "header": "To rename and upload the replied file.",

@@ -11,7 +11,7 @@ plugin_category = "extra"
 
 
 @catub.cat_cmd(
-    pattern="azan(?: |$)(.*)",
+    pattern="azan(?:\s|$)([\s\S]*)",
     command=("azan", plugin_category),
     info={
         "header": "Shows you the Islamic prayer times of the given city name.",

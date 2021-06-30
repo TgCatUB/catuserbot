@@ -214,7 +214,7 @@ async def _(event):
 
 # Ported by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)
 @catub.cat_cmd(
-    pattern="zombies ?(.*)",
+    pattern="zombies ?([\s\S]*)",
     command=("zombies", plugin_category),
     info={
         "header": "To check deleted accounts and clean",
@@ -279,7 +279,7 @@ async def rm_deletedacc(show):
 
 
 @catub.cat_cmd(
-    pattern="ikuck ?(.*)",
+    pattern="ikuck ?([\s\S]*)",
     command=("ikuck", plugin_category),
     info={
         "header": "To get breif summary of members in the group",

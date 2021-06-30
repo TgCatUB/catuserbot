@@ -11,7 +11,7 @@ from ..core.data import _sudousers_list, blacklist_chats_list
 from ..core.events import MessageEdited, NewMessage
 from ..core.logger import logging
 from ..core.session import catub
-from ..helpers.utils.format import paste_text
+from ..helpers.utils.format import paste_message
 from ..helpers.utils.utils import runcmd
 from ..sql_helper.globals import gvarstatus
 
@@ -156,7 +156,7 @@ def errors_handler(func):
             output = (await runcmd(command))[:2]
             result = output[0] + output[1]
             ftext += result
-            pastelink = paste_text(ftext)
+            pastelink = await paste_message(ftext)
             text = "**CatUserbot Error report**\n\n"
             link = "[here](https://t.me/catuserbot_support)"
             text += "If you wanna you can report it"

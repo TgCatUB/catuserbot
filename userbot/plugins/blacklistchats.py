@@ -72,7 +72,7 @@ async def chat_blacklist(event):
 
 
 @catub.cat_cmd(
-    pattern="addblkchat(s)? ?((.|\n)*)?",
+    pattern="addblkchat(s)?(?:\s|$)([\s\S]*)",
     command=("addblkchat", plugin_category),
     info={
         "header": "To add chats to blacklist.",
@@ -113,7 +113,7 @@ async def add_blacklist_chat(event):
                 }
                 blacklistchats[str(chat.id)] = chatdata
                 result += (
-                    f"Succesfully added {get_display_name(chat)} to blacklist chats.\n"
+                    f"successfully added {get_display_name(chat)} to blacklist chats.\n"
                 )
             except Exception as e:
                 errors += f"**While adding the {chatid}** - __{str(e)}__\n"
@@ -133,7 +133,7 @@ async def add_blacklist_chat(event):
                 }
                 blacklistchats[str(chat.id)] = chatdata
                 result += (
-                    f"Succesfully added {get_display_name(chat)} to blacklist chats.\n"
+                    f"successfully added {get_display_name(chat)} to blacklist chats.\n"
                 )
         except Exception as e:
             errors += f"**While adding the {chatid}** - __{str(e)}__\n"
@@ -151,7 +151,7 @@ async def add_blacklist_chat(event):
 
 
 @catub.cat_cmd(
-    pattern="rmblkchat(s)? ?((.|\n)*)?",
+    pattern="rmblkchat(s)?(?:\s|$)([\s\S]*)",
     command=("rmblkchat", plugin_category),
     info={
         "header": "To remove chats to blacklist.",
@@ -183,7 +183,7 @@ async def add_blacklist_chat(event):
                     chatname = blacklistchats[str(chatid)]["chat_name"]
                     del blacklistchats[str(chatid)]
                     result += (
-                        f"Succesfully removed {chatname} from blacklisted chats.\n"
+                        f"successfully removed {chatname} from blacklisted chats.\n"
                     )
                 else:
                     errors += f"the given id {chatid} doesn't exists in your database. That is it hasn't been blacklisted.\n"
@@ -196,7 +196,7 @@ async def add_blacklist_chat(event):
             if chatid in blkchats:
                 chatname = blacklistchats[str(chatid)]["chat_name"]
                 del blacklistchats[str(chatid)]
-                result += f"Succesfully removed {chatname} from blacklisted chats.\n"
+                result += f"successfully removed {chatname} from blacklisted chats.\n"
             else:
                 errors += f"the given id {chatid} doesn't exists in your database. That is it hasn't been blacklisted.\n"
         except Exception as e:

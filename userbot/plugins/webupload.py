@@ -25,7 +25,7 @@ link_regex = re.compile(
 
 
 @catub.cat_cmd(
-    pattern="labstack(?: |$)(.*)",
+    pattern="labstack(?:\s|$)([\s\S]*)",
     command=("labstack", plugin_category),
     info={
         "header": "To upload media to labstack.",

@@ -103,7 +103,7 @@ async def ff_mpeg_trim_cmd(event):
 
 
 @catub.cat_cmd(
-    pattern="vtrim(?: |$)(.*)",
+    pattern="vtrim(?:\s|$)([\s\S]*)",
     command=("vtrim", plugin_category),
     info={
         "header": "Trims the saved media with specific given time internval and outputs as video if it is video",
@@ -189,7 +189,7 @@ async def ff_mpeg_trim_cmd(event):
 
 
 @catub.cat_cmd(
-    pattern="atrim(?: |$)(.*)",
+    pattern="atrim(?:\s|$)([\s\S]*)",
     command=("atrim", plugin_category),
     info={
         "header": "Trims the saved media with specific given time internval and outputs as audio",

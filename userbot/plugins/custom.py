@@ -1,3 +1,4 @@
+from urlextract import URLExtract
 from validators.url import url
 
 from userbot import catub
@@ -11,6 +12,7 @@ plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
 cmdhd = Config.COMMAND_HAND_LER
 
+extractor = URLExtract()
 vlist = [
     "ALIVE_PIC",
     "ALIVE_EMOJI",
@@ -205,5 +207,5 @@ async def custom_catuserbot(event):
             )
         delgvar("START_TEXT")
     await edit_or_reply(
-        event, f"__Succesfully deleted your customization of {input_str}.__"
+        event, f"__successfully deleted your customization of {input_str}.__"
     )

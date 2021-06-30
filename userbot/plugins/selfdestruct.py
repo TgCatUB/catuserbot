@@ -8,7 +8,7 @@ LOGS = logging.getLogger(__name__)
 
 
 @catub.cat_cmd(
-    pattern="sdm (\d*) (.*)",
+    pattern="sdm (\d*) ([\s\S]*)",
     command=("sdm", plugin_category),
     info={
         "header": "To self destruct the message after paticualr time.",
@@ -29,7 +29,7 @@ async def selfdestruct(destroy):
 
 
 @catub.cat_cmd(
-    pattern="selfdm (\d*) (.*)",
+    pattern="selfdm (\d*) ([\s\S]*)",
     command=("selfdm", plugin_category),
     info={
         "header": "To self destruct the message after paticualr time. and in message will show the time.",

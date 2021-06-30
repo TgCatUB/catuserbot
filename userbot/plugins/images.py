@@ -12,7 +12,7 @@ plugin_category = "misc"
 
 
 @catub.cat_cmd(
-    pattern="img(?: |$)(\d*)? ?(.*)",
+    pattern="img(?: |$)(\d*)? ?([\s\S]*)",
     command=("img", plugin_category),
     info={
         "header": "Google image search.",

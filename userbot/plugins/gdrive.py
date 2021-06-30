@@ -840,8 +840,8 @@ async def lists(gdrive, folderlink=None):  # sourcery no-metrics
             else:
                 query = f"'{parents}' in parents and (name contains '{name}')"
         else:
-            if re.search("-p (.*)", checker):
-                parents = re.search("-p (.*)", checker).group(1)
+            if re.search("-p ([\s\S]*)", checker):
+                parents = re.search("-p ([\s\S]*)", checker).group(1)
                 name = checker.split("-p")[0].strip()
                 query = f"'{parents}' in parents and (name contains '{name}')"
             else:
@@ -1017,7 +1017,7 @@ async def reset_credentials(gdrive):
 
 
 @catub.cat_cmd(
-    pattern="glist(?: |$)(-l \d+)?(?: |$)?(.*)?(?: |$)",
+    pattern="glist(?: |$)(-l \d+)?(?: |$)?([\s\S]*)?(?: |$)",
     command=("glist", plugin_category),
     info={
         "header": "Get list of folders and files with default size 50",
@@ -1042,7 +1042,7 @@ async def catlists(gdrive):
 
 
 @catub.cat_cmd(
-    pattern="gdf (mkdir|rm|info) (.*)",
+    pattern="gdf (mkdir|rm|info) ([\s\S]*)",
     command=("gdf", plugin_category),
     info={
         "header": "Google Drive folder/file management",
@@ -1239,7 +1239,7 @@ async def cancel_process(gdrive):
 
 
 @catub.cat_cmd(
-    pattern="ugd(?: |$)(.*)",
+    pattern="ugd(?:\s|$)([\s\S]*)",
     command=("ugd", plugin_category),
     info={
         "header": "upload files/folders to gdrive.",
@@ -1458,7 +1458,7 @@ async def set_upload_folder(gdrive):
 
 
 @catub.cat_cmd(
-    pattern="gset(?: |$)(.*)",
+    pattern="gset(?:\s|$)([\s\S]*)",
     command=("gset", plugin_category),
     info={
         "header": "To set temparary parent id.",
@@ -1501,7 +1501,7 @@ async def set_upload_folder(gdrive):
 
 
 @catub.cat_cmd(
-    pattern="gdown ?(-u)? (.*)",
+    pattern="gdown ?(-u)? ([\s\S]*)",
     command=("gdown", plugin_category),
     info={
         "header": "To download files form gdrive.",
@@ -1555,7 +1555,7 @@ async def g_download(event):
 
 
 @catub.cat_cmd(
-    pattern="gshare (.*)",
+    pattern="gshare ([\s\S]*)",
     command=("gshare", plugin_category),
     info={
         "header": "To share the team drive files.",

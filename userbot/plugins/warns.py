@@ -9,7 +9,7 @@ plugin_category = "admin"
 
 
 @catub.cat_cmd(
-    pattern="warn(?: |$)(.*)",
+    pattern="warn(?:\s|$)([\s\S]*)",
     command=("warn", plugin_category),
     info={
         "header": "To warn a user.",

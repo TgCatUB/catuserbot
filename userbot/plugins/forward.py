@@ -1,6 +1,6 @@
 import string
 
-from telethon.tl.types import Channel
+from telethon.tl.types import Channel, MessageMediaWebPage
 
 from userbot import catub
 from userbot.core.logger import logging
@@ -41,12 +41,11 @@ async def all_groups_id(cat):
 )
 async def _(event):
     "To get view counter for the message"
-    if Config.PRIVATE_CHANNEL_BOT_API_ID is None:
-        await edit_or_reply(
+    if Config.PRIVATE_CHANNEL_BOT_API_ID == 0:
+        return await edit_or_reply(
             event,
             "Please set the required environment variable `PRIVATE_CHANNEL_BOT_API_ID` for this plugin to work",
         )
-        return
     try:
         e = await event.client.get_entity(Config.PRIVATE_CHANNEL_BOT_API_ID)
     except Exception as e:
@@ -79,11 +78,13 @@ async def _(event):
     m = await event.get_reply_message()
     if not m:
         return
-    await event.respond(m)
+    if m.media and not isinstance(m.media, MessageMediaWebPage):
+        return await event.client.send_file(event.chat_id, m.media, caption=m.text)
+    await event.client.send_message(event.chat_id, m.text)
 
 
 @catub.cat_cmd(
-    pattern="fpost (.*)",
+    pattern="fpost ([\s\S]*)",
     command=("fpost", plugin_category),
     info={
         "header": "Split the word and forwards each letter from previous messages in that group",

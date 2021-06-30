@@ -66,7 +66,7 @@ async def _(event):
         os.remove(thumb_image_path)
     else:
         await edit_or_reply(event, "`No thumbnail is set to clear`")
-    await edit_or_reply(event, "✅ Custom thumbnail cleared succesfully.")
+    await edit_or_reply(event, "✅ Custom thumbnail cleared successfully.")
 
 
 @catub.cat_cmd(

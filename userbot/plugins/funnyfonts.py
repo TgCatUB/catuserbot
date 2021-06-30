@@ -10,7 +10,7 @@ plugin_category = "fun"
 
 
 @catub.cat_cmd(
-    pattern="str(?: |$)(.*)",
+    pattern="str(?:\s|$)([\s\S]*)",
     command=("str", plugin_category),
     info={
         "header": "stretches the given text",
@@ -37,7 +37,7 @@ async def stretch(stret):
 
 
 @catub.cat_cmd(
-    pattern="zal(?: |$)(.*)",
+    pattern="zal(?:\s|$)([\s\S]*)",
     command=("zal", plugin_category),
     info={
         "header": "chages given text into some funny way",
@@ -81,7 +81,7 @@ async def zal(zgfy):
 
 
 @catub.cat_cmd(
-    pattern="cp(?: |$)(.*)",
+    pattern="cp(?:\s|$)([\s\S]*)",
     command=("cp", plugin_category),
     info={
         "header": "chages given text into some funny way",
@@ -120,7 +120,7 @@ async def copypasta(cp_e):
 
 
 @catub.cat_cmd(
-    pattern="weeb(?: |$)(.*)",
+    pattern="weeb(?:\s|$)([\s\S]*)",
     command=("weeb", plugin_category),
     info={
         "header": "chages given text into some funny way",
@@ -146,7 +146,7 @@ async def weebify(event):
 
 
 @catub.cat_cmd(
-    pattern="downside(?: |$)(.*)",
+    pattern="downside(?:\s|$)([\s\S]*)",
     command=("downside", plugin_category),
     info={
         "header": "chages given text into upside down",
@@ -177,7 +177,7 @@ async def stylish_generator(event):
 
 
 @catub.cat_cmd(
-    pattern="subscript(?: |$)(.*)",
+    pattern="subscript(?:\s|$)([\s\S]*)",
     command=("subscript", plugin_category),
     info={
         "header": "chages given text into subscript",
@@ -208,7 +208,7 @@ async def stylish_generator(event):
 
 
 @catub.cat_cmd(
-    pattern="superscript(?: |$)(.*)",
+    pattern="superscript(?:\s|$)([\s\S]*)",
     command=("superscript", plugin_category),
     info={
         "header": "chages given text into superscript",

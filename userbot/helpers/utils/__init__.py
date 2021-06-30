@@ -1,4 +1,5 @@
 from .extdl import *
+from .paste import *
 
 flag = True
 check = 0
@@ -8,7 +9,7 @@ while flag:
         from . import tools as _cattools
         from . import utils as _catutils
         from .events import *
-        from .format import htmlmentionuser, mentionuser, parse_pre
+        from .format import *
 
         break
     except ModuleNotFoundError as e:

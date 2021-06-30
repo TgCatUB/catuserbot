@@ -11,7 +11,7 @@ plugin_category = "extra"
 
 
 @catub.cat_cmd(
-    pattern="gps (.*)",
+    pattern="gps ([\s\S]*)",
     command=("gps", plugin_category),
     info={
         "header": "To send the map of the given location.",

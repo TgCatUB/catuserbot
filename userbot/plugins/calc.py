@@ -8,7 +8,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="calc (.*)",
+    pattern="calc ([\s\S]*)",
     command=("calc", plugin_category),
     info={
         "header": "To solve basic mathematics equations.",

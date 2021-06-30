@@ -30,7 +30,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="admins(?: |$)(.*)",
+    pattern="admins(?:\s|$)([\s\S]*)",
     command=("admins", plugin_category),
     info={
         "header": "To get list of admins.",
@@ -85,7 +85,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="bots(?: |$)(.*)",
+    pattern="bots(?:\s|$)([\s\S]*)",
     command=("bots", plugin_category),
     info={
         "header": "To get list of bots.",
@@ -127,7 +127,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="users(?: |$)(.*)",
+    pattern="users(?:\s|$)([\s\S]*)",
     command=("users", plugin_category),
     info={
         "header": "To get list of users.",
@@ -177,7 +177,7 @@ async def get_users(show):
 
 
 @catub.cat_cmd(
-    pattern="chatinfo(?: |$)(.*)",
+    pattern="chatinfo(?:\s|$)([\s\S]*)",
     command=("chatinfo", plugin_category),
     info={
         "header": "To get Group details.",
@@ -193,6 +193,8 @@ async def info(event):
     "To get group information"
     catevent = await edit_or_reply(event, "`Analysing the chat...`")
     chat = await get_chatinfo(event, catevent)
+    if chat is None:
+        return
     caption = await fetch_info(chat, event)
     try:
         await catevent.edit(caption, parse_mode="html")
@@ -236,7 +238,8 @@ async def get_chatinfo(event, catevent):
             await catevent.edit("`Channel or supergroup doesn't exist`")
             return None
         except (TypeError, ValueError) as err:
-            await catevent.edit(str(err))
+            LOGS.info(err)
+            await edit_delete(catevent, "**Error:**\n__Can't fetch the chat__")
             return None
     return chat_info
 

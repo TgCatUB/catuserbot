@@ -17,7 +17,7 @@ from ..core.managers import edit_delete, edit_or_reply
 plugin_category="extra"
 
 @catub.cat_cmd(
-    pattern="hibuddy(?: |$)(.*)",
+    pattern="hibuddy(?:\s|$)([\s\S]*)",
     command=("hibuddy", plugin_category),
     info={
         "header": "Just to say hi to other user.",

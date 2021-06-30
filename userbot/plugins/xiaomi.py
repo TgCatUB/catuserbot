@@ -12,7 +12,7 @@ plugin_category = "extra"
 
 
 @catub.cat_cmd(
-    pattern="firmware (.*)",
+    pattern="firmware ([\s\S]*)",
     command=("firmware", plugin_category),
     info={
         "header": "To get lastest Firmware.",
@@ -42,7 +42,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="vendor (.*)",
+    pattern="vendor ([\s\S]*)",
     command=("vendor", plugin_category),
     info={
         "header": "To get lastest Vendor.",
@@ -72,7 +72,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="xspecs (.*)",
+    pattern="xspecs ([\s\S]*)",
     command=("xspecs", plugin_category),
     info={
         "header": "To get quick spec information about device",
@@ -102,7 +102,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="fastboot (.*)",
+    pattern="fastboot ([\s\S]*)",
     command=("fastboot", plugin_category),
     info={
         "header": "To get latest fastboot MIUI.",
@@ -132,7 +132,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="recovery (.*)",
+    pattern="recovery ([\s\S]*)",
     command=("recovery", plugin_category),
     info={
         "header": "To get latest recovery MIUI.",
@@ -162,7 +162,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="pb (.*)",
+    pattern="pb ([\s\S]*)",
     command=("pb", plugin_category),
     info={
         "header": "To get latest PBRP.",
@@ -192,7 +192,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="of (.*)",
+    pattern="of ([\s\S]*)",
     command=("of", plugin_category),
     info={
         "header": "To get latest ORangeFox Recover.",

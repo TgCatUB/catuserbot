@@ -45,7 +45,7 @@ async def get_tz(con):
 
 
 @catub.cat_cmd(
-    pattern="ctime(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?",
+    pattern="ctime(?:\s|$)([\s\S]*)(?<![0-9])(?: |$)([0-9]+)?",
     command=("ctime", plugin_category),
     info={
         "header": "To get current time of a paticular country",
@@ -112,7 +112,7 @@ async def time_func(tdata):
 
 
 @catub.cat_cmd(
-    pattern="time(?: |$)(.*)",
+    pattern="time(?:\s|$)([\s\S]*)",
     command=("time", plugin_category),
     info={
         "header": "To show current time.",
