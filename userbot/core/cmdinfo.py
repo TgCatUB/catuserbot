@@ -1,6 +1,12 @@
 from typing import Dict, List, Union
 
-from urlextract import URLExtract
+from ..helpers.utils.extdl import install_pip
+
+try:
+    from urlextract import URLExtract
+except ModuleNotFoundError:
+    install_pip("urlextract")
+    from urlextract import URLExtract
 
 from ..Config import Config
 
