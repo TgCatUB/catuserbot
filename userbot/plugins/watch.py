@@ -88,7 +88,7 @@ def get_provider(url):
 
 
 @catub.cat_cmd(
-    pattern="watch (.*)",
+    pattern="watch ([\s\S]*)",
     command=("watch", plugin_category),
     info={
         "header": "To search online streaming sites for that movie.",

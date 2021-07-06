@@ -14,7 +14,7 @@ GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
 
 
 @catub.cat_cmd(
-    pattern="lyrics ?(.*)",
+    pattern="lyrics ?([\s\S]*)",
     command=("lyrics", plugin_category),
     info={
         "header": "Song lyrics searcher",
@@ -51,7 +51,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="glyrics ?(.*)",
+    pattern="glyrics ?([\s\S]*)",
     command=("glyrics", plugin_category),
     info={
         "header": "Song lyrics searcher using genius api",

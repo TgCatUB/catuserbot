@@ -10,8 +10,10 @@ from humanize import naturalsize
 
 from userbot import catub
 
+from ..core.logger import logging
 from ..core.managers import edit_or_reply
 
+LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
 
 
@@ -182,7 +184,7 @@ def mega_dl(url: str) -> str:
     result = popen(command).read()
     try:
         data = json.loads(result)
-        print(data)
+        LOGS.info(data)
     except json.JSONDecodeError:
         reply += "`Error: Can't extract the link`\n"
         return reply
@@ -241,7 +243,7 @@ def sourceforge(url: str) -> str:
     except IndexError:
         reply = "`No SourceForge links found`\n"
         return reply
-    file_path = re.findall(r"files(.*)/download", link)[0]
+    file_path = re.findall(r"files([\s\S]*)/download", link)[0]
     reply = f"Mirrors for __{file_path.split('/')[-1]}__\n"
     project = re.findall(r"projects?/(.*?)/files", link)[0]
     mirrors = (
@@ -251,7 +253,7 @@ def sourceforge(url: str) -> str:
     page = BeautifulSoup(requests.get(mirrors).content, "html.parser")
     info = page.find("ul", {"id": "mirrorList"}).findAll("li")
     for mirror in info[1:]:
-        name = re.findall(r"\((.*)\)", mirror.text.strip())[0]
+        name = re.findall(r"\(([\s\S]*)\)", mirror.text.strip())[0]
         dl_url = (
             f'https://{mirror["id"]}.dl.sourceforge.net/project/{project}/{file_path}'
         )
@@ -274,8 +276,8 @@ def osdn(url: str) -> str:
     mirrors = page.find("form", {"id": "mirror-select-form"}).findAll("tr")
     for data in mirrors[1:]:
         mirror = data.find("input")["value"]
-        name = re.findall(r"\((.*)\)", data.findAll("td")[-1].text.strip())[0]
-        dl_url = re.sub(r"m=(.*)&f", f"m={mirror}&f", link)
+        name = re.findall(r"\(([\s\S]*)\)", data.findAll("td")[-1].text.strip())[0]
+        dl_url = re.sub(r"m=([\s\S]*)&f", f"m={mirror}&f", link)
         reply += f"[{name}]({dl_url}) "
     return reply
 
@@ -306,7 +308,7 @@ def androidfilehost(url: str) -> str:
     except IndexError:
         reply = "`No AFH links found`\n"
         return reply
-    fid = re.findall(r"\?fid=(.*)", link)[0]
+    fid = re.findall(r"\?fid=([\s\S]*)", link)[0]
     session = requests.Session()
     user_agent = useragent()
     headers = {"user-agent": user_agent}

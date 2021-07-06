@@ -23,7 +23,7 @@ game_list = "1.`ttt` :- Tic-Tac-Toe\n2.`ttf` :- Tic-Tac-Four\n3.`cf` :- Connect 
 
 
 @catub.cat_cmd(
-    pattern="game(?: |$)(.*)",
+    pattern="game(?:\s|$)([\s\S]*)",
     command=("game", plugin_category),
     info={
         "header": "Play inline games",

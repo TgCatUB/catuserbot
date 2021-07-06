@@ -361,7 +361,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="ttf (.*)",
+    pattern="ttf ([\s\S]*)",
     command=("ttf", plugin_category),
     info={
         "header": "Text to file.",
@@ -476,7 +476,7 @@ async def on_file_to_photo(event):
 
 
 @catub.cat_cmd(
-    pattern="gif(?: |$)(.*)",
+    pattern="gif(?:\s|$)([\s\S]*)",
     command=("gif", plugin_category),
     info={
         "header": "Converts Given animated sticker to gif.",

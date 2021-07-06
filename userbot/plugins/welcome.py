@@ -84,7 +84,7 @@ async def _(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="savewelcome(?: |$)(.*)",
+    pattern="savewelcome(?:\s|$)([\s\S]*)",
     command=("savewelcome", plugin_category),
     info={
         "header": "To welcome new users in chat.",

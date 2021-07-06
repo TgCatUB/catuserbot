@@ -21,7 +21,7 @@ NO_PERM = "`I don't have sufficient permissions! This is so sed. Alexa play desp
 
 
 @catub.cat_cmd(
-    pattern="tmute(?: |$)(.*)",
+    pattern="tmute(?:\s|$)([\s\S]*)",
     command=("tmute", plugin_category),
     info={
         "header": "To stop sending messages permission for that user",
@@ -108,7 +108,7 @@ async def tmuter(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="tban(?: |$)(.*)",
+    pattern="tban(?:\s|$)([\s\S]*)",
     command=("tban", plugin_category),
     info={
         "header": "To remove a user from the group for specified time.",

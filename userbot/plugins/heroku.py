@@ -30,7 +30,7 @@ HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 
 @catub.cat_cmd(
-    pattern="(set|get|del) var (.*)",
+    pattern="(set|get|del) var ([\s\S]*)",
     command=("var", plugin_category),
     info={
         "header": "To manage heroku vars.",

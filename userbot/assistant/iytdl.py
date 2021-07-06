@@ -45,7 +45,7 @@ plugin_category = "bot"
 
 
 @catub.cat_cmd(
-    pattern="iytdl(?: |$)(.*)",
+    pattern="iytdl(?:\s|$)([\s\S]*)",
     command=("iytdl", plugin_category),
     info={
         "header": "ytdl with inline buttons.",

@@ -151,7 +151,7 @@ async def irotate(event):
 
 
 @catub.cat_cmd(
-    pattern="iresize(?: |$)(.*)$",
+    pattern="iresize(?:\s|$)([\s\S]*)$",
     command=("iresize", plugin_category),
     info={
         "header": "To resize the replied image/sticker",

@@ -4,7 +4,7 @@ plugin_category = "fun"
 
 
 @catub.cat_cmd(
-    pattern="ded (.*)",
+    pattern="ded ([\s\S]*)",
     command=("ded", plugin_category),
     info={
         "header": "Just a art command try out yourself to see",
@@ -34,7 +34,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="killer (.*)",
+    pattern="killer ([\s\S]*)",
     command=("killer", plugin_category),
     info={
         "header": "Just a art command try out yourself to see",

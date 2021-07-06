@@ -40,7 +40,7 @@ async def get_font_file(client, channel_id, search_kw=""):
 
 
 @catub.cat_cmd(
-    pattern="sttxt(?: |$)(.*)",
+    pattern="sttxt(?:\s|$)([\s\S]*)",
     command=("sttxt", plugin_category),
     info={
         "header": "Anime that makes your writing fun.",
@@ -66,7 +66,7 @@ async def waifu(animu):
 
 # 12 21 28 30
 @catub.cat_cmd(
-    pattern="stcr ?(?:(.*?) ?; )?(.*)",
+    pattern="stcr ?(?:(.*?) ?; )?([\s\S]*)",
     command=("stcr", plugin_category),
     info={
         "header": "your text as sticker.",
@@ -134,7 +134,7 @@ async def sticklet(event):
 
 
 @catub.cat_cmd(
-    pattern="honk(?: |$)(.*)",
+    pattern="honk(?:\s|$)([\s\S]*)",
     command=("honk", plugin_category),
     info={
         "header": "Make honk say anything.",
@@ -160,7 +160,7 @@ async def honk(event):
 
 
 @catub.cat_cmd(
-    pattern="twt(?: |$)(.*)",
+    pattern="twt(?:\s|$)([\s\S]*)",
     command=("twt", plugin_category),
     info={
         "header": "Make a cool tweet of your account",
@@ -186,7 +186,7 @@ async def twt(event):
 
 
 @catub.cat_cmd(
-    pattern="doge(?: |$)(.*)",
+    pattern="doge(?:\s|$)([\s\S]*)",
     command=("doge", plugin_category),
     info={
         "header": "Make doge say anything.",
@@ -212,7 +212,7 @@ async def doge(event):
 
 
 @catub.cat_cmd(
-    pattern="glax(|r)(?: |$)(.*)",
+    pattern="glax(|r)(?:\s|$)([\s\S]*)",
     command=("glax", plugin_category),
     info={
         "header": "Make glax the dragon scream your text.",

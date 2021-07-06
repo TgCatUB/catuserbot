@@ -63,7 +63,7 @@ async def subprocess_run(megadl, cmd):
 
 
 @catub.cat_cmd(
-    pattern="mega(?: |$)(.*)",
+    pattern="mega(?:\s|$)([\s\S]*)",
     command=("mega", plugin_category),
     info={
         "header": "Downloads mega files from it links.",

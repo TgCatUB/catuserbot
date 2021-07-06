@@ -30,7 +30,7 @@ def weird_division(n, d):
 
 
 @catub.cat_cmd(
-    pattern="chatfs(?: |$)(.*)",
+    pattern="chatfs(?:\s|$)([\s\S]*)",
     command=("chatfs", plugin_category),
     info={
         "header": "Shows you the complete media/file summary of the that group.",
@@ -132,7 +132,7 @@ async def _(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="userfs(?: |$)(.*)",
+    pattern="userfs(?:\s|$)([\s\S]*)",
     command=("userfs", plugin_category),
     info={
         "header": "Shows you the complete media/file summary of the that user in that group.",

@@ -86,7 +86,7 @@ async def gn(event):
 
 
 @catub.cat_cmd(
-    pattern="hi(?: |$)(.*)",
+    pattern="hi(?:\s|$)([\s\S]*)",
     command=("hi", plugin_category),
     info={
         "header": "Hi text art.",

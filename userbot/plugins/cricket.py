@@ -46,7 +46,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="cric (.*)",
+    pattern="cric ([\s\S]*)",
     command=("cric", plugin_category),
     info={
         "header": "To see the scoreboard or commentary of a match",

@@ -16,7 +16,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="ls(?: |$)(.*)",
+    pattern="ls(?:\s|$)([\s\S]*)",
     command=("ls", plugin_category),
     info={
         "header": "To list all files and folders.",
@@ -106,7 +106,7 @@ async def lst(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="rem (.*)",
+    pattern="rem ([\s\S]*)",
     command=("rem", plugin_category),
     info={
         "header": "To delete a file or folder from the server",
@@ -131,14 +131,14 @@ async def lst(event):
     catcmd = f"rm -rf {path}"
     if os.path.isdir(path):
         await _catutils.runcmd(catcmd)
-        await edit_or_reply(event, f"Succesfully removed `{path}` directory")
+        await edit_or_reply(event, f"successfully removed `{path}` directory")
     else:
         await _catutils.runcmd(catcmd)
-        await edit_or_reply(event, f"Succesfully removed `{path}` file")
+        await edit_or_reply(event, f"successfully removed `{path}` file")
 
 
 @catub.cat_cmd(
-    pattern="mkdir(?: |$)(.*)",
+    pattern="mkdir(?:\s|$)([\s\S]*)",
     command=("mkdir", plugin_category),
     info={
         "header": "To create a new directory.",
@@ -175,7 +175,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="cpto(?: |$)(.*)",
+    pattern="cpto(?:\s|$)([\s\S]*)",
     command=("cpto", plugin_category),
     info={
         "header": "To copy a file from one directory to other directory",
@@ -221,7 +221,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="mvto(?: |$)(.*)",
+    pattern="mvto(?:\s|$)([\s\S]*)",
     command=("mvto", plugin_category),
     info={
         "header": "To move a file from one directory to other directory.",

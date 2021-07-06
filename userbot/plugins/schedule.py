@@ -6,7 +6,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="schd (\d*) (.*)",
+    pattern="schd (\d*) ([\s\S]*)",
     command=("schd", plugin_category),
     info={
         "header": "To schedule a message after given time(in seconds).",

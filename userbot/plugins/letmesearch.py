@@ -10,7 +10,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="lmg (.*)",
+    pattern="lmg ([\s\S]*)",
     command=("lmg", plugin_category),
     info={
         "header": "Searches the given query in Google and shows you the link of that query.",
@@ -37,7 +37,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="lmy (.*)",
+    pattern="lmy ([\s\S]*)",
     command=("lmy", plugin_category),
     info={
         "header": "Searches the given query in youtube and shows you the link of that query.",
@@ -66,7 +66,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="ddg (.*)",
+    pattern="ddg ([\s\S]*)",
     command=("ddg", plugin_category),
     info={
         "header": "Searches the given query in Duck buck go and shows you the link of that query.",
@@ -95,7 +95,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="lmalt (.*)",
+    pattern="lmalt ([\s\S]*)",
     command=("lmalt", plugin_category),
     info={
         "header": "Searches the given query in altnews and shows you the link of that query.",
@@ -122,7 +122,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="lmvar (.*)",
+    pattern="lmvar ([\s\S]*)",
     command=("lmvar", plugin_category),
     info={
         "header": "Searches the given app name in heroku and show that app vars page link .",
@@ -151,7 +151,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="lmlog (.*)",
+    pattern="lmlog ([\s\S]*)",
     command=("lmlog", plugin_category),
     info={
         "header": "Searches the given app name in heroku and shows you logs page link of that app.",
@@ -178,7 +178,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="dyno (.*)",
+    pattern="dyno ([\s\S]*)",
     command=("dyno", plugin_category),
     info={
         "header": "Searches the given app name in heroku and shows you dyno page link of that app.",
@@ -205,7 +205,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="lmkp (.*)",
+    pattern="lmkp ([\s\S]*)",
     command=("lmkp", plugin_category),
     info={
         "header": "Searches the given query in indian kanoon and shows you the link of that query.",
@@ -232,7 +232,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="gem (.*)",
+    pattern="gem ([\s\S]*)",
     command=("gem", plugin_category),
     info={
         "header": "Searches the given query in Government e marketplace and shows you the link of that query.",
@@ -259,7 +259,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="archive (.*)",
+    pattern="archive ([\s\S]*)",
     command=("archive", plugin_category),
     info={
         "header": "Searches the given query in web archive and shows you the link of that query.",

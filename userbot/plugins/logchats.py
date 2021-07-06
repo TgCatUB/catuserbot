@@ -29,7 +29,7 @@ LOG_CHATS_ = LOG_CHATS()
 
 @catub.cat_cmd(incoming=True, func=lambda e: e.is_private, edited=False, forword=None)
 async def monito_p_m_s(event):  # sourcery no-metrics
-    if not Config.PM_LOGGER_GROUP_ID:
+    if Config.PM_LOGGER_GROUP_ID == -100:
         return
     if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
         return
@@ -76,7 +76,7 @@ async def log_tagged_messages(event):
         return
     if (
         (no_log_pms_sql.is_approved(hmm.id))
-        or (not Config.PM_LOGGER_GROUP_ID)
+        or (Config.PM_LOGGER_GROUP_ID == -100)
         or ("on" in AFK_.USERAFK_ON)
         or (await event.get_sender() and (await event.get_sender()).bot)
     ):
@@ -107,7 +107,7 @@ async def log_tagged_messages(event):
 
 
 @catub.cat_cmd(
-    pattern="save(?: |$)(.*)",
+    pattern="save(?:\s|$)([\s\S]*)",
     command=("save", plugin_category),
     info={
         "header": "To log the replied message to bot log group so you can check later.",
@@ -150,7 +150,7 @@ async def log(log_text):
 )
 async def set_no_log_p_m(event):
     "To turn on logging of messages from that chat."
-    if Config.PM_LOGGER_GROUP_ID is not None:
+    if Config.PM_LOGGER_GROUP_ID != -100:
         chat = await event.get_chat()
         if no_log_pms_sql.is_approved(chat.id):
             no_log_pms_sql.disapprove(chat.id)
@@ -172,7 +172,7 @@ async def set_no_log_p_m(event):
 )
 async def set_no_log_p_m(event):
     "To turn off logging of messages from that chat."
-    if Config.PM_LOGGER_GROUP_ID is not None:
+    if Config.PM_LOGGER_GROUP_ID != -100:
         chat = await event.get_chat()
         if not no_log_pms_sql.is_approved(chat.id):
             no_log_pms_sql.approve(chat.id)
@@ -210,12 +210,11 @@ async def set_pmlog(event):
         else:
             addgvar("PMLOG", h_type)
             await event.edit("`Pm logging is disabled`")
+    elif h_type:
+        addgvar("PMLOG", h_type)
+        await event.edit("`Pm logging is enabled`")
     else:
-        if h_type:
-            addgvar("PMLOG", h_type)
-            await event.edit("`Pm logging is enabled`")
-        else:
-            await event.edit("`Pm logging is already disabled`")
+        await event.edit("`Pm logging is already disabled`")
 
 
 @catub.cat_cmd(
@@ -247,9 +246,8 @@ async def set_grplog(event):
         else:
             addgvar("GRPLOG", h_type)
             await event.edit("`Group logging is disabled`")
+    elif h_type:
+        addgvar("GRPLOG", h_type)
+        await event.edit("`Group logging is enabled`")
     else:
-        if h_type:
-            addgvar("GRPLOG", h_type)
-            await event.edit("`Group logging is enabled`")
-        else:
-            await event.edit("`Group logging is already disabled`")
+        await event.edit("`Group logging is already disabled`")

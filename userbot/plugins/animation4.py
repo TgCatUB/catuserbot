@@ -6,7 +6,7 @@ plugin_category = "fun"
 
 
 @catub.cat_cmd(
-    pattern="kilr(?: |$)(.*)",
+    pattern="kilr(?:\s|$)([\s\S]*)",
     command=("kilr", plugin_category),
     info={
         "header": "Fun animation try yourself to know more",

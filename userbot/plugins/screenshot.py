@@ -22,7 +22,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="ss (.*)",
+    pattern="ss ([\s\S]*)",
     command=("ss", plugin_category),
     info={
         "header": "To Take a screenshot of a website.",
@@ -93,7 +93,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="scapture (.*)",
+    pattern="scapture ([\s\S]*)",
     command=("scapture", plugin_category),
     info={
         "header": "To Take a screenshot of a website.",

@@ -34,7 +34,7 @@ class AFK:
 AFK_ = AFK()
 
 
-@catub.cat_cmd(outgoing=True)
+@catub.cat_cmd(outgoing=True, edited=False)
 async def set_not_afk(event):
     if AFK_.afk_on is False:
         return
@@ -80,7 +80,9 @@ async def set_not_afk(event):
             )
 
 
-@catub.cat_cmd(incoming=True, func=lambda e: bool(e.mentioned or e.is_private))
+@catub.cat_cmd(
+    incoming=True, func=lambda e: bool(e.mentioned or e.is_private), edited=False
+)
 async def on_afk(event):  # sourcery no-metrics
     if AFK_.afk_on is False:
         return
@@ -138,7 +140,7 @@ async def on_afk(event):  # sourcery no-metrics
         if event.is_private:
             return
         hmm = await event.get_chat()
-        if not Config.PM_LOGGER_GROUP_ID:
+        if Config.PM_LOGGER_GROUP_ID == -100:
             return
         full = None
         try:
@@ -164,7 +166,7 @@ async def on_afk(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="afk(?: |$)(.*)",
+    pattern="afk(?:\s|$)([\s\S]*)",
     command=("afk", plugin_category),
     info={
         "header": "Enables afk for your account",
@@ -224,7 +226,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="mafk(?: |$)(.*)",
+    pattern="mafk(?:\s|$)([\s\S]*)",
     command=("mafk", plugin_category),
     info={
         "header": "Enables afk for your account",

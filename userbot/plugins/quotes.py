@@ -1,20 +1,20 @@
 # inspired from uniborg Quotes plugin
 import random
 
-import requests
-
 from userbot import catub
 
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import catmemes
+from ..helpers.functions import random_quote, search_quotes
+from ..helpers.utils import parse_pre
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "extra"
 
 
 @catub.cat_cmd(
-    pattern="quote(?: |$)(.*)",
+    pattern="quote(?:\s|$)([\s\S]*)",
     command=("quote", plugin_category),
     info={
         "header": "To get random quotes on given topic.",
@@ -25,24 +25,12 @@ plugin_category = "extra"
 )
 async def quote_search(event):
     "shows random quotes on given topic."
-    catevent = await edit_or_reply(event, "`Processing...`")
     input_str = event.pattern_match.group(1)
-    if not input_str:
-        api_url = "https://quotes.cwprojects.live/random"
-        try:
-            response = requests.get(api_url).json()
-        except Exception:
-            response = None
-    else:
-        api_url = f"https://quotes.cwprojects.live/search/query={input_str}"
-        try:
-            response = random.choice(requests.get(api_url).json())
-        except Exception:
-            response = None
-    if response is not None:
-        await catevent.edit(f"`{response['text']}`")
-    else:
-        await edit_delete(catevent, "`Sorry Zero results found`", 5)
+    try:
+        response = await search_quotes(input_str) if input_str else await random_quote()
+    except Exception:
+        return await edit_delete(event, "`Sorry Zero results found`", 5)
+    await edit_or_reply(event, response, parse_mode=parse_pre)
 
 
 @catub.cat_cmd(

@@ -80,7 +80,7 @@ async def Oof(e):
 
 
 @catub.cat_cmd(
-    pattern="type (.*)",
+    pattern="type ([\s\S]*)",
     command=("type", plugin_category),
     info={
         "header": "Type writter animation.",
@@ -105,7 +105,7 @@ async def typewriter(typew):
 
 
 @catub.cat_cmd(
-    pattern="repeat (\d*) (.*)",
+    pattern="repeat (\d*) ([\s\S]*)",
     command=("repeat", plugin_category),
     info={
         "header": "repeats the given text with given no of times.",

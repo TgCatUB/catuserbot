@@ -21,6 +21,7 @@ def load_module(shortname, plugin_path=None):
         pass
     elif shortname.endswith("_"):
         path = Path(f"userbot/plugins/{shortname}.py")
+        checkplugins(path)
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
@@ -33,6 +34,7 @@ def load_module(shortname, plugin_path=None):
         else:
             path = Path((f"{plugin_path}/{shortname}.py"))
             name = f"{plugin_path}/{shortname}".replace("/", ".")
+        checkplugins(path)
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
         mod.bot = catub
@@ -88,3 +90,13 @@ def remove_plugin(shortname):
                 del catub._event_builders[i]
     except BaseException:
         raise ValueError
+
+
+def checkplugins(filename):
+    with open(filename, "r") as f:
+        filedata = f.read()
+    filedata = filedata.replace("sendmessage", "send_message")
+    filedata = filedata.replace("sendfile", "send_file")
+    filedata = filedata.replace("editmessage", "edit_message")
+    with open(filename, "w") as f:
+        f.write(filedata)

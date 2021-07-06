@@ -18,7 +18,7 @@ LOGS = logging.getLogger("CatUserbot")
 bot = catub
 
 StartTime = time.time()
-catversion = "3.0.2"
+catversion = "3.0.3"
 
 if Config.UPSTREAM_REPO == "badcat":
     UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot"
@@ -44,7 +44,7 @@ else:
 
 if Config.PM_LOGGER_GROUP_ID == 0:
     if gvarstatus("PM_LOGGER_GROUP_ID") is None:
-        Config.PM_LOGGER_GROUP_ID = 0
+        Config.PM_LOGGER_GROUP_ID = -100
     else:
         Config.PM_LOGGER_GROUP_ID = int(gvarstatus("PM_LOGGER_GROUP_ID"))
 elif str(Config.PM_LOGGER_GROUP_ID)[0] != "-":

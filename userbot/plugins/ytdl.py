@@ -152,7 +152,7 @@ async def _get_file_name(path: pathlib.Path, full: bool = True) -> str:
 
 
 @catub.cat_cmd(
-    pattern="yta(?: |$)(.*)",
+    pattern="yta(?:\s|$)([\s\S]*)",
     command=("yta", plugin_category),
     info={
         "header": "To download audio from many sites like Youtube",
@@ -219,7 +219,7 @@ async def download_audio(event):
 
 
 @catub.cat_cmd(
-    pattern="ytv(?: |$)(.*)",
+    pattern="ytv(?:\s|$)([\s\S]*)",
     command=("ytv", plugin_category),
     info={
         "header": "To download video from many sites like Youtube",
@@ -284,7 +284,7 @@ async def download_video(event):
 
 
 @catub.cat_cmd(
-    pattern="yts(?: |$)(\d*)? ?(.*)",
+    pattern="yts(?: |$)(\d*)? ?([\s\S]*)",
     command=("yts", plugin_category),
     info={
         "header": "To search youtube videos",
@@ -322,7 +322,7 @@ async def yt_search(event):
 
 
 @catub.cat_cmd(
-    pattern="insta (.*)",
+    pattern="insta ([\s\S]*)",
     command=("insta", plugin_category),
     info={
         "header": "To download instagram video/photo",

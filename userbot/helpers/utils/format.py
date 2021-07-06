@@ -1,35 +1,28 @@
 import datetime
-import re
 
-import requests
+from bs4 import BeautifulSoup
+from markdown import markdown
 from telethon.tl.tlobject import TLObject
 from telethon.tl.types import MessageEntityPre
 from telethon.utils import add_surrogate
 
 from ..functions.utils import utc_to_local
+from .paste import pastetext
 
 
-def paste_text(text, markdown=True):
+async def paste_message(text, pastetype="p", extension=None, markdown=True):
     if markdown:
-        asciich = ["**", "`", "__"]
-        for i in asciich:
-            text = re.sub(rf"\{i}", "", text)
-    try:
-        nekokey = (
-            requests.post("https://nekobin.com/api/documents", json={"content": text})
-            .json()
-            .get("result")
-            .get("key")
-        )
-        link = f"https://nekobin.com/{nekokey}"
-    except Exception:
-        text = text.encode(encoding="latin-1", errors="namereplace")
-        url = "https://del.dog/documents"
-        r = requests.post(url, data=text).json()
-        link = f"https://del.dog/{r['key']}"
-        if r["isUrl"]:
-            link = f"https://del.dog/v/{r['key']}"
-    return link
+        text = md_to_text(text)
+    response = await pastetext(text, pastetype, extension)
+    if "url" in response:
+        return response["url"]
+    return "Error while pasting text to site"
+
+
+def md_to_text(md):
+    html = markdown(md)
+    soup = BeautifulSoup(html, features="html.parser")
+    return soup.get_text()
 
 
 def mentionuser(name, userid):
@@ -78,6 +71,7 @@ def parse_pre(text):
 
 
 def yaml_format(obj, indent=0, max_str_len=256, max_byte_len=64):
+    # sourcery no-metrics
     """
     Pretty formats the given object as a YAML string which is returned.
     (based on TLObject.pretty_format)

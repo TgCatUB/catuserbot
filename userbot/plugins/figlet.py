@@ -25,7 +25,7 @@ CMD_FIG = {
 
 
 @catub.cat_cmd(
-    pattern="figlet(?: |$)(.*)",
+    pattern="figlet(?:\s|$)([\s\S]*)",
     command=("figlet", plugin_category),
     info={
         "header": "Changes the given text into the given style",

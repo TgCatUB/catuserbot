@@ -55,7 +55,7 @@ async def get_user(event):
 
 
 @catub.cat_cmd(
-    pattern="(\w+)say (.*)",
+    pattern="(\w+)say ([\s\S]*)",
     command=("cowsay", plugin_category),
     info={
         "header": "A fun art plugin.",
@@ -131,7 +131,7 @@ async def univsaye(cowmsg):
 
 
 @catub.cat_cmd(
-    pattern="coin ?(.*)",
+    pattern="coin ?([\s\S]*)",
     command=("coin", plugin_category),
     info={
         "header": "Coin flipper.",
@@ -176,7 +176,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="slap(?: |$)(.*)",
+    pattern="slap(?:\s|$)([\s\S]*)",
     command=("slap", plugin_category),
     info={
         "header": "To slap a person with random objects !!",
@@ -252,7 +252,7 @@ async def shout(args):
 
 
 @catub.cat_cmd(
-    pattern="owo ?(.*)",
+    pattern="owo ?([\s\S]*)",
     command=("owo", plugin_category),
     info={
         "header": "check yourself.",
@@ -282,7 +282,7 @@ async def faces(owo):
 
 
 @catub.cat_cmd(
-    pattern="clap(?: |$)(.*)",
+    pattern="clap(?:\s|$)([\s\S]*)",
     command=("clap", plugin_category),
     info={
         "header": "Praise people!",
@@ -307,7 +307,7 @@ async def claptext(event):
 
 
 @catub.cat_cmd(
-    pattern="smk(?: |$)(.*)",
+    pattern="smk(?:\s|$)([\s\S]*)",
     command=("smk", plugin_category),
     info={
         "header": "A shit module for ツ , who cares.",
@@ -335,7 +335,7 @@ async def smrk(smk):
 
 
 @catub.cat_cmd(
-    pattern="f (.*)",
+    pattern="f ([\s\S]*)",
     command=("f", plugin_category),
     info={
         "header": "Pay Respects.",
@@ -365,7 +365,7 @@ async def payf(event):
 
 
 @catub.cat_cmd(
-    pattern="wish(?: |$)(.*)",
+    pattern="wish(?:\s|$)([\s\S]*)",
     command=("wish", plugin_category),
     info={
         "header": "Shows the chance of your success.",
@@ -392,7 +392,7 @@ async def wish_check(event):
 
 
 @catub.cat_cmd(
-    pattern="lfy(?: |$)(.*)",
+    pattern="lfy(?:\s|$)([\s\S]*)",
     command=("lfy", plugin_category),
     info={
         "header": "Let me Google that for you real quick !!",
@@ -429,7 +429,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="gbun(?: |$)(.*)",
+    pattern="gbun(?:\s|$)([\s\S]*)",
     command=("gbun", plugin_category),
     info={
         "header": "Fake gban action !!",

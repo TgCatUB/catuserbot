@@ -41,7 +41,7 @@ async def ocr_space_file(
 
 
 @catub.cat_cmd(
-    pattern="ocr(?: |$)(.*)",
+    pattern="ocr(?:\s|$)([\s\S]*)",
     command=("ocr", plugin_category),
     info={
         "header": "To read text in image and print it.",

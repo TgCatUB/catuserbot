@@ -16,7 +16,7 @@ plugin_category = "tools"
 
 
 @catub.cat_cmd(
-    pattern="hash (.*)",
+    pattern="hash ([\s\S]*)",
     command=("hash", plugin_category),
     info={
         "header": "Find the md5, sha1, sha256, sha512 of the string when written into a txt file.",
@@ -53,7 +53,7 @@ async def gethash(hash_q):
 
 
 @catub.cat_cmd(
-    pattern="hbase (en|de) (.*)",
+    pattern="hbase (en|de) ([\s\S]*)",
     command=("hbase", plugin_category),
     info={
         "header": "Find the base64 encoding or decoding of the given string.",

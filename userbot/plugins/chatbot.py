@@ -1,3 +1,5 @@
+import random
+
 from telethon.utils import get_display_name
 
 from userbot import catub
@@ -16,6 +18,16 @@ from ..sql_helper.chatbot_sql import (
 from ..sql_helper.globals import gvarstatus
 
 plugin_category = "fun"
+
+tired_response = [
+    "I am little tired, Please give me some rest",
+    "Who are you to ask me questions Continuously",
+    "Leave me alone for some times",
+    "Time to Sleep, I will get back to you soon",
+    "I have a job to do, Come back later",
+    "I need to rest, leave me alone for some times",
+    "I am not feeling well, Please Come back later",
+]
 
 
 @catub.cat_cmd(
@@ -194,12 +206,16 @@ async def ai_reply(event):
     if is_added(event.chat_id, event.sender_id) and (event.message.text):
         AI_LANG = gvarstatus("AI_LANG") or "en"
         master_name = get_display_name(await event.client.get_me())
-        response = await rs_client.get_ai_response(
-            message=event.message.text,
-            server="primary",
-            master="CatUserbot",
-            bot=master_name,
-            uid=event.client.uid,
-            language=AI_LANG,
-        )
-        await event.reply(response.message)
+        try:
+            response = await rs_client.get_ai_response(
+                message=event.message.text,
+                server="primary",
+                master="CatUserbot",
+                bot=master_name,
+                uid=event.client.uid,
+                language=AI_LANG,
+            )
+            await event.reply(response.message)
+        except Exception as e:
+            LOGS.error(str(e))
+            await event.reply(random.choice(tired_response))

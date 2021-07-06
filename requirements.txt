@@ -1,5 +1,6 @@
 aiofiles
 aiohttp
+apscheduler
 cairosvg
 cloudscraper
 colour
@@ -21,10 +22,12 @@ hachoir
 heroku3
 html-telegraph-poster
 humanize
+IMDbPY
 jikanpy
 justwatch
 lottie
 lyricsgenius
+markdown
 motor
 moviepy
 nekos.py
@@ -56,7 +59,7 @@ speedtest-cli
 sqlalchemy-json
 sqlalchemy==1.3.23
 telegraph
-Telethon
+git+https://github.com/sandy1709/Telethon
 TgCrypto
 tswift
 ujson

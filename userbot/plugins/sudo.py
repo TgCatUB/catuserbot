@@ -89,7 +89,7 @@ async def chat_blacklist(event):
 
 
 @catub.cat_cmd(
-    pattern="addsudo(?: |$)(.*)",
+    pattern="addsudo(?:\s|$)([\s\S]*)",
     command=("addsudo", plugin_category),
     info={
         "header": "To add user as your sudo.",
@@ -129,7 +129,7 @@ async def add_sudo_user(event):
 
 
 @catub.cat_cmd(
-    pattern="delsudo(?: |$)(.*)",
+    pattern="delsudo(?:\s|$)([\s\S]*)",
     command=("delsudo", plugin_category),
     info={
         "header": "To remove user from your sudo.",
@@ -189,7 +189,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="addscmd(s)? ((.|\n)*)",
+    pattern="addscmd(s)?(?:\s|$)([\s\S]*)",
     command=("addscmd", plugin_category),
     info={
         "header": "To enable cmds for sudo users.",
@@ -282,7 +282,7 @@ async def _(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="rmscmd(s)? ((.|\n)*)?",
+    pattern="rmscmd(s)?(?:\s|$)([\s\S]*)?",
     command=("rmscmd", plugin_category),
     info={
         "header": "To disable given cmds for sudo.",

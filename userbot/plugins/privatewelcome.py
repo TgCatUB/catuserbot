@@ -80,7 +80,7 @@ async def _(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="savepwel(?: |$)(.*)",
+    pattern="savepwel(?:\s|$)([\s\S]*)",
     command=("savepwel", plugin_category),
     info={
         "header": "To welcome user(sends welcome message to here private messages).",

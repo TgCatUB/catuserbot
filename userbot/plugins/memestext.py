@@ -107,7 +107,7 @@ async def proo(e):
 
 
 @catub.cat_cmd(
-    pattern="react ?(.*)",
+    pattern="react ?([\s\S]*)",
     command=("react", plugin_category),
     info={
         "header": "Make your userbot react",
