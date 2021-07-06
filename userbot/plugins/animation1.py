@@ -179,7 +179,7 @@ async def _(event):
 async def _(event):
     "animation command"
     animation_interval = 0.3
-    animation_ttl = range(27)
+    animation_ttl = range(24)
     animation_chars = [
         "🔴⬛⬛⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
         "⬜⬜⬛⬜⬜\n⬜⬛⬜⬜⬜\n🔴⬜⬜⬜⬜",
@@ -189,13 +189,12 @@ async def _(event):
         "⬜⬜⬛⬜⬜\n⬜⬜⬜⬛⬜\n⬜⬜⬜⬜🔴",
         "⬜⬜⬛⬜⬜\n⬜⬜⬛⬜⬜\n⬜⬜🔴⬜⬜",
         "⬜⬜⬛⬜⬜\n⬜⬛⬜⬜⬜\n🔴⬜⬜⬜⬜",
-        "🔴⬛⬛⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
     ]
     event = await edit_or_reply(event, "ding..dong..ding..dong ...")
     await asyncio.sleep(2)
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
-        await event.edit(animation_chars[i % 9])
+        await event.edit(animation_chars[i % 8])
 
 
 @catub.cat_cmd(
