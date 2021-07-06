@@ -73,11 +73,10 @@ async def _(event):
         ):
             if x.deleted:
                 mentions += "\n `{}`".format(x.id)
-            else:
-                if isinstance(x.participant, ChannelParticipantAdmin):
-                    mentions += "\n ⚜️ [{}](tg://user?id={}) `{}`".format(
-                        x.first_name, x.id, x.id
-                    )
+            elif isinstance(x.participant, ChannelParticipantAdmin):
+                mentions += "\n ⚜️ [{}](tg://user?id={}) `{}`".format(
+                    x.first_name, x.id, x.id
+                )
     except Exception as e:
         mentions += " " + str(e) + "\n"
     await event.client.send_message(event.chat_id, mentions, reply_to=reply_message)
@@ -150,9 +149,8 @@ async def get_users(show):
             chat = await show.client.get_entity(input_str)
         except Exception as e:
             return await edit_delete(show, f"`{str(e)}`", 10)
-    else:
-        if not show.is_group:
-            return await edit_or_reply(show, "`Are you sure this is a group?`")
+    elif not show.is_group:
+        return await edit_or_reply(show, "`Are you sure this is a group?`")
     catevent = await edit_or_reply(show, "`getting users list wait...`  ")
     try:
         if show.pattern_match.group(1):

@@ -164,12 +164,12 @@ async def _(event):  # sourcery no-metrics
             cpin = True
             changeinfo = True
             locktype = "everything"
-        else:
-            if input_str:
-                return await edit_delete(
-                    event, f"**Invalid lock type :** `{input_str}`", time=5
-                )
+        elif input_str:
+            return await edit_delete(
+                event, f"**Invalid lock type :** `{input_str}`", time=5
+            )
 
+        else:
             return await edit_or_reply(event, "`I can't lock nothing !!`")
         try:
             cat = Get(cat)
@@ -352,12 +352,12 @@ async def _(event):  # sourcery no-metrics
             cpin = False
             changeinfo = False
             locktype = "everything"
-        else:
-            if input_str:
-                return await edit_delete(
-                    event, f"**Invalid unlock type :** `{input_str}`", time=5
-                )
+        elif input_str:
+            return await edit_delete(
+                event, f"**Invalid unlock type :** `{input_str}`", time=5
+            )
 
+        else:
             return await edit_or_reply(event, "`I can't unlock nothing !!`")
         try:
             cat = Get(cat)
@@ -662,12 +662,12 @@ async def _(event):  # sourcery no-metrics
         ucpin = True
         uchangeinfo = True
         locktype = "everything"
-    else:
-        if input_str:
-            return await edit_delete(
-                event, f"**Invalid lock type :** `{input_str}`", time=5
-            )
+    elif input_str:
+        return await edit_delete(
+            event, f"**Invalid lock type :** `{input_str}`", time=5
+        )
 
+    else:
         return await edit_or_reply(event, "`I can't lock nothing !!`")
     try:
         cat = Get(cat)
@@ -913,12 +913,12 @@ async def _(event):  # sourcery no-metrics
         if not changeinfo:
             uchangeinfo = False
         locktype = "everything"
-    else:
-        if input_str:
-            return await edit_delete(
-                event, f"**Invalid lock type :** `{input_str}`", time=5
-            )
+    elif input_str:
+        return await edit_delete(
+            event, f"**Invalid lock type :** `{input_str}`", time=5
+        )
 
+    else:
         return await edit_or_reply(event, "`I can't lock nothing !!`")
     try:
         cat = Get(cat)

@@ -157,14 +157,13 @@ async def _(event):
         outstr = await plugininfo(input_str, event, flag)
         if outstr is None:
             return
+    elif flag == "-t":
+        outstr = await grpinfo()
     else:
-        if flag == "-t":
-            outstr = await grpinfo()
-        else:
-            results = await event.client.inline_query(Config.TG_BOT_USERNAME, "help")
-            await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
-            await event.delete()
-            return
+        results = await event.client.inline_query(Config.TG_BOT_USERNAME, "help")
+        await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+        await event.delete()
+        return
     await edit_or_reply(event, outstr)
 
 

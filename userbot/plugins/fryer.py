@@ -142,10 +142,7 @@ async def deepfryer(event):
     "image fryer"
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
-    if input_str:
-        frycount = int(input_str)
-    else:
-        frycount = 1
+    frycount = int(input_str) if input_str else 1
     if event.is_reply:
         reply_message = await event.get_reply_message()
         data = await check_media(reply_message)

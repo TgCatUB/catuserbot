@@ -128,12 +128,12 @@ def higlighted_text(
     for i, items in enumerate(list_text):
         x, y = (font.getsize(list_text[i])[0] + 50, int(th * 2 - (th / 2)))
         # align masks on the image....left,right & center
-        if align == "right":
-            width_align = "(mask_size-x)"
-        if align == "left":
-            width_align = "0"
         if align == "center":
             width_align = "((mask_size-x)/2)"
+        elif align == "left":
+            width_align = "0"
+        elif align == "right":
+            width_align = "(mask_size-x)"
         clr = ImageColor.getcolor(background, "RGBA")
         if transparency == 0:
             mask_img = Image.new(
