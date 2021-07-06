@@ -16,18 +16,18 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(incoming=True)
-async def filter_incoming_handler(handler):  # sourcery no-metrics
-    if handler.sender_id == handler.client.uid:
+async def filter_incoming_handler(event):  # sourcery no-metrics
+    if event.sender_id == event.client.uid:
         return
-    name = handler.raw_text
-    filters = get_filters(handler.chat_id)
+    name = event.raw_text
+    filters = get_filters(event.chat_id)
     if not filters:
         return
-    a_user = await handler.get_sender()
-    chat = await handler.get_chat()
-    me = await handler.client.get_me()
+    a_user = await event.get_sender()
+    chat = await event.get_chat()
+    me = await event.client.get_me()
     title = chat.title or "this chat"
-    participants = await handler.client.get_participants(chat)
+    participants = await event.client.get_participants(chat)
     count = len(participants)
     mention = f"[{a_user.first_name}](tg://user?id={a_user.id})"
     my_mention = f"[{me.first_name}](tg://user?id={me.id})"
@@ -44,10 +44,10 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
         pattern = r"( |^|[^\w])" + re.escape(trigger.keyword) + r"( |$|[^\w])"
         if re.search(pattern, name, flags=re.IGNORECASE):
             if trigger.f_mesg_id:
-                msg_o = await handler.client.get_messages(
+                msg_o = await event.client.get_messages(
                     entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
                 )
-                await handler.reply(
+                await event.reply(
                     msg_o.message.format(
                         mention=mention,
                         title=title,
@@ -66,7 +66,7 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
                     file=msg_o.media,
                 )
             elif trigger.reply:
-                await handler.reply(
+                await event.reply(
                     trigger.reply.format(
                         mention=mention,
                         title=title,
@@ -86,7 +86,7 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="filter ([\s\S]*)",
+    pattern="filter (.*)",
     command=("filter", plugin_category),
     info={
         "header": "To save filter for the given keyword.",
@@ -184,13 +184,13 @@ async def on_snip_list(event):
         "usage": "{tr}stop <keyword>",
     },
 )
-async def remove_a_filter(r_handler):
+async def remove_a_filter(event):
     "Stops the specified keyword."
-    filt = r_handler.pattern_match.group(1)
-    if not remove_filter(r_handler.chat_id, filt):
-        await r_handler.edit("Filter` {} `doesn't exist.".format(filt))
+    filt = event.pattern_match.group(1)
+    if not remove_filter(event.chat_id, filt):
+        await event.edit("Filter` {} `doesn't exist.".format(filt))
     else:
-        await r_handler.edit("Filter `{} `was deleted successfully".format(filt))
+        await event.edit("Filter `{} `was deleted successfully".format(filt))
 
 
 @catub.cat_cmd(
