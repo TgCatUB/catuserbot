@@ -106,7 +106,6 @@ async def filter_incoming_handler(event):  # sourcery no-metrics
             "{my_mention}": "To mention myself",
             "{my_username}": "To use my username.",
         },
-        "note": "For saving media/stickers as filters you need to set PRIVATE_GROUP_BOT_API_ID.",
         "usage": "{tr}filter <keyword>",
     },
 )
