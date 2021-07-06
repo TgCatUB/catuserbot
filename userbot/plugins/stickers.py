@@ -364,6 +364,8 @@ async def kang(args):  # sourcery no-metrics
                     emoji,
                     cmd,
                 )
+            if packname is None:
+                return
             await edit_delete(
                 catevent,
                 f"`Sticker kanged successfully!\
@@ -386,6 +388,8 @@ async def kang(args):  # sourcery no-metrics
                     packname,
                     is_anim,
                 )
+            if otherpack is None:
+                return
             if otherpack:
                 await edit_delete(
                     catevent,
@@ -562,6 +566,8 @@ async def pack_kang(event):  # sourcery no-metrics
                         cmd,
                         pkang=True,
                     )
+            if catpackname is None:
+                return
             if catpackname not in blablapacks:
                 blablapacks.append(catpackname)
                 blablapacknames.append(pack)
