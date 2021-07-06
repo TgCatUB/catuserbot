@@ -151,7 +151,7 @@ async def _(event):  # sourcery no-metrics
                                 \n\n**URL : **`{url}`\
                                 \n**File Name :** `{file_name}`\
                                 \n{progress_str}\
-                                \n`{humanbytes(downloaded)} of {humanbytes(total_length)} @{humanbytes(dspeed)}`\
+                                \n`{humanbytes(downloaded)} of {humanbytes(total_length)} @ {humanbytes(dspeed)}`\
                                 \n**ETA : **`{estimated_total_time}`"
             if oldmsg != current_message:
                 if delay > 2:
