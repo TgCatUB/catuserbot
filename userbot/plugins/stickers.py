@@ -133,7 +133,9 @@ async def newpacksticker(
         await catevent.edit(
             "You have blocked the @stickers bot. unblock it and try."
         )
-        return
+        if not pkang:
+            return None,None,None
+        return None,None
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packnick)
@@ -150,7 +152,9 @@ async def newpacksticker(
         await catevent.edit(
             f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
         )
-        return
+        if not pkang:
+            return None,None,None
+        return None,None
     await conv.send_message(emoji)
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
@@ -192,7 +196,9 @@ async def add_to_pack(
         await catevent.edit(
             "You have blocked the @stickers bot. unblock it and try."
         )
-        return
+        if not pkang:
+            return None,None
+        return None,None
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packname)
@@ -236,7 +242,9 @@ async def add_to_pack(
         await catevent.edit(
             f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
         )
-        return
+        if not pkang:
+            return None,None
+        return None,None
     await conv.send_message(emoji)
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
