@@ -153,10 +153,11 @@ async def _(event):  # sourcery no-metrics
                                 \n{progress_str}\
                                 \n`{humanbytes(downloaded)} of {humanbytes(total_length)} @{humanbytes(dspeed)}`\
                                 \n**ETA : **`{estimated_total_time}`"
-            c_time = time.time()
             if oldmsg != current_message:
-                if delay >= 1:
+                if delay > 2:
                     await mone.edit(current_message)
+                    delay = 0
+                    c_time = time.time()
                 oldmsg = current_message
             await asyncio.sleep(1)
         end = datetime.now()
