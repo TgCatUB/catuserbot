@@ -141,9 +141,7 @@ async def add_new_filter(event):
     elif msg and msg.text and not string:
         string = msg.text
     else:
-        return edit_or_reply(
-            event, "__What should i do ?__"
-        )
+        return edit_or_reply(event, "__What should i do ?__")
     success = "`Filter` **{}** `{} successfully`"
     if add_filter(str(event.chat_id), keyword, string, msg_id) is True:
         return await edit_or_reply(event, success.format(keyword, "added"))
