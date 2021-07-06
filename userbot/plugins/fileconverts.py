@@ -502,9 +502,9 @@ async def _(event):  # sourcery no-metrics
                 loc[1] = int(loc[1])
             except ValueError:
                 return await edit_delete(
-                event,
-                "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
-            )
+                    event,
+                    "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
+                )
             if 0 < loc[0] < 721:
                 quality = loc[0].strip()
             else:
@@ -518,9 +518,9 @@ async def _(event):  # sourcery no-metrics
                 loc[0] = int(loc[0])
             except ValueError:
                 return await edit_delete(
-                event,
-                "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
-            )
+                    event,
+                    "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
+                )
             if 0 < loc[0] < 721:
                 quality = loc[0].strip()
             else:
