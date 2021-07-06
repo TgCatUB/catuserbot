@@ -55,7 +55,7 @@ async def ocr(event):
     "To read text in image."
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
-    if mediatype and mediatype not in ["Photo", "Document"]:
+    if mediatype is None or mediatype not in ["Photo", "Document"]:
         return await edit_delete(event, "__Reply to image to read text on it__")
     catevent = await edit_or_reply(event, "`Reading...`")
     if not os.path.isdir(Config.TEMP_DIR):
