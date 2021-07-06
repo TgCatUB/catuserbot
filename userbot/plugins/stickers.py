@@ -127,7 +127,13 @@ async def newpacksticker(
     otherpack=False,
     pkang=False,
 ):
-    await conv.send_message(cmd)
+    try:
+        await conv.send_message(cmd)
+    except YouBlockedUserError: 
+        await catevent.edit(
+            "You have blocked the @stickers bot. unblock it and try."
+        )
+        return
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packnick)
@@ -180,7 +186,13 @@ async def add_to_pack(
     cmd,
     pkang=False,
 ):
-    await conv.send_message("/addsticker")
+    try:
+        await conv.send_message("/addsticker")
+    except YouBlockedUserError: 
+        await catevent.edit(
+            "You have blocked the @stickers bot. unblock it and try."
+        )
+        return
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packname)
