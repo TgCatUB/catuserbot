@@ -49,7 +49,7 @@ plugin_category = "admin"
     groups_only=True,
     require_admin=True,
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics
     "To lock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -164,12 +164,12 @@ async def _(event):  # sourcery no-metrics
             cpin = True
             changeinfo = True
             locktype = "everything"
-        else:
-            if input_str:
-                return await edit_delete(
-                    event, f"**Invalid lock type :** `{input_str}`", time=5
-                )
+        elif input_str:
+            return await edit_delete(
+                event, f"**Invalid lock type :** `{input_str}`", time=5
+            )
 
+        else:
             return await edit_or_reply(event, "`I can't lock nothing !!`")
         try:
             cat = Get(cat)
@@ -237,7 +237,7 @@ async def _(event):  # sourcery no-metrics
     groups_only=True,
     require_admin=True,
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics
     "To unlock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -352,12 +352,12 @@ async def _(event):  # sourcery no-metrics
             cpin = False
             changeinfo = False
             locktype = "everything"
-        else:
-            if input_str:
-                return await edit_delete(
-                    event, f"**Invalid unlock type :** `{input_str}`", time=5
-                )
+        elif input_str:
+            return await edit_delete(
+                event, f"**Invalid unlock type :** `{input_str}`", time=5
+            )
 
+        else:
             return await edit_or_reply(event, "`I can't unlock nothing !!`")
         try:
             cat = Get(cat)
@@ -476,7 +476,7 @@ async def _(event):  # sourcery no-metrics
     groups_only=True,
     require_admin=True,
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics
     "To lock the given permission for replied person only."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -662,12 +662,12 @@ async def _(event):  # sourcery no-metrics
         ucpin = True
         uchangeinfo = True
         locktype = "everything"
-    else:
-        if input_str:
-            return await edit_delete(
-                event, f"**Invalid lock type :** `{input_str}`", time=5
-            )
+    elif input_str:
+        return await edit_delete(
+            event, f"**Invalid lock type :** `{input_str}`", time=5
+        )
 
+    else:
         return await edit_or_reply(event, "`I can't lock nothing !!`")
     try:
         cat = Get(cat)
@@ -724,7 +724,7 @@ async def _(event):  # sourcery no-metrics
     groups_only=True,
     require_admin=True,
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics
     "To unlock the given permission for replied person only."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -913,12 +913,12 @@ async def _(event):  # sourcery no-metrics
         if not changeinfo:
             uchangeinfo = False
         locktype = "everything"
-    else:
-        if input_str:
-            return await edit_delete(
-                event, f"**Invalid lock type :** `{input_str}`", time=5
-            )
+    elif input_str:
+        return await edit_delete(
+            event, f"**Invalid lock type :** `{input_str}`", time=5
+        )
 
+    else:
         return await edit_or_reply(event, "`I can't lock nothing !!`")
     try:
         cat = Get(cat)

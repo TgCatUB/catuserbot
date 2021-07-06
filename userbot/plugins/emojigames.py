@@ -48,11 +48,10 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
@@ -88,11 +87,10 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
@@ -128,11 +126,10 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
@@ -168,11 +165,10 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
@@ -208,11 +204,10 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
@@ -248,8 +243,7 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
