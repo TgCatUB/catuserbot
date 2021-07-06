@@ -110,44 +110,47 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
         "usage": "{tr}filter <keyword>",
     },
 )
-async def add_new_filter(new_handler):
+async def add_new_filter(event):
     "To save the filter"
-    keyword = new_handler.pattern_match.group(1)
-    string = new_handler.text.partition(keyword)[2]
-    msg = await new_handler.get_reply_message()
+    keyword = event.pattern_match.group(1)
+    string = event.text.partition(keyword)[2]
+    msg = await event.get_reply_message()
     msg_id = None
     if msg and msg.media and not string:
         if BOTLOG:
-            await new_handler.client.send_message(
+            await event.client.send_message(
                 BOTLOG_CHATID,
                 f"#FILTER\
-            \nCHAT ID: {new_handler.chat_id}\
+            \nCHAT ID: {event.chat_id}\
             \nTRIGGER: {keyword}\
             \n\nThe following message is saved as the filter's reply data for the chat, please do NOT delete it !!",
             )
-            msg_o = await new_handler.client.forward_messages(
+            msg_o = await event.client.forward_messages(
                 entity=BOTLOG_CHATID,
                 messages=msg,
-                from_peer=new_handler.chat_id,
+                from_peer=event.chat_id,
                 silent=True,
             )
             msg_id = msg_o.id
         else:
             await edit_or_reply(
-                new_handler,
+                event,
                 "__Saving media as reply to the filter requires the__ `PRIVATE_GROUP_BOT_API_ID` __to be set.__",
             )
             return
-    elif new_handler.reply_to_msg_id and not string:
-        rep_msg = await new_handler.get_reply_message()
-        string = rep_msg.text
+    elif msg and msg.text and not string:
+        string = msg.text
+    else:
+        return edit_or_reply(
+            event, "__What should i do ?__"
+        )
     success = "`Filter` **{}** `{} successfully`"
-    if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
-        return await edit_or_reply(new_handler, success.format(keyword, "added"))
-    remove_filter(str(new_handler.chat_id), keyword)
-    if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
-        return await edit_or_reply(new_handler, success.format(keyword, "Updated"))
-    await edit_or_reply(new_handler, f"Error while setting filter for {keyword}")
+    if add_filter(str(event.chat_id), keyword, string, msg_id) is True:
+        return await edit_or_reply(event, success.format(keyword, "added"))
+    remove_filter(str(event.chat_id), keyword)
+    if add_filter(str(event.chat_id), keyword, string, msg_id) is True:
+        return await edit_or_reply(event, success.format(keyword, "Updated"))
+    await edit_or_reply(event, f"Error while setting filter for {keyword}")
 
 
 @catub.cat_cmd(
