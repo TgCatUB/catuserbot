@@ -154,10 +154,10 @@ async def _(event):  # sourcery no-metrics
                                 \n`{humanbytes(downloaded)} of {humanbytes(total_length)} @ {humanbytes(dspeed)}`\
                                 \n**ETA : **`{estimated_total_time}`"
             if oldmsg != current_message and delay > 5:
-                    await mone.edit(current_message)
-                    delay = 0
-                    c_time = time.time()
-                    oldmsg = current_message
+                await mone.edit(current_message)
+                delay = 0
+                c_time = time.time()
+                oldmsg = current_message
             await asyncio.sleep(1)
         end = datetime.now()
         ms = (end - start).seconds
