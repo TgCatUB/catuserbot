@@ -66,14 +66,14 @@ async def paste_img(event):
     text_to_print = ""
     if input_str:
         text_to_print = input_str
-    if text_to_print == "" and reply.media:
+    if text_to_print == "" and reply and reply.media:
         mediatype = media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
             with open(d_file_name, "r") as f:
                 text_to_print = f.read()
     if text_to_print == "":
-        if reply.text:
+        if reply and reply.text:
             text_to_print = reply.raw_text
         else:
             return await edit_delete(
@@ -140,7 +140,7 @@ async def paste_bin(event):
     text_to_print = ""
     if input_str:
         text_to_print = input_str
-    if text_to_print == "" and reply.media:
+    if text_to_print == "" and reply and reply.media:
         mediatype = media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
@@ -149,7 +149,7 @@ async def paste_bin(event):
             with open(d_file_name, "r") as f:
                 text_to_print = f.read()
     if text_to_print == "":
-        if reply.text:
+        if reply and reply.text:
             text_to_print = reply.raw_text
         else:
             return await edit_delete(
@@ -270,14 +270,14 @@ async def _(event):
     text_to_print = ""
     if input_str:
         text_to_print = input_str
-    if text_to_print == "" and reply.media:
+    if text_to_print == "" and reply and reply.media:
         mediatype = media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
             with open(d_file_name, "r") as f:
                 text_to_print = f.read()
     if text_to_print == "":
-        if reply.text:
+        if reply and reply.text:
             text_to_print = reply.raw_text
         else:
             return await edit_delete(
