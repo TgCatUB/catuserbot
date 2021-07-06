@@ -149,7 +149,7 @@ async def echo(event):
         ],
     },
 )
-async def echo(event):    # sourcery no-metrics
+async def echo(event):  # sourcery no-metrics
     "To list all users on who you enabled echoing."
     input_str = event.pattern_match.group(1)
     private_chats = ""
@@ -162,7 +162,9 @@ async def echo(event):    # sourcery no-metrics
         for echos in lsts:
             if echos.chat_type == "Personal":
                 if echos.user_username:
-                    private_chats += f"☞ [{echos.user_name}](https://t.me/{echos.user_username})\n"
+                    private_chats += (
+                        f"☞ [{echos.user_name}](https://t.me/{echos.user_username})\n"
+                    )
                 else:
                     private_chats += (
                         f"☞ [{echos.user_name}](tg://user?id={echos.user_id})\n"

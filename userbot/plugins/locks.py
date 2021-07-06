@@ -49,7 +49,7 @@ plugin_category = "admin"
     groups_only=True,
     require_admin=True,
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "To lock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -237,7 +237,7 @@ async def _(event):    # sourcery no-metrics
     groups_only=True,
     require_admin=True,
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "To unlock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -476,7 +476,7 @@ async def _(event):  # sourcery no-metrics
     groups_only=True,
     require_admin=True,
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "To lock the given permission for replied person only."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -724,7 +724,7 @@ async def _(event):    # sourcery no-metrics
     groups_only=True,
     require_admin=True,
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "To unlock the given permission for replied person only."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
