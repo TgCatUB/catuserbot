@@ -192,7 +192,7 @@ async def _(event):
         reply_message = await event.get_reply_message()
     emoticon = event.pattern_match.group(1)
     input_str = int(event.pattern_match.group(2))
-    if not 0<input_str<65:
+    if not 0 < input_str < 65:
         return
     await event.delete()
     if emoticon == "jp":
