@@ -151,7 +151,7 @@ async def custom_catuserbot(event):
     text = None
     if reply:
         text = reply.text
-    if not reply and text:
+    if text is None:
         return await edit_delete(event, "__Reply to custom text or url__")
     input_str = event.pattern_match.group(1)
     if input_str == "pmpermit":
