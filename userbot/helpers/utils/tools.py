@@ -58,7 +58,7 @@ async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
             clip = VideoFileClip(media)
             try:
                 clip = clip.save_frame(catfile, 0.1)
-            except:
+            except Exception:
                 clip = clip.save_frame(catfile, 0)
     elif mediatype == "Document":
         mimetype = reply.document.mime_type
