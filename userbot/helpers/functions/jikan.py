@@ -334,10 +334,10 @@ async def callAPI(search_str):
     return response.text
 
 
-def memory_file(name=None, contents=None, *, bytes=True):
-    if isinstance(contents, str) and bytes:
+def memory_file(name=None, contents=None, *, temp_bytes=True):
+    if isinstance(contents, str) and temp_bytes:
         contents = contents.encode()
-    file = BytesIO() if bytes else StringIO()
+    file = BytesIO() if temp_bytes else StringIO()
     if name:
         file.name = name
     if contents:
