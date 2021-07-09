@@ -61,9 +61,8 @@ async def chat_blacklist(event):
                 text,
             )
             return await event.client.reload(msg)
-        else:
-            text += "**You haven't added anyone to your sudo yet.**"
-            return await edit_or_reply(
+        text += "**You haven't added anyone to your sudo yet.**"
+        return await edit_or_reply(
                 event,
                 text,
             )
@@ -79,9 +78,8 @@ async def chat_blacklist(event):
                 text,
             )
             return await event.client.reload(msg)
-        else:
-            text += "**You haven't added any chat to blacklist yet.**"
-            return await edit_or_reply(
+        text += "**You haven't added any chat to blacklist yet.**"
+        return await edit_or_reply(
                 event,
                 text,
             )
