@@ -633,7 +633,6 @@ async def on_plug_in_callback_query_handler(event):
             return await event.edit(text, buttons=buttons)
         except Exception as e:
             LOGS.error(str(e))
-            pass
     await event.edit(buttons=buttons)
 
 

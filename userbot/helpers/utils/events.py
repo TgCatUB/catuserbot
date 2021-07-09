@@ -48,7 +48,6 @@ async def get_user_from_event(
                 return user_obj, extra
     except Exception as e:
         LOGS.error(str(e))
-        pass
     try:
         if nogroup is False:
             if secondgroup:
