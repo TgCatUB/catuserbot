@@ -63,9 +63,9 @@ async def chat_blacklist(event):
             return await event.client.reload(msg)
         text += "**You haven't added anyone to your sudo yet.**"
         return await edit_or_reply(
-                event,
-                text,
-            )
+            event,
+            text,
+        )
     if gvarstatus("sudoenable") is not None:
         delgvar("sudoenable")
         text = "__Disabled sudo successfully.__"
@@ -80,9 +80,9 @@ async def chat_blacklist(event):
             return await event.client.reload(msg)
         text += "**You haven't added any chat to blacklist yet.**"
         return await edit_or_reply(
-                event,
-                text,
-            )
+            event,
+            text,
+        )
     await edit_delete(event, "It was turned off already")
 
 
