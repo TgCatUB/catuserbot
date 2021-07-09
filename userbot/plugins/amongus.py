@@ -159,7 +159,7 @@ async def procces_img(event):
                 user = await event.client.get_me()
             text = f"{get_display_name(user)} {choice(imps)}."
             text += text2
-        except:
+        except Exception:
             text = args
     else:
         text = f"{get_display_name(user)} {choice(imps)}."
