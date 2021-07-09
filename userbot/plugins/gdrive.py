@@ -1485,17 +1485,15 @@ async def set_upload_folder(gdrive):
                 "**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`"
             )
             return None
-        else:
-            await gdrive.edit(
+        await gdrive.edit(
                 "**[PARENT - FOLDER]**\n\n" "**Status : WARNING** -` forcing use...`"
             )
-            GDRIVE_.parent_Id = inp
+        GDRIVE_.parent_Id = inp
     else:
         GDRIVE_.parent_Id, _ = await get_file_id(ext_id)
         await gdrive.edit(
             "**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`"
         )
-    return
 
 
 @catub.cat_cmd(
