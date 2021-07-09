@@ -1430,28 +1430,28 @@ async def google_drive(gdrive):  # sourcery no-metrics
     },
 )
 async def set_upload_folder(gdrive):
-        """to clear the temperary upload parent id."""
-        gdrive = await edit_or_reply(gdrive, "`Sending information...`")
-        if G_DRIVE_FOLDER_ID is not None:
-            GDRIVE_.parent_Id = G_DRIVE_FOLDER_ID
-            await gdrive.edit(
-                "**[FOLDER - SET]**\n\n" "**Status : **`OK- using G_DRIVE_FOLDER_ID now.`"
-            )
-            return None
-        try:
-            GDRIVE_.parent_id = ""
-        except NameError:
-            await gdrive.edit(
-                "**[FOLDER - SET]**\n\n" "**Status : **`BAD - No parent_Id is set.`"
-            )
-            return False
-        else:
-            await gdrive.edit(
-                "**[FOLDER - SET]**\n\n"
-                "**Status : **`OK`"
-                " - `G_DRIVE_FOLDER_ID empty, will use root.`"
-            )
-            return None
+    """to clear the temperary upload parent id."""
+    gdrive = await edit_or_reply(gdrive, "`Sending information...`")
+    if G_DRIVE_FOLDER_ID is not None:
+        GDRIVE_.parent_Id = G_DRIVE_FOLDER_ID
+        await gdrive.edit(
+            "**[FOLDER - SET]**\n\n" "**Status : **`OK- using G_DRIVE_FOLDER_ID now.`"
+        )
+        return None
+    try:
+        GDRIVE_.parent_id = ""
+    except NameError:
+        await gdrive.edit(
+            "**[FOLDER - SET]**\n\n" "**Status : **`BAD - No parent_Id is set.`"
+        )
+        return False
+    else:
+        await gdrive.edit(
+            "**[FOLDER - SET]**\n\n"
+            "**Status : **`OK`"
+            " - `G_DRIVE_FOLDER_ID empty, will use root.`"
+        )
+        return None
 
 
 @catub.cat_cmd(
@@ -1485,8 +1485,8 @@ async def set_upload_folder(gdrive):
             )
             return None
         await gdrive.edit(
-                "**[PARENT - FOLDER]**\n\n" "**Status : WARNING** -` forcing use...`"
-            )
+            "**[PARENT - FOLDER]**\n\n" "**Status : WARNING** -` forcing use...`"
+        )
         GDRIVE_.parent_Id = inp
     else:
         GDRIVE_.parent_Id, _ = await get_file_id(ext_id)
