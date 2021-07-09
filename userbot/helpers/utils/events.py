@@ -46,7 +46,8 @@ async def get_user_from_event(
             if isinstance(user, int) or user.startswith("@"):
                 user_obj = await event.client.get_entity(user)
                 return user_obj, extra
-    except Exception:
+    except Exception as e:
+        LOGS.error(str(e))
         pass
     try:
         if nogroup is False:
