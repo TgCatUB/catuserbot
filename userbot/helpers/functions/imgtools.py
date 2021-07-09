@@ -118,7 +118,6 @@ async def dotify(image, pix, mode):
         im_ = temp
     im = im_.convert("L")
     im_ = im if mode else im_
-    [_.thumbnail((pix, pix)) for _ in [im, im_]]
     w, h = im.size
     img = Image.new(im_.mode, (w * count + (count // 2), h * count + (count // 2)), 0)
     ImageDraw.Draw(img)
