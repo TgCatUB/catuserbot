@@ -65,7 +65,7 @@ async def get_user_from_event(
                 return None, None
             user_obj = await event.client.get_entity(previous_message.sender_id)
             return user_obj, extra
-        elif not args:
+        if not args:
             if not noedits:
                 await edit_delete(
                     catevent, "`Pass the user's username, id or reply!`", 5
