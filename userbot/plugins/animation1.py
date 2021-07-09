@@ -161,7 +161,7 @@ async def _(event):
         "What The",
         "What The F",
         "What The F Brah",
-        "What The F Brah\nhttps://telegra.ph/file/f3b760e4a99340d331f9b.jpg",
+        "[What The F Brah](https://telegra.ph/file/f3b760e4a99340d331f9b.jpg)",
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
