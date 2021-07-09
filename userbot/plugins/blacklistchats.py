@@ -46,9 +46,9 @@ async def chat_blacklist(event):
             return await event.client.reload(msg)
         text += "**You haven't added any chat to blacklist.**"
         return await edit_or_reply(
-                event,
-                text,
-            )
+            event,
+            text,
+        )
     if gvarstatus("blacklist_chats") is not None:
         delgvar("blacklist_chats")
         text = "__Your CatUserbot is as free as a bird.It works in Every Chat .__"
@@ -63,9 +63,9 @@ async def chat_blacklist(event):
             return await event.client.reload(msg)
         text += "**You haven't added any chat to blacklist.**"
         return await edit_or_reply(
-                event,
-                text,
-            )
+            event,
+            text,
+        )
     await edit_delete(event, "It was turned off already")
 
 
