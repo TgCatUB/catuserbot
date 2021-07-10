@@ -1,7 +1,8 @@
 """
-Created & modified by @Jisan7509
-Base idea DevsExpo
+Created by @Jisan7509
+#catuserbot
 """
+
 import asyncio
 import os
 import re
@@ -27,6 +28,8 @@ vars_list = {
     "lfs": "LOGO_FONT_SIZE",
     "lfh": "LOGO_FONT_HEIGHT",
     "lfw": "LOGO_FONT_WIDTH",
+    "lfsw": "LOGO_FONT_STROKE_WIDTH",
+    "lfsc": "LOGO_FONT_STROKE_COLOR",
     "lf": "LOGO_FONT",
 }
 
@@ -36,7 +39,7 @@ plugin_category = "useless"
 
 
 @catub.cat_cmd(
-    pattern="(|s)logo(?: |$)(.*)",
+    pattern="(|s)logo(?: |$)([\s\S]*)",
     command=("logo", plugin_category),
     info={
         "header": "Make a logo in image or sticker",
@@ -58,14 +61,19 @@ async def very(event):
     "To create a logo"
     cmd = event.pattern_match.group(1).lower()
     text = event.pattern_match.group(2)
+    reply = await event.get_reply_message()
+    if not text and reply:
+        text = reply.text
     if not text:
-        return await edit_delete(event, "```Give some text to make the logo...```")
+        return await edit_delete(event, "**ಠ∀ಠ Gimmi text to make logo**")
     reply_to_id = await reply_id(event)
     catevent = await edit_or_reply(event, "`Processing.....`")
     LOGO_FONT_SIZE = gvarstatus("LOGO_FONT_SIZE") or 220
     LOGO_FONT_WIDTH = gvarstatus("LOGO_FONT_WIDTH") or 2
     LOGO_FONT_HEIGHT = gvarstatus("LOGO_FONT_HEIGHT") or 2
     LOGO_FONT_COLOR = gvarstatus("LOGO_FONT_COLOR") or "red"
+    LOGO_FONT_STROKE_WIDTH = gvarstatus("LOGO_FONT_STROKE_WIDTH") or 0
+    LOGO_FONT_STROKE_COLOR = gvarstatus("LOGO_FONT_STROKE_COLOR") or None
     LOGO_BACKGROUND = (
         gvarstatus("LOGO_BACKGROUND")
         or f"https://raw.githubusercontent.com/Jisan09/Files/main/backgroud/black.jpg"
@@ -86,16 +94,31 @@ async def very(event):
     image_widthz, image_heightz = img.size
     w, h = draw.textsize(text, font=font)
     h += int(h * 0.21)
-    draw.text(
-        (
-            (image_widthz - w) / float(LOGO_FONT_WIDTH),
-            (image_heightz - h) / float(LOGO_FONT_HEIGHT),
-        ),
-        text,
-        font=font,
-        fill=LOGO_FONT_COLOR,
-    )
-    file_name = "LogoBy@MeisNub.png"
+    try:
+        draw.text(
+            (
+                (image_widthz - w) / float(LOGO_FONT_WIDTH),
+                (image_heightz - h) / float(LOGO_FONT_HEIGHT),
+            ),
+            text,
+            font=font,
+            fill=LOGO_FONT_COLOR,
+            stroke_width=int(LOGO_FONT_STROKE_WIDTH),
+            stroke_fill=LOGO_FONT_STROKE_COLOR,
+        )
+    except OSError:
+        draw.text(
+            (
+                (image_widthz - w) / float(LOGO_FONT_WIDTH),
+                (image_heightz - h) / float(LOGO_FONT_HEIGHT),
+            ),
+            text,
+            font=font,
+            fill=LOGO_FONT_COLOR,
+            stroke_width=0,
+            stroke_fill=None,
+        )
+    file_name = "badcat.png"
     img.save(file_name, "png")
     if cmd == "":
         await event.client.send_file(
@@ -111,7 +134,7 @@ async def very(event):
 
 
 @catub.cat_cmd(
-    pattern="(|c)lbg(?: |$)(.*)",
+    pattern="(|c)lbg(?:\s|$)([\s\S]*)",
     command=("lbg", plugin_category),
     info={
         "header": "Change the background of logo",
@@ -178,7 +201,7 @@ async def bad(event):
 
 
 @catub.cat_cmd(
-    pattern="lf(|c|s|h|w)(?: |$)(.*)",
+    pattern="lf(|c|s|h|w|sc|sw)(?:\s|$)([\s\S]*)",
     command=("lf", plugin_category),
     info={
         "header": "Change text style for logo.",
@@ -188,13 +211,17 @@ async def bad(event):
             "s": "To change size of logo font.",
             "h": "To change hight of logo font.",
             "w": "To change width of logo font.",
+            "sw": "To change stroke width of logo font.",
+            "sc": "To change stroke color of logo font.",
         },
         "usage": [
             "{tr}lf <font name>",
             "{tr}lfc <logo font color>",
-            "{tr}lfs <1-100>",
-            "{tr}lfh <10-1000>",
-            "{tr}lfw <10-1000>",
+            "{tr}lfs <1-1000>",
+            "{tr}lfh <10-100>",
+            "{tr}lfw <10-100>",
+            "{tr}lfsw <10-100>",
+            "{tr}lfsc <logo font stroke color>",
         ],
         "examples": [
             "{tr}lf genau-font.ttf",
@@ -202,6 +229,8 @@ async def bad(event):
             "{tr}lfs 120",
             "{tr}lfh 1",
             "{tr}lfw 8",
+            "{tr}lfsw 5",
+            "{tr}lfsc white",
         ],
     },
 )
@@ -239,7 +268,7 @@ async def pussy(event):
             await edit_delete(
                 event, f"**Font for logo changed to :-** `{input_str}`", time=10
             )
-    elif cmd == "c":
+    elif cmd == "c" or cmd == "sc":
         fg_name = []
         for name, code in PIL.ImageColor.colormap.items():
             fg_name.append(name)
@@ -247,26 +276,30 @@ async def pussy(event):
         if not input_str:
             return await edit_delete(
                 event,
-                f"**Available foreground color names are here:-**\n\n{fg_list}",
+                f"**Available color names are here:-**\n\n{fg_list}",
                 time=80,
             )
         if input_str not in fg_name:
-            catevent = await edit_or_reply(
-                event, "`Give me a correct foreground color name...`"
-            )
+            catevent = await edit_or_reply(event, "`Give me a correct color name...`")
             await asyncio.sleep(1)
             await edit_delete(
                 catevent,
-                f"**Available foreground color names are here:-**\n\n{fg_list}",
+                f"**Available color names are here:-**\n\n{fg_list}",
                 time=80,
             )
         else:
-            addgvar("LOGO_FONT_COLOR", input_str)
-            await edit_delete(
-                event,
-                f"**Foreground color for logo changed to :-** `{input_str}`",
-                time=10,
-            )
+            if cmd == "c":
+                addgvar("LOGO_FONT_COLOR", input_str)
+                await edit_delete(
+                    event,
+                    f"**Foreground color for logo changed to :-** `{input_str}`",
+                    10,
+                )
+            else:
+                addgvar("LOGO_FONT_STROKE_COLOR", input_str)
+                await edit_delete(
+                    event, f"**Stroke color for logo changed to :-** `{input_str}`", 10
+                )
     else:
         cat = re.compile(r"^\-?[1-9][0-9]*\.?[0-9]*")
         isint = re.match(cat, input_str)
@@ -285,7 +318,7 @@ async def pussy(event):
                 else:
                     await edit_delete(
                         event,
-                        f"**Font size is between 20 - 1000, You can't set limit to :** `{input_str}`",
+                        f"**Font size is between 0 - 1000, You can't set limit to :** `{input_str}`",
                     )
             elif cmd == "w":
                 input_str = float(input_str)
@@ -297,7 +330,7 @@ async def pussy(event):
                 else:
                     await edit_delete(
                         event,
-                        f"**Font width is between 0 - 30, You can't set limit to {input_str}",
+                        f"**Font width is between 0 - 100, You can't set limit to {input_str}",
                     )
             elif cmd == "h":
                 input_str = float(input_str)
@@ -309,12 +342,24 @@ async def pussy(event):
                 else:
                     await edit_delete(
                         event,
-                        f"**Font hight is between 0 - 30, You can't set limit to {input_str}",
+                        f"**Font hight is between 0 - 100, You can't set limit to {input_str}",
+                    )
+            elif cmd == "sw":
+                input_str = int(input_str)
+                if input_str > 0 and input_str <= 100:
+                    addgvar("LOGO_FONT_STROKE_WIDTH", input_str)
+                    await edit_delete(
+                        event, f"**Font stroke width is changed to :-** `{input_str}`"
+                    )
+                else:
+                    await edit_delete(
+                        event,
+                        f"**Font stroke width size is between 0 - 100, You can't set limit to :** `{input_str}`",
                     )
 
 
 @catub.cat_cmd(
-    pattern="(g|d|r)lvar(?: |$)(.*)",
+    pattern="(g|d|r)lvar(?:\s|$)([\s\S]*)",
     command=("lvar", plugin_category),
     info={
         "header": "Manage values which set for logo",
@@ -362,6 +407,8 @@ async def cat(event):
         delgvar("LOGO_FONT_SIZE")
         delgvar("LOGO_FONT_HEIGHT")
         delgvar("LOGO_FONT_WIDTH")
+        delgvar("LOGO_FONT_STROKE_COLOR")
+        delgvar("LOGO_FONT_STROKE_WIDTH")
         if os.path.exists("./temp/bg_img.jpg"):
             os.remove("./temp/bg_img.jpg")
         if os.path.exists("./temp/logo.ttf"):
