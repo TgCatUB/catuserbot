@@ -15,7 +15,7 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import catmemes
-from ..helpers.utils import _catutils,parse_pre
+from ..helpers.utils import _catutils, parse_pre
 from . import BOTLOG, BOTLOG_CHATID, mention
 
 plugin_category = "fun"
@@ -239,9 +239,9 @@ async def shout(args):
     "shouts the text in a fun way"
     input_str = args.pattern_match.group(1)
     if not input_str:
-        return await edit_delete(args,"__What should i shout?__")
+        return await edit_delete(args, "__What should i shout?__")
     words = input_str.split()
-    msg =""
+    msg = ""
     for messagestr in words:
         text = " ".join(messagestr)
         result = [" ".join(text)]
@@ -250,8 +250,8 @@ async def shout(args):
         result = list("\n".join(result))
         result[0] = text[0]
         result = "".join(result)
-        msg += "\n" + result+ "\n"
-    await edit_or_reply(args, msg,parse_mode=parse_pre)
+        msg += "\n" + result + "\n"
+    await edit_or_reply(args, msg, parse_mode=parse_pre)
 
 
 @catub.cat_cmd(
