@@ -61,7 +61,7 @@ async def _(event):
     first_name = names
     last_name = ""
     if ";" in names:
-        first_name, last_name = names.split("|", 1)
+        first_name, last_name = names.split(";", 1)
     try:
         await event.client(
             functions.account.UpdateProfileRequest(
