@@ -99,7 +99,7 @@ async def d_paste(message, extension=None):
     """
     To Paste the given message/text/code to dogbin
     """
-    siteurl = "https://del.dog/documents"
+    siteurl = "http://catbin.up.railway.app/documents"
     data = {"content": message}
     try:
         response = requests.post(url=siteurl, data=json.dumps(data), headers=headers)
@@ -108,13 +108,13 @@ async def d_paste(message, extension=None):
     if response.ok:
         response = response.json()
         purl = (
-            f"https://del.dog/{response['key']}.{extension}"
+            f"http://catbin.up.railway.app/{response['key']}.{extension}"
             if extension
-            else f"https://del.dog/{response['key']}"
+            else f"http://catbin.up.railway.app/{response['key']}"
         )
         return {
             "url": purl,
-            "raw": f"https://del.dog/raw/{response['key']}",
+            "raw": f"http://catbin.up.railway.app/raw/{response['key']}",
             "bin": "Dog",
         }
     return {"error": "Unable to reach dogbin."}
