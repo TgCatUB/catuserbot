@@ -59,6 +59,8 @@ async def _(event):
 async def _(event):
     "To get users warns list"
     reply_message = await event.get_reply_message()
+    if not reply_message:
+        return await edit_delete(event, "__Reply to user to get his warns.__")
     result = sql.get_warns(reply_message.sender_id, event.chat_id)
     if not result or result[0] == 0:
         return await edit_or_reply(event, "this user hasn't got any warnings!")
