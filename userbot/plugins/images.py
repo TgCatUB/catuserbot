@@ -59,6 +59,7 @@ async def img_sampler(event):
         paths = response.download(arguments)
     except Exception as e:
         return await cat.edit(f"Error: \n`{e}`")
+    print(paths[0])
     lst = paths[0][query]
     await event.client.send_file(event.chat_id, lst, reply_to=reply_to_id)
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
