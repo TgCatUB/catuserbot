@@ -43,7 +43,6 @@ async def _(event):
                 LOGS.info(str(e))
         await edit_or_reply(event, "`Either give input as username or reply to user`")
     elif event.reply_to_msg_id:
-        await event.get_input_chat()
         r_msg = await event.get_reply_message()
         if r_msg.media:
             bot_api_file_id = pack_bot_file_id(r_msg.media)
