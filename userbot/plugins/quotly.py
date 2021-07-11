@@ -157,7 +157,7 @@ async def stickerchat(catquotes):
     fetchmsg = reply.message
     repliedreply = None
     mediatype = media_type(reply)
-    if mediatype and mediatype in ["Photo","Round Video","Gif"]:
+    if mediatype and mediatype in ["Photo", "Round Video", "Gif"]:
         return await edit_or_reply(catquotes, "`Replied message is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
@@ -194,7 +194,7 @@ async def stickerchat(catquotes):
     fetchmsg = reply.message
     repliedreply = await reply.get_reply_message()
     mediatype = media_type(reply)
-    if mediatype and mediatype in ["Photo","Round Video","Gif"]:
+    if mediatype and mediatype in ["Photo", "Round Video", "Gif"]:
         return await edit_or_reply(catquotes, "`Replied message is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
