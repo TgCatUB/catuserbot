@@ -251,8 +251,8 @@ async def shout(args):
         result[0] = text[0]
         result = "".join(result)
         msg += "\n" + result
-        if len(words)>1:
-            msg+="\n\n----------\n"
+        if len(words) > 1:
+            msg += "\n\n----------\n"
     await edit_or_reply(args, msg, parse_mode=parse_pre)
 
 
