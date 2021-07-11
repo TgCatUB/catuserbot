@@ -1,6 +1,7 @@
 import html
-from urllib.parse import quote_plus
 from datetime import datetime
+from urllib.parse import quote_plus
+
 import aiohttp
 import bs4
 import jikanpy
@@ -49,7 +50,7 @@ async def anilist(event):
         url, json={"query": airing_query, "variables": variables}
     ).json()["data"]["Media"]
     if response is None:
-        return await edit_delete(event,"__Unable to find the anime.__")
+        return await edit_delete(event, "__Unable to find the anime.__")
     ms_g = f"**Name**: **{response['title']['romaji']}**(`{response['title']['native']}`)\n**ID**: `{response['id']}`"
     if response["nextAiringEpisode"]:
         airing_time = response["nextAiringEpisode"]["timeUntilAiring"]
