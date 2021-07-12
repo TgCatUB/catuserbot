@@ -55,11 +55,8 @@ async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
         await event.client.download_media(reply, catfile, thumb=-1)
         if not os.path.exists(catfile):
             catmedia = await reply.download_media(file="./temp")
-            clip = VideoFileClip(media)
-            try:
-                clip = clip.save_frame(catfile, 0.1)
-            except Exception:
-                clip = clip.save_frame(catfile, 0)
+            await runcmd(f"rm -rf '{catfile}'")
+            await take_screen_shot(catmedia, 0, catfile)
     elif mediatype == "Document":
         mimetype = reply.document.mime_type
         mtype = mimetype.split("/")
