@@ -210,7 +210,7 @@ async def ytdl_callback(c_q: CallbackQuery):
     with open(PATH) as f:
         view_data = ujson.load(f)
     search_data = view_data.get(data_key)
-    total = len(search_data)
+    total = len(search_data) if search_data is not None else 0
     if choosen_btn == "back":
         index = int(page) - 1
         del_back = index == 1
