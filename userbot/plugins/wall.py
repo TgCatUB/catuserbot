@@ -78,9 +78,7 @@ async def noods(event):
         else:
             i += 1
         if count == int(limit):
-            cap = f"**➥ Query :-** `{query.title()}`"
-            caption = caption[:-1]
-            caption = caption.append(cap)
+            caption[-1] = f"**➥ Query :-** `{query.title()}`"
             await event.client.send_file(
                 event.chat_id,
                 files,
