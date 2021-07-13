@@ -5,13 +5,14 @@ import requests
 from bs4 import BeautifulSoup
 
 from userbot import catub
+
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import reply_id
 
-
 LOGS = logging.getLogger(os.path.basename(__name__))
 plugin_category = "extra"
+
 
 async def wall_download(piclink, query):
     try:
@@ -29,6 +30,7 @@ async def wall_download(piclink, query):
     except Exception as e:
         LOGS.info(str(e))
         return None
+
 
 @catub.cat_cmd(
     pattern="wall(?:\s|$)([\s\S]*)",
@@ -57,7 +59,9 @@ async def noods(event):
     soup = BeautifulSoup(r.content, "lxml")
     walls = soup.find_all("img", class_="img-responsive")
     if not walls:
-        return await edit_delete(catevent, f"**Can't find anything with** `{query}`", 10)
+        return await edit_delete(
+            catevent, f"**Can't find anything with** `{query}`", 10
+        )
     i = count = 0
     piclist = []
     piclinks = []
@@ -80,7 +84,9 @@ async def noods(event):
             await edit_or_reply(catevent, "📥** Downloading...**")
             pic = await wall_download(a, query)
             if pic is None:
-                return await edit_delete(catevent, "__Sorry i can't download wallpaper.__")
+                return await edit_delete(
+                    catevent, "__Sorry i can't download wallpaper.__"
+                )
             piclist.append(pic)
             piclinks.append(a)
             captionlist.append("")
