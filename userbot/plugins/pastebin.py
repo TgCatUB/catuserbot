@@ -214,7 +214,7 @@ async def get_dogbin_content(event):
                 ("pasty" in iurl)
                 or ("spaceb" in iurl)
                 or ("nekobin" in iurl)
-                or ("dog" in iurl)
+                or ("catbin" in iurl)
             ):
                 url = iurl
                 break
@@ -232,8 +232,10 @@ async def get_dogbin_content(event):
             rawurl = f"https://spaceb.in/api/v1/documents/{fid[0]}/raw"
         elif "nekobin" in url:
             rawurl = f"nekobin.com/raw/{fid[0]}"
-        elif "dog" in url:
-            rawurl = f"https://del.dog/raw/{fid[0]}"
+        elif "catbin" in url:
+            rawurl = f"http://catbin.up.railway.app/raw/{fid[0]}"
+        else:
+            return await edit_delete(event, "__This pastebin is not supported.__") 
     resp = requests.get(rawurl)
     try:
         resp.raise_for_status()
