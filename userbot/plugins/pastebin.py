@@ -235,7 +235,7 @@ async def get_dogbin_content(event):
         elif "catbin" in url:
             rawurl = f"http://catbin.up.railway.app/raw/{fid[0]}"
         else:
-            return await edit_delete(event, "__This pastebin is not supported.__") 
+            return await edit_delete(event, "__This pastebin is not supported.__")
     resp = requests.get(rawurl)
     try:
         resp.raise_for_status()
