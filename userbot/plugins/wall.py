@@ -3,18 +3,35 @@ import random
 
 import requests
 from bs4 import BeautifulSoup
-from pySmartDL import SmartDL
 
 from userbot import catub
-
+from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import reply_id, runcmd
+from ..helpers.utils import reply_id
 
+
+LOGS = logging.getLogger(os.path.basename(__name__))
 plugin_category = "extra"
 
+async def wall_download(piclink, query):
+    try:
+        if not os.path.isdir("./temp"):
+            os.mkdir("./temp")
+        picpath = f"./temp/{query.title().replace(' ', '')}.jpg"
+        if os.path.exists(picpath):
+            i = 1
+            while os.path.exists(picpath) and i < 11:
+                picpath = f"./temp/{query.title().replace(' ', '')}-{i}.jpg"
+                i += 1
+        with open(picpath, "wb") as f:
+            f.write(requests.get(piclink).content)
+        return picpath
+    except Exception as e:
+        LOGS.info(str(e))
+        return None
 
 @catub.cat_cmd(
-    pattern="wall([\s\S]*)",
+    pattern="wall(?:\s|$)([\s\S]*)",
     command=("wall", plugin_category),
     info={
         "header": "Searches and uploads wallpaper",
@@ -28,32 +45,29 @@ async def noods(event):
     reply_to_id = await reply_id(event)
     limit = 1
     if not query:
-        return await edit_delete(event, "`What should i search ?`")
+        return await edit_delete(event, "`what should i search`", 10)
     if ";" in query:
         query, limit = query.split(";")
     if int(limit) > 10:
         return await edit_delete(event, f"`Wallpaper search limit is 1-10`", 10)
-    string = "⏳ `Processing..`"
-    await edit_or_reply(event, "🔍 `Searching...`")
+    catevent = await edit_or_reply(event, "🔍 `Searching...`")
     r = requests.get(
         f"https://wall.alphacoders.com/search.php?search={query.replace(' ','+')}"
     )
     soup = BeautifulSoup(r.content, "lxml")
     walls = soup.find_all("img", class_="img-responsive")
     if not walls:
-        return await edit_delete(
-            event, f"**Can't find any wallpaper releated to** `{query}`", 10
-        )
+        return await edit_delete(catevent, f"**Can't find anything with** `{query}`", 10)
     i = count = 0
-    files = []
-    caption = []
+    piclist = []
+    piclinks = []
+    captionlist = []
+    await edit_or_reply(catevent, "⏳ `Processing..`")
+    url2 = "https://api.alphacoders.com/content/get-download-link"
     for x in walls:
-        await edit_or_reply(event, string)
-        string += "`.`"
         wall = random.choice(walls)["src"][8:-4]
         server = wall.split(".")[0]
         fileid = wall.split("-")[-1]
-        url2 = "https://api.alphacoders.com/content/get-download-link"
         data = {
             "content_id": fileid,
             "content_type": "wallpaper",
@@ -61,33 +75,38 @@ async def noods(event):
             "image_server": server,
         }
         res = requests.post(url2, data=data)
-        url = res.json()["link"]
-        if "We are sorry," not in requests.get(url).text:
-            await edit_or_reply(event, "📥** Downloading...**")
-            directory = os.path.join(Config.TEMP_DIR, query)
-            if not os.path.isdir(directory):
-                os.mkdir(directory)
-            path = f"{directory}/{fileid}.jpg"
-            x = SmartDL(url, path, progress_bar=False)
-            x.start(blocking=False)
-            x.wait("finished")
-            files.append(path)
-            caption.append("")
+        a = res.json()["link"]
+        if "We are sorry," not in requests.get(a).text and a not in piclinks:
+            await edit_or_reply(catevent, "📥** Downloading...**")
+            pic = await wall_download(a, query)
+            if pic is None:
+                return await edit_delete(catevent, "__Sorry i can't download wallpaper.__")
+            piclist.append(pic)
+            piclinks.append(a)
+            captionlist.append("")
             count += 1
             i = 0
         else:
             i += 1
+        await edit_or_reply(
+            catevent, f"**📥 Downloaded : {count}/{limit}\n\n❌ Errors : {i}/5**"
+        )
         if count == int(limit):
-            caption[-1] = f"**➥ Query :-** `{query.title()}`"
-            await event.client.send_file(
-                event.chat_id,
-                files,
-                caption=caption,
-                reply_to=reply_to_id,
-                force_document=True,
-            )
-            await event.delete()
-            await runcmd(f"rm -rf '{directory}'")
             break
-    if i == 5:
-        return await edit_delete(event, "`Max search limit exceed..`")
+        if i == 5:
+            await edit_or_reply(catevent, "`Max search error limit exceed..`")
+    try:
+        await edit_or_reply(catevent, "`Sending...`")
+        captionlist[-1] = f"**➥ Query :-** `{query.title()}`"
+        await event.client.send_file(
+            event.chat_id,
+            piclist,
+            caption=captionlist,
+            reply_to=reply_to_id,
+            force_document=True,
+        )
+        await catevent.delete()
+    except Exception as e:
+        LOGS.info(str(e))
+    for i in piclist:
+        os.remove(i)
