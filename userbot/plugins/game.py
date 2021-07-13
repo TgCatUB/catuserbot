@@ -7,11 +7,12 @@ from ..helpers.utils import reply_id
 
 plugin_category = "fun"
 
-game_code = ["ttt", "ttf", "cf", "rps", "rpsls", "rr", "c", "pc"]
-button = ["0", "1", "2", "3", "4", "5", "6", "7"]
+game_code = ["ttt", "ttf","ex" "cf", "rps", "rpsls", "rr", "c", "pc"]
+button = ["0", "1", "2", "3", "4", "5", "6", "7","8"]
 game_name = [
     "Tic-Tac-Toe",
     "Tic-Tac-Four",
+    "Elephant XO",
     "Connect Four",
     "Rock-Paper-Scissors",
     "Rock-Paper-Scissors-Lizard-Spock",
@@ -19,7 +20,7 @@ game_name = [
     "Checkers",
     "Pool Checkers",
 ]
-game_list = "1.`ttt` :- Tic-Tac-Toe\n2.`ttf` :- Tic-Tac-Four\n3.`cf` :- Connect Four\n4.`rps` :- Rock-Paper-Scissors\n5.`rpsls` :- Rock-Paper-Scissors-Lizard-Spock\n6.`rr` :- Russian Roulette\n7.`c` :- Checkers\n8.`pc` :- Pool Checkers"
+game_list = "1.`ttt` :- Tic-Tac-Toe\n2.`ttf` :- Tic-Tac-Four\n3.`ex` :- Elephant XO\n4.`cf` :- Connect Four\n5.`rps` :- Rock-Paper-Scissors\n6.`rpsls` :- Rock-Paper-Scissors-Lizard-Spock\n7.`rr` :- Russian Roulette\n8.`c` :- Checkers\n9.`pc` :- Pool Checkers"
 
 
 @catub.cat_cmd(
