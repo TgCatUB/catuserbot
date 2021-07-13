@@ -10,6 +10,8 @@ while flag:
         from . import utils as _catutils
         from .events import *
         from .format import *
+        from .tools import *
+        from .utils import *
 
         break
     except ModuleNotFoundError as e:
