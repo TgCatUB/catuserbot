@@ -4,6 +4,7 @@ import random
 import requests
 from bs4 import BeautifulSoup
 from pySmartDL import SmartDL
+
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
@@ -40,7 +41,9 @@ async def noods(event):
     soup = BeautifulSoup(r.content, "lxml")
     walls = soup.find_all("img", class_="img-responsive")
     if not walls:
-        return await edit_delete(event, f"**Can't find any wallpaper releated to** `{query}`", 10)
+        return await edit_delete(
+            event, f"**Can't find any wallpaper releated to** `{query}`", 10
+        )
     i = count = 0
     files = []
     caption = []
@@ -61,7 +64,7 @@ async def noods(event):
         url = res.json()["link"]
         if "We are sorry," not in requests.get(url).text:
             await edit_or_reply(event, "📥** Downloading...**")
-            directory = os.path.join(Config.TEMP_DIR,query)
+            directory = os.path.join(Config.TEMP_DIR, query)
             if not os.path.isdir(directory):
                 os.mkdir(directory)
             path = f"{directory}/{fileid}.jpg"
