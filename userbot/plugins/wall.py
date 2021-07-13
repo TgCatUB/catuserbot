@@ -4,11 +4,10 @@ import random
 import requests
 from bs4 import BeautifulSoup
 from pySmartDL import SmartDL
-
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import reply_id
+from ..helpers.utils import reply_id,runcmd
 
 plugin_category = "extra"
 
@@ -89,7 +88,7 @@ async def noods(event):
                 force_document=True,
             )
             await event.delete()
-            os.rmdir(directory)
+            await runcmd(f"rm -rf '{directory}'")
             break
     if i == 5:
         return await edit_delete(event, "`Max search limit exceed..`")
