@@ -196,7 +196,10 @@ async def _(event):
     await sleep(2)
     if response_api:
         await event.edit(
-            f"Let me **dyno** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n👉 \n[Billings]({respons_api})\n`Thank me later 😉` ".
+            f"Let me **dyno** that for you:\
+                \n👉 [{input_str}]({response_api.rstrip()})\
+                \n👉 [Billings]({respons_api.rstrip()})\
+                \n`Thank me later 😉`"
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
