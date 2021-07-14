@@ -189,7 +189,9 @@ async def _(event):
     "Searches the given app name in heroku and shows you dyno page link of that app."
     input_str = event.pattern_match.group(1)
     billings_url = "https://da.gd/s?url=https://dashboard.heroku.com/account/billing"
-    sample_url = f"https://da.gd/s?url=https://dashboard.heroku.com/apps/{input_str}/resources"
+    sample_url = (
+        f"https://da.gd/s?url=https://dashboard.heroku.com/apps/{input_str}/resources"
+    )
     response_api = requests.get(sample_url).text
     respons_api = requests.get(billings_url).text
     event = await edit_or_reply(event, "`Searching.....`")
