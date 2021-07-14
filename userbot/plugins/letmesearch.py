@@ -20,7 +20,9 @@ plugin_category = "utils"
 async def _(event):
     "Searches the given query in Google and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = f"https://da.gd/s?url=http://google.com/search?q={input_str.replace(' ', '+')}"
+    sample_url = (
+        f"https://da.gd/s?url=http://google.com/search?q={input_str.replace(' ', '+')}"
+    )
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
@@ -89,7 +91,9 @@ async def _(event):
 async def _(event):
     "Searches the given query in altnews and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = f"https://da.gd/s?url=https://www.altnews.in/?s={input_str.replace(' ', '+')}"
+    sample_url = (
+        f"https://da.gd/s?url=https://www.altnews.in/?s={input_str.replace(' ', '+')}"
+    )
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
@@ -159,7 +163,9 @@ async def _(event):
     "Searches the given app name in heroku and shows you dyno page link of that app."
     input_str = event.pattern_match.group(1)
     billings_url = "https://da.gd/s?url=https://dashboard.heroku.com/account/billing"
-    sample_url = f"https://da.gd/s?url=https://dashboard.heroku.com/apps/{input_str}/resources"
+    sample_url = (
+        f"https://da.gd/s?url=https://dashboard.heroku.com/apps/{input_str}/resources"
+    )
     response_api = requests.get(sample_url).text
     respons_api = requests.get(billings_url).text
     event = await edit_or_reply(event, "`Searching.....`")
