@@ -32,7 +32,7 @@ async def potocmd(event):
     uid = "".join(event.raw_text.split(maxsplit=1)[1:])
     user = await event.get_reply_message()
     chat = event.input_chat
-    if user:
+    if user and user.sender:
         photos = await event.client.get_profile_photos(user.sender)
         u = True
     else:
