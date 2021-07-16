@@ -106,19 +106,15 @@ async def bot_start(event):
             start_msg = f"Hey! 👤{mention},\
                         \nI am {my_mention}'s assistant bot.\
                         \nYou can contact to my master from here.\
-                        \n\nPowered by [Catuserbot](https://t.me/catuserbot)"
+                        \n\nPowered by [Plutonium X](https://t.me/plutoniumx1)"
         buttons = [
             (
-                Button.url("MY BIO", "t.me/plutoniumx1"),
-                Button.url(
-                    "CONTACT",
-                    "t.me/pmplutoniumxbot?start",
+                Button.url("MY BIO", "t.me/plutoniumx1")
                 ),
             )
         ]
     else:
-        start_msg = "Hey ADITYA!\
-            \nHow can i help you ?"
+        start_msg = "Hey ADITYA!, How can I help you?\n\nTry pressing /help."
         buttons = None
     try:
         await event.client.send_message(
