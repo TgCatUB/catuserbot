@@ -111,7 +111,6 @@ async def bot_start(event):
             (
                 Button.url("MY BIO", "t.me/plutoniumx1")
                 ),
-            )
         ]
     else:
         start_msg = "Hey ADITYA!, How can I help you?\n\nTry pressing /help."
