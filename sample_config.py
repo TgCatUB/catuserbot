@@ -101,6 +101,8 @@ class Config(object):
     # https://console.bluemix.net/docs/services/speech-to-text/getting-started.html
     IBM_WATSON_CRED_URL = os.environ.get("IBM_WATSON_CRED_URL", None)
     IBM_WATSON_CRED_PASSWORD = os.environ.get("IBM_WATSON_CRED_PASSWORD", None)
+    # Get free api from https://dashboard.ipdata.co/sign-up.html
+    IPDATA_API = os.environ.get("IPDATA_API", None)
     # Get a Free API Key from OCR.Space
     OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
     # Genius lyrics get this value from https://genius.com/developers both has
