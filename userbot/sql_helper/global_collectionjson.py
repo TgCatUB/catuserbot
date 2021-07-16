@@ -26,7 +26,7 @@ def get_collection(keywoard):
         SESSION.close()
 
 
-def add_collection(keywoard, json, njson):
+def add_collection(keywoard, json, njson={}):
     to_check = get_collection(keywoard)
     if not to_check:
         keyword_items = Cat_GlobalCollection_Json(keywoard, json, njson)
