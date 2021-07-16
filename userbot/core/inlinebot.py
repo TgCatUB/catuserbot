@@ -509,7 +509,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 Button.url("MY BIO", "t.me/plutoniumx1"),
                 Button.url(
                     "CONTACT",
-                    "t.me/pmplutoniumxbot?start",
+                    "t.me/plutxbot?start",
                 ),
             )
         ]
