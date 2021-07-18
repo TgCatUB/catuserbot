@@ -60,7 +60,7 @@ async def ban_user(chat_id, i, rights):
             "{tr}kickme",
         ],
     },
-    groups_only=True,
+    groups_only=False,
 )
 async def kickme(leave):
     "to leave the group."
@@ -221,7 +221,7 @@ async def _(event):
         "description": "Searches for deleted accounts in a group. Use `.zombies clean` to remove deleted accounts from the group.",
         "usage": ["{tr}zombies", "{tr}zombies clean"],
     },
-    groups_only=True,
+    groups_only=False,
 )
 async def rm_deletedacc(show):
     "To check deleted accounts and clean"
