@@ -24,9 +24,12 @@ from youtube_dl.utils import (
 )
 
 from ..core.logger import logging
-from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb
+from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb, ytsearch
 from ..helpers.utils import _format
-from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, ytsearch
+from userbot import catub
+from ..core.managers import edit_delete, edit_or_reply
+from . import hmention
+from ..helpers import progress, reply_id
 
 BASE_YT_URL = "https://www.youtube.com/watch?v="
 LOGS = logging.getLogger(__name__)
