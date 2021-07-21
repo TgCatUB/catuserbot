@@ -312,7 +312,7 @@ async def spammer(event):
     await event.delete()
     cat = ("".join(cat.split(maxsplit=1)[1:])).split(" ", 1)
     try:
-        counter = int(cat[0])
+        int(cat[0])
     except Exception:
         return await edit_delete(
             event, "__Use proper syntax for delay spam. For syntax refer help menu.__"
