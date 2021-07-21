@@ -1,6 +1,7 @@
 import typing
 
 from telethon import events, functions, hints, types
+from telethon.tl.types import Channel, MessageMediaWebPage
 from telethon.tl.types import InputPeerChannel, InputPeerChat, InputPeerUser
 
 from ..Config import Config
@@ -235,6 +236,19 @@ async def send_file(
     comment_to: "typing.Union[int, types.Message]" = None,
     **kwargs,
 ):
+    if isinstance(file, MessageMediaWebPage):
+        return await client.send_message(
+            entity=entity,
+            message=caption,
+            reply_to=reply_to,
+            parse_mode=parse_mode,
+            formatting_entities=formatting_entities,
+            link_preview=True,
+            buttons=buttons,
+            silent=silent,
+            schedule=schedule,
+            comment_to=comment_to,
+        )
     chatid = entity
     if str(chatid) == str(Config.BOTLOG_CHATID):
         return await client.sendfile(
