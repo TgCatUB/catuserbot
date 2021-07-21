@@ -1,42 +1,13 @@
 import asyncio
-import io
-import os
-import pathlib
-import re
-import time
-from datetime import datetime
-
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl import types
-from telethon.utils import get_attributes
-from youtube_dl import YoutubeDL
-from youtube_dl.utils import (
-    ContentTooShortError,
-    DownloadError,
-    ExtractorError,
-    GeoRestrictedError,
-    MaxDownloadsReached,
-    PostProcessingError,
-    UnavailableVideoError,
-    XAttrMetadataError,
-)
-
-from ..core.logger import logging
-from ..helpers.utils import _format
-from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, ytsearch
-
-
-
-from ..helpers.functions.utube import get_yt_video_id, get_ytthumb, _mp3Dl
-import asyncio
-import io
-import os
 import glob
+import io
+import os
 import pathlib
 import re
 import time
 from datetime import datetime
 from time import time
+
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import types
 from telethon.utils import get_attributes
@@ -53,14 +24,13 @@ from youtube_dl.utils import (
 )
 
 from ..core.logger import logging
+from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb
 from ..helpers.utils import _format
 from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, ytsearch
 
 BASE_YT_URL = "https://www.youtube.com/watch?v="
 LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
-
-
 
 
 video_opts = {
@@ -165,7 +135,6 @@ async def fix_attributes(
     return new_attributes, mime_type
 
 
-
 @catub.cat_cmd(
     pattern="yta(?:\s|$)([\s\S]*)",
     command=("yta", plugin_category),
@@ -187,13 +156,11 @@ async def download_audio(event):
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
     try:
-        vid_data = YoutubeDL({"no-playlist": True}).extract_info(
-            url, download=False
-        )
+        vid_data = YoutubeDL({"no-playlist": True}).extract_info(url, download=False)
     except ExtractorError:
         vid_data = {"formats": []}
     startTime = time()
-    thumb = await get_ytthumb(get_yt_video_id(url))
+    await get_ytthumb(get_yt_video_id(url))
     retcode = await _mp3Dl(url=url, starttime=startTime, uid="320")
     if retcode != 0:
         return await event.edit(str(retcode))
@@ -207,7 +174,7 @@ async def download_audio(event):
     if not _fpath:
         return await edit_delete(catevent, "__Unable to upload file__")
     attributes, mime_type = get_attributes(str(_fpath))
-    ul = io.open( pathlib.Path(_fpath), "rb")
+    ul = io.open(pathlib.Path(_fpath), "rb")
     uploaded = await event.client.fast_upload_file(
         file=ul,
         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
