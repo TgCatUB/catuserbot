@@ -29,24 +29,23 @@ LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
 
 audio_opts = {
-    "format": "bestaudio",
-    "addmetadata": True,
-    "writethumbnail": True,
-    "prefer_ffmpeg": True,
-    "geo_bypass": True,
-    "nocheckcertificate": True,
-    "postprocessors": [
-        {
-            "key": "FFmpegExtractAudio",
-            "preferredcodec": "mp3",
-            "preferredquality": "320",
-        },
-        {"key": "FFmpegMetadata"},
-    ],
-    "outtmpl": "%(title)s.mp3",
-    "quiet": True,
-    "logtostderr": False,
-}
+        'format':'bestaudio/best',
+        'extractaudio':True,
+        'audioformat':'mp3',
+        'outtmpl':'%(title)s.%(ext)s',     #name the file the ID of the video
+        'noplaylist':True,
+        'nocheckcertificate':True,
+        "geo_bypass": True,
+        'proxy':"",
+        'addmetadata':True,
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '320',
+        }],
+        "quiet": True,
+    }
+
 
 video_opts = {
     "format": "best",
