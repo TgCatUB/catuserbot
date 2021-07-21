@@ -43,31 +43,20 @@ async def filter_incoming_handler(event):  # sourcery no-metrics
     for trigger in filters:
         pattern = r"( |^|[^\w])" + re.escape(trigger.keyword) + r"( |$|[^\w])"
         if re.search(pattern, name, flags=re.IGNORECASE):
+            file_media = None
+            filter_msg = None
             if trigger.f_mesg_id:
                 msg_o = await event.client.get_messages(
                     entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
                 )
-                await event.reply(
-                    msg_o.message.format(
-                        mention=mention,
-                        title=title,
-                        count=count,
-                        first=first,
-                        last=last,
-                        fullname=fullname,
-                        username=username,
-                        userid=userid,
-                        my_first=my_first,
-                        my_last=my_last,
-                        my_fullname=my_fullname,
-                        my_username=my_username,
-                        my_mention=my_mention,
-                    ),
-                    file=msg_o.media,
-                )
+                file_media = msg_o.media
+                filter_msg = msg_o.message
+                link_preview = True
             elif trigger.reply:
-                await event.reply(
-                    trigger.reply.format(
+                filter_msg = cws.reply
+                link_preview = False
+            await event.reply(
+                    filter_msg.format(
                         mention=mention,
                         title=title,
                         count=count,
@@ -81,7 +70,9 @@ async def filter_incoming_handler(event):  # sourcery no-metrics
                         my_fullname=my_fullname,
                         my_username=my_username,
                         my_mention=my_mention,
-                    ),
+                            ),
+                    file=file_media,
+                    link_preview=link_preview,
                 )
 
 
