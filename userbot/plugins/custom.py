@@ -92,9 +92,6 @@ async def bad(event):  # sourcery no-metrics
                 if (("PIC" in vname) or ("pic" in vname)) and not url(i):
                     return await edit_delete(event, "**Give me a correct link...**")
             addgvar(vname, vinfo)
-            await edit_delete(
-                event, f"📑 Value of **{vname}** is changed to :- `{vinfo}`", time=20
-            )
             if BOTLOG_CHATID:
                 await event.client.send_message(
                     BOTLOG_CHATID,
@@ -102,6 +99,9 @@ async def bad(event):  # sourcery no-metrics
                     \n**{vname}** is updated newly in database as below",
                 )
                 await event.client.send_message(BOTLOG_CHATID, vinfo, silent=True)
+            await edit_delete(
+                event, f"📑 Value of **{vname}** is changed to :- `{vinfo}`", time=20
+            )
         if cmd == "get":
             var_data = gvarstatus(vname)
             await edit_delete(
@@ -109,17 +109,17 @@ async def bad(event):  # sourcery no-metrics
             )
         elif cmd == "del":
             delgvar(vname)
-            await edit_delete(
-                event,
-                f"📑 Value of **{vname}** is now deleted & set to default.",
-                time=20,
-            )
             if BOTLOG_CHATID:
                 await event.client.send_message(
                     BOTLOG_CHATID,
                     f"#DEL_DATAVAR\
                     \n**{vname}** is deleted from database",
                 )
+            await edit_delete(
+                event,
+                f"📑 Value of **{vname}** is now deleted & set to default.",
+                time=20,
+            )
     else:
         await edit_delete(
             event, f"**📑 Give correct var name from the list :\n\n**{vnlist}", time=60
