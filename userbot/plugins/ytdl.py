@@ -40,7 +40,7 @@ audio_opts = {
         {
             "key": "FFmpegExtractAudio",
             "preferredcodec": "mp3",
-            "preferredquality": 320,
+            "preferredquality": "320",
         },
         {"key": "EmbedThumbnail"},  # ERROR: Conversion failed!
         {"key": "FFmpegMetadata"},
