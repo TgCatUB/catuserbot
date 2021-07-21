@@ -52,8 +52,10 @@ async def _(event):  # sourcery no-metrics
                 )
                 file_media = msg_o.media
                 current_saved_welcome_message = msg_o.message
+                link_preview = True
             elif cws.reply:
                 current_saved_welcome_message = cws.reply
+                link_preview = False
         if not pmpermit_sql.is_approved(userid):
             pmpermit_sql.approve(userid, "Due to private welcome")
         await sleep(1)
@@ -76,6 +78,7 @@ async def _(event):  # sourcery no-metrics
             ),
             file=file_media,
             parse_mode="html",
+            link_preview=link_preview,
         )
 
 
@@ -185,4 +188,4 @@ async def show_welcome(event):
         await edit_or_reply(
             event, "`I am currently pwelcoming new users with this welcome note.`"
         )
-        await event.reply(cws.reply)
+        await event.reply(cws.reply, link_preview=False)
