@@ -53,7 +53,7 @@ async def filter_incoming_handler(event):  # sourcery no-metrics
                 filter_msg = msg_o.message
                 link_preview = True
             elif trigger.reply:
-                filter_msg = cws.reply
+                filter_msg = trigger.reply
                 link_preview = False
             await event.reply(
                 filter_msg.format(
