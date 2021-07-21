@@ -28,16 +28,14 @@ from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, y
 LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
 
-audio_opts = {
-    "format": "bestaudio/best",
-    "extractaudio": True,
-    "audioformat": "mp3",
-    "outtmpl": "%(title)s.%(ext)s",  # name the file the ID of the video
-    "noplaylist": True,
-    "nocheckcertificate": True,
-    "geo_bypass": True,
-    "proxy": "",
+audio_opts =  {
+    "format": "bestaudio",
     "addmetadata": True,
+    "key": "FFmpegMetadata",
+    "writethumbnail": True,
+    "prefer_ffmpeg": True,
+    "geo_bypass": True,
+    "nocheckcertificate": True,
     "postprocessors": [
         {
             "key": "FFmpegExtractAudio",
@@ -45,7 +43,9 @@ audio_opts = {
             "preferredquality": "320",
         }
     ],
+    "outtmpl": "%(title)s.mp3",
     "quiet": True,
+    "logtostderr": False,
 }
 
 
