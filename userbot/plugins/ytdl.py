@@ -211,7 +211,7 @@ async def download_audio(event):
         reply_to=reply_to_id,
         parse_mode="html",
     )
-    for _path in glob.glob(os.path.join(Config.TEMP_DIR, str(startTime), "*")):
+    for _path in ["_fpath","thumb_pic"]:
         os.remove(_path)
     await catevent.delete()
 
