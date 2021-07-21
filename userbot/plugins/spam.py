@@ -309,12 +309,12 @@ async def spammer(event):
             event, "__Use proper syntax to spam. Foe syntax refer help menu.__"
         )
     cat = input_str[1:]
-    await event.delete()
     try:
         int(cat[0])
     except Exception:
         return await edit_delete(
             event, "__Use proper syntax for delay spam. For syntax refer help menu.__"
         )
+    await event.delete()
     addgvar("spamwork", True)
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)
