@@ -56,24 +56,24 @@ async def filter_incoming_handler(event):  # sourcery no-metrics
                 filter_msg = cws.reply
                 link_preview = False
             await event.reply(
-                    filter_msg.format(
-                        mention=mention,
-                        title=title,
-                        count=count,
-                        first=first,
-                        last=last,
-                        fullname=fullname,
-                        username=username,
-                        userid=userid,
-                        my_first=my_first,
-                        my_last=my_last,
-                        my_fullname=my_fullname,
-                        my_username=my_username,
-                        my_mention=my_mention,
-                            ),
-                    file=file_media,
-                    link_preview=link_preview,
-                )
+                filter_msg.format(
+                    mention=mention,
+                    title=title,
+                    count=count,
+                    first=first,
+                    last=last,
+                    fullname=fullname,
+                    username=username,
+                    userid=userid,
+                    my_first=my_first,
+                    my_last=my_last,
+                    my_fullname=my_fullname,
+                    my_username=my_username,
+                    my_mention=my_mention,
+                ),
+                file=file_media,
+                link_preview=link_preview,
+            )
 
 
 @catub.cat_cmd(
