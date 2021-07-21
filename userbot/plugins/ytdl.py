@@ -39,7 +39,9 @@ audio_opts = {
             "key": "FFmpegExtractAudio",
             "preferredcodec": "mp3",
             "preferredquality": "320",
-        }
+        },
+        {"key": "EmbedThumbnail"},  # ERROR: Conversion failed!
+        {"key": "FFmpegMetadata"},
     ],
     "outtmpl": "%(title)s.mp3",
     "quiet": True,
@@ -54,7 +56,7 @@ video_opts = {
     "prefer_ffmpeg": True,
     "geo_bypass": True,
     "nocheckcertificate": True,
-    "postprocessors": [{"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}],
+    "postprocessors": [{"key": "FFmpegVideoConvertor", "preferedformat": "mp4"},{"key": "FFmpegMetadata"}],
     "outtmpl": "%(title)s.mp4",
     "logtostderr": False,
     "quiet": True,
@@ -66,36 +68,28 @@ async def ytdl_down(event, opts, url):
         await event.edit("`Fetching data, please wait..`")
         with YoutubeDL(opts) as ytdl:
             ytdl_data = ytdl.extract_info(url)
+        return ytdl_data
     except DownloadError as DE:
         await event.edit(f"`{str(DE)}`")
-        return
     except ContentTooShortError:
         await event.edit("`The download content was too short.`")
-        return None
     except GeoRestrictedError:
         await event.edit(
             "`Video is not available from your geographic location due to geographic restrictions imposed by a website.`"
         )
-        return None
     except MaxDownloadsReached:
         await event.edit("`Max-downloads limit has been reached.`")
-        return None
     except PostProcessingError:
         await event.edit("`There was an error during post processing.`")
-        return None
     except UnavailableVideoError:
         await event.edit("`Media is not available in the requested format.`")
-        return None
     except XAttrMetadataError as XAME:
         await event.edit(f"`{XAME.code}: {XAME.msg}\n{XAME.reason}`")
-        return None
     except ExtractorError:
         await event.edit("`There was an error during info extraction.`")
-        return None
     except Exception as e:
         await event.edit(f"**Error : **\n__{str(e)}__")
-        return None
-    return ytdl_data
+    return None
 
 
 async def fix_attributes(
@@ -110,12 +104,12 @@ async def fix_attributes(
     duration = int(info_dict.get("duration", 0))
     suffix = path.suffix[1:]
     if supports_streaming and suffix != "mp4":
-        supports_streaming = False
+        supports_streaming = True
 
     attributes, mime_type = get_attributes(path)
     if suffix == "mp3":
         title = str(info_dict.get("title", info_dict.get("id", "Unknown title")))
-        audio = types.DocumentAttributeAudio(duration, None, title, uploader)
+        audio = types.DocumentAttributeAudio(duration=duration, voice=None, title=title, performer=uploader)
     elif suffix == "mp4":
         width = int(info_dict.get("width", 0))
         height = int(info_dict.get("height", 0))
@@ -126,7 +120,7 @@ async def fix_attributes(
                 height = height or attr.h
                 break
         video = types.DocumentAttributeVideo(
-            duration, width, height, round_message, supports_streaming
+            duration=duration, w=width, h=height, round_message=round_message, supports_streaming=supports_streaming
         )
 
     if audio and isinstance(audio, types.DocumentAttributeAudio):
@@ -145,10 +139,6 @@ async def fix_attributes(
         ):
             new_attributes.append(attr)
     return new_attributes, mime_type
-
-
-async def _get_file_name(path: pathlib.Path, full: bool = True) -> str:
-    return str(path.absolute()) if full else path.stem + path.suffix
 
 
 @catub.cat_cmd(
@@ -171,7 +161,7 @@ async def download_audio(event):
         myString = rmsg.text
         url = re.search("(?P<url>https?://[^\s]+)", myString).group("url")
     if not url:
-        return await edit_or_reply(event, "`What I am Supposed to find? Give link`")
+        return await edit_or_reply(event, "`What I am Supposed to do? Give link`")
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
     ytdl_data = await ytdl_down(catevent, audio_opts, url)
@@ -202,6 +192,7 @@ async def download_audio(event):
         file=uploaded,
         mime_type=mime_type,
         attributes=attributes,
+        force_file=False,
         thumb=await event.client.upload_file(catthumb) if catthumb else None,
     )
     await event.client.send_file(
