@@ -196,7 +196,11 @@ async def set_no_log_p_m(event):
 async def set_pmlog(event):
     "To turn on or turn off logging of Private messages"
     if Config.PM_LOGGER_GROUP_ID == -100:
-        return await edit_delete(event, "__For functioning of this you need to set PM_LOGGER_GROUP_ID in config vars__",10)
+        return await edit_delete(
+            event,
+            "__For functioning of this you need to set PM_LOGGER_GROUP_ID in config vars__",
+            10,
+        )
     input_str = event.pattern_match.group(1)
     if input_str == "off":
         h_type = False
@@ -234,7 +238,11 @@ async def set_pmlog(event):
 async def set_grplog(event):
     "To turn on or turn off group tags logging"
     if Config.PM_LOGGER_GROUP_ID == -100:
-        return await edit_delete(event, "__For functioning of this you need to set PM_LOGGER_GROUP_ID in config vars__",10)
+        return await edit_delete(
+            event,
+            "__For functioning of this you need to set PM_LOGGER_GROUP_ID in config vars__",
+            10,
+        )
     input_str = event.pattern_match.group(1)
     if input_str == "off":
         h_type = False
