@@ -881,7 +881,7 @@ async def unblock_pm(event):
 
 
 @catub.cat_cmd(
-    pattern="listapproved$",
+    pattern="l(ist)?a(pproved)?$",
     command=("listapproved", plugin_category),
     info={
         "header": "To see list of approved users.",
