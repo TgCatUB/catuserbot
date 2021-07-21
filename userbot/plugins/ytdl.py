@@ -72,6 +72,7 @@ async def ytdl_down(event, opts, url):
         return ytdl_data
     except DownloadError as DE:
         await event.edit(f"`{str(DE)}`")
+        return
     except ContentTooShortError:
         await event.edit("`The download content was too short.`")
     except GeoRestrictedError:
