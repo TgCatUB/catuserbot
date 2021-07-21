@@ -665,7 +665,7 @@ async def on_plug_in_callback_query_handler(event):
 
 
 @catub.tgbot.on(
-    CallbackQuery(data=re.compile(b"(.*)_cmdhelp_([a-z]+)_([0-9]+)_([a-z]+)_([0-9]+)"))
+    CallbackQuery(data=re.compile(b"(.*)_cmdhelp_([a-z1-9]+)_([0-9]+)_([a-z]+)_([0-9]+)"))
 )
 @check_owner
 async def on_plug_in_callback_query_handler(event):
@@ -674,11 +674,6 @@ async def on_plug_in_callback_query_handler(event):
     pgno = int(event.pattern_match.group(3).decode("UTF-8"))
     category_plugins = str(event.pattern_match.group(4).decode("UTF-8"))
     category_pgno = int(event.pattern_match.group(5).decode("UTF-8"))
-    print(cmd)
-    print(category)
-    print(pgno)
-    print(category_plugins)
-    print(category_pgno)
     buttons = [
         (
             Button.inline(
@@ -692,5 +687,4 @@ async def on_plug_in_callback_query_handler(event):
         \n**Plugin :** `{category}`\
         \n**Category :** `{category_plugins}`\
         \n\n**✘ Intro :**\n{CMD_INFO[cmd][0]}"
-    print(text)
     await event.edit(text, buttons=buttons)
