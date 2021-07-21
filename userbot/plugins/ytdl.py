@@ -28,6 +28,8 @@ plugin_category = "misc"
 
 audio_opts = {
     "format": "bestaudio",
+    "addmetadata": True,
+    "key": "FFmpegMetadata",
     "writethumbnail": True,
     "prefer_ffmpeg": True,
     "geo_bypass": True,
@@ -37,9 +39,7 @@ audio_opts = {
             "key": "FFmpegExtractAudio",
             "preferredcodec": "mp3",
             "preferredquality": "320",
-        },
-        {"key": "EmbedThumbnail"},  # ERROR: Conversion failed!
-        {"key": "FFmpegMetadata"},
+        }
     ],
     "outtmpl": "%(title)s.mp3",
     "quiet": True,
