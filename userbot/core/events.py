@@ -1,8 +1,12 @@
 import typing
 
 from telethon import events, functions, hints, types
-from telethon.tl.types import Channel, MessageMediaWebPage
-from telethon.tl.types import InputPeerChannel, InputPeerChat, InputPeerUser
+from telethon.tl.types import (
+    InputPeerChannel,
+    InputPeerChat,
+    InputPeerUser,
+    MessageMediaWebPage,
+)
 
 from ..Config import Config
 from .managers import edit_or_reply
