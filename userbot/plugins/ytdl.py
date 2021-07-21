@@ -28,7 +28,7 @@ from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, y
 LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
 
-audio_opts =  {
+audio_opts = {
     "format": "bestaudio",
     "addmetadata": True,
     "key": "FFmpegMetadata",
