@@ -25,28 +25,42 @@ from ..core.logger import logging
 from ..helpers.utils import _format
 from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, ytsearch
 
+
+
+from ..helpers.functions.utube import get_yt_video_id, get_ytthumb, _mp3Dl
+import asyncio
+import io
+import os
+import glob
+import pathlib
+import re
+import time
+from datetime import datetime
+from time import time
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl import types
+from telethon.utils import get_attributes
+from youtube_dl import YoutubeDL
+from youtube_dl.utils import (
+    ContentTooShortError,
+    DownloadError,
+    ExtractorError,
+    GeoRestrictedError,
+    MaxDownloadsReached,
+    PostProcessingError,
+    UnavailableVideoError,
+    XAttrMetadataError,
+)
+
+from ..core.logger import logging
+from ..helpers.utils import _format
+from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, ytsearch
+
+BASE_YT_URL = "https://www.youtube.com/watch?v="
 LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
 
-audio_opts = {
-    "format": "bestaudio",
-    "addmetadata": True,
-    "key": "FFmpegMetadata",
-    "writethumbnail": True,
-    "prefer_ffmpeg": True,
-    "geo_bypass": True,
-    "nocheckcertificate": True,
-    "postprocessors": [
-        {
-            "key": "FFmpegExtractAudio",
-            "preferredcodec": "mp3",
-            "preferredquality": "320",
-        }
-    ],
-    "outtmpl": "%(title)s.mp3",
-    "quiet": True,
-    "logtostderr": False,
-}
+
 
 
 video_opts = {
@@ -151,16 +165,14 @@ async def fix_attributes(
     return new_attributes, mime_type
 
 
+
 @catub.cat_cmd(
     pattern="yta(?:\s|$)([\s\S]*)",
     command=("yta", plugin_category),
     info={
         "header": "To download audio from many sites like Youtube",
         "description": "downloads the audio from the given link (Suports the all sites which support youtube-dl)",
-        "examples": [
-            "{tr}yta <reply to link>",
-            "{tr}yta <link>",
-        ],
+        "examples": ["{tr}yta <reply to link>", "{tr}yta <link>"],
     },
 )
 async def download_audio(event):
@@ -174,46 +186,58 @@ async def download_audio(event):
         return await edit_or_reply(event, "`What I am Supposed to do? Give link`")
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
-    ytdl_data = await ytdl_down(catevent, audio_opts, url)
-    if ytdl_data is None:
-        return
-    await catevent.edit(
-        f"`Preparing to upload song:`\
-        \n**{ytdl_data['title']}**\
-        \nby *{ytdl_data['uploader']}*"
-    )
-    f = pathlib.Path(f"{ytdl_data['title']}.mp3".replace("|", "_"))
-    catthumb = pathlib.Path(f"{ytdl_data['title']}.mp3.jpg".replace("|", "_"))
-    if not os.path.exists(catthumb):
-        catthumb = pathlib.Path(f"{ytdl_data['title']}.mp3.webp".replace("|", "_"))
-    if not os.path.exists(catthumb):
-        catthumb = None
-    c_time = time.time()
-    ul = io.open(f, "rb")
+    try:
+        vid_data = YoutubeDL({"no-playlist": True}).extract_info(
+            url, download=False
+        )
+    except ExtractorError:
+        vid_data = {"formats": []}
+    startTime = time()
+    thumb = await get_ytthumb(get_yt_video_id(url))
+    retcode = await _mp3Dl(url=url, starttime=startTime, uid="320")
+    if retcode != 0:
+        return await event.edit(str(retcode))
+    _fpath = ""
+    thumb_pic = None
+    for _path in glob.glob(os.path.join(Config.TEMP_DIR, str(startTime), "*")):
+        if _path.lower().endswith((".jpg", ".png", ".webp")):
+            thumb_pic = _path
+        else:
+            _fpath = _path
+    if not _fpath:
+        return await edit_delete(catevent, "__Unable to upload file__")
+    attributes, mime_type = get_attributes(str(_fpath))
+    ul = io.open( pathlib.Path(_fpath), "rb")
     uploaded = await event.client.fast_upload_file(
         file=ul,
         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-            progress(d, t, catevent, c_time, "upload", file_name=f)
+            progress(
+                d,
+                t,
+                catevent,
+                startTime,
+                "trying to upload",
+                file_name=os.path.basename(pathlib.Path(_fpath)),
+            )
         ),
     )
     ul.close()
-    attributes, mime_type = await fix_attributes(f, ytdl_data, supports_streaming=True)
     media = types.InputMediaUploadedDocument(
         file=uploaded,
         mime_type=mime_type,
         attributes=attributes,
         force_file=False,
-        thumb=await event.client.upload_file(catthumb) if catthumb else None,
+        thumb=await event.client.upload_file(thumb_pic) if thumb_pic else None,
     )
     await event.client.send_file(
         event.chat_id,
         file=media,
+        caption=f"<b>File Name : </b><code>{vid_data.get('title', os.path.basename(pathlib.Path(_fpath)))}</code>",
         reply_to=reply_to_id,
-        caption=ytdl_data["title"],
+        parse_mode="html",
     )
-    os.remove(f)
-    if catthumb:
-        os.remove(catthumb)
+    for _path in glob.glob(os.path.join(Config.TEMP_DIR, str(startTime), "*")):
+        os.remove(_path)
     await catevent.delete()
 
 
