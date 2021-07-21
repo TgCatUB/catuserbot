@@ -3,10 +3,11 @@ from validators.url import url
 
 from userbot import catub
 from userbot.core.logger import logging
-from . import BOTLOG_CHATID
+
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
+from . import BOTLOG_CHATID
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
@@ -100,9 +101,7 @@ async def bad(event):  # sourcery no-metrics
                     f"#SET_DATAVAR\
                     \n**{vname}** is updated newly in database as below",
                 )
-                await event.client.send_messages(
-                    BOTLOG_CHATID, vinfo, sient=True
-                )
+                await event.client.send_messages(BOTLOG_CHATID, vinfo, sient=True)
         if cmd == "get":
             var_data = gvarstatus(vname)
             await edit_delete(
@@ -183,14 +182,12 @@ async def custom_catuserbot(event):
         addgvar("pmpermit_pic", urls)
     await edit_or_reply(event, f"__Your custom {input_str} has been updated__")
     if BOTLOG_CHATID:
-                await event.client.send_message(
-                    BOTLOG_CHATID,
-                    f"#SET_DATAVAR\
+        await event.client.send_message(
+            BOTLOG_CHATID,
+            f"#SET_DATAVAR\
                     \n**{input_str}** is updated newly in database as below",
-                )
-                await event.client.send_messages(
-                    BOTLOG_CHATID, text, sient=True
-                )
+        )
+        await event.client.send_messages(BOTLOG_CHATID, text, sient=True)
 
 
 @catub.cat_cmd(
@@ -235,8 +232,8 @@ async def custom_catuserbot(event):
         event, f"__successfully deleted your customization of {input_str}.__"
     )
     if BOTLOG_CHATID:
-                await event.client.send_message(
-                    BOTLOG_CHATID,
-                    f"#DEL_DATAVAR\
+        await event.client.send_message(
+            BOTLOG_CHATID,
+            f"#DEL_DATAVAR\
                     \n**{input_str}** is deleted from database",
-                )
+        )
