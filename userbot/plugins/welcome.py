@@ -3,7 +3,7 @@ from telethon import events
 
 from userbot import catub
 from userbot.core.logger import logging
-
+from telethon.tl.types import Channel, MessageMediaWebPage
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from ..sql_helper.welcome_sql import (
@@ -59,8 +59,10 @@ async def _(event):  # sourcery no-metrics
                 )
                 file_media = msg_o.media
                 current_saved_welcome_message = msg_o.message
+                link_preview=True
             elif cws.reply:
                 current_saved_welcome_message = cws.reply
+                link_preview=False
         current_message = await event.reply(
             current_saved_welcome_message.format(
                 mention=mention,
@@ -79,6 +81,7 @@ async def _(event):  # sourcery no-metrics
             ),
             file=file_media,
             parse_mode="html",
+            link_preview=link_preview
         )
         update_previous_welcome(event.chat_id, current_message.id)
 
@@ -187,7 +190,7 @@ async def show_welcome(event):
         await edit_or_reply(
             event, "`I am currently welcoming new users with this welcome note.`"
         )
-        await event.reply(cws.reply, link_preview=False)
+        await event.reply(cws.reply,link_preview=False)
 
 
 @catub.cat_cmd(
