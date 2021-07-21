@@ -162,7 +162,7 @@ async def download_audio(event):
     try:
         vid_data = YoutubeDL({"no-playlist": True}).extract_info(url, download=False)
     except ExtractorError:
-        vid_data = {"formats": []}
+        vid_data = {"title":url,"uploader":"Catuserbot","formats": []}
     startTime = time()
     await get_ytthumb(get_yt_video_id(url))
     retcode = await _mp3Dl(url=url, starttime=startTime, uid="320")
@@ -177,6 +177,11 @@ async def download_audio(event):
             _fpath = _path
     if not _fpath:
         return await edit_delete(catevent, "__Unable to upload file__")
+    await catevent.edit(
+        f"`Preparing to upload video:`\
+        \n**{vid_data['title']}**\
+        \nby *{vid_data['uploader']}*"
+    )
     attributes, mime_type = get_attributes(str(_fpath))
     ul = io.open(pathlib.Path(_fpath), "rb")
     uploaded = await event.client.fast_upload_file(
@@ -250,7 +255,7 @@ async def download_video(event):
         \nby *{ytdl_data['uploader']}*"
     )
     ul = io.open(f, "rb")
-    c_time = time.time()
+    c_time = time()
     attributes, mime_type = await fix_attributes(f, ytdl_data, supports_streaming=True)
     uploaded = await event.client.fast_upload_file(
         file=ul,
