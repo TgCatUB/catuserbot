@@ -24,27 +24,30 @@ from youtube_dl.utils import (
 from ..helpers.utils import _format
 from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, ytsearch
 
+from ..core.logger import logging
+
+LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
 
 audio_opts = {
-    "format": "bestaudio",
-    "addmetadata": True,
-    "key": "FFmpegMetadata",
-    "writethumbnail": True,
-    "prefer_ffmpeg": True,
-    "geo_bypass": True,
-    "nocheckcertificate": True,
-    "postprocessors": [
-        {
-            "key": "FFmpegExtractAudio",
-            "preferredcodec": "mp3",
-            "preferredquality": "320",
-        }
-    ],
-    "outtmpl": "%(title)s.mp3",
-    "quiet": True,
-    "logtostderr": False,
-}
+        "outtmpl": os.path.join(Config.TEMP_DIR, "%(title)s.%(ext)s"),
+        "logger": LOGS,
+        "writethumbnail": True,
+        "prefer_ffmpeg": True,
+        "format": "bestaudio/best",
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": 320,
+            },
+            {"key": "EmbedThumbnail"},  # ERROR: Conversion failed!
+            {"key": "FFmpegMetadata"},
+        ],
+        "quiet": True,
+    }
 
 video_opts = {
     "format": "best",
