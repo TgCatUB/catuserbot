@@ -178,8 +178,8 @@ async def custom_catuserbot(event):
         urls = extractor.find_urls(reply.text)
         if not urls:
             return await edit_delete(event, "`the given link is not supported`", 5)
-        text = urls
-        addgvar("pmpermit_pic", urls)
+        text = " ".join(urls)
+        addgvar("pmpermit_pic", text)
     await edit_or_reply(event, f"__Your custom {input_str} has been updated__")
     if BOTLOG_CHATID:
         await event.client.send_message(
