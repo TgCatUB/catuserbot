@@ -71,7 +71,7 @@ async def ytdl_down(event, opts, url):
     try:
         await event.edit("`Fetching data, please wait..`")
         with YoutubeDL(opts) as ytdl:
-            ytdl_data = ytdl.download([url])
+            ytdl_data = ytdl.extract_info(url)
     except DownloadError as DE:
         await event.edit(f"`{str(DE)}`")
     except ContentTooShortError:
