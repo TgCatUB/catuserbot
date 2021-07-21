@@ -31,7 +31,6 @@ plugin_category = "misc"
 audio_opts = {
     "format": "bestaudio",
     "addmetadata": True,
-    "key": "FFmpegMetadata",
     "writethumbnail": True,
     "prefer_ffmpeg": True,
     "geo_bypass": True,
