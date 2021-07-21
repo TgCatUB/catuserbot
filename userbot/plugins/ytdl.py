@@ -210,8 +210,6 @@ async def download_audio(event):
         file=media,
         reply_to=reply_to_id,
         caption=ytdl_data["title"],
-        supports_streaming=True,
-        force_document=False,
     )
     os.remove(f)
     if catthumb:
