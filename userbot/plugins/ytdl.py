@@ -161,7 +161,7 @@ async def download_audio(event):
     try:
         vid_data = YoutubeDL({"no-playlist": True}).extract_info(url, download=False)
     except ExtractorError:
-        vid_data = {"title":url,"uploader":"Catuserbot","formats": []}
+        vid_data = {"title": url, "uploader": "Catuserbot", "formats": []}
     startTime = time()
     await get_ytthumb(get_yt_video_id(url))
     retcode = await _mp3Dl(url=url, starttime=startTime, uid="320")
