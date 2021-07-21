@@ -28,12 +28,12 @@ from . import catub, edit_delete, edit_or_reply, hmention, progress, reply_id, y
 LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
 
-audio_opts = {
-    "outtmpl": "%(title)s.mp3",
-    "logger": LOGS,
+audio_opts =  {
+    "format": "bestaudio",
+    "addmetadata": True,
+    "key": "FFmpegMetadata",
     "writethumbnail": True,
     "prefer_ffmpeg": True,
-    "format": "bestaudio/best",
     "geo_bypass": True,
     "nocheckcertificate": True,
     "postprocessors": [
@@ -42,10 +42,11 @@ audio_opts = {
             "preferredcodec": "mp3",
             "preferredquality": "320",
         },
-        {"key": "EmbedThumbnail"},  # ERROR: Conversion failed!
         {"key": "FFmpegMetadata"},
     ],
+    "outtmpl": "%(title)s.mp3",
     "quiet": True,
+    "logtostderr": False,
 }
 
 video_opts = {
