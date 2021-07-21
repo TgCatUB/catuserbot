@@ -665,7 +665,9 @@ async def on_plug_in_callback_query_handler(event):
 
 
 @catub.tgbot.on(
-    CallbackQuery(data=re.compile(b"(.*)_cmdhelp_([a-z1-9]+)_([0-9]+)_([a-z]+)_([0-9]+)"))
+    CallbackQuery(
+        data=re.compile(b"(.*)_cmdhelp_([a-z1-9]+)_([0-9]+)_([a-z]+)_([0-9]+)")
+    )
 )
 @check_owner
 async def on_plug_in_callback_query_handler(event):
