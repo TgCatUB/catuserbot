@@ -136,7 +136,7 @@ async def send_message(
     reply_to: "typing.Union[int, types.Message]" = None,
     parse_mode: typing.Optional[str] = (),
     formatting_entities: typing.Optional[typing.List[types.TypeMessageEntity]] = None,
-    link_preview: bool = False,
+    link_preview: bool = True,
     file: "typing.Union[hints.FileLike, typing.Sequence[hints.FileLike]]" = None,
     force_document: bool = False,
     clear_draft: bool = False,
