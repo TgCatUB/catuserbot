@@ -4,7 +4,6 @@ import io
 import os
 import pathlib
 import re
-import time
 from datetime import datetime
 from time import time
 
