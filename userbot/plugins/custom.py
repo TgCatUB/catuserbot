@@ -101,7 +101,7 @@ async def bad(event):  # sourcery no-metrics
                     f"#SET_DATAVAR\
                     \n**{vname}** is updated newly in database as below",
                 )
-                await event.client.send_messages(BOTLOG_CHATID, vinfo, sient=True)
+                await event.client.send_message(BOTLOG_CHATID, vinfo, sient=True)
         if cmd == "get":
             var_data = gvarstatus(vname)
             await edit_delete(
@@ -187,7 +187,7 @@ async def custom_catuserbot(event):
             f"#SET_DATAVAR\
                     \n**{input_str}** is updated newly in database as below",
         )
-        await event.client.send_messages(BOTLOG_CHATID, text, sient=True)
+        await event.client.send_message(BOTLOG_CHATID, text, sient=True)
 
 
 @catub.cat_cmd(
