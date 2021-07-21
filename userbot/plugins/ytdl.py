@@ -183,7 +183,7 @@ async def download_audio(event):
         \nby *{ytdl_data['uploader']}*"
     )
     f = pathlib.Path(f"{ytdl_data['title']}.mp3"
-    catthumb = pathlib.Path(f"{ytdl_data['title']}.mp3.jpg"
+    catthumb = pathlib.Path(f"{ytdl_data['title']}.mp3.jpg")
     if not os.path.exists(catthumb):
         catthumb = pathlib.Path(f"{ytdl_data['title']}.mp3.webp"
     if not os.path.exists(catthumb):
