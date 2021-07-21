@@ -56,7 +56,10 @@ video_opts = {
     "prefer_ffmpeg": True,
     "geo_bypass": True,
     "nocheckcertificate": True,
-    "postprocessors": [{"key": "FFmpegVideoConvertor", "preferedformat": "mp4"},{"key": "FFmpegMetadata"}],
+    "postprocessors": [
+        {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"},
+        {"key": "FFmpegMetadata"},
+    ],
     "outtmpl": "%(title)s.mp4",
     "logtostderr": False,
     "quiet": True,
@@ -109,7 +112,9 @@ async def fix_attributes(
     attributes, mime_type = get_attributes(path)
     if suffix == "mp3":
         title = str(info_dict.get("title", info_dict.get("id", "Unknown title")))
-        audio = types.DocumentAttributeAudio(duration=duration, voice=None, title=title, performer=uploader)
+        audio = types.DocumentAttributeAudio(
+            duration=duration, voice=None, title=title, performer=uploader
+        )
     elif suffix == "mp4":
         width = int(info_dict.get("width", 0))
         height = int(info_dict.get("height", 0))
@@ -120,7 +125,11 @@ async def fix_attributes(
                 height = height or attr.h
                 break
         video = types.DocumentAttributeVideo(
-            duration=duration, w=width, h=height, round_message=round_message, supports_streaming=supports_streaming
+            duration=duration,
+            w=width,
+            h=height,
+            round_message=round_message,
+            supports_streaming=supports_streaming,
         )
 
     if audio and isinstance(audio, types.DocumentAttributeAudio):
