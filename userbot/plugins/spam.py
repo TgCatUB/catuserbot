@@ -310,7 +310,6 @@ async def spammer(event):
         )
     cat = input_str[1:]
     await event.delete()
-    cat = ("".join(cat.split(maxsplit=1)[1:])).split(" ", 1)
     try:
         int(cat[0])
     except Exception:
