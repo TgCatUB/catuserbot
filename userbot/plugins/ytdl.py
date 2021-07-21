@@ -29,7 +29,7 @@ LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
 
 audio_opts = {
-    "outtmpl": os.path.join(Config.TEMP_DIR, "%(title)s.%(ext)s"),
+    "outtmpl": "%(title)s.%(ext)s",
     "logger": LOGS,
     "writethumbnail": True,
     "prefer_ffmpeg": True,
