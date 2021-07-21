@@ -182,10 +182,10 @@ async def download_audio(event):
         \n**{ytdl_data['title']}**\
         \nby *{ytdl_data['uploader']}*"
     )
-    f = pathlib.Path(f"{ytdl_data['title']}.mp3".replace("|", "_"))
-    catthumb = pathlib.Path(f"{ytdl_data['title']}.mp3.jpg".replace("|", "_"))
+    f = pathlib.Path(f"{ytdl_data['title']}.mp3"
+    catthumb = pathlib.Path(f"{ytdl_data['title']}.mp3.jpg"
     if not os.path.exists(catthumb):
-        catthumb = pathlib.Path(f"{ytdl_data['title']}.mp3.webp".replace("|", "_"))
+        catthumb = pathlib.Path(f"{ytdl_data['title']}.mp3.webp"
     if not os.path.exists(catthumb):
         catthumb = None
     c_time = time.time()
@@ -245,10 +245,10 @@ async def download_video(event):
     ytdl_data = await ytdl_down(catevent, video_opts, url)
     if ytdl_down is None:
         return
-    f = pathlib.Path(f"{ytdl_data['title']}.mp4".replace("|", "_"))
-    catthumb = pathlib.Path(f"{ytdl_data['title']}.jpg".replace("|", "_"))
+    f = pathlib.Path(f"{ytdl_data['title']}.mp4"
+    catthumb = pathlib.Path(f"{ytdl_data['title']}.jpg"
     if not os.path.exists(catthumb):
-        catthumb = pathlib.Path(f"{ytdl_data['title']}.webp".replace("|", "_"))
+        catthumb = pathlib.Path(f"{ytdl_data['title']}.webp"
     if not os.path.exists(catthumb):
         catthumb = None
     await catevent.edit(
