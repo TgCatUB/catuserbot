@@ -129,7 +129,7 @@ async def spammer(event):
         counter = int(cat[0])
     except Exception:
         return await edit_delete(
-            event, "__Use proper syntax to spam. Foe syntax refer help menu.__"
+            event, "__Use proper syntax to spam. For syntax refer help menu.__"
         )
     if counter > 50:
         sleeptimet = 0.5
@@ -310,5 +310,12 @@ async def spammer(event):
         )
     cat = input_str[1:]
     await event.delete()
+    cat = ("".join(cat.split(maxsplit=1)[1:])).split(" ", 1)
+    try:
+        counter = int(cat[0])
+    except Exception:
+        return await edit_delete(
+            event, "__Use proper syntax for delay spam. For syntax refer help menu.__"
+        )
     addgvar("spamwork", True)
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)
