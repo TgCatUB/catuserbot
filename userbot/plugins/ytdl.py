@@ -6,10 +6,11 @@ import pathlib
 import re
 from datetime import datetime
 from time import time
-from wget import download
+
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import types
 from telethon.utils import get_attributes
+from wget import download
 from youtube_dl import YoutubeDL
 from youtube_dl.utils import (
     ContentTooShortError,
@@ -21,13 +22,14 @@ from youtube_dl.utils import (
     UnavailableVideoError,
     XAttrMetadataError,
 )
-from ..core import check_owner, pool
+
 from userbot import catub
 
+from ..core import pool
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import progress, reply_id
-from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb, ytsearch
+from ..helpers.functions.utube import _mp3Dl, get_ytthumb, ytsearch
 from ..helpers.utils import _format
 from . import hmention
 
