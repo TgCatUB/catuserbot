@@ -185,7 +185,9 @@ async def download_audio(event):
     attributes, mime_type = get_attributes(str(_fpath))
     ul = io.open(pathlib.Path(_fpath), "rb")
     if thumb_pic is None:
-        thumb_pic = str(await pool.run_in_thread(download)(await get_ytthumb(get_yt_video_id(url))))
+        thumb_pic = str(
+            await pool.run_in_thread(download)(await get_ytthumb(get_yt_video_id(url)))
+        )
     uploaded = await event.client.fast_upload_file(
         file=ul,
         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
