@@ -1,7 +1,10 @@
-#visi.tk/plutoniumx
+# visi.tk/plutoniumx
 import calendar
+
 from userbot import catub
+
 plugin_category = "utils"
+
 
 @catub.cat_cmd(
     pattern="ycal (.*)",

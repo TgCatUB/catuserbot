@@ -22,7 +22,9 @@ async def on_plug_in_callback_query_handler(event):
             else:
                 reply_pop_up_alert = "Why were you trying to open and read this top-secret message? Go away kid and do your own work, idiot"
         except KeyError:
-            reply_pop_up_alert = "This top-secret message has been erased from my server..."
+            reply_pop_up_alert = (
+                "This top-secret message has been erased from my server..."
+            )
     else:
         reply_pop_up_alert = "This top-secret message has been erased from my server..."
     await event.answer(reply_pop_up_alert, cache_time=0, alert=True)

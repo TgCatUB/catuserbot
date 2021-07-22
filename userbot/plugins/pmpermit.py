@@ -16,7 +16,6 @@ from ..sql_helper import global_collectionjson as sql
 from ..sql_helper import global_list as sqllist
 from ..sql_helper import pmpermit_sql
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from . import mention
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
@@ -487,7 +486,11 @@ __Let's make this smooth and let him know why you are here.__
     buttons = [
         (Button.inline(text="To enquire something.", data="to_enquire_something"),),
         (Button.inline(text="To request something.", data="to_request_something"),),
-        (Button.inline(text="To chat with @plutoniumx.", data="to_chat_with_my_master"),),
+        (
+            Button.inline(
+                text="To chat with @plutoniumx.", data="to_chat_with_my_master"
+            ),
+        ),
         (
             Button.inline(
                 text="To spam @plutoniumx's inbox.",

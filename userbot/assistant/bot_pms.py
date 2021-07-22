@@ -108,9 +108,7 @@ async def bot_start(event):
                         \nYou can contact to my master from here.\
                         \n\nPowered by [Plutonium X](https://t.me/plutoniumx1)"
         buttons = [
-            (
-                Button.url("MY BIO", "t.me/plutoniumx1")
-                ),
+            (Button.url("MY BIO", "t.me/plutoniumx1")),
         ]
     else:
         start_msg = "Hey ADITYA!, How can I help you?\n\nTry pressing /help."

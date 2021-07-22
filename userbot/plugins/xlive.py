@@ -1,9 +1,9 @@
-#BY @Infinity20998 , @not_ayan
+# BY @Infinity20998 , @not_ayan
 import random
 import re
 import time
-from platform import python_version
 from datetime import datetime
+from platform import python_version
 
 from telethon import version
 from telethon.events import CallbackQuery
@@ -48,6 +48,8 @@ ANIME_QUOTE = [
 plugin_category = "utils"
 
 start = datetime.now()
+
+
 @catub.cat_cmd(
     pattern="alive$",
     command=("alive", plugin_category),
@@ -81,7 +83,9 @@ async def amireallyalive(event):
         cat_caption += f"┃**{EMOJI} ꜱᴇɴꜱᴇɪ :** {mention}\n"
         cat_caption += f"┃**{EMOJI} ʜᴇᴀʀᴛ :** `{check_sgnirts}`\n"
         cat_caption += f"┗━━━━━━━━━━━━━━━━┛\n"
-        cat_caption += f"┏━━━━━━━━━━━━━━┓\n┃ ⁭⁫**{EMOJI} ᴘɪɴɢ :** `{ms} ms` \n┗━━━━━━━━━━━━━━┛\n"
+        cat_caption += (
+            f"┏━━━━━━━━━━━━━━┓\n┃ ⁭⁫**{EMOJI} ᴘɪɴɢ :** `{ms} ms` \n┗━━━━━━━━━━━━━━┛\n"
+        )
         await event.client.send_file(
             event.chat_id,
             PIC,
