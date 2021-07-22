@@ -143,7 +143,7 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
     if not _fpath:
         await edit_delete(upload_msg, "nothing found !")
         return
-    if not thumb_pic and downtype == "v":
+    if not thumb_pic:
         thumb_pic = str(await pool.run_in_thread(download)(await get_ytthumb(yt_code)))
     attributes, mime_type = get_attributes(str(_fpath))
     ul = io.open(Path(_fpath), "rb")
