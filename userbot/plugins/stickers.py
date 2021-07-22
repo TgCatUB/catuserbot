@@ -677,7 +677,7 @@ async def pic2packcmd(event):
             await event.client.send_read_acknowledge(conv.chat_id)
             for packname in ending.raw_text.split():
                 stick_pack_name = packname
-                if packname.startswith("https://t.me/"):
+                if stick_pack_name.startswith("https://t.me/"):
                     break
             await catevent.edit(
                 f"__successfully created the pack for the replied media : __[{args}]({stick_pack_name})"
