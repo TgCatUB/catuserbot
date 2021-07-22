@@ -177,15 +177,14 @@ async def bad(event):
             return await edit_delete(
                 event, "This media is successfully set as background."
             )
-        if input_str.startswith("https://t"):
-            addgvar("LOGO_BACKGROUND", input_str)
-            return await edit_delete(
-                event, f"**Background for logo changed to :-** `{input_str}`"
-            )
-        else:
+        if not input_str.startswith("https://t"):
             return await edit_delete(
                 event, "Give a valid Telegraph picture link, Or reply to a media."
             )
+        addgvar("LOGO_BACKGROUND", input_str)
+        return await edit_delete(
+            event, f"**Background for logo changed to :-** `{input_str}`"
+        )
     if not input_str:
         return await edit_delete(event, lbg_list, time=60)
     if input_str not in bg_name:
@@ -268,7 +267,7 @@ async def pussy(event):
             await edit_delete(
                 event, f"**Font for logo changed to :-** `{input_str}`", time=10
             )
-    elif cmd == "c" or cmd == "sc":
+    elif cmd in ["c", "sc"]:
         fg_name = []
         for name, code in PIL.ImageColor.colormap.items():
             fg_name.append(name)
@@ -287,19 +286,18 @@ async def pussy(event):
                 f"**Available color names are here:-**\n\n{fg_list}",
                 time=80,
             )
+        elif cmd == "c":
+            addgvar("LOGO_FONT_COLOR", input_str)
+            await edit_delete(
+                event,
+                f"**Foreground color for logo changed to :-** `{input_str}`",
+                10,
+            )
         else:
-            if cmd == "c":
-                addgvar("LOGO_FONT_COLOR", input_str)
-                await edit_delete(
-                    event,
-                    f"**Foreground color for logo changed to :-** `{input_str}`",
-                    10,
-                )
-            else:
-                addgvar("LOGO_FONT_STROKE_COLOR", input_str)
-                await edit_delete(
-                    event, f"**Stroke color for logo changed to :-** `{input_str}`", 10
-                )
+            addgvar("LOGO_FONT_STROKE_COLOR", input_str)
+            await edit_delete(
+                event, f"**Stroke color for logo changed to :-** `{input_str}`", 10
+            )
     else:
         cat = re.compile(r"^\-?[1-9][0-9]*\.?[0-9]*")
         isint = re.match(cat, input_str)
@@ -307,55 +305,54 @@ async def pussy(event):
             return await edit_delete(
                 event, f"**Give an integer value to set**", time=10
             )
-        else:
-            if cmd == "s":
-                input_str = int(input_str)
-                if input_str > 0 and input_str <= 1000:
-                    addgvar("LOGO_FONT_SIZE", input_str)
-                    await edit_delete(
-                        event, f"**Font size is changed to :-** `{input_str}`"
-                    )
-                else:
-                    await edit_delete(
-                        event,
-                        f"**Font size is between 0 - 1000, You can't set limit to :** `{input_str}`",
-                    )
-            elif cmd == "w":
-                input_str = float(input_str)
-                if input_str > 0 and input_str <= 100:
-                    addgvar("LOGO_FONT_WIDTH", input_str)
-                    await edit_delete(
-                        event, f"**Font width is changed to :-** `{input_str}`"
-                    )
-                else:
-                    await edit_delete(
-                        event,
-                        f"**Font width is between 0 - 100, You can't set limit to {input_str}",
-                    )
-            elif cmd == "h":
-                input_str = float(input_str)
-                if input_str > 0 and input_str <= 100:
-                    addgvar("LOGO_FONT_HEIGHT", input_str)
-                    await edit_delete(
-                        event, f"**Font hight is changed to :-** `{input_str}`"
-                    )
-                else:
-                    await edit_delete(
-                        event,
-                        f"**Font hight is between 0 - 100, You can't set limit to {input_str}",
-                    )
-            elif cmd == "sw":
-                input_str = int(input_str)
-                if input_str > 0 and input_str <= 100:
-                    addgvar("LOGO_FONT_STROKE_WIDTH", input_str)
-                    await edit_delete(
-                        event, f"**Font stroke width is changed to :-** `{input_str}`"
-                    )
-                else:
-                    await edit_delete(
-                        event,
-                        f"**Font stroke width size is between 0 - 100, You can't set limit to :** `{input_str}`",
-                    )
+        if cmd == "s":
+            input_str = int(input_str)
+            if input_str > 0 and input_str <= 1000:
+                addgvar("LOGO_FONT_SIZE", input_str)
+                await edit_delete(
+                    event, f"**Font size is changed to :-** `{input_str}`"
+                )
+            else:
+                await edit_delete(
+                    event,
+                    f"**Font size is between 0 - 1000, You can't set limit to :** `{input_str}`",
+                )
+        elif cmd == "w":
+            input_str = float(input_str)
+            if input_str > 0 and input_str <= 100:
+                addgvar("LOGO_FONT_WIDTH", input_str)
+                await edit_delete(
+                    event, f"**Font width is changed to :-** `{input_str}`"
+                )
+            else:
+                await edit_delete(
+                    event,
+                    f"**Font width is between 0 - 100, You can't set limit to {input_str}",
+                )
+        elif cmd == "h":
+            input_str = float(input_str)
+            if input_str > 0 and input_str <= 100:
+                addgvar("LOGO_FONT_HEIGHT", input_str)
+                await edit_delete(
+                    event, f"**Font hight is changed to :-** `{input_str}`"
+                )
+            else:
+                await edit_delete(
+                    event,
+                    f"**Font hight is between 0 - 100, You can't set limit to {input_str}",
+                )
+        elif cmd == "sw":
+            input_str = int(input_str)
+            if input_str > 0 and input_str <= 100:
+                addgvar("LOGO_FONT_STROKE_WIDTH", input_str)
+                await edit_delete(
+                    event, f"**Font stroke width is changed to :-** `{input_str}`"
+                )
+            else:
+                await edit_delete(
+                    event,
+                    f"**Font stroke width size is between 0 - 100, You can't set limit to :** `{input_str}`",
+                )
 
 
 @catub.cat_cmd(
@@ -390,12 +387,10 @@ async def cat(event):
             var_data = gvarstatus(var)
             await edit_delete(event, f"📑 Value of **{var}** is  `{var_data}`", time=60)
         elif cmd == "d":
-            if input_str == "lbg":
-                if os.path.exists("./temp/bg_img.jpg"):
-                    os.remove("./temp/bg_img.jpg")
-            if input_str == "lf":
-                if os.path.exists("./temp/logo.ttf"):
-                    os.remove("./temp/logo.ttf")
+            if input_str == "lbg" and os.path.exists("./temp/bg_img.jpg"):
+                os.remove("./temp/bg_img.jpg")
+            if input_str == "lf" and os.path.exists("./temp/logo.ttf"):
+                os.remove("./temp/logo.ttf")
             delgvar(var)
             await edit_delete(
                 event, f"📑 Value of **{var}** is now deleted & set to default.", time=60

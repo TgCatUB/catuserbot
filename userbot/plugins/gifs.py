@@ -43,14 +43,10 @@ async def some(event):
     res = requests.get("https://giphy.com/")
     res = res.text.split("GIPHY_FE_WEB_API_KEY =")[1].split("\n")[0]
     api_key = res[2:-1]
-    list_id = []
     r = requests.get(
         f"https://api.giphy.com/v1/gifs/search?q={inpt}&api_key={api_key}&limit=50"
     ).json()
-    i = 0
-    while i < len(r["data"]):
-        list_id.append(r["data"][i]["id"])
-        i += 1
+    list_id = [r["data"][i]["id"] for i in range(len(r["data"]))]
     rlist = random.sample(list_id, int(count))
     for items in rlist:
         nood = await event.client.send_file(
@@ -106,8 +102,7 @@ async def some(event):
     catevent = await edit_or_reply(event, "`Wait babe...`😘")
     maxmsg = await event.client.get_messages(chat)
     start = random.randint(31, maxmsg.total)
-    if start > maxmsg.total - 40:
-        start = maxmsg.total - 40
+    start = min(start, maxmsg.total - 40)
     end = start + 41
     kiss = []
     async for x in event.client.iter_messages(

@@ -171,14 +171,10 @@ def get_all_mov():
 
 def get_closest(movie):
     movies = get_all_mov()
-    closes = get_close_matches(movie,movies)
-    return closes
+    return get_close_matches(movie,movies)
 
 def get_from_mov(movie):
-    mov_list = []
-    for item in collection:
-        if item[1] == movie:
-            mov_list.append(item[0])
+    mov_list = [item[0] for item in collection if item[1] == movie]
     mov_list.sort()
     return mov_list
 
@@ -237,5 +233,5 @@ async def getdialoguemovie(event):
     await asyncio.sleep(1)
     movies = get_all_mov()
     for movie in movies:
-        result = result + f"`{movie}`\n"
+        result += f"`{movie}`\n"
     await newevent.edit(result)
