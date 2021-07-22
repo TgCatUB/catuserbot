@@ -29,7 +29,7 @@ from ..core import pool
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import progress, reply_id
-from ..helpers.functions.utube import _mp3Dl, get_ytthumb, ytsearch
+from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb, ytsearch
 from ..helpers.utils import _format
 from . import hmention
 
@@ -185,7 +185,7 @@ async def download_audio(event):
     attributes, mime_type = get_attributes(str(_fpath))
     ul = io.open(pathlib.Path(_fpath), "rb")
     if thumb_pic is None:
-        thumb_pic = str(await pool.run_in_thread(download)(await get_ytthumb(yt_code)))
+        thumb_pic = str(await pool.run_in_thread(download)(await get_ytthumb(get_yt_video_id(url))))
     uploaded = await event.client.fast_upload_file(
         file=ul,
         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
