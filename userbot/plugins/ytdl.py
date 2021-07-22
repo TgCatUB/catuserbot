@@ -6,7 +6,7 @@ import pathlib
 import re
 from datetime import datetime
 from time import time
-
+from wget import download
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import types
 from telethon.utils import get_attributes
@@ -21,7 +21,7 @@ from youtube_dl.utils import (
     UnavailableVideoError,
     XAttrMetadataError,
 )
-
+from ..core import check_owner, pool
 from userbot import catub
 
 from ..core.logger import logging
@@ -163,7 +163,6 @@ async def download_audio(event):
     except ExtractorError:
         vid_data = {"title": url, "uploader": "Catuserbot", "formats": []}
     startTime = time()
-    await get_ytthumb(get_yt_video_id(url))
     retcode = await _mp3Dl(url=url, starttime=startTime, uid="320")
     if retcode != 0:
         return await event.edit(str(retcode))
@@ -183,6 +182,8 @@ async def download_audio(event):
     )
     attributes, mime_type = get_attributes(str(_fpath))
     ul = io.open(pathlib.Path(_fpath), "rb")
+    if thumb_pic is None:
+        thumb_pic = str(await pool.run_in_thread(download)(await get_ytthumb(yt_code)))
     uploaded = await event.client.fast_upload_file(
         file=ul,
         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
