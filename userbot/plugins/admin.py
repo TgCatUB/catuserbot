@@ -1,5 +1,5 @@
 from asyncio import sleep
-from telethon.utils import get_display_name
+
 from telethon import functions
 from telethon.errors import (
     BadRequestError,
@@ -19,6 +19,7 @@ from telethon.tl.types import (
     InputChatPhotoEmpty,
     MessageMediaPhoto,
 )
+from telethon.utils import get_display_name
 
 from userbot import catub
 

@@ -6,6 +6,7 @@ from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import ChatBannedRights
 from telethon.utils import get_display_name
+
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
