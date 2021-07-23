@@ -39,7 +39,7 @@ class NewMessage(events.NewMessage):
                 try:
                     event.chat = event._client.loop.create_task(event.get_chat())
                 except AttributeError:
-                    event.chat = None
+                    event.chat = "Null"
 
             if self.incoming:
                 try:
@@ -53,7 +53,7 @@ class NewMessage(events.NewMessage):
                     is_creator = True
                 if isinstance(participant, types.ChannelParticipantAdmin):
                     is_admin = True
-            elif event.chat is None:
+            elif event.chat == "Null":
                 is_admin = True
                 is_creator = False
             else:
