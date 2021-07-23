@@ -1,6 +1,6 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
 from telethon import events
-
+from telethon.utils import get_display_name
 from userbot import catub
 from userbot.core.logger import logging
 
@@ -125,7 +125,7 @@ async def save_welcome(event):
                 BOTLOG_CHATID,
                 f"#WELCOME_NOTE\
                 \nCHAT ID: {event.chat_id}\
-                \nThe following message is saved as the welcome note for the {event.chat.title}, Don't delete this message !!",
+                \nThe following message is saved as the welcome note for the {get_display_name(await event.get_chat())}, Don't delete this message !!",
             )
             msg_o = await event.client.forward_messages(
                 entity=BOTLOG_CHATID, messages=msg, from_peer=event.chat_id, silent=True

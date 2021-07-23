@@ -4,7 +4,7 @@ Idea by @BlazingRobonix
 """
 
 from userbot import catub
-
+from telethon.utils import get_display_name
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.echo_sql import (
     addecho,
@@ -46,7 +46,7 @@ async def echo(event):
         chat_name = user.first_name
         chat_type = "Personal"
     else:
-        chat_name = event.chat.title
+        chat_name = get_display_name(await event.get_chat())
         chat_type = "Group"
     user_name = user.first_name
     user_username = user.username

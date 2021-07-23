@@ -3,7 +3,7 @@ from asyncio import sleep
 from telethon import events
 
 from userbot import catub
-
+from telethon.utils import get_display_name
 from ..core.managers import edit_or_reply
 from ..sql_helper import pmpermit_sql as pmpermit_sql
 from ..sql_helper.welcomesql import (
@@ -121,7 +121,7 @@ async def save_welcome(event):
                 BOTLOG_CHATID,
                 f"#WELCOME_NOTE\
                 \nCHAT ID: {event.chat_id}\
-                \nThe following message is saved as the welcome note for the {event.chat.title}, Dont delete this message !!",
+                \nThe following message is saved as the welcome note for the {get_display_name(await event.get_chat())}, Dont delete this message !!",
             )
             msg_o = await event.client.forward_messages(
                 entity=BOTLOG_CHATID, messages=msg, from_peer=event.chat_id, silent=True
