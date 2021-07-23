@@ -92,7 +92,6 @@ async def safe_check_text(msg):  # sourcery no-metrics
     return bool(
         (
             (Config.STRING_SESSION in msg)
-            or (str(Config.APP_ID) in msg)
             or (Config.API_HASH in msg)
             or (Config.TG_BOT_TOKEN in msg)
             or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)
