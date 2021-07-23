@@ -385,9 +385,7 @@ async def startmute(event):
             return await edit_or_reply(
                 event, "`This user is already muted in this chat ~~lmfao sed rip~~`"
             )
-        result = await event.client(
-            functions.channels.GetParticipantRequest(event.chat_id, user.id)
-        )
+        result = await event.client.get_permissions(event.chat_id, user.id)
         try:
             if result.participant.banned_rights.send_messages:
                 return await edit_or_reply(
@@ -479,9 +477,7 @@ async def endmute(event):
             if is_muted(user.id, event.chat_id):
                 unmute(user.id, event.chat_id)
             else:
-                result = await event.client(
-                    functions.channels.GetParticipantRequest(event.chat_id, user.id)
-                )
+                result = await event.client.get_permissions(event.chat_id, user.id)
                 if result.participant.banned_rights.send_messages:
                     await event.client(
                         EditBannedRequest(event.chat_id, user.id, UNBAN_RIGHTS)

@@ -83,9 +83,7 @@ async def kickme(leave):
 )
 async def _(event):
     "To kick everyone from group."
-    result = await event.client(
-        functions.channels.GetParticipantRequest(event.chat_id, event.client.uid)
-    )
+    result = await event.client.get_permissions(event.chat_id, event.client.uid)
     if not result.participant.admin_rights.ban_users:
         return await edit_or_reply(
             event, "`It seems like you dont have ban users permission in this group.`"
@@ -127,9 +125,7 @@ async def _(event):
 )
 async def _(event):
     "To ban everyone from group."
-    result = await event.client(
-        functions.channels.GetParticipantRequest(event.chat_id, event.client.uid)
-    )
+    result = await event.client.get_permissions(event.chat_id, event.client.uid)
     if not result:
         return await edit_or_reply(
             event, "`It seems like you dont have ban users permission in this group.`"

@@ -40,11 +40,9 @@ class NewMessage(events.NewMessage):
 
             if self.incoming:
                 try:
-                    p = event._client.loop.create_task(
-                        event._client(
-                            functions.channels.GetParticipantRequest(
+                    p = event._client.loop.create_task( 
+                        event._client.get_permissions(
                                 event.chat_id, event.sender_id
-                            )
                         )
                     )
                     participant = p.participant

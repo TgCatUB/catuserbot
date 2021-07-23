@@ -483,9 +483,7 @@ async def _(event):  # sourcery no-metrics
     peer_id = event.chat_id
     reply = await event.get_reply_message()
     chat_per = (await event.get_chat()).default_banned_rights
-    result = await event.client(
-        functions.channels.GetParticipantRequest(peer_id, reply.from_id)
-    )
+    result = await event.client.get_permissions(peer_id, reply.from_id)
     admincheck = await is_admin(event.client, peer_id, reply.from_id)
     if admincheck:
         return await edit_delete(event, "`This user is admin you cant play with him`")
@@ -731,9 +729,7 @@ async def _(event):  # sourcery no-metrics
     peer_id = event.chat_id
     reply = await event.get_reply_message()
     chat_per = (await event.get_chat()).default_banned_rights
-    result = await event.client(
-        functions.channels.GetParticipantRequest(peer_id, reply.from_id)
-    )
+    result = await event.client.get_permissions(peer_id, reply.from_id)
     admincheck = await is_admin(event.client, peer_id, reply.from_id)
     if admincheck:
         return await edit_delete(event, "`This user is admin you cant play with him`")
@@ -967,9 +963,7 @@ async def _(event):  # sourcery no-metrics
     if not user:
         return
     admincheck = await is_admin(event.client, peer_id, user.id)
-    result = await event.client(
-        functions.channels.GetParticipantRequest(peer_id, user.id)
-    )
+    result = await event.client.get_permissions(peer_id, user.id)
     output = ""
     if admincheck:
         c_info = "✅" if result.participant.admin_rights.change_info else "❌"
