@@ -1,5 +1,5 @@
 from asyncio import sleep
-from telethon.utils import get_display_name
+
 from telethon.errors import (
     ChatAdminRequiredError,
     FloodWaitError,
@@ -19,6 +19,7 @@ from telethon.tl.types import (
     UserStatusOnline,
     UserStatusRecently,
 )
+from telethon.utils import get_display_name
 
 from userbot import catub
 
@@ -174,7 +175,7 @@ async def _(event):
     succ = 0
     total = 0
     flag = False
-    chat = await event.get_chat()
+    await event.get_chat()
     async for i in event.client.iter_participants(
         event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
     ):
@@ -205,7 +206,9 @@ async def _(event):
                     )
             except MessageNotModifiedError:
                 pass
-    await catevent.edit(f"**Unbanned :**__{succ}/{total} in the chat {get_display_name(await event.get_chat())}__")
+    await catevent.edit(
+        f"**Unbanned :**__{succ}/{total} in the chat {get_display_name(await event.get_chat())}__"
+    )
 
 
 # Ported by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)
