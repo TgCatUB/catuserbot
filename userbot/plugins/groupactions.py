@@ -1,5 +1,5 @@
 from asyncio import sleep
-
+from telethon.utils import get_display_name
 from telethon.errors import (
     ChatAdminRequiredError,
     FloodWaitError,
@@ -205,7 +205,7 @@ async def _(event):
                     )
             except MessageNotModifiedError:
                 pass
-    await catevent.edit(f"**Unbanned :**__{succ}/{total} in the chat {chat.title}__")
+    await catevent.edit(f"**Unbanned :**__{succ}/{total} in the chat {get_display_name(await event.get_chat())}__")
 
 
 # Ported by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)
@@ -270,7 +270,7 @@ async def rm_deletedacc(show):
             BOTLOG_CHATID,
             f"#CLEANUP\
             \n{del_status}\
-            \nCHAT: {show.chat.title}(`{show.chat_id}`)",
+            \nCHAT: {show.get_display_name(await event.get_chat())}(`{show.chat_id}`)",
         )
 
 
