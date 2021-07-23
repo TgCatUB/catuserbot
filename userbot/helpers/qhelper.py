@@ -20,7 +20,7 @@ import urllib
 import emoji
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont, ImageOps
-from telethon.tl import functions, types
+from telethon.tl import types
 
 from .utils import _catutils
 

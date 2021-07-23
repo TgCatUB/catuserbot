@@ -1,6 +1,6 @@
 import typing
 
-from telethon import events, functions, hints, types
+from telethon import events, hints, types
 from telethon.tl.types import (
     InputPeerChannel,
     InputPeerChat,
@@ -40,10 +40,8 @@ class NewMessage(events.NewMessage):
 
             if self.incoming:
                 try:
-                    p = event._client.loop.create_task( 
-                        event._client.get_permissions(
-                                event.chat_id, event.sender_id
-                        )
+                    p = event._client.loop.create_task(
+                        event._client.get_permissions(event.chat_id, event.sender_id)
                     )
                     participant = p.participant
                 except Exception:

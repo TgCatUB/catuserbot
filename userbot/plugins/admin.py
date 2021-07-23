@@ -1,6 +1,5 @@
 from asyncio import sleep
 
-from telethon import functions
 from telethon.errors import (
     BadRequestError,
     ImageProcessFailedError,
