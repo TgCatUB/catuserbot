@@ -35,11 +35,12 @@ class NewMessage(events.NewMessage):
             is_admin = False
             creator = hasattr(event.chat, "creator")
             admin_rights = hasattr(event.chat, "admin_rights")
+            flag = None
             if not creator and not admin_rights:
                 try:
                     event.chat = event._client.loop.create_task(event.get_chat())
                 except AttributeError:
-                    event.chat = "Null"
+                    flag = "Null"
 
             if self.incoming:
                 try:
@@ -53,7 +54,7 @@ class NewMessage(events.NewMessage):
                     is_creator = True
                 if isinstance(participant, types.ChannelParticipantAdmin):
                     is_admin = True
-            elif event.chat == "Null":
+            elif flag:
                 is_admin = True
                 is_creator = False
             else:
