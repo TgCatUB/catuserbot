@@ -108,7 +108,7 @@ async def cpu(event):
 )
 async def sysdetails(sysd):
     "Shows system information using neofetch"
-    catevent = await edit_or_reply(sysd, "`Fectching system information.`")
+    catevent = await edit_or_reply(sysd, "`Fetching system information.`")
     cmd = "git clone https://github.com/dylanaraps/neofetch.git"
     await _catutils.runcmd(cmd)
     neo = "neofetch/neofetch --off --color_blocks off --bold off --cpu_temp C \

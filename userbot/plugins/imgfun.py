@@ -112,7 +112,7 @@ async def imirror(event):  # sourcery no-metrics
     info={
         "header": "To rotate the replied image or sticker",
         "usage": [
-            "{tr}irotate <angel>",
+            "{tr}irotate <angle>",
         ],
     },
 )
