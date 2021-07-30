@@ -273,7 +273,7 @@ async def rm_deletedacc(show):
             BOTLOG_CHATID,
             f"#CLEANUP\
             \n{del_status}\
-            \nCHAT: {show.get_display_name(await event.get_chat())}(`{show.chat_id}`)",
+            \nCHAT: {get_display_name(await event.get_chat())}(`{show.chat_id}`)",
         )
 
 
