@@ -148,7 +148,10 @@ async def send_message(
     comment_to: "typing.Union[int, types.Message]" = None,
 ):
     chatid = entity
-    if str(chatid) == str(Config.BOTLOG_CHATID):
+    if str(chatid) in [
+        str(Config.BOTLOG_CHATID),
+        str(Config.PM_LOGGER_GROUP_ID),
+    ]:
         return await client.sendmessage(
             entity=chatid,
             message=message,
