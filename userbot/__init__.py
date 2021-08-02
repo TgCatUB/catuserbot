@@ -1,7 +1,8 @@
 import time
-
+import signal
 import heroku3
 
+from asyncio.exceptions import CancelledError
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
@@ -26,6 +27,17 @@ elif Config.UPSTREAM_REPO == "goodcat":
     UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
 else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
+
+# disconnect
+def disconnect_userbot():
+    delgvar("ipaddress")
+    try:
+        catub.disconnect()
+    except (ConnectionError, CancelledError):
+        pass
+    sys.exit(143)
+    
+signal.signal(signal.SIGTERM, disconnect_userbot)
 
 if Config.PRIVATE_GROUP_BOT_API_ID == 0:
     if gvarstatus("PRIVATE_GROUP_BOT_API_ID") is None:
