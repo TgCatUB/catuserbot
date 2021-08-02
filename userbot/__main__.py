@@ -1,4 +1,4 @@
-import signal
+
 import sys
 
 import userbot
@@ -15,7 +15,6 @@ from .utils import (
     startupmessage,
     verifyLoggerGroup,
 )
-from .utils.startup import disconnect_userbot
 
 LOGS = logging.getLogger("CatUserbot")
 
@@ -67,7 +66,6 @@ async def startup_process():
 
 catub.loop.run_until_complete(startup_process())
 
-signal.signal(signal.SIGTERM, disconnect_userbot)
 
 if len(sys.argv) not in (1, 3, 4):
     catub.disconnect()
