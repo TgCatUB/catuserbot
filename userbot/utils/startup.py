@@ -116,14 +116,7 @@ async def ipchange():
         return "ip change"
 
 
-# disconnect
-def disconnect_userbot():
-    delgvar("ipaddress")
-    try:
-        catub.disconnect()
-    except (ConnectionError, CancelledError):
-        pass
-    sys.exit(143)
+
 
 
 async def add_bot_to_logger_group(chat_id):
