@@ -50,7 +50,7 @@ async def user(event):
     reply = await event.get_reply_message()
     if not search_query and reply and reply.text:
         search_query = reply.text
-    else:
+    elif not search_query:
         return await edit_delete(event, "__Whom should i search.__")
     try:
         user = jikan.user(search_query)
