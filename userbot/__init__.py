@@ -29,7 +29,7 @@ elif Config.UPSTREAM_REPO == "goodcat":
 else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
-# disconnect
+# disconnect https://stackoverflow.com/questions/18499497/how-to-process-sigterm-signal-gracefully
 def disconnect_userbot():
     delgvar("ipaddress")
     try:
