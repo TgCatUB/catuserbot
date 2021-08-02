@@ -1,9 +1,9 @@
-import sys
 import signal
-from .utils.startup import disconnect_userbot
+import sys
+
 import userbot
 from userbot import BOTLOG_CHATID, HEROKU_APP, PM_LOGGER_GROUP_ID
-import signal
+
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
@@ -15,6 +15,7 @@ from .utils import (
     startupmessage,
     verifyLoggerGroup,
 )
+from .utils.startup import disconnect_userbot
 
 LOGS = logging.getLogger("CatUserbot")
 
