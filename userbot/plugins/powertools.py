@@ -1,7 +1,7 @@
 import sys
 from asyncio.exceptions import CancelledError
 from time import sleep
-
+import os
 from userbot import catub
 
 from ..core.logger import logging
@@ -72,7 +72,7 @@ async def _(event):
     if HEROKU_APP is not None:
         HEROKU_APP.process_formation()["worker"].scale(0)
     else:
-        sys.exit(143)
+        os._exit(143)
 
 
 @catub.cat_cmd(

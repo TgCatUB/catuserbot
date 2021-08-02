@@ -78,7 +78,7 @@ async def restart_script(client: TelegramClient, sandy):
     executable = sys.executable.replace(" ", "\\ ")
     args = [executable, "-m", "userbot"]
     os.execle(executable, *args, os.environ)
-    sys.exit(0)
+    os._exit(143)
 
 
 async def get_message_link(client, event):

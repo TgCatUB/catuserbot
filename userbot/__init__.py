@@ -2,7 +2,7 @@ import signal
 import sys
 import time
 from asyncio.exceptions import CancelledError
-
+import os
 import heroku3
 
 from .Config import Config
@@ -38,7 +38,7 @@ def disconnect_userbot(*_):
         catub.disconnect()
     except (ConnectionError, CancelledError):
         pass
-    sys.exit(143)
+    os._exit(143)
 
 
 signal.signal(signal.SIGTERM, disconnect_userbot)
