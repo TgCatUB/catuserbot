@@ -26,6 +26,7 @@ LOGS = logging.getLogger("CatUserbot")
 cmdhr = Config.COMMAND_HAND_LER
 
 
+
 async def setup_bot():
     """
     To set up bot for userbot
@@ -115,6 +116,14 @@ async def ipchange():
             pass
         return "ip change"
 
+#disconnect 
+def disconnect_userbot():
+    delgvar("ipaddress")
+    try:
+        catub.disconnect()
+    except (ConnectionError, CancelledError):
+        pass
+    sys.exit(143)
 
 async def add_bot_to_logger_group(chat_id):
     """
