@@ -1,4 +1,4 @@
-import signal
+
 import time
 
 import heroku3
@@ -7,7 +7,6 @@ from .Config import Config
 from .core.logger import logging
 from .core.session import catub
 from .sql_helper.globals import addgvar, delgvar, gvarstatus
-from .utils.startup import disconnect_userbot
 
 __version__ = "3.0.4"
 __license__ = "GNU Affero General Public License v3.0"
@@ -28,8 +27,6 @@ elif Config.UPSTREAM_REPO == "goodcat":
     UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
 else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
-
-signal.signal(signal.SIGTERM, disconnect_userbot)
 
 if Config.PRIVATE_GROUP_BOT_API_ID == 0:
     if gvarstatus("PRIVATE_GROUP_BOT_API_ID") is None:
