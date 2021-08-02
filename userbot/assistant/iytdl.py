@@ -133,8 +133,8 @@ async def ytdl_download_callback(c_q: CallbackQuery):  # sourcery no-metrics
         retcode = await _mp3Dl(url=yt_url, starttime=startTime, uid=choice_str)
     if retcode != 0:
         return await upload_msg.edit(str(retcode))
-    _fpath = ""
-    thumb_pic = None
+    _fpath  =  ""
+    thumb_pic  =  لا شيء
     for _path in glob.glob(os.path.join(Config.TEMP_DIR, str(startTime), "*")):
         if _path.lower().endswith((".jpg", ".png", ".webp")):
             thumb_pic = _path
@@ -261,7 +261,7 @@ async def ytdl_callback(c_q: CallbackQuery):
                 (
                     Button.url(
                         "↗️  Click To Open",
-                        url=telegraph,
+                        url     = m تلكراف  ،
                     )
                 ),
                 (
