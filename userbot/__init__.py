@@ -31,7 +31,7 @@ else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
 # disconnect https://stackoverflow.com/questions/18499497/how-to-process-sigterm-signal-gracefully
-def disconnect_userbot(_signo, _stack_frame):
+def disconnect_userbot(*_):
     delgvar("ipaddress")
     LOGS.info("Disconnecting userbot")
     try:
