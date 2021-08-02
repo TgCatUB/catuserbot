@@ -31,19 +31,6 @@ elif Config.UPSTREAM_REPO == "goodcat":
 else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 
-# disconnect https://stackoverflow.com/questions/18499497/how-to-process-sigterm-signal-gracefully
-def disconnect_userbot(*_):
-    delgvar("ipaddress")
-    LOGS.info("Disconnecting userbot")
-    try:
-        catub.disconnect()
-    except (ConnectionError, CancelledError):
-        pass
-    os._exit(143)
-
-
-signal.signal(signal.SIGTERM, disconnect_userbot)
-
 if Config.PRIVATE_GROUP_BOT_API_ID == 0:
     if gvarstatus("PRIVATE_GROUP_BOT_API_ID") is None:
         Config.BOTLOG = False
