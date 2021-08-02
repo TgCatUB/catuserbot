@@ -1,7 +1,8 @@
+import signal
 import time
 
 import heroku3
-import signal
+
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
