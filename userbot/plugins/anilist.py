@@ -1,5 +1,6 @@
 import html
 from datetime import datetime
+import textwrap
 from urllib.parse import quote_plus
 
 import aiohttp
@@ -13,12 +14,13 @@ from telegraph import exceptions, upload_file
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import media_type, readable_time, time_formatter
+from ..helpers import media_type, readable_time, time_formatter, post_to_telegraph
 from ..helpers.functions import (
     airing_query,
     callAPI,
     formatJSON,
     get_anime_manga,
+    get_poster,
     getBannerLink,
     memory_file,
     replace_text,
@@ -33,6 +35,69 @@ headers = {
 plugin_category = "extra"
 
 
+@catub.cat_cmd(
+    pattern="mal ?(.*)",
+    command=("mal", plugin_category),
+    info={
+        "header": "Search profiles of MAL.",
+        "usage": "{tr}mal <username>",
+        "examples": "{tr}mal KenKaneki",
+    },
+)
+async def user(event):
+    "Search profiles of MAL."
+    search_query = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not search_query and reply and reply.text:
+        search_query = reply.text
+    else:
+        return await edit_delete(event, "__Whom should i search.__")
+    try:
+        user = jikan.user(search_query)
+    except APIException:
+        return await edit_delete(event, "`No User found with given username`", 5)
+    date_format = "%Y-%m-%d"
+    img = user["image_url"] or "https://telegra.ph//file/9b4205e1b1cc68a4ffd5e.jpg"
+    try:
+        user_birthday = datetime.datetime.fromisoformat(user["birthday"])
+        user_birthday_formatted = user_birthday.strftime(date_format)
+    except BaseException:
+        user_birthday_formatted = "Unknown"
+    user_joined_date = datetime.datetime.fromisoformat(user["joined"])
+    user_joined_date_formatted = user_joined_date.strftime(date_format)
+    user_last_online = datetime.datetime.fromisoformat(user["last_online"])
+    user_last_online_formatted = user_last_online.strftime(date_format)
+    for entity in user:
+        if user[entity] is None:
+            user[entity] = "Unknown"
+    about = user["about"].split(" ", 60)
+    try:
+        about.pop(60)
+    except IndexError:
+        pass
+    about_string = " ".join(about)
+    about_string = about_string.replace("<br>", "").strip().replace("\r\n", "\n")
+    caption = ""
+    caption += textwrap.dedent(
+        f"""
+    **Username:** [{user['username']}]({user['url']})
+    **Gender:** `{user['gender']}`
+    **MAL ID:** `{user['user_id']}`
+    **Birthday:** `{user_birthday_formatted}`
+    **Joined:** `{user_joined_date_formatted}`
+    **Last Online:** `{user_last_online_formatted}`
+    
+    **Days wasted watching Anime:** `{user['anime_stats']['days_watched']}`
+    **No of completed Animes:** `{user['anime_stats']['completed']}`
+    **Total No of episodes Watched:** `{user['anime_stats']}{['episodes_watched']}`
+    **Days wasted reading Manga:** `{user['manga_stats']['days_read']}`
+    """
+    )
+
+    caption += f"**About:** __{about_string}__"
+    await event.client.send_file(event.chat_id, file=img, caption=caption)
+    await event.delete()
+    
 @catub.cat_cmd(
     pattern="airing ([\s\S]*)",
     command=("airing", plugin_category),
