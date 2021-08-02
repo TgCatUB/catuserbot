@@ -35,7 +35,7 @@ plugin_category = "extra"
 
 
 @catub.cat_cmd(
-    pattern="mal ?(.*)",
+    pattern="mal(?:\s|$)([\s\S]*)",
     command=("mal", plugin_category),
     info={
         "header": "Search profiles of MAL.",
