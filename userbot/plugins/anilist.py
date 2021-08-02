@@ -1,6 +1,6 @@
 import html
-from datetime import datetime
 import textwrap
+from datetime import datetime
 from urllib.parse import quote_plus
 
 import aiohttp
@@ -14,13 +14,12 @@ from telegraph import exceptions, upload_file
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import media_type, readable_time, time_formatter, post_to_telegraph
+from ..helpers import media_type, readable_time, time_formatter
 from ..helpers.functions import (
     airing_query,
     callAPI,
     formatJSON,
     get_anime_manga,
-    get_poster,
     getBannerLink,
     memory_file,
     replace_text,
@@ -97,7 +96,8 @@ async def user(event):
     caption += f"**About:** __{about_string}__"
     await event.client.send_file(event.chat_id, file=img, caption=caption)
     await event.delete()
-    
+
+
 @catub.cat_cmd(
     pattern="airing ([\s\S]*)",
     command=("airing", plugin_category),
