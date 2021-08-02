@@ -1,8 +1,9 @@
 import sys
-
+import signal
+from .utils.startup import disconnect_userbot
 import userbot
 from userbot import BOTLOG_CHATID, HEROKU_APP, PM_LOGGER_GROUP_ID
-
+import signal
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
@@ -64,6 +65,8 @@ async def startup_process():
 
 
 catub.loop.run_until_complete(startup_process())
+
+signal.signal(signal.SIGTERM, disconnect_userbot)
 
 if len(sys.argv) not in (1, 3, 4):
     catub.disconnect()
