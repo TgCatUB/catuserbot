@@ -95,7 +95,9 @@ async def user(event):
     )
 
     caption += f"**About:** __{about_string}__"
-    await event.client.send_file(event.chat_id, file=img, caption=caption,reply_to=replyto)
+    await event.client.send_file(
+        event.chat_id, file=img, caption=caption, reply_to=replyto
+    )
     await event.delete()
 
 
