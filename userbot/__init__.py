@@ -32,6 +32,7 @@ else:
 # disconnect https://stackoverflow.com/questions/18499497/how-to-process-sigterm-signal-gracefully
 def disconnect_userbot():
     delgvar("ipaddress")
+    LOGS.info("Disconnecting userbot")
     try:
         catub.disconnect()
     except (ConnectionError, CancelledError):
