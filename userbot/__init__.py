@@ -1,8 +1,9 @@
+import os
 import signal
 import sys
 import time
 from asyncio.exceptions import CancelledError
-import os
+
 import heroku3
 
 from .Config import Config
