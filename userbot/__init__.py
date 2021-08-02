@@ -1,8 +1,9 @@
-import time
 import signal
+import time
+from asyncio.exceptions import CancelledError
+
 import heroku3
 
-from asyncio.exceptions import CancelledError
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
@@ -36,7 +37,8 @@ def disconnect_userbot():
     except (ConnectionError, CancelledError):
         pass
     sys.exit(143)
-    
+
+
 signal.signal(signal.SIGTERM, disconnect_userbot)
 
 if Config.PRIVATE_GROUP_BOT_API_ID == 0:
