@@ -89,7 +89,7 @@ async def user(event):
     
     **Days wasted watching Anime:** `{user['anime_stats']['days_watched']}`
     **No of completed Animes:** `{user['anime_stats']['completed']}`
-    **Total No of episodes Watched:** `{user['anime_stats']}{['episodes_watched']}`
+    **Total No of episodes Watched:** `{user['anime_stats']['episodes_watched']}`
     **Days wasted reading Manga:** `{user['manga_stats']['days_read']}`
     """
     )
