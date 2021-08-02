@@ -46,6 +46,7 @@ plugin_category = "extra"
 async def user(event):
     "Search profiles of MAL."
     search_query = event.pattern_match.group(1)
+    replyto = await reply_id(event)
     reply = await event.get_reply_message()
     if not search_query and reply and reply.text:
         search_query = reply.text
@@ -54,17 +55,17 @@ async def user(event):
     try:
         user = jikan.user(search_query)
     except APIException:
-        return await edit_delete(event, "`No User found with given username`", 5)
+        return await edit_delete(event, "__No User found with given username__", 5)
     date_format = "%Y-%m-%d"
     img = user["image_url"] or "https://telegra.ph//file/9b4205e1b1cc68a4ffd5e.jpg"
     try:
-        user_birthday = datetime.datetime.fromisoformat(user["birthday"])
+        user_birthday = datetime.fromisoformat(user["birthday"])
         user_birthday_formatted = user_birthday.strftime(date_format)
     except BaseException:
         user_birthday_formatted = "Unknown"
-    user_joined_date = datetime.datetime.fromisoformat(user["joined"])
+    user_joined_date = datetime.fromisoformat(user["joined"])
     user_joined_date_formatted = user_joined_date.strftime(date_format)
-    user_last_online = datetime.datetime.fromisoformat(user["last_online"])
+    user_last_online = datetime.fromisoformat(user["last_online"])
     user_last_online_formatted = user_last_online.strftime(date_format)
     for entity in user:
         if user[entity] is None:
@@ -94,7 +95,7 @@ async def user(event):
     )
 
     caption += f"**About:** __{about_string}__"
-    await event.client.send_file(event.chat_id, file=img, caption=caption)
+    await event.client.send_file(event.chat_id, file=img, caption=caption,reply_to=replyto)
     await event.delete()
 
 
