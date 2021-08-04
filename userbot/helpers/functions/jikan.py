@@ -287,9 +287,9 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         result = jikan.anime(mal_id)
         trailer = result["trailer_url"]
         if trailer:
-            TRAILER = f"<a href='{trailer}'>Trailer</a>"
+            TRAILER = f"<a href='{trailer}'>🎬 Trailer</a>"
         else:
-            TRAILER = "<i>No Trailer Available</i>"
+            TRAILER = "🎬 <i>No Trailer Available</i>"
         image = getBannerLink(mal_id)
         studio_string = ", ".join(
             studio_info["name"] for studio_info in result["studios"]
@@ -391,10 +391,10 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
             title_h,
             f"<img src='{title_img}' title={romaji}/>\n"
             + f"<code>{caption}</code>\n"
-            + f"🎬{TRAILER}\n"
+            + f"{TRAILER}\n"
             + html_pc,
         )
-        caption += f"🎬 <b>{TRAILER}</b>\n📖 <a href='{synopsis_link}'><b>Synopsis</b></a> <b>&</b> <a href='{result['url']}'><b>Read More</b></a>"
+        caption += f"<b>{TRAILER}</b>\n📖 <a href='{synopsis_link}'><b>Synopsis</b></a> <b>&</b> <a href='{result['url']}'><b>Read More</b></a>"
     elif search_type == "anime_manga":
         caption += textwrap.dedent(
             f"""
