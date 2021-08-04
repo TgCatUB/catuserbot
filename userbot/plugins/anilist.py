@@ -33,6 +33,7 @@ headers = {
 }
 plugin_category = "extra"
 
+
 @catub.cat_cmd(
     pattern="aq$",
     command=("aq", plugin_category),
@@ -52,6 +53,7 @@ async def anime_quote(event):
         f"• <b>Anime</b> (アニメ) <b>:</b>\n ➥ <i>{anime}</i>\n\n• <b>Character:</b> (キャラクター) <b>:</b>\n ➥ <i>{character}</i>\n\n• <b>Quote:</b> (言っている) <b>:</b>\n ➥ <i>{quote}</i>",
         parse_mode="html",
     )
+
 
 @catub.cat_cmd(
     pattern="mal(?:\s|$)([\s\S]*)",
