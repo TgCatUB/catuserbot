@@ -353,13 +353,13 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         title_img = coverImg or bannerImg
         romaji = anime_data["title"]["romaji"]
         native = anime_data["title"]["native"]
-        english = data["title"]["english"]
+        english = anime_data["title"]["english"]
         # Telegraph Post mejik
         html_pc = ""
         html_pc += f"<img src='{title_img}' title={romaji}/>"
         html_pc += f"<h1>{native}</h1>"
         html_pc += "<h3>Synopsis:</h3>"
-        html_pc += synopsis
+        html_pc += result["synopsis"] or "Unknown"
         html_pc += "<br>"
         if html_char:
             html_pc += "<h2>Main Characters:</h2>"
