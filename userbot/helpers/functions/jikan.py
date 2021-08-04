@@ -287,9 +287,9 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         result = jikan.anime(mal_id)
         trailer = result["trailer_url"]
         if trailer:
-            LOL = f"<a href='{trailer}'>Trailer</a>"
+            TRAILER = f"<a href='{trailer}'>Trailer</a>"
         else:
-            LOL = "<i>No Trailer Available</i>"
+            TRAILER = "<i>No Trailer Available</i>"
         image = getBannerLink(mal_id)
         studio_string = ", ".join(
             studio_info["name"] for studio_info in result["studios"]
@@ -385,16 +385,16 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         🎭 <b>Genres</b>: <i>{genre_string}</i>
         🎙️ <b>Studios</b>: <i>{studio_string}</i>
         💸 <b>Producers</b>: <i>{producer_string}</i>
-        🎬 {LOL}
         """
         )
         synopsis_link = await post_to_telegraph(
             title_h,
             f"<img src='{title_img}' title={romaji}/>"
             + f"<code>{caption}</code>"
+            + f"🎬 <b>{TRAILER}</b>"
             + html_pc,
         )
-        caption += f"📖 <a href='{synopsis_link}'><b>Synopsis</b></a> & <a href='{result['url']}'><b>Read More</b></a>"
+        caption += f"🎬 <b>{TRAILER}</b>\n📖 <a href='{synopsis_link}'><b>Synopsis</b></a> <b>&</b> <a href='{result['url']}'><b>Read More</b></a>"
     elif search_type == "anime_manga":
         caption += textwrap.dedent(
             f"""
