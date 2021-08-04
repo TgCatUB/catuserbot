@@ -2,17 +2,19 @@ import json
 import re
 import textwrap
 from io import BytesIO, StringIO
-
+from ..tools import post_to_telegraph
 import bs4
 import jikanpy
 import requests
 from jikanpy import Jikan
 from telethon.tl.types import DocumentAttributeAnimated
 from telethon.utils import is_video
+from aiohttp import ClientSession
 
 jikan = Jikan()
 url = "https://graphql.anilist.co"
 # Anime Helper
+
 
 
 async def formatJSON(outData):
@@ -161,6 +163,80 @@ query ($id: Int,$search: String) {
     }
 """
 
+ANIME_QUERY = """
+query ($id: Int, $idMal:Int, $search: String, $type: MediaType, $asHtml: Boolean) {
+  Media (id: $id, idMal: $idMal, search: $search, type: $type) {
+    id
+    idMal
+    title {
+      romaji
+      english
+      native
+    }
+    format
+    status
+    description (asHtml: $asHtml)
+    startDate {
+      year
+      month
+      day
+    }
+    season
+    episodes
+    duration
+    countryOfOrigin
+    source (version: 2)
+    trailer {
+      id
+      site
+      thumbnail
+    }
+    coverImage {
+      extraLarge
+    }
+    bannerImage
+    genres
+    averageScore
+    nextAiringEpisode {
+      airingAt
+      timeUntilAiring
+      episode
+    }
+    isAdult
+    characters (role: MAIN, page: 1, perPage: 10) {
+      nodes {
+        id
+        name {
+          full
+          native
+        }
+        image {
+          large
+        }
+        description (asHtml: $asHtml)
+        siteUrl
+      }
+    }
+    studios (isMain: true) {
+      nodes {
+        name
+        siteUrl
+      }
+    }
+    siteUrl
+  }
+}
+"""
+
+async def anime_json_synomsis(query, vars_):
+    """Makes a Post to https://graphql.anilist.co."""
+    url_ = "https://graphql.anilist.co"
+    async with ClientSession() as session:
+        async with session.post(
+            url_, json={"query": query, "variables": vars_}
+        ) as post_con:
+            json_data = await post_con.json()
+    return json_data
 
 def getPosterLink(mal):
     # grab poster from kitsu
@@ -202,7 +278,7 @@ def getBannerLink(mal, kitsu_search=True):
     return getPosterLink(mal)
 
 
-def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
+async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
     jikan = jikanpy.jikan.Jikan()
     if search_type == "anime_anime":
         result = jikan.anime(mal_id)
@@ -247,6 +323,52 @@ def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         if result[entity] is None:
             result[entity] = "Unknown"
     if search_type == "anime_anime":
+        anime_malid = result["mal_id"]
+        anime_result = await anime_json_synomsis(ANIME_QUERY, {"idMal": anime_malid, "asHtml": True, "type": "ANIME"})
+        anime_data = result["data"]["Media"]
+        html_char = ""
+        for character in anime_data["characters"]["nodes"]:
+            html_ = ""
+            html_ += "<br>"
+            html_ += f"""<a href="{character['siteUrl']}">"""
+            html_ += f"""<img src="{character['image']['large']}"/></a>"""
+            html_ += "<br>"
+            html_ += f"<h3>{character['name']['full']}</h3>"
+            html_ += f"<em>{c_flag} {character['name']['native']}</em><br>"
+            html_ += f"<b>Character ID</b>: {character['id']}<br>"
+            html_ += (
+                f"<h4>About Character and Role:</h4>{character.get('description', 'N/A')}"
+            )
+            html_char += f"{html_}<br><br>"
+        studios = "".join(
+            "<a href='{}'>• {}</a> ".format(studio["siteUrl"], studio["name"])
+            for studio in anime_data["studios"]["nodes"]
+        )
+        coverImg = anime_data.get("coverImage")["extraLarge"]
+        bannerImg = anime_data.get("bannerImage")
+        anime_url = anime_data.get("siteUrl")
+        title_img = coverImg or bannerImg
+        romaji = anime_data["title"]["romaji"]
+        native = anime_data["title"]["native"]
+        english = data["title"]["english"]
+        # Telegraph Post mejik
+        html_pc = ""
+        html_pc += f"<img src='{title_img}' title={romaji}/>"
+        html_pc += f"<h1>{native}</h1>"
+        html_pc += "<h3>Synopsis:</h3>"
+        html_pc += synopsis
+        html_pc += "<br>"
+        if html_char:
+            html_pc += "<h2>Main Characters:</h2>"
+            html_pc += html_char
+            html_pc += "<br><br>"
+        html_pc += "<h3>More Info:</h3>"
+        html_pc += f"<br><b>Studios:</b> {studios}<br>"
+        html_pc += f"<a href='https://myanimelist.net/anime/{anime_malid}'>View on MAL</a>"
+        html_pc += f"<a href='{url}'> View on anilist.co</a>"
+        html_pc += f"<img src='{bannerImg}'/>"
+        title_h = english or romaji
+    if search_type == "anime_anime":
         caption += textwrap.dedent(
             f"""
         🆎 <b>Type</b>: <i>{result['type']}</i>
@@ -259,10 +381,11 @@ def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         🎭 <b>Genres</b>: <i>{genre_string}</i>
         🎙️ <b>Studios</b>: <i>{studio_string}</i>
         💸 <b>Producers</b>: <i>{producer_string}</i>
-        🎬 <b>Trailer:</b> {LOL}
-        📖 <b>Synopsis</b>: <i>{synopsis_string}</i> <a href='{result['url']}'>Read More</a>
+        🎬 {LOL}
         """
         )
+        synopsis_link = await post_to_telegraph(title_h, caption+html_pc)
+        caption += f"📖 <a href='{synopsis_link}'><b>Synopsis</b></a> & <a href='{result['url']}'><b>Read More</b></a>"
     elif search_type == "anime_manga":
         caption += textwrap.dedent(
             f"""
