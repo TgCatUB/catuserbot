@@ -390,7 +390,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         synopsis_link = await post_to_telegraph(
             title_h,
             f"<img src='{title_img}' title={romaji}/>"
-            + f"<code>{caption}</code>"
+            + f"<code>{caption}</code>\n"
             + f"🎬{TRAILER}"
             + html_pc,
         )
