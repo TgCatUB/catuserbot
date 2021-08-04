@@ -356,7 +356,6 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         english = anime_data["title"]["english"]
         # Telegraph Post mejik
         html_pc = ""
-        html_pc += f"<img src='{title_img}' title={romaji}/>"
         html_pc += f"<h1>{native}</h1>"
         html_pc += "<h3>Synopsis:</h3>"
         html_pc += result["synopsis"] or "Unknown"
@@ -389,7 +388,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         🎬 {LOL}
         """
         )
-        synopsis_link = await post_to_telegraph(title_h, caption + html_pc)
+        synopsis_link = await post_to_telegraph(title_h, f"<img src='{title_img}' title={romaji}/>" + f"<code>{caption}</code>" + html_pc)
         caption += f"📖 <a href='{synopsis_link}'><b>Synopsis</b></a> & <a href='{result['url']}'><b>Read More</b></a>"
     elif search_type == "anime_manga":
         caption += textwrap.dedent(
