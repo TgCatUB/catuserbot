@@ -330,7 +330,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         anime_result = await anime_json_synomsis(
             ANIME_QUERY, {"idMal": anime_malid, "asHtml": True, "type": "ANIME"}
         )
-        anime_data = result["data"]["Media"]
+        anime_data = anime_result["data"]["Media"]
         html_char = ""
         for character in anime_data["characters"]["nodes"]:
             html_ = ""
