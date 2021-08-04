@@ -197,7 +197,7 @@ async def get_manga(event):
     jikan = jikanpy.jikan.Jikan()
     search_result = jikan.search("manga", input_str)
     first_mal_id = search_result["results"][0]["mal_id"]
-    caption, image = get_anime_manga(first_mal_id, "anime_manga", event.chat_id)
+    caption, image = await get_anime_manga(first_mal_id, "anime_manga", event.chat_id)
     await catevent.delete()
     await event.client.send_file(
         event.chat_id, file=image, caption=caption, parse_mode="html", reply_to=reply_to
@@ -213,7 +213,7 @@ async def get_manga(event):
         "examples": "{tr}sanime black clover",
     },
 )
-async def get_manga(event):
+async def get_anime(event):
     "searches for anime."
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
@@ -229,7 +229,7 @@ async def get_manga(event):
     jikan = jikanpy.jikan.Jikan()
     search_result = jikan.search("anime", input_str)
     first_mal_id = search_result["results"][0]["mal_id"]
-    caption, image = get_anime_manga(first_mal_id, "anime_anime", event.chat_id)
+    caption, image = await get_anime_manga(first_mal_id, "anime_anime", event.chat_id)
     try:
         await catevent.delete()
         await event.client.send_file(
