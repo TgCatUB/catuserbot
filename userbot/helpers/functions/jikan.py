@@ -391,7 +391,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
             title_h,
             f"<img src='{title_img}' title={romaji}/>"
             + f"<code>{caption}</code>"
-            + f"🎬 <b>{TRAILER}</b>"
+            + f"🎬{TRAILER}"
             + html_pc,
         )
         caption += f"🎬 <b>{TRAILER}</b>\n📖 <a href='{synopsis_link}'><b>Synopsis</b></a> <b>&</b> <a href='{result['url']}'><b>Read More</b></a>"
