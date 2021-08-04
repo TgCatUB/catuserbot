@@ -339,7 +339,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
             html_ += f"""<img src="{character['image']['large']}"/></a>"""
             html_ += "<br>"
             html_ += f"<h3>{character['name']['full']}</h3>"
-            html_ += f"<em>{c_flag} {character['name']['native']}</em><br>"
+            html_ += f"<em>{character['name']['native']}</em><br>"
             html_ += f"<b>Character ID</b>: {character['id']}<br>"
             html_ += f"<h4>About Character and Role:</h4>{character.get('description', 'N/A')}"
             html_char += f"{html_}<br><br>"
