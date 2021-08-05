@@ -93,7 +93,7 @@ async def quote_search(event):
 
 
 @catub.cat_cmd(
-    pattern="listfed(?:\s|$)([\s\S]*)",
+    pattern="listfed(s)?(?:\s|$)([\s\S]*)",
     command=("listfed", plugin_category),
     info={
         "header": "To list all feds in your database.",
