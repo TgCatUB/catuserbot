@@ -5,12 +5,120 @@ from userbot import catub
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format, get_user_from_event, reply_id
+from ..sql_helper.global_collectionjson import add_collection, get_collection, del_collection, get_collections
+
 
 LOGS = logging.getLogger(__name__)
 
 plugin_category = "admin"
 rose = "@MissRose_bot"
 
+
+@catub.cat_cmd(
+    pattern="addfedto (\w+) (\w+)",
+    command=("addfedto", plugin_category),
+    info={
+        "header": "Add the federation to given group in database.",
+        "description": "You can add multiple federations to one name like a group of feds under one name. And you can access all thoose feds by that name.",
+        "usage": "{tr}addfedto <group name> <fedid>",
+    },
+)
+async def quote_search(event):
+    "Add the federation to database."
+    fedgroup = event.pattern_match.group(1)
+    fedid = event.pattern_match.group(2)
+    if get_collection("fedids") is not None:
+        feds = get_collection("fedids").json
+    else:
+        feds = {}
+    if fedgroup in feds:
+        fed_ids = feds[fedgroup]
+        if fedid in fed_ids:
+            return await edit_delete(event,"__This fed is already part of this fed group.__")
+        fed_ids.append(fedid)
+        feds[fedgroup] = fed_ids
+    else:
+        feds[fedgroup] = [fedid]
+    add_collection("fedids",feds)
+    await edit_or_reply(event,"__The given fed is succesfully added to fed group.__")
+    if BOTLOG:
+        await event.client.send_message(BOTLOG_CHATID,f"#ADDFEDID\
+        \n**Fedid:** `{fedid}`\
+        \n**Fed Group:** `{fedgroup}`\
+        \nThe above fedid is sucessfully added to that fed group.")
+
+
+@catub.cat_cmd(
+    pattern="rmfedfrom (\w+) (\w+)",
+    command=("rmfedfrom", plugin_category),
+    info={
+        "header": "Remove the federation from given group in database.",
+        "description": "To remove given fed from the given group name",
+        "usage": "{tr}rmfedfrom <group name> <fedid>",
+    },
+)
+async def quote_search(event):
+    "To remove the federation to database."
+    fedgroup = event.pattern_match.group(1)
+    fedid = event.pattern_match.group(2)
+    if get_collection("fedids") is not None:
+        feds = get_collection("fedids").json
+    else:
+        feds = {}
+    if fedgroup not in feds:
+        return await edit_delete(event,"__There is no such fedgroup in your database.__")
+    fed_ids = feds[fedgroup]
+    if fedid not in fed_ids:
+        return await edit_delete(event,"__This fed is not part of given fed group.__")
+    fed_ids.remove(fedid)
+    feds[fedgroup] = fed_ids
+    add_collection("fedids",feds)
+    await edit_or_reply(event,"__The given fed is succesfully removed from fed group.__")
+    if BOTLOG:
+        await event.client.send_message(BOTLOG_CHATID,f"#REMOVEFEDID\
+        \n**Fedid:** `{fedid}`\
+        \n**Fed Group:** `{fedgroup}`\
+        \nThe above fedid is sucessfully removed that fed group.")        
+
+@catub.cat_cmd(
+    pattern="listfed(?:\s|$)([\s\S]*)",
+    command=("listfed", plugin_category),
+    info={
+        "header": "To list all feds in your database.",
+        "description": "if you give input then will show only feds in that group else will show all feds in your database",
+        "usage": ["{tr}listfed","{tr}listfed <group name>"],
+    },
+)
+async def quote_search(event):
+    "To list federations in database."
+    fedgroup = event.pattern_match.group(2)
+    if get_collection("fedids") is not None:
+        feds = get_collection("fedids").json
+    else:
+        feds = {}
+    output = ""
+    if not fedgroup:
+        for fedgrp in feds:
+            fedids = feds[fedgrp]
+            if fedids != []:
+                output +=f"\n• **{fedgrp}:**\n"
+                for fid in fedids:
+                    output +=f"☞ `{fid}`\n"
+    elif fedgroup in feds:
+        fedids = feds[fedgroup]
+        if fedids != []:
+            output +=f"\n• **{fedgroup}:**\n"
+            for fid in fedids:
+                output +=f"☞ `{fid}`\n"
+    else:
+        return await edit_delete(event,"__There is no such fedgroup in your database.__")
+    if output != "" and fedgroup:
+        output = f"**The list of feds in the group** `{fedgroup}` **are:**\n" + output
+    elif output != "":
+        output = "**The list of all feds in your database are :**\n" +output
+    else:
+        output = "__There are no feds in your database try by adding them using addfedto__"
+    await edit_or_reply(event,output)
 
 @catub.cat_cmd(
     pattern="f(ed)?info(?:\s|$)([\s\S]*)",
