@@ -14,7 +14,7 @@ rose = "@MissRose_bot"
 
 
 @catub.cat_cmd(
-    pattern="addfedto (\w+) (\w+)",
+    pattern="addfedto (\w+) ([-\w]+)",
     command=("addfedto", plugin_category),
     info={
         "header": "Add the federation to given group in database.",
@@ -53,7 +53,7 @@ async def quote_search(event):
 
 
 @catub.cat_cmd(
-    pattern="rmfedfrom (\w+) (\w+)",
+    pattern="rmfedfrom (\w+) ([-\w]+)",
     command=("rmfedfrom", plugin_category),
     info={
         "header": "Remove the federation from given group in database.",
