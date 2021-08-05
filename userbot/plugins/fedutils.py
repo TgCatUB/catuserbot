@@ -1,6 +1,6 @@
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
-from userbot import catub
+from userbot import catub, BOTLOG, BOTLOG_CHATID
 
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
