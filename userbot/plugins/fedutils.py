@@ -110,6 +110,91 @@ async def group_fban(event):
             success_report += f"\n☞ __{txt}__"
     await edit_or_reply(catevent, success_report)
 
+@catub.cat_cmd(
+    pattern="unfban(?:\s|$)([\s\S]*)",
+    command=("unfban", plugin_category),
+    info={
+        "header": "UnBan the person in your database federations",
+        "description": "Will unfban the person in the group of federations which you stored in database.",
+        "usage": "{tr}unfban <userid/username/reply> <group> <reason>",
+    },
+)
+async def group_unfban(event):
+    "unfban a person."
+    if FBAN_GROUP_ID == 0:
+        return await edit_delete(
+            event,
+            "__For working of this cmd you need to set FBAN_GROUP_ID in heroku vars__",
+        )
+    user, reason = await get_user_from_event(event)
+    if not user:
+        return
+    if user.id == event.client.uid:
+        return await edit_delete(event, "__You can't unfban yourself.__")
+    if not reason:
+        return await edit_delete(
+            event, "__You haven't mentioned group name and reason for unfban__"
+        )
+    reasons = reason.split(" ", 1)
+    fedgroup = reasons[0]
+    reason = "Not Mentioned" if len(reasons) == 1 else reasons[1]
+    if get_collection("fedids") is not None:
+        feds = get_collection("fedids").json
+    else:
+        feds = {}
+    if fedgroup in feds:
+        fedids = feds[fedgroup]
+    else:
+        return await edit_delete(
+            event, f"__There is no such '{fedgroup}' named fedgroup in your database.__"
+        )
+    catevent = await edit_or_reply(
+        event, f"Unfbanning {_format.mentionuser(user.first_name ,user.id)}.."
+    )
+    fedchat = FBAN_GROUP_ID
+    success = 0
+    errors = []
+    total = 0
+    for i in fedids:
+        total += 1
+        try:
+            async with event.client.conversation(fedchat) as conv:
+                await conv.send_message(f"/joinfed {i}")
+                reply = await conv.get_response()
+                await event.client.send_read_acknowledge(
+                    conv.chat_id, message=reply, clear_mentions=True
+                )
+                if (
+                    "All new federation bans will now also remove the members from this chat."
+                    not in reply.text
+                ):
+                    return await edit_delete(
+                        catevent,
+                        "__You must be owner of the group(FBAN_GROUP_ID) to perform this action__",
+                        10,
+                    )
+                await conv.send_message(f"/unfban {user.id} {reason}")
+                reply = await conv.get_response()
+                await event.client.send_read_acknowledge(
+                    conv.chat_id, message=reply, clear_mentions=True
+                )
+                check = False
+                for txt in unfbanresults:
+                    if txt in reply.text:
+                        success += 1
+                        check = True
+                if not check:
+                    errors.append(reply.text)
+        except Exception as e:
+            errors.append(str(e))
+    success_report = f"{_format.mentionuser(user.first_name ,user.id)} is succesfully unbanned in {success} feds of {total}\
+        \n**Reason:** __{reason}__.\n"
+    if errors != []:
+        success_report += "\n**Error:**"
+        for txt in errors:
+            success_report += f"\n☞ __{txt}__"
+    await edit_or_reply(catevent, success_report)    
+
 
 @catub.cat_cmd(
     pattern="addfedto (\w+|-all) ([-\w]+)",
