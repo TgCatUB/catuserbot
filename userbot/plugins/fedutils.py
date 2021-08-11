@@ -129,7 +129,7 @@ async def quote_search(event):  # sourcery no-metrics
     else:
         feds = {}
     if fedgroup == "-all":
-        catevent = await edit_or_reply(event, "`Adding all your feds to database...`")
+        catevent = await edit_or_reply(event,"`Adding all your feds to database...`")
         fedidstoadd = []
         async with event.client.conversation("@MissRose_bot") as conv:
             try:
@@ -185,7 +185,7 @@ async def quote_search(event):  # sourcery no-metrics
                 "__I have failed to fetch your feds or you are not admin of any fed.__",
             )
         feds[fedid] = fedidstoadd
-        add_collection("fedids", feds)
+        add_collection("fedids", feds,{})
         await edit_or_reply(
             catevent,
             f"__Successfully added all your feds to database group__ **{fedid}**.",
@@ -194,7 +194,7 @@ async def quote_search(event):  # sourcery no-metrics
             await event.client.send_message(
                 BOTLOG_CHATID,
                 f"#ADDFEDID\
-                \n**Fed Group:** `{fedgroup}`\
+                \n**Fed Group:** `{fedid}`\
                 \nSuccessfully added all your feds to above database group.",
             )
         return
@@ -208,7 +208,7 @@ async def quote_search(event):  # sourcery no-metrics
         feds[fedgroup] = fed_ids
     else:
         feds[fedgroup] = [fedid]
-    add_collection("fedids", feds)
+    add_collection("fedids", feds,{})
     await edit_or_reply(event, "__The given fed is succesfully added to fed group.__")
     if BOTLOG:
         await event.client.send_message(
@@ -246,7 +246,7 @@ async def quote_search(event):
         return await edit_delete(event, "__This fed is not part of given fed group.__")
     fed_ids.remove(fedid)
     feds[fedgroup] = fed_ids
-    add_collection("fedids", feds)
+    add_collection("fedids", feds,{})
     await edit_or_reply(
         event, "__The given fed is succesfully removed from fed group.__"
     )
