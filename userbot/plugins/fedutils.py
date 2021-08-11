@@ -131,42 +131,53 @@ async def quote_search(event):  # sourcery no-metrics
     if fedgroup == "-all":
         fedidstoadd = []
         async with event.client.conversation("@MissRose_bot") as conv:
-            await conv.send_message("/start")
-            await asyncio.sleep(1)
-            await conv.send_message("/myfeds")
-            await asyncio.sleep(2)
             try:
-                response = await conv.get_response()
-            except asyncio.exceptions.TimeoutError:
-                return await edit_or_reply(
-                    event,
-                    "__Rose bot is not responding try again later.__",
-                )
-            await asyncio.sleep(2)
-            if "make a file" in response.text or "Looks like" in response.text:
-                await response.click(0)
+                await conv.send_message("/myfeds")
                 await asyncio.sleep(2)
-                response_result = await conv.get_response()
-                await asyncio.sleep(2)
-                if response_result.media:
-                    fed_file = await event.client.download_media(
-                        response_result,
-                        "fedlist",
-                    )
-                    await asyncio.sleep(5)
-                    fedfile = open(fed_file, errors="ignore")
-                    lines = fedfile.readlines()
-                    for line in lines:
-                        try:
-                            fedidstoadd.append(line[:36])
-                        except Exception:
-                            pass
-                elif "You can only use fed commands once every" in (
-                    await conv.get_edit
-                ):
+                try:
+                    response = await conv.get_response()
+                except asyncio.exceptions.TimeoutError:
                     return await edit_or_reply(
-                        event, "You can only use fed commands once every 5 min."
+                        event,
+                        "__Rose bot is not responding try again later.__",
                     )
+                if "can only" in response.text:
+                    return await edit_delete(catevent, f"__{response.text}__")
+                if "make a file" in response.text or "Looks like" in response.text:
+                    await response.click(0)
+                    await asyncio.sleep(2)
+                    response_result = await conv.get_response()
+                    await asyncio.sleep(2)
+                    if response_result.media:
+                        fed_file = await event.client.download_media(
+                            response_result,
+                            "fedlist",
+                        )
+                        await asyncio.sleep(5)
+                        fedfile = open(fed_file, errors="ignore")
+                        lines = fedfile.readlines()
+                        for line in lines:
+                            try:
+                                fedidstoadd.append(line[:36])
+                            except Exception:
+                                pass
+                else:
+                    text_lines = response.text.split("`")
+                    for fedid in text_lines:
+                        if len(fedid)==36 and fedid.count("-")==4:
+                            fedidstoadd.append(fedid)
+            except YouBlockedUserError:
+                await edit_delete(
+                    catevent,
+                    "**Error while fecthing myfeds:**\n__Unblock__ @MissRose_Bot __and try again!__",
+                    10,
+                )
+            except Exception as e:
+                await edit_delete(
+                    catevent, f"**Error while fecthing myfeds:**\n__{str(e)}__", 10
+                )
+            await event.client.send_read_acknowledge(conv.chat_id)
+            conv.cancel()
         if not fedidstoadd:
             return await edit_or_reply(
                 event,
