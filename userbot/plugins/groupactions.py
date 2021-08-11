@@ -289,7 +289,7 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                 except FloodWaitError as e:
                     LOGS.warn(f"A flood wait of {e.seconds} occurred.")
                     await event.edit(
-                        f"__A wait of {readable_time(e.seconds)} needed again to continue the process.__"
+                        f"__A wait of {readable_time(e.seconds)} needed again to continue the process. Untill Now {del_u} users are cleaned.__"
                     )
                     await sleep(e.seconds + 5)
                 except UserAdminInvalidError:
@@ -324,7 +324,7 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                 except FloodWaitError as e:
                     LOGS.warn(f"A flood wait of {e.seconds} occurred.")
                     await event.edit(
-                        f"__A wait of {readable_time(e.seconds)} needed again to continue the process.__"
+                        f"__A wait of {readable_time(e.seconds)} needed again to continue the process. Untill Now {del_u} users are cleaned.__"
                     )
                     await sleep(e.seconds + 5)
                 except Exception as e:
@@ -345,7 +345,7 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                 except FloodWaitError as e:
                     LOGS.warn(f"A flood wait of {e.seconds} occurred.")
                     await event.edit(
-                        f"__A wait of {readable_time(e.seconds)} needed again to continue the process.__"
+                        f"__A wait of {readable_time(e.seconds)} needed again to continue the process. Untill Now {del_u} users are cleaned.__"
                     )
                     await sleep(e.seconds + 5)
                 except Exception as e:
