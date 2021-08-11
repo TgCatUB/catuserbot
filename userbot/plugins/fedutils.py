@@ -129,6 +129,7 @@ async def quote_search(event):  # sourcery no-metrics
     else:
         feds = {}
     if fedgroup == "-all":
+        catevent = await edit_or_reply(event,"`Adding all your feds to database...`")
         fedidstoadd = []
         async with event.client.conversation("@MissRose_bot") as conv:
             try:
@@ -138,7 +139,7 @@ async def quote_search(event):  # sourcery no-metrics
                     response = await conv.get_response()
                 except asyncio.exceptions.TimeoutError:
                     return await edit_or_reply(
-                        event,
+                        catevent,
                         "__Rose bot is not responding try again later.__",
                     )
                 if "can only" in response.text:
@@ -163,9 +164,9 @@ async def quote_search(event):  # sourcery no-metrics
                                 pass
                 else:
                     text_lines = response.text.split("`")
-                    for fedid in text_lines:
-                        if len(fedid) == 36 and fedid.count("-") == 4:
-                            fedidstoadd.append(fedid)
+                    for fed_id in text_lines:
+                        if len(fed_id) == 36 and fed_id.count("-") == 4:
+                            fedidstoadd.append(fed_id)
             except YouBlockedUserError:
                 await edit_delete(
                     catevent,
@@ -180,13 +181,13 @@ async def quote_search(event):  # sourcery no-metrics
             conv.cancel()
         if not fedidstoadd:
             return await edit_or_reply(
-                event,
+                catevent,
                 "__I have failed to fetch your feds or you are not admin of any fed.__",
             )
         feds[fedid] = fedidstoadd
         add_collection("fedids", feds)
         await edit_or_reply(
-            event,
+            catevent,
             f"__Successfully added all your feds to database group__ **{fedid}**.",
         )
         if BOTLOG:
