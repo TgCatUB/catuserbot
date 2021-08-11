@@ -110,6 +110,7 @@ async def group_fban(event):
             success_report += f"\n☞ __{txt}__"
     await edit_or_reply(catevent, success_report)
 
+
 @catub.cat_cmd(
     pattern="unfban(?:\s|$)([\s\S]*)",
     command=("unfban", plugin_category),
@@ -193,7 +194,7 @@ async def group_unfban(event):
         success_report += "\n**Error:**"
         for txt in errors:
             success_report += f"\n☞ __{txt}__"
-    await edit_or_reply(catevent, success_report)    
+    await edit_or_reply(catevent, success_report)
 
 
 @catub.cat_cmd(
