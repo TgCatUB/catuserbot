@@ -164,7 +164,7 @@ async def quote_search(event):  # sourcery no-metrics
                 else:
                     text_lines = response.text.split("`")
                     for fedid in text_lines:
-                        if len(fedid)==36 and fedid.count("-")==4:
+                        if len(fedid) == 36 and fedid.count("-") == 4:
                             fedidstoadd.append(fedid)
             except YouBlockedUserError:
                 await edit_delete(
