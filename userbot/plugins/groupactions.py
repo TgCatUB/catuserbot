@@ -286,8 +286,16 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                     return await edit_delete(
                         event, "`I don't have ban rights in this group`", 5
                     )
+                except FloodWaitError as e:
+                    LOGS.warn(f"A flood wait of {e.seconds} occurred.")
+                    await event.edit(
+                        f"__A wait of {readable_time(e.seconds)} needed again to continue the process.__"
+                    )
+                    await sleep(e.seconds + 5)
                 except UserAdminInvalidError:
                     del_a += 1
+                except Exception as e:
+                    LOGS.error(str(e))
         if del_u > 0:
             del_status = (
                 f"Successfully cleaned **{del_u}** deleted account(s) in the group."
@@ -313,8 +321,14 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                     return await edit_delete(
                         event, "`I don't have ban rights in this group`", 5
                     )
+                except FloodWaitError as e:
+                    LOGS.warn(f"A flood wait of {e.seconds} occurred.")
+                    await event.edit(
+                        f"__A wait of {readable_time(e.seconds)} needed again to continue the process.__"
+                    )
+                    await sleep(e.seconds + 5)
                 except Exception as e:
-                    LOGS.error(f"kick {str(e)}")
+                    LOGS.error(str(e))
                     del_a += 1
         async for user in show.client.iter_participants(
             show.chat_id, filter=ChannelParticipantsBanned
@@ -328,8 +342,14 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                     return await edit_delete(
                         event, "`I don't have ban rights in this group`", 5
                     )
-                except Exception:
-                    LOGS.error(f"banned {str(e)}")
+                except FloodWaitError as e:
+                    LOGS.warn(f"A flood wait of {e.seconds} occurred.")
+                    await event.edit(
+                        f"__A wait of {readable_time(e.seconds)} needed again to continue the process.__"
+                    )
+                    await sleep(e.seconds + 5)
+                except Exception as e:
+                    LOGS.error(str(e))
                     del_a += 1
         if del_u > 0:
             del_status = f"`Successfully cleaned {del_u} deleted account(s) in the group who are banned or restricted.`"
