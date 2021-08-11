@@ -134,6 +134,8 @@ async def imdb_query(event):  # sourcery no-metrics
 <b>Story Outline : </b><i>{mov_plot}</i>"""
         if "full-size cover url" in moviekeys:
             imageurl = movie["full-size cover url"]
+        else:
+            imageurl = None
         soup = BeautifulSoup(resulttext, features="html.parser")
         rtext = soup.get_text()
         if len(rtext) > 1024:
