@@ -1,11 +1,9 @@
 import os
 import urllib
 
-from ..helpers.functions import clippy, convert_tosticker, higlighted_text
 from .. import catub
-
-from ..core.managers import edit_or_reply, edit_delete
-from ..helpers.functions import deEmojify, hide_inlinebot, waifutxt
+from ..core.managers import edit_delete
+from ..helpers.functions import clippy, convert_tosticker, deEmojify, higlighted_text
 from ..helpers.utils import reply_id
 
 plugin_category = "fun"
