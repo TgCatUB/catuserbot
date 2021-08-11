@@ -1,5 +1,7 @@
-from telethon.errors.rpcerrorlist import YouBlockedUserError
 import os
+
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+
 from userbot import BOTLOG, BOTLOG_CHATID, catub
 
 from ..core.logger import logging
