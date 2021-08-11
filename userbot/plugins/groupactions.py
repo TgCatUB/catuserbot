@@ -10,8 +10,8 @@ from telethon.tl import functions
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import (
     ChannelParticipantsAdmins,
-    ChannelParticipantsKicked,
     ChannelParticipantsBanned,
+    ChannelParticipantsKicked,
     ChatBannedRights,
     UserStatusEmpty,
     UserStatusLastMonth,
@@ -242,11 +242,15 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                 del_status = f"__Found__ **{del_u}** __ghost/deleted/zombie account(s) in this group,\
                             \nclean them by using__ `.zombies clean`"
         else:
-            async for user in show.client.iter_participants(show.chat_id, filter=ChannelParticipantsBanned):
+            async for user in show.client.iter_participants(
+                show.chat_id, filter=ChannelParticipantsBanned
+            ):
                 if user.deleted:
                     del_u += 1
                     await sleep(0.5)
-            async for user in show.client.iter_participants(show.chat_id, filter=ChannelParticipantsKicked):
+            async for user in show.client.iter_participants(
+                show.chat_id, filter=ChannelParticipantsKicked
+            ):
                 if user.deleted:
                     del_u += 1
                     await sleep(0.5)
@@ -274,34 +278,46 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                     await sleep(0.5)
                     del_u += 1
                 except ChatAdminRequiredError:
-                    return await edit_delete(event, "`I don't have ban rights in this group`", 5)
+                    return await edit_delete(
+                        event, "`I don't have ban rights in this group`", 5
+                    )
                 except UserAdminInvalidError:
                     del_a += 1
         if del_u > 0:
-            del_status = f"Successfully cleaned **{del_u}** deleted account(s) in the group."
-        if del_a > 0 :
+            del_status = (
+                f"Successfully cleaned **{del_u}** deleted account(s) in the group."
+            )
+        if del_a > 0:
             del_status = f"Successfully cleaned **{del_u}** deleted account(s) in the group.\
             \n**{del_a}** deleted admin accounts are not removed"
     else:
-        async for user in show.client.iter_participants(show.chat_id, filter=ChannelParticipantsKicked):
+        async for user in show.client.iter_participants(
+            show.chat_id, filter=ChannelParticipantsKicked
+        ):
             if user.deleted:
                 try:
                     await show.client.kick_participant(show.chat_id, user.id)
                     await sleep(0.5)
                     del_u += 1
                 except ChatAdminRequiredError:
-                    return await edit_delete(event, "`I don't have ban rights in this group`", 5)
-                except Exception as e:
+                    return await edit_delete(
+                        event, "`I don't have ban rights in this group`", 5
+                    )
+                except Exception:
                     del_a += 1
-        async for user in show.client.iter_participants(show.chat_id, filter=ChannelParticipantsBanned):
+        async for user in show.client.iter_participants(
+            show.chat_id, filter=ChannelParticipantsBanned
+        ):
             if user.deleted:
                 try:
                     await show.client.kick_participant(show.chat_id, user.id)
                     await sleep(0.5)
                     del_u += 1
                 except ChatAdminRequiredError:
-                    return await edit_delete(event, "`I don't have ban rights in this group`", 5)
-                except Exception as e:
+                    return await edit_delete(
+                        event, "`I don't have ban rights in this group`", 5
+                    )
+                except Exception:
                     del_a += 1
         if del_u > 0:
             del_status = f"Successfully cleaned **{del_u}** deleted account(s) in the group who are banned or restricted."
@@ -316,6 +332,7 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                 \n{del_status}\
                 \nCHAT: {get_display_name(await event.get_chat())}(`{show.chat_id}`)",
         )
+
 
 @catub.cat_cmd(
     pattern="ikuck ?([\s\S]*)",
