@@ -6,8 +6,6 @@ from telethon.errors import (
     MessageNotModifiedError,
     UserAdminInvalidError,
 )
-
-from ..utils import is_admin
 from telethon.tl import functions
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import (
@@ -29,6 +27,7 @@ from userbot import catub
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import readable_time
+from ..utils import is_admin
 from . import BOTLOG, BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
@@ -243,9 +242,13 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                 del_status = f"__Found__ **{del_u}** __ghost/deleted/zombie account(s) in this group,\
                             \nclean them by using__ `.zombies clean`"
         else:
-            catadmin = await is_admin(show.client,show.chat_id, show.client.uid)
+            catadmin = await is_admin(show.client, show.chat_id, show.client.uid)
             if not catadmin:
-                return await edit_delete(event,"`You must be admin to check zombies in restricted users`",10)
+                return await edit_delete(
+                    event,
+                    "`You must be admin to check zombies in restricted users`",
+                    10,
+                )
             async for user in show.client.iter_participants(
                 show.chat_id, filter=ChannelParticipantsBanned
             ):
@@ -293,9 +296,11 @@ async def rm_deletedacc(show):  # sourcery no-metrics
             del_status = f"Successfully cleaned **{del_u}** deleted account(s) in the group.\
             \n**{del_a}** deleted admin accounts are not removed"
     else:
-        catadmin = await is_admin(show.client,show.chat_id, show.client.uid)
+        catadmin = await is_admin(show.client, show.chat_id, show.client.uid)
         if not catadmin:
-                return await edit_delete(event,"`You must be admin to clean zombies in restricted users`",10)
+            return await edit_delete(
+                event, "`You must be admin to clean zombies in restricted users`", 10
+            )
         async for user in show.client.iter_participants(
             show.chat_id, filter=ChannelParticipantsKicked
         ):
