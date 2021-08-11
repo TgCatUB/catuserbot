@@ -22,7 +22,7 @@ fbanresults = [
     "has already been fbanned, with the exact same reason.",
 ]
 
-unfbanresults = ["I'll give", "Un-FedBan"]
+unfbanresults = ["I'll give", "Un-FedBan", "un-FedBan"]
 
 
 @catub.cat_cmd(
