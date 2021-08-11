@@ -129,7 +129,7 @@ async def quote_search(event):  # sourcery no-metrics
     else:
         feds = {}
     if fedgroup == "-all":
-        catevent = await edit_or_reply(event,"`Adding all your feds to database...`")
+        catevent = await edit_or_reply(event, "`Adding all your feds to database...`")
         fedidstoadd = []
         async with event.client.conversation("@MissRose_bot") as conv:
             try:
