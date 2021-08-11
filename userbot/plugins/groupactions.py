@@ -313,7 +313,8 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                     return await edit_delete(
                         event, "`I don't have ban rights in this group`", 5
                     )
-                except Exception:
+                except Exception as e:
+                    LOGS.error(f"kick {str(e)}")
                     del_a += 1
         async for user in show.client.iter_participants(
             show.chat_id, filter=ChannelParticipantsBanned
@@ -328,13 +329,14 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                         event, "`I don't have ban rights in this group`", 5
                     )
                 except Exception:
+                    LOGS.error(f"banned {str(e)}")
                     del_a += 1
         if del_u > 0:
-            del_status = f"Successfully cleaned **{del_u}** deleted account(s) in the group who are banned or restricted."
+            del_status = f"`Successfully cleaned {del_u} deleted account(s) in the group who are banned or restricted.`"
         if del_a > 0:
-            del_status = f"Successfully cleaned **{del_u}** deleted account(s) in the group who are banned or restricted.\
-            \n**{del_a}** deleted admin accounts are not removed"
-    await edit_delete(event, del_status, 5)
+            del_status = f"`Successfully cleaned `**{del_u}**` deleted account(s) in the group who are banned or restricted.\
+            \nFailed to kick `**{del_a}**` accounts.`"
+    await edit_delete(event, del_status, 15)
     if BOTLOG:
         await show.client.send_message(
             BOTLOG_CHATID,
