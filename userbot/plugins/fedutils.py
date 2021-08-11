@@ -1,5 +1,5 @@
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-
+import os
 from userbot import BOTLOG, BOTLOG_CHATID, catub
 
 from ..core.logger import logging
@@ -8,6 +8,7 @@ from ..helpers.utils import _format, get_user_from_event, reply_id
 from ..sql_helper.global_collectionjson import add_collection, get_collection
 
 LOGS = logging.getLogger(__name__)
+FBAN_GROUP_ID = int(os.environ.get("FBAN_GROUP_ID") or 0)
 
 plugin_category = "admin"
 rose = "@MissRose_bot"
@@ -32,7 +33,7 @@ unfbanresults = ["I'll give", "Un-FedBan"]
 )
 async def group_fban(event):
     "fban a person."
-    if Config.FBAN_GROUP_ID == 0:
+    if FBAN_GROUP_ID == 0:
         return await edit_delete(
             event,
             "__For working of this cmd you need to set FBAN_GROUP_ID in heroku vars__",
@@ -62,7 +63,7 @@ async def group_fban(event):
     catevent = await edit_or_reply(
         event, f"Fbanning {_format.mentionuser(user.first_name ,user.id)}.."
     )
-    fedchat = Config.FBAN_GROUP_ID
+    fedchat = FBAN_GROUP_ID
     success = 0
     errors = []
     total = 0
