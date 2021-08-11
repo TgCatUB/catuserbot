@@ -1,6 +1,8 @@
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-import os
 import asyncio
+import os
+
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+
 from userbot import BOTLOG, BOTLOG_CHATID, catub
 
 from ..core.logger import logging
@@ -118,83 +120,92 @@ async def group_fban(event):
         "usage": "{tr}addfedto <group name> <fedid>",
     },
 )
-async def quote_search(event):    # sourcery no-metrics
-        "Add the federation to database."
-        fedgroup = event.pattern_match.group(1)
-        fedid = event.pattern_match.group(2)
-        if get_collection("fedids") is not None:
-            feds = get_collection("fedids").json
-        else:
-            feds = {}
-        if fedgroup =="-all":
-            fedidstoadd = []
-            async with event.client.conversation("@MissRose_bot") as conv:
-                await conv.send_message("/start")
-                await asyncio.sleep(1)
-                await conv.send_message("/myfeds")
+async def quote_search(event):  # sourcery no-metrics
+    "Add the federation to database."
+    fedgroup = event.pattern_match.group(1)
+    fedid = event.pattern_match.group(2)
+    if get_collection("fedids") is not None:
+        feds = get_collection("fedids").json
+    else:
+        feds = {}
+    if fedgroup == "-all":
+        fedidstoadd = []
+        async with event.client.conversation("@MissRose_bot") as conv:
+            await conv.send_message("/start")
+            await asyncio.sleep(1)
+            await conv.send_message("/myfeds")
+            await asyncio.sleep(2)
+            try:
+                response = await conv.get_response()
+            except asyncio.exceptions.TimeoutError:
+                return await edit_or_reply(
+                    event,
+                    "__Rose bot is not responding try again later.__",
+                )
+            await asyncio.sleep(2)
+            if "make a file" in response.text or "Looks like" in response.text:
+                await response.click(0)
                 await asyncio.sleep(2)
-                try:
-                    response = await conv.get_response()
-                except asyncio.exceptions.TimeoutError:
-                    return await edit_or_reply(event,
-                        "__Rose bot is not responding try again later.__",
+                response_result = await conv.get_response()
+                await asyncio.sleep(2)
+                if response_result.media:
+                    fed_file = await event.client.download_media(
+                        response_result,
+                        "fedlist",
                     )
-                await asyncio.sleep(2)
-                if "make a file" in response.text or "Looks like" in response.text:
-                    await response.click(0)
-                    await asyncio.sleep(2)
-                    response_result = await conv.get_response()
-                    await asyncio.sleep(2)
-                    if response_result.media:
-                        fed_file = await event.client.download_media(
-                            response_result,
-                            "fedlist",
-                        )
-                        await asyncio.sleep(5)
-                        fedfile = open(fed_file, errors="ignore")
-                        lines = fedfile.readlines()
-                        for line in lines:
-                            try:
-                                fedidstoadd.append(line[:36])
-                            except Exception as e:
-                                pass
-                    elif "You can only use fed commands once every" in (
-                        await conv.get_edit
-                    ):
-                        return await edit_or_reply(event,"You can only use fed commands once every 5 min.")
-            if not fedidstoadd:
-                return await edit_or_reply(event,"__I have failed to fetch your feds or you are not admin of any fed.__")
-            feds[fedid] = fedidstoadd
-            add_collection("fedids", feds)
-            await edit_or_reply(event, f"__Successfully added all your feds to database group__ **{fedid}**.")
-            if BOTLOG:
-                await event.client.send_message(
-                    BOTLOG_CHATID,
-                    f"#ADDFEDID\
-                \n**Fed Group:** `{fedgroup}`\
-                \nSuccessfully added all your feds to above database group.",
-                )
-            return
-        if fedgroup in feds:
-            fed_ids = feds[fedgroup]
-            if fedid in fed_ids:
-                return await edit_delete(
-                    event, "__This fed is already part of this fed group.__"
-                )
-            fed_ids.append(fedid)
-            feds[fedgroup] = fed_ids
-        else:
-            feds[fedgroup] = [fedid]
+                    await asyncio.sleep(5)
+                    fedfile = open(fed_file, errors="ignore")
+                    lines = fedfile.readlines()
+                    for line in lines:
+                        try:
+                            fedidstoadd.append(line[:36])
+                        except Exception:
+                            pass
+                elif "You can only use fed commands once every" in (
+                    await conv.get_edit
+                ):
+                    return await edit_or_reply(
+                        event, "You can only use fed commands once every 5 min."
+                    )
+        if not fedidstoadd:
+            return await edit_or_reply(
+                event,
+                "__I have failed to fetch your feds or you are not admin of any fed.__",
+            )
+        feds[fedid] = fedidstoadd
         add_collection("fedids", feds)
-        await edit_or_reply(event, "__The given fed is succesfully added to fed group.__")
+        await edit_or_reply(
+            event,
+            f"__Successfully added all your feds to database group__ **{fedid}**.",
+        )
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
                 f"#ADDFEDID\
+                \n**Fed Group:** `{fedgroup}`\
+                \nSuccessfully added all your feds to above database group.",
+            )
+        return
+    if fedgroup in feds:
+        fed_ids = feds[fedgroup]
+        if fedid in fed_ids:
+            return await edit_delete(
+                event, "__This fed is already part of this fed group.__"
+            )
+        fed_ids.append(fedid)
+        feds[fedgroup] = fed_ids
+    else:
+        feds[fedgroup] = [fedid]
+    add_collection("fedids", feds)
+    await edit_or_reply(event, "__The given fed is succesfully added to fed group.__")
+    if BOTLOG:
+        await event.client.send_message(
+            BOTLOG_CHATID,
+            f"#ADDFEDID\
             \n**Fedid:** `{fedid}`\
             \n**Fed Group:** `{fedgroup}`\
             \nThe above fedid is sucessfully added to that fed group.",
-            )
+        )
 
 
 @catub.cat_cmd(
