@@ -237,7 +237,6 @@ async def rm_deletedacc(show):  # sourcery no-metrics
             async for user in show.client.iter_participants(show.chat_id):
                 if user.deleted:
                     del_u += 1
-                    await sleep(0.5)
             if del_u > 0:
                 del_status = f"__Found__ **{del_u}** __ghost/deleted/zombie account(s) in this group,\
                             \nclean them by using__ `.zombies clean`"
@@ -247,13 +246,11 @@ async def rm_deletedacc(show):  # sourcery no-metrics
             ):
                 if user.deleted:
                     del_u += 1
-                    await sleep(0.5)
             async for user in show.client.iter_participants(
                 show.chat_id, filter=ChannelParticipantsKicked
             ):
                 if user.deleted:
                     del_u += 1
-                    await sleep(0.5)
             if del_u > 0:
                 del_status = f"__Found__ **{del_u}** __ghost/deleted/zombie account(s) in this group who are restricted or banned,\
                             \nclean them by using__ `.zombies -r clean`"
