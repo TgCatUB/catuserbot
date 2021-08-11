@@ -163,7 +163,7 @@ async def get_file_id(input_str):
         return link, "unknown"
 
 
-async def download(event, gdrive, service, uri=None):    # sourcery no-metrics
+async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
     """Download files to local then upload"""
     start = datetime.now()
     reply = ""
@@ -294,7 +294,7 @@ async def download(event, gdrive, service, uri=None):    # sourcery no-metrics
                 return reply
     except Exception as e:
         status = status.replace("DOWNLOAD]", "ERROR]")
-        reply += f'**{status}**\n\n**Status : **`failed`\n**Reason : **`{e}`\n\n'
+        reply += f"**{status}**\n\n**Status : **`failed`\n**Reason : **`{e}`\n\n"
         return reply
 
 
@@ -540,7 +540,7 @@ async def download_gdrive(gdrive, service, uri, dir_id=GDRIVE_.parent_Id):
                 f"**Link : **[link](https://drive.google.com/open?id={ret_id})"
             )
     except HttpError as e:
-        reply = f'**Error : **`{e}`'
+        reply = f"**Error : **`{e}`"
     return reply
 
 
@@ -879,7 +879,7 @@ async def lists(gdrive, folderlink=None):  # sourcery no-metrics
         except HttpError as e:
             await edit_or_reply(
                 gdrive,
-                f'**[GDRIVE - LIST]**\n\n**Status : **`BAD`\n**Reason : **`{e}`',
+                f"**[GDRIVE - LIST]**\n\n**Status : **`BAD`\n**Reason : **`{e}`",
             )
 
             return
@@ -1054,7 +1054,7 @@ async def catlists(gdrive):
         ],
     },
 )
-async def google_drive_managers(gdrive):    # sourcery no-metrics
+async def google_drive_managers(gdrive):  # sourcery no-metrics
     """Google Drive folder/file management"""
     service = await create_app(gdrive)
     if service is False:
@@ -1137,7 +1137,7 @@ async def google_drive_managers(gdrive):    # sourcery no-metrics
                 try:
                     f = await get_information(service, f_id)
                 except Exception as e:
-                    reply += f'**[FILE/FOLDER - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n'
+                    reply += f"**[FILE/FOLDER - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n"
 
                     continue
             name = f.get("name")
@@ -1150,7 +1150,7 @@ async def google_drive_managers(gdrive):    # sourcery no-metrics
                 service.files().delete(fileId=f_id, supportsAllDrives=True).execute()
             except HttpError as e:
                 status.replace("DELETE", "ERROR")
-                reply += f'**{status}**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n'
+                reply += f"**{status}**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n"
                 continue
             else:
                 reply += (
@@ -1166,7 +1166,7 @@ async def google_drive_managers(gdrive):    # sourcery no-metrics
                 try:
                     f = await get_information(service, f_id)
                 except Exception as e:
-                    reply += f'**FILE/FOLDER - ERROR**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n'
+                    reply += f"**FILE/FOLDER - ERROR**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n"
 
                     continue
             """If exists parse file/folder information"""
@@ -1233,7 +1233,7 @@ async def cancel_process(gdrive):
         "usage": "{tr}ugd <uri/url/drivelink/local file/folder path>",
     },
 )
-async def google_drive(gdrive):    # sourcery no-metrics
+async def google_drive(gdrive):  # sourcery no-metrics
     "To upload to gdrive."
     reply = ""
     start = datetime.now()
@@ -1277,7 +1277,7 @@ async def google_drive(gdrive):    # sourcery no-metrics
             return True
         except Exception as e:
             await gdrive.edit(
-                f'**[FOLDER - UPLOAD]**\n\n**Folder Name : **`{folder_name}`\n**Status : **`BAD`\n**Reason : **`{e}`'
+                f"**[FOLDER - UPLOAD]**\n\n**Folder Name : **`{folder_name}`\n**Status : **`BAD`\n**Reason : **`{e}`"
             )
 
             return False
@@ -1313,7 +1313,7 @@ async def google_drive(gdrive):    # sourcery no-metrics
                     )
                     break
                 except Exception as e:
-                    reply += f'**[FILE - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n'
+                    reply += f"**[FILE - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n"
                     continue
             if not reply:
                 return None
@@ -1335,7 +1335,7 @@ async def google_drive(gdrive):    # sourcery no-metrics
                         )
                         break
                     except Exception as e:
-                        reply += f'**[FILE - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n'
+                        reply += f"**[FILE - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n"
                         continue
             if not reply:
                 return None
@@ -1368,7 +1368,7 @@ async def google_drive(gdrive):    # sourcery no-metrics
                     break
                 else:
                     """if something bad happened, continue to next uri"""
-                    reply += f'**[UNKNOWN - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{dl}` | `{e}`\n\n'
+                    reply += f"**[UNKNOWN - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{dl}` | `{e}`\n\n"
 
                     continue
         await gdrive.edit(reply, link_preview=False)

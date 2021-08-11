@@ -26,7 +26,7 @@ async def cult_small_video(
 ):
     # https://stackoverflow.com/a/13891070/4723940
     out_put_file_name = out_put_file_name or os.path.join(
-        output_directory, f'{round(time.time())}.mp4'
+        output_directory, f"{round(time.time())}.mp4"
     )
 
     file_genertor_command = [
@@ -87,7 +87,7 @@ async def ff_mpeg_trim_cmd(event):
                 )
                 dl.close()
             except Exception as e:
-                await catevent.edit(f'**Error:**\n`{e}`')
+                await catevent.edit(f"**Error:**\n`{e}`")
             else:
                 end = datetime.now()
                 ms = (end - start).seconds
@@ -99,7 +99,7 @@ async def ff_mpeg_trim_cmd(event):
     else:
         await edit_delete(
             event,
-            'A media file already exists in path. Please remove the media and try again!\n`.ffmpegclear`',
+            "A media file already exists in path. Please remove the media and try again!\n`.ffmpegclear`",
         )
 
 
@@ -161,7 +161,9 @@ async def ff_mpeg_trim_cmd(event):
         cmd, start_time = cmt
         o = await _cattools.take_screen_shot(FF_MPEG_DOWN_LOAD_MEDIA_PATH, start_time)
         if o is None:
-            return await edit_delete(catevent, "**Error : **`Can't complete the process`")
+            return await edit_delete(
+                catevent, "**Error : **`Can't complete the process`"
+            )
         try:
             c_time = time.time()
             await event.client.send_file(
@@ -210,7 +212,7 @@ async def ff_mpeg_trim_cmd(event):
     cmt = current_message_text.split(" ")
     start = datetime.now()
     out_put_file_name = os.path.join(
-        Config.TMP_DOWNLOAD_DIRECTORY, f'{round(time.time())}.mp3'
+        Config.TMP_DOWNLOAD_DIRECTORY, f"{round(time.time())}.mp3"
     )
 
     if len(cmt) == 3:
@@ -224,7 +226,9 @@ async def ff_mpeg_trim_cmd(event):
             out_put_file_name,
         )
         if o is None:
-            return await edit_delete(catevent, "**Error : **`Can't complete the process`")
+            return await edit_delete(
+                catevent, "**Error : **`Can't complete the process`"
+            )
         try:
             c_time = time.time()
             await event.client.send_file(

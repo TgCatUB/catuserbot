@@ -121,7 +121,7 @@ async def tar_file(event):
         ],
     },
 )
-async def zip_file(event):    # sourcery no-metrics
+async def zip_file(event):  # sourcery no-metrics
     "To unpack the zip file"
     input_str = event.pattern_match.group(1)
     if input_str:
@@ -130,7 +130,7 @@ async def zip_file(event):    # sourcery no-metrics
             start = datetime.now()
             if not zipfile.is_zipfile(path):
                 return await edit_delete(
-                    event, f'`The Given path {path} is not zip file to unpack`'
+                    event, f"`The Given path {path} is not zip file to unpack`"
                 )
 
             mone = await edit_or_reply(event, "`Unpacking....`")
@@ -173,7 +173,7 @@ async def zip_file(event):    # sourcery no-metrics
             )
             dl.close()
         except Exception as e:
-            return await edit_delete(mone, f'**Error:**\n__{e}__')
+            return await edit_delete(mone, f"**Error:**\n__{e}__")
         await mone.edit("`Download finished Unpacking now`")
         destination = os.path.join(
             Config.TMP_DOWNLOAD_DIRECTORY,
@@ -205,7 +205,7 @@ async def zip_file(event):    # sourcery no-metrics
         ],
     },
 )
-async def untar_file(event):    # sourcery no-metrics
+async def untar_file(event):  # sourcery no-metrics
     "To unpack the tar file"
     input_str = event.pattern_match.group(1)
     if input_str:
@@ -214,7 +214,7 @@ async def untar_file(event):    # sourcery no-metrics
             start = datetime.now()
             if not is_tarfile(path):
                 return await edit_delete(
-                    event, f'`The Given path {path} is not tar file to unpack`'
+                    event, f"`The Given path {path} is not tar file to unpack`"
                 )
 
             mone = await edit_or_reply(event, "`Unpacking....`")
@@ -255,7 +255,7 @@ async def untar_file(event):    # sourcery no-metrics
             )
             dl.close()
         except Exception as e:
-            return await edit_delete(mone, f'**Error:**\n__{e}__')
+            return await edit_delete(mone, f"**Error:**\n__{e}__")
         if not is_tarfile(filename):
             return await edit_delete(
                 mone, "`The replied file is not tar file to unpack it recheck it`"

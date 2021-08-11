@@ -114,7 +114,7 @@ async def aexec(code, smessatatus):
     reply = await event.get_reply_message()
     exec(
         (
-            'async def __aexec(message, event , reply, client, p, chat): '
+            "async def __aexec(message, event , reply, client, p, chat): "
             + "".join(f"\n {l}" for l in code.split("\n"))
         )
     )

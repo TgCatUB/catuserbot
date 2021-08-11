@@ -217,7 +217,7 @@ async def decide(event):
     if decision != "decide":
         r = requests.get(f"https://yesno.wtf/api?force={decision}").json()
     else:
-        r = requests.get('https://yesno.wtf/api').json()
+        r = requests.get("https://yesno.wtf/api").json()
     await event.delete()
     sandy = await event.client.send_message(
         event.chat_id, str(r["answer"]).upper(), reply_to=message_id, file=r["image"]

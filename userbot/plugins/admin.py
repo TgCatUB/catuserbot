@@ -86,7 +86,7 @@ plugin_category = "admin"
     groups_only=True,
     require_admin=True,
 )
-async def set_group_photo(event):    # sourcery no-metrics
+async def set_group_photo(event):  # sourcery no-metrics
     "For changing Group dp"
     flag = (event.pattern_match.group(1)).strip()
     if flag == "-s":
@@ -118,7 +118,7 @@ async def set_group_photo(event):    # sourcery no-metrics
         try:
             await event.client(EditPhotoRequest(event.chat_id, InputChatPhotoEmpty()))
         except Exception as e:
-            return await edit_delete(event, f'**Error : **`{e}`')
+            return await edit_delete(event, f"**Error : **`{e}`")
         process = "deleted"
         await edit_delete(event, "```successfully group profile pic deleted.```")
     if BOTLOG:
@@ -358,7 +358,7 @@ async def startmute(event):
         try:
             mute(event.chat_id, event.chat_id)
         except Exception as e:
-            await event.edit(f'**Error **\n`{e}`')
+            await event.edit(f"**Error **\n`{e}`")
         else:
             await event.edit("`Successfully muted that person.\n**｀-´)⊃━☆ﾟ.*･｡ﾟ **`")
         if BOTLOG:
@@ -394,7 +394,7 @@ async def startmute(event):
         except AttributeError:
             pass
         except Exception as e:
-            return await edit_or_reply(event, f'**Error : **`{e}`', 10)
+            return await edit_or_reply(event, f"**Error : **`{e}`", 10)
         try:
             await event.client(EditBannedRequest(event.chat_id, user.id, MUTE_RIGHTS))
         except UserAdminInvalidError:
@@ -410,7 +410,7 @@ async def startmute(event):
                 )
             mute(user.id, event.chat_id)
         except Exception as e:
-            return await edit_or_reply(event, f'**Error : **`{e}`', 10)
+            return await edit_or_reply(event, f"**Error : **`{e}`", 10)
         if reason:
             await edit_or_reply(
                 event,
@@ -457,7 +457,7 @@ async def endmute(event):
         try:
             unmute(event.chat_id, event.chat_id)
         except Exception as e:
-            await event.edit(f'**Error **\n`{e}`')
+            await event.edit(f"**Error **\n`{e}`")
         else:
             await event.edit(
                 "`Successfully unmuted that person\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍`"
@@ -487,7 +487,7 @@ async def endmute(event):
                 "`This user can already speak freely in this chat ~~lmfao sed rip~~`",
             )
         except Exception as e:
-            return await edit_or_reply(event, f'**Error : **`{e}`')
+            return await edit_or_reply(event, f"**Error : **`{e}`")
         await edit_or_reply(
             event,
             f"{_format.mentionuser(user.first_name ,user.id)} `is unmuted in {get_display_name(await event.get_chat())}\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍`",
@@ -525,7 +525,7 @@ async def endmute(event):
     try:
         await event.client.kick_participant(event.chat_id, user.id)
     except Exception as e:
-        return await catevent.edit(NO_PERM + f'\n{e}')
+        return await catevent.edit(NO_PERM + f"\n{e}")
     if reason:
         await catevent.edit(
             f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`\nReason: {reason}"
@@ -567,7 +567,7 @@ async def pin(event):
     except BadRequestError:
         return await edit_delete(event, NO_PERM, 5)
     except Exception as e:
-        return await edit_delete(event, f'`{e}`', 5)
+        return await edit_delete(event, f"`{e}`", 5)
     await edit_delete(event, "`Pinned Successfully!`", 3)
     if BOTLOG and not event.is_private:
         await event.client.send_message(
@@ -615,7 +615,7 @@ async def pin(event):
     except BadRequestError:
         return await edit_delete(event, NO_PERM, 5)
     except Exception as e:
-        return await edit_delete(event, f'`{e}`', 5)
+        return await edit_delete(event, f"`{e}`", 5)
     await edit_delete(event, "`Unpinned Successfully!`", 3)
     if BOTLOG and not event.is_private:
         await event.client.send_message(

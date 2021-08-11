@@ -43,7 +43,7 @@ async def install(event):
                     event, "Errors! This plugin is already installed/pre-installed.", 10
                 )
         except Exception as e:
-            await edit_delete(event, f'**Error:**\n`{e}`', 10)
+            await edit_delete(event, f"**Error:**\n`{e}`", 10)
             os.remove(downloaded_file_name)
 
 
@@ -70,7 +70,7 @@ async def load(event):
     except Exception as e:
         await edit_or_reply(
             event,
-            f'Could not load {shortname} because of the following error.\n{e}',
+            f"Could not load {shortname} because of the following error.\n{e}",
         )
 
 
@@ -121,7 +121,7 @@ async def unload(event):
         remove_plugin(shortname)
         await edit_or_reply(event, f"Unloaded {shortname} successfully")
     except Exception as e:
-        await edit_or_reply(event, f'Successfully unload {shortname}\n{e}')
+        await edit_or_reply(event, f"Successfully unload {shortname}\n{e}")
 
 
 @catub.cat_cmd(
@@ -154,4 +154,4 @@ async def unload(event):
         remove_plugin(shortname)
         await edit_or_reply(event, f"{shortname} is Uninstalled successfully")
     except Exception as e:
-        await edit_or_reply(event, f'Successfully uninstalled {shortname}\n{e}')
+        await edit_or_reply(event, f"Successfully uninstalled {shortname}\n{e}")

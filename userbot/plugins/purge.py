@@ -162,7 +162,7 @@ async def purge_to(event):
                 "#PURGE \n`Purge of " + str(count) + " messages done successfully.`",
             )
     except Exception as e:
-        await edit_delete(event, f'**Error**\n`{e}`')
+        await edit_delete(event, f"**Error**\n`{e}`")
 
 
 @catub.cat_cmd(
@@ -236,7 +236,7 @@ async def purgeme(event):
         ],
     },
 )
-async def fastpurger(event):    # sourcery no-metrics
+async def fastpurger(event):  # sourcery no-metrics
     "To purge messages from the replied message"
     chat = await event.get_input_chat()
     msgs = []

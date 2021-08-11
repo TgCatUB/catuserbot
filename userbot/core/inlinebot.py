@@ -56,32 +56,22 @@ def main_menu():
     text = f"𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁 𝗛𝗲𝗹𝗽𝗲𝗿\
         \n𝗣𝗿𝗼𝘃𝗶𝗱𝗲𝗱 𝗯𝘆 {mention}"
     buttons = [
-        (Button.inline('ℹ️ Info', data="check"),),
+        (Button.inline("ℹ️ Info", data="check"),),
         (
-            Button.inline(
-                f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})", data='admin_menu'
-            ),
-            Button.inline(f"🤖 Bot ({len(GRP_INFO['bot'])})", data='bot_menu'),
+            Button.inline(f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})", data="admin_menu"),
+            Button.inline(f"🤖 Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
         ),
         (
-            Button.inline(f"🎨 Fun ({len(GRP_INFO['fun'])})", data='fun_menu'),
-            Button.inline(
-                f"🧩 Misc ({len(GRP_INFO['misc'])})", data='misc_menu'
-            ),
+            Button.inline(f"🎨 Fun ({len(GRP_INFO['fun'])})", data="fun_menu"),
+            Button.inline(f"🧩 Misc ({len(GRP_INFO['misc'])})", data="misc_menu"),
         ),
         (
-            Button.inline(
-                f"🧰 Tools ({len(GRP_INFO['tools'])})", data='tools_menu'
-            ),
-            Button.inline(
-                f"🗂 Utils ({len(GRP_INFO['utils'])})", data='utils_menu'
-            ),
+            Button.inline(f"🧰 Tools ({len(GRP_INFO['tools'])})", data="tools_menu"),
+            Button.inline(f"🗂 Utils ({len(GRP_INFO['utils'])})", data="utils_menu"),
         ),
         (
-            Button.inline(
-                f"➕ Extra ({len(GRP_INFO['extra'])})", data='extra_menu'
-            ),
-            Button.inline('🔒 Close Menu', data='close'),
+            Button.inline(f"➕ Extra ({len(GRP_INFO['extra'])})", data="extra_menu"),
+            Button.inline("🔒 Close Menu", data="close"),
         ),
     ]
 

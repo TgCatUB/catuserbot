@@ -232,7 +232,7 @@ async def shazamcmd(event):
     except Exception as e:
         LOGS.error(e)
         return await edit_delete(
-            catevent, f'**Error while reverse searching song:**\n__{e}__'
+            catevent, f"**Error while reverse searching song:**\n__{e}__"
         )
 
     image = track["images"]["background"]

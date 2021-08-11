@@ -81,7 +81,7 @@ async def unban_user_from_bot(user, reason, reply_to=None):
         rem_user_from_bl(user.id)
     except Exception as e:
         LOGS.error(str(e))
-    banned_msg = '**You have been Unbanned from this bot. From now on you can send messages here to contact my master.**'
+    banned_msg = "**You have been Unbanned from this bot. From now on you can send messages here to contact my master.**"
 
     if reason is not None:
         banned_msg += f"\n**Reason:** __{reason}__"

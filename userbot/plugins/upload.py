@@ -91,7 +91,7 @@ async def upload(path, event, udir_event, catflag=None):  # sourcery no-metrics
     catflag = catflag or False
     reply_to_id = await reply_id(event)
     if os.path.isdir(path):
-        await event.client.send_message(event.chat_id, f'**Folder : **`{path}`')
+        await event.client.send_message(event.chat_id, f"**Folder : **`{path}`")
         Files = os.listdir(path)
         Files = sortthings(Files, path)
         for file in Files:
@@ -165,12 +165,12 @@ async def uploadir(event):
             f"`Uploaded {UPLOAD_.uploaded} files successfully in {ms} seconds. `",
         )
     else:
-        await edit_or_reply(udir_event, '`Uploading file .....`')
+        await edit_or_reply(udir_event, "`Uploading file .....`")
         UPLOAD_.uploaded = 0
         await upload(path, event, udir_event, catflag=flag)
         end = datetime.now()
         ms = (end - start).seconds
         await edit_delete(
             udir_event,
-            f'`Uploaded file {path} successfully in {ms} seconds. `',
+            f"`Uploaded file {path} successfully in {ms} seconds. `",
         )

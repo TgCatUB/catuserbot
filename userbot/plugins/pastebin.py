@@ -96,7 +96,7 @@ async def paste_img(event):
         if d_file_name is not None:
             os.remove(d_file_name)
     except Exception as e:
-        await edit_delete(catevent, f'**Error:**\n`{e}`', time=10)
+        await edit_delete(catevent, f"**Error:**\n`{e}`", time=10)
 
 
 @catub.cat_cmd(
@@ -159,7 +159,7 @@ async def paste_bin(event):
         if "error" in response:
             return await edit_delete(
                 catevent,
-                '**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`',
+                "**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
             )
 
         result = ""
@@ -170,7 +170,7 @@ async def paste_bin(event):
             result += f"\n<b>Raw link: <a href={response['raw']}>Raw</a></b>"
         await catevent.edit(result, link_preview=False, parse_mode="html")
     except Exception as e:
-        await edit_delete(catevent, f'**Error while pasting text:**\n`{e}`')
+        await edit_delete(catevent, f"**Error while pasting text:**\n`{e}`")
 
 
 @catub.cat_cmd(
@@ -286,11 +286,11 @@ async def _(event):
         if "error" in response:
             return await edit_delete(
                 catevent,
-                '**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`',
+                "**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
             )
 
     except Exception as e:
-        return await edit_delete(catevent, f'**Error while pasting text:**\n`{e}`')
+        return await edit_delete(catevent, f"**Error while pasting text:**\n`{e}`")
     url = response["url"]
     chat = "@CorsaBot"
     await catevent.edit("`Making instant view...`")

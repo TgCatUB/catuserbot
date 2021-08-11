@@ -308,7 +308,6 @@ async def carbon_api(event):
         reply_to=event.message.reply_to_msg_id,
     )
 
-
     os.remove("./carbon.png")
 
     await cat.delete()

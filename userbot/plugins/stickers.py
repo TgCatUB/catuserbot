@@ -208,7 +208,7 @@ async def add_to_pack(
             pack = 1
         packname = pack_name(userid, pack, is_anim)
         packnick = pack_nick(username, pack, is_anim)
-        await catevent.edit(f'`Switching to Pack {pack} due to insufficient space`')
+        await catevent.edit(f"`Switching to Pack {pack} due to insufficient space`")
         await conv.send_message(packname)
         x = await conv.get_response()
         if x.text == "Invalid pack selected.":

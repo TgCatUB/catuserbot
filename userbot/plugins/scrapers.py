@@ -72,7 +72,7 @@ async def wiki(event):
         "usage": "{tr}imdb <movie/series name>",
     },
 )
-async def imdb_query(event):    # sourcery no-metrics
+async def imdb_query(event):  # sourcery no-metrics
     """To fetch imdb data about the given movie or series."""
     catevent = await edit_or_reply(event, "`searching........`")
     reply_to = await reply_id(event)
@@ -165,4 +165,4 @@ async def imdb_query(event):    # sourcery no-metrics
     except IndexError:
         await catevent.edit(f"__No movie found with name {movie_name}.__")
     except Exception as e:
-        await catevent.edit(f'**Error:**\n__{e}__')
+        await catevent.edit(f"**Error:**\n__{e}__")

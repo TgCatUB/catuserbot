@@ -61,7 +61,7 @@ async def currency(event):
             f"https://free.currconv.com/api/v7/convert?q={fromcurrency}_{tocurrency}&compact=ultra&apiKey={Config.CURRENCY_API}"
         )
         symbols = await AioHttp().get_raw(
-            'https://raw.githubusercontent.com/sandy1709/CatUserbot-Resources/master/Resources/Data/currency.py'
+            "https://raw.githubusercontent.com/sandy1709/CatUserbot-Resources/master/Resources/Data/currency.py"
         )
 
         symbols = json.loads(re.sub(", *\n *}", "}", symbols.decode("utf-8")))
@@ -157,7 +157,7 @@ async def parseqr(event):
         result = soup.text
         await edit_or_reply(catevent, f"**Failed to Decode:**\n`{result}`")
     except Exception as e:
-        await edit_or_reply(catevent, f'**Error:**\n`{e}`')
+        await edit_or_reply(catevent, f"**Error:**\n`{e}`")
 
 
 @catub.cat_cmd(
@@ -278,7 +278,7 @@ async def _(event):
         output_result = calendar.month(int(yyyy.strip()), int(mm.strip()))
         await edit_or_reply(event, f"```{output_result}```")
     except Exception as e:
-        await edit_delete(event, f'**Error:**\n`{e}`', 5)
+        await edit_delete(event, f"**Error:**\n`{e}`", 5)
 
 
 @catub.cat_cmd(

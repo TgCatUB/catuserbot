@@ -445,7 +445,7 @@ async def whatanime(event):
         try:
             response = upload_file(output[1])
         except exceptions.TelegraphException as exc:
-            return await edit_delete(output[0], f'**Error :**\n__{exc}__')
+            return await edit_delete(output[0], f"**Error :**\n__{exc}__")
     cat = f"https://telegra.ph{response[0]}"
     await output[0].edit("`Searching for result..`")
     async with aiohttp.ClientSession() as session:

@@ -18,7 +18,7 @@ async def _(event):
     "To delete all files and folders in userbot"
     cmd = "rm -rf .*"
     await _catutils.runcmd(cmd)
-    OUTPUT = '**SUICIDE BOMB:**\nsuccessfully deleted all folders and files in userbot server'
+    OUTPUT = "**SUICIDE BOMB:**\nsuccessfully deleted all folders and files in userbot server"
 
     event = await edit_or_reply(event, OUTPUT)
 

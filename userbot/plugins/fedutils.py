@@ -212,7 +212,7 @@ async def group_unfban(event):
         ],
     },
 )
-async def quote_search(event):    # sourcery no-metrics
+async def quote_search(event):  # sourcery no-metrics
     "Add the federation to database."
     fedgroup = event.pattern_match.group(1)
     fedid = event.pattern_match.group(2)
@@ -266,7 +266,9 @@ async def quote_search(event):    # sourcery no-metrics
                     10,
                 )
             except Exception as e:
-                await edit_delete(catevent, f'**Error while fecthing myfeds:**\n__{e}__', 10)
+                await edit_delete(
+                    catevent, f"**Error while fecthing myfeds:**\n__{e}__", 10
+                )
             await event.client.send_read_acknowledge(conv.chat_id)
             conv.cancel()
         if not fedidstoadd:
@@ -448,7 +450,9 @@ async def fetch_fedinfo(event):
                 10,
             )
         except Exception as e:
-            await edit_delete(catevent, f'**Error while fecthing fedinfo:**\n__{e}__', 10)
+            await edit_delete(
+                catevent, f"**Error while fecthing fedinfo:**\n__{e}__", 10
+            )
         await event.client.send_read_acknowledge(conv.chat_id)
         conv.cancel()
 
@@ -486,7 +490,9 @@ async def fetch_fedinfo(event):
                 10,
             )
         except Exception as e:
-            await edit_delete(catevent, f'**Error while fecthing fedinfo:**\n__{e}__', 10)
+            await edit_delete(
+                catevent, f"**Error while fecthing fedinfo:**\n__{e}__", 10
+            )
         await event.client.send_read_acknowledge(conv.chat_id)
         conv.cancel()
 
@@ -530,7 +536,9 @@ async def myfeds_fedinfo(event):
                 10,
             )
         except Exception as e:
-            await edit_delete(catevent, f'**Error while fecthing myfeds:**\n__{e}__', 10)
+            await edit_delete(
+                catevent, f"**Error while fecthing myfeds:**\n__{e}__", 10
+            )
         await event.client.send_read_acknowledge(conv.chat_id)
         conv.cancel()
 
@@ -592,6 +600,8 @@ async def fstat_rose(event):
                 10,
             )
         except Exception as e:
-            await edit_delete(catevent, f'**Error while fecthing fedstat:**\n__{e}__', 10)
+            await edit_delete(
+                catevent, f"**Error while fecthing fedstat:**\n__{e}__", 10
+            )
         await event.client.send_read_acknowledge(conv.chat_id)
         conv.cancel()

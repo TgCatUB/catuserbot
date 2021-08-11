@@ -39,7 +39,7 @@ def weird_division(n, d):
         "examples": "{tr}chatfs @catuserbot_support",
     },
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "Shows you the complete media/file summary of the that group"
     entity = event.chat_id
     input_str = event.pattern_match.group(1)
@@ -59,7 +59,7 @@ async def _(event):    # sourcery no-metrics
     except Exception as e:
         return await edit_delete(
             event,
-            f'<b>Error : </b><code>{e}</code>',
+            f"<b>Error : </b><code>{e}</code>",
             time=5,
             parse_mode="HTML",
         )
@@ -118,7 +118,7 @@ async def _(event):    # sourcery no-metrics
         str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))
         + " ms"
     )
-    totalstring = f'<code><b>Total files : </b>       | {totalcount}\\\x1f                  \nTotal file size :    | {humanbytes(totalsize)}\\\x1f                  \nAvg. file size :     | {avghubytes}\\\x1f                  \n</code>'
+    totalstring = f"<code><b>Total files : </b>       | {totalcount}\\\x1f                  \nTotal file size :    | {humanbytes(totalsize)}\\\x1f                  \nAvg. file size :     | {avghubytes}\\\x1f                  \n</code>"
 
     runtimestring = f"<code>Runtime :            | {runtime}\
                     \nRuntime per file :   | {avgruntime}\
@@ -127,7 +127,7 @@ async def _(event):    # sourcery no-metrics
     result = f"<b>Group : {link}</b>\n\n"
     result += f"<code>Total Messages: {msg_count}</code>\n"
     result += "<b>File Summary : </b>\n"
-    result += f'<code>{x}</code>\n'
+    result += f"<code>{x}</code>\n"
     result += f"{largest}"
     result += line + totalstring + line + runtimestring + line
     await catevent.edit(result, parse_mode="HTML", link_preview=False)
@@ -143,7 +143,7 @@ async def _(event):    # sourcery no-metrics
         "examples": "{tr}userfs @MissRose_bot",
     },
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "Shows you the complete media/file summary of the that user in that group."
     reply = await event.get_reply_message()
     input_str = event.pattern_match.group(1)
@@ -175,7 +175,7 @@ async def _(event):    # sourcery no-metrics
         chatdata = await event.client.get_entity(entity)
     except Exception as e:
         return await edit_delete(
-            event, f'<b>Error : </b><code>{e}</code>', 5, parse_mode="HTML"
+            event, f"<b>Error : </b><code>{e}</code>", 5, parse_mode="HTML"
         )
 
     try:
@@ -183,7 +183,7 @@ async def _(event):    # sourcery no-metrics
     except Exception as e:
         return await edit_delete(
             event,
-            f'<b>Error : </b><code>{e}</code>',
+            f"<b>Error : </b><code>{e}</code>",
             time=5,
             parse_mode="HTML",
         )
@@ -245,7 +245,7 @@ async def _(event):    # sourcery no-metrics
         str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))
         + " ms"
     )
-    totalstring = f'<code><b>Total files : </b>       | {totalcount}\\\x1f                  \nTotal file size :    | {humanbytes(totalsize)}\\\x1f                  \nAvg. file size :     | {avghubytes}\\\x1f                  \n</code>'
+    totalstring = f"<code><b>Total files : </b>       | {totalcount}\\\x1f                  \nTotal file size :    | {humanbytes(totalsize)}\\\x1f                  \nAvg. file size :     | {avghubytes}\\\x1f                  \n</code>"
 
     runtimestring = f"<code>Runtime :            | {runtime}\
                     \nRuntime per file :   | {avgruntime}\
@@ -254,7 +254,7 @@ async def _(event):    # sourcery no-metrics
     result = f"<b>Group : {link}\nUser : {_format.htmlmentionuser(userdata.first_name,userdata.id)}\n\n"
     result += f"<code>Total Messages: {msg_count}</code>\n"
     result += "<b>File Summary : </b>\n"
-    result += f'<code>{x}</code>\n'
+    result += f"<code>{x}</code>\n"
     result += f"{largest}"
     result += line + totalstring + line + runtimestring + line
     await catevent.edit(result, parse_mode="HTML", link_preview=False)
