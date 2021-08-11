@@ -270,7 +270,7 @@ async def rm_deletedacc(show):  # sourcery no-metrics
     )
     del_u = 0
     del_a = 0
-    if flag != " -r"
+    if flag != " -r":
         async for user in show.client.iter_participants(show.chat_id):
             if user.deleted:
                 try:
