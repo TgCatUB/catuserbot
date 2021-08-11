@@ -44,7 +44,7 @@ async def group_fban(event):
         return await edit_delete(event, "__You can't fban yourself.__")
     if not reason:
         return await edit_delete(
-            event, "__You haven't mentioned group name and reason for fban"
+            event, "__You haven't mentioned group name and reason for fban__"
         )
     reasons = reason.split(" ", 1)
     fedgroup = reasons[0]
@@ -57,7 +57,7 @@ async def group_fban(event):
         fedids = feds[fedgroup]
     else:
         return await edit_delete(
-            event, f"__There is no such ({fedgroup}) named fedgroup in your database.__"
+            event, f"__There is no such '{fedgroup}' named fedgroup in your database.__"
         )
     catevent = await edit_or_reply(
         event, f"Fbanning {_format.mentionuser(user.first_name ,user.id)}.."
