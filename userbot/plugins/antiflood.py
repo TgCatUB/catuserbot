@@ -36,11 +36,10 @@ async def _(event):
     except Exception as e:
         no_admin_privilege_message = await event.client.send_message(
             entity=event.chat_id,
-            message=f"""**Automatic AntiFlooder**
-@admin [User](tg://user?id={event.message.sender_id}) is flooding this chat.
-`{str(e)}`""",
+            message=f"**Automatic AntiFlooder**\x1f@admin [User](tg://user?id={event.message.sender_id}) is flooding this chat.\x1f`{e}`",
             reply_to=event.message.id,
         )
+
         await asyncio.sleep(4)
         await no_admin_privilege_message.edit(
             "This is useless SPAM dude. Stop this, enjoy the chat buddy "

@@ -78,15 +78,16 @@ def char_is_emoji(character):
 
 def pack_nick(username, pack, is_anim):
     if gvarstatus("CUSTOM_STICKER_PACKNAME"):
-        if is_anim:
-            packnick = f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack} (Animated)"
-        else:
-            packnick = f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack}"
+        return (
+            f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack} (Animated)"
+            if is_anim
+            else f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack}"
+        )
+
     elif is_anim:
-        packnick = f"@{username} Vol.{pack} (Animated)"
+        return f"@{username} Vol.{pack} (Animated)"
     else:
-        packnick = f"@{username} Vol.{pack}"
-    return packnick
+        return f"@{username} Vol.{pack}"
 
 
 async def resize_photo(photo):
@@ -207,9 +208,7 @@ async def add_to_pack(
             pack = 1
         packname = pack_name(userid, pack, is_anim)
         packnick = pack_nick(username, pack, is_anim)
-        await catevent.edit(
-            f"`Switching to Pack {str(pack)} due to insufficient space`"
-        )
+        await catevent.edit(f"`Switching to Pack {pack} due to insufficient space`")
         await conv.send_message(packname)
         x = await conv.get_response()
         if x.text == "Invalid pack selected.":
@@ -677,7 +676,7 @@ async def pic2packcmd(event):
             await event.client.send_read_acknowledge(conv.chat_id)
             for packname in ending.raw_text.split():
                 stick_pack_name = packname
-                if packname.startswith("https://t.me/"):
+                if stick_pack_name.startswith("https://t.me/"):
                     break
             await catevent.edit(
                 f"__successfully created the pack for the replied media : __[{args}]({stick_pack_name})"

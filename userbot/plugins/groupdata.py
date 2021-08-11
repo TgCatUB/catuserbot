@@ -148,7 +148,7 @@ async def get_users(show):
         try:
             chat = await show.client.get_entity(input_str)
         except Exception as e:
-            return await edit_delete(show, f"`{str(e)}`", 10)
+            return await edit_delete(show, f"`{e}`", 10)
     elif not show.is_group:
         return await edit_or_reply(show, "`Are you sure this is a group?`")
     catevent = await edit_or_reply(show, "`getting users list wait...`  ")
@@ -199,8 +199,9 @@ async def info(event):
     except Exception as e:
         if BOTLOG:
             await event.client.send_message(
-                BOTLOG_CHATID, f"**Error in chatinfo : **\n`{str(e)}`"
+                BOTLOG_CHATID, f"**Error in chatinfo : **\n`{e}`"
             )
+
         await catevent.edit("`An unexpected error has occurred.`")
 
 
@@ -266,7 +267,7 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         )
     except Exception as e:
         msg_info = None
-        LOGS.error(f"Exception: {str(e)}")
+        LOGS.error(f"Exception: {e}")
     # No chance for IndexError as it checks for msg_info.messages first
     first_msg_valid = bool(
         msg_info and msg_info.messages and msg_info.messages[0].id == 1
@@ -381,7 +382,7 @@ async def fetch_info(chat, event):  # sourcery no-metrics
             )
             admins = participants_admins.count if participants_admins else None
         except Exception as e:
-            LOGS.error(f"Exception:{str(e)}")
+            LOGS.error(f"Exception:{e}")
     if bots_list:
         for _ in bots_list:
             bots += 1

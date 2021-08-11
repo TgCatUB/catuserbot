@@ -75,7 +75,7 @@ async def _(event):
         try:
             media_urls = upload_file(downloaded_file_name)
         except exceptions.TelegraphException as exc:
-            await catevent.edit(f"**Error : **\n`{str(exc)}`")
+            await catevent.edit(f"**Error : **\n`{exc}`")
             os.remove(downloaded_file_name)
         else:
             end = datetime.now()

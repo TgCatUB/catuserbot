@@ -63,9 +63,7 @@ async def paste_img(event):
         input_str = input_str.replace(ext[0], "").strip()
     except IndexError:
         extension = None
-    text_to_print = ""
-    if input_str:
-        text_to_print = input_str
+    text_to_print = input_str or ""
     if text_to_print == "" and reply and reply.media:
         mediatype = media_type(reply)
         if mediatype == "Document":
@@ -98,7 +96,7 @@ async def paste_img(event):
         if d_file_name is not None:
             os.remove(d_file_name)
     except Exception as e:
-        await edit_delete(catevent, f"**Error:**\n`{str(e)}`", time=10)
+        await edit_delete(catevent, f"**Error:**\n`{e}`", time=10)
 
 
 @catub.cat_cmd(
@@ -137,9 +135,7 @@ async def paste_bin(event):
         pastetype = "n"
     else:
         pastetype = event.pattern_match.group(1) or "p"
-    text_to_print = ""
-    if input_str:
-        text_to_print = input_str
+    text_to_print = input_str or ""
     if text_to_print == "" and reply and reply.media:
         mediatype = media_type(reply)
         if mediatype == "Document":
@@ -163,8 +159,9 @@ async def paste_bin(event):
         if "error" in response:
             return await edit_delete(
                 catevent,
-                f"**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
+                "**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
             )
+
         result = ""
         if pastebins[response["bin"]] != pastetype:
             result += f"<b>{get_key(pastetype)} is down, So </b>"
@@ -173,7 +170,7 @@ async def paste_bin(event):
             result += f"\n<b>Raw link: <a href={response['raw']}>Raw</a></b>"
         await catevent.edit(result, link_preview=False, parse_mode="html")
     except Exception as e:
-        await edit_delete(catevent, f"**Error while pasting text:**\n`{str(e)}`")
+        await edit_delete(catevent, f"**Error while pasting text:**\n`{e}`")
 
 
 @catub.cat_cmd(
@@ -269,9 +266,7 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     pastetype = "d"
-    text_to_print = ""
-    if input_str:
-        text_to_print = input_str
+    text_to_print = input_str or ""
     if text_to_print == "" and reply and reply.media:
         mediatype = media_type(reply)
         if mediatype == "Document":
@@ -291,10 +286,11 @@ async def _(event):
         if "error" in response:
             return await edit_delete(
                 catevent,
-                f"**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
+                "**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
             )
+
     except Exception as e:
-        return await edit_delete(catevent, f"**Error while pasting text:**\n`{str(e)}`")
+        return await edit_delete(catevent, f"**Error while pasting text:**\n`{e}`")
     url = response["url"]
     chat = "@CorsaBot"
     await catevent.edit("`Making instant view...`")
@@ -314,5 +310,5 @@ async def _(event):
             if urls:
                 result = f"The instant preview is [here]({urls[0]})"
         if result == "":
-            result = f"I can't make it as instant view"
+            result = "I can't make it as instant view"
         await catevent.edit(result, link_preview=True)

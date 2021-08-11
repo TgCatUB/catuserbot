@@ -63,7 +63,7 @@ async def ytdl_down(event, opts, url):
         with YoutubeDL(opts) as ytdl:
             ytdl_data = ytdl.extract_info(url)
     except DownloadError as DE:
-        await event.edit(f"`{str(DE)}`")
+        await event.edit(f"`{DE}`")
     except ContentTooShortError:
         await event.edit("`The download content was too short.`")
     except GeoRestrictedError:
@@ -81,7 +81,7 @@ async def ytdl_down(event, opts, url):
     except ExtractorError:
         await event.edit("`There was an error during info extraction.`")
     except Exception as e:
-        await event.edit(f"**Error : **\n__{str(e)}__")
+        await event.edit(f"**Error : **\n__{e}__")
     return ytdl_data
 
 

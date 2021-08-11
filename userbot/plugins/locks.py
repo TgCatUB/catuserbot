@@ -201,7 +201,7 @@ async def _(event):  # sourcery no-metrics
         except BaseException as e:
             await edit_delete(
                 event,
-                f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
+                f"`Do I have proper rights for that ??`\n\n**Error:** `{e}`",
                 time=5,
             )
 
@@ -389,7 +389,7 @@ async def _(event):  # sourcery no-metrics
         except BaseException as e:
             return await edit_delete(
                 event,
-                f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
+                f"`Do I have proper rights for that ??`\n\n**Error:** `{e}`",
                 time=5,
             )
 
@@ -693,7 +693,7 @@ async def _(event):  # sourcery no-metrics
     except BaseException as e:
         await edit_delete(
             event,
-            f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
+            f"`Do I have proper rights for that ??`\n\n**Error:** `{e}`",
             time=5,
         )
 
@@ -942,7 +942,7 @@ async def _(event):  # sourcery no-metrics
     except BaseException as e:
         await edit_delete(
             event,
-            f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
+            f"`Do I have proper rights for that ??`\n\n**Error:** `{e}`",
             time=5,
         )
 

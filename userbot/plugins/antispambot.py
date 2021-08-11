@@ -210,7 +210,5 @@ def banchecker(user_id):
 
 
 def spamchecker(user_id):
-    ban = None
-    if spamwatch:
-        ban = spamwatch.get_ban(user_id)
+    ban = spamwatch.get_ban(user_id) if spamwatch else None
     return bool(ban)

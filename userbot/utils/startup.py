@@ -51,7 +51,7 @@ async def setup_bot():
         if Config.OWNER_ID == 0:
             Config.OWNER_ID = utils.get_peer_id(catub.me)
     except Exception as e:
-        LOGS.error(f"STRING_SESSION - {str(e)}")
+        LOGS.error(f"STRING_SESSION - {e}")
         sys.exit()
 
 

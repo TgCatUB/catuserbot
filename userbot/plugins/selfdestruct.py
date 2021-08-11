@@ -43,9 +43,8 @@ async def selfdestruct(destroy):
     cat = ("".join(destroy.text.split(maxsplit=1)[1:])).split(" ", 1)
     message = cat[1]
     ttl = int(cat[0])
-    text = (
-        message + f"\n\n`This message shall be self-destructed in {str(ttl)} seconds`"
-    )
+    text = message + f"\n\n`This message shall be self-destructed in {ttl} seconds`"
+
     await destroy.delete()
     smsg = await destroy.client.send_message(destroy.chat_id, text)
     await sleep(ttl)

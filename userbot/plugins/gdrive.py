@@ -294,9 +294,7 @@ async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
                 return reply
     except Exception as e:
         status = status.replace("DOWNLOAD]", "ERROR]")
-        reply += (
-            f"**{status}**\n\n" "**Status : **`failed`\n" f"**Reason : **`{str(e)}`\n\n"
-        )
+        reply += f"**{status}**\n\n**Status : **`failed`\n**Reason : **`{e}`\n\n"
         return reply
 
 
@@ -542,7 +540,7 @@ async def download_gdrive(gdrive, service, uri, dir_id=GDRIVE_.parent_Id):
                 f"**Link : **[link](https://drive.google.com/open?id={ret_id})"
             )
     except HttpError as e:
-        reply = f"**Error : **`{str(e)}`"
+        reply = f"**Error : **`{e}`"
     return reply
 
 
@@ -881,10 +879,9 @@ async def lists(gdrive, folderlink=None):  # sourcery no-metrics
         except HttpError as e:
             await edit_or_reply(
                 gdrive,
-                "**[GDRIVE - LIST]**\n\n"
-                "**Status : **`BAD`\n"
-                f"**Reason : **`{str(e)}`",
+                f"**[GDRIVE - LIST]**\n\n**Status : **`BAD`\n**Reason : **`{e}`",
             )
+
             return
         for files in response.get("files", []):
             if len(result) >= page_size:
@@ -1140,11 +1137,8 @@ async def google_drive_managers(gdrive):  # sourcery no-metrics
                 try:
                     f = await get_information(service, f_id)
                 except Exception as e:
-                    reply += (
-                        f"**[FILE/FOLDER - ERROR]**\n\n"
-                        "**Status : **`BAD`\n"
-                        f"**Reason : **`{str(e)}`\n"
-                    )
+                    reply += f"**[FILE/FOLDER - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n"
+
                     continue
             name = f.get("name")
             mimeType = f.get("mimeType")
@@ -1156,11 +1150,7 @@ async def google_drive_managers(gdrive):  # sourcery no-metrics
                 service.files().delete(fileId=f_id, supportsAllDrives=True).execute()
             except HttpError as e:
                 status.replace("DELETE", "ERROR")
-                reply += (
-                    f"**{status}**\n\n"
-                    "**Status : **`BAD`\n"
-                    f"**Reason : **`{str(e)}`\n\n"
-                )
+                reply += f"**{status}**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n"
                 continue
             else:
                 reply += (
@@ -1176,11 +1166,8 @@ async def google_drive_managers(gdrive):  # sourcery no-metrics
                 try:
                     f = await get_information(service, f_id)
                 except Exception as e:
-                    reply += (
-                        "**FILE/FOLDER - ERROR**\n\n"
-                        "**Status : **`BAD`\n"
-                        f"**Reason : **`{str(e)}`\n\n"
-                    )
+                    reply += f"**FILE/FOLDER - ERROR**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n"
+
                     continue
             """If exists parse file/folder information"""
             name_or_id = f.get("name")  # override input value
@@ -1290,11 +1277,9 @@ async def google_drive(gdrive):  # sourcery no-metrics
             return True
         except Exception as e:
             await gdrive.edit(
-                "**[FOLDER - UPLOAD]**\n\n"
-                f"**Folder Name : **`{folder_name}`\n"
-                "**Status : **`BAD`\n"
-                f"**Reason : **`{str(e)}`"
+                f"**[FOLDER - UPLOAD]**\n\n**Folder Name : **`{folder_name}`\n**Status : **`BAD`\n**Reason : **`{e}`"
             )
+
             return False
         else:
             await gdrive.edit(
@@ -1328,11 +1313,7 @@ async def google_drive(gdrive):  # sourcery no-metrics
                     )
                     break
                 except Exception as e:
-                    reply += (
-                        "**[FILE - ERROR]**\n\n"
-                        "**Status : **`BAD`\n"
-                        f"**Reason : **`{str(e)}`\n\n"
-                    )
+                    reply += f"**[FILE - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n"
                     continue
             if not reply:
                 return None
@@ -1354,11 +1335,7 @@ async def google_drive(gdrive):  # sourcery no-metrics
                         )
                         break
                     except Exception as e:
-                        reply += (
-                            "**[FILE - ERROR]**\n\n"
-                            "**Status : **`BAD`\n"
-                            f"**Reason : **`{str(e)}`\n\n"
-                        )
+                        reply += f"**[FILE - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n"
                         continue
             if not reply:
                 return None
@@ -1391,11 +1368,8 @@ async def google_drive(gdrive):  # sourcery no-metrics
                     break
                 else:
                     """if something bad happened, continue to next uri"""
-                    reply += (
-                        "**[UNKNOWN - ERROR]**\n\n"
-                        "**Status : **`BAD`\n"
-                        f"**Reason : **`{dl}` | `{str(e)}`\n\n"
-                    )
+                    reply += f"**[UNKNOWN - ERROR]**\n\n**Status : **`BAD`\n**Reason : **`{dl}` | `{e}`\n\n"
+
                     continue
         await gdrive.edit(reply, link_preview=False)
         return None
@@ -1515,7 +1489,6 @@ async def g_download(event):
     service = await create_app(event)
     if service is False:
         return None
-    thumb = None
     cmd = event.pattern_match.group(1)
     drive_link = event.pattern_match.group(2)
     catevent = await edit_or_reply(
@@ -1524,8 +1497,7 @@ async def g_download(event):
     file_name, catprocess = await gdrive_download(event, catevent, service, drive_link)
     if catprocess is not None:
         return await edit_delete(catevent, file_name)
-    if os.path.exists(thumb_image_path):
-        thumb = thumb_image_path
+    thumb = thumb_image_path if os.path.exists(thumb_image_path) else None
     if not cmd:
         await catevent.edit("**File Downloaded.\nLocation : **`" + str(file_name) + "`")
     else:

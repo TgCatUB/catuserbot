@@ -132,9 +132,9 @@ async def progress(
         eta = round((total - current) / speed)
         elapsed_time = round(elapsed_time)
         if "upload" in prog_type.lower():
-            status = f"Uploading"
+            status = "Uploading"
         elif "download" in prog_type.lower():
-            status = f"Downloading"
+            status = "Downloading"
         else:
             status = "Unknown"
         progress_str = "`{0}` | `[{1}{2}] {3}%`".format(

@@ -34,7 +34,7 @@ async def formatJSON(outData):
     link = f"https://anilist.co/anime/{jsonData['id']}"
     msg += f"[{title}]({link})"
     msg += f"\n\n**Type** : {jsonData['format']}"
-    msg += f"\n**Genres** : "
+    msg += "\n**Genres** : "
     for g in jsonData["genres"]:
         msg += g + " "
     msg += f"\n**Status** : {jsonData['status']}"

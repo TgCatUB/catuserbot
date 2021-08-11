@@ -58,8 +58,12 @@ async def _(event):  # sourcery no-metrics
         chatdata = await event.client.get_entity(entity)
     except Exception as e:
         return await edit_delete(
-            event, f"<b>Error : </b><code>{str(e)}</code>", time=5, parse_mode="HTML"
+            event,
+            f"<b>Error : </b><code>{e}</code>",
+            time=5,
+            parse_mode="HTML",
         )
+
     if type(chatdata).__name__ == "Channel":
         if chatdata.username:
             link = f"<a href='t.me/{chatdata.username}'>{chatdata.title}</a>"
@@ -114,10 +118,8 @@ async def _(event):  # sourcery no-metrics
         str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))
         + " ms"
     )
-    totalstring = f"<code><b>Total files : </b>       | {str(totalcount)}\
-                  \nTotal file size :    | {humanbytes(totalsize)}\
-                  \nAvg. file size :     | {avghubytes}\
-                  \n</code>"
+    totalstring = f"<code><b>Total files : </b>       | {totalcount}\\\x1f                  \nTotal file size :    | {humanbytes(totalsize)}\\\x1f                  \nAvg. file size :     | {avghubytes}\\\x1f                  \n</code>"
+
     runtimestring = f"<code>Runtime :            | {runtime}\
                     \nRuntime per file :   | {avgruntime}\
                     \n</code>"
@@ -125,7 +127,7 @@ async def _(event):  # sourcery no-metrics
     result = f"<b>Group : {link}</b>\n\n"
     result += f"<code>Total Messages: {msg_count}</code>\n"
     result += "<b>File Summary : </b>\n"
-    result += f"<code>{str(x)}</code>\n"
+    result += f"<code>{x}</code>\n"
     result += f"{largest}"
     result += line + totalstring + line + runtimestring + line
     await catevent.edit(result, parse_mode="HTML", link_preview=False)
@@ -173,14 +175,19 @@ async def _(event):  # sourcery no-metrics
         chatdata = await event.client.get_entity(entity)
     except Exception as e:
         return await edit_delete(
-            event, f"<b>Error : </b><code>{str(e)}</code>", 5, parse_mode="HTML"
+            event, f"<b>Error : </b><code>{e}</code>", 5, parse_mode="HTML"
         )
+
     try:
         userdata = await event.client.get_entity(userentity)
     except Exception as e:
         return await edit_delete(
-            event, f"<b>Error : </b><code>{str(e)}</code>", time=5, parse_mode="HTML"
+            event,
+            f"<b>Error : </b><code>{e}</code>",
+            time=5,
+            parse_mode="HTML",
         )
+
     if type(chatdata).__name__ == "Channel":
         if chatdata.username:
             link = f"<a href='t.me/{chatdata.username}'>{chatdata.title}</a>"
@@ -238,10 +245,8 @@ async def _(event):  # sourcery no-metrics
         str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))
         + " ms"
     )
-    totalstring = f"<code><b>Total files : </b>       | {str(totalcount)}\
-                  \nTotal file size :    | {humanbytes(totalsize)}\
-                  \nAvg. file size :     | {avghubytes}\
-                  \n</code>"
+    totalstring = f"<code><b>Total files : </b>       | {totalcount}\\\x1f                  \nTotal file size :    | {humanbytes(totalsize)}\\\x1f                  \nAvg. file size :     | {avghubytes}\\\x1f                  \n</code>"
+
     runtimestring = f"<code>Runtime :            | {runtime}\
                     \nRuntime per file :   | {avgruntime}\
                     \n</code>"
@@ -249,7 +254,7 @@ async def _(event):  # sourcery no-metrics
     result = f"<b>Group : {link}\nUser : {_format.htmlmentionuser(userdata.first_name,userdata.id)}\n\n"
     result += f"<code>Total Messages: {msg_count}</code>\n"
     result += "<b>File Summary : </b>\n"
-    result += f"<code>{str(x)}</code>\n"
+    result += f"<code>{x}</code>\n"
     result += f"{largest}"
     result += line + totalstring + line + runtimestring + line
     await catevent.edit(result, parse_mode="HTML", link_preview=False)

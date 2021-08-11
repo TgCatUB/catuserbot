@@ -33,6 +33,6 @@ async def _(event):
             )
         )
     except Exception as e:
-        await event.edit(f"**Error:**\n`{str(e)}`")
+        await event.edit(f"**Error:**\n`{e}`")
     else:
         await event.edit("Transferred 🌚")

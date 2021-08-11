@@ -73,8 +73,9 @@ async def collage(event):
             if files and os.path.exists(files):
                 os.remove(files)
         return await edit_delete(
-            event, f"`media is not supported or try with smaller grid size`", 5
+            event, "`media is not supported or try with smaller grid size`", 5
         )
+
     await event.client.send_file(
         event.chat_id,
         endfile,

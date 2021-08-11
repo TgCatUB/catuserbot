@@ -69,7 +69,7 @@ async def lst(event):  # sourcery no-metrics
         msg = msg + folders + files if files or folders else msg + "__empty path__"
     else:
         size = os.stat(path).st_size
-        msg = f"The details of given file :\n"
+        msg = "The details of given file :\n"
         if str(path).endswith((".mp3", ".flac", ".wav", ".m4a")):
             mode = "🎵"
         if str(path).endswith((".opus")):
@@ -85,7 +85,7 @@ async def lst(event):  # sourcery no-metrics
         time.ctime(os.path.getctime(path))
         time2 = time.ctime(os.path.getmtime(path))
         time3 = time.ctime(os.path.getatime(path))
-        msg += f"**Location :** `{str(path)}`\n"
+        msg += f"**Location :** `{path}`\n"
         msg += f"**icon :** `{mode}`\n"
         msg += f"**Size :** `{humanbytes(size)}`\n"
         msg += f"**Last Modified Time:** `{time2}`\n"

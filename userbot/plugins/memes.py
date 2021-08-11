@@ -217,7 +217,7 @@ async def decide(event):
     if decision != "decide":
         r = requests.get(f"https://yesno.wtf/api?force={decision}").json()
     else:
-        r = requests.get(f"https://yesno.wtf/api").json()
+        r = requests.get("https://yesno.wtf/api").json()
     await event.delete()
     sandy = await event.client.send_message(
         event.chat_id, str(r["answer"]).upper(), reply_to=message_id, file=r["image"]
@@ -391,7 +391,7 @@ async def wish_check(event):
         reslt = f"**Your wish has been cast. **✨\
                   \n\n__Chance of success :__ **{chance}%**"
     else:
-        reslt = f"What's your Wish? Should I consider you as Idiot by default ? 😜"
+        reslt = "What's your Wish? Should I consider you as Idiot by default ? 😜"
     await edit_or_reply(event, reslt)
 
 

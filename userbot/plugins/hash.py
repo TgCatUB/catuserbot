@@ -107,4 +107,4 @@ async def endecrypt(event):
             )[2:]
             await edit_or_reply(event, "**Decoded text :**\n`" + lething[:-1] + "`")
         except Exception as e:
-            await edit_delete(event, f"**Error:**\n__{str(e)}__")
+            await edit_delete(event, f"**Error:**\n__{e}__")

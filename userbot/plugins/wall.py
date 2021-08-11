@@ -51,7 +51,7 @@ async def noods(event):
     if ";" in query:
         query, limit = query.split(";")
     if int(limit) > 10:
-        return await edit_delete(event, f"`Wallpaper search limit is 1-10`", 10)
+        return await edit_delete(event, "`Wallpaper search limit is 1-10`", 10)
     catevent = await edit_or_reply(event, "🔍 `Searching...`")
     r = requests.get(
         f"https://wall.alphacoders.com/search.php?search={query.replace(' ','+')}"

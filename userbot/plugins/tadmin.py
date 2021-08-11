@@ -59,7 +59,7 @@ async def tmuter(event):  # sourcery no-metrics
     if not ctime:
         return
     if user.id == event.client.uid:
-        return await catevent.edit(f"Sorry, I can't mute myself")
+        return await catevent.edit("Sorry, I can't mute myself")
     try:
         await catevent.client(
             EditBannedRequest(
@@ -105,7 +105,7 @@ async def tmuter(event):  # sourcery no-metrics
             "`Either you're not an admin or you tried to mute an admin that you didn't promote`"
         )
     except Exception as e:
-        return await catevent.edit(f"`{str(e)}`")
+        return await catevent.edit(f"`{e}`")
 
 
 @catub.cat_cmd(
@@ -146,7 +146,7 @@ async def tban(event):  # sourcery no-metrics
     if not ctime:
         return
     if user.id == event.client.uid:
-        return await catevent.edit(f"Sorry, I can't ban myself")
+        return await catevent.edit("Sorry, I can't ban myself")
     await catevent.edit("`Whacking the pest!`")
     try:
         await event.client(

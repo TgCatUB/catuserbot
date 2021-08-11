@@ -334,5 +334,5 @@ async def variable(var):
             "Set the required var in heroku to function this normally `HEROKU_APP_NAME`.",
         )
     heroku_var = app.config()
-    await edit_or_reply(var, f"`Changing goodcat to badcat wait for 2-3 minutes.`")
+    await edit_or_reply(var, "`Changing goodcat to badcat wait for 2-3 minutes.`")
     heroku_var["UPSTREAM_REPO"] = "https://github.com/Jisan09/catuserbot"
