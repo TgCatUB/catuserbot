@@ -163,6 +163,6 @@ async def imdb_query(event):  # sourcery no-metrics
             parse_mode="HTML",
         )
     except IndexError:
-        await catevent.edit(f"__No movie found with {movie_name}__")
+        await catevent.edit(f"__No movie found with name {movie_name}.__")
     except Exception as e:
         await catevent.edit(f"**Error:**\n__{str(e)}__")
