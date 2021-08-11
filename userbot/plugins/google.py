@@ -117,7 +117,7 @@ async def gsearch(q_event):
             try:
                 gresults = await ysearch.async_search(*search_args)
             except Exception as e:
-                return await edit_delete(catevent, f"**Error:**\n`{str(e)}`", time=10)
+                return await edit_delete(catevent, f'**Error:**\n`{e}`', time=10)
     msg = ""
     for i in range(lim):
         if i > len(gresults["links"]):

@@ -43,7 +43,7 @@ NO_PERM = "`I don't have sufficient permissions! This is so sed. Alexa play desp
     groups_only=True,
     require_admin=True,
 )
-async def tmuter(event):  # sourcery no-metrics
+async def tmuter(event):    # sourcery no-metrics
     "To mute a person for specific time"
     catevent = await edit_or_reply(event, "`muting....`")
     user, reason = await get_user_from_event(event, catevent)
@@ -59,7 +59,7 @@ async def tmuter(event):  # sourcery no-metrics
     if not ctime:
         return
     if user.id == event.client.uid:
-        return await catevent.edit(f"Sorry, I can't mute myself")
+        return await catevent.edit("Sorry, I can't mute myself")
     try:
         await catevent.client(
             EditBannedRequest(
@@ -105,7 +105,7 @@ async def tmuter(event):  # sourcery no-metrics
             "`Either you're not an admin or you tried to mute an admin that you didn't promote`"
         )
     except Exception as e:
-        return await catevent.edit(f"`{str(e)}`")
+        return await catevent.edit(f'`{e}`')
 
 
 @catub.cat_cmd(
@@ -130,7 +130,7 @@ async def tmuter(event):  # sourcery no-metrics
     groups_only=True,
     require_admin=True,
 )
-async def tban(event):  # sourcery no-metrics
+async def tban(event):    # sourcery no-metrics
     "To ban a person for specific time"
     catevent = await edit_or_reply(event, "`banning....`")
     user, reason = await get_user_from_event(event, catevent)
@@ -146,7 +146,7 @@ async def tban(event):  # sourcery no-metrics
     if not ctime:
         return
     if user.id == event.client.uid:
-        return await catevent.edit(f"Sorry, I can't ban myself")
+        return await catevent.edit("Sorry, I can't ban myself")
     await catevent.edit("`Whacking the pest!`")
     try:
         await event.client(

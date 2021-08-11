@@ -62,7 +62,7 @@ font_list = [
         ],
     },
 )
-async def maccmd(event):  # sourcery no-metrics
+async def maccmd(event):    # sourcery no-metrics
     "Adds frame for the replied image."
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
@@ -84,9 +84,7 @@ async def maccmd(event):  # sourcery no-metrics
             )
         image = Image.open(imag[1])
     except Exception as e:
-        return await edit_delete(
-            catevent, f"**Error in identifying image:**\n__{str(e)}__"
-        )
+        return await edit_delete(catevent, f'**Error in identifying image:**\n__{e}__')
     wid, hgt = image.size
     img = Image.new("RGBA", (wid, hgt))
     scale = min(wid // 100, hgt // 100)

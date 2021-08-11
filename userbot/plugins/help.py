@@ -55,7 +55,7 @@ async def cmdinfo(input_str, event, plugin=False):
         )
         return None
     except Exception as e:
-        await edit_delete(event, f"**Error**\n`{str(e)}`")
+        await edit_delete(event, f'**Error**\n`{e}`')
         return None
     outstr = f"**Command :** `{cmdprefix}{input_str}`\n"
     plugin = get_key(input_str)
@@ -75,7 +75,7 @@ async def plugininfo(input_str, event, flag):
         outstr = await cmdinfo(input_str, event, plugin=True)
         return outstr
     except Exception as e:
-        await edit_delete(event, f"**Error**\n`{str(e)}`")
+        await edit_delete(event, f'**Error**\n`{e}`')
         return None
     if len(cmds) == 1 and (flag is None or (flag and flag != "-p")):
         outstr = await cmdinfo(cmds[0], event, plugin=False)
@@ -90,7 +90,7 @@ async def plugininfo(input_str, event, flag):
         try:
             outstr += f"•  **info :** `{CMD_INFO[cmd][1]}`\n\n"
         except IndexError:
-            outstr += f"•  **info :** `None`\n\n"
+            outstr += '•  **info :** `None`\n\n'
     outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help <command name>`\
         \n**Note : **If command name is same as plugin name then use this `{cmdprefix}help -c <command name>`."
     return outstr
@@ -190,7 +190,7 @@ async def _(event):
         except KeyError:
             return await edit_delete(event, "__Invalid plugin name recheck it.__")
         except Exception as e:
-            return await edit_delete(event, f"**Error**\n`{str(e)}`")
+            return await edit_delete(event, f'**Error**\n`{e}`')
         outstr = f"• **{input_str.title()} has {len(cmds)} commands**\n"
         for cmd in cmds:
             outstr += f"  - `{cmdprefix}{cmd}`\n"

@@ -28,10 +28,7 @@ botusername = Config.TG_BOT_USERNAME
 cmhd = Config.COMMAND_HAND_LER
 
 
-@catub.bot_cmd(
-    pattern=f"^/help$",
-    from_users=Config.OWNER_ID,
-)
+@catub.bot_cmd(pattern='^/help$', from_users=Config.OWNER_ID)
 async def bot_help(event):
     await event.reply(
         f"""The commands in the bot are:
@@ -56,10 +53,7 @@ async def bot_help(event):
     )
 
 
-@catub.bot_cmd(
-    pattern=f"^/broadcast$",
-    from_users=Config.OWNER_ID,
-)
+@catub.bot_cmd(pattern='^/broadcast$', from_users=Config.OWNER_ID)
 async def bot_broadcast(event):
     replied = await event.get_reply_message()
     if not replied:
@@ -89,8 +83,9 @@ async def bot_broadcast(event):
             LOGS.error(str(e))
             if BOTLOG:
                 await event.client.send_message(
-                    BOTLOG_CHATID, f"**Error while broadcasting**\n`{str(e)}`"
+                    BOTLOG_CHATID, f'**Error while broadcasting**\n`{e}`'
                 )
+
         else:
             count += 1
             if count % 5 == 0:
@@ -117,15 +112,11 @@ async def bot_broadcast(event):
     await br_cast.edit(b_info, parse_mode="html")
 
 
-@catub.cat_cmd(
-    pattern=f"bot_users$",
-    command=("bot_users", plugin_category),
-    info={
+@catub.cat_cmd(pattern='bot_users$', command=("bot_users", plugin_category), info={
         "header": "To get users list who started bot.",
         "description": "To get compelete list of users who started your bot",
         "usage": "{tr}bot_users",
-    },
-)
+    })
 async def ban_starters(event):
     "To get list of users who started bot."
     ulist = get_all_starters()
@@ -137,10 +128,7 @@ async def ban_starters(event):
     await edit_or_reply(event, msg)
 
 
-@catub.bot_cmd(
-    pattern=f"^/ban\s+([\s\S]*)",
-    from_users=Config.OWNER_ID,
-)
+@catub.bot_cmd(pattern='^/ban\\s+([\\s\\S]*)', from_users=Config.OWNER_ID)
 async def ban_botpms(event):
     user_id, reason = await get_user_and_reason(event)
     reply_to = await reply_id(event)
@@ -156,7 +144,7 @@ async def ban_botpms(event):
         user = await event.client.get_entity(user_id)
         user_id = user.id
     except Exception as e:
-        return await event.reply(f"**Error:**\n`{str(e)}`")
+        return await event.reply(f'**Error:**\n`{e}`')
     if user_id == Config.OWNER_ID:
         return await event.reply("I can't ban you master")
     check = check_is_black_list(user.id)
@@ -172,10 +160,7 @@ async def ban_botpms(event):
     await event.reply(msg)
 
 
-@catub.bot_cmd(
-    pattern=f"^/unban(?:\s|$)([\s\S]*)",
-    from_users=Config.OWNER_ID,
-)
+@catub.bot_cmd(pattern='^/unban(?:\\s|$)([\\s\\S]*)', from_users=Config.OWNER_ID)
 async def ban_botpms(event):
     user_id, reason = await get_user_and_reason(event)
     reply_to = await reply_id(event)
@@ -187,7 +172,7 @@ async def ban_botpms(event):
         user = await event.client.get_entity(user_id)
         user_id = user.id
     except Exception as e:
-        return await event.reply(f"**Error:**\n`{str(e)}`")
+        return await event.reply(f'**Error:**\n`{e}`')
     check = check_is_black_list(user.id)
     if not check:
         return await event.client.send_message(
@@ -199,15 +184,11 @@ async def ban_botpms(event):
     await event.reply(msg)
 
 
-@catub.cat_cmd(
-    pattern=f"bblist$",
-    command=("bblist", plugin_category),
-    info={
+@catub.cat_cmd(pattern='bblist$', command=("bblist", plugin_category), info={
         "header": "To get users list who are banned in bot.",
         "description": "To get list of users who are banned in bot.",
         "usage": "{tr}bblist",
-    },
-)
+    })
 async def ban_starters(event):
     "To get list of users who are banned in bot."
     ulist = get_all_bl_users()
@@ -219,18 +200,14 @@ async def ban_starters(event):
     await edit_or_reply(event, msg)
 
 
-@catub.cat_cmd(
-    pattern=f"bot_antif (on|off)$",
-    command=("bot_antif", plugin_category),
-    info={
+@catub.cat_cmd(pattern='bot_antif (on|off)$', command=("bot_antif", plugin_category), info={
         "header": "To enable or disable bot antiflood.",
         "description": "if it was turned on then after 10 messages or 10 edits of same messages in less time then your bot auto loacks them.",
         "usage": [
             "{tr}bot_antif on",
             "{tr}bot_antif off",
         ],
-    },
-)
+    })
 async def ban_antiflood(event):
     "To enable or disable bot antiflood."
     input_str = event.pattern_match.group(1)
