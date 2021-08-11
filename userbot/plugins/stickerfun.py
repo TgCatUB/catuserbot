@@ -186,32 +186,6 @@ async def twt(event):
 
 
 @catub.cat_cmd(
-    pattern="doge(?:\s|$)([\s\S]*)",
-    command=("doge", plugin_category),
-    info={
-        "header": "Make doge say anything.",
-        "usage": "{tr}doge <text/reply to msg>",
-        "examples": "{tr}doge Gib money",
-    },
-)
-async def doge(event):
-    "Make a cool doge text sticker"
-    text = event.pattern_match.group(1)
-    reply_to_id = await reply_id(event)
-    bot_name = "@DogeStickerBot"
-    if not text:
-        if event.is_reply:
-            text = (await event.get_reply_message()).message
-        else:
-            return await edit_delete(
-                event, "__What is doge supposed to say? Give some text.__"
-            )
-    text = deEmojify(text)
-    await event.delete()
-    await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)
-
-
-@catub.cat_cmd(
     pattern="glax(|r)(?:\s|$)([\s\S]*)",
     command=("glax", plugin_category),
     info={
