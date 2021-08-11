@@ -203,8 +203,13 @@ async def group_unfban(event):
     info={
         "header": "Add the federation to given group in database.",
         "description": "You can add multiple federations to one name like a group of feds under one name. And you can access all thoose feds by that name.",
-        "flags": {"-all":"If you want to add all your feds to database then use this as {tr}addfedto -all <group name>"},
-        "usage": ["{tr}addfedto <group name> <fedid>","{tr}addfedto -all <group name>",],
+        "flags": {
+            "-all": "If you want to add all your feds to database then use this as {tr}addfedto -all <group name>"
+        },
+        "usage": [
+            "{tr}addfedto <group name> <fedid>",
+            "{tr}addfedto -all <group name>",
+        ],
     },
 )
 async def quote_search(event):  # sourcery no-metrics
@@ -313,8 +318,13 @@ async def quote_search(event):  # sourcery no-metrics
     info={
         "header": "Remove the federation from given group in database.",
         "description": "To remove given fed from the given group name",
-        "flags":{"-all": "If you want to delete compelete group then use this flag as {tr}rmfedfrom -all <group name>"},
-        "usage": ["{tr}rmfedfrom <group name> <fedid>","{tr}rmfedfrom -all <group name>"],
+        "flags": {
+            "-all": "If you want to delete compelete group then use this flag as {tr}rmfedfrom -all <group name>"
+        },
+        "usage": [
+            "{tr}rmfedfrom <group name> <fedid>",
+            "{tr}rmfedfrom -all <group name>",
+        ],
     },
 )
 async def quote_search(event):
@@ -325,14 +335,16 @@ async def quote_search(event):
         feds = get_collection("fedids").json
     else:
         feds = {}
-    if fedgroup =="-all":
+    if fedgroup == "-all":
         if fedid not in feds:
             return await edit_delete(
                 event, "__There is no such fedgroup in your database.__"
             )
         feds[fedid] = []
         add_collection("fedids", feds, {})
-        await edit_or_reply(event,f"__Succesfully removed all feds in the category {fedid}__")
+        await edit_or_reply(
+            event, f"__Succesfully removed all feds in the category {fedid}__"
+        )
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
