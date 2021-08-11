@@ -214,7 +214,7 @@ async def _(event):
 
 # Ported by ©[NIKITA](t.me/kirito6969) and ©[EYEPATCH](t.me/NeoMatrix90)
 @catub.cat_cmd(
-    pattern="zombies ?(-r )?([\s\S]*)",
+    pattern="zombies( -r| )? ?([\s\S]*)",
     command=("zombies", plugin_category),
     info={
         "header": "To check deleted accounts and clean",
@@ -233,7 +233,7 @@ async def rm_deletedacc(show):  # sourcery no-metrics
         event = await edit_or_reply(
             show, "`Searching for ghost/deleted/zombie accounts...`"
         )
-        if not flag:
+        if flag != " -r":
             async for user in show.client.iter_participants(show.chat_id):
                 if user.deleted:
                     del_u += 1
@@ -270,7 +270,7 @@ async def rm_deletedacc(show):  # sourcery no-metrics
     )
     del_u = 0
     del_a = 0
-    if not flag:
+    if flag != " -r"
         async for user in show.client.iter_participants(show.chat_id):
             if user.deleted:
                 try:
