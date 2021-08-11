@@ -20,6 +20,7 @@ fbanresults = [
 
 unfbanresults = ["I'll give", "Un-FedBan"]
 
+
 @catub.cat_cmd(
     pattern="fban(?:\s|$)([\s\S]*)",
     command=("fban", plugin_category),
@@ -32,14 +33,19 @@ unfbanresults = ["I'll give", "Un-FedBan"]
 async def group_fban(event):
     "fban a person."
     if Config.FBAN_GROUP_ID == 0:
-        return await edit_delete(event,"__For working of this cmd you need to set FBAN_GROUP_ID in heroku vars__")
+        return await edit_delete(
+            event,
+            "__For working of this cmd you need to set FBAN_GROUP_ID in heroku vars__",
+        )
     user, reason = await get_user_from_event(event)
     if not user:
         return
     if user.id == event.client.uid:
         return await edit_delete(event, "__You can't fban yourself.__")
     if not reason:
-        return await edit_delete(event,"__You haven't mentioned group name and reason for fban")
+        return await edit_delete(
+            event, "__You haven't mentioned group name and reason for fban"
+        )
     reasons = reason.split(" ", 1)
     fedgroup = reasons[0]
     reason = "Not Mentioned" if len(reasons) == 1 else reasons[1]
@@ -47,14 +53,15 @@ async def group_fban(event):
         feds = get_collection("fedids").json
     else:
         feds = {}
-    fbanids = []
     if fedgroup in feds:
-        fbanids = feds[fedgroup]
+        feds[fedgroup]
     else:
         return await edit_delete(
             event, f"__There is no such ({fedgroup}) named fedgroup in your database.__"
         )
-    catevent = await edit_or_reply(event,f"Fbanning {_format.mentionuser(user.first_name ,user.id)}.." )
+    catevent = await edit_or_reply(
+        event, f"Fbanning {_format.mentionuser(user.first_name ,user.id)}.."
+    )
     fedchat = Config.FBAN_GROUP_ID
     success = 0
     errors = []
@@ -68,8 +75,15 @@ async def group_fban(event):
                 await event.client.send_read_acknowledge(
                     conv.chat_id, message=reply, clear_mentions=True
                 )
-                if "All new federation bans will now also remove the members from this chat." not in reply.text:
-                    return await edit_delete(catevent,"__You must be owner of the group(FBAN_GROUP_ID) to perform this action__", 10) 
+                if (
+                    "All new federation bans will now also remove the members from this chat."
+                    not in reply.text
+                ):
+                    return await edit_delete(
+                        catevent,
+                        "__You must be owner of the group(FBAN_GROUP_ID) to perform this action__",
+                        10,
+                    )
                 await conv.send_message(f"/fban {user.id} {reason}")
                 reply = await conv.get_response()
                 await event.client.send_read_acknowledge(
@@ -78,7 +92,7 @@ async def group_fban(event):
                 check = False
                 for txt in fbanresults:
                     if txt in reply.text:
-                        success +=1
+                        success += 1
                         check = True
                 if not check:
                     errors.append(reply.text)
@@ -87,13 +101,10 @@ async def group_fban(event):
     success_report = f"{_format.mentionuser(user.first_name ,user.id)} is succesfully banned in {success} feds of {total}\
         \n**Reason:** __{reason}__.\n"
     if errors != []:
-        success_report +="\n**Error:**"
+        success_report += "\n**Error:**"
         for txt in errors:
-            success_report +=f"\n☞ __{txt}__"
-    await edit_or_reply(catevent,success_report)
-
-
-
+            success_report += f"\n☞ __{txt}__"
+    await edit_or_reply(catevent, success_report)
 
 
 @catub.cat_cmd(
