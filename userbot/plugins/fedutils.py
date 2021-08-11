@@ -54,7 +54,7 @@ async def group_fban(event):
     else:
         feds = {}
     if fedgroup in feds:
-        feds[fedgroup]
+        fedids = feds[fedgroup]
     else:
         return await edit_delete(
             event, f"__There is no such ({fedgroup}) named fedgroup in your database.__"
