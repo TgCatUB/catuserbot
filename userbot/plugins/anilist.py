@@ -24,9 +24,11 @@ from ..helpers.functions import (
     formatJSON,
     get_anime_manga,
     get_anime_schedule,
+    get_filler_episodes,
     getBannerLink,
     memory_file,
     replace_text,
+    search_in_animefiller,
     weekdays,
 )
 from ..helpers.utils import _cattools, reply_id
@@ -257,6 +259,43 @@ async def get_manga(event):
         event.chat_id, file=image, caption=caption, parse_mode="html", reply_to=reply_to
     )
 
+@catub.cat_cmd(
+    pattern="fillers(?:\s|$)([\s\S]*)",
+    command=("fillers", plugin_category),
+    info={
+        "header": "To get list of filler episodes.",
+        "usage": "{tr}fillers <anime name>",
+        "examples": "{tr}fillers one piece",
+    },
+)
+async def get_anime(event):
+    "to get list of filler episodes."
+    input_str = event.pattern_match.group(1)
+    if not input_str:
+        if reply:
+            input_str = reply.text
+        else:
+            return await edit_delete(
+                event, "__What should i search ? Gib me Something to Search__"
+            )
+    result = await search_in_animefiller(input_str)
+    if result == {}:
+        return await edit_or_reply(event,f"**No filler episodes for the given anime**` {input_str}`")
+    for anime in result.keys():
+        response = await get_filler_episodes(anime)
+        msg = ""
+        msg += f"**Fillers for anime** `{anime}`**"
+        msg += "\n\nManga Canon episodes:**\n"
+        msg += str(response.get("total_ep"))
+        msg += "\n\n**Mixed/Canon fillers:**\n"
+        msg += str(response.get("mixed_ep"))
+        msg += "\n\n**Fillers:**\n"
+        msg += str(response.get("filler_episodes"))
+        if result.get("anime_canon_episodes") is not None:
+            msg += "\n\n**Anime Canon episodes:**\n"
+            msg += str(response.get("anime_canon_episodes"))
+        await edit_or_reply(event,msg)
+        return
 
 @catub.cat_cmd(
     pattern="sanime(?:\s|$)([\s\S]*)",
