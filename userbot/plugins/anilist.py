@@ -27,7 +27,7 @@ from ..helpers.functions import (
 from ..helpers.utils import _cattools, reply_id
 
 jikan = Jikan()
-url = "https://graphql.anilist.co"
+anilistapiurl = "https://graphql.anilist.co"
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
 }
@@ -123,7 +123,7 @@ async def user(event):
 
 
 @catub.cat_cmd(
-    pattern="airing ([\s\S]*)",
+    pattern="airing(?:\s|$)([\s\S]*)",
     command=("airing", plugin_category),
     info={
         "header": "Shows you the time left for the new episode of current running anime show.",
@@ -134,9 +134,11 @@ async def user(event):
 async def anilist(event):
     "Get airing date & time of any anime"
     search = event.pattern_match.group(1)
+    if not search:
+        return await edit_delete(event,"__which anime results should i fetch__")
     variables = {"search": search}
     response = requests.post(
-        url, json={"query": airing_query, "variables": variables}
+        anilistapiurl, json={"query": airing_query, "variables": variables}
     ).json()["data"]["Media"]
     if response is None:
         return await edit_delete(event, "__Unable to find the anime.__")
@@ -402,8 +404,8 @@ async def upcoming(event):
     anime = later.get("anime")
     for new in anime:
         name = new.get("title")
-        url = new.get("url")
-        rep += f"• <a href='{url}'>{name}</a>\n"
+        a_url = new.get("url")
+        rep += f"• <a href='{a_url}'>{name}</a>\n"
         if len(rep) > 1000:
             break
     await edit_or_reply(event, rep, parse_mode="html")
