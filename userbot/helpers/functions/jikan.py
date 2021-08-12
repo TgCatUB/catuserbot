@@ -2,7 +2,6 @@ import json
 import re
 import textwrap
 import time
-from datetime import datetime
 from io import BytesIO, StringIO
 
 import bs4
@@ -20,9 +19,9 @@ jikan = Jikan()
 anilisturl = "https://graphql.anilist.co"
 # Anime Helper
 
-weekdays  = {
-    "monday" : 0,
-    "tuesday" : 1,
+weekdays = {
+    "monday": 0,
+    "tuesday": 1,
     "wednesday": 2,
     "thursday": 3,
     "friday": 4,
@@ -30,11 +29,13 @@ weekdays  = {
     "sunday": 6,
 }
 
+
 def get_weekday(dayid):
     for key, value in weekdays.items():
         if value == dayid:
             return key
-        
+
+
 character_query = """
     query ($query: String) {
         Character (search: $query) {
@@ -187,6 +188,7 @@ query ($search: String) {
 }
 """
 
+
 async def get_anime_schedule(weekid):
     "get anime schedule"
     dayname = get_weekday(weekid).title()
@@ -195,7 +197,8 @@ async def get_anime_schedule(weekid):
         scheduled_list = (await animesession.schedule(day=day)).get(day)
         for a_name in scheduled_list:
             result += f"• `{a_name['title']}`\n"
-    return result , dayname
+    return result, dayname
+
 
 async def formatJSON(outData):
     msg = ""
