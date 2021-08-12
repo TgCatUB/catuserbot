@@ -1,5 +1,6 @@
 import html
 import os
+import re
 import textwrap
 from datetime import datetime
 from urllib.parse import quote_plus
@@ -265,8 +266,9 @@ async def get_manga(event):
     command=("fillers", plugin_category),
     info={
         "header": "To get list of filler episodes.",
-        "usage": "{tr}fillers <anime name>",
-        "examples": "{tr}fillers one piece",
+        "flags": {"-n": "If more than one name have same common word then to select required anime"},
+        "usage": ["{tr}fillers <anime name>","{tr}fillers -n<number> <anime name>"],
+        "examples": ["{tr}fillers one piece","{tr}fillers -n5 naruto",],
     },
 )
 async def get_anime(event):
@@ -280,15 +282,23 @@ async def get_anime(event):
             return await edit_delete(
                 event, "__What should i search ? Gib me Something to Search__"
             )
+    anime = re.findall(r"-n\d+", input_str)
+    try:
+        anime = anime[0]
+        anime = anime.replace("-n", "")
+        input_str = input_str.replace("-n" + anime, "")
+        anime = int(anime)
+    except IndexError:
+        anime = 0
     result = await search_in_animefiller(input_str)
     if result == {}:
         return await edit_or_reply(
             event, f"**No filler episodes for the given anime**` {input_str}`"
         )
-    for anime in result.keys():
-        response = await get_filler_episodes(result[anime])
+    if len(result) == 1:
+        response = await get_filler_episodes(result[list(result.keys())[0]])
         msg = ""
-        msg += f"**Fillers for anime** `{anime}`**"
+        msg += f"**Fillers for anime** `{list(result.keys())[0]}`**"
         msg += "\n\n• Manga Canon episodes:**\n"
         msg += str(response.get("total_ep"))
         msg += "\n\n**• Mixed/Canon fillers:**\n"
@@ -300,6 +310,27 @@ async def get_anime(event):
             msg += str(response.get("anime_canon_episodes"))
         await edit_or_reply(event, msg)
         return
+    if anime == 0:
+        msg = f"**More than 1 result found for {input_str}. so try as** `{Config.COMMAND_HAND_LER}fillers -n<number> {input_str}`\n\n"
+        for i, an in enumerate(list(resuly.keys()), start=1):
+            msg += f"{i}. {an}\n"
+        await edit_or_reply(event, msg)
+        return
+    response = await get_filler_episodes(result[list(result.keys())[anime-1]])
+    msg = ""
+    msg += f"**Fillers for anime** `{list(result.keys())[anime-1]}`**"
+    msg += "\n\n• Manga Canon episodes:**\n"
+    msg += str(response.get("total_ep"))
+    msg += "\n\n**• Mixed/Canon fillers:**\n"
+    msg += str(response.get("mixed_ep"))
+    msg += "\n\n**• Fillers:**\n"
+    msg += str(response.get("filler_episodes"))
+    if response.get("anime_canon_episodes") is not None:
+        msg += "\n\n**• Anime Canon episodes:**\n"
+        msg += str(response.get("anime_canon_episodes"))
+    await edit_or_reply(event, msg)
+
+    
 
 
 @catub.cat_cmd(
