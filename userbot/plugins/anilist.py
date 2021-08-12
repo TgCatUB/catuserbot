@@ -295,7 +295,7 @@ async def get_anime(event):
         anime = int(anime)
     except IndexError:
         anime = 0
-    result = await search_in_animefiller(input_str)
+    result = await search_in_animefiller(input_str.strip())
     if result == {}:
         return await edit_or_reply(
             event, f"**No filler episodes for the given anime**` {input_str}`"
@@ -313,16 +313,12 @@ async def get_anime(event):
         if response.get("anime_canon_episodes") is not None:
             msg += "\n\n**• Anime Canon episodes:**\n"
             msg += str(response.get("anime_canon_episodes"))
-        await edit_or_reply(event, msg)
-        return
+        return await edit_or_reply(event, msg)
     if anime == 0:
         msg = f"**More than 1 result found for {input_str}. so try as** `{Config.COMMAND_HAND_LER}fillers -n<number> {input_str}`\n\n"
         for i, an in enumerate(list(result.keys()), start=1):
             msg += f"{i}. {an}\n"
-        await edit_or_reply(event, msg)
-        return
-    print(anime)
-    print(list(result.keys())[anime - 1])
+        return await edit_or_reply(event, msg)
     response = await get_filler_episodes(result[list(result.keys())[anime - 1]])
     msg = ""
     msg += f"**Fillers for anime** `{list(result.keys())[anime-1]}`**"
