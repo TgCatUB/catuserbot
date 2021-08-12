@@ -569,32 +569,32 @@ async def get_filler_episodes(filler_id):  # sourcery no-metrics
         mixed_episodes = None
         filler_episodes = None
         anime_canon_episodes = None
-        total_ep = "".join(f"{total_no.text}, " for total_no in total_episodes)
+        total_ep = ", ".join(total_no.text for total_no in total_episodes)
     elif len(complete_anime) == 2:
         total_episodes = complete_anime[0].findAll("a")
         filler_ep = complete_anime[1].findAll("a")
         mixed_episodes = None
         anime_canon_episodes = None
-        total_ep = "".join(f"{total_no.text}, " for total_no in total_episodes)
-        filler_episodes = "".join(f"{filler_no.text}, " for filler_no in filler_ep)
+        total_ep = ", ".join(total_no.text for total_no in total_episodes)
+        filler_episodes = ", ".join(filler_no.text for filler_no in filler_ep)
     elif len(complete_anime) == 3:
         total_episodes = complete_anime[0].findAll("a")
         mixed_ep = complete_anime[1].findAll("a")
         filler_ep = complete_anime[2].findAll("a")
         anime_canon_episodes = None
-        total_ep = "".join(f"{total_no.text}, " for total_no in total_episodes)
-        filler_episodes = "".join(f"{filler_no.text}, " for filler_no in filler_ep)
-        mixed_episodes = "".join(f"{miixed_no.text}, " for miixed_no in mixed_ep)
+        total_ep = ", ".join(total_no.text for total_no in total_episodes)
+        filler_episodes = ", ".join(filler_no.text for filler_no in filler_ep)
+        mixed_episodes = ", ".join(miixed_no.text for miixed_no in mixed_ep)
     elif len(complete_anime) == 4:
         total_episodes = complete_anime[0].findAll("a")
         mixed_ep = complete_anime[1].findAll("a")
         filler_ep = complete_anime[2].findAll("a")
         animecanon_ep = complete_anime[3].findAll("a")
-        total_ep = "".join(f"{total_no.text}, " for total_no in total_episodes)
-        filler_episodes = "".join(f"{filler_no.text}, " for filler_no in filler_ep)
-        mixed_episodes = "".join(f"{miixed_no.text}, " for miixed_no in mixed_ep)
-        anime_canon_episodes = "".join(
-            f"{animecanon_no.text}, " for animecanon_no in animecanon_ep
+        total_ep = ", ".join(total_no.text for total_no in total_episodes)
+        filler_episodes = ", ".join(filler_no.text for filler_no in filler_ep)
+        mixed_episodes = ", ".join(miixed_no.text for miixed_no in mixed_ep)
+        anime_canon_episodes = ", ".join(
+            animecanon_no.text for animecanon_no in animecanon_ep
         )
     return {
         "filler_id": filler_id,
