@@ -82,7 +82,7 @@ async def anilist_usersearch(event):
             search_query = reply.text
         else:
             return await edit_delete(event, "__Whom should i search.__")
-    catevent = await edit_or_reply(event,"`Searching user profile in anilist...`")
+    catevent = await edit_or_reply(event, "`Searching user profile in anilist...`")
     searchresult = await anilist_user(search_query)
     if len(searchresult) == 1:
         return await edit_or_reply(
