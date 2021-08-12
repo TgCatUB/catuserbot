@@ -316,17 +316,13 @@ def getBannerLink(mal, kitsu_search=True):
         if response.status_code == 200:
             return image
     # try getting anilist banner
-    query = """
-    query ($idMal: Int){
-        Media(idMal: $idMal){
-            bannerImage
-        }
-    }
-    """
-    data = {"query": query, "variables": {"idMal": int(mal)}}
-    image = requests.post(anilisturl, json=data).json()["data"]["Media"]["bannerImage"]
+    query = '''query($id: Int, $type: MediaType){Media(idMal: $id, type: $type){
+id
+siteUrl}}'''
+    data = {"query": query, "variables": {"idMal": int(mal), "type": "ANIME"}}
+    image = requests.post(anilisturl, json=data).json()["data"]["Media"]["id"]
     if image:
-        return image
+        return f"https://img.anili.st/media/{image}"
     return getPosterLink(mal)
 
 
@@ -339,7 +335,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
             TRAILER = f"<a href='{trailer}'>🎬 Trailer</a>"
         else:
             TRAILER = "🎬 <i>No Trailer Available</i>"
-        image = getBannerLink(mal_id)
+        image = getBannerLink(mal_id, False)
         studio_string = ", ".join(
             studio_info["name"] for studio_info in result["studios"]
         )
