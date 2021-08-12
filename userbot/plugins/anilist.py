@@ -475,6 +475,8 @@ async def aschedule_fetch(event):
     input_str = event.pattern_match.group(1) or datetime.now().weekday()
     if input_str in weekdays:
         input_str = weekdays[input_str]
+    print(input_str)
+    print(typpe(input_str))
     if input_str not in [0, 1, 2, 3, 4, 5, 6]:
         return await edit_delete(event, "`You have given and invalid weekday`", 7)
     result = await get_anime_schedule(input_str)
