@@ -158,6 +158,7 @@ def paginate_help(
     modulo_page = page_number % max_num_pages
     if plugins:
         if len(pairs) > number_of_rows:
+
             pairs = pairs[
                 modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
             ] + [
@@ -170,6 +171,8 @@ def paginate_help(
         else:
             pairs = pairs + [(Button.inline("⚙️ Main Menu", data="mainmenu"),)]
     elif len(pairs) > number_of_rows:
+        if category_pgno <0:
+            category_pgno = len(pairs) + category_pgno
         pairs = pairs[
             modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
         ] + [
@@ -189,6 +192,8 @@ def paginate_help(
             )
         ]
     else:
+        if category_pgno <0:
+            category_pgno = len(pairs) + category_pgno
         pairs = pairs + [
             (
                 Button.inline(
