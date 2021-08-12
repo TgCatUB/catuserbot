@@ -259,6 +259,7 @@ async def get_manga(event):
         event.chat_id, file=image, caption=caption, parse_mode="html", reply_to=reply_to
     )
 
+
 @catub.cat_cmd(
     pattern="fillers(?:\s|$)([\s\S]*)",
     command=("fillers", plugin_category),
@@ -280,7 +281,9 @@ async def get_anime(event):
             )
     result = await search_in_animefiller(input_str)
     if result == {}:
-        return await edit_or_reply(event,f"**No filler episodes for the given anime**` {input_str}`")
+        return await edit_or_reply(
+            event, f"**No filler episodes for the given anime**` {input_str}`"
+        )
     for anime in result.keys():
         response = await get_filler_episodes(anime)
         msg = ""
@@ -294,8 +297,9 @@ async def get_anime(event):
         if result.get("anime_canon_episodes") is not None:
             msg += "\n\n**Anime Canon episodes:**\n"
             msg += str(response.get("anime_canon_episodes"))
-        await edit_or_reply(event,msg)
+        await edit_or_reply(event, msg)
         return
+
 
 @catub.cat_cmd(
     pattern="sanime(?:\s|$)([\s\S]*)",
