@@ -558,7 +558,7 @@ async def search_in_animefiller(query):
     }
 
 
-def get_filler_episodes(filler_id):  # sourcery no-metrics
+async def get_filler_episodes(filler_id):  # sourcery no-metrics
     "to get eppisode numbers"
     html = requests.get(animnefillerurl + filler_id).text
     soup = bs4.BeautifulSoup(html, "html.parser")
