@@ -295,7 +295,8 @@ async def get_anime(event):
         anime = int(anime)
     except IndexError:
         anime = 0
-    result = await search_in_animefiller(input_str.strip())
+    input_str = input_str.strip()
+    result = await search_in_animefiller(input_str)
     if result == {}:
         return await edit_or_reply(
             event, f"**No filler episodes for the given anime**` {input_str}`"
