@@ -1,17 +1,18 @@
 import html
+import os
 import textwrap
 from datetime import datetime
 from urllib.parse import quote_plus
-import os
+
 import aiohttp
 import bs4
 import jikanpy
 import requests
 from jikanpy import Jikan
 from jikanpy.exceptions import APIException
+from pySmartDL import SmartDL
 from telegraph import exceptions, upload_file
 
-from pySmartDL import SmartDL
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
@@ -61,6 +62,7 @@ async def anime_quote(event):
         parse_mode="html",
     )
 
+
 @catub.cat_cmd(
     pattern="aluser(?:\s|$)([\s\S]*)",
     command=("aluser", plugin_category),
@@ -73,7 +75,7 @@ async def anime_quote(event):
 async def anilist_user(event):
     "Search user profiles of Anilist."
     search_query = event.pattern_match.group(1)
-    replyto = await reply_id(event)
+    await reply_id(event)
     reply = await event.get_reply_message()
     if not search_query:
         if reply and reply.text:
@@ -82,20 +84,23 @@ async def anilist_user(event):
             return await edit_delete(event, "__Whom should i search.__")
     searchresult = await anilist_user(search_query)
     if len(searchresult) == 1:
-        return await edit_or_reply(event,f"**Error while searching user profile:**\n{searchresult[0]}")
+        return await edit_or_reply(
+            event, f"**Error while searching user profile:**\n{searchresult[0]}"
+        )
     downloader = SmartDL(searchresult[1], ppath, progress_bar=False)
     downloader.start(blocking=False)
     while not downloader.isFinished():
         pass
     await event.client.send_file(
-                event.chat_id,
-                ppath,
-                caption=searchresult[0],
-                reply_to=reply_to,
-            )
+        event.chat_id,
+        ppath,
+        caption=searchresult[0],
+        reply_to=reply_to,
+    )
     os.remove(ppath)
     await catevent.delete()
-    
+
+
 @catub.cat_cmd(
     pattern="mal(?:\s|$)([\s\S]*)",
     command=("mal", plugin_category),
