@@ -220,7 +220,8 @@ async def _(event):
     info={
         "header": "To check deleted accounts and clean",
         "description": "Searches for deleted accounts in a group. Use `.zombies clean` to remove deleted accounts from the group.",
-        "usage": ["{tr}zombies", "{tr}zombies clean"],
+        "flag": {"-r":"Use this for check users from banned and restricted users"},
+        "usage": ["{tr}zombies", "{tr}zombies clean","{tr}zombies -r", "{tr}zombies -r clean"],
     },
     groups_only=True,
 )
