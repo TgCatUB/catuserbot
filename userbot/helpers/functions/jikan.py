@@ -316,9 +316,9 @@ def getBannerLink(mal, kitsu_search=True):
         if response.status_code == 200:
             return image
     # try getting anilist banner
-    query = '''query($id: Int, $type: MediaType){Media(idMal: $id, type: $type){
+    query = """query($id: Int, $type: MediaType){Media(idMal: $id, type: $type){
 id
-siteUrl}}'''
+siteUrl}}"""
     data = {"query": query, "variables": {"idMal": int(mal), "type": "ANIME"}}
     image = requests.post(anilisturl, json=data).json()["data"]["Media"]["id"]
     if image:
