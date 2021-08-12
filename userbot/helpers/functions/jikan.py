@@ -14,7 +14,7 @@ from telethon.utils import is_video
 from ..tools import post_to_telegraph
 
 jikan = Jikan()
-url = "https://graphql.anilist.co"
+anilisturl = "https://graphql.anilist.co"
 # Anime Helper
 
 
@@ -103,43 +103,6 @@ airing_query = """
     }
     """
 
-anime_query = """
-   query ($id: Int,$search: String) {
-      Media (id: $id, type: ANIME,search: $search) {
-        id
-        title {
-          romaji
-          english
-          native
-        }
-        description (asHtml: false)
-        startDate{
-            year
-          }
-          episodes
-          season
-          type
-          format
-          status
-          duration
-          siteUrl
-          studios{
-              nodes{
-                   name
-              }
-          }
-          trailer{
-               id
-               site
-               thumbnail
-          }
-          averageScore
-          genres
-          bannerImage
-      }
-    }
-"""
-
 manga_query = """
 query ($id: Int,$search: String) {
       Media (id: $id, type: MANGA,search: $search) {
@@ -164,7 +127,8 @@ query ($id: Int,$search: String) {
     }
 """
 
-ANIME_QUERY = """
+
+anime_query ="""
 query ($id: Int, $idMal:Int, $search: String, $type: MediaType, $asHtml: Boolean) {
   Media (id: $id, idMal: $idMal, search: $search, type: $type) {
     id
@@ -176,6 +140,7 @@ query ($id: Int, $idMal:Int, $search: String, $type: MediaType, $asHtml: Boolean
     }
     format
     status
+    type 
     description (asHtml: $asHtml)
     startDate {
       year
@@ -328,7 +293,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
     if search_type == "anime_anime":
         anime_malid = result["mal_id"]
         anime_result = await anime_json_synomsis(
-            ANIME_QUERY, {"idMal": anime_malid, "asHtml": True, "type": "ANIME"}
+            anime_query, {"idMal": anime_malid, "asHtml": True, "type": "ANIME"}
         )
         anime_data = anime_result["data"]["Media"]
         html_char = ""
@@ -369,7 +334,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         html_pc += (
             f"<a href='https://myanimelist.net/anime/{anime_malid}'>View on MAL</a>"
         )
-        html_pc += f"<a href='{url}'> View on anilist.co</a>"
+        html_pc += f"<a href='{result['url']}'> View on anilist.co</a>"
         html_pc += f"<img src='{bannerImg}'/>"
         title_h = english or romaji
     if search_type == "anime_anime":
@@ -461,8 +426,7 @@ async def callAPI(search_str):
     }
     """
     variables = {"search": search_str}
-    url = "https://graphql.anilist.co"
-    response = requests.post(url, json={"query": query, "variables": variables})
+    response = requests.post(anilisturl, json={"query": query, "variables": variables})
     return response.text
 
 
