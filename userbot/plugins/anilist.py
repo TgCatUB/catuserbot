@@ -69,7 +69,7 @@ async def anime_quote(event):
     info={
         "header": "Search User profiles in anilist.",
         "usage": "{tr}aluser <username>",
-        "examples": "{tr}aluser KenKaneki",
+        "examples": "{tr}aluser Infinity20998",
     },
 )
 async def anilist_usersearch(event):
