@@ -226,7 +226,7 @@ async def anilist_user(input_str):
     result = requests.post(
         anilisturl, json={"query": user_query, "variables": username}
     ).json()
-    error = k.get("errors")
+    error = result.get("errors")
     if error:
         error_sts = error[0].get("message")
         return [f"{error_sts}"]
