@@ -12,8 +12,8 @@ from jikanpy import Jikan
 from telethon.tl.types import DocumentAttributeAnimated
 from telethon.utils import is_video
 
-from ..tools import post_to_telegraph
 from ..progress import readable_time
+from ..tools import post_to_telegraph
 
 jikan = Jikan()
 anilisturl = "https://graphql.anilist.co"
