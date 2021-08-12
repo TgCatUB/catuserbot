@@ -401,7 +401,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         )
         coverImg = anime_data.get("coverImage")["extraLarge"]
         bannerImg = anime_data.get("bannerImage")
-        anime_data.get("siteUrl")
+        anilist_animelink = anime_data.get("siteUrl")
         title_img = coverImg or bannerImg
         romaji = anime_data["title"]["romaji"]
         native = anime_data["title"]["native"]
@@ -422,7 +422,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         html_pc += (
             f"<a href='https://myanimelist.net/anime/{anime_malid}'>View on MAL</a>"
         )
-        html_pc += f"<a href='{anilisturl}'> View on anilist.co</a>"
+        html_pc += f"<a href='{anilist_animelink}'> View on anilist.co</a>"
         html_pc += f"<img src='{bannerImg}'/>"
         title_h = english or romaji
     if search_type == "anime_anime":
