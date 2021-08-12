@@ -2,7 +2,7 @@ import html
 import textwrap
 from datetime import datetime
 from urllib.parse import quote_plus
-
+import os
 import aiohttp
 import bs4
 import jikanpy
@@ -11,12 +11,14 @@ from jikanpy import Jikan
 from jikanpy.exceptions import APIException
 from telegraph import exceptions, upload_file
 
+from pySmartDL import SmartDL
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import media_type, readable_time, time_formatter
 from ..helpers.functions import (
     airing_query,
+    anilist_user,
     callAPI,
     formatJSON,
     get_anime_manga,
@@ -27,10 +29,15 @@ from ..helpers.functions import (
 from ..helpers.utils import _cattools, reply_id
 
 jikan = Jikan()
+
 anilistapiurl = "https://graphql.anilist.co"
+
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
 }
+
+ppath = os.path.join(os.getcwd(), "temp", "anilistuser.jpg")
+
 plugin_category = "extra"
 
 
@@ -54,7 +61,41 @@ async def anime_quote(event):
         parse_mode="html",
     )
 
-
+@catub.cat_cmd(
+    pattern="aluser(?:\s|$)([\s\S]*)",
+    command=("aluser", plugin_category),
+    info={
+        "header": "Search User profiles in anilist.",
+        "usage": "{tr}aluser <username>",
+        "examples": "{tr}aluser KenKaneki",
+    },
+)
+async def anilist_user(event):
+    "Search user profiles of Anilist."
+    search_query = event.pattern_match.group(1)
+    replyto = await reply_id(event)
+    reply = await event.get_reply_message()
+    if not search_query:
+        if reply and reply.text:
+            search_query = reply.text
+        else:
+            return await edit_delete(event, "__Whom should i search.__")
+    searchresult = await anilist_user(search_query)
+    if len(searchresult) == 1:
+        return await edit_or_reply(event,f"**Error while searching user profile:**\n{searchresult[0]}")
+    downloader = SmartDL(searchresult[1], ppath, progress_bar=False)
+    downloader.start(blocking=False)
+    while not downloader.isFinished():
+        pass
+    await event.client.send_file(
+                event.chat_id,
+                ppath,
+                caption=searchresult[0],
+                reply_to=reply_to,
+            )
+    os.remove(ppath)
+    await catevent.delete()
+    
 @catub.cat_cmd(
     pattern="mal(?:\s|$)([\s\S]*)",
     command=("mal", plugin_category),
