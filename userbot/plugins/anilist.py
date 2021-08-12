@@ -75,17 +75,18 @@ async def anime_quote(event):
 async def anilist_user(event):
     "Search user profiles of Anilist."
     search_query = event.pattern_match.group(1)
-    await reply_id(event)
+    reply_to = await reply_id(event)
     reply = await event.get_reply_message()
     if not search_query:
         if reply and reply.text:
             search_query = reply.text
         else:
             return await edit_delete(event, "__Whom should i search.__")
+    catevent = await edit_or_reply(event,"`Searching user profile in anilist...`")
     searchresult = await anilist_user(search_query)
     if len(searchresult) == 1:
         return await edit_or_reply(
-            event, f"**Error while searching user profile:**\n{searchresult[0]}"
+            catevent, f"**Error while searching user profile:**\n{searchresult[0]}"
         )
     downloader = SmartDL(searchresult[1], ppath, progress_bar=False)
     downloader.start(blocking=False)
