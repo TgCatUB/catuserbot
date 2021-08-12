@@ -191,10 +191,10 @@ query ($search: String) {
 
 async def get_anime_schedule(weekid):
     "get anime schedule"
-    dayname = get_weekday(weekid).title()
-    result = f"✙ **Scheduled animes for {dayname} are : **\n\n"
+    dayname = get_weekday(weekid)
+    result = f"✙ **Scheduled animes for {dayname.title()} are : **\n\n"
     async with jikanpy.AioJikan() as animesession:
-        scheduled_list = (await animesession.schedule(day=day)).get(day)
+        scheduled_list = (await animesession.schedule(day=dayname)).get(day)
         for a_name in scheduled_list:
             result += f"• `{a_name['title']}`\n"
     return result, dayname
