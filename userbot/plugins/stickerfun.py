@@ -16,7 +16,7 @@ from telethon.tl.types import InputMessagesFilterDocument
 
 from userbot import catub
 
-from ..core.managers import edit_or_reply, edit_delete
+from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import (
     clippy,
     convert_tosticker,
@@ -26,6 +26,7 @@ from ..helpers.functions import (
     waifutxt,
 )
 from ..helpers.utils import reply_id
+
 plugin_category = "fun"
 
 
