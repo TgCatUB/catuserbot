@@ -237,17 +237,17 @@ async def anilist_user(input_str):
 **User name :** [{user_data['name']}]({user_data['siteUrl']})
 **Anilist ID :** `{user_data['id']}` 
 
-**•  Anime Stats**
-☞ **Total Anime Watched :** `{user_data["statistics"]["anime"]['count']}`
-☞ **Total Episode Watched : **`{user_data["statistics"]["anime"]['episodesWatched']}`
-☞ **Total Time Spent : **`{readable_time(user_data["statistics"]["anime"]['minutesWatched']*60)}`
-☞ **Average Score :** `{user_data["statistics"]["anime"]['meanScore']}`
+**✙  Anime Stats**
+• **Total Anime Watched :** `{user_data["statistics"]["anime"]['count']}`
+• **Total Episode Watched : **`{user_data["statistics"]["anime"]['episodesWatched']}`
+• **Total Time Spent : **`{readable_time(user_data["statistics"]["anime"]['minutesWatched']*60)}`
+• **Average Score :** `{user_data["statistics"]["anime"]['meanScore']}`
 
-**•  Manga Stats**
-☞ **Total Manga Read :** `{user_data["statistics"]["manga"]['count']}`
-☞ **Total Chapters Read :** `{user_data["statistics"]["manga"]['chaptersRead']}`
-☞ **Total Volumes Read : **`{user_data["statistics"]["manga"]['volumesRead']}`
-☞ **Average Score : **`{user_data["statistics"]["manga"]['meanScore']}`
+**✙  Manga Stats**
+• **Total Manga Read :** `{user_data["statistics"]["manga"]['count']}`
+• **Total Chapters Read :** `{user_data["statistics"]["manga"]['chaptersRead']}`
+• **Total Volumes Read : **`{user_data["statistics"]["manga"]['volumesRead']}`
+• **Average Score : **`{user_data["statistics"]["manga"]['meanScore']}`
 """
     )
     return stats, f'https://img.anili.st/user/{user_data["id"]}?a={time.time()}'
