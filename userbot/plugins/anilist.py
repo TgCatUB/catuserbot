@@ -319,7 +319,13 @@ async def get_anime(event):
         for i, an in enumerate(list(result.keys()), start=1):
             msg += f"{i}. {an}\n"
         return await edit_or_reply(event, msg)
-    response = await get_filler_episodes(result[list(result.keys())[anime - 1]])
+    try:
+        response = await get_filler_episodes(result[list(result.keys())[anime - 1]])
+    except IndexError:
+        msg = f"**Given index for {input_str} is wrong check again for correct index and then try** `{Config.COMMAND_HAND_LER}fillers -n<index> {input_str}`\n\n"
+        for i, an in enumerate(list(result.keys()), start=1):
+            msg += f"{i}. {an}\n"
+        return await edit_or_reply(event, msg)
     msg = ""
     msg += f"**Fillers for anime** `{list(result.keys())[anime-1]}`**"
     msg += "\n\n• Manga Canon episodes:**\n"
