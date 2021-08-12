@@ -224,7 +224,7 @@ async def anilist_user(input_str):
     "Fetch user details from anilist"
     username = {"search": input_str}
     result = requests.post(
-        url, json={"query": user_query, "variables": username}
+        anilisturl, json={"query": user_query, "variables": username}
     ).json()
     error = k.get("errors")
     if error:
