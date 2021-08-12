@@ -1,8 +1,9 @@
 import json
 import re
 import textwrap
-from io import BytesIO, StringIO
 import time
+from io import BytesIO, StringIO
+
 import bs4
 import jikanpy
 import requests
@@ -170,6 +171,7 @@ query ($search: String) {
 }
 """
 
+
 async def formatJSON(outData):
     msg = ""
     jsonData = json.loads(outData)
@@ -217,17 +219,20 @@ def shorten(description, info="anilist.co"):
         .replace("__", "**")
     )
 
+
 async def anilist_user(input_str):
     "Fetch user details from anilist"
     username = {"search": input_str}
-    result = requests.post(url, json={"query": user_query, "variables": username}).json()
+    result = requests.post(
+        url, json={"query": user_query, "variables": username}
+    ).json()
     error = k.get("errors")
     if error:
         error_sts = error[0].get("message")
         return [f"{error_sts}"]
-    user_data = k['data']['User']
-    anime = data['statistics']['anime']
-    manga = data['statistics']['manga']
+    user_data = k["data"]["User"]
+    anime = data["statistics"]["anime"]
+    manga = data["statistics"]["manga"]
     stats = textwrap.dedent(
         f"""
 **User name:** [{user_data['name']}]({user_data['siteUrl']})
@@ -244,8 +249,10 @@ Total Manga Read: `{manga['count']}`
 Total Chapters Read: `{manga['chaptersRead']}`
 Total Volumes Read: `{manga['volumesRead']}`
 Average Score: `{manga['meanScore']}`
-""" )
+"""
+    )
     return stats, f'https://img.anili.st/user/{user_data["id"]}?a={time.time()}'
+
 
 async def anime_json_synomsis(query, vars_):
     """Makes a Post to https://graphql.anilist.co."""
@@ -289,9 +296,7 @@ def getBannerLink(mal, kitsu_search=True):
     }
     """
     data = {"query": query, "variables": {"idMal": int(mal)}}
-    image = requests.post(anilisturl, json=data).json()["data"][
-        "Media"
-    ]["bannerImage"]
+    image = requests.post(anilisturl, json=data).json()["data"]["Media"]["bannerImage"]
     if image:
         return image
     return getPosterLink(mal)
