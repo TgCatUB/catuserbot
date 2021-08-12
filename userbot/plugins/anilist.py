@@ -135,7 +135,7 @@ async def anilist(event):
     "Get airing date & time of any anime"
     search = event.pattern_match.group(1)
     if not search:
-        return await edit_delete(event,"__which anime results should i fetch__")
+        return await edit_delete(event, "__which anime results should i fetch__")
     variables = {"search": search}
     response = requests.post(
         anilistapiurl, json={"query": airing_query, "variables": variables}
