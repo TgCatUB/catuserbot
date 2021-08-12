@@ -459,6 +459,7 @@ async def upcoming(event):
             break
     await edit_or_reply(event, rep, parse_mode="html")
 
+
 @catub.cat_cmd(
     pattern="aschedule(?: |$)([\S\s]*)",
     command=("aschedule", plugin_category),
@@ -466,16 +467,16 @@ async def upcoming(event):
         "header": "Shows you animes to be aired on that day.",
         "description": "To get list of animes to be aired on that day use can also use 0 for monday , 1 for tuesday.... 6 for sunday.",
         "usage": "{tr}aschedule <weekdays/[0-6]",
-        "example": ["{tr}aschedule sunday","{tr}aschedule 5"],
+        "example": ["{tr}aschedule sunday", "{tr}aschedule 5"],
     },
-) 
+)
 async def aschedule_fetch(event):
     "To get list of animes scheduled on that day"
     input_str = event.pattern_match.group(1) or datetime.now().weekday()
     if input_str in weekdays:
         input_str = weekdays[input_str]
-    if input_str not in [0,1,2,3,4,5,6]:
-        return await edit_delete(event,"`You have given and invalid weekday`",7)
+    if input_str not in [0, 1, 2, 3, 4, 5, 6]:
+        return await edit_delete(event, "`You have given and invalid weekday`", 7)
     result = await get_anime_schedule(input_str)
     await edit_or_reply(event, result[0])
 
