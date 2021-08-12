@@ -17,6 +17,7 @@ extractor = URLExtract()
 vlist = [
     "ALIVE_PIC",
     "ALIVE_EMOJI",
+    "ALIVE_TEMPLATE",
     "ALIVE_TEXT",
     "ALLOW_NSFW",
     "HELP_EMOJI",
@@ -50,7 +51,7 @@ oldvars = {
             "get": "To show the already existing var value.",
             "del": "To delete the existing value",
         },
-        "var name": "[list of vars](https://catuserbot.gitbook.io/catuserbot/data-vars-setup)",
+        "var name": "**[list of vars]**(https://catuserbot.gitbook.io/catuserbot/data-vars-setup)",
         "usage": [
             "{tr}setdv <var name> <var value>",
             "{tr}getdv <var name>",
@@ -83,6 +84,8 @@ async def bad(event):  # sourcery no-metrics
         if vname in oldvars:
             vname = oldvars[vname]
         if cmd == "set":
+            if not vinfo and vname == "ALIVE_TEMPLATE":
+                return await edit_delete(event, f"Check @cat_alive")
             if not vinfo:
                 return await edit_delete(
                     event, f"Give some values which you want to save for **{vname}**"
