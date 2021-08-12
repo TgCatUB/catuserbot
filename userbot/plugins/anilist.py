@@ -322,6 +322,7 @@ async def get_anime(event):
         await edit_or_reply(event, msg)
         return
     print(anime)
+    print(list(result.keys())[anime - 1])
     response = await get_filler_episodes(result[list(result.keys())[anime - 1]])
     msg = ""
     msg += f"**Fillers for anime** `{list(result.keys())[anime-1]}`**"
