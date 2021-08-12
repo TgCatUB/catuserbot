@@ -295,7 +295,7 @@ async def get_anime(event):
         msg += str(response.get("mixed_ep"))
         msg += "\n\n**• Fillers:**\n"
         msg += str(response.get("filler_episodes"))
-        if result.get("anime_canon_episodes") is not None:
+        if response.get("anime_canon_episodes") is not None:
             msg += "\n\n**• Anime Canon episodes:**\n"
             msg += str(response.get("anime_canon_episodes"))
         await edit_or_reply(event, msg)
