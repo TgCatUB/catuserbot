@@ -194,7 +194,7 @@ async def get_anime_schedule(weekid):
     dayname = get_weekday(weekid)
     result = f"✙ **Scheduled animes for {dayname.title()} are : **\n\n"
     async with jikanpy.AioJikan() as animesession:
-        scheduled_list = (await animesession.schedule(day=dayname)).get(day)
+        scheduled_list = (await animesession.schedule(day=dayname)).get(dayname)
         for a_name in scheduled_list:
             result += f"• `{a_name['title']}`\n"
     return result, dayname
