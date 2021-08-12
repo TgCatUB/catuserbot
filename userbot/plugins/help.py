@@ -85,7 +85,7 @@ async def plugininfo(input_str, event, flag):
     category = getkey(input_str)
     if category is not None:
         outstr += f"**Category :** `{category}`\n\n"
-    for cmd in cmds:
+    for cmd in sorted(cmds):
         outstr += f"•  **cmd :** `{cmdprefix}{cmd}`\n"
         try:
             outstr += f"•  **info :** `{CMD_INFO[cmd][1]}`\n\n"
@@ -118,7 +118,7 @@ async def cmdlist():
         for plugin in plugins:
             cmds = PLG_INFO[plugin]
             outstr += f"• **{plugin.title()} has {len(cmds)} commands**\n"
-            for cmd in cmds:
+            for cmd in sorted(cmds):
                 outstr += f"  - `{cmdprefix}{cmd}`\n"
             outstr += "\n"
     outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help -c <command name>`"
