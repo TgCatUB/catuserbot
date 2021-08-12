@@ -230,7 +230,7 @@ async def anilist_user(input_str):
     if error:
         error_sts = error[0].get("message")
         return [f"{error_sts}"]
-    user_data = k["data"]["User"]
+    user_data = result["data"]["User"]
     anime = data["statistics"]["anime"]
     manga = data["statistics"]["manga"]
     stats = textwrap.dedent(
