@@ -307,7 +307,7 @@ def getKitsu(mal):
     return requests.get(link).json()["data"]["id"]
 
 
-def getBannerLink(mal, kitsu_search=True,anilistid=0):
+def getBannerLink(mal, kitsu_search=True, anilistid=0):
     # try getting kitsu backdrop
     if kitsu_search:
         kitsu = getKitsu(mal)
@@ -315,7 +315,7 @@ def getBannerLink(mal, kitsu_search=True,anilistid=0):
         response = requests.get(image)
         if response.status_code == 200:
             return image
-    if anilistid !=0:
+    if anilistid != 0:
         return f"https://img.anili.st/media/{anilistid}"
     # try getting anilist banner
     query = """
@@ -401,12 +401,12 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         )
         coverImg = anime_data.get("coverImage")["extraLarge"]
         bannerImg = anime_data.get("bannerImage")
-        anilist = anime_data.get("siteUrl")
+        anime_data.get("siteUrl")
         title_img = coverImg or bannerImg
         romaji = anime_data["title"]["romaji"]
         native = anime_data["title"]["native"]
         english = anime_data["title"]["english"]
-        image = getBannerLink(mal_id, False,anime_data.get("id"))
+        image = getBannerLink(mal_id, False, anime_data.get("id"))
         # Telegraph Post mejik
         html_pc = ""
         html_pc += f"<h1>{native}</h1>"
