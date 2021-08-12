@@ -231,24 +231,22 @@ async def anilist_user(input_str):
         error_sts = error[0].get("message")
         return [f"{error_sts}"]
     user_data = result["data"]["User"]
-    anime = data["statistics"]["anime"]
-    manga = data["statistics"]["manga"]
     stats = textwrap.dedent(
         f"""
 **User name:** [{user_data['name']}]({user_data['siteUrl']})
 **MAL ID:** `{user_data['id']}` 
 
 **Anime Stats:**
-Total Anime Watched: `{anime['count']}`
-Total Episode Watched: `{anime['episodesWatched']}`
-Total Time Spent: `{anime['minutesWatched']}`
-Average Score: `{anime['meanScore']}`
+Total Anime Watched: `{user_data["statistics"]["anime"]['count']}`
+Total Episode Watched: `{user_data["statistics"]["anime"]['episodesWatched']}`
+Total Time Spent: `{user_data["statistics"]["anime"]['minutesWatched']}`
+Average Score: `{user_data["statistics"]["anime"]['meanScore']}`
 
 **Manga Stats:**
-Total Manga Read: `{manga['count']}`
-Total Chapters Read: `{manga['chaptersRead']}`
-Total Volumes Read: `{manga['volumesRead']}`
-Average Score: `{manga['meanScore']}`
+Total Manga Read: `{user_data["statistics"]["manga"]['count']}`
+Total Chapters Read: `{user_data["statistics"]["manga"]['chaptersRead']}`
+Total Volumes Read: `{user_data["statistics"]["manga"]['volumesRead']}`
+Average Score: `{user_data["statistics"]["manga"]['meanScore']}`
 """
     )
     return stats, f'https://img.anili.st/user/{user_data["id"]}?a={time.time()}'
