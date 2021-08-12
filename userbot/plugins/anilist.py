@@ -266,9 +266,14 @@ async def get_manga(event):
     command=("fillers", plugin_category),
     info={
         "header": "To get list of filler episodes.",
-        "flags": {"-n": "If more than one name have same common word then to select required anime"},
-        "usage": ["{tr}fillers <anime name>","{tr}fillers -n<number> <anime name>"],
-        "examples": ["{tr}fillers one piece","{tr}fillers -n5 naruto",],
+        "flags": {
+            "-n": "If more than one name have same common word then to select required anime"
+        },
+        "usage": ["{tr}fillers <anime name>", "{tr}fillers -n<number> <anime name>"],
+        "examples": [
+            "{tr}fillers one piece",
+            "{tr}fillers -n5 naruto",
+        ],
     },
 )
 async def get_anime(event):
@@ -316,7 +321,7 @@ async def get_anime(event):
             msg += f"{i}. {an}\n"
         await edit_or_reply(event, msg)
         return
-    response = await get_filler_episodes(result[list(result.keys())[anime-1]])
+    response = await get_filler_episodes(result[list(result.keys())[anime - 1]])
     msg = ""
     msg += f"**Fillers for anime** `{list(result.keys())[anime-1]}`**"
     msg += "\n\n• Manga Canon episodes:**\n"
@@ -329,8 +334,6 @@ async def get_anime(event):
         msg += "\n\n**• Anime Canon episodes:**\n"
         msg += str(response.get("anime_canon_episodes"))
     await edit_or_reply(event, msg)
-
-    
 
 
 @catub.cat_cmd(
