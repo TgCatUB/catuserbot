@@ -1,8 +1,9 @@
 import random
 import re
 import time
-from platform import python_version
 from datetime import datetime
+from platform import python_version
+
 from telethon import version
 from telethon.errors.rpcerrorlist import (
     MediaEmptyError,
@@ -44,9 +45,7 @@ async def amireallyalive(event):
     ms = (end - start).microseconds / 1000
     _, check_sgnirts = check_data_base_heal_th()
     EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
-    ALIVE_TEXT = (
-        gvarstatus("ALIVE_TEXT") or "**✮ MY BOT IS RUNNING SUCCESSFULLY ✮**"
-    )
+    ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "**✮ MY BOT IS RUNNING SUCCESSFULLY ✮**"
     CAT_IMG = gvarstatus("ALIVE_PIC")
     cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
     caption = cat_caption.format(
@@ -78,8 +77,8 @@ async def amireallyalive(event):
             event,
             caption,
         )
-        
-        
+
+
 temp = """{ALIVE_TEXT}
 **{EMOJI} Database :** `{check_sgnirts}`
 **{EMOJI} Telethon Version :** `{version.__version__}`
@@ -87,7 +86,7 @@ temp = """{ALIVE_TEXT}
 **{EMOJI} Python Version :** `{python_version()}`
 **{EMOJI} Uptime :** `{uptime}`
 **{EMOJI} Master:** {mention}"""
-        
+
 
 @catub.cat_cmd(
     pattern="ialive$",
