@@ -72,7 +72,7 @@ async def anime_quote(event):
         "examples": "{tr}aluser KenKaneki",
     },
 )
-async def anilist_user(event):
+async def anilist_usersearch(event):
     "Search user profiles of Anilist."
     search_query = event.pattern_match.group(1)
     reply_to = await reply_id(event)
