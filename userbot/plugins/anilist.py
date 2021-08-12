@@ -317,10 +317,11 @@ async def get_anime(event):
         return
     if anime == 0:
         msg = f"**More than 1 result found for {input_str}. so try as** `{Config.COMMAND_HAND_LER}fillers -n<number> {input_str}`\n\n"
-        for i, an in enumerate(list(resuly.keys()), start=1):
+        for i, an in enumerate(list(result.keys()), start=1):
             msg += f"{i}. {an}\n"
         await edit_or_reply(event, msg)
         return
+    print(anime)
     response = await get_filler_episodes(result[list(result.keys())[anime - 1]])
     msg = ""
     msg += f"**Fillers for anime** `{list(result.keys())[anime-1]}`**"
