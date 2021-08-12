@@ -285,10 +285,10 @@ async def get_anime(event):
         return await edit_or_reply(
             event, f"**No filler episodes for the given anime**` {input_str}`"
         )
-    for anime in result.items():
-        response = await get_filler_episodes(anime[0])
+    for anime in result.keys():
+        response = await get_filler_episodes(result["anime"])
         msg = ""
-        msg += f"**Fillers for anime** `{anime[0]}`**"
+        msg += f"**Fillers for anime** `{anime}`**"
         msg += "\n\nManga Canon episodes:**\n"
         msg += str(response.get("total_ep"))
         msg += "\n\n**Mixed/Canon fillers:**\n"
