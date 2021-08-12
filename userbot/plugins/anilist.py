@@ -466,7 +466,7 @@ async def upcoming(event):
     info={
         "header": "Shows you animes to be aired on that day.",
         "description": "To get list of animes to be aired on that day use can also use 0 for monday , 1 for tuesday.... 6 for sunday.",
-        "usage": "{tr}aschedule <weekdays/[0-6]",
+        "usage": "{tr}aschedule <weekdays/[0-6]>",
         "example": ["{tr}aschedule sunday", "{tr}aschedule 5"],
     },
 )
