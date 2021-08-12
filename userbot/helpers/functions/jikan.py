@@ -18,7 +18,7 @@ from ..tools import post_to_telegraph
 jikan = Jikan()
 
 anilisturl = "https://graphql.anilist.co"
-animnefillerurl =  "https://www.animefillerlist.com/shows/"
+animnefillerurl = "https://www.animefillerlist.com/shows/"
 # Anime Helper
 
 weekdays = {
@@ -533,6 +533,7 @@ def is_gif(file):
         return False
     return DocumentAttributeAnimated() in getattr(file, "document", file).attributes
 
+
 async def search_in_animefiller(query):
     "To search anime name and get its id"
     html = requests.get(animnefillerurl).text
@@ -555,7 +556,7 @@ async def search_in_animefiller(query):
 
 def get_filler_episodes(filler_id):  # sourcery no-metrics
     "to get eppisode numbers"
-    html = requests.get(animnefillerurl+ filler_id).text
+    html = requests.get(animnefillerurl + filler_id).text
     soup = bs4.BeautifulSoup(html, "html.parser")
     div = soup.find("div", attrs={"id": "Condensed"})
     complete_anime = div.find_all("span", attrs={"class": "Episodes"})
