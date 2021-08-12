@@ -40,6 +40,7 @@ headers = {
 }
 
 ppath = os.path.join(os.getcwd(), "temp", "anilistuser.jpg")
+anime_path = os.path.join(os.getcwd(), "temp", "animeresult.jpg")
 
 plugin_category = "extra"
 
@@ -284,16 +285,21 @@ async def get_anime(event):
     first_mal_id = search_result["results"][0]["mal_id"]
     caption, image = await get_anime_manga(first_mal_id, "anime_anime", event.chat_id)
     try:
-        await catevent.delete()
+        downloader = SmartDL(image, anime_path, progress_bar=False)
+        downloader.start(blocking=False)
+        while not downloader.isFinished():
+            pass
         await event.client.send_file(
             event.chat_id,
-            file=image,
+            file=anime_path,
             caption=caption,
             parse_mode="html",
             reply_to=reply_to,
         )
+        await catevent.delete()
+        os.remove(anime_path)
     except BaseException:
-        image = getBannerLink(first_mal_id, False)
+        image = getBannerLink(first_mal_id, True)
         await event.client.send_file(
             event.chat_id,
             file=image,
