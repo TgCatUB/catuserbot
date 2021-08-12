@@ -240,7 +240,7 @@ async def anilist_user(input_str):
 **•  Anime Stats**
 ☞ **Total Anime Watched :** `{user_data["statistics"]["anime"]['count']}`
 ☞ **Total Episode Watched : **`{user_data["statistics"]["anime"]['episodesWatched']}`
-☞ **Total Time Spent : **`{readable_time(user_data["statistics"]["anime"]['minutesWatched'])}`
+☞ **Total Time Spent : **`{readable_time(user_data["statistics"]["anime"]['minutesWatched']*60)}`
 ☞ **Average Score :** `{user_data["statistics"]["anime"]['meanScore']}`
 
 **•  Manga Stats**
