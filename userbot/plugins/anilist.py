@@ -108,7 +108,7 @@ async def anilist_usersearch(event):
     info={
         "header": "Search profiles of MAL.",
         "usage": "{tr}mal <username>",
-        "examples": "{tr}mal KenKaneki",
+        "examples": "{tr}mal Infinity20998",
     },
 )
 async def user(event):
