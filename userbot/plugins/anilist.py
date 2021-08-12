@@ -272,6 +272,7 @@ async def get_manga(event):
 async def get_anime(event):
     "to get list of filler episodes."
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
     if not input_str:
         if reply:
             input_str = reply.text
@@ -285,9 +286,9 @@ async def get_anime(event):
             event, f"**No filler episodes for the given anime**` {input_str}`"
         )
     for anime in result.items():
-        response = await get_filler_episodes(anime)
+        response = await get_filler_episodes(anime[0])
         msg = ""
-        msg += f"**Fillers for anime** `{anime}`**"
+        msg += f"**Fillers for anime** `{anime[0]}`**"
         msg += "\n\nManga Canon episodes:**\n"
         msg += str(response.get("total_ep"))
         msg += "\n\n**Mixed/Canon fillers:**\n"
