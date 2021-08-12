@@ -2,7 +2,7 @@ import json
 import re
 import textwrap
 from io import BytesIO, StringIO
-
+import time
 import bs4
 import jikanpy
 import requests
@@ -16,54 +16,6 @@ from ..tools import post_to_telegraph
 jikan = Jikan()
 anilisturl = "https://graphql.anilist.co"
 # Anime Helper
-
-
-async def formatJSON(outData):
-    msg = ""
-    jsonData = json.loads(outData)
-    res = list(jsonData.keys())
-    if "errors" in res:
-        msg += f"**Error** : `{jsonData['errors'][0]['message']}`"
-        return msg
-    jsonData = jsonData["data"]["Media"]
-    if "bannerImage" in jsonData.keys():
-        msg += f"[〽️]({jsonData['bannerImage']})"
-    else:
-        msg += "〽️"
-    title = jsonData["title"]["romaji"]
-    link = f"https://anilist.co/anime/{jsonData['id']}"
-    msg += f"[{title}]({link})"
-    msg += f"\n\n**Type** : {jsonData['format']}"
-    msg += "\n**Genres** : "
-    for g in jsonData["genres"]:
-        msg += g + " "
-    msg += f"\n**Status** : {jsonData['status']}"
-    msg += f"\n**Episode** : {jsonData['episodes']}"
-    msg += f"\n**Year** : {jsonData['startDate']['year']}"
-    msg += f"\n**Score** : {jsonData['averageScore']}"
-    msg += f"\n**Duration** : {jsonData['duration']} min\n\n"
-    # https://t.me/catuserbot_support/19496
-    cat = f"{jsonData['description']}"
-    msg += " __" + re.sub("<br>", "\n", cat) + "__"
-    msg = re.sub("<b>", "__**", msg)
-    msg = re.sub("</b>", "**__", msg)
-    return msg
-
-
-def shorten(description, info="anilist.co"):
-    msg = ""
-    if len(description) > 700:
-        description = description[0:200] + "....."
-        msg += f"\n**Description**:\n{description} [Read More]({info})"
-    else:
-        msg += f"\n**Description**: \n   {description}"
-    return (
-        msg.replace("<br>", "")
-        .replace("</br>", "")
-        .replace("<i>", "")
-        .replace("</i>", "")
-        .replace("__", "**")
-    )
 
 
 character_query = """
@@ -194,13 +146,112 @@ query ($id: Int, $idMal:Int, $search: String, $type: MediaType, $asHtml: Boolean
 }
 """
 
+user_query = """
+query ($search: String) {
+  User (name: $search) {
+    id
+    name
+    siteUrl
+    statistics {
+      anime {
+        count
+        minutesWatched
+        episodesWatched
+        meanScore
+      }
+      manga {
+        count
+        chaptersRead
+        volumesRead
+        meanScore
+      }
+    }
+  }
+}
+"""
+
+async def formatJSON(outData):
+    msg = ""
+    jsonData = json.loads(outData)
+    res = list(jsonData.keys())
+    if "errors" in res:
+        msg += f"**Error** : `{jsonData['errors'][0]['message']}`"
+        return msg
+    jsonData = jsonData["data"]["Media"]
+    if "bannerImage" in jsonData.keys():
+        msg += f"[〽️]({jsonData['bannerImage']})"
+    else:
+        msg += "〽️"
+    title = jsonData["title"]["romaji"]
+    link = f"https://anilist.co/anime/{jsonData['id']}"
+    msg += f"[{title}]({link})"
+    msg += f"\n\n**Type** : {jsonData['format']}"
+    msg += "\n**Genres** : "
+    for g in jsonData["genres"]:
+        msg += g + " "
+    msg += f"\n**Status** : {jsonData['status']}"
+    msg += f"\n**Episode** : {jsonData['episodes']}"
+    msg += f"\n**Year** : {jsonData['startDate']['year']}"
+    msg += f"\n**Score** : {jsonData['averageScore']}"
+    msg += f"\n**Duration** : {jsonData['duration']} min\n\n"
+    # https://t.me/catuserbot_support/19496
+    cat = f"{jsonData['description']}"
+    msg += " __" + re.sub("<br>", "\n", cat) + "__"
+    msg = re.sub("<b>", "__**", msg)
+    msg = re.sub("</b>", "**__", msg)
+    return msg
+
+
+def shorten(description, info="anilist.co"):
+    msg = ""
+    if len(description) > 700:
+        description = description[0:200] + "....."
+        msg += f"\n**Description**:\n{description} [Read More]({info})"
+    else:
+        msg += f"\n**Description**: \n   {description}"
+    return (
+        msg.replace("<br>", "")
+        .replace("</br>", "")
+        .replace("<i>", "")
+        .replace("</i>", "")
+        .replace("__", "**")
+    )
+
+async def anilist_user(input_str):
+    "Fetch user details from anilist"
+    username = {"search": input_str}
+    result = requests.post(url, json={"query": user_query, "variables": username}).json()
+    error = k.get("errors")
+    if error:
+        error_sts = error[0].get("message")
+        return [f"{error_sts}"]
+    user_data = k['data']['User']
+    anime = data['statistics']['anime']
+    manga = data['statistics']['manga']
+    stats = textwrap.dedent(
+        f"""
+**User name:** [{user_data['name']}]({user_data['siteUrl']})
+**MAL ID:** `{user_data['id']}` 
+
+**Anime Stats:**
+Total Anime Watched: `{anime['count']}`
+Total Episode Watched: `{anime['episodesWatched']}`
+Total Time Spent: `{anime['minutesWatched']}`
+Average Score: `{anime['meanScore']}`
+
+**Manga Stats:**
+Total Manga Read: `{manga['count']}`
+Total Chapters Read: `{manga['chaptersRead']}`
+Total Volumes Read: `{manga['volumesRead']}`
+Average Score: `{manga['meanScore']}`
+""" )
+    return stats, f'https://img.anili.st/user/{user_data["id"]}?a={time.time()}'
 
 async def anime_json_synomsis(query, vars_):
     """Makes a Post to https://graphql.anilist.co."""
-    url_ = "https://graphql.anilist.co"
     async with ClientSession() as session:
         async with session.post(
-            url_, json={"query": query, "variables": vars_}
+            anilisturl, json={"query": query, "variables": vars_}
         ) as post_con:
             json_data = await post_con.json()
     return json_data
@@ -238,7 +289,7 @@ def getBannerLink(mal, kitsu_search=True):
     }
     """
     data = {"query": query, "variables": {"idMal": int(mal)}}
-    image = requests.post("https://graphql.anilist.co", json=data).json()["data"][
+    image = requests.post(anilisturl, json=data).json()["data"][
         "Media"
     ]["bannerImage"]
     if image:
