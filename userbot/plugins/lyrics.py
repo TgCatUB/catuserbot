@@ -33,7 +33,7 @@ async def lyrics(event):  # sourcery no-metrics
             event,
             "`Set genius access token in heroku vars for functioning of this command`",
         )
-    match = q_event.pattern_match.group(1)
+    match = event.pattern_match.group(1)
     songno = re.findall(r"-n\d+", match)
     listview = re.findall(r"-l", match)
     try:
@@ -66,6 +66,9 @@ async def lyrics(event):  # sourcery no-metrics
             return await catevent.edit(f"Song **{artist} - {song}** not found!")
         result = f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```"
     else:
+        catevent = await edit_or_reply(
+            event, f"`Searching lyrics for {query}...`"
+        )
         response = genius.search_songs(query)
         msg = f"**The songs found for the given query:** `{query}`\n\n"
         if len(response["hits"]) == 0:
