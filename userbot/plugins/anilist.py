@@ -314,7 +314,7 @@ async def get_anime(event):
         if response.get("anime_canon_episodes") is not None:
             msg += "\n\n**`• Anime Canon episodes:**\n`"
             msg += str(response.get("anime_canon_episodes"))
-        msg +="`"
+        msg += "`"
         return await edit_or_reply(event, msg)
     if anime == 0:
         msg = f"**More than 1 result found for {input_str}. so try as** `{Config.COMMAND_HAND_LER}fillers -n<number> {input_str}`\n\n"
