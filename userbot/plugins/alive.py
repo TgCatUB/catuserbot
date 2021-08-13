@@ -53,7 +53,7 @@ async def amireallyalive(event):
         EMOJI=EMOJI,
         mention=mention,
         uptime=uptime,
-        Televar=version.__version__,
+        telever=version.__version__,
         catver=catversion,
         pyver=python_version(),
         dbhealth=check_sgnirts,
@@ -80,10 +80,10 @@ async def amireallyalive(event):
 
 
 temp = """{ALIVE_TEXT}
-**{EMOJI} Database :** `{check_sgnirts}`
-**{EMOJI} Telethon Version :** `{version.__version__}`
-**{EMOJI} Catuserbot Version :** `{catversion}`
-**{EMOJI} Python Version :** `{python_version()}`
+**{EMOJI} Database :** `{dbhealth}`
+**{EMOJI} Telethon Version :** `{telever}`
+**{EMOJI} Catuserbot Version :** `{catver}`
+**{EMOJI} Python Version :** `{pyver}`
 **{EMOJI} Uptime :** `{uptime}`
 **{EMOJI} Master:** {mention}"""
 
