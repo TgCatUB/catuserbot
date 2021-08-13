@@ -1,11 +1,9 @@
 import asyncio
-import requests
 import json
 import random
 
-from userbot import catub
-from ..core.managers import edit_delete, edit_or_reply
-from . import  hmention
+import requests
+
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
@@ -37,28 +35,24 @@ game_list = """1.`ttt` :- Tic-Tac-Toe
 8.`c` :- Checkers
 9.`pc` :- Pool Checkers"""
 
-category = [
-    'classic',
-    'kids',
-    'party',
-    'hot',
-    'mixed'
-]
+category = ["classic", "kids", "party", "hot", "mixed"]
 
-async def get_task(mode,choice):
-    url = 'https://psycatgames.com/api/tod-v2/'
+
+async def get_task(mode, choice):
+    url = "https://psycatgames.com/api/tod-v2/"
     data = {
-        "id":"truth-or-dare",
-        "language":"en",
-        "category":category[choice],
-        "type":mode
+        "id": "truth-or-dare",
+        "language": "en",
+        "category": category[choice],
+        "type": mode,
     }
     headers = {
-        'referer': 'https://psycatgames.com/app/truth-or-dare/?utm_campaign=tod_website&utm_source=tod_en&utm_medium=website'
+        "referer": "https://psycatgames.com/app/truth-or-dare/?utm_campaign=tod_website&utm_source=tod_en&utm_medium=website"
     }
-    response = requests.post(url,headers=headers,data=json.dumps(data))
-    result = response.json()['results']
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    result = response.json()["results"]
     return random.choice(result)
+
 
 @catub.cat_cmd(
     pattern="(task|truth|dare)(?: |$)([1-5]+)$",
@@ -67,27 +61,34 @@ async def get_task(mode,choice):
         "header": "Get a random truth or dare task.",
         "description": "if no input is given then task will be from classic or kids category. if you want specific category then give input.",
         "note": "U need to give input as 1 for classic , 2 for kids , 3 for party , 4 for hot and 5 for mixed. if you want to give multiple catgories then use numbers without space like 12",
-        "example": ["{tr}task","{tr}task 2","{tr}task 123",]
+        "example": [
+            "{tr}task",
+            "{tr}task 2",
+            "{tr}task 123",
+        ],
     },
 )
 async def truth_dare_task(event):
     "Get a random task either truth or dare."
     taskmode = event.pattern_match.group(1)
     if taskmode == "task":
-        catevent = await edit_or_reply(event,'Getting a random task for you.....')
-        taskmode = random.choice(["truth" , "dare"])
+        catevent = await edit_or_reply(event, "Getting a random task for you.....")
+        taskmode = random.choice(["truth", "dare"])
     else:
-        catevent = await edit_or_reply(event,f'Getting a random {taskmode} task for you.....')
+        catevent = await edit_or_reply(
+            event, f"Getting a random {taskmode} task for you....."
+        )
     category = event.pattern_match.group(2)
-    category = int(random.choice(category)) if category else random.choice([1,2])
+    category = int(random.choice(category)) if category else random.choice([1, 2])
     try:
-        task = await get_task(taskmode,category)
-        if taskmode=="truth":
-            await catevent.edit(f'**The truth task for you is**\n`{task}`')
+        task = await get_task(taskmode, category)
+        if taskmode == "truth":
+            await catevent.edit(f"**The truth task for you is**\n`{task}`")
         else:
-            await catevent.edit(f'**The dare task for you is**\n`{task}`')
+            await catevent.edit(f"**The dare task for you is**\n`{task}`")
     except Exception as e:
-        await edit_delete(catevent,f"**Error while getting task**\n`{str(e)}`",7)
+        await edit_delete(catevent, f"**Error while getting task**\n`{str(e)}`", 7)
+
 
 @catub.cat_cmd(
     command=("truth", plugin_category),
@@ -95,12 +96,17 @@ async def truth_dare_task(event):
         "header": "Get a random truth task.",
         "description": "if no input is given then task will be from classic or kids category. if you want specific category then give input.",
         "note": "U need to give input as 1 for classic , 2 for kids , 3 for party , 4 for hot and 5 for mixed. if you want to give multiple catgories then use numbers without space like 12",
-        "example": ["{tr}truth","{tr}truth 2","{tr}truth 123",]
+        "example": [
+            "{tr}truth",
+            "{tr}truth 2",
+            "{tr}truth 123",
+        ],
     },
 )
 async def truth_task(event):
     "Get a random truth task."
     # just to show in help menu as seperate
+
 
 @catub.cat_cmd(
     command=("dare", plugin_category),
@@ -108,13 +114,18 @@ async def truth_task(event):
         "header": "Get a random dare task.",
         "description": "if no input is given then task will be from classic or kids category. if you want specific category then give input.",
         "note": "U need to give input as 1 for classic , 2 for kids , 3 for party , 4 for hot and 5 for mixed. if you want to give multiple catgories then use numbers without space like 12",
-        "example": ["{tr}dare","{tr}dare 2","{tr}dare 123",]
+        "example": [
+            "{tr}dare",
+            "{tr}dare 2",
+            "{tr}dare 123",
+        ],
     },
 )
 async def dare_task(event):
     "Get a random dare task."
-    # just to show in help menu as seperate    
-    
+    # just to show in help menu as seperate
+
+
 @catub.cat_cmd(
     pattern="game(?:\s|$)([\s\S]*)",
     command=("game", plugin_category),
