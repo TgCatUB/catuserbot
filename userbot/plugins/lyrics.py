@@ -42,6 +42,7 @@ async def lyrics(event):  # sourcery no-metrics
         songno = songno[0]
         songno = songno.replace("-n", "")
         match = match.replace("-n" + songno, "")
+        songno = int(songno)
     except IndexError:
         songno = 1
     if songno < 1 or songno > 10:
