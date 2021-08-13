@@ -55,7 +55,7 @@ async def get_task(mode, choice):
 
 
 @catub.cat_cmd(
-    pattern="(task|truth|dare)(?: |$)([1-5]+)$",
+    pattern="(task|truth|dare)(?: |$)([1-5]+)?$",
     command=("task", plugin_category),
     info={
         "header": "Get a random truth or dare task.",
