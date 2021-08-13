@@ -1,5 +1,4 @@
 import asyncio
-import os
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
