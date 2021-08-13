@@ -77,7 +77,7 @@ async def lyrics(event):  # sourcery no-metrics
                 event, f"**I can't find lyrics for the given query: **`{query}`"
             )
         for i, an in enumerate(response["hits"], start=1):
-            msg += f"{i}. {an['result']['title']}\n"
+            msg += f"{i}. `{an['result']['title']}`\n"
         if listview:
             result = msg
         else:
