@@ -11,7 +11,7 @@ from ..helpers.utils import _format, get_user_from_event, reply_id
 from ..sql_helper.global_collectionjson import add_collection, get_collection
 
 LOGS = logging.getLogger(__name__)
-FBAN_GROUP_ID = int(os.environ.get("FBAN_GROUP_ID") or 0)
+FBAN_GROUP_ID = Config.FBAN_GROUP_ID
 
 plugin_category = "admin"
 rose = "@MissRose_bot"
@@ -277,7 +277,7 @@ async def quote_search(event):  # sourcery no-metrics
                 "__I have failed to fetch your feds or you are not admin of any fed.__",
             )
         feds[fedid] = fedidstoadd
-        add_collection("fedids", feds, {})
+        add_collection("fedids", feds)
         await edit_or_reply(
             catevent,
             f"__Successfully added all your feds to database group__ **{fedid}**.",
@@ -300,7 +300,7 @@ async def quote_search(event):  # sourcery no-metrics
         feds[fedgroup] = fed_ids
     else:
         feds[fedgroup] = [fedid]
-    add_collection("fedids", feds, {})
+    add_collection("fedids", feds)
     await edit_or_reply(
         event, "__The given fed is succesfully added to fed category.__"
     )
@@ -343,7 +343,7 @@ async def quote_search(event):
                 event, "__There is no such fedgroup in your database.__"
             )
         feds[fedid] = []
-        add_collection("fedids", feds, {})
+        add_collection("fedids", feds)
         await edit_or_reply(
             event, f"__Succesfully removed all feds in the category {fedid}__"
         )
@@ -366,7 +366,7 @@ async def quote_search(event):
         )
     fed_ids.remove(fedid)
     feds[fedgroup] = fed_ids
-    add_collection("fedids", feds, {})
+    add_collection("fedids", feds)
     await edit_or_reply(
         event, "__The given fed is succesfully removed from fed category.__"
     )
