@@ -301,7 +301,9 @@ async def quote_search(event):  # sourcery no-metrics
     else:
         feds[fedgroup] = [fedid]
     add_collection("fedids", feds, {})
-    await edit_or_reply(event, "__The given fed is succesfully added to fed category.__")
+    await edit_or_reply(
+        event, "__The given fed is succesfully added to fed category.__"
+    )
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -359,7 +361,9 @@ async def quote_search(event):
         )
     fed_ids = feds[fedgroup]
     if fedid not in fed_ids:
-        return await edit_delete(event, "__This fed is not part of given fed category.__")
+        return await edit_delete(
+            event, "__This fed is not part of given fed category.__"
+        )
     fed_ids.remove(fedid)
     feds[fedgroup] = fed_ids
     add_collection("fedids", feds, {})
@@ -411,7 +415,9 @@ async def quote_search(event):
             event, "__There is no such fedgroup in your database.__"
         )
     if output != "" and fedgroup:
-        output = f"**The list of feds in the category** `{fedgroup}` **are:**\n" + output
+        output = (
+            f"**The list of feds in the category** `{fedgroup}` **are:**\n" + output
+        )
     elif output != "":
         output = "**The list of all feds in your database are :**\n" + output
     else:
