@@ -61,7 +61,6 @@ sqlalchemy==1.3.23
 telegraph
 git+https://github.com/sandy1709/Telethon
 TgCrypto
-tswift
 ujson
 urlextract
 validators
