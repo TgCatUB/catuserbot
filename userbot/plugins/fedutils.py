@@ -328,7 +328,7 @@ async def quote_search(event):  # sourcery no-metrics
     },
 )
 async def quote_search(event):
-    "To remove the federation to database."
+    "To remove the federation from database."
     fedgroup = event.pattern_match.group(1)
     fedid = event.pattern_match.group(2)
     if get_collection("fedids") is not None:
