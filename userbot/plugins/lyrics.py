@@ -66,9 +66,7 @@ async def lyrics(event):  # sourcery no-metrics
             return await catevent.edit(f"Song **{artist} - {song}** not found!")
         result = f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```"
     else:
-        catevent = await edit_or_reply(
-            event, f"`Searching lyrics for {query}...`"
-        )
+        catevent = await edit_or_reply(event, f"`Searching lyrics for {query}...`")
         response = genius.search_songs(query)
         msg = f"**The songs found for the given query:** `{query}`\n\n"
         if len(response["hits"]) == 0:
