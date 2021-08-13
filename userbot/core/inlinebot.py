@@ -310,6 +310,7 @@ async def inline_handler(event):  # sourcery no-metrics
                         sandy = f"@{u.username}"
                     else:
                         sandy = f"[{u.first_name}](tg://user?id={u.id})"
+                    u = int(u.id) 
                 except ValueError:
                     # ValueError: Could not find the input entity
                     sandy = f"[user](tg://user?id={u})"
@@ -359,6 +360,7 @@ async def inline_handler(event):  # sourcery no-metrics
                         sandy = f"@{u.username}"
                     else:
                         sandy = f"[{u.first_name}](tg://user?id={u.id})"
+                    u = int(u.id)
                 except ValueError:
                     # ValueError: Could not find the input entity
                     sandy = f"[user](tg://user?id={u})"
