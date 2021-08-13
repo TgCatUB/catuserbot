@@ -82,11 +82,11 @@ async def lyrics(event):  # sourcery no-metrics
             result = msg
         else:
             result = f"**The song found for the given query:** `{query}`\n\n"
-            if songno - 1 > len(response["hits"]):
+            if songno > len(response["hits"]):
                 return await edit_or_reply(
                     event,
                     f"**Invalid song selection for the query select proper number**\n{msg}",
                 )
-            songtitle = response["hits"][0]["result"]["title"]
+            songtitle = response["hits"][songno-1]["result"]["title"]
             result += f"`{genius.search_song(songtitle).lyrics}`"
     await edit_or_reply(catevent, result)
