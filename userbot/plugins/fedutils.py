@@ -30,8 +30,8 @@ unfbanresults = ["I'll give", "Un-FedBan", "un-FedBan"]
     command=("fban", plugin_category),
     info={
         "header": "Ban the person in your database federations",
-        "description": "Will fban the person in the group of federations which you stored in database.",
-        "usage": "{tr}fban <userid/username/reply> <group> <reason>",
+        "description": "Will fban the person in the all feds of given category which you stored in database.",
+        "usage": "{tr}fban <userid/username/reply> <category> <reason>",
     },
 )
 async def group_fban(event):
@@ -48,7 +48,7 @@ async def group_fban(event):
         return await edit_delete(event, "__You can't fban yourself.__")
     if not reason:
         return await edit_delete(
-            event, "__You haven't mentioned group name and reason for fban__"
+            event, "__You haven't mentioned category name and reason for fban__"
         )
     reasons = reason.split(" ", 1)
     fedgroup = reasons[0]
@@ -116,8 +116,8 @@ async def group_fban(event):
     command=("unfban", plugin_category),
     info={
         "header": "UnBan the person in your database federations",
-        "description": "Will unfban the person in the group of federations which you stored in database.",
-        "usage": "{tr}unfban <userid/username/reply> <group> <reason>",
+        "description": "Will unfban the person in the all feds of given category which you stored in database.",
+        "usage": "{tr}unfban <userid/username/reply> <category> <reason>",
     },
 )
 async def group_unfban(event):
@@ -134,7 +134,7 @@ async def group_unfban(event):
         return await edit_delete(event, "__You can't unfban yourself.__")
     if not reason:
         return await edit_delete(
-            event, "__You haven't mentioned group name and reason for unfban__"
+            event, "__You haven't mentioned category name and reason for unfban__"
         )
     reasons = reason.split(" ", 1)
     fedgroup = reasons[0]
@@ -201,14 +201,14 @@ async def group_unfban(event):
     pattern="addfedto (\w+|-all) ([-\w]+)",
     command=("addfedto", plugin_category),
     info={
-        "header": "Add the federation to given group in database.",
-        "description": "You can add multiple federations to one name like a group of feds under one name. And you can access all thoose feds by that name.",
+        "header": "Add the federation to given category in database.",
+        "description": "You can add multiple federations to one category like a group of feds under one category. And you can access all thoose feds by that name.",
         "flags": {
-            "-all": "If you want to add all your feds to database then use this as {tr}addfedto -all <group name>"
+            "-all": "If you want to add all your feds to database then use this as {tr}addfedto -all <category name>"
         },
         "usage": [
-            "{tr}addfedto <group name> <fedid>",
-            "{tr}addfedto -all <group name>",
+            "{tr}addfedto <category name> <fedid>",
+            "{tr}addfedto -all <category name>",
         ],
     },
 )
@@ -287,28 +287,28 @@ async def quote_search(event):  # sourcery no-metrics
                 BOTLOG_CHATID,
                 f"#ADDFEDID\
                 \n**Fed Group:** `{fedid}`\
-                \nSuccessfully added all your feds to above database group.",
+                \nSuccessfully added all your feds to above database category.",
             )
         return
     if fedgroup in feds:
         fed_ids = feds[fedgroup]
         if fedid in fed_ids:
             return await edit_delete(
-                event, "__This fed is already part of this fed group.__"
+                event, "__This fed is already part of this fed category.__"
             )
         fed_ids.append(fedid)
         feds[fedgroup] = fed_ids
     else:
         feds[fedgroup] = [fedid]
     add_collection("fedids", feds, {})
-    await edit_or_reply(event, "__The given fed is succesfully added to fed group.__")
+    await edit_or_reply(event, "__The given fed is succesfully added to fed category.__")
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
             f"#ADDFEDID\
             \n**Fedid:** `{fedid}`\
             \n**Fed Group:** `{fedgroup}`\
-            \nThe above fedid is sucessfully added to that fed group.",
+            \nThe above fedid is sucessfully added to that fed category.",
         )
 
 
@@ -316,14 +316,14 @@ async def quote_search(event):  # sourcery no-metrics
     pattern="rmfedfrom (\w+|-all) ([-\w]+)",
     command=("rmfedfrom", plugin_category),
     info={
-        "header": "Remove the federation from given group in database.",
-        "description": "To remove given fed from the given group name",
+        "header": "Remove the federation from given category in database.",
+        "description": "To remove given fed from the given category name",
         "flags": {
-            "-all": "If you want to delete compelete group then use this flag as {tr}rmfedfrom -all <group name>"
+            "-all": "If you want to delete compelete category then use this flag as {tr}rmfedfrom -all <category name>"
         },
         "usage": [
-            "{tr}rmfedfrom <group name> <fedid>",
-            "{tr}rmfedfrom -all <group name>",
+            "{tr}rmfedfrom <category name> <fedid>",
+            "{tr}rmfedfrom -all <category name>",
         ],
     },
 )
@@ -350,7 +350,7 @@ async def quote_search(event):
                 BOTLOG_CHATID,
                 f"#REMOVEFEDID\
             \n**Fed Group:** `{fedid}`\
-            \nDeleted this Fed group in your database.",
+            \nDeleted this Fed category in your database.",
             )
         return
     if fedgroup not in feds:
@@ -359,12 +359,12 @@ async def quote_search(event):
         )
     fed_ids = feds[fedgroup]
     if fedid not in fed_ids:
-        return await edit_delete(event, "__This fed is not part of given fed group.__")
+        return await edit_delete(event, "__This fed is not part of given fed category.__")
     fed_ids.remove(fedid)
     feds[fedgroup] = fed_ids
     add_collection("fedids", feds, {})
     await edit_or_reply(
-        event, "__The given fed is succesfully removed from fed group.__"
+        event, "__The given fed is succesfully removed from fed category.__"
     )
     if BOTLOG:
         await event.client.send_message(
@@ -372,7 +372,7 @@ async def quote_search(event):
             f"#REMOVEFEDID\
         \n**Fedid:** `{fedid}`\
         \n**Fed Group:** `{fedgroup}`\
-        \nThe above fedid is sucessfully removed that fed group.",
+        \nThe above fedid is sucessfully removed that fed category.",
         )
 
 
@@ -381,8 +381,8 @@ async def quote_search(event):
     command=("listfed", plugin_category),
     info={
         "header": "To list all feds in your database.",
-        "description": "if you give input then will show only feds in that group else will show all feds in your database",
-        "usage": ["{tr}listfed", "{tr}listfed <group name>"],
+        "description": "if you give input then will show only feds in that category else will show all feds in your database",
+        "usage": ["{tr}listfed", "{tr}listfed <category name>"],
     },
 )
 async def quote_search(event):
@@ -411,7 +411,7 @@ async def quote_search(event):
             event, "__There is no such fedgroup in your database.__"
         )
     if output != "" and fedgroup:
-        output = f"**The list of feds in the group** `{fedgroup}` **are:**\n" + output
+        output = f"**The list of feds in the category** `{fedgroup}` **are:**\n" + output
     elif output != "":
         output = "**The list of all feds in your database are :**\n" + output
     else:
