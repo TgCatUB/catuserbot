@@ -19,14 +19,22 @@ GENIUS = Config.GENIUS_API_TOKEN
     command=("lyrics", plugin_category),
     info={
         "header": "Song lyrics searcher using genius api.",
-        "description" : "if you want to provide artist name with song name then use this format {tr}lyrics <artist name> - <song name> . if you use this format in your query then flags won't work. by default it will show first query.",
+        "description": "if you want to provide artist name with song name then use this format {tr}lyrics <artist name> - <song name> . if you use this format in your query then flags won't work. by default it will show first query.",
         "flags": {
             "-l": "to get list of search lists.",
             "-g": "To get paticular song lyrics.",
         },
         "note": "For functioning of this command set the GENIUS_API_TOKEN in heroku. Get value from  https://genius.com/developers.",
-        "usage": ["{tr}lyrics <artist name> - <song name>", "{tr}lyrics -l <song name>", "{tr}lyrics -n<song number> <song name>"],
-        "examples": ["{tr}lyrics Armaan Malik - butta bomma","{tr}lyrics -l butta bomma","{tr}lyrics -n2 butta bomma"]
+        "usage": [
+            "{tr}lyrics <artist name> - <song name>",
+            "{tr}lyrics -l <song name>",
+            "{tr}lyrics -n<song number> <song name>",
+        ],
+        "examples": [
+            "{tr}lyrics Armaan Malik - butta bomma",
+            "{tr}lyrics -l butta bomma",
+            "{tr}lyrics -n2 butta bomma",
+        ],
     },
 )
 async def lyrics(event):  # sourcery no-metrics
