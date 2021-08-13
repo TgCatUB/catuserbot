@@ -63,6 +63,7 @@ class Config(object):
     # for custom thumb image set this with your required thumb telegraoh link
     THUMB_IMAGE = os.environ.get(
         "THUMB_IMAGE", "https://telegra.ph/file/ca95524e4734b0d5461b5.jpg"
+    CUSTOM_PERMIT = os.environ.get("custom pm message", None)
     )
     # specify NO_LOAD with plugin names for not loading in userbot
     NO_LOAD = [x for x in os.environ.get("NO_LOAD", "").split()]
