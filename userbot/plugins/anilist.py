@@ -312,7 +312,7 @@ async def get_anime(event):
         msg += "\n\n`**• Fillers:**\n`"
         msg += str(response.get("filler_episodes"))
         if response.get("anime_canon_episodes") is not None:
-            msg += "\n\n**`• Anime Canon episodes:**\n`"
+            msg += "\n\n`**• Anime Canon episodes:**\n`"
             msg += str(response.get("anime_canon_episodes"))
         msg += "`"
         return await edit_or_reply(event, msg)
@@ -330,15 +330,16 @@ async def get_anime(event):
         return await edit_or_reply(event, msg)
     msg = ""
     msg += f"**Fillers for anime** `{list(result.keys())[anime-1]}`**"
-    msg += "\n\n• Manga Canon episodes:**\n"
+    msg += "\n\n• Manga Canon episodes:**`\n"
     msg += str(response.get("total_ep"))
-    msg += "\n\n**• Mixed/Canon fillers:**\n"
+    msg += "\n\n`**• Mixed/Canon fillers:**`\n"
     msg += str(response.get("mixed_ep"))
-    msg += "\n\n**• Fillers:**\n"
+    msg += "\n\n`**• Fillers:**\n`"
     msg += str(response.get("filler_episodes"))
     if response.get("anime_canon_episodes") is not None:
-        msg += "\n\n**• Anime Canon episodes:**\n"
+        msg += "\n\n`**• Anime Canon episodes:**\n`"
         msg += str(response.get("anime_canon_episodes"))
+    msg += "`"
     await edit_or_reply(event, msg)
 
 
