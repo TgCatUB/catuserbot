@@ -33,7 +33,7 @@ def check_data_base_heal_th():
         # to check database we will execute raw query
         SESSION.execute("SELECT 1")
     except Exception as e:
-        output = f"❌ {str(e)}"
+        output = f"❌ {e}"
         is_database_working = False
     else:
         output = "Functioning"

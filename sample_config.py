@@ -40,6 +40,8 @@ class Config(object):
     PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID") or 0)
     # Set this value same as PRIVATE_GROUP_BOT_API_ID if you need pmgaurd
     PRIVATE_GROUP_ID = int(os.environ.get("PRIVATE_GROUP_ID") or 0)
+    # Set this value for working of fban/unfban/superfban/superunfban cmd
+    FBAN_GROUP_ID = int(os.environ.get("FBAN_GROUP_ID") or 0)
     # set this value with channel id of private channel use full for .frwd cmd
     PRIVATE_CHANNEL_BOT_API_ID = int(os.environ.get("PRIVATE_CHANNEL_BOT_API_ID") or 0)
     # for heroku plugin you can get this value from https://dashboard.heroku.com/account
@@ -101,6 +103,8 @@ class Config(object):
     # https://console.bluemix.net/docs/services/speech-to-text/getting-started.html
     IBM_WATSON_CRED_URL = os.environ.get("IBM_WATSON_CRED_URL", None)
     IBM_WATSON_CRED_PASSWORD = os.environ.get("IBM_WATSON_CRED_PASSWORD", None)
+    # Get free api from https://dashboard.ipdata.co/sign-up.html
+    IPDATA_API = os.environ.get("IPDATA_API", None)
     # Get a Free API Key from OCR.Space
     OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
     # Genius lyrics get this value from https://genius.com/developers both has

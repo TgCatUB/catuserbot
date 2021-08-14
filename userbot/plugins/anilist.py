@@ -1,4 +1,8 @@
 import html
+import os
+import re
+import textwrap
+from datetime import datetime
 from urllib.parse import quote_plus
 
 import aiohttp
@@ -7,6 +11,7 @@ import jikanpy
 import requests
 from jikanpy import Jikan
 from jikanpy.exceptions import APIException
+from pySmartDL import SmartDL
 from telegraph import exceptions, upload_file
 
 from userbot import catub
@@ -15,25 +20,163 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import media_type, readable_time, time_formatter
 from ..helpers.functions import (
     airing_query,
+    anilist_user,
     callAPI,
     formatJSON,
     get_anime_manga,
+    get_anime_schedule,
+    get_filler_episodes,
     getBannerLink,
     memory_file,
     replace_text,
+    search_in_animefiller,
+    weekdays,
 )
 from ..helpers.utils import _cattools, reply_id
 
 jikan = Jikan()
-url = "https://graphql.anilist.co"
+
+anilistapiurl = "https://graphql.anilist.co"
+
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
 }
+
+ppath = os.path.join(os.getcwd(), "temp", "anilistuser.jpg")
+anime_path = os.path.join(os.getcwd(), "temp", "animeresult.jpg")
+
 plugin_category = "extra"
 
 
 @catub.cat_cmd(
-    pattern="airing ([\s\S]*)",
+    pattern="aq$",
+    command=("aq", plugin_category),
+    info={
+        "header": "Get random Anime quotes.",
+        "usage": "{tr}aq",
+        "examples": "{tr}aq",
+    },
+)
+async def anime_quote(event):
+    data = requests.get("https://animechan.vercel.app/api/random").json()
+    anime = data["anime"]
+    character = data["character"]
+    quote = data["quote"]
+    await edit_or_reply(
+        event,
+        f"• <b>Anime</b> (アニメ) <b>:</b>\n ➥ <i>{anime}</i>\n\n• <b>Character:</b> (キャラクター) <b>:</b>\n ➥ <i>{character}</i>\n\n• <b>Quote:</b> (言っている) <b>:</b>\n ➥ <i>{quote}</i>",
+        parse_mode="html",
+    )
+
+
+@catub.cat_cmd(
+    pattern="aluser(?:\s|$)([\s\S]*)",
+    command=("aluser", plugin_category),
+    info={
+        "header": "Search User profiles in anilist.",
+        "usage": "{tr}aluser <username>",
+        "examples": "{tr}aluser Infinity20998",
+    },
+)
+async def anilist_usersearch(event):
+    "Search user profiles of Anilist."
+    search_query = event.pattern_match.group(1)
+    reply_to = await reply_id(event)
+    reply = await event.get_reply_message()
+    if not search_query:
+        if reply and reply.text:
+            search_query = reply.text
+        else:
+            return await edit_delete(event, "__Whom should i search.__")
+    catevent = await edit_or_reply(event, "`Searching user profile in anilist...`")
+    searchresult = await anilist_user(search_query)
+    if len(searchresult) == 1:
+        return await edit_or_reply(
+            catevent, f"**Error while searching user profile:**\n{searchresult[0]}"
+        )
+    downloader = SmartDL(searchresult[1], ppath, progress_bar=False)
+    downloader.start(blocking=False)
+    while not downloader.isFinished():
+        pass
+    await event.client.send_file(
+        event.chat_id,
+        ppath,
+        caption=searchresult[0],
+        reply_to=reply_to,
+    )
+    os.remove(ppath)
+    await catevent.delete()
+
+
+@catub.cat_cmd(
+    pattern="mal(?:\s|$)([\s\S]*)",
+    command=("mal", plugin_category),
+    info={
+        "header": "Search profiles of MAL.",
+        "usage": "{tr}mal <username>",
+        "examples": "{tr}mal Infinity20998",
+    },
+)
+async def user(event):
+    "Search profiles of MAL."
+    search_query = event.pattern_match.group(1)
+    replyto = await reply_id(event)
+    reply = await event.get_reply_message()
+    if not search_query and reply and reply.text:
+        search_query = reply.text
+    elif not search_query:
+        return await edit_delete(event, "__Whom should i search.__")
+    try:
+        user = jikan.user(search_query)
+    except APIException:
+        return await edit_delete(event, "__No User found with given username__", 5)
+    date_format = "%Y-%m-%d"
+    img = user["image_url"] or "https://telegra.ph//file/9b4205e1b1cc68a4ffd5e.jpg"
+    try:
+        user_birthday = datetime.fromisoformat(user["birthday"])
+        user_birthday_formatted = user_birthday.strftime(date_format)
+    except BaseException:
+        user_birthday_formatted = "Unknown"
+    user_joined_date = datetime.fromisoformat(user["joined"])
+    user_joined_date_formatted = user_joined_date.strftime(date_format)
+    user_last_online = datetime.fromisoformat(user["last_online"])
+    user_last_online_formatted = user_last_online.strftime(date_format)
+    for entity in user:
+        if user[entity] is None:
+            user[entity] = "Unknown"
+    about = user["about"].split(" ", 60)
+    try:
+        about.pop(60)
+    except IndexError:
+        pass
+    about_string = " ".join(about)
+    about_string = about_string.replace("<br>", "").strip().replace("\r\n", "\n")
+    caption = ""
+    caption += textwrap.dedent(
+        f"""
+    **Username:** [{user['username']}]({user['url']})
+    **Gender:** `{user['gender']}`
+    **MAL ID:** `{user['user_id']}`
+    **Birthday:** `{user_birthday_formatted}`
+    **Joined:** `{user_joined_date_formatted}`
+    **Last Online:** `{user_last_online_formatted}`
+    
+    **Days wasted watching Anime:** `{user['anime_stats']['days_watched']}`
+    **No of completed Animes:** `{user['anime_stats']['completed']}`
+    **Total No of episodes Watched:** `{user['anime_stats']['episodes_watched']}`
+    **Days wasted reading Manga:** `{user['manga_stats']['days_read']}`
+    """
+    )
+
+    caption += f"**About:** __{about_string}__"
+    await event.client.send_file(
+        event.chat_id, file=img, caption=caption, reply_to=replyto
+    )
+    await event.delete()
+
+
+@catub.cat_cmd(
+    pattern="airing(?:\s|$)([\s\S]*)",
     command=("airing", plugin_category),
     info={
         "header": "Shows you the time left for the new episode of current running anime show.",
@@ -44,15 +187,20 @@ plugin_category = "extra"
 async def anilist(event):
     "Get airing date & time of any anime"
     search = event.pattern_match.group(1)
+    if not search:
+        return await edit_delete(event, "__which anime results should i fetch__")
     variables = {"search": search}
     response = requests.post(
-        url, json={"query": airing_query, "variables": variables}
+        anilistapiurl, json={"query": airing_query, "variables": variables}
     ).json()["data"]["Media"]
+    if response is None:
+        return await edit_delete(event, "__Unable to find the anime.__")
     ms_g = f"**Name**: **{response['title']['romaji']}**(`{response['title']['native']}`)\n**ID**: `{response['id']}`"
     if response["nextAiringEpisode"]:
         airing_time = response["nextAiringEpisode"]["timeUntilAiring"]
         airing_time_final = time_formatter(airing_time)
-        ms_g += f"\n**Episode**: `{response['nextAiringEpisode']['episode']}`\n**Airing In**: `{airing_time_final}`"
+        airing_at = response["nextAiringEpisode"]["airingAt"]
+        ms_g += f"\n**Episode**: `{response['nextAiringEpisode']['episode']}`\n**Airing In**: `{airing_time_final}`\n**Time: **`{datetime.fromtimestamp(airing_at)}`"
     else:
         ms_g += f"\n**Episode**:{response['episodes']}\n**Status**: `N/A`"
     await edit_or_reply(event, ms_g)
@@ -106,11 +254,93 @@ async def get_manga(event):
     jikan = jikanpy.jikan.Jikan()
     search_result = jikan.search("manga", input_str)
     first_mal_id = search_result["results"][0]["mal_id"]
-    caption, image = get_anime_manga(first_mal_id, "anime_manga", event.chat_id)
+    caption, image = await get_anime_manga(first_mal_id, "anime_manga", event.chat_id)
     await catevent.delete()
     await event.client.send_file(
         event.chat_id, file=image, caption=caption, parse_mode="html", reply_to=reply_to
     )
+
+
+@catub.cat_cmd(
+    pattern="fillers(?:\s|$)([\s\S]*)",
+    command=("fillers", plugin_category),
+    info={
+        "header": "To get list of filler episodes.",
+        "flags": {
+            "-n": "If more than one name have same common word then to select required anime"
+        },
+        "usage": ["{tr}fillers <anime name>", "{tr}fillers -n<number> <anime name>"],
+        "examples": [
+            "{tr}fillers one piece",
+            "{tr}fillers -n5 naruto",
+        ],
+    },
+)
+async def get_anime(event):
+    "to get list of filler episodes."
+    input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str:
+        if reply:
+            input_str = reply.text
+        else:
+            return await edit_delete(
+                event, "__What should i search ? Gib me Something to Search__"
+            )
+    anime = re.findall(r"-n\d+", input_str)
+    try:
+        anime = anime[0]
+        anime = anime.replace("-n", "")
+        input_str = input_str.replace("-n" + anime, "")
+        anime = int(anime)
+    except IndexError:
+        anime = 0
+    input_str = input_str.strip()
+    result = await search_in_animefiller(input_str)
+    if result == {}:
+        return await edit_or_reply(
+            event, f"**No filler episodes for the given anime**` {input_str}`"
+        )
+    if len(result) == 1:
+        response = await get_filler_episodes(result[list(result.keys())[0]])
+        msg = ""
+        msg += f"**Fillers for anime** `{list(result.keys())[0]}`**"
+        msg += "\n\n• Manga Canon episodes:**`\n"
+        msg += str(response.get("total_ep"))
+        msg += "\n\n`**• Mixed/Canon fillers:**`\n"
+        msg += str(response.get("mixed_ep"))
+        msg += "\n\n`**• Fillers:**\n`"
+        msg += str(response.get("filler_episodes"))
+        if response.get("anime_canon_episodes") is not None:
+            msg += "\n\n`**• Anime Canon episodes:**\n`"
+            msg += str(response.get("anime_canon_episodes"))
+        msg += "`"
+        return await edit_or_reply(event, msg)
+    if anime == 0:
+        msg = f"**More than 1 result found for {input_str}. so try as** `{Config.COMMAND_HAND_LER}fillers -n<number> {input_str}`\n\n"
+        for i, an in enumerate(list(result.keys()), start=1):
+            msg += f"{i}. {an}\n"
+        return await edit_or_reply(event, msg)
+    try:
+        response = await get_filler_episodes(result[list(result.keys())[anime - 1]])
+    except IndexError:
+        msg = f"**Given index for {input_str} is wrong check again for correct index and then try** `{Config.COMMAND_HAND_LER}fillers -n<index> {input_str}`\n\n"
+        for i, an in enumerate(list(result.keys()), start=1):
+            msg += f"{i}. {an}\n"
+        return await edit_or_reply(event, msg)
+    msg = ""
+    msg += f"**Fillers for anime** `{list(result.keys())[anime-1]}`**"
+    msg += "\n\n• Manga Canon episodes:**`\n"
+    msg += str(response.get("total_ep"))
+    msg += "\n\n`**• Mixed/Canon fillers:**`\n"
+    msg += str(response.get("mixed_ep"))
+    msg += "\n\n`**• Fillers:**\n`"
+    msg += str(response.get("filler_episodes"))
+    if response.get("anime_canon_episodes") is not None:
+        msg += "\n\n`**• Anime Canon episodes:**\n`"
+        msg += str(response.get("anime_canon_episodes"))
+    msg += "`"
+    await edit_or_reply(event, msg)
 
 
 @catub.cat_cmd(
@@ -122,7 +352,7 @@ async def get_manga(event):
         "examples": "{tr}sanime black clover",
     },
 )
-async def get_manga(event):
+async def get_anime(event):
     "searches for anime."
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
@@ -138,18 +368,23 @@ async def get_manga(event):
     jikan = jikanpy.jikan.Jikan()
     search_result = jikan.search("anime", input_str)
     first_mal_id = search_result["results"][0]["mal_id"]
-    caption, image = get_anime_manga(first_mal_id, "anime_anime", event.chat_id)
+    caption, image = await get_anime_manga(first_mal_id, "anime_anime", event.chat_id)
     try:
-        await catevent.delete()
+        downloader = SmartDL(image, anime_path, progress_bar=False)
+        downloader.start(blocking=False)
+        while not downloader.isFinished():
+            pass
         await event.client.send_file(
             event.chat_id,
-            file=image,
+            file=anime_path,
             caption=caption,
             parse_mode="html",
             reply_to=reply_to,
         )
+        await catevent.delete()
+        os.remove(anime_path)
     except BaseException:
-        image = getBannerLink(first_mal_id, False)
+        image = getBannerLink(first_mal_id, True)
         await event.client.send_file(
             event.chat_id,
             file=image,
@@ -309,11 +544,36 @@ async def upcoming(event):
     anime = later.get("anime")
     for new in anime:
         name = new.get("title")
-        url = new.get("url")
-        rep += f"• <a href='{url}'>{name}</a>\n"
+        a_url = new.get("url")
+        rep += f"• <a href='{a_url}'>{name}</a>\n"
         if len(rep) > 1000:
             break
     await edit_or_reply(event, rep, parse_mode="html")
+
+
+@catub.cat_cmd(
+    pattern="aschedule(?: |$)([\S\s]*)",
+    command=("aschedule", plugin_category),
+    info={
+        "header": "Shows you animes to be aired on that day.",
+        "description": "To get list of animes to be aired on that day use can also use 0 for monday , 1 for tuesday.... 6 for sunday.",
+        "usage": "{tr}aschedule <weekdays/[0-6]>",
+        "example": ["{tr}aschedule sunday", "{tr}aschedule 5"],
+    },
+)
+async def aschedule_fetch(event):
+    "To get list of animes scheduled on that day"
+    input_str = event.pattern_match.group(1) or datetime.now().weekday()
+    if input_str in weekdays:
+        input_str = weekdays[input_str]
+    try:
+        input_str = int(input_str)
+    except ValueError:
+        return await edit_delete(event, "`You have given and invalid weekday`", 7)
+    if input_str not in [0, 1, 2, 3, 4, 5, 6]:
+        return await edit_delete(event, "`You have given and invalid weekday`", 7)
+    result = await get_anime_schedule(input_str)
+    await edit_or_reply(event, result[0])
 
 
 @catub.cat_cmd(
@@ -352,7 +612,7 @@ async def whatanime(event):
         try:
             response = upload_file(output[1])
         except exceptions.TelegraphException as exc:
-            return await edit_delete(output[0], f"**Error :**\n__{str(exc)}__")
+            return await edit_delete(output[0], f"**Error :**\n__{exc}__")
     cat = f"https://telegra.ph{response[0]}"
     await output[0].edit("`Searching for result..`")
     async with aiohttp.ClientSession() as session:

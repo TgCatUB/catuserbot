@@ -83,7 +83,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     try:
         outframes = await spin_frames(image, w, h, outframes)
     except Exception as e:
-        return await edit_delete(output[0], f"**Error**\n__{str(e)}__")
+        return await edit_delete(output[0], f"**Error**\n__{e}__")
     output = io.BytesIO()
     output.name = "Output.gif"
     outframes[0].save(output, save_all=True, append_images=outframes[1:], duration=1)
@@ -103,7 +103,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
             width = track.width
     PATH = os.path.join(Config.TEMP_DIR, "round.gif")
     if aspect_ratio != 1:
-        crop_by = width if (height > width) else height
+        crop_by = min(height, width)
         await _catutils.runcmd(
             f'ffmpeg -i {final} -vf "crop={crop_by}:{crop_by}" {PATH}'
         )
@@ -186,7 +186,7 @@ async def video_catfile(event):  # sourcery no-metrics
                     height = track.height
                     width = track.width
             if aspect_ratio != 1:
-                crop_by = width if (height > width) else height
+                crop_by = min(height, width)
                 await _catutils.runcmd(
                     f'ffmpeg -i {catfile} -vf "crop={crop_by}:{crop_by}" {PATH}'
                 )
@@ -197,7 +197,7 @@ async def video_catfile(event):  # sourcery no-metrics
             try:
                 catthumb = await reply.download_media(thumb=-1)
             except Exception as e:
-                LOGS.error(f"circle - {str(e)}")
+                LOGS.error(f"circle - {e}")
     elif mediatype in ["Voice", "Audio"]:
         catthumb = None
         try:
@@ -421,7 +421,7 @@ async def get(event):
         except Exception as e:
             if os.path.exists(file_loc):
                 os.remove(file_loc)
-            return await edit_delete(event, f"**Error**\n__{str(e)}__")
+            return await edit_delete(event, f"**Error**\n__{e}__")
     await edit_or_reply(
         event,
         file_content,
@@ -497,6 +497,14 @@ async def _(event):  # sourcery no-metrics
                 "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
             )
         if len(loc) == 2:
+            try:
+                loc[0] = int(loc[0])
+                loc[1] = int(loc[1])
+            except ValueError:
+                return await edit_delete(
+                    event,
+                    "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
+                )
             if 0 < loc[0] < 721:
                 quality = loc[0].strip()
             else:
@@ -506,6 +514,13 @@ async def _(event):  # sourcery no-metrics
             else:
                 return await edit_delete(event, "Use quality of range 0 to 20")
         if len(loc) == 1:
+            try:
+                loc[0] = int(loc[0])
+            except ValueError:
+                return await edit_delete(
+                    event,
+                    "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
+                )
             if 0 < loc[0] < 721:
                 quality = loc[0].strip()
             else:
@@ -710,7 +725,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
         elif args == "i":
             outframes = await invert_frames(image, w, h, outframes)
     except Exception as e:
-        return await edit_delete(catevent, f"**Error**\n__{str(e)}__")
+        return await edit_delete(catevent, f"**Error**\n__{e}__")
     output = io.BytesIO()
     output.name = "Output.gif"
     outframes[0].save(output, save_all=True, append_images=outframes[1:], duration=0.7)

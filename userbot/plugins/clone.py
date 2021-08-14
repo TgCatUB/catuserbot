@@ -56,7 +56,10 @@ async def _(event):
     await event.client(functions.account.UpdateProfileRequest(first_name=first_name))
     await event.client(functions.account.UpdateProfileRequest(last_name=last_name))
     await event.client(functions.account.UpdateProfileRequest(about=user_bio))
-    pfile = await event.client.upload_file(profile_pic)
+    try:
+        pfile = await event.client.upload_file(profile_pic)
+    except Exception as e:
+        return await edit_delete(event, f"**Failed to clone due to error:**\n__{e}__")
     await event.client(functions.photos.UploadProfilePhotoRequest(pfile))
     await edit_delete(event, "**LET US BE AS ONE**")
     if BOTLOG:
@@ -91,5 +94,6 @@ async def _(event):
     await edit_delete(event, "successfully reverted to your account back")
     if BOTLOG:
         await event.client.send_message(
-            BOTLOG_CHATID, f"#REVERT\nsuccessfully reverted back to your profile"
+            BOTLOG_CHATID,
+            "#REVERT\nsuccessfully reverted back to your profile",
         )

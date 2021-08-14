@@ -1,6 +1,8 @@
 """
-All Thenks goes to Emily ( The creater of This Plugin) from ftg userbot
+Thenks goes to Emily ( The creater of Poto cmd) from ftg userbot
 """
+
+from PIL import Image, ImageFilter, UnidentifiedImageError
 
 from userbot import catub
 
@@ -32,7 +34,7 @@ async def potocmd(event):
     uid = "".join(event.raw_text.split(maxsplit=1)[1:])
     user = await event.get_reply_message()
     chat = event.input_chat
-    if user:
+    if user and user.sender:
         photos = await event.client.get_profile_photos(user.sender)
         u = True
     else:
@@ -70,10 +72,47 @@ async def potocmd(event):
             await edit_or_reply(event, "`Are you comedy me ?`")
             return
         if int(uid) > (len(photos)):
-            return await edit_delere(
+            return await edit_delete(
                 event, "`No photo found of this NIBBA / NIBBI. Now u Die!`"
             )
 
         send_photos = await event.client.download_media(photos[uid - 1])
         await event.client.send_file(event.chat_id, send_photos)
     await event.delete()
+
+
+@catub.cat_cmd(
+    pattern="blur(?:\s|$)([\s\S]*)",
+    command=("blur", plugin_category),
+    info={
+        "header": "To blur picture.",
+        "description": "Reply to a user to blur his profile picture , or reply to a photo to blur that.",
+        "usage": [
+            "{tr}blur <number> <reply to a picture / user text>",
+            "{tr}blur <reply to a picture / user text>",
+        ],
+    },
+)
+async def potocmd(event):
+    "To blur pic"
+    reply_to_id = await reply_id(event)
+    rinp = event.pattern_match.group(1)
+    rimg = await event.get_reply_message()
+    red = int(rinp) if rinp else 10
+    pic_name = "blur.png"
+    try:
+        if rimg and rimg.media:
+            await event.client.download_media(rimg, pic_name)
+        else:
+            user = rimg.sender_id
+            await event.client.download_profile_photo(user, pic_name)
+    except AttributeError:
+        return await edit_delete(event, "`Replay to a user message... `")
+    try:
+        im1 = Image.open(pic_name)
+        im2 = im1.filter(ImageFilter.GaussianBlur(radius=red))
+        im2.save(pic_name)
+    except UnidentifiedImageError:
+        return await edit_delete(event, "`Replay to a picture or user message... `")
+    await event.delete()
+    await event.client.send_file(event.chat_id, pic_name, reply_to=reply_to_id)

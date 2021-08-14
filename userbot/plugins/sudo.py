@@ -61,12 +61,11 @@ async def chat_blacklist(event):
                 text,
             )
             return await event.client.reload(msg)
-        else:
-            text += "**You haven't added anyone to your sudo yet.**"
-            return await edit_or_reply(
-                event,
-                text,
-            )
+        text += "**You haven't added anyone to your sudo yet.**"
+        return await edit_or_reply(
+            event,
+            text,
+        )
     if gvarstatus("sudoenable") is not None:
         delgvar("sudoenable")
         text = "__Disabled sudo successfully.__"
@@ -79,12 +78,11 @@ async def chat_blacklist(event):
                 text,
             )
             return await event.client.reload(msg)
-        else:
-            text += "**You haven't added any chat to blacklist yet.**"
-            return await edit_or_reply(
-                event,
-                text,
-            )
+        text += "**You haven't added any chat to blacklist yet.**"
+        return await edit_or_reply(
+            event,
+            text,
+        )
     await edit_delete(event, "It was turned off already")
 
 
@@ -256,7 +254,9 @@ async def _(event):  # sourcery no-metrics
         loadcmds = []
         for plugin in input_str:
             if plugin not in PLG_INFO:
-                errors += f"`{cmd}` __There is no such plugin in your CatUserbot__.\n"
+                errors += (
+                    f"`{plugin}` __There is no such plugin in your CatUserbot__.\n"
+                )
             else:
                 loadcmds += PLG_INFO[plugin]
     else:
@@ -345,7 +345,9 @@ async def _(event):  # sourcery no-metrics
         flagcmds = []
         for plugin in input_str:
             if plugin not in PLG_INFO:
-                errors += f"`{cmd}` __There is no such plugin in your CatUserbot__.\n"
+                errors += (
+                    f"`{plugin}` __There is no such plugin in your CatUserbot__.\n"
+                )
             else:
                 flagcmds += PLG_INFO[plugin]
     else:

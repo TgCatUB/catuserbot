@@ -78,15 +78,16 @@ def char_is_emoji(character):
 
 def pack_nick(username, pack, is_anim):
     if gvarstatus("CUSTOM_STICKER_PACKNAME"):
-        if is_anim:
-            packnick = f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack} (Animated)"
-        else:
-            packnick = f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack}"
+        return (
+            f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack} (Animated)"
+            if is_anim
+            else f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack}"
+        )
+
     elif is_anim:
-        packnick = f"@{username} Vol.{pack} (Animated)"
+        return f"@{username} Vol.{pack} (Animated)"
     else:
-        packnick = f"@{username} Vol.{pack}"
-    return packnick
+        return f"@{username} Vol.{pack}"
 
 
 async def resize_photo(photo):
@@ -127,7 +128,13 @@ async def newpacksticker(
     otherpack=False,
     pkang=False,
 ):
-    await conv.send_message(cmd)
+    try:
+        await conv.send_message(cmd)
+    except YouBlockedUserError:
+        await catevent.edit("You have blocked the @stickers bot. unblock it and try.")
+        if not pkang:
+            return None, None, None
+        return None, None
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packnick)
@@ -144,7 +151,9 @@ async def newpacksticker(
         await catevent.edit(
             f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
         )
-        return
+        if not pkang:
+            return None, None, None
+        return None, None
     await conv.send_message(emoji)
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
@@ -180,7 +189,13 @@ async def add_to_pack(
     cmd,
     pkang=False,
 ):
-    await conv.send_message("/addsticker")
+    try:
+        await conv.send_message("/addsticker")
+    except YouBlockedUserError:
+        await catevent.edit("You have blocked the @stickers bot. unblock it and try.")
+        if not pkang:
+            return None, None
+        return None, None
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packname)
@@ -193,9 +208,7 @@ async def add_to_pack(
             pack = 1
         packname = pack_name(userid, pack, is_anim)
         packnick = pack_nick(username, pack, is_anim)
-        await catevent.edit(
-            f"`Switching to Pack {str(pack)} due to insufficient space`"
-        )
+        await catevent.edit(f"`Switching to Pack {pack} due to insufficient space`")
         await conv.send_message(packname)
         x = await conv.get_response()
         if x.text == "Invalid pack selected.":
@@ -224,7 +237,9 @@ async def add_to_pack(
         await catevent.edit(
             f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
         )
-        return
+        if not pkang:
+            return None, None
+        return None, None
     await conv.send_message(emoji)
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
@@ -348,6 +363,8 @@ async def kang(args):  # sourcery no-metrics
                     emoji,
                     cmd,
                 )
+            if packname is None:
+                return
             await edit_delete(
                 catevent,
                 f"`Sticker kanged successfully!\
@@ -370,6 +387,8 @@ async def kang(args):  # sourcery no-metrics
                     packname,
                     is_anim,
                 )
+            if otherpack is None:
+                return
             if otherpack:
                 await edit_delete(
                     catevent,
@@ -546,6 +565,8 @@ async def pack_kang(event):  # sourcery no-metrics
                         cmd,
                         pkang=True,
                     )
+            if catpackname is None:
+                return
             if catpackname not in blablapacks:
                 blablapacks.append(catpackname)
                 blablapacknames.append(pack)
@@ -654,10 +675,11 @@ async def pic2packcmd(event):
             )
             await event.client.send_read_acknowledge(conv.chat_id)
             for packname in ending.raw_text.split():
-                if packname.startswith("https://t.me/"):
+                stick_pack_name = packname
+                if stick_pack_name.startswith("https://t.me/"):
                     break
             await catevent.edit(
-                f"__successfully created the pack for the replied media : __[{args}]({packname})"
+                f"__successfully created the pack for the replied media : __[{args}]({stick_pack_name})"
             )
 
         except YouBlockedUserError:

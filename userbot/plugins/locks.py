@@ -5,6 +5,7 @@ from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import ChatBannedRights
+from telethon.utils import get_display_name
 
 from userbot import catub
 
@@ -164,12 +165,12 @@ async def _(event):  # sourcery no-metrics
             cpin = True
             changeinfo = True
             locktype = "everything"
-        else:
-            if input_str:
-                return await edit_delete(
-                    event, f"**Invalid lock type :** `{input_str}`", time=5
-                )
+        elif input_str:
+            return await edit_delete(
+                event, f"**Invalid lock type :** `{input_str}`", time=5
+            )
 
+        else:
             return await edit_or_reply(event, "`I can't lock nothing !!`")
         try:
             cat = Get(cat)
@@ -200,7 +201,7 @@ async def _(event):  # sourcery no-metrics
         except BaseException as e:
             await edit_delete(
                 event,
-                f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
+                f"`Do I have proper rights for that ??`\n\n**Error:** `{e}`",
                 time=5,
             )
 
@@ -352,12 +353,12 @@ async def _(event):  # sourcery no-metrics
             cpin = False
             changeinfo = False
             locktype = "everything"
-        else:
-            if input_str:
-                return await edit_delete(
-                    event, f"**Invalid unlock type :** `{input_str}`", time=5
-                )
+        elif input_str:
+            return await edit_delete(
+                event, f"**Invalid unlock type :** `{input_str}`", time=5
+            )
 
+        else:
             return await edit_or_reply(event, "`I can't unlock nothing !!`")
         try:
             cat = Get(cat)
@@ -388,7 +389,7 @@ async def _(event):  # sourcery no-metrics
         except BaseException as e:
             return await edit_delete(
                 event,
-                f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
+                f"`Do I have proper rights for that ??`\n\n**Error:** `{e}`",
                 time=5,
             )
 
@@ -482,9 +483,7 @@ async def _(event):  # sourcery no-metrics
     peer_id = event.chat_id
     reply = await event.get_reply_message()
     chat_per = (await event.get_chat()).default_banned_rights
-    result = await event.client(
-        functions.channels.GetParticipantRequest(peer_id, reply.from_id)
-    )
+    result = await event.client.get_permissions(peer_id, reply.from_id)
     admincheck = await is_admin(event.client, peer_id, reply.from_id)
     if admincheck:
         return await edit_delete(event, "`This user is admin you cant play with him`")
@@ -662,12 +661,12 @@ async def _(event):  # sourcery no-metrics
         ucpin = True
         uchangeinfo = True
         locktype = "everything"
-    else:
-        if input_str:
-            return await edit_delete(
-                event, f"**Invalid lock type :** `{input_str}`", time=5
-            )
+    elif input_str:
+        return await edit_delete(
+            event, f"**Invalid lock type :** `{input_str}`", time=5
+        )
 
+    else:
         return await edit_or_reply(event, "`I can't lock nothing !!`")
     try:
         cat = Get(cat)
@@ -694,7 +693,7 @@ async def _(event):  # sourcery no-metrics
     except BaseException as e:
         await edit_delete(
             event,
-            f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
+            f"`Do I have proper rights for that ??`\n\n**Error:** `{e}`",
             time=5,
         )
 
@@ -730,9 +729,7 @@ async def _(event):  # sourcery no-metrics
     peer_id = event.chat_id
     reply = await event.get_reply_message()
     chat_per = (await event.get_chat()).default_banned_rights
-    result = await event.client(
-        functions.channels.GetParticipantRequest(peer_id, reply.from_id)
-    )
+    result = await event.client.get_permissions(peer_id, reply.from_id)
     admincheck = await is_admin(event.client, peer_id, reply.from_id)
     if admincheck:
         return await edit_delete(event, "`This user is admin you cant play with him`")
@@ -913,12 +910,12 @@ async def _(event):  # sourcery no-metrics
         if not changeinfo:
             uchangeinfo = False
         locktype = "everything"
-    else:
-        if input_str:
-            return await edit_delete(
-                event, f"**Invalid lock type :** `{input_str}`", time=5
-            )
+    elif input_str:
+        return await edit_delete(
+            event, f"**Invalid lock type :** `{input_str}`", time=5
+        )
 
+    else:
         return await edit_or_reply(event, "`I can't lock nothing !!`")
     try:
         cat = Get(cat)
@@ -945,7 +942,7 @@ async def _(event):  # sourcery no-metrics
     except BaseException as e:
         await edit_delete(
             event,
-            f"`Do I have proper rights for that ??`\n\n**Error:** `{str(e)}`",
+            f"`Do I have proper rights for that ??`\n\n**Error:** `{e}`",
             time=5,
         )
 
@@ -966,9 +963,7 @@ async def _(event):  # sourcery no-metrics
     if not user:
         return
     admincheck = await is_admin(event.client, peer_id, user.id)
-    result = await event.client(
-        functions.channels.GetParticipantRequest(peer_id, user.id)
-    )
+    result = await event.client.get_permissions(peer_id, user.id)
     output = ""
     if admincheck:
         c_info = "✅" if result.participant.admin_rights.change_info else "❌"
@@ -978,7 +973,7 @@ async def _(event):  # sourcery no-metrics
         pin = "✅" if result.participant.admin_rights.pin_messages else "❌"
         add_a = "✅" if result.participant.admin_rights.add_admins else "❌"
         call = "✅" if result.participant.admin_rights.manage_call else "❌"
-        output += f"**Admin rights of **{_format.mentionuser(user.first_name ,user.id)} **in {event.chat.title} chat are **\n"
+        output += f"**Admin rights of **{_format.mentionuser(user.first_name ,user.id)} **in {get_display_name(await event.get_chat())} chat are **\n"
         output += f"__Change info :__ {c_info}\n"
         output += f"__Delete messages :__ {del_me}\n"
         output += f"__Ban users :__ {ban}\n"
@@ -1012,7 +1007,7 @@ async def _(event):  # sourcery no-metrics
             uadduser = "❌" if chat_per.invite_users else "✅"
             ucpin = "❌" if chat_per.pin_messages else "✅"
             uchangeinfo = "❌" if chat_per.change_info else "✅"
-        output += f"{_format.mentionuser(user.first_name ,user.id)} **permissions in {event.chat.title} chat are **\n"
+        output += f"{_format.mentionuser(user.first_name ,user.id)} **permissions in {get_display_name(await event.get_chat())} chat are **\n"
         output += f"__Send Messages :__ {umsg}\n"
         output += f"__Send Media :__ {umedia}\n"
         output += f"__Send Stickers :__ {usticker}\n"

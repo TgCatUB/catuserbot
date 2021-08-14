@@ -52,7 +52,7 @@ def doit(chat_id, match, original):
             if i > 0:
                 return original, s
         except Exception as e:
-            return None, f"u dun goofed m8: {str(e)}"
+            return None, f"u dun goofed m8: {e}"
         return None, None
 
     if original is not None:

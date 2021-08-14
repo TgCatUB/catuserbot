@@ -132,6 +132,10 @@ async def download(event):
         os.makedirs(GIT_TEMP_DIR)
     start = datetime.now()
     reply_message = await event.get_reply_message()
+    if not reply_message or not reply_message.media:
+        return await edit_delete(
+            event, "__Reply to a file which you want to commit in your github.__"
+        )
     try:
         downloaded_file_name = await event.client.download_media(reply_message.media)
     except Exception as e:

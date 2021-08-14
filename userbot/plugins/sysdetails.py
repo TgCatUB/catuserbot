@@ -71,10 +71,10 @@ async def psu(event):
     bw = "**Bandwith Usage**\n"
     bw += f"`Upload  : {get_size(psutil.net_io_counters().bytes_sent)}`\n"
     bw += f"`Download: {get_size(psutil.net_io_counters().bytes_recv)}`\n"
-    help_string = f"{str(softw)}\n"
-    help_string += f"{str(cpuu)}\n"
-    help_string += f"{str(memm)}\n"
-    help_string += f"{str(bw)}\n"
+    help_string = f"{softw}\n"
+    help_string += f"{cpuu}\n"
+    help_string += f"{memm}\n"
+    help_string += f"{bw}\n"
     help_string += "**Engine Info**\n"
     help_string += f"`Python {sys.version}`\n"
     help_string += f"`Telethon {__version__}`"
@@ -108,7 +108,7 @@ async def cpu(event):
 )
 async def sysdetails(sysd):
     "Shows system information using neofetch"
-    catevent = await edit_or_reply(sysd, "`Fectching system information.`")
+    catevent = await edit_or_reply(sysd, "`Fetching system information.`")
     cmd = "git clone https://github.com/dylanaraps/neofetch.git"
     await _catutils.runcmd(cmd)
     neo = "neofetch/neofetch --off --color_blocks off --bold off --cpu_temp C \

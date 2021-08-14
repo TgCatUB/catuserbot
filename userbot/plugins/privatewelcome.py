@@ -1,6 +1,7 @@
 from asyncio import sleep
 
 from telethon import events
+from telethon.utils import get_display_name
 
 from userbot import catub
 
@@ -27,7 +28,7 @@ async def _(event):  # sourcery no-metrics
         a_user = await event.get_user()
         chat = await event.get_chat()
         me = await event.client.get_me()
-        title = chat.title or "this chat"
+        title = get_display_name(await event.get_chat()) or "this chat"
         participants = await event.client.get_participants(chat)
         count = len(participants)
         mention = "<a href='tg://user?id={}'>{}</a>".format(
@@ -52,8 +53,10 @@ async def _(event):  # sourcery no-metrics
                 )
                 file_media = msg_o.media
                 current_saved_welcome_message = msg_o.message
+                link_preview = True
             elif cws.reply:
                 current_saved_welcome_message = cws.reply
+                link_preview = False
         if not pmpermit_sql.is_approved(userid):
             pmpermit_sql.approve(userid, "Due to private welcome")
         await sleep(1)
@@ -76,6 +79,7 @@ async def _(event):  # sourcery no-metrics
             ),
             file=file_media,
             parse_mode="html",
+            link_preview=link_preview,
         )
 
 
@@ -118,7 +122,7 @@ async def save_welcome(event):
                 BOTLOG_CHATID,
                 f"#WELCOME_NOTE\
                 \nCHAT ID: {event.chat_id}\
-                \nThe following message is saved as the welcome note for the {event.chat.title}, Dont delete this message !!",
+                \nThe following message is saved as the welcome note for the {get_display_name(await event.get_chat())}, Dont delete this message !!",
             )
             msg_o = await event.client.forward_messages(
                 entity=BOTLOG_CHATID, messages=msg, from_peer=event.chat_id, silent=True
@@ -185,4 +189,4 @@ async def show_welcome(event):
         await edit_or_reply(
             event, "`I am currently pwelcoming new users with this welcome note.`"
         )
-        await event.reply(cws.reply)
+        await event.reply(cws.reply, link_preview=False)

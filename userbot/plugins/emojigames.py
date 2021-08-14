@@ -16,7 +16,7 @@ BOWL_E_MOJI = "🎳"
 
 
 @catub.cat_cmd(
-    pattern=f"({DART_E_MOJI}|dart)( ([1-6])|$)",
+    pattern=f"({DART_E_MOJI}|dart) ([1-6])$",
     command=("dart", plugin_category),
     info={
         "header": "To get specific dart animation.",
@@ -48,15 +48,14 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
-    pattern=f"({DICE_E_MOJI}|dice)( ([1-6])|$)",
+    pattern=f"({DICE_E_MOJI}|dice) ([1-6])$",
     command=("dice", plugin_category),
     info={
         "header": "To get specific dice animation.",
@@ -88,15 +87,14 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
-    pattern=f"({BALL_E_MOJI}|bb)( ([1-5])|$)",
+    pattern=f"({BALL_E_MOJI}|bb) ([1-5])$",
     command=("bb", plugin_category),
     info={
         "header": "To get specific basket ball animation.",
@@ -128,15 +126,14 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
-    pattern=f"({FOOT_E_MOJI}|fb)( ([1-5])|$)",
+    pattern=f"({FOOT_E_MOJI}|fb) ([1-5])$",
     command=("fb", plugin_category),
     info={
         "header": "To get specific football animation.",
@@ -168,15 +165,14 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
-    pattern=f"({SLOT_E_MOJI}|jp)( ([1-64])|$)",
+    pattern=f"({SLOT_E_MOJI}|jp) ([0-9]+)$",
     command=("jp", plugin_category),
     info={
         "header": "To get specific jackpot animation.",
@@ -195,7 +191,9 @@ async def _(event):
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
     emoticon = event.pattern_match.group(1)
-    input_str = event.pattern_match.group(2)
+    input_str = int(event.pattern_match.group(2))
+    if not 0 < input_str < 65:
+        return
     await event.delete()
     if emoticon == "jp":
         emoticon = "🎰"
@@ -208,15 +206,14 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))
 
 
 @catub.cat_cmd(
-    pattern=f"({BOWL_E_MOJI}|bowl)( ([1-6])|$)",
+    pattern=f"({BOWL_E_MOJI}|bowl) ([1-6])$",
     command=("bowl", plugin_category),
     info={
         "header": "To get specific bowling animation.",
@@ -238,7 +235,7 @@ async def _(event):
     input_str = event.pattern_match.group(2)
     await event.delete()
     if emoticon == "bowl":
-        emoticon = "🎯"
+        emoticon = "🎳"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
         try:
@@ -248,8 +245,7 @@ async def _(event):
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
         except BaseException:
             pass
+    elif event.sender_id == event.client.uid:
+        await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
-        if event.sender_id == event.client.uid:
-            await event.edit(file=InputMediaDice(emoticon=emoticon))
-        else:
-            await event.reply(file=InputMediaDice(emoticon=emoticon))
+        await event.reply(file=InputMediaDice(emoticon=emoticon))

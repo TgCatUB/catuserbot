@@ -15,7 +15,7 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import catmemes
-from ..helpers.utils import _catutils
+from ..helpers.utils import _catutils, parse_pre
 from . import BOTLOG, BOTLOG_CHATID, mention
 
 plugin_category = "fun"
@@ -217,7 +217,7 @@ async def decide(event):
     if decision != "decide":
         r = requests.get(f"https://yesno.wtf/api?force={decision}").json()
     else:
-        r = requests.get(f"https://yesno.wtf/api").json()
+        r = requests.get("https://yesno.wtf/api").json()
     await event.delete()
     sandy = await event.client.send_message(
         event.chat_id, str(r["answer"]).upper(), reply_to=message_id, file=r["image"]
@@ -226,7 +226,7 @@ async def decide(event):
 
 
 @catub.cat_cmd(
-    pattern="shout",
+    pattern="shout(?:\s|$)([\s\S]*)",
     command=("shout", plugin_category),
     info={
         "header": "shouts the text in a fun way",
@@ -237,18 +237,23 @@ async def decide(event):
 )
 async def shout(args):
     "shouts the text in a fun way"
-    msg = "```"
-    messagestr = args.text
-    messagestr = messagestr[7:]
-    text = " ".join(messagestr)
-    result = [" ".join(text)]
-    for pos, symbol in enumerate(text[1:]):
-        result.append(symbol + " " + "  " * pos + symbol)
-    result = list("\n".join(result))
-    result[0] = text[0]
-    result = "".join(result)
-    msg = "\n" + result
-    await edit_or_reply(args, "`" + msg + "`")
+    input_str = args.pattern_match.group(1)
+    if not input_str:
+        return await edit_delete(args, "__What should i shout?__")
+    words = input_str.split()
+    msg = ""
+    for messagestr in words:
+        text = " ".join(messagestr)
+        result = [" ".join(text)]
+        for pos, symbol in enumerate(text[1:]):
+            result.append(symbol + " " + "  " * pos + symbol)
+        result = list("\n".join(result))
+        result[0] = text[0]
+        result = "".join(result)
+        msg += "\n" + result
+        if len(words) > 1:
+            msg += "\n\n----------\n"
+    await edit_or_reply(args, msg, parse_mode=parse_pre)
 
 
 @catub.cat_cmd(
@@ -382,12 +387,11 @@ async def wish_check(event):
     if wishtxt:
         reslt = f"**Your wish **__{wishtxt}__ **has been cast.** ✨\
               \n\n__Chance of success :__ **{chance}%**"
-    else:
-        if event.is_reply:
-            reslt = f"**Your wish has been cast. **✨\
+    elif event.is_reply:
+        reslt = f"**Your wish has been cast. **✨\
                   \n\n__Chance of success :__ **{chance}%**"
-        else:
-            reslt = f"What's your Wish? Should I consider you as Idiot by default ? 😜"
+    else:
+        reslt = "What's your Wish? Should I consider you as Idiot by default ? 😜"
     await edit_or_reply(event, reslt)
 
 

@@ -49,7 +49,7 @@ async def img_sampler(event):
     response = googleimagesdownload()
     # creating list of arguments
     arguments = {
-        "keywords": query,
+        "keywords": query.replace(",", " "),
         "limit": lim,
         "format": "jpg",
         "no_directory": "no_directory",
@@ -59,7 +59,7 @@ async def img_sampler(event):
         paths = response.download(arguments)
     except Exception as e:
         return await cat.edit(f"Error: \n`{e}`")
-    lst = paths[0][query]
+    lst = paths[0][query.replace(",", " ")]
     await event.client.send_file(event.chat_id, lst, reply_to=reply_to_id)
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await cat.delete()

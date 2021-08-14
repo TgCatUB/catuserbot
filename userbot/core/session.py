@@ -27,7 +27,7 @@ try:
         connection_retries=None,
     )
 except Exception as e:
-    print(f"STRING_SESSION - {str(e)}")
+    print(f"STRING_SESSION - {e}")
     sys.exit()
 
 

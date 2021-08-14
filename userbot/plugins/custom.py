@@ -7,6 +7,7 @@ from userbot.core.logger import logging
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
+from . import BOTLOG_CHATID
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
@@ -16,6 +17,7 @@ extractor = URLExtract()
 vlist = [
     "ALIVE_PIC",
     "ALIVE_EMOJI",
+    "ALIVE_TEMPLATE",
     "ALIVE_TEXT",
     "ALLOW_NSFW",
     "HELP_EMOJI",
@@ -49,7 +51,7 @@ oldvars = {
             "get": "To show the already existing var value.",
             "del": "To delete the existing value",
         },
-        "var name": "[list of vars](https://catuserbot.gitbook.io/catuserbot/data-vars-setup)",
+        "var name": "**[list of vars]**(https://catuserbot.gitbook.io/catuserbot/data-vars-setup)",
         "usage": [
             "{tr}setdv <var name> <var value>",
             "{tr}getdv <var name>",
@@ -82,6 +84,8 @@ async def bad(event):  # sourcery no-metrics
         if vname in oldvars:
             vname = oldvars[vname]
         if cmd == "set":
+            if not vinfo and vname == "ALIVE_TEMPLATE":
+                return await edit_delete(event, f"Check @cat_alive")
             if not vinfo:
                 return await edit_delete(
                     event, f"Give some values which you want to save for **{vname}**"
@@ -91,6 +95,13 @@ async def bad(event):  # sourcery no-metrics
                 if (("PIC" in vname) or ("pic" in vname)) and not url(i):
                     return await edit_delete(event, "**Give me a correct link...**")
             addgvar(vname, vinfo)
+            if BOTLOG_CHATID:
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    f"#SET_DATAVAR\
+                    \n**{vname}** is updated newly in database as below",
+                )
+                await event.client.send_message(BOTLOG_CHATID, vinfo, silent=True)
             await edit_delete(
                 event, f"📑 Value of **{vname}** is changed to :- `{vinfo}`", time=20
             )
@@ -101,6 +112,12 @@ async def bad(event):  # sourcery no-metrics
             )
         elif cmd == "del":
             delgvar(vname)
+            if BOTLOG_CHATID:
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    f"#DEL_DATAVAR\
+                    \n**{vname}** is deleted from database",
+                )
             await edit_delete(
                 event,
                 f"📑 Value of **{vname}** is now deleted & set to default.",
@@ -151,7 +168,7 @@ async def custom_catuserbot(event):
     text = None
     if reply:
         text = reply.text
-    if not reply and text:
+    if text is None:
         return await edit_delete(event, "__Reply to custom text or url__")
     input_str = event.pattern_match.group(1)
     if input_str == "pmpermit":
@@ -164,8 +181,16 @@ async def custom_catuserbot(event):
         urls = extractor.find_urls(reply.text)
         if not urls:
             return await edit_delete(event, "`the given link is not supported`", 5)
-        addgvar("pmpermit_pic", urls)
+        text = " ".join(urls)
+        addgvar("pmpermit_pic", text)
     await edit_or_reply(event, f"__Your custom {input_str} has been updated__")
+    if BOTLOG_CHATID:
+        await event.client.send_message(
+            BOTLOG_CHATID,
+            f"#SET_DATAVAR\
+                    \n**{input_str}** is updated newly in database as below",
+        )
+        await event.client.send_message(BOTLOG_CHATID, text, silent=True)
 
 
 @catub.cat_cmd(
@@ -209,3 +234,9 @@ async def custom_catuserbot(event):
     await edit_or_reply(
         event, f"__successfully deleted your customization of {input_str}.__"
     )
+    if BOTLOG_CHATID:
+        await event.client.send_message(
+            BOTLOG_CHATID,
+            f"#DEL_DATAVAR\
+                    \n**{input_str}** is deleted from database",
+        )

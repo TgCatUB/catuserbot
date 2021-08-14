@@ -63,17 +63,15 @@ async def paste_img(event):
         input_str = input_str.replace(ext[0], "").strip()
     except IndexError:
         extension = None
-    text_to_print = ""
-    if input_str:
-        text_to_print = input_str
-    if text_to_print == "" and reply.media:
+    text_to_print = input_str or ""
+    if text_to_print == "" and reply and reply.media:
         mediatype = media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
             with open(d_file_name, "r") as f:
                 text_to_print = f.read()
     if text_to_print == "":
-        if reply.text:
+        if reply and reply.text:
             text_to_print = reply.raw_text
         else:
             return await edit_delete(
@@ -98,7 +96,7 @@ async def paste_img(event):
         if d_file_name is not None:
             os.remove(d_file_name)
     except Exception as e:
-        await edit_delete(catevent, f"**Error:**\n`{str(e)}`", time=10)
+        await edit_delete(catevent, f"**Error:**\n`{e}`", time=10)
 
 
 @catub.cat_cmd(
@@ -137,10 +135,8 @@ async def paste_bin(event):
         pastetype = "n"
     else:
         pastetype = event.pattern_match.group(1) or "p"
-    text_to_print = ""
-    if input_str:
-        text_to_print = input_str
-    if text_to_print == "" and reply.media:
+    text_to_print = input_str or ""
+    if text_to_print == "" and reply and reply.media:
         mediatype = media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
@@ -149,7 +145,7 @@ async def paste_bin(event):
             with open(d_file_name, "r") as f:
                 text_to_print = f.read()
     if text_to_print == "":
-        if reply.text:
+        if reply and reply.text:
             text_to_print = reply.raw_text
         else:
             return await edit_delete(
@@ -163,8 +159,9 @@ async def paste_bin(event):
         if "error" in response:
             return await edit_delete(
                 catevent,
-                f"**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
+                "**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
             )
+
         result = ""
         if pastebins[response["bin"]] != pastetype:
             result += f"<b>{get_key(pastetype)} is down, So </b>"
@@ -173,7 +170,7 @@ async def paste_bin(event):
             result += f"\n<b>Raw link: <a href={response['raw']}>Raw</a></b>"
         await catevent.edit(result, link_preview=False, parse_mode="html")
     except Exception as e:
-        await edit_delete(catevent, f"**Error while pasting text:**\n`{str(e)}`")
+        await edit_delete(catevent, f"**Error while pasting text:**\n`{e}`")
 
 
 @catub.cat_cmd(
@@ -214,7 +211,7 @@ async def get_dogbin_content(event):
                 ("pasty" in iurl)
                 or ("spaceb" in iurl)
                 or ("nekobin" in iurl)
-                or ("dog" in iurl)
+                or ("catbin" in iurl)
             ):
                 url = iurl
                 break
@@ -232,8 +229,10 @@ async def get_dogbin_content(event):
             rawurl = f"https://spaceb.in/api/v1/documents/{fid[0]}/raw"
         elif "nekobin" in url:
             rawurl = f"nekobin.com/raw/{fid[0]}"
-        elif "dog" in url:
-            rawurl = f"https://del.dog/raw/{fid[0]}"
+        elif "catbin" in url:
+            rawurl = f"http://catbin.up.railway.app/raw/{fid[0]}"
+        else:
+            return await edit_delete(event, "__This pastebin is not supported.__")
     resp = requests.get(rawurl)
     try:
         resp.raise_for_status()
@@ -267,17 +266,15 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     pastetype = "d"
-    text_to_print = ""
-    if input_str:
-        text_to_print = input_str
-    if text_to_print == "" and reply.media:
+    text_to_print = input_str or ""
+    if text_to_print == "" and reply and reply.media:
         mediatype = media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
             with open(d_file_name, "r") as f:
                 text_to_print = f.read()
     if text_to_print == "":
-        if reply.text:
+        if reply and reply.text:
             text_to_print = reply.raw_text
         else:
             return await edit_delete(
@@ -289,10 +286,11 @@ async def _(event):
         if "error" in response:
             return await edit_delete(
                 catevent,
-                f"**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
+                "**Error while pasting text:**\n`Unable to process your request may be pastebins are down.`",
             )
+
     except Exception as e:
-        return await edit_delete(catevent, f"**Error while pasting text:**\n`{str(e)}`")
+        return await edit_delete(catevent, f"**Error while pasting text:**\n`{e}`")
     url = response["url"]
     chat = "@CorsaBot"
     await catevent.edit("`Making instant view...`")
@@ -312,5 +310,5 @@ async def _(event):
             if urls:
                 result = f"The instant preview is [here]({urls[0]})"
         if result == "":
-            result = f"I can't make it as instant view"
+            result = "I can't make it as instant view"
         await catevent.edit(result, link_preview=True)

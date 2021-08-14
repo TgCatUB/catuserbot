@@ -129,7 +129,7 @@ async def spammer(event):
         counter = int(cat[0])
     except Exception:
         return await edit_delete(
-            event, "__Use proper syntax to spam. Foe syntax refer help menu.__"
+            event, "__Use proper syntax to spam. For syntax refer help menu.__"
         )
     if counter > 50:
         sleeptimet = 0.5
@@ -255,7 +255,7 @@ async def tmeme(event):
     command=("wspam", plugin_category),
     info={
         "header": "Spam the text word by word.",
-        "description": "Spams the chat with every word in given text asnew message.",
+        "description": "Spams the chat with every word in given text as new message.",
         "usage": "{tr}wspam <text>",
         "examples": "{tr}wspam I am using catuserbot",
     },
@@ -306,9 +306,15 @@ async def spammer(event):
         sleeptimet = sleeptimem = float(input_str[0])
     except Exception:
         return await edit_delete(
-            event, "__Use proper syntax to spam. Foe syntax refer help menu.__"
+            event, "__Use proper syntax to spam. For syntax refer help menu.__"
         )
     cat = input_str[1:]
+    try:
+        int(cat[0])
+    except Exception:
+        return await edit_delete(
+            event, "__Use proper syntax for delay spam. For syntax refer help menu.__"
+        )
     await event.delete()
     addgvar("spamwork", True)
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)

@@ -80,7 +80,7 @@ async def remove_background(event):
         try:
             await event.client.download_media(reply_message, file_name)
         except Exception as e:
-            await edit_delete(catevent, f"`{str(e)}`", 5)
+            await edit_delete(catevent, f"`{e}`", 5)
             return
         else:
             await catevent.edit("`Removing Background of this media`")

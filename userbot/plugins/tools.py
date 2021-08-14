@@ -61,8 +61,9 @@ async def currency(event):
             f"https://free.currconv.com/api/v7/convert?q={fromcurrency}_{tocurrency}&compact=ultra&apiKey={Config.CURRENCY_API}"
         )
         symbols = await AioHttp().get_raw(
-            f"https://raw.githubusercontent.com/sandy1709/CatUserbot-Resources/master/Resources/Data/currency.py"
+            "https://raw.githubusercontent.com/sandy1709/CatUserbot-Resources/master/Resources/Data/currency.py"
         )
+
         symbols = json.loads(re.sub(", *\n *}", "}", symbols.decode("utf-8")))
         try:
             result = aresponse[f"{fromcurrency}_{tocurrency}"]
@@ -81,7 +82,7 @@ async def currency(event):
     except Exception:
         await edit_or_reply(
             event,
-            f"__It seems you are using different currency value. which doesn't exist on earth.__",
+            "__It seems you are using different currency value. which doesn't exist on earth.__",
         )
 
 
@@ -156,7 +157,7 @@ async def parseqr(event):
         result = soup.text
         await edit_or_reply(catevent, f"**Failed to Decode:**\n`{result}`")
     except Exception as e:
-        await edit_or_reply(catevent, f"**Error:**\n`{str(e)}`")
+        await edit_or_reply(catevent, f"**Error:**\n`{e}`")
 
 
 @catub.cat_cmd(
@@ -277,7 +278,93 @@ async def _(event):
         output_result = calendar.month(int(yyyy.strip()), int(mm.strip()))
         await edit_or_reply(event, f"```{output_result}```")
     except Exception as e:
-        await edit_delete(event, f"**Error:**\n`{str(e)}`", 5)
+        await edit_delete(event, f"**Error:**\n`{e}`", 5)
+
+
+@catub.cat_cmd(
+    pattern="ip(?:\s|$)([\s\S]*)",
+    command=("ip", plugin_category),
+    info={
+        "header": "Find details of an IP address",
+        "description": "To check detailed info of provided ip address.",
+        "usage": "{tr}ip <mine/ip address",
+        "examples": [
+            "{tr}ip mine",
+            "{tr}ip 13.106.3.255",
+        ],
+    },
+)
+async def spy(event):
+    "To see details of an ip."
+    inpt = event.pattern_match.group(1)
+    if not inpt:
+        return await edit_delete(event, "**Give an ip address to lookup...**", 20)
+    check = "" if inpt == "mine" else inpt
+    API = Config.IPDATA_API
+    if API is None:
+        return await edit_delete(
+            event,
+            "**Get an API key from [Ipdata](https://dashboard.ipdata.co/sign-up.html) & set that in heroku var `IPDATA_API`**",
+            80,
+        )
+    url = requests.get(f"https://api.ipdata.co/{check}?api-key={API}")
+    r = url.json()
+    try:
+        return await edit_delete(event, f"**{r['message']}**", 60)
+    except KeyError:
+        await edit_or_reply(event, "🔍 **Searching...**")
+    ip = r["ip"]
+    city = r["city"]
+    postal = r["postal"]
+    region = r["region"]
+    latitude = r["latitude"]
+    carrier = r["asn"]["name"]
+    longitude = r["longitude"]
+    country = r["country_name"]
+    carriel = r["asn"]["domain"]
+    region_code = r["region_code"]
+    continent = r["continent_name"]
+    time_z = r["time_zone"]["abbr"]
+    currcode = r["currency"]["code"]
+    calling_code = r["calling_code"]
+    country_code = r["country_code"]
+    currency = r["currency"]["name"]
+    curnative = r["currency"]["native"]
+    lang1 = r["languages"][0]["name"]
+    time_zone = r["time_zone"]["name"]
+    emoji_flag = r["emoji_flag"]
+    continent_code = r["continent_code"]
+    native = r["languages"][0]["native"]
+    current_time = r["time_zone"]["current_time"]
+
+    symbol = "₹" if country == "India" else curnative
+    language1 = (
+        f"<code>{lang1}</code>"
+        if lang1 == native
+        else f"<code>{lang1}</code> [<code>{native}</code>]"
+    )
+
+    try:
+        lang2 = f', <code>{r["languages"][1]["name"]}</code>'
+    except IndexError:
+        lang2 = ""
+
+    string = f"✘ <b>Lookup For Ip : {ip}</b> {emoji_flag}\n\n\
+    <b>• City Name :</b>  <code>{city}</code>\n\
+    <b>• Region Name :</b>  <code>{region}</code> [<code>{region_code}</code>]\n\
+    <b>• Country Name :</b>  <code>{country}</code> [<code>{country_code}</code>]\n\
+    <b>• Continent Name :</b>  <code>{continent}</code> [<code>{continent_code}</code>]\n\
+    <b>• View on Map :  <a href = https://www.google.com/maps/search/?api=1&query={latitude}%2C{longitude}>Google Map</a></b>\n\
+    <b>• Postal Code :</b> <code>{postal}</code>\n\
+    <b>• Caller Code :</b>  <code>+{calling_code}</code>\n\
+    <b>• Carrier Detail :  <a href = https://www.{carriel}>{' '.join(carrier.split()[:2])}</a></b>\n\
+    <b>• Language :</b>  {language1} {lang2}\n\
+    <b>• Currency :</b>  <code>{currency}</code> [<code>{symbol}{currcode}</code>]\n\
+    <b>• Time Zone :</b> <code>{time_zone}</code> [<code>{time_z}</code>]\n\
+    <b>• Time :</b> <code>{current_time[11:16]}</code>\n\
+    <b>• Date :</b> <code>{current_time[:10]}</code>\n\
+    <b>• Time Offset :</b> <code>{current_time[-6:]}</code>"
+    await edit_or_reply(event, string, parse_mode="html")
 
 
 @catub.cat_cmd(

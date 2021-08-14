@@ -94,4 +94,4 @@ async def _(event):
             "`Processed text {} into voice in {} seconds!`".format(text[0:20], ms),
         )
     except Exception as e:
-        await edit_or_reply(catevent, f"**Error:**\n`{str(e)}`")
+        await edit_or_reply(catevent, f"**Error:**\n`{e}`")

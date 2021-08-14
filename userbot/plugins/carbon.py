@@ -303,7 +303,7 @@ async def carbon_api(event):
     await event.client.send_file(
         event.chat_id,
         file,
-        caption=f"Here's your Karbon2",
+        caption="Here's your Karbon2",
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
@@ -372,10 +372,11 @@ async def carbon_api(event):
     await event.client.send_file(
         event.chat_id,
         file,
-        caption=f"Here's your Karbon3",
+        caption="Here's your Karbon3",
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
+
     os.remove("./carbon.png")
     await cat.delete()
 
@@ -437,10 +438,11 @@ async def carbon_api(event):
     await event.client.send_file(
         event.chat_id,
         file,
-        caption=f"Here's your Karbon4 ",
+        caption="Here's your Karbon4 ",
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
+
     os.remove("./carbon.png")
     await cat.delete()
 
@@ -538,9 +540,10 @@ async def carbon_api(event):
     await event.client.send_file(
         event.chat_id,
         file,
-        caption=f"Here's your karbonrgb",
+        caption="Here's your karbonrgb",
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
+
     os.remove("./carbon.png")
     await cat.delete()

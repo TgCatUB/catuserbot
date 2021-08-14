@@ -134,6 +134,8 @@ async def imdb_query(event):  # sourcery no-metrics
 <b>Story Outline : </b><i>{mov_plot}</i>"""
         if "full-size cover url" in moviekeys:
             imageurl = movie["full-size cover url"]
+        else:
+            imageurl = None
         soup = BeautifulSoup(resulttext, features="html.parser")
         rtext = soup.get_text()
         if len(rtext) > 1024:
@@ -161,6 +163,6 @@ async def imdb_query(event):  # sourcery no-metrics
             parse_mode="HTML",
         )
     except IndexError:
-        await catevent.edit("Give Valid Name of the movie")
+        await catevent.edit(f"__No movie found with name {movie_name}.__")
     except Exception as e:
-        await catevent.edit(f"**Error:**\n__{str(e)}__")
+        await catevent.edit(f"**Error:**\n__{e}__")

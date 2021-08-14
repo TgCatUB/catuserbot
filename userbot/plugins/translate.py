@@ -59,7 +59,7 @@ async def _(event):
                 \n`{after_tr_text}`"
         await edit_or_reply(event, output_str)
     except Exception as exc:
-        await edit_delete(event, f"**Error:**\n`{str(exc)}`", time=5)
+        await edit_delete(event, f"**Error:**\n`{exc}`", time=5)
 
 
 @catub.cat_cmd(

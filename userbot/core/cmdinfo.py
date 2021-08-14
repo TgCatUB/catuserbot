@@ -13,8 +13,8 @@ from ..Config import Config
 extractor = URLExtract()
 
 
-def get_data(about, type):
-    data = about[type]
+def get_data(about, ktype):
+    data = about[ktype]
     urls = extractor.find_urls(data)
     if len(urls) > 0:
         return data

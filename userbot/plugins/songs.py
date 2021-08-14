@@ -12,6 +12,7 @@ from telethon import types
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
+from youtubesearchpython import Video
 
 from userbot import catub
 
@@ -55,9 +56,8 @@ async def _(event):
     reply = await event.get_reply_message()
     if event.pattern_match.group(2):
         query = event.pattern_match.group(2)
-    elif reply:
-        if reply.message:
-            query = reply.message
+    elif reply and reply.message:
+        query = reply.message
     else:
         return await edit_or_reply(event, "`What I am Supposed to find `")
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
@@ -98,12 +98,12 @@ async def _(event):
         catthumb = Path(f"{catname}.webp")
     elif not os.path.exists(catthumb):
         catthumb = None
-
+    ytdata = Video.get(video_link)
     await event.client.send_file(
         event.chat_id,
         song_file,
         force_document=False,
-        caption=query,
+        caption=f"**Title:** `{ytdata['title']}`",
         thumb=catthumb,
         supports_streaming=True,
         reply_to=reply_to_id,
@@ -139,9 +139,8 @@ async def _(event):
     reply = await event.get_reply_message()
     if event.pattern_match.group(1):
         query = event.pattern_match.group(1)
-    elif reply:
-        if reply.message:
-            query = reply.messag
+    elif reply and reply.message:
+        query = reply.message
     else:
         return await edit_or_reply(event, "`What I am Supposed to find`")
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
@@ -182,11 +181,12 @@ async def _(event):
         catthumb = Path(f"{catname}.webp")
     elif not os.path.exists(catthumb):
         catthumb = None
+    ytdata = Video.get(video_link)
     await event.client.send_file(
         event.chat_id,
         vsong_file,
         force_document=False,
-        caption=query,
+        caption=f"**Title:** `{ytdata['title']}`",
         thumb=catthumb,
         supports_streaming=True,
         reply_to=reply_to_id,
@@ -232,8 +232,9 @@ async def shazamcmd(event):
     except Exception as e:
         LOGS.error(e)
         return await edit_delete(
-            catevent, f"**Error while reverse searching song:**\n__{str(e)}__"
+            catevent, f"**Error while reverse searching song:**\n__{e}__"
         )
+
     image = track["images"]["background"]
     song = track["share"]["subject"]
     await event.client.send_file(

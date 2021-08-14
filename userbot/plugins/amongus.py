@@ -159,7 +159,7 @@ async def procces_img(event):
                 user = await event.client.get_me()
             text = f"{get_display_name(user)} {choice(imps)}."
             text += text2
-        except:
+        except Exception:
             text = args
     else:
         text = f"{get_display_name(user)} {choice(imps)}."
@@ -208,9 +208,9 @@ async def _(event):
     stcr3 = await event.client.send_file(
         event.chat_id, "CAADAQADOwADnjOcH77v3Ap51R7gAg"
     )
-    text4 = await event.reply(f"**Others :** Where??? ")
+    text4 = await event.reply("**Others :** Where??? ")
     await asyncio.sleep(2)
-    await text4.edit(f"**Others :** Who?? ")
+    await text4.edit("**Others :** Who?? ")
     await asyncio.sleep(2)
     await text4.edit(
         f"**[{ALIVE_NAME}]({USERNAME}) :** Its {name} , I saw {name}  using vent,"

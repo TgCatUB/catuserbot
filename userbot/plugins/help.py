@@ -55,7 +55,7 @@ async def cmdinfo(input_str, event, plugin=False):
         )
         return None
     except Exception as e:
-        await edit_delete(event, f"**Error**\n`{str(e)}`")
+        await edit_delete(event, f"**Error**\n`{e}`")
         return None
     outstr = f"**Command :** `{cmdprefix}{input_str}`\n"
     plugin = get_key(input_str)
@@ -75,7 +75,7 @@ async def plugininfo(input_str, event, flag):
         outstr = await cmdinfo(input_str, event, plugin=True)
         return outstr
     except Exception as e:
-        await edit_delete(event, f"**Error**\n`{str(e)}`")
+        await edit_delete(event, f"**Error**\n`{e}`")
         return None
     if len(cmds) == 1 and (flag is None or (flag and flag != "-p")):
         outstr = await cmdinfo(cmds[0], event, plugin=False)
@@ -85,12 +85,12 @@ async def plugininfo(input_str, event, flag):
     category = getkey(input_str)
     if category is not None:
         outstr += f"**Category :** `{category}`\n\n"
-    for cmd in cmds:
+    for cmd in sorted(cmds):
         outstr += f"•  **cmd :** `{cmdprefix}{cmd}`\n"
         try:
             outstr += f"•  **info :** `{CMD_INFO[cmd][1]}`\n\n"
         except IndexError:
-            outstr += f"•  **info :** `None`\n\n"
+            outstr += "•  **info :** `None`\n\n"
     outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help <command name>`\
         \n**Note : **If command name is same as plugin name then use this `{cmdprefix}help -c <command name>`."
     return outstr
@@ -118,7 +118,7 @@ async def cmdlist():
         for plugin in plugins:
             cmds = PLG_INFO[plugin]
             outstr += f"• **{plugin.title()} has {len(cmds)} commands**\n"
-            for cmd in cmds:
+            for cmd in sorted(cmds):
                 outstr += f"  - `{cmdprefix}{cmd}`\n"
             outstr += "\n"
     outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help -c <command name>`"
@@ -157,14 +157,13 @@ async def _(event):
         outstr = await plugininfo(input_str, event, flag)
         if outstr is None:
             return
+    elif flag == "-t":
+        outstr = await grpinfo()
     else:
-        if flag == "-t":
-            outstr = await grpinfo()
-        else:
-            results = await event.client.inline_query(Config.TG_BOT_USERNAME, "help")
-            await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
-            await event.delete()
-            return
+        results = await event.client.inline_query(Config.TG_BOT_USERNAME, "help")
+        await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+        await event.delete()
+        return
     await edit_or_reply(event, outstr)
 
 
@@ -191,7 +190,7 @@ async def _(event):
         except KeyError:
             return await edit_delete(event, "__Invalid plugin name recheck it.__")
         except Exception as e:
-            return await edit_delete(event, f"**Error**\n`{str(e)}`")
+            return await edit_delete(event, f"**Error**\n`{e}`")
         outstr = f"• **{input_str.title()} has {len(cmds)} commands**\n"
         for cmd in cmds:
             outstr += f"  - `{cmdprefix}{cmd}`\n"

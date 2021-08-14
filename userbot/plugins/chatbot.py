@@ -55,7 +55,7 @@ async def add_chatbot(event):
         chat_name = user.first_name
         chat_type = "Personal"
     else:
-        chat_name = event.chat.title
+        chat_name = get_display_name(await event.get_chat())
         chat_type = "Group"
     user_name = user.first_name
     user_username = user.username
@@ -64,7 +64,7 @@ async def add_chatbot(event):
     try:
         addai(chat_id, user_id, chat_name, user_name, user_username, chat_type)
     except Exception as e:
-        await edit_delete(catevent, f"**Error:**\n`{str(e)}`")
+        await edit_delete(catevent, f"**Error:**\n`{e}`")
     else:
         await edit_or_reply(catevent, "Hi")
 
@@ -90,7 +90,7 @@ async def remove_chatbot(event):
         try:
             remove_ai(chat_id, user_id)
         except Exception as e:
-            await edit_delete(catevent, f"**Error:**\n`{str(e)}`")
+            await edit_delete(catevent, f"**Error:**\n`{e}`")
         else:
             await edit_or_reply(event, "Ai has been stopped for the user")
     else:
@@ -134,7 +134,7 @@ async def delete_chatbot(event):
         try:
             remove_users(event.chat_id)
         except Exception as e:
-            await edit_delete(event, f"**Error:**\n`{str(e)}`", 10)
+            await edit_delete(event, f"**Error:**\n`{e}`", 10)
         else:
             await edit_or_reply(event, "Deleted ai for all enabled users in this chat")
 
@@ -197,7 +197,7 @@ async def list_chatbot(event):  # sourcery no-metrics
                 private_chats += (
                     f"☞ [{echos.user_name}](tg://user?id={echos.user_id})\n"
                 )
-        output_str = f"**Ai enabled users in this chat are:**\n" + private_chats
+        output_str = "**Ai enabled users in this chat are:**\n" + private_chats
     await edit_or_reply(event, output_str)
 
 

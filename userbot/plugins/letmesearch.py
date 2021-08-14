@@ -20,17 +20,15 @@ plugin_category = "utils"
 async def _(event):
     "Searches the given query in Google and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=http://google.com/search?q={}".format(
-        input_str.replace(" ", "+")
+    sample_url = (
+        f"https://da.gd/s?url=http://google.com/search?q={input_str.replace(' ', '+')}"
     )
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **Google** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me **Google** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
@@ -47,19 +45,13 @@ async def _(event):
 async def _(event):
     "Searches the given query in youtube and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = (
-        "https://da.gd/s?url=https://www.youtube.com/results?search_query={}".format(
-            input_str.replace(" ", "+")
-        )
-    )
+    sample_url = f"https://da.gd/s?url=https://www.youtube.com/results?search_query={input_str.replace(' ', '+')}"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **youtube** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me **youtube** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
@@ -76,19 +68,13 @@ async def _(event):
 async def _(event):
     "Searches the given query in Duck buck go and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = (
-        "https://da.gd/s?url=https://duckduckgo.com/?q={}&t=h_&ia=about".format(
-            input_str.replace(" ", "+")
-        )
-    )
+    sample_url = f"https://da.gd/s?url=https://duckduckgo.com/?q={input_str.replace(' ', '+')}&t=h_&ia=about"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **duckduckgo** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me **duckduckgo** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
@@ -105,17 +91,15 @@ async def _(event):
 async def _(event):
     "Searches the given query in altnews and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=https://www.altnews.in/?s={}".format(
-        input_str.replace(" ", "+")
+    sample_url = (
+        f"https://da.gd/s?url=https://www.altnews.in/?s={input_str.replace(' ', '+')}"
     )
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **altnews** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me **altnews** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
@@ -132,19 +116,13 @@ async def _(event):
 async def _(event):
     "Searches the given app name in heroku and show that app vars page link ."
     input_str = event.pattern_match.group(1)
-    sample_url = (
-        "https://da.gd/s?url=https://dashboard.heroku.com/apps/{}/settings".format(
-            input_str.replace(" ", "+")
-        )
-    )
+    sample_url = f"https://da.gd/s?url=https://dashboard.heroku.com/apps/{input_str.replace(' ', '+')}/settings"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **var** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me **var** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
@@ -161,17 +139,13 @@ async def _(event):
 async def _(event):
     "Searches the given app name in heroku and shows you logs page link of that app."
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=https://dashboard.heroku.com/apps/{}/logs".format(
-        input_str.replace(" ", "+")
-    )
+    sample_url = f"https://da.gd/s?url=https://dashboard.heroku.com/apps/{input_str.replace(' ', '+')}/logs"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **log** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me **log** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
@@ -188,17 +162,20 @@ async def _(event):
 async def _(event):
     "Searches the given app name in heroku and shows you dyno page link of that app."
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=https://dashboard.heroku.com/account/{}".format(
-        input_str.replace(" ", "+")
+    billings_url = "https://da.gd/s?url=https://dashboard.heroku.com/account/billing"
+    sample_url = (
+        f"https://da.gd/s?url=https://dashboard.heroku.com/apps/{input_str}/resources"
     )
     response_api = requests.get(sample_url).text
+    respons_api = requests.get(billings_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **dyno** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me **dyno** that for you:\
+                \n👉 [{input_str}]({response_api.rstrip()})\
+                \n👉 [Billings]({respons_api.rstrip()})\
+                \n`Thank me later 😉`"
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
@@ -215,17 +192,13 @@ async def _(event):
 async def _(event):
     "Searches the given query in indian kanoon and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=https://indiankanoon.org/search/?formInput={}+sortby%3Amostrecent".format(
-        input_str.replace(" ", "+")
-    )
+    sample_url = f"https://da.gd/s?url=https://indiankanoon.org/search/?formInput={input_str.replace(' ', '+')}+sortby%3Amostrecent"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **Indiankanoon.com : Place** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me **Indiankanoon.com : Place** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
@@ -242,17 +215,13 @@ async def _(event):
 async def _(event):
     "Searches the given query in Government e marketplace and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=https://mkp.gem.gov.in/search?q={}&sort_type=created_at_desc&_xhr=1".format(
-        input_str.replace(" ", "+")
-    )
+    sample_url = f"https://da.gd/s?url=https://mkp.gem.gov.in/search?q={input_str.replace(' ', '+')}&sort_type=created_at_desc&_xhr=1"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me **gem.gov.in** that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me **gem.gov.in** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)
@@ -269,17 +238,13 @@ async def _(event):
 async def _(event):
     "Searches the given query in web archive and shows you the link of that query."
     input_str = event.pattern_match.group(1)
-    sample_url = "https://da.gd/s?url=https://web.archive.org/web/*/{}".format(
-        input_str.replace(" ", "+")
-    )
+    sample_url = f"https://da.gd/s?url=https://web.archive.org/web/*/{input_str.replace(' ', '+')}"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            "Let me run your link on wayback machine that for you:\n👉 [{}]({})\n`Thank me later 😉` ".format(
-                input_str, response_api.rstrip()
-            )
+            f"Let me run your link on wayback machine that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)

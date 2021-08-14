@@ -106,7 +106,7 @@ async def _(event):
     except BadRequestError:
         return await catevent.edit(NO_PERM)
     except Exception as e:
-        return await edit_delete(catevent, f"__{str(e)}__", time=10)
+        return await edit_delete(catevent, f"__{e}__", time=10)
     await catevent.edit("`Promoted Successfully! Now gib Party`")
 
 

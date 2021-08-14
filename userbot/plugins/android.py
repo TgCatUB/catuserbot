@@ -105,6 +105,8 @@ async def codename_info(event):
     )
     devices_lower = {k.lower(): v for k, v in data.items()}
     devices = devices_lower.get(brand)
+    if not devices:
+        return await edit_or_reply(event, f"__I couldn't find {brand}.__")
     results = [
         i
         for i in devices

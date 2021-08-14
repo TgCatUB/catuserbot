@@ -23,9 +23,9 @@ YOUTUBE_REGEX = re.compile(
 )
 PATH = "./userbot/cache/ytsearch.json"
 
-song_dl = "youtube-dl --force-ipv4 --write-thumbnail -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
+song_dl = "youtube-dl --force-ipv4 --write-thumbnail --add-metadata --embed-thumbnail -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
 thumb_dl = "youtube-dl --force-ipv4 -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
-video_dl = "youtube-dl --force-ipv4 --write-thumbnail  -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
+video_dl = "youtube-dl --force-ipv4 --write-thumbnail  --add-metadata --embed-thumbnail -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
 name_dl = (
     "youtube-dl --force-ipv4 --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
 )
@@ -271,7 +271,7 @@ def _tubeDl(url: str, starttime, uid: str):
         "outtmpl": os.path.join(
             Config.TEMP_DIR, str(starttime), "%(title)s-%(format)s.%(ext)s"
         ),
-        "logger": LOGS,
+        #         "logger": LOGS,
         "format": uid,
         "writethumbnail": True,
         "prefer_ffmpeg": True,
@@ -299,7 +299,7 @@ def _tubeDl(url: str, starttime, uid: str):
 def _mp3Dl(url: str, starttime, uid: str):
     _opts = {
         "outtmpl": os.path.join(Config.TEMP_DIR, str(starttime), "%(title)s.%(ext)s"),
-        "logger": LOGS,
+        #         "logger": LOGS,
         "writethumbnail": True,
         "prefer_ffmpeg": True,
         "format": "bestaudio/best",

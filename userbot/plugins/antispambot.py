@@ -6,6 +6,7 @@ from requests import get
 from telethon.errors import ChatAdminRequiredError
 from telethon.events import ChatAction
 from telethon.tl.types import ChannelParticipantsAdmins
+from telethon.utils import get_display_name
 
 from ..Config import Config
 from ..sql_helper.gban_sql_helper import get_gbanuser, is_gbanned
@@ -96,7 +97,7 @@ if Config.ANTISPAMBOT_BAN:
                 BOTLOG_CHATID,
                 "#ANTISPAMBOT\n"
                 f"**User :** [{user.first_name}](tg://user?id={user.id})\n"
-                f"**Chat :** {event.chat.title} (`{event.chat_id}`)\n"
+                f"**Chat :** {get_display_name(await event.get_chat())} (`{event.chat_id}`)\n"
                 f"**Reason :** {hmm.text}",
             )
 
@@ -209,7 +210,5 @@ def banchecker(user_id):
 
 
 def spamchecker(user_id):
-    ban = None
-    if spamwatch:
-        ban = spamwatch.get_ban(user_id)
+    ban = spamwatch.get_ban(user_id) if spamwatch else None
     return bool(ban)
