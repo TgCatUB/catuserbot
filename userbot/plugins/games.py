@@ -11,8 +11,7 @@ from ..helpers.utils import reply_id
 
 plugin_category = "fun"
 
-game_code = ["ttt", "ttf", "ex" "cf", "rps", "rpsls", "rr", "c", "pc"]
-button = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+game_code = ["ttt", "ttf", "ex", "cf", "rps", "rpsls", "rr", "c", "pc"]
 game_name = [
     "Tic-Tac-Toe",
     "Tic-Tac-Four",
@@ -25,16 +24,7 @@ game_name = [
     "Pool Checkers",
 ]
 
-game_list = """1.`ttt` :- Tic-Tac-Toe
-2.`ttf` :- Tic-Tac-Four
-3.`ex` :- Elephant XO
-4.`cf` :- Connect Four
-5.`rps` :- Rock-Paper-Scissors
-6.`rpsls` :- Rock-Paper-Scissors-Lizard-Spock
-7.`rr` :- Russian Roulette
-8.`c` :- Checkers
-9.`pc` :- Pool Checkers"""
-
+game = dict(zip(game_code, game_name))
 category = ["classic", "kids", "party", "hot", "mixed"]
 
 
@@ -87,7 +77,7 @@ async def truth_dare_task(event):
         else:
             await catevent.edit(f"**The dare task for you is**\n`{task}`")
     except Exception as e:
-        await edit_delete(catevent, f"**Error while getting task**\n`{str(e)}`", 7)
+        await edit_delete(catevent, f"**Error while getting task**\n`{e}`", 7)
 
 
 @catub.cat_cmd(
@@ -132,16 +122,7 @@ async def dare_task(event):
     info={
         "header": "Play inline games",
         "description": "Start an inline game by inlinegamebot",
-        "Game code & Name": {
-            "ttt": "Tic-Tac-Toe",
-            "ttf": "Tic-Tac-Four",
-            "cf": "Connect Four",
-            "rps": "Rock-Paper-Scissors",
-            "rpsls": "Rock-Paper-Scissors-Lizard-Spock",
-            "rr": "Russian Roulette",
-            "c": "Checkers",
-            "pc": "Pool Checkers",
-        },
+        "Game code & Name": game,
         "usage": "{tr}game <game code>",
         "examples": "{tr}game ttt ",
     },
@@ -150,8 +131,10 @@ async def igame(event):
     "Fun game by inline"
     reply_to_id = await reply_id(event)
     input_str = event.pattern_match.group(1)
-    data = dict(zip(game_code, button))
-    name = dict(zip(game_code, game_name))
+    game_list = "".join(
+        f"**{i}.** `{item}` :- __{game[item]}__\n"
+        for i, item in enumerate(game, start=1)
+    )
     if not input_str:
         await edit_delete(
             event, f"**Available Game Codes & Names :-**\n\n{game_list}", time=60
@@ -164,13 +147,14 @@ async def igame(event):
             catevent, f"**Available Game Codes & Names :-**\n\n{game_list}", time=60
         )
     else:
-        game = data[input_str]
-        gname = name[input_str]
         await edit_or_reply(
-            event, f"**Game code `{input_str}` is selected for game:-** __{gname}__"
+            event,
+            f"**Game code `{input_str}` is selected for game:-** __{game[input_str]}__",
         )
         await asyncio.sleep(1)
         bot = "@inlinegamesbot"
-        results = await event.client.inline_query(bot, gname)
-        await results[int(game)].click(event.chat_id, reply_to=reply_to_id)
+        results = await event.client.inline_query(bot, input_str)
+        await results[game_code.index(input_str)].click(
+            event.chat_id, reply_to=reply_to_id
+        )
         await event.delete()
