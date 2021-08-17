@@ -104,7 +104,7 @@ async def _(event):
     try:
         await event.client(EditAdminRequest(event.chat_id, user.id, new_rights, rank))
     except BadRequestError:
-        return await catevent.edit("__I think yoi dosen't have permission to promote__")
+        return await catevent.edit("__I think you don't have permission to promote__")
     except Exception as e:
         return await edit_delete(catevent, f"__{e}__", time=10)
     await catevent.edit("`Promoted Successfully! Now gib Party`")
