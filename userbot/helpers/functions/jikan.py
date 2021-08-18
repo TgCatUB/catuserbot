@@ -429,9 +429,11 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         caption += textwrap.dedent(
             f"""
         🆎 <b>Type</b>: <i>{result['type']}</i>
+        🆔 <b>MAL ID</b>: <i>{result['mal_id']}</i>
         📡 <b>Status</b>: <i>{result['status']}</i>
         🎙️ <b>Aired</b>: <i>{result['aired']['string']}</i>
         🔢 <b>Episodes</b>: <i>{result['episodes']}</i>
+        🔞 <b>Rating</b>: <i>{result['rating']}</i>
         💯 <b>Score</b>: <i>{result['score']}</i>
         🌐 <b>Premiered</b>: <i>{result['premiered']}</i>
         ⌛ <b>Duration</b>: <i>{result['duration']}</i>
@@ -455,6 +457,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         📡 <b>Status</b>: <i>{result['status']}</i>
         🔢 <b>Volumes</b>: <i>{result['volumes']}</i>
         📃 <b>Chapters</b>: <i>{result['chapters']}</i>
+        📊 <b>Rank</b>: <i>{result['rank']}</i>
         💯 <b>Score</b>: <i>{result['score']}</i>
         🎭 <b>Genres</b>: <i>{genre_string}</i>
         📖 <b>Synopsis</b>: <i>{synopsis_string}</i>
