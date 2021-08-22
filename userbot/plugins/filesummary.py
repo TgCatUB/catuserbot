@@ -34,7 +34,7 @@ def weird_division(n, d):
     command=("chatfs", plugin_category),
     info={
         "header": "Shows you the complete media/file summary of the that group.",
-        "description": "As of now limited to last 10000 in the group u used",
+        "description": "As of now limited to last 10000 messages in the group u used",
         "usage": "{tr}chatfs <Username/id>",
         "examples": "{tr}chatfs @catuserbot_support",
     },
