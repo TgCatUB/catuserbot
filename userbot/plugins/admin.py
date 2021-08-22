@@ -333,8 +333,8 @@ async def watcher(event):
     command=("mute", plugin_category),
     info={
         "header": "To stop sending messages from that user",
-        "description": "If is is not admin then changes his permission in group,\
-            if he is admin or if you try in personal chat then his messages will be deleted\
+        "description": "If he is not admin then changes his permission in group,\
+if he is admin or if you try in personal chat then his messages will be deleted\
             \nNote : You need proper rights for this.",
         "usage": [
             "{tr}mute <userid/username/reply>",
@@ -436,7 +436,7 @@ async def startmute(event):
     command=("unmute", plugin_category),
     info={
         "header": "To allow user to send messages again",
-        "description": "Will change user permissions ingroup to send messages again.\
+        "description": "Will change user permissions in the group to send messages again.\
         \nNote : You need proper rights for this.",
         "usage": [
             "{tr}unmute <userid/username/reply>",

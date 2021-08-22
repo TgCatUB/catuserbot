@@ -558,7 +558,7 @@ async def myfeds_fedinfo(event):
             "{tr}fstat list of all federations you are banned in.",
             "{tr}fstat <fedid> shows you info of you in the given fed."
             "{tr}fstat <userid/username/reply> list of all federations he is banned in.",
-            "{tr}fstat <userid/username/reply> <fedid> shows you info of the that user in the given fed.",
+            "{tr}fstat <userid/username/reply> <fedid> shows you info of the user in the given fed.",
         ],
     },
 )
