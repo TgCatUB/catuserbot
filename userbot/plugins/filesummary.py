@@ -34,7 +34,7 @@ def weird_division(n, d):
     command=("chatfs", plugin_category),
     info={
         "header": "Shows you the complete media/file summary of the that group.",
-        "description": "As of now limited to last 10000 messages in the group u used",
+        "description": "As of now limited to last 10000 messages in the group you used.",
         "usage": "{tr}chatfs <Username/id>",
         "examples": "{tr}chatfs @catuserbot_support",
     },
@@ -138,7 +138,7 @@ async def _(event):  # sourcery no-metrics
     command=("userfs", plugin_category),
     info={
         "header": "Shows you the complete media/file summary of the that user in that group.",
-        "description": "As of now limited to last 10000 messages of that person in the group u used",
+        "description": "As of now limited to last 10000 messages of that person in the group you used.",
         "usage": "{tr}userfs <reply/username/id>",
         "examples": "{tr}userfs @MissRose_bot",
     },
