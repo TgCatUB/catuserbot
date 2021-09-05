@@ -34,7 +34,7 @@ def weird_division(n, d):
     command=("chatfs", plugin_category),
     info={
         "header": "Shows you the complete media/file summary of the group.",
-        "description": "As of now limited to last 10000 messages in that group you used.",
+        "description": "As of now limited to last 10000 messages in the group you used.",
         "usage": "{tr}chatfs <Username/id>",
         "examples": "{tr}chatfs @catuserbot_support",
     },
@@ -138,13 +138,13 @@ async def _(event):  # sourcery no-metrics
     command=("userfs", plugin_category),
     info={
         "header": "Shows you the complete media/file summary of the user in that group.",
-        "description": "As of now limited to last 10000 messages of that person in that group you used.",
+        "description": "As of now limited to last 10000 messages of that person in the group you used.",
         "usage": "{tr}userfs <reply/username/id>",
         "examples": "{tr}userfs @MissRose_bot",
     },
 )
 async def _(event):  # sourcery no-metrics
-    "Shows you the complete media/file summary of the user in that group."
+    "Shows you the complete media/file summary of the user in the group."
     reply = await event.get_reply_message()
     input_str = event.pattern_match.group(1)
     if reply and input_str:
