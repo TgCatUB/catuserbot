@@ -30,7 +30,7 @@ from .logger import logging
 LOGS = logging.getLogger(__name__)
 
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
-CATLOGO = "https://telegra.ph/file/493268c1f5ebedc967eba.jpg"
+CATLOGO = "https://telegra.ph/file/a7c4d830ffb038b846347.jpg"
 tr = Config.COMMAND_HAND_LER
 
 
@@ -53,8 +53,8 @@ def ibuild_keyboard(buttons):
 
 
 def main_menu():
-    text = f"𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁 𝗛𝗲𝗹𝗽𝗲𝗿\
-        \n𝗣𝗿𝗼𝘃𝗶𝗱𝗲𝗱 𝗯𝘆 {mention}"
+    text = f"𝗠𝗬 𝗔𝗦𝗦𝗜𝗦𝗧𝗔𝗡𝗧'𝘀 𝗛𝗘𝗟𝗣 𝗠𝗘𝗡𝗨\
+        \n𝗖𝗿𝗮𝗳𝘁𝗲𝗱 𝗳𝗼𝗿 {mention}"
     buttons = [
         (Button.inline("ℹ️ Info", data="check"),),
         (
@@ -226,7 +226,7 @@ async def inline_handler(event):  # sourcery no-metrics
             buttons = [
                 (
                     Button.inline("Stats", data="stats"),
-                    Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
+                    Button.url("𝗠𝗬 𝗕𝗜𝗢", "https://t.me/realnub"),
                 )
             ]
             ALIVE_PIC = gvarstatus("ALIVE_PIC")
@@ -332,10 +332,10 @@ async def inline_handler(event):  # sourcery no-metrics
             timestamp = int(time.time() * 2)
             newtroll = {str(timestamp): {"userid": u, "text": txct}}
 
-            buttons = [Button.inline("show message 🔐", data=f"troll_{timestamp}")]
+            buttons = [Button.inline("reveal the secret 🔐", data=f"troll_{timestamp}")]
             result = builder.article(
                 title="Troll Message",
-                text=f"Only {sandy} cannot access this message!",
+                text=f"🔐 This is a top-secret message. Only {sandy} cannot read this 🤫",
                 buttons=buttons,
             )
             await event.answer([result] if result else None)
@@ -382,10 +382,10 @@ async def inline_handler(event):  # sourcery no-metrics
             timestamp = int(time.time() * 2)
             newsecret = {str(timestamp): {"userid": u, "text": txct}}
 
-            buttons = [Button.inline("show message 🔐", data=f"secret_{timestamp}")]
+            buttons = [Button.inline("reveal the secret 🔐", data=f"secret_{timestamp}")]
             result = builder.article(
                 title="secret message",
-                text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
+                text=f"🔒 This is a top-secret message. Only {sandy} can read this 🤫",
                 buttons=buttons,
             )
             await event.answer([result] if result else None)
@@ -405,12 +405,13 @@ async def inline_handler(event):  # sourcery no-metrics
             timestamp = int(time.time() * 2)
             newhide = {str(timestamp): {"text": query}}
 
-            buttons = [Button.inline("Read Message ", data=f"hide_{timestamp}")]
+            buttons = [Button.inline("reveal the secret 🔐", data=f"hide_{timestamp}")]
             result = builder.article(
                 title="Hidden Message",
-                text=f"✖✖✖",
+                text="🔐 This is a top-secret message 🤫",
                 buttons=buttons,
             )
+
             await event.answer([result] if result else None)
             if jsondata:
                 jsondata.update(newhide)
@@ -420,8 +421,8 @@ async def inline_handler(event):  # sourcery no-metrics
         elif string == "help":
             _result = main_menu()
             result = builder.article(
-                title="© CatUserbot Help",
-                description="Help menu for CatUserbot",
+                title="Assistant Help",
+                description="Help menu of my assistant",
                 text=_result[0],
                 buttons=_result[1],
                 link_preview=False,
@@ -557,10 +558,10 @@ async def inline_handler(event):  # sourcery no-metrics
     else:
         buttons = [
             (
-                Button.url("Source code", "https://github.com/sandy1709/catuserbot"),
+                Button.url("𝗠𝗬 𝗕𝗜𝗢", "t.me/realnub"),
                 Button.url(
-                    "Deploy",
-                    "https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack&template=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack",
+                    "𝗖𝗢𝗡𝗧𝗔𝗖𝗧",
+                    "t.me/plutxbot?start",
                 ),
             )
         ]
@@ -569,14 +570,14 @@ async def inline_handler(event):  # sourcery no-metrics
             url=CATLOGO, size=0, mime_type="image/jpeg", attributes=[]
         )
         text, msg_entities = await event.client._parse_message_text(
-            "𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.", "md"
+            "𝗜 𝗮𝗺 𝗻𝗼𝘁 𝗳𝗼𝗿 𝘆𝗼𝘂!", "md"
         )
         result = types.InputBotInlineResult(
             id=str(uuid4()),
             type="photo",
-            title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
-            description="Deploy yourself",
-            url="https://github.com/sandy1709/catuserbot",
+            title="𝗣𝗹𝘂𝘁𝗼𝗻𝗶𝘂𝗺 𝗫",
+            description="𝗜 𝗮𝗺 𝗻𝗼𝘁 𝗳𝗼𝗿 𝘆𝗼𝘂!",
+            url="https://t.me/realnub",
             thumb=photo,
             content=photo,
             send_message=types.InputBotInlineMessageMediaAuto(

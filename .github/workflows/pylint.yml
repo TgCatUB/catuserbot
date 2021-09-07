@@ -27,9 +27,9 @@ jobs:
       # commit changes
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'pylint: auto fixes'
+          commit_message: 'new commit'
           commit_options: '--no-verify'
           repository: .
-          commit_user_name: sandy1709
-          commit_user_email: 58665444+sandy1709@users.noreply.github.com
-          commit_author: sandy1709 <58665444+sandy1709@users.noreply.github.com>
+          commit_user_name: adityaprasad502
+          commit_user_email: 70315903+adityaprasad502@users.noreply.github.com
+          commit_author: adityaprasad502 <70315903+adityaprasad502@users.noreply.github.com>

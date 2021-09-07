@@ -64,26 +64,26 @@ async def app_search(event):
         app_details = "<a href='" + app_icon + "'>📲&#8203;</a>"
         app_details += " <b>" + app_name + "</b>"
         app_details += (
-            "\n\n<code>Developer :</code> <a href='"
+            "\n\n<code>Developer: </code> <a href='"
             + app_dev_link
             + "'>"
             + app_dev
             + "</a>"
         )
-        app_details += "\n<code>Rating :</code> " + app_rating.replace(
-            "Rated ", "⭐ "
+        app_details += "\n<code>Rating:</code> " + app_rating.replace(
+            "Rated ", " "
         ).replace(" out of ", "/").replace(" stars", "", 1).replace(
-            " stars", "⭐ "
+            " stars", " ⭐ "
         ).replace(
             "five", "5"
         )
         app_details += (
-            "\n<code>Features :</code> <a href='"
+            "\n<code>App Link: </code> <a href='"
             + app_link
-            + "'>View in Play Store</a>"
+            + "'>Open in Play Store</a>"
         )
         app_details += f"\n\n===> {ALIVE_NAME} <==="
-        await event.edit(app_details, link_preview=True, parse_mode="HTML")
+        await event.edit(app_details, link_preview=False, parse_mode="HTML")
     except IndexError:
         await event.edit("No result found in search. Please enter **Valid app name**")
     except Exception as err:

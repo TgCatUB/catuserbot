@@ -13,22 +13,22 @@ plugin_category = "utils"
     pattern="lmg ([\s\S]*)",
     command=("lmg", plugin_category),
     info={
-        "header": "Searches the given query in Google and shows you the link of that query.",
+        "header": "Searches the given query in Bing and shows you the link of that query.",
         "usage": "{tr}lmg <Query>",
     },
 )
 async def _(event):
-    "Searches the given query in Google and shows you the link of that query."
+    "Searches the given query in Bing and shows you the link of that query."
     input_str = event.pattern_match.group(1)
     sample_url = (
-        f"https://da.gd/s?url=http://google.com/search?q={input_str.replace(' ', '+')}"
+        f"https://da.gd/s?url=http://bing.com/search?q={input_str.replace(' ', '+')}"
     )
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
     if response_api:
         await event.edit(
-            f"Let me **Google** that for you:\n👉 [{input_str}]({response_api.rstrip()})\n`Thank me later 😉` "
+            f"Let me **Bing** that for you:\n👉 [{input_str}]({response_api.rstrip()})"
         )
     else:
         await edit_delete(event, "`Something went wrong. Please try again later.`", 5)

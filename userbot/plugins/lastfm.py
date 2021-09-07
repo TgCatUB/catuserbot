@@ -112,9 +112,9 @@ async def get_curr_track(lfmbio):  # sourcery no-metrics
                 environ["oldsong"] = str(LASTFM_.SONG)
                 environ["oldartist"] = str(LASTFM_.ARTIST)
                 if BIO_PREFIX:
-                    lfmbio = f"{BIO_PREFIX} 🎧: {LASTFM_.ARTIST} - {LASTFM_.SONG}"
+                    lfmbio = f"{BIO_PREFIX} ♬ {LASTFM_.ARTIST} - {LASTFM_.SONG}"
                 else:
-                    lfmbio = f"🎧: {LASTFM_.ARTIST} - {LASTFM_.SONG}"
+                    lfmbio = f"♬: {LASTFM_.ARTIST} - {LASTFM_.SONG}"
                 try:
                     if BOTLOG and LASTFM_.LastLog:
                         await catub.send_message(
@@ -122,7 +122,7 @@ async def get_curr_track(lfmbio):  # sourcery no-metrics
                         )
                     await catub(UpdateProfileRequest(about=lfmbio))
                 except AboutTooLongError:
-                    short_bio = f"🎧: {LASTFM_.SONG}"
+                    short_bio = f"♬: {LASTFM_.SONG}"
                     await catub(UpdateProfileRequest(about=short_bio))
             if playing is None and user_info.about != DEFAULT_BIO:
                 await sleep(6)
@@ -156,16 +156,16 @@ async def get_curr_track(lfmbio):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="lastfm$",
-    command=("lastfm", plugin_category),
+    pattern="now$",
+    command=("now", plugin_category),
     info={
         "header": "To fetch scrobble data from last.fm",
         "description": "Shows currently scrobbling track or most recent scrobbles if nothing is playing.",
-        "usage": "{tr}lastfm",
+        "usage": "{tr}now",
     },
 )
 async def last_fm(lastFM):
-    ".lastfm command, fetch scrobble data from last.fm."
+    ".now command, fetch scrobble data from last.fm."
     await lastFM.edit("Processing...")
     preview = None
     playing = User(LASTFM_USERNAME, lastfm).get_now_playing()

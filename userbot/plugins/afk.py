@@ -34,7 +34,7 @@ class AFK:
 AFK_ = AFK()
 
 
-@catub.cat_cmd(outgoing=True, edited=False)
+@catub.cat_cmd(outgoing=True)
 async def set_not_afk(event):
     if AFK_.afk_on is False:
         return
@@ -58,12 +58,12 @@ async def set_not_afk(event):
         else:
             endtime += f"{m}m {s}s" if m > 0 else f"{s}s"
     current_message = event.message.message
-    if (("afk" not in current_message) or ("#afk" not in current_message)) and (
-        "on" in AFK_.USERAFK_ON
-    ):
+    if ("SNAP!!" == current_message.upper()) and ("on" in AFK_.USERAFK_ON):
+        await event.delete()
+        # if current_message == "SNAP!!":
         shite = await event.client.send_message(
             event.chat_id,
-            "`Back alive! No Longer afk.\nWas afk for " + endtime + "`",
+            "**I was afk for " + endtime + "**",
         )
         AFK_.USERAFK_ON = {}
         AFK_.afk_time = None
@@ -80,9 +80,7 @@ async def set_not_afk(event):
             )
 
 
-@catub.cat_cmd(
-    incoming=True, func=lambda e: bool(e.mentioned or e.is_private), edited=False
-)
+@catub.cat_cmd(incoming=True, func=lambda e: bool(e.mentioned or e.is_private))
 async def on_afk(event):  # sourcery no-metrics
     if AFK_.afk_on is False:
         return
@@ -115,32 +113,32 @@ async def on_afk(event):  # sourcery no-metrics
         if AFK_.afk_type == "media":
             if AFK_.reason:
                 message_to_reply = (
-                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
+                    f"**I am AFK!\nLast seen {endtime} ago.\n\nReason: {AFK_.reason}**"
                 )
             else:
-                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+                message_to_reply = f"**I am AFK!\nLast seen {endtime} ago.**"
             if event.chat_id:
                 msg = await event.reply(message_to_reply, file=AFK_.media_afk.media)
         elif AFK_.afk_type == "text":
             if AFK_.msg_link and AFK_.reason:
                 message_to_reply = (
-                    f"**I am AFK .\n\nAFK Since {endtime}\nReason : **{AFK_.reason}"
+                    f"**I am AFK!\nLast seen {endtime} ago.\n\nReason:** {AFK_.reason}"
                 )
             elif AFK_.reason:
                 message_to_reply = (
-                    f"`I am AFK .\n\nAFK Since {endtime}\nReason : {AFK_.reason}`"
+                    f"**I am AFK!\nLast seen {endtime} ago.\n\nReason: {AFK_.reason}**"
                 )
             else:
-                message_to_reply = f"`I am AFK .\n\nAFK Since {endtime}\nReason : Not Mentioned ( ಠ ʖ̯ ಠ)`"
+                message_to_reply = f"**I am AFK!\nLast seen {endtime} ago.**"
             if event.chat_id:
-                msg = await event.reply(message_to_reply)
+                msg = await event.reply(message_to_reply, link_preview=True)
         if event.chat_id in AFK_.last_afk_message:
             await AFK_.last_afk_message[event.chat_id].delete()
         AFK_.last_afk_message[event.chat_id] = msg
         if event.is_private:
             return
         hmm = await event.get_chat()
-        if Config.PM_LOGGER_GROUP_ID == -100:
+        if not Config.PM_LOGGER_GROUP_ID:
             return
         full = None
         try:
@@ -169,7 +167,7 @@ async def on_afk(event):  # sourcery no-metrics
     pattern="afk(?:\s|$)([\s\S]*)",
     command=("afk", plugin_category),
     info={
-        "header": "Enables afk for your account",
+        "header": "Enables never ending afk for your account",
         "description": "When you are in afk if any one tags you then your bot will reply as he is offline.\
  AFK mean away from keyboard.",
         "options": "If you want AFK reason with hyperlink use [ ; ] after reason, then paste the media link.",
@@ -178,7 +176,7 @@ async def on_afk(event):  # sourcery no-metrics
             "{tr}afk <reason> ; <link>",
         ],
         "examples": "{tr}afk Let Me Sleep",
-        "note": "Switches off AFK when you type back anything, anywhere. You can use #afk in message to continue in afk without breaking it",
+        "note": "Switches off AFK when you type back SNAP!!",
     },
 )
 async def _(event):
@@ -208,10 +206,10 @@ async def _(event):
         AFK_.USERAFK_ON = f"on: {AFK_.reason}"
         if AFK_.reason:
             await edit_delete(
-                event, f"`I shall be Going afk! because ~` {AFK_.reason}", 5
+                event, f"**I shall be Going afk! because ~ {AFK_.reason}**", 5
             )
         else:
-            await edit_delete(event, "`I shall be Going afk! `", 5)
+            await edit_delete(event, "**I shall be Going afk!**", 5)
         if BOTLOG:
             if AFK_.reason:
                 await event.client.send_message(
@@ -229,7 +227,7 @@ async def _(event):
     pattern="mafk(?:\s|$)([\s\S]*)",
     command=("mafk", plugin_category),
     info={
-        "header": "Enables afk for your account",
+        "header": "Enables never ending afk for your account",
         "description": "When you are in afk if any one tags you then your bot will reply as he is offline.\
  AFK mean away from keyboard. Here it supports media unlike afk command",
         "options": "If you want AFK reason with hyperlink use [ ; ] after reason, then paste the media link.",
@@ -237,7 +235,7 @@ async def _(event):
             "{tr}mafk <reason> and reply to media",
         ],
         "examples": "{tr}mafk Let Me Sleep",
-        "note": "Switches off AFK when you type back anything, anywhere. You can use #afk in message to continue in afk without breaking it",
+        "note": "Switches off AFK when you type back SNAP!!",
     },
 )
 async def _(event):
@@ -263,7 +261,13 @@ async def _(event):
     AFK_.afk_star = start_1.replace(microsecond=0)
     if not AFK_.USERAFK_ON:
         input_str = event.pattern_match.group(1)
-        AFK_.reason = input_str
+        if ";" in input_str:
+            msg, mlink = input_str.split(";", 1)
+            AFK_.reason = f"[{msg.strip()}]({mlink.strip()})"
+            AFK_.msg_link = True
+        else:
+            AFK_.reason = input_str
+            AFK_.msg_link = False
         last_seen_status = await event.client(
             functions.account.GetPrivacyRequest(types.InputPrivacyKeyStatusTimestamp())
         )
@@ -272,10 +276,10 @@ async def _(event):
         AFK_.USERAFK_ON = f"on: {AFK_.reason}"
         if AFK_.reason:
             await edit_delete(
-                event, f"`I shall be Going afk! because ~` {AFK_.reason}", 5
+                event, f"**I shall be Going afk! because ~ {AFK_.reason}**", 5
             )
         else:
-            await edit_delete(event, "`I shall be Going afk! `", 5)
+            await edit_delete(event, "**I shall be Going afk!**", 5)
         AFK_.media_afk = await reply.forward_to(BOTLOG_CHATID)
         if AFK_.reason:
             await event.client.send_message(
