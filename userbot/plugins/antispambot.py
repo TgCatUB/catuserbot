@@ -108,7 +108,7 @@ if Config.ANTISPAMBOT_BAN:
     info={
         "header": "To check the users who are banned in cas",
         "description": "When you use this cmd it will check every user in the group where you used whether \
-        he is banned in cas (combat antispam service) and will show there names if they are flagged in cas",
+he is banned in cas (combat antispam service) and will show their names if they are flagged in cas",
         "usage": "{tr}cascheck",
     },
     groups_only=True,
@@ -156,7 +156,7 @@ async def caschecker(event):
     info={
         "header": "To check the users who are banned in spamwatch",
         "description": "When you use this command it will check every user in the group where you used whether \
-        he is banned in spamwatch federation and will show there names if they are banned in spamwatch federation",
+he is banned in spamwatch federation and will show there names if they are banned in spamwatch federation",
         "usage": "{tr}spamcheck",
     },
     groups_only=True,
