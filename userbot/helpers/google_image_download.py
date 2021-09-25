@@ -24,7 +24,7 @@ from urllib.request import HTTPError, Request, URLError, urlopen
 from userbot import LOGS
 
 from .utils.format import paste_message
-
+from .utils.utils import run_async
 http.client._MAXHEADERS = 1000
 
 args_list = [
@@ -601,7 +601,7 @@ class googleimagesdownload:
         data = object[1]
         main = data[3]
         info = data[9]
-        LOGS.info(paste_message(info))
+        LOGS.info(run_async(paste_message(info)))
         return {
             "image_height": main[2],
             "image_width": main[1],
