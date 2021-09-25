@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 from telethon import TelegramClient, events
-from telethon.errors import MessageIdInvalidError, MessageNotModifiedError
+from telethon.errors import MessageIdInvalidError, MessageNotModifiedError, ChatSendStickersForbiddenError
 
 from ..Config import Config
 from ..helpers.utils.events import checking
@@ -93,13 +93,11 @@ class CatUserBotClient(TelegramClient):
         def decorator(func):  # sourcery no-metrics
             async def wrapper(check):
                 if groups_only and not check.is_group:
-                    await edit_delete(check, "`I don't think this is a group.`", 10)
-                    return
+                    return await edit_delete(check, "`I don't think this is a group.`", 10)
                 if private_only and not check.is_private:
-                    await edit_delete(
+                    return await edit_delete(
                         check, "`I don't think this is a personal Chat.`", 10
                     )
-                    return
                 try:
                     await func(check)
                 except events.StopPropagation:
@@ -110,6 +108,10 @@ class CatUserBotClient(TelegramClient):
                     LOGS.error("Message was same as previous message")
                 except MessageIdInvalidError:
                     LOGS.error("Message was deleted or cant be found")
+                except ChatSendStickersForbiddenError:
+                    return await edit_delete(
+                        check, "`I guess i can't send stickers in this chat`", 10
+                    )
                 except BaseException as e:
                     LOGS.exception(e)
                     if not disable_errors:
