@@ -122,9 +122,7 @@ class CatUserBotClient(TelegramClient):
                 except MessageIdInvalidError:
                     LOGS.error("Message was deleted or cant be found")
                 except BotInlineDisabledError:
-                    await edit_delete(
-                        check, "`Turn on Inline mode for our bot`", 10
-                    )
+                    await edit_delete(check, "`Turn on Inline mode for our bot`", 10)
                 except ChatSendStickersForbiddenError:
                     await edit_delete(
                         check, "`I guess i can't send stickers in this chat`", 10
@@ -134,9 +132,7 @@ class CatUserBotClient(TelegramClient):
                         check, "`The bot didnt answer to your query in time`", 10
                     )
                 except ChatSendMediaForbiddenError:
-                    await edit_delete(
-                        check, "`You can't send media in this chat`", 10
-                    )
+                    await edit_delete(check, "`You can't send media in this chat`", 10)
                 except AlreadyInConversationError:
                     await edit_delete(
                         check,
@@ -148,7 +144,9 @@ class CatUserBotClient(TelegramClient):
                         check, "`You can't send inline messages in this chat.`", 10
                     )
                 except FloodWaitError as e:
-                    LOGS.error(f"A flood wait of {e.seconds} occured. wait for {e.seconds} seconds and try")
+                    LOGS.error(
+                        f"A flood wait of {e.seconds} occured. wait for {e.seconds} seconds and try"
+                    )
                     await check.delete()
                     await asyncio.sleep(e.seconds + 5)
                 except BaseException as e:
