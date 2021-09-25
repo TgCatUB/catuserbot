@@ -7,7 +7,11 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 from telethon import TelegramClient, events
-from telethon.errors import MessageIdInvalidError, MessageNotModifiedError, ChatSendStickersForbiddenError
+from telethon.errors import (
+    ChatSendStickersForbiddenError,
+    MessageIdInvalidError,
+    MessageNotModifiedError,
+)
 
 from ..Config import Config
 from ..helpers.utils.events import checking
@@ -93,7 +97,9 @@ class CatUserBotClient(TelegramClient):
         def decorator(func):  # sourcery no-metrics
             async def wrapper(check):
                 if groups_only and not check.is_group:
-                    return await edit_delete(check, "`I don't think this is a group.`", 10)
+                    return await edit_delete(
+                        check, "`I don't think this is a group.`", 10
+                    )
                 if private_only and not check.is_private:
                     return await edit_delete(
                         check, "`I don't think this is a personal Chat.`", 10
