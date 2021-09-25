@@ -69,6 +69,7 @@ async def s_paste(message, extension="txt"):
         }
     return {"error": "Unable to reach spacebin."}
 
+
 def spaste(message, extension="txt"):
     """
     To Paste the given message/text/code to spaceb.in
