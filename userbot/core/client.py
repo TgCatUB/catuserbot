@@ -122,33 +122,34 @@ class CatUserBotClient(TelegramClient):
                 except MessageIdInvalidError:
                     LOGS.error("Message was deleted or cant be found")
                 except BotInlineDisabledError:
-                    return await edit_delete(
+                    await edit_delete(
                         check, "`Turn on Inline mode for our bot`", 10
                     )
                 except ChatSendStickersForbiddenError:
-                    return await edit_delete(
+                    await edit_delete(
                         check, "`I guess i can't send stickers in this chat`", 10
                     )
                 except BotResponseTimeoutError:
-                    return await edit_delete(
+                    await edit_delete(
                         check, "`The bot didnt answer to your query in time`", 10
                     )
                 except ChatSendMediaForbiddenError:
-                    return await edit_delete(
+                    await edit_delete(
                         check, "`You can't send media in this chat`", 10
                     )
                 except AlreadyInConversationError:
-                    return await edit_delete(
+                    await edit_delete(
                         check,
                         "`A conversation is already happening with the given chat. try again after some time.`",
                         10,
                     )
                 except ChatSendInlineForbiddenError:
-                    return await edit_delete(
+                    await edit_delete(
                         check, "`You can't send inline messages in this chat.`", 10
                     )
                 except FloodWaitError as e:
-                    LOGS.error(f"A flood wait of {e.seconds} occured")
+                    LOGS.error(f"A flood wait of {e.seconds} occured. wait for {e.seconds} seconds and try")
+                    await check.delete()
                     await asyncio.sleep(e.seconds + 5)
                 except BaseException as e:
                     LOGS.exception(e)
