@@ -20,7 +20,8 @@ import urllib.request
 from http.client import BadStatusLine
 from urllib.parse import quote
 from urllib.request import HTTPError, Request, URLError, urlopen
-
+from userbot import LOGS
+from .utils.format import paste_message
 http.client._MAXHEADERS = 1000
 
 args_list = [
@@ -597,7 +598,7 @@ class googleimagesdownload:
         data = object[1]
         main = data[3]
         info = data[9]
-        LOGS.info(f"page : {_format.paste_text(info)}")
+        LOGS.info(paste_message(info))
         return {
             "image_height": main[2],
             "image_width": main[1],
