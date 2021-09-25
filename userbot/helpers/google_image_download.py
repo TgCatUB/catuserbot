@@ -593,17 +593,17 @@ class googleimagesdownload:
             page = page[end_content:]
         return tabs
 
-    #Format the object in readable format
-    def format_object(self,object):
+    # Format the object in readable format
+    def format_object(self, object):
         return {
-            'image_format': object['ity'],
-            'image_height': object['oh'],
-            'image_width': object['ow'],
-            'image_link': object['ou'],
-            'image_description': object['pt'],
-            'image_host': object['rh'],
-            'image_source': object['ru'],
-            'image_thumbnail_url': object['tu'],
+            "image_format": object["ity"],
+            "image_height": object["oh"],
+            "image_width": object["ow"],
+            "image_link": object["ou"],
+            "image_description": object["pt"],
+            "image_host": object["rh"],
+            "image_source": object["ru"],
+            "image_thumbnail_url": object["tu"],
         }
 
     # function to download single image
