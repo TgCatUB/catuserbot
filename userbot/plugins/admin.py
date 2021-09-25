@@ -394,7 +394,7 @@ async def startmute(event):
         except AttributeError:
             pass
         except Exception as e:
-            return await edit_or_reply(event, f"**Error : **`{e}`", 10)
+            return await edit_or_reply(event, f"**Error : **`{e}`")
         try:
             await event.client(EditBannedRequest(event.chat_id, user.id, MUTE_RIGHTS))
         except UserAdminInvalidError:
@@ -410,7 +410,7 @@ async def startmute(event):
                 )
             mute(user.id, event.chat_id)
         except Exception as e:
-            return await edit_or_reply(event, f"**Error : **`{e}`", 10)
+            return await edit_or_reply(event, f"**Error : **`{e}`")
         if reason:
             await edit_or_reply(
                 event,
