@@ -601,7 +601,7 @@ class googleimagesdownload:
         data = object[1]
         main = data[3]
         info = data[9]
-        #LOGS.info(spaste(json.dumps(info)))
+        # LOGS.info(spaste(json.dumps(info)))
         return {
             "image_height": main[2],
             "image_width": main[1],
