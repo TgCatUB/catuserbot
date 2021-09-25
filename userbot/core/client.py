@@ -1,23 +1,23 @@
+import asyncio
 import datetime
 import inspect
 import re
 import sys
-import asyncio
 import traceback
 from pathlib import Path
 from typing import Dict, List, Union
 
 from telethon import TelegramClient, events
 from telethon.errors import (
-    ChatSendStickersForbiddenError,
-    MessageIdInvalidError,
-    MessageNotModifiedError,
+    AlreadyInConversationError,
     BotInlineDisabledError,
     BotResponseTimeoutError,
+    ChatSendInlineForbiddenError,
     ChatSendMediaForbiddenError,
-    AlreadyInConversationError,
-    ChatSendInlineForbiddenError, 
-    FloodWaitError
+    ChatSendStickersForbiddenError,
+    FloodWaitError,
+    MessageIdInvalidError,
+    MessageNotModifiedError,
 )
 
 from ..Config import Config
@@ -139,7 +139,9 @@ class CatUserBotClient(TelegramClient):
                     )
                 except AlreadyInConversationError:
                     return await edit_delete(
-                        check, "`A conversation is already happening with the given chat. try again after some time.`", 10
+                        check,
+                        "`A conversation is already happening with the given chat. try again after some time.`",
+                        10,
                     )
                 except ChatSendInlineForbiddenError:
                     return await edit_delete(
