@@ -598,7 +598,7 @@ class googleimagesdownload:
         return tabs
 
     # Format the object in readable format
-    
+
     def format_object(self, object):
         data = object[1]
         main = data[3]
