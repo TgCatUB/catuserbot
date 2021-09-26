@@ -349,7 +349,7 @@ async def kang(args):  # sourcery no-metrics
             "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
             not in htmlstr
         ):
-            async with args.client.conversation("Stickers") as conv:
+            async with args.client.conversation("@Stickers") as conv:
                 packname, emoji = await add_to_pack(
                     catevent,
                     conv,
@@ -374,7 +374,7 @@ async def kang(args):  # sourcery no-metrics
             )
         else:
             await catevent.edit("`Brewing a new Pack...`")
-            async with args.client.conversation("Stickers") as conv:
+            async with args.client.conversation("@Stickers") as conv:
                 otherpack, packname, emoji = await newpacksticker(
                     catevent,
                     conv,
@@ -535,7 +535,7 @@ async def pack_kang(event):  # sourcery no-metrics
                 "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
                 in htmlstr
             ):
-                async with event.client.conversation("Stickers") as conv:
+                async with event.client.conversation("@Stickers") as conv:
                     pack, catpackname = await newpacksticker(
                         catevent,
                         conv,
@@ -550,7 +550,7 @@ async def pack_kang(event):  # sourcery no-metrics
                         pkang=True,
                     )
             else:
-                async with event.client.conversation("Stickers") as conv:
+                async with event.client.conversation("@Stickers") as conv:
                     pack, catpackname = await add_to_pack(
                         catevent,
                         conv,

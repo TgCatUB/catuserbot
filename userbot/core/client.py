@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import inspect
 import re
@@ -7,7 +8,17 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 from telethon import TelegramClient, events
-from telethon.errors import MessageIdInvalidError, MessageNotModifiedError
+from telethon.errors import (
+    AlreadyInConversationError,
+    BotInlineDisabledError,
+    BotResponseTimeoutError,
+    ChatSendInlineForbiddenError,
+    ChatSendMediaForbiddenError,
+    ChatSendStickersForbiddenError,
+    FloodWaitError,
+    MessageIdInvalidError,
+    MessageNotModifiedError,
+)
 
 from ..Config import Config
 from ..helpers.utils.events import checking
@@ -91,15 +102,15 @@ class CatUserBotClient(TelegramClient):
                 REGEX_.regex2 = re.compile(reg2 + pattern)
 
         def decorator(func):  # sourcery no-metrics
-            async def wrapper(check):
+            async def wrapper(check):  # sourcery no-metrics
                 if groups_only and not check.is_group:
-                    await edit_delete(check, "`I don't think this is a group.`", 10)
-                    return
+                    return await edit_delete(
+                        check, "`I don't think this is a group.`", 10
+                    )
                 if private_only and not check.is_private:
-                    await edit_delete(
+                    return await edit_delete(
                         check, "`I don't think this is a personal Chat.`", 10
                     )
-                    return
                 try:
                     await func(check)
                 except events.StopPropagation:
@@ -110,6 +121,34 @@ class CatUserBotClient(TelegramClient):
                     LOGS.error("Message was same as previous message")
                 except MessageIdInvalidError:
                     LOGS.error("Message was deleted or cant be found")
+                except BotInlineDisabledError:
+                    await edit_delete(check, "`Turn on Inline mode for our bot`", 10)
+                except ChatSendStickersForbiddenError:
+                    await edit_delete(
+                        check, "`I guess i can't send stickers in this chat`", 10
+                    )
+                except BotResponseTimeoutError:
+                    await edit_delete(
+                        check, "`The bot didnt answer to your query in time`", 10
+                    )
+                except ChatSendMediaForbiddenError:
+                    await edit_delete(check, "`You can't send media in this chat`", 10)
+                except AlreadyInConversationError:
+                    await edit_delete(
+                        check,
+                        "`A conversation is already happening with the given chat. try again after some time.`",
+                        10,
+                    )
+                except ChatSendInlineForbiddenError:
+                    await edit_delete(
+                        check, "`You can't send inline messages in this chat.`", 10
+                    )
+                except FloodWaitError as e:
+                    LOGS.error(
+                        f"A flood wait of {e.seconds} occured. wait for {e.seconds} seconds and try"
+                    )
+                    await check.delete()
+                    await asyncio.sleep(e.seconds + 5)
                 except BaseException as e:
                     LOGS.exception(e)
                     if not disable_errors:

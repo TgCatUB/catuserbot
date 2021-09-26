@@ -64,11 +64,13 @@ async def _(event):
             scam_action = choice(options)
             scam_time = int(args[0])
     elif len(args) == 2:
-        scam_action = str(args[0]).lower()
-        scam_time = int(args[1])
+        try:
+            scam_action = str(args[0]).lower()
+            scam_time = int(args[1])
+        except ValueError:
+            return await edit_delete(event, "`Invalid Syntax !!`")
     else:
-        await edit_delete(event, "`Invalid Syntax !!`")
-        return
+        return await edit_delete(event, "`Invalid Syntax !!`")
     try:
         if scam_time > 0:
             await event.delete()
