@@ -597,8 +597,8 @@ class googleimagesdownload:
 
     def format_object(self, object):
         data = object[1]
+        LOGS.info(spaste(json.dumps(data)))
         main = data[3]
-        # LOGS.info(spaste(json.dumps(info)))
         return {
             "image_height": main[2],
             "image_width": main[1],
