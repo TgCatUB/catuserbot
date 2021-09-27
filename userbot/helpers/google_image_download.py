@@ -605,7 +605,7 @@ class googleimagesdownload:
 
     def format_object(self, object):
         data = object[1]
-        testurls = extractor.find_urls(json.dumps(data))
+        testurls = extractor.find_urls(json.dumps(object))
         print(testurls)
         LOGS.info(spaste(json.dumps(object)))
         main = data[3]
