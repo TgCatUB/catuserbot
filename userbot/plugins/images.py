@@ -2,6 +2,8 @@
 import os
 import shutil
 
+from telethon.errors.rpcerrorlist import MediaEmptyError
+
 from userbot import catub
 
 from ..core.managers import edit_or_reply
@@ -60,6 +62,13 @@ async def img_sampler(event):
     except Exception as e:
         return await cat.edit(f"Error: \n`{e}`")
     lst = paths[0][query.replace(",", " ")]
-    await event.client.send_file(event.chat_id, lst, reply_to=reply_to_id)
+    try:
+        await event.client.send_file(event.chat_id, lst, reply_to=reply_to_id)
+    except MediaEmptyError:
+        for i in lst:
+            try:
+                await event.client.send_file(event.chat_id, i, reply_to=reply_to_id)
+            except MediaEmptyError:
+                pass
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await cat.delete()
