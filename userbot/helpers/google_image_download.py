@@ -1294,7 +1294,7 @@ class googleimagesdownload:
         i = 0
         count = 1
         image_objects = self._get_image_objects(page)
-        #LOGS.info(spaste(json.dumps(image_objects)))
+        # LOGS.info(spaste(json.dumps(image_objects)))
         while count < limit + 1:
             if len(image_objects) == 0:
                 print("no_links")
