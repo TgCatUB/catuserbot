@@ -609,10 +609,10 @@ class googleimagesdownload:
             "image_width": main[1],
             "image_link": main[0],
             "image_format": main[0][-1 * (len(main[0]) - main[0].rfind(".") - 1) :],
-            "image_description": info["2003"][3],
-            "image_host": info["2003"][1],
-            "image_source": info["2003"][2],
-            "image_thumbnail_url": data[2][0],
+            "image_description": "Downloaded using catuserbot",
+            "image_host": "Unknown",
+            "image_source": "Unknown",
+            "image_thumbnail_url": "Unknown",
         }
 
     # function to download single image
@@ -1294,7 +1294,7 @@ class googleimagesdownload:
         i = 0
         count = 1
         image_objects = self._get_image_objects(page)
-        LOGS.info(spaste(json.dumps(image_objects)))
+        #LOGS.info(spaste(json.dumps(image_objects)))
         while count < limit + 1:
             if len(image_objects) == 0:
                 print("no_links")
