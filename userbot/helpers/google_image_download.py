@@ -1323,13 +1323,23 @@ class googleimagesdownload:
         count = 1
         image_objects = self._get_image_objects(page)
         # LOGS.info(spaste(json.dumps(image_objects)))
+        oldurl = ""
+        newurl = ""
         while count < limit + 1:
             if len(image_objects) == 0:
                 print("no_links")
                 break
             else:
                 # format the item for readability
-                object = self.format_object(image_objects[i])
+                try:
+                    object = self.format_object(image_objects[i])
+                except IndexError:
+                    testurls = extractor.find_urls(json.dumps(image_objects))
+                    object = self.format_object(testurls[i])
+                newurl = object["image_link"]
+                if newurl == oldurl:
+                    continue
+                oldurl = newurl
                 if arguments["metadata"] and not arguments["silent_mode"]:
                     print("\nImage Metadata: " + str(object))
 
