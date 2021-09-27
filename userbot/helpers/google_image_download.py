@@ -3,8 +3,10 @@
 #  coding: utf-8
 
 ###### Searching and Downloading Google Images to the local disk ######
-# Import Libraries
+
 import argparse
+
+# Import Libraries
 import codecs
 import datetime
 import http.client
@@ -19,13 +21,9 @@ from http.client import BadStatusLine
 from urllib.parse import quote
 from urllib.request import HTTPError, Request, URLError, urlopen
 
-from urlextract import URLExtract
-
 # from userbot import LOGS
 
 # from .utils.paste import spaste
-
-extractor = URLExtract()
 
 http.client._MAXHEADERS = 1000
 
@@ -602,11 +600,12 @@ class googleimagesdownload:
     # Format the object in readable format
 
     def format_object(self, object):
+        data = object[1]
+        main = data[3]
+        info = data[9]
+        if info is None:
+            info = data[11]
         try:
-            data = object[1]
-            main = data[3]
-            info = data[9]
-            # LOGS.info(spaste(json.dumps(info)))
             return {
                 "image_height": main[2],
                 "image_width": main[1],
@@ -617,31 +616,9 @@ class googleimagesdownload:
                 "image_source": info["2003"][2],
                 "image_thumbnail_url": data[2][0],
             }
-        except TypeError:
-            testurls = extractor.find_urls(json.dumps(object))
-            for imglink in testurls:
-                if "https://encrypted-tbn0.gstatic.com/images?q=tbn:" in imglink:
-                    main = imglink
-                    return {
-                        "image_height": "",
-                        "image_width": "",
-                        "image_link": main,
-                        "image_format": main[-1 * (len(main) - main.rfind(".") - 1) :],
-                        "image_description": "Downloaded using catuserbot",
-                        "image_host": "Unknown",
-                        "image_source": "Unknown",
-                        "image_thumbnail_url": "Unknown",
-                    }
-            return {
-                "image_height": "",
-                "image_width": "",
-                "image_link": "",
-                "image_format": "",
-                "image_description": "",
-                "image_host": "Unknown",
-                "image_source": "Unknown",
-                "image_thumbnail_url": "Unknown",
-            }
+        except Exception as e:
+            print(e)
+            return None
 
     # function to download single image
 
@@ -1321,25 +1298,15 @@ class googleimagesdownload:
         errorCount = 0
         i = 0
         count = 1
+        # LOGS.info(f"page : {_format.paste_text(page)}")
         image_objects = self._get_image_objects(page)
-        # LOGS.info(spaste(json.dumps(image_objects)))
-        oldurl = ""
-        newurl = ""
         while count < limit + 1:
             if len(image_objects) == 0:
                 print("no_links")
                 break
             else:
                 # format the item for readability
-                try:
-                    object = self.format_object(image_objects[i])
-                except IndexError:
-                    testurls = extractor.find_urls(json.dumps(image_objects))
-                    object = self.format_object(testurls[i])
-                newurl = object["image_link"]
-                if newurl == oldurl:
-                    continue
-                oldurl = newurl
+                object = self.format_object(image_objects[i])
                 if arguments["metadata"] and not arguments["silent_mode"]:
                     print("\nImage Metadata: " + str(object))
 
