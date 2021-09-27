@@ -4,6 +4,7 @@
 
 ###### Searching and Downloading Google Images to the local disk ######
 
+# Import Libraries
 import argparse
 import codecs
 import datetime
@@ -13,7 +14,6 @@ import os
 import re
 import ssl
 
-# Import Libraries
 import sys
 import time  # Importing the time library to check the time of code execution
 import urllib.request
@@ -498,6 +498,9 @@ class googleimagesdownload:
     # Downloading entire Web Document (Raw Page Content)
     def download_page(self, url):
         try:
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
+            }
             req = urllib.request.Request(url, headers=headers)
             resp = urllib.request.urlopen(req)
             respData = str(resp.read())
