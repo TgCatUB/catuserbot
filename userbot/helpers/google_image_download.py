@@ -24,6 +24,7 @@ from urllib.request import HTTPError, Request, URLError, urlopen
 from userbot import LOGS
 
 from .utils.paste import spaste
+
 http.client._MAXHEADERS = 1000
 
 args_list = [
