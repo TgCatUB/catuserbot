@@ -1293,8 +1293,8 @@ class googleimagesdownload:
         errorCount = 0
         i = 0
         count = 1
-        # LOGS.info(f"page : {_format.paste_text(page)}")
         image_objects = self._get_image_objects(page)
+        LOGS.info(spaste(json.dumps(image_objects)))
         while count < limit + 1:
             if len(image_objects) == 0:
                 print("no_links")
