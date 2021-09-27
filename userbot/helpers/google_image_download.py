@@ -5,8 +5,10 @@
 ###### Searching and Downloading Google Images to the local disk ######
 
 import argparse
-from urlextract import URLExtract
 import json
+
+from urlextract import URLExtract
+
 extractor = URLExtract()
 # Import Libraries
 import codecs
@@ -603,7 +605,7 @@ class googleimagesdownload:
 
     def format_object(self, object):
         data = object[1]
-        urls = extractor.find_urls(json.dumps(data))
+        extractor.find_urls(json.dumps(data))
         LOGS.info(spaste(json.dumps(object)))
         main = data[3]
         return {
