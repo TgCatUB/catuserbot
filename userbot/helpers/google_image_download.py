@@ -3,14 +3,10 @@
 #  coding: utf-8
 
 ###### Searching and Downloading Google Images to the local disk ######
-
+# Import Libraries
 import argparse
 import json
-
 from urlextract import URLExtract
-
-extractor = URLExtract()
-# Import Libraries
 import codecs
 import datetime
 import http.client
@@ -25,9 +21,11 @@ from http.client import BadStatusLine
 from urllib.parse import quote
 from urllib.request import HTTPError, Request, URLError, urlopen
 
-from userbot import LOGS
+# from userbot import LOGS
 
-from .utils.paste import spaste
+# from .utils.paste import spaste
+
+extractor = URLExtract()
 
 http.client._MAXHEADERS = 1000
 
@@ -604,21 +602,47 @@ class googleimagesdownload:
     # Format the object in readable format
 
     def format_object(self, object):
-        data = object[1]
-        testurls = extractor.find_urls(json.dumps(object))
-        print(testurls)
-        LOGS.info(spaste(json.dumps(object)))
-        main = data[3]
-        return {
-            "image_height": main[2],
-            "image_width": main[1],
-            "image_link": main[0],
-            "image_format": main[0][-1 * (len(main[0]) - main[0].rfind(".") - 1) :],
-            "image_description": "Downloaded using catuserbot",
-            "image_host": "Unknown",
-            "image_source": "Unknown",
-            "image_thumbnail_url": "Unknown",
-        }
+        try:
+            data = object[1]
+            main = data[3]
+            info = data[9]
+            # LOGS.info(spaste(json.dumps(info)))
+            return {
+                "image_height": main[2],
+                "image_width": main[1],
+                "image_link": main[0],
+                "image_format": main[0][-1 * (len(main[0]) - main[0].rfind(".") - 1) :],
+                "image_description": info["2003"][3],
+                "image_host": info["2003"][17],
+                "image_source": info["2003"][2],
+                "image_thumbnail_url": data[2][0],
+            }
+        except TypeError:
+            testurls = extractor.find_urls(json.dumps(object))
+            for imglink in testurls:
+                if "https://encrypted-tbn0.gstatic.com/images?q=tbn:" in imglink:
+                    main = imglink
+                    return {
+                        "image_height": "",
+                        "image_width": "",
+                        "image_link": main,
+                        "image_format": main[-1 * (len(main) - main.rfind(".") - 1) :],
+                        "image_description": "Downloaded using catuserbot",
+                        "image_host": "Unknown",
+                        "image_source": "Unknown",
+                        "image_thumbnail_url": "Unknown",
+                    }
+            return {
+                        "image_height": "",
+                        "image_width": "",
+                        "image_link": "",
+                        "image_format": "",
+                        "image_description": "",
+                        "image_host": "Unknown",
+                        "image_source": "Unknown",
+                        "image_thumbnail_url": "Unknown",
+                    }
+            
 
     # function to download single image
 
