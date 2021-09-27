@@ -6,15 +6,19 @@
 
 # Import Libraries
 import sys
-from urllib import quote
 
-import httplib
-from httplib import BadStatusLine, IncompleteRead
+import urllib.request
+from urllib.request import Request, urlopen
+from urllib.request import URLError, HTTPError
+from urllib.parse import quote
+import http.client
+from http.client import IncompleteRead, BadStatusLine
+    
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from urllib2 import HTTPError, Request, URLError, urlopen
 
-httplib._MAXHEADERS = 1000
+
 import argparse
 import codecs
 import datetime
@@ -23,7 +27,7 @@ import os
 import re
 import ssl
 import time  # Importing the time library to check the time of code execution
-
+http.client._MAXHEADERS = 1000
 args_list = [
     "keywords",
     "keywords_from_file",
