@@ -513,17 +513,10 @@ class googleimagesdownload:
             )
         except Exception as e:
             print(e)
-            print(
-                "Image objects data unpacking failed. Please leave a comment with the above error at https://github.com/hardikvasa/google-images-download/pull/298"
-            )
             sys.exit()
 
     # Download Page for more than 100 images
     def download_extended_page(self, url, chromedriver):
-
-        if sys.version_info[0] < 3:
-            reload(sys)
-            sys.setdefaultencoding("utf8")
         options = webdriver.ChromeOptions()
         options.add_argument("--no-sandbox")
         options.add_argument("--headless")
