@@ -726,18 +726,14 @@ class googleimagesdownload:
         return
 
     def similar_images(self, similar_images):
-        version = (3, 0)
-        cur_version = sys.version_info
-        try:
-            searchUrl = (
-                "https://www.google.com/searchbyimage?site=search&sa=X&image_url="
-                + similar_images
-            )
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
-            }
-
-            if cur_version >= version:
+            try:
+                searchUrl = (
+                    "https://www.google.com/searchbyimage?site=search&sa=X&image_url="
+                    + similar_images
+                )
+                headers = {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
+                }
                 req1 = urllib.request.Request(searchUrl, headers=headers)
                 resp1 = urllib.request.urlopen(req1)
                 content = str(resp1.read())
@@ -752,26 +748,11 @@ class googleimagesdownload:
                 )
                 req2 = urllib.request.Request(newurl, headers=headers)
                 urllib.request.urlopen(req2)
-            else:
-                req1 = urllib2.Request(searchUrl, headers=headers)
-                resp1 = urllib2.urlopen(req1)
-                content = str(resp1.read())
-                l1 = content.find("AMhZZ")
-                l2 = content.find("&", l1)
-                urll = content[l1:l2]
-
-                newurl = (
-                    "https://www.google.com/search?tbs=sbi:"
-                    + urll
-                    + "&site=search&sa=X"
-                )
-                req2 = urllib2.Request(newurl, headers=headers)
-                urllib2.urlopen(req2)
-            l3 = content.find("/search?sa=X&amp;q=")
-            l4 = content.find(";", l3 + 19)
-            return content[l3 + 19 : l4]
-        except:
-            return "Cloud not connect to Google Images endpoint"
+                l3 = content.find("/search?sa=X&amp;q=")
+                l4 = content.find(";", l3 + 19)
+                return content[l3 + 19 : l4]
+            except:
+                return "Cloud not connect to Google Images endpoint"
 
     # Building URL parameters
     def build_url_parameters(self, arguments):
