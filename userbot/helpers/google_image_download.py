@@ -1291,19 +1291,20 @@ class googleimagesdownload:
         # LOGS.info(_format.paste_text(object_decode[:-15]))
         return json.loads(object_decode[:-15])[31][0][12][2]
 
-    def _get_all_items(self, page, main_directory, dir_name, limit, arguments):
+    def _get_all_items(self, image_objects, main_directory, dir_name, limit, arguments):
         # sourcery no-metrics
         items = []
         abs_path = []
         errorCount = 0
         i = 0
         count = 1
-        # LOGS.info(f"page : {_format.paste_text(page)}")
-        image_objects = self._get_image_objects(page)
-        while count < limit + 1:
+        while count < limit + 1 and i < len(image_objects):
             if len(image_objects) == 0:
                 print("no_links")
                 break
+            elif arguments["offset"] and count <= int(arguments["offset"]):
+                count += 1
+                # page = page[end_content:]
             else:
                 # format the item for readability
                 object = self.format_object(image_objects[i])
@@ -1311,12 +1312,7 @@ class googleimagesdownload:
                     print("\nImage Metadata: " + str(object))
 
                 # download the images
-                (
-                    download_status,
-                    download_message,
-                    return_image_name,
-                    absolute_path,
-                ) = self.download_image(
+                download_status, download_message, return_image_name, absolute_path = self.download_image(
                     object["image_link"],
                     object["image_format"],
                     main_directory,
@@ -1341,10 +1337,7 @@ class googleimagesdownload:
 
                     # download image_thumbnails
                     if arguments["thumbnail"] or arguments["thumbnail_only"]:
-                        (
-                            download_status,
-                            download_message_thumbnail,
-                        ) = self.download_image_thumbnail(
+                        download_status, download_message_thumbnail = self.download_image_thumbnail(
                             object["image_thumbnail_url"],
                             main_directory,
                             dir_name,
@@ -1362,8 +1355,9 @@ class googleimagesdownload:
 
                     count += 1
                     object["image_filename"] = return_image_name
-                    # Append all the links in the list named 'Links'
-                    items.append(object)
+                    items.append(
+                        object
+                    )  # Append all the links in the list named 'Links'
                     abs_path.append(absolute_path)
                 else:
                     errorCount += 1
