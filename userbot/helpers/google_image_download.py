@@ -5,8 +5,6 @@
 ###### Searching and Downloading Google Images to the local disk ######
 # Import Libraries
 import argparse
-import json
-from urlextract import URLExtract
 import codecs
 import datetime
 import http.client
@@ -20,6 +18,8 @@ import urllib.request
 from http.client import BadStatusLine
 from urllib.parse import quote
 from urllib.request import HTTPError, Request, URLError, urlopen
+
+from urlextract import URLExtract
 
 # from userbot import LOGS
 
@@ -633,16 +633,15 @@ class googleimagesdownload:
                         "image_thumbnail_url": "Unknown",
                     }
             return {
-                        "image_height": "",
-                        "image_width": "",
-                        "image_link": "",
-                        "image_format": "",
-                        "image_description": "",
-                        "image_host": "Unknown",
-                        "image_source": "Unknown",
-                        "image_thumbnail_url": "Unknown",
-                    }
-            
+                "image_height": "",
+                "image_width": "",
+                "image_link": "",
+                "image_format": "",
+                "image_description": "",
+                "image_host": "Unknown",
+                "image_source": "Unknown",
+                "image_thumbnail_url": "Unknown",
+            }
 
     # function to download single image
 
