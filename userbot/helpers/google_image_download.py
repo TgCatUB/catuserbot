@@ -1312,7 +1312,12 @@ class googleimagesdownload:
                     print("\nImage Metadata: " + str(object))
 
                 # download the images
-                download_status, download_message, return_image_name, absolute_path = self.download_image(
+                (
+                    download_status,
+                    download_message,
+                    return_image_name,
+                    absolute_path,
+                ) = self.download_image(
                     object["image_link"],
                     object["image_format"],
                     main_directory,
@@ -1337,7 +1342,10 @@ class googleimagesdownload:
 
                     # download image_thumbnails
                     if arguments["thumbnail"] or arguments["thumbnail_only"]:
-                        download_status, download_message_thumbnail = self.download_image_thumbnail(
+                        (
+                            download_status,
+                            download_message_thumbnail,
+                        ) = self.download_image_thumbnail(
                             object["image_thumbnail_url"],
                             main_directory,
                             dir_name,
