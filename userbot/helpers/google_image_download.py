@@ -4,29 +4,26 @@
 
 ###### Searching and Downloading Google Images to the local disk ######
 
-# Import Libraries
-import sys
-
-import urllib.request
-from urllib.request import Request, urlopen
-from urllib.request import URLError, HTTPError
-from urllib.parse import quote
-import http.client
-from http.client import IncompleteRead, BadStatusLine
-    
-
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-
-
 import argparse
 import codecs
 import datetime
+import http.client
 import json
 import os
 import re
 import ssl
+
+# Import Libraries
+import sys
 import time  # Importing the time library to check the time of code execution
+import urllib.request
+from http.client import BadStatusLine, IncompleteRead
+from urllib.parse import quote
+from urllib.request import HTTPError, Request, URLError, urlopen
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
 http.client._MAXHEADERS = 1000
 args_list = [
     "keywords",
