@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime
 
+from telethon import events
 from telethon.errors import BadRequestError
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.functions.users import GetFullUserRequest
@@ -224,6 +225,26 @@ async def gablist(event):
     else:
         GBANNED_LIST = "no Gbanned Users (yet)"
     await edit_or_reply(event, GBANNED_LIST)
+
+
+@catub.on(events.ChatAction)
+async def _(event):
+    if event.user_joined or event.added_by:
+        user = await event.get_user()
+        chat = await event.get_chat()
+        if gban_sql.is_gbanned(user.id):
+            if chat.admin_rights:
+                try:
+                    await event.client.edit_permissions(
+                        chat.id,
+                        user.id,
+                        view_messages=False,
+                    )
+                    await event.reply(
+                        f"**#GBanned_User** Joined.\n\n**First Name:** [{user.first_name}](tg://user?id={user.id})\n**Action:** `Banned`"
+                    )
+                except BaseException:
+                    pass
 
 
 @catub.cat_cmd(
