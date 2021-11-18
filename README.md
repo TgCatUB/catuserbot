@@ -1,4 +1,4 @@
-<h1 align="center"><img src="./userbot/helpers/resources/Music.gif" width="30px"> PEPE CAT <img src="./userbot/helpers/resources/Music.gif" width="30px"></h1>
+<h1 align="center"><img src="./userbot/helpers/resources/Music.gif" width="30px"> ZAROX CAT <img src="./userbot/helpers/resources/Music.gif" width="30px"></h1>
 
 A simple Telegram userbot based on Telethon .
 [![catuserbot logo](https://telegra.ph/file/b7dc845e3a48cde0d7bb1.jpg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot%2Ftree%2Fbugs&template=https%3A%2F%2Fgithub.com%2Fsandy1709%2Fcatuserbot)
