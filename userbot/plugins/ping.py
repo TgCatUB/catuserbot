@@ -35,7 +35,11 @@ async def _(event):
         catevent = await edit_or_reply(event, "Pong!")
         end = datetime.now()
         ms = (end - start).microseconds / 1000
-        await catevent.edit(f"Pong!\n`{ms} ms`")
+        await catevent.edit(f"▱▱▱▱▱▱")
+        await catevent.edit(f"▰▰▱▱▱▱")
+        await catevent.edit(f"▰▰▰▰▱▱")
+        await catevent.edit(f"▰▰▰▰▰▰")
+        await catevent.edit(f"\*╔═════════╗*\nPong !\n`{ms} ms`\n*╚═══❖❖═══╝*")
 
 
 @catub.cat_cmd(
