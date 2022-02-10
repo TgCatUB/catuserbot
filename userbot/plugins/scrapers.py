@@ -7,7 +7,7 @@ from wikipedia.exceptions import DisambiguationError, PageError
 
 from userbot import catub
 
-from ..core.managers import edit_or_reply, edit_delete
+from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import get_cast, get_moviecollections, imdb, mov_titles
 from ..helpers.utils import reply_id
 from . import BOTLOG, BOTLOG_CHATID
