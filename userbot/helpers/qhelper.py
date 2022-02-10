@@ -221,9 +221,9 @@ async def process(msg, user, client, reply, replied=None):
         elif reply.document.size < 1048576:
             docsize = str(round(reply.document.size / 1024, 2)) + " KB "
         elif reply.document.size < 1073741824:
-            docsize = str(round(reply.document.size / 1024 ** 2, 2)) + " MB "
+            docsize = str(round(reply.document.size / 1024**2, 2)) + " MB "
         else:
-            docsize = str(round(reply.document.size / 1024 ** 3, 2)) + " GB "
+            docsize = str(round(reply.document.size / 1024**3, 2)) + " GB "
         docbglen = (
             font.getsize(docsize)[0]
             if font.getsize(docsize)[0] > font.getsize(docname)[0]

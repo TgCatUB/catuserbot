@@ -15,7 +15,7 @@ plugin_category = "utils"
 
 
 def convert_from_bytes(size):
-    power = 2 ** 10
+    power = 2**10
     n = 0
     units = {0: "", 1: "Kbps", 2: "Mbps", 3: "Gbps", 4: "Tbps"}
     while size > power:
