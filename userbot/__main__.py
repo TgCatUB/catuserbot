@@ -1,14 +1,13 @@
 import sys
 
 import userbot
-from userbot import BOTLOG_CHATID, HEROKU_APP, PM_LOGGER_GROUP_ID
+from userbot import BOTLOG_CHATID, PM_LOGGER_GROUP_ID
 
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
 from .utils import (
     add_bot_to_logger_group,
-    ipchange,
     load_plugins,
     setup_bot,
     startupmessage,
@@ -29,6 +28,7 @@ try:
 except Exception as e:
     LOGS.error(f"{e}")
     sys.exit()
+
 
 async def startup_process():
     await verifyLoggerGroup()
