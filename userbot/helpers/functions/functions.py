@@ -94,7 +94,6 @@ async def animator(media, mainevent, textevent):
     return sticker
 
 
-
 def reddit_thumb_link(preview, thumb=None):
     for i in preview:
         if "width=216" in i:
