@@ -12,13 +12,12 @@ from telethon import types
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from validators.url import url
-from youtubesearchpython import Video
 
 from userbot import catub
 
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import name_dl, song_dl, video_dl, yt_search, yt_data
+from ..helpers.functions import name_dl, song_dl, video_dl, yt_data, yt_search
 from ..helpers.tools import media_type
 from ..helpers.utils import _catutils, reply_id
 
