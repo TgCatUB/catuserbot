@@ -1,7 +1,9 @@
-import time
-import sys
-import heroku3
 import signal
+import sys
+import time
+
+import heroku3
+
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
@@ -19,6 +21,7 @@ bot = catub
 
 StartTime = time.time()
 catversion = "3.0.4"
+
 
 def close_connection(*_):
     print("Clossing Userbot connection.")
