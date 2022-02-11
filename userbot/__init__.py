@@ -8,6 +8,7 @@ from .Config import Config
 from .core.logger import logging
 from .core.session import catub
 from .sql_helper.globals import addgvar, delgvar, gvarstatus
+from .helpers.utils.utils import runasync 
 
 __version__ = "3.0.5"
 __license__ = "GNU Affero General Public License v3.0"
@@ -25,7 +26,7 @@ catversion = "3.0.4"
 
 def close_connection(*_):
     print("Clossing Userbot connection.")
-    bot.disconnect()
+    runasync(catub.disconnect())
     sys.exit(143)
 
 
