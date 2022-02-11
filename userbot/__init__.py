@@ -1,7 +1,7 @@
 import time
-
+import sys
 import heroku3
-
+import signal
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
@@ -19,6 +19,14 @@ bot = catub
 
 StartTime = time.time()
 catversion = "3.0.4"
+
+def close_connection(*_):
+    print("Clossing Userbot connection.")
+    bot.disconnect()
+    sys.exit(143)
+
+
+signal.signal(signal.SIGTERM, close_connection)
 
 if Config.UPSTREAM_REPO == "badcat":
     UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot"
