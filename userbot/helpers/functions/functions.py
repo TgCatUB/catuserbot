@@ -5,7 +5,6 @@ from textwrap import wrap
 from uuid import uuid4
 
 import requests
-from googletrans import Translator
 
 from ..utils.extdl import install_pip
 from ..utils.utils import runcmd
@@ -94,18 +93,6 @@ async def animator(media, mainevent, textevent):
     sticker = "animate.webm"
     return sticker
 
-
-# https://github.com/ssut/py-googletrans/issues/234#issuecomment-722379788
-async def getTranslate(text, **kwargs):
-    translator = Translator()
-    result = None
-    for _ in range(10):
-        try:
-            result = translator.translate(text, **kwargs)
-        except Exception:
-            translator = Translator()
-            await sleep(0.1)
-    return result
 
 
 def reddit_thumb_link(preview, thumb=None):
