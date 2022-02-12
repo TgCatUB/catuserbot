@@ -29,7 +29,7 @@ async def _(event):
         )
     check = url(input_str)
     if not check:
-        catstr = f'http://{input_str}'
+        catstr = f"http://{input_str}"
         check = url(catstr)
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
@@ -63,12 +63,12 @@ async def _(event):
         )
     check = url(input_str)
     if not check:
-        catstr = f'http://{input_str}'
+        catstr = f"http://{input_str}"
         check = url(catstr)
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
     if not input_str.startswith("http"):
-        input_str = f'http://{input_str}'
+        input_str = f"http://{input_str}"
     sample_url = f"https://da.gd/s?url={input_str}"
     if response_api := requests.get(sample_url).text:
         await edit_or_reply(
@@ -99,12 +99,12 @@ async def _(event):
         )
     check = url(input_str)
     if not check:
-        catstr = f'http://{input_str}'
+        catstr = f"http://{input_str}"
         check = url(catstr)
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
     if not input_str.startswith("http"):
-        input_str = f'http://{input_str}'
+        input_str = f"http://{input_str}"
     r = requests.get(input_str, allow_redirects=False)
     if str(r.status_code).startswith("3"):
         await edit_or_reply(
@@ -141,8 +141,8 @@ async def _(event):
         )
     check = url(input_str)
     if not check:
-        catstr = f'http://{input_str}'
+        catstr = f"http://{input_str}"
         check = url(catstr)
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
-    await edit_or_reply(event, f'[ㅤㅤㅤㅤㅤㅤㅤ]({input_str})')
+    await edit_or_reply(event, f"[ㅤㅤㅤㅤㅤㅤㅤ]({input_str})")

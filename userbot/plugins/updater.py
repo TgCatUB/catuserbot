@@ -18,7 +18,6 @@ from ..sql_helper.global_collection import (
     del_keyword_collectionlist,
     get_collectionlist_items,
 )
-from ..sql_helper.globals import delgvar
 
 plugin_category = "tools"
 cmdhd = Config.COMMAND_HAND_LER
@@ -151,7 +150,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     ups_rem.fetch(ac_br)
     repo.git.reset("--hard", "FETCH_HEAD")
     heroku_git_url = heroku_app.git_url.replace(
-        "https://", f'https://api:{HEROKU_API_KEY}@'
+        "https://", f"https://api:{HEROKU_API_KEY}@"
     )
 
     if "heroku" in repo.remotes:
@@ -218,22 +217,22 @@ async def upstream(event):
 
         repo = Repo()
     except NoSuchPathError as error:
-        await event.edit(f'{txt}\n`directory {error} is not found`')
+        await event.edit(f"{txt}\n`directory {error} is not found`")
         return repo.__del__()
     except GitCommandError as error:
-        await event.edit(f'{txt}\n`Early failure! {error}`')
+        await event.edit(f"{txt}\n`Early failure! {error}`")
         return repo.__del__()
     except InvalidGitRepositoryError as error:
         if conf is None:
             return await event.edit(
-                f'`Unfortunately, the directory {error} does not seem to be a git repository.\nBut we can fix that by force updating the userbot using .update now.`'
+                f"`Unfortunately, the directory {error} does not seem to be a git repository.\nBut we can fix that by force updating the userbot using .update now.`"
             )
 
         repo = Repo.init()
-        origin = repo.create_remote('upstream', off_repo)
+        origin = repo.create_remote("upstream", off_repo)
         origin.fetch()
         force_update = True
-        repo.create_head('master', origin.refs.master)
+        repo.create_head("master", origin.refs.master)
         repo.heads.master.set_tracking_branch(origin.refs.master)
         repo.heads.master.checkout(True)
     ac_br = repo.active_branch.name
@@ -292,10 +291,10 @@ async def upstream(event):
 
         repo = Repo()
     except NoSuchPathError as error:
-        await event.edit(f'{txt}\n`directory {error} is not found`')
+        await event.edit(f"{txt}\n`directory {error} is not found`")
         return repo.__del__()
     except GitCommandError as error:
-        await event.edit(f'{txt}\n`Early failure! {error}`')
+        await event.edit(f"{txt}\n`Early failure! {error}`")
         return repo.__del__()
     except InvalidGitRepositoryError:
         repo = Repo.init()

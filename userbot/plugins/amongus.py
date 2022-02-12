@@ -20,7 +20,9 @@ plugin_category = "extra"
 
 
 async def amongus_gen(text: str, clr: int) -> str:
-    url = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Amongus/"
+    url = (
+        "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Amongus/"
+    )
     font = ImageFont.truetype(
         BytesIO(
             get(
@@ -115,7 +117,7 @@ async def sayliecmd(event):
     try:
         clr = clr[0]
         clr = clr.replace("-c", "")
-        text = text.replace(f'-c{clr}', "")
+        text = text.replace(f"-c{clr}", "")
         clr = int(clr)
         if clr > 12 or clr < 1:
             clr = randint(1, 12)

@@ -53,7 +53,7 @@ async def _(event):
         inputstr = input_str
         caturl = url(inputstr)
         if not caturl:
-            inputstr = f'http://{input_str}'
+            inputstr = f"http://{input_str}"
             caturl = url(inputstr)
         if not caturl:
             return await catevent.edit("`The given input is not supported url`")
@@ -78,7 +78,7 @@ async def _(event):
         hmm = f"**url : **{input_str} \n**Time :** `{ms} seconds`"
         await catevent.delete()
         with io.BytesIO(im_png) as out_file:
-            out_file.name = f'{input_str}.PNG'
+            out_file.name = f"{input_str}.PNG"
             await event.client.send_file(
                 event.chat_id,
                 out_file,
@@ -117,7 +117,7 @@ async def _(event):
     inputstr = input_str
     caturl = url(inputstr)
     if not caturl:
-        inputstr = f'http://{input_str}'
+        inputstr = f"http://{input_str}"
         caturl = url(inputstr)
     if not caturl:
         return await catevent.edit("`The given input is not supported url`")

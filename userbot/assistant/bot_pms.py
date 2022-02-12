@@ -206,11 +206,7 @@ async def bot_pms_edit(event):  # sourcery no-metrics
         if users is None:
             return
         if reply_msg := next(
-            (
-                user.message_id
-                for user in users
-                if user.chat_id == str(chat.id)
-            ),
+            (user.message_id for user in users if user.chat_id == str(chat.id)),
             None,
         ):
             await event.client.send_message(
