@@ -7,7 +7,7 @@ from wikipedia.exceptions import DisambiguationError, PageError
 
 from userbot import catub
 
-from ..core.managers import edit_or_reply
+from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import get_cast, get_moviecollections, imdb, mov_titles
 from ..helpers.utils import reply_id
 from . import BOTLOG, BOTLOG_CHATID
@@ -52,7 +52,7 @@ async def wiki(event):
                 event, f"**Disambiguated page found.**\n\n{result}"
             )
         except PageError:
-            return await edit_or_delete(
+            return await edit_delete(
                 event, f"**Sorry i Can't find any results for **`{match}`"
             )
     await edit_or_reply(

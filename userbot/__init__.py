@@ -1,3 +1,5 @@
+import signal
+import sys
 import time
 
 import heroku3
@@ -5,12 +7,13 @@ import heroku3
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
+from .helpers.utils.utils import runasync
 from .sql_helper.globals import addgvar, delgvar, gvarstatus
 
-__version__ = "3.0.5"
+__version__ = "3.0.6"
 __license__ = "GNU Affero General Public License v3.0"
-__author__ = "CatUserBot <https://github.com/sandy1709/catuserbot>"
-__copyright__ = "CatUserBot Copyright (C) 2020 - 2021  " + __author__
+__author__ = "CatUserBot <https://github.com/TgCatUB/catuserbot>"
+__copyright__ = f"CatUserBot Copyright (C) 2020 - 2021  {__author__}"
 
 catub.version = __version__
 catub.tgbot.version = __version__
@@ -18,12 +21,21 @@ LOGS = logging.getLogger("CatUserbot")
 bot = catub
 
 StartTime = time.time()
-catversion = "3.0.4"
+catversion = "3.0.6"
+
+
+def close_connection(*_):
+    print("Clossing Userbot connection.")
+    runasync(catub.disconnect())
+    sys.exit(143)
+
+
+signal.signal(signal.SIGTERM, close_connection)
 
 if Config.UPSTREAM_REPO == "badcat":
     UPSTREAM_REPO_URL = "https://github.com/Jisan09/catuserbot"
 elif Config.UPSTREAM_REPO == "goodcat":
-    UPSTREAM_REPO_URL = "https://github.com/sandy1709/catuserbot"
+    UPSTREAM_REPO_URL = "https://github.com/TgCatUB/catuserbot"
 else:
     UPSTREAM_REPO_URL = Config.UPSTREAM_REPO
 

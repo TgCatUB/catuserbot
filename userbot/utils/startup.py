@@ -1,11 +1,9 @@
 import glob
 import os
 import sys
-from asyncio.exceptions import CancelledError
 from datetime import timedelta
 from pathlib import Path
 
-import requests
 from telethon import Button, functions, types, utils
 
 from userbot import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID
@@ -18,7 +16,7 @@ from ..sql_helper.global_collection import (
     del_keyword_collectionlist,
     get_item_collectionlist,
 )
-from ..sql_helper.globals import addgvar, delgvar, gvarstatus
+from ..sql_helper.globals import addgvar, gvarstatus
 from .pluginmanager import load_module
 from .tools import create_supergroup
 
@@ -94,26 +92,6 @@ async def startupmessage():
     except Exception as e:
         LOGS.error(e)
         return None
-
-
-# don't know work or not just a try in future will use sleep
-async def ipchange():
-    """
-    Just to check if ip change or not
-    """
-    newip = (requests.get("https://httpbin.org/ip").json())["origin"]
-    if gvarstatus("ipaddress") is None:
-        addgvar("ipaddress", newip)
-        return None
-    oldip = gvarstatus("ipaddress")
-    if oldip != newip:
-        delgvar("ipaddress")
-        LOGS.info("Ip Change detected")
-        try:
-            await catub.disconnect()
-        except (ConnectionError, CancelledError):
-            pass
-        return "ip change"
 
 
 async def add_bot_to_logger_group(chat_id):
