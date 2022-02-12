@@ -18,7 +18,6 @@ from ..sql_helper.global_collection import (
     del_keyword_collectionlist,
     get_collectionlist_items,
 )
-from ..sql_helper.globals import delgvar
 
 plugin_category = "tools"
 cmdhd = Config.COMMAND_HAND_LER
@@ -116,7 +115,6 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     if HEROKU_API_KEY is None:
         return await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
     heroku = heroku3.from_key(HEROKU_API_KEY)
-    heroku_app = None
     heroku_applications = heroku.apps()
     if HEROKU_APP_NAME is None:
         await event.edit(
@@ -125,10 +123,11 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         )
         repo.__del__()
         return
-    for app in heroku_applications:
-        if app.name == HEROKU_APP_NAME:
-            heroku_app = app
-            break
+    heroku_app = next(
+        (app for app in heroku_applications if app.name == HEROKU_APP_NAME),
+        None,
+    )
+
     if heroku_app is None:
         await event.edit(
             f"{txt}\n" "`Invalid Heroku credentials for deploying userbot dyno.`"
@@ -151,8 +150,9 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     ups_rem.fetch(ac_br)
     repo.git.reset("--hard", "FETCH_HEAD")
     heroku_git_url = heroku_app.git_url.replace(
-        "https://", "https://api:" + HEROKU_API_KEY + "@"
+        "https://", f"https://api:{HEROKU_API_KEY}@"
     )
+
     if "heroku" in repo.remotes:
         remote = repo.remote("heroku")
         remote.set_url(heroku_git_url)
@@ -174,7 +174,6 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         await event.edit(f"{txt}\n**Here is the error log:**\n`{error}`")
         return repo.__del__()
     await event.edit("`Deploy was failed. So restarting to update`")
-    delgvar("ipaddress")
     try:
         await event.client.disconnect()
         if HEROKU_APP is not None:
@@ -211,8 +210,11 @@ async def upstream(event):
             event, "`Set the required vars first to update the bot`"
         )
     try:
-        txt = "`Oops.. Updater cannot continue due to "
-        txt += "some problems occured`\n\n**LOGTRACE:**\n"
+        txt = (
+            "`Oops.. Updater cannot continue due to "
+            + "some problems occured`\n\n**LOGTRACE:**\n"
+        )
+
         repo = Repo()
     except NoSuchPathError as error:
         await event.edit(f"{txt}\n`directory {error} is not found`")
@@ -223,11 +225,9 @@ async def upstream(event):
     except InvalidGitRepositoryError as error:
         if conf is None:
             return await event.edit(
-                f"`Unfortunately, the directory {error} "
-                "does not seem to be a git repository.\n"
-                "But we can fix that by force updating the userbot using "
-                ".update now.`"
+                f"`Unfortunately, the directory {error} does not seem to be a git repository.\nBut we can fix that by force updating the userbot using .update now.`"
             )
+
         repo = Repo.init()
         origin = repo.create_remote("upstream", off_repo)
         origin.fetch()
@@ -281,11 +281,14 @@ async def upstream(event):
 )
 async def upstream(event):
     event = await edit_or_reply(event, "`Pulling the nekopack repo wait a sec ....`")
-    off_repo = "https://github.com/Mr-confused/nekopack"
+    off_repo = "https://github.com/TgCatUB/nekopack"
     os.chdir("/app")
     try:
-        txt = "`Oops.. Updater cannot continue due to "
-        txt += "some problems occured`\n\n**LOGTRACE:**\n"
+        txt = (
+            "`Oops.. Updater cannot continue due to "
+            + "some problems occured`\n\n**LOGTRACE:**\n"
+        )
+
         repo = Repo()
     except NoSuchPathError as error:
         await event.edit(f"{txt}\n`directory {error} is not found`")

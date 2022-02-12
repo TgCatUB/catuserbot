@@ -109,7 +109,7 @@ async def bot_start(event):
                         \n\nPowered by [Catuserbot](https://t.me/catuserbot)"
         buttons = [
             (
-                Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
+                Button.url("Repo", "https://github.com/TgCatUB/catuserbot"),
                 Button.url(
                     "Deploy",
                     "https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack&template=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack",
@@ -205,12 +205,10 @@ async def bot_pms_edit(event):  # sourcery no-metrics
         users = get_user_reply(event.id)
         if users is None:
             return
-        reply_msg = None
-        for user in users:
-            if user.chat_id == str(chat.id):
-                reply_msg = user.message_id
-                break
-        if reply_msg:
+        if reply_msg := next(
+            (user.message_id for user in users if user.chat_id == str(chat.id)),
+            None,
+        ):
             await event.client.send_message(
                 Config.OWNER_ID,
                 f"⬆️ **This message was edited by the user** {_format.mentionuser(get_display_name(chat) , chat.id)} as :",
@@ -267,11 +265,15 @@ async def handler(event):
                 except Exception as e:
                     LOGS.error(str(e))
         if users_1 is not None:
-            reply_msg = None
-            for user in users_1:
-                if user.chat_id != Config.OWNER_ID:
-                    reply_msg = user.message_id
-                    break
+            reply_msg = next(
+                (
+                    user.message_id
+                    for user in users_1
+                    if user.chat_id != Config.OWNER_ID
+                ),
+                None,
+            )
+
             try:
                 if reply_msg:
                     users = get_user_id(reply_msg)

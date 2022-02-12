@@ -34,6 +34,12 @@ def run_async(loop, coro):
     return asyncio.run_coroutine_threadsafe(coro, loop).result()
 
 
+def runasync(func: callable):
+    """Run async functions with the right event loop."""
+    asyncio.get_event_loop()
+    return loop.run_until_complete(func)
+
+
 async def unsavegif(event, sandy):
     try:
         await event.client(

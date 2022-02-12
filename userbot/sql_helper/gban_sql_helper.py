@@ -53,8 +53,7 @@ def catgban(chat_id, reason):
 
 
 def catungban(chat_id):
-    rem = SESSION.query(GBan).get(str(chat_id))
-    if rem:
+    if rem := SESSION.query(GBan).get(str(chat_id)):
         SESSION.delete(rem)
         SESSION.commit()
 

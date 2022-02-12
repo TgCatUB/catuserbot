@@ -226,17 +226,13 @@ async def video_catfile(event):  # sourcery no-metrics
             return await edit_delete(
                 catevent, "`No thumb found to make it video note`", 5
             )
-    if (
-        mediatype
-        in [
-            "Voice",
-            "Audio",
-            "Gif",
-            "Video",
-            "Sticker",
-        ]
-        and not catfile.endswith((".webp"))
-    ):
+    if mediatype in [
+        "Voice",
+        "Audio",
+        "Gif",
+        "Video",
+        "Sticker",
+    ] and not catfile.endswith((".webp")):
         if os.path.exists(PATH):
             c_time = time.time()
             attributes, mime_type = get_attributes(PATH)
