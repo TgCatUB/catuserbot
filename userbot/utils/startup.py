@@ -96,25 +96,6 @@ async def startupmessage():
         return None
 
 
-# don't know work or not just a try in future will use sleep
-async def ipchange():
-    """
-    Just to check if ip change or not
-    """
-    newip = (requests.get("https://httpbin.org/ip").json())["origin"]
-    if gvarstatus("ipaddress") is None:
-        addgvar("ipaddress", newip)
-        return None
-    oldip = gvarstatus("ipaddress")
-    if oldip != newip:
-        delgvar("ipaddress")
-        LOGS.info("Ip Change detected")
-        try:
-            await catub.disconnect()
-        except (ConnectionError, CancelledError):
-            pass
-        return "ip change"
-
 
 async def add_bot_to_logger_group(chat_id):
     """
