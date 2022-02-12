@@ -20,6 +20,7 @@ gtts
 hachoir
 heroku3
 html-telegraph-poster
+httpx[http2]
 humanize
 IMDbPY
 jikanpy
@@ -66,6 +67,7 @@ vcsi
 wand
 wget
 youtube_dl
+
 git+https://github.com/sandy1709/Telethon
 git+https://github.com/goldsmith/Wikipedia
 git+https://github.com/sandy1709/py-googletrans
