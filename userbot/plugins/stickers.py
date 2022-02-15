@@ -432,7 +432,7 @@ async def kang(args):  # sourcery no-metrics
                     is_anim,
                     stfile,
                 )
-            if os.path.exists(sticker):
+            if is_video and os.path.exists(sticker):
                 os.remove(sticker)
             if otherpack is None:
                 return
