@@ -32,6 +32,7 @@ motor
 moviepy
 nekos.py
 opencv-python-headless
+pafy
 Pillow
 prettytable
 psutil
@@ -45,6 +46,8 @@ PyMuPDF
 pySmartDL
 python-barcode
 python-dotenv
+pytgcalls==3.0.0.dev21
+pytube
 pytz
 qrcode
 randomstuff.py
