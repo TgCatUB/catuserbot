@@ -566,9 +566,9 @@ WHERE = ["in the chest", "on the head", "on the butt", "on the crotch"]
 
 async def slap(replied_user, event, DEFAULTUSER):
     """Construct a funny slap sentence !!"""
-    user_id = replied_user.user.id
-    first_name = replied_user.user.first_name
-    username = replied_user.user.username
+    user_id = replied_user.id
+    first_name = replied_user.first_name
+    username = replied_user.username
     if username:
         slapped = "@{}".format(username)
     else:
@@ -586,6 +586,7 @@ async def slap(replied_user, event, DEFAULTUSER):
         throws=throw,
         where=where,
     )
+
 
 
 UWUS = [

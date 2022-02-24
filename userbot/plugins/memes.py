@@ -14,44 +14,11 @@ from telethon.tl.types import ChannelParticipantsAdmins, MessageEntityMentionNam
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import catmemes
+from ..helpers import catmemes,get_user_from_event
 from ..helpers.utils import _catutils, parse_pre
 from . import BOTLOG, BOTLOG_CHATID, mention
 
 plugin_category = "fun"
-
-
-async def get_user(event):
-    # Get the user from argument or replied message.
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        replied_user = await event.client(
-            GetFullUserRequest(previous_message.sender_id)
-        )
-    else:
-        user = event.pattern_match.group(1)
-        if user.isnumeric():
-            user = int(user)
-
-        if not user:
-            self_user = await event.client.get_me()
-            user = self_user.id
-
-        if event.message.entities:
-            probable_user_mention_entity = event.message.entities[0]
-
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user
-        try:
-            user_object = await event.client.get_entity(user)
-            replied_user = await event.client(GetFullUserRequest(user_object.id))
-
-        except (TypeError, ValueError):
-            await event.edit("`I don't slap aliens, they ugly AF !!`")
-            return None
-    return replied_user
 
 
 @catub.cat_cmd(
@@ -185,7 +152,7 @@ async def _(event):
 )
 async def who(event):
     "To slap a person with random objects !!"
-    replied_user = await get_user(event)
+    replied_user,reason = await get_user_from_event(event)
     if replied_user is None:
         return
     caption = await catmemes.slap(replied_user, event, mention)
@@ -455,7 +422,7 @@ async def gbun(event):
     reply_message = None
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
-        replied_user = await event.client(GetFullUserRequest(reply_message.sender_id))
+        replied_user = (await event.client(GetFullUserRequest(reply_message.sender_id))).full_user
         firstname = replied_user.user.first_name
         usname = replied_user.user.username
         idd = reply_message.sender_id

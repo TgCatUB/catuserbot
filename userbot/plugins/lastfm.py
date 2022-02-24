@@ -18,6 +18,8 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.logger import logging
+from ..helpers.functions import deEmojify, hide_inlinebot
+from ..helpers.utils import reply_id
 from . import BOTLOG, BOTLOG_CHATID, DEFAULT_BIO
 
 LOGS = logging.getLogger(__name__)
@@ -97,7 +99,7 @@ async def get_curr_track(lfmbio):  # sourcery no-metrics
         try:
             if LASTFM_.USER_ID == 0:
                 LASTFM_.USER_ID = (await lfmbio.client.get_me()).id
-            user_info = await catub(GetFullUserRequest(LASTFM_.USER_ID))
+            user_info = (await catub(GetFullUserRequest(LASTFM_.USER_ID))).full_user
             LASTFM_.RUNNING = True
             playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
             LASTFM_.SONG = playing.get_title()
@@ -260,3 +262,41 @@ async def lastlog(lstlog):
         await lstlog.edit(LFM_LOG_DISABLED)
     else:
         await lstlog.edit(LFM_LOG_ERR)
+
+
+@catub.cat_cmd(
+    pattern="now$",
+    command=("now", plugin_category),
+    info={
+        "header": "Send your current listening song from Lastfm/Spotify/Deezer.",
+        "usage": "{tr}now",
+        "note": "For working of this command, you need to authorize @NowPlayBot.",
+    },
+)
+async def now(event):
+    "Send your current listening song."
+    text = " "
+    reply_to_id = await reply_id(event)
+    bot_name = "@nowplaybot"
+    text = deEmojify(text)
+    await event.delete()
+    await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)
+
+
+@catub.cat_cmd(
+    pattern="inow$",
+    command=("inow", plugin_category),
+    info={
+        "header": "Show your current listening song in the form of a cool image.",
+        "usage": "{tr}inow",
+        "note": "For working of this command, you need to authorize @SpotiPieBot.",
+    },
+)
+async def nowimg(event):
+    "Show your current listening song."
+    text = " "
+    reply_to_id = await reply_id(event)
+    bot_name = "@Spotipiebot"
+    text = deEmojify(text)
+    await event.delete()
+    await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)

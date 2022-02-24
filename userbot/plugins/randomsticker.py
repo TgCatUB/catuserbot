@@ -77,7 +77,8 @@ async def _(event):
         for x in (
             await event.client(
                 functions.messages.GetStickerSetRequest(
-                    types.InputStickerSetShortName("DabOnHaters")
+                    types.InputStickerSetShortName("DabOnHaters"),
+                    hash=0,
                 )
             )
         ).documents
@@ -104,7 +105,8 @@ async def handler(event):
         for x in (
             await event.client(
                 functions.messages.GetStickerSetRequest(
-                    types.InputStickerSetShortName("supermind")
+                    types.InputStickerSetShortName("supermind"),
+                    hash=0,
                 )
             )
         ).documents
