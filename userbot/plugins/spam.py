@@ -201,6 +201,7 @@ async def stickerpack_spam(event):
             return
         await event.client.send_file(event.chat_id, m)
         await asyncio.sleep(0.7)
+    await catevent.delete()
     if BOTLOG:
         if event.is_private:
             await event.client.send_message(
