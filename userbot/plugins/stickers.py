@@ -85,6 +85,7 @@ def pack_nick(username, pack, is_anim, is_video):
         if is_video:
             return f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol. {pack} (Video)"
         return f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack}"
+
     if is_anim:
         return f"@{username} Vol.{pack} (Animated)"
     if is_video:
@@ -333,19 +334,23 @@ async def kang(args):  # sourcery no-metrics
             is_anim = True
             photo = 1
         elif message.media.document.mime_type in ["video/mp4", "video/webm"]:
+            emojibypass = False
+            is_video = True
+            photo = 1
             if message.media.document.mime_type == "video/webm":
                 catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
                 sticker = await args.client.download_media(
                     message.media.document, "animate.webm"
                 )
+                attributes = message.media.document.attributes
+                for attribute in attributes:
+                    if isinstance(attribute, DocumentAttributeSticker):
+                        emoji = attribute.alt
+                        emojibypass = True
             else:
                 catevent = await edit_or_reply(args, "__⌛ Downloading..__")
                 sticker = await animator(message, args, catevent)
                 await edit_or_reply(catevent, f"`{random.choice(KANGING_STR)}`")
-            is_video = True
-            emoji = "😂"
-            emojibypass = True
-            photo = 1
         else:
             await edit_delete(args, "`Unsupported File!`")
             return
@@ -500,7 +505,8 @@ async def pack_kang(event):  # sourcery no-metrics
                 InputStickerSetID(
                     id=stickerset_attr.stickerset.id,
                     access_hash=stickerset_attr.stickerset.access_hash,
-                )
+                ),
+                hash=0,
             )
         )
     except Exception:
@@ -513,7 +519,8 @@ async def pack_kang(event):  # sourcery no-metrics
         functions.messages.GetStickerSetRequest(
             stickerset=types.InputStickerSetShortName(
                 short_name=f"{get_stickerset.set.short_name}"
-            )
+            ),
+            hash=0,
         )
     )
     noofst = get_stickerset.set.count
@@ -545,6 +552,19 @@ async def pack_kang(event):  # sourcery no-metrics
                     emoji = attribute.alt
             is_anim = True
             photo = 1
+        elif "video/webm" in message.mime_type:
+            await edit_or_reply(
+                catevent,
+                f"`This sticker pack is kanging now . Status of kang process : {kangst}/{noofst}`",
+            )
+            await event.client.download_media(message, "animate.webm")
+            attributes = message.attributes
+            for attribute in attributes:
+                if isinstance(attribute, DocumentAttributeSticker):
+                    emoji = attribute.alt
+            emojibypass = True
+            is_video = True
+            photo = 1
         else:
             await edit_delete(catevent, "`Unsupported File!`")
             return
@@ -569,7 +589,9 @@ async def pack_kang(event):  # sourcery no-metrics
             packname = pack_name(userid, pack, is_anim, is_video)
             cmd = "/newpack"
             stfile = io.BytesIO()
-            if is_anim:
+            if is_video:
+                cmd = "/newvideo"
+            elif is_anim:
                 cmd = "/newanimated"
             else:
                 image = await resize_photo(photo)
@@ -846,7 +868,8 @@ async def get_pack_info(event):
             InputStickerSetID(
                 id=stickerset_attr.stickerset.id,
                 access_hash=stickerset_attr.stickerset.access_hash,
-            )
+            ),
+            hash=0,
         )
     )
     pack_emojis = []
