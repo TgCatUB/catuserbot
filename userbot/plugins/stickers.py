@@ -562,7 +562,6 @@ async def pack_kang(event):  # sourcery no-metrics
             for attribute in attributes:
                 if isinstance(attribute, DocumentAttributeSticker):
                     emoji = attribute.alt
-            emojibypass = True
             is_video = True
             photo = 1
         else:
