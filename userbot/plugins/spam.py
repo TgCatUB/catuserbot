@@ -173,7 +173,8 @@ async def stickerpack_spam(event):
                 types.InputStickerSetID(
                     id=stickerset_attr.stickerset.id,
                     access_hash=stickerset_attr.stickerset.access_hash,
-                )
+                ),
+                hash=0,
             )
         )
     except Exception:
@@ -190,7 +191,8 @@ async def stickerpack_spam(event):
         functions.messages.GetStickerSetRequest(
             stickerset=types.InputStickerSetShortName(
                 short_name=f"{get_stickerset.set.short_name}"
-            )
+            ),
+            hash=0,
         )
     )
     addgvar("spamwork", True)
