@@ -7,7 +7,6 @@ from requests import get
 from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
-
 from userbot import catub
 from userbot.core.logger import logging
 
@@ -24,9 +23,7 @@ async def fetch_info(replied_user, event):
     """Get details from the User object."""
     FullUser = (await event.client(GetFullUserRequest(replied_user.id))).full_user
     replied_user_profile_photos = await event.client(
-        GetUserPhotosRequest(
-            user_id=replied_user.id, offset=42, max_id=0, limit=80
-        )
+        GetUserPhotosRequest(user_id=replied_user.id, offset=42, max_id=0, limit=80)
     )
     replied_user_profile_photos_count = "User haven't set profile pic"
     dc_id = "Can't get dc id"
