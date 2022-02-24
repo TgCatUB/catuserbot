@@ -588,7 +588,6 @@ async def slap(replied_user, event, DEFAULTUSER):
     )
 
 
-
 UWUS = [
     "(・`ω´・)",
     ";;w;;",
