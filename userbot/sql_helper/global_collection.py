@@ -52,10 +52,9 @@ def add_to_collectionlist(keywoard, contents):
 
 def rm_from_collectionlist(keywoard, contents):
     with CAT_GLOBALCOLLECTION:
-        keyword_items = SESSION.query(Cat_GlobalCollection).get(
+        if keyword_items := SESSION.query(Cat_GlobalCollection).get(
             (keywoard, tuple(contents))
-        )
-        if keyword_items:
+        ):
             if tuple(contents) in COLLECTION_SQL_.CONTENTS_LIST.get(keywoard, set()):
                 COLLECTION_SQL_.CONTENTS_LIST.get(keywoard, set()).remove(
                     tuple(contents)
