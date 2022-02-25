@@ -211,7 +211,7 @@ async def group_unfban(event):
         ],
     },
 )
-async def quote_search(event):    # sourcery no-metrics
+async def quote_search(event):  # sourcery no-metrics
     "Add the federation to database."
     fedgroup = event.pattern_match.group(1)
     fedid = event.pattern_match.group(2)

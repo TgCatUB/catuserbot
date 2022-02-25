@@ -637,7 +637,6 @@ async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
                 round(percentage, 2),
             )
 
-
             current_message = (
                 "**Uploading **\n\n"
                 f"**Name : **`{file_name}`\n"
@@ -758,16 +757,10 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                     percentage = int(file.progress)
                     downloaded = percentage * int(file.total_length) / 100
                     prog_str = "**Downloading : **`[{0}{1}] {2}`".format(
-                        "".join(
-                            "▰" for _ in range(math.floor(percentage / 10))
-                        ),
-                        "".join(
-                            "▱"
-                            for _ in range(10 - math.floor(percentage / 10))
-                        ),
+                        "".join("▰" for _ in range(math.floor(percentage / 10))),
+                        "".join("▱" for _ in range(10 - math.floor(percentage / 10))),
                         file.progress_string(),
                     )
-
 
                     msg = (
                         "**[URI - DOWNLOAD]**\n\n"
