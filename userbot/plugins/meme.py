@@ -21,7 +21,7 @@ async def kek(keks):
     uio = ["/", "\\"]
     for i in range(15):
         await asyncio.sleep(0.5)
-        txt = ":" + uio[i % 2]
+        txt = f":{uio[i % 2]}"
         await keks.edit(txt)
 
 
@@ -39,7 +39,7 @@ async def lol(lel):
     okay = "-__-"
     for _ in range(15):
         await asyncio.sleep(0.5)
-        okay = okay[:-1] + "_-"
+        okay = f"{okay[:-1]}_-"
         await lel.edit(okay)
 
 
@@ -57,7 +57,7 @@ async def fun(e):
     t = ";__;"
     for _ in range(15):
         await asyncio.sleep(0.5)
-        t = t[:-1] + "_;"
+        t = f"{t[:-1]}_;"
         await e.edit(t)
 
 
@@ -75,7 +75,7 @@ async def Oof(e):
     catevent = await edit_or_reply(e, t)
     for _ in range(15):
         await asyncio.sleep(0.5)
-        t = t[:-1] + "of"
+        t = f"{t[:-1]}of"
         await catevent.edit(t)
 
 
@@ -96,8 +96,8 @@ async def typewriter(typew):
     typew = await edit_or_reply(typew, typing_symbol)
     await asyncio.sleep(sleep_time)
     for character in message:
-        old_text = old_text + "" + character
-        typing_text = old_text + "" + typing_symbol
+        old_text = f"{old_text}{character}"
+        typing_text = f"{old_text}{typing_symbol}"
         await typew.edit(typing_text)
         await asyncio.sleep(sleep_time)
         await typew.edit(old_text)
@@ -140,61 +140,61 @@ async def meme(event):
     memeVar = memeVar[6:]
     if not memeVar:
         memeVar = "✈️"
-    event = await edit_or_reply(event, "-------------" + memeVar)
+    event = await edit_or_reply(event, f"-------------{memeVar}")
     await asyncio.sleep(sleepValue)
-    await event.edit("------------" + memeVar + "-")
+    await event.edit(f"------------{memeVar}-")
     await asyncio.sleep(sleepValue)
-    await event.edit("-----------" + memeVar + "--")
+    await event.edit(f"-----------{memeVar}--")
     await asyncio.sleep(sleepValue)
-    await event.edit("----------" + memeVar + "---")
+    await event.edit(f"----------{memeVar}---")
     await asyncio.sleep(sleepValue)
-    await event.edit("---------" + memeVar + "----")
+    await event.edit(f"---------{memeVar}----")
     await asyncio.sleep(sleepValue)
-    await event.edit("--------" + memeVar + "-----")
+    await event.edit(f"--------{memeVar}-----")
     await asyncio.sleep(sleepValue)
-    await event.edit("-------" + memeVar + "------")
+    await event.edit(f"-------{memeVar}------")
     await asyncio.sleep(sleepValue)
-    await event.edit("------" + memeVar + "-------")
+    await event.edit(f"------{memeVar}-------")
     await asyncio.sleep(sleepValue)
-    await event.edit("-----" + memeVar + "--------")
+    await event.edit(f"-----{memeVar}--------")
     await asyncio.sleep(sleepValue)
-    await event.edit("----" + memeVar + "---------")
+    await event.edit(f"----{memeVar}---------")
     await asyncio.sleep(sleepValue)
-    await event.edit("---" + memeVar + "----------")
+    await event.edit(f"---{memeVar}----------")
     await asyncio.sleep(sleepValue)
-    await event.edit("--" + memeVar + "-----------")
+    await event.edit(f"--{memeVar}-----------")
     await asyncio.sleep(sleepValue)
-    await event.edit("-" + memeVar + "------------")
+    await event.edit(f"-{memeVar}------------")
     await asyncio.sleep(sleepValue)
-    await event.edit(memeVar + "-------------")
+    await event.edit(f"{memeVar}-------------")
     await asyncio.sleep(sleepValue)
-    await event.edit("-------------" + memeVar)
+    await event.edit(f"-------------{memeVar}")
     await asyncio.sleep(sleepValue)
-    await event.edit("------------" + memeVar + "-")
+    await event.edit(f"------------{memeVar}-")
     await asyncio.sleep(sleepValue)
-    await event.edit("-----------" + memeVar + "--")
+    await event.edit(f"-----------{memeVar}--")
     await asyncio.sleep(sleepValue)
-    await event.edit("----------" + memeVar + "---")
+    await event.edit(f"----------{memeVar}---")
     await asyncio.sleep(sleepValue)
-    await event.edit("---------" + memeVar + "----")
+    await event.edit(f"---------{memeVar}----")
     await asyncio.sleep(sleepValue)
-    await event.edit("--------" + memeVar + "-----")
+    await event.edit(f"--------{memeVar}-----")
     await asyncio.sleep(sleepValue)
-    await event.edit("-------" + memeVar + "------")
+    await event.edit(f"-------{memeVar}------")
     await asyncio.sleep(sleepValue)
-    await event.edit("------" + memeVar + "-------")
+    await event.edit(f"------{memeVar}-------")
     await asyncio.sleep(sleepValue)
-    await event.edit("-----" + memeVar + "--------")
+    await event.edit(f"-----{memeVar}--------")
     await asyncio.sleep(sleepValue)
-    await event.edit("----" + memeVar + "---------")
+    await event.edit(f"----{memeVar}---------")
     await asyncio.sleep(sleepValue)
-    await event.edit("---" + memeVar + "----------")
+    await event.edit(f"---{memeVar}----------")
     await asyncio.sleep(sleepValue)
-    await event.edit("--" + memeVar + "-----------")
+    await event.edit(f"--{memeVar}-----------")
     await asyncio.sleep(sleepValue)
-    await event.edit("-" + memeVar + "------------")
+    await event.edit(f"-{memeVar}------------")
     await asyncio.sleep(sleepValue)
-    await event.edit(memeVar + "-------------")
+    await event.edit(f"{memeVar}-------------")
     await asyncio.sleep(sleepValue)
     await event.edit(memeVar)
 
@@ -217,7 +217,7 @@ async def give(event):
     lp = giveVar[6:]
     if not lp:
         lp = " 🍭"
-    event = await edit_or_reply(event, lp + "        ")
+    event = await edit_or_reply(event, f"{lp}        ")
     await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + "       ")
     await asyncio.sleep(sleepValue)
@@ -235,7 +235,7 @@ async def give(event):
     await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + lp + lp + lp + lp + lp + lp + lp)
     await asyncio.sleep(sleepValue)
-    await event.edit(lp + "        ")
+    await event.edit(f"{lp}        ")
     await asyncio.sleep(sleepValue)
     await event.edit(lp + lp + "       ")
     await asyncio.sleep(sleepValue)

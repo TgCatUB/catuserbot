@@ -291,7 +291,7 @@ async def get_anime(event):
     try:
         anime = anime[0]
         anime = anime.replace("-n", "")
-        input_str = input_str.replace("-n" + anime, "")
+        input_str = input_str.replace(f"-n{anime}", "")
         anime = int(anime)
     except IndexError:
         anime = 0
@@ -485,8 +485,7 @@ async def anime_download(event):  # sourcery no-metrics
         search_url = f"https://animekaizoku.com/?s={search_query}"
         html_text = requests.get(search_url, headers=headers).text
         soup = bs4.BeautifulSoup(html_text, "html.parser")
-        search_result = soup.find_all("h2", {"class": "post-title"})
-        if search_result:
+        if search_result := soup.find_all("h2", {"class": "post-title"}):
             result = f"<a href={search_url}>Click Here For More Results</a> <b>of</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKaizoku</code>: \n\n"
             for entry in search_result:
                 post_link = "https://animekaizoku.com/" + entry.a["href"]

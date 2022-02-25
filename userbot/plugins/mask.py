@@ -92,7 +92,7 @@ async def catbot(catmemes):
         os.remove(download_location)
     except exceptions.TelegraphException as exc:
         os.remove(download_location)
-        return await catevent.edit("ERROR: " + str(exc))
+        return await catevent.edit(f"ERROR: {str(exc)}")
     cat = f"https://telegra.ph{response[0]}"
     cat = await awooify(cat)
     await catevent.delete()
@@ -139,7 +139,7 @@ async def catbot(catmemes):
         os.remove(download_location)
     except exceptions.TelegraphException as exc:
         os.remove(download_location)
-        return await catevent.edit("ERROR: " + str(exc))
+        return await catevent.edit(f"ERROR: {str(exc)}")
     cat = f"https://telegra.ph{response[0]}"
     cat = await lolice(cat)
     await catevent.delete()
@@ -186,7 +186,7 @@ async def catbot(catmemes):
         os.remove(download_location)
     except exceptions.TelegraphException as exc:
         os.remove(download_location)
-        return await catevent.edit("ERROR: " + str(exc))
+        return await catevent.edit(f"ERROR: {str(exc)}")
     cat = f"https://telegra.ph{response[0]}"
     cat = await baguette(cat)
     await catevent.delete()
@@ -233,7 +233,7 @@ async def catbot(catmemes):
         os.remove(download_location)
     except exceptions.TelegraphException as exc:
         os.remove(download_location)
-        return await catevent.edit("ERROR: " + str(exc))
+        return await catevent.edit(f"ERROR: {str(exc)}")
     cat = f"https://telegra.ph{response[0]}"
     cat = await iphonex(cat)
     await catevent.delete()

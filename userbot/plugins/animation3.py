@@ -115,22 +115,19 @@ async def _(event):
     h = [(u[0], u[1], u[2]), (u[0], u[1], ""), (u[0], "", "")]
     for something in reversed(
         [
-            y
-            for y in (
-                [
-                    "".join(x)
-                    for x in (
-                        f + (s, g, s + s * f.count(""), t),
-                        f + (g, s * 2 + s * f.count(""), t),
-                        f[:i] + (o, f[i], s * 2 + s * f.count(""), t),
-                        f[:i] + (s + s * f.count(""), o, f[i], s, t),
-                        f[:i] + (s * 2 + s * f.count(""), o, f[i], t),
-                        f[:i] + (s * 3 + s * f.count(""), o, t),
-                        f[:i] + (s * 3 + s * f.count(""), g, t),
-                    )
-                ]
-                for i, f in enumerate(reversed(h))
-            )
+            [
+                "".join(x)
+                for x in (
+                    f + (s, g, s + s * f.count(""), t),
+                    f + (g, s * 2 + s * f.count(""), t),
+                    f[:i] + (o, f[i], s * 2 + s * f.count(""), t),
+                    f[:i] + (s + s * f.count(""), o, f[i], s, t),
+                    f[:i] + (s * 2 + s * f.count(""), o, f[i], t),
+                    f[:i] + (s * 3 + s * f.count(""), o, t),
+                    f[:i] + (s * 3 + s * f.count(""), g, t),
+                )
+            ]
+            for i, f in enumerate(reversed(h))
         ]
     ):
         for something_else in something:

@@ -81,7 +81,7 @@ async def gettags(track=None, isNowPlaying=None, playing=None):
         arg = track.track
     if not tags:
         tags = arg.artist.get_top_tags()
-    tags = "".join(" #" + t.item.__str__() for t in tags[:5])
+    tags = "".join(f" #{t.item.__str__()}" for t in tags[:5])
     tags = sub("^ ", "", tags)
     tags = sub(" ", "_", tags)
     tags = sub("_#", " #", tags)

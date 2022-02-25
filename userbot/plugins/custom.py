@@ -85,7 +85,7 @@ async def bad(event):  # sourcery no-metrics
             vname = oldvars[vname]
         if cmd == "set":
             if not vinfo and vname == "ALIVE_TEMPLATE":
-                return await edit_delete(event, f"Check @cat_alive")
+                return await edit_delete(event, "Check @cat_alive")
             if not vinfo:
                 return await edit_delete(
                     event, f"Give some values which you want to save for **{vname}**"

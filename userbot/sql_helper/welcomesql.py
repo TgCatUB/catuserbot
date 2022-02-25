@@ -1,7 +1,7 @@
 try:
     from . import BASE, SESSION
-except ImportError:
-    raise AttributeError
+except ImportError as e:
+    raise AttributeError from e
 
 from sqlalchemy import BigInteger, Column, Numeric, String, UnicodeText
 
@@ -58,8 +58,7 @@ def addwelcome_setting(chat_id, previous_welcome, reply, f_mesg_id):
 
 def rmwelcome_setting(chat_id):
     try:
-        rem = SESSION.query(JoinWelcome).get(str(chat_id))
-        if rem:
+        if rem := SESSION.query(JoinWelcome).get(str(chat_id)):
             SESSION.delete(rem)
             SESSION.commit()
             return True

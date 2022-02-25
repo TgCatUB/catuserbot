@@ -90,9 +90,9 @@ async def _(event):
     counter = int(event.pattern_match.group(1))
     if BOTLOG:
         await event.client.send_message(
-            BOTLOG_CHATID,
-            "You put the bot to sleep for " + str(counter) + " seconds",
+            BOTLOG_CHATID, f"You put the bot to sleep for {counter} seconds"
         )
+
     event = await edit_or_reply(event, f"`ok, let me sleep for {counter} seconds`")
     sleep(counter)
     await event.edit("`OK, I'm awake now.`")

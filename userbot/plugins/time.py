@@ -126,12 +126,11 @@ async def _(event):
     current_time = dt.now().strftime(
         f"⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n⚡USERBOT TIMEZONE⚡\n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡\n   {os.path.basename(Config.TZ)}\n  Time: %H:%M:%S \n  Date: %d.%m.%y \n⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡"
     )
-    input_str = event.pattern_match.group(1)
-    if input_str:
+    if input_str := event.pattern_match.group(1):
         current_time = input_str
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
-    required_file_name = Config.TEMP_DIR + " " + str(dt.now()) + ".webp"
+    required_file_name = f"{Config.TEMP_DIR} {str(dt.now())}.webp"
     img = Image.new("RGBA", (350, 220), color=(0, 0, 0, 115))
     fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
     drawn_text = ImageDraw.Draw(img)

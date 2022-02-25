@@ -51,7 +51,7 @@ async def fetch_info(replied_user, event):
         if first_name
         else ("This User has no First Name")
     )
-    full_name = full_name if full_name else first_name
+    full_name = full_name or first_name
     username = "@{}".format(username) if username else ("This User has no Username")
     user_bio = "This User has no About" if not user_bio else user_bio
     caption = "<b><i>USER INFO from Durov's Database :</i></b>\n\n"
@@ -102,11 +102,10 @@ async def _(event):
     except AttributeError:
         dc_id = "Can't get dc id"
     if spamwatch:
-        ban = spamwatch.get_ban(user_id)
-        if ban:
+        if ban := spamwatch.get_ban(user_id):
             sw = f"**Spamwatch Banned :** `True` \n       **-**🤷‍♂️**Reason : **`{ban.reason}`"
         else:
-            sw = f"**Spamwatch Banned :** `False`"
+            sw = "**Spamwatch Banned :** `False`"
     else:
         sw = "**Spamwatch Banned :**`Not Connected`"
     try:

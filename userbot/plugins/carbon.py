@@ -154,7 +154,7 @@ async def carbon_api(event):
         k_skeme.send_keys(Keys.ENTER)
     else:
         color_scheme = str(random.randint(1, 29))
-        driver.find_element_by_id(("downshift-0-item-" + color_scheme)).click()
+        driver.find_element_by_id(f"downshift-0-item-{color_scheme}").click()
     driver.find_element_by_id("export-menu").click()
     driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
     driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()

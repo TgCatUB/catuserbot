@@ -50,7 +50,7 @@ async def lyrics(event):  # sourcery no-metrics
     try:
         songno = songno[0]
         songno = songno.replace("-n", "")
-        match = match.replace("-n" + songno, "")
+        match = match.replace(f"-n{songno}", "")
         songno = int(songno)
     except IndexError:
         songno = 1

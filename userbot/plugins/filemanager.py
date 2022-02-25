@@ -49,21 +49,21 @@ async def lst(event):  # sourcery no-metrics
             if not os.path.isdir(catpath):
                 size = os.stat(catpath).st_size
                 if str(contents).endswith((".mp3", ".flac", ".wav", ".m4a")):
-                    files += "🎵" + f"`{contents}`\n"
+                    files += f"🎵`{contents}`\n"
                 if str(contents).endswith((".opus")):
-                    files += "🎙" + f"`{contents}`\n"
+                    files += f"🎙`{contents}`\n"
                 elif str(contents).endswith(
                     (".mkv", ".mp4", ".webm", ".avi", ".mov", ".flv")
                 ):
-                    files += "🎞" + f"`{contents}`\n"
+                    files += f"🎞`{contents}`\n"
                 elif str(contents).endswith((".zip", ".tar", ".tar.gz", ".rar")):
-                    files += "🗜" + f"`{contents}`\n"
+                    files += f"🗜`{contents}`\n"
                 elif str(contents).endswith(
                     (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".ico")
                 ):
-                    files += "🖼" + f"`{contents}`\n"
+                    files += f"🖼`{contents}`\n"
                 else:
-                    files += "📄" + f"`{contents}`\n"
+                    files += f"📄`{contents}`\n"
             else:
                 folders += f"📁`{contents}`\n"
         msg = msg + folders + files if files or folders else msg + "__empty path__"

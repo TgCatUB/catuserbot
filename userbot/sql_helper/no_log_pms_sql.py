@@ -30,7 +30,6 @@ def approve(chat_id):
 
 
 def disapprove(chat_id):
-    rem = SESSION.query(NOLogPMs).get(chat_id)
-    if rem:
+    if rem := SESSION.query(NOLogPMs).get(chat_id):
         SESSION.delete(rem)
         SESSION.commit()

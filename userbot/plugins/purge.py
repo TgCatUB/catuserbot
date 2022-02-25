@@ -187,9 +187,9 @@ async def purgeme(event):
         await message.delete()
 
     smsg = await event.client.send_message(
-        event.chat_id,
-        "**Purge complete!**` Purged " + str(count) + " messages.`",
+        event.chat_id, f"**Purge complete!**` Purged {count} messages.`"
     )
+
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -567,7 +567,7 @@ async def fast_purger(event):  # sourcery no-metrics
         result += "__Fast purge completed!\nPurged __`" + str(count) + "` __messages.__"
     if error != "":
         result += f"\n\n**Error:**{error}"
-    if result == "":
+    if not result:
         result += "__There are no messages to purge.__"
     hi = await event.client.send_message(event.chat_id, result)
     if BOTLOG:

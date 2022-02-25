@@ -50,8 +50,7 @@ def disapprove(user_id):
 
 def is_approved(user_id):
     try:
-        _result = SESSION.query(PmPermit_Sql).get(str(user_id))
-        if _result:
+        if _result := SESSION.query(PmPermit_Sql).get(str(user_id)):
             return _result
         return None
     finally:

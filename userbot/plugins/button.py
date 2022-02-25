@@ -107,7 +107,7 @@ async def _(event):
         markdown_note = "".join(event.text.split(maxsplit=1)[1:])
     if not markdown_note:
         return await edit_delete(event, "`what text should i use in button post`")
-    catinput = "Inline buttons " + markdown_note
+    catinput = f"Inline buttons {markdown_note}"
     results = await event.client.inline_query(Config.TG_BOT_USERNAME, catinput)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()

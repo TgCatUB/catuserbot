@@ -369,16 +369,16 @@ async def edit_message(
 ):
     chatid = entity
     if isinstance(chatid, InputPeerChannel):
-        chat_id = int("-100" + str(chatid.channel_id))
+        chat_id = int(f"-100{str(chatid.channel_id)}")
     elif isinstance(chatid, InputPeerChat):
-        chat_id = int("-" + str(chatid.chat_id))
+        chat_id = int(f"-{str(chatid.chat_id)}")
     elif isinstance(chatid, InputPeerUser):
         chat_id = int(chatid.user_id)
     else:
         chat_id = chatid
     if str(chat_id) == str(Config.BOTLOG_CHATID):
         return await client.editmessage(
-            entity=entity,
+            entity=chatid,
             message=message,
             text=text,
             parse_mode=parse_mode,
@@ -389,6 +389,7 @@ async def edit_message(
             buttons=buttons,
             schedule=schedule,
         )
+
     main_msg = text
     safecheck = await safe_check_text(main_msg)
     if safecheck:

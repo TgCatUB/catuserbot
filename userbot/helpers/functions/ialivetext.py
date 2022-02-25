@@ -57,7 +57,7 @@ async def catalive(StartTime):
             "Authorization": f"Bearer {Config.HEROKU_API_KEY}",
             "Accept": "application/vnd.heroku+json; version=3.account-quotas",
         }
-        path = "/accounts/" + user_id + "/actions/get-quota"
+        path = f"/accounts/{user_id}/actions/get-quota"
         r = requests.get(heroku_api + path, headers=headers)
         result = r.json()
         quota = result["account_quota"]
