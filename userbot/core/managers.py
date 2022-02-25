@@ -39,7 +39,7 @@ async def edit_or_reply(
     if aslink or deflink:
         linktext = linktext or "Message was to big so pasted to bin"
         response = await paste_message(text, pastetype="s")
-        text = linktext + f" [here]({response})"
+        text = f"{linktext} [here]({response})"
         if event.sender_id in sudo_users:
             if reply_to:
                 return await reply_to.reply(text, link_preview=link_preview)

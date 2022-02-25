@@ -479,13 +479,9 @@ async def on_file_to_photo(event):
         "usage": "{tr}gif quality ; fps(frames per second)",
     },
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics
     "Converts Given animated sticker to gif"
-    input_str = event.pattern_match.group(1)
-    if not input_str:
-        quality = None
-        fps = None
-    else:
+    if input_str := event.pattern_match.group(1):
         loc = input_str.split(";")
         if len(loc) > 2:
             return await edit_delete(
@@ -521,6 +517,9 @@ async def _(event):  # sourcery no-metrics
                 quality = loc[0].strip()
             else:
                 return await edit_delete(event, "Use quality of range 0 to 721")
+    else:
+        quality = None
+        fps = None
     catreply = await event.get_reply_message()
     cat_event = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if not catreply or not catreply.media or not catreply.media.document:
@@ -600,10 +599,11 @@ async def _(event):
         voice_note = False
         supports_streaming = False
         if input_str == "voice":
-            new_required_file_caption = "voice_" + str(round(time.time())) + ".opus"
+            new_required_file_caption = f"voice_{str(round(time.time()))}.opus"
             new_required_file_name = (
-                Config.TMP_DOWNLOAD_DIRECTORY + "/" + new_required_file_caption
+                f'{Config.TMP_DOWNLOAD_DIRECTORY}/{new_required_file_caption}'
             )
+
             command_to_run = [
                 "ffmpeg",
                 "-i",
@@ -621,10 +621,11 @@ async def _(event):
             voice_note = True
             supports_streaming = True
         elif input_str == "mp3":
-            new_required_file_caption = "mp3_" + str(round(time.time())) + ".mp3"
+            new_required_file_caption = f"mp3_{str(round(time.time()))}.mp3"
             new_required_file_name = (
-                Config.TMP_DOWNLOAD_DIRECTORY + "/" + new_required_file_caption
+                f'{Config.TMP_DOWNLOAD_DIRECTORY}/{new_required_file_caption}'
             )
+
             command_to_run = [
                 "ffmpeg",
                 "-i",

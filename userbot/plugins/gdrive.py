@@ -163,7 +163,7 @@ async def get_file_id(input_str):
         return link, "unknown"
 
 
-async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
+async def download(event, gdrive, service, uri=None):    # sourcery no-metrics
     """Download files to local then upload"""
     start = datetime.now()
     reply = ""
@@ -274,7 +274,7 @@ async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
             status = status.replace("[FILE", "[FOLDER")
             folder = await create_dir(service, file_name, GDRIVE_.parent_Id)
             dir_id = folder.get("id")
-            webViewURL = "https://drive.google.com/drive/folders/" + dir_id
+            webViewURL = f"https://drive.google.com/drive/folders/{dir_id}"
             try:
                 await task_directory(gdrive, service, required_file_name, dir_id)
             except CancelProcess:
@@ -425,10 +425,16 @@ async def gdrive_download(
                     speed = round(downloaded / diff, 2)
                     eta = round((file_size - downloaded) / speed)
                     prog_str = "`[{0}{1}] {2}%`".format(
-                        "".join("▰" for i in range(math.floor(percentage / 10))),
-                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
+                        "".join(
+                            "▰" for _ in range(math.floor(percentage / 10))
+                        ),
+                        "".join(
+                            "▱"
+                            for _ in range(10 - math.floor(percentage / 10))
+                        ),
                         round(percentage, 2),
                     )
+
                     current_message = (
                         "**File downloading**\n\n"
                         f"**Name : **`{file_name}`\n"
@@ -480,14 +486,15 @@ async def gdrive_download(
                         status,
                         "".join(
                             Config.FINISHED_PROGRESS_STR
-                            for i in range(math.floor(percentage / 5))
+                            for _ in range(math.floor(percentage / 5))
                         ),
                         "".join(
                             Config.UNFINISHED_PROGRESS_STR
-                            for i in range(20 - math.floor(percentage / 5))
+                            for _ in range(20 - math.floor(percentage / 5))
                         ),
                         round(percentage, 2),
                     )
+
                     current_message = (
                         "**File Downloading**\n\n"
                         f"**Name : **`{file_name}`\n"
@@ -637,14 +644,15 @@ async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
             prog_str = "`Uploading :`\n`[{0}{1}] {2}`".format(
                 "".join(
                     Config.FINISHED_PROGRESS_STR
-                    for i in range(math.floor(percentage / 10))
+                    for _ in range(math.floor(percentage / 10))
                 ),
                 "".join(
                     Config.UNFINISHED_PROGRESS_STR
-                    for i in range(10 - math.floor(percentage / 10))
+                    for _ in range(10 - math.floor(percentage / 10))
                 ),
                 round(percentage, 2),
             )
+
 
             current_message = (
                 "**Uploading **\n\n"
@@ -766,10 +774,16 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                     percentage = int(file.progress)
                     downloaded = percentage * int(file.total_length) / 100
                     prog_str = "**Downloading : **`[{0}{1}] {2}`".format(
-                        "".join("▰" for i in range(math.floor(percentage / 10))),
-                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
+                        "".join(
+                            "▰" for _ in range(math.floor(percentage / 10))
+                        ),
+                        "".join(
+                            "▱"
+                            for _ in range(10 - math.floor(percentage / 10))
+                        ),
                         file.progress_string(),
                     )
+
 
                     msg = (
                         "**[URI - DOWNLOAD]**\n\n"

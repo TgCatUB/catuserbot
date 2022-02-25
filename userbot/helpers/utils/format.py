@@ -96,12 +96,10 @@ def yaml_format(obj, indent=0, max_str_len=256, max_byte_len=64):
             formatted = yaml_format(v, indent)
             if not formatted.strip():
                 continue
-            result.append(" " * (indent if has_multiple_items else 1))
-            result.append(f"{k}:")
+            result.extend((" " * (indent if has_multiple_items else 1), f"{k}:"))
             if not formatted[0].isspace():
                 result.append(" ")
-            result.append(f"{formatted}")
-            result.append("\n")
+            result.extend((f"{formatted}", "\n"))
         if has_items:
             result.pop()
         if has_multiple_items:

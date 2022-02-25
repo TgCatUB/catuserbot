@@ -220,7 +220,7 @@ async def formatJSON(outData):
     msg += f"\n\n**Type** : {jsonData['format']}"
     msg += "\n**Genres** : "
     for g in jsonData["genres"]:
-        msg += g + " "
+        msg += f'{g} '
     msg += f"\n**Status** : {jsonData['status']}"
     msg += f"\n**Episode** : {jsonData['episodes']}"
     msg += f"\n**Year** : {jsonData['startDate']['year']}"
@@ -237,7 +237,7 @@ async def formatJSON(outData):
 def shorten(description, info="anilist.co"):
     msg = ""
     if len(description) > 700:
-        description = description[0:200] + "....."
+        description = description[:200] + "....."
         msg += f"\n**Description**:\n{description} [Read More]({info})"
     else:
         msg += f"\n**Description**: \n   {description}"
@@ -256,8 +256,7 @@ async def anilist_user(input_str):
     result = requests.post(
         anilisturl, json={"query": user_query, "variables": username}
     ).json()
-    error = result.get("errors")
-    if error:
+    if error := result.get("errors"):
         error_sts = error[0].get("message")
         return [f"{error_sts}"]
     user_data = result["data"]["User"]
@@ -326,10 +325,9 @@ def getBannerLink(mal, kitsu_search=True, anilistid=0):
     }
     """
     data = {"query": query, "variables": {"idMal": int(mal)}}
-    image = requests.post("https://graphql.anilist.co", json=data).json()["data"][
-        "Media"
-    ]["bannerImage"]
-    if image:
+    if image := requests.post("https://graphql.anilist.co", json=data).json()[
+        "data"
+    ]["Media"]["bannerImage"]:
         return image
     return getPosterLink(mal)
 
@@ -338,8 +336,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
     jikan = jikanpy.jikan.Jikan()
     if search_type == "anime_anime":
         result = jikan.anime(mal_id)
-        trailer = result["trailer_url"]
-        if trailer:
+        if trailer := result["trailer_url"]:
             TRAILER = f"<a href='{trailer}'>🎬 Trailer</a>"
         else:
             TRAILER = "🎬 <i>No Trailer Available</i>"
@@ -385,8 +382,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         anime_data = anime_result["data"]["Media"]
         html_char = ""
         for character in anime_data["characters"]["nodes"]:
-            html_ = ""
-            html_ += "<br>"
+            html_ = "" + "<br>"
             html_ += f"""<a href="{character['siteUrl']}">"""
             html_ += f"""<img src="{character['image']['large']}"/></a>"""
             html_ += "<br>"

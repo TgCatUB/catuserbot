@@ -215,8 +215,7 @@ async def bloom_pfploop():
 
 
 async def autoname_loop():
-    AUTONAMESTART = gvarstatus("autoname") == "true"
-    while AUTONAMESTART:
+    while AUTONAMESTART := gvarstatus("autoname") == "true":
         DM = time.strftime("%d-%m-%y")
         HM = time.strftime("%H:%M")
         name = f"⌚️ {HM}||›  {DEFAULTUSER} ‹||📅 {DM}"
@@ -227,12 +226,10 @@ async def autoname_loop():
             LOGS.warning(str(ex))
             await asyncio.sleep(ex.seconds)
         await asyncio.sleep(Config.CHANGE_TIME)
-        AUTONAMESTART = gvarstatus("autoname") == "true"
 
 
 async def autobio_loop():
-    AUTOBIOSTART = gvarstatus("autobio") == "true"
-    while AUTOBIOSTART:
+    while AUTOBIOSTART := gvarstatus("autobio") == "true":
         DMY = time.strftime("%d.%m.%Y")
         HM = time.strftime("%H:%M")
         bio = f"📅 {DMY} | {DEFAULTUSERBIO} | ⌚️ {HM}"
@@ -243,16 +240,15 @@ async def autobio_loop():
             LOGS.warning(str(ex))
             await asyncio.sleep(ex.seconds)
         await asyncio.sleep(Config.CHANGE_TIME)
-        AUTOBIOSTART = gvarstatus("autobio") == "true"
 
 
 async def animeprofilepic(collection_images):
     rnd = random.randint(0, len(collection_images) - 1)
     pack = collection_images[rnd]
-    pc = requests.get("http://getwallpapers.com/collection/" + pack).text
+    pc = requests.get(f"http://getwallpapers.com/collection/{pack}").text
     f = re.compile(r"/\w+/full.+.jpg")
     f = f.findall(pc)
-    fy = "http://getwallpapers.com" + random.choice(f)
+    fy = f"http://getwallpapers.com{random.choice(f)}"
     if not os.path.exists("f.ttf"):
         urllib.request.urlretrieve(
             "https://github.com/rebel6969/mym/raw/master/Rebel-robot-Regular.ttf",

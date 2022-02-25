@@ -17,7 +17,7 @@ from .utils import (
 LOGS = logging.getLogger("CatUserbot")
 
 print(userbot.__copyright__)
-print("Licensed under the terms of the " + userbot.__license__)
+print(f"Licensed under the terms of the {userbot.__license__}")
 
 cmdhr = Config.COMMAND_HAND_LER
 
@@ -52,10 +52,11 @@ async def startup_process():
 catub.loop.run_until_complete(startup_process())
 
 
-if len(sys.argv) not in (1, 3, 4):
-    catub.disconnect()
-else:
+if len(sys.argv) in {1, 3, 4}:
     try:
         catub.run_until_disconnected()
     except ConnectionError:
         pass
+
+else:
+    catub.disconnect()
