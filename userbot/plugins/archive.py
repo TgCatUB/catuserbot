@@ -57,7 +57,7 @@ async def zip_file(event):
     filepath = os.path.join(
         Config.TMP_DOWNLOAD_DIRECTORY, os.path.basename(Path(input_str))
     )
-    zip_file = zipfile.ZipFile(f'{filepath}.zip', "w")
+    zip_file = zipfile.ZipFile(f"{filepath}.zip", "w")
     with zip_file:
         for file in filePaths:
             zip_file.write(file)
@@ -121,7 +121,7 @@ async def tar_file(event):
         ],
     },
 )
-async def zip_file(event):    # sourcery no-metrics
+async def zip_file(event):  # sourcery no-metrics
     "To unpack the zip file"
     if input_str := event.pattern_match.group(1):
         path = Path(input_str)
@@ -204,7 +204,7 @@ async def zip_file(event):    # sourcery no-metrics
         ],
     },
 )
-async def untar_file(event):    # sourcery no-metrics
+async def untar_file(event):  # sourcery no-metrics
     "To unpack the tar file"
     if input_str := event.pattern_match.group(1):
         path = Path(input_str)

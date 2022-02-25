@@ -49,7 +49,7 @@ def humanbytes(size: int) -> str:
     while size > power:
         size /= power
         raised_to_pow += 1
-    return f'{str(round(size, 2))} {dict_power_n[raised_to_pow]}B'
+    return f"{str(round(size, 2))} {dict_power_n[raised_to_pow]}B"
 
 
 def time_formatter(seconds: int) -> str:
@@ -58,10 +58,10 @@ def time_formatter(seconds: int) -> str:
     days, hours = divmod(hours, 24)
     seconds = round(seconds, 2)
     tmp = (
-        (f'{str(days)} day(s), ' if days else "")
-        + (f'{str(hours)} hour(s), ' if hours else "")
-        + (f'{str(minutes)} minute(s), ' if minutes else "")
-        + (f'{str(seconds)} second(s), ' if seconds else "")
+        (f"{str(days)} day(s), " if days else "")
+        + (f"{str(hours)} hour(s), " if hours else "")
+        + (f"{str(minutes)} minute(s), " if minutes else "")
+        + (f"{str(seconds)} second(s), " if seconds else "")
     )
 
     return tmp[:-2]
@@ -72,9 +72,9 @@ def readable_time(seconds: int) -> str:
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
     return (
-        (f'{int(days)} day(s), ' if days else "")
-        + (f'{int(hours)}:' if hours else "00:")
-        + (f'{int(minutes)}:' if minutes else "00:")
+        (f"{int(days)} day(s), " if days else "")
+        + (f"{int(hours)}:" if hours else "00:")
+        + (f"{int(minutes)}:" if minutes else "00:")
         + (str(int(seconds)) if seconds else "00")
     )
 
@@ -141,8 +141,7 @@ async def progress(
         progress_str = "`{0}` | `[{1}{2}] {3}%`".format(
             status,
             "".join(
-                Config.FINISHED_PROGRESS_STR
-                for _ in range(math.floor(percentage / 5))
+                Config.FINISHED_PROGRESS_STR for _ in range(math.floor(percentage / 5))
             ),
             "".join(
                 Config.UNFINISHED_PROGRESS_STR

@@ -23,9 +23,9 @@ async def kakashi(event):
     "Get latest Magisk releases"
     magisk_repo = "https://raw.githubusercontent.com/topjohnwu/magisk-files/"
     magisk_dict = {
-        "⦁ **Stable**": f'{magisk_repo}master/stable.json',
-        "⦁ **Beta**": f'{magisk_repo}master/beta.json',
-        "⦁ **Canary**": f'{magisk_repo}master/canary.json',
+        "⦁ **Stable**": f"{magisk_repo}master/stable.json",
+        "⦁ **Beta**": f"{magisk_repo}master/beta.json",
+        "⦁ **Canary**": f"{magisk_repo}master/canary.json",
     }
 
     releases = "**Latest Magisk Releases**\n\n"
@@ -110,8 +110,7 @@ async def codename_info(event):
     if results := [
         i
         for i in devices
-        if i["name"].lower() == device.lower()
-        or i["model"].lower() == device.lower()
+        if i["name"].lower() == device.lower() or i["model"].lower() == device.lower()
     ]:
         reply = f"**Search results for {brand} {device}**:\n\n"
         if len(results) > 8:

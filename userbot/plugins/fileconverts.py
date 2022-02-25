@@ -479,7 +479,7 @@ async def on_file_to_photo(event):
         "usage": "{tr}gif quality ; fps(frames per second)",
     },
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "Converts Given animated sticker to gif"
     if input_str := event.pattern_match.group(1):
         loc = input_str.split(";")
@@ -601,7 +601,7 @@ async def _(event):
         if input_str == "voice":
             new_required_file_caption = f"voice_{str(round(time.time()))}.opus"
             new_required_file_name = (
-                f'{Config.TMP_DOWNLOAD_DIRECTORY}/{new_required_file_caption}'
+                f"{Config.TMP_DOWNLOAD_DIRECTORY}/{new_required_file_caption}"
             )
 
             command_to_run = [
@@ -623,7 +623,7 @@ async def _(event):
         elif input_str == "mp3":
             new_required_file_caption = f"mp3_{str(round(time.time()))}.mp3"
             new_required_file_name = (
-                f'{Config.TMP_DOWNLOAD_DIRECTORY}/{new_required_file_caption}'
+                f"{Config.TMP_DOWNLOAD_DIRECTORY}/{new_required_file_caption}"
             )
 
             command_to_run = [
