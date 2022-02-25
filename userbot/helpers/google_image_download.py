@@ -1435,9 +1435,7 @@ class googleimagesdownload:
             records = []
             json_file = json.load(open(arguments["config_file"]))
             for record in range(len(json_file["Records"])):
-                arguments = {}
-                for i in args_list:
-                    arguments[i] = None
+                arguments = {i: None for i in args_list}
                 for key, value in json_file["Records"][record].items():
                     arguments[key] = value
                 records.append(arguments)

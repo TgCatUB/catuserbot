@@ -211,7 +211,7 @@ async def group_unfban(event):
         ],
     },
 )
-async def quote_search(event):  # sourcery no-metrics
+async def quote_search(event):    # sourcery no-metrics
     "Add the federation to database."
     fedgroup = event.pattern_match.group(1)
     fedid = event.pattern_match.group(2)
@@ -255,9 +255,12 @@ async def quote_search(event):  # sourcery no-metrics
                                 pass
                 else:
                     text_lines = response.text.split("`")
-                    for fed_id in text_lines:
-                        if len(fed_id) == 36 and fed_id.count("-") == 4:
-                            fedidstoadd.append(fed_id)
+                    fedidstoadd.extend(
+                        fed_id
+                        for fed_id in text_lines
+                        if len(fed_id) == 36 and fed_id.count("-") == 4
+                    )
+
             except YouBlockedUserError:
                 await edit_delete(
                     catevent,
