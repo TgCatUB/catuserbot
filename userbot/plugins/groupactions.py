@@ -230,7 +230,7 @@ async def _(event):
     },
     groups_only=True,
 )
-async def rm_deletedacc(show):    # sourcery no-metrics
+async def rm_deletedacc(show):  # sourcery no-metrics
     "To check deleted accounts and clean"
     flag = show.pattern_match.group(1)
     con = show.pattern_match.group(2).lower()

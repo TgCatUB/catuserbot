@@ -57,7 +57,7 @@ def sun(unix, ctimezone):
         ],
     },
 )
-async def get_weather(event):    # sourcery no-metrics
+async def get_weather(event):  # sourcery no-metrics
     "To get the weather report of a city."
     if not Config.OPEN_WEATHER_MAP_APPID:
         return await edit_or_reply(
@@ -73,14 +73,14 @@ async def get_weather(event):    # sourcery no-metrics
     if "," in CITY:
         newcity = CITY.split(",")
         if len(newcity[1]) == 2:
-            CITY = f'{newcity[0].strip()},{newcity[1].strip()}'
+            CITY = f"{newcity[0].strip()},{newcity[1].strip()}"
         else:
             country = await get_tz((newcity[1].strip()).title())
             try:
                 countrycode = timezone_countries[f"{country}"]
             except KeyError:
                 return await edit_or_reply(event, "`Invalid Country.`")
-            CITY = f'{newcity[0].strip()},{countrycode.strip()}'
+            CITY = f"{newcity[0].strip()},{countrycode.strip()}"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={Config.OPEN_WEATHER_MAP_APPID}"
     async with aiohttp.ClientSession() as _session:
         async with _session.get(url) as request:
@@ -160,14 +160,14 @@ async def set_default_city(event):
     if "," in CITY:
         newcity = CITY.split(",")
         if len(newcity[1]) == 2:
-            CITY = f'{newcity[0].strip()},{newcity[1].strip()}'
+            CITY = f"{newcity[0].strip()},{newcity[1].strip()}"
         else:
             country = await get_tz((newcity[1].strip()).title())
             try:
                 countrycode = timezone_countries[f"{country}"]
             except KeyError:
                 return await edit_or_reply(event, "`Invalid country.`")
-            CITY = f'{newcity[0].strip()},{countrycode.strip()}'
+            CITY = f"{newcity[0].strip()},{countrycode.strip()}"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={Config.OPEN_WEATHER_MAP_APPID}"
     request = requests.get(url)
     result = json.loads(request.text)

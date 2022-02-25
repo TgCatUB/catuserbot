@@ -47,7 +47,7 @@ async def _(event):
     }
     data = open(required_file_name, "rb").read()
     response = requests.post(
-        f'{Config.IBM_WATSON_CRED_URL}/v1/recognize',
+        f"{Config.IBM_WATSON_CRED_URL}/v1/recognize",
         headers=headers,
         data=data,
         auth=("apikey", Config.IBM_WATSON_CRED_PASSWORD),

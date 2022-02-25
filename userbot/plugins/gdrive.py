@@ -163,7 +163,7 @@ async def get_file_id(input_str):
         return link, "unknown"
 
 
-async def download(event, gdrive, service, uri=None):    # sourcery no-metrics
+async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
     """Download files to local then upload"""
     start = datetime.now()
     reply = ""
@@ -369,15 +369,14 @@ async def gdrive_download(
             except KeyError:
                 page = BeautifulSoup(download.content, "lxml")
                 try:
-                    export = (drive + page.find("a", {"id": "uc-download-link"}).get("href"))
+                    export = drive + page.find("a", {"id": "uc-download-link"}).get(
+                        "href"
+                    )
                 except AttributeError:
                     try:
                         error = (
-                            page.find("p", {"class": "uc-error-caption"}).text
-                            + "\n"
-                        ) + page.find(
-                            "p", {"class": "uc-error-subcaption"}
-                        ).text
+                            page.find("p", {"class": "uc-error-caption"}).text + "\n"
+                        ) + page.find("p", {"class": "uc-error-subcaption"}).text
 
                     except Exception:
                         reply += "**[FILE - ERROR]**\n\n**Status : **BAD - failed to download.\n**Reason : **uncaught err."
@@ -421,13 +420,8 @@ async def gdrive_download(
                     speed = round(downloaded / diff, 2)
                     eta = round((file_size - downloaded) / speed)
                     prog_str = "`[{0}{1}] {2}%`".format(
-                        "".join(
-                            "▰" for _ in range(math.floor(percentage / 10))
-                        ),
-                        "".join(
-                            "▱"
-                            for _ in range(10 - math.floor(percentage / 10))
-                        ),
+                        "".join("▰" for _ in range(math.floor(percentage / 10))),
+                        "".join("▱" for _ in range(10 - math.floor(percentage / 10))),
                         round(percentage, 2),
                     )
 

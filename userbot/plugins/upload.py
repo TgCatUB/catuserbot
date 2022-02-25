@@ -45,7 +45,7 @@ async def catlst_of_files(path):
 
 
 def get_video_thumb(file, output=None, width=320):
-    output = f'{file}.jpg'
+    output = f"{file}.jpg"
     metadata = extractMetadata(createParser(file))
     cmd = [
         "ffmpeg",

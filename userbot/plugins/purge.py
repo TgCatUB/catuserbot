@@ -481,7 +481,7 @@ async def fastpurger(event):  # sourcery no-metrics
         ],
     },
 )
-async def fast_purger(event):    # sourcery no-metrics
+async def fast_purger(event):  # sourcery no-metrics
     "To purge messages from the replied message of replied user."
     chat = await event.get_input_chat()
     msgs = []

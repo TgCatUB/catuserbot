@@ -496,7 +496,9 @@ async def fetch_fedinfo(event):
                 10,
             )
         except Exception as e:
-            await edit_delete(catevent, f"**Error while fecthing fedinfo:**\n__{e}__", 10)
+            await edit_delete(
+                catevent, f"**Error while fecthing fedinfo:**\n__{e}__", 10
+            )
         await event.client.send_read_acknowledge(conv.chat_id)
         conv.cancel()
 
@@ -604,6 +606,8 @@ async def fstat_rose(event):
                 10,
             )
         except Exception as e:
-            await edit_delete(catevent, f"**Error while fecthing fedstat:**\n__{e}__", 10)
+            await edit_delete(
+                catevent, f"**Error while fecthing fedstat:**\n__{e}__", 10
+            )
         await event.client.send_read_acknowledge(conv.chat_id)
         conv.cancel()

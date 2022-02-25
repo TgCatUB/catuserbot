@@ -222,7 +222,7 @@ async def _(event):  # sourcery no-metrics
         name += "_" + str(getattr(reply.document, "id", reply.id)) + ext
     if path and path.exists():
         if path.is_file():
-            newname = f'{str(path.stem)}_OLD'
+            newname = f"{str(path.stem)}_OLD"
             path.rename(path.with_name(newname).with_suffix(path.suffix))
             file_name = path
         else:

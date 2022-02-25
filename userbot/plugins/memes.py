@@ -213,8 +213,7 @@ async def shout(args):
         text = " ".join(messagestr)
         result = [" ".join(text)]
         result.extend(
-            f'{symbol} ' + "  " * pos + symbol
-            for pos, symbol in enumerate(text[1:])
+            f"{symbol} " + "  " * pos + symbol for pos, symbol in enumerate(text[1:])
         )
 
         result = list("\n".join(result))
@@ -302,7 +301,7 @@ async def smrk(smk):
         await edit_or_reply(smk, "ツ")
         return
     if message == "dele":
-        await edit_or_reply(smk, f'{message}te the hellツ')
+        await edit_or_reply(smk, f"{message}te the hellツ")
     else:
         smirk = " ツ"
         reply_text = message + smirk

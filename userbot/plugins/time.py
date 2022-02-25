@@ -130,7 +130,7 @@ async def _(event):
         current_time = input_str
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
-    required_file_name = f'{Config.TEMP_DIR} {str(dt.now())}.webp'
+    required_file_name = f"{Config.TEMP_DIR} {str(dt.now())}.webp"
     img = Image.new("RGBA", (350, 220), color=(0, 0, 0, 115))
     fnt = ImageFont.truetype(FONT_FILE_TO_USE, 30)
     drawn_text = ImageDraw.Draw(img)
