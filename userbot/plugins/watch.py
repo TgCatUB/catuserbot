@@ -25,7 +25,6 @@ justwatchapi.__dict__["HEADER"] = {
 
 
 def get_stream_data(query):
-    stream_data = {}
     # Compatibility for Current Userge Users
     try:
         country = Config.WATCH_COUNTRY
@@ -35,12 +34,15 @@ def get_stream_data(query):
     just_watch = JustWatch(country=country)
     results = just_watch.search_for_item(query=query)
     movie = results["items"][0]
-    stream_data["title"] = movie["title"]
-    stream_data["movie_thumb"] = (
-        "https://images.justwatch.com"
-        + movie["poster"].replace("{profile}", "")
-        + "s592"
-    )
+    stream_data = {
+        "title": movie["title"],
+        "movie_thumb": (
+            "https://images.justwatch.com"
+            + movie["poster"].replace("{profile}", "")
+            + "s592"
+        ),
+    }
+
     stream_data["release_year"] = movie["original_release_year"]
     try:
         LOGS.info(movie["cinema_release_date"])
@@ -125,9 +127,9 @@ async def _(event):
 
     output_ = f"**Movie:**\n`{title}`\n**Release Date:**\n`{release_date}`"
     if imdb_score:
-        output_ = output_ + f"\n**IMDB: **{imdb_score}"
+        output_ = f"{output_}\n**IMDB: **{imdb_score}"
     if tmdb_score:
-        output_ = output_ + f"\n**TMDB: **{tmdb_score}"
+        output_ = f"{output_}\n**TMDB: **{tmdb_score}"
 
     output_ = output_ + "\n\n**Available on:**\n"
     for provider, link in stream_providers.items():

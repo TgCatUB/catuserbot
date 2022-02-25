@@ -127,16 +127,14 @@ async def fix_attributes(
     if video and isinstance(video, types.DocumentAttributeVideo):
         new_attributes.append(video)
 
-    for attr in attributes:
-        if (
+    new_attributes.extend(attr for attr in attributes if (
             isinstance(attr, types.DocumentAttributeAudio)
             and not audio
             or not isinstance(attr, types.DocumentAttributeAudio)
             and not video
             or not isinstance(attr, types.DocumentAttributeAudio)
             and not isinstance(attr, types.DocumentAttributeVideo)
-        ):
-            new_attributes.append(attr)
+        ))
     return new_attributes, mime_type
 
 

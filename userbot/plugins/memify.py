@@ -34,8 +34,8 @@ plugin_category = "fun"
 def random_color():
     number_of_colors = 2
     return [
-        "#" + "".join(random.choice("0123456789ABCDEF") for j in range(6))
-        for i in range(number_of_colors)
+        "#" + "".join(random.choice("0123456789ABCDEF") for _ in range(6))
+        for _ in range(number_of_colors)
     ]
 
 

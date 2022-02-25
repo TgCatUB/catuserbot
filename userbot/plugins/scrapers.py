@@ -72,7 +72,7 @@ async def wiki(event):
         "usage": "{tr}imdb <movie/series name>",
     },
 )
-async def imdb_query(event):  # sourcery no-metrics
+async def imdb_query(event):    # sourcery no-metrics
     """To fetch imdb data about the given movie or series."""
     catevent = await edit_or_reply(event, "`searching........`")
     reply_to = await reply_id(event)
@@ -141,7 +141,7 @@ async def imdb_query(event):  # sourcery no-metrics
         if len(rtext) > 1024:
             extralimit = len(rtext) - 1024
             climit = len(resulttext) - extralimit - 20
-            resulttext = resulttext[:climit] + "...........</i>"
+            resulttext = f'{resulttext[:climit]}...........</i>'
         if imageurl:
             downloader = SmartDL(imageurl, moviepath, progress_bar=False)
             downloader.start(blocking=False)

@@ -37,7 +37,7 @@ GENIUS = Config.GENIUS_API_TOKEN
         ],
     },
 )
-async def lyrics(event):  # sourcery no-metrics
+async def lyrics(event):    # sourcery no-metrics
     "To fetch song lyrics"
     if GENIUS is None:
         return await edit_or_reply(
@@ -50,7 +50,7 @@ async def lyrics(event):  # sourcery no-metrics
     try:
         songno = songno[0]
         songno = songno.replace("-n", "")
-        match = match.replace("-n" + songno, "")
+        match = match.replace(f"-n{songno}", "")
         songno = int(songno)
     except IndexError:
         songno = 1

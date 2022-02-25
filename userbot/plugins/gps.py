@@ -25,8 +25,7 @@ async def gps(event):
     input_str = event.pattern_match.group(1)
     catevent = await edit_or_reply(event, "`finding.....`")
     geolocator = Nominatim(user_agent="catuserbot")
-    geoloc = geolocator.geocode(input_str)
-    if geoloc:
+    if geoloc := geolocator.geocode(input_str):
         lon = geoloc.longitude
         lat = geoloc.latitude
         await event.client.send_file(

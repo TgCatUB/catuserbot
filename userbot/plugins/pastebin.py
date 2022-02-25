@@ -218,9 +218,7 @@ async def get_dogbin_content(event):
     if not url:
         return await edit_delete(event, "__I can't find any pastebin link.__")
     catevent = await edit_or_reply(event, "`Getting Contents of pastebin.....`")
-    rawurl = None
-    if "raw" in url:
-        rawurl = url
+    rawurl = url if "raw" in url else None
     if rawurl is None:
         fid = os.path.splitext((os.path.basename(url)))
         if "pasty" in url:
@@ -250,8 +248,6 @@ async def get_dogbin_content(event):
         )
     reply_text = f"**Fetched dogbin URL content successfully!**\n\n**Content:** \n```{resp.text}```"
     await edit_or_reply(catevent, reply_text)
-
-
 @catub.cat_cmd(
     pattern="paster(?:\s|$)([\s\S]*)",
     command=("paster", plugin_category),

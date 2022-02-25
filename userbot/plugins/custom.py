@@ -65,7 +65,7 @@ oldvars = {
         ],
     },
 )
-async def bad(event):  # sourcery no-metrics
+async def bad(event):    # sourcery no-metrics
     "To manage vars in database"
     cmd = event.pattern_match.group(1).lower()
     vname = event.pattern_match.group(2)
@@ -85,7 +85,7 @@ async def bad(event):  # sourcery no-metrics
             vname = oldvars[vname]
         if cmd == "set":
             if not vinfo and vname == "ALIVE_TEMPLATE":
-                return await edit_delete(event, f"Check @cat_alive")
+                return await edit_delete(event, "Check @cat_alive")
             if not vinfo:
                 return await edit_delete(
                     event, f"Give some values which you want to save for **{vname}**"
