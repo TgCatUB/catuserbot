@@ -26,7 +26,7 @@ def get_collection(keywoard):
         SESSION.close()
 
 
-def add_collection(keywoard, json, njson = None):
+def add_collection(keywoard, json, njson=None):
     if njson is None:
         njson = {}
     to_check = get_collection(keywoard)

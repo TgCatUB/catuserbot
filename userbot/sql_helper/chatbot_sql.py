@@ -89,9 +89,7 @@ def remove_ai(chat_id, user_id):
 
 
 def remove_users(chat_id):
-    if saved_filter := SESSION.query(ChatBot).filter(
-        ChatBot.chat_id == str(chat_id)
-    ):
+    if saved_filter := SESSION.query(ChatBot).filter(ChatBot.chat_id == str(chat_id)):
         saved_filter.delete()
         SESSION.commit()
 

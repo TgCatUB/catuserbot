@@ -70,9 +70,7 @@ def del_user_from_db(message_id):
 def get_user_reply(reply_id):
     try:
         if _result := (
-            SESSION.query(Bot_Users)
-            .filter(Bot_Users.reply_id == str(reply_id))
-            .all()
+            SESSION.query(Bot_Users).filter(Bot_Users.reply_id == str(reply_id)).all()
         ):
             return _result
         return None
@@ -83,9 +81,7 @@ def get_user_reply(reply_id):
 def get_user_results(result_id):
     try:
         if _result := (
-            SESSION.query(Bot_Users)
-            .filter(Bot_Users.result_id == str(result_id))
-            .all()
+            SESSION.query(Bot_Users).filter(Bot_Users.result_id == str(result_id)).all()
         ):
             return _result
         return None
@@ -96,9 +92,7 @@ def get_user_results(result_id):
 def get_user_logging(logger_id):
     try:
         if _result := (
-            SESSION.query(Bot_Users)
-            .filter(Bot_Users.logger_id == str(logger_id))
-            .all()
+            SESSION.query(Bot_Users).filter(Bot_Users.logger_id == str(logger_id)).all()
         ):
             return _result
         return None
