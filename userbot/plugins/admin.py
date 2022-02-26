@@ -1,5 +1,3 @@
-from asyncio import sleep
-
 from telethon.errors import (
     BadRequestError,
     ImageProcessFailedError,
@@ -11,7 +9,6 @@ from telethon.tl.functions.channels import (
     EditBannedRequest,
     EditPhotoRequest,
 )
-
 from telethon.tl.types import (
     ChatAdminRights,
     ChatBannedRights,
