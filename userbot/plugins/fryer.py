@@ -49,6 +49,7 @@ async def deepfry(img: Image) -> Image:
 
 
 async def check_media(reply_message):
+    data = None
     if reply_message and reply_message.media:
         if reply_message.photo:
             data = reply_message.photo
