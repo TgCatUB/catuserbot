@@ -11,7 +11,7 @@ from telethon.tl.functions.channels import (
     EditBannedRequest,
     EditPhotoRequest,
 )
-from telethon.tl.functions.users import GetFullUserRequest
+
 from telethon.tl.types import (
     ChatAdminRights,
     ChatBannedRights,
@@ -345,10 +345,7 @@ async def watcher(event):
 async def startmute(event):
     "To mute a person in that paticular chat"
     if event.is_private:
-        await event.edit("`Unexpected issues or ugly errors may occur!`")
-        await sleep(2)
-        await event.get_reply_message()
-        replied_user = await event.client(GetFullUserRequest(event.chat_id))
+        replied_user = await event.client.get_entity(event.chat_id)
         if is_muted(event.chat_id, event.chat_id):
             return await event.edit(
                 "`This user is already muted in this chat ~~lmfao sed rip~~`"
@@ -365,7 +362,7 @@ async def startmute(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#PM_MUTE\n"
-                f"**User :** [{replied_user.user.first_name}](tg://user?id={event.chat_id})\n",
+                f"**User :** [{replied_user.first_name}](tg://user?id={event.chat_id})\n",
             )
     else:
         chat = await event.get_chat()
@@ -447,9 +444,7 @@ async def startmute(event):
 async def endmute(event):
     "To mute a person in that paticular chat"
     if event.is_private:
-        await event.edit("`Unexpected issues or ugly errors may occur!`")
-        await sleep(1)
-        replied_user = await event.client(GetFullUserRequest(event.chat_id))
+        replied_user = await event.client.get_entity(event.chat_id)
         if not is_muted(event.chat_id, event.chat_id):
             return await event.edit(
                 "`__This user is not muted in this chat__\n（ ^_^）o自自o（^_^ ）`"
@@ -466,7 +461,7 @@ async def endmute(event):
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "#PM_UNMUTE\n"
-                f"**User :** [{replied_user.user.first_name}](tg://user?id={event.chat_id})\n",
+                f"**User :** [{replied_user.first_name}](tg://user?id={event.chat_id})\n",
             )
     else:
         user, _ = await get_user_from_event(event)
@@ -516,7 +511,7 @@ async def endmute(event):
     groups_only=True,
     require_admin=True,
 )
-async def endmute(event):
+async def kick(event):
     "use this to kick a user from chat"
     user, reason = await get_user_from_event(event)
     if not user:
@@ -593,7 +588,7 @@ async def pin(event):
         ],
     },
 )
-async def pin(event):
+async def unpin(event):
     "To unpin message(s) in the group"
     to_unpin = event.reply_to_msg_id
     options = (event.pattern_match.group(1)).strip()
@@ -665,9 +660,7 @@ async def _iundlt(event):  # sourcery no-metrics
     deleted_msg = f"**Recent {lim} Deleted message(s) in this group are :**"
     if not flag:
         for msg in adminlog:
-            ruser = (
-                await event.client(GetFullUserRequest(msg.old.from_id.user_id))
-            ).user
+            ruser = await event.client.get_entity(msg.old.from_id.user_id)
             _media_type = media_type(msg.old)
             if _media_type is None:
                 deleted_msg += f"\n☞ __{msg.old.message}__ **Sent by** {_format.mentionuser(ruser.first_name ,ruser.id)}"
@@ -677,9 +670,7 @@ async def _iundlt(event):  # sourcery no-metrics
     else:
         main_msg = await edit_or_reply(catevent, deleted_msg)
         for msg in adminlog:
-            ruser = (
-                await event.client(GetFullUserRequest(msg.old.from_id.user_id))
-            ).user
+            ruser = await event.client.get_entity(msg.old.from_id.user_id)
             _media_type = media_type(msg.old)
             if _media_type is None:
                 await main_msg.reply(
