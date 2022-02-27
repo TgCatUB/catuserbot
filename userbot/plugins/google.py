@@ -143,6 +143,19 @@ async def gsearch(q_event):
 
 
 @catub.cat_cmd(
+    pattern="gis ([\s\S]*)",
+    command=("gis", plugin_category),
+    info={
+        "header": "Google search in image format",
+        "usage": "{tr}gis <query>",
+        "examples": "{tr}gis cat",
+    },
+)
+async def _(event):
+    "To search in google and send result in picture."
+    
+    
+@catub.cat_cmd(
     pattern="grs$",
     command=("grs", plugin_category),
     info={
