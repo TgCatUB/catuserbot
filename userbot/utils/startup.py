@@ -3,9 +3,9 @@ import os
 import sys
 from datetime import timedelta
 from pathlib import Path
-
+from ..helpers.utils.utils import _catutils
 from telethon import Button, functions, types, utils
-
+import urllib.request
 from userbot import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID
 
 from ..Config import Config
@@ -22,6 +22,7 @@ from .tools import create_supergroup
 
 LOGS = logging.getLogger("CatUserbot")
 cmdhr = Config.COMMAND_HAND_LER
+
 
 
 async def setup_bot():
@@ -119,13 +120,20 @@ async def add_bot_to_logger_group(chat_id):
             LOGS.error(str(e))
 
 
-async def load_plugins(folder):
+async def load_plugins(folder,extfolder=None):
     """
     To load plugins from the mentioned folder
     """
-    path = f"userbot/{folder}/*.py"
+    if externalfolder:
+        path = f"{extfolder}/*.py"
+        plugin_path= extfolder
+    else:
+        path = f"userbot/{folder}/*.py"
+        plugin_path=f"userbot/{folder}"
     files = glob.glob(path)
     files.sort()
+    success= 0
+    failure = []
     for name in files:
         with open(name) as f:
             path1 = Path(f.name)
@@ -138,19 +146,33 @@ async def load_plugins(folder):
                         try:
                             load_module(
                                 shortname.replace(".py", ""),
-                                plugin_path=f"userbot/{folder}",
+                                plugin_path=plugin_path,
                             )
+                            if shortname in failure:
+                                failure.remove(shortname)
+                            success = +1
                             break
                         except ModuleNotFoundError as e:
                             install_pip(e.name)
                             check += 1
+                            if shortname not in failure:
+                                failure.append(shortname)
                             if check > 5:
                                 break
                 else:
-                    os.remove(Path(f"userbot/{folder}/{shortname}.py"))
+                    os.remove(Path(f"{plugin_path}/{shortname}.py"))
             except Exception as e:
-                os.remove(Path(f"userbot/{folder}/{shortname}.py"))
-                LOGS.info(f"unable to load {shortname} because of error {e}")
+                if shortname not in failure:
+                    failure.append(shortname)
+                os.remove(Path(f"{plugin_path}/{shortname}.py"))
+                LOGS.info(
+                    f"unable to load {shortname} because of error {e}\nBase Folder {plugin_path}"
+                )
+    if extfolder:
+        await catub.tgbot.send_message(
+            BOTLOG_CHATID,
+            f'Your external repo plugins have imported \n**No of imported plugins :** `{success}`\n**Failed plugins to import :** {", ".join(failure)}',
+        )
 
 
 async def verifyLoggerGroup():
@@ -219,3 +241,26 @@ async def verifyLoggerGroup():
         args = [executable, "-m", "userbot"]
         os.execle(executable, *args, os.environ)
         sys.exit(0)
+
+async def install_externalrepo():
+    if Config.EXTERNAL_REPOBRANCH:
+        repourl = os.path.join(Config.EXTERNAL_REPO , f"tree/{Config.EXTERNAL_REPOBRANCH}")
+        gcmd = f"git clone -b {Config.EXTERNAL_REPOBRANCH} {Config.EXTERNAL_REPO}"
+        errtext = f"There is no branch with name `{Config.EXTERNAL_REPOBRANCH}` in your external repo {Config.EXTERNAL_REPO}. Recheck branch name and correct it in vars(`EXTERNAL_REPO_BRANCH`)"
+    else:
+        repourl = Config.EXTERNAL_REPO
+        gcmd = f"git clone {Config.EXTERNAL_REPO}"
+        errtext = f"The link({Config.EXTERNAL_REPO}) you provided for `EXTERNAL_REPO` in vars is invalid. please recheck that link"
+    response = urllib.request.urlopen(repourl)
+    if response.code!=200:
+        return await catub.tgbot.send_message(
+                BOTLOG_CHATID,
+            errtext)
+    await runcmd(gcmd)
+    basename = os.path.basename(Config.EXTERNAL_REPO)
+    if not os.path.exits(basename):
+        return await catub.tgbot.send_message(
+            BOTLOG_CHATID,
+            "There was a problem in cloning the external repo. please recheck external repo link",
+        )
+    await load_plugins(folder="userbot", extfolder=basename )
