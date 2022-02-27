@@ -1,5 +1,3 @@
-from asyncio import sleep
-
 from googletrans import LANGUAGES, Translator
 
 from userbot import catub
@@ -139,9 +137,17 @@ async def lang(value):
     LANG = LANGUAGES[arg]
 
     if BOTLOG and input_str == "trt":
-        await value.client.send_message(BOTLOG_CHATID, f"**Language for Translator changed to:** `{LANG.title()}`")
+        await value.client.send_message(
+            BOTLOG_CHATID, f"**Language for Translator changed to:** `{LANG.title()}`"
+        )
     if BOTLOG:
         if input_str == "tocr":
-            await value.client.send_message(BOTLOG_CHATID,f"**Language for Translated Ocr changed to:** `{LANG.title()}`")
+            await value.client.send_message(
+                BOTLOG_CHATID,
+                f"**Language for Translated Ocr changed to:** `{LANG.title()}`",
+            )
         if input_str == "ai":
-            await value.client.send_message(BOTLOG_CHATID, f"**Language for Chatbot is changed to:** `{LANG.title()}`")
+            await value.client.send_message(
+                BOTLOG_CHATID,
+                f"**Language for Chatbot is changed to:** `{LANG.title()}`",
+            )
