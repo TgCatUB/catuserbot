@@ -88,7 +88,7 @@ async def animator(media, mainevent, textevent):
     BadCat = await mainevent.client.download_media(media, Config.TEMP_DIR)
     await textevent.edit("__🎞Converting into Animated sticker..__")
     await runcmd(
-        f"ffmpeg -to 00:00:02.900 -i {BadCat} -vf scale={w}:{h} -c:v libvpx-vp9 -crf 30 -b:v 560k -maxrate 560k -bufsize 256k -an animate.webm"
+        f"ffmpeg -to 00:00:02.900 -i '{BadCat}' -vf scale={w}:{h} -c:v libvpx-vp9 -crf 30 -b:v 560k -maxrate 560k -bufsize 256k -an animate.webm"
     )  # pain
     os.remove(BadCat)
     return "animate.webm"
