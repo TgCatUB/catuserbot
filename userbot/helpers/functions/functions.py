@@ -3,9 +3,9 @@ import zipfile
 from random import choice
 from textwrap import wrap
 from uuid import uuid4
-from googletrans import Translator
 
 import requests
+from googletrans import Translator
 
 from ..utils.extdl import install_pip
 from ..utils.utils import runcmd
