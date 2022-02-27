@@ -124,7 +124,7 @@ async def load_plugins(folder, extfolder=None):
     """
     To load plugins from the mentioned folder
     """
-    if externalfolder:
+    if extfolder:
         path = f"{extfolder}/*.py"
         plugin_path = extfolder
     else:
