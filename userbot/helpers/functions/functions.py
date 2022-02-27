@@ -3,6 +3,7 @@ import zipfile
 from random import choice
 from textwrap import wrap
 from uuid import uuid4
+from googletrans import Translator
 
 import requests
 
