@@ -63,12 +63,12 @@ async def device_info(event):
         ).text
     )
     if results := data.get(codename):
-        reply = f"**Search results for {codename}**:\n\n"
+        reply = f"**Search results for `{codename}` :**\n\n"
         for item in results:
             reply += (
-                f"**Brand**: {item['brand']}\n"
-                f"**Name**: {item['name']}\n"
-                f"**Model**: {item['model']}\n\n"
+                f"**Brand**: `{item['brand']}`\n"
+                f"**Name**: `{item['name']}`\n"
+                f"**Model**: `{item['model']}`\n\n"
             )
     else:
         reply = f"`Couldn't find info about {codename}!`\n"
@@ -117,79 +117,12 @@ async def codename_info(event):
             results = results[:8]
         for item in results:
             reply += (
-                f"**Device**: {item['device']}\n"
-                f"**Name**: {item['name']}\n"
-                f"**Model**: {item['model']}\n\n"
+                f"**Device**: `{item['device']}`\n"
+                f"**Name**: `{item['name']}`\n"
+                f"**Model**: `{item['model']}`\n\n"
             )
     else:
         reply = f"`Couldn't find {device} codename!`\n"
-    await edit_or_reply(event, reply)
-
-
-@catub.cat_cmd(
-    pattern="specs(?: |)([\S]*)(?: |)([\s\S]*)",
-    command=("specs", plugin_category),
-    info={
-        "header": "To Get info about android device .",
-        "usage": "{tr}specs",
-        "examples": "{tr}specs Xiaomi Redmi Note 5 Pro",
-    },
-)
-async def devices_specifications(event):
-    "Mobile devices specifications"
-    textx = await event.get_reply_message()
-    brand = event.pattern_match.group(1).lower()
-    device = event.pattern_match.group(2).lower()
-    if brand and device:
-        pass
-    elif textx:
-        brand = textx.text.split(" ")[0]
-        device = " ".join(textx.text.split(" ")[1:])
-    else:
-        return await edit_delete(event, "`Usage: .specs <brand> <device>`")
-    all_brands = (
-        BeautifulSoup(
-            get("https://www.devicespecifications.com/en/brand-more").content, "lxml"
-        )
-        .find("div", {"class": "brand-listing-container-news"})
-        .findAll("a")
-    )
-    brand_page_url = None
-    try:
-        brand_page_url = [
-            i["href"] for i in all_brands if brand == i.text.strip().lower()
-        ][0]
-    except IndexError:
-        return await edit_delete(event, f"`{brand} is unknown brand!`")
-    devices = BeautifulSoup(get(brand_page_url).content, "lxml").findAll(
-        "div", {"class": "model-listing-container-80"}
-    )
-    device_page_url = None
-    try:
-        device_page_url = [
-            i.a["href"]
-            for i in BeautifulSoup(str(devices), "lxml").findAll("h3")
-            if device in i.text.strip().lower()
-        ]
-    except IndexError:
-        return await edit_delete(event, f"`can't find {device}!`")
-    if len(device_page_url) > 2:
-        device_page_url = device_page_url[:2]
-    reply = ""
-    for url in device_page_url:
-        info = BeautifulSoup(get(url).content, "lxml")
-        reply = "\n" + info.title.text.split("-")[0].strip() + "\n"
-        info = info.find("div", {"id": "model-brief-specifications"})
-        specifications = re.findall(r"<b>.*?<br/>", str(info))
-        for item in specifications:
-            title = re.findall(r"<b>(.*?)</b>", item)[0].strip()
-            data = (
-                re.findall(r"</b>: (.*?)<br/>", item)[0]
-                .replace("<b>", "")
-                .replace("</b>", "")
-                .strip()
-            )
-            reply += f"**{title}**: {data}\n"
     await edit_or_reply(event, reply)
 
 

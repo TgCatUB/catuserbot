@@ -87,7 +87,7 @@ async def animator(media, mainevent, textevent):
     BadCat = await mainevent.client.download_media(media, Config.TEMP_DIR)
     await textevent.edit("__🎞Converting into Animated sticker..__")
     await runcmd(
-        f"ffmpeg -ss 00:00:00 -to 00:00:02.900 -i {BadCat} -vf scale={w}:{h} -c:v libvpx-vp9 -crf 30 -b:v 560k -maxrate 560k -bufsize 256k -an animate.webm"
+        f"ffmpeg -to 00:00:02.900 -i {BadCat} -vf scale={w}:{h} -c:v libvpx-vp9 -crf 30 -b:v 560k -maxrate 560k -bufsize 256k -an animate.webm"
     )  # pain
     os.remove(BadCat)
     return "animate.webm"
@@ -251,6 +251,19 @@ async def hide_inlinebot(borg, bot_name, text, chat_id, reply_to_id, c_lick=0):
         await cat.delete()
 
 
+# https://github.com/ssut/py-googletrans/issues/234#issuecomment-722379788
+async def getTranslate(text, **kwargs):
+    translator = Translator()
+    result = None
+    for _ in range(10):
+        try:
+            result = translator.translate(text, **kwargs)
+        except Exception:
+            translator = Translator()
+            await sleep(0.1)
+    return result
+    
+    
 # for stickertxt
 async def waifutxt(text, chat_id, reply_to_id, bot):
     animus = [
