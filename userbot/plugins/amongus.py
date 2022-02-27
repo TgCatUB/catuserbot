@@ -262,4 +262,3 @@ async def _(event):
         await asyncio.sleep(4)
         await catevent.delete()
         await event.client.send_file(event.chat_id, "CAADAQADQAADnjOcH-WOkB8DEctJAg")
-

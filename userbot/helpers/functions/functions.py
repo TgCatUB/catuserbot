@@ -263,8 +263,8 @@ async def getTranslate(text, **kwargs):
             translator = Translator()
             await sleep(0.1)
     return result
-    
-    
+
+
 # for stickertxt
 async def waifutxt(text, chat_id, reply_to_id, bot):
     animus = [
