@@ -3,7 +3,7 @@ from googletrans import LANGUAGES, Translator
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import getTranslate
+from ..helpers.functions.functions import getTranslate
 from ..sql_helper.globals import addgvar, gvarstatus
 from . import BOTLOG, BOTLOG_CHATID, deEmojify
 
@@ -54,7 +54,7 @@ async def _(event):
     command=("trt", plugin_category),
     info={
         "header": "To translate the text to required language.",
-        "note": "for this command set lanuage by `.lang trt` command.",
+        "note": "for this command set lanuage by `{tr}lang trt` command.",
         "usage": [
             "{tr}trt",
             "{tr}trt <text>",
