@@ -8,7 +8,7 @@ import heroku3
 import lottie
 import requests
 import spamwatch as spam_watch
-from telethon.tl.functions.users import GetFullUserRequest
+
 from validators.url import url
 
 from .. import *
@@ -25,7 +25,6 @@ bot = catub
 LOGS = logging.getLogger(__name__)
 USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
 USERINFO = asyncio.run(catub.get_entity(catub.uid))
-FULL_USERINFO = asyncio.run(catub(GetFullUserRequest(catub.uid))).full_user
 ALIVE_NAME = gvarstatus("ALIVE_NAME") or USERINFO.first_name
 
 
