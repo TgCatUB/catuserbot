@@ -26,20 +26,13 @@ from ..sql_helper.global_list import (
     rm_from_list,
 )
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from . import (
-    BOTLOG,
-    BOTLOG_CHATID,
-    _catutils,
-    catub,
-    edit_delete,
-    logging,
-)
+from . import BOTLOG, BOTLOG_CHATID, _catutils, catub, edit_delete, logging
 
 plugin_category = "tools"
 DEFAULTUSERBIO = gvarstatus("DEFAULT_BIO") or " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
 DEFAULTUSER = gvarstatus("DEFAULT_NAME") or Config.ALIVE_NAME
 LOGS = logging.getLogger(__name__)
-CHANGE_TIME =  int(gvarstatus("CHANGE_TIME")) if gvarstatus("CHANGE_TIME") else 60
+CHANGE_TIME = int(gvarstatus("CHANGE_TIME")) if gvarstatus("CHANGE_TIME") else 60
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
@@ -47,7 +40,9 @@ autopic_path = os.path.join(os.getcwd(), "userbot", "original_pic.png")
 digitalpic_path = os.path.join(os.getcwd(), "userbot", "digital_pic.png")
 autophoto_path = os.path.join(os.getcwd(), "userbot", "photo_pfp.png")
 
-digitalpfp = gvarstatus("DIGITAL_PIC") or "https://telegra.ph/file/aeaebe33b1f3988a0b690.jpg"
+digitalpfp = (
+    gvarstatus("DIGITAL_PIC") or "https://telegra.ph/file/aeaebe33b1f3988a0b690.jpg"
+)
 
 COLLECTION_STRINGS = {
     "batmanpfp_strings": [

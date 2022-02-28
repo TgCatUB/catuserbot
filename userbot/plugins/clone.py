@@ -3,22 +3,16 @@ import html
 
 from telethon.tl import functions
 from telethon.tl.functions.users import GetFullUserRequest
-from ..sql_helper.globals import gvarstatus
 
 from ..Config import Config
-from . import (
-    ALIVE_NAME,
-    BOTLOG,
-    BOTLOG_CHATID,
-    catub,
-    edit_delete,
-    get_user_from_event,
-)
+from ..sql_helper.globals import gvarstatus
+from . import ALIVE_NAME, BOTLOG, BOTLOG_CHATID, catub, edit_delete, get_user_from_event
 
 plugin_category = "utils"
 DEFAULTUSER = gvarstatus("DEFAULT_NAME") or ALIVE_NAME
-DEFAULTUSERBIO = gvarstatus("DEFAULT_BIO") or "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙"
-
+DEFAULTUSERBIO = (
+    gvarstatus("DEFAULT_BIO") or "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙"
+)
 
 
 @catub.cat_cmd(
@@ -77,7 +71,7 @@ async def _(event):
 async def revert(event):
     "To reset your original details"
     firstname = DEFAULTUSER
-    lastname= gvarstatus("Last_Name") if gvarstatus("Last_Name") else ""
+    lastname = gvarstatus("Last_Name") if gvarstatus("Last_Name") else ""
     bio = f"{DEFAULTUSERBIO}"
     await event.client(
         functions.photos.DeletePhotosRequest(
