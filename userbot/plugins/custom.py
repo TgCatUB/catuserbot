@@ -90,8 +90,8 @@ async def bad(event):  # sourcery no-metrics
         if cmd == "set":
             if vname == "DEFAULT_USER":
                 if vinfo and vinfo == "Me":
-                USERINFO = await catub.get_entity(catub.uid)
-                FULL_USERINFO = (await catub(GetFullUserRequest(catub.uid))).full_user
+                    USERINFO = await catub.get_entity(catub.uid)
+                    FULL_USERINFO = (await catub(GetFullUserRequest(catub.uid))).full_user
                     addgvar("First_Name", USERINFO.first_name)
                     addgvar("DEFAULT_NAME", USERINFO.first_name)
                     if USERINFO.last_name:
