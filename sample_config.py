@@ -12,6 +12,8 @@ class Config(object):
     LOGGER = True
 
     # MUST NEEDED VARS
+    # set this value with your name
+    ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
     # Get the values for following 2 from my.telegram.org
     APP_ID = int(os.environ.get("APP_ID", 6))
     API_HASH = os.environ.get("API_HASH") or None
@@ -33,6 +35,7 @@ class Config(object):
 
     # BASIC and MAIN CONFIG VARS
     # for profile default name
+    AUTONAME = os.environ.get("AUTONAME", None)
     # Set this value with group id of private group(can be found this value by .id)
     PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID") or 0)
     # Set this value same as PRIVATE_GROUP_BOT_API_ID if you need pmgaurd
@@ -65,6 +68,14 @@ class Config(object):
     )
     # specify NO_LOAD with plugin names for not loading in userbot
     NO_LOAD = list(os.environ.get("NO_LOAD", "").split())
+    # for custom pic for .digitalpfp
+    DIGITAL_PIC = os.environ.get("DIGITAL_PIC", None)
+    # your default pic telegraph link
+    DEFAULT_PIC = os.environ.get("DEFAULT_PIC", None)
+    # set this with your default bio
+    DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
+    # set this with your deafult name
+    DEFAULT_NAME = os.environ.get("DEFAULT_NAME", None)
     # specify command handler that should be used for the plugins
     # this should be a valid "regex" pattern
     COMMAND_HAND_LER = os.environ.get("COMMAND_HAND_LER", r".")
@@ -73,6 +84,8 @@ class Config(object):
     TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "downloads")
     # set this with required folder path to act as temparary folder
     TEMP_DIR = os.environ.get("TEMP_DIR", "./temp/")
+    # time to update autoprofile cmds
+    CHANGE_TIME = int(os.environ.get("CHANGE_TIME", 60))
     # SpamWatch, CAS, SpamProtection ban Needed or not
     ANTISPAMBOT_BAN = os.environ.get("ANTISPAMBOT_BAN", False)
     # is dual logging needed or not true or false

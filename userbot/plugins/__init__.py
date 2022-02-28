@@ -15,17 +15,15 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..core.session import catub
 from ..helpers import *
-from ..sql_helper.globals import gvarstatus
 from ..helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
-from telethon.tl.functions.users import GetFullUserRequest
 
 # =================== CONSTANT ===================
 bot = catub
 LOGS = logging.getLogger(__name__)
 USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
-USERINFO = asyncio.run(catub.get_entity(catub.uid))
-FULL_USERINFO = asyncio.run(catub(GetFullUserRequest(catub.uid))).full_user
-ALIVE_NAME = gvarstatus("ALIVE_NAME") or USERINFO.first_name
+ALIVE_NAME = Config.ALIVE_NAME
+AUTONAME = Config.AUTONAME
+DEFAULT_BIO = Config.DEFAULT_BIO
 
 
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
@@ -34,6 +32,8 @@ HEROKU_APP_NAME = Config.HEROKU_APP_NAME
 HEROKU_API_KEY = Config.HEROKU_API_KEY
 
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
+
+USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
 
 # mention user
 mention = f"[{Config.ALIVE_NAME}](tg://user?id={USERID})"
