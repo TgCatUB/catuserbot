@@ -10,8 +10,9 @@ from telethon.tl.types import ChatBannedRights
 
 class Config(object):
     LOGGER = True
-
     # MUST NEEDED VARS
+    # set this value with your name
+    ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
     # Get the values for following 2 from my.telegram.org
     APP_ID = int(os.environ.get("APP_ID", 6))
     API_HASH = os.environ.get("API_HASH") or None

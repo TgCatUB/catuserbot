@@ -16,13 +16,13 @@ cmdhd = Config.COMMAND_HAND_LER
 
 extractor = URLExtract()
 vlist = [
-    "ALIVE_NAME",
     "ALIVE_PIC",
     "ALIVE_EMOJI",
     "ALIVE_TEMPLATE",
     "ALIVE_TEXT",
     "ALLOW_NSFW",
-    "CHANGE_TIME" "DEFAULT_USER",
+    "CHANGE_TIME",
+    "DEFAULT_USER",
     "DIGITAL_PIC",
     "HELP_EMOJI",
     "HELP_TEXT",
@@ -89,11 +89,11 @@ async def bad(event):  # sourcery no-metrics
             vname = oldvars[vname]
         if cmd == "set":
             if vname == "DEFAULT_USER":
-                if vinfo and vinfo == "Me":
+                if not vinfo or (vinfo and vinfo != "Me"):
+                    return await edit_delete(event,f"**To save your Current Profile info Set the value:**\n `.setdv DEFAULT_USER Me`")
+                else:
                     USERINFO = await catub.get_entity(catub.uid)
-                    FULL_USERINFO = (
-                        await catub(GetFullUserRequest(catub.uid))
-                    ).full_user
+                    FULL_USERINFO = (await catub(GetFullUserRequest(catub.uid))).full_user
                     addgvar("First_Name", USERINFO.first_name)
                     addgvar("DEFAULT_NAME", USERINFO.first_name)
                     if USERINFO.last_name:
@@ -114,11 +114,7 @@ async def bad(event):  # sourcery no-metrics
                     usrln = gvarstatus("Last_Name") or None
                     usrbio = gvarstatus("DEFAULT_BIO") or None
                     usrphoto = gvarstatus("DEFAULT_PIC") or None
-                    vinfo = f'Name: {gvarstatus("DEFAULT_NAME")}\nFirst Name: {gvarstatus("First_Name")}\nLast Name: {usrln}\nBio: {usrbio}\nPhoto: {usrphoto}'
-                return await edit_delete(
-                    event,
-                    f"**To save your Current Profile info Set the value:**\n `{tr}setdv DEFAULT_USER Me`",
-                )
+                    vinfo = f'**Name:** `{gvarstatus("DEFAULT_NAME")}`\n**First Name:** `{gvarstatus("First_Name")}`\n**Last Name:** `{usrln}`\n**Bio:** `{usrbio}`\n**Photo:** `{usrphoto}`'
             if not vinfo and vname == "ALIVE_TEMPLATE":
                 return await edit_delete(event, "Check @cat_alive")
             if not vinfo:

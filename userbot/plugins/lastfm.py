@@ -20,12 +20,13 @@ from ..Config import Config
 from ..core.logger import logging
 from ..helpers.functions import deEmojify, hide_inlinebot
 from ..helpers.utils import reply_id
-from . import BOTLOG, BOTLOG_CHATID, DEFAULT_BIO
+from . import BOTLOG, BOTLOG_CHATID
+from ..sql_helper.globals import gvarstatus
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "extra"
 
-
+DEFAULT_BIO = gvarstatus("DEFAULT_BIO")
 BIO_PREFIX = Config.BIO_PREFIX
 LASTFM_API = Config.LASTFM_API
 LASTFM_SECRET = Config.LASTFM_SECRET
