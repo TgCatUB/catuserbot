@@ -1,15 +1,13 @@
-from urlextract import URLExtract
 from telegraph import upload_file
+from urlextract import URLExtract
 from validators.url import url
 
-
+from userbot import BOTLOG_CHATID, FULL_USERINFO, USERINFO, catub
 from userbot.core.logger import logging
-from userbot import catub,BOTLOG_CHATID,USERINFO,FULL_USERINFO
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
- 
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
@@ -23,8 +21,7 @@ vlist = [
     "ALIVE_TEMPLATE",
     "ALIVE_TEXT",
     "ALLOW_NSFW",
-    "CHANGE_TIME"
-    "DEFAULT_USER",
+    "CHANGE_TIME" "DEFAULT_USER",
     "DIGITAL_PIC",
     "HELP_EMOJI",
     "HELP_TEXT",
@@ -95,7 +92,10 @@ async def bad(event):  # sourcery no-metrics
                     addgvar("First_Name", USERINFO.first_name)
                     addgvar("DEFAULT_NAME", USERINFO.first_name)
                     if USERINFO.last_name:
-                        addgvar("DEFAULT_NAME", f"{USERINFO.first_name}  {USERINFO.first_name}")
+                        addgvar(
+                            "DEFAULT_NAME",
+                            f"{USERINFO.first_name}  {USERINFO.first_name}",
+                        )
                         addgvar("Last_Name", USERINFO.last_name)
                     if FULL_USERINFO.about:
                         addgvar("DEFAULT_BIO", FULL_USERINFO.about)
@@ -106,11 +106,14 @@ async def bad(event):  # sourcery no-metrics
                         addgvar("DEFAULT_PIC", f"https://telegra.ph{myphoto_urls[0]}")
                     except IndexError:
                         pass
-                    usrln= gvarstatus("Last_Name") or None
-                    usrbio= gvarstatus("DEFAULT_BIO") or None
-                    usrphoto= gvarstatus("DEFAULT_PIC") or None
+                    usrln = gvarstatus("Last_Name") or None
+                    usrbio = gvarstatus("DEFAULT_BIO") or None
+                    usrphoto = gvarstatus("DEFAULT_PIC") or None
                     vinfo = f'Name: {gvarstatus("DEFAULT_NAME")}\nFirst Name: {gvarstatus("First_Name")}\nLast Name: {usrln}\nBio: {usrbio}\nPhoto: {usrphoto}'
-                return await edit_delete(event, f"**To save your Current Profile info Set the value:**\n `{tr}setdv DEFAULT_USER Me`")
+                return await edit_delete(
+                    event,
+                    f"**To save your Current Profile info Set the value:**\n `{tr}setdv DEFAULT_USER Me`",
+                )
             if not vinfo and vname == "ALIVE_TEMPLATE":
                 return await edit_delete(event, "Check @cat_alive")
             if not vinfo:

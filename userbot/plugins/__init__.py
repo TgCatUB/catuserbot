@@ -7,6 +7,7 @@ import heroku3
 import lottie
 import requests
 import spamwatch as spam_watch
+from telethon.tl.functions.users import GetFullUserRequest
 from validators.url import url
 
 from .. import *
@@ -15,9 +16,8 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..core.session import catub
 from ..helpers import *
-from ..sql_helper.globals import gvarstatus
 from ..helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
-from telethon.tl.functions.users import GetFullUserRequest
+from ..sql_helper.globals import gvarstatus
 
 # =================== CONSTANT ===================
 bot = catub
