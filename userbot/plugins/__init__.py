@@ -1,4 +1,4 @@
-import asyncio
+
 import math
 import os
 import re
@@ -24,7 +24,7 @@ from ..sql_helper.globals import gvarstatus
 bot = catub
 LOGS = logging.getLogger(__name__)
 USERID = catub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
-USERINFO = asyncio.run(catub.get_entity(catub.uid))
+USERINFO = await catub.get_entity(catub.uid)
 ALIVE_NAME = gvarstatus("ALIVE_NAME") or USERINFO.first_name
 
 
