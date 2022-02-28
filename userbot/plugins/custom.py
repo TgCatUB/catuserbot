@@ -2,13 +2,12 @@ from telegraph import upload_file
 from urlextract import URLExtract
 from validators.url import url
 
-from userbot import BOTLOG_CHATID, USERINFO, catub
+from userbot import BOTLOG_CHATID, FULL_USERINFO, USERINFO, catub
 from userbot.core.logger import logging
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from telethon.tl.functions.users import GetFullUserRequest
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
@@ -90,7 +89,6 @@ async def bad(event):  # sourcery no-metrics
         if cmd == "set":
             if vname == "DEFAULT_USER":
                 if vinfo and vinfo == "Me":
-                FULL_USERINFO = (await catub(GetFullUserRequest(catub.uid))).full_user
                     addgvar("First_Name", USERINFO.first_name)
                     addgvar("DEFAULT_NAME", USERINFO.first_name)
                     if USERINFO.last_name:
