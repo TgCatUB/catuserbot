@@ -87,14 +87,17 @@ async def fileinfo(file):
         "size": cat_json[0]["FileSize"],
         "extension": cat_json[0]["FileExtension"],
     }
-    if "VideoCount" or "AudioCount" or "ImageCount" in cat_json[0]:
-        dic["format"] = cat_json[0]["Format"]
-        dic["type"] = cat_json[1]["@type"]
-        if "ImageCount" not in cat_json[0]:
-            dic["duration"] = cat_json[0]["Duration"]
-        if "VideoCount" or "ImageCount" in cat_json[0]:
-            dic["height"] = cat_json[1]["Height"]
-            dic["width"] = cat_json[1]["Width"]
+    try:
+        if "VideoCount" or "AudioCount" or "ImageCount" in cat_json[0]:
+            dic["format"] = cat_json[0]["Format"]
+            dic["type"] = cat_json[1]["@type"]
+            if "ImageCount" not in cat_json[0]:
+                dic["duration"] = cat_json[0]["Duration"]
+            if "VideoCount" or "ImageCount" in cat_json[0]:
+                dic["height"] = cat_json[1]["Height"]
+                dic["width"] = cat_json[1]["Width"]
+    except (IndexError,KeyError):
+        pass
     return dic
 
 
