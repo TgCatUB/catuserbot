@@ -1,5 +1,5 @@
-import os
 import json
+import os
 import zipfile
 from random import choice
 from textwrap import wrap
@@ -80,24 +80,24 @@ async def age_verification(event, reply_to_id):
 
 
 async def fileinfo(file):
-    x,y,z,s = await runcmd(f"mediainfo '{file}' --Output=JSON")
+    x, y, z, s = await runcmd(f"mediainfo '{file}' --Output=JSON")
     cat_json = json.loads(x)["media"]["track"]
-    dic= {
+    dic = {
         "path": file,
-        "size": cat_json[0]['FileSize'],
-        "extension": cat_json[0]['FileExtension']
+        "size": cat_json[0]["FileSize"],
+        "extension": cat_json[0]["FileExtension"],
     }
-    if 'VideoCount' or 'AudioCount' or 'ImageCount' in cat_json[0]:
-        dic["format"] = cat_json[0]['Format']
-        dic["type"] = cat_json[1]['@type']
-        if 'ImageCount' not in cat_json[0]:
-            dic["duration"] = cat_json[0]['Duration']
-        if 'VideoCount' or 'ImageCount' in cat_json[0]:
-            dic["height"] = cat_json[1]['Height']
-            dic["width"] = cat_json[1]['Width']
+    if "VideoCount" or "AudioCount" or "ImageCount" in cat_json[0]:
+        dic["format"] = cat_json[0]["Format"]
+        dic["type"] = cat_json[1]["@type"]
+        if "ImageCount" not in cat_json[0]:
+            dic["duration"] = cat_json[0]["Duration"]
+        if "VideoCount" or "ImageCount" in cat_json[0]:
+            dic["height"] = cat_json[1]["Height"]
+            dic["width"] = cat_json[1]["Width"]
     return dic
-    
- 
+
+
 async def animator(media, mainevent, textevent=None):
     # //Hope u dunt kang :/ @Jisan7509
     if not os.path.isdir(Config.TEMP_DIR):

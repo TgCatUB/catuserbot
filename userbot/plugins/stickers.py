@@ -27,9 +27,9 @@ from telethon.tl.types import (
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import crop_and_divide, animator
+from ..helpers.functions import animator, crop_and_divide
 from ..helpers.tools import media_type
-from ..helpers.utils import _cattools, runcmd
+from ..helpers.utils import _cattools
 from ..sql_helper.globals import gvarstatus
 
 plugin_category = "fun"
@@ -61,7 +61,7 @@ KANGING_STR = [
     "Mr.Steal Your Sticker is stealing this sticker... ",
 ]
 
-    
+
 def verify_cond(catarray, text):
     return any(i in text for i in catarray)
 
@@ -341,13 +341,21 @@ async def kang(args):  # sourcery no-metrics
                 attributes = message.media.document.attributes
                 for attribute in attributes:
                     if isinstance(attribute, DocumentAttributeSticker):
-                        if message.media.document.size/1024>255:
-                            catevent = await edit_or_reply(args, "__⌛ File size big,,, Downloading..__")
+                        if message.media.document.size / 1024 > 255:
+                            catevent = await edit_or_reply(
+                                args, "__⌛ File size big,,, Downloading..__"
+                            )
                             sticker = await animator(message, args, catevent)
-                            await edit_or_reply(catevent, f"`{random.choice(KANGING_STR)}`")
+                            await edit_or_reply(
+                                catevent, f"`{random.choice(KANGING_STR)}`"
+                            )
                         else:
-                            catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
-                            sticker = await args.client.download_media(message.media.document, "animate.webm")
+                            catevent = await edit_or_reply(
+                                args, f"`{random.choice(KANGING_STR)}`"
+                            )
+                            sticker = await args.client.download_media(
+                                message.media.document, "animate.webm"
+                            )
                         emoji = attribute.alt
                         emojibypass = True
             else:
@@ -556,8 +564,11 @@ async def pack_kang(event):  # sourcery no-metrics
             is_anim = True
             photo = 1
         elif "video/webm" in message.mime_type:
-            await edit_or_reply(catevent,f"`This sticker pack is kanging now . Status of kang process : {kangst}/{noofst}`")
-            if message.size/1024 > 255:
+            await edit_or_reply(
+                catevent,
+                f"`This sticker pack is kanging now . Status of kang process : {kangst}/{noofst}`",
+            )
+            if message.size / 1024 > 255:
                 await animator(message, event)
             else:
                 await event.client.download_media(message, "animate.webm")
