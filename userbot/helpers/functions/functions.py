@@ -96,7 +96,7 @@ async def fileinfo(file):
             if "VideoCount" or "ImageCount" in cat_json[0]:
                 dic["height"] = cat_json[1]["Height"]
                 dic["width"] = cat_json[1]["Width"]
-    except (IndexError,KeyError):
+    except (IndexError, KeyError):
         pass
     return dic
 
