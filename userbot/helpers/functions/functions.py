@@ -1,4 +1,5 @@
 import os
+import json
 import zipfile
 from random import choice
 from textwrap import wrap
@@ -78,15 +79,36 @@ async def age_verification(event, reply_to_id):
     return True
 
 
-async def animator(media, mainevent, textevent):
+async def fileinfo(file):
+    x,y,z,s = await runcmd(f"mediainfo '{file}' --Output=JSON")
+    cat_json = json.loads(x)["media"]["track"]
+    dic= {
+        "path": file,
+        "size": cat_json[0]['FileSize'],
+        "extension": cat_json[0]['FileExtension']
+    }
+    if 'VideoCount' or 'AudioCount' or 'ImageCount' in cat_json[0]:
+        dic["format"] = cat_json[0]['Format']
+        dic["type"] = cat_json[1]['@type']
+        if 'ImageCount' not in cat_json[0]:
+            dic["duration"] = cat_json[0]['Duration']
+        if 'VideoCount' or 'ImageCount' in cat_json[0]:
+            dic["height"] = cat_json[1]['Height']
+            dic["width"] = cat_json[1]['Width']
+    return dic
+    
+ 
+async def animator(media, mainevent, textevent=None):
     # //Hope u dunt kang :/ @Jisan7509
-    h = media.file.height
-    w = media.file.width
-    w, h = (-1, 512) if h > w else (512, -1)
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
     BadCat = await mainevent.client.download_media(media, Config.TEMP_DIR)
-    await textevent.edit("__🎞Converting into Animated sticker..__")
+    file = await fileinfo(BadCat)
+    h = file["height"]
+    w = file["width"]
+    w, h = (-1, 512) if h > w else (512, -1)
+    if textevent:
+        await textevent.edit("__🎞Converting into Animated sticker..__")
     await runcmd(
         f"ffmpeg -to 00:00:02.900 -i '{BadCat}' -vf scale={w}:{h} -c:v libvpx-vp9 -crf 30 -b:v 560k -maxrate 560k -bufsize 256k -an animate.webm"
     )  # pain
