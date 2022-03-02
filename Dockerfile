@@ -6,7 +6,7 @@ RUN git clone https://github.com/sandy1709/catuserbot.git /root/userbot
 WORKDIR /root/userbot
 
 # Install requirements
-RUN pip3 install --no-cache-dir requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 ENV PATH="/home/userbot/bin:$PATH"
 
