@@ -10,7 +10,6 @@ from telethon.tl.types import (
 
 from ..Config import Config
 from .managers import edit_or_reply
-from .session import catub
 
 
 @events.common.name_inner_event
@@ -93,6 +92,7 @@ async def safe_check_text(msg):  # sourcery no-metrics
     if not msg:
         return False
     msg = str(msg)
+    from .session import catub
     phone = str((await catub.get_entity(catub.uid)).phone)
     return bool(
         (
