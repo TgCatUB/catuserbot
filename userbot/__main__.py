@@ -12,6 +12,7 @@ from .utils import (
     setup_bot,
     startupmessage,
     verifyLoggerGroup,
+    install_externalrepo,
 )
 
 LOGS = logging.getLogger("CatUserbot")
@@ -57,6 +58,12 @@ if len(sys.argv) in {1, 3, 4}:
         catub.run_until_disconnected()
     except ConnectionError:
         pass
-
 else:
     catub.disconnect()
+
+async def externalrepo():
+    await install_externalrepo(Config.EXTERNAL_REPO,Config.EXTERNAL_REPOBRANCH)
+    if Config.BADCAT:
+        await install_externalrepo(Config.BADCAT_REPO,Config.BADCAT_REPOBRANCH)
+
+catub.loop.run_until_complete(externalrepo())

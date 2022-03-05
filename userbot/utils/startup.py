@@ -21,7 +21,7 @@ from ..sql_helper.globals import addgvar, gvarstatus
 from .pluginmanager import load_module
 from .tools import create_supergroup
 
-LOGS = logging.getLogger("CatUserbot")
+LOGS = logging.getLogger("CatUBStartUP")
 cmdhr = Config.COMMAND_HAND_LER
 
 
@@ -243,23 +243,26 @@ async def verifyLoggerGroup():
         sys.exit(0)
 
 
-async def install_externalrepo():
-    if Config.EXTERNAL_REPOBRANCH:
+async def install_externalrepo(repo , branch):
+    CATREPO = repo
+    if CATBRANCH := branch:
         repourl = os.path.join(
-            Config.EXTERNAL_REPO, f"tree/{Config.EXTERNAL_REPOBRANCH}"
+             CATREPO, f"tree/{CATBRANCH}"
         )
-        gcmd = f"git clone -b {Config.EXTERNAL_REPOBRANCH} {Config.EXTERNAL_REPO}"
-        errtext = f"There is no branch with name `{Config.EXTERNAL_REPOBRANCH}` in your external repo {Config.EXTERNAL_REPO}. Recheck branch name and correct it in vars(`EXTERNAL_REPO_BRANCH`)"
+        gcmd = f"git clone -b {CATBRANCH} {CATREPO}"
+        errtext = f"There is no branch with name `{CATBRANCH}` in your external repo {CATREPO}. Recheck branch name and correct it in vars(`EXTERNAL_REPO_BRANCH`)"
     else:
-        repourl = Config.EXTERNAL_REPO
-        gcmd = f"git clone {Config.EXTERNAL_REPO}"
-        errtext = f"The link({Config.EXTERNAL_REPO}) you provided for `EXTERNAL_REPO` in vars is invalid. please recheck that link"
+        repourl = CATREPO
+        gcmd = f"git clone {CATREPO}"
+        errtext = f"The link({CATREPO}) you provided for `EXTERNAL_REPO` in vars is invalid. please recheck that link"
     response = urllib.request.urlopen(repourl)
     if response.code != 200:
+        LOGS.error(errtext)
         return await catub.tgbot.send_message(BOTLOG_CHATID, errtext)
     await runcmd(gcmd)
-    basename = os.path.basename(Config.EXTERNAL_REPO)
+    basename = os.path.basename(CATREPO)
     if not os.path.exits(basename):
+        LOGS.error("There was a problem in cloning the external repo. please recheck external repo link")
         return await catub.tgbot.send_message(
             BOTLOG_CHATID,
             "There was a problem in cloning the external repo. please recheck external repo link",

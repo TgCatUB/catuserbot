@@ -4,7 +4,7 @@
 
 import os
 from typing import Set
-
+from validators.url import url
 from telethon.tl.types import ChatBannedRights
 
 
@@ -31,7 +31,12 @@ class Config(object):
     UPSTREAM_REPO = os.environ.get(
         "UPSTREAM_REPO", "https://github.com/TgCatUB/catuserbot.git"
     )
-
+    #External plugins repo 
+    EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO",None)
+    if EXTERNAL_REPO and not url(EXTERNAL_REPO):
+        EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
+    #if you need badcat plugins use the following vars
+    BADCAT = bool(os.environ.get("BADCAT",False))
     # BASIC and MAIN CONFIG VARS
     # for profile default name
     # Set this value with group id of private group(can be found this value by .id)
@@ -155,6 +160,12 @@ class Config(object):
     CATUBLOGO = None
     BOTLOG = False
     BOTLOG_CHATID = 0
+    #extra plugins realted vars below  4 
+    EXTERNAL_REPOBRANCH = os.environ.get("EXTERNAL_REPOBRANCH","main")
+    BADCAT_REPO = os.environ.get("BADCAT_REPO","https://github.com/TgCatUB/CatPlugins")
+    if BADCAT_REPO and not url(BADCAT_REPO):
+        BADCAT_REPO = "https://github.com/TgCatUB/CatPlugins"
+    BADCAT_REPOBRANCH = os.environ.get("BADCAT_REPOBRANCH","badcat")
 
 
 class Production(Config):
