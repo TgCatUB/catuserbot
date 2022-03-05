@@ -162,12 +162,12 @@ async def spotify_setup(event):
     if not BOTLOG:
         return await edit_delete(
             event,
-            "For authencation you need to set `PRIVATE_GROUP_BOT_API_ID` in heroku",
+            "For authencation you need to set `PRIVATE_GROUP_BOT_API_ID` in heroku", 7
         )
     if not (SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET):
-        return await edit_delete(event, no_sp_vars)
+        return await edit_delete(event, no_sp_vars , 10)
     if event.chat_id != BOTLOG_CHATID:
-        return await edit_delete(event, "CHAT INVALID :: Do this in your Log Channel")
+        return await edit_delete(event, "CHAT INVALID :: Do this in your Log Channel", 7)
     authurl = (
         "https://accounts.spotify.com/authorize?client_id={}&response_type=code&redirect_uri="
         "https%3A%2F%2Fexample.com%2Fcallback&scope=user-read-playback-state%20user-read-currently"
@@ -199,7 +199,7 @@ async def spotify_setup(event):
     if not (access_token and refresh_token):
         return await edit_delete(
             msg,
-            "Auth. was Unsuccessful !\ndo sp_setup again and provide a valid URL or Code",
+            "Auth. was Unsuccessful !\ndo sp_setup again and provide a valid URL or Code",10
         )
     to_create = {
         "bio": "",
@@ -210,7 +210,7 @@ async def spotify_setup(event):
     }
     with open(PATH, "w") as outfile:
         ujson.dump(to_create, outfile, indent=4)
-    await edit_delete(msg, "Done! Setup was Successfully")
+    await edit_delete(msg, "Done! Setup was Successfully",5)
     glob_db.add_collection(
         "SP_DATA",
         {"data": {"access_token": access_token, "refresh_token": refresh_token}},
@@ -661,5 +661,5 @@ async def spotify_now(event):
         os.remove(thumb)
     except KeyError:
         await edit_delete(
-            catevent, "\n**Strange!! Try after restaring Spotify once ;)**"
+            catevent, "\n**Strange!! Try after restaring Spotify once ;)**",7
         )
