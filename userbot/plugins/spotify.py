@@ -35,9 +35,9 @@ from ..helpers.functions.functions import (
     text_draw,
 )
 from ..sql_helper import global_collectionjson as glob_db
-from . import catub, BOTLOG, BOTLOG_CHATID, Config
+from . import BOTLOG, BOTLOG_CHATID, Config, catub
 
-SPOTIFY_CLIENT_ID =  Config.SPOTIFY_CLIENT_ID
+SPOTIFY_CLIENT_ID = Config.SPOTIFY_CLIENT_ID
 SPOTIFY_CLIENT_SECRET = Config.SPOTIFY_CLIENT_SECRET
 
 LOGS = logging.getLogger(__name__)
