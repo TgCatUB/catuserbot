@@ -56,7 +56,7 @@ async def externalrepo():
     print("ok")
     if Config.BADCAT:
         await install_externalrepo(Config.BADCAT_REPO, Config.BADCAT_REPOBRANCH)
-        
+
 
 catub.loop.run_until_complete(startup_process())
 
@@ -69,5 +69,3 @@ if len(sys.argv) in {1, 3, 4}:
         pass
 else:
     catub.disconnect()
-
-
