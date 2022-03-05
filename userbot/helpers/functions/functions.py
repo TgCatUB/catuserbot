@@ -17,7 +17,7 @@ except ModuleNotFoundError:
     install_pip("IMDbPY")
     from imdb import IMDb
 
-from PIL import Image, ImageColor, ImageDraw, ImageFont,ImageOps
+from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from ...Config import Config
@@ -35,7 +35,8 @@ mov_titles = [
     "localized title",
 ]
 
-#----------------------------------------------## Scrap ##------------------------------------------------------------#
+# ----------------------------------------------## Scrap ##------------------------------------------------------------#
+
 
 async def get_cast(casttype, movie):
     mov_casttype = ""
@@ -80,17 +81,19 @@ async def sanga_seperator(sanga_list):
     usernames = sanga_list[s:]
     names = sanga_list[:s]
     return names, usernames
-    
-    
+
+
 # covid india data
 async def covidindia(state):
     url = "https://www.mohfw.gov.in/data/datanew.json"
     req = requests.get(url).json()
     return next((req[states.index(i)] for i in states if i == state), None)
-#--------------------------------------------------------------------------------------------------------------------#
 
 
-#----------------------------------------------## Media ##-----------------------------------------------------------#
+# --------------------------------------------------------------------------------------------------------------------#
+
+
+# ----------------------------------------------## Media ##-----------------------------------------------------------#
 async def age_verification(event, reply_to_id):
     ALLOW_NSFW = gvarstatus("ALLOW_NSFW") or "False"
     if ALLOW_NSFW.lower() == "true":
@@ -123,8 +126,8 @@ async def fileinfo(file):
     except (IndexError, KeyError):
         pass
     return dic
-    
-    
+
+
 async def animator(media, mainevent, textevent=None):
     # //Hope u dunt kang :/ @Jisan7509
     if not os.path.isdir(Config.TEMP_DIR):
@@ -141,10 +144,13 @@ async def animator(media, mainevent, textevent=None):
     )  # pain
     os.remove(BadCat)
     return "animate.webm"
-#--------------------------------------------------------------------------------------------------------------------#
 
 
-#----------------------------------------------## Bots ##------------------------------------------------------------#
+# --------------------------------------------------------------------------------------------------------------------#
+
+
+# ----------------------------------------------## Bots ##------------------------------------------------------------#
+
 
 async def clippy(borg, msg, chat_id, reply_to_id):
     chat = "@clippy"
@@ -162,18 +168,20 @@ async def clippy(borg, msg, chat_id, reply_to_id):
             reply_to=reply_to_id,
         )
     await borg.delete_messages(conv.chat_id, [msg.id, pic.id])
-    
-    
+
+
 async def hide_inlinebot(borg, bot_name, text, chat_id, reply_to_id, c_lick=0):
     sticcers = await borg.inline_query(bot_name, f"{text}.")
     cat = await sticcers[c_lick].click("me", hide_via=True)
     if cat:
         await borg.send_file(int(chat_id), cat, reply_to=reply_to_id)
         await cat.delete()
-#--------------------------------------------------------------------------------------------------------------------#
 
 
-#----------------------------------------------## Tools ##------------------------------------------------------------#
+# --------------------------------------------------------------------------------------------------------------------#
+
+
+# ----------------------------------------------## Tools ##------------------------------------------------------------#
 
 # https://www.tutorialspoint.com/How-do-you-split-a-list-into-evenly-sized-chunks-in-Python
 def sublists(input_list: list, width: int = 3):
@@ -199,7 +207,7 @@ async def getTranslate(text, **kwargs):
             translator = Translator()
             await sleep(0.1)
     return result
-    
+
 
 def reddit_thumb_link(preview, thumb=None):
     for i in preview:
@@ -209,35 +217,38 @@ def reddit_thumb_link(preview, thumb=None):
     if not thumb:
         thumb = preview.pop()
     return thumb.replace("\u0026", "&")
-#--------------------------------------------------------------------------------------------------------------------#
 
 
-#----------------------------------------------## Image ##------------------------------------------------------------#
+# --------------------------------------------------------------------------------------------------------------------#
 
-def ellipse_create(filename,size,border):
+
+# ----------------------------------------------## Image ##------------------------------------------------------------#
+
+
+def ellipse_create(filename, size, border):
     img = Image.open(filename)
-    img = img.resize((int(1024/size), int(1024/size)));
+    img = img.resize((int(1024 / size), int(1024 / size)))
     drawsize = (img.size[0] * 3, img.size[1] * 3)
-    mask = Image.new('L', drawsize, 0)
-    draw = ImageDraw.Draw(mask) 
-    draw.ellipse((0,0) + drawsize, fill=255,outline="green",width=int(border))
+    mask = Image.new("L", drawsize, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.ellipse((0, 0) + drawsize, fill=255, outline="green", width=int(border))
     mask = mask.resize(img.size, Image.ANTIALIAS)
     img.putalpha(mask)
-    return img,mask
- 
- 
-def ellipse_layout_create(filename,size,border):
-    x,mask = ellipse_create(filename,size,border)
+    return img, mask
+
+
+def ellipse_layout_create(filename, size, border):
+    x, mask = ellipse_create(filename, size, border)
     img = ImageOps.expand(mask)
     return img
-  
-  
-def text_draw(font_name,font_size,img,text,hight):
+
+
+def text_draw(font_name, font_size, img, text, hight):
     font = ImageFont.truetype(font_name, font_size)
     draw = ImageDraw.Draw(img)
     w, h = draw.textsize(text, font=font)
-    h += int(h*0.21)
-    draw.text(((1024-w)/2, int(hight)), text=text, fill='white', font=font)
+    h += int(h * 0.21)
+    draw.text(((1024 - w) / 2, int(hight)), text=text, fill="white", font=font)
 
 
 def higlighted_text(
@@ -302,7 +313,7 @@ def higlighted_text(
             # put text on mask
             mask_draw = ImageDraw.Draw(mask_img)
             mask_draw.text((25, 8), list_text[i], foreground, font=font)
-#https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi
+            # https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi
             circle = Image.new("L", (rad * 2, rad * 2), 0)
             draw = ImageDraw.Draw(circle)
             draw.ellipse((0, 0, rad * 2, rad * 2), transparency)
@@ -324,10 +335,12 @@ def higlighted_text(
         )
         source_img = Image.alpha_composite(source_img, trans)
     source_img.save(output_img, "png")
-#----------------------------------------------------------------------------------------------------------------------#
-    
-    
-#----------------------------------------------## Sticker ##-----------------------------------------------------------#
+
+
+# ----------------------------------------------------------------------------------------------------------------------#
+
+
+# ----------------------------------------------## Sticker ##-----------------------------------------------------------#
 
 # for stickertxt
 async def waifutxt(text, chat_id, reply_to_id, bot):
