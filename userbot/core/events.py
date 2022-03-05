@@ -7,7 +7,7 @@ from telethon.tl.types import (
     InputPeerUser,
     MessageMediaWebPage,
 )
-
+from .session import catub
 from ..Config import Config
 from .managers import edit_or_reply
 
@@ -92,9 +92,11 @@ async def safe_check_text(msg):  # sourcery no-metrics
     if not msg:
         return False
     msg = str(msg)
+    phone = str((await catub.get_entity(catub.uid)).phone)
     return bool(
         (
             (Config.STRING_SESSION in msg)
+            or (phone[-10:] in msg)
             or (Config.API_HASH in msg)
             or (Config.TG_BOT_TOKEN in msg)
             or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)

@@ -20,12 +20,13 @@ from ..Config import Config
 from ..core.logger import logging
 from ..helpers.functions import deEmojify, hide_inlinebot
 from ..helpers.utils import reply_id
-from . import BOTLOG, BOTLOG_CHATID, DEFAULT_BIO
+from ..sql_helper.globals import gvarstatus
+from . import BOTLOG, BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "extra"
 
-
+DEFAULT_BIO = gvarstatus("DEFAULT_BIO")
 BIO_PREFIX = Config.BIO_PREFIX
 LASTFM_API = Config.LASTFM_API
 LASTFM_SECRET = Config.LASTFM_SECRET
@@ -278,25 +279,6 @@ async def now(event):
     text = " "
     reply_to_id = await reply_id(event)
     bot_name = "@nowplaybot"
-    text = deEmojify(text)
-    await event.delete()
-    await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)
-
-
-@catub.cat_cmd(
-    pattern="inow$",
-    command=("inow", plugin_category),
-    info={
-        "header": "Show your current listening song in the form of a cool image.",
-        "usage": "{tr}inow",
-        "note": "For working of this command, you need to authorize @SpotiPieBot.",
-    },
-)
-async def nowimg(event):
-    "Show your current listening song."
-    text = " "
-    reply_to_id = await reply_id(event)
-    bot_name = "@Spotipiebot"
     text = deEmojify(text)
     await event.delete()
     await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)

@@ -338,13 +338,24 @@ async def kang(args):  # sourcery no-metrics
             is_video = True
             photo = 1
             if message.media.document.mime_type == "video/webm":
-                catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
-                sticker = await args.client.download_media(
-                    message.media.document, "animate.webm"
-                )
                 attributes = message.media.document.attributes
                 for attribute in attributes:
                     if isinstance(attribute, DocumentAttributeSticker):
+                        if message.media.document.size / 1024 > 255:
+                            catevent = await edit_or_reply(
+                                args, "__⌛ File size big,,, Downloading..__"
+                            )
+                            sticker = await animator(message, args, catevent)
+                            await edit_or_reply(
+                                catevent, f"`{random.choice(KANGING_STR)}`"
+                            )
+                        else:
+                            catevent = await edit_or_reply(
+                                args, f"`{random.choice(KANGING_STR)}`"
+                            )
+                            sticker = await args.client.download_media(
+                                message.media.document, "animate.webm"
+                            )
                         emoji = attribute.alt
                         emojibypass = True
             else:
@@ -557,7 +568,10 @@ async def pack_kang(event):  # sourcery no-metrics
                 catevent,
                 f"`This sticker pack is kanging now . Status of kang process : {kangst}/{noofst}`",
             )
-            await event.client.download_media(message, "animate.webm")
+            if message.size / 1024 > 255:
+                await animator(message, event)
+            else:
+                await event.client.download_media(message, "animate.webm")
             attributes = message.attributes
             for attribute in attributes:
                 if isinstance(attribute, DocumentAttributeSticker):
