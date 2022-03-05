@@ -17,7 +17,7 @@ except ModuleNotFoundError:
     install_pip("IMDbPY")
     from imdb import IMDb
 
-from PIL import Image, ImageColor, ImageDraw, ImageFont
+from PIL import Image, ImageColor, ImageDraw, ImageFont,ImageOps
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from ...Config import Config
@@ -35,6 +35,7 @@ mov_titles = [
     "localized title",
 ]
 
+#----------------------------------------------## Scrap ##------------------------------------------------------------#
 
 async def get_cast(casttype, movie):
     mov_casttype = ""
@@ -67,6 +68,29 @@ def rand_key():
     return str(uuid4())[:8]
 
 
+async def sanga_seperator(sanga_list):
+    for i in sanga_list:
+        if i.startswith("🔗"):
+            sanga_list.remove(i)
+    s = 0
+    for i in sanga_list:
+        if i.startswith("Username History"):
+            break
+        s += 1
+    usernames = sanga_list[s:]
+    names = sanga_list[:s]
+    return names, usernames
+    
+    
+# covid india data
+async def covidindia(state):
+    url = "https://www.mohfw.gov.in/data/datanew.json"
+    req = requests.get(url).json()
+    return next((req[states.index(i)] for i in states if i == state), None)
+#--------------------------------------------------------------------------------------------------------------------#
+
+
+#----------------------------------------------## Media ##-----------------------------------------------------------#
 async def age_verification(event, reply_to_id):
     ALLOW_NSFW = gvarstatus("ALLOW_NSFW") or "False"
     if ALLOW_NSFW.lower() == "true":
@@ -99,8 +123,8 @@ async def fileinfo(file):
     except (IndexError, KeyError):
         pass
     return dic
-
-
+    
+    
 async def animator(media, mainevent, textevent=None):
     # //Hope u dunt kang :/ @Jisan7509
     if not os.path.isdir(Config.TEMP_DIR):
@@ -117,7 +141,65 @@ async def animator(media, mainevent, textevent=None):
     )  # pain
     os.remove(BadCat)
     return "animate.webm"
+#--------------------------------------------------------------------------------------------------------------------#
 
+
+#----------------------------------------------## Bots ##------------------------------------------------------------#
+
+async def clippy(borg, msg, chat_id, reply_to_id):
+    chat = "@clippy"
+    async with borg.conversation(chat) as conv:
+        try:
+            msg = await conv.send_file(msg)
+            pic = await conv.get_response()
+            await borg.send_read_acknowledge(conv.chat_id)
+        except YouBlockedUserError:
+            await kakashi.edit("Please unblock @clippy and try again")
+            return
+        await borg.send_file(
+            chat_id,
+            pic,
+            reply_to=reply_to_id,
+        )
+    await borg.delete_messages(conv.chat_id, [msg.id, pic.id])
+    
+    
+async def hide_inlinebot(borg, bot_name, text, chat_id, reply_to_id, c_lick=0):
+    sticcers = await borg.inline_query(bot_name, f"{text}.")
+    cat = await sticcers[c_lick].click("me", hide_via=True)
+    if cat:
+        await borg.send_file(int(chat_id), cat, reply_to=reply_to_id)
+        await cat.delete()
+#--------------------------------------------------------------------------------------------------------------------#
+
+
+#----------------------------------------------## Tools ##------------------------------------------------------------#
+
+# https://www.tutorialspoint.com/How-do-you-split-a-list-into-evenly-sized-chunks-in-Python
+def sublists(input_list: list, width: int = 3):
+    return [input_list[x : x + width] for x in range(0, len(input_list), width)]
+
+
+# unziping file
+async def unzip(downloaded_file_name):
+    with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
+        zip_ref.extractall("./temp")
+    downloaded_file_name = os.path.splitext(downloaded_file_name)[0]
+    return f"{downloaded_file_name}.gif"
+
+
+# https://github.com/ssut/py-googletrans/issues/234#issuecomment-722379788
+async def getTranslate(text, **kwargs):
+    translator = Translator()
+    result = None
+    for _ in range(10):
+        try:
+            result = translator.translate(text, **kwargs)
+        except Exception:
+            translator = Translator()
+            await sleep(0.1)
+    return result
+    
 
 def reddit_thumb_link(preview, thumb=None):
     for i in preview:
@@ -127,6 +209,35 @@ def reddit_thumb_link(preview, thumb=None):
     if not thumb:
         thumb = preview.pop()
     return thumb.replace("\u0026", "&")
+#--------------------------------------------------------------------------------------------------------------------#
+
+
+#----------------------------------------------## Image ##------------------------------------------------------------#
+
+def ellipse_create(filename,size,border):
+    img = Image.open(filename)
+    img = img.resize((int(1024/size), int(1024/size)));
+    drawsize = (img.size[0] * 3, img.size[1] * 3)
+    mask = Image.new('L', drawsize, 0)
+    draw = ImageDraw.Draw(mask) 
+    draw.ellipse((0,0) + drawsize, fill=255,outline="green",width=int(border))
+    mask = mask.resize(img.size, Image.ANTIALIAS)
+    img.putalpha(mask)
+    return img,mask
+ 
+ 
+def ellipse_layout_create(filename,size,border):
+    x,mask = ellipse_create(filename,size,border)
+    img = ImageOps.expand(mask)
+    return img
+  
+  
+def text_draw(font_name,font_size,img,text,hight):
+    font = ImageFont.truetype(font_name, font_size)
+    draw = ImageDraw.Draw(img)
+    w, h = draw.textsize(text, font=font)
+    h += int(h*0.21)
+    draw.text(((1024-w)/2, int(hight)), text=text, fill='white', font=font)
 
 
 def higlighted_text(
@@ -191,7 +302,7 @@ def higlighted_text(
             # put text on mask
             mask_draw = ImageDraw.Draw(mask_img)
             mask_draw.text((25, 8), list_text[i], foreground, font=font)
-            # remove corner (source- https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi)
+#https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi
             circle = Image.new("L", (rad * 2, rad * 2), 0)
             draw = ImageDraw.Draw(circle)
             draw.ellipse((0, 0, rad * 2, rad * 2), transparency)
@@ -213,82 +324,10 @@ def higlighted_text(
         )
         source_img = Image.alpha_composite(source_img, trans)
     source_img.save(output_img, "png")
-
-
-async def clippy(borg, msg, chat_id, reply_to_id):
-    chat = "@clippy"
-    async with borg.conversation(chat) as conv:
-        try:
-            msg = await conv.send_file(msg)
-            pic = await conv.get_response()
-            await borg.send_read_acknowledge(conv.chat_id)
-        except YouBlockedUserError:
-            await kakashi.edit("Please unblock @clippy and try again")
-            return
-        await borg.send_file(
-            chat_id,
-            pic,
-            reply_to=reply_to_id,
-        )
-    await borg.delete_messages(conv.chat_id, [msg.id, pic.id])
-
-
-# https://www.tutorialspoint.com/How-do-you-split-a-list-into-evenly-sized-chunks-in-Python
-def sublists(input_list: list, width: int = 3):
-    return [input_list[x : x + width] for x in range(0, len(input_list), width)]
-
-
-async def sanga_seperator(sanga_list):
-    for i in sanga_list:
-        if i.startswith("🔗"):
-            sanga_list.remove(i)
-    s = 0
-    for i in sanga_list:
-        if i.startswith("Username History"):
-            break
-        s += 1
-    usernames = sanga_list[s:]
-    names = sanga_list[:s]
-    return names, usernames
-
-
-# unziping file
-async def unzip(downloaded_file_name):
-    with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
-        zip_ref.extractall("./temp")
-    downloaded_file_name = os.path.splitext(downloaded_file_name)[0]
-    return f"{downloaded_file_name}.gif"
-
-
-# covid india data
-
-
-async def covidindia(state):
-    url = "https://www.mohfw.gov.in/data/datanew.json"
-    req = requests.get(url).json()
-    return next((req[states.index(i)] for i in states if i == state), None)
-
-
-async def hide_inlinebot(borg, bot_name, text, chat_id, reply_to_id, c_lick=0):
-    sticcers = await borg.inline_query(bot_name, f"{text}.")
-    cat = await sticcers[c_lick].click("me", hide_via=True)
-    if cat:
-        await borg.send_file(int(chat_id), cat, reply_to=reply_to_id)
-        await cat.delete()
-
-
-# https://github.com/ssut/py-googletrans/issues/234#issuecomment-722379788
-async def getTranslate(text, **kwargs):
-    translator = Translator()
-    result = None
-    for _ in range(10):
-        try:
-            result = translator.translate(text, **kwargs)
-        except Exception:
-            translator = Translator()
-            await sleep(0.1)
-    return result
-
+#----------------------------------------------------------------------------------------------------------------------#
+    
+    
+#----------------------------------------------## Sticker ##-----------------------------------------------------------#
 
 # for stickertxt
 async def waifutxt(text, chat_id, reply_to_id, bot):

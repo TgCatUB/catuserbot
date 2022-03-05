@@ -284,20 +284,3 @@ async def now(event):
     await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)
 
 
-@catub.cat_cmd(
-    pattern="inow$",
-    command=("inow", plugin_category),
-    info={
-        "header": "Show your current listening song in the form of a cool image.",
-        "usage": "{tr}inow",
-        "note": "For working of this command, you need to authorize @SpotiPieBot.",
-    },
-)
-async def nowimg(event):
-    "Show your current listening song."
-    text = " "
-    reply_to_id = await reply_id(event)
-    bot_name = "@Spotipiebot"
-    text = deEmojify(text)
-    await event.delete()
-    await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)

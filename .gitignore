@@ -104,3 +104,5 @@ config.py
 
 # mypy
 .mypy_cache/
+userbot/assistant/botmanagers.py.bak
+*.bak
