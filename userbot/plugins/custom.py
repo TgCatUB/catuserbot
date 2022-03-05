@@ -74,7 +74,7 @@ oldvars = {
         ],
     },
 )
-async def bad(event):    # sourcery no-metrics
+async def bad(event):  # sourcery no-metrics
     "To manage vars in database"
     cmd = event.pattern_match.group(1).lower()
     vname = event.pattern_match.group(2)
@@ -101,9 +101,7 @@ async def bad(event):    # sourcery no-metrics
                     )
 
                 USERINFO = await catub.get_entity(catub.uid)
-                FULL_USERINFO = (
-                    await catub(GetFullUserRequest(catub.uid))
-                ).full_user
+                FULL_USERINFO = (await catub(GetFullUserRequest(catub.uid))).full_user
                 addgvar("FIRST_NAME", USERINFO.first_name)
                 addgvar("DEFAULT_NAME", USERINFO.first_name)
                 if USERINFO.last_name:
@@ -135,7 +133,8 @@ async def bad(event):    # sourcery no-metrics
                     return await edit_delete(event, "Check @cat_alive")
                 if not vinfo:
                     return await edit_delete(
-                        event, f"Give some values which you want to save for **{vname}**"
+                        event,
+                        f"Give some values which you want to save for **{vname}**",
                     )
                 check = vinfo.split(" ")
                 for i in check:
@@ -150,9 +149,10 @@ async def bad(event):    # sourcery no-metrics
                         break
                     elif not "PIC" in vname:
                         break
-                if vname == "DEFAULT_BIO" and len(vinfo) >70:
+                if vname == "DEFAULT_BIO" and len(vinfo) > 70:
                     return await edit_or_reply(
-                        event, f"No of characters in your bio must not exceed 70 so compress it and set again\n`{vinfo}`"
+                        event,
+                        f"No of characters in your bio must not exceed 70 so compress it and set again\n`{vinfo}`",
                     )
                 addgvar(vname, vinfo)
             if BOTLOG_CHATID:

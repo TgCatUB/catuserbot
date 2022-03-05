@@ -7,9 +7,10 @@ from telethon.tl.types import (
     InputPeerUser,
     MessageMediaWebPage,
 )
-from .session import catub
+
 from ..Config import Config
 from .managers import edit_or_reply
+from .session import catub
 
 
 @events.common.name_inner_event
