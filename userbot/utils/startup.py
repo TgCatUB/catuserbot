@@ -4,7 +4,7 @@ import sys
 import urllib.request
 from datetime import timedelta
 from pathlib import Path
-from ..helpers.utils.utils import runcmd
+
 from telethon import Button, functions, types, utils
 
 from userbot import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID
@@ -13,6 +13,7 @@ from ..Config import Config
 from ..core.logger import logging
 from ..core.session import catub
 from ..helpers.utils import install_pip
+from ..helpers.utils.utils import runcmd
 from ..sql_helper.global_collection import (
     del_keyword_collectionlist,
     get_item_collectionlist,
