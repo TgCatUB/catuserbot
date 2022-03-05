@@ -260,7 +260,7 @@ async def install_externalrepo(repo, branch):
         return await catub.tgbot.send_message(BOTLOG_CHATID, errtext)
     await runcmd(gcmd)
     basename = os.path.basename(CATREPO)
-    if not os.path.exits(basename):
+    if not os.path.exists(basename):
         LOGS.error(
             "There was a problem in cloning the external repo. please recheck external repo link"
         )
