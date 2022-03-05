@@ -8,11 +8,11 @@ from .core.logger import logging
 from .core.session import catub
 from .utils import (
     add_bot_to_logger_group,
+    install_externalrepo,
     load_plugins,
     setup_bot,
     startupmessage,
     verifyLoggerGroup,
-    install_externalrepo,
 )
 
 LOGS = logging.getLogger("CatUserbot")
@@ -61,9 +61,11 @@ if len(sys.argv) in {1, 3, 4}:
 else:
     catub.disconnect()
 
+
 async def externalrepo():
-    await install_externalrepo(Config.EXTERNAL_REPO,Config.EXTERNAL_REPOBRANCH)
+    await install_externalrepo(Config.EXTERNAL_REPO, Config.EXTERNAL_REPOBRANCH)
     if Config.BADCAT:
-        await install_externalrepo(Config.BADCAT_REPO,Config.BADCAT_REPOBRANCH)
+        await install_externalrepo(Config.BADCAT_REPO, Config.BADCAT_REPOBRANCH)
+
 
 catub.loop.run_until_complete(externalrepo())

@@ -243,12 +243,10 @@ async def verifyLoggerGroup():
         sys.exit(0)
 
 
-async def install_externalrepo(repo , branch):
+async def install_externalrepo(repo, branch):
     CATREPO = repo
     if CATBRANCH := branch:
-        repourl = os.path.join(
-             CATREPO, f"tree/{CATBRANCH}"
-        )
+        repourl = os.path.join(CATREPO, f"tree/{CATBRANCH}")
         gcmd = f"git clone -b {CATBRANCH} {CATREPO}"
         errtext = f"There is no branch with name `{CATBRANCH}` in your external repo {CATREPO}. Recheck branch name and correct it in vars(`EXTERNAL_REPO_BRANCH`)"
     else:
@@ -262,7 +260,9 @@ async def install_externalrepo(repo , branch):
     await runcmd(gcmd)
     basename = os.path.basename(CATREPO)
     if not os.path.exits(basename):
-        LOGS.error("There was a problem in cloning the external repo. please recheck external repo link")
+        LOGS.error(
+            "There was a problem in cloning the external repo. please recheck external repo link"
+        )
         return await catub.tgbot.send_message(
             BOTLOG_CHATID,
             "There was a problem in cloning the external repo. please recheck external repo link",
