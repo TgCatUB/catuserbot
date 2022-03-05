@@ -112,7 +112,7 @@ class Database:
         self.save()
 
     def save_spam(self, which, what):
-        self.db[f'{which}_spam'] = what
+        self.db[f"{which}_spam"] = what
 
     def return_token(self):
         return self.db["access_token"]
@@ -124,7 +124,7 @@ class Database:
         return self.db["bio"]
 
     def return_spam(self, which):
-        return self.db[f'{which}_spam']
+        return self.db[f"{which}_spam"]
 
     def save(self):
         with open(PATH, "w") as outfile:
@@ -144,7 +144,7 @@ def ms_converter(millis):
         seconds = f"0{str(seconds)}"
     minutes = (millis / (1000 * 60)) % 60
     minutes = int(minutes)
-    return f'{minutes}:{str(seconds)}'
+    return f"{minutes}:{str(seconds)}"
 
 
 @catub.cat_cmd(
