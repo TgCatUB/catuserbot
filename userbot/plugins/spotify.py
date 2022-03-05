@@ -90,7 +90,9 @@ class Database:
                     with open(PATH, "w") as outfile:
                         ujson.dump(to_create, outfile, indent=4)
             else:
-                LOGS.error('Spotify Auth. required see help for ".spsetup" for more info !')
+                LOGS.error(
+                    'Spotify Auth. required see help for ".spsetup" for more info !'
+                )
                 return
         with open(PATH) as f:
             self.db = ujson.load(f)
@@ -483,16 +485,19 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
             # wait another 40 seconds after that
             if not skip:
                 await asyncio.sleep(40)
-                
-                
+
+
 async def sp_var_check(event):
     if not (SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET):
         await event.edit(no_sp_vars)
         return False
     if (SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET) and SP_DATABASE is None:
-        await event.edit("ERROR :: No Database was found!\n**See help for sp_setup for more info.**")
+        await event.edit(
+            "ERROR :: No Database was found!\n**See help for sp_setup for more info.**"
+        )
         return False
     return True
+
 
 @catub.cat_cmd(
     pattern="spbio$",
