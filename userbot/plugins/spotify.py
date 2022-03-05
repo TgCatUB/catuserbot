@@ -28,7 +28,6 @@ from telethon.tl.functions.users import GetFullUserRequest
 
 from userbot.core.logger import logging
 
-from ..Config import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions.functions import (
     ellipse_create,
@@ -36,7 +35,10 @@ from ..helpers.functions.functions import (
     text_draw,
 )
 from ..sql_helper import global_collectionjson as glob_db
-from . import BOTLOG, BOTLOG_CHATID, catub
+from . import catub, BOTLOG, BOTLOG_CHATID, Config
+
+SPOTIFY_CLIENT_ID =  Config.SPOTIFY_CLIENT_ID
+SPOTIFY_CLIENT_SECRET = Config.SPOTIFY_CLIENT_SECRET
 
 LOGS = logging.getLogger(__name__)
 
