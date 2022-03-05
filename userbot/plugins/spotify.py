@@ -91,9 +91,9 @@ class Database:
                     with open(PATH, "w") as outfile:
                         ujson.dump(to_create, outfile, indent=4)
             else:
-#                 LOGS.error(
-#                     'Spotify Auth. required see help for ".spsetup" for more info !'
-#                 )
+                #                 LOGS.error(
+                #                     'Spotify Auth. required see help for ".spsetup" for more info !'
+                #                 )
                 return
         with open(PATH) as f:
             self.db = ujson.load(f)
