@@ -244,7 +244,7 @@ async def verifyLoggerGroup():
         sys.exit(0)
 
 
-async def install_externalrepo(repo, branch,cfolder):
+async def install_externalrepo(repo, branch, cfolder):
     CATREPO = repo
     if CATBRANCH := branch:
         repourl = os.path.join(CATREPO, f"tree/{CATBRANCH}")
