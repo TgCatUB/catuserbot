@@ -151,7 +151,7 @@ async def load_plugins(folder, extfolder=None):
                             )
                             if shortname in failure:
                                 failure.remove(shortname)
-                            success = +1
+                            success += 1
                             break
                         except ModuleNotFoundError as e:
                             install_pip(e.name)
