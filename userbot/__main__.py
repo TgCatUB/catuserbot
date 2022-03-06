@@ -51,7 +51,8 @@ async def startup_process():
 
 
 async def externalrepo():
-    await install_externalrepo(
+    if Config.EXTERNAL_REPO:
+        await install_externalrepo(
         Config.EXTERNAL_REPO, Config.EXTERNAL_REPOBRANCH, "xtraplugins"
     )
     if Config.BADCAT:
