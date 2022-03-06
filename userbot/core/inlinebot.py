@@ -59,7 +59,9 @@ def main_menu():
         buttons = [
             (Button.inline("ℹ️ Info", data="check"),),
             (
-                Button.inline(f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})", data="admin_menu"),
+                Button.inline(
+                    f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})", data="admin_menu"
+                ),
                 Button.inline(f"🤖 Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
             ),
             (
@@ -72,7 +74,9 @@ def main_menu():
             ),
             (
                 Button.inline(f"➕ Extra ({len(GRP_INFO['extra'])})", data="extra_menu"),
-                Button.inline(f"⚰️ Useless ({len(GRP_INFO['useless'])})", data="useless_menu"),
+                Button.inline(
+                    f"⚰️ Useless ({len(GRP_INFO['useless'])})", data="useless_menu"
+                ),
             ),
             (Button.inline("🔒 Close Menu", data="close"),),
         ]
@@ -80,7 +84,9 @@ def main_menu():
         buttons = [
             (Button.inline("ℹ️ Info", data="check"),),
             (
-                Button.inline(f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})", data="admin_menu"),
+                Button.inline(
+                    f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})", data="admin_menu"
+                ),
                 Button.inline(f"🤖 Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
             ),
             (

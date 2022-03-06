@@ -334,16 +334,18 @@ async def variable(event):
         )
     app = Heroku.app(Config.HEROKU_APP_NAME)
     heroku_var = app.config()
-    switch= "BADCAT"
+    switch = "BADCAT"
     cmd = event.pattern_match.group(1).lower()
     if cmd == "good":
         if switch in heroku_var:
-            await edit_or_reply(event, "`Changing badcat to goodcat wait for 2-3 minutes.`")
+            await edit_or_reply(
+                event, "`Changing badcat to goodcat wait for 2-3 minutes.`"
+            )
             del heroku_var[switch]
             return
-        await edit_delete(event, "`You already using GoodCat`",6)
+        await edit_delete(event, "`You already using GoodCat`", 6)
     else:
         if switch in heroku_var:
-            return await edit_or_reply(event, "`You already using BadCat`",6)
+            return await edit_or_reply(event, "`You already using BadCat`", 6)
         await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
         heroku_var[switch] = "True"
