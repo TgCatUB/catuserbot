@@ -34,6 +34,7 @@ from ..helpers.functions.functions import (
     ellipse_create,
     ellipse_layout_create,
     text_draw,
+    make_inline,
 )
 from ..sql_helper import global_collectionjson as glob_db
 from . import BOTLOG, BOTLOG_CHATID, Config, catub
@@ -78,9 +79,6 @@ class Database:
     def __init__(self):
         if not os.path.exists(PATH):
             if SPOTIFY_DB is None:
-                # LOGS.error(
-                #     'Spotify Auth. required see help for ".spsetup" for more info !'
-                # )
                 return
             if db_ := SPOTIFY_DB.get("data"):
                 access_token = db_.get("access_token")
@@ -151,7 +149,7 @@ def ms_converter(millis):
     command=("spsetup", plugin_category),
     info={
         "header": "Setup for Spotify Auth",
-        "description": "[In LOG Channel]\nLogin in your spotify account before doing this, then follow the instructions",
+        "description": "Login in your spotify account before doing this\nIn BOT Logger Group do .spsetup then follow the instruction.",
         "usage": "{tr}spsetup",
     },
 )
@@ -179,7 +177,7 @@ async def spotify_setup(event):
     async with event.client.conversation(BOTLOG_CHATID) as conv:
         msg = await conv.send_message(
             "Go to the following link in "
-            f"your browser: {authurl.format(SPOTIFY_CLIENT_ID)} and reply the code or url"
+            f"your browser: {authurl.format(SPOTIFY_CLIENT_ID)} and reply this msg with the Page Url you got after giving authencation."
         )
         res = conv.wait_event(events.NewMessage(outgoing=True, chats=BOTLOG_CHATID))
         res = await res
@@ -201,7 +199,7 @@ async def spotify_setup(event):
     if not (access_token and refresh_token):
         return await edit_delete(
             msg,
-            "Auth. was Unsuccessful !\ndo sp_setup again and provide a valid URL or Code",
+            "Auth. Unsuccessful !\ndo .spsetup again and provide a valid URL in reply",
             10,
         )
     to_create = {
@@ -213,7 +211,7 @@ async def spotify_setup(event):
     }
     with open(PATH, "w") as outfile:
         ujson.dump(to_create, outfile, indent=4)
-    await edit_delete(msg, "Done! Setup was Successfully", 5)
+    await edit_delete(msg, "Done! Setup Successfull", 5)
     glob_db.add_collection(
         "SP_DATA",
         {"data": {"access_token": access_token, "refresh_token": refresh_token}},
@@ -493,7 +491,7 @@ async def sp_var_check(event):
         return False
     if (SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET) and SP_DATABASE is None:
         await event.edit(
-            "ERROR :: No Database was found!\n**See help for sp_setup for more info.**"
+            "ERROR :: No Database was found!\n**Do `.help spsetup` for more info.**"
         )
         return False
     return True
@@ -602,6 +600,7 @@ async def spotify_now(event):
     "Spotify Now Playing"
     if not await sp_var_check(event):
         return
+    msg_id = await reply_id(event)
     catevent = await edit_or_reply(event, "🎶 `Fetching...`")
     oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
     r = requests.get(
@@ -660,7 +659,8 @@ async def spotify_now(event):
                 dic["duration"],
             )
             await catevent.delete()
-        await catub.send_file(event.chat_id, thumb)
+        button_format = f'**✘ Name:** `{dic["title"]}`\n**✘ Artist:** `{dic["interpret"]} <media:{thumb} [🎧 Spotify]<buttonurl:{dic["link"]}>'
+        await make_inline(button_format,event.client,event.chat_id,msg_id)
         os.remove(thumb)
     except KeyError:
         await edit_delete(
