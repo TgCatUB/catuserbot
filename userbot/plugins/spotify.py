@@ -33,8 +33,8 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions.functions import (
     ellipse_create,
     ellipse_layout_create,
-    text_draw,
     make_inline,
+    text_draw,
 )
 from ..sql_helper import global_collectionjson as glob_db
 from . import BOTLOG, BOTLOG_CHATID, Config, catub
@@ -660,7 +660,7 @@ async def spotify_now(event):
             )
             await catevent.delete()
         button_format = f'**✘ Name:** `{dic["title"]}`\n**✘ Artist:** `{dic["interpret"]} <media:{thumb} [🎧 Spotify]<buttonurl:{dic["link"]}>'
-        await make_inline(button_format,event.client,event.chat_id,msg_id)
+        await make_inline(button_format, event.client, event.chat_id, msg_id)
         os.remove(thumb)
     except KeyError:
         await edit_delete(

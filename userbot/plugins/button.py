@@ -8,8 +8,8 @@ import re
 from telethon import Button
 
 from ..Config import Config
-from . import catub, edit_delete, reply_id
 from ..helpers.functions.functions import make_inline
+from . import catub, edit_delete, reply_id
 
 plugin_category = "tools"
 # regex obtained from:
@@ -108,7 +108,7 @@ async def _(event):
         markdown_note = "".join(event.text.split(maxsplit=1)[1:])
     if not markdown_note:
         return await edit_delete(event, "`What text should i use in button post`")
-    await make_inline(markdown_note,event.client,event.chat_id,reply_to_id)
+    await make_inline(markdown_note, event.client, event.chat_id, reply_to_id)
     await event.delete()
 
 
