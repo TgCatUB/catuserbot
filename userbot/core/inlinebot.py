@@ -30,6 +30,7 @@ from .logger import logging
 LOGS = logging.getLogger(__name__)
 
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
+MEDIA_PATH_REGEX = re.compile(r"(:?\<\bmedia:(:?(?:.*?)+)\>)")
 CATLOGO = "https://telegra.ph/file/493268c1f5ebedc967eba.jpg"
 tr = Config.COMMAND_HAND_LER
 
@@ -294,6 +295,11 @@ async def inline_handler(event):  # sourcery no-metrics
             prev = 0
             note_data = ""
             buttons = []
+            media = None
+            catmedia = MEDIA_PATH_REGEX.search(markdown_note)
+            if catmedia:
+                media = catmedia.group(2)
+                markdown_note = markdown_note.replace(catmedia.group(0),"")
             for match in BTN_URL_REGEX.finditer(markdown_note):
                 n_escapes = 0
                 to_check = match.start(1) - 1
@@ -315,12 +321,26 @@ async def inline_handler(event):  # sourcery no-metrics
                 note_data += markdown_note[prev:]
             message_text = note_data.strip()
             tl_ib_buttons = ibuild_keyboard(buttons)
-            result = builder.article(
-                title="Inline creator",
-                text=message_text,
-                buttons=tl_ib_buttons,
-                link_preview=False,
-            )
+            if media and media.endswith((".jpg", ".png")):
+                result = builder.photo(
+                    media,
+                    text=message_text,
+                    buttons=tl_ib_buttons,
+                )
+            elif media:
+                result = builder.document(
+                    media,
+                    title="Inline creator",
+                    text=message_text,
+                    buttons=tl_ib_buttons,
+                )
+            else:
+                result = builder.article(
+                    title="Inline creator",
+                    text=message_text,
+                    buttons=tl_ib_buttons,
+                    link_preview=False,
+                )
             await event.answer([result] if result else None)
         elif match:
             query = query[7:]
