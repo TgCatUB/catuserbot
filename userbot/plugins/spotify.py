@@ -18,6 +18,7 @@ import asyncio
 import os
 import time
 import urllib.request
+
 import lyricsgenius
 import requests
 import ujson
@@ -529,13 +530,14 @@ async def spotifybio(event):
         await spotify_bio()
 
 
-
-def telegraph_lyrics(tittle,artist):
+def telegraph_lyrics(tittle, artist):
     telegraph = Telegraph()
     telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
     GENIUS = Config.GENIUS_API_TOKEN
     if GENIUS is None:
-        result = "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command"
+        result = (
+            "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command"
+        )
     else:
         genius = lyricsgenius.Genius(GENIUS)
         try:
@@ -547,8 +549,8 @@ def telegraph_lyrics(tittle,artist):
         content = songs.lyrics
         content = content.replace("\n", "<br>")
         result = f"<b>by {artist} </b><br><br>{content}"
-    response = telegraph.create_page(tittle,html_content=result)
-    return response['url']
+    response = telegraph.create_page(tittle, html_content=result)
+    return response["url"]
 
 
 def file_check():
@@ -682,7 +684,7 @@ async def spotify_now(event):
                 dic["progress"],
                 dic["duration"],
             )
-            lyrics = telegraph_lyrics(dic["title"],dic["interpret"])
+            lyrics = telegraph_lyrics(dic["title"], dic["interpret"])
             await catevent.delete()
         button_format = f'**🎶 Track :- ** `{dic["title"]}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}> [📜 Lyrics]<buttonurl:{lyrics}:same>'
         await make_inline(button_format, event.client, event.chat_id, msg_id)
