@@ -18,10 +18,11 @@ import asyncio
 import os
 import time
 import urllib.request
-
+import lyricsgenius
 import requests
 import ujson
 from PIL import Image, ImageEnhance, ImageFilter
+from telegraph import Telegraph
 from telethon import events
 from telethon.errors import AboutTooLongError, FloodWaitError
 from telethon.tl.functions.account import UpdateProfileRequest
@@ -41,6 +42,7 @@ from . import BOTLOG, BOTLOG_CHATID, Config, catub, reply_id
 
 SPOTIFY_CLIENT_ID = Config.SPOTIFY_CLIENT_ID
 SPOTIFY_CLIENT_SECRET = Config.SPOTIFY_CLIENT_SECRET
+
 
 LOGS = logging.getLogger(__name__)
 
@@ -527,6 +529,28 @@ async def spotifybio(event):
         await spotify_bio()
 
 
+
+def telegraph_lyrics(tittle,artist):
+    telegraph = Telegraph()
+    telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
+    GENIUS = Config.GENIUS_API_TOKEN
+    if GENIUS is None:
+        result = "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command"
+    else:
+        genius = lyricsgenius.Genius(GENIUS)
+        try:
+            songs = genius.search_song(tittle, artist)
+        except TypeError:
+            songs = None
+        if songs is None:
+            result = "<b>Lyrics Not found!</b>"
+        content = songs.lyrics
+        content = content.replace("\n", "<br>")
+        result = f"<b>by {artist} </b><br><br>{content}"
+    response = telegraph.create_page(tittle,html_content=result)
+    return response['url']
+
+
 def file_check():
     logo = "temp/cat_music.png"
     font_bold = "temp/GoogleSans-Bold.ttf"
@@ -658,8 +682,9 @@ async def spotify_now(event):
                 dic["progress"],
                 dic["duration"],
             )
+            lyrics = telegraph_lyrics(dic["title"],dic["interpret"])
             await catevent.delete()
-        button_format = f'**✘ Name:- ** `{dic["title"]}`\n**✘ Artist:- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}>'
+        button_format = f'**🎶 Track :- ** `{dic["title"]}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}> [📜 Lyrics]<buttonurl:{lyrics}:same>'
         await make_inline(button_format, event.client, event.chat_id, msg_id)
         os.remove(thumb)
     except KeyError:
