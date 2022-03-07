@@ -542,7 +542,7 @@ def telegraph_lyrics(tittle, artist):
         genius = lyricsgenius.Genius(GENIUS)
         try:
             if "(" in tittle:
-                tittle,t2 = tittle.split("(")
+                tittle, t2 = tittle.split("(")
             songs = genius.search_song(tittle, artist)
         except TypeError:
             songs = None
