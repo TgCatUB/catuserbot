@@ -177,12 +177,10 @@ async def hide_inlinebot(borg, bot_name, text, chat_id, reply_to_id, c_lick=0):
         await borg.send_file(int(chat_id), cat, reply_to=reply_to_id)
         await cat.delete()
 
-
 async def make_inline(text, borg, chat_id, reply_to_id):
     catinput = f"Inline buttons {text}"
     results = await borg.inline_query(Config.TG_BOT_USERNAME, catinput)
-    await results[0].click(event.chat_id, reply_to=reply_to_id)
-
+    await results[0].click(chat_id, reply_to=reply_to_id)
 
 # --------------------------------------------------------------------------------------------------------------------#
 

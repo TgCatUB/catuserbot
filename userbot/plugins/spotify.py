@@ -37,7 +37,7 @@ from ..helpers.functions.functions import (
     text_draw,
 )
 from ..sql_helper import global_collectionjson as glob_db
-from . import BOTLOG, BOTLOG_CHATID, Config, catub
+from . import BOTLOG, BOTLOG_CHATID, Config, catub,reply_id
 
 SPOTIFY_CLIENT_ID = Config.SPOTIFY_CLIENT_ID
 SPOTIFY_CLIENT_SECRET = Config.SPOTIFY_CLIENT_SECRET
@@ -552,7 +552,7 @@ def file_check():
 
 
 async def make_thumb(url, client, song, artist, now, full):
-    pic_name = "cat.png"
+    pic_name = "./temp/cat.png"
     urllib.request.urlretrieve(url, pic_name)
     background = Image.open(pic_name).resize((1024, 1024))
     background = background.filter(ImageFilter.GaussianBlur(5))
@@ -659,7 +659,7 @@ async def spotify_now(event):
                 dic["duration"],
             )
             await catevent.delete()
-        button_format = f'**✘ Name:** `{dic["title"]}`\n**✘ Artist:** `{dic["interpret"]} <media:{thumb} [🎧 Spotify]<buttonurl:{dic["link"]}>'
+        button_format = f'**✘ Name:- ** `{dic["title"]}`\n**✘ Artist:- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}>'
         await make_inline(button_format, event.client, event.chat_id, msg_id)
         os.remove(thumb)
     except KeyError:
