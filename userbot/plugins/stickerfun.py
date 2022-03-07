@@ -499,7 +499,6 @@ async def penguin(event):
             os.remove(files)
 
 
-
 @catub.cat_cmd(
     pattern="(|h)gandhi(?:\s|$)([\s\S]*)",
     command=("gandhi", plugin_category),

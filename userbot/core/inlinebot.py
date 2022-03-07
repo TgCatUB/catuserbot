@@ -299,7 +299,7 @@ async def inline_handler(event):  # sourcery no-metrics
             catmedia = MEDIA_PATH_REGEX.search(markdown_note)
             if catmedia:
                 media = catmedia.group(2)
-                markdown_note = markdown_note.replace(catmedia.group(0),"")
+                markdown_note = markdown_note.replace(catmedia.group(0), "")
             for match in BTN_URL_REGEX.finditer(markdown_note):
                 n_escapes = 0
                 to_check = match.start(1) - 1
