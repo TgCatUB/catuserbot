@@ -16,6 +16,7 @@
 
 import asyncio
 import os
+import re
 import time
 import urllib.request
 
@@ -540,9 +541,10 @@ def telegraph_lyrics(tittle, artist):
         )
     else:
         genius = lyricsgenius.Genius(GENIUS)
+        regx = re.search(r"([^(-]+) [(-].*",tittle)
+        if regx:
+            tittle = regx.group(1)
         try:
-            if "(" in tittle:
-                tittle, t2 = tittle.split("(")
             songs = genius.search_song(tittle, artist)
         except TypeError:
             songs = None
@@ -688,7 +690,7 @@ async def spotify_now(event):
             )
             lyrics = telegraph_lyrics(dic["title"], dic["interpret"])
             await catevent.delete()
-        button_format = f'**🎶 Track :- ** `{dic["title"]}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}> [📜 Lyrics]<buttonurl:{lyrics}:same>'
+        button_format = f'**🎶 Track :- ** `{dic["title"]}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [📜 Lyrics]<buttonurl:{lyrics}>[🎧 Spotify]<buttonurl:{dic["link"]}:same>'
         await make_inline(button_format, event.client, event.chat_id, msg_id)
         os.remove(thumb)
     except KeyError:
