@@ -541,7 +541,7 @@ def telegraph_lyrics(tittle, artist):
         )
     else:
         genius = lyricsgenius.Genius(GENIUS)
-        regx = re.search(r"([^(-]+) [(-].*",tittle)
+        regx = re.search(r"([^(-]+) [(-].*", tittle)
         if regx:
             tittle = regx.group(1)
         try:
