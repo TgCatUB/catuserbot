@@ -1,12 +1,11 @@
-
 import asyncio
-import os
 import glob
+import os
+
 from userbot import catub
 
-from ..helpers.utils import _catutils
-from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import _catutils
 
 plugin_category = "tools"
 
@@ -19,13 +18,13 @@ var_checker = [
     "PRIVATE_CHANNEL_BOT_API_ID",
     "PRIVATE_GROUP_BOT_API_ID",
 ]
-exts =["jpg","png","webp","webm","m4a","mp4","mp3","tgs"]  
+exts = ["jpg", "png", "webp", "webm", "m4a", "mp4", "mp3", "tgs"]
 
 cmds = [
     "rm -rf downloads",
     "mkdir downloads",
 ]
-#========================================================================
+# ========================================================================
 
 
 @catub.cat_cmd(
@@ -53,22 +52,24 @@ async def variable(event):  # sourcery no-metrics
     Manage most of ConfigVars setting, set new var, get current var, or delete var...
     """
     if not os.path.exists(config):
-        return await edit_delete(event,"`There no Config file , You can't use this plugin.`")
+        return await edit_delete(
+            event, "`There no Config file , You can't use this plugin.`"
+        )
     cmd = event.pattern_match.group(1)
-    string= ""
+    string = ""
     match = None
     with open(config, "r") as f:
-      configs = f.readlines()
+        configs = f.readlines()
     if cmd == "get":
         cat = await edit_or_reply(event, "`Getting information...`")
         await asyncio.sleep(1)
         variable = event.pattern_match.group(2).split()[0]
         for i in configs:
             if variable in i:
-                return await cat.edit(
-                    "**ConfigVars**:" f"\n\n`{i}`"
-                )
-        await cat.edit("**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__")
+                return await cat.edit("**ConfigVars**:" f"\n\n`{i}`")
+        await cat.edit(
+            "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__"
+        )
     elif cmd == "set":
         variable = "".join(event.text.split(maxsplit=2)[2:])
         cat = await edit_or_reply(event, "`Setting information...`")
@@ -81,17 +82,19 @@ async def variable(event):  # sourcery no-metrics
         if not value:
             return await cat.edit("`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1)
-        for i in configs :
+        for i in configs:
             if variable in i:
-                string+=f'    {variable} = {value}\n'
+                string += f"    {variable} = {value}\n"
                 match = True
             else:
-                string+=f"{i}"
+                string += f"{i}"
         if match:
             await cat.edit(f"`{variable}` **successfully changed to  ->  **`{value}`")
         else:
-            string+=f'    {variable} = {value}\n'
-            await cat.edit(f"`{variable}`**  successfully added with value`  ->  **{value}`")
+            string += f"    {variable} = {value}\n"
+            await cat.edit(
+                f"`{variable}`**  successfully added with value`  ->  **{value}`"
+            )
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
@@ -104,18 +107,19 @@ async def variable(event):  # sourcery no-metrics
             if variable in i:
                 match = True
             else:
-                string+=f"{i}"
+                string += f"{i}"
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
         if match:
             await cat.edit(f"`{variable}` **successfully deleted.**")
         else:
-            await cat.edit("**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__")
+            await cat.edit(
+                "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__"
+            )
         await event.client.reload(cat)
-        
-        
-        
+
+
 @catub.cat_cmd(
     pattern="(re|clean)load$",
     command=("reload", plugin_category),
@@ -137,13 +141,12 @@ async def _(event):
     cat = await edit_or_reply(event, "`Wait 2-3 min, reloading...`")
     if cmd == "clean":
         for file in exts:
-            removing = glob.glob(f'./*.{file}')
+            removing = glob.glob(f"./*.{file}")
             for i in removing:
                 os.remove(i)
         for i in cmds:
             await _catutils.runcmd(i)
     await event.client.reload(cat)
-
 
 
 @catub.cat_cmd(
@@ -160,21 +163,25 @@ async def _(event):
 async def variable(event):
     "To update to badcat( for extra masala and gali)."
     if not os.path.exists(config):
-        return await edit_delete(event,"`There no Config file , You can't use this plugin.`")
-    string= ""
+        return await edit_delete(
+            event, "`There no Config file , You can't use this plugin.`"
+        )
+    string = ""
     match = None
     switch = "BADCAT"
     cmd = event.pattern_match.group(1).lower()
     with open(config, "r") as f:
         configs = f.readlines()
-    for i in configs :
+    for i in configs:
         if switch in i:
             match = True
         else:
-            string+=f"{i}"
+            string += f"{i}"
     if cmd == "good":
         if match:
-            cat = await edit_or_reply(event,f"`Changing badcat to goodcat wait for 2-3 minutes.`")
+            cat = await edit_or_reply(
+                event, f"`Changing badcat to goodcat wait for 2-3 minutes.`"
+            )
             with open(config, "w") as f1:
                 f1.write(string)
                 f1.close()
@@ -184,8 +191,10 @@ async def variable(event):
     elif cmd == "bad":
         if match:
             return await edit_or_reply(event, "`You already using BadCat`")
-        string+=f'    {switch} = "True"\n' 
-        cat = await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
+        string += f'    {switch} = "True"\n'
+        cat = await edit_or_reply(
+            event, "`Changing goodcat to badcat wait for 2-3 minutes.`"
+        )
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
