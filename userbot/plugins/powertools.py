@@ -114,10 +114,10 @@ async def set_pmlog(event):
     input_str = event.pattern_match.group(1)
     if input_str == "off":
         if gvarstatus("restartupdate") is None:
-            return await edit_delete(event, "__Notify was already disabled__")
+            return await edit_delete(event, "__Notify already disabled__")
         delgvar("restartupdate")
-        return await edit_or_reply(event, "__Notify was disabled successfully.__")
+        return await edit_or_reply(event, "__Notify is disable successfully.__")
     if gvarstatus("restartupdate") is None:
         addgvar("restartupdate", "turn-oned")
-        return await edit_or_reply(event, "__Notify was enabled successfully.__")
-    await edit_delete(event, "__Notify was already enabled.__")
+        return await edit_or_reply(event, "__Notify is enable successfully.__")
+    await edit_delete(event, "__Notify already enabled.__")
