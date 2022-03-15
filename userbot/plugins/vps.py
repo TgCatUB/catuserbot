@@ -151,7 +151,7 @@ async def _(event):
 
 @catub.cat_cmd(
     pattern="(good|bad)cat$",
-    command=("cat", plugin_category),
+    command=("switch", plugin_category),
     info={
         "header": "To switch between goodcat & badcat(For extra nsfw and gali).",
         "usage": [
