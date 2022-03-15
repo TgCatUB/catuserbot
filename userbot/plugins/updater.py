@@ -315,27 +315,37 @@ async def upstream(event):
 
 
 @catub.cat_cmd(
-    pattern="badcat$",
-    command=("badcat", plugin_category),
+    pattern="(good|bad)cat$",
+    command=("switch", plugin_category),
     info={
-        "header": "To update to badcat( for extra masala and gali).",
-        "usage": "{tr}badcat",
+        "header": "To switch between goodcat & badcat(For extra nsfw and gali).",
+        "usage": [
+            "{tr}goodcat",
+            "{tr}badcat",
+        ],
     },
 )
-async def variable(var):
+async def variable(event):
     "To update to badcat( for extra masala and gali)."
-    if Config.HEROKU_API_KEY is None:
+    if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):
         return await edit_delete(
-            var,
-            "Set the required var in heroku to function this normally `HEROKU_API_KEY`.",
+            event,
+            "Set the required vars in heroku to function this normally `HEROKU_API_KEY` and `HEROKU_APP_NAME`.",
         )
-    if Config.HEROKU_APP_NAME is not None:
-        app = Heroku.app(Config.HEROKU_APP_NAME)
-    else:
-        return await edit_delete(
-            var,
-            "Set the required var in heroku to function this normally `HEROKU_APP_NAME`.",
-        )
+    app = Heroku.app(Config.HEROKU_APP_NAME)
     heroku_var = app.config()
-    await edit_or_reply(var, "`Changing goodcat to badcat wait for 2-3 minutes.`")
-    heroku_var["UPSTREAM_REPO"] = "https://github.com/Jisan09/catuserbot"
+    switch = "BADCAT"
+    cmd = event.pattern_match.group(1).lower()
+    if cmd == "good":
+        if switch in heroku_var:
+            await edit_or_reply(
+                event, "`Changing badcat to goodcat wait for 2-3 minutes.`"
+            )
+            del heroku_var[switch]
+            return
+        await edit_delete(event, "`You already using GoodCat`", 6)
+    else:
+        if switch in heroku_var:
+            return await edit_or_reply(event, "`You already using BadCat`", 6)
+        await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
+        heroku_var[switch] = "True"

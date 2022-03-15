@@ -16,12 +16,15 @@
 
 import asyncio
 import os
+import re
 import time
 import urllib.request
 
+import lyricsgenius
 import requests
 import ujson
 from PIL import Image, ImageEnhance, ImageFilter
+from telegraph import Telegraph
 from telethon import events
 from telethon.errors import AboutTooLongError, FloodWaitError
 from telethon.tl.functions.account import UpdateProfileRequest
@@ -33,13 +36,15 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions.functions import (
     ellipse_create,
     ellipse_layout_create,
+    make_inline,
     text_draw,
 )
 from ..sql_helper import global_collectionjson as glob_db
-from . import BOTLOG, BOTLOG_CHATID, Config, catub
+from . import BOTLOG, BOTLOG_CHATID, Config, catub, reply_id
 
 SPOTIFY_CLIENT_ID = Config.SPOTIFY_CLIENT_ID
 SPOTIFY_CLIENT_SECRET = Config.SPOTIFY_CLIENT_SECRET
+
 
 LOGS = logging.getLogger(__name__)
 
@@ -78,9 +83,6 @@ class Database:
     def __init__(self):
         if not os.path.exists(PATH):
             if SPOTIFY_DB is None:
-                # LOGS.error(
-                #     'Spotify Auth. required see help for ".spsetup" for more info !'
-                # )
                 return
             if db_ := SPOTIFY_DB.get("data"):
                 access_token = db_.get("access_token")
@@ -151,7 +153,7 @@ def ms_converter(millis):
     command=("spsetup", plugin_category),
     info={
         "header": "Setup for Spotify Auth",
-        "description": "[In LOG Channel]\nLogin in your spotify account before doing this, then follow the instructions",
+        "description": "Login in your spotify account before doing this\nIn BOT Logger Group do .spsetup then follow the instruction.",
         "usage": "{tr}spsetup",
     },
 )
@@ -179,7 +181,7 @@ async def spotify_setup(event):
     async with event.client.conversation(BOTLOG_CHATID) as conv:
         msg = await conv.send_message(
             "Go to the following link in "
-            f"your browser: {authurl.format(SPOTIFY_CLIENT_ID)} and reply the code or url"
+            f"your browser: {authurl.format(SPOTIFY_CLIENT_ID)} and reply this msg with the Page Url you got after giving authencation."
         )
         res = conv.wait_event(events.NewMessage(outgoing=True, chats=BOTLOG_CHATID))
         res = await res
@@ -201,7 +203,7 @@ async def spotify_setup(event):
     if not (access_token and refresh_token):
         return await edit_delete(
             msg,
-            "Auth. was Unsuccessful !\ndo sp_setup again and provide a valid URL or Code",
+            "Auth. Unsuccessful !\ndo .spsetup again and provide a valid URL in reply",
             10,
         )
     to_create = {
@@ -213,7 +215,7 @@ async def spotify_setup(event):
     }
     with open(PATH, "w") as outfile:
         ujson.dump(to_create, outfile, indent=4)
-    await edit_delete(msg, "Done! Setup was Successfully", 5)
+    await edit_delete(msg, "Done! Setup Successfull", 5)
     glob_db.add_collection(
         "SP_DATA",
         {"data": {"access_token": access_token, "refresh_token": refresh_token}},
@@ -493,7 +495,7 @@ async def sp_var_check(event):
         return False
     if (SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET) and SP_DATABASE is None:
         await event.edit(
-            "ERROR :: No Database was found!\n**See help for sp_setup for more info.**"
+            "ERROR :: No Database was found!\n**Do `.help spsetup` for more info.**"
         )
         return False
     return True
@@ -529,6 +531,32 @@ async def spotifybio(event):
         await spotify_bio()
 
 
+def telegraph_lyrics(tittle, artist):
+    telegraph = Telegraph()
+    telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
+    GENIUS = Config.GENIUS_API_TOKEN
+    if GENIUS is None:
+        result = (
+            "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command"
+        )
+    else:
+        genius = lyricsgenius.Genius(GENIUS)
+        regx = re.search(r"([^(-]+) [(-].*", tittle)
+        if regx:
+            tittle = regx.group(1)
+        try:
+            songs = genius.search_song(tittle, artist)
+        except TypeError:
+            songs = None
+        if songs is None:
+            result = "<b>Lyrics Not found!</b>"
+        content = songs.lyrics
+        content = content.replace("\n", "<br>")
+        result = f"<b>by {artist} </b><br><br>{content}"
+    response = telegraph.create_page(tittle, html_content=result)
+    return response["url"]
+
+
 def file_check():
     logo = "temp/cat_music.png"
     font_bold = "temp/GoogleSans-Bold.ttf"
@@ -554,7 +582,7 @@ def file_check():
 
 
 async def make_thumb(url, client, song, artist, now, full):
-    pic_name = "cat.png"
+    pic_name = "./temp/cat.png"
     urllib.request.urlretrieve(url, pic_name)
     background = Image.open(pic_name).resize((1024, 1024))
     background = background.filter(ImageFilter.GaussianBlur(5))
@@ -602,6 +630,7 @@ async def spotify_now(event):
     "Spotify Now Playing"
     if not await sp_var_check(event):
         return
+    msg_id = await reply_id(event)
     catevent = await edit_or_reply(event, "🎶 `Fetching...`")
     oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
     r = requests.get(
@@ -659,8 +688,10 @@ async def spotify_now(event):
                 dic["progress"],
                 dic["duration"],
             )
+            lyrics = telegraph_lyrics(dic["title"], dic["interpret"])
             await catevent.delete()
-        await catub.send_file(event.chat_id, thumb)
+        button_format = f'**🎶 Track :- ** `{dic["title"]}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [📜 Lyrics]<buttonurl:{lyrics}>[🎧 Spotify]<buttonurl:{dic["link"]}:same>'
+        await make_inline(button_format, event.client, event.chat_id, msg_id)
         os.remove(thumb)
     except KeyError:
         await edit_delete(
