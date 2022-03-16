@@ -541,9 +541,6 @@ def telegraph_lyrics(tittle, artist):
         )
     else:
         genius = lyricsgenius.Genius(GENIUS)
-        regx = re.search(r"([^(-]+) [(-].*", tittle)
-        if regx:
-            tittle = regx.group(1)
         try:
             songs = genius.search_song(tittle, artist)
         except TypeError:
@@ -552,8 +549,8 @@ def telegraph_lyrics(tittle, artist):
             result = "<b>Lyrics Not found!</b>"
         content = songs.lyrics
         content = content.replace("\n", "<br>")
-        result = f"<b>by {artist} </b><br><br>{content}"
-    response = telegraph.create_page(tittle, html_content=result)
+        result = f"<h3>{tittle}</h3><br><b>by {artist}</b><br><br>{content}"
+    response = telegraph.create_page("Lyrics", html_content=result, author_name="CatUserbot",author_url="https://t.me/catuserbot17")
     return response["url"]
 
 
@@ -608,6 +605,8 @@ async def make_thumb(url, client, song, artist, now, full):
     thumbmask.paste(user_lay, (700, 450), user_lay)
     user, x = ellipse_create(myphoto, 7.5, 0)
     thumbmask.paste(user, (717, 467), user)
+    if len(song) > 18:
+        song = f"{song[:18]}..."
     text_draw(mfont, 30, thumbmask, "NOW PLAYING", 745)
     text_draw(bfont, 80, thumbmask, song, 772)
     text_draw(mfont, 45, thumbmask, f"by {artist}", 865)
@@ -678,8 +677,9 @@ async def spotify_now(event):
             dic["link"] = received["item"]["external_urls"]["spotify"]
             dic["image"] = received["item"]["album"]["images"][1]["url"]
             tittle = dic["title"]
-            if len(tittle) > 18:
-                tittle = f"{tittle[:18]}..."
+            regx = re.search(r"([^(-]+) [(-].*", tittle)
+            if regx:
+                tittle = regx.group(1)
             thumb = await make_thumb(
                 dic["image"],
                 catub,
@@ -688,9 +688,9 @@ async def spotify_now(event):
                 dic["progress"],
                 dic["duration"],
             )
-            lyrics = telegraph_lyrics(dic["title"], dic["interpret"])
+            lyrics = telegraph_lyrics(tittle, dic["interpret"])
             await catevent.delete()
-        button_format = f'**🎶 Track :- ** `{dic["title"]}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [📜 Lyrics]<buttonurl:{lyrics}>[🎧 Spotify]<buttonurl:{dic["link"]}:same>'
+        button_format = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}>[📜 Lyrics]<buttonurl:{lyrics}:same>'
         await make_inline(button_format, event.client, event.chat_id, msg_id)
         os.remove(thumb)
     except KeyError:
