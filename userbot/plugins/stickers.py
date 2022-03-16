@@ -172,7 +172,7 @@ async def newpacksticker(
     rsp = await conv.get_response()
     if not verify_cond(EMOJI_SEN, rsp.text):
         await catevent.edit(
-            f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
+            f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.text}"
         )
         if not pkang:
             return None, None, None
@@ -263,7 +263,7 @@ async def add_to_pack(
     rsp = await conv.get_response()
     if not verify_cond(EMOJI_SEN, rsp.text):
         await catevent.edit(
-            f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
+            f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.text}"
         )
         if not pkang:
             return None, None
