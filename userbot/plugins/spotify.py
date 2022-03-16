@@ -550,7 +550,12 @@ def telegraph_lyrics(tittle, artist):
         content = songs.lyrics
         content = content.replace("\n", "<br>")
         result = f"<h3>{tittle}</h3><br><b>by {artist}</b><br><br>{content}"
-    response = telegraph.create_page("Lyrics", html_content=result, author_name="CatUserbot",author_url="https://t.me/catuserbot17")
+    response = telegraph.create_page(
+        "Lyrics",
+        html_content=result,
+        author_name="CatUserbot",
+        author_url="https://t.me/catuserbot17",
+    )
     return response["url"]
 
 
