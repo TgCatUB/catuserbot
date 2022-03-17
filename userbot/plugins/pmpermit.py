@@ -780,7 +780,7 @@ async def tapprove_pm(event):  # sourcery no-metrics
         PM_WARNS = sql.get_collection("pmwarns").json
     except AttributeError:
         PM_WARNS = {}
-    if user.id not in PMPERMIT_.TEMPAPPROVED:
+    if (user.id not in PMPERMIT_.TEMPAPPROVED) and (not pmpermit_sql.is_approved(user.id)):
         if str(user.id) in PM_WARNS:
             del PM_WARNS[str(user.id)]
         PMPERMIT_.TEMPAPPROVED.append(user.id)
@@ -815,6 +815,11 @@ async def tapprove_pm(event):  # sourcery no-metrics
         sql.del_collection("pmmessagecache")
         sql.add_collection("pmwarns", PM_WARNS, {})
         sql.add_collection("pmmessagecache", PMMESSAGE_CACHE, {})
+    elif pmpermit_sql.is_approved(user.id):
+        await edit_delete(
+            event,
+            f"[{user.first_name}](tg://user?id={user.id}) __is in approved list__",
+        )
     else:
         await edit_delete(
             event,
