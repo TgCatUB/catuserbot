@@ -20,7 +20,12 @@ async def reply_id(event):
 
 
 async def get_user_from_event(
-    event, catevent=None, secondgroup=None,thirdgroup=None, nogroup=False, noedits=False
+    event,
+    catevent=None,
+    secondgroup=None,
+    thirdgroup=None,
+    nogroup=False,
+    noedits=False,
 ):  # sourcery no-metrics
     if catevent is None:
         catevent = event

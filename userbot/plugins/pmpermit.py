@@ -22,11 +22,14 @@ plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
 cmdhd = Config.COMMAND_HAND_LER
 
+
 class PMPERMIT:
     def __init__(self):
         self.TEMPAPPROVED = ()
 
+
 PMPERMIT_ = PMPERMIT()
+
 
 async def do_pm_permit_action(event, chat):  # sourcery no-metrics
     reply_to_id = await reply_id(event)
@@ -410,7 +413,7 @@ async def on_new_private_message(event):
     if pmpermit_sql.is_approved(chat.id):
         return
     if chat.id in PMPERMIT_.TEMPAPPROVED:
-        return 
+        return
     if str(chat.id) in sqllist.get_collection_list("pmspam"):
         return await do_pm_spam_action(event, chat)
     if str(chat.id) in sqllist.get_collection_list("pmchat"):
@@ -744,6 +747,7 @@ async def approve_p_m(event):  # sourcery no-metrics
             f"[{user.first_name}](tg://user?id={user.id}) __is already in approved list__",
         )
 
+
 @catub.cat_cmd(
     pattern="t(emp)?(a|approve)(?:\s|$)([\s\S]*)",
     command=("approve", plugin_category),
@@ -755,7 +759,7 @@ async def approve_p_m(event):  # sourcery no-metrics
         ],
     },
 )
-async def approve_p_m(event):    # sourcery no-metrics
+async def approve_p_m(event):  # sourcery no-metrics
     "To approve user to pm"
     if gvarstatus("pmpermit") is None:
         return await edit_delete(
@@ -778,7 +782,7 @@ async def approve_p_m(event):    # sourcery no-metrics
     if user.id not in PMPERMIT_.TEMPAPPROVED:
         if str(user.id) in PM_WARNS:
             del PM_WARNS[str(user.id)]
-        start_date = str(datetime.now().strftime("%B %d, %Y"))
+        str(datetime.now().strftime("%B %d, %Y"))
         PMPERMIT_.TEMPAPPROVED.append(user.id)
         chat = user
         if str(chat.id) in sqllist.get_collection_list("pmspam"):
@@ -862,7 +866,7 @@ async def disapprove_p_m(event):
             event,
             f"[{user.first_name}](tg://user?id={user.id}) __is disapproved to personal message me.__\n**Reason:**__ {reason}__",
         )
-    elif user.id in  PMPERMIT_.TEMPAPPROVED:
+    elif user.id in PMPERMIT_.TEMPAPPROVED:
         PMPERMIT_.TEMPAPPROVED.remove(user.id)
         await edit_or_reply(
             event,
