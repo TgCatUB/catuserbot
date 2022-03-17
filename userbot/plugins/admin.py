@@ -657,7 +657,7 @@ async def _iundlt(event):  # sourcery no-metrics
     deleted_msg = f"**Recent {lim} Deleted message(s) in this group are :**"
     if not flag:
         for msg in adminlog:
-            ruser = await event.client.get_entity(msg.old.from_id.user_id)
+            ruser = await event.client.get_entity(msg.old.from_id)
             _media_type = media_type(msg.old)
             if _media_type is None:
                 deleted_msg += f"\n☞ __{msg.old.message}__ **Sent by** {_format.mentionuser(ruser.first_name ,ruser.id)}"
@@ -667,7 +667,7 @@ async def _iundlt(event):  # sourcery no-metrics
     else:
         main_msg = await edit_or_reply(catevent, deleted_msg)
         for msg in adminlog:
-            ruser = await event.client.get_entity(msg.old.from_id.user_id)
+            ruser = await event.client.get_entity(msg.old.from_id)
             _media_type = media_type(msg.old)
             if _media_type is None:
                 await main_msg.reply(
