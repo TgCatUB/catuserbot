@@ -780,7 +780,9 @@ async def tapprove_pm(event):  # sourcery no-metrics
         PM_WARNS = sql.get_collection("pmwarns").json
     except AttributeError:
         PM_WARNS = {}
-    if (user.id not in PMPERMIT_.TEMPAPPROVED) and (not pmpermit_sql.is_approved(user.id)):
+    if (user.id not in PMPERMIT_.TEMPAPPROVED) and (
+        not pmpermit_sql.is_approved(user.id)
+    ):
         if str(user.id) in PM_WARNS:
             del PM_WARNS[str(user.id)]
         PMPERMIT_.TEMPAPPROVED.append(user.id)
