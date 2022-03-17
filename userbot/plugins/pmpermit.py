@@ -25,7 +25,7 @@ cmdhd = Config.COMMAND_HAND_LER
 
 class PMPERMIT:
     def __init__(self):
-        self.TEMPAPPROVED = ()
+        self.TEMPAPPROVED = []
 
 
 PMPERMIT_ = PMPERMIT()
