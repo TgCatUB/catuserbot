@@ -22,6 +22,11 @@ plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
 cmdhd = Config.COMMAND_HAND_LER
 
+class PMPERMIT:
+    def __init__(self):
+        self.TEMPAPPROVED = ()
+
+PMPERMIT_ = PMPERMIT()
 
 async def do_pm_permit_action(event, chat):  # sourcery no-metrics
     reply_to_id = await reply_id(event)
@@ -139,9 +144,8 @@ Don't spam my inbox. say reason and wait until my response.__"""
             )
             msg = await results[0].click(chat.id, reply_to=reply_to_id, hide_via=True)
         else:
-            PM_PIC = gvarstatus("pmpermit_pic")
-            if PM_PIC:
-                CAT = [x for x in PM_PIC.split()]
+            if PM_PIC := gvarstatus("pmpermit_pic"):
+                CAT = list(PM_PIC.split())
                 PIC = list(CAT)
                 CAT_IMG = random.choice(PIC)
             else:
@@ -405,6 +409,8 @@ async def on_new_private_message(event):
         return
     if pmpermit_sql.is_approved(chat.id):
         return
+    if chat.id in PMPERMIT_.TEMPAPPROVED:
+        return 
     if str(chat.id) in sqllist.get_collection_list("pmspam"):
         return await do_pm_spam_action(event, chat)
     if str(chat.id) in sqllist.get_collection_list("pmchat"):
@@ -442,6 +448,10 @@ async def you_dm_other(event):
             f"{cmdhd}a",
             f"{cmdhd}da",
             f"{cmdhd}approve",
+            f"{cmdhd}tempapprove",
+            f"{cmdhd}tempa",
+            f"{cmdhd}tapprove",
+            f"{cmdhd}ta",
         )
     ):
         return
@@ -734,6 +744,79 @@ async def approve_p_m(event):  # sourcery no-metrics
             f"[{user.first_name}](tg://user?id={user.id}) __is already in approved list__",
         )
 
+@catub.cat_cmd(
+    pattern="t(emp)?(a|approve)(?:\s|$)([\s\S]*)",
+    command=("approve", plugin_category),
+    info={
+        "header": "To approve user to direct message you.",
+        "usage": [
+            "{tr}a/approve <username/reply reason> in group",
+            "{tr}a/approve <reason> in pm",
+        ],
+    },
+)
+async def approve_p_m(event):    # sourcery no-metrics
+    "To approve user to pm"
+    if gvarstatus("pmpermit") is None:
+        return await edit_delete(
+            event,
+            f"__Turn on pmpermit by doing __`{cmdhd}pmguard on` __for working of this plugin__",
+        )
+    if event.is_private:
+        user = await event.get_chat()
+        reason = event.pattern_match.group(3)
+    else:
+        user, reason = await get_user_from_event(event, thirdgroup=True)
+        if not user:
+            return
+    if not reason:
+        reason = "Not mentioned"
+    try:
+        PM_WARNS = sql.get_collection("pmwarns").json
+    except AttributeError:
+        PM_WARNS = {}
+    if user.id not in PMPERMIT_.TEMPAPPROVED:
+        if str(user.id) in PM_WARNS:
+            del PM_WARNS[str(user.id)]
+        start_date = str(datetime.now().strftime("%B %d, %Y"))
+        PMPERMIT_.TEMPAPPROVED.append(user.id)
+        chat = user
+        if str(chat.id) in sqllist.get_collection_list("pmspam"):
+            sqllist.rm_from_list("pmspam", chat.id)
+        if str(chat.id) in sqllist.get_collection_list("pmchat"):
+            sqllist.rm_from_list("pmchat", chat.id)
+        if str(chat.id) in sqllist.get_collection_list("pmrequest"):
+            sqllist.rm_from_list("pmrequest", chat.id)
+        if str(chat.id) in sqllist.get_collection_list("pmenquire"):
+            sqllist.rm_from_list("pmenquire", chat.id)
+        if str(chat.id) in sqllist.get_collection_list("pmoptions"):
+            sqllist.rm_from_list("pmoptions", chat.id)
+        await edit_delete(
+            event,
+            f"[{user.first_name}](tg://user?id={user.id}) is __temporarily approved to pm__\n**Reason :** __{reason}__",
+        )
+        try:
+            PMMESSAGE_CACHE = sql.get_collection("pmmessagecache").json
+        except AttributeError:
+            PMMESSAGE_CACHE = {}
+        if str(user.id) in PMMESSAGE_CACHE:
+            try:
+                await event.client.delete_messages(
+                    user.id, PMMESSAGE_CACHE[str(user.id)]
+                )
+            except Exception as e:
+                LOGS.info(str(e))
+            del PMMESSAGE_CACHE[str(user.id)]
+        sql.del_collection("pmwarns")
+        sql.del_collection("pmmessagecache")
+        sql.add_collection("pmwarns", PM_WARNS, {})
+        sql.add_collection("pmmessagecache", PMMESSAGE_CACHE, {})
+    else:
+        await edit_delete(
+            event,
+            f"[{user.first_name}](tg://user?id={user.id}) __is already in temporary approved list__",
+        )
+
 
 @catub.cat_cmd(
     pattern="(da|disapprove)(?:\s|$)([\s\S]*)",
@@ -775,6 +858,12 @@ async def disapprove_p_m(event):
         reason = "Not Mentioned."
     if pmpermit_sql.is_approved(user.id):
         pmpermit_sql.disapprove(user.id)
+        await edit_or_reply(
+            event,
+            f"[{user.first_name}](tg://user?id={user.id}) __is disapproved to personal message me.__\n**Reason:**__ {reason}__",
+        )
+    elif user.id in  PMPERMIT_.TEMPAPPROVED:
+        PMPERMIT_.TEMPAPPROVED.remove(user.id)
         await edit_or_reply(
             event,
             f"[{user.first_name}](tg://user?id={user.id}) __is disapproved to personal message me.__\n**Reason:**__ {reason}__",
