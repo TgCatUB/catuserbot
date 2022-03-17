@@ -22,9 +22,14 @@ from ..sql_helper.globals import addgvar, gvarstatus
 from .pluginmanager import load_module
 from .tools import create_supergroup
 
+ENV = bool(os.environ.get("ENV", False))
 LOGS = logging.getLogger("CatUBStartUP")
 cmdhr = Config.COMMAND_HAND_LER
 
+if ENV:
+    VPS_NOLOAD = ["vps"]
+elif os.path.exists("config.py"):
+    VPS_NOLOAD = ["heroku","updater"]
 
 async def setup_bot():
     """
@@ -139,14 +144,15 @@ async def load_plugins(folder, extfolder=None):
         with open(name) as f:
             path1 = Path(f.name)
             shortname = path1.stem
+            pluginname = shortname.replace(".py", "")
             try:
-                if shortname.replace(".py", "") not in Config.NO_LOAD:
+                if (pluginname not in Config.NO_LOAD) and (pluginname not in VPS_NOLOAD):
                     flag = True
                     check = 0
                     while flag:
                         try:
                             load_module(
-                                shortname.replace(".py", ""),
+                                pluginname,
                                 plugin_path=plugin_path,
                             )
                             if shortname in failure:
