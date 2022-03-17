@@ -346,6 +346,6 @@ async def variable(event):
         await edit_delete(event, "`You already using GoodCat`", 6)
     else:
         if switch in heroku_var:
-            return await edit_or_reply(event, "`You already using BadCat`", 6)
+            return await edit_delete(event, "`You already using BadCat`", 6)
         await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
         heroku_var[switch] = "True"
