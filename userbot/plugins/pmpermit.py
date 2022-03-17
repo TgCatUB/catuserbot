@@ -753,7 +753,7 @@ async def approve_p_m(event):  # sourcery no-metrics
     command=("tapprove", plugin_category),
     info={
         "header": "To approve user to direct message you for temporarily.",
-        "note" : "Heroku restarts every 24 hours so with every restart it dissapproves every temp approved user",
+        "note": "Heroku restarts every 24 hours so with every restart it dissapproves every temp approved user",
         "usage": [
             "{tr}ta/tapprove <username/reply reason> in group",
             "{tr}ta/tapprove <reason> in pm",
