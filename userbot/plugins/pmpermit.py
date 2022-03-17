@@ -750,17 +750,18 @@ async def approve_p_m(event):  # sourcery no-metrics
 
 @catub.cat_cmd(
     pattern="t(emp)?(a|approve)(?:\s|$)([\s\S]*)",
-    command=("approve", plugin_category),
+    command=("tapprove", plugin_category),
     info={
-        "header": "To approve user to direct message you.",
+        "header": "To approve user to direct message you for temporarily.",
+        "note" : "Heroku restarts every 24 hours so with every restart it dissapproves every temp approved user",
         "usage": [
-            "{tr}a/approve <username/reply reason> in group",
-            "{tr}a/approve <reason> in pm",
+            "{tr}ta/tapprove <username/reply reason> in group",
+            "{tr}ta/tapprove <reason> in pm",
         ],
     },
 )
-async def approve_p_m(event):  # sourcery no-metrics
-    "To approve user to pm"
+async def tapprove_pm(event):  # sourcery no-metrics
+    "Temporarily approve user to pm"
     if gvarstatus("pmpermit") is None:
         return await edit_delete(
             event,
@@ -782,7 +783,6 @@ async def approve_p_m(event):  # sourcery no-metrics
     if user.id not in PMPERMIT_.TEMPAPPROVED:
         if str(user.id) in PM_WARNS:
             del PM_WARNS[str(user.id)]
-        str(datetime.now().strftime("%B %d, %Y"))
         PMPERMIT_.TEMPAPPROVED.append(user.id)
         chat = user
         if str(chat.id) in sqllist.get_collection_list("pmspam"):
