@@ -29,7 +29,8 @@ cmdhr = Config.COMMAND_HAND_LER
 if ENV:
     VPS_NOLOAD = ["vps"]
 elif os.path.exists("config.py"):
-    VPS_NOLOAD = ["heroku","updater"]
+    VPS_NOLOAD = ["heroku", "updater"]
+
 
 async def setup_bot():
     """
@@ -146,7 +147,9 @@ async def load_plugins(folder, extfolder=None):
             shortname = path1.stem
             pluginname = shortname.replace(".py", "")
             try:
-                if (pluginname not in Config.NO_LOAD) and (pluginname not in VPS_NOLOAD):
+                if (pluginname not in Config.NO_LOAD) and (
+                    pluginname not in VPS_NOLOAD
+                ):
                     flag = True
                     check = 0
                     while flag:
