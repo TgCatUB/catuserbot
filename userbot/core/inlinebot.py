@@ -608,7 +608,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
                 Button.url(
                     "Deploy",
-                    "https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack&template=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack",
+                    "https://github.com/TgCatUB/nekopack",
                 ),
             )
         ]

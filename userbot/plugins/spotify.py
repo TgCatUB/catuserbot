@@ -702,3 +702,71 @@ async def spotify_now(event):
         await edit_delete(
             catevent, "\n**Strange!! Try after restaring Spotify once ;)**", 7
         )
+
+
+
+@catub.cat_cmd(
+    pattern="spinfo$",
+    command=("spinfo", plugin_category),
+    info={
+        "header": "To fetch Info of current spotify user",
+        "description": "Shows user info, if any songs playing then show device also. ",
+        "usage": "{tr}spinfo",
+    },
+)
+async def spotify_now(event):
+    "Spotify Info"
+    if not await sp_var_check(event):
+        return
+    oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
+    dic = {}
+    x = requests.get("https://api.spotify.com/v1/me", headers=oauth)
+    y = requests.get("https://api.spotify.com/v1/me/player/devices", headers=oauth)
+    uinfo = x.json()
+    device = y.json()
+    result = "**Strange Error :: do  `.spnow`  once**"
+    if x.status_code == 200:
+        dic["id"] = uinfo["id"]
+        dic["name"] = uinfo["display_name"]
+        try:
+            dic["img"] = uinfo["images"][0]["url"]
+        except IndexError:
+            dic["img"] = None
+        dic["url"] = uinfo["external_urls"]["spotify"]
+        dic["followers"] = uinfo["followers"]["total"]
+        dic["country"] = uinfo["country"]
+        result = f'[\u2063]({dic["img"]})**Name :- [{dic["name"]}]({dic["url"]})\nCountry :-** `{dic["country"]}`\n**Followers :-** `{dic["followers"]}`\n**User Id :-** `{dic["id"]}`\n'
+    if device["devices"]:
+        for i in device["devices"]:
+            if i["is_active"]:
+                result += f'**Device :-** `{i["name"]}` (__{i["type"]}__)\n'
+    await edit_or_reply(event,result,link_preview = True)
+    
+   
+   
+@catub.cat_cmd(
+    pattern="sprecent$",
+    command=("sprecent", plugin_category),
+    info={
+        "header": "To fetch list of recently played songs",
+        "description": "Shows 15 recently played songs form spotify",
+        "usage": "{tr}sprecent",
+    },
+)
+async def spotify_now(event):
+    "Spotify recently played songs"
+    if not await sp_var_check(event):
+        return
+    song = "**Strange Error :: do  `.spnow`  once**"
+    oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
+    if x.status_code == 200:
+        song = "__**Last played songs :-**__\n\n"
+        x = requests.get("https://api.spotify.com/v1/me/player/recently-played?limit=15", headers=oauth)
+        songs = x.json()
+        for i in songs["items"]:
+            tittle = i['track']['name']
+            regx = re.search(r"([^(-]+) [(-].*", tittle)
+            if regx:
+                tittle = regx.group(1)
+            song += f"**◉ [{tittle} - {i['track']['artists'][0]['name']}]({i['track']['external_urls']['spotify']})**\n"
+    await edit_or_reply(event,song)
