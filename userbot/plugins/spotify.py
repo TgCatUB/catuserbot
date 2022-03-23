@@ -757,12 +757,9 @@ async def spotify_now(event):
         return
     song = "**Strange Error :: do  `.spnow`  once**"
     oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
+    x = requests.get("https://api.spotify.com/v1/me/player/recently-played?limit=15", headers=oauth)
     if x.status_code == 200:
         song = "__**Last played songs :-**__\n\n"
-        x = requests.get(
-            "https://api.spotify.com/v1/me/player/recently-played?limit=15",
-            headers=oauth,
-        )
         songs = x.json()
         for i in songs["items"]:
             tittle = i["track"]["name"]
