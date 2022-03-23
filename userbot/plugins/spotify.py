@@ -704,7 +704,6 @@ async def spotify_now(event):
         )
 
 
-
 @catub.cat_cmd(
     pattern="spinfo$",
     command=("spinfo", plugin_category),
@@ -740,10 +739,9 @@ async def spotify_now(event):
         for i in device["devices"]:
             if i["is_active"]:
                 result += f'**Device :-** `{i["name"]}` (__{i["type"]}__)\n'
-    await edit_or_reply(event,result,link_preview = True)
-    
-   
-   
+    await edit_or_reply(event, result, link_preview=True)
+
+
 @catub.cat_cmd(
     pattern="sprecent$",
     command=("sprecent", plugin_category),
@@ -761,12 +759,15 @@ async def spotify_now(event):
     oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
     if x.status_code == 200:
         song = "__**Last played songs :-**__\n\n"
-        x = requests.get("https://api.spotify.com/v1/me/player/recently-played?limit=15", headers=oauth)
+        x = requests.get(
+            "https://api.spotify.com/v1/me/player/recently-played?limit=15",
+            headers=oauth,
+        )
         songs = x.json()
         for i in songs["items"]:
-            tittle = i['track']['name']
+            tittle = i["track"]["name"]
             regx = re.search(r"([^(-]+) [(-].*", tittle)
             if regx:
                 tittle = regx.group(1)
             song += f"**◉ [{tittle} - {i['track']['artists'][0]['name']}]({i['track']['external_urls']['spotify']})**\n"
-    await edit_or_reply(event,song)
+    await edit_or_reply(event, song)

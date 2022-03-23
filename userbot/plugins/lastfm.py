@@ -171,7 +171,7 @@ async def get_curr_track(lfmbio):  # sourcery no-metrics
 )
 async def last_fm(lastFM):
     ".lastfm command, fetch scrobble data from last.fm."
-    await edit_or_reply(lastFM,"Processing...")
+    await edit_or_reply(lastFM, "Processing...")
     preview = None
     playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
     username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
@@ -202,9 +202,9 @@ async def last_fm(lastFM):
             if tags:
                 output += f"`{tags}`\n\n"
     if preview is not None:
-        await edit_or_reply(lastFM,f"{output}", parse_mode="md", link_preview=True)
+        await edit_or_reply(lastFM, f"{output}", parse_mode="md", link_preview=True)
     else:
-        await edit_or_reply(lastFM,f"{output}", parse_mode="md")
+        await edit_or_reply(lastFM, f"{output}", parse_mode="md")
 
 
 @catub.cat_cmd(
@@ -226,18 +226,18 @@ async def lastbio(lfmbio):
         if not LASTFM_.LASTFMCHECK:
             LASTFM_.LASTFMCHECK = True
             environ["errorcheck"] = "0"
-            await edit_or_reply(lfmbio,LFM_BIO_ENABLED)
+            await edit_or_reply(lfmbio, LFM_BIO_ENABLED)
             await sleep(4)
             await get_curr_track(lfmbio)
         else:
-            await edit_or_reply(lfmbio,LFM_BIO_RUNNING)
+            await edit_or_reply(lfmbio, LFM_BIO_RUNNING)
     elif arg == "off":
         LASTFM_.LASTFMCHECK = False
         LASTFM_.RUNNING = False
         await lfmbio.client(UpdateProfileRequest(about=DEFAULT_BIO))
-        await edit_or_reply(lfmbio,LFM_BIO_DISABLED)
+        await edit_or_reply(lfmbio, LFM_BIO_DISABLED)
     else:
-        await edit_or_reply(lfmbio,LFM_BIO_ERR)
+        await edit_or_reply(lfmbio, LFM_BIO_ERR)
 
 
 @catub.cat_cmd(
@@ -257,12 +257,12 @@ async def lastlog(lstlog):
     LASTFM_.LastLog = False
     if arg == "on":
         LASTFM_.LastLog = True
-        await edit_or_reply(lstlog,LFM_LOG_ENABLED)
+        await edit_or_reply(lstlog, LFM_LOG_ENABLED)
     elif arg == "off":
         LASTFM_.LastLog = False
-        await edit_or_reply(lstlog,LFM_LOG_DISABLED)
+        await edit_or_reply(lstlog, LFM_LOG_DISABLED)
     else:
-        await edit_or_reply(lstlog,LFM_LOG_ERR)
+        await edit_or_reply(lstlog, LFM_LOG_ERR)
 
 
 @catub.cat_cmd(
