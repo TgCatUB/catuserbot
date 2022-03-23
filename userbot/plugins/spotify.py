@@ -735,7 +735,7 @@ async def spotify_now(event):
         dic["followers"] = uinfo["followers"]["total"]
         dic["country"] = uinfo["country"]
         result = f'[\u2063]({dic["img"]})**Name :- [{dic["name"]}]({dic["url"]})\nCountry :-** `{dic["country"]}`\n**Followers :-** `{dic["followers"]}`\n**User Id :-** `{dic["id"]}`\n'
-    if device["devices"]:
+    if y.status_code == 200 and device["devices"]:
         for i in device["devices"]:
             if i["is_active"]:
                 result += f'**Device :-** `{i["name"]}` (__{i["type"]}__)\n'
