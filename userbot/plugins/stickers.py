@@ -261,7 +261,7 @@ async def add_to_pack(
                 pkang=pkang,
             )
     if is_video:
-        # await conv.send_file("animate.webm")
+        await conv.send_file("animate.webm")
         os.remove("animate.webm")
     elif is_anim:
         await conv.send_file("AnimatedSticker.tgs")
