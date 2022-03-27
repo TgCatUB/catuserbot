@@ -220,11 +220,20 @@ async def add_to_pack(
         if not pkang:
             return None, None
         return None, None
+    vtry = True if is_video else None
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packname)
     x = await conv.get_response()
-    while ("50" in x.text) or ("120" in x.text):
+    while ("50" in x.message) or ("120" in x.message) or vtry:
+        if vtry:
+            await conv.send_file("animate.webm")
+            x = await conv.get_response()
+            if "50 video stickers" in x.message:
+                await conv.send_message("/addsticker") 
+            else:
+                vtry = None
+                break
         try:
             val = int(pack)
             pack = val + 1
@@ -235,7 +244,7 @@ async def add_to_pack(
         await catevent.edit(f"`Switching to Pack {pack} due to insufficient space`")
         await conv.send_message(packname)
         x = await conv.get_response()
-        if x.text == "Invalid pack selected.":
+        if x.message == 'Invalid set selected.':
             return await newpacksticker(
                 catevent,
                 conv,
@@ -251,8 +260,8 @@ async def add_to_pack(
                 otherpack=True,
                 pkang=pkang,
             )
-    if is_video:
-        await conv.send_file("animate.webm")
+    if is_video: 
+        #await conv.send_file("animate.webm")
         os.remove("animate.webm")
     elif is_anim:
         await conv.send_file("AnimatedSticker.tgs")
@@ -261,9 +270,9 @@ async def add_to_pack(
         stfile.seek(0)
         await conv.send_file(stfile, force_document=True)
     rsp = await conv.get_response()
-    if not verify_cond(EMOJI_SEN, rsp.text):
+    if not verify_cond(EMOJI_SEN, rsp.message):
         await catevent.edit(
-            f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.text}"
+            f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.message}"
         )
         if not pkang:
             return None, None
@@ -675,7 +684,7 @@ async def pack_kang(event):  # sourcery no-metrics
     },
 )
 async def pussycat(args):
-    "To kang a sticker."  # scam :('  Dom't kamg :/@Jisan7509
+    "Convert to animated sticker."  # scam :('  Dom't kamg :/@Jisan7509
     message = await args.get_reply_message()
     user = await args.client.get_me()
     userid = user.id
