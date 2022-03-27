@@ -230,7 +230,7 @@ async def add_to_pack(
             await conv.send_file("animate.webm")
             x = await conv.get_response()
             if "50 video stickers" in x.message:
-                await conv.send_message("/addsticker") 
+                await conv.send_message("/addsticker")
             else:
                 vtry = None
                 break
@@ -244,7 +244,7 @@ async def add_to_pack(
         await catevent.edit(f"`Switching to Pack {pack} due to insufficient space`")
         await conv.send_message(packname)
         x = await conv.get_response()
-        if x.message == 'Invalid set selected.':
+        if x.message == "Invalid set selected.":
             return await newpacksticker(
                 catevent,
                 conv,
@@ -260,8 +260,8 @@ async def add_to_pack(
                 otherpack=True,
                 pkang=pkang,
             )
-    if is_video: 
-        #await conv.send_file("animate.webm")
+    if is_video:
+        # await conv.send_file("animate.webm")
         os.remove("animate.webm")
     elif is_anim:
         await conv.send_file("AnimatedSticker.tgs")
