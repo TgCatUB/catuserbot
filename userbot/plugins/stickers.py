@@ -261,15 +261,16 @@ async def add_to_pack(
                 pkang=pkang,
             )
     if is_video:
-        await conv.send_file("animate.webm")
         os.remove("animate.webm")
+        rsp = x
     elif is_anim:
         await conv.send_file("AnimatedSticker.tgs")
         os.remove("AnimatedSticker.tgs")
+        rsp = await conv.get_response()
     else:
         stfile.seek(0)
         await conv.send_file(stfile, force_document=True)
-    rsp = await conv.get_response()
+        rsp = await conv.get_response()
     if not verify_cond(EMOJI_SEN, rsp.message):
         await catevent.edit(
             f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.message}"
