@@ -229,20 +229,20 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
     audio_dict = {}
     # ------------------------------------------------ #
     for video in vid_data["formats"]:
-
-        fr_note = video.get("format_note")
-        fr_id = int(video.get("format_id"))
-        fr_size = video.get("filesize")
-        if video.get("ext") == "mp4":
-            for frmt_ in qual_list:
-                if fr_note in (frmt_, f"{frmt_}60"):
-                    qual_dict[frmt_][fr_id] = fr_size
-        if video.get("acodec") != "none":
-            bitrrate = int(video.get("abr", 0))
-            if bitrrate != 0:
-                audio_dict[
-                    bitrrate
-                ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
+        if video.get('asr'):
+            fr_note = video.get("format_note")
+            fr_id = int(video.get("format_id"))
+            fr_size = video.get("filesize")
+            if video.get("ext") == "mp4":
+                for frmt_ in qual_list:
+                    if fr_note in (frmt_, f"{frmt_}60"):
+                        qual_dict[frmt_][fr_id] = fr_size
+            if video.get("acodec") != "none":
+                bitrrate = int(video.get("abr", 0))
+                if bitrrate != 0:
+                    audio_dict[
+                        bitrrate
+                    ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
 
     video_btns = []
     for frmt in qual_list:
