@@ -67,7 +67,7 @@ validators
 vcsi
 wand
 wget
-youtube_dl
+yt_dlp
 
 git+https://github.com/sandy1709/Telethon@beta
 git+https://github.com/goldsmith/Wikipedia

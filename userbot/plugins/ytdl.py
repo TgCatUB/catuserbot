@@ -11,8 +11,8 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import types
 from telethon.utils import get_attributes
 from wget import download
-from youtube_dl import YoutubeDL
-from youtube_dl.utils import (
+from yt_dlp import YoutubeDL
+from yt_dlp.utils import (
     ContentTooShortError,
     DownloadError,
     ExtractorError,
