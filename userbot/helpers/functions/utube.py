@@ -100,6 +100,7 @@ async def yt_data(cat):
     return data
 """
 
+
 async def get_ytthumb(videoid: str):
     thumb_quality = [
         "maxresdefault.jpg",  # Best quality
