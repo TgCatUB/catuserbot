@@ -6,8 +6,8 @@ from collections import defaultdict
 import ujson
 import yt_dlp
 from telethon import Button
-from yt_dlp.utils import DownloadError, ExtractorError, GeoRestrictedError
 from youtubesearchpython import VideosSearch
+from yt_dlp.utils import DownloadError, ExtractorError, GeoRestrictedError
 
 from ...Config import Config
 from ...core import pool
@@ -27,7 +27,9 @@ song_dl = "yt-dlp --force-ipv4 --write-thumbnail --add-metadata --embed-thumbnai
 
 thumb_dl = "yt-dlp --force-ipv4 -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
 video_dl = "yt-dlp --force-ipv4 --write-thumbnail  --add-metadata --embed-thumbnail -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
-name_dl = "yt-dlp --force-ipv4 --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
+name_dl = (
+    "yt-dlp --force-ipv4 --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
+)
 
 
 async def yt_search(cat):
