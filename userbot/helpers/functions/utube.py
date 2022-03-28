@@ -229,7 +229,7 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
     audio_dict = {}
     # ------------------------------------------------ #
     for video in vid_data["formats"]:
-        if video.get('asr'):
+        if video.get("filesize"):
             fr_note = video.get("format_note")
             fr_id = int(video.get("format_id"))
             fr_size = video.get("filesize")
