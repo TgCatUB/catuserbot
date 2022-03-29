@@ -27,7 +27,7 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import progress, reply_id
 from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb, ytsearch
 from ..helpers.utils import _format
-from . import catub, hmention
+from . import catub
 
 BASE_YT_URL = "https://www.youtube.com/watch?v="
 LOGS = logging.getLogger(__name__)
@@ -320,4 +320,3 @@ async def yt_search(event):
         return await edit_delete(video_q, str(e), time=10, parse_mode=_format.parse_pre)
     reply_text = f"**•  Search Query:**\n`{query}`\n\n**•  Results:**\n{full_response}"
     await edit_or_reply(video_q, reply_text)
-
