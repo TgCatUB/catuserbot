@@ -4,10 +4,8 @@ import io
 import os
 import pathlib
 import re
-from datetime import datetime
 from time import time
 
-from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import types
 from telethon.utils import get_attributes
 from wget import download
@@ -23,15 +21,13 @@ from yt_dlp.utils import (
     XAttrMetadataError,
 )
 
-from userbot import catub
-
 from ..core import pool
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import progress, reply_id
 from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb, ytsearch
 from ..helpers.utils import _format
-from . import hmention
+from . import catub, hmention
 
 BASE_YT_URL = "https://www.youtube.com/watch?v="
 LOGS = logging.getLogger(__name__)
@@ -146,8 +142,8 @@ async def fix_attributes(
     pattern="yta(?:\s|$)([\s\S]*)",
     command=("yta", plugin_category),
     info={
-        "header": "To download audio from many sites like Youtube",
-        "description": "downloads the audio from the given link (Suports the all sites which support youtube-dl)",
+        "header": "To download audio from many sites like Youtube, Facebook, Instagram, etc.",
+        "description": "downloads the audio from the given link ([Supported Sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md))",
         "examples": ["{tr}yta <reply to link>", "{tr}yta <link>"],
     },
 )
@@ -227,8 +223,8 @@ async def download_audio(event):
     pattern="ytv(?:\s|$)([\s\S]*)",
     command=("ytv", plugin_category),
     info={
-        "header": "To download video from many sites like Youtube",
-        "description": "downloads the video from the given link(Suports the all sites which support youtube-dl)",
+        "header": "To download video from many sites like Youtube, Facebook, Instagram",
+        "description": "downloads the video from the given link ([Supported Sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md))",
         "examples": [
             "{tr}ytv <reply to link>",
             "{tr}ytv <link>",
@@ -325,51 +321,3 @@ async def yt_search(event):
     reply_text = f"**•  Search Query:**\n`{query}`\n\n**•  Results:**\n{full_response}"
     await edit_or_reply(video_q, reply_text)
 
-
-@catub.cat_cmd(
-    pattern="insta ([\s\S]*)",
-    command=("insta", plugin_category),
-    info={
-        "header": "To download instagram video/photo",
-        "description": "Note downloads only public profile photos/videos.",
-        "examples": [
-            "{tr}insta <link>",
-        ],
-    },
-)
-async def kakashi(event):
-    "For downloading instagram media"
-    chat = "@instasavegrambot"
-    link = event.pattern_match.group(1)
-    if "www.instagram.com" not in link:
-        await edit_or_reply(
-            event, "` I need a Instagram link to download it's Video...`(*_*)"
-        )
-    else:
-        start = datetime.now()
-        catevent = await edit_or_reply(event, "**Downloading.....**")
-    async with event.client.conversation(chat) as conv:
-        try:
-            msg_start = await conv.send_message("/start")
-            response = await conv.get_response()
-            msg = await conv.send_message(link)
-            video = await conv.get_response()
-            details = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-        except YouBlockedUserError:
-            await catevent.edit("**Error:** `unblock` @instasavegrambot `and retry!`")
-            return
-        await catevent.delete()
-        cat = await event.client.send_file(
-            event.chat_id,
-            video,
-        )
-        end = datetime.now()
-        ms = (end - start).seconds
-        await cat.edit(
-            f"<b><i>➥ Video uploaded in {ms} seconds.</i></b>\n<b><i>➥ Uploaded by :- {hmention}</i></b>",
-            parse_mode="html",
-        )
-    await event.client.delete_messages(
-        conv.chat_id, [msg_start.id, response.id, msg.id, video.id, details.id]
-    )
