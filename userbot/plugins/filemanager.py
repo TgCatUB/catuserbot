@@ -106,7 +106,7 @@ async def lst(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="rem ([\s\S]*)",
+    pattern="rem(?:\s|$)([\s\S]*)",
     command=("rem", plugin_category),
     info={
         "header": "To delete a file or folder from the server",
@@ -128,7 +128,7 @@ async def lst(event):
             f"there is no such directory or file with the name `{cat}` check again",
         )
         return
-    catcmd = f"rm -rf {path}"
+    catcmd = f"rm -rf '{path}'"
     if os.path.isdir(path):
         await _catutils.runcmd(catcmd)
         await edit_or_reply(event, f"successfully removed `{path}` directory")

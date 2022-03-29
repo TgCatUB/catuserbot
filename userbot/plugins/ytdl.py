@@ -3,10 +3,10 @@ import glob
 import io
 import os
 import pathlib
-import re
 from time import time
 
 from telethon.tl import types
+from urlextract import URLExtract
 from telethon.utils import get_attributes
 from wget import download
 from yt_dlp import YoutubeDL
@@ -30,7 +30,9 @@ from ..helpers.utils import _format
 from . import catub
 
 BASE_YT_URL = "https://www.youtube.com/watch?v="
+extractor = URLExtract()
 LOGS = logging.getLogger(__name__)
+
 plugin_category = "misc"
 
 
@@ -149,73 +151,74 @@ async def fix_attributes(
 )
 async def download_audio(event):
     """To download audio from YouTube and many other sites."""
-    url = event.pattern_match.group(1)
+    msg = event.pattern_match.group(1)
     rmsg = await event.get_reply_message()
-    if not url and rmsg:
-        myString = rmsg.text
-        url = re.search("(?P<url>https?://[^\s]+)", myString).group("url")
-    if not url:
-        return await edit_or_reply(event, "`What I am Supposed to do? Give link`")
+    if not msg and rmsg:
+        msg = rmsg.text
+    urls = extractor.find_urls(msg)
+    if not urls:
+        return await edit_or_reply(event, "What I am Supposed to do? Give link") 
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
-    try:
-        vid_data = YoutubeDL({"no-playlist": True}).extract_info(url, download=False)
-    except ExtractorError:
-        vid_data = {"title": url, "uploader": "Catuserbot", "formats": []}
-    startTime = time()
-    retcode = await _mp3Dl(url=url, starttime=startTime, uid="320")
-    if retcode != 0:
-        return await event.edit(str(retcode))
-    _fpath = ""
-    thumb_pic = None
-    for _path in glob.glob(os.path.join(Config.TEMP_DIR, str(startTime), "*")):
-        if _path.lower().endswith((".jpg", ".png", ".webp")):
-            thumb_pic = _path
-        else:
-            _fpath = _path
-    if not _fpath:
-        return await edit_delete(catevent, "__Unable to upload file__")
-    await catevent.edit(
-        f"`Preparing to upload video:`\
-        \n**{vid_data['title']}**\
-        \nby *{vid_data['uploader']}*"
-    )
-    attributes, mime_type = get_attributes(str(_fpath))
-    ul = io.open(pathlib.Path(_fpath), "rb")
-    if thumb_pic is None:
-        thumb_pic = str(
-            await pool.run_in_thread(download)(await get_ytthumb(get_yt_video_id(url)))
+    for url in urls:
+        try:
+            vid_data = YoutubeDL({"no-playlist": True}).extract_info(url, download=False)
+        except ExtractorError:
+            vid_data = {"title": url, "uploader": "Catuserbot", "formats": []}
+        startTime = time()
+        retcode = await _mp3Dl(url=url, starttime=startTime, uid="320")
+        if retcode != 0:
+            return await event.edit(str(retcode))
+        _fpath = ""
+        thumb_pic = None
+        for _path in glob.glob(os.path.join(Config.TEMP_DIR, str(startTime), "*")):
+            if _path.lower().endswith((".jpg", ".png", ".webp")):
+                thumb_pic = _path
+            else:
+                _fpath = _path
+        if not _fpath:
+            return await edit_delete(catevent, "__Unable to upload file__")
+        await catevent.edit(
+            f"`Preparing to upload video:`\
+            \n**{vid_data['title']}***"
         )
-    uploaded = await event.client.fast_upload_file(
-        file=ul,
-        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-            progress(
-                d,
-                t,
-                catevent,
-                startTime,
-                "trying to upload",
-                file_name=os.path.basename(pathlib.Path(_fpath)),
+        attributes, mime_type = get_attributes(str(_fpath))
+        ul = io.open(pathlib.Path(_fpath), "rb")
+        if thumb_pic is None:
+            thumb_pic = str(
+                await pool.run_in_thread(download)(await get_ytthumb(get_yt_video_id(url)))
             )
-        ),
-    )
-    ul.close()
-    media = types.InputMediaUploadedDocument(
-        file=uploaded,
-        mime_type=mime_type,
-        attributes=attributes,
-        force_file=False,
-        thumb=await event.client.upload_file(thumb_pic) if thumb_pic else None,
-    )
-    await event.client.send_file(
-        event.chat_id,
-        file=media,
-        caption=f"<b>File Name : </b><code>{vid_data.get('title', os.path.basename(pathlib.Path(_fpath)))}</code>",
-        reply_to=reply_to_id,
-        parse_mode="html",
-    )
-    for _path in [_fpath, thumb_pic]:
-        os.remove(_path)
+        uploaded = await event.client.fast_upload_file(
+            file=ul,
+            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                progress(
+                    d,
+                    t,
+                    catevent,
+                    startTime,
+                    "trying to upload",
+                    file_name=os.path.basename(pathlib.Path(_fpath)),
+                )
+            ),
+        )
+        ul.close()
+        media = types.InputMediaUploadedDocument(
+            file=uploaded,
+            mime_type=mime_type,
+            attributes=attributes,
+            force_file=False,
+            thumb=await event.client.upload_file(thumb_pic) if thumb_pic else None,
+        )
+        await event.client.send_file(
+            event.chat_id,
+            file=media,
+            caption=f"<b>File Name : </b><code>{vid_data.get('title', os.path.basename(pathlib.Path(_fpath)))}</code>",
+            supports_streaming=True,
+            reply_to=reply_to_id,
+            parse_mode="html",
+        )
+        for _path in [_fpath, thumb_pic]:
+            os.remove(_path)
     await catevent.delete()
 
 
@@ -233,54 +236,58 @@ async def download_audio(event):
 )
 async def download_video(event):
     """To download video from YouTube and many other sites."""
-    url = event.pattern_match.group(1)
+    msg = event.pattern_match.group(1)
     rmsg = await event.get_reply_message()
-    if not url and rmsg:
-        myString = rmsg.text
-        url = re.search("(?P<url>https?://[^\s]+)", myString).group("url")
-    if not url:
-        return await edit_or_reply(event, "What I am Supposed to find? Give link")
+    if not msg and rmsg:
+        msg = rmsg.text
+    urls = extractor.find_urls(msg)
+    if not urls:
+        return await edit_or_reply(event, "What I am Supposed to do? Give link") 
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
-    ytdl_data = await ytdl_down(catevent, video_opts, url)
-    if ytdl_down is None:
-        return
-    f = pathlib.Path(f"{ytdl_data['title']}.mp4".replace("|", "_"))
-    catthumb = pathlib.Path(f"{ytdl_data['title']}.jpg".replace("|", "_"))
-    if not os.path.exists(catthumb):
-        catthumb = pathlib.Path(f"{ytdl_data['title']}.webp".replace("|", "_"))
-    if not os.path.exists(catthumb):
-        catthumb = None
-    await catevent.edit(
-        f"`Preparing to upload video:`\
-        \n**{ytdl_data['title']}**\
-        \nby *{ytdl_data['uploader']}*"
-    )
-    ul = io.open(f, "rb")
-    c_time = time()
-    attributes, mime_type = await fix_attributes(f, ytdl_data, supports_streaming=True)
-    uploaded = await event.client.fast_upload_file(
-        file=ul,
-        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-            progress(d, t, catevent, c_time, "upload", file_name=f)
-        ),
-    )
-    ul.close()
-    media = types.InputMediaUploadedDocument(
-        file=uploaded,
-        mime_type=mime_type,
-        attributes=attributes,
-        thumb=await event.client.upload_file(catthumb) if catthumb else None,
-    )
-    await event.client.send_file(
-        event.chat_id,
-        file=media,
-        reply_to=reply_to_id,
-        caption=ytdl_data["title"],
-    )
-    os.remove(f)
-    if catthumb:
-        os.remove(catthumb)
+    for url in urls:
+        ytdl_data = await ytdl_down(catevent, video_opts, url)
+        if ytdl_down is None:
+            return
+        try:
+            f = pathlib.Path(f"{ytdl_data['title']}.mp4".replace("|", "_"))
+            catthumb = pathlib.Path(f"{ytdl_data['title']}.jpg".replace("|", "_"))
+            if not os.path.exists(catthumb):
+                catthumb = pathlib.Path(f"{ytdl_data['title']}.webp".replace("|", "_"))
+            if not os.path.exists(catthumb):
+                catthumb = None
+            await catevent.edit(
+                f"`Preparing to upload video:`\
+                \n**{ytdl_data['title']}**"
+            )
+            ul = io.open(f, "rb")
+            c_time = time()
+            attributes, mime_type = await fix_attributes(f, ytdl_data, supports_streaming=True)
+            uploaded = await event.client.fast_upload_file(
+                file=ul,
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, catevent, c_time, "Upload :", file_name=f)
+                ),
+            )
+            ul.close()
+            media = types.InputMediaUploadedDocument(
+                file=uploaded,
+                mime_type=mime_type,
+                attributes=attributes,
+            )
+            await event.client.send_file(
+                event.chat_id,
+                file=media,
+                reply_to=reply_to_id,
+                caption= f'**Title :** `{ytdl_data["title"]}`',
+                thumb=catthumb,
+            )
+            os.remove(f)
+            if catthumb:
+                os.remove(catthumb)
+        except TypeError:
+            await asyncio.sleep(2)
+            pass
     await event.delete()
 
 
