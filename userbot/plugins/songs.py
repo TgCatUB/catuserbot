@@ -93,7 +93,7 @@ async def _(event):
         catthumb = Path(f"{catname}.webp")
     elif not os.path.exists(catthumb):
         catthumb = None
-    title = catname.replace("./temp/", "")
+    title = catname.replace("./temp/", "").replace("_", "|")
     await event.client.send_file(
         event.chat_id,
         song_file,
@@ -173,12 +173,11 @@ async def _(event):
         catthumb = Path(f"{catname}.webp")
     elif not os.path.exists(catthumb):
         catthumb = None
-    title = catname.replace("./temp/", "")
+    title = catname.replace("./temp/", "").replace("_", "|")
     await event.client.send_file(
         event.chat_id,
         vsong_file,
-        force_document=False,
-        caption=f"**Title:** `{title}`",
+        caption=f"**➥ Title :-** `{title}`",
         thumb=catthumb,
         supports_streaming=True,
         reply_to=reply_to_id,
