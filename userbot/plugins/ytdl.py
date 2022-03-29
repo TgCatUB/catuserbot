@@ -6,8 +6,8 @@ import pathlib
 from time import time
 
 from telethon.tl import types
-from urlextract import URLExtract
 from telethon.utils import get_attributes
+from urlextract import URLExtract
 from wget import download
 from yt_dlp import YoutubeDL
 from yt_dlp.utils import (
@@ -157,12 +157,14 @@ async def download_audio(event):
         msg = rmsg.text
     urls = extractor.find_urls(msg)
     if not urls:
-        return await edit_or_reply(event, "What I am Supposed to do? Give link") 
+        return await edit_or_reply(event, "What I am Supposed to do? Give link")
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
     for url in urls:
         try:
-            vid_data = YoutubeDL({"no-playlist": True}).extract_info(url, download=False)
+            vid_data = YoutubeDL({"no-playlist": True}).extract_info(
+                url, download=False
+            )
         except ExtractorError:
             vid_data = {"title": url, "uploader": "Catuserbot", "formats": []}
         startTime = time()
@@ -186,7 +188,9 @@ async def download_audio(event):
         ul = io.open(pathlib.Path(_fpath), "rb")
         if thumb_pic is None:
             thumb_pic = str(
-                await pool.run_in_thread(download)(await get_ytthumb(get_yt_video_id(url)))
+                await pool.run_in_thread(download)(
+                    await get_ytthumb(get_yt_video_id(url))
+                )
             )
         uploaded = await event.client.fast_upload_file(
             file=ul,
@@ -242,7 +246,7 @@ async def download_video(event):
         msg = rmsg.text
     urls = extractor.find_urls(msg)
     if not urls:
-        return await edit_or_reply(event, "What I am Supposed to do? Give link") 
+        return await edit_or_reply(event, "What I am Supposed to do? Give link")
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
     for url in urls:
@@ -262,7 +266,9 @@ async def download_video(event):
             )
             ul = io.open(f, "rb")
             c_time = time()
-            attributes, mime_type = await fix_attributes(f, ytdl_data, supports_streaming=True)
+            attributes, mime_type = await fix_attributes(
+                f, ytdl_data, supports_streaming=True
+            )
             uploaded = await event.client.fast_upload_file(
                 file=ul,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
@@ -279,7 +285,7 @@ async def download_video(event):
                 event.chat_id,
                 file=media,
                 reply_to=reply_to_id,
-                caption= f'**Title :** `{ytdl_data["title"]}`',
+                caption=f'**Title :** `{ytdl_data["title"]}`',
                 thumb=catthumb,
             )
             os.remove(f)
@@ -287,7 +293,6 @@ async def download_video(event):
                 os.remove(catthumb)
         except TypeError:
             await asyncio.sleep(2)
-            pass
     await event.delete()
 
 
