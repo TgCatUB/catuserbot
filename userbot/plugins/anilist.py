@@ -370,8 +370,8 @@ async def get_anime(event):
         search_result = jikan.search("anime", input_str)
     except APIException:
         return await edit_delete(
-                event, "__Unable to fectch result. Try after some time__"
-            )
+            event, "__Unable to fectch result. Try after some time__"
+        )
     first_mal_id = search_result["results"][0]["mal_id"]
     caption, image = await get_anime_manga(first_mal_id, "anime_anime", event.chat_id)
     try:
