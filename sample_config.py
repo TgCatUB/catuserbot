@@ -9,6 +9,8 @@ from telethon.tl.types import ChatBannedRights
 from validators.url import url
 
 
+
+
 class Config(object):
     LOGGER = True
     # MUST NEEDED VARS
@@ -37,7 +39,8 @@ class Config(object):
     if EXTERNAL_REPO and (EXTERNAL_REPO.lower() != "no") and not url(EXTERNAL_REPO):
         EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
     # if you need badcat plugins use the following vars
-    BADCAT = bool(os.environ.get("BADCAT", False))
+    BADCAT = os.environ.get("BADCAT", "no")
+    BADCAT = bool(BADCAT and (BADCAT.lower() != "no"))
     # BASIC and MAIN CONFIG VARS
     # for profile default name
     # Set this value with group id of private group(can be found this value by .id)
@@ -167,6 +170,7 @@ class Config(object):
     if BADCAT_REPO and not url(BADCAT_REPO):
         BADCAT_REPO = "https://github.com/TgCatUB/CatPlugins"
     BADCAT_REPOBRANCH = os.environ.get("BADCAT_REPOBRANCH", "badcat")
+
 
 
 class Production(Config):
