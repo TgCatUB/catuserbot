@@ -22,7 +22,7 @@ from ..sql_helper.global_collection import (
 
 plugin_category = "tools"
 cmdhd = Config.COMMAND_HAND_LER
-
+ENV = bool(os.environ.get("ENV", False))
 LOGS = logging.getLogger(__name__)
 # -- Constants -- #
 
