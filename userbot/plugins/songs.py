@@ -100,8 +100,7 @@ async def _(event):
         event.chat_id,
         song_file,
         force_document=False,
-        caption=f"<b><i>➥ Title :- <code>{title}</code>\n➥ Uploaded by :- {hmention}</i></b>",
-        parse_mode="html",
+        caption=f"**Title:** `{ytdata['title']}`",,
         thumb=catthumb,
         supports_streaming=True,
         reply_to=reply_to_id,
@@ -179,7 +178,7 @@ async def _(event):
     await event.client.send_file(
         event.chat_id,
         vsong_file,
-        caption=f"**➥ Title :-** `{title}`",
+        caption=f"**Title:** `{ytdata['title']}`",
         thumb=catthumb,
         supports_streaming=True,
         reply_to=reply_to_id,
@@ -280,7 +279,7 @@ async def _(event):
         await event.client.send_file(
             event.chat_id,
             music,
-            caption=f"<b><i>➥ Title :- <code>{song}</code>\n➥ Uploaded by :- {hmention}</i></b>",
+            caption=f"<b>Title :- <code>{song}</code></b>",
             parse_mode="html",
             reply_to=reply_id_,
         )
