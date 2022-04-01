@@ -28,6 +28,7 @@ LOGS = logging.getLogger(__name__)
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME or None
 HEROKU_API_KEY = Config.HEROKU_API_KEY or None
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
+BADCAT = Config.BADCAT
 heroku_api = "https://api.heroku.com"
 
 UPSTREAM_REPO_BRANCH = Config.UPSTREAM_REPO_BRANCH
@@ -326,7 +327,7 @@ async def upstream(event):
     },
 )
 async def variable(event):
-    "To update to badcat( for extra masala and gali)."
+    "To switch between good & bad cat"
     if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):
         return await edit_delete(
             event,
@@ -337,7 +338,7 @@ async def variable(event):
     switch = "BADCAT"
     cmd = event.pattern_match.group(1).lower()
     if cmd == "good":
-        if switch in heroku_var:
+        if BADCAT:
             await edit_or_reply(
                 event, "`Changing badcat to goodcat wait for 2-3 minutes.`"
             )
@@ -345,7 +346,7 @@ async def variable(event):
             return
         await edit_delete(event, "`You already using GoodCat`", 6)
     else:
-        if switch in heroku_var:
+        if BADCAT:
             return await edit_delete(event, "`You already using BadCat`", 6)
         await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
         heroku_var[switch] = "True"

@@ -6,12 +6,14 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _catutils
+from ..Config import Config
 
 plugin_category = "tools"
 
 
 # ============================@ Constants @===============================
 config = "./config.py"
+BADCAT = Config.BADCAT
 var_checker = [
     "APP_ID",
     "PM_LOGGER_GROUP_ID",
@@ -161,7 +163,7 @@ async def _(event):
     },
 )
 async def variable(event):
-    "To update to badcat( for extra masala and gali)."
+    "To switch between good & bad cat"
     if not os.path.exists(config):
         return await edit_delete(
             event, "`There no Config file , You can't use this plugin.`"
@@ -178,7 +180,7 @@ async def variable(event):
         else:
             string += f"{i}"
     if cmd == "good":
-        if match:
+        if match and not BADCAT:
             cat = await edit_or_reply(
                 event, f"`Changing badcat to goodcat wait for 2-3 minutes.`"
             )
@@ -189,7 +191,7 @@ async def variable(event):
             return await event.client.reload(cat)
         await edit_delete(event, "`You already using GoodCat`")
     elif cmd == "bad":
-        if match:
+        if match and BADCAT:
             return await edit_or_reply(event, "`You already using BadCat`")
         string += f'    {switch} = "True"\n'
         cat = await edit_or_reply(
