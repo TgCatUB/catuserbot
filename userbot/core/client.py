@@ -251,9 +251,11 @@ class CatUserBotClient(TelegramClient):
         self: TelegramClient,
         disable_errors: bool = False,
         edited: bool = False,
+        forword=False,
         **kwargs,
     ) -> callable:  # sourcery no-metrics
         kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
+        kwargs.setdefault("forwards", forword)
 
         def decorator(func):
             async def wrapper(check):
