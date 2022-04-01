@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import os
 import sys
 from asyncio.exceptions import CancelledError
@@ -100,7 +101,7 @@ async def update_requirements():
         return repr(e)
 
 
-async def update(event, repo, ups_rem, ac_br):
+async def update_bot(event, repo, ups_rem, ac_br):
     try:
         ups_rem.pull(ac_br)
     except GitCommandError:
@@ -175,12 +176,10 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         await event.edit(f"{txt}\n**Here is the error log:**\n`{error}`")
         return repo.__del__()
     await event.edit("`Deploy was failed. So restarting to update`")
-    try:
+    with contextlib.suppress(CancelledError):
         await event.client.disconnect()
         if HEROKU_APP is not None:
             HEROKU_APP.restart()
-    except CancelledError:
-        pass
 
 
 @catub.cat_cmd(
@@ -206,7 +205,7 @@ async def upstream(event):
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
-    if HEROKU_API_KEY is None or HEROKU_APP_NAME is None:
+    if ENV and (HEROKU_API_KEY is None or HEROKU_APP_NAME is None):
         return await edit_or_reply(
             event, "`Set the required vars first to update the bot`"
         )
@@ -246,10 +245,8 @@ async def upstream(event):
             "please checkout to any official branch`"
         )
         return repo.__del__()
-    try:
+    with contextlib.suppress(BaseException):
         repo.create_remote("upstream", off_repo)
-    except BaseException:
-        pass
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
     changelog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
@@ -273,7 +270,7 @@ async def upstream(event):
         )
     if conf == "now":
         await event.edit("`Updating userbot, please wait....`")
-        await update(event, repo, ups_rem, ac_br)
+        await update_bot(event, repo, ups_rem, ac_br)
     return
 
 
@@ -281,8 +278,17 @@ async def upstream(event):
     pattern="update deploy$",
 )
 async def upstream(event):
+    if ENV:
+        if HEROKU_API_KEY is None or HEROKU_APP_NAME is None:
+            return await edit_or_reply(
+                event, "`Set the required vars first to update the bot`"
+            )
+    elif os.path.exists("config.py"):
+        return await edit_delete(
+                event, f"I guess you are on selfhost. For self host you need to use `{cmdhd}update now`"
+            )
     event = await edit_or_reply(event, "`Pulling the nekopack repo wait a sec ....`")
-    off_repo = "https://github.com/TgCatUB/nekopack/tree/test"
+    off_repo = "https://github.com/TgCatUB/nekopack"
     os.chdir("/app")
     try:
         txt = (
@@ -304,10 +310,8 @@ async def upstream(event):
         repo.create_head("master", origin.refs.master)
         repo.heads.master.set_tracking_branch(origin.refs.master)
         repo.heads.master.checkout(True)
-    try:
+    with contextlib.suppress(BaseException):
         repo.create_remote("upstream", off_repo)
-    except BaseException:
-        pass
     ac_br = repo.active_branch.name
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
