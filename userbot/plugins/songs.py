@@ -16,7 +16,6 @@ from validators.url import url
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import name_dl, song_dl, video_dl, yt_search
-
 from ..helpers.tools import media_type
 from ..helpers.utils import _catutils, reply_id
 from . import catub, hmention
@@ -34,6 +33,7 @@ SONGBOT_BLOCKED_STRING = "<code>Please unblock @songdl_bot and try again</code>"
 # =========================================================== #
 #                                                             #
 # =========================================================== #
+
 
 @catub.cat_cmd(
     pattern="song(320)?(?:\s|$)([\s\S]*)",
@@ -76,8 +76,8 @@ async def _(event):
         pass
     try:
         stderr = (await _catutils.runcmd(song_cmd))[1]
-        #if stderr:
-            #await catevent.edit(f"**Error1 :** `{stderr}`")
+        # if stderr:
+        # await catevent.edit(f"**Error1 :** `{stderr}`")
         catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
         if stderr:
             return await catevent.edit(f"**Error :** `{stderr}`")
