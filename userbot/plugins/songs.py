@@ -16,6 +16,7 @@ from validators.url import url
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import name_dl, song_dl, video_dl, yt_search
+
 from ..helpers.tools import media_type
 from ..helpers.utils import _catutils, reply_id
 from . import catub, hmention
@@ -33,7 +34,6 @@ SONGBOT_BLOCKED_STRING = "<code>Please unblock @songdl_bot and try again</code>"
 # =========================================================== #
 #                                                             #
 # =========================================================== #
-
 
 @catub.cat_cmd(
     pattern="song(320)?(?:\s|$)([\s\S]*)",
@@ -68,21 +68,23 @@ async def _(event):
     cmd = event.pattern_match.group(1)
     q = "320k" if cmd == "320" else "128k"
     song_cmd = song_dl.format(QUALITY=q, video_link=video_link)
-    # thumb_cmd = thumb_dl.format(video_link=video_link)
     name_cmd = name_dl.format(video_link=video_link)
     try:
         cat = Get(cat)
         await event.client(cat)
     except BaseException:
         pass
-    stderr = (await _catutils.runcmd(song_cmd))[1]
-    if stderr:
-        return await catevent.edit(f"**Error :** `{stderr}`")
-    catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
-    if stderr:
-        return await catevent.edit(f"**Error :** `{stderr}`")
-    catname = os.path.splitext(catname)[0]
-    song_file = Path(f"{catname}.mp3")
+    try:
+        stderr = (await _catutils.runcmd(song_cmd))[1]
+        #if stderr:
+            #await catevent.edit(f"**Error1 :** `{stderr}`")
+        catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
+        if stderr:
+            return await catevent.edit(f"**Error :** `{stderr}`")
+        catname = os.path.splitext(catname)[0]
+        song_file = Path(f"{catname}.mp3")
+    except:
+        pass
     if not os.path.exists(song_file):
         return await catevent.edit(
             f"Sorry!. I can't find any related video/audio for `{query}`"
