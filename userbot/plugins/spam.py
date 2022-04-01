@@ -115,8 +115,9 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
     pattern="spam ([\s\S]*)",
     command=("spam", plugin_category),
     info={
-        "header": "Floods the text in the chat !! with given number of times,",
-        "description": "Sends the replied media/message <count> times !! in the chat",
+        "header": "Floods the text in the chat !! with given number of times.",
+        "description": "Sends the replied media/message <count> times !! in the chat.",
+        "note" : "To stop the spam after starting it use '{tr}end spam' cmd.",
         "usage": ["{tr}spam <count> <text>", "{tr}spam <count> reply to message"],
         "examples": "{tr}spam 10 hi",
     },
