@@ -21,6 +21,22 @@ print("Licensed under the terms of the " + userbot.__license__)
 
 cmdhr = Config.COMMAND_HAND_LER
 
+repo = os.environ.get("EXTERNAL_PLUGIN_REPO") or "https://github.com/TgCatUB/CatPlugins"
+token = os.environ.get("GITHUB_ACCESS_TOKEN")
+a, b, c, username, d, = repo.split("/")
+ppr = c + "/" + username + "/"  + d
+if token:
+    plug_repo = f"https://{username}:{token}@{ppr}.git"
+else:
+    plug_repo = repo
+
+try:
+    os.system(f"git clone {plug_repo}")
+    os.system(f"mv '{d}/ext_plugins' 'userbot'")
+    os.system("rm -rf Plugins")
+except Exception as e:
+    LOGS.error(f"{e}")
+
 try:
     LOGS.info("Starting Userbot")
     catub.loop.run_until_complete(setup_bot())
@@ -34,6 +50,8 @@ async def startup_process():
     await verifyLoggerGroup()
     await load_plugins("plugins")
     await load_plugins("assistant")
+    print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
+    await load_plugins("ext_plugins")
     print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
     print("Yay your userbot is officially working.!!!")
     print(
