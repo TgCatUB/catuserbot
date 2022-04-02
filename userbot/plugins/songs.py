@@ -147,21 +147,24 @@ async def _(event):
         return await catevent.edit(
             f"Sorry!. I can't find any related video/audio for `{query}`"
         )
-    name_cmd = name_dl.format(video_link=video_link)
-    video_cmd = video_dl.format(video_link=video_link)
-    stderr = (await _catutils.runcmd(video_cmd))[1]
-    if stderr:
-        return await catevent.edit(f"**Error :** `{stderr}`")
-    catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
-    if stderr:
-        return await catevent.edit(f"**Error :** `{stderr}`")
     try:
         cat = Get(cat)
         await event.client(cat)
     except BaseException:
         pass
-    catname = os.path.splitext(catname)[0]
-    vsong_file = Path(f"{catname}.mp4")
+    name_cmd = name_dl.format(video_link=video_link)
+    video_cmd = video_dl.format(video_link=video_link)
+    try:
+        stderr = (await _catutils.runcmd(video_cmd))[1]
+        #if stderr:
+            #return await catevent.edit(f"**Error :** `{stderr}`")
+        catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
+        if stderr:
+            return await catevent.edit(f"**Error :** `{stderr}`")
+        catname = os.path.splitext(catname)[0]
+        vsong_file = Path(f"{catname}.mp4")
+    except:
+        pass
     if not os.path.exists(vsong_file):
         vsong_file = Path(f"{catname}.mkv")
     elif not os.path.exists(vsong_file):
