@@ -100,7 +100,7 @@ async def _(event):
         event.chat_id,
         song_file,
         force_document=False,
-        caption=f"**Title:** `{ytdata['title']}`",,
+        caption=f"**Title:** `{ytdata['title']}`",
         thumb=catthumb,
         supports_streaming=True,
         reply_to=reply_to_id,
