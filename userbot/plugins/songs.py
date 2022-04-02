@@ -156,8 +156,8 @@ async def _(event):
     video_cmd = video_dl.format(video_link=video_link)
     try:
         stderr = (await _catutils.runcmd(video_cmd))[1]
-        #if stderr:
-            #return await catevent.edit(f"**Error :** `{stderr}`")
+        # if stderr:
+        # return await catevent.edit(f"**Error :** `{stderr}`")
         catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
         if stderr:
             return await catevent.edit(f"**Error :** `{stderr}`")
