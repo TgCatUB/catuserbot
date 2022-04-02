@@ -13,7 +13,6 @@ plugin_category = "tools"
 
 # ============================@ Constants @===============================
 config = "./config.py"
-BADCAT = Config.BADCAT
 var_checker = [
     "APP_ID",
     "PM_LOGGER_GROUP_ID",
