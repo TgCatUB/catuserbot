@@ -13,6 +13,7 @@ from userbot import HEROKU_APP, UPSTREAM_REPO_URL, catub
 
 from ..Config import Config
 from ..core.logger import logging
+from ..helpers.utils import _catutils
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.global_collection import (
     add_to_collectionlist,
@@ -332,25 +333,60 @@ async def upstream(event):
 )
 async def variable(event):
     "To switch between good & bad cat"
-    if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):
-        return await edit_delete(
-            event,
-            "Set the required vars in heroku to function this normally `HEROKU_API_KEY` and `HEROKU_APP_NAME`.",
-        )
-    app = Heroku.app(Config.HEROKU_APP_NAME)
-    heroku_var = app.config()
     switch = "BADCAT"
     cmd = event.pattern_match.group(1).lower()
-    if cmd == "good":
-        if BADCAT:
-            await edit_or_reply(
-                event, "`Changing badcat to goodcat wait for 2-3 minutes.`"
+    if ENV:
+        if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):
+            return await edit_delete(
+                event,
+                "Set the required vars in heroku to function this normally `HEROKU_API_KEY` and `HEROKU_APP_NAME`.",
             )
-            del heroku_var[switch]
-            return
-        await edit_delete(event, "`You already using GoodCat`", 6)
+        app = Heroku.app(Config.HEROKU_APP_NAME)
+        heroku_var = app.config()
+        if cmd == "good":
+            if BADCAT:
+                await edit_or_reply(
+                    event, "`Changing badcat to goodcat wait for 2-3 minutes.`"
+                )
+                del heroku_var[switch]
+                return
+            await edit_delete(event, "`You already using GoodCat`", 6)
+        else:
+            if BADCAT:
+                return await edit_delete(event, "`You already using BadCat`", 6)
+            await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
+            heroku_var[switch] = "True"
+    elif os.path.exists(config):
+        string = ""
+        match = None
+        with open(config, "r") as f:
+            configs = f.readlines()
+        for i in configs:
+            if switch in i:
+                match = True
+            else:
+                string += f"{i}"
+        if cmd == "good":
+            if match and not BADCAT:
+                cat = await edit_or_reply(
+                    event, f"`Changing badcat to goodcat wait for 2-3 minutes.`"
+                )
+                with open(config, "w") as f1:
+                    f1.write(string)
+                    f1.close()
+                await _catutils.runcmd("rm -rf badcatext")
+                return await event.client.reload(cat)
+            await edit_delete(event, "`You already using GoodCat`")
+        elif cmd == "bad":
+            if match and BADCAT:
+                return await edit_or_reply(event, "`You already using BadCat`")
+            string += f'    {switch} = "True"\n'
+            cat = await edit_or_reply(
+                event, "`Changing goodcat to badcat wait for 2-3 minutes.`"
+            )
+            with open(config, "w") as f1:
+                f1.write(string)
+                f1.close()
+            await event.client.reload(cat)
     else:
-        if BADCAT:
-            return await edit_delete(event, "`You already using BadCat`", 6)
-        await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
-        heroku_var[switch] = "True"
+        await edit_delete(event, "`There no Config file , You can't use this plugin.`")
