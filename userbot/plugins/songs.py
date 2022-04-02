@@ -18,7 +18,7 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import name_dl, song_dl, video_dl, yt_search
 from ..helpers.tools import media_type
 from ..helpers.utils import _catutils, reply_id
-from . import catub, hmention
+from . import catub
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
@@ -95,7 +95,7 @@ async def _(event):
         catthumb = Path(f"{catname}.webp")
     elif not os.path.exists(catthumb):
         catthumb = None
-    title = catname.replace("./temp/", "").replace("_", "|")
+    catname.replace("./temp/", "").replace("_", "|")
     await event.client.send_file(
         event.chat_id,
         song_file,
@@ -174,7 +174,7 @@ async def _(event):
         catthumb = Path(f"{catname}.webp")
     elif not os.path.exists(catthumb):
         catthumb = None
-    title = catname.replace("./temp/", "").replace("_", "|")
+    catname.replace("./temp/", "").replace("_", "|")
     await event.client.send_file(
         event.chat_id,
         vsong_file,

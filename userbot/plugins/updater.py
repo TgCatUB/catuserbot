@@ -13,8 +13,8 @@ from userbot import HEROKU_APP, UPSTREAM_REPO_URL, catub
 
 from ..Config import Config
 from ..core.logger import logging
-from ..helpers.utils import _catutils
 from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import _catutils
 from ..sql_helper.global_collection import (
     add_to_collectionlist,
     del_keyword_collectionlist,
@@ -286,8 +286,9 @@ async def upstream(event):
             )
     elif os.path.exists("config.py"):
         return await edit_delete(
-                event, f"I guess you are on selfhost. For self host you need to use `{cmdhd}update now`"
-            )
+            event,
+            f"I guess you are on selfhost. For self host you need to use `{cmdhd}update now`",
+        )
     event = await edit_or_reply(event, "`Pulling the nekopack repo wait a sec ....`")
     off_repo = "https://github.com/TgCatUB/nekopack"
     os.chdir("/app")
@@ -354,7 +355,9 @@ async def variable(event):
         else:
             if BADCAT:
                 return await edit_delete(event, "`You already using BadCat`", 6)
-            await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
+            await edit_or_reply(
+                event, "`Changing goodcat to badcat wait for 2-3 minutes.`"
+            )
             heroku_var[switch] = "True"
     elif os.path.exists(config):
         string = ""
