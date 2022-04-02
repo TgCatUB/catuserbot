@@ -29,7 +29,7 @@ cmdhr = Config.COMMAND_HAND_LER
 if ENV:
     VPS_NOLOAD = ["vps"]
 elif os.path.exists("config.py"):
-    VPS_NOLOAD = ["heroku", "updater"]
+    VPS_NOLOAD = ["heroku"]
 
 
 async def setup_bot():
