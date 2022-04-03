@@ -179,6 +179,8 @@ async def load_plugins(folder, extfolder=None):
                     f"unable to load {shortname} because of error {e}\nBase Folder {plugin_path}"
                 )
     if extfolder:
+        if not failure:
+            failure.append("None")
         await catub.tgbot.send_message(
             BOTLOG_CHATID,
             f'Your external repo plugins have imported \n**No of imported plugins :** `{success}`\n**Failed plugins to import :** {", ".join(failure)}',
