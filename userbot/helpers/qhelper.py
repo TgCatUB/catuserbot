@@ -101,6 +101,8 @@ async def process(msg, user, client, reply, replied=None):
             title = details.participant.rank if details.participant.rank else "Admin"
     except TypeError:
         pass
+    except ValueError:
+        pass
     titlewidth = font2.getsize(title)[0]
 
     # Get user name
