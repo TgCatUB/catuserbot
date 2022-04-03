@@ -205,7 +205,7 @@ def cm_ru(url: str) -> str:
         reply = "`No cloud.mail.ru links found`\n"
         return reply
     command = f"bin/cmrudl -s {link}"
-    result = popen(command).read()  # nosec
+    result = popen(command).read()
     result = result.splitlines()[-1]
     try:
         data = json.loads(result)
@@ -214,7 +214,7 @@ def cm_ru(url: str) -> str:
         return reply
     dl_url = data["download"]
     name = data["file_name"]
-    size = humanbytes(int(data["file_size"]))
+    size = naturalsize(int(data["file_size"]))
     reply += f"[{name} ({size})]({dl_url})\n"
     return reply
 
@@ -243,7 +243,7 @@ def sourceforge(url: str) -> str:
     except IndexError:
         reply = "`No SourceForge links found`\n"
         return reply
-    file_path = re.findall(r"files(.*)/download", link)[0]
+    file_path = re.findall(r"files([\s\S]*)/download", link)[0]
     reply = f"Mirrors for __{file_path.split('/')[-1]}__\n"
     project = re.findall(r"projects?/(.*?)/files", link)[0]
     mirrors = (
@@ -253,7 +253,7 @@ def sourceforge(url: str) -> str:
     page = BeautifulSoup(requests.get(mirrors).content, "html.parser")
     info = page.find("ul", {"id": "mirrorList"}).findAll("li")
     for mirror in info[1:]:
-        name = re.findall(r"\((.*)\)", mirror.text.strip())[0]
+        name = re.findall(r"\(([\s\S]*)\)", mirror.text.strip())[0]
         dl_url = (
             f'https://{mirror["id"]}.dl.sourceforge.net/project/{project}/{file_path}'
         )
@@ -276,8 +276,8 @@ def osdn(url: str) -> str:
     mirrors = page.find("form", {"id": "mirror-select-form"}).findAll("tr")
     for data in mirrors[1:]:
         mirror = data.find("input")["value"]
-        name = re.findall(r"\((.*)\)", data.findAll("td")[-1].text.strip())[0]
-        dl_url = re.sub(r"m=(.*)&f", f"m={mirror}&f", link)
+        name = re.findall(r"\(([\s\S]*)\)", data.findAll("td")[-1].text.strip())[0]
+        dl_url = re.sub(r"m=([\s\S]*)&f", f"m={mirror}&f", link)
         reply += f"[{name}]({dl_url}) "
     return reply
 
@@ -308,7 +308,7 @@ def androidfilehost(url: str) -> str:
     except IndexError:
         reply = "`No AFH links found`\n"
         return reply
-    fid = re.findall(r"\?fid=(.*)", link)[0]
+    fid = re.findall(r"\?fid=([\s\S]*)", link)[0]
     session = requests.Session()
     user_agent = useragent()
     headers = {"user-agent": user_agent}
@@ -363,7 +363,6 @@ def useragent():
     user_agent = choice(useragents)
     return user_agent.text
 
-
 def anonfiles(url: str) -> str:
     reply = ""
     html_s = requests.get(url).content
@@ -391,16 +390,3 @@ def onedrive(link: str) -> str:
     resp2 = requests.head(dl_link)
     dl_size = humanbytes(int(resp2.headers["Content-Length"]))
     return f"[{file_name} ({dl_size})]({dl_link})"
-
-
-def useragent():
-    """useragent random setter"""
-    useragents = BeautifulSoup(
-        requests.get(
-            "https://developers.whatismybrowser.com/"
-            "useragents/explore/operating_system_name/android/"
-        ).content,
-        "lxml",
-    ).findAll("td", {"class": "useragent"})
-    user_agent = choice(useragents)
-    return user_agent.text
