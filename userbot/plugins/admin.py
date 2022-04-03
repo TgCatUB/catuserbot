@@ -20,7 +20,6 @@ from telethon.utils import get_display_name
 from userbot import catub
 
 from ..core.data import _sudousers_list
-
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import media_type
