@@ -19,6 +19,8 @@ from telethon.utils import get_display_name
 
 from userbot import catub
 
+from ..core.data import _sudousers_list
+
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import media_type
@@ -243,14 +245,7 @@ async def _ban_person(event):
         await event.client(EditBannedRequest(event.chat_id, user.id, BANNED_RIGHTS))
     except BadRequestError:
         return await catevent.edit(NO_PERM)
-    try:
-        reply = await event.get_reply_message()
-        if reply:
-            await reply.delete()
-    except BadRequestError:
-        return await catevent.edit(
-            "`I dont have message nuking rights! But still he is banned!`"
-        )
+    reply = await event.get_reply_message()
     if reason:
         await catevent.edit(
             f"{_format.mentionuser(user.first_name ,user.id)}` is banned !!`\n**Reason : **`{reason}`"
@@ -274,6 +269,14 @@ async def _ban_person(event):
                 f"#BAN\
                 \nUSER: [{user.first_name}](tg://user?id={user.id})\
                 \nCHAT: {get_display_name(await event.get_chat())}(`{event.chat_id}`)",
+            )
+        try:
+            if reply:
+                await reply.forward_to(BOTLOG_CHATID)
+                await reply.delete()
+        except BadRequestError:
+            return await catevent.edit(
+                "`I dont have message nuking rights! But still he is banned!`"
             )
 
 
@@ -561,6 +564,9 @@ async def pin(event):
     except Exception as e:
         return await edit_delete(event, f"`{e}`", 5)
     await edit_delete(event, "`Pinned Successfully!`", 3)
+    sudo_users = _sudousers_list()
+    if event.sender_id in sudo_users:
+        await event.delete()
     if BOTLOG and not event.is_private:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -609,6 +615,9 @@ async def unpin(event):
     except Exception as e:
         return await edit_delete(event, f"`{e}`", 5)
     await edit_delete(event, "`Unpinned Successfully!`", 3)
+    sudo_users = _sudousers_list()
+    if event.sender_id in sudo_users:
+        await event.delete()
     if BOTLOG and not event.is_private:
         await event.client.send_message(
             BOTLOG_CHATID,
