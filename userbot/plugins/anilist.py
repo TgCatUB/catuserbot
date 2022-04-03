@@ -4,6 +4,7 @@ import re
 import textwrap
 from datetime import datetime
 from urllib.parse import quote_plus
+import contextlib
 
 import aiohttp
 import bs4
@@ -46,7 +47,6 @@ ppath = os.path.join(os.getcwd(), "temp", "anilistuser.jpg")
 anime_path = os.path.join(os.getcwd(), "temp", "animeresult.jpg")
 
 plugin_category = "extra"
-
 
 @catub.cat_cmd(
     pattern="aq$",
@@ -122,10 +122,11 @@ async def user(event):
     search_query = event.pattern_match.group(1)
     replyto = await reply_id(event)
     reply = await event.get_reply_message()
-    if not search_query and reply and reply.text:
-        search_query = reply.text
-    elif not search_query:
-        return await edit_delete(event, "__Whom should i search.__")
+    if not search_query:
+        if reply and reply.text:
+            search_query = reply.text
+        else:
+            return await edit_delete(event, "__Whom should i search.__")
     try:
         user = jikan.user(search_query)
     except APIException:
@@ -145,10 +146,8 @@ async def user(event):
         if user[entity] is None:
             user[entity] = "Unknown"
     about = user["about"].split(" ", 60)
-    try:
+    with contextlib.suppress(IndexError):
         about.pop(60)
-    except IndexError:
-        pass
     about_string = " ".join(about)
     about_string = about_string.replace("<br>", "").strip().replace("\r\n", "\n")
     caption = ""
@@ -436,10 +435,8 @@ async def character(event):
         nicknames_string = ", ".join(character["nicknames"])
         caption += f"\n**Nicknames** : `{nicknames_string}`"
     about = character["about"].split(" ", 60)
-    try:
+    with contextlib.suppress(IndexError):
         about.pop(60)
-    except IndexError:
-        pass
     about_string = " ".join(about)
     mal_url = search_result["results"][0]["url"]
     for entity in character:
