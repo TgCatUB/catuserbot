@@ -1,10 +1,10 @@
+import contextlib
 import html
 import os
 import re
 import textwrap
 from datetime import datetime
 from urllib.parse import quote_plus
-import contextlib
 
 import aiohttp
 import bs4
@@ -47,6 +47,7 @@ ppath = os.path.join(os.getcwd(), "temp", "anilistuser.jpg")
 anime_path = os.path.join(os.getcwd(), "temp", "animeresult.jpg")
 
 plugin_category = "extra"
+
 
 @catub.cat_cmd(
     pattern="aq$",
