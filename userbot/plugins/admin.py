@@ -16,6 +16,7 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 from telethon.utils import get_display_name
+import contextlib
 
 from userbot import catub
 
@@ -565,10 +566,8 @@ async def pin(event):
     await edit_delete(event, "`Pinned Successfully!`", 3)
     sudo_users = _sudousers_list()
     if event.sender_id in sudo_users:
-        try:
+        with contextlib.suppress(BadRequestError):
             await event.delete()
-        except BadRequestError:
-            pass
     if BOTLOG and not event.is_private:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -619,10 +618,8 @@ async def unpin(event):
     await edit_delete(event, "`Unpinned Successfully!`", 3)
     sudo_users = _sudousers_list()
     if event.sender_id in sudo_users:
-        try:
+        with contextlib.suppress(BadRequestError):
             await event.delete()
-        except BadRequestError:
-            pass
     if BOTLOG and not event.is_private:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -653,18 +650,17 @@ async def unpin(event):
     groups_only=True,
     require_admin=True,
 )
-async def _iundlt(event):  # sourcery no-metrics
+async def _iundlt(event):    # sourcery no-metrics
     "To check recent deleted messages in group"
     catevent = await edit_or_reply(event, "`Searching recent actions .....`")
     flag = event.pattern_match.group(1)
     if event.pattern_match.group(2) != "":
         lim = int(event.pattern_match.group(2))
-        if lim > 15:
-            lim = int(15)
+        lim = min(lim, 15)
         if lim <= 0:
-            lim = int(1)
+            lim = 1
     else:
-        lim = int(5)
+        lim = 5
     adminlog = await event.client.get_admin_log(
         event.chat_id, limit=lim, edit=False, delete=True
     )
