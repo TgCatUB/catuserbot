@@ -7,7 +7,7 @@ from telethon.tl.types import Channel, Chat, User
 
 from userbot import catub
 
-from ..core.managers import edit_delete, edit_or_reply
+from ..core.managers import edit_or_reply
 
 plugin_category = "utils"
 
@@ -227,8 +227,9 @@ async def stats(event):  # sourcery no-metrics
             caption=caption,
         )
 
+
 # the bot used for ustat cmd is premium now
-        
+
 # @catub.cat_cmd(
 #     pattern="ustat(?:\s|$)([\s\S]*)",
 #     command=("ustat", plugin_category),
