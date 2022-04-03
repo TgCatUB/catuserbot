@@ -565,7 +565,10 @@ async def pin(event):
     await edit_delete(event, "`Pinned Successfully!`", 3)
     sudo_users = _sudousers_list()
     if event.sender_id in sudo_users:
-        await event.delete()
+        try:
+            await event.delete()
+        except BadRequestError:
+            pass
     if BOTLOG and not event.is_private:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -616,7 +619,10 @@ async def unpin(event):
     await edit_delete(event, "`Unpinned Successfully!`", 3)
     sudo_users = _sudousers_list()
     if event.sender_id in sudo_users:
-        await event.delete()
+        try:
+            await event.delete()
+        except BadRequestError:
+            pass
     if BOTLOG and not event.is_private:
         await event.client.send_message(
             BOTLOG_CHATID,
