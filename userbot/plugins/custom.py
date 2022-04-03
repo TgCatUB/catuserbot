@@ -145,7 +145,11 @@ async def bad(event):  # sourcery no-metrics
                         return await edit_delete(event, "**Give me a correct link...**")
                     elif (("PIC" in vname) or ("pic" in vname)) and not url(i):
                         return await edit_delete(event, "**Give me a correct link...**")
-                    elif (vname == "DIGITAL_PIC" or vname == "DEFAULT_PIC" or vname =="BOT_START_PIC") and url(i):
+                    elif (
+                        vname == "DIGITAL_PIC"
+                        or vname == "DEFAULT_PIC"
+                        or vname == "BOT_START_PIC"
+                    ) and url(i):
                         vinfo = i
                         break
                     elif not "PIC" in vname:
