@@ -18,6 +18,7 @@ from telethon.tl.types import (
     MessageEntitySpoiler,
     MessageEntityTextUrl,
     MessageEntityUnderline,
+    MessageEntityStrike,
 )
 from telethon.utils import add_surrogate, del_surrogate
 
@@ -98,12 +99,13 @@ PARSED_ENTITIES = (
 MATCHERS = [
     (DEFAULT_URL_RE, parse_url_match),
     (get_tag_parser("**", MessageEntityBold)),
-    (get_tag_parser("__", MessageEntityItalic)),
+    (get_tag_parser("_", MessageEntityItalic)),
     (get_tag_parser("```", partial(MessageEntityPre, language=""))),
     (get_tag_parser("`", MessageEntityCode)),
-    (get_tag_parser("--", MessageEntityUnderline)),
+    (get_tag_parser("#", MessageEntityUnderline)),
     (get_tag_parser("||", MessageEntitySpoiler)),
     (get_tag_parser(">", MessageEntityBlockquote)),
+    (get_tag_parser("~~",  MessageEntityStrike)),
     (re.compile(r"\+\+(.+?)\+\+"), parse_aesthetics),
     (re.compile(r"([^/\w]|^)(/?(r/\w+))"), parse_subreddit),
     (re.compile(r"(?<!\w)(~{2})(?!~~)(.+?)(?<!~)\1(?!\w)"), parse_strikethrough),
