@@ -102,7 +102,7 @@ MATCHERS = [
     (get_tag_parser("_", MessageEntityItalic)),
     (get_tag_parser("```", partial(MessageEntityPre, language=""))),
     (get_tag_parser("`", MessageEntityCode)),
-    (get_tag_parser("#", MessageEntityUnderline)),
+    (get_tag_parser("-", MessageEntityUnderline)),
     (get_tag_parser("||", MessageEntitySpoiler)),
     (get_tag_parser(">", MessageEntityBlockquote)),
     (get_tag_parser("~~", MessageEntityStrike)),
