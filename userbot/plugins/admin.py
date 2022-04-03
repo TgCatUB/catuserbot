@@ -1,3 +1,5 @@
+import contextlib
+
 from telethon.errors import (
     BadRequestError,
     ImageProcessFailedError,
@@ -16,7 +18,6 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 from telethon.utils import get_display_name
-import contextlib
 
 from userbot import catub
 
@@ -650,7 +651,7 @@ async def unpin(event):
     groups_only=True,
     require_admin=True,
 )
-async def _iundlt(event):    # sourcery no-metrics
+async def _iundlt(event):  # sourcery no-metrics
     "To check recent deleted messages in group"
     catevent = await edit_or_reply(event, "`Searching recent actions .....`")
     flag = event.pattern_match.group(1)
