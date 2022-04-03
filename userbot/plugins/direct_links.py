@@ -363,6 +363,7 @@ def useragent():
     user_agent = choice(useragents)
     return user_agent.text
 
+
 def anonfiles(url: str) -> str:
     reply = ""
     html_s = requests.get(url).content
