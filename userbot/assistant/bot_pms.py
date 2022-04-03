@@ -113,7 +113,7 @@ async def bot_start(event):
                 Button.url("Repo", "https://github.com/TgCatUB/catuserbot"),
                 Button.url(
                     "Deploy",
-                    "https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack&template=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack",
+                    "https://github.com/TgCatUB/nekopack",
                 ),
             )
         ]
