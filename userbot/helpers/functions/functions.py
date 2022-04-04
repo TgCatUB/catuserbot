@@ -287,8 +287,13 @@ def higlighted_text(
     hight = 30 + eh
     # wrap the text & save in a list
     mask_size = int((w / text_wrap) + 50)
-    input_text = "\n".join(wrap(text, int((40.0 / w) * mask_size)))
-    list_text = input_text.splitlines()
+    list_text=[]
+    lines = text.splitlines()
+    for item in lines:
+        input_text = "\n".join(wrap(item, int((40.0 / w) * mask_size)))
+        split_text = input_text.splitlines()
+        for final in split_text:
+            list_text.append(final)
     # create image with correct size and black background
     if direction == "upwards":
         list_text.reverse()
