@@ -37,8 +37,6 @@ from ..sql_helper import google_drive_sql as helper
 from . import (
     BOTLOG,
     BOTLOG_CHATID,
-    G_DRIVE_DATA,
-    G_DRIVE_FOLDER_ID,
     TMP_DOWNLOAD_DIRECTORY,
 )
 
@@ -47,7 +45,10 @@ plugin_category = "misc"
 
 # Catuserbot Google Drive managers  ported from Projectbish and added extra things by @mrconfused
 
-
+G_DRIVE_CLIENT_ID = Config.G_DRIVE_CLIENT_ID
+G_DRIVE_CLIENT_SECRET = Config.G_DRIVE_CLIENT_SECRET
+G_DRIVE_DATA = Config.G_DRIVE_DATA
+G_DRIVE_FOLDER_ID = Config.G_DRIVE_FOLDER_ID
 # =========================================================== #
 #                          STATIC                             #
 # =========================================================== #
