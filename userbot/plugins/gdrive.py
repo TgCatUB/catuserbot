@@ -12,15 +12,14 @@ import time
 from datetime import datetime
 from mimetypes import guess_type
 from urllib.parse import quote
-from oauth2client.client import (
-    OAuth2WebServerFlow, HttpAccessTokenRefreshError, FlowExchangeError)
+
 import requests
 from bs4 import BeautifulSoup
 from google.auth.transport.requests import Request
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
+from oauth2client.client import FlowExchangeError, OAuth2WebServerFlow
 from telethon import events
 
 from userbot import catub
@@ -52,9 +51,11 @@ plugin_category = "misc"
 # =========================================================== #
 GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
 GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
-SCOPES = ["https://www.googleapis.com/auth/drive",
-               "https://www.googleapis.com/auth/drive.file",
-               "https://www.googleapis.com/auth/drive.metadata"]
+SCOPES = [
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive.metadata",
+]
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 # =========================================================== #
 #      STATIC CASE FOR G_DRIVE_FOLDER_ID IF VALUE IS URL      #
@@ -951,10 +952,9 @@ async def generate_credentials(gdrive):
             }
         }
     gdrive = await edit_or_reply(gdrive, "`Creating credentials...`")
-    flow = OAuth2WebServerFlow(G_DRIVE_CLIENT_ID,
-                                             G_DRIVE_CLIENT_SECRET,
-                                             SCOPES,
-                                             redirect_uri=REDIRECT_URI)
+    flow = OAuth2WebServerFlow(
+        G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET, SCOPES, redirect_uri=REDIRECT_URI
+    )
     auth_url, _ = flow.step1_get_authorize_url()
     msg = await gdrive.respond(
         "`Go to your Private log group to authenticate token...`"
