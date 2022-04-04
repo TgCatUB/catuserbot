@@ -522,7 +522,10 @@ async def _(event):  # sourcery no-metrics
         fps = None
     catreply = await event.get_reply_message()
     cat_event = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    if media_type(catreply) != "Sticker" or catreply.media.document.mime_type == "image/webp":
+    if (
+        media_type(catreply) != "Sticker"
+        or catreply.media.document.mime_type == "image/webp"
+    ):
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
     catevent = await edit_or_reply(
         event,
