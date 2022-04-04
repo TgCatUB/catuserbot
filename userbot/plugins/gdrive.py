@@ -932,7 +932,9 @@ async def generate_credentials(gdrive):
                 "**Status : **`BAD`\n"
                 "**Reason : **`G_DRIVE_DATA entity is not valid!`",
             )
-            return False
+            return
+        G_DRIVE_CLIENT_ID = configs["installed"]["client_id"]
+        G_DRIVE_CLIENT_SECRET = configs["installed"]["client_secret"]
     else:
         """Only for old user"""
         if G_DRIVE_CLIENT_ID is None and G_DRIVE_CLIENT_SECRET is None:
@@ -942,15 +944,7 @@ async def generate_credentials(gdrive):
                 "**Status : **`BAD`\n"
                 "**Reason : **`please get your G_DRIVE_DATA`",
             )
-            return False
-        configs = {
-            "installed": {
-                "client_id": G_DRIVE_CLIENT_ID,
-                "client_secret": G_DRIVE_CLIENT_SECRET,
-                "auth_uri": GOOGLE_AUTH_URI,
-                "token_uri": GOOGLE_TOKEN_URI,
-            }
-        }
+            return
     gdrive = await edit_or_reply(gdrive, "`Creating credentials...`")
     flow = OAuth2WebServerFlow(
         G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET, SCOPES, redirect_uri=REDIRECT_URI
