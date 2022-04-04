@@ -575,7 +575,7 @@ async def create_dir(service, folder_name, dir_id=None):
     if not dir_id:
         try:
             len(GDRIVE_.parent_Id)
-        except NameError:
+        except (NameError, TypeError):
             # Fallback to G_DRIVE_FOLDER_ID else root dir
             if G_DRIVE_FOLDER_ID is not None:
                 metadata["parents"] = [G_DRIVE_FOLDER_ID]
@@ -824,6 +824,8 @@ async def glists(gdrive, folderlink=None):  # sourcery no-metrics
         try:
             if GDRIVE_.parent_Id is not None:
                 query = f"'{GDRIVE_.parent_Id}' in parents and (name contains '*')"
+            else:
+                query = ""
         except NameError:
             if G_DRIVE_FOLDER_ID is not None:
                 query = f"'{G_DRIVE_FOLDER_ID}' in parents and (name contains '*')"
