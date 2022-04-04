@@ -106,7 +106,7 @@ G_DRIVE_FOLDER_LINK = "📁 [{}](https://drive.google.com/drive/folders/{})"
 
 class GDRIVE:
     def __init__(self):
-        self.parent_Id = G_DRIVE_FOLDER_ID or ""
+        self.parent_Id = G_DRIVE_FOLDER_ID or None
         self.is_cancelled = False
 
 
