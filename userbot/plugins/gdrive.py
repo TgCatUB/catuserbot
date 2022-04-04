@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import contextlib
 import io
 import json
 import logging
@@ -11,7 +12,8 @@ import time
 from datetime import datetime
 from mimetypes import guess_type
 from urllib.parse import quote
-
+from oauth2client.client import (
+    OAuth2WebServerFlow, HttpAccessTokenRefreshError, FlowExchangeError)
 import requests
 from bs4 import BeautifulSoup
 from google.auth.transport.requests import Request
@@ -50,10 +52,9 @@ plugin_category = "misc"
 # =========================================================== #
 GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
 GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
-SCOPES = [
-    "https://www.googleapis.com/auth/drive",
-    "https://www.googleapis.com/auth/drive.metadata",
-]
+SCOPES = ["https://www.googleapis.com/auth/drive",
+               "https://www.googleapis.com/auth/drive.file",
+               "https://www.googleapis.com/auth/drive.metadata"]
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 # =========================================================== #
 #      STATIC CASE FOR G_DRIVE_FOLDER_ID IF VALUE IS URL      #
@@ -131,11 +132,9 @@ async def create_app(gdrive):
         else:
             await gdrive.edit("`Credentials is empty, please generate it...`")
             return False
-    try:
+    with contextlib.suppress(BaseException):
         cat = Get(cat)
         await gdrive.client(cat)
-    except BaseException:
-        pass
     return build("drive", "v3", credentials=creds, cache_discovery=False)
 
 
@@ -146,10 +145,7 @@ async def get_raw_name(file_path):
 
 async def get_mimeType(name):
     """Check mimeType given file"""
-    mimeType = guess_type(name)[0]
-    if not mimeType:
-        mimeType = "text/plain"
-    return mimeType
+    return guess_type(name)[0] or "text/plain"
 
 
 async def get_file_id(input_str):
@@ -955,10 +951,11 @@ async def generate_credentials(gdrive):
             }
         }
     gdrive = await edit_or_reply(gdrive, "`Creating credentials...`")
-    flow = InstalledAppFlow.from_client_config(
-        configs, SCOPES, redirect_uri=REDIRECT_URI
-    )
-    auth_url, _ = flow.authorization_url(access_type="offline", prompt="consent")
+    flow = OAuth2WebServerFlow(G_DRIVE_CLIENT_ID,
+                                             G_DRIVE_CLIENT_SECRET,
+                                             SCOPES,
+                                             redirect_uri=REDIRECT_URI)
+    auth_url, _ = flow.step1_get_authorize_url()
     msg = await gdrive.respond(
         "`Go to your Private log group to authenticate token...`"
     )
@@ -969,8 +966,10 @@ async def generate_credentials(gdrive):
         r = conv.wait_event(events.NewMessage(outgoing=True, chats=BOTLOG_CHATID))
         r = await r
         code = r.message.message.strip()
-        flow.fetch_token(code=code)
-        creds = flow.credentials
+        try:
+            creds = flow.step2_exchange(code=code)
+        except FlowExchangeError as e:
+            LOGS.exception(e)
         await asyncio.sleep(3.5)
         await gdrive.client.delete_messages(gdrive.chat_id, msg.id)
         await gdrive.client.delete_messages(BOTLOG_CHATID, [url_msg.id, r.id])
@@ -979,7 +978,6 @@ async def generate_credentials(gdrive):
         await gdrive.edit("`Credentials created...`")
     helper.save_credentials(str(gdrive.sender_id), creds)
     await gdrive.delete()
-    return
 
 
 @catub.cat_cmd(
