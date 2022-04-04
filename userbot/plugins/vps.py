@@ -66,7 +66,7 @@ async def variable(event):  # sourcery no-metrics
         variable = event.pattern_match.group(2).split()[0]
         for i in configs:
             if variable in i:
-                _,val = i.split("= ")
+                _, val = i.split("= ")
                 return await cat.edit("**ConfigVars**:" f"\n\n`{variable}` = `{val}`")
         await cat.edit(
             "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__"
