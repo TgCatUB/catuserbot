@@ -66,7 +66,8 @@ async def variable(event):  # sourcery no-metrics
         variable = event.pattern_match.group(2).split()[0]
         for i in configs:
             if variable in i:
-                return await cat.edit("**ConfigVars**:" f"\n\n`{i}`")
+                _,val = i.split("= ")
+                return await cat.edit("**ConfigVars**:" f"\n\n`{variable}` = `{val}`")
         await cat.edit(
             "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__"
         )
@@ -126,8 +127,8 @@ async def variable(event):  # sourcery no-metrics
     info={
         "header": "To reload your bot in vps/ similar to restart",
         "flags": {
-            "re": "To set new var in vps or modify the old var",
-            "clean": "To show the already existing var value.",
+            "re": "restart your bot without deleting junk files",
+            "clean": "delete all junk files & restart",
         },
         "usage": [
             "{tr}reload",
