@@ -41,13 +41,13 @@ plugin_category = "misc"
 
 # Catuserbot Google Drive managers  ported from Projectbish and added extra things by @mrconfused
 
+# =========================================================== #
+#                          STATIC                             #
+# =========================================================== #
 G_DRIVE_CLIENT_ID = Config.G_DRIVE_CLIENT_ID
 G_DRIVE_CLIENT_SECRET = Config.G_DRIVE_CLIENT_SECRET
 G_DRIVE_DATA = Config.G_DRIVE_DATA
 G_DRIVE_FOLDER_ID = Config.G_DRIVE_FOLDER_ID
-# =========================================================== #
-#                          STATIC                             #
-# =========================================================== #
 GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
 GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
 SCOPES = [
@@ -805,7 +805,7 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                 )
 
 
-async def lists(gdrive, folderlink=None):  # sourcery no-metrics
+async def glists(gdrive, folderlink=None):  # sourcery no-metrics
     checker = gdrive.pattern_match.group(1)
     if checker is not None:
         page_size = int(gdrive.pattern_match.group(1).strip("-l "))
@@ -938,8 +938,8 @@ async def generate_credentials(gdrive):
                 "**Reason : **`G_DRIVE_DATA entity is not valid!`",
             )
             return
-        G_DRIVE_CLIENT_ID = configs["installed"]["client_id"]
-        G_DRIVE_CLIENT_SECRET = configs["installed"]["client_secret"]
+        G_DRIVE_CLIENTID = configs["installed"]["client_id"]
+        G_DRIVE_CLIENTSECRET = configs["installed"]["client_secret"]
     else:
         """Only for old user"""
         if G_DRIVE_CLIENT_ID is None and G_DRIVE_CLIENT_SECRET is None:
@@ -950,9 +950,11 @@ async def generate_credentials(gdrive):
                 "**Reason : **`please get your G_DRIVE_DATA`",
             )
             return
+        G_DRIVE_CLIENTID = G_DRIVE_CLIENT_ID
+        G_DRIVE_CLIENTSECRET = G_DRIVE_CLIENT_SECRET
     gdrive = await edit_or_reply(gdrive, "`Creating credentials...`")
     flow = OAuth2WebServerFlow(
-        G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET, SCOPES, redirect_uri=REDIRECT_URI
+        G_DRIVE_CLIENTID, G_DRIVE_CLIENTSECRET, SCOPES, redirect_uri=REDIRECT_URI
     )
     auth_url = flow.step1_get_authorize_url()
     msg = await gdrive.respond(
@@ -1021,7 +1023,7 @@ async def reset_credentials(gdrive):
 )
 async def catlists(gdrive):
     "To get list of files and folers"
-    await lists(gdrive)
+    await glists(gdrive)
 
 
 @catub.cat_cmd(
