@@ -14,12 +14,13 @@ from mimetypes import guess_type
 from urllib.parse import quote
 
 import requests
+from httplib2 import Http
 from bs4 import BeautifulSoup
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
-from oauth2client.client import FlowExchangeError, OAuth2WebServerFlow
+from oauth2client.client import FlowExchangeError, OAuth2WebServerFlow, HttpAccessTokenRefreshError
 from telethon import events
 
 from userbot import catub
@@ -120,23 +121,29 @@ async def create_app(gdrive):
     if creds is not None:
         """Repack credential objects from strings"""
         creds = pickle.loads(base64.b64decode(creds.encode()))
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            await gdrive.edit("`Refreshing credentials...`")
-            """Refresh credentials"""
-            creds.refresh(Request())
-            helper.save_credentials(
-                str(hmm), base64.b64encode(pickle.dumps(creds)).decode()
-            )
-        else:
-            await gdrive.edit("`Credentials is empty, please generate it...`")
-            return False
+    else:
+        await gdrive.edit("`Credentials is empty, please generate it...`")
+        return False
     with contextlib.suppress(BaseException):
         cat = Get(cat)
         await gdrive.client(cat)
-    return build("drive", "v3", credentials=creds, cache_discovery=False)
+    try:
+        return build("drive", "v3", credentials=creds, cache_discovery=False)
+    except Exception:
+        await gdrive.edit("`Refreshing credentials...`")
+        try:
+            creds.refresh(Http())
+        except HttpAccessTokenRefreshError as e:
+            LOGS.exception(e)
+            helper.clear_credentials(str(hmm))
+            await gdrive.edit("Please do gauth again")
+            return False
+        helper.save_credentials(
+                str(hmm), base64.b64encode(pickle.dumps(creds)).decode()
+            )
+        return build("drive", "v3", credentials=creds, cache_discovery=False)
 
-
+        
 async def get_raw_name(file_path):
     """Get file_name from file_path"""
     return file_path.split("/")[-1]
