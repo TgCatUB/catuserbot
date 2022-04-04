@@ -955,7 +955,7 @@ async def generate_credentials(gdrive):
     flow = OAuth2WebServerFlow(
         G_DRIVE_CLIENT_ID, G_DRIVE_CLIENT_SECRET, SCOPES, redirect_uri=REDIRECT_URI
     )
-    auth_url  = flow.step1_get_authorize_url()
+    auth_url = flow.step1_get_authorize_url()
     msg = await gdrive.respond(
         "`Go to your Private log group to authenticate token...`"
     )
