@@ -14,13 +14,16 @@ from mimetypes import guess_type
 from urllib.parse import quote
 
 import requests
-from httplib2 import Http
 from bs4 import BeautifulSoup
-from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
-from oauth2client.client import FlowExchangeError, OAuth2WebServerFlow, HttpAccessTokenRefreshError
+from httplib2 import Http
+from oauth2client.client import (
+    FlowExchangeError,
+    HttpAccessTokenRefreshError,
+    OAuth2WebServerFlow,
+)
 from telethon import events
 
 from userbot import catub
@@ -139,11 +142,11 @@ async def create_app(gdrive):
             await gdrive.edit("Please do gauth again")
             return False
         helper.save_credentials(
-                str(hmm), base64.b64encode(pickle.dumps(creds)).decode()
-            )
+            str(hmm), base64.b64encode(pickle.dumps(creds)).decode()
+        )
         return build("drive", "v3", credentials=creds, cache_discovery=False)
 
-        
+
 async def get_raw_name(file_path):
     """Get file_name from file_path"""
     return file_path.split("/")[-1]
