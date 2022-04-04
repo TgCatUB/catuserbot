@@ -287,7 +287,7 @@ def higlighted_text(
     hight = 30 + eh
     # wrap the text & save in a list
     mask_size = int((w / text_wrap) + 50)
-    list_text=[]
+    list_text = []
     lines = text.splitlines()
     for item in lines:
         input_text = "\n".join(wrap(item, int((40.0 / w) * mask_size)))
