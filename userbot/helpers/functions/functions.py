@@ -271,8 +271,8 @@ def higlighted_text(
     linespace="+2",
     rad=20,
     position=(0, 0),
-    album = False,
-    lines= None,
+    album=False,
+    lines=None,
 ):
     templait = Image.open(input_img)
     # resize image
@@ -296,11 +296,11 @@ def higlighted_text(
         for final in split_text:
             list_text.append(final)
     x = [list_text]
-    if album and len(list_text)>lines:
-        x = [list_text[i:i + lines] for i in range(0, len(list_text),lines)]
+    if album and len(list_text) > lines:
+        x = [list_text[i : i + lines] for i in range(0, len(list_text), lines)]
     for pic_no, list_text in enumerate(x):
         # create image with correct size and black background
-        source_img = templait.convert("RGBA").resize((h,w))
+        source_img = templait.convert("RGBA").resize((h, w))
         if direction == "upwards":
             list_text.reverse()
             operator = "-"
@@ -339,7 +339,9 @@ def higlighted_text(
                 alpha.paste(circle.crop((0, 0, rad, rad)), (0, 0))
                 alpha.paste(circle.crop((0, rad, rad, rad * 2)), (0, mh - rad))
                 alpha.paste(circle.crop((rad, 0, rad * 2, rad)), (mw - rad, 0))
-                alpha.paste(circle.crop((rad, rad, rad * 2, rad * 2)), (mw - rad, mh - rad))
+                alpha.paste(
+                    circle.crop((rad, rad, rad * 2, rad * 2)), (mw - rad, mh - rad)
+                )
                 mask_img.putalpha(alpha)
             # put mask_img on source image & trans remove the corner white
             trans = Image.new("RGBA", source_img.size)
