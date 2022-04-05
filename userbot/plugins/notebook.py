@@ -242,7 +242,7 @@ def notebook_values(page, font):
     command=("write", plugin_category),
     info={
         "header": "To write down your text in notebook.",
-        "description": "Give text to it or reply to msg, it will write that in notebook.",
+        "description": "Give text to it or reply to message, it will write that in notebook.",
         "usage": "{tr}write <Reply/Text>",
     },
 )
@@ -260,7 +260,7 @@ async def write_page(event):
             text = rtext.message
         if not text:
             return await edit_delete(event, "**ಠ∀ಠ Gimmi text to write**")
-        cap = "**🖋️ Written Using :-** [CatUserbot](https://t.me/catuserbot_support)"
+        cap = "**🖋️ Written Using :- CatUserbot**"
     if cmd == "notebook":
         text = (
             (await catub(GetFullUserRequest(catub.uid))).full_user
@@ -328,12 +328,12 @@ async def notebook(event):
     command=("nb", plugin_category),
     info={
         "header": "Change configuration of notebook",
-        "description": "Customise Notebook font, page, pen color, log .... to full list of avilable options you have to use the cmd without input.",
+        "description": "Customise Notebook font, page, pen color, log .... to see full list of available options you have to use the cmd without input.",
         "flags": {
             "font": "To change font for notebook",
             "page": "To change page for notebook",
             "pen": "To change color of text for notebook",
-            "log": "Save your notes in your botlogger.",
+            "log": "To save your notes in your botlogger.",
         },
         "usage": [
             "{tr}nbfont <font name>",
