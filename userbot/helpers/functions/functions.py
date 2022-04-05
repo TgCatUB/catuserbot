@@ -260,7 +260,6 @@ def text_draw(font_name, font_size, img, text, hight):
 def higlighted_text(
     input_img,
     text,
-    output_img,
     background="black",
     foreground="white",
     transparency=255,
@@ -272,11 +271,12 @@ def higlighted_text(
     linespace="+2",
     rad=20,
     position=(0, 0),
+    album = False,
+    lines= None,
 ):
     templait = Image.open(input_img)
     # resize image
-    source_img = templait.convert("RGBA").resize((1024, 1024))
-    w, h = source_img.size
+    w = h = 1024
     if font_name is None:
         font_name = "userbot/helpers/styles/impact.ttf"
     font = ImageFont.truetype(font_name, font_size)
@@ -288,64 +288,73 @@ def higlighted_text(
     # wrap the text & save in a list
     mask_size = int((w / text_wrap) + 50)
     list_text = []
-    lines = text.splitlines()
-    for item in lines:
+    output = []
+    raw_text = text.splitlines()
+    for item in raw_text:
         input_text = "\n".join(wrap(item, int((40.0 / w) * mask_size)))
         split_text = input_text.splitlines()
         for final in split_text:
             list_text.append(final)
-    # create image with correct size and black background
-    if direction == "upwards":
-        list_text.reverse()
-        operator = "-"
-        hight = h - (th + int(th / 1.2)) + eh
-    else:
-        operator = "+"
-    for i, items in enumerate(list_text):
-        x, y = (font.getsize(list_text[i])[0] + 50, int(th * 2 - (th / 2)))
-        # align masks on the image....left,right & center
-        if align == "center":
-            width_align = "((mask_size-x)/2)"
-        elif align == "left":
-            width_align = "0"
-        elif align == "right":
-            width_align = "(mask_size-x)"
-        clr = ImageColor.getcolor(background, "RGBA")
-        if transparency == 0:
-            mask_img = Image.new(
-                "RGBA", (x, y), (clr[0], clr[1], clr[2], 0)
-            )  # background
-            mask_draw = ImageDraw.Draw(mask_img)
-            mask_draw.text((25, 8), list_text[i], foreground, font=font)
+    x = [list_text]
+    if album and len(list_text)>lines:
+        x = [list_text[i:i + lines] for i in range(0, len(list_text),lines)]
+    for pic_no, list_text in enumerate(x):
+        # create image with correct size and black background
+        source_img = templait.convert("RGBA").resize((h,w))
+        if direction == "upwards":
+            list_text.reverse()
+            operator = "-"
+            hight = h - (th + int(th / 1.2)) + eh
         else:
-            mask_img = Image.new(
-                "RGBA", (x, y), (clr[0], clr[1], clr[2], transparency)
-            )  # background
-            # put text on mask
-            mask_draw = ImageDraw.Draw(mask_img)
-            mask_draw.text((25, 8), list_text[i], foreground, font=font)
-            # https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi
-            circle = Image.new("L", (rad * 2, rad * 2), 0)
-            draw = ImageDraw.Draw(circle)
-            draw.ellipse((0, 0, rad * 2, rad * 2), transparency)
-            alpha = Image.new("L", mask_img.size, transparency)
-            mw, mh = mask_img.size
-            alpha.paste(circle.crop((0, 0, rad, rad)), (0, 0))
-            alpha.paste(circle.crop((0, rad, rad, rad * 2)), (0, mh - rad))
-            alpha.paste(circle.crop((rad, 0, rad * 2, rad)), (mw - rad, 0))
-            alpha.paste(circle.crop((rad, rad, rad * 2, rad * 2)), (mw - rad, mh - rad))
-            mask_img.putalpha(alpha)
-        # put mask_img on source image & trans remove the corner white
-        trans = Image.new("RGBA", source_img.size)
-        trans.paste(
-            mask_img,
-            (
-                (int(width) + int(eval(f"{width_align}"))),
-                (eval(f"{hight} {operator}({y*i}+({int(linespace)*i}))")),
-            ),
-        )
-        source_img = Image.alpha_composite(source_img, trans)
-    source_img.save(output_img, "png")
+            operator = "+"
+        for i, items in enumerate(list_text):
+            x, y = (font.getsize(list_text[i])[0] + 50, int(th * 2 - (th / 2)))
+            # align masks on the image....left,right & center
+            if align == "center":
+                width_align = "((mask_size-x)/2)"
+            elif align == "left":
+                width_align = "0"
+            elif align == "right":
+                width_align = "(mask_size-x)"
+            clr = ImageColor.getcolor(background, "RGBA")
+            if transparency == 0:
+                mask_img = Image.new(
+                    "RGBA", (x, y), (clr[0], clr[1], clr[2], 0)
+                )  # background
+                mask_draw = ImageDraw.Draw(mask_img)
+                mask_draw.text((25, 8), list_text[i], foreground, font=font)
+            else:
+                mask_img = Image.new(
+                    "RGBA", (x, y), (clr[0], clr[1], clr[2], transparency)
+                )  # background
+                # put text on mask
+                mask_draw = ImageDraw.Draw(mask_img)
+                mask_draw.text((25, 8), list_text[i], foreground, font=font)
+                # https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi
+                circle = Image.new("L", (rad * 2, rad * 2), 0)
+                draw = ImageDraw.Draw(circle)
+                draw.ellipse((0, 0, rad * 2, rad * 2), transparency)
+                alpha = Image.new("L", mask_img.size, transparency)
+                mw, mh = mask_img.size
+                alpha.paste(circle.crop((0, 0, rad, rad)), (0, 0))
+                alpha.paste(circle.crop((0, rad, rad, rad * 2)), (0, mh - rad))
+                alpha.paste(circle.crop((rad, 0, rad * 2, rad)), (mw - rad, 0))
+                alpha.paste(circle.crop((rad, rad, rad * 2, rad * 2)), (mw - rad, mh - rad))
+                mask_img.putalpha(alpha)
+            # put mask_img on source image & trans remove the corner white
+            trans = Image.new("RGBA", source_img.size)
+            trans.paste(
+                mask_img,
+                (
+                    (int(width) + int(eval(f"{width_align}"))),
+                    (eval(f"{hight} {operator}({y*i}+({int(linespace)*i}))")),
+                ),
+            )
+            source_img = Image.alpha_composite(source_img, trans)
+        output_img = f"./temp/cat{pic_no}.jpg"
+        output.append(output_img)
+        source_img.save(output_img, "png")
+    return output
 
 
 # ----------------------------------------------------------------------------------------------------------------------#
