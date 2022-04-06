@@ -7,7 +7,6 @@ import os
 import urllib
 
 from telethon.tl.functions.users import GetFullUserRequest
-
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import deEmojify, higlighted_text
 from ..sql_helper.globals import addgvar, gvarstatus
@@ -15,7 +14,7 @@ from . import BOTLOG, BOTLOG_CHATID, catub, reply_id
 
 plugin_category = "tools"
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Pages = {
     "Note Book": "note",
     "Raugh Book": "rough",
@@ -25,7 +24,7 @@ Pages = {
     "A4 Page": "a4",
 }
 
-Fonts = ["BrownBag", "Caveat", "HomemadeApple", "JottFLF", "LiuJian", "WriteSong"]
+Fonts = ["BrownBag", "Caveat", "HomemadeApple", "JottFLF", "WriteSong"]
 
 Colors = [
     "black",
@@ -50,7 +49,7 @@ Colors = [
     "red",
     "teal",
 ]
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 def notebook_values(page, font):
@@ -59,181 +58,151 @@ def notebook_values(page, font):
         lines = 28
         if font == "BrownBag":
             text_wrap = 1.1
-            font_size = 55
-            linespace = "-64"
+            font_size = 50
+            linespace = "-55"
             lines = 26
-        elif font == "HomemadeApple":
-            text_wrap = 1.1
-            font_size = 30
-            linespace = "-64"
-            lines = 26
-        elif font == "JottFLF":
-            text_wrap = 0.9
-            font_size = 40
-            linespace = "-38"
-        elif font == "LiuJian":
-            text_wrap = 0.7
-            font_size = 30
-            linespace = "-35"
-        elif font == "WriteSong":
-            text_wrap = 0.5
-            font_size = 30
-            linespace = "-15"
         elif font == "Caveat":
-            text_wrap = 0.666
+            text_wrap = 0.766
             font_size = 35
             linespace = "-35"
+        elif font == "HomemadeApple":
+            text_wrap = 1.2
+            font_size = 30
+            linespace = "-62"
+            lines = 26
+        elif font == "JottFLF":
+            text_wrap = 1.15
+            font_size = 40
+            linespace = "-37"
+        elif font == "WriteSong":
+            text_wrap = 0.6
+            font_size = 30
+            linespace = "-15"
     elif page == "spiral":
         position = (130, 10)
         lines = 26
         if font == "BrownBag":
-            text_wrap = 1.1
+            text_wrap = 1.2
             font_size = 55
-            linespace = "-64"
+            linespace = "-67"
+        elif font == "Caveat":
+            text_wrap = 0.766
+            font_size = 35
+            linespace = "-35"
+            lines = 28
         elif font == "HomemadeApple":
             text_wrap = 1.1
             font_size = 30
             linespace = "-64"
         elif font == "JottFLF":
-            text_wrap = 0.9
+            text_wrap = 1.05
             font_size = 40
-            linespace = "-38"
+            linespace = "-37"
             lines = 28
-        elif font == "LiuJian":
-            text_wrap = 0.7
-            font_size = 30
-            linespace = "-35"
-            lines = 30
         elif font == "WriteSong":
-            text_wrap = 0.5
+            text_wrap = 0.6
             font_size = 30
             linespace = "-15"
-        elif font == "Caveat":
-            text_wrap = 0.666
-            font_size = 35
-            linespace = "-35"
-            lines = 28
     elif page == "white":
         position = (130, 35)
+        lines = 27
         if font == "BrownBag":
-            text_wrap = 1.1
+            text_wrap = 1.12
             font_size = 50
-            linespace = "-57"
+            linespace = "-58"
             lines = 26
+        elif font == "Caveat":
+            text_wrap = 0.77
+            font_size = 35
+            linespace = "-36"
         elif font == "HomemadeApple":
             text_wrap = 1.1
             font_size = 28
             linespace = "-60"
-            lines = 28
         elif font == "JottFLF":
-            text_wrap = 0.9
+            text_wrap = 1
             font_size = 35
             linespace = "-30"
-        elif font == "LiuJian":
-            text_wrap = 0.7
-            font_size = 30
-            linespace = "-35"
-            lines = 30
         elif font == "WriteSong":
-            text_wrap = 0.6
+            text_wrap = 0.65
             font_size = 30
             linespace = "-20"
             lines = 30
-        elif font == "Caveat":
-            text_wrap = 0.75
-            font_size = 35
-            linespace = "-35"
-            lines = 27
     elif page == "notepad":
-        position = (80, 100)
-        lines = 25
+        position=(20, 100)
+        lines = 28
         if font == "BrownBag":
-            text_wrap = 1
-            font_size = 50
+            text_wrap = 1.17
+            font_size = 47
             linespace = "-57"
-        elif font == "HomemadeApple":
-            text_wrap = 0.9
-            font_size = 28
-            linespace = "-60"
-        elif font == "JottFLF":
-            text_wrap = 0.8
-            font_size = 35
-            linespace = "-30"
-        elif font == "LiuJian":
-            text_wrap = 0.666
-            font_size = 30
+        elif font == "Caveat":
+            text_wrap = 0.85
+            font_size = 33
             linespace = "-35"
+        elif font == "HomemadeApple":
+            text_wrap = 1.1
+            font_size = 26
+            linespace = "-56"
+        elif font == "JottFLF":
+            text_wrap = 1
+            font_size = 33
+            linespace = "-30"
         elif font == "WriteSong":
-            text_wrap = 0.6
+            text_wrap = 0.7
             font_size = 30
             linespace = "-23"
             lines = 30
-        elif font == "Caveat":
-            text_wrap = 0.666
-            font_size = 35
-            linespace = "-35"
-            lines = 24
+            position = (20, 110)   
     elif page == "note":
-        position = (80, 123)
+        position = (40, 115)
         lines = 22
         if font == "BrownBag":
-            text_wrap = 1
-            font_size = 50
-            linespace = "-54"
-            position = (80, 100)
-        elif font == "HomemadeApple":
-            text_wrap = 0.9
-            font_size = 28
-            linespace = "-57"
-            position = (80, 115)
-        elif font == "JottFLF":
-            text_wrap = 0.8
-            font_size = 36
-            linespace = "-30"
-        elif font == "LiuJian":
-            text_wrap = 0.666
-            font_size = 30
-            linespace = "-33"
-        elif font == "WriteSong":
-            text_wrap = 0.6
-            font_size = 30
-            linespace = "-14"
+            text_wrap = 1.1
+            font_size = 45
+            linespace = "-46"
+            position = (40,110)
         elif font == "Caveat":
-            text_wrap = 0.6
+            text_wrap = 0.85
             font_size = 35
             linespace = "-33"
-            position = (80, 115)
-    elif page == "rough":
-        position = (120, 55)
-        lines = 25
-        if font == "BrownBag":
-            text_wrap = 0.9
-            font_size = 50
-            linespace = "-56"
         elif font == "HomemadeApple":
+            text_wrap = 1.17
+            font_size = 28
+            linespace = "-57"
+            position = (40, 110)
+        elif font == "JottFLF":
+            text_wrap = 1.1
+            font_size = 36
+            linespace = "-29"
+        elif font == "WriteSong":
+            text_wrap = 0.7
+            font_size = 30
+            linespace = "-14"
+    elif page == "rough":
+        lines = 25
+        position = (70, 60)
+        if font == "BrownBag":
+            text_wrap = 1.1
+            font_size = 45
+            linespace = "-47"
+            position = (70, 50)
+        elif font == "Caveat":
             text_wrap = 0.9
+            font_size = 35
+            linespace = "-35"
+        elif font == "HomemadeApple":
+            text_wrap = 1.1
             font_size = 27
             linespace = "-55"
         elif font == "JottFLF":
-            text_wrap = 0.65
-            font_size = 36
-            linespace = "-31"
-            position = (120, 60)
-        elif font == "LiuJian":
-            text_wrap = 0.6
-            font_size = 30
-            linespace = "-31"
-            position = (120, 65)
+            text_wrap = 0.95
+            font_size = 33
+            linespace = "-25"
         elif font == "WriteSong":
-            text_wrap = 0.45
+            text_wrap = 0.666
             font_size = 30
             linespace = "-16"
-            position = (120, 65)
-        elif font == "Caveat":
-            text_wrap = 0.6
-            font_size = 35
-            linespace = "-35"
-            position = (120, 60)
+            position = (70, 65)
     return lines, text_wrap, font_size, linespace, position
 
 

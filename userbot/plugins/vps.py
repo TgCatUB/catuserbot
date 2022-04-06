@@ -1,3 +1,8 @@
+# \\ Created by-@Jisan7509 -- Github.com/Jisan09 //
+#  \\   https://github.com/TgCatUB/catuserbot   //
+#   \\       Plugin for @catuserbot            //
+#    ```````````````````````````````````````````
+
 import asyncio
 import glob
 import os
@@ -79,7 +84,7 @@ async def variable(event):  # sourcery no-metrics
         value = "".join(variable.split(maxsplit=1)[1:])
         variable = "".join(variable.split(maxsplit=1)[0])
         if variable not in var_checker:
-            value = f'"{value}"'
+            value = f"'{value}'"
         if not value:
             return await cat.edit("`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1)
@@ -94,7 +99,7 @@ async def variable(event):  # sourcery no-metrics
         else:
             string += f"    {variable} = {value}\n"
             await cat.edit(
-                f"`{variable}`**  successfully added with value`  ->  **{value}`"
+                f"`{variable}`**  successfully added with value  ->  **`{value}`"
             )
         with open(config, "w") as f1:
             f1.write(string)
