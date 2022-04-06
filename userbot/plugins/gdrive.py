@@ -1491,7 +1491,7 @@ async def g_download(event):
         return await edit_delete(catevent, file_name)
     thumb = thumb_image_path if os.path.exists(thumb_image_path) else None
     if not cmd:
-        await catevent.edit("**File Downloaded.\nLocation : **`" + str(file_name) + "`")
+        await catevent.edit("**File Downloaded.\nLocation : **`" + str(os.path.relpath(file_name, start=os.curdir)) + "`")
     else:
         c_time = time.time()
         await event.client.send_file(
@@ -1508,7 +1508,7 @@ async def g_download(event):
         os.remove(file_name)
         await edit_delete(
             catevent,
-            "**File Downloaded and uploaded.\nName : **`" + str(file_name) + "`",
+            "**File Downloaded and uploaded.\nName : **`" + str(os.path.relpath(file_name, start=os.curdir)) + "`",
             5,
         )
 
