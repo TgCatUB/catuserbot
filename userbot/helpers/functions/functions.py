@@ -276,8 +276,8 @@ def higlighted_text(
 ):
     templait = Image.open(input_img)
     # resize image
-    rw,rh = templait.size
-    w,h = (1024, int(1024*rh/rw)) if rw>rh else (int(1024*rw/rh), 1024)
+    rw, rh = templait.size
+    w, h = (1024, int(1024 * rh / rw)) if rw > rh else (int(1024 * rw / rh), 1024)
     if font_name is None:
         font_name = "userbot/helpers/styles/impact.ttf"
     font = ImageFont.truetype(font_name, font_size)
@@ -301,7 +301,7 @@ def higlighted_text(
         x = [list_text[i : i + lines] for i in range(0, len(list_text), lines)]
     for pic_no, list_text in enumerate(x):
         # create image with correct size and black background
-        source_img = templait.convert("RGBA").resize((w,h))
+        source_img = templait.convert("RGBA").resize((w, h))
         if direction == "upwards":
             list_text.reverse()
             operator = "-"
