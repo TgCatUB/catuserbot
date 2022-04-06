@@ -962,13 +962,13 @@ async def generate_credentials(gdrive):
         if getcode:
             code = getcode.group(2)
         else:
-            await edit_or_reply(gdrive,"Given link is wrong. recheck your link")
+            await edit_or_reply(gdrive, "Given link is wrong. recheck your link")
             return
         try:
             flow.fetch_token(code=code)
         except Exception as e:
             LOGS.exeception(e)
-            await edit_or_reply(gdrive,"Given link is wrong. recheck your link")
+            await edit_or_reply(gdrive, "Given link is wrong. recheck your link")
             return
         creds = flow.credentials
         await asyncio.sleep(3.5)
