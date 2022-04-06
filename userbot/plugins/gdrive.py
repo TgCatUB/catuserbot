@@ -814,6 +814,8 @@ async def glists(gdrive, folderlink=None):  # sourcery no-metrics
         try:
             if GDRIVE_.parent_Id is not None:
                 query = f"'{GDRIVE_.parent_Id}' in parents and (name contains '*')"
+            else:
+                query= = ""
         except NameError:
             if G_DRIVE_FOLDER_ID is not None:
                 query = f"'{G_DRIVE_FOLDER_ID}' in parents and (name contains '*')"
