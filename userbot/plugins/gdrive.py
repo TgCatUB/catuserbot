@@ -165,7 +165,6 @@ async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
     if uri:
         try:
             from .torrentutils import aria2, check_metadata
-
             cattorrent = True
         except Exception:
             cattorrent = False
@@ -386,10 +385,7 @@ async def gdrive_download(
 
             else:
                 file_size = int(download.headers["Content-Length"])
-            file_name = re.search(
-                "filename='(.)'", download.headers["Content-Disposition"]
-            ).group(1)
-
+            file_name = re.search("filename='(.)'", download.headers["Content-Disposition"])[1]
             file_path = os.path.join(path, file_name)
             with io.FileIO(file_path, "wb") as files:
                 CHUNK_SIZE = None
@@ -584,15 +580,19 @@ async def create_dir(service, folder_name, dir_id=None):
 
 
 async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
-    try:
+    with contextlib.suppress(Exception):
         await gdrive.edit("`Processing upload...`")
-    except Exception:
-        pass
+        if dir_id is not None:
+            dir_id = [dir_id]
+        elif GDRIVE_.parent_Id is not None:
+            dir_id = [GDRIVE_.parent_Id]
+        else:
+            dir_id = ""
     body = {
         "name": file_name,
         "description": "Uploaded from Telegram using Catuserbot.",
         "mimeType": mimeType,
-        "parents": [dir_id] if dir_id is not None else [GDRIVE_.parent_Id],
+        "parents": dir_id,
     }
     media_body = MediaFileUpload(file_path, mimetype=mimeType, resumable=True)
     # Start upload process
@@ -617,18 +617,7 @@ async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
             percentage = uploaded / file_size * 100
             speed = round(uploaded / diff, 2)
             eta = round((file_size - uploaded) / speed)
-            prog_str = "`Uploading :`\n`[{0}{1}] {2}`".format(
-                "".join(
-                    Config.FINISHED_PROGRESS_STR
-                    for i in range(math.floor(percentage / 10))
-                ),
-                "".join(
-                    Config.UNFINISHED_PROGRESS_STR
-                    for i in range(10 - math.floor(percentage / 10))
-                ),
-                round(percentage, 2),
-            )
-
+            prog_str = "`Uploading :`\n`[{0}{1}] {2}`".format("".join(Config.FINISHED_PROGRESS_STR for _ in range(math.floor(percentage / 10))), "".join(Config.UNFINISHED_PROGRESS_STR for _ in range(10 - math.floor(percentage / 10))), round(percentage, 2))
             current_message = (
                 "**Uploading **\n\n"
                 f"**Name : **`{file_name}`\n"
@@ -652,7 +641,7 @@ async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
 async def task_directory(gdrive, service, folder_path, dir_id=None):
     GDRIVE_.is_cancelled = False
     lists = os.listdir(folder_path)
-    dir_id = dir_id or GDRIVE_.parent_Id
+    dir_id = dir_id or GDRIVE_.parent_Id or ""
     if len(lists) == 0:
         return dir_id
     for f in lists:
@@ -831,7 +820,7 @@ async def glists(gdrive, folderlink=None):  # sourcery no-metrics
         else:
             query = f"'{parents}' in parents and (name contains '{name}')"
     elif re.search("-p ([\s\S]*)", checker):
-        parents = re.search("-p ([\s\S]*)", checker).group(1)
+        parents = re.search("-p ([\s\S]*)", checker)[1]
         name = checker.split("-p")[0].strip()
         query = f"'{parents}' in parents and (name contains '{name}')"
     else:
@@ -866,12 +855,10 @@ async def glists(gdrive, folderlink=None):  # sourcery no-metrics
                 gdrive,
                 f"**[GDRIVE - LIST]**\n\n**Status : **`BAD`\n**Reason : **`{e}`",
             )
-
             return
         for files in response.get("files", []):
             if len(result) >= page_size:
                 break
-
             file_name = files.get("name")
             if files.get("mimeType") == "application/vnd.google-apps.folder":
                 link = files.get("webViewLink")
@@ -1074,7 +1061,7 @@ async def google_drive_managers(gdrive):  # sourcery no-metrics
         }
         try:
             len(GDRIVE_.parent_Id)
-        except NameError:
+        except (NameError,TypeError):
             """Fallback to G_DRIVE_FOLDER_ID else to root dir"""
             if G_DRIVE_FOLDER_ID is not None:
                 metadata["parents"] = [G_DRIVE_FOLDER_ID]
@@ -1179,7 +1166,7 @@ async def google_drive_managers(gdrive):  # sourcery no-metrics
                 f"**ID    :** `{f_id}`\n"
             )
             if mimeType != "application/vnd.google-apps.folder":
-                msg += f"**Size  :** `{humanbytes(f_size)}`\n"
+                msg += f"**Size  :** `{humanbytes(int(f_size))}`\n"
                 msg += f"**Link  :** [{name_or_id}]({downloadURL})\n\n"
             else:
                 msg += f"**URL   :** [Open]({webViewLink})\n\n"
