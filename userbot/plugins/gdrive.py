@@ -102,7 +102,7 @@ G_DRIVE_FOLDER_LINK = "📁 [{}](https://drive.google.com/drive/folders/{})"
 
 class GDRIVE:
     def __init__(self):
-        self.parent_Id = G_DRIVE_FOLDER_ID or ""
+        self.parent_Id = G_DRIVE_FOLDER_ID or None
         self.is_cancelled = False
 
 
@@ -565,7 +565,7 @@ async def create_dir(service, folder_name, dir_id=None):
     if not dir_id:
         try:
             len(GDRIVE_.parent_Id)
-        except NameError:
+        except (NameError, TypeError):
             # Fallback to G_DRIVE_FOLDER_ID else root dir
             if G_DRIVE_FOLDER_ID is not None:
                 metadata["parents"] = [G_DRIVE_FOLDER_ID]
@@ -795,7 +795,7 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                 )
 
 
-async def lists(gdrive, folderlink=None):  # sourcery no-metrics
+async def glists(gdrive, folderlink=None):  # sourcery no-metrics
     checker = gdrive.pattern_match.group(1)
     if checker is not None:
         page_size = int(gdrive.pattern_match.group(1).strip("-l "))
@@ -1023,7 +1023,7 @@ async def reset_credentials(gdrive):
 )
 async def catlists(gdrive):
     "To get list of files and folers"
-    await lists(gdrive)
+    await glists(gdrive)
 
 
 @catub.cat_cmd(
