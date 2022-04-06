@@ -15,15 +15,11 @@ from urllib.parse import quote
 
 import requests
 from bs4 import BeautifulSoup
+from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
-from httplib2 import Http
-from oauth2client.client import (
-    FlowExchangeError,
-    HttpAccessTokenRefreshError,
-    OAuth2WebServerFlow,
-)
 from telethon import events
 
 from userbot import catub
@@ -34,12 +30,17 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import CancelProcess, humanbytes, progress, time_formatter
 from ..helpers.utils import _format
 from ..sql_helper import google_drive_sql as helper
-from . import BOTLOG, BOTLOG_CHATID, TMP_DOWNLOAD_DIRECTORY
+from . import (
+    BOTLOG,
+    BOTLOG_CHATID,
+    TMP_DOWNLOAD_DIRECTORY,
+)
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
 
 # Catuserbot Google Drive managers  ported from Projectbish and added extra things by @mrconfused
+
 
 # =========================================================== #
 #                          STATIC                             #
@@ -52,10 +53,9 @@ GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
 GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
 SCOPES = [
     "https://www.googleapis.com/auth/drive",
-    "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive.metadata",
 ]
-REDIRECT_URI = "http://localhost"
+REDIRECT_URI = "https://localhost"
 # =========================================================== #
 #      STATIC CASE FOR G_DRIVE_FOLDER_ID IF VALUE IS URL      #
 # =========================================================== #
@@ -106,7 +106,7 @@ G_DRIVE_FOLDER_LINK = "📁 [{}](https://drive.google.com/drive/folders/{})"
 
 class GDRIVE:
     def __init__(self):
-        self.parent_Id = G_DRIVE_FOLDER_ID or None
+        self.parent_Id = G_DRIVE_FOLDER_ID or ""
         self.is_cancelled = False
 
 
@@ -121,27 +121,21 @@ async def create_app(gdrive):
     if creds is not None:
         """Repack credential objects from strings"""
         creds = pickle.loads(base64.b64decode(creds.encode()))
-    else:
-        await gdrive.edit("`Credentials is empty, please generate it...`")
-        return False
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            await gdrive.edit("`Refreshing credentials...`")
+            """Refresh credentials"""
+            creds.refresh(Request())
+            helper.save_credentials(
+                str(hmm), base64.b64encode(pickle.dumps(creds)).decode()
+            )
+        else:
+            await gdrive.edit("`Credentials is empty, please generate it...`")
+            return False
     with contextlib.suppress(BaseException):
         cat = Get(cat)
         await gdrive.client(cat)
-    try:
-        return build("drive", "v3", credentials=creds, cache_discovery=False)
-    except Exception:
-        await gdrive.edit("`Refreshing credentials...`")
-        try:
-            creds.refresh(Http())
-        except HttpAccessTokenRefreshError as e:
-            LOGS.exception(e)
-            helper.clear_credentials(str(hmm))
-            await gdrive.edit("Please do gauth again")
-            return False
-        helper.save_credentials(
-            str(hmm), base64.b64encode(pickle.dumps(creds)).decode()
-        )
-        return build("drive", "v3", credentials=creds, cache_discovery=False)
+    return build("drive", "v3", credentials=creds, cache_discovery=False)
 
 
 async def get_raw_name(file_path):
@@ -165,7 +159,7 @@ async def get_file_id(input_str):
         return link, "unknown"
 
 
-async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
+async def download(event, gdrive, service, uri=None):    # sourcery no-metrics
     """Download files to local then upload"""
     start = datetime.now()
     reply = ""
@@ -371,14 +365,10 @@ async def gdrive_download(
             except KeyError:
                 page = BeautifulSoup(download.content, "lxml")
                 try:
-                    export = drive + page.find("a", {"id": "uc-download-link"}).get(
-                        "href"
-                    )
+                    export = (drive + page.find("a", {"id": "uc-download-link"}).get("href"))
                 except AttributeError:
                     try:
-                        error = (
-                            page.find("p", {"class": "uc-error-caption"}).text + "\n"
-                        ) + page.find("p", {"class": "uc-error-subcaption"}).text
+                        error = (page.find("p", {"class": "uc-error-caption"}).text + "\n") + page.find("p", {"class": "uc-error-subcaption"}).text
 
                     except Exception:
                         reply += "**[FILE - ERROR]**\n\n**Status : **BAD - failed to download.\n**Reason : **uncaught err."
@@ -388,17 +378,11 @@ async def gdrive_download(
 
                     return reply, "Error"
                 download = session.get(export, stream=True)
-                file_size = humanbytes(
-                    page.find("span", {"class": "uc-name-size"})
-                    .text.split()[-1]
-                    .strip("()")
-                )
+                file_size = humanbytes(page.find("span", {"class": "uc-name-size"}).text.split()[-1].strip("()"))
 
             else:
                 file_size = int(download.headers["Content-Length"])
-            file_name = re.search(
-                "filename='(.)'", download.headers["Content-Disposition"]
-            ).group(1)
+            file_name = re.search("filename='(.)'", download.headers["Content-Disposition"]).group(1)
 
             file_path = os.path.join(path, file_name)
             with io.FileIO(file_path, "wb") as files:
@@ -421,11 +405,7 @@ async def gdrive_download(
                     percentage = downloaded / file_size * 100
                     speed = round(downloaded / diff, 2)
                     eta = round((file_size - downloaded) / speed)
-                    prog_str = "`[{0}{1}] {2}%`".format(
-                        "".join("▰" for _ in range(math.floor(percentage / 10))),
-                        "".join("▱" for _ in range(10 - math.floor(percentage / 10))),
-                        round(percentage, 2),
-                    )
+                    prog_str = "`[{0}{1}] {2}%`".format("".join("▰" for _ in range(math.floor(percentage / 10))), "".join("▱" for _ in range(10 - math.floor(percentage / 10))), round(percentage, 2))
 
                     current_message = f"**File downloading**\n\n**Name : **`{file_name}`\n**Status**\n{prog_str}\n`{humanbytes(downloaded)} of {humanbytes(file_size)}` @ {humanbytes(speed)}`\n**ETA :** `{time_formatter(eta)}`"
 
@@ -468,18 +448,7 @@ async def gdrive_download(
                     percentage = downloaded / file_size * 100
                     speed = round(downloaded / diff, 2)
                     eta = round((file_size - downloaded) / speed)
-                    prog_str = "`{0}` | `[{1}{2}] {3}%`".format(
-                        status,
-                        "".join(
-                            Config.FINISHED_PROGRESS_STR
-                            for _ in range(math.floor(percentage / 5))
-                        ),
-                        "".join(
-                            Config.UNFINISHED_PROGRESS_STR
-                            for _ in range(20 - math.floor(percentage / 5))
-                        ),
-                        round(percentage, 2),
-                    )
+                    prog_str = "`{0}` | `[{1}{2}] {3}%`".format(status, "".join(Config.FINISHED_PROGRESS_STR for _ in range(math.floor(percentage / 5))), "".join(Config.UNFINISHED_PROGRESS_STR for _ in range(20 - math.floor(percentage / 5))), round(percentage, 2))
 
                     current_message = (
                         "**File Downloading**\n\n"
@@ -549,7 +518,7 @@ async def change_permission(service, Id):
         ):
             return
         else:
-            raise e from e
+            raise e
     return
 
 
@@ -575,7 +544,7 @@ async def create_dir(service, folder_name, dir_id=None):
     if not dir_id:
         try:
             len(GDRIVE_.parent_Id)
-        except (NameError, TypeError):
+        except NameError:
             # Fallback to G_DRIVE_FOLDER_ID else root dir
             if G_DRIVE_FOLDER_ID is not None:
                 metadata["parents"] = [G_DRIVE_FOLDER_ID]
@@ -630,11 +599,11 @@ async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
             prog_str = "`Uploading :`\n`[{0}{1}] {2}`".format(
                 "".join(
                     Config.FINISHED_PROGRESS_STR
-                    for _ in range(math.floor(percentage / 10))
+                    for i in range(math.floor(percentage / 10))
                 ),
                 "".join(
                     Config.UNFINISHED_PROGRESS_STR
-                    for _ in range(10 - math.floor(percentage / 10))
+                    for i in range(10 - math.floor(percentage / 10))
                 ),
                 round(percentage, 2),
             )
@@ -759,8 +728,8 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                     percentage = int(file.progress)
                     downloaded = percentage * int(file.total_length) / 100
                     prog_str = "**Downloading : **`[{0}{1}] {2}`".format(
-                        "".join("▰" for _ in range(math.floor(percentage / 10))),
-                        "".join("▱" for _ in range(10 - math.floor(percentage / 10))),
+                        "".join("▰" for i in range(math.floor(percentage / 10))),
+                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
                         file.progress_string(),
                     )
 
@@ -805,7 +774,7 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                 )
 
 
-async def glists(gdrive, folderlink=None):  # sourcery no-metrics
+async def lists(gdrive, folderlink=None):  # sourcery no-metrics
     checker = gdrive.pattern_match.group(1)
     if checker is not None:
         page_size = int(gdrive.pattern_match.group(1).strip("-l "))
@@ -824,8 +793,6 @@ async def glists(gdrive, folderlink=None):  # sourcery no-metrics
         try:
             if GDRIVE_.parent_Id is not None:
                 query = f"'{GDRIVE_.parent_Id}' in parents and (name contains '*')"
-            else:
-                query = ""
         except NameError:
             if G_DRIVE_FOLDER_ID is not None:
                 query = f"'{G_DRIVE_FOLDER_ID}' in parents and (name contains '*')"
@@ -939,9 +906,7 @@ async def generate_credentials(gdrive):
                 "**Status : **`BAD`\n"
                 "**Reason : **`G_DRIVE_DATA entity is not valid!`",
             )
-            return
-        G_DRIVE_CLIENTID = configs["installed"]["client_id"]
-        G_DRIVE_CLIENTSECRET = configs["installed"]["client_secret"]
+            return False
     else:
         """Only for old user"""
         if G_DRIVE_CLIENT_ID is None and G_DRIVE_CLIENT_SECRET is None:
@@ -951,14 +916,20 @@ async def generate_credentials(gdrive):
                 "**Status : **`BAD`\n"
                 "**Reason : **`please get your G_DRIVE_DATA`",
             )
-            return
-        G_DRIVE_CLIENTID = G_DRIVE_CLIENT_ID
-        G_DRIVE_CLIENTSECRET = G_DRIVE_CLIENT_SECRET
+            return False
+        configs = {
+            "installed": {
+                "client_id": G_DRIVE_CLIENT_ID,
+                "client_secret": G_DRIVE_CLIENT_SECRET,
+                "auth_uri": GOOGLE_AUTH_URI,
+                "token_uri": GOOGLE_TOKEN_URI,
+            }
+        }
     gdrive = await edit_or_reply(gdrive, "`Creating credentials...`")
-    flow = OAuth2WebServerFlow(
-        G_DRIVE_CLIENTID, G_DRIVE_CLIENTSECRET, SCOPES, redirect_uri=REDIRECT_URI
+    flow = InstalledAppFlow.from_client_config(
+        configs, SCOPES, redirect_uri=REDIRECT_URI
     )
-    auth_url = flow.step1_get_authorize_url()
+    auth_url, _ = flow.authorization_url(access_type="offline", prompt="consent")
     msg = await gdrive.respond(
         "`Go to your Private log group to authenticate token...`"
     )
@@ -969,10 +940,8 @@ async def generate_credentials(gdrive):
         r = conv.wait_event(events.NewMessage(outgoing=True, chats=BOTLOG_CHATID))
         r = await r
         code = r.message.message.strip()
-        try:
-            creds = flow.step2_exchange(code=code)
-        except FlowExchangeError as e:
-            LOGS.exception(e)
+        flow.fetch_token(code=code)
+        creds = flow.credentials
         await asyncio.sleep(3.5)
         await gdrive.client.delete_messages(gdrive.chat_id, msg.id)
         await gdrive.client.delete_messages(BOTLOG_CHATID, [url_msg.id, r.id])
@@ -981,6 +950,7 @@ async def generate_credentials(gdrive):
         await gdrive.edit("`Credentials created...`")
     helper.save_credentials(str(gdrive.sender_id), creds)
     await gdrive.delete()
+    return
 
 
 @catub.cat_cmd(
@@ -1025,7 +995,7 @@ async def reset_credentials(gdrive):
 )
 async def catlists(gdrive):
     "To get list of files and folers"
-    await glists(gdrive)
+    await lists(gdrive)
 
 
 @catub.cat_cmd(
