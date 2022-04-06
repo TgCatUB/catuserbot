@@ -7,6 +7,7 @@ import os
 import urllib
 
 from telethon.tl.functions.users import GetFullUserRequest
+
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import deEmojify, higlighted_text
 from ..sql_helper.globals import addgvar, gvarstatus
@@ -129,7 +130,7 @@ def notebook_values(page, font):
             linespace = "-20"
             lines = 30
     elif page == "notepad":
-        position=(20, 100)
+        position = (20, 100)
         lines = 28
         if font == "BrownBag":
             text_wrap = 1.17
@@ -152,7 +153,7 @@ def notebook_values(page, font):
             font_size = 30
             linespace = "-23"
             lines = 30
-            position = (20, 110)   
+            position = (20, 110)
     elif page == "note":
         position = (40, 115)
         lines = 22
@@ -160,7 +161,7 @@ def notebook_values(page, font):
             text_wrap = 1.1
             font_size = 45
             linespace = "-46"
-            position = (40,110)
+            position = (40, 110)
         elif font == "Caveat":
             text_wrap = 0.85
             font_size = 35
