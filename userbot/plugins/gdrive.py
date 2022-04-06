@@ -912,11 +912,8 @@ async def generate_credentials(gdrive):
         )
     hmm = gdrive.client.uid
     if helper.get_credentials(str(hmm)) is not None:
-        await edit_or_reply(gdrive, "`You already authorized token...`")
-        await asyncio.sleep(1.5)
-        await gdrive.delete()
-        return False
-    """Generate credentials"""
+        await edit_delete(gdrive, "`You already authorized token...`")
+        return
     if G_DRIVE_DATA is not None:
         try:
             configs = json.loads(G_DRIVE_DATA)
@@ -961,17 +958,27 @@ async def generate_credentials(gdrive):
         r = conv.wait_event(events.NewMessage(outgoing=True, chats=BOTLOG_CHATID))
         r = await r
         code = r.message.message.strip()
-        flow.fetch_token(code=code)
+        getcode = re.search("(.*)(4\/.*)(&.*)", code)
+        if getcode:
+            code = getcode.group(2)
+        else:
+            await edit_or_reply(gdrive,"Given link is wrong. recheck your link")
+            return
+        try:
+            flow.fetch_token(code=code)
+        except Exception as e:
+            LOGS.exeception(e)
+            await edit_or_reply(gdrive,"Given link is wrong. recheck your link")
+            return
         creds = flow.credentials
         await asyncio.sleep(3.5)
         await gdrive.client.delete_messages(gdrive.chat_id, msg.id)
         await gdrive.client.delete_messages(BOTLOG_CHATID, [url_msg.id, r.id])
-        """Unpack credential objects into strings"""
         creds = base64.b64encode(pickle.dumps(creds)).decode()
         await gdrive.edit("`Credentials created...`")
     helper.save_credentials(str(gdrive.sender_id), creds)
+    await asyncio.sleep(5)
     await gdrive.delete()
-    return
 
 
 @catub.cat_cmd(
