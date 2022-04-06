@@ -165,6 +165,7 @@ async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
     if uri:
         try:
             from .torrentutils import aria2, check_metadata
+
             cattorrent = True
         except Exception:
             cattorrent = False
@@ -385,7 +386,9 @@ async def gdrive_download(
 
             else:
                 file_size = int(download.headers["Content-Length"])
-            file_name = re.search("filename='(.)'", download.headers["Content-Disposition"])[1]
+            file_name = re.search(
+                "filename='(.)'", download.headers["Content-Disposition"]
+            )[1]
             file_path = os.path.join(path, file_name)
             with io.FileIO(file_path, "wb") as files:
                 CHUNK_SIZE = None
@@ -617,7 +620,17 @@ async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
             percentage = uploaded / file_size * 100
             speed = round(uploaded / diff, 2)
             eta = round((file_size - uploaded) / speed)
-            prog_str = "`Uploading :`\n`[{0}{1}] {2}`".format("".join(Config.FINISHED_PROGRESS_STR for _ in range(math.floor(percentage / 10))), "".join(Config.UNFINISHED_PROGRESS_STR for _ in range(10 - math.floor(percentage / 10))), round(percentage, 2))
+            prog_str = "`Uploading :`\n`[{0}{1}] {2}`".format(
+                "".join(
+                    Config.FINISHED_PROGRESS_STR
+                    for _ in range(math.floor(percentage / 10))
+                ),
+                "".join(
+                    Config.UNFINISHED_PROGRESS_STR
+                    for _ in range(10 - math.floor(percentage / 10))
+                ),
+                round(percentage, 2),
+            )
             current_message = (
                 "**Uploading **\n\n"
                 f"**Name : **`{file_name}`\n"
@@ -1061,7 +1074,7 @@ async def google_drive_managers(gdrive):  # sourcery no-metrics
         }
         try:
             len(GDRIVE_.parent_Id)
-        except (NameError,TypeError):
+        except (NameError, TypeError):
             """Fallback to G_DRIVE_FOLDER_ID else to root dir"""
             if G_DRIVE_FOLDER_ID is not None:
                 metadata["parents"] = [G_DRIVE_FOLDER_ID]
