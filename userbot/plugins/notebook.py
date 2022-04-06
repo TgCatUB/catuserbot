@@ -230,7 +230,7 @@ async def write_page(event):
             text = rtext.message
         if not text:
             return await edit_delete(event, "**ಠ∀ಠ Gimmi text to write**")
-        cap = "**🖋️ Written Using :- CatUserbot**"
+        cap = None
     if cmd == "notebook":
         text = (
             (await catub(GetFullUserRequest(catub.uid))).full_user

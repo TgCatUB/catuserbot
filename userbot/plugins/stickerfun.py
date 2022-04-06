@@ -265,7 +265,6 @@ async def quby(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     temp_name = "./temp/quby_temp.png"
-    file_name = "./temp/quby.png"
     templait = urllib.request.urlretrieve(
         "https://telegra.ph/file/09f4df5a129758a2e1c9c.jpg", temp_name
     )
@@ -278,24 +277,23 @@ async def quby(event):
         wrap = 1.2
         position = (0, 0)
     text = deEmojify(text)
-    higlighted_text(
+    file = higlighted_text(
         temp_name,
         text,
-        file_name,
         text_wrap=wrap,
         font_size=font,
         linespace="+4",
         position=position,
     )
     if cmd == "b":
-        cat = convert_tosticker(file_name)
+        cat = convert_tosticker(file[0])
         await event.client.send_file(
             event.chat_id, cat, reply_to=reply_to_id, force_document=False
         )
     else:
-        await clippy(event.client, file_name, event.chat_id, reply_to_id)
+        await clippy(event.client, file[0], event.chat_id, reply_to_id)
     await event.delete()
-    for files in (temp_name, file_name):
+    for files in (temp_name, file[0]):
         if files and os.path.exists(files):
             os.remove(files)
 
@@ -333,7 +331,6 @@ async def knife(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     temp_name = "./temp/knife_temp.png"
-    file_name = "./temp/knife.png"
     templait = urllib.request.urlretrieve(
         "https://telegra.ph/file/2188367c8c5f43c36aa59.jpg", temp_name
     )
@@ -346,10 +343,9 @@ async def knife(event):
         wrap = 1.4
         position = (150, 500)
     text = deEmojify(text)
-    higlighted_text(
+    file = higlighted_text(
         temp_name,
         text,
-        file_name,
         text_wrap=wrap,
         font_size=font,
         linespace="-5",
@@ -357,14 +353,14 @@ async def knife(event):
         direction="upwards",
     )
     if cmd == "b":
-        cat = convert_tosticker(file_name)
+        cat = convert_tosticker(file[0])
         await event.client.send_file(
             event.chat_id, cat, reply_to=reply_to_id, force_document=False
         )
     else:
-        await clippy(event.client, file_name, event.chat_id, reply_to_id)
+        await clippy(event.client, file[0], event.chat_id, reply_to_id)
     await event.delete()
-    for files in (temp_name, file_name):
+    for files in (temp_name, file[0]):
         if files and os.path.exists(files):
             os.remove(files)
 
@@ -402,7 +398,6 @@ async def doge(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     temp_name = "./temp/doge_temp.jpg"
-    file_name = "./temp/doge.jpg"
     templait = urllib.request.urlretrieve(
         "https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg", temp_name
     )
@@ -411,10 +406,9 @@ async def doge(event):
     bg, fg, alpha, ls = (
         ("black", "white", 255, "5") if cmd == "h" else ("white", "black", 0, "-40")
     )
-    higlighted_text(
+    file = higlighted_text(
         temp_name,
         text,
-        file_name,
         text_wrap=wrap,
         font_size=font,
         linespace=ls,
@@ -424,12 +418,12 @@ async def doge(event):
         foreground=fg,
         transparency=alpha,
     )
-    cat = convert_tosticker(file_name)
+    cat = convert_tosticker(file[0])
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
     await event.delete()
-    for files in (temp_name, file_name):
+    for files in (temp_name, file[0]):
         if files and os.path.exists(files):
             os.remove(files)
 
@@ -467,7 +461,6 @@ async def penguin(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     temp_name = "./temp/peguin_temp.jpg"
-    file_name = "./temp/penguin.jpg"
     templait = urllib.request.urlretrieve(
         "https://telegra.ph/file/ee1fc91bbaef2cc808c7c.png", temp_name
     )
@@ -476,10 +469,9 @@ async def penguin(event):
     bg, fg, alpha, ls = (
         ("black", "white", 255, "-20") if cmd == "h" else ("white", "black", 0, "-40")
     )
-    higlighted_text(
+    file = higlighted_text(
         temp_name,
         text,
-        file_name,
         text_wrap=wrap,
         font_size=font,
         linespace=ls,
@@ -489,12 +481,12 @@ async def penguin(event):
         foreground=fg,
         transparency=alpha,
     )
-    cat = convert_tosticker(file_name)
+    cat = convert_tosticker(file[0])
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
     await event.delete()
-    for files in (temp_name, file_name):
+    for files in (temp_name, file[0]):
         if files and os.path.exists(files):
             os.remove(files)
 
@@ -532,7 +524,6 @@ async def gandhi(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     temp_name = "./temp/gandhi_temp.jpg"
-    file_name = "./temp/gandhi.jpg"
     templait = urllib.request.urlretrieve(
         "https://telegra.ph/file/3bebc56ee82cce4f300ce.jpg", temp_name
     )
@@ -541,10 +532,9 @@ async def gandhi(event):
     bg, fg, alpha, ls = (
         ("white", "black", 255, "-20") if cmd == "h" else ("black", "white", 0, "-40")
     )
-    higlighted_text(
+    file = higlighted_text(
         temp_name,
         text,
-        file_name,
         text_wrap=wrap,
         font_size=font,
         linespace=ls,
@@ -554,11 +544,11 @@ async def gandhi(event):
         foreground=fg,
         transparency=alpha,
     )
-    cat = convert_tosticker(file_name)
+    cat = convert_tosticker(file[0])
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
     await event.delete()
-    for files in (temp_name, file_name):
+    for files in (temp_name, file[0]):
         if files and os.path.exists(files):
             os.remove(files)
