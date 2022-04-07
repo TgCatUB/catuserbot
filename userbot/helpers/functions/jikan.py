@@ -605,7 +605,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
                 aired += "-" + str(result["startDate"]["day"])
         else:
             aired = "Unknown"
-        if result["status"].lower() != " finished":
+        if result["status"].lower() != "finished":
             endaired = "Airing Now"
         else:
             endaired = ""
