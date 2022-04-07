@@ -582,6 +582,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
             f"""
         🆎 <b>Type</b>: <i>{result['type'].lower()}</i>
         🆔 <b>MAL ID</b>: <i>{result['idMal']}</i>
+        🆔 <b>AL ID</b>: <i>{result['id']}</i>
         📡 <b>Status</b>: <i>{result['status'].lower()}</i>
         ⏳ <b>Aired From</b>: <i>{aired}</i>
         ⌛️ <b>Aired To</b>: <i>{endaired}</i>
@@ -605,12 +606,14 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
     elif search_type == "anime_manga":
         caption += textwrap.dedent(
             f"""
-        🆎 <b>Type</b>: <i>{result['type']}</i>
-        📡 <b>Status</b>: <i>{result['status']}</i>
+        🆎 <b>Type</b>: <i>{result['type'].lower()}</i>
+        🆔 <b>MAL ID</b>: <i>{result['idMal']}</i>
+        🆔 <b>AL ID</b>: <i>{result['id']}</i>
+        📡 <b>Status</b>: <i>{result['status'].lower()}</i>
         🔢 <b>Volumes</b>: <i>{result['volumes']}</i>
         📃 <b>Chapters</b>: <i>{result['chapters']}</i>
-        📊 <b>Rank</b>: <i>{result['rank']}</i>
         💯 <b>Score</b>: <i>{result['score']}</i>
+        📊 <b>Popularity</b>: <i>{result['popularity']}</i>
         🎭 <b>Genres</b>: <i>{genre_string}</i>
         📖 <b>Synopsis</b>: <i>{synopsis_string}</i>
         """
