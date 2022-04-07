@@ -485,7 +485,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
     caption += f" ({result['title']['native']})\n"
     alternative_names = []
     if result['title']['english'] is not None:
-    alternative_names.append(result['title']['english']
+        alternative_names.append(result['title']['english']
     alternative_names.extend(result["synonyms"])
     if alternative_names:
         alternative_names_string = ", ".join(alternative_names)
