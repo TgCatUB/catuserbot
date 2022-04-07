@@ -562,20 +562,20 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
     if search_type == "anime_anime":
         if result["startDate"]:
             aired = ""
-            aired += result["startDate"]["year"]
+            aired += str(result["startDate"]["year"])
             if result["startDate"]["month"]:
-                aired += "/" + result["startDate"]["month"]
+                aired += "/" + str(result["startDate"]["month"])
             if result["startDate"]["day"]:
-                aired += "/" + result["startDate"]["day"]
+                aired += "/" + str(result["startDate"]["day"])
         else:
             aired = "Unknown"
         if result["endDate"]:
             endaired = ""
-            endaired += result["endDate"]["year"]
+            endaired += str(result["endDate"]["year"])
             if result["endDate"]["month"]:
-                endaired += "/" + result["endDate"]["month"]
+                endaired += "/" + str(result["endDate"]["month"])
             if result["endDate"]["day"]:
-                endaired += "/" + result["endDate"]["day"]
+                endaired += "/" + str(result["endDate"]["day"])
         else:
             endaired = "Airing Now"
         caption += textwrap.dedent(
