@@ -99,6 +99,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String, $type: MediaType) {
         }
         media (id: $id, search: $search, type: $type) {
             id
+
             title {
                 romaji
                 english
@@ -111,8 +112,8 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String, $type: MediaType) {
 """
 
 manga_query = """
-query ($id: Int,$search: String) {
-  Media (id: $id, type: MANGA,search: $search) {
+query ($id: Int, $idMal: Int,$search: String) {
+  Media ($id: Int, $idMal: Int, type: MANGA,search: $search) {
     id
     title {
       romaji
@@ -136,6 +137,7 @@ query ($id: Int,$search: String) {
     season
     chapters
     volumes
+    synonyms
     countryOfOrigin
     source (version: 2)
     trailer {
@@ -169,6 +171,15 @@ query ($id: Int,$search: String) {
         description
         siteUrl
       }
+    }
+    rankings {
+        rank
+        type
+        format
+        year
+        season
+        allTime
+        context
     }
     studios (isMain: true) {
       nodes {
@@ -207,6 +218,7 @@ query ($id: Int, $idMal:Int, $search: String, $asHtml: Boolean) {
     }
     season
     episodes
+    synonyms
     duration
     countryOfOrigin
     source (version: 2)
@@ -226,6 +238,15 @@ query ($id: Int, $idMal:Int, $search: String, $asHtml: Boolean) {
       airingAt
       timeUntilAiring
       episode
+    }
+    rankings {
+        rank
+        type
+        format
+        year
+        season
+        allTime
+        context
     }
     isAdult
     characters (role: MAIN, page: 1, perPage: 10) {
@@ -437,38 +458,41 @@ def getBannerLink(mal, kitsu_search=True, anilistid=0):
     return getPosterLink(mal)
 
 
-async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
-    jikan = jikanpy.jikan.Jikan()
+async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-metrics
     if search_type == "anime_anime":
-        result = jikan.anime(mal_id)
-        if trailer := result["trailer_url"]:
+        variables = {"search": search_str}
+        query = anime_query
+        result = json.loads((requests.post(anilisturl, json={"query": query, "variables": variables})).text)
+        res = list(result.keys())
+        if "errors" in res:
+            return f"**Error** : `{result['errors'][0]['message']}`" , None
+        if result["trailer"]:
+            trailer = f"https://www.youtube.com/watch?v={result["trailer"]["id"]}"
             TRAILER = f"<a href='{trailer}'>🎬 Trailer</a>"
         else:
             TRAILER = "🎬 <i>No Trailer Available</i>"
         studio_string = ", ".join(
-            studio_info["name"] for studio_info in result["studios"]
-        )
-        producer_string = ", ".join(
-            producer_info["name"] for producer_info in result["producers"]
+            nodes["name"] for nodes in result["studios"]
         )
     elif search_type == "anime_manga":
-        result = jikan.manga(mal_id)
-        image = result["image_url"]
-    caption = f"📺 <a href='{result['url']}'>{result['title']}</a>"
-    if result["title_japanese"]:
-        caption += f" ({result['title_japanese']})\n"
-    else:
-        caption += "\n"
+        variables = {"search": search_str}
+        query = manga_query
+        result = json.loads((requests.post(anilisturl, json={"query": query, "variables": variables})).text)
+        res = list(result.keys())
+        if "errors" in res:
+            return f"**Error** : `{result['errors'][0]['message']}`" , None 
+    caption = f"📺 <a href='{result['siteUrl']}'>{result['title']['romaji']}</a>"
+    caption += f" ({result['title']['native']})\n"
     alternative_names = []
-    if result["title_english"] is not None:
-        alternative_names.append(result["title_english"])
-    alternative_names.extend(result["title_synonyms"])
+    if result['title']['english'] is not None:
+    alternative_names.append(result['title']['english']
+    alternative_names.extend(result["synonyms"])
     if alternative_names:
         alternative_names_string = ", ".join(alternative_names)
         caption += f"\n<b>Also known as</b>: <i>{alternative_names_string}</i>"
-    genre_string = ", ".join(genre_info["name"] for genre_info in result["genres"])
-    if result["synopsis"] is not None:
-        synopsis = result["synopsis"].split(" ", 60)
+    genre_string = ", ".join(result["genres"])
+    if result["description"] is not None:
+        synopsis = result["description"].split(" ", 60)
         try:
             synopsis.pop(60)
         except IndexError:
@@ -480,7 +504,7 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         if result[entity] is None:
             result[entity] = "Unknown"
     if search_type == "anime_anime":
-        anime_malid = result["mal_id"]
+        anime_malid = result["idMal"]
         anime_result = await anime_json_synomsis(
             anime_query, {"idMal": anime_malid, "asHtml": True, "type": "ANIME"}
         )
@@ -507,12 +531,12 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         romaji = anime_data["title"]["romaji"]
         native = anime_data["title"]["native"]
         english = anime_data["title"]["english"]
-        image = getBannerLink(mal_id, False, anime_data.get("id"))
+        image = getBannerLink(result["idMal"], False, anime_data.get("id"))
         # Telegraph Post mejik
         html_pc = ""
         html_pc += f"<h1>{native}</h1>"
         html_pc += "<h3>Synopsis:</h3>"
-        html_pc += result["synopsis"] or "Unknown"
+        html_pc += result["description"] or "Unknown"
         html_pc += "<br>"
         if html_char:
             html_pc += "<h2>Main Characters:</h2>"
@@ -527,20 +551,38 @@ async def get_anime_manga(mal_id, search_type, _user_id):  # sourcery no-metrics
         html_pc += f"<img src='{bannerImg}'/>"
         title_h = english or romaji
     if search_type == "anime_anime":
+        if result["startDate"]:
+            aired = ''
+            aired += result["startDate"]['year']
+            if result["startDate"]['month']:
+                aired += "/" + result["startDate"]['month']
+            if result["startDate"]['day']:
+                aired += "/" + result["startDate"]['day']
+        else:
+            aired = "Unknown"
+        if result["endDate"]:
+            endaired = ''
+            endaired += result["endDate"]['year']
+            if result["endDate"]['month']:
+                endaired += "/" + result["endDate"]['month']
+            if result["endDate"]['day']:
+                endaired += "/" + result["endDate"]['day']
+        else:
+            endaired = "Airing Now"
         caption += textwrap.dedent(
             f"""
         🆎 <b>Type</b>: <i>{result['type']}</i>
-        🆔 <b>MAL ID</b>: <i>{result['mal_id']}</i>
+        🆔 <b>MAL ID</b>: <i>{result['idMal']}</i>
         📡 <b>Status</b>: <i>{result['status']}</i>
-        🎙️ <b>Aired</b>: <i>{result['aired']['string']}</i>
+        🎙️ <b>Aired From</b>: <i>{aired}</i>
+        🎙️ <b>Aired To</b>: <i>{endaired}</i>
         🔢 <b>Episodes</b>: <i>{result['episodes']}</i>
-        🔞 <b>Rating</b>: <i>{result['rating']}</i>
-        💯 <b>Score</b>: <i>{result['score']}</i>
-        🌐 <b>Premiered</b>: <i>{result['premiered']}</i>
+        💯 <b>Score</b>: <i>{result['averageScore']}</i>
+        💯 <b>Popularity</b>: <i>{result['popularity']}</i>
+        🌐 <b>Premiered</b>: <i>{result['season']}</i>
         ⌛ <b>Duration</b>: <i>{result['duration']}</i>
         🎭 <b>Genres</b>: <i>{genre_string}</i>
         🎙️ <b>Studios</b>: <i>{studio_string}</i>
-        💸 <b>Producers</b>: <i>{producer_string}</i>
         """
         )
         synopsis_link = await post_to_telegraph(
