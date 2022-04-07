@@ -8,7 +8,6 @@ from urllib.parse import quote_plus
 
 import aiohttp
 import bs4
-import jikanpy
 import requests
 from jikanpy import Jikan
 from jikanpy.exceptions import APIException
