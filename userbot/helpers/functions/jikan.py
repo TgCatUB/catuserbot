@@ -213,8 +213,11 @@ async def get_anime_schedule(weekid):
 
 async def callAPI(search_str):
     variables = {"search": search_str}
-    response = requests.post(anilisturl, json={"query": anime_query, "variables": variables})
+    response = requests.post(
+        anilisturl, json={"query": anime_query, "variables": variables}
+    )
     return response.text
+
 
 async def formatJSON(outData):
     msg = ""
