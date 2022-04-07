@@ -348,7 +348,7 @@ async def get_anime(event):
     command=("sanime", plugin_category),
     info={
         "header": "Searches for anime.",
-        "usage": "{tr}sanime <anime name",
+        "usage": "{tr}sanime <anime name>",
         "examples": "{tr}sanime black clover",
     },
 )
@@ -365,15 +365,7 @@ async def get_anime(event):
                 event, "__What should i search ? Gib me Something to Search__"
             )
     catevent = await edit_or_reply(event, "`Searching Anime..`")
-    jikan = jikanpy.jikan.Jikan()
-    try:
-        search_result = jikan.search("anime", input_str)
-    except APIException:
-        return await edit_delete(
-            event, "__Unable to fectch result. Try after some time__"
-        )
-    first_mal_id = search_result["results"][0]["mal_id"]
-    caption, image = await get_anime_manga(first_mal_id, "anime_anime", event.chat_id)
+    caption, image = await get_anime_manga(input_str, "anime_anime", event.chat_id)
     try:
         downloader = SmartDL(image, anime_path, progress_bar=False)
         downloader.start(blocking=False)
