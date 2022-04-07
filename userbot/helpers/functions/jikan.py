@@ -476,7 +476,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
             TRAILER = f"<a href='{trailer}'>🎬 Trailer</a>"
         else:
             TRAILER = "🎬 <i>No Trailer Available</i>"
-        studio_string = ", ".join(nodes["name"] for nodes in result["studios"])
+        studio_string = ", ".join(nodes["name"] for nodes in result["studios"]["nodes"])
     elif search_type == "anime_manga":
         variables = {"search": search_str}
         query = manga_query
