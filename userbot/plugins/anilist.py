@@ -251,10 +251,7 @@ async def get_manga(event):
                 event, "__What should i search ? Gib me Something to Search__"
             )
     catevent = await edit_or_reply(event, "`Searching Manga..`")
-    jikan = jikanpy.jikan.Jikan()
-    search_result = jikan.search("manga", input_str)
-    first_mal_id = search_result["results"][0]["mal_id"]
-    caption, image = await get_anime_manga(first_mal_id, "anime_manga", event.chat_id)
+    caption, image = await get_anime_manga(input_str, "anime_anime", event.chat_id)
     await catevent.delete()
     await event.client.send_file(
         event.chat_id, file=image, caption=caption, parse_mode="html", reply_to=reply_to
