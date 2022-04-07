@@ -32,6 +32,8 @@ vlist = [
     "HELP_TEXT",
     "IALIVE_PIC",
     "LAST_NAME",
+    "PING_PIC",
+    "PING_TEMPLATE",
     "PM_PIC",
     "PM_TEXT",
     "PM_BLOCK",
@@ -130,7 +132,7 @@ async def bad(event):  # sourcery no-metrics
                 usrphoto = gvarstatus("DEFAULT_PIC") or None
                 vinfo = f'**Name:** `{gvarstatus("DEFAULT_NAME")}`\n**First Name:** `{gvarstatus("FIRST_NAME")}`\n**Last Name:** `{usrln}`\n**Bio:** `{usrbio}`\n**Photo:** `{usrphoto}`'
             else:
-                if not vinfo and vname == "ALIVE_TEMPLATE":
+                if not vinfo and vname in ["ALIVE_TEMPLATE","PING_TEMPLATE"]:
                     return await edit_delete(event, "Check @cat_alive")
                 if not vinfo:
                     return await edit_delete(
@@ -173,7 +175,7 @@ async def bad(event):  # sourcery no-metrics
         if cmd == "get":
             var_data = gvarstatus(vname)
             await edit_delete(
-                event, f"📑 Value of **{vname}** is  `{var_data}`", time=20
+                event, f"📑 Value of **{vname}** is  ```{var_data}```", time=20
             )
         elif cmd == "del":
             if vname == "DEFAULT_USER":

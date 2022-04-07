@@ -276,40 +276,40 @@ def higlighted_text(
 ):
     templait = Image.open(input_img)
     # resize image
-    rw, rh = templait.size
-    w, h = (1024, int(1024 * rh / rw)) if rw > rh else (int(1024 * rw / rh), 1024)
+    raw_width, raw_height = templait.size
+    resized_width, resized_height = (1024, int(1024 * raw_height / raw_width)) if raw_width > raw_height else (int(1024 * raw_width / raw_height), 1024)
     if font_name is None:
         font_name = "userbot/helpers/styles/impact.ttf"
     font = ImageFont.truetype(font_name, font_size)
-    ew, eh = position
+    extra_width, extra_height = position
     # get text size
-    tw, th = font.getsize(text)
-    width = 50 + ew
-    hight = 30 + eh
+    text_width, text_height = font.getsize(text)
+    width = 50 + extra_width
+    hight = 30 + extra_height
     # wrap the text & save in a list
-    mask_size = int((w / text_wrap) + 50)
+    mask_size = int((resized_width / text_wrap) + 50)
     list_text = []
     output = []
     raw_text = text.splitlines()
     for item in raw_text:
-        input_text = "\n".join(wrap(item, int((40.0 / w) * mask_size)))
+        input_text = "\n".join(wrap(item, int((40.0 / resized_width) * mask_size)))
         split_text = input_text.splitlines()
         for final in split_text:
             list_text.append(final)
-    x = [list_text]
+    texts = [list_text]
     if album and len(list_text) > lines:
-        x = [list_text[i : i + lines] for i in range(0, len(list_text), lines)]
-    for pic_no, list_text in enumerate(x):
+        texts = [list_text[i : i + lines] for i in range(0, len(list_text), lines)]
+    for pic_no, list_text in enumerate(texts):
         # create image with correct size and black background
-        source_img = templait.convert("RGBA").resize((w, h))
+        source_img = templait.convert("RGBA").resize((resized_width, resized_height))
         if direction == "upwards":
             list_text.reverse()
             operator = "-"
-            hight = h - (th + int(th / 1.2)) + eh
+            hight = resized_height - (text_height + int(text_height / 1.2)) + extra_height
         else:
             operator = "+"
         for i, items in enumerate(list_text):
-            x, y = (font.getsize(list_text[i])[0] + 50, int(th * 2 - (th / 2)))
+            x, y = (font.getsize(list_text[i])[0] + 50, int(text_height * 2 - (text_height / 2)))
             # align masks on the image....left,right & center
             if align == "center":
                 width_align = "((mask_size-x)/2)"
@@ -317,16 +317,16 @@ def higlighted_text(
                 width_align = "0"
             elif align == "right":
                 width_align = "(mask_size-x)"
-            clr = ImageColor.getcolor(background, "RGBA")
+            color = ImageColor.getcolor(background, "RGBA")
             if transparency == 0:
                 mask_img = Image.new(
-                    "RGBA", (x, y), (clr[0], clr[1], clr[2], 0)
+                    "RGBA", (x, y), (color[0], color[1], color[2], 0)
                 )  # background
                 mask_draw = ImageDraw.Draw(mask_img)
                 mask_draw.text((25, 8), list_text[i], foreground, font=font)
             else:
                 mask_img = Image.new(
-                    "RGBA", (x, y), (clr[0], clr[1], clr[2], transparency)
+                    "RGBA", (x, y), (color[0], color[1], color[2], transparency)
                 )  # background
                 # put text on mask
                 mask_draw = ImageDraw.Draw(mask_img)
@@ -336,12 +336,12 @@ def higlighted_text(
                 draw = ImageDraw.Draw(circle)
                 draw.ellipse((0, 0, rad * 2, rad * 2), transparency)
                 alpha = Image.new("L", mask_img.size, transparency)
-                mw, mh = mask_img.size
+                mask_width, mask_height = mask_img.size
                 alpha.paste(circle.crop((0, 0, rad, rad)), (0, 0))
-                alpha.paste(circle.crop((0, rad, rad, rad * 2)), (0, mh - rad))
-                alpha.paste(circle.crop((rad, 0, rad * 2, rad)), (mw - rad, 0))
+                alpha.paste(circle.crop((0, rad, rad, rad * 2)), (0, mask_height - rad))
+                alpha.paste(circle.crop((rad, 0, rad * 2, rad)), (mask_width - rad, 0))
                 alpha.paste(
-                    circle.crop((rad, rad, rad * 2, rad * 2)), (mw - rad, mh - rad)
+                    circle.crop((rad, rad, rad * 2, rad * 2)), (mask_width - rad, mask_height - rad)
                 )
                 mask_img.putalpha(alpha)
             # put mask_img on source image & trans remove the corner white

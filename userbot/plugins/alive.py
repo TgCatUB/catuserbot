@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from platform import python_version
 
+import requests
 from telethon import version
 from telethon.errors.rpcerrorlist import (
     MediaEmptyError,
@@ -38,6 +39,10 @@ plugin_category = "utils"
 async def amireallyalive(event):
     "A kind of showing bot details"
     reply_to_id = await reply_id(event)
+    ANIME = None
+    if "ANIME" in gvarstatus("ALIVE_TEMPLATE"):
+        data = requests.get("https://animechan.vercel.app/api/random").json()
+        ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
     uptime = await get_readable_time((time.time() - StartTime))
     start = datetime.now()
     catevent = await edit_or_reply(event, "`Checking...`")
@@ -50,6 +55,7 @@ async def amireallyalive(event):
     cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
     caption = cat_caption.format(
         ALIVE_TEXT=ALIVE_TEXT,
+        ANIME=ANIME,
         EMOJI=EMOJI,
         mention=mention,
         uptime=uptime,
