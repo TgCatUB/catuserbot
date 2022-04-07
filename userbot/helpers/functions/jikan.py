@@ -462,30 +462,36 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
     if search_type == "anime_anime":
         variables = {"search": search_str}
         query = anime_query
-        result = json.loads((requests.post(anilisturl, json={"query": query, "variables": variables})).text)
+        result = json.loads(
+            (
+                requests.post(anilisturl, json={"query": query, "variables": variables})
+            ).text
+        )
         res = list(result.keys())
         if "errors" in res:
-            return f"**Error** : `{result['errors'][0]['message']}`" , None
+            return f"**Error** : `{result['errors'][0]['message']}`", None
         if result["trailer"]:
             trailer = f'https://www.youtube.com/watch?v={result["trailer"]["id"]}'
             TRAILER = f"<a href='{trailer}'>🎬 Trailer</a>"
         else:
             TRAILER = "🎬 <i>No Trailer Available</i>"
-        studio_string = ", ".join(
-            nodes["name"] for nodes in result["studios"]
-        )
+        studio_string = ", ".join(nodes["name"] for nodes in result["studios"])
     elif search_type == "anime_manga":
         variables = {"search": search_str}
         query = manga_query
-        result = json.loads((requests.post(anilisturl, json={"query": query, "variables": variables})).text)
+        result = json.loads(
+            (
+                requests.post(anilisturl, json={"query": query, "variables": variables})
+            ).text
+        )
         res = list(result.keys())
         if "errors" in res:
-            return f"**Error** : `{result['errors'][0]['message']}`" , None 
+            return f"**Error** : `{result['errors'][0]['message']}`", None
     caption = f"📺 <a href='{result['siteUrl']}'>{result['title']['romaji']}</a>"
     caption += f" ({result['title']['native']})\n"
     alternative_names = []
-    if result['title']['english'] is not None:
-        alternative_names.append(result['title']['english'])
+    if result["title"]["english"] is not None:
+        alternative_names.append(result["title"]["english"])
     alternative_names.extend(result["synonyms"])
     if alternative_names:
         alternative_names_string = ", ".join(alternative_names)
@@ -552,21 +558,21 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
         title_h = english or romaji
     if search_type == "anime_anime":
         if result["startDate"]:
-            aired = ''
-            aired += result["startDate"]['year']
-            if result["startDate"]['month']:
-                aired += "/" + result["startDate"]['month']
-            if result["startDate"]['day']:
-                aired += "/" + result["startDate"]['day']
+            aired = ""
+            aired += result["startDate"]["year"]
+            if result["startDate"]["month"]:
+                aired += "/" + result["startDate"]["month"]
+            if result["startDate"]["day"]:
+                aired += "/" + result["startDate"]["day"]
         else:
             aired = "Unknown"
         if result["endDate"]:
-            endaired = ''
-            endaired += result["endDate"]['year']
-            if result["endDate"]['month']:
-                endaired += "/" + result["endDate"]['month']
-            if result["endDate"]['day']:
-                endaired += "/" + result["endDate"]['day']
+            endaired = ""
+            endaired += result["endDate"]["year"]
+            if result["endDate"]["month"]:
+                endaired += "/" + result["endDate"]["month"]
+            if result["endDate"]["day"]:
+                endaired += "/" + result["endDate"]["day"]
         else:
             endaired = "Airing Now"
         caption += textwrap.dedent(
