@@ -489,7 +489,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
         if "errors" in res:
             return f"**Error** : `{result['errors'][0]['message']}`", None
         result = result["data"]["Media"]
-        image = getBannerLink(result["idMal"], False, result["id"])
+        image = f"https://img.anili.st/media/{result['id']}"
     caption = f"📺 <a href='{result['siteUrl']}'>{result['title']['romaji']}</a>"
     caption += f" ({result['title']['native']})\n"
     alternative_names = []
