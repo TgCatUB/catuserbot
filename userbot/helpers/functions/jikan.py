@@ -39,7 +39,7 @@ def get_weekday(dayid):
             return key
 
 
-character_query ="""
+character_query = """
 query ($page: Int, $perPage: Int, $query: String) {
     Page (page: $page, perPage: $perPage) {
         pageInfo {
