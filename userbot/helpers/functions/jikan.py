@@ -113,7 +113,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String, $type: MediaType) {
 
 manga_query = """
 query ($id: Int, $idMal: Int,$search: String) {
-  Media ($id: Int, $idMal: Int, type: MANGA,search: $search) {
+  Media (id: $id, idMal: $idMal, search: $search, type: MANGA) {
     id
     title {
       romaji
