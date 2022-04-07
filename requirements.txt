@@ -33,7 +33,6 @@ motor
 moviepy
 nekos.py
 opencv-python-headless
-oauth2client
 Pillow
 prettytable
 psutil
