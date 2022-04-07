@@ -115,6 +115,7 @@ manga_query = """
 query ($id: Int, $idMal: Int,$search: String) {
   Media (id: $id, idMal: $idMal, search: $search, type: MANGA) {
     id
+    idMal
     title {
       romaji
       english
