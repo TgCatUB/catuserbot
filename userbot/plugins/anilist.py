@@ -251,10 +251,29 @@ async def get_manga(event):
             )
     catevent = await edit_or_reply(event, "`Searching Manga..`")
     caption, image = await get_anime_manga(input_str, "anime_manga", event.chat_id)
-    await catevent.delete()
-    await event.client.send_file(
-        event.chat_id, file=image, caption=caption, parse_mode="html", reply_to=reply_to
-    )
+    try:
+        downloader = SmartDL(image, anime_path, progress_bar=False)
+        downloader.start(blocking=False)
+        while not downloader.isFinished():
+            pass
+        await event.client.send_file(
+            event.chat_id,
+            file=anime_path,
+            caption=caption,
+            parse_mode="html",
+            reply_to=reply_to,
+        )
+        await catevent.delete()
+        os.remove(anime_path)
+    except BaseException:
+        await event.client.send_file(
+            event.chat_id,
+            file=image,
+            caption=caption,
+            parse_mode="html",
+            reply_to=reply_to,
+        )
+        await catevent.delete()
 
 
 @catub.cat_cmd(
@@ -385,6 +404,7 @@ async def get_anime(event):
             parse_mode="html",
             reply_to=reply_to,
         )
+        await catevent.delete()
 
 
 @catub.cat_cmd(
