@@ -1,19 +1,20 @@
-import time
-import random
 import asyncio
-import requests
+import random
+import time
 from datetime import datetime
 
-from . import mention, catub,StartTime
-from ..Config import Config
-from ..core.managers import edit_or_reply
-from ..sql_helper.globals import gvarstatus
-from ..helpers.functions import get_readable_time
+import requests
 from telethon.errors.rpcerrorlist import (
     MediaEmptyError,
     WebpageCurlFailedError,
     WebpageMediaEmptyError,
 )
+
+from ..Config import Config
+from ..core.managers import edit_or_reply
+from ..helpers.functions import get_readable_time
+from ..sql_helper.globals import gvarstatus
+from . import StartTime, catub, mention
 
 plugin_category = "tools"
 
@@ -43,13 +44,13 @@ async def _(event):
     if flag == " -a":
         catevent = await edit_or_reply(event, "`!....`")
         await asyncio.sleep(0.3)
-        await edit_or_reply(catevent,"`..!..`")
+        await edit_or_reply(catevent, "`..!..`")
         await asyncio.sleep(0.3)
-        await edit_or_reply(catevent,"`....!`")
+        await edit_or_reply(catevent, "`....!`")
         end = datetime.now()
         tms = (end - start).microseconds / 1000
         ms = round((tms - 0.6) / 3, 3)
-        await edit_or_reply(catevent,f"Average Ping!\n`{ms} ms`")
+        await edit_or_reply(catevent, f"Average Ping!\n`{ms} ms`")
     else:
         catevent = await edit_or_reply(event, temp_)
         end = datetime.now()
@@ -84,4 +85,3 @@ async def _(event):
                 catevent,
                 caption,
             )
-

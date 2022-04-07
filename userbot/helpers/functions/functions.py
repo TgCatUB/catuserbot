@@ -277,7 +277,11 @@ def higlighted_text(
     templait = Image.open(input_img)
     # resize image
     raw_width, raw_height = templait.size
-    resized_width, resized_height = (1024, int(1024 * raw_height / raw_width)) if raw_width > raw_height else (int(1024 * raw_width / raw_height), 1024)
+    resized_width, resized_height = (
+        (1024, int(1024 * raw_height / raw_width))
+        if raw_width > raw_height
+        else (int(1024 * raw_width / raw_height), 1024)
+    )
     if font_name is None:
         font_name = "userbot/helpers/styles/impact.ttf"
     font = ImageFont.truetype(font_name, font_size)
@@ -305,11 +309,16 @@ def higlighted_text(
         if direction == "upwards":
             list_text.reverse()
             operator = "-"
-            hight = resized_height - (text_height + int(text_height / 1.2)) + extra_height
+            hight = (
+                resized_height - (text_height + int(text_height / 1.2)) + extra_height
+            )
         else:
             operator = "+"
         for i, items in enumerate(list_text):
-            x, y = (font.getsize(list_text[i])[0] + 50, int(text_height * 2 - (text_height / 2)))
+            x, y = (
+                font.getsize(list_text[i])[0] + 50,
+                int(text_height * 2 - (text_height / 2)),
+            )
             # align masks on the image....left,right & center
             if align == "center":
                 width_align = "((mask_size-x)/2)"
@@ -341,7 +350,8 @@ def higlighted_text(
                 alpha.paste(circle.crop((0, rad, rad, rad * 2)), (0, mask_height - rad))
                 alpha.paste(circle.crop((rad, 0, rad * 2, rad)), (mask_width - rad, 0))
                 alpha.paste(
-                    circle.crop((rad, rad, rad * 2, rad * 2)), (mask_width - rad, mask_height - rad)
+                    circle.crop((rad, rad, rad * 2, rad * 2)),
+                    (mask_width - rad, mask_height - rad),
                 )
                 mask_img.putalpha(alpha)
             # put mask_img on source image & trans remove the corner white
