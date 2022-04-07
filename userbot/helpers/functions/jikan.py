@@ -564,18 +564,18 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
             aired = ""
             aired += str(result["startDate"]["year"])
             if result["startDate"]["month"]:
-                aired += "/" + str(result["startDate"]["month"])
+                aired += "-" + str(result["startDate"]["month"])
             if result["startDate"]["day"]:
-                aired += "/" + str(result["startDate"]["day"])
+                aired += "-" + str(result["startDate"]["day"])
         else:
             aired = "Unknown"
         if result["endDate"]:
             endaired = ""
             endaired += str(result["endDate"]["year"])
             if result["endDate"]["month"]:
-                endaired += "/" + str(result["endDate"]["month"])
+                endaired += "-" + str(result["endDate"]["month"])
             if result["endDate"]["day"]:
-                endaired += "/" + str(result["endDate"]["day"])
+                endaired += "-" + str(result["endDate"]["day"])
         else:
             endaired = "Airing Now"
         caption += textwrap.dedent(
@@ -588,7 +588,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
         🔢 <b>Episodes</b>: <i>{result['episodes']}</i>
         💯 <b>Score</b>: <i>{result['averageScore']}</i>
         📊 <b>Popularity</b>: <i>{result['popularity']}</i>
-        🌐 <b>Premiered</b>: <i>{result['season']}</i>
+        🌐 <b>Premiered</b>: <i>{result['season'].lower()}</i>
         ⌛ <b>Duration</b>: <i>{result['duration']}</i>
         🎭 <b>Genres</b>: <i>{genre_string}</i>
         🎙️ <b>Studios</b>: <i>{studio_string}</i>
