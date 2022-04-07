@@ -120,6 +120,11 @@ query ($id: Int, $idMal:Int, $search: String, $type: MediaType, $asHtml: Boolean
       month
       day
     }
+    endDate{
+      year
+      month
+      day
+    }
     season
     episodes
     duration
@@ -136,6 +141,7 @@ query ($id: Int, $idMal:Int, $search: String, $type: MediaType, $asHtml: Boolean
     bannerImage
     genres
     averageScore
+    popularity
     nextAiringEpisode {
       airingAt
       timeUntilAiring
@@ -205,6 +211,11 @@ async def get_anime_schedule(weekid):
     return result, dayname
 
 
+async def callAPI(search_str):
+    variables = {"search": search_str}
+    response = requests.post(anilisturl, json={"query": anime_query, "variables": variables})
+    return response.text
+
 async def formatJSON(outData):
     msg = ""
     jsonData = json.loads(outData)
@@ -222,12 +233,12 @@ async def formatJSON(outData):
     msg += f"[{title}]({link})"
     msg += f"\n\n**Type** : {jsonData['format']}"
     msg += "\n**Genres** : "
-    for g in jsonData["genres"]:
-        msg += f"{g} "
+    msg += f", ".join(jsonData["genres"])
     msg += f"\n**Status** : {jsonData['status']}"
     msg += f"\n**Episode** : {jsonData['episodes']}"
     msg += f"\n**Year** : {jsonData['startDate']['year']}"
     msg += f"\n**Score** : {jsonData['averageScore']}"
+    msg += f"\n**Popularity** : {jsonData['popularity']}"
     msg += f"\n**Duration** : {jsonData['duration']} min\n\n"
     # https://t.me/catuserbot_support/19496
     cat = f"{jsonData['description']}"
@@ -488,38 +499,6 @@ def get_poster(query):
 
 def replace_text(text):
     return text.replace('"', "").replace("\\r", "").replace("\\n", "").replace("\\", "")
-
-
-async def callAPI(search_str):
-    query = """
-    query ($id: Int,$search: String) {
-      Media (id: $id, type: ANIME,search: $search) {
-        id
-        title {
-          romaji
-          english
-        }
-        description (asHtml: false)
-        startDate{
-            year
-          }
-          episodes
-          chapters
-          volumes
-          season
-          type
-          format
-          status
-          duration
-          averageScore
-          genres
-          bannerImage
-      }
-    }
-    """
-    variables = {"search": search_str}
-    response = requests.post(anilisturl, json={"query": query, "variables": variables})
-    return response.text
 
 
 def memory_file(name=None, contents=None, *, temp_bytes=True):
