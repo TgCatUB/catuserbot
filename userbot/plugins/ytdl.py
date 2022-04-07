@@ -273,7 +273,9 @@ async def download_video(event):
             uploaded = await event.client.fast_upload_file(
                 file=ul,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, catevent, c_time, "Upload :", file_name=ytdl_data['title'])
+                    progress(
+                        d, t, catevent, c_time, "Upload :", file_name=ytdl_data["title"]
+                    )
                 ),
             )
             ul.close()
