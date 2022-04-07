@@ -148,8 +148,8 @@ query ($id: Int,$search: String) {
 """
 
 anime_query = """
-query ($id: Int, $idMal:Int, $search: String, $type: ANIME, $asHtml: Boolean) {
-  Media (id: $id, idMal: $idMal, search: $search, type: $type) {
+query ($id: Int, $idMal:Int, $search: String, $asHtml: Boolean) {
+  Media (id: $id, idMal: $idMal, search: $search, type: ANIME) {
     id
     idMal
     title {
