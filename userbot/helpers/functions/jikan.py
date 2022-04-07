@@ -265,7 +265,7 @@ async def callAPI(search_str):
     return response.text
 
 
-async def formatJSON(outData,manga=False):
+async def formatJSON(outData, manga=False):
     msg = ""
     jsonData = json.loads(outData)
     res = list(jsonData.keys())
