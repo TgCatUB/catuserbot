@@ -182,12 +182,6 @@ query ($id: Int, $idMal: Int,$search: String) {
         allTime
         context
     }
-    studios (isMain: true) {
-      nodes {
-        name
-        siteUrl
-      }
-    }
     siteUrl
   }
 }
@@ -560,6 +554,50 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
         html_pc += f"<a href='{anilist_animelink}'> View on anilist.co</a>"
         html_pc += f"<img src='{bannerImg}'/>"
         title_h = english or romaji
+    else:
+        anime_malid = result["id"]
+        anime_result = await anime_json_synomsis(
+            manga_query, {"id": anime_malid, "asHtml": True, "type": "MANGA"}
+        )
+        anime_data = anime_result["data"]["Media"]
+        html_char = ""
+        for character in anime_data["characters"]["nodes"]:
+            html_ = "" + "<br>"
+            html_ += f"""<a href="{character['siteUrl']}">"""
+            html_ += f"""<img src="{character['image']['large']}"/></a>"""
+            html_ += "<br>"
+            html_ += f"<h3>{character['name']['full']}</h3>"
+            html_ += f"<em>{character['name']['native']}</em><br>"
+            html_ += f"<b>Character ID</b>: {character['id']}<br>"
+            html_ += f"<h4>About Character and Role:</h4>{character.get('description', 'N/A')}"
+            html_char += f"{html_}<br><br>"io in anime_data["studios"]["nodes"]
+        )
+        coverImg = anime_data.get("coverImage")["extraLarge"]
+        bannerImg = anime_data.get("bannerImage")
+        anilist_animelink = anime_data.get("siteUrl")
+        title_img = coverImg or bannerImg
+        romaji = anime_data["title"]["romaji"]
+        native = anime_data["title"]["native"]
+        english = anime_data["title"]["english"]
+        image = getBannerLink(result["idMal"], False, anime_data.get("id"))
+        # Telegraph Post mejik
+        html_pc = ""
+        html_pc += f"<h1>{native}</h1>"
+        html_pc += "<h3>Synopsis:</h3>"
+        html_pc += result["description"] or "Unknown"
+        html_pc += "<br>"
+        if html_char:
+            html_pc += "<h2>Main Characters:</h2>"
+            html_pc += html_char
+            html_pc += "<br><br>"
+        html_pc += "<h3>More Info:</h3>"
+        if result["idMal"]:
+            html_pc += (
+                f"<a href='https://myanimelist.net/anime/{result["idMal"]}'>View on MAL</a>"
+            )
+        html_pc += f"<a href='{anilist_animelink}'> View on anilist.co</a>"
+        html_pc += f"<img src='{bannerImg}'/>"
+        title_h = english or romaji
     if search_type == "anime_anime":
         if result["startDate"]:
             aired = ""
@@ -616,9 +654,17 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
         💯 <b>Score</b>: <i>{result['averageScore']}</i>
         📊 <b>Popularity</b>: <i>{result['popularity']}</i>
         🎭 <b>Genres</b>: <i>{genre_string}</i>
-        📖 <b>Synopsis</b>: <i>{synopsis_string}</i>
         """
         )
+        synopsis_link = await post_to_telegraph(
+            title_h,
+            f"<img src='{title_img}' title={romaji}/>\n"
+            + f"<code>{caption}</code>\n"
+            + f"{TRAILER}\n"
+            + html_pc,
+        )
+        caption += f"📖 <a href='{synopsis_link}'><b>Synopsis</b></a> <b>&</b> <a href='{result['siteUrl']}'><b>Read More</b></a>"
+    
     return caption, image
 
 
