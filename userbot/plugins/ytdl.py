@@ -251,7 +251,6 @@ async def download_video(event):
     reply_to_id = await reply_id(event)
     for url in urls:
         ytdl_data = await ytdl_down(catevent, video_opts, url)
-        print(ytdl_data)
         if ytdl_down is None:
             return
         try:
