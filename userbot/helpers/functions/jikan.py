@@ -2,8 +2,9 @@ import json
 import re
 import textwrap
 import time
-from io import BytesIO, StringIO
 from datetime import datetime
+from io import BytesIO, StringIO
+
 import bs4
 import jikanpy
 import requests
