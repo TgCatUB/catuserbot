@@ -252,7 +252,7 @@ async def get_manga(event):
     catevent = await edit_or_reply(event, "`Searching Manga..`")
     caption, image = await get_anime_manga(input_str, "anime_manga", event.chat_id)
     if image is None:
-        await edit_or_reply(catevent,caption,parse_mode="html")
+        await edit_or_reply(catevent, caption, parse_mode="html")
         return
     try:
         downloader = SmartDL(image, anime_path, progress_bar=False)
@@ -385,7 +385,7 @@ async def get_anime(event):
     catevent = await edit_or_reply(event, "`Searching Anime..`")
     caption, image = await get_anime_manga(input_str, "anime_anime", event.chat_id)
     if image is None:
-        await edit_or_reply(catevent,caption,parse_mode="html")
+        await edit_or_reply(catevent, caption, parse_mode="html")
         return
     try:
         downloader = SmartDL(image, anime_path, progress_bar=False)
