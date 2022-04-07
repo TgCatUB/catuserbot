@@ -570,8 +570,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
             html_ += f"<em>{character['name']['native']}</em><br>"
             html_ += f"<b>Character ID</b>: {character['id']}<br>"
             html_ += f"<h4>About Character and Role:</h4>{character.get('description', 'N/A')}"
-            html_char += f"{html_}<br><br>"io in anime_data["studios"]["nodes"]
-        )
+            html_char += f"{html_}<br><br>"
         coverImg = anime_data.get("coverImage")["extraLarge"]
         bannerImg = anime_data.get("bannerImage")
         anilist_animelink = anime_data.get("siteUrl")
