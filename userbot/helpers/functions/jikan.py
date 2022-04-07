@@ -467,7 +467,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
         if "errors" in res:
             return f"**Error** : `{result['errors'][0]['message']}`" , None
         if result["trailer"]:
-            trailer = f"https://www.youtube.com/watch?v={result["trailer"]["id"]}"
+            trailer = f'https://www.youtube.com/watch?v={result["trailer"]["id"]}'
             TRAILER = f"<a href='{trailer}'>🎬 Trailer</a>"
         else:
             TRAILER = "🎬 <i>No Trailer Available</i>"
