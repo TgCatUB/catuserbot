@@ -613,7 +613,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
         📡 <b>Status</b>: <i>{result['status'].lower()}</i>
         🔢 <b>Volumes</b>: <i>{result['volumes']}</i>
         📃 <b>Chapters</b>: <i>{result['chapters']}</i>
-        💯 <b>Score</b>: <i>{result['score']}</i>
+        💯 <b>Score</b>: <i>{result['averageScore']}</i>
         📊 <b>Popularity</b>: <i>{result['popularity']}</i>
         🎭 <b>Genres</b>: <i>{genre_string}</i>
         📖 <b>Synopsis</b>: <i>{synopsis_string}</i>
