@@ -39,22 +39,37 @@ def get_weekday(dayid):
             return key
 
 
-character_query = """
-    query ($query: String) {
-        Character (search: $query) {
-               id
-               name {
-                     first
-                     last
-                     full
-               }
-               siteUrl
-               image {
-                        large
-               }
-               description
+character_query ="""
+query ($page: Int, $perPage: Int, $query: String) {
+    Page (page: $page, perPage: $perPage) {
+        pageInfo {
+            total
+        }
+        characters (search: $query) {
+                id
+                name {
+                    first
+                    last
+                    full
+                }
+                image {
+                    medium
+                    large
+                }
+                description
+                gender
+                dateOfBirth{
+                    year
+                    month
+                    day
+                }
+                age
+                bloodType
+                siteUrl
+                favourites
         }
     }
+}
 """
 
 airing_query = """
@@ -76,16 +91,35 @@ airing_query = """
     }
     """
 
+anilist_query = """
+query ($id: Int, $page: Int, $perPage: Int, $search: String, $type: MediaType) {
+    Page (page: $page, perPage: $perPage) {
+        pageInfo {
+            total
+        }
+        media (id: $id, search: $search, type: $type) {
+            id
+            title {
+                romaji
+                english
+                native
+            }
+            siteUrl
+        }
+    }
+}
+"""
+
 manga_query = """
 query ($id: Int,$search: String) {
-      Media (id: $id, type: MANGA,search: $search) {
-        id
-        title {
-          romaji
-          english
-          native
-        }
-        format
+  Media (id: $id, type: MANGA,search: $search) {
+    id
+    title {
+      romaji
+      english
+      native
+    }
+    format
     status
     type 
     description
