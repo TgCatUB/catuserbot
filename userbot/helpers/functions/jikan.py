@@ -85,21 +85,67 @@ query ($id: Int,$search: String) {
           english
           native
         }
-        description (asHtml: false)
-        startDate{
-            year
-          }
-          type
-          format
-          status
-          siteUrl
-          averageScore
-          genres
-          bannerImage
+        format
+    status
+    type 
+    description
+    startDate {
+      year
+      month
+      day
+    }
+    endDate{
+      year
+      month
+      day
+    }
+    season
+    chapters
+    volumes
+    countryOfOrigin
+    source (version: 2)
+    trailer {
+      id
+      site
+      thumbnail
+    }
+    coverImage {
+      extraLarge
+    }
+    bannerImage
+    genres
+    averageScore
+    popularity
+    nextAiringEpisode {
+      airingAt
+      timeUntilAiring
+      episode
+    }
+    isAdult
+    characters (role: MAIN, page: 1, perPage: 10) {
+      nodes {
+        id
+        name {
+          full
+          native
+        }
+        image {
+          large
+        }
+        description
+        siteUrl
       }
     }
+    studios (isMain: true) {
+      nodes {
+        name
+        siteUrl
+      }
+    }
+    siteUrl
+  }
+}
 """
-
 
 anime_query = """
 query ($id: Int, $idMal:Int, $search: String, $type: MediaType, $asHtml: Boolean) {
@@ -219,7 +265,7 @@ async def callAPI(search_str):
     return response.text
 
 
-async def formatJSON(outData):
+async def formatJSON(outData,manga=False):
     msg = ""
     jsonData = json.loads(outData)
     res = list(jsonData.keys())
@@ -238,11 +284,15 @@ async def formatJSON(outData):
     msg += "\n**Genres** : "
     msg += f", ".join(jsonData["genres"])
     msg += f"\n**Status** : {jsonData['status']}"
-    msg += f"\n**Episode** : {jsonData['episodes']}"
+    if manga:
+        msg += f"\n**Chapters** : {jsonData['chapters']}"
+        msg += f"\n**Volumes** : {jsonData['volumes']}"
+    else:
+        msg += f"\n**Episode** : {jsonData['episodes']}"
+        msg += f"\n**Duration** : {jsonData['duration']} min\n\n"
     msg += f"\n**Year** : {jsonData['startDate']['year']}"
     msg += f"\n**Score** : {jsonData['averageScore']}"
     msg += f"\n**Popularity** : {jsonData['popularity']}"
-    msg += f"\n**Duration** : {jsonData['duration']} min\n\n"
     # https://t.me/catuserbot_support/19496
     cat = f"{jsonData['description']}"
     msg += " __" + re.sub("<br>", "\n", cat) + "__"
