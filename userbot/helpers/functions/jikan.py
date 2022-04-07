@@ -501,9 +501,9 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
             synopsis.pop(60)
         except IndexError:
             pass
-        synopsis_string = " ".join(synopsis) + "..."
+        " ".join(synopsis) + "..."
     else:
-        synopsis_string = "Unknown"
+        pass
     for entity in result:
         if result[entity] is None:
             result[entity] = "Unknown"
@@ -591,9 +591,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
             html_pc += "<br><br>"
         html_pc += "<h3>More Info:</h3>"
         if result["idMal"]:
-            html_pc += (
-                f"<a href='https://myanimelist.net/anime/{result['idMal']}'>View on MAL</a>"
-            )
+            html_pc += f"<a href='https://myanimelist.net/anime/{result['idMal']}'>View on MAL</a>"
         html_pc += f"<a href='{anilist_animelink}'> View on anilist.co</a>"
         html_pc += f"<img src='{bannerImg}'/>"
         title_h = english or romaji
@@ -663,7 +661,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
             + html_pc,
         )
         caption += f"📖 <a href='{synopsis_link}'><b>Synopsis</b></a> <b>&</b> <a href='{result['siteUrl']}'><b>Read More</b></a>"
-    
+
     return caption, image
 
 
