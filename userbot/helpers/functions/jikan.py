@@ -605,23 +605,23 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
                 aired += "-" + str(result["startDate"]["day"])
         else:
             aired = "Unknown"
-        if result["endDate"]:
+        if result['status'].lower() != " finished":
+            endaired = "Airing Now"
+        else:
             endaired = ""
             endaired += str(result["endDate"]["year"])
             if result["endDate"]["month"]:
                 endaired += "-" + str(result["endDate"]["month"])
             if result["endDate"]["day"]:
                 endaired += "-" + str(result["endDate"]["day"])
-        else:
-            endaired = "Airing Now"
         caption += textwrap.dedent(
             f"""
         🆎 <b>Type</b>: <i>{result['type'].lower()}</i>
         🆔 <b>MAL ID</b>: <i>{result['idMal']}</i>
         🆔 <b>AL ID</b>: <i>{result['id']}</i>
         📡 <b>Status</b>: <i>{result['status'].lower()}</i>
-        ⏳ <b>Aired From</b>: <i>{aired}</i>
-        ⌛️ <b>Aired To</b>: <i>{endaired}</i>
+        ⏳ <b>Airing Started</b>: <i>{aired}</i>
+        ⌛️ <b>Airing Ended</b>: <i>{endaired}</i>
         🔢 <b>Episodes</b>: <i>{result['episodes']}</i>
         💯 <b>Score</b>: <i>{result['averageScore']}</i>
         📊 <b>Popularity</b>: <i>{result['popularity']}</i>
