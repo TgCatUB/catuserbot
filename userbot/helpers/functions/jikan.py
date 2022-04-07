@@ -470,6 +470,7 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
         res = list(result.keys())
         if "errors" in res:
             return f"**Error** : `{result['errors'][0]['message']}`", None
+        result = result["data"]["Media"]
         if result["trailer"]:
             trailer = f'https://www.youtube.com/watch?v={result["trailer"]["id"]}'
             TRAILER = f"<a href='{trailer}'>🎬 Trailer</a>"
@@ -487,6 +488,8 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
         res = list(result.keys())
         if "errors" in res:
             return f"**Error** : `{result['errors'][0]['message']}`", None
+        result = result["data"]["Media"]
+        image = getBannerLink(result["idMal"], False, result["id"])
     caption = f"📺 <a href='{result['siteUrl']}'>{result['title']['romaji']}</a>"
     caption += f" ({result['title']['native']})\n"
     alternative_names = []
