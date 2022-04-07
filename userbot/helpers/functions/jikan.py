@@ -3,7 +3,7 @@ import re
 import textwrap
 import time
 from io import BytesIO, StringIO
-
+from datetime import datetime
 import bs4
 import jikanpy
 import requests
@@ -266,8 +266,8 @@ async def anilist_user(input_str):
         f"""
 **User name :** [{user_data['name']}]({user_data['siteUrl']})
 **Anilist ID :** `{user_data['id']}` 
-**Joined anilist :**`{[user_data['createdAt']]}`
-**Last Updated :**`{[user_data['updatedAt']]}`
+**Joined anilist :**`{datetime.fromtimestamp(user_data['createdAt'])}`
+**Last Updated :**`{datetime.fromtimestamp(user_data['updatedAt'])}`
 
 **✙  Anime Stats**
 • **Total Anime Watched :** `{user_data["statistics"]["anime"]['count']}`
