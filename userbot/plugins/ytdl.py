@@ -48,7 +48,7 @@ video_opts = {
         {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"},
         {"key": "FFmpegMetadata"},
     ],
-    "outtmpl": "%(title)s.mp4",
+    "outtmpl": "cat_ytv.mp4",
     "logtostderr": False,
     "quiet": True,
 }
@@ -251,13 +251,15 @@ async def download_video(event):
     reply_to_id = await reply_id(event)
     for url in urls:
         ytdl_data = await ytdl_down(catevent, video_opts, url)
+        print(ytdl_data)
         if ytdl_down is None:
             return
         try:
-            f = pathlib.Path(f"{ytdl_data['title']}.mp4".replace("|", "_"))
-            catthumb = pathlib.Path(f"{ytdl_data['title']}.jpg".replace("|", "_"))
+            f = pathlib.Path("cat_ytv.mp4")
+            print(f)
+            catthumb = pathlib.Path("cat_ytv.jpg")
             if not os.path.exists(catthumb):
-                catthumb = pathlib.Path(f"{ytdl_data['title']}.webp".replace("|", "_"))
+                catthumb = pathlib.Path("cat_ytv.webp")
             if not os.path.exists(catthumb):
                 catthumb = None
             await catevent.edit(
@@ -272,7 +274,7 @@ async def download_video(event):
             uploaded = await event.client.fast_upload_file(
                 file=ul,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, catevent, c_time, "Upload :", file_name=f)
+                    progress(d, t, catevent, c_time, "Upload :", file_name=ytdl_data['title'])
                 ),
             )
             ul.close()
