@@ -739,13 +739,17 @@ async def get_output(service, file_id):
                 dfile_name = dfile_.get("name")
                 result1 = get_file_path(service, dfile_id, dfile_name)
                 result2 = get_file_path(service, file_id, file_name)
-                finalresult = result2.replace(result1,"")
+                finalresult = result2.replace(result1, "")
                 link = os.path.join(
                     Config.G_DRIVE_INDEX_LINK.rstrip("/"),
                     quote(finalresult),
                 )
             except Exception as e:
-                await edit_delete(event, f"**Error while fetching G_DRIVE_FOLDER_ID:**/nstr({e})", parse_mode=_format.parse_pre)
+                await edit_delete(
+                    event,
+                    f"**Error while fetching G_DRIVE_FOLDER_ID:**/nstr({e})",
+                    parse_mode=_format.parse_pre,
+                )
                 return
         else:
             link = os.path.join(
@@ -774,7 +778,11 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                 if not file.error_message:
                     percentage = int(file.progress)
                     downloaded = percentage * int(file.total_length) / 100
-                    prog_str = "**Downloading : **`[{0}{1}] {2}`".format("".join("▰" for _ in range(math.floor(percentage / 10))), "".join("▱" for _ in range(10 - math.floor(percentage / 10))), file.progress_string())
+                    prog_str = "**Downloading : **`[{0}{1}] {2}`".format(
+                        "".join("▰" for _ in range(math.floor(percentage / 10))),
+                        "".join("▱" for _ in range(10 - math.floor(percentage / 10))),
+                        file.progress_string(),
+                    )
                     msg = (
                         "**[URI - DOWNLOAD]**\n\n"
                         f"**Name : **`{file.name}`\n"
@@ -809,7 +817,11 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                 return await event.delete()
             elif " depth exceeded" in str(e):
                 file.remove(force=True)
-                await event.edit("Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(file.name))
+                await event.edit(
+                    "Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(
+                        file.name
+                    )
+                )
 
 
 async def glists(gdrive, folderlink=None):  # sourcery no-metrics
