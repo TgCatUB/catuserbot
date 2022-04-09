@@ -725,7 +725,7 @@ async def get_output(service, file_id, event):
         out = G_DRIVE_FILE_LINK.format(file_name, file_id, file_size)
     if Config.G_DRIVE_INDEX_LINK:
         if Config.G_DRIVE_FOLDER_ID:
-            dfile_id, _ = await get_file_id(Config.G_DRIVE_INDEX_LINK)
+            dfile_id, _ = await get_file_id(Config.G_DRIVE_FOLDER_ID)
             try:
                 dfile_ = (
                     service.files()
@@ -747,9 +747,8 @@ async def get_output(service, file_id, event):
             except Exception as e:
                 await edit_delete(
                     event,
-                    f"**Error while fetching G_DRIVE_FOLDER_ID:**/nstr({e})",
-                    parse_mode=_format.parse_pre,
-                )
+                    f"**Error while fetching G_DRIVE_FOLDER_ID:**\n`{str(e)}`",
+                    )
                 return
         else:
             link = os.path.join(
