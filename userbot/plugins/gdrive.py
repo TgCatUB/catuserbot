@@ -748,7 +748,7 @@ async def get_output(service, file_id, event):
                 await edit_delete(
                     event,
                     f"**Error while fetching G_DRIVE_FOLDER_ID:**\n`{str(e)}`",
-                    )
+                )
                 return
         else:
             link = os.path.join(
