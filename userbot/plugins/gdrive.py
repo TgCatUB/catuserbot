@@ -678,7 +678,7 @@ async def gshare(service, event, url):
     await event.edit("`Loading GDrive Share...`")
     file_id, _ = await get_file_id(url)
     try:
-        result = await get_output(service, file_id)
+        result = await get_output(service, file_id,event)
     except Exception as e:
         await edit_delete(event, f"str({e})", parse_mode=_format.parse_pre)
         return
@@ -705,7 +705,7 @@ def get_file_path(service, file_id, file_name):
     return "/".join(reversed(tmp_path[:-1]))
 
 
-async def get_output(service, file_id):
+async def get_output(service, file_id,event):
     file_ = (
         service.files()
         .get(
