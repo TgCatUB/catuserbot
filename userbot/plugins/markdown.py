@@ -104,7 +104,7 @@ MATCHERS = [
     (get_tag_parser("`", MessageEntityCode)),
     (get_tag_parser("--", MessageEntityUnderline)),
     (get_tag_parser("||", MessageEntitySpoiler)),
-    (get_tag_parser(">", MessageEntityBlockquote)),
+    (get_tag_parser(">>", MessageEntityBlockquote)),
     (get_tag_parser("~~", MessageEntityStrike)),
     (re.compile(r"\+\+(.+?)\+\+"), parse_aesthetics),
     (re.compile(r"([^/\w]|^)(/?(r/\w+))"), parse_subreddit),
