@@ -673,7 +673,7 @@ async def task_directory(gdrive, service, folder_path, dir_id=None):
     return returnid
 
 
-async def share(service, event, url):
+async def gshare(service, event, url):
     """get shareable link"""
     await event.edit("`Loading GDrive Share...`")
     file_id, _ = await get_file_id(url)
@@ -724,10 +724,34 @@ async def get_output(service, file_id):
     else:
         out = G_DRIVE_FILE_LINK.format(file_name, file_id, file_size)
     if Config.G_DRIVE_INDEX_LINK:
-        link = os.path.join(
-            Config.G_DRIVE_INDEX_LINK.rstrip("/"),
-            quote(get_file_path(service, file_id, file_name)),
-        )
+        if Config.G_DRIVE_FOLDER_ID:
+            dfile_id, _ = await get_file_id(Config.G_DRIVE_INDEX_LINK)
+            try:
+                dfile_ = (
+                    service.files()
+                    .get(
+                        fileId=dfile_id,
+                        fields="id, name, size, mimeType",
+                        supportsTeamDrives=True,
+                    )
+                    .execute()
+                )
+                dfile_name = dfile_.get("name")
+                result1 = get_file_path(service, dfile_id, dfile_name)
+                result2 = get_file_path(service, file_id, file_name)
+                finalresult = result2.replace(result1,"")
+                link = os.path.join(
+                    Config.G_DRIVE_INDEX_LINK.rstrip("/"),
+                    quote(finalresult),
+                )
+            except Exception as e:
+                await edit_delete(event, f"**Error while fetching G_DRIVE_FOLDER_ID:**/nstr({e})", parse_mode=_format.parse_pre)
+                return
+        else:
+            link = os.path.join(
+                Config.G_DRIVE_INDEX_LINK.rstrip("/"),
+                quote(get_file_path(service, file_id, file_name)),
+            )
         if mime_type == "application/vnd.google-apps.folder":
             link += "/"
         out += f"\n👥 __[Shareable Link]({link})__"
@@ -750,12 +774,7 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                 if not file.error_message:
                     percentage = int(file.progress)
                     downloaded = percentage * int(file.total_length) / 100
-                    prog_str = "**Downloading : **`[{0}{1}] {2}`".format(
-                        "".join("▰" for i in range(math.floor(percentage / 10))),
-                        "".join("▱" for i in range(10 - math.floor(percentage / 10))),
-                        file.progress_string(),
-                    )
-
+                    prog_str = "**Downloading : **`[{0}{1}] {2}`".format("".join("▰" for _ in range(math.floor(percentage / 10))), "".join("▱" for _ in range(10 - math.floor(percentage / 10))), file.progress_string())
                     msg = (
                         "**[URI - DOWNLOAD]**\n\n"
                         f"**Name : **`{file.name}`\n"
@@ -772,7 +791,7 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                     await asyncio.sleep(3)
                     await check_progress_for_dl(gid, event, previous)
                 else:
-                    await event.edit("Error : `{}`".format(str(file.error_message)))
+                    await event.edit(f"Error : `{str(file.error_message)}`")
                     return
             else:
                 await event.edit(
@@ -790,11 +809,7 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                 return await event.delete()
             elif " depth exceeded" in str(e):
                 file.remove(force=True)
-                await event.edit(
-                    "Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(
-                        file.name
-                    )
-                )
+                await event.edit("Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(file.name))
 
 
 async def glists(gdrive, folderlink=None):  # sourcery no-metrics
@@ -1528,7 +1543,7 @@ async def g_download(event):
         "usage": "{tr}gshare <folder/file link>",
     },
 )
-async def gshare(event):
+async def catshare(event):
     "To share the team drive files."
     service = await create_app(event)
     if service is False:
@@ -1536,4 +1551,4 @@ async def gshare(event):
     input_str = event.pattern_match.group(1)
     catevent = await edit_or_reply(event, "`Creating sharable link...`")
     await asyncio.sleep(2)
-    await share(service, catevent, input_str)
+    await gshare(service, catevent, input_str)
