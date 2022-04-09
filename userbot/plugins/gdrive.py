@@ -742,7 +742,7 @@ async def get_output(service, file_id, event):
                 finalresult = result2.replace(result1, "")
                 link = os.path.join(
                     Config.G_DRIVE_INDEX_LINK.rstrip("/"),
-                    quote(finalresult),
+                    quote(finalresult[1:]),
                 )
             except Exception as e:
                 await edit_delete(
