@@ -1,7 +1,7 @@
+import re
 import time
 from datetime import datetime
 
-import re
 from telethon.tl.types import Channel, PollAnswer
 
 
@@ -98,4 +98,4 @@ def Build_Poll(options):
 
 def deEmojify(inputString: str) -> str:
     """Remove emojis and other non-safe characters from string"""
-    return re.sub("[^a-zA-Z0-9 \\`~!@#$%^&*(){}[\]_+=.:;\n'\",><?/-]","",inputString)
+    return re.sub("[^a-zA-Z0-9 \\`~!@#$%^&*(){}[\]_+=.:;\n'\",><?/-]", "", inputString)
