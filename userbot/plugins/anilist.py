@@ -212,13 +212,18 @@ async def anilist(event):
     info={
         "header": "search anime.",
         "description": "Fectchs anime information from anilist",
-        "flags":{"d": "shows you anime details (another format)",
-                "s": "anime search list (shows only anime name and link to anilist)",
-                "n": "get details of specific anime number from search list"
-                },
-        "note" : "for flag n you need to use number attached to flag",
+        "flags": {
+            "d": "shows you anime details (another format)",
+            "s": "anime search list (shows only anime name and link to anilist)",
+            "n": "get details of specific anime number from search list",
+        },
+        "note": "for flag n you need to use number attached to flag",
         "usage": "{tr}anime <flags> <name of anime>",
-        "examples": ["{tr}anime fairy tail","{tr}anime -s fairy tail","{tr}anime -n3 fairy tail",]
+        "examples": [
+            "{tr}anime fairy tail",
+            "{tr}anime -s fairy tail",
+            "{tr}anime -n3 fairy tail",
+        ],
     },
 )
 async def anilist(event):  # sourcery no-metrics
@@ -321,13 +326,18 @@ async def anilist(event):  # sourcery no-metrics
     info={
         "header": "search manga.",
         "description": "Fectchs manga information from anilist",
-        "flags":{"d": "shows you manga details (another format)",
-                "s": "manga search list (shows only manga name and link to anilist)",
-                "n": "get details of specific manga number from search list"
-                },
-        "note" : "for flag n you need to use number attached to flag",
+        "flags": {
+            "d": "shows you manga details (another format)",
+            "s": "manga search list (shows only manga name and link to anilist)",
+            "n": "get details of specific manga number from search list",
+        },
+        "note": "for flag n you need to use number attached to flag",
         "usage": "{tr}manga <flags> <name of manga>",
-        "examples": ["{tr}manga fairy tail","{tr}manga -s fairy tail","{tr}manga -n3 fairy tail",]
+        "examples": [
+            "{tr}manga fairy tail",
+            "{tr}manga -s fairy tail",
+            "{tr}manga -n3 fairy tail",
+        ],
     },
 )
 async def anilist(event):  # sourcery no-metrics
@@ -365,7 +375,7 @@ async def anilist(event):  # sourcery no-metrics
     match = match.replace("-d", "")
     myanime = bool(myanime)
     query = match.strip()
-    result, respone = await searchanilist(query,manga=True)
+    result, respone = await searchanilist(query, manga=True)
     if not respone:
         return await edit_delete(catevent, result)
     if len(result) == 0:
