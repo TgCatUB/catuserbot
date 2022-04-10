@@ -21,6 +21,8 @@ from ..helpers import media_type, readable_time, time_formatter
 from ..helpers.functions import (
     airing_query,
     anilist_user,
+    anime_json_synomsis,
+    character_query
     callAPI,
     formatJSON,
     get_anime_manga,
@@ -522,55 +524,119 @@ async def get_anime(event):
     pattern="char(?:\s|$)([\s\S]*)",
     command=("char", plugin_category),
     info={
-        "header": "Shows you character infomation.",
-        "usage": "{tr}char <char name>",
-        "examples": "{tr}char erza scarlet",
+        "header": "search character.",
+        "description": "Fetches character information from anilist",
+        "flags": {
+            "s": "character search list (shows only character name and link to anilist)",
+            "n": "get details of specific character number from search list",
+        },
+        "note": "for flag n you need to use number attached to flag",
+        "usage": "{tr}character <flags> <name of character>",
+        "examples": [
+            "{tr}character erza scarlet",
+            "{tr}character -s erza scarlet",
+            "{tr}character -n2 erza scarlet",
+        ],
     },
 )
-async def character(event):
-    "Character information."
+async def anilist(event):  # sourcery no-metrics
+    "Get info on any character."
     reply_to = await reply_id(event)
-    search_query = event.pattern_match.group(1)
+    input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
-    if not search_query:
+    if not input_str:
         if reply:
-            search_query = reply.text
+            input_str = reply.text
         else:
             return await edit_delete(
                 event, "__What should i search ? Gib me Something to Search__"
             )
-    catevent = await edit_or_reply(event, "`Searching Character...`")
+    match = input_str
+    animeno = re.findall(r"-n\d+", match)
+    listview = re.findall(r"-s", match)
+    specific = bool(animeno)
     try:
-        search_result = jikan.search("character", search_query)
-    except APIException:
-        return await edit_delete(catevent, "`Character not found.`")
-    first_mal_id = search_result["results"][0]["mal_id"]
-    character = jikan.character(first_mal_id)
-    caption = f"[{character['name']}]({character['url']})"
-    if character["name_kanji"] != "Japanese":
-        caption += f" ({character['name_kanji']})\n"
+        animeno = animeno[0]
+        animeno = animeno.replace("-n", "")
+        match = match.replace(f"-n{animeno}", "")
+        animeno = int(animeno)
+    except IndexError:
+        animeno = 1
+    if animeno < 1 or animeno > 10:
+        return await edit_or_reply(
+            event,
+            "`character number must be in between 1 to 10 use -l flag to query results`",
+        )
+    catevent = await edit_or_reply(event, "`Searching character..`")
+    match = match.replace("-s", "")
+    listview = bool(listview)
+    query = match.strip()
+    search_query = {"page" : 1, "perPage": 10, "query": query}
+    result = await anime_json_synomsis(character_query, search_query)
+    result = result["data"]["Page"]["characters"]
+    if len(result) == 0:
+        return await edit_or_reply(
+            catevent, f"**Search query:** `{query}`\n**Result:** `No results found`"
+        )
+    if listview:
+        msg = f"<b>Search Query: </b> <code>{query}</code>\n\n<b>Results:</b>\n"
+        i = 1
+        ani_data = result
+        for result in ani_data:
+            if i > 10:
+                break
+            msg += f'<b>{i}.</b> <code>{result["name"]["full"]}</code> - <a href="{result["siteUrl"]}">{result["name"]["first"]}</a>\n'
+            i += 1
+        await catevent.edit(msg, parse_mode="html")
+        return
+    for entity in result:
+        if result[entity] is None:
+            result[entity] = "Unknown"
+    dateofbirth= []
+    if result["dateofBirth"]["year"]:
+        dateofbirth.append(result["dateofBirth"]["year"])
+    if result["dateofBirth"]["month"]:
+        dateofbirth.append(result["dateofBirth"]["month"])
+    if result["dateofBirth"]["day"]:
+        dateofbirth.append(result["dateofBirth"]["day"])
+    if len(dateofbirth) != 0:
+        dob = "-".join(dateofbirth)
     else:
-        caption += "\n"
-    if character["nicknames"]:
-        nicknames_string = ", ".join(character["nicknames"])
-        caption += f"\n**Nicknames** : `{nicknames_string}`"
-    about = character["about"].split(" ", 60)
-    with contextlib.suppress(IndexError):
-        about.pop(60)
-    about_string = " ".join(about)
-    mal_url = search_result["results"][0]["url"]
-    for entity in character:
-        if character[entity] is None:
-            character[entity] = "Unknown"
-    caption += f"\n🔰**Extracted Character Data**🔰\n\n{about_string}"
-    caption += f" [Read More]({mal_url})..."
-    await catevent.delete()
-    await event.client.send_file(
-        event.chat_id,
-        file=character["image_url"],
-        caption=replace_text(caption),
-        reply_to=reply_to,
+        dob = "Unknown"
+    caption=textwrap.dedent(
+        f"""
+        🆎 <b> Name</b>: <i>{result['name']['full']}</i>
+        🆔 <b>AL ID</b>: <i>{result['id']}</i>
+        👫 <b>Gender</b>: <i>{result['gender'].lower()}</i>
+        🔢 <b>Age</b>: <i>{result['age']}</i>
+        🎂 <b>Date of Birth</b>: {dob}
+        📃 <b>Blood Type</b>: <i>{result['bloodtype']}</i>
+        📊 <b>Liked By</b>: <i>{result['favourites']}</i>
+        """
     )
+    html_ = f"""<a href="{result['siteUrl']}">"""
+    html_ += f"""<img src="{result['image']['large']}"/></a>"""
+    html_ += "<br>"
+    html_ += f"<h3>{result['name']['full']}</h3>"
+    html_ += f"<em>{result['name']['native']}</em><br>"
+    html_ += f"<b>Character ID</b>: {result['id']}<br>"
+    html_ += f"<h4>About Character and Role:</h4>{result['description'] or 'N/A'}"
+    html_ += "<br><br>"
+    html_ +=f"<a href='{result['siteUrl']}'> View on anilist</a>"
+
+    synopsis_link = await post_to_telegraph(
+            result['name']['full'],
+            f"<code>{caption}</code>\n"
+            + f"<br>"
+            + html_,
+        )
+    await event.client.send_file(
+            event.chat_id,
+            file=result['image']['large'],
+            caption=caption + f"📖 <a href='{synopsis_link}'><b>Description</b></a> <b>&</b> <a href='{result['siteUrl']}'><b>Read More</b></a>",
+            parse_mode="html",
+            reply_to=reply_to,
+        )
 
 
 @catub.cat_cmd(
