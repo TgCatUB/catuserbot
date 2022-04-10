@@ -592,7 +592,7 @@ async def anilist(event):  # sourcery no-metrics
         if result[entity] is None:
             result[entity] = "Unknown"
     if specific:
-        result = result[animeno-1]
+        result = result[animeno - 1]
     else:
         result = result[0]
     dateofbirth = []
