@@ -613,7 +613,7 @@ async def anilist(event):  # sourcery no-metrics
         👫 <b>Gender</b>: <i>{result['gender'].lower()}</i>
         🔢 <b>Age</b>: <i>{result['age']}</i>
         🎂 <b>Date of Birth</b>: {dob}
-        📃 <b>Blood Type</b>: <i>{result['bloodtype']}</i>
+        📃 <b>Blood Type</b>: <i>{result['bloodType']}</i>
         📊 <b>Liked By</b>: <i>{result['favourites']}</i>
         """
     )
