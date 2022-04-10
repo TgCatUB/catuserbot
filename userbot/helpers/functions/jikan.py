@@ -309,13 +309,21 @@ async def get_anime_schedule(weekid):
 
 async def callAPI(search_str, manga=False):
     variables = {"search": search_str}
-    if manga:
-        query = manga_query
-    else:
-        query = anime_query
+    query = manga_query if manga else anime_query
     response = requests.post(anilisturl, json={"query": query, "variables": variables})
     return response.text
 
+async def searchanilist(search_str, manga=False):
+    typea = "MANGA" if manga else "ANIME"
+    variables = {"search": search_str,"type":typea ,"page" : 1,"perPage":10}
+    response = requests.post(anilisturl, json={"query": anilist_query, "variables": variables})
+    msg = ""
+    jsonData = json.loads(response.text)
+    res = list(jsonData.keys())
+    if "errors" in res:
+        msg += f"**Error** : `{jsonData['errors'][0]['message']}`"
+        return msg , False
+    return jsonData["data"]["Page"]["media"] , True
 
 async def formatJSON(outData, manga=False):
     msg = ""
@@ -334,7 +342,7 @@ async def formatJSON(outData, manga=False):
     msg += f"[{title}]({link})"
     msg += f"\n\n**Type** : {jsonData['format']}"
     msg += "\n**Genres** : "
-    msg += f", ".join(jsonData["genres"])
+    msg += ", ".join(jsonData["genres"])
     msg += f"\n**Status** : {jsonData['status']}"
     if manga:
         msg += f"\n**Chapters** : {jsonData['chapters']}"
