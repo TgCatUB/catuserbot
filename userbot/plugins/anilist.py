@@ -17,7 +17,7 @@ from telegraph import exceptions, upload_file
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import media_type, readable_time, time_formatter, post_to_telegraph
+from ..helpers import media_type, post_to_telegraph, readable_time, time_formatter
 from ..helpers.functions import (
     airing_query,
     anilist_user,
@@ -30,7 +30,6 @@ from ..helpers.functions import (
     get_filler_episodes,
     getBannerLink,
     memory_file,
-    replace_text,
     search_in_animefiller,
     searchanilist,
     weekdays,
@@ -554,7 +553,7 @@ async def anilist(event):  # sourcery no-metrics
     match = input_str
     animeno = re.findall(r"-n\d+", match)
     listview = re.findall(r"-s", match)
-    specific = bool(animeno)
+    bool(animeno)
     try:
         animeno = animeno[0]
         animeno = animeno.replace("-n", "")
