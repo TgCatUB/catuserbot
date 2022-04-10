@@ -322,6 +322,7 @@ async def insta_dl(event):
         )
     v1 = "@instasave_bot"
     v2 = "@videomaniacbot"
+    media_list = []
     catevent = await edit_or_reply(event, "**Downloading.....**")
     async with event.client.conversation(v1) as conv:
         try:
@@ -341,13 +342,19 @@ async def insta_dl(event):
             media = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
             if media.media:
-                text = await conv.get_response()
-                await event.client.send_read_acknowledge(conv.chat_id)
-                details = text.message.splitlines()
+                if media.grouped_id:
+                    while media.grouped_id:
+                        media_list.append(media)
+                        media = await conv.get_response()
+                else:
+                    media_list.append(media)
+                    media = await conv.get_response()
+                    await event.client.send_read_acknowledge(conv.chat_id)
+                details = media.message.splitlines()
                 await catevent.delete()
                 await event.client.send_file(
                     event.chat_id,
-                    media,
+                    media_list,
                     caption=f"**{details[0]}**",
                 )
                 return await delete_conv(event, v1, v1_flag)
