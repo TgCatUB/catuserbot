@@ -17,7 +17,7 @@ from telegraph import exceptions, upload_file
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import media_type, readable_time, time_formatter
+from ..helpers import media_type, readable_time, time_formatter, post_to_telegraph
 from ..helpers.functions import (
     airing_query,
     anilist_user,
