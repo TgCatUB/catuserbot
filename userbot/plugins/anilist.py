@@ -597,11 +597,11 @@ async def anilist(event):  # sourcery no-metrics
             result[entity] = "Unknown"
     dateofbirth = []
     if result["dateOfBirth"]["year"]:
-        dateofbirth.append(result["dateOfBirth"]["year"])
+        dateofbirth.append(str(result["dateOfBirth"]["year"]))
     if result["dateOfBirth"]["month"]:
-        dateofbirth.append(result["dateOfBirth"]["month"])
+        dateofbirth.append(str(result["dateOfBirth"]["month"]))
     if result["dateOfBirth"]["day"]:
-        dateofbirth.append(result["dateOfBirth"]["day"])
+        dateofbirth.append(str(result["dateOfBirth"]["day"]))
     if len(dateofbirth) != 0:
         dob = "-".join(dateofbirth)
     else:
