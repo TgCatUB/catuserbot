@@ -585,12 +585,12 @@ async def create_dir(service, folder_name, dir_id=None):
 async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
     with contextlib.suppress(Exception):
         await gdrive.edit("`Processing upload...`")
-        if dir_id is not None:
-            dir_id = [dir_id]
-        elif GDRIVE_.parent_Id is not None:
-            dir_id = [GDRIVE_.parent_Id]
-        else:
-            dir_id = ""
+    if dir_id is not None:
+        dir_id = [dir_id]
+    elif GDRIVE_.parent_Id is not None:
+        dir_id = [GDRIVE_.parent_Id]
+    else:
+        dir_id = ""
     body = {
         "name": file_name,
         "description": "Uploaded from Telegram using Catuserbot.",
@@ -1252,7 +1252,7 @@ async def cancel_process(gdrive):
         "usage": "{tr}ugd <uri/url/drivelink/local file/folder path>",
     },
 )
-async def google_drive(gdrive):  # sourcery no-metrics
+async def google_drive(gdrive):    # sourcery no-metrics
     "To upload to gdrive."
     reply = ""
     start = datetime.now()
@@ -1284,15 +1284,14 @@ async def google_drive(gdrive):  # sourcery no-metrics
         folder_name = await get_raw_name(folder_path)
         folder = await create_dir(service, folder_name, dir_id=GDRIVE_.parent_Id)
         dir_Id = folder.get("id")
-        webViewURL = "https://drive.google.com/drive/folders/" + dir_Id
+        webViewURL = f"https://drive.google.com/drive/folders/{dir_Id}"
         try:
-            await task_directory(gdrive, service, folder_path, dir_id=folder.get("id"))
+            await task_directory(gdrive, service, folder_path, dir_id=dir_Id)
         except CancelProcess:
             await gdrive.edit(
                 "**[FOLDER - CANCELLED]**\n\n"
-                "**Status : **`OK - received signal cancelled.`"
+                "**Status : **`Cancelled (received cancel signal).`"
             )
-            await gdrive.delete()
             return True
         except Exception as e:
             await gdrive.edit(
@@ -1302,9 +1301,10 @@ async def google_drive(gdrive):  # sourcery no-metrics
             return False
         else:
             await gdrive.edit(
-                "**[FOLDER - UPLOAD]**\n\n"
-                f"[{folder_name}]({webViewURL})\n"
-                "**Status : **`OK - Successfully uploaded.`\n\n"
+                "<b>[FOLDER - UPLOAD]</b>\n\n"
+                f"<b>Location: </b><a href='{webViewURL}'>{folder_name}</a>\n"
+                "<b>Status : </b><code>Successfully uploaded.</code>",
+                parse_mode='HTML',
             )
             return True
     elif not value and event.reply_to_msg_id:
