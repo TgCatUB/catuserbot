@@ -49,8 +49,9 @@ query ($page: Int, $perPage: Int, $query: String) {
                 id
                 name {
                     first
-                    last
                     full
+                    last
+                    native
                 }
                 image {
                     medium
