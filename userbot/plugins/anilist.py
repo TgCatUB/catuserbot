@@ -588,13 +588,13 @@ async def anilist(event):  # sourcery no-metrics
             i += 1
         await catevent.edit(msg, parse_mode="html")
         return
-    for entity in result:
-        if result[entity] is None:
-            result[entity] = "Unknown"
     if specific:
         result = result[animeno - 1]
     else:
         result = result[0]
+    for entity in result:
+        if result[entity] is None:
+            result[entity] = "Unknown"
     dateofbirth = []
     if result["dateofBirth"]["year"]:
         dateofbirth.append(result["dateofBirth"]["year"])
