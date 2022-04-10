@@ -1,9 +1,6 @@
 from asyncio import sleep
-
 import requests
-
 from userbot import catub
-
 from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "utils"
@@ -20,6 +17,11 @@ plugin_category = "utils"
 async def _(event):
     "Searches the given query in Google and shows you the link of that query."
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(event, "**ಠ∀ಠ Give me text to search..**")
     sample_url = (
         f"https://da.gd/s?url=http://google.com/search?q={input_str.replace(' ', '+')}"
     )
@@ -45,6 +47,11 @@ async def _(event):
 async def _(event):
     "Searches the given query in youtube and shows you the link of that query."
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(event, "**ಠ∀ಠ Give me text to search..**")
     sample_url = f"https://da.gd/s?url=https://www.youtube.com/results?search_query={input_str.replace(' ', '+')}"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
@@ -68,6 +75,11 @@ async def _(event):
 async def _(event):
     "Searches the given query in Duck buck go and shows you the link of that query."
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(event, "**ಠ∀ಠ Give me text to search..**")
     sample_url = f"https://da.gd/s?url=https://duckduckgo.com/?q={input_str.replace(' ', '+')}&t=h_&ia=about"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
@@ -192,6 +204,11 @@ async def _(event):
 async def _(event):
     "Searches the given query in indian kanoon and shows you the link of that query."
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(event, "**ಠ∀ಠ Give me text to search..**")
     sample_url = f"https://da.gd/s?url=https://indiankanoon.org/search/?formInput={input_str.replace(' ', '+')}+sortby%3Amostrecent"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
@@ -215,6 +232,11 @@ async def _(event):
 async def _(event):
     "Searches the given query in Government e marketplace and shows you the link of that query."
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(event, "**ಠ∀ಠ Give me text to search..**")
     sample_url = f"https://da.gd/s?url=https://mkp.gem.gov.in/search?q={input_str.replace(' ', '+')}&sort_type=created_at_desc&_xhr=1"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
@@ -238,6 +260,11 @@ async def _(event):
 async def _(event):
     "Searches the given query in web archive and shows you the link of that query."
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(event, "**ಠ∀ಠ Give me text to search..**")
     sample_url = f"https://da.gd/s?url=https://web.archive.org/web/*/{input_str.replace(' ', '+')}"
     response_api = requests.get(sample_url).text
     event = await edit_or_reply(event, "`Searching.....`")
