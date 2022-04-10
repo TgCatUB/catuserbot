@@ -23,7 +23,7 @@ from yt_dlp.utils import (
     XAttrMetadataError,
 )
 
-from userbot import catub
+from . import catub, BOTLOG, BOTLOG_CHATID
 
 from ..core import pool
 from ..core.logger import logging
