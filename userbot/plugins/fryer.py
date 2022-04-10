@@ -1,4 +1,5 @@
 import io
+import os
 from random import randint, uniform
 
 from PIL import Image, ImageEnhance, ImageOps
@@ -98,16 +99,20 @@ async def frybot(event):
     catevent = await edit_or_reply(event, "```Processing...```")
     async with event.client.conversation(chat) as conv:
         try:
-            msg_flag = await conv.send_message(output[1])
+            msg_flag = await conv.send_message("/start")
         except YouBlockedUserError:
             await edit_or_reply(catevent, "**Error:** Trying to unblock & retry, wait a sec...")
             await catub(unblock("image_deepfrybot"))
-            msg_flag = await conv.send_message(output[1])
+            msg_flag = await conv.send_message("/start")
+        await conv.get_response()
+        await event.client.send_read_acknowledge(conv.chat_id)
+        await event.client.send_file(conv.chat_id,output[1])
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
         await catevent.delete()
         await event.client.send_file(event.chat_id, response, reply_to=reply_to)
         await delete_conv(event, chat, msg_flag)
+        os.remove(output[1])
 
 @catub.cat_cmd(
     pattern="deepfry(?: |$)([1-9])?",
