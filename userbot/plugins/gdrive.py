@@ -1252,7 +1252,7 @@ async def cancel_process(gdrive):
         "usage": "{tr}ugd <uri/url/drivelink/local file/folder path>",
     },
 )
-async def google_drive(gdrive):    # sourcery no-metrics
+async def google_drive(gdrive):  # sourcery no-metrics
     "To upload to gdrive."
     reply = ""
     start = datetime.now()
@@ -1304,7 +1304,7 @@ async def google_drive(gdrive):    # sourcery no-metrics
                 "<b>[FOLDER - UPLOAD]</b>\n\n"
                 f"<b>Location: </b><a href='{webViewURL}'>{folder_name}</a>\n"
                 "<b>Status : </b><code>Successfully uploaded.</code>",
-                parse_mode='HTML',
+                parse_mode="HTML",
             )
             return True
     elif not value and event.reply_to_msg_id:
