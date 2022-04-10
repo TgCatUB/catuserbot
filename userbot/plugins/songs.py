@@ -15,7 +15,7 @@ from validators.url import url
 
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import name_dl, song_dl, video_dl, yt_search
+from ..helpers.functions import delete_conv, name_dl, song_dl, video_dl, yt_search
 from ..helpers.tools import media_type
 from ..helpers.utils import _catutils, reply_id
 from . import catub
@@ -110,14 +110,6 @@ async def _(event):
         if files and os.path.exists(files):
             os.remove(files)
 
-
-async def delete_messages(event, chat, from_message):
-    itermsg = event.client.iter_messages(chat, min_id=from_message.id)
-    msgs = [from_message.id]
-    async for i in itermsg:
-        msgs.append(i.id)
-    await event.client.delete_messages(chat, msgs)
-    await event.client.send_read_acknowledge(chat)
 
 
 @catub.cat_cmd(
@@ -267,7 +259,7 @@ async def _(event):
             if baka[0].message.startswith(
                 ("I don't like to say this but I failed to find any such song.")
             ):
-                await delete_messages(event, chat, purgeflag)
+                await delete_conv(event, chat, purgeflag)
                 return await edit_delete(
                     catevent, SONG_NOT_FOUND, parse_mode="html", time=5
                 )
@@ -287,7 +279,7 @@ async def _(event):
             reply_to=reply_id_,
         )
         await catevent.delete()
-        await delete_messages(event, chat, purgeflag)
+        await delete_conv(event, chat, purgeflag)
 
 
 # reverse search by  @Lal_bakthan

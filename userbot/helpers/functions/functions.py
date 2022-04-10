@@ -184,6 +184,14 @@ async def make_inline(text, borg, chat_id, reply_to_id):
     await results[0].click(chat_id, reply_to=reply_to_id)
 
 
+async def delete_conv(event, chat, from_message):
+    itermsg = event.client.iter_messages(chat, min_id=from_message.id)
+    msgs = [from_message.id]
+    async for i in itermsg:
+        msgs.append(i.id)
+    await event.client.delete_messages(chat, msgs)
+    await event.client.send_read_acknowledge(chat)
+
 # --------------------------------------------------------------------------------------------------------------------#
 
 
