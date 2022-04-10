@@ -553,7 +553,7 @@ async def anilist(event):  # sourcery no-metrics
     match = input_str
     animeno = re.findall(r"-n\d+", match)
     listview = re.findall(r"-s", match)
-    bool(animeno)
+    specific = bool(animeno)
     try:
         animeno = animeno[0]
         animeno = animeno.replace("-n", "")
@@ -591,6 +591,10 @@ async def anilist(event):  # sourcery no-metrics
     for entity in result:
         if result[entity] is None:
             result[entity] = "Unknown"
+    if specific:
+        result = result[animeno-1]
+    else:
+        result = result[0]
     dateofbirth = []
     if result["dateofBirth"]["year"]:
         dateofbirth.append(result["dateofBirth"]["year"])
