@@ -210,10 +210,15 @@ async def anilist(event):
     pattern="anime(?:\s|$)([\s\S]*)",
     command=("anime", plugin_category),
     info={
-        "header": "Shows you the details of the anime.",
+        "header": "search anime.",
         "description": "Fectchs anime information from anilist",
-        "usage": "{tr}anime <name of anime>",
-        "examples": "{tr}anime fairy tail",
+        "flags":{"d": "shows you anime details (another format)",
+                "s": "anime search list (shows only anime name and link to anilist)",
+                "n": "get details of specific anime number from search list"
+                },
+        "note" : "for flag n you need to use number attached to flag",
+        "usage": "{tr}anime <flags> <name of anime>",
+        "examples": ["{tr}anime fairy tail","{tr}anime -s fairy tail","{tr}anime -n3 fairy tail",]
     },
 )
 async def anilist(event):  # sourcery no-metrics
@@ -267,6 +272,7 @@ async def anilist(event):  # sourcery no-metrics
     if listview:
         msg = f"<b>Search Query: </b> <code>{query}</code>\n\n<b>Results:</b>\n"
         i = 1
+        ani_data = result
         for result in ani_data:
             if i > 10:
                 break
@@ -313,13 +319,19 @@ async def anilist(event):  # sourcery no-metrics
     pattern="manga(?:\s|$)([\s\S]*)",
     command=("manga", plugin_category),
     info={
-        "header": "Searches for manga.",
-        "usage": "{tr}manga <manga name",
-        "examples": "{tr}manga fairy tail",
+        "header": "search manga.",
+        "description": "Fectchs manga information from anilist",
+        "flags":{"d": "shows you manga details (another format)",
+                "s": "manga search list (shows only manga name and link to anilist)",
+                "n": "get details of specific manga number from search list"
+                },
+        "note" : "for flag n you need to use number attached to flag",
+        "usage": "{tr}manga <flags> <name of manga>",
+        "examples": ["{tr}manga fairy tail","{tr}manga -s fairy tail","{tr}manga -n3 fairy tail",]
     },
 )
-async def get_manga(event):
-    "searches for manga."
+async def anilist(event):  # sourcery no-metrics
+    "Get info on any manga."
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
@@ -330,7 +342,58 @@ async def get_manga(event):
             return await edit_delete(
                 event, "__What should i search ? Gib me Something to Search__"
             )
-    catevent = await edit_or_reply(event, "`Searching Manga..`")
+    match = input_str
+    animeno = re.findall(r"-n\d+", match)
+    listview = re.findall(r"-s", match)
+    myanime = re.findall(r"-d", match)
+    specific = bool(animeno)
+    try:
+        animeno = animeno[0]
+        animeno = animeno.replace("-n", "")
+        match = match.replace(f"-n{animeno}", "")
+        animeno = int(animeno)
+    except IndexError:
+        animeno = 1
+    if animeno < 1 or animeno > 10:
+        return await edit_or_reply(
+            event,
+            "`manga number must be in between 1 to 10 use -l flag to query results`",
+        )
+    catevent = await edit_or_reply(event, "`Searching manga..`")
+    match = match.replace("-s", "")
+    listview = bool(listview)
+    match = match.replace("-d", "")
+    myanime = bool(myanime)
+    query = match.strip()
+    result, respone = await searchanilist(query,manga=True)
+    if not respone:
+        return await edit_delete(catevent, result)
+    if len(result) == 0:
+        return await edit_or_reply(
+            catevent, f"**Search query:** `{query}`\n**Result:** `No results found`"
+        )
+    input_str = result[0]["title"]["english"] or result[0]["title"]["romaji"]
+    if myanime:
+        result = await callAPI(input_str)
+        msg = await formatJSON(result)
+        await catevent.edit(msg, link_preview=True)
+        return
+    if listview:
+        msg = f"<b>Search Query: </b> <code>{query}</code>\n\n<b>Results:</b>\n"
+        i = 1
+        ani_data = result
+        for result in ani_data:
+            if i > 10:
+                break
+            input_str = result["title"]["english"] or result["title"]["romaji"]
+            if result["title"]["english"]:
+                msg += f'<b>{i}.</b> <code>{result["title"]["english"]}</code> - <a href="{result["siteUrl"]}">{result["title"]["romaji"]}</a>\n'
+            else:
+                msg += f'<b>{i}.</b> <code>{result["title"]["romaji"]}</code> - <a href="{result["siteUrl"]}">{result["title"]["native"]}</a>\n'
+            i += 1
+        await catevent.edit(msg, parse_mode="html")
+        return
+    input_str = result[animeno - 1]["title"]["romaji"] if specific else query
     caption, image = await get_anime_manga(input_str, "anime_manga", event.chat_id)
     if image is None:
         await edit_or_reply(catevent, caption, parse_mode="html")
@@ -350,6 +413,7 @@ async def get_manga(event):
         await catevent.delete()
         os.remove(anime_path)
     except BaseException:
+        image = getBannerLink(first_mal_id, True)
         await event.client.send_file(
             event.chat_id,
             file=image,
