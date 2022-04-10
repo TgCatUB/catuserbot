@@ -322,7 +322,9 @@ async def insta_dl(event):
     if not link:
         return await edit_delete(event, "**ಠ∀ಠ Give me link to search..**", 10)
     if "instagram.com" not in link:
-        return await edit_delete(event,"` I need a Instagram link to download it's Video...`(*_*)" ,10)
+        return await edit_delete(
+            event, "` I need a Instagram link to download it's Video...`(*_*)", 10
+        )
     v1 = "@instasave_bot"
     v2 = "@videomaniacbot"
     media_list = []

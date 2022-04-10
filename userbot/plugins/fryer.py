@@ -3,7 +3,6 @@ import os
 from random import randint, uniform
 
 from PIL import Image, ImageEnhance, ImageOps
-from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 from telethon.tl.types import DocumentAttributeFilename
@@ -12,8 +11,7 @@ from userbot import catub
 
 from ..core.managers import edit_or_reply
 from ..helpers.functions import delete_conv
-from ..helpers.utils import reply_id, media_to_pic
-
+from ..helpers.utils import media_to_pic, reply_id
 
 plugin_category = "extra"
 
@@ -91,28 +89,33 @@ async def frybot(event):
     reply_to = await reply_id(event)
     reply_message = await event.get_reply_message()
     if not event.reply_to_msg_id or not reply_message.media:
-        return await edit_delete(event, "```Reply to a media to fry it...```",10)
+        return await edit_delete(event, "```Reply to a media to fry it...```", 10)
     output = await media_to_pic(event, reply_message)
     if output[1] is None:
-        return await edit_delete(output[0], "__Unable to extract image from the replied message.__",10)
+        return await edit_delete(
+            output[0], "__Unable to extract image from the replied message.__", 10
+        )
     chat = "@image_deepfrybot"
     catevent = await edit_or_reply(event, "```Processing...```")
     async with event.client.conversation(chat) as conv:
         try:
             msg_flag = await conv.send_message("/start")
         except YouBlockedUserError:
-            await edit_or_reply(catevent, "**Error:** Trying to unblock & retry, wait a sec...")
+            await edit_or_reply(
+                catevent, "**Error:** Trying to unblock & retry, wait a sec..."
+            )
             await catub(unblock("image_deepfrybot"))
             msg_flag = await conv.send_message("/start")
         await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
-        await event.client.send_file(conv.chat_id,output[1])
+        await event.client.send_file(conv.chat_id, output[1])
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
         await catevent.delete()
         await event.client.send_file(event.chat_id, response, reply_to=reply_to)
         await delete_conv(event, chat, msg_flag)
         os.remove(output[1])
+
 
 @catub.cat_cmd(
     pattern="deepfry(?: |$)([1-9])?",
