@@ -111,7 +111,6 @@ async def _(event):
             os.remove(files)
 
 
-
 @catub.cat_cmd(
     pattern="vsong(?:\s|$)([\s\S]*)",
     command=("vsong", plugin_category),

@@ -192,6 +192,7 @@ async def delete_conv(event, chat, from_message):
     await event.client.delete_messages(chat, msgs)
     await event.client.send_read_acknowledge(chat)
 
+
 # --------------------------------------------------------------------------------------------------------------------#
 
 

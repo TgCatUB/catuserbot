@@ -5,10 +5,10 @@ import os
 import pathlib
 from time import time
 
-from telethon.tl import types
-from telethon.utils import get_attributes
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.contacts import UnblockRequest as unblock 
+from telethon.tl import types
+from telethon.tl.functions.contacts import UnblockRequest as unblock
+from telethon.utils import get_attributes
 from urlextract import URLExtract
 from wget import download
 from yt_dlp import YoutubeDL
@@ -23,6 +23,8 @@ from yt_dlp.utils import (
     XAttrMetadataError,
 )
 
+from userbot import catub
+
 from ..core import pool
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
@@ -30,7 +32,6 @@ from ..helpers import progress, reply_id
 from ..helpers.functions import delete_conv
 from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb, ytsearch
 from ..helpers.utils import _format
-from userbot import catub
 
 BASE_YT_URL = "https://www.youtube.com/watch?v="
 extractor = URLExtract()
@@ -327,7 +328,9 @@ async def insta_dl(event):
         try:
             v1_flag = await conv.send_message("/start")
         except YouBlockedUserError:
-            await edit_or_reply(catevent,"**Error:** Trying to unblock & retry, wait a sec...")
+            await edit_or_reply(
+                catevent, "**Error:** Trying to unblock & retry, wait a sec..."
+            )
             await catub(unblock("instasave_bot"))
             v1_flag = await conv.send_message("/start")
         response = await conv.get_response()
@@ -341,22 +344,24 @@ async def insta_dl(event):
             if media.media:
                 text = await conv.get_response()
                 await event.client.send_read_acknowledge(conv.chat_id)
-                details =  text.message.splitlines()
+                details = text.message.splitlines()
                 await catevent.delete()
                 await event.client.send_file(
                     event.chat_id,
                     media,
-                    caption = f"**{details[0]}**",
+                    caption=f"**{details[0]}**",
                 )
                 return await delete_conv(event, v1, v1_flag)
-            checker =  media.message.splitlines()[2]
+            checker = media.message.splitlines()[2]
         await delete_conv(event, v1, v1_flag)
-        await edit_or_reply(catevent,"**Switching v2...**")
+        await edit_or_reply(catevent, "**Switching v2...**")
         async with event.client.conversation(v2) as conv:
             try:
                 v2_flag = await conv.send_message("/start")
             except YouBlockedUserError:
-                await edit_or_reply(catevent,"**Error:** Trying to unblock & retry, wait a sec...")
+                await edit_or_reply(
+                    catevent, "**Error:** Trying to unblock & retry, wait a sec..."
+                )
                 await catub(unblock("videomaniacbot"))
                 v2_flag = await conv.send_message("/start")
             await conv.get_response()
@@ -369,14 +374,21 @@ async def insta_dl(event):
             await event.client.send_read_acknowledge(conv.chat_id)
             if media.media:
                 if BOTLOG and "join the channel" in checker:
-                    error =  checker.splitlines()[2]
-                    await event.client.send_message(BOTLOG_CHATID, f"**#V1_ERROR :-**\n\n__Currently we using @instasave_bot for v1, that need users to join this chat : {error}__\n\n__If you know any good bot which does'nt need join channel, inform us here: @catuserbot_support__")
+                    error = checker.splitlines()[2]
+                    await event.client.send_message(
+                        BOTLOG_CHATID,
+                        f"**#V1_ERROR :-**\n\n__Currently we using @instasave_bot for v1, that need users to join this chat : {error}__\n\n__If you know any good bot which does'nt need join channel, inform us here: @catuserbot_support__",
+                    )
                 await catevent.delete()
                 await event.client.send_file(event.chat_id, media)
-            else: 
-                await edit_delete(catevent, f"**#ERROR\nv1 :** __{checker}__\n\n**v2 :**__ {media.text}__",40)
+            else:
+                await edit_delete(
+                    catevent,
+                    f"**#ERROR\nv1 :** __{checker}__\n\n**v2 :**__ {media.text}__",
+                    40,
+                )
             await delete_conv(event, v2, v2_flag)
- 
+
 
 @catub.cat_cmd(
     pattern="yts(?: |$)(\d*)? ?([\s\S]*)",
