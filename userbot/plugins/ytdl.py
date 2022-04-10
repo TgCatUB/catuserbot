@@ -303,7 +303,7 @@ async def download_video(event):
 
 
 @catub.cat_cmd(
-    pattern="insta ([\s\S]*)",
+    pattern="insta(?: |$)([\s\S]*)",
     command=("insta", plugin_category),
     info={
         "header": "To download instagram video/photo",
@@ -316,9 +316,13 @@ async def download_video(event):
 async def insta_dl(event):
     "For downloading instagram media"
     link = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not link and reply:
+        link = reply.text
+    if not link:
+        return await edit_delete(event, "**ಠ∀ಠ Give me link to search..**", 10)
     if "instagram.com" not in link:
-        await edit_or_reply(
-            event, "` I need a Instagram link to download it's Video...`(*_*)"
+        return await edit_delete(event,"` I need a Instagram link to download it's Video...`(*_*)" ,10)
         )
     v1 = "@instasave_bot"
     v2 = "@videomaniacbot"

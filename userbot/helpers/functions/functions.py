@@ -19,6 +19,7 @@ except ModuleNotFoundError:
 
 from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps
 from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.contacts import UnblockRequest as unblock
 
 from ...Config import Config
 from ...sql_helper.globals import gvarstatus
@@ -157,11 +158,11 @@ async def clippy(borg, msg, chat_id, reply_to_id):
     async with borg.conversation(chat) as conv:
         try:
             msg = await conv.send_file(msg)
-            pic = await conv.get_response()
-            await borg.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await kakashi.edit("Please unblock @clippy and try again")
-            return
+            await catub(unblock("clippy"))
+            msg = await conv.send_file(msg)
+        pic = await conv.get_response()
+        await borg.send_read_acknowledge(conv.chat_id)
         await borg.send_file(
             chat_id,
             pic,
