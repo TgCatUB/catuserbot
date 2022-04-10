@@ -31,6 +31,7 @@ from ..helpers.functions import (
     replace_text,
     search_in_animefiller,
     weekdays,
+    searchanilist,
 )
 from ..helpers.utils import _cattools, reply_id
 
@@ -215,17 +216,94 @@ async def anilist(event):
         "examples": "{tr}anime fairy tail",
     },
 )
-async def anilist(event):
+async def anilist(event):    # sourcery no-metrics
     "Get info on any anime."
+    reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
     if not input_str:
-        return await edit_delete(
-            event, "__What should i search ? Gib me Something to Search__"
+        if reply:
+            input_str = reply.text
+        else:
+            return await edit_delete(
+                event, "__What should i search ? Gib me Something to Search__"
+            )
+    animeno = re.findall(r"-n\d+", match)
+    listview = re.findall(r"-s", match)
+    myanime = re.findall(r"-d", match)
+    specific = bool(animeno)
+    try:
+        animeno = animeno[0]
+        animeno = animeno.replace("-n", "")
+        match = match.replace(f"-n{animeno}", "")
+        animeno = int(animeno)
+    except IndexError:
+        animeno = 1
+    if animeno < 1 or animeno > 10:
+        return await edit_or_reply(
+            event,
+            "`anime number must be in between 1 to 10 use -l flag to query results`",
         )
-    event = await edit_or_reply(event, "`Searching...`")
-    result = await callAPI(input_str)
-    msg = await formatJSON(result)
-    await event.edit(msg, link_preview=True)
+    catevent = await edit_or_reply(event, "`Searching Anime..`")
+    match = match.replace("-s", "")
+    listview = bool(listview)
+    match =match.replace("-d", "")
+    myanime = bool(myanime)
+    query = match.strip()
+    result , respone = await searchanilist(query)
+    if not respone:
+        return await edit_delete(catevent,result)
+    if len(result)==0:
+        return await edit_or_reply(catevent,f"**Search query:** `{query}`\n**Result:** `No results found`")
+    input_str = result[0]["title"]["english"] or result[0]["title"]["romaji"]
+    if myanime:
+        result = await callAPI(input_str)
+        msg = await formatJSON(result)
+        await catevent.edit(msg, link_preview=True)
+        return
+    if listview:
+        msg = f"<b>Search Query: </b> <code>{query}</code>\n\n<b>Results:</b>\n"
+        i = 1
+        for result in ani_data:
+            if i>10:
+                break
+            input_str = result["title"]["english"] or result["title"]["romaji"]
+            if result["title"]["english"]:
+                msg += f'<b>{i}.</b> <code>{result["title"]["english"]}</code> - <a href="{result["siteUrl"]}">{result["title"]["romaji"]}</a>\n'
+            else:
+                msg += f'<b>{i}.</b> <code>{result["title"]["romaji"]}</code> - <a href="{result["siteUrl"]}">{result["title"]["native"]}</a>\n'
+            i+=1
+        await catevent.edit(msg,parse_mode='html')
+        return
+    input_str = result[animeno-1]["title"]["romaji"] if specific else query
+    caption, image = await get_anime_manga(input_str, "anime_anime", event.chat_id)
+    if image is None:
+            await edit_or_reply(catevent, caption, parse_mode="html")
+            return
+    try:
+            downloader = SmartDL(image, anime_path, progress_bar=False)
+            downloader.start(blocking=False)
+            while not downloader.isFinished():
+                pass
+            await event.client.send_file(
+                event.chat_id,
+                file=anime_path,
+                caption=caption,
+                parse_mode="html",
+                reply_to=reply_to,
+            )
+            await catevent.delete()
+            os.remove(anime_path)
+    except BaseException:
+            image = getBannerLink(first_mal_id, True)
+            await event.client.send_file(
+                event.chat_id,
+                file=image,
+                caption=caption,
+                parse_mode="html",
+                reply_to=reply_to,
+            )
+            await catevent.delete()
 
 
 @catub.cat_cmd(
@@ -360,57 +438,6 @@ async def get_anime(event):
     msg += "`"
     await edit_or_reply(event, msg)
 
-
-@catub.cat_cmd(
-    pattern="sanime(?:\s|$)([\s\S]*)",
-    command=("sanime", plugin_category),
-    info={
-        "header": "Searches for anime.",
-        "usage": "{tr}sanime <anime name>",
-        "examples": "{tr}sanime black clover",
-    },
-)
-async def get_anime(event):
-    "searches for anime."
-    reply_to = await reply_id(event)
-    input_str = event.pattern_match.group(1)
-    reply = await event.get_reply_message()
-    if not input_str:
-        if reply:
-            input_str = reply.text
-        else:
-            return await edit_delete(
-                event, "__What should i search ? Gib me Something to Search__"
-            )
-    catevent = await edit_or_reply(event, "`Searching Anime..`")
-    caption, image = await get_anime_manga(input_str, "anime_anime", event.chat_id)
-    if image is None:
-        await edit_or_reply(catevent, caption, parse_mode="html")
-        return
-    try:
-        downloader = SmartDL(image, anime_path, progress_bar=False)
-        downloader.start(blocking=False)
-        while not downloader.isFinished():
-            pass
-        await event.client.send_file(
-            event.chat_id,
-            file=anime_path,
-            caption=caption,
-            parse_mode="html",
-            reply_to=reply_to,
-        )
-        await catevent.delete()
-        os.remove(anime_path)
-    except BaseException:
-        image = getBannerLink(first_mal_id, True)
-        await event.client.send_file(
-            event.chat_id,
-            file=image,
-            caption=caption,
-            parse_mode="html",
-            reply_to=reply_to,
-        )
-        await catevent.delete()
 
 
 @catub.cat_cmd(
