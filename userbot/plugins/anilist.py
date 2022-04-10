@@ -22,8 +22,8 @@ from ..helpers.functions import (
     airing_query,
     anilist_user,
     anime_json_synomsis,
-    character_query
     callAPI,
+    character_query,
     formatJSON,
     get_anime_manga,
     get_anime_schedule,
@@ -571,7 +571,7 @@ async def anilist(event):  # sourcery no-metrics
     match = match.replace("-s", "")
     listview = bool(listview)
     query = match.strip()
-    search_query = {"page" : 1, "perPage": 10, "query": query}
+    search_query = {"page": 1, "perPage": 10, "query": query}
     result = await anime_json_synomsis(character_query, search_query)
     result = result["data"]["Page"]["characters"]
     if len(result) == 0:
@@ -592,7 +592,7 @@ async def anilist(event):  # sourcery no-metrics
     for entity in result:
         if result[entity] is None:
             result[entity] = "Unknown"
-    dateofbirth= []
+    dateofbirth = []
     if result["dateofBirth"]["year"]:
         dateofbirth.append(result["dateofBirth"]["year"])
     if result["dateofBirth"]["month"]:
@@ -603,7 +603,7 @@ async def anilist(event):  # sourcery no-metrics
         dob = "-".join(dateofbirth)
     else:
         dob = "Unknown"
-    caption=textwrap.dedent(
+    caption = textwrap.dedent(
         f"""
         🆎 <b> Name</b>: <i>{result['name']['full']}</i>
         🆔 <b>AL ID</b>: <i>{result['id']}</i>
@@ -622,21 +622,20 @@ async def anilist(event):  # sourcery no-metrics
     html_ += f"<b>Character ID</b>: {result['id']}<br>"
     html_ += f"<h4>About Character and Role:</h4>{result['description'] or 'N/A'}"
     html_ += "<br><br>"
-    html_ +=f"<a href='{result['siteUrl']}'> View on anilist</a>"
+    html_ += f"<a href='{result['siteUrl']}'> View on anilist</a>"
 
     synopsis_link = await post_to_telegraph(
-            result['name']['full'],
-            f"<code>{caption}</code>\n"
-            + f"<br>"
-            + html_,
-        )
+        result["name"]["full"],
+        f"<code>{caption}</code>\n" + f"<br>" + html_,
+    )
     await event.client.send_file(
-            event.chat_id,
-            file=result['image']['large'],
-            caption=caption + f"📖 <a href='{synopsis_link}'><b>Description</b></a> <b>&</b> <a href='{result['siteUrl']}'><b>Read More</b></a>",
-            parse_mode="html",
-            reply_to=reply_to,
-        )
+        event.chat_id,
+        file=result["image"]["large"],
+        caption=caption
+        + f"📖 <a href='{synopsis_link}'><b>Description</b></a> <b>&</b> <a href='{result['siteUrl']}'><b>Read More</b></a>",
+        parse_mode="html",
+        reply_to=reply_to,
+    )
 
 
 @catub.cat_cmd(
