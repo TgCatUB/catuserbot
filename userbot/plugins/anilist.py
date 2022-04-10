@@ -211,7 +211,7 @@ async def anilist(event):
     command=("anime", plugin_category),
     info={
         "header": "search anime.",
-        "description": "Fectchs anime information from anilist",
+        "description": "Fetches anime information from anilist",
         "flags": {
             "d": "shows you anime details (another format)",
             "s": "anime search list (shows only anime name and link to anilist)",
@@ -221,6 +221,7 @@ async def anilist(event):
         "usage": "{tr}anime <flags> <name of anime>",
         "examples": [
             "{tr}anime fairy tail",
+            "{tr}anime -d fairy tail",
             "{tr}anime -s fairy tail",
             "{tr}anime -n3 fairy tail",
         ],
@@ -325,7 +326,7 @@ async def anilist(event):  # sourcery no-metrics
     command=("manga", plugin_category),
     info={
         "header": "search manga.",
-        "description": "Fectchs manga information from anilist",
+        "description": "Fetches manga information from anilist",
         "flags": {
             "d": "shows you manga details (another format)",
             "s": "manga search list (shows only manga name and link to anilist)",
@@ -334,9 +335,10 @@ async def anilist(event):  # sourcery no-metrics
         "note": "for flag n you need to use number attached to flag",
         "usage": "{tr}manga <flags> <name of manga>",
         "examples": [
-            "{tr}manga fairy tail",
-            "{tr}manga -s fairy tail",
-            "{tr}manga -n3 fairy tail",
+            "{tr}manga wind breaker",
+            "{tr}manga -d wind breaker",
+            "{tr}manga -s wind breaker",
+            "{tr}manga -n2 wind breaker",
         ],
     },
 )
