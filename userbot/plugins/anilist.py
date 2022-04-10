@@ -228,6 +228,7 @@ async def anilist(event):  # sourcery no-metrics
             return await edit_delete(
                 event, "__What should i search ? Gib me Something to Search__"
             )
+    match = input_str
     animeno = re.findall(r"-n\d+", match)
     listview = re.findall(r"-s", match)
     myanime = re.findall(r"-d", match)
