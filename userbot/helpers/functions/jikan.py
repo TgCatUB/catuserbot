@@ -313,17 +313,21 @@ async def callAPI(search_str, manga=False):
     response = requests.post(anilisturl, json={"query": query, "variables": variables})
     return response.text
 
+
 async def searchanilist(search_str, manga=False):
     typea = "MANGA" if manga else "ANIME"
-    variables = {"search": search_str,"type":typea ,"page" : 1,"perPage":10}
-    response = requests.post(anilisturl, json={"query": anilist_query, "variables": variables})
+    variables = {"search": search_str, "type": typea, "page": 1, "perPage": 10}
+    response = requests.post(
+        anilisturl, json={"query": anilist_query, "variables": variables}
+    )
     msg = ""
     jsonData = json.loads(response.text)
     res = list(jsonData.keys())
     if "errors" in res:
         msg += f"**Error** : `{jsonData['errors'][0]['message']}`"
-        return msg , False
-    return jsonData["data"]["Page"]["media"] , True
+        return msg, False
+    return jsonData["data"]["Page"]["media"], True
+
 
 async def formatJSON(outData, manga=False):
     msg = ""
