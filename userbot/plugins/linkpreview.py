@@ -1,7 +1,7 @@
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 from urlextract import URLExtract
-
+import asyncio
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
@@ -42,10 +42,11 @@ async def ctg(event):
             )
             await catub(unblock("chotamreaderbot"))
             msg_flag = await conv.send_message(urls[0])
+        await asyncio.sleep(2)
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
         if response.text.startswith(""):
             await edit_or_reply(event, "Am I Dumb Or Am I Dumb?")
         else:
-            await edit_or_reply(event, response.message)
+            await edit_or_reply(event, response.message, link_preview=True)
         await delete_conv(event, chat, msg_flag)

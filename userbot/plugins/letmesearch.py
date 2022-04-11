@@ -87,7 +87,7 @@ async def dukdukgo(event):
 
 
 @catub.cat_cmd(
-    pattern="lmalt ([\s\S]*)",
+    pattern="lmalt(?: |$)([\s\S]*)",
     command=("lmalt", plugin_category),
     info={
         "header": "Searches the given query in altnews and shows you the link of that query.",
@@ -97,6 +97,11 @@ async def dukdukgo(event):
 async def news(event):
     "Searches the given query in altnews and shows you the link of that query."
     input_str = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not input_str and reply:
+        input_str = reply.text
+    if not input_str:
+        return await edit_delete(event, "**ಠ∀ಠ Give me text to search..**")
     sample_url = f"https://www.altnews.in/?s={input_str.replace(' ', '+')}"
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
