@@ -94,18 +94,18 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
                     width = fallback.getsize(line)[0]
             maxlength = max(maxlength, length)
     title = ""
-    try:
-        details = await client.get_permissions(event.chat_id, user.id)
-        if isinstance(details.participant, types.ChannelParticipantCreator):
-            title = details.participant.rank if details.participant.rank else "Creator"
-        elif isinstance(details.participant, types.ChannelParticipantAdmin):
-            title = details.participant.rank if details.participant.rank else "Admin"
-    except UserNotParticipantError:
-        pass
-    except TypeError:
-        pass
-    except ValueError:
-        pass
+    # try:
+    #     details = await client.get_permissions(event.chat_id, user.id)
+    #     if isinstance(details.participant, types.ChannelParticipantCreator):
+    #         title = details.participant.rank if details.participant.rank else "Creator"
+    #     elif isinstance(details.participant, types.ChannelParticipantAdmin):
+    #         title = details.participant.rank if details.participant.rank else "Admin"
+    # except UserNotParticipantError:
+    #     pass
+    # except TypeError:
+    #     pass
+    # except ValueError:
+    #     pass
     titlewidth = font2.getsize(title)[0]
 
     # Get user name
