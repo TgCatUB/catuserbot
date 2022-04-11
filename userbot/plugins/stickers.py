@@ -16,6 +16,7 @@ from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import functions, types
 from telethon.tl.functions.messages import GetStickerSetRequest
+from telethon.tl.functions.contacts import UnblockRequest as unblock
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import (
     DocumentAttributeFilename,
@@ -93,13 +94,12 @@ def pack_nick(username, pack, is_anim, is_video):
     return f"@{username} Vol.{pack}"
 
 
-async def delpack(catevent, conv, cmd, args, packname):
+async def delpack(catevent, conv, args, packname):
     try:
-        await conv.send_message(cmd)
+        await conv.send_message("/delpack")
     except YouBlockedUserError:
-        await catevent.edit("You have blocked the @stickers bot. unblock it and try.")
-        return None, None
-    await conv.send_message("/delpack")
+        await catub(unblock("stickers"))
+        await conv.send_message("/delpack")
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packname)
@@ -152,10 +152,8 @@ async def newpacksticker(
     try:
         await conv.send_message(cmd)
     except YouBlockedUserError:
-        await catevent.edit("You have blocked the @stickers bot. unblock it and try.")
-        if not pkang:
-            return None, None, None
-        return None, None
+        await catub(unblock("stickers"))
+        await conv.send_message(cmd)
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packnick)
@@ -216,10 +214,8 @@ async def add_to_pack(
     try:
         await conv.send_message("/addsticker")
     except YouBlockedUserError:
-        await catevent.edit("You have blocked the @stickers bot. unblock it and try.")
-        if not pkang:
-            return None, None
-        return None, None
+        await catub(unblock("stickers"))
+        await conv.send_message("/addsticker")
     vtry = True if is_video else None
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
@@ -714,7 +710,6 @@ async def pussycat(args):
             await delpack(
                 catevent,
                 xconv,
-                cmd,
                 args,
                 packname,
             )
@@ -813,46 +808,44 @@ async def pic2packcmd(event):
         i = 0
         try:
             await event.client.send_message(chat, "/cancel")
-            await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
-            await event.client.send_message(chat, "/newpack")
-            await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
-            await event.client.send_message(chat, args)
-            await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
-            for im in images:
-                img = io.BytesIO(im)
-                img.name = name + ".png"
-                img.seek(0)
-                await event.client.send_file(chat, img, force_document=True)
-                await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
-                await event.client.send_message(chat, emoji)
-                await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
-                await event.client.send_read_acknowledge(conv.chat_id)
-                await asyncio.sleep(1)
-                i += 1
-                await catevent.edit(
-                    f"__Making the pack.\nProgress: {i}/{len(images)}__"
-                )
-            await event.client.send_message(chat, "/publish")
-            await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
-            await event.client.send_file(chat, new_img, force_document=True)
-            await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
-            await event.client.send_message(chat, name)
-            ending = await conv.wait_event(
-                events.NewMessage(incoming=True, from_users=chat)
-            )
-            await event.client.send_read_acknowledge(conv.chat_id)
-            for packname in ending.raw_text.split():
-                stick_pack_name = packname
-                if stick_pack_name.startswith("https://t.me/"):
-                    break
-            await catevent.edit(
-                f"__successfully created the pack for the replied media : __[{args}]({stick_pack_name})"
-            )
-
         except YouBlockedUserError:
+            await catub(unblock("stickers"))
+            await event.client.send_message(chat, "/cancel")
+        await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
+        await event.client.send_message(chat, "/newpack")
+        await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
+        await event.client.send_message(chat, args)
+        await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
+        for im in images:
+            img = io.BytesIO(im)
+            img.name = name + ".png"
+            img.seek(0)
+            await event.client.send_file(chat, img, force_document=True)
+            await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
+            await event.client.send_message(chat, emoji)
+            await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
+            await event.client.send_read_acknowledge(conv.chat_id)
+            await asyncio.sleep(1)
+            i += 1
             await catevent.edit(
-                "__You blocked @Stickers bot. unblock it and try again__"
+                f"__Making the pack.\nProgress: {i}/{len(images)}__"
             )
+        await event.client.send_message(chat, "/publish")
+        await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
+        await event.client.send_file(chat, new_img, force_document=True)
+        await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
+        await event.client.send_message(chat, name)
+        ending = await conv.wait_event(
+            events.NewMessage(incoming=True, from_users=chat)
+        )
+        await event.client.send_read_acknowledge(conv.chat_id)
+        for packname in ending.raw_text.split():
+            stick_pack_name = packname
+            if stick_pack_name.startswith("https://t.me/"):
+                break
+        await catevent.edit(
+            f"__successfully created the pack for the replied media : __[{args}]({stick_pack_name})"
+        )
 
 
 @catub.cat_cmd(
