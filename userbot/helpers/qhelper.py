@@ -21,7 +21,7 @@ import emoji
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from telethon.tl import types
-
+from telethon.errors.rpcerrorlist import UserNotParticipantError
 from .utils import _catutils
 
 COLORS = [
@@ -99,6 +99,8 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
             title = details.participant.rank if details.participant.rank else "Creator"
         elif isinstance(details.participant, types.ChannelParticipantAdmin):
             title = details.participant.rank if details.participant.rank else "Admin"
+    except UserNotParticipantError:
+        pass
     except TypeError:
         pass
     except ValueError:
