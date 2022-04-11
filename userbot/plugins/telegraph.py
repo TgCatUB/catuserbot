@@ -3,20 +3,19 @@ import os
 import random
 import string
 from datetime import datetime
-from urlextract import URLExtract
 
 from PIL import Image
 from telegraph import Telegraph, exceptions, upload_file
-from telethon.utils import get_display_name
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
+from telethon.utils import get_display_name
+from urlextract import URLExtract
 
 from ..Config import Config
 from ..core.logger import logging
-from ..helpers.functions import delete_conv
 from ..core.managers import edit_delete, edit_or_reply
-from . import catub, reply_id, BOTLOG, BOTLOG_CHATID
-
+from ..helpers.functions import delete_conv
+from . import BOTLOG, BOTLOG_CHATID, catub, reply_id
 
 LOGS = logging.getLogger(__name__)
 
@@ -129,7 +128,6 @@ async def _(event):
         )
 
 
-
 @catub.cat_cmd(
     pattern="ctg(?: |$)([\s\S]*)",
     command=("ctg", plugin_category),
@@ -167,5 +165,7 @@ async def ctg(event):
             await edit_or_reply(catevent, "Am I Dumb Or Am I Dumb?")
         else:
             await catevent.delete()
-            await event.client.send_message(event.chat_id, response, reply_to=reply_to_id, link_preview=True)
+            await event.client.send_message(
+                event.chat_id, response, reply_to=reply_to_id, link_preview=True
+            )
         await delete_conv(event, chat, msg_flag)
