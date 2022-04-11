@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-async def process(msg, user, client, reply, event, replied=None):   # sourcery no-metrics
+async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/", 0o755)
     urllib.request.urlretrieve(
