@@ -15,8 +15,8 @@ from PIL import Image
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import functions, types
-from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.contacts import UnblockRequest as unblock
+from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import (
     DocumentAttributeFilename,
@@ -696,7 +696,6 @@ async def pussycat(args):
     else:
         await edit_delete(args, "`I can't convert that...`")
         return
-    cmd = "/newvideo"
     packname = f"Cat_{userid}_temp_pack"
     response = urllib.request.urlopen(
         urllib.request.Request(f"http://t.me/addstickers/{packname}")
@@ -827,9 +826,7 @@ async def pic2packcmd(event):
             await event.client.send_read_acknowledge(conv.chat_id)
             await asyncio.sleep(1)
             i += 1
-            await catevent.edit(
-                f"__Making the pack.\nProgress: {i}/{len(images)}__"
-            )
+            await catevent.edit(f"__Making the pack.\nProgress: {i}/{len(images)}__")
         await event.client.send_message(chat, "/publish")
         await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
         await event.client.send_file(chat, new_img, force_document=True)
