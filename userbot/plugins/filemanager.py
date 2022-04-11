@@ -12,7 +12,7 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _catutils, _format
 from . import humanbytes
 
-plugin_category = "utils"
+plugin_category = "tools"
 
 
 @catub.cat_cmd(
