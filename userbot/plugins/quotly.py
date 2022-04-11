@@ -195,7 +195,9 @@ async def stickerchat(catquotes):
             return await edit_or_reply(
                 catquotes, "`I cant quote the message . no text is given`"
             )
-    res, catmsg = await process(fetchmsg, user, catquotes.client, reply, catquotes, repliedreply)
+    res, catmsg = await process(
+        fetchmsg, user, catquotes.client, reply, catquotes, repliedreply
+    )
     if not res:
         return
     outfi = os.path.join("./temp", "sticker.png")
