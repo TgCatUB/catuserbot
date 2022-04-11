@@ -12,6 +12,7 @@ from barcode.writer import ImageWriter
 from bs4 import BeautifulSoup
 from PIL import Image, ImageColor
 from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.contacts import UnblockRequest as unblock
 
 from userbot import catub
 
@@ -107,26 +108,27 @@ async def _(event):
     async with event.client.conversation(chat) as conv:
         try:
             await conv.send_message("/start")
-            await conv.get_response()
-            await event.client.forward_messages(chat, reply_message)
-            response1 = await conv.get_response()
-            if response1.text:
-                await event.client.send_read_acknowledge(conv.chat_id)
-                return await catevent.edit(response1.text, parse_mode=_format.parse_pre)
-            await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-            response3 = await conv.get_response()
-            response4 = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            return await catevent.edit(
-                "`You blocked `@VS_Robot` Unblock it and give a try`"
-            )
+            await edit_or_reply(catevent, "**Error:** Trying to unblock & retry, wait a sec...")
+            await catub(unblock("VS_Robot"))
+            await conv.send_message("/start")
+        await conv.get_response()
+        await event.client.forward_messages(chat, reply_message)
+        response1 = await conv.get_response()
+        if response1.text:
+            await event.client.send_read_acknowledge(conv.chat_id)
+            sec = ''.join([num for num in response1.text if num.isdigit()])
+            return await edit_or_reply(catevent, f"**Please wait for {sec}s before retry**")
+        await conv.get_response()
+        await event.client.send_read_acknowledge(conv.chat_id)
+        response2 = await conv.get_response()
+        response3 = await conv.get_response()
+        await event.client.send_read_acknowledge(conv.chat_id)
         if not input_str:
-            return await edit_or_reply(catevent, response4.text)
+            return await edit_or_reply(catevent, response3.text[30:])
         await catevent.delete()
         await event.client.send_file(
-            event.chat_id, response3.media, reply_to=(await reply_id(event))
+            event.chat_id, response2.media, reply_to=(await reply_id(event))
         )
 
 
