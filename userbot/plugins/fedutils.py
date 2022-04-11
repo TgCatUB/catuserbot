@@ -1,7 +1,7 @@
 import asyncio
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-
+from telethon.tl.functions.contacts import UnblockRequest as unblock
 from userbot import BOTLOG, BOTLOG_CHATID, catub
 
 from ..core.logger import logging
@@ -224,7 +224,11 @@ async def quote_search(event):  # sourcery no-metrics
         fedidstoadd = []
         async with event.client.conversation("@MissRose_bot") as conv:
             try:
-                await conv.send_message("/myfeds")
+                try:
+                    await conv.send_message("/myfeds")
+                except YouBlockedUserError:
+                    await catub(unblock("MissRose_bot"))
+                    await conv.send_message("/myfeds")
                 await asyncio.sleep(2)
                 try:
                     response = await conv.get_response()
@@ -260,13 +264,6 @@ async def quote_search(event):  # sourcery no-metrics
                         for fed_id in text_lines
                         if len(fed_id) == 36 and fed_id.count("-") == 4
                     )
-
-            except YouBlockedUserError:
-                await edit_delete(
-                    catevent,
-                    "**Error while fecthing myfeds:**\n__Unblock__ @MissRose_Bot __and try again!__",
-                    10,
-                )
             except Exception as e:
                 await edit_delete(
                     catevent, f"**Error while fecthing myfeds:**\n__{e}__", 10
@@ -448,15 +445,13 @@ async def fetch_fedinfo(event):
     catevent = await edit_or_reply(event, "`Fetching info about given fed...`")
     async with event.client.conversation(rose) as conv:
         try:
-            await conv.send_message(f"/fedinfo {input_str}")
+            try:
+                await conv.send_message(f"/fedinfo {input_str}")
+            except YouBlockedUserError:
+                await catub(unblock("MissRose_bot"))
+                await conv.send_message(f"/fedinfo {input_str}")
             response = await conv.get_response()
-            await catevent.edit(response.text)
-        except YouBlockedUserError:
-            await edit_delete(
-                catevent,
-                "**Error while fecthing fedinfo:**\n__Unblock__ @MissRose_Bot __and try again!__",
-                10,
-            )
+            await edit_or_reply(catevent,response.text)
         except Exception as e:
             await edit_delete(
                 catevent, f"**Error while fecthing fedinfo:**\n__{e}__", 10
@@ -484,20 +479,13 @@ async def fetch_fedinfo(event):
     catevent = await edit_or_reply(event, "`Fetching admins list of given fed...`")
     async with event.client.conversation(rose) as conv:
         try:
-            await conv.send_message(f"/fedadmins {input_str}")
+            try:
+                await conv.send_message(f"/fedadmins {input_str}")
+            except YouBlockedUserError:
+                await catub(unblock("MissRose_bot"))
+                await conv.send_message(f"/fedadmins {input_str}")
             response = await conv.get_response()
-            await catevent.edit(
-                f"**Fedid:** ```{input_str}```\n\n{response.text}"
-                if input_str
-                else response.text
-            )
-
-        except YouBlockedUserError:
-            await edit_delete(
-                catevent,
-                "**Error while fecthing fedinfo:**\n__Unblock__ @MissRose_Bot __and try again!__",
-                10,
-            )
+            await edit_or_reply(catevent, f"**Fedid:** ```{input_str}```\n\n{response.text}" if input_strelse response.text)
         except Exception as e:
             await edit_delete(
                 catevent, f"**Error while fecthing fedinfo:**\n__{e}__", 10
@@ -520,7 +508,11 @@ async def myfeds_fedinfo(event):
     replyid = await reply_id(event)
     async with event.client.conversation(rose) as conv:
         try:
-            await conv.send_message("/myfeds")
+            try:
+                await conv.send_message("/myfeds")
+            except YouBlockedUserError:
+                await catub(unblock("MissRose_bot"))
+                await conv.send_message("/myfeds")
             response = await conv.get_response()
             if "can only" in response.text:
                 return await edit_delete(catevent, f"__{response.text}__")
@@ -537,13 +529,7 @@ async def myfeds_fedinfo(event):
                 )
                 await catevent.delete()
                 return
-            await catevent.edit(response.text)
-        except YouBlockedUserError:
-            await edit_delete(
-                catevent,
-                "**Error while fecthing myfeds:**\n__Unblock__ @MissRose_Bot __and try again!__",
-                10,
-            )
+            await edit_or_reply(catevent,response.text)
         except Exception as e:
             await edit_delete(
                 catevent, f"**Error while fecthing myfeds:**\n__{e}__", 10
@@ -579,7 +565,11 @@ async def fstat_rose(event):
     replyid = await reply_id(event)
     async with event.client.conversation(rose) as conv:
         try:
-            await conv.send_message(f"/fedstat {str(user.id)} {fedid.strip()}")
+            try:
+                await conv.send_message(f"/fedstat {str(user.id)} {fedid.strip()}")
+            except YouBlockedUserError:
+                await catub(unblock("MissRose_bot"))
+                await conv.send_message(f"/fedstat {str(user.id)} {fedid.strip()}")
             response = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
             if "can only" in response.text:
@@ -601,13 +591,7 @@ async def fstat_rose(event):
                 )
                 await catevent.delete()
                 return
-            await catevent.edit(result + response.text)
-        except YouBlockedUserError:
-            await edit_delete(
-                catevent,
-                "**Error while fecthing fedstat:**\n__Unblock__ @MissRose_Bot __and try again!__",
-                10,
-            )
+            await edit_or_reply(catevent,result + response.text)
         except Exception as e:
             await edit_delete(
                 catevent, f"**Error while fecthing fedstat:**\n__{e}__", 10
