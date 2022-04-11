@@ -20,7 +20,6 @@ import urllib
 import emoji
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont, ImageOps
-from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.tl import types
 
 from .utils import _catutils
