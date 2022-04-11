@@ -1,10 +1,11 @@
-from userbot import catub
-from urlextract import URLExtract
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
+from urlextract import URLExtract
 
+from userbot import catub
+
+from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import delete_conv
-from ..core.managers import edit_or_reply, edit_delete
 
 extractor = URLExtract()
 
@@ -26,23 +27,25 @@ async def ctg(event):
     if not input_str and reply:
         input_str = reply.text
     if not input_str:
-        return await edit_delete(event, "**ಠ∀ಠ Give me link to search..**",20)
+        return await edit_delete(event, "**ಠ∀ಠ Give me link to search..**", 20)
     urls = extractor.find_urls(input_str)
     if not urls:
-        return await edit_delete(event, "**There no link to search in the text..**",20)
+        return await edit_delete(event, "**There no link to search in the text..**", 20)
     chat = "@chotamreaderbot"
     await edit_or_reply(event, "```Processing...```")
     async with event.client.conversation(chat) as conv:
         try:
             msg_flag = await conv.send_message(urls[0])
         except YouBlockedUserError:
-            await edit_or_reply(event,"**Error:** Trying to unblock & retry, wait a sec...")
+            await edit_or_reply(
+                event, "**Error:** Trying to unblock & retry, wait a sec..."
+            )
             await catub(unblock("chotamreaderbot"))
             msg_flag = await conv.send_message(urls[0])
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
         if response.text.startswith(""):
-            await edit_or_reply(event,"Am I Dumb Or Am I Dumb?")
+            await edit_or_reply(event, "Am I Dumb Or Am I Dumb?")
         else:
-            await edit_or_reply(event,response.message)
+            await edit_or_reply(event, response.message)
         await delete_conv(event, chat, msg_flag)

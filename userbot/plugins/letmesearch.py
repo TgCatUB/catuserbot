@@ -26,7 +26,10 @@ async def googal(event):
     sample_url = f"http://google.com/search?q={input_str.replace(' ','+')}"
     await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,f"Let me **Google** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ")
+    await edit_or_reply(
+        event,
+        f"Let me **Google** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ",
+    )
 
 
 @catub.cat_cmd(
@@ -45,10 +48,15 @@ async def uthoob(event):
         input_str = reply.text
     if not input_str:
         return await edit_delete(event, "**ಠ∀ಠ Give me text to search..**")
-    sample_url = f"https://www.youtube.com/results?search_query={input_str.replace(' ', '+')}"
+    sample_url = (
+        f"https://www.youtube.com/results?search_query={input_str.replace(' ', '+')}"
+    )
     await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,f"Let me **youtube** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ")
+    await edit_or_reply(
+        event,
+        f"Let me **youtube** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ",
+    )
 
 
 @catub.cat_cmd(
@@ -67,10 +75,15 @@ async def dukdukgo(event):
         input_str = reply.text
     if not input_str:
         return await edit_delete(event, "**ಠ∀ಠ Give me text to search..**")
-    sample_url = f"https://duckduckgo.com/?q={input_str.replace(' ', '+')}&t=h_&ia=about"
+    sample_url = (
+        f"https://duckduckgo.com/?q={input_str.replace(' ', '+')}&t=h_&ia=about"
+    )
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,f"Let me **duckduckgo** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ")
+    await edit_or_reply(
+        event,
+        f"Let me **duckduckgo** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ",
+    )
 
 
 @catub.cat_cmd(
@@ -87,7 +100,10 @@ async def news(event):
     sample_url = f"https://www.altnews.in/?s={input_str.replace(' ', '+')}"
     event = await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,f"Let me **altnews** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ")
+    await edit_or_reply(
+        event,
+        f"Let me **altnews** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ",
+    )
 
 
 @catub.cat_cmd(
@@ -101,10 +117,15 @@ async def news(event):
 async def var(event):
     "Searches the given app name in heroku and show that app vars page link ."
     input_str = event.pattern_match.group(1)
-    sample_url = f"https://dashboard.heroku.com/apps/{input_str.replace(' ', '+')}/settings"
+    sample_url = (
+        f"https://dashboard.heroku.com/apps/{input_str.replace(' ', '+')}/settings"
+    )
     await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,f"Let me **var** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ")
+    await edit_or_reply(
+        event,
+        f"Let me **var** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ",
+    )
 
 
 @catub.cat_cmd(
@@ -121,7 +142,10 @@ async def log(event):
     sample_url = f"https://dashboard.heroku.com/apps/{input_str.replace(' ', '+')}/logs"
     await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,f"Let me **log** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ")
+    await edit_or_reply(
+        event,
+        f"Let me **log** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ",
+    )
 
 
 @catub.cat_cmd(
@@ -136,15 +160,18 @@ async def dyno(event):
     "Searches the given app name in heroku and shows you dyno page link of that app."
     input_str = event.pattern_match.group(1)
     billings_url = "https://da.gd/s?url=https://dashboard.heroku.com/account/billing"
-    sample_url = f"https://da.gd/s?url=https://dashboard.heroku.com/apps/{input_str}/resources"
+    sample_url = (
+        f"https://da.gd/s?url=https://dashboard.heroku.com/apps/{input_str}/resources"
+    )
     await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,
+    await edit_or_reply(
+        event,
         f"Let me **dyno** that for you:\
             \n👉 [{input_str}]({sample_url})\
             \n👉 [Billings]({billings_url})\
-            \n`Thank me later 😉`")
-
+            \n`Thank me later 😉`",
+    )
 
 
 @catub.cat_cmd(
@@ -166,7 +193,10 @@ async def kanun(event):
     sample_url = f"https://indiankanoon.org/search/?formInput={input_str.replace(' ', '+')}+sortby%3Amostrecent"
     await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,f"Let me **Indiankanoon.com : Place** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ")
+    await edit_or_reply(
+        event,
+        f"Let me **Indiankanoon.com : Place** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ",
+    )
 
 
 @catub.cat_cmd(
@@ -188,7 +218,10 @@ async def gem(event):
     sample_url = f"https://mkp.gem.gov.in/search?q={input_str.replace(' ', '+')}&sort_type=created_at_desc&_xhr=1"
     await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,f"Let me **gem.gov.in** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ")
+    await edit_or_reply(
+        event,
+        f"Let me **gem.gov.in** that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ",
+    )
 
 
 @catub.cat_cmd(
@@ -210,4 +243,7 @@ async def archive(event):
     sample_url = f"https://da.gd/s?url=https://web.archive.org/web/*/{input_str.replace(' ', '+')}"
     await edit_or_reply(event, "`Searching.....`")
     await sleep(2)
-    await edit_or_reply(event,f"Let me run your link on wayback machine that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ")
+    await edit_or_reply(
+        event,
+        f"Let me run your link on wayback machine that for you:\n👉 [{input_str}]({sample_url})\n`Thank me later 😉` ",
+    )
