@@ -144,12 +144,17 @@ async def q_pic(event):  # sourcery no-metrics
     command=("q", plugin_category),
     info={
         "header": "Makes your message as sticker quote.",
-        "flags" : {
+        "flags": {
             "r": "use r infront of q to include the previous replied message",
-            "f": "use f infront of q to create fake quote with given user"
+            "f": "use f infront of q to create fake quote with given user",
         },
-        "usage": ["{tr}q","{tr}rq","{fq} <user/reply> <text>","{frq} <user/reply> <text>"],
-        "examples" : ["{tr}fq @jisan7509 hello bad boys and girls"],
+        "usage": [
+            "{tr}q",
+            "{tr}rq",
+            "{fq} <user/reply> <text>",
+            "{frq} <user/reply> <text>",
+        ],
+        "examples": ["{tr}fq @jisan7509 hello bad boys and girls"],
     },
 )
 async def stickerchat(catquotes):
