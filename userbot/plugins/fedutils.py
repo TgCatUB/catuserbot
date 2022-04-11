@@ -485,7 +485,11 @@ async def fetch_fedinfo(event):
                 await catub(unblock("MissRose_bot"))
                 await conv.send_message(f"/fedadmins {input_str}")
             response = await conv.get_response()
-            await edit_or_reply(catevent, f"**Fedid:** ```{input_str}```\n\n{response.text}" if input_strelse response.text)
+            await edit_or_reply(catevent,
+                f"**Fedid:** ```{input_str}```\n\n{response.text}"
+                if input_str
+                else response.text
+            )
         except Exception as e:
             await edit_delete(
                 catevent, f"**Error while fecthing fedinfo:**\n__{e}__", 10
