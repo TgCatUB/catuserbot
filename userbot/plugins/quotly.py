@@ -161,19 +161,20 @@ async def stickerchat(catquotes):
     "Makes your message as sticker quote"
     reply = await catquotes.get_reply_message()
     cmd = catquotes.pattern_match.group(1)
+    mediatype = None
     if cmd in ["rq", "q", "frq"]:
         if not reply:
             return await edit_or_reply(
                 catquotes, "`I cant quote the message . reply to a message`"
             )
-    fetchmsg = reply.message
+        fetchmsg = reply.message
+        mediatype = media_type(reply)
     if cmd == "rq":
         repliedreply = await reply.get_reply_message()
     elif cmd == "frq":
         repliedreply = reply
     else:
         repliedreply = None
-    mediatype = media_type(reply)
     if mediatype and mediatype in ["Photo", "Round Video", "Gif"]:
         return await edit_or_reply(catquotes, "`Replied message is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
