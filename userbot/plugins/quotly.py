@@ -20,7 +20,7 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import convert_tosticker, media_type, process
-from ..helpers.utils import _cattools, reply_id, get_user_from_event
+from ..helpers.utils import _cattools, get_user_from_event, reply_id
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
@@ -161,7 +161,7 @@ async def stickerchat(catquotes):
     "Makes your message as sticker quote"
     reply = await catquotes.get_reply_message()
     cmd = catquotes.pattern_match.group(1)
-    if cmd in ["rq" , "q" , "frq"]:
+    if cmd in ["rq", "q", "frq"]:
         if not reply:
             return await edit_or_reply(
                 catquotes, "`I cant quote the message . reply to a message`"
