@@ -188,6 +188,13 @@ async def stickerchat(catquotes):
         user, rank = await get_user_from_event(catquotes, secondgroup=True)
         if not user:
             return
+        fetchmsg = rank
+        if not fetchmsg and reply:
+            fetchmsg = reply.message
+        if not fetchmsg:
+            return await edit_or_reply(
+                catquotes, "`I cant quote the message . no text is given`"
+            )
     res, catmsg = await process(fetchmsg, user, catquotes.client, reply, repliedreply)
     if not res:
         return
