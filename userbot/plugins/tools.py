@@ -110,7 +110,9 @@ async def scan(event):
         try:
             flag = await conv.send_message("/start")
         except YouBlockedUserError:
-            await edit_or_reply(catevent, "**Error:** Trying to unblock & retry, wait a sec...")
+            await edit_or_reply(
+                catevent, "**Error:** Trying to unblock & retry, wait a sec..."
+            )
             await catub(unblock("VS_Robot"))
             flag = await conv.send_message("/start")
         await conv.get_response()
@@ -118,8 +120,8 @@ async def scan(event):
         response1 = await conv.get_response()
         if response1.text:
             await event.client.send_read_acknowledge(conv.chat_id)
-            sec = ''.join([num for num in response1.text if num.isdigit()])
-            await edit_delete(catevent, f"**Please wait for {sec}s before retry**",15)
+            sec = "".join([num for num in response1.text if num.isdigit()])
+            await edit_delete(catevent, f"**Please wait for {sec}s before retry**", 15)
         else:
             await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
