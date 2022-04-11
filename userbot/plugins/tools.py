@@ -20,7 +20,7 @@ from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import AioHttp
-from ..helpers.utils import _catutils, _format, reply_id
+from ..helpers.utils import _catutils, reply_id
 
 plugin_category = "tools"
 
@@ -109,7 +109,9 @@ async def _(event):
         try:
             await conv.send_message("/start")
         except YouBlockedUserError:
-            await edit_or_reply(catevent, "**Error:** Trying to unblock & retry, wait a sec...")
+            await edit_or_reply(
+                catevent, "**Error:** Trying to unblock & retry, wait a sec..."
+            )
             await catub(unblock("VS_Robot"))
             await conv.send_message("/start")
         await conv.get_response()
@@ -117,8 +119,10 @@ async def _(event):
         response1 = await conv.get_response()
         if response1.text:
             await event.client.send_read_acknowledge(conv.chat_id)
-            sec = ''.join([num for num in response1.text if num.isdigit()])
-            return await edit_or_reply(catevent, f"**Please wait for {sec}s before retry**")
+            sec = "".join([num for num in response1.text if num.isdigit()])
+            return await edit_or_reply(
+                catevent, f"**Please wait for {sec}s before retry**"
+            )
         await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
         response2 = await conv.get_response()
