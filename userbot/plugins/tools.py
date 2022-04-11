@@ -129,11 +129,12 @@ async def scan(event):
             response3 = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
             if not input_str:
-                return await edit_or_reply(catevent, response3.text[30:])
-            await catevent.delete()
-            await event.client.send_file(
-                event.chat_id, response2.media, reply_to=(await reply_id(event))
-            )
+                await edit_or_reply(catevent, response3.text[30:])
+            else:
+                await catevent.delete()
+                await event.client.send_file(
+                    event.chat_id, response2.media, reply_to=(await reply_id(event))
+                )
         await delete_conv(event, chat, flag)
 
 
