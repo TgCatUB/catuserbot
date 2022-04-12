@@ -69,7 +69,7 @@ wand
 wget
 yt_dlp
 
-https://github.com/Jisan09/Telethon/archive/refs/heads/xyz.zip
+git+https://github.com/sandy1709/Telethon@beta
 git+https://github.com/goldsmith/Wikipedia
 git+https://github.com/sandy1709/py-googletrans
 git+https://github.com/alexmercerind/youtube-search-python
