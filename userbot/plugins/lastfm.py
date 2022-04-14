@@ -18,15 +18,12 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.logger import logging
-from ..helpers.functions import deEmojify, hide_inlinebot
-from ..helpers.utils import reply_id
-from ..sql_helper.globals import gvarstatus
-from . import BOTLOG, BOTLOG_CHATID, edit_or_reply
+from . import BOTLOG, BOTLOG_CHATID, DEFAULT_BIO
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "extra"
 
-DEFAULT_BIO = gvarstatus("DEFAULT_BIO")
+
 BIO_PREFIX = Config.BIO_PREFIX
 LASTFM_API = Config.LASTFM_API
 LASTFM_SECRET = Config.LASTFM_SECRET
@@ -82,7 +79,7 @@ async def gettags(track=None, isNowPlaying=None, playing=None):
         arg = track.track
     if not tags:
         tags = arg.artist.get_top_tags()
-    tags = "".join(f" #{t.item.__str__()}" for t in tags[:5])
+    tags = "".join(" #" + t.item.__str__() for t in tags[:5])
     tags = sub("^ ", "", tags)
     tags = sub(" ", "_", tags)
     tags = sub("_#", " #", tags)
@@ -100,7 +97,7 @@ async def get_curr_track(lfmbio):  # sourcery no-metrics
         try:
             if LASTFM_.USER_ID == 0:
                 LASTFM_.USER_ID = (await lfmbio.client.get_me()).id
-            user_info = (await catub(GetFullUserRequest(LASTFM_.USER_ID))).full_user
+            user_info = await catub(GetFullUserRequest(LASTFM_.USER_ID))
             LASTFM_.RUNNING = True
             playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
             LASTFM_.SONG = playing.get_title()
@@ -171,7 +168,7 @@ async def get_curr_track(lfmbio):  # sourcery no-metrics
 )
 async def last_fm(lastFM):
     ".lastfm command, fetch scrobble data from last.fm."
-    await edit_or_reply(lastFM, "Processing...")
+    await lastFM.edit("Processing...")
     preview = None
     playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
     username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
@@ -202,9 +199,9 @@ async def last_fm(lastFM):
             if tags:
                 output += f"`{tags}`\n\n"
     if preview is not None:
-        await edit_or_reply(lastFM, f"{output}", parse_mode="md", link_preview=True)
+        await lastFM.edit(f"{output}", parse_mode="md", link_preview=True)
     else:
-        await edit_or_reply(lastFM, f"{output}", parse_mode="md")
+        await lastFM.edit(f"{output}", parse_mode="md")
 
 
 @catub.cat_cmd(
@@ -226,18 +223,18 @@ async def lastbio(lfmbio):
         if not LASTFM_.LASTFMCHECK:
             LASTFM_.LASTFMCHECK = True
             environ["errorcheck"] = "0"
-            await edit_or_reply(lfmbio, LFM_BIO_ENABLED)
+            await lfmbio.edit(LFM_BIO_ENABLED)
             await sleep(4)
             await get_curr_track(lfmbio)
         else:
-            await edit_or_reply(lfmbio, LFM_BIO_RUNNING)
+            await lfmbio.edit(LFM_BIO_RUNNING)
     elif arg == "off":
         LASTFM_.LASTFMCHECK = False
         LASTFM_.RUNNING = False
         await lfmbio.client(UpdateProfileRequest(about=DEFAULT_BIO))
-        await edit_or_reply(lfmbio, LFM_BIO_DISABLED)
+        await lfmbio.edit(LFM_BIO_DISABLED)
     else:
-        await edit_or_reply(lfmbio, LFM_BIO_ERR)
+        await lfmbio.edit(LFM_BIO_ERR)
 
 
 @catub.cat_cmd(
@@ -257,28 +254,9 @@ async def lastlog(lstlog):
     LASTFM_.LastLog = False
     if arg == "on":
         LASTFM_.LastLog = True
-        await edit_or_reply(lstlog, LFM_LOG_ENABLED)
+        await lstlog.edit(LFM_LOG_ENABLED)
     elif arg == "off":
         LASTFM_.LastLog = False
-        await edit_or_reply(lstlog, LFM_LOG_DISABLED)
+        await lstlog.edit(LFM_LOG_DISABLED)
     else:
-        await edit_or_reply(lstlog, LFM_LOG_ERR)
-
-
-@catub.cat_cmd(
-    pattern="now$",
-    command=("now", plugin_category),
-    info={
-        "header": "Send your current listening song from Lastfm/Spotify/Deezer.",
-        "usage": "{tr}now",
-        "note": "For working of this command, you need to authorize @NowPlayBot.",
-    },
-)
-async def now(event):
-    "Send your current listening song."
-    text = " "
-    reply_to_id = await reply_id(event)
-    bot_name = "@nowplaybot"
-    text = deEmojify(text)
-    await event.delete()
-    await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)
+        await lstlog.edit(LFM_LOG_ERR)

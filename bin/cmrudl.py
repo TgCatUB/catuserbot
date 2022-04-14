@@ -227,7 +227,9 @@ class Main(object):
                 self.jsobj = m.group(1)
 
             def result(self):
-                return None if not self.jsobj else self.jsobj
+                if not self.jsobj:
+                    return None
+                return self.jsobj
 
         parser = TheHTMLParser()
         parser.feed(html)
@@ -334,7 +336,8 @@ class Main(object):
         return ".%s.%s" % (__prog__, urllib_quote(storage["hash"]))
 
     def create_file_name(self, storage):
-        if opt_file := self.options.file:
+        opt_file = self.options.file
+        if opt_file:
             return opt_file
         return storage["name"] if storage else None
 

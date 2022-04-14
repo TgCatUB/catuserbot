@@ -218,7 +218,9 @@ async def get_dogbin_content(event):
     if not url:
         return await edit_delete(event, "__I can't find any pastebin link.__")
     catevent = await edit_or_reply(event, "`Getting Contents of pastebin.....`")
-    rawurl = url if "raw" in url else None
+    rawurl = None
+    if "raw" in url:
+        rawurl = url
     if rawurl is None:
         fid = os.path.splitext((os.path.basename(url)))
         if "pasty" in url:

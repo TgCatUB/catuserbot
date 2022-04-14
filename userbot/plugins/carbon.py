@@ -35,10 +35,6 @@ async def carbon_api(event):
         pcode = str(pcode[8:])
     elif textx:
         pcode = str(textx.message)
-    else:
-        return await edit_delete(
-            cat, "`No text is given. Either pass text along with cmd or reply to text`"
-        )
     pcode = deEmojify(pcode)
     code = quote_plus(pcode)
     cat = await edit_or_reply(event, "`Carbonizing...\n25%`")
@@ -116,13 +112,8 @@ async def carbon_api(event):
     elif textx:
         pcode = str(textx.message)
         skeme = None
-    else:
-        return await edit_delete(
-            cat, "`No text is given. Either pass text along with cmd or reply to text`"
-        )
     pcode = pcode.strip()
-    if skeme:
-        skeme = skeme.strip()
+    skeme = skeme.strip()
     pcode = deEmojify(pcode)
     code = quote_plus(pcode)
     await cat.edit("`Meking Carbon...`\n`25%`")
@@ -163,7 +154,7 @@ async def carbon_api(event):
         k_skeme.send_keys(Keys.ENTER)
     else:
         color_scheme = str(random.randint(1, 29))
-        driver.find_element_by_id(f"downshift-0-item-{color_scheme}").click()
+        driver.find_element_by_id(("downshift-0-item-" + color_scheme)).click()
     driver.find_element_by_id("export-menu").click()
     driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
     driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
@@ -209,10 +200,6 @@ async def carbon_api(event):
         pcode = str(pcode[6:])
     elif textx:
         pcode = str(textx.message)
-    else:
-        return await edit_delete(
-            cat, "`No text is given. Either pass text along with cmd or reply to text`"
-        )
     code = quote_plus(pcode)
     url = CARBON.format(code=code, lang=CARBONLANG)
     chrome_options = Options()
@@ -280,10 +267,6 @@ async def carbon_api(event):
         pcode = str(pcode[6:])
     elif textx:
         pcode = str(textx.message)
-    else:
-        return await edit_delete(
-            cat, "`No text is given. Either pass text along with cmd or reply to text`"
-        )
     code = quote_plus(pcode)
     url = CARBON.format(code=code, lang=CARBONLANG)
     chrome_options = Options()
@@ -351,10 +334,6 @@ async def carbon_api(event):
         pcode = str(pcode[6:])
     elif textx:
         pcode = str(textx.message)
-    else:
-        return await edit_delete(
-            cat, "`No text is given. Either pass text along with cmd or reply to text`"
-        )
     code = quote_plus(pcode)
     url = CARBON.format(code=code, lang=CARBONLANG)
     chrome_options = Options()
@@ -423,10 +402,6 @@ async def carbon_api(event):
         pcode = str(pcode[6:])
     elif textx:
         pcode = str(textx.message)
-    else:
-        return await edit_delete(
-            cat, "`No text is given. Either pass text along with cmd or reply to text`"
-        )
     code = quote_plus(pcode)
     url = CARBON.format(code=code, lang=CARBONLANG)
     chrome_options = Options()
@@ -529,10 +504,6 @@ async def carbon_api(event):
         pcode = str(pcode[7:])
     elif textx:
         pcode = str(textx.message)
-    else:
-        return await edit_delete(
-            cat, "`No text is given. Either pass text along with cmd or reply to text`"
-        )
     code = quote_plus(pcode)
     url = CARBON.format(code=code, R=RED, G=GREEN, B=BLUE, T=The, lang=CARBONLANG)
     chrome_options = Options()

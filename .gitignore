@@ -104,4 +104,3 @@ config.py
 
 # mypy
 .mypy_cache/
-.vscode/extensions.json

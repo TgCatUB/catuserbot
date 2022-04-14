@@ -40,12 +40,13 @@ async def catlst_of_files(path):
     files = []
     for dirname, dirnames, filenames in os.walk(path):
         # print path to all filenames.
-        files.extend(os.path.join(dirname, filename) for filename in filenames)
+        for filename in filenames:
+            files.append(os.path.join(dirname, filename))
     return files
 
 
 def get_video_thumb(file, output=None, width=320):
-    output = f"{file}.jpg"
+    output = file + ".jpg"
     metadata = extractMetadata(createParser(file))
     cmd = [
         "ffmpeg",

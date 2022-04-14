@@ -1,13 +1,26 @@
+from asyncio import sleep
+
 from googletrans import LANGUAGES, Translator
 
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions.functions import getTranslate
 from ..sql_helper.globals import addgvar, gvarstatus
 from . import BOTLOG, BOTLOG_CHATID, deEmojify
 
 plugin_category = "utils"
+
+# https://github.com/ssut/py-googletrans/issues/234#issuecomment-722379788
+async def getTranslate(text, **kwargs):
+    translator = Translator()
+    result = None
+    for _ in range(10):
+        try:
+            result = translator.translate(text, **kwargs)
+        except Exception:
+            translator = Translator()
+            await sleep(0.1)
+    return result
 
 
 @catub.cat_cmd(
@@ -54,7 +67,7 @@ async def _(event):
     command=("trt", plugin_category),
     info={
         "header": "To translate the text to required language.",
-        "note": "for this command set lanuage by `{tr}lang trt` command.",
+        "note": "for this set command set lanuage by lang tst command.",
         "usage": [
             "{tr}trt",
             "{tr}trt <text>",
@@ -91,20 +104,18 @@ async def translateme(trans):
 
 
 @catub.cat_cmd(
-    pattern="lang (ai|trt|tocr) ([\s\S]*)",
+    pattern="lang (ai|trt) ([\s\S]*)",
     command=("lang", plugin_category),
     info={
         "header": "To set language for trt/ai command.",
         "description": "Check here [Language codes](https://bit.ly/2SRQ6WU)",
         "options": {
             "trt": "default language for trt command",
-            "tocr": "default language for tocr command",
             "ai": "default language for chatbot(ai)",
         },
         "usage": "{tr}lang option <language codes>",
         "examples": [
             "{tr}lang trt te",
-            "{tr}lang tocr bn",
             "{tr}lang ai hi",
         ],
     },
@@ -122,32 +133,21 @@ async def lang(value):
     if input_str == "trt":
         addgvar("TRT_LANG", arg)
         await edit_or_reply(
-            value, f"**Language for Translator changed to:** `{LANG.title()}`"
-        )
-    elif input_str == "tocr":
-        addgvar("TOCR_LANG", arg)
-        await edit_or_reply(
-            value, f"**Language for Translated Ocr changed to:** `{LANG.title()}`"
+            value, f"`Language for Translator changed to {LANG.title()}.`"
         )
     else:
         addgvar("AI_LANG", arg)
         await edit_or_reply(
-            value, f"**Language for Chatbot is changed to:** `{LANG.title()}`"
+            value, f"`Language for chatbot is changed to {LANG.title()}.`"
         )
     LANG = LANGUAGES[arg]
 
-    if BOTLOG and input_str == "trt":
-        await value.client.send_message(
-            BOTLOG_CHATID, f"**Language for Translator changed to:** `{LANG.title()}`"
-        )
     if BOTLOG:
-        if input_str == "tocr":
+        if input_str == "trt":
             await value.client.send_message(
-                BOTLOG_CHATID,
-                f"**Language for Translated Ocr changed to:** `{LANG.title()}`",
+                BOTLOG_CHATID, f"`Language for Translator changed to {LANG.title()}.`"
             )
         if input_str == "ai":
             await value.client.send_message(
-                BOTLOG_CHATID,
-                f"**Language for Chatbot is changed to:** `{LANG.title()}`",
+                BOTLOG_CHATID, f"`Language for chatbot is changed to {LANG.title()}.`"
             )

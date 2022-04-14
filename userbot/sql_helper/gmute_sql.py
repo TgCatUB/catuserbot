@@ -1,7 +1,7 @@
 try:
     from . import BASE, SESSION
-except ImportError as e:
-    raise Exception("Hello!") from e
+except ImportError:
+    raise Exception("Hello!")
 
 from sqlalchemy import Column, String
 
@@ -33,6 +33,7 @@ def gmute(sender):
 
 
 def ungmute(sender):
-    if rem := SESSION.query(GMute).get((str(sender))):
+    rem = SESSION.query(GMute).get((str(sender)))
+    if rem:
         SESSION.delete(rem)
         SESSION.commit()

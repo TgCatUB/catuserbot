@@ -42,7 +42,8 @@ def weird_division(n, d):
 async def _(event):  # sourcery no-metrics
     "Shows you the complete media/file summary of the that group"
     entity = event.chat_id
-    if input_str := event.pattern_match.group(1):
+    input_str = event.pattern_match.group(1)
+    if input_str:
         try:
             entity = int(input_str)
         except ValueError:
@@ -109,9 +110,9 @@ async def _(event):  # sourcery no-metrics
             largest += f"  •  <b><a href='{media_dict[mediax]['max_file_link']}'>{mediax}</a>  : </b><code>{humanbytes(media_dict[mediax]['max_size'])}</code>\n"
     endtime = int(time.monotonic())
     if endtime - starttime >= 120:
-        runtime = f"{str(round(((endtime - starttime) / 60), 2))} minutes"
+        runtime = str(round(((endtime - starttime) / 60), 2)) + " minutes"
     else:
-        runtime = f"{str(endtime - starttime)} seconds"
+        runtime = str(endtime - starttime) + " seconds"
     avghubytes = humanbytes(weird_division(totalsize, totalcount))
     avgruntime = (
         str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))
@@ -236,9 +237,9 @@ async def _(event):  # sourcery no-metrics
             largest += f"  •  <b><a href='{media_dict[mediax]['max_file_link']}'>{mediax}</a>  : </b><code>{humanbytes(media_dict[mediax]['max_size'])}</code>\n"
     endtime = int(time.monotonic())
     if endtime - starttime >= 120:
-        runtime = f"{str(round(((endtime - starttime) / 60), 2))} minutes"
+        runtime = str(round(((endtime - starttime) / 60), 2)) + " minutes"
     else:
-        runtime = f"{str(endtime - starttime)} seconds"
+        runtime = str(endtime - starttime) + " seconds"
     avghubytes = humanbytes(weird_division(totalsize, totalcount))
     avgruntime = (
         str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))

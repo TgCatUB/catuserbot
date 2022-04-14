@@ -76,7 +76,8 @@ def remove_warn(user_id, chat_id):
 
 def reset_warns(user_id, chat_id):
     with WARN_INSERTION_LOCK:
-        if warned_user := SESSION.query(Warns).get((user_id, str(chat_id))):
+        warned_user = SESSION.query(Warns).get((user_id, str(chat_id)))
+        if warned_user:
             warned_user.num_warns = 0
             warned_user.reasons = ""
             SESSION.add(warned_user)
@@ -118,7 +119,8 @@ def set_warn_strength(chat_id, soft_warn):
 
 def get_warn_setting(chat_id):
     try:
-        if setting := SESSION.query(WarnSettings).get(str(chat_id)):
+        setting = SESSION.query(WarnSettings).get(str(chat_id))
+        if setting:
             return setting.warn_limit, setting.soft_warn
         return 3, False
     finally:

@@ -53,7 +53,8 @@ def del_starter_from_db(user_id):
 
 def get_starter_details(user_id):
     try:
-        if _result := SESSION.query(Bot_Starters).get(str(user_id)):
+        _result = SESSION.query(Bot_Starters).get(str(user_id))
+        if _result:
             return _result
         return None
     finally:

@@ -22,7 +22,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="(ss|gis) ([\s\S]*)",
+    pattern="ss ([\s\S]*)",
     command=("ss", plugin_category),
     info={
         "header": "To Take a screenshot of a website.",
@@ -49,18 +49,14 @@ async def _(event):
         chrome_options.binary_location = Config.CHROME_BIN
         await event.edit("`Starting Google Chrome BIN`")
         driver = webdriver.Chrome(chrome_options=chrome_options)
-        cmd = event.pattern_match.group(1)
-        input_str = event.pattern_match.group(2)
+        input_str = event.pattern_match.group(1)
         inputstr = input_str
-        if cmd == "ss":
+        caturl = url(inputstr)
+        if not caturl:
+            inputstr = f"http://{input_str}"
             caturl = url(inputstr)
-            if not caturl:
-                inputstr = f"http://{input_str}"
-                caturl = url(inputstr)
-            if not caturl:
-                return await catevent.edit("`The given input is not supported url`")
-        if cmd == "gis":
-            inputstr = f"https://www.google.com/search?q={input_str}"
+        if not caturl:
+            return await catevent.edit("`The given input is not supported url`")
         driver.get(inputstr)
         await catevent.edit("`Calculating Page Dimensions`")
         height = driver.execute_script(

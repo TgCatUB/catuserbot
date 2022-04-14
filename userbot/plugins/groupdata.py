@@ -78,7 +78,7 @@ async def _(event):
                     x.first_name, x.id, x.id
                 )
     except Exception as e:
-        mentions += f" {str(e)}" + "\n"
+        mentions += " " + str(e) + "\n"
     await event.client.send_message(event.chat_id, mentions, reply_to=reply_message)
     await event.delete()
 
@@ -99,14 +99,15 @@ async def _(event):
 async def _(event):
     "To get list of bots."
     mentions = "**Bots in this Group**: \n"
-    if input_str := event.pattern_match.group(1):
+    input_str = event.pattern_match.group(1)
+    if not input_str:
+        chat = await event.get_input_chat()
+    else:
         mentions = "Bots in {} Group: \n".format(input_str)
         try:
             chat = await event.client.get_entity(input_str)
         except Exception as e:
             return await edit_or_reply(event, str(e))
-    else:
-        chat = await event.get_input_chat()
     try:
         async for x in event.client.iter_participants(
             chat, filter=ChannelParticipantsBots
@@ -120,7 +121,7 @@ async def _(event):
                     x.first_name, x.id, x.id
                 )
     except Exception as e:
-        mentions += f" {str(e)}" + "\n"
+        mentions += " " + str(e) + "\n"
     await edit_or_reply(event, mentions)
 
 
@@ -141,7 +142,8 @@ async def get_users(show):
     "To get list of Users."
     mentions = "**Users in this Group**: \n"
     await reply_id(show)
-    if input_str := show.pattern_match.group(1):
+    input_str = show.pattern_match.group(1)
+    if input_str:
         mentions = "Users in {} Group: \n".format(input_str)
         try:
             chat = await show.client.get_entity(input_str)
@@ -168,7 +170,7 @@ async def get_users(show):
                         f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
                     )
     except Exception as e:
-        mentions += f" {str(e)}" + "\n"
+        mentions += " " + str(e) + "\n"
     await edit_or_reply(catevent, mentions)
 
 

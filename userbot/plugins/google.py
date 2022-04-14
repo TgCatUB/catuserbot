@@ -89,13 +89,13 @@ async def gsearch(q_event):
     try:
         page = page[0]
         page = page.replace("-p", "")
-        match = match.replace(f"-p{page}", "")
+        match = match.replace("-p" + page, "")
     except IndexError:
         page = 1
     try:
         lim = lim[0]
         lim = lim.replace("-l", "")
-        match = match.replace(f"-l{lim}", "")
+        match = match.replace("-l" + lim, "")
         lim = int(lim)
         if lim <= 0:
             lim = int(5)
@@ -138,21 +138,8 @@ async def gsearch(q_event):
     if BOTLOG:
         await q_event.client.send_message(
             BOTLOG_CHATID,
-            f"Google Search query `{match}` was executed successfully",
+            "Google Search query `" + match + "` was executed successfully",
         )
-
-
-@catub.cat_cmd(
-    pattern="gis ([\s\S]*)",
-    command=("gis", plugin_category),
-    info={
-        "header": "Google search in image format",
-        "usage": "{tr}gis <query>",
-        "examples": "{tr}gis cat",
-    },
-)
-async def _(event):
-    "To search in google and send result in picture."
 
 
 @catub.cat_cmd(
@@ -323,7 +310,7 @@ async def google_search(event):
             event,
             "__Plox your search query exceeds 200 characters or you search query is empty.__",
         )
-    query = f"#12{input_str}"
+    query = "#12" + input_str
     results = await event.client.inline_query("@StickerizerBot", query)
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()

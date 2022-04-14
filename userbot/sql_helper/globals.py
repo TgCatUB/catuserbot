@@ -1,7 +1,7 @@
 try:
     from . import BASE, SESSION
-except ImportError as e:
-    raise AttributeError from e
+except ImportError:
+    raise AttributeError
 from sqlalchemy import Column, String, UnicodeText
 
 

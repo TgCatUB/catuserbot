@@ -115,9 +115,8 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
     pattern="spam ([\s\S]*)",
     command=("spam", plugin_category),
     info={
-        "header": "Floods the text in the chat !! with given number of times.",
-        "description": "Sends the replied media/message <count> times !! in the chat.",
-        "note": "To stop the spam after starting it use '{tr}end spam' cmd.",
+        "header": "Floods the text in the chat !! with given number of times,",
+        "description": "Sends the replied media/message <count> times !! in the chat",
         "usage": ["{tr}spam <count> <text>", "{tr}spam <count> reply to message"],
         "examples": "{tr}spam 10 hi",
     },
@@ -174,8 +173,7 @@ async def stickerpack_spam(event):
                 types.InputStickerSetID(
                     id=stickerset_attr.stickerset.id,
                     access_hash=stickerset_attr.stickerset.access_hash,
-                ),
-                hash=0,
+                )
             )
         )
     except Exception:
@@ -192,8 +190,7 @@ async def stickerpack_spam(event):
         functions.messages.GetStickerSetRequest(
             stickerset=types.InputStickerSetShortName(
                 short_name=f"{get_stickerset.set.short_name}"
-            ),
-            hash=0,
+            )
         )
     )
     addgvar("spamwork", True)
@@ -202,7 +199,6 @@ async def stickerpack_spam(event):
             return
         await event.client.send_file(event.chat_id, m)
         await asyncio.sleep(0.7)
-    await catevent.delete()
     if BOTLOG:
         if event.is_private:
             await event.client.send_message(

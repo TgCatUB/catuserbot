@@ -39,11 +39,12 @@ def add_user_to_db(message_id, first_name, chat_id, reply_id, logger_id, result_
 
 def get_user_id(message_id):
     try:
-        if _result := (
+        _result = (
             SESSION.query(Bot_Users)
             .filter(Bot_Users.message_id == str(message_id))
             .all()
-        ):
+        )
+        if _result:
             return _result
         return None
     finally:
@@ -52,11 +53,12 @@ def get_user_id(message_id):
 
 def del_user_from_db(message_id):
     try:
-        if _result := (
+        _result = (
             SESSION.query(Bot_Users)
             .filter(Bot_Users.message_id == str(message_id))
             .all()
-        ):
+        )
+        if _result:
             for rst in _result:
                 rem = SESSION.query(Bot_Users).get((str(rst.message_id), rst.result_id))
                 SESSION.delete(rem)
@@ -69,9 +71,10 @@ def del_user_from_db(message_id):
 
 def get_user_reply(reply_id):
     try:
-        if _result := (
+        _result = (
             SESSION.query(Bot_Users).filter(Bot_Users.reply_id == str(reply_id)).all()
-        ):
+        )
+        if _result:
             return _result
         return None
     finally:
@@ -80,9 +83,10 @@ def get_user_reply(reply_id):
 
 def get_user_results(result_id):
     try:
-        if _result := (
+        _result = (
             SESSION.query(Bot_Users).filter(Bot_Users.result_id == str(result_id)).all()
-        ):
+        )
+        if _result:
             return _result
         return None
     finally:
@@ -91,9 +95,10 @@ def get_user_results(result_id):
 
 def get_user_logging(logger_id):
     try:
-        if _result := (
+        _result = (
             SESSION.query(Bot_Users).filter(Bot_Users.logger_id == str(logger_id)).all()
-        ):
+        )
+        if _result:
             return _result
         return None
     finally:

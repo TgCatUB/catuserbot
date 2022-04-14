@@ -1,7 +1,6 @@
 import glob
 import os
 import sys
-import urllib.request
 from datetime import timedelta
 from pathlib import Path
 
@@ -13,7 +12,6 @@ from ..Config import Config
 from ..core.logger import logging
 from ..core.session import catub
 from ..helpers.utils import install_pip
-from ..helpers.utils.utils import runcmd
 from ..sql_helper.global_collection import (
     del_keyword_collectionlist,
     get_item_collectionlist,
@@ -22,14 +20,8 @@ from ..sql_helper.globals import addgvar, gvarstatus
 from .pluginmanager import load_module
 from .tools import create_supergroup
 
-ENV = bool(os.environ.get("ENV", False))
-LOGS = logging.getLogger("CatUBStartUP")
+LOGS = logging.getLogger("CatUserbot")
 cmdhr = Config.COMMAND_HAND_LER
-
-if ENV:
-    VPS_NOLOAD = ["vps"]
-elif os.path.exists("config.py"):
-    VPS_NOLOAD = ["heroku"]
 
 
 async def setup_bot():
@@ -127,64 +119,38 @@ async def add_bot_to_logger_group(chat_id):
             LOGS.error(str(e))
 
 
-async def load_plugins(folder, extfolder=None):
+async def load_plugins(folder):
     """
     To load plugins from the mentioned folder
     """
-    if extfolder:
-        path = f"{extfolder}/*.py"
-        plugin_path = extfolder
-    else:
-        path = f"userbot/{folder}/*.py"
-        plugin_path = f"userbot/{folder}"
+    path = f"userbot/{folder}/*.py"
     files = glob.glob(path)
     files.sort()
-    success = 0
-    failure = []
     for name in files:
         with open(name) as f:
             path1 = Path(f.name)
             shortname = path1.stem
-            pluginname = shortname.replace(".py", "")
             try:
-                if (pluginname not in Config.NO_LOAD) and (
-                    pluginname not in VPS_NOLOAD
-                ):
+                if shortname.replace(".py", "") not in Config.NO_LOAD:
                     flag = True
                     check = 0
                     while flag:
                         try:
                             load_module(
-                                pluginname,
-                                plugin_path=plugin_path,
+                                shortname.replace(".py", ""),
+                                plugin_path=f"userbot/{folder}",
                             )
-                            if shortname in failure:
-                                failure.remove(shortname)
-                            success += 1
                             break
                         except ModuleNotFoundError as e:
                             install_pip(e.name)
                             check += 1
-                            if shortname not in failure:
-                                failure.append(shortname)
                             if check > 5:
                                 break
                 else:
-                    os.remove(Path(f"{plugin_path}/{shortname}.py"))
+                    os.remove(Path(f"userbot/{folder}/{shortname}.py"))
             except Exception as e:
-                if shortname not in failure:
-                    failure.append(shortname)
-                os.remove(Path(f"{plugin_path}/{shortname}.py"))
-                LOGS.info(
-                    f"unable to load {shortname} because of error {e}\nBase Folder {plugin_path}"
-                )
-    if extfolder:
-        if not failure:
-            failure.append("None")
-        await catub.tgbot.send_message(
-            BOTLOG_CHATID,
-            f'Your external repo plugins have imported \n**No of imported plugins :** `{success}`\n**Failed plugins to import :** `{", ".join(failure)}`',
-        )
+                os.remove(Path(f"userbot/{folder}/{shortname}.py"))
+                LOGS.info(f"unable to load {shortname} because of error {e}")
 
 
 async def verifyLoggerGroup():
@@ -253,32 +219,3 @@ async def verifyLoggerGroup():
         args = [executable, "-m", "userbot"]
         os.execle(executable, *args, os.environ)
         sys.exit(0)
-
-
-async def install_externalrepo(repo, branch, cfolder):
-    CATREPO = repo
-    if CATBRANCH := branch:
-        repourl = os.path.join(CATREPO, f"tree/{CATBRANCH}")
-        gcmd = f"git clone -b {CATBRANCH} {CATREPO} {cfolder}"
-        errtext = f"There is no branch with name `{CATBRANCH}` in your external repo {CATREPO}. Recheck branch name and correct it in vars(`EXTERNAL_REPO_BRANCH`)"
-    else:
-        repourl = CATREPO
-        gcmd = f"git clone {CATREPO} {cfolder}"
-        errtext = f"The link({CATREPO}) you provided for `EXTERNAL_REPO` in vars is invalid. please recheck that link"
-    response = urllib.request.urlopen(repourl)
-    if response.code != 200:
-        LOGS.error(errtext)
-        return await catub.tgbot.send_message(BOTLOG_CHATID, errtext)
-    await runcmd(gcmd)
-    if not os.path.exists(cfolder):
-        LOGS.error(
-            "There was a problem in cloning the external repo. please recheck external repo link"
-        )
-        return await catub.tgbot.send_message(
-            BOTLOG_CHATID,
-            "There was a problem in cloning the external repo. please recheck external repo link",
-        )
-    if os.path.exists(os.path.join(cfolder, "requirements.txt")):
-        rpath = os.path.join(cfolder, "requirements.txt")
-        await runcmd(f"pip3 install --no-cache-dir {rpath}")
-    await load_plugins(folder="userbot", extfolder=cfolder)

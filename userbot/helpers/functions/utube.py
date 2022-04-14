@@ -4,10 +4,10 @@ import urllib.request
 from collections import defaultdict
 
 import ujson
-import yt_dlp
+import youtube_dl
 from telethon import Button
+from youtube_dl.utils import DownloadError, ExtractorError, GeoRestrictedError
 from youtubesearchpython import VideosSearch
-from yt_dlp.utils import DownloadError, ExtractorError, GeoRestrictedError
 
 from ...Config import Config
 from ...core import pool
@@ -23,12 +23,11 @@ YOUTUBE_REGEX = re.compile(
 )
 PATH = "./userbot/cache/ytsearch.json"
 
-song_dl = "yt-dlp --force-ipv4 --write-thumbnail --add-metadata --embed-thumbnail -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
-
-thumb_dl = "yt-dlp --force-ipv4 -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
-video_dl = "yt-dlp --force-ipv4 --write-thumbnail --add-metadata --embed-thumbnail -o './temp/%(title)s.%(ext)s' -f 'best[height<=480]' {video_link}"
+song_dl = "youtube-dl --force-ipv4 --write-thumbnail --add-metadata --embed-thumbnail -o './temp/%(title)s.%(ext)s' --extract-audio --audio-format mp3 --audio-quality {QUALITY} {video_link}"
+thumb_dl = "youtube-dl --force-ipv4 -o './temp/%(title)s.%(ext)s' --write-thumbnail --skip-download {video_link}"
+video_dl = "youtube-dl --force-ipv4 --write-thumbnail  --add-metadata --embed-thumbnail -o './temp/%(title)s.%(ext)s' -f '[filesize<20M]' {video_link}"
 name_dl = (
-    "yt-dlp --force-ipv4 --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
+    "youtube-dl --force-ipv4 --get-filename -o './temp/%(title)s.%(ext)s' {video_link}"
 )
 
 
@@ -36,9 +35,8 @@ async def yt_search(cat):
     try:
         cat = urllib.parse.quote(cat)
         html = urllib.request.urlopen(
-            f"https://www.youtube.com/results?search_query={cat}"
+            "https://www.youtube.com/results?search_query=" + cat
         )
-
         user_data = re.findall(r"watch\?v=(\S{11})", html.read().decode())
         video_link = []
         k = 0
@@ -88,17 +86,16 @@ class YT_Search_X:
 
 ytsearch_data = YT_Search_X()
 
-"""
+
 async def yt_data(cat):
     params = {"format": "json", "url": cat}
     url = "https://www.youtube.com/oembed"  # https://stackoverflow.com/questions/29069444/returning-the-urls-as-a-list-from-a-youtube-search-query
     query_string = urllib.parse.urlencode(params)
-    url = f"{url}?{query_string}"
+    url = url + "?" + query_string
     with urllib.request.urlopen(url) as response:
         response_text = response.read()
         data = ujson.loads(response_text.decode())
     return data
-"""
 
 
 async def get_ytthumb(videoid: str):
@@ -119,7 +116,9 @@ async def get_ytthumb(videoid: str):
 
 
 def get_yt_video_id(url: str):
-    if match := YOUTUBE_REGEX.search(url):
+    # https://regex101.com/r/c06cbV/1
+    match = YOUTUBE_REGEX.search(url)
+    if match:
         return match.group(1)
 
 
@@ -129,19 +128,19 @@ def get_choice_by_id(choice_id, media_type: str):
         # default format selection
         choice_str = "bestvideo+bestaudio/best"
         disp_str = "best(video+audio)"
-    elif choice_id == "mp3":
-        choice_str = "320"
-        disp_str = "320 Kbps"
     elif choice_id == "mp4":
         # Download best Webm / Mp4 format available or any other best if no mp4
         # available
         choice_str = "bestvideo[ext=webm]+251/bestvideo[ext=mp4]+(258/256/140/bestaudio[ext=m4a])/bestvideo[ext=webm]+(250/249)/best"
         disp_str = "best(video+audio)[webm/mp4]"
+    elif choice_id == "mp3":
+        choice_str = "320"
+        disp_str = "320 Kbps"
     else:
         disp_str = str(choice_id)
         if media_type == "v":
             # mp4 video quality + best compatible audio
-            choice_str = f"{disp_str}+(258/256/140/bestaudio[ext=m4a])/best"
+            choice_str = disp_str + "+(258/256/140/bestaudio[ext=m4a])/best"
         else:  # Audio
             choice_str = disp_str
     return choice_str, disp_str
@@ -210,7 +209,7 @@ def yt_search_btns(
 @pool.run_in_thread
 def download_button(vid: str, body: bool = False):  # sourcery no-metrics
     try:
-        vid_data = yt_dlp.YoutubeDL({"no-playlist": True}).extract_info(
+        vid_data = youtube_dl.YoutubeDL({"no-playlist": True}).extract_info(
             BASE_YT_URL + vid, download=False
         )
     except ExtractorError:
@@ -230,20 +229,20 @@ def download_button(vid: str, body: bool = False):  # sourcery no-metrics
     audio_dict = {}
     # ------------------------------------------------ #
     for video in vid_data["formats"]:
-        if video.get("filesize"):
-            fr_note = video.get("format_note")
-            fr_id = int(video.get("format_id"))
-            fr_size = video.get("filesize")
-            if video.get("ext") == "mp4":
-                for frmt_ in qual_list:
-                    if fr_note in (frmt_, f"{frmt_}60"):
-                        qual_dict[frmt_][fr_id] = fr_size
-            if video.get("acodec") != "none":
-                bitrrate = int(video.get("abr", 0))
-                if bitrrate != 0:
-                    audio_dict[
-                        bitrrate
-                    ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
+
+        fr_note = video.get("format_note")
+        fr_id = int(video.get("format_id"))
+        fr_size = video.get("filesize")
+        if video.get("ext") == "mp4":
+            for frmt_ in qual_list:
+                if fr_note in (frmt_, frmt_ + "60"):
+                    qual_dict[frmt_][fr_id] = fr_size
+        if video.get("acodec") != "none":
+            bitrrate = int(video.get("abr", 0))
+            if bitrrate != 0:
+                audio_dict[
+                    bitrrate
+                ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
 
     video_btns = []
     for frmt in qual_list:
@@ -295,7 +294,7 @@ def _tubeDl(url: str, starttime, uid: str):
         "quiet": True,
     }
     try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             x = ydl.download([url])
     except DownloadError as e:
         LOGS.error(e)
@@ -329,7 +328,7 @@ def _mp3Dl(url: str, starttime, uid: str):
         "quiet": True,
     }
     try:
-        with yt_dlp.YoutubeDL(_opts) as ytdl:
+        with youtube_dl.YoutubeDL(_opts) as ytdl:
             dloader = ytdl.download([url])
     except Exception as y_e:
         LOGS.exception(y_e)
