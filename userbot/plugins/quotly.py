@@ -20,7 +20,7 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import convert_tosticker, media_type, process
-from ..helpers.utils import _cattools, reply_id
+from ..helpers.utils import _cattools, get_user_from_event, reply_id
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
@@ -97,7 +97,7 @@ async def q_pic(event):  # sourcery no-metrics
                 ).content
             )
     text = "\n".join(textwrap.wrap(text, 25))
-    text = "“" + text + "„"
+    text = f"“{text}„"
     font = ImageFont.truetype(FONT_FILE_TO_USE, 50)
     img = Image.open(pfp)
     if black:
@@ -140,69 +140,64 @@ async def q_pic(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="q(?:\s|$)([\s\S]*)",
+    pattern="(q|rq|fq|frq)(?:\s|$)([\s\S]*)",
     command=("q", plugin_category),
     info={
         "header": "Makes your message as sticker quote.",
-        "usage": "{tr}q",
+        "flags": {
+            "r": "use r infront of q to include the previous replied message",
+            "f": "use f infront of q to create fake quote with given user",
+        },
+        "usage": [
+            "{tr}q",
+            "{tr}rq",
+            "{fq} <user/reply> <text>",
+            "{frq} <user/reply> <text>",
+        ],
+        "examples": ["{tr}fq @jisan7509 hello bad boys and girls"],
     },
 )
 async def stickerchat(catquotes):
     "Makes your message as sticker quote"
     reply = await catquotes.get_reply_message()
-    if not reply:
-        return await edit_or_reply(
-            catquotes, "`I cant quote the message . reply to a message`"
-        )
-    fetchmsg = reply.message
-    repliedreply = None
-    mediatype = media_type(reply)
+    cmd = catquotes.pattern_match.group(1)
+    mediatype = None
+    if cmd in ["rq", "q", "frq"]:
+        if not reply:
+            return await edit_or_reply(
+                catquotes, "`I cant quote the message . reply to a message`"
+            )
+        fetchmsg = reply.message
+        mediatype = media_type(reply)
+    if cmd == "rq":
+        repliedreply = await reply.get_reply_message()
+    elif cmd == "frq":
+        repliedreply = reply
+    else:
+        repliedreply = None
     if mediatype and mediatype in ["Photo", "Round Video", "Gif"]:
         return await edit_or_reply(catquotes, "`Replied message is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
-    user = (
-        await catquotes.client.get_entity(reply.forward.sender)
-        if reply.fwd_from
-        else reply.sender
-    )
-    res, catmsg = await process(fetchmsg, user, catquotes.client, reply, repliedreply)
-    if not res:
-        return
-    outfi = os.path.join("./temp", "sticker.png")
-    catmsg.save(outfi)
-    endfi = convert_tosticker(outfi)
-    await catquotes.client.send_file(catquotes.chat_id, endfi, reply_to=reply)
-    await catevent.delete()
-    os.remove(endfi)
-
-
-@catub.cat_cmd(
-    pattern="rq(?:\s|$)([\s\S]*)",
-    command=("rq", plugin_category),
-    info={
-        "header": "Makes your message along with the previous replied message as sticker quote",
-        "usage": "{tr}rq",
-    },
-)
-async def stickerchat(catquotes):
-    "To make sticker message."
-    reply = await catquotes.get_reply_message()
-    if not reply:
-        return await edit_or_reply(
-            catquotes, "`I cant quote the message . reply to a message`"
+    if cmd in ["rq", "q"]:
+        user = (
+            await catquotes.client.get_entity(reply.forward.sender)
+            if reply.fwd_from
+            else reply.sender
         )
-    fetchmsg = reply.message
-    repliedreply = await reply.get_reply_message()
-    mediatype = media_type(reply)
-    if mediatype and mediatype in ["Photo", "Round Video", "Gif"]:
-        return await edit_or_reply(catquotes, "`Replied message is not supported now`")
-    catevent = await edit_or_reply(catquotes, "`Making quote...`")
-    user = (
-        await catquotes.client.get_entity(reply.forward.sender)
-        if reply.fwd_from
-        else reply.sender
+    else:
+        user, rank = await get_user_from_event(catquotes, secondgroup=True)
+        if not user:
+            return
+        fetchmsg = rank
+        if not fetchmsg and reply:
+            fetchmsg = reply.message
+        if not fetchmsg:
+            return await edit_or_reply(
+                catquotes, "`I cant quote the message . no text is given`"
+            )
+    res, catmsg = await process(
+        fetchmsg, user, catquotes.client, reply, catquotes, repliedreply
     )
-    res, catmsg = await process(fetchmsg, user, catquotes.client, reply, repliedreply)
     if not res:
         return
     outfi = os.path.join("./temp", "sticker.png")

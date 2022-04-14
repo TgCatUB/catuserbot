@@ -1,15 +1,16 @@
+from telegraph import upload_file
+from telethon.tl.functions.users import GetFullUserRequest
 from urlextract import URLExtract
 from validators.url import url
 
-from userbot import catub
+from userbot import BOTLOG_CHATID, catub
 from userbot.core.logger import logging
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from . import BOTLOG_CHATID
 
-plugin_category = "utils"
+plugin_category = "tools"
 LOGS = logging.getLogger(__name__)
 cmdhd = Config.COMMAND_HAND_LER
 
@@ -20,14 +21,25 @@ vlist = [
     "ALIVE_TEMPLATE",
     "ALIVE_TEXT",
     "ALLOW_NSFW",
+    "CHANGE_TIME",
+    "DEFAULT_BIO",
+    "DEFAULT_NAME",
+    "DEFAULT_PIC",
+    "DEFAULT_USER",
+    "DIGITAL_PIC",
+    "FIRST_NAME",
     "HELP_EMOJI",
     "HELP_TEXT",
     "IALIVE_PIC",
+    "LAST_NAME",
+    "PING_PIC",
+    "PING_TEMPLATE",
     "PM_PIC",
     "PM_TEXT",
     "PM_BLOCK",
     "MAX_FLOOD_IN_PMS",
     "START_TEXT",
+    "BOT_START_PIC",
     "NO_OF_ROWS_IN_HELP",
     "NO_OF_COLUMNS_IN_HELP",
     "CUSTOM_STICKER_PACKNAME",
@@ -84,17 +96,72 @@ async def bad(event):  # sourcery no-metrics
         if vname in oldvars:
             vname = oldvars[vname]
         if cmd == "set":
-            if not vinfo and vname == "ALIVE_TEMPLATE":
-                return await edit_delete(event, f"Check @cat_alive")
-            if not vinfo:
-                return await edit_delete(
-                    event, f"Give some values which you want to save for **{vname}**"
-                )
-            check = vinfo.split(" ")
-            for i in check:
-                if (("PIC" in vname) or ("pic" in vname)) and not url(i):
-                    return await edit_delete(event, "**Give me a correct link...**")
-            addgvar(vname, vinfo)
+            if vname == "DEFAULT_USER":
+                if not vinfo or vinfo != "Me":
+                    return await edit_delete(
+                        event,
+                        "**To save your Current Profile info Set the value:**\\n `.setdv DEFAULT_USER Me`",
+                    )
+
+                USERINFO = await catub.get_entity(catub.uid)
+                FULL_USERINFO = (await catub(GetFullUserRequest(catub.uid))).full_user
+                addgvar("FIRST_NAME", USERINFO.first_name)
+                addgvar("DEFAULT_NAME", USERINFO.first_name)
+                if USERINFO.last_name:
+                    addgvar(
+                        "DEFAULT_NAME",
+                        f"{USERINFO.first_name}  {USERINFO.first_name}",
+                    )
+                    addgvar("LAST_NAME", USERINFO.last_name)
+                elif gvarstatus("LAST_NAME"):
+                    delgvar("LAST_NAME")
+                if FULL_USERINFO.about:
+                    addgvar("DEFAULT_BIO", FULL_USERINFO.about)
+                elif gvarstatus("DEFAULT_BIO"):
+                    delgvar("DEFAULT_BIO")
+                try:
+                    photos = await catub.get_profile_photos(catub.uid)
+                    myphoto = await catub.download_media(photos[0])
+                    myphoto_urls = upload_file(myphoto)
+                    addgvar("DEFAULT_PIC", f"https://telegra.ph{myphoto_urls[0]}")
+                except IndexError:
+                    if gvarstatus("DEFAULT_PIC"):
+                        delgvar("DEFAULT_PIC")
+                usrln = gvarstatus("LAST_NAME") or None
+                usrbio = gvarstatus("DEFAULT_BIO") or None
+                usrphoto = gvarstatus("DEFAULT_PIC") or None
+                vinfo = f'**Name:** `{gvarstatus("DEFAULT_NAME")}`\n**First Name:** `{gvarstatus("FIRST_NAME")}`\n**Last Name:** `{usrln}`\n**Bio:** `{usrbio}`\n**Photo:** `{usrphoto}`'
+            else:
+                if not vinfo and vname in ["ALIVE_TEMPLATE", "PING_TEMPLATE"]:
+                    return await edit_delete(event, "Check @cat_alive")
+                if not vinfo:
+                    return await edit_delete(
+                        event,
+                        f"Give some values which you want to save for **{vname}**",
+                    )
+                check = vinfo.split(" ")
+                for i in check:
+                    if vname == "DEFAULT_PIC" and not url(i):
+                        return await edit_delete(event, "**Give me a correct link...**")
+                    elif vname == "DIGITAL_PIC" and not url(i):
+                        return await edit_delete(event, "**Give me a correct link...**")
+                    elif (("PIC" in vname) or ("pic" in vname)) and not url(i):
+                        return await edit_delete(event, "**Give me a correct link...**")
+                    elif (
+                        vname == "DIGITAL_PIC"
+                        or vname == "DEFAULT_PIC"
+                        or vname == "BOT_START_PIC"
+                    ) and url(i):
+                        vinfo = i
+                        break
+                    elif not "PIC" in vname:
+                        break
+                if vname == "DEFAULT_BIO" and len(vinfo) > 70:
+                    return await edit_or_reply(
+                        event,
+                        f"No of characters in your bio must not exceed 70 so compress it and set again\n`{vinfo}`",
+                    )
+                addgvar(vname, vinfo)
             if BOTLOG_CHATID:
                 await event.client.send_message(
                     BOTLOG_CHATID,
@@ -108,9 +175,18 @@ async def bad(event):  # sourcery no-metrics
         if cmd == "get":
             var_data = gvarstatus(vname)
             await edit_delete(
-                event, f"📑 Value of **{vname}** is  `{var_data}`", time=20
+                event, f"📑 Value of **{vname}** is  ```{var_data}```", time=20
             )
         elif cmd == "del":
+            if vname == "DEFAULT_USER":
+                delgvar("FIRST_NAME")
+                delgvar("DEFAULT_NAME")
+                if gvarstatus("LAST_NAME"):
+                    delgvar("LAST_NAME")
+                if gvarstatus("DEFAULT_BIO"):
+                    delgvar("DEFAULT_BIO")
+                if gvarstatus("DEFAULT_PIC"):
+                    delgvar("DEFAULT_PIC")
             delgvar(vname)
             if BOTLOG_CHATID:
                 await event.client.send_message(

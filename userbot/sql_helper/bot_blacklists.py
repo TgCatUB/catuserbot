@@ -53,8 +53,7 @@ def check_is_black_list(chat_id: int):
 
 def rem_user_from_bl(chat_id: int):
     """remove the user from the blacklist"""
-    s__ = SESSION.query(Bot_BlackList).get(str(chat_id))
-    if s__:
+    if s__ := SESSION.query(Bot_BlackList).get(str(chat_id)):
         SESSION.delete(s__)
         SESSION.commit()
         return True

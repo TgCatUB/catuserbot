@@ -49,6 +49,12 @@ async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
             stdout, stderr = (await runcmd(catcmd))[:2]
             if stderr:
                 LOGS.info(stdout + stderr)
+        elif catmedia.endswith(".webm"):
+            clip = VideoFileClip(catmedia)
+            try:
+                clip = clip.save_frame(catfile, 0.1)
+            except Exception:
+                clip = clip.save_frame(catfile, 0)
         elif catmedia.endswith(".webp"):
             im = Image.open(catmedia)
             im.save(catfile)
@@ -56,7 +62,7 @@ async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
         await event.client.download_media(reply, catfile, thumb=-1)
         if not os.path.exists(catfile):
             catmedia = await reply.download_media(file="./temp")
-            clip = VideoFileClip(media)
+            clip = VideoFileClip(catmedia)
             try:
                 clip = clip.save_frame(catfile, 0.1)
             except Exception:

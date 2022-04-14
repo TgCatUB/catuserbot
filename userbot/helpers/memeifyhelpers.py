@@ -76,7 +76,7 @@ async def cat_meme(CNG_FONTS, topString, bottomString, filename, endname):
     draw = ImageDraw.Draw(img)
     # draw outlines
     # there may be a better way
-    outlineRange = int(fontSize / 15)
+    outlineRange = fontSize // 15
     for x in range(-outlineRange, outlineRange + 1):
         for y in range(-outlineRange, outlineRange + 1):
             draw.text(

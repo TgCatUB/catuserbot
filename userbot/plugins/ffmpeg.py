@@ -137,7 +137,7 @@ async def ff_mpeg_trim_cmd(event):
         )
         if o is None:
             return await edit_delete(
-                catevent, f"**Error : **`Can't complete the process`"
+                catevent, "**Error : **`Can't complete the process`"
             )
         try:
             c_time = time.time()

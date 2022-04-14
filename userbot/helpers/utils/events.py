@@ -20,13 +20,20 @@ async def reply_id(event):
 
 
 async def get_user_from_event(
-    event, catevent=None, secondgroup=None, nogroup=False, noedits=False
+    event,
+    catevent=None,
+    secondgroup=None,
+    thirdgroup=None,
+    nogroup=False,
+    noedits=False,
 ):  # sourcery no-metrics
     if catevent is None:
         catevent = event
     if nogroup is False:
         if secondgroup:
             args = event.pattern_match.group(2).split(" ", 1)
+        elif thirdgroup:
+            args = event.pattern_match.group(3).split(" ", 1)
         else:
             args = event.pattern_match.group(1).split(" ", 1)
     extra = None

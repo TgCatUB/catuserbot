@@ -57,7 +57,7 @@ plugin_category = "extra"
         ],
     },
 )
-async def very(event):
+async def very(event):  # sourcery no-metrics
     "To create a logo"
     cmd = event.pattern_match.group(1).lower()
     text = event.pattern_match.group(2)
@@ -76,12 +76,14 @@ async def very(event):
     LOGO_FONT_STROKE_COLOR = gvarstatus("LOGO_FONT_STROKE_COLOR") or None
     LOGO_BACKGROUND = (
         gvarstatus("LOGO_BACKGROUND")
-        or f"https://raw.githubusercontent.com/Jisan09/Files/main/backgroud/black.jpg"
+        or "https://raw.githubusercontent.com/Jisan09/Files/main/backgroud/black.jpg"
     )
+
     LOGO_FONT = (
         gvarstatus("LOGO_FONT")
-        or f"https://github.com/Jisan09/Files/blob/main/fonts/Streamster.ttf?raw=true"
+        or "https://github.com/Jisan09/Files/blob/main/fonts/Streamster.ttf?raw=true"
     )
+
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     if not os.path.exists("temp/bg_img.jpg"):
@@ -233,7 +235,7 @@ async def bad(event):
         ],
     },
 )
-async def pussy(event):
+async def pussy(event):  # sourcery no-metrics
     "To customise logo font"
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)

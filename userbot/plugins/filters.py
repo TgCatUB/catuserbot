@@ -43,7 +43,7 @@ async def filter_incoming_handler(event):  # sourcery no-metrics
     my_fullname = f"{my_first} {my_last}" if my_last else my_first
     my_username = f"@{me.username}" if me.username else my_mention
     for trigger in filters:
-        pattern = r"( |^|[^\w])" + re.escape(trigger.keyword) + r"( |$|[^\w])"
+        pattern = f"( |^|[^\\w]){re.escape(trigger.keyword)}( |$|[^\\w])"
         if re.search(pattern, name, flags=re.IGNORECASE):
             file_media = None
             filter_msg = None

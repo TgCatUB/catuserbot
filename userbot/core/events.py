@@ -92,9 +92,13 @@ async def safe_check_text(msg):  # sourcery no-metrics
     if not msg:
         return False
     msg = str(msg)
+    from .session import catub
+
+    phone = str((await catub.get_entity(catub.uid)).phone)
     return bool(
         (
             (Config.STRING_SESSION in msg)
+            or (phone[-10:] in msg)
             or (Config.API_HASH in msg)
             or (Config.TG_BOT_TOKEN in msg)
             or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)
@@ -135,15 +139,23 @@ async def send_message(
     entity: "hints.EntityLike",
     message: "hints.MessageLike" = "",
     *,
+    send_as: "hints.EntityLike" = None,
     reply_to: "typing.Union[int, types.Message]" = None,
+    attributes: "typing.Sequence[types.TypeDocumentAttribute]" = None,
     parse_mode: typing.Optional[str] = (),
     formatting_entities: typing.Optional[typing.List[types.TypeMessageEntity]] = None,
     link_preview: bool = False,
     file: "typing.Union[hints.FileLike, typing.Sequence[hints.FileLike]]" = None,
+    thumb: "hints.FileLike" = None,
     force_document: bool = False,
     clear_draft: bool = False,
     buttons: "hints.MarkupLike" = None,
     silent: bool = None,
+    album: bool = False,
+    allow_cache: bool = False,
+    background: bool = None,
+    noforwards: bool = None,
+    supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
     comment_to: "typing.Union[int, types.Message]" = None,
 ):
@@ -155,15 +167,23 @@ async def send_message(
         return await client.sendmessage(
             entity=chatid,
             message=message,
+            send_as=send_as,
             reply_to=reply_to,
+            attributes=attributes,
             parse_mode=parse_mode,
             formatting_entities=formatting_entities,
             link_preview=link_preview,
             file=file,
+            thumb=thumb,
             force_document=force_document,
             clear_draft=clear_draft,
             buttons=buttons,
             silent=silent,
+            album=album,
+            allow_cache=allow_cache,
+            background=background,
+            noforwards=noforwards,
+            supports_streaming=supports_streaming,
             schedule=schedule,
             comment_to=comment_to,
         )
@@ -174,15 +194,23 @@ async def send_message(
             response = await client.sendmessage(
                 entity=Config.BOTLOG_CHATID,
                 message=msg,
+                send_as=send_as,
                 reply_to=reply_to,
+                attributes=attributes,
                 parse_mode=parse_mode,
                 formatting_entities=formatting_entities,
                 link_preview=link_preview,
                 file=file,
+                thumb=thumb,
                 force_document=force_document,
                 clear_draft=clear_draft,
                 buttons=buttons,
                 silent=silent,
+                album=album,
+                allow_cache=allow_cache,
+                background=background,
+                noforwards=noforwards,
+                supports_streaming=supports_streaming,
                 schedule=schedule,
                 comment_to=comment_to,
             )
@@ -191,30 +219,46 @@ async def send_message(
         return await client.sendmessage(
             entity=chatid,
             message=msg,
+            send_as=send_as,
             reply_to=reply_to,
+            attributes=attributes,
             parse_mode=parse_mode,
             formatting_entities=formatting_entities,
             link_preview=link_preview,
             file=file,
+            thumb=thumb,
             force_document=force_document,
             clear_draft=clear_draft,
             buttons=buttons,
             silent=silent,
+            album=album,
+            allow_cache=allow_cache,
+            background=background,
+            noforwards=noforwards,
+            supports_streaming=supports_streaming,
             schedule=schedule,
             comment_to=comment_to,
         )
     return await client.sendmessage(
         entity=chatid,
         message=msg,
+        send_as=send_as,
         reply_to=reply_to,
+        attributes=attributes,
         parse_mode=parse_mode,
         formatting_entities=formatting_entities,
         link_preview=link_preview,
         file=file,
+        thumb=thumb,
         force_document=force_document,
         clear_draft=clear_draft,
         buttons=buttons,
         silent=silent,
+        album=album,
+        allow_cache=allow_cache,
+        background=background,
+        noforwards=noforwards,
+        supports_streaming=supports_streaming,
         schedule=schedule,
         comment_to=comment_to,
     )
@@ -240,9 +284,11 @@ async def send_file(
     video_note: bool = False,
     buttons: "hints.MarkupLike" = None,
     silent: bool = None,
+    background: bool = None,
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
     comment_to: "typing.Union[int, types.Message]" = None,
+    ttl: int = None,
     **kwargs,
 ):
     if isinstance(file, MessageMediaWebPage):
@@ -278,9 +324,11 @@ async def send_file(
             video_note=video_note,
             buttons=buttons,
             silent=silent,
+            background=background,
             supports_streaming=supports_streaming,
             schedule=schedule,
             comment_to=comment_to,
+            ttl=ttl,
             **kwargs,
         )
 
@@ -312,9 +360,11 @@ async def send_file(
                 video_note=video_note,
                 buttons=buttons,
                 silent=silent,
+                background=background,
                 supports_streaming=supports_streaming,
                 schedule=schedule,
                 comment_to=comment_to,
+                ttl=ttl,
                 **kwargs,
             )
         msglink = await client.get_msg_link(response)
@@ -346,9 +396,11 @@ async def send_file(
         video_note=video_note,
         buttons=buttons,
         silent=silent,
+        background=background,
         supports_streaming=supports_streaming,
         schedule=schedule,
         comment_to=comment_to,
+        ttl=ttl,
         **kwargs,
     )
 
@@ -360,35 +412,42 @@ async def edit_message(
     text: str = None,
     *,
     parse_mode: str = (),
+    attributes: "typing.Sequence[types.TypeDocumentAttribute]" = None,
     formatting_entities: typing.Optional[typing.List[types.TypeMessageEntity]] = None,
     link_preview: bool = True,
     file: "hints.FileLike" = None,
+    thumb: "hints.FileLike" = None,
     force_document: bool = False,
     buttons: "hints.MarkupLike" = None,
+    supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
 ):
     chatid = entity
     if isinstance(chatid, InputPeerChannel):
-        chat_id = int("-100" + str(chatid.channel_id))
+        chat_id = int(f"-100{str(chatid.channel_id)}")
     elif isinstance(chatid, InputPeerChat):
-        chat_id = int("-" + str(chatid.chat_id))
+        chat_id = int(f"-{str(chatid.chat_id)}")
     elif isinstance(chatid, InputPeerUser):
         chat_id = int(chatid.user_id)
     else:
         chat_id = chatid
     if str(chat_id) == str(Config.BOTLOG_CHATID):
         return await client.editmessage(
-            entity=entity,
+            entity=chatid,
             message=message,
             text=text,
             parse_mode=parse_mode,
+            attributes=attributes,
             formatting_entities=formatting_entities,
             link_preview=link_preview,
             file=file,
+            thumb=thumb,
             force_document=force_document,
             buttons=buttons,
+            supports_streaming=supports_streaming,
             schedule=schedule,
         )
+
     main_msg = text
     safecheck = await safe_check_text(main_msg)
     if safecheck:
@@ -397,11 +456,14 @@ async def edit_message(
                 entity=Config.BOTLOG_CHATID,
                 message=main_msg,
                 parse_mode=parse_mode,
+                attributes=attributes,
                 formatting_entities=formatting_entities,
                 link_preview=link_preview,
                 file=file,
+                thumb=thumb,
                 force_document=force_document,
                 buttons=buttons,
+                supports_streaming=supports_streaming,
                 schedule=schedule,
             )
         msglink = await client.get_msg_link(response)
@@ -411,11 +473,14 @@ async def edit_message(
             message=message,
             text=msg,
             parse_mode=parse_mode,
+            attributes=attributes,
             formatting_entities=formatting_entities,
             link_preview=link_preview,
             file=file,
+            thumb=thumb,
             force_document=force_document,
             buttons=buttons,
+            supports_streaming=supports_streaming,
             schedule=schedule,
         )
     return await client.editmessage(
@@ -423,10 +488,13 @@ async def edit_message(
         message=message,
         text=main_msg,
         parse_mode=parse_mode,
+        attributes=attributes,
         formatting_entities=formatting_entities,
         link_preview=link_preview,
         file=file,
+        thumb=thumb,
         force_document=force_document,
         buttons=buttons,
+        supports_streaming=supports_streaming,
         schedule=schedule,
     )
