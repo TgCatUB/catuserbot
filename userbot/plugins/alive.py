@@ -40,7 +40,8 @@ async def amireallyalive(event):
     "A kind of showing bot details"
     reply_to_id = await reply_id(event)
     ANIME = None
-    if "ANIME" in gvarstatus("ALIVE_TEMPLATE"):
+    cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
+    if "ANIME" in cat_caption:
         data = requests.get("https://animechan.vercel.app/api/random").json()
         ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
     uptime = await get_readable_time((time.time() - StartTime))
@@ -52,7 +53,6 @@ async def amireallyalive(event):
     EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
     ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "**✮ MY BOT IS RUNNING SUCCESSFULLY ✮**"
     CAT_IMG = gvarstatus("ALIVE_PIC")
-    cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
     caption = cat_caption.format(
         ALIVE_TEXT=ALIVE_TEXT,
         ANIME=ANIME,
