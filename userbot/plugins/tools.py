@@ -12,6 +12,7 @@ from barcode.writer import ImageWriter
 from bs4 import BeautifulSoup
 from PIL import Image, ImageColor
 from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.contacts import UnblockRequest as unblock
 
 from userbot import catub
 
@@ -19,7 +20,8 @@ from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import AioHttp
-from ..helpers.utils import _catutils, _format, reply_id
+from ..helpers.functions import delete_conv
+from ..helpers.utils import _catutils, reply_id
 
 plugin_category = "tools"
 
@@ -95,7 +97,7 @@ async def currency(event):
         "usage": ["{tr}scan", "{tr}scan -i"],
     },
 )
-async def _(event):
+async def scan(event):
     input_str = event.pattern_match.group(1)
     if not event.reply_to_msg_id:
         return await edit_or_reply(event, "```Reply to any user message.```")
@@ -106,28 +108,34 @@ async def _(event):
     catevent = await edit_or_reply(event, " `Sliding my tip, of fingers over it`")
     async with event.client.conversation(chat) as conv:
         try:
-            await conv.send_message("/start")
-            await conv.get_response()
-            await event.client.forward_messages(chat, reply_message)
-            response1 = await conv.get_response()
-            if response1.text:
-                await event.client.send_read_acknowledge(conv.chat_id)
-                return await catevent.edit(response1.text, parse_mode=_format.parse_pre)
-            await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-            response3 = await conv.get_response()
-            response4 = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
+            flag = await conv.send_message("/start")
         except YouBlockedUserError:
-            return await catevent.edit(
-                "`You blocked `@VS_Robot` Unblock it and give a try`"
+            await edit_or_reply(
+                catevent, "**Error:** Trying to unblock & retry, wait a sec..."
             )
-        if not input_str:
-            return await edit_or_reply(catevent, response4.text)
-        await catevent.delete()
-        await event.client.send_file(
-            event.chat_id, response3.media, reply_to=(await reply_id(event))
-        )
+            await catub(unblock("VS_Robot"))
+            flag = await conv.send_message("/start")
+        await conv.get_response()
+        await conv.send_message(reply_message)
+        response1 = await conv.get_response()
+        if response1.text:
+            await event.client.send_read_acknowledge(conv.chat_id)
+            sec = "".join([num for num in response1.text if num.isdigit()])
+            await edit_delete(catevent, f"**Please wait for {sec}s before retry**", 15)
+        else:
+            await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            response2 = await conv.get_response()
+            response3 = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            if not input_str:
+                await edit_or_reply(catevent, response3.text[30:])
+            else:
+                await catevent.delete()
+                await event.client.send_file(
+                    event.chat_id, response2.media, reply_to=(await reply_id(event))
+                )
+        await delete_conv(event, chat, flag)
 
 
 @catub.cat_cmd(

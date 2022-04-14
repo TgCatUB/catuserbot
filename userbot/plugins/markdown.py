@@ -10,10 +10,13 @@ from telethon.extensions.markdown import DEFAULT_URL_RE
 from telethon.tl import types
 from telethon.tl.functions.messages import EditMessageRequest
 from telethon.tl.types import (
+    MessageEntityBlockquote,
     MessageEntityBold,
     MessageEntityCode,
     MessageEntityItalic,
     MessageEntityPre,
+    MessageEntitySpoiler,
+    MessageEntityStrike,
     MessageEntityTextUrl,
     MessageEntityUnderline,
 )
@@ -70,7 +73,7 @@ def parse_b_meme(m):
 
 
 def parse_subreddit(m):
-    text = "/" + m.group(3)
+    text = f"/{m.group(3)}"
     entity = MessageEntityTextUrl(
         offset=m.start(2), length=len(text), url=f"https://reddit.com{text}"
     )
@@ -100,6 +103,9 @@ MATCHERS = [
     (get_tag_parser("```", partial(MessageEntityPre, language=""))),
     (get_tag_parser("`", MessageEntityCode)),
     (get_tag_parser("--", MessageEntityUnderline)),
+    (get_tag_parser("||", MessageEntitySpoiler)),
+    (get_tag_parser(">>", MessageEntityBlockquote)),
+    (get_tag_parser("~~", MessageEntityStrike)),
     (re.compile(r"\+\+(.+?)\+\+"), parse_aesthetics),
     (re.compile(r"([^/\w]|^)(/?(r/\w+))"), parse_subreddit),
     (re.compile(r"(?<!\w)(~{2})(?!~~)(.+?)(?<!~)\1(?!\w)"), parse_strikethrough),

@@ -19,7 +19,7 @@ async def on_new_message(event):
     if not catadmin:
         return
     for snip in snips:
-        pattern = r"( |^|[^\w])" + re.escape(snip) + r"( |$|[^\w])"
+        pattern = f"( |^|[^\\w]){re.escape(snip)}( |$|[^\\w])"
         if re.search(pattern, name, flags=re.IGNORECASE):
             try:
                 await event.delete()

@@ -36,8 +36,7 @@ def get_credentials(user):
 
 
 def clear_credentials(user):
-    saved_credentials = SESSION.query(GoogleDriveCreds).get(user)
-    if saved_credentials:
+    if saved_credentials := SESSION.query(GoogleDriveCreds).get(user):
         SESSION.delete(saved_credentials)
         SESSION.commit()
         return True

@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from platform import python_version
 
+import requests
 from telethon import version
 from telethon.errors.rpcerrorlist import (
     MediaEmptyError,
@@ -38,6 +39,11 @@ plugin_category = "utils"
 async def amireallyalive(event):
     "A kind of showing bot details"
     reply_to_id = await reply_id(event)
+    ANIME = None
+    cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
+    if "ANIME" in cat_caption:
+        data = requests.get("https://animechan.vercel.app/api/random").json()
+        ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
     uptime = await get_readable_time((time.time() - StartTime))
     start = datetime.now()
     catevent = await edit_or_reply(event, "`Checking...`")
@@ -47,9 +53,9 @@ async def amireallyalive(event):
     EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
     ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "**✮ MY BOT IS RUNNING SUCCESSFULLY ✮**"
     CAT_IMG = gvarstatus("ALIVE_PIC")
-    cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
     caption = cat_caption.format(
         ALIVE_TEXT=ALIVE_TEXT,
+        ANIME=ANIME,
         EMOJI=EMOJI,
         mention=mention,
         uptime=uptime,
@@ -60,7 +66,7 @@ async def amireallyalive(event):
         ping=ms,
     )
     if CAT_IMG:
-        CAT = [x for x in CAT_IMG.split()]
+        CAT = list(CAT_IMG.split())
         PIC = random.choice(CAT)
         try:
             await event.client.send_file(
@@ -103,8 +109,7 @@ async def amireallyalive(event):
     "A kind of showing bot details by your inline bot"
     reply_to_id = await reply_id(event)
     EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
-    ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "**Catuserbot is Up and Running**"
-    cat_caption = f"{ALIVE_TEXT}\n"
+    cat_caption = "**Catuserbot is Up and Running**\n"
     cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
     cat_caption += f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
     cat_caption += f"**{EMOJI} Python Version :** `{python_version()}\n`"

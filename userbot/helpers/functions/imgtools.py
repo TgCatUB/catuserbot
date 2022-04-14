@@ -81,7 +81,7 @@ async def crop_and_divide(img):
     (new_width, new_height) = (0, 0)
     media = []
     for _ in range(1, rows + 1):
-        for o in range(1, columns + 1):
+        for _ in range(1, columns + 1):
             mimg = img.crop(
                 (
                     new_width,

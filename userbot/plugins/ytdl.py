@@ -3,16 +3,16 @@ import glob
 import io
 import os
 import pathlib
-import re
-from datetime import datetime
 from time import time
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import types
+from telethon.tl.functions.contacts import UnblockRequest as unblock
 from telethon.utils import get_attributes
+from urlextract import URLExtract
 from wget import download
-from youtube_dl import YoutubeDL
-from youtube_dl.utils import (
+from yt_dlp import YoutubeDL
+from yt_dlp.utils import (
     ContentTooShortError,
     DownloadError,
     ExtractorError,
@@ -23,18 +23,19 @@ from youtube_dl.utils import (
     XAttrMetadataError,
 )
 
-from userbot import catub
-
 from ..core import pool
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import progress, reply_id
+from ..helpers.functions import delete_conv
 from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb, ytsearch
 from ..helpers.utils import _format
-from . import hmention
+from . import BOTLOG, BOTLOG_CHATID, catub
 
 BASE_YT_URL = "https://www.youtube.com/watch?v="
+extractor = URLExtract()
 LOGS = logging.getLogger(__name__)
+
 plugin_category = "misc"
 
 
@@ -50,7 +51,7 @@ video_opts = {
         {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"},
         {"key": "FFmpegMetadata"},
     ],
-    "outtmpl": "%(title)s.mp4",
+    "outtmpl": "cat_ytv.mp4",
     "logtostderr": False,
     "quiet": True,
 }
@@ -127,7 +128,9 @@ async def fix_attributes(
     if video and isinstance(video, types.DocumentAttributeVideo):
         new_attributes.append(video)
 
-    for attr in attributes:
+    new_attributes.extend(
+        attr
+        for attr in attributes
         if (
             isinstance(attr, types.DocumentAttributeAudio)
             and not audio
@@ -135,8 +138,8 @@ async def fix_attributes(
             and not video
             or not isinstance(attr, types.DocumentAttributeAudio)
             and not isinstance(attr, types.DocumentAttributeVideo)
-        ):
-            new_attributes.append(attr)
+        )
+    )
     return new_attributes, mime_type
 
 
@@ -144,80 +147,85 @@ async def fix_attributes(
     pattern="yta(?:\s|$)([\s\S]*)",
     command=("yta", plugin_category),
     info={
-        "header": "To download audio from many sites like Youtube",
-        "description": "downloads the audio from the given link (Suports the all sites which support youtube-dl)",
+        "header": "To download audio from many sites like Youtube, Facebook, Instagram, etc.",
+        "description": "downloads the audio from the given link ([Supported Sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md))",
         "examples": ["{tr}yta <reply to link>", "{tr}yta <link>"],
     },
 )
 async def download_audio(event):
     """To download audio from YouTube and many other sites."""
-    url = event.pattern_match.group(1)
+    msg = event.pattern_match.group(1)
     rmsg = await event.get_reply_message()
-    if not url and rmsg:
-        myString = rmsg.text
-        url = re.search("(?P<url>https?://[^\s]+)", myString).group("url")
-    if not url:
-        return await edit_or_reply(event, "`What I am Supposed to do? Give link`")
+    if not msg and rmsg:
+        msg = rmsg.text
+    urls = extractor.find_urls(msg)
+    if not urls:
+        return await edit_or_reply(event, "What I am Supposed to do? Give link")
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
-    try:
-        vid_data = YoutubeDL({"no-playlist": True}).extract_info(url, download=False)
-    except ExtractorError:
-        vid_data = {"title": url, "uploader": "Catuserbot", "formats": []}
-    startTime = time()
-    retcode = await _mp3Dl(url=url, starttime=startTime, uid="320")
-    if retcode != 0:
-        return await event.edit(str(retcode))
-    _fpath = ""
-    thumb_pic = None
-    for _path in glob.glob(os.path.join(Config.TEMP_DIR, str(startTime), "*")):
-        if _path.lower().endswith((".jpg", ".png", ".webp")):
-            thumb_pic = _path
-        else:
-            _fpath = _path
-    if not _fpath:
-        return await edit_delete(catevent, "__Unable to upload file__")
-    await catevent.edit(
-        f"`Preparing to upload video:`\
-        \n**{vid_data['title']}**\
-        \nby *{vid_data['uploader']}*"
-    )
-    attributes, mime_type = get_attributes(str(_fpath))
-    ul = io.open(pathlib.Path(_fpath), "rb")
-    if thumb_pic is None:
-        thumb_pic = str(
-            await pool.run_in_thread(download)(await get_ytthumb(get_yt_video_id(url)))
-        )
-    uploaded = await event.client.fast_upload_file(
-        file=ul,
-        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-            progress(
-                d,
-                t,
-                catevent,
-                startTime,
-                "trying to upload",
-                file_name=os.path.basename(pathlib.Path(_fpath)),
+    for url in urls:
+        try:
+            vid_data = YoutubeDL({"no-playlist": True}).extract_info(
+                url, download=False
             )
-        ),
-    )
-    ul.close()
-    media = types.InputMediaUploadedDocument(
-        file=uploaded,
-        mime_type=mime_type,
-        attributes=attributes,
-        force_file=False,
-        thumb=await event.client.upload_file(thumb_pic) if thumb_pic else None,
-    )
-    await event.client.send_file(
-        event.chat_id,
-        file=media,
-        caption=f"<b>File Name : </b><code>{vid_data.get('title', os.path.basename(pathlib.Path(_fpath)))}</code>",
-        reply_to=reply_to_id,
-        parse_mode="html",
-    )
-    for _path in [_fpath, thumb_pic]:
-        os.remove(_path)
+        except ExtractorError:
+            vid_data = {"title": url, "uploader": "Catuserbot", "formats": []}
+        startTime = time()
+        retcode = await _mp3Dl(url=url, starttime=startTime, uid="320")
+        if retcode != 0:
+            return await event.edit(str(retcode))
+        _fpath = ""
+        thumb_pic = None
+        for _path in glob.glob(os.path.join(Config.TEMP_DIR, str(startTime), "*")):
+            if _path.lower().endswith((".jpg", ".png", ".webp")):
+                thumb_pic = _path
+            else:
+                _fpath = _path
+        if not _fpath:
+            return await edit_delete(catevent, "__Unable to upload file__")
+        await catevent.edit(
+            f"`Preparing to upload video:`\
+            \n**{vid_data['title']}***"
+        )
+        attributes, mime_type = get_attributes(str(_fpath))
+        ul = io.open(pathlib.Path(_fpath), "rb")
+        if thumb_pic is None:
+            thumb_pic = str(
+                await pool.run_in_thread(download)(
+                    await get_ytthumb(get_yt_video_id(url))
+                )
+            )
+        uploaded = await event.client.fast_upload_file(
+            file=ul,
+            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                progress(
+                    d,
+                    t,
+                    catevent,
+                    startTime,
+                    "trying to upload",
+                    file_name=os.path.basename(pathlib.Path(_fpath)),
+                )
+            ),
+        )
+        ul.close()
+        media = types.InputMediaUploadedDocument(
+            file=uploaded,
+            mime_type=mime_type,
+            attributes=attributes,
+            force_file=False,
+            thumb=await event.client.upload_file(thumb_pic) if thumb_pic else None,
+        )
+        await event.client.send_file(
+            event.chat_id,
+            file=media,
+            caption=f"<b>File Name : </b><code>{vid_data.get('title', os.path.basename(pathlib.Path(_fpath)))}</code>",
+            supports_streaming=True,
+            reply_to=reply_to_id,
+            parse_mode="html",
+        )
+        for _path in [_fpath, thumb_pic]:
+            os.remove(_path)
     await catevent.delete()
 
 
@@ -225,8 +233,8 @@ async def download_audio(event):
     pattern="ytv(?:\s|$)([\s\S]*)",
     command=("ytv", plugin_category),
     info={
-        "header": "To download video from many sites like Youtube",
-        "description": "downloads the video from the given link(Suports the all sites which support youtube-dl)",
+        "header": "To download video from many sites like Youtube, Facebook, Instagram",
+        "description": "downloads the video from the given link ([Supported Sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md))",
         "examples": [
             "{tr}ytv <reply to link>",
             "{tr}ytv <link>",
@@ -235,55 +243,162 @@ async def download_audio(event):
 )
 async def download_video(event):
     """To download video from YouTube and many other sites."""
-    url = event.pattern_match.group(1)
+    msg = event.pattern_match.group(1)
     rmsg = await event.get_reply_message()
-    if not url and rmsg:
-        myString = rmsg.text
-        url = re.search("(?P<url>https?://[^\s]+)", myString).group("url")
-    if not url:
-        return await edit_or_reply(event, "What I am Supposed to find? Give link")
+    if not msg and rmsg:
+        msg = rmsg.text
+    urls = extractor.find_urls(msg)
+    if not urls:
+        return await edit_or_reply(event, "What I am Supposed to do? Give link")
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
-    ytdl_data = await ytdl_down(catevent, video_opts, url)
-    if ytdl_down is None:
-        return
-    f = pathlib.Path(f"{ytdl_data['title']}.mp4".replace("|", "_"))
-    catthumb = pathlib.Path(f"{ytdl_data['title']}.jpg".replace("|", "_"))
-    if not os.path.exists(catthumb):
-        catthumb = pathlib.Path(f"{ytdl_data['title']}.webp".replace("|", "_"))
-    if not os.path.exists(catthumb):
-        catthumb = None
-    await catevent.edit(
-        f"`Preparing to upload video:`\
-        \n**{ytdl_data['title']}**\
-        \nby *{ytdl_data['uploader']}*"
-    )
-    ul = io.open(f, "rb")
-    c_time = time()
-    attributes, mime_type = await fix_attributes(f, ytdl_data, supports_streaming=True)
-    uploaded = await event.client.fast_upload_file(
-        file=ul,
-        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-            progress(d, t, catevent, c_time, "upload", file_name=f)
-        ),
-    )
-    ul.close()
-    media = types.InputMediaUploadedDocument(
-        file=uploaded,
-        mime_type=mime_type,
-        attributes=attributes,
-        thumb=await event.client.upload_file(catthumb) if catthumb else None,
-    )
-    await event.client.send_file(
-        event.chat_id,
-        file=media,
-        reply_to=reply_to_id,
-        caption=ytdl_data["title"],
-    )
-    os.remove(f)
-    if catthumb:
-        os.remove(catthumb)
+    for url in urls:
+        ytdl_data = await ytdl_down(catevent, video_opts, url)
+        if ytdl_down is None:
+            return
+        try:
+            f = pathlib.Path("cat_ytv.mp4")
+            print(f)
+            catthumb = pathlib.Path("cat_ytv.jpg")
+            if not os.path.exists(catthumb):
+                catthumb = pathlib.Path("cat_ytv.webp")
+            if not os.path.exists(catthumb):
+                catthumb = None
+            await catevent.edit(
+                f"`Preparing to upload video:`\
+                \n**{ytdl_data['title']}**"
+            )
+            ul = io.open(f, "rb")
+            c_time = time()
+            attributes, mime_type = await fix_attributes(
+                f, ytdl_data, supports_streaming=True
+            )
+            uploaded = await event.client.fast_upload_file(
+                file=ul,
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(
+                        d, t, catevent, c_time, "Upload :", file_name=ytdl_data["title"]
+                    )
+                ),
+            )
+            ul.close()
+            media = types.InputMediaUploadedDocument(
+                file=uploaded,
+                mime_type=mime_type,
+                attributes=attributes,
+            )
+            await event.client.send_file(
+                event.chat_id,
+                file=media,
+                reply_to=reply_to_id,
+                caption=f'**Title :** `{ytdl_data["title"]}`',
+                thumb=catthumb,
+            )
+            os.remove(f)
+            if catthumb:
+                os.remove(catthumb)
+        except TypeError:
+            await asyncio.sleep(2)
     await event.delete()
+
+
+@catub.cat_cmd(
+    pattern="insta(?: |$)([\s\S]*)",
+    command=("insta", plugin_category),
+    info={
+        "header": "To download instagram video/photo",
+        "description": "Note downloads only public profile photos/videos.",
+        "examples": [
+            "{tr}insta <link>",
+        ],
+    },
+)
+async def insta_dl(event):
+    "For downloading instagram media"
+    link = event.pattern_match.group(1)
+    reply = await event.get_reply_message()
+    if not link and reply:
+        link = reply.text
+    if not link:
+        return await edit_delete(event, "**ಠ∀ಠ Give me link to search..**", 10)
+    if "instagram.com" not in link:
+        return await edit_delete(
+            event, "` I need a Instagram link to download it's Video...`(*_*)", 10
+        )
+    v1 = "@instasave_bot"
+    v2 = "@videomaniacbot"
+    media_list = []
+    catevent = await edit_or_reply(event, "**Downloading.....**")
+    async with event.client.conversation(v1) as conv:
+        try:
+            v1_flag = await conv.send_message("/start")
+        except YouBlockedUserError:
+            await edit_or_reply(
+                catevent, "**Error:** Trying to unblock & retry, wait a sec..."
+            )
+            await catub(unblock("instasave_bot"))
+            v1_flag = await conv.send_message("/start")
+        response = await conv.get_response()
+        checker = response.text
+        await event.client.send_read_acknowledge(conv.chat_id)
+        if checker == "Welcome!":
+            await asyncio.sleep(2)
+            await conv.send_message(link)
+            media = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            if media.media:
+                if media.grouped_id:
+                    while media.grouped_id:
+                        media_list.append(media)
+                        media = await conv.get_response()
+                else:
+                    media_list.append(media)
+                    media = await conv.get_response()
+                    await event.client.send_read_acknowledge(conv.chat_id)
+                details = media.message.splitlines()
+                await catevent.delete()
+                await event.client.send_file(
+                    event.chat_id,
+                    media_list,
+                    caption=f"**{details[0]}**",
+                )
+                return await delete_conv(event, v1, v1_flag)
+            checker = media.message.splitlines()[2]
+        await delete_conv(event, v1, v1_flag)
+        await edit_or_reply(catevent, "**Switching v2...**")
+        async with event.client.conversation(v2) as conv:
+            try:
+                v2_flag = await conv.send_message("/start")
+            except YouBlockedUserError:
+                await edit_or_reply(
+                    catevent, "**Error:** Trying to unblock & retry, wait a sec..."
+                )
+                await catub(unblock("videomaniacbot"))
+                v2_flag = await conv.send_message("/start")
+            await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            await asyncio.sleep(1)
+            await conv.send_message(link)
+            await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            media = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            if media.media:
+                if BOTLOG and "join the channel" in checker:
+                    error = checker.splitlines()[2]
+                    await event.client.send_message(
+                        BOTLOG_CHATID,
+                        f"**#V1_ERROR :-**\n\n__Currently we using @instasave_bot for v1, that need users to join this chat : {error}__\n\n__If you know any good bot which does'nt need join channel, inform us here: @catuserbot_support__",
+                    )
+                await catevent.delete()
+                await event.client.send_file(event.chat_id, media)
+            else:
+                await edit_delete(
+                    catevent,
+                    f"**#ERROR\nv1 :** __{checker}__\n\n**v2 :**__ {media.text}__",
+                    40,
+                )
+            await delete_conv(event, v2, v2_flag)
 
 
 @catub.cat_cmd(
@@ -322,52 +437,3 @@ async def yt_search(event):
         return await edit_delete(video_q, str(e), time=10, parse_mode=_format.parse_pre)
     reply_text = f"**•  Search Query:**\n`{query}`\n\n**•  Results:**\n{full_response}"
     await edit_or_reply(video_q, reply_text)
-
-
-@catub.cat_cmd(
-    pattern="insta ([\s\S]*)",
-    command=("insta", plugin_category),
-    info={
-        "header": "To download instagram video/photo",
-        "description": "Note downloads only public profile photos/videos.",
-        "examples": [
-            "{tr}insta <link>",
-        ],
-    },
-)
-async def kakashi(event):
-    "For downloading instagram media"
-    chat = "@instasavegrambot"
-    link = event.pattern_match.group(1)
-    if "www.instagram.com" not in link:
-        await edit_or_reply(
-            event, "` I need a Instagram link to download it's Video...`(*_*)"
-        )
-    else:
-        start = datetime.now()
-        catevent = await edit_or_reply(event, "**Downloading.....**")
-    async with event.client.conversation(chat) as conv:
-        try:
-            msg_start = await conv.send_message("/start")
-            response = await conv.get_response()
-            msg = await conv.send_message(link)
-            video = await conv.get_response()
-            details = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-        except YouBlockedUserError:
-            await catevent.edit("**Error:** `unblock` @instasavegrambot `and retry!`")
-            return
-        await catevent.delete()
-        cat = await event.client.send_file(
-            event.chat_id,
-            video,
-        )
-        end = datetime.now()
-        ms = (end - start).seconds
-        await cat.edit(
-            f"<b><i>➥ Video uploaded in {ms} seconds.</i></b>\n<b><i>➥ Uploaded by :- {hmention}</i></b>",
-            parse_mode="html",
-        )
-    await event.client.delete_messages(
-        conv.chat_id, [msg_start.id, response.id, msg.id, video.id, details.id]
-    )

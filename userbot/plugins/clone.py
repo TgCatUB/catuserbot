@@ -5,23 +5,13 @@ from telethon.tl import functions
 from telethon.tl.functions.users import GetFullUserRequest
 
 from ..Config import Config
-from . import (
-    ALIVE_NAME,
-    AUTONAME,
-    BOTLOG,
-    BOTLOG_CHATID,
-    DEFAULT_BIO,
-    catub,
-    edit_delete,
-    get_user_from_event,
-)
+from ..sql_helper.globals import gvarstatus
+from . import ALIVE_NAME, BOTLOG, BOTLOG_CHATID, catub, edit_delete, get_user_from_event
 
 plugin_category = "utils"
-DEFAULTUSER = str(AUTONAME) if AUTONAME else str(ALIVE_NAME)
+DEFAULTUSER = gvarstatus("FIRST_NAME") or ALIVE_NAME
 DEFAULTUSERBIO = (
-    str(DEFAULT_BIO)
-    if DEFAULT_BIO
-    else "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁˙"
+    gvarstatus("DEFAULT_BIO") or "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁"
 )
 
 
@@ -49,7 +39,7 @@ async def _(event):
         last_name = last_name.replace("\u2060", "")
     if last_name is None:
         last_name = "⁪⁬⁮⁮⁮⁮ ‌‌‌‌"
-    replied_user = await event.client(GetFullUserRequest(replied_user.id))
+    replied_user = (await event.client(GetFullUserRequest(replied_user.id))).full_user
     user_bio = replied_user.about
     if user_bio is not None:
         user_bio = replied_user.about
@@ -74,23 +64,23 @@ async def _(event):
     command=("revert", plugin_category),
     info={
         "header": "To revert back to your original name , bio and profile pic",
-        "note": "For proper Functioning of this command you need to set AUTONAME and DEFAULT_BIO with your profile name and bio respectively.",
+        "note": "For proper Functioning of this command you need to set DEFAULT_USER in Database",
         "usage": "{tr}revert",
     },
 )
-async def _(event):
+async def revert(event):
     "To reset your original details"
-    name = f"{DEFAULTUSER}"
-    blank = ""
-    bio = f"{DEFAULTUSERBIO}"
+    firstname = DEFAULTUSER
+    lastname = gvarstatus("LAST_NAME") or ""
+    bio = DEFAULTUSERBIO
     await event.client(
         functions.photos.DeletePhotosRequest(
             await event.client.get_profile_photos("me", limit=1)
         )
     )
     await event.client(functions.account.UpdateProfileRequest(about=bio))
-    await event.client(functions.account.UpdateProfileRequest(first_name=name))
-    await event.client(functions.account.UpdateProfileRequest(last_name=blank))
+    await event.client(functions.account.UpdateProfileRequest(first_name=firstname))
+    await event.client(functions.account.UpdateProfileRequest(last_name=lastname))
     await edit_delete(event, "successfully reverted to your account back")
     if BOTLOG:
         await event.client.send_message(

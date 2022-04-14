@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-async def process(msg, user, client, reply, replied=None):
+async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/", 0o755)
     urllib.request.urlretrieve(
@@ -80,27 +80,31 @@ async def process(msg, user, client, reply, replied=None):
             text += textwrap.wrap(line, 43)
             maxlength = 43
             if width < fallback.getsize(line[:43])[0]:
-                if "MessageEntityCode" in str(reply.entities):
+                if reply and "MessageEntityCode" in str(reply.entities):
                     width = mono.getsize(line[:43])[0] + 30
                 else:
                     width = fallback.getsize(line[:43])[0]
         else:
             text.append(line + "\n")
             if width < fallback.getsize(line)[0]:
-                if "MessageEntityCode" in str(reply.entities):
+                if reply and "MessageEntityCode" in str(reply.entities):
                     width = mono.getsize(line)[0] + 30
                 else:
                     width = fallback.getsize(line)[0]
             maxlength = max(maxlength, length)
     title = ""
-    try:
-        details = await client.get_permissions(reply.chat_id, user.id)
-        if isinstance(details.participant, types.ChannelParticipantCreator):
-            title = details.participant.rank if details.participant.rank else "Creator"
-        elif isinstance(details.participant, types.ChannelParticipantAdmin):
-            title = details.participant.rank if details.participant.rank else "Admin"
-    except TypeError:
-        pass
+    # try:
+    #     details = await client.get_permissions(event.chat_id, user.id)
+    #     if isinstance(details.participant, types.ChannelParticipantCreator):
+    #         title = details.participant.rank if details.participant.rank else "Creator"
+    #     elif isinstance(details.participant, types.ChannelParticipantAdmin):
+    #         title = details.participant.rank if details.participant.rank else "Admin"
+    # except UserNotParticipantError:
+    #     pass
+    # except TypeError:
+    #     pass
+    # except ValueError:
+    #     pass
     titlewidth = font2.getsize(title)[0]
 
     # Get user name
@@ -154,7 +158,7 @@ async def process(msg, user, client, reply, replied=None):
         # Creating a big canvas to gather all the elements
         replname = "" if not replied.sender.last_name else replied.sender.last_name
         reptot = replied.sender.first_name + " " + replname
-        if reply.sticker:
+        if reply and reply.sticker:
             sticker = await reply.download_media()
             file_1 = os.path.join("./temp/", "q.png")
             if sticker.endswith(("tgs")):
@@ -197,7 +201,7 @@ async def process(msg, user, client, reply, replied=None):
             len(title),
         )
         y = 200
-    elif reply.sticker:
+    elif reply and reply.sticker:
         sticker = await reply.download_media()
         file_1 = os.path.join("./temp/", "q.png")
         if sticker.endswith(("tgs")):
@@ -213,7 +217,7 @@ async def process(msg, user, client, reply, replied=None):
         if os.path.lexists(file_1):
             os.remove(file_1)
         return True, canvas
-    elif reply.document and not reply.audio:
+    elif reply and reply.document and not reply.audio:
         docname = ".".join(reply.document.attributes[-1].file_name.split(".")[:-1])
         doctype = reply.document.attributes[-1].file_name.split(".")[-1].upper()
         if reply.document.size < 1024:
@@ -348,21 +352,22 @@ async def get_entity(msg):
     italic = {0: 0}
     mono = {0: 0}
     link = {0: 0}
-    if not msg.entities:
-        return bold, mono, italic, link
-    for entity in msg.entities:
-        if isinstance(entity, types.MessageEntityBold):
-            bold[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityItalic):
-            italic[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityCode):
-            mono[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityUrl):
-            link[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityTextUrl):
-            link[entity.offset] = entity.offset + entity.length
-        elif isinstance(entity, types.MessageEntityMention):
-            link[entity.offset] = entity.offset + entity.length
+    if msg:
+        if not msg.entities:
+            return bold, mono, italic, link
+        for entity in msg.entities:
+            if isinstance(entity, types.MessageEntityBold):
+                bold[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityItalic):
+                italic[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityCode):
+                mono[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityUrl):
+                link[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityTextUrl):
+                link[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityMention):
+                link[entity.offset] = entity.offset + entity.length
     return bold, mono, italic, link
 
 

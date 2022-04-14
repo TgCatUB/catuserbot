@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import os
 import sys
 from asyncio.exceptions import CancelledError
@@ -13,6 +14,7 @@ from userbot import HEROKU_APP, UPSTREAM_REPO_URL, catub
 from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.utils import _catutils
 from ..sql_helper.global_collection import (
     add_to_collectionlist,
     del_keyword_collectionlist,
@@ -21,13 +23,14 @@ from ..sql_helper.global_collection import (
 
 plugin_category = "tools"
 cmdhd = Config.COMMAND_HAND_LER
-
+ENV = bool(os.environ.get("ENV", False))
 LOGS = logging.getLogger(__name__)
 # -- Constants -- #
 
 HEROKU_APP_NAME = Config.HEROKU_APP_NAME or None
 HEROKU_API_KEY = Config.HEROKU_API_KEY or None
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
+BADCAT = Config.BADCAT
 heroku_api = "https://api.heroku.com"
 
 UPSTREAM_REPO_BRANCH = Config.UPSTREAM_REPO_BRANCH
@@ -99,7 +102,7 @@ async def update_requirements():
         return repr(e)
 
 
-async def update(event, repo, ups_rem, ac_br):
+async def update_bot(event, repo, ups_rem, ac_br):
     try:
         ups_rem.pull(ac_br)
     except GitCommandError:
@@ -174,12 +177,10 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         await event.edit(f"{txt}\n**Here is the error log:**\n`{error}`")
         return repo.__del__()
     await event.edit("`Deploy was failed. So restarting to update`")
-    try:
+    with contextlib.suppress(CancelledError):
         await event.client.disconnect()
         if HEROKU_APP is not None:
             HEROKU_APP.restart()
-    except CancelledError:
-        pass
 
 
 @catub.cat_cmd(
@@ -205,7 +206,7 @@ async def upstream(event):
     event = await edit_or_reply(event, "`Checking for updates, please wait....`")
     off_repo = UPSTREAM_REPO_URL
     force_update = False
-    if HEROKU_API_KEY is None or HEROKU_APP_NAME is None:
+    if ENV and (HEROKU_API_KEY is None or HEROKU_APP_NAME is None):
         return await edit_or_reply(
             event, "`Set the required vars first to update the bot`"
         )
@@ -245,10 +246,8 @@ async def upstream(event):
             "please checkout to any official branch`"
         )
         return repo.__del__()
-    try:
+    with contextlib.suppress(BaseException):
         repo.create_remote("upstream", off_repo)
-    except BaseException:
-        pass
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
     changelog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
@@ -272,7 +271,7 @@ async def upstream(event):
         )
     if conf == "now":
         await event.edit("`Updating userbot, please wait....`")
-        await update(event, repo, ups_rem, ac_br)
+        await update_bot(event, repo, ups_rem, ac_br)
     return
 
 
@@ -280,6 +279,16 @@ async def upstream(event):
     pattern="update deploy$",
 )
 async def upstream(event):
+    if ENV:
+        if HEROKU_API_KEY is None or HEROKU_APP_NAME is None:
+            return await edit_or_reply(
+                event, "`Set the required vars first to update the bot`"
+            )
+    elif os.path.exists("config.py"):
+        return await edit_delete(
+            event,
+            f"I guess you are on selfhost. For self host you need to use `{cmdhd}update now`",
+        )
     event = await edit_or_reply(event, "`Pulling the nekopack repo wait a sec ....`")
     off_repo = "https://github.com/TgCatUB/nekopack"
     os.chdir("/app")
@@ -303,10 +312,8 @@ async def upstream(event):
         repo.create_head("master", origin.refs.master)
         repo.heads.master.set_tracking_branch(origin.refs.master)
         repo.heads.master.checkout(True)
-    try:
+    with contextlib.suppress(BaseException):
         repo.create_remote("upstream", off_repo)
-    except BaseException:
-        pass
     ac_br = repo.active_branch.name
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
@@ -315,27 +322,74 @@ async def upstream(event):
 
 
 @catub.cat_cmd(
-    pattern="badcat$",
-    command=("badcat", plugin_category),
+    pattern="(good|bad)cat$",
+    command=("switch", plugin_category),
     info={
-        "header": "To update to badcat( for extra masala and gali).",
-        "usage": "{tr}badcat",
+        "header": "To switch between goodcat & badcat(For extra nsfw and gali).",
+        "usage": [
+            "{tr}goodcat",
+            "{tr}badcat",
+        ],
     },
 )
-async def variable(var):
-    "To update to badcat( for extra masala and gali)."
-    if Config.HEROKU_API_KEY is None:
-        return await edit_delete(
-            var,
-            "Set the required var in heroku to function this normally `HEROKU_API_KEY`.",
-        )
-    if Config.HEROKU_APP_NAME is not None:
+async def variable(event):
+    "To switch between good & bad cat"
+    switch = "BADCAT"
+    cmd = event.pattern_match.group(1).lower()
+    if ENV:
+        if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):
+            return await edit_delete(
+                event,
+                "Set the required vars in heroku to function this normally `HEROKU_API_KEY` and `HEROKU_APP_NAME`.",
+            )
         app = Heroku.app(Config.HEROKU_APP_NAME)
+        heroku_var = app.config()
+        if cmd == "good":
+            if BADCAT:
+                await edit_or_reply(
+                    event, "`Changing badcat to goodcat wait for 2-3 minutes.`"
+                )
+                del heroku_var[switch]
+                return
+            await edit_delete(event, "`You already using GoodCat`", 6)
+        else:
+            if BADCAT:
+                return await edit_delete(event, "`You already using BadCat`", 6)
+            await edit_or_reply(
+                event, "`Changing goodcat to badcat wait for 2-3 minutes.`"
+            )
+            heroku_var[switch] = "True"
+    elif os.path.exists(config):
+        string = ""
+        match = None
+        with open(config, "r") as f:
+            configs = f.readlines()
+        for i in configs:
+            if switch in i:
+                match = True
+            else:
+                string += f"{i}"
+        if cmd == "good":
+            if match and not BADCAT:
+                cat = await edit_or_reply(
+                    event, f"`Changing badcat to goodcat wait for 2-3 minutes.`"
+                )
+                with open(config, "w") as f1:
+                    f1.write(string)
+                    f1.close()
+                await _catutils.runcmd("rm -rf badcatext")
+                return await event.client.reload(cat)
+            await edit_delete(event, "`You already using GoodCat`")
+        elif cmd == "bad":
+            if match and BADCAT:
+                return await edit_or_reply(event, "`You already using BadCat`")
+            string += f'    {switch} = "True"\n'
+            cat = await edit_or_reply(
+                event, "`Changing goodcat to badcat wait for 2-3 minutes.`"
+            )
+            with open(config, "w") as f1:
+                f1.write(string)
+                f1.close()
+            await event.client.reload(cat)
     else:
-        return await edit_delete(
-            var,
-            "Set the required var in heroku to function this normally `HEROKU_APP_NAME`.",
-        )
-    heroku_var = app.config()
-    await edit_or_reply(var, "`Changing goodcat to badcat wait for 2-3 minutes.`")
-    heroku_var["UPSTREAM_REPO"] = "https://github.com/Jisan09/catuserbot"
+        await edit_delete(event, "`There no Config file , You can't use this plugin.`")

@@ -104,7 +104,7 @@ async def bot_broadcast(event):
                     await asyncio.sleep(e.seconds)
     end_ = datetime.now()
     b_info = f"🔊  Successfully broadcasted message to ➜  <b>{count} users.</b>"
-    if len(blocked_users) != 0:
+    if blocked_users:
         b_info += f"\n🚫  <b>{len(blocked_users)} users</b> blocked your bot recently, so have been removed."
     b_info += (
         f"\n⏳  <code>Process took: {time_formatter((end_ - start_).seconds)}</code>."
@@ -151,8 +151,7 @@ async def ban_botpms(event):
         return await event.reply(f"**Error:**\n`{e}`")
     if user_id == Config.OWNER_ID:
         return await event.reply("I can't ban you master")
-    check = check_is_black_list(user.id)
-    if check:
+    if check := check_is_black_list(user.id):
         return await event.client.send_message(
             event.chat_id,
             f"#Already_banned\

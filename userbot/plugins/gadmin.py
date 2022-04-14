@@ -3,7 +3,6 @@ from datetime import datetime
 
 from telethon.errors import BadRequestError
 from telethon.tl.functions.channels import EditBannedRequest
-from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import ChatBannedRights
 from telethon.utils import get_display_name
 
@@ -250,7 +249,7 @@ async def startgmute(event):
             return await edit_or_reply(event, "`Sorry, I can't gmute myself`")
         userid = user.id
     try:
-        user = (await event.client(GetFullUserRequest(userid))).user
+        user = await event.client.get_entity(userid)
     except Exception:
         return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
     if is_muted(userid, "gmute"):
@@ -316,7 +315,7 @@ async def endgmute(event):
             return await edit_or_reply(event, "`Sorry, I can't gmute myself`")
         userid = user.id
     try:
-        user = (await event.client(GetFullUserRequest(userid))).user
+        user = await event.client.get_entity(userid)
     except Exception:
         return await edit_or_reply(event, "`Sorry. I am unable to fetch the user`")
     if not is_muted(userid, "gmute"):

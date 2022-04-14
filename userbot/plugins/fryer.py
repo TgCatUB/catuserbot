@@ -1,15 +1,17 @@
 import io
+import os
 from random import randint, uniform
 
 from PIL import Image, ImageEnhance, ImageOps
-from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.contacts import UnblockRequest as unblock
 from telethon.tl.types import DocumentAttributeFilename
 
 from userbot import catub
 
 from ..core.managers import edit_or_reply
-from ..helpers import reply_id
+from ..helpers.functions import delete_conv
+from ..helpers.utils import media_to_pic, reply_id
 
 plugin_category = "extra"
 
@@ -49,6 +51,7 @@ async def deepfry(img: Image) -> Image:
 
 
 async def check_media(reply_message):
+    data = None
     if reply_message and reply_message.media:
         if reply_message.photo:
             data = reply_message.photo
@@ -81,49 +84,37 @@ async def check_media(reply_message):
         "usage": "{tr}frybot",
     },
 )
-async def _(event):
+async def frybot(event):
     "Fries the given sticker or image"
     reply_to = await reply_id(event)
-    if not event.reply_to_msg_id:
-        event = await edit_or_reply(event, "Reply to any user message.")
-        return
     reply_message = await event.get_reply_message()
-    if event.is_reply:
-        reply_message = await event.get_reply_message()
-        data = await check_media(reply_message)
-        if isinstance(data, bool):
-            event = await edit_or_reply(event, "`I can't deep fry that!`")
-            return
-    if not event.is_reply:
-        event = await edit_or_reply(
-            event, "`Reply to an image or sticker to deep fry it!`"
+    if not event.reply_to_msg_id or not reply_message.media:
+        return await edit_delete(event, "```Reply to a media to fry it...```", 10)
+    output = await media_to_pic(event, reply_message)
+    if output[1] is None:
+        return await edit_delete(
+            output[0], "__Unable to extract image from the replied message.__", 10
         )
-        return
     chat = "@image_deepfrybot"
-    if reply_message.sender.bot:
-        event = await edit_or_reply(event, "Reply to actual users message.")
-        return
-    event = await edit_or_reply(event, "```Processing```")
+    catevent = await edit_or_reply(event, "```Processing...```")
     async with event.client.conversation(chat) as conv:
         try:
-            response = conv.wait_event(
-                events.NewMessage(incoming=True, from_users=432858024)
-            )
-            await event.client.forward_messages(chat, reply_message)
-            response = await response
+            msg_flag = await conv.send_message("/start")
         except YouBlockedUserError:
-            await event.reply("unblock @image_deepfrybot and try again")
-            return
-        await bot.send_read_acknowledge(conv.chat_id)
-        if response.text.startswith("Forward"):
-            await event.edit(
-                "```can you kindly disable your forward privacy settings for good?```"
+            await edit_or_reply(
+                catevent, "**Error:** Trying to unblock & retry, wait a sec..."
             )
-        else:
-            await event.client.send_file(
-                event.chat_id, response.message.media, reply_to=reply_to
-            )
-        await event.delete()
+            await catub(unblock("image_deepfrybot"))
+            msg_flag = await conv.send_message("/start")
+        await conv.get_response()
+        await event.client.send_read_acknowledge(conv.chat_id)
+        await event.client.send_file(conv.chat_id, output[1])
+        response = await conv.get_response()
+        await event.client.send_read_acknowledge(conv.chat_id)
+        await catevent.delete()
+        await event.client.send_file(event.chat_id, response, reply_to=reply_to)
+        await delete_conv(event, chat, msg_flag)
+        os.remove(output[1])
 
 
 @catub.cat_cmd(

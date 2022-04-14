@@ -41,7 +41,7 @@ async def wall_download(piclink, query):
         "examples": ["{tr}wall one piece", "{tr}wall one piece ; 2"],
     },
 )
-async def noods(event):
+async def noods(event):  # sourcery no-metrics
     "Wallpaper searcher"
     query = event.pattern_match.group(1)
     reply_to_id = await reply_id(event)

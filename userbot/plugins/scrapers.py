@@ -141,7 +141,7 @@ async def imdb_query(event):  # sourcery no-metrics
         if len(rtext) > 1024:
             extralimit = len(rtext) - 1024
             climit = len(resulttext) - extralimit - 20
-            resulttext = resulttext[:climit] + "...........</i>"
+            resulttext = f"{resulttext[:climit]}...........</i>"
         if imageurl:
             downloader = SmartDL(imageurl, moviepath, progress_bar=False)
             downloader.start(blocking=False)

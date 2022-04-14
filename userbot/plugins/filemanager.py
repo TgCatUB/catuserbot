@@ -12,7 +12,7 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _catutils, _format
 from . import humanbytes
 
-plugin_category = "utils"
+plugin_category = "tools"
 
 
 @catub.cat_cmd(
@@ -49,21 +49,21 @@ async def lst(event):  # sourcery no-metrics
             if not os.path.isdir(catpath):
                 size = os.stat(catpath).st_size
                 if str(contents).endswith((".mp3", ".flac", ".wav", ".m4a")):
-                    files += "🎵" + f"`{contents}`\n"
+                    files += f"🎵`{contents}`\n"
                 if str(contents).endswith((".opus")):
-                    files += "🎙" + f"`{contents}`\n"
+                    files += f"🎙`{contents}`\n"
                 elif str(contents).endswith(
                     (".mkv", ".mp4", ".webm", ".avi", ".mov", ".flv")
                 ):
-                    files += "🎞" + f"`{contents}`\n"
+                    files += f"🎞`{contents}`\n"
                 elif str(contents).endswith((".zip", ".tar", ".tar.gz", ".rar")):
-                    files += "🗜" + f"`{contents}`\n"
+                    files += f"🗜`{contents}`\n"
                 elif str(contents).endswith(
                     (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".ico")
                 ):
-                    files += "🖼" + f"`{contents}`\n"
+                    files += f"🖼`{contents}`\n"
                 else:
-                    files += "📄" + f"`{contents}`\n"
+                    files += f"📄`{contents}`\n"
             else:
                 folders += f"📁`{contents}`\n"
         msg = msg + folders + files if files or folders else msg + "__empty path__"
@@ -106,7 +106,7 @@ async def lst(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="rem ([\s\S]*)",
+    pattern="rem(?:\s|$)([\s\S]*)",
     command=("rem", plugin_category),
     info={
         "header": "To delete a file or folder from the server",
@@ -128,7 +128,7 @@ async def lst(event):
             f"there is no such directory or file with the name `{cat}` check again",
         )
         return
-    catcmd = f"rm -rf {path}"
+    catcmd = f"rm -rf '{path}'"
     if os.path.isdir(path):
         await _catutils.runcmd(catcmd)
         await edit_or_reply(event, f"successfully removed `{path}` directory")

@@ -22,7 +22,7 @@ GENIUS = Config.GENIUS_API_TOKEN
         "description": "if you want to provide artist name with song name then use this format {tr}lyrics <artist name> - <song name> . if you use this format in your query then flags won't work. by default it will show first query.",
         "flags": {
             "-l": "to get list of search lists.",
-            "-g": "To get paticular song lyrics.",
+            "-n": "To get paticular song lyrics.",
         },
         "note": "For functioning of this command set the GENIUS_API_TOKEN in heroku. Get value from  https://genius.com/developers.",
         "usage": [
@@ -50,7 +50,7 @@ async def lyrics(event):  # sourcery no-metrics
     try:
         songno = songno[0]
         songno = songno.replace("-n", "")
-        match = match.replace("-n" + songno, "")
+        match = match.replace(f"-n{songno}", "")
         songno = int(songno)
     except IndexError:
         songno = 1

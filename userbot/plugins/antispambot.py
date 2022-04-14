@@ -59,8 +59,7 @@ if Config.ANTISPAMBOT_BAN:
             except Exception as e:
                 LOGS.info(e)
         if spamwatch and not catbanned:
-            ban = spamwatch.get_ban(user.id)
-            if ban:
+            if ban := spamwatch.get_ban(user.id):
                 hmm = await event.reply(
                     f"[{user.first_name}](tg://user?id={user.id}) was banned by spamwatch for the reason `{ban.reason}`"
                 )

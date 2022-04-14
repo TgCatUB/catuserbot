@@ -48,8 +48,9 @@ def add_to_list(keywoard, group_id):
 
 def rm_from_list(keywoard, group_id):
     with CATGLOBALLIST_INSERTION_LOCK:
-        broadcast_group = SESSION.query(CatGloballist).get((keywoard, str(group_id)))
-        if broadcast_group:
+        if broadcast_group := SESSION.query(CatGloballist).get(
+            (keywoard, str(group_id))
+        ):
             if str(group_id) in GLOBALLIST_SQL_.GLOBALLIST_VALUES.get(keywoard, set()):
                 GLOBALLIST_SQL_.GLOBALLIST_VALUES.get(keywoard, set()).remove(
                     str(group_id)

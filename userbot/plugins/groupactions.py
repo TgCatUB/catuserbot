@@ -299,8 +299,9 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                     )
                     await sleep(e.seconds + 5)
                     await event.edit(
-                        f"__Ok the wait is over .I am cleaning all deleted accounts in this group__"
+                        "__Ok the wait is over .I am cleaning all deleted accounts in this group__"
                     )
+
                 except UserAdminInvalidError:
                     del_a += 1
                 except Exception as e:
@@ -337,8 +338,9 @@ async def rm_deletedacc(show):  # sourcery no-metrics
                     )
                     await sleep(e.seconds + 5)
                     await event.edit(
-                        f"__Ok the wait is over .I am cleaning all deleted accounts in restricted or banned users list in this group__"
+                        "__Ok the wait is over .I am cleaning all deleted accounts in restricted or banned users list in this group__"
                     )
+
                 except Exception as e:
                     LOGS.error(str(e))
                     del_a += 1
