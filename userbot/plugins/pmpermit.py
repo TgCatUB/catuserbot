@@ -960,7 +960,10 @@ async def unblock_pm(event):
     if not reason:
         reason = "Not Mentioned."
     await event.client(functions.contacts.UnblockRequest(user.id))
-    await edit_or_reply(event,f"[{user.first_name}](tg://user?id={user.id}) __is unblocked he/she can personal message you from now on.__\n**Reason:** __{reason}__")
+    await edit_or_reply(
+        event,
+        f"[{user.first_name}](tg://user?id={user.id}) __is unblocked he/she can personal message you from now on.__\n**Reason:** __{reason}__",
+    )
 
 
 @catub.cat_cmd(
