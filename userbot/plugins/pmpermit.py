@@ -899,11 +899,6 @@ async def disapprove_p_m(event):
 )
 async def block_p_m(event):
     "To block user to direct message you."
-    if gvarstatus("pmpermit") is None:
-        return await edit_delete(
-            event,
-            f"__Turn on pmpermit by doing __`{cmdhd}pmguard on` __for working of this plugin__",
-        )
     if event.is_private:
         user = await event.get_chat()
         reason = event.pattern_match.group(1)
@@ -936,7 +931,7 @@ async def block_p_m(event):
     sql.add_collection("pmwarns", PM_WARNS, {})
     sql.add_collection("pmmessagecache", PMMESSAGE_CACHE, {})
     await event.client(functions.contacts.BlockRequest(user.id))
-    await edit_delete(
+    await edit_or_reply(
         event,
         f"[{user.first_name}](tg://user?id={user.id}) __is blocked, he can no longer personal message you.__\n**Reason:** __{reason}__",
     )
@@ -955,11 +950,6 @@ async def block_p_m(event):
 )
 async def unblock_pm(event):
     "To unblock a user."
-    if gvarstatus("pmpermit") is None:
-        return await edit_delete(
-            event,
-            f"__Turn on pmpermit by doing __`{cmdhd}pmguard on` __for working of this plugin__",
-        )
     if event.is_private:
         user = await event.get_chat()
         reason = event.pattern_match.group(1)
@@ -970,9 +960,7 @@ async def unblock_pm(event):
     if not reason:
         reason = "Not Mentioned."
     await event.client(functions.contacts.UnblockRequest(user.id))
-    await event.edit(
-        f"[{user.first_name}](tg://user?id={user.id}) __is unblocked he/she can personal message you from now on.__\n**Reason:** __{reason}__"
-    )
+    await edit_or_reply(event,f"[{user.first_name}](tg://user?id={user.id}) __is unblocked he/she can personal message you from now on.__\n**Reason:** __{reason}__")
 
 
 @catub.cat_cmd(
