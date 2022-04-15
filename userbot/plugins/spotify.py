@@ -536,20 +536,16 @@ def telegraph_lyrics(tittle, artist):
     telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
     GENIUS = Config.GENIUS_API_TOKEN
     if GENIUS is None:
-        result = (
-            "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command"
-        )
+        result = "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command"
     else:
         genius = lyricsgenius.Genius(GENIUS)
         try:
             songs = genius.search_song(tittle, artist)
-        except TypeError:
-            songs = None
-        if songs is None:
+            content = songs.lyrics
+            content = content.replace("\n", "<br>")
+            result = f"<h3>{tittle}</h3><br><b>by {artist}</b><br><br>{content}"
+        except (TypeError, AttributeError):
             result = "<b>Lyrics Not found!</b>"
-        content = songs.lyrics
-        content = content.replace("\n", "<br>")
-        result = f"<h3>{tittle}</h3><br><b>by {artist}</b><br><br>{content}"
     response = telegraph.create_page(
         "Lyrics",
         html_content=result,
