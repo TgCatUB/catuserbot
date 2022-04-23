@@ -556,7 +556,12 @@ def telegraph_lyrics(tittle, artist):
             author_url="https://t.me/catuserbot17",
         )
     except Exception as e:
-        response = telegraph.create_page("Lyrics", html_content=str(e), author_name="CatUserbot",author_url="https://t.me/catuserbot17")
+        response = telegraph.create_page(
+            "Lyrics",
+            html_content=str(e),
+            author_name="CatUserbot",
+            author_url="https://t.me/catuserbot17",
+        )
     return response["url"]
 
 
