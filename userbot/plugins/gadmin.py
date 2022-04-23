@@ -144,7 +144,8 @@ async def catgban(event):
         gban_sql.catungban(user.id)
     else:
         return await edit_delete(
-            cate, f"[{user.first_name}](tg://user?id={user.id}) `is not in your gbanned list`"
+            cate,
+            f"[{user.first_name}](tg://user?id={user.id}) `is not in your gbanned list`",
         )
     san = await admin_groups(event.client)
     count = 0
