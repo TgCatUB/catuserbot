@@ -548,12 +548,15 @@ def telegraph_lyrics(tittle, artist):
             result = f"<h3>{tittle}</h3><br><b>by {artist}</b><br><br>{content}"
         except (TypeError, AttributeError):
             result = "<b>Lyrics Not found!</b>"
-    response = telegraph.create_page(
-        "Lyrics",
-        html_content=result,
-        author_name="CatUserbot",
-        author_url="https://t.me/catuserbot17",
-    )
+    try:
+        response = telegraph.create_page(
+            "Lyrics",
+            html_content=result,
+            author_name="CatUserbot",
+            author_url="https://t.me/catuserbot17",
+        )
+    except Exception as e:
+        response = telegraph.create_page("Lyrics", html_content=str(e), author_name="CatUserbot",author_url="https://t.me/catuserbot17")
     return response["url"]
 
 
