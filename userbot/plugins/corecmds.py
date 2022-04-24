@@ -18,9 +18,8 @@ def plug_checker(plugin):
     if not os.path.exists(the_plugin_file):
         plug_path = f"./badcatext/{input_str}.py"
     return plug_path
-    
-    
-    
+
+
 @catub.cat_cmd(
     pattern="install$",
     command=("install", plugin_category),
