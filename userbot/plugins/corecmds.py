@@ -11,6 +11,16 @@ DELETE_TIMEOUT = 5
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 
 
+def plug_checker(plugin):
+    plug_path = f"./userbot/plugins/{input_str}.py"
+    if not os.path.exists(the_plugin_file):
+        plug_path = f"./xtraplugins/{input_str}.py"
+    if not os.path.exists(the_plugin_file):
+        plug_path = f"./badcatext/{input_str}.py"
+    return plug_path
+    
+    
+    
 @catub.cat_cmd(
     pattern="install$",
     command=("install", plugin_category),
@@ -88,7 +98,7 @@ async def send(event):
     reply_to_id = await reply_id(event)
     thumb = thumb_image_path if os.path.exists(thumb_image_path) else None
     input_str = event.pattern_match.group(1)
-    the_plugin_file = f"./userbot/plugins/{input_str}.py"
+    the_plugin_file = plug_checker(input_str)
     if os.path.exists(the_plugin_file):
         caat = await event.client.send_file(
             event.chat_id,
@@ -138,7 +148,7 @@ async def unload(event):
 async def unload(event):
     "To uninstall a plugin."
     shortname = event.pattern_match.group(1)
-    path = Path(f"userbot/plugins/{shortname}.py")
+    path = plug_checker(shortname)
     if not os.path.exists(path):
         return await edit_delete(
             event, f"There is no plugin with path {path} to uninstall it"
