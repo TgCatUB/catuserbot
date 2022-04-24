@@ -120,7 +120,7 @@ async def fileinfo(file):
             dic["format"] = cat_json[0]["Format"]
             dic["type"] = cat_json[1]["@type"]
             if "ImageCount" not in cat_json[0]:
-                dic["duration"] = int(cat_json[0]["Duration"])
+                dic["duration"] = cat_json[0]["Duration"]
             if "VideoCount" or "ImageCount" in cat_json[0]:
                 dic["height"] = int(cat_json[1]["Height"])
                 dic["width"] = int(cat_json[1]["Width"])

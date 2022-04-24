@@ -57,6 +57,7 @@ async def cult_small_video(
 
 
 def ms_converter(sec):
+    sec = int(sec)
     seconds = sec % 60
     if str(seconds) == "0":
         seconds = "00"
