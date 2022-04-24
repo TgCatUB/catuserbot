@@ -9,7 +9,7 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import _cattools, media_type, progress, reply_id
+from ..helpers import _cattools, _catutils, fileinfo, media_type, progress, reply_id
 
 plugin_category = "utils"
 
@@ -57,7 +57,7 @@ async def cult_small_video(
 
 
 @catub.cat_cmd(
-    pattern="ffmpegsave$",
+    pattern="ffmpegsave(?:\s|$)([\s\S]*)",
     command=("ffmpegsave", plugin_category),
     info={
         "header": "Saves the media file in bot to trim mutliple times",
@@ -67,7 +67,14 @@ async def cult_small_video(
 )
 async def ff_mpeg_trim_cmd(event):
     "Saves the media file in bot to trim mutliple times"
+    mpath = event.pattern_match.group(1)
     if not os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
+        if mpath and os.path.exists(mpath):
+            media = (await fileinfo(mpath))["type"]
+            if media not in ["Video", "Audio"]
+                return await edit_delete(event, "`Only media files are supported`", 5)
+            await _catutils.runcmd(f"cp -r {mpath} {FF_MPEG_DOWN_LOAD_MEDIA_PATH}")
+            return await edit_or_reply(event,f"Saved file to `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
         reply_message = await event.get_reply_message()
         if reply_message:
             start = datetime.now()
@@ -87,13 +94,11 @@ async def ff_mpeg_trim_cmd(event):
                 )
                 dl.close()
             except Exception as e:
-                await catevent.edit(f"**Error:**\n`{e}`")
+                await edit_or_reply(catevent,f"**Error:**\n`{e}`")
             else:
                 end = datetime.now()
                 ms = (end - start).seconds
-                await catevent.edit(
-                    f"Saved file to `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}` in `{ms}` seconds."
-                )
+                await edit_or_reply(catevent,f"Saved file to `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}` in `{ms}` seconds.")
         else:
             await edit_delete(event, "`Reply to a any media file`")
     else:
