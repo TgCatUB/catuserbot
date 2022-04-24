@@ -3,6 +3,7 @@ from pathlib import Path
 
 from ..Config import Config
 from ..utils import load_module, remove_plugin
+from ..core import CMD_INFO, PLG_INFO
 from . import CMD_HELP, CMD_LIST, SUDO_LIST, catub, edit_delete, edit_or_reply, reply_id
 
 plugin_category = "tools"
@@ -134,8 +135,8 @@ async def unload(event):
 
 
 @catub.cat_cmd(
-    pattern="uninstall ([\s\S]*)",
-    command=("uninstall", plugin_category),
+    pattern="unl ([\s\S]*)",
+    command=("unl", plugin_category),
     info={
         "header": "To uninstall a plugin temporarily.",
         "description": "To stop functioning of that plugin and remove that plugin from bot.",
@@ -159,6 +160,10 @@ async def unload(event):
         SUDO_LIST.pop(shortname)
     if shortname in CMD_HELP:
         CMD_HELP.pop(shortname)
+    if shortname in PLG_INFO:
+        for cmd in PLG_INFO[shortname]:
+            CMD_INFO.pop(cmd)
+        PLG_INFO.pop(shortname)
     try:
         remove_plugin(shortname)
         await edit_or_reply(event, f"{shortname} is Uninstalled successfully")
