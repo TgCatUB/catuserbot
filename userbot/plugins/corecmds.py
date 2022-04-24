@@ -12,11 +12,11 @@ thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg"
 
 
 def plug_checker(plugin):
-    plug_path = f"./userbot/plugins/{input_str}.py"
-    if not os.path.exists(the_plugin_file):
-        plug_path = f"./xtraplugins/{input_str}.py"
-    if not os.path.exists(the_plugin_file):
-        plug_path = f"./badcatext/{input_str}.py"
+    plug_path = f"./userbot/plugins/{plugin}.py"
+    if not os.path.exists(plug_path):
+        plug_path = f"./xtraplugins/{plugin}.py"
+    if not os.path.exists(plug_path):
+        plug_path = f"./badcatext/{plugin}.py"
     return plug_path
 
 
