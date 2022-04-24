@@ -62,14 +62,14 @@ def ms_converter(sec):
         seconds = "00"
     if len(str(seconds)) == 1:
         seconds = f"0{str(seconds)}"
-    minutes = (sec/60) % 60
+    minutes = (sec / 60) % 60
     minutes = int(minutes)
     if str(minutes) == "0":
         minutes = "00"
     if len(str(minutes)) == 1:
         minutes = f"0{str(minutes)}"
     return f"{minutes}:{seconds}"
-    
+
 
 @catub.cat_cmd(
     pattern="ffmpegsave(?:\s|$)([\s\S]*)",
@@ -89,7 +89,9 @@ async def ff_mpeg_trim_cmd(event):
             if media not in ["Video", "Audio"]:
                 return await edit_delete(event, "`Only media files are supported`", 5)
             await _catutils.runcmd(f"cp -r {mpath} {FF_MPEG_DOWN_LOAD_MEDIA_PATH}")
-            return await edit_or_reply(event,f"Saved file to `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}`")
+            return await edit_or_reply(
+                event, f"Saved file to `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}`"
+            )
         reply_message = await event.get_reply_message()
         if reply_message:
             start = datetime.now()
@@ -109,11 +111,14 @@ async def ff_mpeg_trim_cmd(event):
                 )
                 dl.close()
             except Exception as e:
-                await edit_or_reply(catevent,f"**Error:**\n`{e}`")
+                await edit_or_reply(catevent, f"**Error:**\n`{e}`")
             else:
                 end = datetime.now()
                 ms = (end - start).seconds
-                await edit_or_reply(catevent,f"Saved file to `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}` in `{ms}` seconds.")
+                await edit_or_reply(
+                    catevent,
+                    f"Saved file to `{FF_MPEG_DOWN_LOAD_MEDIA_PATH}` in `{ms}` seconds.",
+                )
         else:
             await edit_delete(event, "`Reply to a any media file`")
     else:
@@ -208,7 +213,7 @@ async def ff_mpeg_trim_cmd(event):
     ms = (end - start).seconds
     await edit_delete(catevent, f"`Completed Process in {ms} seconds`", 3)
 
-    
+
 @catub.cat_cmd(
     pattern="atrim(?:\s|$)([\s\S]*)",
     command=("atrim", plugin_category),
@@ -248,9 +253,7 @@ async def ff_mpeg_trim_cmd(event):
         out_put_file_name,
     )
     if o is None:
-        return await edit_delete(
-            catevent, "**Error : **`Can't complete the process`"
-        )
+        return await edit_delete(catevent, "**Error : **`Can't complete the process`")
     try:
         c_time = time.time()
         await event.client.send_file(
