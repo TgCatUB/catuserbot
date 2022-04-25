@@ -260,12 +260,19 @@ def ellipse_layout_create(filename, size, border):
     return img
 
 
-def text_draw(font_name, font_size, img, text,hight, stroke_width=0,stroke_fill=None):
+def text_draw(font_name, font_size, img, text, hight, stroke_width=0, stroke_fill=None):
     font = ImageFont.truetype(font_name, font_size)
     draw = ImageDraw.Draw(img)
     w, h = draw.textsize(text, font=font)
     h += int(h * 0.21)
-    draw.text(((1024 - w) / 2, int(hight)), text=text, fill="white", font=font,stroke_width=stroke_width,stroke_fill=stroke_fill)
+    draw.text(
+        ((1024 - w) / 2, int(hight)),
+        text=text,
+        fill="white",
+        font=font,
+        stroke_width=stroke_width,
+        stroke_fill=stroke_fill,
+    )
 
 
 def higlighted_text(
