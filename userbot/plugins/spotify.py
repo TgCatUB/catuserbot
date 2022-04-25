@@ -23,6 +23,7 @@ import urllib.request
 import lyricsgenius
 import requests
 import ujson
+from validators.url import url
 from PIL import Image, ImageEnhance, ImageFilter
 from telegraph import Telegraph
 from telethon import events
@@ -38,6 +39,7 @@ from ..helpers.functions.functions import (
     ellipse_layout_create,
     make_inline,
     text_draw,
+    delete_conv,
 )
 from ..sql_helper import global_collectionjson as glob_db
 from . import BOTLOG, BOTLOG_CHATID, Config, catub, reply_id
@@ -589,6 +591,37 @@ def file_check():
     return logo, font_bold, font_mid
 
 
+def sp_data(API):
+    oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
+    spdata = requests.get(API, headers=oauth)
+    if spdata.status_code == 401:
+        data = {
+            "client_id": SPOTIFY_CLIENT_ID,
+            "client_secret": SPOTIFY_CLIENT_SECRET,
+            "grant_type": "refresh_token",
+            "refresh_token": SP_DATABASE.return_refresh(),
+        }
+        r = requests.post("https://accounts.spotify.com/api/token", data=data)
+        received = r.json()
+        # if a new refresh is token as well, we save it here
+        try:
+            SP_DATABASE.save_refresh(received["refresh_token"])
+        except KeyError:
+            pass
+        SP_DATABASE.save_token(received["access_token"])
+        glob_db.add_collection(
+            "SP_DATA",
+            {
+                "data": {
+                    "access_token": SP_DATABASE.return_token(),
+                    "refresh_token": SP_DATABASE.return_refresh(),
+                }
+            },
+        )
+        spdata = requests.get(API, headers=oauth)
+    return spdata
+    
+    
 async def make_thumb(url, client, song, artist, now, full):
     pic_name = "./temp/cat.png"
     urllib.request.urlretrieve(url, pic_name)
@@ -625,8 +658,8 @@ async def make_thumb(url, client, song, artist, now, full):
     thumbmask.save(pic_name)
     os.remove(myphoto)
     return pic_name
-
-
+    
+    
 @catub.cat_cmd(
     pattern="spnow$",
     command=("spnow", plugin_category),
@@ -642,37 +675,10 @@ async def spotify_now(event):
         return
     msg_id = await reply_id(event)
     catevent = await edit_or_reply(event, "🎶 `Fetching...`")
-    oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
-    r = requests.get(
-        "https://api.spotify.com/v1/me/player/currently-playing", headers=oauth
-    )
+    r = sp_data("https://api.spotify.com/v1/me/player/currently-playing")
     if r.status_code == 204:
         return await edit_delete(
             catevent, "\n**I'm not listening anything right now  ;)**"
-        )
-    elif r.status_code == 401:
-        data = {
-            "client_id": SPOTIFY_CLIENT_ID,
-            "client_secret": SPOTIFY_CLIENT_SECRET,
-            "grant_type": "refresh_token",
-            "refresh_token": SP_DATABASE.return_refresh(),
-        }
-        r = requests.post("https://accounts.spotify.com/api/token", data=data)
-        received = r.json()
-        # if a new refresh is token as well, we save it here
-        try:
-            SP_DATABASE.save_refresh(received["refresh_token"])
-        except KeyError:
-            pass
-        SP_DATABASE.save_token(received["access_token"])
-        glob_db.add_collection(
-            "SP_DATA",
-            {
-                "data": {
-                    "access_token": SP_DATABASE.return_token(),
-                    "refresh_token": SP_DATABASE.return_refresh(),
-                }
-            },
         )
     try:
         if SP_DATABASE.SPOTIFY_MODE:
@@ -723,13 +729,11 @@ async def spotify_now(event):
     "Spotify Info"
     if not await sp_var_check(event):
         return
-    oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
     dic = {}
-    x = requests.get("https://api.spotify.com/v1/me", headers=oauth)
-    y = requests.get("https://api.spotify.com/v1/me/player/devices", headers=oauth)
+    x = sp_data("https://api.spotify.com/v1/me")
+    y = sp_data("https://api.spotify.com/v1/me/player/devices")
     uinfo = x.json()
     device = y.json()
-    result = "**Strange Error :: do  `.spnow`  once**"
     if x.status_code == 200:
         dic["id"] = uinfo["id"]
         dic["name"] = uinfo["display_name"]
@@ -761,13 +765,9 @@ async def spotify_now(event):
     "Spotify recently played songs"
     if not await sp_var_check(event):
         return
-    song = "**Strange Error :: do  `.spnow`  once**"
-    oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
-    x = requests.get(
-        "https://api.spotify.com/v1/me/player/recently-played?limit=15", headers=oauth
-    )
+    x = sp_data("https://api.spotify.com/v1/me/player/recently-played?limit=15")
     if x.status_code == 200:
-        song = "__**Last played songs :-**__\n\n"
+        song = "__**Spotify last played songs :-**__\n\n"
         songs = x.json()
         for i in songs["items"]:
             tittle = i["track"]["name"]
@@ -776,3 +776,62 @@ async def spotify_now(event):
                 tittle = regx.group(1)
             song += f"**◉ [{tittle} - {i['track']['artists'][0]['name']}]({i['track']['external_urls']['spotify']})**\n"
     await edit_or_reply(event, song)
+
+
+@catub.cat_cmd(
+    pattern="now(?:\s|$)([\s\S]*)",
+    command=("now", plugin_category),
+    info={
+        "header": "To get song from spotify",
+        "description": "Send the currently playing song of spotify or song from a spotify link.",
+        "usage": [
+            "{tr}now",
+            "{tr}now <Spotify/Deezer link>",
+        ],
+    },
+)
+async def spotify_now(event):
+    "Send spotify song"
+    msg_id = await reply_id(event)
+    link = event.pattern_match.group(1)
+    chat = "@DeezerMusicBot"
+    catevent = await edit_or_reply(event, "🎶 `Fetching...`")
+    if link:
+        cap = f"<b>Spotify :- <a href = {link}>Link</a></b>"
+        if not url(link) and "spotify" not in link:
+            return await edit_delete(catevent, "**Give me a correct link...**")
+    elif not link:
+        if not await sp_var_check(event):
+            return
+        r = sp_data("https://api.spotify.com/v1/me/player/currently-playing")
+        if r.status_code == 204:
+            return await edit_delete(
+                catevent, "\n**I'm not listening anything right now  ;)**"
+            )
+        try:
+            received = r.json()
+            if received["currently_playing_type"] == "track":
+                title = received["item"]["name"]
+                link = received["item"]["external_urls"]["spotify"]
+                cap = f"<b>Spotify :- <a href = {link}>{title}</a></b>"
+        except KeyError:
+            return await edit_delete(catevent, "\n**Strange!! Try after restaring Spotify once ;)**")
+    async with event.client.conversation(chat) as conv:
+        try:
+            purgeflag = await conv.send_message("/start")
+        except YouBlockedUserError:
+            await catub(unblock("DeezerMusicBot"))
+            purgeflag = await conv.send_message("/start")
+        await conv.get_response()
+        await conv.send_message(link)
+        song = await conv.get_response()
+        await event.client.send_read_acknowledge(conv.chat_id)
+        await catevent.delete()
+        await event.client.send_file(
+            event.chat_id,
+            song,
+            caption=cap,
+            parse_mode="html",
+            reply_to=msg_id,
+        )
+        await delete_conv(event, chat, purgeflag)
