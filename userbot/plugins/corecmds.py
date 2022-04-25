@@ -2,8 +2,9 @@ import os
 from pathlib import Path
 
 from ..Config import Config
-from ..core import CMD_INFO, PLG_INFO
+from ..core import CMD_INFO, PLG_INFO,LOADED_CMDS
 from ..utils import load_module, remove_plugin
+
 from . import CMD_HELP, CMD_LIST, SUDO_LIST, catub, edit_delete, edit_or_reply, reply_id
 
 plugin_category = "tools"
@@ -162,6 +163,7 @@ async def unload(event):
         CMD_HELP.pop(shortname)
     if shortname in PLG_INFO:
         for cmd in PLG_INFO[shortname]:
+            LOADED_CMDS.pop(cmd)
             CMD_INFO.pop(cmd)
         PLG_INFO.pop(shortname)
     try:
