@@ -2,8 +2,9 @@ import os
 from pathlib import Path
 
 from ..Config import Config
-from ..core import CMD_INFO, LOADED_CMDS, PLG_INFO
+from ..core import CMD_INFO, PLG_INFO
 from ..utils import load_module, remove_plugin
+
 from . import CMD_HELP, CMD_LIST, SUDO_LIST, catub, edit_delete, edit_or_reply, reply_id
 
 plugin_category = "tools"
@@ -160,13 +161,12 @@ async def unload(event):
         SUDO_LIST.pop(shortname)
     if shortname in CMD_HELP:
         CMD_HELP.pop(shortname)
-    if shortname in PLG_INFO:
-        for cmd in PLG_INFO[shortname]:
-            LOADED_CMDS.pop(cmd)
-            CMD_INFO.pop(cmd)
-        PLG_INFO.pop(shortname)
     try:
         remove_plugin(shortname)
         await edit_or_reply(event, f"{shortname} is Uninstalled successfully")
     except Exception as e:
         await edit_or_reply(event, f"Successfully uninstalled {shortname}\n{e}")
+    if shortname in PLG_INFO:
+        for cmd in PLG_INFO[shortname]:
+            CMD_INFO.pop(cmd)
+        PLG_INFO.pop(shortname)
