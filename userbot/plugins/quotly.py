@@ -151,8 +151,8 @@ async def q_pic(event):  # sourcery no-metrics
         "usage": [
             "{tr}q",
             "{tr}rq",
-            "{fq} <user/reply> <text>",
-            "{frq} <user/reply> <text>",
+            "{tr}fq <user/reply> <text>",
+            "{tr}frq <user/reply> <text>",
         ],
         "examples": ["{tr}fq @jisan7509 hello bad boys and girls"],
     },
