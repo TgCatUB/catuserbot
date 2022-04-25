@@ -24,6 +24,7 @@ from telethon.tl import types
 
 from .utils import _catutils
 
+#//Random colors for name
 COLORS = [
     "#F07975",
     "#F49F69",
@@ -35,40 +36,60 @@ COLORS = [
     "#E181AC",
 ]
 
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+def file_check():
+    regular = "./temp/Roboto-Regular.ttf"
+    medium = "./temp/Roboto-Medium.ttf"
+    mono = "./temp/DroidSansMono.ttf"
+    italic = "./temp/Roboto-Italic.ttf"
+    fallback = "./temp/Quivira.otf"
+    special ="./temp/ArialUnicodeMS.ttf"
+    if not os.path.isdir("./temp"):
+        os.mkdir("./temp")
+    if not os.path.exists(regular):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf",
+            regular,
+        )
+    if not os.path.exists(medium):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf",
+            medium,
+        )
+    if not os.path.exists(mono):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/DroidSansMono.ttf",
+            mono,
+        )
+    if not os.path.exists(italic):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf",
+            italic,
+        )
+    if not os.path.exists(fallback):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf",
+            fallback,
+        )
+    if not os.path.exists(special):
+        urllib.request.urlretrieve(
+            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
+            special,
+        )
+    return regular,medium,mono,italic,fallback,special
+    
 
 async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics
-    if not os.path.isdir("./temp/"):
-        os.mkdir("./temp/", 0o755)
-    urllib.request.urlretrieve(
-        "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf",
-        "./temp/Roboto-Regular.ttf",
-    )
-    urllib.request.urlretrieve(
-        "https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf",
-        "./temp/Quivira.otf",
-    )
-    urllib.request.urlretrieve(
-        "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf",
-        "./temp/Roboto-Medium.ttf",
-    )
-    urllib.request.urlretrieve(
-        "https://github.com/erenmetesar/modules-repo/raw/master/DroidSansMono.ttf",
-        "./temp/DroidSansMono.ttf",
-    )
-    urllib.request.urlretrieve(
-        "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf",
-        "./temp/Roboto-Italic.ttf",
-    )
-
+    regular,medium,mono,italic,fallback,special =file_check()
     # Importıng fonts and gettings the size of text
-    font = ImageFont.truetype("./temp/Roboto-Medium.ttf", 43, encoding="utf-16")
-    font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 33, encoding="utf-16")
-    mono = ImageFont.truetype("./temp/DroidSansMono.ttf", 30, encoding="utf-16")
-    italic = ImageFont.truetype("./temp/Roboto-Italic.ttf", 33, encoding="utf-16")
-    fallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
+    font = ImageFont.truetype(medium, 43, encoding="utf-16")
+    font2 = ImageFont.truetype(regular, 33, encoding="utf-16")
+    mono = ImageFont.truetype(mono, 30, encoding="utf-16")
+    italic = ImageFont.truetype(italic, 33, encoding="utf-16")
+    fallback = ImageFont.truetype(fallback, 43, encoding="utf-16")
 
     # Splitting text
     maxlength = 0
@@ -250,7 +271,7 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
 
     # Writing User's Name
     space = pfpbg.width + 30
-    namefallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
+    namefallback = ImageFont.truetype(special, 43, encoding="utf-16")
     for letter in tot:
         if letter in emoji.UNICODE_EMOJI["en"]:
             newemoji, mask = await emoji_fetch(letter)
@@ -274,9 +295,9 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     bold, mono, italic, link = await get_entity(reply)
     index = 0
     emojicount = 0
-    textfallback = ImageFont.truetype("./temp/Quivira.otf", 33, encoding="utf-16")
-    textcolor = "white"
+    textfallback = ImageFont.truetype(special, 38, encoding="utf-16")
     for line in text:
+        textcolor = "white"
         for letter in line:
             index = (
                 msg.find(letter) if emojicount == 0 else msg.find(letter) + emojicount
@@ -284,27 +305,27 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
             for offset, length in bold.items():
                 if index in range(offset, length):
                     font2 = ImageFont.truetype(
-                        "./temp/Roboto-Medium.ttf", 33, encoding="utf-16"
+                        medium, 38, encoding="utf-16"
                     )
                     textcolor = "white"
             for offset, length in italic.items():
                 if index in range(offset, length):
                     font2 = ImageFont.truetype(
-                        "./temp/Roboto-Italic.ttf", 33, encoding="utf-16"
+                        italic, 38, encoding="utf-16"
                     )
                     textcolor = "white"
             for offset, length in mono.items():
                 if index in range(offset, length):
                     font2 = ImageFont.truetype(
-                        "./temp/DroidSansMono.ttf", 30, encoding="utf-16"
+                        mono, 35, encoding="utf-16"
                     )
-                    textcolor = "white"
+                    textcolor = "teal"
             for offset, length in link.items():
                 if index in range(offset, length):
                     font2 = ImageFont.truetype(
-                        "./temp/Roboto-Regular.ttf", 30, encoding="utf-16"
+                        regular, 35, encoding="utf-16"
                     )
-                    textcolor = "#898989"
+                    textcolor = "#59a7f6"
             if letter in emoji.UNICODE_EMOJI["en"]:
                 newemoji, mask = await emoji_fetch(letter)
                 canvas.paste(newemoji, (x, y - 2), mask)
@@ -327,16 +348,17 @@ async def drawer(width, height):
     # Top part
     top = Image.new("RGBA", (width, 20), (0, 0, 0, 0))
     draw = ImageDraw.Draw(top)
-    draw.line((10, 0, top.width - 20, 0), fill=(29, 29, 29, 255), width=50)
-    draw.pieslice((0, 0, 30, 50), 180, 270, fill=(29, 29, 29, 255))
-    draw.pieslice((top.width - 75, 0, top.width, 50), 270, 360, fill=(29, 29, 29, 255))
+    draw.line((10, 0, top.width - 20, 0), fill=(27, 20, 41, 255), width=50)
+    draw.pieslice((0, 0, 30, 50), 180, 270, fill=(27, 20, 41, 255))
+    draw.pieslice((top.width - 75, 0, top.width, 50), 270, 360, fill=(27, 20, 41, 255))
 
     # Middle part
-    middle = Image.new("RGBA", (top.width, height + 75), (29, 29, 29, 255))
+    middle = Image.new("RGBA", (top.width, height + 75), (27, 20, 41, 255))
 
     # Bottom part
-    bottom = ImageOps.flip(top)
-
+    fliptop = ImageOps.flip(top)
+    bottom = Image.new("RGBA", (top.width,145), 255)
+    bottom.paste(fliptop)
     return top, middle, bottom
 
 
