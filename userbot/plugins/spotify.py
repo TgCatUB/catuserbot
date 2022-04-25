@@ -23,23 +23,23 @@ import urllib.request
 import lyricsgenius
 import requests
 import ujson
-from validators.url import url
 from PIL import Image, ImageEnhance, ImageFilter
 from telegraph import Telegraph
 from telethon import events
 from telethon.errors import AboutTooLongError, FloodWaitError
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
+from validators.url import url
 
 from userbot.core.logger import logging
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions.functions import (
+    delete_conv,
     ellipse_create,
     ellipse_layout_create,
     make_inline,
     text_draw,
-    delete_conv,
 )
 from ..sql_helper import global_collectionjson as glob_db
 from . import BOTLOG, BOTLOG_CHATID, Config, catub, reply_id
@@ -620,8 +620,8 @@ def sp_data(API):
         )
         spdata = requests.get(API, headers=oauth)
     return spdata
-    
-    
+
+
 async def make_thumb(url, client, song, artist, now, full):
     pic_name = "./temp/cat.png"
     urllib.request.urlretrieve(url, pic_name)
@@ -658,8 +658,8 @@ async def make_thumb(url, client, song, artist, now, full):
     thumbmask.save(pic_name)
     os.remove(myphoto)
     return pic_name
-    
-    
+
+
 @catub.cat_cmd(
     pattern="spnow$",
     command=("spnow", plugin_category),
@@ -815,7 +815,9 @@ async def spotify_now(event):
                 link = received["item"]["external_urls"]["spotify"]
                 cap = f"<b>Spotify :- <a href = {link}>{title}</a></b>"
         except KeyError:
-            return await edit_delete(catevent, "\n**Strange!! Try after restaring Spotify once ;)**")
+            return await edit_delete(
+                catevent, "\n**Strange!! Try after restaring Spotify once ;)**"
+            )
     async with event.client.conversation(chat) as conv:
         try:
             purgeflag = await conv.send_message("/start")

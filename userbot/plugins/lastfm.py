@@ -18,7 +18,6 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.logger import logging
-from ..helpers.utils import reply_id
 from ..sql_helper.globals import gvarstatus
 from . import BOTLOG, BOTLOG_CHATID, edit_or_reply
 
@@ -262,4 +261,3 @@ async def lastlog(lstlog):
         await edit_or_reply(lstlog, LFM_LOG_DISABLED)
     else:
         await edit_or_reply(lstlog, LFM_LOG_ERR)
-
