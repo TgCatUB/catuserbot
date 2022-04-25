@@ -24,7 +24,7 @@ from telethon.tl import types
 
 from .utils import _catutils
 
-#//Random colors for name
+# //Random colors for name
 COLORS = [
     "#F07975",
     "#F49F69",
@@ -40,13 +40,14 @@ COLORS = [
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+
 def file_check():
     regular = "./temp/Roboto-Regular.ttf"
     medium = "./temp/Roboto-Medium.ttf"
     mono = "./temp/DroidSansMono.ttf"
     italic = "./temp/Roboto-Italic.ttf"
     fallback = "./temp/Quivira.otf"
-    special ="./temp/ArialUnicodeMS.ttf"
+    special = "./temp/ArialUnicodeMS.ttf"
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     if not os.path.exists(regular):
@@ -79,11 +80,11 @@ def file_check():
             "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
             special,
         )
-    return regular,medium,mono,italic,fallback,special
-    
+    return regular, medium, mono, italic, fallback, special
+
 
 async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics
-    regular,medium,mono,italic,fallback,special =file_check()
+    regular, medium, mono, italic, fallback, special = file_check()
     # Importıng fonts and gettings the size of text
     font = ImageFont.truetype(medium, 43, encoding="utf-16")
     font2 = ImageFont.truetype(regular, 33, encoding="utf-16")
@@ -304,27 +305,19 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
             )
             for offset, length in bold.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype(
-                        medium, 38, encoding="utf-16"
-                    )
+                    font2 = ImageFont.truetype(medium, 38, encoding="utf-16")
                     textcolor = "white"
             for offset, length in italic.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype(
-                        italic, 38, encoding="utf-16"
-                    )
+                    font2 = ImageFont.truetype(italic, 38, encoding="utf-16")
                     textcolor = "white"
             for offset, length in mono.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype(
-                        mono, 35, encoding="utf-16"
-                    )
+                    font2 = ImageFont.truetype(mono, 35, encoding="utf-16")
                     textcolor = "teal"
             for offset, length in link.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype(
-                        regular, 35, encoding="utf-16"
-                    )
+                    font2 = ImageFont.truetype(regular, 35, encoding="utf-16")
                     textcolor = "#59a7f6"
             if letter in emoji.UNICODE_EMOJI["en"]:
                 newemoji, mask = await emoji_fetch(letter)
@@ -357,7 +350,7 @@ async def drawer(width, height):
 
     # Bottom part
     fliptop = ImageOps.flip(top)
-    bottom = Image.new("RGBA", (top.width,145), 255)
+    bottom = Image.new("RGBA", (top.width, 145), 255)
     bottom.paste(fliptop)
     return top, middle, bottom
 
