@@ -2,9 +2,8 @@ import os
 from pathlib import Path
 
 from ..Config import Config
-from ..core import CMD_INFO, PLG_INFO,LOADED_CMDS
+from ..core import CMD_INFO, LOADED_CMDS, PLG_INFO
 from ..utils import load_module, remove_plugin
-
 from . import CMD_HELP, CMD_LIST, SUDO_LIST, catub, edit_delete, edit_or_reply, reply_id
 
 plugin_category = "tools"
