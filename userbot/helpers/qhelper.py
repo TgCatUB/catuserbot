@@ -88,9 +88,9 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     # Importıng fonts and gettings the size of text
     font = ImageFont.truetype("./temp/Roboto-Medium.ttf", 43, encoding="utf-16")
     font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 33, encoding="utf-16")
-    mono = ImageFont.truetype(mono, 30, encoding="utf-16")
-    italic = ImageFont.truetype(italic, 33, encoding="utf-16")
-    fallback = ImageFont.truetype(fallback, 43, encoding="utf-16")
+    mono = ImageFont.truetype("./temp/DroidSansMono.ttf", 30, encoding="utf-16")
+    italic = ImageFont.truetype("./temp/Roboto-Italic.ttf", 33, encoding="utf-16")
+    fallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
 
     # Splitting text
     maxlength = 0
@@ -269,7 +269,12 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
         canvas.paste(middle, (pfpbg.width, top.height))
         canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
         y = 85
-
+    with TTFont(special) as font:
+        characters = {chr(y[0]) for x in font["cmap"].tables for y in x.cmap.items()}
+    if tot[0] in characters:
+       special = special
+    else:
+       special="./temp/Quivira.otf"
     # Writing User's Name
     space = pfpbg.width + 30
     namefallback = ImageFont.truetype(special, 43, encoding="utf-16")
