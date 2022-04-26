@@ -91,6 +91,9 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     mono = ImageFont.truetype("./temp/DroidSansMono.ttf", 30, encoding="utf-16")
     italic = ImageFont.truetype("./temp/Roboto-Italic.ttf", 33, encoding="utf-16")
     fallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
+    sepcialn =ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 43, encoding="utf-16")
+    sepcialt =ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 33, encoding="utf-16")
+    
 
     # Splitting text
     maxlength = 0
@@ -269,15 +272,9 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
         canvas.paste(middle, (pfpbg.width, top.height))
         canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
         y = 85
-    with TTFont(special) as font:
-        characters = {chr(y[0]) for x in font["cmap"].tables for y in x.cmap.items()}
-    if tot[0] in characters:
-        special = special
-    else:
-        special = "./temp/Quivira.otf"
     # Writing User's Name
     space = pfpbg.width + 30
-    namefallback = ImageFont.truetype(special, 43, encoding="utf-16")
+    namefallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
     for letter in tot:
         if letter in emoji.UNICODE_EMOJI["en"]:
             newemoji, mask = await emoji_fetch(letter)
@@ -288,8 +285,8 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
                 draw.text((space, 20), letter, font=namefallback, fill=color)
                 space += namefallback.getsize(letter)[0]
             else:
-                draw.text((space, 20), letter, font=font, fill=color)
-                space += font.getsize(letter)[0]
+                draw.text((space, 20), letter, font=sepcialn, fill=color)
+                space += sepcialn.getsize(letter)[0]
 
     if title:
         draw.text(
@@ -301,7 +298,7 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     bold, mono, italic, link = await get_entity(reply)
     index = 0
     emojicount = 0
-    textfallback = ImageFont.truetype(special, 38, encoding="utf-16")
+    textfallback = ImageFont.truetype("./temp/Quivira.otf", 38, encoding="utf-16")
     for line in text:
         textcolor = "white"
         for letter in line:
@@ -334,8 +331,8 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
                     draw.text((x, y), letter, font=textfallback, fill=textcolor)
                     x += textfallback.getsize(letter)[0]
                 else:
-                    draw.text((x, y), letter, font=font2, fill=textcolor)
-                    x += font2.getsize(letter)[0]
+                    draw.text((x, y), letter, font=sepcialt, fill=textcolor)
+                    x += sepcialt.getsize(letter)[0]
             msg = msg.replace(letter, "¶", 1)
         y += 40
         x = pfpbg.width + 30
@@ -361,7 +358,7 @@ async def drawer(width, height):
 
 
 async def fontTest(letter):
-    test = TTFont("./temp/Roboto-Medium.ttf")
+    test = TTFont("./temp/ArialUnicodeMS.ttf")
     for table in test["cmap"].tables:
         if ord(letter) in table.cmap.keys():
             return True
