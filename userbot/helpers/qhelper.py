@@ -272,9 +272,9 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     with TTFont(special) as font:
         characters = {chr(y[0]) for x in font["cmap"].tables for y in x.cmap.items()}
     if tot[0] in characters:
-       special = special
+        special = special
     else:
-       special="./temp/Quivira.otf"
+        special = "./temp/Quivira.otf"
     # Writing User's Name
     space = pfpbg.width + 30
     namefallback = ImageFont.truetype(special, 43, encoding="utf-16")
