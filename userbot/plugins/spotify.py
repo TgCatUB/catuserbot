@@ -537,6 +537,7 @@ def telegraph_lyrics(tittle, artist):
     telegraph = Telegraph()
     telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
     GENIUS = Config.GENIUS_API_TOKEN
+    symbol = "❌"
     if GENIUS is None:
         result = "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command.<br><br><b>Check out this <a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></b>"
     else:
@@ -546,8 +547,10 @@ def telegraph_lyrics(tittle, artist):
             content = songs.lyrics
             content = content.replace("\n", "<br>")
             result = f"<h3>{tittle}</h3><br><b>by {artist}</b><br><br>{content}"
+            symbol = "📜"
         except (TypeError, AttributeError):
             result = "<b>Lyrics Not found!</b>"
+            symbol = "❌"
     try:
         response = telegraph.create_page(
             "Lyrics",
@@ -556,13 +559,14 @@ def telegraph_lyrics(tittle, artist):
             author_url="https://t.me/catuserbot17",
         )
     except Exception as e:
+        symbol = "❌"
         response = telegraph.create_page(
             "Lyrics",
             html_content=str(e),
             author_name="CatUserbot",
             author_url="https://t.me/catuserbot17",
         )
-    return response["url"]
+    return response["url"], symbol
 
 
 def file_check():
@@ -705,9 +709,9 @@ async def spotify_now(event):
                 dic["progress"],
                 dic["duration"],
             )
-            lyrics = telegraph_lyrics(tittle, dic["interpret"])
+            lyrics,symbol = telegraph_lyrics(tittle, dic["interpret"])
             await catevent.delete()
-        button_format = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}>[📜 Lyrics]<buttonurl:{lyrics}:same>'
+        button_format = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}>[{symbol} Lyrics]<buttonurl:{lyrics}:same>'
         await make_inline(button_format, event.client, event.chat_id, msg_id)
         os.remove(thumb)
     except KeyError:
