@@ -81,6 +81,7 @@ def file_check():
             special,
         )
 
+
 async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics
     file_check()
     # Importıng fonts and gettings the size of text
@@ -89,9 +90,8 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     mono = ImageFont.truetype("./temp/DroidSansMono.ttf", 30, encoding="utf-16")
     italic = ImageFont.truetype("./temp/Roboto-Italic.ttf", 33, encoding="utf-16")
     fallback = ImageFont.truetype("./temp/Quivira.otf", 41, encoding="utf-16")
-    sepcialn =ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 41, encoding="utf-16")
-    sepcialt =ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 35, encoding="utf-16")
-    
+    sepcialn = ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 41, encoding="utf-16")
+    sepcialt = ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 35, encoding="utf-16")
 
     # Splitting text
     maxlength = 0
@@ -305,19 +305,27 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
             )
             for offset, length in bold.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype("./temp/Roboto-Medium.ttf", 38, encoding="utf-16")
+                    font2 = ImageFont.truetype(
+                        "./temp/Roboto-Medium.ttf", 38, encoding="utf-16"
+                    )
                     textcolor = "white"
             for offset, length in italic.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype("./temp/Roboto-Italic.ttf", 38, encoding="utf-16")
+                    font2 = ImageFont.truetype(
+                        "./temp/Roboto-Italic.ttf", 38, encoding="utf-16"
+                    )
                     textcolor = "white"
             for offset, length in mono.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype("./temp/DroidSansMono.ttf", 35, encoding="utf-16")
+                    font2 = ImageFont.truetype(
+                        "./temp/DroidSansMono.ttf", 35, encoding="utf-16"
+                    )
                     textcolor = "teal"
             for offset, length in link.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 35, encoding="utf-16")
+                    font2 = ImageFont.truetype(
+                        "./temp/Roboto-Regular.ttf", 35, encoding="utf-16"
+                    )
                     textcolor = "#59a7f6"
             if letter in emoji.UNICODE_EMOJI["en"]:
                 newemoji, mask = await emoji_fetch(letter)
