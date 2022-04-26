@@ -78,7 +78,7 @@ OFFSET = 1
 LIMIT = 70 - OFFSET
 # [----------------------------------------------------------------------]
 # Errors
-no_sp_vars = "Vars `SPOTIFY_CLIENT_ID` & `SPOTIFY_CLIENT_SECRET` are missing, add them first !\nGet them from here : https://developer.spotify.com/dashboard/login "
+no_sp_vars = "Vars `SPOTIFY_CLIENT_ID` & `SPOTIFY_CLIENT_SECRET` are missing, add them first !\n\n[Follow this tutorial](https://telegra.ph/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2)"
 
 
 class Database:
@@ -497,7 +497,7 @@ async def sp_var_check(event):
         return False
     if (SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET) and SP_DATABASE is None:
         await event.edit(
-            "ERROR :: No Database was found!\n**Do `.help spsetup` for more info.**"
+            "ERROR :: No Database was found!\n**Do `.help spsetup` for more info.**\n\n[Follow this tutorial](https://telegra.ph/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2)"
         )
         return False
     return True
@@ -539,7 +539,7 @@ def telegraph_lyrics(tittle, artist):
     GENIUS = Config.GENIUS_API_TOKEN
     if GENIUS is None:
         result = (
-            "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command"
+            "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command.<br><br><b>Check out this <a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></b>"
         )
     else:
         genius = lyricsgenius.Genius(GENIUS)
