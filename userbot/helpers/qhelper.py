@@ -91,9 +91,8 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     mono = ImageFont.truetype("./temp/DroidSansMono.ttf", 30, encoding="utf-16")
     italic = ImageFont.truetype("./temp/Roboto-Italic.ttf", 33, encoding="utf-16")
     fallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
-    sepcialn =ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 43, encoding="utf-16")
-    sepcialt =ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 33, encoding="utf-16")
-    
+    sepcialn = ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 43, encoding="utf-16")
+    sepcialt = ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 33, encoding="utf-16")
 
     # Splitting text
     maxlength = 0
