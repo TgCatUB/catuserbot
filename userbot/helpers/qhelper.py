@@ -447,7 +447,7 @@ async def transparent(emoji):
 
 
 async def replied_user(draw, tot, text, maxlength, title):
-    namefont = ImageFont.truetype("./temp/Roboto-Medium.ttf", 38)
+    namefont = ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 38)
     namefallback = ImageFont.truetype("./temp/Quivira.otf", 38)
     textfont = ImageFont.truetype("./temp/Roboto-Regular.ttf", 32)
     textfallback = ImageFont.truetype("./temp/Roboto-Medium.ttf", 38)
