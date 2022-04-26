@@ -48,8 +48,8 @@ def file_check():
     italic = "./temp/Roboto-Italic.ttf"
     fallback = "./temp/Quivira.otf"
     special = "./temp/ArialUnicodeMS.ttf"
-    if not os.path.isdir("./temp"):
-        os.mkdir("./temp")
+    if not os.path.isdir("./temp/"):
+        os.mkdir("./temp/", 0o755)
     if not os.path.exists(regular):
         urllib.request.urlretrieve(
             "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf",
@@ -86,8 +86,8 @@ def file_check():
 async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics
     regular, medium, mono, italic, fallback, special = file_check()
     # Importıng fonts and gettings the size of text
-    font = ImageFont.truetype(medium, 43, encoding="utf-16")
-    font2 = ImageFont.truetype(regular, 33, encoding="utf-16")
+    font = ImageFont.truetype("./temp/Roboto-Medium.ttf", 43, encoding="utf-16")
+    font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 33, encoding="utf-16")
     mono = ImageFont.truetype(mono, 30, encoding="utf-16")
     italic = ImageFont.truetype(italic, 33, encoding="utf-16")
     fallback = ImageFont.truetype(fallback, 43, encoding="utf-16")
