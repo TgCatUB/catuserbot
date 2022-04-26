@@ -80,19 +80,18 @@ def file_check():
             "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
             special,
         )
-    return regular, medium, mono, italic, fallback, special
-
 
 async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics
-    regular, medium, mono, italic, fallback, special = file_check()
+    file_check()
     # Importıng fonts and gettings the size of text
-    font = ImageFont.truetype("./temp/Roboto-Medium.ttf", 43, encoding="utf-16")
+    font = ImageFont.truetype("./temp/Roboto-Medium.ttf", 41, encoding="utf-16")
     font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 33, encoding="utf-16")
     mono = ImageFont.truetype("./temp/DroidSansMono.ttf", 30, encoding="utf-16")
     italic = ImageFont.truetype("./temp/Roboto-Italic.ttf", 33, encoding="utf-16")
-    fallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
-    sepcialn = ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 43, encoding="utf-16")
-    sepcialt = ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 33, encoding="utf-16")
+    fallback = ImageFont.truetype("./temp/Quivira.otf", 41, encoding="utf-16")
+    sepcialn =ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 41, encoding="utf-16")
+    sepcialt =ImageFont.truetype("./temp/ArialUnicodeMS.ttf", 35, encoding="utf-16")
+    
 
     # Splitting text
     maxlength = 0
@@ -306,19 +305,19 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
             )
             for offset, length in bold.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype(medium, 38, encoding="utf-16")
+                    font2 = ImageFont.truetype("./temp/Roboto-Medium.ttf", 38, encoding="utf-16")
                     textcolor = "white"
             for offset, length in italic.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype(italic, 38, encoding="utf-16")
+                    font2 = ImageFont.truetype("./temp/Roboto-Italic.ttf", 38, encoding="utf-16")
                     textcolor = "white"
             for offset, length in mono.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype(mono, 35, encoding="utf-16")
+                    font2 = ImageFont.truetype("./temp/DroidSansMono.ttf", 35, encoding="utf-16")
                     textcolor = "teal"
             for offset, length in link.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype(regular, 35, encoding="utf-16")
+                    font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 35, encoding="utf-16")
                     textcolor = "#59a7f6"
             if letter in emoji.UNICODE_EMOJI["en"]:
                 newemoji, mask = await emoji_fetch(letter)
