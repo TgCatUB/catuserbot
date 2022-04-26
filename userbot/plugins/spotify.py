@@ -538,9 +538,7 @@ def telegraph_lyrics(tittle, artist):
     telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
     GENIUS = Config.GENIUS_API_TOKEN
     if GENIUS is None:
-        result = (
-            "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command.<br><br><b>Check out this <a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></b>"
-        )
+        result = "Set <b>GENIUS_API_TOKEN</b> in heroku vars for functioning of this command.<br><br><b>Check out this <a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></b>"
     else:
         genius = lyricsgenius.Genius(GENIUS)
         try:
