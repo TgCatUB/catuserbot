@@ -709,7 +709,7 @@ async def spotify_now(event):
                 dic["progress"],
                 dic["duration"],
             )
-            lyrics,symbol = telegraph_lyrics(tittle, dic["interpret"])
+            lyrics, symbol = telegraph_lyrics(tittle, dic["interpret"])
             await catevent.delete()
         button_format = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}>[{symbol} Lyrics]<buttonurl:{lyrics}:same>'
         await make_inline(button_format, event.client, event.chat_id, msg_id)
