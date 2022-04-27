@@ -509,11 +509,11 @@ async def penguin(event):
         "https://telegra.ph/file/ee1fc91bbaef2cc808c7c.png"
     )
     text = soft_deEmojify(text)
-    font, wrap = (90, 4) if len(text) < 50 else (70, 4.5)
-    bg, fg, alpha, ls = (
-        ("black", "white", 255, "-20") if cmd == "h" else ("white", "black", 0, "-40")
+    font, wrap, lines = (90, 4,5) if len(text) < 50 else (70, 4.5,7)
+    bg, fg, alpha, ls, lines = (
+        ("black", "white", 255, "-30",lines-2) if cmd == "h" else ("white", "black", 0, "-60",lines)
     )
-    file = higlighted_text(
+    file, _ = higlighted_text(
         temp_name,
         text,
         text_wrap=wrap,
@@ -525,6 +525,11 @@ async def penguin(event):
         background=bg,
         foreground=fg,
         transparency=alpha,
+        lines=lines,
+        album=True,
+        album_limit=1,
+        stroke_width=1,
+        stroke_fill=fg
     )
     cat = convert_tosticker(file[0])
     await event.client.send_file(
@@ -570,11 +575,11 @@ async def gandhi(event):
         "https://telegra.ph/file/3bebc56ee82cce4f300ce.jpg"
     )
     text = soft_deEmojify(text)
-    font, wrap = (90, 3) if len(text) < 60 else (70, 2.8)
-    bg, fg, alpha, ls = (
-        ("white", "black", 255, "-20") if cmd == "h" else ("black", "white", 0, "-40")
+    font, wrap, lines = (90, 3,5) if len(text) < 75 else (70, 2.8,7)
+    bg, fg, alpha, ls, lines = (
+        ("white", "black", 255, "-30", lines-1) if cmd == "h" else ("black", "white", 0, "-60",lines)
     )
-    file = higlighted_text(
+    file,_ = higlighted_text(
         temp_name,
         text,
         text_wrap=wrap,
@@ -586,6 +591,11 @@ async def gandhi(event):
         background=bg,
         foreground=fg,
         transparency=alpha,
+        lines=lines,
+        album=True,
+        album_limit=1,
+        stroke_width=1,
+        stroke_fill=fg
     )
     cat = convert_tosticker(file[0])
     await event.client.send_file(
