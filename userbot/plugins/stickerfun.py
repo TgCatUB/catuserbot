@@ -281,7 +281,7 @@ async def quby(event):
     temp_name, fontname = file_checker(
         "https://telegra.ph/file/09f4df5a129758a2e1c9c.jpg"
     )
-    lines=3
+    lines = 3
     if len(text) < 80:
         font = 60
         wrap = 1.3
@@ -290,7 +290,7 @@ async def quby(event):
         font = 50
         wrap = 1
         position = (-70, 0)
-    file,txt = higlighted_text(
+    file, txt = higlighted_text(
         temp_name,
         text,
         text_wrap=wrap,
@@ -299,14 +299,14 @@ async def quby(event):
         linespace="+2",
         position=position,
         lines=lines,
-        album =True,
+        album=True,
         album_limit=1,
         stroke_width=1,
     )
-    if len(txt)>=lines:
-        for x in range(0,lines):
-            text= text.replace(txt[x],"")
-        file,_ = higlighted_text(
+    if len(txt) >= lines:
+        for x in range(0, lines):
+            text = text.replace(txt[x], "")
+        file, _ = higlighted_text(
             file[0],
             text,
             text_wrap=wrap,
@@ -314,9 +314,9 @@ async def quby(event):
             font_size=font,
             linespace="+2",
             position=position,
-            direction = "upwards",
+            direction="upwards",
             lines=1,
-            album =True,
+            album=True,
             album_limit=1,
             stroke_width=1,
         )

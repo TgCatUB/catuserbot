@@ -354,14 +354,28 @@ def higlighted_text(
                     "RGBA", (x, y), (color[0], color[1], color[2], 0)
                 )  # background
                 mask_draw = ImageDraw.Draw(mask_img)
-                mask_draw.text((25, 8), list_text[i], foreground, font=font, stroke_width=stroke_width, stroke_fill=stroke_fill)
+                mask_draw.text(
+                    (25, 8),
+                    list_text[i],
+                    foreground,
+                    font=font,
+                    stroke_width=stroke_width,
+                    stroke_fill=stroke_fill,
+                )
             else:
                 mask_img = Image.new(
                     "RGBA", (x, y), (color[0], color[1], color[2], transparency)
                 )  # background
                 # put text on mask
                 mask_draw = ImageDraw.Draw(mask_img)
-                mask_draw.text((25, 8), list_text[i], foreground, font=font, stroke_width=stroke_width, stroke_fill=stroke_fill)
+                mask_draw.text(
+                    (25, 8),
+                    list_text[i],
+                    foreground,
+                    font=font,
+                    stroke_width=stroke_width,
+                    stroke_fill=stroke_fill,
+                )
                 # https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi
                 circle = Image.new("L", (rad * 2, rad * 2), 0)
                 draw = ImageDraw.Draw(circle)
@@ -390,9 +404,9 @@ def higlighted_text(
         output_img = f"./temp/cat{pic_no}.jpg"
         output.append(output_img)
         source_img.save(output_img, "png")
-        if album_limit and (album_limit-1)==pic_no:
+        if album_limit and (album_limit - 1) == pic_no:
             break
-    return output,output_text
+    return output, output_text
 
 
 # ----------------------------------------------------------------------------------------------------------------------#
