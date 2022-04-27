@@ -335,7 +335,7 @@ async def quby(event):
 
 
 @catub.cat_cmd(
-    pattern="(|b)blob(?:\s|$)([\s\S]*)",
+    pattern="(|b)(blob|kirby)(?:\s|$)([\s\S]*)",
     command=("blob", plugin_category),
     info={
         "header": "Give the sticker on background.",
@@ -343,8 +343,8 @@ async def quby(event):
             "b": "To create knife sticker transparent.",
         },
         "usage": [
-            "{tr}blob <text/reply to msg>",
-            "{tr}bblob <text/reply to msg>",
+            "{tr}blob/kirby <text/reply to msg>",
+            "{tr}bblob/bkirby <text/reply to msg>",
         ],
         "examples": [
             "{tr}blob Gib money",
@@ -354,8 +354,8 @@ async def quby(event):
 )
 async def knife(event):
     "Make a blob knife text sticker"
-    cmd = event.pattern_match.group(1).lower
-    text = event.pattern_match.group(2)
+    cmd = event.pattern_match.group(1).lower()
+    text = event.pattern_match.group(3)
     reply_to_id = await reply_id(event)
     if not text and event.is_reply:
         text = (await event.get_reply_message()).message
@@ -367,6 +367,7 @@ async def knife(event):
     temp_name, fontname = file_checker(
         "https://telegra.ph/file/2188367c8c5f43c36aa59.jpg"
     )
+    text = soft_deEmojify(text)
     if len(text) < 50:
         font = 90
         wrap = 2
@@ -375,8 +376,7 @@ async def knife(event):
         font = 60
         wrap = 1.4
         position = (150, 500)
-    text = soft_deEmojify(text)
-    file = higlighted_text(
+    file, _ = higlighted_text(
         temp_name,
         text,
         text_wrap=wrap,
@@ -388,9 +388,7 @@ async def knife(event):
     )
     if cmd == "b":
         cat = convert_tosticker(file[0])
-        await event.client.send_file(
-            event.chat_id, cat, reply_to=reply_to_id, force_document=False
-        )
+        await event.client.send_file(event.chat_id, cat, reply_to=reply_to_id, force_document=False)
     else:
         await clippy(event.client, file[0], event.chat_id, reply_to_id)
     await event.delete()
@@ -400,21 +398,15 @@ async def knife(event):
 
 
 @catub.cat_cmd(
-    pattern="(|h)doge(?:\s|$)([\s\S]*)",
+    pattern="doge(?:\s|$)([\s\S]*)",
     command=("doge", plugin_category),
     info={
         "header": "Make doge say anything.",
         "flags": {
             "h": "To create doge sticker with highligted text.",
         },
-        "usage": [
-            "{tr}doge <text/reply to msg>",
-            "{tr}hdoge <text/reply to msg>",
-        ],
-        "examples": [
-            "{tr}doge Gib money",
-            "{tr}hdoge Gib money",
-        ],
+        "usage": "{tr}doge <text/reply to msg>",
+        "examples": "{tr}doge Gib money",
     },
 )
 async def doge(event):
@@ -429,31 +421,53 @@ async def doge(event):
             event, "__What is doge supposed to say? Give some text.__"
         )
     await edit_delete(event, "`Wait, processing.....`")
+    text = soft_deEmojify(reply.message)
     temp_name, fontname = file_checker(
         "https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg"
     )
-    text = soft_deEmojify(text)
-    font, wrap = (90, 2) if len(text) < 90 else (70, 2.5)
-    bg, fg, alpha, ls = (
-        ("black", "white", 255, "5") if cmd == "h" else ("white", "black", 0, "-40")
-    )
-    file = higlighted_text(
+    font, wrap, lines,ls = (90, 1.8, 5, "-75") if len(text) < 140 else (70, 1.3,6, "-55")
+    file,txt = higlighted_text(
         temp_name,
         text,
         text_wrap=wrap,
         font_name=fontname,
         font_size=font,
         linespace=ls,
-        position=(0, 10),
+        position=(-20, 0),
         align="left",
-        background=bg,
-        foreground=fg,
-        transparency=alpha,
+        background="white",
+        foreground="black",
+        transparency=0,
+        lines=lines,
+        album =True,
+        album_limit=1,
+        stroke_width=1,
+        stroke_fill="black"
     )
-    cat = convert_tosticker(file[0])
-    await event.client.send_file(
-        event.chat_id, cat, reply_to=reply_to_id, force_document=False
-    )
+    if len(txt)>=lines:
+        for x in range(0,lines):
+            text= text.replace(txt[x],"")
+        position=(-20, 20) if font == 90 else (-20, 40)
+        file, _ = higlighted_text(
+            file[0],
+            text,
+            text_wrap=wrap+2,
+            font_name=fontname,
+            font_size=font,
+            linespace=ls,
+            position=position,
+            direction = "upwards",
+            align="left",
+            background="white",
+            foreground="black",
+            transparency=0,
+            lines=lines,
+            album =True,
+            album_limit=1,
+            stroke_width=1,
+            stroke_fill="black"
+        )
+    await event.client.send_file(event.chat_id, file[0], reply_to=reply_to_id, force_document=False)
     await event.delete()
     for files in (temp_name, file[0]):
         if files and os.path.exists(files):
