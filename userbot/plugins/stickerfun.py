@@ -424,7 +424,7 @@ async def doge(event):
         "https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg"
     )
     font, wrap, lines, ls = (
-        (90, 1.8, 5, "-75") if len(text) < 140 else (70, 1.3, 6, "-55")
+        (90, 1.9, 5, "-75") if len(text) < 140 else (70, 1.3, 6, "-55")
     )
     file, txt = higlighted_text(
         temp_name,
