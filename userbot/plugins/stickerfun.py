@@ -20,7 +20,8 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import (
     clippy,
     convert_tosticker,
-    deEmojify,
+    soft_deEmojify,
+    soft_deEmojify,
     hide_inlinebot,
     higlighted_text,
     waifutxt,
@@ -46,7 +47,20 @@ async def get_font_file(client, channel_id, search_kw=""):
     # download and return the file path
     return await client.download_media(font_file_message)
 
-
+def file_checker(template):
+    if not os.path.isdir("./temp"):
+        os.mkdir("./temp")
+    tempname = "./temp/cat_temp.png"
+    fontname = "./temp/ArialUnicodeMS.ttf"
+    templait = urllib.request.urlretrieve(template,temp_name)
+    if not os.path.exists(fontname):
+        urllib.request.urlretrieve(
+            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
+            fontname,
+        )
+    return tempname, fontname
+    
+    
 @catub.cat_cmd(
     pattern="(?:st|sttxt)(?:\s|$)([\s\S]*)",
     command=("sttxt", plugin_category),
@@ -162,7 +176,7 @@ async def honk(event):
             return await edit_delete(
                 event, "__What is honk supposed to say? Give some text.__"
             )
-    text = deEmojify(text)
+    text = soft_deEmojify(text)
     await event.delete()
     await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)
 
@@ -188,7 +202,7 @@ async def twt(event):
             return await edit_delete(
                 event, "__What am I supposed to Tweet? Give some text.__"
             )
-    text = deEmojify(text)
+    text = soft_deEmojify(text)
     await event.delete()
     await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)
 
@@ -225,7 +239,7 @@ async def glax(event):
             return await edit_delete(
                 event, "What is glax supposed to scream? Give text.."
             )
-    text = deEmojify(text)
+    text = soft_deEmojify(text)
     await event.delete()
     await hide_inlinebot(
         event.client, bot_name, text, event.chat_id, reply_to_id, c_lick=c_lick
@@ -262,12 +276,7 @@ async def quby(event):
             event, "__What is quby supposed to say? Give some text.__"
         )
     await edit_delete(event, "`Wait, processing.....`")
-    if not os.path.isdir("./temp"):
-        os.mkdir("./temp")
-    temp_name = "./temp/quby_temp.png"
-    templait = urllib.request.urlretrieve(
-        "https://telegra.ph/file/09f4df5a129758a2e1c9c.jpg", temp_name
-    )
+    temp_name,fontname = file_checker("https://telegra.ph/file/09f4df5a129758a2e1c9c.jpg")
     if len(text) < 40:
         font = 80
         wrap = 1.4
@@ -276,11 +285,12 @@ async def quby(event):
         font = 60
         wrap = 1.2
         position = (0, 0)
-    text = deEmojify(text)
+    text = soft_deEmojify(text)
     file = higlighted_text(
         temp_name,
         text,
         text_wrap=wrap,
+        font_name=fontname,
         font_size=font,
         linespace="+4",
         position=position,
@@ -325,15 +335,10 @@ async def knife(event):
         text = (await event.get_reply_message()).message
     if not text:
         return await edit_delete(
-            event, "__What is knife supposed to say? Give some text.__"
+            event, "__What is blob supposed to say? Give some text.__"
         )
     await edit_delete(event, "`Wait, processing.....`")
-    if not os.path.isdir("./temp"):
-        os.mkdir("./temp")
-    temp_name = "./temp/knife_temp.png"
-    templait = urllib.request.urlretrieve(
-        "https://telegra.ph/file/2188367c8c5f43c36aa59.jpg", temp_name
-    )
+    temp_name,fontname = file_checker("https://telegra.ph/file/2188367c8c5f43c36aa59.jpg")
     if len(text) < 50:
         font = 90
         wrap = 2
@@ -342,11 +347,12 @@ async def knife(event):
         font = 60
         wrap = 1.4
         position = (150, 500)
-    text = deEmojify(text)
+    text = soft_deEmojify(text)
     file = higlighted_text(
         temp_name,
         text,
         text_wrap=wrap,
+        font_name=fontname,
         font_size=font,
         linespace="-5",
         position=position,
@@ -395,13 +401,8 @@ async def doge(event):
             event, "__What is doge supposed to say? Give some text.__"
         )
     await edit_delete(event, "`Wait, processing.....`")
-    if not os.path.isdir("./temp"):
-        os.mkdir("./temp")
-    temp_name = "./temp/doge_temp.jpg"
-    templait = urllib.request.urlretrieve(
-        "https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg", temp_name
-    )
-    text = deEmojify(text)
+    temp_name,fontname = file_checker("https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg")
+    text = soft_deEmojify(text)
     font, wrap = (90, 2) if len(text) < 90 else (70, 2.5)
     bg, fg, alpha, ls = (
         ("black", "white", 255, "5") if cmd == "h" else ("white", "black", 0, "-40")
@@ -410,6 +411,7 @@ async def doge(event):
         temp_name,
         text,
         text_wrap=wrap,
+        font_name=fontname,
         font_size=font,
         linespace=ls,
         position=(0, 10),
@@ -458,13 +460,8 @@ async def penguin(event):
             event, "What is penguin supposed to say? Give some text."
         )
     await edit_delete(event, "Wait, processing.....")
-    if not os.path.isdir("./temp"):
-        os.mkdir("./temp")
-    temp_name = "./temp/peguin_temp.jpg"
-    templait = urllib.request.urlretrieve(
-        "https://telegra.ph/file/ee1fc91bbaef2cc808c7c.png", temp_name
-    )
-    text = deEmojify(text)
+    temp_name,fontname = file_checker("https://telegra.ph/file/ee1fc91bbaef2cc808c7c.png")
+    text = soft_deEmojify(text)
     font, wrap = (90, 4) if len(text) < 50 else (70, 4.5)
     bg, fg, alpha, ls = (
         ("black", "white", 255, "-20") if cmd == "h" else ("white", "black", 0, "-40")
@@ -473,6 +470,7 @@ async def penguin(event):
         temp_name,
         text,
         text_wrap=wrap,
+        font_name=fontname,
         font_size=font,
         linespace=ls,
         position=(0, 10),
@@ -521,13 +519,8 @@ async def gandhi(event):
             event, "What is gandhi supposed to write? Give some text."
         )
     await edit_delete(event, "Wait, processing.....")
-    if not os.path.isdir("./temp"):
-        os.mkdir("./temp")
-    temp_name = "./temp/gandhi_temp.jpg"
-    templait = urllib.request.urlretrieve(
-        "https://telegra.ph/file/3bebc56ee82cce4f300ce.jpg", temp_name
-    )
-    text = deEmojify(text)
+    temp_name,fontname = file_checker("https://telegra.ph/file/3bebc56ee82cce4f300ce.jpg")
+    text = soft_deEmojify(text)
     font, wrap = (90, 3) if len(text) < 60 else (70, 2.8)
     bg, fg, alpha, ls = (
         ("white", "black", 255, "-20") if cmd == "h" else ("black", "white", 0, "-40")
@@ -536,6 +529,7 @@ async def gandhi(event):
         temp_name,
         text,
         text_wrap=wrap,
+        font_name=fontname,
         font_size=font,
         linespace=ls,
         position=(470, 10),
