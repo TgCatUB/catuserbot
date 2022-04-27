@@ -20,10 +20,9 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import (
     clippy,
     convert_tosticker,
-    soft_deEmojify,
-    soft_deEmojify,
     hide_inlinebot,
     higlighted_text,
+    soft_deEmojify,
     waifutxt,
 )
 from ..helpers.utils import reply_id
@@ -47,20 +46,21 @@ async def get_font_file(client, channel_id, search_kw=""):
     # download and return the file path
     return await client.download_media(font_file_message)
 
+
 def file_checker(template):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     tempname = "./temp/cat_temp.png"
     fontname = "./temp/ArialUnicodeMS.ttf"
-    templait = urllib.request.urlretrieve(template,temp_name)
+    urllib.request.urlretrieve(template, temp_name)
     if not os.path.exists(fontname):
         urllib.request.urlretrieve(
             "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
             fontname,
         )
     return tempname, fontname
-    
-    
+
+
 @catub.cat_cmd(
     pattern="(?:st|sttxt)(?:\s|$)([\s\S]*)",
     command=("sttxt", plugin_category),
@@ -276,7 +276,9 @@ async def quby(event):
             event, "__What is quby supposed to say? Give some text.__"
         )
     await edit_delete(event, "`Wait, processing.....`")
-    temp_name,fontname = file_checker("https://telegra.ph/file/09f4df5a129758a2e1c9c.jpg")
+    temp_name, fontname = file_checker(
+        "https://telegra.ph/file/09f4df5a129758a2e1c9c.jpg"
+    )
     if len(text) < 40:
         font = 80
         wrap = 1.4
@@ -338,7 +340,9 @@ async def knife(event):
             event, "__What is blob supposed to say? Give some text.__"
         )
     await edit_delete(event, "`Wait, processing.....`")
-    temp_name,fontname = file_checker("https://telegra.ph/file/2188367c8c5f43c36aa59.jpg")
+    temp_name, fontname = file_checker(
+        "https://telegra.ph/file/2188367c8c5f43c36aa59.jpg"
+    )
     if len(text) < 50:
         font = 90
         wrap = 2
@@ -401,7 +405,9 @@ async def doge(event):
             event, "__What is doge supposed to say? Give some text.__"
         )
     await edit_delete(event, "`Wait, processing.....`")
-    temp_name,fontname = file_checker("https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg")
+    temp_name, fontname = file_checker(
+        "https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg"
+    )
     text = soft_deEmojify(text)
     font, wrap = (90, 2) if len(text) < 90 else (70, 2.5)
     bg, fg, alpha, ls = (
@@ -460,7 +466,9 @@ async def penguin(event):
             event, "What is penguin supposed to say? Give some text."
         )
     await edit_delete(event, "Wait, processing.....")
-    temp_name,fontname = file_checker("https://telegra.ph/file/ee1fc91bbaef2cc808c7c.png")
+    temp_name, fontname = file_checker(
+        "https://telegra.ph/file/ee1fc91bbaef2cc808c7c.png"
+    )
     text = soft_deEmojify(text)
     font, wrap = (90, 4) if len(text) < 50 else (70, 4.5)
     bg, fg, alpha, ls = (
@@ -519,7 +527,9 @@ async def gandhi(event):
             event, "What is gandhi supposed to write? Give some text."
         )
     await edit_delete(event, "Wait, processing.....")
-    temp_name,fontname = file_checker("https://telegra.ph/file/3bebc56ee82cce4f300ce.jpg")
+    temp_name, fontname = file_checker(
+        "https://telegra.ph/file/3bebc56ee82cce4f300ce.jpg"
+    )
     text = soft_deEmojify(text)
     font, wrap = (90, 3) if len(text) < 60 else (70, 2.8)
     bg, fg, alpha, ls = (
