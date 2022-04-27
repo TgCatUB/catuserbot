@@ -20,9 +20,9 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import (
     clippy,
     convert_tosticker,
+    deEmojify,
     hide_inlinebot,
     higlighted_text,
-    deEmojify
     soft_deEmojify,
     waifutxt,
 )
