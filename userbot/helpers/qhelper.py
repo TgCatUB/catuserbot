@@ -40,7 +40,6 @@ COLORS = [
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-
 def file_check():
     regular = "./temp/Roboto-Regular.ttf"
     medium = "./temp/Roboto-Medium.ttf"
@@ -147,25 +146,23 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     # Draw Template
     top, middle, bottom = await drawer(width, height)
     # Profile Photo Check and Fetch
-    yes = False
     color = random.choice(COLORS)
-    async for photo in client.iter_profile_photos(user, limit=1):
-        yes = True
-    if yes:
-        pfp = await client.download_profile_photo(user)
-        paste = Image.open(pfp)
-        os.remove(pfp)
-        paste.thumbnail((105, 105))
+    if user.photo:
+        async for photo in client.iter_profile_photos(user, limit=1):
+            pfp = await client.download_profile_photo(user)
+            paste = Image.open(pfp)
+            os.remove(pfp)
+            paste.thumbnail((90, 90))
 
-        # Mask
-        mask_im = Image.new("L", paste.size, 0)
-        draw = ImageDraw.Draw(mask_im)
-        draw.ellipse((0, 0, 105, 105), fill=255)
+            # Mask
+            mask_im = Image.new("L", paste.size, 0)
+            draw = ImageDraw.Draw(mask_im)
+            draw.ellipse((0, 0, 90, 90), fill=255)
 
-        # Apply Mask
-        pfpbg.paste(paste, (0, 0), mask_im)
+            # Apply Mask
+            pfpbg.paste(paste, (0, 0), mask_im)
     else:
-        paste, color = await no_photo(user, tot)
+        paste, color = await no_photo(tot)
         pfpbg.paste(paste, (0, 0))
 
     # Creating a big canvas to gather all the elements
@@ -409,11 +406,11 @@ async def catdoctype(name, size, htype, canvas):
     return canvas
 
 
-async def no_photo(reply, tot):
-    pfp = Image.new("RGBA", (105, 105), (0, 0, 0, 0))
+async def no_photo(tot):
+    pfp = Image.new("RGBA", (90, 90), (0, 0, 0, 0))
     pen = ImageDraw.Draw(pfp)
     color = random.choice(COLORS)
-    pen.ellipse((0, 0, 105, 105), fill=color)
+    pen.ellipse((0, 0, 90, 90), fill=color)
     letter = "" if not tot else tot[0]
     font = ImageFont.truetype("./temp/Roboto-Regular.ttf", 60)
     pen.text((32, 17), letter, font=font, fill="white")
