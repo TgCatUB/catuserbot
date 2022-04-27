@@ -28,10 +28,11 @@ plugin_category = "fun"
 
 
 class Forward_Lock:
-  def __init__(self, name):
-    self.first_name = name
-    self.last_name = None
-    self.photo = None
+    def __init__(self, name):
+        self.first_name = name
+        self.last_name = None
+        self.photo = None
+
 
 def get_warp_length(width):
     return int((20.0 / 1024.0) * (width + 0.0))
@@ -187,10 +188,10 @@ async def stickerchat(catquotes):
     if cmd in ["rq", "q"]:
         try:
             user = (
-                    await catquotes.client.get_entity(reply.forward.sender)
-                    if reply.fwd_from
-                    else reply.sender
-                )
+                await catquotes.client.get_entity(reply.forward.sender)
+                if reply.fwd_from
+                else reply.sender
+            )
         except TypeError:
             user = Forward_Lock(reply.fwd_from.from_name)
     else:
