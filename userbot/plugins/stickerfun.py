@@ -388,7 +388,9 @@ async def knife(event):
     )
     if cmd == "b":
         cat = convert_tosticker(file[0])
-        await event.client.send_file(event.chat_id, cat, reply_to=reply_to_id, force_document=False)
+        await event.client.send_file(
+            event.chat_id, cat, reply_to=reply_to_id, force_document=False
+        )
     else:
         await clippy(event.client, file[0], event.chat_id, reply_to_id)
     await event.delete()
@@ -411,7 +413,7 @@ async def knife(event):
 )
 async def doge(event):
     "Make a cool doge text sticker"
-    cmd = event.pattern_match.group(1).lower()
+    event.pattern_match.group(1).lower()
     text = event.pattern_match.group(2)
     reply_to_id = await reply_id(event)
     if not text and event.is_reply:
@@ -425,8 +427,10 @@ async def doge(event):
     temp_name, fontname = file_checker(
         "https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg"
     )
-    font, wrap, lines,ls = (90, 1.8, 5, "-75") if len(text) < 140 else (70, 1.3,6, "-55")
-    file,txt = higlighted_text(
+    font, wrap, lines, ls = (
+        (90, 1.8, 5, "-75") if len(text) < 140 else (70, 1.3, 6, "-55")
+    )
+    file, txt = higlighted_text(
         temp_name,
         text,
         text_wrap=wrap,
@@ -439,35 +443,37 @@ async def doge(event):
         foreground="black",
         transparency=0,
         lines=lines,
-        album =True,
+        album=True,
         album_limit=1,
         stroke_width=1,
-        stroke_fill="black"
+        stroke_fill="black",
     )
-    if len(txt)>=lines:
-        for x in range(0,lines):
-            text= text.replace(txt[x],"")
-        position=(-20, 20) if font == 90 else (-20, 40)
+    if len(txt) >= lines:
+        for x in range(0, lines):
+            text = text.replace(txt[x], "")
+        position = (-20, 20) if font == 90 else (-20, 40)
         file, _ = higlighted_text(
             file[0],
             text,
-            text_wrap=wrap+2,
+            text_wrap=wrap + 2,
             font_name=fontname,
             font_size=font,
             linespace=ls,
             position=position,
-            direction = "upwards",
+            direction="upwards",
             align="left",
             background="white",
             foreground="black",
             transparency=0,
             lines=lines,
-            album =True,
+            album=True,
             album_limit=1,
             stroke_width=1,
-            stroke_fill="black"
+            stroke_fill="black",
         )
-    await event.client.send_file(event.chat_id, file[0], reply_to=reply_to_id, force_document=False)
+    await event.client.send_file(
+        event.chat_id, file[0], reply_to=reply_to_id, force_document=False
+    )
     await event.delete()
     for files in (temp_name, file[0]):
         if files and os.path.exists(files):
