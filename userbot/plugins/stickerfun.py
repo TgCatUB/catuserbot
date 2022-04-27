@@ -419,7 +419,7 @@ async def doge(event):
             event, "__What is doge supposed to say? Give some text.__"
         )
     await edit_delete(event, "`Wait, processing.....`")
-    text = soft_deEmojify(reply.message)
+    text = soft_deEmojify(text)
     temp_name, fontname = file_checker(
         "https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg"
     )
@@ -447,7 +447,6 @@ async def doge(event):
     if len(txt) >= lines:
         for x in range(0, lines):
             text = text.replace(txt[x], "")
-        position = (-20, 20) if font == 90 else (-20, 40)
         file, _ = higlighted_text(
             file[0],
             text,
@@ -455,8 +454,7 @@ async def doge(event):
             font_name=fontname,
             font_size=font,
             linespace=ls,
-            position=position,
-            direction="upwards",
+            position=(-20, 480),
             align="left",
             background="white",
             foreground="black",
@@ -467,8 +465,9 @@ async def doge(event):
             stroke_width=1,
             stroke_fill="black",
         )
+    cat = convert_tosticker(file[0])
     await event.client.send_file(
-        event.chat_id, file[0], reply_to=reply_to_id, force_document=False
+        event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
     await event.delete()
     for files in (temp_name, file[0]):
