@@ -282,6 +282,7 @@ async def quby(event):
         "https://telegra.ph/file/09f4df5a129758a2e1c9c.jpg"
     )
     lines = 3
+    text = soft_deEmojify(text)
     if len(text) < 80:
         font = 60
         wrap = 1.3
