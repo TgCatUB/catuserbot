@@ -22,6 +22,7 @@ from ..helpers.functions import (
     convert_tosticker,
     hide_inlinebot,
     higlighted_text,
+    deEmojify
     soft_deEmojify,
     waifutxt,
 )
@@ -52,7 +53,7 @@ def file_checker(template):
         os.mkdir("./temp")
     tempname = "./temp/cat_temp.png"
     fontname = "./temp/ArialUnicodeMS.ttf"
-    urllib.request.urlretrieve(template, temp_name)
+    urllib.request.urlretrieve(template, tempname)
     if not os.path.exists(fontname):
         urllib.request.urlretrieve(
             "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
