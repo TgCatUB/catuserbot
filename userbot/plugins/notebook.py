@@ -254,7 +254,7 @@ async def write_page(event):
             font_name,
         )
     lines, text_wrap, font_size, linespace, position = notebook_values(page, font)
-    image = higlighted_text(
+    image, _ = higlighted_text(
         temp_name,
         text,
         text_wrap=text_wrap,

@@ -3,8 +3,9 @@
 # imported from ppe-remix by @heyworld & @DeletedUser420
 # modified by @mrconfused
 # pengin & gandhi Yato
-
+# modified & improved by @jisan7509
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
+
 import io
 import os
 import random
@@ -280,24 +281,45 @@ async def quby(event):
     temp_name, fontname = file_checker(
         "https://telegra.ph/file/09f4df5a129758a2e1c9c.jpg"
     )
-    if len(text) < 40:
-        font = 80
-        wrap = 1.4
-        position = (100, 0)
-    else:
+    lines=3
+    if len(text) < 80:
         font = 60
-        wrap = 1.2
-        position = (0, 0)
-    text = soft_deEmojify(text)
-    file = higlighted_text(
+        wrap = 1.3
+        position = (45, 0)
+    else:
+        font = 50
+        wrap = 1
+        position = (-70, 0)
+    file,txt = higlighted_text(
         temp_name,
         text,
         text_wrap=wrap,
         font_name=fontname,
         font_size=font,
-        linespace="+4",
+        linespace="+2",
         position=position,
+        lines=lines,
+        album =True,
+        album_limit=1,
+        stroke_width=1,
     )
+    if len(txt)>=lines:
+        for x in range(0,lines):
+            text= text.replace(txt[x],"")
+        file,_ = higlighted_text(
+            file[0],
+            text,
+            text_wrap=wrap,
+            font_name=fontname,
+            font_size=font,
+            linespace="+2",
+            position=position,
+            direction = "upwards",
+            lines=1,
+            album =True,
+            album_limit=1,
+            stroke_width=1,
+        )
     if cmd == "b":
         cat = convert_tosticker(file[0])
         await event.client.send_file(
@@ -386,7 +408,7 @@ async def knife(event):
         },
         "usage": [
             "{tr}doge <text/reply to msg>",
-            "{tr}tdoge <text/reply to msg>",
+            "{tr}hdoge <text/reply to msg>",
         ],
         "examples": [
             "{tr}doge Gib money",
