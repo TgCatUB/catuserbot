@@ -404,17 +404,13 @@ async def knife(event):
     command=("doge", plugin_category),
     info={
         "header": "Make doge say anything.",
-        "flags": {
-            "h": "To create doge sticker with highligted text.",
-        },
         "usage": "{tr}doge <text/reply to msg>",
         "examples": "{tr}doge Gib money",
     },
 )
 async def doge(event):
     "Make a cool doge text sticker"
-    event.pattern_match.group(1).lower()
-    text = event.pattern_match.group(2)
+    text = event.pattern_match.group(1)
     reply_to_id = await reply_id(event)
     if not text and event.is_reply:
         text = (await event.get_reply_message()).message
