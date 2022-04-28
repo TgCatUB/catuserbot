@@ -86,7 +86,7 @@ def readable_time(seconds: int) -> str:
         + (f"{check(hours)}:" if hours else "00:")
         + (f"{check(minutes)}:" if minutes else "00:")
         + str((check(seconds)) if seconds else "00")
-        
+    )
 
 def human_to_bytes(size: str) -> int:
     units = {
