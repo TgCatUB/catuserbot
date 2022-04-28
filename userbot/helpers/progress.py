@@ -56,7 +56,8 @@ def scheck(inp):
     if inp == 1:
         return ""
     return "s"
-    
+
+
 def time_formatter(seconds: int) -> str:
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
@@ -69,13 +70,15 @@ def time_formatter(seconds: int) -> str:
         + (f"{str(seconds)} second{scheck(seconds)}, " if seconds else "")
     )
     return tmp[:-2]
-    
+
+
 def check(inp):
-    if len(str(inp))==1:
+    if len(str(inp)) == 1:
         inp = f"0{inp}"
         return inp
     return inp
-    
+
+
 def readable_time(seconds: int) -> str:
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
@@ -87,6 +90,7 @@ def readable_time(seconds: int) -> str:
         + (f"{check(minutes)}:" if minutes else "00:")
         + str((check(seconds)) if seconds else "00")
     )
+
 
 def human_to_bytes(size: str) -> int:
     units = {
