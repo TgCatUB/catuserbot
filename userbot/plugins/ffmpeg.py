@@ -209,7 +209,7 @@ async def ffmpeg_compress(event):
         new = await fileinfo(compress)
         osize = old["size"]
         nsize = new["size"]
-        cap = f"**Old Size:** `{humanbytes(osize)}`\n**New Size:** `{humanbytes(nsize)}`\n**Compressed:** `{int(100-(osize/nsize*100))}%`\n\n**Time Taken:-**\n**Compression : **`{time_formatter(cms)}`"
+        cap = f"**Old Size:** `{humanbytes(osize)}`\n**New Size:** `{humanbytes(nsize)}`\n**Compressed:** `{int(100-(nsize/osize*100))}%`\n\n**Time Taken:-**\n**Compression : **`{time_formatter(cms)}`"
         if cmd == "f":
             try:
                 c_time = time.time()
