@@ -112,7 +112,7 @@ async def fileinfo(file):
     cat_json = json.loads(x)["media"]["track"]
     dic = {
         "path": file,
-        "size": cat_json[0]["FileSize"],
+        "size": int(cat_json[0]["FileSize"]),
         "extension": cat_json[0]["FileExtension"],
     }
     try:
