@@ -1,90 +1,105 @@
 # ported from uniborg by @spechide
 import asyncio
 import io
-import os
-import time
-import re
 import math
-import subprocess
+import os
+import re
+import time
 from datetime import datetime
-from userbot.core.logger import logging
+
 from userbot import catub
+from userbot.core.logger import logging
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import _cattools, _catutils, fileinfo, media_type, progress,time_formatter, readable_time,humanbytes, reply_id
+from ..helpers import (
+    _cattools,
+    _catutils,
+    fileinfo,
+    humanbytes,
+    media_type,
+    progress,
+    readable_time,
+    reply_id,
+    time_formatter,
+)
 
 plugin_category = "utils"
 
 
-FF_MPEG_DOWN_LOAD_MEDIA_PATH = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "catuserbot.media.ffmpeg")
+FF_MPEG_DOWN_LOAD_MEDIA_PATH = os.path.join(
+    Config.TMP_DOWNLOAD_DIRECTORY, "catuserbot.media.ffmpeg"
+)
 FINISHED_PROGRESS_STR = Config.FINISHED_PROGRESS_STR
 UN_FINISHED_PROGRESS_STR = Config.UNFINISHED_PROGRESS_STR
 LOGGER = logging.getLogger(__name__)
 
-    
-    
-async def convert_video(video_file, output_directory,crf, total_time, bot, message):
+
+async def convert_video(video_file, output_directory, crf, total_time, bot, message):
     # https://stackoverflow.com/a/13891070/4723940
-    out_put_file_name = output_directory + \
-        "/" + str(round(time.time())) + ".mp4"
+    out_put_file_name = output_directory + "/" + str(round(time.time())) + ".mp4"
     progress = output_directory + "/" + "progress.txt"
-    with open(progress, 'w') as f:
-      pass
+    with open(progress, "w") as f:
+        pass
     COMPRESSION_START_TIME = time.time()
     process = await asyncio.create_subprocess_shell(
         f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{video_file}""" -preset ultrafast -vcodec libx265 -crf {crf} -c:a copy """{out_put_file_name}"""',
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )
-    LOGGER.info("ffmpeg_process: "+str(process.pid))
-    isDone = False
+    LOGGER.info("ffmpeg_process: " + str(process.pid))
     while process.returncode != 0:
-      await asyncio.sleep(3)
-      with open("./temp/progress.txt",'r+') as file:
-        text = file.read()
-        frame = re.findall("frame=(\d+)", text)
-        time_in_us=re.findall("out_time_ms=(\d+)", text)
-        progress=re.findall("progress=(\w+)", text)
-        speed=re.findall("speed=(\d+\.?\d*)", text)
-        if len(frame):
-          frame = int(frame[-1])
-        else:
-          frame = 1;
-        if len(speed):
-          speed = speed[-1]
-        else:
-          speed = 1;
-        if len(time_in_us):
-          time_in_us = time_in_us[-1]
-        else:
-          time_in_us = 1;
-        if len(progress):
-          if progress[-1] == "end":
-            LOGGER.info(progress[-1])
-            isDone = True
-            break
-        execution_time = time_formatter((time.time() - COMPRESSION_START_TIME))
-        elapsed_time = int(time_in_us)/1000000
-        difference = math.floor( (total_time - elapsed_time) / float(speed) )
-        ETA = "-"
-        if difference > 0:
-          ETA = time_formatter(difference)
-        percentage = math.floor(elapsed_time * 100 / total_time)
-        progress_str = "📊 **Progress :** {0}%\n[{1}{2}]".format(
-            round(percentage, 2),
-            ''.join([FINISHED_PROGRESS_STR for i in range(math.floor(percentage / 10))]),
-            ''.join([UN_FINISHED_PROGRESS_STR for i in range(10 - math.floor(percentage / 10))])
+        await asyncio.sleep(3)
+        with open("./temp/progress.txt", "r+") as file:
+            text = file.read()
+            frame = re.findall("frame=(\d+)", text)
+            time_in_us = re.findall("out_time_ms=(\d+)", text)
+            progress = re.findall("progress=(\w+)", text)
+            speed = re.findall("speed=(\d+\.?\d*)", text)
+            if len(frame):
+                frame = int(frame[-1])
+            else:
+                frame = 1
+            if len(speed):
+                speed = speed[-1]
+            else:
+                speed = 1
+            if len(time_in_us):
+                time_in_us = time_in_us[-1]
+            else:
+                time_in_us = 1
+            if len(progress):
+                if progress[-1] == "end":
+                    LOGGER.info(progress[-1])
+                    break
+            time_formatter((time.time() - COMPRESSION_START_TIME))
+            elapsed_time = int(time_in_us) / 1000000
+            difference = math.floor((total_time - elapsed_time) / float(speed))
+            ETA = "-"
+            if difference > 0:
+                ETA = time_formatter(difference)
+            percentage = math.floor(elapsed_time * 100 / total_time)
+            progress_str = "📊 **Progress :** {0}%\n[{1}{2}]".format(
+                round(percentage, 2),
+                "".join(
+                    [FINISHED_PROGRESS_STR for i in range(math.floor(percentage / 10))]
+                ),
+                "".join(
+                    [
+                        UN_FINISHED_PROGRESS_STR
+                        for i in range(10 - math.floor(percentage / 10))
+                    ]
+                ),
             )
-        stats = f'📦️ **Compressing CRF-{crf}**\n\n' \
-                f'⏰️ **ETA :** {ETA}\n\n' \
-                f'{progress_str}\n'
-        try:
-          await message.edit(
-            text=stats
-          )
-        except:
-            pass 
+            stats = (
+                f"📦️ **Compressing CRF-{crf}**\n\n"
+                f"⏰️ **ETA :** {ETA}\n\n"
+                f"{progress_str}\n"
+            )
+            try:
+                await message.edit(text=stats)
+            except:
+                pass
     # Wait for the subprocess to finish
     stdout, stderr = await process.communicate()
     if os.path.lexists(out_put_file_name):
@@ -111,7 +126,7 @@ async def cult_small_video(
     if os.path.lexists(out_put_file_name):
         return out_put_file_name
     return None
-    
+
 
 @catub.cat_cmd(
     pattern="(|f)compress(?:\s|$)([\s\S]*)",
@@ -142,7 +157,7 @@ async def ffmpeg_compress(event):
     cmd = event.pattern_match.group(1).lower()
     reply_message = await event.get_reply_message()
     start = datetime.now()
-    if not crf :
+    if not crf:
         crf = "28"
     dlpath = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "cat.media.ffmpeg")
     if not reply_message or not reply_message.media:
@@ -154,10 +169,12 @@ async def ffmpeg_compress(event):
             catevent = await edit_or_reply(event, "`Processing...`")
             delete = False
         else:
-            await edit_delete(event, "`Reply to Video file or save video by .ffmpegsave`")
+            await edit_delete(
+                event, "`Reply to Video file or save video by .ffmpegsave`"
+            )
     elif reply_message:
         media = media_type(reply_message)
-        if media not in ["Video","Round Video", "Gif"]:
+        if media not in ["Video", "Round Video", "Gif"]:
             return await edit_delete(event, "`Only Video files are supported`")
         catevent = await edit_or_reply(event, "`Saving the file...`")
         try:
@@ -182,15 +199,17 @@ async def ffmpeg_compress(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     cstart = datetime.now()
-    compress = await convert_video(dlpath, "./temp", crf , old["duration"],catub, catevent)
+    compress = await convert_video(
+        dlpath, "./temp", crf, old["duration"], catub, catevent
+    )
     cend = datetime.now()
     cms = (cend - cstart).seconds
     if delete:
         os.remove(dlpath)
     if compress:
         new = await fileinfo(compress)
-        osize = old['size']
-        nsize = new['size']
+        osize = old["size"]
+        nsize = new["size"]
         cap = f"**Old Size :** `{humanbytes(osize)}`\n**New Size :** `{humanbytes(nsize)}`\n**Compressed : {int(100-((osize/nsize)*100))}%`**\n\n**Time Taken :-**\n**Compression : `{time_formatter(cms)}`"
         if cmd == "f":
             try:
@@ -198,7 +217,7 @@ async def ffmpeg_compress(event):
                 catt = await event.client.send_file(
                     event.chat_id,
                     compress,
-                    thumb = thumb_image_path,
+                    thumb=thumb_image_path,
                     caption=cap,
                     force_document=True,
                     supports_streaming=True,
@@ -219,7 +238,7 @@ async def ffmpeg_compress(event):
                     event.chat_id,
                     compress,
                     caption=cap,
-                    thumb = thumb,
+                    thumb=thumb,
                     force_document=False,
                     supports_streaming=True,
                     allow_cache=False,
@@ -236,10 +255,10 @@ async def ffmpeg_compress(event):
     await catevent.delete()
     end = datetime.now()
     ms = (end - start).seconds
-    cap+= f"\n**Total : `{time_formatter(ms)}`"
-    await edit_or_reply(caat,cap)
-    
-    
+    cap += f"\n**Total : `{time_formatter(ms)}`"
+    await edit_or_reply(caat, cap)
+
+
 @catub.cat_cmd(
     pattern="ffmpegsave(?:\s|$)([\s\S]*)",
     command=("ffmpegsave", plugin_category),
