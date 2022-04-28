@@ -52,30 +52,43 @@ def humanbytes(size: int) -> str:
     return f"{str(round(size, 2))} {dict_power_n[raised_to_pow]}B"
 
 
+def scheck(inp):
+    if inp == 1:
+        return ""
+    return "s"
+
+
 def time_formatter(seconds: int) -> str:
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
     seconds = round(seconds, 2)
     tmp = (
-        (f"{str(days)} day(s), " if days else "")
-        + (f"{str(hours)} hour(s), " if hours else "")
-        + (f"{str(minutes)} minute(s), " if minutes else "")
-        + (f"{str(seconds)} second(s), " if seconds else "")
+        (f"{str(days)} day{scheck(days)}, " if days else "")
+        + (f"{str(hours)} hour{scheck(hours)}, " if hours else "")
+        + (f"{str(minutes)} minute{scheck(minutes)}, " if minutes else "")
+        + (f"{str(seconds)} second{scheck(seconds)}, " if seconds else "")
     )
-
     return tmp[:-2]
+
+
+def check(inp):
+    if len(str(inp)) == 1:
+        inp = f"0{inp}"
+        return inp
+    return inp
 
 
 def readable_time(seconds: int) -> str:
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
+    print(type(minutes))
     return (
         (f"{int(days)} day(s), " if days else "")
-        + (f"{int(hours)}:" if hours else "00:")
-        + (f"{int(minutes)}:" if minutes else "00:")
-        + (str(int(seconds)) if seconds else "00")
+        + (f"{check(hours)}:" if hours else "00:")
+        + (f"{check(minutes)}:" if minutes else "00:")
+        + str((check(seconds)) if seconds else "00")
     )
 
 

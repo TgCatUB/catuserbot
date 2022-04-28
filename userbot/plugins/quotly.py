@@ -27,6 +27,13 @@ FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 plugin_category = "fun"
 
 
+class Forward_Lock:
+    def __init__(self, name):
+        self.first_name = name
+        self.last_name = None
+        self.photo = None
+
+
 def get_warp_length(width):
     return int((20.0 / 1024.0) * (width + 0.0))
 
@@ -151,8 +158,8 @@ async def q_pic(event):  # sourcery no-metrics
         "usage": [
             "{tr}q",
             "{tr}rq",
-            "{fq} <user/reply> <text>",
-            "{frq} <user/reply> <text>",
+            "{tr}fq <user/reply> <text>",
+            "{tr}frq <user/reply> <text>",
         ],
         "examples": ["{tr}fq @jisan7509 hello bad boys and girls"],
     },
@@ -179,11 +186,14 @@ async def stickerchat(catquotes):
         return await edit_or_reply(catquotes, "`Replied message is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     if cmd in ["rq", "q"]:
-        user = (
-            await catquotes.client.get_entity(reply.forward.sender)
-            if reply.fwd_from
-            else reply.sender
-        )
+        try:
+            user = (
+                await catquotes.client.get_entity(reply.forward.sender)
+                if reply.fwd_from
+                else reply.sender
+            )
+        except TypeError:
+            user = Forward_Lock(reply.fwd_from.from_name)
     else:
         user, rank = await get_user_from_event(catquotes, secondgroup=True)
         if not user:

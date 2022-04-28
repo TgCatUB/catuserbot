@@ -19,3 +19,7 @@ class Development(Config):
     COMMAND_HAND_LER = "."
     # command hanler for sudo
     SUDO_COMMAND_HAND_LER = "."
+    # External plugins repo
+    EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
+    # if you need badcat plugins set "True"
+    BADCAT = "False"

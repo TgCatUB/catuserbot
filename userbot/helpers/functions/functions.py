@@ -112,7 +112,7 @@ async def fileinfo(file):
     cat_json = json.loads(x)["media"]["track"]
     dic = {
         "path": file,
-        "size": cat_json[0]["FileSize"],
+        "size": int(cat_json[0]["FileSize"]),
         "extension": cat_json[0]["FileExtension"],
     }
     try:
@@ -120,7 +120,8 @@ async def fileinfo(file):
             dic["format"] = cat_json[0]["Format"]
             dic["type"] = cat_json[1]["@type"]
             if "ImageCount" not in cat_json[0]:
-                dic["duration"] = cat_json[0]["Duration"]
+                dic["duration"] = int(float(cat_json[0]["Duration"]))
+                dic["bitrate"] = int(int(cat_json[0]["OverallBitRate"]) / 1000)
             if "VideoCount" or "ImageCount" in cat_json[0]:
                 dic["height"] = int(cat_json[1]["Height"])
                 dic["width"] = int(cat_json[1]["Width"])
@@ -259,30 +260,40 @@ def ellipse_layout_create(filename, size, border):
     return img
 
 
-def text_draw(font_name, font_size, img, text, hight):
+def text_draw(font_name, font_size, img, text, hight, stroke_width=0, stroke_fill=None):
     font = ImageFont.truetype(font_name, font_size)
     draw = ImageDraw.Draw(img)
     w, h = draw.textsize(text, font=font)
     h += int(h * 0.21)
-    draw.text(((1024 - w) / 2, int(hight)), text=text, fill="white", font=font)
+    draw.text(
+        ((1024 - w) / 2, int(hight)),
+        text=text,
+        fill="white",
+        font=font,
+        stroke_width=stroke_width,
+        stroke_fill=stroke_fill,
+    )
 
 
 def higlighted_text(
     input_img,
     text,
+    align="center",
     background="black",
     foreground="white",
-    transparency=255,
-    align="center",
-    direction=None,
-    text_wrap=2,
-    font_name=None,
-    font_size=60,
+    stroke_fill="white",
     linespace="+2",
     rad=20,
+    text_wrap=2,
+    font_size=60,
+    stroke_width=0,
+    transparency=255,
     position=(0, 0),
     album=False,
     lines=None,
+    direction=None,
+    font_name=None,
+    album_limit=None,
 ):
     templait = Image.open(input_img)
     # resize image
@@ -304,6 +315,7 @@ def higlighted_text(
     mask_size = int((resized_width / text_wrap) + 50)
     list_text = []
     output = []
+    output_text = []
     raw_text = text.splitlines()
     for item in raw_text:
         input_text = "\n".join(wrap(item, int((40.0 / resized_width) * mask_size)))
@@ -342,14 +354,28 @@ def higlighted_text(
                     "RGBA", (x, y), (color[0], color[1], color[2], 0)
                 )  # background
                 mask_draw = ImageDraw.Draw(mask_img)
-                mask_draw.text((25, 8), list_text[i], foreground, font=font)
+                mask_draw.text(
+                    (25, 8),
+                    list_text[i],
+                    foreground,
+                    font=font,
+                    stroke_width=stroke_width,
+                    stroke_fill=stroke_fill,
+                )
             else:
                 mask_img = Image.new(
                     "RGBA", (x, y), (color[0], color[1], color[2], transparency)
                 )  # background
                 # put text on mask
                 mask_draw = ImageDraw.Draw(mask_img)
-                mask_draw.text((25, 8), list_text[i], foreground, font=font)
+                mask_draw.text(
+                    (25, 8),
+                    list_text[i],
+                    foreground,
+                    font=font,
+                    stroke_width=stroke_width,
+                    stroke_fill=stroke_fill,
+                )
                 # https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi
                 circle = Image.new("L", (rad * 2, rad * 2), 0)
                 draw = ImageDraw.Draw(circle)
@@ -374,10 +400,13 @@ def higlighted_text(
                 ),
             )
             source_img = Image.alpha_composite(source_img, trans)
+            output_text.append(list_text[i])
         output_img = f"./temp/cat{pic_no}.jpg"
         output.append(output_img)
         source_img.save(output_img, "png")
-    return output
+        if album_limit and (album_limit - 1) == pic_no:
+            break
+    return output, output_text
 
 
 # ----------------------------------------------------------------------------------------------------------------------#

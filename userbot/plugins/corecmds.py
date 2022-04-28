@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from ..Config import Config
+from ..core import CMD_INFO, PLG_INFO
 from ..utils import load_module, remove_plugin
 from . import CMD_HELP, CMD_LIST, SUDO_LIST, catub, edit_delete, edit_or_reply, reply_id
 
@@ -9,6 +10,15 @@ plugin_category = "tools"
 
 DELETE_TIMEOUT = 5
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
+
+
+def plug_checker(plugin):
+    plug_path = f"./userbot/plugins/{plugin}.py"
+    if not os.path.exists(plug_path):
+        plug_path = f"./xtraplugins/{plugin}.py"
+    if not os.path.exists(plug_path):
+        plug_path = f"./badcatext/{plugin}.py"
+    return plug_path
 
 
 @catub.cat_cmd(
@@ -88,7 +98,7 @@ async def send(event):
     reply_to_id = await reply_id(event)
     thumb = thumb_image_path if os.path.exists(thumb_image_path) else None
     input_str = event.pattern_match.group(1)
-    the_plugin_file = f"./userbot/plugins/{input_str}.py"
+    the_plugin_file = plug_checker(input_str)
     if os.path.exists(the_plugin_file):
         caat = await event.client.send_file(
             event.chat_id,
@@ -138,7 +148,7 @@ async def unload(event):
 async def unload(event):
     "To uninstall a plugin."
     shortname = event.pattern_match.group(1)
-    path = Path(f"userbot/plugins/{shortname}.py")
+    path = plug_checker(shortname)
     if not os.path.exists(path):
         return await edit_delete(
             event, f"There is no plugin with path {path} to uninstall it"
@@ -155,3 +165,7 @@ async def unload(event):
         await edit_or_reply(event, f"{shortname} is Uninstalled successfully")
     except Exception as e:
         await edit_or_reply(event, f"Successfully uninstalled {shortname}\n{e}")
+    if shortname in PLG_INFO:
+        for cmd in PLG_INFO[shortname]:
+            CMD_INFO.pop(cmd)
+        PLG_INFO.pop(shortname)

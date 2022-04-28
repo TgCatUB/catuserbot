@@ -18,8 +18,6 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.logger import logging
-from ..helpers.functions import deEmojify, hide_inlinebot
-from ..helpers.utils import reply_id
 from ..sql_helper.globals import gvarstatus
 from . import BOTLOG, BOTLOG_CHATID, edit_or_reply
 
@@ -263,22 +261,3 @@ async def lastlog(lstlog):
         await edit_or_reply(lstlog, LFM_LOG_DISABLED)
     else:
         await edit_or_reply(lstlog, LFM_LOG_ERR)
-
-
-@catub.cat_cmd(
-    pattern="now$",
-    command=("now", plugin_category),
-    info={
-        "header": "Send your current listening song from Lastfm/Spotify/Deezer.",
-        "usage": "{tr}now",
-        "note": "For working of this command, you need to authorize @NowPlayBot.",
-    },
-)
-async def now(event):
-    "Send your current listening song."
-    text = " "
-    reply_to_id = await reply_id(event)
-    bot_name = "@nowplaybot"
-    text = deEmojify(text)
-    await event.delete()
-    await hide_inlinebot(event.client, bot_name, text, event.chat_id, reply_to_id)

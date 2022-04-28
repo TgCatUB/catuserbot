@@ -60,7 +60,7 @@ async def catgban(event):  # sourcery no-metrics
         return await edit_delete(cate, "`why would I ban myself`")
     if gban_sql.is_gbanned(user.id):
         await cate.edit(
-            f"`the `[user](tg://user?id={user.id})` is already in gbanned list any way checking again`"
+            f"``[{user.first_name}](tg://user?id={user.id})` is already in gbanned list any way checking again`"
         )
     else:
         gban_sql.catgban(user.id, reason)
@@ -70,7 +70,7 @@ async def catgban(event):  # sourcery no-metrics
     if sandy == 0:
         return await edit_delete(cate, "`you are not admin of atleast one group` ")
     await cate.edit(
-        f"`initiating gban of the `[user](tg://user?id={user.id}) `in {len(san)} groups`"
+        f"`initiating gban of `[{user.first_name}](tg://user?id={user.id}) `in {len(san)} groups`"
     )
     for i in range(sandy):
         try:
@@ -144,7 +144,8 @@ async def catgban(event):
         gban_sql.catungban(user.id)
     else:
         return await edit_delete(
-            cate, f"the [user](tg://user?id={user.id}) `is not in your gbanned list`"
+            cate,
+            f"[{user.first_name}](tg://user?id={user.id}) `is not in your gbanned list`",
         )
     san = await admin_groups(event.client)
     count = 0
@@ -152,7 +153,7 @@ async def catgban(event):
     if sandy == 0:
         return await edit_delete(cate, "`you are not even admin of atleast one group `")
     await cate.edit(
-        f"initiating ungban of the [user](tg://user?id={user.id}) in `{len(san)}` groups"
+        f"initiating ungban of [{user.first_name}](tg://user?id={user.id}) in `{len(san)}` groups"
     )
     for i in range(sandy):
         try:

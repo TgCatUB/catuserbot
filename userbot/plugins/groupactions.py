@@ -120,7 +120,7 @@ async def _(event):
         "header": "To ban everyone from group.",
         "description": "To ban all from the group except admins.",
         "usage": [
-            "{tr}kickall",
+            "{tr}banall",
         ],
     },
     groups_only=True,

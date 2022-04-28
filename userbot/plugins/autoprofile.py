@@ -33,7 +33,7 @@ DEFAULTUSERBIO = gvarstatus("DEFAULT_BIO") or " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦ�
 DEFAULTUSER = gvarstatus("DEFAULT_NAME") or Config.ALIVE_NAME
 LOGS = logging.getLogger(__name__)
 CHANGE_TIME = int(gvarstatus("CHANGE_TIME")) if gvarstatus("CHANGE_TIME") else 60
-
+DEFAULT_PIC = gvarstatus("DEFAULT_PIC") or None
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 autopic_path = os.path.join(os.getcwd(), "userbot", "original_pic.png")
@@ -63,11 +63,11 @@ COLLECTION_STRINGS = {
 
 async def autopicloop():
     AUTOPICSTART = gvarstatus("autopic") == "true"
-    if AUTOPICSTART and Config.DEFAULT_PIC is None:
+    if AUTOPICSTART and DEFAULT_PIC is None:
         if BOTLOG:
             return await catub.send_message(
                 BOTLOG_CHATID,
-                "**Error**\n`For functing of autopic you need to set DEFAULT_PIC var in Heroku vars`",
+                "**Error**\n`For functing of autopic you need to set DEFAULT_PIC var in Database vars`",
             )
         return
     if gvarstatus("autopic") is not None:
@@ -77,7 +77,7 @@ async def autopicloop():
             LOGS.warn(str(e))
     while AUTOPICSTART:
         if not os.path.exists(autopic_path):
-            downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
+            downloader = SmartDL(DEFAULT_PIC, autopic_path, progress_bar=False)
             downloader.start(blocking=False)
             while not downloader.isFinished():
                 pass
@@ -166,16 +166,16 @@ async def digitalpicloop():
 
 async def bloom_pfploop():
     BLOOMSTART = gvarstatus("bloom") == "true"
-    if BLOOMSTART and Config.DEFAULT_PIC is None:
+    if BLOOMSTART and DEFAULT_PIC is None:
         if BOTLOG:
             return await catub.send_message(
                 BOTLOG_CHATID,
-                "**Error**\n`For functing of bloom you need to set DEFAULT_PIC var in Heroku vars`",
+                "**Error**\n`For functing of bloom you need to set DEFAULT_PIC var in Database vars`",
             )
         return
     while BLOOMSTART:
         if not os.path.exists(autopic_path):
-            downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
+            downloader = SmartDL(DEFAULT_PIC, autopic_path, progress_bar=False)
             downloader.start(blocking=False)
             while not downloader.isFinished():
                 pass
@@ -328,7 +328,7 @@ async def _(event):
             then set CHANGE_TIME var in Database with time(in seconds) between each change of profilepic.",
         "options": "you can give integer input with cmd like 40,55,75 ..etc.\
              So that your profile pic will rotate with that specific angle",
-        "note": "For functioning of this cmd you need to set DEFAULT_PIC var in heroku. \
+        "note": "For functioning of this cmd you need to set DEFAULT_PIC var in Database. \
             To stop this do '.end autopic'",
         "usage": [
             "{tr}autopic",
@@ -338,13 +338,13 @@ async def _(event):
 )
 async def _(event):
     "To set time on your profile pic"
-    if Config.DEFAULT_PIC is None:
+    if DEFAULT_PIC is None:
         return await edit_delete(
             event,
-            "**Error**\nFor functing of autopic you need to set DEFAULT_PIC var in Heroku vars",
+            "**Error**\nFor functing of autopic you need to set DEFAULT_PIC var in Database vars",
             parse_mode=_format.parse_pre,
         )
-    downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=False)
+    downloader = SmartDL(DEFAULT_PIC, autopic_path, progress_bar=False)
     downloader.start(blocking=False)
     while not downloader.isFinished():
         pass
@@ -396,20 +396,20 @@ async def _(event):
         "header": "Changes profile pic every 1 minute with the random colour pic with time on it",
         "description": "If you like to change the time interval for every new pic chnage \
             then set CHANGE_TIME var in Database with time(in seconds) between each change of profilepic.",
-        "note": "For functioning of this cmd you need to set DEFAULT_PIC var in heroku. \
+        "note": "For functioning of this cmd you need to set DEFAULT_PIC var in Database. \
             To stop this do '.end bloom'",
         "usage": "{tr}bloom",
     },
 )
 async def _(event):
     "To set random colour pic with time to profile pic"
-    if Config.DEFAULT_PIC is None:
+    if DEFAULT_PIC is None:
         return await edit_delete(
             event,
-            "**Error**\nFor functing of bloom you need to set DEFAULT_PIC var in Heroku vars",
+            "**Error**\nFor functing of bloom you need to set DEFAULT_PIC var in Database vars",
             parse_mode=_format.parse_pre,
         )
-    downloader = SmartDL(Config.DEFAULT_PIC, autopic_path, progress_bar=True)
+    downloader = SmartDL(DEFAULT_PIC, autopic_path, progress_bar=True)
     downloader.start(blocking=False)
     while not downloader.isFinished():
         pass
@@ -530,7 +530,7 @@ async def _(event):
     command=("autobio", plugin_category),
     info={
         "header": "Changes your bio with time",
-        "description": "Updates your profile bio along with time. Set DEFAULT_BIO var in heroku with your fav bio,",
+        "description": "Updates your profile bio along with time. Set DEFAULT_BIO var in Database with your fav bio,",
         "note": "To stop this do '.end autobio'",
         "usage": "{tr}autobio",
     },
