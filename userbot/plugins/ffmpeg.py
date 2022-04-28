@@ -27,6 +27,7 @@ from ..helpers import (
 plugin_category = "utils"
 
 
+thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 FF_MPEG_DOWN_LOAD_MEDIA_PATH = os.path.join(
     Config.TMP_DOWNLOAD_DIRECTORY, "catuserbot.media.ffmpeg"
 )
@@ -161,7 +162,7 @@ async def ffmpeg_compress(event):
     dlpath = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "cat.media.ffmpeg")
     if not reply_message or not reply_message.media:
         if os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
-            media = (await fileinfo(mpath))["type"]
+            media = (await fileinfo(FF_MPEG_DOWN_LOAD_MEDIA_PATH))["type"]
             if media not in ["Video"]:
                 return await edit_delete(event, "`Only Video files are supported`")
             dlpath = FF_MPEG_DOWN_LOAD_MEDIA_PATH
@@ -183,7 +184,7 @@ async def ffmpeg_compress(event):
                 location=reply_message.document,
                 out=dl,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, catevent, c_time, "trying to download")
+                    progress(d, t, catevent, c_time, "Trying to download")
                 ),
             )
             dl.close()
@@ -223,7 +224,7 @@ async def ffmpeg_compress(event):
                     allow_cache=False,
                     reply_to=reply_to_id,
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, catevent, c_time, "trying to upload")
+                        progress(d, t, catevent, c_time, "Trying to upload")
                     ),
                 )
                 os.remove(compress)
@@ -243,7 +244,7 @@ async def ffmpeg_compress(event):
                     allow_cache=False,
                     reply_to=reply_to_id,
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, catevent, c_time, "trying to upload")
+                        progress(d, t, catevent, c_time, "Trying to upload")
                     ),
                 )
                 os.remove(compress)
