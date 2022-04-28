@@ -98,14 +98,13 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
             )
             try:
                 await message.edit(text=stats)
-            except:
+            except Exception :
                 pass
     # Wait for the subprocess to finish
     stdout, stderr = await process.communicate()
     if os.path.lexists(out_put_file_name):
         return out_put_file_name
-    else:
-        return None
+    return None
 
 
 async def cult_small_video(
@@ -137,7 +136,7 @@ async def cult_small_video(
         "flags": {
             "f": "To Force file the compressed video.",
         },
-        "note": "For quality of compress choose CRF value < 0 - 51 >        higher crf value = less video size = low on quality. If no crf given it will use default value 28.",
+        "note": "For quality of compress choose CRF value [ 0 - 51 ]\nHigher crf value = less video size = low on quality.\nIf no crf given it will use default value 23.",
         "usage": [
             "{tr}compress < 0 - 51 >",
             "{tr}fcompress < 0 - 51 >",
@@ -158,7 +157,7 @@ async def ffmpeg_compress(event):
     reply_message = await event.get_reply_message()
     start = datetime.now()
     if not crf:
-        crf = "28"
+        crf = "23"
     dlpath = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "cat.media.ffmpeg")
     if not reply_message or not reply_message.media:
         if os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
@@ -210,7 +209,7 @@ async def ffmpeg_compress(event):
         new = await fileinfo(compress)
         osize = old["size"]
         nsize = new["size"]
-        cap = f"**Old Size :** `{humanbytes(osize)}`\n**New Size :** `{humanbytes(nsize)}`\n**Compressed : {int(100-((osize/nsize)*100))}%`**\n\n**Time Taken :-**\n**Compression : `{time_formatter(cms)}`"
+        cap = f"**Old Size:** `{humanbytes(osize)}`\n**New Size:** `{humanbytes(nsize)}`\n**Compressed:** `{int(100-(osize/nsize*100))}%`\n\n**Time Taken:-**\n**Compression : **`{time_formatter(cms)}`"
         if cmd == "f":
             try:
                 c_time = time.time()
@@ -227,7 +226,7 @@ async def ffmpeg_compress(event):
                         progress(d, t, catevent, c_time, "trying to upload")
                     ),
                 )
-                os.remove(thumb)
+                os.remove(compress)
             except Exception as e:
                 return await edit_delete(catevent, f"**Error : **`{e}`")
         else:
@@ -255,8 +254,8 @@ async def ffmpeg_compress(event):
     await catevent.delete()
     end = datetime.now()
     ms = (end - start).seconds
-    cap += f"\n**Total : `{time_formatter(ms)}`"
-    await edit_or_reply(caat, cap)
+    cap += f"\n**Total :** `{time_formatter(ms)}`"
+    await edit_or_reply(catt, cap)
 
 
 @catub.cat_cmd(
