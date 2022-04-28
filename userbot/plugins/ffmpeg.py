@@ -98,7 +98,7 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
             )
             try:
                 await message.edit(text=stats)
-            except Exception :
+            except Exception:
                 pass
     # Wait for the subprocess to finish
     stdout, stderr = await process.communicate()
