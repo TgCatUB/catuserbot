@@ -5,7 +5,7 @@ from userbot import catub
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions.functions import getTranslate
 from ..sql_helper.globals import addgvar, gvarstatus
-from . import BOTLOG, BOTLOG_CHATID, deEmojify
+from . import BOTLOG, BOTLOG_CHATID, soft_deEmojify
 
 plugin_category = "utils"
 
@@ -36,7 +36,7 @@ async def _(event):
         return await edit_delete(
             event, "`.tl LanguageCode` as reply to a message", time=5
         )
-    text = deEmojify(text.strip())
+    text = soft_deEmojify(text.strip())
     lan = lan.strip()
     Translator()
     try:
@@ -75,7 +75,7 @@ async def translateme(trans):
         )
     TRT_LANG = gvarstatus("TRT_LANG") or "en"
     try:
-        reply_text = await getTranslate(deEmojify(message), dest=TRT_LANG)
+        reply_text = await getTranslate(soft_deEmojify(message), dest=TRT_LANG)
     except ValueError:
         return await edit_delete(trans, "`Invalid destination language.`", time=5)
     source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
