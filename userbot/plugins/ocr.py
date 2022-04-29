@@ -81,7 +81,9 @@ async def ocr(event):
         if cmd == "t":
             TRT_LANG = gvarstatus("TOCR_LANG") or "en"
             try:
-                reply_text = await getTranslate(soft_deEmojify(ParsedText), dest=TRT_LANG)
+                reply_text = await getTranslate(
+                    soft_deEmojify(ParsedText), dest=TRT_LANG
+                )
             except ValueError:
                 return await edit_delete(
                     trans, "`Invalid destination language.`", time=5
