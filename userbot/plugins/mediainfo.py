@@ -24,8 +24,10 @@ async def file_data(reply):
         hmm += f"Size  :  {humanbytes(reply.file.size)}<br>"
     if reply.date:
         hmm += f"Date  :  {_format.yaml_format(reply.date)}<br>"
-    if reply.file.id:
+    try:
         hmm += f"Id  :  {reply.file.id}<br>"
+    except AttributeError:
+        pass
     if reply.file.ext:
         hmm += f"Extension  :  '{reply.file.ext}'<br>"
     if reply.file.emoji:
