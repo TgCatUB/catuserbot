@@ -26,8 +26,8 @@ import ujson
 from PIL import Image, ImageEnhance, ImageFilter
 from telegraph import Telegraph
 from telethon import events
-from telethon.tl.custom import Button
 from telethon.errors import AboutTooLongError, FloodWaitError
+from telethon.tl.custom import Button
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from validators.url import url
@@ -843,9 +843,11 @@ async def spotify_now(event):
         await catevent.delete()
         if cmd == "i":
             songg = await catub.send_file(BOTLOG_CHATID, song)
-            fetch_songg = await catub.tgbot.get_messages(BOTLOG_CHATID, ids= songg.id)
-            btn_song = await catub.tgbot.send_file(BOTLOG_CHATID,fetch_songg,buttons= Button.url('🎧 Spotify', link))
-            fetch_btn_song = await catub.get_messages(BOTLOG_CHATID, ids= btn_song.id)
+            fetch_songg = await catub.tgbot.get_messages(BOTLOG_CHATID, ids=songg.id)
+            btn_song = await catub.tgbot.send_file(
+                BOTLOG_CHATID, fetch_songg, buttons=Button.url("🎧 Spotify", link)
+            )
+            fetch_btn_song = await catub.get_messages(BOTLOG_CHATID, ids=btn_song.id)
             await event.client.forward_messages(event.chat_id, fetch_btn_song)
             await songg.delete()
             await btn_song.delete()
