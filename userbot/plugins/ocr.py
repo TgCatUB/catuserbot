@@ -7,7 +7,7 @@ from ..Config import Config
 from ..core.managers import edit_or_reply
 from ..helpers.functions import getTranslate
 from ..sql_helper.globals import gvarstatus
-from . import _cattools, catub, convert_toimage, deEmojify
+from . import _cattools, catub, convert_toimage, soft_deEmojify
 
 plugin_category = "utils"
 
@@ -81,7 +81,9 @@ async def ocr(event):
         if cmd == "t":
             TRT_LANG = gvarstatus("TOCR_LANG") or "en"
             try:
-                reply_text = await getTranslate(deEmojify(ParsedText), dest=TRT_LANG)
+                reply_text = await getTranslate(
+                    soft_deEmojify(ParsedText), dest=TRT_LANG
+                )
             except ValueError:
                 return await edit_delete(
                     trans, "`Invalid destination language.`", time=5

@@ -27,6 +27,7 @@ from PIL import Image, ImageEnhance, ImageFilter
 from telegraph import Telegraph
 from telethon import events
 from telethon.errors import AboutTooLongError, FloodWaitError
+from telethon.tl.custom import Button
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from validators.url import url
@@ -783,7 +784,7 @@ async def spotify_now(event):
 
 
 @catub.cat_cmd(
-    pattern="now(?:\s|$)([\s\S]*)",
+    pattern="(i|)now(?:\s|$)([\s\S]*)",
     command=("now", plugin_category),
     info={
         "header": "To get song from spotify",
@@ -791,14 +792,23 @@ async def spotify_now(event):
         "usage": [
             "{tr}now",
             "{tr}now <Spotify/Deezer link>",
+        "flags": {
+            "i": "To send song song link as button",
+        },
+        "usage": [
+            "{tr}now",
+            "{tr}inow",
+            "{tr}now <Spotify/Deezer link>",
+            "{tr}inow <Spotify/Deezer link>",
         ],
     },
 )
 async def spotify_now(event):
     "Send spotify song"
-    msg_id = await reply_id(event)
-    link = event.pattern_match.group(1)
     chat = "@DeezerMusicBot"
+    msg_id = await reply_id(event)
+    cmd = event.pattern_match.group(1).lower()
+    link = event.pattern_match.group(2)
     catevent = await edit_or_reply(event, "🎶 `Fetching...`")
     if link:
         cap = f"<b>Spotify :- <a href = {link}>Link</a></b>"
@@ -834,11 +844,22 @@ async def spotify_now(event):
         song = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
         await catevent.delete()
-        await event.client.send_file(
-            event.chat_id,
-            song,
-            caption=cap,
-            parse_mode="html",
-            reply_to=msg_id,
-        )
+        if cmd == "i":
+            songg = await catub.send_file(BOTLOG_CHATID, song)
+            fetch_songg = await catub.tgbot.get_messages(BOTLOG_CHATID, ids=songg.id)
+            btn_song = await catub.tgbot.send_file(
+                BOTLOG_CHATID, fetch_songg, buttons=Button.url("🎧 Spotify", link)
+            )
+            fetch_btn_song = await catub.get_messages(BOTLOG_CHATID, ids=btn_song.id)
+            await event.client.forward_messages(event.chat_id, fetch_btn_song)
+            await songg.delete()
+            await btn_song.delete()
+        else:
+            await event.client.send_file(
+                event.chat_id,
+                song,
+                caption=cap,
+                parse_mode="html",
+                reply_to=msg_id,
+            )
         await delete_conv(event, chat, purgeflag)
