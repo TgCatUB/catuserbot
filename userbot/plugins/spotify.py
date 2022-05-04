@@ -30,10 +30,10 @@ from telethon.tl.custom import Button
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from validators.url import url
+
 from userbot.core.logger import logging
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.tools import post_to_telegraph
 from ..helpers.functions.functions import (
     delete_conv,
     ellipse_create,
@@ -41,6 +41,7 @@ from ..helpers.functions.functions import (
     make_inline,
     text_draw,
 )
+from ..helpers.tools import post_to_telegraph
 from ..sql_helper import global_collectionjson as glob_db
 from . import BOTLOG, BOTLOG_CHATID, Config, catub, reply_id
 
@@ -543,7 +544,12 @@ async def telegraph_lyrics(tittle, artist, title_img):
         try:
             songs = genius.search_song(tittle, artist)
             content = songs.lyrics
-            content = content.replace("\n", "<br>").replace("<br><br>","<br>‌‌‎ <br>").replace("[","<b>[").replace("]","]</b>")
+            content = (
+                content.replace("\n", "<br>")
+                .replace("<br><br>", "<br>‌‌‎ <br>")
+                .replace("[", "<b>[")
+                .replace("]", "]</b>")
+            )
             result = f"<img src='{title_img}'/><h4>{tittle}</h4><br><b>by {artist}</b><br>‌‌‎ <br>{content}"
             symbol = "𝄞"
         except (TypeError, AttributeError):
@@ -704,7 +710,6 @@ async def spotify_now(event):
     os.remove(thumb)
 
 
-
 @catub.cat_cmd(
     pattern="spinfo$",
     command=("spinfo", plugin_category),
@@ -841,7 +846,12 @@ async def spotify_now(event):
             songg = await catub.send_file(BOTLOG_CHATID, song)
             fetch_songg = await catub.tgbot.get_messages(BOTLOG_CHATID, ids=songg.id)
             btn_song = await catub.tgbot.send_file(
-                BOTLOG_CHATID, fetch_songg, buttons=[Button.url("🎧 Spotify", link),Button.url(f"{symbol} Lyrics", lyrics)]
+                BOTLOG_CHATID,
+                fetch_songg,
+                buttons=[
+                    Button.url("🎧 Spotify", link),
+                    Button.url(f"{symbol} Lyrics", lyrics),
+                ],
             )
             fetch_btn_song = await catub.get_messages(BOTLOG_CHATID, ids=btn_song.id)
             await event.client.forward_messages(event.chat_id, fetch_btn_song)
