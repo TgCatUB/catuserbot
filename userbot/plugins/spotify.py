@@ -621,7 +621,8 @@ def sp_data(API):
                 }
             },
         )
-        spdata = requests.get(API, headers=oauth)
+        oauth2 = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
+        spdata = requests.get(API, headers=oauth2)
     return spdata
 
 
@@ -792,6 +793,7 @@ async def spotify_now(event):
         "usage": [
             "{tr}now",
             "{tr}now <Spotify/Deezer link>",
+        ],
         "flags": {
             "i": "To send song song link as button",
         },
