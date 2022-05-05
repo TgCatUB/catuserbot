@@ -1,10 +1,10 @@
 import base64
 import time
 
-from telethon.tl.custom import Dialog
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.custom import Dialog
 from telethon.tl.functions.contacts import UnblockRequest as unblock
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import Channel, Chat, User
 
 from userbot import catub
@@ -262,7 +262,7 @@ async def _(event):
         uid = reply_message.sender_id
     chat = "@BRScan_bot"
     catevent = await edit_or_reply(event, "`Processing...`")
-    reply_to = await reply_id(event)
+    await reply_id(event)
     async with event.client.conversation(chat) as conv:
         try:
             purgeflag = await conv.send_message(f"/search {uid}")
@@ -272,7 +272,7 @@ async def _(event):
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
         if "user is not in my database" in response.text:
-            await edit_delete(catevent,"`User not found in database!`")
+            await edit_delete(catevent, "`User not found in database!`")
         else:
-            await edit_or_reply(catevent,response.message)
+            await edit_or_reply(catevent, response.message)
         await delete_conv(event, chat, purgeflag)
