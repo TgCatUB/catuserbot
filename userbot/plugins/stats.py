@@ -271,13 +271,20 @@ async def _(event):
             purgeflag = await conv.send_message(f"/search {uid}")
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
-        msg = response.message
+        msg = response.text
         if "user is not in my database" in msg:
             await edit_delete(catevent, "`User not found in database!`")
         else:
+            lines = msg.splitlines()
+            msg = ""
+            for i in lines:
+                if "Name:" in i and str(uid) not in i:
+                    msg = f"**Name:** [{i.replace('**Name:** ','')}](tg://user?id={uid})\n"
+                else:
+                    msg += f"{i}\n"
             if response.media:
                 file = await catub.download_media(response)
-                msg = f"{msg}\n\n"
+                msg = f"{msg}\n"
                 with open(file, "r") as f:
                     chats = f.readlines()
                 for i in chats:
