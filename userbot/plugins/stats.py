@@ -1,6 +1,6 @@
 import base64
 import time
-
+import os
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.custom import Dialog
 from telethon.tl.functions.contacts import UnblockRequest as unblock
@@ -270,8 +270,17 @@ async def _(event):
             purgeflag = await conv.send_message(f"/search {uid}")
         response = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
-        if "user is not in my database" in response.text:
+        msg = response.message
+        if "user is not in my database" in msg:
             await edit_delete(catevent, "`User not found in database!`")
         else:
-            await edit_or_reply(catevent, response.message)
+            if response.media:
+                file = await catub.download_media(response)
+                msg = f"{msg}\n\n"
+                with open(file, "r") as f:
+                    chats = f.readlines()
+                for i in chats:
+                    msg += f"{i}"
+                os.remove(file)
+            await edit_or_reply(catevent, msg)
         await delete_conv(event, chat, purgeflag)
