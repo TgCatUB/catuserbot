@@ -262,7 +262,6 @@ async def _(event):
         uid = reply_message.sender_id
     chat = "@BRScan_bot"
     catevent = await edit_or_reply(event, "`Processing...`")
-    await reply_id(event)
     async with event.client.conversation(chat) as conv:
         try:
             purgeflag = await conv.send_message(f"/search {uid}")
