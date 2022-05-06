@@ -176,7 +176,10 @@ async def ffmpeg_compress(event):
         if not reply_message.media:
             return await edit_delete(event, "`Reply to a media file`")
         media = media_type(reply_message)
-        if reply_message.media.document.mime_type.split("/")[0] != "video" or  media=="Sticker":
+        if (
+            reply_message.media.document.mime_type.split("/")[0] != "video"
+            or media == "Sticker"
+        ):
             return await edit_delete(event, "`Only Video files are supported`")
         catevent = await edit_or_reply(event, "`Saving the file...`")
         try:
@@ -288,7 +291,11 @@ async def ff_mpeg_trim_cmd(event):
                 return await edit_delete(event, "`Reply to a media file`")
             start = datetime.now()
             media = media_type(reply_message)
-            if reply_message.media.document.mime_type.split("/")[0] not in ["video","audio"] or  media=="Sticker":
+            if (
+                reply_message.media.document.mime_type.split("/")[0]
+                not in ["video", "audio"]
+                or media == "Sticker"
+            ):
                 return await edit_delete(event, "`Only media files are supported`", 5)
             catevent = await edit_or_reply(event, "`Saving the file...`")
             try:
