@@ -534,6 +534,13 @@ async def spotifybio(event):
         await spotify_bio()
 
 
+def title_fetch(title):
+    regx = re.search(r"([a-zA-Z0-9]+(?: ?[a-zA-Z0-9]+)+(?: - \w - \w+)?(?:-\w-\w+)?).*", title)
+    if regx:
+        return regx.group(1)
+    return title
+    
+    
 async def telegraph_lyrics(tittle, artist, title_img):
     GENIUS = Config.GENIUS_API_TOKEN
     symbol = "❌"
@@ -691,10 +698,7 @@ async def spotify_now(event):
         dic["duration"] = ms_converter(received["item"]["duration_ms"])
         dic["link"] = received["item"]["external_urls"]["spotify"]
         dic["image"] = received["item"]["album"]["images"][1]["url"]
-        tittle = dic["title"]
-        regx = re.search(r"([^(-]+) [(-].*", tittle)
-        if regx:
-            tittle = regx.group(1)
+        tittle = title_fetch(dic["title"])
         thumb = await make_thumb(
             dic["image"],
             catub,
@@ -764,11 +768,8 @@ async def spotify_now(event):
         song = "__**Spotify last played songs :-**__\n\n"
         songs = x.json()
         for i in songs["items"]:
-            tittle = i["track"]["name"]
-            regx = re.search(r"([^(-]+) [(-].*", tittle)
-            if regx:
-                tittle = regx.group(1)
-            song += f"**◉ [{tittle} - {i['track']['artists'][0]['name']}]({i['track']['external_urls']['spotify']})**\n"
+            title = title_fetch(i["track"]["name"])
+            song += f"**◉ [{title} - {i['track']['artists'][0]['name']}]({i['track']['external_urls']['spotify']})**\n"
     await edit_or_reply(event, song)
 
 
@@ -839,9 +840,7 @@ async def spotify_now(event):
         await event.client.send_read_acknowledge(conv.chat_id)
         await catevent.delete()
         if cmd == "i":
-            regx = re.search(r"([^(-]+) [(-].*", title)
-            if regx:
-                title = regx.group(1)
+            title = title_fetch(title)
             lyrics, symbol = await telegraph_lyrics(title, artist, thumb)
             songg = await catub.send_file(BOTLOG_CHATID, song)
             fetch_songg = await catub.tgbot.get_messages(BOTLOG_CHATID, ids=songg.id)
