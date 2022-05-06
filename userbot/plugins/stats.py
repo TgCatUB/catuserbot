@@ -4,7 +4,6 @@ import time
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.custom import Dialog
 from telethon.tl.functions.contacts import UnblockRequest as unblock
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import Channel, Chat, User
 
 from userbot import catub
@@ -130,32 +129,46 @@ async def full_stats(event):  # sourcery no-metrics
     catevent = await edit_or_reply(event, STAT_INDICATION)
     start_time = time.time()
     grp = []
-    message= []
+    message = []
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if isinstance(entity, Channel) and entity.broadcast:
-            if flag=="p":
+            if flag == "p":
                 try:
                     if entity.username and catcmd == "c":
-                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        grp.append(
+                            f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
+                        )
                         output = CHANNELS_STR
-                    if ((entity.creator or entity.admin_rights) and entity.username) and catcmd == "ca":
-                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                    if (
+                        (entity.creator or entity.admin_rights) and entity.username
+                    ) and catcmd == "ca":
+                        grp.append(
+                            f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
+                        )
                         output = CHANNELS_ADMINSTR
                     if (entity.creator and entity.username) and catcmd == "co":
-                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        grp.append(
+                            f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
+                        )
                         output = CHANNELS_OWNERSTR
                 except AttributeError:
                     pass
-            elif flag=="":
+            elif flag == "":
                 if catcmd == "c":
-                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
                     output = CHANNELS_STR
                 if (entity.creator or entity.admin_rights) and catcmd == "ca":
-                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
                     output = CHANNELS_ADMINSTR
                 if entity.creator and catcmd == "co":
-                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
                     output = CHANNELS_OWNERSTR
         elif (
             isinstance(entity, Channel)
@@ -164,43 +177,57 @@ async def full_stats(event):  # sourcery no-metrics
             and not isinstance(entity, User)
             and isinstance(entity, Chat)
         ):
-            if flag=="p":
+            if flag == "p":
                 try:
                     if entity.username and catcmd == "g":
-                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        grp.append(
+                            f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
+                        )
                         output = GROUPS_STR
-                    if ((entity.creator or entity.admin_rights) and entity.username) and catcmd == "ga":
-                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                    if (
+                        (entity.creator or entity.admin_rights) and entity.username
+                    ) and catcmd == "ga":
+                        grp.append(
+                            f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
+                        )
                         output = GROUPS_ADMINSTR
                     if (entity.creator and entity.username) and catcmd == "go":
-                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        grp.append(
+                            f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
+                        )
                         output = GROUPS_OWNERSTR
                 except AttributeError:
                     pass
-            elif flag=="":
+            elif flag == "":
                 if catcmd == "g":
-                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
                     output = GROUPS_STR
                 if (entity.creator or entity.admin_rights) and catcmd == "ga":
-                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
                     output = GROUPS_ADMINSTR
                 if entity.creator and catcmd == "go":
-                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
                     output = GROUPS_OWNERSTR
     for k, i in enumerate(grp, start=1):
         output += f"{k} .) {i}\n"
         if k % 100 == 0:
             message.append(output)
-            output= ""
+            output = ""
     stop_time = time.time() - start_time
     if output:
         message.append(output)
     count = len(message)
-    message[count-1] = f"{message[count-1]}\n<b>Time Taken : </b> {stop_time:.02f}s"
+    message[count - 1] = f"{message[count-1]}\n<b>Time Taken : </b> {stop_time:.02f}s"
     await catevent.edit(message[0], parse_mode="html")
-    if count>1:
+    if count > 1:
         for i in range(count):
-            await catub.send_message(event.chat_id,message[i], parse_mode="html")
+            await catub.send_message(event.chat_id, message[i], parse_mode="html")
 
 
 @catub.cat_cmd(
