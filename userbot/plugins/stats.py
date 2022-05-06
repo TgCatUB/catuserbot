@@ -121,7 +121,7 @@ async def stats(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="(|p)saxt (g|ga|go|c|ca|co)$",
+    pattern="(|p)stat (g|ga|go|c|ca|co)$",
 )
 async def full_stats(event):  # sourcery no-metrics
     flag = event.pattern_match.group(1)
@@ -216,7 +216,7 @@ async def full_stats(event):  # sourcery no-metrics
                     output = GROUPS_OWNERSTR
     for k, i in enumerate(grp, start=1):
         output += f"{k} .) {i}\n"
-        if k % 100 == 0:
+        if k % 99 == 0:
             message.append(output)
             output = ""
     stop_time = time.time() - start_time
@@ -226,7 +226,7 @@ async def full_stats(event):  # sourcery no-metrics
     message[count - 1] = f"{message[count-1]}\n<b>Time Taken : </b> {stop_time:.02f}s"
     await catevent.edit(message[0], parse_mode="html")
     if count > 1:
-        for i in range(count):
+        for i in range(1, count):
             await catub.send_message(event.chat_id, message[i], parse_mode="html")
 
 
