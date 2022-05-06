@@ -1,4 +1,3 @@
-import base64
 import os
 import time
 
@@ -18,12 +17,12 @@ plugin_category = "utils"
 #                           STRINGS                           #
 # =========================================================== #
 STAT_INDICATION = "`Collecting stats, Wait man`"
-CHANNELS_STR = "**The list of channels in which you are their are here **\n\n"
-CHANNELS_ADMINSTR = "**The list of channels in which you are admin are here **\n\n"
-CHANNELS_OWNERSTR = "**The list of channels in which you are owner are here **\n\n"
-GROUPS_STR = "**The list of groups in which you are their are here **\n\n"
-GROUPS_ADMINSTR = "**The list of groups in which you are admin are here **\n\n"
-GROUPS_OWNERSTR = "**The list of groups in which you are owner are here **\n\n"
+CHANNELS_STR = "<b>The list of channels in which you are their are here </b>\n\n"
+CHANNELS_ADMINSTR = "<b>The list of channels in which you are admin are here </b>\n\n"
+CHANNELS_OWNERSTR = "<b>The list of channels in which you are owner are here </b>\n\n"
+GROUPS_STR = "<b>The list of groups in which you are their are here </b>\n\n"
+GROUPS_ADMINSTR = "<b>The list of groups in which you are admin are here </b>\n\n"
+GROUPS_OWNERSTR = "<b>The list of groups in which you are owner are here </b>\n\n"
 # =========================================================== #
 #                                                             #
 # =========================================================== #
@@ -47,6 +46,7 @@ def user_full_name(user):
         "header": "To get statistics of your telegram account.",
         "description": "Shows you the count of  your groups, channels, private chats...etc if no input is given.",
         "flags": {
+            "p": "To show public group/channels only",
             "g": "To get list of all group you in",
             "ga": "To get list of all groups where you are admin",
             "go": "To get list of all groups where you are owner/creator.",
@@ -54,8 +54,8 @@ def user_full_name(user):
             "ca": "To get list of all channels where you are admin",
             "co": "To get list of all channels where you are owner/creator.",
         },
-        "usage": ["{tr}stat", "{tr}stat <flag>"],
-        "examples": ["{tr}stat g", "{tr}stat ca"],
+        "usage": ["{tr}stat", "{tr}stat <flag>", "{tr}pstat <flag>"],
+        "examples": ["{tr}stat g", "{tr}stat ca", "{tr}pstat ca"],
     },
 )
 async def stats(event):  # sourcery no-metrics
@@ -122,71 +122,41 @@ async def stats(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="stat (c|ca|co)$",
+    pattern="(|p)saxt (g|ga|go|c|ca|co)$",
 )
-async def stats(event):  # sourcery no-metrics
-    catcmd = event.pattern_match.group(1)
+async def full_stats(event):  # sourcery no-metrics
+    flag = event.pattern_match.group(1)
+    catcmd = event.pattern_match.group(2)
     catevent = await edit_or_reply(event, STAT_INDICATION)
     start_time = time.time()
-    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    hi = []
-    hica = []
-    hico = []
+    grp = []
+    message= []
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if isinstance(entity, Channel) and entity.broadcast:
-            hi.append([entity.title, entity.id])
-            if entity.creator or entity.admin_rights:
-                hica.append([entity.title, entity.id])
-            if entity.creator:
-                hico.append([entity.title, entity.id])
-    if catcmd == "c":
-        output = CHANNELS_STR
-        for k, i in enumerate(hi, start=1):
-            output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = CHANNELS_STR
-    elif catcmd == "ca":
-        output = CHANNELS_ADMINSTR
-        for k, i in enumerate(hica, start=1):
-            output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = CHANNELS_ADMINSTR
-    elif catcmd == "co":
-        output = CHANNELS_OWNERSTR
-        for k, i in enumerate(hico, start=1):
-            output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = CHANNELS_OWNERSTR
-    stop_time = time.time() - start_time
-    try:
-        cat = Get(cat)
-        await event.client(cat)
-    except BaseException:
-        pass
-    output += f"\n**Time Taken : ** {stop_time:.02f}s"
-    try:
-        await catevent.edit(output)
-    except Exception:
-        await edit_or_reply(
-            catevent,
-            output,
-            caption=caption,
-        )
-
-
-@catub.cat_cmd(
-    pattern="stat (g|ga|go)$",
-)
-async def stats(event):  # sourcery no-metrics
-    catcmd = event.pattern_match.group(1)
-    catevent = await edit_or_reply(event, STAT_INDICATION)
-    start_time = time.time()
-    cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    hi = []
-    higa = []
-    higo = []
-    async for dialog in event.client.iter_dialogs():
-        entity = dialog.entity
-        if isinstance(entity, Channel) and entity.broadcast:
-            continue
+            if flag=="p":
+                try:
+                    if entity.username and catcmd == "c":
+                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        output = CHANNELS_STR
+                    if ((entity.creator or entity.admin_rights) and entity.username) and catcmd == "ca":
+                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        output = CHANNELS_ADMINSTR
+                    if (entity.creator and entity.username) and catcmd == "co":
+                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        output = CHANNELS_OWNERSTR
+                except AttributeError:
+                    pass
+            elif flag=="":
+                if catcmd == "c":
+                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    output = CHANNELS_STR
+                if (entity.creator or entity.admin_rights) and catcmd == "ca":
+                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    output = CHANNELS_ADMINSTR
+                if entity.creator and catcmd == "co":
+                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    output = CHANNELS_OWNERSTR
         elif (
             isinstance(entity, Channel)
             and entity.megagroup
@@ -194,41 +164,43 @@ async def stats(event):  # sourcery no-metrics
             and not isinstance(entity, User)
             and isinstance(entity, Chat)
         ):
-            hi.append([entity.title, entity.id])
-            if entity.creator or entity.admin_rights:
-                higa.append([entity.title, entity.id])
-            if entity.creator:
-                higo.append([entity.title, entity.id])
-    if catcmd == "g":
-        output = GROUPS_STR
-        for k, i in enumerate(hi, start=1):
-            output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = GROUPS_STR
-    elif catcmd == "ga":
-        output = GROUPS_ADMINSTR
-        for k, i in enumerate(higa, start=1):
-            output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = GROUPS_ADMINSTR
-    elif catcmd == "go":
-        output = GROUPS_OWNERSTR
-        for k, i in enumerate(higo, start=1):
-            output += f"{k} .) [{i[0]}](https://t.me/c/{i[1]}/1)\n"
-        caption = GROUPS_OWNERSTR
+            if flag=="p":
+                try:
+                    if entity.username and catcmd == "g":
+                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        output = GROUPS_STR
+                    if ((entity.creator or entity.admin_rights) and entity.username) and catcmd == "ga":
+                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        output = GROUPS_ADMINSTR
+                    if (entity.creator and entity.username) and catcmd == "go":
+                        grp.append(f"<a href = https://t.me/{entity.username}>{entity.title}</a>")
+                        output = GROUPS_OWNERSTR
+                except AttributeError:
+                    pass
+            elif flag=="":
+                if catcmd == "g":
+                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    output = GROUPS_STR
+                if (entity.creator or entity.admin_rights) and catcmd == "ga":
+                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    output = GROUPS_ADMINSTR
+                if entity.creator and catcmd == "go":
+                    grp.append(f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>")
+                    output = GROUPS_OWNERSTR
+    for k, i in enumerate(grp, start=1):
+        output += f"{k} .) {i}\n"
+        if k % 100 == 0:
+            message.append(output)
+            output= ""
     stop_time = time.time() - start_time
-    try:
-        cat = Get(cat)
-        await event.client(cat)
-    except BaseException:
-        pass
-    output += f"\n**Time Taken : ** {stop_time:.02f}s"
-    try:
-        await catevent.edit(output)
-    except Exception:
-        await edit_or_reply(
-            catevent,
-            output,
-            caption=caption,
-        )
+    if output:
+        message.append(output)
+    count = len(message)
+    message[count-1] = f"{message[count-1]}\n<b>Time Taken : </b> {stop_time:.02f}s"
+    await catevent.edit(message[0], parse_mode="html")
+    if count>1:
+        for i in range(count):
+            await catub.send_message(event.chat_id,message[i], parse_mode="html")
 
 
 @catub.cat_cmd(
@@ -239,7 +211,7 @@ async def stats(event):  # sourcery no-metrics
         "usage": "{tr}ustat <reply/userid/username>",
     },
 )
-async def _(event):
+async def ustat(event):
     "To get replied user's public groups."
     input_str = "".join(event.text.split(maxsplit=1)[1:])
     reply_message = await event.get_reply_message()

@@ -35,13 +35,13 @@ async def startup_process():
     await verifyLoggerGroup()
     await load_plugins("plugins")
     await load_plugins("assistant")
-    print("---------------------------------------------")
+    print("============================================================")
     print("Yay your userbot is officially working.!!!")
     print(
         f"Congratulation, now type {cmdhr}alive to see message if catub is live\
         \nIf you need assistance, head to https://t.me/catuserbot_support"
     )
-    print("---------------------------------------------")
+    print("============================================================")
     await verifyLoggerGroup()
     await add_bot_to_logger_group(BOTLOG_CHATID)
     if PM_LOGGER_GROUP_ID != -100:
