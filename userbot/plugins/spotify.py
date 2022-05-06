@@ -535,12 +535,14 @@ async def spotifybio(event):
 
 
 def title_fetch(title):
-    regx = re.search(r"([a-zA-Z0-9]+(?: ?[a-zA-Z0-9]+)+(?: - \w - \w+)?(?:-\w-\w+)?).*", title)
+    regx = re.search(
+        r"([a-zA-Z0-9]+(?: ?[a-zA-Z0-9]+)+(?: - \w - \w+)?(?:-\w-\w+)?).*", title
+    )
     if regx:
         return regx.group(1)
     return title
-    
-    
+
+
 async def telegraph_lyrics(tittle, artist, title_img):
     GENIUS = Config.GENIUS_API_TOKEN
     symbol = "❌"
