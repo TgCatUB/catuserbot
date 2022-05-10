@@ -184,12 +184,12 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="(s(a)?z(a)?m)(?:\s|$)([\s\S]*)",
+    pattern="(s(ha)?z(a)?m)(?:\s|$)([\s\S]*)",
     command=("shazam", plugin_category),
     info={
         "header": "To reverse search song.",
         "description": "Reverse search audio file using shazam api",
-        "flags": "s": "To send the song of sazam match",
+        "flags": {"s": "To send the song of sazam match"},
         "usage": [
             "{tr}shazam <reply to voice/audio>",
             "{tr}szm <reply to voice/audio>",
@@ -254,7 +254,7 @@ async def shazamcmd(event):
             file = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
             delete = True
-    await event.client.send_file(event.chat_id, file, caption=f"<b>Song :</b> <code>{title}</code>\n\n<b>Song Link : <a href = {slink}/1>YouTube</a></b>", reply_to=reply, parse_mode="html")
+    await event.client.send_file(event.chat_id, file, caption=f"<b>Song :</b> <code>{title}</code>\n<b>Song Link : <a href = {slink}/1>YouTube</a></b>", reply_to=reply, parse_mode="html")
     await catevent.delete()
     if delete:
         await delete_conv(event, chat, purgeflag)
