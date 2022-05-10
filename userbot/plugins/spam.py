@@ -322,3 +322,45 @@ async def spammer(event):
     await event.delete()
     addgvar("spamwork", True)
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)
+    
+    
+@catub.cat_cmd(
+    pattern="(r(eact)?spam$)",
+    command=("rspam", plugin_category),
+    info={
+        "header": "React spam to message",
+        "notes": "This a really annyoing spam, so added filter to work with mutual contats only\nUse  <{tr}stop spam> to stop it",
+        "usage": [
+            "{tr}rspam <reply>",
+            "{tr}reactspam <reply>",
+        ],
+    },
+)
+async def react_spam(event):#By @FeelDeD
+    "Spam react on message"
+    msg = await event.get_reply_message()
+    if not msg:
+        return await edit_delete(event, "```Reply to a message```", 10)
+    catevent = await edit_or_reply(event,"Processing...")
+    checker = (await event.client.get_entity(msg.from_id)).mutual_contact
+    if not checker:
+        return await edit_delete(event, "```The user isn't your mutual contact, both need to be in each others contact for this plugin to work..```", 10)
+    if isinstance(msg.peer_id, types.PeerUser):
+        emoji = ['👍', '👎', '❤', '🔥', '🥰', '👏', '😁', '🤔', '🤯', '😱', '🤬', '😢', '🎉', '🤩', '🤮', '💩']
+    else:
+        getchat = await event.client(GetFullChannelRequest(channel=event.chat_id))
+        grp_emoji = getchat.full_chat.available_reactions
+        if not grp_emoji :
+            return await edit_delete(event, f"`Reaction is not active in this chat`", 6)
+        emoji = grp_emoji
+    addgvar("spamwork", True)
+    await catevent.delete()
+    for s in range(69):
+        for i in remoji:
+            await asyncio.sleep(0.2)
+            await msg.react(i,True)
+            await asyncio.sleep(0.2)
+            ac = gvarstatus("spamwork")
+            if not ac:
+                await asyncio.sleep(0.4)
+                return await msg.react("")
