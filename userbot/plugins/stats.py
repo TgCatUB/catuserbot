@@ -228,7 +228,9 @@ async def full_stats(event):  # sourcery no-metrics
     reply_to_msg = event.id
     if count > 1:
         for i in range(1, count):
-            new_event = await catub.send_message(event.chat_id, message[i], parse_mode="html",reply_to=reply_to_msg)
+            new_event = await catub.send_message(
+                event.chat_id, message[i], parse_mode="html", reply_to=reply_to_msg
+            )
             reply_to_msg = new_event.id
 
 
