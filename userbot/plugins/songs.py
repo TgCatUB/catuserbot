@@ -184,14 +184,16 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="s(a)?z(a)?m$",
+    pattern="(s(a)?z(a)?m)(?:\s|$)([\s\S]*)",
     command=("shazam", plugin_category),
     info={
         "header": "To reverse search song.",
         "description": "Reverse search audio file using shazam api",
+        "flags": "s": "To send the song of sazam match",
         "usage": [
             "{tr}shazam <reply to voice/audio>",
             "{tr}szm <reply to voice/audio>",
+            "{tr}szm s<reply to voice/audio>",
         ],
     },
 )
@@ -199,11 +201,15 @@ async def shazamcmd(event):
     "To reverse search song."
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
+    chat = "@DeezerMusicBot"
+    delete = False
+    flag = event.pattern_match.group(4)
     if not reply or not mediatype or mediatype not in ["Voice", "Audio"]:
         return await edit_delete(
             event, "__Reply to Voice clip or Audio clip to reverse search that song.__"
         )
     catevent = await edit_or_reply(event, "__Downloading the audio clip...__")
+    name = "cat.mp3"
     try:
         for attr in getattr(reply.document, "attributes", []):
             if isinstance(attr, types.DocumentAttributeFilename):
@@ -217,19 +223,41 @@ async def shazamcmd(event):
         mp3_fileto_recognize = open(name, "rb").read()
         shazam = Shazam(mp3_fileto_recognize)
         recognize_generator = shazam.recognizeSong()
+        print(recognize_generator)
+        print()
         track = next(recognize_generator)[1]["track"]
+        print(track)
     except Exception as e:
         LOGS.error(e)
         return await edit_delete(
             catevent, f"**Error while reverse searching song:**\n__{e}__"
         )
 
-    image = track["images"]["background"]
-    song = track["share"]["subject"]
-    await event.client.send_file(
-        event.chat_id, image, caption=f"**Song:** `{song}`", reply_to=reply
-    )
+    file = track["images"]["background"]
+    title = track["share"]["subject"]
+    slink = await yt_search(title)
+    if flag == "s":
+        deezer = track["hub"]['providers'][1]['actions'][0]['uri'][15:]
+        async with event.client.conversation(chat) as conv:
+            try:
+                purgeflag = await conv.send_message("/start")
+            except YouBlockedUserError:
+                await catub(unblock("DeezerMusicBot"))
+                purgeflag = await conv.send_message("/start")
+            await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            await conv.send_message(deezer)
+            await event.client.get_messages(chat)
+            song = await event.client.get_messages(chat)
+            await song[0].click(0)
+            await conv.get_response()
+            file = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+            delete = True
+    await event.client.send_file(event.chat_id, file, caption=f"<b>Song :</b> <code>{title}</code>\n\n<b>Song Link : <a href = {slink}/1>YouTube</a></b>", reply_to=reply, parse_mode="html")
     await catevent.delete()
+    if delete:
+        await delete_conv(event, chat, purgeflag)
 
 
 @catub.cat_cmd(

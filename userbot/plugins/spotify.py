@@ -27,6 +27,8 @@ from PIL import Image, ImageEnhance, ImageFilter
 from telethon import events
 from telethon.errors import AboutTooLongError, FloodWaitError
 from telethon.tl.custom import Button
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.contacts import UnblockRequest as unblock
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from validators.url import url
