@@ -237,7 +237,7 @@ async def shazamcmd(event):
     title = track["share"]["subject"]
     slink = await yt_search(title)
     if flag == "s":
-        deezer = track["hub"]['providers'][1]['actions'][0]['uri'][15:]
+        deezer = track["hub"]["providers"][1]["actions"][0]["uri"][15:]
         async with event.client.conversation(chat) as conv:
             try:
                 purgeflag = await conv.send_message("/start")
@@ -254,7 +254,13 @@ async def shazamcmd(event):
             file = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
             delete = True
-    await event.client.send_file(event.chat_id, file, caption=f"<b>Song :</b> <code>{title}</code>\n<b>Song Link : <a href = {slink}/1>YouTube</a></b>", reply_to=reply, parse_mode="html")
+    await event.client.send_file(
+        event.chat_id,
+        file,
+        caption=f"<b>Song :</b> <code>{title}</code>\n<b>Song Link : <a href = {slink}/1>YouTube</a></b>",
+        reply_to=reply,
+        parse_mode="html",
+    )
     await catevent.delete()
     if delete:
         await delete_conv(event, chat, purgeflag)
