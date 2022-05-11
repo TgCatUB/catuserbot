@@ -1,6 +1,6 @@
 import os
 import time
-
+import asyncio
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.custom import Dialog
 from telethon.tl.functions.contacts import UnblockRequest as unblock
@@ -272,26 +272,37 @@ async def ustat(event):
         except YouBlockedUserError:
             await catub(unblock("BRScan_bot"))
             purgeflag = await conv.send_message(f"/search {uid}")
-        response = await conv.get_response()
+        response_list = []
+        chat_list = []
+        msg_list = []
+        while True:
+            try:
+                response = await conv.get_response(timeout=2)
+            except asyncio.TimeoutError:
+                break
+            response_list.append(response.text)
         await event.client.send_read_acknowledge(conv.chat_id)
-        msg = response.text
-        if "user is not in my database" in msg:
-            await edit_delete(catevent, "`User not found in database!`")
-        else:
-            lines = msg.splitlines()
+    await delete_conv(event, chat, purgeflag)
+    if "user is not in my database" in response_list[0]:
+        return await edit_delete(catevent, "`User not found in database!`")
+    count = len(response_list)
+    for i in range(1,count):
+        lines = response_list[i].splitlines()
+        chat_list += lines
+    msg = f"{response_list[0]}\n\n"  
+    for k, i in enumerate(chat_list, start=1):
+        #tittle = (await event.client.get_entity(i[3:])).title
+        #msg += f"**{k} .** [{tittle}](https://t.me/{i[3:]})\n"
+        msg += f"**{k}. {i[2:]}**\n"
+        if k % 99 == 0:
+            msg_list.append(msg)
             msg = ""
-            for i in lines:
-                if "Name:" in i and str(uid) not in i:
-                    msg = f"**Name:** [{i.replace('**Name:** ','')}](tg://user?id={uid})\n"
-                else:
-                    msg += f"{i}\n"
-            if response.media:
-                file = await catub.download_media(response)
-                msg = f"{msg}\n"
-                with open(file, "r") as f:
-                    chats = f.readlines()
-                for i in chats:
-                    msg += f"{i}"
-                os.remove(file)
-            await edit_or_reply(catevent, msg)
-        await delete_conv(event, chat, purgeflag)
+    if msg:
+        msg_list.append(msg)
+    checker = len(msg_list)
+    await catevent.edit(msg_list[0])
+    reply_to_msg = event.id
+    if checker > 1:
+        for i in range(1, checker):
+            new_event = await catub.send_message(event.chat_id, msg_list[i],reply_to=reply_to_msg)
+            reply_to_msg = new_event.id
