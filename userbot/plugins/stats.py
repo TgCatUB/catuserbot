@@ -1,6 +1,6 @@
-import os
-import time
 import asyncio
+import time
+
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.custom import Dialog
 from telethon.tl.functions.contacts import UnblockRequest as unblock
@@ -286,13 +286,13 @@ async def ustat(event):
     if "user is not in my database" in response_list[0]:
         return await edit_delete(catevent, "`User not found in database!`")
     count = len(response_list)
-    for i in range(1,count):
+    for i in range(1, count):
         lines = response_list[i].splitlines()
         chat_list += lines
-    msg = f"{response_list[0]}\n\n"  
+    msg = f"{response_list[0]}\n\n"
     for k, i in enumerate(chat_list, start=1):
-        #tittle = (await event.client.get_entity(i[3:])).title
-        #msg += f"**{k} .** [{tittle}](https://t.me/{i[3:]})\n"
+        # tittle = (await event.client.get_entity(i[3:])).title
+        # msg += f"**{k} .** [{tittle}](https://t.me/{i[3:]})\n"
         msg += f"**{k}. {i[2:]}**\n"
         if k % 99 == 0:
             msg_list.append(msg)
@@ -304,5 +304,7 @@ async def ustat(event):
     reply_to_msg = event.id
     if checker > 1:
         for i in range(1, checker):
-            new_event = await catub.send_message(event.chat_id, msg_list[i],reply_to=reply_to_msg)
+            new_event = await catub.send_message(
+                event.chat_id, msg_list[i], reply_to=reply_to_msg
+            )
             reply_to_msg = new_event.id

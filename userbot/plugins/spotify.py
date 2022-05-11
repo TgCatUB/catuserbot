@@ -539,7 +539,9 @@ async def spotifybio(event):
 def title_fetch(title):
     pattern = re.compile(r"([^(-]+) [(-].*")
     if "-E-" in title or "- E -" in title:
-        pattern = re.compile(r"([a-zA-Z0-9]+(?: ?[a-zA-Z0-9]+)+(?: - \w - \w+)?(?:-\w-\w+)?).*")
+        pattern = re.compile(
+            r"([a-zA-Z0-9]+(?: ?[a-zA-Z0-9]+)+(?: - \w - \w+)?(?:-\w-\w+)?).*"
+        )
     regx = pattern.search(title)
     if regx:
         return regx.group(1)
