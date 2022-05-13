@@ -320,10 +320,8 @@ async def _(event):
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
-    await event.client.send_file(
-        event.chat_id, meme_file, reply_to=reply_to_id, force_document=False
-    )
+    await event.client.send_file(event.chat_id, output[1], reply_to=reply_to_id)
+    os.remove(output[1])
     await output[0].delete()
 
 

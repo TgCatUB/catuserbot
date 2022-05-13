@@ -33,6 +33,8 @@ async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
     else:
         catevent = event
     catmedia = None
+    if not os.path.isdir("./temp"):
+        os.mkdir("./temp")
     catfile = os.path.join("./temp/", "meme.png")
     if os.path.exists(catfile):
         os.remove(catfile)
