@@ -1,5 +1,4 @@
 # reverse search and google search  plugin for cat
-import io
 import os
 import re
 import urllib
@@ -13,10 +12,9 @@ from search_engine_parser.core.exceptions import NoResultsOrTrafficError
 
 from userbot import BOTLOG, BOTLOG_CHATID, catub
 
-from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import deEmojify
-from ..helpers.utils import reply_id, _cattools
+from ..helpers.utils import _cattools, reply_id
 
 opener = urllib.request.build_opener()
 useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
@@ -173,10 +171,12 @@ async def grs(event):
         previous_message = await event.get_reply_message()
         previous_message_text = previous_message.message
         BASE_URL = "http://www.google.com"
-        if previous_message.media:   
+        if previous_message.media:
             photo = await _cattools.media_to_pic(event, previous_message)
             if photo[1] is None:
-                return await edit_delete(photo[0], "__Unable to extract image from the replied message.__")
+                return await edit_delete(
+                    photo[0], "__Unable to extract image from the replied message.__"
+                )
             SEARCH_URL = "{}/searchbyimage/upload".format(BASE_URL)
             multipart = {
                 "encoded_image": (
@@ -248,7 +248,9 @@ async def reverse(event):
         return await edit_or_reply(event, "`Reply to media...`")
     photo = await _cattools.media_to_pic(event, message)
     if photo[1] is None:
-        return await edit_delete(photo[0], "__Unable to extract image from the replied message.__")
+        return await edit_delete(
+            photo[0], "__Unable to extract image from the replied message.__"
+        )
     catevent = await edit_or_reply(event, "`Processing...`")
     try:
         image = Image.open(photo[1])
