@@ -60,7 +60,7 @@ def random_loader(Font, Color, Background, collection):
     if Background in rand_bg:
         if Background == "total random":
             for i in collection["backgronds"]:
-                bg+=collection["backgronds"][i]
+                bg += collection["backgronds"][i]
             Background = random.choice(bg)
         else:
             Background = random.choice(collection["backgronds"][Background])
@@ -145,7 +145,7 @@ async def very(event):  # sourcery no-metrics
             template = requests.get(LOGO_BACKGROUND)
             temp_img = Image.open(BytesIO(template.content))
         except Exception as e:
-            await edit_or_reply(catevent,f"**Bad Url:** {LOGO_BACKGROUND}\n\n{e}") 
+            await edit_or_reply(catevent, f"**Bad Url:** {LOGO_BACKGROUND}\n\n{e}")
         raw_width, raw_height = temp_img.size
         resized_width, resized_height = (
             (1024, int(1024 * raw_height / raw_width))
@@ -154,10 +154,10 @@ async def very(event):  # sourcery no-metrics
         )
         img = temp_img.convert("RGBA").resize((resized_width, resized_height))
         draw = ImageDraw.Draw(img)
-        logo = requests.get(LOGO_FONT) 
+        logo = requests.get(LOGO_FONT)
         fontsize = int(LOGO_FONT_SIZE)
         font = ImageFont.truetype(BytesIO(logo.content), fontsize)
-        while font.getsize(text)[0] > 0.70*resized_width:
+        while font.getsize(text)[0] > 0.70 * resized_width:
             fontsize -= 1
             font = ImageFont.truetype(BytesIO(logo.content), fontsize)
         image_widthz, image_heightz = img.size
