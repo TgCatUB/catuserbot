@@ -58,11 +58,12 @@ def random_loader(Font, Color, Background, collection):
     if Color == "Random":
         Color = random.choice(collection["colors"])
     if Background in rand_bg:
-        Background = random.choice(collection["backgronds"][Background])
         if Background == "total random":
             for i in collection["backgronds"]:
-                collection["backgronds"][i]
+                bg+=collection["backgronds"][i]
             Background = random.choice(bg)
+        else:
+            Background = random.choice(collection["backgronds"][Background])
     return Font, Color, Background
 
 
@@ -109,7 +110,7 @@ async def very(event):  # sourcery no-metrics
         return await edit_delete(event, "**ಠ∀ಠ Gimmi text to make logo**")
     catevent = await edit_or_reply(event, "Processing...")
     reply_to_id = await reply_id(event)
-    LOGO_FONT_SIZE = gvarstatus("LOGO_FONT_SIZE") or 220
+    LOGO_FONT_SIZE = gvarstatus("LOGO_FONT_SIZE") or 200
     LOGO_FONT_WIDTH = gvarstatus("LOGO_FONT_WIDTH") or 2
     LOGO_FONT_HEIGHT = gvarstatus("LOGO_FONT_HEIGHT") or 2
     LOGO_FONT_COLOR = loader1 = gvarstatus("LOGO_FONT_COLOR") or "red"
@@ -140,8 +141,11 @@ async def very(event):  # sourcery no-metrics
             LOGO_FONT, LOGO_FONT_COLOR, LOGO_BACKGROUND = random_loader(
                 LOGO_FONT, LOGO_FONT_COLOR, LOGO_BACKGROUND, rjson
             )
-        template = requests.get(LOGO_BACKGROUND)
-        temp_img = Image.open(BytesIO(template.content))
+        try:
+            template = requests.get(LOGO_BACKGROUND)
+            temp_img = Image.open(BytesIO(template.content))
+        except Exception as e:
+            await edit_or_reply(catevent,f"**Bad Url:** {LOGO_BACKGROUND}\n\n{e}") 
         raw_width, raw_height = temp_img.size
         resized_width, resized_height = (
             (1024, int(1024 * raw_height / raw_width))
@@ -150,8 +154,12 @@ async def very(event):  # sourcery no-metrics
         )
         img = temp_img.convert("RGBA").resize((resized_width, resized_height))
         draw = ImageDraw.Draw(img)
-        logo = requests.get(LOGO_FONT)
-        font = ImageFont.truetype(BytesIO(logo.content), int(LOGO_FONT_SIZE))
+        logo = requests.get(LOGO_FONT) 
+        fontsize = int(LOGO_FONT_SIZE)
+        font = ImageFont.truetype(BytesIO(logo.content), fontsize)
+        while font.getsize(text)[0] > 0.70*resized_width:
+            fontsize -= 1
+            font = ImageFont.truetype(BytesIO(logo.content), fontsize)
         image_widthz, image_heightz = img.size
         w, h = draw.textsize(text, font=font)
         h += int(h * 0.21)
