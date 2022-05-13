@@ -272,7 +272,7 @@ async def ustat(event):
         except YouBlockedUserError:
             await catub(unblock("BRScan_bot"))
             purgeflag = await conv.send_message(f"/search {uid}")
-        response_list = []
+        msg = ""
         chat_list = []
         msg_list = []
         while True:
@@ -280,19 +280,16 @@ async def ustat(event):
                 response = await conv.get_response(timeout=2)
             except asyncio.TimeoutError:
                 break
-            response_list.append(response.text)
+            chat_list += response.text.splitlines()
         await event.client.send_read_acknowledge(conv.chat_id)
     await delete_conv(event, chat, purgeflag)
-    if "user is not in my database" in response_list[0]:
+    if "user is not in my database" in chat_list[0]:
         return await edit_delete(catevent, "`User not found in database!`")
-    count = len(response_list)
-    for i in range(1, count):
-        lines = response_list[i].splitlines()
-        chat_list += lines
-    msg = f"{response_list[0]}\n\n"
-    for k, i in enumerate(chat_list, start=1):
-        # tittle = (await event.client.get_entity(i[3:])).title
-        # msg += f"**{k} .** [{tittle}](https://t.me/{i[3:]})\n"
+    rng = 5 if chat_list[4] == "" else 4
+    for i in chat_list[:4]:
+        msg += f"{i}\n"
+    msg += "\n"
+    for k, i in enumerate(chat_list[rng:], start=1):
         msg += f"**{k}. {i[2:]}**\n"
         if k % 99 == 0:
             msg_list.append(msg)
