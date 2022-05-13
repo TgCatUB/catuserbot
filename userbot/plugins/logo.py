@@ -5,23 +5,22 @@ Created by @Jisan7509
 
 
 import os
-import re
-
-from io import BytesIO
 import random
-import json
+import re
+from io import BytesIO
+
 import PIL
 import requests
-from telegraph import upload_file
 from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
+from telegraph import upload_file
 
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import clippy
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from . import reply_id, mention
+from . import mention, reply_id
 
 # ======================================================================================================================================================================================
 
@@ -36,12 +35,13 @@ vars_list = {
     "lf": "LOGO_FONT",
 }
 
-rand_bg = ['total random','anime','frame','mcu/dcu','neon']
+rand_bg = ["total random", "anime", "frame", "mcu/dcu", "neon"]
 # ======================================================================================================================================================================================
 
 plugin_category = "extra"
 
-def random_checker(Font,Color,Background):
+
+def random_checker(Font, Color, Background):
     if Font == "Random":
         return True
     if Color == "Random":
@@ -49,23 +49,23 @@ def random_checker(Font,Color,Background):
     if Background in rand_bg:
         return True
     return False
-    
-def random_loader(Font,Color,Background,collection):
-    bg = []
-    checker = True
-    if Font == "Random":
-        Font = random.choice(collection['fonts'])
-    if Color == "Random":
-        Color = random.choice(collection['colors'])
-    if Background in rand_bg:
-        Background = random.choice(collection['backgronds'][Background])
-        if Background == "total random":
-            for i in collection['backgronds']:
-                backgrond+=collection['backgronds'][i]
-            Background = random.choice(bg)
-    return Font,Color,Background
 
-    
+
+def random_loader(Font, Color, Background, collection):
+    bg = []
+    if Font == "Random":
+        Font = random.choice(collection["fonts"])
+    if Color == "Random":
+        Color = random.choice(collection["colors"])
+    if Background in rand_bg:
+        Background = random.choice(collection["backgronds"][Background])
+        if Background == "total random":
+            for i in collection["backgronds"]:
+                collection["backgronds"][i]
+            Background = random.choice(bg)
+    return Font, Color, Background
+
+
 @catub.cat_cmd(
     pattern="(|f|s)logo(?: |$)([\s\S]*)",
     command=("logo", plugin_category),
@@ -101,13 +101,13 @@ async def very(event):  # sourcery no-metrics
         count, text = text.split(";")
     else:
         count = 1
-    count = 10 if int(count)>10 else int(count)
+    count = 10 if int(count) > 10 else int(count)
     reply = await event.get_reply_message()
     if not text and reply:
         text = reply.text
     if not text:
         return await edit_delete(event, "**ಠ∀ಠ Gimmi text to make logo**")
-    catevent = await edit_or_reply(event,"Processing...")
+    catevent = await edit_or_reply(event, "Processing...")
     reply_to_id = await reply_id(event)
     LOGO_FONT_SIZE = gvarstatus("LOGO_FONT_SIZE") or 220
     LOGO_FONT_WIDTH = gvarstatus("LOGO_FONT_WIDTH") or 2
@@ -123,17 +123,23 @@ async def very(event):  # sourcery no-metrics
         gvarstatus("LOGO_FONT")
         or "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Logo/Fonts/Streamster.ttf?raw=true"
     )
-    rcheck = random_checker(LOGO_FONT,LOGO_FONT_COLOR,LOGO_BACKGROUND)
+    rcheck = random_checker(LOGO_FONT, LOGO_FONT_COLOR, LOGO_BACKGROUND)
     if rcheck:
-        rjson = requests.get("https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/master/Resources/Logo/resources.txt").json()
-    if count>1 and not rcheck:
+        rjson = requests.get(
+            "https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/master/Resources/Logo/resources.txt"
+        ).json()
+    if count > 1 and not rcheck:
         count = 1
-        catevent = await edit_or_reply(event,"Not using random value,Changing limit to 1..")
-    output =[]
+        catevent = await edit_or_reply(
+            event, "Not using random value,Changing limit to 1.."
+        )
+    output = []
     captionlist = []
-    for i  in range(count): 
+    for i in range(count):
         if rcheck:
-            LOGO_FONT,LOGO_FONT_COLOR,LOGO_BACKGROUND = random_loader(LOGO_FONT,LOGO_FONT_COLOR,LOGO_BACKGROUND,rjson)
+            LOGO_FONT, LOGO_FONT_COLOR, LOGO_BACKGROUND = random_loader(
+                LOGO_FONT, LOGO_FONT_COLOR, LOGO_BACKGROUND, rjson
+            )
         template = requests.get(LOGO_BACKGROUND)
         temp_img = Image.open(BytesIO(template.content))
         raw_width, raw_height = temp_img.size
@@ -177,7 +183,7 @@ async def very(event):  # sourcery no-metrics
         img.save(file_name, "png")
         output.append(file_name)
         captionlist.append("")
-        LOGO_FONT_COLOR,LOGO_BACKGROUND,LOGO_FONT= loader1,loader2,loader3 
+        LOGO_FONT_COLOR, LOGO_BACKGROUND, LOGO_FONT = loader1, loader2, loader3
     captionlist[-1] = f"**➥__ Logo generated by :-** {mention}__"
     if cmd == "":
         await event.client.send_file(
@@ -189,7 +195,7 @@ async def very(event):  # sourcery no-metrics
         await event.client.send_file(
             event.chat_id,
             output,
-            caption = captionlist,
+            caption=captionlist,
             reply_to=reply_to_id,
             force_document=True,
         )
@@ -223,7 +229,7 @@ async def bad(event):
     "To change background of logo"
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)
-    bg_name = ['black','blue','purple','red','white'] + rand_bg
+    bg_name = ["black", "blue", "purple", "red", "white"] + rand_bg
     lbg_list = "**Available background names are here:-**\n\n**1.** `black`\n**2.** `blue`\n**3.** `purple`\n**4.** `red`\n**5.** `white`\n\n**Random Backgrounds:**\n**1.** `total random`\n**2.** `anime`\n**3.** `frame`\n**4.** `mcu/dcu`\n**5.** `neon`\n"
     if cmd == "c":
         reply_message = await event.get_reply_message()
@@ -242,7 +248,11 @@ async def bad(event):
         )
     if not input_str or input_str not in bg_name:
         return await edit_delete(event, lbg_list, 60)
-    string = input_str if input_str in rand_bg else f"https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Logo/Background/{input_str}.jpg"
+    string = (
+        input_str
+        if input_str in rand_bg
+        else f"https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Logo/Background/{input_str}.jpg"
+    )
     addgvar("LOGO_BACKGROUND", string)
     await edit_delete(event, f"**Background for logo changed to :-** `{input_str}`", 10)
 
@@ -286,7 +296,9 @@ async def pussy(event):  # sourcery no-metrics
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)
     if cmd == "":
-        source = requests.get("https://github.com/TgCatUB/CatUserbot-Resources/tree/master/Resources/Logo/Fonts")
+        source = requests.get(
+            "https://github.com/TgCatUB/CatUserbot-Resources/tree/master/Resources/Logo/Fonts"
+        )
         soup = BeautifulSoup(source.text, features="html.parser")
         links = soup.find_all("a", class_="js-navigation-open Link--primary")
         logo_font = []
@@ -295,59 +307,95 @@ async def pussy(event):  # sourcery no-metrics
             cat = os.path.splitext(each.text)[0]
             logo_font.append(cat)
             font_name += f"**{i}.**  `{cat}`\n"
-        logo_font.append('Random')
+        logo_font.append("Random")
         if not input_str or input_str not in logo_font:
-            return await edit_delete(event, font_name,80)
+            return await edit_delete(event, font_name, 80)
         string = input_str
         if input_str != "Random":
             if " " in input_str:
                 input_str = str(input_str).replace(" ", "%20")
             string = f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Logo/Fonts/{input_str}.ttf?raw=true"
         addgvar("LOGO_FONT", string)
-        return await edit_delete(event, f"**Font for logo changed to :-** `{input_str}`", 10)
+        return await edit_delete(
+            event, f"**Font for logo changed to :-** `{input_str}`", 10
+        )
     elif cmd in ["c", "sc"]:
         fg_name = []
         for name, code in PIL.ImageColor.colormap.items():
             fg_name.append(name)
             fg_list = str(fg_name).replace("'", "`")
-        rfg_name = fg_name+['Random']
+        rfg_name = fg_name + ["Random"]
         if cmd == "c":
             if not input_str or input_str not in rfg_name:
-                return await edit_delete(event,f"**Available font color names are here:-**\n\n[`Random`]\n\n{fg_list}",80)
+                return await edit_delete(
+                    event,
+                    f"**Available font color names are here:-**\n\n[`Random`]\n\n{fg_list}",
+                    80,
+                )
             addgvar("LOGO_FONT_COLOR", input_str)
-            return await edit_delete(event,f"**Font color for logo changed to :-** `{input_str}`",10)
+            return await edit_delete(
+                event, f"**Font color for logo changed to :-** `{input_str}`", 10
+            )
         if not input_str or input_str not in fg_name:
-            return await edit_delete(event,f"**Available stroke color names are here:-**\n\n{fg_list}",80)
+            return await edit_delete(
+                event, f"**Available stroke color names are here:-**\n\n{fg_list}", 80
+            )
         addgvar("LOGO_FONT_STROKE_COLOR", input_str)
-        return await edit_delete(event, f"**Stroke color for logo changed to :-** `{input_str}`", 10)
+        return await edit_delete(
+            event, f"**Stroke color for logo changed to :-** `{input_str}`", 10
+        )
     cat = re.compile(r"^\-?[1-9][0-9]*\.?[0-9]*")
     isint = re.match(cat, input_str)
     if not input_str or not isint:
-        return await edit_delete(event, f"**Give an integer value to set**",10)
+        return await edit_delete(event, f"**Give an integer value to set**", 10)
     if cmd == "s":
         input_str = int(input_str)
         if input_str > 0 and input_str <= 1000:
             addgvar("LOGO_FONT_SIZE", input_str)
-            return await edit_delete(event, f"**Font size is changed to :-** `{input_str}`",10)
-        await edit_delete(event,f"**Font size is between 0 - 1000, You can't set limit to :** `{input_str}`",10)
+            return await edit_delete(
+                event, f"**Font size is changed to :-** `{input_str}`", 10
+            )
+        await edit_delete(
+            event,
+            f"**Font size is between 0 - 1000, You can't set limit to :** `{input_str}`",
+            10,
+        )
     elif cmd == "w":
         input_str = float(input_str)
         if input_str > 0 and input_str <= 100:
             addgvar("LOGO_FONT_WIDTH", input_str)
-            return await edit_delete(event, f"**Font width is changed to :-** `{input_str}`",10)
-        await edit_delete(event,f"**Font width is between 0 - 100, You can't set limit to {input_str}",10)
+            return await edit_delete(
+                event, f"**Font width is changed to :-** `{input_str}`", 10
+            )
+        await edit_delete(
+            event,
+            f"**Font width is between 0 - 100, You can't set limit to {input_str}",
+            10,
+        )
     elif cmd == "h":
         input_str = float(input_str)
         if input_str > 0 and input_str <= 100:
             addgvar("LOGO_FONT_HEIGHT", input_str)
-            return await edit_delete(event, f"**Font hight is changed to :-** `{input_str}`",10)
-        await edit_delete(event,f"**Font hight is between 0 - 100, You can't set limit to {input_str}",10)
+            return await edit_delete(
+                event, f"**Font hight is changed to :-** `{input_str}`", 10
+            )
+        await edit_delete(
+            event,
+            f"**Font hight is between 0 - 100, You can't set limit to {input_str}",
+            10,
+        )
     elif cmd == "sw":
         input_str = int(input_str)
         if input_str > 0 and input_str <= 100:
             addgvar("LOGO_FONT_STROKE_WIDTH", input_str)
-            return await edit_delete(event, f"**Font stroke width is changed to :-** `{input_str}`",10)
-        await edit_delete(event,f"**Font stroke width size is between 0 - 100, You can't set limit to :** `{input_str}`",10)
+            return await edit_delete(
+                event, f"**Font stroke width is changed to :-** `{input_str}`", 10
+            )
+        await edit_delete(
+            event,
+            f"**Font stroke width size is between 0 - 100, You can't set limit to :** `{input_str}`",
+            10,
+        )
 
 
 @catub.cat_cmd(
