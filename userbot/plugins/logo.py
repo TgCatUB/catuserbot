@@ -3,7 +3,6 @@ Created by @Jisan7509
 #catuserbot
 """
 
-
 import os
 import random
 import re
@@ -77,7 +76,7 @@ def random_loader(Font, Color, Background, collection):
             "s": "To create a logo in sticker instade of image.",
             "f": "To create a logo image and send as documnent",
         },
-        "note": "To create multiple logo at once you can use count value from 1 to 10.\nThis only work if any random option is selected.",
+        "note": "To create multiple logo at once you can use count value from 1 to 7.\nThis only work if any random option is selected.",
         "usage": [
             "{tr}logo <text/reply>",
             "{tr}logo count ; <text/reply>",
@@ -102,7 +101,7 @@ async def very(event):  # sourcery no-metrics
         count, text = text.split(";")
     else:
         count = 1
-    count = 10 if int(count) > 10 else int(count)
+    count = 7 if int(count) > 7 else int(count)
     reply = await event.get_reply_message()
     if not text and reply:
         text = reply.text
