@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def file_check(re=True,me=True,mo=True,it=True,fa=True,sp=True):
+def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True):
     regular = "./temp/Roboto-Regular.ttf"
     medium = "./temp/Roboto-Medium.ttf"
     mono = "./temp/DroidSansMono.ttf"
@@ -86,7 +86,7 @@ def file_check(re=True,me=True,mo=True,it=True,fa=True,sp=True):
                 "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
                 special,
             )
-            
+
 
 async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics
     file_check()
