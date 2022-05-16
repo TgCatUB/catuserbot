@@ -31,9 +31,12 @@ cmds = [
 ]
 # ========================================================================
 
-async def switch_branch(): 
+
+async def switch_branch():
     if Config.UPSTREAM_REPO:
-        branch = Config.UPSTREAM_REPO_BRANCH if Config.UPSTREAM_REPO_BRANCH else "master"
+        branch = (
+            Config.UPSTREAM_REPO_BRANCH if Config.UPSTREAM_REPO_BRANCH else "master"
+        )
         await _catutils.runcmd(f"git clone -b {branch} {Config.UPSTREAM_REPO} TempCat")
         file_list = os.listdir("TempCat")
         for file in file_list:
@@ -138,7 +141,7 @@ async def variable(event):  # sourcery no-metrics
         await switch_branch()
         await event.client.reload(cat)
 
-    
+
 @catub.cat_cmd(
     pattern="(re|clean)load$",
     command=("reload", plugin_category),
