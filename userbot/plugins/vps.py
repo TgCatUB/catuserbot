@@ -7,6 +7,7 @@ import asyncio
 import glob
 import os
 import re
+
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
@@ -31,14 +32,17 @@ cmds = [
 ]
 # ========================================================================
 
-async def switch_branch(): 
+
+async def switch_branch():
     with open("config.py", "r") as f:
         configs = f.read()
     BRANCH = "master"
     REPO = "https://github.com/TgCatUB/catuserbot"
-    for match in re.finditer(r"(?:(UPSTREAM_REPO|UPSTREAM_REPO_BRANCH)(?:[ = \"\']+(.*[^\"\'\n])))", configs):
-        BRANCH = match.group(2) if match.group(1) =="UPSTREAM_REPO_BRANCH" else BRANCH
-        REPO = match.group(2) if match.group(1) =="UPSTREAM_REPO" else REPO
+    for match in re.finditer(
+        r"(?:(UPSTREAM_REPO|UPSTREAM_REPO_BRANCH)(?:[ = \"\']+(.*[^\"\'\n])))", configs
+    ):
+        BRANCH = match.group(2) if match.group(1) == "UPSTREAM_REPO_BRANCH" else BRANCH
+        REPO = match.group(2) if match.group(1) == "UPSTREAM_REPO" else REPO
     if REPO:
         await _catutils.runcmd(f"git clone -b {BRANCH} {REPO} TempCat")
         file_list = os.listdir("TempCat")
@@ -144,7 +148,7 @@ async def variable(event):  # sourcery no-metrics
         await switch_branch()
         await event.client.reload(cat)
 
-    
+
 @catub.cat_cmd(
     pattern="(re|clean)load$",
     command=("reload", plugin_category),
