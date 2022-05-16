@@ -19,7 +19,14 @@ from telethon.utils import get_display_name
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import convert_tosticker, file_check, fontTest, media_type, process, soft_deEmojify
+from ..helpers import (
+    convert_tosticker,
+    file_check,
+    fontTest,
+    media_type,
+    process,
+    soft_deEmojify,
+)
 from ..helpers.utils import _cattools, get_user_from_event, reply_id
 
 plugin_category = "fun"
@@ -105,7 +112,9 @@ async def q_pic(event):  # sourcery no-metrics
             )
     text = "\n".join(textwrap.wrap(text, 25))
     text = f"“{text}„"
-    textf = "./temp/ArialUnicodeMS.ttf" if await fontTest(text[0]) else "./temp/Quivira.otf"
+    textf = (
+        "./temp/ArialUnicodeMS.ttf" if await fontTest(text[0]) else "./temp/Quivira.otf"
+    )
     textfont = ImageFont.truetype(textf, 50)
     img = Image.open(pfp)
     if black:
