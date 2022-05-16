@@ -335,6 +335,7 @@ async def upstream(event):
 async def variable(event):
     "To switch between good & bad cat"
     switch = "BADCAT"
+    config = "config.py"
     cmd = event.pattern_match.group(1).lower()
     if ENV:
         if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):

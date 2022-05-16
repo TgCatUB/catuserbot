@@ -31,6 +31,17 @@ cmds = [
 ]
 # ========================================================================
 
+async def switch_branch(): 
+    if Config.UPSTREAM_REPO:
+        branch = Config.UPSTREAM_REPO_BRANCH if Config.UPSTREAM_REPO_BRANCH else "master"
+        await _catutils.runcmd(f"git clone -b {branch} {Config.UPSTREAM_REPO} TempCat")
+        file_list = os.listdir("TempCat")
+        for file in file_list:
+            await _catutils.runcmd(f"rm -rf {file}")
+            await _catutils.runcmd(f"mv ./TempCat/{file} ./")
+        await _catutils.runcmd("pip3 install --no-cache-dir -r requirements.txt")
+        await _catutils.runcmd("rm -rf TempCat")
+
 
 @catub.cat_cmd(
     pattern="(set|get|del) var ([\s\S]*)",
@@ -104,6 +115,7 @@ async def variable(event):  # sourcery no-metrics
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
+        await switch_branch()
         await event.client.reload(cat)
     if cmd == "del":
         cat = await edit_or_reply(event, "`Deleting information...`")
@@ -123,9 +135,10 @@ async def variable(event):  # sourcery no-metrics
             await cat.edit(
                 "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__"
             )
+        await switch_branch()
         await event.client.reload(cat)
 
-
+    
 @catub.cat_cmd(
     pattern="(re|clean)load$",
     command=("reload", plugin_category),
@@ -152,4 +165,5 @@ async def _(event):
                 os.remove(i)
         for i in cmds:
             await _catutils.runcmd(i)
+    await switch_branch()
     await event.client.reload(cat)
