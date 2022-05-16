@@ -19,10 +19,8 @@ from telethon.utils import get_display_name
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import convert_tosticker, file_check, fontTest, media_type, process
+from ..helpers import convert_tosticker, file_check, fontTest, media_type, process, soft_deEmojify
 from ..helpers.utils import _cattools, get_user_from_event, reply_id
-
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 plugin_category = "fun"
 
@@ -69,6 +67,7 @@ async def q_pic(event):  # sourcery no-metrics
         return await edit_delete(
             event, "__Provide input along with cmd or reply to text message.__"
         )
+    text = soft_deEmojify(text)
     catevent = await edit_or_reply(event, "__Making Quote pic....__")
     file_check(re=False, me=False, mo=False, it=False)
     mediatype = media_type(reply)
@@ -106,7 +105,7 @@ async def q_pic(event):  # sourcery no-metrics
             )
     text = "\n".join(textwrap.wrap(text, 25))
     text = f"“{text}„"
-    textf = "./temp/ArialUnicodeMS.ttf" if fontTest(text[0]) else "./temp/Quivira.otf"
+    textf = "./temp/ArialUnicodeMS.ttf" if await fontTest(text[0]) else "./temp/Quivira.otf"
     textfont = ImageFont.truetype(textf, 50)
     img = Image.open(pfp)
     if black:
@@ -125,7 +124,7 @@ async def q_pic(event):  # sourcery no-metrics
         usrname = get_display_name(user)
         namef = (
             "./temp/ArialUnicodeMS.ttf"
-            if fontTest(usrname[0])
+            if await fontTest(usrname[0])
             else "./temp/Quivira.otf"
         )
         namefont = ImageFont.truetype(namef, 50)
