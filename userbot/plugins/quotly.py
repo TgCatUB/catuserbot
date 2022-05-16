@@ -19,7 +19,7 @@ from telethon.utils import get_display_name
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import convert_tosticker, media_type, process
+from ..helpers import convert_tosticker, media_type, process,file_check,fontTest
 from ..helpers.utils import _cattools, get_user_from_event, reply_id
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
@@ -70,6 +70,7 @@ async def q_pic(event):  # sourcery no-metrics
             event, "__Provide input along with cmd or reply to text message.__"
         )
     catevent = await edit_or_reply(event, "__Making Quote pic....__")
+    file_check(re=False,me=False,mo=False,it=False)
     mediatype = media_type(reply)
     if (
         (not reply)
@@ -105,7 +106,8 @@ async def q_pic(event):  # sourcery no-metrics
             )
     text = "\n".join(textwrap.wrap(text, 25))
     text = f"“{text}„"
-    font = ImageFont.truetype(FONT_FILE_TO_USE, 50)
+    textf = "./temp/ArialUnicodeMS.ttf" if fontTest(text[0]) else "./temp/Quivira.otf" 
+    textfont = ImageFont.truetype(textf, 50)
     img = Image.open(pfp)
     if black:
         img = img.convert("L")
@@ -116,18 +118,21 @@ async def q_pic(event):  # sourcery no-metrics
     nimg.putalpha(150)
     img.paste(nimg, (nw // 2, nh // 2), nimg)
     draw = ImageDraw.Draw(img)
-    tw, th = draw.textsize(text=text, font=font)
+    tw, th = draw.textsize(text=text, font=textfont)
     x, y = (w - tw) // 2, (h - th) // 2
-    draw.text((x, y), text=text, font=font, fill="#ffffff", align="center")
+    draw.text((x, y), text=text, font=textfont, fill="#ffffff", align="center")
     if user is not None:
+        usrname = get_display_name(user)
+        namef = "./temp/ArialUnicodeMS.ttf" if fontTest(usrname[0]) else "./temp/Quivira.otf" 
+        namefont = ImageFont.truetype(namef, 50)
         credit = "\n".join(
-            wrap(f"by {get_display_name(user)}", int(get_warp_length(w / 2.5)))
+            wrap(f"by {usrname}", int(get_warp_length(w / 2.5)))
         )
-        tw, th = draw.textsize(text=credit, font=font)
+        tw, th = draw.textsize(text=credit, font=namefont)
         draw.text(
             ((w - nw + tw) // 1.6, (h - nh - th)),
             text=credit,
-            font=font,
+            font=namefont,
             fill="#ffffff",
             align="left",
         )

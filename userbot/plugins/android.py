@@ -61,8 +61,8 @@ async def device_info(event):
             "certified-android-devices/master/by_device.json"
         ).text
     )
-    if results := data.get(codename):
-        reply = f"**Search results for `{codename}` :**\n\n"
+    if results := data.get(codename.lower()):
+        reply = f"**Search results for `{codename.lower()}` :**\n\n"
         for item in results:
             reply += (
                 f"**Brand**: `{item['brand']}`\n"

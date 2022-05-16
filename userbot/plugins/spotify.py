@@ -566,7 +566,7 @@ async def telegraph_lyrics(tittle, artist, title_img):
             )
             result = f"<img src='{title_img}'/><h4>{tittle}</h4><br><b>by {artist}</b><br>‌‌‎ <br>{content}"
             symbol = "𝄞"
-        except (TypeError, AttributeError):
+        except Exception:
             result = "<h4>Lyrics Not found!</h4>"
             symbol = "❌"
     try:
