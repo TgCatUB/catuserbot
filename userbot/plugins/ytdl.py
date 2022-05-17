@@ -30,7 +30,7 @@ from ..helpers import progress, reply_id
 from ..helpers.functions import delete_conv
 from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb, ytsearch
 from ..helpers.utils import _format
-from . import BOTLOG, BOTLOG_CHATID, catub
+from . import catub
 
 BASE_YT_URL = "https://www.youtube.com/watch?v="
 extractor = URLExtract()
@@ -325,8 +325,8 @@ async def insta_dl(event):
         return await edit_delete(
             event, "` I need a Instagram link to download it's Video...`(*_*)", 10
         )
-    #v1 = "@instasave_bot"
-    v1="@IgGramBot"
+    # v1 = "@instasave_bot"
+    v1 = "@IgGramBot"
     v2 = "@videomaniacbot"
     media_list = []
     catevent = await edit_or_reply(event, "**Downloading.....**")
