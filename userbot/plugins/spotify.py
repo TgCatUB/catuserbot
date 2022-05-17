@@ -548,7 +548,7 @@ def title_fetch(title):
     return title
 
 
-async def telegraph_lyrics(tittle, artist, title_img):
+async def telegraph_lyrics(tittle, artist):
     GENIUS = Config.GENIUS_API_TOKEN
     symbol = "❌"
     if GENIUS is None:
@@ -564,7 +564,7 @@ async def telegraph_lyrics(tittle, artist, title_img):
                 .replace("[", "<b>[")
                 .replace("]", "]</b>")
             )
-            result = f"<img src='{title_img}'/><h4>{tittle}</h4><br><b>by {artist}</b><br>‌‌‎ <br>{content}"
+            result = f"<img src='{songs.song_art_image_url}'/><h4>{tittle}</h4><br><b>by {artist}</b><br>‌‌‎ <br>{content}"
             symbol = "𝄞"
         except Exception:
             result = "<h4>Lyrics Not found!</h4>"
@@ -714,7 +714,7 @@ async def spotify_now(event):
             dic["progress"],
             dic["duration"],
         )
-        lyrics, symbol = await telegraph_lyrics(tittle, dic["interpret"], dic["image"])
+        lyrics, symbol = await telegraph_lyrics(tittle, dic["interpret"])
         await catevent.delete()
     button_format = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}>[{symbol} Lyrics]<buttonurl:{lyrics}:same>'
     await make_inline(button_format, event.client, event.chat_id, msg_id)
@@ -818,7 +818,6 @@ async def spotify_now(event):
         received = sp_data(f"https://api.spotify.com/v1/tracks/{song_id}").json()
         title = received["album"]["name"]
         artist = received["album"]["artists"][0]["name"]
-        thumb = received["album"]["images"][1]["url"]
         link = f"https://open.spotify.com/track/{song_id}"
     else:
         if not await sp_var_check(event):
@@ -833,7 +832,6 @@ async def spotify_now(event):
             title = received["item"]["name"]
             link = received["item"]["external_urls"]["spotify"]
             artist = received["item"]["artists"][0]["name"]
-            thumb = received["item"]["album"]["images"][1]["url"]
     async with event.client.conversation(chat) as conv:
         try:
             purgeflag = await conv.send_message("/start")
@@ -848,7 +846,7 @@ async def spotify_now(event):
         await catevent.delete()
         if cmd == "i":
             title = title_fetch(title)
-            lyrics, symbol = await telegraph_lyrics(title, artist, thumb)
+            lyrics, symbol = await telegraph_lyrics(title, artist)
             songg = await catub.send_file(BOTLOG_CHATID, song)
             fetch_songg = await catub.tgbot.get_messages(BOTLOG_CHATID, ids=songg.id)
             btn_song = await catub.tgbot.send_file(
