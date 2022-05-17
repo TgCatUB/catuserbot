@@ -325,7 +325,8 @@ async def insta_dl(event):
         return await edit_delete(
             event, "` I need a Instagram link to download it's Video...`(*_*)", 10
         )
-    v1 = "@instasave_bot"
+    #v1 = "@instasave_bot"
+    v1="@IgGramBot"
     v2 = "@videomaniacbot"
     media_list = []
     catevent = await edit_or_reply(event, "**Downloading.....**")
@@ -333,29 +334,25 @@ async def insta_dl(event):
         try:
             v1_flag = await conv.send_message("/start")
         except YouBlockedUserError:
-            await edit_or_reply(
-                catevent, "**Error:** Trying to unblock & retry, wait a sec..."
-            )
-            await catub(unblock("instasave_bot"))
+            await catub(unblock("IgGramBot"))
             v1_flag = await conv.send_message("/start")
-        response = await conv.get_response()
-        checker = response.text
+        await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
-        if checker == "Welcome!":
-            await asyncio.sleep(2)
-            await conv.send_message(link)
-            media = await conv.get_response()
+        await conv.send_message(link)
+        await conv.get_response()
+        await event.client.send_read_acknowledge(conv.chat_id)
+        try:
+            media = await conv.get_response(timeout=10)
             await event.client.send_read_acknowledge(conv.chat_id)
             if media.media:
-                if media.grouped_id:
-                    while media.grouped_id:
-                        media_list.append(media)
-                        media = await conv.get_response()
-                else:
+                while True:
                     media_list.append(media)
-                    media = await conv.get_response()
-                    await event.client.send_read_acknowledge(conv.chat_id)
-                details = media.message.splitlines()
+                    try:
+                        media = await conv.get_response(timeout=2)
+                        await event.client.send_read_acknowledge(conv.chat_id)
+                    except asyncio.TimeoutError:
+                        break
+                details = media_list[0].message.splitlines()
                 await catevent.delete()
                 await event.client.send_file(
                     event.chat_id,
@@ -363,16 +360,13 @@ async def insta_dl(event):
                     caption=f"**{details[0]}**",
                 )
                 return await delete_conv(event, v1, v1_flag)
-            checker = media.message.splitlines()[2]
-        await delete_conv(event, v1, v1_flag)
+        except asyncio.TimeoutError:
+            await delete_conv(event, v1, v1_flag)
         await edit_or_reply(catevent, "**Switching v2...**")
         async with event.client.conversation(v2) as conv:
             try:
                 v2_flag = await conv.send_message("/start")
             except YouBlockedUserError:
-                await edit_or_reply(
-                    catevent, "**Error:** Trying to unblock & retry, wait a sec..."
-                )
                 await catub(unblock("videomaniacbot"))
                 v2_flag = await conv.send_message("/start")
             await conv.get_response()
@@ -384,18 +378,12 @@ async def insta_dl(event):
             media = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
             if media.media:
-                if BOTLOG and "join the channel" in checker:
-                    error = checker.splitlines()[2]
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        f"**#V1_ERROR :-**\n\n__Currently we using @instasave_bot for v1, that need users to join this chat : {error}__\n\n__If you know any good bot which does'nt need join channel, inform us here: @catuserbot_support__",
-                    )
                 await catevent.delete()
                 await event.client.send_file(event.chat_id, media)
             else:
                 await edit_delete(
                     catevent,
-                    f"**#ERROR\nv1 :** __{checker}__\n\n**v2 :**__ {media.text}__",
+                    f"**#ERROR\nv1 :** __Not valid URL__\n\n**v2 :**__ {media.text}__",
                     40,
                 )
             await delete_conv(event, v2, v2_flag)
