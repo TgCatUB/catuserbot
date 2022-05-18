@@ -34,13 +34,10 @@ class Config(object):
     )
     # External plugins repo
     EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO", None)
-    if bool(EXTERNAL_REPO and (EXTERNAL_REPO.lower() != "no")) and not url(
-        EXTERNAL_REPO
-    ):
+    if EXTERNAL_REPO and not url(EXTERNAL_REPO):
         EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
     # if you need badcat plugins use the following vars
-    BADCAT = os.environ.get("BADCAT", "no")
-    BADCAT = bool(BADCAT and (BADCAT.lower() != "no"))
+    BADCAT = os.environ.get("BADCAT", False)
     # BASIC and MAIN CONFIG VARS
     # for profile default name
     # Set this value with group id of private group(can be found this value by .id)
