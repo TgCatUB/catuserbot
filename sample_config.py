@@ -34,11 +34,11 @@ class Config(object):
     )
     # External plugins repo
     EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO", None)
-    EXTERNAL_REPO = (
-        "https://github.com/TgCatUB/CatPlugins"
-        if EXTERNAL_REPO and EXTERNAL_REPO.lower() != "false" and not url(EXTERNAL_REPO)
-        else None
-    )
+    if bool(EXTERNAL_REPO and (EXTERNAL_REPO.lower() != "false")):
+        if not url(EXTERNAL_REPO):
+            EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
+    else:
+        EXTERNAL_REPO = None
     # if you need badcat plugins use the following vars
     BADCAT = os.environ.get("BADCAT", False)
     BADCAT = bool(BADCAT and (BADCAT.lower() != "false"))
