@@ -93,8 +93,12 @@ async def variable(event):  # sourcery no-metrics
         for i in configs:
             if variable in i:
                 _, val = i.split("= ")
-                return await edit_or_reply(cat,"**ConfigVars**:" f"\n\n`{variable}` = `{val}`")
-        await edit_or_reply(cat,"**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__")
+                return await edit_or_reply(
+                    cat, "**ConfigVars**:" f"\n\n`{variable}` = `{val}`"
+                )
+        await edit_or_reply(
+            cat, "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__"
+        )
     elif cmd == "set":
         variable = "".join(event.text.split(maxsplit=2)[2:])
         cat = await edit_or_reply(event, "`Setting information...`")
@@ -105,13 +109,16 @@ async def variable(event):  # sourcery no-metrics
         if variable not in var_checker:
             value = f"'{value}'"
         if not value:
-            return await edit_or_reply(cat,"`.set var <ConfigVars-name> <value>`")
+            return await edit_or_reply(cat, "`.set var <ConfigVars-name> <value>`")
         if variable == "EXTERNAL_REPO":
             if bool(value and (value.lower() != "false")):
                 if not url(value):
                     value = "https://github.com/TgCatUB/CatPlugins"
             else:
-                return await edit_or_reply(cat,"There no point in setting {variable} with {value}, use .del var to delete instead.")
+                return await edit_or_reply(
+                    cat,
+                    "There no point in setting {variable} with {value}, use .del var to delete instead.",
+                )
         await asyncio.sleep(1)
         for i in configs:
             if variable in i:
@@ -120,10 +127,14 @@ async def variable(event):  # sourcery no-metrics
             else:
                 string += f"{i}"
         if match:
-            await edit_or_reply(cat,f"`{variable}` **successfully changed to  ->  **`{value}`")
+            await edit_or_reply(
+                cat, f"`{variable}` **successfully changed to  ->  **`{value}`"
+            )
         else:
             string += f"    {variable} = {value}\n"
-            await edit_or_reply(cat,f"`{variable}`**  successfully added with value  ->  **`{value}`")
+            await edit_or_reply(
+                cat, f"`{variable}`**  successfully added with value  ->  **`{value}`"
+            )
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
@@ -142,9 +153,12 @@ async def variable(event):  # sourcery no-metrics
             f1.write(string)
             f1.close()
         if match:
-            await edit_or_reply(cat,f"`{variable}` **successfully deleted.**")
+            await edit_or_reply(cat, f"`{variable}` **successfully deleted.**")
         else:
-            await edit_or_reply(cat,"**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__")
+            await edit_or_reply(
+                cat,
+                "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__",
+            )
         await switch_branch()
         await event.client.reload(cat)
 
