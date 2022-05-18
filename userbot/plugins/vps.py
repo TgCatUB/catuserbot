@@ -12,6 +12,7 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _catutils
+from validators.url import url
 
 plugin_category = "tools"
 
@@ -102,16 +103,15 @@ async def variable(event):  # sourcery no-metrics
             return await cat.edit("`.set var <ConfigVars-name> <value>`")
         value = "".join(variable.split(maxsplit=1)[1:])
         variable = "".join(variable.split(maxsplit=1)[0])
-        if variable not in var_checker:
-            value = f"'{value}'"
         if not value:
             return await edit_or_reply(cat,"`.set var <ConfigVars-name> <value>`")
-        if variable == "EXTERNAL_REPO":
-            if bool(value and (value.lower() != "false")):
+        if variable not in var_checker:
+            if variable == "EXTERNAL_REPO" and bool(value and (value.lower() != "false")):
                 if not url(value):
                     value = "https://github.com/TgCatUB/CatPlugins"
             else:
-                return await edit_or_reply(cat,"There no point in setting {variable} with {value}, use .del var to delete instead.")
+                return await edit_or_reply(cat,f"**There no point in setting `{variable}` with `{value}`\nUse `.del var` to delete instead.**")
+            value = f"'{value}'"
         await asyncio.sleep(1)
         for i in configs:
             if variable in i:
