@@ -33,11 +33,11 @@ class Config(object):
         "UPSTREAM_REPO", "https://github.com/TgCatUB/catuserbot"
     )
     # External plugins repo
-    EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO", None)
-    if EXTERNAL_REPO and not url(EXTERNAL_REPO):
-        EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
+    EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO",None)
+    EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins" if EXTERNAL_REPO and BADCAT.lower() != "false" and not url(EXTERNAL_REPO) else None
     # if you need badcat plugins use the following vars
     BADCAT = os.environ.get("BADCAT", False)
+    BADCAT = bool(BADCAT and (BADCAT.lower() != "false"))
     # BASIC and MAIN CONFIG VARS
     # for profile default name
     # Set this value with group id of private group(can be found this value by .id)
