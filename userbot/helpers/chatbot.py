@@ -4,9 +4,9 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
 from userbot import catub
+from userbot.helpers.functions import delete_conv
 
 from ..sql_helper.globals import addgvar, gvarstatus
-from userbot.helpers.functions import delete_conv
 
 
 async def ai_api(event):
