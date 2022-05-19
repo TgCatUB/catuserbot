@@ -211,5 +211,4 @@ async def ai_reply(event):
             ai_msg = response.json()["reply"]
             await event.reply(ai_msg)
         else:
-            LOGS.error(str(e))
             await event.reply(random.choice(tired_response))
