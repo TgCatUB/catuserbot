@@ -1,11 +1,12 @@
 import random
+import requests
 
 from telethon.utils import get_display_name
 
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import get_user_from_event, rs_client
+from ..helpers import get_user_from_event,ai_api
 from ..sql_helper.chatbot_sql import (
     addai,
     get_all_users,
@@ -15,7 +16,7 @@ from ..sql_helper.chatbot_sql import (
     remove_all_users,
     remove_users,
 )
-from ..sql_helper.globals import gvarstatus
+
 
 plugin_category = "fun"
 
@@ -204,18 +205,11 @@ async def list_chatbot(event):  # sourcery no-metrics
 @catub.cat_cmd(incoming=True, edited=False)
 async def ai_reply(event):
     if is_added(event.chat_id, event.sender_id) and (event.message.text):
-        AI_LANG = gvarstatus("AI_LANG") or "en"
-        master_name = get_display_name(await event.client.get_me())
-        try:
-            response = await rs_client.get_ai_response(
-                message=event.message.text,
-                server="primary",
-                master="CatUserbot",
-                bot=master_name,
-                uid=event.client.uid,
-                language=AI_LANG,
-            )
-            await event.reply(response.message)
-        except Exception as e:
+        response = requests.get(f"https://kukiapi.xyz/api/apikey={await ai_api(event)}/message={event.message.text}")
+        if response.status_code == 200:
+            ai_msg = response.json()['reply']
+            await event.reply(ai_msg)
+        else:
             LOGS.error(str(e))
             await event.reply(random.choice(tired_response))
+
