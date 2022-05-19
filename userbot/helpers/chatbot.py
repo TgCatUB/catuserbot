@@ -1,9 +1,13 @@
 import re
-from userbot import catub
-from .helpers.functions import delete_conv
-from ..sql_helper.globals import addgvar, gvarstatus
+
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
+
+from userbot import catub
+
+from ..sql_helper.globals import addgvar, gvarstatus
+from .helpers.functions import delete_conv
+
 
 async def ai_api(event):
     token = gvarstatus("AI_API_TOKEN") or None
@@ -26,4 +30,4 @@ async def ai_api(event):
             if rgxtoken:
                 token = rgxtoken.group(1)
             addgvar("AI_API_TOKEN", token)
-    return(token)
+    return token
