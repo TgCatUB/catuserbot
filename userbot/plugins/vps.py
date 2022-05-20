@@ -123,16 +123,11 @@ async def variable(event):  # sourcery no-metrics
         if not value:
             return await edit_or_reply(cat, "`.set var <ConfigVars-name> <value>`")
         if variable not in var_checker:
-            if variable == "EXTERNAL_REPO" and bool(
-                value and (value.lower() != "false")
-            ):
-                if not url(value):
+            if variable == "EXTERNAL_REPO":
+                if bool(value and (value.lower() != "false")) and not url(value):
                     value = "https://github.com/TgCatUB/CatPlugins"
-            else:
-                return await edit_or_reply(
-                    cat,
-                    f"**There no point in setting `{variable}` with `{value}`\nUse `.del var` to delete instead.**",
-                )
+                else:
+                    return await edit_or_reply(cat,f"**There no point in setting `{variable}` with `{value}`\nUse `.del var` to delete instead.**")
             value = f"'{value}'"
         await asyncio.sleep(1)
         for i in configs:
