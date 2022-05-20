@@ -127,7 +127,10 @@ async def variable(event):  # sourcery no-metrics
                 if bool(value and (value.lower() != "false")) and not url(value):
                     value = "https://github.com/TgCatUB/CatPlugins"
                 else:
-                    return await edit_or_reply(cat,f"**There no point in setting `{variable}` with `{value}`\nUse `.del var` to delete instead.**")
+                    return await edit_or_reply(
+                        cat,
+                        f"**There no point in setting `{variable}` with `{value}`\nUse `.del var` to delete instead.**",
+                    )
             value = f"'{value}'"
         await asyncio.sleep(1)
         for i in configs:
