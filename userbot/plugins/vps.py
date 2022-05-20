@@ -167,13 +167,12 @@ async def variable(event):  # sourcery no-metrics
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
-        if match:
-            await edit_or_reply(cat, f"`{variable}` **successfully deleted.**")
-        else:
-            await edit_or_reply(
+        if not match:
+            return await edit_or_reply(
                 cat,
                 "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__",
             )
+        await edit_or_reply(cat, f"`{variable}` **successfully deleted.**")
         await switch_branch()
         await event.client.reload(cat)
 
