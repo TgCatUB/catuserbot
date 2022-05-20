@@ -34,17 +34,19 @@ cmds = [
 ]
 # ========================================================================
 
-
 async def switch_branch():
-    with open("config.py", "r") as f:
+    with open(config, "r") as f:
         configs = f.read()
     BRANCH = "master"
     REPO = "https://github.com/TgCatUB/catuserbot"
+    BADCAT = EXTERNAL = False
     for match in re.finditer(
-        r"(?:(UPSTREAM_REPO|UPSTREAM_REPO_BRANCH)(?:[ = \"\']+(.*[^\"\'\n])))", configs
+        r"(?:(UPSTREAM_REPO|UPSTREAM_REPO_BRANCH|EXTERNAL_REPO|BADCAT)(?:[ = \"\']+(.*[^\"\'\n])))", configs
     ):
         BRANCH = match.group(2) if match.group(1) == "UPSTREAM_REPO_BRANCH" else BRANCH
         REPO = match.group(2) if match.group(1) == "UPSTREAM_REPO" else REPO
+        EXTERNAL = match.group(2) if match.group(1) == "EXTERNAL_REPO" else EXTERNAL
+        BADCAT = True if match.group(1) == "BADCAT" and match.group(2).lower()!= "false" else BADCAT
     if REPO:
         await _catutils.runcmd(f"git clone -b {BRANCH} {REPO} TempCat")
         file_list = os.listdir("TempCat")
@@ -53,6 +55,10 @@ async def switch_branch():
             await _catutils.runcmd(f"mv ./TempCat/{file} ./")
         await _catutils.runcmd("pip3 install --no-cache-dir -r requirements.txt")
         await _catutils.runcmd("rm -rf TempCat")
+    if not BADCAT and os.path.exists("badcatext"):
+        await _catutils.runcmd("rm -rf badcatext")
+    if not EXTERNAL and os.path.exists("xtraplugins"):
+        await _catutils.runcmd("rm -rf xtraplugins")
 
 
 @catub.cat_cmd(

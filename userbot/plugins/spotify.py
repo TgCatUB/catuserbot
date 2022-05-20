@@ -565,7 +565,7 @@ async def telegraph_lyrics(tittle, artist):
                 .replace("]", "]</b>")
             )
             result = f"<img src='{songs.song_art_image_url}'/><h4>{tittle}</h4><br><b>by {artist}</b><br>‌‌‎ <br>{content}"
-            symbol = "𝄞"
+            symbol = "ıllılı."
         except Exception:
             result = "<h4>Lyrics Not found!</h4>"
             symbol = "❌"
