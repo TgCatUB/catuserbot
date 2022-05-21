@@ -761,11 +761,19 @@ async def vtog(event):
     "Reply this command to a video to convert it to gif."
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
-    if mediatype and mediatype not in ["video","Document"] and reply.media.document.mime_type!= "video/mp4":
+    if (
+        mediatype
+        and mediatype not in ["video", "Document"]
+        and reply.media.document.mime_type != "video/mp4"
+    ):
         return await edit_delete(event, "__Reply to video to convert it to gif__")
-    catevent = await edit_or_reply(event, "__🎞Converting into Gif, It can take several minutes...__")
-    await event.client.download_media(reply,"catvideo.mp4")
-    await _catutils.runcmd('ffmpeg -i catvideo.mp4 -c:v libx264 -fs 5M -an catgif.mp4 -y')
+    catevent = await edit_or_reply(
+        event, "__🎞Converting into Gif, It can take several minutes...__"
+    )
+    await event.client.download_media(reply, "catvideo.mp4")
+    await _catutils.runcmd(
+        "ffmpeg -i catvideo.mp4 -c:v libx264 -fs 5M -an catgif.mp4 -y"
+    )
     sandy = await event.client.send_file(event.chat_id, "catgif.mp4", reply_to=reply)
     await _catutils.unsavegif(event, sandy)
     await catevent.delete()
