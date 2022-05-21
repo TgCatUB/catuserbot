@@ -750,37 +750,25 @@ async def pic_gifcmd(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="vtog ?([0-9.]+)?$",
+    pattern="vtog$",
     command=("vtog", plugin_category),
     info={
         "header": "Reply this command to a video to convert it to gif.",
-        "description": "By default speed will be 1x",
-        "usage": "{tr}vtog <speed>",
+        "usage": "{tr}vtog <reply to video>",
     },
 )
-async def _(event):
+async def vtog(event):
     "Reply this command to a video to convert it to gif."
     reply = await event.get_reply_message()
-    mediatype = media_type(event)
-    if mediatype and mediatype != "video":
+    mediatype = media_type(reply)
+    if mediatype and mediatype not in ["video","Document"] and reply.media.document.mime_type!= "video/mp4":
         return await edit_delete(event, "__Reply to video to convert it to gif__")
-    args = event.pattern_match.group(1)
-    if not args:
-        args = 2.0
-    else:
-        try:
-            args = float(args)
-        except ValueError:
-            args = 2.0
-    catevent = await edit_or_reply(event, "__🎞Converting into Gif..__")
-    inputfile = await reply.download_media()
-    outputfile = os.path.join(Config.TEMP_DIR, "vidtogif.gif")
-    result = await vid_to_gif(inputfile, outputfile, speed=args)
-    if result is None:
-        return await edit_delete(event, "__I couldn't convert it to gif.__")
-    sandy = await event.client.send_file(event.chat_id, result, reply_to=reply)
+    catevent = await edit_or_reply(event, "__🎞Converting into Gif, It can take several minutes...__")
+    await event.client.download_media(reply,"catvideo.mp4")
+    await _catutils.runcmd('ffmpeg -i catvideo.mp4 -c:v libx264 -fs 5M -an catgif.mp4 -y')
+    sandy = await event.client.send_file(event.chat_id, "catgif.mp4", reply_to=reply)
     await _catutils.unsavegif(event, sandy)
     await catevent.delete()
-    for i in [inputfile, outputfile]:
+    for i in ["catvideo.mp4", "catgif.mp4"]:
         if os.path.exists(i):
             os.remove(i)
