@@ -43,10 +43,10 @@ from ..helpers.functions.functions import (
     make_inline,
     text_draw,
 )
-from ..helpers.utils import reply_id
 from ..helpers.tools import post_to_telegraph
+from ..helpers.utils import reply_id
 from ..sql_helper import global_collectionjson as glob_db
-from . import BOTLOG, BOTLOG_CHATID, catub, LyricsGen
+from . import BOTLOG, BOTLOG_CHATID, LyricsGen, catub
 
 SPOTIFY_CLIENT_ID = Config.SPOTIFY_CLIENT_ID
 SPOTIFY_CLIENT_SECRET = Config.SPOTIFY_CLIENT_SECRET
@@ -556,8 +556,8 @@ async def telegraph_lyrics(tittle, artist):
         result = "<h1>Set GENIUS_API_TOKEN in heroku vars for functioning of this command.<br>‌‌‎ <br>Check out this <a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></h1>"
     else:
         try:
-            songs = genius.search_song(tittle, artist)
-            album, content = await LyricsGen.lyrics(tittle, artist,mode="devloper")
+            genius.search_song(tittle, artist)
+            album, content = await LyricsGen.lyrics(tittle, artist, mode="devloper")
             content = (
                 content.replace("\n", "<br>")
                 .replace("<br><br>", "<br>‌‌‎ <br>")
