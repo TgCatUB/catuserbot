@@ -25,8 +25,8 @@ ENV = bool(os.environ.get("ENV", False))
 
 class LyricGenius:
     def __init__(self):
-        genius_api = GENIUS
-        self.genius = lyricsgenius.Genius(genius_api)
+        if GENIUS:
+            self.genius = lyricsgenius.Genius(GENIUS)
 
     def songs(self, title):
         songs = self.genius.search_songs(title)["hits"]
@@ -126,10 +126,7 @@ async def delete_conv(client, chat, from_message):
 async def lyrics(event):  # sourcery no-metrics
     "To fetch song lyrics"
     if GENIUS is None:
-        return await edit_or_reply(
-            event,
-            "`Set genius access token in heroku vars for functioning of this command`",
-        )
+        return await edit_or_reply(event,"<i>Set <code>GENIUS_API_TOKEN</code> in heroku vars for functioning of this command.\n\nCheck out this <b><a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></b></i>",parse_mode="html")
     match = event.pattern_match.group(1)
     songno = re.findall(r"-n\d+", match)
     listview = re.findall(r"-l", match)

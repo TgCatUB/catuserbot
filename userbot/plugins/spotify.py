@@ -20,7 +20,6 @@ import re
 import time
 import urllib.request
 
-import lyricsgenius
 import requests
 import ujson
 from PIL import Image, ImageEnhance, ImageFilter
@@ -35,6 +34,7 @@ from validators.url import url
 
 from userbot.core.logger import logging
 
+from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions.functions import (
     delete_conv,
@@ -43,9 +43,10 @@ from ..helpers.functions.functions import (
     make_inline,
     text_draw,
 )
+from ..helpers.utils import reply_id
 from ..helpers.tools import post_to_telegraph
 from ..sql_helper import global_collectionjson as glob_db
-from . import BOTLOG, BOTLOG_CHATID, Config, catub, reply_id
+from . import BOTLOG, BOTLOG_CHATID, catub, LyricsGen
 
 SPOTIFY_CLIENT_ID = Config.SPOTIFY_CLIENT_ID
 SPOTIFY_CLIENT_SECRET = Config.SPOTIFY_CLIENT_SECRET
@@ -554,17 +555,16 @@ async def telegraph_lyrics(tittle, artist):
     if GENIUS is None:
         result = "<h1>Set GENIUS_API_TOKEN in heroku vars for functioning of this command.<br>‌‌‎ <br>Check out this <a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></h1>"
     else:
-        genius = lyricsgenius.Genius(GENIUS)
         try:
             songs = genius.search_song(tittle, artist)
-            content = songs.lyrics
+            album, content = await LyricsGen.lyrics(tittle, artist,mode="devloper")
             content = (
                 content.replace("\n", "<br>")
                 .replace("<br><br>", "<br>‌‌‎ <br>")
                 .replace("[", "<b>[")
                 .replace("]", "]</b>")
             )
-            result = f"<img src='{songs.song_art_image_url}'/><h4>{tittle}</h4><br><b>by {artist}</b><br>‌‌‎ <br>{content}"
+            result = f"<img src='{album}'/><h4>{tittle}</h4><br><b>by {artist}</b><br>‌‌‎ <br>{content}"
             symbol = "ıllılı."
         except Exception:
             result = "<h4>Lyrics Not found!</h4>"
