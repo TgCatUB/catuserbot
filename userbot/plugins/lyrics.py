@@ -1,18 +1,101 @@
-# credits to @mrconfused (@sandy1709)
+#\\ Created by-@mrconfused -- Github.com/sandy1709 //
+# \\ Modified by-@Jisan7509 -- Github.com/Jisan09 //
+#  \\    https://github.com/TgCatUB/catuserbot   //
+#   \\        Plugin for @catuserbot            //
+#    ````````````````````````````````````````````
+
 
 import re
-
+import os
 import lyricsgenius
 
 from userbot import catub
-
 from ..Config import Config
 from ..core.managers import edit_or_reply
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.contacts import UnblockRequest as unblock
+
 
 plugin_category = "extra"
 
 GENIUS = Config.GENIUS_API_TOKEN
+ENV = bool(os.environ.get("ENV", False))
 
+
+class LyricGenius:
+    def __init__(self):
+        genius_api = GENIUS
+        self.genius = lyricsgenius.Genius(genius_api)
+        
+    def songs(self,title):
+        songs = self.genius.search_songs(title)['hits']
+        return songs
+
+    def song(self,title,artist=None):
+        song_info = None
+        try:
+            if not artist:
+                song_info = self.songs(title)[0]["result"]
+            else:
+                for song in self.songs(title):
+                    if artist in song["result"]["primary_artist"]["name"]:
+                        song_info = song["result"]
+                        break
+                if not song_info:
+                    for song in self.songs(f"{title} by {artist}"):
+                        if artist in song["result"]["primary_artist"]["name"]:
+                            song_info = song["result"]
+                            break
+        except (AttributeError,IndexError):
+            pass
+        return song_info
+
+    async def lyrics(self,title,artist=None,mode = "lyrics"):
+        try:
+            if ENV:
+                if not artist:
+                    song_info = self.song(title)["title"]
+                    song = self.genius.search_song(song_info)
+                    lyrics = song.lyrics
+                    link = song.song_art_image_url
+                else:
+                    song = self.genius.search_song(title,artist)
+                    lyrics = song.lyrics
+                    link = song.song_art_image_url
+            else:
+                msg = f"{artist}-{title}" if artist else title
+                chat = "@lyrics69bot"
+                async with catub.conversation(chat) as conv:
+                    try:
+                        flag = await conv.send_message("/start")
+                    except YouBlockedUserError:
+                        await catub(unblock("lyrics69bot"))
+                        flag = await conv.send_message("/start")
+                    await conv.get_response()
+                    await catub.send_read_acknowledge(conv.chat_id)
+                    await conv.send_message(f"/{mode} {msg}")
+                    if mode == "devloper":
+                        link = (await conv.get_response()).text
+                        await catub.send_read_acknowledge(conv.chat_id)
+                    lyrics = (await conv.get_response()).text
+                    await catub.send_read_acknowledge(conv.chat_id)
+                    await delete_conv(catub, chat, flag)
+        except (TypeError,KeyError):
+            lyrics = link = None
+        if mode == "devloper":
+            return link, lyrics
+        return lyrics
+
+LyricsGen = LyricGenius()
+
+async def delete_conv(client, chat, from_message):
+    itermsg = client.iter_messages(chat, min_id=from_message.id)
+    msgs = [from_message.id]
+    async for i in itermsg:
+        msgs.append(i.id)
+    await client.delete_messages(chat, msgs)
+    await client.send_read_acknowledge(chat)
+    
 
 @catub.cat_cmd(
     pattern="lyrics(?:\s|$)([\s\S]*)",
@@ -62,40 +145,33 @@ async def lyrics(event):  # sourcery no-metrics
     match = match.replace("-l", "")
     listview = bool(listview)
     query = match.strip()
-    genius = lyricsgenius.Genius(GENIUS)
+    song = songinfo = query
+    artist = None
     if "-" in query:
         args = query.split("-", 1)
         artist = args[0].strip(" ")
         song = args[1].strip(" ")
-        catevent = await edit_or_reply(
-            event, f"`Searching lyrics for {artist} - {song}...`"
-        )
-        try:
-            songs = genius.search_song(song, artist)
-        except TypeError:
-            songs = None
-        if songs is None:
-            return await catevent.edit(f"Song **{artist} - {song}** not found!")
-        result = f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```"
+        songinfo = f"{artist} - {song}"
+        catevent = await edit_or_reply(event, f"`Searching lyrics for {songinfo}...`")
+        lyrics = await LyricsGen.lyrics(song, artist)
+        if lyrics is None:
+            return await catevent.edit(f"Song **{songinfo}** not found!")
+        result = f"**Search query**: \n`{songinfo}`\n\n```{lyrics}```"
     else:
         catevent = await edit_or_reply(event, f"`Searching lyrics for {query}...`")
-        response = genius.search_songs(query)
+        response = LyricsGen.songs(song)
         msg = f"**The songs found for the given query:** `{query}`\n\n"
-        if len(response["hits"]) == 0:
-            return await edit_or_reply(
-                catevent, f"**I can't find lyrics for the given query: **`{query}`"
-            )
-        for i, an in enumerate(response["hits"], start=1):
+        for i, an in enumerate(response, start=1):
             msg += f"{i}. `{an['result']['title']}`\n"
         if listview:
             result = msg
         else:
             result = f"**The song found for the given query:** `{query}`\n\n"
-            if songno > len(response["hits"]):
+            if songno > len(response):
                 return await edit_or_reply(
                     catevent,
                     f"**Invalid song selection for the query select proper number**\n{msg}",
                 )
-            songtitle = response["hits"][songno - 1]["result"]["title"]
-            result += f"`{genius.search_song(songtitle).lyrics}`"
+            songtitle = response[songno - 1]["result"]["title"]
+            result += f"`{await LyricsGen.lyrics(songtitle)}`"
     await edit_or_reply(catevent, result)
