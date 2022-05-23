@@ -1,20 +1,21 @@
-#\\ Created by-@mrconfused -- Github.com/sandy1709 //
+# \\ Created by-@mrconfused -- Github.com/sandy1709 //
 # \\ Modified by-@Jisan7509 -- Github.com/Jisan09 //
 #  \\    https://github.com/TgCatUB/catuserbot   //
 #   \\        Plugin for @catuserbot            //
 #    ````````````````````````````````````````````
 
 
-import re
 import os
-import lyricsgenius
+import re
 
-from userbot import catub
-from ..Config import Config
-from ..core.managers import edit_or_reply
+import lyricsgenius
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
+from userbot import catub
+
+from ..Config import Config
+from ..core.managers import edit_or_reply
 
 plugin_category = "extra"
 
@@ -26,12 +27,12 @@ class LyricGenius:
     def __init__(self):
         genius_api = GENIUS
         self.genius = lyricsgenius.Genius(genius_api)
-        
-    def songs(self,title):
-        songs = self.genius.search_songs(title)['hits']
+
+    def songs(self, title):
+        songs = self.genius.search_songs(title)["hits"]
         return songs
 
-    def song(self,title,artist=None):
+    def song(self, title, artist=None):
         song_info = None
         try:
             if not artist:
@@ -46,11 +47,11 @@ class LyricGenius:
                         if artist in song["result"]["primary_artist"]["name"]:
                             song_info = song["result"]
                             break
-        except (AttributeError,IndexError):
+        except (AttributeError, IndexError):
             pass
         return song_info
 
-    async def lyrics(self,title,artist=None,mode = "lyrics"):
+    async def lyrics(self, title, artist=None, mode="lyrics"):
         try:
             if ENV:
                 if not artist:
@@ -59,7 +60,7 @@ class LyricGenius:
                     lyrics = song.lyrics
                     link = song.song_art_image_url
                 else:
-                    song = self.genius.search_song(title,artist)
+                    song = self.genius.search_song(title, artist)
                     lyrics = song.lyrics
                     link = song.song_art_image_url
             else:
@@ -80,13 +81,15 @@ class LyricGenius:
                     lyrics = (await conv.get_response()).text
                     await catub.send_read_acknowledge(conv.chat_id)
                     await delete_conv(catub, chat, flag)
-        except (TypeError,KeyError):
+        except (TypeError, KeyError):
             lyrics = link = None
         if mode == "devloper":
             return link, lyrics
         return lyrics
 
+
 LyricsGen = LyricGenius()
+
 
 async def delete_conv(client, chat, from_message):
     itermsg = client.iter_messages(chat, min_id=from_message.id)
@@ -95,7 +98,7 @@ async def delete_conv(client, chat, from_message):
         msgs.append(i.id)
     await client.delete_messages(chat, msgs)
     await client.send_read_acknowledge(chat)
-    
+
 
 @catub.cat_cmd(
     pattern="lyrics(?:\s|$)([\s\S]*)",
