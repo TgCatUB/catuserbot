@@ -23,3 +23,8 @@ class Development(Config):
     EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
     # if you need badcat plugins set "True"
     BADCAT = "False"
+    # Google Chrome Binary Path. 
+    CHROME_BIN = "/usr/bin/google-chrome"
+    # Chrome Driver Path. 
+    CHROME_DRIVER = "/usr/bin/chromedriver"
+    
