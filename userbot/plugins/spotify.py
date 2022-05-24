@@ -556,7 +556,9 @@ async def telegraph_lyrics(event, tittle, artist):
         result = "<h1>Set GENIUS_API_TOKEN in heroku vars for functioning of this command.<br>‌‌‎ <br>Check out this <a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></h1>"
     else:
         try:
-            album, content = await LyricsGen.lyrics(event, tittle, artist, mode="devloper")
+            album, content = await LyricsGen.lyrics(
+                event, tittle, artist, mode="devloper"
+            )
             content = (
                 content.replace("\n", "<br>")
                 .replace("<br><br>", "<br>‌‌‎ <br>")
