@@ -549,14 +549,14 @@ def title_fetch(title):
     return title
 
 
-async def telegraph_lyrics(tittle, artist):
+async def telegraph_lyrics(event, tittle, artist):
     GENIUS = Config.GENIUS_API_TOKEN
     symbol = "❌"
     if GENIUS is None:
         result = "<h1>Set GENIUS_API_TOKEN in heroku vars for functioning of this command.<br>‌‌‎ <br>Check out this <a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></h1>"
     else:
         try:
-            album, content = await LyricsGen.lyrics(tittle, artist, mode="devloper")
+            album, content = await LyricsGen.lyrics(event, tittle, artist, mode="devloper")
             content = (
                 content.replace("\n", "<br>")
                 .replace("<br><br>", "<br>‌‌‎ <br>")
@@ -713,7 +713,7 @@ async def spotify_now(event):
             dic["progress"],
             dic["duration"],
         )
-        lyrics, symbol = await telegraph_lyrics(tittle, dic["interpret"])
+        lyrics, symbol = await telegraph_lyrics(event, tittle, dic["interpret"])
         await catevent.delete()
     button_format = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}>[{symbol} Lyrics]<buttonurl:{lyrics}:same>'
     await make_inline(button_format, event.client, event.chat_id, msg_id)
@@ -845,7 +845,7 @@ async def spotify_now(event):
         await catevent.delete()
         if cmd == "i":
             title = title_fetch(title)
-            lyrics, symbol = await telegraph_lyrics(title, artist)
+            lyrics, symbol = await telegraph_lyrics(event, title, artist)
             songg = await catub.send_file(BOTLOG_CHATID, song)
             fetch_songg = await catub.tgbot.get_messages(BOTLOG_CHATID, ids=songg.id)
             btn_song = await catub.tgbot.send_file(

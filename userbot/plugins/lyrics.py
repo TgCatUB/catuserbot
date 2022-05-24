@@ -74,7 +74,7 @@ async def lyrics(event):  # sourcery no-metrics
         song = args[1].strip(" ")
         songinfo = f"{artist} - {song}"
         catevent = await edit_or_reply(event, f"`Searching lyrics for {songinfo}...`")
-        lyrics = await LyricsGen.lyrics(song, artist)
+        lyrics = await LyricsGen.lyrics(event, song, artist)
         if lyrics is None:
             return await catevent.edit(f"Song **{songinfo}** not found!")
         result = f"**Search query**: \n`{songinfo}`\n\n```{lyrics}```"
@@ -94,5 +94,5 @@ async def lyrics(event):  # sourcery no-metrics
                     f"**Invalid song selection for the query select proper number**\n{msg}",
                 )
             songtitle = response[songno - 1]["result"]["title"]
-            result += f"`{await LyricsGen.lyrics(songtitle)}`"
+            result += f"`{await LyricsGen.lyrics(event, songtitle)}`"
     await edit_or_reply(catevent, result)
