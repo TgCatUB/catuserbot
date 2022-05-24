@@ -7,10 +7,9 @@
 
 import re
 
-from userbot import catub
-
 from ..Config import Config
 from ..core.managers import edit_or_reply
+from . import LyricsGen, catub
 
 GENIUS = Config.GENIUS_API_TOKEN
 
