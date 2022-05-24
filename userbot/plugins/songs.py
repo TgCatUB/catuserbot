@@ -5,7 +5,6 @@ import asyncio
 import base64
 import io
 import os
-from pathlib import Path
 
 from ShazamAPI import Shazam
 from telethon import types
@@ -16,9 +15,9 @@ from validators.url import url
 
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import delete_conv, yt_search, song_download
+from ..helpers.functions import delete_conv, song_download, yt_search
 from ..helpers.tools import media_type
-from ..helpers.utils import _catutils, reply_id
+from ..helpers.utils import reply_id
 from . import catub
 
 plugin_category = "utils"
@@ -33,8 +32,6 @@ SONG_SENDING_STRING = "<code>yeah..! i found something wi8..🥰...</code>"
 # =========================================================== #
 #                                                             #
 # =========================================================== #
-
-
 
 
 @catub.cat_cmd(
@@ -69,7 +66,7 @@ async def song(event):
         )
     cmd = event.pattern_match.group(1)
     q = "320k" if cmd == "320" else "128k"
-    song_file,catthumb,title = await song_download(video_link, catevent,quality=q)
+    song_file, catthumb, title = await song_download(video_link, catevent, quality=q)
     await event.client.send_file(
         event.chat_id,
         song_file,
@@ -117,7 +114,7 @@ async def vsong(event):
         await event.client(cat)
     except BaseException:
         pass
-    vsong_file,catthumb,title = await song_download(video_link, catevent, video=True)
+    vsong_file, catthumb, title = await song_download(video_link, catevent, video=True)
     await event.client.send_file(
         event.chat_id,
         vsong_file,

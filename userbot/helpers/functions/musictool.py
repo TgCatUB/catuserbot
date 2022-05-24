@@ -1,10 +1,10 @@
-import asyncio
 import os
 from pathlib import Path
 
 import lyricsgenius
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
+
 from userbot import catub
 
 from ...Config import Config
