@@ -17,7 +17,6 @@ from ..core.session import catub
 from ..helpers import *
 from ..helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
 from ..sql_helper.globals import gvarstatus
-from .lyrics import LyricsGen
 
 # =================== CONSTANT ===================
 bot = catub

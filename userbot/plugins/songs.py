@@ -16,7 +16,7 @@ from validators.url import url
 
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import delete_conv, name_dl, song_dl, video_dl, yt_search
+from ..helpers.functions import delete_conv, yt_search, song_download
 from ..helpers.tools import media_type
 from ..helpers.utils import _catutils, reply_id
 from . import catub
@@ -35,6 +35,8 @@ SONG_SENDING_STRING = "<code>yeah..! i found something wi8..🥰...</code>"
 # =========================================================== #
 
 
+
+
 @catub.cat_cmd(
     pattern="song(320)?(?:\s|$)([\s\S]*)",
     command=("song", plugin_category),
@@ -48,7 +50,7 @@ SONG_SENDING_STRING = "<code>yeah..! i found something wi8..🥰...</code>"
         "examples": "{tr}song memories song",
     },
 )
-async def _(event):
+async def song(event):
     "To search songs"
     reply_to_id = await reply_id(event)
     reply = await event.get_reply_message()
@@ -67,35 +69,7 @@ async def _(event):
         )
     cmd = event.pattern_match.group(1)
     q = "320k" if cmd == "320" else "128k"
-    song_cmd = song_dl.format(QUALITY=q, video_link=video_link)
-    name_cmd = name_dl.format(video_link=video_link)
-    try:
-        cat = Get(cat)
-        await event.client(cat)
-    except BaseException:
-        pass
-    try:
-        stderr = (await _catutils.runcmd(song_cmd))[1]
-        # if stderr:
-        # await catevent.edit(f"**Error1 :** `{stderr}`")
-        catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
-        if stderr:
-            return await catevent.edit(f"**Error :** `{stderr}`")
-        catname = os.path.splitext(catname)[0]
-        song_file = Path(f"{catname}.mp3")
-    except:
-        pass
-    if not os.path.exists(song_file):
-        return await catevent.edit(
-            f"Sorry!. I can't find any related video/audio for `{query}`"
-        )
-    await catevent.edit("`yeah..! i found something wi8..🥰`")
-    catthumb = Path(f"{catname}.jpg")
-    if not os.path.exists(catthumb):
-        catthumb = Path(f"{catname}.webp")
-    elif not os.path.exists(catthumb):
-        catthumb = None
-    title = catname.replace("./temp/", "").replace("_", "|")
+    song_file,catthumb,title = await song_download(video_link, catevent,quality=q)
     await event.client.send_file(
         event.chat_id,
         song_file,
@@ -121,7 +95,7 @@ async def _(event):
         "examples": "{tr}vsong memories song",
     },
 )
-async def _(event):
+async def vsong(event):
     "To search video songs"
     reply_to_id = await reply_id(event)
     reply = await event.get_reply_message()
@@ -143,32 +117,7 @@ async def _(event):
         await event.client(cat)
     except BaseException:
         pass
-    name_cmd = name_dl.format(video_link=video_link)
-    video_cmd = video_dl.format(video_link=video_link)
-    try:
-        stderr = (await _catutils.runcmd(video_cmd))[1]
-        # if stderr:
-        # return await catevent.edit(f"**Error :** `{stderr}`")
-        catname, stderr = (await _catutils.runcmd(name_cmd))[:2]
-        if stderr:
-            return await catevent.edit(f"**Error :** `{stderr}`")
-        catname = os.path.splitext(catname)[0]
-        vsong_file = Path(f"{catname}.mp4")
-    except:
-        pass
-    if not os.path.exists(vsong_file):
-        vsong_file = Path(f"{catname}.mkv")
-    elif not os.path.exists(vsong_file):
-        return await catevent.edit(
-            f"Sorry!. I can't find any related video/audio for `{query}`"
-        )
-    await catevent.edit("`yeah..! i found something wi8..🥰`")
-    catthumb = Path(f"{catname}.jpg")
-    if not os.path.exists(catthumb):
-        catthumb = Path(f"{catname}.webp")
-    elif not os.path.exists(catthumb):
-        catthumb = None
-    title = catname.replace("./temp/", "").replace("_", "|")
+    vsong_file,catthumb,title = await song_download(video_link, catevent, video=True)
     await event.client.send_file(
         event.chat_id,
         vsong_file,
@@ -273,7 +222,7 @@ async def shazamcmd(event):
         "examples": "{tr}song2 memories song",
     },
 )
-async def _(event):
+async def song2(event):
     "To search songs"
     song = event.pattern_match.group(1)
     chat = "@songdl_bot"
