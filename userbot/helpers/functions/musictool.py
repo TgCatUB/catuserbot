@@ -6,8 +6,8 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
 from ...Config import Config
-from ...core.session import catub
 from ..utils.utils import runcmd
+from .functions import delete_conv
 from .utube import name_dl, song_dl, video_dl
 
 GENIUS = Config.GENIUS_API_TOKEN
@@ -42,7 +42,7 @@ class LyricGenius:
             pass
         return song_info
 
-    async def lyrics(self, title, artist=None, mode="lyrics"):
+    async def lyrics(self, event, title, artist=None, mode="lyrics"):
         lyrics = link = None
         if ENV:
             if not artist:
@@ -59,36 +59,27 @@ class LyricGenius:
         else:
             msg = f"{artist}-{title}" if artist else title
             chat = "@lyrics69bot"
-            async with catub.conversation(chat) as conv:
+            async with event.client.conversation(chat) as conv:
                 try:
                     flag = await conv.send_message("/start")
                 except YouBlockedUserError:
-                    await catub(unblock("lyrics69bot"))
+                    await event.client(unblock("lyrics69bot"))
                     flag = await conv.send_message("/start")
                 await conv.get_response()
-                await catub.send_read_acknowledge(conv.chat_id)
+                await event.client.send_read_acknowledge(conv.chat_id)
                 await conv.send_message(f"/{mode} {msg}")
                 if mode == "devloper":
                     link = (await conv.get_response()).text
-                    await catub.send_read_acknowledge(conv.chat_id)
+                    await event.client.send_read_acknowledge(conv.chat_id)
                 lyrics = (await conv.get_response()).text
-                await catub.send_read_acknowledge(conv.chat_id)
-                await delete_by_client(catub, chat, flag)
+                await event.client.send_read_acknowledge(conv.chat_id)
+                await delete_conv(event, chat, flag)
         if mode == "devloper":
             return link, lyrics
         return lyrics
 
 
 LyricsGen = LyricGenius()
-
-
-async def delete_by_client(client, chat, from_message):
-    itermsg = client.iter_messages(chat, min_id=from_message.id)
-    msgs = [from_message.id]
-    async for i in itermsg:
-        msgs.append(i.id)
-    await client.delete_messages(chat, msgs)
-    await client.send_read_acknowledge(chat)
 
 
 async def song_download(url, event, quality="128k", video=False, title=True):
