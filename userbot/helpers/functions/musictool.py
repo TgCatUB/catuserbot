@@ -5,9 +5,8 @@ import lyricsgenius
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
-from userbot import catub
-
 from ...Config import Config
+from ...core.session import catub
 from ..utils.utils import runcmd
 from .utube import name_dl, song_dl, video_dl
 
