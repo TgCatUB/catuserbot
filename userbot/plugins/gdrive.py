@@ -155,7 +155,7 @@ async def get_file_id(input_str):
         return link, "unknown"
 
 
-async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
+async def download(event, gdrive, service, uri=None):  # sourcery no-metrics  # sourcery skip: low-code-quality
     """Download files to local then upload"""
     start = datetime.now()
     reply = ""
@@ -762,7 +762,7 @@ async def get_output(service, file_id, event):
     return out
 
 
-async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
+async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics  # sourcery skip: low-code-quality
     complete = None
     global filenames
     GDRIVE_.is_cancelled = False
@@ -824,7 +824,7 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                 )
 
 
-async def glists(gdrive, folderlink=None):  # sourcery no-metrics
+async def glists(gdrive, folderlink=None):  # sourcery no-metrics  # sourcery skip: low-code-quality
     checker = gdrive.pattern_match.group(1)
     if checker is not None:
         page_size = int(gdrive.pattern_match.group(1).strip("-l "))
