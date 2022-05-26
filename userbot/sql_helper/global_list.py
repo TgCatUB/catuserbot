@@ -18,7 +18,11 @@ class CatGloballist(BASE):
         return "<Cat global values '%s' for %s>" % (self.group_id, self.keywoard)
 
     def __eq__(self, other):
-        return isinstance(other, CatGloballist) and self.keywoard == other.keywoard and self.group_id == other.group_id
+        return (
+            isinstance(other, CatGloballist)
+            and self.keywoard == other.keywoard
+            and self.group_id == other.group_id
+        )
 
 
 CatGloballist.__table__.create(checkfirst=True)

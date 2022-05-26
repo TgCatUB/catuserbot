@@ -18,7 +18,11 @@ class BlackListFilters(BASE):
         return "<Blacklist filter '%s' for %s>" % (self.trigger, self.chat_id)
 
     def __eq__(self, other):
-        return isinstance(other, BlackListFilters) and self.chat_id == other.chat_id and self.trigger == other.trigger
+        return (
+            isinstance(other, BlackListFilters)
+            and self.chat_id == other.chat_id
+            and self.trigger == other.trigger
+        )
 
 
 BlackListFilters.__table__.create(checkfirst=True)

@@ -139,7 +139,11 @@ def get_choice_by_id(choice_id, media_type: str):
         disp_str = "best(video+audio)[webm/mp4]"
     else:
         disp_str = str(choice_id)
-        choice_str = f"{disp_str}+(258/256/140/bestaudio[ext=m4a])/best" if media_type == "v" else disp_str
+        choice_str = (
+            f"{disp_str}+(258/256/140/bestaudio[ext=m4a])/best"
+            if media_type == "v"
+            else disp_str
+        )
 
     return choice_str, disp_str
 

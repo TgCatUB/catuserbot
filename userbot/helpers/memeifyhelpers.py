@@ -78,7 +78,9 @@ async def cat_meme(CNG_FONTS, topString, bottomString, filename, endname):
     # draw outlines
     # there may be a better way
     outlineRange = fontSize // 15
-    for x, y in itertools.product(range(-outlineRange, outlineRange + 1), range(-outlineRange, outlineRange + 1)):
+    for x, y in itertools.product(
+        range(-outlineRange, outlineRange + 1), range(-outlineRange, outlineRange + 1)
+    ):
         draw.text(
             (topTextPosition[0] + x, topTextPosition[1] + y),
             topString,

@@ -17,7 +17,11 @@ class Filter(BASE):
         self.f_mesg_id = f_mesg_id
 
     def __eq__(self, other):
-        return isinstance(other, Filter) and self.chat_id == other.chat_id and self.keyword == other.keyword
+        return (
+            isinstance(other, Filter)
+            and self.chat_id == other.chat_id
+            and self.keyword == other.keyword
+        )
 
 
 Filter.__table__.create(checkfirst=True)
