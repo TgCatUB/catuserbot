@@ -79,7 +79,9 @@ async def labstack(event):
         return await editor.edit(exc.output.decode("UTF-8"))
     else:
         LOGS.info(t_response)
-        t_response_arry = f'https://up.labstack.com/api/v1/links/{r2json["code"]}/receive'
+        t_response_arry = (
+            f'https://up.labstack.com/api/v1/links/{r2json["code"]}/receive'
+        )
     await editor.edit(
         t_response_arry + "\nMax Days:" + str(max_days), link_preview=False
     )

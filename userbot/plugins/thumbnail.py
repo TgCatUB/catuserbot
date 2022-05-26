@@ -2,6 +2,7 @@
 # credits @spechide
 
 import os
+
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
@@ -14,8 +15,6 @@ from ..helpers.utils import _cattools
 from . import CMD_HELP
 
 plugin_category = "utils"
-
-
 
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"

@@ -92,7 +92,14 @@ async def _(event):
                 )
             )
         else:
-            await event.client.send_file(event.chat_id, speedtest_image, caption=f"**SpeedTest** completed in {ms} seconds", force_document=as_document, reply_to=reply_msg_id, allow_cache=False)
+            await event.client.send_file(
+                event.chat_id,
+                speedtest_image,
+                caption=f"**SpeedTest** completed in {ms} seconds",
+                force_document=as_document,
+                reply_to=reply_msg_id,
+                allow_cache=False,
+            )
 
             await event.delete()
     except Exception as exc:

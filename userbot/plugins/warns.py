@@ -61,7 +61,10 @@ async def _(event):
     num_warns, reasons = result
     limit, soft_warn = sql.get_warn_setting(event.chat_id)
     if not reasons:
-        return await edit_or_reply(event, f"this user has {num_warns} / {limit} warning, but no reasons for any of them.")
+        return await edit_or_reply(
+            event,
+            f"this user has {num_warns} / {limit} warning, but no reasons for any of them.",
+        )
     text = f"This user has {num_warns}/{limit} warnings, for the following reasons:"
     text += "\r\n"
     text += reasons

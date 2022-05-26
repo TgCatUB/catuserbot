@@ -113,7 +113,9 @@ async def _(event):
             link_preview=False,
         )
     else:
-        await edit_or_reply(event, f"Input URL {input_str} returned status_code {r.status_code}")
+        await edit_or_reply(
+            event, f"Input URL {input_str} returned status_code {r.status_code}"
+        )
 
 
 # By Priyam Kalra

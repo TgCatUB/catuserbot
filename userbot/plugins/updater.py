@@ -372,7 +372,9 @@ async def variable(event):  # sourcery skip: low-code-quality
                 string += f"{i}"
         if cmd == "good":
             if match and not BADCAT:
-                cat = await edit_or_reply(event, "`Changing badcat to goodcat wait for 2-3 minutes.`")
+                cat = await edit_or_reply(
+                    event, "`Changing badcat to goodcat wait for 2-3 minutes.`"
+                )
                 with open(config, "w") as f1:
                     f1.write(string)
                     f1.close()
