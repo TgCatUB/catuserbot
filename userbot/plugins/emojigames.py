@@ -1,6 +1,6 @@
 # imported from uniborg credit goes to spechide
 from telethon.tl.types import InputMediaDice
-
+import contextlib
 from . import catub
 
 plugin_category = "fun"
@@ -13,6 +13,7 @@ FOOT_E_MOJI = "⚽️"
 SLOT_E_MOJI = "🎰"
 BOWL_E_MOJI = "🎳"
 # EMOJI CONSTANTS
+
 
 
 @catub.cat_cmd(
@@ -41,13 +42,11 @@ async def _(event):
         emoticon = "🎯"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
-        try:
+        with contextlib.suppress(BaseException):
             required_number = int(input_str)
             while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
-        except BaseException:
-            pass
     elif event.sender_id == event.client.uid:
         await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
@@ -80,13 +79,11 @@ async def _(event):
         emoticon = "🎲"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
-        try:
+        with contextlib.suppress(BaseException):
             required_number = int(input_str)
             while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
-        except BaseException:
-            pass
     elif event.sender_id == event.client.uid:
         await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
@@ -119,13 +116,11 @@ async def _(event):
         emoticon = "🏀"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
-        try:
+        with contextlib.suppress(BaseException):
             required_number = int(input_str)
             while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
-        except BaseException:
-            pass
     elif event.sender_id == event.client.uid:
         await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
@@ -158,13 +153,11 @@ async def _(event):
         emoticon = "⚽️"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
-        try:
+        with contextlib.suppress(BaseException):
             required_number = int(input_str)
             while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
-        except BaseException:
-            pass
     elif event.sender_id == event.client.uid:
         await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
@@ -199,13 +192,11 @@ async def _(event):
         emoticon = "🎰"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
-        try:
-            required_number = int(input_str)
+        with contextlib.suppress(BaseException):
+            required_number = input_str
             while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
-        except BaseException:
-            pass
     elif event.sender_id == event.client.uid:
         await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:
@@ -238,13 +229,11 @@ async def _(event):
         emoticon = "🎳"
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
-        try:
+        with contextlib.suppress(BaseException):
             required_number = int(input_str)
             while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
-        except BaseException:
-            pass
     elif event.sender_id == event.client.uid:
         await event.edit(file=InputMediaDice(emoticon=emoticon))
     else:

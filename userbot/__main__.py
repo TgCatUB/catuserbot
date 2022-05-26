@@ -2,7 +2,7 @@ import sys
 
 import userbot
 from userbot import BOTLOG_CHATID, PM_LOGGER_GROUP_ID
-
+import contextlib
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
@@ -61,7 +61,7 @@ async def externalrepo():
         )
 
 
-import contextlib
+
 
 catub.loop.run_until_complete(startup_process())
 

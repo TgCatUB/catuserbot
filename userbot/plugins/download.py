@@ -42,7 +42,7 @@ async def _get_file_name(path: pathlib.Path, full: bool = True) -> str:
         ],
     },
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To download the replied telegram file"
     mone = await edit_or_reply(event, "`Downloading....`")
     input_str = event.pattern_match.group(3)
@@ -185,7 +185,7 @@ async def _(event):  # sourcery no-metrics
         ],
     },
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     pwd = os.getcwd()
     input_str = event.pattern_match.group(3)
     name = NAME

@@ -1,3 +1,4 @@
+import contextlib
 from asyncio import sleep
 
 from telethon.errors import (
@@ -189,9 +190,8 @@ async def _(event):
             )
         except FloodWaitError as e:
             LOGS.warn(f"A flood wait of {e.seconds} occurred.")
-            await catevent.edit(
-                f"__A wait of {readable_time(e.seconds)} needed again to continue the process.__"
-            )
+            await catevent.edit(f"__A wait of {readable_time(e.seconds)} needed again to continue the process.__")
+
             await sleep(e.seconds + 5)
         except Exception as ex:
             await catevent.edit(str(ex))
@@ -201,13 +201,11 @@ async def _(event):
                 await sleep(2)
             else:
                 await sleep(1)
-            try:
+            with contextlib.suppress(MessageNotModifiedError):
                 if succ % 10 == 0:
                     await catevent.edit(
                         f"__Unbanning all banned accounts...,\n{succ} accounts are unbanned untill now.__"
                     )
-            except MessageNotModifiedError:
-                pass
     await catevent.edit(
         f"**Unbanned :**__{succ}/{total} in the chat {get_display_name(await event.get_chat())}__"
     )
@@ -231,6 +229,7 @@ async def _(event):
     groups_only=True,
 )
 async def rm_deletedacc(show):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "To check deleted accounts and clean"
     flag = show.pattern_match.group(1)
     con = show.pattern_match.group(2).lower()

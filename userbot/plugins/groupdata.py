@@ -19,7 +19,7 @@ from telethon.tl.types import (
 from telethon.utils import get_input_location
 
 from userbot import catub
-
+import contextlib
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import reply_id
@@ -207,10 +207,8 @@ async def get_chatinfo(event, catevent):
     chat = event.pattern_match.group(1)
     chat_info = None
     if chat:
-        try:
+        with contextlib.suppress(ValueError):
             chat = int(chat)
-        except ValueError:
-            pass
     if not chat:
         if event.reply_to_msg_id:
             replied_msg = await event.get_reply_message()

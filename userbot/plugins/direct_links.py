@@ -137,12 +137,10 @@ def zippy_share(url: str) -> str:
     scripts = page_soup.find_all("script", {"type": "text/javascript"})
     for script in scripts:
         if "getElementById('dlbutton')" in script.text:
-            url_raw = re.search(
-                r"= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);", script.text
-            ).group("url")
-            math = re.search(
-                r"= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);", script.text
-            ).group("math")
+            url_raw = re.search(r"= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);", script.text)["url"]
+
+            math = re.search(r"= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);", script.text)["math"]
+
             dl_url = url_raw.replace(math, '"' + str(eval(math)) + '"')
             break
     dl_url = base_url + eval(dl_url)

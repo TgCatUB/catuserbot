@@ -1,6 +1,6 @@
 import asyncio
 from datetime import datetime
-
+import contextlib
 from telethon.errors import BadRequestError
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChatBannedRights
@@ -49,7 +49,7 @@ UNBAN_RIGHTS = ChatBannedRights(
         "usage": "{tr}gban <username/reply/userid> <reason (optional)>",
     },
 )
-async def catgban(event):  # sourcery no-metrics
+async def catgban(event):    # sourcery no-metrics
     "To ban user in every group where you are admin."
     cate = await edit_or_reply(event, "`gbanning.......`")
     start = datetime.now()
@@ -116,12 +116,10 @@ async def catgban(event):  # sourcery no-metrics
                 \n__Banned in {count} groups__\
                 \n**Time taken : **`{cattaken} seconds`",
             )
-        try:
+        with contextlib.suppress(BadRequestError):
             if reply:
                 await reply.forward_to(BOTLOG_CHATID)
                 await reply.delete()
-        except BadRequestError:
-            pass
 
 
 @catub.cat_cmd(

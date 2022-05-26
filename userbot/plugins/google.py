@@ -1,4 +1,5 @@
 # reverse search and google search  plugin for cat
+import contextlib
 import os
 import re
 import urllib
@@ -28,14 +29,12 @@ async def ParseSauce(googleurl):
     source = opener.open(googleurl).read()
     soup = BeautifulSoup(source, "html.parser")
     results = {"similar_images": "", "best_guess": ""}
-    try:
+    with contextlib.suppress(BaseException):
         for similar_image in soup.findAll("input", {"class": "gLFyf"}):
             url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
                 similar_image.get("value")
             )
             results["similar_images"] = url
-    except BaseException:
-        pass
     for best_guess in soup.findAll("div", attrs={"class": "r5a77d"}):
         results["best_guess"] = best_guess.get_text()
     return results
@@ -96,12 +95,12 @@ async def gsearch(q_event):
         match = match.replace(f"-l{lim}", "")
         lim = int(lim)
         if lim <= 0:
-            lim = int(5)
+            lim = 5
     except IndexError:
         lim = 5
     #     smatch = urllib.parse.quote_plus(match)
     smatch = match.replace(" ", "+")
-    search_args = (str(smatch), int(page))
+    search_args = str(smatch), page
     gsearch = GoogleSearch()
     bsearch = BingSearch()
     ysearch = YahooSearch()
@@ -177,7 +176,7 @@ async def grs(event):
                 return await edit_delete(
                     photo[0], "__Unable to extract image from the replied message.__"
                 )
-            SEARCH_URL = "{}/searchbyimage/upload".format(BASE_URL)
+            SEARCH_URL = f"{BASE_URL}/searchbyimage/upload"
             multipart = {
                 "encoded_image": (
                     photo[1],
@@ -273,7 +272,7 @@ async def reverse(event):
         return await catevent.edit("`Unable to perform reverse search.`")
     fetchUrl = response.headers["Location"]
     os.remove(name)
-    match = await ParseSauce(fetchUrl + "&preferences?hl=en&fg=1#languages")
+    match = await ParseSauce(f"{fetchUrl}&preferences?hl=en&fg=1#languages")
     guess = match["best_guess"]
     imgspage = match["similar_images"]
     if guess and imgspage:
@@ -286,14 +285,12 @@ async def reverse(event):
     for i in images:
         k = requests.get(i)
         yeet.append(k.content)
-    try:
+    with contextlib.suppress(TypeError):
         await event.client.send_file(
             entity=await event.client.get_input_entity(event.chat_id),
             file=yeet,
             reply_to=reply_to,
         )
-    except TypeError:
-        pass
     await catevent.edit(
         f"[{guess}]({fetchUrl})\n\n[Visually similar images]({imgspage})"
     )
