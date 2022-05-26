@@ -77,7 +77,9 @@ async def load(event):
         load_module(shortname)
         await edit_delete(event, f"`Successfully loaded {shortname}`", 10)
     except Exception as e:
-        await edit_or_reply(event, f"Could not load {shortname} because of the following error.\n{e}")
+        await edit_or_reply(
+            event, f"Could not load {shortname} because of the following error.\n{e}"
+        )
 
 
 @catub.cat_cmd(

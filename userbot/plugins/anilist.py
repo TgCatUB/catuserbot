@@ -540,7 +540,7 @@ async def get_anime(event):
         ],
     },
 )
-async def anilist(event):    # sourcery no-metrics
+async def anilist(event):  # sourcery no-metrics
     # sourcery skip: low-code-quality
     "Get info on any character."
     reply_to = await reply_id(event)
@@ -624,7 +624,9 @@ async def anilist(event):    # sourcery no-metrics
     html_ += "<br><br>"
     html_ += f"<a href='{result['siteUrl']}'> View on anilist</a>"
 
-    synopsis_link = await post_to_telegraph(result["name"]["full"], f"<code>{caption}</code>\n<br>{html_}")
+    synopsis_link = await post_to_telegraph(
+        result["name"]["full"], f"<code>{caption}</code>\n<br>{html_}"
+    )
 
     await event.client.send_file(
         event.chat_id,

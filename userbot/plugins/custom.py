@@ -77,7 +77,7 @@ oldvars = {
         ],
     },
 )
-async def bad(event):    # sourcery no-metrics  # sourcery skip: low-code-quality
+async def bad(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To manage vars in database"
     cmd = event.pattern_match.group(1).lower()
     vname = event.pattern_match.group(2)
@@ -147,7 +147,11 @@ async def bad(event):    # sourcery no-metrics  # sourcery skip: low-code-qualit
                         return await edit_delete(event, "**Give me a correct link...**")
                     elif (("PIC" in vname) or ("pic" in vname)) and not url(i):
                         return await edit_delete(event, "**Give me a correct link...**")
-                    elif vname in ["DIGITAL_PIC", "DEFAULT_PIC", "BOT_START_PIC"] and url(i):
+                    elif vname in [
+                        "DIGITAL_PIC",
+                        "DEFAULT_PIC",
+                        "BOT_START_PIC",
+                    ] and url(i):
                         vinfo = i
                         break
                     elif "PIC" not in vname:

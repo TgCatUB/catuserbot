@@ -57,7 +57,7 @@ def sun(unix, ctimezone):
         ],
     },
 )
-async def get_weather(event):    # sourcery no-metrics
+async def get_weather(event):  # sourcery no-metrics
     # sourcery skip: low-code-quality
     "To get the weather report of a city."
     if not Config.OPEN_WEATHER_MAP_APPID:

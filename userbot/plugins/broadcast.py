@@ -17,6 +17,8 @@ LOGS = logging.getLogger(__name__)
 
 
 import contextlib
+
+
 @catub.cat_cmd(
     pattern="msgto(?:\s|$)([\s\S]*)",
     command=("msgto", plugin_category),
