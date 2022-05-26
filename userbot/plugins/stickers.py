@@ -295,7 +295,7 @@ async def add_to_pack(
         "usage": "{tr}kang [emoji('s)] [number]",
     },
 )
-async def kang(args):    # sourcery no-metrics  # sourcery skip: low-code-quality
+async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To kang a sticker."
     photo = None
     emojibypass = False

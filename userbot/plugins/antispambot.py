@@ -130,7 +130,11 @@ async def caschecker(event):
         async for user in event.client.iter_participants(info.id):
             if banchecker(user.id):
                 cas_count += 1
-                banned_users += f"Deleted Account `{user.id}`\n" if user.deleted else f"{user.first_name}-`{user.id}`\n"
+                banned_users += (
+                    f"Deleted Account `{user.id}`\n"
+                    if user.deleted
+                    else f"{user.first_name}-`{user.id}`\n"
+                )
             members_count += 1
         text = f"**Warning!** Found `{cas_count}` of `{members_count}` users are CAS Banned:\n"
         text += banned_users
@@ -174,7 +178,11 @@ async def caschecker(event):
         async for user in event.client.iter_participants(info.id):
             if spamchecker(user.id):
                 cas_count += 1
-                banned_users += f"Deleted Account `{user.id}`\n" if user.deleted else f"{user.first_name}-`{user.id}`\n"
+                banned_users += (
+                    f"Deleted Account `{user.id}`\n"
+                    if user.deleted
+                    else f"{user.first_name}-`{user.id}`\n"
+                )
 
             members_count += 1
         text = f"**Warning! **Found `{cas_count}` of `{members_count}` users are spamwatch Banned:\n"

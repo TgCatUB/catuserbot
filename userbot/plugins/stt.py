@@ -66,7 +66,11 @@ async def _(event):
         transcript_confidence += " " + str(alternatives["confidence"])
     end = datetime.now()
     ms = (end - start).seconds
-    string_to_show = f"**Language : **`{lan}`\n**Transcript : **`{transcript_response}`\n**Time Taken : **`{ms} seconds`\n**Confidence : **`{transcript_confidence}`" if transcript_response else f"**Language : **`{lan}`\n**Time Taken : **`{ms} seconds`\n**No Results Found**"
+    string_to_show = (
+        f"**Language : **`{lan}`\n**Transcript : **`{transcript_response}`\n**Time Taken : **`{ms} seconds`\n**Confidence : **`{transcript_confidence}`"
+        if transcript_response
+        else f"**Language : **`{lan}`\n**Time Taken : **`{ms} seconds`\n**No Results Found**"
+    )
     await catevent.edit(string_to_show)
     # now, remove the temporary file
     os.remove(required_file_name)

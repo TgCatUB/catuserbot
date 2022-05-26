@@ -1,6 +1,7 @@
 # by @mrconfused (@sandy1709)
 import asyncio
 import base64
+import contextlib
 import io
 import logging
 import os
@@ -8,7 +9,7 @@ import time
 from datetime import datetime
 from io import BytesIO
 from shutil import copyfile
-import contextlib
+
 import fitz
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
 from pymediainfo import MediaInfo
@@ -47,7 +48,6 @@ LOGS = logging.getLogger(__name__)
 PATH = os.path.join("./temp", "temp_vid.mp4")
 
 thumb_loc = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
-
 
 
 @catub.cat_cmd(
@@ -478,7 +478,7 @@ async def on_file_to_photo(event):
         "usage": "{tr}gif quality ; fps(frames per second)",
     },
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "Converts Given animated sticker to gif"
     if input_str := event.pattern_match.group(1):
         loc = input_str.split(";")
@@ -687,7 +687,7 @@ async def _(event):
         "examples": ["{tr}itog s", "{tr}itog -s"],
     },
 )
-async def pic_gifcmd(event):    # sourcery no-metrics
+async def pic_gifcmd(event):  # sourcery no-metrics
     "To convert replied image or sticker to gif"
     reply = await event.get_reply_message()
     mediatype = media_type(reply)

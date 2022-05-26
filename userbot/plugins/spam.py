@@ -1,7 +1,7 @@
 import asyncio
 import base64
-
 import contextlib
+
 from telethon.tl import functions, types
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetStickerSetRequest
@@ -337,7 +337,7 @@ async def spammer(event):
         ],
     },
 )
-async def react_spam(event):    # By @FeelDeD
+async def react_spam(event):  # By @FeelDeD
     "Spam react on message"
     msg = await event.get_reply_message()
     if not msg:
@@ -373,7 +373,9 @@ async def react_spam(event):    # By @FeelDeD
         getchat = await event.client(GetFullChannelRequest(channel=event.chat_id))
         grp_emoji = getchat.full_chat.available_reactions
         if not grp_emoji:
-            return await edit_delete(event, "`Reaction is not active in this chat..`", 6)
+            return await edit_delete(
+                event, "`Reaction is not active in this chat..`", 6
+            )
         emoji = grp_emoji
     addgvar("spamwork", True)
     await catevent.delete()

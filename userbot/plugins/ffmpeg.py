@@ -71,7 +71,18 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
             if difference > 0:
                 ETA = time_formatter(difference)
             percentage = math.floor(elapsed_time * 100 / total_time)
-            progress_str = "📊 **Progress :** {0}%\n[{1}{2}]".format(round(percentage, 2), "".join([FINISHED_PROGRESS_STR for _ in range(math.floor(percentage / 10))]), "".join([UN_FINISHED_PROGRESS_STR for _ in range(10 - math.floor(percentage / 10))]))
+            progress_str = "📊 **Progress :** {0}%\n[{1}{2}]".format(
+                round(percentage, 2),
+                "".join(
+                    [FINISHED_PROGRESS_STR for _ in range(math.floor(percentage / 10))]
+                ),
+                "".join(
+                    [
+                        UN_FINISHED_PROGRESS_STR
+                        for _ in range(10 - math.floor(percentage / 10))
+                    ]
+                ),
+            )
 
             stats = (
                 f"📦️ **Compressing CRF-{crf}**\n\n"
@@ -171,9 +182,7 @@ async def ffmpeg_compress(event):  # sourcery skip: low-code-quality
         catevent = await edit_or_reply(event, "`Processing...`")
         delete = False
     else:
-        await edit_delete(
-            event, "`Reply to Video file or save video by .ffmpegsave`"
-        )
+        await edit_delete(event, "`Reply to Video file or save video by .ffmpegsave`")
     old = await fileinfo(dlpath)
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
