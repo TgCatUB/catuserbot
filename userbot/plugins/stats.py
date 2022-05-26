@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import time
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -57,7 +58,7 @@ def user_full_name(user):
         "examples": ["{tr}stat g", "{tr}stat ca", "{tr}pstat ca"],
     },
 )
-async def stats(event):  # sourcery no-metrics
+async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
     "To get statistics of your telegram account."
     cat = await edit_or_reply(event, STAT_INDICATION)
     start_time = time.time()
@@ -123,7 +124,7 @@ async def stats(event):  # sourcery no-metrics
 @catub.cat_cmd(
     pattern="(|p)stat (g|ga|go|c|ca|co)$",
 )
-async def full_stats(event):  # sourcery no-metrics
+async def full_stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
     flag = event.pattern_match.group(1)
     catcmd = event.pattern_match.group(2)
     catevent = await edit_or_reply(event, STAT_INDICATION)
@@ -133,8 +134,24 @@ async def full_stats(event):  # sourcery no-metrics
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
         if isinstance(entity, Channel) and entity.broadcast:
-            if flag == "p":
-                try:
+            if flag == "":
+                if catcmd == "c":
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
+                    output = CHANNELS_STR
+                if (entity.creator or entity.admin_rights) and catcmd == "ca":
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
+                    output = CHANNELS_ADMINSTR
+                if entity.creator and catcmd == "co":
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
+                    output = CHANNELS_OWNERSTR
+            elif flag == "p":
+                with contextlib.suppress(AttributeError):
                     if entity.username and catcmd == "c":
                         grp.append(
                             f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
@@ -152,24 +169,6 @@ async def full_stats(event):  # sourcery no-metrics
                             f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
                         )
                         output = CHANNELS_OWNERSTR
-                except AttributeError:
-                    pass
-            elif flag == "":
-                if catcmd == "c":
-                    grp.append(
-                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
-                    )
-                    output = CHANNELS_STR
-                if (entity.creator or entity.admin_rights) and catcmd == "ca":
-                    grp.append(
-                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
-                    )
-                    output = CHANNELS_ADMINSTR
-                if entity.creator and catcmd == "co":
-                    grp.append(
-                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
-                    )
-                    output = CHANNELS_OWNERSTR
         elif (
             isinstance(entity, Channel)
             and entity.megagroup
@@ -177,8 +176,24 @@ async def full_stats(event):  # sourcery no-metrics
             and not isinstance(entity, User)
             and isinstance(entity, Chat)
         ):
-            if flag == "p":
-                try:
+            if flag == "":
+                if catcmd == "g":
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
+                    output = GROUPS_STR
+                if (entity.creator or entity.admin_rights) and catcmd == "ga":
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
+                    output = GROUPS_ADMINSTR
+                if entity.creator and catcmd == "go":
+                    grp.append(
+                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
+                    )
+                    output = GROUPS_OWNERSTR
+            elif flag == "p":
+                with contextlib.suppress(AttributeError):
                     if entity.username and catcmd == "g":
                         grp.append(
                             f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
@@ -196,24 +211,6 @@ async def full_stats(event):  # sourcery no-metrics
                             f"<a href = https://t.me/{entity.username}>{entity.title}</a>"
                         )
                         output = GROUPS_OWNERSTR
-                except AttributeError:
-                    pass
-            elif flag == "":
-                if catcmd == "g":
-                    grp.append(
-                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
-                    )
-                    output = GROUPS_STR
-                if (entity.creator or entity.admin_rights) and catcmd == "ga":
-                    grp.append(
-                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
-                    )
-                    output = GROUPS_ADMINSTR
-                if entity.creator and catcmd == "go":
-                    grp.append(
-                        f"<a href = https://t.me/c/{entity.id}/1>{entity.title}</a>"
-                    )
-                    output = GROUPS_OWNERSTR
     for k, i in enumerate(grp, start=1):
         output += f"{k} .) {i}\n"
         if k % 99 == 0:

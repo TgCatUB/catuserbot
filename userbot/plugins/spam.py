@@ -1,6 +1,7 @@
 import asyncio
 import base64
 
+import contextlib
 from telethon.tl import functions, types
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetStickerSetRequest
@@ -19,6 +20,7 @@ plugin_category = "extra"
 
 
 async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=False):
+    # sourcery skip: low-code-quality
     # sourcery no-metrics
     counter = int(cat[0])
     if len(cat) == 2:
@@ -184,11 +186,9 @@ async def stickerpack_spam(event):
             catevent,
             "`I guess this sticker is not part of any pack so i cant kang this sticker pack try kang for this sticker`",
         )
-    try:
+    with contextlib.suppress(BaseException):
         hmm = Get(hmm)
         await event.client(hmm)
-    except BaseException:
-        pass
     reqd_sticker_set = await event.client(
         functions.messages.GetStickerSetRequest(
             stickerset=types.InputStickerSetShortName(
@@ -232,7 +232,7 @@ async def stickerpack_spam(event):
 )
 async def tmeme(event):
     "Spam the text letter by letter."
-    cspam = str("".join(event.text.split(maxsplit=1)[1:]))
+    cspam = "".join(event.text.split(maxsplit=1)[1:])
     message = cspam.replace(" ", "")
     await event.delete()
     addgvar("spamwork", True)
@@ -267,7 +267,7 @@ async def tmeme(event):
 )
 async def tmeme(event):
     "Spam the text word by word"
-    wspam = str("".join(event.text.split(maxsplit=1)[1:]))
+    wspam = "".join(event.text.split(maxsplit=1)[1:])
     message = wspam.split()
     await event.delete()
     addgvar("spamwork", True)
@@ -337,7 +337,7 @@ async def spammer(event):
         ],
     },
 )
-async def react_spam(event):  # By @FeelDeD
+async def react_spam(event):    # By @FeelDeD
     "Spam react on message"
     msg = await event.get_reply_message()
     if not msg:
@@ -373,9 +373,7 @@ async def react_spam(event):  # By @FeelDeD
         getchat = await event.client(GetFullChannelRequest(channel=event.chat_id))
         grp_emoji = getchat.full_chat.available_reactions
         if not grp_emoji:
-            return await edit_delete(
-                event, f"`Reaction is not active in this chat..`", 6
-            )
+            return await edit_delete(event, "`Reaction is not active in this chat..`", 6)
         emoji = grp_emoji
     addgvar("spamwork", True)
     await catevent.delete()

@@ -8,7 +8,7 @@ import time
 from datetime import datetime
 from io import BytesIO
 from shutil import copyfile
-
+import contextlib
 import fitz
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
 from pymediainfo import MediaInfo
@@ -47,6 +47,7 @@ LOGS = logging.getLogger(__name__)
 PATH = os.path.join("./temp", "temp_vid.mp4")
 
 thumb_loc = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
+
 
 
 @catub.cat_cmd(
@@ -477,7 +478,7 @@ async def on_file_to_photo(event):
         "usage": "{tr}gif quality ; fps(frames per second)",
     },
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics
     "Converts Given animated sticker to gif"
     if input_str := event.pattern_match.group(1):
         loc = input_str.split(";")
@@ -530,11 +531,9 @@ async def _(event):  # sourcery no-metrics
         "Converting this Sticker to GiF...\n This may takes upto few mins..",
         parse_mode=_format.parse_pre,
     )
-    try:
+    with contextlib.suppress(BaseException):
         cat_event = Get(cat_event)
         await event.client(cat_event)
-    except BaseException:
-        pass
     reply_to_id = await reply_id(event)
     catfile = await event.client.download_media(catreply)
     if catreply.media.document.mime_type == "video/webm":
@@ -688,7 +687,7 @@ async def _(event):
         "examples": ["{tr}itog s", "{tr}itog -s"],
     },
 )
-async def pic_gifcmd(event):  # sourcery no-metrics
+async def pic_gifcmd(event):    # sourcery no-metrics
     "To convert replied image or sticker to gif"
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
@@ -700,7 +699,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
             "__Reply to photo or sticker to make it gif. Animated sticker is not supported__",
         )
     args = event.pattern_match.group(1)
-    args = "i" if not args else args.replace("-", "")
+    args = args.replace("-", "") if args else "i"
     catevent = await edit_or_reply(event, "__🎞 Making Gif from the replied media...__")
     imag = await _cattools.media_to_pic(event, reply, noedits=True)
     if imag[1] is None:

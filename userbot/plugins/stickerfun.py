@@ -6,6 +6,7 @@
 # modified & improved by @jisan7509
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
 
+import contextlib
 import io
 import os
 import random
@@ -151,10 +152,8 @@ async def sticklet(event):
         reply_to=reply_to_id,
     )
     # cleanup
-    try:
+    with contextlib.suppress(BaseException):
         os.remove(FONT_FILE)
-    except BaseException:
-        pass
 
 
 @catub.cat_cmd(
@@ -305,7 +304,7 @@ async def quby(event):
         stroke_width=1,
     )
     if len(txt) >= lines:
-        for x in range(0, lines):
+        for x in range(lines):
             text = text.replace(txt[x], "")
         file, _ = higlighted_text(
             file[0],
@@ -445,7 +444,7 @@ async def doge(event):
         stroke_fill="black",
     )
     if len(txt) >= lines:
-        for x in range(0, lines):
+        for x in range(lines):
             text = text.replace(txt[x], "")
         file, _ = higlighted_text(
             file[0],

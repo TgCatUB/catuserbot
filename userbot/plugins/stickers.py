@@ -211,7 +211,7 @@ async def add_to_pack(
     emoji,
     cmd,
     pkang=False,
-):
+):  # sourcery skip: low-code-quality
     try:
         await conv.send_message("/addsticker")
     except YouBlockedUserError:
@@ -295,7 +295,7 @@ async def add_to_pack(
         "usage": "{tr}kang [emoji('s)] [number]",
     },
 )
-async def kang(args):  # sourcery no-metrics
+async def kang(args):    # sourcery no-metrics  # sourcery skip: low-code-quality
     "To kang a sticker."
     photo = None
     emojibypass = False
@@ -348,7 +348,7 @@ async def kang(args):  # sourcery no-metrics
                 attributes = message.media.document.attributes
                 for attribute in attributes:
                     if isinstance(attribute, DocumentAttributeSticker):
-                        if message.media.document.size / 1024 > 255:
+                        if message.media.document.size > 261120:
                             catevent = await edit_or_reply(
                                 args, "__⌛ File size big,,, Downloading..__"
                             )

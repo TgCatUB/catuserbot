@@ -343,7 +343,7 @@ async def create_server_dir(service, current_path, folder_name):
 
 async def gdrive_download(
     event, gdrive, service, uri, path=os.path.join(os.getcwd(), "gdrive")
-):  # sourcery no-metrics
+):  # sourcery no-metrics  # sourcery skip: low-code-quality
     reply = ""
     if not os.path.exists(path):
         os.mkdir(path)

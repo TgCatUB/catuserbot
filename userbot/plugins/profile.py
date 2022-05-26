@@ -239,9 +239,5 @@ async def remove_profilepic(delpfp):
 async def _(event):
     "To list all public channels and groups."
     result = await event.client(GetAdminedPublicChannelsRequest())
-    output_str = "**Your current reserved usernames are:**\n"
-    output_str += "".join(
-        f" - {channel_obj.title} @{channel_obj.username} \n"
-        for channel_obj in result.chats
-    )
+    output_str = "**Your current reserved usernames are:**\n" + "".join(f" - {channel_obj.title} @{channel_obj.username} \n" for channel_obj in result.chats)
     await edit_or_reply(event, output_str)

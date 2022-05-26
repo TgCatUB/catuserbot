@@ -180,9 +180,9 @@ async def remove_a_filter(event):
     "Stops the specified keyword."
     filt = event.pattern_match.group(1)
     if not remove_filter(event.chat_id, filt):
-        await event.edit("Filter` {} `doesn't exist.".format(filt))
+        await event.edit(f"Filter` {filt} `doesn't exist.")
     else:
-        await event.edit("Filter `{} `was deleted successfully".format(filt))
+        await event.edit(f"Filter `{filt} `was deleted successfully")
 
 
 @catub.cat_cmd(
@@ -195,8 +195,7 @@ async def remove_a_filter(event):
 )
 async def on_all_snip_delete(event):
     "To delete all filters in that group."
-    filters = get_filters(event.chat_id)
-    if filters:
+    if filters := get_filters(event.chat_id):
         remove_all_filters(event.chat_id)
         await edit_or_reply(event, "filters in current chat deleted successfully")
     else:

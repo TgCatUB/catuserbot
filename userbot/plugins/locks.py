@@ -8,6 +8,7 @@ from telethon.tl.types import ChatBannedRights
 from telethon.utils import get_display_name
 
 from userbot import catub
+import contextlib
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format
@@ -50,7 +51,7 @@ plugin_category = "admin"
     groups_only=True,
     require_admin=True,
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics  # sourcery skip: low-code-quality
     "To lock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -60,7 +61,7 @@ async def _(event):  # sourcery no-metrics
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, True)
-        await edit_or_reply(event, "`Locked {}`".format(input_str))
+        await edit_or_reply(event, f"`Locked {input_str}`")
     else:
         msg = chat_per.send_messages
         media = chat_per.send_media
@@ -172,11 +173,9 @@ async def _(event):  # sourcery no-metrics
 
         else:
             return await edit_or_reply(event, "`I can't lock nothing !!`")
-        try:
+        with contextlib.suppress(BaseException):
             cat = Get(cat)
             await event.client(cat)
-        except BaseException:
-            pass
         lock_rights = ChatBannedRights(
             until_date=None,
             send_messages=msg,

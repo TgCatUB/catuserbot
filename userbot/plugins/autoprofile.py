@@ -564,7 +564,7 @@ async def _(event):
         "examples": ["{tr}end autopic"],
     },
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To stop the functions of autoprofile plugin"
     input_str = event.pattern_match.group(1)
     if input_str == "thorpfp" and gvarstatus("autopfp_strings") is not None:
