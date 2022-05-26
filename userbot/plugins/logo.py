@@ -93,7 +93,7 @@ def random_loader(Font, Color, Background, collection):
         ],
     },
 )
-async def very(event):    # sourcery no-metrics
+async def very(event):  # sourcery no-metrics
     # sourcery skip: low-code-quality
     "To create a logo"
     cmd = event.pattern_match.group(1).lower()
@@ -300,7 +300,7 @@ async def bad(event):
         ],
     },
 )
-async def pussy(event):    # sourcery no-metrics
+async def pussy(event):  # sourcery no-metrics
     # sourcery skip: low-code-quality
     "To customise logo font"
     cmd = event.pattern_match.group(1).lower()

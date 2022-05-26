@@ -71,7 +71,7 @@ async def subprocess_run(megadl, cmd):
         "usage": "{tr}mega <mega.nz link>",
     },
 )
-async def mega_downloader(megadl):    # sourcery no-metrics
+async def mega_downloader(megadl):  # sourcery no-metrics
     # sourcery skip: low-code-quality
     "To download mega files from mega.nz links."
     catevent = await edit_or_reply(megadl, "`Collecting information...`")
@@ -133,8 +133,12 @@ async def mega_downloader(megadl):    # sourcery no-metrics
         percentage = int(downloader.get_progress() * 100)
         speed = downloader.get_speed(human=True)
         estimated_total_time = round(downloader.get_eta())
-        progress_str = "`{0}` | [{1}{2}] `{3}%`".format(status, "".join("▰" for _ in range(math.floor(percentage / 10))), "".join("▱" for _ in range(10 - math.floor(percentage / 10))), round(percentage, 2))
-
+        progress_str = "`{0}` | [{1}{2}] `{3}%`".format(
+            status,
+            "".join("▰" for _ in range(math.floor(percentage / 10))),
+            "".join("▱" for _ in range(10 - math.floor(percentage / 10))),
+            round(percentage, 2),
+        )
 
         diff = time.time() - start
         try:
