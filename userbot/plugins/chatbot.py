@@ -112,8 +112,7 @@ async def remove_chatbot(event):
 )
 async def delete_chatbot(event):
     "To delete ai in this chat."
-    input_str = event.pattern_match.group(1)
-    if input_str:
+    if input_str := event.pattern_match.group(1):
         lecho = get_all_users()
         if len(lecho) == 0:
             return await edit_delete(
@@ -154,6 +153,7 @@ async def delete_chatbot(event):
     },
 )
 async def list_chatbot(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "To list all users on who you enabled ai."
     input_str = event.pattern_match.group(1)
     private_chats = ""

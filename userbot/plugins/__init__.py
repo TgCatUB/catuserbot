@@ -58,8 +58,7 @@ if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
 
 # thumb image
 if Config.THUMB_IMAGE is not None:
-    check = url(Config.THUMB_IMAGE)
-    if check:
+    if check := url(Config.THUMB_IMAGE):
         try:
             with open(thumb_image_path, "wb") as f:
                 f.write(requests.get(Config.THUMB_IMAGE).content)

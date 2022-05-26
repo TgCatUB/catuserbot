@@ -57,12 +57,7 @@ async def _(event):
 
     for trigger in to_blacklist:
         sql.add_to_blacklist(event.chat_id, trigger.lower())
-    await edit_or_reply(
-        event,
-        "Added {} triggers to the blacklist in the current chat".format(
-            len(to_blacklist)
-        ),
-    )
+    await edit_or_reply(event, f"Added {len(to_blacklist)} triggers to the blacklist in the current chat")
 
 
 @catub.cat_cmd(
