@@ -56,7 +56,7 @@ def get_warp_length(width):
         "examples": ["{tr}qpic CatUserbot.", "{tr}qpic -b CatUserbot."],
     },
 )
-async def q_pic(event):  # sourcery no-metrics
+async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     args = event.pattern_match.group(1)
     black = re.findall(r"-b", args)
     sticker = re.findall(r"-s", args)

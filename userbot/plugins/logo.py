@@ -93,7 +93,8 @@ def random_loader(Font, Color, Background, collection):
         ],
     },
 )
-async def very(event):  # sourcery no-metrics
+async def very(event):    # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "To create a logo"
     cmd = event.pattern_match.group(1).lower()
     text = event.pattern_match.group(2)
@@ -101,7 +102,7 @@ async def very(event):  # sourcery no-metrics
         count, text = text.split(";")
     else:
         count = 1
-    count = 7 if int(count) > 7 else int(count)
+    count = min(int(count), 7)
     reply = await event.get_reply_message()
     if not text and reply:
         text = reply.text
@@ -238,7 +239,6 @@ async def bad(event):
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)
     bg_name = ["black", "blue", "purple", "red", "white"] + rand_bg
-    lbg_list = "**Available background names are here:-**\n\n**1.** `black`\n**2.** `blue`\n**3.** `purple`\n**4.** `red`\n**5.** `white`\n\n**Random Backgrounds:**\n**1.** `total random`\n**2.** `anime`\n**3.** `frame`\n**4.** `mcu/dcu`\n**5.** `neon`\n"
     if cmd == "c":
         reply_message = await event.get_reply_message()
         if not input_str and event.reply_to_msg_id and reply_message.media:
@@ -255,6 +255,7 @@ async def bad(event):
             event, f"**Background for logo changed to :-** `{input_str}`"
         )
     if not input_str or input_str not in bg_name:
+        lbg_list = "**Available background names are here:-**\n\n**1.** `black`\n**2.** `blue`\n**3.** `purple`\n**4.** `red`\n**5.** `white`\n\n**Random Backgrounds:**\n**1.** `total random`\n**2.** `anime`\n**3.** `frame`\n**4.** `mcu/dcu`\n**5.** `neon`\n"
         return await edit_delete(event, lbg_list, 60)
     string = (
         input_str
@@ -299,7 +300,8 @@ async def bad(event):
         ],
     },
 )
-async def pussy(event):  # sourcery no-metrics
+async def pussy(event):    # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "To customise logo font"
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)
@@ -355,7 +357,7 @@ async def pussy(event):  # sourcery no-metrics
     cat = re.compile(r"^\-?[1-9][0-9]*\.?[0-9]*")
     isint = re.match(cat, input_str)
     if not input_str or not isint:
-        return await edit_delete(event, f"**Give an integer value to set**", 10)
+        return await edit_delete(event, "**Give an integer value to set**", 10)
     if cmd == "s":
         input_str = int(input_str)
         if input_str > 0 and input_str <= 1000:
