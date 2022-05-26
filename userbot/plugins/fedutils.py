@@ -1,10 +1,11 @@
 import asyncio
+import contextlib
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
 from userbot import BOTLOG, BOTLOG_CHATID, catub
-import contextlib
+
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format, get_user_from_event, reply_id
@@ -212,7 +213,7 @@ async def group_unfban(event):
         ],
     },
 )
-async def quote_search(event):    # sourcery no-metrics
+async def quote_search(event):  # sourcery no-metrics
     # sourcery skip: low-code-quality
     "Add the federation to database."
     fedgroup = event.pattern_match.group(1)
@@ -265,7 +266,9 @@ async def quote_search(event):    # sourcery no-metrics
                         if len(fed_id) == 36 and fed_id.count("-") == 4
                     )
             except Exception as e:
-                await edit_delete(catevent, f"**Error while fecthing myfeds:**\n__{e}__", 10)
+                await edit_delete(
+                    catevent, f"**Error while fecthing myfeds:**\n__{e}__", 10
+                )
             await event.client.send_read_acknowledge(conv.chat_id)
             conv.cancel()
         if not fedidstoadd:

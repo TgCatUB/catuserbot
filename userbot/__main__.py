@@ -1,8 +1,9 @@
+import contextlib
 import sys
 
 import userbot
 from userbot import BOTLOG_CHATID, PM_LOGGER_GROUP_ID
-import contextlib
+
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
@@ -59,8 +60,6 @@ async def externalrepo():
         await install_externalrepo(
             Config.BADCAT_REPO, Config.BADCAT_REPOBRANCH, "badcatext"
         )
-
-
 
 
 catub.loop.run_until_complete(startup_process())

@@ -1,6 +1,7 @@
 import asyncio
-from datetime import datetime
 import contextlib
+from datetime import datetime
+
 from telethon.errors import BadRequestError
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChatBannedRights
@@ -49,7 +50,7 @@ UNBAN_RIGHTS = ChatBannedRights(
         "usage": "{tr}gban <username/reply/userid> <reason (optional)>",
     },
 )
-async def catgban(event):    # sourcery no-metrics
+async def catgban(event):  # sourcery no-metrics
     "To ban user in every group where you are admin."
     cate = await edit_or_reply(event, "`gbanning.......`")
     start = datetime.now()

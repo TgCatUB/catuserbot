@@ -1,6 +1,8 @@
 # imported from uniborg credit goes to spechide
-from telethon.tl.types import InputMediaDice
 import contextlib
+
+from telethon.tl.types import InputMediaDice
+
 from . import catub
 
 plugin_category = "fun"
@@ -13,7 +15,6 @@ FOOT_E_MOJI = "⚽️"
 SLOT_E_MOJI = "🎰"
 BOWL_E_MOJI = "🎳"
 # EMOJI CONSTANTS
-
 
 
 @catub.cat_cmd(
