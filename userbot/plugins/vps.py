@@ -88,6 +88,7 @@ async def switch_branch():
     },
 )
 async def variable(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     """
     Manage most of ConfigVars setting, set new var, get current var, or delete var...
     """

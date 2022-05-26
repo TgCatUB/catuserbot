@@ -31,18 +31,12 @@ async def _(event):
         sql.reset_warns(reply_message.sender_id, event.chat_id)
         if soft_warn:
             logger.info("TODO: kick user")
-            reply = "{} warnings, [user](tg://user?id={}) has to bee kicked!".format(
-                limit, reply_message.sender_id
-            )
+            reply = f"{limit} warnings, [user](tg://user?id={reply_message.sender_id}) has to bee kicked!"
         else:
             logger.info("TODO: ban user")
-            reply = "{} warnings, [user](tg://user?id={}) has to bee banned!".format(
-                limit, reply_message.sender_id
-            )
+            reply = f"{limit} warnings, [user](tg://user?id={reply_message.sender_id}) has to bee banned!"
     else:
-        reply = "[user](tg://user?id={}) has {}/{} warnings... watch out!".format(
-            reply_message.sender_id, num_warns, limit
-        )
+        reply = f"[user](tg://user?id={reply_message.sender_id}) has {num_warns}/{limit} warnings... watch out!"
         if warn_reason:
             reply += "\nReason for last warn:\n{}".format(html.escape(warn_reason))
     await edit_or_reply(event, reply)
@@ -67,16 +61,8 @@ async def _(event):
     num_warns, reasons = result
     limit, soft_warn = sql.get_warn_setting(event.chat_id)
     if not reasons:
-        return await edit_or_reply(
-            event,
-            "this user has {} / {} warning, but no reasons for any of them.".format(
-                num_warns, limit
-            ),
-        )
-
-    text = "This user has {}/{} warnings, for the following reasons:".format(
-        num_warns, limit
-    )
+        return await edit_or_reply(event, f"this user has {num_warns} / {limit} warning, but no reasons for any of them.")
+    text = f"This user has {num_warns}/{limit} warnings, for the following reasons:"
     text += "\r\n"
     text += reasons
     await event.edit(text)

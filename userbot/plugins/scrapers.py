@@ -73,6 +73,7 @@ async def wiki(event):
     },
 )
 async def imdb_query(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     """To fetch imdb data about the given movie or series."""
     catevent = await edit_or_reply(event, "`searching........`")
     reply_to = await reply_id(event)

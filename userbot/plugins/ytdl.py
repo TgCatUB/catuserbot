@@ -152,7 +152,7 @@ async def fix_attributes(
         "examples": ["{tr}yta <reply to link>", "{tr}yta <link>"],
     },
 )
-async def download_audio(event):
+async def download_audio(event):  # sourcery skip: low-code-quality
     """To download audio from YouTube and many other sites."""
     msg = event.pattern_match.group(1)
     rmsg = await event.get_reply_message()
@@ -416,9 +416,9 @@ async def yt_search(event):
     if event.pattern_match.group(1) != "":
         lim = int(event.pattern_match.group(1))
         if lim <= 0:
-            lim = int(10)
+            lim = 10
     else:
-        lim = int(10)
+        lim = 10
     try:
         full_response = await ytsearch(query, limit=lim)
     except Exception as e:

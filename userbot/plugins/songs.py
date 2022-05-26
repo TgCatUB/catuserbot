@@ -6,6 +6,7 @@ import base64
 import io
 import os
 
+import contextlib
 from ShazamAPI import Shazam
 from telethon import types
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -109,11 +110,9 @@ async def vsong(event):
         return await catevent.edit(
             f"Sorry!. I can't find any related video/audio for `{query}`"
         )
-    try:
+    with contextlib.suppress(BaseException):
         cat = Get(cat)
         await event.client(cat)
-    except BaseException:
-        pass
     vsong_file, catthumb, title = await song_download(video_link, catevent, video=True)
     await event.client.send_file(
         event.chat_id,

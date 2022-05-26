@@ -50,7 +50,7 @@ def resize_image(image):
             "{tr}telegraph text <title(optional)>",
         ],
     },
-)  # sourcery no-metrics
+)  # sourcery no-me  # sourcery skip: low-code-quality, low-code-qualitytrics
 async def _(event):
     "To get telegraph link."
     catevent = await edit_or_reply(event, "`processing........`")
