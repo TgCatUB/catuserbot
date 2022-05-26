@@ -61,14 +61,13 @@ async def externalrepo():
         )
 
 
+import contextlib
 catub.loop.run_until_complete(startup_process())
 
 catub.loop.run_until_complete(externalrepo())
 
 if len(sys.argv) in {1, 3, 4}:
-    try:
+    with contextlib.suppress(ConnectionError):
         catub.run_until_disconnected()
-    except ConnectionError:
-        pass
 else:
     catub.disconnect()

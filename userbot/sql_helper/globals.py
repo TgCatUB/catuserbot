@@ -41,10 +41,5 @@ def addgvar(variable, value):
 
 
 def delgvar(variable):
-    rem = (
-        SESSION.query(Globals)
-        .filter(Globals.variable == str(variable))
-        .delete(synchronize_session="fetch")
-    )
-    if rem:
+    if rem := (SESSION.query(Globals).filter(Globals.variable == str(variable)).delete(synchronize_session="fetch")):
         SESSION.commit()

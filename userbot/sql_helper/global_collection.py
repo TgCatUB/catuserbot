@@ -21,11 +21,7 @@ class Cat_GlobalCollection(BASE):
         )
 
     def __eq__(self, other):
-        return bool(
-            isinstance(other, Cat_GlobalCollection)
-            and self.keywoard == other.keywoard
-            and self.contents == other.contents
-        )
+        return isinstance(other, Cat_GlobalCollection) and self.keywoard == other.keywoard and self.contents == other.contents
 
 
 Cat_GlobalCollection.__table__.create(checkfirst=True)

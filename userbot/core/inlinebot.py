@@ -122,7 +122,7 @@ def paginate_help(
     plugins=True,
     category_plugins=None,
     category_pgno=0,
-):  # sourcery no-metrics
+):  # sourcery no-metrics  # sourcery skip: low-code-quality
     try:
         number_of_rows = int(gvarstatus("NO_OF_ROWS_IN_HELP") or 5)
     except (ValueError, TypeError):

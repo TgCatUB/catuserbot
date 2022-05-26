@@ -1,3 +1,4 @@
+import pathlib
 import typing
 
 from telethon import events, hints, types
@@ -89,6 +90,7 @@ class MessageEdited(NewMessage):
 
 
 async def safe_check_text(msg):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     if not msg:
         return False
     msg = str(msg)
@@ -336,8 +338,7 @@ async def send_file(
     msg = caption
     safecheck = await safe_check_text(msg)
     try:
-        with open(file) as f:
-            filemsg = f.read()
+        filemsg = pathlib.Path(file).read_text()
     except Exception:
         filemsg = ""
     safe_file_check = await safe_check_text(filemsg)

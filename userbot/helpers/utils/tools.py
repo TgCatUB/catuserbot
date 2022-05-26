@@ -13,6 +13,7 @@ LOGS = logging.getLogger(__name__)
 
 
 async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     mediatype = media_type(reply)
     if mediatype not in [
         "Photo",
@@ -25,13 +26,8 @@ async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
         "Document",
     ]:
         return event, None
-    if not noedits:
-        catevent = await edit_or_reply(
-            event, "`Transfiguration Time! Converting to ....`"
-        )
+    catevent = event if noedits else await edit_or_reply(event, "`Transfiguration Time! Converting to ....`")
 
-    else:
-        catevent = event
     catmedia = None
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")

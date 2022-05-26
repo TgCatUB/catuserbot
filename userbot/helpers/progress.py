@@ -53,9 +53,7 @@ def humanbytes(size: int) -> str:
 
 
 def scheck(inp):
-    if inp == 1:
-        return ""
-    return "s"
+    return "" if inp == 1 else "s"
 
 
 def time_formatter(seconds: int) -> str:
@@ -118,7 +116,7 @@ async def progress(
     file_name=None,
     is_cancelled=False,
     delay=5,
-):  # sourcery no-metrics
+):  # sourcery no-metrics  # sourcery skip: low-code-quality
     if is_cancelled is True:
         raise CancelProcess
     task_id = f"{gdrive.chat_id}.{gdrive.id}"

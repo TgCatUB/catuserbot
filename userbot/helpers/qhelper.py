@@ -50,42 +50,36 @@ def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True):
     special = "./temp/ArialUnicodeMS.ttf"
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
-    if re:
-        if not os.path.exists(regular):
-            urllib.request.urlretrieve(
-                "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf",
-                regular,
-            )
-    if me:
-        if not os.path.exists(medium):
-            urllib.request.urlretrieve(
-                "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf",
-                medium,
-            )
-    if mo:
-        if not os.path.exists(mono):
-            urllib.request.urlretrieve(
-                "https://github.com/erenmetesar/modules-repo/raw/master/DroidSansMono.ttf",
-                mono,
-            )
-    if it:
-        if not os.path.exists(italic):
-            urllib.request.urlretrieve(
-                "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf",
-                italic,
-            )
-    if fa:
-        if not os.path.exists(fallback):
-            urllib.request.urlretrieve(
-                "https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf",
-                fallback,
-            )
-    if sp:
-        if not os.path.exists(special):
-            urllib.request.urlretrieve(
-                "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
-                special,
-            )
+    if re and not os.path.exists(regular):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf",
+            regular,
+        )
+    if me and not os.path.exists(medium):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf",
+            medium,
+        )
+    if mo and not os.path.exists(mono):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/DroidSansMono.ttf",
+            mono,
+        )
+    if it and not os.path.exists(italic):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf",
+            italic,
+        )
+    if fa and not os.path.exists(fallback):
+        urllib.request.urlretrieve(
+            "https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf",
+            fallback,
+        )
+    if sp and not os.path.exists(special):
+        urllib.request.urlretrieve(
+            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
+            special,
+        )
 
 
 async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics

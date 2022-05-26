@@ -1,3 +1,4 @@
+import contextlib
 import re
 
 from telethon import Button
@@ -27,14 +28,12 @@ async def age_verification_true(event: CallbackQuery):
             data="chg_of_decision_",
         )
     ]
-    try:
+    with contextlib.suppress(MessageNotModifiedError):
         await event.edit(
             text="To access this plugin type `.setdv ALLOW_NSFW True`",
             file="https://telegra.ph/file/85f3071c31279bcc280ef.jpg",
             buttons=buttons,
         )
-    except MessageNotModifiedError:
-        pass
 
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(r"^age_verification_false")))
@@ -52,14 +51,12 @@ async def age_verification_false(event: CallbackQuery):
             data="chg_of_decision_",
         )
     ]
-    try:
+    with contextlib.suppress(MessageNotModifiedError):
         await event.edit(
             text="GO AWAY KID !",
             file="https://telegra.ph/file/1140f16a883d35224e6a1.jpg",
             buttons=buttons,
         )
-    except MessageNotModifiedError:
-        pass
 
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(r"^chg_of_decision_")))
@@ -77,11 +74,9 @@ async def chg_of_decision_(event: CallbackQuery):
             Button.inline(text="No I'm Not", data="age_verification_false"),
         )
     ]
-    try:
+    with contextlib.suppress(MessageNotModifiedError):
         await event.edit(
             text="**ARE YOU OLD ENOUGH FOR THIS ?**",
             file="https://telegra.ph/file/238f2c55930640e0e8c56.jpg",
             buttons=buttons,
         )
-    except MessageNotModifiedError:
-        pass

@@ -26,8 +26,7 @@ async def ai_api(event):
             respond = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
             await delete_conv(event, chat, purgeflag)
-            rgxtoken = re.search(r"(?:API: )(.+)(?: Do)", respond.message)
-            if rgxtoken:
-                token = rgxtoken.group(1)
+            if rgxtoken := re.search(r"(?:API: )(.+)(?: Do)", respond.message):
+                token = rgxtoken[1]
             addgvar("AI_API_TOKEN", token)
     return token

@@ -1,5 +1,6 @@
 import base64
 
+import contextlib
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import MessageEntityMentionName
 
@@ -26,7 +27,7 @@ async def get_user_from_event(
     thirdgroup=None,
     nogroup=False,
     noedits=False,
-):  # sourcery no-metrics
+):  # sourcery no-metrics  # sourcery skip: low-code-quality
     if catevent is None:
         catevent = event
     if nogroup is False:
@@ -87,8 +88,6 @@ async def get_user_from_event(
 
 async def checking(catub):
     cat_c = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    try:
+    with contextlib.suppress(BaseException):
         cat_channel = Get(cat_c)
         await catub(cat_channel)
-    except BaseException:
-        pass

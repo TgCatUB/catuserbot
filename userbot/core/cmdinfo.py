@@ -23,7 +23,7 @@ def get_data(about, ktype):
 
 def _format_about(
     about: Union[str, Dict[str, Union[str, List[str], Dict[str, str]]]]
-) -> str:  # sourcery no-metrics
+) -> str:  # sourcery no-metrics  # sourcery skip: low-code-quality
     if not isinstance(about, dict):
         return about
     tmp_chelp = ""

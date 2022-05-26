@@ -341,9 +341,9 @@ async def watcher(event):
             "{tr}mute <userid/username/reply>",
             "{tr}mute <userid/username/reply> <reason>",
         ],
-    },  # sourcery no-metrics
+    },  
 )
-async def startmute(event):
+async def startmute(event): # sourcery no-metri  # sourcery skip: low-code-quality, low-code-qualitycs
     "To mute a person in that paticular chat"
     if event.is_private:
         replied_user = await event.client.get_entity(event.chat_id)

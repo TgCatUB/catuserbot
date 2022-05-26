@@ -69,6 +69,7 @@ def admin_cmd(pattern=None, command=None, **args):  # sourcery no-metrics
 
 
 def sudo_cmd(pattern=None, command=None, **args):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]

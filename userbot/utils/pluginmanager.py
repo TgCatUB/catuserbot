@@ -1,3 +1,4 @@
+import contextlib
 import importlib
 import sys
 from pathlib import Path
@@ -22,7 +23,7 @@ def load_module(shortname, plugin_path=None):
     elif shortname.endswith("_"):
         path = Path(f"userbot/plugins/{shortname}.py")
         checkplugins(path)
-        name = "userbot.plugins.{}".format(shortname)
+        name = f"userbot.plugins.{shortname}"
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
@@ -76,12 +77,10 @@ def remove_plugin(shortname):
         return True
     except Exception as e:
         LOGS.error(e)
-    try:
+    with contextlib.suppress(BaseException):
         for i in LOAD_PLUG[shortname]:
             catub.remove_event_handler(i)
         del LOAD_PLUG[shortname]
-    except BaseException:
-        pass
     try:
         name = f"userbot.plugins.{shortname}"
         for i in reversed(range(len(catub._event_builders))):

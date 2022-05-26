@@ -503,7 +503,7 @@ class googleimagesdownload:
             req = urllib.request.Request(url, headers=headers)
             resp = urllib.request.urlopen(req)
             respData = str(resp.read())
-        except:
+        except Exception:
             print(
                 "Could not open URL. Please check your internet connection and/or ssl settings \n"
                 "If you are using proxy, make sure your proxy settings is configured correctly"
@@ -581,7 +581,7 @@ class googleimagesdownload:
             for _ in range(50):
                 element.send_keys(Keys.PAGE_DOWN)
                 time.sleep(0.3)  # bot id protection
-        except:
+        except Exception:
             for _ in range(10):
                 element.send_keys(Keys.PAGE_DOWN)
                 time.sleep(0.3)  # bot id protection
@@ -619,7 +619,7 @@ class googleimagesdownload:
         start_line = s.find('class="dtviD"')
         start_content = s.find('href="', start_line + 1)
         end_content = s.find('">', start_content + 1)
-        url_item = "https://www.google.com" + str(s[start_content + 6 : end_content])
+        url_item = f"https://www.google.com{str(s[start_content + 6 : end_content])}"
         url_item = url_item.replace("&amp;", "&")
 
         start_line_2 = s.find('class="dtviD"')
@@ -742,7 +742,7 @@ class googleimagesdownload:
             l3 = content.find("/search?sa=X&amp;q=")
             l4 = content.find(";", l3 + 19)
             return content[l3 + 19 : l4]
-        except:
+        except Exception:
             return "Cloud not connect to Google Images endpoint"
 
     # Building URL parameters
