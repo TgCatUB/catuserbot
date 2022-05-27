@@ -237,7 +237,7 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     groups_only=True,
     require_admin=True,
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics  # sourcery skip: low-code-quality
     "To unlock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -247,7 +247,7 @@ async def _(event):  # sourcery no-metrics
     chat_per = (await event.get_chat()).default_banned_rights
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, False)
-        await edit_or_reply(event, "`UnLocked {}`".format(input_str))
+        await edit_or_reply(event, f"`UnLocked {input_str}`")
     else:
         msg = chat_per.send_messages
         media = chat_per.send_media
@@ -359,11 +359,9 @@ async def _(event):  # sourcery no-metrics
 
         else:
             return await edit_or_reply(event, "`I can't unlock nothing !!`")
-        try:
+        with contextlib.suppress(BaseException):
             cat = Get(cat)
             await event.client(cat)
-        except BaseException:
-            pass
         unlock_rights = ChatBannedRights(
             until_date=None,
             send_messages=msg,

@@ -156,6 +156,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     },
 )
 async def video_catfile(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "To make circular video note."
     reply = await event.get_reply_message()
     args = event.pattern_match.group(1)
@@ -591,9 +592,7 @@ async def _(event):
     else:
         end = datetime.now()
         ms = (end - start).seconds
-        await event.edit(
-            "Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms)
-        )
+        await event.edit(f"Downloaded to `{downloaded_file_name}` in {ms} seconds.")
         new_required_file_name = ""
         new_required_file_caption = ""
         command_to_run = []
@@ -688,6 +687,7 @@ async def _(event):
     },
 )
 async def pic_gifcmd(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "To convert replied image or sticker to gif"
     reply = await event.get_reply_message()
     mediatype = media_type(reply)

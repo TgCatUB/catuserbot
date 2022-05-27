@@ -241,6 +241,7 @@ async def get_chatinfo(event, catevent):
 
 
 async def fetch_info(chat, event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     # chat.chats is a list so we use get_entity() to avoid IndexError
     chat_obj_info = await event.client.get_entity(chat.full_chat.id)
     broadcast = (

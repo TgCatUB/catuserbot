@@ -53,7 +53,7 @@ Colors = [
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-def notebook_values(page, font):
+def notebook_values(page, font):  # sourcery skip: low-code-quality
     if page == "a4":
         position = (75, 10)
         lines = 28
@@ -216,7 +216,7 @@ def notebook_values(page, font):
         "usage": "{tr}write <Reply/Text>",
     },
 )
-async def write_page(event):
+async def write_page(event):  # sourcery skip: low-code-quality
     """Write down your text in notebook."""
     cmd = event.pattern_match.group(1)
     font = gvarstatus("NOTEBOOK_FONT") or "Caveat"
@@ -319,7 +319,7 @@ async def notebook(event):
         ],
     },
 )
-async def notebook_conf(event):
+async def notebook_conf(event):   # sourcery skip: low-code-quality
     """Change settings for notebook"""
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)

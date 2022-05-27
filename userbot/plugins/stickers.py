@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import contextlib
 import io
 import math
 import os
@@ -486,7 +487,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
         "usage": "{tr}pkang [number]",
     },
 )
-async def pack_kang(event):  # sourcery no-metrics
+async def pack_kang(event):    # sourcery no-metrics
     "To kang entire sticker sticker."
     user = await event.client.get_me()
     if user.username:
@@ -575,7 +576,7 @@ async def pack_kang(event):  # sourcery no-metrics
                 catevent,
                 f"`This sticker pack is kanging now . Status of kang process : {kangst}/{noofst}`",
             )
-            if message.size / 1024 > 255:
+            if message.size > 261120:
                 await animator(message, event)
             else:
                 await event.client.download_media(message, "animate.webm")
@@ -600,11 +601,9 @@ async def pack_kang(event):  # sourcery no-metrics
                         catevent,
                         "`Sorry the given name cant be used for pack or there is no pack with that name`",
                     )
-            try:
+            with contextlib.suppress(BaseException):
                 cat = Get(cat)
                 await event.client(cat)
-            except BaseException:
-                pass
             packnick = pack_nick(username, pack, is_anim, is_video)
             packname = pack_name(userid, pack, is_anim, is_video)
             cmd = "/newpack"
