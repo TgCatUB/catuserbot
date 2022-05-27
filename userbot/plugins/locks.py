@@ -237,7 +237,7 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     groups_only=True,
     require_admin=True,
 )
-async def _(event):    # sourcery no-metrics  # sourcery skip: low-code-quality
+async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To unlock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id

@@ -487,7 +487,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
         "usage": "{tr}pkang [number]",
     },
 )
-async def pack_kang(event):    # sourcery no-metrics
+async def pack_kang(event):  # sourcery no-metrics
     "To kang entire sticker sticker."
     user = await event.client.get_me()
     if user.username:

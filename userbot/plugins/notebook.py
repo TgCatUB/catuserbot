@@ -319,7 +319,7 @@ async def notebook(event):
         ],
     },
 )
-async def notebook_conf(event):   # sourcery skip: low-code-quality
+async def notebook_conf(event):  # sourcery skip: low-code-quality
     """Change settings for notebook"""
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)
