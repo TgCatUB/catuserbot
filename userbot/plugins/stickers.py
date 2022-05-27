@@ -488,6 +488,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
     },
 )
 async def pack_kang(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "To kang entire sticker sticker."
     user = await event.client.get_me()
     if user.username:
@@ -798,7 +799,7 @@ async def pic2packcmd(event):
     img.paste(image, ((www - w) // 2, 0))
     newimg = img.resize((100, 100))
     new_img = io.BytesIO()
-    new_img.name = name + ".png"
+    new_img.name = f"{name}.png"
     images = await crop_and_divide(img)
     newimg.save(new_img)
     new_img.seek(0)
@@ -817,7 +818,7 @@ async def pic2packcmd(event):
         await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
         for im in images:
             img = io.BytesIO(im)
-            img.name = name + ".png"
+            img.name = f"{name}.png"
             img.seek(0)
             await event.client.send_file(chat, img, force_document=True)
             await conv.wait_event(events.NewMessage(incoming=True, from_users=chat))
