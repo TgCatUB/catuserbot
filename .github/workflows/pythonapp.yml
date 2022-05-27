@@ -19,14 +19,10 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install libpq-dev
-          sudo apt-get install libxml2-dev libxslt-dev python-dev
           python -m pip install --upgrade pip
           pip install wheel
           pip install -r requirements.txt
-          pip install flake8 flake8-print flake8-quotes pylint
-      - name: Analysing the code with pylint
-        run: |
-          pylint $(git ls-files '*.py')
+          pip install flake8 flake8-print flake8-quotes
       - name: Check for showstoppers
         run: |
           # stop the build if there are Python syntax errors
