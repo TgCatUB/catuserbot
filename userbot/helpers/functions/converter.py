@@ -24,6 +24,7 @@ class CatConverter:
     async def to_image(self, event, reply, noedits=False, rgb=False):
         memetype = meme_type(reply)
         mediatype = media_type(reply)
+        catmedia = None
         if memetype == "Document":
             return event, None
         catevent = (
