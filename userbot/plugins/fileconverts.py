@@ -33,8 +33,9 @@ from ..helpers.functions import (
     spin_frames,
     ud_frames,
     vid_to_gif,
+    unsavegif,
 )
-from ..helpers.utils import _cattools, _catutils, _format, parse_pre, reply_id
+from ..helpers.utils import _catutils, _format, parse_pre, reply_id
 from . import make_gif
 
 plugin_category = "misc"
@@ -72,7 +73,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
         return await edit_delete(event, "`Reply to supported Media...`")
     media_type(reply)
     catevent = await edit_or_reply(event, "__Making round spin video wait a sec.....__")
-    output = await _cattools.media_to_pic(event, reply, noedits=True)
+    output = await Convert.to_image(event, reply, noedits=True)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -139,7 +140,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
         supports_streaming=True,
     )
     if not args:
-        await _catutils.unsavegif(event, sandy)
+        await unsavegif(event, sandy)
     await catevent.delete()
     for i in [final, "Output.gif", meme_file, PATH, final]:
         if os.path.exists(i):
@@ -270,7 +271,7 @@ async def video_catfile(event):  # sourcery no-metrics
             )
 
             if not args:
-                await _catutils.unsavegif(event, sandy)
+                await unsavegif(event, sandy)
             os.remove(PATH)
             if flag:
                 os.remove(catthumb)
@@ -317,7 +318,7 @@ async def _(event):
         return await edit_delete(
             event, "Reply to any sticker/media to convert it to image.__"
         )
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(event, reply)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -344,7 +345,7 @@ async def _(event):
         return await edit_delete(
             event, "Reply to any image/media to convert it to sticker.__"
         )
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(event, reply)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -548,7 +549,7 @@ async def _(event):  # sourcery no-metrics
         force_document=False,
         reply_to=reply_to_id,
     )
-    await _catutils.unsavegif(event, sandy)
+    await unsavegif(event, sandy)
     await catevent.delete()
     for files in (catgif, catfile):
         if files and os.path.exists(files):
@@ -701,7 +702,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     args = event.pattern_match.group(1)
     args = args.replace("-", "") if args else "i"
     catevent = await edit_or_reply(event, "__🎞 Making Gif from the replied media...__")
-    imag = await _cattools.media_to_pic(event, reply, noedits=True)
+    imag = await Convert.to_image(event, reply, noedits=True)
     if imag[1] is None:
         return await edit_delete(
             imag[0], "__Unable to extract image from the replied message.__"
@@ -741,7 +742,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
                 os.remove(i)
         return
     sandy = await event.client.send_file(event.chat_id, output, reply_to=reply)
-    await _catutils.unsavegif(event, sandy)
+    await unsavegif(event, sandy)
     await catevent.delete()
     for i in [final, "Output.gif", imag[1]]:
         if os.path.exists(i):
@@ -774,7 +775,7 @@ async def vtog(event):
         "ffmpeg -i catvideo.mp4 -c:v libx264 -fs 5M -an catgif.mp4 -y"
     )
     sandy = await event.client.send_file(event.chat_id, "catgif.mp4", reply_to=reply)
-    await _catutils.unsavegif(event, sandy)
+    await unsavegif(event, sandy)
     await catevent.delete()
     for i in ["catvideo.mp4", "catgif.mp4"]:
         if os.path.exists(i):

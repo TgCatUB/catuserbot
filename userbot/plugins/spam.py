@@ -11,8 +11,7 @@ from telethon.utils import get_display_name
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.tools import media_type
-from ..helpers.utils import _catutils
+from ..helpers import media_type, unsavegif
 from ..sql_helper.globals import addgvar, gvarstatus
 from . import BOTLOG, BOTLOG_CHATID
 
@@ -40,7 +39,7 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
             sandy = await event.client.send_file(
                 event.chat_id, sandy, caption=sandy.text
             )
-            await _catutils.unsavegif(event, sandy)
+            await unsavegif(event, sandy)
             await asyncio.sleep(sleeptimem)
         if BOTLOG:
             if DelaySpam is not True:
@@ -70,7 +69,7 @@ async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=Fal
                 )
 
             sandy = await event.client.send_file(BOTLOG_CHATID, sandy)
-            await _catutils.unsavegif(event, sandy)
+            await unsavegif(event, sandy)
         return
     elif event.reply_to_msg_id and sandy.text:
         spam_message = sandy.text

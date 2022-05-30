@@ -20,6 +20,7 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import (
+    Convert,
     convert_tosticker,
     file_check,
     fontTest,
@@ -27,7 +28,7 @@ from ..helpers import (
     process,
     soft_deEmojify,
 )
-from ..helpers.utils import _cattools, get_user_from_event, reply_id
+from ..helpers.utils import get_user_from_event, reply_id
 
 plugin_category = "fun"
 
@@ -90,7 +91,7 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
         user = reply.sender_id if reply else event.client.uid
         pfp = await event.client.download_profile_photo(user)
     else:
-        imag = await _cattools.media_to_pic(event, reply, noedits=True)
+        imag = await Convert.to_image(event, reply, noedits=True)
         if imag[1] is None:
             return await edit_delete(
                 imag[0], "__Unable to extract image from the replied message.__"

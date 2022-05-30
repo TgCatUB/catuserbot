@@ -30,7 +30,7 @@ async def collage(event):
     catinput = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     catid = await reply_id(event)
-    event = await edit_or_reply(
+    await edit_or_reply(
         event, "```collaging this may take several minutes too..... 😁```"
     )
     if not (reply and (reply.media)):

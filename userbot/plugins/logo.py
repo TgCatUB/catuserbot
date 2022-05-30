@@ -17,7 +17,7 @@ from telegraph import upload_file
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import clippy
+from ..helpers.functions import clippy,Convert
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from . import hmention, reply_id
 
@@ -242,7 +242,7 @@ async def bad(event):
     if cmd == "c":
         reply_message = await event.get_reply_message()
         if not input_str and event.reply_to_msg_id and reply_message.media:
-            output = await _cattools.media_to_pic(event, reply_message)
+            output = await Convert.to_image(event, reply_message)
             myphoto_urls = upload_file(output[1])
             input_str = f"https://telegra.ph{myphoto_urls[0]}"
             os.remove(output[1])

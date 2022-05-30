@@ -11,7 +11,7 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..core.session import catub
 from ..helpers.tools import media_type
-from ..helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
+from ..helpers.utils import _catutils, _format, install_pip, reply_id
 from .decorators import admin_cmd, sudo_cmd
 
 LOGS = logging.getLogger("CatUserbot")
@@ -48,7 +48,6 @@ def load_module(shortname, plugin_path=None):
         mod.reply_id = reply_id
         mod.admin_cmd = admin_cmd
         mod._catutils = _catutils
-        mod._cattools = _cattools
         mod.media_type = media_type
         mod.edit_delete = edit_delete
         mod.install_pip = install_pip

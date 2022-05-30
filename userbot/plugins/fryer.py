@@ -10,8 +10,8 @@ from telethon.tl.types import DocumentAttributeFilename
 from userbot import catub
 
 from ..core.managers import edit_or_reply
-from ..helpers.functions import delete_conv
-from ..helpers.utils import media_to_pic, reply_id
+from ..helpers.functions import delete_conv, Convert
+from ..helpers.utils import reply_id
 
 plugin_category = "extra"
 
@@ -90,7 +90,7 @@ async def frybot(event):
     reply_message = await event.get_reply_message()
     if not event.reply_to_msg_id or not reply_message.media:
         return await edit_delete(event, "```Reply to a media to fry it...```", 10)
-    output = await media_to_pic(event, reply_message)
+    output = await Convert.to_image(event, reply_message)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__", 10

@@ -14,7 +14,7 @@ from telethon.tl.types import DocumentAttributeAnimated
 from telethon.utils import is_video
 
 from ..progress import readable_time
-from ..tools import post_to_telegraph
+from .functions import post_to_telegraph
 
 jikan = Jikan()
 

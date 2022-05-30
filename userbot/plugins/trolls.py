@@ -8,7 +8,7 @@ from telegraph import exceptions, upload_file
 from userbot import catub
 
 from ..core.managers import edit_or_reply
-from ..helpers.utils import _cattools, reply_id
+from ..helpers import reply_id,Convert
 from . import convert_toimage, deEmojify, phcomment, threats, trap, trash
 
 plugin_category = "fun"
@@ -28,7 +28,7 @@ async def catbot(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await _cattools.media_to_pic(event, replied)
+    output = await Convert.to_image(event, replied)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -68,7 +68,7 @@ async def catbot(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await _cattools.media_to_pic(event, replied)
+    output = await Convert.to_image(event, replied)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -117,7 +117,7 @@ async def catbot(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await _cattools.media_to_pic(event, replied)
+    output = await Convert.to_image(event, replied)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -166,7 +166,7 @@ async def catbot(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await _cattools.media_to_pic(event, replied)
+    output = await Convert.to_image(event, replied)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"

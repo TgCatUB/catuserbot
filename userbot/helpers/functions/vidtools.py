@@ -1,26 +1,14 @@
 import logging
 import random
+from typing import Optional
 
-from moviepy.editor import VideoFileClip
 from PIL import Image, ImageOps
+from telethon import functions, types
 
 from ...core.logger import logging
+from ..utils.utils import runcmd
 
 LOGS = logging.getLogger(__name__)
-
-
-async def vid_to_gif(inputfile, outputfile, speed=None, starttime=None, endtime=None):
-    try:
-        clip = VideoFileClip(inputfile)
-        if starttime is not None and endtime is not None:
-            clip = clip.subclip(int(starttime), int(endtime))
-        if speed is not None:
-            clip = clip.speedx(float(speed))
-        clip.write_gif(outputfile, logger=None)
-        return outputfile
-    except Exception as e:
-        LOGS.error(e)
-        return None
 
 
 async def r_frames(image, w, h, outframes):
@@ -80,3 +68,32 @@ async def invert_frames(image, w, h, outframes):
     outframes.append(image)
     outframes.append(invert)
     return outframes
+
+
+async def unsavegif(event, sandy):
+    try:
+        await event.client(
+            functions.messages.SaveGifRequest(
+                id=types.InputDocument(
+                    id=sandy.media.document.id,
+                    access_hash=sandy.media.document.access_hash,
+                    file_reference=sandy.media.document.file_reference,
+                ),
+                unsave=True,
+            )
+        )
+    except Exception as e:
+        LOGS.info(str(e))
+
+
+async def take_screen_shot(
+    video_file: str, duration: int, path: str = ""
+) -> Optional[str]:
+    thumb_image_path = path or os.path.join(
+        "./temp/", f"{os.path.basename(video_file)}.jpg"
+    )
+    command = f"ffmpeg -hide_banner -loglevel quiet -ss {duration} -i '{video_file}' -vframes 1 '{thumb_image_path}' -y"
+    err = (await runcmd(command))[1]
+    if err:
+        LOGS.error(err)
+    return thumb_image_path if os.path.exists(thumb_image_path) else None

@@ -17,7 +17,7 @@ from telegraph import exceptions, upload_file
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import media_type, post_to_telegraph, readable_time, time_formatter
+from ..helpers import media_type, readable_time, time_formatter
 from ..helpers.functions import (
     airing_query,
     anilist_user,
@@ -29,12 +29,13 @@ from ..helpers.functions import (
     get_anime_schedule,
     get_filler_episodes,
     getBannerLink,
+    post_to_telegraph,
     memory_file,
     search_in_animefiller,
     searchanilist,
     weekdays,
 )
-from ..helpers.utils import _cattools, reply_id
+from ..helpers import Convert, reply_id
 
 jikan = Jikan()
 
@@ -782,12 +783,12 @@ async def whatanime(event):
             event, "__reply to media to reverse search that anime__."
         )
     mediatype = media_type(reply)
-    if mediatype not in ["Photo", "Video", "Gif", "Sticker"]:
+    if mediatype not in ["Photo", "Video", "Gif", "Sticker","Document"]:
         return await edit_delete(
             event,
             f"__Reply to proper media that is expecting photo/video/gif/sticker. not {mediatype}__.",
         )
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(event, reply)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"

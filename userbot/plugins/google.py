@@ -14,8 +14,8 @@ from search_engine_parser.core.exceptions import NoResultsOrTrafficError
 from userbot import BOTLOG, BOTLOG_CHATID, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import deEmojify
-from ..helpers.utils import _cattools, reply_id
+from ..helpers.functions import deEmojify, Convert
+from ..helpers.utils import reply_id
 
 opener = urllib.request.build_opener()
 useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
@@ -171,7 +171,7 @@ async def grs(event):
         previous_message_text = previous_message.message
         BASE_URL = "http://www.google.com"
         if previous_message.media:
-            photo = await _cattools.media_to_pic(event, previous_message)
+            photo = await Convert.to_image(event, previous_message)
             if photo[1] is None:
                 return await edit_delete(
                     photo[0], "__Unable to extract image from the replied message.__"
@@ -245,7 +245,7 @@ async def reverse(event):
     message = await event.get_reply_message()
     if not message and not message.media:
         return await edit_or_reply(event, "`Reply to media...`")
-    photo = await _cattools.media_to_pic(event, message)
+    photo = await Convert.to_image(event, message)
     if photo[1] is None:
         return await edit_delete(
             photo[0], "__Unable to extract image from the replied message.__"

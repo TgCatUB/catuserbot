@@ -29,9 +29,8 @@ from telethon.tl.types import (
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import animator, crop_and_divide
+from ..helpers.functions import animator, crop_and_divide,Convert
 from ..helpers.tools import media_type
-from ..helpers.utils import _cattools
 from ..sql_helper.globals import gvarstatus
 
 plugin_category = "fun"
@@ -681,21 +680,21 @@ async def pack_kang(event):  # sourcery no-metrics
         "usage": "{tr}vas <Reply to Video/Gif>",
     },
 )
-async def pussycat(args):
+async def pussycat(event):
     "Convert to animated sticker."  # scam :('  Dom't kamg :/@Jisan7509
-    message = await args.get_reply_message()
-    user = await args.client.get_me()
+    message = await event.get_reply_message()
+    user = await event.client.get_me()
     userid = user.id
     if message and message.media:
         if "video/mp4" in message.media.document.mime_type:
-            catevent = await edit_or_reply(args, "__⌛ Downloading..__")
-            sticker = await animator(message, args, catevent)
+            catevent = await edit_or_reply(event, "__⌛ Downloading..__")
+            sticker = await animator(message, event, catevent)
             await edit_or_reply(catevent, f"`{random.choice(KANGING_STR)}`")
         else:
-            await edit_delete(args, "`Reply to video/gif...!`")
+            await edit_delete(event, "`Reply to video/gif...!`")
             return
     else:
-        await edit_delete(args, "`I can't convert that...`")
+        await edit_delete(event, "`I can't convert that...`")
         return
     packname = f"Cat_{userid}_temp_pack"
     response = urllib.request.urlopen(
@@ -706,20 +705,20 @@ async def pussycat(args):
         "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
         not in htmlstr
     ):
-        async with args.client.conversation("@Stickers") as xconv:
+        async with event.client.conversation("@Stickers") as xconv:
             await delpack(
                 catevent,
                 xconv,
-                args,
+                event,
                 packname,
             )
     await catevent.edit("`Hold on, making sticker...`")
-    async with args.client.conversation("@Stickers") as conv:
+    async with event.client.conversation("@Stickers") as conv:
         otherpack, packname, emoji = await newpacksticker(
             catevent,
             conv,
             "/newvideo",
-            args,
+            event,
             1,
             "Cat",
             True,
@@ -731,8 +730,8 @@ async def pussycat(args):
     if otherpack is None:
         return
     await catevent.delete()
-    await args.client.send_file(
-        args.chat_id,
+    await event.client.send_file(
+        event.chat_id,
         sticker,
         force_document=True,
         caption=f"**[Sticker Preview](t.me/addstickers/{packname})**\n*__It will remove automatically on your next convert.__",
@@ -787,7 +786,7 @@ async def pic2packcmd(event):
         random.choice(list(string.ascii_lowercase + string.ascii_uppercase))
         for _ in range(16)
     )
-    image = await _cattools.media_to_pic(catevent, reply, noedits=True)
+    image = await Convert.to_image(catevent, reply, noedits=True)
     if image[1] is None:
         return await edit_delete(
             image[0], "__Unable to extract image from the replied message.__"

@@ -13,7 +13,7 @@ while flag:
         from .progress import *
         from .qhelper import *
         from .tools import *
-        from .utils import _cattools, _catutils, _format
+        from .utils import _catutils, _format
 
         break
     except ModuleNotFoundError as e:

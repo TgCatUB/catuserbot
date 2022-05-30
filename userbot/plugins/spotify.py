@@ -42,8 +42,9 @@ from ..helpers.functions.functions import (
     ellipse_layout_create,
     make_inline,
     text_draw,
+    post_to_telegraph,
 )
-from ..helpers.tools import post_to_telegraph
+
 from ..helpers.utils import reply_id
 from ..sql_helper import global_collectionjson as glob_db
 from . import BOTLOG, BOTLOG_CHATID, LyricsGen, catub
@@ -844,6 +845,8 @@ async def spotify_now(event):
         await conv.send_message(link)
         song = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
+        if not song.media:
+            song, thumb = song_download(url, event, quality="128k", video=False, title=True):
         await catevent.delete()
         if cmd == "i":
             title = title_fetch(title)

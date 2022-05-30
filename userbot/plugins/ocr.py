@@ -5,9 +5,9 @@ from googletrans import LANGUAGES
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
-from ..helpers.functions import getTranslate
+from ..helpers.functions import getTranslate,Convert
 from ..sql_helper.globals import gvarstatus
-from . import _cattools, catub, convert_toimage, soft_deEmojify
+from . import catub, convert_toimage, soft_deEmojify
 
 plugin_category = "utils"
 
@@ -64,7 +64,7 @@ async def ocr(event):
     lang_code = event.pattern_match.group(2)
     output_file = os.path.join(Config.TEMP_DIR, "ocr.jpg")
     try:
-        output = await _cattools.media_to_pic(event, reply)
+        output = await Convert.to_image(event, reply)
         outputt = convert_toimage(output[1], filename=output_file)
     except AttributeError:
         await catevent.edit("`Couldn't read it.. you sure this readable !?`")

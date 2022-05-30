@@ -30,7 +30,6 @@ lyricsgenius
 markdown
 markdown-it-py
 motor
-moviepy
 opencv-python-headless
 Pillow
 prettytable

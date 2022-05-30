@@ -4,7 +4,6 @@ import re
 import time
 
 import heroku3
-import lottie
 import requests
 import spamwatch as spam_watch
 from validators.url import url
@@ -15,7 +14,7 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..core.session import catub
 from ..helpers import *
-from ..helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
+from ..helpers.utils import _catutils, _format, install_pip, reply_id
 from ..sql_helper.globals import gvarstatus
 
 # =================== CONSTANT ===================
@@ -76,14 +75,3 @@ def set_key(dictionary, key, value):
     else:
         dictionary[key] = [dictionary[key], value]
 
-
-async def make_gif(event, reply, quality=None, fps=None):
-    fps = fps or 1
-    quality = quality or 256
-    result_p = os.path.join("temp", "animation.gif")
-    animation = lottie.parsers.tgs.parse_tgs(reply)
-    with open(result_p, "wb") as result:
-        await _catutils.run_sync(
-            lottie.exporters.gif.export_gif, animation, result, quality, fps
-        )
-    return result_p

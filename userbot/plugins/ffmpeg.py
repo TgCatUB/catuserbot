@@ -14,12 +14,12 @@ from userbot.core.logger import logging
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import (
-    _cattools,
     _catutils,
     fileinfo,
     humanbytes,
     media_type,
     progress,
+    take_screen_shot,
     readable_time,
     reply_id,
     time_formatter,
@@ -220,7 +220,7 @@ async def ffmpeg_compress(event):  # sourcery skip: low-code-quality
         except Exception as e:
             return await edit_delete(catevent, f"**Error : **`{e}`")
     else:
-        thumb = await _cattools.take_screen_shot(compress, "00:01")
+        thumb = await take_screen_shot(compress, "00:01")
         try:
             c_time = time.time()
             catt = await event.client.send_file(
@@ -367,7 +367,7 @@ async def ff_mpeg_trim_cmd(event):
     elif len(cmt) == 2:
         # output should be image
         cmd, start_time = cmt
-        o = await _cattools.take_screen_shot(FF_MPEG_DOWN_LOAD_MEDIA_PATH, start_time)
+        o = await take_screen_shot(FF_MPEG_DOWN_LOAD_MEDIA_PATH, start_time)
         if o is None:
             return await edit_delete(
                 catevent, "**Error : **`Can't complete the process`"
