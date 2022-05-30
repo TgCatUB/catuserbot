@@ -3,9 +3,10 @@ import os
 from PIL import Image
 
 from userbot.core.logger import logging
+from userbot.core.managers import edit_or_reply
 from .vidtools import take_screen_shot
 from ..utils.utils import runcmd
-from ...core.managers import edit_or_reply
+
 from ..helpers.tools import fileinfo,media_type,meme_type
 
 LOGS = logging.getLogger(__name__)
