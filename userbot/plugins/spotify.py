@@ -845,8 +845,8 @@ async def spotify_now(event):
         await conv.send_message(link)
         song = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
-        if not song.media:
-            song, thumb = song_download(url, event, quality="128k", video=False, title=True):
+        #if not song.media:
+            #song, thumb = song_download(url, event, quality="128k", video=False, title=True):
         await catevent.delete()
         if cmd == "i":
             title = title_fetch(title)
