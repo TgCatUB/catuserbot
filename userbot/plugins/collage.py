@@ -7,11 +7,10 @@
 
 import os
 
-from userbot import catub
+from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import _catutils, reply_id
-from . import make_gif
 
 plugin_category = "utils"
 
@@ -30,58 +29,41 @@ async def collage(event):
     catinput = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     catid = await reply_id(event)
-    await edit_or_reply(
-        event, "```collaging this may take several minutes too..... 😁```"
-    )
+    await edit_or_reply(event, "```Collaging this may take several minutes..... 😁```")
     if not (reply and (reply.media)):
-        await event.edit("`Media not found...`")
-        return
-    if not os.path.isdir("./temp/"):
-        os.mkdir("./temp/")
-    catsticker = await reply.download_media(file="./temp/")
-    if not catsticker.endswith((".mp4", ".mkv", ".tgs")):
-        os.remove(catsticker)
-        await event.edit("`Media format is not supported...`")
-        return
+        return await edit_delete(event, "`Reply to a media file..`")
     if catinput:
         if not catinput.isdigit():
-            os.remove(catsticker)
-            await event.edit("`You input is invalid, check help`")
-            return
+            return await edit_delete(event, "`You input is invalid, check help`")
+
         catinput = int(catinput)
         if not 0 < catinput < 10:
-            os.remove(catsticker)
-            await event.edit(
-                "`Why too big grid you cant see images, use size of grid between 1 to 9`"
+            await edit_or_reply(
+                event,
+                "__Why big grid you cant see images, use size of grid between 1 to 9\nAnyways changing value to max 9__",
             )
-            return
+            catinput = 9
     else:
         catinput = 3
-    if catsticker.endswith(".tgs"):
-        hmm = await make_gif(event, catsticker)
-        if hmm.endswith(("@tgstogifbot")):
-            os.remove(catsticker)
-            return await event.edit(hmm)
-        collagefile = hmm
-    else:
-        collagefile = catsticker
-    endfile = "./temp/collage.png"
-    catcmd = f"vcsi -g {catinput}x{catinput} '{collagefile}' -o {endfile}"
-    stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
-    if not os.path.exists(endfile):
-        for files in (catsticker, collagefile):
-            if files and os.path.exists(files):
-                os.remove(files)
-        return await edit_delete(
-            event, "`media is not supported or try with smaller grid size`", 5
+    collagefile = await Convert.to_gif(event, reply, noedits=True)
+    if not collagefile[1]:
+        await edit_or_reply(
+            event, "**Error:-** __Unable to process the replied media__"
         )
-
+    endfile = "./temp/collage.png"
+    catcmd = f"vcsi -g {catinput}x{catinput} '{collagefile[1]}' -o {endfile}"
+    stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
+    if not os.path.exists(endfile) and os.path.exists(collagefile[1]):
+        os.remove(collagefile[1])
+        return await edit_delete(
+            event, "`Media is not supported, or try with smaller grid size`"
+        )
     await event.client.send_file(
         event.chat_id,
         endfile,
         reply_to=catid,
     )
     await event.delete()
-    for files in (catsticker, collagefile, endfile):
+    for files in (collagefile[1], endfile):
         if files and os.path.exists(files):
             os.remove(files)

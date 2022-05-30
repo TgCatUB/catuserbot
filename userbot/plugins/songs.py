@@ -16,10 +16,10 @@ from validators.url import url
 
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import delete_conv, song_download, yt_search
+from ..helpers.functions import delete_conv, yt_search
 from ..helpers.tools import media_type
 from ..helpers.utils import reply_id
-from . import catub
+from . import catub, song_download
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
