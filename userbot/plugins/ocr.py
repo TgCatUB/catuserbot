@@ -7,7 +7,7 @@ from ..Config import Config
 from ..core.managers import edit_or_reply
 from ..helpers.functions import getTranslate
 from ..sql_helper.globals import gvarstatus
-from . import Convert, catub, convert_toimage, soft_deEmojify
+from . import Convert, catub, soft_deEmojify
 
 plugin_category = "utils"
 
@@ -62,13 +62,10 @@ async def ocr(event):
         os.makedirs(Config.TEMP_DIR)
     cmd = event.pattern_match.group(1)
     lang_code = event.pattern_match.group(2)
-    output_file = os.path.join(Config.TEMP_DIR, "ocr.jpg")
-    try:
-        output = await Convert.to_image(event, reply)
-        outputt = convert_toimage(output[1], filename=output_file)
-    except AttributeError:
-        await catevent.edit("`Couldn't read it.. you sure this readable !?`")
-    test_file = await ocr_space_file(filename=output_file, language=lang_code)
+    output_file = await Convert.to_image(event, reply, rgb=True, noedits=True)
+    if not output_file[1]:
+        return await catevent.edit("`Couldn't read it.. you sure this readable !?`")
+    test_file = await ocr_space_file(filename=output_file[1], language=lang_code)
     try:
         ParsedText = test_file["ParsedResults"][0]["ParsedText"]
     except BaseException:
@@ -94,7 +91,8 @@ async def ocr(event):
             await catevent.edit(
                 f"🧧**Here's what I could read from it:**\n\n`{ParsedText}`\n\n{tran_text}"
             )
-    os.remove(output_file)
+    if os.path.exists(output_file[1]):
+        os.remove(output_file[1])
 
 
 @catub.cat_cmd(
