@@ -1,8 +1,8 @@
 import os
 
 from PIL import Image
-
 from userbot.core.logger import logging
+from userbot.core.managers import edit_or_reply
 from userbot.helpers.tools import fileinfo, media_type, meme_type
 
 from ..utils.utils import runcmd
@@ -28,7 +28,9 @@ class CatConverter:
         catevent = (
             event
             if noedits
-            else await event.edit("`Transfiguration Time! Converting to ....`")
+            else await edit_or_reply(
+                event, "`Transfiguration Time! Converting to ....`"
+            )
         )
         catfile = self._dir_check("./temp", "meme.png")
         if mediatype in ["Audio", "Voice"]:
@@ -86,7 +88,7 @@ class CatConverter:
         catevent = (
             event
             if noedits
-            else await event.edit("__🎞Converting into Animated sticker..__")
+            else await edit_or_reply(event, "__🎞Converting into Animated sticker..__")
         )
         catfile = self._dir_check("./temp", "animate.webm")
         catmedia = await reply.download_media(file="./temp")
@@ -117,7 +119,9 @@ class CatConverter:
         catevent = (
             event
             if noedits
-            else await event.edit("`Transfiguration Time! Converting to ....`")
+            else await edit_or_reply(
+                event, "`Transfiguration Time! Converting to ....`"
+            )
         )
         catmedia = None
         catfile = self._dir_check("./temp", "meme.mp4")
