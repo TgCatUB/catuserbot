@@ -586,7 +586,9 @@ async def grp_stat(event):  # sourcery skip: low-code-quality
         if check > limit:
             break
     string = (
-        f"<b>The top {check-1} active users of the previous {quantity} messages Who sent {msgfiltername[flag]} in group {grpcheck.title} are:</b>\n\n{tempstring}\n<b>Total {msgfiltername[flag]} type messages sent in last  {quantity} messages are {finalquantity}.</b>"
+        f"<b>The top {check-1} active users of the previous {quantity} messages Who sent {msgfiltername[flag]} in group {grpcheck.title} are:</b>\
+        \n\n{tempstring}\
+        \n<b>Total {msgfiltername[flag]} type messages sent in last  {quantity} messages are {finalquantity}.</b>"
         if flag
         else f"<b>The top {check-1} active users of the previous {finalquantity} messages in group {grpcheck.title} are:</b>\n\n{tempstring}"
     )
