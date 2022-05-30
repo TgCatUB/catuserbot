@@ -26,10 +26,10 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 
-from userbot import catub
+from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import Convert, animator, crop_and_divide
+from ..helpers.functions import animator, crop_and_divide
 from ..helpers.tools import media_type
 from ..sql_helper.globals import gvarstatus
 

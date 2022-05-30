@@ -5,9 +5,9 @@ from googletrans import LANGUAGES
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
-from ..helpers.functions import Convert, getTranslate
+from ..helpers.functions import getTranslate
 from ..sql_helper.globals import gvarstatus
-from . import catub, convert_toimage, soft_deEmojify
+from . import Convert, catub, convert_toimage, soft_deEmojify
 
 plugin_category = "utils"
 

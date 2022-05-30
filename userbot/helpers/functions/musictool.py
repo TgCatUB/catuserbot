@@ -6,6 +6,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
 from ...Config import Config
+from ...core.managers import edit_or_reply
 from ..utils.utils import runcmd
 from .functions import delete_conv
 from .utube import name_dl, song_dl, video_dl
@@ -96,7 +97,7 @@ async def song_download(url, event, quality="128k", video=False, title=True):
         stderr = (await runcmd(media_cmd))[1]
         media_name, stderr = (await runcmd(name_cmd))[:2]
         if stderr:
-            return await event.edit(f"**Error ::** `{stderr}`")
+            return await edit_or_reply(event, f"**Error ::** `{stderr}`")
         media_name = os.path.splitext(media_name)[0]
         media_file = Path(f"{media_name}.{media_ext[0]}")
     except:
@@ -104,10 +105,10 @@ async def song_download(url, event, quality="128k", video=False, title=True):
     if not os.path.exists(media_file):
         media_file = Path(f"{media_name}.{media_ext[1]}")
     elif not os.path.exists(media_file):
-        return await event.edit(
-            f"__Sorry!.. I'm unable to find your requested {media_type}.__"
+        return await edit_or_reply(
+            event, f"__Sorry!.. I'm unable to find your requested {media_type}.__"
         )
-    await event.edit(f"__Uploading requested {media_type}...__")
+    await edit_or_reply(event, f"__Uploading requested {media_type}...__")
     media_thumb = Path(f"{media_name}.jpg")
     if not os.path.exists(media_thumb):
         media_thumb = Path(f"{media_name}.webp")

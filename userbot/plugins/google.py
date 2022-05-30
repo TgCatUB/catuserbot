@@ -10,11 +10,10 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from search_engine_parser import BingSearch, GoogleSearch, YahooSearch
 from search_engine_parser.core.exceptions import NoResultsOrTrafficError
-
-from userbot import BOTLOG, BOTLOG_CHATID, catub
+from userbot import BOTLOG, BOTLOG_CHATID, Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import Convert, deEmojify
+from ..helpers.functions import deEmojify
 from ..helpers.utils import reply_id
 
 opener = urllib.request.build_opener()

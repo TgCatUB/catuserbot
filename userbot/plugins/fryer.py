@@ -7,10 +7,10 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 from telethon.tl.types import DocumentAttributeFilename
 
-from userbot import catub
+from userbot import Convert, catub
 
 from ..core.managers import edit_or_reply
-from ..helpers.functions import Convert, delete_conv
+from ..helpers.functions import delete_conv
 from ..helpers.utils import reply_id
 
 plugin_category = "extra"
