@@ -17,7 +17,7 @@ from telegraph import upload_file
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import clippy,Convert
+from ..helpers.functions import Convert, clippy
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from . import hmention, reply_id
 

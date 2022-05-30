@@ -3,12 +3,13 @@ import os
 from PIL import Image
 
 from userbot.core.logger import logging
-from .vidtools import take_screen_shot
-from ..utils.utils import runcmd
 
-from ..helpers.tools import fileinfo,media_type,meme_type
+from ..helpers.tools import fileinfo, media_type, meme_type
+from ..utils.utils import runcmd
+from .vidtools import take_screen_shot
 
 LOGS = logging.getLogger(__name__)
+
 
 class CatConverter:
     def _dir_check(self, dirct, file):
@@ -71,8 +72,8 @@ class CatConverter:
             os.remove(response[1])
             return response[0], filename, response[2]
         return response[0], None
-        
-    async def to_webm(self, event, reply,noedits=False):
+
+    async def to_webm(self, event, reply, noedits=False):
         # //Hope u dunt kang :/ @Jisan7509
         memetype = meme_type(reply)
         if memetype not in [
@@ -101,8 +102,8 @@ class CatConverter:
         if os.path.exists(catfile):
             return catevent, catfile
         return catevent, None
-    
-    async def to_gif(self, event, reply,noedits=False):
+
+    async def to_gif(self, event, reply, noedits=False):
         memetype = meme_type(reply)
         mediatype = media_type(reply)
         if memetype not in [
@@ -136,8 +137,6 @@ class CatConverter:
         if os.path.exists(catfile):
             return event, catfile
         return event, None
-    
+
+
 Convert = CatConverter()
-
-
-

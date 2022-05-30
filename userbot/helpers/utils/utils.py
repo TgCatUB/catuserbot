@@ -3,7 +3,6 @@ import functools
 import shlex
 from typing import Tuple
 
-
 from ...core.logger import logging
 
 LOGS = logging.getLogger(__name__)
@@ -37,5 +36,3 @@ def runasync(func: callable):
     """Run async functions with the right event loop."""
     asyncio.get_event_loop()
     return loop.run_until_complete(func)
-
-

@@ -13,7 +13,6 @@ from ..Config import Config
 from ..core.managers import edit_or_reply
 from ..helpers.functions import take_screen_shot
 
-
 plugin_category = "utils"
 
 
@@ -40,9 +39,7 @@ async def _(event):
         metadata = extractMetadata(createParser(downloaded_file_name))
         if metadata and metadata.has("duration"):
             duration = metadata.get("duration").seconds
-        downloaded_file_name = await take_screen_shot(
-            downloaded_file_name, duration
-        )
+        downloaded_file_name = await take_screen_shot(downloaded_file_name, duration)
     # https://stackoverflow.com/a/21669827/4723940
     Image.open(downloaded_file_name).convert("RGB").save(thumb_image_path, "JPEG")
     # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails

@@ -1,4 +1,3 @@
-import json
 import os
 import zipfile
 from random import choice

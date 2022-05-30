@@ -8,7 +8,7 @@ from telegraph import exceptions, upload_file
 from userbot import catub
 
 from ..core.managers import edit_or_reply
-from ..helpers import reply_id,Convert
+from ..helpers import Convert, reply_id
 from . import convert_toimage, deEmojify, phcomment, threats, trap, trash
 
 plugin_category = "fun"

@@ -17,7 +17,7 @@ from telegraph import exceptions, upload_file
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import media_type, readable_time, time_formatter
+from ..helpers import Convert, media_type, readable_time, reply_id, time_formatter
 from ..helpers.functions import (
     airing_query,
     anilist_user,
@@ -29,13 +29,12 @@ from ..helpers.functions import (
     get_anime_schedule,
     get_filler_episodes,
     getBannerLink,
-    post_to_telegraph,
     memory_file,
+    post_to_telegraph,
     search_in_animefiller,
     searchanilist,
     weekdays,
 )
-from ..helpers import Convert, reply_id
 
 jikan = Jikan()
 
@@ -783,7 +782,7 @@ async def whatanime(event):
             event, "__reply to media to reverse search that anime__."
         )
     mediatype = media_type(reply)
-    if mediatype not in ["Photo", "Video", "Gif", "Sticker","Document"]:
+    if mediatype not in ["Photo", "Video", "Gif", "Sticker", "Document"]:
         return await edit_delete(
             event,
             f"__Reply to proper media that is expecting photo/video/gif/sticker. not {mediatype}__.",

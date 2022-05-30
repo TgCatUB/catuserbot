@@ -32,8 +32,8 @@ from ..helpers.functions import (
     r_frames,
     spin_frames,
     ud_frames,
-    vid_to_gif,
     unsavegif,
+    vid_to_gif,
 )
 from ..helpers.utils import _catutils, _format, parse_pre, reply_id
 from . import make_gif

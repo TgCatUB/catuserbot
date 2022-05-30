@@ -1,5 +1,4 @@
 import io
-import os
 
 from PIL import Image, ImageDraw, ImageOps
 
