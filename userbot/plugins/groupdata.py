@@ -1,4 +1,5 @@
 import contextlib
+import re
 from datetime import datetime
 from math import sqrt
 
@@ -24,23 +25,9 @@ from userbot import catub
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import reply_id
-from . import BOTLOG, BOTLOG_CHATID
-import contextlib
-from ..helpers.utils import format
-import re
-from telethon.tl.functions.channels import GetFullChannelRequest
-from telethon.tl.functions.messages import GetFullChatRequest
-from telethon.errors import (
-    ChannelInvalidError,
-    ChannelPrivateError,
-    ChannelPublicGroupNaError,
-)
-from telethon.tl.types import InputMessagesFilterMyMentions
-
 from ..helpers.tools import media_type
-
-from ..core.managers import edit_delete, edit_or_reply
-from userbot import catub
+from ..helpers.utils import format
+from . import BOTLOG, BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "utils"
@@ -50,10 +37,10 @@ msgfilter = {
     "a": ["Audio", "Voice"],
     "g": ["Gif"],
     "s": ["Sticker"],
-    "v": ["Video","Round Video"],
+    "v": ["Video", "Round Video"],
     "f": ["Document"],
     "t": [None],
-    "m": ["Photo","Video"],
+    "m": ["Photo", "Video"],
     # "t": ["Tags"],
 }
 
@@ -67,9 +54,10 @@ msgfiltername = {
     "t": "Text Messages",
     "m": "Photos and Videos",
     # "t": ["Tags"],
-} 
+}
 
-async def get_chatinfo(event,match,catevent):
+
+async def get_chatinfo(event, match, catevent):
     if not match:
         if event.reply_to_msg_id:
             replied_msg = await event.get_reply_message()
@@ -95,10 +83,11 @@ async def get_chatinfo(event,match,catevent):
         except ChannelPublicGroupNaError:
             await catevent.edit("`The given Channel or Supergroup doesn't exist`")
             return None
-        except (TypeError, ValueError) as err:
+        except (TypeError, ValueError):
             await catevent.edit("**Error:**\n__Can't fetch the chat__")
             return None
     return chat_info
+
 
 async def fetch_info(chat, event):  # sourcery no-metrics
     # sourcery skip: low-code-quality
@@ -317,6 +306,7 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         caption += f"Description: \n<code>{description}</code>\n"
     return caption
 
+
 @catub.cat_cmd(
     pattern="admins(?:\s|$)([\s\S]*)",
     command=("admins", plugin_category),
@@ -477,7 +467,7 @@ async def info(event):
     "To get group information"
     catevent = await edit_or_reply(event, "`Analysing the chat...`")
     match = event.pattern_match.group(1)
-    chat = await get_chatinfo(event,match.strip(),catevent)
+    chat = await get_chatinfo(event, match.strip(), catevent)
     if not chat:
         return
     caption = await fetch_info(chat, event)
@@ -507,8 +497,8 @@ async def info(event):
             "-v": "To select only Videos(including round videos)",
             "-f": "To select only Documents(files)",
             "-t": "To select only text messages",
-            "-m" : "To select only media files(Photos+Videos)",
-            #TODO: "-t": "To filter only messages which mentioned you",
+            "-m": "To select only media files(Photos+Videos)",
+            # TODO: "-t": "To filter only messages which mentioned you",
         },
         "usage": [
             "{tr}grpstats <flags> <group username/gorup id>",
@@ -520,16 +510,16 @@ async def info(event):
             "{tr}grpstats -l20 @catuserbot_support",
             "{tr}grpstats -s @catuserbotot",
             "{tr}grpstats -s -l20 -q2000 @catuserbotot",
-        ]
+        ],
     },
 )
-async def grp_stat(event):    # sourcery skip: low-code-quality
+async def grp_stat(event):  # sourcery skip: low-code-quality
     "To get active user stats of the group"
     catevent = await edit_or_reply(event, "`Analysing the chat...`")
     match = event.pattern_match.group(2)
     quantity = re.findall(r"-q\d+", match)
     limit = re.findall(r"-l\d+", match)
-    flag = re.findall(r"-[a-z]+",match)
+    flag = re.findall(r"-[a-z]+", match)
     try:
         quantity = quantity[0]
         match = match.replace(quantity, "")
@@ -548,48 +538,56 @@ async def grp_stat(event):    # sourcery skip: low-code-quality
         limit = 10
     try:
         flag = flag[0]
-        match = match.replace(flag,"")
-        flag = flag.replace("-","")
+        match = match.replace(flag, "")
+        flag = flag.replace("-", "")
     except IndexError:
         flag = None
     temp = {}
-    chatinfo = await get_chatinfo(event,match.strip(),catevent)
+    chatinfo = await get_chatinfo(event, match.strip(), catevent)
     if not chatinfo:
         return
     grpcheck = await event.client.get_entity(chatinfo.full_chat.id)
     if grpcheck.broadcast:
-        await catevent.edit("**Error**:\n__grpstats command doesn't work on channel, try on group.__")
+        await catevent.edit(
+            "**Error**:\n__grpstats command doesn't work on channel, try on group.__"
+        )
         return None
     if flag and flag not in msgfilter:
-        await catevent.edit("**Error**:\n__Given flag {flag} is invalid please check flags mention in help.__")
+        await catevent.edit(
+            "**Error**:\n__Given flag {flag} is invalid please check flags mention in help.__"
+        )
     async for msg in event.client.iter_messages(chatinfo.full_chat.id, limit=quantity):
-                user = getattr(msg, "sender_id", False)
-                if not user:
-                    continue
-                if user not in temp:
-                    temp[user] = 0
-                if not flag:
-                    temp[user] += 1
-                else:
-                    mediatype = media_type(msg)
-                    if mediatype in msgfilter[flag]:
-                        temp[user] += 1
-    sorted_temp = dict(sorted(temp.items(), key=lambda item: item[1],reverse=True))
+        user = getattr(msg, "sender_id", False)
+        if not user:
+            continue
+        if user not in temp:
+            temp[user] = 0
+        if not flag:
+            temp[user] += 1
+        else:
+            mediatype = media_type(msg)
+            if mediatype in msgfilter[flag]:
+                temp[user] += 1
+    sorted_temp = dict(sorted(temp.items(), key=lambda item: item[1], reverse=True))
     finalquantity = sum(sorted_temp.values())
-    user_limit = len(sorted_temp)
+    len(sorted_temp)
     tempstring = ""
     check = 1
     for userid, count in sorted_temp.items():
-            try:
-                if count == 0:
-                    break
-                userdetails = await event.client.get_entity(userid)
-                if not userdetails.deleted:
-                    tempstring += f"{check}.) {format.htmlmentionuser(userdetails.first_name, userdetails.id)}: {count}\n" 
-            except (AttributeError,TypeError):
-                continue 
-            check +=1
-            if check >limit:
+        try:
+            if count == 0:
                 break
-    string = f"<b>The top {check-1} active users of the previous {quantity} messages Who sent {msgfiltername[flag]} in group {grpcheck.title} are:</b>\n\n{tempstring}\n<b>Total {msgfiltername[flag]} type messages sent in last  {quantity} messages are {finalquantity}.</b>" if flag else f"<b>The top {check-1} active users of the previous {finalquantity} messages in group {grpcheck.title} are:</b>\n\n{tempstring}"
-    await catevent.edit(string, parse_mode='html')
+            userdetails = await event.client.get_entity(userid)
+            if not userdetails.deleted:
+                tempstring += f"{check}.) {format.htmlmentionuser(userdetails.first_name, userdetails.id)}: {count}\n"
+        except (AttributeError, TypeError):
+            continue
+        check += 1
+        if check > limit:
+            break
+    string = (
+        f"<b>The top {check-1} active users of the previous {quantity} messages Who sent {msgfiltername[flag]} in group {grpcheck.title} are:</b>\n\n{tempstring}\n<b>Total {msgfiltername[flag]} type messages sent in last  {quantity} messages are {finalquantity}.</b>"
+        if flag
+        else f"<b>The top {check-1} active users of the previous {finalquantity} messages in group {grpcheck.title} are:</b>\n\n{tempstring}"
+    )
+    await catevent.edit(string, parse_mode="html")
