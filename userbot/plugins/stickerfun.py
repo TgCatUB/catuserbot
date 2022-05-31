@@ -15,13 +15,11 @@ import urllib
 
 from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import InputMessagesFilterDocument
-
-from userbot import catub
+from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import (
     clippy,
-    convert_tosticker,
     deEmojify,
     hide_inlinebot,
     higlighted_text,
@@ -321,7 +319,7 @@ async def quby(event):
             stroke_width=1,
         )
     if cmd == "b":
-        cat = convert_tosticker(file[0])
+        cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
         await event.client.send_file(
             event.chat_id, cat, reply_to=reply_to_id, force_document=False
         )
@@ -386,7 +384,7 @@ async def knife(event):
         direction="upwards",
     )
     if cmd == "b":
-        cat = convert_tosticker(file[0])
+        cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
         await event.client.send_file(
             event.chat_id, cat, reply_to=reply_to_id, force_document=False
         )
@@ -464,7 +462,7 @@ async def doge(event):
             stroke_width=1,
             stroke_fill="black",
         )
-    cat = convert_tosticker(file[0])
+    cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
@@ -532,7 +530,7 @@ async def penguin(event):
         stroke_width=1,
         stroke_fill=fg,
     )
-    cat = convert_tosticker(file[0])
+    cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
@@ -600,7 +598,7 @@ async def gandhi(event):
         stroke_width=1,
         stroke_fill=fg,
     )
-    cat = convert_tosticker(file[0])
+    cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
