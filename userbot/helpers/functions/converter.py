@@ -146,8 +146,8 @@ class CatConverter:
         if catmedia and os.path.exists(catmedia):
             os.remove(catmedia)
         if os.path.exists(catfile):
-            return event, catfile
-        return event, None
+            return catevent, catfile
+        return catevent, None
 
 
 Convert = CatConverter()

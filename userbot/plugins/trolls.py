@@ -3,13 +3,13 @@
 
 import os
 
+from userbot import Convert, catub
+
 from telegraph import exceptions, upload_file
 
-from userbot import catub
-
 from ..core.managers import edit_or_reply
-from ..helpers import Convert, reply_id
-from . import convert_toimage, deEmojify, phcomment, threats, trap, trash
+from ..helpers import reply_id
+from . import deEmojify, phcomment, threats, trap, trash
 
 plugin_category = "fun"
 
@@ -28,28 +28,27 @@ async def catbot(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await Convert.to_image(event, replied)
+    output = await Convert.to_image(event, replied, rgb=True)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    download_location = convert_toimage(output[1])
-    size = os.stat(download_location).st_size
+    size = os.stat(output[1]).st_size
     if size > 5242880:
-        os.remove(download_location)
+        os.remove(output[1])
         return await output[0].edit(
             "the replied file size is not supported it must me below 5 mb"
         )
-    await event.reply(file=download_location)
+    await event.reply(file=output[1])
     await output[0].edit("generating image..")
     try:
-        response = upload_file(download_location)
+        response = upload_file(output[1])
     except exceptions.TelegraphException as exc:
-        os.remove(download_location)
+        os.remove(output[1])
         return await output[0].edit(f"**Error: **\n`{exc}`")
     cat = f"https://telegra.ph{response[0]}"
     cat = await trash(cat)
-    os.remove(download_location)
+    os.remove(output[1])
     await output[0].delete()
     await event.client.send_file(event.chat_id, cat, reply_to=catid)
 
@@ -68,28 +67,27 @@ async def catbot(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await Convert.to_image(event, replied)
+    output = await Convert.to_image(event, replied, rgb=True)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    download_location = convert_toimage(output[1])
-    size = os.stat(download_location).st_size
+    size = os.stat(output[1]).st_size
     if size > 5242880:
-        os.remove(download_location)
+        os.remove(output[1])
         return await output[0].edit(
             "the replied file size is not supported it must me below 5 mb"
         )
     await output[0].edit("generating image..")
     try:
-        response = upload_file(download_location)
+        response = upload_file(output[1])
     except exceptions.TelegraphException as exc:
-        os.remove(download_location)
+        os.remove(output[1])
         return await output[0].edit(f"**Error: **\n`{exc}`")
     cat = f"https://telegra.ph{response[0]}"
     cat = await threats(cat)
     await output[0].delete()
-    os.remove(download_location)
+    os.remove(output[1])
     await event.client.send_file(event.chat_id, cat, reply_to=catid)
 
 
@@ -117,28 +115,27 @@ async def catbot(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await Convert.to_image(event, replied)
+    output = await Convert.to_image(event, replied, rgb=True)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    download_location = convert_toimage(output[1])
-    size = os.stat(download_location).st_size
+    size = os.stat(output[1]).st_size
     if size > 5242880:
-        os.remove(download_location)
+        os.remove(output[1])
         return await output[0].edit(
             "the replied file size is not supported it must me below 5 mb"
         )
     await output[0].edit("generating image..")
     try:
-        response = upload_file(download_location)
+        response = upload_file(output[1])
     except exceptions.TelegraphException as exc:
-        os.remove(download_location)
+        os.remove(output[1])
         return await output[0].edit(f"**Error: **\n`{exc}`")
     cat = f"https://telegra.ph{response[0]}"
     cat = await trap(text1, text2, cat)
     await output[0].delete()
-    os.remove(download_location)
+    os.remove(output[1])
     await event.client.send_file(event.chat_id, cat, reply_to=catid)
 
 
@@ -166,27 +163,26 @@ async def catbot(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await Convert.to_image(event, replied)
+    output = await Convert.to_image(event, replied, rgb=True)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    download_location = convert_toimage(output[1])
-    size = os.stat(download_location).st_size
+    size = os.stat(output[1]).st_size
     if size > 5242880:
-        os.remove(download_location)
+        os.remove(output[1])
         return await output[0].edit(
             "the replied file size is not supported it must me below 5 mb"
         )
 
     await output[0].edit("generating image..")
     try:
-        response = upload_file(download_location)
+        response = upload_file(output[1])
     except exceptions.TelegraphException as exc:
-        os.remove(download_location)
+        os.remove(output[1])
         return await output[0].edit(f"**Error: **\n`{exc}`")
     cat = f"https://telegra.ph{response[0]}"
     cat = await phcomment(cat, text, username)
     await output[0].delete()
-    os.remove(download_location)
+    os.remove(output[1])
     await event.client.send_file(event.chat_id, cat, reply_to=catid)
