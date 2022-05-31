@@ -1,3 +1,4 @@
+import contextlib
 import os
 from pathlib import Path
 
@@ -21,12 +22,11 @@ class LyricGenius:
             self.genius = lyricsgenius.Genius(GENIUS)
 
     def songs(self, title):
-        songs = self.genius.search_songs(title)["hits"]
-        return songs
+        return self.genius.search_songs(title)["hits"]
 
     def song(self, title, artist=None):
         song_info = None
-        try:
+        with contextlib.suppress(AttributeError, IndexError):
             if not artist:
                 song_info = self.songs(title)[0]["result"]
             else:
@@ -39,8 +39,6 @@ class LyricGenius:
                         if artist in song["result"]["primary_artist"]["name"]:
                             song_info = song["result"]
                             break
-        except (AttributeError, IndexError):
-            pass
         return song_info
 
     async def lyrics(self, event, title, artist=None, mode="lyrics"):
@@ -49,14 +47,11 @@ class LyricGenius:
             if not artist:
                 song_info = self.song(title)["title"]
                 song = self.genius.search_song(song_info)
-                if song:
-                    lyrics = song.lyrics
-                    link = song.song_art_image_url
             else:
                 song = self.genius.search_song(title, artist)
-                if song:
-                    lyrics = song.lyrics
-                    link = song.song_art_image_url
+            if song:
+                lyrics = song.lyrics
+                link = song.song_art_image_url
         else:
             msg = f"{artist}-{title}" if artist else title
             chat = "@lyrics69bot"
@@ -93,15 +88,13 @@ async def song_download(url, event, quality="128k", video=False, title=True):
         media_ext = ["mp4", "mkv"]
         media_cmd = video_dl.format(video_link=url)
 
-    try:
+    with contextlib.suppress(Exception):
         stderr = (await runcmd(media_cmd))[1]
         media_name, stderr = (await runcmd(name_cmd))[:2]
         if stderr:
             return await edit_or_reply(event, f"**Error ::** `{stderr}`")
         media_name = os.path.splitext(media_name)[0]
         media_file = Path(f"{media_name}.{media_ext[0]}")
-    except:
-        pass
     if not os.path.exists(media_file):
         media_file = Path(f"{media_name}.{media_ext[1]}")
     elif not os.path.exists(media_file):
