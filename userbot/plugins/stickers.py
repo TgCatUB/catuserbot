@@ -334,7 +334,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
             for attribute in attributes:
                 if isinstance(attribute, DocumentAttributeSticker):
                     emoji = attribute.alt
-            emojibypass = True
+                    emojibypass = True
             is_anim = True
             photo = 1
         elif memetype in ["Video", "Gif", "Video Sticker"]:
