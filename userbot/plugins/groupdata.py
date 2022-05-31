@@ -1,16 +1,10 @@
-import contextlib
 import re
 from datetime import datetime
 from math import sqrt
 
 from emoji import emojize
-from telethon.errors import (
-    ChannelInvalidError,
-    ChannelPrivateError,
-    ChannelPublicGroupNaError,
-)
-from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
-from telethon.tl.functions.messages import GetFullChatRequest, GetHistoryRequest
+from telethon.tl.functions.channels import GetParticipantsRequest
+from telethon.tl.functions.messages import GetHistoryRequest
 from telethon.tl.types import (
     ChannelParticipantAdmin,
     ChannelParticipantCreator,
