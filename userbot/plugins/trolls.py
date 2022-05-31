@@ -3,11 +3,11 @@
 
 import os
 
-from telegraph import exceptions, upload_file
-
 from userbot import Convert, catub
 
-from ..core.managers import edit_or_reply
+from telegraph import exceptions, upload_file
+
+from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import reply_id
 from . import deEmojify, phcomment, threats, trap, trash
 
@@ -22,7 +22,7 @@ plugin_category = "fun"
         "usage": "{tr}trash",
     },
 )
-async def catbot(event):
+async def _(event):
     "image meme creator."
     replied = await event.get_reply_message()
     catid = await reply_id(event)
@@ -39,7 +39,6 @@ async def catbot(event):
         return await output[0].edit(
             "the replied file size is not supported it must me below 5 mb"
         )
-    await event.reply(file=output[1])
     await output[0].edit("generating image..")
     try:
         response = upload_file(output[1])
@@ -61,7 +60,7 @@ async def catbot(event):
         "usage": "{tr}threats",
     },
 )
-async def catbot(event):
+async def _(event):
     "image meme creator."
     replied = await event.get_reply_message()
     catid = await reply_id(event)
@@ -100,7 +99,7 @@ async def catbot(event):
         "usage": "{tr}trap (name of the person to trap) ; (trapper name)",
     },
 )
-async def catbot(event):
+async def _(event):
     "image meme creator."
     input_str = event.pattern_match.group(1)
     input_str = deEmojify(input_str)
@@ -148,7 +147,7 @@ async def catbot(event):
         "usage": "{tr}phub (username);(text in comment)",
     },
 )
-async def catbot(event):
+async def _(event):
     "image meme creator."
     input_str = event.pattern_match.group(1)
     input_str = deEmojify(input_str)
