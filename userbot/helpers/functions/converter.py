@@ -1,25 +1,31 @@
 import os
 
 from PIL import Image
-
 from userbot.core.logger import logging
 from userbot.core.managers import edit_or_reply
+from userbot.helpers.functions.vidtools import take_screen_shot
 from userbot.helpers.tools import fileinfo, media_type, meme_type
-
-from ..utils.utils import runcmd
-from .vidtools import take_screen_shot
+from userbot.helpers.utils.utils import runcmd
 
 LOGS = logging.getLogger(__name__)
 
 
 class CatConverter:
-    def _dir_check(self, dirct, file):
+    async def _media_check(self, reply, dirct, file, memetype):
         if not os.path.isdir(dirct):
             os.mkdir(dirct)
         catfile = os.path.join(dirct, file)
         if os.path.exists(catfile):
             os.remove(catfile)
-        return catfile
+        try:
+            catmedia = reply if os.path.exists(reply) else None
+        except TypeError:
+            if memetype in ["Video", "Gif"]:
+                dirct = "./temp/catfile.mp4"
+            elif memetype == "Audio":
+                dirct = "./temp/catfile.mp3"
+            catmedia = await reply.download_media(dirct)
+        return catfile, catmedia
 
     async def to_image(self, event, reply, noedits=False, rgb=False):
         memetype = await meme_type(reply)
@@ -33,41 +39,27 @@ class CatConverter:
                 event, "`Transfiguration Time! Converting to ....`"
             )
         )
-        catfile = self._dir_check("./temp", "meme.png")
-        if mediatype in ["Audio", "Voice"]:
-            await event.client.download_media(reply, catfile, thumb=-1)
-        catmedia = (
-            None
-            if os.path.exists(catfile)
-            else await reply.download_media(file="./temp")
+        catfile, catmedia = await self._media_check(
+            reply, "./temp", "meme.png", memetype
         )
-        if (
-            memetype != "Photo"
-            and memetype not in ["Round Video", "Video", "Gif"]
-            and mediatype == "Sticker"
-            and memetype == "Animated Sticker"
-        ):
-            catcmd = f"lottie_convert.py --frame 0 -if lottie -of png '{catmedia}' '{catfile}'"
-            stdout, stderr = (await runcmd(catcmd))[:2]
-            if stderr:
-                LOGS.info(stdout + stderr)
-        elif (
-            memetype != "Photo"
-            and memetype not in ["Round Video", "Video", "Gif"]
-            and mediatype == "Sticker"
-            and memetype == "Video Sticker"
-            or memetype != "Photo"
-            and memetype in ["Round Video", "Video", "Gif"]
-        ):
-            await take_screen_shot(catmedia, "00.00", catfile)
-        elif (
-            memetype != "Photo"
-            and mediatype == "Sticker"
-            and memetype == "Static Sticker"
-            or memetype == "Photo"
-        ):
+        if memetype == "Photo":
             im = Image.open(catmedia)
             im.save(catfile)
+        elif memetype in ["Audio", "Voice"]:
+            await runcmd(f"ffmpeg -i '{catmedia}' -an -c:v copy '{catfile}' -y")
+        elif memetype in ["Round Video", "Video", "Gif"]:
+            await take_screen_shot(catmedia, "00.00", catfile)
+        if mediatype == "Sticker":
+            if memetype == "Animated Sticker":
+                catcmd = f"lottie_convert.py --frame 0 -if lottie -of png '{catmedia}' '{catfile}'"
+                stdout, stderr = (await runcmd(catcmd))[:2]
+                if stderr:
+                    LOGS.info(stdout + stderr)
+            elif memetype == "Video Sticker":
+                await take_screen_shot(catmedia, "00.00", catfile)
+            elif memetype == "Static Sticker":
+                im = Image.open(catmedia)
+                im.save(catfile)
         if catmedia and os.path.exists(catmedia):
             os.remove(catmedia)
         if os.path.exists(catfile):
@@ -104,8 +96,9 @@ class CatConverter:
             if noedits
             else await edit_or_reply(event, "__🎞Converting into Animated sticker..__")
         )
-        catfile = self._dir_check("./temp", "animate.webm")
-        catmedia = await reply.download_media(file="./temp")
+        catfile, catmedia = await self._media_check(
+            reply, "./temp", "animate.webm", memetype
+        )
         file = await fileinfo(catmedia)
         h = file["height"]
         w = file["width"]
@@ -137,18 +130,17 @@ class CatConverter:
                 event, "`Transfiguration Time! Converting to ....`"
             )
         )
-        catmedia = None
-        catfile = self._dir_check("./temp", "meme.mp4")
+        catfile, catmedia = await self._media_check(
+            reply, "./temp", "meme.mp4", memetype
+        )
         if mediatype == "Sticker":
-            catmedia = await reply.download_media(file="./temp")
             if memetype == "Video Sticker":
                 await runcmd(f"ffmpeg -i '{catmedia}' -c copy '{catfile}'")
             elif memetype == "Animated Sticker":
                 await runcmd(f"lottie_convert.py '{catmedia}' '{catfile}'")
         elif mediatype == "Gif":
-            await reply.download_media(file=catfile)
+            await runcmd(f"mv '{catmedia}' '{catfile}'")
         else:
-            catmedia = await reply.download_media(file="./temp/catfile.mp4")
             await runcmd(f"ffmpeg -i '{catmedia}' -c:v libx264 -fs 5M -an '{catfile}'")
         if catmedia and os.path.exists(catmedia):
             os.remove(catmedia)
