@@ -4,7 +4,6 @@ import random
 from typing import Optional
 
 from PIL import Image, ImageOps
-from telethon import functions, types
 
 from ...core.logger import logging
 from ..utils.utils import runcmd

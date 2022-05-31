@@ -3,15 +3,11 @@ import zipfile
 from random import choice
 from textwrap import wrap
 from uuid import uuid4
-import logging
-import os
-import random
-from typing import Optional
 
-from PIL import Image, ImageOps
-from telethon import functions, types
 import requests
 from googletrans import Translator
+from PIL import Image, ImageOps
+from telethon import functions, types
 
 from ..utils.extdl import install_pip
 from ..utils.utils import runcmd
@@ -129,6 +125,7 @@ async def unsavegif(event, sandy):
         )
     except Exception as e:
         LOGS.info(str(e))
+
 
 # --------------------------------------------------------------------------------------------------------------------#
 
