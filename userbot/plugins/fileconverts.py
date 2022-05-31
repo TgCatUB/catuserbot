@@ -71,7 +71,6 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     reply = await event.get_reply_message()
     if not reply:
         return await edit_delete(event, "`Reply to supported Media...`")
-    await media_type(reply)
     catevent = await edit_or_reply(event, "__Making round spin video wait a sec.....__")
     output = await Convert.to_image(event, reply, noedits=True)
     if output[1] is None:

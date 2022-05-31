@@ -22,8 +22,8 @@ class CatConverter:
         return catfile
 
     async def to_image(self, event, reply, noedits=False, rgb=False):
-        memetype = meme_type(reply)
-        mediatype = media_type(reply)
+        memetype = await meme_type(reply)
+        mediatype = await media_type(reply)
         if memetype == "Document":
             return event, None
         catevent = (
@@ -91,7 +91,7 @@ class CatConverter:
 
     async def to_webm(self, event, reply, noedits=False):
         # //Hope u dunt kang :/ @Jisan7509
-        memetype = meme_type(reply)
+        memetype = await meme_type(reply)
         if memetype not in [
             "Round Video",
             "Video Sticker",
@@ -120,8 +120,8 @@ class CatConverter:
         return catevent, None
 
     async def to_gif(self, event, reply, noedits=False):
-        memetype = meme_type(reply)
-        mediatype = media_type(reply)
+        memetype = await meme_type(reply)
+        mediatype = await media_type(reply)
         if memetype not in [
             "Round Video",
             "Video Sticker",

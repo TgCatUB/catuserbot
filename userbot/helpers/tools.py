@@ -96,23 +96,17 @@ async def fileinfo(file):
 
 
 async def file_type(message):
-    if os.path.exists(message):
-        media = await fileinfo(message)
-        if media["type"] == "Image":
-            if media["format"] == "WebP":
-                return "Static Sticker"
-            return "Photo"
-        elif media["type"] == "Video":
-            if media["audio"] == "None":
-                if media["format"] == "WebM":
-                    return "Video Sticker"
-                return "Gif"
-            return "Video"
-        elif media["type"] == "Audio":
-            if media["format"] == "Ogg":
-                return "Voice"
-            return "Audio"
-        elif media["extension"] == "tgs":
-            return "Animated Sticker"
-        return "Document"
-    return None
+    if not os.path.exists(message):
+        return None
+    media = await fileinfo(message)
+    if media["type"] == "Image":
+        return "Static Sticker" if media["format"] == "WebP" else "Photo"
+    elif media["type"] == "Video":
+        if media["audio"] == "None":
+            return "Video Sticker" if media["format"] == "WebM" else "Gif"
+        return "Video"
+    elif media["type"] == "Audio":
+        return "Voice" if media["format"] == "Ogg" else "Audio"
+    elif media["extension"] == "tgs":
+        return "Animated Sticker"
+    return "Document"
