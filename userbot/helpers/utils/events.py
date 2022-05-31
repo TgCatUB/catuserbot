@@ -8,6 +8,30 @@ from ...Config import Config
 from ...core.logger import logging
 from ...core.managers import edit_delete
 
+import contextlib
+import re
+from datetime import datetime
+from math import sqrt
+
+from emoji import emojize
+from telethon.errors import (
+    ChannelInvalidError,
+    ChannelPrivateError,
+    ChannelPublicGroupNaError,
+)
+from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
+from telethon.tl.functions.messages import GetFullChatRequest, GetHistoryRequest
+from telethon.tl.types import (
+    ChannelParticipantAdmin,
+    ChannelParticipantCreator,
+    ChannelParticipantsAdmins,
+    ChannelParticipantsBots,
+    MessageActionChannelMigrateFrom,
+)
+from telethon.utils import get_input_location
+from ...core.managers import edit_delete, edit_or_reply
+from ..helpers.tools import media_type
+
 LOGS = logging.getLogger(__name__)
 
 
@@ -19,6 +43,36 @@ async def reply_id(event):
         reply_to_id = event.reply_to_msg_id
     return reply_to_id
 
+async def get_chatinfo(event, match, catevent):
+    if not match:
+        if event.reply_to_msg_id:
+            replied_msg = await event.get_reply_message()
+            if replied_msg.fwd_from and replied_msg.fwd_from.channel_id is not None:
+                match = replied_msg.fwd_from.channel_id
+        else:
+            match = event.chat_id
+    with contextlib.suppress(ValueError):
+        match = int(match)
+    try:
+        chat_info = await event.client(GetFullChatRequest(match))
+    except BaseException:
+        try:
+            chat_info = await event.client(GetFullChannelRequest(match))
+        except ChannelInvalidError:
+            await catevent.edit("`Invalid channel/group`")
+            return None
+        except ChannelPrivateError:
+            await catevent.edit(
+                "`This is a private channel/group or I am banned from there`"
+            )
+            return None
+        except ChannelPublicGroupNaError:
+            await catevent.edit("`The given Channel or Supergroup doesn't exist`")
+            return None
+        except (TypeError, ValueError):
+            await catevent.edit("**Error:**\n__Can't fetch the chat__")
+            return None
+    return chat_info
 
 async def get_user_from_event(
     event,
