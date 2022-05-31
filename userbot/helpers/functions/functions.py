@@ -10,7 +10,6 @@ from PIL import Image, ImageOps
 from telethon import functions, types
 
 from ..utils.extdl import install_pip
-from ..utils.utils import runcmd
 
 try:
     from imdb import IMDb
@@ -26,7 +25,6 @@ from telethon.tl.functions.contacts import UnblockRequest as unblock
 from ...Config import Config
 from ...sql_helper.globals import gvarstatus
 from ..resources.states import states
-from ..tools import fileinfo
 
 imdb = IMDb()
 
@@ -111,22 +109,6 @@ async def post_to_telegraph(
     return post_page["url"]
 
 
-async def unsavegif(event, sandy):
-    try:
-        await event.client(
-            functions.messages.SaveGifRequest(
-                id=types.InputDocument(
-                    id=sandy.media.document.id,
-                    access_hash=sandy.media.document.access_hash,
-                    file_reference=sandy.media.document.file_reference,
-                ),
-                unsave=True,
-            )
-        )
-    except Exception as e:
-        LOGS.info(str(e))
-
-
 # --------------------------------------------------------------------------------------------------------------------#
 
 
@@ -143,22 +125,20 @@ async def age_verification(event, reply_to_id):
     return True
 
 
-async def animator(media, mainevent, textevent=None):
-    # //Hope u dunt kang :/ @Jisan7509
-    if not os.path.isdir(Config.TEMP_DIR):
-        os.makedirs(Config.TEMP_DIR)
-    BadCat = await mainevent.client.download_media(media, Config.TEMP_DIR)
-    file = await fileinfo(BadCat)
-    h = file["height"]
-    w = file["width"]
-    w, h = (-1, 512) if h > w else (512, -1)
-    if textevent:
-        await textevent.edit("__🎞Converting into Animated sticker..__")
-    await runcmd(
-        f"ffmpeg -to 00:00:02.900 -i '{BadCat}' -vf scale={w}:{h} -c:v libvpx-vp9 -crf 30 -b:v 560k -maxrate 560k -bufsize 256k -an animate.webm"
-    )  # pain
-    os.remove(BadCat)
-    return "animate.webm"
+async def unsavegif(event, sandy):
+    try:
+        await event.client(
+            functions.messages.SaveGifRequest(
+                id=types.InputDocument(
+                    id=sandy.media.document.id,
+                    access_hash=sandy.media.document.access_hash,
+                    file_reference=sandy.media.document.file_reference,
+                ),
+                unsave=True,
+            )
+        )
+    except Exception as e:
+        LOGS.info(str(e))
 
 
 # --------------------------------------------------------------------------------------------------------------------#

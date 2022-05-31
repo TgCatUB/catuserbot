@@ -29,8 +29,8 @@ from telethon.tl.types import (
 from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import animator, crop_and_divide
-from ..helpers.tools import media_type
+from ..helpers.functions import crop_and_divide
+from ..helpers.tools import media_type,meme_type
 from ..sql_helper.globals import gvarstatus
 
 plugin_category = "fun"
@@ -314,21 +314,19 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
         username = user.username
     userid = user.id
     if message and message.media:
-        if isinstance(message.media, MessageMediaPhoto):
+        memetype = await meme_type(message)
+        if memetype == "Photo":
             catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
             photo = io.BytesIO()
             photo = await args.client.download_media(message.photo, photo)
-        elif "image" in message.media.document.mime_type.split("/"):
+        elif memetype == "Static Sticker":
             catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
             photo = io.BytesIO()
             await args.client.download_media(message.media.document, photo)
-            if (
-                DocumentAttributeFilename(file_name="sticker.webp")
-                in message.media.document.attributes
-            ):
+            if message.media.document.attributes[1].alt:
                 emoji = message.media.document.attributes[1].alt
                 emojibypass = True
-        elif "tgsticker" in message.media.document.mime_type:
+        elif memetype == "Animated Sticker":
             catevent = await edit_or_reply(args, f"`{random.choice(KANGING_STR)}`")
             await args.client.download_media(
                 message.media.document, "AnimatedSticker.tgs"
@@ -340,19 +338,19 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
             emojibypass = True
             is_anim = True
             photo = 1
-        elif message.media.document.mime_type in ["video/mp4", "video/webm"]:
+        elif memetype ["Video", "Gif","Video Sticker"]:
             emojibypass = False
             is_video = True
             photo = 1
-            if message.media.document.mime_type == "video/webm":
+            if memetype == "Video Sticker":
                 attributes = message.media.document.attributes
                 for attribute in attributes:
                     if isinstance(attribute, DocumentAttributeSticker):
                         if message.media.document.size > 261120:
                             catevent = await edit_or_reply(
-                                args, "__⌛ File size big,,, Downloading..__"
+                                args, "__🎞Converting into Animated sticker..__"
                             )
-                            sticker = await animator(message, args, catevent)
+                            sticker = (await Convert.to_webm(args, message, noedits=True))[1]
                             await edit_or_reply(
                                 catevent, f"`{random.choice(KANGING_STR)}`"
                             )
@@ -366,8 +364,8 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
                         emoji = attribute.alt
                         emojibypass = True
             else:
-                catevent = await edit_or_reply(args, "__⌛ Downloading..__")
-                sticker = await animator(message, args, catevent)
+                catevent = await edit_or_reply(args, "__🎞Converting into Animated sticker..__")
+                sticker = (await Convert.to_webm(args, message, noedits=True))[1]
                 await edit_or_reply(catevent, f"`{random.choice(KANGING_STR)}`")
         else:
             await edit_delete(args, "`Unsupported File!`")
@@ -581,7 +579,7 @@ async def pack_kang(event):  # sourcery no-metrics
                 f"`This sticker pack is kanging now . Status of kang process : {kangst}/{noofst}`",
             )
             if message.size > 261120:
-                await animator(message, event)
+                await Convert.to_webm(event,message,noedits=True)
             else:
                 await event.client.download_media(message, "animate.webm")
             attributes = message.attributes
@@ -689,17 +687,13 @@ async def pussycat(event):
     message = await event.get_reply_message()
     user = await event.client.get_me()
     userid = user.id
-    if message and message.media:
-        if "video/mp4" in message.media.document.mime_type:
-            catevent = await edit_or_reply(event, "__⌛ Downloading..__")
-            sticker = await animator(message, event, catevent)
-            await edit_or_reply(catevent, f"`{random.choice(KANGING_STR)}`")
-        else:
-            await edit_delete(event, "`Reply to video/gif...!`")
-            return
-    else:
-        await edit_delete(event, "`I can't convert that...`")
-        return
+    if not (message and message.media):
+        return await edit_delete(event, "`I can't convert that...`")
+    memetype = await meme_type(message)
+    if memetype not in ["Video","Gif"]:
+        return await edit_delete(event, "`Reply to video/gif...!`") 
+    sticker = await Convert.to_webm(event,message)
+    await edit_or_reply(sticker[0], f"`{random.choice(KANGING_STR)}`")
     packname = f"Cat_{userid}_temp_pack"
     response = urllib.request.urlopen(
         urllib.request.Request(f"http://t.me/addstickers/{packname}")
@@ -716,10 +710,10 @@ async def pussycat(event):
                 event,
                 packname,
             )
-    await catevent.edit("`Hold on, making sticker...`")
+    await edit_or_reply(sticker[0],"`Hold on, making sticker...`")
     async with event.client.conversation("@Stickers") as conv:
         otherpack, packname, emoji = await newpacksticker(
-            catevent,
+            sticker[0],
             conv,
             "/newvideo",
             event,
@@ -733,16 +727,16 @@ async def pussycat(event):
         )
     if otherpack is None:
         return
-    await catevent.delete()
+    await sticker[0].delete()
     await event.client.send_file(
         event.chat_id,
-        sticker,
+        sticker[1],
         force_document=True,
         caption=f"**[Sticker Preview](t.me/addstickers/{packname})**\n*__It will remove automatically on your next convert.__",
         reply_to=message,
     )
-    if os.path.exists(sticker):
-        os.remove(sticker)
+    if os.path.exists(sticker[1]):
+        os.remove(sticker[1])
 
 
 @catub.cat_cmd(
