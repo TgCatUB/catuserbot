@@ -19,13 +19,7 @@ from telethon.utils import get_display_name
 from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import (
-    file_check,
-    fontTest,
-    media_type,
-    process,
-    soft_deEmojify,
-)
+from ..helpers import file_check, fontTest, media_type, process, soft_deEmojify
 from ..helpers.utils import get_user_from_event, reply_id
 
 plugin_category = "fun"
@@ -226,7 +220,7 @@ async def stickerchat(catquotes):
         return
     outfi = os.path.join("./temp", "sticker.png")
     catmsg.save(outfi)
-    endfi = await Convert.to_sticker(catquotes,outfi,noedits=True)
+    endfi = await Convert.to_sticker(catquotes, outfi, noedits=True)
     await catquotes.client.send_file(catquotes.chat_id, endfi[1], reply_to=reply)
     await catevent.delete()
     os.remove(endfi[1])
