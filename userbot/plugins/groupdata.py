@@ -26,7 +26,7 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import reply_id
 from ..helpers.tools import media_type
-from ..helpers.utils import format
+from ..helpers.utils import format, get_chatinfo
 from . import BOTLOG, BOTLOG_CHATID
 
 LOGS = logging.getLogger(__name__)
@@ -55,38 +55,6 @@ msgfiltername = {
     "m": "Photos and Videos",
     # "t": ["Tags"],
 }
-
-
-async def get_chatinfo(event, match, catevent):
-    if not match:
-        if event.reply_to_msg_id:
-            replied_msg = await event.get_reply_message()
-            if replied_msg.fwd_from and replied_msg.fwd_from.channel_id is not None:
-                match = replied_msg.fwd_from.channel_id
-        else:
-            match = event.chat_id
-    with contextlib.suppress(ValueError):
-        match = int(match)
-    try:
-        chat_info = await event.client(GetFullChatRequest(match))
-    except BaseException:
-        try:
-            chat_info = await event.client(GetFullChannelRequest(match))
-        except ChannelInvalidError:
-            await catevent.edit("`Invalid channel/group`")
-            return None
-        except ChannelPrivateError:
-            await catevent.edit(
-                "`This is a private channel/group or I am banned from there`"
-            )
-            return None
-        except ChannelPublicGroupNaError:
-            await catevent.edit("`The given Channel or Supergroup doesn't exist`")
-            return None
-        except (TypeError, ValueError):
-            await catevent.edit("**Error:**\n__Can't fetch the chat__")
-            return None
-    return chat_info
 
 
 async def fetch_info(chat, event):  # sourcery no-metrics
