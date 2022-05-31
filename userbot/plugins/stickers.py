@@ -337,7 +337,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
             emojibypass = True
             is_anim = True
             photo = 1
-        elif memetype["Video", "Gif", "Video Sticker"]:
+        elif memetype in ["Video", "Gif", "Video Sticker"]:
             emojibypass = False
             is_video = True
             photo = 1
