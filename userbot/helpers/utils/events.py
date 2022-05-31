@@ -1,36 +1,19 @@
 import base64
 import contextlib
 
+from telethon.errors import (
+    ChannelInvalidError,
+    ChannelPrivateError,
+    ChannelPublicGroupNaError,
+)
+from telethon.tl.functions.channels import GetFullChannelRequest
+from telethon.tl.functions.messages import GetFullChatRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.types import MessageEntityMentionName
 
 from ...Config import Config
 from ...core.logger import logging
 from ...core.managers import edit_delete
-
-import contextlib
-import re
-from datetime import datetime
-from math import sqrt
-
-from emoji import emojize
-from telethon.errors import (
-    ChannelInvalidError,
-    ChannelPrivateError,
-    ChannelPublicGroupNaError,
-)
-from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
-from telethon.tl.functions.messages import GetFullChatRequest, GetHistoryRequest
-from telethon.tl.types import (
-    ChannelParticipantAdmin,
-    ChannelParticipantCreator,
-    ChannelParticipantsAdmins,
-    ChannelParticipantsBots,
-    MessageActionChannelMigrateFrom,
-)
-from telethon.utils import get_input_location
-from ...core.managers import edit_delete, edit_or_reply
-from ..helpers.tools import media_type
 
 LOGS = logging.getLogger(__name__)
 
@@ -42,6 +25,7 @@ async def reply_id(event):
     if event.reply_to_msg_id:
         reply_to_id = event.reply_to_msg_id
     return reply_to_id
+
 
 async def get_chatinfo(event, match, catevent):
     if not match:
@@ -73,6 +57,7 @@ async def get_chatinfo(event, match, catevent):
             await catevent.edit("**Error:**\n__Can't fetch the chat__")
             return None
     return chat_info
+
 
 async def get_user_from_event(
     event,
