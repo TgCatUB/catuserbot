@@ -36,15 +36,36 @@ class CatConverter:
         catfile = self._dir_check("./temp", "meme.png")
         if mediatype in ["Audio", "Voice"]:
             await event.client.download_media(reply, catfile, thumb=-1)
-        catmedia = None if os.path.exists(catfile) else await reply.download_media(file="./temp")
-        if memetype != "Photo" and memetype not in ["Round Video", "Video", "Gif"] and mediatype == "Sticker" and memetype == "Animated Sticker":
+        catmedia = (
+            None
+            if os.path.exists(catfile)
+            else await reply.download_media(file="./temp")
+        )
+        if (
+            memetype != "Photo"
+            and memetype not in ["Round Video", "Video", "Gif"]
+            and mediatype == "Sticker"
+            and memetype == "Animated Sticker"
+        ):
             catcmd = f"lottie_convert.py --frame 0 -if lottie -of png '{catmedia}' '{catfile}'"
             stdout, stderr = (await runcmd(catcmd))[:2]
             if stderr:
                 LOGS.info(stdout + stderr)
-        elif memetype != "Photo" and memetype not in ["Round Video", "Video", "Gif"] and mediatype == "Sticker" and memetype == "Video Sticker" or memetype != "Photo" and memetype in ["Round Video", "Video", "Gif"]:
+        elif (
+            memetype != "Photo"
+            and memetype not in ["Round Video", "Video", "Gif"]
+            and mediatype == "Sticker"
+            and memetype == "Video Sticker"
+            or memetype != "Photo"
+            and memetype in ["Round Video", "Video", "Gif"]
+        ):
             await take_screen_shot(catmedia, "00.00", catfile)
-        elif memetype != "Photo" and mediatype == "Sticker" and memetype == "Static Sticker" or memetype == "Photo":
+        elif (
+            memetype != "Photo"
+            and mediatype == "Sticker"
+            and memetype == "Static Sticker"
+            or memetype == "Photo"
+        ):
             im = Image.open(catmedia)
             im.save(catfile)
         if catmedia and os.path.exists(catmedia):

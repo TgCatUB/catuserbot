@@ -535,7 +535,10 @@ async def get_anime_manga(search_str, search_type, _user_id):  # sourcery no-met
             html_ += f"<b>Character ID</b>: {character['id']}<br>"
             html_ += f"<h4>About Character and Role:</h4>{character.get('description', 'N/A')}"
             html_char += f"{html_}<br><br>"
-        studios = "".join(f"""<a href='{studio["siteUrl"]}'>• {studio["name"]}</a> """ for studio in anime_data["studios"]["nodes"])
+        studios = "".join(
+            f"""<a href='{studio["siteUrl"]}'>• {studio["name"]}</a> """
+            for studio in anime_data["studios"]["nodes"]
+        )
 
         coverImg = anime_data.get("coverImage")["extraLarge"]
         bannerImg = anime_data.get("bannerImage")
@@ -706,7 +709,11 @@ def memory_file(name=None, contents=None, *, temp_bytes=True):
 def is_gif(file):
     # ngl this should be fixed, telethon.utils.is_gif but working
     # lazy to go to github and make an issue kek
-    return DocumentAttributeAnimated() in getattr(file, "document", file).attributes if is_video(file) else False
+    return (
+        DocumentAttributeAnimated() in getattr(file, "document", file).attributes
+        if is_video(file)
+        else False
+    )
 
 
 async def search_in_animefiller(query):
