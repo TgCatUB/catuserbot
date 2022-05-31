@@ -565,7 +565,7 @@ async def grp_stat(event):  # sourcery skip: low-code-quality
         if not flag:
             temp[user] += 1
         else:
-            mediatype = media_type(msg)
+            mediatype = await media_type(msg)
             if mediatype in msgfilter[flag]:
                 temp[user] += 1
     sorted_temp = dict(sorted(temp.items(), key=lambda item: item[1], reverse=True))

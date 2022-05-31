@@ -78,7 +78,7 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
     text = soft_deEmojify(text)
     catevent = await edit_or_reply(event, "__Making Quote pic....__")
     file_check(re=False, me=False, mo=False, it=False)
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if (
         (not reply)
         or (not mediatype)
@@ -191,7 +191,7 @@ async def stickerchat(catquotes):
                 catquotes, "`I cant quote the message . reply to a message`"
             )
         fetchmsg = reply.message
-        mediatype = media_type(reply)
+        mediatype = await media_type(reply)
     if cmd == "rq":
         repliedreply = await reply.get_reply_message()
     elif cmd == "frq":

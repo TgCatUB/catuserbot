@@ -148,7 +148,7 @@ async def on_afk(event):  # sourcery no-metrics
             full = await event.client.get_entity(event.message.from_id)
         except Exception as e:
             LOGS.info(str(e))
-        messaget = media_type(event)
+        messaget = await media_type(event)
         resalt = f"#AFK_TAGS \n<b>Group : </b><code>{hmm.title}</code>"
         if full is not None:
             resalt += f"\n<b>From : </b> 👤{_format.htmlmentionuser(full.first_name , full.id)}"
@@ -244,7 +244,7 @@ async def _(event):
 async def _(event):
     "To mark yourself as afk i.e. Away from keyboard (supports media)"
     reply = await event.get_reply_message()
-    media_t = media_type(reply)
+    media_t = await media_type(reply)
     if media_t == "Sticker" or not media_t:
         return await edit_or_reply(
             event, "`You haven't replied to any media to activate media afk`"

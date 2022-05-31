@@ -81,7 +81,7 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     }
     async for message in event.client.iter_messages(entity=entity, limit=None):
         msg_count += 1
-        media = media_type(message)
+        media = await media_type(message)
         if media is not None:
             media_dict[media]["file_size"] += message.file.size
             media_dict[media]["count"] += 1
@@ -208,7 +208,7 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
         entity=entity, limit=None, from_user=userentity
     ):
         msg_count += 1
-        media = media_type(message)
+        media = await media_type(message)
         if media is not None:
             media_dict[media]["file_size"] += message.file.size
             media_dict[media]["count"] += 1

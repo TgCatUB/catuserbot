@@ -33,7 +33,7 @@ async def _(event):
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
     reply = await event.get_reply_message()
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if not reply or (mediatype and mediatype not in ["Voice", "Audio"]):
         return await edit_delete(
             event,

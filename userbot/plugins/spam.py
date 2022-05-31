@@ -157,7 +157,7 @@ async def spammer(event):
 async def stickerpack_spam(event):
     "To spam the chat with stickers."
     reply = await event.get_reply_message()
-    if not reply or media_type(reply) is None or media_type(reply) != "Sticker":
+    if not reply or await media_type(reply) is None or await media_type(reply) != "Sticker":
         return await edit_delete(
             event, "`reply to any sticker to send all stickers in that pack`"
         )

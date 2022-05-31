@@ -67,7 +67,7 @@ async def maccmd(event):  # sourcery no-metrics
     # sourcery skip: low-code-quality
     "Adds frame for the replied image."
     reply = await event.get_reply_message()
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
         return await edit_delete(event, "__Reply to photo or sticker to frame it.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker":

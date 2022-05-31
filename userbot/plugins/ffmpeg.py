@@ -151,7 +151,7 @@ async def ffmpeg_compress(event):  # sourcery skip: low-code-quality
         crf = "23"
     dlpath = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "cat.media.ffmpeg")
     if reply_message and reply_message.media:
-        media = media_type(reply_message)
+        media = await media_type(reply_message)
         if (
             reply_message.media.document.mime_type.split("/")[0] != "video"
             or media == "Sticker"
@@ -272,7 +272,7 @@ async def ff_mpeg_trim_cmd(event):
             if not reply_message.media:
                 return await edit_delete(event, "`Reply to a media file...`")
             start = datetime.now()
-            media = media_type(reply_message)
+            media = await media_type(reply_message)
             if (
                 reply_message.media.document.mime_type.split("/")[0]
                 not in ["video", "audio"]

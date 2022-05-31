@@ -71,7 +71,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     reply = await event.get_reply_message()
     if not reply:
         return await edit_delete(event, "`Reply to supported Media...`")
-    media_type(reply)
+    await media_type(reply)
     catevent = await edit_or_reply(event, "__Making round spin video wait a sec.....__")
     output = await Convert.to_image(event, reply, noedits=True)
     if output[1] is None:
@@ -164,7 +164,7 @@ async def video_catfile(event):  # sourcery no-metrics
     catid = await reply_id(event)
     if not reply or not reply.media:
         return await edit_delete(event, "`Reply to supported media`")
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if mediatype == "Round Video":
         return await edit_delete(
             event,
@@ -396,7 +396,7 @@ async def get(event):
 async def get(event):
     "File to text message conversion."
     reply = await event.get_reply_message()
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if mediatype != "Document":
         return await edit_delete(
             event, "__It seems this is not writable file. Reply to writable file.__"
@@ -524,7 +524,7 @@ async def _(event):  # sourcery no-metrics
     catreply = await event.get_reply_message()
     cat_event = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if (
-        media_type(catreply) != "Sticker"
+        await media_type(catreply) != "Sticker"
         or catreply.media.document.mime_type == "image/webp"
     ):
         return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
@@ -691,7 +691,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     # sourcery skip: low-code-quality
     "To convert replied image or sticker to gif"
     reply = await event.get_reply_message()
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
         return await edit_delete(event, "__Reply to photo or sticker to make it gif.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker":
@@ -760,7 +760,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
 async def vtog(event):
     "Reply this command to a video to convert it to gif."
     reply = await event.get_reply_message()
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if (
         mediatype
         and mediatype not in ["video", "Document"]

@@ -781,7 +781,7 @@ async def whatanime(event):
         return await edit_delete(
             event, "__reply to media to reverse search that anime__."
         )
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if mediatype not in ["Photo", "Video", "Gif", "Sticker", "Document"]:
         return await edit_delete(
             event,

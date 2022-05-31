@@ -505,7 +505,7 @@ async def pack_kang(event):  # sourcery no-metrics
     emoji = None
     reply = await event.get_reply_message()
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    if not reply or media_type(reply) is None or media_type(reply) != "Sticker":
+    if not reply or await media_type(reply) is None or await media_type(reply) != "Sticker":
         return await edit_delete(
             event, "`reply to any sticker to send all stickers in that pack`"
         )
@@ -761,7 +761,7 @@ async def pussycat(event):
 async def pic2packcmd(event):
     "To split the replied image and make sticker pack."
     reply = await event.get_reply_message()
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
         return await edit_delete(event, "__Reply to photo or sticker to make pack.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/x-tgsticker":

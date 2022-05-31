@@ -145,7 +145,7 @@ async def vsong(event):
 async def shazamcmd(event):
     "To reverse search song."
     reply = await event.get_reply_message()
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     chat = "@DeezerMusicBot"
     delete = False
     flag = event.pattern_match.group(4)

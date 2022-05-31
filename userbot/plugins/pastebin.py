@@ -65,7 +65,7 @@ async def paste_img(event):
         extension = None
     text_to_print = input_str or ""
     if text_to_print == "" and reply and reply.media:
-        mediatype = media_type(reply)
+        mediatype = await media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
             with open(d_file_name, "r") as f:
@@ -137,7 +137,7 @@ async def paste_bin(event):
         pastetype = event.pattern_match.group(1) or "p"
     text_to_print = input_str or ""
     if text_to_print == "" and reply and reply.media:
-        mediatype = media_type(reply)
+        mediatype = await media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
             if extension is None:
@@ -266,7 +266,7 @@ async def _(event):
     pastetype = "d"
     text_to_print = input_str or ""
     if text_to_print == "" and reply and reply.media:
-        mediatype = media_type(reply)
+        mediatype = await media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
             with open(d_file_name, "r") as f:
