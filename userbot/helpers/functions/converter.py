@@ -98,7 +98,7 @@ class CatConverter:
             else await edit_or_reply(event, "__🎞Converting into Animated sticker..__")
         )
         catfile, catmedia = await self._media_check(
-            reply, "./temp", "animate.webm", memetype
+            reply, "./", "animate.webm", memetype
         )
         file = await fileinfo(catmedia)
         h = file["height"]

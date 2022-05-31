@@ -708,7 +708,7 @@ async def pussycat(event):
     ):
         async with event.client.conversation("@Stickers") as xconv:
             await delpack(
-                catevent,
+                sticker[0],
                 xconv,
                 event,
                 packname,
