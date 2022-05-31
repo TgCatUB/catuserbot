@@ -505,7 +505,11 @@ async def pack_kang(event):  # sourcery no-metrics
     emoji = None
     reply = await event.get_reply_message()
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    if not reply or await media_type(reply) is None or await media_type(reply) != "Sticker":
+    if (
+        not reply
+        or await media_type(reply) is None
+        or await media_type(reply) != "Sticker"
+    ):
         return await edit_delete(
             event, "`reply to any sticker to send all stickers in that pack`"
         )
