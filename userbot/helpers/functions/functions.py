@@ -3,7 +3,13 @@ import zipfile
 from random import choice
 from textwrap import wrap
 from uuid import uuid4
+import logging
+import os
+import random
+from typing import Optional
 
+from PIL import Image, ImageOps
+from telethon import functions, types
 import requests
 from googletrans import Translator
 
@@ -108,6 +114,21 @@ async def post_to_telegraph(
     )
     return post_page["url"]
 
+
+async def unsavegif(event, sandy):
+    try:
+        await event.client(
+            functions.messages.SaveGifRequest(
+                id=types.InputDocument(
+                    id=sandy.media.document.id,
+                    access_hash=sandy.media.document.access_hash,
+                    file_reference=sandy.media.document.file_reference,
+                ),
+                unsave=True,
+            )
+        )
+    except Exception as e:
+        LOGS.info(str(e))
 
 # --------------------------------------------------------------------------------------------------------------------#
 

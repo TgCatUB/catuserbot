@@ -71,22 +71,6 @@ async def invert_frames(image, w, h, outframes):
     return outframes
 
 
-async def unsavegif(event, sandy):
-    try:
-        await event.client(
-            functions.messages.SaveGifRequest(
-                id=types.InputDocument(
-                    id=sandy.media.document.id,
-                    access_hash=sandy.media.document.access_hash,
-                    file_reference=sandy.media.document.file_reference,
-                ),
-                unsave=True,
-            )
-        )
-    except Exception as e:
-        LOGS.info(str(e))
-
-
 async def take_screen_shot(
     video_file: str, duration: int, path: str = ""
 ) -> Optional[str]:
