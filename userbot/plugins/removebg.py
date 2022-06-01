@@ -92,11 +92,10 @@ async def remove_background(event):
         )
     contentType = response.headers.get("content-type")
     remove_bg_image = "./temp/backgroundless.png"
-    if "image" in contentType:
-        with open("./temp/backgroundless.png", "wb") as file:
-            file.write(response.content)
-    else:
+    if "image" not in contentType:
         return await edit_delete(catevent, f"`{response.content.decode('UTF-8')}`", 5)
+    with open("./temp/backgroundless.png", "wb") as file:
+        file.write(response.content)
     await catevent.delete()
     if cmd == "srmbg":
         file = (await Convert.to_sticker(catevent, remove_bg_image, noedits=True))[1]

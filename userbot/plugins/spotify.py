@@ -259,7 +259,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
             # SPOTIFY
             skip = False
             to_insert = {}
-            oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
+            oauth = {"Authorization": f"Bearer {SP_DATABASE.return_token()}"}
             r = requests.get(
                 "https://api.spotify.com/v1/me/player/currently-playing", headers=oauth
             )
@@ -281,15 +281,14 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                             "resolved."
                         )
                         await catub.send_message(BOTLOG_CHATID, string)
-                else:
-                    if save_spam("spotify", True):
-                        # currently item is not passed when the user plays a
-                        # podcast
-                        string = (
-                            f"**[INFO]**\n\nThe playback {received['currently_playing_type']}"
-                            " didn't gave me any additional information, so I skipped updating the bio."
-                        )
-                        await catub.send_message(BOTLOG_CHATID, string)
+                elif save_spam("spotify", True):
+                    # currently item is not passed when the user plays a
+                    # podcast
+                    string = (
+                        f"**[INFO]**\n\nThe playback {received['currently_playing_type']}"
+                        " didn't gave me any additional information, so I skipped updating the bio."
+                    )
+                    await catub.send_message(BOTLOG_CHATID, string)
             # 429 means flood limit, we need to wait
             elif r.status_code == 429:
                 to_wait = r.headers["Retry-After"]
@@ -301,8 +300,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                 )
                 skip = True
                 await asyncio.sleep(int(to_wait))
-            # 204 means user plays nothing, since to_insert is false, we dont
-            # need to change anything
+            # 204 means user plays nothing
             elif r.status_code == 204:
                 if save_spam("spotify", False):
                     stringy = (
@@ -338,9 +336,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                 # since we didnt actually update our status yet, lets do this
                 # without the 30 seconds wait
                 skip = True
-            # 502 means bad gateway, its an issue on spotify site which we can do nothing about. 30 seconds wait shouldn't
-            # put too much pressure on the spotify server, so we are just going
-            # to notify the user once
+            # 502 means bad gateway
             elif r.status_code == 502:
                 if save_spam("spotify", True):
                     string = (
@@ -348,9 +344,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                         "servers. The bot will continue to run but may not update the bio for a short time."
                     )
                     await catub.send_message(BOTLOG_CHATID, string)
-            # 503 means service unavailable, its an issue on spotify site which we can do nothing about. 30 seconds wait
-            # shouldn't put too much pressure on the spotify server, so we are
-            # just going to notify the user once
+            # 503 means service unavailable
             elif r.status_code == 503:
                 if save_spam("spotify", True):
                     string = (
@@ -365,7 +359,6 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                 if save_spam("spotify", True):
                     string = "**[INFO]**\n\nSpotify returned a 404 error, which is a bug on their side."
                     await catub.send_message(BOTLOG_CHATID, string)
-            # catch anything else
             else:
                 await catub.send_message(
                     BOTLOG_CHATID,
@@ -418,15 +411,11 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                     if new_bio:
                         # test if the user changed his bio to blank, we save it
                         # before we override
-                        if not bio:
-                            SP_DATABASE.save_bio(bio)
-                        # test if the user changed his bio in the meantime, if
-                        # yes, we save it before we override
-                        elif "🎶" not in bio:
+                        if not bio or "🎶" not in bio:
                             SP_DATABASE.save_bio(bio)
                         # test if the bio isn't the same, otherwise updating it
                         # would be stupid
-                        if not new_bio == bio:
+                        if new_bio != bio:
                             try:
                                 await catub(UpdateProfileRequest(about=new_bio))
                                 spotify_bio.lrt = time.time()
@@ -449,14 +438,12 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                                     await catub.send_message(BOTLOG_CHATID, stringy)
                     # if we dont have a bio, everything was too long, so we
                     # tell the user that
-                    if not new_bio:
-                        if save_spam("telegram", True):
-                            to_send = (
-                                "**[INFO]**\n\nThe current track exceeded the character limit, so the bio wasn't "
-                                f"updated.\n\n Track: {title}\nInterpret: {interpret}"
-                            )
-                            await catub.send_message(BOTLOG_CHATID, to_send)
-                # not to_insert means no playback
+                    if not new_bio and save_spam("telegram", True):
+                        to_send = (
+                            "**[INFO]**\n\nThe current track exceeded the character limit, so the bio wasn't "
+                            f"updated.\n\n Track: {title}\nInterpret: {interpret}"
+                        )
+                        await catub.send_message(BOTLOG_CHATID, to_send)
                 else:
                     if save_spam("telegram", False):
                         stringy = (
@@ -467,18 +454,10 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                     old_bio = SP_DATABASE.return_bio()
                     # this means the bio is blank, so we save that as the new
                     # one
-                    if not bio:
+                    if not bio or "🎶" not in bio and bio != old_bio:
                         SP_DATABASE.save_bio(bio)
-                    # this means an old playback is in the bio, so we change it
-                    # back to the original one
                     elif "🎶" in bio:
                         await catub(UpdateProfileRequest(about=old_bio))
-                    # this means a new original is there, lets save it
-                    elif not bio == old_bio:
-                        SP_DATABASE.save_bio(bio)
-                    # this means the original one we saved is still valid
-                    else:
-                        pass
             except FloodWaitError as e:
                 to_wait = e.seconds
                 LOGS.error(f"to wait for {str(to_wait)}")
@@ -499,7 +478,7 @@ async def sp_var_check(event):
     if not (SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET):
         await event.edit(no_sp_vars)
         return False
-    if (SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET) and SP_DATABASE is None:
+    if SP_DATABASE is None:
         await event.edit(
             "ERROR :: No Database was found!\n**Do `.help spsetup` for more info.**\n\n[Follow this tutorial](https://telegra.ph/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2)"
         )
@@ -543,9 +522,8 @@ def title_fetch(title):
         pattern = re.compile(
             r"([a-zA-Z0-9]+(?: ?[a-zA-Z0-9]+)+(?: - \w - \w+)?(?:-\w-\w+)?).*"
         )
-    regx = pattern.search(title)
-    if regx:
-        return regx.group(1)
+    if regx := pattern.search(title):
+        return regx[1]
     return title
 
 
@@ -603,7 +581,7 @@ def file_check():
 
 
 def sp_data(API):
-    oauth = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
+    oauth = {"Authorization": f"Bearer {SP_DATABASE.return_token()}"}
     spdata = requests.get(API, headers=oauth)
     if spdata.status_code == 401:
         data = {
@@ -629,7 +607,7 @@ def sp_data(API):
                 }
             },
         )
-        oauth2 = {"Authorization": "Bearer " + SP_DATABASE.return_token()}
+        oauth2 = {"Authorization": f"Bearer {SP_DATABASE.return_token()}"}
         spdata = requests.get(API, headers=oauth2)
     return spdata
 
@@ -642,7 +620,7 @@ async def make_thumb(url, client, song, artist, now, full):
     enhancer = ImageEnhance.Brightness(background)
     background = enhancer.enhance(0.5)
     logo, bfont, mfont = file_check()
-    cat = Image.open(logo, "r").resize((int(1024 / 5), int(1024 / 5)))
+    cat = Image.open(logo, "r").resize((1024 // 5, 1024 // 5))
     thumbmask = Image.new("RGBA", (1024, 1024), 0)
     thumbmask.paste(background, (0, 0))
     thumbmask.paste(cat, (-30, 840), mask=cat)
@@ -815,7 +793,7 @@ async def spotify_now(event):
         idrgx = re.search(r"(?:/track/)((?:\w|-){22})", link)
         if not idrgx:
             return await edit_delete(catevent, "\n**Error!! Invalid spotify url ;)**")
-        song_id = idrgx.group(1)
+        song_id = idrgx[1]
         received = sp_data(f"https://api.spotify.com/v1/tracks/{song_id}").json()
         title = received["album"]["name"]
         artist = received["album"]["artists"][0]["name"]

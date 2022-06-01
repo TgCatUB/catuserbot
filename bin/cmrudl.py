@@ -75,7 +75,7 @@ class Main(object):
 
     def assert_status_code(self, code, expected):
         if code != expected:
-            raise Exception("Invalid status code: %s expected: %s" % (code, expected))
+            raise Exception(f"Invalid status code: {code} expected: {expected}")
 
     def seconds_human(self, seconds):
         m, s = divmod(seconds, 60)
@@ -153,7 +153,7 @@ class Main(object):
             if continued:
                 # Switch to range request if continue from existing.
                 status = 206
-                headers["Range"] = "bytes=%s-" % (offset)
+                headers["Range"] = f"bytes={offset}-"
 
             start = time.time()
             progress(self.DL_PROGRESS_START, start, start, offset, 0, offset, None)
@@ -227,7 +227,7 @@ class Main(object):
                 self.jsobj = m.group(1)
 
             def result(self):
-                return None if not self.jsobj else self.jsobj
+                return self.jsobj or None
 
         parser = TheHTMLParser()
         parser.feed(html)
@@ -239,7 +239,7 @@ class Main(object):
         return {"cloudSettings": cloud_settings}
 
     def fetch_storage(self, url):
-        self.log("Fetching storage: %s" % (url), True)
+        self.log(f"Fetching storage: {url}", True)
         (code, headers, body) = self.request_data(self.options.url[0])
         self.assert_status_code(code, 200)
 
@@ -253,14 +253,14 @@ class Main(object):
         weblink_get_len = len(weblink_get)
         if weblink_get_len != 1:
             raise Exception(
-                "Unexpected dispatcher.weblink_get count: %s" % (weblink_get_len)
+                f"Unexpected dispatcher.weblink_get count: {weblink_get_len}"
             )
 
         weblink_get_url = weblink_get[0]["url"]
-        self.log("Found URL: %s" % (weblink_get_url), True)
+        self.log(f"Found URL: {weblink_get_url}", True)
 
         state_id = cloud_settings["state"]["id"]
-        self.log("Found ID: %s" % (state_id), True)
+        self.log(f"Found ID: {state_id}", True)
 
         folders = cloud_settings["folders"]
         file_info = self.search_folders(folders, state_id)
@@ -268,18 +268,18 @@ class Main(object):
             raise Exception("Could not find file info in folders tree")
 
         file_name = file_info["name"]
-        self.log("Found name: %s" % (file_name), True)
+        self.log(f"Found name: {file_name}", True)
 
         file_size = file_info["size"]
-        self.log("Found size: %s" % (file_size), True)
+        self.log(f"Found size: {file_size}", True)
 
         file_mtime = file_info["mtime"]
-        self.log("Found mtime: %s" % (file_mtime), True)
+        self.log(f"Found mtime: {file_mtime}", True)
 
         # A unique hash, appears to be SHA1, but unknown what is hashed.
         # If how it is generated can be documented, could be used to verify download.
         file_hash = file_info["hash"]
-        self.log("Found hash: %s" % (file_hash), True)
+        self.log(f"Found hash: {file_hash}", True)
 
         return {
             "url": weblink_get_url,
@@ -292,7 +292,7 @@ class Main(object):
 
     def fetch_token(self):
         url = "https://cloud.mail.ru/api/v2/tokens/download"
-        self.log("Fetching token: %s" % (url), True)
+        self.log(f"Fetching token: {url}", True)
         (code, headers, body) = self.request_data(url)
         self.assert_status_code(code, 200)
 
@@ -303,7 +303,7 @@ class Main(object):
         self.assert_status_code(obj_status, 200)
 
         token = json_obj["body"]["token"]
-        self.log("Found token: %s" % (token), True)
+        self.log(f"Found token: {token}", True)
 
         return token
 
@@ -324,14 +324,14 @@ class Main(object):
         return None
 
     def create_download_url(self, storage, token):
-        return "%s/%s?key=%s" % (storage["url"], storage["id"], urllib_quote(token))
+        return f'{storage["url"]}/{storage["id"]}?key={urllib_quote(token)}'
 
     def create_out_dir(self):
         opt_dir = self.options.dir
         return opt_dir or ""
 
     def create_file_name_temp(self, storage):
-        return ".%s.%s" % (__prog__, urllib_quote(storage["hash"]))
+        return f'.{__prog__}.{urllib_quote(storage["hash"])}'
 
     def create_file_name(self, storage):
         if opt_file := self.options.file:
@@ -341,43 +341,41 @@ class Main(object):
     def download_verify_size(self, file_path, file_size):
         size = self.stat(file_path).st_size
         if size != file_size:
-            raise Exception(
-                "Unexected download size: %s expected: %s" % (size, file_size)
-            )
+            raise Exception(f"Unexected download size: {size} expected: {file_size}")
 
     def download_set_mtime(self, file_path, file_mtime):
         os.utime(file_path, (file_mtime, file_mtime))
 
     def assert_not_exists(self, file_path):
         if self.stat(file_path):
-            raise Exception("Already exists: %s" % (file_path))
+            raise Exception(f"Already exists: {file_path}")
 
     def download(self):
         out_dir = self.create_out_dir()
         if out_dir:
-            self.log("Output dir: %s" % (out_dir))
+            self.log(f"Output dir: {out_dir}")
 
         file_name = self.create_file_name(None)
         if file_name is not None:
-            self.log("Output file: %s" % (file_name))
+            self.log(f"Output file: {file_name}")
             self.assert_not_exists(os.path.join(out_dir, file_name))
 
         storage = self.fetch_storage(self.options.url[0])
 
         if file_name is None:
             file_name = self.create_file_name(storage)
-            self.log("Output file: %s" % (file_name))
+            self.log(f"Output file: {file_name}")
 
         token = self.fetch_token()
 
         url = self.create_download_url(storage, token)
-        self.log("Download URL: %s" % (url), True)
+        self.log(f"Download URL: {url}", True)
 
         file_name_path = os.path.join(out_dir, file_name)
         self.assert_not_exists(file_name_path)
 
         file_name_temp = self.create_file_name_temp(storage)
-        self.log("Temporary file: %s" % (file_name_temp), True)
+        self.log(f"Temporary file: {file_name_temp}", True)
 
         file_name_temp_path = os.path.join(out_dir, file_name_temp)
 
@@ -398,7 +396,7 @@ class Main(object):
 
         # Verify size.
         storage_size = storage["size"]
-        self.log("Verifying size: %s" % (storage_size), True)
+        self.log(f"Verifying size: {storage_size}", True)
         try:
             self.download_verify_size(file_name_temp_path, storage_size)
         except Exception as ex:
@@ -408,7 +406,7 @@ class Main(object):
         # Set the modified time if requested.
         if self.options.mtime:
             storage_mtime = storage["mtime"]
-            self.log("Setting mtime: %s" % (storage_mtime), True)
+            self.log(f"Setting mtime: {storage_mtime}", True)
             self.download_set_mtime(file_name_temp_path, storage_mtime)
 
         os.rename(file_name_temp_path, file_name_path)
@@ -431,13 +429,9 @@ class Main(object):
 
         timestr = self.seconds_human(math.floor(delta))
         percent = self.percent_human(current, total)
-        amount = "%s (%s) / %s (%s)" % (
-            self.bytes_human(current),
-            current,
-            self.bytes_human(total),
-            total,
-        )
-        persec = "%s/s" % (self.bytes_human(round(bytes_sec)))
+        amount = f"{self.bytes_human(current)} ({current}) / {self.bytes_human(total)} ({total})"
+
+        persec = f"{self.bytes_human(round(bytes_sec))}/s"
         timerem = self.seconds_human(math.ceil(delta_remain))
 
         self.output_progress("  ".join(["", timestr, percent, amount, persec, timerem]))
@@ -452,7 +446,7 @@ class Main(object):
             s = str(ex)
             if not s:
                 s = ex.__class__.__name__
-            self.output("Error: %s" % (s))
+            self.output(f"Error: {s}")
             return 1
 
         try:
@@ -468,10 +462,11 @@ def main():
     parser = argparse.ArgumentParser(
         prog=__prog__,
         description=os.linesep.join(
-            ["%s %s" % (__prog__, __version__), "%s %s" % (__copyright__, __license__)]
+            [f"{__prog__} {__version__}", f"{__copyright__} {__license__}"]
         ),
         formatter_class=argparse.RawTextHelpFormatter,
     )
+
     parser.add_argument(
         "-v", "--version", action="version", version=__version__, help="Print version"
     )

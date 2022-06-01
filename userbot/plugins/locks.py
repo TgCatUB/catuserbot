@@ -403,10 +403,7 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
 async def _(event):  # sourcery no-metrics
     "To see the active locks in the current group"
     res = ""
-    current_db_locks = get_locks(event.chat_id)
-    if not current_db_locks:
-        res = "There are no DataBase settings in this chat"
-    else:
+    if current_db_locks := get_locks(event.chat_id):
         res = "Following are the DataBase permissions in this chat: \n"
         ubots = "❌" if current_db_locks.bots else "✅"
         ucommands = "❌" if current_db_locks.commands else "✅"
@@ -418,6 +415,8 @@ async def _(event):  # sourcery no-metrics
         res += f"👉 `email`: `{uemail}`\n"
         res += f"👉 `forward`: `{uforward}`\n"
         res += f"👉 `url`: `{uurl}`\n"
+    else:
+        res = "There are no DataBase settings in this chat"
     current_chat = await event.get_chat()
     try:
         chat_per = current_chat.default_banned_rights
