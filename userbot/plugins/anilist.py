@@ -538,7 +538,7 @@ async def get_anime(event):
         ],
     },
 )
-async def anilist(event):    # sourcery no-metrics
+async def anilist(event):  # sourcery no-metrics
     "Get info on any character."
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)

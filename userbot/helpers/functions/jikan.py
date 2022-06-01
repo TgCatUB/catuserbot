@@ -710,8 +710,7 @@ def is_gif(file):
     # ngl this should be fixed, telethon.utils.is_gif but working
     # lazy to go to github and make an issue kek
     return (
-        DocumentAttributeAnimated()
-        in getattr(file, "document", file).attributes
+        DocumentAttributeAnimated() in getattr(file, "document", file).attributes
         if is_video(file)
         else False
     )

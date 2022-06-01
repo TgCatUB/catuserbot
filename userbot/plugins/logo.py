@@ -235,7 +235,7 @@ async def bad(event):
         ],
     },
 )
-async def pussy(event):    # sourcery no-metrics
+async def pussy(event):  # sourcery no-metrics
     "To customise logo font"
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)

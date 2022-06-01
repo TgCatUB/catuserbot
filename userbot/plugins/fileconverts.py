@@ -688,7 +688,7 @@ async def _(event):
         "examples": ["{tr}itog s", "{tr}itog -s"],
     },
 )
-async def pic_gifcmd(event):    # sourcery no-metrics
+async def pic_gifcmd(event):  # sourcery no-metrics
     "To convert replied image or sticker to gif"
     reply = await event.get_reply_message()
     mediatype = media_type(reply)

@@ -28,9 +28,7 @@ async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
     catevent = (
         event
         if noedits
-        else await edit_or_reply(
-            event, "`Transfiguration Time! Converting to ....`"
-        )
+        else await edit_or_reply(event, "`Transfiguration Time! Converting to ....`")
     )
 
     catmedia = None

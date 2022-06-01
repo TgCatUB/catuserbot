@@ -25,7 +25,7 @@ plugin_category = "tools"
         "examples": "{tr}ls userbot",
     },
 )
-async def ls(event):    # sourcery no-metrics
+async def ls(event):  # sourcery no-metrics
     "To list all files and folders."
     cat = "".join(event.text.split(maxsplit=1)[1:])
     path = cat or os.getcwd()
