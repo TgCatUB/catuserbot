@@ -507,7 +507,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 caption, buttons = await download_button(link, body=True)
                 photo = await get_ytthumb(link)
             if found_:
-                markup = Button.build_reply_markup(buttons)
+                markup = event.client.build_reply_markup(buttons)
                 photo = types.InputWebDocument(
                     url=photo, size=0, mime_type="image/jpeg", attributes=[]
                 )
@@ -548,7 +548,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 Button.inline(text="Yes I'm 18+", data="age_verification_true"),
                 Button.inline(text="No I'm Not", data="age_verification_false"),
             ]
-            markup = Button.build_reply_markup(buttons)
+            markup = event.client.build_reply_markup(buttons)
             photo = types.InputWebDocument(
                 url="https://i.imgur.com/Zg58iXc.jpg",
                 size=0,
@@ -612,7 +612,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 ),
             )
         ]
-        markup = Button.build_reply_markup(buttons)
+        markup = event.client.build_reply_markup(buttons)
         photo = types.InputWebDocument(
             url=CATLOGO, size=0, mime_type="image/jpeg", attributes=[]
         )
