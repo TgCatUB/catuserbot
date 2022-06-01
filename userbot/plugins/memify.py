@@ -168,7 +168,7 @@ async def memes(event):
         bottom = ""
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
-    output = await Convert.to_image(event, reply,rgb=True)
+    output = await Convert.to_image(event, reply, rgb=True)
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -187,7 +187,7 @@ async def memes(event):
     else:
         await cat_meeme(top, bottom, CNG_FONTS, meme_file, meme)
     if cmd != "mmf":
-        meme = (await Convert.to_sticker(event,meme,noedits=True))[1]
+        meme = (await Convert.to_sticker(event, meme, noedits=True))[1]
     await event.client.send_file(
         event.chat_id, meme, reply_to=catid, force_document=False
     )
