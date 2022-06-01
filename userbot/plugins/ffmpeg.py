@@ -38,8 +38,8 @@ LOGGER = logging.getLogger(__name__)
 
 async def convert_video(video_file, output_directory, crf, total_time, bot, message):
     # https://stackoverflow.com/a/13891070/4723940
-    out_put_file_name = output_directory + "/" + str(round(time.time())) + ".mp4"
-    progress = output_directory + "/" + "progress.txt"
+    out_put_file_name = f"{output_directory}/{str(round(time.time()))}.mp4"
+    progress = f"{output_directory}/progress.txt"
     with open(progress, "w") as f:
         pass
     COMPRESSION_START_TIME = time.time()
@@ -48,7 +48,7 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )
-    LOGGER.info("ffmpeg_process: " + str(process.pid))
+    LOGGER.info(f"ffmpeg_process: {str(process.pid)}")
     while process.returncode != 0:
         await asyncio.sleep(3)
         with open("./temp/progress.txt", "r+") as file:
@@ -57,22 +57,12 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
             time_in_us = re.findall("out_time_ms=(\d+)", text)
             progress = re.findall("progress=(\w+)", text)
             speed = re.findall("speed=(\d+\.?\d*)", text)
-            if len(frame):
-                frame = int(frame[-1])
-            else:
-                frame = 1
-            if len(speed):
-                speed = speed[-1]
-            else:
-                speed = 1
-            if len(time_in_us):
-                time_in_us = time_in_us[-1]
-            else:
-                time_in_us = 1
-            if len(progress):
-                if progress[-1] == "end":
-                    LOGGER.info(progress[-1])
-                    break
+            frame = int(frame[-1]) if len(frame) else 1
+            speed = speed[-1] if len(speed) else 1
+            time_in_us = time_in_us[-1] if len(time_in_us) else 1
+            if len(progress) and progress[-1] == "end":
+                LOGGER.info(progress[-1])
+                break
             time_formatter((time.time() - COMPRESSION_START_TIME))
             elapsed_time = int(time_in_us) / 1000000
             difference = math.floor((total_time - elapsed_time) / float(speed))
@@ -83,15 +73,19 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
             progress_str = "📊 **Progress :** {0}%\n[{1}{2}]".format(
                 round(percentage, 2),
                 "".join(
-                    [FINISHED_PROGRESS_STR for i in range(math.floor(percentage / 10))]
+                    [
+                        FINISHED_PROGRESS_STR
+                        for _ in range(math.floor(percentage / 10))
+                    ]
                 ),
                 "".join(
                     [
                         UN_FINISHED_PROGRESS_STR
-                        for i in range(10 - math.floor(percentage / 10))
+                        for _ in range(10 - math.floor(percentage / 10))
                     ]
                 ),
             )
+
             stats = (
                 f"📦️ **Compressing CRF-{crf}**\n\n"
                 f"⏰️ **ETA :** {ETA}\n\n"
@@ -160,19 +154,7 @@ async def ffmpeg_compress(event):
     if not crf:
         crf = "23"
     dlpath = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "cat.media.ffmpeg")
-    if not reply_message or not reply_message.media:
-        if os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
-            media = (await fileinfo(FF_MPEG_DOWN_LOAD_MEDIA_PATH))["type"]
-            if media not in ["Video"]:
-                return await edit_delete(event, "`Only Video files are supported`")
-            dlpath = FF_MPEG_DOWN_LOAD_MEDIA_PATH
-            catevent = await edit_or_reply(event, "`Processing...`")
-            delete = False
-        else:
-            await edit_delete(
-                event, "`Reply to Video file or save video by .ffmpegsave`"
-            )
-    elif reply_message:
+    if reply_message and reply_message.media:
         media = media_type(reply_message)
         if media not in ["Video", "Round Video", "Gif"]:
             return await edit_delete(event, "`Only Video files are supported`")
@@ -193,8 +175,17 @@ async def ffmpeg_compress(event):
         else:
             await edit_or_reply(catevent, "`Processing...`")
             delete = True
+    elif os.path.exists(FF_MPEG_DOWN_LOAD_MEDIA_PATH):
+        media = (await fileinfo(FF_MPEG_DOWN_LOAD_MEDIA_PATH))["type"]
+        if media not in ["Video"]:
+            return await edit_delete(event, "`Only Video files are supported`")
+        dlpath = FF_MPEG_DOWN_LOAD_MEDIA_PATH
+        catevent = await edit_or_reply(event, "`Processing...`")
+        delete = False
     else:
-        await edit_delete(event, "`Reply to video file`")
+        await edit_delete(
+            event, "`Reply to Video file or save video by .ffmpegsave`"
+        )
     old = await fileinfo(dlpath)
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
@@ -206,52 +197,51 @@ async def ffmpeg_compress(event):
     cms = (cend - cstart).seconds
     if delete:
         os.remove(dlpath)
-    if compress:
-        new = await fileinfo(compress)
-        osize = old["size"]
-        nsize = new["size"]
-        cap = f"**Old Size:** `{humanbytes(osize)}`\n**New Size:** `{humanbytes(nsize)}`\n**Compressed:** `{int(100-(nsize/osize*100))}%`\n\n**Time Taken:-**\n**Compression : **`{time_formatter(cms)}`"
-        if cmd == "f":
-            try:
-                c_time = time.time()
-                catt = await event.client.send_file(
-                    event.chat_id,
-                    compress,
-                    thumb=thumb_image_path,
-                    caption=cap,
-                    force_document=True,
-                    supports_streaming=True,
-                    allow_cache=False,
-                    reply_to=reply_to_id,
-                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, catevent, c_time, "Trying to upload")
-                    ),
-                )
-                os.remove(compress)
-            except Exception as e:
-                return await edit_delete(catevent, f"**Error : **`{e}`")
-        else:
-            thumb = await _cattools.take_screen_shot(compress, "00:01")
-            try:
-                c_time = time.time()
-                catt = await event.client.send_file(
-                    event.chat_id,
-                    compress,
-                    caption=cap,
-                    thumb=thumb,
-                    force_document=False,
-                    supports_streaming=True,
-                    allow_cache=False,
-                    reply_to=reply_to_id,
-                    progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, catevent, c_time, "Trying to upload")
-                    ),
-                )
-                os.remove(compress)
-            except Exception as e:
-                return await edit_delete(catevent, f"**Error : **`{e}`")
-    else:
+    if not compress:
         return await edit_delete(catevent, "**ERROR :: Unalble to Compress**")
+    new = await fileinfo(compress)
+    osize = old["size"]
+    nsize = new["size"]
+    cap = f"**Old Size:** `{humanbytes(osize)}`\n**New Size:** `{humanbytes(nsize)}`\n**Compressed:** `{int(100-(nsize/osize*100))}%`\n\n**Time Taken:-**\n**Compression : **`{time_formatter(cms)}`"
+    if cmd == "f":
+        try:
+            c_time = time.time()
+            catt = await event.client.send_file(
+                event.chat_id,
+                compress,
+                thumb=thumb_image_path,
+                caption=cap,
+                force_document=True,
+                supports_streaming=True,
+                allow_cache=False,
+                reply_to=reply_to_id,
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, catevent, c_time, "Trying to upload")
+                ),
+            )
+            os.remove(compress)
+        except Exception as e:
+            return await edit_delete(catevent, f"**Error : **`{e}`")
+    else:
+        thumb = await _cattools.take_screen_shot(compress, "00:01")
+        try:
+            c_time = time.time()
+            catt = await event.client.send_file(
+                event.chat_id,
+                compress,
+                caption=cap,
+                thumb=thumb,
+                force_document=False,
+                supports_streaming=True,
+                allow_cache=False,
+                reply_to=reply_to_id,
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, catevent, c_time, "Trying to upload")
+                ),
+            )
+            os.remove(compress)
+        except Exception as e:
+            return await edit_delete(catevent, f"**Error : **`{e}`")
     await catevent.delete()
     end = datetime.now()
     ms = (end - start).seconds

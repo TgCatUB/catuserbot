@@ -116,15 +116,13 @@ async def fileinfo(file):
         "extension": cat_json[0]["FileExtension"],
     }
     try:
-        if "VideoCount" or "AudioCount" or "ImageCount" in cat_json[0]:
-            dic["format"] = cat_json[0]["Format"]
-            dic["type"] = cat_json[1]["@type"]
-            if "ImageCount" not in cat_json[0]:
-                dic["duration"] = int(float(cat_json[0]["Duration"]))
-                dic["bitrate"] = int(int(cat_json[0]["OverallBitRate"]) / 1000)
-            if "VideoCount" or "ImageCount" in cat_json[0]:
-                dic["height"] = int(cat_json[1]["Height"])
-                dic["width"] = int(cat_json[1]["Width"])
+        dic["format"] = cat_json[0]["Format"]
+        dic["type"] = cat_json[1]["@type"]
+        if "ImageCount" not in cat_json[0]:
+            dic["duration"] = int(float(cat_json[0]["Duration"]))
+            dic["bitrate"] = int(cat_json[0]["OverallBitRate"]) // 1000
+        dic["height"] = int(cat_json[1]["Height"])
+        dic["width"] = int(cat_json[1]["Width"])
     except (IndexError, KeyError):
         pass
     return dic
@@ -256,8 +254,7 @@ def ellipse_create(filename, size, border):
 
 def ellipse_layout_create(filename, size, border):
     x, mask = ellipse_create(filename, size, border)
-    img = ImageOps.expand(mask)
-    return img
+    return ImageOps.expand(mask)
 
 
 def text_draw(font_name, font_size, img, text, hight, stroke_width=0, stroke_fill=None):
@@ -320,8 +317,7 @@ def higlighted_text(
     for item in raw_text:
         input_text = "\n".join(wrap(item, int((40.0 / resized_width) * mask_size)))
         split_text = input_text.splitlines()
-        for final in split_text:
-            list_text.append(final)
+        list_text.extend(iter(split_text))
     texts = [list_text]
     if album and len(list_text) > lines:
         texts = [list_text[i : i + lines] for i in range(0, len(list_text), lines)]

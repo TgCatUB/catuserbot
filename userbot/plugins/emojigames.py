@@ -200,7 +200,7 @@ async def _(event):
     r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))
     if input_str:
         try:
-            required_number = int(input_str)
+            required_number = input_str
             while r.media.value != required_number:
                 await r.delete()
                 r = await reply_message.reply(file=InputMediaDice(emoticon=emoticon))

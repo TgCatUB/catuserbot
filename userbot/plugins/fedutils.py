@@ -415,9 +415,8 @@ async def quote_search(event):
             event, "__There is no such fedgroup in your database.__"
         )
     if output != "" and fedgroup:
-        output = (
-            f"**The list of feds in the category** `{fedgroup}` **are:**\n" + output
-        )
+        output = f"**The list of feds in the category** `{fedgroup}` **are:**\n{output}"
+
     elif output != "":
         output = "**The list of all feds in your database are :**\n" + output
     else:

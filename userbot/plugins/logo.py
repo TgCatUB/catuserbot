@@ -235,7 +235,7 @@ async def bad(event):
         ],
     },
 )
-async def pussy(event):  # sourcery no-metrics
+async def pussy(event):    # sourcery no-metrics
     "To customise logo font"
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)
@@ -304,9 +304,7 @@ async def pussy(event):  # sourcery no-metrics
         cat = re.compile(r"^\-?[1-9][0-9]*\.?[0-9]*")
         isint = re.match(cat, input_str)
         if not input_str or not isint:
-            return await edit_delete(
-                event, f"**Give an integer value to set**", time=10
-            )
+            return await edit_delete(event, "**Give an integer value to set**", time=10)
         if cmd == "s":
             input_str = int(input_str)
             if input_str > 0 and input_str <= 1000:

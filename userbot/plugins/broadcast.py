@@ -78,8 +78,7 @@ async def catbroadcast_add(event):
             parse_mode=_format.parse_pre,
         )
     keyword = catinput_str.lower()
-    check = sql.is_in_broadcastlist(keyword, event.chat_id)
-    if check:
+    if check := sql.is_in_broadcastlist(keyword, event.chat_id):
         return await edit_delete(
             event,
             f"This chat is already in this category {keyword}",
@@ -397,7 +396,7 @@ async def catbroadcast_remove(event):
                 parse_mode=_format.parse_pre,
             )
     keyword = keyword.lower()
-    check = sql.is_in_broadcastlist(keyword, int(groupid))
+    check = sql.is_in_broadcastlist(keyword, groupid)
     if not check:
         return await edit_delete(
             event,

@@ -987,9 +987,8 @@ async def generate_credentials(gdrive):
         r = conv.wait_event(events.NewMessage(outgoing=True, chats=BOTLOG_CHATID))
         r = await r
         code = r.message.message.strip()
-        getcode = re.search("(.*)(4\/.*)(&.*)", code)
-        if getcode:
-            code = getcode.group(2)
+        if getcode := re.search("(.*)(4\/.*)(&.*)", code):
+            code = getcode[2]
         else:
             await edit_or_reply(gdrive, "Given link is wrong. recheck your link")
             return

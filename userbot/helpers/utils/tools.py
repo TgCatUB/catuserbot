@@ -25,13 +25,14 @@ async def media_to_pic(event, reply, noedits=False):  # sourcery no-metrics
         "Document",
     ]:
         return event, None
-    if not noedits:
-        catevent = await edit_or_reply(
+    catevent = (
+        event
+        if noedits
+        else await edit_or_reply(
             event, "`Transfiguration Time! Converting to ....`"
         )
+    )
 
-    else:
-        catevent = event
     catmedia = None
     catfile = os.path.join("./temp/", "meme.png")
     if os.path.exists(catfile):

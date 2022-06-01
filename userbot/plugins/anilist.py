@@ -538,7 +538,7 @@ async def get_anime(event):
         ],
     },
 )
-async def anilist(event):  # sourcery no-metrics
+async def anilist(event):    # sourcery no-metrics
     "Get info on any character."
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
@@ -588,10 +588,7 @@ async def anilist(event):  # sourcery no-metrics
             i += 1
         await catevent.edit(msg, parse_mode="html")
         return
-    if specific:
-        result = result[animeno - 1]
-    else:
-        result = result[0]
+    result = result[animeno - 1] if specific else result[0]
     for entity in result:
         if result[entity] is None:
             result[entity] = "Unknown"
@@ -602,10 +599,7 @@ async def anilist(event):  # sourcery no-metrics
         dateofbirth.append(str(result["dateOfBirth"]["month"]))
     if result["dateOfBirth"]["day"]:
         dateofbirth.append(str(result["dateOfBirth"]["day"]))
-    if len(dateofbirth) != 0:
-        dob = "-".join(dateofbirth)
-    else:
-        dob = "Unknown"
+    dob = "-".join(dateofbirth) if dateofbirth else "Unknown"
     caption = textwrap.dedent(
         f"""
         🆎 <b> Name</b>: <i>{result['name']['full']}</i>
@@ -628,9 +622,9 @@ async def anilist(event):  # sourcery no-metrics
     html_ += f"<a href='{result['siteUrl']}'> View on anilist</a>"
 
     synopsis_link = await post_to_telegraph(
-        result["name"]["full"],
-        f"<code>{caption}</code>\n" + f"<br>" + html_,
+        result["name"]["full"], f"<code>{caption}</code>\n<br>{html_}"
     )
+
     await event.client.send_file(
         event.chat_id,
         file=result["image"]["large"],

@@ -40,9 +40,9 @@ async def potocmd(event):
     else:
         photos = await event.client.get_profile_photos(chat)
         u = False
-    if uid.strip() == "":
+    if not uid.strip():
         uid = 1
-        if int(uid) > (len(photos)):
+        if uid > (len(photos)):
             return await edit_delete(
                 event, "`No photo found of this NIBBA / NIBBI. Now u Die!`"
             )
@@ -71,7 +71,7 @@ async def potocmd(event):
         except BaseException:
             await edit_or_reply(event, "`Are you comedy me ?`")
             return
-        if int(uid) > (len(photos)):
+        if uid > (len(photos)):
             return await edit_delete(
                 event, "`No photo found of this NIBBA / NIBBI. Now u Die!`"
             )

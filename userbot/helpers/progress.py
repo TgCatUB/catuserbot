@@ -53,9 +53,7 @@ def humanbytes(size: int) -> str:
 
 
 def scheck(inp):
-    if inp == 1:
-        return ""
-    return "s"
+    return "" if inp == 1 else "s"
 
 
 def time_formatter(seconds: int) -> str:

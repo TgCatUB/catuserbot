@@ -68,7 +68,7 @@ async def _(event):
             sec_res = requests.get(result["repos_url"])
             if sec_res.status_code == 200:
                 limit = event.pattern_match.group(2)
-                limit = 5 if not limit else int(limit)
+                limit = int(limit) if limit else 5
                 for repo in sec_res.json():
                     repos.append(f"[{repo['name']}]({repo['html_url']})")
                     limit -= 1
@@ -143,9 +143,7 @@ async def download(event):
     else:
         end = datetime.now()
         ms = (end - start).seconds
-        await mone.edit(
-            "Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms)
-        )
+        await mone.edit(f"Downloaded to `{downloaded_file_name}` in {ms} seconds.")
         await mone.edit("Committing to Github....")
         await git_commit(downloaded_file_name, mone)
 

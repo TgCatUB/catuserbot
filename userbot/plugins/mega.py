@@ -71,7 +71,7 @@ async def subprocess_run(megadl, cmd):
         "usage": "{tr}mega <mega.nz link>",
     },
 )
-async def mega_downloader(megadl):  # sourcery no-metrics
+async def mega_downloader(megadl):    # sourcery no-metrics
     "To download mega files from mega.nz links."
     catevent = await edit_or_reply(megadl, "`Collecting information...`")
     if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
@@ -108,7 +108,7 @@ async def mega_downloader(megadl):  # sourcery no-metrics
     file_url = data["url"]
     hex_key = data["hex_key"]
     hex_raw_key = data["hex_raw_key"]
-    temp_file_name = file_name + ".temp"
+    temp_file_name = f"{file_name}.temp"
     temp_file_path = os.path.join(TMP_DOWNLOAD_DIRECTORY, temp_file_name)
     file_path = os.path.join(TMP_DOWNLOAD_DIRECTORY, file_name)
     if os.path.isfile(file_path):
@@ -134,10 +134,11 @@ async def mega_downloader(megadl):  # sourcery no-metrics
         estimated_total_time = round(downloader.get_eta())
         progress_str = "`{0}` | [{1}{2}] `{3}%`".format(
             status,
-            "".join("▰" for i in range(math.floor(percentage / 10))),
-            "".join("▱" for i in range(10 - math.floor(percentage / 10))),
+            "".join("▰" for _ in range(math.floor(percentage / 10))),
+            "".join("▱" for _ in range(10 - math.floor(percentage / 10))),
             round(percentage, 2),
         )
+
 
         diff = time.time() - start
         try:
@@ -193,9 +194,8 @@ async def mega_downloader(megadl):  # sourcery no-metrics
 
 
 async def decrypt_file(megadl, file_path, temp_file_path, hex_key, hex_raw_key):
-    cmd = "cat '{}' | openssl enc -d -aes-128-ctr -K {} -iv {} > '{}'".format(
-        temp_file_path, hex_key, hex_raw_key, file_path
-    )
+    cmd = f"cat '{temp_file_path}' | openssl enc -d -aes-128-ctr -K {hex_key} -iv {hex_raw_key} > '{file_path}'"
+
     if await subprocess_run(megadl, cmd):
         os.remove(temp_file_path)
     else:

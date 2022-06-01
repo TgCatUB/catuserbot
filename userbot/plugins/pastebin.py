@@ -304,8 +304,7 @@ async def _(event):
         result = ""
         if response:
             await event.client.send_read_acknowledge(conv.chat_id)
-            urls = extractor.find_urls(response.text)
-            if urls:
+            if urls := extractor.find_urls(response.text):
                 result = f"The instant preview is [here]({urls[0]})"
         if result == "":
             result = "I can't make it as instant view"

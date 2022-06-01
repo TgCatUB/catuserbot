@@ -98,12 +98,12 @@ async def gsearch(q_event):
         match = match.replace(f"-l{lim}", "")
         lim = int(lim)
         if lim <= 0:
-            lim = int(5)
+            lim = 5
     except IndexError:
         lim = 5
     #     smatch = urllib.parse.quote_plus(match)
     smatch = match.replace(" ", "+")
-    search_args = (str(smatch), int(page))
+    search_args = str(smatch), page
     gsearch = GoogleSearch()
     bsearch = BingSearch()
     ysearch = YahooSearch()
@@ -177,7 +177,7 @@ async def _(event):
             downloaded_file_name = await event.client.download_media(
                 previous_message, Config.TMP_DOWNLOAD_DIRECTORY
             )
-            SEARCH_URL = "{}/searchbyimage/upload".format(BASE_URL)
+            SEARCH_URL = f"{BASE_URL}/searchbyimage/upload"
             multipart = {
                 "encoded_image": (
                     downloaded_file_name,
@@ -272,7 +272,7 @@ async def _(img):
             return await catevent.edit("`Unable to perform reverse search.`")
         fetchUrl = response.headers["Location"]
         os.remove(name)
-        match = await ParseSauce(fetchUrl + "&preferences?hl=en&fg=1#languages")
+        match = await ParseSauce(f"{fetchUrl}&preferences?hl=en&fg=1#languages")
         guess = match["best_guess"]
         imgspage = match["similar_images"]
         if guess and imgspage:

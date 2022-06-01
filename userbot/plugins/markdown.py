@@ -142,9 +142,7 @@ def parse(message, old_entities=None):
 
             text, entity = parser(match)
 
-            # Shift old entities after our current position (so they stay in place)
-            shift = len(text) - len(match[0])
-            if shift:
+            if shift := len(text) - len(match[0]):
                 for e in old_entities[after:]:
                     e.offset += shift
 

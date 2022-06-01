@@ -361,8 +361,8 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         if hasattr(chat_obj_info, "verified") and chat_obj_info.verified
         else "No"
     )
-    username = "@{}".format(username) if username else None
-    creator_username = "@{}".format(creator_username) if creator_username else None
+    username = f"@{username}" if username else None
+    creator_username = f"@{creator_username}" if creator_username else None
     # end of spaghetti block
 
     if admins is None:

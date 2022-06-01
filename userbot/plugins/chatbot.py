@@ -112,8 +112,7 @@ async def remove_chatbot(event):
 )
 async def delete_chatbot(event):
     "To delete ai in this chat."
-    input_str = event.pattern_match.group(1)
-    if input_str:
+    if input_str := event.pattern_match.group(1):
         lecho = get_all_users()
         if len(lecho) == 0:
             return await edit_delete(

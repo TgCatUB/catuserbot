@@ -42,12 +42,11 @@ async def img_sampler(event):
     cat = await edit_or_reply(event, "`Processing...`")
     if event.pattern_match.group(1) != "":
         lim = int(event.pattern_match.group(1))
-        if lim > 10:
-            lim = int(10)
+        lim = min(lim, 10)
         if lim <= 0:
-            lim = int(1)
+            lim = 1
     else:
-        lim = int(3)
+        lim = 3
     response = googleimagesdownload()
     # creating list of arguments
     arguments = {

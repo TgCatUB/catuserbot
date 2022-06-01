@@ -268,7 +268,7 @@ async def memes(event):
     c_list = random_color()
     color1 = c_list[0]
     color2 = c_list[1]
-    bgcolor = "#080808" if not catinput else catinput
+    bgcolor = catinput or "#080808"
     asciiart(meme_file, 0.3, 1.9, outputfile, color1, color2, bgcolor)
     await event.client.send_file(
         event.chat_id, outputfile, reply_to=catid, force_document=False
@@ -520,7 +520,7 @@ async def memes(event):
 async def memes(event):
     "zooms your media file."
     catinput = event.pattern_match.group(1)
-    catinput = 50 if not catinput else int(catinput)
+    catinput = int(catinput) if catinput else 50
     reply = await event.get_reply_message()
     if not reply:
         return await edit_delete(event, "`Reply to supported Media...`")
