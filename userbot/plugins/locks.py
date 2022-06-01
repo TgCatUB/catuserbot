@@ -400,7 +400,7 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     },
     groups_only=True,
 )
-async def _(event):    # sourcery no-metrics
+async def _(event):  # sourcery no-metrics
     "To see the active locks in the current group"
     res = ""
     if current_db_locks := get_locks(event.chat_id):

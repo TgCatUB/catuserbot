@@ -16,7 +16,7 @@ import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
 import urllib.request
-from http.client import BadStatusLine, IncompleteRead
+from http.client import BadStatusLine
 from urllib.parse import quote
 from urllib.request import HTTPError, Request, URLError, urlopen
 
@@ -1232,7 +1232,9 @@ class googleimagesdownload:
 
                 # return image name back to calling method to use it for thumbnail downloads
                 download_status = "success"
-                download_message = f"Completed Image ====> {prefix}{str(count)}.{image_name}"
+                download_message = (
+                    f"Completed Image ====> {prefix}{str(count)}.{image_name}"
+                )
                 return_image_name = prefix + str(count) + "." + image_name
 
                 # image size parameter

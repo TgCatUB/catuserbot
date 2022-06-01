@@ -252,7 +252,9 @@ class Main(object):
         weblink_get = cloud_settings["dispatcher"]["weblink_get"]
         weblink_get_len = len(weblink_get)
         if weblink_get_len != 1:
-            raise Exception(f"Unexpected dispatcher.weblink_get count: {weblink_get_len}")
+            raise Exception(
+                f"Unexpected dispatcher.weblink_get count: {weblink_get_len}"
+            )
 
         weblink_get_url = weblink_get[0]["url"]
         self.log(f"Found URL: {weblink_get_url}", True)

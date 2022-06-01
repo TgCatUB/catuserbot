@@ -302,7 +302,10 @@ class CatUserBotClient(TelegramClient):
                             ftext, pastetype="s", markdown=False
                         )
                         link = "[here](https://t.me/catuserbot_support)"
-                        text = "**CatUserbot Error report**\n\n" + "If you wanna you can report it"
+                        text = (
+                            "**CatUserbot Error report**\n\n"
+                            + "If you wanna you can report it"
+                        )
                         text += f"- just forward this message {link}.\n"
                         text += (
                             "Nothing is logged except the fact of error and date\n\n"
