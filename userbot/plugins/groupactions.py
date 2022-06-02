@@ -393,7 +393,7 @@ async def rm_deletedacc(show):  # sourcery no-metrics
     },
     groups_only=True,
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To get breif summary of members in the group.1 11"
     input_str = event.pattern_match.group(1)
     if input_str:

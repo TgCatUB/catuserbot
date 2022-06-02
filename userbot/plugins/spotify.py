@@ -15,6 +15,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import asyncio
+import contextlib
 import os
 import re
 import time
@@ -255,6 +256,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
         return False
 
     async def spotify_bio():  # sourcery no-metrics
+        # sourcery skip: low-code-quality
         while SP_DATABASE.SPOTIFY_MODE:
             # SPOTIFY
             skip = False
@@ -319,10 +321,8 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                 r = requests.post("https://accounts.spotify.com/api/token", data=data)
                 received = r.json()
                 # if a new refresh is token as well, we save it here
-                try:
+                with contextlib.suppress(KeyError):
                     SP_DATABASE.save_refresh(received["refresh_token"])
-                except KeyError:
-                    pass
                 SP_DATABASE.save_token(received["access_token"])
                 glob_db.add_collection(
                     "SP_DATA",
@@ -593,10 +593,8 @@ def sp_data(API):
         r = requests.post("https://accounts.spotify.com/api/token", data=data)
         received = r.json()
         # if a new refresh is token as well, we save it here
-        try:
+        with contextlib.suppress(KeyError):
             SP_DATABASE.save_refresh(received["refresh_token"])
-        except KeyError:
-            pass
         SP_DATABASE.save_token(received["access_token"])
         glob_db.add_collection(
             "SP_DATA",
