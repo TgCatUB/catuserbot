@@ -1,7 +1,6 @@
 import os
 
 from PIL import Image
-
 from userbot.core.logger import logging
 from userbot.core.managers import edit_or_reply
 from userbot.helpers.functions.vidtools import take_screen_shot
@@ -28,7 +27,9 @@ class CatConverter:
             catmedia = await reply.download_media(dirct)
         return catfile, catmedia
 
-    async def to_image(self, event, reply, noedits=False, rgb=False):
+    async def to_image(
+        self, event, reply, dirct="./temp", file="meme.png", noedits=False, rgb=False
+    ):
         memetype = await meme_type(reply)
         mediatype = await media_type(reply)
         if memetype == "Document":
@@ -40,9 +41,7 @@ class CatConverter:
                 event, "`Transfiguration Time! Converting to ....`"
             )
         )
-        catfile, catmedia = await self._media_check(
-            reply, "./temp", "meme.png", memetype
-        )
+        catfile, catmedia = await self._media_check(reply, dirct, file, memetype)
         if memetype == "Photo":
             im = Image.open(catmedia)
             im.save(catfile)
@@ -72,8 +71,10 @@ class CatConverter:
             return catevent, catfile, mediatype
         return catevent, None
 
-    async def to_sticker(self, event, reply, noedits=False, rgb=False):
-        filename = os.path.join("./temp/", "meme.webp")
+    async def to_sticker(
+        self, event, reply, dirct="./temp", file="meme.webp", noedits=False, rgb=False
+    ):
+        filename = os.path.join(dirct, file)
         response = await self.to_image(event, reply, noedits, rgb)
         if response[1]:
             image = Image.open(response[1])
@@ -82,7 +83,9 @@ class CatConverter:
             return response[0], filename, response[2]
         return response[0], None
 
-    async def to_webm(self, event, reply, noedits=False):
+    async def to_webm(
+        self, event, reply, dirct="./", file="animate.webm", noedits=False
+    ):
         # //Hope u dunt kang :/ @Jisan7509
         memetype = await meme_type(reply)
         if memetype not in [
@@ -97,12 +100,10 @@ class CatConverter:
             if noedits
             else await edit_or_reply(event, "__🎞Converting into Animated sticker..__")
         )
-        catfile, catmedia = await self._media_check(
-            reply, "./", "animate.webm", memetype
-        )
-        file = await fileinfo(catmedia)
-        h = file["height"]
-        w = file["width"]
+        catfile, catmedia = await self._media_check(reply, dirct, file, memetype)
+        media = await fileinfo(catmedia)
+        h = media["height"]
+        w = media["width"]
         w, h = (-1, 512) if h > w else (512, -1)
         await runcmd(
             f"ffmpeg -to 00:00:02.900 -i '{catmedia}' -vf scale={w}:{h} -c:v libvpx-vp9 -crf 30 -b:v 560k -maxrate 560k -bufsize 256k -an '{catfile}'"
@@ -113,7 +114,9 @@ class CatConverter:
             return catevent, catfile
         return catevent, None
 
-    async def to_gif(self, event, reply, noedits=False):
+    async def to_gif(
+        self, event, reply, dirct="./temp", file="meme.mp4", noedits=False
+    ):
         memetype = await meme_type(reply)
         mediatype = await media_type(reply)
         if memetype not in [
@@ -131,9 +134,7 @@ class CatConverter:
                 event, "`Transfiguration Time! Converting to ....`"
             )
         )
-        catfile, catmedia = await self._media_check(
-            reply, "./temp", "meme.mp4", memetype
-        )
+        catfile, catmedia = await self._media_check(reply, dirct, file, memetype)
         if mediatype == "Sticker":
             if memetype == "Video Sticker":
                 await runcmd(f"ffmpeg -i '{catmedia}' -c copy '{catfile}'")
