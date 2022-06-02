@@ -1120,7 +1120,7 @@ class googleimagesdownload:
         thumbnail_only,
         format,
         ignore_urls,
-    ):  # sourcery no-metrics
+    ):  # sourcery no-metrics  # sourcery skip: avoid-builtin-shadow, low-code-quality
         if not silent_mode and (print_urls or no_download):
             print(f"Image URL: {image_url}")
         if ignore_urls and any(url in image_url for url in ignore_urls.split(",")):
@@ -1306,6 +1306,7 @@ class googleimagesdownload:
         return download_status, download_message, return_image_name, absolute_path
 
     def _get_all_items(self, image_objects, main_directory, dir_name, limit, arguments):
+        # sourcery skip: avoid-builtin-shadow, low-code-qualityadow, low-code-quality
         # sourcery no-metrics
         items = []
         abs_path = []
