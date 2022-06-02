@@ -76,7 +76,7 @@ class CatConverter:
         self, event, reply, dirct="./temp", file="meme.webp", noedits=False, rgb=False
     ):
         filename = os.path.join(dirct, file)
-        response = await self.to_image(event, reply, noedits, rgb)
+        response = await self.to_image(event, reply, noedits=noedits, rgb=rgb)
         if response[1]:
             image = Image.open(response[1])
             image.save(filename, "webp")
