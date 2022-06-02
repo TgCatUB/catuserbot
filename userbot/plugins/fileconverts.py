@@ -25,8 +25,6 @@ from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import media_type, progress, thumb_from_audio
 from ..helpers.functions import (
-    convert_toimage,
-    convert_tosticker,
     invert_frames,
     l_frames,
     r_frames,
@@ -77,7 +75,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     image = Image.open(meme_file)
     w, h = image.size
     outframes = []
@@ -91,11 +89,10 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     output.seek(0)
     with open("Output.gif", "wb") as outfile:
         outfile.write(output.getbuffer())
-    final = os.path.join(Config.TEMP_DIR, "output.gif")
-    output = await vid_to_gif("Output.gif", final)
-    if output is None:
+    final = await Convert.to_gif(event, "Output.gif", noedits=True)
+    if final[1] is None:
         return await edit_delete(catevent, "__Unable to make spin gif.__")
-    media_info = MediaInfo.parse(final)
+    media_info = MediaInfo.parse(final[1])
     aspect_ratio = 1
     for track in media_info.tracks:
         if track.track_type == "Video":
@@ -106,10 +103,10 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     if aspect_ratio != 1:
         crop_by = min(height, width)
         await _catutils.runcmd(
-            f'ffmpeg -i {final} -vf "crop={crop_by}:{crop_by}" {PATH}'
+            f'ffmpeg -i {final[1]} -vf "crop={crop_by}:{crop_by}" {PATH}'
         )
     else:
-        copyfile(final, PATH)
+        copyfile(final[1], PATH)
     time.time()
     ul = io.open(PATH, "rb")
     uploaded = await event.client.fast_upload_file(
@@ -141,7 +138,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     if not args:
         await unsavegif(event, sandy)
     await catevent.delete()
-    for i in [final, "Output.gif", meme_file, PATH, final]:
+    for i in [final[1], "Output.gif", meme_file, PATH]:
         if os.path.exists(i):
             os.remove(i)
 
@@ -349,7 +346,7 @@ async def _(event):
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_tosticker(output[1])
+    meme_file = (await Convert.to_sticker(event, output[1], noedits=True))[1]
     await event.client.send_file(
         event.chat_id, meme_file, reply_to=reply_to_id, force_document=False
     )
