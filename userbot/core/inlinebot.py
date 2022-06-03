@@ -606,9 +606,9 @@ async def inline_handler(event):  # sourcery no-metrics
             results = []
             results.append(
                 builder.article(
-                    title='Alive',
-                    description='Check if CatUserbot is alive.',
-                    text='ALIVE TEXT',
+                    title="Alive",
+                    description="Check if CatUserbot is alive.",
+                    text="ALIVE TEXT",
                 ),
             )
             _result = main_menu()
@@ -623,23 +623,23 @@ async def inline_handler(event):  # sourcery no-metrics
             )
             results.append(
                 builder.article(
-                    title='Secret',
-                    description='Send secret message to your friends.',
-                    text='SECRET TEXT',
+                    title="Secret",
+                    description="Send secret message to your friends.",
+                    text="SECRET TEXT",
                 ),
             )
             results.append(
                 builder.article(
-                    title='Troll',
-                    description='Send trolls to your friends.',
-                    text='TROLL TEXT',
+                    title="Troll",
+                    description="Send trolls to your friends.",
+                    text="TROLL TEXT",
                 ),
             )
             results.append(
                 builder.article(
-                    title='YTDL',
-                    description='Download videos from YouTube.',
-                    text='YTDL TEXT',
+                    title="YTDL",
+                    description="Download videos from YouTube.",
+                    text="YTDL TEXT",
                 ),
             )
             await event.answer(results)
