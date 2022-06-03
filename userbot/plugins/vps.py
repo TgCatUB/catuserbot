@@ -25,6 +25,7 @@ var_checker = [
     "PM_LOGGER_GROUP_ID",
     "PRIVATE_CHANNEL_BOT_API_ID",
     "PRIVATE_GROUP_BOT_API_ID",
+    "PLUGIN_CHANNEL",
 ]
 exts = ["jpg", "png", "webp", "webm", "m4a", "mp4", "mp3", "tgs"]
 

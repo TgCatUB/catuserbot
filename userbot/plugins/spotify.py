@@ -611,6 +611,8 @@ def sp_data(API):
 
 
 async def make_thumb(url, client, song, artist, now, full):
+    if not os.path.isdir("./temp"):
+        os.mkdir("./temp")
     pic_name = "./temp/cat.png"
     urllib.request.urlretrieve(url, pic_name)
     background = Image.open(pic_name).resize((1024, 1024))
