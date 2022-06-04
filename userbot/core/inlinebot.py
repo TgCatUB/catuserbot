@@ -31,7 +31,6 @@ LOGS = logging.getLogger(__name__)
 
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 MEDIA_PATH_REGEX = re.compile(r"(:?\<\bmedia:(:?(?:.*?)+)\>)")
-CATLOGO = "https://telegra.ph/file/493268c1f5ebedc967eba.jpg"
 tr = Config.COMMAND_HAND_LER
 
 
@@ -41,6 +40,11 @@ def getkey(val):
             if val == plugin:
                 return key
     return None
+
+
+def get_thumb(name):
+    url = f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Inline/{name}.png?raw=true"
+    return types.InputWebDocument(url=url, size=0, mime_type="image/png", attributes=[])
 
 
 def ibuild_keyboard(buttons):
@@ -91,7 +95,7 @@ def main_menu():
 
 
 def article_builder(event, method):
-    media = None
+    media = thumb = photo = None
     link_preview = False
     builder = event.builder
     title = "Cat Userbot"
@@ -100,6 +104,7 @@ def article_builder(event, method):
         help_info = main_menu()
         title = "© CatUserbot Help"
         description = "Help menu for CatUserbot"
+        thumb = get_thumb("help")
         query = help_info[0]
         buttons = help_info[1]
     elif method == "pmpermit":
@@ -165,13 +170,7 @@ def article_builder(event, method):
             note_data += markdown_note[prev:]
         query = note_data.strip()
         buttons = ibuild_keyboard(buttons_list)
-    if media and media.endswith((".jpg", ".jpeg", ".png")):
-        result = builder.photo(
-            media,
-            text=query,
-            buttons=buttons,
-        )
-    elif media:
+    if media and not media.endswith((".jpg", ".jpeg", ".png")):
         result = builder.document(
             media,
             title=title,
@@ -180,9 +179,19 @@ def article_builder(event, method):
             buttons=buttons,
         )
     else:
+        type = "article"
+        if media and media.endswith((".jpg", ".jpeg", ".png")):
+            photo = types.InputWebDocument(
+                url=media, size=0, mime_type="image/jpeg", attributes=[]
+            )
+            type = "photo"
         result = builder.article(
             title=title,
             description=description,
+            type=type,
+            file=media,
+            thumb=thumb if thumb else photo,
+            content=photo,
             text=query,
             buttons=buttons,
             link_preview=link_preview,
@@ -574,6 +583,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Secret",
                     description="Send secret message to your friends",
                     text="__Send secret message which only you & the reciver can see..__",
+                    thumb=get_thumb("secret"),
                     buttons=[
                         Button.switch_inline(
                             "Secret Text", query="secret @username Text", same_peer=True
@@ -586,6 +596,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Troll",
                     description="Send troll message to your friends",
                     text="__Send troll message which everyone can see except the reciver..__",
+                    thumb=get_thumb("troll"),
                     buttons=[
                         Button.switch_inline(
                             "Troll Text", query="troll @username Text", same_peer=True
@@ -598,6 +609,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Hide",
                     description="Send hidden text in chat",
                     text="__Send hidded message to save from being quote..__",
+                    thumb=get_thumb("hide"),
                     buttons=[
                         Button.switch_inline(
                             "Hidden Text", query="hide Text", same_peer=True
@@ -610,6 +622,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Youtube Download",
                     description="Download videos from YouTube",
                     text="__Download videos or audio from YouTube with different option of resolution..__",
+                    thumb=get_thumb("youtube"),
                     buttons=[
                         Button.switch_inline(
                             "Youtube-dl", query="ytdl perfect", same_peer=True
@@ -617,36 +630,23 @@ async def inline_handler(event):  # sourcery no-metrics
                     ],
                 ),
             )
-            await event.answer(results)
-
+            await event.answer(results)   
     else:
-        buttons = [
-            (
-                Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
-                Button.url(
-                    "Deploy",
-                    "https://github.com/TgCatUB/nekopack",
-                ),
-            )
-        ]
-        markup = event.client.build_reply_markup(buttons)
-        photo = types.InputWebDocument(
-            url=CATLOGO, size=0, mime_type="image/jpeg", attributes=[]
-        )
-        text, msg_entities = await event.client._parse_message_text(
-            "𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.", "md"
-        )
-        result = types.InputBotInlineResult(
-            id=str(uuid4()),
-            type="photo",
+        photo = get_thumb("catlogo")
+        result = builder.article(
             title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
             description="Deploy yourself",
-            url="https://github.com/TgCatUB/catuserbot",
-            thumb=photo,
+            text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
+            type="photo",
             content=photo,
-            send_message=types.InputBotInlineMessageMediaAuto(
-                reply_markup=markup, message=text, entities=msg_entities
-            ),
+            file=photo,
+            thumb=photo,
+            buttons=[
+                (
+                    Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
+                    Button.url("Deploy","https://github.com/TgCatUB/nekopack",),
+                )
+            ],
         )
         await event.answer([result] if result else None)
 
