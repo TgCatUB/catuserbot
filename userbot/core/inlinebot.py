@@ -158,7 +158,7 @@ async def article_builder(event, method):
     elif method == "spotify":
         try:
             from userbot.plugins.spotify import SP_DATABASE, get_spotify, sp_data
-            
+
             title = "Spotify"
             description = "Get currently playing song"
             media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
