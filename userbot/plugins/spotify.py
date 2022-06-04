@@ -653,7 +653,7 @@ async def make_thumb(url, client, song, artist, now, full):
 
 async def get_spotify(event, response):
     dic = {}
-    received = r.json()
+    received = response.json()
     if received["currently_playing_type"] == "track":
         dic["title"] = received["item"]["name"]
         dic["progress"] = ms_converter(received["progress_ms"])
@@ -697,10 +697,9 @@ async def spotify_now(event):
     if SP_DATABASE.SPOTIFY_MODE:
         info = f"🎶 Vibing ; [{spotify_bio.title}]({spotify_bio.link}) - {spotify_bio.interpret}"
         return await edit_or_reply(event, info, link_preview=True)
-    dic, lyrics, symbol = await get_spotify(event, response)
-    await catevent.delete()
     results = await event.client.inline_query(Config.TG_BOT_USERNAME, "spotify")
     await results[0].click(event.chat_id, reply_to=msg_id, hide_via=True)
+    await catevent.delete()
     if os.path.exists("./temp/cat.png"):
         os.remove("./temp/cat.png")
 
