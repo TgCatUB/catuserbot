@@ -237,7 +237,9 @@ async def article_builder(event, method):
         type = "article"
         if media and media.endswith((".jpg", ".jpeg", ".png")):
             if not thumb:
-                thumb = types.InputWebDocument(url=media, size=0, mime_type="image/jpeg", attributes=[])
+                thumb = types.InputWebDocument(
+                    url=media, size=0, mime_type="image/jpeg", attributes=[]
+                )
             type = "photo"
         result = builder.article(
             title=title,
