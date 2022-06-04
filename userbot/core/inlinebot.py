@@ -630,7 +630,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     ],
                 ),
             )
-            await event.answer(results)   
+            await event.answer(results)
     else:
         photo = get_thumb("catlogo")
         result = builder.article(
@@ -644,7 +644,10 @@ async def inline_handler(event):  # sourcery no-metrics
             buttons=[
                 (
                     Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
-                    Button.url("Deploy","https://github.com/TgCatUB/nekopack",),
+                    Button.url(
+                        "Deploy",
+                        "https://github.com/TgCatUB/nekopack",
+                    ),
                 )
             ],
         )
