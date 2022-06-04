@@ -158,13 +158,15 @@ async def article_builder(event, method):
     elif method == "spotify":
         try:
             from userbot.plugins.spotify import SP_DATABASE, get_spotify, sp_data
-
+            
+            title = "Spotify"
+            description = "Get currently playing song"
             media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
             if (
                 not (Config.SPOTIFY_CLIENT_ID and Config.SPOTIFY_CLIENT_SECRET)
                 or SP_DATABASE is None
             ):
-                query = "__Spotify not setup properly Do `.help spsetup` and follow the tutorial.__"
+                query = "__Spotify not setup properly. \nDo `.help spsetup` and follow the tutorial.__"
                 buttons = [
                     Button.url(
                         "Tutorial",
