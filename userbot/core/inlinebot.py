@@ -109,14 +109,14 @@ def article_builder(event, method):
         buttons = help_info[1]
 
     elif method == "deploy":
-        media="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
-        title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩"
-        description="Deploy yourself"
-        query="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁."
-        buttons=[
+        media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
+        title = "𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩"
+        description = "Deploy yourself"
+        query = "𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁."
+        buttons = [
             (
                 Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
-                Button.url("Deploy","https://github.com/TgCatUB/nekopack"),
+                Button.url("Deploy", "https://github.com/TgCatUB/nekopack"),
             )
         ]
 
@@ -140,7 +140,7 @@ def article_builder(event, method):
             from userbot.plugins.alive import catalive_text
 
             query = catalive_text()
-        except (ImportError,KeyError):
+        except (ImportError, KeyError):
             return None
         title = "Cat Alive"
         description = "Alive menu for CatUserbot"
@@ -154,22 +154,35 @@ def article_builder(event, method):
             CAT = [x for x in ALIVE_PIC.split()]
             PIC = list(CAT)
             media = random.choice(PIC)
-            
-    elif method =="spotify":
+
+    elif method == "spotify":
         try:
-            from userbot.plugins.spotify import SP_DATABASE, sp_data, get_spotify, telegraph_lyrics
-            media="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
-            if not (Config.SPOTIFY_CLIENT_ID and Config.SPOTIFY_CLIENT_SECRET) or SP_DATABASE is None:
+            from userbot.plugins.spotify import SP_DATABASE, get_spotify, sp_data
+
+            media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
+            if (
+                not (Config.SPOTIFY_CLIENT_ID and Config.SPOTIFY_CLIENT_SECRET)
+                or SP_DATABASE is None
+            ):
                 query = "__Spotify not setup properly Do `.help spsetup` and follow the tutorial.__"
-                buttons = [Button.url("Tutorial", "https://telegra.ph/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2")]
+                buttons = [
+                    Button.url(
+                        "Tutorial",
+                        "https://telegra.ph/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2",
+                    )
+                ]
             else:
-                response = sp_data("https://api.spotify.com/v1/me/player/currently-playing")
-                if response.status_code==204:
+                response = sp_data(
+                    "https://api.spotify.com/v1/me/player/currently-playing"
+                )
+                if response.status_code == 204:
                     query = "__Currently not listening any music on spotify...__"
                     buttons = [Button.url("Open Spotify", "https://open.spotify.com/")]
                 else:
-                    media,tittle,dic,lyrics,symbol = await get_spotify(event,response)
-                    thumb=get_thumb("spotify_on")
+                    media, tittle, dic, lyrics, symbol = await get_spotify(
+                        event, response
+                    )
+                    thumb = get_thumb("spotify_on")
                     query = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}`'
                     buttons = [
                         (
@@ -177,7 +190,7 @@ def article_builder(event, method):
                             Button.url(f"{symbol} Lyrics", lyrics),
                         )
                     ]
-        except (ImportError,KeyError):
+        except (ImportError, KeyError):
             return None
 
     elif method.startswith("Inline buttons"):

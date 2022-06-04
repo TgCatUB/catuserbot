@@ -41,7 +41,6 @@ from ..helpers.functions.functions import (
     delete_conv,
     ellipse_create,
     ellipse_layout_create,
-    make_inline,
     post_to_telegraph,
     text_draw,
 )
@@ -651,7 +650,8 @@ async def make_thumb(url, client, song, artist, now, full):
     os.remove(myphoto)
     return pic_name
 
-async def get_spotify(event,response):
+
+async def get_spotify(event, response):
     dic = {}
     received = r.json()
     if received["currently_playing_type"] == "track":
@@ -671,9 +671,9 @@ async def get_spotify(event,response):
             dic["duration"],
         )
         lyrics, symbol = await telegraph_lyrics(event, tittle, dic["interpret"])
-    return thumb,tittle,dic,lyrics,symbol
-    
-    
+    return thumb, tittle, dic, lyrics, symbol
+
+
 @catub.cat_cmd(
     pattern="spnow$",
     command=("spnow", plugin_category),
@@ -697,7 +697,7 @@ async def spotify_now(event):
     if SP_DATABASE.SPOTIFY_MODE:
         info = f"🎶 Vibing ; [{spotify_bio.title}]({spotify_bio.link}) - {spotify_bio.interpret}"
         return await edit_or_reply(event, info, link_preview=True)
-    dic,lyrics,symbol = await get_spotify(event,response)
+    dic, lyrics, symbol = await get_spotify(event, response)
     await catevent.delete()
     results = await event.client.inline_query(Config.TG_BOT_USERNAME, "spotify")
     await results[0].click(event.chat_id, reply_to=msg_id, hide_via=True)
