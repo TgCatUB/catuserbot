@@ -107,6 +107,17 @@ def article_builder(event, method):
         thumb = get_thumb("help")
         query = help_info[0]
         buttons = help_info[1]
+    elif method == "deploy":
+        media="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
+        title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩"
+        description="Deploy yourself"
+        query="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁."
+        buttons=[
+            (
+                Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
+                Button.url("Deploy","https://github.com/TgCatUB/nekopack"),
+            )
+        ]
     elif method == "pmpermit":
         query = gvarstatus("pmpermit_text")
         buttons = [Button.inline(text="Show Options.", data="show_pmpermit_options")]
@@ -632,25 +643,7 @@ async def inline_handler(event):  # sourcery no-metrics
             )
             await event.answer(results)
     else:
-        photo = get_thumb("catlogo")
-        result = builder.article(
-            title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
-            description="Deploy yourself",
-            text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
-            type="photo",
-            content=photo,
-            file="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png",
-            thumb=photo,
-            buttons=[
-                (
-                    Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
-                    Button.url(
-                        "Deploy",
-                        "https://github.com/TgCatUB/nekopack",
-                    ),
-                )
-            ],
-        )
+        result = article_builder(event, "deploy")
         await event.answer([result] if result else None)
 
 
