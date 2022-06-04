@@ -25,6 +25,7 @@ import requests
 import ujson
 from PIL import Image, ImageEnhance, ImageFilter
 from telethon import events
+from telegraph import upload_file
 from telethon.errors import AboutTooLongError, FloodWaitError
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.custom import Button
@@ -671,7 +672,10 @@ async def get_spotify(event, response):
             dic["duration"],
         )
         lyrics, symbol = await telegraph_lyrics(event, tittle, dic["interpret"])
-    return thumb, tittle, dic, lyrics, symbol
+        url = upload_file(thumb)
+        if os.path.exists(thumb):
+            os.remove(thumb)
+    return f"https://telegra.ph{url[0]}", tittle, dic, lyrics, symbol
 
 
 @catub.cat_cmd(
@@ -700,8 +704,6 @@ async def spotify_now(event):
     results = await event.client.inline_query(Config.TG_BOT_USERNAME, "spotify")
     await results[0].click(event.chat_id, reply_to=msg_id, hide_via=True)
     await catevent.delete()
-    if os.path.exists("./temp/cat.png"):
-        os.remove("./temp/cat.png")
 
 
 @catub.cat_cmd(

@@ -95,7 +95,7 @@ def main_menu():
 
 
 async def article_builder(event, method):
-    media = thumb = None
+    media = thumb = photo = None
     link_preview = False
     builder = event.builder
     title = "Cat Userbot"
@@ -236,18 +236,17 @@ async def article_builder(event, method):
     else:
         type = "article"
         if media and media.endswith((".jpg", ".jpeg", ".png")):
-            if not thumb:
-                thumb = types.InputWebDocument(
-                    url=media, size=0, mime_type="image/jpeg", attributes=[]
-                )
+            photo = types.InputWebDocument(
+                url=media, size=0, mime_type="image/jpeg", attributes=[]
+            )
             type = "photo"
         result = builder.article(
             title=title,
             description=description,
             type=type,
             file=media,
-            thumb=thumb,
-            content=thumb,
+            thumb=thumb if thumb else photo,
+            content=photo,
             text=query,
             buttons=buttons,
             link_preview=link_preview,
@@ -692,8 +691,6 @@ async def inline_handler(event):  # sourcery no-metrics
                 ),
             )
             await event.answer(results)
-            if os.path.exists("./temp/cat.png"):
-                os.remove("./temp/cat.png")
     else:
         result = await article_builder(event, "deploy")
         await event.answer([result] if result else None)
