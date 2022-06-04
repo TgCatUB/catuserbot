@@ -94,7 +94,7 @@ def main_menu():
     return text, buttons
 
 
-def article_builder(event, method):
+async def article_builder(event, method):
     media = thumb = photo = None
     link_preview = False
     builder = event.builder
@@ -397,10 +397,10 @@ async def inline_handler(event):  # sourcery no-metrics
         hid = re.compile("hide (.*)")
         match3 = re.findall(hid, query)
         if string == "ialive":
-            result = article_builder(event, string)
+            result = await article_builder(event, string)
             await event.answer([result] if result else None)
         elif query.startswith("Inline buttons"):
-            result = article_builder(event, query)
+            result = await article_builder(event, query)
             await event.answer([result] if result else None)
         elif match:
             query = query[7:]
@@ -526,10 +526,10 @@ async def inline_handler(event):  # sourcery no-metrics
             else:
                 json.dump(newhide, open(hide, "w"))
         elif string == "help":
-            result = article_builder(event, string)
+            result = await article_builder(event, string)
             await event.answer([result] if result else None)
         elif string == "spotify":
-            result = article_builder(event, string)
+            result = await article_builder(event, string)
             await event.answer([result] if result else None)
         elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
             link = get_yt_video_id(str_y[1].strip())
@@ -626,15 +626,15 @@ async def inline_handler(event):  # sourcery no-metrics
             )
             await event.answer([result] if result else None)
         elif string == "pmpermit":
-            result = article_builder(event, string)
+            result = await article_builder(event, string)
             await event.answer([result] if result else None)
         elif string == "":
             results = []
-            alive_menu = article_builder(event, "ialive")
+            alive_menu = await article_builder(event, "ialive")
             results.append(alive_menu) if alive_menu else None
-            help_menu = article_builder(event, "help")
+            help_menu = await article_builder(event, "help")
             results.append(help_menu) if help_menu else None
-            spotify_menu = article_builder(event, "spotify")
+            spotify_menu = await article_builder(event, "spotify")
             results.append(spotify_menu) if spotify_menu else None
             results.append(
                 builder.article(
@@ -692,7 +692,7 @@ async def inline_handler(event):  # sourcery no-metrics
             if os.path.exists("./temp/cat.png"):
                 os.remove("./temp/cat.png")
     else:
-        result = article_builder(event, "deploy")
+        result = await article_builder(event, "deploy")
         await event.answer([result] if result else None)
 
 
