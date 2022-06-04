@@ -140,7 +140,7 @@ def article_builder(event, method):
             from userbot.plugins.alive import catalive_text
 
             query = catalive_text()
-        except (ImportError, KeyError):
+        except:
             return None
         title = "Cat Alive"
         description = "Alive menu for CatUserbot"
@@ -190,7 +190,7 @@ def article_builder(event, method):
                             Button.url(f"{symbol} Lyrics", lyrics),
                         )
                     ]
-        except (ImportError, KeyError):
+        except:
             return None
 
     elif method.startswith("Inline buttons"):
@@ -528,6 +528,9 @@ async def inline_handler(event):  # sourcery no-metrics
         elif string == "help":
             result = article_builder(event, string)
             await event.answer([result] if result else None)
+        elif string == "spotify":
+            result = article_builder(event, string)
+            await event.answer([result] if result else None)
         elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
             link = get_yt_video_id(str_y[1].strip())
             found_ = True
@@ -631,6 +634,8 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(alive_menu) if alive_menu else None
             help_menu = article_builder(event, "help")
             results.append(help_menu) if help_menu else None
+            spotify_menu = article_builder(event, "spotify")
+            results.append(spotify_menu) if spotify_menu else None
             results.append(
                 builder.article(
                     title="Secret",
