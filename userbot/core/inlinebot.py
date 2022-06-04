@@ -95,7 +95,7 @@ def main_menu():
 
 
 async def article_builder(event, method):
-    media = thumb = photo = None
+    media = thumb = None
     link_preview = False
     builder = event.builder
     title = "Cat Userbot"
@@ -236,17 +236,16 @@ async def article_builder(event, method):
     else:
         type = "article"
         if media and media.endswith((".jpg", ".jpeg", ".png")):
-            photo = types.InputWebDocument(
-                url=media, size=0, mime_type="image/jpeg", attributes=[]
-            )
+            if not thumb:
+                thumb = types.InputWebDocument(url=media, size=0, mime_type="image/jpeg", attributes=[])
             type = "photo"
         result = builder.article(
             title=title,
             description=description,
             type=type,
             file=media,
-            thumb=thumb if thumb else photo,
-            content=photo,
+            thumb=thumb,
+            content=thumb,
             text=query,
             buttons=buttons,
             link_preview=link_preview,
