@@ -102,7 +102,7 @@ def article_builder(event, method):
     description = "Button menu for CatUserbot"
     if method == "help":
         help_info = main_menu()
-        title = "© CatUserbot Help"
+        title = "Help Menu"
         description = "Help menu for CatUserbot"
         thumb = get_thumb("help")
         query = help_info[0]
@@ -639,7 +639,7 @@ async def inline_handler(event):  # sourcery no-metrics
             text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
             type="photo",
             content=photo,
-            file=photo,
+            file="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png",
             thumb=photo,
             buttons=[
                 (
