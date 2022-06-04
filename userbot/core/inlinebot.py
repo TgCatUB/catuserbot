@@ -91,6 +91,7 @@ def main_menu():
 
 
 def article_builder(event, method):
+    media = None
     link_preview = False
     builder = event.builder
     title = "Cat Userbot"
