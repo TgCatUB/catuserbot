@@ -651,7 +651,29 @@ async def make_thumb(url, client, song, artist, now, full):
     os.remove(myphoto)
     return pic_name
 
-
+async def get_spotify(event,response):
+    dic = {}
+    received = r.json()
+    if received["currently_playing_type"] == "track":
+        dic["title"] = received["item"]["name"]
+        dic["progress"] = ms_converter(received["progress_ms"])
+        dic["interpret"] = received["item"]["artists"][0]["name"]
+        dic["duration"] = ms_converter(received["item"]["duration_ms"])
+        dic["link"] = received["item"]["external_urls"]["spotify"]
+        dic["image"] = received["item"]["album"]["images"][1]["url"]
+        tittle = title_fetch(dic["title"])
+        thumb = await make_thumb(
+            dic["image"],
+            catub,
+            tittle,
+            dic["interpret"],
+            dic["progress"],
+            dic["duration"],
+        )
+        lyrics, symbol = await telegraph_lyrics(event, tittle, dic["interpret"])
+    return thumb,tittle,dic,lyrics,symbol
+    
+    
 @catub.cat_cmd(
     pattern="spnow$",
     command=("spnow", plugin_category),
@@ -675,29 +697,12 @@ async def spotify_now(event):
     if SP_DATABASE.SPOTIFY_MODE:
         info = f"🎶 Vibing ; [{spotify_bio.title}]({spotify_bio.link}) - {spotify_bio.interpret}"
         return await edit_or_reply(event, info, link_preview=True)
-    dic = {}
-    received = r.json()
-    if received["currently_playing_type"] == "track":
-        dic["title"] = received["item"]["name"]
-        dic["progress"] = ms_converter(received["progress_ms"])
-        dic["interpret"] = received["item"]["artists"][0]["name"]
-        dic["duration"] = ms_converter(received["item"]["duration_ms"])
-        dic["link"] = received["item"]["external_urls"]["spotify"]
-        dic["image"] = received["item"]["album"]["images"][1]["url"]
-        tittle = title_fetch(dic["title"])
-        thumb = await make_thumb(
-            dic["image"],
-            catub,
-            tittle,
-            dic["interpret"],
-            dic["progress"],
-            dic["duration"],
-        )
-        lyrics, symbol = await telegraph_lyrics(event, tittle, dic["interpret"])
-        await catevent.delete()
-    button_format = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}` <media:{thumb}> [🎧 Spotify]<buttonurl:{dic["link"]}>[{symbol} Lyrics]<buttonurl:{lyrics}:same>'
-    await make_inline(button_format, event.client, event.chat_id, msg_id)
-    os.remove(thumb)
+    dic,lyrics,symbol = await get_spotify(event,response)
+    await catevent.delete()
+    results = await event.client.inline_query(Config.TG_BOT_USERNAME, "spotify")
+    await results[0].click(event.chat_id, reply_to=msg_id, hide_via=True)
+    if os.path.exists("./temp/cat.png"):
+        os.remove("./temp/cat.png")
 
 
 @catub.cat_cmd(
