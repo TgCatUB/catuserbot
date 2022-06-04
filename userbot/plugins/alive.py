@@ -24,6 +24,7 @@ from . import mention
 
 plugin_category = "utils"
 
+
 @catub.cat_cmd(
     pattern="alive$",
     command=("alive", plugin_category),
@@ -92,6 +93,7 @@ temp = """{ALIVE_TEXT}
 **{EMOJI} Uptime :** `{uptime}`
 **{EMOJI} Master:** {mention}"""
 
+
 def catalive_text():
     EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
     cat_caption = "**Catuserbot is Up and Running**\n"
@@ -100,8 +102,8 @@ def catalive_text():
     cat_caption += f"**{EMOJI} Python Version :** `{python_version()}\n`"
     cat_caption += f"**{EMOJI} Master:** {mention}\n"
     return cat_caption
-    
-    
+
+
 @catub.cat_cmd(
     pattern="ialive$",
     command=("ialive", plugin_category),
@@ -119,6 +121,7 @@ async def amireallyalive(event):
     results = await event.client.inline_query(Config.TG_BOT_USERNAME, "ialive")
     await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
     await event.delete()
+
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"stats")))
 async def on_plug_in_callback_query_handler(event):

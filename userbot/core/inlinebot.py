@@ -59,9 +59,7 @@ def main_menu():
     buttons = [
         (Button.inline("ℹ️ Info", data="check"),),
         (
-            Button.inline(
-                f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})", data="admin_menu"
-            ),
+            Button.inline(f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})", data="admin_menu"),
             Button.inline(f"🤖 Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
         ),
         (
@@ -92,18 +90,17 @@ def main_menu():
     return text, buttons
 
 
-def article_builder(event,method): 
-    Media = None
+def article_builder(event, method):
     link_preview = False
     builder = event.builder
-    title="Cat Userbot"
-    description="Button menu for CatUserbot"
+    title = "Cat Userbot"
+    description = "Button menu for CatUserbot"
     if method == "help":
         help_info = main_menu()
-        title="© CatUserbot Help"
-        description="Help menu for CatUserbot"
-        query=help_info[0]
-        buttons=help_info[1]   
+        title = "© CatUserbot Help"
+        description = "Help menu for CatUserbot"
+        query = help_info[0]
+        buttons = help_info[1]
     elif method == "pmpermit":
         query = gvarstatus("pmpermit_text")
         buttons = [Button.inline(text="Show Options.", data="show_pmpermit_options")]
@@ -121,10 +118,12 @@ def article_builder(event,method):
         ]
         try:
             from .alive import catalive_text
+
             query = catalive_text()
-        except: return None
-        title="Cat Alive"
-        description="Alive menu for CatUserbot"
+        except:
+            return None
+        title = "Cat Alive"
+        description = "Alive menu for CatUserbot"
         ALIVE_PIC = gvarstatus("ALIVE_PIC")
         IALIVE_PIC = gvarstatus("IALIVE_PIC")
         if IALIVE_PIC:
@@ -134,7 +133,7 @@ def article_builder(event,method):
         if not IALIVE_PIC and ALIVE_PIC:
             CAT = [x for x in ALIVE_PIC.split()]
             PIC = list(CAT)
-            media = random.choice(PIC) 
+            media = random.choice(PIC)
     elif method.startswith("Inline buttons"):
         markdown_note = method[14:]
         prev = 0
@@ -335,10 +334,10 @@ async def inline_handler(event):  # sourcery no-metrics
         hid = re.compile("hide (.*)")
         match3 = re.findall(hid, query)
         if string == "ialive":
-            result = article_builder(event,string)
+            result = article_builder(event, string)
             await event.answer([result] if result else None)
         elif query.startswith("Inline buttons"):
-            result = article_builder(event,query)
+            result = article_builder(event, query)
             await event.answer([result] if result else None)
         elif match:
             query = query[7:]
@@ -464,7 +463,7 @@ async def inline_handler(event):  # sourcery no-metrics
             else:
                 json.dump(newhide, open(hide, "w"))
         elif string == "help":
-            result = article_builder(event,string)
+            result = article_builder(event, string)
             await event.answer([result] if result else None)
         elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
             link = get_yt_video_id(str_y[1].strip())
@@ -561,20 +560,24 @@ async def inline_handler(event):  # sourcery no-metrics
             )
             await event.answer([result] if result else None)
         elif string == "pmpermit":
-            result = article_builder(event,string)
+            result = article_builder(event, string)
             await event.answer([result] if result else None)
         elif string == "":
             results = []
-            alive_menu = article_builder(event,"ialive")
+            alive_menu = article_builder(event, "ialive")
             results.append(alive_menu) if alive_menu else None
-            help_menu = article_builder(event,"help")
+            help_menu = article_builder(event, "help")
             results.append(help_menu) if help_menu else None
             results.append(
                 builder.article(
                     title="Secret",
                     description="Send secret message to your friends",
                     text="__Send secret message which only you & the reciver can see..__",
-                    buttons= [Button.switch_inline("Secret Text", query="secret @username Text", same_peer=True)]
+                    buttons=[
+                        Button.switch_inline(
+                            "Secret Text", query="secret @username Text", same_peer=True
+                        )
+                    ],
                 ),
             )
             results.append(
@@ -582,7 +585,11 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Troll",
                     description="Send troll message to your friends",
                     text="__Send troll message which everyone can see except the reciver..__",
-                    buttons= [Button.switch_inline("Troll Text", query="troll @username Text", same_peer=True)]
+                    buttons=[
+                        Button.switch_inline(
+                            "Troll Text", query="troll @username Text", same_peer=True
+                        )
+                    ],
                 ),
             )
             results.append(
@@ -590,7 +597,11 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Hide",
                     description="Send hidden text in chat",
                     text="__Send hidded message to save from being quote..__",
-                    buttons= [Button.switch_inline("Hidden Text", query="hide Text", same_peer=True)]
+                    buttons=[
+                        Button.switch_inline(
+                            "Hidden Text", query="hide Text", same_peer=True
+                        )
+                    ],
                 ),
             )
             results.append(
@@ -598,7 +609,11 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Youtube Download",
                     description="Download videos from YouTube",
                     text="__Download videos or audio from YouTube with different option of resolution..__",
-                    buttons= [Button.switch_inline("Youtube-dl", query="ytdl perfect", same_peer=True)]
+                    buttons=[
+                        Button.switch_inline(
+                            "Youtube-dl", query="ytdl perfect", same_peer=True
+                        )
+                    ],
                 ),
             )
             await event.answer(results)
