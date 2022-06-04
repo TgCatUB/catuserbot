@@ -76,20 +76,18 @@ def main_menu():
         ),
         (
             Button.inline(f"➕ Extra ({len(GRP_INFO['extra'])})", data="extra_menu"),
-            Button.inline(
-                f"⚰️ Useless ({len(GRP_INFO['useless'])})", data="useless_menu"
-            ),
+            Button.inline("🔒 Close Menu", data="close"),
         ),
-        (Button.inline("🔒 Close Menu", data="close"),),
     ]
-    if not Config.BADCAT:
+    if Config.BADCAT:
         switch_button = [
             (
                 Button.inline(f"➕ Extra ({len(GRP_INFO['extra'])})", data="extra_menu"),
-                Button.inline("🔒 Close Menu", data="close"),
+                Button.inline(f"⚰️ Useless ({len(GRP_INFO['useless'])})", data="useless_menu"),
             ),
+            (Button.inline("🔒 Close Menu", data="close"),),
         ]
-        buttons = buttons[:-2] + switch_button
+        buttons = buttons[:-1] + switch_button
 
     return text, buttons
 
