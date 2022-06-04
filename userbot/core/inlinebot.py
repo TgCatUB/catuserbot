@@ -108,14 +108,14 @@ def article_builder(event, method):
         query = help_info[0]
         buttons = help_info[1]
     elif method == "deploy":
-        media="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
-        title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩"
-        description="Deploy yourself"
-        query="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁."
-        buttons=[
+        media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
+        title = "𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩"
+        description = "Deploy yourself"
+        query = "𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁."
+        buttons = [
             (
                 Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
-                Button.url("Deploy","https://github.com/TgCatUB/nekopack"),
+                Button.url("Deploy", "https://github.com/TgCatUB/nekopack"),
             )
         ]
     elif method == "pmpermit":
