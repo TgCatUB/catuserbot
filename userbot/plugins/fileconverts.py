@@ -20,7 +20,7 @@ from userbot import Convert, catub
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import media_type, progress, thumb_from_audio, meme_type
+from ..helpers import media_type, meme_type, progress, thumb_from_audio
 from ..helpers.functions import (
     invert_frames,
     l_frames,
