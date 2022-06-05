@@ -294,12 +294,12 @@ async def video_catfile(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="stoi$",
-    command=("stoi", plugin_category),
+    pattern="(stoi|mtoi)$",
+    command=("mtoi", plugin_category),
     info={
-        "header": "Reply this command to a sticker to get image.",
-        "description": "This also converts every media to image. that is if video then extracts image from that video.if audio then extracts thumb.",
-        "usage": "{tr}stoi",
+        "header": "Reply this command to a media to get image.",
+        "description": "This also converts every media to image. that is if video then extracts image from that video. if audio then extracts thumb.",
+        "usage": "{tr}mtoi",
     },
 )
 async def _(event):
@@ -314,7 +314,7 @@ async def _(event):
         event,
         reply,
         dirct="./temp",
-        file="stoi.png",
+        file="catconverter.jpeg",
     )
     if output[1] is None:
         return await edit_delete(
@@ -501,13 +501,15 @@ async def _(event):  # sourcery no-metrics
         )
     catevent = await edit_or_reply(
         event,
-        "Converting this Sticker to GiF...\n This may takes upto few mins..",
+        "Converting this media to GiF...\n This may takes upto few mins..",
         parse_mode=_format.parse_pre,
     )
     reply_to_id = await reply_id(event)
     catfile = await event.client.download_media(catreply)
     final = await Convert.to_gif(event, catfile, file="animation.mp4", noedits=True)
     catgif = final[1]
+    if catgif is None:
+        return await edit_delete(catevent, "`Sorry couldn't convert the media to gif.`")
     sandy = await event.client.send_file(
         event.chat_id,
         catgif,
