@@ -62,7 +62,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     "To convert replied image or sticker to spining round video."
     args = event.pattern_match.group(1)
     reply = await event.get_reply_message()
-    if not reply:
+    if not (reply and reply.media):
         return await edit_delete(event, "`Reply to supported Media...`")
     catevent = await edit_or_reply(event, "__Making round spin video wait a sec.....__")
     output = await Convert.to_image(
