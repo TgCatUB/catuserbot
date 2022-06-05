@@ -787,7 +787,7 @@ async def pic2packcmd(event):
         random.choice(list(string.ascii_lowercase + string.ascii_uppercase))
         for _ in range(16)
     )
-    image = await Convert.to_image(catevent, reply, noedits=True)
+    image = await Convert.to_image(catevent, reply, dirct="./temp", file="stickers.png", noedits=True)
     if image[1] is None:
         return await edit_delete(
             image[0], "__Unable to extract image from the replied message.__"

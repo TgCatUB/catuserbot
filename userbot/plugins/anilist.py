@@ -787,7 +787,7 @@ async def whatanime(event):
             event,
             f"__Reply to proper media that is expecting photo/video/gif/sticker. not {mediatype}__.",
         )
-    output = await Convert.to_image(event, reply)
+    output = await Convert.to_image(event, reply, dirct="./temp", file="wanime.png", )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
