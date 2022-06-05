@@ -28,7 +28,9 @@ async def _(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await Convert.to_image(event, replied, dirct="./temp", file="trash.png", rgb=True)
+    output = await Convert.to_image(
+        event, replied, dirct="./temp", file="trash.png", rgb=True
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -66,7 +68,9 @@ async def _(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await Convert.to_image(event, replied, dirct="./temp", file="threats.png", rgb=True)
+    output = await Convert.to_image(
+        event, replied, dirct="./temp", file="threats.png", rgb=True
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -114,7 +118,9 @@ async def _(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await Convert.to_image(event, replied, dirct="./temp", file="trap.png", rgb=True)
+    output = await Convert.to_image(
+        event, replied, dirct="./temp", file="trap.png", rgb=True
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -162,7 +168,9 @@ async def _(event):
     catid = await reply_id(event)
     if not replied:
         return await edit_or_reply(event, "reply to a supported media file")
-    output = await Convert.to_image(event, replied, dirct="./temp", file="phub.png", rgb=True)
+    output = await Convert.to_image(
+        event, replied, dirct="./temp", file="phub.png", rgb=True
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"

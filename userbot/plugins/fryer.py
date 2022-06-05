@@ -90,7 +90,12 @@ async def frybot(event):
     reply_message = await event.get_reply_message()
     if not event.reply_to_msg_id or not reply_message.media:
         return await edit_delete(event, "```Reply to a media to fry it...```", 10)
-    output = await Convert.to_image(event, reply_message, dirct="./temp", file="frybot.png", )
+    output = await Convert.to_image(
+        event,
+        reply_message,
+        dirct="./temp",
+        file="frybot.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__", 10

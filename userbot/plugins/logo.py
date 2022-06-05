@@ -242,7 +242,9 @@ async def bad(event):
     if cmd == "c":
         reply_message = await event.get_reply_message()
         if not input_str and event.reply_to_msg_id and reply_message.media:
-            output = await Convert.to_image(event, reply_message, dirct="./temp", file="lbg.png", noedits=True)
+            output = await Convert.to_image(
+                event, reply_message, dirct="./temp", file="lbg.png", noedits=True
+            )
             myphoto_urls = upload_file(output[1])
             input_str = f"https://telegra.ph{myphoto_urls[0]}"
             os.remove(output[1])

@@ -77,7 +77,9 @@ async def maccmd(event):  # sourcery no-metrics
     args = event.pattern_match.group(1)
     force = bool(args)
     try:
-        imag = await Convert.to_image(catevent, reply, dirct="./temp", file="pframe.png", noedits=True)
+        imag = await Convert.to_image(
+            catevent, reply, dirct="./temp", file="pframe.png", noedits=True
+        )
         if imag[1] is None:
             return await edit_delete(
                 imag[0], "__Unable to extract image from the replied message.__"
@@ -168,7 +170,9 @@ async def memes(event):
         bottom = ""
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
-    output = await Convert.to_image(event, reply, dirct="./temp", file="mmf.png", rgb=True)
+    output = await Convert.to_image(
+        event, reply, dirct="./temp", file="mmf.png", rgb=True
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -245,7 +249,12 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await Convert.to_image(event, reply,dirct="./temp", file="ascii.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="ascii.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -293,7 +302,12 @@ async def memes(event):
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
     jisanidea = None
-    output = await Convert.to_image(event, reply,dirct="./temp", file="invert.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="invert.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -337,7 +351,12 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await Convert.to_image(event, reply,dirct="./temp", file="solarize.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="solarize.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -381,7 +400,12 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await Convert.to_image(event, reply, dirct="./temp", file="irotate.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="irotate.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -425,7 +449,12 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await Convert.to_image(event, reply,dirct="./temp", file="flip.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="flip.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -469,7 +498,12 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await Convert.to_image(event, reply,dirct="./temp", file="gray.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="gray.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -515,7 +549,12 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await Convert.to_image(event, reply,dirct="./temp", file="zoom.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="zoom.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -578,7 +617,12 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await Convert.to_image(event, reply,dirct="./temp", file="framed.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="framed.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"

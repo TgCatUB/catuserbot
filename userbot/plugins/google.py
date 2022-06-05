@@ -171,7 +171,12 @@ async def grs(event):
         previous_message_text = previous_message.message
         BASE_URL = "http://www.google.com"
         if previous_message.media:
-            photo = await Convert.to_image(event, previous_message,dirct="./temp", file="grs.png", )
+            photo = await Convert.to_image(
+                event,
+                previous_message,
+                dirct="./temp",
+                file="grs.png",
+            )
             if photo[1] is None:
                 return await edit_delete(
                     photo[0], "__Unable to extract image from the replied message.__"
@@ -245,7 +250,12 @@ async def reverse(event):
     message = await event.get_reply_message()
     if not message and not message.media:
         return await edit_or_reply(event, "`Reply to media...`")
-    photo = await Convert.to_image(event, message, dirct="./temp", file="reverse.png", )
+    photo = await Convert.to_image(
+        event,
+        message,
+        dirct="./temp",
+        file="reverse.png",
+    )
     if photo[1] is None:
         return await edit_delete(
             photo[0], "__Unable to extract image from the replied message.__"

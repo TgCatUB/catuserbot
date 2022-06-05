@@ -41,7 +41,12 @@ async def glitch(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     catinput = int(catinput) if catinput else 2
-    glitch_file = await Convert.to_image(event, reply, dirct="./temp", file="glitch.png", )
+    glitch_file = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="glitch.png",
+    )
     if glitch_file[1] is None:
         return await edit_delete(
             glitch_file[0], "__Unable to extract image from the replied message.__"

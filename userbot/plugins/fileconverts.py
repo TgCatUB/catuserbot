@@ -70,7 +70,9 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     if not reply:
         return await edit_delete(event, "`Reply to supported Media...`")
     catevent = await edit_or_reply(event, "__Making round spin video wait a sec.....__")
-    output = await Convert.to_image(event, reply, dirct="./temp", file="spin.png", noedits=True)
+    output = await Convert.to_image(
+        event, reply, dirct="./temp", file="spin.png", noedits=True
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -314,7 +316,12 @@ async def _(event):
         return await edit_delete(
             event, "Reply to any sticker/media to convert it to image.__"
         )
-    output = await Convert.to_image(event, reply,dirct="./temp", file="stoi.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="stoi.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -341,7 +348,12 @@ async def _(event):
         return await edit_delete(
             event, "Reply to any image/media to convert it to sticker.__"
         )
-    output = await Convert.to_image(event, reply, dirct="./temp", file="itos.png", )
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="itos.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
@@ -698,7 +710,9 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     args = event.pattern_match.group(1)
     args = args.replace("-", "") if args else "i"
     catevent = await edit_or_reply(event, "__🎞 Making Gif from the replied media...__")
-    imag = await Convert.to_image(event, reply, dirct="./temp", file="itog.png", noedits=True)
+    imag = await Convert.to_image(
+        event, reply, dirct="./temp", file="itog.png", noedits=True
+    )
     if imag[1] is None:
         return await edit_delete(
             imag[0], "__Unable to extract image from the replied message.__"

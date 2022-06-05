@@ -83,7 +83,9 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
         user = reply.sender_id if reply else event.client.uid
         pfp = await event.client.download_profile_photo(user)
     else:
-        imag = await Convert.to_image(event, reply, dirct="./temp", file="quotly.png", noedits=True)
+        imag = await Convert.to_image(
+            event, reply, dirct="./temp", file="quotly.png", noedits=True
+        )
         if imag[1] is None:
             return await edit_delete(
                 imag[0], "__Unable to extract image from the replied message.__"
