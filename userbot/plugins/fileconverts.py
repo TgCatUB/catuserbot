@@ -81,7 +81,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     except Exception as e:
         return await edit_delete(output[0], f"**Error**\n__{e}__")
     output = io.BytesIO()
-    output.name = "Output.gif"
+    output.name = "Output.mp4"
     outframes[0].save(output, save_all=True, append_images=outframes[1:], duration=1)
     output.seek(0)
     with open("Output.gif", "wb") as outfile:
