@@ -189,9 +189,9 @@ async def memes(event):
     else:
         await cat_meeme(top, bottom, CNG_FONTS, meme_file, meme)
     if cmd != "mmf":
-        meme = (
-            await Convert.to_sticker(event, meme, file="memes.webp", noedits=True)
-        )[1]
+        meme = (await Convert.to_sticker(event, meme, file="memes.webp", noedits=True))[
+            1
+        ]
     await event.client.send_file(
         event.chat_id, meme, reply_to=catid, force_document=False
     )

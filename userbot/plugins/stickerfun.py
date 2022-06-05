@@ -467,9 +467,7 @@ async def doge(event):
             stroke_width=1,
             stroke_fill="black",
         )
-    cat = (await Convert.to_sticker(event, file[0], file="doge.webp", noedits=True))[
-        1
-    ]
+    cat = (await Convert.to_sticker(event, file[0], file="doge.webp", noedits=True))[1]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )

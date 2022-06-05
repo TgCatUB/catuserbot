@@ -66,7 +66,9 @@ async def ocr(event):
         event, reply, dirct="./temp", file="image.png", rgb=True, noedits=True
     )
     if not output_file[1]:
-        return await catevent.edit("`Couldn't find image. Are you sure you replied to image?`")
+        return await catevent.edit(
+            "`Couldn't find image. Are you sure you replied to image?`"
+        )
     test_file = await ocr_space_file(filename=output_file[1], language=lang_code)
     try:
         ParsedText = test_file["ParsedResults"][0]["ParsedText"]
