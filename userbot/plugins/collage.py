@@ -56,7 +56,7 @@ async def collage(event):
     else:
         catinput = 3
     await edit_or_reply(event, "```Collaging this may take several minutes..... 😁```")
-    if mediacheck not in ["Round Video", "Gif", "Video Sticker", "Video"]:
+    if mediacheck in ["Round Video", "Gif", "Video Sticker", "Video"]:
         if not os.path.isdir("./temp/"):
             os.mkdir("./temp/")
         catsticker = await reply.download_media(file="./temp/")
