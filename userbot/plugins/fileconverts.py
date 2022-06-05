@@ -478,32 +478,27 @@ async def on_file_to_photo(event):
         return
     await catt.delete()
 
-
 @catub.cat_cmd(
-    pattern="gif$",
+    pattern="(gif|vtog)$",
     command=("gif", plugin_category),
     info={
-        "header": "Converts Given animated sticker to gif.",
+        "header": "Converts Given video/animated sticker to gif.",
         "usage": "{tr}gif <reply to animated sticker or video>",
     },
 )
 async def _(event):  # sourcery no-metrics
     "Converts Given animated sticker to gif"
     catreply = await event.get_reply_message()
-    cat_event = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
-    if (
-        await media_type(catreply) != "Sticker"
-        or catreply.media.document.mime_type == "image/webp"
-    ):
-        return await edit_or_reply(event, "`Stupid!, This is not animated sticker.`")
+    memetype = await meme_type(catreply)
+    if memetype == "Gif":
+        return await edit_delete(event, "`This is already gif.`")
+    if memetype not in ["Round Video","Animated Sticker","Video Sticker","Video",]:
+        return await edit_delete(event, "`Stupid!, This is not animated sticker/video sticker/video.`")
     catevent = await edit_or_reply(
         event,
         "Converting this Sticker to GiF...\n This may takes upto few mins..",
         parse_mode=_format.parse_pre,
     )
-    with contextlib.suppress(BaseException):
-        cat_event = Get(cat_event)
-        await event.client(cat_event)
     reply_to_id = await reply_id(event)
     catfile = await event.client.download_media(catreply)
     final = await Convert.to_gif(event, catfile, file="animation.mp4", noedits=True)
@@ -712,38 +707,5 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     await unsavegif(event, sandy)
     await catevent.delete()
     for i in [output[1], "Output.gif", imag[1]]:
-        if os.path.exists(i):
-            os.remove(i)
-
-
-@catub.cat_cmd(
-    pattern="vtog$",
-    command=("vtog", plugin_category),
-    info={
-        "header": "Reply this command to a video to convert it to gif.",
-        "usage": "{tr}vtog <reply to video>",
-    },
-)
-async def vtog(event):
-    "Reply this command to a video to convert it to gif."
-    reply = await event.get_reply_message()
-    mediatype = await media_type(reply)
-    if (
-        mediatype
-        and mediatype not in ["video", "Document"]
-        and reply.media.document.mime_type != "video/mp4"
-    ):
-        return await edit_delete(event, "__Reply to video to convert it to gif__")
-    catevent = await edit_or_reply(
-        event, "__🎞Converting into Gif, It can take several minutes...__"
-    )
-    await event.client.download_media(reply, "catvideo.mp4")
-    await _catutils.runcmd(
-        "ffmpeg -i catvideo.mp4 -c:v libx264 -fs 5M -an catgif.mp4 -y"
-    )
-    sandy = await event.client.send_file(event.chat_id, "catgif.mp4", reply_to=reply)
-    await unsavegif(event, sandy)
-    await catevent.delete()
-    for i in ["catvideo.mp4", "catgif.mp4"]:
         if os.path.exists(i):
             os.remove(i)
