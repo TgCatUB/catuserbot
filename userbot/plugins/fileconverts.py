@@ -508,11 +508,11 @@ async def _(event):  # sourcery no-metrics
                     "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
                 )
             if 0 < loc[0] < 721:
-                quality = loc[0].strip()
+                loc[0].strip()
             else:
                 return await edit_delete(event, "Use quality of range 0 to 721")
             if 0 < loc[1] < 20:
-                quality = loc[1].strip()
+                loc[1].strip()
             else:
                 return await edit_delete(event, "Use quality of range 0 to 20")
         if len(loc) == 1:
@@ -524,12 +524,11 @@ async def _(event):  # sourcery no-metrics
                     "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
                 )
             if 0 < loc[0] < 721:
-                quality = loc[0].strip()
+                loc[0].strip()
             else:
                 return await edit_delete(event, "Use quality of range 0 to 721")
     else:
-        quality = None
-        fps = None
+        pass
     catreply = await event.get_reply_message()
     cat_event = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if (
@@ -741,7 +740,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     with open("Output.gif", "wb") as outfile:
         outfile.write(output.getbuffer())
     output = await Convert.to_gif(event, "Output.gif", file="output.mp4", noedits=True)
-    catgif = output[1]
+    output[1]
     if output[0] is None:
         await edit_delete(
             catevent, "__There was some error in the media. I can't format it to gif.__"
