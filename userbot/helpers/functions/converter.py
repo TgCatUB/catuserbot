@@ -142,7 +142,7 @@ class CatConverter:
             elif memetype == "Animated Sticker":
                 await runcmd(f"lottie_convert.py '{catmedia}' '{catfile}'")
         elif mediatype == "Gif":
-            if catmedia endswith(".gif"):
+            if catmedia.endswith(".gif"):
                 await runcmd(f"ffmpeg -f gif -i '{catmedia}' -fs 5M '{catfile}'")
             else:
                 await runcmd(f"mv '{catmedia}' '{catfile}'")
