@@ -33,7 +33,6 @@ from ..helpers.functions import (
     unsavegif,
 )
 from ..helpers.utils import _catutils, _format, parse_pre, reply_id
-from . import make_gif
 
 plugin_category = "misc"
 
@@ -175,8 +174,7 @@ async def video_catfile(event):  # sourcery no-metrics
     if mediatype in ["Gif", "Video", "Sticker"]:
         if not catfile.endswith((".webp")):
             if catfile.endswith((".tgs")):
-                hmm = await make_gif(catevent, catfile)
-                os.rename(hmm, "./temp/circle.mp4")
+                await Convert.to_gif(event, catfile, file="circle.mp4", noedits=True)
                 catfile = "./temp/circle.mp4"
             media_info = MediaInfo.parse(catfile)
             aspect_ratio = 1
@@ -482,53 +480,15 @@ async def on_file_to_photo(event):
 
 
 @catub.cat_cmd(
-    pattern="gif(?:\s|$)([\s\S]*)",
+    pattern="gif$",
     command=("gif", plugin_category),
     info={
         "header": "Converts Given animated sticker to gif.",
-        "usage": "{tr}gif quality ; fps(frames per second)",
+        "usage": "{tr}gif <reply to animated sticker or video>",
     },
 )
 async def _(event):  # sourcery no-metrics
     "Converts Given animated sticker to gif"
-    if input_str := event.pattern_match.group(1):
-        loc = input_str.split(";")
-        if len(loc) > 2:
-            return await edit_delete(
-                event,
-                "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
-            )
-        if len(loc) == 2:
-            try:
-                loc[0] = int(loc[0])
-                loc[1] = int(loc[1])
-            except ValueError:
-                return await edit_delete(
-                    event,
-                    "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
-                )
-            if 0 < loc[0] < 721:
-                loc[0].strip()
-            else:
-                return await edit_delete(event, "Use quality of range 0 to 721")
-            if 0 < loc[1] < 20:
-                loc[1].strip()
-            else:
-                return await edit_delete(event, "Use quality of range 0 to 20")
-        if len(loc) == 1:
-            try:
-                loc[0] = int(loc[0])
-            except ValueError:
-                return await edit_delete(
-                    event,
-                    "wrong syntax . syntax is `.gif quality ; fps(frames per second)`",
-                )
-            if 0 < loc[0] < 721:
-                loc[0].strip()
-            else:
-                return await edit_delete(event, "Use quality of range 0 to 721")
-    else:
-        pass
     catreply = await event.get_reply_message()
     cat_event = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if (
@@ -740,7 +700,6 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     with open("Output.gif", "wb") as outfile:
         outfile.write(output.getbuffer())
     output = await Convert.to_gif(event, "Output.gif", file="output.mp4", noedits=True)
-    output[1]
     if output[0] is None:
         await edit_delete(
             catevent, "__There was some error in the media. I can't format it to gif.__"
