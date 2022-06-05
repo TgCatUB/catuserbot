@@ -514,7 +514,9 @@ async def inline_handler(event):  # sourcery no-metrics
             newhide = {str(timestamp): {"text": query}}
 
             buttons = [Button.inline("Read Message ", data=f"hide_{timestamp}")]
-            result = builder.article(title="Hidden Message", text="✖✖✖", buttons=buttons)
+            result = builder.article(
+                title="Hidden Message", text="✖✖✖", buttons=buttons
+            )
             await event.answer([result] if result else None)
             if jsondata:
                 jsondata.update(newhide)
