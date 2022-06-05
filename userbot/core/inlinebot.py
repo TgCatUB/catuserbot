@@ -96,7 +96,6 @@ def main_menu():
 
 async def article_builder(event, method):
     media = thumb = photo = None
-    link_preview = False
     builder = event.builder
     title = "Cat Userbot"
     description = "Button menu for CatUserbot"
@@ -123,9 +122,8 @@ async def article_builder(event, method):
     elif method == "pmpermit":
         query = gvarstatus("pmpermit_text")
         buttons = [Button.inline(text="Show Options.", data="show_pmpermit_options")]
-        PM_PIC = gvarstatus("pmpermit_pic")
-        if PM_PIC:
-            CAT = [x for x in PM_PIC.split()]
+        if PM_PIC := gvarstatus("pmpermit_pic"):
+            CAT = list(PM_PIC.split())
             PIC = list(CAT)
             media = random.choice(PIC)
 
@@ -147,11 +145,11 @@ async def article_builder(event, method):
         ALIVE_PIC = gvarstatus("ALIVE_PIC")
         IALIVE_PIC = gvarstatus("IALIVE_PIC")
         if IALIVE_PIC:
-            CAT = [x for x in IALIVE_PIC.split()]
+            CAT = list(IALIVE_PIC.split())
             PIC = list(CAT)
             media = random.choice(PIC)
         if not IALIVE_PIC and ALIVE_PIC:
-            CAT = [x for x in ALIVE_PIC.split()]
+            CAT = list(ALIVE_PIC.split())
             PIC = list(CAT)
             media = random.choice(PIC)
 
@@ -163,7 +161,8 @@ async def article_builder(event, method):
             description = "Get currently playing song."
             media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
             if (
-                not (Config.SPOTIFY_CLIENT_ID and Config.SPOTIFY_CLIENT_SECRET)
+                not Config.SPOTIFY_CLIENT_ID
+                or not Config.SPOTIFY_CLIENT_SECRET
                 or SP_DATABASE is None
             ):
                 query = "__Spotify is not setup properly. \nDo `.help spsetup` and follow the tutorial.__"
@@ -200,8 +199,7 @@ async def article_builder(event, method):
         prev = 0
         note_data = ""
         buttons_list = []
-        catmedia = MEDIA_PATH_REGEX.search(markdown_note)
-        if catmedia:
+        if catmedia := MEDIA_PATH_REGEX.search(markdown_note):
             media = catmedia.group(2)
             markdown_note = markdown_note.replace(catmedia.group(0), "")
         for match in BTN_URL_REGEX.finditer(markdown_note):
@@ -226,32 +224,32 @@ async def article_builder(event, method):
         query = note_data.strip()
         buttons = ibuild_keyboard(buttons_list)
     if media and not media.endswith((".jpg", ".jpeg", ".png")):
-        result = builder.document(
+        return builder.document(
             media,
             title=title,
             description=description,
             text=query,
             buttons=buttons,
         )
-    else:
-        type = "article"
-        if media and media.endswith((".jpg", ".jpeg", ".png")):
-            photo = types.InputWebDocument(
-                url=media, size=0, mime_type="image/jpeg", attributes=[]
-            )
-            type = "photo"
-        result = builder.article(
-            title=title,
-            description=description,
-            type=type,
-            file=media,
-            thumb=thumb if thumb else photo,
-            content=photo,
-            text=query,
-            buttons=buttons,
-            link_preview=link_preview,
+
+    type = "article"
+    if media and media.endswith((".jpg", ".jpeg", ".png")):
+        photo = types.InputWebDocument(
+            url=media, size=0, mime_type="image/jpeg", attributes=[]
         )
-    return result
+        type = "photo"
+    link_preview = False
+    return builder.article(
+        title=title,
+        description=description,
+        type=type,
+        file=media,
+        thumb=thumb or photo,
+        content=photo,
+        text=query,
+        buttons=buttons,
+        link_preview=link_preview,
+    )
 
 
 def command_in_category(cname):
@@ -516,11 +514,7 @@ async def inline_handler(event):  # sourcery no-metrics
             newhide = {str(timestamp): {"text": query}}
 
             buttons = [Button.inline("Read Message ", data=f"hide_{timestamp}")]
-            result = builder.article(
-                title="Hidden Message",
-                text=f"✖✖✖",
-                buttons=buttons,
-            )
+            result = builder.article(title="Hidden Message", text="✖✖✖", buttons=buttons)
             await event.answer([result] if result else None)
             if jsondata:
                 jsondata.update(newhide)
@@ -638,58 +632,63 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(help_menu) if help_menu else None
             spotify_menu = await article_builder(event, "spotify")
             results.append(spotify_menu) if spotify_menu else None
-            results.append(
-                builder.article(
-                    title="Secret",
-                    description="Send secret message to your friends.",
-                    text="__Send secret message which only you & the reciever can see.__",
-                    thumb=get_thumb("secret"),
-                    buttons=[
-                        Button.switch_inline(
-                            "Secret Text", query="secret @username Text", same_peer=True
-                        )
-                    ],
-                ),
+            results.extend(
+                (
+                    builder.article(
+                        title="Secret",
+                        description="Send secret message to your friends.",
+                        text="__Send secret message which only you & the reciever can see.__",
+                        thumb=get_thumb("secret"),
+                        buttons=[
+                            Button.switch_inline(
+                                "Secret Text",
+                                query="secret @username Text",
+                                same_peer=True,
+                            )
+                        ],
+                    ),
+                    builder.article(
+                        title="Troll",
+                        description="Send troll message to your friends.",
+                        text="__Send troll message which everyone can see except the reciever.__",
+                        thumb=get_thumb("troll"),
+                        buttons=[
+                            Button.switch_inline(
+                                "Troll Text",
+                                query="troll @username Text",
+                                same_peer=True,
+                            )
+                        ],
+                    ),
+                    builder.article(
+                        title="Hide",
+                        description="Send hidden text in chat.",
+                        text="__Send hidden message for spoilers/quote prevention.__",
+                        thumb=get_thumb("hide"),
+                        buttons=[
+                            Button.switch_inline(
+                                "Hidden Text",
+                                query="hide Text",
+                                same_peer=True,
+                            )
+                        ],
+                    ),
+                    builder.article(
+                        title="Youtube Download",
+                        description="Download videos/audios from YouTube.",
+                        text="__Download videos or audios from YouTube with different option of resolutions/quality.__",
+                        thumb=get_thumb("youtube"),
+                        buttons=[
+                            Button.switch_inline(
+                                "Youtube-dl",
+                                query="ytdl perfect",
+                                same_peer=True,
+                            )
+                        ],
+                    ),
+                )
             )
-            results.append(
-                builder.article(
-                    title="Troll",
-                    description="Send troll message to your friends.",
-                    text="__Send troll message which everyone can see except the reciever.__",
-                    thumb=get_thumb("troll"),
-                    buttons=[
-                        Button.switch_inline(
-                            "Troll Text", query="troll @username Text", same_peer=True
-                        )
-                    ],
-                ),
-            )
-            results.append(
-                builder.article(
-                    title="Hide",
-                    description="Send hidden text in chat.",
-                    text="__Send hidden message for spoilers/quote prevention.__",
-                    thumb=get_thumb("hide"),
-                    buttons=[
-                        Button.switch_inline(
-                            "Hidden Text", query="hide Text", same_peer=True
-                        )
-                    ],
-                ),
-            )
-            results.append(
-                builder.article(
-                    title="Youtube Download",
-                    description="Download videos/audios from YouTube.",
-                    text="__Download videos or audios from YouTube with different option of resolutions/quality.__",
-                    thumb=get_thumb("youtube"),
-                    buttons=[
-                        Button.switch_inline(
-                            "Youtube-dl", query="ytdl perfect", same_peer=True
-                        )
-                    ],
-                ),
-            )
+
             await event.answer(results)
     else:
         result = await article_builder(event, "deploy")
