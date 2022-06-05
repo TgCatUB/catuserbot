@@ -143,7 +143,7 @@ async def article_builder(event, method):
         except:
             return None
         title = "Cat Alive"
-        description = "Alive menu for CatUserbot"
+        description = "Alive menu for CatUserbot."
         ALIVE_PIC = gvarstatus("ALIVE_PIC")
         IALIVE_PIC = gvarstatus("IALIVE_PIC")
         if IALIVE_PIC:
@@ -160,13 +160,13 @@ async def article_builder(event, method):
             from userbot.plugins.spotify import SP_DATABASE, get_spotify, sp_data
 
             title = "Spotify"
-            description = "Get currently playing song"
+            description = "Get currently playing song."
             media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
             if (
                 not (Config.SPOTIFY_CLIENT_ID and Config.SPOTIFY_CLIENT_SECRET)
                 or SP_DATABASE is None
             ):
-                query = "__Spotify not setup properly. \nDo `.help spsetup` and follow the tutorial.__"
+                query = "__Spotify is not setup properly. \nDo `.help spsetup` and follow the tutorial.__"
                 buttons = [
                     Button.url(
                         "Tutorial",
@@ -178,7 +178,7 @@ async def article_builder(event, method):
                     "https://api.spotify.com/v1/me/player/currently-playing"
                 )
                 if response.status_code == 204:
-                    query = "__Currently not listening any music on spotify...__"
+                    query = "__Currently not listening to any music on spotify...__"
                     buttons = [Button.url("Open Spotify", "https://open.spotify.com/")]
                 else:
                     media, tittle, dic, lyrics, symbol = await get_spotify(
@@ -641,8 +641,8 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(
                 builder.article(
                     title="Secret",
-                    description="Send secret message to your friends",
-                    text="__Send secret message which only you & the reciver can see..__",
+                    description="Send secret message to your friends.",
+                    text="__Send secret message which only you & the reciever can see.__",
                     thumb=get_thumb("secret"),
                     buttons=[
                         Button.switch_inline(
@@ -654,8 +654,8 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(
                 builder.article(
                     title="Troll",
-                    description="Send troll message to your friends",
-                    text="__Send troll message which everyone can see except the reciver..__",
+                    description="Send troll message to your friends.",
+                    text="__Send troll message which everyone can see except the reciever.__",
                     thumb=get_thumb("troll"),
                     buttons=[
                         Button.switch_inline(
@@ -667,8 +667,8 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(
                 builder.article(
                     title="Hide",
-                    description="Send hidden text in chat",
-                    text="__Send hidded message to save from being quote..__",
+                    description="Send hidden text in chat.",
+                    text="__Send hidden message for spoilers/quote prevention.__",
                     thumb=get_thumb("hide"),
                     buttons=[
                         Button.switch_inline(
@@ -680,8 +680,8 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(
                 builder.article(
                     title="Youtube Download",
-                    description="Download videos from YouTube",
-                    text="__Download videos or audio from YouTube with different option of resolution..__",
+                    description="Download videos/audios from YouTube.",
+                    text="__Download videos or audios from YouTube with different option of resolutions/quality.__",
                     thumb=get_thumb("youtube"),
                     buttons=[
                         Button.switch_inline(
