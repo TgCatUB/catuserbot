@@ -9,7 +9,7 @@ import time
 from datetime import datetime
 from io import BytesIO
 from shutil import copyfile
-from userbot import Convert
+
 import fitz
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
 from pymediainfo import MediaInfo
@@ -19,7 +19,7 @@ from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.functions.messages import SendMediaRequest
 from telethon.utils import get_attributes
 
-from userbot import catub
+from userbot import Convert, catub
 
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
