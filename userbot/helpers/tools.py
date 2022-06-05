@@ -102,7 +102,11 @@ async def file_type(message):
         return None
     media = await fileinfo(message)
     if media["type"] == "Image":
-        return "Static Sticker" if media["format"] == "WebP" else "Photo"
+        if media["format"] == "Gif":
+            return gif 
+        if media["format"] == "WebP":
+            return "Static Sticker"
+        return "Photo"
     elif media["type"] == "Video":
         if media["audio"] == "None":
             return "Video Sticker" if media["format"] == "WebM" else "Gif"
