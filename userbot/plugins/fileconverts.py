@@ -1,7 +1,5 @@
 # by @mrconfused (@sandy1709)
 import asyncio
-import base64
-import contextlib
 import io
 import logging
 import os
@@ -15,7 +13,6 @@ from PIL import Image, ImageDraw, ImageFilter, ImageOps
 from pymediainfo import MediaInfo
 from telethon import types
 from telethon.errors import PhotoInvalidDimensionsError
-from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.tl.functions.messages import SendMediaRequest
 from telethon.utils import get_attributes
 
@@ -478,6 +475,7 @@ async def on_file_to_photo(event):
         return
     await catt.delete()
 
+
 @catub.cat_cmd(
     pattern="(gif|vtog)$",
     command=("gif", plugin_category),
@@ -492,8 +490,15 @@ async def _(event):  # sourcery no-metrics
     memetype = await meme_type(catreply)
     if memetype == "Gif":
         return await edit_delete(event, "`This is already gif.`")
-    if memetype not in ["Round Video","Animated Sticker","Video Sticker","Video",]:
-        return await edit_delete(event, "`Stupid!, This is not animated sticker/video sticker/video.`")
+    if memetype not in [
+        "Round Video",
+        "Animated Sticker",
+        "Video Sticker",
+        "Video",
+    ]:
+        return await edit_delete(
+            event, "`Stupid!, This is not animated sticker/video sticker/video.`"
+        )
     catevent = await edit_or_reply(
         event,
         "Converting this Sticker to GiF...\n This may takes upto few mins..",
