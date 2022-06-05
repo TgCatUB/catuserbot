@@ -10,7 +10,7 @@ import os
 from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import _catutils, reply_id, meme_type
+from ..helpers import _catutils, meme_type, reply_id
 
 plugin_category = "utils"
 
@@ -32,8 +32,16 @@ async def collage(event):
     if not (reply and (reply.media)):
         return await edit_delete(event, "`Reply to a media file..`")
     mediacheck = await meme_type(reply)
-    if mediacheck not in ["Round Video","Gif","Video Sticker","Animated Sticker","Video"]:
-        return await edit_delete(event, "`The replied message media type is not supported.`")
+    if mediacheck not in [
+        "Round Video",
+        "Gif",
+        "Video Sticker",
+        "Animated Sticker",
+        "Video",
+    ]:
+        return await edit_delete(
+            event, "`The replied message media type is not supported.`"
+        )
     if catinput:
         if not catinput.isdigit():
             return await edit_delete(event, "`You input is invalid, check help`")
@@ -47,14 +55,16 @@ async def collage(event):
             catinput = 9
     else:
         catinput = 3
-    catevent = await edit_or_reply(event, "```Collaging this may take several minutes..... 😁```")
-    if mediacheck not in ["Round Video","Gif","Video Sticker","Video"]:
+    await edit_or_reply(event, "```Collaging this may take several minutes..... 😁```")
+    if mediacheck not in ["Round Video", "Gif", "Video Sticker", "Video"]:
         if not os.path.isdir("./temp/"):
             os.mkdir("./temp/")
         catsticker = await reply.download_media(file="./temp/")
         collagefile = catsticker
     else:
-        collage_file = await Convert.to_gif(event, reply, file="collage.mp4", noedits=True)
+        collage_file = await Convert.to_gif(
+            event, reply, file="collage.mp4", noedits=True
+        )
         collagefile = collage_file[1]
     if not collagefile:
         await edit_or_reply(
