@@ -292,7 +292,7 @@ async def video_catfile(event):  # sourcery no-metrics
     await event.client.send_file(event.chat_id, im, reply_to=catid)
     await catevent.delete()
 
-
+ 
 @catub.cat_cmd(
     pattern="(stoi|mtoi)$",
     command=("mtoi", plugin_category),
@@ -314,7 +314,7 @@ async def _(event):
         event,
         reply,
         dirct="./temp",
-        file="catconverter.jpeg",
+        file="catconverter.png",
     )
     if output[1] is None:
         return await edit_delete(
