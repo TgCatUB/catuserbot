@@ -100,7 +100,7 @@ async def remove_background(event):
         file.write(response.content)
     await catevent.delete()
     if cmd == "srmbg":
-        file = (await Convert.to_sticker(catevent, remove_bg_image, noedits=True))[1]
+        file = (await Convert.to_sticker(catevent, remove_bg_image,file="sticker.webp", noedits=True))[1]
         await event.client.send_file(
             event.chat_id,
             file,

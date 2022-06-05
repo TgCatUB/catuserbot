@@ -358,7 +358,7 @@ async def _(event):
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = (await Convert.to_sticker(event, output[1], noedits=True))[1]
+    meme_file = (await Convert.to_sticker(event, output[1], file="sticker.webp", noedits=True))[1]
     await event.client.send_file(
         event.chat_id, meme_file, reply_to=reply_to_id, force_document=False
     )

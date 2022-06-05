@@ -320,7 +320,7 @@ async def quby(event):
             stroke_width=1,
         )
     if cmd == "b":
-        cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
+        cat = (await Convert.to_sticker(event, file[0], file="sticker.webp", noedits=True))[1]
         await event.client.send_file(
             event.chat_id, cat, reply_to=reply_to_id, force_document=False
         )
@@ -385,7 +385,7 @@ async def knife(event):
         direction="upwards",
     )
     if cmd == "b":
-        cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
+        cat = (await Convert.to_sticker(event, file[0], file="sticker.webp", noedits=True))[1]
         await event.client.send_file(
             event.chat_id, cat, reply_to=reply_to_id, force_document=False
         )
@@ -463,7 +463,7 @@ async def doge(event):
             stroke_width=1,
             stroke_fill="black",
         )
-    cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
+    cat = (await Convert.to_sticker(event, file[0], file="sticker.webp", noedits=True))[1]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
@@ -531,7 +531,7 @@ async def penguin(event):
         stroke_width=1,
         stroke_fill=fg,
     )
-    cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
+    cat = (await Convert.to_sticker(event, file[0], file="sticker.webp", noedits=True))[1]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
@@ -599,7 +599,7 @@ async def gandhi(event):
         stroke_width=1,
         stroke_fill=fg,
     )
-    cat = (await Convert.to_sticker(event, file[0], noedits=True))[1]
+    cat = (await Convert.to_sticker(event, file[0], file="sticker.webp", noedits=True))[1]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
