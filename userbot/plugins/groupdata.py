@@ -196,54 +196,54 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         for _ in bots_list:
             bots += 1
 
-    caption = "<b>CHAT INFO:</b>\n"
-    caption += f"ID: <code>{chat_obj_info.id}</code>\n"
+    caption = f"<b><u>{chat_type.capitalize()} INFO: </u></b>\n"
+    caption += f"🆔 <b>ID: </b><code>{chat_obj_info.id}</code>\n"
     if chat_title is not None:
-        caption += f"{chat_type} name: {chat_title}\n"
+        caption += f"🔖 <b>{chat_type} name: </b><code>{chat_title}</code>\n"
     if former_title is not None:  # Meant is the very first title
-        caption += f"Former name: {former_title}\n"
+        caption += f"📜 <b>Former name: </b><code>{former_title}</code>\n"
     if username is not None:
-        caption += f"{chat_type} type: Public\n"
-        caption += f"Link: {username}\n"
+        caption += f"🧭 <b>{chat_type} type: </b><code>Public</code>\n"
+        caption += f"🔗 <b>Link: {username}\n"
     else:
-        caption += f"{chat_type} type: Private\n"
+        caption += f"🧭 <b>{chat_type} type: </b><code>Private</code>\n"
     if creator_username is not None:
-        caption += f"Creator: {creator_username}\n"
+        caption += f"🔗 <b>Creator: {creator_username}\n"
     elif creator_valid:
         caption += (
-            f'Creator: <a href="tg://user?id={creator_id}">{creator_firstname}</a>\n'
+            f'🔗 <b>Creator: </b><a href="tg://user?id={creator_id}">{creator_firstname}</a>\n'
         )
     if created is not None:
-        caption += f"Created: <code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
+        caption += f"🗓️ <b>Created: </b><code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
     else:
-        caption += f"Created: <code>{chat_obj_info.date.date().strftime('%b %d, %Y')} - {chat_obj_info.date.time()}</code> {warn_emoji}\n"
-    caption += f"Data Centre ID: {dc_id}\n"
+        caption += f"🗓️ <b>Created: </b><code>{chat_obj_info.date.date().strftime('%b %d, %Y')} - {chat_obj_info.date.time()}</code> {warn_emoji}\n"
+    caption += f"📡 <b>Data Centre ID: </b><code>{dc_id}</code>\n"
     if exp_count is not None:
         chat_level = int((1 + sqrt(1 + 7 * exp_count / 14)) / 2)
-        caption += f"{chat_type} level: <code>{chat_level}</code>\n"
+        caption += f"📊 <b>{chat_type} level: </b><code>{chat_level}</code>\n"
     if messages_viewable is not None:
-        caption += f"Viewable messages: <code>{messages_viewable}</code>\n"
+        caption += f"✉️ <b>Viewable messages: </b><code>{messages_viewable}</code>\n"
     if messages_sent:
-        caption += f"Messages sent: <code>{messages_sent}</code>\n"
+        caption += f"📥 <b>Messages sent: </b><code>{messages_sent}</code>\n"
     elif messages_sent_alt:
-        caption += f"Messages sent: <code>{messages_sent_alt}</code> {warn_emoji}\n"
+        caption += f"📥 <b>Messages sent: </b><code>{messages_sent_alt}</code> {warn_emoji}\n"
     if members is not None:
-        caption += f"Members: <code>{members}</code>\n"
+        caption += f"👨‍👩‍👧‍👦 <b>Members: </b><code>{members}</code>\n"
     if admins is not None:
-        caption += f"Administrators: <code>{admins}</code>\n"
+        caption += f"🤴 <b>Administrators: </b><code>{admins}</code>\n"
     if bots_list:
-        caption += f"Bots: <code>{bots}</code>\n"
+        caption += f"🤖 <b>Bots: </b><code>{bots}</code>\n"
     if members_online:
-        caption += f"Currently online: <code>{members_online}</code>\n"
+        caption += f"👀 <b>Currently online: </b><code>{members_online}</code>\n"
     if restrcited_users is not None:
-        caption += f"Restricted users: <code>{restrcited_users}</code>\n"
+        caption += f"⚠️ <b>Restricted users: </b><code>{restrcited_users}</code>\n"
     if banned_users is not None:
-        caption += f"Banned users: <code>{banned_users}</code>\n"
+        caption += f"🚫 <b>Banned users: </b><code>{banned_users}</code>\n"
     if group_stickers is not None:
-        caption += f'{chat_type} stickers: <a href="t.me/addstickers/{chat.full_chat.stickerset.short_name}">{group_stickers}</a>\n'
+        caption += f'❤️ <b>{chat_type} stickers: </b><a href="t.me/addstickers/{chat.full_chat.stickerset.short_name}">{group_stickers}</a>\n'
     caption += "\n"
     if not broadcast:
-        caption += f"Slow mode: {slowmode}"
+        caption += f"🐌 <b>Slow mode: </b><code>{slowmode}</code>"
         if (
             hasattr(chat_obj_info, "slowmode_enabled")
             and chat_obj_info.slowmode_enabled
@@ -251,21 +251,21 @@ async def fetch_info(chat, event):  # sourcery no-metrics
             caption += f", <code>{slowmode_time}s</code>\n\n"
         else:
             caption += "\n\n"
-        caption += f"Supergroup: {supergroup}\n\n"
+        caption += f"👨‍👩‍👧‍👦 <b>Supergroup: </b><code>{supergroup}</code>\n\n"
     if hasattr(chat_obj_info, "restricted"):
-        caption += f"Restricted: {restricted}\n"
+        caption += f"🚫 <b>Restricted: </b><code>{restricted}</code>\n"
         if chat_obj_info.restricted:
-            caption += f"> Platform: {chat_obj_info.restriction_reason[0].platform}\n"
-            caption += f"> Reason: {chat_obj_info.restriction_reason[0].reason}\n"
-            caption += f"> Text: {chat_obj_info.restriction_reason[0].text}\n\n"
+            caption += f"<b>● Platform: </b><code>{chat_obj_info.restriction_reason[0].platform}</code>\n"
+            caption += f"<b>● Reason: </b><code>{chat_obj_info.restriction_reason[0].reason}</code>\n"
+            caption += f"<b>● Text: </b><code>{chat_obj_info.restriction_reason[0].text}</code>\n\n"
         else:
             caption += "\n"
     if hasattr(chat_obj_info, "scam") and chat_obj_info.scam:
-        caption += "Scam: <b>Yes</b>\n\n"
+        caption += "💀 <b>Scam: </b><code>Yes</code>\n\n"
     if hasattr(chat_obj_info, "verified"):
-        caption += f"Verified by Telegram: {verified}\n\n"
+        caption += f"✅ <b>Verified by Telegram: </b><code>{verified}</code>\n\n"
     if description:
-        caption += f"Description: \n<code>{description}</code>\n"
+        caption += f"💬 <b>Description: </b>\n<code>{description}</code>\n"
     return caption
 
 
