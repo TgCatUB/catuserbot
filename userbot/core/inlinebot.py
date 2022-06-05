@@ -130,6 +130,7 @@ async def article_builder(event, method):
             media = random.choice(PIC)
 
     elif method == "ialive":
+        thumb = get_thumb("alive")
         buttons = [
             (
                 Button.inline("Stats", data="stats"),
@@ -229,6 +230,7 @@ async def article_builder(event, method):
         result = builder.document(
             media,
             title=title,
+            thumb=thumb,
             description=description,
             text=query,
             buttons=buttons,
