@@ -125,8 +125,6 @@ async def maccmd(event):  # sourcery no-metrics
         event.chat_id, output, reply_to=reply, force_document=force
     )
     await catevent.delete()
-    if os.path.exists(output):
-        os.remove(output)
 
 
 @catub.cat_cmd(
@@ -192,7 +190,7 @@ async def memes(event):
         await cat_meeme(top, bottom, CNG_FONTS, meme_file, meme)
     if cmd != "mmf":
         meme = (
-            await Convert.to_sticker(event, meme, file="sticker.webp", noedits=True)
+            await Convert.to_sticker(event, meme, file="memes.webp", noedits=True)
         )[1]
     await event.client.send_file(
         event.chat_id, meme, reply_to=catid, force_document=False

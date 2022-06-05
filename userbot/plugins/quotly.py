@@ -223,7 +223,7 @@ async def stickerchat(catquotes):
     outfi = os.path.join("./temp", "sticker.png")
     catmsg.save(outfi)
     endfi = await Convert.to_sticker(
-        catquotes, outfi, file="sticker.webp", noedits=True
+        catquotes, outfi, file="stickerchat.webp", noedits=True
     )
     await catquotes.client.send_file(catquotes.chat_id, endfi[1], reply_to=reply)
     await catevent.delete()

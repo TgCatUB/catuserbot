@@ -102,7 +102,7 @@ async def remove_background(event):
     if cmd == "srmbg":
         file = (
             await Convert.to_sticker(
-                catevent, remove_bg_image, file="sticker.webp", noedits=True
+                catevent, remove_bg_image, file="rmbgsticker.webp", noedits=True
             )
         )[1]
         await event.client.send_file(
