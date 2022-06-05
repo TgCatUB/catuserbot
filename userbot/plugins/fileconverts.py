@@ -453,7 +453,7 @@ async def on_file_to_photo(event):
     if not image.mime_type.startswith("image/"):
         return await edit_delete(event, "`This isn't an image`")
     if image.mime_type == "image/webp":
-        return await edit_delete(event, "`For sticker to image use stoi command`")
+        return await edit_delete(event, "`For sticker to image use mtoi command`")
     if image.size > 10 * 1024 * 1024:
         return  # We'd get PhotoSaveFileInvalidError otherwise
     catt = await edit_or_reply(event, "`Converting.....`")
