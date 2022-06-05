@@ -84,9 +84,9 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     output.name = "Output.mp4"
     outframes[0].save(output, save_all=True, append_images=outframes[1:], duration=1)
     output.seek(0)
-    with open("Output.gif", "wb") as outfile:
+    with open("Output.mp4", "wb") as outfile:
         outfile.write(output.getbuffer())
-    final = await Convert.to_gif(event, "Output.gif", file="spin.mp4", noedits=True)
+    final = await Convert.to_gif(event, "Output.mp4", file="spin.mp4", noedits=True)
     if final[1] is None:
         return await edit_delete(catevent, "__Unable to make spin gif.__")
     media_info = MediaInfo.parse(final[1])
