@@ -350,7 +350,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
                                 args, "__🎞Converting into Animated sticker..__"
                             )
                             sticker = (
-                                await Convert.to_webm(args, message, noedits=True)
+                                await Convert.to_webm(args, message, file="animate.webm", noedits=True)
                             )[1]
                             await edit_or_reply(
                                 catevent, f"`{random.choice(KANGING_STR)}`"
@@ -368,7 +368,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
                 catevent = await edit_or_reply(
                     args, "__🎞Converting into Animated sticker..__"
                 )
-                sticker = (await Convert.to_webm(args, message, noedits=True))[1]
+                sticker = (await Convert.to_webm(args, message, file="animate.webm", noedits=True))[1]
                 await edit_or_reply(catevent, f"`{random.choice(KANGING_STR)}`")
         else:
             await edit_delete(args, "`Unsupported File!`")
@@ -582,7 +582,7 @@ async def pack_kang(event):  # sourcery no-metrics
                 f"`This sticker pack is kanging now . Status of kang process : {kangst}/{noofst}`",
             )
             if message.size > 261120:
-                await Convert.to_webm(event, message, noedits=True)
+                await Convert.to_webm(event, message, file="animate.webm", noedits=True)
             else:
                 await event.client.download_media(message, "animate.webm")
             attributes = message.attributes
@@ -695,7 +695,7 @@ async def pussycat(event):
     memetype = await meme_type(message)
     if memetype not in ["Video", "Gif"]:
         return await edit_delete(event, "`Reply to video/gif...!`")
-    sticker = await Convert.to_webm(event, message)
+    sticker = await Convert.to_webm(event, message, file="animate.webm",)
     await edit_or_reply(sticker[0], f"`{random.choice(KANGING_STR)}`")
     packname = f"Cat_{userid}_temp_pack"
     response = urllib.request.urlopen(

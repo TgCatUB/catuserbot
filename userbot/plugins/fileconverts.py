@@ -31,7 +31,6 @@ from ..helpers.functions import (
     spin_frames,
     ud_frames,
     unsavegif,
-    vid_to_gif,
 )
 from ..helpers.utils import _catutils, _format, parse_pre, reply_id
 from . import make_gif
@@ -91,7 +90,7 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     output.seek(0)
     with open("Output.gif", "wb") as outfile:
         outfile.write(output.getbuffer())
-    final = await Convert.to_gif(event, "Output.gif", noedits=True)
+    final = await Convert.to_gif(event, "Output.gif", file="spin.mp4", noedits=True)
     if final[1] is None:
         return await edit_delete(catevent, "__Unable to make spin gif.__")
     media_info = MediaInfo.parse(final[1])
@@ -548,10 +547,8 @@ async def _(event):  # sourcery no-metrics
         await event.client(cat_event)
     reply_to_id = await reply_id(event)
     catfile = await event.client.download_media(catreply)
-    if catreply.media.document.mime_type == "video/webm":
-        catgif = await vid_to_gif(catfile, "./temp/animation.gif")
-    else:
-        catgif = await make_gif(event, catfile, quality, fps)
+    final = await Convert.to_gif(event, catfile, file="animation.mp4", noedits=True)
+    catgif = final[1]
     sandy = await event.client.send_file(
         event.chat_id,
         catgif,
@@ -743,20 +740,20 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     output.seek(0)
     with open("Output.gif", "wb") as outfile:
         outfile.write(output.getbuffer())
-    final = os.path.join(Config.TEMP_DIR, "output.gif")
-    output = await vid_to_gif("Output.gif", final)
-    if output is None:
+    output = await Convert.to_gif(event, "Output.gif", file="output.mp4", noedits=True)
+    catgif = output[1]
+    if output[0] is None:
         await edit_delete(
             catevent, "__There was some error in the media. I can't format it to gif.__"
         )
-        for i in [final, "Output.gif", imag[1]]:
+        for i in [output[1], "Output.gif", imag[1]]:
             if os.path.exists(i):
                 os.remove(i)
         return
     sandy = await event.client.send_file(event.chat_id, output, reply_to=reply)
     await unsavegif(event, sandy)
     await catevent.delete()
-    for i in [final, "Output.gif", imag[1]]:
+    for i in [output[1], "Output.gif", imag[1]]:
         if os.path.exists(i):
             os.remove(i)
 

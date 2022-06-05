@@ -85,7 +85,7 @@ class CatConverter:
         return response[0], None
 
     async def to_webm(
-        self, event, reply, dirct="./", file="animate.webm", noedits=False
+        self, event, reply, dirct="./temp", file="animate.webm", noedits=False
     ):
         # //Hope u dunt kang :/ @Jisan7509
         memetype = await meme_type(reply)

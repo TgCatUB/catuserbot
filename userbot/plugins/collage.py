@@ -45,7 +45,7 @@ async def collage(event):
             catinput = 9
     else:
         catinput = 3
-    collagefile = await Convert.to_gif(event, reply, noedits=True)
+    collagefile = await Convert.to_gif(event, reply, file="collage.mp4", noedits=True)
     if not collagefile[1]:
         await edit_or_reply(
             event, "**Error:-** __Unable to process the replied media__"
