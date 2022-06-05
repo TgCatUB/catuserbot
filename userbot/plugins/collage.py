@@ -10,7 +10,7 @@ import os
 from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import _catutils, reply_id
+from ..helpers import _catutils, reply_id, meme_type
 
 plugin_category = "utils"
 
@@ -29,9 +29,11 @@ async def collage(event):
     catinput = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     catid = await reply_id(event)
-    await edit_or_reply(event, "```Collaging this may take several minutes..... 😁```")
     if not (reply and (reply.media)):
         return await edit_delete(event, "`Reply to a media file..`")
+    mediacheck = await meme_type(reply)
+    if mediacheck not in ["Round Video","Gif","Video Sticker","Animated Sticker","Video"]:
+        return await edit_delete(event, "`The replied message media type is not supported.`")
     if catinput:
         if not catinput.isdigit():
             return await edit_delete(event, "`You input is invalid, check help`")
@@ -45,16 +47,24 @@ async def collage(event):
             catinput = 9
     else:
         catinput = 3
-    collagefile = await Convert.to_gif(event, reply, file="collage.mp4", noedits=True)
-    if not collagefile[1]:
+    catevent = await edit_or_reply(event, "```Collaging this may take several minutes..... 😁```")
+    if mediacheck not in ["Round Video","Gif","Video Sticker","Video"]:
+        if not os.path.isdir("./temp/"):
+            os.mkdir("./temp/")
+        catsticker = await reply.download_media(file="./temp/")
+        collagefile = catsticker
+    else:
+        collage_file = await Convert.to_gif(event, reply, file="collage.mp4", noedits=True)
+        collagefile = collage_file[1]
+    if not collagefile:
         await edit_or_reply(
             event, "**Error:-** __Unable to process the replied media__"
         )
     endfile = "./temp/collage.png"
-    catcmd = f"vcsi -g {catinput}x{catinput} '{collagefile[1]}' -o {endfile}"
+    catcmd = f"vcsi -g {catinput}x{catinput} '{collagefile}' -o {endfile}"
     stdout, stderr = (await _catutils.runcmd(catcmd))[:2]
-    if not os.path.exists(endfile) and os.path.exists(collagefile[1]):
-        os.remove(collagefile[1])
+    if not os.path.exists(endfile) and os.path.exists(collagefile):
+        os.remove(collagefile)
         return await edit_delete(
             event, "`Media is not supported, or try with smaller grid size`"
         )
@@ -64,6 +74,6 @@ async def collage(event):
         reply_to=catid,
     )
     await event.delete()
-    for files in (collagefile[1], endfile):
+    for files in (collagefile, endfile):
         if files and os.path.exists(files):
             os.remove(files)

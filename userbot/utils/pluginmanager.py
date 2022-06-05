@@ -48,7 +48,6 @@ def load_module(shortname, plugin_path=None):
         mod.reply_id = reply_id
         mod.admin_cmd = admin_cmd
         mod._catutils = _catutils
-        mod.media_type = media_type
         mod.edit_delete = edit_delete
         mod.install_pip = install_pip
         mod.parse_pre = _format.parse_pre
