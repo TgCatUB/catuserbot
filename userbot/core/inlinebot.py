@@ -143,6 +143,7 @@ async def article_builder(event, method):
         except:
             return None
         title = "Cat Alive"
+        thumb = get_thumb("alive")
         description = "Alive menu for CatUserbot."
         ALIVE_PIC = gvarstatus("ALIVE_PIC")
         IALIVE_PIC = gvarstatus("IALIVE_PIC")
@@ -245,7 +246,7 @@ async def article_builder(event, method):
             description=description,
             type=type,
             file=media,
-            thumb=thumb if thumb else photo,
+            thumb=thumb,
             content=photo,
             text=query,
             buttons=buttons,
