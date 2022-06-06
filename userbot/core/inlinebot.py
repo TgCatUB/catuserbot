@@ -103,7 +103,7 @@ async def article_builder(event, method):
     if method == "help":
         help_info = main_menu()
         title = "Help Menu"
-        description = "Help menu for CatUserbot"
+        description = "Help menu for CatUserbot."
         thumb = get_thumb("help")
         query = help_info[0]
         buttons = help_info[1]
@@ -111,7 +111,7 @@ async def article_builder(event, method):
     elif method == "deploy":
         media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
         title = "𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩"
-        description = "Deploy yourself"
+        description = "Deploy yourself."
         query = "𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁."
         buttons = [
             (
@@ -682,7 +682,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 builder.article(
                     title="Youtube Download",
                     description="Download videos/audios from YouTube.",
-                    text="__Download videos or audios from YouTube with different option of resolutions/quality.__",
+                    text="__Download videos or audios from YouTube with different options of resolutions/quality.__",
                     thumb=get_thumb("youtube"),
                     buttons=[
                         Button.switch_inline(
