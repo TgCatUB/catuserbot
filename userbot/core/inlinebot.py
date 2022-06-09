@@ -246,7 +246,7 @@ async def article_builder(event, method):
             description=description,
             type=type,
             file=media,
-            thumb=thumb,
+            thumb=thumb if thumb else photo,
             content=photo,
             text=query,
             buttons=buttons,
