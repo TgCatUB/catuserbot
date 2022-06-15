@@ -266,10 +266,10 @@ async def fetch_info(chat, event):  # sourcery no-metrics
     if grp_emoji:
         caption += f"🙂 <b>Enabled Reactions: </b>\n"
         if len(grp_emoji) > 8:
-            caption += f"    <b>-</b>{''.join(grp_emoji[:8])}"
-            caption += f"    <b>-</b>{''.join(grp_emoji[8:])}"
+            caption += f"    <b>-</b>{''.join(grp_emoji[:8])}\n"
+            caption += f"    <b>-</b>{''.join(grp_emoji[8:])}\n"
         else:
-            caption += f"    <b>-</b>{''.join(grp_emoji)}"
+            caption += f"    <b>-</b>{''.join(grp_emoji)}\n"
     else:
         caption += (
             f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>\n"
