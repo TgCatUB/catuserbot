@@ -3,6 +3,7 @@ from datetime import datetime
 from math import sqrt
 
 from emoji import emojize
+from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.channels import GetParticipantsRequest
 from telethon.tl.functions.messages import GetHistoryRequest
 from telethon.tl.types import (
@@ -61,6 +62,8 @@ async def fetch_info(chat, event):  # sourcery no-metrics
     chat_type = "Channel" if broadcast else "Group"
     chat_title = chat_obj_info.title
     warn_emoji = emojize(":warning:")
+    getchat = await event.client(GetFullChannelRequest(channel=chat.full_chat.id))
+    grp_emoji = getchat.full_chat.available_reactions
     try:
         msg_info = await event.client(
             GetHistoryRequest(
@@ -264,6 +267,10 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         caption += "💀 <b>Scam: </b><code>Yes</code>\n\n"
     if hasattr(chat_obj_info, "verified"):
         caption += f"✅ <b>Verified by Telegram: </b><code>{verified}</code>\n\n"
+    if grp_emoji:
+        caption += f"🙂 <b>Enabled Reactions: </b><code>{''.join(grp_emoji)}</code>"
+    else:
+        caption += f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>"
     if description:
         caption += f"💬 <b>Description: </b>\n<code>{description}</code>\n"
     return caption
