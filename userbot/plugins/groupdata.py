@@ -264,7 +264,7 @@ async def fetch_info(chat, event):  # sourcery no-metrics
     if hasattr(chat_obj_info, "verified"):
         caption += f"✅ <b>Verified by Telegram: </b><code>{verified}</code>\n"
     if grp_emoji:
-        caption += f"🙂 <b>Enabled Reactions: </b><code>{''.join(grp_emoji[:7])}</code>\
+        caption += f"🙂 <b>Enabled Reactions: </b><code>{''.join(grp_emoji[:8])}</code>\
                    \n                             <code>{''.join(grp_emoji[8:])}</code>\n"
     else:
         caption += (
