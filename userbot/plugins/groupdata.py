@@ -3,8 +3,7 @@ from datetime import datetime
 from math import sqrt
 
 from emoji import emojize
-from telethon.tl.functions.channels import GetFullChannelRequest
-from telethon.tl.functions.channels import GetParticipantsRequest
+from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
 from telethon.tl.functions.messages import GetHistoryRequest
 from telethon.tl.types import (
     ChannelParticipantAdmin,
@@ -270,7 +269,9 @@ async def fetch_info(chat, event):  # sourcery no-metrics
     if grp_emoji:
         caption += f"🙂 <b>Enabled Reactions: </b><code>{''.join(grp_emoji)}</code>"
     else:
-        caption += f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>"
+        caption += (
+            f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>"
+        )
     if description:
         caption += f"💬 <b>Description: </b>\n<code>{description}</code>\n"
     return caption
