@@ -251,7 +251,7 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         ):
             caption += f", <code>{slowmode_time}s</code>\n"
         else:
-            caption += "\n\n"
+            caption += "\n"
         caption += f"👨‍👩‍👧‍👦 <b>Supergroup: </b><code>{supergroup}</code>\n"
     if hasattr(chat_obj_info, "restricted"):
         caption += f"🚫 <b>Restricted: </b><code>{restricted}</code>\n"
@@ -259,14 +259,13 @@ async def fetch_info(chat, event):  # sourcery no-metrics
             caption += f"<b>● Platform: </b><code>{chat_obj_info.restriction_reason[0].platform}</code>\n"
             caption += f"<b>● Reason: </b><code>{chat_obj_info.restriction_reason[0].reason}</code>\n"
             caption += f"<b>● Text: </b><code>{chat_obj_info.restriction_reason[0].text}</code>\n"
-        else:
-            caption += "\n"
     if hasattr(chat_obj_info, "scam") and chat_obj_info.scam:
         caption += "💀 <b>Scam: </b><code>Yes</code>\n"
     if hasattr(chat_obj_info, "verified"):
         caption += f"✅ <b>Verified by Telegram: </b><code>{verified}</code>\n"
     if grp_emoji:
-        caption += f"🙂 <b>Enabled Reactions: </b><code>{''.join(grp_emoji)}</code>\n"
+        caption += f"🙂 <b>Enabled Reactions: </b><code>{''.join(grp_emoji[:7])}</code>\
+                   \n                         <code>{''.join(grp_emoji[8:])}</code>n"
     else:
         caption += (
             f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>\n"
