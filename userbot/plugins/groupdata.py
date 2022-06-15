@@ -243,34 +243,33 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         caption += f"🚫 <b>Banned users: </b><code>{banned_users}</code>\n"
     if group_stickers is not None:
         caption += f'❤️ <b>{chat_type} stickers: </b><a href="t.me/addstickers/{chat.full_chat.stickerset.short_name}">{group_stickers}</a>\n'
-    caption += "\n"
     if not broadcast:
         caption += f"🐌 <b>Slow mode: </b><code>{slowmode}</code>"
         if (
             hasattr(chat_obj_info, "slowmode_enabled")
             and chat_obj_info.slowmode_enabled
         ):
-            caption += f", <code>{slowmode_time}s</code>\n\n"
+            caption += f", <code>{slowmode_time}s</code>\n"
         else:
             caption += "\n\n"
-        caption += f"👨‍👩‍👧‍👦 <b>Supergroup: </b><code>{supergroup}</code>\n\n"
+        caption += f"👨‍👩‍👧‍👦 <b>Supergroup: </b><code>{supergroup}</code>\n"
     if hasattr(chat_obj_info, "restricted"):
         caption += f"🚫 <b>Restricted: </b><code>{restricted}</code>\n"
         if chat_obj_info.restricted:
             caption += f"<b>● Platform: </b><code>{chat_obj_info.restriction_reason[0].platform}</code>\n"
             caption += f"<b>● Reason: </b><code>{chat_obj_info.restriction_reason[0].reason}</code>\n"
-            caption += f"<b>● Text: </b><code>{chat_obj_info.restriction_reason[0].text}</code>\n\n"
+            caption += f"<b>● Text: </b><code>{chat_obj_info.restriction_reason[0].text}</code>\n"
         else:
             caption += "\n"
     if hasattr(chat_obj_info, "scam") and chat_obj_info.scam:
-        caption += "💀 <b>Scam: </b><code>Yes</code>\n\n"
+        caption += "💀 <b>Scam: </b><code>Yes</code>\n"
     if hasattr(chat_obj_info, "verified"):
-        caption += f"✅ <b>Verified by Telegram: </b><code>{verified}</code>\n\n"
+        caption += f"✅ <b>Verified by Telegram: </b><code>{verified}</code>\n"
     if grp_emoji:
-        caption += f"🙂 <b>Enabled Reactions: </b><code>{''.join(grp_emoji)}</code>"
+        caption += f"🙂 <b>Enabled Reactions: </b><code>{''.join(grp_emoji)}</code>\n"
     else:
         caption += (
-            f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>"
+            f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>\n"
         )
     if description:
         caption += f"💬 <b>Description: </b>\n<code>{description}</code>\n"
