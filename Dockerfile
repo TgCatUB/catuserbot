@@ -1,13 +1,13 @@
-FROM sandy1709/catuserbot:slim-buster
+FROM python:3.10
 
-#clonning repo 
-RUN git clone https://github.com/sandy1709/catuserbot.git /root/userbot
-#working directory 
-WORKDIR /root/userbot
+WORKDIR /app
 
-# Install requirements
-RUN pip3 install --no-cache-dir requirements.txt
+COPY requirements.txt /app/
 
-ENV PATH="/home/userbot/bin:$PATH"
+RUN pip3 install -r requirements.txt
+
+COPY . /app
+
+#set a default command
 
 CMD ["python3","-m","userbot"]
