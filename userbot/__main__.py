@@ -62,7 +62,7 @@ async def externalrepo():
         )
     if Config.VCMODE:
         await install_externalrepo(
-            "https://github.com/TgCatUB/CatVCPlayer", "main", "catvc"
+            "https://github.com/TgCatUB/CatVCPlayer", "test", "catvc"
         )
 
 
