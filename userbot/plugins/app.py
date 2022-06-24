@@ -10,7 +10,7 @@ import bs4
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
-from ..helpers.functions.functions import ellipse_create
+from ..helpers import file_check, ellipse_create
 from . import catub, edit_delete, edit_or_reply
 
 plugin_category = "utils"
@@ -83,10 +83,12 @@ async def app_search(event):
     info = info.text if info else None
     review = review.text if review else None
     bgurl = bg_url_1 if downloads and review else bg_url_2
+    file_check(re=False, me=False, mo=False, it=False, fa=False, sp=False, go=True)
     if len(app_name) > 14:
         app_name = f"{app_name[:14]}..."
     pic_name = "playstore.png"
     logo = "app_logo.png"
+    font = "temp/GoogleSans-Medium.ttf"
     urllib.request.urlretrieve(app_icon, logo)
     urllib.request.urlretrieve(bgurl, pic_name)
     background = Image.open(pic_name).resize((1024, 512))
@@ -97,12 +99,12 @@ async def app_search(event):
     thumb, x = ellipse_create(logo, 4, 0)
     thumbmask.paste(thumb, (680, 53), thumb)
 
-    text_draw("temp/GoogleSans-Medium.ttf", 65, thumbmask, app_name, 50, 30)
-    text_draw("temp/GoogleSans-Medium.ttf", 30, thumbmask, dev_name, 60, 120, "red")
-    text_draw("temp/GoogleSans-Medium.ttf", 70, thumbmask, f"{rating} / 5", 190, 260)
+    text_draw(font, 65, thumbmask, app_name, 50, 30)
+    text_draw(font, 30, thumbmask, dev_name, 60, 120, "red")
+    text_draw(font, 70, thumbmask, f"{rating} / 5", 190, 260)
     if bgurl == bg_url_1:
-        text_draw("temp/GoogleSans-Medium.ttf", 35, thumbmask, review, 80, 420)
-        text_draw("temp/GoogleSans-Medium.ttf", 30, thumbmask, downloads, 415, 420)
+        text_draw(font, 35, thumbmask, review, 80, 420)
+        text_draw(font, 30, thumbmask, downloads, 415, 420)
     thumbmask.save(pic_name)
     os.remove(logo)
     app_details = f" <b>{fullapp_name}</b>"

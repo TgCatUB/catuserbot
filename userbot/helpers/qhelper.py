@@ -41,13 +41,14 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True):
+def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True, go=False):
     regular = "./temp/Roboto-Regular.ttf"
     medium = "./temp/Roboto-Medium.ttf"
     mono = "./temp/DroidSansMono.ttf"
     italic = "./temp/Roboto-Italic.ttf"
     fallback = "./temp/Quivira.otf"
     special = "./temp/ArialUnicodeMS.ttf"
+    google = "./temp/GoogleSans-Medium.ttf"
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
     if re and not os.path.exists(regular):
@@ -79,6 +80,11 @@ def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True):
         urllib.request.urlretrieve(
             "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
             special,
+        )
+    if sp and not os.path.exists(google):
+        urllib.request.urlretrieve(
+            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/GoogleSans-Medium.ttf?raw=true",
+            google,
         )
 
 
