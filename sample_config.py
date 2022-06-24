@@ -42,6 +42,9 @@ class Config(object):
     # if you need badcat plugins use the following vars
     BADCAT = os.environ.get("BADCAT", False)
     BADCAT = bool(BADCAT and (BADCAT.lower() != "false"))
+    # for vc plugins
+    VCMODE = os.environ.get("VCMODE", False)
+    VCMODE = bool(VCMODE and (VCMODE.lower() != "false"))
     # BASIC and MAIN CONFIG VARS
     # for profile default name
     # Set this value with group id of private group(can be found this value by .id)

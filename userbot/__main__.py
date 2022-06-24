@@ -60,6 +60,10 @@ async def externalrepo():
         await install_externalrepo(
             Config.BADCAT_REPO, Config.BADCAT_REPOBRANCH, "badcatext"
         )
+    if Config.VCMODE:
+        await install_externalrepo(
+            "https://github.com/TgCatUB/CatVCPlayer", "main", "catvc"
+        )
 
 
 catub.loop.run_until_complete(startup_process())
