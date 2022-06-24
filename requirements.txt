@@ -4,10 +4,7 @@ apscheduler
 cairosvg
 cloudscraper
 colour
-covid
 cowpy
-dataclasses
-DateTime
 emoji
 fonttools
 geopy
@@ -35,6 +32,7 @@ Pillow
 prettytable
 psutil
 psycopg2
+PyDictionary
 pyfiglet
 PyGithub
 pygments
@@ -46,7 +44,6 @@ python-barcode
 python-dotenv
 pytz
 qrcode
-regex
 requests
 search-engine-parser
 selenium
