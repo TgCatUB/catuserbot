@@ -41,7 +41,6 @@ pymediainfo
 PyMuPDF
 pySmartDL
 python-barcode
-python-dotenv
 pytz
 qrcode
 requests
