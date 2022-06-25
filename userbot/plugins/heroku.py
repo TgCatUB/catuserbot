@@ -240,8 +240,8 @@ def prettyjson(obj, indent=2, maxlinelength=80):
         },
         "usage": [
             "{tr}buildpack",
-            "{tr}addbuildpack <url of the buildpack>",
-            "{tr}delbuildpack <url of the buildpack>",
+            "{tr}addbuildpack (url of the buildpack)",
+            "{tr}delbuildpack (url of the buildpack)",
         ],
         "examples": [
             "{tr}buildpack",
