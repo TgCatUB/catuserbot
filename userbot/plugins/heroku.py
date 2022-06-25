@@ -289,7 +289,7 @@ async def variable(event):
             f"**Success:** __Buildpack removed.\nDo `.update deploy` to complete updating__",
             30,
         )
-    string = "__**Currently available buildpacks for {Config.HEROKU_APP_NAME}:-**__\n\n"
+    string = f"__**Currently available buildpacks for {Config.HEROKU_APP_NAME}:-**__\n\n"
     for i, url in enumerate(buidpacks, start=1):
         string += f"**{i}.**   `{url}`\n\n"
     await edit_or_reply(event, string)
