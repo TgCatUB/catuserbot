@@ -1,7 +1,6 @@
 import re
 from collections import defaultdict, deque
 
-import regex
 from telethon import events
 from telethon.tl import functions, types
 
@@ -37,7 +36,7 @@ def doit(chat_id, match, original):
     flags = 0
     for f in fl:
         if f == "i":
-            flags |= regex.IGNORECASE
+            flags |= re.IGNORECASE
         elif f == "g":
             count = 0
         else:
@@ -48,7 +47,7 @@ def doit(chat_id, match, original):
             s = original.message
             if s.startswith(HEADER):
                 s = s[len(HEADER) :]
-            s, i = regex.subn(fr, to, s, count=count, flags=flags)
+            s, i = re.subn(fr, to, s, count=count, flags=flags)
             if i > 0:
                 return original, s
         except Exception as e:
