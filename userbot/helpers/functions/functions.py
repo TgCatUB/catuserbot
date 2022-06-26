@@ -197,6 +197,10 @@ async def delete_conv(event, chat, from_message):
 def sublists(input_list: list, width: int = 3):
     return [input_list[x : x + width] for x in range(0, len(input_list), width)]
 
+#split string into fixed length substrings
+def chunkstring(string, length):
+    return (string[0+i:length+i] for i in range(0, len(string), length))
+
 
 # unziping file
 async def unzip(downloaded_file_name):
