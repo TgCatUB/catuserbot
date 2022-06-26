@@ -20,6 +20,7 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import reply_id
 from ..helpers.tools import media_type
+from ..helpers.functions import chunkstring
 from ..helpers.utils import format, get_chatinfo
 from . import BOTLOG, BOTLOG_CHATID
 
@@ -265,17 +266,15 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         caption += f"✅ <b>Verified by Telegram: </b><code>{verified}</code>\n"
     if grp_emoji:
         caption += f"🙂 <b>Enabled Reactions: </b>\n"
-        if len(grp_emoji) > 8:
-            caption += f"    <b>-</b> {''.join(grp_emoji[:8])}\n"
-            caption += f"    <b>-</b> {''.join(grp_emoji[8:])}\n"
-        else:
-            caption += f"    <b>-</b> {''.join(grp_emoji)}\n"
+        reactionslist = chunkstring(grp_emoji, 8)
+        caption += "    <b>-</b> "
+        caption += "\n    <b>-</b> ".join(reactionslist)
     else:
         caption += (
-            f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>\n"
+            f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>"
         )
     if description:
-        caption += f"💬 <b>Description: </b>\n<code>{description}</code>\n"
+        caption += f"\n💬 <b>Description: </b>\n<code>{description}</code>\n"
     return caption
 
 
