@@ -28,13 +28,12 @@ async def reply_id(event):
 
 
 async def get_chatinfo(event, match, catevent):
+    if not match and event.reply_to_msg_id:
+        replied_msg = await event.get_reply_message()
+        if replied_msg.fwd_from and replied_msg.fwd_from.channel_id is not None:
+            match = replied_msg.fwd_from.channel_id
     if not match:
-        if event.reply_to_msg_id:
-            replied_msg = await event.get_reply_message()
-            if replied_msg.fwd_from and replied_msg.fwd_from.channel_id is not None:
-                match = replied_msg.fwd_from.channel_id
-        else:
-            match = event.chat_id
+        match = event.chat_id
     with contextlib.suppress(ValueError):
         match = int(match)
     try:
