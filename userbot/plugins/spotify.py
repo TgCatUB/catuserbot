@@ -786,7 +786,7 @@ async def spotify_now(event):
         ],
     },
 )
-async def spotify_now(event):
+async def spotify_now(event):  # sourcery skip: remove-duplicate-dict-key
     "Send spotify song"
     chat = "@DeezerMusicBot"
     msg_id = await reply_id(event)

@@ -38,7 +38,7 @@ async def _(event):
     else:
         reply = f"[user](tg://user?id={reply_message.sender_id}) has {num_warns}/{limit} warnings... watch out!"
         if warn_reason:
-            reply += "\nReason for last warn:\n{}".format(html.escape(warn_reason))
+            reply += f"\nReason for last warn:\n{html.escape(warn_reason)}"
     await edit_or_reply(event, reply)
 
 

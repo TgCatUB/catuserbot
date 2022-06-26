@@ -314,19 +314,15 @@ async def _(event):
             chat, filter=ChannelParticipantsAdmins
         ):
             if not x.deleted and isinstance(x.participant, ChannelParticipantCreator):
-                mentions += "\n 👑 [{}](tg://user?id={}) `{}`".format(
-                    x.first_name, x.id, x.id
-                )
+                mentions += f"\n 👑 [{x.first_name}](tg://user?id={x.id}) `{x.id}`"
         mentions += "\n"
         async for x in event.client.iter_participants(
             chat, filter=ChannelParticipantsAdmins
         ):
             if x.deleted:
-                mentions += "\n `{}`".format(x.id)
+                mentions += f"\n `{x.id}`"
             elif isinstance(x.participant, ChannelParticipantAdmin):
-                mentions += "\n ⚜️ [{}](tg://user?id={}) `{}`".format(
-                    x.first_name, x.id, x.id
-                )
+                mentions += f"\n ⚜️ [{x.first_name}](tg://user?id={x.id}) `{x.id}`"
     except Exception as e:
         mentions += f" {str(e)}" + "\n"
     await event.client.send_message(event.chat_id, mentions, reply_to=reply_message)
@@ -350,7 +346,7 @@ async def _(event):
     "To get list of bots."
     mentions = "**Bots in this Group**: \n"
     if input_str := event.pattern_match.group(1):
-        mentions = "Bots in {} Group: \n".format(input_str)
+        mentions = f"Bots in {input_str} Group: \n"
         try:
             chat = await event.client.get_entity(input_str)
         except Exception as e:
@@ -362,13 +358,9 @@ async def _(event):
             chat, filter=ChannelParticipantsBots
         ):
             if isinstance(x.participant, ChannelParticipantAdmin):
-                mentions += "\n ⚜️ [{}](tg://user?id={}) `{}`".format(
-                    x.first_name, x.id, x.id
-                )
+                mentions += f"\n ⚜️ [{x.first_name}](tg://user?id={x.id}) `{x.id}`"
             else:
-                mentions += "\n [{}](tg://user?id={}) `{}`".format(
-                    x.first_name, x.id, x.id
-                )
+                mentions += f"\n [{x.first_name}](tg://user?id={x.id}) `{x.id}`"
     except Exception as e:
         mentions += f" {str(e)}" + "\n"
     await edit_or_reply(event, mentions)
@@ -392,7 +384,7 @@ async def get_users(show):
     mentions = "**Users in this Group**: \n"
     await reply_id(show)
     if input_str := show.pattern_match.group(1):
-        mentions = "Users in {} Group: \n".format(input_str)
+        mentions = f"Users in {input_str} Group: \n"
         try:
             chat = await show.client.get_entity(input_str)
         except Exception as e:
