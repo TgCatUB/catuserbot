@@ -2,6 +2,7 @@ import asyncio
 import contextlib
 import time
 from datetime import datetime
+
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.custom import Dialog
 from telethon.tl.functions.contacts import UnblockRequest as unblock
@@ -10,6 +11,7 @@ from telethon.tl.types import Channel, Chat, User
 from userbot import catub
 from userbot.core.managers import edit_delete, edit_or_reply
 from userbot.helpers import delete_conv
+
 from ..sql_helper import global_collectionjson as sql
 
 plugin_category = "utils"
@@ -129,11 +131,7 @@ async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
         agc = sql.get_collection("admin_list").json
     except AttributeError:
         agc = {}
-    agc = {
-        "groups" : admingroupids,
-        "channels": broadcastchannelids,
-        "date": date
-    }
+    agc = {"groups": admingroupids, "channels": broadcastchannelids, "date": date}
     sql.del_collection("admin_list")
     sql.add_collection("admin_list", agc, {})
     if BOTLOG:
@@ -142,6 +140,7 @@ async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
             "#ADMIN_LIST\n"
             f"Admin groups list is succesfully updated at {date}. if you want to update it do `.stat` or `.adminlist`",
         )
+
 
 @catub.cat_cmd(
     pattern="(|p)stat (g|ga|go|c|ca|co)$",
