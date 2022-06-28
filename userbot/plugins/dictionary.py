@@ -61,8 +61,7 @@ async def _(event):
         if "message" not in response:
             result = response[0]
             if "phonetic" in result:
-                phonetic = result["phonetic"]
-                if phonetic:
+                if phonetic := result["phonetic"]:
                     ft += f"<b>Phonetic: </b>\n<code>{phonetic}</code>\n\n"
             meanings = result["meanings"]
             synonyms = []
@@ -70,7 +69,7 @@ async def _(event):
             for content in meanings:
                 ft += f"<u><b>Meaning ({content['partOfSpeech']}):</b></u>\n"
                 for count, text in enumerate(content["definitions"], 1):
-                    ft += f"<b>{count}.</b> <i>{text['definition']}</i>\n"
+                    ft += f"<b>{count}.</b> {text['definition']}\n"
                 if content["synonyms"]:
                     synonyms.extend(content["synonyms"])
                 if content["antonyms"]:

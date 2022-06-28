@@ -1,7 +1,7 @@
 import asyncio
 import contextlib
 import time
-
+from datetime import datetime
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.custom import Dialog
 from telethon.tl.functions.contacts import UnblockRequest as unblock
@@ -10,6 +10,7 @@ from telethon.tl.types import Channel, Chat, User
 from userbot import catub
 from userbot.core.managers import edit_delete, edit_or_reply
 from userbot.helpers import delete_conv
+from ..sql_helper import global_collectionjson as sql
 
 plugin_category = "utils"
 
@@ -72,6 +73,8 @@ async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
     creator_in_channels = 0
     unread_mentions = 0
     unread = 0
+    admingroupids = []
+    broadcastchannelids = []
     dialog: Dialog
     async for dialog in event.client.iter_dialogs():
         entity = dialog.entity
@@ -79,6 +82,7 @@ async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
             broadcast_channels += 1
             if entity.creator or entity.admin_rights:
                 admin_in_broadcast_channels += 1
+                broadcastchannelids.append(entity.id)
             if entity.creator:
                 creator_in_channels += 1
         elif (
@@ -91,6 +95,7 @@ async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
             groups += 1
             if entity.creator or entity.admin_rights:
                 admin_in_groups += 1
+                admingroupids.append(entity.id)
             if entity.creator:
                 creator_in_groups += 1
         elif not isinstance(entity, Channel) and isinstance(entity, User):
@@ -101,6 +106,7 @@ async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
         unread += dialog.unread_count
     stop_time = time.time() - start_time
     full_name = inline_mention(await event.client.get_me())
+    date = str(datetime.now().strftime("%B %d, %Y"))
     response = f"📌 **Stats for {full_name}** \n\n"
     response += f"**Private Chats:** {private_chats} \n"
     response += f"   ★ `Users: {private_chats - bots}` \n"
@@ -119,7 +125,23 @@ async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
     response += f"**Unread Mentions:** {unread_mentions} \n\n"
     response += f"📌 __It Took:__ {stop_time:.02f}s \n"
     await cat.edit(response)
-
+    try:
+        agc = sql.get_collection("admin_list").json
+    except AttributeError:
+        agc = {}
+    agc = {
+        "groups" : admingroupids,
+        "channels": broadcastchannelids,
+        "date": date
+    }
+    sql.del_collection("admin_list")
+    sql.add_collection("admin_list", agc, {})
+    if BOTLOG:
+        await event.client.send_message(
+            BOTLOG_CHATID,
+            "#ADMIN_LIST\n"
+            f"Admin groups list is succesfully updated at {date}. if you want to update it do `.stat` or `.adminlist`",
+        )
 
 @catub.cat_cmd(
     pattern="(|p)stat (g|ga|go|c|ca|co)$",
