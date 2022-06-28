@@ -11,8 +11,9 @@ from telethon.tl.types import Channel, Chat, User
 from userbot import catub
 from userbot.core.managers import edit_delete, edit_or_reply
 from userbot.helpers import delete_conv
-from . import BOTLOG, BOTLOG_CHATID
+
 from ..sql_helper import global_collectionjson as sql
+from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "utils"
 
