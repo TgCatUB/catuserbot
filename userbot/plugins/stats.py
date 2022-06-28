@@ -139,7 +139,7 @@ async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
         await event.client.send_message(
             BOTLOG_CHATID,
             "#ADMIN_LIST\n"
-            f"Admin groups list is succesfully updated at {date}. if you want to update it do `.stat` or `.adminlist`",
+            f"Admin groups list has been succesfully updated on {date}. If you want to update it again, do  `.stat` or `.adminlist`",
         )
 
 
