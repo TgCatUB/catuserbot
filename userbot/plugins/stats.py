@@ -109,7 +109,7 @@ async def stats(event):  # sourcery no-metrics # sourcery skip: low-code-quality
         unread += dialog.unread_count
     stop_time = time.time() - start_time
     full_name = inline_mention(await event.client.get_me())
-    date = str(datetime.now().strftime("%B %d, %Y"))
+    date = str(datetime.now().strftime("%B %d, %Y, %H:%M"))
     response = f"📌 **Stats for {full_name}** \n\n"
     response += f"**Private Chats:** {private_chats} \n"
     response += f"   ★ `Users: {private_chats - bots}` \n"
