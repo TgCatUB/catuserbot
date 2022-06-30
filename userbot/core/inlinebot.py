@@ -406,7 +406,7 @@ async def inline_handler(event):  # sourcery no-metrics
             result = await article_builder(event, query)
             await event.answer([result] if result else None)
         elif match:
-            query = query[7:]
+            query = query[6:]
             user, txct = query.split(" ", 1)
             builder = event.builder
             troll = os.path.join("./userbot", "troll.txt")
