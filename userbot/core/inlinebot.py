@@ -537,6 +537,8 @@ async def inline_handler(event):  # sourcery no-metrics
             buttons = [Button.inline("Read Message ", data=f"hide_{timestamp}")]
             result = builder.article(
                 title="Hidden Message",
+                description="Send hidden text in chat.",
+                thumb=get_thumb("hide"),
                 text=f"✖✖✖",
                 buttons=buttons,
             )
@@ -661,7 +663,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 builder.article(
                     title="Secret",
                     description="Send secret message to your friends.",
-                    text="__Send secret message which only you & the reciever can see.\n\nFor multiple users give space like **@bot troll @username @username2 | Text**__",
+                    text="__Send secret message which only you & the reciever can see.\n\nFor multiple users give space like **@bot secret @username @username2 | Text**__",
                     thumb=get_thumb("secret"),
                     buttons=[
                         Button.switch_inline(
