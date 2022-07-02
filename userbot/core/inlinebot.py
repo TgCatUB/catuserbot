@@ -454,7 +454,7 @@ async def inline_handler(event):  # sourcery no-metrics
             result = builder.article(
                 title=f"Troll Message  to {sandy}.",
                 description="Only he/she/they can't open it.",
-                thumb=wb(CATLOGO, 0, "image/jpeg", []),
+                thumb=get_thumb("troll"),
                 text=f"Only {sandy} cannot access this message!",
                 buttons=buttons,
             )
@@ -513,7 +513,7 @@ async def inline_handler(event):  # sourcery no-metrics
             result = builder.article(
                 title=f"secret message  to {sandy}.",
                 description="Only he/she/they can open it.",
-                thumb=wb(CATLOGO, 0, "image/jpeg", []),
+                thumb=get_thumb("secret"),
                 text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
                 buttons=buttons,
             )
