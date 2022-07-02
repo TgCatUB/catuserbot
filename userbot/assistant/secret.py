@@ -15,7 +15,9 @@ async def on_plug_in_callback_query_handler(event):
         try:
             message = jsondata[f"{timestamp}"]
             userid = message["userid"]
-            ids = userid.append(catub.uid)
+            print(f"1. {userid}")
+            ids = userid+[catub.uid]
+            print(f"2. {ids}")
             if event.query.user_id in ids:
                 encrypted_tcxt = message["text"]
                 reply_pop_up_alert = encrypted_tcxt
