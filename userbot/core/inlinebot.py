@@ -466,7 +466,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 json.dump(newtroll, open(troll, "w"))
         elif match2:
             query = query[7:]
-            iris, txct = query.split(" ", 1)
+            iris, txct = query.split(" | ")
             builder = event.builder
             secret = os.path.join("./userbot", "secrets.txt")
             users = iris.split(" ")
