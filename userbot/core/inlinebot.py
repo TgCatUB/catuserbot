@@ -665,7 +665,9 @@ async def inline_handler(event):  # sourcery no-metrics
                     thumb=get_thumb("secret"),
                     buttons=[
                         Button.switch_inline(
-                            "Secret Text", query="secret @username | Text", same_peer=True
+                            "Secret Text",
+                            query="secret @username | Text",
+                            same_peer=True,
                         )
                     ],
                 ),
