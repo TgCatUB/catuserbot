@@ -407,45 +407,54 @@ async def inline_handler(event):  # sourcery no-metrics
             await event.answer([result] if result else None)
         elif match:
             query = query[6:]
-            user, txct = query.split(" ", 1)
+            iris, txct = query.split(" | ")
             builder = event.builder
             troll = os.path.join("./userbot", "troll.txt")
+            users = iris.split(" ")
+            sandy = ""
+            user_list = []
             try:
                 jsondata = json.load(open(troll))
             except Exception:
                 jsondata = False
-            try:
-                # if u is user id
-                u = int(user)
+            for user in users:
                 try:
-                    u = await event.client.get_entity(u)
+                    # if u is user id
+                    u = int(user)
+                    try:
+                        u = await event.client.get_entity(u)
+                        if u.username:
+                            sandy += f"@{u.username}"
+                        else:
+                            sandy += f"[{u.first_name}](tg://user?id={u.id})"
+                        u = int(u.id)
+                    except ValueError:
+                        # ValueError: Could not find the input entity
+                        sandy += f"[user](tg://user?id={u})"
+                except ValueError:
+                    # if u is username
+                    try:
+                        u = await event.client.get_entity(user)
+                    except ValueError:
+                        return
                     if u.username:
-                        sandy = f"@{u.username}"
+                        sandy += f"@{u.username}"
                     else:
-                        sandy = f"[{u.first_name}](tg://user?id={u.id})"
+                        sandy += f"[{u.first_name}](tg://user?id={u.id})"
                     u = int(u.id)
-                except ValueError:
-                    # ValueError: Could not find the input entity
-                    sandy = f"[user](tg://user?id={u})"
-            except ValueError:
-                # if u is username
-                try:
-                    u = await event.client.get_entity(user)
-                except ValueError:
+                except Exception:
                     return
-                if u.username:
-                    sandy = f"@{u.username}"
-                else:
-                    sandy = f"[{u.first_name}](tg://user?id={u.id})"
-                u = int(u.id)
-            except Exception:
-                return
+                user_list.append(u)
+                sandy += " "
+            sandy = sandy[:-1]
             timestamp = int(time.time() * 2)
-            newtroll = {str(timestamp): {"userid": u, "text": txct}}
+            newtroll = {str(timestamp): {"userid": user_list, "text": txct}}
 
             buttons = [Button.inline("show message 🔐", data=f"troll_{timestamp}")]
             result = builder.article(
-                title="Troll Message",
+                title=f"Troll Message  to {sandy}.",
+                description="Only he/she/they can't open it.",
+                thumb=wb(CATLOGO, 0, "image/jpeg", []),
                 text=f"Only {sandy} cannot access this message!",
                 buttons=buttons,
             )
@@ -457,45 +466,54 @@ async def inline_handler(event):  # sourcery no-metrics
                 json.dump(newtroll, open(troll, "w"))
         elif match2:
             query = query[7:]
-            user, txct = query.split(" ", 1)
+            iris, txct = query.split(" ", 1)
             builder = event.builder
             secret = os.path.join("./userbot", "secrets.txt")
+            users = iris.split(" ")
+            sandy = ""
+            user_list = []
             try:
                 jsondata = json.load(open(secret))
             except Exception:
                 jsondata = False
-            try:
-                # if u is user id
-                u = int(user)
+            for user in users:
                 try:
-                    u = await event.client.get_entity(u)
+                    # if u is user id
+                    u = int(user)
+                    try:
+                        u = await event.client.get_entity(u)
+                        if u.username:
+                            sandy += f"@{u.username}"
+                        else:
+                            sandy += f"[{u.first_name}](tg://user?id={u.id})"
+                        u = int(u.id)
+                    except ValueError:
+                        # ValueError: Could not find the input entity
+                        sandy += f"[user](tg://user?id={u})"
+                except ValueError:
+                    # if u is username
+                    try:
+                        u = await event.client.get_entity(user)
+                    except ValueError:
+                        return
                     if u.username:
-                        sandy = f"@{u.username}"
+                        sandy += f"@{u.username}"
                     else:
-                        sandy = f"[{u.first_name}](tg://user?id={u.id})"
+                        sandy += f"[{u.first_name}](tg://user?id={u.id})"
                     u = int(u.id)
-                except ValueError:
-                    # ValueError: Could not find the input entity
-                    sandy = f"[user](tg://user?id={u})"
-            except ValueError:
-                # if u is username
-                try:
-                    u = await event.client.get_entity(user)
-                except ValueError:
+                except Exception:
                     return
-                if u.username:
-                    sandy = f"@{u.username}"
-                else:
-                    sandy = f"[{u.first_name}](tg://user?id={u.id})"
-                u = int(u.id)
-            except Exception:
-                return
+                user_list.append(u)
+                sandy += " "
+            sandy = sandy[:-1]
             timestamp = int(time.time() * 2)
-            newsecret = {str(timestamp): {"userid": u, "text": txct}}
+            newsecret = {str(timestamp): {"userid": user_list, "text": txct}}
 
             buttons = [Button.inline("show message 🔐", data=f"secret_{timestamp}")]
             result = builder.article(
-                title="secret message",
+                title=f"secret message  to {sandy}.",
+                description="Only he/she/they can open it.",
+                thumb=wb(CATLOGO, 0, "image/jpeg", []),
                 text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
                 buttons=buttons,
             )
