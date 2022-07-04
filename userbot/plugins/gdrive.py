@@ -28,9 +28,9 @@ from userbot.core.logger import logging
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import CancelProcess, humanbytes, progress, time_formatter
+from ..helpers.functions.functions import post_to_telegraph
 from ..helpers.utils import _format
 from ..sql_helper import google_drive_sql as helper
-from ..helpers.functions.functions import post_to_telegraph
 from . import BOTLOG, BOTLOG_CHATID, TMP_DOWNLOAD_DIRECTORY
 
 LOGS = logging.getLogger(__name__)
@@ -1435,22 +1435,24 @@ async def set_upload_folder(gdrive):
     await edit_or_reply(gdrive, "`Sending information...`")
     if G_DRIVE_FOLDER_ID is not None:
         GDRIVE_.parent_Id = G_DRIVE_FOLDER_ID
-        await edit_or_reply(gdrive,
-            "**[FOLDER - SET]**\n\n" "**Status : **`OK- using G_DRIVE_FOLDER_ID now.`"
+        await edit_or_reply(
+            gdrive,
+            "**[FOLDER - SET]**\n\n" "**Status : **`OK- using G_DRIVE_FOLDER_ID now.`",
         )
         return None
     try:
         GDRIVE_.parent_id = ""
     except NameError:
-        await edit_or_reply(gdrive,
-            "**[FOLDER - SET]**\n\n" "**Status : **`BAD - No parent_Id is set.`"
+        await edit_or_reply(
+            gdrive, "**[FOLDER - SET]**\n\n" "**Status : **`BAD - No parent_Id is set.`"
         )
         return False
     else:
-        await edit_or_reply(gdrive,
+        await edit_or_reply(
+            gdrive,
             "**[FOLDER - SET]**\n\n"
             "**Status : **`OK`"
-            " - `G_DRIVE_FOLDER_ID empty, will use root.`"
+            " - `G_DRIVE_FOLDER_ID empty, will use root.`",
         )
         return None
 
@@ -1469,7 +1471,7 @@ async def set_upload_folder(gdrive):
     await edit_or_reply(gdrive, "`Sending information...`")
     inp = gdrive.pattern_match.group(1)
     if not inp:
-        return await edit_or_reply(gdrive,">`.gset <folderURL/folderID>`")  
+        return await edit_or_reply(gdrive, ">`.gset <folderURL/folderID>`")
     try:
         ext_id = re.findall(r"\bhttps?://drive\.google\.com\S+", inp)[0]
         GDRIVE_.parent_Id, _ = await get_file_id(ext_id)
@@ -1479,10 +1481,18 @@ async def set_upload_folder(gdrive):
         c2 = "-" in inp or "_" in inp
         if True in [c1 or c2]:
             GDRIVE_.parent_Id = inp
-            return await edit_or_reply(gdrive,"**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`")
-        await edit_or_reply(gdrive,"**[PARENT - FOLDER]**\n\n" "**Status : WARNING** -` forcing use...`")
+            return await edit_or_reply(
+                gdrive,
+                "**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`",
+            )
+        await edit_or_reply(
+            gdrive,
+            "**[PARENT - FOLDER]**\n\n" "**Status : WARNING** -` forcing use...`",
+        )
         GDRIVE_.parent_Id = inp
-    await edit_or_reply(gdrive,"**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`")
+    await edit_or_reply(
+        gdrive, "**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`"
+    )
 
 
 @catub.cat_cmd(

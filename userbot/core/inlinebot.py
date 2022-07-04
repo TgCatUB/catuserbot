@@ -425,7 +425,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 try:
                     u = await event.client.get_entity(usr)
                 except ValueError:
-                    return 
+                    return
                 if u.username:
                     sandy += f"@{u.username}"
                 else:
@@ -435,7 +435,7 @@ async def inline_handler(event):  # sourcery no-metrics
             sandy = sandy[:-1]
             timestamp = int(time.time() * 2)
             newtroll = {str(timestamp): {"userid": user_list, "text": txct}}
-            
+
             buttons = [Button.inline("show message 🔐", data=f"troll_{timestamp}")]
             result = builder.article(
                 title=f"Troll Message  to {sandy}.",
@@ -470,7 +470,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 try:
                     u = await event.client.get_entity(usr)
                 except ValueError:
-                    return 
+                    return
                 if u.username:
                     sandy += f"@{u.username}"
                 else:
