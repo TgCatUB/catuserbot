@@ -408,7 +408,7 @@ async def inline_handler(event):  # sourcery no-metrics
         elif match:
             query = query[6:]
             if "|" in query:
-                iris, txct = query.replace(" |","|").replace("| ","|").split("|")
+                iris, txct = query.replace(" |", "|").replace("| ", "|").split("|")
                 users = iris.split(" ")
             else:
                 user, txct = query.split(" ", 1)
@@ -452,7 +452,7 @@ async def inline_handler(event):  # sourcery no-metrics
         elif match2:
             query = query[7:]
             if "|" in query:
-                iris, txct = query.replace(" |","|").replace("| ","|").split("|")
+                iris, txct = query.replace(" |", "|").replace("| ", "|").split("|")
                 users = iris.split(" ")
             else:
                 user, txct = query.split(" ", 1)
