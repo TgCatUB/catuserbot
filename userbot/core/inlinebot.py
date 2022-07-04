@@ -408,7 +408,7 @@ async def inline_handler(event):  # sourcery no-metrics
         elif match:
             query = query[6:]
             if "|" in query:
-                iris, txct = query.split(" | ")
+                iris, txct = query.split("|")
                 users = iris.split(" ")
             else:
                 user, txct = query.split(" ", 1)
@@ -435,7 +435,6 @@ async def inline_handler(event):  # sourcery no-metrics
             sandy = sandy[:-1]
             timestamp = int(time.time() * 2)
             newtroll = {str(timestamp): {"userid": user_list, "text": txct}}
-
             buttons = [Button.inline("show message 🔐", data=f"troll_{timestamp}")]
             result = builder.article(
                 title=f"Troll Message  to {sandy}.",
@@ -453,7 +452,7 @@ async def inline_handler(event):  # sourcery no-metrics
         elif match2:
             query = query[7:]
             if "|" in query:
-                iris, txct = query.split(" | ")
+                iris, txct = query.split("|")
                 users = iris.split(" ")
             else:
                 user, txct = query.split(" ", 1)
@@ -635,12 +634,12 @@ async def inline_handler(event):  # sourcery no-metrics
                 builder.article(
                     title="Secret",
                     description="Send secret message to your friends.",
-                    text="__Send secret message which only you & the reciever can see.\n\nFor multiple users give space like **@bot secret @username @username2 | Text**__",
+                    text="__Send secret message which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.like **@bot secret @username @username2 | Text**__",
                     thumb=get_thumb("secret"),
                     buttons=[
                         Button.switch_inline(
                             "Secret Text",
-                            query="secret @username | Text",
+                            query="secret @username Text",
                             same_peer=True,
                         )
                     ],
@@ -650,11 +649,11 @@ async def inline_handler(event):  # sourcery no-metrics
                 builder.article(
                     title="Troll",
                     description="Send troll message to your friends.",
-                    text="__Send troll message which everyone can see except the reciever.\n\nFor multiple users give space like **@bot troll @username @username2 | Text**__",
+                    text="__Send troll message which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text. like **@bot troll @username @username2 | Text**__",
                     thumb=get_thumb("troll"),
                     buttons=[
                         Button.switch_inline(
-                            "Troll Text", query="troll @username | Text", same_peer=True
+                            "Troll Text", query="troll @username Text", same_peer=True
                         )
                     ],
                 ),
