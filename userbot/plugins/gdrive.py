@@ -857,10 +857,16 @@ async def glists(gdrive):
                 query = ""
     elif checker.startswith("-t"):
         ftype = checker.strip("-t ")
-        if not ftype or ftype not in ["all","file","folder"]:
-            return await edit_delete(gdrive, "__**Set type for glist from these:**__\n\n**1.**  `all`\n**2.**  `file`\n**3.**  `folder`", 30)
+        if not ftype or ftype not in ["all", "file", "folder"]:
+            return await edit_delete(
+                gdrive,
+                "__**Set type for glist from these:**__\n\n**1.**  `all`\n**2.**  `file`\n**3.**  `folder`",
+                30,
+            )
         GDRIVE_.doc_type = ftype
-        return await edit_delete(gdrive, f"__Type for glist successfully changed to **{ftype}**__")
+        return await edit_delete(
+            gdrive, f"__Type for glist successfully changed to **{ftype}**__"
+        )
     elif checker.startswith("-p"):
         parents = checker.split(None, 2)[1]
         parents = parents.split("/")[-1]
@@ -927,7 +933,7 @@ async def glists(gdrive):
     message = (
         folder
         if GDRIVE_.doc_type == "folder"
-        else (file if GDRIVE_.doc_type == "file" else folder+file)
+        else (file if GDRIVE_.doc_type == "file" else folder + file)
     )
     if query == "":
         query = "Not specified"
