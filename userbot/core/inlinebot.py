@@ -407,10 +407,13 @@ async def inline_handler(event):  # sourcery no-metrics
             await event.answer([result] if result else None)
         elif match:
             query = query[6:]
-            iris, txct = query.split(" | ")
-            builder = event.builder
+            if "|" in query:
+                iris, txct = query.split(" | ")
+                users = iris.split(" ")
+            else:
+                user, txct = query.split(" ", 1)
+                users = [user]
             troll = os.path.join("./userbot", "troll.txt")
-            users = iris.split(" ")
             sandy = ""
             user_list = []
             try:
@@ -418,38 +421,21 @@ async def inline_handler(event):  # sourcery no-metrics
             except Exception:
                 jsondata = False
             for user in users:
+                usr = int(user) if user.isdigit() else user
                 try:
-                    # if u is user id
-                    u = int(user)
-                    try:
-                        u = await event.client.get_entity(u)
-                        if u.username:
-                            sandy += f"@{u.username}"
-                        else:
-                            sandy += f"[{u.first_name}](tg://user?id={u.id})"
-                        u = int(u.id)
-                    except ValueError:
-                        # ValueError: Could not find the input entity
-                        sandy += f"[user](tg://user?id={u})"
+                    u = await event.client.get_entity(usr)
                 except ValueError:
-                    # if u is username
-                    try:
-                        u = await event.client.get_entity(user)
-                    except ValueError:
-                        return
-                    if u.username:
-                        sandy += f"@{u.username}"
-                    else:
-                        sandy += f"[{u.first_name}](tg://user?id={u.id})"
-                    u = int(u.id)
-                except Exception:
-                    return
-                user_list.append(u)
+                    return 
+                if u.username:
+                    sandy += f"@{u.username}"
+                else:
+                    sandy += f"[{u.first_name}](tg://user?id={u.id})"
+                user_list.append(u.id)
                 sandy += " "
             sandy = sandy[:-1]
             timestamp = int(time.time() * 2)
             newtroll = {str(timestamp): {"userid": user_list, "text": txct}}
-
+            
             buttons = [Button.inline("show message 🔐", data=f"troll_{timestamp}")]
             result = builder.article(
                 title=f"Troll Message  to {sandy}.",
@@ -466,10 +452,13 @@ async def inline_handler(event):  # sourcery no-metrics
                 json.dump(newtroll, open(troll, "w"))
         elif match2:
             query = query[7:]
-            iris, txct = query.split(" | ")
-            builder = event.builder
+            if "|" in query:
+                iris, txct = query.split(" | ")
+                users = iris.split(" ")
+            else:
+                user, txct = query.split(" ", 1)
+                users = [user]
             secret = os.path.join("./userbot", "secrets.txt")
-            users = iris.split(" ")
             sandy = ""
             user_list = []
             try:
@@ -477,33 +466,16 @@ async def inline_handler(event):  # sourcery no-metrics
             except Exception:
                 jsondata = False
             for user in users:
+                usr = int(user) if user.isdigit() else user
                 try:
-                    # if u is user id
-                    u = int(user)
-                    try:
-                        u = await event.client.get_entity(u)
-                        if u.username:
-                            sandy += f"@{u.username}"
-                        else:
-                            sandy += f"[{u.first_name}](tg://user?id={u.id})"
-                        u = int(u.id)
-                    except ValueError:
-                        # ValueError: Could not find the input entity
-                        sandy += f"[user](tg://user?id={u})"
+                    u = await event.client.get_entity(usr)
                 except ValueError:
-                    # if u is username
-                    try:
-                        u = await event.client.get_entity(user)
-                    except ValueError:
-                        return
-                    if u.username:
-                        sandy += f"@{u.username}"
-                    else:
-                        sandy += f"[{u.first_name}](tg://user?id={u.id})"
-                    u = int(u.id)
-                except Exception:
-                    return
-                user_list.append(u)
+                    return 
+                if u.username:
+                    sandy += f"@{u.username}"
+                else:
+                    sandy += f"[{u.first_name}](tg://user?id={u.id})"
+                user_list.append(u.id)
                 sandy += " "
             sandy = sandy[:-1]
             timestamp = int(time.time() * 2)
