@@ -105,6 +105,7 @@ class GDRIVE:
     def __init__(self):
         self.parent_Id = G_DRIVE_FOLDER_ID or None
         self.is_cancelled = False
+        self.doc_type = "all"
 
 
 GDRIVE_ = GDRIVE()
@@ -854,6 +855,12 @@ async def glists(gdrive):
                 query = f"'{G_DRIVE_FOLDER_ID}' in parents and (name contains '*')"
             else:
                 query = ""
+    elif checker.startswith("-t"):
+        ftype = checker.strip("-t ")
+        if not ftype or ftype not in ["all","file","folder"]:
+            return await edit_delete(gdrive, "__**Set type for glist from these:**__\n\n**1.**  `all`\n**2.**  `file`\n**3.**  `folder`", 30)
+        GDRIVE_.doc_type = ftype
+        return await edit_delete(gdrive, f"__Type for glist successfully changed to **{ftype}**__")
     elif checker.startswith("-p"):
         parents = checker.split(None, 2)[1]
         parents = parents.split("/")[-1]
@@ -873,7 +880,7 @@ async def glists(gdrive):
     service = await create_app(gdrive)
     if service is False:
         return False
-    message = ""
+    folder = file = ""
     fields = "nextPageToken, files(name, id, " "mimeType, webViewLink, webContentLink)"
     page_token = None
     result = []
@@ -906,10 +913,10 @@ async def glists(gdrive):
             file_name = files.get("name")
             if files.get("mimeType") == "application/vnd.google-apps.folder":
                 link = files.get("webViewLink")
-                message += f"<a href = {link}>📁️ • {file_name}</a>\n"
+                folder += f"<a href = {link}>📁️ • {file_name}</a>\n"
             else:
                 link = files.get("webContentLink")
-                message += f"<a href = {link}>📄️ • {file_name}</a>\n"
+                file += f"<a href = {link}>📄️ • {file_name}</a>\n"
             result.append(files)
         if len(result) >= page_size:
             break
@@ -917,7 +924,11 @@ async def glists(gdrive):
         page_token = response.get("nextPageToken", None)
         if page_token is None:
             break
-
+    message = (
+        folder
+        if GDRIVE_.doc_type == "folder"
+        else (file if GDRIVE_.doc_type == "file" else folder+file)
+    )
     if query == "":
         query = "Not specified"
     if len(message) > 4000:
@@ -1046,6 +1057,7 @@ async def reset_credentials(gdrive):
         "flags": {
             "l": "Use flag `-l range[1-1000]` for limit output",
             "p": "Use flag `-p parents-folder_id` for files/folder in given folder in gdrive.",
+            "t": "Use flag `-t file type` to show those on glist, available types are - all, file, folder. ",
         },
         "note": "for `.glist` you can combine -l and -p flags with or without name "
         "at the same time, it must be `-l` flags first before use `-p` flags.\n"
@@ -1054,6 +1066,7 @@ async def reset_credentials(gdrive):
             "{tr}glist -l <count>",
             "{tr}glist -l <count> -p parent_id",
             "{tr}glist -p <parent_id>",
+            "{tr}glist -t folder",
             "{tr}glist",
         ],
     },
