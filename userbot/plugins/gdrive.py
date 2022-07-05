@@ -106,6 +106,7 @@ class GDRIVE:
         self.parent_Id = G_DRIVE_FOLDER_ID or None
         self.is_cancelled = False
         self.doc_type = "all"
+        self.doc_limit = 50
 
 
 GDRIVE_ = GDRIVE()
@@ -832,10 +833,10 @@ async def check_progress_for_dl(
 
 async def glists(gdrive):
     checker = gdrive.pattern_match.group(1)
-    page_size = 50  # default page_size is 50
+    page_size = GDRIVE_.doc_limit
     name = None
     if checker is not None:
-        page_size = int(checker.strip("-l "))
+        GDRIVE_.doc_limit = int(checker.strip("-l "))
         if page_size > 1000:
             return await edit_or_reply(
                 gdrive,
