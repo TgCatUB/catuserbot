@@ -445,14 +445,16 @@ async def inline_handler(event):  # sourcery no-metrics
                 jsondata = False
             timestamp = int(time.time() * 2)
             new_msg = {str(timestamp): {"userid": user_list, "text": txct}}
-            buttons = [
-                Button.inline(info_type[2], data=f"{info_type[0]}_{timestamp}")
-            ]
+            buttons = [Button.inline(info_type[2], data=f"{info_type[0]}_{timestamp}")]
             result = builder.article(
                 title=f"{info_type[0].title()} message  to {sandy}.",
-                description="Send hidden text in chat." if match3 else f"Only he/she/they {info_type[1]} open it.",
+                description="Send hidden text in chat."
+                if match3
+                else f"Only he/she/they {info_type[1]} open it.",
                 thumb=get_thumb(info_type[0]),
-                text= "✖✖✖" if match3 else f"🔒 A whisper message to {sandy}, Only he/she can open it.",
+                text="✖✖✖"
+                if match3
+                else f"🔒 A whisper message to {sandy}, Only he/she can open it.",
                 buttons=buttons,
             )
             await event.answer([result] if result else None)
