@@ -406,13 +406,13 @@ async def inline_handler(event):  # sourcery no-metrics
             result = await article_builder(event, query)
             await event.answer([result] if result else None)
         elif match or match2 or match3:
+            user_list = []
             if match3:
                 sandy = "chat"
                 query = query[5:]
                 info_type = ["hide", "can't", "Read Message "]
             else:
                 sandy = ""
-                user_list = []
                 if match:
                     query = query[6:]
                     info_type = ["troll", "can't", "show message 🔐"]
@@ -420,10 +420,10 @@ async def inline_handler(event):  # sourcery no-metrics
                     query = query[7:]
                     info_type = ["secret", "can", "show message 🔐"]
                 if "|" in query:
-                    iris, txct = query.replace(" |", "|").replace("| ", "|").split("|")
+                    iris, query = query.replace(" |", "|").replace("| ", "|").split("|")
                     users = iris.split(" ")
                 else:
-                    user, txct = query.split(" ", 1)
+                    user, query = query.split(" ", 1)
                     users = [user]
                 for user in users:
                     usr = int(user) if user.isdigit() else user
@@ -444,7 +444,7 @@ async def inline_handler(event):  # sourcery no-metrics
             except Exception:
                 jsondata = False
             timestamp = int(time.time() * 2)
-            new_msg = {str(timestamp): {"userid": user_list, "text": txct}}
+            new_msg = {str(timestamp): {"text": query} if match3 else {"userid": user_list, "text": query}}
             buttons = [Button.inline(info_type[2], data=f"{info_type[0]}_{timestamp}")]
             result = builder.article(
                 title=f"{info_type[0].title()} message  to {sandy}.",
