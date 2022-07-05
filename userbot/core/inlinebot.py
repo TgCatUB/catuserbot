@@ -405,19 +405,24 @@ async def inline_handler(event):  # sourcery no-metrics
         elif query.startswith("Inline buttons"):
             result = await article_builder(event, query)
             await event.answer([result] if result else None)
-        elif match:
-            query = query[6:]
+        elif match or match2:
+            sandy = ""
+            user_list = []
+            if match:
+                query = query[6:]
+                info_type = ["troll","can't"]
+            elif match2:
+                query = query[7:]
+                info_type = ["secret","can"]
             if "|" in query:
                 iris, txct = query.replace(" |", "|").replace("| ", "|").split("|")
                 users = iris.split(" ")
             else:
                 user, txct = query.split(" ", 1)
                 users = [user]
-            troll = os.path.join("./userbot", "troll.txt")
-            sandy = ""
-            user_list = []
+            old_msg = os.path.join("./userbot", f"{info_type[0]}.txt")
             try:
-                jsondata = json.load(open(troll))
+                jsondata = json.load(open(old_msg))
             except Exception:
                 jsondata = False
             for user in users:
@@ -434,66 +439,21 @@ async def inline_handler(event):  # sourcery no-metrics
                 sandy += " "
             sandy = sandy[:-1]
             timestamp = int(time.time() * 2)
-            newtroll = {str(timestamp): {"userid": user_list, "text": txct}}
-            buttons = [Button.inline("show message 🔐", data=f"troll_{timestamp}")]
+            new_msg = {str(timestamp): {"userid": user_list, "text": txct}}
+            buttons = [Button.inline("show message 🔐", data=f"{info_type[0]}_{timestamp}")]
             result = builder.article(
-                title=f"Troll Message  to {sandy}.",
-                description="Only he/she/they can't open it.",
-                thumb=get_thumb("troll"),
-                text=f"Only {sandy} cannot access this message!",
-                buttons=buttons,
-            )
-            await event.answer([result] if result else None)
-            if jsondata:
-                jsondata.update(newtroll)
-                json.dump(jsondata, open(troll, "w"))
-            else:
-                json.dump(newtroll, open(troll, "w"))
-        elif match2:
-            query = query[7:]
-            if "|" in query:
-                iris, txct = query.replace(" |", "|").replace("| ", "|").split("|")
-                users = iris.split(" ")
-            else:
-                user, txct = query.split(" ", 1)
-                users = [user]
-            secret = os.path.join("./userbot", "secrets.txt")
-            sandy = ""
-            user_list = []
-            try:
-                jsondata = json.load(open(secret))
-            except Exception:
-                jsondata = False
-            for user in users:
-                usr = int(user) if user.isdigit() else user
-                try:
-                    u = await event.client.get_entity(usr)
-                except ValueError:
-                    return
-                if u.username:
-                    sandy += f"@{u.username}"
-                else:
-                    sandy += f"[{u.first_name}](tg://user?id={u.id})"
-                user_list.append(u.id)
-                sandy += " "
-            sandy = sandy[:-1]
-            timestamp = int(time.time() * 2)
-            newsecret = {str(timestamp): {"userid": user_list, "text": txct}}
-
-            buttons = [Button.inline("show message 🔐", data=f"secret_{timestamp}")]
-            result = builder.article(
-                title=f"secret message  to {sandy}.",
-                description="Only he/she/they can open it.",
-                thumb=get_thumb("secret"),
+                title=f"{info_type[0].title()} Message  to {sandy}.",
+                description=f"Only he/she/they {info_type[1]} open it.",
+                thumb=get_thumb(info_type[0]),
                 text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
                 buttons=buttons,
             )
             await event.answer([result] if result else None)
             if jsondata:
-                jsondata.update(newsecret)
-                json.dump(jsondata, open(secret, "w"))
+                jsondata.update(new_msg)
+                json.dump(jsondata, open(old_msg, "w"))
             else:
-                json.dump(newsecret, open(secret, "w"))
+                json.dump(new_msg, open(old_msg, "w"))
         elif match3:
             query = query[5:]
             builder = event.builder
