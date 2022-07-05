@@ -408,7 +408,7 @@ async def inline_handler(event):  # sourcery no-metrics
         elif match or match2 or match3:
             user_list = []
             if match3:
-                #sandy = (await event.client.get_entity(event.chat_id)).title or "Chat"
+                # sandy = (await event.client.get_entity(event.chat_id)).title or "Chat"
                 print(event)
                 sandy = "Chat"
                 query = query[5:]
