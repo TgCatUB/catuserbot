@@ -444,7 +444,11 @@ async def inline_handler(event):  # sourcery no-metrics
             except Exception:
                 jsondata = False
             timestamp = int(time.time() * 2)
-            new_msg = {str(timestamp): {"text": query} if match3 else {"userid": user_list, "text": query}}
+            new_msg = {
+                str(timestamp): {"text": query}
+                if match3
+                else {"userid": user_list, "text": query}
+            }
             buttons = [Button.inline(info_type[2], data=f"{info_type[0]}_{timestamp}")]
             result = builder.article(
                 title=f"{info_type[0].title()} message  to {sandy}.",
