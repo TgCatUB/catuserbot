@@ -836,7 +836,7 @@ async def glists(gdrive):
     page_size = GDRIVE_.doc_limit
     name = None
     if checker is not None:
-        GDRIVE_.doc_limit = int(checker.strip("-l "))
+        page_size = GDRIVE_.doc_limit = int(checker.strip("-l "))
         if page_size > 1000:
             return await edit_or_reply(
                 gdrive,
