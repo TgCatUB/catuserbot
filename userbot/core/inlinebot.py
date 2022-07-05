@@ -410,10 +410,10 @@ async def inline_handler(event):  # sourcery no-metrics
             user_list = []
             if match:
                 query = query[6:]
-                info_type = ["troll","can't"]
+                info_type = ["troll", "can't"]
             elif match2:
                 query = query[7:]
-                info_type = ["secret","can"]
+                info_type = ["secret", "can"]
             if "|" in query:
                 iris, txct = query.replace(" |", "|").replace("| ", "|").split("|")
                 users = iris.split(" ")
@@ -440,7 +440,9 @@ async def inline_handler(event):  # sourcery no-metrics
             sandy = sandy[:-1]
             timestamp = int(time.time() * 2)
             new_msg = {str(timestamp): {"userid": user_list, "text": txct}}
-            buttons = [Button.inline("show message 🔐", data=f"{info_type[0]}_{timestamp}")]
+            buttons = [
+                Button.inline("show message 🔐", data=f"{info_type[0]}_{timestamp}")
+            ]
             result = builder.article(
                 title=f"{info_type[0].title()} Message  to {sandy}.",
                 description=f"Only he/she/they {info_type[1]} open it.",
