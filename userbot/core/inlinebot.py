@@ -405,49 +405,54 @@ async def inline_handler(event):  # sourcery no-metrics
         elif query.startswith("Inline buttons"):
             result = await article_builder(event, query)
             await event.answer([result] if result else None)
-        elif match or match2:
-            sandy = ""
-            user_list = []
-            if match:
-                query = query[6:]
-                info_type = ["troll", "can't"]
-            elif match2:
-                query = query[7:]
-                info_type = ["secret", "can"]
-            if "|" in query:
-                iris, txct = query.replace(" |", "|").replace("| ", "|").split("|")
-                users = iris.split(" ")
+        elif match or match2 or match3:
+            if match3:
+                sandy = "chat"
+                query = query[5:]
+                info_type = ["hide", "can't", "Read Message "]
             else:
-                user, txct = query.split(" ", 1)
-                users = [user]
+                sandy = ""
+                user_list = []
+                if match:
+                    query = query[6:]
+                    info_type = ["troll", "can't", "show message 🔐"]
+                elif match2:
+                    query = query[7:]
+                    info_type = ["secret", "can", "show message 🔐"]
+                if "|" in query:
+                    iris, txct = query.replace(" |", "|").replace("| ", "|").split("|")
+                    users = iris.split(" ")
+                else:
+                    user, txct = query.split(" ", 1)
+                    users = [user]
+                for user in users:
+                    usr = int(user) if user.isdigit() else user
+                    try:
+                        u = await event.client.get_entity(usr)
+                    except ValueError:
+                        return
+                    if u.username:
+                        sandy += f"@{u.username}"
+                    else:
+                        sandy += f"[{u.first_name}](tg://user?id={u.id})"
+                    user_list.append(u.id)
+                    sandy += " "
+                sandy = sandy[:-1]
             old_msg = os.path.join("./userbot", f"{info_type[0]}.txt")
             try:
                 jsondata = json.load(open(old_msg))
             except Exception:
                 jsondata = False
-            for user in users:
-                usr = int(user) if user.isdigit() else user
-                try:
-                    u = await event.client.get_entity(usr)
-                except ValueError:
-                    return
-                if u.username:
-                    sandy += f"@{u.username}"
-                else:
-                    sandy += f"[{u.first_name}](tg://user?id={u.id})"
-                user_list.append(u.id)
-                sandy += " "
-            sandy = sandy[:-1]
             timestamp = int(time.time() * 2)
             new_msg = {str(timestamp): {"userid": user_list, "text": txct}}
             buttons = [
-                Button.inline("show message 🔐", data=f"{info_type[0]}_{timestamp}")
+                Button.inline(info_type[2], data=f"{info_type[0]}_{timestamp}")
             ]
             result = builder.article(
-                title=f"{info_type[0].title()} Message  to {sandy}.",
-                description=f"Only he/she/they {info_type[1]} open it.",
+                title=f"{info_type[0].title()} message  to {sandy}.",
+                description="Send hidden text in chat." if match3 else f"Only he/she/they {info_type[1]} open it.",
                 thumb=get_thumb(info_type[0]),
-                text=f"🔒 A whisper message to {sandy}, Only he/she can open it.",
+                text= "✖✖✖" if match3 else f"🔒 A whisper message to {sandy}, Only he/she can open it.",
                 buttons=buttons,
             )
             await event.answer([result] if result else None)
@@ -456,31 +461,6 @@ async def inline_handler(event):  # sourcery no-metrics
                 json.dump(jsondata, open(old_msg, "w"))
             else:
                 json.dump(new_msg, open(old_msg, "w"))
-        elif match3:
-            query = query[5:]
-            builder = event.builder
-            hide = os.path.join("./userbot", "hide.txt")
-            try:
-                jsondata = json.load(open(hide))
-            except Exception:
-                jsondata = False
-            timestamp = int(time.time() * 2)
-            newhide = {str(timestamp): {"text": query}}
-
-            buttons = [Button.inline("Read Message ", data=f"hide_{timestamp}")]
-            result = builder.article(
-                title="Hidden Message",
-                description="Send hidden text in chat.",
-                thumb=get_thumb("hide"),
-                text=f"✖✖✖",
-                buttons=buttons,
-            )
-            await event.answer([result] if result else None)
-            if jsondata:
-                jsondata.update(newhide)
-                json.dump(jsondata, open(hide, "w"))
-            else:
-                json.dump(newhide, open(hide, "w"))
         elif string == "help":
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
