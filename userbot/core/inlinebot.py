@@ -586,8 +586,14 @@ async def inline_handler(event):  # sourcery no-metrics
                     thumb=get_thumb("secret"),
                     buttons=[
                         (
-                            Button.switch_inline("Single", query="secret @username Text", same_peer=True),
-                            Button.switch_inline("Multiple", query="secret @username @username2 | Text", same_peer=True),
+                            Button.switch_inline(
+                                "Single", query="secret @username Text", same_peer=True
+                            ),
+                            Button.switch_inline(
+                                "Multiple",
+                                query="secret @username @username2 | Text",
+                                same_peer=True,
+                            ),
                         )
                     ],
                 ),
@@ -600,8 +606,14 @@ async def inline_handler(event):  # sourcery no-metrics
                     thumb=get_thumb("troll"),
                     buttons=[
                         (
-                            Button.switch_inline("Single", query="troll @username Text", same_peer=True),
-                            Button.switch_inline("Multiple", query="troll @username @username2 | Text", same_peer=True),
+                            Button.switch_inline(
+                                "Single", query="troll @username Text", same_peer=True
+                            ),
+                            Button.switch_inline(
+                                "Multiple",
+                                query="troll @username @username2 | Text",
+                                same_peer=True,
+                            ),
                         )
                     ],
                 ),
