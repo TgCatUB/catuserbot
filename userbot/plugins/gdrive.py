@@ -836,7 +836,6 @@ async def glists(gdrive):
     page_size = GDRIVE_.doc_limit
     name = None
     if checker is not None:
-        page_size = GDRIVE_.doc_limit = int(checker.strip("-l "))
         if page_size > 1000:
             return await edit_or_reply(
                 gdrive,
@@ -844,6 +843,7 @@ async def glists(gdrive):
                 "**Status : **`BAD`\n"
                 "**Reason : **`can't get list if limit more than 1000.`",
             )
+        page_size = GDRIVE_.doc_limit = int(checker.strip("-l "))
     checker = gdrive.pattern_match.group(2)
     if checker == "":
         try:
