@@ -140,7 +140,7 @@ async def article_builder(event, method):
             from userbot.plugins.alive import catalive_text
 
             query = catalive_text()
-        except:
+        except Exception:
             return None
         title = "Cat Alive"
         thumb = get_thumb("alive")
@@ -193,7 +193,7 @@ async def article_builder(event, method):
                             Button.url(f"{symbol} Lyrics", lyrics),
                         )
                     ]
-        except:
+        except Exception:
             return None
 
     elif method.startswith("Inline buttons"):
@@ -582,13 +582,12 @@ async def inline_handler(event):  # sourcery no-metrics
                 builder.article(
                     title="Secret",
                     description="Send secret message to your friends.",
-                    text="__Send secret message which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.like **@bot secret @username @username2 | Text**__",
+                    text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
                     thumb=get_thumb("secret"),
                     buttons=[
-                        Button.switch_inline(
-                            "Secret Text",
-                            query="secret @username Text",
-                            same_peer=True,
+                        (
+                            Button.switch_inline("Single", query="secret @username Text", same_peer=True),
+                            Button.switch_inline("Multiple", query="secret @username @username2 | Text", same_peer=True),
                         )
                     ],
                 ),
@@ -597,11 +596,12 @@ async def inline_handler(event):  # sourcery no-metrics
                 builder.article(
                     title="Troll",
                     description="Send troll message to your friends.",
-                    text="__Send troll message which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text. like **@bot troll @username @username2 | Text**__",
+                    text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
                     thumb=get_thumb("troll"),
                     buttons=[
-                        Button.switch_inline(
-                            "Troll Text", query="troll @username Text", same_peer=True
+                        (
+                            Button.switch_inline("Single", query="troll @username Text", same_peer=True),
+                            Button.switch_inline("Multiple", query="troll @username @username2 | Text", same_peer=True),
                         )
                     ],
                 ),
