@@ -1,7 +1,6 @@
 # by  @sandy1709 ( https://t.me/mrconfused  )
 
 # songs finder for catuserbot
-import asyncio
 import base64
 import contextlib
 import io

@@ -28,11 +28,9 @@ from telegraph import upload_file
 from telethon import events
 from telethon.errors import AboutTooLongError, FloodWaitError
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.custom import Button
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 from telethon.tl.functions.users import GetFullUserRequest
-from validators.url import url
 
 from userbot.core.logger import logging
 
@@ -789,7 +787,7 @@ async def spotify_now(event):
 async def spotify_now(event):  # sourcery skip: remove-duplicate-dict-key
     "Send spotify song"
     chat = "@CatMusicRobot"
-    msg_id = await reply_id(event)
+    await reply_id(event)
     cmd = event.pattern_match.group(1).lower()
     link = event.pattern_match.group(2)
     catevent = await edit_or_reply(event, "🎶 `Fetching...`")
@@ -798,7 +796,9 @@ async def spotify_now(event):  # sourcery skip: remove-duplicate-dict-key
             return
         r = sp_data("https://api.spotify.com/v1/me/player/currently-playing")
         if r.status_code == 204:
-            return await edit_delete(catevent, "**I'm not listening anything right now  ;)**")
+            return await edit_delete(
+                catevent, "**I'm not listening anything right now  ;)**"
+            )
         received = r.json()
         if received["currently_playing_type"] == "track":
             link = received["item"]["external_urls"]["spotify"]
