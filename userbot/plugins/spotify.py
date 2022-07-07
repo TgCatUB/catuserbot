@@ -781,79 +781,38 @@ async def spotify_now(event):
         "usage": [
             "{tr}now",
             "{tr}inow",
-            "{tr}now <Spotify/Deezer link>",
-            "{tr}inow <Spotify/Deezer link>",
+            "{tr}now <Song Name/Spotify link/Deezer link>",
+            "{tr}inow <Song Name/Spotify link/Deezer link>",
         ],
     },
 )
 async def spotify_now(event):  # sourcery skip: remove-duplicate-dict-key
     "Send spotify song"
-    chat = "@DeezerMusicBot"
+    chat = "@CatMusicRobot"
     msg_id = await reply_id(event)
     cmd = event.pattern_match.group(1).lower()
     link = event.pattern_match.group(2)
     catevent = await edit_or_reply(event, "🎶 `Fetching...`")
-    if link:
-        if not url(link) and "spotify" not in link:
-            return await edit_delete(catevent, "**Give me a correct link...**")
-        idrgx = re.search(r"(?:/track/)((?:\w|-){22})", link)
-        if not idrgx:
-            return await edit_delete(catevent, "\n**Error!! Invalid spotify url ;)**")
-        song_id = idrgx[1]
-        received = sp_data(f"https://api.spotify.com/v1/tracks/{song_id}").json()
-        title = received["album"]["name"]
-        artist = received["album"]["artists"][0]["name"]
-        link = f"https://open.spotify.com/track/{song_id}"
-    else:
+    if not link:
         if not await sp_var_check(event):
             return
         r = sp_data("https://api.spotify.com/v1/me/player/currently-playing")
         if r.status_code == 204:
-            return await edit_delete(
-                catevent, "\n**I'm not listening anything right now  ;)**"
-            )
+            return await edit_delete(catevent, "**I'm not listening anything right now  ;)**")
         received = r.json()
         if received["currently_playing_type"] == "track":
-            title = received["item"]["name"]
             link = received["item"]["external_urls"]["spotify"]
-            artist = received["item"]["artists"][0]["name"]
+    link = f"/music {link}" if cmd == "i" else link
     async with event.client.conversation(chat) as conv:
         try:
-            purgeflag = await conv.send_message("/start")
+            purgeflag = await conv.send_message(link)
         except YouBlockedUserError:
-            await catub(unblock("DeezerMusicBot"))
-            purgeflag = await conv.send_message("/start")
-        await conv.get_response()
-        await event.client.send_read_acknowledge(conv.chat_id)
-        await conv.send_message(link)
+            await catub(unblock("CatMusicRobot"))
+            purgeflag = await conv.send_message(link)
         song = await conv.get_response()
+        if not song.media:
+            return await edit_delete(catevent, "**Sorry unable to find the song.  ;!**")
         await event.client.send_read_acknowledge(conv.chat_id)
-        # if not song.media:
-        # song, thumb = song_download(url, event, quality="128k", video=False, title=True):
         await catevent.delete()
-        if cmd == "i":
-            title = title_fetch(title)
-            lyrics, symbol = await telegraph_lyrics(event, title, artist)
-            songg = await catub.send_file(BOTLOG_CHATID, song)
-            fetch_songg = await catub.tgbot.get_messages(BOTLOG_CHATID, ids=songg.id)
-            btn_song = await catub.tgbot.send_file(
-                BOTLOG_CHATID,
-                fetch_songg,
-                buttons=[
-                    Button.url("🎧 Spotify", link),
-                    Button.url(f"{symbol} Lyrics", lyrics),
-                ],
-            )
-            fetch_btn_song = await catub.get_messages(BOTLOG_CHATID, ids=btn_song.id)
-            await event.client.forward_messages(event.chat_id, fetch_btn_song)
-            await songg.delete()
-            await btn_song.delete()
-        else:
-            await event.client.send_file(
-                event.chat_id,
-                song,
-                caption=f"<b>Spotify :- <a href = {link}>{title}</a></b>",
-                parse_mode="html",
-                reply_to=msg_id,
-            )
+        await event.client.forward_messages(event.chat_id, song)
         await delete_conv(event, chat, purgeflag)
