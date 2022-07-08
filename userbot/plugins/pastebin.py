@@ -9,6 +9,7 @@ from pygments.lexers import Python3Lexer
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.utils import get_extension
 from urlextract import URLExtract
+
 from userbot import catub
 
 from ..Config import Config
@@ -135,9 +136,9 @@ async def rayso_by_pro_odi(event):  # By @feelded
             return await edit_delete(event, "`Unsupported.`")
     else:
         return await edit_delete(event, "`What should I do?`")
-        
-    #// Max size 30000 byte but that breaks thumb so making on 28000 byte
-    text_list = text_chunk_list(text,28000) 
+
+    # // Max size 30000 byte but that breaks thumb so making on 28000 byte
+    text_list = text_chunk_list(text, 28000)
     for i, text in enumerate(text_list, start=1):
         await edit_or_reply(event, f"**⏳ Pasting on image : {i}/{len(text_list)} **")
         r = requests.post(
