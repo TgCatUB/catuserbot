@@ -145,7 +145,7 @@ async def rayso_by_pro_odi(event):  # By @feelded
             "https://raysoapi.herokuapp.com/generate",
             data={
                 "text": text,
-                "title": (await catub.get_me).first_name,
+                "title": (await catub.get_me()).first_name,
                 "theme": theme,
                 "darkMode": "true",
                 "language": "python",
