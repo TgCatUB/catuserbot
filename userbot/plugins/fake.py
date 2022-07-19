@@ -96,7 +96,7 @@ async def _(event):
 )
 async def _(event):
     "To promote a person without admin rights"
-    new_rights = ChatAdminRights(post_messages=True)
+    new_rights = ChatAdminRights(other=True)
     catevent = await edit_or_reply(event, "`Promoting...`")
     user, rank = await get_user_from_event(event, catevent)
     if not rank:

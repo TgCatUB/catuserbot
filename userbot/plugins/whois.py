@@ -1,5 +1,6 @@
 # Userbot module for fetching info about any user on Telegram(including you!).
 
+import contextlib
 import html
 import os
 
@@ -27,11 +28,9 @@ async def fetch_info(replied_user, event):
     )
     replied_user_profile_photos_count = "User haven't set profile pic"
     dc_id = "Can't get dc id"
-    try:
+    with contextlib.suppress(AttributeError):
         replied_user_profile_photos_count = replied_user_profile_photos.count
         dc_id = replied_user.photo.dc_id
-    except AttributeError:
-        pass
     user_id = replied_user.id
     first_name = replied_user.first_name
     full_name = FullUser.private_forward_name
@@ -52,8 +51,8 @@ async def fetch_info(replied_user, event):
         else ("This User has no First Name")
     )
     full_name = full_name or first_name
-    username = "@{}".format(username) if username else ("This User has no Username")
-    user_bio = "This User has no About" if not user_bio else user_bio
+    username = f"@{username}" if username else "This User has no Username"
+    user_bio = user_bio or "This User has no About"
     caption = "<b><i>USER INFO from Durov's Database :</i></b>\n\n"
     caption += f"<b>👤 Name:</b> {full_name}\n"
     caption += f"<b>🤵 Username:</b> {username}\n"
@@ -109,7 +108,7 @@ async def _(event):
     else:
         sw = "**Spamwatch Banned :**`Not Connected`"
     try:
-        casurl = "https://api.cas.chat/check?user_id={}".format(user_id)
+        casurl = f"https://api.cas.chat/check?user_id={user_id}"
         data = get(casurl).json()
     except Exception as e:
         LOGS.info(e)

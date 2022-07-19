@@ -6,6 +6,7 @@
 # modified & improved by @jisan7509
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
 
+import contextlib
 import io
 import os
 import random
@@ -15,12 +16,11 @@ import urllib
 from PIL import Image, ImageDraw, ImageFont
 from telethon.tl.types import InputMessagesFilterDocument
 
-from userbot import catub
+from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import (
     clippy,
-    convert_tosticker,
     deEmojify,
     hide_inlinebot,
     higlighted_text,
@@ -151,10 +151,8 @@ async def sticklet(event):
         reply_to=reply_to_id,
     )
     # cleanup
-    try:
+    with contextlib.suppress(BaseException):
         os.remove(FONT_FILE)
-    except BaseException:
-        pass
 
 
 @catub.cat_cmd(
@@ -305,7 +303,7 @@ async def quby(event):
         stroke_width=1,
     )
     if len(txt) >= lines:
-        for x in range(0, lines):
+        for x in range(lines):
             text = text.replace(txt[x], "")
         file, _ = higlighted_text(
             file[0],
@@ -322,7 +320,9 @@ async def quby(event):
             stroke_width=1,
         )
     if cmd == "b":
-        cat = convert_tosticker(file[0])
+        cat = (
+            await Convert.to_sticker(event, file[0], file="quby.webp", noedits=True)
+        )[1]
         await event.client.send_file(
             event.chat_id, cat, reply_to=reply_to_id, force_document=False
         )
@@ -387,7 +387,9 @@ async def knife(event):
         direction="upwards",
     )
     if cmd == "b":
-        cat = convert_tosticker(file[0])
+        cat = (
+            await Convert.to_sticker(event, file[0], file="knife.webp", noedits=True)
+        )[1]
         await event.client.send_file(
             event.chat_id, cat, reply_to=reply_to_id, force_document=False
         )
@@ -445,7 +447,7 @@ async def doge(event):
         stroke_fill="black",
     )
     if len(txt) >= lines:
-        for x in range(0, lines):
+        for x in range(lines):
             text = text.replace(txt[x], "")
         file, _ = higlighted_text(
             file[0],
@@ -465,7 +467,7 @@ async def doge(event):
             stroke_width=1,
             stroke_fill="black",
         )
-    cat = convert_tosticker(file[0])
+    cat = (await Convert.to_sticker(event, file[0], file="doge.webp", noedits=True))[1]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
@@ -533,7 +535,9 @@ async def penguin(event):
         stroke_width=1,
         stroke_fill=fg,
     )
-    cat = convert_tosticker(file[0])
+    cat = (await Convert.to_sticker(event, file[0], file="penguin.webp", noedits=True))[
+        1
+    ]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )
@@ -601,7 +605,9 @@ async def gandhi(event):
         stroke_width=1,
         stroke_fill=fg,
     )
-    cat = convert_tosticker(file[0])
+    cat = (await Convert.to_sticker(event, file[0], file="gandhi.webp", noedits=True))[
+        1
+    ]
     await event.client.send_file(
         event.chat_id, cat, reply_to=reply_to_id, force_document=False
     )

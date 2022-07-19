@@ -1,3 +1,4 @@
+# sourcery skip: raise-specific-error
 try:
     from . import BASE, SESSION
 except ImportError as e:

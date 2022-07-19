@@ -103,6 +103,7 @@ class CatUserBotClient(TelegramClient):
 
         def decorator(func):  # sourcery no-metrics
             async def wrapper(check):  # sourcery no-metrics
+                # sourcery skip: low-code-quality
                 if groups_only and not check.is_group:
                     return await edit_delete(
                         check, "`I don't think this is a group.`", 10
@@ -300,9 +301,11 @@ class CatUserBotClient(TelegramClient):
                         pastelink = await paste_message(
                             ftext, pastetype="s", markdown=False
                         )
-                        text = "**CatUserbot Error report**\n\n"
                         link = "[here](https://t.me/catuserbot_support)"
-                        text += "If you wanna you can report it"
+                        text = (
+                            "**CatUserbot Error report**\n\n"
+                            + "If you wanna you can report it"
+                        )
                         text += f"- just forward this message {link}.\n"
                         text += (
                             "Nothing is logged except the fact of error and date\n\n"

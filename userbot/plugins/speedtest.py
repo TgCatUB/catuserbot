@@ -45,10 +45,10 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     as_text = False
     as_document = False
-    if input_str == "image":
-        as_document = False
-    elif input_str == "file":
+    if input_str == "file":
         as_document = True
+    elif input_str == "image":
+        as_document = False
     elif input_str == "text":
         as_text = True
     catevent = await edit_or_reply(
@@ -95,11 +95,12 @@ async def _(event):
             await event.client.send_file(
                 event.chat_id,
                 speedtest_image,
-                caption="**SpeedTest** completed in {} seconds".format(ms),
+                caption=f"**SpeedTest** completed in {ms} seconds",
                 force_document=as_document,
                 reply_to=reply_msg_id,
                 allow_cache=False,
             )
+
             await event.delete()
     except Exception as exc:
         await catevent.edit(

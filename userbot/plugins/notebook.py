@@ -8,8 +8,10 @@ import urllib
 
 from telethon.tl.functions.users import GetFullUserRequest
 
+from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import deEmojify, higlighted_text
+from ..helpers.tools import media_type
 from ..sql_helper.globals import addgvar, gvarstatus
 from . import BOTLOG, BOTLOG_CHATID, catub, reply_id
 
@@ -53,7 +55,7 @@ Colors = [
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-def notebook_values(page, font):
+def notebook_values(page, font):  # sourcery skip: low-code-quality
     if page == "a4":
         position = (75, 10)
         lines = 28
@@ -213,10 +215,13 @@ def notebook_values(page, font):
     info={
         "header": "To write down your text in notebook.",
         "description": "Give text to it or reply to message, it will write that in notebook.",
-        "usage": "{tr}write <Reply/Text>",
+        "usage": [
+            "{tr}write <Reply/Text>",
+            "{tr}write -f <Reply to File>",
+        ],
     },
 )
-async def write_page(event):
+async def write_page(event):  # sourcery skip: low-code-quality
     """Write down your text in notebook."""
     cmd = event.pattern_match.group(1)
     font = gvarstatus("NOTEBOOK_FONT") or "Caveat"
@@ -226,6 +231,15 @@ async def write_page(event):
     if cmd == "write":
         text = event.pattern_match.group(2)
         rtext = await event.get_reply_message()
+        if text == "-f":
+            if not rtext.media:
+                return await edit_delete(event, "**ಠ∀ಠ Reply to any kinda Text file**")
+            if await media_type(rtext) == "Document":
+                file_name = await rtext.download_media(Config.TEMP_DIR)
+                with open(file_name, "r") as f:
+                    text = f.read()
+                if os.path.exists(file_name):
+                    os.remove(file_name)
         if not text and rtext:
             text = rtext.message
         if not text:
@@ -319,7 +333,7 @@ async def notebook(event):
         ],
     },
 )
-async def notebook_conf(event):
+async def notebook_conf(event):  # sourcery skip: low-code-quality
     """Change settings for notebook"""
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)

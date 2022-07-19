@@ -208,7 +208,7 @@ async def _(event):
         ],
     },
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To enable cmds for sudo users."
     input_str = event.pattern_match.group(2)
     errors = ""
@@ -303,7 +303,7 @@ async def _(event):  # sourcery no-metrics
         ],
     },
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To disable cmds for sudo users."
     input_str = event.pattern_match.group(2)
     errors = ""

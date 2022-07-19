@@ -28,6 +28,7 @@ from userbot.core.logger import logging
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import CancelProcess, humanbytes, progress, time_formatter
+from ..helpers.functions.functions import post_to_telegraph
 from ..helpers.utils import _format
 from ..sql_helper import google_drive_sql as helper
 from . import BOTLOG, BOTLOG_CHATID, TMP_DOWNLOAD_DIRECTORY
@@ -104,6 +105,8 @@ class GDRIVE:
     def __init__(self):
         self.parent_Id = G_DRIVE_FOLDER_ID or None
         self.is_cancelled = False
+        self.doc_type = "all"
+        self.doc_limit = 50
 
 
 GDRIVE_ = GDRIVE()
@@ -155,7 +158,9 @@ async def get_file_id(input_str):
         return link, "unknown"
 
 
-async def download(event, gdrive, service, uri=None):  # sourcery no-metrics
+async def download(
+    event, gdrive, service, uri=None
+):  # sourcery no-metrics  # sourcery skip: low-code-quality
     """Download files to local then upload"""
     start = datetime.now()
     reply = ""
@@ -343,7 +348,7 @@ async def create_server_dir(service, current_path, folder_name):
 
 async def gdrive_download(
     event, gdrive, service, uri, path=os.path.join(os.getcwd(), "gdrive")
-):  # sourcery no-metrics
+):  # sourcery no-metrics  # sourcery skip: low-code-quality
     reply = ""
     if not os.path.exists(path):
         os.mkdir(path)
@@ -762,7 +767,9 @@ async def get_output(service, file_id, event):
     return out
 
 
-async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
+async def check_progress_for_dl(
+    event, gid, previous
+):  # sourcery no-metrics  # sourcery skip: low-code-quality
     complete = None
     global filenames
     GDRIVE_.is_cancelled = False
@@ -824,20 +831,19 @@ async def check_progress_for_dl(event, gid, previous):  # sourcery no-metrics
                 )
 
 
-async def glists(gdrive, folderlink=None):  # sourcery no-metrics
+async def glists(gdrive):
     checker = gdrive.pattern_match.group(1)
+    page_size = GDRIVE_.doc_limit
+    name = None
     if checker is not None:
-        page_size = int(gdrive.pattern_match.group(1).strip("-l "))
         if page_size > 1000:
-            await edit_or_reply(
+            return await edit_or_reply(
                 gdrive,
                 "**GDRIVE - LIST**\n\n"
                 "**Status : **`BAD`\n"
                 "**Reason : **`can't get list if limit more than 1000.`",
             )
-            return
-    else:
-        page_size = 25  # default page_size is 25
+        page_size = GDRIVE_.doc_limit = int(checker.strip("-l "))
     checker = gdrive.pattern_match.group(2)
     if checker == "":
         try:
@@ -850,6 +856,18 @@ async def glists(gdrive, folderlink=None):  # sourcery no-metrics
                 query = f"'{G_DRIVE_FOLDER_ID}' in parents and (name contains '*')"
             else:
                 query = ""
+    elif checker.startswith("-t"):
+        ftype = checker.strip("-t ")
+        if not ftype or ftype not in ["all", "file", "folder"]:
+            return await edit_delete(
+                gdrive,
+                "__**Set type for glist from these:**__\n\n**1.**  `all`\n**2.**  `file`\n**3.**  `folder`",
+                30,
+            )
+        GDRIVE_.doc_type = ftype
+        return await edit_delete(
+            gdrive, f"__Type for glist successfully changed to **{ftype}**__"
+        )
     elif checker.startswith("-p"):
         parents = checker.split(None, 2)[1]
         parents = parents.split("/")[-1]
@@ -869,7 +887,7 @@ async def glists(gdrive, folderlink=None):  # sourcery no-metrics
     service = await create_app(gdrive)
     if service is False:
         return False
-    message = ""
+    folder = file = ""
     fields = "nextPageToken, files(name, id, " "mimeType, webViewLink, webContentLink)"
     page_token = None
     result = []
@@ -902,10 +920,10 @@ async def glists(gdrive, folderlink=None):  # sourcery no-metrics
             file_name = files.get("name")
             if files.get("mimeType") == "application/vnd.google-apps.folder":
                 link = files.get("webViewLink")
-                message += f"📁️ • [{file_name}]({link})\n"
+                folder += f"<a href = {link}>📁️ • {file_name}</a>\n"
             else:
                 link = files.get("webContentLink")
-                message += f"📄️ • [{file_name}]({link})\n"
+                file += f"<a href = {link}>📄️ • {file_name}</a>\n"
             result.append(files)
         if len(result) >= page_size:
             break
@@ -913,12 +931,21 @@ async def glists(gdrive, folderlink=None):  # sourcery no-metrics
         page_token = response.get("nextPageToken", None)
         if page_token is None:
             break
-
-    del result
+    message = (
+        folder
+        if GDRIVE_.doc_type == "folder"
+        else (file if GDRIVE_.doc_type == "file" else folder + file)
+    )
     if query == "":
         query = "Not specified"
+    if len(message) > 4000:
+        title = name if name else query
+        url = await post_to_telegraph(title, message.replace("\n", "<br>"))
+        message = f"<b><a href = {url}>• View in Telegraph</a></b>"
     await edit_or_reply(
-        gdrive, "**Google Drive Query**:\n" f"`{query}`\n\n**Results**\n\n{message}"
+        gdrive,
+        f"<b>Google Drive Query:</b>\n<code>{query}</code>\n\n<b>Results</b>\n\n{message}",
+        parse_mode="html",
     )
 
 
@@ -987,9 +1014,8 @@ async def generate_credentials(gdrive):
         r = conv.wait_event(events.NewMessage(outgoing=True, chats=BOTLOG_CHATID))
         r = await r
         code = r.message.message.strip()
-        getcode = re.search("(.*)(4\/.*)(&.*)", code)
-        if getcode:
-            code = getcode.group(2)
+        if getcode := re.search("(.*)(4\/.*)(&.*)", code):
+            code = getcode[2]
         else:
             await edit_or_reply(gdrive, "Given link is wrong. recheck your link")
             return
@@ -1038,6 +1064,7 @@ async def reset_credentials(gdrive):
         "flags": {
             "l": "Use flag `-l range[1-1000]` for limit output",
             "p": "Use flag `-p parents-folder_id` for files/folder in given folder in gdrive.",
+            "t": "Use flag `-t file type` to show those on glist, available types are - all, file, folder. ",
         },
         "note": "for `.glist` you can combine -l and -p flags with or without name "
         "at the same time, it must be `-l` flags first before use `-p` flags.\n"
@@ -1046,6 +1073,7 @@ async def reset_credentials(gdrive):
             "{tr}glist -l <count>",
             "{tr}glist -l <count> -p parent_id",
             "{tr}glist -p <parent_id>",
+            "{tr}glist -t folder",
             "{tr}glist",
         ],
     },
@@ -1424,25 +1452,27 @@ async def google_drive(gdrive):  # sourcery no-metrics
 )
 async def set_upload_folder(gdrive):
     """to clear the temperary upload parent id."""
-    gdrive = await edit_or_reply(gdrive, "`Sending information...`")
+    await edit_or_reply(gdrive, "`Sending information...`")
     if G_DRIVE_FOLDER_ID is not None:
         GDRIVE_.parent_Id = G_DRIVE_FOLDER_ID
-        await gdrive.edit(
-            "**[FOLDER - SET]**\n\n" "**Status : **`OK- using G_DRIVE_FOLDER_ID now.`"
+        await edit_or_reply(
+            gdrive,
+            "**[FOLDER - SET]**\n\n" "**Status : **`OK- using G_DRIVE_FOLDER_ID now.`",
         )
         return None
     try:
         GDRIVE_.parent_id = ""
     except NameError:
-        await gdrive.edit(
-            "**[FOLDER - SET]**\n\n" "**Status : **`BAD - No parent_Id is set.`"
+        await edit_or_reply(
+            gdrive, "**[FOLDER - SET]**\n\n" "**Status : **`BAD - No parent_Id is set.`"
         )
         return False
     else:
-        await gdrive.edit(
+        await edit_or_reply(
+            gdrive,
             "**[FOLDER - SET]**\n\n"
             "**Status : **`OK`"
-            " - `G_DRIVE_FOLDER_ID empty, will use root.`"
+            " - `G_DRIVE_FOLDER_ID empty, will use root.`",
         )
         return None
 
@@ -1458,34 +1488,31 @@ async def set_upload_folder(gdrive):
 )
 async def set_upload_folder(gdrive):
     """Set parents dir for upload/check/makedir/remve"""
-    event = gdrive
-    gdrive = await edit_or_reply(gdrive, "`Sending information...`")
-    inp = event.pattern_match.group(1)
+    await edit_or_reply(gdrive, "`Sending information...`")
+    inp = gdrive.pattern_match.group(1)
     if not inp:
-        await gdrive.edit(">`.gset <folderURL/folderID>`")
-        return None
-    """Value for .gset can be folderId or folder link"""
+        return await edit_or_reply(gdrive, ">`.gset <folderURL/folderID>`")
     try:
         ext_id = re.findall(r"\bhttps?://drive\.google\.com\S+", inp)[0]
+        GDRIVE_.parent_Id, _ = await get_file_id(ext_id)
     except IndexError:
         """if given value isn't folderURL assume it's an Id"""
         c1 = any(map(str.isdigit, inp))
         c2 = "-" in inp or "_" in inp
         if True in [c1 or c2]:
             GDRIVE_.parent_Id = inp
-            await gdrive.edit(
-                "**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`"
+            return await edit_or_reply(
+                gdrive,
+                "**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`",
             )
-            return None
-        await gdrive.edit(
-            "**[PARENT - FOLDER]**\n\n" "**Status : WARNING** -` forcing use...`"
+        await edit_or_reply(
+            gdrive,
+            "**[PARENT - FOLDER]**\n\n" "**Status : WARNING** -` forcing use...`",
         )
         GDRIVE_.parent_Id = inp
-    else:
-        GDRIVE_.parent_Id, _ = await get_file_id(ext_id)
-        await gdrive.edit(
-            "**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`"
-        )
+    await edit_or_reply(
+        gdrive, "**[PARENT - FOLDER]**\n\n" "**Status : **`OK - Successfully changed.`"
+    )
 
 
 @catub.cat_cmd(

@@ -1,3 +1,6 @@
+# Thumbnail Utilities ported from uniborg
+# credits @spechide
+
 import os
 
 from hachoir.metadata import extractMetadata
@@ -8,13 +11,9 @@ from userbot import catub
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
-from ..helpers.utils import _cattools
-from . import CMD_HELP
+from ..helpers.functions import take_screen_shot
 
 plugin_category = "utils"
-
-# Thumbnail Utilities ported from uniborg
-# credits @spechide
 
 
 thumb_image_path = Config.TMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
@@ -40,9 +39,7 @@ async def _(event):
         metadata = extractMetadata(createParser(downloaded_file_name))
         if metadata and metadata.has("duration"):
             duration = metadata.get("duration").seconds
-        downloaded_file_name = await _cattools.take_screen_shot(
-            downloaded_file_name, duration
-        )
+        downloaded_file_name = await take_screen_shot(downloaded_file_name, duration)
     # https://stackoverflow.com/a/21669827/4723940
     Image.open(downloaded_file_name).convert("RGB").save(thumb_image_path, "JPEG")
     # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails
@@ -110,17 +107,3 @@ async def _(event):
         await edit_or_reply(event, caption_str)
     else:
         await edit_or_reply(event, "Reply `.gethumbnail` as a reply to a media")
-
-
-CMD_HELP.update(
-    {
-        "thumbnail": "**Plugin :** `thumbnail`\
-    \n\n**Syntax :** `.savethumb`\
-    \n**Usage : **Reply to file or video to save it as temporary thumbimage\
-    \n\n**Syntax : **`.clearthumb`\
-    \n**Usage : **To clear Thumbnail no longer you uploads uses custom thumbanail\
-    \n\n**Syntax : **`.getthumb`\
-    \n**Usage : **To get thumbnail of given video or gives your present thumbnail\
-    "
-    }
-)

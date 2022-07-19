@@ -14,10 +14,10 @@ from jikanpy.exceptions import APIException
 from pySmartDL import SmartDL
 from telegraph import exceptions, upload_file
 
-from userbot import catub
+from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import media_type, post_to_telegraph, readable_time, time_formatter
+from ..helpers import media_type, readable_time, reply_id, time_formatter
 from ..helpers.functions import (
     airing_query,
     anilist_user,
@@ -30,11 +30,11 @@ from ..helpers.functions import (
     get_filler_episodes,
     getBannerLink,
     memory_file,
+    post_to_telegraph,
     search_in_animefiller,
     searchanilist,
     weekdays,
 )
-from ..helpers.utils import _cattools, reply_id
 
 jikan = Jikan()
 
@@ -229,6 +229,7 @@ async def anilist(event):
     },
 )
 async def anilist(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "Get info on any anime."
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
@@ -344,6 +345,7 @@ async def anilist(event):  # sourcery no-metrics
     },
 )
 async def anilist(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "Get info on any manga."
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
@@ -539,6 +541,7 @@ async def get_anime(event):
     },
 )
 async def anilist(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "Get info on any character."
     reply_to = await reply_id(event)
     input_str = event.pattern_match.group(1)
@@ -588,10 +591,7 @@ async def anilist(event):  # sourcery no-metrics
             i += 1
         await catevent.edit(msg, parse_mode="html")
         return
-    if specific:
-        result = result[animeno - 1]
-    else:
-        result = result[0]
+    result = result[animeno - 1] if specific else result[0]
     for entity in result:
         if result[entity] is None:
             result[entity] = "Unknown"
@@ -602,10 +602,7 @@ async def anilist(event):  # sourcery no-metrics
         dateofbirth.append(str(result["dateOfBirth"]["month"]))
     if result["dateOfBirth"]["day"]:
         dateofbirth.append(str(result["dateOfBirth"]["day"]))
-    if len(dateofbirth) != 0:
-        dob = "-".join(dateofbirth)
-    else:
-        dob = "Unknown"
+    dob = "-".join(dateofbirth) if dateofbirth else "Unknown"
     caption = textwrap.dedent(
         f"""
         🆎 <b> Name</b>: <i>{result['name']['full']}</i>
@@ -628,9 +625,9 @@ async def anilist(event):  # sourcery no-metrics
     html_ += f"<a href='{result['siteUrl']}'> View on anilist</a>"
 
     synopsis_link = await post_to_telegraph(
-        result["name"]["full"],
-        f"<code>{caption}</code>\n" + f"<br>" + html_,
+        result["name"]["full"], f"<code>{caption}</code>\n<br>{html_}"
     )
+
     await event.client.send_file(
         event.chat_id,
         file=result["image"]["large"],
@@ -659,6 +656,7 @@ async def anilist(event):  # sourcery no-metrics
     },
 )
 async def anime_download(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "Anime download links."
     search_query = event.pattern_match.group(2)
     input_str = event.pattern_match.group(1)
@@ -783,13 +781,18 @@ async def whatanime(event):
         return await edit_delete(
             event, "__reply to media to reverse search that anime__."
         )
-    mediatype = media_type(reply)
-    if mediatype not in ["Photo", "Video", "Gif", "Sticker"]:
+    mediatype = await media_type(reply)
+    if mediatype not in ["Photo", "Video", "Gif", "Sticker", "Document"]:
         return await edit_delete(
             event,
             f"__Reply to proper media that is expecting photo/video/gif/sticker. not {mediatype}__.",
         )
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="wanime.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"

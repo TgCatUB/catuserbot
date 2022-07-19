@@ -122,6 +122,7 @@ async def tar_file(event):
     },
 )
 async def zip_file(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "To unpack the zip file"
     if input_str := event.pattern_match.group(1):
         path = Path(input_str)
@@ -205,6 +206,7 @@ async def zip_file(event):  # sourcery no-metrics
     },
 )
 async def untar_file(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "To unpack the tar file"
     if input_str := event.pattern_match.group(1):
         path = Path(input_str)

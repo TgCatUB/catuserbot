@@ -2,6 +2,7 @@
 # memify plugin for catuserbot
 import asyncio
 import base64
+import contextlib
 import io
 import os
 import random
@@ -10,14 +11,12 @@ import string
 from PIL import Image, ImageFilter
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 
-from userbot import catub
+from userbot import Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import asciiart, cat_meeme, cat_meme, media_type
 from ..helpers.functions import (
     add_frame,
-    convert_toimage,
-    convert_tosticker,
     crop,
     flip_image,
     grayscale,
@@ -25,7 +24,7 @@ from ..helpers.functions import (
     mirror_file,
     solarize,
 )
-from ..helpers.utils import _cattools, reply_id
+from ..helpers.utils import reply_id
 from ..sql_helper.globals import addgvar, gvarstatus
 
 plugin_category = "fun"
@@ -63,9 +62,10 @@ font_list = [
     },
 )
 async def maccmd(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "Adds frame for the replied image."
     reply = await event.get_reply_message()
-    mediatype = media_type(reply)
+    mediatype = await media_type(reply)
     if not reply or not mediatype or mediatype not in ["Photo", "Sticker"]:
         return await edit_delete(event, "__Reply to photo or sticker to frame it.__")
     if mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker":
@@ -77,7 +77,9 @@ async def maccmd(event):  # sourcery no-metrics
     args = event.pattern_match.group(1)
     force = bool(args)
     try:
-        imag = await _cattools.media_to_pic(catevent, reply, noedits=True)
+        imag = await Convert.to_image(
+            catevent, reply, dirct="./temp", file="pframe.png", noedits=True
+        )
         if imag[1] is None:
             return await edit_delete(
                 imag[0], "__Unable to extract image from the replied message.__"
@@ -123,8 +125,6 @@ async def maccmd(event):  # sourcery no-metrics
         event.chat_id, output, reply_to=reply, force_document=force
     )
     await catevent.delete()
-    if os.path.exists(output):
-        os.remove(output)
 
 
 @catub.cat_cmd(
@@ -168,17 +168,17 @@ async def memes(event):
         bottom = ""
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event, reply, dirct="./temp", file="mmf.png", rgb=True
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    try:
+    with contextlib.suppress(BaseException):
         san = Get(san)
         await event.client(san)
-    except BaseException:
-        pass
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     meme = os.path.join("./temp", "catmeme.jpg")
     if gvarstatus("CNG_FONTS") is None:
         CNG_FONTS = "userbot/helpers/styles/impact.ttf"
@@ -189,7 +189,9 @@ async def memes(event):
     else:
         await cat_meeme(top, bottom, CNG_FONTS, meme_file, meme)
     if cmd != "mmf":
-        meme = convert_tosticker(meme)
+        meme = (await Convert.to_sticker(event, meme, file="memes.webp", noedits=True))[
+            1
+        ]
     await event.client.send_file(
         event.chat_id, meme, reply_to=catid, force_document=False
     )
@@ -247,19 +249,22 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="ascii.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
-    try:
+    with contextlib.suppress(BaseException):
         san = Get(san)
         await event.client(san)
-    except BaseException:
-        pass
     outputfile = (
         os.path.join("./temp", "ascii_file.webp")
         if jisanidea
@@ -268,7 +273,7 @@ async def memes(event):
     c_list = random_color()
     color1 = c_list[0]
     color2 = c_list[1]
-    bgcolor = "#080808" if not catinput else catinput
+    bgcolor = catinput or "#080808"
     asciiart(meme_file, 0.3, 1.9, outputfile, color1, color2, bgcolor)
     await event.client.send_file(
         event.chat_id, outputfile, reply_to=catid, force_document=False
@@ -297,19 +302,22 @@ async def memes(event):
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
     jisanidea = None
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="invert.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
-    try:
+    with contextlib.suppress(BaseException):
         san = Get(san)
         await event.client(san)
-    except BaseException:
-        pass
     outputfile = (
         os.path.join("./temp", "invert.webp")
         if jisanidea
@@ -343,19 +351,22 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="solarize.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
-    try:
+    with contextlib.suppress(BaseException):
         san = Get(san)
         await event.client(san)
-    except BaseException:
-        pass
     outputfile = (
         os.path.join("./temp", "solarize.webp")
         if jisanidea
@@ -389,19 +400,22 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="irotate.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
-    try:
+    with contextlib.suppress(BaseException):
         san = Get(san)
         await event.client(san)
-    except BaseException:
-        pass
     outputfile = (
         os.path.join("./temp", "mirror_file.webp")
         if jisanidea
@@ -435,19 +449,22 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="flip.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
-    try:
+    with contextlib.suppress(BaseException):
         san = Get(san)
         await event.client(san)
-    except BaseException:
-        pass
     outputfile = (
         os.path.join("./temp", "flip_image.webp")
         if jisanidea
@@ -481,19 +498,22 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="gray.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
-    try:
+    with contextlib.suppress(BaseException):
         san = Get(san)
         await event.client(san)
-    except BaseException:
-        pass
     outputfile = (
         os.path.join("./temp", "grayscale.webp")
         if jisanidea
@@ -520,7 +540,7 @@ async def memes(event):
 async def memes(event):
     "zooms your media file."
     catinput = event.pattern_match.group(1)
-    catinput = 50 if not catinput else int(catinput)
+    catinput = int(catinput) if catinput else 50
     reply = await event.get_reply_message()
     if not reply:
         return await edit_delete(event, "`Reply to supported Media...`")
@@ -529,19 +549,22 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="zoom.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
-    try:
+    with contextlib.suppress(BaseException):
         san = Get(san)
         await event.client(san)
-    except BaseException:
-        pass
     outputfile = (
         os.path.join("./temp", "zoomimage.webp")
         if jisanidea
@@ -594,19 +617,22 @@ async def memes(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     jisanidea = None
-    output = await _cattools.media_to_pic(event, reply)
+    output = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="framed.png",
+    )
     if output[1] is None:
         return await edit_delete(
             output[0], "__Unable to extract image from the replied message.__"
         )
-    meme_file = convert_toimage(output[1])
+    meme_file = output[1]
     if output[2] in ["Round Video", "Gif", "Sticker", "Video"]:
         jisanidea = True
-    try:
+    with contextlib.suppress(BaseException):
         san = Get(san)
         await event.client(san)
-    except BaseException:
-        pass
     outputfile = (
         os.path.join("./temp", "framed.webp")
         if jisanidea

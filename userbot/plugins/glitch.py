@@ -8,10 +8,10 @@ import os
 from glitch_this import ImageGlitcher
 from PIL import Image
 
-from userbot import catub
+from userbot import Convert, catub
 
 from ..core.managers import edit_delete
-from ..helpers.utils import _cattools, _catutils, reply_id
+from ..helpers import reply_id, unsavegif
 
 plugin_category = "fun"
 
@@ -41,7 +41,12 @@ async def glitch(event):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     catinput = int(catinput) if catinput else 2
-    glitch_file = await _cattools.media_to_pic(event, reply)
+    glitch_file = await Convert.to_image(
+        event,
+        reply,
+        dirct="./temp",
+        file="glitch.png",
+    )
     if glitch_file[1] is None:
         return await edit_delete(
             glitch_file[0], "__Unable to extract image from the replied message.__"
@@ -67,7 +72,7 @@ async def glitch(event):
             loop=LOOP,
         )
         sandy = await event.client.send_file(event.chat_id, glitched, reply_to=catid)
-        await _catutils.unsavegif(event, sandy)
+        await unsavegif(event, sandy)
     await glitch_file[0].delete()
     for files in (glitch_file[1], glitched):
         if files and os.path.exists(files):

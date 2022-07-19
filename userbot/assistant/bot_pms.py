@@ -69,7 +69,7 @@ async def check_bot_started_users(user, event):
     incoming=True,
     func=lambda e: e.is_private,
 )
-async def bot_start(event):
+async def bot_start(event):  # sourcery skip: low-code-quality
     chat = await event.get_chat()
     user = await catub.get_me()
     if check_is_black_list(chat.id):
@@ -152,6 +152,7 @@ async def bot_start(event):
 
 @catub.bot_cmd(incoming=True, func=lambda e: e.is_private)
 async def bot_pms(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     chat = await event.get_chat()
     if check_is_black_list(chat.id):
         return
@@ -332,7 +333,7 @@ async def bot_start(event):
     await info_msg.edit(uinfo)
 
 
-async def send_flood_alert(user_) -> None:
+async def send_flood_alert(user_) -> None:  # sourcery skip: low-code-quality
     # sourcery no-metrics
     buttons = [
         (

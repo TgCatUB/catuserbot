@@ -4,10 +4,7 @@ apscheduler
 cairosvg
 cloudscraper
 colour
-covid
 cowpy
-dataclasses
-DateTime
 emoji
 fonttools
 geopy
@@ -30,8 +27,6 @@ lyricsgenius
 markdown
 markdown-it-py
 motor
-moviepy
-nekos.py
 opencv-python-headless
 Pillow
 prettytable
@@ -45,11 +40,8 @@ pymediainfo
 PyMuPDF
 pySmartDL
 python-barcode
-python-dotenv
 pytz
 qrcode
-randomstuff.py
-regex
 requests
 search-engine-parser
 selenium
@@ -69,7 +61,7 @@ wand
 wget
 yt_dlp
 
-git+https://github.com/sandy1709/Telethon@beta
+git+https://github.com/sandy1709/Telethon@alpha
 git+https://github.com/goldsmith/Wikipedia
 git+https://github.com/sandy1709/py-googletrans
 git+https://github.com/alexmercerind/youtube-search-python

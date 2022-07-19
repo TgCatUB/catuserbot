@@ -92,6 +92,7 @@ async def artist_and_song(track):
 
 
 async def get_curr_track(lfmbio):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     oldartist = ""
     oldsong = ""
     while LASTFM_.LASTFMCHECK:

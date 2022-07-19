@@ -23,7 +23,7 @@ class Echos(BASE):
         self.chat_type = chat_type
 
     def __eq__(self, other):
-        return bool(
+        return (
             isinstance(other, Echos)
             and self.chat_id == other.chat_id
             and self.user_id == other.user_id

@@ -24,9 +24,7 @@ async def chain(event):
     await edit_or_reply(event, "`Counting...`")
     count = -1
     if msg.reply_to:
-        msg_id = msg.reply_to.reply_to_msg_id
-        if msg.reply_to.reply_to_top_id:
-            msg_id = msg.reply_to.reply_to_top_id
+        msg_id = msg.reply_to.reply_to_top_id or msg.reply_to.reply_to_msg_id
     thread = f"https://t.me/c/{chat}/{msg_id}?thread={msg_id}"
     while msg:
         reply = await msg.get_reply_message()
