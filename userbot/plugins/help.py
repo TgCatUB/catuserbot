@@ -1,134 +1,16 @@
 from telethon import functions
-
 from userbot import catub
 
 from ..Config import Config
-from ..core import CMD_INFO, GRP_INFO, PLG_INFO
+from ..core import CMD_INFO, PLG_INFO
+from ..core.cmdinfo import (cmdinfo, cmdlist, grpinfo, plugininfo)
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import reply_id
 
 cmdprefix = Config.COMMAND_HAND_LER
-BADCAT = Config.BADCAT
+
 
 plugin_category = "tools"
-
-hemojis = {
-    "admin": "👮‍♂️",
-    "bot": "🤖",
-    "fun": "🎨",
-    "misc": "🧩",
-    "tools": "🧰",
-    "utils": "🗂",
-    "extra": "➕",
-    "useless": "⚰️",
-}
-
-
-def get_key(val):
-    for key, value in PLG_INFO.items():
-        for cmd in value:
-            if val == cmd:
-                return key
-    return None
-
-
-def getkey(val):
-    for key, value in GRP_INFO.items():
-        for plugin in value:
-            if val == plugin:
-                return key
-    return None
-
-
-async def cmdinfo(input_str, event, plugin=False):
-    if input_str[0] == cmdprefix:
-        input_str = input_str[1:]
-    try:
-        about = CMD_INFO[input_str]
-    except KeyError:
-        if plugin:
-            await edit_delete(
-                event,
-                f"**There is no plugin or command as **`{input_str}`** in your bot.**",
-            )
-            return None
-        await edit_delete(
-            event, f"**There is no command as **`{input_str}`** in your bot.**"
-        )
-        return None
-    except Exception as e:
-        await edit_delete(event, f"**Error**\n`{e}`")
-        return None
-    outstr = f"**Command :** `{cmdprefix}{input_str}`\n"
-    plugin = get_key(input_str)
-    if plugin is not None:
-        outstr += f"**Plugin :** `{plugin}`\n"
-        category = getkey(plugin)
-        if category is not None:
-            outstr += f"**Category :** `{category}`\n\n"
-    outstr += f"**✘  Intro :**\n{about[0]}"
-    return outstr
-
-
-async def plugininfo(input_str, event, flag):
-    try:
-        cmds = PLG_INFO[input_str]
-    except KeyError:
-        outstr = await cmdinfo(input_str, event, plugin=True)
-        return outstr
-    except Exception as e:
-        await edit_delete(event, f"**Error**\n`{e}`")
-        return None
-    if len(cmds) == 1 and (flag is None or (flag and flag != "-p")):
-        outstr = await cmdinfo(cmds[0], event, plugin=False)
-        return outstr
-    outstr = f"**Plugin : **`{input_str}`\n"
-    outstr += f"**Commands Available :** `{len(cmds)}`\n"
-    category = getkey(input_str)
-    if category is not None:
-        outstr += f"**Category :** `{category}`\n\n"
-    for cmd in sorted(cmds):
-        outstr += f"•  **cmd :** `{cmdprefix}{cmd}`\n"
-        try:
-            outstr += f"•  **info :** `{CMD_INFO[cmd][1]}`\n\n"
-        except IndexError:
-            outstr += "•  **info :** `None`\n\n"
-    outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help <command name>`\
-        \n**Note : **If command name is same as plugin name then use this `{cmdprefix}help -c <command name>`."
-    return outstr
-
-
-async def grpinfo():
-    outstr = "**Plugins in Catuserbot are:**\n\n"
-    outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help <plugin name>`\n\n"
-    category = ["admin", "bot", "fun", "misc", "tools", "utils", "extra"]
-    if BADCAT:
-        category.append("useless")
-    for cat in category:
-        plugins = GRP_INFO[cat]
-        outstr += f"**{hemojis[cat]} {cat.title()} **({len(plugins)})\n"
-        for plugin in plugins:
-            outstr += f"`{plugin}`  "
-        outstr += "\n\n"
-    return outstr
-
-
-async def cmdlist():
-    outstr = "**Total list of Commands in your Catuserbot are :**\n\n"
-    category = ["admin", "bot", "fun", "misc", "tools", "utils", "extra"]
-    if BADCAT:
-        category.append("useless")
-    for cat in category:
-        plugins = GRP_INFO[cat]
-        outstr += f"**{hemojis[cat]} {cat.title()} ** - {len(plugins)}\n\n"
-        for plugin in plugins:
-            cmds = PLG_INFO[plugin]
-            outstr += f"• **{plugin.title()} has {len(cmds)} commands**\n"
-            for cmd in sorted(cmds):
-                outstr += f"  - `{cmdprefix}{cmd}`\n"
-            outstr += "\n"
-    outstr += f"**👩‍💻 Usage : ** `{cmdprefix}help -c <command name>`"
-    return outstr
 
 
 @catub.cat_cmd(

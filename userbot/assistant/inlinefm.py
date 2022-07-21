@@ -8,10 +8,10 @@ from pathlib import Path
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
 from telethon.utils import get_attributes
-
 from userbot import catub
+
 from userbot.Config import Config
-from userbot.helpers import humanbytes, progress
+from userbot.helpers import progress, humanbytes
 from userbot.helpers.utils import _catutils
 
 CC = []
@@ -45,16 +45,16 @@ def add_s(msg, num: int):
             fmsg += f"{ff}\n"
     buttons = [
         [
-            Button.inline("D", data=f"rem_{msgs[valv]}|{valv}"),
-            Button.inline("X", data=f"cut_{msgs[valv]}|{valv}"),
-            Button.inline("C", data=f"copy_{msgs[valv]}|{valv}"),
-            Button.inline("V", data=f"paste_{valv}"),
+            Button.inline("D", data=f"fmrem_{msgs[valv]}|{valv}"),
+            Button.inline("X", data=f"fmcut_{msgs[valv]}|{valv}"),
+            Button.inline("C", data=f"fmcopy_{msgs[valv]}|{valv}"),
+            Button.inline("V", data=f"fmpaste_{valv}"),
         ],
         [
-            Button.inline("⬅️", data="back"),
-            Button.inline("⬆️", data=f"up_{valv}"),
-            Button.inline("⬇️", data=f"down_{valv}"),
-            Button.inline("➡️", data=f"forth_{msgs[valv]}"),
+            Button.inline("⬅️", data="fmback"),
+            Button.inline("⬆️", data=f"fmup_{valv}"),
+            Button.inline("⬇️", data=f"fmdown_{valv}"),
+            Button.inline("➡️", data=f"fmforth_{msgs[valv]}"),
         ],
     ]
     return fmsg, buttons
@@ -121,16 +121,16 @@ def get_manager(path, num: int):
         msg += f"**Last Accessed Time:** `{time3}`"
         buttons = [
             [
-                Button.inline("Rem", data=f"rem_File|{num}"),
-                Button.inline("Send", data="send"),
-                Button.inline("X", data=f"cut_File|{num}"),
-                Button.inline("C", data=f"copy_File{num}"),
+                Button.inline("Rem", data=f"fmrem_File|{num}"),
+                Button.inline("Send", data="fmsend"),
+                Button.inline("X", data=f"fmcut_File|{num}"),
+                Button.inline("C", data=f"fmcopy_File{num}"),
             ],
             [
-                Button.inline("⬅️", data="back"),
-                Button.inline("⬆️", data="up_File"),
-                Button.inline("⬇️", data="down_File"),
-                Button.inline("➡️", data="forth_File"),
+                Button.inline("⬅️", data="fmback"),
+                Button.inline("⬆️", data="fmup_File"),
+                Button.inline("⬇️", data="fmdown_File"),
+                Button.inline("➡️", data="fmforth_File"),
             ],
         ]
         PATH.clear()
@@ -140,7 +140,7 @@ def get_manager(path, num: int):
 
 
 # BACK
-@catub.tgbot.on(CallbackQuery(pattern="back"))
+@catub.tgbot.on(CallbackQuery(pattern="fmback"))
 async def back(event):
     path = PATH[0]
     paths = path.split("/")
@@ -159,7 +159,7 @@ async def back(event):
 
 
 # UP
-@catub.tgbot.on(CallbackQuery(pattern="up_(.*)"))
+@catub.tgbot.on(CallbackQuery(pattern="fmup_(.*)"))
 async def up(event):
     num = event.pattern_match.group(1).decode("UTF-8")
     if num == "File":
@@ -173,7 +173,7 @@ async def up(event):
 
 
 # DOWN
-@catub.tgbot.on(CallbackQuery(pattern="down_(.*)"))
+@catub.tgbot.on(CallbackQuery(pattern="fmdown_(.*)"))
 async def down(event):
     num = event.pattern_match.group(1).decode("UTF-8")
     if num == "File":
@@ -187,7 +187,7 @@ async def down(event):
 
 
 # FORTH
-@catub.tgbot.on(CallbackQuery(pattern="forth_(.*)"))
+@catub.tgbot.on(CallbackQuery(pattern="fmforth_(.*)"))
 async def forth(event):
     npath = event.pattern_match.group(1).decode("UTF-8")
     if npath == "File":
@@ -203,7 +203,7 @@ async def forth(event):
 
 
 # REMOVE
-@catub.tgbot.on(CallbackQuery(pattern="rem_(.*)"))
+@catub.tgbot.on(CallbackQuery(pattern="fmrem_(.*)"))
 async def remove(event):
     fn, num = (event.pattern_match.group(1).decode("UTF-8")).split("|", 1)
     path = PATH[0]
@@ -247,7 +247,7 @@ async def send(event):
     await event.answer(f"File {path} sent successfully...")
 """
 # SEND
-@catub.tgbot.on(CallbackQuery(pattern="send"))
+@catub.tgbot.on(CallbackQuery(pattern="fmsend"))
 async def send(event):
     path = PATH[0]
     startTime = time.time()
@@ -272,15 +272,13 @@ async def send(event):
         mime_type=mime_type,
         attributes=attributes,
         force_file=False,
-        thumb=await event.client.upload_file(thumb_image_path)
-        if thumb_image_path
-        else None,
+        thumb=await event.client.upload_file(thumb_image_path) if thumb_image_path else None,
     )
     await event.edit("hi", file=media)
 
 
 # CUT
-@catub.tgbot.on(CallbackQuery(pattern="cut_(.*)"))
+@catub.tgbot.on(CallbackQuery(pattern="fmcut_(.*)"))
 async def cut(event):
     f, n = (event.pattern_match.group(1).decode("UTF-8")).split("|", 1)
     if CC:
@@ -313,7 +311,7 @@ async def cut(event):
 
 
 # COPY
-@catub.tgbot.on(CallbackQuery(pattern="copy_(.*)"))
+@catub.tgbot.on(CallbackQuery(pattern="fmcopy_(.*)"))
 async def copy(event):
     f, n = (event.pattern_match.group(1).decode("UTF-8")).split("|", 1)
     if CC:
@@ -346,7 +344,7 @@ async def copy(event):
 
 
 # PASTE
-@catub.tgbot.on(CallbackQuery(pattern="paste_(.*)"))
+@catub.tgbot.on(CallbackQuery(pattern="fmpaste_(.*)"))
 async def paste(event):
     n = event.pattern_match.group(1).decode("UTF-8")
     path = PATH[0]

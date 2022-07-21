@@ -25,6 +25,7 @@ from ..helpers.functions.utube import (
 from ..plugins import mention
 from ..sql_helper.globals import gvarstatus
 from . import CMD_INFO, GRP_INFO, PLG_INFO, check_owner
+from .cmdinfo import cmdinfo, plugininfo, getkey, get_key
 from .logger import logging
 
 LOGS = logging.getLogger(__name__)
@@ -32,14 +33,6 @@ LOGS = logging.getLogger(__name__)
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
 MEDIA_PATH_REGEX = re.compile(r"(:?\<\bmedia:(:?(?:.*?)+)\>)")
 tr = Config.COMMAND_HAND_LER
-
-
-def getkey(val):
-    for key, value in GRP_INFO.items():
-        for plugin in value:
-            if val == plugin:
-                return key
-    return None
 
 
 def get_thumb(name):
@@ -473,6 +466,9 @@ async def inline_handler(event):  # sourcery no-metrics
         elif string == "spotify":
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
+        elif str_y[0].lower() == "s" and len(str_y) == 2:
+            result = inline_search(event, str_y[1].strip())
+            await event.answer([result] if result else None)
         elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
             link = get_yt_video_id(str_y[1].strip())
             found_ = True
@@ -805,3 +801,37 @@ async def on_plug_in_callback_query_handler(event):
         \n**Category :** `{category_plugins}`\
         \n\n**✘ Intro :**\n{CMD_INFO[cmd][0]}"
     await event.edit(text, buttons=buttons)
+
+
+async def inline_search(event, query):
+    answers = []
+    builder = event.builder
+    if found := [i for i in sorted(list(CMD_INFO)) if query in i]:
+        for cmd in found:
+            title = f"**Command :**  {cmd}"
+            plugin = get_key(cmd)
+            info = CMD_INFO[cmd][1]
+            description = f"Plugin :  {plugin} \nCategory :  {getkey(plugin)}\n{info}"
+            text = await cmdinfo(cmd, event)
+            result = builder.article(
+                title=title,
+                description=description,
+                thumb=get_thumb("plugin_cmd"),
+                text=text,
+            )
+            answers.append(result)
+
+    if found := [i for i in sorted(list(PLG_INFO.keys())) if query in i]:
+        for plugin in found:
+            count = len(PLG_INFO[plugin])
+            if count>1:
+                title = f"**Plugin :**  {plugin}"
+                text = await plugininfo(plugin, event, "-p")
+                result = builder.article(
+                    title=title,
+                    description=f"Category :  {getkey(plugin)}\nTotal Cmd : {count}",
+                    thumb=get_thumb("plugin"),
+                    text=text,
+                )
+                answers.append(result)
+    return answers
