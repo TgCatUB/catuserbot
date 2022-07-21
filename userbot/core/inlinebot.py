@@ -572,48 +572,6 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(alive_menu) if alive_menu else None
             help_menu = await article_builder(event, "help")
             results.append(help_menu) if help_menu else None
-            spotify_menu = await article_builder(event, "spotify")
-            results.append(spotify_menu) if spotify_menu else None
-            results.append(
-                builder.article(
-                    title="Secret",
-                    description="Send secret message to your friends.",
-                    text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
-                    thumb=get_thumb("secret.png"),
-                    buttons=[
-                        (
-                            Button.switch_inline(
-                                "Single", query="secret @username Text", same_peer=True
-                            ),
-                            Button.switch_inline(
-                                "Multiple",
-                                query="secret @username @username2 | Text",
-                                same_peer=True,
-                            ),
-                        )
-                    ],
-                ),
-            )
-            results.append(
-                builder.article(
-                    title="Troll",
-                    description="Send troll message to your friends.",
-                    text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
-                    thumb=get_thumb("troll.png"),
-                    buttons=[
-                        (
-                            Button.switch_inline(
-                                "Single", query="troll @username Text", same_peer=True
-                            ),
-                            Button.switch_inline(
-                                "Multiple",
-                                query="troll @username @username2 | Text",
-                                same_peer=True,
-                            ),
-                        )
-                    ],
-                ),
-            )
             results.append(
                 builder.article(
                     title="Hide",
@@ -636,6 +594,48 @@ async def inline_handler(event):  # sourcery no-metrics
                     buttons=[
                         Button.switch_inline(
                             "Search Help", query="s al", same_peer=True
+                        )
+                    ],
+                ),
+            )
+            results.append(
+                builder.article(
+                    title="Secret",
+                    description="Send secret message to your friends.",
+                    text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
+                    thumb=get_thumb("secret.png"),
+                    buttons=[
+                        (
+                            Button.switch_inline(
+                                "Single", query="secret @username Text", same_peer=True
+                            ),
+                            Button.switch_inline(
+                                "Multiple",
+                                query="secret @username @username2 | Text",
+                                same_peer=True,
+                            ),
+                        )
+                    ],
+                ),
+            )
+            spotify_menu = await article_builder(event, "spotify")
+            results.append(spotify_menu) if spotify_menu else None
+            results.append(
+                builder.article(
+                    title="Troll",
+                    description="Send troll message to your friends.",
+                    text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
+                    thumb=get_thumb("troll.png"),
+                    buttons=[
+                        (
+                            Button.switch_inline(
+                                "Single", query="troll @username Text", same_peer=True
+                            ),
+                            Button.switch_inline(
+                                "Multiple",
+                                query="troll @username @username2 | Text",
+                                same_peer=True,
+                            ),
                         )
                     ],
                 ),
