@@ -8,10 +8,10 @@ from pathlib import Path
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
 from telethon.utils import get_attributes
-from userbot import catub
 
+from userbot import catub
 from userbot.Config import Config
-from userbot.helpers import progress, humanbytes
+from userbot.helpers import humanbytes, progress
 from userbot.helpers.utils import _catutils
 
 CC = []
@@ -272,7 +272,9 @@ async def send(event):
         mime_type=mime_type,
         attributes=attributes,
         force_file=False,
-        thumb=await event.client.upload_file(thumb_image_path) if thumb_image_path else None,
+        thumb=await event.client.upload_file(thumb_image_path)
+        if thumb_image_path
+        else None,
     )
     await event.edit("hi", file=media)
 
