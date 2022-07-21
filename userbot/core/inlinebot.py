@@ -467,7 +467,7 @@ async def inline_handler(event):  # sourcery no-metrics
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
         elif str_y[0].lower() == "s" and len(str_y) == 2:
-            result = inline_search(event, str_y[1].strip())
+            result = await inline_search(event, str_y[1].strip())
             await event.answer([result] if result else None)
         elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
             link = get_yt_video_id(str_y[1].strip())
