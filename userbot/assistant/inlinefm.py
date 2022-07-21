@@ -1,17 +1,18 @@
 # By MineisZarox https://t.me/IrisZarox (Demon)
 import asyncio
+import io
 import os
 import time
 from pathlib import Path
 
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
-
+from telethon.utils import get_attributes
 from userbot import catub
 
-from ..Config import Config
-from ..helpers.utils import _catutils
-from . import humanbytes
+from userbot.Config import Config
+from userbot.helpers import progress, humanbytes
+from userbot.helpers.utils import _catutils
 
 CC = []
 PATH = []  # using list method for some reason
@@ -44,16 +45,16 @@ def add_s(msg, num: int):
             fmsg += f"{ff}\n"
     buttons = [
         [
-            Button.inline(f"D", data=f"rem_{msgs[valv]}|{valv}"),
-            Button.inline(f"X", data=f"cut_{msgs[valv]}|{valv}"),
-            Button.inline(f"C", data=f"copy_{msgs[valv]}|{valv}"),
-            Button.inline(f"V", data=f"paste_{valv}"),
+            Button.inline("D", data=f"rem_{msgs[valv]}|{valv}"),
+            Button.inline("X", data=f"cut_{msgs[valv]}|{valv}"),
+            Button.inline("C", data=f"copy_{msgs[valv]}|{valv}"),
+            Button.inline("V", data=f"paste_{valv}"),
         ],
         [
-            Button.inline(f"⬅️", data=f"back"),
-            Button.inline(f"⬆️", data=f"up_{valv}"),
-            Button.inline(f"⬇️", data=f"down_{valv}"),
-            Button.inline(f"➡️", data=f"forth_{msgs[valv]}"),
+            Button.inline("⬅️", data="back"),
+            Button.inline("⬆️", data=f"up_{valv}"),
+            Button.inline("⬇️", data=f"down_{valv}"),
+            Button.inline("➡️", data=f"forth_{msgs[valv]}"),
         ],
     ]
     return fmsg, buttons
@@ -120,16 +121,16 @@ def get_manager(path, num: int):
         msg += f"**Last Accessed Time:** `{time3}`"
         buttons = [
             [
-                Button.inline(f"Rem", data=f"rem_File|{num}"),
-                Button.inline(f"Send", data=f"send"),
-                Button.inline(f"X", data=f"cut_File|{num}"),
-                Button.inline(f"C", data=f"copy_File{num}"),
+                Button.inline("Rem", data=f"rem_File|{num}"),
+                Button.inline("Send", data="send"),
+                Button.inline("X", data=f"cut_File|{num}"),
+                Button.inline("C", data=f"copy_File{num}"),
             ],
             [
-                Button.inline(f"⬅️", data=f"back"),
-                Button.inline(f"⬆️", data=f"up_File"),
-                Button.inline(f"⬇️", data=f"down_File"),
-                Button.inline(f"➡️", data=f"forth_File"),
+                Button.inline("⬅️", data="back"),
+                Button.inline("⬆️", data="up_File"),
+                Button.inline("⬇️", data="down_File"),
+                Button.inline("➡️", data="forth_File"),
             ],
         ]
         PATH.clear()
@@ -228,10 +229,14 @@ async def remove(event):
     await event.answer(f"{rpath} removed successfully...")
 
 
+"""
 # SEND
 @catub.tgbot.on(CallbackQuery(pattern="send"))
 async def send(event):
     print(event)
+    print()
+    x = await event.get_chat()
+    print(x)
     path = PATH[0]
     chat = -(int((await event.get_chat()).id)) + -1000000000000
     await catub.send_file(
@@ -240,6 +245,36 @@ async def send(event):
         thumb=thumb_image_path if os.path.exists(thumb_image_path) else None,
     )
     await event.answer(f"File {path} sent successfully...")
+"""
+# SEND
+@catub.tgbot.on(CallbackQuery(pattern="send"))
+async def send(event):
+    path = PATH[0]
+    startTime = time.time()
+    attributes, mime_type = get_attributes(str(path))
+    ul = io.open(Path(path), "rb")
+    uploaded = await event.client.fast_upload_file(
+        file=ul,
+        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+            progress(
+                d,
+                t,
+                event,
+                startTime,
+                "trying to upload",
+                file_name=os.path.basename(Path(path)),
+            )
+        ),
+    )
+    ul.close()
+    media = types.InputMediaUploadedDocument(
+        file=uploaded,
+        mime_type=mime_type,
+        attributes=attributes,
+        force_file=False,
+        thumb=await event.client.upload_file(thumb_image_path) if thumb_image_path else None,
+    )
+    await event.edit("hi", file=media)
 
 
 # CUT
@@ -326,7 +361,7 @@ async def paste(event):
         await event.answer("You aint copied anything to paste")
 
 
-@catub.tgbot.on(InlineQuery)
+"""
 async def lsinline(event):
 
     if (
@@ -339,8 +374,7 @@ async def lsinline(event):
         except Exception:
             ls = event.text
             path = os.getcwd()
-        if "ls" in ls:
-            print(ls)
+        if "ja" in ls:
             if not os.path.exists(path):
                 return
             num = 1
@@ -348,13 +382,63 @@ async def lsinline(event):
             result = []
             result.append(
                 await event.builder.article(
-                    title="Inline FM",
-                    description="Inline file manager",
-                    thumb=get_thumb(
-                        "https://telegra.ph/file/95412625a79efe853bf9a.png"
-                    ),
+                    title="File Manager",
+                    description= f"Inline file manager\nPath:  {path}",   
+                    file="https://telegra.ph/file/657545ca6add1ad9663f9.jpg",
+                    content=get_thumb("https://telegra.ph/file/95412625a79efe853bf9a.png"),
+                    thumb=get_thumb("https://telegra.ph/file/95412625a79efe853bf9a.png"),
                     text=msg,
                     buttons=buttons,
                 )
             )
             await event.answer(result)
+"""
+
+
+@catub.tgbot.on(InlineQuery)
+async def lsinline(event):
+    try:
+        ls, path_ = (event.text).split(" ", 1)
+        path = Path(path_) if path_ else os.getcwd()
+    except Exception:
+        ls = event.text
+        path = os.getcwd()
+    if "ls" in ls:
+        if not os.path.exists(path):
+            return
+        num = 1
+        msg, buttons = get_manager(path, num)
+        media = thumb = photo = None
+        link_preview = False
+        builder = event.builder
+        title = "File Manager"
+        description = f"Inline file manager\nPath:  {path}"
+        thumb = get_thumb("https://telegra.ph/file/95412625a79efe853bf9a.png")
+        media = "https://telegra.ph/file/657545ca6add1ad9663f9.jpg"
+        if media and not media.endswith((".jpg", ".jpeg", ".png")):
+            result = builder.document(
+                media,
+                title=title,
+                description=description,
+                text=msg,
+                buttons=buttons,
+            )
+        else:
+            type = "article"
+            if media and media.endswith((".jpg", ".jpeg", ".png")):
+                photo = types.InputWebDocument(
+                    url=media, size=0, mime_type="image/jpeg", attributes=[]
+                )
+                type = "photo"
+            result = builder.article(
+                title=title,
+                description=description,
+                type=type,
+                file=media,
+                thumb=thumb if thumb else photo,
+                content=photo,
+                text=msg,
+                buttons=buttons,
+                link_preview=link_preview,
+            )
+        await event.answer([result])
