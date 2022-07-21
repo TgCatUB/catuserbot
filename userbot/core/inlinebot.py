@@ -36,7 +36,7 @@ tr = Config.COMMAND_HAND_LER
 
 
 def get_thumb(name):
-    url = f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Inline/{name}.png?raw=true"
+    url = f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Inline/{name}?raw=true"
     return types.InputWebDocument(url=url, size=0, mime_type="image/png", attributes=[])
 
 
@@ -97,7 +97,7 @@ async def article_builder(event, method):
         help_info = main_menu()
         title = "Help Menu"
         description = "Help menu for CatUserbot."
-        thumb = get_thumb("help")
+        thumb = get_thumb("help.png")
         query = help_info[0]
         buttons = help_info[1]
 
@@ -136,7 +136,7 @@ async def article_builder(event, method):
         except Exception:
             return None
         title = "Cat Alive"
-        thumb = get_thumb("alive")
+        thumb = get_thumb("alive.png")
         description = "Alive menu for CatUserbot."
         ALIVE_PIC = gvarstatus("ALIVE_PIC")
         IALIVE_PIC = gvarstatus("IALIVE_PIC")
@@ -178,7 +178,7 @@ async def article_builder(event, method):
                     media, tittle, dic, lyrics, symbol = await get_spotify(
                         event, response
                     )
-                    thumb = get_thumb("spotify_on")
+                    thumb = get_thumb("spotify_on.png")
                     query = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}`'
                     buttons = [
                         (
@@ -448,7 +448,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 description="Send hidden text in chat."
                 if match3
                 else f"Only he/she/they {info_type[1]} open it.",
-                thumb=get_thumb(info_type[0]),
+                thumb=get_thumb(f"{info_type[0]}.png"),
                 text="✖✖✖"
                 if match3
                 else f"🔒 A whisper message to {sandy}, Only he/she can open it.",
@@ -468,7 +468,7 @@ async def inline_handler(event):  # sourcery no-metrics
             await event.answer([result] if result else None)
         elif str_y[0].lower() == "s" and len(str_y) == 2:
             result = await inline_search(event, str_y[1].strip())
-            await event.answer([result] if result else None)
+            await event.answer(result if result else None)
         elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
             link = get_yt_video_id(str_y[1].strip())
             found_ = True
@@ -579,7 +579,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Secret",
                     description="Send secret message to your friends.",
                     text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
-                    thumb=get_thumb("secret"),
+                    thumb=get_thumb("secret.png"),
                     buttons=[
                         (
                             Button.switch_inline(
@@ -599,7 +599,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Troll",
                     description="Send troll message to your friends.",
                     text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
-                    thumb=get_thumb("troll"),
+                    thumb=get_thumb("troll.png"),
                     buttons=[
                         (
                             Button.switch_inline(
@@ -619,7 +619,7 @@ async def inline_handler(event):  # sourcery no-metrics
                     title="Hide",
                     description="Send hidden text in chat.",
                     text="__Send hidden message for spoilers/quote prevention.__",
-                    thumb=get_thumb("hide"),
+                    thumb=get_thumb("hide.png"),
                     buttons=[
                         Button.switch_inline(
                             "Hidden Text", query="hide Text", same_peer=True
@@ -629,10 +629,23 @@ async def inline_handler(event):  # sourcery no-metrics
             )
             results.append(
                 builder.article(
+                    title="Search",
+                    description="Search cmds & plugins",
+                    text="__Get help about a plugin or cmd.\n\nMixture of .help & .s__",
+                    thumb=get_thumb("search.jpg"),
+                    buttons=[
+                        Button.switch_inline(
+                            "Search Help", query="s al", same_peer=True
+                        )
+                    ],
+                ),
+            )
+            results.append(
+                builder.article(
                     title="Youtube Download",
                     description="Download videos/audios from YouTube.",
                     text="__Download videos or audios from YouTube with different options of resolutions/quality.__",
-                    thumb=get_thumb("youtube"),
+                    thumb=get_thumb("youtube.png"),
                     buttons=[
                         Button.switch_inline(
                             "Youtube-dl", query="ytdl perfect", same_peer=True
@@ -808,15 +821,18 @@ async def inline_search(event, query):
     builder = event.builder
     if found := [i for i in sorted(list(CMD_INFO)) if query in i]:
         for cmd in found:
-            title = f"**Command :**  {cmd}"
+            title = f"Command:  {cmd}"
             plugin = get_key(cmd)
-            info = CMD_INFO[cmd][1]
-            description = f"Plugin :  {plugin} \nCategory :  {getkey(plugin)}\n{info}"
+            try:
+                info = CMD_INFO[cmd][1]
+            except IndexError:
+                info = "None"
+            description = f"Plugin:  {plugin} \nCategory:  {getkey(plugin)}\n{info}"
             text = await cmdinfo(cmd, event)
             result = builder.article(
                 title=title,
                 description=description,
-                thumb=get_thumb("plugin_cmd"),
+                thumb=get_thumb("plugin_cmd.jpg"),
                 text=text,
             )
             answers.append(result)
@@ -825,12 +841,12 @@ async def inline_search(event, query):
         for plugin in found:
             count = len(PLG_INFO[plugin])
             if count > 1:
-                title = f"**Plugin :**  {plugin}"
+                title = f"Plugin:  {plugin}"
                 text = await plugininfo(plugin, event, "-p")
                 result = builder.article(
                     title=title,
-                    description=f"Category :  {getkey(plugin)}\nTotal Cmd : {count}",
-                    thumb=get_thumb("plugin"),
+                    description=f"Category:  {getkey(plugin)}\nTotal Cmd: {count}",
+                    thumb=get_thumb("plugin.jpg"),
                     text=text,
                 )
                 answers.append(result)
