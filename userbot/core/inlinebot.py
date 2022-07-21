@@ -25,7 +25,7 @@ from ..helpers.functions.utube import (
 from ..plugins import mention
 from ..sql_helper.globals import gvarstatus
 from . import CMD_INFO, GRP_INFO, PLG_INFO, check_owner
-from .cmdinfo import cmdinfo, plugininfo, getkey, get_key
+from .cmdinfo import cmdinfo, get_key, getkey, plugininfo
 from .logger import logging
 
 LOGS = logging.getLogger(__name__)
@@ -824,7 +824,7 @@ async def inline_search(event, query):
     if found := [i for i in sorted(list(PLG_INFO.keys())) if query in i]:
         for plugin in found:
             count = len(PLG_INFO[plugin])
-            if count>1:
+            if count > 1:
                 title = f"**Plugin :**  {plugin}"
                 text = await plugininfo(plugin, event, "-p")
                 result = builder.article(

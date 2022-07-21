@@ -1,9 +1,10 @@
 from telethon import functions
+
 from userbot import catub
 
 from ..Config import Config
 from ..core import CMD_INFO, PLG_INFO
-from ..core.cmdinfo import (cmdinfo, cmdlist, grpinfo, plugininfo)
+from ..core.cmdinfo import cmdinfo, cmdlist, grpinfo, plugininfo
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import reply_id
 
