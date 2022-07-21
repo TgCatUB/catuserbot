@@ -353,7 +353,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
                                 await Convert.to_webm(
                                     args,
                                     message,
-                                    dict="./",
+                                    dirct="./",
                                     file="animate.webm",
                                     noedits=True,
                                 )
@@ -376,7 +376,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
                 )
                 sticker = (
                     await Convert.to_webm(
-                        args, message, dict="./", file="animate.webm", noedits=True
+                        args, message, dirct="./", file="animate.webm", noedits=True
                     )
                 )[1]
                 await edit_or_reply(catevent, f"`{random.choice(KANGING_STR)}`")
@@ -593,7 +593,7 @@ async def pack_kang(event):  # sourcery no-metrics
             )
             if message.size > 261120:
                 await Convert.to_webm(
-                    event, message, dict="./", file="animate.webm", noedits=True
+                    event, message, dirct="./", file="animate.webm", noedits=True
                 )
             else:
                 await event.client.download_media(message, "animate.webm")
@@ -710,7 +710,7 @@ async def pussycat(event):
     sticker = await Convert.to_webm(
         event,
         message,
-        dict="./",
+        dirct="./",
         file="animate.webm",
     )
     await edit_or_reply(sticker[0], f"`{random.choice(KANGING_STR)}`")
