@@ -1,26 +1,26 @@
-#By MineisZarox https://t.me/IrisZarox (Demon)
+# By MineisZarox https://t.me/IrisZarox (Demon)
 import asyncio
-import io
 import os
-import shutil
 import time
 from pathlib import Path
 
+from telethon import Button, CallbackQuery, events
+
 from userbot import catub
 
-from telethon import events, Button
-from telethon import CallbackQuery
 from ..Config import Config
 from ..core import check_owner
-from ..helpers.utils import _catutils, _format
+from ..helpers.utils import _catutils
 from . import humanbytes
 
 CC = []
-PATH = []#using list method for some reason
-#thumb_image_path = os.path.join("./temp", "zarza.jpg")
+PATH = []  # using list method for some reason
+# thumb_image_path = os.path.join("./temp", "zarza.jpg")
+
 
 def get_thumb(url):
     return types.InputWebDocument(url=url, size=0, mime_type="image/png", attributes=[])
+
 
 # freaking selector
 def add_s(msg, num: int):
@@ -28,7 +28,7 @@ def add_s(msg, num: int):
     msgs = msg.splitlines()
     leng = len(msgs)
     if num == 0:
-        valv = leng-1
+        valv = leng - 1
         msgs[valv] = msgs[valv] + " ⭕️"
         for ff in msgs:
             fmsg += f"{ff}\n"
@@ -42,15 +42,19 @@ def add_s(msg, num: int):
         msgs[valv] = msgs[valv] + " ⭕️"
         for ff in msgs:
             fmsg += f"{ff}\n"
-    buttons = [[
-        Button.inline(f"D", data=f"rem_{msgs[valv]}|{valv}"),
-        Button.inline(f"X", data=f"cut_{msgs[valv]}|{valv}"),
-        Button.inline(f"C", data=f"copy_{msgs[valv]}|{valv}"),
-        Button.inline(f"V", data=f"paste_{valv}")],
-        [Button.inline(f"⬅️", data=f"back"),
-        Button.inline(f"⬆️", data=f"up_{valv}"),
-        Button.inline(f"⬇️", data=f"down_{valv}"),
-        Button.inline(f"➡️", data=f"forth_{msgs[valv]}")]
+    buttons = [
+        [
+            Button.inline(f"D", data=f"rem_{msgs[valv]}|{valv}"),
+            Button.inline(f"X", data=f"cut_{msgs[valv]}|{valv}"),
+            Button.inline(f"C", data=f"copy_{msgs[valv]}|{valv}"),
+            Button.inline(f"V", data=f"paste_{valv}"),
+        ],
+        [
+            Button.inline(f"⬅️", data=f"back"),
+            Button.inline(f"⬆️", data=f"up_{valv}"),
+            Button.inline(f"⬇️", data=f"down_{valv}"),
+            Button.inline(f"➡️", data=f"forth_{msgs[valv]}"),
+        ],
     ]
     return fmsg, buttons
 
@@ -114,22 +118,27 @@ def get_manager(path, num: int):
         msg += f"**Size :** `{humanbytes(size)}`\n"
         msg += f"**Last Modified Time:** `{time2}`\n"
         msg += f"**Last Accessed Time:** `{time3}`"
-        buttons = [[
-            Button.inline(f"Rem", data=f"rem_File|{num}"),
-            Button.inline(f"Send", data=f"send"),
-            Button.inline(f"X", data=f"cut_File|{num}"),
-            Button.inline(f"C", data=f"copy_File{num}"),],
-            [Button.inline(f"⬅️", data=f"back"),
-            Button.inline(f"⬆️", data=f"up_File"),
-            Button.inline(f"⬇️", data=f"down_File"),
-            Button.inline(f"➡️", data=f"forth_File")]
+        buttons = [
+            [
+                Button.inline(f"Rem", data=f"rem_File|{num}"),
+                Button.inline(f"Send", data=f"send"),
+                Button.inline(f"X", data=f"cut_File|{num}"),
+                Button.inline(f"C", data=f"copy_File{num}"),
+            ],
+            [
+                Button.inline(f"⬅️", data=f"back"),
+                Button.inline(f"⬆️", data=f"up_File"),
+                Button.inline(f"⬇️", data=f"down_File"),
+                Button.inline(f"➡️", data=f"forth_File"),
+            ],
         ]
         PATH.clear()
         PATH.append(path)
         msgs = (msg, buttons)
     return msgs
 
-#BACK
+
+# BACK
 @catub.tgbot.on(CallbackQuery(pattern="back"))
 @check_owner
 async def back(event):
@@ -148,11 +157,12 @@ async def back(event):
     await asyncio.sleep(1)
     await event.edit(msg, buttons=buttons)
 
-#UP
+
+# UP
 @catub.tgbot.on(CallbackQuery(pattern="up_(.*)"))
 @check_owner
 async def up(event):
-    num = (event.pattern_match.group(1).decode("UTF-8"))
+    num = event.pattern_match.group(1).decode("UTF-8")
     if num == "File":
         await event.answer("Its a File dummy!", alert=True)
     else:
@@ -162,11 +172,12 @@ async def up(event):
         await asyncio.sleep(1)
         await event.edit(msg, buttons=buttons)
 
-#DOWN
+
+# DOWN
 @catub.tgbot.on(CallbackQuery(pattern="down_(.*)"))
 @check_owner
 async def down(event):
-    num= (event.pattern_match.group(1).decode("UTF-8"))
+    num = event.pattern_match.group(1).decode("UTF-8")
     if num == "File":
         await event.answer("Its a file dummy!", alert=True)
     else:
@@ -175,12 +186,13 @@ async def down(event):
         msg, buttons = get_manager(path, num1)
         await asyncio.sleep(1)
         await event.edit(msg, buttons=buttons)
-    
-#FORTH
+
+
+# FORTH
 @catub.tgbot.on(CallbackQuery(pattern="forth_(.*)"))
 @check_owner
 async def forth(event):
-    npath = (event.pattern_match.group(1).decode("UTF-8"))
+    npath = event.pattern_match.group(1).decode("UTF-8")
     if npath == "File":
         await event.answer("Its a file dummy!", alert=True)
     else:
@@ -192,7 +204,8 @@ async def forth(event):
         await asyncio.sleep(1)
         await event.edit(msg, buttons=buttons)
 
-#REMOVE
+
+# REMOVE
 @catub.tgbot.on(CallbackQuery(pattern="rem_(.*)"))
 @check_owner
 async def remove(event):
@@ -219,16 +232,22 @@ async def remove(event):
     await _catutils.runcmd(f"rm -rf '{rpath}'")
     await event.answer(f"{rpath} removed successfully...")
 
-#SEND
+
+# SEND
 @catub.tgbot.on(CallbackQuery(pattern="send"))
 @check_owner
 async def send(event):
     path = PATH[0]
-    chat = (-(int((await event.get_chat()).id)) + -1000000000000)
-    await catub.send_file(chat, file=path, thumb=thumb_image_path if os.path.exists(thumb_image_path) else None)
-    await event.answer(f"File {path} sent successfully...")        
+    chat = -(int((await event.get_chat()).id)) + -1000000000000
+    await catub.send_file(
+        chat,
+        file=path,
+        thumb=thumb_image_path if os.path.exists(thumb_image_path) else None,
+    )
+    await event.answer(f"File {path} sent successfully...")
 
-#CUT
+
+# CUT
 @catub.tgbot.on(CallbackQuery(pattern="cut_(.*)"))
 @check_owner
 async def cut(event):
@@ -261,7 +280,8 @@ async def cut(event):
         await asyncio.sleep(1)
         await event.edit(msg, buttons=buttons)
 
-#COPY
+
+# COPY
 @catub.tgbot.on(CallbackQuery(pattern="copy_(.*)"))
 @check_owner
 async def copy(event):
@@ -291,14 +311,15 @@ async def copy(event):
             CC.append(rpath)
             await event.answer(f"Copying {rpath} ...")
         msg, buttons = get_manager(path, n)
-        await asyncio.sleep(1) 
+        await asyncio.sleep(1)
         await event.edit(msg, buttons=buttons)
 
-#PASTE
+
+# PASTE
 @catub.tgbot.on(CallbackQuery(pattern="paste_(.*)"))
 @check_owner
 async def paste(event):
-    n = (event.pattern_match.group(1).decode("UTF-8"))
+    n = event.pattern_match.group(1).decode("UTF-8")
     path = PATH[0]
     if CC:
         if CC[0] == "cut":
@@ -312,10 +333,14 @@ async def paste(event):
     else:
         await event.answer("You aint copied anything to paste")
 
+
 @catub.tgbot.on(events.InlineQuery)
 async def lsinline(event):
 
-    if event.query.user_id == Config.OWNER_ID or event.query.user_id in Config.SUDO_USERS:
+    if (
+        event.query.user_id == Config.OWNER_ID
+        or event.query.user_id in Config.SUDO_USERS
+    ):
         try:
             ls, path_ = (event.text).split(" ", 1)
             path = Path(path_) if path_ else os.getcwd()
@@ -329,10 +354,15 @@ async def lsinline(event):
             num = 1
             msg, buttons = get_manager(path, num)
             result = []
-            result.append(await event.builder.article(
-                title="Inline FM",
-                description="Inline file manager",
-                thumb=get_thumb("https://telegra.ph/file/95412625a79efe853bf9a.png"),
-                text=msg,
-                buttons=buttons))
+            result.append(
+                await event.builder.article(
+                    title="Inline FM",
+                    description="Inline file manager",
+                    thumb=get_thumb(
+                        "https://telegra.ph/file/95412625a79efe853bf9a.png"
+                    ),
+                    text=msg,
+                    buttons=buttons,
+                )
+            )
             await event.answer(result)
