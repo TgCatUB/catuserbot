@@ -4,18 +4,17 @@ import os
 import time
 from pathlib import Path
 
-from telethon import Button, CallbackQuery, events
-
+from telethon import Button, types
+from telethon.events import CallbackQuery, InlineQuery
 from userbot import catub
 
 from ..Config import Config
-from ..core import check_owner
 from ..helpers.utils import _catutils
 from . import humanbytes
 
 CC = []
 PATH = []  # using list method for some reason
-# thumb_image_path = os.path.join("./temp", "zarza.jpg")
+thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 
 
 def get_thumb(url):
@@ -140,7 +139,6 @@ def get_manager(path, num: int):
 
 # BACK
 @catub.tgbot.on(CallbackQuery(pattern="back"))
-@check_owner
 async def back(event):
     path = PATH[0]
     paths = path.split("/")
@@ -160,7 +158,6 @@ async def back(event):
 
 # UP
 @catub.tgbot.on(CallbackQuery(pattern="up_(.*)"))
-@check_owner
 async def up(event):
     num = event.pattern_match.group(1).decode("UTF-8")
     if num == "File":
@@ -175,7 +172,6 @@ async def up(event):
 
 # DOWN
 @catub.tgbot.on(CallbackQuery(pattern="down_(.*)"))
-@check_owner
 async def down(event):
     num = event.pattern_match.group(1).decode("UTF-8")
     if num == "File":
@@ -190,7 +186,6 @@ async def down(event):
 
 # FORTH
 @catub.tgbot.on(CallbackQuery(pattern="forth_(.*)"))
-@check_owner
 async def forth(event):
     npath = event.pattern_match.group(1).decode("UTF-8")
     if npath == "File":
@@ -207,7 +202,6 @@ async def forth(event):
 
 # REMOVE
 @catub.tgbot.on(CallbackQuery(pattern="rem_(.*)"))
-@check_owner
 async def remove(event):
     fn, num = (event.pattern_match.group(1).decode("UTF-8")).split("|", 1)
     path = PATH[0]
@@ -235,8 +229,8 @@ async def remove(event):
 
 # SEND
 @catub.tgbot.on(CallbackQuery(pattern="send"))
-@check_owner
 async def send(event):
+    print(event)
     path = PATH[0]
     chat = -(int((await event.get_chat()).id)) + -1000000000000
     await catub.send_file(
@@ -249,7 +243,6 @@ async def send(event):
 
 # CUT
 @catub.tgbot.on(CallbackQuery(pattern="cut_(.*)"))
-@check_owner
 async def cut(event):
     f, n = (event.pattern_match.group(1).decode("UTF-8")).split("|", 1)
     if CC:
@@ -283,7 +276,6 @@ async def cut(event):
 
 # COPY
 @catub.tgbot.on(CallbackQuery(pattern="copy_(.*)"))
-@check_owner
 async def copy(event):
     f, n = (event.pattern_match.group(1).decode("UTF-8")).split("|", 1)
     if CC:
@@ -317,7 +309,6 @@ async def copy(event):
 
 # PASTE
 @catub.tgbot.on(CallbackQuery(pattern="paste_(.*)"))
-@check_owner
 async def paste(event):
     n = event.pattern_match.group(1).decode("UTF-8")
     path = PATH[0]
@@ -334,7 +325,7 @@ async def paste(event):
         await event.answer("You aint copied anything to paste")
 
 
-@catub.tgbot.on(events.InlineQuery)
+@catub.tgbot.on(InlineQuery)
 async def lsinline(event):
 
     if (
@@ -344,7 +335,7 @@ async def lsinline(event):
         try:
             ls, path_ = (event.text).split(" ", 1)
             path = Path(path_) if path_ else os.getcwd()
-        except:
+        except Exception:
             ls = event.text
             path = os.getcwd()
         if "ls" in ls:
