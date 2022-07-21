@@ -116,7 +116,7 @@ def get_manager(path, num: int):
         msg += f"**Last Accessed Time:** `{time3}`"
         buttons = [[
             Button.inline(f"Rem", data=f"rem_File|{num}"),
-            Button.inline(f"Send", data=f"send_"),
+            Button.inline(f"Send", data=f"send"),
             Button.inline(f"X", data=f"cut_File|{num}"),
             Button.inline(f"C", data=f"copy_File{num}"),],
             [Button.inline(f"⬅️", data=f"back"),
