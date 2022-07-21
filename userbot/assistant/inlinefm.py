@@ -224,7 +224,7 @@ async def remove(event):
 @check_owner
 async def send(event):
     path = PATH[0]
-    chat = (-(int(await event.get_chat()).id)) + -1000000000000)
+    chat = (-(int((await event.get_chat()).id)) + -1000000000000)
     await catub.send_file(chat, file=path, thumb=thumb_image_path if os.path.exists(thumb_image_path) else None)
     await event.answer(f"File {path} sent successfully...")        
 
