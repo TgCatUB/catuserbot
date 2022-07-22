@@ -23,7 +23,6 @@ lottie
 lyricsgenius
 markdown
 motor
-opencv-python-headless
 Pillow
 prettytable
 psutil
