@@ -10,6 +10,7 @@ from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format, get_user_from_event, reply_id
 from ..sql_helper.global_collectionjson import add_collection, get_collection
+from ..Config import Config
 
 LOGS = logging.getLogger(__name__)
 FBAN_GROUP_ID = Config.FBAN_GROUP_ID

@@ -18,9 +18,12 @@ from telethon.utils import get_display_name
 
 from userbot import Convert, catub
 
+from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import file_check, fontTest, media_type, process, soft_deEmojify
 from ..helpers.utils import get_user_from_event, reply_id
+
+LOGS = logging.getLogger(__name__)
 
 plugin_category = "fun"
 

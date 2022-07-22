@@ -90,7 +90,7 @@ async def remove_chatbot(event):
         try:
             remove_ai(chat_id, user_id)
         except Exception as e:
-            await edit_delete(catevent, f"**Error:**\n`{e}`")
+            await edit_delete(event, f"**Error:**\n`{e}`")
         else:
             await edit_or_reply(event, "Ai has been stopped for the user")
     else:

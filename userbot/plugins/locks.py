@@ -10,11 +10,14 @@ from telethon.utils import get_display_name
 
 from userbot import catub
 
+from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format
 from ..sql_helper.locks_sql import get_locks, is_locked, update_lock
 from ..utils import is_admin
 from . import BOTLOG, get_user_from_event
+
+logger = logging.getLogger(__name__)
 
 plugin_category = "admin"
 

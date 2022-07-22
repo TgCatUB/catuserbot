@@ -2,8 +2,11 @@ import html
 
 from userbot import catub
 
-from ..core.managers import edit_or_reply
+from ..core.managers import edit_or_reply, edit_delete
 from ..sql_helper import warns_sql as sql
+from userbot.core.logger import logging
+
+logger = logging.getLogger(__name__)
 
 plugin_category = "admin"
 

@@ -206,7 +206,7 @@ async def copy(event):
     if not os.path.exists(original):
         await edit_delete(
             event,
-            f"there is no such directory or file with the name `{cat}` check again",
+            f"there is no such directory or file with the name `{original}` check again",
         )
         return
     mone = await edit_or_reply(

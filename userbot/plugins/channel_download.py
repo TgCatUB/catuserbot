@@ -11,6 +11,7 @@ import os
 import subprocess
 
 from ..Config import Config
+from ..helpers.tools import media_type
 from . import catub, edit_or_reply
 
 plugin_category = "tools"

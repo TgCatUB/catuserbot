@@ -30,6 +30,7 @@ from ..helpers import progress, reply_id
 from ..helpers.functions import delete_conv
 from ..helpers.functions.utube import _mp3Dl, get_yt_video_id, get_ytthumb, ytsearch
 from ..helpers.utils import _format
+from ..Config import Config
 from . import catub
 
 BASE_YT_URL = "https://www.youtube.com/watch?v="

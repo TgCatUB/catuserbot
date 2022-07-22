@@ -78,5 +78,5 @@ async def pollcreator(catpoll):
             )
         except ForbiddenError:
             await edit_or_reply(catpoll, "`This chat has forbidden the polls`")
-        except exception as e:
+        except Exception as e:
             await edit_or_reply(catpoll, str(e))

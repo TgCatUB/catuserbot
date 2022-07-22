@@ -7,6 +7,7 @@ from userbot import catub
 from ..core.managers import edit_or_reply
 from ..sql_helper import blacklist_sql as sql
 from ..utils import is_admin
+from . import BOTLOG_CHATID
 
 plugin_category = "admin"
 

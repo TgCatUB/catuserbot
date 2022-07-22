@@ -11,7 +11,7 @@ from humanize import naturalsize
 from userbot import catub
 
 from ..core.logger import logging
-from ..core.managers import edit_or_reply
+from ..core.managers import edit_or_reply, edit_delete
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
@@ -376,7 +376,7 @@ def anonfiles(url: str) -> str:
     reply += f"[{name}]({dl_url})\n"
     return reply
 
-
+"""
 def onedrive(link: str) -> str:
     link_without_query = urlparse(link)._replace(query=None).geturl()
     direct_link_encoded = str(
@@ -393,3 +393,4 @@ def onedrive(link: str) -> str:
     resp2 = requests.head(dl_link)
     dl_size = humanbytes(int(resp2.headers["Content-Length"]))
     return f"[{file_name} ({dl_size})]({dl_link})"
+"""

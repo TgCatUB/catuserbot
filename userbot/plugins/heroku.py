@@ -67,10 +67,10 @@ async def variable(var):  # sourcery no-metrics
         try:
             variable = var.pattern_match.group(2).split()[0]
             if variable in heroku_var:
-                return await cat.edit(
+                return await edit_or_reply(cat, 
                     "**ConfigVars**:" f"\n\n`{variable}` = `{heroku_var[variable]}`\n"
                 )
-            await cat.edit(
+            await edit_or_reply(cat, 
                 "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ don't exists__"
             )
         except IndexError:
@@ -91,16 +91,16 @@ async def variable(var):  # sourcery no-metrics
         variable = "".join(var.text.split(maxsplit=2)[2:])
         cat = await edit_or_reply(var, "`Setting information...`")
         if not variable:
-            return await cat.edit("`.set var <ConfigVars-name> <value>`")
+            return await edit_or_reply(cat, "`.set var <ConfigVars-name> <value>`")
         value = "".join(variable.split(maxsplit=1)[1:])
         variable = "".join(variable.split(maxsplit=1)[0])
         if not value:
-            return await cat.edit("`.set var <ConfigVars-name> <value>`")
+            return await edit_or_reply(cat, "`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1.5)
         if variable in heroku_var:
-            await cat.edit(f"`{variable}` **successfully changed to  ->  **`{value}`")
+            await edit_or_reply(cat, f"`{variable}` **successfully changed to  ->  **`{value}`")
         else:
-            await cat.edit(
+            await edit_or_reply(cat, 
                 f"`{variable}`**  successfully added with value`  ->  **{value}`"
             )
         heroku_var[variable] = value
@@ -109,12 +109,12 @@ async def variable(var):  # sourcery no-metrics
         try:
             variable = var.pattern_match.group(2).split()[0]
         except IndexError:
-            return await cat.edit("`Please specify ConfigVars you want to delete`")
+            return await edit_or_reply(cat, "`Please specify ConfigVars you want to delete`")
         await asyncio.sleep(1.5)
         if variable not in heroku_var:
-            return await cat.edit(f"`{variable}`**  does not exist**")
+            return await edit_or_reply(cat, f"`{variable}`**  does not exist**")
 
-        await cat.edit(f"`{variable}`  **successfully deleted**")
+        await edit_or_reply(cat, f"`{variable}`  **successfully deleted**")
         del heroku_var[variable]
 
 

@@ -4,8 +4,7 @@ Thenks goes to Emily ( The creater of Poto cmd) from ftg userbot
 
 from PIL import Image, ImageFilter, UnidentifiedImageError
 
-from userbot import catub
-
+from . import catub, reply_id
 from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "extra"
