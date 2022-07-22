@@ -1,7 +1,4 @@
-aiofiles
 aiohttp
-apscheduler
-cairosvg
 cloudscraper
 colour
 cowpy

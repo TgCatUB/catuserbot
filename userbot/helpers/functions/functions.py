@@ -26,7 +26,9 @@ from telethon.tl.functions.contacts import UnblockRequest as unblock
 from ...Config import Config
 from ...sql_helper.globals import gvarstatus
 from ..resources.states import states
+from ...core.logger import logging
 
+LOGS = logging.getLogger(__name__)
 imdb = IMDb()
 
 mov_titles = [
