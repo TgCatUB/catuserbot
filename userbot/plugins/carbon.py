@@ -6,7 +6,6 @@ from urllib.parse import quote_plus
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from . import catub, deEmojify

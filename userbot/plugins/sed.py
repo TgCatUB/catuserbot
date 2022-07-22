@@ -6,8 +6,8 @@ from telethon.tl import functions, types
 
 from userbot import catub
 
-from ..core.managers import edit_or_reply, edit_delete
 from ..Config import Config
+from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "tools"
 

@@ -4,7 +4,7 @@ import requests
 from googletrans import LANGUAGES
 
 from ..Config import Config
-from ..core.managers import edit_or_reply, edit_delete
+from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import getTranslate
 from ..sql_helper.globals import gvarstatus
 from . import Convert, catub, soft_deEmojify
@@ -66,16 +66,20 @@ async def ocr(event):
         event, reply, dirct="./temp", file="image.png", rgb=True, noedits=True
     )
     if not output_file[1]:
-        return await edit_delete(catevent,"`Couldn't find image. Are you sure you replied to image?`")
+        return await edit_delete(
+            catevent, "`Couldn't find image. Are you sure you replied to image?`"
+        )
     test_file = await ocr_space_file(filename=output_file[1], language=lang_code)
     try:
         ParsedText = test_file["ParsedResults"][0]["ParsedText"]
     except BaseException:
-        await edit_delete(catevent,"`Couldn't read it.`\n`I guess I need new glasses.`")
+        await edit_delete(
+            catevent, "`Couldn't read it.`\n`I guess I need new glasses.`"
+        )
     else:
         if cmd == "":
-            await edit_or_reply(catevent,
-                f"**Here's what I could read from it:**\n\n`{ParsedText}`"
+            await edit_or_reply(
+                catevent, f"**Here's what I could read from it:**\n\n`{ParsedText}`"
             )
         if cmd == "t":
             TRT_LANG = gvarstatus("TOCR_LANG") or "en"
@@ -88,8 +92,9 @@ async def ocr(event):
             source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
             transl_lan = LANGUAGES[f"{reply_text.dest.lower()}"]
             tran_text = f"📜**Translate :-\nFrom {source_lan.title()}({reply_text.src.lower()}) to {transl_lan.title()}({reply_text.dest.lower()}) :**\n\n`{reply_text.text}`"
-            await edit_or_reply(catevent,
-                f"🧧**Here's what I could read from it:**\n\n`{ParsedText}`\n\n{tran_text}"
+            await edit_or_reply(
+                catevent,
+                f"🧧**Here's what I could read from it:**\n\n`{ParsedText}`\n\n{tran_text}",
             )
     if os.path.exists(output_file[1]):
         os.remove(output_file[1])
