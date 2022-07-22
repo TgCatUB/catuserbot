@@ -25,7 +25,6 @@ justwatch
 lottie
 lyricsgenius
 markdown
-markdown-it-py
 motor
 opencv-python-headless
 Pillow

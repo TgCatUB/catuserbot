@@ -769,10 +769,6 @@ async def spotify_now(event):
     info={
         "header": "To get song from spotify",
         "description": "Send the currently playing song of spotify or song from a spotify link.",
-        "usage": [
-            "{tr}now",
-            "{tr}now <Spotify/Deezer link>",
-        ],
         "flags": {
             "i": "To send song song link as button",
         },
