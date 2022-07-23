@@ -12,7 +12,7 @@ from userbot import catub
 from userbot.core.logger import logging
 
 from ..Config import Config
-from ..core.managers import edit_or_reply
+from ..core.managers import edit_or_reply, edit_delete
 from ..helpers import get_user_from_event, reply_id
 from . import spamwatch
 
@@ -40,6 +40,7 @@ async def fetch_info(replied_user, event):
     is_bot = replied_user.bot
     restricted = replied_user.restricted
     verified = replied_user.verified
+    is_premium = (await event.client.get_entity(user_id)).premium
     photo = await event.client.download_profile_photo(
         user_id,
         Config.TMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg",
@@ -59,6 +60,7 @@ async def fetch_info(replied_user, event):
     caption += f"<b>🔖 ID:</b> <code>{user_id}</code>\n"
     caption += f"<b>🌏 Data Centre ID:</b> {dc_id}\n"
     caption += f"<b>🖼 Number of Profile Pics:</b> {replied_user_profile_photos_count}\n"
+    caption += f"<b>⭐️ Is Premium:</b> {is_premium}\n"
     caption += f"<b>🤖 Is Bot:</b> {is_bot}\n"
     caption += f"<b>🔏 Is Restricted:</b> {restricted}\n"
     caption += f"<b>🌐 Is Verified by Telegram:</b> {verified}\n\n"
@@ -159,8 +161,8 @@ async def who(event):
     cat = await edit_or_reply(event, "`Fetching userinfo wait....`")
     try:
         photo, caption = await fetch_info(replied_user, event)
-    except AttributeError:
-        return await edit_or_reply(cat, "`Could not fetch info of that user.`")
+    except (AttributeError, TypeError):
+        return await edit_delete(cat, "`Could not fetch info of that user.`")
     message_id_to_reply = await reply_id(event)
     try:
         await event.client.send_file(

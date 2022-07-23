@@ -6,6 +6,7 @@ from telethon.tl import functions, types
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+from telethon.errors.rpcerrorlist import ForbiddenError
 from telethon.utils import get_display_name
 
 from userbot import catub
@@ -204,7 +205,10 @@ async def stickerpack_spam(event):
     for m in reqd_sticker_set.documents:
         if gvarstatus("spamwork") is None:
             return
-        await event.client.send_file(event.chat_id, m)
+        try:
+            await event.client.send_file(event.chat_id, m)
+        except ForbiddenError:
+            pass
         await asyncio.sleep(0.7)
     await catevent.delete()
     if BOTLOG:
@@ -385,4 +389,7 @@ async def react_spam(event):  # By @FeelDeD
     while gvarstatus("spamwork"):
         for i in emoji:
             await asyncio.sleep(0.2)
-            await msg.react(i, True)
+            try:
+                await msg.react(i, True)
+            except ForbiddenError:
+                pass
