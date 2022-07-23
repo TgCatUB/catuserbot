@@ -2,11 +2,11 @@ import asyncio
 import base64
 import contextlib
 
+from telethon.errors.rpcerrorlist import ForbiddenError
 from telethon.tl import functions, types
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-from telethon.errors.rpcerrorlist import ForbiddenError
 from telethon.utils import get_display_name
 
 from userbot import catub

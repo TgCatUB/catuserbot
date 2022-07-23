@@ -12,7 +12,7 @@ from userbot import catub
 from userbot.core.logger import logging
 
 from ..Config import Config
-from ..core.managers import edit_or_reply, edit_delete
+from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import get_user_from_event, reply_id
 from . import spamwatch
 
