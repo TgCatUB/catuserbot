@@ -350,13 +350,9 @@ async def react_spam(event):  # By @FeelDeD
     if not msg:
         return await edit_delete(event, "```Reply to a message..```", 10)
     catevent = await edit_or_reply(event, "Processing...")
-    checker = (await event.client.get_entity(msg.from_id)).mutual_contact
-    if not checker:
-        return await edit_delete(
-            event,
-            "```The user isn't your mutual contact, both need to be in each others contact for this plugin to work..```",
-            10,
-        )
+    #checker = (await event.client.get_entity(msg.from_id)).mutual_contact
+    #if not checker:
+        #return await edit_delete(event,"`The user isn't your mutual contact, both need to be in each others contact for this plugin to work..`")
     if isinstance(msg.peer_id, types.PeerUser):
         emoji = [
             "👍",
