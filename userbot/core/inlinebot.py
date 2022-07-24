@@ -104,22 +104,20 @@ async def article_builder(event, method):
         buttons = help_info[1]
     if method == "ls":
         try:
-            ls, path_ = (event.text).split(" ", 1)
+            _ , path_ = (event.text).split(" ", 1)
             path = Path(path_) if path_ else os.getcwd()
         except Exception:
-            ls = event.text
             path = os.getcwd()
-        if "ls" in ls:
-            if not os.path.exists(path):
-                return
-            num = 1
-            query, buttons = get_manager(path, num)
-            title = "File Manager"
-            description = (
-                f"Inline file manager\nSyntax: ls (path optional)\nPath:  {path}"
-            )
-            thumb = get_thumb("filemanager.jpg")
-            media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/filemanager.jpg"
+        if not os.path.exists(path):
+            return
+        num = 1
+        query, buttons = get_manager(path, num)
+        title = "File Manager"
+        description = (
+            f"Inline file manager\nSyntax: ls (path optional)\nPath:  {path}"
+        )
+        thumb = get_thumb("filemanager.jpg")
+        media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/filemanager.jpg"
     elif method == "deploy":
         media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
         title = "𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩"
