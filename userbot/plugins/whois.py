@@ -1,5 +1,6 @@
 # Userbot module for fetching info about any user on Telegram(including you!).
 
+import contextlib
 import html
 import os
 
@@ -11,7 +12,7 @@ from userbot import catub
 from userbot.core.logger import logging
 
 from ..Config import Config
-from ..core.managers import edit_or_reply
+from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import get_user_from_event, reply_id
 from . import spamwatch
 
@@ -27,11 +28,9 @@ async def fetch_info(replied_user, event):
     )
     replied_user_profile_photos_count = "User haven't set profile pic"
     dc_id = "Can't get dc id"
-    try:
+    with contextlib.suppress(AttributeError):
         replied_user_profile_photos_count = replied_user_profile_photos.count
         dc_id = replied_user.photo.dc_id
-    except AttributeError:
-        pass
     user_id = replied_user.id
     first_name = replied_user.first_name
     full_name = FullUser.private_forward_name
@@ -41,6 +40,7 @@ async def fetch_info(replied_user, event):
     is_bot = replied_user.bot
     restricted = replied_user.restricted
     verified = replied_user.verified
+    is_premium = (await event.client.get_entity(user_id)).premium
     photo = await event.client.download_profile_photo(
         user_id,
         Config.TMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg",
@@ -52,14 +52,15 @@ async def fetch_info(replied_user, event):
         else ("This User has no First Name")
     )
     full_name = full_name or first_name
-    username = "@{}".format(username) if username else ("This User has no Username")
-    user_bio = "This User has no About" if not user_bio else user_bio
+    username = f"@{username}" if username else "This User has no Username"
+    user_bio = user_bio or "This User has no About"
     caption = "<b><i>USER INFO from Durov's Database :</i></b>\n\n"
     caption += f"<b>👤 Name:</b> {full_name}\n"
     caption += f"<b>🤵 Username:</b> {username}\n"
     caption += f"<b>🔖 ID:</b> <code>{user_id}</code>\n"
     caption += f"<b>🌏 Data Centre ID:</b> {dc_id}\n"
     caption += f"<b>🖼 Number of Profile Pics:</b> {replied_user_profile_photos_count}\n"
+    caption += f"<b>⭐️ Is Premium:</b> {is_premium}\n"
     caption += f"<b>🤖 Is Bot:</b> {is_bot}\n"
     caption += f"<b>🔏 Is Restricted:</b> {restricted}\n"
     caption += f"<b>🌐 Is Verified by Telegram:</b> {verified}\n\n"
@@ -109,7 +110,7 @@ async def _(event):
     else:
         sw = "**Spamwatch Banned :**`Not Connected`"
     try:
-        casurl = "https://api.cas.chat/check?user_id={}".format(user_id)
+        casurl = f"https://api.cas.chat/check?user_id={user_id}"
         data = get(casurl).json()
     except Exception as e:
         LOGS.info(e)
@@ -160,8 +161,8 @@ async def who(event):
     cat = await edit_or_reply(event, "`Fetching userinfo wait....`")
     try:
         photo, caption = await fetch_info(replied_user, event)
-    except AttributeError:
-        return await edit_or_reply(cat, "`Could not fetch info of that user.`")
+    except (AttributeError, TypeError):
+        return await edit_delete(cat, "`Could not fetch info of that user.`")
     message_id_to_reply = await reply_id(event)
     try:
         await event.client.send_file(

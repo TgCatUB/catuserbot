@@ -1,4 +1,5 @@
 import base64
+import contextlib
 
 from telethon import events, functions, types
 from telethon.tl.functions.channels import EditBannedRequest
@@ -9,11 +10,14 @@ from telethon.utils import get_display_name
 
 from userbot import catub
 
+from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format
 from ..sql_helper.locks_sql import get_locks, is_locked, update_lock
 from ..utils import is_admin
 from . import BOTLOG, get_user_from_event
+
+logger = logging.getLogger(__name__)
 
 plugin_category = "admin"
 
@@ -50,7 +54,7 @@ plugin_category = "admin"
     groups_only=True,
     require_admin=True,
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To lock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -60,7 +64,7 @@ async def _(event):  # sourcery no-metrics
     cat = base64.b64decode("QUFBQUFGRV9vWjVYVE5fUnVaaEtOdw==")
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, True)
-        await edit_or_reply(event, "`Locked {}`".format(input_str))
+        await edit_or_reply(event, f"`Locked {input_str}`")
     else:
         msg = chat_per.send_messages
         media = chat_per.send_media
@@ -172,11 +176,9 @@ async def _(event):  # sourcery no-metrics
 
         else:
             return await edit_or_reply(event, "`I can't lock nothing !!`")
-        try:
+        with contextlib.suppress(BaseException):
             cat = Get(cat)
             await event.client(cat)
-        except BaseException:
-            pass
         lock_rights = ChatBannedRights(
             until_date=None,
             send_messages=msg,
@@ -238,7 +240,7 @@ async def _(event):  # sourcery no-metrics
     groups_only=True,
     require_admin=True,
 )
-async def _(event):  # sourcery no-metrics
+async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To unlock the given permission for entire group."
     input_str = event.pattern_match.group(1)
     peer_id = event.chat_id
@@ -248,7 +250,7 @@ async def _(event):  # sourcery no-metrics
     chat_per = (await event.get_chat()).default_banned_rights
     if input_str in (("bots", "commands", "email", "forward", "url")):
         update_lock(peer_id, input_str, False)
-        await edit_or_reply(event, "`UnLocked {}`".format(input_str))
+        await edit_or_reply(event, f"`UnLocked {input_str}`")
     else:
         msg = chat_per.send_messages
         media = chat_per.send_media
@@ -360,11 +362,9 @@ async def _(event):  # sourcery no-metrics
 
         else:
             return await edit_or_reply(event, "`I can't unlock nothing !!`")
-        try:
+        with contextlib.suppress(BaseException):
             cat = Get(cat)
             await event.client(cat)
-        except BaseException:
-            pass
         unlock_rights = ChatBannedRights(
             until_date=None,
             send_messages=msg,
@@ -406,10 +406,7 @@ async def _(event):  # sourcery no-metrics
 async def _(event):  # sourcery no-metrics
     "To see the active locks in the current group"
     res = ""
-    current_db_locks = get_locks(event.chat_id)
-    if not current_db_locks:
-        res = "There are no DataBase settings in this chat"
-    else:
+    if current_db_locks := get_locks(event.chat_id):
         res = "Following are the DataBase permissions in this chat: \n"
         ubots = "❌" if current_db_locks.bots else "✅"
         ucommands = "❌" if current_db_locks.commands else "✅"
@@ -421,6 +418,8 @@ async def _(event):  # sourcery no-metrics
         res += f"👉 `email`: `{uemail}`\n"
         res += f"👉 `forward`: `{uforward}`\n"
         res += f"👉 `url`: `{uurl}`\n"
+    else:
+        res = "There are no DataBase settings in this chat"
     current_chat = await event.get_chat()
     try:
         chat_per = current_chat.default_banned_rights

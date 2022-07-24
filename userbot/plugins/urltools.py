@@ -114,8 +114,7 @@ async def _(event):
         )
     else:
         await edit_or_reply(
-            event,
-            "Input URL {} returned status_code {}".format(input_str, r.status_code),
+            event, f"Input URL {input_str} returned status_code {r.status_code}"
         )
 
 

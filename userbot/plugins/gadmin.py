@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 from datetime import datetime
 
 from telethon.errors import BadRequestError
@@ -116,12 +117,10 @@ async def catgban(event):  # sourcery no-metrics
                 \n__Banned in {count} groups__\
                 \n**Time taken : **`{cattaken} seconds`",
             )
-        try:
+        with contextlib.suppress(BadRequestError):
             if reply:
                 await reply.forward_to(BOTLOG_CHATID)
                 await reply.delete()
-        except BadRequestError:
-            pass
 
 
 @catub.cat_cmd(

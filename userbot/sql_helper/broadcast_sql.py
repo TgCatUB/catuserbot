@@ -18,7 +18,7 @@ class CatBroadcast(BASE):
         return "<Cat Broadcast channels '%s' for %s>" % (self.group_id, self.keywoard)
 
     def __eq__(self, other):
-        return bool(
+        return (
             isinstance(other, CatBroadcast)
             and self.keywoard == other.keywoard
             and self.group_id == other.group_id

@@ -1,3 +1,4 @@
+import contextlib
 import importlib
 import sys
 from pathlib import Path
@@ -9,8 +10,7 @@ from ..core import LOADED_CMDS, PLG_INFO
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..core.session import catub
-from ..helpers.tools import media_type
-from ..helpers.utils import _cattools, _catutils, _format, install_pip, reply_id
+from ..helpers.utils import _catutils, _format, install_pip, reply_id
 from .decorators import admin_cmd, sudo_cmd
 
 LOGS = logging.getLogger("CatUserbot")
@@ -22,7 +22,7 @@ def load_module(shortname, plugin_path=None):
     elif shortname.endswith("_"):
         path = Path(f"userbot/plugins/{shortname}.py")
         checkplugins(path)
-        name = "userbot.plugins.{}".format(shortname)
+        name = f"userbot.plugins.{shortname}"
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
@@ -47,8 +47,6 @@ def load_module(shortname, plugin_path=None):
         mod.reply_id = reply_id
         mod.admin_cmd = admin_cmd
         mod._catutils = _catutils
-        mod._cattools = _cattools
-        mod.media_type = media_type
         mod.edit_delete = edit_delete
         mod.install_pip = install_pip
         mod.parse_pre = _format.parse_pre
@@ -76,12 +74,10 @@ def remove_plugin(shortname):
         return True
     except Exception as e:
         LOGS.error(e)
-    try:
+    with contextlib.suppress(BaseException):
         for i in LOAD_PLUG[shortname]:
             catub.remove_event_handler(i)
         del LOAD_PLUG[shortname]
-    except BaseException:
-        pass
     try:
         name = f"userbot.plugins.{shortname}"
         for i in reversed(range(len(catub._event_builders))):

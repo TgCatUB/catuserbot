@@ -25,7 +25,7 @@ plugin_category = "tools"
         "examples": "{tr}ls userbot",
     },
 )
-async def ls(event):  # sourcery no-metrics
+async def ls(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To list all files and folders."
     cat = "".join(event.text.split(maxsplit=1)[1:])
     path = cat or os.getcwd()
@@ -66,7 +66,7 @@ async def ls(event):  # sourcery no-metrics
                     files += f"📄`{contents}`\n"
             else:
                 folders += f"📁`{contents}`\n"
-        msg = msg + folders + files if files or folders else msg + "__empty path__"
+        msg = msg + folders + files if files or folders else f"{msg}__empty path__"
     else:
         size = os.stat(path).st_size
         msg = "The details of given file :\n"
@@ -206,7 +206,7 @@ async def copy(event):
     if not os.path.exists(original):
         await edit_delete(
             event,
-            f"there is no such directory or file with the name `{cat}` check again",
+            f"there is no such directory or file with the name `{original}` check again",
         )
         return
     mone = await edit_or_reply(

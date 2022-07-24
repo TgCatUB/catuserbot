@@ -1,3 +1,4 @@
+import contextlib
 import sys
 
 import userbot
@@ -35,13 +36,13 @@ async def startup_process():
     await verifyLoggerGroup()
     await load_plugins("plugins")
     await load_plugins("assistant")
-    print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
+    print("============================================================")
     print("Yay your userbot is officially working.!!!")
     print(
         f"Congratulation, now type {cmdhr}alive to see message if catub is live\
         \nIf you need assistance, head to https://t.me/catuserbot_support"
     )
-    print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
+    print("============================================================")
     await verifyLoggerGroup()
     await add_bot_to_logger_group(BOTLOG_CHATID)
     if PM_LOGGER_GROUP_ID != -100:
@@ -59,6 +60,10 @@ async def externalrepo():
         await install_externalrepo(
             Config.BADCAT_REPO, Config.BADCAT_REPOBRANCH, "badcatext"
         )
+    if Config.VCMODE:
+        await install_externalrepo(
+            "https://github.com/TgCatUB/CatVCPlayer", "test", "catvc"
+        )
 
 
 catub.loop.run_until_complete(startup_process())
@@ -66,9 +71,7 @@ catub.loop.run_until_complete(startup_process())
 catub.loop.run_until_complete(externalrepo())
 
 if len(sys.argv) in {1, 3, 4}:
-    try:
+    with contextlib.suppress(ConnectionError):
         catub.run_until_disconnected()
-    except ConnectionError:
-        pass
 else:
     catub.disconnect()

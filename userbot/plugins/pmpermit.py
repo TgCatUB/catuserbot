@@ -16,7 +16,7 @@ from ..sql_helper import global_collectionjson as sql
 from ..sql_helper import global_list as sqllist
 from ..sql_helper import pmpermit_sql
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from . import mention
+from . import BOTLOG_CHATID, mention
 
 plugin_category = "utils"
 LOGS = logging.getLogger(__name__)
@@ -32,6 +32,7 @@ PMPERMIT_ = PMPERMIT()
 
 
 async def do_pm_permit_action(event, chat):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     reply_to_id = await reply_id(event)
     try:
         PM_WARNS = sql.get_collection("pmwarns").json
@@ -761,6 +762,7 @@ async def approve_p_m(event):  # sourcery no-metrics
     },
 )
 async def tapprove_pm(event):  # sourcery no-metrics
+    # sourcery skip: low-code-quality
     "Temporarily approve user to pm"
     if gvarstatus("pmpermit") is None:
         return await edit_delete(

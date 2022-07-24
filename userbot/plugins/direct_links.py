@@ -11,7 +11,7 @@ from humanize import naturalsize
 from userbot import catub
 
 from ..core.logger import logging
-from ..core.managers import edit_or_reply
+from ..core.managers import edit_delete, edit_or_reply
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "misc"
@@ -139,10 +139,12 @@ def zippy_share(url: str) -> str:
         if "getElementById('dlbutton')" in script.text:
             url_raw = re.search(
                 r"= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);", script.text
-            ).group("url")
-            math = re.search(
-                r"= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);", script.text
-            ).group("math")
+            )["url"]
+
+            math = re.search(r"= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);", script.text)[
+                "math"
+            ]
+
             dl_url = url_raw.replace(math, '"' + str(eval(math)) + '"')
             break
     dl_url = base_url + eval(dl_url)
@@ -375,6 +377,7 @@ def anonfiles(url: str) -> str:
     return reply
 
 
+"""
 def onedrive(link: str) -> str:
     link_without_query = urlparse(link)._replace(query=None).geturl()
     direct_link_encoded = str(
@@ -391,3 +394,4 @@ def onedrive(link: str) -> str:
     resp2 = requests.head(dl_link)
     dl_size = humanbytes(int(resp2.headers["Content-Length"]))
     return f"[{file_name} ({dl_size})]({dl_link})"
+"""

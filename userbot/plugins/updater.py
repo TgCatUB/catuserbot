@@ -332,9 +332,10 @@ async def upstream(event):
         ],
     },
 )
-async def variable(event):
+async def variable(event):  # sourcery skip: low-code-quality
     "To switch between good & bad cat"
     switch = "BADCAT"
+    config = "config.py"
     cmd = event.pattern_match.group(1).lower()
     if ENV:
         if (HEROKU_APP_NAME is None) or (HEROKU_API_KEY is None):
@@ -372,7 +373,7 @@ async def variable(event):
         if cmd == "good":
             if match and not BADCAT:
                 cat = await edit_or_reply(
-                    event, f"`Changing badcat to goodcat wait for 2-3 minutes.`"
+                    event, "`Changing badcat to goodcat wait for 2-3 minutes.`"
                 )
                 with open(config, "w") as f1:
                     f1.write(string)

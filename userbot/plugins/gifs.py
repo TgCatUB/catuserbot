@@ -5,7 +5,7 @@ import random
 import requests
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import _catutils, reply_id
+from ..helpers import reply_id, unsavegif
 from . import catub
 
 plugin_category = "Extra"
@@ -49,5 +49,5 @@ async def some(event):
             f"https://media.giphy.com/media/{items}/giphy.gif",
             reply_to=reply_to_id,
         )
-        await _catutils.unsavegif(event, nood)
+        await unsavegif(event, nood)
     await catevent.delete()

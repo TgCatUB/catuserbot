@@ -257,6 +257,7 @@ async def verifyLoggerGroup():
 
 async def install_externalrepo(repo, branch, cfolder):
     CATREPO = repo
+    rpath = os.path.join(cfolder, "requirements.txt")
     if CATBRANCH := branch:
         repourl = os.path.join(CATREPO, f"tree/{CATBRANCH}")
         gcmd = f"git clone -b {CATBRANCH} {CATREPO} {cfolder}"
@@ -278,7 +279,6 @@ async def install_externalrepo(repo, branch, cfolder):
             BOTLOG_CHATID,
             "There was a problem in cloning the external repo. please recheck external repo link",
         )
-    if os.path.exists(os.path.join(cfolder, "requirements.txt")):
-        rpath = os.path.join(cfolder, "requirements.txt")
-        await runcmd(f"pip3 install --no-cache-dir {rpath}")
+    if os.path.exists(rpath):
+        await runcmd(f"pip3 install --no-cache-dir -r {rpath}")
     await load_plugins(folder="userbot", extfolder=cfolder)

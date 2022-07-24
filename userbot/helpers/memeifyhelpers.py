@@ -1,3 +1,4 @@
+import itertools
 from os import getcwd
 from os.path import join
 from textwrap import wrap
@@ -77,20 +78,21 @@ async def cat_meme(CNG_FONTS, topString, bottomString, filename, endname):
     # draw outlines
     # there may be a better way
     outlineRange = fontSize // 15
-    for x in range(-outlineRange, outlineRange + 1):
-        for y in range(-outlineRange, outlineRange + 1):
-            draw.text(
-                (topTextPosition[0] + x, topTextPosition[1] + y),
-                topString,
-                (0, 0, 0),
-                font=font,
-            )
-            draw.text(
-                (bottomTextPosition[0] + x, bottomTextPosition[1] + y),
-                bottomString,
-                (0, 0, 0),
-                font=font,
-            )
+    for x, y in itertools.product(
+        range(-outlineRange, outlineRange + 1), range(-outlineRange, outlineRange + 1)
+    ):
+        draw.text(
+            (topTextPosition[0] + x, topTextPosition[1] + y),
+            topString,
+            (0, 0, 0),
+            font=font,
+        )
+        draw.text(
+            (bottomTextPosition[0] + x, bottomTextPosition[1] + y),
+            bottomString,
+            (0, 0, 0),
+            font=font,
+        )
     draw.text(topTextPosition, topString, (255, 255, 255), font=font)
     draw.text(bottomTextPosition, bottomString, (255, 255, 255), font=font)
     img.save(endname)

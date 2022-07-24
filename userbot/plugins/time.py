@@ -14,8 +14,6 @@ from . import reply_id
 
 plugin_category = "utils"
 
-# Userbot timezone
-
 
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 

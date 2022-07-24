@@ -1,17 +1,19 @@
-# credits to @mrconfused (@sandy1709)
+# \\ Created by-@mrconfused -- Github.com/sandy1709 //
+# \\ Modified by-@Jisan7509 -- Github.com/Jisan09 //
+#  \\    https://github.com/TgCatUB/catuserbot   //
+#   \\        Plugin for @catuserbot            //
+#    ````````````````````````````````````````````
+
 
 import re
 
-import lyricsgenius
-
-from userbot import catub
-
 from ..Config import Config
 from ..core.managers import edit_or_reply
-
-plugin_category = "extra"
+from . import LyricsGen, catub
 
 GENIUS = Config.GENIUS_API_TOKEN
+
+plugin_category = "extra"
 
 
 @catub.cat_cmd(
@@ -42,7 +44,8 @@ async def lyrics(event):  # sourcery no-metrics
     if GENIUS is None:
         return await edit_or_reply(
             event,
-            "`Set genius access token in heroku vars for functioning of this command`",
+            "<i>Set <code>GENIUS_API_TOKEN</code> in heroku vars for functioning of this command.\n\nCheck out this <b><a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></b></i>",
+            parse_mode="html",
         )
     match = event.pattern_match.group(1)
     songno = re.findall(r"-n\d+", match)
@@ -62,40 +65,33 @@ async def lyrics(event):  # sourcery no-metrics
     match = match.replace("-l", "")
     listview = bool(listview)
     query = match.strip()
-    genius = lyricsgenius.Genius(GENIUS)
+    song = songinfo = query
+    artist = None
     if "-" in query:
         args = query.split("-", 1)
         artist = args[0].strip(" ")
         song = args[1].strip(" ")
-        catevent = await edit_or_reply(
-            event, f"`Searching lyrics for {artist} - {song}...`"
-        )
-        try:
-            songs = genius.search_song(song, artist)
-        except TypeError:
-            songs = None
-        if songs is None:
-            return await catevent.edit(f"Song **{artist} - {song}** not found!")
-        result = f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```"
+        songinfo = f"{artist} - {song}"
+        catevent = await edit_or_reply(event, f"`Searching lyrics for {songinfo}...`")
+        lyrics = await LyricsGen.lyrics(event, song, artist)
+        if lyrics is None:
+            return await catevent.edit(f"Song **{songinfo}** not found!")
+        result = f"**Search query**: \n`{songinfo}`\n\n```{lyrics}```"
     else:
         catevent = await edit_or_reply(event, f"`Searching lyrics for {query}...`")
-        response = genius.search_songs(query)
+        response = LyricsGen.songs(song)
         msg = f"**The songs found for the given query:** `{query}`\n\n"
-        if len(response["hits"]) == 0:
-            return await edit_or_reply(
-                catevent, f"**I can't find lyrics for the given query: **`{query}`"
-            )
-        for i, an in enumerate(response["hits"], start=1):
+        for i, an in enumerate(response, start=1):
             msg += f"{i}. `{an['result']['title']}`\n"
         if listview:
             result = msg
         else:
             result = f"**The song found for the given query:** `{query}`\n\n"
-            if songno > len(response["hits"]):
+            if songno > len(response):
                 return await edit_or_reply(
                     catevent,
                     f"**Invalid song selection for the query select proper number**\n{msg}",
                 )
-            songtitle = response["hits"][songno - 1]["result"]["title"]
-            result += f"`{genius.search_song(songtitle).lyrics}`"
+            songtitle = response[songno - 1]["result"]["title"]
+            result += f"`{await LyricsGen.lyrics(event, songtitle)}`"
     await edit_or_reply(catevent, result)

@@ -41,44 +41,50 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def file_check():
+def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True, go=False):
     regular = "./temp/Roboto-Regular.ttf"
     medium = "./temp/Roboto-Medium.ttf"
     mono = "./temp/DroidSansMono.ttf"
     italic = "./temp/Roboto-Italic.ttf"
     fallback = "./temp/Quivira.otf"
     special = "./temp/ArialUnicodeMS.ttf"
+    google = "./temp/GoogleSans-Medium.ttf"
     if not os.path.isdir("./temp/"):
-        os.mkdir("./temp/", 0o755)
-    if not os.path.exists(regular):
+        os.mkdir("./temp/")
+    if re and not os.path.exists(regular):
         urllib.request.urlretrieve(
             "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf",
             regular,
         )
-    if not os.path.exists(medium):
+    if me and not os.path.exists(medium):
         urllib.request.urlretrieve(
             "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf",
             medium,
         )
-    if not os.path.exists(mono):
+    if mo and not os.path.exists(mono):
         urllib.request.urlretrieve(
             "https://github.com/erenmetesar/modules-repo/raw/master/DroidSansMono.ttf",
             mono,
         )
-    if not os.path.exists(italic):
+    if it and not os.path.exists(italic):
         urllib.request.urlretrieve(
             "https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf",
             italic,
         )
-    if not os.path.exists(fallback):
+    if fa and not os.path.exists(fallback):
         urllib.request.urlretrieve(
             "https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf",
             fallback,
         )
-    if not os.path.exists(special):
+    if sp and not os.path.exists(special):
         urllib.request.urlretrieve(
             "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
             special,
+        )
+    if go and not os.path.exists(google):
+        urllib.request.urlretrieve(
+            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/GoogleSans-Medium.ttf?raw=true",
+            google,
         )
 
 

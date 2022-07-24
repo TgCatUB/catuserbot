@@ -1,28 +1,6 @@
 import io
-import os
 
 from PIL import Image, ImageDraw, ImageOps
-
-
-def convert_toimage(image, filename=None):
-    filename = filename or os.path.join("./temp/", "temp.jpg")
-    img = Image.open(image)
-    if img.mode != "RGB":
-        img = img.convert("RGB")
-    img.save(filename, "jpeg")
-    os.remove(image)
-    return filename
-
-
-def convert_tosticker(response, filename=None):
-    filename = filename or os.path.join("./temp/", "temp.webp")
-    image = Image.open(response)
-    if image.mode != "RGB":
-        image.convert("RGB")
-    image.save(filename, "webp")
-    os.remove(response)
-    return filename
-
 
 # http://effbot.org/imagingbook/imageops.html
 # https://stackoverflow.com/questions/2498875/how-to-invert-colors-of-image-with-pil-python-imaging/38378828

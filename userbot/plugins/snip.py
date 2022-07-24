@@ -1,5 +1,7 @@
 # ported from paperplaneExtended by avinashreddy3108 for media support
 
+import contextlib
+
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
@@ -16,7 +18,7 @@ plugin_category = "utils"
 async def incom_note(event):
     if not BOTLOG:
         return
-    try:
+    with contextlib.suppress(AttributeError):
         if not (await event.get_sender()).bot:
             notename = event.text[1:]
             notename = notename.lower()
@@ -42,8 +44,6 @@ async def incom_note(event):
                         reply_to=message_id_to_reply,
                         link_preview=False,
                     )
-    except AttributeError:
-        pass
 
 
 @catub.cat_cmd(
@@ -146,8 +146,7 @@ async def on_snip_delete(event):
     "To delete paticular note in bot."
     name = event.pattern_match.group(1)
     name = name.lower()
-    catsnip = get_note(name)
-    if catsnip:
+    if catsnip := get_note(name):
         rm_note(name)
     else:
         return await edit_or_reply(

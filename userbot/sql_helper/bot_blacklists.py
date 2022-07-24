@@ -19,7 +19,7 @@ class Bot_BlackList(BASE):
         self.first_name = first_name
 
     def __repr__(self):
-        return "<BL %s>" % self.chat_id
+        return f"<BL {self.chat_id}>"
 
 
 Bot_BlackList.__table__.create(checkfirst=True)

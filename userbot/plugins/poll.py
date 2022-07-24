@@ -25,31 +25,7 @@ plugin_category = "extra"
 async def pollcreator(catpoll):
     "To create a poll"
     reply_to_id = await reply_id(catpoll)
-    string = "".join(catpoll.text.split(maxsplit=1)[1:])
-    if not string:
-        options = Build_Poll(["Yah sure 😊✌️", "Nah 😏😕", "Whatever die sur 🥱🙄"])
-        try:
-            await catpoll.client.send_message(
-                catpoll.chat_id,
-                file=InputMediaPoll(
-                    poll=Poll(
-                        id=random.getrandbits(32),
-                        question="👆👆So do you guys agree with this?",
-                        answers=options,
-                    )
-                ),
-                reply_to=reply_to_id,
-            )
-            await catpoll.delete()
-        except PollOptionInvalidError:
-            await edit_or_reply(
-                catpoll, "`A poll option used invalid data (the data may be too long).`"
-            )
-        except ForbiddenError:
-            await edit_or_reply(catpoll, "`This chat has forbidden the polls`")
-        except exception as e:
-            await edit_or_reply(catpoll, str(e))
-    else:
+    if string := "".join(catpoll.text.split(maxsplit=1)[1:]):
         catinput = string.split(";")
         if len(catinput) > 2 and len(catinput) < 12:
             options = Build_Poll(catinput[1:])
@@ -80,3 +56,27 @@ async def pollcreator(catpoll):
                 catpoll,
                 "Make sure that you used Correct syntax `.poll question ; option1 ; option2`",
             )
+
+    else:
+        options = Build_Poll(["Yah sure 😊✌️", "Nah 😏😕", "Whatever die sur 🥱🙄"])
+        try:
+            await catpoll.client.send_message(
+                catpoll.chat_id,
+                file=InputMediaPoll(
+                    poll=Poll(
+                        id=random.getrandbits(32),
+                        question="👆👆So do you guys agree with this?",
+                        answers=options,
+                    )
+                ),
+                reply_to=reply_to_id,
+            )
+            await catpoll.delete()
+        except PollOptionInvalidError:
+            await edit_or_reply(
+                catpoll, "`A poll option used invalid data (the data may be too long).`"
+            )
+        except ForbiddenError:
+            await edit_or_reply(catpoll, "`This chat has forbidden the polls`")
+        except Exception as e:
+            await edit_or_reply(catpoll, str(e))

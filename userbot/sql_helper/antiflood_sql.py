@@ -20,7 +20,7 @@ class FloodControl(BASE):
         self.chat_id = str(chat_id)  # ensure string
 
     def __repr__(self):
-        return "<flood control for %s>" % self.chat_id
+        return f"<flood control for {self.chat_id}>"
 
 
 FloodControl.__table__.create(checkfirst=True)
@@ -52,22 +52,22 @@ def set_flood(chat_id, amount):
 
 
 def update_flood(chat_id: str, user_id) -> bool:
-    if str(chat_id) not in ANTIFLOOD_SQL_.CHAT_FLOOD:
+    if chat_id not in ANTIFLOOD_SQL_.CHAT_FLOOD:
         return
-    curr_user_id, count, limit = ANTIFLOOD_SQL_.CHAT_FLOOD.get(str(chat_id), DEF_OBJ)
+    curr_user_id, count, limit = ANTIFLOOD_SQL_.CHAT_FLOOD.get(chat_id, DEF_OBJ)
     if limit == 0:  # no antiflood
         return False
     if user_id != curr_user_id or user_id is None:  # other user
-        ANTIFLOOD_SQL_.CHAT_FLOOD[str(chat_id)] = (user_id, DEF_COUNT + 1, limit)
+        ANTIFLOOD_SQL_.CHAT_FLOOD[chat_id] = (user_id, DEF_COUNT + 1, limit)
         return False
 
     count += 1
     if count > limit:  # too many msgs, kick
-        ANTIFLOOD_SQL_.CHAT_FLOOD[str(chat_id)] = (None, DEF_COUNT, limit)
+        ANTIFLOOD_SQL_.CHAT_FLOOD[chat_id] = (None, DEF_COUNT, limit)
         return True
 
     # default -> update
-    ANTIFLOOD_SQL_.CHAT_FLOOD[str(chat_id)] = (user_id, count, limit)
+    ANTIFLOOD_SQL_.CHAT_FLOOD[chat_id] = (user_id, count, limit)
     return False
 
 

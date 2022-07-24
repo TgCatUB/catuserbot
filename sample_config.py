@@ -34,11 +34,18 @@ class Config(object):
     )
     # External plugins repo
     EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO", None)
-    if EXTERNAL_REPO and (EXTERNAL_REPO.lower() != "no") and not url(EXTERNAL_REPO):
-        EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
+    if bool(EXTERNAL_REPO and (EXTERNAL_REPO.lower() != "false")):
+        if not url(EXTERNAL_REPO):
+            EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
+    else:
+        EXTERNAL_REPO = None
     # if you need badcat plugins use the following vars
-    BADCAT = os.environ.get("BADCAT", "no")
-    BADCAT = bool(BADCAT and (BADCAT.lower() != "no"))
+    BADCAT = os.environ.get("BADCAT", False)
+    BADCAT = bool(BADCAT and (BADCAT.lower() != "false"))
+    # for vc plugins
+    VCMODE = os.environ.get("VCMODE", False)
+    VCMODE = bool(VCMODE and (VCMODE.lower() != "false"))
+    VC_SESSION = os.environ.get("VC_SESSION", None)
     # BASIC and MAIN CONFIG VARS
     # for profile default name
     # Set this value with group id of private group(can be found this value by .id)
@@ -127,8 +134,6 @@ class Config(object):
     SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET", None)
     # SpamWatch API you can get it from get api from http://t.me/SpamWatchBot?start=token
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
-    # can get from https://coffeehouse.intellivoid.net/
-    RANDOM_STUFF_API_KEY = os.environ.get("RANDOM_STUFF_API_KEY", None)
     # github vars
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)

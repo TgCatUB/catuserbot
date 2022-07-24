@@ -67,11 +67,13 @@ async def variable(var):  # sourcery no-metrics
         try:
             variable = var.pattern_match.group(2).split()[0]
             if variable in heroku_var:
-                return await cat.edit(
-                    "**ConfigVars**:" f"\n\n`{variable}` = `{heroku_var[variable]}`\n"
+                return await edit_or_reply(
+                    cat,
+                    "**ConfigVars**:" f"\n\n`{variable}` = `{heroku_var[variable]}`\n",
                 )
-            await cat.edit(
-                "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ don't exists__"
+            await edit_or_reply(
+                cat,
+                "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ don't exists__",
             )
         except IndexError:
             configs = prettyjson(heroku_var.to_dict(), indent=2)
@@ -91,17 +93,19 @@ async def variable(var):  # sourcery no-metrics
         variable = "".join(var.text.split(maxsplit=2)[2:])
         cat = await edit_or_reply(var, "`Setting information...`")
         if not variable:
-            return await cat.edit("`.set var <ConfigVars-name> <value>`")
+            return await edit_or_reply(cat, "`.set var <ConfigVars-name> <value>`")
         value = "".join(variable.split(maxsplit=1)[1:])
         variable = "".join(variable.split(maxsplit=1)[0])
         if not value:
-            return await cat.edit("`.set var <ConfigVars-name> <value>`")
+            return await edit_or_reply(cat, "`.set var <ConfigVars-name> <value>`")
         await asyncio.sleep(1.5)
         if variable in heroku_var:
-            await cat.edit(f"`{variable}` **successfully changed to  ->  **`{value}`")
+            await edit_or_reply(
+                cat, f"`{variable}` **successfully changed to  ->  **`{value}`"
+            )
         else:
-            await cat.edit(
-                f"`{variable}`**  successfully added with value`  ->  **{value}`"
+            await edit_or_reply(
+                cat, f"`{variable}`**  successfully added with value`  ->  **{value}`"
             )
         heroku_var[variable] = value
     elif exe == "del":
@@ -109,12 +113,14 @@ async def variable(var):  # sourcery no-metrics
         try:
             variable = var.pattern_match.group(2).split()[0]
         except IndexError:
-            return await cat.edit("`Please specify ConfigVars you want to delete`")
+            return await edit_or_reply(
+                cat, "`Please specify ConfigVars you want to delete`"
+            )
         await asyncio.sleep(1.5)
         if variable not in heroku_var:
-            return await cat.edit(f"`{variable}`**  does not exist**")
+            return await edit_or_reply(cat, f"`{variable}`**  does not exist**")
 
-        await cat.edit(f"`{variable}`  **successfully deleted**")
+        await edit_or_reply(cat, f"`{variable}`  **successfully deleted**")
         del heroku_var[variable]
 
 
@@ -227,3 +233,71 @@ def prettyjson(obj, indent=2, maxlinelength=80):
         indent=indent,
     )
     return indentitems(items, indent, level=0)
+
+
+@catub.cat_cmd(
+    pattern="(|add|del)buildpack(?:\s|$)([\s\S]*)",
+    command=("buildpack", plugin_category),
+    info={
+        "header": "To manage heroku buildpacks.",
+        "flags": {
+            "add": "To set new buildpack",
+            "del": "To delete the existing buildpack",
+        },
+        "usage": [
+            "{tr}buildpack",
+            "{tr}addbuildpack (url of the buildpack)",
+            "{tr}delbuildpack (url of the buildpack)",
+        ],
+        "examples": [
+            "{tr}buildpack",
+            "{tr}addbuildpack https://github.com/amivin/aria2-heroku.git",
+        ],
+    },
+)
+async def variable(event):
+    "Manange heroku buildpacks with heroku api"
+    if (Config.HEROKU_API_KEY is None) or (Config.HEROKU_APP_NAME is None):
+        return await edit_delete(
+            event,
+            "Set the required vars in heroku to function this normally `HEROKU_API_KEY` and `HEROKU_APP_NAME`.",
+        )
+    app = Heroku.app(Config.HEROKU_APP_NAME)
+    cmd = event.pattern_match.group(1).lower()
+    link = event.pattern_match.group(2)
+    buidpacks = []
+    for item in app.buildpacks():
+        buidpacks.append(item.buildpack.url)
+    if cmd and not link:
+        return await edit_delete(event, "**Error::** `Give buildpack link..`")
+    elif cmd == "add":
+        if link in buidpacks:
+            return await edit_delete(
+                event, "**Error::** __Buildpack is already connected to this app..__"
+            )
+        buidpacks.append(link)
+        app.update_buildpacks(buidpacks)
+        return await edit_delete(
+            event,
+            f"**Success:** __Buildpack connected.\nDo `.update deploy` to complete updating__",
+            30,
+        )
+    elif cmd == "del":
+        if link not in buidpacks:
+            return await edit_delete(
+                event,
+                "**Error::** __Unable to delete, buildpack is not connected to this app...__",
+            )
+        buidpacks.remove(link)
+        app.update_buildpacks(buidpacks)
+        return await edit_delete(
+            event,
+            f"**Success:** __Buildpack removed.\nDo `.update deploy` to complete updating__",
+            30,
+        )
+    string = (
+        f"__**Currently available buildpacks for {Config.HEROKU_APP_NAME}:-**__\n\n"
+    )
+    for i, url in enumerate(buidpacks, start=1):
+        string += f"**{i}.**   `{url}`\n\n"
+    await edit_or_reply(event, string)

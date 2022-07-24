@@ -11,6 +11,7 @@ import os
 import subprocess
 
 from ..Config import Config
+from ..helpers.tools import media_type
 from . import catub, edit_or_reply
 
 plugin_category = "tools"
@@ -38,7 +39,7 @@ async def get_media(event):
     msgs = await event.client.get_messages(channel_username, limit=limit)
     i = 0
     for msg in msgs:
-        mediatype = media_type(msg)
+        mediatype = await media_type(msg)
         if mediatype is not None:
             await event.client.download_media(msg, tempdir)
             i += 1
@@ -76,7 +77,7 @@ async def get_media(event):
     msgs = await event.client.get_messages(channel_username, limit=3000)
     i = 0
     for msg in msgs:
-        mediatype = media_type(msg)
+        mediatype = await media_type(msg)
         if mediatype is not None:
             await event.client.download_media(msg, tempdir)
             i += 1

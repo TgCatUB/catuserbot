@@ -19,9 +19,7 @@ class Warns(BASE):
         self.reasons = ""
 
     def __repr__(self):
-        return "<{} warns for {} in {} for reasons {}>".format(
-            self.num_warns, self.user_id, self.chat_id, self.reasons
-        )
+        return f"<{self.num_warns} warns for {self.user_id} in {self.chat_id} for reasons {self.reasons}>"
 
 
 class WarnSettings(BASE):
@@ -36,7 +34,7 @@ class WarnSettings(BASE):
         self.soft_warn = soft_warn
 
     def __repr__(self):
-        return "<{} has {} possible warns.>".format(self.chat_id, self.warn_limit)
+        return f"<{self.chat_id} has {self.warn_limit} possible warns.>"
 
 
 Warns.__table__.create(checkfirst=True)

@@ -1,9 +1,12 @@
 import html
 
 from userbot import catub
+from userbot.core.logger import logging
 
-from ..core.managers import edit_or_reply
+from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper import warns_sql as sql
+
+logger = logging.getLogger(__name__)
 
 plugin_category = "admin"
 
@@ -31,20 +34,14 @@ async def _(event):
         sql.reset_warns(reply_message.sender_id, event.chat_id)
         if soft_warn:
             logger.info("TODO: kick user")
-            reply = "{} warnings, [user](tg://user?id={}) has to bee kicked!".format(
-                limit, reply_message.sender_id
-            )
+            reply = f"{limit} warnings, [user](tg://user?id={reply_message.sender_id}) has to bee kicked!"
         else:
             logger.info("TODO: ban user")
-            reply = "{} warnings, [user](tg://user?id={}) has to bee banned!".format(
-                limit, reply_message.sender_id
-            )
+            reply = f"{limit} warnings, [user](tg://user?id={reply_message.sender_id}) has to bee banned!"
     else:
-        reply = "[user](tg://user?id={}) has {}/{} warnings... watch out!".format(
-            reply_message.sender_id, num_warns, limit
-        )
+        reply = f"[user](tg://user?id={reply_message.sender_id}) has {num_warns}/{limit} warnings... watch out!"
         if warn_reason:
-            reply += "\nReason for last warn:\n{}".format(html.escape(warn_reason))
+            reply += f"\nReason for last warn:\n{html.escape(warn_reason)}"
     await edit_or_reply(event, reply)
 
 
@@ -69,14 +66,9 @@ async def _(event):
     if not reasons:
         return await edit_or_reply(
             event,
-            "this user has {} / {} warning, but no reasons for any of them.".format(
-                num_warns, limit
-            ),
+            f"this user has {num_warns} / {limit} warning, but no reasons for any of them.",
         )
-
-    text = "This user has {}/{} warnings, for the following reasons:".format(
-        num_warns, limit
-    )
+    text = f"This user has {num_warns}/{limit} warnings, for the following reasons:"
     text += "\r\n"
     text += reasons
     await event.edit(text)

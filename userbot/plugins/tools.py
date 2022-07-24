@@ -75,7 +75,7 @@ async def currency(event):
                 "__You have used wrong currency codes or Api can't fetch details or try by restarting bot it will work if everything is fine.__",
                 time=10,
             )
-        output = float(value) * float(result)
+        output = value * float(result)
         output = round(output, 4)
         await edit_or_reply(
             event,
@@ -217,7 +217,7 @@ async def _(event):
         return await catevent.edit(str(e))
     end = datetime.now()
     ms = (end - start).seconds
-    await edit_delete(catevent, "Created BarCode in {} seconds".format(ms))
+    await edit_delete(catevent, f"Created BarCode in {ms} seconds")
 
 
 @catub.cat_cmd(
@@ -387,11 +387,10 @@ async def spy(event):
 async def _(event):
     "to get details of the relevant bank or branch."
     input_str = event.pattern_match.group(1)
-    url = "https://ifsc.razorpay.com/{}".format(input_str)
+    url = f"https://ifsc.razorpay.com/{input_str}"
     r = requests.get(url)
     if r.status_code != 200:
-        return await edit_or_reply(event, "`{}`: {}".format(input_str, r.text))
-
+        return await edit_or_reply(event, f"`{input_str}`: {r.text}")
     b = r.json()
     a = json.dumps(b, sort_keys=True, indent=4)
     # https://stackoverflow.com/a/9105132/4723940
@@ -459,15 +458,15 @@ async def _(event):
     if xkcd_id is None:
         xkcd_url = "https://xkcd.com/info.0.json"
     else:
-        xkcd_url = "https://xkcd.com/{}/info.0.json".format(xkcd_id)
+        xkcd_url = f"https://xkcd.com/{xkcd_id}/info.0.json"
     r = requests.get(xkcd_url)
     if not r.ok:
-        return await catevent.edit("xkcd n.{} not found!".format(xkcd_id))
+        return await catevent.edit(f"xkcd n.{xkcd_id} not found!")
     data = r.json()
     year = data.get("year")
     month = data["month"].zfill(2)
     day = data["day"].zfill(2)
-    xkcd_link = "https://xkcd.com/{}".format(data.get("num"))
+    xkcd_link = f'https://xkcd.com/{data.get("num")}'
     safe_title = data.get("safe_title")
     data.get("transcript")
     alt = data.get("alt")
