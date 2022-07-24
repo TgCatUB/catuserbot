@@ -11,8 +11,8 @@ from telethon.utils import get_attributes
 
 from userbot import catub
 from userbot.Config import Config
-from userbot.helpers import humanbytes, progress
 from userbot.core.decorators import check_owner
+from userbot.helpers import humanbytes, progress
 from userbot.helpers.utils import _catutils
 
 CC = []
