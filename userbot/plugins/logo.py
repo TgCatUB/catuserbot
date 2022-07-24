@@ -230,6 +230,7 @@ async def very(event):  # sourcery no-metrics
         ],
         "examples": [
             "{tr}lbg red",
+            "{tr}lbg anime",
             "{tr}clbg https://telegra.ph/blablabla.jpg",
         ],
     },

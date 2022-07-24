@@ -5,6 +5,7 @@ import random
 import re
 import time
 from uuid import uuid4
+from pathlib import Path
 
 from telethon import Button, types
 from telethon.errors import QueryIdInvalidError
@@ -22,6 +23,7 @@ from ..helpers.functions.utube import (
     result_formatter,
     ytsearch_data,
 )
+from ..assistant.inlinefm import get_manager
 from ..plugins import mention
 from ..sql_helper.globals import gvarstatus
 from . import CMD_INFO, GRP_INFO, PLG_INFO, check_owner
@@ -100,7 +102,22 @@ async def article_builder(event, method):
         thumb = get_thumb("help.png")
         query = help_info[0]
         buttons = help_info[1]
-
+    if method == "ls":
+        try:
+            ls, path_ = (event.text).split(" ", 1)
+            path = Path(path_) if path_ else os.getcwd()
+        except Exception:
+            ls = event.text
+            path = os.getcwd()
+        if "ls" in ls:
+            if not os.path.exists(path):
+                return
+            num = 1
+            query, buttons = get_manager(path, num)
+            title = "File Manager"
+            description = f"Inline file manager\nSyntax: ls (path optional)\nPath:  {path}"
+            thumb = get_thumb("filemanager.jpg")
+            media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/filemanager.jpg"
     elif method == "deploy":
         media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
         title = "𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩"
@@ -395,6 +412,9 @@ async def inline_handler(event):  # sourcery no-metrics
         if string == "ialive":
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
+        if str_y[0].lower() == "ls":
+            result = await article_builder(event, str_y[0].lower())
+            await event.answer([result] if result else None)
         elif query.startswith("Inline buttons"):
             result = await article_builder(event, query)
             await event.answer([result] if result else None)
@@ -572,10 +592,14 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(alive_menu) if alive_menu else None
             help_menu = await article_builder(event, "help")
             results.append(help_menu) if help_menu else None
+            spotify_menu = await article_builder(event, "spotify")
+            results.append(spotify_menu) if spotify_menu else None
+            file_manager = await article_builder(event, "ls")
+            results.append(file_manager) if file_manager else None
             results.append(
                 builder.article(
                     title="Hide",
-                    description="Send hidden text in chat.",
+                    description="Send hidden text in chat.\nSyntax: hide",
                     text="__Send hidden message for spoilers/quote prevention.__",
                     thumb=get_thumb("hide.png"),
                     buttons=[
@@ -588,7 +612,7 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(
                 builder.article(
                     title="Search",
-                    description="Search cmds & plugins",
+                    description="Search cmds & plugins\nSyntax: s",
                     text="__Get help about a plugin or cmd.\n\nMixture of .help & .s__",
                     thumb=get_thumb("search.jpg"),
                     buttons=[
@@ -601,7 +625,7 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(
                 builder.article(
                     title="Secret",
-                    description="Send secret message to your friends.",
+                    description="Send secret message to your friends.\nSyntax: secret @usename",
                     text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
                     thumb=get_thumb("secret.png"),
                     buttons=[
@@ -618,12 +642,10 @@ async def inline_handler(event):  # sourcery no-metrics
                     ],
                 ),
             )
-            spotify_menu = await article_builder(event, "spotify")
-            results.append(spotify_menu) if spotify_menu else None
             results.append(
                 builder.article(
                     title="Troll",
-                    description="Send troll message to your friends.",
+                    description="Send troll message to your friends.\nSyntax: toll @usename",
                     text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
                     thumb=get_thumb("troll.png"),
                     buttons=[
@@ -643,7 +665,7 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(
                 builder.article(
                     title="Youtube Download",
-                    description="Download videos/audios from YouTube.",
+                    description="Download videos/audios from YouTube.\nSyntax: ytdl",
                     text="__Download videos or audios from YouTube with different options of resolutions/quality.__",
                     thumb=get_thumb("youtube.png"),
                     buttons=[

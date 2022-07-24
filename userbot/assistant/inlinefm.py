@@ -19,10 +19,6 @@ PATH = []  # using list method for some reason
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 
 
-def get_thumb(url):
-    return types.InputWebDocument(url=url, size=0, mime_type="image/png", attributes=[])
-
-
 # freaking selector
 def add_s(msg, num: int):
     fmsg = ""
@@ -229,23 +225,6 @@ async def remove(event):
     await event.answer(f"{rpath} removed successfully...")
 
 
-"""
-# SEND
-@catub.tgbot.on(CallbackQuery(pattern="send"))
-async def send(event):
-    print(event)
-    print()
-    x = await event.get_chat()
-    print(x)
-    path = PATH[0]
-    chat = -(int((await event.get_chat()).id)) + -1000000000000
-    await catub.send_file(
-        chat,
-        file=path,
-        thumb=thumb_image_path if os.path.exists(thumb_image_path) else None,
-    )
-    await event.answer(f"File {path} sent successfully...")
-"""
 # SEND
 @catub.tgbot.on(CallbackQuery(pattern="fmsend"))
 async def send(event):
@@ -361,86 +340,3 @@ async def paste(event):
         CC.clear
     else:
         await event.answer("You aint copied anything to paste")
-
-
-"""
-async def lsinline(event):
-
-    if (
-        event.query.user_id == Config.OWNER_ID
-        or event.query.user_id in Config.SUDO_USERS
-    ):
-        try:
-            ls, path_ = (event.text).split(" ", 1)
-            path = Path(path_) if path_ else os.getcwd()
-        except Exception:
-            ls = event.text
-            path = os.getcwd()
-        if "ja" in ls:
-            if not os.path.exists(path):
-                return
-            num = 1
-            msg, buttons = get_manager(path, num)
-            result = []
-            result.append(
-                await event.builder.article(
-                    title="File Manager",
-                    description= f"Inline file manager\nPath:  {path}",   
-                    file="https://telegra.ph/file/657545ca6add1ad9663f9.jpg",
-                    content=get_thumb("https://telegra.ph/file/95412625a79efe853bf9a.png"),
-                    thumb=get_thumb("https://telegra.ph/file/95412625a79efe853bf9a.png"),
-                    text=msg,
-                    buttons=buttons,
-                )
-            )
-            await event.answer(result)
-"""
-
-
-@catub.tgbot.on(InlineQuery)
-async def lsinline(event):
-    try:
-        ls, path_ = (event.text).split(" ", 1)
-        path = Path(path_) if path_ else os.getcwd()
-    except Exception:
-        ls = event.text
-        path = os.getcwd()
-    if "ls" in ls:
-        if not os.path.exists(path):
-            return
-        num = 1
-        msg, buttons = get_manager(path, num)
-        media = thumb = photo = None
-        link_preview = False
-        builder = event.builder
-        title = "File Manager"
-        description = f"Inline file manager\nPath:  {path}"
-        thumb = get_thumb("https://telegra.ph/file/95412625a79efe853bf9a.png")
-        media = "https://telegra.ph/file/657545ca6add1ad9663f9.jpg"
-        if media and not media.endswith((".jpg", ".jpeg", ".png")):
-            result = builder.document(
-                media,
-                title=title,
-                description=description,
-                text=msg,
-                buttons=buttons,
-            )
-        else:
-            type = "article"
-            if media and media.endswith((".jpg", ".jpeg", ".png")):
-                photo = types.InputWebDocument(
-                    url=media, size=0, mime_type="image/jpeg", attributes=[]
-                )
-                type = "photo"
-            result = builder.article(
-                title=title,
-                description=description,
-                type=type,
-                file=media,
-                thumb=thumb if thumb else photo,
-                content=photo,
-                text=msg,
-                buttons=buttons,
-                link_preview=link_preview,
-            )
-        await event.answer([result])

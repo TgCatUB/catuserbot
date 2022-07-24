@@ -45,6 +45,7 @@ class Config(object):
     # for vc plugins
     VCMODE = os.environ.get("VCMODE", False)
     VCMODE = bool(VCMODE and (VCMODE.lower() != "false"))
+    VC_SESSION = os.environ.get("VC_SESSION", None)
     # BASIC and MAIN CONFIG VARS
     # for profile default name
     # Set this value with group id of private group(can be found this value by .id)
