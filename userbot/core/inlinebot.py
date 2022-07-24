@@ -104,7 +104,7 @@ async def article_builder(event, method):
         buttons = help_info[1]
     if method == "ls":
         try:
-            _ , path_ = (event.text).split(" ", 1)
+            _, path_ = (event.text).split(" ", 1)
             path = Path(path_) if path_ else os.getcwd()
         except Exception:
             path = os.getcwd()
@@ -113,9 +113,7 @@ async def article_builder(event, method):
         num = 1
         query, buttons = get_manager(path, num)
         title = "File Manager"
-        description = (
-            f"Inline file manager\nSyntax: ls (path optional)\nPath:  {path}"
-        )
+        description = f"Inline file manager\nSyntax: ls (path optional)\nPath:  {path}"
         thumb = get_thumb("filemanager.jpg")
         media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/filemanager.jpg"
     elif method == "deploy":
