@@ -4,8 +4,8 @@ import os
 import random
 import re
 import time
-from uuid import uuid4
 from pathlib import Path
+from uuid import uuid4
 
 from telethon import Button, types
 from telethon.errors import QueryIdInvalidError
@@ -14,6 +14,7 @@ from youtubesearchpython import VideosSearch
 
 from userbot import catub
 
+from ..assistant.inlinefm import get_manager
 from ..Config import Config
 from ..helpers.functions import rand_key
 from ..helpers.functions.utube import (
@@ -23,7 +24,6 @@ from ..helpers.functions.utube import (
     result_formatter,
     ytsearch_data,
 )
-from ..assistant.inlinefm import get_manager
 from ..plugins import mention
 from ..sql_helper.globals import gvarstatus
 from . import CMD_INFO, GRP_INFO, PLG_INFO, check_owner
@@ -115,7 +115,9 @@ async def article_builder(event, method):
             num = 1
             query, buttons = get_manager(path, num)
             title = "File Manager"
-            description = f"Inline file manager\nSyntax: ls (path optional)\nPath:  {path}"
+            description = (
+                f"Inline file manager\nSyntax: ls (path optional)\nPath:  {path}"
+            )
             thumb = get_thumb("filemanager.jpg")
             media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/filemanager.jpg"
     elif method == "deploy":

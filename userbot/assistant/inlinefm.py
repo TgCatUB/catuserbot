@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 
 from telethon import Button, types
-from telethon.events import CallbackQuery, InlineQuery
+from telethon.events import CallbackQuery
 from telethon.utils import get_attributes
 
 from userbot import catub
