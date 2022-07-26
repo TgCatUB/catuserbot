@@ -798,7 +798,7 @@ async def spotify_now(event):  # sourcery skip: remove-duplicate-dict-key
         received = r.json()
         if received["currently_playing_type"] == "track":
             link = received["item"]["external_urls"]["spotify"]
-    link = f"/music {link}" if cmd == "i" else link
+    link = link if cmd == "i" else f"/songs {link}"
     async with event.client.conversation(chat) as conv:
         try:
             purgeflag = await conv.send_message(link)
