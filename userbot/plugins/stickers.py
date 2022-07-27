@@ -216,20 +216,20 @@ async def add_to_pack(
     except YouBlockedUserError:
         await catub(unblock("stickers"))
         await conv.send_message("/addsticker")
-    vtry = True if is_video else None
+    #vtry = True if is_video else None
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packname)
     x = await conv.get_response()
-    while ("50" in x.message) or ("120" in x.message) or vtry:
-        if vtry:
-            await conv.send_file("animate.webm")
-            x = await conv.get_response()
-            if "50 video stickers" in x.message:
-                await conv.send_message("/addsticker")
-            else:
-                vtry = None
-                break
+    while ("50" in x.message) or ("120" in x.message):
+        #if vtry:
+            #await conv.send_file("animate.webm")
+            #x = await conv.get_response()
+            #if "50 video stickers" in x.message:
+                #await conv.send_message("/addsticker")
+            #else:
+                #vtry = None
+                #break
         try:
             val = int(pack)
             pack = val + 1

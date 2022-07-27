@@ -337,7 +337,7 @@ async def spammer(event):
     command=("rspam", plugin_category),
     info={
         "header": "React spam to message",
-        "notes": "This a really annyoing spam, so added filter to work with mutual contats only\nUse  <{tr}stop spam> to stop it",
+        "notes": "This a really annyoing spam, so added filter to work with mutual contats only\nUse  [ {tr}end spam ] to stop it",
         "usage": [
             "{tr}rspam <reply>",
             "{tr}reactspam <reply>",

@@ -173,6 +173,8 @@ class Config(object):
     if BADCAT_REPO and not url(BADCAT_REPO):
         BADCAT_REPO = "https://github.com/TgCatUB/CatPlugins"
     BADCAT_REPOBRANCH = os.environ.get("BADCAT_REPOBRANCH", "badcat")
+    VC_REPO = os.environ.get("VC_REPO", "https://github.com/TgCatUB/CatVCPlayer")
+    VC_REPOBRANCH = os.environ.get("VC_REPOBRANCH", "test")
 
 
 class Production(Config):
