@@ -458,16 +458,12 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
                 catevent,
                 f"`Sticker kanged to a Different Pack !\
                 \nAnd Newly created pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
-                parse_mode="md",
-                time=10,
             )
         else:
             await edit_delete(
                 catevent,
                 f"`Sticker kanged successfully!\
                 \nYour Pack is` [here](t.me/addstickers/{packname}) `and emoji for the kanged sticker is {emoji}`",
-                parse_mode="md",
-                time=10,
             )
 
 
