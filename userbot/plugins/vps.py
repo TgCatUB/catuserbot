@@ -54,6 +54,11 @@ async def switch_branch():
             if match.group(1) == "BADCAT" and match.group(2).lower() != "false"
             else BADCAT
         )
+        VCMODE = (
+            True
+            if match.group(1) == "VCMODE" and match.group(2).lower() != "false"
+            else VCMODE
+        )
     if REPO:
         await _catutils.runcmd(f"git clone -b {BRANCH} {REPO} TempCat")
         file_list = os.listdir("TempCat")
@@ -66,6 +71,8 @@ async def switch_branch():
         await _catutils.runcmd("rm -rf badcatext")
     if not EXTERNAL and os.path.exists("xtraplugins"):
         await _catutils.runcmd("rm -rf xtraplugins")
+    if not VCMODE and os.path.exists("catvc"):
+        await _catutils.runcmd("rm -rf catvc")
 
 
 @catub.cat_cmd(

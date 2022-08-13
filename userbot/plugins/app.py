@@ -11,6 +11,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 
 from ..helpers import ellipse_create, file_check
+from ..helpers.utils import reply_id
 from . import catub, edit_delete, edit_or_reply
 
 plugin_category = "utils"
@@ -43,6 +44,7 @@ def text_draw(font_name, font_size, img, text, width, hight, fill="white"):
 async def app_search(event):
     "To search any app in playstore."
     query = event.pattern_match.group(1)
+    reply_to_id = await reply_id(event)
     if not query:
         return await edit_delete(
             event, "`Enter an app name to get result from PlayStore..`"
@@ -113,6 +115,10 @@ async def app_search(event):
     app_details += f"\n\n<b>Features :</b> <a href= {app_link}>View in Play Store</a>"
     await event.delete()
     await event.client.send_file(
-        event.chat_id, pic_name, caption=app_details, parse_mode="HTML"
+        event.chat_id,
+        pic_name,
+        caption=app_details,
+        parse_mode="HTML",
+        reply_to=reply_to_id,
     )
     os.remove(pic_name)
