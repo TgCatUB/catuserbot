@@ -38,7 +38,6 @@ python-barcode
 pytz
 qrcode
 requests
-search-engine-parser
 selenium
 setuptools
 ShazamAPI
@@ -56,6 +55,7 @@ wand
 wget
 yt_dlp
 
+git+https://github.com/Jisan09/search-engine-parser
 git+https://github.com/sandy1709/Telethon@beta
 git+https://github.com/goldsmith/Wikipedia
 git+https://github.com/sandy1709/py-googletrans
