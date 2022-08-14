@@ -1,12 +1,13 @@
 import string
 
-from telethon.tl.types import Channel, MessageMediaWebPage
 from telethon.errors.rpcerrorlist import ForbiddenError
+from telethon.tl.types import Channel, MessageMediaWebPage
+
 from userbot import catub
 from userbot.core.logger import logging
 
 from ..Config import Config
-from ..core.managers import edit_or_reply, edit_delete
+from ..core.managers import edit_delete, edit_or_reply
 
 plugin_category = "extra"
 
@@ -82,7 +83,10 @@ async def _(event):
         try:
             return await event.client.send_file(event.chat_id, m.media, caption=m.text)
         except ForbiddenError:
-            return await edit_delete(event,"**Sad ::**  __You are too poor to d this, Get a Premium from Durov.__")
+            return await edit_delete(
+                event,
+                "**Sad ::**  __You are too poor to d this, Get a Premium from Durov.__",
+            )
     await event.client.send_message(event.chat_id, m.text)
 
 
