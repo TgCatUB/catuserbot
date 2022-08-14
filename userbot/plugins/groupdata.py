@@ -61,7 +61,10 @@ async def fetch_info(chat, event):  # sourcery skip: low-code-quality
     chat_title = chat_obj_info.title
     warn_emoji = emojize(":warning:")
     getchat = await event.client(GetFullChannelRequest(channel=chat.full_chat.id))
-    grp_emoji = "".join(getchat.full_chat.available_reactions)
+    try:
+        grp_emoji = "".join(getchat.full_chat.available_reactions)
+    except TypeError:
+        grp_emoji = None
     try:
         msg_info = await event.client(
             GetHistoryRequest(
