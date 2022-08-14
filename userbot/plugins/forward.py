@@ -1,12 +1,12 @@
 import string
 
 from telethon.tl.types import Channel, MessageMediaWebPage
-
+from telethon.errors.rpcerrorlist import ForbiddenError
 from userbot import catub
 from userbot.core.logger import logging
 
 from ..Config import Config
-from ..core.managers import edit_or_reply
+from ..core.managers import edit_or_reply, edit_delete
 
 plugin_category = "extra"
 
@@ -79,7 +79,10 @@ async def _(event):
     if not m:
         return
     if m.media and not isinstance(m.media, MessageMediaWebPage):
-        return await event.client.send_file(event.chat_id, m.media, caption=m.text)
+        try:
+            return await event.client.send_file(event.chat_id, m.media, caption=m.text)
+        except ForbiddenError:
+            return await edit_delete(event,"**Sad ::**  __You are too poor to d this, Get a Premium from Durov.__")
     await event.client.send_message(event.chat_id, m.text)
 
 
