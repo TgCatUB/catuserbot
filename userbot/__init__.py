@@ -27,7 +27,7 @@ catversion = "3.2.0"
 
 
 def close_connection(*_):
-    print("Clossing Userbot connection.")
+    print("Closing Userbot connection.")
     runasync(catub.disconnect())
     sys.exit(143)
 
