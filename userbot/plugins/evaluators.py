@@ -45,7 +45,7 @@ async def _(event):
     )
     if BOTLOG:
         await event.client.send_message(
-            BOTLOG_CHATID, f"Terminal command {cmd} was executed sucessfully."
+            BOTLOG_CHATID, f"Terminal command {cmd} was executed successfully."
         )
 
 
@@ -102,7 +102,7 @@ async def _(event):
     )
     if BOTLOG:
         await event.client.send_message(
-            BOTLOG_CHATID, f"eval command {cmd} was executed sucessfully."
+            BOTLOG_CHATID, f"eval command {cmd} was executed successfully."
         )
 
 
