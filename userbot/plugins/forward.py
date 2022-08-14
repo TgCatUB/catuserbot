@@ -85,7 +85,7 @@ async def _(event):
         except ForbiddenError:
             return await event.client.send_message(
                 event.chat_id,
-                "**Sad ::**  __You are too poor to d this, Get a Premium from Durov.__",
+                "**Sad ::**  __You are too poor to use this, Get a Premium Account from Durov.__",
             )
     await event.client.send_message(event.chat_id, m.text)
 
