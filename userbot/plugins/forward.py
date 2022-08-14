@@ -7,7 +7,7 @@ from userbot import catub
 from userbot.core.logger import logging
 
 from ..Config import Config
-from ..core.managers import edit_delete, edit_or_reply
+from ..core.managers import edit_or_reply
 
 plugin_category = "extra"
 
@@ -83,8 +83,8 @@ async def _(event):
         try:
             return await event.client.send_file(event.chat_id, m.media, caption=m.text)
         except ForbiddenError:
-            return await edit_delete(
-                event,
+            return await event.client.send_message(
+                event.chat_id,
                 "**Sad ::**  __You are too poor to d this, Get a Premium from Durov.__",
             )
     await event.client.send_message(event.chat_id, m.text)
