@@ -33,7 +33,7 @@ pprint "#get this values from the my.telegram.org"
 pprint "\nAPI ID: "; color_reset; read api_id
 pprint "#get this values from the my.telegram.org"
 pprint "\nAPI HASH: "; color_reset; read api_hash
-pprint "#the name to display in your alive message write inside " " "
+pprint "#the name to display in your alive message write inside (" ") "
 pprint "\nALIVE_NAME: "; color_reset; read alive_name
 pprint "# create any PostgreSQL database (i recommend to use elephantsql) and paste"
 pprint "\nDB URI: "; color_reset; read database_url
