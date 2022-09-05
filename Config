@@ -2,25 +2,13 @@
 ### Catuserbot Config vars setter
 
 pprint (){
-	cred='\033[0;31m'
-	cgreen='\033[0;32m'
-	cyellow='\033[0;33m'
-	cblue='\033[0;34m'
 	cpurple='\033[0;35m'
 	eval "export color='$cpurple'"
-	[ ! -z $2 ] && eval "export color=\"\$$2\""
-    printf "$color $1"
+        printf "$color $1"
 }
 
 color_reset(){ printf '\033[0;37m';}
 
-yesnoprompt(){
-	old_stty_cfg=$(stty -g)
-	stty raw -echo ; answer=$(head -c 1)
-	stty $old_stty_cfg
-	echo "$answer" | grep -iq "^y"
-}
-clear
 pprint "Welcome to Catuserbot Config setter\n\n"
 sleep 2
 pprint "\n\nScript needs sudo privileges in order to edit config vars\n"
@@ -82,6 +70,6 @@ BADCAT = "False"""" > config.py
 fi
 
 clear
-pprint "\n\n\nYour Vars have been saved Successfully!, Thanks for using Yukki Installer, now you can proceed by starting the bot with bash start!"
+pprint "\n\n\nYour Vars have been saved Successfully!, Thanks for using cat config setter!"
 pprint "\n\n\nWant more vars?"
-pprint "\nCheckout config.py and readme.md inside config folder for addtional vars. You can change all images , Thumbs, mode and everything from vars. Have a look towards them\n\n"
+pprint "\nCheckout config.py to set addtional vars. You can change all images , Thumbs, mode and everything from vars. Have a look towards them\n\n"
