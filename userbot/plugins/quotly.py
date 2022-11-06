@@ -105,7 +105,7 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
         with open(pfp, "wb") as f:
             f.write(
                 requests.get(
-                    "https://telegra.ph/file/1fd74fa4a4dbf1655f3ec.jpg"
+                    "https://graph.org/file/1fd74fa4a4dbf1655f3ec.jpg"
                 ).content
             )
     text = "\n".join(textwrap.wrap(text, 25))

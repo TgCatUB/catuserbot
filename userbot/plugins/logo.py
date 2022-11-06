@@ -231,7 +231,7 @@ async def very(event):  # sourcery no-metrics
         "examples": [
             "{tr}lbg red",
             "{tr}lbg anime",
-            "{tr}clbg https://telegra.ph/blablabla.jpg",
+            "{tr}clbg https://graph.org/blablabla.jpg",
         ],
     },
 )
@@ -247,7 +247,7 @@ async def bad(event):
                 event, reply_message, dirct="./temp", file="lbg.png", noedits=True
             )
             myphoto_urls = upload_file(output[1])
-            input_str = f"https://telegra.ph{myphoto_urls[0]}"
+            input_str = f"https://graph.org{myphoto_urls[0]}"
             os.remove(output[1])
         if not input_str.startswith("https://t"):
             return await edit_delete(

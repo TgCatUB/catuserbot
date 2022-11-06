@@ -81,7 +81,7 @@ OFFSET = 1
 LIMIT = 70 - OFFSET
 # [----------------------------------------------------------------------]
 # Errors
-no_sp_vars = "Vars `SPOTIFY_CLIENT_ID` & `SPOTIFY_CLIENT_SECRET` are missing, add them first !\n\n[Follow this tutorial](https://telegra.ph/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2)"
+no_sp_vars = "Vars `SPOTIFY_CLIENT_ID` & `SPOTIFY_CLIENT_SECRET` are missing, add them first !\n\n[Follow this tutorial](https://graph.org/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2)"
 
 
 class Database:
@@ -478,7 +478,7 @@ async def sp_var_check(event):
         return False
     if SP_DATABASE is None:
         await event.edit(
-            "ERROR :: No Database was found!\n**Do `.help spsetup` for more info.**\n\n[Follow this tutorial](https://telegra.ph/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2)"
+            "ERROR :: No Database was found!\n**Do `.help spsetup` for more info.**\n\n[Follow this tutorial](https://graph.org/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2)"
         )
         return False
     return True
@@ -529,7 +529,7 @@ async def telegraph_lyrics(event, tittle, artist):
     GENIUS = Config.GENIUS_API_TOKEN
     symbol = "❌"
     if GENIUS is None:
-        result = "<h1>Set GENIUS_API_TOKEN in heroku vars for functioning of this command.<br>‌‌‎ <br>Check out this <a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></h1>"
+        result = "<h1>Set GENIUS_API_TOKEN in heroku vars for functioning of this command.<br>‌‌‎ <br>Check out this <a href = https://graph.org/How-to-get-Genius-API-Token-04-26>Tutorial</a></h1>"
     else:
         try:
             album, content = await LyricsGen.lyrics(
@@ -673,7 +673,7 @@ async def get_spotify(event, response):
         url = upload_file(thumb)
         if os.path.exists(thumb):
             os.remove(thumb)
-    return f"https://telegra.ph{url[0]}", tittle, dic, lyrics, symbol
+    return f"https://graph.org{url[0]}", tittle, dic, lyrics, symbol
 
 
 @catub.cat_cmd(

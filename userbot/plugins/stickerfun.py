@@ -277,7 +277,7 @@ async def quby(event):
         )
     await edit_delete(event, "`Wait, processing.....`")
     temp_name, fontname = file_checker(
-        "https://telegra.ph/file/09f4df5a129758a2e1c9c.jpg"
+        "https://graph.org/file/09f4df5a129758a2e1c9c.jpg"
     )
     lines = 3
     text = soft_deEmojify(text)
@@ -365,7 +365,7 @@ async def knife(event):
         )
     await edit_delete(event, "`Wait, processing.....`")
     temp_name, fontname = file_checker(
-        "https://telegra.ph/file/2188367c8c5f43c36aa59.jpg"
+        "https://graph.org/file/2188367c8c5f43c36aa59.jpg"
     )
     text = soft_deEmojify(text)
     if len(text) < 50:
@@ -423,7 +423,7 @@ async def doge(event):
     await edit_delete(event, "`Wait, processing.....`")
     text = soft_deEmojify(text)
     temp_name, fontname = file_checker(
-        "https://telegra.ph/file/6f621b9782d9c925bd6c4.jpg"
+        "https://graph.org/file/6f621b9782d9c925bd6c4.jpg"
     )
     font, wrap, lines, ls = (
         (90, 1.9, 5, "-75") if len(text) < 140 else (70, 1.3, 6, "-55")
@@ -508,7 +508,7 @@ async def penguin(event):
         )
     await edit_delete(event, "Wait, processing.....")
     temp_name, fontname = file_checker(
-        "https://telegra.ph/file/ee1fc91bbaef2cc808c7c.png"
+        "https://graph.org/file/ee1fc91bbaef2cc808c7c.png"
     )
     text = soft_deEmojify(text)
     font, wrap, lines = (90, 4, 5) if len(text) < 50 else (70, 4.5, 7)
@@ -578,7 +578,7 @@ async def gandhi(event):
         )
     await edit_delete(event, "Wait, processing.....")
     temp_name, fontname = file_checker(
-        "https://telegra.ph/file/3bebc56ee82cce4f300ce.jpg"
+        "https://graph.org/file/3bebc56ee82cce4f300ce.jpg"
     )
     text = soft_deEmojify(text)
     font, wrap, lines = (90, 3, 5) if len(text) < 75 else (70, 2.8, 7)

@@ -123,7 +123,7 @@ async def bad(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
                     photos = await catub.get_profile_photos(catub.uid)
                     myphoto = await catub.download_media(photos[0])
                     myphoto_urls = upload_file(myphoto)
-                    addgvar("DEFAULT_PIC", f"https://telegra.ph{myphoto_urls[0]}")
+                    addgvar("DEFAULT_PIC", f"https://graph.org{myphoto_urls[0]}")
                 except IndexError:
                     if gvarstatus("DEFAULT_PIC"):
                         delgvar("DEFAULT_PIC")
