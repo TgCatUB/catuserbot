@@ -1,3 +1,5 @@
+Chrome fix by KD(@kdinthehouse)
+
 Prerequisites
 
 sudo apt install -y unzip xvfb libxi6 libgconf-2-4
