@@ -1,0 +1,38 @@
+Prerequisites
+
+sudo apt install -y unzip xvfb libxi6 libgconf-2-4
+sudo apt install default-jdk
+
+Install Google Chrome
+
+sudo curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+sudo bash -c "echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google-chrome.list"
+sudo apt -y update
+sudo apt -y install google-chrome-stable
+sudo chmod +x /usr/bin/google-chrome
+
+Installing ChromeDriver
+
+wget https://chromedriver.storage.googleapis.com/104.0.5112.79/chromedriver_linux64.zip
+unzip chromedriver_linux64.zip
+sudo mv chromedriver /usr/bin/chromedriver
+sudo chown root:root /usr/bin/chromedriver
+sudo chmod +x /usr/bin/chromedriver
+
+Download Required Jar Files
+
+wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+mv selenium-server-standalone-3.141.59.jar selenium-server-standalone.jar
+
+Start Chrome via Selenium Server
+
+xvfb-run java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-standalone.jar
+CTRL + C
+
+ConfigVars:
+
+CHROME_BIN = /usr/bin/google-chrome
+CHROME_DRIVER = /usr/bin/chromedriver
+
+
+Note: ChromeDriver uses the same version number scheme as Chrome
