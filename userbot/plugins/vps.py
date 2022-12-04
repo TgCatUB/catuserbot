@@ -41,7 +41,7 @@ async def switch_branch():
         configs = f.read()
     BRANCH = "master"
     REPO = "https://github.com/TgCatUB/catuserbot"
-    BADCAT = EXTERNAL = False
+    BADCAT = VCMODE = EXTERNAL = False
     for match in re.finditer(
         r"(?:(UPSTREAM_REPO|UPSTREAM_REPO_BRANCH|EXTERNAL_REPO|BADCAT)(?:[ = \"\']+(.*[^\"\'\n])))",
         configs,
@@ -140,20 +140,20 @@ async def variable(event):  # sourcery no-metrics
                         cat,
                         f"**There no point in setting `{variable}` with `{value}`\nUse `.del var` to delete instead.**",
                     )
-            value = f"'{value}'"
+            value = f'"{value}"'
         await asyncio.sleep(1)
         for i in configs:
             if variable in i:
                 string += f"    {variable} = {value}\n"
                 match = True
             else:
-                string += f"{i}"
+                string += i
         if match:
             await edit_or_reply(
                 cat, f"`{variable}` **successfully changed to  ->  **`{value}`"
             )
         else:
-            string += f"    {variable} = {value}\n"
+            string += f'    {variable} = {value}\n'
             await edit_or_reply(
                 cat, f"`{variable}`**  successfully added with value  ->  **`{value}`"
             )
@@ -170,7 +170,7 @@ async def variable(event):  # sourcery no-metrics
             if variable in i:
                 match = True
             else:
-                string += f"{i}"
+                string += i
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
