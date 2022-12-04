@@ -153,7 +153,7 @@ async def variable(event):  # sourcery no-metrics
                 cat, f"`{variable}` **successfully changed to  ->  **`{value}`"
             )
         else:
-            string += f'    {variable} = {value}\n'
+            string += f"    {variable} = {value}\n"
             await edit_or_reply(
                 cat, f"`{variable}`**  successfully added with value  ->  **`{value}`"
             )
