@@ -8,9 +8,8 @@ import glob
 import os
 import re
 
-from validators.url import url
-
 from userbot import catub
+from validators.url import url
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _catutils
@@ -27,7 +26,16 @@ var_checker = [
     "PRIVATE_GROUP_BOT_API_ID",
     "PLUGIN_CHANNEL",
 ]
-exts = ["jpg", "png", "webp", "webm", "m4a", "mp4", "mp3", "tgs"]
+
+default = [
+    "./README.md",
+    "./config.py",
+    "./requirements.txt",
+    "./CatTgbot.session",
+    "./sample_config.py",
+    "./stringsetup.py",
+    "./exampleconfig.py",
+]
 
 cmds = [
     "rm -rf downloads",
@@ -43,7 +51,7 @@ async def switch_branch():
     REPO = "https://github.com/TgCatUB/catuserbot"
     BADCAT = VCMODE = EXTERNAL = False
     for match in re.finditer(
-        r"(?:(UPSTREAM_REPO|UPSTREAM_REPO_BRANCH|EXTERNAL_REPO|BADCAT)(?:[ = \"\']+(.*[^\"\'\n])))",
+        r"(?:(UPSTREAM_REPO|UPSTREAM_REPO_BRANCH|EXTERNAL_REPO|BADCAT|VCMODE)(?:[ = \"\']+(.*[^\"\'\n])))",
         configs,
     ):
         BRANCH = match.group(2) if match.group(1) == "UPSTREAM_REPO_BRANCH" else BRANCH
@@ -95,8 +103,7 @@ async def switch_branch():
         ],
     },
 )
-async def variable(event):  # sourcery no-metrics
-    # sourcery skip: low-code-quality
+async def variable(event):
     """
     Manage most of ConfigVars setting, set new var, get current var, or delete var...
     """
@@ -199,15 +206,15 @@ async def variable(event):  # sourcery no-metrics
         ],
     },
 )
-async def _(event):
+async def reload(event):
     "To reload Your bot"
     cmd = event.pattern_match.group(1)
     cat = await edit_or_reply(event, "`Wait 2-3 min, reloading...`")
     if cmd == "clean":
-        for file in exts:
-            removing = glob.glob(f"./*.{file}")
-            for i in removing:
-                os.remove(i)
+        all_files = glob.glob("./*.*")
+        removing = [file for file in all_files if file not in default]
+        for i in removing:
+            os.remove(i)
         for i in cmds:
             await _catutils.runcmd(i)
     await switch_branch()
