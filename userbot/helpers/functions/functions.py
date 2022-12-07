@@ -109,7 +109,7 @@ async def post_to_telegraph(
         author_url=auth_url,
         text=html_format_content,
     )
-    return post_page["url"]
+    return f"https://graph.org/{post_page['path']}"
 
 
 # --------------------------------------------------------------------------------------------------------------------#
