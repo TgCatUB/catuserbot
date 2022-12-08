@@ -45,7 +45,8 @@ THEMES = [
     "sunset",
 ]
 
-MODES = ["mode-day","mode-night"]
+MODES = ["mode-day", "mode-night"]
+
 
 def get_key(val):
     for key, value in pastebins.items():
@@ -113,7 +114,7 @@ async def rayso_by_pro_odi(event):  # By @feelded
         query = checker[1] if len(checker) > 1 else None
 
     # Add Mode
-    if checker and checker[0].lower() in MODES :
+    if checker and checker[0].lower() in MODES:
         addgvar("RAYSO_MODES", checker[0].lower())
         if checker[0] == query and not rquery:
             return await edit_delete(event, f"`Theme Mode changed to {query.title()}.`")
@@ -156,7 +157,7 @@ async def rayso_by_pro_odi(event):  # By @feelded
         await edit_or_reply(event, f"**⏳ Pasting on image : {i}/{len(text_list)} **")
         r = requests.post(
             "https://rayso-cat.herokuapp.com/api",
-            json = {
+            json={
                 "code": str(text),
                 "title": (await catub.get_me()).first_name,
                 "theme": theme,
