@@ -142,7 +142,7 @@ async def rayso_by_pro_odi(event):  # By @feelded
     for i, text in enumerate(text_list, start=1):
         await edit_or_reply(event, f"**⏳ Pasting on image : {i}/{len(text_list)} **")
         r = requests.post(
-            "https://raysoapi.herokuapp.com/generate",
+            "https://ray-so.herokuapp.com/generate",
             data={
                 "text": text,
                 "title": (await catub.get_me()).first_name,
