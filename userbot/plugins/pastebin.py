@@ -45,6 +45,7 @@ THEMES = [
     "sunset",
 ]
 
+MODES = ["mode-day","mode-night"]
 
 def get_key(val):
     for key, value in pastebins.items():
@@ -76,7 +77,8 @@ def text_chunk_list(query, bits=29900):
     command=("rayso", plugin_category),
     info={
         "header": "Create beautiful images of your code",
-        "notes": "Available Themes: | `breeze` | `candy` | `crimson` | `falcon` | `meadow` | `midnight` | `raindrop` | `random` | `sunset` |",
+        "Themes": "`breeze` | `candy` | `crimson` | `falcon` | `meadow` | `midnight` | `raindrop` | `random` | `sunset` |",
+        "Modes": "`Mode-Day` | `Mode-Night` |",
         "examples": [
             "{tr}rayso -l",
             "{tr}rayso breeze",
@@ -84,7 +86,7 @@ def text_chunk_list(query, bits=29900):
             "{tr}rayso <reply>",
         ],
         "usage": [
-            "{tr}rayso -l (get list of themes)",
+            "{tr}rayso -l (get list of themes & modes)",
             "{tr}rayso <theme> (change the theme)",
             "{tr}rayso <text/reply> (generate)",
             "{tr}rayso <theme> <text/reply>(generate with the theme)",
@@ -110,9 +112,16 @@ async def rayso_by_pro_odi(event):  # By @feelded
             return await edit_delete(event, f"`Theme changed to {query.title()}.`")
         query = checker[1] if len(checker) > 1 else None
 
+    # Add Mode
+    if checker and checker[0].lower() in MODES :
+        addgvar("RAYSO_MODES", checker[0].lower())
+        if checker[0] == query and not rquery:
+            return await edit_delete(event, f"`Theme Mode changed to {query.title()}.`")
+        query = checker[1] if len(checker) > 1 else None
+
     # Themes List
     if query == "-l":
-        ALLTHEME = "**🎈 Total Themes:**\n\n**1.**  `Random`"
+        ALLTHEME = "**🎈Modes:**\n**1.**  `Mode-Day`\n**2.**  `Mode-Night`\n\n**🎈Themes:**\n**1.**  `Random`"
         for i, each in enumerate(THEMES, start=2):
             ALLTHEME += f"\n**{i}.**  `{each.title()}`"
         return await edit_delete(event, ALLTHEME, 60)
@@ -121,6 +130,10 @@ async def rayso_by_pro_odi(event):  # By @feelded
     theme = gvarstatus("RAYSO_THEME") or "random"
     if theme == "random":
         theme = random.choice(THEMES)
+
+    # Get Mode
+    mode = gvarstatus("RAYSO_MODES") or "mode-night"
+    darkMode = True if mode == "mode-night" else False
 
     if query:
         text = query
@@ -142,13 +155,13 @@ async def rayso_by_pro_odi(event):  # By @feelded
     for i, text in enumerate(text_list, start=1):
         await edit_or_reply(event, f"**⏳ Pasting on image : {i}/{len(text_list)} **")
         r = requests.post(
-            "https://ray-so.herokuapp.com/generate",
-            data={
-                "text": text,
+            "https://rayso-cat.herokuapp.com/api",
+            json = {
+                "code": str(text),
                 "title": (await catub.get_me()).first_name,
                 "theme": theme,
-                "darkMode": "true",
                 "language": "python",
+                "darkMode": darkMode,
             },
         )
         name = f"rayso{i}.png"
