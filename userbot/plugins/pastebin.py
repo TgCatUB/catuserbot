@@ -11,13 +11,13 @@ from telethon.utils import get_extension
 from urlextract import URLExtract
 
 from userbot import catub
-
+from ..core.managers import edit_delete, edit_or_reply
 from ..Config import Config
 from ..core.events import MessageEdited
 from ..core.logger import logging
-from ..core.managers import edit_delete, edit_or_reply
+
 from ..helpers.tools import media_type
-from ..helpers.utils import pastetext, reply_id
+from ..helpers.utils import pastetext, reply_id, headers
 from ..sql_helper.globals import addgvar, gvarstatus
 from . import hmention
 
@@ -164,6 +164,7 @@ async def rayso_by_pro_odi(event):  # By @feelded
                 "language": "python",
                 "darkMode": darkMode,
             },
+            headers = headers,
         )
         name = f"rayso{i}.png"
         with open(name, "wb") as f:
