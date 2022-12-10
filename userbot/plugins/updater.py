@@ -47,7 +47,6 @@ IS_SELECTED_DIFFERENT_BRANCH = (
     "please check out to an official branch, and re-start the updater."
 )
 
-
 # -- Constants End -- #
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
