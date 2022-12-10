@@ -79,7 +79,7 @@ async def imdb_query(event):  # sourcery no-metrics
     reply_to = await reply_id(event)
     try:
         movie_name = event.pattern_match.group(1)
-        movies = imdb.search_movie(movie_name)
+        movies = imdb.search_movie_advanced(movie_name)
         movieid = movies[0].movieID
         movie = imdb.get_movie(movieid)
         moviekeys = list(movie.keys())

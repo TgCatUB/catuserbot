@@ -327,7 +327,8 @@ async def insta_dl(event):
             event, "` I need a Instagram link to download it's Video...`(*_*)", 10
         )
     # v1 = "@instasave_bot"
-    v1 = "@IgGramBot"
+    # v1 = "@IgGramBot"
+    v1 = "Fullsavebot"
     v2 = "@videomaniacbot"
     media_list = []
     catevent = await edit_or_reply(event, "**Downloading.....**")
@@ -335,10 +336,15 @@ async def insta_dl(event):
         try:
             v1_flag = await conv.send_message("/start")
         except YouBlockedUserError:
-            await catub(unblock("IgGramBot"))
+            await catub(unblock("Fullsavebot"))
             v1_flag = await conv.send_message("/start")
-        await conv.get_response()
+        checker = await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)
+        if "Choose the language you like" in checker.message:
+            await checker.click(1)
+            await conv.send_message(link)
+            await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
         await conv.send_message(link)
         await conv.get_response()
         await event.client.send_read_acknowledge(conv.chat_id)

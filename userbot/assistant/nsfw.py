@@ -31,7 +31,7 @@ async def age_verification_true(event: CallbackQuery):
     with contextlib.suppress(MessageNotModifiedError):
         await event.edit(
             text="To access this plugin type `.setdv ALLOW_NSFW True`",
-            file="https://telegra.ph/file/85f3071c31279bcc280ef.jpg",
+            file="https://graph.org/file/85f3071c31279bcc280ef.jpg",
             buttons=buttons,
         )
 
@@ -54,7 +54,7 @@ async def age_verification_false(event: CallbackQuery):
     with contextlib.suppress(MessageNotModifiedError):
         await event.edit(
             text="GO AWAY KID !",
-            file="https://telegra.ph/file/1140f16a883d35224e6a1.jpg",
+            file="https://graph.org/file/1140f16a883d35224e6a1.jpg",
             buttons=buttons,
         )
 
@@ -77,6 +77,6 @@ async def chg_of_decision_(event: CallbackQuery):
     with contextlib.suppress(MessageNotModifiedError):
         await event.edit(
             text="**ARE YOU OLD ENOUGH FOR THIS ?**",
-            file="https://telegra.ph/file/238f2c55930640e0e8c56.jpg",
+            file="https://graph.org/file/238f2c55930640e0e8c56.jpg",
             buttons=buttons,
         )

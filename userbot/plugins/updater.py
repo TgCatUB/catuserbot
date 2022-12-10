@@ -47,7 +47,6 @@ IS_SELECTED_DIFFERENT_BRANCH = (
     "please check out to an official branch, and re-start the updater."
 )
 
-
 # -- Constants End -- #
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -111,6 +110,10 @@ async def update_bot(event, repo, ups_rem, ac_br):
     sandy = await event.edit(
         "`Successfully Updated!\n" "Bot is restarting... Wait for a minute!`"
     )
+    if os.path.exists("config.py"):
+        from userbot.plugins.vps import switch_branch
+
+        await switch_branch()
     await event.client.reload(sandy)
 
 

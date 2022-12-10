@@ -52,9 +52,7 @@ msgfiltername = {
 }
 
 
-async def fetch_info(chat, event):  # sourcery no-metrics
-    # sourcery skip: low-code-quality
-    # chat.chats is a list so we use get_entity() to avoid IndexError
+async def fetch_info(chat, event):  # sourcery skip: low-code-quality
     chat_obj_info = await event.client.get_entity(chat.full_chat.id)
     broadcast = (
         chat_obj_info.broadcast if hasattr(chat_obj_info, "broadcast") else False
@@ -63,7 +61,10 @@ async def fetch_info(chat, event):  # sourcery no-metrics
     chat_title = chat_obj_info.title
     warn_emoji = emojize(":warning:")
     getchat = await event.client(GetFullChannelRequest(channel=chat.full_chat.id))
-    grp_emoji = "".join(getchat.full_chat.available_reactions)
+    try:
+        grp_emoji = "".join(getchat.full_chat.available_reactions)
+    except TypeError:
+        grp_emoji = None
     try:
         msg_info = await event.client(
             GetHistoryRequest(
@@ -80,12 +81,9 @@ async def fetch_info(chat, event):  # sourcery no-metrics
     except Exception as e:
         msg_info = None
         LOGS.error(f"Exception: {e}")
-    # No chance for IndexError as it checks for msg_info.messages first
     first_msg_valid = bool(
         msg_info and msg_info.messages and msg_info.messages[0].id == 1
     )
-
-    # Same for msg_info.users
     creator_valid = bool(first_msg_valid and msg_info.users)
     creator_id = msg_info.users[0].id if creator_valid else None
     creator_firstname = (
@@ -110,78 +108,86 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         dc_id, location = get_input_location(chat.full_chat.chat_photo)
     except Exception:
         dc_id = "Unknown"
-
-    # this is some spaghetti I need to change
     description = chat.full_chat.about
     members = (
         chat.full_chat.participants_count
         if hasattr(chat.full_chat, "participants_count")
         else chat_obj_info.participants_count
     )
+
     admins = (
         chat.full_chat.admins_count if hasattr(chat.full_chat, "admins_count") else None
     )
+
     banned_users = (
         chat.full_chat.kicked_count if hasattr(chat.full_chat, "kicked_count") else None
     )
+
     restrcited_users = (
         chat.full_chat.banned_count if hasattr(chat.full_chat, "banned_count") else None
     )
+
     members_online = (
         chat.full_chat.online_count if hasattr(chat.full_chat, "online_count") else 0
     )
+
     group_stickers = (
         chat.full_chat.stickerset.title
         if hasattr(chat.full_chat, "stickerset") and chat.full_chat.stickerset
         else None
     )
+
     messages_viewable = msg_info.count if msg_info else None
     messages_sent = (
         chat.full_chat.read_inbox_max_id
         if hasattr(chat.full_chat, "read_inbox_max_id")
         else None
     )
+
     messages_sent_alt = (
         chat.full_chat.read_outbox_max_id
         if hasattr(chat.full_chat, "read_outbox_max_id")
         else None
     )
+
     exp_count = chat.full_chat.pts if hasattr(chat.full_chat, "pts") else None
     username = chat_obj_info.username if hasattr(chat_obj_info, "username") else None
-    bots_list = chat.full_chat.bot_info  # this is a list
+
+    bots_list = chat.full_chat.bot_info
     bots = 0
     supergroup = (
         "<b>Yes</b>"
         if hasattr(chat_obj_info, "megagroup") and chat_obj_info.megagroup
         else "No"
     )
+
     slowmode = (
         "<b>Yes</b>"
         if hasattr(chat_obj_info, "slowmode_enabled") and chat_obj_info.slowmode_enabled
         else "No"
     )
+
     slowmode_time = (
         chat.full_chat.slowmode_seconds
         if hasattr(chat_obj_info, "slowmode_enabled") and chat_obj_info.slowmode_enabled
         else None
     )
+
     restricted = (
         "<b>Yes</b>"
         if hasattr(chat_obj_info, "restricted") and chat_obj_info.restricted
         else "No"
     )
+
     verified = (
         "<b>Yes</b>"
         if hasattr(chat_obj_info, "verified") and chat_obj_info.verified
         else "No"
     )
+
     username = f"@{username}" if username else None
     creator_username = f"@{creator_username}" if creator_username else None
-    # end of spaghetti block
-
     if admins is None:
-        # use this alternative way if chat.full_chat.admins_count is None,
-        # works even without being an admin
         try:
             participants_admins = await event.client(
                 GetParticipantsRequest(
@@ -192,18 +198,18 @@ async def fetch_info(chat, event):  # sourcery no-metrics
                     hash=0,
                 )
             )
+
             admins = participants_admins.count if participants_admins else None
         except Exception as e:
             LOGS.error(f"Exception:{e}")
     if bots_list:
         for _ in bots_list:
             bots += 1
-
     caption = f"<b><u>{chat_type.capitalize()} INFO: </u></b>\n"
     caption += f"🆔 <b>ID: </b><code>{chat_obj_info.id}</code>\n"
     if chat_title is not None:
         caption += f"🔖 <b>{chat_type} name: </b><code>{chat_title}</code>\n"
-    if former_title is not None:  # Meant is the very first title
+    if former_title is not None:
         caption += f"📜 <b>Former name: </b><code>{former_title}</code>\n"
     if username is not None:
         caption += f"🧭 <b>{chat_type} type: </b><code>Public</code>\n"
@@ -214,10 +220,13 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         caption += f"🔗 <b>Creator: {creator_username}\n"
     elif creator_valid:
         caption += f'🔗 <b>Creator: </b><a href="tg://user?id={creator_id}">{creator_firstname}</a>\n'
+
     if created is not None:
         caption += f"🗓️ <b>Created: </b><code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
+
     else:
         caption += f"🗓️ <b>Created: </b><code>{chat_obj_info.date.date().strftime('%b %d, %Y')} - {chat_obj_info.date.time()}</code> {warn_emoji}\n"
+
     caption += f"📡 <b>Data Centre ID: </b><code>{dc_id}</code>\n"
     if exp_count is not None:
         chat_level = int((1 + sqrt(1 + 7 * exp_count / 14)) / 2)
@@ -230,6 +239,7 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         caption += (
             f"📥 <b>Messages sent: </b><code>{messages_sent_alt}</code> {warn_emoji}\n"
         )
+
     if members is not None:
         caption += f"👨‍👩‍👧‍👦 <b>Members: </b><code>{members}</code>\n"
     if admins is not None:
@@ -244,6 +254,7 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         caption += f"🚫 <b>Banned users: </b><code>{banned_users}</code>\n"
     if group_stickers is not None:
         caption += f'❤️ <b>{chat_type} stickers: </b><a href="t.me/addstickers/{chat.full_chat.stickerset.short_name}">{group_stickers}</a>\n'
+
     if not broadcast:
         caption += f"🐌 <b>Slow mode: </b><code>{slowmode}</code>"
         if (
@@ -258,8 +269,11 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         caption += f"🚫 <b>Restricted: </b><code>{restricted}</code>\n"
         if chat_obj_info.restricted:
             caption += f"<b>● Platform: </b><code>{chat_obj_info.restriction_reason[0].platform}</code>\n"
+
             caption += f"<b>● Reason: </b><code>{chat_obj_info.restriction_reason[0].reason}</code>\n"
+
             caption += f"<b>● Text: </b><code>{chat_obj_info.restriction_reason[0].text}</code>\n"
+
     if hasattr(chat_obj_info, "scam") and chat_obj_info.scam:
         caption += "💀 <b>Scam: </b><code>Yes</code>\n"
     if hasattr(chat_obj_info, "verified"):
@@ -270,9 +284,8 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         caption += "    <b>-</b> "
         caption += "\n    <b>-</b> ".join(reactionslist)
     else:
-        caption += (
-            f"🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>"
-        )
+        caption += "🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>"
+
     if description:
         caption += f"\n💬 <b>Description: </b>\n<code>{description}</code>\n"
     return caption
@@ -450,6 +463,7 @@ async def info(event):
     info={
         "header": "To get stats of the group.",
         "description": "Will show you the list of users who are more active in last required number of messages.",
+        "note": "the missing number in the result means that number must be deleted account or telegram bot.",
         "flags": {
             "-q": "To give limit for number of latest messages. by default it is 3000",
             "-l": "To give limit for number of users. by default it is 10",
@@ -461,6 +475,7 @@ async def info(event):
             "-f": "To select only Documents(files)",
             "-t": "To select only text messages",
             "-m": "To select only media files(Photos+Videos)",
+            "-b": "To show bots also in the result."
             # TODO: "-t": "To filter only messages which mentioned you",
         },
         "usage": [
@@ -515,17 +530,18 @@ async def grp_stat(event):  # sourcery skip: low-code-quality
             "**Error**:\n__grpstats command doesn't work on channel, try on group.__"
         )
         return None
-    if flag and flag not in msgfilter:
+    if flag and (flag not in msgfilter and flag != "b"):
         await catevent.edit(
-            "**Error**:\n__Given flag {flag} is invalid please check flags mention in help.__"
+            f"**Error**:\n__Given flag {flag} is invalid please check flags mention in help.__"
         )
+        return None
     async for msg in event.client.iter_messages(chatinfo.full_chat.id, limit=quantity):
         user = getattr(msg, "sender_id", False)
         if not user:
             continue
         if user not in temp:
             temp[user] = 0
-        if not flag:
+        if not flag or flag == "b":
             temp[user] += 1
         else:
             mediatype = await media_type(msg)
@@ -541,7 +557,12 @@ async def grp_stat(event):  # sourcery skip: low-code-quality
             if count == 0:
                 break
             userdetails = await event.client.get_entity(userid)
-            if not userdetails.deleted:
+            if not userdetails.deleted and (
+                (not flag or flag != "b")
+                and not userdetails.bot
+                or flag
+                and flag == "b"
+            ):
                 tempstring += f"{check}.) {format.htmlmentionuser(userdetails.first_name, userdetails.id)}: {count}\n"
         except (AttributeError, TypeError):
             continue
@@ -552,7 +573,7 @@ async def grp_stat(event):  # sourcery skip: low-code-quality
         f"<b>The top {check-1} active users of the previous {quantity} messages Who sent {msgfiltername[flag]} in group {grpcheck.title} are:</b>\
         \n\n{tempstring}\
         \n<b>Total {msgfiltername[flag]} type messages sent in last  {quantity} messages are {finalquantity}.</b>"
-        if flag
+        if flag and flag != "b"
         else f"<b>The top {check-1} active users of the previous {finalquantity} messages in group {grpcheck.title} are:</b>\n\n{tempstring}"
     )
     await catevent.edit(string, parse_mode="html")

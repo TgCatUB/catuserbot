@@ -17,7 +17,7 @@ from ..core.events import MessageEdited
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.tools import media_type
-from ..helpers.utils import pastetext, reply_id
+from ..helpers.utils import headers, pastetext, reply_id
 from ..sql_helper.globals import addgvar, gvarstatus
 from . import hmention
 
@@ -44,6 +44,8 @@ THEMES = [
     "raindrop",
     "sunset",
 ]
+
+MODES = ["mode-day", "mode-night"]
 
 
 def get_key(val):
@@ -76,7 +78,8 @@ def text_chunk_list(query, bits=29900):
     command=("rayso", plugin_category),
     info={
         "header": "Create beautiful images of your code",
-        "notes": "Available Themes: | `breeze` | `candy` | `crimson` | `falcon` | `meadow` | `midnight` | `raindrop` | `random` | `sunset` |",
+        "Themes": "`breeze` | `candy` | `crimson` | `falcon` | `meadow` | `midnight` | `raindrop` | `random` | `sunset` |",
+        "Modes": "`Mode-Day` | `Mode-Night` |",
         "examples": [
             "{tr}rayso -l",
             "{tr}rayso breeze",
@@ -84,7 +87,7 @@ def text_chunk_list(query, bits=29900):
             "{tr}rayso <reply>",
         ],
         "usage": [
-            "{tr}rayso -l (get list of themes)",
+            "{tr}rayso -l (get list of themes & modes)",
             "{tr}rayso <theme> (change the theme)",
             "{tr}rayso <text/reply> (generate)",
             "{tr}rayso <theme> <text/reply>(generate with the theme)",
@@ -99,7 +102,7 @@ async def rayso_by_pro_odi(event):  # By @feelded
     reply_to_id = await reply_id(event)
     query = event.pattern_match.group(1)
     rquery = await event.get_reply_message()
-    await edit_or_reply(event, "**⏳ Processing ...**")
+    catevent = await edit_or_reply(event, "**⏳ Processing ...**")
     if query:
         checker = query.split(maxsplit=1)
 
@@ -107,20 +110,33 @@ async def rayso_by_pro_odi(event):  # By @feelded
     if checker and (checker[0].lower() in THEMES or checker[0].lower() == "random"):
         addgvar("RAYSO_THEME", checker[0].lower())
         if checker[0] == query and not rquery:
-            return await edit_delete(event, f"`Theme changed to {query.title()}.`")
+            return await edit_delete(catevent, f"`Theme changed to {query.title()}.`")
+        query = checker[1] if len(checker) > 1 else None
+
+    # Add Mode
+    if checker and checker[0].lower() in MODES:
+        addgvar("RAYSO_MODES", checker[0].lower())
+        if checker[0] == query and not rquery:
+            return await edit_delete(
+                catevent, f"`Theme Mode changed to {query.title()}.`"
+            )
         query = checker[1] if len(checker) > 1 else None
 
     # Themes List
     if query == "-l":
-        ALLTHEME = "**🎈 Total Themes:**\n\n**1.**  `Random`"
+        ALLTHEME = "**🎈Modes:**\n**1.**  `Mode-Day`\n**2.**  `Mode-Night`\n\n**🎈Themes:**\n**1.**  `Random`"
         for i, each in enumerate(THEMES, start=2):
             ALLTHEME += f"\n**{i}.**  `{each.title()}`"
-        return await edit_delete(event, ALLTHEME, 60)
+        return await edit_delete(catevent, ALLTHEME, 60)
 
     # Get Theme
     theme = gvarstatus("RAYSO_THEME") or "random"
     if theme == "random":
         theme = random.choice(THEMES)
+
+    # Get Mode
+    mode = gvarstatus("RAYSO_MODES") or "mode-night"
+    darkMode = True if mode == "mode-night" else False
 
     if query:
         text = query
@@ -133,30 +149,31 @@ async def rayso_by_pro_odi(event):  # By @feelded
         elif rquery.text:
             text = rquery.raw_text
         else:
-            return await edit_delete(event, "`Unsupported.`")
+            return await edit_delete(catevent, "`Unsupported.`")
     else:
-        return await edit_delete(event, "`What should I do?`")
+        return await edit_delete(catevent, "`What should I do?`")
 
     # // Max size 30000 byte but that breaks thumb so making on 28000 byte
     text_list = text_chunk_list(text, 28000)
     for i, text in enumerate(text_list, start=1):
-        await edit_or_reply(event, f"**⏳ Pasting on image : {i}/{len(text_list)} **")
+        await edit_or_reply(catevent, f"**⏳ Pasting on image : {i}/{len(text_list)} **")
         r = requests.post(
-            "https://raysoapi.herokuapp.com/generate",
-            data={
-                "text": text,
+            "https://rayso-cat.herokuapp.com/api",
+            json={
+                "code": str(text),
                 "title": (await catub.get_me()).first_name,
                 "theme": theme,
-                "darkMode": "true",
                 "language": "python",
+                "darkMode": darkMode,
             },
+            headers=headers,
         )
         name = f"rayso{i}.png"
         with open(name, "wb") as f:
             f.write(r.content)
         files.append(name)
         captions.append("")
-    await edit_or_reply(event, f"**📎 Uploading... **")
+    await edit_or_reply(catevent, f"**📎 Uploading... **")
     captions[-1] = f"<i>➥ Generated by : <b>{hmention}</b></i>"
     await catub.send_file(
         event.chat_id,
@@ -166,7 +183,7 @@ async def rayso_by_pro_odi(event):  # By @feelded
         caption=captions,
         parse_mode="html",
     )
-    await event.delete()
+    await catevent.delete()
     for name in files:
         os.remove(name)
 

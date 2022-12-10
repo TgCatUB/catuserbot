@@ -134,7 +134,7 @@ async def user(event):
     except APIException:
         return await edit_delete(event, "__No User found with given username__", 5)
     date_format = "%Y-%m-%d"
-    img = user["image_url"] or "https://telegra.ph//file/9b4205e1b1cc68a4ffd5e.jpg"
+    img = user["image_url"] or "https://graph.org/file/9b4205e1b1cc68a4ffd5e.jpg"
     try:
         user_birthday = datetime.fromisoformat(user["birthday"])
         user_birthday_formatted = user_birthday.strftime(date_format)
@@ -805,7 +805,7 @@ async def whatanime(event):
             response = upload_file(output[1])
         except exceptions.TelegraphException as exc:
             return await edit_delete(output[0], f"**Error :**\n__{exc}__")
-    cat = f"https://telegra.ph{response[0]}"
+    cat = f"https://graph.org{response[0]}"
     await output[0].edit("`Searching for result..`")
     async with aiohttp.ClientSession() as session:
         async with session.post(

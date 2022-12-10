@@ -13,10 +13,10 @@ from telethon import functions, types
 from ..utils.extdl import install_pip
 
 try:
-    from imdb import IMDb
+    from imdb import Cinemagoer
 except ModuleNotFoundError:
-    install_pip("IMDbPY")
-    from imdb import IMDb
+    install_pip("cinemagoer")
+    from imdb import Cinemagoer
 
 from html_telegraph_poster import TelegraphPoster
 from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps
@@ -29,7 +29,7 @@ from ...sql_helper.globals import gvarstatus
 from ..resources.states import states
 
 LOGS = logging.getLogger(__name__)
-imdb = IMDb()
+imdb = Cinemagoer()
 
 mov_titles = [
     "long imdb title",
@@ -109,7 +109,7 @@ async def post_to_telegraph(
         author_url=auth_url,
         text=html_format_content,
     )
-    return post_page["url"]
+    return f"https://graph.org/{post_page['path']}"
 
 
 # --------------------------------------------------------------------------------------------------------------------#

@@ -44,7 +44,7 @@ async def lyrics(event):  # sourcery no-metrics
     if GENIUS is None:
         return await edit_or_reply(
             event,
-            "<i>Set <code>GENIUS_API_TOKEN</code> in heroku vars for functioning of this command.\n\nCheck out this <b><a href = https://telegra.ph/How-to-get-Genius-API-Token-04-26>Tutorial</a></b></i>",
+            "<i>Set <code>GENIUS_API_TOKEN</code> in heroku vars for functioning of this command.\n\nCheck out this <b><a href = https://graph.org/How-to-get-Genius-API-Token-04-26>Tutorial</a></b></i>",
             parse_mode="html",
         )
     match = event.pattern_match.group(1)

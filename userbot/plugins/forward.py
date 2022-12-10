@@ -1,5 +1,6 @@
 import string
 
+from telethon.errors.rpcerrorlist import ForbiddenError
 from telethon.tl.types import Channel, MessageMediaWebPage
 
 from userbot import catub
@@ -79,7 +80,13 @@ async def _(event):
     if not m:
         return
     if m.media and not isinstance(m.media, MessageMediaWebPage):
-        return await event.client.send_file(event.chat_id, m.media, caption=m.text)
+        try:
+            return await event.client.send_file(event.chat_id, m.media, caption=m.text)
+        except ForbiddenError:
+            return await event.client.send_message(
+                event.chat_id,
+                "**Sad ::**  __You are too poor to use this, Get a Premium Account from Durov.__",
+            )
     await event.client.send_message(event.chat_id, m.text)
 
 

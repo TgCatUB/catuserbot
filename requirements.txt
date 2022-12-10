@@ -1,4 +1,5 @@
 aiohttp
+cinemagoer
 cloudscraper
 colour
 cowpy
@@ -16,7 +17,6 @@ heroku3
 html-telegraph-poster
 httpx[http2]
 humanize
-IMDbPY
 jikanpy
 justwatch
 lottie
@@ -38,7 +38,6 @@ python-barcode
 pytz
 qrcode
 requests
-search-engine-parser
 selenium
 setuptools
 ShazamAPI
@@ -46,7 +45,7 @@ spamwatch
 speedtest-cli
 sqlalchemy-json
 sqlalchemy==1.3.23
-telegraph
+telegraph==2.1.0
 tgcrypto
 ujson
 urlextract
@@ -56,7 +55,8 @@ wand
 wget
 yt_dlp
 
-git+https://github.com/sandy1709/Telethon@beta
+git+https://github.com/Jisan09/search-engine-parser
+git+https://github.com/Jisan09/Telethon@beta
 git+https://github.com/goldsmith/Wikipedia
 git+https://github.com/sandy1709/py-googletrans
 git+https://github.com/alexmercerind/youtube-search-python

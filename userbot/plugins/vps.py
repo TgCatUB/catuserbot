@@ -27,7 +27,16 @@ var_checker = [
     "PRIVATE_GROUP_BOT_API_ID",
     "PLUGIN_CHANNEL",
 ]
-exts = ["jpg", "png", "webp", "webm", "m4a", "mp4", "mp3", "tgs"]
+
+default = [
+    "./README.md",
+    "./config.py",
+    "./requirements.txt",
+    "./CatTgbot.session",
+    "./sample_config.py",
+    "./stringsetup.py",
+    "./exampleconfig.py",
+]
 
 cmds = [
     "rm -rf downloads",
@@ -41,19 +50,12 @@ async def switch_branch():
         configs = f.read()
     BRANCH = "master"
     REPO = "https://github.com/TgCatUB/catuserbot"
-    BADCAT = EXTERNAL = False
     for match in re.finditer(
-        r"(?:(UPSTREAM_REPO|UPSTREAM_REPO_BRANCH|EXTERNAL_REPO|BADCAT)(?:[ = \"\']+(.*[^\"\'\n])))",
+        r"(?:(UPSTREAM_REPO|UPSTREAM_REPO_BRANCH)(?:[ = \"\']+(.*[^\"\'\n])))",
         configs,
     ):
         BRANCH = match.group(2) if match.group(1) == "UPSTREAM_REPO_BRANCH" else BRANCH
         REPO = match.group(2) if match.group(1) == "UPSTREAM_REPO" else REPO
-        EXTERNAL = match.group(2) if match.group(1) == "EXTERNAL_REPO" else EXTERNAL
-        BADCAT = (
-            True
-            if match.group(1) == "BADCAT" and match.group(2).lower() != "false"
-            else BADCAT
-        )
     if REPO:
         await _catutils.runcmd(f"git clone -b {BRANCH} {REPO} TempCat")
         file_list = os.listdir("TempCat")
@@ -62,10 +64,12 @@ async def switch_branch():
             await _catutils.runcmd(f"mv ./TempCat/{file} ./")
         await _catutils.runcmd("pip3 install --no-cache-dir -r requirements.txt")
         await _catutils.runcmd("rm -rf TempCat")
-    if not BADCAT and os.path.exists("badcatext"):
+    if os.path.exists("badcatext"):
         await _catutils.runcmd("rm -rf badcatext")
-    if not EXTERNAL and os.path.exists("xtraplugins"):
+    if os.path.exists("xtraplugins"):
         await _catutils.runcmd("rm -rf xtraplugins")
+    if os.path.exists("catvc"):
+        await _catutils.runcmd("rm -rf catvc")
 
 
 @catub.cat_cmd(
@@ -88,8 +92,7 @@ async def switch_branch():
         ],
     },
 )
-async def variable(event):  # sourcery no-metrics
-    # sourcery skip: low-code-quality
+async def variable(event):
     """
     Manage most of ConfigVars setting, set new var, get current var, or delete var...
     """
@@ -133,14 +136,14 @@ async def variable(event):  # sourcery no-metrics
                         cat,
                         f"**There no point in setting `{variable}` with `{value}`\nUse `.del var` to delete instead.**",
                     )
-            value = f"'{value}'"
+            value = f'"{value}"'
         await asyncio.sleep(1)
         for i in configs:
             if variable in i:
                 string += f"    {variable} = {value}\n"
                 match = True
             else:
-                string += f"{i}"
+                string += i
         if match:
             await edit_or_reply(
                 cat, f"`{variable}` **successfully changed to  ->  **`{value}`"
@@ -163,7 +166,7 @@ async def variable(event):  # sourcery no-metrics
             if variable in i:
                 match = True
             else:
-                string += f"{i}"
+                string += i
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
@@ -192,15 +195,15 @@ async def variable(event):  # sourcery no-metrics
         ],
     },
 )
-async def _(event):
+async def reload(event):
     "To reload Your bot"
     cmd = event.pattern_match.group(1)
     cat = await edit_or_reply(event, "`Wait 2-3 min, reloading...`")
     if cmd == "clean":
-        for file in exts:
-            removing = glob.glob(f"./*.{file}")
-            for i in removing:
-                os.remove(i)
+        all_files = glob.glob("./*.*")
+        removing = [file for file in all_files if file not in default]
+        for i in removing:
+            os.remove(i)
         for i in cmds:
             await _catutils.runcmd(i)
     await switch_branch()

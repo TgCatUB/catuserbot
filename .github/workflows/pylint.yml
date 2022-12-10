@@ -30,6 +30,6 @@ jobs:
           commit_message: 'pylint: auto fixes'
           commit_options: '--no-verify'
           repository: .
-          commit_user_name: sandy1709
-          commit_user_email: 58665444+sandy1709@users.noreply.github.com
-          commit_author: sandy1709 <58665444+sandy1709@users.noreply.github.com>
+          commit_user_name: TgCat
+          commit_user_email: 99109058+TgCat@users.noreply.github.com
+          commit_author: TgCat <99109058+TgCat@users.noreply.github.com>

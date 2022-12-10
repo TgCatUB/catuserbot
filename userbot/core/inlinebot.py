@@ -179,7 +179,7 @@ async def article_builder(event, method):
                 buttons = [
                     Button.url(
                         "Tutorial",
-                        "https://telegra.ph/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2",
+                        "https://graph.org/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2",
                     )
                 ]
             else:

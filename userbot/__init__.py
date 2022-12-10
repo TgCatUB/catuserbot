@@ -12,7 +12,7 @@ from .helpers.functions.musictool import *
 from .helpers.utils.utils import runasync
 from .sql_helper.globals import addgvar, delgvar, gvarstatus
 
-__version__ = "3.2.0"
+__version__ = "3.2.1"
 __license__ = "GNU Affero General Public License v3.0"
 __author__ = "CatUserBot <https://github.com/TgCatUB/catuserbot>"
 __copyright__ = f"CatUserBot Copyright (C) 2020 - 2021  {__author__}"
@@ -23,11 +23,11 @@ LOGS = logging.getLogger("CatUserbot")
 bot = catub
 
 StartTime = time.time()
-catversion = "3.2.0"
+catversion = "3.2.1"
 
 
 def close_connection(*_):
-    print("Clossing Userbot connection.")
+    print("Closing Userbot connection.")
     runasync(catub.disconnect())
     sys.exit(143)
 
