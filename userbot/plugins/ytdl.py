@@ -327,7 +327,7 @@ async def insta_dl(event):
             event, "` I need a Instagram link to download it's Video...`(*_*)", 10
         )
     # v1 = "@instasave_bot"
-    #v1 = "@IgGramBot"
+    # v1 = "@IgGramBot"
     v1 = "Fullsavebot"
     v2 = "@videomaniacbot"
     media_list = []
