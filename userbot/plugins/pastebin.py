@@ -117,7 +117,9 @@ async def rayso_by_pro_odi(event):  # By @feelded
     if checker and checker[0].lower() in MODES:
         addgvar("RAYSO_MODES", checker[0].lower())
         if checker[0] == query and not rquery:
-            return await edit_delete(catevent, f"`Theme Mode changed to {query.title()}.`")
+            return await edit_delete(
+                catevent, f"`Theme Mode changed to {query.title()}.`"
+            )
         query = checker[1] if len(checker) > 1 else None
 
     # Themes List
