@@ -113,6 +113,7 @@ async def update_bot(event, repo, ups_rem, ac_br):
     )
     if os.path.exists("config.py"):
         from userbot.plugins.vps import switch_branch
+
         await switch_branch()
     await event.client.reload(sandy)
 
