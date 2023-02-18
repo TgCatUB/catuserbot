@@ -53,8 +53,8 @@ validators
 vcsi
 wand
 wget
-yt_dlp
 
+git+https://github.com/yt-dlp/yt-dlp
 git+https://github.com/Jisan09/search-engine-parser
 git+https://github.com/Jisan09/Telethon@beta
 git+https://github.com/goldsmith/Wikipedia
