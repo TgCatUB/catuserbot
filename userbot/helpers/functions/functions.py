@@ -196,6 +196,7 @@ async def delete_conv(event, chat, from_message):
 
 # ----------------------------------------------## Tools ##------------------------------------------------------------#
 
+
 # https://www.tutorialspoint.com/How-do-you-split-a-list-into-evenly-sized-chunks-in-Python
 def sublists(input_list: list, width: int = 3):
     return [input_list[x : x + width] for x in range(0, len(input_list), width)]
@@ -412,6 +413,7 @@ def higlighted_text(
 
 
 # ----------------------------------------------## Sticker ##-----------------------------------------------------------#
+
 
 # for stickertxt
 async def waifutxt(text, chat_id, reply_to_id, bot):

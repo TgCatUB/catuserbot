@@ -1357,7 +1357,6 @@ class googleimagesdownload:
                 if not arguments["silent_mode"]:
                     print(download_message)
                 if download_status == "success":
-
                     # download image_thumbnails
                     if arguments["thumbnail"] or arguments["thumbnail_only"]:
                         (
@@ -1654,7 +1653,6 @@ def main():
     total_errors = 0
     t0 = time.time()  # start the timer
     for arguments in records:
-
         if arguments["single_image"]:  # Download Single Image using a URL
             response = googleimagesdownload()
             response.single_image(arguments["single_image"])
