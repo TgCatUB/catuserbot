@@ -646,7 +646,6 @@ async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
                 f"**ETA** -> `{time_formatter(eta)}`"
             )
             if display_message != current_message:
-
                 await gdrive.edit(current_message)
                 display_message = current_message
     file_id = response.get("id")

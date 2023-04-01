@@ -249,7 +249,7 @@ async def bad(event):
             myphoto_urls = upload_file(output[1])
             input_str = f"https://graph.org{myphoto_urls[0]}"
             os.remove(output[1])
-        if not input_str.startswith("https://t"):
+        if not input_str.startswith("https://"):
             return await edit_delete(
                 event, "Give a valid Telegraph picture link, Or reply to a media."
             )
