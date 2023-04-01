@@ -23,6 +23,7 @@ lottie
 lyricsgenius
 markdown
 motor
+openai
 Pillow
 prettytable
 psutil

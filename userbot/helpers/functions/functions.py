@@ -243,6 +243,23 @@ def reddit_thumb_link(preview, thumb=None):
 
 # ----------------------------------------------## Image ##------------------------------------------------------------#
 
+async def wall_download(piclink, query):
+    try:
+        if not os.path.isdir("./temp"):
+            os.mkdir("./temp")
+        picpath = f"./temp/{query.title().replace(' ', '')}.jpg"
+        if os.path.exists(picpath):
+            i = 1
+            while os.path.exists(picpath) and i < 11:
+                picpath = f"./temp/{query.title().replace(' ', '')}-{i}.jpg"
+                i += 1
+        with open(picpath, "wb") as f:
+            f.write(requests.get(piclink).content)
+        return picpath
+    except Exception as e:
+        LOGS.info(str(e))
+        return None
+
 
 def ellipse_create(filename, size, border):
     img = Image.open(filename)

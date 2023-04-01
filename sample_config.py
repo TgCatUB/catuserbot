@@ -129,6 +129,8 @@ class Config(object):
     LASTFM_SECRET = os.environ.get("LASTFM_SECRET", None)
     LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
     LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD", None)
+    # Open ai api // get from here: https://platform.openai.com/account/api-keys
+    OPEN_AI_API = os.environ.get("OPEN_AI_API ", None)
     # Spotify API for spotify.py // get from here :  https://developer.spotify.com/dashboard/login
     SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID", None)
     SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET", None)
