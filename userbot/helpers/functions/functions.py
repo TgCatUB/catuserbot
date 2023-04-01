@@ -243,6 +243,7 @@ def reddit_thumb_link(preview, thumb=None):
 
 # ----------------------------------------------## Image ##------------------------------------------------------------#
 
+
 async def wall_download(piclink, query):
     try:
         if not os.path.isdir("./temp"):
