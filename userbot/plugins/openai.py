@@ -157,7 +157,7 @@ async def dalle_image_generation(event):
         return await edit_delete(event, "__Input a value between 1-10.__")
 
     # Flag to generate a media via editing a media
-    elif "-e" or "-v" in text:
+    elif any(opt in text for opt in ("-e", "-v")):
         if not reply or not reply.media:
             return await edit_delete(event, "__Reply to a Image with instructions__")
         if "e" in text:
