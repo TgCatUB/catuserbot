@@ -6,8 +6,6 @@ import os
 import re
 
 import openai
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.contacts import UnblockRequest as unblock
 
 from userbot import catub
 from userbot.Config import Config
@@ -118,6 +116,9 @@ async def generate_dalle_image(text, reply, event, flag=None):
     captions[-1] = f"**➥ Query :-** `{text.title()}`"
     return photos, captions
 
+"""
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.contacts import UnblockRequest as unblock
 
 async def ai_api(event):
     token = gvarstatus("AI_API_TOKEN") or None
@@ -140,3 +141,4 @@ async def ai_api(event):
                 token = rgxtoken[1]
             addgvar("AI_API_TOKEN", token)
     return token
+"""
