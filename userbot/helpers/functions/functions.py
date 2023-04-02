@@ -19,7 +19,7 @@ except ModuleNotFoundError:
     from imdb import Cinemagoer
 
 from html_telegraph_poster import TelegraphPoster
-from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps, ImageFilter
+from PIL import Image, ImageColor, ImageDraw, ImageFilter, ImageFont, ImageOps
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
