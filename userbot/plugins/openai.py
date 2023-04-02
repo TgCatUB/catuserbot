@@ -65,7 +65,7 @@ async def gpt_response_with_prompt(event):
     # Flag to generate edited message
     if "-e" in text:
         text = text.replace("-e", "").strip()
-        if not(reply and reply.text) or not text:
+        if not (reply and reply.text) or not text:
             return await edit_delete(
                 event,
                 "__Reply to message & pass the instruction message along with flag.__",
