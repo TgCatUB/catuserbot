@@ -72,7 +72,7 @@ async def gpt_response_with_prompt(event):
             )
         await edit_or_reply(event, "`Generating edited text...`")
         response = generate_edited_response(reply.text, text)
-        await edit_or_reply(event, response)
+        return await edit_or_reply(event, response)
 
     # Flag to change model of ai
     elif "-m" in text:
@@ -115,9 +115,9 @@ async def gpt_response_with_prompt(event):
     if not text:
         return await edit_delete(event, "**ಠ∀ಠ Gimmi text**")
 
-    await edit_or_reply(event, "__Generating answer...__")
+    catevent = await edit_or_reply(event, "__Generating answer...__")
     gpt_response = await generate_gpt_response(text, chat_id)
-    await edit_or_reply(event, gpt_response)
+    await edit_or_reply(catevent, gpt_response)
 
 
 @catub.cat_cmd(
@@ -192,7 +192,6 @@ async def dalle_image_generation(event):
     else:
         photos, captions = await generate_dalle_image(text, reply, event)
 
-    await edit_or_reply(event, "__Uploading...__")
     await event.client.send_file(
         event.chat_id,
         photos,

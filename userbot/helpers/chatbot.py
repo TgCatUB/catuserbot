@@ -74,7 +74,7 @@ async def generate_dalle_image(text, reply, event, flag=None):
     if not text:
         return await edit_delete(event, "**ಠ∀ಠ Gimmi text**")
 
-    await edit_or_reply(event, "__Generating image...__")
+    catevent = await edit_or_reply(event, "__Generating image...__")
     try:
         if flag:
             filename = "dalle-in.png"
@@ -101,7 +101,7 @@ async def generate_dalle_image(text, reply, event, flag=None):
                 size=f"{size}x{size}",
             )
     except Exception as e:
-        return await edit_delete(event, f"Error generating image: {e}")
+        return await edit_delete(catevent, f"Error generating image: {e}")
 
     photos = []
     captions = []
@@ -109,9 +109,10 @@ async def generate_dalle_image(text, reply, event, flag=None):
         photo = await wall_download(media["url"], "Dall-E")
         photos.append(photo)
         captions.append("")
-        await edit_or_reply(event, f"__📥 Downloaded : {i}/{limit}__")
+        await edit_or_reply(catevent, f"__📥 Downloaded : {i}/{limit}__")
 
     captions[-1] = f"**➥ Query :-** `{text.title()}`"
+    await edit_or_reply(catevent, "__Uploading...__")
     return photos, captions
 
 
