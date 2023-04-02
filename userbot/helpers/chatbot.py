@@ -3,15 +3,13 @@
 #     ````````````````````````````````````````
 
 import os
-import re
 
 import openai
 
-from userbot import catub
 from userbot.Config import Config
 from userbot.core.managers import edit_delete, edit_or_reply
-from userbot.helpers.functions import delete_conv, format_image, wall_download
-from userbot.sql_helper.globals import addgvar, gvarstatus
+from userbot.helpers.functions import format_image, wall_download
+from userbot.sql_helper.globals import gvarstatus
 
 openai.api_key = Config.OPENAI_API_KEY
 conversations = {}
@@ -115,6 +113,7 @@ async def generate_dalle_image(text, reply, event, flag=None):
 
     captions[-1] = f"**➥ Query :-** `{text.title()}`"
     return photos, captions
+
 
 """
 from telethon.errors.rpcerrorlist import YouBlockedUserError
