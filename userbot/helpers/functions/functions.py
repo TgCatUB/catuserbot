@@ -19,7 +19,7 @@ except ModuleNotFoundError:
     from imdb import Cinemagoer
 
 from html_telegraph_poster import TelegraphPoster
-from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps, ImageFilter
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
@@ -242,6 +242,25 @@ def reddit_thumb_link(preview, thumb=None):
 
 
 # ----------------------------------------------## Image ##------------------------------------------------------------#
+
+
+def format_image(filename):
+    img = Image.open(filename).convert("RGBA")
+    w, h = img.size
+    if w != h:
+        _min, _max = min(w, h), max(w, h)
+        bg = img.crop(
+            ((w - _min) // 2, (h - _min) // 2, (w + _min) // 2, (h + _min) // 2)
+        )
+        bg = bg.filter(ImageFilter.GaussianBlur(5))
+        bg = bg.resize((_max, _max))
+        img_new = Image.new("RGBA", (_max, _max), (255, 255, 255, 0))
+        img_new.paste(
+            bg, ((img_new.width - bg.width) // 2, (img_new.height - bg.height) // 2)
+        )
+        img_new.paste(img, ((img_new.width - w) // 2, (img_new.height - h) // 2))
+        img = img_new
+    img.save(filename)
 
 
 async def wall_download(piclink, query):

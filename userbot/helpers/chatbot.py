@@ -6,14 +6,12 @@ import os
 import re
 
 import openai
-from PIL import Image, ImageFilter
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
-
 from userbot import catub
 from userbot.Config import Config
 from userbot.core.managers import edit_delete, edit_or_reply
-from userbot.helpers.functions import delete_conv, wall_download
+from userbot.helpers.functions import delete_conv, format_image, wall_download
 from userbot.sql_helper.globals import addgvar, gvarstatus
 
 openai.api_key = Config.OPENAI_API_KEY
@@ -47,6 +45,19 @@ async def generate_gpt_response(input_text, chat_id):
     return generated_text
 
 
+def generate_edited_response(input_text, instructions):
+    try:
+        response = openai.Edit.create(
+            model="text-davinci-edit-001",
+            input=input_text,
+            instruction=instructions,
+        )
+        edited_text = response.choices[0].text.strip()
+    except Exception as e:
+        edited_text = f"__Error generating GPT edited response:__ `{e}`"
+    return edited_text
+
+
 def del_convo(chat_id, checker=False):
     global conversations
     out_text = "__There is no GPT context to delete for this chat.__"
@@ -56,25 +67,6 @@ def del_convo(chat_id, checker=False):
         out_text = "__GPT context deleted for this chat.__"
     if checker:
         return out_text
-
-
-def format_image(filename):
-    img = Image.open(filename).convert("RGBA")
-    w, h = img.size
-    if w != h:
-        _min, _max = min(w, h), max(w, h)
-        bg = img.crop(
-            ((w - _min) // 2, (h - _min) // 2, (w + _min) // 2, (h + _min) // 2)
-        )
-        bg = bg.filter(ImageFilter.GaussianBlur(5))
-        bg = bg.resize((_max, _max))
-        img_new = Image.new("RGBA", (_max, _max), (255, 255, 255, 0))
-        img_new.paste(
-            bg, ((img_new.width - bg.width) // 2, (img_new.height - bg.height) // 2)
-        )
-        img_new.paste(img, ((img_new.width - w) // 2, (img_new.height - h) // 2))
-        img = img_new
-    img.save(filename)
 
 
 async def generate_dalle_image(text, reply, event, flag=None):

@@ -9,7 +9,8 @@ import os
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.chatbot import del_convo, generate_dalle_image, generate_gpt_response
+from ..helpers.chatbot import (del_convo, generate_dalle_image,
+                               generate_edited_response, generate_gpt_response)
 from ..helpers.utils import reply_id
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 
@@ -27,6 +28,7 @@ SIZE = ["256", "512", "1024"]
         "header": "Generate GPT response with prompt",
         "description": "Use {tr}gpt followed by a prompt to generate a GPT response using the provided text",
         "flags": {
+            "e": "To generate edited response.",
             "m": "To change model of ai.",
             "s": "To add system message.",
             "ds": "To delete system message.",
@@ -34,6 +36,7 @@ SIZE = ["256", "512", "1024"]
         },
         "usage": [
             "{tr}gpt <text/reply>",
+            "{tr}gpt -e <reply to a gpt message along with instruction>",
             "{tr}gpt -m <model name>",
             "{tr}gpt -s <system message>",
             "{tr}gpt -ds",
@@ -41,6 +44,7 @@ SIZE = ["256", "512", "1024"]
         ],
         "examples": [
             "{tr}gpt write a paragraph on cat",
+            "{tr}gpt -e change the word count to 200 <reply to gpt message>",
             "{tr}gpt -m gpt-3.5-turbo-0301",
             "{tr}gpt -s Write every answer in an extremely angry tone , use swear words and insults wherever you see fit",
         ],
@@ -54,8 +58,20 @@ async def gpt_response_with_prompt(event):
     model_text = "**Available models:**\n\n"
     chat_id = event.chat_id
 
+    # Flag to generate edited message
+    if "-e" in text:
+        text = text.replace("-e", "").strip()
+        if ((not reply) and (not reply.text)) or (not text):
+            return await edit_delete(
+                event,
+                "__Reply to message & pass the instruction message along with flag.__",
+            )
+        await edit_or_reply(event, "`Generating edited text...`")
+        response = generate_edited_response(reply.text, text)
+        await edit_or_reply(event, response)
+
     # Flag to change model of ai
-    if "-m" in text:
+    elif "-m" in text:
         flag = text.replace("-m", "").strip()
         if not flag or flag not in MODELS:
             for index, name in enumerate(MODELS, 1):
