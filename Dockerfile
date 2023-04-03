@@ -1,12 +1,13 @@
-FROM jisan09/catuserbot:latest
+# We using apt-chrome-pip to install everything.
+# Check different tags >>> https://hub.docker.com/repository/docker/jisan09/catuserbot/tags
 
-#clonning repo 
-RUN git clone https://github.com/TgCatUB/catuserbot /root/userbot
-#working directory 
-WORKDIR /root/userbot
+FROM jisan09/catuserbot:apt-chrome-pip
 
-# Install requirements
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Working directory 
+WORKDIR ./userbot
+
+## Copy files into the Docker image
+COPY . .
 
 ENV PATH="/home/userbot/bin:$PATH"
 
