@@ -64,7 +64,7 @@ class CatUserBotClient(TelegramClient):
         public: bool = False,
         **kwargs,
     ) -> callable:  # sourcery no-metrics
-        kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
+        if not public: kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
         kwargs.setdefault("forwards", forword)
         if gvarstatus("blacklist_chats") is not None:
             kwargs["blacklist_chats"] = True
@@ -217,6 +217,11 @@ class CatUserBotClient(TelegramClient):
                     NewMessage(pattern=REGEX_.regex1, outgoing=True, **kwargs),
                 )
                 if public:
+                    if edited:
+                        catub.add_event_handler(
+                            wrapper,
+                            MessageEdited(pattern=REGEX_.regex1, incoming=True, func=lambda e: bool(e.sender_id not in _sudousers_list()), **kwargs),
+                        )
                     catub.add_event_handler(
                         wrapper,
                         NewMessage(pattern=REGEX_.regex1, incoming=True, func=lambda e: bool(e.sender_id not in _sudousers_list()), **kwargs),
