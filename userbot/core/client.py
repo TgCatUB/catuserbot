@@ -218,10 +218,10 @@ class CatUserBotClient(TelegramClient):
                 )
                 if public:
                     if edited:
-                    catub.add_event_handler(
-                        wrapper,
-                        MessageEdited(pattern=REGEX_.regex1, incoming=True, func=lambda e: bool(e.sender_id not in _sudousers_list()), **kwargs),
-                    )
+                        catub.add_event_handler(
+                            wrapper,
+                            MessageEdited(pattern=REGEX_.regex1, incoming=True, func=lambda e: bool(e.sender_id not in _sudousers_list()), **kwargs),
+                        )
                     catub.add_event_handler(
                         wrapper,
                         NewMessage(pattern=REGEX_.regex1, incoming=True, func=lambda e: bool(e.sender_id not in _sudousers_list()), **kwargs),
