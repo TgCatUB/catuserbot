@@ -64,7 +64,8 @@ class CatUserBotClient(TelegramClient):
         public: bool = False,
         **kwargs,
     ) -> callable:  # sourcery no-metrics
-        if not public: kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
+        if not public:
+            kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
         kwargs.setdefault("forwards", forword)
         if gvarstatus("blacklist_chats") is not None:
             kwargs["blacklist_chats"] = True
@@ -220,11 +221,23 @@ class CatUserBotClient(TelegramClient):
                     if edited:
                         catub.add_event_handler(
                             wrapper,
-                            MessageEdited(pattern=REGEX_.regex2, incoming=True, func=lambda e: bool(e.sender_id not in _sudousers_list()), **kwargs),
+                            MessageEdited(
+                                pattern=REGEX_.regex2,
+                                incoming=True,
+                                func=lambda e: bool(
+                                    e.sender_id not in _sudousers_list()
+                                ),
+                                **kwargs,
+                            ),
                         )
                     catub.add_event_handler(
                         wrapper,
-                        NewMessage(pattern=REGEX_.regex2, incoming=True, func=lambda e: bool(e.sender_id not in _sudousers_list()), **kwargs),
+                        NewMessage(
+                            pattern=REGEX_.regex2,
+                            incoming=True,
+                            func=lambda e: bool(e.sender_id not in _sudousers_list()),
+                            **kwargs,
+                        ),
                     )
                 if allow_sudo and gvarstatus("sudoenable") is not None:
                     if command is None or command[0] in sudo_enabledcmds:
