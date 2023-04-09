@@ -1,6 +1,5 @@
 # We using apt-chrome-pip to install everything.
 # Check different tags >>> https://hub.docker.com/repository/docker/jisan09/catuserbot/tags
-
 FROM jisan09/catuserbot:apt-chrome-pip
 
 # Working directory 
