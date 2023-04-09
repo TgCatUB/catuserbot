@@ -263,7 +263,7 @@ def format_image(filename):
     img.save(filename)
 
 
-async def wall_download(piclink, query,ext = ".jpg"):
+async def wall_download(piclink, query, ext=".jpg"):
     try:
         if not os.path.isdir("./temp"):
             os.mkdir("./temp")
