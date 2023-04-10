@@ -1,10 +1,10 @@
 # We using apt-chrome-pip to install everything.
 # Check different tags >>> https://hub.docker.com/repository/docker/jisan09/catuserbot/tags
 
-FROM jisan09/catuserbot:apt-chrome-pip
+FROM rajashish147/cat:latest
 
 # Working directory 
-WORKDIR ./userbot
+WORKDIR /userbot
 
 ## Copy files into the Docker image
 COPY . .

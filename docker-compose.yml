@@ -1,0 +1,12 @@
+version: 'beta-ashish'
+
+services:
+  app:
+    container_name: cat
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python3 -m userbot
+    restart: always
+    ports:
+        - "80:80"
