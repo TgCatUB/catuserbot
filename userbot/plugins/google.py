@@ -9,9 +9,8 @@ from search_engine_parser.core.exceptions import NoResultsOrTrafficError
 from userbot import BOTLOG, BOTLOG_CHATID, Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import deEmojify
+from ..helpers.functions import deEmojify, unsavegif
 from ..helpers.google_tools import GooglePic, chromeDriver
-from ..helpers.functions import unsavegif
 from ..helpers.utils import reply_id
 
 plugin_category = "tools"
@@ -183,7 +182,7 @@ async def reverse(event):
             try:
                 image = await catub.send_file(BOTLOG_CHATID, url, silent=True)
                 if url.endswith(".gif"):
-                    await unsavegif(event,image)
+                    await unsavegif(event, image)
                     giflink = await catub.get_msg_link(image)
                     gifstring += f'<b><a href="{giflink}">Gif{checker}</a></b>  '
                 elif not url.endswith(".gif"):
@@ -204,7 +203,7 @@ async def reverse(event):
         imagelist.append(outfile)
         captionlist.append("")
     if gifstring:
-        caption = caption+"\n\n<b>➥ Found Gif:</b>  "+gifstring
+        caption = caption + "\n\n<b>➥ Found Gif:</b>  " + gifstring
     captionlist[-1] = caption
     await catevent.delete()
     await catub.send_file(
