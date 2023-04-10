@@ -11,6 +11,7 @@ from userbot import BOTLOG, BOTLOG_CHATID, Convert, catub
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import deEmojify
 from ..helpers.google_tools import GooglePic, chromeDriver
+from ..helpers.functions import unsavegif
 from ..helpers.utils import reply_id
 
 plugin_category = "tools"
@@ -163,7 +164,7 @@ async def reverse(event):
     if data["lens"] is None:
         return await edit_delete(catevent, "`Couldn't find any reverse data..`")
     outfile = "./temp/reverse.png"
-    imagelist, captionlist = [], []
+    imagelist, captionlist, gifstring = [], [], ""
     if cmd == "grs":
         # save screenshot from lens url
         pic, _ = await chromeDriver(data["lens"])
@@ -178,25 +179,33 @@ async def reverse(event):
                 else item.site
             )
             # scamming telethon to send media as album
+            # gif file can't album so doing single
             try:
-                image = await catub.send_file(event.chat_id, url)
-                imagelist.append(image.media)
-                captionlist.append("")
-                await image.delete()
+                image = await catub.send_file(BOTLOG_CHATID, url, silent=True)
+                if url.endswith(".gif"):
+                    await unsavegif(event,image)
+                    giflink = await catub.get_msg_link(image)
+                    gifstring += f'<b><a href="{giflink}">Gif{checker}</a></b>  '
+                elif not url.endswith(".gif"):
+                    imagelist.append(image.media)
+                    captionlist.append("")
+                    await image.delete()
                 await edit_or_reply(catevent, f"**📥 Downloaded : {checker}/{limit}**")
+                if checker >= int(limit):
+                    break
             except Exception:
                 pass
-            if len(imagelist) == int(limit):
-                break
+
     end = datetime.now()
     ms = (end - start).seconds
+    caption = f'<b>➥ Google Reverse Search:</b>  <code>{data["title"]}</code>\n<b>➥ View Source: <a href="{data["google"]}">Google Image</a></b>\n<b>➥ View Similar: <a href="{data["lens"]}">Google Lens</a> </b>(Desktop)\n<b>➥ Time Taken:</b>  <code>{ms} seconds</code>'
     # if no similar image found save the replied image to respond
     if not imagelist:
         imagelist.append(outfile)
         captionlist.append("")
-    captionlist[
-        -1
-    ] = f'<b>➥ Google Reverse Search:</b>  <code>{data["title"]}</code>\n<b>➥ View Source: <a href="{data["google"]}">Google Image</a></b>\n<b>➥ View Similar: <a href="{data["lens"]}">Google Lens</a> </b>(Desktop)\n<b>➥ Time Taken:</b>  <code>{ms} seconds</code>'
+    if gifstring:
+        caption = caption+"\n\n<b>➥ Found Gif:</b>  "+gifstring
+    captionlist[-1] = caption
     await catevent.delete()
     await catub.send_file(
         event.chat_id,
@@ -205,7 +214,8 @@ async def reverse(event):
         parse_mode="html",
         reply_to=reply_to,
     )
-    os.remove(outfile)
+    if os.path.exists(outfile):
+        os.remove(outfile)
 
 
 @catub.cat_cmd(
