@@ -263,15 +263,15 @@ def format_image(filename):
     img.save(filename)
 
 
-async def wall_download(piclink, query):
+async def wall_download(piclink, query, ext=".jpg"):
     try:
         if not os.path.isdir("./temp"):
             os.mkdir("./temp")
-        picpath = f"./temp/{query.title().replace(' ', '')}.jpg"
+        picpath = f"./temp/{query.title().replace(' ', '')}{ext}"
         if os.path.exists(picpath):
             i = 1
             while os.path.exists(picpath) and i < 11:
-                picpath = f"./temp/{query.title().replace(' ', '')}-{i}.jpg"
+                picpath = f"./temp/{query.title().replace(' ', '')}-{i}{ext}"
                 i += 1
         with open(picpath, "wb") as f:
             f.write(requests.get(piclink).content)

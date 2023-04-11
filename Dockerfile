@@ -1,4 +1,4 @@
-FROM catub/catuserbot:latest
+
 
 # Working directory 
 WORKDIR /userbot
