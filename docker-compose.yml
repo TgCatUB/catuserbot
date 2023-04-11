@@ -1,4 +1,4 @@
-version: 'beta-ashish'
+version: '3.3'
 
 services:
   app:
@@ -9,4 +9,4 @@ services:
     command: python3 -m userbot
     restart: always
     ports:
-        - "80:80"
+        - "6969:6969"
