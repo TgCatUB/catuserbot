@@ -7,6 +7,6 @@ services:
       context: .
       dockerfile: Dockerfile
     command: python3 -m userbot
-    restart: always
+    restart: on-failure
     ports:
         - "6969:6969"
