@@ -48,7 +48,7 @@ async def catbroadcast_add(event):
                 "The replied message was failed to send to the user. Confusion between to whom it should send.",
                 reply_to=msg.id,
             )
-        msglink = await event.clienr.get_msg_link(msg)
+        msglink = await event.client.get_msg_link(msg)
         return await edit_or_reply(
             event,
             f"__Sorry! Confusion between users to whom should i send the person mentioned in message or to the person replied. text message was logged in [log group]({msglink}). you can resend message from there__",
