@@ -5,7 +5,7 @@ from sqlalchemy import JSON, Column, DateTime, Integer, String
 
 from userbot import catub
 
-from .sql_helper import BASE, SESSION
+from . import BASE, SESSION
 
 
 class CatScheduler(BASE):
