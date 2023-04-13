@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import contextlib
 from datetime import datetime, timedelta
 
@@ -67,10 +76,13 @@ def reassign_message(message):
 
 def delete_message_by_id(id):
     message = SESSION.query(CatScheduler).filter_by(id=id).first()
+    out = f"There no task active with Id : `{id}`"
     if message:
         SESSION.delete(message)
         SESSION.commit()
+        out = f"The task `{id}` deleted successfully"
     SESSION.close()
+    return out
 
 
 def delete_all_messages():
