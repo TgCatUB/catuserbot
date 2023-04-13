@@ -1,17 +1,18 @@
-"""Module to display Currenty Playing Spotify Songs in your bio"""
+""" Module to display Currenty Playing Spotify Songs in your bio """
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-#  CREDITS:
+# Special Credits:
 # [Poolitzer](https://t.me/poolitzer)  (for creating spotify bio plugin)
 #
 # [Sunny](https://t.me/medevilofxd) and Others for spotify_userbot
 # (https://github.com/anilchauhanxda/spotify_userbot/blob/master/bot.py)
-#
-# Github.com/code-rgb [ TG - @DetetedUser420 ]
-#  Ported it to Pyrogram and improved Heroku compatiblilty
-#
-# tg- @Jisan7509  // Github.com/Jisan09
-# Ported back to teletethon.. xD // Added decent thumb & dual mode for now playing song
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import asyncio
