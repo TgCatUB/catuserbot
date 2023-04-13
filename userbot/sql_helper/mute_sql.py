@@ -7,9 +7,9 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-from . import BASE, SESSION
-
 from sqlalchemy import Column, String
+
+from . import BASE, SESSION
 
 
 class Mute(BASE):
