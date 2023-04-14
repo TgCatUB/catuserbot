@@ -24,7 +24,6 @@ async def chromeDriver(inputstr, event=None):
     start = datetime.now()
     try:
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--start-in-incognito")
         chrome_options.add_argument("--ignore-certificate-errors")
         chrome_options.add_argument("--test-type")
         chrome_options.add_argument("--headless")
