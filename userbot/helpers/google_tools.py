@@ -92,7 +92,12 @@ class GooglePic:
 
     @staticmethod
     async def reverse_data(image_filename, flag=False):
-        data = {"title": None,"lens": None,"google": None,"error": None, }
+        data = {
+            "title": None,
+            "lens": None,
+            "google": None,
+            "error": None,
+        }
         with open(image_filename, mode="rb") as f:
             url = f"https://lens.google.com/upload?ep=ccm&s=&st={int(time.time())}"
             try:
@@ -102,24 +107,36 @@ class GooglePic:
                     res2 = requests.get(data["lens"])
                     if res2.ok:
                         html = res2.text
-                        google_url = re.search(r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
+                        google_url = re.search(
+                            r"https://www.google.com/search\?tbs.+?(?=\")", html
+                        ).group()
                         if not google_url:
-                            _ , html, data["error"] = await chromeDriver(data["lens"], html=True)
-                            google_url = re.search(r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
+                            _, html, data["error"] = await chromeDriver(
+                                data["lens"], html=True
+                            )
+                            google_url = re.search(
+                                r"https://www.google.com/search\?tbs.+?(?=\")", html
+                            ).group()
                     if html:
                         if flag:
                             data["image_set"] = set()
                             for link in re.findall(
-                                r'https://www.google.com/imgres\?imgurl.+?\"', html
+                                r"https://www.google.com/imgres\?imgurl.+?\"", html
                             ):
                                 decoded_link = link.encode().decode("unicode-escape")
-                                image = re.search(r"imgurl=(.+?)&", decoded_link).group(1)
-                                site = re.search(r"imgrefurl=(.+?)&", decoded_link).group(1)
-                                if image.endswith((".jpg", ".jpeg", ".png", ".gif")) or site.endswith((".jpg", ".jpeg", ".png", ".gif")):
+                                image = re.search(r"imgurl=(.+?)&", decoded_link).group(
+                                    1
+                                )
+                                site = re.search(
+                                    r"imgrefurl=(.+?)&", decoded_link
+                                ).group(1)
+                                if image.endswith(
+                                    (".jpg", ".jpeg", ".png", ".gif")
+                                ) or site.endswith((".jpg", ".jpeg", ".png", ".gif")):
                                     data["image_set"].add(GooglePic(image, site))
-                        
+
                         data["title"] = GooglePic.__title_fetch__(html)
-                        data["google"] = (google_url.encode().decode("unicode_escape"))
+                        data["google"] = google_url.encode().decode("unicode_escape")
             except Exception as error:
                 data["error"] = str(error)
         return data
