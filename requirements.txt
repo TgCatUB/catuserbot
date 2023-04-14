@@ -53,7 +53,7 @@ validators
 vcsi
 wand
 wget
-
+ffmpeg
 git+https://github.com/Jisan09/search-engine-parser
 git+https://github.com/Jisan09/Telethon@beta
 git+https://github.com/goldsmith/Wikipedia
