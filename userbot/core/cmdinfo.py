@@ -14,11 +14,7 @@ from ..helpers.utils.extdl import install_pip
 from . import CMD_INFO, GRP_INFO, PLG_INFO
 from .managers import edit_delete
 
-try:
-    from urlextract import URLExtract
-except ModuleNotFoundError:
-    install_pip("urlextract")
-    from urlextract import URLExtract
+from urlextract import URLExtract
 
 
 extractor = URLExtract()
@@ -41,7 +37,12 @@ def get_data(about, ktype):
     urls = extractor.find_urls(data)
     if len(urls) > 0:
         return data
-    return data.capitalize()
+    words = data.split()
+    data = data.capitalize()
+    for word in words:
+        if word.isupper():
+            data = data.replace(word.lower(),word) 
+    return data
 
 
 def _format_about(
@@ -103,7 +104,7 @@ def _format_about(
         del about["others"]
     if about:
         for t_n, t_d in about.items():
-            tmp_chelp += f"\n\n✘  **{t_n} :**\n"
+            tmp_chelp += f"\n\n✘  **{t_n.title()} :**\n"
             if isinstance(t_d, dict):
                 for o_n, o_d in t_d.items():
                     tmp_chelp += f"    ▫ `{o_n}` : __{get_data(t_d , o_n)}__\n"
