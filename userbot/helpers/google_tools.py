@@ -37,7 +37,7 @@ async def chromeDriver(inputstr, event=None):
         driver.get(inputstr)
         if "google" in url:
             try:
-                button = driver.find_element(By.ID, 'L2AGLb')
+                button = driver.find_element(By.ID, "L2AGLb")
                 button.click()
             except Exception:
                 pass
