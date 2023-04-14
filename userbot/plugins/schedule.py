@@ -45,6 +45,7 @@ plugin_category = "tools"
             "{tr}schedule @cat 25465845 -1005554825 > 2069-01-30 10:30",
             "{tr}schedule -b catlist > 2069-01-30 10:30",
         ],
+        "Note": "Set `TZ` in config with your timezone, default it is Asia/Kolkata.",
     },
 )
 async def schedule(event):
@@ -56,8 +57,8 @@ async def schedule(event):
         return await edit_delete(event, "__Reply to a message to schedule...__")
     try:
         user, daytime = commands.split(">")
+        user_list = []
         if "-b" in user:
-            user_list = []
             user = user.replace("-b", "").strip()
             if bcast.num_broadcastlist_chat(user) == 0:
                 return await edit_delete(
@@ -91,7 +92,7 @@ async def schedule(event):
         logged = await catub.send_message(BOTLOG_CHATID, reply)
         message = {"chat": logged.chat_id, "msg_id": logged.id}
         sql.add_message_to_database(user_list, message, scheduled_time, daytime)
-        await edit_delete(event, "**ಠ∀ಠ Added to database**")
+        await edit_delete(event, "__Task added to database__")
     except Exception as err:
         await edit_delete(event, f"**Error:** `{err}`", 30)
 
@@ -115,6 +116,7 @@ async def schedule(event):
             "{tr}autoschedule @cat 25465845 -1005554825 > sunday 10:30",
             "{tr}autoschedule -b catlist > sunday 10:30",
         ],
+        "Note": "Set `TZ` in config with your timezone, default it is Asia/Kolkata.",
     },
 )
 async def autoschedule(event):
@@ -158,7 +160,7 @@ async def schedulelist(event):
         for item in schedules:
             string += f'<b>Task ID:</b>  <code>{item.id}</code>\n<b>Message:  <a href="https://t.me/c/{str(item.message["chat"])[4:]}/{item.message["msg_id"]}">Scheduled Message</a></b>\n<b>Time:</b>  <code>{item.scheduled_time} seconds</code>\n'
             if item.day_of_week:
-                string += f"<b>Repeat:</b>  Every {item.day_of_week}"
+                string += f"<b>Repeat:</b>  <i>Every {item.day_of_week}</i>"
             string += "\n\n"
         await edit_or_reply(event, string, parse_mode="html")
 
