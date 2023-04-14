@@ -65,12 +65,12 @@ async def schedule(event):
                     event,
                     f"__There is no category with name **{user}**. Check `.listall` in broadcast plugin__",
                 )
-            user_list = bcast.get_chat_broadcastlist(user)
+            user_list = list(bcast.get_chat_broadcastlist(user))
         else:
             for item in user.split():
                 with contextlib.suppress(ValueError):
                     item = int(item)
-                with contextlib.suppress(ValueError):
+                with contextlib.suppress(ValueError, IndexError):
                     user = await catub.get_entity(item)
                     user_list.append(user.id)
         if not user_list:
