@@ -70,7 +70,7 @@ def _format_about(
         tmp_chelp += "\n\n✘  **Available Options :**"
         if isinstance(about["options"], dict):
             for o_n, o_d in about["options"].items():
-                tmp_chelp += f"\n    ▫ `{o_n}` : __{o_d}__"
+                tmp_chelp += f"\n    ▫ `{o_n}` : __{o_d.lower()}__"
         else:
             tmp_chelp += f"\n    __{about['options']}__"
         del about["options"]
@@ -103,7 +103,7 @@ def _format_about(
         del about["others"]
     if about:
         for t_n, t_d in about.items():
-            tmp_chelp += f"\n\n✘  **{t_n.title()} :**\n"
+            tmp_chelp += f"\n\n✘  **{t_n} :**\n"
             if isinstance(t_d, dict):
                 for o_n, o_d in t_d.items():
                     tmp_chelp += f"    ▫ `{o_n}` : __{get_data(t_d , o_n)}__\n"
