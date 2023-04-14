@@ -7,6 +7,7 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import contextlib
 import re
 import time
 from datetime import datetime
@@ -19,7 +20,7 @@ from ..Config import Config
 from ..core.managers import edit_or_reply
 
 
-async def chromeDriver(inputstr, event=None):
+async def chromeDriver(inputstr, event=None, html=None):
     if Config.CHROME_BIN is None:
         return None, "Need to install Google Chrome. Module Stopping."
     start = datetime.now()
@@ -35,12 +36,15 @@ async def chromeDriver(inputstr, event=None):
             await edit_or_reply(event, "`Starting Google Chrome BIN`")
         driver = webdriver.Chrome(chrome_options=chrome_options)
         driver.get(inputstr)
+
         if "google" in inputstr:
-            try:
-                button = driver.find_element(By.ID, "L2AGLb")
-                button.click()
-            except Exception:
-                pass
+            with contextlib.suppress(Exception):
+                driver.find_element(By.ID, "L2AGLb").click()
+            with contextlib.suppress(Exception):
+                driver.find_element(
+                    By.XPATH, "//button[@aria-label='Accept all']"
+                ).click()
+
         if event:
             await edit_or_reply(event, "`Calculating Page Dimensions`")
         height = driver.execute_script(
@@ -54,15 +58,17 @@ async def chromeDriver(inputstr, event=None):
         # for good measure to make the scroll bars disappear
         im_png = driver.get_screenshot_as_png()
         # saves screenshot of entire page
-        if event:
-            await edit_or_reply(event, "`Stoppping Chrome Bin`")
-        driver.close()
+        # if event: await edit_or_reply(event, "`Stoppping Chrome Bin`")
         # capture the total work time
         end = datetime.now()
         ms = (end - start).seconds
+        if html:
+            html = driver.page_source
+            return im_png, html, None
+        driver.close()
         return im_png, f"**url : **{inputstr} \n**Time :** `{ms} seconds`"
     except Exception as e:
-        return None, str(e)
+        return None, html, str(e)
 
 
 class GooglePic:
@@ -85,8 +91,8 @@ class GooglePic:
         return "Visual matches" if (len(title) > 100 or not title) else title
 
     @staticmethod
-    def reverse_data(image_filename, flag=False):
-        data = {"title": None, "lens": None, "google": None, "error": None}
+    async def reverse_data(image_filename, flag=False):
+        data = {"title": None,"lens": None,"google": None,"error": None, }
         with open(image_filename, mode="rb") as f:
             url = f"https://lens.google.com/upload?ep=ccm&s=&st={int(time.time())}"
             try:
@@ -96,29 +102,24 @@ class GooglePic:
                     res2 = requests.get(data["lens"])
                     if res2.ok:
                         html = res2.text
+                        google_url = re.search(r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
+                        if not google_url:
+                            _ , html, data["error"] = await chromeDriver(data["lens"], html=True)
+                            google_url = re.search(r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
+                    if html:
                         if flag:
                             data["image_set"] = set()
                             for link in re.findall(
-                                r'https://www.google.com/imgres\?imgurl.+?"', html
+                                r'https://www.google.com/imgres\?imgurl.+?\"', html
                             ):
                                 decoded_link = link.encode().decode("unicode-escape")
-                                image = re.search(r"imgurl=(.+?)&", decoded_link).group(
-                                    1
-                                )
-                                site = re.search(
-                                    r"imgrefurl=(.+?)&", decoded_link
-                                ).group(1)
-                                if image.endswith(
-                                    (".jpg", ".jpeg", ".png", ".gif")
-                                ) or site.endswith((".jpg", ".jpeg", ".png", ".gif")):
+                                image = re.search(r"imgurl=(.+?)&", decoded_link).group(1)
+                                site = re.search(r"imgrefurl=(.+?)&", decoded_link).group(1)
+                                if image.endswith((".jpg", ".jpeg", ".png", ".gif")) or site.endswith((".jpg", ".jpeg", ".png", ".gif")):
                                     data["image_set"].add(GooglePic(image, site))
-                        google_url = re.search(
-                            r"https://www.google.com/search\?tbs.+?(?=\")", html
-                        )
+                        
                         data["title"] = GooglePic.__title_fetch__(html)
-                        data["google"] = (
-                            google_url.group().encode().decode("unicode_escape")
-                        )
+                        data["google"] = (google_url.encode().decode("unicode_escape"))
             except Exception as error:
                 data["error"] = str(error)
         return data
