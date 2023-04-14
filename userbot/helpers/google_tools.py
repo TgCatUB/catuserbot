@@ -35,7 +35,7 @@ async def chromeDriver(inputstr, event=None):
             await edit_or_reply(event, "`Starting Google Chrome BIN`")
         driver = webdriver.Chrome(chrome_options=chrome_options)
         driver.get(inputstr)
-        if "google" in url:
+        if "google" in inputstr:
             try:
                 button = driver.find_element(By.ID, "L2AGLb")
                 button.click()
