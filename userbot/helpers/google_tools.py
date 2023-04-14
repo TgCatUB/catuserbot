@@ -13,6 +13,7 @@ from datetime import datetime
 
 import requests
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
@@ -27,7 +28,6 @@ async def chromeDriver(inputstr, event=None):
         chrome_options.add_argument("--ignore-certificate-errors")
         chrome_options.add_argument("--test-type")
         chrome_options.add_argument("--headless")
-        # https://stackoverflow.com/a/53073789/4723940
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.binary_location = Config.CHROME_BIN
@@ -35,6 +35,12 @@ async def chromeDriver(inputstr, event=None):
             await edit_or_reply(event, "`Starting Google Chrome BIN`")
         driver = webdriver.Chrome(chrome_options=chrome_options)
         driver.get(inputstr)
+        if "google" in url:
+            try:
+                button = driver.find_element(By.ID, 'L2AGLb')
+                button.click()
+            except Exception:
+                pass
         if event:
             await edit_or_reply(event, "`Calculating Page Dimensions`")
         height = driver.execute_script(
