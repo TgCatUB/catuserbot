@@ -108,10 +108,16 @@ class GooglePic:
                     if res2.ok:
                         html = res2.text
                         with contextlib.suppress(Exception):
-                            data["google"] = re.search(r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
+                            data["google"] = re.search(
+                                r"https://www.google.com/search\?tbs.+?(?=\")", html
+                            ).group()
                         if not data["google"]:
-                            _, html, data["error"] = await chromeDriver(data["lens"], html=True)
-                            data["google"] = re.search(r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
+                            _, html, data["error"] = await chromeDriver(
+                                data["lens"], html=True
+                            )
+                            data["google"] = re.search(
+                                r"https://www.google.com/search\?tbs.+?(?=\")", html
+                            ).group()
                     if html:
                         if flag:
                             data["image_set"] = set()
@@ -131,7 +137,9 @@ class GooglePic:
                                     data["image_set"].add(GooglePic(image, site))
 
                         data["title"] = GooglePic.__title_fetch__(html)
-                        data["google"] = data["google"].encode().decode("unicode_escape")
+                        data["google"] = (
+                            data["google"].encode().decode("unicode_escape")
+                        )
             except Exception as error:
                 data["error"] = str(error)
         return data
