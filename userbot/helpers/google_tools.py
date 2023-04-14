@@ -122,7 +122,7 @@ class GooglePic:
                         if flag:
                             data["image_set"] = set()
                             for link in re.findall(
-                                r"https://www.google.com/imgres\?imgurl.+?\"", html
+                                r"https://www.google.com/imgres\?imgurl.+?(?=\")", html
                             ):
                                 decoded_link = link.encode().decode("unicode-escape")
                                 image = re.search(r"imgurl=(.+?)&", decoded_link).group(
