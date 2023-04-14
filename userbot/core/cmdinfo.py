@@ -9,13 +9,11 @@
 
 from typing import Dict, List, Union
 
-from ..Config import Config
-from ..helpers.utils.extdl import install_pip
-from . import CMD_INFO, GRP_INFO, PLG_INFO
-from .managers import edit_delete
-
 from urlextract import URLExtract
 
+from ..Config import Config
+from . import CMD_INFO, GRP_INFO, PLG_INFO
+from .managers import edit_delete
 
 extractor = URLExtract()
 cmdprefix = Config.COMMAND_HAND_LER
@@ -41,7 +39,7 @@ def get_data(about, ktype):
     data = data.capitalize()
     for word in words:
         if word.isupper():
-            data = data.replace(word.lower(),word) 
+            data = data.replace(word.lower(), word)
     return data
 
 
