@@ -54,7 +54,7 @@ class chromeDriver:
             return None, error
         if event:
             await edit_or_reply(
-                event, "`Calculating Page Dimensions with Google Chrome BIN``"
+                event, "`Calculating Page Dimensions with Google Chrome BIN`"
             )
         height = driver.execute_script(
             "return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);"
