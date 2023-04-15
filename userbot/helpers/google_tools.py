@@ -81,7 +81,6 @@ class chromeDriver:
         return html, None
 
 
-
 class GooglePic:
     def __init__(self, image, site):
         self.image = image
@@ -120,15 +119,21 @@ class GooglePic:
                     if res2.ok:
                         html = res2.text.encode().decode("unicode_escape")
                         with contextlib.suppress(Exception):
-                            data["google"] = re.search(r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
+                            data["google"] = re.search(
+                                r"https://www.google.com/search\?tbs.+?(?=\")", html
+                            ).group()
                         if not data["google"]:
                             html, data["error"] = chromeDriver.get_html(data["lens"])
                             html = html.encode().decode("unicode_escape")
-                            data["google"] = re.search( r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
+                            data["google"] = re.search(
+                                r"https://www.google.com/search\?tbs.+?(?=\")", html
+                            ).group()
                     if html:
                         if flag:
                             data["image_set"] = set()
-                            for link in re.findall(r"https://www.google.com/imgres\?imgurl.+?(?=\")", html):
+                            for link in re.findall(
+                                r"https://www.google.com/imgres\?imgurl.+?(?=\")", html
+                            ):
                                 image = re.search(r"imgurl=(.+?)&", link).group(1)
                                 site = re.search(r"imgrefurl=(.+?)&", link).group(1)
                                 if image.endswith(
