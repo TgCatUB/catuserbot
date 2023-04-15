@@ -15,7 +15,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    network_mode: "host"
     command: python3 -m userbot
     restart: on-failure
-    ports:
-        - "6969:6969"
