@@ -20,33 +20,42 @@ from ..Config import Config
 from ..core.managers import edit_or_reply
 
 
-async def chromeDriver(inputstr, event=None, html=None):
-    if Config.CHROME_BIN is None:
-        return None, "Need to install Google Chrome. Module Stopping."
-    start = datetime.now()
-    try:
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--ignore-certificate-errors")
-        chrome_options.add_argument("--test-type")
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.binary_location = Config.CHROME_BIN
-        if event:
-            await edit_or_reply(event, "`Starting Google Chrome BIN`")
-        driver = webdriver.Chrome(chrome_options=chrome_options)
-        driver.get(inputstr)
+class chromeDriver:
+    @staticmethod
+    def base(inputstr):
+        if Config.CHROME_BIN is None:
+            return None, "Need to install Google Chrome. Module Stopping."
+        try:
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument("--ignore-certificate-errors")
+            chrome_options.add_argument("--test-type")
+            chrome_options.add_argument("--headless")
+            chrome_options.add_argument("--no-sandbox")
+            chrome_options.add_argument("--disable-dev-shm-usage")
+            chrome_options.binary_location = Config.CHROME_BIN
+            driver = webdriver.Chrome(chrome_options=chrome_options)
+            driver.get(inputstr)
+            if "google" in inputstr:
+                with contextlib.suppress(Exception):
+                    driver.find_element(By.ID, "L2AGLb").click()
+                with contextlib.suppress(Exception):
+                    driver.find_element(
+                        By.XPATH, "//button[@aria-label='Accept all']"
+                    ).click()
+            return driver, None
+        except Exception as err:
+            return None, err
 
-        if "google" in inputstr:
-            with contextlib.suppress(Exception):
-                driver.find_element(By.ID, "L2AGLb").click()
-            with contextlib.suppress(Exception):
-                driver.find_element(
-                    By.XPATH, "//button[@aria-label='Accept all']"
-                ).click()
-
+    @staticmethod
+    async def get_screenshot(inputstr, event=None):
+        start = datetime.now()
+        driver, error = chromeDriver.base(inputstr)
+        if not driver:
+            return None, error
         if event:
-            await edit_or_reply(event, "`Calculating Page Dimensions`")
+            await edit_or_reply(
+                event, "`Calculating Page Dimensions with Google Chrome BIN``"
+            )
         height = driver.execute_script(
             "return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);"
         )
@@ -54,21 +63,23 @@ async def chromeDriver(inputstr, event=None, html=None):
             "return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);"
         )
         driver.set_window_size(width + 100, height + 100)
-        # Add some pixels on top of the calculated dimensions
-        # for good measure to make the scroll bars disappear
         im_png = driver.get_screenshot_as_png()
-        # saves screenshot of entire page
-        # if event: await edit_or_reply(event, "`Stoppping Chrome Bin`")
-        # capture the total work time
+        if event:
+            await edit_or_reply(event, "`Stoppping Chrome Bin`")
+        driver.close()
         end = datetime.now()
         ms = (end - start).seconds
-        if html:
-            html = driver.page_source
-            return im_png, html, None
-        driver.close()
         return im_png, f"**url : **{inputstr} \n**Time :** `{ms} seconds`"
-    except Exception as e:
-        return None, html, str(e)
+
+    @staticmethod
+    def get_html(inputstr):
+        driver, error = chromeDriver.base(inputstr)
+        if not driver:
+            return None, error
+        html = driver.page_source
+        driver.close()
+        return html, None
+
 
 
 class GooglePic:
@@ -91,11 +102,12 @@ class GooglePic:
         return "Visual matches" if (len(title) > 100 or not title) else title
 
     @staticmethod
-    async def reverse_data(image_filename, flag=False):
+    def reverse_data(image_filename, flag=False):
         data = {
             "title": None,
             "lens": None,
             "google": None,
+            "image_set": None,
             "error": None,
         }
         with open(image_filename, mode="rb") as f:
@@ -106,40 +118,24 @@ class GooglePic:
                     data["lens"] = re.search(r"https?://[^\"]+", res1.text).group()
                     res2 = requests.get(data["lens"])
                     if res2.ok:
-                        html = res2.text
+                        html = res2.text.encode().decode("unicode_escape")
                         with contextlib.suppress(Exception):
-                            data["google"] = re.search(
-                                r"https://www.google.com/search\?tbs.+?(?=\")", html
-                            ).group()
+                            data["google"] = re.search(r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
                         if not data["google"]:
-                            _, html, data["error"] = await chromeDriver(
-                                data["lens"], html=True
-                            )
-                            data["google"] = re.search(
-                                r"https://www.google.com/search\?tbs.+?(?=\")", html
-                            ).group()
+                            html, data["error"] = chromeDriver.get_html(data["lens"])
+                            html = html.encode().decode("unicode_escape")
+                            data["google"] = re.search( r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
                     if html:
                         if flag:
                             data["image_set"] = set()
-                            for link in re.findall(
-                                r"https://www.google.com/imgres\?imgurl.+?(?=\")", html
-                            ):
-                                decoded_link = link.encode().decode("unicode-escape")
-                                image = re.search(r"imgurl=(.+?)&", decoded_link).group(
-                                    1
-                                )
-                                site = re.search(
-                                    r"imgrefurl=(.+?)&", decoded_link
-                                ).group(1)
+                            for link in re.findall(r"https://www.google.com/imgres\?imgurl.+?(?=\")", html):
+                                image = re.search(r"imgurl=(.+?)&", link).group(1)
+                                site = re.search(r"imgrefurl=(.+?)&", link).group(1)
                                 if image.endswith(
                                     (".jpg", ".jpeg", ".png", ".gif")
                                 ) or site.endswith((".jpg", ".jpeg", ".png", ".gif")):
                                     data["image_set"].add(GooglePic(image, site))
-
                         data["title"] = GooglePic.__title_fetch__(html)
-                        data["google"] = (
-                            data["google"].encode().decode("unicode_escape")
-                        )
             except Exception as error:
                 data["error"] = str(error)
         return data

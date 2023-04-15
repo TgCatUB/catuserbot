@@ -49,7 +49,7 @@ async def screenshot(event):
     elif cmd == "gis":
         text = f"https://www.google.com/search?q={text}"
     catevent = await edit_or_reply(event, "`Processing ...`")
-    image, response = await chromeDriver(text, catevent)
+    image, response = await chromeDriver.get_screenshot(text, catevent)
     if not image:
         return await edit_delete(catevent, response)
 

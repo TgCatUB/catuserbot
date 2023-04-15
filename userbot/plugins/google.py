@@ -176,7 +176,7 @@ async def reverse(event):
     imagelist, captionlist, gifstring = [], [], ""
     if cmd == "grs":
         # save screenshot from lens url
-        pic, _ = await chromeDriver(data["lens"])
+        pic, _ = await chromeDriver.get_screenshot(data["lens"])
         if pic:
             with open(outfile, "wb") as file:
                 file.write(pic)
