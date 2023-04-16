@@ -21,7 +21,6 @@ from ..core.managers import edit_or_reply
 
 
 class chromeDriver:
-
     @staticmethod
     def driver():
         if Config.CHROME_BIN is None:
@@ -38,9 +37,9 @@ class chromeDriver:
             return driver, None
         except Exception as err:
             return None, err
-            
+
     @staticmethod
-    def bypass_cache(inputstr, driver = None):
+    def bypass_cache(inputstr, driver=None):
         if driver is None:
             driver, error = chromeDriver.driver()
             if not driver:
@@ -53,7 +52,7 @@ class chromeDriver:
                     By.XPATH, "//button[@aria-label='Accept all']"
                 ).click()
         return driver, None
-        
+
     @staticmethod
     def get_html(inputstr):
         driver, error = chromeDriver.bypass_cache(inputstr)
@@ -62,7 +61,7 @@ class chromeDriver:
         html = driver.page_source
         driver.close()
         return html, None
-        
+
     @staticmethod
     async def get_screenshot(inputstr, event=None):
         start = datetime.now()
@@ -87,7 +86,6 @@ class chromeDriver:
         end = datetime.now()
         ms = (end - start).seconds
         return im_png, f"**url : **{inputstr} \n**Time :** `{ms} seconds`"
-
 
 
 class GooglePic:
