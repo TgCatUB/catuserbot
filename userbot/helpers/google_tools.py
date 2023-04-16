@@ -22,7 +22,7 @@ from ..core.managers import edit_or_reply
 
 class chromeDriver:
     @staticmethod
-    def driver():
+    def start_driver():
         if Config.CHROME_BIN is None:
             return None, "Need to install Google Chrome. Module Stopping."
         try:
@@ -41,9 +41,10 @@ class chromeDriver:
     @staticmethod
     def bypass_cache(inputstr, driver=None):
         if driver is None:
-            driver, error = chromeDriver.driver()
+            driver, error = chromeDriver.start_driver()
             if not driver:
                 return None, error
+        driver.get(inputstr)
         if "google" in inputstr:
             with contextlib.suppress(Exception):
                 driver.find_element(By.ID, "L2AGLb").click()
