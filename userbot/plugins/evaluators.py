@@ -133,7 +133,6 @@ async def aexec(code, smessatatus):
     )
 
 
-
 @catub.cat_cmd(
     pattern="inspect ([\s\S]*)",
     command=("inspect", plugin_category),
@@ -149,7 +148,7 @@ async def aexec(code, smessatatus):
             "{tr}inspect userbot.plugins.alive",
             "{tr}inspect edit_or_reply",
             "{tr}inspect bs4 BeautifulSoup",
-        ]
+        ],
     },
 )
 async def search_func(event):
@@ -166,7 +165,10 @@ async def search_func(event):
         function = function[0] if function else None
         spec = importlib.util.find_spec(module_name)
         if spec is None:
-            return await edit_delete(catevent,f"**Error:**  no module or function found by the name: {module_name}")
+            return await edit_delete(
+                catevent,
+                f"**Error:**  no module or function found by the name: {module_name}",
+            )
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         if function:
@@ -199,7 +201,7 @@ async def search_func(event):
     await catub.send_file(
         event.chat_id,
         filename,
-        caption= caption,
+        caption=caption,
         allow_cache=False,
         reply_to=event.message.reply_to_msg_id,
     )
