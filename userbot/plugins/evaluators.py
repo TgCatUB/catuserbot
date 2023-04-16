@@ -146,7 +146,7 @@ async def aexec(code, smessatatus):
             "{tr}inspect <function>",
             "{tr}inspect <module> <function>",
         ],
-        "example": [
+        "examples": [
             "{tr}inspect userbot.plugins.alive",
             "{tr}inspect edit_or_reply",
             "{tr}inspect bs4 BeautifulSoup",
