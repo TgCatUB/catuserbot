@@ -22,7 +22,7 @@ from ..core.managers import edit_or_reply
 
 class chromeDriver:
     @staticmethod
-    def base(inputstr):
+    def start_driver():
         if Config.CHROME_BIN is None:
             return None, "Need to install Google Chrome. Module Stopping."
         try:
@@ -34,22 +34,39 @@ class chromeDriver:
             chrome_options.add_argument("--disable-dev-shm-usage")
             chrome_options.binary_location = Config.CHROME_BIN
             driver = webdriver.Chrome(chrome_options=chrome_options)
-            driver.get(inputstr)
-            if "google" in inputstr:
-                with contextlib.suppress(Exception):
-                    driver.find_element(By.ID, "L2AGLb").click()
-                with contextlib.suppress(Exception):
-                    driver.find_element(
-                        By.XPATH, "//button[@aria-label='Accept all']"
-                    ).click()
             return driver, None
         except Exception as err:
             return None, err
 
     @staticmethod
+    def bypass_cache(inputstr, driver=None):
+        if driver is None:
+            driver, error = chromeDriver.start_driver()
+            if not driver:
+                return None, error
+        driver.get(inputstr)
+        if "google" in inputstr:
+            with contextlib.suppress(Exception):
+                driver.find_element(By.ID, "L2AGLb").click()
+            with contextlib.suppress(Exception):
+                driver.find_element(
+                    By.XPATH, "//button[@aria-label='Accept all']"
+                ).click()
+        return driver, None
+
+    @staticmethod
+    def get_html(inputstr):
+        driver, error = chromeDriver.bypass_cache(inputstr)
+        if not driver:
+            return None, error
+        html = driver.page_source
+        driver.close()
+        return html, None
+
+    @staticmethod
     async def get_screenshot(inputstr, event=None):
         start = datetime.now()
-        driver, error = chromeDriver.base(inputstr)
+        driver, error = chromeDriver.bypass_cache(inputstr)
         if not driver:
             return None, error
         if event:
@@ -70,15 +87,6 @@ class chromeDriver:
         end = datetime.now()
         ms = (end - start).seconds
         return im_png, f"**url : **{inputstr} \n**Time :** `{ms} seconds`"
-
-    @staticmethod
-    def get_html(inputstr):
-        driver, error = chromeDriver.base(inputstr)
-        if not driver:
-            return None, error
-        html = driver.page_source
-        driver.close()
-        return html, None
 
 
 class GooglePic:
