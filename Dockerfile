@@ -12,6 +12,9 @@ FROM catub/catuserbot:latest
 # Working directory 
 WORKDIR /userbot
 
+# Timezone
+ENV TZ=Asia/Kolkata
+
 ## Copy files into the Docker image
 COPY . .
 
