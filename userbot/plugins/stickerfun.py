@@ -6,13 +6,13 @@
 # modified & improved by @jisan7509
 # RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
 
-from io import BytesIO
 import os
 import random
 import textwrap
 import urllib
-import requests
+from io import BytesIO
 
+import requests
 from PIL import Image, ImageDraw, ImageFont
 
 from userbot import Convert, catub
@@ -29,7 +29,6 @@ from ..helpers.functions import (
 from ..helpers.utils import reply_id
 
 plugin_category = "fun"
-
 
 
 def file_checker(template):
@@ -97,7 +96,9 @@ async def sticklet(event):
     image = Image.new("RGBA", (512, 512), (255, 255, 255, 0))
     draw = ImageDraw.Draw(image)
     fontsize = 230
-    json = requests.get("https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/master/Resources/StickerFun/resources.txt").json()
+    json = requests.get(
+        "https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/master/Resources/StickerFun/resources.txt"
+    ).json()
     FONT_FILE = requests.get(random.choice(json["fonts"]))
     font = ImageFont.truetype(BytesIO(FONT_FILE.content), size=fontsize)
     while draw.multiline_textsize(sticktext, font=font) > (512, 512):
@@ -118,7 +119,6 @@ async def sticklet(event):
         image_stream,
         reply_to=reply_to_id,
     )
-
 
 
 @catub.cat_cmd(
