@@ -158,4 +158,11 @@ def ai_response(text):
                     )
                 )
             )
-    return output_text
+    # clean out line numbers
+    formated_out =""
+    for item in output_text.splitlines():
+        if item.isdigit():
+            item = ""
+        formated_out += item + "\n"
+
+    return formated_out.replace("\n\n","\n")
