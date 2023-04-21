@@ -10,18 +10,17 @@
 import os
 
 import openai
+from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from userbot.Config import Config
 from userbot.core.managers import edit_delete, edit_or_reply
 from userbot.helpers.functions import format_image, wall_download
-from userbot.sql_helper.globals import gvarstatus
 from userbot.helpers.google_tools import chromeDriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import StaleElementReferenceException
-
+from userbot.sql_helper.globals import gvarstatus
 
 openai.api_key = Config.OPENAI_API_KEY
 conversations = {}
@@ -132,16 +131,31 @@ def ai_response(text):
     driver, error = chromeDriver.start_driver()
     driver.get("https://ora.sh/embed/b5034e48-5669-4326-b1a8-75fd91f5fa1e")
 
-    input_box = WebDriverWait(driver, 2).until(EC.element_to_be_clickable(( By.XPATH, '//*[@id="__next"]/div[2]/div/div/div/div[3]/div/textarea')))
+    input_box = WebDriverWait(driver, 2).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, '//*[@id="__next"]/div[2]/div/div/div/div[3]/div/textarea')
+        )
+    )
     input_box.send_keys(text)
     input_box.send_keys(Keys.ENTER)
 
-    output_box = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div[2]/div/div/div/div[2]/div[2]/div/div/div')))
+    output_box = WebDriverWait(driver, 2).until(
+        EC.presence_of_element_located(
+            (By.XPATH, '//*[@id="__next"]/div[2]/div/div/div/div[2]/div[2]/div/div/div')
+        )
+    )
     output_text = ""
 
     while not output_text:
         try:
             output_text = output_box.text
         except StaleElementReferenceException:
-            output_box = WebDriverWait(driver,2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div[2]/div/div/div/div[2]/div[2]/div/div/div')))
+            output_box = WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//*[@id="__next"]/div[2]/div/div/div/div[2]/div[2]/div/div/div',
+                    )
+                )
+            )
     return output_text
