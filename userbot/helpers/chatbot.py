@@ -15,6 +15,13 @@ from userbot.Config import Config
 from userbot.core.managers import edit_delete, edit_or_reply
 from userbot.helpers.functions import format_image, wall_download
 from userbot.sql_helper.globals import gvarstatus
+from userbot.helpers.google_tools import chromeDriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import StaleElementReferenceException
+
 
 openai.api_key = Config.OPENAI_API_KEY
 conversations = {}
@@ -121,29 +128,20 @@ async def generate_dalle_image(text, reply, event, flag=None):
     return photos, captions
 
 
-"""
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.contacts import UnblockRequest as unblock
+def ai_response(text):
+    driver, error = chromeDriver.start_driver()
+    driver.get("https://ora.sh/embed/b5034e48-5669-4326-b1a8-75fd91f5fa1e")
 
-async def ai_api(event):
-    token = gvarstatus("AI_API_TOKEN") or None
-    if not token:
-        chat = "@Kukichatbot"
-        token = "5381629779-KUKIdn8kLJ5Ln0"
-        async with event.client.conversation(chat) as conv:
-            try:
-                purgeflag = await conv.send_message("/start")
-            except YouBlockedUserError:
-                await catub(unblock("Kukichatbot"))
-                purgeflag = await conv.send_message("/start")
-            await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-            await conv.send_message("/token")
-            respond = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-            await delete_conv(event, chat, purgeflag)
-            if rgxtoken := re.search(r"(?:API: )(.+)(?: Do)", respond.message):
-                token = rgxtoken[1]
-            addgvar("AI_API_TOKEN", token)
-    return token
-"""
+    input_box = WebDriverWait(driver, 2).until(EC.element_to_be_clickable(( By.XPATH, '//*[@id="__next"]/div[2]/div/div/div/div[3]/div/textarea')))
+    input_box.send_keys(text)
+    input_box.send_keys(Keys.ENTER)
+
+    output_box = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div[2]/div/div/div/div[2]/div[2]/div/div/div')))
+    output_text = ""
+
+    while not output_text:
+        try:
+            output_text = output_box.text
+        except StaleElementReferenceException:
+            output_box = WebDriverWait(driver,2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div[2]/div/div/div/div[2]/div[2]/div/div/div')))
+    return output_text
