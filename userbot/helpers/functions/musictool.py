@@ -68,7 +68,7 @@ class LyricGenius:
                     .replace("\n\n\n", "\n\n")
                 )
 
-        except (HTTPError, ValueError):
+        except (HTTPError, ValueError, TimeoutError):
             # try to scrap 1st
             url = f"https://www.musixmatch.com/lyrics/{artist.replace(' ', '-')}/{title.replace(' ', '-')}"
             soup, _ = chromeDriver.get_html(url)
