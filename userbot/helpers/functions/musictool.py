@@ -61,7 +61,7 @@ class LyricGenius:
             song = self.genius.search_song(title, artist)
             lyrics = song.lyrics.split(f"{title} Lyrics")
             if len(lyrics)>1:
-                lyrics = lyrics[1].replace("[","\n\n[").replace("\n\n\n[","\n\n[").replace("\n\n\n","\n\n"))
+                lyrics = lyrics[1].replace("[","\n\n[").replace("\n\n\n[","\n\n[").replace("\n\n\n","\n\n")
 
         except (HTTPError, ValueError):
             # try to scrap 1st
