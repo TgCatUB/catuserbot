@@ -24,26 +24,26 @@ plugin_category = "tools"
     info={
         "header": "Create beautiful artwork using the power of AI.",
         "notes": "Best styles are V2s",
-        "examples": [
-            "{tr}genimg -l",
-            "{tr}genimg -l 84",
-            "{tr}genimg Cat",
-        ],
         "usage": [
             "{tr}genimg -l ( get list of artstyles )",
             "{tr}genimg -l <style-id> ( change the style )",
             "{tr}genimg <text> (generate)",
+        ],
+        "examples": [
+            "{tr}genimg -l",
+            "{tr}genimg -l 84",
+            "{tr}genimg Cat riding bike",
         ],
     },
 )
 async def gen_img(odi):
     "Generate an Image using the provided text with Somnium"
     reply_to_id = await reply_id(odi)
-    query = "odi.pattern_match.group(1)"
+    query = odi.pattern_match.group(1)
     if not query:
         return await edit_delete(odi, "`What should I do ??`")
 
-    catevent = await edit_or_reply(odi, "`Generating ai image ...`")
+    catevent = await edit_or_reply(odi, "`Processing ...`")
     rstyles = {value: key for key, value in Somnium.Styles().items()}
     styleid = int(gvarstatus("DREAM_STYLE") or "84")
 
@@ -58,16 +58,18 @@ async def gen_img(odi):
 
             return await edit_delete(
                 catevent,
-                f"**Error**:\nWrong style id.\nGet list of styles: [`.dream -l`]",
+                f"**Wrong style id.\n\n🎠 Here is list of:**  [styles]({await GetStylesGraph()}) ",
+                link_preview=True,
+                time=120,
             )
 
         return await edit_delete(
             catevent,
-            f"**🎠 Here is list of:**  [styles]({await GetStylesGraph()}) .",
+            f"**🎠 Here is list of:**  [styles]({await GetStylesGraph()}) ",
             link_preview=True,
             time=120,
         )
-
+    await edit_or_reply(catevent, "`Generating ai image ...`")
     getart = Somnium.Generate(query, styleid)
     await catub.send_file(
         odi.chat_id,
@@ -84,8 +86,8 @@ async def gen_img(odi):
     command=("gentxt", plugin_category),
     info={
         "header": "Generate GPT response with prompt using the power of AI.",
-        "examples": "{tr}gentxt < text / reply >",
-        "usage": "{tr}gentxt write a paragraph on cat",
+        "usage": "{tr}gentxt < text / reply >",
+        "examples": "{tr}gentxt write a paragraph on cat",
     },
 )
 async def gen_txt(event):
