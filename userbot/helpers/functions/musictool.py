@@ -59,7 +59,10 @@ class LyricGenius:
             artist = song_info["primary_artist"]["name"]
         try:
             song = self.genius.search_song(title, artist)
-            lyrics = song.lyrics
+            lyrics = song.lyrics.split(f"{title} Lyrics")
+            if len(lyrics)>1:
+                lyrics = lyrics[1].replace("[","\n\n[").replace("\n\n\n[","\n\n[").replace("\n\n\n","\n\n"))
+
         except (HTTPError, ValueError):
             # try to scrap 1st
             url = f"https://www.musixmatch.com/lyrics/{artist.replace(' ', '-')}/{title.replace(' ', '-')}"
