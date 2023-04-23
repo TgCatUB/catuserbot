@@ -16,15 +16,10 @@ from uuid import uuid4
 
 import requests
 from googletrans import Translator
-from PIL import Image, ImageOps
-from telethon import functions, types
-
-from ..utils.extdl import install_pip
-
-from imdb import Cinemagoer
-
 from html_telegraph_poster import TelegraphPoster
+from imdb import Cinemagoer
 from PIL import Image, ImageColor, ImageDraw, ImageFilter, ImageFont, ImageOps
+from telethon import functions, types
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
@@ -126,6 +121,7 @@ async def GetStylesGraph():
         ]
     )
     return await post_to_telegraph("List Of ArtStyles", html)
+
 
 # --------------------------------------------------------------------------------------------------------------------#
 
