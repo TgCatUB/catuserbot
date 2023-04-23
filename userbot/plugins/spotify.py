@@ -526,7 +526,7 @@ def title_fetch(title):
     return title
 
 
-async def telegraph_lyrics(event, tittle, artist):
+async def telegraph_lyrics(tittle, artist):
     GENIUS = Config.GENIUS_API_TOKEN
     symbol = "❌"
     if GENIUS is None:
@@ -649,7 +649,7 @@ async def make_thumb(url, client, song, artist, now, full):
     return pic_name
 
 
-async def get_spotify(event, response):
+async def get_spotify(response):
     dic = {}
     received = response.json()
     if received["currently_playing_type"] == "track":
@@ -668,7 +668,7 @@ async def get_spotify(event, response):
             dic["progress"],
             dic["duration"],
         )
-        lyrics, symbol = await telegraph_lyrics(event, tittle, dic["interpret"])
+        lyrics, symbol = await telegraph_lyrics(tittle, dic["interpret"])
         url = upload_file(thumb)
         if os.path.exists(thumb):
             os.remove(thumb)

@@ -199,9 +199,7 @@ async def article_builder(event, method):
                     query = "__Currently not listening to any music on spotify...__"
                     buttons = [Button.url("Open Spotify", "https://open.spotify.com/")]
                 else:
-                    media, tittle, dic, lyrics, symbol = await get_spotify(
-                        event, response
-                    )
+                    media, tittle, dic, lyrics, symbol = await get_spotify(response)
                     thumb = get_thumb("spotify_on.png")
                     query = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}`'
                     buttons = [
