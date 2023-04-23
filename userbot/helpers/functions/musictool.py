@@ -10,22 +10,20 @@
 import contextlib
 import os
 from pathlib import Path
+from urllib.error import HTTPError
 
 import lyricsgenius
-
+import requests
+from bs4 import BeautifulSoup
 
 from ...Config import Config
-from ...helpers.google_tools import chromeDriver
 from ...core.managers import edit_or_reply
+from ...helpers.google_tools import chromeDriver
 from ..utils.utils import runcmd
 from .utube import name_dl, song_dl, video_dl
 
-from bs4 import BeautifulSoup
-import requests
-from urllib.error import HTTPError
-
-
 GENIUS = Config.GENIUS_API_TOKEN
+
 
 class LyricGenius:
     def __init__(self):
@@ -53,7 +51,7 @@ class LyricGenius:
         return song_info
 
     def lyrics(self, title, artist=None):
-        lyrics = "" 
+        lyrics = ""
         song_info = self.song(title, artist)
         title = song_info["title"]
         link = song_info["song_art_image_url"] or None
@@ -62,22 +60,25 @@ class LyricGenius:
         try:
             song = self.genius.search_song(title, artist)
             lyrics = song.lyrics
-        except (HTTPError, ValueError ):
+        except (HTTPError, ValueError):
             # try to scrap 1st
             url = f"https://www.musixmatch.com/lyrics/{artist.replace(' ', '-')}/{title.replace(' ', '-')}"
             soup, _ = chromeDriver.get_html(url)
-            soup = BeautifulSoup(soup, 'html.parser')
-            lyrics_containers = soup.find_all(class_='lyrics__content__ok')
+            soup = BeautifulSoup(soup, "html.parser")
+            lyrics_containers = soup.find_all(class_="lyrics__content__ok")
             for container in lyrics_containers:
                 lyrics += container.get_text().strip()
 
             # if private data then show 30%
             if not lyrics:
-                base_url = 'https://api.musixmatch.com/ws/1.1/'
-                endpoint = base_url + f'matcher.lyrics.get?format=json&q_track={title}&q_artist={artist}&apikey=bf9bfaeccae52f5a4366bcdb2a6b0c4e'
+                base_url = "https://api.musixmatch.com/ws/1.1/"
+                endpoint = (
+                    base_url
+                    + f"matcher.lyrics.get?format=json&q_track={title}&q_artist={artist}&apikey=bf9bfaeccae52f5a4366bcdb2a6b0c4e"
+                )
                 response = requests.get(endpoint)
                 data = response.json()
-                lyrics = data['message']['body']['lyrics']['lyrics_body']
+                lyrics = data["message"]["body"]["lyrics"]["lyrics_body"]
         return link, lyrics
 
 
