@@ -43,6 +43,7 @@ requests
 selenium
 setuptools
 ShazamAPI
+somnium
 spamwatch
 speedtest-cli
 sqlalchemy-json

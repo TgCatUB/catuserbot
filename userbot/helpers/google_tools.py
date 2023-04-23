@@ -36,7 +36,7 @@ class chromeDriver:
             driver = webdriver.Chrome(chrome_options=chrome_options)
             return driver, None
         except Exception as err:
-            return None, err
+            return None, str(err)
 
     @staticmethod
     def bypass_cache(inputstr, driver=None):

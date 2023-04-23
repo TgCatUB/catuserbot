@@ -49,7 +49,7 @@ async def generate_gpt_response(input_text, chat_id):
         messages.append({"role": "assistant", "content": generated_text})
         conversations[chat_id] = messages
     except Exception as e:
-        generated_text = f"`Error generating GPT response: {e}`"
+        generated_text = f"`Error generating GPT response: {str(e)}`"
     return generated_text
 
 
@@ -62,7 +62,7 @@ def generate_edited_response(input_text, instructions):
         )
         edited_text = response.choices[0].text.strip()
     except Exception as e:
-        edited_text = f"__Error generating GPT edited response:__ `{e}`"
+        edited_text = f"__Error generating GPT edited response:__ `{str(e)}`"
     return edited_text
 
 
@@ -79,7 +79,7 @@ def del_convo(chat_id, checker=False):
 
 async def generate_dalle_image(text, reply, event, flag=None):
     size = gvarstatus("DALLE_SIZE") or "1024"
-    limit = gvarstatus("DALLE_LIMIT") or "1"
+    limit = int(gvarstatus("DALLE_LIMIT") or "1")
     if not text and reply:
         text = reply.text
     if not text:
@@ -95,25 +95,24 @@ async def generate_dalle_image(text, reply, event, flag=None):
                 response = openai.Image.create_edit(
                     image=open(filename, "rb"),
                     prompt=text,
-                    n=int(limit),
+                    n=limit,
                     size=f"{size}x{size}",
                 )
             elif flag == "v":
                 response = openai.Image.create_variation(
                     image=open(filename, "rb"),
-                    n=int(limit),
+                    n=limit,
                     size=f"{size}x{size}",
                 )
             os.remove(filename)
         else:
             response = openai.Image.create(
                 prompt=text,
-                n=int(limit),
+                n=limit,
                 size=f"{size}x{size}",
             )
     except Exception as e:
-        return await edit_delete(catevent, f"Error generating image: {e}")
-
+        return await edit_delete(catevent, f"Error generating image: {str(e)}")
     photos = []
     captions = []
     for i, media in enumerate(response["data"], 1):
@@ -129,6 +128,8 @@ async def generate_dalle_image(text, reply, event, flag=None):
 
 def ai_response(text):
     driver, error = chromeDriver.start_driver()
+    if not driver:
+        return error
     driver.get("https://ora.sh/embed/b5034e48-5669-4326-b1a8-75fd91f5fa1e")
 
     input_box = WebDriverWait(driver, 2).until(
