@@ -10,7 +10,6 @@
 import contextlib
 import os
 from pathlib import Path
-from urllib.error import HTTPError
 
 import lyricsgenius
 import requests
@@ -67,8 +66,7 @@ class LyricGenius:
                     .replace("\n\n\n[", "\n\n[")
                     .replace("\n\n\n", "\n\n")
                 )
-
-        except (HTTPError, ValueError, TimeoutError):
+        except Exception:
             # try to scrap 1st
             url = f"https://www.musixmatch.com/lyrics/{artist.replace(' ', '-')}/{title.replace(' ', '-')}"
             soup, _ = chromeDriver.get_html(url)
