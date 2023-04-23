@@ -15,7 +15,7 @@ from ..helpers import GetStylesGraph, ai_response, reply_id
 from ..sql_helper.globals import addgvar, gvarstatus
 from . import catub, mention
 
-plugin_category = "useless"
+plugin_category = "tools"
 
 
 @catub.cat_cmd(
