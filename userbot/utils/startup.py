@@ -181,10 +181,7 @@ async def load_plugins(folder, extfolder=None):
     if extfolder:
         if not failure:
             failure.append("None")
-        await catub.tgbot.send_message(
-            BOTLOG_CHATID,
-            f'Your external repo plugins have imported \n**No of imported plugins :** `{success}`\n**Failed plugins to import :** `{", ".join(failure)}`',
-        )
+        return success, failure
 
 
 async def verifyLoggerGroup():
@@ -281,4 +278,5 @@ async def install_externalrepo(repo, branch, cfolder):
         )
     if os.path.exists(rpath):
         await runcmd(f"pip3 install --no-cache-dir -r {rpath}")
-    await load_plugins(folder="userbot", extfolder=cfolder)
+    success, failure = await load_plugins(folder="userbot", extfolder=cfolder)
+    return repourl, cfolder, success, failure

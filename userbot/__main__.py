@@ -61,16 +61,21 @@ async def startup_process():
 
 
 async def externalrepo():
+    string = "<b>Your external repo plugins have imported.<b>\n\n"
     if Config.EXTERNAL_REPO:
-        await install_externalrepo(
+        data = await install_externalrepo(
             Config.EXTERNAL_REPO, Config.EXTERNAL_REPOBRANCH, "xtraplugins"
         )
+        string += f"<b>➜ Repo:  </b><a href='{data[0]}'><b>{data[1]}</b></a>\n<b>     • Imported Plugins:</b>  <code>{data[2]}</code>\n<b>     • Failed to Import:</b>  <code>{', '.join(data[3])}</code>\n\n"
     if Config.BADCAT:
-        await install_externalrepo(
+        data = await install_externalrepo(
             Config.BADCAT_REPO, Config.BADCAT_REPOBRANCH, "badcatext"
         )
+        string += f"<b>➜ Repo:  </b><a href='{data[0]}'><b>{data[1]}</b></a>\n<b>     • Imported Plugins:</b>  <code>{data[2]}</code>\n<b>     • Failed to Import:</b>  <code>{', '.join(data[3])}</code>\n\n"
     if Config.VCMODE:
-        await install_externalrepo(Config.VC_REPO, Config.VC_REPOBRANCH, "catvc")
+        data = await install_externalrepo(Config.VC_REPO, Config.VC_REPOBRANCH, "catvc")
+        string += f"<b>➜ Repo:  </b><a href='{data[0]}'><b>{data[1]}</b></a>\n<b>     • Imported Plugins:</b>  <code>{data[2]}</code>\n<b>     • Failed to Import:</b>  <code>{', '.join(data[3])}</code>\n\n"
+    await catub.tgbot.send_message(BOTLOG_CHATID, string, parse_mode="html")
 
 
 catub.loop.run_until_complete(startup_process())
