@@ -104,3 +104,4 @@ config.py
 
 # mypy
 .mypy_cache/
+*.bak
