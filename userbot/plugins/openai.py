@@ -120,7 +120,7 @@ async def gpt_response_with_prompt(event):
         return await edit_delete(event, "**ಠ∀ಠ Gimmi text**")
 
     catevent = await edit_or_reply(event, "__Generating answer...__")
-    gpt_response = await generate_gpt_response(text, chat_id)
+    gpt_response = generate_gpt_response(text, chat_id)
     await edit_or_reply(catevent, gpt_response)
 
 
@@ -195,14 +195,15 @@ async def dalle_image_generation(event):
     # If no flag then generate from text
     else:
         photos, captions = await generate_dalle_image(text, reply, event)
-
-    await event.client.send_file(
-        event.chat_id,
-        photos,
-        caption=captions,
-        reply_to=reply_to_id,
-        force_document=True,
-    )
-    await event.delete()
-    for i in photos:
-        os.remove(i)
+        
+    if photos:
+        await event.client.send_file(
+            event.chat_id,
+            photos,
+            caption=captions,
+            reply_to=reply_to_id,
+            force_document=True,
+        )
+        await event.delete()
+        for i in photos:
+            os.remove(i)

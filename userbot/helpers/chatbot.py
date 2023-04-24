@@ -26,7 +26,7 @@ openai.api_key = Config.OPENAI_API_KEY
 conversations = {}
 
 
-async def generate_gpt_response(input_text, chat_id):
+def generate_gpt_response(input_text, chat_id):
     global conversations
     model = gvarstatus("CHAT_MODEL") or "gpt-3.5-turbo"
     system_message = gvarstatus("SYSTEM_MESSAGE") or None
@@ -112,7 +112,9 @@ async def generate_dalle_image(text, reply, event, flag=None):
                 size=f"{size}x{size}",
             )
     except Exception as e:
-        return await edit_delete(catevent, f"Error generating image: {str(e)}")
+        await edit_delete(catevent, f"Error generating image: {str(e)}")
+        return None, None
+        
     photos = []
     captions = []
     for i, media in enumerate(response["data"], 1):
