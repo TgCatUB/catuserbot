@@ -7,7 +7,6 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-import base64
 import os
 import random
 import re
@@ -83,7 +82,8 @@ def text_chunk_list(query, bits=29900):
     if string != "":
         text_list.append(string)
     return text_list
-
+    
+    
 
 @catub.cat_cmd(
     pattern="rayso(?:\s|$)([\s\S]*)",
@@ -167,23 +167,13 @@ async def rayso_by_pro_odi(event):  # By @feelded
 
     # // Max size 30000 byte but that breaks thumb so making on 28000 byte
     text_list = text_chunk_list(text, 28000)
+    user = (await catub.get_me()).first_name
     for i, text in enumerate(text_list, start=1):
         await edit_or_reply(catevent, f"**⏳ Pasting on image : {i}/{len(text_list)} **")
-
-        name = f"rayso{i}.png"
-        url = f'https://ray.so/#code={base64.b64encode(text.encode()).decode().replace("+","-")}&title={(await catub.get_me()).first_name}&theme={theme}&padding=64&darkMode={darkMode}&language=python'
-        driver, error = chromeDriver.start_driver()
+        outfile, error = chromeDriver.get_rayso(text, file_name=f"rayso{i}.png", title=user, theme=theme, darkMode=darkMode)
         if error:
-            return await edit_delete(catevent, error)
-        driver.set_window_size(2000, 20000)
-        driver.get(url)
-        element = driver.find_element(By.CLASS_NAME, "Controls_controls__kwzcE")
-        driver.execute_script("arguments[0].style.display = 'none';", element)
-        frame = driver.find_element(By.CLASS_NAME, "Frame_frame__Dmfe9")
-        frame.screenshot(name)
-        driver.quit()
-
-        files.append(name)
+            return await edit_delete(catevent,error)
+        files.append(outfile)
         captions.append("")
 
     await edit_or_reply(catevent, f"**📎 Uploading... **")

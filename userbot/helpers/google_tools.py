@@ -7,6 +7,7 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import base64
 import contextlib
 import re
 import time
@@ -63,6 +64,21 @@ class chromeDriver:
         driver.close()
         return html, None
 
+    @staticmethod
+    def get_rayso(inputstr, file_name ="Rayso.png", title="CatUB", theme ="crimson", darkMode=True):
+        url = f'https://ray.so/#code={base64.b64encode(inputstr.encode()).decode().replace("+","-")}&title={title}&theme={theme}&padding=64&darkMode={darkMode}&language=python'
+        driver, error = chromeDriver.start_driver()
+        if error:
+            return None, error
+        driver.set_window_size(2000, 20000)
+        driver.get(url)
+        element = driver.find_element(By.CLASS_NAME, "Controls_controls__kwzcE")
+        driver.execute_script("arguments[0].style.display = 'none';", element)
+        frame = driver.find_element(By.CLASS_NAME, "Frame_frame__Dmfe9")
+        frame.screenshot(file_name)
+        driver.quit()
+        return file_name, None
+    
     @staticmethod
     async def get_screenshot(inputstr, event=None):
         start = datetime.now()
