@@ -8,12 +8,15 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import logging
 import sys
+import logging
+
+sys.stdout = open("catub.log", "a")
+sys.stderr = sys.stdout
 
 logging.basicConfig(
-    format="[%(levelname)s - %(asctime)s] - %(name)s - %(message)s",
+    format="[%(levelname)s- %(asctime)s]- %(name)s- %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)],
     level=logging.INFO,
-    handlers=[logging.FileHandler("catub.log", "a"), logging.StreamHandler(sys.stdout)],
     datefmt="%H:%M:%S",
 )
