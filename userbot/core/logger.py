@@ -10,12 +10,11 @@
 import sys
 import logging
 
-sys.stdout = open("catub.log", "a")
-sys.stderr = sys.stdout
+sys.stdout = sys.stderr = open("catub.log", "a")
 
 logging.basicConfig(
     format="[%(levelname)s- %(asctime)s]- %(name)s- %(message)s",
-    handlers=[logging.FileHandler("catub.log"), logging.StreamHandler(sys.stderr)],
+    handlers=[logging.FileHandler("catub.log"), logging.StreamHandler()],
     level=logging.INFO,
     datefmt="%H:%M:%S",
 )
