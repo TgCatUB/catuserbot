@@ -195,7 +195,7 @@ async def dalle_image_generation(event):
     # If no flag then generate from text
     else:
         photos, captions = await generate_dalle_image(text, reply, event)
-        
+
     if photos:
         await event.client.send_file(
             event.chat_id,

@@ -114,7 +114,7 @@ async def generate_dalle_image(text, reply, event, flag=None):
     except Exception as e:
         await edit_delete(catevent, f"Error generating image: {str(e)}")
         return None, None
-        
+
     photos = []
     captions = []
     for i, media in enumerate(response["data"], 1):
