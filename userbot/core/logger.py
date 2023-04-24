@@ -7,7 +7,7 @@
 # Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-"""
+
 import logging
 import sys
 
@@ -15,16 +15,8 @@ logging.basicConfig(
     format="[%(levelname)s - %(asctime)s] - %(name)s - %(message)s",
     level=logging.INFO,
     handlers=[
-        logging.FileHandler("catub.log", mode="w"),
+        logging.FileHandler("catub.log", "a"),
         logging.StreamHandler(sys.stdout)
-    ]
-)
-"""
-import logging
-
-logging.basicConfig(
-    format="[%(levelname)s - %(asctime)s] - %(name)s - %(message)s",
-    level=logging.INFO,
-    handlers=[logging.StreamHandler(), logging.FileHandler("catub.log")],
-    datefmt="%H:%M:%S",
+    ],
+    datefmt="%H:%M:%S"
 )
