@@ -112,6 +112,9 @@ async def safe_check_text(msg):  # sourcery no-metrics
             or (phone[-10:] in msg)
             or (Config.API_HASH in msg)
             or (Config.TG_BOT_TOKEN in msg)
+            or (Config.BOTLOG_CHATID in msg)
+            or (Config.PRIVATE_GROUP_BOT_API_ID and Config.PRIVATE_GROUP_BOT_API_ID in msg)
+            or (Config.PM_LOGGER_GROUP_ID and Config.PM_LOGGER_GROUP_ID in msg)
             or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)
             or (Config.OPEN_WEATHER_MAP_APPID and Config.OPEN_WEATHER_MAP_APPID in msg)
             or (Config.IBM_WATSON_CRED_URL and Config.IBM_WATSON_CRED_URL in msg)
@@ -286,6 +289,7 @@ async def send_file(
     force_document: bool = False,
     file_size: int = None,
     clear_draft: bool = False,
+    checker: "hints.FileLike" = None,
     progress_callback: "hints.ProgressCallback" = None,
     reply_to: "hints.MessageIDLike" = None,
     attributes: "typing.Sequence[types.TypeDocumentAttribute]" = None,
@@ -349,6 +353,8 @@ async def send_file(
     safecheck = await safe_check_text(msg)
     try:
         filemsg = pathlib.Path(file).read_text()
+    except Exception:
+        filemsg = pathlib.Path(checker).read_text()
     except Exception:
         filemsg = ""
     safe_file_check = await safe_check_text(filemsg)

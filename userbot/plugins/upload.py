@@ -120,6 +120,7 @@ async def upload(path, event, udir_event, catflag=None):  # sourcery no-metrics
         await event.client.send_file(
             event.chat_id,
             file=media,
+            checker=f,
             caption=f"**File Name : **`{fname}`",
             reply_to=reply_to_id,
         )
