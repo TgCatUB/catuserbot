@@ -169,7 +169,6 @@ async def unload(event):
         PLG_INFO.pop(shortname)
 
 
-
 @catub.cat_cmd(
     pattern="logs(|full)$",
     command=("logs", plugin_category),
@@ -181,13 +180,13 @@ async def unload(event):
 async def app_log(event):
     "To get log of the Catuserbot"
     cmd = event.pattern_match.group(1)
-    with open('catub.log', 'r') as file:
+    with open("catub.log", "r") as file:
         if cmd == "full":
             log = file.read()
-            linktext="**Full logs: **"
+            linktext = "**Full logs: **"
         elif cmd == "":
             lines = file.readlines()[-100:]
-            log = ''.join(lines)
-            linktext="**Recent 100 lines of logs: **"
+            log = "".join(lines)
+            linktext = "**Recent 100 lines of logs: **"
 
-    await edit_or_reply(event, log, deflink=True,linktext=linktext)
+    await edit_or_reply(event, log, deflink=True, linktext=linktext)
