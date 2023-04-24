@@ -64,6 +64,8 @@ async def switch_branch():
             await _catutils.runcmd(f"mv ./TempCat/{file} ./")
         await _catutils.runcmd("pip3 install --no-cache-dir -r requirements.txt")
         await _catutils.runcmd("rm -rf TempCat")
+    if os.path.exists("catub.log"):
+        os.remove("catub.log")
     if os.path.exists("badcatext"):
         await _catutils.runcmd("rm -rf badcatext")
     if os.path.exists("xtraplugins"):
