@@ -195,8 +195,8 @@ async def dyno_usage(dyno):
 
 
 @catub.cat_cmd(
-    pattern="(herokulogs|logs)$",
-    command=("logs", plugin_category),
+    pattern="herokulogs$",
+    command=("herokulogs", plugin_category),
     info={
         "header": "To get recent 100 lines logs from heroku.",
         "usage": ["{tr}herokulogs", "{tr}logs"],
