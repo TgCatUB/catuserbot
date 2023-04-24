@@ -220,7 +220,7 @@ async def verifyLoggerGroup():
             "CatUserbot BotLog Group", catub, Config.TG_BOT_USERNAME, descript
         )
         addgvar("PRIVATE_GROUP_BOT_API_ID", groupid)
-        print(
+        LOGS.info(
             "Private Group for PRIVATE_GROUP_BOT_API_ID is created successfully and added to vars."
         )
         flag = True

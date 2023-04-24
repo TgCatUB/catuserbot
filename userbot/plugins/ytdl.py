@@ -259,7 +259,6 @@ async def download_video(event):
             return
         try:
             f = pathlib.Path("cat_ytv.mp4")
-            print(f)
             catthumb = pathlib.Path("cat_ytv.jpg")
             if not os.path.exists(catthumb):
                 catthumb = pathlib.Path("cat_ytv.webp")
