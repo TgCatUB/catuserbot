@@ -16,7 +16,6 @@ sys.stderr = sys.stdout
 
 logging.basicConfig(
     format="[%(levelname)s- %(asctime)s]- %(name)s- %(message)s",
-    handlers=[logging.StreamHandler()],
     level=logging.INFO,
     datefmt="%H:%M:%S",
 )
