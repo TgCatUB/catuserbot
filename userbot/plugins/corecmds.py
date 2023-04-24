@@ -215,6 +215,8 @@ async def app_log(event):
     elif "r" in flag:
         outfile, error = chromeDriver.get_rayso(log, file_name="logs.png")
         if outfile:
-            await catub.send_file(event.chat_id, outfile, caption=linktext, force_document=True)
+            await catub.send_file(
+                event.chat_id, outfile, caption=linktext, force_document=True
+            )
             return os.remove(outfile)
     return await edit_or_reply(event, log, deflink=True, linktext=linktext)
