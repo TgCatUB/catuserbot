@@ -14,5 +14,5 @@ import sys
 logging.basicConfig(
     level=logging.INFO,
     format="[%(levelname)s - %(asctime)s] - %(name)s - %(message)s",
-    handlers=[logging.FileHandler("catub.log"),logging.StreamHandler(sys.stdout)]
+    handlers=[logging.FileHandler("catub.log"), logging.StreamHandler(sys.stdout)],
 )
