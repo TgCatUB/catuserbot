@@ -25,9 +25,6 @@ import logging
 logging.basicConfig(
     format="[%(levelname)s - %(asctime)s] - %(name)s - %(message)s",
     level=logging.INFO,
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler("catub.log")
-    ],
-    datefmt="%H:%M:%S"
+    handlers=[logging.StreamHandler(), logging.FileHandler("catub.log")],
+    datefmt="%H:%M:%S",
 )
