@@ -195,14 +195,13 @@ async def unload(event):
         ],
     },
 )
-
 async def app_log(event):
     "To get log of the Catuserbot"
     flag = event.pattern_match.group(1)
     flag = [*flag]
     if flag and (flag[0] != "-" or any(i not in ["-", "f", "r", "t"] for i in flag)):
-        return await edit_delete(event,"**Invalid flag...**")
-    
+        return await edit_delete(event, "**Invalid flag...**")
+
     with open("catub.log", "r") as file:
         if "f" in flag:
             log = file.read()

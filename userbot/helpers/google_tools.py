@@ -65,7 +65,9 @@ class chromeDriver:
         return html, None
 
     @staticmethod
-    def get_rayso(inputstr, file_name ="Rayso.png", title="CatUB", theme ="crimson", darkMode=True):
+    def get_rayso(
+        inputstr, file_name="Rayso.png", title="CatUB", theme="crimson", darkMode=True
+    ):
         url = f'https://ray.so/#code={base64.b64encode(inputstr.encode()).decode().replace("+","-")}&title={title}&theme={theme}&padding=64&darkMode={darkMode}&language=python'
         driver, error = chromeDriver.start_driver()
         if error:
@@ -78,7 +80,7 @@ class chromeDriver:
         frame.screenshot(file_name)
         driver.quit()
         return file_name, None
-    
+
     @staticmethod
     async def get_screenshot(inputstr, event=None):
         start = datetime.now()

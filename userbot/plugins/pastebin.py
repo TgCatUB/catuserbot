@@ -15,7 +15,6 @@ import pygments
 import requests
 from pygments.formatters import ImageFormatter
 from pygments.lexers import Python3Lexer
-from selenium.webdriver.common.by import By
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.utils import get_extension
 from urlextract import URLExtract
@@ -82,8 +81,7 @@ def text_chunk_list(query, bits=29900):
     if string != "":
         text_list.append(string)
     return text_list
-    
-    
+
 
 @catub.cat_cmd(
     pattern="rayso(?:\s|$)([\s\S]*)",
@@ -170,9 +168,11 @@ async def rayso_by_pro_odi(event):  # By @feelded
     user = (await catub.get_me()).first_name
     for i, text in enumerate(text_list, start=1):
         await edit_or_reply(catevent, f"**⏳ Pasting on image : {i}/{len(text_list)} **")
-        outfile, error = chromeDriver.get_rayso(text, file_name=f"rayso{i}.png", title=user, theme=theme, darkMode=darkMode)
+        outfile, error = chromeDriver.get_rayso(
+            text, file_name=f"rayso{i}.png", title=user, theme=theme, darkMode=darkMode
+        )
         if error:
-            return await edit_delete(catevent,error)
+            return await edit_delete(catevent, error)
         files.append(outfile)
         captions.append("")
 
