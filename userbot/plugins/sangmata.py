@@ -3,11 +3,11 @@ import asyncio
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import types
 from telethon.tl.functions.contacts import UnblockRequest as unblock
-
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format
+from ..helpers import _format, sanga_seperator
 
 plugin_category = "utils"
 
@@ -34,13 +34,13 @@ async def sangmata(event):
     reply = await event.get_reply_message()
     if not user and reply:
         user = reply.from_id
-    elif not user:
+    if not user:
         return await edit_delete(
             event,
             "`Reply to  user's text message to get name/username history or give userid/username`",
         )
 
-    userinfo = await catub.get_entity(reply.from_id)
+    userinfo = await catub.get_entity(user)
     if not isinstance(userinfo, types.User):
         return await edit_delete(event, "`Can't fetch the user...`")
 

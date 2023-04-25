@@ -9,6 +9,7 @@
 
 import asyncio
 import os
+import re
 import zipfile
 from random import choice
 from textwrap import wrap
