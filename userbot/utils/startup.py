@@ -193,11 +193,11 @@ async def verifyLoggerGroup():
         try:
             entity = await catub.get_entity(BOTLOG_CHATID)
             if not isinstance(entity, types.User) and not entity.creator:
-                if entity.default_banned_rights.send_messages:
+                if ((entity.default_banned_rights and entity.default_banned_rights.send_messages) or not entity.admin_rights.post_messages):
                     LOGS.info(
                         "Permissions missing to send messages for the specified PRIVATE_GROUP_BOT_API_ID."
                     )
-                if entity.default_banned_rights.invite_users:
+                if ((entity.default_banned_rights and entity.default_banned_rights.invite_users) or not entity.admin_rights.invite_users):
                     LOGS.info(
                         "Permissions missing to addusers for the specified PRIVATE_GROUP_BOT_API_ID."
                     )
@@ -228,11 +228,11 @@ async def verifyLoggerGroup():
         try:
             entity = await catub.get_entity(PM_LOGGER_GROUP_ID)
             if not isinstance(entity, types.User) and not entity.creator:
-                if entity.default_banned_rights.send_messages:
+                if ((entity.default_banned_rights and entity.default_banned_rights.send_messages) or not entity.admin_rights.post_messages):
                     LOGS.info(
                         "Permissions missing to send messages for the specified PM_LOGGER_GROUP_ID."
                     )
-                if entity.default_banned_rights.invite_users:
+                if ((entity.default_banned_rights and entity.default_banned_rights.invite_users) or not entity.admin_rights.invite_users):
                     LOGS.info(
                         "Permissions missing to addusers for the specified PM_LOGGER_GROUP_ID."
                     )
