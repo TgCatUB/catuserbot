@@ -116,13 +116,9 @@ class CatUserBotClient(TelegramClient):
             async def wrapper(check):  # sourcery no-metrics
                 # sourcery skip: low-code-quality
                 if groups_only and not check.is_group:
-                    return await edit_delete(
-                        check, "`I don't think this is a group.`", 10
-                    )
+                    return await edit_delete(check, "`I don't think this is a group.`")
                 if private_only and not check.is_private:
-                    return await edit_delete(
-                        check, "`I don't think this is a personal Chat.`", 10
-                    )
+                    return await edit_delete(check, "`I don't think this is a personal Chat.`")
                 try:
                     await func(check)
                 except events.StopPropagation as e:
@@ -134,27 +130,17 @@ class CatUserBotClient(TelegramClient):
                 except MessageIdInvalidError:
                     LOGS.error("Message was deleted or cant be found")
                 except BotInlineDisabledError:
-                    await edit_delete(check, "`Turn on Inline mode for our bot`", 10)
+                    await edit_delete(check, "`Turn on Inline mode for our bot`")
                 except ChatSendStickersForbiddenError:
-                    await edit_delete(
-                        check, "`I guess i can't send stickers in this chat`", 10
-                    )
+                    await edit_delete(check, "`I guess i can't send stickers in this chat`")
                 except BotResponseTimeoutError:
-                    await edit_delete(
-                        check, "`The bot didnt answer to your query in time`", 10
-                    )
+                    await edit_delete(check, "`The bot didnt answer to your query in time`")
                 except ChatSendMediaForbiddenError:
-                    await edit_delete(check, "`You can't send media in this chat`", 10)
+                    await edit_delete(check, "`You can't send media in this chat`")
                 except AlreadyInConversationError:
-                    await edit_delete(
-                        check,
-                        "`A conversation is already happening with the given chat. try again after some time.`",
-                        10,
-                    )
+                    await edit_delete(check,"`A conversation is already happening with the given chat. try again after some time.`")
                 except ChatSendInlineForbiddenError:
-                    await edit_delete(
-                        check, "`You can't send inline messages in this chat.`", 10
-                    )
+                    await edit_delete(check, "`You can't send inline messages in this chat.`")
                 except FloodWaitError as e:
                     LOGS.error(
                         f"A flood wait of {e.seconds} occured. wait for {e.seconds} seconds and try"
@@ -290,7 +276,7 @@ class CatUserBotClient(TelegramClient):
     ) -> callable:  # sourcery no-metrics
         kwargs["func"] = kwargs.get("func", lambda e: e.via_bot_id is None)
         kwargs.setdefault("forwards", forword)
-
+        
         def decorator(func):
             async def wrapper(check):
                 try:

@@ -292,7 +292,7 @@ async def send_file(
     force_document: bool = False,
     file_size: int = None,
     clear_draft: bool = False,
-    checker: "hints.FileLike" = None,
+    checker: "typing.Union[hints.FileLike, typing.Sequence[hints.FileLike]]" = None,
     progress_callback: "hints.ProgressCallback" = None,
     reply_to: "hints.MessageIDLike" = None,
     attributes: "typing.Sequence[types.TypeDocumentAttribute]" = None,
@@ -355,9 +355,10 @@ async def send_file(
     msg = caption
     safecheck = await safe_check_text(msg)
     try:
-        filemsg = pathlib.Path(file).read_text()
-    except Exception:
-        filemsg = pathlib.Path(checker).read_text()
+        if checker:
+            filemsg = pathlib.Path(checker).read_text()
+        else:
+            filemsg = pathlib.Path(file).read_text()
     except Exception:
         filemsg = ""
     safe_file_check = await safe_check_text(filemsg)
