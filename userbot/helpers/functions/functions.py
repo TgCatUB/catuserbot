@@ -80,7 +80,7 @@ def sanga_seperator(sanga_list):
     for info in sanga_list:
         string += info[info.find("\n") + 1 :]
     string = re.sub(r"^$\n", "", string, flags=re.MULTILINE)
-    name, username = string.split("Usernames")
+    name, username = string.split("Usernames**")
     name = name.split("Names")[1]
     return name, username
 

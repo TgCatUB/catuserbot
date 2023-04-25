@@ -68,5 +68,6 @@ async def sangmata(event):
 
     names, usernames = sanga_seperator(responses)
     check = (usernames, "Username") if cmd == "u" else (names, "Name")
-    output = f"**➜ User Info :**  {_format.mentionuser(userinfo.first_name or userinfo.id, userinfo.id)}\n**➜ {check[1]} History :**\n{check[0]}"
+    user_name = f"{userinfo.first_name} {userinfo.last_name}" if userinfo.last_name else userinfo.first_name
+    output = f"**➜ User Info :**  {_format.mentionuser(user_name, userinfo.id)}\n**➜ {check[1]} History :**\n{check[0]}"
     await edit_or_reply(catevent, output)
