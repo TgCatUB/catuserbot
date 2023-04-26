@@ -120,7 +120,8 @@ async def variable(event):
                 break
         if not finalMessage:
             return await edit_or_reply(
-                cat, "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__"
+                cat,
+                "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__",
             )
     elif cmd == "set":
         variable = "".join(event.text.split(maxsplit=2)[2:])
@@ -152,7 +153,9 @@ async def variable(event):
             finalMessage = f"`{variable}` **successfully changed to  ->  **`{value}`"
         else:
             string += f"    {variable} = {value}\n"
-            finalMessage = f"`{variable}`**  successfully added with value  ->  **`{value}`"
+            finalMessage = (
+                f"`{variable}`**  successfully added with value  ->  **`{value}`"
+            )
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
@@ -176,11 +179,11 @@ async def variable(event):
         finalMessage = f"`{variable}` **successfully deleted.**"
     await edit_or_reply(cat, f"{finalMessage} reloading the bot it may take some time.")
     if BOTLOG:
-         await event.client.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID,
-            f"#VAR #CONFIG_VAR #{'FETCHED' if cmd=='get' else 'DELETED' if cmd=='del' else 'UPDATED' if match else 'ADDED'}\n{finalMessage if cmd !='get' else ''}"
+            f"#VAR #CONFIG_VAR #{'FETCHED' if cmd=='get' else 'DELETED' if cmd=='del' else 'UPDATED' if match else 'ADDED'}\n{finalMessage if cmd !='get' else ''}",
         )
-    if cmd != 'get':
+    if cmd != "get":
         await reload_codebase()
         await event.client.reload(cat)
 
