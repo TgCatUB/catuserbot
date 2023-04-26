@@ -14,6 +14,7 @@ from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _catutils
+from . import BOTLOG, BOTLOG_CHATID
 
 plugin_category = "tools"
 
@@ -45,7 +46,7 @@ cmds = [
 # ========================================================================
 
 
-async def switch_branch():
+async def reload_codebase():
     with open(config, "r") as f:
         configs = f.read()
     BRANCH = "master"
@@ -104,6 +105,7 @@ async def variable(event):
         )
     cmd = event.pattern_match.group(1)
     string = ""
+    finalMessage = ""
     match = None
     with open(config, "r") as f:
         configs = f.readlines()
@@ -114,12 +116,12 @@ async def variable(event):
         for i in configs:
             if variable in i:
                 _, val = i.split("= ")
-                return await edit_or_reply(
-                    cat, "**ConfigVars**:" f"\n\n`{variable}` = `{val}`"
-                )
-        await edit_or_reply(
-            cat, "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__"
-        )
+                finalMessage = "**ConfigVars**:" f"\n\n`{variable}` = `{val}`"
+                break
+        if not finalMessage:
+            return await edit_or_reply(
+                cat, "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__"
+            )
     elif cmd == "set":
         variable = "".join(event.text.split(maxsplit=2)[2:])
         cat = await edit_or_reply(event, "`Setting information...`")
@@ -147,20 +149,14 @@ async def variable(event):
             else:
                 string += i
         if match:
-            await edit_or_reply(
-                cat, f"`{variable}` **successfully changed to  ->  **`{value}`"
-            )
+            finalMessage = f"`{variable}` **successfully changed to  ->  **`{value}`"
         else:
             string += f"    {variable} = {value}\n"
-            await edit_or_reply(
-                cat, f"`{variable}`**  successfully added with value  ->  **`{value}`"
-            )
+            finalMessage = f"`{variable}`**  successfully added with value  ->  **`{value}`"
         with open(config, "w") as f1:
             f1.write(string)
             f1.close()
-        await switch_branch()
-        await event.client.reload(cat)
-    if cmd == "del":
+    elif cmd == "del":
         cat = await edit_or_reply(event, "`Deleting information...`")
         await asyncio.sleep(1)
         variable = event.pattern_match.group(2).split()[0]
@@ -177,8 +173,15 @@ async def variable(event):
                 cat,
                 "**ConfigVars**:" f"\n\n__Error:\n-> __`{variable}`__ doesn't exists__",
             )
-        await edit_or_reply(cat, f"`{variable}` **successfully deleted.**")
-        await switch_branch()
+        finalMessage = f"`{variable}` **successfully deleted.**"
+    await edit_or_reply(cat, f"{finalMessage} reloading the bot it may take some time.")
+    if BOTLOG:
+         await event.client.send_message(
+            BOTLOG_CHATID,
+            f"#VAR #CONFIG_VAR #{'FETCHED' if cmd=='get' else 'DELETED' if cmd=='del' else 'UPDATED' if match else 'ADDED'}\n{finalMessage if cmd !='get' else ''}"
+        )
+    if cmd != 'get':
+        await reload_codebase()
         await event.client.reload(cat)
 
 
@@ -208,5 +211,5 @@ async def reload(event):
             os.remove(i)
         for i in cmds:
             await _catutils.runcmd(i)
-    await switch_branch()
+    await reload_codebase()
     await event.client.reload(cat)
