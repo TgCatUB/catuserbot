@@ -71,6 +71,7 @@ def heroku_app():
 async def variable(event):
     "Manage most of ConfigVars setting, set new var, get current var, or delete event..."
     app, Heroku = heroku_app()
+    value = None
     if not app:
         return await edit_delete(event, Heroku)
     cmd = event.pattern_match.group(1)
@@ -81,9 +82,9 @@ async def variable(event):
         variable, value = variable.split(" ", 1)
     if not variable:
         return await edit_delete(event, "`What to do without Config Var??`")
-    if variable in dBcof.varlist:
+    if variable in dBcof.var_list:
         cat = await edit_or_reply(event, "`Processing...`")
-        data = dBcof.setup_vars(event, cmd, variable, value)
+        data = await dBcof.setup_vars(event, cmd, variable, value)
         return await edit_delete(cat, data)
 
     heroku_var = app.config()

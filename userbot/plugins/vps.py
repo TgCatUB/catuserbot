@@ -109,14 +109,15 @@ async def variable(event):
     cmd = event.pattern_match.group(1)
     if cmd == "info":
         return await edit_delete(event, dBcof.vars_info(), 60)
+    value = None
     variable = event.pattern_match.group(2)
     if " " in variable:
         variable, value = variable.split(" ", 1)
     if not variable:
         return await edit_or_reply(event, "`What to do without Config Var??`")
-    if variable in dBcof.varlist:
+    if variable in dBcof.var_list:
         cat = await edit_or_reply(event, "`Processing...`")
-        data = dBcof.setup_vars(event, cmd, variable, value)
+        data = await dBcof.setup_vars(event, cmd, variable, value)
         return await edit_delete(cat, data)
     string = ""
     match = None
