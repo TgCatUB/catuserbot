@@ -264,11 +264,7 @@ async def _(event):
         and input_str
     ):
         message = input_str
-    elif (
-        reply
-        and (not input_str or not input_str.isnumeric())
-        and not input_str
-    ):
+    elif reply and (not input_str or not input_str.isnumeric()) and not input_str:
         messages_id.append(reply.id)
     else:
         return await edit_delete(

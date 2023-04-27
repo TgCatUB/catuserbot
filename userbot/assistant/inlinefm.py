@@ -114,7 +114,7 @@ def _extracted_from_get_manager_3(path, num):
     for contents in sorted(lists):
         zpath = os.path.join(path, contents)
         if not os.path.isdir(zpath):
-            size = os.stat(zpath).st_size
+            os.stat(zpath).st_size
             if str(contents).endswith((".mp3", ".flac", ".wav", ".m4a")):
                 files += f"🎧`{contents}`\n"
             if str(contents).endswith((".opus")):

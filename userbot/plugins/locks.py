@@ -1036,13 +1036,17 @@ async def check_incoming_messages(event):  # sourcery no-metrics
             try:
                 await event.delete()
             except Exception as e:
-                await event.reply(f"I don't seem to have ADMIN permission here. \n`{str(e)}`")
+                await event.reply(
+                    f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
+                )
                 update_lock(peer_id, "commands", False)
     if is_locked(peer_id, "forward") and event.fwd_from:
         try:
             await event.delete()
         except Exception as e:
-            await event.reply(f"I don't seem to have ADMIN permission here. \n`{str(e)}`")
+            await event.reply(
+                f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
+            )
             update_lock(peer_id, "forward", False)
     if is_locked(peer_id, "email"):
         is_email = False
@@ -1054,7 +1058,9 @@ async def check_incoming_messages(event):  # sourcery no-metrics
             try:
                 await event.delete()
             except Exception as e:
-                await event.reply(f"I don't seem to have ADMIN permission here. \n`{str(e)}`")
+                await event.reply(
+                    f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
+                )
                 update_lock(peer_id, "email", False)
     if is_locked(peer_id, "url"):
         is_url = False
@@ -1068,7 +1074,9 @@ async def check_incoming_messages(event):  # sourcery no-metrics
             try:
                 await event.delete()
             except Exception as e:
-                await event.reply(f"I don't seem to have ADMIN permission here. \n`{str(e)}`")
+                await event.reply(
+                    f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
+                )
                 update_lock(peer_id, "url", False)
 
 
@@ -1101,7 +1109,9 @@ async def _(event):
                         )
                     )
                 except Exception as e:
-                    await event.reply(f"I don't seem to have ADMIN permission here. \n`{str(e)}`")
+                    await event.reply(
+                        f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
+                    )
                     update_lock(event.chat_id, "bots", False)
                     break
         if BOTLOG and is_ban_able:
