@@ -20,7 +20,7 @@ def _sudousers_list():
     return [int(chat) for chat in [*sudousers]]
 
 
-def _vcsers_list():
+def _vcusers_list():
     sudousers, vcusers = {}, {}
     with contextlib.suppress(AttributeError):
         sudousers = get_collection("sudousers_list").json
