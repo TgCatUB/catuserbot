@@ -112,12 +112,6 @@ async def safe_check_text(msg):  # sourcery no-metrics
             or (phone[-10:] in msg)
             or (Config.API_HASH in msg)
             or (Config.TG_BOT_TOKEN in msg)
-            or (str(Config.BOTLOG_CHATID) in msg)
-            or (
-                Config.PRIVATE_GROUP_BOT_API_ID
-                and str(Config.PRIVATE_GROUP_BOT_API_ID) in msg
-            )
-            or (Config.PM_LOGGER_GROUP_ID and str(Config.PM_LOGGER_GROUP_ID) in msg)
             or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)
             or (Config.OPEN_WEATHER_MAP_APPID and Config.OPEN_WEATHER_MAP_APPID in msg)
             or (Config.IBM_WATSON_CRED_URL and Config.IBM_WATSON_CRED_URL in msg)
