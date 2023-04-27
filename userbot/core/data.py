@@ -8,6 +8,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import contextlib
+
 from ..sql_helper.global_collectionjson import get_collection
 from ..sql_helper.global_list import get_collection_list
 
@@ -18,12 +19,14 @@ def _sudousers_list():
         sudousers = get_collection("sudousers_list").json
     return [int(chat) for chat in [*sudousers]]
 
+
 def _vcsers_list():
     sudousers, vcusers = {}, {}
     with contextlib.suppress(AttributeError):
         sudousers = get_collection("sudousers_list").json
         vcusers = get_collection("vcusers_list").json
-    return [int(chat) for chat in [*sudousers,*vcusers]]
+    return [int(chat) for chat in [*sudousers, *vcusers]]
+
 
 def _users_list():
     sudousers = {}
@@ -32,6 +35,7 @@ def _users_list():
     ulist = [int(chat) for chat in [*sudousers]]
     ulist.append("me")
     return list(ulist)
+
 
 def blacklist_chats_list():
     blacklistchats = {}

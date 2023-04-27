@@ -230,9 +230,7 @@ class CatUserBotClient(TelegramClient):
                             MessageEdited(
                                 pattern=REGEX_.regex2,
                                 incoming=True,
-                                func=lambda e: bool(
-                                    e.sender_id not in _vcusers_list()
-                                ),
+                                func=lambda e: bool(e.sender_id not in _vcusers_list()),
                                 **kwargs,
                             ),
                         )
