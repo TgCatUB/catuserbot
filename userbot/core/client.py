@@ -231,7 +231,7 @@ class CatUserBotClient(TelegramClient):
                                 pattern=REGEX_.regex2,
                                 incoming=True,
                                 func=lambda e: bool(
-                                    e.sender_id not in _sudousers_list()
+                                    e.sender_id not in _vcusers_list()
                                 ),
                                 **kwargs,
                             ),
@@ -241,7 +241,7 @@ class CatUserBotClient(TelegramClient):
                         NewMessage(
                             pattern=REGEX_.regex2,
                             incoming=True,
-                            func=lambda e: bool(e.sender_id not in _sudousers_list()),
+                            func=lambda e: bool(e.sender_id not in _vcusers_list()),
                             **kwargs,
                         ),
                     )

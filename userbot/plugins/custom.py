@@ -52,7 +52,7 @@ extractor = URLExtract()
         "usage": [
             "{tr}custom <option> reply",
         ],
-        "NOTE": "You can set,fetch or delete these by `{tr}setdv` , `{tr}getdv` & `{tr}deldv` as well.",
+        "NOTE": "You can set,fetch or delete these by `{tr}set var` , `{tr}get var` & `{tr}del var` as well.",
     },
 )
 async def custom(event):
