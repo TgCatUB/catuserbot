@@ -169,7 +169,7 @@ class Config(object):
     CATUBLOGO = None
     BOTLOG = False
     BOTLOG_CHATID = 0
-    # extra plugins realted vars below  4
+    # extra plugins realted vars below
     EXTERNAL_REPOBRANCH = os.environ.get("EXTERNAL_REPOBRANCH", "main")
     BADCAT_REPO = os.environ.get("BADCAT_REPO", "https://github.com/TgCatUB/CatPlugins")
     if BADCAT_REPO and not url(BADCAT_REPO):

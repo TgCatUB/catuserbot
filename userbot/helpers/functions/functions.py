@@ -9,6 +9,7 @@
 
 import asyncio
 import os
+import re
 import zipfile
 from random import choice
 from textwrap import wrap
@@ -74,18 +75,14 @@ def rand_key():
     return str(uuid4())[:8]
 
 
-async def sanga_seperator(sanga_list):
-    for i in sanga_list:
-        if i.startswith("🔗"):
-            sanga_list.remove(i)
-    s = 0
-    for i in sanga_list:
-        if i.startswith("Username History"):
-            break
-        s += 1
-    usernames = sanga_list[s:]
-    names = sanga_list[:s]
-    return names, usernames
+def sanga_seperator(sanga_list):
+    string = ""
+    for info in sanga_list:
+        string += info[info.find("\n") + 1 :]
+    string = re.sub(r"^$\n", "", string, flags=re.MULTILINE)
+    name, username = string.split("Usernames**")
+    name = name.split("Names")[1]
+    return name, username
 
 
 # covid india data
