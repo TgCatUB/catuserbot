@@ -57,9 +57,7 @@ async def yt_search(cat):
             k += 1
             if k > 3:
                 break
-        if video_link:
-            return video_link[0]
-        return "Couldnt fetch results"
+        return video_link[0] if video_link else "Couldnt fetch results"
     except Exception:
         return "Couldnt fetch results"
 
@@ -166,9 +164,7 @@ async def result_formatter(results: list):
         title = f'<a href={r.get("link")}><b>{r.get("title")}</b></a>\n'
         out = title
         if r.get("descriptionSnippet"):
-            out += "<code>{}</code>\n\n".format(
-                "".join(x.get("text") for x in r.get("descriptionSnippet"))
-            )
+            out += f'<code>{"".join(x.get("text") for x in r.get("descriptionSnippet"))}</code>\n\n'
         out += f'<b>❯  Duration:</b> {r.get("accessibility").get("duration")}\n'
         views = f'<b>❯  Views:</b> {r.get("viewCount").get("short")}\n'
         out += views

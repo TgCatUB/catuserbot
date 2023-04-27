@@ -85,7 +85,7 @@ class CatUserBotClient(TelegramClient):
         file_test = file_test.stem.replace(".py", "")
         if command is not None:
             command = list(command)
-            if not command[1] in BOT_INFO:
+            if command[1] not in BOT_INFO:
                 BOT_INFO.append(command[1])
             try:
                 if file_test not in GRP_INFO[command[1]]:
@@ -97,7 +97,7 @@ class CatUserBotClient(TelegramClient):
                     PLG_INFO[file_test].append(command[0])
             except BaseException:
                 PLG_INFO.update({file_test: [command[0]]})
-            if not command[0] in CMD_INFO:
+            if command[0] not in CMD_INFO:
                 CMD_INFO[command[0]] = [_format_about(info)]
         if pattern is not None:
             if (
@@ -204,7 +204,7 @@ class CatUserBotClient(TelegramClient):
 
             from .session import catub
 
-            if not func.__doc__ is None:
+            if func.__doc__ is not None:
                 CMD_INFO[command[0]].append((func.__doc__).strip())
             if pattern is not None:
                 if command is not None:
@@ -230,10 +230,9 @@ class CatUserBotClient(TelegramClient):
                             MessageEdited(
                                 pattern=REGEX_.regex2,
                                 incoming=True,
-                                func=lambda e: bool(
-                                    e.sender_id not in _sudousers_list()
-                                ),
-                                **kwargs,
+                                func=lambda e: e.sender_id
+                                not in _sudousers_list(),
+                                **kwargs
                             ),
                         )
                     catub.add_event_handler(
@@ -241,29 +240,32 @@ class CatUserBotClient(TelegramClient):
                         NewMessage(
                             pattern=REGEX_.regex2,
                             incoming=True,
-                            func=lambda e: bool(e.sender_id not in _sudousers_list()),
-                            **kwargs,
+                            func=lambda e: e.sender_id not in _sudousers_list(),
+                            **kwargs
                         ),
                     )
-                if allow_sudo and gvarstatus("sudoenable") is not None:
-                    if command is None or command[0] in sudo_enabledcmds:
-                        if edited:
-                            catub.add_event_handler(
-                                wrapper,
-                                MessageEdited(
-                                    pattern=REGEX_.regex2,
-                                    from_users=_sudousers_list(),
-                                    **kwargs,
-                                ),
-                            )
+                if (
+                    allow_sudo
+                    and gvarstatus("sudoenable") is not None
+                    and (command is None or command[0] in sudo_enabledcmds)
+                ):
+                    if edited:
                         catub.add_event_handler(
                             wrapper,
-                            NewMessage(
+                            MessageEdited(
                                 pattern=REGEX_.regex2,
                                 from_users=_sudousers_list(),
                                 **kwargs,
                             ),
                         )
+                    catub.add_event_handler(
+                        wrapper,
+                        NewMessage(
+                            pattern=REGEX_.regex2,
+                            from_users=_sudousers_list(),
+                            **kwargs,
+                        ),
+                    )
             else:
                 if file_test in LOADED_CMDS and func in LOADED_CMDS[file_test]:
                     return None
@@ -347,7 +349,7 @@ class CatUserBotClient(TelegramClient):
 
             from .session import catub
 
-            if edited is True:
+            if edited:
                 catub.tgbot.add_event_handler(func, events.MessageEdited(**kwargs))
             else:
                 catub.tgbot.add_event_handler(func, events.NewMessage(**kwargs))

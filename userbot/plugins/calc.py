@@ -43,9 +43,7 @@ async def calculator(event):
         evaluation = stdout
     else:
         evaluation = "Sorry I can't find result for the given equation"
-    final_output = "**EQUATION**: `{}` \n\n **SOLUTION**: \n`{}` \n".format(
-        cmd, evaluation
-    )
+    final_output = f"**EQUATION**: `{cmd}` \n\n **SOLUTION**: \n`{evaluation}` \n"
     await event.edit(final_output)
 
 

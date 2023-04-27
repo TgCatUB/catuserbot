@@ -24,7 +24,7 @@ class CatBroadcast(BASE):
         self.group_id = str(group_id)
 
     def __repr__(self):
-        return "<Cat Broadcast channels '%s' for %s>" % (self.group_id, self.keywoard)
+        return f"<Cat Broadcast channels '{self.group_id}' for {self.keywoard}>"
 
     def __eq__(self, other):
         return (

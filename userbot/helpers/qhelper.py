@@ -137,8 +137,8 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     titlewidth = font2.getsize(title)[0]
 
     # Get user name
-    lname = "" if not user.last_name else user.last_name
-    tot = user.first_name + " " + lname
+    lname = user.last_name or ""
+    tot = f"{user.first_name} {lname}"
 
     namewidth = fallback.getsize(tot)[0] + 10
 
@@ -183,8 +183,8 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     y = 80
     if replied:
         # Creating a big canvas to gather all the elements
-        replname = "" if not replied.sender.last_name else replied.sender.last_name
-        reptot = replied.sender.first_name + " " + replname
+        replname = replied.sender.last_name or ""
+        reptot = f"{replied.sender.first_name} {replname}"
         if reply and reply.sticker:
             sticker = await reply.download_media()
             file_1 = os.path.join("./temp/", "q.png")
@@ -248,13 +248,13 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
         docname = ".".join(reply.document.attributes[-1].file_name.split(".")[:-1])
         doctype = reply.document.attributes[-1].file_name.split(".")[-1].upper()
         if reply.document.size < 1024:
-            docsize = str(reply.document.size) + " Bytes"
+            docsize = f"{str(reply.document.size)} Bytes"
         elif reply.document.size < 1048576:
-            docsize = str(round(reply.document.size / 1024, 2)) + " KB "
+            docsize = f"{str(round(reply.document.size / 1024, 2))} KB "
         elif reply.document.size < 1073741824:
-            docsize = str(round(reply.document.size / 1024**2, 2)) + " MB "
+            docsize = f"{str(round(reply.document.size / 1024**2, 2))} MB "
         else:
-            docsize = str(round(reply.document.size / 1024**3, 2)) + " GB "
+            docsize = f"{str(round(reply.document.size / 1024**3, 2))} GB "
         docbglen = (
             font.getsize(docsize)[0]
             if font.getsize(docsize)[0] > font.getsize(docname)[0]
@@ -282,14 +282,13 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
             newemoji, mask = await emoji_fetch(letter)
             canvas.paste(newemoji, (space, 24), mask)
             space += 40
-        else:
-            if not await fontTest(letter):
-                draw.text((space, 20), letter, font=namefallback, fill=color)
-                space += namefallback.getsize(letter)[0]
-            else:
-                draw.text((space, 20), letter, font=sepcialn, fill=color)
-                space += sepcialn.getsize(letter)[0]
+        elif await fontTest(letter):
+            draw.text((space, 20), letter, font=sepcialn, fill=color)
+            space += sepcialn.getsize(letter)[0]
 
+        else:
+            draw.text((space, 20), letter, font=namefallback, fill=color)
+            space += namefallback.getsize(letter)[0]
     if title:
         draw.text(
             (canvas.width - titlewidth - 20, 25), title, font=font2, fill="#898989"
@@ -336,13 +335,12 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
                 canvas.paste(newemoji, (x, y - 2), mask)
                 x += 45
                 emojicount += 1
+            elif await fontTest(letter):
+                draw.text((x, y), letter, font=sepcialt, fill=textcolor)
+                x += sepcialt.getsize(letter)[0]
             else:
-                if not await fontTest(letter):
-                    draw.text((x, y), letter, font=textfallback, fill=textcolor)
-                    x += textfallback.getsize(letter)[0]
-                else:
-                    draw.text((x, y), letter, font=sepcialt, fill=textcolor)
-                    x += sepcialt.getsize(letter)[0]
+                draw.text((x, y), letter, font=textfallback, fill=textcolor)
+                x += textfallback.getsize(letter)[0]
             msg = msg.replace(letter, "¶", 1)
         y += 40
         x = pfpbg.width + 30
@@ -418,7 +416,7 @@ async def no_photo(tot):
     pen = ImageDraw.Draw(pfp)
     color = random.choice(COLORS)
     pen.ellipse((0, 0, 90, 90), fill=color)
-    letter = "" if not tot else tot[0]
+    letter = tot[0] if tot else ""
     font = ImageFont.truetype("./temp/Roboto-Regular.ttf", 60)
     pen.text((32, 17), letter, font=font, fill="white")
     return pfp, color
@@ -456,7 +454,7 @@ async def replied_user(draw, tot, text, maxlength, title):
     textfont = ImageFont.truetype("./temp/Roboto-Regular.ttf", 32)
     textfallback = ImageFont.truetype("./temp/Roboto-Medium.ttf", 38)
     maxlength = maxlength + 7 if maxlength < 10 else maxlength
-    text = text[: maxlength - 2] + ".." if len(text) > maxlength else text
+    text = f"{text[:maxlength - 2]}.." if len(text) > maxlength else text
     draw.line((165, 90, 165, 170), width=5, fill="white")
     space = 0
     for letter in tot:

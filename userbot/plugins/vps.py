@@ -43,6 +43,13 @@ cmds = [
     "rm -rf downloads",
     "mkdir downloads",
 ]
+
+getTag = {
+            'get':'FETCHED',
+            'del':'DELETED',
+            'set':'ADDED',
+            'update':'UPDATED'
+}
 # ========================================================================
 
 
@@ -95,7 +102,7 @@ async def reload_codebase():
         ],
     },
 )
-async def variable(event):
+async def variable(event):  # sourcery skip: low-code-quality
     """
     Manage most of ConfigVars setting, set new var, get current var, or delete var...
     """
@@ -176,9 +183,10 @@ async def variable(event):
         finalMessage = f"`{variable}` **successfully deleted.**"
     await edit_or_reply(cat, f"{finalMessage} reloading the bot it may take some time.")
     if BOTLOG:
-         await event.client.send_message(
+        await event.client.send_message(
             BOTLOG_CHATID,
-            f"#VAR #CONFIG_VAR #{'FETCHED' if cmd=='get' else 'DELETED' if cmd=='del' else 'UPDATED' if match else 'ADDED'}\n{finalMessage if cmd !='get' else ''}"
+            f"#VAR #CONFIG_VAR #{getTag['update' if cmd=='set' and match else cmd]}\
+            \n{finalMessage if cmd !='get' else ''}"
         )
     if cmd != 'get':
         await reload_codebase()

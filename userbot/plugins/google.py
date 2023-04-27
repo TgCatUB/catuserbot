@@ -166,7 +166,7 @@ async def reverse(event):
         )
     catevent = await edit_or_reply(event, "`Processing...`")
     # get data accoding to cmd
-    flag = False if cmd == "grs" else True
+    flag = cmd != "grs"
     data = GooglePic.reverse_data(photo[1], flag)
     if data["error"]:
         return await edit_delete(catevent, data["error"])

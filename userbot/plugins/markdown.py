@@ -45,7 +45,7 @@ def get_tag_parser(tag, entity):
         return m.group(1), entity(offset=m.start(), length=len(m.group(1)))
 
     tag = re.escape(tag)
-    return re.compile(tag + r"(.+?)" + tag, re.DOTALL), tag_parser
+    return re.compile(f"{tag}(.+?){tag}", re.DOTALL), tag_parser
 
 
 PRINTABLE_ASCII = range(0x21, 0x7F)

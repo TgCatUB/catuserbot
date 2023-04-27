@@ -1,0 +1,7 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true,
+        "source.fixAll.flake8": true,
+        "sourcery.apply": true
+    }
+}

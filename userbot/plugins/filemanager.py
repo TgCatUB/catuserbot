@@ -38,7 +38,7 @@ async def ls(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     path = Path(cat) if cat else os.getcwd()
     if os.path.isdir(path):
         if cat:
-            msg = "Folders and Files in `{}` :\n".format(path)
+            msg = f"Folders and Files in `{path}` :\n"
         else:
             msg = "Folders and Files in Current Directory :\n"
         lists = os.listdir(path)

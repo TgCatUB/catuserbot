@@ -115,7 +115,7 @@ async def _(event):
                     FPOST_.MSG_CACHE[c] = msg
                     break
         if c not in FPOST_.MSG_CACHE:
-            for i in FPOST_.GROUPSID:
+            for _ in FPOST_.GROUPSID:
                 async for msg in event.client.iter_messages(event.chat_id, search=c):
                     if msg.raw_text.lower() == c and msg.media is None:
                         FPOST_.MSG_CACHE[c] = msg

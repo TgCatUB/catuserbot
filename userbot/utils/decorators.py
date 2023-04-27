@@ -1,3 +1,4 @@
+import contextlib
 import datetime
 import inspect
 import re
@@ -181,27 +182,21 @@ def register(**args):
     allow_sudo = args.get("allow_sudo", False)
 
     if pattern is not None and not pattern.startswith("(?i)"):
-        args["pattern"] = "(?i)" + pattern
+        args["pattern"] = f"(?i){pattern}"
 
     if "disable_edited" in args:
         del args["disable_edited"]
 
     reg = re.compile("(.*)")
     if pattern is not None:
-        try:
+        with contextlib.suppress(BaseException):
             cmd = re.search(reg, pattern)
-            try:
-                cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
-            except BaseException:
-                pass
-
+            with contextlib.suppress(BaseException):
+                cmd = cmd[1].replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
             except BaseException:
                 CMD_LIST.update({file_test: [cmd]})
-        except BaseException:
-            pass
-
     if allow_sudo:
         args["from_users"] = list(Config.SUDO_USERS)
         # Mutually exclusive with outgoing (can only set one of either).
@@ -243,33 +238,25 @@ def command(**args):
     args["outgoing"] = True
     if bool(args["incoming"]):
         args["outgoing"] = False
-    try:
+    with contextlib.suppress(BaseException):
         if pattern is not None and not pattern.startswith("(?i)"):
-            args["pattern"] = "(?i)" + pattern
-    except BaseException:
-        pass
+            args["pattern"] = f"(?i){pattern}"
     reg = re.compile("(.*)")
     if pattern is not None:
-        try:
+        with contextlib.suppress(BaseException):
             cmd = re.search(reg, pattern)
-            try:
-                cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
-            except BaseException:
-                pass
+            with contextlib.suppress(BaseException):
+                cmd = cmd[1].replace("$", "").replace("\\", "").replace("^", "")
             try:
                 CMD_LIST[file_test].append(cmd)
             except BaseException:
                 CMD_LIST.update({file_test: [cmd]})
-        except BaseException:
-            pass
     if allow_sudo:
         args["from_users"] = list(Config.SUDO_USERS)
         args["incoming"] = True
     del allow_sudo
-    try:
+    with contextlib.suppress(BaseException):
         del args["allow_sudo"]
-    except BaseException:
-        pass
     if gvarstatus("blacklist_chats") is not None:
         args["blacklist_chats"] = True
         args["chats"] = blacklist_chats_list()

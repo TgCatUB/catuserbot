@@ -159,7 +159,7 @@ async def on_snip_list(event):
     for filt in filters:
         if OUT_STR == "There are no filters in this chat.":
             OUT_STR = "Active filters in this chat:\n"
-        OUT_STR += "👉 `{}`\n".format(filt.keyword)
+        OUT_STR += f"👉 `{filt.keyword}`\n"
     await edit_or_reply(
         event,
         OUT_STR,
