@@ -14,15 +14,13 @@ import logging
 from datetime import datetime
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
 from userbot import BOTLOG_CHATID, catub
 
-from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper import broadcast_sql as bcast
 from ..sql_helper import schedule_sql as sql
 
-LOGS = logging.getLogger(__name__)
+logging.getLogger("apscheduler").setLevel(logging.WARNING)
 
 plugin_category = "tools"
 
