@@ -3,5 +3,12 @@
         "source.organizeImports": true,
         "source.fixAll.flake8": true,
         "sourcery.apply": true
-    }
+    },
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "python.formatting.blackPath": "python3 -m black",
+    "python.formatting.blackArgs": [
+        "--config",
+        "isort.cfg"
+    ]
 }
