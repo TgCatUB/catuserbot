@@ -36,7 +36,12 @@ from ..helpers.utils.utils import runcmd
 from ..sql_helper.globals import gvarstatus
 from . import BOT_INFO, CMD_INFO, GRP_INFO, LOADED_CMDS, PLG_INFO
 from .cmdinfo import _format_about
-from .data import _sudousers_list, _vcusers_list, blacklist_chats_list, sudo_enabled_cmds
+from .data import (
+    _sudousers_list,
+    _vcusers_list,
+    blacklist_chats_list,
+    sudo_enabled_cmds,
+)
 from .events import *
 from .fasttelethon import download_file, upload_file
 from .logger import logging
@@ -230,8 +235,8 @@ class CatUserBotClient(TelegramClient):
                             MessageEdited(
                                 pattern=REGEX_.regex2,
                                 from_users=_vcusers_list(),
-                                #incoming=True,
-                                #func=lambda e: bool(e.sender_id not in _vcusers_list()),
+                                # incoming=True,
+                                # func=lambda e: bool(e.sender_id not in _vcusers_list()),
                                 **kwargs,
                             ),
                         )
@@ -240,8 +245,8 @@ class CatUserBotClient(TelegramClient):
                         NewMessage(
                             pattern=REGEX_.regex2,
                             from_users=_vcusers_list(),
-                            #incoming=True,
-                            #func=lambda e: bool(e.sender_id not in _vcusers_list()),
+                            # incoming=True,
+                            # func=lambda e: bool(e.sender_id not in _vcusers_list()),
                             **kwargs,
                         ),
                     )
