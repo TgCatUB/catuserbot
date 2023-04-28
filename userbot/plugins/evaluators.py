@@ -161,7 +161,7 @@ async def search_func(event):
     catevent = await edit_or_reply(event, "`Processing.....`")
     try:
         source = eval(query)
-        filename = query + ".txt"
+        filename = f"{query}.txt"
     except (NameError, SyntaxError):
         module_name, *function = query.split()
         function = function[0] if function else None
@@ -188,7 +188,7 @@ async def search_func(event):
                     )
             else:
                 source = getattr(module, function)
-            filename = function + ".txt"
+            filename = f"{function}.txt"
         else:
             filename = module_name.split(".")[-1] + ".txt"
             source = module
