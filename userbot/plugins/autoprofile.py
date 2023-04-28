@@ -37,20 +37,13 @@ from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from . import BOTLOG, BOTLOG_CHATID, _catutils, catub, edit_delete, logging
 
 plugin_category = "tools"
-DEFAULTUSERBIO = gvarstatus("DEFAULT_BIO") or " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
-DEFAULTUSER = gvarstatus("DEFAULT_NAME") or Config.ALIVE_NAME
-LOGS = logging.getLogger(__name__)
-CHANGE_TIME = int(gvarstatus("CHANGE_TIME")) if gvarstatus("CHANGE_TIME") else 60
-DEFAULT_PIC = gvarstatus("DEFAULT_PIC") or None
-FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
+LOGS = logging.getLogger(__name__)
+
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 autopic_path = os.path.join(os.getcwd(), "userbot", "original_pic.png")
 digitalpic_path = os.path.join(os.getcwd(), "userbot", "digital_pic.png")
 autophoto_path = os.path.join(os.getcwd(), "userbot", "photo_pfp.png")
-
-digitalpfp = (
-    gvarstatus("DIGITAL_PIC") or "https://graph.org/file/aeaebe33b1f3988a0b690.jpg"
-)
 
 COLLECTION_STRINGS = {
     "batmanpfp_strings": [
@@ -68,8 +61,17 @@ COLLECTION_STRINGS = {
     ],
 }
 
+def fetch_data():
+    global DEFAULTUSERBIO, DEFAULTUSER, CHANGE_TIME, DEFAULT_PIC, digitalpfp
+    DEFAULTUSERBIO = gvarstatus("DEFAULT_BIO") or " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
+    DEFAULTUSER = gvarstatus("DEFAULT_NAME") or Config.ALIVE_NAME
+    CHANGE_TIME = int(gvarstatus("CHANGE_TIME") or "60")
+    DEFAULT_PIC = gvarstatus("DEFAULT_PIC") or None
+    digitalpfp = gvarstatus("DIGITAL_PIC") or "https://graph.org/file/aeaebe33b1f3988a0b690.jpg"
+
 
 async def autopicloop():
+    fetch_data()
     AUTOPICSTART = gvarstatus("autopic") == "true"
     if AUTOPICSTART and DEFAULT_PIC is None:
         if BOTLOG:
@@ -110,6 +112,7 @@ async def autopicloop():
 
 
 async def custompfploop():
+    fetch_data()
     CUSTOMPICSTART = gvarstatus("CUSTOM_PFP") == "true"
     i = 0
     while CUSTOMPICSTART:
@@ -136,6 +139,7 @@ async def custompfploop():
 
 
 async def digitalpicloop():
+    fetch_data()
     DIGITALPICSTART = gvarstatus("digitalpic") == "true"
     i = 0
     while DIGITALPICSTART:
@@ -173,6 +177,7 @@ async def digitalpicloop():
 
 
 async def bloom_pfploop():
+    fetch_data()
     BLOOMSTART = gvarstatus("bloom") == "true"
     if BLOOMSTART and DEFAULT_PIC is None:
         if BOTLOG:
@@ -217,6 +222,7 @@ async def bloom_pfploop():
 
 
 async def autoname_loop():
+    fetch_data()
     while AUTONAMESTART := gvarstatus("autoname") == "true":
         DM = time.strftime("%d-%m-%y")
         HM = time.strftime("%H:%M")
@@ -231,6 +237,7 @@ async def autoname_loop():
 
 
 async def autobio_loop():
+    fetch_data()
     while AUTOBIOSTART := gvarstatus("autobio") == "true":
         DMY = time.strftime("%d.%m.%Y")
         HM = time.strftime("%H:%M")
@@ -263,6 +270,7 @@ async def animeprofilepic(collection_images):
 
 
 async def autopfp_start():
+    fetch_data()
     if gvarstatus("autopfp_strings") is not None:
         AUTOPFP_START = True
         string_list = COLLECTION_STRINGS[gvarstatus("autopfp_strings")]
@@ -346,6 +354,7 @@ async def _(event):
 )
 async def _(event):
     "To set time on your profile pic"
+    fetch_data()
     if DEFAULT_PIC is None:
         return await edit_delete(
             event,
@@ -411,6 +420,7 @@ async def _(event):
 )
 async def _(event):
     "To set random colour pic with time to profile pic"
+    fetch_data()
     if DEFAULT_PIC is None:
         return await edit_delete(
             event,
@@ -574,6 +584,7 @@ async def _(event):
 )
 async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
     "To stop the functions of autoprofile plugin"
+    fetch_data()
     input_str = event.pattern_match.group(1)
     if input_str == "thorpfp" and gvarstatus("autopfp_strings") is not None:
         pfp_string = gvarstatus("autopfp_strings")[:-8]

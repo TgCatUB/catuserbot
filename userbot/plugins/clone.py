@@ -9,10 +9,6 @@ from ..sql_helper.globals import gvarstatus
 from . import ALIVE_NAME, BOTLOG, BOTLOG_CHATID, catub, edit_delete, get_user_from_event
 
 plugin_category = "utils"
-DEFAULTUSER = gvarstatus("FIRST_NAME") or ALIVE_NAME
-DEFAULTUSERBIO = (
-    gvarstatus("DEFAULT_BIO") or "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁"
-)
 
 
 @catub.cat_cmd(
@@ -70,9 +66,9 @@ async def _(event):
 )
 async def revert(event):
     "To reset your original details"
-    firstname = DEFAULTUSER
+    firstname = gvarstatus("FIRST_NAME") or ALIVE_NAME
     lastname = gvarstatus("LAST_NAME") or ""
-    bio = DEFAULTUSERBIO
+    bio = gvarstatus("DEFAULT_BIO") or "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁"
     await event.client(
         functions.photos.DeletePhotosRequest(
             await event.client.get_profile_photos("me", limit=1)
