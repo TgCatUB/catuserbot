@@ -68,7 +68,10 @@ async def revert(event):
     "To reset your original details"
     firstname = gvarstatus("FIRST_NAME") or ALIVE_NAME
     lastname = gvarstatus("LAST_NAME") or ""
-    bio = gvarstatus("DEFAULT_BIO") or "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁"
+    bio = (
+        gvarstatus("DEFAULT_BIO")
+        or "sıɥʇ ǝpoɔǝp uǝɥʇ llıʇu∩ ˙ǝɔɐds ǝʇɐʌıɹd ǝɯos ǝɯ ǝʌı⅁"
+    )
     await event.client(
         functions.photos.DeletePhotosRequest(
             await event.client.get_profile_photos("me", limit=1)

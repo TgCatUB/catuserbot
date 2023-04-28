@@ -61,13 +61,16 @@ COLLECTION_STRINGS = {
     ],
 }
 
+
 def fetch_data():
     global DEFAULTUSERBIO, DEFAULTUSER, CHANGE_TIME, DEFAULT_PIC, digitalpfp
     DEFAULTUSERBIO = gvarstatus("DEFAULT_BIO") or " ᗯᗩᏆᎢᏆᑎᏀ ᏞᏆᏦᗴ ᎢᏆᗰᗴ  "
     DEFAULTUSER = gvarstatus("DEFAULT_NAME") or Config.ALIVE_NAME
     CHANGE_TIME = int(gvarstatus("CHANGE_TIME") or "60")
     DEFAULT_PIC = gvarstatus("DEFAULT_PIC") or None
-    digitalpfp = gvarstatus("DIGITAL_PIC") or "https://graph.org/file/aeaebe33b1f3988a0b690.jpg"
+    digitalpfp = (
+        gvarstatus("DIGITAL_PIC") or "https://graph.org/file/aeaebe33b1f3988a0b690.jpg"
+    )
 
 
 async def autopicloop():
