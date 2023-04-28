@@ -71,9 +71,7 @@ async def check_media(reply_message):
             data = reply_message.media.document
         else:
             return False
-    if not data or data is None:
-        return False
-    return data
+    return False if not data or data is None else data
 
 
 @catub.cat_cmd(

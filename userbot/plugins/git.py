@@ -163,7 +163,7 @@ async def git_commit(file_name, mone):
         LOGS.info(content_file)
     for i in content_list:
         create_file = True
-        if i == 'ContentFile(path="' + file_name + '")':
+        if i == f'ContentFile(path="{file_name}")':
             return await mone.edit("`File Already Exists`")
     if create_file:
         file_name = f"userbot/plugins/{file_name}"

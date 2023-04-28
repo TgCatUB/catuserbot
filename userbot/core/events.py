@@ -437,7 +437,7 @@ async def edit_message(
     buttons: "hints.MarkupLike" = None,
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
-):
+):  # sourcery skip: use-assigned-variable
     chatid = entity
     if isinstance(chatid, InputPeerChannel):
         chat_id = int(f"-100{str(chatid.channel_id)}")

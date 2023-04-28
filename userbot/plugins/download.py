@@ -167,7 +167,7 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
                 f"**•  Downloaded in {ms} seconds.**\n**•  Downloaded file location :- ** `{os.path.relpath(downloaded_file_name,os.getcwd())}`"
             )
         else:
-            await mone.edit("Incorrect URL\n {}".format(input_str))
+            await mone.edit(f"Incorrect URL\n {input_str}")
     else:
         await mone.edit("`Reply to a message to download to my local server.`")
 

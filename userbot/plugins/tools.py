@@ -394,7 +394,7 @@ async def _(event):
     b = r.json()
     a = json.dumps(b, sort_keys=True, indent=4)
     # https://stackoverflow.com/a/9105132/4723940
-    await edit_or_reply(event, str(a))
+    await edit_or_reply(event, a)
 
 
 @catub.cat_cmd(

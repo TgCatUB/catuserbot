@@ -121,9 +121,9 @@ class GooglePic:
         pattern1 = re.compile(r"Image search ([^\"]+)")
         pattern2 = re.compile(r"\],\"(.*?)(?=\",null,\[\[\"ROSTI\")")
         if match := pattern1.search(html):
-            title = match.group(1)
+            title = match[1]
         elif match := pattern2.search(html):
-            title = match.group(1)
+            title = match[1]
         return "Visual matches" if (len(title) > 100 or not title) else title
 
     @staticmethod
@@ -160,8 +160,8 @@ class GooglePic:
                             for link in re.findall(
                                 r"https://www.google.com/imgres\?imgurl.+?(?=\")", html
                             ):
-                                image = re.search(r"imgurl=(.+?)&", link).group(1)
-                                site = re.search(r"imgrefurl=(.+?)&", link).group(1)
+                                image = re.search(r"imgurl=(.+?)&", link)[1]
+                                site = re.search(r"imgrefurl=(.+?)&", link)[1]
                                 if image.endswith(
                                     (".jpg", ".jpeg", ".png", ".gif")
                                 ) or site.endswith((".jpg", ".jpeg", ".png", ".gif")):
