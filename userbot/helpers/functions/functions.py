@@ -76,7 +76,9 @@ def rand_key():
 
 
 def sanga_seperator(sanga_list):
-    string = "".join(info[info.find("\n") + 1 :] for info in sanga_list)
+    string = ""
+    for info in sanga_list:
+        string += info[info.find("\n") + 1 :]
     string = re.sub(r"^$\n", "", string, flags=re.MULTILINE)
     name, username = string.split("Usernames**")
     name = name.split("Names")[1]

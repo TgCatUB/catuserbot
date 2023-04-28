@@ -290,6 +290,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                         " didn't gave me any additional information, so I skipped updating the bio."
                     )
                     await catub.send_message(BOTLOG_CHATID, string)
+            # 429 means flood limit, we need to wait
             elif r.status_code == 429:
                 to_wait = r.headers["Retry-After"]
                 LOGS.error(f"Spotify, have to wait for {str(to_wait)}")
@@ -300,6 +301,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                 )
                 skip = True
                 await asyncio.sleep(int(to_wait))
+            # 204 means user plays nothing
             elif r.status_code == 204:
                 if save_spam("spotify", False):
                     stringy = (
@@ -307,6 +309,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                         "resolved."
                     )
                     await catub.send_message(BOTLOG_CHATID, stringy)
+            # 401 means our access token is expired, so we need to refresh it
             elif r.status_code == 401:
                 data = {
                     "client_id": SPOTIFY_CLIENT_ID,
@@ -332,6 +335,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                 # since we didnt actually update our status yet, lets do this
                 # without the 30 seconds wait
                 skip = True
+            # 502 means bad gateway
             elif r.status_code == 502:
                 if save_spam("spotify", True):
                     string = (
@@ -339,6 +343,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                         "servers. The bot will continue to run but may not update the bio for a short time."
                     )
                     await catub.send_message(BOTLOG_CHATID, string)
+            # 503 means service unavailable
             elif r.status_code == 503:
                 if save_spam("spotify", True):
                     string = (
@@ -347,6 +352,8 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                         "short time."
                     )
                     await catub.send_message(BOTLOG_CHATID, string)
+            # 404 is a spotify error which isn't supposed to happen (since our URL is correct). Track the issue here:
+            # https://github.com/spotify/web-api/issues/1280
             elif r.status_code == 404:
                 if save_spam("spotify", True):
                     string = "**[INFO]**\n\nSpotify returned a 404 error, which is a bug on their side."
@@ -360,7 +367,7 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                     + "\n\nText: "
                     + r.text,
                 )
-                LOGS.error(f"Spotify, error {r.status_code}, text: {r.text}")
+                LOGS.error(f"Spotify, error {str(r.status_code)}, text: {r.text}")
                 # stop the whole program since I dont know what happens here
                 # and this is the safest thing we can do
                 SP_DATABASE.SPOTIFY_MODE = False
@@ -514,7 +521,9 @@ def title_fetch(title):
         pattern = re.compile(
             r"([a-zA-Z0-9]+(?: ?[a-zA-Z0-9]+)+(?: - \w - \w+)?(?:-\w-\w+)?).*"
         )
-    return regx[1] if (regx := pattern.search(title)) else title
+    if regx := pattern.search(title):
+        return regx[1]
+    return title
 
 
 async def telegraph_lyrics(tittle, artist):

@@ -31,7 +31,9 @@ async def meme_type(message):
                 mime = message.document.mime_type
                 if mime == "application/x-tgsticker":
                     return "Animated Sticker"
-                return "Video Sticker" if mime == "video/webm" else "Static Sticker"
+                if mime == "video/webm":
+                    return "Video Sticker"
+                return "Static Sticker"
             if message.video:
                 return "Video"
             if message.document:
@@ -111,7 +113,9 @@ async def file_type(message):
     if media["type"] == "Image":
         if media["format"] == "GIF":
             return "Gif"
-        return "Static Sticker" if media["format"] == "WebP" else "Photo"
+        if media["format"] == "WebP":
+            return "Static Sticker"
+        return "Photo"
     elif media["type"] == "Video":
         if media["audio"] == "None":
             return "Video Sticker" if media["format"] == "WebM" else "Gif"

@@ -24,7 +24,7 @@ class BlackListFilters(BASE):
         self.trigger = trigger
 
     def __repr__(self):
-        return f"<Blacklist filter '{self.trigger}' for {self.chat_id}>"
+        return "<Blacklist filter '%s' for %s>" % (self.trigger, self.chat_id)
 
     def __eq__(self, other):
         return (

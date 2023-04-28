@@ -24,7 +24,7 @@ class CatGloballist(BASE):
         self.group_id = str(group_id)
 
     def __repr__(self):
-        return f"<Cat global values '{self.group_id}' for {self.keywoard}>"
+        return "<Cat global values '%s' for %s>" % (self.group_id, self.keywoard)
 
     def __eq__(self, other):
         return (

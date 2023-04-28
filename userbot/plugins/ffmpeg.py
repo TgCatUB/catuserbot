@@ -93,7 +93,9 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
                 await message.edit(text=stats)
     # Wait for the subprocess to finish
     stdout, stderr = await process.communicate()
-    return out_put_file_name if os.path.lexists(out_put_file_name) else None
+    if os.path.lexists(out_put_file_name):
+        return out_put_file_name
+    return None
 
 
 async def cult_small_video(
@@ -111,7 +113,9 @@ async def cult_small_video(
     )
     # Wait for the subprocess to finish
     await process.communicate()
-    return out_put_file_name if os.path.lexists(out_put_file_name) else None
+    if os.path.lexists(out_put_file_name):
+        return out_put_file_name
+    return None
 
 
 @catub.cat_cmd(

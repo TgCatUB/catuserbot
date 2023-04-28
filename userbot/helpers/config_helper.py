@@ -108,9 +108,9 @@ async def set_var(event, vname, vinfo):
         if error:
             return error
     else:
+        if not vinfo and vname in ["ALIVE_TEMPLATE", "PING_TEMPLATE"]:
+            return "Check @cat_alive"
         if not vinfo:
-            if vname in ["ALIVE_TEMPLATE", "PING_TEMPLATE"]:
-                return "Check @cat_alive"
             return f"Give some values which you want to save for **{vname}**"
         check = vinfo.split(" ")
         for i in check:

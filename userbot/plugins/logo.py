@@ -43,7 +43,11 @@ plugin_category = "extra"
 def random_checker(Font, Color, Background):
     if Font == "Random":
         return True
-    return True if Color == "Random" else Background in rand_bg
+    if Color == "Random":
+        return True
+    if Background in rand_bg:
+        return True
+    return False
 
 
 def random_loader(Font, Color, Background, collection):

@@ -100,6 +100,7 @@ def main_menu():
 
 async def article_builder(event, method):
     media = thumb = photo = None
+    link_preview = False
     builder = event.builder
     title = "Cat Userbot"
     description = "Button menu for CatUserbot"
@@ -139,8 +140,9 @@ async def article_builder(event, method):
     elif method == "pmpermit":
         query = gvarstatus("pmpermit_text")
         buttons = [Button.inline(text="Show Options.", data="show_pmpermit_options")]
-        if PM_PIC := gvarstatus("pmpermit_pic"):
-            CAT = list(PM_PIC.split())
+        PM_PIC = gvarstatus("pmpermit_pic")
+        if PM_PIC:
+            CAT = [x for x in PM_PIC.split()]
             PIC = list(CAT)
             media = random.choice(PIC)
 
@@ -163,11 +165,11 @@ async def article_builder(event, method):
         ALIVE_PIC = gvarstatus("ALIVE_PIC")
         IALIVE_PIC = gvarstatus("IALIVE_PIC")
         if IALIVE_PIC:
-            CAT = list(IALIVE_PIC.split())
+            CAT = [x for x in IALIVE_PIC.split()]
             PIC = list(CAT)
             media = random.choice(PIC)
         if not IALIVE_PIC and ALIVE_PIC:
-            CAT = list(ALIVE_PIC.split())
+            CAT = [x for x in ALIVE_PIC.split()]
             PIC = list(CAT)
             media = random.choice(PIC)
 
@@ -179,8 +181,7 @@ async def article_builder(event, method):
             description = "Get currently playing song."
             media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
             if (
-                not Config.SPOTIFY_CLIENT_ID
-                or not Config.SPOTIFY_CLIENT_SECRET
+                not (Config.SPOTIFY_CLIENT_ID and Config.SPOTIFY_CLIENT_SECRET)
                 or SP_DATABASE is None
             ):
                 query = "__Spotify is not setup properly. \nDo `.help spsetup` and follow the tutorial.__"
@@ -215,7 +216,8 @@ async def article_builder(event, method):
         prev = 0
         note_data = ""
         buttons_list = []
-        if catmedia := MEDIA_PATH_REGEX.search(markdown_note):
+        catmedia = MEDIA_PATH_REGEX.search(markdown_note)
+        if catmedia:
             media = catmedia.group(2)
             markdown_note = markdown_note.replace(catmedia.group(0), "")
         for match in BTN_URL_REGEX.finditer(markdown_note):
@@ -240,30 +242,32 @@ async def article_builder(event, method):
         query = note_data.strip()
         buttons = ibuild_keyboard(buttons_list)
     if media and not media.endswith((".jpg", ".jpeg", ".png")):
-        return builder.document(
+        result = builder.document(
             media,
             title=title,
             description=description,
             text=query,
             buttons=buttons,
         )
-    mediaType = "article"
-    if media and media.endswith((".jpg", ".jpeg", ".png")):
-        photo = types.InputWebDocument(
-            url=media, size=0, mime_type="image/jpeg", attributes=[]
+    else:
+        type = "article"
+        if media and media.endswith((".jpg", ".jpeg", ".png")):
+            photo = types.InputWebDocument(
+                url=media, size=0, mime_type="image/jpeg", attributes=[]
+            )
+            type = "photo"
+        result = builder.article(
+            title=title,
+            description=description,
+            type=type,
+            file=media,
+            thumb=thumb if thumb else photo,
+            content=photo,
+            text=query,
+            buttons=buttons,
+            link_preview=link_preview,
         )
-        mediaType = "photo"
-    return builder.article(
-        title=title,
-        description=description,
-        type=mediaType,
-        file=media,
-        thumb=thumb or photo,
-        content=photo,
-        text=query,
-        buttons=buttons,
-        link_preview=False,
-    )
+    return result
 
 
 def command_in_category(cname):
@@ -429,7 +433,7 @@ async def inline_handler(event):  # sourcery no-metrics
                 if match:
                     query = query[6:]
                     info_type = ["troll", "can't", "show message 🔐"]
-                else:
+                elif match2:
                     query = query[7:]
                     info_type = ["secret", "can", "show message 🔐"]
                 if "|" in query:
@@ -488,7 +492,7 @@ async def inline_handler(event):  # sourcery no-metrics
             await event.answer([result] if result else None)
         elif str_y[0].lower() == "s" and len(str_y) == 2:
             result = await inline_search(event, str_y[1].strip())
-            await event.answer(result or None)
+            await event.answer(result if result else None)
         elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
             link = get_yt_video_id(str_y[1].strip())
             found_ = True
@@ -596,86 +600,84 @@ async def inline_handler(event):  # sourcery no-metrics
             results.append(spotify_menu) if spotify_menu else None
             file_manager = await article_builder(event, "ls")
             results.append(file_manager) if file_manager else None
-            results.extend(
-                (
-                    builder.article(
-                        title="Hide",
-                        description="Send hidden text in chat.\nSyntax: hide",
-                        text="__Send hidden message for spoilers/quote prevention.__",
-                        thumb=get_thumb("hide.png"),
-                        buttons=[
+            results.append(
+                builder.article(
+                    title="Hide",
+                    description="Send hidden text in chat.\nSyntax: hide",
+                    text="__Send hidden message for spoilers/quote prevention.__",
+                    thumb=get_thumb("hide.png"),
+                    buttons=[
+                        Button.switch_inline(
+                            "Hidden Text", query="hide Text", same_peer=True
+                        )
+                    ],
+                ),
+            )
+            results.append(
+                builder.article(
+                    title="Search",
+                    description="Search cmds & plugins\nSyntax: s",
+                    text="__Get help about a plugin or cmd.\n\nMixture of .help & .s__",
+                    thumb=get_thumb("search.jpg"),
+                    buttons=[
+                        Button.switch_inline(
+                            "Search Help", query="s al", same_peer=True
+                        )
+                    ],
+                ),
+            )
+            results.append(
+                builder.article(
+                    title="Secret",
+                    description="Send secret message to your friends.\nSyntax: secret @usename",
+                    text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
+                    thumb=get_thumb("secret.png"),
+                    buttons=[
+                        (
                             Button.switch_inline(
-                                "Hidden Text",
-                                query="hide Text",
+                                "Single", query="secret @username Text", same_peer=True
+                            ),
+                            Button.switch_inline(
+                                "Multiple",
+                                query="secret @username @username2 | Text",
                                 same_peer=True,
-                            )
-                        ],
-                    ),
-                    builder.article(
-                        title="Search",
-                        description="Search cmds & plugins\nSyntax: s",
-                        text="__Get help about a plugin or cmd.\n\nMixture of .help & .s__",
-                        thumb=get_thumb("search.jpg"),
-                        buttons=[
+                            ),
+                        )
+                    ],
+                ),
+            )
+            results.append(
+                builder.article(
+                    title="Troll",
+                    description="Send troll message to your friends.\nSyntax: toll @usename",
+                    text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
+                    thumb=get_thumb("troll.png"),
+                    buttons=[
+                        (
                             Button.switch_inline(
-                                "Search Help", query="s al", same_peer=True
-                            )
-                        ],
-                    ),
-                    builder.article(
-                        title="Secret",
-                        description="Send secret message to your friends.\nSyntax: secret @usename",
-                        text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
-                        thumb=get_thumb("secret.png"),
-                        buttons=[
-                            (
-                                Button.switch_inline(
-                                    "Single",
-                                    query="secret @username Text",
-                                    same_peer=True,
-                                ),
-                                Button.switch_inline(
-                                    "Multiple",
-                                    query="secret @username @username2 | Text",
-                                    same_peer=True,
-                                ),
-                            )
-                        ],
-                    ),
-                    builder.article(
-                        title="Troll",
-                        description="Send troll message to your friends.\nSyntax: toll @usename",
-                        text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
-                        thumb=get_thumb("troll.png"),
-                        buttons=[
-                            (
-                                Button.switch_inline(
-                                    "Single",
-                                    query="troll @username Text",
-                                    same_peer=True,
-                                ),
-                                Button.switch_inline(
-                                    "Multiple",
-                                    query="troll @username @username2 | Text",
-                                    same_peer=True,
-                                ),
-                            )
-                        ],
-                    ),
-                    builder.article(
-                        title="Youtube Download",
-                        description="Download videos/audios from YouTube.\nSyntax: ytdl",
-                        text="__Download videos or audios from YouTube with different options of resolutions/quality.__",
-                        thumb=get_thumb("youtube.png"),
-                        buttons=[
+                                "Single", query="troll @username Text", same_peer=True
+                            ),
                             Button.switch_inline(
-                                "Youtube-dl",
-                                query="ytdl perfect",
+                                "Multiple",
+                                query="troll @username @username2 | Text",
                                 same_peer=True,
-                            )
-                        ],
-                    ),
-                )
+                            ),
+                        )
+                    ],
+                ),
+            )
+            results.append(
+                builder.article(
+                    title="Youtube Download",
+                    description="Download videos/audios from YouTube.\nSyntax: ytdl",
+                    text="__Download videos or audios from YouTube with different options of resolutions/quality.__",
+                    thumb=get_thumb("youtube.png"),
+                    buttons=[
+                        Button.switch_inline(
+                            "Youtube-dl", query="ytdl perfect", same_peer=True
+                        )
+                    ],
+                ),
             )
             await event.answer(results)
     else:

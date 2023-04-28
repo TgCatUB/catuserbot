@@ -274,7 +274,9 @@ async def buildpack(event):
         return await edit_delete(event, Heroku)
     cmd = event.pattern_match.group(1).lower()
     link = event.pattern_match.group(2)
-    buidpacks = [item.buildpack.url for item in app.buildpacks()]
+    buidpacks = []
+    for item in app.buildpacks():
+        buidpacks.append(item.buildpack.url)
     if cmd and not link:
         return await edit_delete(event, "**Error::** `Give buildpack link..`")
     elif cmd == "add":

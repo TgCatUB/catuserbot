@@ -50,7 +50,7 @@ async def gen_img(odi):
     if query.startswith("-l"):
         query = query.replace("-l", "").strip()
         if query.isnumeric():
-            if int(query) in rstyles:
+            if int(query) in rstyles.keys():
                 addgvar("DREAM_STYLE", int(query))
                 return await edit_delete(
                     catevent, f"`Style changed to {rstyles[int(query)]}.`"
@@ -101,7 +101,8 @@ async def gen_txt(event):
         return await edit_delete(event, "`What should I do ??`")
 
     catevent = await edit_or_reply(event, "`Generating ai response ...`")
-    if generated_text := ai_response(query):
-        await edit_or_reply(catevent, generated_text)
-    else:
-        await edit_delete(catevent, "`Sorry, unable to generate response`")
+    generated_text = ai_response(query)
+
+    if not generated_text:
+        return await edit_delete(catevent, "`Sorry, unable to generate response`")
+    await edit_or_reply(catevent, generated_text)

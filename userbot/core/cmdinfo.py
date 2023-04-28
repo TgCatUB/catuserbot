@@ -166,12 +166,14 @@ async def plugininfo(input_str, event, flag):
     try:
         cmds = PLG_INFO[input_str]
     except KeyError:
-        return await cmdinfo(input_str, event, plugin=True)
+        outstr = await cmdinfo(input_str, event, plugin=True)
+        return outstr
     except Exception as e:
         await edit_delete(event, f"**Error**\n`{e}`")
         return None
     if len(cmds) == 1 and (flag is None or (flag and flag != "-p")):
-        return await cmdinfo(cmds[0], event, plugin=False)
+        outstr = await cmdinfo(cmds[0], event, plugin=False)
+        return outstr
     outstr = f"**Plugin : **`{input_str}`\n"
     outstr += f"**Commands Available :** `{len(cmds)}`\n"
     category = getkey(input_str)

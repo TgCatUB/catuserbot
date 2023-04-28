@@ -24,7 +24,10 @@ class Cat_GlobalCollection(BASE):
         self.contents = tuple(contents)
 
     def __repr__(self):
-        return f"<Cat Global Collection lists '{self.contents}' for {self.keywoard}>"
+        return "<Cat Global Collection lists '%s' for %s>" % (
+            self.contents,
+            self.keywoard,
+        )
 
     def __eq__(self, other):
         return (

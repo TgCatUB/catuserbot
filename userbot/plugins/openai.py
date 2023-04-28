@@ -69,7 +69,7 @@ async def gpt_response_with_prompt(event):
     # Flag to generate edited message
     if "-e" in text:
         text = text.replace("-e", "").strip()
-        if not reply or not reply.text or not text:
+        if not (reply and reply.text) or not text:
             return await edit_delete(
                 event,
                 "__Reply to message & pass the instruction message along with flag.__",
@@ -78,6 +78,7 @@ async def gpt_response_with_prompt(event):
         response = generate_edited_response(reply.text, text)
         return await edit_or_reply(event, response)
 
+    # Flag to change model of ai
     elif "-m" in text:
         flag = text.replace("-m", "").strip()
         if not flag or flag not in MODELS:
@@ -87,6 +88,7 @@ async def gpt_response_with_prompt(event):
         addgvar("CHAT_MODEL", flag)
         return await edit_delete(event, f"__Chat model changed to : **{flag}**__")
 
+    # Flag to add system message
     elif "-s" in text:
         flag = text.replace("-s", "").strip()
         if not flag:
@@ -97,13 +99,16 @@ async def gpt_response_with_prompt(event):
         del_convo(chat_id)
         return await edit_delete(event, f"__System message changed to :__\n\n`{flag}`")
 
+    # Flag to delete system message
     elif "-ds" in text:
-        if SYSTEM_MESSAGE := gvarstatus("SYSTEM_MESSAGE") or None:
+        SYSTEM_MESSAGE = gvarstatus("SYSTEM_MESSAGE") or None
+        if SYSTEM_MESSAGE:
             del_convo(chat_id)
             delgvar("SYSTEM_MESSAGE")
             return await edit_delete(event, "__System message cleared.__")
         return await edit_delete(event, "__There's no system message set for GPT.__")
 
+    # Flag to delete context of given chat
     elif "-dc" in text:
         response = del_convo(chat_id, True)
         return await edit_delete(event, response)

@@ -81,7 +81,7 @@ async def waifu(animu):
 )
 async def sticklet(event):
     "your text as sticker"
-    RGB = tuple(random.sample(range(255), 3))
+    RGB = tuple(random.sample(range(0, 255), 3))
     reply_to_id = await reply_id(event)
     sticktext = event.pattern_match.group(1)
     reply = await event.get_reply_message()

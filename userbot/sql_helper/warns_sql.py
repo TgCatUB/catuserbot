@@ -94,7 +94,11 @@ def reset_warns(user_id, chat_id):
 def get_warns(user_id, chat_id):
     try:
         user = SESSION.query(Warns).get((user_id, str(chat_id)))
-        return (user.num_warns, user.reasons) if user else None
+        if not user:
+            return None
+        reasons = user.reasons
+        num = user.num_warns
+        return num, reasons
     finally:
         SESSION.close()
 

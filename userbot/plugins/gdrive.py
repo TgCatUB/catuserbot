@@ -819,13 +819,15 @@ async def check_progress_for_dl(
                 return file.name
         except Exception as e:
             if " not found" in str(e) or "'file'" in str(e):
-                await event.edit(f"Download Canceled :\n`{file.name}`")
+                await event.edit("Download Canceled :\n`{}`".format(file.name))
                 await asyncio.sleep(2.5)
                 return await event.delete()
             elif " depth exceeded" in str(e):
                 file.remove(force=True)
                 await event.edit(
-                    f"Download Auto Canceled :\n`{file.name}`\nYour Torrent/Link is Dead."
+                    "Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(
+                        file.name
+                    )
                 )
 
 
@@ -937,7 +939,7 @@ async def glists(gdrive):
     if query == "":
         query = "Not specified"
     if len(message) > 4000:
-        title = name or query
+        title = name if name else query
         url = await post_to_telegraph(title, message.replace("\n", "<br>"))
         message = f"<b><a href = {url}>• View in Telegraph</a></b>"
     await edit_or_reply(

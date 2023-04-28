@@ -394,8 +394,8 @@ async def _(event):  # sourcery no-metrics
     "To show list of enabled cmds for sudo."
     input_str = event.pattern_match.group(1)
     sudocmds = sudo_enabled_cmds()
-    error = ""
     clist = {}
+    error = ""
     if not input_str:
         text = "**The list of sudo enabled commands are :**"
         result = "**SUDO ENABLED COMMANDS**"
@@ -435,7 +435,11 @@ async def _(event):  # sourcery no-metrics
         for cmd in clist[plugin]:
             output += f"`{cmd}` "
         output += "\n\n"
-    finalstr = f"{result}\n\n**SUDO TRIGGER: **`{Config.SUDO_COMMAND_HAND_LER}`\n**Commands:** {count}\n\n{output}"
+    finalstr = (
+        result
+        + f"\n\n**SUDO TRIGGER: **`{Config.SUDO_COMMAND_HAND_LER}`\n**Commands:** {count}\n\n"
+        + output
+    )
     await edit_or_reply(event, finalstr, aslink=True, linktext=text)
 
 

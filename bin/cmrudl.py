@@ -221,8 +221,10 @@ class Main(object):
                 if not self.script:
                     return
                 src = data.strip()
-                if m := self.jsobjreg.match(src):
-                    self.jsobj = m.group(1)
+                m = self.jsobjreg.match(src)
+                if not m:
+                    return
+                self.jsobj = m.group(1)
 
             def result(self):
                 return self.jsobj or None
@@ -449,7 +451,9 @@ class Main(object):
 
         try:
             self.run()
-        except (Exception, KeyboardInterrupt) as ex:
+        except Exception as ex:
+            return exception(ex)
+        except KeyboardInterrupt as ex:
             return exception(ex)
         return 0
 
