@@ -46,7 +46,7 @@ async def install(event):
             if "(" not in downloaded_file_name:
                 path1 = Path(downloaded_file_name)
                 shortname = path1.stem
-                load_module(shortname.replace(".py", ""))
+                load_module(shortname.replace(".py", ""), plugin_path=install_path)
                 await edit_delete(
                     event,
                     f"Installed Plugin `{os.path.basename(downloaded_file_name)}`",
