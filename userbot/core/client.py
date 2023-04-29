@@ -241,9 +241,7 @@ class CatUserBotClient(TelegramClient):
                     catub.add_event_handler(
                         wrapper,
                         NewMessage(
-                            pattern=REGEX_.regex2,
-                            from_users=_vcusers_list(),
-                            **kwargs
+                            pattern=REGEX_.regex2, from_users=_vcusers_list(), **kwargs
                         ),
                     )
                 if (
