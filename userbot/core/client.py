@@ -228,15 +228,13 @@ class CatUserBotClient(TelegramClient):
                     wrapper,
                     NewMessage(pattern=REGEX_.regex1, outgoing=True, **kwargs),
                 )
-                if public:
+                if public and gvarstatus("vc_public_acsess") is not None:
                     if edited:
                         catub.add_event_handler(
                             wrapper,
                             MessageEdited(
                                 pattern=REGEX_.regex2,
                                 from_users=_vcusers_list(),
-                                # incoming=True,
-                                # func=lambda e: bool(e.sender_id not in _vcusers_list()),
                                 **kwargs,
                             ),
                         )
@@ -245,9 +243,7 @@ class CatUserBotClient(TelegramClient):
                         NewMessage(
                             pattern=REGEX_.regex2,
                             from_users=_vcusers_list(),
-                            # incoming=True,
-                            # func=lambda e: bool(e.sender_id not in _vcusers_list()),
-                            **kwargs,
+                            **kwargs
                         ),
                     )
                 if (
