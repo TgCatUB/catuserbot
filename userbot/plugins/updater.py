@@ -111,9 +111,9 @@ async def update_bot(event, repo, ups_rem, ac_br):
         "`Successfully Updated!\n" "Bot is restarting... Wait for a minute!`"
     )
     if os.path.exists("config.py"):
-        from userbot.plugins.vps import switch_branch
+        from userbot.plugins.vps import reload_codebase
 
-        await switch_branch()
+        await reload_codebase()
     await event.client.reload(sandy)
 
 
