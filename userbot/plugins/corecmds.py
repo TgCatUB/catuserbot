@@ -20,11 +20,13 @@ def plug_checker(plugin):
         plug_path = f"./xtraplugins/{plugin}.py"
     if not os.path.exists(plug_path):
         plug_path = f"./badcatext/{plugin}.py"
+    if not os.path.exists(plug_path):
+        plug_path = f"./catvc/{plugin}.py"
     return plug_path
 
 
 @catub.cat_cmd(
-    pattern="install$",
+    pattern="install(?:\s|$)([\s\S]*)",
     command=("install", plugin_category),
     info={
         "header": "To install an external plugin.",
@@ -34,11 +36,12 @@ def plug_checker(plugin):
 )
 async def install(event):
     "To install an external plugin."
+    install_path = event.pattern_match.group(1) or "userbot/plugins"
     if event.reply_to_msg_id:
         try:
             downloaded_file_name = await event.client.download_media(
                 await event.get_reply_message(),
-                "userbot/plugins/",
+                f"{install_path}/",
             )
             if "(" not in downloaded_file_name:
                 path1 = Path(downloaded_file_name)
