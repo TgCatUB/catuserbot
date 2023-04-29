@@ -228,7 +228,7 @@ class CatUserBotClient(TelegramClient):
                     wrapper,
                     NewMessage(pattern=REGEX_.regex1, outgoing=True, **kwargs),
                 )
-                if public and gvarstatus("vc_public_acsess") is not None:
+                if public:
                     if edited:
                         catub.add_event_handler(
                             wrapper,
