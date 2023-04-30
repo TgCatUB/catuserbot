@@ -110,7 +110,6 @@ def build_article(
 ):
     builder = event.builder
     photo_document = None
-
     if media:
         if not media.endswith((".jpg", ".jpeg", ".png")):
             # Return a document object with the provided media URL
@@ -121,9 +120,8 @@ def build_article(
                 text=text,
                 buttons=buttons,
             )
-
         # Create an InputWebDocument object for the media file
-        photo_document = get_thumb(url=photo_document)
+        photo_document = get_thumb(url=media)
     if thumbnail and isinstance(thumbnail, str):
         thumbnail = get_thumb(url=thumbnail)
     # Return an article object with the provided properties
