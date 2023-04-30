@@ -11,9 +11,11 @@
 from somnium import Somnium
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import GetStylesGraph, ai_response, reply_id
+from ..helpers import GetStylesGraph, ThabAi, reply_id
 from ..sql_helper.globals import addgvar, gvarstatus
 from . import catub, mention
+
+catai = ThabAi()
 
 plugin_category = "tools"
 
@@ -101,7 +103,7 @@ async def gen_txt(event):
         return await edit_delete(event, "`What should I do ??`")
 
     catevent = await edit_or_reply(event, "`Generating ai response ...`")
-    if generated_text := ai_response(query):
+    if generated_text := catai.get_response(query):
         await edit_or_reply(catevent, generated_text)
     else:
         await edit_delete(catevent, "`Sorry, unable to generate response`")
