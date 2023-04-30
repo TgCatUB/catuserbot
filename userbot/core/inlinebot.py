@@ -244,7 +244,14 @@ async def article_builder(event, method):
         try:
             from userbot.plugins.spotify import spotify_inline_article
 
-            query, buttons, media, thumb, title, description = spotify_inline_article()
+            (
+                query,
+                buttons,
+                media,
+                thumb,
+                title,
+                description,
+            ) = await spotify_inline_article()
         except Exception:
             return None
 
